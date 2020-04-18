@@ -1,5 +1,6 @@
 include <BasicShapes.scad>
 include <ComplexShapes.scad>
+include <CookieCutter.scad>
 
 //https://www.etsy.com/listing/770065287/professional-quality-mosque-cookie?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_d-craft_supplies_and_tools-kitchen_supplies-kitchen_tools_and_utensils-cookie_cutters&utm_custom1=e12205a9-1426-4d66-9c46-fd49f0a70718&utm_content=go_1843970773_68900286679_346362959724_pla-295472669507_c__770065287&utm_custom2=1843970773&gclid=EAIaIQobChMI5bb_z6re6AIVGKSzCh3zTwPnEAQYBCABEgKdEPD_BwE
 
@@ -45,39 +46,9 @@ module Mosque(width, door_scale=0.25, door_stretch=0, crescent_scale=1, crescent
     }
 }
 
-module offset_shell(thickness = 0.1) {
-  render() {
-      difference() {
-          minkowski() {
-            children();
-            circle(2* thickness, center=true);
-          }
-        children();
-      }
-   }
+cookie_cutter() {
+    Mosque(100, crescent_scale=0.9, crescent_rotation=30);
 }
 
-union() {
-    linear_extrude(height = 2.5, slices = 60) { 
-        scale([.2,.2,1]) {
-            offset_shell(2.5) {
-              Mosque(100, crescent_scale=0.9, crescent_rotation=30);
-            }
-        }
-    };
-    linear_extrude(height = 7.5, slices = 60) translate([0,0,2]) scale([.2,.2,1]) {
-      offset_shell(0.5) {
-          Mosque(100, crescent_scale=0.9, crescent_rotation=30);
-        }
-    };
-}
 
-//
-//module test(thickness = 0.1) {
-//     minkowski() {
-//            children();
-//            circle([2 * thickness, 2 * thickness], center=true);
-//          }
-//}
-//    
 ////Mosque(20);

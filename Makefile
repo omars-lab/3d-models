@@ -11,3 +11,9 @@ openscad := /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
 cookie-cutters:
 	make -f ./Makefile CookieCutter-Arabesque.png
 	make -f ./Makefile CookieCutter-Mosque.png
+
+install.libraries:
+	git clone git@github.com:JustinSDK/dotSCAD.git ${PWD}/libraries/dotSCAD
+
+start:
+	OPENSCADPATH=${PWD}/libraries/dotSCAD open -a "OpenSCAD"

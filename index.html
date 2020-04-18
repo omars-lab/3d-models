@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>3D Models</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/js/jquery.event.move.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/js/jquery.twentytwenty.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/css/twentytwenty.css" type="text/css" media="screen" />
+    <!-- https://www.sitepoint.com/a-minimal-html-document-html5-edition/ -->
+    <!-- https://github.com/zurb/twentytwenty -->
+  </head>
+  <body>
+    <div class="twentytwenty-container">
+      <!-- The before image is first -->
+      <img src="CookieCutter-Arabesque.png" />
+      <!-- The after image is last -->
+      <img src="http://placehold.it/400x200&amp;text=2" />
+    </div>
+    <script>
+        $(function(){
+          $(".twentytwenty-container").twentytwenty();
+        });
+    </script>
+
+    <div class="twentytwenty-container">
+      <!-- The before image is first -->
+      <img src="CookieCutter-Mosque.png" />
+      <!-- The after image is last -->
+      <img src="http://placehold.it/400x200&amp;text=2" />
+    </div>
+    <script>
+        $(function(){
+          $(".twentytwenty-container").twentytwenty();
+        });
+    </script>
+
+  </body>
+</html>

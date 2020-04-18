@@ -22,6 +22,25 @@ module Crescent(r, fatten_scale=1, curve_angle=0, rotate=0) {
     }
 }
 
+
+module round_edges(r) {
+    minkowski() {
+        children();
+        circle(r);
+    };
+}
+
+module CrescentV2(outer_r, inner_r, r_shift, edge_rounding=2) {
+    // Different way to construct ... rounded edges ...
+   round_edges(edge_rounding) {
+        difference() {
+            circle(outer_r);
+            translate(r_shift) circle(inner_r);
+        };
+    };
+}
+
+
 //module Arch(x,y,r) {
 //    // http://kitwallace.co.uk/Blog/item/2013-01-28T17:59:00Z
 //    union() {

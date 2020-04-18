@@ -61,3 +61,22 @@ module EightFoldCookieCutter() {
 //EightFold();
 
 //rotate([0,90,0]) HalfCylinder(r=1.25, h=75, center=true);
+
+
+//module test(thickness = 0.1) {
+//     minkowski() {
+//            children();
+//            circle([2 * thickness, 2 * thickness], center=true);
+//          }
+//}
+
+
+////https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
+//use <MCAD/2Dshapes.scad>
+////pieSlice([10,10],10,70);
+//ellipse(10,20);
+
+
+use <line2d.scad>;
+
+line2d(p1 = [0, 0], p2 = [5, 0], width = 1);
