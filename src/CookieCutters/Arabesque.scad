@@ -1,6 +1,6 @@
-include <BasicShapes.scad>
-include <ComplexShapes.scad>
-include <CookieCutter.scad>
+include <../BasicShapes.scad>
+include <../ComplexShapes.scad>
+include <Common.scad>
 
 module OuterStars(count, star_points, star_size, distance_factor=1) {
     union() {
@@ -26,9 +26,7 @@ cookie_cutter(2, 1) {
     scale([5,5,1]) EightFold();
 }
 
-
-
-// Attempt 1: Trying to manually outline ... 
+// Attempt 1: Trying to manually outline ...
 
 //module InnerFoldShell(shell_thickness) {
 //   scale_factor = 1 + shell_thickness;
@@ -36,7 +34,7 @@ cookie_cutter(2, 1) {
 //        scale([scale_factor,scale_factor,scale_factor])InnerFold();
 //        InnerFold();
 //   }
-//} 
+//}
 
 //module EightFoldShell(shell_thickness) {
 //   scale_factor = 1 + shell_thickness;
@@ -44,12 +42,12 @@ cookie_cutter(2, 1) {
 //        scale([scale_factor,scale_factor,1])EightFold();
 //        EightFold();
 //   }
-//} 
-//
+//}
+
 //module EightFoldCookieCutter() {
 //    union() {
 //          linear_extrude(height = 75, slices = 60) {
-//          scale([5, 5, 1]) 
+//          scale([5, 5, 1])
 //            intersection() {
 //                EightFoldShell(0.3);
 //                translate([0,0,0]) rotate([0,0,90]) Octagon(26.7);
@@ -57,4 +55,5 @@ cookie_cutter(2, 1) {
 //        }
 //    }
 //}
+
 //EightFoldCookieCutter();

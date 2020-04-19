@@ -1,6 +1,6 @@
-include <BasicShapes.scad>
-include <ComplexShapes.scad>
-include <CookieCutter.scad>
+include <../BasicShapes.scad>
+include <../ComplexShapes.scad>
+include <Common.scad>
 
 
 module InnerFold(size=20) {

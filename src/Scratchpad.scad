@@ -77,6 +77,29 @@ module EightFoldCookieCutter() {
 //ellipse(10,20);
 
 
-use <line2d.scad>;
+//use <line2d.scad>;
+//line2d(p1 = [0, 0], p2 = [5, 0], width = 1);
 
-line2d(p1 = [0, 0], p2 = [5, 0], width = 1);
+//use <dotSCAD/src/arc.scad>;
+//$fn = 24;
+//arc(radius = 20, angle = [45, 290], width = 2, width_mode = "LINE_OUTWARD");
+//%circle(r = 20);
+
+
+use <dotSCAD/src/bezier_curve.scad>;
+use <dotSCAD/src/polyline2d.scad>;
+
+t_step = 0.05;
+width = 0.25;
+
+p0 = [0, 0, 0];
+p1 = [20, 20, 0];
+p2 = [40, 0, 0];
+
+points = bezier_curve(t_step, 
+    [p0, p1, p2]
+);
+
+polyline2d(points, width);
+
+%circle(r = 20);

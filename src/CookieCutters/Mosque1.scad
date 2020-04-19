@@ -1,9 +1,6 @@
-include <BasicShapes.scad>
-include <ComplexShapes.scad>
-include <CookieCutter.scad>
-
-//https://www.etsy.com/listing/770065287/professional-quality-mosque-cookie?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_d-craft_supplies_and_tools-kitchen_supplies-kitchen_tools_and_utensils-cookie_cutters&utm_custom1=e12205a9-1426-4d66-9c46-fd49f0a70718&utm_content=go_1843970773_68900286679_346362959724_pla-295472669507_c__770065287&utm_custom2=1843970773&gclid=EAIaIQobChMI5bb_z6re6AIVGKSzCh3zTwPnEAQYBCABEgKdEPD_BwE
-
+include <../BasicShapes.scad>
+include <../ComplexShapes.scad>
+include <Common.scad>
 
 // How do I make a shell???
 // Apporach 1 ... manually trying to strech an image ...
@@ -14,11 +11,11 @@ include <CookieCutter.scad>
 //        translate([0,1,0]) Mosque(width, door_scale=.24, crescent_scale=1.25, crescent_rotation=17.5);
 //
 //   }
-//} 
-// Approach 2 ... doing this ...
-// https://cubehero.com/2013/12/31/creating-cookie-cutters-using-offsets-in-openscad/
 
-module Door() {    
+//}
+// Approach 2 ... doing this ...
+
+module Door() {
     difference(){
         translate([ 0,0,0])color("green")Arch(13, 13);
         translate([ 0,0.5,0])Arch(12, 12);
@@ -34,9 +31,9 @@ module Mosque(width, door_scale=0.25, door_stretch=0, crescent_scale=1, crescent
     arc_height = 1.5*width/5 ;
     total_height = square_height + arc_height + crescent_height;
     echo(total_height, width, total_height/width);
-    
+
     union() {
-        translate([0,square_height+arc_height+crescent_height,0]) 
+        translate([0,square_height+arc_height+crescent_height,0])
             Crescent(crescent_size, crescent_scale, rotate=crescent_rotation);
         difference() {
             translate([-width/2,0,0])square([width, width+(width/10)]);
