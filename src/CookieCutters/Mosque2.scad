@@ -15,28 +15,28 @@ include <Common.scad>
 //}
 // Approach 2 ... doing this ...
 
-module Minaret() {
+module Minaret(size=45) {
 //        color("green") 
-    translate([ 0,0,0]) Arch(10, 45);
+    translate([0,0,0]) Arch(size/4.5, size);
 }
 
-module Dome() {
+module Dome(size=45) {
     union() {
-        translate([35,25]) difference() {
-            circle(27.5, center=true);
-            translate([0,-27.5])square([27.5*2, 27.5*2], center=true);
+        translate([size/1.28,size/1.8]) difference() {
+            circle(size/1.8, center=true);
+            translate([0,-size/1.64])square([2*size/1.64, 2*size/1.64], center=true);
         };
-        translate([35,42]) Arch(5, 9);
+        translate([size/1.28,size/1.19]) Arch(size/9, size/5);
     }
 }
 
 
-module Mosque(width, door_scale=0.25, door_stretch=0, crescent_scale=1, crescent_rotation=0) {
-    Minaret();
-    Dome();
-    square([65,25]);
+module Mosque(size=45) {
+    Minaret(size);
+    Dome(size);
+    square([1.45*size,size/1.8]);
 }
 
-cookie_cutter() {
-    Mosque();
+cookie_cutter(7,2.5,20) {
+    Mosque(200);
 }

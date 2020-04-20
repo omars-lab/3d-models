@@ -23,7 +23,6 @@ module Lantern2(size=100) {
     }
 }
 
-
-rotate([0,0,90]) cookie_cutter() {
-    Lantern2();
+rotate([0,0,90]) cookie_cutter(total_height=25) {
+    Lantern2(250);
 }

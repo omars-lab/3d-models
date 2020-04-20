@@ -22,7 +22,7 @@ module EightFold(distance_factor=1) {
     }
 }
 
-cookie_cutter(2, 1) {
+cookie_cutter() {
     scale([5,5,1]) EightFold();
 }
 

@@ -6,7 +6,7 @@ use <dotSCAD/src/bezier_curve.scad>;
 use <dotSCAD/src/polyline2d.scad>;
 use <dotSCAD/src/arc.scad>;
 
-// Attempt 1 ... 
+// Attempt 1 ...
 //module Lantern3() {
 //    round_edges(0.4 ) difference() {
 //        union() {
@@ -32,7 +32,7 @@ module bottom_curve(size=40, outline_width=4) {
 }
 
 module latern_bottom(size=40, outline_width=4) {
-    union() {
+    mirror([0,1,0]) union() {
         translate([size*0,0,0]) bottom_curve(size,outline_width);
         translate([size*1,0,0]) bottom_curve(size,outline_width);
         translate([size*2,0,0]) bottom_curve(size,outline_width);
@@ -43,9 +43,9 @@ module latern_side(orientation="left", size=40, outline_width=4) {
     t_step = 0.05;
     side = size*3;
     h_plane = orientation == "left" ? size*3 : 0 ;
-    v_plane = orientation == "left" ? -1 * size * 1.5 : size * 1.5 ;
+    v_plane = orientation == "left" ? -1 * size * 1.75 : size * 1.75 ;
     p0 = [h_plane, 0, 0];
-    p1 = [h_plane + v_plane, size*1.25, 0];
+    p1 = [h_plane + v_plane, size*1, 0];
     p2 = [h_plane, size*3, 0];
     points = bezier_curve(t_step, [p0, p1, p2]);
     polyline2d(points, outline_width);
@@ -59,7 +59,7 @@ module latern_top(orientation="left", size=40, outline_width=4) {
     v_plane = orientation == "left" ? -1 * size : size ;
     p0 = [h_plane, size*3, 0];
     p1 = [h_plane+(v_plane/1.2), size*3+size/2.75, 0];
-    p2 = [h_plane+v_plane*1.2, size*3+size/1.15, 0];
+    p2 = [h_plane+v_plane*1.25, size*3+size/1.1, 0];
     points = bezier_curve(t_step, [p0, p1, p2]);
     polyline2d(points, outline_width);
 //    %translate([h_plane+(v_plane/1.2), size*3+size/2, 0]) circle(2);
@@ -107,12 +107,35 @@ module Lantern3(size=40, outline_width=4) {
 //        Lantern3(outline_width=0.01);
 //    }
 ////}
-//   
+//
 
-cookie_cutter() {
-    Lantern3();
-}
+ cookie_cutter(10, 4, total_height=30) {
+//     _Lantern3(100);
+     Lantern3(100);
+ }
 
-//cookie_cutter() {
-//    _Lantern3();
+
+
+
+//
+//module bottom_curve(size=40, outline_width=4, orient="left") {
+//    t_step = 0.05;
+//    p00 = orient=="left" ? [-size/2, 0, 0] : [size+size/2, 0, 0];
+//    p0 = [0, 0, 0];
+//    p1 = [size/2, size/2, 0];
+//    p2 = [size, 0, 0];
+//    _points = orient=="left" ? [p0, p1, p2] : [p0, p1, p2];
+////    _points = orient=="left" ? [p00, p0, p1, p2] : [p0, p1, p2, p00];
+//    points = bezier_curve(t_step, _points);
+//    union() {
+//        polyline2d(points, outline_width);
+//        polyline2d(orient=="left" ? [p00, p0] : [p2, p00], outline_width);
+//    }
+//}
+//
+//module latern_bottom(size=40, outline_width=4) {
+//    union() {
+//        translate([size*0 + size/2,0,0]) bottom_curve(size,outline_width,"left");
+//        translate([size*1.5,0,0]) bottom_curve(size,outline_width,"right");
+//    }
 //}

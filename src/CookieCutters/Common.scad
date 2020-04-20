@@ -10,9 +10,9 @@ module offset_shell(thickness = 0.1) {
    }
 }
 
-module cookie_cutter(handle_thickness=2.5, cutter_tickness=1, total_height=10) {
+module cookie_cutter(handle_thickness=8, cutter_tickness=3, total_height=15) {
     union() {
-        linear_extrude(height = total_height*(0.25), slices = 60) {
+        linear_extrude(height = total_height*(0.15), slices = 60) {
             scale([.2,.2,1]) {
               offset_shell(handle_thickness) {
                 children();
@@ -20,7 +20,7 @@ module cookie_cutter(handle_thickness=2.5, cutter_tickness=1, total_height=10) {
               }
             }
         };
-        linear_extrude(height = total_height*(0.8), slices = 60)
+        linear_extrude(height = total_height*(0.9), slices = 60)
             translate([0,0,2])
             scale([.2,.2,1]) {
               offset_shell(cutter_tickness) {

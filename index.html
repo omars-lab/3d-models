@@ -6,30 +6,116 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/js/jquery.event.move.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/js/jquery.twentytwenty.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/css/twentytwenty.css" type="text/css" media="screen" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zurb/twentytwenty@a7b4057817bb098f554c5626a19c3d5ae14b280b/css/twentytwenty.css" type="text/css" media="screen" /> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800' rel='stylesheet' type='text/css' />
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,700,300,200,100,900' rel='stylesheet' type='text/css' />
     <!-- https://www.sitepoint.com/a-minimal-html-document-html5-edition/ -->
     <!-- https://github.com/zurb/twentytwenty -->
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <style>
+        .grid-item { width: 200px; }
+        .grid-item--width2 { width: 400px; }
+    </style>
+
+    <link type="text/css" href="https://cdn.jotfor.ms/before-after/before-after.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jotfor.ms/before-after/before-after.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kavyasukumar/imgSlider@2b1678e0e8aeb9d9b97554e0fdbc330b3ed26ff2/distr/imgslider.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/kavyasukumar/imgSlider@2b1678e0e8aeb9d9b97554e0fdbc330b3ed26ff2/distr/imgslider.min.js"></script>
+
   </head>
   <body>
-    <div class="twentytwenty-container">
-      <!-- The before image is first -->
+    <!-- <div class="twentytwenty-container">
       <img src="build/images/Arabesque.png" />
-      <!-- The after image is last -->
-      <img src="http://placehold.it/400x200&amp;text=2" />
+      <img src="http://placehold.it/800x400&text=2" />
+    </div> -->
+
+    <!-- <ul id="hexGrid">
+      <li class="hex">
+        <a class="hexIn" href="#">
+          <div class="twentytwenty-container">
+            <img src="build/images/Mosque1.png" />
+            <img src="http://placehold.it/800x400&text=2" />
+          </div>
+        </a>
+      </li>
+    </ul> -->
+
+    <div class="grid">
+      <!-- <div class="grid-item">
+          <div class="twentytwenty-container">
+              <img src="build/images/Arabesque.png" />
+              <img src="http://placehold.it/800x400&text=2" />
+          </div>
+      </div>
+      <div class="grid-item">
+          <div class="twentytwenty-container">
+              <img src="build/images/Arabesque.png" />
+              <img src="http://placehold.it/800x400&text=2" />
+          </div>
+      </div>
+      <div class="grid-item">
+          <div class="twentytwenty-container">
+              <img src="build/images/Arabesque.png" />
+              <img src="http://placehold.it/800x400&text=2" />
+          </div>
+      </div> -->
+      <!--
+      <div class="grid-item">
+          <div class="ba-slider">
+             <img src="build/images/Arabesque.png" />
+             <div class="resize">
+                 <img src="http://placehold.it/800x800&text=2" />
+             </div>
+             <span class="handle"></span>
+          </div>
+      </div>
+
+      -->
+
+      <div class="grid-item">
+          <div class="slider">
+              <div class="slider responsive">
+                  <div class="left image">
+                    <img src="build/images/Circle.png"/>
+                  </div>
+                  <div class="right image">
+                    <img src="http://placehold.it/800x800&text=2"/>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="grid-item">
+          <div class="slider">
+              <div class="slider responsive">
+                  <div class="left image">
+                    <img src="build/images/Lantern1.png"/>
+                  </div>
+                  <div class="right image">
+                    <img src="http://placehold.it/800x800&text=2"/>
+                  </div>
+              </div>
+          </div>
+      </div>
+
     </div>
-    <script>
-        $(function(){
-          $(".twentytwenty-container").twentytwenty();
-        });
+
+    <!-- <script type="text/javascript">
+      $('.ba-slider').beforeAfter();
+    </script> -->
+
+    <script type="text/javascript">
+      $('.slider').slider();
     </script>
 
-    <div class="twentytwenty-container">
-      <!-- The before image is first -->
-      <img src="build/images/Mosque1.png" />
-      <!-- The after image is last -->
-      <img src="http://placehold.it/400x200&amp;text=2" />
-    </div>
     <script>
+        $('.grid').masonry({
+          // options
+          itemSelector: '.grid-item',
+          columnWidth: 200
+        });
+
         $(function(){
           $(".twentytwenty-container").twentytwenty();
         });

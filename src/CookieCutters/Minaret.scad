@@ -38,7 +38,7 @@ module Minaret(size=40){
     square([1.575*size, size/3+4*size]);
 }
 
-cookie_cutter() {
+cookie_cutter(10,4,20) {
     Minaret(100);
 }
 

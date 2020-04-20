@@ -30,7 +30,7 @@ module Mosque(width, door_scale=0.25, door_stretch=0, crescent_scale=1, crescent
     crescent_height = crescent_size;
     arc_height = 1.5*width/5 ;
     total_height = square_height + arc_height + crescent_height;
-    echo(total_height, width, total_height/width);
+//    echo(total_height, width, total_height/width);
 
     union() {
         translate([0,square_height+arc_height+crescent_height,0])
@@ -43,8 +43,8 @@ module Mosque(width, door_scale=0.25, door_stretch=0, crescent_scale=1, crescent
     }
 }
 
-cookie_cutter() {
-    Mosque(100, crescent_scale=0.9, crescent_rotation=30);
+cookie_cutter(9,3.5,25) {
+    Mosque(200, crescent_scale=0.9, crescent_rotation=30);
 }
 
 

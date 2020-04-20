@@ -12,14 +12,21 @@ openscad := /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
 
 %.png: %.scad
 	@echo Generating $*.png from $@
-	${openscad} -o ${ROOT_DIR}/build/images/$*.png $*.scad
+	${openscad} -o ${ROOT_DIR}/build/images/$$(basename $*.png) $*.scad
+
+%.stl: %.scad
+	@echo Generating $*.stl from $@
+	${openscad} -o ${ROOT_DIR}/build/stls/$$(basename $*.stl) $*.scad
 
 cookie-cutters:
 	ls ${ROOT_DIR}/src/CookieCutters/*.scad | sed 's/.scad//g' \
 		| xargs -n 1 basename \
 		| xargs -n 1 bash -c ' \
-			cd ${ROOT_DIR}/src/CookieCutters && make -f ${ROOT_DIR}/Makefile $${0}.png \
+			cd ${ROOT_DIR}/src/CookieCutters && make -f ${ROOT_DIR}/Makefile $${0}.png $${0}.stl \
 		'
+clean:
+	rm -rf ${ROOT_DIR}/build/images/*.png
+	rm -rf ${ROOT_DIR}/build/stls/*.stl
 
 ${DEP}:
 	mkdir -f $$( dirname ${DEP} )
@@ -30,4 +37,3 @@ start: ${DEP}
 
 open:
 	open -a "Google Chrome" ${ROOT_DIR}/index.html
-
