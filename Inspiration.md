@@ -24,3 +24,12 @@ https://cdn.jotfor.ms/before-after/before-after.min.css
 https://cdn.jotfor.ms/before-after/before-after.min.js
 https://cdn.jsdelivr.net/gh/kavyasukumar/imgSlider@2b1678e0e8aeb9d9b97554e0fdbc330b3ed26ff2/distr/imgslider.min.css
 https://cdn.jsdelivr.net/gh/kavyasukumar/imgSlider@2b1678e0e8aeb9d9b97554e0fdbc330b3ed26ff2/distr/imgslider.min.js
+
+https://imagesloaded.desandro.com/
+https://stackoverflow.com/questions/18637418/trying-to-load-local-json-file-to-show-data-in-a-html-page-using-jquery
+http://egegorgulu.com/works/beforeafterjs/
+    https://github.com/jotform/before-after.js
+
+https://css-tricks.com/almanac/properties/c/cursor/
+
+https://www.toptal.com/designers/htmlarrows/arrows/left-right-arrow/

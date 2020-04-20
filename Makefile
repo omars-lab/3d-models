@@ -19,7 +19,7 @@ openscad := /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
 	${openscad} -o ${ROOT_DIR}/build/stls/$$(basename $*.stl) $*.scad
 
 cookie-cutters:
-	ls ${ROOT_DIR}/src/CookieCutters/*.scad | sed 's/.scad//g' \
+	ls ${ROOT_DIR}/src/CookieCutters/*.scad | sed 's/.scad//g' | grep -v Common \
 		| xargs -n 1 basename \
 		| xargs -n 1 bash -c ' \
 			cd ${ROOT_DIR}/src/CookieCutters && make -f ${ROOT_DIR}/Makefile $${0}.png $${0}.stl \
@@ -37,3 +37,6 @@ start: ${DEP}
 
 open:
 	open -a "Google Chrome" ${ROOT_DIR}/index.html
+
+index_images:
+	cat <(echo -n 'var data = ' ) <(ls -1 build/images/*.png | grep -v Common | jq -R '.' | jq -s ) > data.js
