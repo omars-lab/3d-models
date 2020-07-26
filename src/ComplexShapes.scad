@@ -14,6 +14,12 @@ module HalfCircle(r) {
     }
 }
 
+// http://benjamin-engel.blogspot.com/2015/07/openscad-tips-and-tricks.html
+
+module equilateral_triangle(h) {
+    rotate([0,0,-30]) circle(r=h, $fn=3);
+}
+
 module Crescent(r, fatten_scale=1, curve_angle=0, rotate=0) {
     r_prime = r / fatten_scale;
     rotate([0,0,rotate]) difference() {
