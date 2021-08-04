@@ -22,10 +22,24 @@ module EightFold(distance_factor=1) {
     }
 }
 
-cookie_cutter() {
-    scale([5,5,1]) EightFold();
+//cookie_cutter() {
+//    scale([5,5,1]) EightFold();
+//}
+
+//union() {
+//difference() {
+//    Octagon(30);
+//    EightFold();
+//}
+difference() {
+    OuterStars(8, 5, 10.0, distance_factor=1.0);
+    difference(){
+        OuterStars(8, 5, 10.0, distance_factor=1.0);
+        rotate([0,0,9   ])Dodecagon(24.7);
+    }
 }
 
+Star(8, 8, 6);
 // Attempt 1: Trying to manually outline ...
 
 //module InnerFoldShell(shell_thickness) {

@@ -44,3 +44,15 @@ module Hexagon(size) {
 module Octagon(size) {
   Star(4, size, size);
 }
+
+module Decagon(size) {
+  Star(5, size, size);
+}
+
+module Decagon(size) {
+  Star(5, size, size);
+}
+
+module Dodecagon(size) {
+  Star(6, size, size);
+}
