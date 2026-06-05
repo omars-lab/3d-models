@@ -2,26 +2,16 @@ include <../BasicShapes.scad>
 include <../ComplexShapes.scad>
 include <Common.scad>
 
-
-
-module kaabah_top(size) {
-    translate([0,size*8,0]) scale([10,1.5,1]) equilateral_triangle(size);
-}
-
-module kaabah_bottom(size) {
-    mirror([0,1,0]) kaabah_top(size);    
-}
-
-module kaabah_body(size) {
-    square([size*8*2.15, size*8*1.815], center=true);
-}
+// The Kaaba is an iconic cube. As a cookie cutter the faithful silhouette
+// is a clean square with very slightly softened corners (so the print and
+// the dough release cleanly). Earlier versions added wide, flat triangular
+// "peaks" that made the outline read as a hexagon / house rather than a cube.
 
 module kaabah(size) {
-    union() {
-        kaabah_body(size);
-        kaabah_top(size);
-        kaabah_bottom(size);    
-    }
+    corner = size * 0.06;          // subtle corner rounding
+    side   = size * 8 * 1.9;       // overall edge length (kept close to old footprint)
+    offset(r = corner) offset(r = -corner)
+        square([side, side], center = true);
 }
 
 //kaabah(10);

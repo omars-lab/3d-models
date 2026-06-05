@@ -1,359 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Model Gallery - Islamic Cookie Cutters</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sacred Patterns — A Catalog of 3D-Printed Cookie Cutters</title>
+<meta name="description" content="A catalog of Islamic-inspired cookie cutters modeled in OpenSCAD — geometric patterns, lanterns, mosques, and Eid motifs, ready to 3D print.">
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+<style>
+  :root{
+    --paper:      #f3efe6;   /* warm engineering paper          */
+    --paper-2:    #efeade;   /* slightly deeper panel           */
+    --ink:        #1c1a17;   /* near-black ink                  */
+    --ink-soft:   #57514a;   /* muted ink for body copy         */
+    --ink-faint:  #8c8479;   /* faint labels                    */
+    --line:       #d8d1c2;   /* hairline rules                  */
+    --line-2:     #cabfa9;   /* stronger rule                   */
+    --accent:     #b4532a;   /* terracotta — single accent      */
+    --accent-ink: #8c3f1f;
+    --grid:       rgba(120,108,86,0.07);
+    --gold:       #c79a2e;   /* echoes the render gold          */
+    --radius:     2px;
+  }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: white;
-        }
+  *{ margin:0; padding:0; box-sizing:border-box; }
 
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
+  html{ scroll-behavior:smooth; }
 
-        .header p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.9;
-        }
+  body{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    color:var(--ink);
+    background-color:var(--paper);
+    /* fine engineering grid + faint major lines */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 26px 26px, 26px 26px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+  .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(1.1rem,4vw,3rem); }
 
-        .model-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
+  /* ---------- masthead ---------- */
+  header{
+    border-bottom:1px solid var(--line-2);
+    padding:clamp(2.2rem,6vw,4.2rem) 0 clamp(1.6rem,3vw,2.4rem);
+    position:relative;
+  }
+  .kicker{
+    display:flex; align-items:center; gap:.9rem;
+    font-size:.72rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:1.5rem;
+  }
+  .kicker .dash{ flex:0 0 34px; height:1px; background:var(--line-2); }
+  .kicker .spec{ margin-left:auto; color:var(--accent-ink); }
 
-        .model-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    font-size:clamp(2.6rem,7vw,5.4rem);
+    line-height:.98;
+    letter-spacing:-.015em;
+    color:var(--ink);
+    max-width:18ch;
+  }
+  h1 .ar{
+    display:block;
+    font-size:clamp(1.4rem,4vw,2.4rem);
+    color:var(--accent);
+    margin-bottom:.4rem;
+    letter-spacing:0;
+    direction:rtl;
+  }
+  .lede{
+    margin-top:1.5rem;
+    max-width:60ch;
+    color:var(--ink-soft);
+    font-size:clamp(.86rem,1.4vw,.96rem);
+  }
+  .meta-row{
+    margin-top:2rem;
+    display:flex; flex-wrap:wrap; gap:1.4rem 2.6rem;
+    font-size:.74rem; color:var(--ink-faint);
+    letter-spacing:.04em;
+  }
+  .meta-row b{ color:var(--ink); font-weight:600; }
+  .meta-row a{ color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--line-2); }
+  .meta-row a:hover{ border-color:var(--accent); }
 
-        .model-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(45deg, #f0f2f5, #e8ecf0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+  /* ---------- section heads ---------- */
+  .section-head{
+    display:flex; align-items:baseline; gap:1rem;
+    margin:clamp(2.6rem,5vw,4rem) 0 1.4rem;
+    padding-top:1.4rem;
+  }
+  .section-head .no{
+    font-size:.72rem; color:var(--accent-ink); letter-spacing:.1em;
+  }
+  .section-head h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500; font-size:clamp(1.2rem,2.4vw,1.7rem);
+    letter-spacing:-.01em;
+  }
+  .section-head .rule{ flex:1; height:1px; background:var(--line); align-self:center; }
+  .section-head .count{ font-size:.72rem; color:var(--ink-faint); }
 
-        .model-image img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
+  /* ---------- gallery grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(258px,1fr));
+    gap:1px;                       /* hairline seams between plates */
+    background:var(--line);
+    border:1px solid var(--line);
+  }
 
-        .model-card:hover .model-image img {
-            transform: scale(1.05);
-        }
+  .plate{
+    background:var(--paper);
+    position:relative;
+    display:flex; flex-direction:column;
+    transition:background .35s ease;
+  }
+  .plate:hover{ background:#fbf9f3; }
 
-        .model-content {
-            padding: 1.5rem;
-        }
+  /* drafting corner ticks */
+  .plate::before, .plate::after{
+    content:""; position:absolute; width:9px; height:9px; pointer-events:none;
+    border-color:var(--line-2); opacity:0; transition:opacity .3s ease;
+  }
+  .plate::before{ top:10px; left:10px; border-left:1px solid; border-top:1px solid; }
+  .plate::after{ bottom:10px; right:10px; border-right:1px solid; border-bottom:1px solid; }
+  .plate:hover::before, .plate:hover::after{ opacity:1; }
 
-        .model-name {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-        }
+  .frame{
+    position:relative;
+    aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+    padding:1.6rem;
+    overflow:hidden;
+  }
+  /* faint diagonal blueprint hatch behind the object */
+  .frame::before{
+    content:""; position:absolute; inset:14px;
+    background-image:repeating-linear-gradient(45deg,
+        transparent 0 9px, rgba(120,108,86,0.045) 9px 10px);
+    pointer-events:none;
+  }
+  .frame img{
+    position:relative;
+    max-width:78%; max-height:78%;
+    object-fit:contain;
+    filter:drop-shadow(0 6px 14px rgba(60,50,30,0.18));
+    transition:transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .plate:hover .frame img{ transform:translateY(-4px) scale(1.04); }
 
-        .model-description {
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
+  .idx{
+    position:absolute; top:.7rem; left:.85rem;
+    font-size:.68rem; color:var(--ink-faint); letter-spacing:.08em;
+  }
+  .tag{
+    position:absolute; top:.7rem; right:.85rem;
+    font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent-ink);
+    border:1px solid var(--line-2);
+    padding:.16rem .45rem; border-radius:var(--radius);
+    background:var(--paper);
+  }
+  .pending{
+    position:absolute; inset:auto 0 1.1rem 0; text-align:center;
+    font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-faint);
+  }
 
-        .model-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+  .body{
+    border-top:1px solid var(--line);
+    padding:1rem 1.1rem 1.15rem;
+    display:flex; flex-direction:column; gap:.55rem;
+    flex:1;
+  }
+  .body h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600; font-size:1.12rem; letter-spacing:-.01em;
+    color:var(--ink);
+  }
+  .body p{
+    font-size:.74rem; color:var(--ink-soft); line-height:1.55;
+  }
+  .specs{
+    margin-top:.15rem;
+    display:flex; gap:.4rem .9rem; flex-wrap:wrap;
+    font-size:.64rem; color:var(--ink-faint); letter-spacing:.03em;
+  }
+  .specs span::before{ content:"· "; color:var(--line-2); }
+  .specs span:first-child::before{ content:""; }
 
-        .code-link {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
+  .actions{
+    margin-top:auto; padding-top:.7rem;
+    display:flex; gap:.5rem;
+  }
+  .btn{
+    flex:1; text-align:center;
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+    text-decoration:none;
+    padding:.55rem .4rem;
+    border:1px solid var(--line-2);
+    border-radius:var(--radius);
+    color:var(--ink);
+    transition:all .2s ease;
+    display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+  }
+  .btn:hover{ border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .btn.primary{ border-color:var(--accent); color:var(--accent-ink); }
+  .btn.primary:hover{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .btn[aria-disabled="true"]{ opacity:.4; pointer-events:none; }
+  .btn svg{ width:11px; height:11px; }
 
-        .code-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:clamp(3rem,6vw,5rem);
+    border-top:1px solid var(--line-2);
+    padding:2.4rem 0 3.4rem;
+    display:flex; flex-wrap:wrap; gap:1.2rem 2.5rem; align-items:baseline;
+    font-size:.72rem; color:var(--ink-faint); letter-spacing:.04em;
+  }
+  footer .sig{ font-family:'Fraunces', serif; font-size:.95rem; color:var(--ink); letter-spacing:0; }
+  footer a{ color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--line-2); }
+  footer a:hover{ border-color:var(--accent); }
+  footer .right{ margin-left:auto; }
 
-        .stl-link {
-            background: #48bb78;
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
+  /* staggered reveal */
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:none;} }
+  .plate{ opacity:0; animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards; }
+  @media (prefers-reduced-motion:reduce){ .plate{ animation:none; opacity:1; } }
 
-        .stl-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
-        }
-
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 4rem;
-            color: white;
-            opacity: 0.8;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .gallery {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .model-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
+  @media (max-width:560px){
+    .grid{ grid-template-columns:1fr; }
+    .meta-row{ gap:.8rem 1.6rem; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>3D Model Gallery</h1>
-            <p>Beautiful Islamic-inspired cookie cutters designed with OpenSCAD</p>
-        </div>
+<div class="wrap">
 
-        <div id="loading" class="loading">
-            <div class="spinner"></div>
-            Loading gallery...
-        </div>
+  <header>
+    <div class="kicker">
+      <span class="dash"></span>
+      OpenSCAD · Parametric · 3D-Printable
+      <span class="spec">No. 01 — 16 designs</span>
+    </div>
+    <h1>
+      <span class="ar">أنماط مقدّسة</span>
+      Sacred Patterns
+    </h1>
+    <p class="lede">
+      A working catalog of cookie cutters drawn from Islamic geometry and
+      Middle-Eastern architecture — arabesques, lanterns, minarets, mosques,
+      and Eid motifs. Each is modeled parametrically in OpenSCAD and exported
+      ready for the print bed.
+    </p>
+    <div class="meta-row">
+      <span><b>Tooling</b> OpenSCAD</span>
+      <span><b>Layer</b> 0.20 mm</span>
+      <span><b>Infill</b> 20–30%</span>
+      <span><b>Supports</b> none</span>
+      <span><b>Source</b> <a href="https://github.com/omars-lab/3d-models" target="_blank" rel="noopener">github.com/omars-lab/3d-models</a></span>
+    </div>
+  </header>
 
-        <div id="gallery" class="gallery" style="display: none;">
-            <!-- Gallery items will be populated by JavaScript -->
-        </div>
-
-        <div class="footer">
-            <p>Created with ❤️ using OpenSCAD | <a href="https://github.com/omars-lab/3d-models" target="_blank">View on GitHub</a></p>
-        </div>
+  <main>
+    <div class="section-head" id="catalog">
+      <span class="no">§ 01</span>
+      <h2>The Catalog</h2>
+      <span class="rule"></span>
+      <span class="count" id="count"></span>
     </div>
 
-    <script>
-        // Model data
-        var data = [
-          {
-            name: "Arabesque",
-            image: "build/images/Arabesque.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Arabesque.scad",
-            description: "Intricate Islamic geometric pattern featuring eight-fold symmetry with outer stars and complex arabesque designs."
-          },
-          {
-            name: "Circle",
-            image: "build/images/Circle.png", 
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Circle.scad",
-            description: "Simple yet elegant circular cookie cutter design."
-          },
-          {
-            name: "Crescent with Star",
-            image: "build/images/CrescentWithStar.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/CrescentWithStar.scad", 
-            description: "Classic Islamic symbol featuring a crescent moon with a star, perfect for Eid celebrations."
-          },
-          {
-            name: "Eight Point Star",
-            image: "build/images/EightPointStar.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/EightPointStar.scad",
-            description: "Beautiful eight-pointed star design with geometric precision, inspired by traditional Islamic art."
-          },
-          {
-            name: "Lantern 1",
-            image: "build/images/Lantern1.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Lantern1.scad",
-            description: "Traditional Middle Eastern lantern design with arched openings and decorative elements."
-          },
-          {
-            name: "Lantern 2", 
-            image: "build/images/Lantern2.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Lantern2.scad",
-            description: "Alternative lantern design with unique geometric patterns and architectural features."
-          },
-          {
-            name: "Lantern 3",
-            image: "build/images/Lantern3.png", 
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Lantern3.scad",
-            description: "Third variation of the lantern series, showcasing different proportions and decorative styles."
-          },
-          {
-            name: "Minaret",
-            image: "build/images/Minaret.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Minaret.scad",
-            description: "Architectural minaret design representing the iconic tower of Islamic mosques."
-          },
-          {
-            name: "Mosque 1",
-            image: "build/images/Mosque1.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Mosque1.scad", 
-            description: "First mosque design featuring traditional Islamic architecture with dome and minaret elements."
-          },
-          {
-            name: "Mosque 2",
-            image: "build/images/Mosque2.png",
-            code: "https://raw.githubusercontent.com/omars-lab/3d-models/refs/heads/master/src/CookieCutters/Mosque2.scad",
-            description: "Second mosque variation with different architectural proportions and decorative details."
-          }
-        ];
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const gallery = document.getElementById('gallery');
-            const loading = document.getElementById('loading');
-            
-            // Hide loading and show gallery
-            setTimeout(() => {
-                loading.style.display = 'none';
-                gallery.style.display = 'grid';
-                
-                // Populate gallery
-                data.forEach((model, index) => {
-                    const modelCard = createModelCard(model, index);
-                    gallery.appendChild(modelCard);
-                });
-            }, 1000);
-        });
+    <div class="grid" id="grid"></div>
+  </main>
 
-        function createModelCard(model, index) {
-            const card = document.createElement('div');
-            card.className = 'model-card fade-in';
-            card.style.animationDelay = `${index * 0.1}s`;
-            
-            const stlPath = model.code.replace('src/CookieCutters/', 'build/stls/').replace('.scad', '.stl');
-            
-            card.innerHTML = `
-                <div class="model-image">
-                    <img src="${model.image}" alt="${model.name}" loading="lazy">
-                </div>
-                <div class="model-content">
-                    <h3 class="model-name">${model.name}</h3>
-                    <p class="model-description">${model.description}</p>
-                    <div class="model-actions">
-                        <a href="${model.code}" class="code-link" target="_blank">
-                            <i class="fas fa-code"></i>
-                            View Code
-                        </a>
-                        <a href="${stlPath}" class="stl-link" target="_blank">
-                            <i class="fas fa-download"></i>
-                            Download STL
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-    </script>
+  <footer>
+    <span class="sig">Sacred Patterns</span>
+    <span>Modeled &amp; printed by Omar Eid</span>
+    <span>OpenSCAD → STL → PLA</span>
+    <span class="right">
+      <a href="https://github.com/omars-lab/3d-models" target="_blank" rel="noopener">View source on GitHub ↗</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+  // ---- catalog ----------------------------------------------------------
+  // image: processed transparent render in build/images/web/
+  // src  : OpenSCAD source ; stl: printable mesh
+  const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
+  const GH  = "https://github.com/omars-lab/3d-models/blob/master";
+
+  const MODELS = [
+    { id:"Arabesque",        name:"Arabesque",        tag:"Geometry",
+      desc:"Eight-fold symmetry with outer stars folding into a continuous arabesque lattice." },
+    { id:"EightPointStar",   name:"Eight-Point Star", tag:"Geometry",
+      desc:"The rub el hizb — two overlaid squares forming the classic eight-pointed star." },
+    { id:"Circle",           name:"Circle",           tag:"Geometry",
+      desc:"A plain round cutter. The quiet baseline the rest of the catalog departs from." },
+    { id:"Kaabah",           name:"Kaaba",            tag:"Symbol",
+      desc:"A clean cube silhouette echoing the Kaaba at the heart of the Sacred Mosque." },
+    { id:"CrescentWithStar", name:"Crescent & Star",  tag:"Symbol",
+      desc:"The hilal — crescent cradling a star, the motif of Eid nights." },
+    { id:"Eid",              name:"“Eid”",            tag:"Lettering",
+      desc:"The word Eid rendered in a flowing script, cut as a single connected piece." },
+    { id:"Minaret",          name:"Minaret",          tag:"Architecture",
+      desc:"The slender tower of the mosque, from which the call to prayer is given." },
+    { id:"Mosque1",          name:"Mosque I",         tag:"Architecture",
+      desc:"Dome, body, and crowning crescent — the silhouette of a mosque at dusk." },
+    { id:"Mosque2",          name:"Mosque II",        tag:"Architecture",
+      desc:"A second mosque study, re-proportioned with a wider arch and door." },
+    { id:"Lantern1",         name:"Lantern I",        tag:"Lantern",
+      desc:"The fanous — a Ramadan lantern with arched openings and a hanging ring." },
+    { id:"Lantern2",         name:"Lantern II",       tag:"Lantern",
+      desc:"A second fanous, turned and re-cut with a different body geometry." },
+    { id:"Lantern3",         name:"Lantern III",      tag:"Lantern",
+      desc:"The third lantern in the series, taller and more ornate in proportion." },
+    { id:"Camel",            name:"Camel",            tag:"Figure",
+      desc:"A camel in profile — the desert traveler, traced from a hand-drawn outline." },
+    { id:"Sheep",            name:"Sheep",            tag:"Figure",
+      desc:"A sheep for Eid al-Adha, the festival of sacrifice." },
+    { id:"Ballarina2",       name:"Ballerina",        tag:"Figure",
+      desc:"A ballerina mid-pose — a playful aside, vectorized from a sketch." },
+    { id:"PenStand",         name:"Pen Stand",        tag:"Utility",
+      desc:"Not a cutter but a companion piece — a small turned desk pen holder." },
+  ];
+
+  const icons = {
+    code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+    dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 21h14"/></svg>'
+  };
+
+  const grid  = document.getElementById('grid');
+  const total = MODELS.length;
+  document.getElementById('count').textContent = String(total).padStart(2,'0') + ' plates';
+
+  MODELS.forEach((m, i) => {
+    const n = String(i+1).padStart(2,'0');
+    const img = `build/images/web/${m.id}.png`;
+    const src = `${GH}/src/CookieCutters/${m.id}.scad`;
+    const stl = `${RAW}/build/stls/${m.id}.stl`;
+
+    const el = document.createElement('article');
+    el.className = 'plate';
+    el.style.animationDelay = (i * 45) + 'ms';
+    el.innerHTML = `
+      <div class="frame">
+        <span class="idx">${n} / ${String(total).padStart(2,'0')}</span>
+        <span class="tag">${m.tag}</span>
+        <img src="${img}" alt="${m.name} cookie cutter — OpenSCAD render" loading="lazy" decoding="async">
+      </div>
+      <div class="body">
+        <h3>${m.name}</h3>
+        <p>${m.desc}</p>
+        <div class="specs">
+          <span>0.20 mm layer</span><span>PLA</span><span>no supports</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="${src}" target="_blank" rel="noopener">${icons.code} Source</a>
+          <a class="btn primary" href="${stl}" target="_blank" rel="noopener" download>${icons.dl} STL</a>
+        </div>
+      </div>`;
+    grid.appendChild(el);
+  });
+</script>
 </body>
 </html>

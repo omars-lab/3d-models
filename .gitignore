@@ -1,0 +1,7 @@
+.DS_Store
+
+# transient runtime / local agent state
+.claude/scheduled_tasks.lock
+
+# gh-pages deploy worktree (created by `make deploy`)
+.gh-pages/
