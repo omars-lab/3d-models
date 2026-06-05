@@ -4,7 +4,7 @@ A beautiful collection of Islamic-inspired 3D cookie cutters designed with OpenS
 
 ## 🌟 Live Gallery
 
-**👉 [View the Interactive Gallery](https://your-username.github.io/3d-models/)**
+**👉 [View the Interactive Gallery](https://3d-models.bytesofpurpose.com/)**
 
 Experience the full interactive gallery with detailed descriptions, source code links, and 3D model previews.
 
