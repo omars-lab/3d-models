@@ -291,6 +291,7 @@
   // src  : OpenSCAD source ; stl: printable mesh
   const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
   const GH  = "https://github.com/omars-lab/3d-models/blob/master";
+  const ASSET_VER = "20260605b";   // bump when renders change, to bust CDN/browser image cache
 
   const MODELS = [
     { id:"Arabesque",        name:"Arabesque",        tag:"Geometry",
@@ -338,7 +339,7 @@
 
   MODELS.forEach((m, i) => {
     const n = String(i+1).padStart(2,'0');
-    const img = `build/images/web/${m.id}.png`;
+    const img = `build/images/web/${m.id}.png?v=${ASSET_VER}`;
     const src = `${GH}/src/CookieCutters/${m.id}.scad`;
     const stl = `${RAW}/build/stls/${m.id}.stl`;
 
