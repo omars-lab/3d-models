@@ -1,7 +1,13 @@
 .DS_Store
 
-# transient runtime / local agent state
-.claude/scheduled_tasks.lock
+# Local agent / tooling state (machine-specific, not project source)
+.claude/
+
+# Generated build artifacts — NOT tracked on master.
+# The source of truth is src/*.scad; `make cookie-cutters` + `make web-images`
+# regenerate build/, and `make deploy` publishes it to the gh-pages branch
+# (which keeps its own committed copy that GitHub Pages serves).
+build/
 
 # gh-pages deploy worktree (created by `make deploy`)
 .gh-pages/
