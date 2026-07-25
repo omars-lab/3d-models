@@ -4,10 +4,13 @@
 .claude/
 
 # Generated build artifacts — NOT tracked on master.
-# The source of truth is src/*.scad; `make cookie-cutters` + `make web-images`
-# regenerate build/, and `make deploy` publishes it to the gh-pages branch
-# (which keeps its own committed copy that GitHub Pages serves).
-build/
+# The source of truth is src/*.scad (cookie cutters) and the bikar-repo
+# patterns/Orbs/*.bkr (orbs); `make cookie-cutters` / `make orbs` +
+# `make web-images` regenerate build/, and `make deploy` publishes it to the
+# gh-pages branch (which keeps its own committed copy that GitHub Pages
+# serves). The build/*.py helpers are source, not artifacts — keep tracked.
+build/*
+!build/*.py
 
 # gh-pages deploy worktree (created by `make deploy`)
 .gh-pages/

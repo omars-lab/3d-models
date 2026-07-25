@@ -1,0 +1,28 @@
+# Star-Orb — icosahedral pierced-lattice sphere (the M0 spike, in DSL).
+# Each of the 20 triangular faces carries a {6/2} hexagram whose
+# alternating tips land exactly on the triangle's edge midpoints, so the
+# lattice connects across every face boundary and the shell closes
+# watertight. Render with: bikar render Star-Orb.bkr --format stl -o out.stl
+
+blueprint tri_face
+  # Face triangle: circumradius 100, corners at 90/210/330 deg — the
+  # canonical orb pattern frame (corners at 90 + k*120, CCW).
+  circle C0 center(0,0) radius 100
+  divide C0 into 3 offset 90
+  polygon tri [C0.cpt0 C0.cpt1 C0.cpt2]
+  # Inradius circle: its 6 points are the 3 edge midpoints (at 30/150/270)
+  # plus 3 points under the corners — the hexagram's tips.
+  circle C1 center(0,0) radius 50
+  divide C1 into 6 offset 30
+
+pattern tri_star on tri_face
+  edges from tri
+  connect every 2 on C1
+  voids detect
+
+orb StarOrb
+  base icosahedron
+  radius 60
+  inscribe tri_star
+  project spherical
+  struts width 3 depth 2.4
