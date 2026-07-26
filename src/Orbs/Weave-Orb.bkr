@@ -9,6 +9,16 @@
 # print is a genuinely linked chainmail ball, not a fused lattice.
 # Render with: bikar render Weave-Orb.bkr --format stl -o out.stl
 
+# The hexagram circle stays at the fixed inradius 50 (tips must land on
+# edge midpoints for cross-face closure). Keep amplitude at or above
+# (strut_depth + 0.4) / 2 — the mesh gate is per-tube and cannot see
+# ribbon-ribbon interpenetration, so a too-small amplitude fuses the
+# chainmail silently.
+param radius = 60 range 40..110 step 5
+param amplitude = 1.6 range 1.4..2.6 step 0.2
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
 blueprint tri_weave_face
   # Inradius circle of the canonical circumradius-100 triangle frame: its
   # 6 points are the 3 edge midpoints (at 30/150/270) plus 3 inner points
@@ -21,8 +31,8 @@ pattern tri_hexagram on tri_weave_face
 
 orb WeaveOrb
   base icosahedron
-  radius 60
+  radius $radius
   inscribe tri_hexagram
   project spherical
-  struts width 3 depth 2.4
-  weave crossing alternating amplitude 1.6
+  struts width $strut_width depth $strut_depth
+  weave crossing alternating amplitude $amplitude

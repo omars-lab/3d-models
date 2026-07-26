@@ -6,6 +6,12 @@
 # face: 5 star tips + 5 edge regions + the central pentagon).
 # Render with: bikar render Dodeca-Orb.bkr --format stl -o out.stl
 
+# The pentagram runs corner-to-corner on the fixed face frame, so the
+# pattern itself has no knobs; only the print dimensions do.
+param radius = 60 range 40..110 step 5
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
 blueprint pent_face
   circle C0 center(0,0) radius 100
   divide C0 into 5 offset 90
@@ -18,7 +24,7 @@ pattern pent_star on pent_face
 
 orb DodecaOrb
   base dodecahedron
-  radius 60
+  radius $radius
   inscribe pent_star
   project spherical
-  struts width 3 depth 2.4
+  struts width $strut_width depth $strut_depth
