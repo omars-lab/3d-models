@@ -1,6 +1,7 @@
 # Orb Lab — design doc (pre-implementation)
 
-Status: **DRAFT for review — no implementation yet.**
+Status: **DRAFT v2 — revised after design review with Omar (resolved decisions in §11). No
+implementation yet.**
 Scope: an adjustable, knob-driven orb configurator ("Orb Lab") published in the 3d-models
 catalog, with URL-query-parameter state sync, custom-orb capability, and a matching
 **Dials vs Code** construction-mode tab (with visual icons) in bikar studio.
@@ -73,13 +74,50 @@ Two consequences drive the whole design:
   path, so it bundles into a static page. The studio's 3D preview is a dependency-free
   Canvas-2D painter (`main.ts` `drawOrbMesh`/`setupOrbCanvas`) — no three.js anywhere.
 
+### 2.1 Required engine extension — `param` declarations (decided 2026-07-26)
+
+The knob-binding mechanism is **DSL-native variable declarations** — the OpenSCAD-Customizer
+model, chosen over a Lab-side code-gen layer during design review:
+
+```bkr
+param radius = 60 range 40..110 step 5
+param inner = 38 range 16..58
+param shoulder = 60 range 48..76
+```
+
+- New `param <name> = <value> [range <min>..<max> [step <s>]] [advanced]` statement.
+  Range/step are **first-class DSL syntax** (decided — not OpenSCAD-style annotation
+  comments, not Lab-side tables), so scripts are self-describing and studio + Lab read
+  identical metadata. The optional `advanced` flag sorts the knob under the UI's collapsed
+  "advanced" disclosure (decided: present from day one, §11).
+- Bodies reference declared params as `$name`. The expression plumbing already exists —
+  `NumericExpr` has a `var` type with const-eval bindings (`parser.ts:178-195`), today bound
+  only by `for $v in a..b` loops; `param` adds the missing declaration form.
+- Orb-level statements (`radius`, `struts width/depth`, `weave amplitude`) currently parse
+  bare positive numbers and must learn to accept `$name`/expressions.
+- Embedders need a **param-override entry point** (e.g. `compileToGeometry(source,
+  { params })`) so the Lab can drive sliders without textually rewriting source on every
+  drag — exact API is an engine-milestone detail (M5, §10).
+- **Cross-param constraints stay out of the DSL** (v1 decision): `inner < shoulder − 8` and
+  `amplitude ≥ (depth + 0.4)/2` live in the shared knob layer (§8) — constraint expressions
+  in the language are a bigger feature than v1 needs.
+- The committed orb scripts are refactored with param headers and become the archetype
+  templates themselves (§3); geometry at declared defaults must stay byte-identical
+  (golden-STL check).
+- Authoring guardrails (decided): a `.claude/skills/bikar-dsl` skill (grammar, param
+  conventions, cross-face closure rules) and a pre-commit/npm **mesh-gate check on changed
+  `.bkr` files** so humans and agents both get edit-time validation.
+
 ---
 
 ## 3. Archetype templates
 
-An **archetype** = a `.bkr` code-gen function + a knob schema + a per-base constants table.
-The per-base constants (divide counts/offsets, contact points) come from the committed,
-qiyas-validated reference orbs — a template only enables a base it has verified constants for.
+An **archetype** = a param-headed `.bkr` script (§2.1) — the committed, qiyas-validated
+reference orbs themselves, refactored to declare their tunables. The knob schema *is* the
+script's param block; per-base constants (divide counts/offsets, contact points) remain
+literal in each script body, which is why each archetype × base cell is a separate verified
+script rather than one script with a base picker. A cell ships enabled only when a verified
+script exists behind it.
 
 ### v1 archetypes
 
@@ -112,8 +150,9 @@ The six existing gallery orbs become **preset chips** in the Lab: clicking one s
 
 ## 4. Knob taxonomy
 
-Two tiers: **global knobs** (every archetype) and **archetype knobs** (pattern-level
-parameters the template substitutes into generated source).
+Two tiers: **global knobs** (every archetype) and **archetype knobs** (pattern-level params
+declared in each script's param block, §2.1). Knob names in the UI and URL are the param
+names the scripts declare.
 
 ### 4.1 Global knobs
 
@@ -122,12 +161,13 @@ parameters the template substitutes into generated source).
 | Archetype | icon cards | §3 list | changes which archetype knobs show |
 | Base solid | icon row (5 solids) | matrix-gated per archetype | drives petal count N = face sides |
 | Subdivision | stepper 1–4 | icosa-only; hidden otherwise | tris ×~4/level; worker + spinner needed at 3–4 |
-| Radius | slider 40–100 mm | default 60 | inset-degeneracy margin grows with R (§5) |
+| Radius | slider 40 mm → print-target ceiling | default 60 | ceiling = fits-in-build-volume (§6.5); inset-degeneracy margin grows with R (§5) |
 | Projection | toggle spherical/faceted | 2 values | measured: faceted works everywhere, crystalline look, ~20 % less volume |
 | Strut width | slider 1.5–6 mm | measured all-PASS at R=60 | wider struts shrink the valid pattern range (inset ∝ width/R) |
 | Strut depth | slider 1.2–4 mm | floor = mesh-gate min feature 1.2 | also the weave ribbon thickness |
 | Weave | toggle (weave-capable archetypes only) | on/off | switches family; disables strut-lattice-only knobs |
 | Weave amplitude | slider, **min = (depth + 0.4)/2** | default 1.6 at depth 2.4 | see §5 — the gate does *not* catch interpenetration |
+| Print target | machine dropdown + custom X/Y/Z | Bambu X1C/P1S/A1/A1 mini, Prusa MK4/Core One, Ender 3, SLS/MJF services, Custom | **not a design knob** — localStorage, never in share URLs (§6.5); sets the radius ceiling + process guidance |
 
 ### 4.2 Rosette archetype knobs (measured envelope)
 
@@ -198,6 +238,12 @@ physically wrong orbs; the UI must make these unreachable:
   blind to tube-tube contact; measured: amp 1.0 at depth 2.4 = −0.4 mm clearance, passes).
   Clamp the slider minimum, recompute when depth changes.
 - Strut depth < 1.2 mm → would fail the mesh-gate feature floor; clamp rather than error.
+- Radius above the print-target ceiling (§6.5) → clamp the slider max, not the design: a
+  *shared* design bigger than the viewer's build volume still renders, flagged "exceeds your
+  print target". Weave archetypes on an FDM target get a "powder process required" notice
+  rather than a hard block.
+- These cross-param constraints live in the shared knob layer (§8), not the DSL (§2.1) —
+  per-param ranges are the script's job, relationships between params are the UI's.
 
 **Tier 2 — engine hard errors (surface, don't hide).** Some knob corners can't be cheaply
 predicted; the engine's messages are already user-actionable — show them verbatim in an error
@@ -222,34 +268,40 @@ panel with the offending knobs highlighted:
 
 ### 6.1 Parameter schema (knob mode)
 
-Short keys, human-readable values, versioned:
+With DSL params (§2.1), **URL keys are the param names the script declares** — no hand-
+invented short-key table to maintain:
 
 ```
-lab.html?v=1&t=rosette&b=dod&r=60&sw=3&sd=2.4&p=s&in=38&sh=60
-lab.html?v=1&t=rosetteweave&b=dod&r=60&sw=3&sd=2.4&amp=1.6&in=38&sh=60
-lab.html?v=1&t=star&b=ico&sub=2&r=60&sw=3&sd=2.4&p=f
+lab.html?v=1&f=rosette-dodeca&inner=42&shoulder=64
+lab.html?v=1&f=rosette-weave-dodeca&amplitude=1.8
+lab.html?v=1&f=star-icosa&subdivide=2&projection=faceted
 ```
 
-- `v` — schema version, always present, bumped on any breaking key change; loader migrates or
+- `v` — schema version, always present, bumped on any breaking change; loader migrates or
   falls back to defaults with a notice.
-- `t` — archetype; `b` — base (`tet oct cube dod ico`); `sub` — subdivision (icosa only);
-  `r`/`sw`/`sd` — mm numbers; `p` — `s|f`; `amp` — weave amplitude; `in`/`sh` — rosette rings.
-- Omitted keys = archetype defaults, so preset links stay short and forward-compatible.
+- `f` — archetype script id, one per verified archetype × base cell (§3).
+- Every other key = a declared param name; values are the DSL literals.
+- Omitted keys = the script's declared defaults, so preset links stay short and
+  forward-compatible. A param *rename* in a shipped script is a breaking change → bump `v`
+  and keep an alias map.
 
 ### 6.2 Sync mechanics
 
 - Knob change → debounced (~200 ms) `history.replaceState` — no history spam while dragging.
-- Archetype or base change → `pushState` (a real navigation-sized jump; back button returns).
+- Archetype-script (`f=`) change → `pushState` (a real navigation-sized jump; back button
+  returns).
 - On load: parse → validate → **clamp into the valid envelope** (a shared/hand-edited URL may
   encode an invalid combo) → render; if clamped, show a "adjusted N parameters" toast.
 - "Copy link" button (explicit affordance beats assuming users watch the address bar).
 
 ### 6.3 Custom orbs in the URL
 
-When code mode diverges from what knobs can express: `t=custom&code=<lz-string
+When the source diverges from every shipped script: `f=custom&code=<lz-string
 compressToEncodedURIComponent of the full .bkr source>`. Orb `.bkr` files are ~1–2 KB text and
 compress well; if the resulting URL exceeds ~1,800 chars, warn and offer a `.bkr` download
-instead of a link.
+instead of a link. Params declared *by the custom source* still work as URL keys next to
+`code=` (overrides applied after parse) — custom orbs keep working sliders and shareable
+knob tweaks.
 
 ### 6.4 Best-practice alignment (researched precedents)
 
@@ -258,7 +310,7 @@ instead of a link.
   memory, debounce only the URL write (200–300 ms). Our 200 ms sits inside the norm.
 - **Never mix push and replace inside one debounced drag** — a queued pushState turns the
   whole flush into a new history entry and corrupts the back button. Slider drags are
-  replace-only; archetype/base changes push *outside* the debounce queue.
+  replace-only; archetype-script changes push *outside* the debounce queue.
 - **Default elision** (drop params at their default value) is the established convention —
   §6.1 already does this.
 - **Compressed-source-in-URL precedents**: TypeScript Playground uses exactly
@@ -271,17 +323,45 @@ instead of a link.
   proxies/QR/chat unfurlers are the real constraint) — our 1,800 warning threshold is
   consistent.
 
+### 6.5 Print target — localStorage, not URL (decided 2026-07-26)
+
+The radius ceiling derives from a **print target** picker: a dropdown of common machines with
+known build volumes — Bambu X1C/P1S (256³), A1 (256³), A1 mini (180³), Prusa MK4/Core One,
+Ender 3, … — plus SLS/MJF *service* presets and a **Custom** entry with manual X/Y/Z inputs.
+
+- Ceiling math: whole sphere must fit → `2R ≤ min(X, Y, Z) − 10 mm` margin. (The FDM
+  hemisphere-split variant, task #11, would relax the Z term for tall-bed machines.)
+- The machine choice **implies the process**, driving guidance with zero extra knobs: FDM
+  targets surface the weave "powder process required" notice and the split-export dependency;
+  SLS/MJF service targets print everything as-is.
+- The target is a fact about the *user's environment*, not the design — it persists in
+  **localStorage and is never written to share URLs**. A recipient opening a design that
+  exceeds *their* target sees it rendered normally with an "exceeds your print target" flag;
+  the design is never silently shrunk.
+- The machine table is maintained in the shared knob layer (§8) — a dozen entries, not a
+  database; Custom covers the tail.
+
 ---
 
 ## 7. Custom orbs — knobs ⇄ code
 
-- **Code view is always live**: the generated `.bkr` for the current knob state is visible
-  (read-only in Dials mode) — the knobs *teach the DSL*.
-- Switching to Code mode unlocks editing. First keystroke that diverges from generated source
-  flips state to `t=custom` (URL now carries `code=`), and the knob panel dims with a
-  "detached — reset to dials" affordance (one-way detach; no source-to-knob inference in v1).
+DSL params (§2.1) dissolve the detach problem that a code-gen design would have had — there
+is no cliff between knob-land and code-land (decided 2026-07-26, superseding the earlier
+one-way-detach proposal):
+
+- **Sliders bind to the param block by name, bidirectionally.** Dragging a slider updates the
+  param's value (via the override entry point, reflected in the visible source); editing a
+  param's value in code moves the slider. The knobs *teach the DSL* — the source is always
+  visible.
+- **Structural edits below the param header never disable the knobs** — they redefine the orb
+  the knobs feed. Once the body diverges from every shipped script the design becomes
+  `f=custom` (§6.3); its declared params keep working as sliders. **Users can declare their
+  own knobs** — that is the custom-orb capability.
+- Adding/removing/renaming a `param` line simply adds/removes/renames a slider on the next
+  successful evaluate. A failed parse or eval keeps the last-good knob panel and preview,
+  with the engine error shown verbatim (§5 tier 2).
 - Evaluate/preview/STL/mesh-gate all work identically on custom source — same
-  `compileToGeometry` path, engine errors shown verbatim.
+  `compileToGeometry` path.
 - **Open in Studio**: serializes current source into the studio (deep link to
   `/editor/#<name>`; exact transport — hash payload vs the dev pattern API — is P2 detail).
 
@@ -305,16 +385,18 @@ Bikar studio gains an **input-mode toggle** — orthogonal to the existing *outp
 - **Icons**: inline SVG glyphs in the tab labels — a three-slider "mixer" glyph for Dials, a
   `</>` chevron glyph for Code — matching studio's existing monochrome UI accents;
   `aria-label`s + keyboard focus states.
-- Dials mode is available when the open file matches a known template signature (the starter
-  Orbs) or the user starts from "New orb (dials)"; arbitrary files open in Code mode with the
-  Dials tab present but disabled (tooltip: "dials are available for template orbs").
-- The **template engine is shared code** with the Lab (same archetype modules), so studio
-  dials and Lab knobs can never drift. Proposed home: a small `@naqshcoffee/orb-templates`
-  workspace package in bikar (pure functions: `schema(archetype)`, `generate(archetype,
-  base, params) → .bkr`, `clamp(params)`). The knob-schema shape should follow the de-facto
-  OpenSCAD Customizer conventions (type, range `[min:step:max]`, labeled enums, group/tab,
-  description) — the standard MakerWorld/Thingiverse both build UI from, so the vocabulary
-  is already familiar to the 3D-printing audience.
+- Dials mode is available whenever the open file **declares params** (§2.1) — after the
+  refactor that includes every starter orb. Files with no param block open in Code mode with
+  the Dials tab visible but disabled (tooltip: "declare `param` values to get dials").
+- With DSL-native params the planned code-gen template package shrinks to a thin **shared
+  knob layer** used by both studio and Lab: read the evaluated param schema
+  (names/defaults/ranges/steps come from core), render sliders, apply the cross-param
+  constraint table (§5), and hold the print-target machine table (§6.5). Home (decided):
+  **folded into `@naqshcoffee/ui`** — the existing shared UI package gains the knob
+  components and tables; keep the knob exports tree-shakeable so the Lab bundle doesn't drag
+  in unrelated studio UI. The schema vocabulary intentionally mirrors OpenSCAD Customizer
+  conventions (range, step, labeled enums, groups) — familiar to the 3D-printing audience —
+  but encoded first-class in the DSL rather than in comments.
 - Studio keeps its own persistence (starter files/dev API); URL-param sync is a Lab feature,
   though the hash deep-link (`/editor/#Name`) continues to work.
 
@@ -325,8 +407,8 @@ Bikar studio gains an **input-mode toggle** — orthogonal to the existing *outp
 ```
 bikar (engine repo)                          3d-models (publish repo)
 ┌──────────────────────────────┐             ┌───────────────────────────┐
-│ packages/core  (unchanged)   │             │ lab/  (vendored dist)     │
-│ packages/orb-templates (new) │──vite build→│   lab.html + assets       │
+│ packages/core (+param stmt)  │             │ lab.html  (vendored dist) │
+│ @naqshcoffee/ui (+knobs, §8) │──vite build→│   + assets                │
 │ packages/lab   (new, vite)   │             │ index.html  "Open in Lab" │
 │ packages/web   (+Dials tab)  │             │ Makefile: make lab        │
 └──────────────────────────────┘             └───────────────────────────┘
@@ -355,14 +437,23 @@ bikar (engine repo)                          3d-models (publish repo)
 
 ## 10. Phased plan
 
-- **P0 — Lab core** (first shippable): `packages/orb-templates` (Rosette archetype only,
-  cube+dodeca), `packages/lab` page with global+rosette knobs, worker evaluate, 3D preview,
-  URL sync (`v=1`), mesh-gate panel, STL download, `make lab` vendoring, gallery "Open in
-  Lab" links on the two rosette plates.
-- **P1 — breadth**: Star + weave archetypes, preset chips for all six committed orbs,
+- **M5 — DSL params (bikar, prerequisite)**: `param` statement with first-class
+  `range`/`step`, `$name` accepted in orb-level numbers, param-override entry point for
+  embedders, refactor the six committed orbs with param headers (**geometry at defaults
+  byte-identical — golden-STL check**), language-reference + decision-ledger docs,
+  `.claude/skills/bikar-dsl` authoring skill, pre-commit/npm mesh-gate check on changed
+  `.bkr` files.
+- **P0 — Lab core** (first shippable): separate `lab.html` (decided) via `packages/lab`,
+  knob UI auto-generated from the rosette scripts' param blocks (cube + dodeca) including
+  the collapsed advanced disclosure for `advanced`-flagged params (decided: day one),
+  print-target picker (§6.5), worker evaluate, 3D preview, URL sync (`v=1`, param-name
+  keys), mesh-gate panel, STL download, `make lab` vendoring, gallery "Open in Lab" links on
+  the two rosette plates.
+- **P1 — breadth**: Star + weave archetype scripts, preset chips for all six committed orbs,
   calibration sweeps to flip 🔬 matrix cells (incl. the Hankin θ/δ envelope), axis-view tabs.
-- **P2 — custom + studio**: Code mode with lz-string URLs, Open-in-Studio handoff, studio
-  Dials/Code tab with icons (consuming `orb-templates`), shared-viewer extraction.
+- **P2 — custom + studio**: `f=custom` code editing with lz-string URLs + declared-param
+  sliders, Open-in-Studio handoff, studio Dials/Code tab with icons (consuming the shared
+  knob layer), shared-viewer extraction.
 - **P3 — polish**: strand-count/clearance readouts, "adjusted parameters" toasts, print-notes
   panel per family (SLS/MJF vs FDM guidance from the supports write-up).
 - **Beyond (unscheduled, engine-gated)**: latitude-gradient contact angle (Kaplan's parquet
@@ -375,18 +466,43 @@ against template goldens, qiyas orb-validate ≥ 0.95 on new presets.
 
 ---
 
-## 11. Open questions
+## 11. Decisions & open questions
 
-1. **Lab placement**: separate `lab.html` linked from the gallery header (recommended — keeps
-   index.html static and cacheable) vs embedded section in `index.html`?
-2. **Radius ceiling**: 100 mm slider max is arbitrary — print-bed driven? (SLS build volumes
-   allow more; FDM hemisphere-split pending task #11.)
-3. **Custom-orb inference**: is one-way knob→code detach acceptable for v1, or is parsing
-   template-shaped code back into knobs (round-trip) worth the complexity?
-4. **`@naqshcoffee/orb-templates` naming/home** — new workspace package (proposed) vs folding
-   into core?
-5. Should the Lab expose `pierce`/`hankin`-style *advanced* toggles hidden behind an
-   "advanced" disclosure, or keep v1 strictly curated?
+### Resolved in design review (Omar, 2026-07-26)
+
+1. **Lab placement → separate `lab.html`**, linked from the gallery header + per-plate "Open
+   in Lab" links. Implication: index.html stays static/cacheable; engine bundle loads only in
+   the Lab; the Lab owns its URL namespace.
+2. **Radius ceiling → print-target picker** (machine dropdown — Bambu/Prusa/Ender/… — plus
+   SLS/MJF service presets and custom X/Y/Z; §6.5). Implications: ceiling derives from build
+   volume, process guidance (weave warnings, split-export note) comes free from the machine
+   choice, target lives in localStorage and never in share URLs.
+3. **Knobs↔code → DSL-native `param` declarations** ("sliders as variables"), superseding
+   the one-way-detach/marker-comment options entirely. Implications: new bikar milestone M5
+   (§2.1, §10); committed orbs refactored into self-describing templates; bidirectional
+   slider↔code sync by construction; custom orbs can declare their own knobs; URL keys are
+   param names (§6.1); the code-gen template package collapses into a thin shared knob layer
+   (§8).
+4. **Param ranges → first-class DSL syntax** (`param inner = 38 range 16..58 step 1`), not
+   annotation comments, not Lab-side tables. Implication: scripts are self-describing;
+   studio and Lab can never disagree about a knob's bounds.
+5. **Authoring guardrails → both**: a `.claude/skills/bikar-dsl` skill (grammar + param
+   conventions + closure rules) and a pre-commit/npm mesh-gate check on changed `.bkr` files.
+
+6. **Shared knob layer home → fold into `@naqshcoffee/ui`** (chosen over a new workspace
+   package). Implications: the existing shared UI package gains the knob components plus the
+   cross-param constraint and machine tables; the Lab bundle takes a dependency on
+   `@naqshcoffee/ui`, so its knob exports must stay tree-shakeable to keep studio-only UI
+   out of the Lab page.
+7. **Advanced knobs → disclosure from day one** (chosen over curated-v1). Implications: the
+   `param` statement carries an `advanced` flag (§2.1); scripts may expose less-calibrated
+   extras under the collapsed disclosure immediately; accepted trade-off — advanced knobs
+   will hit tier-2 engine errors more often, with the verbatim error panel as the safety net,
+   and calibration sweeps promote knobs out of advanced over time.
+
+### Still open
+
+None — all design-review questions are resolved (2026-07-26).
 
 ---
 
