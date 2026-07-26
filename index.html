@@ -292,7 +292,9 @@
       <em>bikar</em>, a text DSL for Islamic geometry, compiled straight to a
       watertight printable mesh: star patterns inscribed on a polyhedron's
       faces, projected to the sphere, and solidified into struts or woven
-      ribbons.
+      ribbons. The rosette orbs are adjustable — open one in the
+      <a href="lab.html">Orb&nbsp;Lab</a> to dial radius, petals, and struts,
+      then download your own STL.
     </p>
 
     <div class="grid" id="grid-orbs"></div>
@@ -367,10 +369,12 @@
       specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
     { id:"RosetteOrb", file:"Rosette-Orb.bkr", name:"Rosette Orb", tag:"Lattice",
       desc:"Twelve classical rosettes — ten kite petals ringing a pierced star core — joined petal-tip to petal-tip across the dodecahedron's edges.",
-      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=rosette-dodeca" },
     { id:"RosetteCubeOrb", file:"Rosette-Cube-Orb.bkr", name:"Cube Rosette Orb", tag:"Lattice",
       desc:"The same rosette construction on the cube: six eight-petal blooms fusing across every edge, each holding an eight-pointed star core.",
-      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=rosette-cube" },
     { id:"RosetteWeaveOrb", file:"Rosette-Weave-Orb.bkr", name:"Rosette Weave Orb", tag:"Weave",
       desc:"Five-petal flowers chained through their shoulders and woven over and under — ten closed ribbons linked into a chainmail flower-ball.",
       specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb" },
@@ -378,7 +382,8 @@
 
   const icons = {
     code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
-    dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 21h14"/></svg>'
+    dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 21h14"/></svg>',
+    lab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>'
   };
 
   function plate(m, i, total, srcHref, altKind){
@@ -404,6 +409,7 @@
         <div class="actions">
           <a class="btn" href="${srcHref}" target="_blank" rel="noopener">${icons.code} Source</a>
           <a class="btn primary" href="${stl}" target="_blank" rel="noopener" download>${icons.dl} STL</a>
+          ${m.lab ? `<a class="btn" href="${m.lab}">${icons.lab} Open in Lab</a>` : ''}
         </div>
       </div>`;
     return el;

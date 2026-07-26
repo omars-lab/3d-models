@@ -29,9 +29,9 @@ ORB_VIEWS := $(ROOT_DIR)/build/orb-views
 # gh-pages deploy
 PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
-DEPLOY_PATHS := index.html build/images build/stls src LICENSE README.md
+DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs web-images deploy
+.PHONY: cookie-cutters orbs lab web-images deploy
 
 %.png: %.scad
 	@echo Generating $*.png from $@
@@ -64,10 +64,23 @@ orbs:
 	done; \
 	cd ${ROOT_DIR} && python3 build/orb_previews.py
 
+# Orb Lab — the knob-driven orb configurator built by bikar's packages/lab
+# (vite). `make lab` builds it there and vendors the output here: lab.html
+# at the site root (the gallery links to it) plus its hashed assets/ dir.
+# Both are generated, gitignored on master, and published by `make deploy`.
+lab:
+	@set -euo pipefail; \
+	cd $(BIKAR_DIR)/packages/lab && npx vite build; \
+	cp $(BIKAR_DIR)/packages/lab/dist/lab.html ${ROOT_DIR}/lab.html; \
+	rm -rf ${ROOT_DIR}/assets; \
+	cp -R $(BIKAR_DIR)/packages/lab/dist/assets ${ROOT_DIR}/assets; \
+	echo "Orb Lab vendored: lab.html + assets/"
+
 clean:
 	rm -rf ${ROOT_DIR}/build/images/*.png
 	rm -rf ${ROOT_DIR}/build/stls/*.stl
 	rm -rf ${ROOT_DIR}/build/orb-views
+	rm -rf ${ROOT_DIR}/lab.html ${ROOT_DIR}/assets
 
 ${DEP}:
 	mkdir -f $$( dirname ${DEP} )
@@ -92,7 +105,7 @@ web-images:
 # Publish the static gallery to the gh-pages branch via a dedicated worktree,
 # so master's working tree is never disturbed. gh-pages has a history that is
 # intentionally separate from master; we sync the built site onto it.
-deploy: web-images
+deploy: web-images lab
 	@set -euo pipefail; \
 	cd ${ROOT_DIR}; \
 	git show-ref --verify --quiet refs/heads/${PAGES_BRANCH} \

@@ -12,5 +12,10 @@
 build/*
 !build/*.py
 
+# Orb Lab page vendored from bikar's packages/lab by `make lab` — generated,
+# published to gh-pages by `make deploy`, never tracked on master.
+/lab.html
+/assets/
+
 # gh-pages deploy worktree (created by `make deploy`)
 .gh-pages/
