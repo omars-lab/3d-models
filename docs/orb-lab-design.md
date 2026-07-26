@@ -464,6 +464,19 @@ Each phase ends with the standard verification: bikar `npm test` + `npm run ci` 
 92 pre-existing prettier-dirty files), CLI-rendered STLs of Lab-generated sources byte-checked
 against template goldens, qiyas orb-validate ≥ 0.95 on new presets.
 
+### Implementation status
+
+- **M5 shipped** (bikar `d1a0d43`): everything listed above, goldens byte-identical ×6.
+- **P0 shipped** (bikar `03e7153` + `3269ab6`, 3d-models `dfae231`): everything listed
+  above, browser-smoke-tested (clean boot, URL clamp round-trip + toast, script switch,
+  machine-ceiling chip, unknown-`f` fallback). One deliberate deviation from §8: the knob
+  layer lives inside `packages/lab` behind its own module boundary for now —
+  `@naqshcoffee/ui` is an external GitHub-Packages dependency and installing into it needs
+  `GITHUB_PACKAGES_TOKEN`, so the fold into the shared UI kit moves to the P2 studio work.
+  Additions beyond the letter of the spec: cross-param guard rails in the Lab (tier-1
+  rules `inner ≤ shoulder − 8`, `amplitude ≥ (strut_depth + 0.4)/2`), and the
+  "adjusted parameters" toast (scheduled P3) landed early on the URL-load path.
+
 ---
 
 ## 11. Decisions & open questions
