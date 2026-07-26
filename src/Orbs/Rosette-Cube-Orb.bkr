@@ -1,0 +1,41 @@
+# Rosette-Cube-Orb — cubic 8-petal rosette sphere.
+# The same rosette construction as Rosette-Orb on the cube's 6 square
+# faces: 8 kite petals per face reaching all 4 corners and all 4 edge
+# midpoints (both shared with the neighboring faces), joined
+# shoulder-to-shoulder so their inner edges zigzag into an 8-pointed
+# star core. 17 voids per face: 8 petals + 8 boundary cells + the
+# pierced star core.
+# Render with: bikar render Rosette-Cube-Orb.bkr --format stl -o out.stl
+
+blueprint sq_rosette
+  # Face square: circumradius 100, corners at 90 + k*90 deg CCW — the
+  # canonical orb pattern frame.
+  circle C0 center(0,0) radius 100
+  divide C0 into 4 offset 90
+  polygon sq [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3]
+  # Midpoint-direction circle: rays at 45 + k*90 aim at edge midpoints.
+  circle Cm center(0,0) radius 100
+  divide Cm into 4 offset 45
+  # Exact edge midpoint = edge chord x center ray (point R0_E3.cpt0).
+  line E3 from C0.cpt3 to C0.cpt0
+  line R0 from C0.mpt to Cm.cpt0
+  # Inner ring (star core) and shoulder ring, 8 points each.
+  circle C1 center(0,0) radius 38
+  divide C1 into 8 offset 0
+  circle C2 center(0,0) radius 60
+  divide C2 into 8 offset 22.5
+
+pattern sq_rosette on sq_rosette
+  edges from sq
+  rotate 4 around C0.mpt
+    # Corner petal + midpoint petal; adjacent petals share shoulders.
+    connect cycle [C0.cpt0 C2.cpt1 C1.cpt2 C2.cpt2]
+    connect cycle [R0_E3.cpt0 C2.cpt0 C1.cpt1 C2.cpt1]
+  voids detect
+
+orb RosetteCubeOrb
+  base cube
+  radius 60
+  inscribe sq_rosette
+  project spherical
+  struts width 3 depth 2.4

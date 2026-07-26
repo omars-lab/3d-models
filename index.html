@@ -251,7 +251,7 @@
     <div class="kicker">
       <span class="dash"></span>
       OpenSCAD · Parametric · 3D-Printable
-      <span class="spec">No. 02 — 19 designs</span>
+      <span class="spec">No. 02 — 22 designs</span>
     </div>
     <h1>
       Coded<br>Cookie Cutters
@@ -315,7 +315,7 @@
   // src  : OpenSCAD source ; stl: printable mesh
   const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
   const GH  = "https://github.com/omars-lab/3d-models/blob/master";
-  const ASSET_VER = "20260605b";   // bump when renders change, to bust CDN/browser image cache
+  const ASSET_VER = "20260726a";   // bump when renders change, to bust CDN/browser image cache
 
   const MODELS = [
     { id:"Arabesque",        name:"Arabesque",        tag:"Geometry",
@@ -365,6 +365,15 @@
     { id:"DodecaOrb", file:"Dodeca-Orb.bkr", name:"Dodeca Orb", tag:"Lattice",
       desc:"Twelve corner-to-corner pentagrams on the dodecahedron's faces, closing into a five-fold pierced shell.",
       specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+    { id:"RosetteOrb", file:"Rosette-Orb.bkr", name:"Rosette Orb", tag:"Lattice",
+      desc:"Twelve classical rosettes — ten kite petals ringing a pierced star core — joined petal-tip to petal-tip across the dodecahedron's edges.",
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+    { id:"RosetteCubeOrb", file:"Rosette-Cube-Orb.bkr", name:"Cube Rosette Orb", tag:"Lattice",
+      desc:"The same rosette construction on the cube: six eight-petal blooms fusing across every edge, each holding an eight-pointed star core.",
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+    { id:"RosetteWeaveOrb", file:"Rosette-Weave-Orb.bkr", name:"Rosette Weave Orb", tag:"Weave",
+      desc:"Five-petal flowers chained through their shoulders and woven over and under — ten closed ribbons linked into a chainmail flower-ball.",
+      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb" },
   ];
 
   const icons = {
