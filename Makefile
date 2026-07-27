@@ -31,7 +31,13 @@ PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy
+.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks
+
+# One-time per clone: route git hooks to the tracked .githooks/ dir
+# (pre-commit runs a gitleaks secret scan on staged changes).
+setup-hooks:
+	git -C ${ROOT_DIR} config core.hooksPath .githooks
+	@echo "hooks: core.hooksPath -> .githooks (pre-commit = gitleaks)"
 
 %.png: %.scad
 	@echo Generating $*.png from $@
