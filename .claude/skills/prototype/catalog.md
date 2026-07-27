@@ -13,10 +13,18 @@ floor) — these prints test *reality*, not the mesh.
 
 - **Status**: planned
 - **Model**: three small Star-Orbs at `radius` 40 with `strut_width`
-  1.5 / 2 / 3 (Lab → set knobs → "Write values into code" → Download `.bkr`;
-  `strut_depth` at default 2.4), plated together in the slicer. Cheapest
-  honest coupon — the struts meet the sphere at the same angles as a real
-  print, which a flat test plate would not exercise.
+  1.5 / 2 / 3 (`strut_depth` at default 2.4), plated together in the slicer
+  (80 mm spheres — two runs if a small bed won't take all three). Rendered
+  via CLI param override (no baked `.bkr` needed; values are validated
+  against the declared ranges):
+  `cd bikar && for w in 1.5 2 3; do node packages/cli/dist/index.js render
+  patterns/Orbs/Star-Orb.bkr --format stl --check --param radius=40 --param
+  strut_width=$w -o ../3d-models/build/stls/coupons/P1-StrutCoupon-W$w.stl;
+  done` — all three pass the mesh gate (watertight; minFeature 1.5 / 2 /
+  2.4 mm — at width 3 the 2.4 mm *depth* is the smallest feature);
+  15.8 / 20.3 / 28.2 cm³, ≈80 g PLA for the trio. Cheapest honest coupon —
+  the struts meet the sphere at the same angles as a real print, which a
+  flat test plate would not exercise.
 - **Print target**: TBD — record machine/material/nozzle/layer on first print.
 - **What we want to learn**:
   - [ ] 1. Smallest `strut_width` that prints cleanly with a 0.4 mm nozzle —

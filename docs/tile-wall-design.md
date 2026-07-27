@@ -233,6 +233,53 @@ and for the design lesson that classic detents keep a small maintained preload
 - **`story pole`**: a printable 1:1 strip of the module+gap pitch for on-wall dry layout —
   the tiler's story pole, printed.
 
+### 7.1 Production reality: a wall's worth on one small printer
+
+Bed size is a **non-constraint by design** — a `wall` is never printed as an object, only
+as N independent tiles, each of which fits any bed ≥ module + brim. The design choices
+that make small-printer production work are already in place, not accidents:
+
+- **`connect none` default (B.1)**: tiles mount to the wall, not to each other, so there
+  is no mechanical inter-fit between batches. Print order is free, a damaged tile is a
+  one-tile reprint, and installation proceeds in courses while later batches are still
+  printing — the `story pole` is the staged-install tool.
+- **The gap formula (§5)** is what lets a tile printed in week 4 land on the grid laid in
+  week 1: 1.2 mm swallows FDM scatter with 3× margin, so batch-to-batch drift never
+  accumulates into a fit failure.
+- **Identicality is the throughput lever**: the field is one sliced plate file re-run N
+  times. `vary`/`checker` stays per-*type* (two designs = two plate files, not N unique
+  ones), and the chirality-aware `layout report` states the total unique-STL count —
+  typically one field tile plus two cropped edge types.
+
+The real constraint is **print-hours**. Order-of-magnitude, *estimates until the W1 2×2
+pilot measures a real tile* (≈100 mm relief tile: ~40–60 g, ~2–4 h at 0.2 mm on a modern
+small printer):
+
+| Field | Tiles (~101 mm pitch) | One machine, continuous | Filament |
+|---|---|---|---|
+| 0.6 × 0.6 m focal panel | ~36 | ~5 days | ~2 kg |
+| 1.2 × 1.8 m accent wall | ~200 | ~4 weeks | ~10 kg |
+
+Levers, in order of impact:
+
+1. **Shrink the field, not the ambition** — a focal panel with a plain surround is how
+   ceramic accent walls are installed in practice, and is ~5× fewer tiles for most of the
+   visual impact.
+2. **Match `module` to the bed** — 4-up needs `2·module + inter-part clearance + edge
+   margins ≤ bed` (≈ `module 80` on a 180 mm bed, `module 100` on 220 mm). Re-moduling is
+   a one-line change; `layout report` recomputes the whole BOM.
+3. **Farm out the identical middle** — send the field-tile plate to a print service or
+   makerspace farm and keep the local printer for edge tiles, coupons, and replacements.
+   Mixed provenance is safe for the same reasons batches are: `connect none` plus the
+   gap margin.
+4. **Buy the filament in one batch** — across weeks of printing, spool-to-spool color
+   drift is the visible failure mode (the direct analog of matching ceramic dye lots),
+   and dry storage matters at multi-week timescales.
+
+`layout report` should therefore grow **production metrics** in W3: plates required at
+the declared bed size, spool count, and calendar estimate at N print-hours/day — the
+numbers above, computed instead of estimated.
+
 ## 8. Validator summary (craft → compiler)
 
 | Check | Severity | Source rule |
@@ -259,7 +306,9 @@ and for the design lesson that classic detents keep a small maintained preload
   tiles clipped into a square hanging on one screw. Prototype catalog gains fit-coupon and
   clip-coupon entries; their measurements calibrate the printer profile and warp default.
 - **W3**: anchor/movement/environment validators, `vary`/`checker`, story pole, chirality
-  report, `crop stretch`. Deliverable: a real hallway wall spec compiling to a full BOM.
+  report, `crop stretch`, production metrics in `layout report` (plates at bed size,
+  spools, calendar at N h/day — §7.1). Deliverable: a real hallway wall spec compiling to
+  a full BOM.
 
 ## 10. Open questions
 
