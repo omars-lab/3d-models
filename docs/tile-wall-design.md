@@ -301,8 +301,9 @@ numbers above, computed instead of estimated.
 - **W1** (with C1): `tile`, `wall` grid + centered/quartering layout, `crop clip`, SVG
   wall render, margin + sliver validators. Deliverable: printable 2×2 wall of nail-hole
   tiles + layout report.
-- **W2** (with C2): connector library + coupons (fit step gauge, clip coupon: two dummy
-  corners + one CornerClip), Lab instanced preview, keyhole mounts. Deliverable: four
+- **W2** (with C2): connector library + coupons (fit step gauge, clip coupon: dummy
+  corners in *both* rebate variants — §10 Q1 — + one CornerClip), Lab instanced preview,
+  keyhole mounts. Deliverable: four
   tiles clipped into a square hanging on one screw. Prototype catalog gains fit-coupon and
   clip-coupon entries; their measurements calibrate the printer profile and warp default.
 - **W3**: anchor/movement/environment validators, `vary`/`checker`, story pole, chirality
@@ -312,8 +313,9 @@ numbers above, computed instead of estimated.
 
 ## 10. Open questions
 
-1. Is the 0.6 mm front rebate for the clip jaw acceptable on the art face, or should v1
-   clips bear on the border band *without* a rebate (slight 1-layer proudness at corners)?
+1. **Decided 2026-07-27 — settle empirically in W2**: the clip coupon prints both corner
+   variants (0.6 mm front rebate and no-rebate proud) and the in-the-flesh comparison in
+   raking light picks the default. Neither variant is baked into the grammar before then.
 2. `checker` with two tile types requires identical border/connector geometry — enforce by
    construction (shared `border` spec) or validate per pair?
 3. Do cropped edge tiles keep their relief clipped mid-motif, or should the border band
