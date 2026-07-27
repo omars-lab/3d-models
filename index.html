@@ -251,7 +251,7 @@
     <div class="kicker">
       <span class="dash"></span>
       OpenSCAD · Parametric · 3D-Printable
-      <span class="spec">No. 02 — 22 designs</span>
+      <span class="spec">No. 02 — 27 designs</span>
     </div>
     <h1>
       Coded<br>Cookie Cutters
@@ -292,9 +292,9 @@
       <em>bikar</em>, a text DSL for Islamic geometry, compiled straight to a
       watertight printable mesh: star patterns inscribed on a polyhedron's
       faces, projected to the sphere, and solidified into struts or woven
-      ribbons. The rosette orbs are adjustable — open one in the
-      <a href="lab.html">Orb&nbsp;Lab</a> to dial radius, petals, and struts,
-      then download your own STL.
+      ribbons. Every orb is adjustable — open one in the
+      <a href="lab.html">Orb&nbsp;Lab</a> to dial radius, star angles, and
+      struts, then download your own STL.
     </p>
 
     <div class="grid" id="grid-orbs"></div>
@@ -317,7 +317,7 @@
   // src  : OpenSCAD source ; stl: printable mesh
   const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
   const GH  = "https://github.com/omars-lab/3d-models/blob/master";
-  const ASSET_VER = "20260726a";   // bump when renders change, to bust CDN/browser image cache
+  const ASSET_VER = "20260727a";   // bump when renders change, to bust CDN/browser image cache
 
   const MODELS = [
     { id:"Arabesque",        name:"Arabesque",        tag:"Geometry",
@@ -360,13 +360,16 @@
   const ORBS = [
     { id:"StarOrb",   file:"Star-Orb.bkr",   name:"Star Orb",   tag:"Lattice",
       desc:"Twenty hexagrams — one per icosahedron face — fuse across every edge into a pierced star lattice wrapped around the sphere.",
-      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=star-icosa" },
     { id:"WeaveOrb",  file:"Weave-Orb.bkr",  name:"Weave Orb",  tag:"Weave",
       desc:"Twenty-six closed ribbons interlace alternately over and under — a genuinely linked chainmail ball, printed in place as one piece.",
-      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=weave-icosa" },
     { id:"DodecaOrb", file:"Dodeca-Orb.bkr", name:"Dodeca Orb", tag:"Lattice",
       desc:"Twelve corner-to-corner pentagrams on the dodecahedron's faces, closing into a five-fold pierced shell.",
-      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=star-dodeca" },
     { id:"RosetteOrb", file:"Rosette-Orb.bkr", name:"Rosette Orb", tag:"Lattice",
       desc:"Twelve classical rosettes — ten kite petals ringing a pierced star core — joined petal-tip to petal-tip across the dodecahedron's edges.",
       specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
@@ -377,7 +380,28 @@
       lab:"lab.html?v=1&f=rosette-cube" },
     { id:"RosetteWeaveOrb", file:"Rosette-Weave-Orb.bkr", name:"Rosette Weave Orb", tag:"Weave",
       desc:"Five-petal flowers chained through their shoulders and woven over and under — ten closed ribbons linked into a chainmail flower-ball.",
-      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb" },
+      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=rosette-weave" },
+    { id:"HankinOrb", file:"Hankin-Orb.bkr", name:"Hankin Orb", tag:"Lattice",
+      desc:"Polygons in contact — rays launched from every edge midpoint meet in five-pointed stars. The contact angle is a live knob: dial it from needle-thin to fat-star.",
+      specs:["⌀ 120 mm","θ 54° · dial 18–80°","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=hankin-dodeca" },
+    { id:"StarCubeOrb", file:"Star-Cube-Orb.bkr", name:"Cube Star Orb", tag:"Lattice",
+      desc:"An {8/3} octagram on each of the cube's six faces — half its tips land on edge midpoints, half under the corners, closing an eight-fold lattice.",
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=star-cube" },
+    { id:"StarOctaOrb", file:"Star-Octa-Orb.bkr", name:"Octa Star Orb", tag:"Lattice",
+      desc:"The Star Orb's hexagram on the octahedron's eight larger faces — a bolder, more open star field from the same canonical construction.",
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=star-octa" },
+    { id:"StarTetraOrb", file:"Star-Tetra-Orb.bkr", name:"Tetra Star Orb", tag:"Lattice",
+      desc:"The minimal base: four hexagrams, each stretched across a full quarter-sphere by the tetrahedron's giant faces.",
+      specs:["⌀ 120 mm","3 × 2.4 mm struts","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=star-tetra" },
+    { id:"WeaveDodecaOrb", file:"Weave-Dodeca-Orb.bkr", name:"Dodeca Weave Orb", tag:"Weave",
+      desc:"Pentagram chords between edge midpoints run straight through each face boundary, weaving into ten closed ribbons — a chainmail star-ball.",
+      specs:["⌀ 120 mm","1.6 mm weave lift","PLA"], alt:"orb",
+      lab:"lab.html?v=1&f=weave-dodeca" },
   ];
 
   const icons = {

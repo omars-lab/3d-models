@@ -125,9 +125,9 @@ script exists behind it.
 |---|---|---|---|
 | **Rosette** | 2 kite petals per wedge (corner + edge-midpoint contacts), shoulder ring 2N, inner ring 2N → pierced 2N-star core | classical rosettes, petal-tip welds across edges | Rosette-Orb (dodeca, qiyas 0.954), Rosette-Cube-Orb (cube, 0.975) |
 | **Rosette Weave** | midpoint-only kites, shoulders under corners, no `edges from` → all even-degree nodes + `weave` | interlaced closed ribbons (chainmail) | Rosette-Weave-Orb (dodeca, 1.000, 10 strands) |
-| **Star (hexagram)** | inscribed star polygons per face (`connect every k`) | crisp geometric star field | Star-Orb (icosa), Dodeca-Orb |
-| **Hankin star** | `hankin angle θ [delta δ]` polygons-in-contact | authentic PIC stars; θ sweeps acute→obtuse families | none yet — needs a calibration sweep before enabling (P1) |
-| **Classic weave** | hexagram lattice without face edges + `weave` | great-circle chainmail | Weave-Orb (icosa, 26 strands) |
+| **Star (hexagram)** | inscribed star polygons per face (`connect every k`) | crisp geometric star field | Star-Orb (icosa), Dodeca-Orb, Star-Cube-Orb ({8/3}, 1.000), Star-Octa-Orb (0.992), Star-Tetra-Orb (1.000) |
+| **Hankin star** | `hankin angle θ [delta δ]` polygons-in-contact | authentic PIC stars; θ sweeps acute→obtuse families | Hankin-Orb (dodeca, qiyas 1.000, θ knob 18–80°) |
+| **Classic weave** | hexagram lattice without face edges + `weave` | great-circle chainmail | Weave-Orb (icosa, 26 strands), Weave-Dodeca-Orb ({5/2} chords, 1.000, 10 strands) |
 
 Archetype × base compatibility matrix (✅ verified · 🔬 needs calibration sweep · ✖ rejected):
 
@@ -135,16 +135,26 @@ Archetype × base compatibility matrix (✅ verified · 🔬 needs calibration s
 |---|---|---|---|---|---|---|
 | Rosette | 🔬 | 🔬 | ✅ | ✅ | ✖ (corner/midpoint radius ratio too extreme) | ✖ |
 | Rosette Weave | 🔬 | 🔬 | 🔬 | ✅ | ✖ | ✖ |
-| Star | 🔬 | 🔬 | 🔬 | ✅ | ✅ | ✅ (measured: sub 2 = 20160 tris, 73.9 cm³) |
-| Hankin | 🔬 | 🔬 | 🔬 | 🔬 | 🔬 | 🔬 |
-| Classic weave | 🔬 | 🔬 | ✖ (odd-degree risk) | 🔬 | ✅ | 🔬 |
+| Star | ✅ (P1: 1008 tris, 28.1 cm³, qiyas 1.000) | ✅ (P1: 2016 tris, 34.6 cm³, qiyas 0.992¹) | ✅ (P1: {8/3} octagram, 3168 tris, 38.6 cm³, qiyas 1.000) | ✅ | ✅ | ✅ (measured: sub 2 = 20160 tris, 73.9 cm³) |
+| Hankin | 🔬 | 🔬 | 🔬 | ✅ (P1: 2160 tris, 24.2 cm³, qiyas 1.000; θ envelope below) | 🔬 | 🔬 |
+| Classic weave | 🔬 | 🔬 | ✖ (odd-degree risk) | ✅ (P1: {5/2} midpoint chords, 10 strands, euler 0, qiyas 1.000) | ✅ | 🔬 |
+
+¹ Star-Octa's 0.992 is a warn-severity shape-count mismatch on the vertex-4 view (encoded 17
+regions vs 16 declared) — a known qiyas encoder quirk at 4-fold tangencies, not a geometry
+error; the composite still clears the 0.95 gate.
+
+Hankin θ calibration (2026-07 sweep): at the default R=60/w=3 the gate passes θ ∈ 10..84
+(θ=6 hard-errors with inset degeneracy), but the envelope narrows at the range corners —
+R=40 needs θ≥14 and w=6 needs θ≥18. All four (θ=18|80) × (R=40|110) × (w=6|1.5) corner
+combos pass, so the shipped declared range is **18..80 step 1, default 54** (detents:
+36 / 54 ideal / 72).
 
 Unverified cells ship **disabled** (grayed with a "not yet calibrated" tooltip), not hidden —
 the matrix itself communicates the roadmap. Calibration = run the CLI sweep harness (already
 scripted this session) + qiyas orb-validate, then flip the cell.
 
-The six existing gallery orbs become **preset chips** in the Lab: clicking one sets every knob
-(and thus the URL) to reproduce it exactly.
+Every committed gallery orb becomes a **preset chip** in the Lab (eleven as of P1): clicking
+one sets every knob (and thus the URL) to reproduce it exactly.
 
 ---
 
@@ -209,7 +219,8 @@ committed reference orbs exactly, the way Najm defaults reproduce Lee.
   **two-point** family (θ conventionally near 45° there). Ship as an "advanced" disclosure
   knob.
 - The parser enforces **no ranges** on θ/δ (`parser.ts:1985-2001`) — the valid envelope per
-  base must come from a calibration sweep before this archetype ships (P1). Note the
+  base must come from a calibration sweep before the archetype ships. Done for dodeca in P1:
+  the measured envelope and shipped 18..80 range are recorded under the §3 matrix. Note the
   literature warns of *aliasing*: different (tiling, θ) pairs can produce the same pattern,
   so calibration should also dedupe visually identical detents.
 
@@ -476,6 +487,20 @@ against template goldens, qiyas orb-validate ≥ 0.95 on new presets.
   Additions beyond the letter of the spec: cross-param guard rails in the Lab (tier-1
   rules `inner ≤ shoulder − 8`, `amplitude ≥ (strut_depth + 0.4)/2`), and the
   "adjusted parameters" toast (scheduled P3) landed early on the URL-load path.
+- **P1 shipped** (bikar `0eab01f`): five calibration sweeps flipped five matrix cells (§3) —
+  Hankin×dodeca (with the measured θ 18..80 envelope), Star×cube ({8/3} octagram),
+  Star×octa, Star×tetra, and Classic-weave×dodeca ({5/2} midpoint chords, 10 strands,
+  euler 0 — the odd-cycle parity risk did not materialize). All five ship as committed
+  `patterns/Orbs/` scripts (spike-golden byte-identical) and gallery plates; all eleven
+  committed orbs are now Lab preset chips with `f=` deep links. Lab additions: symmetry-axis
+  view tabs (SVGs rendered lazily in the worker via the same `projectOrbView`/
+  `renderOrbViewSVG` path qiyas validates, invalidated per result, stale-dropped by seq);
+  weave trust rows (interlocked-ribbon count from a worker-side connected-component scan,
+  ribbon-gap clearance `2·amplitude − strut_depth` with a ✓/fused readout); and the §5
+  tier-3 FDM notice when a weave design targets a filament machine. The five new orbs also
+  join the studio's Orbs starter folder. qiyas orb-validate composites: Hankin 1.000,
+  Star-Cube 1.000, Star-Tetra 1.000, Weave-Dodeca 1.000, Star-Octa 0.992 (warn-severity
+  shape-count quirk, §3 footnote).
 
 ---
 
