@@ -102,3 +102,41 @@
 | 10 | Dry-fit artifacts: story-pole strip, waste/offcut report for diagonal layouts (15–20% waste, chirality-aware reuse) | `story_pole()`, `layout_report()` outputs | Mid-install discovery that the wall needs 6 more tiles and 2 mirrored edge pieces the user never printed |
 
 **Cross-cutting sources most worth keeping on file:** https://tools.creative3dp.com/blog/press-fit-tolerances-3d-printing/ (fit ladder), https://www.diytileguy.com/tile-leveling-systems/ (clip mechanics), https://allgaragefloors.com/interlocking-garage-floor-tile/ + https://www.garageflooringllc.com/expansion-and-contraction/ (plastic-field expansion failures), https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/ (snap design), https://www.ceramictilefoundation.org/blog/tile-layout-centered-balanced-no-small-cuts (layout doctrine), https://www.constructionspecifier.com/specifying-movement-joints-and-sealants-for-tile-and-stone-reviewing-current-industry-standards-and-design-options/ (EJ171).
+
+---
+
+## Errata (added after the adversarial grounding audit, kept out of the verbatim text above)
+
+The verbatim report above is preserved as delivered. The grounding audit
+([`tile-wall-grounding-audit.md`](tile-wall-grounding-audit.md)) found the following
+corrections; the design doc (`../tile-wall-design.md`) applies them:
+
+1. **§4 leveling-clip mechanism** — the "base plate sits under BOTH adjacent tiles /
+   bears on the TOP faces of both tiles simultaneously" phrasing is an *inference from*
+   the cited DIYTileGuy article, not a quotation; the article confirms the general
+   mechanism (plate under tile, strap through joint, cap/wedge tension) but not that
+   wording. "Tile cracking under clamped corners" is posed in the article as an open
+   concern, not a reported failure mode.
+2. **§4 FDM bow "0.2–0.5 mm over 100 mm"** — stated as typical with no citation; the
+   literature range is roughly 0–3 mm depending on geometry/bed/material (Prusa forums;
+   Alsoufi & Elsayed 2017). Treat 0.2–0.5 mm as an uncited working placeholder.
+3. **§7 "PETG has ~30% stronger interlayer bonding than PLA"** — unsourced and dubious
+   as stated (PLA layer adhesion is commonly rated excellent); disregard until sourced.
+4. **§7 creep framing** — the cited Wiley paper is a *stress relaxation* study (the
+   correct phenomenon for a deflected clip, mislabeled creep). No cited source supports
+   a "loosens in months" timeline at wall-tile stresses; Thrinter's week-long clip test
+   points the other way. The better-sourced PLA-spring hazard is physical aging /
+   embrittlement-on-flex.
+5. **§1 quartering (half-module shift)** — sourced to DIYTileGuy only; the Ceramic Tile
+   Foundation page verifies center/balance and the half-tile minimum but not the shift
+   technique.
+6. **§2 "never <1/16 in"** — 1/16" is ANSI's *recommended minimum*; TileLetter cautions
+   against blanket 1/16-in use. Soften accordingly.
+7. **Link status at audit time** — AllGarageFloors and idealinc.com returned HTTP 403
+   (unverifiable); Printables 206002 direct fetch 404'd but the model is live (verified
+   via search snippet).
+8. **Missing sources now on file in the design doc's Appendix A** — Dzus/quarter-turn
+   prior art (Wikipedia, Monroe Aerospace, Southco D2), bayonet patent US4251134A,
+   Thrinter creep test, PLA physical-aging papers (Polymer 2019, Macromol. Chem. Phys.
+   2020), Art3d/Stickgoo glue-up precedent, Kingroon/Sovol magnet guides, Rockler
+   keyhole standard, FDM warp studies.

@@ -210,3 +210,39 @@ Recommendation: keep the constructive core as the *primary* backend forever — 
 3. **Geometric selection as the naming mechanism (CadQuery `faces(">Z")`).** Predicates over derived topology are evaluated "at the center of mass" with "quite unexpected" results on non-planar faces, and silently re-target when upstream geometry changes — the topological naming problem wearing a string costume. In bikar, mating features carry author-given names from birth; geometry is derived from names, never the reverse. (Runner-up, from all three ecosystems: frames without contracts — no system ships fit/clearance semantics on its connectors, which is why every printed assembly starts with a fitment gauge. Bikar's contract-bearing `port` is the gap in the market.)
 
 Sources: [BOSL2 attachments.scad](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad) · [BOSL2 attach tutorial](https://github.com/BelfrySCAD/BOSL2/wiki/Tutorial-Attachment-Attach) · [BOSL2 distributors](https://github.com/BelfrySCAD/BOSL2/wiki/distributors.scad) · [OpenSCAD list: BOSL2 anchoring](https://lists.openscad.org/empathy/thread/3U2AWJGYUBTRD3L2IPAH2QPDIU4IWH4E) · [BOSL2 discussion #1315](https://github.com/BelfrySCAD/BOSL2/discussions/1315) · [CadQuery selectors](https://cadquery.readthedocs.io/en/latest/selectors.html) · [CadQuery assemblies](https://cadquery.readthedocs.io/en/latest/assy.html) · [build123d joints](https://build123d.readthedocs.io/en/latest/joints.html) · [HN on build123d vs CadQuery](https://news.ycombinator.com/item?id=41548945) · [OnShape mates](https://cad.onshape.com/help/Content/mate.htm) · [Fusion 360 joint types](https://help.autodesk.com/cloudhelp/ENU/Fusion-Assemble/files/GUID-8818AE31-958A-4A59-989B-9875A174C67A.htm) · [Manifold repo](https://github.com/elalish/manifold) · [Manifold algorithm wiki](https://github.com/elalish/manifold/wiki/Manifold-Library) · [OpenSCAD+Manifold successes](https://github.com/elalish/manifold/discussions/387) · [Manifold bundling issue #1343](https://github.com/elalish/manifold/issues/1343) · [manifold-3d three.js example](https://manifoldcad.org/three) · [Clipper2](https://github.com/AngusJohnson/Clipper2) · [Clipper2-WASM](https://github.com/ErikSom/Clipper2-WASM) · [CGA shape grammar tutorial](https://doc.arcgis.com/en/cityengine/latest/tutorials/tutorial-6-basic-shape-grammar.htm) · [Tsugite (UIST 2020)](https://dl.acm.org/doi/10.1145/3379337.3415899) · [3MF core spec](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md) · [three-mf](https://github.com/watzon/three-mf) · [KCL patternTransform](https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform) · [Qidi PIP clearance guide](https://qidi3d.com/blogs/print-lab/3d-printed-snap-fit-joints-clearance-guide) · [Hubs snap-fit guide](https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/)
+
+---
+
+## Errata (added after the adversarial grounding audit, kept out of the verbatim text above)
+
+The verbatim report above is preserved as delivered. The grounding audit
+([`piece-composition-grounding-audit.md`](piece-composition-grounding-audit.md))
+spot-checked its citations and found the following; the design doc
+(`../piece-composition-design.md`) applies them:
+
+1. **build123d quotes misattributed.** The quotes "made placing components in
+   assemblies far more difficult…" and "simply declare: 'This part goes right here', no
+   fuss" are verbatim from https://juraph.com/kiwi/playing_with_build123d/ — not from
+   HN item 41548945 as cited. The additional complaint about joints being "one-shot
+   repositioning" appears in neither source (unverified snippet).
+2. **Manifold "5–30×" misattributed; one benchmark garbled.** The "5-30x speedups over
+   fast-csg" phrase is verbatim from https://github.com/openscad/openscad/pull/4533
+   (merged March 2023), not from manifold discussion #387 — #387 contains only an
+   independent 11× user report (62.2 s → 5.4 s). The "3m36s → 3.4s" figure matches no
+   fetched source and appears garbled; PR #4533's example is a BOSL2 minkowski going
+   4m31s → ~4 s.
+3. **"OpenSCAD's backend since 2025" needs a nuance.** Manifold became the *default* in
+   OpenSCAD dev snapshots in August 2025 (mailing-list announcement, "after a long time
+   of battle testing"); the stable 2021.01 release still ships CGAL-default.
+4. **Hubs guide mis-grouped.** The Hubs snap-fit guide recommends 0.5 mm nominal FDM
+   clearance — it does not support the −0.10/+0.05/+0.15/+0.35 fit ladder it was cited
+   alongside; it is the counter-position (raw uncompensated clearance vs
+   calibrated-printer designed gaps).
+5. **The survey never audited BOSL2's screws.scad**, which ships thread tolerance
+   classes ("6g"/"2A"), named clearance-hole fits ("close"/"normal"/"loose"), and a
+   separate `$slop` printer-compensation knob — the strongest counter-example to the
+   survey's runner-up claim that no surveyed system ships fit contracts.
+6. **Flagged unverified (not re-fetched by the audit):** the CadQuery "center of
+   mass… quite unexpected" selector quote; the Manifold adopters list
+   (Blender/Godot/BRL-CAD/trimesh); clipper2-wasm version/dormancy details; Qidi PIP
+   clearance numbers.
