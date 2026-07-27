@@ -1,0 +1,39 @@
+# Hankin-Orb — dodecahedral polygons-in-contact star sphere (Kaplan 2005,
+# Bonner's Hankin method). Each pentagonal face launches two rays from
+# every edge midpoint at the contact angle theta to the edge; adjacent
+# rays intersect to form a five-pointed central star with kite cells at
+# the corners. The contact points are the edge midpoints — shared with
+# the neighboring face — so the lattice closes watertight across every
+# edge for any theta in the calibrated range.
+# Render with: bikar render Hankin-Orb.bkr --format stl -o out.stl
+# Sweep the star: bikar render Hankin-Orb.bkr --format stl --param theta=36 -o out.stl
+
+# theta detents worth trying: 36 (the pentagon's natural k*180/5 angle),
+# 54 (ideal angle 90 - 180/5 — the classical balanced star, default),
+# 72 (fat/obtuse family). Range 18..80 is the measured gate-PASS envelope
+# across the full radius and strut-width ranges; outside it the corner
+# kites collapse below the strut inset limit and the engine reports the
+# degeneracy.
+param radius = 60 range 40..110 step 5
+param theta = 54 range 18..80 step 1
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint pent_hankin
+  # Canonical circumradius-100 pentagon frame (corners at 90 + k*72 CCW).
+  circle C0 center(0,0) radius 100
+  divide C0 into 5 offset 90
+  polygon pent [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4]
+
+pattern pent_pic on pent_hankin
+  edges from pent
+  hankin angle $theta on C0
+  voids detect
+
+orb HankinOrb
+  base dodecahedron
+  radius $radius
+  inscribe pent_pic
+  project spherical
+  struts width $strut_width depth $strut_depth
+  pierce voids

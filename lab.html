@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orb Lab — Islamic Geometric Orbs</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='none' stroke='%23d6b254' stroke-width='2'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="Design a 3D-printable Islamic geometric orb with sliders — every knob combination that renders is printable."
+    />
+    <script type="module" crossorigin src="./assets/lab-Cx-AQYq0.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/lab-BopWHTyT.css">
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Orb Lab</h1>
+      <p class="tagline">
+        Dial in an Islamic geometric orb — every design you can download is printable.
+      </p>
+      <a class="gallery-link" href="./index.html">&larr; Gallery</a>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>Archetype</h2>
+          <div id="archetype-chips" class="chips"></div>
+        </section>
+        <section>
+          <h2>Knobs</h2>
+          <div id="knob-panel"></div>
+        </section>
+        <section>
+          <h2>Print target</h2>
+          <select id="machine-select" aria-label="Print target machine"></select>
+          <div id="custom-dims" hidden>
+            <label>X <input id="dim-x" type="number" min="50" max="1000" /></label>
+            <label>Y <input id="dim-y" type="number" min="50" max="1000" /></label>
+            <label>Z <input id="dim-z" type="number" min="50" max="1000" /></label>
+            <span class="unit">mm</span>
+          </div>
+          <p id="target-note" class="target-note"></p>
+          <p id="process-note" class="process-note" hidden></p>
+        </section>
+        <section class="actions">
+          <button id="stl-button" disabled>Download STL</button>
+          <button id="copy-link">Copy link</button>
+        </section>
+        <section>
+          <h2>Mesh gate</h2>
+          <div id="gate-panel" class="gate-panel"></div>
+        </section>
+        <div id="error-panel" class="error-panel" hidden></div>
+      </aside>
+      <div class="lab-stage">
+        <div id="view-tabs" class="view-tabs" role="tablist" aria-label="Preview view"></div>
+        <canvas
+          id="orb-canvas"
+          aria-label="3D orb preview — drag to rotate, scroll to zoom"
+        ></canvas>
+        <div id="axis-view" class="axis-view" hidden></div>
+        <div id="spinner" class="spinner" hidden>computing&hellip;</div>
+      </div>
+    </main>
+    <div id="toast" class="toast" hidden></div>
+  </body>
+</html>

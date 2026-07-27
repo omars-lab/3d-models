@@ -1,0 +1,50 @@
+# Rosette-Orb — dodecahedral 10-petal rosette sphere.
+# Each of the 12 pentagonal faces carries a classical rosette: 10 kite
+# petals reaching all 5 corners and all 5 edge midpoints (both shared
+# with the neighboring faces, so the lattice closes watertight), joined
+# shoulder-to-shoulder on a ring so their inner edges zigzag into a
+# 10-pointed star core. 21 voids per face: 10 petals + 10 boundary
+# cells + the pierced star core.
+# Render with: bikar render Rosette-Orb.bkr --format stl -o out.stl
+# Sweep a knob: bikar render Rosette-Orb.bkr --format stl --param inner=50 -o out.stl
+
+# Ranges are the measured gate-PASS envelopes (2026-07 sweep at radius 60);
+# keep inner below shoulder - 8 or the petals invert into bowties.
+param radius = 60 range 40..110 step 5
+param inner = 38 range 16..58 step 2
+param shoulder = 60 range 48..76 step 2
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint pent_rosette
+  # Face pentagon: circumradius 100, corners at 90 + k*72 deg CCW — the
+  # canonical orb pattern frame.
+  circle C0 center(0,0) radius 100
+  divide C0 into 5 offset 90
+  polygon pent [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4]
+  # Midpoint-direction circle: rays at 54 + k*72 aim at edge midpoints.
+  circle Cm center(0,0) radius 100
+  divide Cm into 5 offset 54
+  # Exact edge midpoint = edge chord x center ray (point R0_E4.cpt0).
+  line E4 from C0.cpt4 to C0.cpt0
+  line R0 from C0.mpt to Cm.cpt0
+  # Inner ring (star core) and shoulder ring, 10 points each.
+  circle C1 center(0,0) radius $inner
+  divide C1 into 10 offset 18
+  circle C2 center(0,0) radius $shoulder
+  divide C2 into 10 offset 36
+
+pattern pent_rosette on pent_rosette
+  edges from pent
+  rotate 5 around C0.mpt
+    # Corner petal + midpoint petal; adjacent petals share shoulders.
+    connect cycle [C0.cpt0 C2.cpt1 C1.cpt2 C2.cpt2]
+    connect cycle [R0_E4.cpt0 C2.cpt0 C1.cpt1 C2.cpt1]
+  voids detect
+
+orb RosetteOrb
+  base dodecahedron
+  radius $radius
+  inscribe pent_rosette
+  project spherical
+  struts width $strut_width depth $strut_depth
