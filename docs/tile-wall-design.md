@@ -211,13 +211,36 @@ Synthesis of the leveling-clip mechanism with permanence and creep constraints:
 
 ## Appendix A — survey sources (kept on file)
 
-Ceramic Tile Foundation + Stone World (layout doctrine, sliver rule); DIYTileGuy
-(quartering; leveling-system mechanics + failure modes); ANSI A108.02 grout-width and
-lippage allowables via CTASC/TileLetter; TCNA EJ171 movement joints via Construction
-Specifier; PLA/ceramic CTE literature (E3S, PMC, Kyocera); garage-tile expansion failures
-(AllGarageFloors, GarageFlooringLLC); LEGO precision (Wave Engineer, Brick Architect);
-Multiboard/Honeycomb tolerance ecosystem; Printables hex wall panels; press-fit ladder +
-snap-fit design (Creative3DP, Hubs, Zbotic, PrintPool, Qidi); creep literature
-(RyanDynamics, ScienceDirect, Wiley); anchor ratings (Family Handyman, AustinGallery);
-keyhole dimensions (Printables 146312, Ideal, Rockler); z-clip/acoustic mounting
-(AcousticDesignWorks, Acoustical Solutions, SoundproofCow).
+The full URL-annotated research report is checked in at
+[`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md) — every rule
+in §2/§5/§8 traces to a linked primary source there. Headline sources:
+
+- **Layout doctrine, sliver rule, quartering**:
+  [Ceramic Tile Foundation](https://www.ceramictilefoundation.org/blog/tile-layout-centered-balanced-no-small-cuts),
+  [Stone World](https://www.stoneworld.com/articles/95159-tile-layout-without-sliver-cuts),
+  [DIYTileGuy quartering](https://www.diytileguy.com/quartering-tile-layout/)
+- **Grout width / movement joints**:
+  ANSI A108.02 3×-variation rule via [CTASC](https://ctasc.com/expert-answers/what-is-the-allowable-tolerance-for-tile-grout-head-joint-widths/)
+  and [TileLetter](https://www.tileletter.com/about-grout-joint-width/);
+  TCNA EJ171 via [Construction Specifier](https://www.constructionspecifier.com/specifying-movement-joints-and-sealants-for-tile-and-stone-reviewing-current-industry-standards-and-design-options/)
+- **PLA vs ceramic movement**: CTE literature
+  ([E3S](https://www.e3s-conferences.org/articles/e3sconf/abs/2018/07/e3sconf_eenviro2018_01007.html),
+  [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC9370745/),
+  [Kyocera ceramic CTE](https://global.kyocera.com/prdct/fc/material-property/property/cte/index.html));
+  garage-tile expansion failures
+  ([AllGarageFloors](https://allgaragefloors.com/interlocking-garage-floor-tile/),
+  [GarageFlooringLLC](https://www.garageflooringllc.com/expansion-and-contraction/))
+- **Leveling-clip mechanics** (the front-face registration insight behind §4):
+  [DIYTileGuy leveling systems](https://www.diytileguy.com/tile-leveling-systems/)
+- **Precision + tolerance ecosystems**: LEGO ±0.01 mm vs FDM ±0.1–0.2 mm;
+  [Multiboard](http://www.multiboard.io/) user tolerance sliders;
+  [Printables hex wall panels](https://www.printables.com/model/206002-wallpanel-modular-hexagon-tiles)
+- **Press-fit / snap-fit design**:
+  [Creative3DP fit ladder](https://tools.creative3dp.com/blog/press-fit-tolerances-3d-printing/),
+  [Hubs snap-fit guide](https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/),
+  [Qidi clearance guide](https://qidi3d.com/blogs/print-lab/3d-printed-snap-fit-joints-clearance-guide)
+- **Hole placement + mounting**: ceramic drill-distance rule
+  ([MyBuildingShop](https://mybuildingshop.com/blogs/mosaic-tile-news/can-i-drill-a-hole-in-ceramic-tile-without-cracking));
+  [keyhole slot dimensions (Printables 146312)](https://www.printables.com/model/146312-keyhole-slot-for-wall-hanging);
+  anchor pull-out deratings and z-clip/acoustic mounting are sourced in the research
+  file's §5, creep literature in its §7

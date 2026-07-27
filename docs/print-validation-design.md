@@ -124,3 +124,19 @@ and the prototype catalog own the rest.
    fine for orbs; revisit if girih-field tiles explode region counts.
 3. Should F3 (supports required) ever be an *error* for presets shipped in the gallery?
    Leaning yes-for-gallery, warn-for-Lab-custom.
+
+## Appendix A — provenance
+
+Unlike the sibling docs, this one has no dedicated research report behind it. The default
+thresholds (45° overhang, 10 mm bridge, 0.21 mm erode for a 0.4 mm nozzle, bed-contact
+floor) are slicer-community defaults, deliberately uncited: §5 makes the `/prototype`
+catalog their calibration authority, and P1/P2 print evidence — not literature — is what
+moves them. Two borrowed pieces do have sources on file:
+
+- The **2D boolean/offset engine** this gate shares with composition (scaled-integer
+  coordinates, post-simplify, sliver culling) is sourced in
+  [`research/code-cad-composition-survey.md`](research/code-cad-composition-survey.md) §5
+  (Clipper2 and its WASM ports).
+- The FDM **dimensional-tolerance and clearance context** (±0.1–0.2 mm printed accuracy)
+  that motivates layer-resolved neck checks is sourced in
+  [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md) §7.

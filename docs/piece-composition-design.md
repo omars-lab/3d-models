@@ -218,9 +218,35 @@ compiler decision, not an authoring idiom.
 
 ## Appendix A — survey sources
 
-BOSL2 attachments + tutorial + distributors (BelfrySCAD wiki); OpenSCAD mailing-list
-threads on BOSL2 anchoring pain; build123d joints docs; CadQuery selectors/assembly docs +
-community verdicts; OnShape mate + mate-connector docs; Fusion 360 joint types; Manifold
-repo/wiki, OpenSCAD integration discussion #387, npm `manifold-3d`; Clipper2 repo +
-`clipper2-wasm`; CGA shape grammar (CityEngine); Tsugite (UIST 2020); 3MF core spec +
-`@jscadui/3mf-export`; KCL `patternTransform`; Qidi/Hubs printed-fit clearance guides.
+The full URL-annotated research report is checked in at
+[`research/code-cad-composition-survey.md`](research/code-cad-composition-survey.md) —
+every claim in §3/§8 traces to a linked primary source there. Headline sources:
+
+- **BOSL2**: [attachments.scad](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad),
+  [attach tutorial](https://github.com/BelfrySCAD/BOSL2/wiki/Tutorial-Attachment-Attach),
+  [distributors.scad](https://github.com/BelfrySCAD/BOSL2/wiki/distributors.scad);
+  anchoring pain: [OpenSCAD list thread](https://lists.openscad.org/empathy/thread/3U2AWJGYUBTRD3L2IPAH2QPDIU4IWH4E),
+  [discussion #1315](https://github.com/BelfrySCAD/BOSL2/discussions/1315)
+- **CadQuery / build123d**: [selectors](https://cadquery.readthedocs.io/en/latest/selectors.html),
+  [assemblies](https://cadquery.readthedocs.io/en/latest/assy.html),
+  [build123d joints](https://build123d.readthedocs.io/en/latest/joints.html),
+  [community verdict (HN)](https://news.ycombinator.com/item?id=41548945)
+- **Commercial mates**: [OnShape mates + mate connectors](https://cad.onshape.com/help/Content/mate.htm),
+  [Fusion 360 joint types](https://help.autodesk.com/cloudhelp/ENU/Fusion-Assemble/files/GUID-8818AE31-958A-4A59-989B-9875A174C67A.htm)
+- **Manifold**: [repo](https://github.com/elalish/manifold),
+  [algorithm wiki](https://github.com/elalish/manifold/wiki/Manifold-Library),
+  [OpenSCAD 5–30× results (#387)](https://github.com/elalish/manifold/discussions/387),
+  [bundling friction (#1343)](https://github.com/elalish/manifold/issues/1343),
+  [three.js round-trip](https://manifoldcad.org/three)
+- **2D booleans**: [Clipper2](https://github.com/AngusJohnson/Clipper2),
+  [Clipper2-WASM](https://github.com/ErikSom/Clipper2-WASM)
+- **Grammar / joints / export**: [CGA shape grammar](https://doc.arcgis.com/en/cityengine/latest/tutorials/tutorial-6-basic-shape-grammar.htm),
+  [Tsugite, UIST 2020](https://dl.acm.org/doi/10.1145/3379337.3415899),
+  [3MF core spec](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md),
+  [three-mf](https://github.com/watzon/three-mf),
+  [KCL patternTransform](https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform)
+- **Printed-fit clearances**: [Qidi guide](https://qidi3d.com/blogs/print-lab/3d-printed-snap-fit-joints-clearance-guide),
+  [Hubs snap-fit guide](https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/);
+  the fit-intent ladder in §4.3 additionally draws on the tile survey's
+  [press-fit tolerance ladder](https://tools.creative3dp.com/blog/press-fit-tolerances-3d-printing/)
+  (see [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md) §7)
