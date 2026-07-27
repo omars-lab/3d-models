@@ -501,6 +501,26 @@ against template goldens, qiyas orb-validate ≥ 0.95 on new presets.
   join the studio's Orbs starter folder. qiyas orb-validate composites: Hankin 1.000,
   Star-Cube 1.000, Star-Tetra 1.000, Weave-Dodeca 1.000, Star-Octa 0.992 (warn-severity
   shape-count quirk, §3 footnote).
+- **P2 shipped** (bikar `52e7990` `59c1b8a` `bade84e` `5e51850` `228466b` `ba5ef85`, per
+  `orb-lab-p2-design.md`): custom orbs + studio Dials. The knob layer moved into a
+  `packages/knobs` workspace package (P2.1 — chosen over the `@naqshcoffee/ui` fold; the
+  external-package token requirement stands, so the workspace package is the durable home).
+  The Lab worker gained the L8 watchdog (60 s heavy tier via the L3 source sniff), an
+  evaluation-generation protocol with respawn, the 64 KiB size guard, and SVG attribute
+  escaping (P2.2). Custom mode (P2.3): a code drawer with gutter + debounced re-evaluate,
+  verbatim engine errors beside a stale-while-revalidate last-good mesh, and "Write values
+  into code" baking. Share links (P2.4): lz-string `code=` payloads under an 1,800-char URL
+  budget that degrade to `.bkr` download beyond it, a localStorage draft mirror, and the
+  damaged-payload toast. The studio (P2.5) gained a Dials mode (param scripts only) with
+  write-through to the source line, plus the Lab→studio `#code/` handoff behind "Open in
+  Studio". P2.6 hardening: the §4.3 trust badge (validated ✓ score / calibrated range /
+  custom — not qiyas-validated) backed by a fresh full-sweep of Docker qiyas orb-validate
+  composites recorded per script — Rosette 0.954, Rosette-Cube 0.975, Rosette-Weave 1.000,
+  Star 1.000, Star-Dodeca 1.000, Weave 0.997 newly recorded; the five P1 scores reproduced
+  exactly — plus ten Playwright specs (six Lab custom-mode, four studio Dials; the Lab
+  preview binds :4613 so a stray default-port vite preview is never silently reused), L6
+  guard-rail unit tests in `packages/knobs`, in-page authoring notes, and this repo's
+  `make lab-smoke` vendoring check (asset refs + worker chunk), run inside `make lab`.
 
 ---
 

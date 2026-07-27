@@ -31,7 +31,7 @@ PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs lab web-images deploy
+.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy
 
 %.png: %.scad
 	@echo Generating $*.png from $@
@@ -74,7 +74,25 @@ lab:
 	cp $(BIKAR_DIR)/packages/lab/dist/lab.html ${ROOT_DIR}/lab.html; \
 	rm -rf ${ROOT_DIR}/assets; \
 	cp -R $(BIKAR_DIR)/packages/lab/dist/assets ${ROOT_DIR}/assets; \
+	$(MAKE) -C ${ROOT_DIR} lab-smoke; \
 	echo "Orb Lab vendored: lab.html + assets/"
+
+# Vendoring smoke (orb-lab-p2-design §4.2): the vendored page and its hashed
+# assets must exist and reference each other — a broken copy step or a stale
+# assets/ dir fails here, not on the deployed site.
+lab-smoke:
+	@set -euo pipefail; \
+	test -s ${ROOT_DIR}/lab.html || { echo "lab-smoke: lab.html missing"; exit 1; }; \
+	refs=$$(grep -o 'assets/[A-Za-z0-9._-]*' ${ROOT_DIR}/lab.html | sort -u); \
+	test -n "$$refs" || { echo "lab-smoke: lab.html references no assets/ files"; exit 1; }; \
+	for ref in $$refs; do \
+		test -s "${ROOT_DIR}/$$ref" || { echo "lab-smoke: lab.html references missing $$ref"; exit 1; }; \
+	done; \
+	main=$$(echo "$$refs" | grep '\.js$$' | head -1); \
+	worker=$$(grep -o 'worker-[A-Za-z0-9._-]*\.js' "${ROOT_DIR}/$$main" | sort -u | head -1); \
+	test -n "$$worker" || { echo "lab-smoke: $$main references no worker chunk"; exit 1; }; \
+	test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
+	echo "lab-smoke: lab.html + $$(echo "$$refs" | wc -l | tr -d ' ') assets + $$worker OK"
 
 clean:
 	rm -rf ${ROOT_DIR}/build/images/*.png
