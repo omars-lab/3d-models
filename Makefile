@@ -31,7 +31,7 @@ PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks
+.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks site experiences
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit runs a gitleaks secret scan on staged changes).
@@ -99,6 +99,29 @@ lab-smoke:
 	test -n "$$worker" || { echo "lab-smoke: $$main references no worker chunk"; exit 1; }; \
 	test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
 	echo "lab-smoke: lab.html + $$(echo "$$refs" | wc -l | tr -d ' ') assets + $$worker OK"
+
+# Serve the gallery + vendored Orb Lab over HTTP. This is the way to *run*
+# the site locally: the Lab's module worker will not load over file://, so
+# `make open` (file:// in Chrome) previews the gallery only. Vendors the Lab
+# first if lab.html is missing. Ctrl-C stops the server.
+SITE_PORT ?= 8613
+site:
+	@set -euo pipefail; \
+	[ -f ${ROOT_DIR}/lab.html ] || $(MAKE) -C ${ROOT_DIR} lab; \
+	[ -d ${ROOT_DIR}/build/images/web ] \
+		|| echo "note: build/images/web/ missing — gallery images need 'make cookie-cutters orbs web-images'"; \
+	( sleep 1; open "http://localhost:${SITE_PORT}/" ) & \
+	echo "gallery  http://localhost:${SITE_PORT}/"; \
+	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
+	python3 -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
+
+# Map of every user-facing experience and the target that starts it.
+experiences:
+	@echo "make site                  gallery + Orb Lab, served at :${SITE_PORT} (this repo)"; \
+	echo "make -C ${BIKAR_DIR} lab-dev     Orb Lab vite dev server w/ HMR at :4613 (bikar)"; \
+	echo "make -C ${BIKAR_DIR} dev         Studio in Docker at :5173 (bikar)"; \
+	echo "make -C ${BIKAR_DIR} local.dev   Studio vite dev server at :5173 (bikar, host)"; \
+	echo "make start                 OpenSCAD app for cookie-cutter authoring (this repo)"
 
 clean:
 	rm -rf ${ROOT_DIR}/build/images/*.png
