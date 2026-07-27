@@ -1,0 +1,51 @@
+# Rosette-Weave-Orb — dodecahedral woven flower sphere (Family 1).
+# Each pentagonal face carries only 5 midpoint kite petals chained
+# through shoulders placed under the corners (no face-boundary edges and
+# no corner petals — those would make odd-degree nodes, which cannot
+# weave). Petals fuse across edge midpoints and around shoulder points,
+# and strand tracing threads them into 10 closed ribbons that interlace
+# alternately: amplitude 1.6 over a 2.4 ribbon depth leaves a 0.8mm
+# clearance, so the print is a linked chainmail flower-ball.
+# Render with: bikar render Rosette-Weave-Orb.bkr --format stl -o out.stl
+
+# Ring ranges stay inside the rosette sweet range — the weave adds parity
+# and clearance constraints on top of the lattice's, so the envelope is
+# narrower than the pierced rosettes'. Keep amplitude at or above
+# (strut_depth + 0.4) / 2: the mesh gate is per-tube and cannot see
+# ribbon-ribbon interpenetration.
+param radius = 60 range 40..110 step 5
+param inner = 38 range 24..50 step 2
+param shoulder = 60 range 48..70 step 2
+param amplitude = 1.6 range 1.4..2.6 step 0.2
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint pent_flower
+  # Canonical circumradius-100 pentagon frame (corners at 90 + k*72 CCW).
+  circle C0 center(0,0) radius 100
+  divide C0 into 5 offset 90
+  polygon pent [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4]
+  # Midpoint-direction circle: rays at 54 + k*72 aim at edge midpoints.
+  circle Cm center(0,0) radius 100
+  divide Cm into 5 offset 54
+  # Exact edge midpoint = edge chord x center ray (point R0_E4.cpt0).
+  line E4 from C0.cpt4 to C0.cpt0
+  line R0 from C0.mpt to Cm.cpt0
+  # Inner ring under the midpoints; shoulder ring under the corners.
+  circle C1 center(0,0) radius $inner
+  divide C1 into 5 offset 54
+  circle C2 center(0,0) radius $shoulder
+  divide C2 into 5 offset 90
+
+pattern pent_flower on pent_flower
+  rotate 5 around C0.mpt
+    connect cycle [R0_E4.cpt0 C2.cpt4 C1.cpt0 C2.cpt0]
+  voids detect
+
+orb RosetteWeaveOrb
+  base dodecahedron
+  radius $radius
+  inscribe pent_flower
+  project spherical
+  struts width $strut_width depth $strut_depth
+  weave crossing alternating amplitude $amplitude
