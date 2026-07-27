@@ -117,6 +117,7 @@ deploy: web-images lab
 		mkdir -p "$$(dirname "${PAGES_WORKTREE}/$$p")"; \
 		cp -R "$$p" "${PAGES_WORKTREE}/$$p"; \
 	done; \
+	find ${PAGES_WORKTREE} -name '.DS_Store' -not -path '*/.git/*' -delete; \
 	cd ${PAGES_WORKTREE}; \
 	git add -A; \
 	if git diff --cached --quiet; then \
