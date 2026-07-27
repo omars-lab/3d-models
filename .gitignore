@@ -1,7 +1,9 @@
 .DS_Store
 
-# Local agent / tooling state (machine-specific, not project source)
-.claude/
+# Local agent / tooling state (machine-specific, not project source) —
+# except .claude/skills/, which is project knowledge (prototype catalog).
+.claude/*
+!.claude/skills/
 
 # Generated build artifacts — NOT tracked on master.
 # The source of truth is src/*.scad (cookie cutters) and the bikar-repo
