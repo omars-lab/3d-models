@@ -1,0 +1,71 @@
+---
+name: maintain-use-cases
+description: Maintain the actor/use-case map for the whole 3d-models experience. Use when shipping or changing any user-facing capability (gallery, Lab, studio, CLI, prototypes, pieces), when the pre-commit use-case hook blocks or reminds, or when auditing what the project supports and where each capability lives in code.
+---
+
+# Maintain use cases
+
+The map lives next to this file in `use-cases.md`: a mermaid diagram of every
+actor and shipped use case, plus a table pinning each use case to the code
+that delivers it. It is the answer to "who is this for and where does that
+capability live?" — kept honest by `validate.py` and the pre-commit hook.
+
+## The contract
+
+- **Pointer syntax** (must be backticked, in the table only):
+  `` `repo:path:L10` `` or `` `repo:path:L10-L20` ``. `repo` is `3d-models`,
+  `bikar`, or `qiyas`; paths are repo-relative.
+- **Pinned, not floating**: pointers are valid at the frontmatter `as_of`
+  commit of their repo — line drift after that commit is expected and fine.
+  The freshness rules below keep the pins from rotting.
+- **Diagram ↔ table parity**: every `UC<n>` node in the mermaid diagram must
+  have a table row and vice versa (validated).
+- **Shipped only**: a use case must exist in deployed/committed code.
+  Planned experiences stay in design docs and the task list until they ship.
+- Cross-repo checkouts (`repos:` in frontmatter, relative to this repo) that
+  are missing locally are warn-and-skip, never a failure.
+
+## Workflows
+
+**Add or change a use case** — when a commit ships a new user-facing
+capability (or retires one): add/edit the diagram node and the table row with
+real pointers, run `validate.py --refresh` (rewrites every reachable repo's
+`as_of` to its HEAD and re-validates — fix any pointer it reports broken by
+re-finding the line at the new pin), and stage `use-cases.md` in the same
+commit as the change.
+
+**Validate** — `make validate-use-cases` (or run
+`.claude/skills/maintain-use-cases/validate.py` directly). Checks frontmatter,
+pointer existence and line ranges at the pinned commits, and diagram/table
+parity.
+
+**Audit** — read `use-cases.md` top to bottom; anything the project does that
+has no UC row is either missing from the map or not actually a user-facing
+capability. Actors with no arrows and UC rows whose pointers you cannot
+justify are pruning candidates.
+
+## The pre-commit hook
+
+`.githooks/pre-commit` dispatches every script in `.githooks/pre-commit.d/`
+in order; `20-use-cases` runs `validate.py --staged`:
+
+| Situation | Result |
+|---|---|
+| `use-cases.md` staged | Staged content must fully validate AND its `3d-models` `as_of` must equal HEAD (the commit being built on) — otherwise **blocked** |
+| Staged file is referenced by a `3d-models` pointer, map not staged | **Blocked** — update the map, or override once with `USE_CASES_OK=1 git commit ...` |
+| Staged files touch experience surfaces (`index.html`, `Makefile`, `docs/*.md`, `src/`) | Non-blocking reminder |
+| Map's `as_of` > 20 commits behind HEAD | Non-blocking reminder to `--refresh` |
+
+The `as_of == HEAD` rule means the recorded commit is always the parent of
+the commit that last touched the map — as recent as it can possibly be
+without knowing the new hash.
+
+## Rules
+
+- Never edit `as_of` hashes by hand — always `validate.py --refresh`.
+- One use case per real capability; do not split one experience into many
+  rows to inflate the map.
+- Retiring a capability removes its node and row in the same commit.
+- The override (`USE_CASES_OK=1`) is for genuinely map-irrelevant edits to a
+  referenced file (typo fixes, refactors) — never for shipping an unmapped
+  capability.

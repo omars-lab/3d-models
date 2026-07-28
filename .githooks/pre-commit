@@ -1,8 +1,11 @@
 #!/bin/sh
-# Pre-commit secret scan. Activate on a fresh clone with: make setup-hooks
-# (sets core.hooksPath to .githooks). Fails closed: no gitleaks, no commit.
-if ! command -v gitleaks >/dev/null 2>&1; then
-  echo "pre-commit: gitleaks not installed — brew install gitleaks" >&2
-  exit 1
-fi
-exec gitleaks git --pre-commit --staged --redact --no-banner
+# Pre-commit dispatcher: runs every executable in .githooks/pre-commit.d/
+# in lexical order; the first failure aborts the commit.
+# Activate on a fresh clone with: make setup-hooks
+# 10-gitleaks     — secret scan on staged hunks (fails closed)
+# 20-use-cases    — use-case map freshness + pointer validation
+hookdir="$(dirname "$0")/pre-commit.d"
+for hook in "$hookdir"/*; do
+  [ -x "$hook" ] || continue
+  "$hook" || exit $?
+done
