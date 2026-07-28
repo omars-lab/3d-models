@@ -2,7 +2,7 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: 863c4cf8aeb0216342e998f5d6a0131746bce2ac
+  3d-models: 96b5b759e7563b3ac280033c7c015de98d251892
   bikar: 9c1f1a6c9cdd569f262eefac4f4073dc80c8e491
   qiyas: 0c75f5707d1263ac9dc99c6d2028e097cf1dd060
 repos:
@@ -51,11 +51,11 @@ flowchart LR
 | UC1 | Author `.bkr` patterns, orbs, and pieces in the bikar DSL | Designer | `bikar:packages/core/src/dsl/evaluator.ts:L375` (orb eval) · `bikar:packages/core/src/dsl/evaluator.ts:L718` (piece eval) · `bikar:docs/language-reference.md:L343` (orb grammar) · `bikar:docs/language-reference.md:L417` (piece grammar) |
 | UC2 | Render STL / SVG / symmetry views with the watertight mesh gate | Designer | `bikar:packages/cli/src/index.ts:L164` (render command) |
 | UC3 | Browse the published catalog of cutters and orbs | Gallery visitor | `3d-models:index.html:L285-L286` (orbs section) · `3d-models:index.html:L360` (ORBS data array) |
-| UC4 | Download a print-ready, gate-checked STL | Gallery visitor, Print operator | `3d-models:Makefile:L56` (orbs pipeline target) |
-| UC5 | Configure an orb with knobs, gate readout, and share links in the Lab | Lab visitor | `3d-models:Makefile:L77` (lab vendoring target) · `bikar:packages/lab/src/main.ts:L1` (Lab app) |
+| UC4 | Download a print-ready, gate-checked STL | Gallery visitor, Print operator | `3d-models:Makefile:L61` (orbs pipeline target) |
+| UC5 | Configure an orb with knobs, gate readout, and share links in the Lab | Lab visitor | `3d-models:Makefile:L82` (lab vendoring target) · `bikar:packages/lab/src/main.ts:L1` (Lab app) |
 | UC6 | Author orbs in the bikar studio with Dials ↔ Code sync | Studio author | `bikar:packages/web/src/main.ts:L1` (studio app) |
 | UC7 | Validate bikar renders against ground truth per symmetry axis | qiyas validator | `qiyas:src/qiyas/orb_validate.py:L95` (view discovery + scoring) |
 | UC8 | Plan and log physical print prototypes | Print operator | `3d-models:.claude/skills/prototype/catalog.md:L1` (prototype catalog) |
-| UC9 | Cut cookies with printed cutters | Baker | `3d-models:Makefile:L50` (cookie-cutters target) |
+| UC9 | Cut cookies with printed cutters | Baker | `3d-models:Makefile:L55` (cookie-cutters target) |
 | UC10 | Compose functional printable pieces (C1: girih tile with countersunk nail bore) | Designer, Print operator | `bikar:packages/core/src/kernel3d/solidify-piece.ts:L320` (extrude solidifier) · `bikar:patterns/Pieces/Nail-Tile.bkr:L1` (deliverable) · `3d-models:docs/piece-composition-design.md:L1` (design doc) |
-| UC11 | Publish the gallery + Lab to gh-pages | Designer | `3d-models:Makefile:L155` (deploy target) |
+| UC11 | Publish the gallery + Lab to gh-pages | Designer | `3d-models:Makefile:L160` (deploy target) |
