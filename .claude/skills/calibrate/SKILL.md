@@ -93,7 +93,12 @@ notebook says.
   geometry; only the caliper proves the number.
 - A new provisional constant must enter `.calibration-baseline.json` in the same
   commit that introduces it — the baseline is append-blocked and may only
-  shrink, so an unbaselined provisional value fails the gate by design.
+  shrink, so an unbaselined provisional value fails the gate by design. Because
+  the file may only shrink, that addition is refused unless it is stated
+  deliberately: `CALIBRATION_BASELINE_MAY_GROW=1 git commit …` (the same
+  variable clears the gate in CI), and the commit message says why the constant
+  has to ship unearned. Removing an entry, because a coupon measured it, needs
+  no ceremony — it is the direction the ratchet turns.
 - Rung ranges authored before a machine exists are **brackets around an unknown**,
   not predictions. Label them so, and log a re-centring as a result rather than
   a mistake.
