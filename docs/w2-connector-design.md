@@ -523,6 +523,12 @@ One entry per claim the grounding audit contested; the audit report
 ([`research/w2-connector-grounding-audit.md`](research/w2-connector-grounding-audit.md))
 is the evidence trail for each.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
+measurement can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
+Tenet 30 — a physical constant is not earned until it records its provenance).
+
 ### B.1 The ~2% PETG strain budget — derivation replaced, endpoint kept
 
 The audit broke the survey's original chain: the "7–10% PETG vendor design band"
@@ -549,7 +555,7 @@ exactly the load case a wall clip sees years after printing, and none of the pro
 sources address aging. A tough/annealed-PLA story would be a new material word with
 its own datasheet, not a bypass of this error.
 
-### B.3 The ≤10 mm bridge rule — deliberately conservative, not a capability claim
+### B.3 The ≤10 mm bridge rule — deliberately conservative, not a capability claim [CAL-BRG-01 — the same bet as print-validation B.4; one coupon (MC-3) closes both]
 
 Credible counter-evidence says a ⌀10.5 mm bridge is nowhere near modern limits:
 Multiboard's official snaps require printers to bridge up to 30 mm, community
@@ -569,7 +575,7 @@ holding four wall tiles coplanar). Equally, no source argues 30° is inadequate.
 is a genuinely coupon-decided bet: W-C1 confirms or rejects it; the literature
 cannot.
 
-### B.5 The warp non-number — claim narrowed, practice bundle downgraded
+### B.5 The warp non-number — claim narrowed, practice bundle downgraded [CAL-WRP-01 — coupon MC-5, not W-F1: warp is a printer property]
 
 The novelty claim survives as qualified in §3: "no *surveyed* published measurement
 for this exact case." Nearest misses found by the audit: a 2025 Int. Polymer
@@ -584,7 +590,7 @@ opposing WhyItFailed's 0.5–0.7% contraction figure. The coupon exists precisel
 because these sources conflict; only the straightedge-and-feeler-gauge measurement
 settles it.
 
-### B.6 The detent 0.3–0.5 mm — verified verbatim, low end soft
+### B.6 The detent 0.3–0.5 mm — verified verbatim, low end soft [CAL-DET-01 — coupon W-C1, design-specific: off the machine card by design]
 
 Both attributions survived verbatim (Firgelli's "0.3-0.5 mm of axial relief gives a
 clear tactile click"; SnapLock's "Minimal column protrusion (0.3–0.5 mm)"). A

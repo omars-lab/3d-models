@@ -926,6 +926,12 @@ Adversarial audit, preserved verbatim: [`research/lego-lab-grounding-audit.md`](
 
 Each entry: the bet, the strongest source against it, and either why we diverge or what changed.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a measurement
+can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which names the
+coupon that settles it; the ceremony is the `calibrate` skill (bikar Tenet 30 — a physical
+constant is not earned until it records its provenance).
+
 **B.1 — The tangency value over LDraw's convention.** We author the tube at ⌀6.514.
 *Counter-position:* LDraw models 6.4 and does so as a **library-wide convention, not a rounding** —
 `stud4.dat` is placed at unit XZ scale in 3,336 parts and never rescaled, and LDraw uses non-integer
@@ -961,7 +967,8 @@ than a mean: it makes a pattern that snaps in one axis and misses in the other s
 that misses in both. That is deliberate — butted pieces fail on the worse axis — but it flattens the
 12-fold case in a way the P1 matrix may want to distinguish.
 
-**B.5 — The 0.8 mm mesh-gate override.** Set to the tangency tube wall exactly, so any *thinner*
+**B.5 — The 0.8 mm mesh-gate override.** [CAL-FEA-01 — coupon MC-2, not LG-F1: the minimum
+printable wall is a printer property] Set to the tangency tube wall exactly, so any *thinner*
 feature still errors. *Counter-position:* Brick Architect reports printed parts whose "walls were
 too thick", i.e. the realised wall exceeds the authored one, and a 0.857 mm authored wall may print
 as ~1.0 and jam. The risk runs both ways and neither direction is settled on paper. LG-F1 measures
@@ -978,7 +985,8 @@ that is not there. §7.2's polyline inset adds a second exposure: a concave vert
 self-intersects is clipped by dropping the crossing span, which is a heuristic, not a proof. Until
 both are checked against a deliberately-holed pattern, the predicate is trusted rather than verified.
 
-**B.8 — The rib as the clutch mechanism.** New in v2. *Counter-position:* nobody has published
+**B.8 — The rib as the clutch mechanism.** [CAL-RIB-01 — coupon LG-F1, design-specific: off
+the machine card by design] New in v2. *Counter-position:* nobody has published
 caliper data on a printed LEGO stud, a clutch force measurement, or a durability cycle count, so
 "a 0.1 mm rib absorbs the process spread" is an argument from MachineBlocks' shipped defaults and
 from W2's detent precedent — not from measurement. A rib that is too stiff jams; one too compliant

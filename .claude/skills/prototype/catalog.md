@@ -180,6 +180,230 @@ floor) — these prints test *reality*, not the mesh.
 
 ---
 
+# Machine characterization card (MC-series)
+
+The MC-series measures the **printer**, not a design. Fit gap, hole compensation,
+minimum feature, bridge span, overhang angle, warp and bed contact are properties
+of *(machine, material, nozzle, slicer profile)* — a value measured on one tuple
+is an anecdote on another, and measuring them inside a clip coupon, a brick coupon
+and an orb coupon separately is measuring the same printer three times. One card
+settles the shared substrate; every design coupon then tests only what is
+genuinely design-specific.
+
+**This series sits ahead of every other entry in the learning ladder** — ahead of
+W-F1 and LG-F1 below, which consume its numbers, and ahead of P1 above, whose Q1
+is MC-2's question asked in strut form. Each entry names the `CAL-…` bets it
+settles; the registry is `.claude/skills/calibrate/bets.md` and the ceremony that
+closes a bet is the `calibrate` skill (bikar Tenet 30 — a physical constant is not
+earned until it records its provenance).
+
+- **Model**: all six live in `bikar/patterns/Coupons/Machine-Card.bkr`, one piece
+  per rung so that rung identity survives into the filename — bikar cannot emit
+  text, so a coupon cannot label itself and monotone size ordering plus `--piece`
+  is the substitute. MC-1 **extends** `patterns/Coupons/Fit-Coupon.bkr` rather
+  than replacing it: that file's ⌀3 ladder is correct as far as it goes, and the
+  card adds the ⌀ sweep `holeCompMm` actually needs.
+- **Authored blind.** No machine exists yet, so every rung range below is a
+  bracket around an unknown, not a prediction. A ladder that turns out to need
+  re-centring is a **result** — log it and re-cut, per the `calibrate` rules.
+- **Print target** for the whole series: record the full profile header from
+  `.claude/skills/calibrate/protocol.md` (machine, material *and colour*, spool,
+  nozzle ⌀ and type, layer height, profile verbatim, ambient, date, caliper)
+  before anything is measured. That header **is** the deliverable; the numbers
+  are meaningless without it.
+- Print the whole card in one job where the bed allows, so all six readings share
+  one profile header. Two jobs means two headers.
+
+## MC-1 — Bore and fit plate (⌀ sweep + fit-class ladder)
+
+- **Status**: planned (no machine yet)
+- **Model**: `bikar/patterns/Coupons/Machine-Card.bkr` — the existing Fit-Coupon
+  plate extended with a bore sweep at **⌀3 / 4 / 5 / 6 / 8 / 10 mm** plus the
+  four-class fit ladder (press / snug / sliding / free) and matching gauge pins.
+  `cd bikar && node packages/cli/dist/index.js render
+  patterns/Coupons/Machine-Card.bkr --format stl --check --piece MC1Plate -o
+  ../3d-models/build/stls/coupons/MC-1-BorePlate.stl`, then one pin per rung via
+  `--piece MC1Pin --param bore_d=...`.
+- **Print target**: TBD — profile header per the series note.
+- **Settles**: `CAL-FIT-01` (the `FIT_GAP_MM` press/snug/sliding/free ladder) and
+  `CAL-HOL-01` (`holeCompMm` 0.20/0.25).
+- **What we want to learn**:
+  - [ ] 1. Realised vs authored bore at each ⌀ — **two orthogonal diameters per
+    bore** (FDM bores are not round, and the X/Y difference is the anisotropy the
+    fit classes live or die by). This is `holeCompMm`, and whether one number
+    covers the whole ⌀ range or it varies with diameter.
+  - [ ] 2. Which gap seats as *press*, *snug*, *sliding*, *free* by hand, judged
+    on `protocol.md`'s four definitions and recorded with **who judged it** — a
+    hand calibration is worthless without the hand.
+  - [ ] 3. Does the literature ladder (−0.10 / +0.05 / +0.15 / +0.35) land on this
+    machine at all, or do the credible looser sources (2–10× wider) win here?
+    Both design docs that carry this bet expect the coupon, not the literature,
+    to be the arbiter.
+  - [ ] 4. Is the compensation separable from the intent, as the architecture
+    assumes — i.e. does one compensation number plus the ladder reproduce the
+    measured fits, or do they interact?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `FIT_GAP_MM` and `holeCompMm` in `bikar` `kernel3d/fit-profile.ts`
+  (value **and** provenance record); `docs/c2-assembly-design.md` Appendix B.3 and
+  B.6; `docs/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
+  which is why one plate closes both; W-F1's seat-clearance conversion.
+
+## MC-2 — Wall ladder (minimum printable feature)
+
+- **Status**: planned (no machine yet)
+- **Model**: seven `tube` rungs, wall **0.4 / 0.6 / 0.8 / 1.0 / 1.2 / 1.6 /
+  2.0 mm** (wall = (outer − inner)/2). One piece per rung:
+  `cd bikar && for w in 0.4 0.6 0.8 1.0 1.2 1.6 2.0; do node
+  packages/cli/dist/index.js render patterns/Coupons/Machine-Card.bkr --format stl
+  --piece MC2Wall --param wall_mm=$w -o
+  ../3d-models/build/stls/coupons/MC-2-Wall-$w.stl; done`.
+- **Print target**: TBD — profile header per the series note.
+- **Settles**: `CAL-FEA-01` (`DEFAULT_MIN_FEATURE_MM`, currently 1.2).
+- **Sub-floor note**: the 0.4–1.0 mm rungs sit **below** the 1.2 mm mesh-gate
+  floor, so `--check` reports FAIL on them **by design** — that is the coupon's
+  whole point, and it is the same posture as the W-series clip blade and the
+  LG-series tube wall. Render those rungs without `--check`; record the FAIL as
+  expected, not as a defect. No `--min-feature` override flag exists and none is
+  added.
+- **What we want to learn**:
+  - [ ] 1. The thinnest wall that prints as a continuous, handleable feature —
+    the number that either confirms the 1.2 mm floor or moves it.
+  - [ ] 2. **In which direction the error runs.** Brick Architect reports printed
+    walls coming out *too thick*; measure realised vs authored at every rung
+    rather than assuming thin-and-missing is the only failure.
+  - [ ] 3. Where the slicer stops emitting a distinct feature and starts merging
+    perimeters — inspect the sliced preview *and* the part, because the two
+    disagree and only the part counts.
+  - [ ] 4. Does the answer move with wall *height* (a short wall is stiffer than a
+    tall one), or is a single floor honest?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `DEFAULT_MIN_FEATURE_MM` in `bikar` `kernel3d/mesh-gate.ts` (value
+  **and** provenance record); `docs/lego-lab-design.md` Appendix B.5 and the §7.4
+  `minFeatureMm: 0.8` override; P1 Q1 and LG-F1 Q5, both of which ask this
+  question in design-specific form.
+
+## MC-3 — Bridge plate (unsupported span)
+
+- **Status**: planned (no machine yet)
+- **Model**: blind bores under a 2 mm ceiling — `band d <span> from 0 to z1` with
+  `z1 < depth`, leaving a roof that must bridge the bore ⌀. Spans **4 / 6 / 8 /
+  10 / 12 / 16 mm**. One piece per rung via `--piece MC3Bridge --param
+  span_mm=...`; `--check` PASS expected on all rungs.
+- **Print target**: TBD — profile header per the series note. **Orientation is
+  load-bearing**: the plate prints flat, bores facing up, ceilings bridging in XY.
+  A bridge number measured in any other orientation answers a different question.
+- **Settles**: `CAL-BRG-01` (the ≤10 mm bridge rule).
+- **What we want to learn**:
+  - [ ] 1. The first rung that **sags** — not the first that fails. The usable
+    limit is the last clean one; a drooping-but-present ceiling is still a defect
+    in a cosmetic seat.
+  - [ ] 2. Does the conservative 10 mm rule survive, or is it 2–3× tighter than
+    this machine needs (Multiboard's shipped snaps demand 30 mm, community
+    guidance says 20–25 mm)?
+  - [ ] 3. Does the droop consume the clearance under the ceiling — the failure
+    mode that matters for a cavity roof, as opposed to cosmetic sag.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: the bridge-span constant in `bikar` `kernel3d/print-gate.ts` (value
+  **and** provenance record); `docs/w2-connector-design.md` Appendix B.3 and §4
+  Q4; `docs/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
+  cavity ceiling bridging cleanly) and §11 Q4.
+
+## MC-4 — Overhang fan
+
+- **Status**: planned (no machine yet)
+- **Model**: one `revolve` of a stepped-slope outer profile — a truncated ring
+  with staircase slopes at **20 / 30 / 40 / 45 / 50 / 60°**. (A true cone is
+  rejected by the C1 ring-solid rule; the staircase is the legal form and its
+  steps double as rung identity.) `--piece MC4Fan`, `--check` PASS expected.
+- **Print target**: TBD — profile header per the series note. **Supports off**,
+  and say so on the sheet: an overhang number measured with supports is not an
+  overhang number.
+- **Settles**: `CAL-OVH-01` (the F5 overhang threshold).
+- **What we want to learn**:
+  - [ ] 1. The first angle showing curl or droop — surface quality per angle,
+    photographed, not just pass/fail.
+  - [ ] 2. Does the shipped-slicer *auto* rule (overhang = half extrusion width
+    per layer, so the effective angle follows layer height) beat a fixed angle
+    here? Print the fan at two layer heights if the plate allows — that
+    comparison is what decides whether the gate's default should be auto or
+    fixed.
+  - [ ] 3. Record the convention **explicitly** with the reading (from vertical
+    vs from horizontal). At 45° the two coincide, which is exactly how convention
+    bugs hide.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: the overhang threshold in `bikar` `kernel3d/print-gate.ts` (value
+  **and** provenance record); `docs/print-validation-design.md` Appendix B.2 and
+  the F5 tier split in §3.
+
+## MC-5 — Warp plate
+
+- **Status**: planned (no machine yet)
+- **Model**: one thin `extrude` with a large footprint — the largest flat plate
+  the bed takes, using Fit-Coupon's guide-circle-quartered rectangle idiom (the
+  blueprint has no rectangle primitive). `--piece MC5Plate`, `--check` PASS
+  expected. One part, four corners measured — there is no ladder here.
+- **Print target**: TBD — profile header per the series note, **plus** brim/raft
+  and part-fan settings verbatim, since those are precisely what the conflicting
+  sources disagree about.
+- **Settles**: `CAL-WRP-01` (`warpMm`, currently `undefined`).
+- **What we want to learn**:
+  - [ ] 1. Gap at **each of four corners** on a flat reference (granite plate or
+    float glass) by feeler gauge. Record all four, not the worst — the *pattern*
+    distinguishes warp from a bed-levelling artifact, and only one of those is
+    the number being sought.
+  - [ ] 2. Does it differ by material? PLA vs PETG on the same plate is one extra
+    print and settles a claim the sources flatly contradict each other on (Prusa's
+    guide says PETG "does not shrink or warp"; WhyItFailed quotes 0.5–0.7%
+    contraction).
+  - [ ] 3. Does the bow relax over days, or is the as-printed number the number?
+  - [ ] 4. Does a brim change it enough to be worth mandating in the print notes?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `warpMm` in `bikar` `kernel3d/fit-profile.ts` — today literally
+  `undefined` pending this measurement (value **and** provenance record);
+  `docs/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
+  rather than re-measuring the printer.
+
+## MC-6 — Bed-contact towers
+
+- **Status**: planned (no machine yet)
+- **Model**: four `rod` towers, ⌀ **3 / 5 / 8 / 12 mm** × 40 mm tall — one line
+  each. `--piece MC6Towers`, `--check` PASS expected.
+- **Print target**: TBD — profile header per the series note, **plus** whether a
+  brim/raft was used. With a brim this coupon measures nothing.
+- **Settles**: `CAL-BED-01` (`MIN_BED_CONTACT_MM2` 25 mm² / footprint ratio 0.01).
+- **What we want to learn**:
+  - [ ] 1. Which towers survived to full height and which detached — and, if
+    observed, at what point in the print. A tower that let go at 30 mm is a
+    different result from one that never stuck.
+  - [ ] 2. The smallest footprint that holds a 40 mm column, which is the number
+    `MIN_BED_CONTACT_MM2` currently guesses at.
+  - [ ] 3. Elephant's foot at the base of each tower, measured deliberately here
+    so it does not contaminate every other coupon's readings.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `MIN_BED_CONTACT_MM2` and the footprint-ratio rule in `bikar`
+  `kernel3d/print-gate.ts` (value **and** provenance record); P2 Q5, the
+  point-contact sphere question, which inherits the threshold from here.
+
+---
+
 # Tile-wall connector ladder (W-series)
 
 The W-series validates the **modular tile-wall** work (design docs
@@ -215,14 +439,23 @@ free-standing strut). Only the clip is exempt, and only where noted.
   - [ ] 1. Which `gap` value seats the clip firmly without forcing on a
     0.4 mm nozzle — i.e. the number that becomes `profile.gapMm` /
     `--fit-profile petg_calibrated`?
-  - [ ] 2. Measured tile warp across the coupon → `profile.warpMm` (does a
-    flat clipseat tile stay flat enough for a corner jaw to bear evenly?).
+  - [ ] 2. **Re-pointed to `CAL-WRP-01` / MC-5.** `profile.warpMm` is a property
+    of *(machine, material, nozzle, profile)*, not of a clipseat tile — measuring
+    it here would measure the printer a second time. The warp plate supplies the
+    baseline. What stays W-F1's is the design-specific remainder: does a tile
+    carrying a clipseat rebate bow **more** than the MC-5 plate at the same
+    profile, i.e. does the rebate itself add bow, and does a corner jaw still
+    bear evenly on the result? Compare against MC-5; only the difference is a
+    finding here.
   - [ ] 3. Does the seat clearance need to differ by tile material (PLA vs
     PETG shrinkage), or is one `gap` good for both?
 - **What we learned**: — pending.
 - **Iteration log**:
   | # | date | change | question | result | decision |
   |---|------|--------|----------|--------|----------|
+- **Settles**: the clipseat-specific half of `CAL-FIT-01` only. The four fit
+  classes and the ⌀ sweep come from MC-1; W-F1 converts them into a seat
+  clearance for *this* joint. Warp (Q2) belongs to `CAL-WRP-01` / MC-5.
 - **Feeds**: `--fit-profile` seat-clearance profile consumed by
   `patterns/Coupons/Clip-Coupon.bkr` and `patterns/Walls/Clip-Wall.bkr`;
   clipseat constants in `bikar` `kernel3d/clipseat.ts` if the seat floor moves.
@@ -260,6 +493,9 @@ free-standing strut). Only the clip is exempt, and only where noted.
 - **Iteration log**:
   | # | date | change | question | result | decision |
   |---|------|--------|----------|--------|----------|
+- **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/w2-connector-design.md`
+  Appendix B.6) — design-specific, deliberately **not** on the machine card, since
+  a detent depth is a property of this clip's bayonet, not of the printer.
 - **Feeds**: the clipseat grammar default (rebate vs proud) in
   `docs/w2-connector-design.md` §10 and every `clipseat` in
   `patterns/Walls/*.bkr`; the mesh-gate sub-floor exemption for bayonet clips
@@ -348,16 +584,24 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     specific — the bridged ceiling sags into the zone the host studs occupy. Look
     at the underside of the 1.6 rung before testing fit, and record whether the
     sag is what blocks it.
-  - [ ] 5. Does the 0.857 mm tube wall actually print — **measure it with
-    calipers** — validating the §7.4 exemption, or does it come out as two merged
-    perimeters? Brick Architect reports printed walls coming out *too thick*, so
-    measure rather than assume the error's direction.
+  - [ ] 5. **Re-pointed to `CAL-FEA-01` / MC-2.** Whether a sub-1.2 mm wall
+    prints at all — and in which direction the realised thickness errs — is a
+    property of the printer, and MC-2's seven-rung wall ladder answers it once
+    for every design in this repo. Brick Architect's "walls came out too thick"
+    is MC-2's Q2, not a LEGO question. What stays LG-F1's is narrower and still
+    worth a caliper: does the tube wall at 0.857 mm on a **short, curved** tube
+    behave like MC-2's flat rung of the same thickness, or does the curvature and
+    the tube's stub height change it? Measure both and compare; a divergence is
+    the finding, not the absolute number.
   - [ ] 6. Does the 0.8 mm-wide rib survive slicing, or does the perimeter path
     swallow it? Inspect the sliced preview *and* the printed part.
 - **What we learned**: — pending.
 - **Iteration log**:
   | # | date | change | question | result | decision |
   |---|------|--------|----------|--------|----------|
+- **Settles**: `CAL-RIB-01` (clutch rib `ribMm`, design doc Appendix B.8) —
+  design-specific and deliberately **not** on the machine card. The minimum
+  printable wall (Q5) belongs to `CAL-FEA-01` / MC-2.
 - **Feeds**: the rib and `wall` entries of the LEGO fit profile in `bikar`
   `kernel3d/fit-profile.ts`; the `engage` default in design doc §4 and §3.6; the
   §7.4 `minFeatureMm` override if Q5 disproves the thin wall; design doc
