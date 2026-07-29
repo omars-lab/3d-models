@@ -973,10 +973,29 @@ Two further findings compound it:
    > `preprocessSource`'s length-changing `#RRGGBB` rewrite **shifts every reported column by +5
    > per preceding hex literal** (283 lines across 75 files). Lines are unaffected, so statement
    > spans are safe; `ParseError` columns are already wrong today.
+   >
+   > **Built 2026-07-29.** Both landed in bikar, in that order —
+   > `docs/decisions/2026-07-29-lexer-hex-colors-token-context.md` (the column shift; the
+   > preprocessor is gone, positions now address the file as written) and
+   > `docs/decisions/2026-07-29-parser-statement-spans-comment-retention.md` (the spans). The
+   > estimate above was pessimistic in one respect: `parseStatement` and `parseDeclaration` are
+   > table dispatches, so the stamp is one helper at two call sites, not a field on 64 node
+   > interfaces — **98.2 % of 23,800 corpus nodes carry a span, 0 of them landing on a blank or
+   > comment line**. The 421 without one are sub-blocks no chokepoint dispatches. The
+   > `data-shape-id` hazard was avoided rather than fixed: nothing rides `Segment.tags`.
 2. **Source→AST→source round-trip is impossible.** The IR is lossy with respect to the file: it
    drops comments, whitespace, and formatting. It is an **AST, not a CST**, in the sense
    Prettier's design turns on. Anyone reading "lossless round trip" in §8.1 must read it as
    *AST-object → JSON → AST-object*, never *file → JSON → file*.
+
+   > **Correction (2026-07-29).** "Drops comments" is no longer true. `FileNode.comments` retains
+   > every one — `{ text, line, column }` in source order, **24,971 across the four-repo corpus, of
+   > which 0 are trailing** — so attachment collapses to "the run of comments directly above
+   > `node.loc.line`". This does not make the IR a CST: whitespace and formatting are still gone,
+   > and the `for`-unroll many-to-one span means the tree still cannot reproduce the file. But the
+   > specific loss that mattered to *this* doc — the 239 lines of `# Construction:` prose across 32
+   > of the 92 pattern files, which is the derivation narrative the worksheet is trying to
+   > render — is recoverable now.
 3. **This strengthens §3.1, not weakens it.** The derivation must come from authored source. The
    AST is the *evaluator's* view of authored source, and it has already thrown away the author's
    own prose account of the construction.
