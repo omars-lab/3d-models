@@ -760,7 +760,8 @@ survey, LDraw library read first-hand), `docs/lego-lab-design.md` v1 → v2,
 promoted to a first-class kernel feature (§3.8, §7.6); `engage` default 1.6 → 3.2 (§3.6); grid-fit
 measure rebuilt on repeat-vector components with a rotation search (§5.3); `studsEngaged` and the
 non-rectangular body partition specified rather than assumed (§5.2, §7.2); V5b and V10 added; LG-F1
-re-scoped to sweep rib thickness; LG-D1 added. Commits: *(pending)*.
+re-scoped to sweep rib thickness; LG-D1 added. Commits: 3d-models `4c3b900`; bikar *(none —
+R0 ships no code)*.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
