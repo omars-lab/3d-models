@@ -305,6 +305,21 @@ layer (which stays C-track work, per the parent composition doc's Clipper2 recip
 `solidifyExtrudedPiece` itself is untouched; shared helpers get exported, and W1
 outputs stay byte-identical.
 
+> **⚠️ Superseded in implementation (2026-07-29).** The nesting contract in the
+> paragraph above did not survive contact with the shapes. A corner-rebated square
+> and its seat-recessed sibling **share long boundary stretches** rather than
+> nesting one inside the other — partial overlap under this contract, so it would
+> have thrown on the primary deliverable. What shipped is a **shared cell
+> partition**: the caller decomposes the union of all sections into non-overlapping
+> 2D cells, each slab is the subset of cells solid in its z range, walls come from
+> boundary edges with no twin in the slab, and interface faces from cells whose
+> membership flips between adjacent slabs (cell identity by object reference).
+> The non-overlap invariant replaces the nesting invariant. Everything else in this
+> section held: no boolean layer, `solidifyExtrudedPiece` untouched, W1 byte-identical.
+> See `bikar/packages/core/src/kernel3d/solidify-slabs.ts` (module header) and
+> `bikar/docs/decisions/2026-07-29-w2-wall-connectors-mounts.md` §A. This paragraph
+> is left standing as the proposal it was.
+
 ## 8. Coupons and the prototype catalog
 
 Two coupon files in a new `patterns/Coupons/` directory (invisible to the 3d-models
