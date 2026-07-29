@@ -177,3 +177,92 @@ floor) — these prints test *reality*, not the mesh.
   | # | date | change | question | result | decision |
   |---|------|--------|----------|--------|----------|
 - **Feeds**: gallery photography of real prints; Lab machine-table notes.
+
+---
+
+# Tile-wall connector ladder (W-series)
+
+The W-series validates the **modular tile-wall** work (design docs
+`docs/w1-tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
+These coupons decide the connector grammar — clipseat fit and the printed
+CornerClip — in plastic before any full wall is committed. Same learning-ladder
+rule: the fit coupon (W-F1) settles the seat clearance the clip coupon (W-C1)
+then builds on. Printing is **on hold** (design doc §8), so both land `planned`.
+
+Sub-floor note for this whole series: a printed `clip`'s bayonet blade is
+~0.6 mm, below the 1.2 mm FDM mesh-gate floor — so `--check` on a **clip part**
+reports FAIL *by design*, and that thin flexing blade is exactly what these
+coupons validate in plastic (design doc §10 Q1). The **tiles** pass the gate
+cleanly (the clipseat rebate is a supported step the gate excludes, not a
+free-standing strut). Only the clip is exempt, and only where noted.
+
+## W-F1 — Clipseat fit coupon (seat clearance ladder)
+
+- **Status**: planned (printing on hold, design doc §8)
+- **Model**: `bikar/patterns/Coupons/Fit-Coupon.bkr` — small clipseat dummy
+  tiles printed across a gap ladder to find the seat clearance that seats
+  firmly without forcing. Render at defaults:
+  `cd bikar && node packages/cli/dist/index.js render
+  patterns/Coupons/Fit-Coupon.bkr --format stl --check -o
+  ../3d-models/build/stls/coupons/W-F1-FitCoupon.stl` — the dummy tiles pass
+  the mesh gate; sweep the `gap` param (`--param gap=...`) to print the ladder.
+  Cheapest connector coupon — it fixes the seat clearance number that every
+  later clip coupon and the full Clip-Wall inherit via `--fit-profile`.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+  PETG is the intended clip material; the seat is on the tile, so print the
+  coupon tiles in the wall's tile material (PLA or PETG) to match shrinkage.
+- **What we want to learn**:
+  - [ ] 1. Which `gap` value seats the clip firmly without forcing on a
+    0.4 mm nozzle — i.e. the number that becomes `profile.gapMm` /
+    `--fit-profile petg_calibrated`?
+  - [ ] 2. Measured tile warp across the coupon → `profile.warpMm` (does a
+    flat clipseat tile stay flat enough for a corner jaw to bear evenly?).
+  - [ ] 3. Does the seat clearance need to differ by tile material (PLA vs
+    PETG shrinkage), or is one `gap` good for both?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `--fit-profile` seat-clearance profile consumed by
+  `patterns/Coupons/Clip-Coupon.bkr` and `patterns/Walls/Clip-Wall.bkr`;
+  clipseat constants in `bikar` `kernel3d/clipseat.ts` if the seat floor moves.
+
+## W-C1 — CornerClip coupon (rebate-vs-proud joint decision)
+
+- **Status**: planned (printing on hold, design doc §8; blocked on W-F1's
+  seat-clearance number)
+- **Model**: `bikar/patterns/Coupons/Clip-Coupon.bkr` — two 40 mm dummy tiles
+  (one `clipseat rebate 0.6`, one `clipseat proud`) plus the `CornerClip` that
+  mates them. There is no `assembly` (a bayonet clip has no connectable port),
+  so render each part by name:
+  `cd bikar && node packages/cli/dist/index.js render
+  patterns/Coupons/Clip-Coupon.bkr --format stl --piece CouponTileRebate
+  --check -o ../3d-models/build/stls/coupons/W-C1-TileRebate.stl` (and
+  `--piece CouponTileProud --check`, then `--piece CouponClip` **without**
+  `--check` — its blade is intentionally sub-floor). Print four of each dummy
+  and a handful of clips, build two real four-corner joints (one rebate, one
+  proud), and decide the clipseat default in plastic. Add
+  `--fit-profile petg_calibrated` once W-F1 has set the profile.
+- **Print target**: TBD — clips in PETG (`material petg`), dummy tiles in the
+  wall's tile material. Record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. **§10 Q1 — the clipseat default**: rebate vs proud in raking
+    light on a real four-corner joint — which reads cleaner and hides the
+    clip better? (This coupon's headline decision.)
+  - [ ] 2. Does the CornerClip's bayonet detent have a positive past-center
+    "click" feel, or does it seat mushy / not hold?
+  - [ ] 3. Does the ~0.6 mm PETG jaw blade survive repeated seat/unseat
+    cycles, or fatigue/snap — i.e. is the sub-floor blade printable-and-durable
+    in practice, validating the mesh-gate exemption?
+  - [ ] 4. Front-face lippage across the joint — do adjacent tiles sit flush,
+    or does the clip pull a step between them?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: the clipseat grammar default (rebate vs proud) in
+  `docs/w2-connector-design.md` §10 and every `clipseat` in
+  `patterns/Walls/*.bkr`; the mesh-gate sub-floor exemption for bayonet clips
+  (`bikar` `kernel3d/corner-clip.ts` minFeature) if Q3 disproves durability;
+  `patterns/Walls/Clip-Wall.bkr` as the first full wall once the joint is
+  proven.
