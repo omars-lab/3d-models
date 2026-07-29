@@ -107,6 +107,40 @@ refuting/complicating sources total.
 - Commit with a message that says what got grounded/qualified/changed; follow the
   repo's commit-trailer conventions.
 
+### 5. Hand the empirical residue to `calibrate` — never let the trail stop
+
+An UNGROUNDED verdict is not a finished verdict. Split every one of them:
+
+- **ARGUED** — sources or reasoning could still decide it and the search was
+  merely incomplete. It stays here: search harder, or record the gap in Appendix B
+  as an open question with what was checked.
+- **EMPIRICAL** — no literature *can* decide it, because a printer decides it (a
+  fit gap, a wall floor, a bridge span, an overhang angle, warp, bed contact,
+  hole compensation). It leaves this skill.
+
+Every EMPIRICAL residue is registered as a **CAL bet** via the sibling `calibrate`
+skill, and the doc's Appendix B entry cites the bet id in its heading —
+`### B.3 The fit ladder — … [CAL-FIT-01]`. Registration is what makes the bet
+enumerable; the citation is what lets a later reader of the doc find the coupon
+instead of re-opening the argument. Both, or neither counts.
+
+Two rules that decide the hard cases:
+
+- **Misfiling an ARGUED claim as a bet is the failure mode of this handoff** — it
+  buys a print to answer a question a citation would have answered for free.
+  When a claim is genuinely ambiguous, leave it untagged and say so in the audit
+  record. Fewer correct bets beat a full-looking table.
+- **The same quantity open in two docs is one bet, not two.** Check the existing
+  registry before minting an id: `FIT_GAP_MM` was independently unresolved as
+  c2 Appendix B.3 *and* piece-composition B.2, with two coupons planned to
+  measure one number. Cluster by *the measurement that settles it*, not by the
+  doc it came from.
+
+A bet with no coupon still gets registered, marked OPEN, with the apparatus it
+needs named — an honest gap beats an invented coupon. Nothing here may mark a bet
+settled: that needs the physical object, and it belongs to `prototype` and
+`calibrate` (bikar Tenet 30).
+
 ## Rules
 
 - Never fabricate a URL or a source's position. Unfetched search snippets are marked

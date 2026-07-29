@@ -21,3 +21,7 @@ build/*
 
 # gh-pages deploy worktree (created by `make deploy`)
 .gh-pages/
+
+# Python bytecode (skills/*/validate.py and friends)
+__pycache__/
+*.pyc

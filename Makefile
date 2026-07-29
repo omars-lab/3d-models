@@ -42,6 +42,7 @@ setup-hooks:
 
 # Validate the actor/use-case map's hash-pinned code pointers.
 validate-use-cases:
+	@python3 -c "import yaml" 2>/dev/null || { echo "PyYAML required: pip install pyyaml"; exit 1; }
 	python3 ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py
 
 %.png: %.scad

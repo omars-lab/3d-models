@@ -191,7 +191,9 @@ both sides.
 The clip solid is a three-slab X-bridge, printed as modeled with all flexing members
 in the XY plane (§3's orientation rule): four jaw pads (the bearing feet, landing on
 the border band), four risers (through the wells), and a hub-plus-arms plate with the
-past-center detent as a ramp bump on the arm underside. Applied survey numbers: arms
+past-center detent as a **full-width transverse rib** stepping down from the arm
+underside (a point bump under the tapered tip is neither printable nor watertight — see
+§12). Applied survey numbers: arms
 **taper toward h/2** at the tip (the 1.09 formula's >60% deflection dividend); root
 fillets **≥ 0.5× arm thickness**; detent **0.3–0.5 mm** proud, rounded, mating into a
 slightly larger pocket; ~5° entry clearance on blade faces; 0.1–0.2 mm radial
@@ -303,6 +305,21 @@ layer (which stays C-track work, per the parent composition doc's Clipper2 recip
 `solidifyExtrudedPiece` itself is untouched; shared helpers get exported, and W1
 outputs stay byte-identical.
 
+> **⚠️ Superseded in implementation (2026-07-29).** The nesting contract in the
+> paragraph above did not survive contact with the shapes. A corner-rebated square
+> and its seat-recessed sibling **share long boundary stretches** rather than
+> nesting one inside the other — partial overlap under this contract, so it would
+> have thrown on the primary deliverable. What shipped is a **shared cell
+> partition**: the caller decomposes the union of all sections into non-overlapping
+> 2D cells, each slab is the subset of cells solid in its z range, walls come from
+> boundary edges with no twin in the slab, and interface faces from cells whose
+> membership flips between adjacent slabs (cell identity by object reference).
+> The non-overlap invariant replaces the nesting invariant. Everything else in this
+> section held: no boolean layer, `solidifyExtrudedPiece` untouched, W1 byte-identical.
+> See `bikar/packages/core/src/kernel3d/solidify-slabs.ts` (module header) and
+> `bikar/docs/decisions/2026-07-29-w2-wall-connectors-mounts.md` §A. This paragraph
+> is left standing as the proposal it was.
+
 ## 8. Coupons and the prototype catalog
 
 Two coupon files in a new `patterns/Coupons/` directory (invisible to the 3d-models
@@ -383,6 +400,65 @@ the coupons split into one file per part.
 - **Q5 — fragment-corner clips.** W2's all-four-full rule leaves some structurally
   fine corners unclipped on cropped walls; per-fragment corner analysis is W3.
 
+## 12. Detent geometry — resolved during implementation (commit W2 4/8)
+
+The §4.2 phrase "detent as a ramp bump on the arm underside" is under-specified in a
+way that only surfaced when the CornerClip generator tried to build it. Two independent
+failures showed the *small interior bump* reading is not buildable **or** printable, and
+the fix changes the detent's shape (not its size or the survey numbers behind it).
+
+### 12.1 Why the small interior bump fails
+
+The arm tapers from `wArmRoot` at the root to `wArmTip = wArmRoot / 2` at the tip, and
+the detent's default plan footprint (`CLIP_DETENT_LEN_MM` square, at
+`rDetentIn = rPadOut + 0.15`) lands **under the narrow tip**. At the default rebate
+fixture (tile depth 10, gap 1.2) this leaves the bump surrounded by **0.05–0.32 mm** of
+arm material on three sides. Two consequences:
+
+1. **Un-printable.** Those surrounding walls are below the 0.4 mm perimeter width, so an
+   FDM printer cannot render them as solid — the very rule the generator enforces
+   everywhere else (`validateClipDims` rejects sub-two-perimeter jaw blades).
+2. **Un-meshable in the flat-prism slab model.** A proud bump *inside* the arm is an
+   interior island: the plate slab must punch it as a hole and refill it, and the fill's
+   top face must weld to the plate bottom. But the wedge cap and the bump cap are
+   triangulated by **independent earcut calls that do not agree**, so their shared
+   boundary never pairs and the mesh is non-watertight (euler 3, one unpaired sliver
+   triangle per limb). Every slab-membership permutation was tried — detent continuous
+   (6 open edges), detent as two refs (a zero-thickness membrane, euler 14+), detent
+   only below the plate (a doubled surface, 37 edges) — and each fails topologically.
+   This is a genuine limitation of flat-prism slabs for a sub-plate boss that is an
+   interior island, **not** a solidifier bug: `detent 0` produces a fully watertight,
+   euler-2 clip, and the jaw pads (also holes-refilled-fresh) weld correctly because
+   they *reappear* in the plate slab with a sealing bottom cap, which a bump directly
+   under the plate cannot do.
+
+### 12.2 Options considered
+
+| Option | Shape | Printable | Weldable | Keeps click | Cost |
+|---|---|---|---|---|---|
+| **A. Full-width rib** ✅ chosen | Detent spans the **entire arm width** over `[rDetentIn, rDetentOut]` — a downward step of the whole arm cross-section, not an interior island | Yes (edge-to-edge, no thin walls) | Yes (rib side edges coincide with arm edges → walls pair as twins; the band is a first-class cell split out of the arm, continuous bump→plate) | Yes — same proud height, same survey 0.3–0.5 mm range | generator rework + volume-test rework |
+| B. Ship `detent 0` default | No bump | Yes | Yes (already euler 2) | No — deferred to the physical coupon | ~none |
+| C. Relocate to hub | Bump moved to the wide hub/arm-root region | Yes | Yes | Yes, but the click engages near the assembly centre, not at the seat rim | new dims + tests |
+
+### 12.3 Chosen fix — full-width transverse rib
+
+The detent becomes a **full-width rib**: over the radial band `[rDetentIn, rDetentOut]`
+the *entire arm cross-section* steps down by `detentMm`. Because the rib's ±y edges lie
+exactly on the arm's tapered ±y edges, the rib is not an interior hole — it is the arm
+band split into its own cell, present in both the detent slab and the plate slab as one
+continuous reference (the C1 shared-ref rule), with the inner-arm and tip segments
+butting against it at `rDetentIn` / `rDetentOut` along shared transverse edges that pair
+as twins. No sub-perimeter walls, no independent-earcut weld seam.
+
+This preserves everything the survey fixed (§B.6): the proud height stays `detentMm`
+(default 0.4 mm, still a `param`, still in the 0.3–0.5 mm band), the rib still mates as
+an anti-rattle preload against the flat seat floor, and `detent 0` still disables it.
+What changes is only the **plan shape** — a transverse rib instead of a point bump —
+which is if anything closer to a bayonet's full-width detent ramp than the original
+point reading. The W-C1 coupon (Q2) still settles the exact proud height and feel;
+this section only records that the *geometry class* is a rib, decided by buildability,
+not the number.
+
 ## Appendix A — survey sources
 
 Primary source file, checked in verbatim with all URLs and access-failure notes:
@@ -447,6 +523,12 @@ One entry per claim the grounding audit contested; the audit report
 ([`research/w2-connector-grounding-audit.md`](research/w2-connector-grounding-audit.md))
 is the evidence trail for each.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
+measurement can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
+Tenet 30 — a physical constant is not earned until it records its provenance).
+
 ### B.1 The ~2% PETG strain budget — derivation replaced, endpoint kept
 
 The audit broke the survey's original chain: the "7–10% PETG vendor design band"
@@ -473,7 +555,7 @@ exactly the load case a wall clip sees years after printing, and none of the pro
 sources address aging. A tough/annealed-PLA story would be a new material word with
 its own datasheet, not a bypass of this error.
 
-### B.3 The ≤10 mm bridge rule — deliberately conservative, not a capability claim
+### B.3 The ≤10 mm bridge rule — deliberately conservative, not a capability claim [CAL-BRG-01 — the same bet as print-validation B.4; one coupon (MC-3) closes both]
 
 Credible counter-evidence says a ⌀10.5 mm bridge is nowhere near modern limits:
 Multiboard's official snaps require printers to bridge up to 30 mm, community
@@ -493,7 +575,7 @@ holding four wall tiles coplanar). Equally, no source argues 30° is inadequate.
 is a genuinely coupon-decided bet: W-C1 confirms or rejects it; the literature
 cannot.
 
-### B.5 The warp non-number — claim narrowed, practice bundle downgraded
+### B.5 The warp non-number — claim narrowed, practice bundle downgraded [CAL-WRP-01 — coupon MC-5, not W-F1: warp is a printer property]
 
 The novelty claim survives as qualified in §3: "no *surveyed* published measurement
 for this exact case." Nearest misses found by the audit: a 2025 Int. Polymer
@@ -508,7 +590,7 @@ opposing WhyItFailed's 0.5–0.7% contraction figure. The coupon exists precisel
 because these sources conflict; only the straightedge-and-feeler-gauge measurement
 settles it.
 
-### B.6 The detent 0.3–0.5 mm — verified verbatim, low end soft
+### B.6 The detent 0.3–0.5 mm — verified verbatim, low end soft [CAL-DET-01 — coupon W-C1, design-specific: off the machine card by design]
 
 Both attributions survived verbatim (Firgelli's "0.3-0.5 mm of axial relief gives a
 clear tactile click"; SnapLock's "Minimal column protrusion (0.3–0.5 mm)"). A

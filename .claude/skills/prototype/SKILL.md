@@ -29,6 +29,11 @@ decisive learning first). Each entry has:
   bullets.
 - **Iteration log** — one table row per physical print: date, what changed
   from the previous iteration, the question it targeted, result, decision.
+- **Settles** — the `CAL-…` bets this entry closes, if any (registry:
+  `.claude/skills/calibrate/bets.md`). A coupon that measures a property of
+  *(machine, material, nozzle, profile)* rather than of this design does not
+  belong here at all — it belongs on the machine card (MC series), and this
+  entry cites the MC bet instead of re-measuring it.
 - **Feeds** — where a learning propagates when it lands (see below).
 
 ## Workflows
@@ -58,6 +63,28 @@ output. Standing targets:
 - `docs/orb-lab-design.md` — §5 print guidance, §10 status.
 - The harness task list (print-prototype and split-export tasks) and the
   project memory.
+
+**Close the CAL bet** — if the entry has a **Settles** line, the propagation is
+not done until the bet is closed too. This is the other half of the `calibrate`
+handoff and it is the half that gets skipped, because the catalog already *looks*
+updated:
+
+- the constant's `Calibrated<T>` record in `bikar`
+  `packages/core/src/kernel3d/calibration.ts` takes the measured value **and**
+  its `provenance.status` flips from `provisional` to a full `measured` record
+  naming machine, material, nozzle, profile, date, and the coupon;
+- the value comes out of `.calibration-baseline.json` — the baseline may only
+  shrink, and a closed bet that stays baselined is the gate lying;
+- `bets.md` is **regenerated**, never hand-edited;
+- the design doc's Appendix B entry carrying that `[CAL-…]` tag closes with the
+  measured value — the tag is a two-way link and a stale one is worse than none.
+
+A reading only counts if it came from the physical object, and it is a
+measurement only if the profile header from `.claude/skills/calibrate/protocol.md`
+was recorded with it. A number without a machine, material, and nozzle is
+anecdote, not calibration (bikar Tenet 30) — it does not get to replace a
+placeholder. A bet whose coupon failed to print is still open, and that failure
+is a result worth logging.
 
 Cite the commit hash in the catalog when a propagation lands.
 

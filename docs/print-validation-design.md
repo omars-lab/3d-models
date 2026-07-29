@@ -236,6 +236,12 @@ Each entry records the strongest counter-position found by the grounding audit
 ([`research/print-validation-grounding-audit.md`](research/print-validation-grounding-audit.md)),
 with either our justification for diverging or the design change it forced.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
+measurement can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
+Tenet 30 — a physical constant is not earned until it records its provenance).
+
 ### B.1 "No slicer needed" — divergence justified, with a CI oracle
 
 The counter-evidence: PrusaSlicer slices fully headless via CLI; Kiri:Moto is an
@@ -250,7 +256,7 @@ warning), so a slicer dry-run cannot surface F5-class defects without G-code dif
 The concession the counter-evidence won: CI runs a PrusaSlicer CLI dry-run on gallery
 presets as an oracle against our gate (§1).
 
-### B.2 The fixed 45° overhang default — the counter-evidence won
+### B.2 The fixed 45° overhang default — the counter-evidence won [CAL-OVH-01 — coupon MC-4]
 
 v1 defaulted θ_max to 45°. Every flagship slicer ships less conservative: PrusaSlicer's
 recommended default is *auto* (overhang = half extrusion width per layer, making the
@@ -272,7 +278,7 @@ vanish at the min-feature floor (~0.05 mm erode) = error ("silently not printed"
 vanish at half-width = warn (single-bead, degraded, far below bikar's 1.2 mm strut
 floor — which the mesh gate still enforces separately).
 
-### B.4 Bridge span measurement — simplified formulation corrected
+### B.4 Bridge span measurement — simplified formulation corrected [CAL-BRG-01 — the same bet as w2-connector B.3; one coupon (MC-3) closes both]
 
 The 10 mm default survives (it is Bambu's shipped `max_bridge_length`, now credited),
 but "max span between anchored ends" was naive: bridge feasibility is

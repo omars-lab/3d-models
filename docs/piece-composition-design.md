@@ -364,6 +364,12 @@ Each entry records the strongest counter-position found by the grounding audit
 ([`research/piece-composition-grounding-audit.md`](research/piece-composition-grounding-audit.md)),
 with either our justification for diverging or the design change it forced.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
+measurement can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
+Tenet 30 — a physical constant is not earned until it records its provenance).
+
 ### B.1 The novelty claim was overbroad — narrowed
 
 v1 claimed "no surveyed system ships dimensional contracts on connectors." False as
@@ -377,7 +383,7 @@ port itself* and makes *connect* fail compilation on mismatch. The claim changed
 "nobody does fit contracts" to "nobody composes contract-on-port with connect-time
 validation."
 
-### B.2 The fit ladder is single-sourced and mainstream guidance disagrees
+### B.2 The fit ladder is single-sourced and mainstream guidance disagrees [CAL-FIT-01 — the same bet as c2-assembly B.3; one coupon (MC-1) closes both]
 
 The −0.10/+0.05/+0.15/+0.35 ladder transcribes one calibrated-printer source
 (Creative3DP). Hubs recommends 0.5 mm FDM clearance; general guides give 0.4–0.6 mm for

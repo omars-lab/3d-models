@@ -477,6 +477,12 @@ its link and a fair summary, then either our justification for diverging or the 
 the audit forced. Where a claim was narrowed, §3 above already carries the corrected
 wording — these entries are the record of why.
 
+Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
+measurement can. The id is the bet's entry in the registry
+([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
+Tenet 30 — a physical constant is not earned until it records its provenance).
+
 ### B.1 "Novel contract validation" — the counter-evidence partially won; the claim was narrowed
 
 The audit's hardest attack landed: mainstream MCAD **does** validate dimensional
@@ -521,7 +527,7 @@ buy only its failure modes (initial-position sensitivity, redundancy instability
 SolveSpace's own docs note its allow-redundant mode "makes the solver less stable")
 for a use case where closed-form composition already answers every placement exactly.
 
-### B.3 The fit ladder — credible sources recommend 2–10× looser
+### B.3 The fit ladder — credible sources recommend 2–10× looser [CAL-FIT-01 — the same bet as piece-composition B.2; coupon MC-1]
 
 The ladder transcribes Creative3DP's calibrated-printer press-fit ladder verbatim,
 including its instruction to keep fit gap and printer compensation separate
@@ -551,7 +557,7 @@ interactive (the CLI cannot answer the dialog), requires all parts exported in o
 shared world frame, and defeats per-part print orientation — the three properties
 `--format parts` exists to provide.
 
-### B.5 CNC Kitchen strength ratios — one lab's bending numbers, wide spread across studies
+### B.5 CNC Kitchen strength ratios — one lab's bending numbers, wide spread across studies [CAL-STR-01 — OPEN, no coupon: needs a load rig, not a print]
 
 The 55%/46% figures are verified verbatim in
 [CNC Kitchen's hook tests](https://www.cnckitchen.com/blog/comparing-pla-petg-amp-asa-feat-prusament) —
@@ -563,7 +569,7 @@ down to ~20–25%
 §3 and §6 now label them as coupon motivation, not constants; the upright-pin question
 stays a `/prototype` catalog question (Q1).
 
-### B.6 PrusaSlicer hole compensation — a load-bearing claim with an expiry date
+### B.6 PrusaSlicer hole compensation — a load-bearing claim with an expiry date [CAL-HOL-01 — the `holeCompMm` magnitude; coupon MC-1]
 
 Verified current: the request chain is open
 ([#1065](https://github.com/prusa3d/PrusaSlicer/issues/1065) since 2018,
