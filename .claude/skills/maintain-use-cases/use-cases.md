@@ -2,8 +2,8 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: bf12a3bd624972bea7b65eb6c9b143440f11bc6c
-  bikar: 6cf121e64294b67a43a28eb5ae688f9666945e2c
+  3d-models: 458de36a7455b54c974a1b21bdc082121848406d
+  bikar: 26755c3bff7130841089043638f7455cc96356fe
   qiyas: 0c75f5707d1263ac9dc99c6d2028e097cf1dd060
 repos:
   bikar: ../bikar
@@ -42,6 +42,8 @@ flowchart LR
   printop --> UC8[UC8: Plan and log physical prototypes]
   printop --> UC10
   printop --> UC12
+  printop --> UC13[UC13: Characterize a printer and earn its constants]
+  designer --> UC13
   baker --> UC9[UC9: Cut cookies with printed cutters]
   validator --> UC7[UC7: Validate renders against ground truth]
 ```
@@ -62,3 +64,4 @@ flowchart LR
 | UC10 | Compose functional printable pieces (C1: girih tile with countersunk nail bore) | Designer, Print operator | `bikar:packages/core/src/kernel3d/solidify-piece.ts:L320` (extrude solidifier) · `bikar:patterns/Pieces/Nail-Tile.bkr:L1` (deliverable) · `3d-models:docs/piece-composition-design.md:L1` (design doc) |
 | UC11 | Publish the gallery + Lab to gh-pages | Designer | `3d-models:Makefile:L161` (deploy target) |
 | UC12 | Lay out tile walls (W1: grid + quartering layout, crop clip/drop, composed wall render, layout report) | Designer, Print operator | `bikar:packages/core/src/kernel/wall-layout.ts:L124` (grid layout kernel) · `bikar:packages/core/src/dsl/evaluator.ts:L1069` (wall eval) · `bikar:patterns/Walls/Nail-Wall.bkr:L1` (deliverable) · `bikar:docs/language-reference.md:L501` (tile/wall grammar) · `3d-models:docs/tile-wall-design.md:L1` (design doc) |
+| UC13 | Characterize a printer and earn the constants that depend on it (machine card, provenance-carrying values, shrink-only gate) | Print operator, Designer | `bikar:packages/core/src/kernel3d/calibration.ts:L82` (`Calibrated<T>` provenance wrapper) · `bikar:scripts/check-calibration.ts:L1` (append-blocked gate) · `bikar:patterns/Coupons/Machine-Card.bkr:L1` (the six coupons) · `3d-models:.claude/skills/calibrate/SKILL.md:L1` (harvest → measure → propagate) · `3d-models:docs/calibration-design.md:L1` (design doc) |
