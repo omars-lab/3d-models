@@ -7,4 +7,5 @@ if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for use-case validation" >&2
   exit 1
 fi
+python3 -c "import yaml" 2>/dev/null || { echo "pre-commit: PyYAML required for use-case validation: pip install pyyaml" >&2; exit 1; }
 exec python3 "$(git rev-parse --show-toplevel)/.claude/skills/maintain-use-cases/validate.py" --staged

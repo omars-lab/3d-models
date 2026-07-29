@@ -31,6 +31,8 @@ import re
 import subprocess
 import sys
 
+import yaml
+
 DOC_RELPATH = ".claude/skills/maintain-use-cases/use-cases.md"
 SELF_REPO = "3d-models"
 STALE_LIMIT = 20
@@ -40,6 +42,11 @@ SURFACE_PATTERNS = (
     re.compile(r"^docs/.*\.md$"),
     re.compile(r"^src/"),
 )
+# POINTER_RE and UC_RE are intentionally regexes: they match *tokens embedded in
+# prose* (a code-span pointer inside a table cell, a UC id inside a diagram
+# label), which is regex's proper job. They are not standing in for a parser —
+# the document's structure (frontmatter, code fences) is read structurally
+# below. Do not "fix" these into a parser.
 POINTER_RE = re.compile(r"`(?P<repo>[\w.-]+):(?P<path>[^`\s:]+):L(?P<start>\d+)(?:-L(?P<end>\d+))?`")
 UC_RE = re.compile(r"\bUC\d+\b")
 
@@ -57,32 +64,103 @@ def try_git(repo_dir: str, *args: str) -> str | None:
         return None
 
 
+def split_frontmatter(text: str) -> tuple[str, str]:
+    """Split a `---` fenced frontmatter block from the body.
+
+    Structural, and fails closed: an absent opening fence or an unterminated
+    block is an error, never an empty frontmatter that silently validates.
+    """
+    lines = text.split("\n")
+    if not lines or lines[0] != "---":
+        raise ValueError(f"{DOC_RELPATH}: missing frontmatter block")
+    for i in range(1, len(lines)):
+        if lines[i] == "---":
+            return "\n".join(lines[1:i]), "\n".join(lines[i + 1 :])
+    raise ValueError(f"{DOC_RELPATH}: frontmatter block is never closed by '---'")
+
+
+def fence_marker(line: str) -> tuple[int, str] | None:
+    """(backtick-run length, info string) if `line` is a code fence, else None."""
+    s = line.strip()
+    if not s.startswith("```"):
+        return None
+    ticks = len(s) - len(s.lstrip("`"))
+    return ticks, s[ticks:].strip()
+
+
+def fenced_blocks(body: str) -> list[tuple[str, str]]:
+    """Walk the body's code fences, returning (info string, block text) pairs.
+
+    Tracks fence open/close as structure rather than pattern-matching the body,
+    so a ``` inside a block cannot be mistaken for a block of its own, and an
+    unclosed fence is reported instead of quietly swallowing the rest of the doc.
+    """
+    blocks: list[tuple[str, str]] = []
+    open_ticks: int | None = None
+    info = ""
+    buf: list[str] = []
+    for line in body.split("\n"):
+        marker = fence_marker(line)
+        if open_ticks is None:
+            if marker and "`" not in marker[1]:
+                open_ticks, info, buf = marker[0], marker[1], []
+            continue
+        if marker and marker[1] == "" and marker[0] >= open_ticks:
+            blocks.append((info, "\n".join(buf)))
+            open_ticks = None
+            continue
+        buf.append(line)
+    if open_ticks is not None:
+        raise ValueError(f"{DOC_RELPATH}: unclosed '```{info}' code fence in the body")
+    return blocks
+
+
+def string_map(meta: dict, key: str, what: str) -> dict[str, str]:
+    """Read `key` from the frontmatter as a mapping of name -> string.
+
+    Every failure mode is an error: absent key, wrong type, or a value YAML
+    resolved to something other than a string (an all-digit hash becomes an int,
+    a bare date becomes a date). A value this reader cannot interpret is never
+    skipped — that is what made a malformed pin look like a missing one.
+    """
+    if key not in meta:
+        raise ValueError(f"{DOC_RELPATH}: frontmatter has no '{key}' mapping")
+    section = meta[key]
+    if not isinstance(section, dict):
+        raise ValueError(f"{DOC_RELPATH}: frontmatter '{key}' is not a mapping (got {type(section).__name__})")
+    out: dict[str, str] = {}
+    for name, value in section.items():
+        if not isinstance(name, str):
+            raise ValueError(f"{DOC_RELPATH}: frontmatter '{key}' has a non-string key {name!r}")
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(
+                f"{DOC_RELPATH}: frontmatter {key}.{name} is not a {what} "
+                f"({value!r}) — quote it if YAML read it as a number or date"
+            )
+        out[name] = value.strip()
+    return out
+
+
 class Doc:
     def __init__(self, text: str):
-        self.as_of: dict[str, str] = {}
-        self.repos: dict[str, str] = {}
-        m = re.match(r"^---\n(.*?)\n---\n", text, re.DOTALL)
-        if not m:
-            raise ValueError(f"{DOC_RELPATH}: missing frontmatter block")
-        section = None
-        for line in m.group(1).splitlines():
-            if re.match(r"^as_of:\s*$", line):
-                section = self.as_of
-            elif re.match(r"^repos:\s*$", line):
-                section = self.repos
-            elif re.match(r"^\S", line):
-                section = None
-            elif section is not None:
-                kv = re.match(r"^\s+([\w.-]+):\s*(\S+)\s*$", line)
-                if kv:
-                    section[kv.group(1)] = kv.group(2)
+        frontmatter, body = split_frontmatter(text)
+        try:
+            meta = yaml.safe_load(frontmatter)
+        except yaml.YAMLError as exc:
+            detail = " ".join(str(exc).split())
+            raise ValueError(f"{DOC_RELPATH}: frontmatter is not valid YAML: {detail}") from exc
+        if not isinstance(meta, dict):
+            raise ValueError(
+                f"{DOC_RELPATH}: frontmatter is not a YAML mapping (got {type(meta).__name__})"
+            )
+        self.as_of: dict[str, str] = string_map(meta, "as_of", "commit hash")
+        self.repos: dict[str, str] = string_map(meta, "repos", "repo path")
         if SELF_REPO not in self.as_of:
             raise ValueError(f"{DOC_RELPATH}: frontmatter as_of is missing '{SELF_REPO}'")
-        body = text[m.end() :]
-        mermaid = re.search(r"```mermaid\n(.*?)```", body, re.DOTALL)
-        if not mermaid:
+        diagrams = [text for info, text in fenced_blocks(body) if info == "mermaid"]
+        if not diagrams:
             raise ValueError(f"{DOC_RELPATH}: no mermaid diagram found")
-        self.diagram_ucs = set(UC_RE.findall(mermaid.group(1)))
+        self.diagram_ucs = set(UC_RE.findall(diagrams[0]))
         self.table_ucs: set[str] = set()
         self.pointers: list[tuple[str, str, int, int]] = []
         for line in body.splitlines():
@@ -172,7 +250,18 @@ def mode_refresh(root: str) -> int:
         if head is None:
             print(f"use-cases refresh: '{repo}' not available — pin kept at {pin[:12]}", file=sys.stderr)
         elif head != pin:
-            text = text.replace(f"{repo}: {pin}", f"{repo}: {head}")
+            # Fail closed: `pin` came back through yaml.safe_load, so it has lost
+            # whatever quoting the file used. A raw replace that finds nothing
+            # would silently leave the pin stale and still report success — the
+            # same skip-what-you-can't-read shape this reader was fixed to end.
+            updated = text.replace(f"{repo}: {pin}", f"{repo}: {head}")
+            if updated == text:
+                raise ValueError(
+                    f"{DOC_RELPATH}: could not rewrite the '{repo}' pin in place — "
+                    f"as_of.{repo} parsed as {pin!r} but no line reads '{repo}: {pin}' "
+                    f"(is it quoted, or on a folded line?). Update it by hand."
+                )
+            text = updated
             print(f"use-cases refresh: {repo} {pin[:12]} -> {head[:12]}")
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
@@ -230,11 +319,17 @@ def mode_staged(root: str) -> int:
 def main() -> int:
     root = run_git(os.path.dirname(os.path.abspath(__file__)), "rev-parse", "--show-toplevel")
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
-    if mode == "--staged":
-        return mode_staged(root)
-    if mode == "--refresh":
-        return mode_refresh(root)
-    return mode_full(root)
+    context = {"--staged": "pre-commit", "--refresh": "refresh"}.get(mode, "full")
+    try:
+        if mode == "--staged":
+            return mode_staged(root)
+        if mode == "--refresh":
+            return mode_refresh(root)
+        return mode_full(root)
+    except ValueError as exc:
+        # An unreadable document is a failure, not a skip — report it in the
+        # same voice as every other error and exit non-zero.
+        return report([str(exc)], [], context=context)
 
 
 if __name__ == "__main__":
