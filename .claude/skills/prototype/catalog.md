@@ -217,13 +217,16 @@ earned until it records its provenance).
 ## MC-1 — Bore and fit plate (⌀ sweep + fit-class ladder)
 
 - **Status**: planned (no machine yet)
-- **Model**: `bikar/patterns/Coupons/Machine-Card.bkr` — the existing Fit-Coupon
-  plate extended with a bore sweep at **⌀3 / 4 / 5 / 6 / 8 / 10 mm** plus the
-  four-class fit ladder (press / snug / sliding / free) and matching gauge pins.
-  `cd bikar && node packages/cli/dist/index.js render
-  patterns/Coupons/Machine-Card.bkr --format stl --check --piece MC1Plate -o
-  ../3d-models/build/stls/coupons/MC-1-BorePlate.stl`, then one pin per rung via
-  `--piece MC1Pin --param bore_d=...`.
+- **Model**: `bikar/patterns/Coupons/Machine-Card.bkr` — **two** plates, because
+  they ask two questions. `MC1BoreSweep` sweeps **⌀3 / 4 / 5 / 6 / 8 / 10 mm** to
+  see whether bore drift depends on diameter (which a single scalar `holeCompMm`
+  assumes it does not); `MC1FitLadder` holds one reference ⌀ and walks the four
+  clearance classes — press / snug / sliding / free — at the gaps
+  `kernel3d/fit-profile.ts` declares, plus a line-to-line zero for an origin.
+  `MC1FitGauge` and `MC1Pin03/04/05/06/08/10` are the mating pins. Full render
+  commands: `docs/calibration-design.md` §6 — **always pass `--piece`**, since
+  without it the CLI renders the `MC1Fit` assembly as one mesh (a plate and a
+  loose pin fused into a single useless STL).
 - **Print target**: TBD — profile header per the series note.
 - **Settles**: `CAL-FIT-01` (the `FIT_GAP_MM` press/snug/sliding/free ladder) and
   `CAL-HOL-01` (`holeCompMm` 0.20/0.25).
@@ -255,11 +258,10 @@ earned until it records its provenance).
 
 - **Status**: planned (no machine yet)
 - **Model**: seven `tube` rungs, wall **0.4 / 0.6 / 0.8 / 1.0 / 1.2 / 1.6 /
-  2.0 mm** (wall = (outer − inner)/2). One piece per rung:
-  `cd bikar && for w in 0.4 0.6 0.8 1.0 1.2 1.6 2.0; do node
-  packages/cli/dist/index.js render patterns/Coupons/Machine-Card.bkr --format stl
-  --piece MC2Wall --param wall_mm=$w -o
-  ../3d-models/build/stls/coupons/MC-2-Wall-$w.stl; done`.
+  2.0 mm** (wall = (outer − inner)/2), one piece per rung —
+  `MC2Wall04 / 06 / 08 / 10 / 12 / 16 / 20`. The rung is in the piece name, not a
+  parameter: the wall is what is being measured, so it is authored literally.
+  Full render commands: `docs/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note.
 - **Settles**: `CAL-FEA-01` (`DEFAULT_MIN_FEATURE_MM`, currently 1.2).
 - **Sub-floor note**: the 0.4–1.0 mm rungs sit **below** the 1.2 mm mesh-gate
@@ -291,13 +293,24 @@ earned until it records its provenance).
 ## MC-3 — Bridge plate (unsupported span)
 
 - **Status**: planned (no machine yet)
-- **Model**: blind bores under a 2 mm ceiling — `band d <span> from 0 to z1` with
-  `z1 < depth`, leaving a roof that must bridge the bore ⌀. Spans **4 / 6 / 8 /
-  10 / 12 / 16 mm**. One piece per rung via `--piece MC3Bridge --param
-  span_mm=...`; `--check` PASS expected on all rungs.
+- **Model**: one plate, `MC3BridgePlate` — 160 × 34 × 6 mm with eight **blind**
+  bores that open on the *bottom* face and stop 2 mm short of the top, so the
+  remaining ceiling must bridge the bore ⌀ and **span is the diameter**. Spans
+  **4 / 6 / 8 / 10 / 12 / 16 / 20 / 25 mm**. `--check` PASS expected — but see
+  below. The ladder runs past the shipped 10 mm rule on purpose: `w2` B.3 has
+  already collected the counter-evidence (Multiboard demands 30 mm, community
+  guidance 20–25, UltiMaker 25 in Tough PLA), so a ladder stopping at 12 could not
+  fail and would cost a print to learn "higher than 12". 10 mm sits fourth from
+  the bottom, bracketed on both sides. Full render command:
+  `docs/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Orientation is
-  load-bearing**: the plate prints flat, bores facing up, ceilings bridging in XY.
-  A bridge number measured in any other orientation answers a different question.
+  the measurement**: plate flat, +z up, **bore mouths on the bed**. Flipped, every
+  bore is an ordinary pocket opening upward with nothing to bridge, and the coupon
+  answers a question nobody asked.
+- **What `--check` cannot see**: it reports `minFeature = 4.5 mm`, the margin
+  beside the ⌀25 bore. The 2 mm bridged ceiling is not in the min-feature
+  computation at all, so the gate is silent about the one dimension this coupon
+  is built around. Do not read its PASS as an opinion on the ceiling.
 - **Settles**: `CAL-BRG-01` (the ≤10 mm bridge rule).
 - **What we want to learn**:
   - [ ] 1. The first rung that **sags** — not the first that fails. The usable
@@ -320,10 +333,13 @@ earned until it records its provenance).
 ## MC-4 — Overhang fan
 
 - **Status**: planned (no machine yet)
-- **Model**: one `revolve` of a stepped-slope outer profile — a truncated ring
-  with staircase slopes at **20 / 30 / 40 / 45 / 50 / 60°**. (A true cone is
-  rejected by the C1 ring-solid rule; the staircase is the legal form and its
-  steps double as rung identity.) `--piece MC4Fan`, `--check` PASS expected.
+- **Model**: one `revolve`d shell, `MC4OverhangFan`, that flares outward as it
+  rises so its **underside** is the test surface — six conical bands of 4 mm rise
+  at **20 / 30 / 40 / 45 / 50 / 60°** from vertical, separated by 1 mm vertical
+  risers. 29 mm tall, top ⌀65.6 mm. (A true cone is rejected by the C1 ring-solid
+  rule; the banded form is the legal one and its risers double as rung identity in
+  the hand.) `--check` PASS expected. Full render command:
+  `docs/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Supports off**,
   and say so on the sheet: an overhang number measured with supports is not an
   overhang number.
@@ -350,10 +366,15 @@ earned until it records its provenance).
 ## MC-5 — Warp plate
 
 - **Status**: planned (no machine yet)
-- **Model**: one thin `extrude` with a large footprint — the largest flat plate
-  the bed takes, using Fit-Coupon's guide-circle-quartered rectangle idiom (the
-  blueprint has no rectangle primitive). `--piece MC5Plate`, `--check` PASS
-  expected. One part, four corners measured — there is no ladder here.
+- **Model**: one thin `extrude`, `MC5WarpPlate` — 120 × 80 × 1.6 mm (eight layers
+  at 0.2), using Fit-Coupon's guide-circle-quartered rectangle idiom (the
+  blueprint has no rectangle primitive). `--check` PASS expected. One part, four
+  corners measured — there is no ladder here. **No features**: no ribs, no
+  lightening holes, nothing that locally changes stiffness, because that would
+  turn the measurement into a property of the feature. The one exception is a ⌀3
+  **fiducial** near one corner, so "corner A" means the same corner on the next
+  print and the next machine — A is nearest the fiducial, then B, C, D clockwise
+  from above. Full render command: `docs/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** brim/raft
   and part-fan settings verbatim, since those are precisely what the conflicting
   sources disagree about.
@@ -382,10 +403,23 @@ earned until it records its provenance).
 
 - **Status**: planned (no machine yet)
 - **Model**: four `rod` towers, ⌀ **3 / 5 / 8 / 12 mm** × 40 mm tall — one line
-  each. `--piece MC6Towers`, `--check` PASS expected.
+  each, one piece each: `MC6Tower03 / 05 / 08 / 12`. Constant height is what makes
+  this a **contact-area** ladder rather than an aspect-ratio one. Render with
+  `--check print` rather than bare `--check`: the slice simulation is what
+  exercises F7, the trigger under test. It already confirms the bracket lands
+  where intended — 7.1 and 19.6 mm² warn F7, 50.2 and 112.9 mm² are clean, so the
+  25 mm² threshold falls between rungs 2 and 3. Full render command:
+  `docs/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** whether a
-  brim/raft was used. With a brim this coupon measures nothing.
-- **Settles**: `CAL-BED-01` (`MIN_BED_CONTACT_MM2` 25 mm² / footprint ratio 0.01).
+  brim/raft was used. **Bare plate, no brim, no raft**: a brim is precisely the
+  mitigation F7 exists to recommend, so printing with one measures the brim
+  instead of the threshold.
+- **Settles**: `CAL-BED-01` (`MIN_BED_CONTACT_MM2` 25 mm² / footprint ratio 0.01)
+  — but only half of it directly. `MIN_BED_CONTACT_RATIO = 0.01` is **untestable
+  on a straight rod**: a rod's first layer *is* its widest layer, so the ratio is
+  100% on all four towers. It rides the same bet and gets settled by inference
+  from the absolute figure, not measured. Recorded as a weakness of this coupon in
+  `docs/calibration-design.md` §8, not papered over.
 - **What we want to learn**:
   - [ ] 1. Which towers survived to full height and which detached — and, if
     observed, at what point in the print. A tower that let go at 30 mm is a
