@@ -341,7 +341,11 @@ known build volumes — Bambu X1C/P1S (256³), A1 (256³), A1 mini (180³), Prus
 Ender 3, … — plus SLS/MJF *service* presets and a **Custom** entry with manual X/Y/Z inputs.
 
 - Ceiling math: whole sphere must fit → `2R ≤ min(X, Y, Z) − 10 mm` margin. (The FDM
-  hemisphere-split variant, task #11, would relax the Z term for tall-bed machines.)
+  hemisphere-split variant, task #11, relaxes only the Z term — which raises the ceiling on
+  **no** offered preset, since a hemisphere keeps the same `2R` footprint in X and Y and every
+  preset has `Z ≥ min(X, Y)`. It helps only a hand-entered **short-Z** Custom machine. Its real
+  benefit is bed contact, not size — see [`hemisphere-split-design.md`](hemisphere-split-design.md)
+  §1.1, which measures this and recommends against building the split.)
 - The machine choice **implies the process**, driving guidance with zero extra knobs: FDM
   targets surface the weave "powder process required" notice and the split-export dependency;
   SLS/MJF service targets print everything as-is.

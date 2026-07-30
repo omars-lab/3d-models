@@ -73,18 +73,35 @@ floor) — these prints test *reality*, not the mesh.
 
 - **Status**: planned (after P2 — needs P2's support-scar baseline to
   compare against)
-- **Model**: same StarOrb.stl, cut at the equator **in the slicer** (no
-  engine work) — both halves printed flat-face-down, supports off or minimal.
+- **Model**: same StarOrb.stl, cut **in the slicer** (no engine work) — both
+  halves printed flat-face-down, supports off or minimal. **Cut on the
+  `vertex` symmetry axis, not at the model's equator.** The authored +z axis
+  is an `edge-2` axis, so "cut at z = 0" gets a 491 mm² / 16-piece
+  cross-section; the `vertex` plane gives one continuous 898 mm² annulus and
+  the `face` plane gives 175 mm² in 12 pieces
+  ([`hemisphere-split-design.md`](../../../docs/hemisphere-split-design.md) §3.5).
 - **Print target**: TBD (same machine as P2 for a fair comparison).
 - **What we want to learn**:
   - [ ] 1. Does flat-down/no-support halves beat the whole-sphere print on
-    surface quality enough to justify engine work?
-  - [ ] 2. Seam: how visible is the glued equator, and does the lattice give
-    enough glue area?
+    surface quality enough to justify engine work? Compare against **simply
+    reorienting the whole orb onto its face axis**, which clears the print
+    gate's bed-contact warning for free (design doc §9.1 Option A0) — that,
+    not the whole-sphere print in its authored orientation, is the bar.
+  - [ ] 2. Seam: how visible is the glued seam, and what does the **annular**
+    `vertex`-plane cross-section actually achieve per mm²? (Predicted ~2.2 kN
+    in tension on 898 mm² at the coupon literature's 2.46 MPa, against a 57 g
+    orb — so the open question is whether a hand-glued lattice seam gets
+    anywhere near the coupon figure, not whether the area is sufficient.)
   - [ ] 3. Alignment: how hard is registering two lattice halves by hand —
-    would an engine split need registration pins/keys to be usable?
-  - [ ] 4. Where should the cut land — through struts or through voids —
-    for the least-visible seam? (Constrains the engine design if we build it.)
+    would an engine split need registration pins/keys to be usable? (Note a
+    `vertex` annular rim should be largely self-jigging; note also that a pin
+    *in a strut* is ruled out by geometry — 0.6 mm socket ceiling against a
+    2 mm minimum printable hole.)
+  - [ ] 4. Where should the cut land: **`vertex` vs `face`** — the former
+    maximises seam strength and bed contact, the latter minimises seam
+    visibility, and they are opposed. Print both if budget allows; this is the
+    one question a print answers better than analysis. (Constrains the engine
+    design if we build it.)
 - **What we learned**: — pending.
 - **Iteration log**:
   | # | date | change | question | result | decision |

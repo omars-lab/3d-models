@@ -632,12 +632,11 @@ closes as **built-elsewhere**, not as **won't-fix**.
 
 ## 10. Open questions
 
-- **Q1 — the `orb-lab-design.md:344` correction.** "Would relax the Z term for tall-bed machines"
-  should become something like "does not raise the radius ceiling on any offered preset — the
-  hemisphere keeps the same 2R footprint; it helps only a hand-entered short-Z Custom machine, and
-  its real benefit is bed contact, not size." Note the existing text also names the wrong class of
-  machine (§1.1). Small, and should land whichever option is chosen. *(Not applied in this change —
-  it edits a shipped design doc's decided section and is listed here for the owner's call.)*
+- **Q1 — the `orb-lab-design.md:344` correction. ✅ Applied (owner-approved 2026-07-30).** "Would
+  relax the Z term for tall-bed machines" named the wrong class of machine and implied a size
+  benefit no offered preset can realise. It now states that the split raises the ceiling on no
+  preset, helps only a hand-entered short-Z Custom machine, and that its real benefit is bed
+  contact rather than size (§1.1).
 - **Q2 — which symmetry axis is the default?** **Answered by measurement, not deferred**:
   `vertex-N` (§4). What remains open is only whether an author-facing selector is worth shipping if
   the split is ever built, since `face-N` buys seam invisibility at a real cost in strength.
@@ -651,10 +650,12 @@ closes as **built-elsewhere**, not as **won't-fix**.
   against is already registered as **`CAL-BRG-01`** (coupon MC-3) — no new bet. The engine can
   answer this without a print, and doing so is the only way to sharpen §3.5's supports row beyond
   the symmetry argument. Worth measuring regardless of the option chosen.
-- **Q5 — re-aim the P3 catalog entry.** `catalog.md`'s P3 says "cut at the equator in the slicer".
-  The STL's equator is the `edge-2` plane (§2), so as written P3 tests neither the recommended
-  `vertex-N` plane nor v1's `face-N`. P3-Q4 needs it to cut on the vertex axis and compare against
-  face. *(Not applied — `catalog.md` is a shipped skill file; listed for the owner's call.)*
+- **Q5 — re-aim the P3 catalog entry. ✅ Applied (owner-approved 2026-07-30).** P3 said "cut at the
+  equator in the slicer", which is the `edge-2` plane (§2) and would have tested neither the
+  recommended `vertex-N` plane nor v1's `face-N`. P3 now cuts on the vertex axis and compares
+  against face; P3-Q1 is benchmarked against Option A0 (reorientation) rather than the authored
+  whole-sphere print; and P3-Q2 asks what the annular seam achieves per mm² rather than whether
+  7.2 mm² butt faces suffice.
 
 ## Appendix A — survey sources
 
