@@ -4,6 +4,8 @@
 # Activate on a fresh clone with: make setup-hooks
 # 10-gitleaks     — secret scan on staged hunks (fails closed)
 # 20-use-cases    — use-case map freshness + pointer validation
+# 30-docs-gate    — design-doc gate: dead relative links, validator
+#                   examples, default provenance (DOCS_GATE_OK=1 skips)
 hookdir="$(dirname "$0")/pre-commit.d"
 for hook in "$hookdir"/*; do
   [ -x "$hook" ] || continue

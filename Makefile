@@ -31,19 +31,28 @@ PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks site experiences validate-use-cases
+.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
-# then the use-case map guard — see .claude/skills/maintain-use-cases/).
+# the use-case map guard — see .claude/skills/maintain-use-cases/ — then the
+# design-doc gate, see .claude/gates/docs_gate.py).
 setup-hooks:
 	git -C ${ROOT_DIR} config core.hooksPath .githooks
-	@echo "hooks: core.hooksPath -> .githooks (pre-commit.d = gitleaks + use-cases)"
+	@echo "hooks: core.hooksPath -> .githooks (pre-commit.d = gitleaks + use-cases + docs-gate)"
 
 # Validate the actor/use-case map's hash-pinned code pointers.
 validate-use-cases:
 	@python3 -c "import yaml" 2>/dev/null || { echo "PyYAML required: pip install pyyaml"; exit 1; }
 	python3 ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py
+
+# Design-doc gate: dead relative links (D1/K9), validators shipped without
+# asserted PASS+FAIL examples (D2/K6), defaults with no citation or CAL-* bet
+# id (D3/K4). Rules and the measurement behind them:
+# docs/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
+validate-docs:
+	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
+	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py
 
 %.png: %.scad
 	@echo Generating $*.png from $@

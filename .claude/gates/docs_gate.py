@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""Design-doc gate for 3d-models.
+
+Three rules, each derived from a failure kind measured across the seven
+grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
+the definitions and the instances each rule is built from.
+
+  D1 (K9)  Every relative markdown link resolves on disk.
+  D2 (K6)  Every `**Validator:**` declaration ships an asserted PASS and an
+           asserted FAIL example in its own section.
+  D3 (K4)  Every `**Default:**` declaration carries a citation link or a
+           CAL-* bet id.
+
+D1 is universal: it applies to every markdown file checked, needs no network,
+and has no false positives by construction — the target either exists on disk
+or it does not.
+
+D2 and D3 are **marker-scoped**: they check that the discipline, once entered,
+is completed. A doc that declares no validators and no defaults passes them
+silently. That is a real limit and it is stated in the taxonomy doc: this gate
+catches an incomplete discipline, not an absent one. It is the same trade
+bikar's check-doc-pointers.ts makes, and it is deliberate — a gate that fires
+on prose it cannot parse gets switched off, which is worse than no gate.
+
+Usage:
+  docs_gate.py [FILE ...]     check the given files (default: all docs/**/*.md)
+  docs_gate.py --staged       check staged markdown files only
+  docs_gate.py --self-test    run the PASS/FAIL fixtures and verify the gate
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+
+FENCE = re.compile(r"^\s*(```|~~~)")
+INLINE_CODE = re.compile(r"`[^`]*`")
+LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
+HEADING = re.compile(r"^#{1,6}\s")
+VALIDATOR = re.compile(r"\*\*Validator:\*\*")
+DEFAULT = re.compile(r"\*\*Default:\*\*")
+CAL_ID = re.compile(r"\bCAL-[A-Z]{3}-\d{2}\b")
+HTTP_LINK = re.compile(r"\]\(https?://")
+ASSERT_PASS = re.compile(r"^\s*[-*]?\s*PASS:", re.IGNORECASE)
+ASSERT_FAIL = re.compile(r"^\s*[-*]?\s*FAIL:", re.IGNORECASE)
+
+SKIP_SCHEMES = ("http://", "https://", "mailto:", "ftp://", "data:")
+
+
+def strip_code(lines: list[str]) -> list[str]:
+    """Blank out fenced blocks and inline code spans.
+
+    A marker or a link written as code is a *mention*, not a use — this file's
+    own fixtures, CLAUDE.md and the taxonomy doc all have to write
+    `**Validator:**` and `**Default:**` inline to document the discipline, and
+    none of those is a declaration. Line numbers are preserved.
+    """
+    out, in_fence = [], False
+    for line in lines:
+        if FENCE.match(line):
+            in_fence = not in_fence
+            out.append("")
+            continue
+        out.append("" if in_fence else INLINE_CODE.sub("", line))
+    return out
+
+
+def check_d1_links(path: Path, lines: list[str]) -> list[str]:
+    findings = []
+    for n, line in enumerate(lines, 1):
+        for target in LINK.findall(line):
+            if target.startswith(SKIP_SCHEMES) or target.startswith("#"):
+                continue
+            bare = target.split("#", 1)[0]
+            if not bare:
+                continue
+            resolved = (path.parent / bare).resolve()
+            if not resolved.exists():
+                findings.append(
+                    f"{path.relative_to(ROOT)}:{n}: D1 (K9) link target does not "
+                    f"exist: {bare}"
+                )
+    return findings
+
+
+def sections(lines: list[str], marker: re.Pattern) -> list[tuple[int, list[str]]]:
+    """Slice the file at each marker hit; a section ends at the next heading
+    or the next marker hit, whichever comes first."""
+    starts = [i for i, line in enumerate(lines) if marker.search(line)]
+    out = []
+    for i in starts:
+        end = len(lines)
+        for j in range(i + 1, len(lines)):
+            if HEADING.match(lines[j]) or marker.search(lines[j]):
+                end = j
+                break
+        out.append((i + 1, lines[i:end]))
+    return out
+
+
+def check_d2_validators(path: Path, lines: list[str], raw: list[str]) -> list[str]:
+    findings = []
+    for lineno, body in sections(lines, VALIDATOR):
+        missing = []
+        if not any(ASSERT_PASS.match(b) for b in body):
+            missing.append("PASS:")
+        if not any(ASSERT_FAIL.match(b) for b in body):
+            missing.append("FAIL:")
+        if missing:
+            name = raw[lineno - 1].strip()[:80]
+            findings.append(
+                f"{path.relative_to(ROOT)}:{lineno}: D2 (K6) validator ships no "
+                f"{' and no '.join(missing)} example — {name}"
+            )
+    return findings
+
+
+def check_d3_defaults(path: Path, lines: list[str], raw: list[str]) -> list[str]:
+    findings = []
+    for lineno, body in sections(lines, DEFAULT):
+        # Provenance may wrap onto continuation lines, so read the whole
+        # paragraph — but stop at the blank line, so an unrelated link further
+        # down the section cannot vouch for this default.
+        para = [body[0]]
+        for line in body[1:]:
+            if not line.strip():
+                break
+            para.append(line)
+        blob = "\n".join(para)
+        if HTTP_LINK.search(blob) or CAL_ID.search(blob):
+            continue
+        findings.append(
+            f"{path.relative_to(ROOT)}:{lineno}: D3 (K4) default carries neither "
+            f"a citation link nor a CAL-* bet id — {raw[lineno - 1].strip()[:80]}"
+        )
+    return findings
+
+
+def check_file(path: Path) -> list[str]:
+    raw = path.read_text(encoding="utf-8").splitlines()
+    lines = strip_code(raw)
+    return (
+        check_d1_links(path, lines)
+        + check_d2_validators(path, lines, raw)
+        + check_d3_defaults(path, lines, raw)
+    )
+
+
+def staged_markdown() -> list[Path]:
+    out = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    return [ROOT / p for p in out if p.endswith(".md") and (ROOT / p).exists()]
+
+
+def self_test() -> int:
+    """Every rule ships an asserted-PASS and an asserted-FAIL fixture.
+
+    This gate enforces the K6 rule, so it must satisfy it: a rule that has
+    never been shown to fire is a rule nobody has tested.
+    """
+    expected = {
+        "fail/d1-dead-link.md": ["D1 (K9)"],
+        "fail/d2-validator-no-examples.md": ["D2 (K6)"],
+        "fail/d3-uncited-default.md": ["D3 (K4)"],
+    }
+    ok = True
+    for name in sorted((FIXTURES / "pass").glob("*.md")):
+        findings = check_file(name)
+        if findings:
+            ok = False
+            print(f"self-test FAIL: {name.name} should be clean, got:")
+            for f in findings:
+                print(f"    {f}")
+        else:
+            print(f"self-test ok: pass/{name.name} → 0 findings")
+    for rel, codes in expected.items():
+        path = FIXTURES / rel
+        findings = check_file(path)
+        blob = " ".join(findings)
+        for code in codes:
+            if code not in blob:
+                ok = False
+                print(f"self-test FAIL: {rel} should report {code}, got: {findings}")
+                break
+        else:
+            if len(findings) != 1:
+                ok = False
+                print(f"self-test FAIL: {rel} should report exactly 1 finding, "
+                      f"got {len(findings)}: {findings}")
+            else:
+                print(f"self-test ok: {rel} → {findings[0].split(': ', 1)[1]}")
+    print("self-test:", "PASS" if ok else "FAIL")
+    return 0 if ok else 1
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("files", nargs="*", type=Path)
+    ap.add_argument("--staged", action="store_true")
+    ap.add_argument("--self-test", action="store_true")
+    args = ap.parse_args()
+
+    if args.self_test:
+        return self_test()
+
+    if args.staged:
+        targets = staged_markdown()
+    elif args.files:
+        targets = [p if p.is_absolute() else (ROOT / p) for p in args.files]
+    else:
+        targets = sorted((ROOT / "docs").rglob("*.md")) + [ROOT / "CLAUDE.md"]
+
+    targets = [p for p in targets if FIXTURES not in p.parents]
+
+    findings = []
+    for path in targets:
+        findings.extend(check_file(path))
+
+    for f in findings:
+        print(f, file=sys.stderr)
+    if findings:
+        print(
+            f"\ndocs-gate: {len(findings)} finding(s) in {len(targets)} file(s). "
+            "See docs/grounding-defect-taxonomy.md. Override once with "
+            "DOCS_GATE_OK=1 git commit",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

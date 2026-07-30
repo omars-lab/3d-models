@@ -1,6 +1,7 @@
 # Evaluating an issue-register skill with reminder hooks
 
-**Date:** 2026-07-30 · **Status:** COMPLETE — verdict reached, nothing built yet
+**Date:** 2026-07-30 · **Status:** COMPLETE — verdict reached; §6 items 1, 2, 3
+and 5 built (see §8), item 4 blocked
 **Repos measured:** bikar, qiyas, 3d-models (this document)
 
 ---
@@ -302,7 +303,9 @@ volume *"seldom"* actually perform.
 
 The seven grounding audits in `docs/research/*-grounding-audit.md` are an
 unintentional corpus of ~104 findings across 7 independent design efforts.
-Classified into failure kinds, **five kinds appear in all seven audits**:
+Classified into failure kinds, **five kinds appear in all seven audits**. Full
+definitions, the instances each row rests on, and the counting rule are in
+[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md):
 
 | Kind | Audits | Preventable by |
 |---|---|---|
@@ -311,10 +314,23 @@ Classified into failure kinds, **five kinds appear in all seven audits**:
 | **K4** Unsourced number presented as fact, then defaults keyed to it | 7/7 | **gate** |
 | **K2** Exhaustiveness asserted over an unsearched space | 7/7 | **prompt** for the framing, **measurement** for the search |
 | **K6** Validator specified against the wrong acceptance region | 7/7 | **gate** |
+| **K10** Rule ported across a process/material/domain regime without stating the transfer conditions | 6/7 | **prompt** |
 | K5 Measured the wrong object | 6/7 | mostly measurement |
+| **K7** Internal contradiction — two parts of the doc cannot both be true | 4/7 | **prompt** |
 | K8 Semantic meaning assumed for an incidental artifact | 4/7 | **measurement only** |
+| K9 Misdirected pointer — resolves to nothing, or to something other than what is claimed of it | 4/7 | **gate** (mechanical) · **prompt** (attribution) |
 | K11 Misread a CLI output field | 2/7 | — do not build for this |
 | K12 Invariant carried across an invalidating change | 1/7 | trivially gate-able; highest severity, lowest frequency |
+
+> **Correction, 2026-07-30.** The first published version of this table carried
+> nine rows and omitted K7, K9 and K10 while the prose below and §6 item 1 both
+> reasoned about K7 and K10 — a **K9** inside the document that classifies K9,
+> and the smaller half of a **K2**. The three rows above were re-derived from
+> the corpus rather than reconstructed from memory; the derivation, with
+> `file:line` anchors for every instance, is in
+> [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md) §2. Their
+> counts come from that pass; the other nine rows carry the original pass's
+> counts. Both passes share an author, and §7's limits apply to both.
 
 Two of the request's implicit premises land in the bottom rows. The failure
 modes that felt most vivid from inside a session — misreading `islands=0/20`,
@@ -370,7 +386,7 @@ What the measurement *does* justify, ranked by strength of evidence:
 
 | # | Change | Evidence | Cost |
 |---|---|---|---|
-| 1 | **A `CLAUDE.md` for 3d-models**, under 200 lines, carrying the four prompt-preventable audit kinds (K1, K2-framing, K7, K10) as rules with their failure mode attached — the qiyas tenet shape | 5 kinds at 7/7 across 7 efforts; §1.3 shows a session-loaded rule is what stopped F1 | one file |
+| 1 | **A `CLAUDE.md` for 3d-models**, under 200 lines, carrying the four prompt-preventable audit kinds ([K1, K2-framing, K7, K10](grounding-defect-taxonomy.md)) as rules with their failure mode attached — the qiyas tenet shape | 5 kinds at 7/7 across 7 efforts; §1.3 shows a session-loaded rule is what stopped F1 | one file |
 | 2 | **The K6 rule as a gate**: every validator specified in a design doc ships one asserted-PASS and one asserted-FAIL example | 7/7; every K6 instance was found by an auditor hand-constructing a counterexample — the method is directly executable | small |
 | 3 | **The K4 rule as a gate**: a number in a normative sentence carries a citation or a `CAL-*` bet id | 7/7; the machinery exists and is already gate-checked (10 bets, 5 with no record) | extend existing |
 | 4 | **Route bikar's two registers**: `CLAUDE.md` documents the unused one and never mentions the used one; union 24, intersection 1 | §1.1, §5-hygiene; Nygard: *"Large documents are never kept up to date"* | small |
@@ -407,6 +423,93 @@ described.
 - **Cross-repo issue docs in qiyas and sacred-patterns were not read.** Only
   bikar's registers were mined in depth.
 - **Nothing here settles whether the five 7/7 kinds would recur under a
-  different author**, and no proposal in §6 has been built or tested. Items 2
-  and 3 are gate *specifications*; they inherit the K6 rule they propose and
-  must ship with a PASS and a FAIL example before being believed.
+  different author.** The corpus has one author, so "the rule prevents this"
+  remains untested no matter how the gate scores.
+- Items 2 and 3 were gate *specifications* when this was written; they inherit
+  the K6 rule they propose and had to ship with a PASS and a FAIL example
+  before being believed. They now do — see §8.1 — so this limit is discharged
+  for them. What replaces it: **both rules are dormant**, matching 0 markers in
+  the current corpus (§8.5).
+
+---
+
+## 8. Build log — 2026-07-30
+
+§7 above stipulated that nothing in §6 had been built, and that items 2 and 3
+"inherit the K6 rule they propose and must ship with a PASS and a FAIL example
+before being believed." This section records what was built against that bar,
+what was attempted and abandoned, and what is blocked.
+
+### 8.1 Shipped
+
+| §6 | Artifact | Verification |
+|---|---|---|
+| 1 | `CLAUDE.md` (149 lines) — K1, K2, K7, K10 as four rules, each with the corpus instance that produced it; plus the graduation rule and the two not-justified findings, so a future session cannot re-propose them without meeting the measurement | under the 200-line bar; every claim in it traces to §5 or to a `*-grounding-audit.md` |
+| 2 | `.claude/gates/docs_gate.py` rule **D2** — a `**Validator:**` declaration must ship an asserted `PASS:` and `FAIL:` in its section | asserted-PASS and asserted-FAIL fixture; `--self-test` |
+| 3 | rule **D3** — a `**Default:**` declaration must carry a citation link or a `CAL-*` bet id in its paragraph | asserted-PASS and asserted-FAIL fixture; `--self-test` |
+| — | rule **D1** (K9, unplanned — see 8.2) — every relative markdown link resolves on disk | asserted-PASS and asserted-FAIL fixture; **83 real link targets checked, 0 false alarms** |
+| 5 | the graduation rule, stated in `CLAUDE.md` as policy | none — it is policy, and that is the honest label |
+
+Wiring: `.githooks/pre-commit.d/30-docs-gate` (staged files, `DOCS_GATE_OK=1`
+overrides), `make validate-docs` (whole tree + self-test).
+
+### 8.2 The defect this session found in this document
+
+§5's taxonomy table published nine rows — K1–K6, K8, K11, K12 — while §5's
+prose and §6 item 1 both reasoned about **K7 and K10**, and **K9** was skipped
+entirely. `grep -rn "K7\|K9\|K10" docs/ .claude/` returned only the two lines
+that *used* them. Two of the five changes §6 asks for were scoped by ids that
+resolved to nothing.
+
+By this document's own taxonomy that is a **K9** inside the document that
+defines K9, and the smaller half of a **K2** — a taxonomy asserted as complete
+over a range a third of which was never published.
+
+**Fix.** The whole taxonomy was re-derived from all seven audits read end to
+end, published as [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md)
+with a `file:line` anchor for every instance, and §5/§6 repointed at it. K7,
+K9 and K10 were *derived*, not reconstructed from memory — the definitions
+follow the corpus, and where two kinds abut (K3/K9, K1/K10) the boundary is
+argued in the file rather than asserted.
+
+**Consequence.** D1 exists because of this. It was not in §6; the defect
+argued for it. D1 is the network-free half of the invariant §5.1 named — *is
+this pointer real* — and it is the rule that would have caught both
+`hemisphere-split`'s F12 and the dead pointer this repo shipped on 2026-07-29.
+It costs no network calls and, measured across 83 targets in 18 files, no false
+alarms.
+
+### 8.3 Attempted and rejected
+
+- **A K4 gate that scans prose for load-bearing numbers.** Rejected: no
+  formulation of "this sentence is normative and contains a number" survives
+  contact with a design doc's prose without the false-alarm rate that §5.1
+  used to kill the link checker. D3 checks an author-written marker instead,
+  and the cost of that choice is stated below and in the taxonomy doc.
+- **A network link checker.** Still rejected, on §5.1's measurement. D1 checks
+  only paths on disk.
+- **An issue register / catalog for this repo.** Still rejected, on §6.
+  The graduation rule in `CLAUDE.md` is what replaces it.
+
+### 8.4 Blocked
+
+**§6 item 4 — route bikar's two registers — was not done.** It requires editing
+`~/Workspace/git/bikar`, whose working checkout is on branch
+`fix-polygon-mpt-vertex` and belongs to a concurrent session; touching it would
+disturb work this session does not own. The finding stands unchanged (union 24,
+intersection 1, `CLAUDE.md` documenting the unused register and never
+mentioning the used one) and the change is small. It is deferred, not dropped.
+
+### 8.5 What is still unproven
+
+- **D2 and D3 are dormant.** The corpus contains **0** `**Validator:**` and
+  **0** `**Default:**` markers — the seven audited docs state their validators
+  and defaults in free prose, and these rules do not retro-fit them. They
+  constrain docs written from now on and nothing else.
+- **They can be evaded by silence.** An author who writes no marker triggers no
+  rule. That is the price of zero false positives, and it is the measurement
+  that should decide their future: *if the next two design docs carry no
+  markers, D2 and D3 should be deleted, not extended.*
+- **`CLAUDE.md` is untested.** Whether a session-loaded rule changes what the
+  next audit finds is exactly the claim §1.3 makes from a single instance (F1).
+  One instance is an anecdote. The first real test is the next design doc.

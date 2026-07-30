@@ -1,0 +1,12 @@
+#!/bin/sh
+# Design-doc gate (.claude/gates/docs_gate.py). Blocks a commit whose staged
+# markdown carries a dead relative link (D1/K9), a validator with no asserted
+# PASS+FAIL example (D2/K6), or a default with no citation or CAL-* bet id
+# (D3/K4). Rules and evidence: docs/grounding-defect-taxonomy.md.
+# Override once: DOCS_GATE_OK=1 git commit
+[ -n "$DOCS_GATE_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the design-doc gate" >&2
+  exit 1
+fi
+exec python3 "$(git rev-parse --show-toplevel)/.claude/gates/docs_gate.py" --staged
