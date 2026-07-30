@@ -6,7 +6,7 @@
 # Calibration bets
 
 A projection of the `Calibrated<T>` records in `bikar/packages/core/src`, in
-`CAL_BET_IDS` registry order. The record on the constant is the source of
+`CAL_BETS` registry order. The record on the constant is the source of
 truth; this file is regenerated from it, so a bet cannot drift from the value
 it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
@@ -16,18 +16,24 @@ is opened, clustered, and closed.
 
 ## Bets
 
-| Bet | Status | Calibrated records |
-|-----|--------|--------------------|
-| `CAL-FIT-01` | provisional | `FIT_GAP_MM_CAL`, `FIT_TOL_MM_CAL` |
-| `CAL-HOL-01` | provisional | `PRINTER_PROFILES_CAL` |
-| `CAL-FEA-01` | provisional | `DEFAULT_MIN_FEATURE_MM_CAL` |
-| `CAL-BRG-01` | open — no record in bikar | — |
-| `CAL-OVH-01` | open — no record in bikar | — |
-| `CAL-WRP-01` | provisional | `PROFILE_WARP_MM_CAL` |
-| `CAL-BED-01` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
-| `CAL-RIB-01` | open — no record in bikar | — |
-| `CAL-DET-01` | open — no record in bikar | — |
-| `CAL-STR-01` | open — no record in bikar | — |
+| Bet | Quantity | Coupon | Status | Calibrated records |
+|-----|----------|--------|--------|--------------------|
+| `CAL-FIT-01` | `FIT_GAP_MM` press/snug/sliding/free gap ladder | `MC-1` | provisional | `FIT_GAP_MM_CAL`, `FIT_TOL_MM_CAL` |
+| `CAL-HOL-01` | `PrinterProfile.holeCompMm` per material | `MC-1` | provisional | `PRINTER_PROFILES_CAL` |
+| `CAL-FEA-01` | `DEFAULT_MIN_FEATURE_MM` printable-feature floor | `MC-2` | provisional | `DEFAULT_MIN_FEATURE_MM_CAL` |
+| `CAL-BRG-01` | unsupported bridge span ceiling | `MC-3` | open — no record in bikar | — |
+| `CAL-OVH-01` | overhang angle threshold (print-gate F5) | `MC-4` | open — no record in bikar | — |
+| `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `PROFILE_WARP_MM_CAL` |
+| `CAL-BED-01` | `MIN_BED_CONTACT_MM2` and `MIN_BED_CONTACT_RATIO` | `MC-6` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
+| `CAL-RIB-01` | Lego clutch rib interference `ribMm` | `LG-F1` | open — no record in bikar | — |
+| `CAL-DET-01` | W2 detent band depth | `W-C1` | open — no record in bikar | — |
+| `CAL-STR-01` | Z-layer strength ratio | none — measuring it needs a load rig, which does not exist; registered so the gap is visible | open — no record in bikar | — |
+
+The **Coupon** column is the bet → coupon mapping as it exists in
+`CAL_BETS`, not a restatement of it: the row is generated from the same
+record the gate reads. A bet whose coupon says `none` names why, because
+a bet nothing can settle is a permanent entry in the baseline and the
+reader is owed the reason.
 
 A bet maps to **zero or more** records, never one-to-one. `CAL-FIT-01` governs
 the gap ladder and the window half-width derived from it; `CAL-BED-01` governs
@@ -36,11 +42,16 @@ share an ID rather than opening one bet per constant.
 
 ## Bets with no record in bikar
 
-`CAL-BRG-01`, `CAL-OVH-01`, `CAL-RIB-01`, `CAL-DET-01`, `CAL-STR-01` — registered in `CAL_BET_IDS`
-with no constant to carry them, because their consumers are 3d-models design
-docs rather than kernel values. They are listed here precisely so the gap is
-visible: bikar's shrink-only gate cannot see them, so nothing but this table
-reports that they are open.
+Registered in `CAL_BETS` with no constant to carry them, because their
+consumers are 3d-models design docs rather than kernel values. They are
+listed with the coupon that will settle each one, so an open bet is a
+named next print rather than an absence:
+
+- `CAL-BRG-01` — unsupported bridge span ceiling · coupon `MC-3`
+- `CAL-OVH-01` — overhang angle threshold (print-gate F5) · coupon `MC-4`
+- `CAL-RIB-01` — Lego clutch rib interference `ribMm` · coupon `LG-F1`
+- `CAL-DET-01` — W2 detent band depth · coupon `W-C1`
+- `CAL-STR-01` — Z-layer strength ratio · coupon none — measuring it needs a load rig, which does not exist; registered so the gap is visible
 
 ## Records
 
