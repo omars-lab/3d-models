@@ -2,8 +2,8 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: 2cb991860ea3128debba0d55f0a526300ee00a1c
-  bikar: dc974095be3ab9b7626266b55994a0ee30781444
+  3d-models: c43127e24e265b37b6cb95a1794b3d2e71668046
+  bikar: 5c9606e20a04d9234c530a13ad7419a02f3a420b
   qiyas: 0c75f5707d1263ac9dc99c6d2028e097cf1dd060
 repos:
   bikar: ../bikar
@@ -34,6 +34,7 @@ flowchart LR
   designer --> UC10[UC10: Compose functional pieces — girih nail tile]
   designer --> UC11[UC11: Publish the gallery site]
   designer --> UC12[UC12: Lay out tile walls — grid, crops, layout report]
+  designer --> UC14[UC14: Author a design doc the grounding gate checks]
   visitor --> UC3[UC3: Browse the catalog]
   visitor --> UC4[UC4: Download a print-ready STL]
   labuser --> UC5[UC5: Configure an orb in the Lab]
@@ -65,3 +66,4 @@ flowchart LR
 | UC11 | Publish the gallery + Lab to gh-pages | Designer | `3d-models:Makefile:L161` (deploy target) |
 | UC12 | Lay out tile walls (W1: grid + quartering layout, crop clip/drop, composed wall render, layout report) | Designer, Print operator | `bikar:packages/core/src/kernel/wall-layout.ts:L124` (grid layout kernel) · `bikar:packages/core/src/dsl/evaluator.ts:L1069` (wall eval) · `bikar:patterns/Walls/Nail-Wall.bkr:L1` (deliverable) · `bikar:docs/language-reference.md:L501` (tile/wall grammar) · `3d-models:docs/tile-wall-design.md:L1` (design doc) |
 | UC13 | Characterize a printer and earn the constants that depend on it (machine card, provenance-carrying values, shrink-only gate) | Print operator, Designer | `bikar:packages/core/src/kernel3d/calibration.ts:L82` (`Calibrated<T>` provenance wrapper) · `bikar:scripts/check-calibration.ts:L1` (append-blocked gate) · `bikar:patterns/Coupons/Machine-Card.bkr:L1` (the six coupons) · `3d-models:.claude/skills/calibrate/SKILL.md:L1` (harvest → measure → propagate) · `3d-models:docs/calibration-design.md:L1` (design doc) |
+| UC14 | Author a design doc whose grounding is checked: dead relative links, validators without a PASS/FAIL example, and defaults without provenance are blocked at commit | Designer | `3d-models:.claude/gates/docs_gate.py:L1` (the three rules + self-test) · `3d-models:.githooks/pre-commit.d/30-docs-gate:L1` (hook wiring) · `3d-models:Makefile:L53` (`validate-docs` target) · `3d-models:docs/grounding-defect-taxonomy.md:L63` (the K1–K12 kinds each rule derives from) · `3d-models:CLAUDE.md:L1` (the four session-loaded rules) |
