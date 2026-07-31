@@ -439,3 +439,77 @@ no rung of the sweep is green. Then a stud is a shape, not a joint, and the
 multi-piece path falls back to *refuse the phantom* with the reasoning here
 intact. This is a measurement, so it is a `CAL-*` bet and not an argument: the
 reversal condition is a coupon result, not a re-reading of this entry.
+
+---
+
+## D-007 — §5.3's rhombic row gets a label, not a wider grammar
+
+**Date:** 2026-07-31 · **Status:** Decided (owner) · **Repos:** 3d-models
+
+### Context
+
+§5.3's lattice matrix is now measured — five bases swept across 2–20 mm,
+[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+Measuring it surfaced a gap between the table and the language. `gridFit` scores
+any translation basis handed to it, while `env.repeatVectors` is assigned in
+exactly one place, `packages/core/src/dsl/evaluator.ts`, and admits exactly two
+shapes: `[(dx,0), (0,dy)]` for `mode rectangular` and `[(dx,0), (dx/2,dy)]` for
+`mode hex`. A 72° rhombus is neither. So one row of the table described a
+lattice **the gate can score and no `.bkr` can produce**, and a reader had no
+way to tell which rows those were.
+
+That is a **K7** — a document disagreeing with the machinery it ships, findable
+by reading one against the other and needing no new research.
+
+The three options were argued with the geometry compiled beside them in the
+`lattice-basis` design note (bikar `packages/lab/src/design/notes/lattice-basis.ts`,
+read at `design.html?n=lattice-basis` after `make lab`), the second note written
+under the [`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+
+### Decision
+
+**Label the row.** §5.3's table gains an **Authorable** column stating, per row,
+whether a script can reach that lattice, plus the paragraph naming the single
+assignment site that decides it. The grammar is unchanged and no row is removed.
+
+### Why, against the two it beat
+
+The note's figures moved the argument, and not in the direction the question
+implied. The framing was "one unbuildable row against two buildable ones", and
+what the drawings showed is that **scale is the variable that matters and it is
+not enough**: the same 3 : 2 rectangular lattice scores **0.41 at 8 mm and 1.00
+at 16 mm**, while hexagonal — a basis the grammar *already* expresses — tops out
+at **0.8037** anywhere in the swept interval. So a low score is not a symptom of
+a missing grammar feature. Widening the grammar would not have raised a single
+number in the table; it would only have let an author write down a lattice that
+still cannot register.
+
+*Widen the grammar* is the largest scope — tokens, lexer, parser, AST, the
+single evaluator assignment, the tiling loop (which steps an axis-aligned basis
+today), the EBNF spec and its differential corpus gate, the language reference,
+and tests — and it buys authorability of a basis whose measured ceiling is 0.73.
+It is not refused on principle; it is refused because nothing currently needs it.
+
+*Cut the row* is small, and destructive in the one place it matters. The 72°
+rhombus is the 5-/10-fold case, which is the case this project exists for. The
+hexagonal row would still carry the "irrational ratio never registers" argument,
+so the point survives — but the reader who came to the table asking about a
+5-fold star would find their case silently absent, which is a worse failure than
+finding it present and marked.
+
+Labelling costs one table column and one paragraph, and it converts the K7 from
+a contradiction into a stated fact. It is the option that leaves the other two
+open.
+
+### What would reverse it
+
+A pattern someone actually wants to build needs a basis the grammar cannot
+express — not a row in a sweep, but a `.bkr` a person sat down to write and
+could not. Then *widen the grammar* becomes the right call and this entry is the
+record of what it costs. The **Authorable** column is also the detector: if it
+ever needs a fourth distinct value, the two-shape restriction has stopped
+describing the language and the column has become the thing it was meant to
+document.
+
+The reversal condition explicitly **is not** a low score. That was the confusion
+this decision cleared up.

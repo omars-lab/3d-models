@@ -568,13 +568,13 @@ a snapping scale cannot fall between samples), pitch 8 mm, θ maximized by
 `gridFit`. Run and full commentary:
 [`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
 
-| Lattice | Ratio | Measured (max fit · at scale · repeat unit) | Typical families |
-|---|---|---|---|
-| square | 1 | **1.0000** at 8 mm, θ = 0, repeat unit **1 × 1** — and at 2, 4 and 16 mm too | 4-, 8-fold canonical constructions |
-| hexagonal | √3 = 1.7321 | max **0.8037**; never ≥ 0.999 in range. One axis snaps, the other plateaus: at 8 mm, θ = 0 the residuals are **0.000 / 4.000 mm** | 6-, 12-fold canonical constructions |
-| 72° rhombic | cot 36° = **1.3764** | max **0.7264** (at 6.995 mm, θ = 9°) over the swept interval; never ≥ 0.999 | many 5-, 10-fold constructions |
-| rectangular, rational ratio | p/q | p/q = 3/2 reaches **1.0000** at 16 mm, θ = 0, repeat unit **3 × 2** | 5-/10-fold designs with a rectangular repeat |
-| genuinely quasiperiodic | — | `gridFit` **undefined**, at every scale and in the fixed-scale probe | rare; no repeat vectors exist |
+| Lattice | Ratio | Measured (max fit · at scale · repeat unit) | Authorable | Typical families |
+|---|---|---|---|---|
+| square | 1 | **1.0000** at 8 mm, θ = 0, repeat unit **1 × 1** — and at 2, 4 and 16 mm too | yes — `tile … mode rectangular` | 4-, 8-fold canonical constructions |
+| hexagonal | √3 = 1.7321 | max **0.8037**; never ≥ 0.999 in range. One axis snaps, the other plateaus: at 8 mm, θ = 0 the residuals are **0.000 / 4.000 mm** | yes — `tile … mode hex` | 6-, 12-fold canonical constructions |
+| 72° rhombic | cot 36° = **1.3764** | max **0.7264** (at 6.995 mm, θ = 9°) over the swept interval; never ≥ 0.999 | **no — kernel only** | many 5-, 10-fold constructions |
+| rectangular, rational ratio | p/q | p/q = 3/2 reaches **1.0000** at 16 mm, θ = 0, repeat unit **3 × 2** | yes — `tile … mode rectangular` | 5-/10-fold designs with a rectangular repeat |
+| genuinely quasiperiodic | — | `gridFit` **undefined**, at every scale and in the fixed-scale probe | yes, trivially — any `brick` with no `tile` block | rare; no repeat vectors exist |
 
 Three things in that table are worth reading twice.
 
@@ -582,9 +582,18 @@ Three things in that table are worth reading twice.
 2–20 mm*, not over every scale. The unbounded claim — that a cot 36° lattice
 never registers — rests on that ratio being irrational, which is an argument and
 not this measurement; the sweep is consistent with it and does not establish it.
-That row is also the one row **no `.bkr` can produce**: the `tile` grammar
-admits a rectangular and a half-staggered basis and nothing else, so the sweep
-reaches a 72° rhombus by constructing the basis directly. See §11 Q8.
+That row is also the one row **no `.bkr` can produce**, which is what the
+**Authorable** column is for. `env.repeatVectors` is assigned in exactly one
+place — `packages/core/src/dsl/evaluator.ts` — and it admits exactly two basis
+shapes: `[(dx,0), (0,dy)]` for `mode rectangular` and `[(dx,0), (dx/2,dy)]` for
+`mode hex`. A 72° rhombus is neither, so the sweep reaches it by constructing
+the basis directly. The column says which rows are facts about a script and
+which are facts about the gate; without it the table silently mixes the two.
+
+The alternative — adding a general two-vector `basis` statement so every score
+in the table becomes reachable — was argued with the geometry compiled beside
+it and was **not** taken: [`decisions-log.md`](decisions-log.md) D-007, and the
+`lattice-basis` design note (§12) it was decided from.
 
 **"At the right scale" is plural.** `square` scores 1.0 at every divisor of the
 pitch in range: 2, 4, 8 and 16 mm. The sweet spots are periodic, so a sweep
@@ -1291,9 +1300,13 @@ deviations from this spec, and additions beyond it.)*
   A 72° rhombic basis is neither. The measured matrix therefore reports a lattice **`gridFit` can
   score but no `.bkr` can produce** — the sweep reaches it by constructing the basis directly. That
   is not wrong, but it is a gap between a table and the machinery the same document ships, which is
-  what K7 is about, so it is written down here rather than left for a reader to discover. Two ways
+  what K7 is about, so it is written down here rather than left for a reader to discover. Three ways
   out: widen the grammar with a general two-vector basis, or mark the row in §5.3 as
-  kernel-reachable-only. Not yet decided.
+  kernel-reachable-only, or drop the row. **Resolved: label the row** —
+  [`decisions-log.md`](decisions-log.md) D-007. §5.3 gains an **Authorable** column and the
+  sentence saying why; the grammar is unchanged; the row stays, because it is the 5-fold case an
+  Islamic-pattern reader will look for. The three options were drawn side by side, with the
+  geometry compiled, in the `lattice-basis` design note (§12).
 
 ---
 
@@ -1349,6 +1362,39 @@ current.
 to [`decisions-log.md`](decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
 the relevant section here. The note is not a third register — it is the worked page a `D-NNN` line
 compresses.
+
+### 12.1 Published so far
+
+| Note | Argues | Status |
+|---|---|---|
+| `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`decisions-log.md`](decisions-log.md) D-006) |
+| `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`decisions-log.md`](decisions-log.md) D-007) |
+
+`lattice-basis` extends the page's "compiled, not drawn" rule to a second kind of figure, and the
+extension is worth recording because it is not the same mechanism. `brickSection()` is handed a
+`BrickProvenance` and draws what the kernel already built. A lattice plan has no solid to be handed:
+`packages/lab/src/design/draw-lattice.ts` calls `gridFit` **itself**, rotates the basis to the
+argmax angle the report returns, and draws, per repeat vector, the dashed **L** to the nearest stud
+centre — where the two legs *are* the two component residuals and the labelled one is the leg the
+score used. The figure is not illustrating the measurement; it is the measurement, rendered.
+
+Two things that discipline forced, both of which were defects first:
+
+- **A figure must name its scale.** §5.3's headline column is a *maximum over a 2–20 mm sweep*, so
+  captioning an 8 mm drawing with 0.8037 would have been exactly the K1 the page is about. The
+  families are functions of scale, and each is drawn twice — at the size an author reaches for
+  first, and at the size the sweep found best. That pair turned out to carry the argument: the same
+  3 : 2 rectangular lattice scores **0.41 at 8 mm and 1.00 at 16 mm**, while hexagonal tops out at
+  **0.8037** at any size, because no scale repairs an irrational ratio.
+- **A comparison must not vary its frame.** The two figure-vs-figure rows use a new `.pair` class
+  rather than `.split`, whose `380px 1fr` columns are deliberately asymmetric for figure-plus-prose
+  and would have made the right-hand drawing bigger than the thing it is being compared to.
+
+The drift risk this note carries is its own: the four lattice families are written out again in
+`draw-lattice.ts` because the note is bundled for a browser while `scripts/sweep-lattice-matrix.ts`
+is a node entry point. `packages/lab/tests/design-lattice.test.ts` is the whole mitigation — it
+imports the script and compares the two at four scales per family, rather than restating the bases
+a third time and passing while the published table disagrees.
 
 ## 13. The studio index and the page catalogue
 
