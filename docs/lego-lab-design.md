@@ -9,12 +9,13 @@ rather than a fact about LEGO (§3.2). Remaining contested bets, each with its s
 source, are in Appendix B.**
 
 Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31), and P1 has shipped its
-design-notes page, its studio index, and **multi-piece export** (§10, D-006) — a brick mints
-stud/anti-stud ports from its own lattice and a two-brick assembly exports as two printable parts.
-The rest of P1 — the compatibility matrix, the sweep strip, the curated scripts — and P2–P3 have
-not. Building it produced the finding that a printed brick on a printed brick has **no clutch at
-all** on the shipped defaults, and the coupon (`LG-S1`) that would settle where the real ceiling
-sits; see §10's implementation status. The Lego Lab
+**sweep strip**, its design-notes page, its studio index, **multi-piece export** (§10, D-006) — a
+brick mints stud/anti-stud ports from its own lattice and a two-brick assembly exports as two
+printable parts — and §5.3's **compatibility matrix, now filled by a real sweep**
+([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)). Only P1's
+curated scripts, and P2–P3, have not. Building it produced the finding that a printed brick on a
+printed brick has **no clutch at all** on the shipped defaults, and the coupon (`LG-S1`) that would
+settle where the real ceiling sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
 section proved its spec wrong, the section above is corrected in place and the deviation is listed
 in §10's implementation status — so this document describes what exists, and §10 records what it
@@ -560,13 +561,45 @@ so 8-fold and 12-fold are exactly as forbidden *globally* as 5-fold and the v1 g
 12 with 6) was not a symmetry argument. What decides the score is the **aspect ratio of the
 pattern's translation lattice**:
 
-| Lattice | Ratio | Expected | Typical families |
+The **Measured** column is a sweep, not a prediction: five bases across one
+shared interval, 2–20 mm at a 0.005 mm step (finer than the snap threshold, so
+a snapping scale cannot fall between samples), pitch 8 mm, θ maximized by
+`gridFit`. Run and full commentary:
+[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+
+| Lattice | Ratio | Measured (max fit · at scale · repeat unit) | Typical families |
 |---|---|---|---|
-| square | 1 | **1.0** at the right scale | 4-, 8-fold canonical constructions |
-| hexagonal | √3 = 1.7321 | one axis snaps, the other plateaus | 6-, 12-fold canonical constructions |
-| 72° rhombic | cot 36° = **1.3764** | never reaches 1 at any scale | many 5-, 10-fold constructions |
-| rectangular, rational ratio | p/q | **1.0** reachable | 5-/10-fold designs with a rectangular repeat |
-| genuinely quasiperiodic | — | `gridFit` **undefined** | rare; no repeat vectors exist |
+| square | 1 | **1.0000** at 8 mm, θ = 0, repeat unit **1 × 1** — and at 2, 4 and 16 mm too | 4-, 8-fold canonical constructions |
+| hexagonal | √3 = 1.7321 | max **0.8037**; never ≥ 0.999 in range. One axis snaps, the other plateaus: at 8 mm, θ = 0 the residuals are **0.000 / 4.000 mm** | 6-, 12-fold canonical constructions |
+| 72° rhombic | cot 36° = **1.3764** | max **0.7264** (at 6.995 mm, θ = 9°) over the swept interval; never ≥ 0.999 | many 5-, 10-fold constructions |
+| rectangular, rational ratio | p/q | p/q = 3/2 reaches **1.0000** at 16 mm, θ = 0, repeat unit **3 × 2** | 5-/10-fold designs with a rectangular repeat |
+| genuinely quasiperiodic | — | `gridFit` **undefined**, at every scale and in the fixed-scale probe | rare; no repeat vectors exist |
+
+Three things in that table are worth reading twice.
+
+**The rhombic row is bounded by the sweep.** 0.7264 is the maximum *over
+2–20 mm*, not over every scale. The unbounded claim — that a cot 36° lattice
+never registers — rests on that ratio being irrational, which is an argument and
+not this measurement; the sweep is consistent with it and does not establish it.
+
+**"At the right scale" is plural.** `square` scores 1.0 at every divisor of the
+pitch in range: 2, 4, 8 and 16 mm. The sweet spots are periodic, so a sweep
+window that straddles none of them draws a flat curve for a lattice that
+registers perfectly — which is a thing the sweep strip (§10) has to not mislead
+the user about.
+
+**A good score and a withheld repeat unit are consistent.** `hexagonal` scores
+0.8037 and still reports no repeat unit in studs. The score is about
+registration; the repeat unit is about axis alignment. A sheared basis can do
+well at the first and have no answer to the second.
+
+**Why the hexagonal row needed a second measurement.** *One axis snaps, the
+other plateaus* is a claim about the two axes separately, and `gridFit` scores
+the **worst** axis — so its best scale is necessarily where the two residuals
+balance (0.785 / 0.785), the one place the asymmetry cannot show. Reading each
+axis at the scale that makes the first basis vector exactly one pitch shows it
+exactly: 0.000 mm against 4.000 mm, a half pitch, which is the worst offset
+there is. No rotation of the basis fixes one axis without moving the other.
 
 The last two rows correct v1's "5-fold never reaches 1 at any scale", which is false as a general
 statement: 5-/10-fold Islamic designs are periodic and do have repeat units — Cromwell describes a
@@ -923,7 +956,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the matrix, the sweep strip and the curated scripts remain open. |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)). Only the curated scripts remain open. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
@@ -1121,6 +1154,39 @@ tube wall: the 1.2 mm floor is a bet about struts, the single-STL path already e
 the parts path had no way to say so. `PlacedPart.featureFloorMm` carries the exemption per part —
 per part, not per assembly, so a tile sharing an assembly with a brick cannot borrow it — with a
 test that asserts the brick parts carry a floor and `Pinned-Tiles.bkr`'s parts carry none.
+
+**P1 (part) — the compatibility matrix measured — 2026-07-31.** bikar `3ad9158` (PR #37:
+`scripts/sweep-lattice-matrix.ts`, `packages/core/tests/kernel3d/lattice-matrix.test.ts`).
+3d-models: this revision's §5.3, plus
+[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+
+§5.3's table shipped an **Expected** column and a prediction in a table reads exactly like a
+measurement in one. It is now a **Measured** column: five bases over one shared interval, 2–20 mm
+at 0.005 mm, θ maximized by `gridFit`. Four of the five predictions hold as written.
+
+The fifth was not testable as the table was built. The hexagonal row predicts *one axis snaps, the
+other plateaus* — a claim about the two axes separately — and `gridFit` scores the **worst** axis,
+so its argmax necessarily lands where the two residuals balance: 0.785 / 0.785, the one place the
+asymmetry cannot appear. The measurement had to be shaped to the claim rather than the claim read
+off the nearest available number, so the script also probes at the scale that makes the first basis
+vector exactly one pitch. There the prediction is exact: **0.000 mm against 4.000 mm.**
+
+Two corrections to the surrounding prose fell out of the run. "At the right scale" is **plural** —
+`square` scores 1.0 at every divisor of the pitch in range, so a sweep window straddling none of
+them draws a flat curve for a lattice that registers perfectly, which is a thing the sweep strip
+must not let a user misread. And a **good score with a withheld repeat unit is consistent**, not a
+bug: `hexagonal` scores 0.8037 and still reports no repeat unit, because the score is about
+registration and the repeat unit is about axis alignment.
+
+One claim was deliberately *not* strengthened. §5.3's rhombic row says "never reaches 1 at any
+scale"; the sweep searched 2–20 mm and can only say **max 0.7264 over that interval**. The
+unbounded version still stands on cot 36° being irrational — an argument, not this table — and the
+doc now attributes it there. Writing the measured number as though it settled every scale would be
+a K2 wearing a measurement's clothes.
+
+The graduation artifact is `lattice-matrix.test.ts` (7 cases), which pins every number §5.3
+publishes and **imports the script rather than re-deriving the bases** — a test that rebuilt them
+would pass while the table and the kernel disagreed, which is the drift it exists to catch.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
