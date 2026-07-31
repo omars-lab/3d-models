@@ -2,15 +2,18 @@
 """Validate the use-case map in use-cases.md.
 
 Modes:
-  validate.py            full validation of the working copy
-  validate.py --staged   pre-commit mode (called by .githooks/pre-commit.d/20-use-cases)
-  validate.py --refresh  rewrite frontmatter as_of hashes to each repo's HEAD, then validate
+  validate.py             full validation of the working copy
+  validate.py --staged    pre-commit mode (called by .githooks/pre-commit.d/20-use-cases)
+  validate.py --refresh   rewrite frontmatter as_of hashes to each repo's HEAD, then validate
+  validate.py --self-test run the page-catalog reader's own fixtures
 
 Checks (full mode):
   - frontmatter parses and every as_of hash resolves in its repo
   - every pointer `repo:path:Lstart[-Lend]` names a file that exists at the
     pinned as_of commit and has at least Lend lines
   - the mermaid diagram and the pointer table declare the same UC ids
+  - every `uc:` id declared by a frontmatter `page_catalogs` source is a use
+    case this map carries (see check_catalogs below)
   - warns when a repo's as_of lags its local HEAD (missing cross-repo
     checkouts are warn-and-skip, never a failure)
 
@@ -49,6 +52,12 @@ SURFACE_PATTERNS = (
 # below. Do not "fix" these into a parser.
 POINTER_RE = re.compile(r"`(?P<repo>[\w.-]+):(?P<path>[^`\s:]+):L(?P<start>\d+)(?:-L(?P<end>\d+))?`")
 UC_RE = re.compile(r"\bUC\d+\b")
+# A `uc:` field in a page catalog — `{ uc: 'UC5', actor: 'lab-visitor', ... }`.
+# Same justification as POINTER_RE: a token embedded in a source file this repo
+# does not own and cannot import. Comment lines are dropped before matching, so
+# a UC id quoted in prose above the data does not become a claim.
+CATALOG_UC_RE = re.compile(r"\buc:\s*['\"](UC\d+)['\"]")
+CATALOG_SPEC_RE = re.compile(r"^(?P<repo>[\w.-]+):(?P<path>\S+)$")
 
 
 def run_git(repo_dir: str, *args: str) -> str:
@@ -141,6 +150,46 @@ def string_map(meta: dict, key: str, what: str) -> dict[str, str]:
     return out
 
 
+def string_specs(meta: dict, key: str) -> list[tuple[str, str]]:
+    """Read an optional `key` as a list of `repo:path` strings.
+
+    Absent is fine — a map with no page catalog to check is a legitimate state,
+    and was the only state before `studio.html` existed. Present-but-malformed
+    is not: a list that holds a dict, or an entry that is not `repo:path`, is an
+    error rather than an entry that quietly drops out of the check.
+    """
+    if key not in meta:
+        return []
+    section = meta[key]
+    if not isinstance(section, list):
+        raise ValueError(f"{DOC_RELPATH}: frontmatter '{key}' is not a list (got {type(section).__name__})")
+    out: list[tuple[str, str]] = []
+    for entry in section:
+        if not isinstance(entry, str):
+            raise ValueError(f"{DOC_RELPATH}: frontmatter '{key}' entry {entry!r} is not a string")
+        m = CATALOG_SPEC_RE.match(entry.strip())
+        if not m:
+            raise ValueError(f"{DOC_RELPATH}: frontmatter '{key}' entry {entry!r} is not 'repo:path'")
+        out.append((m.group("repo"), m.group("path")))
+    return out
+
+
+def catalog_ucs(blob: str) -> set[str]:
+    """The UC ids a page catalog claims, read off its `uc:` fields.
+
+    Comment lines are dropped first. The catalog's own header explains the
+    contract in prose and names example ids while doing it; counting those as
+    claims would demand map entries for illustrations.
+    """
+    ids: set[str] = set()
+    for line in blob.split("\n"):
+        s = line.lstrip()
+        if s.startswith(("*", "//", "/*")):
+            continue
+        ids.update(CATALOG_UC_RE.findall(line))
+    return ids
+
+
 class Doc:
     def __init__(self, text: str):
         frontmatter, body = split_frontmatter(text)
@@ -155,6 +204,7 @@ class Doc:
             )
         self.as_of: dict[str, str] = string_map(meta, "as_of", "commit hash")
         self.repos: dict[str, str] = string_map(meta, "repos", "repo path")
+        self.catalogs: list[tuple[str, str]] = string_specs(meta, "page_catalogs")
         if SELF_REPO not in self.as_of:
             raise ValueError(f"{DOC_RELPATH}: frontmatter as_of is missing '{SELF_REPO}'")
         diagrams = [text for info, text in fenced_blocks(body) if info == "mermaid"]
@@ -182,6 +232,62 @@ class Doc:
             return None
         d = os.path.normpath(os.path.join(root, rel))
         return d if os.path.isdir(os.path.join(d, ".git")) else None
+
+
+def unknown_catalog_ucs(claimed: set[str], carried: set[str]) -> list[str]:
+    """Ids a catalog claims that the map does not carry, in id order."""
+    return sorted(claimed - carried, key=lambda u: int(u[2:]))
+
+
+def check_catalogs(doc: Doc, root: str) -> tuple[list[str], list[str]]:
+    """Hold each declared page catalog to the ids this map actually carries.
+
+    A page catalog (bikar's `packages/lab/src/catalog.ts`) is what the studio
+    index renders itself from, and it names a use case per actor per page. This
+    map is the register of what the system does for whom, so the catalog may
+    *point into* it and may not invent entries in it: a page that advertises
+    UC16 before UC16 exists here is a page making a promise nothing delivers.
+
+    Read at the pinned `as_of`, like every other cross-repo read in this file,
+    and warn-and-skip on an absent checkout or an absent file for the same
+    reason — a pin that predates the catalog is a stale pin, not a defect in
+    the catalog, and failing on it would make `--refresh` the only way to
+    commit anything.
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+    for repo, path in doc.catalogs:
+        pin = doc.as_of.get(repo)
+        if pin is None:
+            errors.append(f"page_catalogs names repo '{repo}' but frontmatter as_of has no hash for it")
+            continue
+        rdir = doc.repo_dir(repo, root)
+        if rdir is None:
+            warnings.append(f"repo '{repo}' not checked out locally — skipped its page-catalog check")
+            continue
+        blob = try_git(rdir, "cat-file", "-p", f"{pin}:{path}")
+        if blob is None:
+            warnings.append(
+                f"page catalog {repo}:{path} does not exist at as_of {pin[:12]} — "
+                "skipped; re-pin once that checkout carries it"
+            )
+            continue
+        claimed = catalog_ucs(blob)
+        if not claimed:
+            # Fail closed. A catalog that parses to nothing is indistinguishable
+            # from a catalog this reader no longer understands, and the second
+            # would otherwise pass silently forever.
+            errors.append(
+                f"page catalog {repo}:{path} declares no `uc:` ids at as_of {pin[:12]} — "
+                "the reader found nothing to check (did the catalog's shape change?)"
+            )
+            continue
+        for uc in unknown_catalog_ucs(claimed, doc.table_ucs):
+            errors.append(
+                f"page catalog {repo}:{path} claims {uc}, which this map does not carry — "
+                f"add {uc} to the diagram and the table, or stop claiming it on the page"
+            )
+    return errors, warnings
 
 
 def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
@@ -219,7 +325,8 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
             nlines = blob.count("\n") + 1
             if end > nlines:
                 errors.append(f"{prepo}:{path}:L{start}-L{end} exceeds file length {nlines} at as_of {pin[:12]}")
-    return errors, warnings
+    cat_errors, cat_warnings = check_catalogs(doc, root)
+    return errors + cat_errors, warnings + cat_warnings
 
 
 def report(errors: list[str], warnings: list[str], context: str) -> int:
@@ -316,11 +423,78 @@ def mode_staged(root: str) -> int:
     return 0
 
 
+SELF_TEST_CATALOG = """/**
+ * A page catalog header, which explains the contract in prose and names an
+ * example while doing it: uc: 'UC99' is an illustration, not a claim.
+ */
+export const PAGES = [
+  { id: 'studio', file: 'studio.html', useCases: [] },
+  { id: 'lab', file: 'lab.html', useCases: [
+    { uc: 'UC5', actor: 'lab-visitor', does: '...' },
+    { uc: "UC4", actor: 'print-operator', does: '...' },
+  ] },
+];
+"""
+
+
+def self_test() -> int:
+    """The page-catalog reader's fixtures — the check that fires on a real file.
+
+    `check_catalogs` needs two checkouts and a pinned commit to run, so the part
+    worth pinning is the part that decides: what the reader extracts, and what
+    it calls unknown. Both are pure functions and both are exercised here.
+    """
+    ok = True
+
+    def expect(name: str, got: object, want: object) -> None:
+        nonlocal ok
+        if got == want:
+            print(f"self-test ok: {name}")
+        else:
+            ok = False
+            print(f"self-test FAIL: {name} — got {got!r}, want {want!r}")
+
+    expect(
+        "reads uc ids in either quote style",
+        catalog_ucs(SELF_TEST_CATALOG),
+        {"UC5", "UC4"},
+    )
+    expect(
+        "does not read a UC id out of a comment",
+        "UC99" in catalog_ucs(SELF_TEST_CATALOG),
+        False,
+    )
+    expect(
+        "a catalog with no useCases yields nothing to check",
+        catalog_ucs("export const PAGES = [];\n"),
+        set(),
+    )
+    expect(
+        "reports an id the map does not carry",
+        unknown_catalog_ucs({"UC5", "UC16"}, {"UC4", "UC5"}),
+        ["UC16"],
+    )
+    expect(
+        "reports nothing when every claim is carried",
+        unknown_catalog_ucs({"UC5", "UC4"}, {"UC4", "UC5", "UC16"}),
+        [],
+    )
+    expect(
+        "orders unknown ids numerically, not lexically",
+        unknown_catalog_ucs({"UC16", "UC9"}, set()),
+        ["UC9", "UC16"],
+    )
+    print("self-test:", "PASS" if ok else "FAIL")
+    return 0 if ok else 1
+
+
 def main() -> int:
     root = run_git(os.path.dirname(os.path.abspath(__file__)), "rev-parse", "--show-toplevel")
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
     context = {"--staged": "pre-commit", "--refresh": "refresh"}.get(mode, "full")
     try:
+        if mode == "--self-test":
+            return self_test()
         if mode == "--staged":
             return mode_staged(root)
         if mode == "--refresh":

@@ -907,7 +907,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; the rest is open. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
@@ -1084,6 +1084,120 @@ deviations from this spec, and additions beyond it.)*
   Lab panel must say so in words rather than implying it with a green tick. Whether a compliance
   proxy (rib deflection × count, or an FEA-lite bending estimate) is worth adding is open; LG-F1 and
   LG-D1 supply the data that would calibrate one.
+
+---
+
+## 12. Design notes — the argument, with the geometry compiled beside it
+
+P1 has to settle multi-piece export (§9), and the way that decision gets made is the same way §3.8
+and §5.3 got made: write the options down, draw them, cost them, choose. What was missing was
+anywhere to *put* that once it was written. A transcript is not a place; a design doc section is
+the right place for the conclusion and the wrong place for three side-by-side figures.
+
+`design.html` is that place — a fourth page in `packages/lab`, built by the same Vite config as
+`lab.html` and `lego.html`, carrying one `DesignNote` per decision from
+`packages/lab/src/design/notes/`.
+
+**The figures are compiled, not drawn.** A hand-authored SVG of a brick section is a *claim* about
+the brick that nothing checks, and it stays on the page long after the geometry it depicts has
+moved. So `brickSection()` in `packages/lab/src/design/draw.ts` takes the `BrickProvenance` that
+`compileToGeometry(source).brick3d` returns — the same record the Lab's gate panels read — and cuts
+a section from it: cavity, ceiling and stud bands come out of `stackBrickSlabs`, the anchor spans
+out of the solver's placements, the dimension leaders off the numbers the kernel computed. Nothing
+in `draw.ts` knows a brick's dimensions; it only knows how to draw one it is handed.
+
+This buys the property the notes exist for: **a note whose argument has expired breaks loudly.**
+Change the anchor solver and the figure changes with it, or the note stops compiling. It does not
+quietly keep showing last month's brick.
+
+It also costs something, and the cost is worth naming rather than discovering. A compiled figure
+can only show geometry the kernel builds **today**. A note arguing for a capability we do not have
+yet — which is most of what a decision note argues about — has exactly one option it can draw from
+life, and the alternatives have to be drawn schematically. The rule that keeps that honest is that
+the caption says which it is: every `<figure>` carries a provenance line naming the pattern and the
+cut plane it came from, or saying plainly that it is a sketch of something not yet buildable.
+
+**Validator:** a note's figure count and its provenance-line count are equal, and
+`tests/design-notes.test.ts` fails when they are not.
+
+PASS: the multi-piece-export note as it ships — three figures, three provenance lines, the
+buildable option's line naming the compiled source and the other two marked as sketches.
+
+FAIL: a fourth figure added to argue a fourth option, with no fourth provenance line. The suite goes
+red on the commit that adds it — which is the only moment anyone still knows whether that figure was
+compiled or drawn. Without this check the note degrades in the one direction that matters: a sketch
+gradually reads as a measurement.
+
+A note carries `status: 'open' | 'decided' | 'superseded'` and, when the status is not `open`, the
+decision it records. That pairing is asserted rather than remembered, because a note that argues
+three ways and never says which way it went is the failure mode this page would otherwise
+institutionalise. Notes are ordered newest-first by an ISO date, and the ordering is asserted too —
+a hand-ordered list of documents is a list that will eventually be wrong about which decision is
+current.
+
+**Where the decision itself lives is unchanged.** A note is the *argument*; the outcome still goes
+to [`decisions-log.md`](decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
+the relevant section here. The note is not a third register — it is the worked page a `D-NNN` line
+compresses.
+
+## 13. The studio index and the page catalogue
+
+Four pages is the point at which "which page do I want?" becomes a real question, and the honest
+answer is not a list of filenames — it is *who each page is for and what they walk away with*. That
+is the actor/use-case map's question, already answered, in
+[`../.claude/skills/maintain-use-cases/use-cases.md`](../.claude/skills/maintain-use-cases/use-cases.md).
+So the index does not invent an answer; it points into that one.
+
+`studio.html` is rendered entirely from `packages/lab/src/catalog.ts`, which holds every page, the
+actors it serves, and one `does` sentence per actor per use case. There is no second list of pages
+in the renderer to drift from it.
+
+**An index maintained by hand goes stale on the day someone adds a page and does not notice, and a
+stale index is worse than none** — it is confidently wrong about what the site can do. Two checks
+remove the hand:
+
+1. `packages/lab/tests/catalog.test.ts` reads the directory. Every `*.html` beside `vite.config.ts`
+   must be a `PAGES` entry *and* a Rollup input, and every entry must name a file and an entry
+   module that exist and reference each other.
+2. `.claude/skills/maintain-use-cases/validate.py` reads the `uc:` ids out of that catalogue at the
+   pinned `as_of` commit and fails when one of them is not a use case the map carries. The map is
+   the register of what this system does for whom; a page may point into it and may not invent
+   entries in it.
+
+Check 1 lives in bikar because that is where the pages are; check 2 lives here because that is where
+the map is. Neither is a new gate — check 2 is a rule inside the `maintain-use-cases` validator the
+repo already runs on every commit, per this repo's standing precedent that a measured recurrence
+earns [a gate rather than a skill](dsl-extension-skill-evaluation.md).
+
+**Validator:** the index is complete exactly when the catalogue and the package agree, in both
+directions.
+
+PASS: `design.html` added as a fourth page — catalogued, listed as a Rollup input, entry module
+present and referenced. Suite green, and the card appears on the index without anyone editing the
+index.
+
+FAIL: a `sweep.html` dropped into `packages/lab` with no `PAGES` entry. `catalogues every html page
+in the package, and no page that is not there` goes red — verified by construction, not by
+inspection. The converse also fails: a `PAGES` entry for a page that was deleted fails the same
+assertion from the other side, which is what stops the index advertising a dead link.
+
+The `does` sentences carry a length floor of 60 characters, and the number is chosen to sit just
+under an ordinary use-case title: UC7's — *"Validate bikar renders against ground truth per symmetry
+axis"* — is 61. A `does` short enough to fail the floor is therefore shorter than the title the
+reader already has from the id chip beside it, which means it restates the id instead of saying what
+the person leaves with. This is a lint threshold, not a measured constant, and it is written down
+here so that it stays a decision rather than becoming a habit.
+
+**Unserved actors stay on the page.** The catalogue carries all seven actors the map names, and the
+four with no page in this package — Gallery visitor, Studio author, Baker, qiyas validator — carry
+an `elsewhere` string saying where they *are* served. The test pins `elsewhere` present exactly when
+the actor is unserved, in both directions, so an actor cannot silently become unserved when a page
+is deleted. An index that lists only the actors it has pages for quietly implies the rest of the
+system does not exist; "nobody has built this" and "this is served elsewhere" are different answers
+and a reader deserves to be told which.
+
+The index page itself carries no use case. Navigation is not something a person accomplishes, and
+minting a UC for it would put an entry in the map that no code delivers.
 
 ---
 

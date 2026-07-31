@@ -29,7 +29,10 @@ ORB_VIEWS := $(ROOT_DIR)/build/orb-views
 # gh-pages deploy
 PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
-DEPLOY_PATHS := index.html lab.html lego.html assets build/images build/stls src LICENSE README.md
+# Recursively expanded, not `:=`, because LAB_PAGES is defined further down
+# beside the vendor step that uses it. `:=` here would expand to nothing and
+# deploy a gallery with no studio pages in it.
+DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
 .PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs
 
@@ -116,49 +119,75 @@ bricks:
 	done; \
 	cd ${ROOT_DIR} && python3 build/brick_previews.py
 
-# The Labs — knob-driven configurators built by bikar's packages/lab (vite)
-# and vendored here: lab.html and lego.html at the site root (the gallery
-# links to both) plus the hashed assets/ dir they share. All generated,
-# gitignored on master, published by `make deploy`.
+# The studio — the pages built by bikar's packages/lab (vite) and vendored
+# here at the site root, plus the hashed assets/ dir they share. All
+# generated, gitignored on master, published by `make deploy`.
 #
-# One build serves both, because lego.html is packages/lab's *second entry*
-# and not a second package (Lego Lab design §9). That is also why there is
-# one vendor step rather than two: two builds would mean two `rm -rf assets`,
-# and the second would delete the chunks the first page had just been linked
+# One build serves all of them, because each is one of packages/lab's *entries*
+# and not a package of its own (Lego Lab design §9). That is also why there is
+# one vendor step rather than four: four builds would mean four `rm -rf assets`,
+# and each would delete the chunks the previous page had just been linked
 # against. `lab` and `lego-lab` are the two names people reach for; they
 # share the recipe so `make lab lego-lab` still builds once.
+#
+# The page list lives here once. It is the deploy-side twin of the catalogue
+# bikar checks against its own directory (Lego Lab design §13) — this end
+# cannot read that one, so a page added there and not here vendors nothing and
+# `lab-smoke` never looks for it. Adding a page is two edits, in two repos, and
+# saying so is cheaper than a cross-repo check that would have to run a build.
+LAB_PAGES = studio.html lab.html lego.html design.html
+# The subset that runs the compile worker. studio.html and design.html render
+# from static data, so requiring a worker chunk of them would fail a page that
+# is working exactly as designed.
+LAB_WORKER_PAGES = lab.html lego.html
+
 lab lego-lab: lab-vendor
 
 lab-vendor:
-	@[ -f "$(BIKAR_DIR)/packages/lab/lego.html" ] \
-		|| { echo "no packages/lab/lego.html in $(BIKAR_DIR) — the Lego Lab entry lives on bikar's lego-lab work; override with 'make lab BIKAR_DIR=...'"; exit 1; }
+	@for page in $(LAB_PAGES); do \
+		[ -f "$(BIKAR_DIR)/packages/lab/$$page" ] \
+			|| { echo "no packages/lab/$$page in $(BIKAR_DIR) — the studio entries live on bikar's lego-lab work; override with 'make lab BIKAR_DIR=...'"; exit 1; }; \
+	done
 	@set -euo pipefail; \
 	cd $(BIKAR_DIR)/packages/lab && npx vite build; \
-	cp $(BIKAR_DIR)/packages/lab/dist/lab.html ${ROOT_DIR}/lab.html; \
-	cp $(BIKAR_DIR)/packages/lab/dist/lego.html ${ROOT_DIR}/lego.html; \
+	for page in $(LAB_PAGES); do \
+		cp $(BIKAR_DIR)/packages/lab/dist/$$page ${ROOT_DIR}/$$page; \
+	done; \
 	rm -rf ${ROOT_DIR}/assets; \
 	cp -R $(BIKAR_DIR)/packages/lab/dist/assets ${ROOT_DIR}/assets; \
 	$(MAKE) -C ${ROOT_DIR} lab-smoke; \
-	echo "Labs vendored: lab.html + lego.html + assets/"
+	echo "Studio vendored: $(LAB_PAGES) + assets/"
 
 # Vendoring smoke (orb-lab-p2-design §4.2): each vendored page and its hashed
 # assets must exist and reference each other — a broken copy step or a stale
-# assets/ dir fails here, not on the deployed site. Both pages are checked,
+# assets/ dir fails here, not on the deployed site. Every page is checked,
 # because they share one assets/ dir and a rebuild that re-hashed only one
-# page's chunks would leave the other pointing at files that no longer exist.
+# page's chunks would leave the others pointing at files that no longer exist.
+#
+# The worker hunt reads *every* js asset a page pulls in, not the first one
+# alphabetically. The old version took the first and got away with it only
+# while the entry chunk happened to sort first; adding studio/design chunks
+# moved a shared chunk to the front and the check failed a page that was
+# perfectly well-formed. "First by name" was never the entry module.
 lab-smoke:
 	@set -euo pipefail; \
-	for page in lab.html lego.html; do \
+	for page in $(LAB_PAGES); do \
 		test -s ${ROOT_DIR}/$$page || { echo "lab-smoke: $$page missing"; exit 1; }; \
 		refs=$$(grep -o 'assets/[A-Za-z0-9._-]*' ${ROOT_DIR}/$$page | sort -u); \
 		test -n "$$refs" || { echo "lab-smoke: $$page references no assets/ files"; exit 1; }; \
 		for ref in $$refs; do \
 			test -s "${ROOT_DIR}/$$ref" || { echo "lab-smoke: $$page references missing $$ref"; exit 1; }; \
 		done; \
-		main=$$(echo "$$refs" | grep '\.js$$' | head -1); \
-		worker=$$(grep -o 'worker-[A-Za-z0-9._-]*\.js' "${ROOT_DIR}/$$main" | sort -u | head -1); \
-		test -n "$$worker" || { echo "lab-smoke: $$main references no worker chunk"; exit 1; }; \
-		test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
+		case " $(LAB_WORKER_PAGES) " in \
+			*" $$page "*) \
+				worker=$$(for ref in $$(echo "$$refs" | grep '\.js$$'); do \
+					grep -o 'worker-[A-Za-z0-9._-]*\.js' "${ROOT_DIR}/$$ref" || true; \
+				done | sort -u | sed -n '1p'); \
+				test -n "$$worker" || { echo "lab-smoke: $$page references no worker chunk from any of its js assets"; exit 1; }; \
+				test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
+				;; \
+			*) worker="no worker (static page)";; \
+		esac; \
 		echo "lab-smoke: $$page + $$(echo "$$refs" | wc -l | tr -d ' ') assets + $$worker OK"; \
 	done
 
@@ -169,13 +198,16 @@ lab-smoke:
 SITE_PORT ?= 8613
 site:
 	@set -euo pipefail; \
-	[ -f ${ROOT_DIR}/lab.html ] && [ -f ${ROOT_DIR}/lego.html ] || $(MAKE) -C ${ROOT_DIR} lab; \
+	missing=""; for page in $(LAB_PAGES); do [ -f ${ROOT_DIR}/$$page ] || missing=1; done; \
+	[ -z "$$missing" ] || $(MAKE) -C ${ROOT_DIR} lab; \
 	[ -d ${ROOT_DIR}/build/images/web ] \
 		|| echo "note: build/images/web/ missing — gallery images need 'make cookie-cutters orbs bricks web-images'"; \
 	( sleep 1; open "http://localhost:${SITE_PORT}/" ) & \
 	echo "gallery  http://localhost:${SITE_PORT}/"; \
+	echo "studio   http://localhost:${SITE_PORT}/studio.html"; \
 	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
 	echo "lego lab http://localhost:${SITE_PORT}/lego.html"; \
+	echo "notes    http://localhost:${SITE_PORT}/design.html"; \
 	python3 -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
 
 # Map of every user-facing experience and the target that starts it.
@@ -191,7 +223,8 @@ clean:
 	rm -rf ${ROOT_DIR}/build/stls/*.stl
 	rm -rf ${ROOT_DIR}/build/orb-views
 	rm -rf ${ROOT_DIR}/build/.brick-names
-	rm -rf ${ROOT_DIR}/lab.html ${ROOT_DIR}/lego.html ${ROOT_DIR}/assets
+	rm -f $(addprefix ${ROOT_DIR}/,$(LAB_PAGES))
+	rm -rf ${ROOT_DIR}/assets
 
 ${DEP}:
 	mkdir -f $$( dirname ${DEP} )

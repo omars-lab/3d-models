@@ -14,11 +14,13 @@
 build/*
 !build/*.py
 
-# Lab pages vendored from bikar's packages/lab by `make lab` / `make lego-lab`
+# Studio pages vendored from bikar's packages/lab by `make lab` / `make lego-lab`
 # — generated, published to gh-pages by `make deploy`, never tracked on master.
-# One vite build emits both, so they share the hashed assets/ dir.
+# One vite build emits all of them, so they share the hashed assets/ dir.
+/studio.html
 /lab.html
 /lego.html
+/design.html
 /assets/
 
 # gh-pages deploy worktree (created by `make deploy`)
