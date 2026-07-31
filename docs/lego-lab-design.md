@@ -8,6 +8,12 @@ and the design changed: the clutch is now a discrete rib rather than a nominal s
 rather than a fact about LEGO (§3.2). Remaining contested bets, each with its strongest refuting
 source, are in Appendix B.**
 
+Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31); P1–P3 have not. The Lego Lab
+page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
+section proved its spec wrong, the section above is corrected in place and the deviation is listed
+in §10's implementation status — so this document describes what exists, and §10 records what it
+cost to find out.
+
 Scope: a new `brick` solid declaration that turns a bikar pattern into a **3D-printable
 LEGO-compatible part** — a body carrying pattern relief, with studs and/or anti-stud anchors on the
 LEGO 8 mm lattice so it clutches into real LEGO — plus the two gates that make "is this pattern
@@ -900,7 +906,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **LG-F1/F2/R1** | physical | Clutch coupons. **No longer block M6** — see the note below. |
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
-| **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. |
+| **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
@@ -931,11 +937,16 @@ non-rectangular body partition specified rather than assumed (§5.2, §7.2); V5b
 re-scoped to sweep rib thickness; LG-D1 added. Commits: 3d-models `4c3b900`; bikar *(none —
 R0 ships no code)*.
 
-**M6 — the `brick` declaration and the brick kernel — 2026-07-31.** bikar `ee2dd50` (Q3's answer as
-a test), `4ca2df0` (self-checking caps, symmetric-difference slab interfaces), `98ad41e` (`lego.ts`,
-`grid-gate.ts`, `brick.ts`, `brick-validate.ts` with V1–V10, `RIB_MM_CAL` under `CAL-RIB-01`),
-`d5fcbef` (grammar, evaluator, CLI report, `patterns/Lego/Star-Brick.bkr`). 3d-models: this
-revision.
+**M6 — the `brick` declaration and the brick kernel — 2026-07-31.** bikar `61c371f` (PR #27), which
+squash-merged the branch this landed on: Q3's answer as a test; self-checking caps and
+symmetric-difference slab interfaces; `lego.ts`, `grid-gate.ts`, `brick.ts` and `brick-validate.ts`
+with V1–V10 and `RIB_MM_CAL` under `CAL-RIB-01`; then the grammar, evaluator, CLI report and
+`patterns/Lego/Star-Brick.bkr`. 3d-models: this revision.
+
+*(An earlier revision of this section cited the five branch commits by hash. The squash collapsed
+them, so none resolve on `main` any more and all five have been replaced by the merge commit. The
+lesson is general and worth stating once: **cite the commit that will exist on the default branch,
+not the one you are standing on** — under a squash-merge policy those are never the same object.)*
 
 Deliberate deviations from this spec, each corrected in place above and each found by building the
 thing the spec described: §4's `origin at (<col>,<row>)` → `at <col>[,] <row>`, with the comma
@@ -951,11 +962,11 @@ graduation rule was honoured throughout: every correction above has a test that 
 fix and passes after, and the two triangulation fixes were each verified by neutering the fix and
 confirming the test goes red.
 
-**M7 — the Lab protocol wiring — 2026-07-31.** bikar `6342378` (`family: 'brick'`, `LabBrick`,
-`brickResponse`, and the `kernel3d/index.ts` brick surface). 3d-models: this revision. The anchor
-solver, `grid-gate.ts` and `sweepGridFit` had already shipped in M6's `98ad41e` for the reason above,
-so what landed here is the boundary: the response payload, the barrel, and the two facts §9 had left
-implicit.
+**M7 — the Lab protocol wiring — 2026-07-31.** bikar `61c371f` (PR #27, the same squash): `family:
+'brick'`, `LabBrick`, `brickResponse`, and the `kernel3d/index.ts` brick surface. 3d-models: this
+revision. The anchor solver, `grid-gate.ts` and `sweepGridFit` had already shipped with M6 for the
+reason above, so what landed here is the boundary: the response payload, the barrel, and the two
+facts §9 had left implicit.
 
 Deliberate deviations, both corrected in §9 above and both found by building the thing: the Lab must
 gate a brick at `brick3d.featureFloorMm` rather than the shipped 1.2 mm floor, or every
@@ -969,6 +980,57 @@ Beyond the spec: `kernel3d/index.ts` exported nothing from `brick.ts`, `brick-va
 `grid-gate.ts`, `lego.ts` or `solidify-slabs.ts`, so the Lab could only have reached the kernel
 through a deep path. The barrel now carries the whole brick surface — the lattice constants the
 overlay draws, both gate reports, the anchor solve, and `sweepGridFit` for P0's sweep strip.
+
+**P0 — the Lego Lab page — 2026-07-31.** bikar `61c371f` (PR #27: `lego.html` as `packages/lab`'s
+second Vite entry, `lego-main.ts`, `lego-scripts.ts`, `lattice-overlay.ts`, `fit-profile.ts`,
+`lego.css`, the four new `patterns/Lego/*.bkr`, the two brick constraint rules, and the
+`fit-profile` / `lego-presets` / `anchor-candidates` / `lego-lab.spec.ts` suites) and `<PR28>`
+(the two fit-row defects below). 3d-models: this revision — `make bricks`, `make lego-lab`,
+`build/brick_previews.py`, `src/Lego/*.bkr`, and gallery §03.
+
+Deliberate deviations from this spec:
+
+- **§9's page is a second Vite entry, not a workspace package.** §2 forbids forking the worker, the
+  protocol or `evaluate.ts`; a second package would have had to either fork them or invent a shared
+  one. A second `input` in `vite.config.ts` reuses all three as source files. The cost is that both
+  Labs share one hashed `assets/` dir, which is why `lab` and `lego-lab` are two names on **one**
+  Makefile recipe — two recipes would mean two `rm -rf assets`, and the second would delete the
+  chunks the first page was linked against.
+- **P0 needed a `make bricks` target §10 does not name.** §10 lists `make lego-lab` and "gallery
+  §03" as one line, which reads as though the page carries the section. It does not: a gallery card
+  needs an STL to download, a preview to show and a `.bkr` to link, and none of those exist until
+  something renders them. `make bricks` drives the bikar CLI over `patterns/Lego/*.bkr` with
+  `--check`, vendors each source into `src/Lego/` (matching the tracked `src/Orbs/` convention), and
+  records the stems in `build/.brick-names` so the preview step previews bricks and not the orbs and
+  cutters sharing `build/stls/`. Shipping §03 with dead links would have been worse than not
+  shipping it.
+- **Brick previews are a mesh render, not a validation view.** The orbs get axis views because
+  qiyas composites them; there is no brick view set and no brick composite, and a brick's claim is
+  made by its two grid gates and the mesh gate, not by a picture. So `brick_previews.py` renders the
+  STL through OpenSCAD's `import()` at the Cornfield preview colours the existing
+  `process_images.py` already keys to transparency — the gallery's image chain, reused whole, with
+  no second pipeline.
+
+Two defects, both shipped in #27, both invisible to `fit-profile.test.ts`, and both found by opening
+the page rather than by reading the suite:
+
+1. **Every fit row was titled `studDiaMm`.** `renderKnobPanel` derives a title from
+   `spec.name.replace(/_/g, ' ')` — correct for a DSL param, inert on camelCase. `fitLabel()`
+   existed and was unit-tested, but nothing called it on the path to the DOM.
+2. **The "measured" toggle sat beside the field name instead of under its value.** The toggle is a
+   `<label>`, so `style.css`'s `.knob-row label { grid-area: label }` (0-1-1) outranked
+   `.fit-measured` (0-1-0) and put the control in the row's title cell — attaching a provenance
+   control to the wrong thing, which is precisely what §9's per-value honesty condition forbids.
+
+Both are now pinned by a seventh case in `lego-lab.spec.ts`, asserting rendered title text and the
+toggle's computed `grid-area`. It is an e2e test because neither defect is reachable without a
+browser: one needs the shared panel to have rendered, the other needs the cascade resolved. Each fix
+was neutered in turn and the test confirmed red, then restored and confirmed green.
+
+The general lesson, and the reason this is written down rather than just fixed: **a unit-tested
+helper is not a rendered one.** Both defects live in the gap between a function that is correct and
+a DOM that never calls it, and no amount of data-layer testing closes that gap. The Lab's honesty
+claims are claims about what a reader *sees*, so at least one test per claim has to look.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*

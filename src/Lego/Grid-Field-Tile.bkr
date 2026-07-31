@@ -1,0 +1,63 @@
+# Grid-Field-Tile — the preset that makes the *scored* gate say a number.
+#
+# Every other preset here inscribes a one-off motif, and a one-off motif has
+# no repeat vectors, so §5.3's grid fit honestly reports `n/a` rather than a
+# score of zero. This one tiles a motif on a square lattice of pitch `pitch`,
+# which gives the gate two vectors to measure and the Lab a knob that moves
+# the score: at `pitch 8.0` the art repeats exactly on the stud lattice and
+# the fit is 1.0; drag it to 8.5 and the pattern walks off the studs a little
+# more with every repeat.
+#
+# That is the whole point of scoring rather than passing/failing. A piece
+# whose art does not register on the 8 mm grid is still printable and still
+# clutches — the anchor gate is the one that can fail — but it cannot be
+# extended by adding another one beside it without the pattern breaking at
+# the seam. V8 warns below 0.8 and names the nearest sweet spot.
+#
+# Two circles, one drawn and one not: `M` carries the diamond that becomes
+# the relief pocket, `G` exists only so the tiler has a pair of points a
+# whole `pitch` apart to step by. `M` is deliberately smaller than half the
+# pitch, so neighbouring pockets stay separated instead of meeting at a
+# corner — a vertex-touching pocket pair is a T-junction the cell partition
+# has to resolve, and there is no reason to hand it one on purpose.
+#
+# Render:
+#   bikar render patterns/Lego/Grid-Field-Tile.bkr --format stl --check -o GridFieldTile.stl
+#   bikar render patterns/Lego/Grid-Field-Tile.bkr --format svg -o GridFieldTile.svg
+#
+# Every dimension the clutch depends on is an unmeasured bet (CAL-RIB-01,
+# coupon LG-F1). Print the coupon before trusting the fit.
+
+param pitch = 8.0 range 6.0..12.0 step 0.1
+param plates = 3 range 2..9 step 1
+param engage = 3.2 range 1.6..4.0 step 0.2
+param relief = 0.8 range 0.8..2.0 step 0.1
+
+blueprint diamond_cell
+  circle G center(0,0) radius $pitch / 2
+  divide G into 4 offset 0
+  circle M center(0,0) radius $pitch * 0.35
+  divide M into 4 offset 0
+
+pattern diamond_motif on diamond_cell
+  connect cycle [M.cpt0 M.cpt1 M.cpt2 M.cpt3]
+
+pattern diamond_field
+  tile diamond_motif
+    repeat_x 3
+    repeat_y 3
+    offset_col G.cpt2 G.cpt0
+    offset_row G.cpt3 G.cpt1
+    mode rectangular
+  voids detect
+
+brick GridFieldTile
+  inscribe diamond_field
+  footprint 5 x 5
+  height $plates plates
+  studs none
+  anchors auto
+  engage $engage
+  clutch auto
+  relief depth $relief
+  origin centered

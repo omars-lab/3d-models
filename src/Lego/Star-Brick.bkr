@@ -1,0 +1,64 @@
+# Star-Brick — the Lego Lab M6 deliverable: a LEGO-compatible brick whose
+# top face carries an {8/3} octagram cut in as relief.
+#
+# The art is inscribed in a radius-12 circle, so its bounding box spans
+# 24 mm. `footprint auto` rounds that up to the smallest whole footprint
+# that contains it — 4 × 4 studs, i.e. 8·4 − 0.2 = 31.8 mm — which leaves
+# ~3.9 mm of margin per side between the art and the shell wall. Nothing is
+# scaled to make that fit: bikar draws pieces at real scale, so a bigger
+# brick is a bigger `footprint` and smaller art is a smaller pattern.
+#
+# `studs none` is not a style choice. Studs and relief are mutually
+# exclusive on the same face (validator V4) — a stud sits 1.6 mm proud of
+# exactly the surface the art is cut into, so studs would bury it. The
+# piece is still a full participant in the system: it has anti-studs
+# underneath, and `anchors auto` gives it the 3 × 3 tube grid that locks it
+# against rotation on whatever it is pressed onto.
+#
+# The default `plates 3` is one brick, 9.6 mm. That is what carries the
+# settled 3.2 mm `engage`: a single plate is 3.2 mm tall, so a plate that
+# engaged 3.2 mm would have no ceiling left at all. The remaining 6.4 mm of
+# ceiling is what the 0.8 mm relief is cut into.
+#
+# The three knobs are ranged so that every combination reachable in the Lab
+# is buildable, which is not automatic — `ceiling = plates·3.2 − engage` and
+# V3 needs 1.2 mm of it left under the relief. At the thinnest corner of the
+# space (2 plates, engage 4.0) the budget is 1.2 mm, so `relief`'s 2.0 mm
+# ceiling gets clamped rather than refused, and the floor of `plates` is 2
+# because §4's one-plate body has no relief budget at any legal `engage`.
+# `relief` starts at 0.8 and not lower for a different reason entirely: a
+# pocket shallower than the 0.7 mm floor brick geometry is allowed to carry
+# is refused by the kernel, art or not.
+#
+# Render:
+#   bikar render patterns/Lego/Star-Brick.bkr --format stl --check -o StarBrick.stl
+#     (STL = the printable brick; stderr = the anchor/grid gates and the
+#      §6 validator warnings)
+#   bikar render patterns/Lego/Star-Brick.bkr --format svg -o StarBrick.svg
+#     (the art alone — the pattern check before plastic)
+#
+# Every dimension the clutch depends on is an unmeasured bet (CAL-RIB-01,
+# coupon LG-F1). Print the coupon before trusting the fit.
+
+param plates = 3 range 2..9 step 1
+param engage = 3.2 range 1.6..4.0 step 0.2
+param relief = 0.8 range 0.8..2.0 step 0.1
+
+blueprint star_face
+  circle C1 center(0,0) radius 12
+  divide C1 into 8 offset 0
+
+pattern star_relief on star_face
+  connect every 3 on C1
+  voids detect
+
+brick StarBrick
+  inscribe star_relief
+  footprint auto
+  height $plates plates
+  studs none
+  anchors auto
+  engage $engage
+  clutch auto
+  relief depth $relief
+  origin centered

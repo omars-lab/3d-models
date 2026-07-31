@@ -1,0 +1,47 @@
+# Edge-Stud-Tile — the third interface: studs on the perimeter cells only,
+# with the art cut into the interior they enclose.
+#
+# `studs none` gives up stacking to carry a pattern and `studs full` gives up
+# the pattern to stack (V4 will not let one face do both). `studs edge` is the
+# partial answer available on a footprint big enough to have an interior: the
+# ring of perimeter studs still takes a piece on top around the border, and
+# the interior stays flat for relief. It is not free — anything laid across
+# the middle bridges the art rather than clutching to it — but on a 6 × 6 the
+# ring is 20 studs and the interior is a 4 × 4 field, which is 32 mm, which
+# is where a radius-12 rosette fits with room to spare.
+#
+# Like `Star-Brick`, the art here is a single centred motif, so the scored
+# grid gate reports `n/a` rather than a number: a one-off rosette has no
+# repeat vectors to measure against the 8 mm lattice, and §5.3 says
+# `undefined` for unmeasurable instead of scoring it zero. `Grid-Field-Tile`
+# is the preset that gives that gate something to chew on.
+#
+# Render:
+#   bikar render patterns/Lego/Edge-Stud-Tile.bkr --format stl --check -o EdgeStudTile.stl
+#   bikar render patterns/Lego/Edge-Stud-Tile.bkr --format svg -o EdgeStudTile.svg
+#
+# Every dimension the clutch depends on is an unmeasured bet (CAL-RIB-01,
+# coupon LG-F1). Print the coupon before trusting the fit.
+
+param plates = 3 range 2..9 step 1
+param engage = 3.2 range 1.6..4.0 step 0.2
+param relief = 0.8 range 0.8..2.0 step 0.1
+
+blueprint rosette_face
+  circle C1 center(0,0) radius 12
+  divide C1 into 12 offset 0
+
+pattern rosette_relief on rosette_face
+  connect every 5 on C1
+  voids detect
+
+brick EdgeStudTile
+  inscribe rosette_relief
+  footprint 6 x 6
+  height $plates plates
+  studs edge
+  anchors auto
+  engage $engage
+  clutch auto
+  relief depth $relief
+  origin centered

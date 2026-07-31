@@ -29,9 +29,9 @@ ORB_VIEWS := $(ROOT_DIR)/build/orb-views
 # gh-pages deploy
 PAGES_BRANCH := gh-pages
 PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
-DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE README.md
+DEPLOY_PATHS := index.html lab.html lego.html assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs lab lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs
+.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -91,35 +91,76 @@ orbs:
 	done; \
 	cd ${ROOT_DIR} && python3 build/orb_previews.py
 
-# Orb Lab — the knob-driven orb configurator built by bikar's packages/lab
-# (vite). `make lab` builds it there and vendors the output here: lab.html
-# at the site root (the gallery links to it) plus its hashed assets/ dir.
-# Both are generated, gitignored on master, and published by `make deploy`.
-lab:
+# Bricks — LEGO-compatible pieces from the same bikar engine (Lego Lab
+# design §10 P0). Same shape as `orbs`, with one difference that is worth
+# stating: an orb's preview comes from its per-symmetry-axis validation
+# views, and a brick has none — there is no brick view set and no recorded
+# qiyas composite, so a brick's claim is made by its two grid gates and the
+# mesh gate, not by a render. build/brick_previews.py therefore draws the
+# mesh itself, via OpenSCAD import(), which lands gold-on-cream exactly
+# where `make web-images` expects it.
+bricks:
+	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
+		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
+	@[ -d "$(BIKAR_DIR)/patterns/Lego" ] \
+		|| { echo "no patterns/Lego in $(BIKAR_DIR) — the brick presets live on bikar's lego-lab work; override with 'make bricks BIKAR_DIR=...'"; exit 1; }
+	@set -euo pipefail; \
+	mkdir -p ${ROOT_DIR}/build/stls ${ROOT_DIR}/build/images ${ROOT_DIR}/src/Lego; \
+	: > ${ROOT_DIR}/build/.brick-names; \
+	for bkr in $(BIKAR_DIR)/patterns/Lego/*.bkr; do \
+		stem=$$(basename "$$bkr" .bkr); name=$${stem//-/}; \
+		echo "== $$name"; \
+		$(BIKAR) render "$$bkr" --format stl --check -o ${ROOT_DIR}/build/stls/$$name.stl; \
+		echo "$$name" >> ${ROOT_DIR}/build/.brick-names; \
+		cp "$$bkr" ${ROOT_DIR}/src/Lego/; \
+	done; \
+	cd ${ROOT_DIR} && python3 build/brick_previews.py
+
+# The Labs — knob-driven configurators built by bikar's packages/lab (vite)
+# and vendored here: lab.html and lego.html at the site root (the gallery
+# links to both) plus the hashed assets/ dir they share. All generated,
+# gitignored on master, published by `make deploy`.
+#
+# One build serves both, because lego.html is packages/lab's *second entry*
+# and not a second package (Lego Lab design §9). That is also why there is
+# one vendor step rather than two: two builds would mean two `rm -rf assets`,
+# and the second would delete the chunks the first page had just been linked
+# against. `lab` and `lego-lab` are the two names people reach for; they
+# share the recipe so `make lab lego-lab` still builds once.
+lab lego-lab: lab-vendor
+
+lab-vendor:
+	@[ -f "$(BIKAR_DIR)/packages/lab/lego.html" ] \
+		|| { echo "no packages/lab/lego.html in $(BIKAR_DIR) — the Lego Lab entry lives on bikar's lego-lab work; override with 'make lab BIKAR_DIR=...'"; exit 1; }
 	@set -euo pipefail; \
 	cd $(BIKAR_DIR)/packages/lab && npx vite build; \
 	cp $(BIKAR_DIR)/packages/lab/dist/lab.html ${ROOT_DIR}/lab.html; \
+	cp $(BIKAR_DIR)/packages/lab/dist/lego.html ${ROOT_DIR}/lego.html; \
 	rm -rf ${ROOT_DIR}/assets; \
 	cp -R $(BIKAR_DIR)/packages/lab/dist/assets ${ROOT_DIR}/assets; \
 	$(MAKE) -C ${ROOT_DIR} lab-smoke; \
-	echo "Orb Lab vendored: lab.html + assets/"
+	echo "Labs vendored: lab.html + lego.html + assets/"
 
-# Vendoring smoke (orb-lab-p2-design §4.2): the vendored page and its hashed
+# Vendoring smoke (orb-lab-p2-design §4.2): each vendored page and its hashed
 # assets must exist and reference each other — a broken copy step or a stale
-# assets/ dir fails here, not on the deployed site.
+# assets/ dir fails here, not on the deployed site. Both pages are checked,
+# because they share one assets/ dir and a rebuild that re-hashed only one
+# page's chunks would leave the other pointing at files that no longer exist.
 lab-smoke:
 	@set -euo pipefail; \
-	test -s ${ROOT_DIR}/lab.html || { echo "lab-smoke: lab.html missing"; exit 1; }; \
-	refs=$$(grep -o 'assets/[A-Za-z0-9._-]*' ${ROOT_DIR}/lab.html | sort -u); \
-	test -n "$$refs" || { echo "lab-smoke: lab.html references no assets/ files"; exit 1; }; \
-	for ref in $$refs; do \
-		test -s "${ROOT_DIR}/$$ref" || { echo "lab-smoke: lab.html references missing $$ref"; exit 1; }; \
-	done; \
-	main=$$(echo "$$refs" | grep '\.js$$' | head -1); \
-	worker=$$(grep -o 'worker-[A-Za-z0-9._-]*\.js' "${ROOT_DIR}/$$main" | sort -u | head -1); \
-	test -n "$$worker" || { echo "lab-smoke: $$main references no worker chunk"; exit 1; }; \
-	test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
-	echo "lab-smoke: lab.html + $$(echo "$$refs" | wc -l | tr -d ' ') assets + $$worker OK"
+	for page in lab.html lego.html; do \
+		test -s ${ROOT_DIR}/$$page || { echo "lab-smoke: $$page missing"; exit 1; }; \
+		refs=$$(grep -o 'assets/[A-Za-z0-9._-]*' ${ROOT_DIR}/$$page | sort -u); \
+		test -n "$$refs" || { echo "lab-smoke: $$page references no assets/ files"; exit 1; }; \
+		for ref in $$refs; do \
+			test -s "${ROOT_DIR}/$$ref" || { echo "lab-smoke: $$page references missing $$ref"; exit 1; }; \
+		done; \
+		main=$$(echo "$$refs" | grep '\.js$$' | head -1); \
+		worker=$$(grep -o 'worker-[A-Za-z0-9._-]*\.js' "${ROOT_DIR}/$$main" | sort -u | head -1); \
+		test -n "$$worker" || { echo "lab-smoke: $$main references no worker chunk"; exit 1; }; \
+		test -s "${ROOT_DIR}/assets/$$worker" || { echo "lab-smoke: worker chunk assets/$$worker missing"; exit 1; }; \
+		echo "lab-smoke: $$page + $$(echo "$$refs" | wc -l | tr -d ' ') assets + $$worker OK"; \
+	done
 
 # Serve the gallery + vendored Orb Lab over HTTP. This is the way to *run*
 # the site locally: the Lab's module worker will not load over file://, so
@@ -128,17 +169,18 @@ lab-smoke:
 SITE_PORT ?= 8613
 site:
 	@set -euo pipefail; \
-	[ -f ${ROOT_DIR}/lab.html ] || $(MAKE) -C ${ROOT_DIR} lab; \
+	[ -f ${ROOT_DIR}/lab.html ] && [ -f ${ROOT_DIR}/lego.html ] || $(MAKE) -C ${ROOT_DIR} lab; \
 	[ -d ${ROOT_DIR}/build/images/web ] \
-		|| echo "note: build/images/web/ missing — gallery images need 'make cookie-cutters orbs web-images'"; \
+		|| echo "note: build/images/web/ missing — gallery images need 'make cookie-cutters orbs bricks web-images'"; \
 	( sleep 1; open "http://localhost:${SITE_PORT}/" ) & \
 	echo "gallery  http://localhost:${SITE_PORT}/"; \
 	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
+	echo "lego lab http://localhost:${SITE_PORT}/lego.html"; \
 	python3 -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
 
 # Map of every user-facing experience and the target that starts it.
 experiences:
-	@echo "make site                  gallery + Orb Lab, served at :${SITE_PORT} (this repo)"; \
+	@echo "make site                  gallery + Orb Lab + Lego Lab, served at :${SITE_PORT} (this repo)"; \
 	echo "make -C ${BIKAR_DIR} lab-dev     Orb Lab vite dev server w/ HMR at :4613 (bikar)"; \
 	echo "make -C ${BIKAR_DIR} dev         Studio in Docker at :5173 (bikar)"; \
 	echo "make -C ${BIKAR_DIR} local.dev   Studio vite dev server at :5173 (bikar, host)"; \
@@ -148,7 +190,8 @@ clean:
 	rm -rf ${ROOT_DIR}/build/images/*.png
 	rm -rf ${ROOT_DIR}/build/stls/*.stl
 	rm -rf ${ROOT_DIR}/build/orb-views
-	rm -rf ${ROOT_DIR}/lab.html ${ROOT_DIR}/assets
+	rm -rf ${ROOT_DIR}/build/.brick-names
+	rm -rf ${ROOT_DIR}/lab.html ${ROOT_DIR}/lego.html ${ROOT_DIR}/assets
 
 ${DEP}:
 	mkdir -f $$( dirname ${DEP} )
