@@ -867,6 +867,30 @@ Protocol: `LabResponse.family` gains `'brick'` in `packages/lab/src/protocol.ts`
 URL schema, debounce, stale-while-revalidate, worker watchdog, size guard, and the preset↔custom
 byte comparison carry over unchanged.
 
+Two things the wiring settled that this section had left to the reader.
+
+**The mesh gate runs against the brick's own floor.** A brick's thinnest feature is its anti-stud
+tube wall, and on the default fit that is 0.757 mm — a dimension the LEGO system fixes, not one the
+design chose. The shipped 1.2 mm FDM floor would therefore fail every dimensionally-correct brick,
+so the Lab passes `brick3d.featureFloorMm` (§7.4's 0.70 mm invariant) exactly as the CLI's `--check`
+does.
+
+**Validator:** a brick's mesh-gate verdict counts only if the floor it was judged against is the
+brick floor, and the panel shows both numbers.
+
+PASS: default `StarBrick` — `gate.minFeatureMm = 0.70` (the brick floor) with
+`gate.declaredMinFeatureMm = 0.757` (the tube wall), verdict PASS. Printable, and visibly exempt.
+
+FAIL: the same brick judged at `gate.minFeatureMm = 1.2` — verdict FAIL on a dimensionally-correct
+part. A panel showing the verdict without the floor reads that as a geometry bug, and the recourse
+it implies — widen the wall — breaks LEGO compatibility.
+
+**The fit set travels with the result, not just a measured/unmeasured flag.** §9's honesty condition
+is per value — *this* number came from a coupon, *that* one is still a default — so `LabBrick.fit`
+carries the whole `BrickFit` including its per-field provenance, and the panel answers each row with
+`fitProvenance(fit, field)`. `isWhollyUnmeasured(fit)` remains the banner. Carrying a boolean
+instead would have made the banner the only thing the UI could honestly say.
+
 ## 10. Phasing
 
 | Phase | Where | Contents |
@@ -875,7 +899,7 @@ byte comparison carry over unchanged.
 | **Q3** | bikar | Holed-pattern check against the union ring (§11 Q3). ✅ **Complete — M7 unblocked.** |
 | **LG-F1/F2/R1** | physical | Clutch coupons. **No longer block M6** — see the note below. |
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
-| **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; what remains is the Lab protocol wiring. |
+| **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
@@ -926,6 +950,25 @@ V7 and V8 cannot be written without them — a validator that cannot be run is n
 graduation rule was honoured throughout: every correction above has a test that fails before the
 fix and passes after, and the two triangulation fixes were each verified by neutering the fix and
 confirming the test goes red.
+
+**M7 — the Lab protocol wiring — 2026-07-31.** bikar `6342378` (`family: 'brick'`, `LabBrick`,
+`brickResponse`, and the `kernel3d/index.ts` brick surface). 3d-models: this revision. The anchor
+solver, `grid-gate.ts` and `sweepGridFit` had already shipped in M6's `98ad41e` for the reason above,
+so what landed here is the boundary: the response payload, the barrel, and the two facts §9 had left
+implicit.
+
+Deliberate deviations, both corrected in §9 above and both found by building the thing: the Lab must
+gate a brick at `brick3d.featureFloorMm` rather than the shipped 1.2 mm floor, or every
+dimensionally-correct brick reports FAIL — the test asserts the substituted floor, not just the
+verdict, so a regression to the generic floor goes red rather than silently passing on a thicker
+part; and `BrickProvenance` now carries the `BrickFit` the mesh was emitted against, because §9's
+per-value coupon-vs-default question cannot be answered from a boolean, and re-fetching the module
+default is the drift the provenance record exists to prevent.
+
+Beyond the spec: `kernel3d/index.ts` exported nothing from `brick.ts`, `brick-validate.ts`,
+`grid-gate.ts`, `lego.ts` or `solidify-slabs.ts`, so the Lab could only have reached the kernel
+through a deep path. The barrel now carries the whole brick surface — the lattice constants the
+overlay draws, both gate reports, the anchor solve, and `sweepGridFit` for P0's sweep strip.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
