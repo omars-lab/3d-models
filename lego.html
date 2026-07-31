@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lego Lab — printable LEGO-compatible bricks</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='6' width='12' height='7' fill='none' stroke='%23d6b254' stroke-width='1.6'/%3E%3Crect x='4' y='3.5' width='3' height='2.5' fill='none' stroke='%23d6b254' stroke-width='1.4'/%3E%3Crect x='9' y='3.5' width='3' height='2.5' fill='none' stroke='%23d6b254' stroke-width='1.4'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="Design a 3D-printable LEGO-compatible brick with sliders — both grid gates, the lattice solve, and a clutch fit whose every number says whether a coupon set it."
+    />
+    <script type="module" crossorigin src="./assets/lego-ByE-myie.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/dist-B5o45qPo.js">
+    <link rel="modulepreload" crossorigin href="./assets/style-DwXNMDMS.js">
+    <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-BxR_cmXS.js">
+    <link rel="modulepreload" crossorigin href="./assets/lego-scripts-ChDnc4Wk.js">
+    <link rel="stylesheet" crossorigin href="./assets/style-CVV-ZBlI.css">
+    <link rel="stylesheet" crossorigin href="./assets/lego-Cq0WrxUl.css">
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Lego Lab</h1>
+      <p class="tagline">
+        Dial in a LEGO-compatible brick — the gates below say what will hold, and the fit knobs say
+        what is still a guess.
+      </p>
+      <a class="gallery-link" href="./studio.html">&larr; Studio</a>
+      <a class="gallery-link" href="./index.html">&larr; Gallery</a>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>Brick</h2>
+          <div id="brick-chips" class="chips"></div>
+        </section>
+        <section>
+          <h2>Knobs</h2>
+          <div id="knob-panel"></div>
+        </section>
+        <section>
+          <h2>Clutch fit</h2>
+          <p class="fit-intro">
+            The numbers that decide whether it grips. Printer <em>and</em> spool &mdash; filament
+            and moisture move the clutch as much as the machine does.
+          </p>
+          <label class="spool-label" for="spool-name">Spool</label>
+          <input
+            id="spool-name"
+            type="text"
+            maxlength="80"
+            placeholder="e.g. Bambu A1 · Polymaker PLA Pro, dried"
+            aria-label="Printer and filament this fit set was measured on"
+          />
+          <div id="fit-banner" class="fit-banner"></div>
+          <div id="fit-panel"></div>
+          <button id="fit-reset" class="link-button">Reset to shipped defaults</button>
+        </section>
+        <section>
+          <h2>Print target</h2>
+          <select id="machine-select" aria-label="Print target machine"></select>
+          <div id="custom-dims" hidden>
+            <label>X <input id="dim-x" type="number" min="50" max="1000" /></label>
+            <label>Y <input id="dim-y" type="number" min="50" max="1000" /></label>
+            <label>Z <input id="dim-z" type="number" min="50" max="1000" /></label>
+            <span class="unit">mm</span>
+          </div>
+          <p id="target-note" class="target-note"></p>
+        </section>
+        <section class="actions">
+          <button id="stl-button" disabled>Download STL</button>
+          <button id="copy-link">Copy link</button>
+        </section>
+        <section>
+          <h2>Grid gates</h2>
+          <div id="grid-panel" class="gate-panel"></div>
+        </section>
+        <section>
+          <h2>Mesh gate</h2>
+          <div id="gate-panel" class="gate-panel"></div>
+        </section>
+        <div id="error-panel" class="error-panel" hidden></div>
+      </aside>
+      <div class="lab-stage">
+        <div id="view-tabs" class="view-tabs" role="tablist" aria-label="Preview view">
+          <button
+            class="view-tab active"
+            data-view="3d"
+            role="tab"
+            aria-selected="true"
+            title="Interactive preview — drag to rotate"
+          >
+            3D
+          </button>
+          <button
+            class="view-tab"
+            data-view="lattice"
+            role="tab"
+            aria-selected="false"
+            title="Top-down 8 mm lattice — the anchor solve, drawn"
+          >
+            Lattice
+          </button>
+          <button
+            class="view-tab"
+            data-view="sweep"
+            role="tab"
+            aria-selected="false"
+            title="Grid fit across one knob's whole range — click a peak to go there"
+          >
+            Sweep
+          </button>
+        </div>
+        <canvas
+          id="orb-canvas"
+          aria-label="3D brick preview — drag to rotate, scroll to zoom"
+        ></canvas>
+        <div id="lattice-view" class="lattice-view" hidden>
+          <canvas id="lattice-canvas" aria-label="Top-down 8 mm lattice with anchors and studs">
+          </canvas>
+          <ul class="lattice-legend">
+            <li><span class="swatch cell-on"></span> stud cell the body covers</li>
+            <li>
+              <span class="swatch cell-off"></span> cell it does not &mdash; no engagement here
+            </li>
+            <li>
+              <span class="swatch anchor-on"></span> anchor placed, drawn at its outer diameter
+            </li>
+            <li><span class="swatch anchor-off"></span> candidate with no anchor</li>
+          </ul>
+          <p id="lattice-note" class="lattice-note"></p>
+        </div>
+        <div id="sweep-view" class="sweep-view" hidden>
+          <div class="sweep-controls">
+            <label class="sweep-label" for="sweep-param">Sweep</label>
+            <select id="sweep-param" aria-label="Which knob to sweep"></select>
+            <button id="sweep-run">Run sweep</button>
+          </div>
+          <canvas
+            id="sweep-canvas"
+            aria-label="Grid fit plotted against the swept knob — click to set the knob"
+          ></canvas>
+          <ul class="lattice-legend">
+            <li><span class="swatch fit-curve"></span> grid fit, 0 to 1</li>
+            <li>
+              <span class="swatch anchor-on filled"></span> sweet spot &mdash; click to go there
+            </li>
+            <li>
+              <span class="swatch anchor-off"></span> fails anchorability &mdash; not a sweet spot
+            </li>
+            <li>
+              <span class="swatch no-fit"></span> no repeat lattice &mdash; unmeasurable, not zero
+            </li>
+          </ul>
+          <p id="sweep-note" class="lattice-note"></p>
+        </div>
+        <div id="spinner" class="spinner" hidden>
+          <span id="spinner-label">computing&hellip;</span>
+          <button id="stop-button" class="stop-button" hidden>Stop</button>
+        </div>
+      </div>
+    </main>
+    <div id="toast" class="toast" hidden></div>
+  </body>
+</html>

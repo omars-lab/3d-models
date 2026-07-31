@@ -251,7 +251,7 @@
     <div class="kicker">
       <span class="dash"></span>
       OpenSCAD · Parametric · 3D-Printable
-      <span class="spec">No. 02 — 27 designs</span>
+      <span class="spec">No. 02 — 32 designs</span>
     </div>
     <h1>
       Coded<br>Cookie Cutters
@@ -267,6 +267,7 @@
       <span><b>Layer</b> 0.20 mm</span>
       <span><b>Infill</b> 20–30%</span>
       <span><b>Supports</b> none</span>
+      <span><b>Studio</b> <a href="studio.html">every page, and who it is for</a></span>
       <span><b>Source</b> <a href="https://github.com/omars-lab/3d-models" target="_blank" rel="noopener">github.com/omars-lab/3d-models</a></span>
     </div>
   </header>
@@ -298,6 +299,29 @@
     </p>
 
     <div class="grid" id="grid-orbs"></div>
+
+    <div class="section-head" id="bricks">
+      <span class="no">§ 03</span>
+      <h2>The Bricks</h2>
+      <span class="rule"></span>
+      <span class="count" id="count-bricks"></span>
+    </div>
+    <p class="section-note">
+      The same <em>bikar</em> grammar, pointed at a studded brick instead of a
+      sphere — LEGO-compatible pieces with the geometry carved into the top
+      face. Two gates judge every one before it becomes an STL: whether the
+      mesh is printable, and whether the piece will actually <em>hold</em> —
+      enough anchors, enough studs engaged, no rotation about a lone tube.
+      Open one in the <a href="lego.html">Lego&nbsp;Lab</a> to dial the
+      geometry and the clutch.
+      <br>
+      A caution worth stating plainly: nobody has published caliper data on a
+      printed stud, so <b>every clutch dimension here is an unmeasured
+      default</b> — a starting point, not a measurement. The Lab says so on
+      each value, and printing a coupon is how you replace one with a number.
+    </p>
+
+    <div class="grid" id="grid-bricks"></div>
   </main>
 
   <footer>
@@ -317,7 +341,7 @@
   // src  : OpenSCAD source ; stl: printable mesh
   const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
   const GH  = "https://github.com/omars-lab/3d-models/blob/master";
-  const ASSET_VER = "20260727a";   // bump when renders change, to bust CDN/browser image cache
+  const ASSET_VER = "20260731a";   // bump when renders change, to bust CDN/browser image cache
 
   const MODELS = [
     { id:"Arabesque",        name:"Arabesque",        tag:"Geometry",
@@ -404,6 +428,46 @@
       lab:"lab.html?v=1&f=weave-dodeca" },
   ];
 
+  // Bricks come from the same engine; src/Lego/*.bkr are copies vendored in
+  // by `make bricks` so Source resolves here. Unlike the orbs, their preview
+  // PNG is a render of the mesh itself (OpenSCAD import) rather than of a
+  // symmetry-axis validation view — a brick has no view set.
+  //
+  // Every spec below is a *shipped default*, and the clutch numbers behind
+  // them have no coupon behind them yet. Sizes and stud counts are exact;
+  // "clutch" is not, and the section note says so rather than letting a
+  // confident spec chip imply otherwise.
+  const BRICKS = [
+    { id:"ClassicBrick", file:"Classic-Brick.bkr", name:"Classic 2×4", tag:"Brick",
+      desc:"LDraw part 3001 printed straight from the grammar — the reference brick, no art. The one to print first, because it is the piece a real brick has to click into.",
+      specs:["2 × 4 studs","9.6 mm tall","3 tube anchors"], alt:"brick",
+      lab:"lego.html?v=1&f=classic-brick" },
+    { id:"StarBrick", file:"Star-Brick.bkr", name:"Star Brick", tag:"Relief",
+      desc:"An {8/3} octagram cut as relief into a smooth 4×4 top — the cookie-cutter geometry, sunk into a piece that stacks.",
+      specs:["4 × 4 studs","smooth top","1 tube anchor"], alt:"brick",
+      lab:"lego.html?v=1&f=star-brick" },
+    { id:"EdgeStudTile", file:"Edge-Stud-Tile.bkr", name:"Edge-Stud Tile", tag:"Relief",
+      desc:"A 6×6 plate that keeps its studs only around the rim, leaving a clear field for the rosette engraved in the middle.",
+      specs:["6 × 6 studs","perimeter ring","17 tube anchors"], alt:"brick",
+      lab:"lego.html?v=1&f=edge-stud-tile" },
+    { id:"GridFieldTile", file:"Grid-Field-Tile.bkr", name:"Grid Field Tile", tag:"Lattice",
+      desc:"A tiled diamond field on a studless 5×5. Its purpose is to be dragged: widen the pitch in the Lab and watch the grid gate score the fit, then fail it.",
+      specs:["5 × 5 studs","studless top","grid fit 1.00"], alt:"brick",
+      lab:"lego.html?v=1&f=grid-field-tile" },
+    { id:"PinRail", file:"Pin-Rail.bkr", name:"Pin Rail 1×8", tag:"Brick",
+      desc:"The 1×n footprint class — too narrow for tubes, so the underside carries pins instead. A different anchor, decided by the geometry rather than by a setting.",
+      specs:["1 × 8 studs","7 pin anchors","9.6 mm tall"], alt:"brick",
+      lab:"lego.html?v=1&f=pin-rail" },
+    { id:"HexFieldTile", file:"Hex-Field-Tile.bkr", name:"Hex Field Tile", tag:"Lattice",
+      desc:"The Grid Field Tile with one word changed — a hexagonal lattice instead of a square one. It scores 0.48 and no knob on the page fixes that, because half the lattice lands a half stud off. Still a correct, printable, clutching piece: a low score costs seamless extension, not function.",
+      specs:["6 × 6 studs","studless top","grid fit 0.48"], alt:"brick",
+      lab:"lego.html?v=1&f=hex-field-tile" },
+    { id:"RationalRepeatTile", file:"Rational-Repeat-Tile.bkr", name:"Rational Repeat Tile", tag:"Lattice",
+      desc:"Not square, and perfect anyway. The lattice steps 1 : 1.5, which lands whole on the stud grid every third column — proof that registering is about a rational ratio, not about being square.",
+      specs:["8 × 8 studs","3 × 2 stud repeat","grid fit 1.00"], alt:"brick",
+      lab:"lego.html?v=1&f=rational-repeat-tile" },
+  ];
+
   const icons = {
     code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
     dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 21h14"/></svg>',
@@ -454,6 +518,14 @@
     plate(m, i, ORBS.length,
           `${GH}/src/Orbs/${m.file}`,
           'orb — bikar render, front hemisphere along its symmetry axis')));
+
+  const gridBricks = document.getElementById('grid-bricks');
+  document.getElementById('count-bricks').textContent =
+    String(BRICKS.length).padStart(2,'0') + ' plates';
+  BRICKS.forEach((m, i) => gridBricks.appendChild(
+    plate(m, i, BRICKS.length,
+          `${GH}/src/Lego/${m.file}`,
+          'brick — OpenSCAD render of the bikar mesh')));
 </script>
 </body>
 </html>
