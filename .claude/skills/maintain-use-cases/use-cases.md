@@ -2,7 +2,7 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: 11aea86378e7431f9a666e860dfdaf3a9438a704
+  3d-models: e105ca9170f70ba9ab387036416c3caa15b441a3
   bikar: 2dce1f1a796097f8916ee689fa0f93ce462ddb06
   qiyas: bae41f0527e81cca6de8269c75a73727cca1cb4a
 repos:
@@ -38,6 +38,8 @@ flowchart LR
   visitor --> UC3[UC3: Browse the catalog]
   visitor --> UC4[UC4: Download a print-ready STL]
   labuser --> UC5[UC5: Configure an orb in the Lab]
+  labuser --> UC15[UC15: Tune a LEGO-compatible brick in the Lego Lab]
+  printop --> UC15
   studiouser --> UC6[UC6: Author in the studio with Dials]
   printop --> UC4
   printop --> UC8[UC8: Plan and log physical prototypes]
@@ -67,3 +69,13 @@ flowchart LR
 | UC12 | Lay out tile walls (W1: grid + quartering layout, crop clip/drop, composed wall render, layout report) | Designer, Print operator | `bikar:packages/core/src/kernel/wall-layout.ts:L124` (grid layout kernel) · `bikar:packages/core/src/dsl/evaluator.ts:L1069` (wall eval) · `bikar:patterns/Walls/Nail-Wall.bkr:L1` (deliverable) · `bikar:docs/language-reference.md:L501` (tile/wall grammar) · `3d-models:docs/tile-wall-design.md:L1` (design doc) |
 | UC13 | Characterize a printer and earn the constants that depend on it (machine card, provenance-carrying values, shrink-only gate) | Print operator, Designer | `bikar:packages/core/src/kernel3d/calibration.ts:L82` (`Calibrated<T>` provenance wrapper) · `bikar:scripts/check-calibration.ts:L1` (append-blocked gate) · `bikar:patterns/Coupons/Machine-Card.bkr:L1` (the six coupons) · `3d-models:.claude/skills/calibrate/SKILL.md:L1` (harvest → measure → propagate) · `3d-models:docs/calibration-design.md:L1` (design doc) |
 | UC14 | Author a design doc whose grounding is checked: dead relative links, validators without a PASS/FAIL example, and defaults without provenance are blocked at commit | Designer | `3d-models:.claude/gates/docs_gate.py:L1` (the three rules + self-test) · `3d-models:.githooks/pre-commit.d/30-docs-gate:L1` (hook wiring) · `3d-models:Makefile:L53` (`validate-docs` target) · `3d-models:docs/grounding-defect-taxonomy.md:L63` (the K1–K12 kinds each rule derives from) · `3d-models:CLAUDE.md:L1` (the four session-loaded rules) |
+| UC15 | Tune a LEGO-compatible brick in the Lego Lab: clutch-fit knobs each tagged with its provenance, both gates, the lattice overlay, and a downloadable STL | Lab visitor, Print operator | `3d-models:Makefile:L102` (brick STL + preview pipeline) · `3d-models:Makefile:L130` (both Lab pages, one recipe) · `3d-models:index.html:L302` (gallery §03) · `3d-models:index.html:L439` (`BRICKS` data array) · `3d-models:docs/lego-lab-design.md:L1` (design doc) |
+
+UC15 carries no `bikar` pointer, and the omission is deliberate rather than an
+oversight: the page itself is `packages/lab/lego.html` and `lego-main.ts`, which
+merged to bikar's `main` as `61c371f`, but a pointer is only valid at its repo's
+`as_of` — and this checkout's `../bikar` still predates that merge, so pinning
+one would fail the moment `--refresh` ran. The pins belong here the next time
+that checkout catches up. Pinning a line the pinned commit does not contain is
+the one thing this map exists to prevent, so it is left unpinned and said out
+loud instead.
