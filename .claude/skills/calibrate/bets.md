@@ -12,21 +12,22 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**10 registered bets · 11 `Calibrated` records — 11 provisional, 0 measured · 3 bets with no record in bikar.**
+**11 registered bets · 14 `Calibrated` records — 14 provisional, 0 measured · 3 bets with no record in bikar.**
 
 ## Bets
 
 | Bet | Quantity | Coupon | Status | Calibrated records |
 |-----|----------|--------|--------|--------------------|
-| `CAL-FIT-01` | `FIT_GAP_MM` press/snug/sliding/free gap ladder | `MC-1` | provisional | `FIT_GAP_MM_CAL`, `FIT_TOL_MM_CAL` |
+| `CAL-FIT-01` | `FIT_GAP_MM` press/snug/sliding/free gap ladder | `MC-1` | provisional | `CLIP_CLEARANCE_MM_CAL`, `FIT_GAP_MM_CAL`, `FIT_TOL_MM_CAL` |
 | `CAL-HOL-01` | `PrinterProfile.holeCompMm` per material | `MC-1` | provisional | `PRINTER_PROFILES_CAL` |
 | `CAL-FEA-01` | `DEFAULT_MIN_FEATURE_MM` printable-feature floor | `MC-2` | provisional | `DEFAULT_MIN_FEATURE_MM_CAL`, `KEYHOLE_FRONT_FLOOR_MM_CAL`, `PERIMETER_WIDTH_MM_CAL` |
 | `CAL-BRG-01` | unsupported bridge span ceiling | `MC-3` | open — no record in bikar | — |
 | `CAL-OVH-01` | overhang angle threshold (print-gate F5) | `MC-4` | open — no record in bikar | — |
-| `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `PROFILE_WARP_MM_CAL` |
+| `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `CLIP_CAPTURE_FLOOR_MM_CAL`, `PROFILE_WARP_MM_CAL` |
 | `CAL-BED-01` | `MIN_BED_CONTACT_MM2` and `MIN_BED_CONTACT_RATIO` | `MC-6` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
 | `CAL-RIB-01` | Lego clutch rib interference `ribMm` | `LG-F1` | provisional | `RIB_MM_CAL` |
 | `CAL-DET-01` | W2 detent band depth | `W-C1` | provisional | `CLIP_DETENT_MM_CAL` |
+| `CAL-CLP-01` | W2 clip Z stack: anti-rattle preload and sub-flush setback | `W-C1` | provisional | `CLIP_Z_BIAS_MM_CAL` |
 | `CAL-STR-01` | Z-layer strength ratio | none — measuring it needs a load rig, which does not exist; registered so the gap is visible | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
@@ -52,6 +53,23 @@ named next print rather than an absence:
 - `CAL-STR-01` — Z-layer strength ratio · coupon none — measuring it needs a load rig, which does not exist; registered so the gap is visible
 
 ## Records
+
+### `CLIP_CLEARANCE_MM_CAL` — `CAL-FIT-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/corner-clip.ts`
+- **Value:**
+
+  ```json
+  {
+    "insert": 0.2,
+    "boot": 0.3,
+    "riser": 0.2,
+    "detent": 0.15
+  }
+  ```
+
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** Hand-picked points in the 0.1-0.2 mm radial clearance band the W2 survey reports for printed twist-lock seats (design doc §5) — a reading of other people's parts on other machines, with `boot` set wider still because that face sweeps past the well circle under rotation rather than dropping straight through. Nothing here has been printed and nothing has been twisted, so what the numbers claim — that this machine holds a 0.2 mm channel without binding or slop — is untested. Shares CAL-FIT-01 rather than opening its own bet because MC-1 (bore & fit plate) measures exactly this: the clearance a mating pair of printed features needs on this printer. `FIT_TOL_MM_CAL` shares the bet for the same reason.
 
 ### `FIT_GAP_MM_CAL` — `CAL-FIT-01`
 
@@ -126,6 +144,13 @@ named next print rather than an absence:
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The nozzle diameter standing in for the extrusion width, which is the slicer's number and not the nozzle's: real perimeters run wider or narrower than nominal with flow and line-width settings. Shares CAL-FEA-01 with `DEFAULT_MIN_FEATURE_MM` because they are one measurement seen twice — that floor IS three of these, so a measured perimeter width settles both or neither, and letting them drift apart would be the drift the bet exists to prevent. Coupon MC-2 (tube wall ladder) settles it: the walls it prints are counted in perimeters, so the ladder reads this width directly.
 
+### `CLIP_CAPTURE_FLOOR_MM_CAL` — `CAL-WRP-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/corner-clip.ts`
+- **Value:** `1`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** A round millimetre standing in for `2 × measured warp` until warp is measured (design doc §5 and §11 Q3) — chosen as a plausible floor, not derived from a printed plate. Registering it surfaced a coupon disagreement: the W2 doc named W-C1 as the coupon that measures warp, while CAL-WRP-01 is settled by MC-5 (warp plate). MC-5 wins — warp is a property of (printer, material, nozzle, profile), not of a clip, and a 40 mm dummy tile's footprint barely warps. The doc was corrected rather than the bet re-pointed (w2-connector-design.md §9 and §11 Q3); W-C1 now checks this floor against MC-5's number instead of deriving one.
+
 ### `PROFILE_WARP_MM_CAL` — `CAL-WRP-01`
 
 - **Module:** `bikar/packages/core/src/kernel3d/fit-profile.ts`
@@ -160,4 +185,19 @@ named next print rather than an absence:
 - **Value:** `0.4`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The middle of the 0.3-0.5 mm band the W2 survey reports for printed snap detents — a reading of other people's parts, not of ours. What the number actually claims is that this machine will hold a 0.4 mm bump crisply enough to be felt and shallowly enough to release, and no bump has been felt: nothing here has been printed. Coupon W-C1 (detent band sweep) settles it.
+
+### `CLIP_Z_BIAS_MM_CAL` — `CAL-CLP-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/corner-clip.ts`
+- **Value:**
+
+  ```json
+  {
+    "antiRattle": 0.1,
+    "backFlush": 0.1
+  }
+  ```
+
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** Both are 0.1 mm because 0.1 mm is a round number one layer high at a 0.4 mm nozzle, not because either was measured: the design doc calls the seated state "near stress-free with only a small residual bias" (§5) and never says how small, and no clip has been seated. `antiRattle` too small rattles and too large cracks the tile or bows it out of plane; `backFlush` too small leaves the clip proud of the wall, which is the one thing the sub-flush rule exists to prevent. Coupon W-C1 settles both by seating a printed clip in a printed wall.
 
