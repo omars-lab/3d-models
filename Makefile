@@ -34,7 +34,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs
+.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-hooks
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -62,6 +62,14 @@ validate-use-cases:
 validate-docs:
 	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
 	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py
+
+# `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
+# clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks
+# and not .claude. This builds that shape and asserts each hook skips instead of
+# dying; it is the regression test for a deploy that failed on the gh-pages
+# commit with `[Errno 2] No such file or directory`.
+validate-hooks:
+	${ROOT_DIR}/.githooks/tests/worktree-without-claude.sh
 
 %.png: %.scad
 	@echo Generating $*.png from $@

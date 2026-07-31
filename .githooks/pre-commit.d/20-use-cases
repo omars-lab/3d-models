@@ -8,4 +8,16 @@ if ! command -v python3 >/dev/null 2>&1; then
   exit 1
 fi
 python3 -c "import yaml" 2>/dev/null || { echo "pre-commit: PyYAML required for use-case validation: pip install pyyaml" >&2; exit 1; }
-exec python3 "$(git rev-parse --show-toplevel)/.claude/skills/maintain-use-cases/validate.py" --staged
+
+# `core.hooksPath` is repo-wide, so this runs in every worktree — including the
+# `gh-pages` one `make deploy` creates, a deliberately diverged branch that
+# carries `.githooks` but not `.claude`. There is no map there to guard and no
+# pointer file to break, so skip rather than fail the deploy. Announced, not
+# silent: if this ever prints in the master worktree, the guard is off and the
+# reason is that the validator went missing.
+VALIDATE="$(git rev-parse --show-toplevel)/.claude/skills/maintain-use-cases/validate.py"
+if [ ! -f "$VALIDATE" ]; then
+  echo "pre-commit: no use-case map in this worktree ($VALIDATE) — skipping the guard" >&2
+  exit 0
+fi
+exec python3 "$VALIDATE" --staged

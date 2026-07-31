@@ -9,4 +9,11 @@ if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for the design-doc gate" >&2
   exit 1
 fi
-exec python3 "$(git rev-parse --show-toplevel)/.claude/gates/docs_gate.py" --staged
+# Same worktree caveat as 20-use-cases: `gh-pages` carries `.githooks` and not
+# `.claude`, and its commits are built site output with no design doc in them.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/docs_gate.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no docs gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE" --staged
