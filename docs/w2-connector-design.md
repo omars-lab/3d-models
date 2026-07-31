@@ -199,9 +199,14 @@ fillets **≥ 0.5× arm thickness**; detent **0.3–0.5 mm** proud, rounded, mat
 slightly larger pocket; ~5° entry clearance on blade faces; 0.1–0.2 mm radial
 clearance in the seat; ~1 mm fillets at blade roots; seated state near **stress-free**
 with only a small residual bias for anti-rattle (the printed substitute for a metal
-bayonet's preload spring). Working strain budgeted at **≤ ~2%** effective for PETG.
-Capture depth = `max(1.0 mm, 2 × measured warp)` from the profile's `warpMm` — the
-1.0 mm fallback holds until the coupon measures real warp.
+bayonet's preload spring). That bias, and the matching setback that keeps the arm
+plate sub-flush, are the one pair of numbers here with no survey behind them at all:
+they ship as `CLIP_Z_BIAS_MM_CAL` under **`CAL-CLP-01`**, settled by W-C1, and the
+absence of a source is why the bet exists rather than a footnote. Working strain
+budgeted at **≤ ~2%** effective for PETG.
+Capture depth = `max(1.0 mm, 2 × measured warp)` from the profile's `warpMm`
+(`CLIP_CAPTURE_FLOOR_MM_CAL`, **`CAL-WRP-01`**) — the 1.0 mm fallback holds until
+MC-5 measures real warp (§11 Q3).
 
 `material pla` is a compile **error** (aged PLA fractures on the engage flex and
 relaxes preload — the parent doc's §5/B.3 embrittlement rule), not a warning. The
@@ -333,8 +338,10 @@ compiles them):
 - **`Clip-Coupon.bkr`** — two 40 mm dummy tiles (`CouponTileRebate` with
   `clipseat corners rebate 0.6`, `CouponTileProud` with `clipseat corners proud`)
   plus one `CouponClip`. Print four of each dummy → two real four-corner joints in
-  both jaw variants. Catalog entry **W-C1**; its questions: (1) measured warp →
-  `profile.warpMm` and the capture default; (2) **§10 Q1** — rebate vs proud in
+  both jaw variants. Catalog entry **W-C1**; its questions: (1) whether the
+  capture default holds at the warp **MC-5** measured (`CAL-WRP-01`) — W-C1
+  checks the clip against that number, it does not measure warp itself (§11 Q3);
+  (2) **§10 Q1** — rebate vs proud in
   raking light, the decided-empirical verdict that sets the grammar default;
   (3) detent past-center feel and engage force; (4) PETG jaw survival over repeated
   engagement; (5) front-face lippage across the joint vs back registration.
@@ -393,7 +400,14 @@ the coupons split into one file per part.
   that range our PETG + this seat geometry lands (click vs shear vs mush) is W-C1
   question 3. Every detent dimension is a `param`.
 - **Q3 — measured warp.** The 1.0 mm capture fallback stands in for
-  `2 × measured warp` until W-C1 measures the real number on this printer.
+  `2 × measured warp` until the real number is measured on this printer. That
+  measurement is **`CAL-WRP-01`, settled by machine-card coupon MC-5** (warp
+  plate) — not by W-C1, as this line previously said. Warp is a property of
+  *(printer, material, nozzle, profile)*, not of a clip: MC-5 measures it once
+  on a large thin plate, and W-C1 consumes the number rather than re-deriving
+  it from a 40 mm dummy tile whose footprint barely warps. The constant lives in
+  `bikar/packages/core/src/kernel3d/corner-clip.ts` as `CLIP_CAPTURE_FLOOR_MM_CAL`
+  and carries that bet in code.
 - **Q4 — keyhole cavity roof quality.** The ~⌀10.5 flat-roof bridge is at the edge of
   *our conservative 10 mm rule* — not the edge of printability (Appendix B.3);
   verified by inspection on the first Clip-Wall print.
