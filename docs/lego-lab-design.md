@@ -8,12 +8,13 @@ and the design changed: the clutch is now a discrete rib rather than a nominal s
 rather than a fact about LEGO (§3.2). Remaining contested bets, each with its strongest refuting
 source, are in Appendix B.**
 
-Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31), and P1 has shipped its
+Built: **R0, M6, M7, P0 and P1 have shipped** (2026-07-29 → 2026-07-31). P1 shipped its
 **sweep strip**, its design-notes page, its studio index, **multi-piece export** (§10, D-006) — a
 brick mints stud/anti-stud ports from its own lattice and a two-brick assembly exports as two
-printable parts — and §5.3's **compatibility matrix, now filled by a real sweep**
-([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)). Only P1's
-curated scripts, and P2–P3, have not. Building it produced the finding that a printed brick on a
+printable parts — §5.3's **compatibility matrix, now filled by a real sweep**
+([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)), and the two
+**curated scripts** that make that matrix clickable rather than only readable. Only P2–P3 have
+not. Building it produced the finding that a printed brick on a
 printed brick has **no clutch at all** on the shipped defaults, and the coupon (`LG-S1`) that would
 settle where the real ceiling sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
@@ -581,6 +582,9 @@ Three things in that table are worth reading twice.
 2–20 mm*, not over every scale. The unbounded claim — that a cot 36° lattice
 never registers — rests on that ratio being irrational, which is an argument and
 not this measurement; the sweep is consistent with it and does not establish it.
+That row is also the one row **no `.bkr` can produce**: the `tile` grammar
+admits a rectangular and a half-staggered basis and nothing else, so the sweep
+reaches a 72° rhombus by constructing the basis directly. See §11 Q8.
 
 **"At the right scale" is plural.** `square` scores 1.0 at every divisor of the
 pitch in range: 2, 4, 8 and 16 mm. The sweet spots are periodic, so a sweep
@@ -956,7 +960,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)). Only the curated scripts remain open. |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
@@ -1188,6 +1192,37 @@ The graduation artifact is `lattice-matrix.test.ts` (7 cases), which pins every 
 publishes and **imports the script rather than re-deriving the bases** — a test that rebuilt them
 would pass while the table and the kernel disagreed, which is the drift it exists to catch.
 
+**P1 (complete) — the curated scripts — 2026-07-31.** bikar `954b5c8` (PR #38:
+`patterns/Lego/Hex-Field-Tile.bkr`, `patterns/Lego/Rational-Repeat-Tile.bkr`, two cases in
+`packages/lab/tests/lego-presets.test.ts`). 3d-models: this entry, the §10 P1 row, and two gallery
+cards in `index.html` §03. **This closes P1.**
+
+The matrix above is a table of numbers no visitor can reach. P0's five presets could show a fit of
+1.00 and a fit of `n/a`; they could not show the middle, where a piece **scores badly and is still
+correct** — which is the whole reason V8 is a warning and not an error. The two new presets are
+each one matrix row made clickable.
+
+`Hex-Field-Tile` is `Grid-Field-Tile` with `mode hex` substituted and *nothing else changed*, so
+the pair isolates the lattice as the only variable. It lands on the sweep's fixed-scale hexagonal
+probe: **fit 0.48**, 15 tube anchors, anchor gate PASS. `Rational-Repeat-Tile` answers the
+conclusion that pair invites — that registering means being square — with **fit 1.00 on a 3 : 2
+lattice** and a repeat unit of 3 × 2 studs.
+
+Two findings from building them, both deliberately left where they are. The hexagonal preset first
+scored **0 of 16** tube anchors, and the cause was field size against footprint margin, not the
+lattice: `repeat_x/y 4` in a 5 × 5 covered every crossing, and `3` in a 6 × 6 passes. The
+motif-radius sweep that looked like the obvious knob changed nothing. Separately, with a **hexagon**
+motif it emitted 5–6 degenerate triangles and with the **diamond** it ships with, zero — the three
+existing tiled presets all baseline at `degenerate=0`, so this was introduced. Isolating it,
+`voids detect` off still fails, `mode rectangular` still fails, a tiled sweep over n=3..12 fails
+only at n=6, and a *single-polygon* repro fails at n=4 and passes at n=6, the opposite. That makes
+it position-dependent sliver behaviour in the solidifier rather than a rule about hexagons, and it
+is carried to §11 as an open question instead of being half-diagnosed here.
+
+The graduation artifact is the two preset cases, which pin each preset to the row it illustrates —
+including `repeatUnitStuds` as **null rather than absent**, because withholding an answer is not
+the same as scoring zero and the field has to say which it is.
+
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
 
@@ -1240,6 +1275,25 @@ deviations from this spec, and additions beyond it.)*
   Lab panel must say so in words rather than implying it with a green tick. Whether a compliance
   proxy (rib deflection × count, or an FEA-lite bending estimate) is worth adding is open; LG-F1 and
   LG-D1 supply the data that would calibrate one.
+- **Q7 — position-dependent degenerate triangles from relief pockets.** Building `Hex-Field-Tile`
+  (§10, P1) turned up a mesh-gate failure — 5–6 zero-area triangles — that depends on *where* a
+  motif sits, not on what it is. A hexagonal motif (n=6) tiled into the field fails; the diamond
+  (n=4) the preset ships with passes; `Grid-Field-Tile`, `Edge-Stud-Tile` and `Star-Brick` all
+  baseline at `degenerate=0`, so it is introduced rather than latent. The narrowing that matters is
+  the one that *rules out* the obvious explanation: disabling `voids detect` still fails, switching
+  to `mode rectangular` still fails, a tiled sweep over n=3,4,5,6,7,8,12 fails **only** at n=6 —
+  and a single-polygon repro fails at n=4 and passes at n=6, the exact opposite. So "hexagons are
+  broken" is false, and the real shape is slivers produced when a pocket boundary lands near
+  another edge. Needs a minimal repro driven from the solidifier rather than from a preset.
+- **Q8 — §5.3's rhombic row is not expressible in the `tile` grammar.** `env.repeatVectors` is
+  assigned in exactly one place, `packages/core/src/dsl/evaluator.ts`, and it admits exactly two
+  basis shapes: `[(dx,0), (0,dy)]` for `mode rectangular` and `[(dx,0), (dx/2,dy)]` for `mode hex`.
+  A 72° rhombic basis is neither. The measured matrix therefore reports a lattice **`gridFit` can
+  score but no `.bkr` can produce** — the sweep reaches it by constructing the basis directly. That
+  is not wrong, but it is a gap between a table and the machinery the same document ships, which is
+  what K7 is about, so it is written down here rather than left for a reader to discover. Two ways
+  out: widen the grammar with a general two-vector basis, or mark the row in §5.3 as
+  kernel-reachable-only. Not yet decided.
 
 ---
 
