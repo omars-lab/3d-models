@@ -1284,16 +1284,39 @@ deviations from this spec, and additions beyond it.)*
   Lab panel must say so in words rather than implying it with a green tick. Whether a compliance
   proxy (rib deflection × count, or an FEA-lite bending estimate) is worth adding is open; LG-F1 and
   LG-D1 supply the data that would calibrate one.
-- **Q7 — position-dependent degenerate triangles from relief pockets.** Building `Hex-Field-Tile`
-  (§10, P1) turned up a mesh-gate failure — 5–6 zero-area triangles — that depends on *where* a
-  motif sits, not on what it is. A hexagonal motif (n=6) tiled into the field fails; the diamond
-  (n=4) the preset ships with passes; `Grid-Field-Tile`, `Edge-Stud-Tile` and `Star-Brick` all
-  baseline at `degenerate=0`, so it is introduced rather than latent. The narrowing that matters is
-  the one that *rules out* the obvious explanation: disabling `voids detect` still fails, switching
-  to `mode rectangular` still fails, a tiled sweep over n=3,4,5,6,7,8,12 fails **only** at n=6 —
-  and a single-polygon repro fails at n=4 and passes at n=6, the exact opposite. So "hexagons are
-  broken" is false, and the real shape is slivers produced when a pocket boundary lands near
-  another edge. Needs a minimal repro driven from the solidifier rather than from a preset.
+- **Q7 — position-dependent degenerate triangles from relief pockets. RESOLVED** (bikar
+  [PR #42](https://github.com/NaqshCoffee/bikar/pull/42)). Building `Hex-Field-Tile` (§10, P1)
+  turned up a mesh-gate failure — 5–6 zero-area triangles — that depended on *where* a motif sat,
+  not on what it was. A hexagonal motif (n=6) tiled into the field failed; the diamond (n=4) the
+  preset ships with passed; `Grid-Field-Tile`, `Edge-Stud-Tile` and `Star-Brick` all baselined at
+  `degenerate=0`. The narrowing that mattered was the one that *ruled out* the obvious explanation:
+  disabling `voids detect` still failed, switching to `mode rectangular` still failed, a tiled
+  sweep over n=3,4,5,6,7,8,12 failed **only** at n=6 — and a single-polygon repro failed at n=4 and
+  passed at n=6, the exact opposite. "Hexagons are broken" was false, and the position-dependence
+  was the tell.
+
+  The cause was **two tolerances for one thing**: the mesh gate rejects a triangle under
+  `DEGENERATE_AREA_MM2 = 1e-6` mm², while `absorbSlivers` — the cap repair that exists to remove
+  exactly those — tested `area === 0`. Everything in between was invisible to the repair and fatal
+  to the gate. The mechanism needs only two holes whose centres share a row: earcut bridges holes
+  along horizontal rays, so the bridge runs down that row and ears an exactly-zero sliver *on the
+  section boundary*, where `absorbSlivers` has no neighbour to split and returns `null`;
+  `triangulateInFrame` then retries at 0.37 rad, where the same sliver measures `1.4e-14` rather
+  than `0`, the triangulation is sound, and it is accepted with the sliver in it. Motif alignment
+  is what puts hole centres on a shared row — that is the whole of the position-dependence, and the
+  shape never mattered.
+
+  The fix exports `DEGENERATE_AREA_MM2` from `mesh-gate.ts` and has `solidify-piece.ts` consume it
+  as `SLIVER_AREA2_MM2 = 2 * DEGENERATE_AREA_MM2` (doubled because `signedArea2Of` returns twice
+  the area), so the gate and its repair are one number rather than two that happen to agree. Note
+  what defeats the weaker version of that argument: the frame retry *changes the measured area*, so
+  a repair calibrated to today's exact zeros is broken by the very machinery that fixes soundness.
+
+  The regression test drives `solidifySlabStack` directly with two hexagonal holes at
+  `dy ∈ {0, 3e-15, 1e-9}` — `3e-15` mm being the y-noise the brick partition actually produced
+  between two pocket rings the geometry says are on one row. It reports 2 flat triangles before the
+  change and none after; the n=6 preset goes from `degenerate=6 — FAIL` to `watertight=true euler=2
+  degenerate=0 — PASS`.
 - **Q8 — §5.3's rhombic row is not expressible in the `tile` grammar.** `env.repeatVectors` is
   assigned in exactly one place, `packages/core/src/dsl/evaluator.ts`, and it admits exactly two
   basis shapes: `[(dx,0), (0,dy)]` for `mode rectangular` and `[(dx,0), (dx/2,dy)]` for `mode hex`.
