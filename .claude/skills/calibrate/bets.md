@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**11 registered bets · 14 `Calibrated` records — 14 provisional, 0 measured · 3 bets with no record in bikar.**
+**12 registered bets · 15 `Calibrated` records — 15 provisional, 0 measured · 3 bets with no record in bikar.**
 
 ## Bets
 
@@ -26,6 +26,7 @@ is opened, clustered, and closed.
 | `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `CLIP_CAPTURE_FLOOR_MM_CAL`, `PROFILE_WARP_MM_CAL` |
 | `CAL-BED-01` | `MIN_BED_CONTACT_MM2` and `MIN_BED_CONTACT_RATIO` | `MC-6` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
 | `CAL-RIB-01` | Lego clutch rib interference `ribMm` | `LG-F1` | provisional | `RIB_MM_CAL` |
+| `CAL-STK-01` | printed-onto-printed stud entry: max total radial interference | `LG-S1` | provisional | `STUD_ENTRY_MAX_MM_CAL` |
 | `CAL-DET-01` | W2 detent band depth | `W-C1` | provisional | `CLIP_DETENT_MM_CAL` |
 | `CAL-CLP-01` | W2 clip Z stack: anti-rattle preload and sub-flush setback | `W-C1` | provisional | `CLIP_Z_BIAS_MM_CAL` |
 | `CAL-STR-01` | Z-layer strength ratio | none — measuring it needs a load rig, which does not exist; registered so the gap is visible | open — no record in bikar | — |
@@ -178,6 +179,13 @@ named next print rather than an absence:
 - **Value:** `0.1`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** MachineBlocks' shipped default and W2's detent precedent — no published caliper, force or cycle-count data on a printed stud exists; LG-F1 sweeps 0/0.05/0.10/0.15/0.20
+
+### `STUD_ENTRY_MAX_MM_CAL` — `CAL-STK-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/lego.ts`
+- **Value:** `0.15`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** the shipped ribMm default (0.10), which the design intends and must not refuse, plus one 2σ of measured FDM part-to-part repeatability (0.05) — no published printed-stud entry-force or assembly-failure data exists; LG-S1 settles it
 
 ### `CLIP_DETENT_MM_CAL` — `CAL-DET-01`
 

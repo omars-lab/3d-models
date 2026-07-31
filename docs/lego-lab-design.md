@@ -9,8 +9,12 @@ rather than a fact about LEGO (§3.2). Remaining contested bets, each with its s
 source, are in Appendix B.**
 
 Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31), and P1 has shipped its
-design-notes page and studio index and *decided* multi-piece export (§10, D-006) without building
-it; the rest of P1, and P2–P3, have not. The Lego Lab
+design-notes page, its studio index, and **multi-piece export** (§10, D-006) — a brick mints
+stud/anti-stud ports from its own lattice and a two-brick assembly exports as two printable parts.
+The rest of P1 — the compatibility matrix, the sweep strip, the curated scripts — and P2–P3 have
+not. Building it produced the finding that a printed brick on a printed brick has **no clutch at
+all** on the shipped defaults, and the coupon (`LG-S1`) that would settle where the real ceiling
+sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
 section proved its spec wrong, the section above is corrected in place and the deviation is listed
 in §10's implementation status — so this document describes what exists, and §10 records what it
@@ -919,7 +923,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **decided** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) with V11 shipped, implementation open; the rest is open. |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the matrix, the sweep strip and the curated scripts remain open. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
@@ -1073,6 +1077,51 @@ drawing is the part. The practice is now a skill, and its parity rule — a note
 equals its `Compiled from` count — is enforced by `tests/design-notes.test.ts` rather than
 remembered.
 
+**P1 (part) — studs-as-ports built — 2026-07-31.** bikar `c60faf2` (PR #36). 3d-models: this
+revision, plus the `LG-S1` coupon in
+[`prototype/catalog.md`](../.claude/skills/prototype/catalog.md).
+
+D-006 is now geometry that renders. A `brick` mints its own ports from the lattice it already
+built — `stud_c<col>r<row>` on the top face, `anti_c<col>r<row>` on the bed — and
+`patterns/Assemblies/Brick-Stack.bkr` decomposes into two piece-local STLs at 3764 triangles each,
+both mesh-gate PASS. Three of the four costs the decision accepted turned out not to be costs: the
+pose solver and `export parts` were already generic over the piece registry, so the only real work
+was the minting. The naming scheme is the one cost that was real, and it is a **lattice coordinate,
+not an ordinal** — under `stud0…stud7` a 2×4 widened to a 2×6 renumbers every stud past the first
+row and an assembly written against the narrow brick silently re-points; under `stud_c1r3` it does
+not.
+
+Two things beyond the spec. The receptacle is **measured, not assumed**: `clearRadiusMm` is the
+minimum over the placed anchors and the shell wall, so a corner cell reports tighter than an
+interior one and a brick the solver gave no anchors (a 1×1) mints no anti-stud ports at all — there
+is nothing bounding the cell to offer. And the evaluator grew a **warning channel**
+(`assembly3d.warnings`, printed on stderr by both CLI paths), because the contract found something
+that is neither fatal nor silent.
+
+**What it found, which is the reason the build was worth doing.** On the shipped fit defaults a
+printed brick stacked on a printed brick has **zero** interference: `stud.d/2 − clearRadius + rib`
+comes to 0.00 mm at a wall-bound corner cell. The −0.2 mm diametral offsets are calibrated for a
+printed part meeting a **moulded** one, where only one side shrank; brick-onto-brick applies them
+to both sides and the clutch cancels. `brickFit { studDiaMm 0 }` applies them once and the joint
+clutches again. This is a **K10** in the shipped code rather than in a doc — a constant carried
+across processes with no sentence saying what must hold for it to transfer — and it is now written
+in four places that a reader of any one of them will hit: the port module, the test, bikar's
+`docs/language-reference.md`, and the pattern header. `CAL-STK-01` is the bet on where the real
+ceiling sits and **LG-S1** is the coupon that settles it; `STUD_ENTRY_MAX_MM = 0.15 mm` is a guess
+until it prints.
+
+The error/warning split follows the line §7.4 already draws: a part that cannot be pushed together
+is not a part (error above the ceiling), a part that assembles without grip still prints and still
+stacks (warning at or below zero interference).
+
+Graduation rule honoured twice. `brick-ports.test.ts` (12 cases) pins the naming invariant, the
+measured receptacle, the no-anchors case, and both sides of the entry contract. Separately,
+`--format parts --check` was found to refuse **every dimensionally-correct brick** on its 0.757 mm
+tube wall: the 1.2 mm floor is a bet about struts, the single-STL path already exempted a brick, and
+the parts path had no way to say so. `PlacedPart.featureFloorMm` carries the exemption per part —
+per part, not per assembly, so a tile sharing an assembly with a brick cannot borrow it — with a
+test that asserts the brick parts carry a floor and `Pinned-Tiles.bkr`'s parts carry none.
+
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
 
@@ -1130,7 +1179,7 @@ deviations from this spec, and additions beyond it.)*
 
 ## 12. Design notes — the argument, with the geometry compiled beside it
 
-P1 has to settle multi-piece export (§9), and the way that decision gets made is the same way §3.8
+P1 had to settle multi-piece export (§10), and the way that decision got made is the same way §3.8
 and §5.3 got made: write the options down, draw them, cost them, choose. What was missing was
 anywhere to *put* that once it was written. A transcript is not a place; a design doc section is
 the right place for the conclusion and the wrong place for three side-by-side figures.

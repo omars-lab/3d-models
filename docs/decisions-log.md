@@ -404,6 +404,26 @@ naming scheme that survives a footprint change, a pose solver for the assembled
 preview, and a clutch-fit rung for printed-onto-printed. It is taken with that
 cost stated, not discovered.
 
+### Built — bikar `c60faf2` (PR #36), 2026-07-31
+
+Three of the four stated costs were not costs: the pose solver and `export parts`
+were already generic over the piece registry, so the work was the minting and the
+contract. The naming scheme was real and resolved as a **lattice coordinate** —
+`stud_c<col>r<row>`, `anti_c<col>r<row>` — because an ordinal renumbers when the
+footprint grows and would silently re-point an assembly written against the
+narrower brick. `patterns/Assemblies/Brick-Stack.bkr` is the worked example.
+
+The printed-onto-printed rung reported back, and it is the finding: **on the
+shipped defaults there is no clutch.** Total radial interference computes to
+0.00 mm, because the fit profile's −0.2 mm diametral offsets are calibrated for
+a printed part meeting a *moulded* one — one shrinking side — and brick-onto-brick
+applies them twice. `brickFit { studDiaMm 0 }` applies them once and the joint
+grips. This is the reversal condition the decision named, *almost*: the stud is
+still a joint, but only once someone states which process the number came from.
+`CAL-STK-01` is the bet on the real entry ceiling and `LG-S1` the coupon that
+settles it. Recorded as a **K10** in the port module, the test, bikar's
+`docs/language-reference.md`, and the pattern header.
+
 ### Unconditional, regardless of this choice
 
 A `brick` must not mint a socket-role port that cuts no geometry. That is a

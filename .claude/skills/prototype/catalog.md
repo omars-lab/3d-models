@@ -574,6 +574,15 @@ LG-F1 and LG-F2 therefore block M6's geometry outright (design doc §8, §10), t
 way W-F1 blocks W-C1 — and LG-F2/LG-D1 would be the first public data of their
 kind.
 
+**Every coupon in this series mates a printed part to a real LEGO part; LG-S1 is
+the one that does not.** Two printed bricks stacked on each other apply the fit
+profile's diametral offset twice — once per side — where a moulded mating part
+applies it once, and on the shipped defaults that cancels the interference
+entirely. The series therefore splits along the *joint*, not along the feature:
+LG-F1/LG-F2/LG-R1 settle printed-to-moulded, LG-S1 settles printed-to-printed,
+and neither result may be quoted for the other without a sentence saying why it
+transfers.
+
 **The architecture these coupons test (post-audit, design doc §3.8/§7.6).**
 Geometry is authored *loose* — every mating surface takes −0.1 mm/side of global
 clearance — and grip comes back as a **discrete compliant rib**: four lobes on
@@ -697,6 +706,78 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 - **Feeds**: the `studDia` LEGO profile entry; **design doc §11 Q1 — whether the
   `studs full`/`studs edge` interfaces ship in M6 or at all**; the nozzle
   requirement in the Lab's print notes (P3).
+
+## LG-S1 — Printed-onto-printed stack coupon (stud-⌀ offset ladder)
+
+- **Status**: planned (printing on hold; blocks nothing, but the number it
+  settles is currently a warning nobody can silence honestly)
+- **Why this one is not LG-F1 or LG-F2 over again**: both of those mate a printed
+  part to a **real LEGO** part, where exactly one side of the joint carries the
+  printer's shrinkage and the fit profile's −0.2 mm diametral offset is applied
+  once. This coupon mates **two printed parts**, so the offset lands on both
+  sides and subtracts twice. On the shipped defaults that leaves total radial
+  interference at **0.00 mm** — a stack that seats face-to-face with no clutch at
+  all. bikar reports it as a warning on every `Brick-Stack` render
+  (`brick-ports.ts`, PR [#36](https://github.com/NaqshCoffee/bikar/pull/36)); the
+  warning is honest and the *ceiling* it is measured against is not yet.
+  A textbook **K10** — a constant transferred across processes without stating
+  the transfer condition — which is why it gets its own coupon rather than a
+  footnote on LG-F2's.
+- **Model**: `bikar/patterns/Assemblies/Brick-Stack.bkr` — two 3-plate 2×4 bricks
+  joined `Base.stud_c0r1` → `Cap.anti_c0r1`, exported as two piece-local STLs:
+  ```
+  cd bikar && node packages/cli/dist/index.js render \
+    patterns/Assemblies/Brick-Stack.bkr --format parts \
+    -o ../3d-models/build/stls/coupons/LG-S1/
+  ```
+  Sweep the **stud-⌀ offset**, which is what the fit profile actually holds:
+  rungs at `studDiaMm` = **−0.20 (shipped default, the no-clutch control) /
+  −0.15 / −0.10 / −0.05 / 0.00 (moulded nominal, offset applied once)**. There
+  is no CLI flag for it yet — the offset lives in `brickFit` on the evaluator
+  options, so the ladder is rendered by a five-line script or by adding the
+  flag first. Note that in the catalogue's terms and the doc's, `studDiaMm`
+  is an **offset onto 4.8 mm**, not a diameter.
+- **Print target**: TBD — same recording discipline as LG-F1 (machine, material,
+  nozzle, layer, XY compensation, spool + dryness). Both halves must come off the
+  **same spool in the same session**: the whole question is what two parts with
+  the *same* shrinkage do to each other, and mixing spools measures something
+  else.
+- **Mating part**: **none that is real LEGO.** That is the definition of this
+  coupon. Print a real-LEGO control alongside — the winning LG-F2 rung on a real
+  brick — so the printed-onto-printed grip can be read as a *ratio* against a
+  joint whose behaviour is already characterised, not as a bare adjective.
+- **What we want to learn**:
+  - [ ] 1. **Where does entry actually stop?** `STUD_ENTRY_MAX_MM = 0.15 mm` is
+    a guess at how much total radial interference two printed parts will swallow
+    before the joint cannot be pushed together. Push each rung until it refuses
+    and record which one does. This is the number `CAL-STK-01` exists for.
+  - [ ] 2. **Does the shipped default really not clutch?** The arithmetic says
+    0.00 mm interference. Print the −0.20 rung and try to lift the stack by the
+    upper brick. If it holds anyway — surface friction, layer texture, the rib
+    doing something the model does not account for — the warning is wrong and
+    the doc must say so.
+  - [ ] 3. Which rung is the one to ship as the printed-pair default, and is it
+    the same number in PLA and PETG? A per-material entry is the likely answer
+    and would mean the fit profile needs a printed-pair variant, not a constant.
+  - [ ] 4. Does the joint survive repeated seat/unseat, or does the first
+    insertion shave the interference away? (LG-D1's question, asked of a pair
+    where *both* sides are printed and both can wear.)
+  - [ ] 5. Does the anti-stud tube splay instead of gripping — i.e. is the
+    receptacle's measured `clearRadiusMm` a rigid boundary or a compliant one?
+    An edge cell is wall-bound and an interior cell tube-bound; compare the two
+    on the same part before concluding anything about the number.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Settles**: `CAL-STK-01` (printed-onto-printed stud entry: max total radial
+  interference).
+- **Feeds**: `STUD_ENTRY_MAX_MM` in `bikar` `kernel3d/lego.ts` — the threshold
+  the stud/anti-stud port contract errors on; whether the fit profile grows a
+  printed-pair `studDiaMm` entry distinct from the printed-to-LEGO one; the
+  warning text in `kernel3d/brick-ports.ts` and the K10 paragraph in bikar's
+  `docs/language-reference.md`, both of which currently name this coupon as the
+  thing that has not happened yet.
 
 ## LG-R1 — 1×N solid-pin coupon
 

@@ -2,8 +2,8 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: 959b639ecb5c430c0379fe124d9818ca301f4c63
-  bikar: 3b31fabcc299b54bb0c8b1fb774e74598c09e876
+  3d-models: 8963f8d6d7f2a7c22674f42880f46c6522b7bfa5
+  bikar: c60faf294792c20c18305eccc6844b70963d8c90
   qiyas: 38fbbe729c6032cb37c270ac152ec0f8274fbbec
 repos:
   bikar: ../bikar
@@ -38,6 +38,8 @@ flowchart LR
   designer --> UC12[UC12: Lay out tile walls — grid, crops, layout report]
   designer --> UC14[UC14: Author a design doc the grounding gate checks]
   designer --> UC16[UC16: Read a design note whose figures are compiled parts]
+  designer --> UC17[UC17: Export a multi-brick model as separate printable parts]
+  printop --> UC17
   visitor --> UC3[UC3: Browse the catalog]
   visitor --> UC4[UC4: Download a print-ready STL]
   labuser --> UC5[UC5: Configure an orb in the Lab]
@@ -72,21 +74,22 @@ flowchart LR
 | UC12 | Lay out tile walls (W1: grid + quartering layout, crop clip/drop, composed wall render, layout report) | Designer, Print operator | `bikar:packages/core/src/kernel/wall-layout.ts:L124` (grid layout kernel) · `bikar:packages/core/src/dsl/evaluator.ts:L1069` (wall eval) · `bikar:patterns/Walls/Nail-Wall.bkr:L1` (deliverable) · `bikar:docs/language-reference.md:L501` (tile/wall grammar) · `3d-models:docs/tile-wall-design.md:L1` (design doc) |
 | UC13 | Characterize a printer and earn the constants that depend on it (machine card, provenance-carrying values, shrink-only gate) | Print operator, Designer | `bikar:packages/core/src/kernel3d/calibration.ts:L82` (`Calibrated<T>` provenance wrapper) · `bikar:scripts/check-calibration.ts:L1` (append-blocked gate) · `bikar:patterns/Coupons/Machine-Card.bkr:L1` (the six coupons) · `3d-models:.claude/skills/calibrate/SKILL.md:L1` (harvest → measure → propagate) · `3d-models:docs/calibration-design.md:L1` (design doc) |
 | UC14 | Author a design doc whose grounding is checked: dead relative links, validators without a PASS/FAIL example, and defaults without provenance are blocked at commit | Designer | `3d-models:.claude/gates/docs_gate.py:L1` (the three rules + self-test) · `3d-models:.githooks/pre-commit.d/30-docs-gate:L1` (hook wiring) · `3d-models:Makefile:L53` (`validate-docs` target) · `3d-models:docs/grounding-defect-taxonomy.md:L63` (the K1–K12 kinds each rule derives from) · `3d-models:CLAUDE.md:L1` (the four session-loaded rules) |
-| UC15 | Tune a LEGO-compatible brick in the Lego Lab: clutch-fit knobs each tagged with its provenance, both gates, the lattice overlay, and a downloadable STL | Lab visitor, Print operator | `3d-models:Makefile:L102` (brick STL + preview pipeline) · `3d-models:Makefile:L130` (both Lab pages, one recipe) · `3d-models:index.html:L302` (gallery §03) · `3d-models:index.html:L439` (`BRICKS` data array) · `3d-models:docs/lego-lab-design.md:L1` (design doc) |
-| UC16 | Read the argument behind a design decision beside sections cut from the parts the repo builds today, so a note and its geometry cannot quietly disagree | Designer | `3d-models:docs/lego-lab-design.md:L1090` (§12 design notes) · `3d-models:docs/lego-lab-design.md:L1143` (§13 studio index) · `3d-models:.claude/skills/maintain-use-cases/validate.py:L242` (the page-catalog check) · `3d-models:Makefile:L138` (the vendored page list) · `3d-models:index.html:L270` (gallery → studio) |
+| UC15 | Tune a LEGO-compatible brick in the Lego Lab: clutch-fit knobs each tagged with its provenance, both gates, the lattice overlay, and a downloadable STL | Lab visitor, Print operator | `bikar:packages/lab/lego.html:L1` (the page) · `bikar:packages/lab/src/lego-main.ts:L1` (knobs, gates, overlay) · `3d-models:Makefile:L102` (brick STL + preview pipeline) · `3d-models:Makefile:L130` (both Lab pages, one recipe) · `3d-models:index.html:L302` (gallery §03) · `3d-models:index.html:L439` (`BRICKS` data array) · `3d-models:docs/lego-lab-design.md:L1` (design doc) |
+| UC16 | Read the argument behind a design decision beside sections cut from the parts the repo builds today, so a note and its geometry cannot quietly disagree | Designer | `bikar:packages/lab/design.html:L1` (the page) · `bikar:packages/lab/src/catalog.ts:L119` (the `uc:` field this map is checked against) · `bikar:packages/lab/src/design/notes/multi-piece-export.ts:L1` (the first note) · `3d-models:docs/lego-lab-design.md:L1180` (§12 design notes) · `3d-models:docs/lego-lab-design.md:L1233` (§13 studio index) · `3d-models:.claude/skills/maintain-use-cases/validate.py:L242` (the page-catalog check) · `3d-models:Makefile:L138` (the vendored page list) · `3d-models:index.html:L270` (gallery → studio) |
+| UC17 | Export a model built from several bricks as one printable STL per brick: a `brick` mints stud/anti-stud ports from its own lattice, an `assembly` connects them by lattice coordinate, and `export parts` plates each piece on its own bottom face — with the entry contract warning when a printed pair has no clutch left | Designer, Print operator | `bikar:packages/core/src/kernel3d/brick-ports.ts:L131` (port minting from the built lattice) · `bikar:packages/cli/src/index.ts:L400` (`--format parts`, per-part feature floor) · `bikar:patterns/Assemblies/Brick-Stack.bkr:L1` (deliverable) · `bikar:docs/language-reference.md:L831` (why the stud window is not on the fit ladder) · `3d-models:docs/decisions-log.md:L352` (D-006, decided and built) · `3d-models:.claude/skills/prototype/catalog.md:L704` (LG-S1, the coupon that settles the ceiling) |
 
-UC15 and UC16 carry no `bikar` pointer, and the omission is deliberate rather
-than an oversight. UC15's page is `packages/lab/lego.html` and `lego-main.ts`,
-which merged to bikar's `main` as `61c371f`; UC16's is `packages/lab/design.html`
-with `src/design/` behind it, which is still on the `lego-lab-p1` branch. But a
-pointer is only valid at its repo's `as_of` — and this checkout's `../bikar`
-predates both, so pinning one would fail the moment `--refresh` ran. The pins
-belong here the next time that checkout catches up. Pinning a line the pinned
-commit does not contain is the one thing this map exists to prevent, so they are
-left unpinned and said out loud instead.
+UC15 and UC16 carried no `bikar` pointer until `2026-07-31`, and the omission
+was deliberate: their pages had merged to bikar's `main` but the `as_of` pin here
+still predated them, and pinning a line the pinned commit does not contain is the
+one thing this map exists to prevent. They are pinned now because the pin moved,
+which is the sequence the note was describing rather than a rule about those two
+use cases. `page_catalogs` checks rather than warns for the same reason —
+`bikar:packages/lab/src/catalog.ts` resolves at the pin, so the catalogue's `uc:`
+ids are now verified against the table above instead of skipped.
 
-The same pin is why `page_catalogs` currently *warns* rather than checks: the
-page catalogue it names, `bikar:packages/lab/src/catalog.ts`, does not exist at
-the pinned `bikar` commit yet. Point it at the branch by hand and it reports
-exactly what it is for — before UC16 joined the table above, it failed with
-*"claims UC16, which this map does not carry"*.
+The `bikar` pin is `origin/main` and not `../bikar`'s own HEAD, deliberately.
+That checkout is another session's working tree and its `main` carries local
+commits that have not been pushed; pinning them would tie this map to work that
+can still be rebased away. `--refresh` will move the pin back to that HEAD the
+next time it runs, so re-pin to `origin/main` by hand after refreshing until the
+two agree.
