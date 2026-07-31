@@ -392,9 +392,21 @@ brick <Name>
   engage <mm>                           # optional — cavity depth, default 3.2 (§3.6)
   clutch auto | none                    # optional — the §3.8 rib set, default auto
   relief depth <mm>                     # optional — pattern cut into the top face
-  origin centered | at (<col>,<row>)    # lattice registration
+  origin centered | at <col>[,] <row>   # lattice registration
   port <name> at ...                    # piece port grammar, unchanged (C2)
 ```
+
+**`origin at` is unparenthesized, and the comma is not always optional.** This sketch originally
+wrote `at (<col>,<row>)`; the shipped grammar does not, because every other `at` clause in the
+language is unparenthesized and one convention across the grammar beats matching a sketch. The
+sketch's spelling is not quietly accepted either — `at (1, -2)` is read as a parenthesized
+expression and the comma inside it is a parse error.
+
+The comma between the two offsets is optional only when the row is non-negative. Both offsets go
+through the ordinary numeric-expression parser, so `at 1 -2` is the single expression `1 − 2` and
+the row never arrives; `at 1, -2` is the spelling to use. This is a wart of reusing the expression
+parser, not a design choice, and `brick-parse.test.ts` pins both spellings so it cannot regress
+into silently reading the wrong lattice offset.
 
 **The three interfaces.**
 
@@ -413,6 +425,16 @@ under studs, which §6 refuses to do silently.
 relief has to work with. Default **3.2 mm**: deep enough that the bridged ceiling clears the host
 studs by 1.6 mm and the tube keeps usable cantilever compliance, shallow enough to leave 6.4 mm of
 relief budget in a `1 brick` body. `engage 1.6` is legal and warns.
+
+**The default does not fit a `1 plate` body, and that is a real restriction, not a rounding.** A
+plate is 3.2 mm tall and V3/V5 require 1.2 mm of ceiling, so a one-plate brick admits `engage` only
+in **[1.6, 2.0]** — every value of which trips V5b, because the whole band sits below the 3.2 mm
+bridging threshold §3.6 settled on. `height 1 plate` therefore cannot be built at the shipped
+default and cannot be built without a warning at any legal value. This is §3.6's finding arriving
+where it bites rather than a defect: a printed one-plate tile has a bridged ceiling parked in the
+host studs' zone, and the warning is the honest report of that. The two plausible fixes — lowering
+the default, or refusing `1 plate` outright — both trade a measured concern for an unmeasured one,
+so neither ships before LG-F2. M6 states the constraint instead.
 
 **Why `clutch` exists.** Per §3.8, geometry is authored *loose* and grip is a discrete rib. `clutch
 auto` emits the rib set §7.6 specifies, sized by the active fit profile. `clutch none` emits nominal
@@ -582,6 +604,18 @@ Three slabs, bottom (bed) to top. z = 0 is the printed bed face, which is the br
 The `studs` slab is omitted entirely for `studs none` — a two-slab stack, which the solidifier
 handles without special-casing.
 
+**Corrected in M6 — relief splits the ceiling into two slabs, so the stack is three or four.** A
+pocket is not "the ceiling minus a region": a recess has a floor, and a floor is a slab boundary.
+With `relief depth d` the ceiling becomes `engage → height − d` (the pockets solid, so the recess
+has a bottom) and `height − d → height` (the pockets absent, which *is* the recess). The row above
+reads correctly only for `relief depth 0`.
+
+The art's connected components each become **one pocket bounded by that component's outer
+perimeter**. An enclosed void inside a component is an error, not an island left standing in the
+recess — the same finding as Q3 (§11) and for the same reason: a nested void arrives from the face
+extractor as material, so nothing downstream can tell "the author meant a hole" from "the author
+drew an overlay". `hole` remains the supported way to ask for a void.
+
 ### 7.2 The partition — both body cases
 
 Cells are built **once** and listed by reference in each slab they are solid in, per §2's
@@ -610,6 +644,42 @@ here rather than discovered in M6.
 The shell's cavity hole and the cavity-interior cell share a boundary; the tube's outer ring is a
 boundary of nothing else. Both must satisfy the coordinate-identity invariant.
 
+**Corrected in M6 — four things this section got wrong about its own construction.**
+
+1. **The interface between two slabs is the symmetric difference of their solid regions, not a cap
+   per cell.** Capping every cell that is solid on exactly one side is wrong whenever the two sides
+   are partitioned differently: a cell below and a cell above covering the same ground each get a
+   cap, so the mesh grows a coincident double wall and the material on one side becomes a
+   **separate body**. It is watertight, the Euler characteristic is fine, and a slicer prints loose
+   parts rattling inside a shell — which is exactly how the first `studs full` brick came out, as
+   four free discs sitting on a closed ceiling. `emitInterfaces` now accumulates directed edges with
+   a signed net count per segment and chains what survives into rings, so a cell present on both
+   sides cancels against itself. `brick.test.ts` counts connected shells, not just watertightness,
+   because watertightness cannot see this.
+
+2. **The anchors must be carried through the ceiling slabs, with a plug closing each bore.** A tube
+   listed only in the cavity slab is solid on one side of the cavity/ceiling interface and gets its
+   own cap plus a coincident counter-cap from the ceiling that holes it — the same loose-body
+   failure as (1). The tube cell and its bore plug are therefore listed in every slab from the bed
+   to the top of the ceiling.
+
+3. **Anchors and relief pockets are resolved by nesting, and by dropping — never by cutting.** An
+   anchor wholly inside a pocket becomes a **hole of that pocket**, so the tube stays solid through
+   the recess: the relief decorates the ceiling and does not cut the structure, and a nested tube's
+   top sits flush with the un-relieved top face. An anchor **straddling** a pocket edge has no such
+   reading — part of it would be cut and part not, which needs the 2D boolean this partition exists
+   to avoid — so `solveAnchors` drops it and reports `droppedForRelief`. This is not a corner case:
+   `Star-Brick` at the default numbers keeps **1 of 9** anchor candidates, and the report says so
+   rather than the piece silently losing its grip.
+
+4. **Studs can never be cut as holes in a ribbed `cavityInterior`.** At the default fit the rib lobe
+   apex reaches |x| = 6.30 mm and the stud circle reaches 4.0 + 2.3 = 6.30 mm — exactly tangent —
+   and a hole ring touching its outline pinches the polygon into non-manifold edges. Studs live on
+   the far side of the ceiling and need no fusion cell, so they are simply not holes here. This is
+   a standing constraint rather than a one-off: `CAL-RIB-01` sweeps `ribMm` up to 0.20, which moves
+   the lobe apex outward, so any future attempt to hole the studs has to re-derive the tangency at
+   the top of the sweep, not at the default.
+
 ### 7.3 The ring cache is mandatory
 
 Every circle discretized here — stud discs, tube outer rings, tube bores, pin discs, relief arcs —
@@ -620,15 +690,68 @@ identical array**. This is the C1 pattern and it is not optional — §2 records
 produces a silently non-watertight mesh. Rib lobes (§7.6) are generated *into* the cached ring, not
 added afterwards, so both cells that reference it see the same coordinates.
 
+**Corrected in M6 — coordinate identity is necessary but not sufficient; the cap triangulator now
+checks its own output.** Sharing the identical array guarantees the two cells agree on where the
+boundary is. It does not guarantee that earcut *triangulates* that boundary manifoldly, and M6
+measured a case where it does not. Earcut bridges each hole into the outline along a horizontal
+ray; when a hole edge, an outline vertex and the next hole share a row, that ray runs through the
+next hole's vertices, and the result is area-exact but meets along a **T-junction** — one triangle
+spanning an edge that two others split at an interior vertex. Every triangle is non-degenerate, the
+area check passes, and the solid is not closed.
+
+So `emitCap` validates the triangulation against the ring edges it was handed, and on failure
+retries in rotated frames: earcut's degeneracies are axis-aligned, rotation is affine, and a
+triangulation valid in the turned frame is valid in the original. Rotation alone is not enough —
+collinearity is rotation-invariant, so the turned frames produce zero-area slivers instead, which
+have no winding to orient and which the mesh gate rejects outright. Each sliver is therefore
+**absorbed**: the triangle across its long edge is split at the sliver's middle vertex, reproducing
+the sliver's short edges in the same direction and leaving the region boundary untouched. Dropping
+it would be wrong — the sliver is the only thing bridging the T-junction.
+
+**Validator:** a cap is accepted only when every directed edge of its triangulation appears exactly
+once and its unpaired edges are precisely the ring edges the section declared.
+PASS: the corner clip's ceiling section, 24-vertex outline and four riser holes, after retry —
+40 unpaired edges, one per ring edge.
+FAIL: the same section in the unrotated frame — 41 unpaired edges, the extra one being the T-junction
+chord, which the area check scores as exact.
+
+The measurement is on the corner clip rather than a brick because that is where it was found: its
+four riser holes all sit on `y = ±1.2`, collinear with the outline's own necks.
+
 ### 7.4 The mesh-gate exemption
 
 Per §3.4 the tube wall is 0.857 mm and per §7.6 the clutch rib protrudes 0.1 mm, both against a
-1.2 mm floor. `brick.ts` therefore calls `meshGate` with an explicit **`minFeatureMm` override of
-0.8**, and the gate report records the override so it appears in the Lab panel rather than being
-hidden. The rib is *additive* — it never thins anything — so it does not need its own numeric floor;
-what it needs is the tangential-width rule in §7.6. Watertightness and Euler consistency are **not**
-relaxed — they are the actual regression guard for §7.2's invariants and every generated brick must
-pass them.
+1.2 mm floor. The rib is *additive* — it never thins anything — so it does not need its own numeric
+floor; what it needs is the tangential-width rule in §7.6. Watertightness and Euler consistency are
+**not** relaxed — they are the actual regression guard for §7.2's invariants and every generated
+brick must pass them.
+
+**Corrected in M6 — `minFeatureMm` is a declaration, not an override, and the number is 0.70.**
+This section originally specified "an explicit `minFeatureMm` override of 0.8". Neither half
+survived contact with the API it names.
+
+`solidifySlabStack`'s `minFeatureMm` is a **declaration of the smallest feature actually present**,
+which the print gate then compares against the FDM floor. It is not a floor the caller lowers.
+Passing a flat 0.8 would be an unmeasured claim about the mesh, and would go on reading 0.8 after a
+fit knob thinned a wall to 0.3 — the exemption would stop being bounded and become asserted. So
+`brickMinFeature` computes the real minimum, `buildBrick` declares it, and the exemption becomes an
+invariant instead: a brick whose thinnest dimension falls below `BRICK_MIN_FEATURE_MM` is refused,
+naming the dimension.
+
+**Default:** `BRICK_MIN_FEATURE_MM` = 0.70 mm (`bikar/packages/core/src/kernel3d/brick.ts`), with the
+derivation below; the *measured* clutch numbers it has to leave room for are bet CAL-RIB-01.
+0.8 was derived from the bare tangency datum's 0.857 mm tube wall, but the shipped fit
+shrinks the tube's outer surface by 0.2 diametral while the bore stays nominal, so the wall a
+**default** brick actually has is `(6.5137 − 0.2 − 4.8) / 2 = 0.757` mm. A floor of 0.8 refuses the
+default brick — the doc's number does not survive the machinery the doc ships. 0.70 clears 0.757
+with margin for the fit knobs and still sits above one 0.4 mm extrusion.
+
+**Validator:** a brick is refused when `brickMinFeature(spec).mm < BRICK_MIN_FEATURE_MM`, and the
+error names the dimension that failed rather than the aggregate.
+PASS: the default 2×4, whose thinnest dimension is the 0.757 mm tube wall — 0.757 ≥ 0.70.
+FAIL: the same brick with a fit profile widening the bore to 5.2 mm, whose tube wall becomes
+`(6.5137 − 0.2 − 5.2) / 2 = 0.557` mm — refused, naming `anchor wall`, where a flat 0.8 declaration
+would have reported 0.8 and shipped a mesh with a 0.557 mm wall in it.
 
 This mirrors W2, where the corner clip is exempt from the mesh floor by design. The precedent is
 deliberate: the floor is a default for pattern art, not a law about connectors.
@@ -670,9 +793,15 @@ lobes away cleanly and leaves nominal surfaces with global clearance only.
 ## 8. Coupons and the prototype catalog — the LG ladder
 
 Entered in `.claude/skills/prototype/catalog.md` in the skill's schema. Ordered
-cheapest-decisive-learning-first. **LG-F1 blocks M6** — the exact analogue of W-F1 blocking W-C1 —
-because §3.2, §3.5 and §3.8 together mean no clutch number in this document is trustworthy until
-something is printed and pushed onto a real brick.
+cheapest-decisive-learning-first. §3.2, §3.5 and §3.8 together mean **no clutch number in this
+document is trustworthy until something is printed and pushed onto a real brick** — LG-F1 is what
+makes one trustworthy.
+
+That premise is unchanged; what changed is what follows from it. This section first read *"LG-F1
+blocks M6"*, on the W-F1/W-C1 analogy. It no longer does — see §10. An untrustworthy number must not
+be **baked**, which is what the analogy correctly forbids; it may perfectly well be a **knob**, and
+LG-F1's own design is a `ribMm` × `engage` sweep, which is what a knob is for. The coupons keep
+their full decisive role and lose only their position in the ordering.
 
 The audit establishes an unusual fact about this ladder: **no public source reports caliper
 measurements on a printed stud, and none reports a clutch durability cycle count.** LG-F2 and LG-D1
@@ -743,13 +872,28 @@ byte comparison carry over unchanged.
 | Phase | Where | Contents |
 |---|---|---|
 | **R0** | 3d-models | Survey → this doc → grounding audit → v2. ✅ **Complete.** |
-| **LG-F1/F2/R1** | physical | Clutch coupons. **Block M6's dimensions.** |
-| **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. |
-| **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. |
+| **Q3** | bikar | Holed-pattern check against the union ring (§11 Q3). ✅ **Complete — M7 unblocked.** |
+| **LG-F1/F2/R1** | physical | Clutch coupons. **No longer block M6** — see the note below. |
+| **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
+| **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; what remains is the Lab protocol wiring. |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
+
+**Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
+the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
+**baked constant** and wrong for a **knob**: LG-F1 is itself a parameter sweep — §8 specifies it as
+a five-rung `ribMm` ladder crossed with three `engage` values — and the Lab runs the same sweep
+without a new plate. So the dependency inverts. M6 and M7 ship with every disputed value adjustable
+and provenance-tagged, the coupons become the Lab's first *input*, and each print narrows a knob
+rather than unblocking a phase. Recorded as
+[`decisions-log.md`](decisions-log.md) D-005, which supersedes D-003.
+
+The condition that keeps this honest is already in §9: the panel must say, per value, whether the
+active number came from a coupon or is still an unmeasured default. A `CAL-*` id with no measurement
+behind it has to read as *unmeasured* in the UI. Without that, "adjustable" silently becomes
+"asserted", which is the thing deferring M6 was meant to prevent.
 
 ### Implementation status
 
@@ -762,6 +906,26 @@ measure rebuilt on repeat-vector components with a rotation search (§5.3); `stu
 non-rectangular body partition specified rather than assumed (§5.2, §7.2); V5b and V10 added; LG-F1
 re-scoped to sweep rib thickness; LG-D1 added. Commits: 3d-models `4c3b900`; bikar *(none —
 R0 ships no code)*.
+
+**M6 — the `brick` declaration and the brick kernel — 2026-07-31.** bikar `ee2dd50` (Q3's answer as
+a test), `4ca2df0` (self-checking caps, symmetric-difference slab interfaces), `98ad41e` (`lego.ts`,
+`grid-gate.ts`, `brick.ts`, `brick-validate.ts` with V1–V10, `RIB_MM_CAL` under `CAL-RIB-01`),
+`d5fcbef` (grammar, evaluator, CLI report, `patterns/Lego/Star-Brick.bkr`). 3d-models: this
+revision.
+
+Deliberate deviations from this spec, each corrected in place above and each found by building the
+thing the spec described: §4's `origin at (<col>,<row>)` → `at <col>[,] <row>`, with the comma
+mandatory for a negative row; §4's default `engage` shown not to fit a `1 plate` body; §7.1's
+three-slab table shown to be a four-slab stack under relief; §7.2's per-cell interface replaced by
+the symmetric difference, plus the anchor carry-through, the pocket nesting/drop rule, and the
+stud-tangency constraint; §7.3's coordinate identity shown to be necessary but not sufficient;
+§7.4's "`minFeatureMm` override of 0.8" replaced by a declared minimum against a 0.70 invariant.
+
+Beyond the spec: `M7`'s anchor solver and grid gate shipped here rather than after M6, because V5b,
+V7 and V8 cannot be written without them — a validator that cannot be run is not a validator. The
+graduation rule was honoured throughout: every correction above has a test that fails before the
+fix and passes after, and the two triangulation fixes were each verified by neutering the fix and
+confirming the test goes red.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
@@ -779,10 +943,28 @@ deviations from this spec, and additions beyond it.)*
 - **Q2 — pin vs tube strength under FDM anisotropy.** A ⌀3.2 solid pin printed in layers may shear
   where a moulded one does not, and two independent makers report 1×N prints too loose (§3.3).
   LG-R1 decides whether 1×N footprints are supported in M6 or deferred.
-- **Q3 — does `unionPatternFaces` always return a ring the anchor test can use?** It guarantees
-  simply-connected, but a pattern with a genuine interior void would have that void cancelled away,
-  so the anchor test could pass on material that is not there. Needs a check against a
-  deliberately-holed pattern before M7. §7.2's inset step has the same exposure.
+- **Q3 — does `unionPatternFaces` always return a ring the anchor test can use? — RESOLVED, yes.**
+  Measured against a deliberately-holed pattern (a 50 mm square with a nested 15 mm square, no
+  edge joining them) in `bikar:packages/core/tests/kernel3d/piece-e2e.test.ts`. The question as
+  written named the wrong mechanism and drew the wrong conclusion from it, so both are corrected
+  here.
+
+  *Mechanism.* The void is not "cancelled away". `getBoundedFaces` returns **every non-outer
+  face**, and in a planar subdivision an enclosed void *is* a bounded face — so it arrives as
+  material, tiles edge-to-edge with its neighbours, and the union never sees a hole at all. The
+  `holeCount > 0` guard cannot fire on a nested void; it fires only on a gap the faces genuinely
+  fail to cover, which one subdivision does not produce.
+
+  *Conclusion.* The ring and the mesh **agree** — the extrusion really is solid across the void
+  (measured volume 25000 mm³, the full solid; a preserved void would give 22750). So an anchor
+  placed by that ring sits in real material, and the failure Q3 feared does not occur. **M7 is
+  unblocked, and so is §7.2's inset**, which had the same supposed exposure.
+
+  *What is actually lost is fidelity, not soundness:* art drawn as a void prints filled, silently.
+  That is unfixable at this layer rather than merely unfixed — a nested subgraph component is the
+  same input whether the author meant a void or a decorative overlay, `Nail-Tile.bkr` depends on
+  the overlay reading, and the DSL has no word separating them. `hole` is the supported way to ask
+  for a void, which is what the sibling `uncovered hole` error already advises.
 - **Q4 — the bridged cavity ceiling.** `engage 3.2` (§3.6) puts the sagging surface 1.6 mm clear of
   the host studs, which is the minimum that works. But span still scales with footprint: a 2×2
   cavity bridges 12 mm, a 6×6 bridges 44 mm. Brick Architect's directional result — the printed
@@ -979,11 +1161,16 @@ studs never overlap relief (V4 forbids the combination). Both hold by validator,
 genuinely three slabs — but V4 is a real capability loss (no studded piece may carry relief), and
 a four-slab variant that recesses relief *between* studs is the obvious LG2 extension.
 
-**B.7 — `unionPatternFaces` as the body outline, and the §7.2 inset.** Q3 records the concern that a
-genuine interior void is cancelled away, so the "inside the body" predicate could pass on material
-that is not there. §7.2's polyline inset adds a second exposure: a concave vertex whose offset
-self-intersects is clipped by dropping the crossing span, which is a heuristic, not a proof. Until
-both are checked against a deliberately-holed pattern, the predicate is trusted rather than verified.
+**B.7 — `unionPatternFaces` as the body outline, and the §7.2 inset.** The first half of this bet is
+**settled and was wrong** — see §11 Q3. A nested void is not cancelled away; it is classified as a
+bounded face and tiles the region, so the ring and the extruded mesh agree and the "inside the body"
+predicate is sound. Measured, not argued.
+
+The second half stands: §7.2's polyline inset clips a self-intersecting offset at a concave vertex by
+dropping the crossing span, which is a heuristic, not a proof. Nothing in the Q3 measurement touches
+it — a convex test pattern never exercises the clip. **Still trusted rather than verified**, and the
+counterexample to look for is a deeply reflex vertex (a star tip) where the dropped span removes wall
+the anchor test then assumes is present.
 
 **B.8 — The rib as the clutch mechanism.** [CAL-RIB-01 — coupon LG-F1, design-specific: off
 the machine card by design] New in v2. *Counter-position:* nobody has published

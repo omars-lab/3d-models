@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**10 registered bets · 10 `Calibrated` records — 10 provisional, 0 measured · 4 bets with no record in bikar.**
+**10 registered bets · 11 `Calibrated` records — 11 provisional, 0 measured · 3 bets with no record in bikar.**
 
 ## Bets
 
@@ -25,7 +25,7 @@ is opened, clustered, and closed.
 | `CAL-OVH-01` | overhang angle threshold (print-gate F5) | `MC-4` | open — no record in bikar | — |
 | `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `PROFILE_WARP_MM_CAL` |
 | `CAL-BED-01` | `MIN_BED_CONTACT_MM2` and `MIN_BED_CONTACT_RATIO` | `MC-6` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
-| `CAL-RIB-01` | Lego clutch rib interference `ribMm` | `LG-F1` | open — no record in bikar | — |
+| `CAL-RIB-01` | Lego clutch rib interference `ribMm` | `LG-F1` | provisional | `RIB_MM_CAL` |
 | `CAL-DET-01` | W2 detent band depth | `W-C1` | provisional | `CLIP_DETENT_MM_CAL` |
 | `CAL-STR-01` | Z-layer strength ratio | none — measuring it needs a load rig, which does not exist; registered so the gap is visible | open — no record in bikar | — |
 
@@ -49,7 +49,6 @@ named next print rather than an absence:
 
 - `CAL-BRG-01` — unsupported bridge span ceiling · coupon `MC-3`
 - `CAL-OVH-01` — overhang angle threshold (print-gate F5) · coupon `MC-4`
-- `CAL-RIB-01` — Lego clutch rib interference `ribMm` · coupon `LG-F1`
 - `CAL-STR-01` — Z-layer strength ratio · coupon none — measuring it needs a load rig, which does not exist; registered so the gap is visible
 
 ## Records
@@ -147,6 +146,13 @@ named next print rather than an absence:
 - **Value:** `0.01`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** 1% of the widest layer — chosen alongside MIN_BED_CONTACT_MM2 as a companion relative trigger for tall parts, from the same absent source, so it rides the same bet. Coupon MC-6 settles both; until then F7 stays warn-only.
+
+### `RIB_MM_CAL` — `CAL-RIB-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/lego.ts`
+- **Value:** `0.1`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** MachineBlocks' shipped default and W2's detent precedent — no published caliper, force or cycle-count data on a printed stud exists; LG-F1 sweeps 0/0.05/0.10/0.15/0.20
 
 ### `CLIP_DETENT_MM_CAL` — `CAL-DET-01`
 
