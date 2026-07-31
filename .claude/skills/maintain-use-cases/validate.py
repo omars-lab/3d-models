@@ -290,6 +290,34 @@ def check_catalogs(doc: Doc, root: str) -> tuple[list[str], list[str]]:
     return errors, warnings
 
 
+def staleness_warning(repo: str, behind: int | None, ahead: int | None) -> str | None:
+    """Say whether a pin that differs from its checkout's HEAD is actually stale.
+
+    `behind` counts `pin..HEAD` and `ahead` counts `HEAD..pin`. They are not
+    opposites: a pin can be both (a divergence) or neither-but-unequal is
+    impossible once both resolve.
+
+    The case that forced this to be a function rather than an inline `!=` is a
+    **sibling checkout that is not the one doing the work**. bikar's pointers
+    are read out of `../bikar`, but its branches are built in a worktree, and
+    worktrees share one object database — so `origin/main` can be pinned here
+    and read here while `../bikar`'s own HEAD sits on an older commit that
+    belongs to another session. That pin is ahead, not behind, and there is
+    nothing to re-pin. Warning "0 commit(s) behind" on it was both false and
+    unactionable, which is the shape of a warning that gets ignored.
+    """
+    if behind is None:
+        return f"'{repo}' as_of does not share history with its local HEAD — check the pin"
+    if behind == 0:
+        return None
+    if repo == SELF_REPO and behind <= STALE_LIMIT:
+        # The self pin is always >= 1 behind once the map-commit lands
+        # (as_of records that commit's parent) — only nag past the limit.
+        return None
+    tail = f", {ahead} ahead" if ahead else ""
+    return f"'{repo}' as_of is {behind} commit(s) behind its local HEAD{tail}"
+
+
 def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -311,10 +339,14 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
         head = try_git(rdir, "rev-parse", "HEAD")
         if head and head != pin:
             behind = try_git(rdir, "rev-list", "--count", f"{pin}..{head}")
-            # The self pin is always >= 1 behind once the map-commit lands
-            # (as_of records that commit's parent) — only nag past the limit.
-            if repo != SELF_REPO or behind is None or int(behind) > STALE_LIMIT:
-                warnings.append(f"'{repo}' as_of is {behind or '?'} commit(s) behind its local HEAD")
+            ahead = try_git(rdir, "rev-list", "--count", f"{head}..{pin}")
+            warning = staleness_warning(
+                repo,
+                int(behind) if behind is not None else None,
+                int(ahead) if ahead is not None else None,
+            )
+            if warning:
+                warnings.append(warning)
         for prepo, path, start, end in doc.pointers:
             if prepo != repo:
                 continue
@@ -483,6 +515,31 @@ def self_test() -> int:
         "orders unknown ids numerically, not lexically",
         unknown_catalog_ucs({"UC16", "UC9"}, set()),
         ["UC9", "UC16"],
+    )
+    expect(
+        "a pin ahead of a sibling checkout's HEAD is not stale",
+        staleness_warning("bikar", 0, 2),
+        None,
+    )
+    expect(
+        "a pin genuinely behind its checkout still warns, and says how far ahead",
+        staleness_warning("bikar", 3, 1),
+        "'bikar' as_of is 3 commit(s) behind its local HEAD, 1 ahead",
+    )
+    expect(
+        "the self pin's own map-commit offset stays quiet",
+        staleness_warning(SELF_REPO, 1, 0),
+        None,
+    )
+    expect(
+        "the self pin past the limit does not",
+        staleness_warning(SELF_REPO, STALE_LIMIT + 1, 0),
+        f"'{SELF_REPO}' as_of is {STALE_LIMIT + 1} commit(s) behind its local HEAD",
+    )
+    expect(
+        "an unrelated pin is reported as unrelated, not as a count",
+        staleness_warning("bikar", None, None),
+        "'bikar' as_of does not share history with its local HEAD — check the pin",
     )
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

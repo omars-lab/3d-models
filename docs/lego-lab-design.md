@@ -8,7 +8,9 @@ and the design changed: the clutch is now a discrete rib rather than a nominal s
 rather than a fact about LEGO (§3.2). Remaining contested bets, each with its strongest refuting
 source, are in Appendix B.**
 
-Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31); P1–P3 have not. The Lego Lab
+Built: **R0, M6, M7 and P0 have shipped** (2026-07-29 → 2026-07-31), and P1 has shipped its
+design-notes page and studio index and *decided* multi-piece export (§10, D-006) without building
+it; the rest of P1, and P2–P3, have not. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
 section proved its spec wrong, the section above is corrected in place and the deviation is listed
 in §10's implementation status — so this document describes what exists, and §10 records what it
@@ -588,11 +590,21 @@ anchorability**, which is the whole point of splitting the two.
 | V8 | `gridFit < 0.8` | WARN, name the swept param and its nearest sweet spot |
 | V9 | pattern bbox exceeds footprint in one axis only | ERROR, suggest the `c × r` that fits |
 | V10 | `clutch none` on a piece whose only clamp is anchors (§3.3 census: no tangent wall) | WARN |
+| V11 | a `port` on a `brick` whose contract states a dimension — `pin`, `pin_socket`, `ring`, `rim` | ERROR, name the port |
 
 V8 is a warning by design: an incommensurable piece is still a *correct* piece, just not a
 seamlessly-tiling one. Refusing it would delete the 5-fold families, which is the opposite of the
 goal. V10 likewise: a clutchless decorative piece is legitimate, but it must not be produced
 silently on a footprint that has nothing else holding it.
+
+V11 is a different shape from the other ten. They all say a dimension is wrong; V11 says a
+declaration describes geometry that was never built. A `brick` has no `hole` statement and
+`buildBrick` reads no ports, so only `hole` cuts material and a dimensioned port on a brick names a
+feature the exported mesh does not contain — the mesh is identical with and without it, while a
+`connect` against it still passes the C2 fit check. `kind axis` is exempt: it states no dimension,
+so there is nothing the kernel can have failed to cut. Found while scoping multi-piece export
+([`decisions-log.md`](decisions-log.md) D-006) and pinned by
+`bikar:packages/core/tests/kernel3d/brick-phantom-port.test.ts`.
 
 ## 7. Kernel — the brick cell partition over `solidifySlabStack`
 
@@ -907,7 +919,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; the rest is open. |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **decided** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) with V11 shipped, implementation open; the rest is open. |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
@@ -1031,6 +1043,35 @@ The general lesson, and the reason this is written down rather than just fixed: 
 helper is not a rendered one.** Both defects live in the gap between a function that is correct and
 a DOM that never calls it, and no amount of data-layer testing closes that gap. The Lab's honesty
 claims are claims about what a reader *sees*, so at least one test per claim has to look.
+
+**P1 (part) — the multi-piece decision and V11 — 2026-07-31.** bikar `617bee1` (PR #34: the
+design-notes page §12, the studio index §13, and the `multi-piece-export` note as `preview`) and
+`3b31fab` (PR #35: V11, and the same note closed to `decided`). 3d-models: this revision, plus
+[`decisions-log.md`](decisions-log.md) D-006 and the
+[`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+
+Multi-piece export is **decided, not built**: `export parts` on a `brick` assembly is studs-as-ports
+— a stud mints an outward port and the tube beneath the ceiling mints its mate, so the joint names
+geometry the kernel already emits. What that costs, and is accepted rather than discovered: two new
+port kinds, a stud-index naming scheme that survives a footprint change, a pose solver for the
+assembled preview, and a printed-onto-printed rung on the clutch ladder. It reverses on a
+measurement — if no rung of that ladder holds, a stud is a shape and not a joint.
+
+The defect that forced the decision is the reason V11 exists. Scoping the export found that a
+`brick` accepted a dimensioned `port`, an `assembly` would `connect` a rod into it, and the C2 fit
+ladder **passed** — while `buildBrick` reads no ports at all. The mesh was identical with and
+without the port (3764 triangles either way), so nothing in the repo could see it except a print.
+Graduation rule honoured: `brick-phantom-port.test.ts` fails before the fix and passes after, and
+its last case asserts the plain brick is watertight *and* that the ported one no longer compiles —
+so there is no pair of meshes left to be identical.
+
+Beyond the spec: the three options were argued as a **design note whose figures are compiles**, not
+drawings — each section is `compileToGeometry(...).brick3d` run through `brickSection()` at page
+load, with hand-authored marks confined to a dashed overlay list. That the *real hole* option's bore
+crosses load-bearing material between two solver-placed tubes is visible on the drawing because the
+drawing is the part. The practice is now a skill, and its parity rule — a note's `<figure>` count
+equals its `Compiled from` count — is enforced by `tests/design-notes.test.ts` rather than
+remembered.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*

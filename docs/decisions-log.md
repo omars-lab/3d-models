@@ -346,3 +346,76 @@ change the Lab surfaces rather than hides.
 3. **M7** — anchor solver, grid gate, `sweepGridFit`.
 4. **P0** — the Lab page, knobs, lattice overlay, both gate panels, sweep strip,
    STL download, `make lego-lab`, gallery section.
+
+---
+
+## D-006 — Multi-piece export for bricks is studs-as-ports
+
+**Date:** 2026-07-31 · **Status:** Decided (owner) · **Repos:** bikar, 3d-models
+
+### Context
+
+[`lego-lab-design.md`](lego-lab-design.md) §10 lists **multi-piece export** in
+P1. Scoping it surfaced a defect: a `brick` accepts a declared socket-role
+`port`, an `assembly` will `connect` a rod into it, and the C2 fit ladder checks
+the pin against the socket diameter and passes — but `buildBrick` never reads
+`decl.ports`. Only `hole` cuts material, and `brick` has no `hole` statement. The
+exported mesh is byte-identical with and without the port: `Panel-Left.stl` is
+3764 triangles either way.
+
+So P1 had nothing to decompose, and §1's non-goals ruled out the joint that
+normally would. The three options were argued with compiled sections in the design note
+`multi-piece-export` — bikar `packages/lab/src/design/notes/multi-piece-export.ts`,
+read at `design.html?n=multi-piece-export` after `make lab` (the page is
+`preview` status and is not published yet). It is the first note written under
+the [`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+
+Shipped in bikar `617bee1` (PR #34, the note as `preview`) and `3b31fab`
+(PR #35, the note closed to `decided` and the validator below).
+
+### Decision
+
+**Studs as ports.** `brick` auto-mints stud and tube ports on the stud lattice;
+an `assembly` connects `Top.tubeN` to `Base.studM` and `export parts` writes one
+STL per brick, each plated on its own bottom face.
+
+### Why, against the two it beat
+
+The deciding fact is on the drawing: **both shapes are already in the exported
+mesh.** The note cuts the same `ClassicBrick` twice — once through the anchor row
+(the tubes that receive) and once through a stud row (the studs received) — and
+neither section contains a line the kernel does not already emit. The option
+names geometry; it does not add any. That is the opposite of the defect above,
+where the fit ladder described a socket nothing had cut.
+
+*Refuse the phantom* is the smallest scope and stays correct, but the only
+assembly a user could actually reach is `Pinned-Tiles.bkr`, a **C2 tile**
+assembly. The Lego Lab would ship a feature its own catalogue never triggers,
+which satisfies the P1 line in letter and not in fact.
+
+*Real hole* contradicts §1's stated non-goal — *"Technic geometry (axle holes,
+pin holes, ⌀4.8 bars)"* — and the section shows why that non-goal was not
+arbitrary: the bore passes through the ceiling and the shell wall, between two
+tubes the anchor solver placed. Widening §1 may be right one day, but arriving
+there as a side effect of a P1 checkbox is how a non-goal dies unnoticed.
+
+Studs-as-ports is the largest scope of the three — two port kinds, a stud-index
+naming scheme that survives a footprint change, a pose solver for the assembled
+preview, and a clutch-fit rung for printed-onto-printed. It is taken with that
+cost stated, not discovered.
+
+### Unconditional, regardless of this choice
+
+A `brick` must not mint a socket-role port that cuts no geometry. That is a
+validator and a test, and it ships whichever option had won — under this one it
+still fires, because a *hand-declared* socket-role port on a brick remains
+uncut. Per the graduation rule the test fails before the fix and passes after.
+
+### What would reverse it
+
+The printed-onto-printed clutch turns out not to hold — a stud printed on a
+Lego-compatible tube either seizes or falls out across the whole fit ladder, so
+no rung of the sweep is green. Then a stud is a shape, not a joint, and the
+multi-piece path falls back to *refuse the phantom* with the reasoning here
+intact. This is a measurement, so it is a `CAL-*` bet and not an argument: the
+reversal condition is a coupon result, not a re-reading of this entry.
