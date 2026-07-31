@@ -984,8 +984,8 @@ overlay draws, both gate reports, the anchor solve, and `sweepGridFit` for P0's 
 **P0 — the Lego Lab page — 2026-07-31.** bikar `61c371f` (PR #27: `lego.html` as `packages/lab`'s
 second Vite entry, `lego-main.ts`, `lego-scripts.ts`, `lattice-overlay.ts`, `fit-profile.ts`,
 `lego.css`, the four new `patterns/Lego/*.bkr`, the two brick constraint rules, and the
-`fit-profile` / `lego-presets` / `anchor-candidates` / `lego-lab.spec.ts` suites) and `<PR28>`
-(the two fit-row defects below). 3d-models: this revision — `make bricks`, `make lego-lab`,
+`fit-profile` / `lego-presets` / `anchor-candidates` / `lego-lab.spec.ts` suites) and `ae8deb1`
+(PR #28 — the two fit-row defects below). 3d-models: this revision — `make bricks`, `make lego-lab`,
 `build/brick_previews.py`, `src/Lego/*.bkr`, and gallery §03.
 
 Deliberate deviations from this spec:
