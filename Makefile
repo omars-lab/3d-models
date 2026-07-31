@@ -39,7 +39,13 @@ DEPLOY_PATHS := index.html lab.html assets build/images build/stls src LICENSE R
 # design-doc gate, see .claude/gates/docs_gate.py).
 setup-hooks:
 	git -C ${ROOT_DIR} config core.hooksPath .githooks
-	@echo "hooks: core.hooksPath -> .githooks (pre-commit.d = gitleaks + use-cases + docs-gate)"
+	@echo "hooks: core.hooksPath -> .githooks"
+	@echo "  pre-commit.d = gitleaks (staged hunks) + use-cases + docs-gate"
+	@echo "  pre-push     = gitleaks full history (this repo has no CI)"
+	@if ! command -v gitleaks >/dev/null 2>&1; then \
+		echo "  WARNING: gitleaks not installed — commits AND pushes will block."; \
+		echo "           brew install gitleaks   (override: GITLEAKS_OK=1)"; \
+	fi
 
 # Validate the actor/use-case map's hash-pinned code pointers.
 validate-use-cases:

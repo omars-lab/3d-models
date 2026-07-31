@@ -1,0 +1,73 @@
+#!/bin/sh
+# Pre-push full-history secret scan. Activate on a fresh clone with:
+# make setup-hooks (sets core.hooksPath to .githooks).
+#
+# WHY THIS FILE EXISTS. Audited 2026-07-31 across all ten repos on this machine,
+# and this one was the last with no full-history secret scan anywhere. Its only
+# gate was .githooks/pre-commit.d/10-gitleaks, which scans *staged hunks* — so a
+# secret reaches the remote unexamined through any of the ordinary paths that
+# never present a staged hunk to that hook:
+#
+#   - `git commit --no-verify` (and this repo documents named overrides, so
+#     reaching for a bypass is a normal move here, not an exotic one)
+#   - an interactive rebase or squash that rewrites commits the hook already saw
+#   - a merge that pulls in another branch's leak
+#   - anything committed before 10-gitleaks existed
+#   - a machine that never ran `make setup-hooks`, where core.hooksPath is unset
+#     and *no* hook in this directory runs at all
+#
+# The other repos close this with CI: bikar and coffee-house-sites both run
+# `gitleaks git .` over full history on every PR. That is not available here —
+# this repo has no .github/workflows directory at all, and adding CI to a repo
+# whose build needs OpenSCAD is a much larger change than the gap warrants. So
+# this takes sacred-patterns' approach, which is in exactly the same position
+# (no CI) and got the same hook in sacred-patterns#20.
+#
+# IT BLOCKS RATHER THAN WARNS, and that is the point. Push is the last gate
+# before commits leave the machine, and a credential that reaches the remote is
+# compromised whether or not the commit is later rewritten away — rewriting
+# history does not un-disclose a key. A hook that skips silently when gitleaks
+# is missing is worse than no hook: it reports nothing either way, so the repo
+# looks scanned. GITLEAKS_OK=1 is the named override, matching the GITLEAKS_OK /
+# USE_CASES_OK / DOCS_GATE_OK convention the other gates here already use — the
+# difference between choosing to skip a gate and never learning it did not run.
+#
+# `gitleaks git .` rather than `gitleaks detect`: detect is deprecated and no
+# longer appears in `gitleaks --help` as of 8.30.1, which lists only
+# dir / git / stdin. It still runs today, but a gate built on a retiring
+# subcommand goes down on someone else's release schedule.
+#
+# `--redact` because this fires exactly when a live credential is present, and
+# printing it in cleartext puts it in terminal scrollback and in whatever gets
+# pasted when asking for help. Rule ID, file and line still print, which is all
+# that is needed to find it.
+#
+# No --config: this repo has no .gitleaks.toml and needs none — the default
+# ruleset scans 86 commits of OpenSCAD sources and markdown clean (verified
+# 2026-07-31). Add one only when a real false positive appears; an allowlist
+# written ahead of a finding is a hole with no incident behind it.
+#
+# TEST-AUTHORING NOTE, learned the hard way while measuring the pre-commit side.
+# Two whole classes of planted secret scan CLEAN and look exactly like a dead
+# gate: vendors' documentation keys (AKIAIOSFODNN7EXAMPLE) and sequential
+# placeholder runs (ghp_0123456789abcdefghijklmnopqrstuvwxyz) — gitleaks' default
+# config filters both. Build the positive control from /dev/urandom and assert it
+# exits 1 BEFORE trusting any clean result from this hook.
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "[pre-push] gitleaks full-history scan"
+  gitleaks git . --no-banner --redact --verbose || {
+    echo ""
+    echo "  Secret scan failed — push blocked. Findings above are redacted;"
+    echo "  the rule/file/line locate the value in your working tree."
+    echo "  Deliberate override: GITLEAKS_OK=1 git push ..."
+    exit 1
+  }
+elif [ "${GITLEAKS_OK:-}" = "1" ]; then
+  echo "[pre-push] WARN: gitleaks full-history scan SKIPPED via GITLEAKS_OK=1."
+else
+  echo "[pre-push] ERROR: gitleaks not installed — history is unscanned."
+  echo "           Install with: brew install gitleaks"
+  echo "           There is no CI in this repo, so this blocks rather than warns."
+  echo "           Deliberate override: GITLEAKS_OK=1 git push ..."
+  exit 1
+fi
