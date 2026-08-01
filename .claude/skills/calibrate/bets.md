@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**12 registered bets · 15 `Calibrated` records — 15 provisional, 0 measured · 3 bets with no record in bikar.**
+**12 registered bets · 16 `Calibrated` records — 16 provisional, 0 measured · 2 bets with no record in bikar.**
 
 ## Bets
 
@@ -21,7 +21,7 @@ is opened, clustered, and closed.
 | `CAL-FIT-01` | `FIT_GAP_MM` press/snug/sliding/free gap ladder | `MC-1` | provisional | `CLIP_CLEARANCE_MM_CAL`, `FIT_GAP_MM_CAL`, `FIT_TOL_MM_CAL` |
 | `CAL-HOL-01` | `PrinterProfile.holeCompMm` per material | `MC-1` | provisional | `PRINTER_PROFILES_CAL` |
 | `CAL-FEA-01` | `DEFAULT_MIN_FEATURE_MM` printable-feature floor | `MC-2` | provisional | `DEFAULT_MIN_FEATURE_MM_CAL`, `KEYHOLE_FRONT_FLOOR_MM_CAL`, `PERIMETER_WIDTH_MM_CAL` |
-| `CAL-BRG-01` | unsupported bridge span ceiling | `MC-3` | open — no record in bikar | — |
+| `CAL-BRG-01` | unsupported bridge span ceiling | `MC-3` | provisional | `BRIDGE_SPAN_MAX_MM_CAL` |
 | `CAL-OVH-01` | overhang angle threshold (print-gate F5) | `MC-4` | open — no record in bikar | — |
 | `CAL-WRP-01` | `PrinterProfile.warpMm` first-plate corner warp | `MC-5` | provisional | `CLIP_CAPTURE_FLOOR_MM_CAL`, `PROFILE_WARP_MM_CAL` |
 | `CAL-BED-01` | `MIN_BED_CONTACT_MM2` and `MIN_BED_CONTACT_RATIO` | `MC-6` | provisional | `MIN_BED_CONTACT_MM2_CAL`, `MIN_BED_CONTACT_RATIO_CAL` |
@@ -49,7 +49,6 @@ consumers are 3d-models design docs rather than kernel values. They are
 listed with the coupon that will settle each one, so an open bet is a
 named next print rather than an absence:
 
-- `CAL-BRG-01` — unsupported bridge span ceiling · coupon `MC-3`
 - `CAL-OVH-01` — overhang angle threshold (print-gate F5) · coupon `MC-4`
 - `CAL-STR-01` — Z-layer strength ratio · coupon none — measuring it needs a load rig, which does not exist; registered so the gap is visible
 
@@ -144,6 +143,13 @@ named next print rather than an absence:
 - **Value:** `0.4`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The nozzle diameter standing in for the extrusion width, which is the slicer's number and not the nozzle's: real perimeters run wider or narrower than nominal with flow and line-width settings. Shares CAL-FEA-01 with `DEFAULT_MIN_FEATURE_MM` because they are one measurement seen twice — that floor IS three of these, so a measured perimeter width settles both or neither, and letting them drift apart would be the drift the bet exists to prevent. Coupon MC-2 (tube wall ladder) settles it: the walls it prints are counted in perimeters, so the ladder reads this width directly.
+
+### `BRIDGE_SPAN_MAX_MM_CAL` — `CAL-BRG-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/grid-gate.ts`
+- **Value:** `10`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** Bambu Studio's shipped `max_bridge_length` default, transcribed from a slicer preset rather than measured — no cavity of any width has been printed and inspected here. Community reports put achievable bridging at 20–80 mm, so the number is conservative by construction and the check that reads it is warn-only. Coupon MC-3 (bridge ladder) settles it; the same bet also backs w2-connector B.3.
 
 ### `CLIP_CAPTURE_FLOOR_MM_CAL` — `CAL-WRP-01`
 

@@ -1270,20 +1270,89 @@ deviations from this spec, and additions beyond it.)*
   same input whether the author meant a void or a decorative overlay, `Nail-Tile.bkr` depends on
   the overlay reading, and the DSL has no word separating them. `hole` is the supported way to ask
   for a void, which is what the sibling `uncovered hole` error already advises.
-- **Q4 — the bridged cavity ceiling.** `engage 3.2` (§3.6) puts the sagging surface 1.6 mm clear of
-  the host studs, which is the minimum that works. But span still scales with footprint: a 2×2
-  cavity bridges 12 mm, a 6×6 bridges 44 mm. Brick Architect's directional result — the printed
-  **anti-stud side** is what fails — says this is where large pieces will break. May need a
-  footprint-dependent warning or internal ribbing.
-- **Q5 — should `auto` footprint round up or refuse?** Rounding a 33 mm pattern up to 5 studs
-  (39.8 mm) leaves a 3.4 mm dead border. Refusing forces the author to rescale. Leaning: round up,
-  warn, and let the sweep strip show the scale that lands on 4 studs.
-- **Q6 — a geometry-only gate structurally cannot score clutch.** Clutch is elastic: it depends on
-  wall and tube *flexure*, material stiffness, moisture, and layer adhesion (§3.5, §3.8). `gridGate`
-  measures geometry. **`anchorability: PASS` must therefore not be read as "will clutch"**, and the
-  Lab panel must say so in words rather than implying it with a green tick. Whether a compliance
-  proxy (rib deflection × count, or an FEA-lite bending estimate) is worth adding is open; LG-F1 and
-  LG-D1 supply the data that would calibrate one.
+- **Q4 — the bridged cavity ceiling. RESOLVED, and the question's own premise was wrong** (bikar
+  [PR #44](https://github.com/NaqshCoffee/bikar/pull/44)). Q4 as written said "span still scales
+  with footprint: a 2×2 cavity bridges 12 mm, a 6×6 bridges 44 mm", and asked for a
+  footprint-dependent warning. Measured on the seven shipped presets, footprint does not move the
+  answer at all. The reason is in this document's own §5.2: `solveAnchors` places an anti-stud at
+  **every interior cell corner**, so the stud pitch caps the widest unsupported run and a bigger
+  plate simply buys more anchors. Q4 reasoned from the outline, and the outline is not what the
+  ceiling spans between.
+
+  | preset | footprint | span (mm) | anchors dropped |
+  | --- | --- | --- | --- |
+  | Classic-Brick | 2×4 | 4.88 | 0 |
+  | Grid-Field-Tile | 5×5 | 4.88 | 0 |
+  | Pin-Rail | 1×8 | 4.80 | 0 |
+  | Rational-Repeat-Tile | 8×8 | 11.57 | 12 (relief) |
+  | Edge-Stud-Tile | 6×6 | 12.54 | 8 (relief) |
+  | Star-Brick | 4×4 (auto) | 14.25 | 8 (relief) |
+  | Hex-Field-Tile | 6×6 | 25.93 | 10 (relief) |
+
+  A 5×5 and a 1×8 land within a tenth of a millimetre of each other, and the largest plate in the
+  set — the 8×8 — is not the widest span; what separates the two halves of the table is a
+  **dropped** anchor, from relief art sitting on a lattice crossing. So the
+  warning is keyed on the measured run, not on the plate. `supportSpanMm` (bikar
+  `packages/core/src/kernel3d/grid-gate.ts`) measures it with a shrinking-grid largest-empty-circle
+  search over the anchor set the build actually kept, and V12 reports it with the drop that opened
+  it — a pocket drop, a body-test drop, or neither — so the recourse is stated rather than guessed.
+
+  **Default:** the ceiling is 10 mm — `BRIDGE_SPAN_MAX_MM`, bet CAL-BRG-01. It is Bambu Studio's
+  shipped `max_bridge_length`: the number a stock slicer stops trusting at, rather than the number
+  filament stops spanning at. This is V12's first consumer; before it the bet had none.
+
+  **Validator:** V12 warns, and never refuses, when the measured span exceeds that ceiling. It is a
+  warning because the ceiling is transcribed from someone else's slicer preset: the same appendix
+  that credits it ([`print-validation-design.md`](print-validation-design.md) B.4) records community
+  bridging at 20–80 mm on tuned machines, so a refusal would be this project asserting a limit it
+  has never printed against. Coupon MC-3 settles it.
+  - PASS: `Classic-Brick` at its defaults — 4.88 mm, every candidate anchored, no message.
+  - FAIL: a 4×4 under a 16 mm relief window — 8 of 9 candidates dropped, 14.25 mm, V12 names the
+    pocket and offers "move or shrink the art that opened it, or accept the bridge".
+
+  Brick Architect's directional result — the printed **anti-stud side** is what fails — is what
+  makes the number worth reporting at all; it is not what predicts which brick is at risk. Internal
+  ribbing stays unbuilt: nothing measured here calls for it, and MC-3 is the print that would say.
+- **Q5 — should `auto` footprint round up or refuse? RESOLVED: round up and warn** (same PR). The
+  warning is V13, and the whole of what took a second draft is **which sources it may speak about**.
+
+  **Validator:** V13 warns when a pattern axis leaves more than half a stud pitch of dead border per
+  side — i.e. when the *smaller* footprint is nearer the art than the one it got — and only when the
+  source wrote `footprint auto`.
+  - PASS: `Edge-Stud-Tile`, whose declared 6×6 leaves a wide margin on purpose — that margin *is*
+    its perimeter stud ring, and its own header says so.
+  - FAIL: `Star-Brick`, the one preset that asks the compiler to round; its source comment already
+    puts the border at "~3.9 mm of margin per side", which is exactly what V13 reports.
+
+  Run ungated, the first draft fired on five of the seven presets. Every one of those five declares
+  its footprint, and in each the border is a design choice a bounding box cannot see. A typed
+  `footprint 6 x 6` is a decision; `auto` is an arithmetic result — V13 judges the arithmetic, which
+  is the only thing it is entitled to judge. The draft also offered "and the smaller plate already
+  fits it as drawn", which contradicts its own first clause: `studsFor` picks the least *n* with
+  `footprintMm(n) ≥ mm`, so under `auto` the art is always strictly wider than `footprintMm(n−1)`
+  and the branch is unreachable. Deleted, with the proof kept beside the code — a K7 caught by
+  reading the message against itself, and no source could have settled it.
+
+  Refusing was rejected for the reason the original leaning gave: the author who wants the smaller
+  plate needs a number, and V13 hands them one ("scale 0.780 lands it there") instead of an error
+  that says only *no*.
+- **Q6 — a geometry-only gate structurally cannot score clutch. RESOLVED as far as it can be** (same
+  PR). Clutch is elastic: it depends on wall and tube *flexure*, material stiffness, moisture, and
+  layer adhesion (§3.5, §3.8). `gridGate` measures geometry. **`anchorability: PASS` must therefore
+  not be read as "will clutch"** — and the Lab panel was rendering exactly `PASS — it will hold`,
+  the paraphrase `grid-gate.ts`'s own module header forbids in so many words. Two artifacts, a rule
+  and a restatement of it, and the restatement had drifted.
+
+  The fix is structural rather than editorial: `anchorabilityVerdict()` and `CLUTCH_CAVEAT` now ship
+  **from the kernel**, beside the rule, and the Lab renders what it is given. The badge reads
+  `PASS — anchorable geometry`; the caveat sits directly under it, because a reader who stops at the
+  green tick must have already read it. A test asserts neither verdict can say "will hold", "will
+  grip" or "will clutch", so the wording cannot drift back.
+
+  Whether a compliance proxy (rib deflection × count, or an FEA-lite bending estimate) is worth
+  adding stays **open** — that part of Q6 is not resolved and is not resolvable here. LG-F1 and
+  LG-D1 supply the data that would calibrate one, and the caveat names them, so the limit reads as
+  a next measurement rather than a dead end.
 - **Q7 — position-dependent degenerate triangles from relief pockets. RESOLVED** (bikar
   [PR #42](https://github.com/NaqshCoffee/bikar/pull/42)). Building `Hex-Field-Tile` (§10, P1)
   turned up a mesh-gate failure — 5–6 zero-area triangles — that depended on *where* a motif sat,
