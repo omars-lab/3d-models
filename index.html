@@ -339,7 +339,9 @@
   // ---- catalog ----------------------------------------------------------
   // image: processed transparent render in build/images/web/
   // src  : OpenSCAD source ; stl: printable mesh
-  const RAW = "https://raw.githubusercontent.com/omars-lab/3d-models/master";
+  // Sources link to master by URL because they are tracked there. Builds —
+  // images and STLs — are relative, because `build/` is .gitignore'd on master
+  // and exists only where this page is served from.
   const GH  = "https://github.com/omars-lab/3d-models/blob/master";
   const ASSET_VER = "20260731a";   // bump when renders change, to bust CDN/browser image cache
 
@@ -477,7 +479,10 @@
   function plate(m, i, total, srcHref, altKind){
     const n = String(i+1).padStart(2,'0');
     const img = `build/images/web/${m.id}.png?v=${ASSET_VER}`;
-    const stl = `${RAW}/build/stls/${m.id}.stl`;
+    // Relative, like `img` above, and for the same reason: `build/` is
+    // .gitignore'd on master and exists only on the deploy branch, so a
+    // raw.githubusercontent link to master 404s on every plate in the gallery.
+    const stl = `build/stls/${m.id}.stl`;
     const specs = (m.specs || ["0.20 mm layer","PLA","no supports"])
       .map(s => `<span>${s}</span>`).join('');
 
