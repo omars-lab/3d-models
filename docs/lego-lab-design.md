@@ -1922,6 +1922,48 @@ the worked example's choice of the latter is an inference, not a sourced claim. 
 answered by opening one file in three viewers**, which is why they are listed as experiments and
 not as bets: no coupon, no calipers, one afternoon.
 
+#### 14.3.1 The afternoon, costed — and a fifth item the four did not anticipate
+
+Grounding: [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md), 2026-08-01, twelve
+named candidates. **K2 — that is a survey of twelve tools, not of the space of LDraw software;**
+the session had no search budget left, so there was no exploratory search and the candidate set is
+the one the brief named plus what could be reached by following links.
+
+**How the afternoon is actually run.** Nothing LDraw is installed on this machine and there is no
+Homebrew formula or cask for LDView, LeoCAD or Studio, so "opening one file" is a manual download
+before it is a command. Of the twelve, **LDView** is the one to reach for: it is the only candidate
+whose *macOS-specific* source shows a snapshot path that returns before `NSApplicationMain` starts
+a window, and `-VerifyLDrawDir=0` lets it run with no parts library at all — which suits us exactly,
+because our MPD references nothing outside itself. §1.2 of the research gives the invocation.
+**K10 — LDView's documentation is written from a Windows point of view, and its Linux release ships
+an off-screen build the macOS release does not have**, so the macOS off-screen path is claimed on
+the strength of `MacOSX/LDView/main.m` and nothing else. It rests on CGL pbuffers, a deprecated
+Apple API, and LDView's own help hedges it — *"if your video card allows this to run without
+displaying a window"*. Untested here.
+
+**The fifth item, and it is the one that matters.** §14.3's four unknowns all ask what a viewer does
+with a *name*. None of them asks what a viewer does with the *triangles*, and for LeoCAD the answer
+looks like: nothing. `lcModel::LoadLDraw` dispatches on line type, builds an `lcPiece` from type-1
+lines, and drops types 2–5 into `else { ReadingHeader = false; mFileLines.append(OriginalLine); }`;
+`mFileLines` is read back only by `SaveLDraw`. Our file is two type-1 lines and 3,764 type-3
+triangles. The name resolves perfectly — `SplitMPD` → `CreatePieceInfo` → `FindPiece` consults the
+same-file blocks first — so the predicted outcome is **an empty model and no error at all**, which
+is the export-succeeds-and-yields-the-wrong-thing class this section was written to avoid, arriving
+from a direction the section did not look. **K1 — this is a source reading, not an observation.**
+It was checked against `leozide/leocad@master` a second time by hand before being written here, and
+what has *not* been ruled out is some other path — a preview renderer, the POV-Ray export,
+`lcSynthInfo` — reconstituting those lines. The run that settles it is the same run as ①.
+
+So the ledger moves as follows. ③ largely **dissolves** for a well-formed export: LDView's
+`subModelNamed` hits the loaded-models dictionary before any disk or tracker lookup, so the parts
+tracker is never reached and the question survives only for a *malformed* file. ④ is **answered
+per-implementation and stays open as a standards question**: LDView's `isPartMeta()` accepts both
+forms, three.js's `isPartType()` accepts only `!LDRAW_ORG` — they are *not* interchangeable across
+readers, and the emitter already writes the form both accept. ① is half-answered and now carries
+the fifth item above. ② — BrickLink Studio — is **untouched**, and nothing in this survey predicts
+it, because Studio maps LDraw parts onto its own catalogue. The afternoon is still owed; it is now
+costed, and it has one more thing to look for than it did.
+
 ---
 
 ## Appendix A — sources
