@@ -12,13 +12,13 @@
       name="description"
       content="Design a 3D-printable LEGO-compatible brick with sliders — both grid gates, the lattice solve, and a clutch fit whose every number says whether a coupon set it."
     />
-    <script type="module" crossorigin src="./assets/lego-B0vXXseQ.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/dist-B5rd_OWE.js">
-    <link rel="modulepreload" crossorigin href="./assets/style-Brwq7ekB.js">
+    <script type="module" crossorigin src="./assets/lego-CyUbSTuh.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/dist-Da2e_0sZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/style-BvBjnx-C.js">
     <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-BxR_cmXS.js">
-    <link rel="modulepreload" crossorigin href="./assets/lego-scripts-N56Wnyi7.js">
+    <link rel="modulepreload" crossorigin href="./assets/lego-scripts-B2le0pGj.js">
     <link rel="stylesheet" crossorigin href="./assets/style-CVV-ZBlI.css">
-    <link rel="stylesheet" crossorigin href="./assets/lego-Cq0WrxUl.css">
+    <link rel="stylesheet" crossorigin href="./assets/lego-BT2C8GYp.css">
   </head>
   <body>
     <header class="lab-header">
@@ -84,6 +84,14 @@
         <div id="error-panel" class="error-panel" hidden></div>
       </aside>
       <div class="lab-stage">
+        <button
+          id="code-toggle"
+          class="code-toggle"
+          aria-expanded="false"
+          title="Show the script source — edit it to make this brick your own"
+        >
+          Code
+        </button>
         <div id="view-tabs" class="view-tabs" role="tablist" aria-label="Preview view">
           <button
             class="view-tab active"
@@ -159,6 +167,71 @@
         <div id="spinner" class="spinner" hidden>
           <span id="spinner-label">computing&hellip;</span>
           <button id="stop-button" class="stop-button" hidden>Stop</button>
+        </div>
+        <div id="code-drawer" class="code-drawer" hidden>
+          <div id="drawer-resize" class="drawer-resize" aria-hidden="true"></div>
+          <div class="drawer-header">
+            <span class="drawer-title">Code</span>
+            <span class="drawer-hint">edits re-evaluate after a pause</span>
+            <button id="bake-button" title="Write the current knob values into the param defaults">
+              Write values into code
+            </button>
+            <button
+              id="bkr-download"
+              title="Download this script as a .bkr file, knob values baked in — the clutch fit stays here, it describes your printer"
+            >
+              Download .bkr
+            </button>
+            <a
+              id="open-studio"
+              target="_blank"
+              rel="noopener"
+              title="Open this script in Bikar Studio — the full pattern editor"
+            >
+              Open in Studio
+            </a>
+            <button id="drawer-hide" title="Hide the code drawer">Hide</button>
+          </div>
+          <div class="editor-body">
+            <pre id="editor-gutter" class="editor-gutter" aria-hidden="true"></pre>
+            <textarea
+              id="code-editor"
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="off"
+              maxlength="65536"
+              aria-label="Brick script source"
+            ></textarea>
+          </div>
+          <details class="authoring-help">
+            <summary>Authoring notes</summary>
+            <ul>
+              <li>
+                <code>param</code> lines become sliders, and the range on the line is the range on
+                the slider. The Lab's two named guard rails (<code>inner</code>/<code>shoulder</code
+                >, <code>amplitude</code>/<code>strut_depth</code>) are orb params &mdash; no brick
+                declares them, so they never fire here. A brick's ranges come from its
+                <code>param</code> lines and from the validators.
+              </li>
+              <li>
+                A brick you typed is scored exactly like one that shipped: both grid gates and the
+                mesh gate read the geometry in front of them, so nothing on this page goes quiet in
+                custom mode. If your script declares an <code>orb</code> rather than a
+                <code>brick</code>, the panels say so instead of guessing.
+              </li>
+              <li>
+                The clutch fit rides in neither the link nor the <code>.bkr</code>. It describes
+                <em>your</em> printer and spool, so whoever opens your link gets your brick and
+                their own fit set &mdash; a link that quietly compensated for your machine's error
+                would make their brick come out wrong in a way neither of you could see.
+              </li>
+              <li>
+                Runaway evaluations are stopped after a time budget (Stop appears sooner). Browsers
+                differ on out-of-memory: some kill the worker, Safari may kill the tab &mdash; save
+                your work with Download or Copy link.
+              </li>
+            </ul>
+          </details>
         </div>
       </div>
     </main>
