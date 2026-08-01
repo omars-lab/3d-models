@@ -1699,17 +1699,32 @@ one element:
   loads its weakest axis in shear every time a brick is pulled off, where a moulded one does not.
   Q2 is open, LG-R1 is the coupon that closes it, and the note says exactly that — it does not say
   the pin will fail, because nothing measured here says so.
-- **Margin to the feature floor.** `process === 'fdm'` and `minFeatureMm` within the margin below.
-  The panel already prints `minFeatureMm` / `minFeature` / `featureFloorMm`; what it does not do is
-  say that a part clearing the floor by a hair clears it on paper only, since the floor is a
-  nominal-geometry check and the printed wall is the one that jams. Names `minFeature` so the
-  reader knows which dimension is close.
+- **Margin to the feature floor.** `process === 'fdm'`, **the fit set has been moved off its
+  shipped defaults**, and `minFeatureMm` is within the margin below. The panel already prints
+  `minFeatureMm` / `minFeature` / `featureFloorMm`; what it does not do is say that a part clearing
+  the floor by a hair clears it on paper only, since the floor is a nominal-geometry check and the
+  printed wall is the one that jams. Names `minFeature` so the reader knows which dimension is
+  close.
+
+  The moved-fit clause is not decoration-avoidance bolted on afterwards — it is the same test the
+  first bullet applies to `family`, applied here. On the shipped fit the thinnest feature of *every*
+  brick is the anti-stud tube wall at **0.757 mm** against a **0.70 mm** floor, 8 % clear, because
+  that dimension is fixed by the part this one has to mate with rather than by anything the design
+  chooses. Keyed on the margin alone the note would be on screen forever. What moves the margin is
+  the fit set, so that is what gates it: the note fires when the reader has dialled a clutch number
+  and dialled it toward the floor. On defaults the standing fact belongs to the fit banner, which
+  already says every clutch number is an unmeasured default until a coupon says otherwise.
+  Implementation: `FIT_FIELDS.some((f) => fitProvenance(brick.fit, f) !== 'default')`, read off the
+  fit the mesh was built from — the same source §9's provenance badges read.
 
   **Default:** the margin is 15 % of `featureFloorMm` — bet [CAL-FEA-01](#appendix-b--contested-bets-and-divergences),
   the same bet the 0.8 mm override rides on, because it is the same unmeasured quantity: the gap
   between the authored wall and the realised one. Appendix B records that Brick Architect reports
   the realised wall running *thicker* than authored, so the hazard is real in the direction that
-  matters and its size is exactly what LG-F1's calipers settle.
+  matters and its size is exactly what LG-F1's calipers settle. Note what 15 % does *not* buy here:
+  at a 0.70 mm floor it admits everything up to 0.805 mm, which the shipped 0.757 mm wall is already
+  inside — so the margin is what makes the note *informative once the fit moves*, not what makes it
+  rare.
 
 Neither condition fires on powder, which is the point: on SLS/MJF the anisotropy question does not
 arise and the resolvable-feature floor is a different number. And a note is not a warning — nothing
@@ -1723,7 +1738,9 @@ learns to skim both.
 - PASS: `Star-Brick` on FDM — 4×4, `supportSpanMm` 14.25 mm, eight anchors dropped for relief
   (§11 Q4's measured table). V12 warns about the bridge (14.25 > `BRIDGE_SPAN_MAX_MM` = 10) and
   the note stays hidden: 4×4 means §5's rule gives `anchorKind: 'tube'`, so the anisotropy
-  condition does not hold, and the thinnest feature clears the margin. One statement, one channel.
+  condition does not hold, and on the shipped fit the second condition does not either — its
+  thinnest feature is 0.757 mm, *inside* the 0.805 mm margin, and the moved-fit clause is the only
+  reason the note is silent. One statement, one channel.
 - FAIL: the same brick with a note that also said "this cavity bridges 14.25 mm unsupported". True,
   already on screen from V12, and duplicated — the reader now has to check whether the two numbers
   agree rather than read either.
