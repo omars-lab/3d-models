@@ -985,7 +985,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` placement export** (survey §6 — a text emit, one line per piece) is unbuilt, and unspecified beyond that clause: a generated brick is not an LDraw part and has no part number to reference, so it needs a spec before it needs code. **§14 specifies the first two**; the LDraw export waits on its own research. |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
@@ -1671,12 +1671,14 @@ minting a UC for it would put an entry in the map that no code delivers.
 
 ---
 
-## 14. P3 — the two refinements the shipped code already earns
+## 14. P3 — the three items, specified
 
-§10's P3 row names three items. Two of them are refinements of surfaces that exist and are
-specified here; the third, the LDraw `.ldr` placement export, is not yet — a generated brick is
-not an LDraw part and has no part number, so a type-1 line has nothing to reference, and that is
-a question about the format before it is a question about our code.
+§10's P3 row names three items. Two are refinements of surfaces that already exist (§14.1, §14.2).
+The third — the LDraw export — was blocked on a question about the format rather than about our
+code: a generated brick is not an LDraw part and has no part number, so a type-1 line has nothing
+to reference. [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) answers it, and
+§14.3 is the spec that follows. **It also refutes the row's own cost estimate**, which is corrected
+in §10 and explained in §14.3.
 
 ### 14.1 The brick page's process note
 
@@ -1754,12 +1756,125 @@ copy and marking change, not a plumbing one. Two channels, because they have dif
 This is deliberately not a new gate. An adjustment is the constraint solver doing its job; the
 brick that comes out is printable, and the reader is being told what it cost, not warned.
 
+### 14.3 The LDraw export
+
+Grounding: [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md), 2026-08-01, seven
+LDraw specification documents plus three viewers, read against bikar at `9cca1ae`.
+
+**The row's framing was wrong, and this is the correction.** §10 called the export *"a text emit,
+one line per piece"* with no mesh work. That is true of exactly the two options the research
+recommends against, and false of the one it recommends. The reason is §3.5 of the research: of the
+**7 brick scripts shipped in bikar's `patterns/Lego/`**, **5** carry `relief depth` and/or
+`studs none` / `studs edge`, and no stock LDraw part has a pattern relief cut into it. A type-1
+line naming `3001.dat` for a `Star-Brick` produces a file that renders as a plain grey 2×4 and
+warns nobody — an export that succeeds and yields the wrong thing, which is the defect class
+[`c2-assembly`](c2-assembly-design.md) was audited over. Even the two scripts with a stock analogue
+(`Classic-Brick`, `Pin-Rail`) differ dimensionally: 4.6 mm studs against 4.8, 6.314 mm tubes
+against 6.4, a 31.8 mm 4-stud run against 32.0, and 0.1 mm clutch ribs no LEGO element carries.
+
+So the export is an **MPD** carrying one inline `0 FILE <name>.dat` block per *distinct* brick,
+geometry as type-3 triangles, referenced by a type-1 line per placement. The MPD specification's
+own worked example defines a part inline with geometry inside an MPD, which is the strongest
+grounding available for the shape. Placement arithmetic is unchanged from the rejected option —
+that property is real and worth keeping — so the whole difference is which filename the type-1
+line names.
+
+**Default:** 1 LDU = 0.4 mm, from the
+[LDraw File Format Specification 1.0.2](https://www.ldraw.org/article/218.html) as fetched and
+quoted in [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §1.3. The spec gives *two*
+conversions and calls both approximations; the other, 1/64 in = 0.396875 mm, makes a stud pitch of
+7.9375 mm. **K10 — why 0.4 transfers and 1/64 in does not:** 20 LDU × 0.4 reproduces §3.1's
+8.0 mm pitch exactly, which is the pitch every dimension in this doc was derived under and the
+conversion the survey read that table under. 1/64 in reproduces nothing here, and must not be
+offered as an emitter option.
+
+The axis map is `(x, y, z)_mm → (x/0.4, (H − z)/0.4, y/0.4)_LDU`, whose 3×3 has determinant **+1**
+— a proper rotation from bikar's right-handed +z-up frame to LDraw's right-handed −y-up one, so
+triangle winding survives. The near-miss `(x, y, z) → (x, −z, −y)` has determinant −1 and would
+invert every face silently. The `H − z` term puts the origin on the brick's **top** face; **K10 —
+that convention transfers because interoperation is the only reason to emit `.ldr` at all.** If
+the file only ever held our own bricks any consistent origin would do; the moment a user drops a
+library part beside ours, a different origin puts it 9.6 mm out with nothing on screen to say so.
+
+Header lines (`0 Name:`, `0 Author:`, `0 !LDRAW_ORG`) come from specifications scoped to
+*submission to an LDraw.org repository*. **K10 — they transfer as conventions, not requirements:**
+a file generated for a user's own viewer is submitted nowhere, so nothing in those specs binds it;
+what does transfer is a reader's expectation, and matching it costs six lines. The emitter writes
+them and the doc does not claim the file is "spec-compliant" on that basis. Two lines are excluded
+on purpose. `0 !LICENSE` asserts a CC BY 4.0 grant over the referenced geometry that nobody in
+this project has made — emit this repo's actual licence or none. `0 BFC CERTIFY CCW` is
+*derivable* (the mesh reports `watertight: true` and positive signed volume, and the axis map
+preserves winding) but has never been rendered in a BFC-checking viewer; absence is defined as
+safe and costs shading quality rather than correctness, so it stays out until someone looks.
+
+**Validator:** an inline block's filename must fall outside all three part-number namespaces the
+LDraw part-number spec defines — bare `NNNN`, `uNNNN`, `tNNNN` — all of which are
+administrator-assigned, with no reserved namespace for user parts. This is not style: the MPD
+extension states in its own words that there are no scoping or namespace rules for MPD files,
+which is both what makes an inline block resolvable *and* what makes a badly-named one dangerous.
+
+- PASS: `bikar-Classic-Brick-2x4-3p-a71f.dat` — begins with letters, contains hyphens, cannot be
+  read as a part number under any of the three forms, and no future library part can collide with
+  it. Carries a `0 //` line saying it is generated and is not an LDraw part.
+- FAIL: `3001.dat` for the same block. It resolves — and, having no scoping rules to stop it,
+  silently replaces the real 2×4 for *every other reference in the document*, including stock
+  parts the user added themselves. The user's own model changes shape and nothing reports it.
+
+**The cost, measured rather than estimated where it says so.** One plain `Classic-Brick` 2×4 is
+3,764 triangles and **217,206 bytes (212.1 KiB)** of type-3 text — measured. `Star-Brick`
+(1,300 tris), `Hex-Field-Tile` (12,148) and `Grid-Field-Tile` (12,844) are measured for triangle
+count and their byte figures **extrapolated** at 57.7 B/line, so ≈ 73 / 685 / 724 KiB are
+order-of-magnitude figures, not measurements. A 20-brick field-tile model lands in the 10 MB range.
+The useful comparison is not "large for a text file" but that 212 KiB exceeds the **184 KiB binary
+STL of the same mesh** — and anyone who wanted the mesh already has `--format stl`. De-duplicating
+identical bricks into one block halves the worked two-brick example, and is the one optimisation
+that is free.
+
+**What is bounded, and stated as bounded.** Three viewers were checked — LDView, LeoCAD, BrickLink
+Studio — and only **LDView** documents a resolution rule that could be quoted. LeoCAD's docs
+describe a library zip/folder and an `unofficial` directory and say nothing about a model-directory
+search or about an unresolvable reference; Studio's import article lists `.ldr`/`.mpd` and says
+nothing about unrecognised parts. Nothing here should be read as *"LDraw viewers do X"*, only as
+*"of the three checked, one documents X and two document nothing"*. Not checked: LDCad,
+Bricksmith, LPub3D, `library.ldraw.org/model-viewer`, three.js `LDrawLoader`, Blender's importers.
+Seven specification documents were read; roughly a dozen further language extensions were not, so
+the "no units or global-scale meta command exists" finding is bounded to those seven.
+
+Two consequences for scope, both of which the emitter must carry rather than the reader:
+
+- **Refuse rather than mislead on a non-8 mm pitch.** `STUD_PITCH_MM = 8.0` is a module constant
+  today, not a knob — §5.3 and the lattice sweep vary *pattern scale* against a fixed 8 mm pitch,
+  which the export represents for free as more triangles. But if pitch ever becomes a knob, LDU is
+  a unit and not a grid: a 7.5 mm pitch emits at 18.75 LDU centres, renders exactly where it was
+  put, and is silently incompatible with every part in the library. The type-1 matrix does scale,
+  legally — and a uniform scale shrinks the studs too, so the result mates with nothing. There is
+  no way to say "this model is on a 7.5 mm pitch" in a file whose whole premise is one fixed unit,
+  so the emitter refuses. That guard is written now, against a future change, not a live case.
+- **The stock-part hybrid is a follow-on, not a precondition.** Emitting a real part number when
+  the brick provably matches within a tolerance, and inline geometry otherwise, is the better
+  answer in principle. It needs a match table (footprint × height × stud mode → part number)
+  maintained against library updates, and a tolerance only a rendered comparison can set — and the
+  deltas above sit in the 0.086–0.2 mm band where "close enough for a layout preview" and "wrong
+  as a dimensional record" are the same number. That is the number to argue about when it is built.
+
+Ten items could not be grounded and the research file enumerates each with the experiment that
+would settle it. Four are load-bearing here: what LeoCAD does with an unresolvable reference and
+whether it resolves names against same-file `0 FILE` blocks; what Studio does with an
+inline-defined part on import and round-trip; what LDView does after its parts-tracker download
+attempt fails for a name that never existed; and whether `0 UNOFFICIAL PART` and
+`0 !LDRAW_ORG Unofficial_Part` are interchangeable — none of the seven specs reconciles them, and
+the worked example's choice of the latter is an inference, not a sourced claim. **All four are
+answered by opening one file in three viewers**, which is why they are listed as experiments and
+not as bets: no coupon, no calipers, one afternoon.
+
 ---
 
 ## Appendix A — sources
 
 Full survey with derivations: [`research/lego-brick-system-survey.md`](research/lego-brick-system-survey.md).
 Adversarial audit, preserved verbatim: [`research/lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md).
+LDraw format research behind §14.3, with its own fetch record and ten ungrounded items:
+[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md).
 
 **Primary, read in full**
 
