@@ -15,8 +15,10 @@ printable parts — §5.3's **compatibility matrix, now filled by a real sweep**
 ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)), and the two
 **curated scripts** that make that matrix clickable rather than only readable. P2 then gave the page
 custom mode — the code drawer, `code=` share links, "Open in Studio" and the localStorage draft —
-by *sharing* the Orb Lab's modules rather than forking them. Only P3 has
-not shipped. Building P1 produced the finding that a printed brick on a
+by *sharing* the Orb Lab's modules rather than forking them. Only P3 has not shipped, and only
+partly: its adjusted-parameter toasts have been in both Labs since P0, which §10's row went on
+calling future work for two phases — what remains there is the brick page's print note and the
+LDraw export. Building P1 produced the finding that a printed brick on a
 printed brick has **no clutch at all** on the shipped defaults, and the coupon (`LG-S1`) that would
 settle where the real ceiling sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
@@ -983,7 +985,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` placement export** (survey §6 — a text emit, one line per piece) is unbuilt, and unspecified beyond that clause: a generated brick is not an LDraw part and has no part number to reference, so it needs a spec before it needs code. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
