@@ -985,7 +985,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` placement export** (survey §6 — a text emit, one line per piece) is unbuilt, and unspecified beyond that clause: a generated brick is not an LDraw part and has no part number to reference, so it needs a spec before it needs code. |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` placement export** (survey §6 — a text emit, one line per piece) is unbuilt, and unspecified beyond that clause: a generated brick is not an LDraw part and has no part number to reference, so it needs a spec before it needs code. **§14 specifies the first two**; the LDraw export waits on its own research. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
@@ -1668,6 +1668,91 @@ and a reader deserves to be told which.
 
 The index page itself carries no use case. Navigation is not something a person accomplishes, and
 minting a UC for it would put an entry in the map that no code delivers.
+
+---
+
+## 14. P3 — the two refinements the shipped code already earns
+
+§10's P3 row names three items. Two of them are refinements of surfaces that exist and are
+specified here; the third, the LDraw `.ldr` placement export, is not yet — a generated brick is
+not an LDraw part and has no part number, so a type-1 line has nothing to reference, and that is
+a question about the format before it is a question about our code.
+
+### 14.1 The brick page's process note
+
+The Orb Lab has carried a process-dependent advisory since P1: `updateProcessNote()`
+(bikar `packages/lab/src/main.ts`) sets one hidden `<p id="process-note">` when
+`family === 'weave' && printTarget.process === 'fdm'`, telling the reader that interlocked ribbons
+come off powder systems pre-assembled and off FDM needing support surgery. The Lego Lab has no such
+element and reads `printTarget` only for `radiusCeilingMm()` and the build-volume readout — so the
+one knob on the page that describes the *machine* changes nothing the page says about the *part*.
+
+The brick's analogue is not `family` — every brick has `family: 'brick'`, so keying on it would
+produce a note that is either always on or always off. It is **`LabBrick.anchorKind`**, because
+that is the field §11 Q2 is a question about, and the field whose answer the FDM/powder split
+actually changes. Two conditions, rendered into the same single slot as a list so the page keeps
+one element:
+
+- **Anchor anisotropy.** `anchorKind === 'pin' && process === 'fdm'`. A ⌀3.2 pin printed in layers
+  loads its weakest axis in shear every time a brick is pulled off, where a moulded one does not.
+  Q2 is open, LG-R1 is the coupon that closes it, and the note says exactly that — it does not say
+  the pin will fail, because nothing measured here says so.
+- **Margin to the feature floor.** `process === 'fdm'` and `minFeatureMm` within the margin below.
+  The panel already prints `minFeatureMm` / `minFeature` / `featureFloorMm`; what it does not do is
+  say that a part clearing the floor by a hair clears it on paper only, since the floor is a
+  nominal-geometry check and the printed wall is the one that jams. Names `minFeature` so the
+  reader knows which dimension is close.
+
+  **Default:** the margin is 15 % of `featureFloorMm` — bet [CAL-FEA-01](#appendix-b--contested-bets-and-divergences),
+  the same bet the 0.8 mm override rides on, because it is the same unmeasured quantity: the gap
+  between the authored wall and the realised one. Appendix B records that Brick Architect reports
+  the realised wall running *thicker* than authored, so the hazard is real in the direction that
+  matters and its size is exactly what LG-F1's calipers settle.
+
+Neither condition fires on powder, which is the point: on SLS/MJF the anisotropy question does not
+arise and the resolvable-feature floor is a different number. And a note is not a warning — nothing
+here is a validator finding, so nothing here belongs in `LabBrick.warnings`, which is the channel
+V5b/V7/V8/V10/V12/V13 already own.
+
+**Validator:** the process note must not restate anything already present in `brick.warnings`. The
+two channels are shown a few hundred pixels apart and a reader who sees the same sentence twice
+learns to skim both.
+
+- PASS: `Star-Brick` on FDM — 4×4, `supportSpanMm` 14.25 mm, eight anchors dropped for relief
+  (§11 Q4's measured table). V12 warns about the bridge (14.25 > `BRIDGE_SPAN_MAX_MM` = 10) and
+  the note stays hidden: 4×4 means §5's rule gives `anchorKind: 'tube'`, so the anisotropy
+  condition does not hold, and the thinnest feature clears the margin. One statement, one channel.
+- FAIL: the same brick with a note that also said "this cavity bridges 14.25 mm unsupported". True,
+  already on screen from V12, and duplicated — the reader now has to check whether the two numbers
+  agree rather than read either.
+
+Note that the example is deliberately not "a big plate": §11 Q4 measured that footprint does not
+move the span at all — `Star-Brick`'s 4×4 spans wider than the 8×8 — and a PASS case that implied
+otherwise would re-import the premise Q4 refuted.
+
+### 14.2 Naming the parameter that moved
+
+Both Labs have toasted `Adjusted N parameters to printable values` since P0
+(bikar `packages/lab/src/lego-main.ts` and `packages/lab/src/main.ts`). The count is the whole
+message: `applyAdjustments()` mutates `values[a.name] = a.to`, or deletes the entry when
+`a.dropped`, and the knob silently shows its new position. A reader who was not watching that knob
+has been told a number changed and not which one.
+
+The data is already in hand — `KnobAdjustment` carries `name`, `to` and `dropped` — so this is a
+copy and marking change, not a plumbing one. Two channels, because they have different lifetimes:
+
+- **The toast** names every adjusted parameter when there are two or fewer
+  (`Raised stud clearance to 0.12 mm`), and falls back to the existing count above that. The bound
+  is the toast's own 3.6 s dwell, which is checked in beside it; it is a copy limit rather than a
+  `**Default:**`, because no measurement settles it and pretending otherwise would put a number in
+  Appendix B that no coupon can close.
+- **The knob** carries a mark for as long as the adjustment holds, which is the channel that
+  survives the toast timing out and the one a reader can act on. A dropped knob — `a.dropped`,
+  where the constraint removed the override entirely — reads differently from a moved one and says
+  so, since "back to the shipped value" and "clamped to 0.12" are different events.
+
+This is deliberately not a new gate. An adjustment is the constraint solver doing its job; the
+brick that comes out is printable, and the reader is being told what it cost, not warned.
 
 ---
 
