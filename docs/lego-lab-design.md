@@ -1323,6 +1323,9 @@ deviations from this spec, and additions beyond it.)*
   Brick Architect's directional result — the printed **anti-stud side** is what fails — is what
   makes the number worth reporting at all; it is not what predicts which brick is at risk. Internal
   ribbing stays unbuilt: nothing measured here calls for it, and MC-3 is the print that would say.
+
+  The refutation is drawn rather than tabulated in the `span-and-border` design note (§12): a 1×8
+  and a 5×5 as underside plans at one scale, with the same disc in both.
 - **Q5 — should `auto` footprint round up or refuse? RESOLVED: round up and warn** (same PR). The
   warning is V13, and the whole of what took a second draft is **which sources it may speak about**.
 
@@ -1342,6 +1345,10 @@ deviations from this spec, and additions beyond it.)*
   `footprintMm(n) ≥ mm`, so under `auto` the art is always strictly wider than `footprintMm(n−1)`
   and the branch is unreachable. Deleted, with the proof kept beside the code — a K7 caught by
   reading the message against itself, and no source could have settled it.
+
+  The gate itself is drawn in the `span-and-border` design note (§12), which draws `Star-Brick`'s
+  border and — for the six presets that typed a footprint — draws nothing, because
+  `borderPlanModel` returns `undefined` for them.
 
   Refusing was rejected for the reason the original leaning gave: the author who wants the smaller
   plate needs a number, and V13 hands them one ("scale 0.780 lands it there") instead of an error
@@ -1471,6 +1478,7 @@ compresses.
 |---|---|---|
 | `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`decisions-log.md`](decisions-log.md) D-006) |
 | `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`decisions-log.md`](decisions-log.md) D-007) |
+| `span-and-border` | §11 Q4 and Q5: what actually bounds the bridged span, and which sources V13 may judge | **decided** — by measurement, recorded in §11 above rather than as a `D-NNN`, because neither was a choice between designs |
 
 `lattice-basis` extends the page's "compiled, not drawn" rule to a second kind of figure, and the
 extension is worth recording because it is not the same mechanism. `brickSection()` is handed a
@@ -1497,6 +1505,38 @@ The drift risk this note carries is its own: the four lattice families are writt
 is a node entry point. `packages/lab/tests/design-lattice.test.ts` is the whole mitigation — it
 imports the script and compares the two at four scales per family, rather than restating the bases
 a third time and passing while the published table disagrees.
+
+`span-and-border` is the third mechanism, and it is the one where the kernel had to change to let
+the page stay honest. `brickSection()` is handed a solid; `latticePlan()` re-runs a *pure* function
+on a basis nobody built. A span is neither. It is a search over the anchor set the build kept, and
+its answer — a diameter — is the one number on this site a reader cannot check by eye: a 25.93 mm
+disc on a 6×6 plate looks identical whether the search found the real hole or wandered into a
+corner. Drawing it left exactly two options, and one of them was a second solve.
+
+So the kernel now returns the circle's **centre** with its diameter (`supportSpan`, with
+`supportSpanMm` kept as the thin wrapper every warn-only consumer wants), and
+`packages/lab/src/design/draw-cavity.ts` draws what it is handed. The same move fixed V13's figure:
+by the time a `BrickSpec` exists the footprint is two integers, so the difference between a plate an
+author chose and one the compiler rounded to has already been erased —
+`BrickResultProvenance.art` now carries the inscribed bounding box and the `footprint auto` flag
+forwarded from the exact values `validateBrick` was handed, rather than letting a drawing re-derive
+a bbox from segments and hope it matches the warning printed beside it.
+
+Two things this note had to say on the figure rather than solve:
+
+- **It cannot draw the anchors that were dropped**, which are the cause of every over-ceiling span
+  in the catalogue. `AnchorSolution` keeps their *count* and not their positions, and re-running the
+  candidate search to recover them would be a second solve of precisely the step whose *rejections*
+  are the subject. The counts go in the caption; the figure shows the consequence.
+- **It draws no border plan at all for six of the seven presets**, and the absence is the argument.
+  `borderPlanModel` returns `undefined` when the footprint was typed, so the page physically cannot
+  make the claim V13's first draft made — that five authors' declared plates were wasteful — and
+  had to withdraw.
+
+`packages/lab/tests/design-cavity.test.ts` is the enforcement: the drawn diameter must `toBe` (not
+`toBeCloseTo`) `BrickProvenance.supportSpanMm` on every shipped preset, the disc must fit inside the
+cavity the same figure draws, and the border model must exist for exactly the `footprint auto` set —
+which `lego-presets.test.ts` independently pins to `Star-Brick.bkr` alone.
 
 ## 13. The studio index and the page catalogue
 
