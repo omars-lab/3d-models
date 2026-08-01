@@ -1,387 +1,339 @@
-# Calibrate — grounding the claims only a printer can settle
+# Four studio defects with one root cause: nothing ties a published surface to its source
 
-> Supersedes the Lego Lab R0 plan previously in this file; that plan is complete and
-> preserved in git at `4c3b900`.
+> Supersedes the Calibrate plan previously in this file; that plan is complete and
+> preserved in git at `de777e3`. (The draft of this line said `4c3b900`, which is
+> where the *Lego Lab R0* plan is preserved — the hash was carried over from the
+> sentence it replaced without being re-checked. Exactly the K9 the docs gate
+> exists for, in a file the gate does not read.)
+
+**Status: complete, 2026-08-01.** All five sections shipped and are live.
+
+| § | What landed | Where |
+|---|---|---|
+| Zero | dev `/api/patterns` GET emits `bkr_source`, so dev rows stop being silently dropped | bikar |
+| A | `patterns/index.json` + disk glob replaces `STARTER_FILES`; bijection gate; gallery regenerated at 102 | bikar |
+| B | landing page rendered from `src/catalog.ts` at build time; five cards; count measured from the manifest | bikar |
+| C | `packages/web/public/404.html`; `appType: 'mpa'`; `resolvePageForUrl` | bikar |
+| D | per-page `<meta name="bikar-page">` + `scripts/check-deploy.sh`, retried against propagation | bikar |
+| — | the reciprocal link both `catalog.ts:74,85` described and neither site carried | 3d-models |
+
+Two items in §D were only learned by running the gate live, and are worth carrying
+forward: Cloudflare Pages **308**-canonicalises `/404.html` to `/404`, so the literal
+filename is the one address that asset is never served at; and a deployment is not
+visible at every edge when `wrangler` prints "Deployment complete", so an assertion
+set needs a settle window rather than a guessed `sleep`.
+
+Left open deliberately: `scripts/cf-setup.sh:99` still omits `bikar-studio.pages.dev`
+from `self_hosted_domains` (Cloudflare settings, Omar's call — see §Security finding),
+and confirming the folder round-trip against the live studio needs a signed-in session.
 
 ## Context
 
-`ground-design-doc` settles what *sources* can settle. Seven design docs have now been
-through it, and the residue is consistent: every audit ends with verdicts that say, in
-effect, *no literature can decide this — measure it*. Today that trail just stops. The
-consequences are visible in shipped code:
+Four complaints, one shape. In each case a surface the user sees is **hand-maintained
+beside** the thing it describes, with no mechanism tying the two together — so it drifts
+silently and nothing reports the drift.
 
-```
-kernel3d/fit-profile.ts:71   "literature-shaped placeholders until the fit coupon
-                              measures this printer"
-kernel3d/fit-profile.ts:105  warpMm — "undefined until the clip coupon measures it"
-kernel3d/print-gate.ts:44    MIN_BED_CONTACT_MM2 — "deliberate placeholders pending
-                              the prototype catalog's P2 Q5 measurement"
-```
-
-Those comments are honest and self-aware, and they are also the whole mechanism. Nothing
-makes them enumerable, nothing stops them ageing into numbers that merely *look* earned,
-and nothing notices that the same physical quantity is separately unresolved in two docs
-at once — `FIT_GAP_MM` is open as c2 Appendix B.3 *and* as piece-composition B.2, with no
-cross-link.
-
-There is duplicated effort in the other direction too. W-F1, LG-F1, LG-F2 and P1 each
-independently plan to measure some of warp, wall floor, and bore fit. But those are not
-properties of a clip, a brick, or an orb — they are properties of *(printer, material,
-nozzle, slicer profile)*. One characterization plate settles the shared substrate; the
-design coupons then test only what is genuinely design-specific.
-
-**Two findings from designing the mechanism widened the scope, in the order they must be
-built:**
-
-1. **Parsing discipline is missing from the tenets, and three sites fail open.** The
-   first draft of this plan proposed `@calibration CAL-…` comment markers found by grep —
-   the exact mechanism `scripts/check-decision-coherence.sh` was written to replace
-   (*"the discipline lived only in skill prose agents skip under pressure"*; its header
-   says *"NO regex. NO markdown-body scan."*). Auditing outward from that found five
-   regex sites, three of which silently skip input they can't match — including one
-   inside a **commit-blocking** hook. That is ≥3 witnesses of one defect class, which is
-   Tenet 28's threshold for *stop characterizing, file the fix*.
-2. **A calibrated number needs structured provenance, not a naming convention.** A value
-   is valid only for a specific *(machine, material, nozzle, profile)*. A comment or a
-   `PROVISIONAL_` prefix can carry doubt; neither can carry that record. So provenance
-   rides on the value as a type, and the registry becomes *derived from code* rather than
-   maintained beside it.
-
-**Intended outcome:** the tenets name both disciplines with their witnesses; the five
-parsing sites are fixed; and a `calibrate` skill + a print-ready machine card close the
-ceremony's missing half — with a gate that lets the set of unearned numbers only shrink.
-
-### Decisions locked (Omar, 2026-07-29)
-
-1. **New `calibrate` skill**, sibling to `ground-design-doc`. `prototype` stays the
-   per-design print backlog; the three hand off to each other.
-2. **Provenance rides on the value, as a type** — not a comment. A `Calibrated<T>` wrapper
-   carries the bet ID and either `'provisional'` or a full measurement record.
-3. **CI + pre-commit gate with an append-blocked baseline** — the set of unearned numbers
-   may only shrink.
-4. **Machine card only** for the first print — the shared substrate, not design coupons.
-5. **Build `Machine-Card.bkr` now**, blind to the eventual machine.
-6. **Fix all five regex findings first**, before calibrate.
-7. **Add PyYAML and use `safe_load`** in `validate.py` — no hand-rolled reader.
-8. **Two new tenets + one conventions bullet** (Phase T below).
-
----
-
-## Phase T — tenets (first, so Phase R's commits cite them)
-
-All edits in `bikar/CLAUDE.md`, the canonical tenets home. Each tenet follows the house
-shape already used by 25/26/28: **rule → stop rule → companion tenets → *failure mode this
-prevents* (dated, with real witnesses) → *anti-pattern this names*.**
-
-**Tenet 29 — Parse structurally; never fail open.** Read structured formats with a
-structured reader (`yaml.safe_load`, `yq --front-matter=extract`, the lexer's own tokens);
-a regex is legitimate for **matching tokens inside prose** and illegitimate as the
-**authoritative reader of structure**. The load-bearing half is *fail closed*: a line the
-reader cannot interpret is an **error**, never a skip — most of all inside a gate, where
-silently skipping input converts a blocking check into a decoration. Companion to Tenet 11
-(native primitives over approximations — same rule, text instead of geometry), 15/16 (the
-typing layer), and 23 (don't re-derive what the producer knows). Witnesses:
-`validate.py:60-95`, `param-rewrite.ts:32`, `evaluator.ts:5777`.
-
-**Tenet 30 — A physical constant is not earned until it records its provenance.** A number
-that a printer decides is not shipped as a bare literal, however plausible its literature
-value: it carries its bet ID and either an explicit `provisional` marker or a measurement
-record naming machine, material, nozzle, profile, and date. Stop rule before merging a
-constant with physical units: name the coupon that will settle it, or mark it provisional —
-"it's the standard value" is not a measurement. Companion to Tenet 9 (no magic numbers —
-the `.bkr` instance of the same rule) and Tenet 25 (no ship on a green metric alone).
-Tenet 9 gains a one-line cross-reference so its reader lands here.
-
-**Conventions bullet (not a tenet) — dependency caution scales with blast radius and
-audience.** Under `## Conventions`, beside "Package manager: npm with workspaces". The
-repo already practises this and it needs recording, not elevating: `packages/core` is a
-published library and carries **zero** runtime dependencies (earcut vendored);
-`packages/knobs` takes `lz-string` without ceremony; `scripts/` demands `yq`+`jq`;
-`3d-models/Makefile:154` check-and-instructs Pillow. The anti-pattern: hand-rolling a
-parser for a solved format to avoid a dependency in dev-only tooling — which is Tenet 29's
-failure wearing a virtue costume.
-
----
-
-## Phase R — parsing remediation (five findings)
-
-Ordered by blast radius. #1 is the only one in a commit-blocking path.
-
-**R1 — `3d-models/.claude/skills/maintain-use-cases/validate.py:60-95`.** Replace the
-hand-rolled frontmatter scan with `yaml.safe_load`. Today `re.match(r"^\s+([\w.-]+):\s*(\S+)\s*$")`
-silently skips quoted values, values containing spaces, and trailing comments, so a
-**malformed `as_of` pin is indistinguishable from a missing one** — in a hook that blocks
-commits. Also replace the ```` ```mermaid ```` body scan with a structured fence walk.
-Leave `POINTER_RE` and `UC_RE` exactly as they are: matching tokens in prose is regex's
-actual job, and they are the in-file example of Tenet 29's legitimate side.
-
-Declare the dependency the way this repo already does — `.githooks/pre-commit.d/20-use-cases`
-currently guards only for `python3`; extend that guard to `import yaml` with the
-`Makefile:154` Pillow message shape (`"PyYAML required: pip install pyyaml"`). No
-`requirements.txt` exists and this plan does not add one for a single dev dependency.
-
-**R2 — `bikar/packages/knobs/src/param-rewrite.ts:32,39,48`.** A second partial
-implementation of the `.bkr` `param` grammar drives the Lab's write-values-into-code, the
-baked `.bkr` download, and the studio Dials tab. Three concrete defects: the tail scan
-`/\s(?:range|advanced)\b/` **omits `step`**; `isExpression: !/^-?\d+(\.\d+)?$/` misjudges
-`.5`, `1e3` and `+3` as expressions; and the line regex only matches a `param` whose
-header form it anticipates. Fix by lexing and rewriting the **token span**, not the line:
-`tokens.ts:190-195` gives `{ type, value, line, column }`, so `column + value.length`
-yields an end offset. The span approach preserves the header comment's real requirement —
-*"everything after the default expression is preserved byte-for-byte"* — which an
-AST round-trip would violate. Update that header comment: it currently defends the line
-scan, and after this it would be arguing for the code it replaced.
-
-**R3 — `bikar/packages/core/src/dsl/evaluator.ts:5777-5792`.** `addressDepth()` counts dots
-with `(prefix.match(/\./g) || []).length` to recover a depth that the code that **built**
-the key already knew — Tenet 23's failure mode exactly. Carry the depth structurally
-alongside the composed ID rather than re-deriving it from the string.
-
-**R4 — `svg-renderer.ts:312-326` vs `gt-emitter.ts:1220-1234`.** The same internal-tag
-predicate is copy-pasted into the renderer **and** into the ground-truth emitter that
-validates the renderer, each commenting "Mirrors <the other>". They have already drifted:
-svg-renderer tests `GIRIH_OUTLINE_TAG`, `GIRIH_DECORATION_TAG` and the
-`GIRIH_REGION_TAG_PREFIX` constant; gt-emitter hardcodes `'_girih_region:'` and lacks both
-tag equality checks. Extract one exported predicate into
-`packages/core/src/kernel/girih-tiles.ts`, which already owns all three constants and is
-already imported by the renderer. Resolve the drift deliberately — the emitter is the
-laxer copy, so adopting the renderer's version is the behaviour change to test for.
-
-**R5 — `bikar/packages/core/src/render/animation-compiler.ts:74`.** `[^"]*` inside a
-constructed attribute-selector regex breaks on an escaped quote. Lowest severity — the
-generator owns its own input — so fix narrowly and note the constraint rather than
-rebuilding a CSS selector parser.
-
-**Explicitly clean, do not touch:** `gen-decision-ledger.sh` / `check-decision-coherence.sh`
-(structured `yq` throughout; one cosmetic `sed 's/\.md$//'`), and `parser.ts:111,124`
-single-char `/\d/` tests, which are lexer character classes.
-
----
-
-## Phase C — calibrate
-
-### What the DSL can already express (verified, no engine work needed)
-
-Checked against `bikar/docs/language-reference.md` §"Piece Declarations (3D)" and the
-existing `patterns/Coupons/Fit-Coupon.bkr`. Every coupon below is authorable today:
-
-| Need | Mechanism | Note |
+| Surface | Source of truth | How it drifted |
 |---|---|---|
-| Bore ⌀ sweep, fit ladder | `extrude` + `hole … band d …` + `rod` | Fit-Coupon already does this at ⌀3 |
-| Wall-thickness ladder | `tube inner <d> outer <d+2t> height <h>` | wall = (outer − inner)/2; the CLI already reports tube wall as the declared min feature |
-| Bridge span ladder | blind bore: `band d <span> from 0 to <z1>` with `z1 < depth` | leaves a ceiling that must bridge the bore ⌀ — span is the diameter |
-| Overhang fan | `revolve profile <region>` with a stepped-slope outer edge | a true cone is rejected (axis-touching, C1 ring solids only); a truncated ring with staircase slopes is legal |
-| Warp | `extrude` of a large thin plate | reuse Fit-Coupon's guide-circle-quartered rectangle idiom — the blueprint has no rectangle primitive |
-| Bed contact | `rod d <small> height <tall>` | one line per tower |
+| `STARTER_FILES` in `packages/web/src/main.ts` | `patterns/**/*.bkr` on disk | 17 files missing (all of `Lego/`), 5 files stale |
+| `docs/gallery.html` | `STARTER_FILES` | inherits all 17; 53 cards vs 85 entries; no `Orbs` group |
+| `packages/web/index.html` landing | the Rollup `input` map | 2 cards vs 3 entries; "74 starter patterns" vs 102 |
+| `deploy.yml` post-deploy check | the deployed site | asserts nothing; cannot fail |
 
-Two consequences, stated before anything is authored:
+`packages/lab` already solved this twice, and both fixes are copied rather than invented:
 
-- **The wall ladder deliberately fails `--check`.** Sub-floor rungs (0.4–1.0 mm) sit below
-  `DEFAULT_MIN_FEATURE_MM = 1.2`, so `meshGate` reports FAIL by design — the W-series
-  sub-floor rule already documented in `catalog.md`. Those rungs render without `--check`.
-  No `--min-feature` override flag is added.
-- **Rung identity is positional, not embossed.** bikar has no text emit, so the BOSL2
-  trick c2's own survey praises (the label *is* the answer) is unavailable. Mitigation:
-  one piece per rung rendered via `--piece`, so identity lives in the filename, plus
-  monotone size ordering that is self-evident in the hand. The protocol states this rather
-  than pretending otherwise.
+- `packages/lab/src/catalog.ts:146-211` — a typed `PAGES` array `studio.html` renders from,
+  with `packages/lab/tests/catalog.test.ts` asserting every `*.html` beside
+  `vite.config.ts` is both a Rollup input and a `PAGES` entry. Its header (`:1-25`) states
+  the rule: *a stale index is worse than none because it is confidently wrong about what
+  the site can do.*
+- `packages/lab/src/lego-scripts.ts:44-46` — the Lego preset registry, pinned against its
+  directory by `packages/lab/tests/lego-presets.test.ts` *"so a preset added to one and not
+  the other fails rather than silently missing its param-box sweep."*
 
-### C1 — the `calibrate` skill
+The second is exactly the check `STARTER_FILES` lacks. The precedent existed; it was never
+applied here.
 
-`.claude/skills/calibrate/SKILL.md`, in the house voice of `ground-design-doc`.
+**Intended outcome:** every pattern on disk appears in the studio; the landing page cannot
+omit a page that ships; an unknown URL returns 404; and each is held by a gate rather than
+by remembering.
 
-**Workflows (the steps that always run):**
+---
 
-1. **Harvest** — sweep three surfaces: design-doc Appendix B + Open Questions,
-   `catalog.md` entries, and the derived bet registry (C2). Classify every unsettled claim
-   as **EMPIRICAL** (a measurement decides it) or **ARGUED** (sources or reasoning decide
-   it — that belongs to `ground-design-doc`; misfiling one here is the main failure mode).
-2. **Cluster** — group bets by *the single measurement that settles them*, not by the doc
-   they came from. Duplicates across docs collapse to one ID. This is what lets one plate
-   close entries in five documents.
-3. **Design the coupon** — one variable per coupon (c2 survey §4 records BOSL2 + Bambu as
-   settled prior art); a ladder bracketing the unknown generously; identity readable from
-   geometry or filename; and an explicit statement of the print orientation the
-   measurement assumes, because a bridge or overhang means nothing without it.
-4. **Emit the print pack** — the `.bkr`, the exact CLI line per rung, the measurement
-   protocol (instrument, where on the part, sample count), and a blank data sheet.
-5. **Measure** — readings come only from the physical object. Inherits `prototype`'s rule:
-   never from a slicer preview, never from reasoning. A failed print is a result.
-6. **Propagate** — the earned number replaces the constant's value *and* its status flips
-   from `provisional` to a full measurement record; the doc's Appendix B entry closes with
-   the measured value; the catalog entry flips; commit hashes cited in both repos.
+## Root cause — the rule was never written, not merely not followed
 
-**Rules:** a bet with no coupon is a backlog item, not a finding. A number without a
-recorded machine/material/nozzle is anecdote, not calibration (Tenet 30). Never delete a
-lost bet — a measurement that refutes the design is a success outcome, as in
-`ground-design-doc`.
+`bikar/.claude/skills/bikar-dsl/SKILL.md:85-89` is the **only** registration statement in
+either repo, and both its globs are literally `Orbs/`:
 
-### C2 — provenance as a type, and a registry derived from it
+> `patterns/Orbs/*.bkr` has two downstream copies that must track it in the same change:
+> the studio's embedded `STARTER_FILES` entries in `packages/web/src/main.ts`, and
+> 3d-models' vendored `src/Orbs/*.bkr`.
 
-New in `bikar/packages/core/src/kernel3d/calibration.ts`:
+Every folder created since — `Pieces`, `Walls`, `Assemblies`, `Coupons`, `Lego` — falls
+outside it. A search of both repos' `.claude/skills/`, `CLAUDE.md`s and `docs/*.md` for any
+general phrasing returns no other hit. That is **K10**: a rule ported from one domain with
+its transfer conditions never stated.
 
-```ts
-export type CalBetId = 'CAL-FIT-01' | 'CAL-HOL-01' | /* … closed union … */;
+The authoring skills confirm it from the other side. `pattern-construction/SKILL.md:114-116`
+— *the* on-ramp — terminates at *"Step 3: Write the File… then tell the user to load it in
+the web UI."* `pattern-management` (227 lines) and `blueprint-design` (185 lines) mention no
+downstream surface at all. `pattern-construction:342` names `STARTER_FILES` only as a
+precondition on files already in it. The one skill in either repo that models registration
+properly is 3d-models' `design-note/SKILL.md:91` — *"### 4. Land it in the catalogue"*.
 
-export type Provenance =
-  | { readonly status: 'provisional'; readonly basis: string }
-  | { readonly status: 'measured'; readonly machine: string; readonly material: string;
-      readonly nozzleMm: number; readonly profile: string; readonly date: string;
-      readonly coupon: string };
+**The use-case map already claims these shipped.** UC12/UC13/UC15/UC17 pin
+`Walls/Nail-Wall.bkr`, `Coupons/Machine-Card.bkr`, `Lego/Hex-Field-Tile.bkr`,
+`Assemblies/Brick-Stack.bkr`, `Pieces/Nail-Tile.bkr` as delivered capability. There is no UC
+row for registration, which is why the commit-blocking use-case hook has never fired.
 
-export interface Calibrated<T> { readonly bet: CalBetId; readonly value: T;
-                                 readonly provenance: Provenance }
+---
+
+## Zero — the bug that makes all of this invisible in dev too
+
+**Fix this first; it is independent of everything below and is one line.**
+
+`loadPatternsFromAPI()` (`main.ts:3456-3489`) calls `fromPatternRows`, which requires
+`bkr_source` (`pattern-api.ts:127-129`) and `continue`s past any row lacking it. The dev
+API's `readPatternsDir` emits `{ name, content, folder }` (`vite.config.ts:385`). So **every
+dev row is dropped**, `patterns.length > 0` is never true, and the dev studio silently falls
+back to `STARTER_FILES` — the fallback comment at `:3487` makes it silent by design.
+
+Half-finished migration in `7c73d02` ("the studio has never been able to save a pattern"):
+the dev **PUT** handler was moved to `bkr_source` (`vite.config.ts:74-80`, with a comment
+saying so) and the **GET** side was left on `content`.
+
+**Fix:** `readPatternsDir` emits `bkr_source`. Regression test: a dev-shaped payload through
+`fromPatternRows` must yield rows, not `[]`. Today it yields `[]` — that inversion is the
+test, and `packages/web/tests/pattern-api.test.ts` is where it goes.
+
+Consequence worth stating: until this lands, an author writing a new pattern sees it in
+**neither** dev nor prod. That is the real reason the drift went unnoticed for 2.5 months.
+
+---
+
+## A. Seed source — a manifest for order, disk for content
+
+**Decided (Omar, 2026-08-01): manifest + glob, and all 102 patterns are included.**
+
+### What the loss audit settled
+
+Adversarial byte-level audit of all 85 entries against disk:
+
+- **No content dies.** 85 entries, 85 disk counterparts, **zero orphans**. 69 byte-identical;
+  11 `Orbs/` differ by a trailing newline only; 5 `Petal Tutorial` files where **disk is
+  newer** (`3029677` fixed disk and skipped `main.ts`). Deleting the array *repairs* those 5,
+  which `packages/core/tests/dsl/option-b-template-regen.test.ts:31,42,49` already asserts
+  against.
+- **0 folder mismatches**, spaces and all. The 4 `folder`-less entries are genuinely at root.
+- **Exactly four keys across all 85**: `name` 85, `dirty` 85, `content` 85, `folder` 81. No
+  fifth field anywhere; `transient` appears on **zero** entries.
+- **All 102 disk files compile** — `starter-compile.test.ts` run green at 103/103.
+- **What does die is order and inclusion**, which exist only in the array. All 9 folders
+  reorder under `localeCompare`; `Petal Tutorial`'s curated
+  `Blueprint → First-Arc → 1-Ring → 2-Ring → Full → Spin → Outer-Glow → Warm → Strapwork`
+  *is* the tutorial and is unrecoverable from disk.
+- History: across all 25 commits touching `main.ts` since extraction, exactly one
+  main.ts-only window ever existed (`f5b89ae`, 3 orbs, closed next day by `d1a0d43`). The
+  Petal difference never runs the other way.
+
+### The design
+
+`patterns/index.json` — an **ordered list of every pattern**, checked in, reviewable:
+
+```json
+{ "order": ["Star-8.bkr", "Sq-Oct.bkr", "Hexagram.bkr", "Rosette-12.bkr",
+            "Petal Tutorial/Petal-Blueprint.bkr", "Petal Tutorial/Petal-First-Arc.bkr",
+            "Petal Tutorial/Petal-1-Ring.bkr", "..."] }
 ```
 
-A closed `CalBetId` union means a typo is a **compile error**, not a missing grep hit —
-this is the whole reason the mechanism moved from comments to types, and it satisfies
-Tenets 15/16 (model the variant; don't launder it through strings).
+No `exclude` key. Since all 102 ship, the gate is a **bijection**: every manifest path
+resolves on disk, every disk `.bkr` appears in the manifest, exactly once each. That is
+strictly stronger than an allow/deny list and has no dead branch. Add `exclude` only when
+something actually needs excluding.
 
-**Migration is the real cost and the plan states it plainly.** Consumer counts:
-`FIT_GAP_MM` 18, `PRINTER_PROFILES` 12, `FIT_TOL_MM` 14, `DEFAULT_MIN_FEATURE_MM` 6,
-`MIN_BED_CONTACT_MM2` 3 — all in-monorepo, nothing published. Approach: wrap the constant,
-export a `.value` accessor beside it, and migrate call sites mechanically. One site needs
-care — `dsl/parser.ts:1464` does `fitTok.value in FIT_GAP_MM`, which breaks under a wrapper
-unless it reads the inner record. **No constant's numeric value changes in this phase**;
-golden STLs must not move, which is the regression test.
+`main.ts` replaces 3392 lines with a seed built from
+`import.meta.glob('../../patterns/**/*.bkr', { query: '?raw', eager: true })` ordered by the
+manifest. Note the path: **Vite root is `packages/web`**, so a leading-slash glob would
+resolve to a nonexistent `packages/web/patterns/`. Vite 8.0.13 supports
+`{ query: '?raw', eager: true }` (verified in the installed `importGlob.d.ts`). Do not rely
+on glob key order — the manifest is the only ordering authority.
 
-`.claude/skills/calibrate/bets.md` is then **generated** from the source of truth by
-`scripts/gen-calibration-registry.ts`, following `gen-decision-ledger.sh`'s precedent — a
-derived artifact, checked in so it is reviewable, regenerated rather than edited.
+### Non-negotiables the implementation must carry (from the audit)
 
-| ID | Quantity | Consumers | Coupon |
-|---|---|---|---|
-| `CAL-FIT-01` | `FIT_GAP_MM` press/snug/sliding/free | c2 B.3, piece-comp B.2, `fit-profile.ts`, W-F1 Q1 | MC-1 |
-| `CAL-HOL-01` | `holeCompMm` 0.20/0.25 | c2 B.6, `fit-profile.ts` | MC-1 |
-| `CAL-FEA-01` | `DEFAULT_MIN_FEATURE_MM` 1.2 | `mesh-gate.ts`, lego B.5, P1 | MC-2 |
-| `CAL-BRG-01` | bridge span ≤10 mm | w2 B.3, lego §3.6 `engage` | MC-3 |
-| `CAL-OVH-01` | overhang threshold (F5) | print-val B.2, `print-gate.ts` | MC-4 |
-| `CAL-WRP-01` | `warpMm` (currently `undefined`) | `fit-profile.ts`, w2 B.5, W-F1 Q2 | MC-5 |
-| `CAL-BED-01` | `MIN_BED_CONTACT_MM2` 25 / ratio 0.01 | `print-gate.ts` | MC-6 |
-| `CAL-RIB-01` | clutch rib `ribMm` 0.10 | lego B.8 | LG-F1 *(not on the card)* |
-| `CAL-DET-01` | detent band 0.3–0.5 mm | w2 B.6 | W-C1 *(not on the card)* |
-| `CAL-STR-01` | Z-layer strength ratio | c2 B.5 | none — needs a load rig, registered OPEN |
+1. **Manifest order is authoritative**; glob key order is not.
+2. **Entry 0 pinned to `Star-8.bkr`.** `activeIndex = 0` (`:3437`) is the cold-boot file and
+   `resolveHashToIndex()` (`:4681`) falls back to it. Assert it.
+3. **Folder labels verbatim, including spaces** — `Flower of Life`, `Petal Tutorial`,
+   `Tiled Patterns`. No slugging; `collapsedFolders`/`knownFolders` and the gallery group
+   titles key on the exact string.
+4. **The 4 root patterns keep an absent `folder` key** — never `''` (`pattern-api.ts:107-110`
+   and its tests already state why).
+5. **Apply the `.folders.json` overlay** (`vite.config.ts:243-256`, `applyFolderOverlay`
+   `:330-344`) with its three states intact, `null` meaning *delete the key*. `patterns/.folders.json`
+   is tracked and currently `{}`, so disk and overlay agree today — they diverge the moment
+   anyone drags a pattern, and a naive read would resurrect a folder the user emptied.
+6. **`dirty: false` synthesized on every seeded file**, or `autoSaveToAPI` (`:3493`) fires on
+   files nobody touched.
+7. **`transient` stays in-memory only** — no disk representation; the `[...patterns,
+   ...transients]` merge at `:3471` keeps working; `:7635` remains its only producer.
+8. **Trailing newlines: take disk bytes verbatim, no normalization.** 28 of 102 files end
+   with `\n` and no embedded entry does. Disk is the source of truth; document the change
+   rather than silently rewriting 28 files.
 
-The last three are deliberately off the machine card: two are design-specific, and
-`CAL-STR-01` has no coupon at all — worth recording as a known gap rather than leaving it
-invisible.
+### Downstream, in the same change
 
-### C3 — the gate
+- **`scripts/generate-gallery.ts:24-138`** — its `indexOf('const STARTER_FILES')` scraper
+  throws the moment the array is gone. Rewrite it to read the manifest + disk, then re-run
+  `make gallery`: the checked-in `docs/gallery.html` is 53 cards / 8 groups against a real
+  102 and is missing `Orbs` entirely.
+- **`scripts/extract-patterns.ts` — delete, do not port.** Its direction (main.ts → disk) is
+  now backwards; running it would overwrite the 5 correct Option-B Petal files with the
+  stale embedded ones. It is in no Makefile target.
+- **Generalize the rule that caused this**: rewrite `bikar-dsl/SKILL.md:85-89` to state the
+  general obligation (any `patterns/**/*.bkr` must appear in `patterns/index.json`), and add
+  a registration step to `pattern-construction/SKILL.md` after `:116`, modelled on
+  `design-note/SKILL.md:91`. Drop that skill's now-obsolete backtick-pitfall note at `:355`.
+- **Stale references to update**: `CLAUDE.md:58` (Tenet 25's "not added to `STARTER_FILES`"
+  ship gate) and `:447`; `.claude/skills/generate-gallery/SKILL.md:10,17,29,43,61`;
+  `pattern-construction/SKILL.md:342`; `compact-prompt/SKILL.md:189`; `dev-workflow/SKILL.md:44`.
+- **3d-models vendored copies** under `src/Orbs/` (11) and `src/Lego/` (7) were verified
+  **all 18 byte-identical** to `patterns/`. Unaffected, but the generalized rule should name
+  them.
 
-`bikar/scripts/check-calibration.ts`, modelled on `check-decision-coherence.sh`: every
-`Calibrated<T>` with `status: 'provisional'` must appear in `.calibration-baseline.json`,
-and the baseline is **append-blocked** — a new provisional value not in the baseline is
-always an error; the file may only shrink. Wired into pre-commit and into `npm run ci`.
+**All 102 ship, including `Coupons/`.** That is a deliberate call — the audit's view was that
+calibration hardware is instruments rather than designs, and it is overridden here. Practical
+effect: 5 new folders appear in the tree (`Assemblies`, `Coupons`, `Lego`, `Pieces`, `Walls`),
+all collapsed on first load per `:3441`.
 
-Note for the wiring step: `check:decisions` is **not** currently in bikar's `ci` script
-(`"ci": "lint && format:check && build && test && spelling && import-graph"`). Add
-`check:calibration` to `ci` — and flag the pre-existing `check:decisions` omission rather
-than silently fixing it, since that is someone's earlier decision to confirm or reverse.
+---
 
-### C4 — the machine card
+## B. Landing page — the lab's catalog, with its test
 
-`bikar/patterns/Coupons/Machine-Card.bkr` (+ `docs/calibration-design.md` here for the
-geometry rationale and the protocol).
+`packages/web/index.html:71-86` is hand-written static HTML: two `<a class="card">`, a
+hard-coded "74 starter patterns", and both hrefs carrying a trailing slash that Cloudflare
+308-redirects away (`/editor/` → `/editor`), costing a round trip per click.
 
-| Coupon | Geometry | Rungs | Settles |
-|---|---|---|---|
-| **MC-1** bore & fit plate | extend the existing Fit-Coupon | ⌀ sweep 3/4/5/6/8/10 + the four-class fit ladder + gauge pins | `CAL-FIT-01`, `CAL-HOL-01` |
-| **MC-2** wall ladder | `tube` ×7 | wall 0.4/0.6/0.8/1.0/1.2/1.6/2.0 | `CAL-FEA-01` |
-| **MC-3** bridge plate | blind bores under a 2 mm ceiling | span 4/6/8/10/12/16 | `CAL-BRG-01` |
-| **MC-4** overhang fan | one `revolve`, stepped outer slope | 20/30/40/45/50/60° | `CAL-OVH-01` |
-| **MC-5** warp plate | thin `extrude`, large footprint | one part, 4 corners measured | `CAL-WRP-01` |
-| **MC-6** bed-contact towers | `rod` ×4 | ⌀3/5/8/12 × 40 mm tall | `CAL-BED-01` |
+**Approach:** port `packages/lab/src/catalog.ts`'s shape into `packages/web` — a typed
+`PAGES` array rendered by `src/landing.ts`, plus a vitest mirroring
+`packages/lab/tests/catalog.test.ts` asserting every Rollup input
+(`vite.config.ts:456-464`) has a catalog entry and vice versa. Reuse the lab's
+`status: 'live' | 'preview'` field (`catalog.ts:142`).
 
-MC-1 extends `Fit-Coupon.bkr` rather than replacing it — that file is already referenced by
-catalog W-F1 and its ⌀3 ladder is correct as far as it goes; the card adds the ⌀ sweep that
-`holeCompMm` actually needs.
+Same omission, same change:
 
-**Authored blind, and the doc says so.** With no machine yet, the rung *ranges* are
-brackets around an unknown, not predictions. `docs/calibration-design.md` records that they
-are unvalidated and that the first print may show a ladder needs re-centring — itself a
-result worth logging.
+- Link the two published sites to each other. `catalog.ts:74,85` already *describes* the
+  relationship in both directions; neither site carries the link.
+- `editor.html` has **no navigation at all** — `href=` returns exactly one hit, the
+  stylesheet at `:7`. Add a link home.
+- Derive the pattern count from the manifest instead of hard-coding it.
 
-### C5 — the handoffs ("tasks we always do")
+---
 
-- **`ground-design-doc/SKILL.md`** gains a step 5: after applying an audit, every verdict
-  that is UNGROUNDED-and-empirical is registered as a CAL bet, and the doc's Appendix B
-  entry cites it. This closes the hole where an audit says "no evidence either way" and
-  the trail ends.
-- **`prototype/SKILL.md`**: catalog entries cite the CAL IDs they settle, and the existing
-  **Propagate** workflow — which today stops at `.bkr` defaults, the mesh gate, and the
-  design doc — gains "close the CAL bet, flip its provenance to `measured`, close its
-  Appendix B entry."
-- **`catalog.md`** gains an **MC series** for the six coupons, in the existing entry
-  schema, ahead of W-F1/LG-F1 in the learning ladder (they consume its numbers). W-F1's Q2
-  (warp) and LG-F1's tube-wall caliper question get re-pointed at `CAL-WRP-01` /
-  `CAL-FEA-01` rather than re-measuring them.
-- **The seven design docs** get `[CAL-…]` tags on the ten empirical Appendix B entries.
-  Text otherwise untouched.
-- **`calibrate/SKILL.md`** cites bikar Tenet 30 — 3d-models has no `CLAUDE.md` and this
-  plan does not create one.
+## C. 404 — one file
+
+No `404.html` in source or `dist/`; no `_routes.json`, `_redirects`, `_headers`, `public/`,
+or `functions/_middleware.js` either. Cloudflare Pages treats an output with no top-level
+`404.html` as an SPA and serves `index.html` with **HTTP 200** for every unmatched path.
+Confirmed live — `/404.html` itself returns the 2388-byte landing page, proving the asset is
+absent.
+
+**Fix:** add `packages/web/public/404.html` (Vite copies `public/` verbatim; the directory
+does not exist yet). Its presence disables the fallback.
+
+Dev note: `vite.config.ts` sets no `appType`, so it defaults to `'spa'` and reproduces the
+same 200 locally — which is why this was never caught. `multiPagePlugin` (`:428-447`) is
+`configureServer`-only and its prefix match is greedy (`/editorial-nonsense` → `editor.html`).
+
+---
+
+## D. Deploy validation that can fail
+
+`.github/workflows/deploy.yml:63-82` is `continue-on-error: true` (`:64`), checks two bare
+roots (`:80`, `:82`), and treats 200 **and** 302 as ✓ (`:73`). Every branch `echo`s and
+returns 0; nothing calls `exit 1`.
+
+Worse than blind: given the SPA fallback, *any* path on pages.dev returns 200, so even
+checking `/editor` would pass a deploy that dropped `editor.html`. And 302 counts as success
+on the custom domain, where Access redirects unknown paths too — so that check asserts only
+that Cloudflare Access is up.
+
+**Fix:** drop `continue-on-error`, assert on **body content** (a per-page marker string per
+entry point), and add a negative assertion that a known-bad path returns 404 — meaningful
+only once §C lands, and the check that would have caught the 4-day/34-run outage.
+
+---
+
+## Security finding — surfaced, not fixed here
+
+`scripts/cf-setup.sh:99` provisions the Access app with
+`self_hosted_domains: ["bikar.naqshcoffee.com"]`. **`bikar-studio.pages.dev` is not in it.**
+Verified live: the custom domain 302s to Access login; pages.dev returns 200 with no auth for
+landing, `/editor` and `/sessions` alike. APIs still fail closed there — Access sets
+`CF_Authorization` only on the custom domain, so `functions/api/_cf-auth.js:31-73` returns
+`null` and every route 401s. The pages are public; the data is not.
+
+Cloudflare settings change, not code. **Left to Omar.**
 
 ---
 
 ## Critical files
 
-**New (3d-models):** `.claude/skills/calibrate/{SKILL.md,bets.md,protocol.md}`,
-`docs/calibration-design.md`.
+**bikar, new:** `patterns/index.json`, `packages/web/public/404.html`,
+`packages/web/src/catalog.ts`, `packages/web/tests/catalog.test.ts`,
+`packages/web/tests/pattern-manifest.test.ts` (the bijection gate).
 
-**Modified (3d-models):** `.claude/skills/maintain-use-cases/validate.py` (R1),
-`.githooks/pre-commit.d/20-use-cases` (R1 guard), `.claude/skills/ground-design-doc/SKILL.md`,
-`.claude/skills/prototype/{SKILL.md,catalog.md}`, and the empirical Appendix B entries in
-`docs/{c2-assembly,piece-composition,w2-connector,print-validation,tile-wall,lego-lab}-design.md`.
+**bikar, modified:** `packages/web/src/main.ts` (`:43-3434` deleted, `:3436-3441` reseeded),
+`packages/web/vite.config.ts` (§Zero `bkr_source`; glob/fs config),
+`packages/web/index.html`, `src/landing.ts`, `editor.html`,
+`scripts/generate-gallery.ts`, `.github/workflows/deploy.yml`, `CLAUDE.md:58,447`, and the
+skill files listed in §A.
 
-**New (bikar):** `CLAUDE.md` tenets 29/30 + conventions bullet (Phase T),
-`packages/core/src/kernel3d/calibration.ts`, `scripts/check-calibration.ts`,
-`scripts/gen-calibration-registry.ts`, `.calibration-baseline.json`,
-`patterns/Coupons/Machine-Card.bkr`.
+**bikar, deleted:** `scripts/extract-patterns.ts`.
 
-**Modified (bikar):** `packages/knobs/src/param-rewrite.ts` (R2),
-`packages/core/src/dsl/evaluator.ts` (R3), `packages/core/src/kernel/girih-tiles.ts` +
-`render/{svg-renderer,gt-emitter}.ts` (R4), `render/animation-compiler.ts` (R5),
-`packages/core/src/kernel3d/{fit-profile,mesh-gate,print-gate}.ts` + their ~53 call sites
-(C2 — wrapper only, **no value changes**), `package.json` (`ci` script).
+**3d-models, modified:** `index.html` (reciprocal link); `use-cases.md` if registration earns
+a UC row.
+
+**Reused rather than written:** `packages/lab/src/catalog.ts` (shape + `status`),
+`packages/lab/tests/catalog.test.ts` (input↔entry assertion),
+`packages/lab/tests/lego-presets.test.ts` (registry↔directory assertion — the direct model
+for the manifest gate), `applyFolderOverlay` (`vite.config.ts:330`), `setPatternFolder`
+(`pattern-api.ts:107`), `design-note/SKILL.md:91` (registration-step shape).
 
 ---
 
 ## Verification
 
-**Phase T:** each new tenet names real witnesses at `file:line` that still exist.
-
-**Phase R:**
-- R1: `python3 -m yaml` reads the real frontmatter; a **deliberately malformed** `as_of`
-  line now fails the hook where it previously passed silently — that inversion is the
-  test. `make validate-use-cases` green on the real tree.
-- R2: round-trip a `param` with `step`, with `.5` / `1e3` / `+3` defaults, and with a
-  trailing comment — every non-target byte identical (the header comment's own contract).
-- R3–R5: `npm run ci` green; R4 must show the emitter's behaviour change explicitly
-  (adopting the renderer's stricter predicate) rather than absorbing it silently.
-- Every fix gets a vitest that encodes the witness before it ships (Tenet 18).
-
-**Phase C:**
-- `npx tsc` proves the registry complete: an unregistered `CalBetId` is a compile error,
-  and `gen-calibration-registry.ts` output matches the checked-in `bets.md` (regenerate
-  and diff, like the decision ledger).
-- `check-calibration.ts` fails on a newly-added provisional value not in the baseline, and
-  passes on the same value once baselined — both directions tested.
-- Golden STLs unchanged: C2 wraps values, it does not alter them.
-- `Machine-Card.bkr` renders every rung; `--check` PASS on MC-1/3/4/5/6; MC-2's sub-floor
-  rungs render without `--check` and are *expected* FAIL, recorded as such, not a defect.
-  Watertight (`euler` consistent) on all rungs — the real regression test, since a bad
-  coupon fails silently in the mesh.
-- Renders eyeballed before the `.bkr` ships (Tenet 25).
-- Skill-file edits trip the pointer hook on `catalog.md`; that is UC8, not a new use case,
-  so `USE_CASES_OK=1` is the correct override (precedent `c7ee0e5`).
-- **Not verifiable now, by construction:** every number the card produces. Nothing here
-  may mark a CAL bet settled — that needs the printer, and the skill's own rules forbid
-  closing one from a render.
+- **§Zero** — a dev-shaped `{name, content, folder}` payload through `fromPatternRows`
+  returns `[]` **before** the fix and rows **after**. Then boot `vite dev` and confirm the
+  Lego folder actually renders.
+- **§A** — the manifest gate goes red three ways, each tested: a disk file absent from the
+  manifest; a manifest path with no disk file; a duplicate entry. Plus: entry 0 asserted to
+  be `Star-8.bkr`; `Petal Tutorial` order asserted explicitly against the curated sequence
+  (it is the case alphabetical destroys); the 5 Petal patterns the studio serves match the
+  disk copies `option-b-template-regen.test.ts` asserts against;
+  `starter-compile.test.ts` stays green at 103/103; `make gallery` regenerated and its card
+  count matches the manifest length.
+- **§B** — the catalog test fails when a Rollup input has no entry (add a throwaway input,
+  watch it go red) and passes on the real tree.
+- **§C** — after deploy, `curl -o /dev/null -w '%{http_code}' https://bikar-studio.pages.dev/nope`
+  returns **404**, and `/404.html` returns the new asset rather than the 2388-byte landing
+  page. Both are 200 today — that inversion is the test.
+- **§D** — show the new step actually failing against a URL known to be missing its marker
+  before wiring it in.
+- **Tenet 25** — the 17 newly-visible patterns get a portal look before shipping. They
+  compile, which that tenet says is necessary and not sufficient.
+- `npm run ci` green in bikar.
+- **Deploy-verification discipline** (learned the hard way): the studio is `editor.html` →
+  `editor-*.js`, **not** the 0.07 kB `main-*.js` landing shim; check `bikar-studio.pages.dev`,
+  **not** the stale `-aur` alias; grep **string literals or CSS class names**, never
+  identifiers — minification mangles those.
 
 ## Out of scope
 
-Mirroring Tenet 29 into qiyas/sacred-patterns (applies there — Python detector — but those
-repos are otherwise untouched here; raise separately). Creating a 3d-models `CLAUDE.md`.
-Adding `check:decisions` to bikar's `ci` (pre-existing omission — flag, don't fix).
-A `requirements.txt` for one dev dependency. A `--min-feature` override flag. Text/emboss
-capability. Any change to a constant's *value*. Design-specific coupons (LG-F1, W-C1 stay
-as they are, re-pointed only). Printing the card — there is no machine.
+Deploying `packages/lab` to `bikar-studio` (it is vendored to 3d-models gh-pages via
+`Makefile:146,153-166`; linking out costs nothing). Deploying `docs/gallery.html`, which is
+generated, committed, and served from nowhere. Adding `bikar-studio.pages.dev` to the Access
+app. Page-level auth middleware. A 3D authoring on-ramp skill — the skills audit found none
+exists for `piece`/`tile`/`wall`/`assembly`/`brick` (corpus census in `docs/grammar.md` §12:
+`pattern` 342 uses, `piece` 28, `assembly` 3, `wall` 2, `brick` 1), which is real but is its
+own work and would swallow this fix. Any change to a pattern's `.bkr` content. Printing.
