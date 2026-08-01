@@ -881,13 +881,23 @@ would be the first public data of their kind. That is a deliverable, not a footn
   it clutch, does it hold, which rib thickness this printer/filament needs, and whether the shallow
   cavity's bridging actually lands in the stud zone (§3.6). → `ribMm` and the `engage` default.
   **Sweeping the rib rather than the bore is the §3.8 change: the bore is set loose on purpose.**
-- **LG-F2 — clutch coupon, stud side.** A plate with a stud-⌀ ladder, tested against a real LEGO
+- **LG-F2 — clutch coupon, stud side.** A 2×4 with a stud-⌀ ladder, tested against a real LEGO
   brick's underside, **and measured with calipers before testing.** *Learns:* whether `studs full`
   is viable at 0.4 mm at all; the realised-vs-authored stud diameter, which no published source
   reports. → the `studDia` entry.
 - **LG-R1 — 1×N pin coupon.** A 1×4 with the three ⌀3.2 pins §3.3 predicts. *Learns:* whether the
   pin geometry survives FDM anisotropy, and whether a pin is weaker than a tube in practice — two
   Printables makers report exactly this failure (§3.3). → the `pinDia` entry.
+
+All three ship as **three-plate bodies at `engage 3.2`**, and F2 and R1 were drafted as single
+plates until the engine refused: a plate is 3.2 mm tall, so it can engage at most 1.6 mm and keep
+any ceiling, and 1.6 mm is exactly what V5b flags on §3.6's grounds. A coupon that warns is a
+measuring instrument with a confound — a failed clutch would then have two candidate explanations.
+The ladders themselves are **not `param`s** and cannot be: no `brick` statement reads a rib
+thickness or a stud ⌀, because those are `brickFit` offsets describing a printer and a spool rather
+than a design. They are swept with bikar's `--brick-fit <field>=<value>`, which leaves provenance
+`manual` — only a printed-and-measured result may claim `coupon` (§9, D-005). Source:
+`bikar/patterns/Coupons/Lego-Clutch-Coupon.bkr`.
 - **LG-D1 — clutch durability.** One passing LG-F1 rung, cycled 100 times against the same LEGO
   plate, with insertion/retention checked at 1 / 10 / 50 / 100. *Learns:* whether PLA's clutch
   survives repeated assembly, or creeps away. No public data exists on this in either direction.

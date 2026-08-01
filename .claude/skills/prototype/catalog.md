@@ -610,20 +610,30 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 ## LG-F1 — Clutch coupon, anchor side (rib-thickness ladder)
 
 - **Status**: planned (printing on hold; blocks M6)
-- **Model**: `bikar/patterns/Coupons/Lego-Clutch-Coupon.bkr` — a 2×4
-  tile-style piece (`studs none`, three anti-stud tubes) at a fixed bore
-  (6.514 mm authored, −0.1 mm/side global clearance applied) printed across a
-  five-rung **rib-thickness** ladder, `ribMm` = **0 / 0.05 / 0.10 / 0.15 /
-  0.20 mm**, crossed with `engage` = **1.6 / 3.2 / 8.0 mm**. Rung 0 is the
-  no-rib control and doubles as the bore test — if it clutches, the §3.8
-  architecture is unnecessary and that is a real finding. Render at defaults:
-  `cd bikar && node packages/cli/dist/index.js render
-  patterns/Coupons/Lego-Clutch-Coupon.bkr --format stl -o
-  ../3d-models/build/stls/coupons/LG-F1-ClutchCoupon.stl` — **without
-  `--check`** (sub-floor tube wall and rib, see the series note); sweep
-  `--param rib_mm=... --param engage_mm=...`. Cheapest decisive coupon in the
-  series: it fixes the numbers every later LG coupon and every shipped brick
-  inherits.
+- **Model**: `bikar/patterns/Coupons/Lego-Clutch-Coupon.bkr` `--piece
+  CouponAnchorPlate` — a 2×4 tile-style piece (`studs none`, three anti-stud
+  tubes) at a fixed bore (6.514 mm authored, −0.1 mm/side global clearance
+  applied) printed across a five-rung **rib-thickness** ladder, `ribMm` =
+  **0 / 0.05 / 0.10 / 0.15 / 0.20 mm**, crossed with `engage` = **1.6 / 3.2 /
+  8.0 mm**. Rung 0 is the no-rib control and doubles as the bore test — if it
+  clutches, the §3.8 architecture is unnecessary and that is a real finding
+  (bikar's `lego-coupons.test.ts` holds that rung to being *genuinely* ribless:
+  fewer triangles than the ribbed solid, not a lobe of zero thickness). Render
+  one rung:
+  ```
+  cd bikar && node packages/cli/dist/index.js render \
+    patterns/Coupons/Lego-Clutch-Coupon.bkr --format stl \
+    --piece CouponAnchorPlate --brick-fit ribMm=0.10 --param engage=3.2 \
+    -o ../3d-models/build/stls/coupons/LG-F1-rib010-eng32.stl
+  ```
+  — **without `--check`** (sub-floor tube wall and rib, see the series note).
+  The rib is **not** a `--param` and cannot be: a `param` is read by a `brick`
+  statement and no brick statement reads a rib thickness. It is a `brickFit`
+  offset, which is what `--brick-fit` reaches (bikar PR
+  [#45](https://github.com/NaqshCoffee/bikar/pull/45)); an earlier version of
+  this entry prescribed `--param rib_mm=…`, a knob that never existed. Cheapest
+  decisive coupon in the series: it fixes the numbers every later LG coupon and
+  every shipped brick inherits.
 - **Print target**: TBD — record machine/material/nozzle/layer/XY-compensation
   **and filament spool + dryness** on first print. Bambu's own docs say fit moves
   with moisture ("dry filament results in a looser fit"), so a LEGO profile is
@@ -672,10 +682,25 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 
 - **Status**: planned (printing on hold; blocks M6's `studs` interfaces)
 - **Model**: `bikar/patterns/Coupons/Lego-Clutch-Coupon.bkr` `--piece
-  CouponStudPlate` — a 2×4 plate with a five-rung stud-⌀ ladder centred on
-  4.8 mm at ±0.15 mm (**4.65 / 4.73 / 4.80 / 4.88 / 4.95 mm**), tested against a
-  real LEGO brick's **underside**. Render without `--check` as above; sweep
-  `--param stud_d=...`.
+  CouponStudPlate` — a 2×4 **three-plate brick** with a five-rung stud-⌀ ladder
+  centred on 4.8 mm at ±0.15 mm (**4.65 / 4.73 / 4.80 / 4.88 / 4.95 mm**),
+  tested against a real LEGO brick's **underside**. Render without `--check` as
+  above; sweep `--brick-fit studDiaMm=` **−0.15 / −0.07 / 0 / +0.08 / +0.15**
+  (the offsets are diametral deltas onto the 4.8 mm datum, so `0` *is* the
+  moulded nominal and the shipped −0.2 sits one rung below the ladder).
+  ```
+  cd bikar && node packages/cli/dist/index.js render \
+    patterns/Coupons/Lego-Clutch-Coupon.bkr --format stl \
+    --piece CouponStudPlate --brick-fit studDiaMm=0 \
+    -o ../3d-models/build/stls/coupons/LG-F2-stud480.stl
+  ```
+  **Three plates, not the one this entry first specified**, and the reason is a
+  warning the engine emits rather than a preference: a plate is 3.2 mm tall, so
+  it can engage at most 1.6 mm and keep any ceiling at all, and 1.6 mm is
+  exactly the engagement V5b flags — the sag Q4 of LG-F1 is *about*. A 1-plate
+  coupon would carry that confound into a measurement of stud ⌀. Body height is
+  not what this ladder sweeps, so three plates costs a few grams and nothing
+  else.
 - **Print target**: TBD. **Print one full ladder at 0.4 mm nozzle and, if
   available, one at 0.2–0.3 mm** — that comparison is the entire point of Q1, and
   it has a published counterexample worth knowing before you run it: Brickset
@@ -732,11 +757,12 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   ```
   Sweep the **stud-⌀ offset**, which is what the fit profile actually holds:
   rungs at `studDiaMm` = **−0.20 (shipped default, the no-clutch control) /
-  −0.15 / −0.10 / −0.05 / 0.00 (moulded nominal, offset applied once)**. There
-  is no CLI flag for it yet — the offset lives in `brickFit` on the evaluator
-  options, so the ladder is rendered by a five-line script or by adding the
-  flag first. Note that in the catalogue's terms and the doc's, `studDiaMm`
-  is an **offset onto 4.8 mm**, not a diameter.
+  −0.15 / −0.10 / −0.05 / 0.00 (moulded nominal, offset applied once)** —
+  `--brick-fit studDiaMm=−0.10` and so on, the same flag LG-F1 and LG-F2 use
+  (bikar PR [#45](https://github.com/NaqshCoffee/bikar/pull/45); before it, this
+  ladder needed a script reaching past the CLI into the API). Note that in the
+  catalogue's terms and the doc's, `studDiaMm` is an **offset onto 4.8 mm**,
+  not a diameter.
 - **Print target**: TBD — same recording discipline as LG-F1 (machine, material,
   nozzle, layer, XY compensation, spool + dryness). Both halves must come off the
   **same spool in the same session**: the whole question is what two parts with
@@ -783,10 +809,20 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 
 - **Status**: planned (printing on hold; blocks 1×N footprint support)
 - **Model**: `bikar/patterns/Coupons/Lego-Clutch-Coupon.bkr` `--piece
-  CouponPinStrip` — a 1×4 tile-style piece carrying the **three ⌀3.2 mm solid
-  pins** design doc §3.3 predicts for a 1×4 footprint (LDraw `p/stud3.dat`),
-  swept ±0.15 mm. This is the coupon that settles the survey's "1×N exception"
-  in plastic rather than on paper.
+  CouponPinStrip` — a 1×4 **three-plate** strip carrying the **three ⌀3.2 mm
+  solid pins** design doc §3.3 predicts for a 1×4 footprint (LDraw
+  `p/stud3.dat`), swept `--brick-fit pinDiaMm=` **−0.15 / −0.07 / 0 / +0.08 /
+  +0.15** (realised **3.05 / 3.13 / 3.20 / 3.28 / 3.35 mm**). This is the coupon
+  that settles the survey's "1×N exception" in plastic rather than on paper.
+  ```
+  cd bikar && node packages/cli/dist/index.js render \
+    patterns/Coupons/Lego-Clutch-Coupon.bkr --format stl \
+    --piece CouponPinStrip --brick-fit pinDiaMm=0 \
+    -o ../3d-models/build/stls/coupons/LG-R1-pin320.stl
+  ```
+  Three plates for LG-F2's reason and one of its own: `engage` is the pin
+  *length*, so a 1-plate strip would sweep pin ⌀ on 1.6 mm stubs and answer Q2's
+  anisotropy question about a column half the height of the one that ships.
 - **Print target**: TBD.
 - **Mating part**: a real LEGO 1×4 plate/brick.
 - **What we want to learn**:
@@ -838,8 +874,9 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 ## LG-B1 — First patterned brick (8-fold, 4×4)
 
 - **Status**: planned (printing on hold; blocked on LG-F1's clutch number)
-- **Model**: `bikar/patterns/Bricks/Star-Brick.bkr` — a 4×4 eight-fold piece at
-  declared defaults (`studs none`, `anchors auto` → nine tubes, relief at the
+- **Model**: `bikar/patterns/Lego/Star-Brick.bkr` (`brick StarBrick`) — an
+  eight-fold piece at declared defaults (`inscribe star_relief`, `footprint
+  auto` → 4×4, `studs none`, `anchors auto` → nine tubes, `relief depth` at the
   §4 default). The first object that is **both a real LEGO part and a real
   Islamic pattern**. Render with `--fit-profile` set from LG-F1.
 - **Print target**: TBD.
@@ -861,10 +898,14 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 
 ## LG-B2 — Off-grid anchor (5-fold rosette)
 
-- **Status**: planned (printing on hold; blocked on LG-B1)
-- **Model**: `bikar/patterns/Bricks/Rosette-Brick.bkr` — a five-fold rosette
-  piece whose outline is genuinely incommensurable with the square lattice,
-  anchored by two tubes. **The load-bearing bet of the entire anchor-only
+- **Status**: planned (printing on hold; blocked on LG-B1) — **and the model
+  does not exist yet.** `patterns/Lego/` ships seven bricks and none of them is
+  a five-fold rosette; the nearest source of the outline is
+  `patterns/Rosettes/*.bkr`, which are 2D patterns with no `brick` declaration.
+  Authoring it is the first step of this coupon, not a lookup.
+- **Model** (to author): `bikar/patterns/Lego/Rosette-Brick.bkr` — a five-fold
+  rosette piece whose outline is genuinely incommensurable with the square
+  lattice, anchored by two tubes. **The load-bearing bet of the entire anchor-only
   approach** (design doc §1, §5.3, Appendix B.2): that a printed piece's outline
   need not obey the grid so long as its interface does.
 - **Print target**: TBD.
