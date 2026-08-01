@@ -985,7 +985,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that is **not** done is the check that needs no code: no LDraw viewer has opened the output. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
@@ -1313,6 +1313,44 @@ worker cannot know which page asked, so it now states only what the engine needs
 question stays where the answer is known. Same shape as the `applyResult` comment above: a true
 sentence that the second consumer made false, invisible to every gate, found by reading a file
 against the change.
+
+**P3 — the process note, the knob that moved, and the LDraw export — 2026-08-01.** bikar `a10f4f6`
+(PR #53: `updateProcessNote`/`applyMachineSelection` and the adjustment markers in `lego-main.ts`,
+`markAdjustedKnobs` in `packages/knobs`, the four new e2e cases, then
+`packages/core/src/render/ldraw-emitter.ts` with 22 unit cases, `--format ldraw` in the CLI, and
+`docs/decisions/2026-08-01-ldraw-export-inline-mpd.md`). 3d-models: this entry, the §10 P3 row, the
+§14.1 correction in `5b1534c`, and UC18 in the use-case map.
+
+**The deliberate deviation is in §14.1, and it is the interesting one.** The spec gated the
+feature-floor note on `process === 'fdm'` and a margin to `featureFloorMm`. Built exactly that way,
+the note is on screen on **every brick the Lab can produce**, including the untouched default: the
+thinnest feature is the anti-stud tube wall, 0.757 mm on the shipped fit against a 0.70 mm floor —
+8%, inside the margin. That is not a coincidence to tune away. The wall is
+`outerDia/2 − bore/2`, and both of those are fixed by §3.1's mating dimensions rather than by
+anything the reader chose, so *no* setting of the margin makes the note rare while leaving it
+useful. A note that never turns off is the decoration §14.1 itself refuses. The condition that does
+discriminate is whether the reader has moved a clutch number — `FIT_FIELDS.some((f) =>
+fitProvenance(brick.fit, f) !== 'default')` — so that is what gates it, and §14.1 now says so with
+the 0.757-inside-0.805 arithmetic written out in its own PASS example. The margin still does work;
+it decides whether a *moved* fit is worth reporting, which is a different job from making the note
+rare.
+
+Two smaller findings, both from building rather than reading. The e2e case that proves the note
+fires first used `tubeDiaMm = −0.1` and stayed silent — because `BrickFit` fields are **diametral
+deltas** and the shipped value is already −0.2, so −0.1 *raised* the wall to 0.807 mm. The passing
+case dials to −0.3 (0.707 mm), and the pair of tests — silence on defaults, note on a moved fit —
+is the graduation artifact for the paragraph above. Separately, nothing re-evaluated the note on a
+machine change, since the mesh does not depend on the build volume; switching FDM → powder left the
+pin/shear advisory on screen where §11 Q2 is not a question at all. `applyMachineSelection` now
+re-asks it.
+
+Beyond the spec: `PlacedPart` gained `bodyHeightMm` and `brickSizeLabel`, because the LDraw origin
+is the brick's **top** face and the emitter cannot compute `H − z` from a placement alone.
+
+**What is owed.** §14.3 lists four items that "are answered by opening one file in three viewers",
+and the emitter shipped without that afternoon happening — the file has been read by 22 tests and
+by no viewer. The PR body says so and this entry repeats it, because a claim about interoperation
+that no interoperating program has seen is exactly the K1 hedge this doc is not allowed to strip.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
