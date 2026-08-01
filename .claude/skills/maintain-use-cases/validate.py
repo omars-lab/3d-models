@@ -33,6 +33,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 import yaml
 
@@ -378,6 +379,30 @@ def mode_full(root: str) -> int:
     return rc
 
 
+def refresh_target(repo: str, rdir: str) -> tuple[str | None, str]:
+    """Resolve what `--refresh` should pin `repo` to, and say which ref that was.
+
+    For this repo, that is HEAD: the map records the commit it is built upon.
+
+    For a **sibling** repo it deliberately is not. `../bikar` and `../qiyas` are
+    other sessions' working checkouts, and their HEAD is routinely a feature
+    branch — unpushed, still rebasable, sometimes unrelated to the pointers
+    being pinned. A pin there ties this map to work that can vanish, and the
+    pointer it validates today can stop resolving with no commit here to blame.
+    The published tip cannot: it is what a fresh clone would see.
+
+    Falling back to HEAD is still better than refusing to refresh, but it is
+    reported, because it is the case that used to happen silently.
+    """
+    if repo == SELF_REPO:
+        return try_git(rdir, "rev-parse", "HEAD"), "HEAD"
+    for ref in ("origin/HEAD", "origin/main"):
+        resolved = try_git(rdir, "rev-parse", "--verify", f"{ref}^{{commit}}")
+        if resolved is not None:
+            return resolved, ref
+    return try_git(rdir, "rev-parse", "HEAD"), "HEAD (no origin ref — pin may be unpublished)"
+
+
 def mode_refresh(root: str) -> int:
     path = os.path.join(root, DOC_RELPATH)
     with open(path, encoding="utf-8") as f:
@@ -385,7 +410,7 @@ def mode_refresh(root: str) -> int:
     doc = Doc(text)
     for repo, pin in doc.as_of.items():
         rdir = doc.repo_dir(repo, root)
-        head = try_git(rdir, "rev-parse", "HEAD") if rdir else None
+        head, ref = refresh_target(repo, rdir) if rdir else (None, "-")
         if head is None:
             print(f"use-cases refresh: '{repo}' not available — pin kept at {pin[:12]}", file=sys.stderr)
         elif head != pin:
@@ -401,7 +426,9 @@ def mode_refresh(root: str) -> int:
                     f"(is it quoted, or on a folded line?). Update it by hand."
                 )
             text = updated
-            print(f"use-cases refresh: {repo} {pin[:12]} -> {head[:12]}")
+            print(f"use-cases refresh: {repo} {pin[:12]} -> {head[:12]} ({ref})")
+        elif repo != SELF_REPO and ref.startswith("HEAD"):
+            print(f"use-cases refresh: '{repo}' pinned from {ref}", file=sys.stderr)
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
     return mode_full(root)
@@ -541,6 +568,36 @@ def self_test() -> int:
         staleness_warning("bikar", None, None),
         "'bikar' as_of does not share history with its local HEAD — check the pin",
     )
+
+    # `--refresh` against a real repo whose HEAD is an unpublished feature
+    # branch — the shape every sibling checkout here actually has. Before
+    # `refresh_target`, this pinned the feature commit: the map silently
+    # followed another session's unpushed work, and the hand-edit back to
+    # origin/main was undone by the next refresh with no way to notice.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+
+        git("init", "-q", "-b", "main")
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "published")
+        published = run_git(tmp, "rev-parse", "HEAD")
+        git("update-ref", "refs/remotes/origin/main", published)
+        git("checkout", "-q", "-b", "feat/other-session")
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "unpushed")
+        unpushed = run_git(tmp, "rev-parse", "HEAD")
+
+        expect("a sibling repo pins to its published tip, not the branch it is on",
+               refresh_target("bikar", tmp), (published, "origin/main"))
+        expect("this repo still pins to HEAD — the commit being built upon",
+               refresh_target(SELF_REPO, tmp), (unpushed, "HEAD"))
+
+        git("update-ref", "-d", "refs/remotes/origin/main")
+        target, ref = refresh_target("bikar", tmp)
+        expect("with no origin ref it falls back to HEAD rather than refusing",
+               target, unpushed)
+        expect("...and says so, because that pin may not be published",
+               ref.startswith("HEAD (no origin ref"), True)
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 

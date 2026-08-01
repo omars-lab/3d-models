@@ -8,13 +8,15 @@ and the design changed: the clutch is now a discrete rib rather than a nominal s
 rather than a fact about LEGO (§3.2). Remaining contested bets, each with its strongest refuting
 source, are in Appendix B.**
 
-Built: **R0, M6, M7, P0 and P1 have shipped** (2026-07-29 → 2026-07-31). P1 shipped its
+Built: **R0, M6, M7, P0, P1 and P2 have shipped** (2026-07-29 → 2026-08-01). P1 shipped its
 **sweep strip**, its design-notes page, its studio index, **multi-piece export** (§10, D-006) — a
 brick mints stud/anti-stud ports from its own lattice and a two-brick assembly exports as two
 printable parts — §5.3's **compatibility matrix, now filled by a real sweep**
 ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)), and the two
-**curated scripts** that make that matrix clickable rather than only readable. Only P2–P3 have
-not. Building it produced the finding that a printed brick on a
+**curated scripts** that make that matrix clickable rather than only readable. P2 then gave the page
+custom mode — the code drawer, `code=` share links, "Open in Studio" and the localStorage draft —
+by *sharing* the Orb Lab's modules rather than forking them. Only P3 has
+not shipped. Building P1 produced the finding that a printed brick on a
 printed brick has **no clutch at all** on the shipped defaults, and the coupon (`LG-S1`) that would
 settle where the real ceiling sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
@@ -980,7 +982,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
-| **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. |
+| **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
 | **P3** | both | Polish: per-family print notes, adjusted-parameter toasts, LDraw `.ldr` placement export (survey §6 — a text emit, one line per piece). |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
@@ -1241,6 +1243,74 @@ is carried to §11 as an open question instead of being half-diagnosed here.
 The graduation artifact is the two preset cases, which pin each preset to the row it illustrates —
 including `repeatUnitStuds` as **null rather than absent**, because withholding an answer is not
 the same as scoring zero and the field has to say which it is.
+
+**P2 — custom mode — 2026-08-01.** bikar `9cca1ae` (PR #50: `lego.html`'s drawer markup and
+authoring notes, the custom-mode section of `lego-main.ts`, the draft-slot parameterization in
+`custom-state.ts`, `STUDIO_EDITOR_URL`'s move into `editor.ts`,
+`packages/lab/tests/lego-custom-mode.test.ts`, the custom-mode block in
+`packages/e2e/tests/lego-lab.spec.ts`, and the de-paged family refusal in
+`packages/lab/src/evaluate.ts`). 3d-models: this entry and the §10 P2 row.
+
+The Lego Lab now has the Orb Lab's code drawer, `code=` share links, "Open in Studio" and the
+localStorage draft — and it has them because §2's no-fork rule held a second time. `editor.ts`,
+`custom-state.ts` and `url-state.ts` are used verbatim; `lego.html` mounts the same markup against
+the same stylesheet. What that bought is one identity rule, one URL budget and one bake semantics
+across two pages, which is the whole argument for the second Vite entry restated at the feature
+level.
+
+**The one shared module that had to change, and why it is a real defect rather than a tidy-up.** The
+draft slot was a module constant in `custom-state.ts`. That was correct while exactly one Lab had a
+drawer and wrong the moment the second one did: both pages are one `localStorage` origin, so a brick
+draft would have booted the Orb Lab into `mode = 'custom'` holding a script that cannot be an orb —
+a page that opens broken, from a write another page made. `ORB_DRAFT_SLOT` and `BRICK_DRAFT_SLOT`
+are now declared beside each other and passed in, so the collision is a thing a reader sees rather
+than a thing they have to reproduce. `STUDIO_EDITOR_URL` moved the other way for the mirror-image
+reason: two copies of a deployment URL means a redeployed studio that one page follows and the other
+does not, and a dead link is invisible from the page that still works.
+
+Two behaviours are deliberately **not** shared, because the brick page makes different promises:
+
+- `applyResult`'s non-brick branch carried the comment *"only reachable if a script in the registry
+  stops declaring a `brick`"*. Custom mode makes typing an `orb` an ordinary thing a user does, so
+  that comment became false the moment the drawer opened — a **K7** caught by reading the file
+  against the change rather than by any gate. The message now names the recourse ("Add a `brick`
+  block, or open it in the Orb Lab") instead of only stating the fact.
+- **The clutch fit rides in neither the `code=` payload nor the downloaded `.bkr`.** §7.5 already
+  separated the two panels; custom mode is where that separation earns its keep. A link that quietly
+  carried the author's fit offsets would make the recipient's brick come out wrong on *their*
+  machine in a way neither of them could see, because both would be looking at the same design and
+  getting different parts. The drawer's authoring notes say so in the place an author is standing
+  when it matters.
+
+Beyond the spec: the sweep strip is dropped on a preset↔custom transition and kept across edits
+*within* custom mode. Those are the same tolerance a knob drag already has, but the reason they
+differ is worth writing down — a strip is a picture of one script's knob range, and
+`refreshSweepControls`' "is this param still declared?" check is not enough to notice that the
+script under it changed, because two scripts can both declare `pitch`.
+
+Graduation rule honoured, in three places because the claims are of three different kinds.
+`custom-state.test.ts` pins the two draft slots as distinct and non-interfering — the bug above,
+written as a test against the module that carried it. `lego-custom-mode.test.ts` runs the identity
+rule against every committed brick source *and* against a one-character edit of each, and checks
+that `lego.html` declares every id `lego-main.ts` resolves with `must()`. That last one exists
+because those calls throw at module load: a renamed element is a blank page, not a failing
+assertion, and P0's own lesson — *a unit-tested helper is not a rendered one* — applies to a
+mounted element as much as to a called function. The scan carries a guard on itself, so a refactor
+that renames `must` goes red instead of quietly becoming a test that asserts nothing.
+
+The third kind is what neither of those can reach, and it went to `packages/e2e/tests/lego-lab.spec.ts`:
+that a by-hand `ribMm` stays out of the URL the page actually writes (§7.5, checked on the link
+rather than on the encoder), that a comment-only edit leaves `data-tris` identical so a typed brick
+is scored by the same gates on the same mesh, and that an orb pasted into this page is refused by
+name. **Writing that third case found a second K7,** one level down. Its first draft pasted a
+script declaring nothing at all and asserted the page's message; it got the shared worker's
+instead, because a script with no declaration never reaches `applyResult`. The worker's refusal
+read *"the Lab previews a 3D orb, a `wall` layout, or a `brick`"* — written when one page ran it,
+false on the page this phase gave a drawer to, which previews neither an orb nor a wall. A shared
+worker cannot know which page asked, so it now states only what the engine needs and the family
+question stays where the answer is known. Same shape as the `applyResult` comment above: a true
+sentence that the second consumer made false, invisible to every gate, found by reading a file
+against the change.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
