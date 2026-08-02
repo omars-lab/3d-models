@@ -3,6 +3,13 @@
 # commits that change pointer-referenced files without updating the map,
 # enforces as_of == HEAD when the map itself is staged, and reminds on
 # experience-surface edits. Override the block once: USE_CASES_OK=1 git commit
+#
+# When the map IS staged the validator runs in full, which since 2026-08-02
+# includes the anchor rule: a pointer written `path:L137 "orbs:"` must have
+# that literal inside the lines it names, at the pinned commit. That is the
+# check the block above was standing in for and could not make — it knew the
+# commit touched a pointed-at file, never whether the pointer still pointed at
+# the right thing. 23 of 44 line claims had drifted by the day it was added.
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for use-case validation" >&2
   exit 1

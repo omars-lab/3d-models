@@ -15,9 +15,20 @@ capability live?" — kept honest by `validate.py` and the pre-commit hook.
 - **Pointer syntax** (must be backticked, in the table only):
   `` `repo:path:L10` `` or `` `repo:path:L10-L20` ``. `repo` is `3d-models`,
   `bikar`, or `qiyas`; paths are repo-relative.
+- **Anchor a pointer that names a specific line**: append a quoted literal that
+  must appear inside the range — `` `3d-models:Makefile:L137 "orbs:"` ``. Write
+  one whenever the line number *is* the claim; a bare `:L1` means "this file"
+  and needs none. Without an anchor, `--refresh` moves the pin forward and
+  re-checks only that the file is long enough, which is how **23 of the map's
+  44 line claims** ended up on unrelated lines by 2026-08-02 while every run
+  printed "all valid". `validate.py` reports the anchored/unanchored split on
+  every run, so the gap stays visible instead of being assumed away.
 - **Pinned, not floating**: pointers are valid at the frontmatter `as_of`
   commit of their repo — line drift after that commit is expected and fine.
-  The freshness rules below keep the pins from rotting.
+  The freshness rules below keep the pins from rotting. One consequence worth
+  knowing: `as_of` is the *parent* of the commit being built, so a pointer into
+  a file that same commit edits is checked against the pre-edit copy. Its
+  anchor catches the shift on the next refresh; nothing catches it without one.
 - **Diagram ↔ table parity**: every `UC<n>` node in the mermaid diagram must
   have a table row and vice versa (validated).
 - **Shipped only**: a use case must exist in deployed/committed code.
@@ -36,8 +47,10 @@ commit as the change.
 
 **Validate** — `make validate-use-cases` (or run
 `.claude/skills/maintain-use-cases/validate.py` directly). Checks frontmatter,
-pointer existence and line ranges at the pinned commits, and diagram/table
-parity.
+pointer existence and line ranges at the pinned commits, every anchor against
+the lines its pointer names, and diagram/table parity. A drifted anchor is
+reported with the line the target moved to, so the repair is the message.
+`validate.py --self-test` covers the pure readers, including the anchor rule.
 
 **Audit** — read `use-cases.md` top to bottom; anything the project does that
 has no UC row is either missing from the map or not actually a user-facing
