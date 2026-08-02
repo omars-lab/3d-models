@@ -118,6 +118,15 @@ rule does not transfer.
   `BrickFit` field set are **harvested from bikar**, not listed — a hand-written
   list omitted `clip` and turned two correct entries into findings on the first
   run.
+- **A line number is a claim too, and needs an anchor to be one.** A pointer in
+  `.claude/skills/maintain-use-cases/use-cases.md` written `` `repo:path:L137` ``
+  asserts the file exists *and* that L137 is the line the label names; only the
+  first was ever checked. Write `` `3d-models:Makefile:L137 "orbs:"` `` and
+  `validate.py` requires the literal inside the range at the pinned commit, then
+  reports where it moved to. It is opt-in with no false-positive mode — every run
+  prints the anchored/unanchored split so the gap stays visible. On 2026-08-02 all
+  44 line claims were audited and **23 had drifted onto an unrelated line** across
+  three repos, while every run said "all valid".
 
 ### Research is checked in
 
