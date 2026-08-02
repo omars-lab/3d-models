@@ -101,6 +101,14 @@ rule does not transfer.
   never fire."
 - **K9 → D1.** Every relative link must resolve on disk. This one is universal
   and needs no marker.
+- **K9 → the pointer gate.** A backticked path is a claim too, and
+  `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`, `make
+  validate-pointers`) holds it to this repo, to a sibling **at a git ref** — not
+  at whatever someone else has checked out — or to a reasoned entry in
+  `.claude/gates/doc-pointer-baseline.json`. The baseline is a ratchet: it may
+  shrink freely and only grows deliberately. Cite a third party's tree, name a
+  file still to be authored, or propose a module, and you belong in it; be
+  stale and you do not.
 
 ### Research is checked in
 

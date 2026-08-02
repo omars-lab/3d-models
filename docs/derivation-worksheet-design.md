@@ -1320,7 +1320,7 @@ Full detail, quotations, and access failures in
 - `bikar/packages/core/src/{dsl/evaluator.ts, dsl/construction-tree.ts, dsl/ast.ts, dsl/parser.ts, dsl/lexer.ts, graph/half-edge.ts, render/svg-renderer.ts, render/orb-view-renderer.ts, render/gt-emitter.ts, kernel3d/solidify-slabs.ts, contract-conformance.ts, index.ts}`
 - `bikar/packages/qiyas-schema/{package.json, tsup.config.ts, scripts/codegen.mjs}`, `bikar/scripts/check-publish-config.js`, `bikar/packages/cli/src/index.ts`, `bikar/packages/lab/src/evaluate.ts`
 - `qiyas/src/qiyas/schema.py`
-- `3d-models/docs/decomposition-approach.md`, `3d-models/docs/w2-connector-design.md`, `3d-models/docs/c2-assembly-design.md`
+- `3d-models/docs/piece-composition-design.md`, `3d-models/docs/w2-connector-design.md`, `3d-models/docs/c2-assembly-design.md`
 
 ---
 

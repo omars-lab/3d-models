@@ -1,0 +1,88 @@
+{
+  "_comment": [
+    "Pointers that do not resolve and are not defects. The gate blocks GROWTH of",
+    "this list, not its existence: adding an entry is a deliberate act with a",
+    "reason, removing one is free. `why` is not read by the gate — it is read by",
+    "the next person deciding whether the entry still earns its place.",
+    "",
+    "Three kinds live here, and only three should. (1) A path in SOMEBODY ELSE'S",
+    "tree, cited as evidence — the gate cannot fetch it and a citation is not a",
+    "claim about our repo. (2) A path the doc says DOES NOT EXIST — a forward",
+    "reference to a file still to be authored, or a wrong pointer quoted as the",
+    "defect under discussion. (3) A module a design doc PROPOSES.",
+    "",
+    "A path that is simply stale does not belong here. Fix it."
+  ],
+  "unresolved": [
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "bikar/patterns/Lego/Rosette-Brick.bkr",
+      "why": "Forward reference. The line reads `**Model** (to author)` — LG-B2's coupon is authored as the first step of running it, so the file is absent by design until then."
+    },
+    {
+      "doc": "docs/backlog.md",
+      "path": "patterns/Lego/Rosette-Brick.bkr",
+      "why": "Same file as above, from the register table, whose own cell says it 'does not exist'. Both entries go when LG-B2 is authored."
+    },
+    {
+      "doc": "docs/click-to-source-design.md",
+      "path": "src/lang/std/artifactGraph-README.md",
+      "why": "Third party — KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."
+    },
+    {
+      "doc": "docs/click-to-source-design.md",
+      "path": "min/vs/editor/editor.main.js",
+      "why": "Third party — Monaco's published dist layout, cited for a measured bundle size."
+    },
+    {
+      "doc": "docs/derivation-worksheet-design.md",
+      "path": "swc.rs/schema.json",
+      "why": "Third party — SWC's published config schema, cited for what it does *not* cover."
+    },
+    {
+      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "path": "packages/core/src/kernel/face-extraction.ts",
+      "why": "Quoted defect. The doc reproduces a wrong pointer bikar's gate caught (real file: packages/core/src/graph/face-extractor.ts). Repairing it would delete the evidence."
+    },
+    {
+      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "path": "packages/core/src/nope/does-not-exist.ts",
+      "why": "Deliberately nonexistent — the injected path in that doc's mutation test of a pointer gate."
+    },
+    {
+      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "path": "scripts/never-written.sh",
+      "why": "Deliberately nonexistent, same mutation test."
+    },
+    {
+      "doc": "docs/dsl-grammar-formalization.md",
+      "path": "TypeScript-Compiler-Notes/GLOSSARY.md",
+      "why": "Third party — a page fetched during the survey, cited for what it fails to state."
+    },
+    {
+      "doc": "docs/dsl-grammar-formalization.md",
+      "path": "using-parsers/1-getting-started.html",
+      "why": "Third party, and a recorded negative result: the doc says the ERROR/MISSING node documentation was **not found** there."
+    },
+    {
+      "doc": "docs/dsl-grammar-formalization.md",
+      "path": "using-parsers/3-advanced-parsing.html",
+      "why": "Third party, same recorded negative result."
+    },
+    {
+      "doc": "docs/hemisphere-split-design.md",
+      "path": "kernel3d/split.ts",
+      "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and §Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
+    },
+    {
+      "doc": "docs/lego-lab-design.md",
+      "path": "config/config-default.scad",
+      "why": "Third party — MachineBlocks' OpenSCAD source, cited for its calibration defaults."
+    },
+    {
+      "doc": "docs/lego-lab-design.md",
+      "path": "lib/block.scad",
+      "why": "Third party, same source."
+    }
+  ]
+}
