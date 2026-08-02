@@ -862,3 +862,71 @@ fire on a real brick — is gone.
 This changes nothing about the certification. The three measured rows of §9.2
 stand; it was the word in the fourth column, not the numbers, that was inferred
 rather than measured.
+
+---
+
+## D-013 — Murals cut art at nominal grid lines, and a printed-part set is not an L78 mosaic
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** 3d-models, bikar
+
+### Context
+
+Two questions had to be settled before the `mural` family could ship, and they
+travel together because both are about what the family *is*.
+
+**Where does the art get cut?** A mural's pattern is one planar graph split
+into c×r pieces whose physical bodies are `8n − 0.2` mm on an 8.0 mm stud
+pitch. Two candidate rules were on the table:
+
+- **Nominal-line cut (taken).** Art is cut at pure multiples of 8.0 mm; the
+  body then clips 0.1 mm per side at build time, so exactly 0.2 mm of art is
+  interrupted per seam. The cut lines are injected into the pattern's own
+  planar-graph extraction, so both sides of every seam carry bit-identical
+  vertex coordinates by construction
+  ([design §5](lego-pattern-set-design.md)).
+- **Gap-registered cut (rejected).** Pre-shrink each piece's art to the
+  `8n − 0.2` body so relief runs flush to the physical edge. Rejected because
+  it double-counts the inset — `PART_RELIEF_MM` transfers as a *physical-gap
+  prediction*, not a pattern-registration offset, which is the repo's named
+  K10 defect ([design §3.2](lego-pattern-set-design.md)) — and because a
+  per-piece offset mints per-piece coordinates, demoting seam continuity from
+  an identity to a tolerance claim needing its own gate.
+
+**Is this the mosaic lego-lab ruled out?**
+[`lego-lab-design.md`](lego-lab-design.md) L78 lists "stock-part mosaic
+generation and BrickLink/Rebrickable BOMs" as an LG non-goal, and `mosaic` was
+accordingly rejected as the declaration's name (bikar decision
+`2026-08-02-mural-panelization`). The ruling: L78 excludes composing pictures
+out of *purchased* LEGO parts — palette quantization, part BOMs. A mural is
+the other branch: **printed** pieces carrying continuous engraved relief that
+no purchasable part has, mounted on a stock baseplate. The non-goal stands
+untouched; the family does not enter it
+([design §1](lego-pattern-set-design.md)).
+
+### Decision
+
+Art is cut at nominal 8.0 mm grid lines; no art offset is ever applied; the
+0.2 mm at each seam is the design's stated price. Printed-part pattern sets
+are in scope and `mural` is their name.
+
+### What would reverse it
+
+**LG-P1's physical measurement, and only that.** The nominal-cut rule's
+geometry is proven in software — bikar's `mural-split` tests assert the seam
+vertex identity to 1e-12 and the area ledger to 1e-9 — so no further argument
+or render can move this entry. What can move it is the two-piece
+seam-registration coupon on a real LEGO-brand baseplate (CAL-REG-01,
+[bets.md](../.claude/skills/calibrate/bets.md)): if a relief line crossing the
+seam visibly jogs by more than the 0.2 mm gap predicts — stud-bore slop and
+plate pitch error compounding into misregistration the nominal cut cannot see
+— then the cut rule needs an art-side correction term, and it would be a
+*measured* one, not a re-derivation of the K10 offset rejected above. Held
+pending a printer, like everything print-gated.
+
+### The graduation
+
+The tests already exist on the bikar side (seam identity, ledger closure,
+V-M5 containment — `packages/core/tests/kernel3d/mural-split.test.ts`), which
+is why this entry records the *decision* and not the defect: what cannot be
+asserted in vitest is that the gap-registered alternative was considered and
+why it lost. That is what this file is for.

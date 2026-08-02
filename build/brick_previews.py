@@ -16,7 +16,13 @@ already keys out to transparency and autocrops — so a brick PNG lands
 in build/images/ and `make web-images` finishes it alongside every
 OpenSCAD render and every orb.
 
-Usage:  python3 build/brick_previews.py
+A mural set gets the same treatment from its *composed* panel STL — every
+piece placed at its layout offset, written ungated by `make pattern-sets`
+(the per-piece gate already ran in the `--format parts` pass). The set's
+gallery claim is the reconstituted pattern, so that is what gets drawn.
+
+Usage:  python3 build/brick_previews.py          # bricks (build/.brick-names)
+        python3 build/brick_previews.py --sets   # mural sets (build/.set-names)
 Deps:   OpenSCAD  (the same binary the cookie-cutter targets use)
 """
 import glob
@@ -78,21 +84,25 @@ def main():
     binary = openscad()
     if not binary:
         sys.exit("OpenSCAD not found — brick previews need the same binary as `make cookie-cutters`")
-    # `make bricks` records which stems it just wrote, so this script previews
-    # the bricks and not the orbs or cookie cutters sharing build/stls/.
-    if not os.path.exists(NAMES_FILE):
-        sys.exit(f"{NAMES_FILE} missing — run `make bricks`, which writes it")
-    with open(NAMES_FILE) as fh:
+    # Each make target records which stems it just wrote, so this script
+    # previews those and not the orbs or cookie cutters sharing build/stls/.
+    sets = "--sets" in sys.argv[1:]
+    names_file = "build/.set-names" if sets else NAMES_FILE
+    target = "make pattern-sets" if sets else "make bricks"
+    if not os.path.exists(names_file):
+        sys.exit(f"{names_file} missing — run `{target}`, which writes it")
+    with open(names_file) as fh:
         names = [line.strip() for line in fh if line.strip()]
 
     os.makedirs(OUT_DIR, exist_ok=True)
     for name in names:
         stl = f"{STL_DIR}/{name}.stl"
         if not os.path.exists(stl):
-            sys.exit(f"{stl} missing — `make bricks` did not write it")
+            sys.exit(f"{stl} missing — `{target}` did not write it")
         render(binary, stl, f"{OUT_DIR}/{name}.png")
         print(f"{name}.png")
-    print(f"rendered {len(names)} brick preview(s) -> {OUT_DIR}")
+    kind = "set" if sets else "brick"
+    print(f"rendered {len(names)} {kind} preview(s) -> {OUT_DIR}")
 
 
 if __name__ == "__main__":

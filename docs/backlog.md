@@ -29,8 +29,9 @@ is the measurement ceremony. This file is the *order*, the *cost*, and the
 **What has been searched, so the claims below can be read for what they are.**
 `CAL-*` ids were grepped across all three repos of the system: `3d-models`
 (`docs/` and `.claude/`), `bikar` (read-only, via the `bikar-lego-lab` worktree),
-and `qiyas`. Twelve ids are registered in `CAL_BETS`; a thirteenth, `CAL-SEA-01`,
-appears twice in `3d-models` only, in both cases as a bet that
+and `qiyas`. Fourteen ids are registered in `CAL_BETS` (twelve at the original
+sweep, plus the two mural bets `CAL-REG-01`/`CAL-CLB-01` registered 2026-08-02);
+one more, `CAL-SEA-01`, appears twice in `3d-models` only, in both cases as a bet that
 [`hemisphere-split-design.md`](hemisphere-split-design.md) §Appendix B and its
 grounding audit deliberately **declined to mint**. `qiyas` contains no `CAL-*`
 id at all. That is the whole set as it exists on disk today; it is not a claim
@@ -38,12 +39,12 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 12 | 10 with a coupon, 2 without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`) |
+| Registered `CAL-*` bets | 14 | 12 with a coupon, 4 without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, and the two mural bets `CAL-REG-01`, `CAL-CLB-01`) |
 | `Calibrated<T>` records | 16 | all provisional, all listed in bikar's `.calibration-baseline.json` |
 | Bets settled by the machine card (MC-1…MC-6) | 7 | 12 of the 16 records |
 | Bets settled by design-specific coupons | 4 | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1) — 4 records |
 | Bets with no coupon anywhere | 1 | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
-| Coupon entries in the prototype catalog | 22 | P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2 |
+| Coupon entries in the prototype catalog | 24 | P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2 |
 | `.bkr` coupon files that exist today | 5 | `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon` |
 
 **What is already built, so no one re-does it.** The machine card is authored and
@@ -81,7 +82,7 @@ plate names what it settles and what it releases.
 · `MC-5` warp plate · `MC-6` bed-contact towers.
 
 **Why first, and why nothing else can honestly go first.** The card measures the
-*(printer, material, nozzle, profile)* tuple once. Seven of the twelve registered
+*(printer, material, nozzle, profile)* tuple once. Seven of the fourteen registered
 bets and twelve of the sixteen provisional records are on this one card. Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
 to measure some of warp, wall floor and bore fit before the card existed;
@@ -219,7 +220,10 @@ patterned brick (needs LG-F1's clutch number); **LG-S1** the printed-onto-printe
 stack; **P5** the weave family, which the catalog expects to *fail or disappoint
 on FDM* and pairs with an SLS/MJF service order; **P6** size extremes; **LG-B2**
 the off-grid rosette brick, whose `.bkr` **does not exist and must be authored
-first**; **P7** material and finish.
+first**; **LG-P1** the mural seam-registration pair (needs LG-F1's rung, and its
+minimal `Seam-Coupon.bkr` must be authored); **LG-P2** the clone-plate clutch
+differential (needs LG-F1's rung and clone plates bought); **P7** material and
+finish.
 
 **K10 — where the FDM findings stop.** P5 deliberately crosses a process
 boundary: it prints the same ribbon gap on FDM and orders it from an SLS/MJF
@@ -265,6 +269,8 @@ Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not 
 | LG-D1 | does clutch survive 100 seat/unseat cycles, and where does it fail | §8 | the material recommendation; §11 Q6's compliance-proxy question; B.8's "durable or one-shot" | reuses LG-F1's winning rung | not stated |
 | LG-B1 | do relief and clutch coexist; is an 8-fold star legible at 4×4 (31.8 mm) | §8 | `relief depth` and `engage` defaults; the P1 compatibility matrix's first ✅ row | exists — `patterns/Lego/Star-Brick.bkr` | not stated |
 | LG-B2 | does rotation lock hold on an incommensurable outline; **how much clutch is lost giving up the tangent side wall** | §8, §5.3, B.2 | B.2's rotation-lock criterion; V8's WARN-not-ERROR call; the 5-fold matrix row | **must be authored** — `patterns/Lego/Rosette-Brick.bkr` does not exist; the seven shipped `patterns/Lego/*.bkr` include no 5-fold rosette | not stated |
+| LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **must be authored** — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural); Star-Mural exists but is not minimal | not stated |
+| LG-P2 | whether LG-F1's winning rib also clutches a clone plate; clone pitch error accumulated over 8 studs | `lego-pattern-set-design.md` §5, [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) | `CAL-CLB-01`; the K2 hedge "LEGO-brand verified, clone unmeasured" | reuses LG-F1's winning rung; needs plates bought, not modelled | not stated |
 
 ### 3.3 W-series connector
 
@@ -314,7 +320,7 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 22 catalog entries + 4 uncatalogued items = 26 print-gated items**,
+**Count: 24 catalog entries + 4 uncatalogued items = 28 print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
 
@@ -642,7 +648,8 @@ one.
    automatically.
 9. **Whether `hemisphere-split-design.md`'s bet table is current.** It states
    that `CAL_BET_IDS` "registers ten ids" and lists ten. The generated registry
-   now reads twelve — `CAL-CLP-01` and `CAL-STK-01` were added later. The doc is
+   now reads fourteen — `CAL-CLP-01`, `CAL-STK-01` and the mural pair
+   `CAL-REG-01`/`CAL-CLB-01` were added later. The doc is
    stale on a count rather than wrong on a conclusion, but I could not tell
    whether anything downstream in that doc depends on the ten.
 10. **What LG-B2's `.bkr` should look like.** The catalog says the model does not
@@ -666,17 +673,20 @@ Four checks, run before shipping it, in the spirit of
 
 - **The headline sequence and the register agree.** §2 puts the machine card
   first; §3.1 shows no MC coupon blocked on anything. §2 puts the LG ladder
-  second; §3.2 shows LG-F1/F2/R1 blocked on nothing, with LG-D1, LG-B1 and LG-B2
-  correctly shown as gated on LG-F1. §2 puts W-F1 before W-C1; §3.3 shows the
+  second; §3.2 shows LG-F1/F2/R1 blocked on nothing, with LG-D1, LG-B1, LG-B2,
+  LG-P1 and LG-P2 correctly shown as gated on LG-F1. §2 puts W-F1 before W-C1; §3.3 shows the
   same order, and §7 item 1 — which used to record that the ordering itself was
   uncertain — now records it as settled two-plates-in-sequence (D-008).
 - **P2 is not claimed to settle a bet.** §2 Plate 4 says so explicitly and §3.4's
   P2 row lists no `CAL-*` id — consistent with the registry, which gives P2 Q5's
   measurement to MC-6.
-- **Counts reconcile.** 12 bets = 7 on the card + 4 on design coupons
-  (`CAL-RIB-01`, `CAL-STK-01`, `CAL-DET-01`, `CAL-CLP-01`) + 1 with no coupon
-  (`CAL-STR-01`). 16 records = 12 on the card + 4 on design coupons. 26
-  print-gated items = 22 catalog entries + 4 uncatalogued. The magnet-pocket item
+- **Counts reconcile.** 14 bets = 7 on the card + 6 on design coupons
+  (`CAL-RIB-01`, `CAL-STK-01`, `CAL-DET-01`, `CAL-CLP-01`, and the mural pair
+  `CAL-REG-01` on LG-P1, `CAL-CLB-01` on LG-P2) + 1 with no coupon
+  (`CAL-STR-01`). 16 records = 12 on the card + 4 on design coupons — the mural
+  bets have coupons but no bikar record yet, which is why the record count did
+  not move with the bet count. 28
+  print-gated items = 24 catalog entries + 4 uncatalogued. The magnet-pocket item
   in §3.7 is deliberately **outside** that 26: no design doc demands it, so
   counting it would inflate the register with work nobody has asked for. §3.7
   says so in place rather than leaving the arithmetic to look wrong.

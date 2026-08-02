@@ -42,7 +42,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bricks pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -168,6 +168,7 @@ bricks:
 	mkdir -p ${ROOT_DIR}/build/stls ${ROOT_DIR}/build/images ${ROOT_DIR}/src/Lego; \
 	: > ${ROOT_DIR}/build/.brick-names; \
 	for bkr in $(BIKAR_DIR)/patterns/Lego/*.bkr; do \
+		if grep -q '^mural ' "$$bkr"; then continue; fi; \
 		stem=$$(basename "$$bkr" .bkr); name=$${stem//-/}; \
 		echo "== $$name"; \
 		$(BIKAR) render "$$bkr" --format stl --check -o ${ROOT_DIR}/build/stls/$$name.stl; \
@@ -175,6 +176,38 @@ bricks:
 		cp "$$bkr" ${ROOT_DIR}/src/Lego/; \
 	done; \
 	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py
+
+# Pattern sets — mural presets from the same directory, skipped by `bricks`
+# above because one STL is the wrong shape for them twice over: a mural
+# prints as one gated STL *per piece*, and the single-mesh `--check` path
+# holds the fused panel to the orb floor (1.2 mm) when every piece was
+# already gated at the brick floor (0.7 mm) it is entitled to — measured
+# here 2026-08-02: Star-Mural's fused mesh FAILs at minFeature 0.76 mm
+# while all four of its pieces PASS. So two renders per set: `--format
+# parts --check` writes the print files into build/stls/<name>/, and an
+# ungated `--format stl` writes the composed panel — every piece at its
+# layout offset — which is the honest gallery image, because the thing the
+# set promises is the reconstituted pattern, not one fragment.
+pattern-sets:
+	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
+		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
+	@[ -d "$(BIKAR_DIR)/patterns/Lego" ] \
+		|| { echo "no patterns/Lego in $(BIKAR_DIR) — the mural presets live on bikar's lego-lab work; override with 'make pattern-sets BIKAR_DIR=...'"; exit 1; }
+	@set -euo pipefail; \
+	mkdir -p ${ROOT_DIR}/build/stls ${ROOT_DIR}/build/images ${ROOT_DIR}/src/Lego; \
+	: > ${ROOT_DIR}/build/.set-names; \
+	for bkr in $(BIKAR_DIR)/patterns/Lego/*.bkr; do \
+		grep -q '^mural ' "$$bkr" || continue; \
+		stem=$$(basename "$$bkr" .bkr); name=$${stem//-/}; \
+		echo "== $$name (set)"; \
+		$(BIKAR) render "$$bkr" --format parts --check -o ${ROOT_DIR}/build/stls/$$name; \
+		$(BIKAR) render "$$bkr" --format stl -o ${ROOT_DIR}/build/stls/$$name.stl; \
+		echo "$$name" >> ${ROOT_DIR}/build/.set-names; \
+		cp "$$bkr" ${ROOT_DIR}/src/Lego/; \
+	done; \
+	[ -s ${ROOT_DIR}/build/.set-names ] \
+		|| { echo "no mural presets in $(BIKAR_DIR)/patterns/Lego — nothing to render"; exit 1; }; \
+	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py --sets
 
 # The studio — the pages built by bikar's packages/lab (vite) and vendored
 # here at the site root, plus the hashed assets/ dir they share. All

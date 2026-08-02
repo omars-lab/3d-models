@@ -1,0 +1,64 @@
+# Star-Mural — one pattern, four bricks, one baseplate.
+#
+# The other presets here each print one piece. This one prints a *set*: a
+# 3 × 3 field of {8/3} stars is cut along the stud grid into 2 × 2 pieces of
+# 4 × 4 studs each, and the pieces reconstitute the field when placed
+# adjacently on a store-bought baseplate. The centre star is quartered by
+# both cut lines and the edge stars are halved by one — deliberately, so
+# every seam runs through art and the set demonstrates the thing a mural
+# exists to demonstrate: fragments cut from one planar graph carry the same
+# vertices on both sides of every seam, so the pattern continues across
+# pieces to within the 0.2 mm physical part gap.
+#
+# The art is cut at the *nominal* 8 mm grid lines; the body's `8n − 0.2`
+# footprint then clips 0.1 mm per side, which is what the seam interrupts.
+# Nothing here re-registers the art to the gap — the gap is physical, the
+# cut is nominal, and conflating the two is the K10 defect the design doc
+# (3d-models `docs/lego-pattern-set-design.md` §3) exists to name.
+#
+# Expect a V12 bridge warning per piece, and it is the set's honest price:
+# an anchor may not sit within its ribbed reach of a pocket edge, and a
+# 12 mm star parked over a 4 × 4 piece's centre rejects the five anchors
+# under and beside it (§5.2 droppedForRelief), leaving the four corner
+# tubes and a ~16 mm bridged ceiling run — over the 10 mm CAL-BRG-01
+# default, which is a slicer setting, not a measured span. Art this large
+# trades interior clutch for pattern; that trade is the point of the demo.
+#
+# Render:
+#   bikar render patterns/Lego/Star-Mural.bkr --format parts --check -o star-mural/
+#     (one STL per piece, StarMural-P_c0r0.stl … + the layout report)
+#   bikar render patterns/Lego/Star-Mural.bkr --format ldraw -o StarMural.mpd
+#     (one MPD, geometry-keyed FILE blocks — a digital pre-assembly)
+#   bikar render patterns/Lego/Star-Mural.bkr --format svg -o StarMural.svg
+#     (the whole field, uncut — the art check before plastic)
+#
+# Every dimension the clutch depends on is an unmeasured bet (CAL-RIB-01,
+# coupon LG-F1), and seam registration on a real plate is its own bet
+# (CAL-REG-01, coupon LG-P1). Print the coupons before trusting the fit.
+
+param plates = 3 range 2..9 step 1
+param relief = 0.8 range 0.8..2.0 step 0.1
+
+blueprint star_cell
+  circle G center(0,0) radius 8
+  divide G into 4 offset 0
+  circle S center(0,0) radius 6
+  divide S into 8 offset 0
+
+pattern star_motif on star_cell
+  connect every 3 on S
+
+pattern star_field
+  tile star_motif
+    repeat_x 3
+    repeat_y 3
+    offset_col G.cpt2 G.cpt0
+    offset_row G.cpt3 G.cpt1
+    mode rectangular
+  voids detect
+
+mural StarMural
+  inscribe star_field
+  pieces 2 x 2 of 4 x 4
+  height $plates plates
+  relief depth $relief
