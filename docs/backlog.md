@@ -656,7 +656,17 @@ one.
     exist and that "authoring it is the first step of this coupon, not a lookup",
     and points at `patterns/Rosettes/*.bkr` as the nearest source of the outline —
     but those are 2D patterns with no `brick` declaration. The authoring work is
-    named, not specified.
+    named, not specified — and, checked on 2026-08-02 at bikar `73514f1`, it is
+    **blocked on a missing DSL surface**: the pattern-outline body is specified
+    in [`lego-lab-design.md`](lego-lab-design.md) §5.2/§7.2 and the kernel
+    honours `BrickSpec.bodyOutline` (tests exercise it), but no `BrickStmt` in
+    the grammar reaches it — `evaluateBrickDecl` builds every DSL brick
+    rectangular, and none of the seven shipped presets is pattern-outline.
+    Authoring `Rosette-Brick.bkr` therefore means first extending the brick
+    declaration (a reserved-word / corpus-sweep / decision-doc change in bikar),
+    not writing a file against today's grammar. An auto rule that silently
+    flipped existing `inscribe` bricks to pattern-outline would rebuild
+    Star-Brick's body; the surface has to be explicit.
 11. **Whether a `make coupons` target is wanted.** §4 states the case both ways
     and does not decide it. This repo's stated precedent
     ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
