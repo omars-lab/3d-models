@@ -985,7 +985,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
 | **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that is **not** done is the check that needs no code: no LDraw viewer has opened the output. |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that was **not** done is the check that needs no code: no LDraw viewer had opened the output. **Partly discharged 2026-08-02** (bikar `49aab9f`, PR #62) — the Lab grew the export button §14.3 specified but never got, and a fourth tab that reads the file back through three.js `LDrawLoader` and prints the signed volume of what it built (§14.4). One third-party reader, continuously; not the twelve-tool afternoon, and not an official LDraw implementation. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
@@ -1351,6 +1351,32 @@ is the brick's **top** face and the emitter cannot compute `H − z` from a plac
 and the emitter shipped without that afternoon happening — the file has been read by 22 tests and
 by no viewer. The PR body says so and this entry repeats it, because a claim about interoperation
 that no interoperating program has seen is exactly the K1 hedge this doc is not allowed to strip.
+*(Partly discharged 2026-08-02 — §14.4. One third-party reader, three.js `LDrawLoader`, now reads
+the export back on every evaluation. That is not the afternoon and not an official LDraw
+implementation; the hedge narrows, it does not lift.)*
+
+**The LDraw read-back panel — 2026-08-02.** bikar `49aab9f` (PR #62), §14.4, D-009. 3d-models: this
+entry, the §10 P3 row, §14.4, and UC19 in the use-case map.
+
+**The scope was larger than D-009 wrote it.** D-009 says to wire `LDrawLoader` *"behind the LDraw
+export button"*. There was no LDraw export button: `git grep -i ldraw -- packages/lab` returned one
+cosmetic string. The emitter shipped in core + CLI only, reachable via `bikar render --format
+ldraw`, so §14.3's export was complete in the sense the spec meant and absent from the surface a
+person actually uses. Building the panel therefore meant building the export path first — one
+`ldraw` request type serving both the download and the preview, so the two consumers cannot drift
+onto different bytes.
+
+**The deliberate deviation is that the cheap read-back was refused.** Parsing the MPD with a small
+hand-written reader and drawing it with the existing Canvas-2D viewer would have cost no dependency
+and no 550 kB chunk. It would also have been *our* parser reading *our* file, which is precisely
+the self-validation gap D-009 exists to close — the panel would have proven that bikar agrees with
+bikar. Independence is the entire value, so three.js went in.
+
+**Beyond the spec:** `ldraw-readback.ts` is deliberately WebGL-free and separate from
+`ldraw-preview.ts`, so the measurement runs under vitest in Node while only the picture needs a
+browser. The two `LDrawLoader` traps in §14.4 were both found by running the loader against the
+real emitted file; neither is visible from the API surface, and the magenta one would have shipped
+as a convincing bug report about the emitter.
 
 *(Each later phase appends an entry here carrying commit hashes in **both** repos, deliberate
 deviations from this spec, and additions beyond it.)*
@@ -1855,12 +1881,20 @@ Header lines (`0 Name:`, `0 Author:`, `0 !LDRAW_ORG`) come from specifications s
 *submission to an LDraw.org repository*. **K10 — they transfer as conventions, not requirements:**
 a file generated for a user's own viewer is submitted nowhere, so nothing in those specs binds it;
 what does transfer is a reader's expectation, and matching it costs six lines. The emitter writes
-them and the doc does not claim the file is "spec-compliant" on that basis. Two lines are excluded
-on purpose. `0 !LICENSE` asserts a CC BY 4.0 grant over the referenced geometry that nobody in
-this project has made — emit this repo's actual licence or none. `0 BFC CERTIFY CCW` is
-*derivable* (the mesh reports `watertight: true` and positive signed volume, and the axis map
-preserves winding) but has never been rendered in a BFC-checking viewer; absence is defined as
-safe and costs shading quality rather than correctness, so it stays out until someone looks.
+them and the doc does not claim the file is "spec-compliant" on that basis. One line is excluded
+on purpose: `0 !LICENSE` asserts a CC BY 4.0 grant over the referenced geometry that nobody in
+this project has made — emit this repo's actual licence or none.
+
+`0 BFC CERTIFY CCW` was the second exclusion, on the grounds that it was *derivable* (the mesh
+reports `watertight: true` and positive signed volume, and the axis map preserves winding) but had
+"never been rendered in a BFC-checking viewer", so it stayed out "until someone looks". Someone
+looked, within four hours of that sentence being written: [`decisions-log.md`
+D-012](decisions-log.md) records the reversal and §14.4 the reader. It is written in every block
+since 2026-08-02, bikar PR #63 — main model included, because S7 makes certification hierarchical
+and certifying only the part would have left the file readable by way of the spec's part-file
+exception rather than on its own terms. **The hedge that narrows and does not lift:** one
+third-party reader has run, not the twelve-tool survey, and none of them an official LDraw
+implementation.
 
 **Validator:** an inline block's filename must fall outside all three part-number namespaces the
 LDraw part-number spec defines — bare `NNNN`, `uNNNN`, `tNNNN` — all of which are
@@ -1962,7 +1996,70 @@ forms, three.js's `isPartType()` accepts only `!LDRAW_ORG` — they are *not* in
 readers, and the emitter already writes the form both accept. ① is half-answered and now carries
 the fifth item above. ② — BrickLink Studio — is **untouched**, and nothing in this survey predicts
 it, because Studio maps LDraw parts onto its own catalogue. The afternoon is still owed; it is now
-costed, and it has one more thing to look for than it did.
+costed, and it has one more thing to look for than it did. **§14.4 discharges the part of it that
+needed no install** — the fifth item, what a reader does with the *triangles*, is answered for
+three.js `LDrawLoader` and answered well. It stays open for LeoCAD, which is where the prediction
+of an empty model came from and where no run has yet been made.
+
+### 14.4 The read-back panel — what a second reader can settle without the afternoon
+
+Decided in [`decisions-log.md` D-009](decisions-log.md); shipped bikar `49aab9f` (PR #62).
+
+§14.3.1 costs an afternoon of *installing* viewers. One reader needs no install: three.js
+`LDrawLoader` is an npm dependency, so it can sit inside the Lego Lab and read the export back on
+every evaluation. That is strictly less than the afternoon — **one third-party implementation, not
+the twelve-tool survey and not an official LDraw one** — and it is the reason D-011 still authorizes
+the single upload to `library.ldraw.org/model-viewer`. What it does buy is that the reading happens
+continuously and without anyone remembering to do it.
+
+The panel is the fourth tab on the Lego Lab stage. It renders the parsed result, but the render is
+not the evidence: a file wound entirely inside-out draws as a convincing brick in any reader that
+culls nothing. So the panel prints two numbers beside the picture, and those are the claim.
+
+> *Qualifier corrected 2026-08-02.* This paragraph originally ended "…which is what every reader
+> does with an uncertified file" — an exhaustiveness claim (**K2**) over readers, resting on a
+> reading of S7's *"may not cull"* that the one reader we have does not satisfy: three builds a
+> `FrontSide` mesh from the authored winding whether the file certifies or not. What NOCERTIFY
+> constrains is what a consumer may *discard*; what it draws instead is unspecified. See
+> [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4.
+
+**Validator:** the read-back passes when every type-1 line resolves against a `0 FILE` block in the
+same file *and* the signed volume of the built geometry is positive in LDraw's right-handed −Y-up
+frame.
+
+- PASS: `Classic-Brick.bkr` → 1 placement, 1 inline block, 1 reference resolved, 1 mesh built,
+  signed volume `> 0` — outward-facing triangles, and no parts library was consulted to get there
+  (`setPartsLibraryPath('')` is what makes it a read-back: with nothing to fall back on, an
+  unsatisfied reference fails instead of being quietly filled in from disk).
+- FAIL: the same bytes with the emitted certification rewritten to `0 BFC CERTIFY CW` → same
+  placement and mesh counts, **same triangle count**, signed volume `< 0`. A culling consumer keeps
+  the inside of the brick.
+
+The FAIL case is why the readout is a *sign* and not a triangle count. Certifying CW halves the
+count exactly as certifying CCW does, so a count separates certified from uncertified and says
+nothing about which side survived — the distinction D-012 rests on is carried entirely by the sign.
+The graduation artifact is `packages/lab/tests/ldraw-readback.test.ts` in bikar, eight cases, run
+in Node without WebGL.
+
+The eighth case was added on 2026-08-02, when shipping D-012 turned up a claim of ours that had
+never been measured. Stripping the certification entirely gives the *same* signed volume the
+certified file gives — bit for bit — because the "extra" triangles three appears to build for an
+uncertified file are reserved buffer slots left at `(0,0,0)`, not reversed copies. The panel's
+triangle row was counting those slots; it now counts area, and reports the slots separately.
+
+**Two `LDrawLoader` traps, found by running it rather than by reading it.**
+`addDefaultMaterials()` throws unless `setConditionalLineMaterial()` ran first; and it registers
+colour codes 16 and 24 only, so our type-1 lines' code 7 falls through to `missingColorMaterial`
+and the brick draws magenta while the file is entirely correct — an export that reads as broken
+when it is not. The panel supplies its own one-line `0 !COLOUR` table through `preloadMaterials`
+via a `data:` URI, which costs no network and, load-bearingly, **leaves the model bytes untouched**:
+the panel has to read what the download writes, not a repaired copy of it.
+
+three.js is a real dependency of `@naqshcoffee/bikar-lab` now, held behind a dynamic import so it
+lands in its own ~550 kB chunk while the Lego Lab entry stays at ~27 kB — a user who never opens
+the tab downloads no WebGL engine. The preview rights LDraw's −Y-up with a rotation of π about X
+rather than a Y scale of −1, because a mirror has determinant −1 and would flip the winding the
+panel exists to show.
 
 ---
 
