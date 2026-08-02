@@ -98,7 +98,10 @@ rule does not transfer.
   doc never wrote: `c2-assembly`'s ±0.05 fit windows overlap at gap 0.10;
   `lego-lab`'s grid-fit formula scores a hexagonal lattice 1.0 while the doc's
   own table says it cannot; `tile-wall`'s anchor validator "will essentially
-  never fire."
+  never fire." The gate cannot check that your `FAIL:` is the *hard* case, and
+  one substitution keeps passing it: **an aggregate cannot discharge a claim
+  about every part.** `lego-lab` §14 certified every triangle CCW and measured
+  one signed volume — which one reversed triangle in 3,764 leaves positive.
 - **K9 → D1.** Every relative link must resolve on disk. This one is universal
   and needs no marker.
 - **K9 → the pointer gate.** A backticked path is a claim too, and

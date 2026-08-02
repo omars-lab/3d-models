@@ -79,6 +79,36 @@ therefore share that correlation.
 
 Bolded rows are the three defined here for the first time.
 
+### K6, sharpened — the acceptance region includes the *shape* of the measurement
+
+Added 2026-08-02 from an instance found after this table was written, and the
+one refinement of an existing kind that the corpus has forced.
+
+K6 was defined as a validator specified against the wrong *region* — the wrong
+bounds on the right quantity. It also covers the wrong **quantity**, and one
+substitution is common enough to name: **an aggregate cannot discharge a claim
+that quantifies over parts.** A sum, a total, an average, an area, a count — each
+is one number over a set, and each is blind to a defect inside the set that
+cancels. A claim of the form *every X is …* needs a measurement that visits every
+X, and no threshold on a summary statistic substitutes for one.
+
+- `lego-lab-design.md` §14 validated `0 BFC CERTIFY CCW` — a claim about every
+  triangle in the block — with the signed volume of the whole mesh. Reversing
+  one triangle of 3,764 leaves the file certifying CCW, resolving every
+  reference, reporting the same triangle count, and reading **+58,095 LDU³**
+  against the honest file's **+62,282**: 6.7% off, sign intact, validator
+  satisfied. Corrected to directed-edge pairing; bikar PR #66.
+- `lego-lab-design.md` §7.3 is the same insight arrived at earlier and by
+  measurement rather than by audit — its FAIL line rejects a T-junction chord
+  *"which the area check scores as exact"*. That the two sections disagreed for
+  1,243 lines is the **K7**; that §14 reached for a total in the first place is
+  this.
+
+The test is cheap and worth running on any `**Validator:**` before it ships:
+*name a defect the FAIL case does not contain, and check that the measurement
+would still fire.* D2 cannot do this — it checks that a `FAIL:` line exists, not
+that it is the hard case — so this stays a prompt rule.
+
 ### K7 — Internal contradiction
 
 Two parts of the document cannot both be true. No external source is required
@@ -222,6 +252,13 @@ Each rule ships an asserted-PASS and an asserted-FAIL fixture under
 enforces the K6 rule, so it had to satisfy it; the PASS fixture caught a real
 false positive in D3's first implementation, which only read the marker line
 and therefore rejected provenance that had wrapped onto the next line.
+
+**What D2 does not cover.** It checks that a `FAIL:` line is present, not that it
+is the *hard* case. `lego-lab-design.md` §14 satisfied D2 for three days while
+its FAIL case — rewriting `CERTIFY CCW` to `CW` — flipped every triangle at once,
+which is the single defect class its aggregate measurement could see. The gap is
+structural, not an implementation bug: whether a counterexample is the hard one
+is a question about the subject matter. See the K6 refinement in §2.
 
 **Measured coverage, 2026-07-30.** Against the 18 files in `docs/` plus
 `CLAUDE.md`:

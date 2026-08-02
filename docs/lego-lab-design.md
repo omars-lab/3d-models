@@ -2024,21 +2024,42 @@ culls nothing. So the panel prints two numbers beside the picture, and those are
 > [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4.
 
 **Validator:** the read-back passes when every type-1 line resolves against a `0 FILE` block in the
-same file *and* the signed volume of the built geometry is positive in LDraw's right-handed −Y-up
-frame.
+same file, the signed volume of the built geometry is positive in LDraw's right-handed −Y-up frame,
+*and* every directed edge of that geometry is walked exactly once in each direction.
 
 - PASS: `Classic-Brick.bkr` → 1 placement, 1 inline block, 1 reference resolved, 1 mesh built,
-  signed volume `> 0` — outward-facing triangles, and no parts library was consulted to get there
-  (`setPartsLibraryPath('')` is what makes it a read-back: with nothing to fall back on, an
+  signed volume **+62,282.24 LDU³**, and 11,292 directed edges with **0 unpaired, 0 doubled** —
+  outward-facing triangles that agree with each other, and no parts library was consulted to get
+  there (`setPartsLibraryPath('')` is what makes it a read-back: with nothing to fall back on, an
   unsatisfied reference fails instead of being quietly filled in from disk).
-- FAIL: the same bytes with the emitted certification rewritten to `0 BFC CERTIFY CW` → same
-  placement and mesh counts, **same triangle count**, signed volume `< 0`. A culling consumer keeps
-  the inside of the brick.
+- FAIL: wrong orientation — the same bytes with the emitted certification rewritten to
+  `0 BFC CERTIFY CW` → same placement and mesh counts, **same triangle count**, signed volume
+  **−62,282.24**, and still 0 unpaired and 0 doubled. A culling consumer keeps the inside of the
+  brick. Coherent and inside-out — which is why the two readings are separate rows and not one.
+- FAIL: wrong coherence — the same bytes with one type-3 line's second and third vertices swapped —
+  **one triangle of 3,764** reversed. Still `CERTIFY CCW`, still 1 reference resolved, still 3,764
+  triangles, and the signed volume still **positive, at +58,095.24**. 3 unpaired edges, 3 doubled.
 
-The FAIL case is why the readout is a *sign* and not a triangle count. Certifying CW halves the
-count exactly as certifying CCW does, so a count separates certified from uncertified and says
-nothing about which side survived — the distinction D-012 rests on is carried entirely by the sign.
-The graduation artifact is `packages/lab/tests/ldraw-readback.test.ts` in bikar, eight cases, run
+The first FAIL is why the orientation readout is a *sign* and not a triangle count. Certifying CW
+halves the count exactly as certifying CCW does, so a count separates certified from uncertified and
+says nothing about which side survived.
+
+> *Validator strengthened 2026-08-02, and the second FAIL case is new.* As written above this line
+> until today, the validator was the resolve check **and the sign alone** — and the second FAIL case
+> passes it. `0 BFC CERTIFY CCW` is a claim about *every* triangle in the block; the signed volume is
+> one sum over all of them, and a sum cannot see a defect that cancels inside it. Reversing one large
+> triangle moved the total by 6.7% and nowhere near zero, and the panel has no per-model baseline to
+> compare a magnitude against, so no threshold on this number was ever going to catch it. The panel
+> said `pass`, in the word "outward faces" — plural.
+>
+> This is a **K7**, and an unusually plain one: [§7.3](#73-the-ring-cache-is-mandatory) has gated cap
+> triangulation on exactly this directed-edge test since the corner clip, and its own FAIL line
+> records the reason — the T-junction chord *"which the area check scores as exact"*. The technique
+> was in the document, 1,243 lines up, and the section that needed it reached for an aggregate
+> instead. §7.3 allows for a declared ring of boundary edges because a cap is open; the brick is
+> closed, so here the expected count is 0.
+
+The graduation artifact is `packages/lab/tests/ldraw-readback.test.ts` in bikar, eleven cases, run
 in Node without WebGL.
 
 The eighth case was added on 2026-08-02, when shipping D-012 turned up a claim of ours that had
