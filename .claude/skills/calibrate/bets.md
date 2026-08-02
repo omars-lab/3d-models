@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**14 registered bets · 16 `Calibrated` records — 16 provisional, 0 measured · 4 bets with no record in bikar.**
+**16 registered bets · 16 `Calibrated` records — 16 provisional, 0 measured · 6 bets with no record in bikar.**
 
 ## Bets
 
@@ -32,6 +32,8 @@ is opened, clustered, and closed.
 | `CAL-STR-01` | Z-layer strength ratio | none — measuring it needs a load rig, which does not exist; registered so the gap is visible | open — no record in bikar | — |
 | `CAL-REG-01` | mural seam registration: lateral jog of a relief line crossing the 0.2 mm gap on a real baseplate | `LG-P1` | open — no record in bikar | — |
 | `CAL-CLB-01` | clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span | `LG-P2` | open — no record in bikar | — |
+| `CAL-ANC-01` | anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control | `LG-B2` | open — no record in bikar | — |
+| `CAL-INW-01` | printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) | `LG-B2` | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -55,6 +57,8 @@ named next print rather than an absence:
 - `CAL-STR-01` — Z-layer strength ratio · coupon none — measuring it needs a load rig, which does not exist; registered so the gap is visible
 - `CAL-REG-01` — mural seam registration: lateral jog of a relief line crossing the 0.2 mm gap on a real baseplate · coupon `LG-P1`
 - `CAL-CLB-01` — clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span · coupon `LG-P2`
+- `CAL-ANC-01` — anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control · coupon `LG-B2`
+- `CAL-INW-01` — printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) · coupon `LG-B2`
 
 ## Records
 

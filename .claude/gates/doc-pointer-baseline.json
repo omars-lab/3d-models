@@ -15,6 +15,11 @@
   ],
   "unresolved": [
     {
+      "doc": "docs/pattern-outline-brick-design.md",
+      "path": "bikar:docs/decisions/2026-08-02-pattern-outline-footprint.md",
+      "why": "Forward reference. §6 names the decision doc the bikar implementation must ship; it is absent by design until that implementation lands. Goes when the surface is built."
+    },
+    {
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Lego/Rosette-Brick.bkr",
       "why": "Forward reference. The line reads `**Model** (to author)` — LG-B2's coupon is authored as the first step of running it, so the file is absent by design until then."
