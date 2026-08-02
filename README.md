@@ -4,7 +4,7 @@ A beautiful collection of Islamic-inspired 3D cookie cutters designed with OpenS
 
 ## 🌟 Live Gallery
 
-**👉 [View the Interactive Gallery](https://3d-models.bytesofpurpose.com/)**
+**👉 [View the Interactive Gallery](https://blog.bytesofpurpose.com/3d-models/)**
 
 Experience the full interactive gallery with detailed descriptions, source code links, and 3D model previews.
 
@@ -102,7 +102,7 @@ This project is open source. Please see the LICENSE file for details.
 
 ## 🔗 Links
 
-- **Live Gallery**: [View Interactive Gallery](https://omars-lab.github.io/3d-models/)
+- **Live Gallery**: [View Interactive Gallery](https://blog.bytesofpurpose.com/3d-models/) — also served at [omars-lab.github.io/3d-models](https://omars-lab.github.io/3d-models/), which 301s here
 - **OpenSCAD Documentation**: [OpenSCAD User Manual](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual)
 - **3D Printing Guide**: [Ultimaker Cura](https://ultimaker.com/software/ultimaker-cura)
 

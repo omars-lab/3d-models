@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": [
+    "The link graph of everything this project publishes, and the exposure of every host",
+    "it publishes on. Hand-maintained, checked by .claude/gates/site_graph.py.",
+    "",
+    "WHY THIS FILE EXISTS. index.html:277 links the gallery to the studio, and both",
+    "catalogues in bikar describe that as the reciprocal loop closing. It points at",
+    "bikar.naqshcoffee.com, which is behind Cloudflare Access — so for every visitor but",
+    "the owner it lands on a login wall, while the identical bytes sit public at",
+    "bikar-studio.pages.dev and are linked from nowhere. Four crawler runs on 2026-08-02",
+    "(linkinator live and offline, linkchecker, a headless-Chrome render) reported that",
+    "edge as OK/valid=1. They cannot do otherwise: Cloudflare answers an unauthenticated",
+    "request with a login page and HTTP 200, so 'does this URL resolve' is the wrong",
+    "question and every tool that asks it returns green.",
+    "",
+    "So this file does not record whether a URL resolves. The repo already settled that:",
+    "an 8.4% sample of 737 URLs measured ~11% false alarms against a true dead-link rate",
+    "under 1%, and a gate that cries wolf gets switched off. It records what only the repo",
+    "knows — which host each edge travels through, and what each host's exposure is — and",
+    "the gate checks the edges against the exposures. That is a fact about two checked-in",
+    "declarations, with no network and no false-positive mode.",
+    "",
+    "There is no standard to conform to here. An XML sitemap is a flat node list by spec",
+    "and may not span hosts; HTML's hierarchical link relations (rel=up/index/contents)",
+    "were deleted from the WHATWG spec in 2011 and are consumed by nothing; schema.org",
+    "SiteNavigationElement has no properties and no known consumer. The survey behind that",
+    "conclusion is docs/research/sitemap-link-graph-survey.md."
+  ],
+
+  "upstream": {
+    "authority": "bikar packages/web/public-surface.json",
+    "mirroredOn": "2026-08-02",
+    "why": [
+      "The exposures below are a MIRROR. bikar is a private repo and is not checked out",
+      "when this gate runs, so the values are copied here and the gate cross-checks them",
+      "only when BIKAR_DIR happens to point at a real clone. This is the same cross-repo",
+      "seam Makefile:141-145 already accepts in as many words: 'Adding a page is two",
+      "edits, in two repos, and saying so is cheaper than a cross-repo check that would",
+      "have to run a build.' Drift is possible; it is bounded to one field per host, and",
+      "the gate says out loud which mode it ran in."
+    ]
+  },
+
+  "surfaces": [
+    {
+      "id": "gallery",
+      "what": "this repo's gh-pages branch — the public gallery",
+      "builtBy": "Makefile deploy (DEPLOY_PATHS), plus lab-vendor for the four lab pages",
+      "hosts": [
+        { "host": "blog.bytesofpurpose.com", "exposure": "public", "canonical": true, "basePath": "/3d-models/" },
+        { "host": "omars-lab.github.io", "exposure": "public", "basePath": "/3d-models/", "note": "301 to the canonical host; measured 2026-08-02" }
+      ]
+    },
+    {
+      "id": "studio",
+      "what": "bikar packages/web, deployed once to the Cloudflare Pages project bikar-studio",
+      "builtBy": "bikar .github/workflows/deploy.yml",
+      "note": "One deployment, three hostnames. Identical bytes; only the Access policy differs.",
+      "hosts": [
+        { "host": "bikar-studio.pages.dev", "exposure": "public" },
+        { "host": "*.bikar-studio.pages.dev", "exposure": "public", "note": "per-deployment aliases; permanent, unbounded set" },
+        { "host": "bikar.naqshcoffee.com", "exposure": "access", "accessTeam": "naqshcoffee.cloudflareaccess.com", "canonical": true }
+      ]
+    }
+  ],
+
+  "nodes": [
+    { "id": "G.index",    "surface": "gallery", "file": "index.html",   "vendored": false, "inRepo": true,  "what": "the gallery index" },
+    { "id": "G.studio",   "surface": "gallery", "file": "studio.html",  "vendored": true,  "inRepo": false, "what": "bikar packages/lab site index" },
+    { "id": "G.lab",      "surface": "gallery", "file": "lab.html",     "vendored": true,  "inRepo": false, "what": "Orb Lab" },
+    { "id": "G.lego",     "surface": "gallery", "file": "lego.html",    "vendored": true,  "inRepo": false, "what": "Lego Lab" },
+    { "id": "G.design",   "surface": "gallery", "file": "design.html",  "vendored": true,  "inRepo": false, "what": "design notes; catalogued status 'preview'" },
+    { "id": "G.readme",   "surface": "gallery", "file": "README.md",    "vendored": false, "inRepo": true,
+      "what": "shipped by Makefile DEPLOY_PATHS, so it is a published page. Its two links to the gallery named two different hosts and one of them, 3d-models.bytesofpurpose.com, was NXDOMAIN — the README's primary call to action, on the deployed branch, contradicting its own §Links. Fixed 2026-08-02; declared here because an undeclared viaHost is exactly what G2 catches." },
+
+    { "id": "S.index",    "surface": "studio",  "file": "index.html",    "inRepo": false, "path": "/",         "what": "studio landing" },
+    { "id": "S.editor",   "surface": "studio",  "file": "editor.html",   "inRepo": false, "path": "/editor",   "what": "the studio proper" },
+    { "id": "S.sessions", "surface": "studio",  "file": "sessions.html", "inRepo": false, "path": "/sessions", "what": "session browser" },
+    { "id": "S.404",      "surface": "studio",  "file": "404.html",      "inRepo": false, "path": "/404",      "what": "not in the Rollup input map by design" }
+  ],
+
+  "edges": [
+    { "from": "G.index", "to": "G.studio", "at": "index.html:270", "evidence": "href=\"studio.html\"", "visibility": "static" },
+    { "from": "G.index", "to": "G.lab",    "at": "index.html:304", "evidence": "href=\"lab.html\"",    "visibility": "static" },
+    { "from": "G.index", "to": "G.lego",   "at": "index.html:322", "evidence": "href=\"lego.html\"",   "visibility": "static" },
+    { "from": "G.index", "to": "G.lab",    "at": "index.html:512", "evidence": "Open in Lab",          "visibility": "js-computed",
+      "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer" },
+    { "from": "G.index", "to": "G.lego",   "at": "index.html:512", "evidence": "Open in Lab",          "visibility": "js-computed",
+      "note": "7 per-model deep links, lego.html?v=1&f=…" },
+
+    { "from": "G.readme", "to": "G.index", "at": "README.md:7",   "evidence": "https://blog.bytesofpurpose.com/3d-models/", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
+    { "from": "G.readme", "to": "G.index", "at": "README.md:105", "evidence": "omars-lab.github.io/3d-models/",             "visibility": "static", "viaHost": "omars-lab.github.io" },
+
+    { "from": "G.index", "to": "S.index", "at": "index.html:277", "evidence": "bikar.naqshcoffee.com",
+      "visibility": "static", "viaHost": "bikar.naqshcoffee.com",
+      "gated": {
+        "why": [
+          "Deliberate: the studio is a private authoring tool and this is the sign-in door,",
+          "labelled <em>sign-in</em> in the markup. What is NOT deliberate is that both",
+          "catalogues in bikar (packages/lab/src/catalog.ts:74, packages/web/src/catalog.ts:34-39)",
+          "describe this as the reciprocal loop finally being walkable, which it is not — a",
+          "visitor gets a login wall. Repointing at the public twin bikar-studio.pages.dev",
+          "would make it walkable and would ADD a fourth edge to fragileIfProtected, so the",
+          "two decisions are one decision. Tracked as task #63."
+        ],
+        "decidedOn": "2026-08-02"
+      } },
+
+    { "from": "G.lab",  "to": "G.studio", "at": "bikar packages/lab/lab.html:22",  "repo": "bikar", "visibility": "static" },
+    { "from": "G.lab",  "to": "G.index",  "at": "bikar packages/lab/lab.html:23",  "repo": "bikar", "visibility": "static",
+      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these four pages beside this repo's index.html" },
+    { "from": "G.lego", "to": "G.studio", "at": "bikar packages/lab/lego.html:23", "repo": "bikar", "visibility": "static" },
+    { "from": "G.lego", "to": "G.index",  "at": "bikar packages/lab/lego.html:24", "repo": "bikar", "visibility": "static" },
+
+    { "from": "G.lab",  "to": "S.editor", "at": "bikar packages/lab/src/editor.ts:22", "repo": "bikar",
+      "visibility": "js-computed", "viaHost": "bikar-studio.pages.dev",
+      "note": "STUDIO_EDITOR_URL, consumed by main.ts:323; baked into gh-pages:assets/style-BFfxPe7x.js:3" },
+    { "from": "G.lego", "to": "S.editor", "at": "bikar packages/lab/src/editor.ts:22", "repo": "bikar",
+      "visibility": "js-computed", "viaHost": "bikar-studio.pages.dev",
+      "note": "same constant, consumed by lego-main.ts:423" },
+
+    { "from": "G.studio", "to": "G.lab",    "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed" },
+    { "from": "G.studio", "to": "G.lego",   "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed" },
+    { "from": "G.studio", "to": "G.design", "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed",
+      "note": "href built by concatenation, so no URL literal survives minification — this is the only route to G.design and no crawler can see it" },
+    { "from": "G.design", "to": "G.studio", "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
+    { "from": "G.design", "to": "G.lab",    "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
+    { "from": "G.design", "to": "G.lego",   "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
+
+    { "from": "S.index", "to": "S.editor",   "at": "bikar packages/web/src/catalog.ts:91",  "repo": "bikar", "visibility": "static" },
+    { "from": "S.index", "to": "S.sessions", "at": "bikar packages/web/src/catalog.ts:102", "repo": "bikar", "visibility": "static" },
+    { "from": "S.index", "to": "G.index",    "at": "bikar packages/web/src/catalog.ts:110", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
+    { "from": "S.index", "to": "G.lab",      "at": "bikar packages/web/src/catalog.ts:119", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
+    { "from": "S.index", "to": "G.lego",     "at": "bikar packages/web/src/catalog.ts:128", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
+
+    { "from": "S.editor",   "to": "S.index", "at": "bikar packages/web/editor.html:26",    "repo": "bikar", "visibility": "static" },
+    { "from": "S.sessions", "to": "S.index", "at": "bikar packages/web/sessions.html:161", "repo": "bikar", "visibility": "static" },
+    { "from": "S.404", "to": "S.index",    "at": "bikar packages/web/public/404.html:81", "repo": "bikar", "visibility": "static" },
+    { "from": "S.404", "to": "S.editor",   "at": "bikar packages/web/public/404.html:82", "repo": "bikar", "visibility": "static" },
+    { "from": "S.404", "to": "S.sessions", "at": "bikar packages/web/public/404.html:83", "repo": "bikar", "visibility": "static" }
+  ],
+
+  "fragileIfProtected": {
+    "$comment": [
+      "Edges that travel through a host that is public today but sits on a surface that",
+      "also has an Access-protected host — i.e. edges that die the day the exposure is",
+      "equalised (task #63). None of them break a build and none turn a test red, which",
+      "is the whole reason they are counted here rather than remembered. The gate",
+      "recomputes this set and fails if the list disagrees; it is a measured number, not",
+      "an estimate."
+    ],
+    "edges": [
+      "G.lab -> S.editor via bikar-studio.pages.dev",
+      "G.lego -> S.editor via bikar-studio.pages.dev"
+    ]
+  }
+}

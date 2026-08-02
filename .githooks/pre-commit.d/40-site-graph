@@ -1,0 +1,22 @@
+#!/bin/sh
+# Check docs/site-graph.json against the repo. See .claude/gates/site_graph.py.
+#
+# Runs on every commit, not only when the graph is staged: the graph's anchors
+# point at line numbers in index.html and at Makefile:LAB_PAGES, so a commit that
+# never touches the JSON is exactly how it goes stale.
+[ -n "$SITE_GRAPH_OK" ] && exit 0
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the site-graph gate" >&2
+  exit 1
+fi
+
+# gh-pages carries .githooks but not .claude, so this hook runs there with no
+# gate to run. Skipping is correct: that branch is generated output.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/site_graph.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no site-graph gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+
+exec python3 "$GATE"
