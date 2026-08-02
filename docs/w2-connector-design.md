@@ -327,14 +327,30 @@ outputs stay byte-identical.
 
 ## 8. Coupons and the prototype catalog
 
-Two coupon files in a new `patterns/Coupons/` directory (invisible to the 3d-models
+Coupon files in a new `patterns/Coupons/` directory (invisible to the 3d-models
 gallery Makefile, which globs only `patterns/Orbs/`; the bikar pre-commit still
 compiles them):
 
-- **`Fit-Step-Gauge.bkr`** — C2's fit ladder made physical: one plate with holes at
-  the press/snug/sliding/free intents around a nominal pin ⌀ plus matching pins,
-  every dimension a `param`. Catalog entry **W-F1**; its measured results set the
-  profile's `holeCompMm` (shared with C2's fit coupon procedure).
+- **`Clipseat-Fit-Coupon.bkr`** — the clip joint's clearance ladder: one 40 mm
+  clipseat dummy tile plus five `CornerClip`s whose declared `gap` walks the blade
+  clearance from 0.40 mm down to 0.00 mm, every dimension a `param`. Catalog entry
+  **W-F1**; its measured result sets `CLIP_CLEARANCE_MM.insert` and the `gap` to
+  declare.
+
+  > **Corrected 2026-08-02.** This bullet originally named a file called
+  > `Fit-Step-Gauge.bkr` and described a *bore-and-pin* ladder — a plate of holes
+  > at the press/snug/sliding/free intents around a nominal pin ⌀, plus matching
+  > pins — assigning it catalog entry **W-F1** and saying its results set the
+  > profile's `holeCompMm` "shared with C2's fit coupon procedure". Two things were
+  > wrong. The filename never existed: what shipped is `Fit-Coupon.bkr`, and as a
+  > *machine* measurement it was in turn superseded by MC-1's `MC1FitLadder`
+  > (catalog: [`.claude/skills/prototype/catalog.md`](../.claude/skills/prototype/catalog.md)).
+  > And the joint
+  > was the wrong one — a bore-and-pin number does not transfer to a bayonet blade
+  > that drops down a channel and then sweeps sideways under load, because a blade
+  > can pass the drop and still bind on the twist. The transfer condition could not
+  > be written, so the rule did not transfer (**K10**); the fix was a second file
+  > for the second joint. See `docs/decisions-log.md` **D-008**.
 - **`Clip-Coupon.bkr`** — two 40 mm dummy tiles (`CouponTileRebate` with
   `clipseat corners rebate 0.6`, `CouponTileProud` with `clipseat corners proud`)
   plus one `CouponClip`. Print four of each dummy → two real four-corner joints in
