@@ -830,3 +830,35 @@ coordinates is positive **and** that the `0 BFC CERTIFY CCW` line is present —
 the first is the precondition the certification rests on, so a future change
 that silently flipped the winding would fail on the number rather than on the
 line.
+
+### As shipped — bikar PR #63, 2026-08-02
+
+Two things the decision above did not say, decided while building it.
+
+**Both blocks are certified, not only the inline part.** The decision said "in
+the inline block", which is where the triangles are. But S7 makes certification
+hierarchical — *"A file is only treated as being BFC-compliant if it and all of
+its superfiles are compliant"* — with a stated exception for part files, on the
+grounds that *"they are complex closed solids, so there is never a valid reason
+to invert them."* Certifying only the part would have made the file readable
+*by way of that exception*. Certifying the main block too means it never has to
+be granted. The main block asserts nothing false: it holds only type-1 lines,
+and `ldrawPlacementMatrix` already refuses a mirroring placement, so there is no
+`0 BFC INVERTNEXT` being silently omitted.
+
+**A wrong claim surfaced while measuring, and it was on our side.** The
+read-back panel reported an uncertified `Classic-Brick` as 7,528 triangles and
+said "both sides kept". Neither survived a direct probe of the buffer: three
+*sizes* the position array for two windings per face and fills only what it
+draws, so half the entries are `(0,0,0)` under a `FrontSide` material. The
+panel was counting reserved slots as geometry, and "both sides kept" was S7's
+*"may not cull"* hardened into a claim about what a consumer draws — a **K1**,
+found four days after the doc that made it. Corrected in
+[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4, with its own
+validator, and fixed in the same PR: `triangles` counts area, `degenerate`
+reports the slots, and the panel's `|volume| < 1` verdict — which could never
+fire on a real brick — is gone.
+
+This changes nothing about the certification. The three measured rows of §9.2
+stand; it was the word in the fourth column, not the numbers, that was inferred
+rather than measured.

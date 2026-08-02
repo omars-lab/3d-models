@@ -1881,12 +1881,20 @@ Header lines (`0 Name:`, `0 Author:`, `0 !LDRAW_ORG`) come from specifications s
 *submission to an LDraw.org repository*. **K10 — they transfer as conventions, not requirements:**
 a file generated for a user's own viewer is submitted nowhere, so nothing in those specs binds it;
 what does transfer is a reader's expectation, and matching it costs six lines. The emitter writes
-them and the doc does not claim the file is "spec-compliant" on that basis. Two lines are excluded
-on purpose. `0 !LICENSE` asserts a CC BY 4.0 grant over the referenced geometry that nobody in
-this project has made — emit this repo's actual licence or none. `0 BFC CERTIFY CCW` is
-*derivable* (the mesh reports `watertight: true` and positive signed volume, and the axis map
-preserves winding) but has never been rendered in a BFC-checking viewer; absence is defined as
-safe and costs shading quality rather than correctness, so it stays out until someone looks.
+them and the doc does not claim the file is "spec-compliant" on that basis. One line is excluded
+on purpose: `0 !LICENSE` asserts a CC BY 4.0 grant over the referenced geometry that nobody in
+this project has made — emit this repo's actual licence or none.
+
+`0 BFC CERTIFY CCW` was the second exclusion, on the grounds that it was *derivable* (the mesh
+reports `watertight: true` and positive signed volume, and the axis map preserves winding) but had
+"never been rendered in a BFC-checking viewer", so it stayed out "until someone looks". Someone
+looked, within four hours of that sentence being written: [`decisions-log.md`
+D-012](decisions-log.md) records the reversal and §14.4 the reader. It is written in every block
+since 2026-08-02, bikar PR #63 — main model included, because S7 makes certification hierarchical
+and certifying only the part would have left the file readable by way of the spec's part-file
+exception rather than on its own terms. **The hedge that narrows and does not lift:** one
+third-party reader has run, not the twelve-tool survey, and none of them an official LDraw
+implementation.
 
 **Validator:** an inline block's filename must fall outside all three part-number namespaces the
 LDraw part-number spec defines — bare `NNNN`, `uNNNN`, `tNNNN` — all of which are
@@ -2006,8 +2014,14 @@ continuously and without anyone remembering to do it.
 
 The panel is the fourth tab on the Lego Lab stage. It renders the parsed result, but the render is
 not the evidence: a file wound entirely inside-out draws as a convincing brick in any reader that
-culls nothing, which is what every reader does with an uncertified file. So the panel prints two
-numbers beside the picture, and those are the claim.
+culls nothing. So the panel prints two numbers beside the picture, and those are the claim.
+
+> *Qualifier corrected 2026-08-02.* This paragraph originally ended "…which is what every reader
+> does with an uncertified file" — an exhaustiveness claim (**K2**) over readers, resting on a
+> reading of S7's *"may not cull"* that the one reader we have does not satisfy: three builds a
+> `FrontSide` mesh from the authored winding whether the file certifies or not. What NOCERTIFY
+> constrains is what a consumer may *discard*; what it draws instead is unspecified. See
+> [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4.
 
 **Validator:** the read-back passes when every type-1 line resolves against a `0 FILE` block in the
 same file *and* the signed volume of the built geometry is positive in LDraw's right-handed −Y-up
@@ -2017,14 +2031,21 @@ frame.
   signed volume `> 0` — outward-facing triangles, and no parts library was consulted to get there
   (`setPartsLibraryPath('')` is what makes it a read-back: with nothing to fall back on, an
   unsatisfied reference fails instead of being quietly filled in from disk).
-- FAIL: the same bytes with `0 BFC CERTIFY CW` inserted → same placement and mesh counts, **same
-  triangle count**, signed volume `< 0`. A culling consumer keeps the inside of the brick.
+- FAIL: the same bytes with the emitted certification rewritten to `0 BFC CERTIFY CW` → same
+  placement and mesh counts, **same triangle count**, signed volume `< 0`. A culling consumer keeps
+  the inside of the brick.
 
 The FAIL case is why the readout is a *sign* and not a triangle count. Certifying CW halves the
 count exactly as certifying CCW does, so a count separates certified from uncertified and says
 nothing about which side survived — the distinction D-012 rests on is carried entirely by the sign.
-The graduation artifact is `packages/lab/tests/ldraw-readback.test.ts` in bikar, seven cases, run
+The graduation artifact is `packages/lab/tests/ldraw-readback.test.ts` in bikar, eight cases, run
 in Node without WebGL.
+
+The eighth case was added on 2026-08-02, when shipping D-012 turned up a claim of ours that had
+never been measured. Stripping the certification entirely gives the *same* signed volume the
+certified file gives — bit for bit — because the "extra" triangles three appears to build for an
+uncertified file are reserved buffer slots left at `(0,0,0)`, not reversed copies. The panel's
+triangle row was counting those slots; it now counts area, and reports the slots separately.
 
 **Two `LDrawLoader` traps, found by running it rather than by reading it.**
 `addDefaultMaterials()` throws unless `setConditionalLineMaterial()` ran first; and it registers
