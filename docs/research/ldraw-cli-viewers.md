@@ -12,6 +12,12 @@
   NOTHING WAS INSTALLED AND NOTHING WAS RUN. Every claim about runtime
   behaviour in this file is derived from documentation or from source code,
   never from observation. §0 states this again and §6 lists it per item.
+
+  Corrected 2026-08-02: that sentence held for §§0-7 and still describes how
+  they were written. It no longer describes the whole file. The §1.4 route was
+  installed and run on 2026-08-02; §8 records what it did, and corrects three
+  §1.4 claims the run falsified. Nothing else was re-derived, and no other
+  candidate has been run.
 -->
 
 # LDraw viewers you can drive from a shell on macOS — what exists, what is free, and what would actually open our file
@@ -656,3 +662,121 @@ nothing was installed and nothing was executed.
   document that cut off before the Command Line section entirely. Every LDView
   quotation in this file comes from the `curl`-retrieved copy read locally, not
   from that truncated pass.
+
+---
+
+## 8. First execution — 2026-08-02
+
+*Everything above §8 was written without running anything. This section was
+written by running one of the twelve candidates. It supersedes §1.4 where the
+two disagree, and it changes nothing about the other eleven, none of which has
+been run.*
+
+### 8.1 What was run
+
+The §1.4 route — three.js `LDrawLoader` in Node, no parts library, no GUI, no
+network, no upload. Two commands, in that order:
+
+```sh
+# 1. produce the file (bikar worktree, node v22.22.3)
+npx tsx packages/cli/src/index.ts render patterns/Assemblies/Brick-Stack.bkr \
+  --format ldraw -o Brick-Stack.mpd
+# -> "LDraw written to Brick-Stack.mpd (2 placement(s), 1 inline part, 213 KiB)"
+
+# 2. read it back with a foreign parser
+npm i three            # resolved to 0.185.1
+node check.mjs Brick-Stack.mpd
+```
+
+Result:
+
+```json
+{ "meshes": 2, "triangles": 15056, "lineSegments": 0,
+  "magentaMeshes": 2, "names": ["bikar-2x4-3p-76a063bd.dat"] }
+```
+
+**Validator:** an independent LDraw implementation resolves every type-1
+reference against a `0 FILE` block in the same file, with no parts library on
+disk and no network.
+
+- PASS: `meshes` equals the placement count the exporter reported (2) and
+  `names` holds exactly one distinct block name. Both type-1 lines found the
+  inline block.
+- FAIL: `meshes` is 0, or the parser reports an unresolved subfile. That is
+  what would happen if the type-1 line's filename did not match the `0 FILE`
+  header, or if the loader searched disk first.
+
+It passed. This is the first observation in this file, and it settles the
+central question §1 was written to answer: **the export opens.** It settles it
+for one implementation, not for LDView, LeoCAD or any other.
+
+### 8.2 Three §1.4 claims the run falsified
+
+1. **The recipe throws as written.** `addDefaultMaterials()` on three 0.185.1
+   raises *"ConditionalLineMaterial type must be specified via
+   .setConditionalLineMaterial()"*. The call must be preceded by
+   `loader.setConditionalLineMaterial(LDrawConditionalLineMaterial)`, imported
+   from three's addons `materials` directory. §1.4 was written from a source
+   read of an unrecorded three version and omits it.
+
+2. **`addDefaultMaterials()` does not prevent the magenta fallback.** §1.4
+   says the call is "not decoration" because without it every face falls back
+   to magenta. It is not decoration, but it is also not sufficient: the method
+   registers **only colour codes 16 and 24**. Our placements carry code 7, so
+   both meshes still came back magenta and the loader printed *"Material
+   properties for code 7 not available"* twice. Code 7 is an official LDraw
+   colour defined in `LDConfig.ldr`; this harness deliberately loads no parts
+   library, so nothing here is evidence that code 7 is wrong in our file — only
+   that a palette-free harness cannot colour it.
+
+3. **The expected triangle count was low by exactly 2×.** §1.4 predicted "two
+   placements of one 3,764-triangle block" and called that arithmetic rather
+   than observation. The arithmetic was right about the file — it contains
+   3,764 type-3 lines, and says so in its own `0 //` comment — and wrong about
+   what a consumer builds. three.js returned 15,056: two placements of 7,528.
+
+### 8.3 Why the count doubled, and what it costs
+
+`LDrawLoader.js` sets `doubleSided = ! bfcCertified || ! bfcCull` before
+pushing each face, and then counts `doubleSided ? 2 : 1`. Our MPD carries no
+`0 BFC CERTIFY` line — an omission the exporter makes deliberately, asserted by
+the test *"omits `0 !LICENSE` and `0 BFC` — both deliberate, per §14.3"* — so
+every triangle is built twice, in both winding orders.
+
+That is a correct fallback, not a rendering error: double-siding is exactly how
+a conforming consumer handles geometry whose winding it cannot trust. The cost
+is that the consumer builds twice the geometry it needs.
+
+It is also avoidable, and the exporter has already done the hard part. Its test
+suite asserts the axis map is a proper rotation (*"determinant +1, so triangle
+winding survives"*) and that a mirroring placement is refused rather than
+inverted silently. Winding is therefore known-consistent on our side; the file
+just never says so. Emitting `0 BFC CERTIFY CCW` would let a consumer cull, and
+would halve what it builds.
+
+**This is a proposal, not a finding against the file.** Two things would have
+to be established first, and neither is: that our emitted winding is CCW in
+LDraw's own convention rather than merely consistent, and that certifying
+changes nothing for a consumer that ignores BFC. Certifying the wrong handedness
+is worse than not certifying — the consumer would cull the faces it should keep.
+
+### 8.4 What this does *not* establish
+
+- **No picture was produced.** The read-back returns counts, not pixels.
+  LDView remains un-run and un-installed; §1.1's `.dmg` step is still a step a
+  human has to take, and §1.2's command is still untested.
+- **No LDraw parts library was involved**, so nothing here tests the search
+  order the §5 experiment was designed to probe. Unknowns ① through ④ in
+  `docs/lego-lab-design.md` §14.3 are untouched except for the one §8.1 settles.
+- **Nothing was uploaded.** Candidate 12,
+  `https://library.ldraw.org/model-viewer`, was not used. §6 item 12 called it a
+  legitimate one-off tiebreaker *"if every local route fails"*. The local route
+  did not fail, so the condition for using it was never met.
+
+### 8.5 Fetch record for this section
+
+Nothing was fetched. `npm i three` downloaded the package from the public
+registry; the two files read afterwards were the installed copies of
+`LDrawLoader.js` and `LDrawConditionalLineMaterial.js` under `node_modules`,
+read locally. Version 0.185.1 — recorded because §8.2's first two corrections
+are version-dependent and the original §1.4 recorded no version at all.
