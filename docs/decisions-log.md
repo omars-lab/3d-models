@@ -608,3 +608,146 @@ gate, and W-C1 stops being blocked on it.
 The reversal condition **is not** the two files looking redundant on paper. They
 looked redundant on paper for the whole period in which one of the two joints had
 no coupon at all.
+
+---
+
+## D-009 — The LDraw read-back is a studio panel, not a CI gate
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** bikar, 3d-models
+
+### Context
+
+Until 2026-08-02 the LDraw export was only ever validated **by its own author**.
+`ldraw-emitter.test.ts` has thirty-odd cases and they are good cases, but every
+one of them checks bikar's output against bikar's reading of the LDraw spec. A
+misreading of the spec passes all of them. Nothing outside bikar had ever parsed
+the file.
+
+[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) surveyed twelve
+candidates for fixing that and recommended two: LDView for a picture (§1.2), and
+three.js `LDrawLoader` in Node for a machine-checkable parse (§1.4), which it
+called *"the route to put in CI"*. Neither had been run. LDView still has not
+been — it installs from a `.dmg`, not Homebrew.
+
+The §1.4 route was run on 2026-08-02 and the export **opens**: both type-1 lines
+resolved against the inline `0 FILE` block with no parts library on disk. §8
+records the run and the three §1.4 claims it falsified.
+
+### Decision
+
+**Wire `LDrawLoader` into the Lego Lab in bikar studio, behind the LDraw export
+button. Do not add the headless CI gate §1.4 proposed — yet.**
+
+The reasoning is that in studio these are not two things. `LDrawLoader` is a
+browser library, studio is a browser app, and the Lego Lab already exports
+LDraw. Rendering the preview *through the loader* means the picture on screen is
+a foreign implementation's reading of the exact bytes the download button hands
+over. The preview cannot drift from the validator because it **is** the
+validator: an export that stopped resolving would stop drawing.
+
+A headless CI case would assert the same invariant with none of the visibility,
+and would be a second place for the same assertion to live. If the panel turns
+out to be something people click past rather than look at, that is the signal to
+add the CI case — not before.
+
+Two traps from §8.2 are load-bearing for the implementation and are recorded
+here so the panel does not rediscover them:
+
+- `addDefaultMaterials()` throws unless `setConditionalLineMaterial()` is called
+  first (three ≥ 0.18x). §1.4's recipe omits this and does not run as written.
+- `addDefaultMaterials()` registers **only colour codes 16 and 24**. Our
+  placements carry code 7, so a panel that stops there renders magenta. It needs
+  a real `LDConfig` subset, or it will look broken while being correct.
+
+### What would reverse it
+
+The panel shipping and then being ignored — nobody looking at it, exports going
+out unlooked-at. Then the invariant needs somewhere that fails loudly without a
+human, and §1.4's vitest case is the answer that was passed over here.
+
+---
+
+## D-010 — Do not certify BFC until the winding's *handedness* is established
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** bikar
+
+### Context
+
+The read-back returned 15,056 triangles for a file containing 3,764 type-3
+lines. `LDrawLoader.js` explains it: `doubleSided = ! bfcCertified || ! bfcCull`,
+then `totalFaces += doubleSided ? 2 : 1`. Our MPD carries no `0 BFC CERTIFY` —
+an omission the emitter makes deliberately, asserted by the test *"omits
+`0 !LICENSE` and `0 BFC` — both deliberate"* — so a conforming consumer builds
+every triangle twice, in both winding orders.
+
+The tempting move is to certify. The emitter has already done the hard part: its
+tests assert the axis map is a proper rotation (*"determinant +1, so triangle
+winding survives"*) and that a mirroring placement is **refused** rather than
+inverted silently. Winding is known-consistent. Certifying would halve what every
+consumer builds.
+
+### Decision
+
+**Leave `0 BFC` off until it is established that our winding is CCW in LDraw's
+own convention — not merely self-consistent.**
+
+Consistency and handedness are different claims and the emitter's tests only
+support the first. `0 BFC CERTIFY CCW` on CW geometry is worse than no
+certification at all: an uncertified file makes a consumer draw both sides, which
+is always correct and merely wasteful, while a wrongly-certified file makes it
+cull the faces it should keep, which is silently wrong. The current state costs
+3,764 redundant triangles on a model that renders instantly.
+
+This is the **K1** rule applied to our own test suite. "Determinant +1" is a
+hedge-bearing statement about a rotation being orientation-preserving; reading it
+as "therefore CCW in LDraw's frame" strips the qualifier and asserts something
+the test never checked.
+
+### What would reverse it
+
+Establishing the handedness — from the axis map composed with LDraw's stated
+face-winding convention, confirmed by a consumer that actually culls. Then
+`0 BFC CERTIFY CCW` is free and should ship.
+
+---
+
+## D-011 — One authorized upload to LDraw.org, as a tiebreaker
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** 3d-models
+
+### Context
+
+`https://library.ldraw.org/model-viewer` is candidate 12 of the twelve in
+[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §3. It is the only one
+that explicitly documents our exact case as supported — *"All parts used in the
+file submitted to the model viewer must be embedded in the MPD, be present in the
+Official Library, or listed on the Parts Tracker"* — and the only one that
+requires **sending our geometry to a third party**: *"The model submitted here is
+uploaded to LDraw.org for processing."*
+
+§6 item 12 set the condition in advance: *"It should not be used as the routine
+check. It is, however, a legitimate one-off tiebreaker if every local route
+fails, provided a human decides the upload is acceptable."*
+
+The local route did **not** fail. But it also did not produce a picture, and no
+official LDraw implementation has read the file — three.js is a third-party
+reimplementation, and LDView is still an uninstalled `.dmg`.
+
+### Decision
+
+**Upload once, with the owner's explicit authorization, given 2026-08-02.**
+
+The stated condition ("if every local route fails") is not met and this decision
+does not pretend otherwise — it is an owner override of a bar this file set, made
+knowingly, for the one thing the local route cannot supply: a rendering by an
+implementation LDraw.org itself hosts.
+
+Scope is one file, once. `Brick-Stack.mpd` is 213 KiB of generated brick
+geometry with no proprietary content and nothing derived from anything but our
+own DSL. The routine check stays local and stays §1.4's.
+
+### What would reverse it
+
+Nothing to reverse — it is a single act, not a standing practice. What would
+**extend** it is exactly what §6 item 12 says: every local route failing. Making
+this the routine check without that is the thing to refuse.
