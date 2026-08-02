@@ -11,6 +11,8 @@ Checks (full mode):
   - frontmatter parses and every as_of hash resolves in its repo
   - every pointer `repo:path:Lstart[-Lend]` names a file that exists at the
     pinned as_of commit and has at least Lend lines
+  - a pointer that carries an anchor — `repo:path:Lstart[-Lend] "text"` — has
+    that text somewhere inside the lines it names (see ANCHORS below)
   - the mermaid diagram and the pointer table declare the same UC ids
   - every `uc:` id declared by a frontmatter `page_catalogs` source is a use
     case this map carries (see check_catalogs below)
@@ -25,6 +27,39 @@ Pre-commit mode adds the freshness contract:
   - staged files touch experience surfaces (index.html, Makefile, docs/,
     src/) -> non-blocking reminder
   - 3d-models as_of more than STALE_LIMIT commits behind HEAD -> reminder
+
+ANCHORS — why a line number alone is not a check
+------------------------------------------------
+A bare `repo:path:L80` claims two things and this file used to check one. It
+checks the file exists and is long enough; it never checked that L80 is the
+line meant. So a pointer keeps validating while the thing it points at slides
+out from under it, and `--refresh` re-pins the commit hash without looking.
+
+Measured, on 2026-08-02: **all eight** `3d-models:Makefile:L*` pointers landed
+on unrelated lines — `L252` "(deploy target)" on a `clean` rule, `L146`
+"(lab vendoring target)" on a `brick_previews.py` call, `L74`
+"(cookie-cutters target)" on a blank line. The drift predates the edits that
+widened it: at `5166d5b` L252 was already 8 lines off. `validate.py` printed
+"all valid" through every one of them, and no other gate claims this class —
+`doc_pointers.py` resolves a backticked *path* and never reads a line number.
+
+So a pointer may carry an anchor: a quoted literal that must appear somewhere
+inside the lines it names.
+
+    `3d-models:Makefile:L137 "orbs:"` (orbs pipeline target)
+
+Opt-in on purpose, and the same shape as `site_graph.py`'s G3 `evidence` rule.
+An anchor is checked when present and **counted** when absent — `mode_full`
+prints both totals, so an unanchored pointer is visible rather than assumed
+fine. There is deliberately no rule that every pointer must have one: a pointer
+into a 1600-line design doc's §12 has no short literal that is stably unique,
+and a gate that demanded one there would be answered with a bad anchor.
+
+Anchoring a pointer moves it out of `doc_pointers.py`'s `BACKTICKED` character
+class (it has no space and no quote), so that gate stops seeing it. Nothing is
+lost: doc_pointers asks whether the path resolves, and the loop below already
+reads the same path out of the pinned commit, which is strictly stronger. Worth
+knowing before wondering why a baseline entry disappeared.
 """
 
 from __future__ import annotations
@@ -34,6 +69,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from typing import NamedTuple
 
 import yaml
 
@@ -51,7 +87,10 @@ SURFACE_PATTERNS = (
 # label), which is regex's proper job. They are not standing in for a parser —
 # the document's structure (frontmatter, code fences) is read structurally
 # below. Do not "fix" these into a parser.
-POINTER_RE = re.compile(r"`(?P<repo>[\w.-]+):(?P<path>[^`\s:]+):L(?P<start>\d+)(?:-L(?P<end>\d+))?`")
+POINTER_RE = re.compile(
+    r"`(?P<repo>[\w.-]+):(?P<path>[^`\s:]+):L(?P<start>\d+)(?:-L(?P<end>\d+))?"
+    r'(?:\s+"(?P<anchor>[^"`]+)")?`'
+)
 UC_RE = re.compile(r"\bUC\d+\b")
 # A `uc:` field in a page catalog — `{ uc: 'UC5', actor: 'lab-visitor', ... }`.
 # Same justification as POINTER_RE: a token embedded in a source file this repo
@@ -191,6 +230,46 @@ def catalog_ucs(blob: str) -> set[str]:
     return ids
 
 
+class Pointer(NamedTuple):
+    """One `repo:path:Lstart[-Lend] ["anchor"]` claim from the table."""
+
+    repo: str
+    path: str
+    start: int
+    end: int
+    anchor: str | None
+
+    def __str__(self) -> str:
+        span = f"L{self.start}" if self.end == self.start else f"L{self.start}-L{self.end}"
+        quoted = f' "{self.anchor}"' if self.anchor else ""
+        return f"{self.repo}:{self.path}:{span}{quoted}"
+
+
+def anchor_miss(blob: str, start: int, end: int, anchor: str) -> str | None:
+    """Say where `anchor` actually is, when it is not inside lines start..end.
+
+    Returns None when the pointer is right. Otherwise a message — and when the
+    anchor exists elsewhere in the file it names those lines, because that is
+    the whole repair: the pointer is off by however far the file moved, and
+    every instance this rule was written for was a pure line shift, not a
+    deleted target. Reporting "not found at L80" and leaving the reader to grep
+    would make the fix cost more than the finding.
+
+    Line numbers are 1-based and inclusive at both ends, matching the pointer
+    syntax. `end` is clamped by the caller's existing length check, so a range
+    running past EOF is already an error before this runs.
+    """
+    lines = blob.split("\n")
+    if any(anchor in line for line in lines[start - 1 : end]):
+        return None
+    elsewhere = [i for i, line in enumerate(lines, 1) if anchor in line]
+    if not elsewhere:
+        return f'anchor "{anchor}" is nowhere in the file — was it renamed?'
+    shown = ", ".join(f"L{i}" for i in elsewhere[:4])
+    more = f" (+{len(elsewhere) - 4} more)" if len(elsewhere) > 4 else ""
+    return f'anchor "{anchor}" is at {shown}{more}, not in the range this pointer names'
+
+
 class Doc:
     def __init__(self, text: str):
         frontmatter, body = split_frontmatter(text)
@@ -213,7 +292,7 @@ class Doc:
             raise ValueError(f"{DOC_RELPATH}: no mermaid diagram found")
         self.diagram_ucs = set(UC_RE.findall(diagrams[0]))
         self.table_ucs: set[str] = set()
-        self.pointers: list[tuple[str, str, int, int]] = []
+        self.pointers: list[Pointer] = []
         for line in body.splitlines():
             if not line.startswith("| UC"):
                 continue
@@ -223,7 +302,9 @@ class Doc:
             for p in POINTER_RE.finditer(line):
                 start = int(p.group("start"))
                 end = int(p.group("end") or start)
-                self.pointers.append((p.group("repo"), p.group("path"), start, end))
+                self.pointers.append(
+                    Pointer(p.group("repo"), p.group("path"), start, end, p.group("anchor"))
+                )
 
     def repo_dir(self, repo: str, root: str) -> str | None:
         if repo == SELF_REPO:
@@ -326,7 +407,7 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
         only_d = ", ".join(sorted(doc.diagram_ucs - doc.table_ucs)) or "-"
         only_t = ", ".join(sorted(doc.table_ucs - doc.diagram_ucs)) or "-"
         errors.append(f"diagram/table mismatch: diagram-only [{only_d}], table-only [{only_t}]")
-    pointer_repos = {p[0] for p in doc.pointers}
+    pointer_repos = {p.repo for p in doc.pointers}
     for repo in sorted(pointer_repos - set(doc.as_of)):
         errors.append(f"pointers reference repo '{repo}' but frontmatter as_of has no hash for it")
     for repo, pin in doc.as_of.items():
@@ -348,16 +429,24 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
             )
             if warning:
                 warnings.append(warning)
-        for prepo, path, start, end in doc.pointers:
-            if prepo != repo:
+        for ptr in doc.pointers:
+            if ptr.repo != repo:
                 continue
-            blob = try_git(rdir, "cat-file", "-p", f"{pin}:{path}")
+            blob = try_git(rdir, "cat-file", "-p", f"{pin}:{ptr.path}")
             if blob is None:
-                errors.append(f"{prepo}:{path} does not exist at as_of {pin[:12]}")
+                errors.append(f"{ptr.repo}:{ptr.path} does not exist at as_of {pin[:12]}")
                 continue
             nlines = blob.count("\n") + 1
-            if end > nlines:
-                errors.append(f"{prepo}:{path}:L{start}-L{end} exceeds file length {nlines} at as_of {pin[:12]}")
+            if ptr.end > nlines:
+                errors.append(
+                    f"{ptr.repo}:{ptr.path}:L{ptr.start}-L{ptr.end} exceeds file length "
+                    f"{nlines} at as_of {pin[:12]}"
+                )
+                continue
+            if ptr.anchor:
+                miss = anchor_miss(blob, ptr.start, ptr.end, ptr.anchor)
+                if miss:
+                    errors.append(f"{ptr} at as_of {pin[:12]}: {miss}")
     cat_errors, cat_warnings = check_catalogs(doc, root)
     return errors + cat_errors, warnings + cat_warnings
 
@@ -375,7 +464,16 @@ def mode_full(root: str) -> int:
         doc = Doc(f.read())
     rc = report(*validate_full(doc, root), context="full")
     if rc == 0:
-        print(f"use-cases: {len(doc.table_ucs)} use cases, {len(doc.pointers)} pointers — all valid at pinned commits")
+        # Say how many pointers were only checked for existence. An unanchored
+        # pointer is not a defect, but it is also not the check the summary
+        # sounds like — "all valid" was printed over eight pointers landing on
+        # unrelated lines, and a bare count is what would have shown it.
+        anchored = sum(1 for p in doc.pointers if p.anchor)
+        print(
+            f"use-cases: {len(doc.table_ucs)} use cases, {len(doc.pointers)} pointers "
+            f"({anchored} anchored, {len(doc.pointers) - anchored} line-number only) "
+            "— all valid at pinned commits"
+        )
     return rc
 
 
@@ -431,6 +529,20 @@ def mode_refresh(root: str) -> int:
             print(f"use-cases refresh: '{repo}' pinned from {ref}", file=sys.stderr)
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
+    # Say what this mode does NOT do. `--refresh` moves the pins forward and
+    # then re-runs the same checks against the newer commit; it has no way to
+    # know that L80 still means what the label beside it says. Every pointer
+    # that drifted did so through a refresh that printed success. An anchored
+    # pointer *is* re-verified here, which is the difference the line below
+    # exists to make visible.
+    unanchored = [p for p in Doc(text).pointers if not p.anchor]
+    if unanchored:
+        print(
+            f"use-cases refresh: re-pinned hashes; {len(unanchored)} pointer(s) carry no "
+            'anchor, so their line numbers were checked for length only. Add "text" '
+            "after the range to have the target re-verified.",
+            file=sys.stderr,
+        )
     return mode_full(root)
 
 
@@ -450,7 +562,7 @@ def mode_staged(root: str) -> int:
         doc = Doc(run_git(root, "show", f"HEAD:{DOC_RELPATH}"))
     except subprocess.CalledProcessError:
         return 0  # map not committed yet — nothing to guard
-    referenced = {path for repo, path, _, _ in doc.pointers if repo == SELF_REPO}
+    referenced = {p.path for p in doc.pointers if p.repo == SELF_REPO}
     hits = sorted(referenced & set(staged))
     if hits:
         if os.environ.get("USE_CASES_OK") == "1":
@@ -543,6 +655,69 @@ def self_test() -> int:
         unknown_catalog_ucs({"UC16", "UC9"}, set()),
         ["UC9", "UC16"],
     )
+    # The anchor rule. Written against the file it was written for: a Makefile
+    # whose `deploy:` rule moved down while the pointer stayed put.
+    makefile = "\n".join(
+        ["# header"] * 5 + ["clean:", "\trm -rf build"] + ["# spacer"] * 3 + ["deploy: web-images lab"]
+    )
+    expect(
+        "an anchor inside the range it names passes",
+        anchor_miss(makefile, 6, 6, "clean:"),
+        None,
+    )
+    expect(
+        "a range is inclusive at both ends",
+        anchor_miss(makefile, 6, 7, "rm -rf build"),
+        None,
+    )
+    expect(
+        "a drifted pointer is told where its target actually is",
+        anchor_miss(makefile, 6, 6, "deploy:"),
+        'anchor "deploy:" is at L11, not in the range this pointer names',
+    )
+    expect(
+        "a target that no longer exists reads differently from one that moved",
+        anchor_miss(makefile, 6, 6, "lab-vendor:"),
+        'anchor "lab-vendor:" is nowhere in the file — was it renamed?',
+    )
+
+    def parse_one(cell: str) -> tuple | None:
+        m = POINTER_RE.search(cell)
+        if not m:
+            return None
+        return (
+            m.group("repo"),
+            m.group("path"),
+            int(m.group("start")),
+            int(m.group("end") or m.group("start")),
+            m.group("anchor"),
+        )
+
+    expect(
+        "a bare pointer still parses, with no anchor",
+        parse_one("`3d-models:Makefile:L137` (orbs pipeline target)"),
+        ("3d-models", "Makefile", 137, 137, None),
+    )
+    expect(
+        "an anchored pointer carries its literal",
+        parse_one('`3d-models:Makefile:L137 "orbs:"` (orbs pipeline target)'),
+        ("3d-models", "Makefile", 137, 137, "orbs:"),
+    )
+    expect(
+        "an anchor may contain spaces, and a range may still be a range",
+        parse_one('`3d-models:Makefile:L201-L216 "lab lego-lab: lab-vendor"`'),
+        ("3d-models", "Makefile", 201, 216, "lab lego-lab: lab-vendor"),
+    )
+    expect(
+        # The parenthetical label is prose, and eight cells already carry a
+        # backticked term inside one. Reading those as anchors would turn a
+        # description into a claim nobody wrote — which is why the syntax is
+        # inside the span rather than after it.
+        "a backticked term in the label beside a pointer is not an anchor",
+        parse_one("`3d-models:Makefile:L75` (`validate-docs` target)"),
+        ("3d-models", "Makefile", 75, 75, None),
+    )
+
     expect(
         "a pin ahead of a sibling checkout's HEAD is not stale",
         staleness_warning("bikar", 0, 2),
