@@ -1,0 +1,23 @@
+#!/bin/sh
+# Catalog↔model gate (.claude/gates/catalog_models.py). Every `--param`,
+# `--piece` and `--brick-fit` a prototype-catalog entry prescribes must name
+# something its `.bkr` actually declares. Two instances motivated it, both in
+# that catalog: W-F1's model file that never existed under the name given, and
+# LG-F1's `--param rib_mm`, "a knob that never existed".
+#
+# Whole-file, not --staged: an entry can break because the *model* changed in
+# bikar, with nothing staged here at all.
+# Override once: CATALOG_MODELS_OK=1 git commit
+[ -n "$CATALOG_MODELS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the catalog↔model gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 20-use-cases, 30-docs-gate and 35-doc-pointers:
+# `gh-pages` carries `.githooks` and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/catalog_models.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no catalog↔model gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"

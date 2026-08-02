@@ -109,6 +109,15 @@ rule does not transfer.
   shrink freely and only grows deliberately. Cite a third party's tree, name a
   file still to be authored, or propose a module, and you belong in it; be
   stale and you do not.
+- **A knob a coupon prescribes is a claim too.** Every `--param`, `--piece` and
+  `--brick-fit` in `.claude/skills/prototype/catalog.md` must name something the
+  entry's `.bkr` declares — `.claude/gates/catalog_models.py`, hook
+  `36-catalog-models`, `make validate-catalog`. Two instances built it: W-F1's
+  model file that never existed under the name given, and LG-F1's `--param
+  rib_mm`, "a knob that never existed". The DSL's declaration keywords and the
+  `BrickFit` field set are **harvested from bikar**, not listed — a hand-written
+  list omitted `clip` and turned two correct entries into findings on the first
+  run.
 
 ### Research is checked in
 

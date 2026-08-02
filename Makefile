@@ -42,7 +42,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -61,16 +61,20 @@ setup-hooks:
 
 # Validate the actor/use-case map's hash-pinned code pointers.
 validate-use-cases:
-	@python3 -c "import yaml" 2>/dev/null || { echo "PyYAML required: pip install pyyaml"; exit 1; }
-	python3 ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py
+	@$(PYTHON) -c "import yaml" 2>/dev/null || { \
+		echo "PyYAML required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
+		echo "  install it there:  $(PYTHON) -m pip install pyyaml"; \
+		echo "  or use one that does:  make $@ PYTHON=/path/to/python3"; \
+		exit 1; }
+	$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py
 
 # Design-doc gate: dead relative links (D1/K9), validators shipped without
 # asserted PASS+FAIL examples (D2/K6), defaults with no citation or CAL-* bet
 # id (D3/K4). Rules and the measurement behind them:
 # docs/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
 validate-docs:
-	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
-	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py
 
 # Doc-pointer gate: every backticked path in CLAUDE.md, .claude/skills/**,
 # .claude/gates/** and docs/** must name a file that exists — here, in a sibling
@@ -79,8 +83,17 @@ validate-docs:
 # bikar's scripts/check-doc-pointers.ts; the transfer conditions and what
 # deliberately did *not* transfer are in the gate's module docstring.
 validate-pointers:
-	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/doc_pointers.py --self-test
-	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/doc_pointers.py
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/doc_pointers.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/doc_pointers.py
+
+# Catalog<->model gate: every --param / --piece / --brick-fit a prototype-catalog
+# entry prescribes must name something its .bkr actually declares. The
+# declaration keywords and the BrickFit field set are harvested from bikar
+# (docs/grammar.md, kernel3d/lego.ts) rather than listed here, and the gate says
+# so out loud if either becomes unreadable instead of quietly passing.
+validate-catalog:
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/catalog_models.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/catalog_models.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks
@@ -98,13 +111,13 @@ validate-hooks:
 # docs/site-graph.md; survey: docs/research/sitemap-link-graph-survey.md.
 # `self-test` mutates the real graph in memory and requires each defect to fire.
 validate-site-graph:
-	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/site_graph.py --self-test
-	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/site_graph.py
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/site_graph.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/site_graph.py
 
 # Regenerate the ```mermaid block in docs/site-graph.md from the JSON, then
 # re-check — so a hand-edited render cannot outlive the graph it renders.
 site-graph:
-	python3 ${ROOT_DIR}/.claude/gates/site_graph.py --update-doc
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/site_graph.py --update-doc
 	$(MAKE) -C ${ROOT_DIR} validate-site-graph
 
 %.png: %.scad
@@ -136,7 +149,7 @@ orbs:
 		$(BIKAR) render "$$bkr" --format views -o $(ORB_VIEWS)/$$name; \
 		cp "$$bkr" ${ROOT_DIR}/src/Orbs/; \
 	done; \
-	cd ${ROOT_DIR} && python3 build/orb_previews.py
+	cd ${ROOT_DIR} && $(PYTHON) build/orb_previews.py
 
 # Bricks — LEGO-compatible pieces from the same bikar engine (Lego Lab
 # design §10 P0). Same shape as `orbs`, with one difference that is worth
@@ -161,7 +174,7 @@ bricks:
 		echo "$$name" >> ${ROOT_DIR}/build/.brick-names; \
 		cp "$$bkr" ${ROOT_DIR}/src/Lego/; \
 	done; \
-	cd ${ROOT_DIR} && python3 build/brick_previews.py
+	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py
 
 # The studio — the pages built by bikar's packages/lab (vite) and vendored
 # here at the site root, plus the hashed assets/ dir they share. All
@@ -252,7 +265,7 @@ site:
 	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
 	echo "lego lab http://localhost:${SITE_PORT}/lego.html"; \
 	echo "notes    http://localhost:${SITE_PORT}/design.html"; \
-	python3 -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
+	$(PYTHON) -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
 
 # Map of every user-facing experience and the target that starts it.
 experiences:
@@ -286,14 +299,28 @@ index_images:
 # Post-process raw renders into transparent, autocropped web images
 # (build/images/web/) that the gallery uses. Requires pillow.
 web-images:
-	@command -v python3 >/dev/null || { echo "python3 required"; exit 1; }
-	@python3 -c "import PIL" 2>/dev/null || { echo "Pillow required: pip install pillow"; exit 1; }
-	cd ${ROOT_DIR} && python3 build/process_images.py
+	@command -v $(PYTHON) >/dev/null || { echo "no interpreter at '$(PYTHON)'"; exit 1; }
+	@$(PYTHON) -c "import PIL" 2>/dev/null || { \
+		echo "Pillow required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
+		echo "  install it there:  $(PYTHON) -m pip install pillow"; \
+		echo "  or use one that does:  make $@ PYTHON=/path/to/python3"; \
+		exit 1; }
+	cd ${ROOT_DIR} && $(PYTHON) build/process_images.py
 
 # Publish the static gallery to the gh-pages branch via a dedicated worktree,
 # so master's working tree is never disturbed. gh-pages has a history that is
 # intentionally separate from master; we sync the built site onto it.
-deploy: web-images lab
+#
+# validate-site-graph runs FIRST, and is the only gate this target can rely on.
+# `core.hooksPath` is repo-wide, so the pre-commit dispatchers do fire in the
+# .gh-pages worktree — but that worktree tracks .githooks and not .claude, so
+# every .claude-dependent gate skips itself there by design (validate-hooks is
+# the regression test for that, and the 2026-08-02 deploy printed all three skip
+# lines). This is therefore the one publish path with no gate in front of it,
+# and site_graph.py's G4 rule — DEPLOY_PATHS and LAB_PAGES must agree with the
+# nodes docs/site-graph.json marks `vendored` — is precisely a deploy-time
+# invariant. Checking it here costs milliseconds and no network.
+deploy: validate-site-graph web-images lab
 	@set -euo pipefail; \
 	cd ${ROOT_DIR}; \
 	git show-ref --verify --quiet refs/heads/${PAGES_BRANCH} \
