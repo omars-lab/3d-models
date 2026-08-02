@@ -34,16 +34,17 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-hooks
+.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
 # the use-case map guard — see .claude/skills/maintain-use-cases/ — then the
-# design-doc gate, see .claude/gates/docs_gate.py).
+# design-doc gate, see .claude/gates/docs_gate.py; then the site-graph gate,
+# see .claude/gates/site_graph.py).
 setup-hooks:
 	git -C ${ROOT_DIR} config core.hooksPath .githooks
 	@echo "hooks: core.hooksPath -> .githooks"
-	@echo "  pre-commit.d = gitleaks (staged hunks) + use-cases + docs-gate"
+	@echo "  pre-commit.d = gitleaks (staged hunks) + use-cases + docs-gate + site-graph"
 	@echo "  pre-push     = gitleaks full history (this repo has no CI)"
 	@if ! command -v gitleaks >/dev/null 2>&1; then \
 		echo "  WARNING: gitleaks not installed — commits AND pushes will block."; \
@@ -70,6 +71,23 @@ validate-docs:
 # commit with `[Errno 2] No such file or directory`.
 validate-hooks:
 	${ROOT_DIR}/.githooks/tests/worktree-without-claude.sh
+
+# Site-graph gate: docs/site-graph.json declares every page this project
+# publishes, every link between them, and each host's exposure. The gate holds
+# that declaration to the repo. It never asks whether a URL resolves — four
+# crawler runs on 2026-08-02 reported the one real defect as green, because
+# Cloudflare Access answers an unauthenticated request with HTTP 200. Reasoning:
+# docs/site-graph.md; survey: docs/research/sitemap-link-graph-survey.md.
+# `self-test` mutates the real graph in memory and requires each defect to fire.
+validate-site-graph:
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/site_graph.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/site_graph.py
+
+# Regenerate the ```mermaid block in docs/site-graph.md from the JSON, then
+# re-check — so a hand-edited render cannot outlive the graph it renders.
+site-graph:
+	python3 ${ROOT_DIR}/.claude/gates/site_graph.py --update-doc
+	$(MAKE) -C ${ROOT_DIR} validate-site-graph
 
 %.png: %.scad
 	@echo Generating $*.png from $@
