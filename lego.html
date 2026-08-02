@@ -12,13 +12,13 @@
       name="description"
       content="Design a 3D-printable LEGO-compatible brick with sliders — both grid gates, the lattice solve, and a clutch fit whose every number says whether a coupon set it."
     />
-    <script type="module" crossorigin src="./assets/lego-CvK7NJ09.js"></script>
+    <script type="module" crossorigin src="./assets/lego-BQcylRXw.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/dist-NuvllDvg.js">
     <link rel="modulepreload" crossorigin href="./assets/style-BFfxPe7x.js">
     <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-BxR_cmXS.js">
     <link rel="modulepreload" crossorigin href="./assets/lego-scripts-BIkkshXZ.js">
     <link rel="stylesheet" crossorigin href="./assets/style-CVV-ZBlI.css">
-    <link rel="stylesheet" crossorigin href="./assets/lego-BjpFkKX1.css">
+    <link rel="stylesheet" crossorigin href="./assets/lego-DUwErGo5.css">
   </head>
   <body>
     <header class="lab-header">
@@ -72,6 +72,13 @@
         </section>
         <section class="actions">
           <button id="stl-button" disabled>Download STL</button>
+          <button
+            id="ldraw-button"
+            disabled
+            title="Download this brick as an LDraw MPD — geometry inline, not a library part"
+          >
+            Download LDraw
+          </button>
           <button id="copy-link">Copy link</button>
         </section>
         <section>
@@ -121,6 +128,15 @@
           >
             Sweep
           </button>
+          <button
+            class="view-tab"
+            data-view="ldraw"
+            role="tab"
+            aria-selected="false"
+            title="The exported LDraw file, read back by a parser that is not ours"
+          >
+            LDraw
+          </button>
         </div>
         <canvas
           id="orb-canvas"
@@ -164,6 +180,14 @@
             </li>
           </ul>
           <p id="sweep-note" class="lattice-note"></p>
+        </div>
+        <div id="ldraw-view" class="ldraw-view" hidden>
+          <canvas
+            id="ldraw-canvas"
+            aria-label="The exported LDraw file as an independent parser built it — drag to rotate, scroll to zoom"
+          ></canvas>
+          <dl id="ldraw-readout" class="ldraw-readout"></dl>
+          <p id="ldraw-note" class="lattice-note"></p>
         </div>
         <div id="spinner" class="spinner" hidden>
           <span id="spinner-label">computing&hellip;</span>

@@ -438,9 +438,10 @@
   ];
 
   // Bricks come from the same engine; src/Lego/*.bkr are copies vendored in
-  // by `make bricks` so Source resolves here. Unlike the orbs, their preview
-  // PNG is a render of the mesh itself (OpenSCAD import) rather than of a
-  // symmetry-axis validation view — a brick has no view set.
+  // by `make bricks` (and `make pattern-sets` for the mural set) so Source
+  // resolves here. Unlike the orbs, their preview PNG is a render of the mesh
+  // itself (OpenSCAD import) rather than of a symmetry-axis validation view —
+  // a brick has no view set.
   //
   // Every spec below is a *shipped default*, and the clutch numbers behind
   // them have no coupon behind them yet. Sizes and stud counts are exact;
@@ -475,6 +476,11 @@
       desc:"Not square, and perfect anyway. The lattice steps 1 : 1.5, which lands whole on the stud grid every third column — proof that registering is about a rational ratio, not about being square.",
       specs:["8 × 8 studs","3 × 2 stud repeat","grid fit 1.00"], alt:"brick",
       lab:"lego.html?v=1&f=rational-repeat-tile" },
+    // No lab link: the Lab previews single bricks and cannot place a set —
+    // a mural is deliberately absent from its script registry.
+    { id:"StarMural", file:"Star-Mural.bkr", name:"Star Mural", tag:"Set",
+      desc:"One 3×3 star field cut along the stud grid into four pieces that reconstitute it on a baseplate — the centre star is quartered by both cuts, on purpose. Each seam's two sides come from one planar graph, so the pattern continues across pieces to within the 0.2 mm part gap. The STL is the composed panel for preview; printing uses the per-piece files, and art this large keeps only corner tubes underneath.",
+      specs:["2 × 2 pieces","4 × 4 studs each","seam 0.2 mm"], alt:"mural set" },
   ];
 
   const icons = {
