@@ -970,27 +970,34 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 
 ## LG-P1 — Mural seam registration (two pieces, one motif)
 
-- **Status**: planned (printing on hold; blocked on LG-F1 producing a passing
-  rung — a piece that does not seat has no seam to measure) — **and the model
-  does not exist yet.** Star-Mural's pieces would work but carry a whole star
-  field; the coupon wants the cheapest two pieces that share one seam.
-- **Model** (to author): `bikar/patterns/Lego/Seam-Coupon.bkr` — a `mural` cut
-  `pieces 2 x 1 of 2 x 2`: two 2×2-stud pieces, one straight relief line
-  crossing the single seam perpendicular to it. The smallest object that can
-  answer **CAL-REG-01**: the mural machinery guarantees both sides of the seam
-  share exact vertex coordinates (`bikar` `mural-split.test.ts` asserts it),
-  but whether the *printed, seated* pieces keep that line straight is decided
-  by stud registration on a real plate, not by the graph.
+- **Status**: model authored (bikar `73514f1`, 2026-08-02); printing on hold,
+  blocked on LG-F1 producing a passing rung — a piece that does not seat has
+  no seam to measure. Star-Mural's pieces would also share a seam but carry a
+  whole star field; this is the cheapest two pieces that share one.
+- **Model**: `bikar/patterns/Lego/Seam-Coupon.bkr` — a `mural` cut
+  `pieces 2 x 1 of 2 x 2`: two 2×2-stud pieces, **two** straight relief bars
+  crossing the single seam perpendicular to it, symmetric at ±5.5 mm about the
+  panel mid-line. This entry originally prescribed *one* line, and authoring
+  it proved one line self-defeating: the mural recentres art by its bbox, so a
+  lone bar lands on the mid-line — exactly where a 2×2 piece keeps its only
+  anti-stud tube candidate — and `solveAnchors` drops any anchor within reach
+  of a pocket, leaving both pieces with zero clutch (V-M6). A coupon that
+  rests unclutched cannot measure stud registration. Two offset bars keep the
+  tube, and double the jog samples per seating. Still the smallest object that
+  can answer **CAL-REG-01**: the mural machinery guarantees both sides of the
+  seam share exact vertex coordinates (`bikar` `mural-split.test.ts` asserts
+  it), but whether the *printed, seated* pieces keep those lines straight is
+  decided by stud registration on a real plate, not by the graph.
 - **Print target**: whatever LG-F1 settled on; render with that `--fit-profile`.
 - **Mating part**: one real LEGO baseplate — the same plate class the set is
   sold against.
 - **What we want to learn**:
-  - [ ] 1. **CAL-REG-01** — how far does the relief line jog laterally where it
+  - [ ] 1. **CAL-REG-01** — how far does each relief bar jog laterally where it
     crosses the seam? The prediction is ≤ the 0.2 mm physical gap (design doc
     §3: the cut is nominal, the gap is physical, nothing re-registers art to
-    gap); measure the jog, don't eyeball it.
+    gap); measure both jogs, don't eyeball them.
   - [ ] 2. Does the 0.2 mm gap read as a groove in the art, or does the eye
-    continue the line across it at arm's length (design doc §3's seam-visibility
+    continue the lines across it at arm's length (design doc §3's seam-visibility
     question, empirical by construction)?
   - [ ] 3. Do stud clearance and elephant's foot leave the two top edges level,
     or does a height step at the seam do more visual damage than the gap?

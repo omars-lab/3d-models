@@ -220,8 +220,8 @@ patterned brick (needs LG-F1's clutch number); **LG-S1** the printed-onto-printe
 stack; **P5** the weave family, which the catalog expects to *fail or disappoint
 on FDM* and pairs with an SLS/MJF service order; **P6** size extremes; **LG-B2**
 the off-grid rosette brick, whose `.bkr` **does not exist and must be authored
-first**; **LG-P1** the mural seam-registration pair (needs LG-F1's rung, and its
-minimal `Seam-Coupon.bkr` must be authored); **LG-P2** the clone-plate clutch
+first**; **LG-P1** the mural seam-registration pair (needs LG-F1's rung; its
+minimal `Seam-Coupon.bkr` is authored — bikar `73514f1`); **LG-P2** the clone-plate clutch
 differential (needs LG-F1's rung and clone plates bought); **P7** material and
 finish.
 
@@ -269,7 +269,7 @@ Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not 
 | LG-D1 | does clutch survive 100 seat/unseat cycles, and where does it fail | §8 | the material recommendation; §11 Q6's compliance-proxy question; B.8's "durable or one-shot" | reuses LG-F1's winning rung | not stated |
 | LG-B1 | do relief and clutch coexist; is an 8-fold star legible at 4×4 (31.8 mm) | §8 | `relief depth` and `engage` defaults; the P1 compatibility matrix's first ✅ row | exists — `patterns/Lego/Star-Brick.bkr` | not stated |
 | LG-B2 | does rotation lock hold on an incommensurable outline; **how much clutch is lost giving up the tangent side wall** | §8, §5.3, B.2 | B.2's rotation-lock criterion; V8's WARN-not-ERROR call; the 5-fold matrix row | **must be authored** — `patterns/Lego/Rosette-Brick.bkr` does not exist; the seven shipped `patterns/Lego/*.bkr` include no 5-fold rosette | not stated |
-| LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **must be authored** — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural); Star-Mural exists but is not minimal | not stated |
+| LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **authored** (bikar `73514f1`) — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural, two bars crossing the seam; one bar would delete the 2×2 pieces' only anchor — see the catalog entry); Star-Mural exists but is not minimal | not stated |
 | LG-P2 | whether LG-F1's winning rib also clutches a clone plate; clone pitch error accumulated over 8 studs | `lego-pattern-set-design.md` §5, [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) | `CAL-CLB-01`; the K2 hedge "LEGO-brand verified, clone unmeasured" | reuses LG-F1's winning rung; needs plates bought, not modelled | not stated |
 
 ### 3.3 W-series connector
