@@ -44,7 +44,7 @@ about bets that could be minted.
 | Bets settled by design-specific coupons | 4 | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1) — 4 records |
 | Bets with no coupon anywhere | 1 | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
 | Coupon entries in the prototype catalog | 22 | P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2 |
-| `.bkr` coupon files that exist today | 4 | `Machine-Card`, `Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon` |
+| `.bkr` coupon files that exist today | 5 | `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon` |
 
 **What is already built, so no one re-does it.** The machine card is authored and
 every rung renders: [`calibration-design.md`](calibration-design.md) §7 carries a
@@ -118,7 +118,7 @@ so a reading is not over-claimed afterwards.
 overhang threshold, `warpMm` (today literally absent), and both F7 bed-contact
 triggers. Downstream: `c2-assembly` B.3 and B.6, `piece-composition` B.2,
 `print-validation` B.2 and B.4, `w2-connector` B.3 and B.5, `lego-lab` B.5, and
-`hemisphere-split`'s whole constants table. Also W-F1's seat-clearance conversion
+`hemisphere-split`'s whole constants table. Also W-F1's blade-clearance conversion
 and, per the catalog, "P1 Q1 … is MC-2's question asked in strut form."
 
 ### Plate 2 — the LEGO clutch ladder: LG-F1, LG-F2 and LG-R1
@@ -163,10 +163,13 @@ hatch, and §11 Q1 says the answer may be "neither nozzle, without a rib."
 
 ### Plate 3 — the W-series connector joint: W-F1 then W-C1
 
-W-F1 is the seat-clearance fit coupon; W-C1 is the CornerClip joint that
+W-F1 is the blade-clearance fit coupon; W-C1 is the CornerClip joint that
 consumes its number. The catalog blocks W-C1 on W-F1, so these are **two plates
-in sequence, not one shared plate** — unless MC-1 turns out to supply W-F1's
-number outright, which is exactly the open question flagged in §7 below.
+in sequence, not one shared plate**. Whether MC-1 might supply W-F1's number
+outright was §7 item 1's open question; it was resolved on 2026-08-02 as **no**
+([`decisions-log.md`](decisions-log.md) D-008) — MC-1 measures a bore-and-pin
+joint, and a blade that drops down a channel and then twists under load can pass
+the drop and still bind on the twist. Two plates it is.
 
 **Why third rather than second.** W-C1 settles two bets (`CAL-DET-01`,
 `CAL-CLP-01`) against LG-F1's one, but it settles them for a feature whose
@@ -267,7 +270,7 @@ Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not 
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
-| W-F1 | the seat clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](w2-connector-design.md) §8 | the clipseat half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — but see §7: the catalog and the file disagree about what it is | not stated |
+| W-F1 | the blade clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](w2-connector-design.md) §8 | the clip-joint half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — `Clipseat-Fit-Coupon.bkr`, 6 pieces (written 2026-08-02, D-008) | not stated |
 | W-C1 | rebate vs proud in raking light; detent past-centre feel; PETG jaw survival; front-face lippage | §8, §10 Q1; [`tile-wall-design.md`](tile-wall-design.md) §10 Q1 | `CAL-DET-01`, `CAL-CLP-01`; the `clipseat` grammar default; the mesh-gate sub-floor exemption for bayonet clips | exists — `Clip-Coupon.bkr`, 3 pieces | not stated |
 
 ### 3.4 Orb ladder
@@ -375,8 +378,9 @@ Checked against the repo, not against memory. Done / not done is stated per item
    thin target that regenerates the card is a judgement call and not an
    obligation; what *is* an obligation is that the lines in §6 are run exactly,
    because `--piece` is what puts rung identity in the filename.
-3. **Reconcile W-F1's `.bkr` with its catalog entry** — see §7, item 1. This
-   must happen before Plate 3 and can happen at any time; it needs no printer.
+3. ~~**Reconcile W-F1's `.bkr` with its catalog entry**~~ — **done 2026-08-02**,
+   see §7 item 1 and [`decisions-log.md`](decisions-log.md) D-008. The coupon it
+   needed did not exist and was written; nothing here waits on a printer.
 4. **Buy or locate the instruments the protocol assumes**: a caliper (make and
    resolution recorded, zeroed at session start), a flat reference — granite
    plate or float glass — and feeler gauges for MC-5, and at least one **real
@@ -584,28 +588,30 @@ that path.
 Stated so the next reader does not mistake an unanswered question for a settled
 one.
 
-1. **What W-F1 actually is.** Three descriptions disagree.
-   [`catalog.md`](../.claude/skills/prototype/catalog.md) W-F1 says the model is
-   `Fit-Coupon.bkr`, describes it as "small clipseat dummy tiles printed across a
-   gap ladder", and instructs `--param gap=…`. The file on disk has **no `gap`
-   param** (its params are `pin_d` and `depth`), has **no clipseat and no tile**,
-   and is a five-bore ⌀ ladder plus a gauge pin.
-   [`c2-assembly-design.md`](c2-assembly-design.md) §8 describes that same file
-   correctly, as C2's step gauge.
-   [`w2-connector-design.md`](w2-connector-design.md) §8 names a **third**
-   filename, `Fit-Step-Gauge.bkr`, which does not exist. The `gap` param that
-   does exist lives in `Clip-Coupon.bkr` — W-C1's file — where it is the
-   **inter-tile gap**, not a seat clearance. I could not determine which of these
-   the author intends, and therefore could not determine whether W-F1 is a
-   separate print at all or is subsumed by MC-1. This is the single largest gap
-   in this backlog: it sits on the critical path of Plate 3 and it decides
-   whether that plate is one print or two.
-2. **Whether `Fit-Coupon.bkr`'s ladder is still the shipped ladder.** Its bores
-   step −0.10 / 0 / +0.10 / +0.20 / +0.30 and its header calls +0.10 "snug",
-   while `FIT_GAP_MM` ships −0.10 / +0.05 / +0.15 / +0.35. MC-1's `MC1FitLadder`
-   uses the shipped values verbatim and asserts itself against the constant via
-   the `MC1Fit` assembly. Whether Fit-Coupon should be re-cut, retired, or left
-   as the historical C2 gauge is a call I could not make from the repo.
+1. ~~**What W-F1 actually is.**~~ **Resolved 2026-08-02 —
+   [`decisions-log.md`](decisions-log.md) D-008.** Three descriptions disagreed:
+   [`catalog.md`](../.claude/skills/prototype/catalog.md) asked clipseat
+   questions over a `Fit-Coupon.bkr` model line, that file being a five-bore ⌀
+   ladder with no clipseat, no tile and no `gap` param;
+   [`c2-assembly-design.md`](c2-assembly-design.md) §8 described the same file
+   correctly as C2's step gauge; and
+   [`w2-connector-design.md`](w2-connector-design.md) §8 named a **third**
+   filename, `Fit-Step-Gauge.bkr`, which had never existed.
+   Reading the geometry settled it: the catalog's prose was describing a coupon
+   nobody had written. A bore-and-pin number does not transfer to a bayonet blade
+   that drops then twists, so W-F1 is now
+   `patterns/Coupons/Clipseat-Fit-Coupon.bkr` — a new five-rung blade-clearance
+   ladder on its own plate. It is **not** subsumed by MC-1, and Plate 3 stays two
+   prints in sequence.
+2. ~~**Whether `Fit-Coupon.bkr`'s ladder is still the shipped ladder.**~~
+   **Resolved 2026-08-02 — same entry.** It was not: it stepped
+   −0.10 / 0 / +0.10 / +0.20 / +0.30 against a shipped `FIT_GAP_MM` of
+   −0.10 / +0.05 / +0.15 / +0.35. **Re-cut, not retired** — it keeps the
+   bore-and-pin role that MC-1 extends rather than replaces — and it now carries
+   one `connect` per fit class, so the next edit to the constant stops the file
+   evaluating instead of drifting silently. The root cause was that four of its
+   five rungs were unasserted; `Machine-Card.bkr` had the same hole (one connect,
+   four rungs) and was closed with it.
 3. **Which machine is arriving.** The repo records a ten-entry menu, not a
    purchase. Every plate above is machine-independent in geometry but not in
    result, and the A1 mini's 180 mm envelope versus the 256 mm class changes how
@@ -662,7 +668,8 @@ Four checks, run before shipping it, in the spirit of
   first; §3.1 shows no MC coupon blocked on anything. §2 puts the LG ladder
   second; §3.2 shows LG-F1/F2/R1 blocked on nothing, with LG-D1, LG-B1 and LG-B2
   correctly shown as gated on LG-F1. §2 puts W-F1 before W-C1; §3.3 shows the
-  same order and §7 item 1 records that the ordering itself is uncertain.
+  same order, and §7 item 1 — which used to record that the ordering itself was
+  uncertain — now records it as settled two-plates-in-sequence (D-008).
 - **P2 is not claimed to settle a bet.** §2 Plate 4 says so explicitly and §3.4's
   P2 row lists no `CAL-*` id — consistent with the registry, which gives P2 Q5's
   measurement to MC-6.

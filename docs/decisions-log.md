@@ -513,3 +513,98 @@ document.
 
 The reversal condition explicitly **is not** a low score. That was the confusion
 this decision cleared up.
+
+---
+
+## D-008 — W-F1 is a new clip-in-notch coupon; the bore ladder keeps its own job
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** 3d-models, bikar
+
+### Context
+
+Three documents disagreed about what catalog entry **W-F1** is, which
+[`backlog.md`](backlog.md) §7 item 1 had already flagged without resolving.
+[`catalog.md`](../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
+clipseat questions — which clearance seats a clip firmly, does it differ by tile
+material — while its **Model** line pointed at `Fit-Coupon.bkr`, which is a plate
+of bores and pins. [`w2-connector-design.md`](w2-connector-design.md) §8 named a
+third thing, `Fit-Step-Gauge.bkr`, a file that has never existed in any repo.
+
+Reading the geometry rather than the docs settled which description was wrong.
+These are two different joints:
+
+- **bore-and-pin** — a peg travelling straight into a hole. One axis, full
+  contact around the circumference, no rotation. `Fit-Coupon.bkr` and MC-1's
+  `MC1FitLadder` measure this.
+- **clip-in-notch** — a bayonet blade dropping down the 1.2 mm channel between
+  four tile corners and *then* sweeping sideways under load. Two motions, and the
+  second one loads faces the first never touched.
+
+A blade can pass the drop and bind on the twist. So the transfer sentence CLAUDE.md's
+**K10** demands — *"this number transfers because …"* — cannot be written between
+them, and the rule does not transfer. The catalog was not describing a coupon that
+existed; the clip joint had no fit coupon at all.
+
+A second defect fell out of the same reading. `Fit-Coupon.bkr` was cutting its
+ladder at `+0.10 / +0.20 / +0.30` while the shipped `FIT_GAP_MM`
+(`kernel3d/fit-profile.ts`) is `press −0.10 / snug +0.05 / sliding +0.15 /
+free +0.35`. It had drifted from the constant it calibrates and nothing noticed,
+because only one of its rungs carried a `connect`.
+
+### Decision
+
+**Two files, one job each.**
+
+1. **W-F1 becomes `patterns/Coupons/Clipseat-Fit-Coupon.bkr`** — new, on its own
+   plate: one 40 mm clipseat dummy tile plus five `CornerClip`s whose declared
+   `gap` walks the blade clearance `0.40 / 0.30 / 0.20 / 0.10 / 0.00`. Rungs are
+   named for the clearance, not the knob, so the names stay true if `wall_gap`
+   moves. It prints before W-C1 because W-C1 consumes its number.
+2. **`Fit-Coupon.bkr` keeps its bore-and-pin role** and its ladder is re-cut to
+   the shipped `FIT_GAP_MM`, with one `connect` per fit class so a future edit to
+   the constant stops the file evaluating instead of drifting again.
+
+### Why, against the alternatives
+
+*Fold W-F1 into W-C1* was the cheapest and is the one the sequencing rules out.
+W-C1 decides rebate-vs-proud, the Z stack and the detent feel; it is the coupon
+that spends the clearance number. A plate that has to settle the clearance and
+the joint at once cannot tell a bad clearance from a bad jaw, which is the
+contamination MC-1 splits its own two plates to avoid.
+
+*Re-point the prose at the bore ladder* — i.e. declare W-F1 to have always been
+about bores — was the smallest diff and would have made the catalog self-consistent
+and wrong. It also has no work left in it: MC-1's `MC1FitLadder` measures the same
+ladder at six diameters instead of one, so W-F1 would have become a duplicate of a
+better coupon while the clip joint stayed unmeasured.
+
+*Change `FIT_GAP_MM` to match the coupon* was available for the second defect and
+is backwards: the coupon exists to measure the constant, so moving the constant to
+whatever a stale file happened to say would destroy the only thing the file is for.
+
+The ladder is deliberately built to be able to **fail at both ends**, which is what
+distinguishes it from a coupon that can only return "yes". `C00`'s blade exactly
+fills the channel; if it drops through, the finding is not "0.00 works" but that
+this machine undersizes blades or oversizes channels, and the reading measures
+*that*. `C40` sits on the two-perimeter floor (`2 × PERIMETER_WIDTH_MM`); if it
+drops freely and shears on the twist, the blade has stopped being a structural
+member. Both bounds are asserted in `corner-clip.test.ts`.
+
+The confound is stated rather than hidden: the declared gap moves the blade width
+*and* `rPadOutMm = rJaw − gap/√2`, the pad's reach over the border band, together.
+That is accepted because the deliverable is one number to declare, not a
+decomposition — and a failed rung still distinguishes them by inspection (a blade
+that will not enter is the blade; a clip that enters, twists, then rocks is the
+reach).
+
+### What would reverse it
+
+Measure the two joints and find the numbers agree. If the blade clearance W-F1
+returns lands inside MC-1's snug window, the joints are behaving as one joint on
+this machine and the transfer sentence K10 asked for can finally be written — at
+which point `Clipseat-Fit-Coupon.bkr` becomes a confirmation coupon rather than a
+gate, and W-C1 stops being blocked on it.
+
+The reversal condition **is not** the two files looking redundant on paper. They
+looked redundant on paper for the whole period in which one of the two joints had
+no coupon at all.

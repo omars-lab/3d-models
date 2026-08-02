@@ -269,7 +269,7 @@ earned until it records its provenance).
 - **Feeds**: `FIT_GAP_MM` and `holeCompMm` in `bikar` `kernel3d/fit-profile.ts`
   (value **and** provenance record); `docs/c2-assembly-design.md` Appendix B.3 and
   B.6; `docs/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
-  which is why one plate closes both; W-F1's seat-clearance conversion.
+  which is why one plate closes both; W-F1's blade-clearance conversion.
 
 ## MC-2 — Wall ladder (minimum printable feature)
 
@@ -461,7 +461,7 @@ The W-series validates the **modular tile-wall** work (design docs
 `docs/w1-tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
 These coupons decide the connector grammar — clipseat fit and the printed
 CornerClip — in plastic before any full wall is committed. Same learning-ladder
-rule: the fit coupon (W-F1) settles the seat clearance the clip coupon (W-C1)
+rule: the fit coupon (W-F1) settles the blade clearance the clip coupon (W-C1)
 then builds on. Printing is **on hold** (design doc §8), so both land `planned`.
 
 Sub-floor note for this whole series: a printed `clip`'s bayonet blade is
@@ -471,25 +471,46 @@ coupons validate in plastic (design doc §10 Q1). The **tiles** pass the gate
 cleanly (the clipseat rebate is a supported step the gate excludes, not a
 free-standing strut). Only the clip is exempt, and only where noted.
 
-## W-F1 — Clipseat fit coupon (seat clearance ladder)
+## W-F1 — Clipseat fit coupon (blade clearance ladder)
 
 - **Status**: planned (printing on hold, design doc §8)
-- **Model**: `bikar/patterns/Coupons/Fit-Coupon.bkr` — small clipseat dummy
-  tiles printed across a gap ladder to find the seat clearance that seats
-  firmly without forcing. Render at defaults:
+- **Model**: `bikar/patterns/Coupons/Clipseat-Fit-Coupon.bkr` — one 40 mm
+  clipseat dummy tile plus five `CornerClip`s across a blade-clearance ladder,
+  to find the clearance that seats firmly without forcing.
+  **This is not `Fit-Coupon.bkr`.** Until 2026-08-02 this entry pointed there,
+  which is a bore-and-pin ladder: a peg going straight into a hole, one axis,
+  full contact, no rotation. The clip joint is a blade dropping down the gap
+  channel between four tiles and *then* sweeping sideways under load — it can
+  pass the drop and still bind on the twist, so a number measured on a bore
+  does not transfer here. That is the whole reason the new file exists; see
+  `docs/decisions-log.md` **D-008**.
+  Print **four** of the tile — they serve W-C1 afterwards, being the same dummy
+  `Clip-Coupon.bkr` uses — and one of each clip:
   `cd bikar && node packages/cli/dist/index.js render
-  patterns/Coupons/Fit-Coupon.bkr --format stl --check -o
-  ../3d-models/build/stls/coupons/W-F1-FitCoupon.stl` — the dummy tiles pass
-  the mesh gate; sweep the `gap` param (`--param gap=...`) to print the ladder.
-  Cheapest connector coupon — it fixes the seat clearance number that every
+  patterns/Coupons/Clipseat-Fit-Coupon.bkr --format stl --piece FitClipTile
+  --check -o ../3d-models/build/stls/coupons/W-F1-FitClipTile.stl`, then the
+  same per clip with `--piece FitClipC40` … `FitClipC00` and **without**
+  `--check` (a bayonet blade is sub-floor by design — see the series note
+  above). Cheapest connector coupon: it fixes the clearance number that every
   later clip coupon and the full Clip-Wall inherit via `--fit-profile`.
+  The tiles are laid at **one** physical channel (`wall_gap`, default 1.2); the
+  ladder is on the clip, and the difference between declared and actual gap is
+  the clearance under test. Rung names are that clearance in hundredths of a
+  mm — `C40` 0.40 / `C30` 0.30 / `C20` 0.20 (the shipped guess) / `C10` 0.10 /
+  `C00` 0.00 — and stay correct if `wall_gap` moves.
 - **Print target**: TBD — record machine/material/nozzle/layer on first print.
-  PETG is the intended clip material; the seat is on the tile, so print the
-  coupon tiles in the wall's tile material (PLA or PETG) to match shrinkage.
+  Clips in PETG (the intended clip material); print the tile in the wall's tile
+  material (PLA or PETG) so its shrinkage matches the channel you will have.
 - **What we want to learn**:
-  - [ ] 1. Which `gap` value seats the clip firmly without forcing on a
-    0.4 mm nozzle — i.e. the number that becomes `profile.gapMm` /
-    `--fit-profile petg_calibrated`?
+  - [ ] 1. Which rung drops through and twists home firmly without forcing on a
+    0.4 mm nozzle — i.e. the diametral blade clearance that becomes
+    `CLIP_CLEARANCE_MM.insert` and the `gap` to declare
+    (`profile.gapMm` / `--fit-profile petg_calibrated`)?
+    **The ladder is built to be able to fail at both ends.** If `C00` — whose
+    blade exactly fills the channel — drops through, the answer is not
+    "0.00 works": it is that this machine undersizes the blade or oversizes the
+    channel, and the reading measures *that* error. If `C40` drops freely but
+    shears on the twist, the blade has stopped being a structural member.
   - [ ] 2. **Re-pointed to `CAL-WRP-01` / MC-5.** `profile.warpMm` is a property
     of *(machine, material, nozzle, profile)*, not of a clipseat tile — measuring
     it here would measure the printer a second time. The warp plate supplies the
@@ -498,23 +519,36 @@ free-standing strut). Only the clip is exempt, and only where noted.
     profile, i.e. does the rebate itself add bow, and does a corner jaw still
     bear evenly on the result? Compare against MC-5; only the difference is a
     finding here.
-  - [ ] 3. Does the seat clearance need to differ by tile material (PLA vs
+  - [ ] 3. Does the clearance need to differ by tile material (PLA vs
     PETG shrinkage), or is one `gap` good for both?
 - **What we learned**: — pending.
 - **Iteration log**:
   | # | date | change | question | result | decision |
   |---|------|--------|----------|--------|----------|
-- **Settles**: the clipseat-specific half of `CAL-FIT-01` only. The four fit
-  classes and the ⌀ sweep come from MC-1; W-F1 converts them into a seat
-  clearance for *this* joint. Warp (Q2) belongs to `CAL-WRP-01` / MC-5.
-- **Feeds**: `--fit-profile` seat-clearance profile consumed by
+- **Settles**: the clip-joint half of `CAL-FIT-01` only. The four fit classes
+  and the ⌀ sweep come from MC-1; W-F1 converts them into a blade clearance for
+  *this* joint. Warp (Q2) belongs to `CAL-WRP-01` / MC-5.
+- **Does not settle**: the Z stack — riser height, anti-rattle preload,
+  back-flush setback — which is `CAL-CLP-01`, and the detent feel, which is
+  `CAL-DET-01`; both are W-C1's. Nor rebate-vs-proud, W-C1's headline decision:
+  this coupon uses `rebate` because the blade clearance is set by the gap
+  channel alone and the variant only changes the jaw pad's thickness, so the
+  ladder reads the same either way.
+- **Confound, stated**: the declared gap sets the blade width *and*
+  `rPadOutMm = rJaw − gap/√2`, the pad's reach over the border band. The two
+  move together and the coupon reports the pair, which is fine — the
+  deliverable is one number to declare, not a decomposition. A failed rung
+  still says which effect bit: a blade that will not enter is the blade; a clip
+  that enters, twists, then rocks or pulls off is the reach.
+- **Feeds**: `--fit-profile` clearance profile consumed by
   `patterns/Coupons/Clip-Coupon.bkr` and `patterns/Walls/Clip-Wall.bkr`;
-  clipseat constants in `bikar` `kernel3d/clipseat.ts` if the seat floor moves.
+  `CLIP_CLEARANCE_MM` in `bikar` `kernel3d/corner-clip.ts`; clipseat constants
+  in `bikar` `kernel3d/clipseat.ts` if the seat floor moves.
 
 ## W-C1 — CornerClip coupon (rebate-vs-proud joint decision)
 
 - **Status**: planned (printing on hold, design doc §8; blocked on W-F1's
-  seat-clearance number)
+  blade-clearance number)
 - **Model**: `bikar/patterns/Coupons/Clip-Coupon.bkr` — two 40 mm dummy tiles
   (one `clipseat rebate 0.6`, one `clipseat proud`) plus the `CornerClip` that
   mates them. There is no `assembly` (a bayonet clip has no connectable port),

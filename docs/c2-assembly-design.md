@@ -350,8 +350,21 @@ The parent doc's intent/compensation split (§5 there), operationalized:
   Assemblies get their own `patterns/Assemblies/` directory — the 3d-models Makefile
   globs only `patterns/Orbs/`, so the gallery pipeline is untouched.
 - **`patterns/Coupons/Fit-Coupon.bkr`** — the step gauge: one plate with through-holes
-  ⌀2.90 / 3.00 / 3.10 / 3.20 / 3.30 plus a ⌀3.00 rod pin, printed at
-  `--fit-profile none`. Procedure (in the file header, BOSL2-`$slop`-style): probe which
+  ⌀2.90 / 3.00 / 3.05 / 3.15 / 3.35 plus a ⌀3.00 rod pin, printed at
+  `--fit-profile none`. The five bores are `FIT_GAP_MM`'s four classes
+  (`press −0.10`, `snug +0.05`, `sliding +0.15`, `free +0.35`) plus a line-to-line
+  reference, and the file's `FitCoupon` assembly `connect`s a gauge to each class
+  so the ladder cannot drift from the constant without the file ceasing to
+  evaluate.
+
+  > **Corrected 2026-08-02.** This bullet, and the file, read
+  > ⌀2.90 / 3.00 / 3.10 / 3.20 / 3.30 — a `−0.10 / 0 / +0.10 / +0.20 / +0.30`
+  > ladder that had never matched the shipped `FIT_GAP_MM`, with a header calling
+  > +0.10 "snug". Only one rung carried a `connect`, so four of the five were
+  > holding nothing. Both file and bullet are now cut from the constant; see
+  > `docs/decisions-log.md` **D-008**.
+
+  Procedure (in the file header, BOSL2-`$slop`-style): probe which
   hole yields press/snug/sliding; `holeCompMm = (⌀ that achieved the fit) − (designed ⌀
   for that fit)`. One variable per coupon, production filament and profile, per the
   Bambu discipline (§3). Results land in the `/prototype` catalog and update

@@ -171,8 +171,18 @@ scalar `holeCompMm` (0.20 PLA / 0.25 PETG in `PRINTER_PROFILES`) assumes the ans
 the second half is "no". That assumption has never been checked, and six bores across a
 3×range is the cheapest way to check it. Fit-Coupon's single ⌀3 ladder structurally
 cannot see it — which is why this card **extends** `Fit-Coupon.bkr` rather than
-replacing it. That file stays exactly as it is; it is still catalog entry W-F1's coupon
-and its ⌀3 ladder is correct as far as it goes.
+replacing it, and its ⌀3 ladder is correct as far as it goes.
+
+> **Corrected 2026-08-02.** This paragraph used to add "that file stays exactly as
+> it is; it is still catalog entry W-F1's coupon." Neither half survived. The file
+> was shipping a `+0.10 / +0.20 / +0.30` ladder against a `FIT_GAP_MM` of
+> `−0.10 / +0.05 / +0.15 / +0.35` — drifted from the constant it calibrates, which
+> is the exact failure the `MC1Fit` assertion below exists to prevent, so
+> `Fit-Coupon.bkr` was re-cut to the shipped values and given the same four
+> `connect`s. And W-F1 is now `Clipseat-Fit-Coupon.bkr`, a different joint; see
+> `docs/decisions-log.md` **D-008**. The drift is why the assertion is now written
+> once per fit class in both files rather than once per file: a rung with no
+> `connect` has nothing holding it to the constant.
 
 **`MC1FitLadder`** — 70 × 20 × 6 mm, five bores at `ref_d` (default 6 mm) offset by the
 shipped ladder verbatim: press −0.10, line-to-line 0, snug +0.05, sliding +0.15,
@@ -187,6 +197,12 @@ machine's XY dimensional error alone; a printed **bore** carries XY error *plus*
 shrinkage. Only the difference is `holeCompMm`. Caliper both. `MC1FitGauge` is the
 ladder's mating pin at `$ref_d`; at the default `ref_d = 6` it is geometrically
 identical to `MC1Pin06`, so print one of the two.
+
+`MC1FitGaugePress`, `MC1FitGaugeSliding` and `MC1FitGaugeFree` are the same rod at
+the same diameter, declaring a different `fit` class each. They are one physical
+part — print `MC1FitGauge` once and try it in all five bores. They exist as four
+pieces because a `connect` places a piece, and one piece cannot be placed in four
+bores at once; four pieces is what buys the four assertions below.
 
 **The ladder asserts itself against the constant.** The `MC1Fit` assembly connects
 `MC1FitGauge.grip` (declared `fit snug`) to `MC1FitLadder.snug`, which runs the shipped
@@ -361,7 +377,8 @@ cd bikar
 CARD=patterns/Coupons/Machine-Card.bkr
 OUT=../3d-models/build/stls/coupons/machine-card
 
-# MC-1 — bore & fit plate
+# MC-1 — bore & fit plate. MC1FitGaugePress/Sliding/Free are the same rod as
+# MC1FitGauge and are deliberately absent: they exist to carry assertions, not meshes.
 for P in MC1BoreSweep MC1FitLadder MC1FitGauge \
          MC1Pin03 MC1Pin04 MC1Pin05 MC1Pin06 MC1Pin08 MC1Pin10; do
   bikar render $CARD --format stl --check --piece $P -o $OUT/$P.stl
