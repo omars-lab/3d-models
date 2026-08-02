@@ -1,0 +1,24 @@
+#!/bin/sh
+# Doc-pointer gate (.claude/gates/doc_pointers.py). Every backticked path in
+# CLAUDE.md, .claude/skills/**, .claude/gates/** and docs/** must name a file
+# that exists — here, in a sibling repo, or in the baseline with a reason.
+# Ported from bikar's scripts/check-doc-pointers.ts; the transfer conditions
+# are in the gate's own module docstring.
+#
+# Whole-tree, not --staged: the check is a ratchet against
+# .claude/gates/doc-pointer-baseline.json, and a staged-only run cannot tell a
+# newly-broken pointer from one the baseline already carries.
+# Override once: DOC_POINTERS_OK=1 git commit
+[ -n "$DOC_POINTERS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the doc-pointer gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 20-use-cases and 30-docs-gate: `gh-pages` carries
+# `.githooks` and not `.claude`, and its commits are built site output.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/doc_pointers.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no doc-pointer gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"

@@ -200,7 +200,7 @@ path**, and the baseline's `_comment` says which group each is in:
 
 The gate was green in the working checkout and, run for the first time in a fresh
 worktree, immediately failed on **4 pointers into `dist/`** —
-`packages/core/dist/index.js` and friends, in `dev-workflow/SKILL.md`, `CLAUDE.md`
+`packages/core/dist/index.js` and friends, in `.claude/skills/dev-workflow/SKILL.md`, `CLAUDE.md`
 and `docs/lessons.md`. Those files exist in a checkout that has been built all
 week and in no other.
 

@@ -180,7 +180,7 @@ from first principles.
 
 ### 2.2 The experiment has already been run in this project, and it failed
 
-qiyas ships `.claude/hooks/web-source-curation-watch.sh` — fires on
+qiyas ships `qiyas/.claude/hooks/web-source-curation-watch.sh` — fires on
 `PostToolUse(WebSearch|WebFetch)`, emits *"consider adding the source to
 `docs/citations.md`"*. It is wired in `.claude/settings.json` and has been live
 since **2026-05-11**.

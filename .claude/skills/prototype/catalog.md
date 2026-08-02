@@ -458,7 +458,7 @@ earned until it records its provenance).
 # Tile-wall connector ladder (W-series)
 
 The W-series validates the **modular tile-wall** work (design docs
-`docs/w1-tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
+`docs/tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
 These coupons decide the connector grammar — clipseat fit and the printed
 CornerClip — in plastic before any full wall is committed. Same learning-ladder
 rule: the fit coupon (W-F1) settles the blade clearance the clip coupon (W-C1)

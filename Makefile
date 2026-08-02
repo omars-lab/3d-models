@@ -22,6 +22,14 @@ openscad := $(shell \
 # views, and styles a hero view into a gallery preview PNG. The .bkr
 # sources are copied into src/Orbs/ so the gallery's Source links resolve
 # in this repo.
+# Overridable because the interpreter that runs the gates (stdlib only) is not
+# always the one carrying Pillow and PyYAML. On 2026-08-02 `make deploy` failed
+# at web-images on a machine where the first python3 on PATH had no PIL and a
+# conda env did — and the error said "pip install pillow", which was the wrong
+# advice. Point this at the interpreter that has the deps instead:
+#   make deploy PYTHON=/path/to/python3
+PYTHON ?= python3
+
 BIKAR_DIR := ${HOME}/Workspace/git/bikar
 BIKAR := node $(BIKAR_DIR)/packages/cli/dist/index.js
 ORB_VIEWS := $(ROOT_DIR)/build/orb-views
@@ -34,7 +42,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bricks lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -63,6 +71,16 @@ validate-use-cases:
 validate-docs:
 	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
 	python3 ${ROOT_DIR}/.claude/gates/docs_gate.py
+
+# Doc-pointer gate: every backticked path in CLAUDE.md, .claude/skills/**,
+# .claude/gates/** and docs/** must name a file that exists — here, in a sibling
+# repo (resolved against a git ref, never someone else's working tree), or in
+# .claude/gates/doc-pointer-baseline.json with a stated reason. Ported from
+# bikar's scripts/check-doc-pointers.ts; the transfer conditions and what
+# deliberately did *not* transfer are in the gate's module docstring.
+validate-pointers:
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/doc_pointers.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/doc_pointers.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks

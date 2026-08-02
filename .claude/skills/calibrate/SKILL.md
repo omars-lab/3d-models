@@ -32,7 +32,7 @@ bet cannot drift away from the value it governs.
 ## Workflows
 
 **Harvest** — sweep three surfaces: design-doc Appendix B + Open Questions,
-`prototype/catalog.md` entries, and the generated registry. Classify every
+`.claude/skills/prototype/catalog.md` entries, and the generated registry. Classify every
 unsettled claim as **EMPIRICAL** (a measurement decides it) or **ARGUED**
 (sources or reasoning decide it — that belongs to `ground-design-doc`).
 Misfiling an ARGUED claim as a bet is this skill's main failure mode: it buys a
