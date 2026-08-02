@@ -760,6 +760,15 @@ LDraw's own convention rather than merely consistent, and that certifying
 changes nothing for a consumer that ignores BFC. Certifying the wrong handedness
 is worse than not certifying — the consumer would cull the faces it should keep.
 
+> **Corrected 2026-08-02, twice.** The proposal was taken up — §9 established
+> both conditions and bikar now writes `0 BFC CERTIFY CCW` in every block, so
+> the test quoted above no longer exists and the exporter no longer omits the
+> line. And the mechanism described here is wrong: *"every triangle is built
+> twice, in both winding orders"* was read off the loader's
+> `totalFaces += doubleSided ? 2 : 1`, which is an **allocation**, not a build.
+> Measured in §9.4, the reserved back half is never filled — it stays `(0,0,0)`
+> under a `FrontSide` material. The count doubled; the geometry did not.
+
 ### 8.4 What this does *not* establish
 
 - **No picture was produced.** The read-back returns counts, not pixels.
@@ -834,9 +843,13 @@ count cannot:
 
 | Variant | triangles built, per placement | signed volume of what was built | faces kept |
 |---|---|---|---|
-| no `0 BFC` line — as shipped today | 7,528 | +62,282 LDU³ | both sides |
+| no `0 BFC` line — as shipped on 2026-08-01, not since | 7,528 buffer slots, **3,764 with area** (see §9.4) | +62,282 LDU³ | **outward** — three builds a `FrontSide` mesh from the authored winding |
 | `0 BFC CERTIFY CCW` | 3,764 | **+62,282 LDU³** | **outward** |
 | `0 BFC CERTIFY CW` | 3,764 | **−62,282 LDU³** | **inward** |
+
+*The first row's "faces kept" cell read "both sides" until 2026-08-02. That was
+an inference from the spec's NOCERTIFY wording, not a measurement, and §9.4
+corrects it.*
 
 **Validator:** certifying CCW must leave a BFC-checking consumer holding the
 same outward surface the file describes, at the file's own face count.
@@ -868,3 +881,44 @@ originals in the layout I probed. I do not know how three lays them out. It
 changes none of the three rows above, each of which is measured rather than
 inferred, but it is the kind of loose end that turns into a wrong claim if
 written up as though it were understood.
+
+### 9.4 The loose end, resolved — 2026-08-02
+
+§9.3's loose end was worth leaving open: pulled on, it turned out to hold a
+wrong claim, and the claim was in the table above rather than in the anomaly.
+
+Probing the uncertified buffer directly — every vertex, not just the sum —
+gives `22,584` position entries of which exactly **half are `(0,0,0)`**, all of
+them in the back half, under a material whose `side` is `FrontSide (0)`. So
+three does not build the reversed copy at all. It *sizes* the buffer for the
+worst case (`doubleSided ? 2 : 1` is an allocation decision, made before the
+faces are written) and fills only what it draws. Zero-area slots contribute
+zero volume, which is why the uncertified sum is not near zero but
+bit-identical to the certified-CCW sum.
+
+Two consequences, both now fixed in bikar (PR #63):
+
+1. **`LDrawReadBack.triangles` was counting buffer slots**, so the panel
+   reported an uncertified file as carrying twice the geometry it has. It now
+   counts triangles with area, and reports the reserved-and-unfilled slots
+   separately as `degenerate`.
+2. **"Both sides kept" was never measured.** It was read off S7's definition of
+   NOCERTIFY — *a consumer may not cull* — as though "may not cull" implied
+   "keeps both windings". It does not: the spec constrains what a consumer may
+   *discard*, and says nothing about what it draws instead. This consumer draws
+   the authored winding, front-side, and stops. The panel's "both sides kept —
+   no BFC certification" verdict fired on `|volume| < 1` and therefore could
+   never fire on a real brick; it is gone.
+
+**Validator:** the read-back's triangle count must equal the type-3 lines the
+file actually contains, whether or not the file certifies.
+
+- PASS: uncertified and CCW-certified `Classic-Brick` both report `3,764`, and
+  the uncertified read additionally reports `3,764` unfilled slots.
+- FAIL: the pre-fix behaviour — `7,528` for the uncertified file against
+  `3,764` type-3 lines in the block, a doubling with no geometry behind it.
+
+This is a **K1** instance caught late: S7's hedge (*may not cull*) was hardened
+into a claim about what gets drawn. It survived §9.3 because §9.3 was looking
+for an explanation of the *number* and did not re-examine the *word* in the
+cell beside it.
