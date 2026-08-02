@@ -932,20 +932,21 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
 
 ## LG-B2 — Off-grid anchor (5-fold rosette)
 
-- **Status**: planned (printing on hold; blocked on LG-B1) — **and the model
-  does not exist yet.** `patterns/Lego/` ships seven bricks and none of them is
-  a five-fold rosette; the nearest source of the outline is
-  `patterns/Rosettes/*.bkr`, which are 2D patterns with no `brick` declaration.
-  Authoring it is the first step of this coupon, not a lookup.
-- **Model** (to author): `bikar/patterns/Lego/Rosette-Brick.bkr` — a five-fold
-  rosette piece whose outline is genuinely incommensurable with the square
-  lattice, anchored by two tubes. **The load-bearing bet of the entire anchor-only
-  approach** (design doc §1, §5.3, Appendix B.2): that a printed piece's outline
-  need not obey the grid so long as its interface does.
+- **Status**: model authored (bikar `bf6c602`, 2026-08-02, riding the
+  `footprint outline` mode that shipped in the same commit); printing on hold,
+  blocked on LG-B1.
+- **Model**: `bikar/patterns/Lego/Rosette-Brick.bkr` — a ten-fold rosette (the
+  five-fold girih family) whose scalloped outline is genuinely incommensurable
+  with the square lattice. At the default radius 20 it compiles to a 6×5 grid
+  with **six tube anchors** in the eight fully-covered lattice cells — the
+  earlier sketch here said "two tubes"; the build is the authority. **The
+  load-bearing bet of the entire anchor-only approach** (design doc §1, §5.3,
+  Appendix B.2): that a printed piece's outline need not obey the grid so long
+  as its interface does.
 - **Print target**: TBD.
 - **What we want to learn**:
   - [ ] 1. Does rotation lock actually hold when the outline is incommensurable
-    — or does the piece rock/twist on two anchors in a way a rectangular piece
+    — or does the piece rock/twist on its anchors in a way a rectangular piece
     does not? (Appendix B.2 is reasoned, not measured.)
   - [ ] 2. Does a piece whose body only partly covers its footprint have enough
     material around each anchor, i.e. is §5.2's 0.4 mm body-clearance test

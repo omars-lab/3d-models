@@ -15,21 +15,6 @@
   ],
   "unresolved": [
     {
-      "doc": "docs/pattern-outline-brick-design.md",
-      "path": "bikar:docs/decisions/2026-08-02-pattern-outline-footprint.md",
-      "why": "Forward reference. §6 names the decision doc the bikar implementation must ship; it is absent by design until that implementation lands. Goes when the surface is built."
-    },
-    {
-      "doc": ".claude/skills/prototype/catalog.md",
-      "path": "bikar/patterns/Lego/Rosette-Brick.bkr",
-      "why": "Forward reference. The line reads `**Model** (to author)` — LG-B2's coupon is authored as the first step of running it, so the file is absent by design until then."
-    },
-    {
-      "doc": "docs/backlog.md",
-      "path": "patterns/Lego/Rosette-Brick.bkr",
-      "why": "Same file as above, from the register table, whose own cell says it 'does not exist'. Both entries go when LG-B2 is authored."
-    },
-    {
       "doc": "docs/click-to-source-design.md",
       "path": "src/lang/std/artifactGraph-README.md",
       "why": "Third party — KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."

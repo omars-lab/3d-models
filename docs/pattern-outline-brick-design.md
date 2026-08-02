@@ -4,8 +4,11 @@ Status: **v2 — drafted and adversarially audited 2026-08-02
 ([`research/pattern-outline-brick-grounding-audit.md`](research/pattern-outline-brick-grounding-audit.md));
 findings F1–F7 applied same day, and the audit's two demanded computations (F3 cusp floor, F4
 component count) were executed against the rosette corpus — results in §5.** The kernel side is
-already built and tested in bikar (§2); this doc specifies the missing language surface. Nothing
-here ships plastic: the physical questions stay with LG-B2 and its bets (Appendix B.4).
+already built and tested in bikar (§2); this doc specifies the missing language surface.
+**Implemented 2026-08-02** (bikar `bf6c602`, decision doc
+`bikar:docs/decisions/2026-08-02-pattern-outline-footprint.md`) with `Rosette-Brick.bkr`
+authored in the same commit; one §6 cell diverged in the small — see the table's grammar row.
+Nothing here ships plastic: the physical questions stay with LG-B2 and its bets (Appendix B.4).
 
 Scope: the smallest bikar DSL extension that lets a `.bkr` declare a brick whose silhouette **is**
 the inscribed pattern's outline rather than a stud-grid rectangle — the body case
@@ -307,7 +310,7 @@ pinch error ("two regions touch at a single point", `chainBoundaryRings`, evalua
 | V13's predicate (`evaluator.ts` L2401) | unchanged — stays keyed to `kind === 'auto'`; outline mode has no rectangular dead border, so the advisory staying off is the decision §4b records |
 | anchorability failure message | gains an outline-mode hint: "the body must fully cover ≥ 2 lattice cells; small or lacy outlines cannot engage the grid" (§4's practical floor) |
 | `kernel3d` | V18 check where `insetRing` is called; no change to `insetRing` itself |
-| `docs/grammar.md` | `BrickFootprint` production + §12 surface table row |
+| `docs/grammar.md` | `BrickFootprint` production; **no §12 row** — implementation found the coverage table keys on dispatched keywords only, and `outline` is a contextual identifier, not one (prose + contextual-words list + an invalid fence instead) |
 | `keywords.snapshot.txt` | **unchanged** — the whole point of the naming choice |
 | corpus-sweep | pre-flight `npx tsx scripts/corpus-sweep.ts` before and after; expected delta zero |
 | tests | parse (`footprint outline`, refusal without `inscribe`); eval (grid derivation, frame identity with relief); V18 star-tip FAIL case verbatim from §5; V19 two-component FAIL case; an end-to-end outline brick rendered `--check` watertight |
