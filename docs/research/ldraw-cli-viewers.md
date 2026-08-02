@@ -780,3 +780,91 @@ registry; the two files read afterwards were the installed copies of
 `LDrawLoader.js` and `LDrawConditionalLineMaterial.js` under `node_modules`,
 read locally. Version 0.185.1 — recorded because §8.2's first two corrections
 are version-dependent and the original §1.4 recorded no version at all.
+
+---
+
+## 9. The BFC differential — 2026-08-02
+
+§8.3 raised the BFC question and deliberately did not answer it. This section
+answers it, by the test §5.3 of
+[`lego-ldraw-export.md`](lego-ldraw-export.md) said was missing.
+
+### 9.1 The hedge that was actually load-bearing
+
+Both prior treatments reached the same conclusion and stopped at the same place.
+`lego-ldraw-export.md` §5.3: *"Consistently-outward winding in a right-handed
+frame means each triangle reads counter-clockwise viewed from outside; §1.4's map
+has `det +1` and therefore preserves that. So `0 BFC CERTIFY CCW` is derivable"* —
+then: ***"Hedge, and it is load-bearing: I did not render the output in a
+BFC-checking viewer."*** The emitter's own module docstring repeats it almost
+word for word. §6 item 9 lists it as untested.
+
+Two claims were being carried, and only one of them was hedged:
+
+1. That our winding is CCW-outward **in LDraw's frame**. Argued from the axis
+   map's `det +1` plus S1 verbatim — *"LDraw uses a right-handed co-ordinate
+   system where -Y is 'up'"* — and never measured on emitted bytes.
+2. That a consumer honouring `0 BFC CERTIFY CCW` keeps the **outward** faces
+   rather than the inward ones. Never tested at all, because no BFC-checking
+   consumer had run.
+
+three.js is a BFC-checking consumer: `LDrawLoader.js` reads `0 BFC` and sets
+`doubleSided = ! bfcCertified || ! bfcCull` before pushing each face. §8 got one
+running. So both claims became testable locally, with no install.
+
+### 9.2 Measured, on the emitted file
+
+Claim 1, straight off the bytes. Read every type-3 line of the inline block as
+plain R³ and take the signed volume of the closed surface,
+`Σ a·(b×c) / 6` — positive exactly when every triangle is wound
+counter-clockwise as seen from outside, in a right-handed reading, and the
+divergence theorem needs no convexity for it:
+
+```
+triangles     : 3764
+signed volume : +62282.2 LDU³  (+3986.1 mm³)
+reading       : CCW-outward (right-handed)
+```
+
+Claim 2, as a three-way differential through the loader. Same bytes, with
+`0 BFC CERTIFY CCW` and then `0 BFC CERTIFY CW` inserted after the inline
+block's `0 FILE` header, and the signed volume taken of the geometry three.js
+*actually built* — which is what says **which side survived**, where a triangle
+count cannot:
+
+| Variant | triangles built, per placement | signed volume of what was built | faces kept |
+|---|---|---|---|
+| no `0 BFC` line — as shipped today | 7,528 | +62,282 LDU³ | both sides |
+| `0 BFC CERTIFY CCW` | 3,764 | **+62,282 LDU³** | **outward** |
+| `0 BFC CERTIFY CW` | 3,764 | **−62,282 LDU³** | **inward** |
+
+**Validator:** certifying CCW must leave a BFC-checking consumer holding the
+same outward surface the file describes, at the file's own face count.
+
+- PASS: the CCW row's face count equals the 3,764 type-3 lines in the block,
+  and its signed volume equals the +62,282 LDU³ measured directly off those
+  lines. Both hold exactly.
+- FAIL: the CW row — same halving, same magnitude, **opposite sign**. A
+  consumer handed that file builds the inside-out surface and reports nothing.
+  This is the counterexample §5.3's hedge existed to demand, and it confirms
+  the hedge was pointing at something real: the count alone cannot tell the two
+  apart.
+
+### 9.3 What this settles, and one thing it does not
+
+It settles both claims **for three.js**, and only for three.js. LDView and the
+other ten remain un-run; §8.4 still stands. But the specific hedge — *"I did not
+render the output in a BFC-checking viewer"* — no longer describes the project.
+One has now run, and it agrees with the derivation rather than upsetting it.
+
+**Unexplained, and recorded rather than reasoned away.** In the uncertified row
+three builds 7,528 triangles per placement — exactly double the file's 3,764,
+matching `totalFaces += doubleSided ? 2 : 1` in the loader — yet the signed
+volume of that buffer is `+62,282`, the *same* as the certified-CCW row rather
+than the zero a set of faces plus their reverses would give. The buffer is
+non-indexed and its first two faces are two genuinely distinct triangles of a
+quad, so the duplicates are neither interleaved with nor blocked after the
+originals in the layout I probed. I do not know how three lays them out. It
+changes none of the three rows above, each of which is measured rather than
+inferred, but it is the kind of loose end that turns into a wrong claim if
+written up as though it were understood.

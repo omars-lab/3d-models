@@ -669,7 +669,14 @@ human, and §1.4's vitest case is the answer that was passed over here.
 
 ## D-010 — Do not certify BFC until the winding's *handedness* is established
 
-**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** bikar
+**Date:** 2026-08-02 · **Status:** **Reversed the same day — see D-012** ·
+**Repos:** bikar
+
+> Superseded 2026-08-02. Its reversal condition fired within the hour: the
+> handedness was measured off the emitted bytes and confirmed against a
+> consumer that culls. The entry is kept because the condition it named is the
+> reason the reversal was cheap, and because the refusal was correct on the
+> evidence available when it was made.
 
 ### Context
 
@@ -751,3 +758,75 @@ own DSL. The routine check stays local and stays §1.4's.
 Nothing to reverse — it is a single act, not a standing practice. What would
 **extend** it is exactly what §6 item 12 says: every local route failing. Making
 this the routine check without that is the thing to refuse.
+
+---
+
+## D-012 — D-010 reversed the same day: certify CCW
+
+**Date:** 2026-08-02 · **Status:** Decided (owner) · **Repos:** bikar, 3d-models
+· **Supersedes:** D-010
+
+### Context
+
+D-010, decided this morning, declined to emit `0 BFC CERTIFY CCW` and wrote its
+own reversal condition:
+
+> Establishing the handedness — from the axis map composed with LDraw's stated
+> face-winding convention, confirmed by a consumer that actually culls. Then
+> `0 BFC CERTIFY CCW` is free and should ship.
+
+Both halves were met within the hour, and neither needed anything installed.
+
+**The stated convention** was already in the repo, read first-hand in
+[`lego-ldraw-export.md`](research/lego-ldraw-export.md) §4 — S1 verbatim,
+*"LDraw uses a right-handed co-ordinate system where -Y is 'up'."* A
+right-handed reading is therefore the correct one, and the signed volume of the
+emitted block's 3,764 type-3 lines in that reading is **+62,282 LDU³**: wound
+counter-clockwise as seen from outside.
+
+**A consumer that culls** turned out to be the one §8 already had running.
+three.js honours `0 BFC`. Feeding it the same bytes three ways
+([`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.2) separates the
+right certification from the wrong one, which a face count cannot: `CERTIFY CCW`
+builds 3,764 faces at **+62,282 LDU³**, `CERTIFY CW` builds 3,764 at
+**−62,282 LDU³**. Outward versus inside-out, same count, opposite sign.
+
+### Decision
+
+**Emit `0 BFC CERTIFY CCW` in the inline block. Keep `0 !LICENSE` off.**
+
+D-010 was right to refuse on the evidence it had, and the refusal cost about
+four hours. What made it cheap to reverse is that D-010 named a condition
+rather than a preference — "until the handedness is established" is a thing
+that can be established, where "it feels premature" is not.
+
+Note what actually moved. The *derivation* is unchanged and was never in
+doubt: `lego-ldraw-export.md` §5.3 had it in April, the emitter's docstring
+restates it, and D-010 restated it again. Three documents agreed on the
+conclusion and all three declined to act on it, because each carried the same
+hedge — *"I did not render the output in a BFC-checking viewer."* The hedge was
+correct and it was also, for that whole period, one `npm i three` away from
+being dischargeable. **A hedge that nobody prices is a hedge that never
+expires.**
+
+`0 !LICENSE` is untouched by this and stays off: it asserts a CC BY 4.0 grant
+over the geometry that nobody in this project has made, which is a question
+about permission and not about winding.
+
+### What would reverse it
+
+A BFC-checking consumer that culls our certified file's *outward* faces —
+i.e. disagrees with three.js about what `CCW` means here. LDView is the one
+that matters, since it is what a person is most likely to open the file in, and
+it is still un-run. If it renders the certified file inside-out, the line comes
+straight back out and §9.3's "for three.js, and only for three.js" is why this
+entry does not claim more than it measured.
+
+### The graduation
+
+Per CLAUDE.md, the obligation is the test that fails before and passes after.
+It is a bikar unit test asserting the emitted block's signed volume in LDraw
+coordinates is positive **and** that the `0 BFC CERTIFY CCW` line is present —
+the first is the precondition the certification rests on, so a future change
+that silently flipped the winding would fail on the number rather than on the
+line.
