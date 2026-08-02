@@ -1,9 +1,12 @@
 # Lego Pattern Set — one pattern → c×r pinned pieces (`mural`) — design doc
 
-Status: **v1 — drafted 2026-08-02. The adversarial grounding audit (C4) has not run yet;
-Appendix B lists the bets this document knows it is making, and every clutch or registration claim
-below is provisional until the LG-P coupons print.** The kernel prerequisite (§7, bikar Milestone A)
-is built and tested; the `mural` language surface (§4–5) is specified here and built in Milestone B.
+Status: **v1 — drafted 2026-08-02, through the adversarial grounding audit (C4) the same day
+([research/lego-pattern-set-grounding-audit.md](research/lego-pattern-set-grounding-audit.md):
+two internal-consistency defects and one misattributed citation found and fixed in place; all four
+Appendix-B bets survived counter-evidence search). Every clutch or registration claim below
+remains provisional until the LG-P coupons print.** The kernel prerequisite (§7, bikar
+Milestone A) is built and tested; the `mural` language surface (§4–5) is specified here and built
+in Milestone B.
 
 Scope: a new `mural` declaration in bikar that takes one holistic 2D pattern (the primary use case
 is Islamic geometry) and decomposes it along the **nominal 8.0 mm LEGO stud grid** into a c×r array
@@ -16,7 +19,8 @@ Builds on: [`lego-lab-design.md`](lego-lab-design.md) (the `brick` declaration, 
 gates — a mural piece **is** a brick); [`research/lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md)
 (the Appendix-A survey behind every dimensional claim here);
 [`tile-wall-design.md`](tile-wall-design.md) (what does *not* transfer — §3);
-[`decisions-log.md`](decisions-log.md) (D-008 will record the cut rule and the L78 ruling — C5).
+[`decisions-log.md`](decisions-log.md) (D-013 will record the cut rule and the L78 ruling — C5; D-008 through D-012 are already
+assigned, a numbering collision the C4 audit caught).
 
 **Decisions locked by Omar, 2026-08-01, before this doc was written.** (1) Rectangular grid tiles
 on the stock 8 mm pitch — the plates one buys at Target, not a custom pinboard. (2) Mount is
@@ -63,6 +67,20 @@ seam registration**. dlvoy splits blank plates and its README says nothing about
 mosaic services tile 1×1 studs where the grid *is* the image. The claim is scoped to that surveyed
 set, not to the world; but within it, LG-P1 has no published predecessor.
 
+Two near-misses found by the C4 audit
+([research/lego-pattern-set-grounding-audit.md](research/lego-pattern-set-grounding-audit.md))
+sharpen rather than defeat the gap claim. Brickapic
+([bricksly.net/tools/brickapic](https://bricksly.net/tools/brickapic), unfetched — 403, snippet
+only) splits one mosaic image across multiple 32×32/48×48 baseplates and re-renders "a grid
+overlay showing you exactly where the seams will sit" — seam-aware panelization, but of stock 1×1
+parts, with no printed pieces, no relief, and nothing validated. Custom-print vendors
+(EclipseBricks, BrickBuildersPro, PriBri — via
+[thebrickblogger.com](https://thebrickblogger.com/2025/04/add-mosaics-and-murals-to-your-lego-city/),
+fetched) sell continuous mural images spanning multiple stock tiles — pattern continuity across
+seams, but by 2D printing on moulded parts. Both do half of LG-P1's job; neither does the half
+this doc exists for: engraved relief on printed bodies whose seam registration is checked, not
+hoped.
+
 ## 2. Engine ground truth
 
 Verified against bikar at **`834dfc2`** (branch `feat/edge-to-edge-relief`; the two commits above
@@ -102,16 +120,27 @@ per side), and the art cut at the nominal line loses exactly 0.2 mm of continuit
 more, because the kernel clips relief at the physical outline, not at an inset (§5, §7).
 
 **Default:** inter-piece seam = `PART_RELIEF_MM` = 0.2 mm, i.e. 0.1 mm relief per side. This is
-LEGO's own convention, measured independently three ways: Cailliau's caliper pages
+LEGO's own convention, measured independently four ways: Cailliau's caliper pages
 ([cailliau.org](https://www.cailliau.org/Alphabetical/L/Lego/Dimensions/General%20Considerations/%20General%20Considerations-en.html),
 "0.1 mm play on each side", a 2×4 measuring 31.8 × 15.8 mm), Brick Owl's "8x − 0.2 mm" brick
-length ([brickowl.com](https://www.brickowl.com/help/stud-dimensions)), and the latericius guide's
-7.8 × 7.8 mm unit footprint. A printed piece inherits a proven inter-part gap, not an invented one.
+length ([brickowl.com](https://www.brickowl.com/help/stud-dimensions)), the latericius guide's
+7.8 × 7.8 mm unit footprint, and Bartneck's dimensioned CAD drawings
+([bartneck.de](https://www.bartneck.de/2019/04/21/lego-brick-dimensions-and-measurements/),
+"there is a 0.2mm gap between bricks next to each other" — the fourth leg, added by the C4 audit).
+A printed piece inherits a proven inter-part gap, not an invented one — though printed-brick
+practice sometimes *widens* the clearance to ~0.2 mm per side for FDM (unverified snippet, audit
+claim 2), which is LG-F1/LG-P1 territory, not a number this doc adopts.
 
-The seam **will be visible**. At a 45 cm viewing distance 0.2 mm subtends ≈1.5 arcmin — at the
-20/20 resolution limit as a feature, and far above dark-line *detection* thresholds (survey §4;
-the sub-arcsecond Hecht & Mintz figure is snippet-sourced and unverified, but even the
-conservatively-sourced 1 arcmin makes a high-contrast groove detectable). The design stance
+The seam **will be visible where it crosses lit relief** — a 0.2 mm slot between raised edges
+self-shadows into exactly the high-contrast dark line the acuity literature measures. At a 45 cm
+viewing distance 0.2 mm subtends ≈1.5 arcmin — at the 20/20 resolution limit as a feature, and
+far above dark-line *detection* thresholds (survey §4; the sub-arcsecond Hecht & Mintz figure is
+a corroborated secondary — *J Gen Physiol* 1939;22:593–612, primary unfetched — and even the
+conservatively-sourced 1 arcmin makes a high-contrast groove detectable). In flat matte
+blank-field regions the sourced thresholds do not directly apply (the fetched vernier review
+requires Michelson contrast ≥ 0.22 for optimal performance), so there the seam may read fainter —
+which costs the design nothing, since those are the regions with no art to interrupt. The design
+stance
 follows: do not chase invisibility; align cuts with the pattern's own construction lines so the
 grid reads as intentional. That stance is our inference, marked as such in the survey (§4.2), not
 a sourced fact.
@@ -157,8 +186,9 @@ holds no measured entry.
 ## 4. Language surface — the `mural` declaration
 
 Specified here; built in Milestone B. One new reserved word (`mural`), gated before implementation
-by the corpus sweep (`bikar:scripts/corpus-sweep.ts`, 328 `.bkr` files across four repos) so an
-existing script cannot be broken by the reservation; fallback name `panelwork`. `mosaic` is
+by the corpus sweep (`bikar:scripts/corpus-sweep.ts`; 345 `.bkr` files across four repos at the
+2026-08-02 sweep, all parsed, none using the word) so an existing script cannot be broken by the
+reservation; fallback name `panelwork`. `mosaic` is
 rejected because lego-lab reserved it *as an error* pointing at the LG2 non-goal, and `panel`
 collides with Lab vocabulary.
 
@@ -173,8 +203,11 @@ mural StarMural
 ```
 
 - `pieces c x r of f x g` — required; `x`/`of` are bare identifiers per the `footprint` precedent.
-  The worked default `4 x 4 of 4 x 4` spans 32×32 studs = 256 mm — exactly one 32×32 baseplate
-  (survey §1.1: 640 LDU), each piece 31.8 × 31.8 mm.
+  The worked default `4 x 4 of 4 x 4` spans 16×16 studs = 128 mm — one quadrant of a 32×32
+  baseplate (survey §1.1: 640 LDU = 256 mm full plate), each piece 31.8 × 31.8 mm. A full 32×32
+  plate is `4 x 4 of 8 x 8` (16 pieces of 63.8 mm) or `8 x 8 of 4 x 4` (64 pieces, the §6 cap).
+  The C4 audit caught the first draft claiming this default spans a full plate — false by §3.1's
+  own formula (8·4·4 = 128, not 256): the taxonomy's K7 class, fixed here.
 - `height` and `relief depth` — per-piece, passed through to every `BrickSpec` unchanged. All
   brick validators (V1–V13) run per piece. `relief depth` is required and must clear
   `BRICK_MIN_FEATURE_MM` (§2).
@@ -187,7 +220,7 @@ mural StarMural
   because a hole in the wall of pieces is worse than a blank; `skip` omits it and the layout
   report says so. `slivers` — fragments thinner than the printable floor are dropped by default
   with their area reported (§6 V15 makes the ledger close), `keep` passes them to the kernel
-  (which may refuse), `error` refuses the mural. These two are policy choices recorded in D-008
+  (which may refuse), `error` refuses the mural. These two are policy choices recorded in D-013
   (C5), not empirical constants — hence no `**Default:**` provenance marker: there is no
   measurement they could cite.
 
@@ -324,6 +357,12 @@ baseplate slab), Cailliau + Brick Owl + latericius (the 0.2 mm inter-part gap, t
 absence finding on clone-plate pitch consistency (§2.2), the split-pattern prior-art gap (§3), and
 the acuity/FDM-error numbers (§4).
 
+The C4 adversarial grounding audit of this document is preserved verbatim at
+[`research/lego-pattern-set-grounding-audit.md`](research/lego-pattern-set-grounding-audit.md)
+(2026-08-02): claim-by-claim verdicts, the counter-evidence deep dives behind §1's near-miss
+paragraph and B.1's tuned-printer divergence, citation spot-checks (five fetched, all confirmed
+except B.4's bulge attribution, fixed), and the two K7 defects this revision corrects.
+
 ## Appendix B — contested bets and divergences
 
 Entries tagged `[CAL-…]` are empirical bets no source can close; ids live in the registry
@@ -336,9 +375,17 @@ claim — pieces on a baseplate reconstitute the pattern — assumes the lateral
 crossing a seam stays below annoyance threshold. *Strongest counter:* FDM XY error (±0.1–0.3 mm,
 fetched JLC figure) exceeds vernier-acuity detection (4–11 µm ideal-edge equivalent at 45 cm) by
 one to two orders of magnitude, so a detectable jog is the *expected* outcome, not the tail risk;
-and no tuning of the 0.2 mm gap corrects a lateral jog. LG-P1 (two 2×2 pieces, one motif crossing
-the seam, on one genuine and one clone plate) measures apparent seam width and jog. Until it
-prints, "reconstitutes the pattern" is a bet. LG-P1 is print-gated and **held** pending a printer.
+and no tuning of the 0.2 mm gap corrects a lateral jog. *Tuned-printer counter to the counter
+(C4 audit):* Bambu-forum calibration threads report holding ±0.05 mm XY after per-filament flow
+calibration (unverified snippets) — the JLC band is a service-bureau envelope, not a floor. This
+narrows but does not overturn the bet: even ±0.05 mm per piece yields relative seam jogs of
+50–100 µm, five to ten times the vernier bound, so a detectable jog remains the expected outcome
+on the best available printer; "one to two orders of magnitude" is the uncalibrated worst case.
+LG-P1 (two 2×2 pieces, one motif crossing the seam, on one genuine and one clone plate) measures
+apparent seam width and jog. Until it prints, "reconstitutes the pattern" is a bet. LG-P1 is
+print-gated and **held** pending a printer; its catalog entry in
+[`.claude/skills/prototype/catalog.md`](../.claude/skills/prototype/catalog.md) is authored in C8
+and did not exist when this doc first shipped (audit finding 10).
 
 **B.2 — Clone-plate behaviour.** [CAL-CLB-01 — coupon LG-P2] §3.3's scoping ("LEGO-brand verified;
 clone unmeasured") rests on an absence: no surveyed source measures clone pitch consistency over a
@@ -357,8 +404,12 @@ grout, or engraved seam channels) becomes a v2 question.
 **B.4 — Elephant's foot vs the 0.2 mm gap.**
 **Default:** first-layer elephant-foot compensation ≈0.2 mm at a 0.4 mm nozzle, per
 [help.prusa3d.com](https://help.prusa3d.com/article/elephant-foot-compensation_114487) — vendor
-guidance, not a measurement on our printer. *The bet:* uncompensated first-layer bulge (0.1–0.2 mm
-per side, same source) can close the entire designed gap and mechanically prevent flush seating —
-a failure mode the top-view arithmetic in §3.1 never sees. LG-P1's coupon prints with compensation
+guidance, not a measurement on our printer. *The bet:* uncompensated first-layer bulge can close
+the entire designed gap and mechanically prevent flush seating — a failure mode the top-view
+arithmetic in §3.1 never sees. The Prusa page does **not** quantify the bulge (the C4 audit caught
+this doc attributing "0.1–0.2 mm per side" to it); we infer its order from the 0.2 mm compensation
+default that removes it, and community caliper examples (unfetched blog measurements:
+~0.25–0.3 mm per side on uncompensated prints) suggest it can run *larger* than our whole designed
+gap — the bet's failure mode is more credible, not less. LG-P1's coupon prints with compensation
 on; if seating still binds, the piece footprint may need a bottom-chamfer, which would be a kernel
 change (a fifth slab) and is deliberately **not** designed until measured.
