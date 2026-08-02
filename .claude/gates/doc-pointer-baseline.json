@@ -25,6 +25,16 @@
       "why": "Same file as above, from the register table, whose own cell says it 'does not exist'. Both entries go when LG-B2 is authored."
     },
     {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "bikar/patterns/Lego/Seam-Coupon.bkr",
+      "why": "Forward reference. LG-P1's line reads `**Model** (to author)` — the minimal 2×1-piece seam coupon is authored as the first step of running the coupon, so the file is absent by design until then."
+    },
+    {
+      "doc": "docs/backlog.md",
+      "path": "patterns/Lego/Seam-Coupon.bkr",
+      "why": "Same file as above, from the register table, whose own cell says it 'must be authored'. Both entries go when LG-P1 is authored."
+    },
+    {
       "doc": "docs/click-to-source-design.md",
       "path": "src/lang/std/artifactGraph-README.md",
       "why": "Third party — KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."

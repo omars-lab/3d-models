@@ -967,3 +967,70 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   |---|------|--------|----------|--------|----------|
 - **Feeds**: design doc Appendix B.2 (the rotation-lock criterion) and V8's
   WARN-not-ERROR call in §6; the P1 compatibility matrix's 5-fold row.
+
+## LG-P1 — Mural seam registration (two pieces, one motif)
+
+- **Status**: planned (printing on hold; blocked on LG-F1 producing a passing
+  rung — a piece that does not seat has no seam to measure) — **and the model
+  does not exist yet.** Star-Mural's pieces would work but carry a whole star
+  field; the coupon wants the cheapest two pieces that share one seam.
+- **Model** (to author): `bikar/patterns/Lego/Seam-Coupon.bkr` — a `mural` cut
+  `pieces 2 x 1 of 2 x 2`: two 2×2-stud pieces, one straight relief line
+  crossing the single seam perpendicular to it. The smallest object that can
+  answer **CAL-REG-01**: the mural machinery guarantees both sides of the seam
+  share exact vertex coordinates (`bikar` `mural-split.test.ts` asserts it),
+  but whether the *printed, seated* pieces keep that line straight is decided
+  by stud registration on a real plate, not by the graph.
+- **Print target**: whatever LG-F1 settled on; render with that `--fit-profile`.
+- **Mating part**: one real LEGO baseplate — the same plate class the set is
+  sold against.
+- **What we want to learn**:
+  - [ ] 1. **CAL-REG-01** — how far does the relief line jog laterally where it
+    crosses the seam? The prediction is ≤ the 0.2 mm physical gap (design doc
+    §3: the cut is nominal, the gap is physical, nothing re-registers art to
+    gap); measure the jog, don't eyeball it.
+  - [ ] 2. Does the 0.2 mm gap read as a groove in the art, or does the eye
+    continue the line across it at arm's length (design doc §3's seam-visibility
+    question, empirical by construction)?
+  - [ ] 3. Do stud clearance and elephant's foot leave the two top edges level,
+    or does a height step at the seam do more visual damage than the gap?
+  - [ ] 4. Seat/unseat/reseat both pieces five times: is the jog repeatable
+    (stud registration) or does it wander (clutch slop)?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `CAL-REG-01` (open, this is its coupon); design doc §3's
+  registration-vs-gap distinction — a measured jog beyond 0.2 mm is the only
+  thing that earns an art-side correction (decisions-log D-013's reversal
+  condition); the gallery's "seam 0.2 mm" spec chip.
+
+## LG-P2 — Clone-baseplate clutch differential
+
+- **Status**: planned (printing on hold; blocked on LG-F1 producing a passing
+  rung, and on buying the plates).
+- **Model**: two copies of the winning LG-F1 rung — the same file and profile
+  LG-D1 uses, so this coupon prices *plates*, not geometry.
+- **Print target**: whatever LG-F1 settled on; record it and change nothing.
+- **Mating parts**: one LEGO-brand baseplate and at least one clone plate of
+  the kind actually stocked at Target/Amazon (Mega or generic). Record brand,
+  SKU and purchase date per plate — "clone" is not one population.
+- **What we want to learn**:
+  - [ ] 1. **CAL-CLB-01** — does the LG-F1 rib that clutches a LEGO-brand plate
+    also clutch a clone plate, on the same fixed scale LG-D1 uses (falls off /
+    holds but slips / holds firm)?
+  - [ ] 2. Pitch accumulation: seat two pieces eight studs apart on each plate —
+    does the clone's pitch error, accumulated across the span, change how a
+    multi-piece set seats (the research survey flags clone pitch deltas as
+    hedged secondary data, not measurement)?
+  - [ ] 3. Stud ⌀ delta: does the clone need a different `--brick-fit`
+    `studDiaMm` compensation, i.e. is "baseplate-compatible" one profile or
+    one per plate population?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `CAL-CLB-01` (open, this is its coupon); the design doc's K2
+  discipline that compatibility claims say "LEGO-brand verified; clone
+  unmeasured" until this coupon reports; whether the Lab's fit-profile page
+  needs a per-plate-brand preset.
