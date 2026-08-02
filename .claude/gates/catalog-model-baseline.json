@@ -1,0 +1,19 @@
+{
+  "_comment": [
+    "Knobs a catalog entry names that its model does not declare, and that are",
+    "not defects. There is one legitimate kind: an entry that names a knob in",
+    "order to say it does not exist. Anything else here is a bug being deferred.",
+    "",
+    "The gate blocks nothing about this file's size — unlike the doc-pointer",
+    "baseline it is not a ratchet, because the population is one. If it starts",
+    "growing, that is the signal to make it one."
+  ],
+  "undeclared": [
+    {
+      "entry": "LG-F1",
+      "flag": "param",
+      "name": "rib_mm",
+      "why": "Named to disown it. The entry reads: 'an earlier version of this entry prescribed `--param rib_mm=…`, a knob that never existed.' Rib thickness is a brickFit offset reached by --brick-fit, not a param — no `brick` statement reads one. Deleting the mention would delete the correction."
+    }
+  ]
+}
