@@ -1108,6 +1108,54 @@ comparison over the wall's distinct tile *types* is not a check of its
 adjacencies — a `checker` wall with three types has pairs no type-level compare
 visits.
 
+### Amendment, 2026-08-03 — as built (bikar `2585a40`, PR #71)
+
+Two corrections, both to the paragraph above. Recording them because the second
+one **inverts** the counterexample that paragraph prescribed.
+
+**1. The position field is a corner subset, not an offset.** The option chosen
+for the clip position was `clipseat on ne,sw` — a subset of the tile's four
+corners. The paragraph above describes it as "different offsets along the edge",
+which is the wording the option preview used and is not what shipped. That cost
+was stated when the option was chosen and this is the amendment it earned.
+
+**2. The `FAIL:` above is the legal PASS.** A corner subset is *tile-local*, so
+which vertices two neighbours actually share depends on the edge:
+
+| joint | shared vertices |
+|---|---|
+| E–W, A left of B | A.`ne` ↔ B.`nw` · A.`se` ↔ B.`sw` |
+| N–S, A below B | A.`nw` ↔ B.`sw` · A.`ne` ↔ B.`se` |
+
+So `on ne,sw` beside `on nw,se` — the "geometrically distinct" pair the
+paragraph above names as the hard failure — **mates at every vertex**. It is a
+legal wall, and a must-be-identical rule would reject it. It is now the
+documented `PASS:`.
+
+The hard `FAIL:` is the opposite case: **two byte-identical `on ne,sw`
+declarations**, which fail at *every* vertex, because a shared vertex is a
+different corner of each of the four tiles meeting there. This is the one that
+had to be written, and the one D2 exists for — a field-by-field compare reports
+"identical" and ships a wall that does not assemble. The validator therefore
+compares **seat state at a vertex**, not the two records.
+
+The four-tile parity that makes this true is pinned at the kernel rather than
+asserted in prose: for a complementary checker, the vertex at block `(c,r)`
+seats a clip iff `(c+r)` is even, so exactly half the interior vertices seat
+one. `packages/core/tests/kernel3d/tile-border.test.ts` asserts the literal clip
+cells and both counters; the walk itself is
+`packages/core/src/kernel/wall-borders.ts`, and it reports `pairsChecked` and
+`pairsSkippedCropped` separately so the skipped cut edges stay visible.
+
+**Graduation.** Building this found a live defect in G3's coverage gate: it read
+only the `TokenType`-indexed dispatch table, and `border`'s head is an ordinary
+identifier, so the gate stayed green with no `border` row for a declaration the
+parser accepted. Fixed in the same change with a contextual-head table the
+surface also reads, plus the test that fails before and passes after. It is the
+same shape as the corollary in [`../CLAUDE.md`](../CLAUDE.md): a gate that
+asserts "everything passes" has to be wrong about a deliberate failure or skip
+it — here it skipped, silently, the newest thing it covered.
+
 ---
 
 ## D-017 — `frame` is orthogonal to `crop`, not a crop mode
