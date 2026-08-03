@@ -1354,8 +1354,53 @@ a tag naming a quantity no authority computes.
 ### What this closes and what it does not
 
 It closes the class where a doc's tally and its authority drift apart unnoticed.
-It does **not** check counts nobody tagged, and it does not check the two
-quantities with no tool behind them — "bets settled by design-specific coupons"
-and the `.bkr` coupon file list are still hand-maintained, because nothing
-prints them today. Naming an authority for those is the next ratchet, not a
-claim this decision makes.
+It does **not** check counts nobody tagged.
+
+### Amendment, same day — the next ratchet, and what it caught
+
+The two quantities this decision left hand-maintained were taken later the same
+day, and the exercise justified itself immediately.
+
+- **The record split.** "Machine-card bets settle 12 of the 17 records; design
+  coupons settle 5" is a projection of the *same* generated `bets.md` — its bet
+  table carries a Coupon column and a record list per row. The gate now parses
+  the rows and classifies by `MC-` prefix, and **cross-checks the split against
+  the header's total**: if the rows do not sum to the header's record count, the
+  parse is wrong and the gate says so rather than reporting a split that does
+  not add up. That check is what makes reading one file twice safe, where
+  deriving from `CAL_BETS` separately would not be.
+- **The coupon file list.** Not derivable as written — the doc's "8" is 6 files
+  in `bikar/patterns/Coupons/` plus 2 coupon models that live among ordinary
+  brick models in `patterns/Lego/`, and no listing separates those two from
+  their neighbours. So the claim was **restructured rather than the gate bent to
+  fit it**: the 6 is now the directory's own file count at `origin/main`
+  (`coupon-dir-bkr`), and the 2 are enumerated. An enumerated set is not a count
+  claim, and inventing a fuzzy authority to cover it would have produced a
+  number the gate blessed without checking.
+
+Reading bikar means reading it **at a published ref** — `origin/HEAD`,
+`origin/main`, `origin/master`, never the working tree or `HEAD`. The sibling
+checkout routinely sits on a detached HEAD belonging to another session (D-001),
+and a gate whose verdict depends on someone else's checkout teaches you to
+ignore it. When bikar is unreachable at all — a fresh clone, the `gh-pages`
+worktree — the quantity is **skipped, and labelled `[skipped: bikar not
+readable]` in the summary**, never folded into a clean run.
+
+And the extension found the same defect again on its first pass, in exactly the
+quantity that had been left untagged: §4 item 2 of `docs/backlog.md` read *"All
+**four** coupon `.bkr` files exist in `bikar/patterns/Coupons/`"* while §2's row
+six lines above said six. Two sites, one updated — the shape D-019 was written
+for, sitting in the one place D-019 had declined to cover.
+
+**Validator (amendment):** `FIXTURE_SKIPPED_AUTHORITY` — a document tagging
+`coupon-dir-bkr` while that authority is absent from the resolved set.
+
+PASS: 0 findings **and** `sites["coupon-dir-bkr"] == 1`. Both halves are
+asserted: zero findings alone would also be satisfied by a gate that dropped the
+marker on the floor, and the site count is what makes the unchecked claim
+visible in the run's output.
+
+FAIL: `same-doc-when-resolvable` — the *identical document* with the authority
+present and disagreeing → 1 C1 finding. The pair is the point: the same bytes
+pass when bikar is unreadable and fail when it is readable, which is what proves
+the skip is a skip and not a hole.

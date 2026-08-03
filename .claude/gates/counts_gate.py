@@ -22,6 +22,22 @@ Rules:
   C2  Every known quantity is marked somewhere, so a quantity cannot quietly
       stop being checked by having its marker deleted.
 
+Authorities, and where each is read from:
+
+  catalog-entries      `catalog_models.py`'s summary line
+  cal-bets             the generated `bets.md` header
+  cal-records          "
+  cal-bets-no-record   "
+  cal-mc-records       the generated `bets.md` *rows*, classified by the `MC-`
+  cal-design-records   prefix on each row's coupon cell — and cross-checked
+                       against the header total, because a projection that does
+                       not add up to the summary it came from is a broken parse,
+                       not a second opinion
+  coupon-dir-bkr       the file count of bikar's `patterns/Coupons/`, read at a
+                       published ref. Skippable: when bikar is unreachable the
+                       quantity is labelled `[skipped]` in the summary rather
+                       than folded into a clean run
+
 Marker syntax, written immediately after the number:
 
     | Entries in the prototype catalog | 29 <!--count:catalog-entries--> | ... |
@@ -48,6 +64,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from doc_pointers import _sibling_root, _tracked_at_ref  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 GATES = Path(__file__).resolve().parent
 BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
@@ -65,7 +85,34 @@ BETS_HEADER = re.compile(
     r"\d+ provisional, \d+ measured · (\d+) bets with no record in bikar\.\*\*"
 )
 
+#: One row of the generated **Bets** table:
+#: `| \`CAL-FIT-01\` | quantity | \`MC-1\` | provisional | \`A_CAL\`, \`B_CAL\` |`
+#: Group 1 is the coupon cell, group 2 the comma-separated record list. The
+#: coupon cell is not always an id — `CAL-STR-01` carries a sentence explaining
+#: why it has no coupon — so it is matched as free text and classified by
+#: prefix, not required to be an id.
+BETS_ROW = re.compile(
+    r"^\| `CAL-[A-Z]+-\d+` \| [^|]* \| ([^|]*) \| [^|]* \| ([^|]*) \|\s*$",
+    re.MULTILINE,
+)
+
 CATALOG_SUMMARY = re.compile(r"^catalog models: (\d+) entries;", re.MULTILINE)
+
+#: Where the coupon models live in bikar. A directory listing is a real
+#: authority — no curation, nothing to keep in sync by hand.
+COUPON_DIR = "patterns/Coupons/"
+
+#: Quantities whose authority lives in a sibling repo, and so may legitimately
+#: be unreachable — a fresh clone, or the `gh-pages` worktree. Everything else
+#: is sourced from this repo and its absence is a failure, not a skip.
+SKIPPABLE = frozenset({"coupon-dir-bkr"})
+
+#: Only the *published* refs. Reading bikar's working tree, or its `HEAD`, makes
+#: this count a function of whichever branch the other session has checked out —
+#: and that checkout is routinely on a detached HEAD (`docs/decisions-log.md`
+#: D-001). This is the same reasoning `doc_pointers._tracked_at_ref` is built
+#: on, and the same trap it was written after walking into.
+BIKAR_REFS = ("origin/HEAD", "origin/main", "origin/master")
 
 
 def authority_catalog_entries() -> int:
@@ -86,20 +133,79 @@ def authority_catalog_entries() -> int:
     return int(m.group(1))
 
 
-def authority_bets() -> tuple[int, int, int]:
+def authority_bets() -> dict[str, int]:
+    """Every quantity the generated registry knows: its header, and its rows.
+
+    The header gives the totals. The rows give the split by coupon series —
+    which records a machine-card bet settles, and which a design-specific
+    coupon does. Both are read out of the one generated file, and the row sum
+    is checked against the header total: if a projection of the registry
+    disagrees with the registry's own summary, the parse is wrong and saying so
+    is the only honest outcome.
+    """
     if not BETS.exists():
         raise RuntimeError(
             f"{BETS.relative_to(ROOT)} is missing — regenerate it with "
             "`cd ../bikar && npm run registry:calibration`"
         )
-    m = BETS_HEADER.search(BETS.read_text(encoding="utf-8"))
+    text = BETS.read_text(encoding="utf-8")
+    m = BETS_HEADER.search(text)
     if not m:
         raise RuntimeError(
             f"{BETS.relative_to(ROOT)} has no parseable header line. It is "
             "generated; if its format changed, this gate's BETS_HEADER pattern "
             "must change with it rather than the file being hand-edited."
         )
-    return int(m.group(1)), int(m.group(2)), int(m.group(3))
+    bets, records, no_record = int(m.group(1)), int(m.group(2)), int(m.group(3))
+
+    rows = BETS_ROW.findall(text)
+    mc = design = 0
+    for coupon, record_cell in rows:
+        n = len(
+            [r for r in record_cell.split(",") if r.strip() and r.strip() != "—"]
+        )
+        if coupon.strip().strip("`").startswith("MC-"):
+            mc += n
+        else:
+            design += n
+
+    if len(rows) != bets or mc + design != records:
+        raise RuntimeError(
+            f"{BETS.relative_to(ROOT)}: the row parse disagrees with the "
+            f"header — {len(rows)} row(s) summing to {mc + design} record(s), "
+            f"against a header of {bets} bets and {records} records. The table "
+            "format changed; BETS_ROW must change with it. A split that does "
+            "not add up to the total is worse than no split."
+        )
+
+    return {
+        "cal-bets": bets,
+        "cal-records": records,
+        "cal-bets-no-record": no_record,
+        "cal-mc-records": mc,
+        "cal-design-records": design,
+    }
+
+
+def authority_coupon_dir() -> int | None:
+    """How many `.bkr` files live in bikar's `patterns/Coupons/`.
+
+    None when bikar is not reachable — a fresh clone, or the `gh-pages`
+    worktree. That is a genuine skip and not a pass: `check` reports it in the
+    summary and declines to fire C2 for the quantity, so a marker that stops
+    being checked is still visible in the output.
+    """
+    repo = _sibling_root("bikar", ROOT)
+    if repo is None:
+        return None
+    for ref in BIKAR_REFS:
+        tree = _tracked_at_ref(repo, ref)
+        if tree is None:
+            continue
+        return len(
+            [p for p in tree if p.startswith(COUPON_DIR) and p.endswith(".bkr")]
+        )
+    return None
 
 
 def resolve_authorities() -> dict[str, tuple[int, str]]:
@@ -108,20 +214,32 @@ def resolve_authorities() -> dict[str, tuple[int, str]]:
     The set is hard-coded and small on purpose. A gate that discovers its own
     quantities cannot tell a number that vanished from a number that was never
     there, and C2 depends on exactly that distinction.
+
+    A quantity whose authority is unreachable is simply absent from the result;
+    `SKIPPABLE` names the ones that may legitimately be, so `check` can tell an
+    unreachable authority from a marker nobody defined.
     """
-    bets, records, no_record = authority_bets()
-    return {
+    bets = authority_bets()
+    header = "`.claude/skills/calibrate/bets.md` header"
+    rows = "`.claude/skills/calibrate/bets.md`'s bet table"
+    out: dict[str, tuple[int, str]] = {
         "catalog-entries": (
             authority_catalog_entries(),
             "`make validate-catalog`",
         ),
-        "cal-bets": (bets, "`.claude/skills/calibrate/bets.md` header"),
-        "cal-records": (records, "`.claude/skills/calibrate/bets.md` header"),
-        "cal-bets-no-record": (
-            no_record,
-            "`.claude/skills/calibrate/bets.md` header",
-        ),
+        "cal-bets": (bets["cal-bets"], header),
+        "cal-records": (bets["cal-records"], header),
+        "cal-bets-no-record": (bets["cal-bets-no-record"], header),
+        "cal-mc-records": (bets["cal-mc-records"], rows),
+        "cal-design-records": (bets["cal-design-records"], rows),
     }
+    coupons = authority_coupon_dir()
+    if coupons is not None:
+        out["coupon-dir-bkr"] = (
+            coupons,
+            f"`bikar/{COUPON_DIR}` at {'/'.join(BIKAR_REFS)}",
+        )
+    return out
 
 
 def marks_in(path: Path) -> list[tuple[int, str, int, str]]:
@@ -138,10 +256,18 @@ def check(
 ) -> tuple[list[str], dict[str, int]]:
     findings: list[str] = []
     sites: dict[str, int] = {name: 0 for name in authorities}
+    #: Markers whose authority did not resolve this run. Counted and reported,
+    #: never failed on — but never silently passed either.
+    skipped = sorted(SKIPPABLE - set(authorities))
+    for name in skipped:
+        sites[name] = 0
 
     for path in targets:
         for lineno, name, claimed, line in marks_in(path):
             rel = path.relative_to(ROOT)
+            if name in skipped:
+                sites[name] += 1
+                continue
             if name not in authorities:
                 findings.append(
                     f"{rel}:{lineno}: C1 unknown quantity 'count:{name}' — this "
@@ -159,7 +285,7 @@ def check(
                 )
 
     for name, count in sorted(sites.items()):
-        if count == 0:
+        if count == 0 and name not in skipped:
             expected, who = authorities[name]
             findings.append(
                 f"C2 quantity 'count:{name}' is marked nowhere, so nothing "
@@ -203,7 +329,20 @@ FIXTURE_UNKNOWN_QUANTITY = """\
 | Registered bets | 17 <!--count:cal-bets--> | fine |
 | Records | 17 <!--count:cal-records--> | fine |
 | No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
-| Coupon `.bkr` files | 8 <!--count:bkr-coupon-files--> | nothing prints this |
+| Coupon models | 8 <!--count:coupon-models--> | nothing prints this |
+"""
+
+# A quantity sourced from bikar, marked here, with bikar unreachable — a fresh
+# clone or the `gh-pages` worktree. It must not fail (there is nothing to
+# compare against) and must not read as an unknown quantity (it is defined,
+# just unresolvable). It must still be *counted*, so the run says out loud that
+# one site went unchecked rather than folding it into a clean summary.
+FIXTURE_SKIPPED_AUTHORITY = """\
+| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | fine |
+| Registered bets | 17 <!--count:cal-bets--> | fine |
+| Records | 17 <!--count:cal-records--> | fine |
+| No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
+| Files in `patterns/Coupons/` | 6 <!--count:coupon-dir-bkr--> | bikar is absent |
 """
 
 FAKE = {
@@ -213,29 +352,56 @@ FAKE = {
     "cal-bets-no-record": (6, "a stub"),
 }
 
+#: The same skippable quantity, this time resolved and disagreeing. Paired with
+#: the skip case so the pair proves the skip is a *skip* and not a hole: the
+#: identical document fails when the authority is readable.
+FAKE_WITH_COUPONS = {**FAKE, "coupon-dir-bkr": (7, "a stub")}
+
 
 def self_test() -> int:
     """Fixed authorities, so the self-test cannot pass by tracking the repo."""
     import tempfile
 
-    cases: list[tuple[str, str, int, str]] = [
-        ("clean", FIXTURE_OK, 0, ""),
-        ("one-of-two-stale", FIXTURE_ONE_OF_TWO_STALE, 1, "says 28"),
-        ("marker-deleted", FIXTURE_MARKER_DELETED, 1, "C2 quantity"),
-        ("unknown-quantity", FIXTURE_UNKNOWN_QUANTITY, 1, "unknown quantity"),
+    cases: list[tuple[str, str, int, str, dict[str, int], dict]] = [
+        ("clean", FIXTURE_OK, 0, "", {}, FAKE),
+        ("one-of-two-stale", FIXTURE_ONE_OF_TWO_STALE, 1, "says 28", {}, FAKE),
+        ("marker-deleted", FIXTURE_MARKER_DELETED, 1, "C2 quantity", {}, FAKE),
+        ("unknown-quantity", FIXTURE_UNKNOWN_QUANTITY, 1, "unknown quantity", {}, FAKE),
+        (
+            "skipped-authority",
+            FIXTURE_SKIPPED_AUTHORITY,
+            0,
+            "",
+            {"coupon-dir-bkr": 1},
+            FAKE,
+        ),
+        (
+            "same-doc-when-resolvable",
+            FIXTURE_SKIPPED_AUTHORITY,
+            1,
+            "coupon-dir-bkr says 6",
+            {"coupon-dir-bkr": 1},
+            FAKE_WITH_COUPONS,
+        ),
     ]
 
     ok = True
     with tempfile.TemporaryDirectory(dir=ROOT) as tmp:
-        for label, body, want, needle in cases:
+        for label, body, want, needle, want_sites, stubs in cases:
             path = Path(tmp) / f"{label}.md"
             path.write_text(body, encoding="utf-8")
-            findings, _ = check([path], FAKE)
-            if len(findings) != want or (needle and needle not in " ".join(findings)):
+            findings, sites = check([path], stubs)
+            bad_sites = {k: sites.get(k) for k, v in want_sites.items() if sites.get(k) != v}
+            if (
+                len(findings) != want
+                or (needle and needle not in " ".join(findings))
+                or bad_sites
+            ):
                 ok = False
                 print(
                     f"self-test FAIL: {label} wanted {want} finding(s) "
-                    f"containing {needle!r}, got {findings}"
+                    f"containing {needle!r} and sites {want_sites}, got "
+                    f"{findings} / {bad_sites}"
                 )
             else:
                 detail = findings[0].split(": ", 1)[-1][:70] if findings else "clean"
@@ -282,7 +448,15 @@ def main() -> int:
 
     for f in findings:
         print(f, file=sys.stderr)
-    summary = ", ".join(f"{k}={sites[k]} site(s)" for k in sorted(sites))
+    # A skipped quantity is labelled in the summary rather than left to look
+    # like a checked one. The site count is still printed: "1 site(s), skipped"
+    # says a claim went unverified this run, which is the whole point of
+    # printing per-quantity counts at all.
+    skipped = SKIPPABLE - set(authorities)
+    summary = ", ".join(
+        f"{k}={sites[k]} site(s)" + (" [skipped: bikar not readable]" if k in skipped else "")
+        for k in sorted(sites)
+    )
     print(f"counts: {len(targets)} document(s); {summary}")
     if findings:
         print(
