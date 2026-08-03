@@ -11,11 +11,12 @@
 # file, never whether the pointer still pointed at the right thing. 23 of 44
 # line claims had drifted by the day it was added.
 #
-# Since 2026-08-03 that anchor read comes from the *index* for any staged
-# self-repo file, not from the pinned commit. `--refresh` runs before the commit
-# exists, so it pins the parent; reading there re-verified anchors against the
-# content the commit was about to replace, and the guard proved only that the
-# map had been refreshed. Covered by `validate.py --self-test`.
+# Since 2026-08-03 a self-repo pointer is read from what this commit will
+# contain — the index for a staged file, HEAD for the rest — never from the pin.
+# `--refresh` runs before the commit exists, so it pins the parent; reading there
+# re-verified anchors against the content the commit was about to replace, and
+# the guard proved only that the map had been refreshed. Sibling repos are still
+# pinned: they move with no commit here to blame. `validate.py --self-test`.
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for use-case validation" >&2
   exit 1
