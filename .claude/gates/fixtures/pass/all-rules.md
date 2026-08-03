@@ -42,3 +42,14 @@ rules](https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printin
 
 **Default:** `detentRibMm = 0.30` — no source can settle this; it is bet
 CAL-DET-01 and ships from the coupon reading.
+
+## D4 — a withdrawn number is named, not asserted
+
+A doc may still discuss a number an audit withdrew; it may not restate it as
+fact. Saying so in the same block is what makes it a discussion:
+
+- **Retention**: v1 argued from an FDM tolerance of ±0.1–0.2 mm. That figure is
+  withdrawn — no printer vendor publishes an accuracy number at all.
+
+And in a plain paragraph, the same way: the ±0.1–0.2 mm figure is uncited by
+construction, so the argument was rebuilt from measured repeatability instead.

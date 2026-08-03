@@ -104,6 +104,11 @@ rule does not transfer.
   one signed volume — which one reversed triangle in 3,764 leaves positive.
 - **K9 → D1.** Every relative link must resolve on disk. This one is universal
   and needs no marker.
+- **K1 → D4. A withdrawal is corpus-wide, not a local edit.** When an audit kills a
+  number, grep every doc before calling it fixed and add the literal to `WITHDRAWN`
+  in `docs_gate.py`. `±0.1–0.2 mm printer accuracy` died 2026-07-29, was rebuilt in
+  two docs, and stood in `tile-wall` five more days under "the load-bearing facts".
+  D4 catches literal restatements only — §2's "10–20× beyond FDM tolerance" escaped.
 - **K9 → the pointer gate.** A backticked path is a claim too, and
   `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`, `make
   validate-pointers`) holds it to this repo, to a sibling **at a git ref** — not
@@ -175,13 +180,11 @@ options, the cheapest one is not the default, "do nothing" is not neutral, and
 each option must say **what it verifies** — an option that verifies nothing
 should be named as such or not offered.
 
-> *Failure mode, 2026-08-03:* the two options offered for rendering the machine
-> card both produced 23 STLs and **neither checked one of them**, while
-> `calibration-design.md` §7 already shipped a 23-row expectation table. The
-> version that shipped reads that table and diffs the mesh gate against it
-> ([D-014](docs/decisions-log.md)) — and `make coupons` is a verifier with a
-> build target as its front door, not the thin re-typing of §6 that the backlog
-> had framed the decision as. The re-typing was never the valuable part.
+> *Failure mode, 2026-08-03:* both options offered for the machine card produced
+> 23 STLs and **neither checked one**, while `calibration-design.md` §7 already
+> shipped a 23-row expectation table. What shipped diffs the mesh gate against
+> that table ([D-014](docs/decisions-log.md)) — a verifier with a build target as
+> its front door, not the re-typing of §6 the backlog had framed it as.
 
 Corollary: **the by-design failure is the load-bearing case.** A gate that
 asserts "everything passes" must be wrong about a deliberate failure or skip

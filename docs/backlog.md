@@ -574,19 +574,47 @@ re-check on 2026-08-03 found some of it had *already* been done before this
 section was written, which is the subject of §8's fifth check.
 
 Three clusters are worth naming because they change documents rather than
-constants. **Two of the three were already closed when this section was
-written** — see each entry; only the unsourced-number cluster is live.
+constants. **All three are now closed** — two were already closed when this
+section was written, and the third closed on 2026-08-03; see each entry.
 
-- **The unsourced-number cluster.** `±0.1–0.2 mm printer accuracy` appears as a
-  load-bearing premise in at least three docs and has **no vendor source**: the
-  lego audit grepped the Bambu X1C and A1 spec PDFs for
+- **The unsourced-number cluster — closed 2026-08-03, and it produced a gate.**
+  `±0.1–0.2 mm printer accuracy` was a load-bearing premise in three docs with
+  **no vendor source**: the lego audit grepped the Bambu X1C and A1 spec PDFs for
   `accur|precis|toler|repeat|deviat` and got **zero matches in both**, and the
-  Prusa MK4S page claims "Perfect Dimensional Accuracy" with no number. Adjacent:
-  a "0.02 mm clutch band" with no source (the cited source says 0.1–0.2 mm), a
-  "7–10% PETG design band" the w2 audit says "appears to be synthesized", a
-  "PETG ~30% stronger interlayer bonding" claim to disregard until sourced, and
-  a "0.2–0.5 mm FDM bow" that is a working placeholder. Only the last of these
-  is a print away; the others are re-sourcing or deletion.
+  Prusa MK4S page claims "Perfect Dimensional Accuracy" with no number.
+
+  What this entry got wrong is *why* it was still open. The audit that killed the
+  number ran on **2026-07-29** and the fix was applied the same week to
+  [`lego-lab-design.md`](lego-lab-design.md) §3.5 (rebuilt from measured
+  repeatability, σ ≈ 0.02 mm) and to
+  [`print-validation-design.md`](print-validation-design.md) Appendix A. It was
+  never applied to [`tile-wall-design.md`](tile-wall-design.md), which is a
+  different *lineage* — a different survey, a different audit — that happens to
+  share the number. So this was not research debt awaiting a fetch; it was a
+  correction that stopped at a document boundary and sat for five days inside a
+  section headed "the load-bearing facts". Both tile-wall sites now carry the
+  rebuilt argument, and
+  [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md)
+  carries errata item 9 (its body stays verbatim, per the survey convention).
+
+  **The check that would have caught it** is `docs_gate.py`'s new **D4**: a
+  hand-entered list of withdrawn literals that may not be restated as fact
+  outside `docs/research/`. Its limit is recorded rather than papered over — run
+  against the pre-fix file it reports **one** finding, not two, because
+  tile-wall §2 wrote the number as a *multiple* ("10–20× beyond FDM tolerance")
+  and left no literal to match. See
+  [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md) §"Why D4
+  exists".
+
+  The four adjacent items were checked in the same pass and none is live: the
+  "0.02 mm clutch band" is corrected in `lego-lab-design.md` §3.5, the
+  "7–10% PETG design band" is withdrawn as apparently synthesized in
+  [`w2-connector-design.md`](w2-connector-design.md) B.1 with the ~2% endpoint
+  re-derived three ways, the "PETG ~30% stronger interlayer bonding" claim never
+  reached a design doc and carries errata item 3 in the survey, and the
+  "0.2–0.5 mm FDM bow" is labelled a placeholder in both docs that use it — it
+  is the one item in this cluster a print settles, and it is owned by the W2 clip
+  coupon in §3.
 - **The misattribution cluster — closed, verified 2026-08-03.** Several quotes
   were credited to the wrong page. All four are now corrected in the design docs:
   the build123d quotes cite
@@ -760,8 +788,10 @@ Five checks, run before shipping it, in the spirit of
   current state**, decaying the moment the item is fixed. So each residue entry
   now carries the anchor that would settle it — a doc, a section, the phrase to
   look for — which turns re-checking the list into a grep instead of a reread.
-  The entries that stay open (the unsourced-number cluster, §6.1's five LDraw
-  items, §6.2's table) each say what they are waiting on for the same reason.
+  The entries that stay open (§6.1's five LDraw items, §6.2's remaining table
+  rows) each say what they are waiting on for the same reason. This sentence
+  named the unsourced-number cluster until 2026-08-03, when that cluster closed
+  — the decay is not hypothetical and it is not slow.
 - **No hedge was hardened.** Where a source says "may", "expected to",
   "predicted", "estimates" or "not ruled out", this file carries the word.
   The three places that matter most: P5 is *expected to* fail or disappoint on

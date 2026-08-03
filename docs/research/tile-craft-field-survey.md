@@ -140,3 +140,18 @@ corrections; the design doc (`../tile-wall-design.md`) applies them:
    Thrinter creep test, PLA physical-aging papers (Polymer 2019, Macromol. Chem. Phys.
    2020), Art3d/Stickgoo glue-up precedent, Kingroon/Sovol magnet guides, Rockler
    keyhole standard, FDM warp studies.
+9. **§6 "FDM holds ±0.1–0.2 mm at best, 10–20× worse than clutch fit demands"** — added
+   2026-08-03, and it did not come from this survey's own audit: it is the *lego*
+   lineage's finding ([`lego-lab-grounding-audit.md`](lego-lab-grounding-audit.md),
+   2026-07-29) arriving here five days late, because the number is shared across two
+   lineages and the correction was applied only in the lineage that found it. Neither half is sourced. No printer vendor publishes
+   an accuracy figure at all — the Bambu X1C and A1 spec sheets were grepped for
+   `accur|precis|toler|repeat|deviat` with **zero matches in both**, and Prusa's MK4S
+   page claims "Perfect Dimensional Accuracy" with no number — so the ±0.1–0.2 mm is
+   uncited by construction. And the same §6 bullet's "0.02 mm oversize won't assemble"
+   traces to thewave.engineer, which actually states the stud/tube interference is
+   **0.1–0.2 mm**, ten times that. The *lesson* — raw interference fits cannot be the
+   retention mechanism between printed tiles — survives, but on the argument rebuilt in
+   [`../lego-lab-design.md`](../lego-lab-design.md) §3.5 from measured repeatability
+   (σ ≈ 0.02 mm) and bore-vs-boss asymmetry (NIST Moylan), which `../tile-wall-design.md`
+   §2 now carries.
