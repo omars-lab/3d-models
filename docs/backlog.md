@@ -29,8 +29,10 @@ is the measurement ceremony. This file is the *order*, the *cost*, and the
 **What has been searched, so the claims below can be read for what they are.**
 `CAL-*` ids were grepped across all three repos of the system: `3d-models`
 (`docs/` and `.claude/`), `bikar` (read-only, via the `bikar-lego-lab` worktree),
-and `qiyas`. Fourteen ids are registered in `CAL_BETS` (twelve at the original
-sweep, plus the two mural bets `CAL-REG-01`/`CAL-CLB-01` registered 2026-08-02);
+and `qiyas`. Seventeen ids are registered in `CAL_BETS` (twelve at the original
+sweep, plus the two mural bets `CAL-REG-01`/`CAL-CLB-01` and the two brick-anchor
+bets `CAL-ANC-01`/`CAL-INW-01` registered 2026-08-02, plus the frame-band bet
+`CAL-FRM-01` registered 2026-08-03);
 one more, `CAL-SEA-01`, appears twice in `3d-models` only, in both cases as a bet that
 [`hemisphere-split-design.md`](hemisphere-split-design.md) §Appendix B and its
 grounding audit deliberately **declined to mint**. `qiyas` contains no `CAL-*`
@@ -39,13 +41,13 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 14 | 12 with a coupon, 4 without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, and the two mural bets `CAL-REG-01`, `CAL-CLB-01`) |
-| `Calibrated<T>` records | 16 | all provisional, all listed in bikar's `.calibration-baseline.json` |
-| Bets settled by the machine card (MC-1…MC-6) | 7 | 12 of the 16 records |
-| Bets settled by design-specific coupons | 4 | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1) — 4 records |
+| Registered `CAL-*` bets | 17 | 16 with a coupon, 6 without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, and the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`) |
+| `Calibrated<T>` records | 17 | all provisional, all listed in bikar's `.calibration-baseline.json` |
+| Bets settled by the machine card (MC-1…MC-6) | 7 | 12 of the 17 records |
+| Bets settled by design-specific coupons | 5 | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-FRM-01` (W-P1) — 5 records |
 | Bets with no coupon anywhere | 1 | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
-| Entries in the prototype catalog | 28 | 24 coupons (P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5) |
-| `.bkr` coupon files that exist today | 5 | `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon` |
+| Entries in the prototype catalog | 29 | 25 coupons (P1–P7, MC-1…MC-6, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
+| `.bkr` coupon files that exist today | 8 | in `patterns/Coupons/`: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`; in `patterns/Lego/`: `Seam-Coupon` (LG-P1), `Rosette-Brick` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
 every rung renders: [`calibration-design.md`](calibration-design.md) §7 carries a
@@ -272,12 +274,18 @@ Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not 
 | LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **authored** (bikar `73514f1`) — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural, two bars crossing the seam; one bar would delete the 2×2 pieces' only anchor — see the catalog entry); Star-Mural exists but is not minimal | not stated |
 | LG-P2 | whether LG-F1's winning rib also clutches a clone plate; clone pitch error accumulated over 8 studs | `lego-pattern-set-design.md` §5, [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) | `CAL-CLB-01`; the K2 hedge "LEGO-brand verified, clone unmeasured" | reuses LG-F1's winning rung; needs plates bought, not modelled | not stated |
 
-### 3.3 W-series connector
+### 3.3 W-series wall
+
+Two of the three are connector coupons; **W-P1 deliberately is not.** It measures
+a proportion — how wide a perimeter margin has to be before it reads as a frame
+rather than as a wall that ran out of tiles — and so it is not blocked on either
+of the other two, nor they on it.
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
 | W-F1 | the blade clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](w2-connector-design.md) §8 | the clip-joint half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — `Clipseat-Fit-Coupon.bkr`, 6 pieces (written 2026-08-02, D-008) | not stated |
 | W-C1 | rebate vs proud in raking light; detent past-centre feel; PETG jaw survival; front-face lippage | §8, §10 Q1; [`tile-wall-design.md`](tile-wall-design.md) §10 Q1 | `CAL-DET-01`, `CAL-CLP-01`; the `clipseat` grammar default; the mesh-gate sub-floor exemption for bayonet clips | exists — `Clip-Coupon.bkr`, 3 pieces | not stated |
+| W-P1 | which band width reads as a deliberate margin — a 4-rung ladder (6/12/20/30 mm) around one fixed 2×2 field, so only the margin varies; whether the answer moves with viewing distance | [`tile-wall-design.md`](tile-wall-design.md) §10 Q3; [`decisions-log.md`](decisions-log.md) D-017 | `CAL-FRM-01`, and with it the `frame` statement's 12 mm default | exists — `Frame-Band-Coupon.bkr` (written 2026-08-03): one `FrameTile`, printed ×4, read against four 1:1 SVG rungs. The band itself is not printable geometry | not stated |
 
 ### 3.4 Orb ladder
 
@@ -543,8 +551,8 @@ LDraw software** (§14.3.1's own K2 note).
 | `--format ldraw` opened in three viewers | downloads (§6.1) | [`lego-lab-design.md`](lego-lab-design.md) §14.3.1 |
 | §11 Q6's compliance proxy — whether rib-deflection or an FEA-lite bending estimate is worth adding to the grid gate | a decision, then code; **calibrating** it needs LG-F1 and LG-D1 | [`lego-lab-design.md`](lego-lab-design.md) §11 Q6, explicitly left open |
 | `layout report` production metrics (W3): plates at the declared bed size, spool count, calendar estimate | code — though the per-tile input is the W1 pilot in §3.5 | [`tile-wall-design.md`](tile-wall-design.md) §7.1 |
-| `tile-wall` §10 Q2 — `checker` border parity | **decided 2026-08-03, D-016: both** — shared `border` spec as the documented path, per-pair validator for tiles that decline it. Unbuilt: the validator, and its `FAIL:` must be the offset case, not two mismatched gaps | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-016 |
-| `tile-wall` §10 Q3 — cropped-edge finish | **decided 2026-08-03, D-017: both finishes, but `frame` is orthogonal to `crop`** — not the `crop clip with frame` sketch. Unbuilt: the band width, which needs a D3 default declaration and is likely a calibration bet on W1 | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-017 |
+| `tile-wall` §10 Q2 — `checker` border parity | **decided 2026-08-03, D-016: both** — shared `border` spec as the documented path, per-pair validator for tiles that decline it. **Built** in bikar `2585a40` (PR #71) — and building it *inverted* the `FAIL:` this row used to prescribe: the position shipped as a tile-local corner subset, so "different offsets" is the legal PASS and two **byte-identical** declarations are the hard FAIL | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-016 |
+| `tile-wall` §10 Q3 — cropped-edge finish | **decided 2026-08-03, D-017: both finishes, but `frame` is orthogonal to `crop`** — not the `crop clip with frame` sketch. **Built** in bikar `fc5adee` (PR #72) as `frame` / `frame band <mm>` / `frame absorb`. The band width is a bet, `CAL-FRM-01` at 12 mm — but settled by a coupon of its own, **W-P1**, not by W1 as this row guessed: W1 varies its art and its tile count between prints and cannot hold the field fixed while the margin changes | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-017 |
 | `print-validation` §8 Q3 — F3 severity | **decided 2026-08-03, D-018: always warn**, overruling the doc's own leaning. Nothing to build — §4's table already read `warn`; the decision makes the doc agree with itself | [`print-validation-design.md`](print-validation-design.md) §8, [`decisions-log.md`](decisions-log.md) D-018 |
 | `lego-lab` §11 Q8's grammar gap — the rhombic lattice row `gridFit` can score but no `.bkr` can produce | **resolved as a label**, [`decisions-log.md`](decisions-log.md) D-007; widening the grammar to a general two-vector basis remains an unbuilt option | [`lego-lab-design.md`](lego-lab-design.md) §11 Q8 |
 | The `polygon`/`C.mpt` evaluator asymmetry MC-4 had to work around | a bikar issue; "not worked around here beyond this idiom" | [`calibration-design.md`](calibration-design.md) §4 |
