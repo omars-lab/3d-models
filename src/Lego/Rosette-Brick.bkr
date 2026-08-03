@@ -1,0 +1,82 @@
+# Rosette-Brick — LG-B2's coupon: a ten-fold rosette (the five-fold girih
+# family) whose *silhouette* is the piece, sitting on a square lattice it
+# does not obey. The load-bearing bet of the anchor-only approach: a printed
+# piece's outline need not follow the grid so long as its interface does.
+#
+# `footprint outline` takes the body from the pattern's face union — here
+# the fully tiled rosette disc, whose boundary is the 20-vertex scalloped
+# ring through the kite tips (radius R) and the mid-ring shoulders
+# (~0.727·R). Measured on the shipped rosette corpus 2026-08-02: one
+# edge-connected component (V19 passes by construction) and a sharpest
+# convex angle of 72° at the tips — three times the ≈23.1° miter-clamp
+# floor, so the V18 wall check passes with no cusp-rounding.
+#
+# There is deliberately no `relief depth`. On this piece the silhouette IS
+# the art; a relief would union every bounded face into one pocket — the
+# whole disc — and sink the entire top face uniformly, which is a recess,
+# not a pattern.
+#
+# Coverage arithmetic, at the default radius 20: the body's closest
+# approach to centre is the shoulder ring at ~14.5 mm; the 5×5 centred
+# grid's centre cell and its four edge-neighbours have far corners at
+# ≤ 12.7 mm, so five lattice cells are fully covered (the anchor gate
+# needs two) and the tube anchors land in them. At the range floor of 18
+# the same five cells clear by ~0.4 mm — below that the edge cells' far
+# corners poke past the shoulders and the gate rightly refuses.
+#
+# Render:
+#   bikar render patterns/Lego/Rosette-Brick.bkr --format stl --check -o RosetteBrick.stl
+#   bikar render patterns/Lego/Rosette-Brick.bkr --format svg -o RosetteBrick.svg
+#
+# What the print settles (both registered, both LG-B2): CAL-ANC-01 — the
+# retention ratio of an anchor-only body against a rectangular control at
+# the same profile; CAL-INW-01 — printed integrity of the 1.5 mm inset
+# cavity wall following a concave lobed outline. Until then every clutch
+# number here is provisional.
+#
+# Construction is Rosette-10.bkr's wedge-and-rotate (after Sarah Brewer's
+# 10-fold tutorial), parameterized: skip-3 chords of a decagon intersect in
+# the inner (R/φ) and middle (~0.727·R) rings, and three rotated cycles —
+# outer kites, inter-petal triangles, inner spokes — tile the disc.
+
+param radius = 20 range 18..40 step 2
+param plates = 3 range 2..6 step 1
+
+blueprint rosette10
+  circle C0 center(0,0) radius $radius
+  divide C0 into 10
+
+  line L0 from C0.cpt0 to C0.cpt3
+  line L1 from C0.cpt1 to C0.cpt4
+  line L2 from C0.cpt2 to C0.cpt5
+  line L3 from C0.cpt3 to C0.cpt6
+  line L4 from C0.cpt4 to C0.cpt7
+  line L5 from C0.cpt5 to C0.cpt8
+  line L6 from C0.cpt6 to C0.cpt9
+  line L7 from C0.cpt7 to C0.cpt0
+  line L8 from C0.cpt8 to C0.cpt1
+  line L9 from C0.cpt9 to C0.cpt2
+
+pattern rosette10 on rosette10
+  # Outer petal kites — circumference to inner ring via mid-ring shoulders
+  rotate 10 around C0.mpt
+    connect cycle [C0.cpt0 L8_L0.cpt0 L9_L8.cpt0 L9_L7.cpt0]
+
+  # Inter-petal triangles — fill gaps between kites at mid-ring level
+  rotate 10 around C0.mpt
+    connect cycle [L8_L0.cpt0 L9_L8.cpt0 L9_L0.cpt0]
+
+  # Inner star spokes — inner ring to center, forms 10-pointed star
+  rotate 10 around C0.mpt
+    connect cycle [L9_L8.cpt0 C0.mpt L9_L0.cpt0]
+
+  voids detect
+
+brick RosetteBrick
+  inscribe rosette10
+  footprint outline
+  height $plates plates
+  studs none
+  anchors auto
+  clutch auto
+  origin centered
