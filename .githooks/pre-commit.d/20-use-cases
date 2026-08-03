@@ -6,10 +6,16 @@
 #
 # When the map IS staged the validator runs in full, which since 2026-08-02
 # includes the anchor rule: a pointer written `path:L137 "orbs:"` must have
-# that literal inside the lines it names, at the pinned commit. That is the
-# check the block above was standing in for and could not make — it knew the
-# commit touched a pointed-at file, never whether the pointer still pointed at
-# the right thing. 23 of 44 line claims had drifted by the day it was added.
+# that literal inside the lines it names. That is the check the block above was
+# standing in for and could not make — it knew the commit touched a pointed-at
+# file, never whether the pointer still pointed at the right thing. 23 of 44
+# line claims had drifted by the day it was added.
+#
+# Since 2026-08-03 that anchor read comes from the *index* for any staged
+# self-repo file, not from the pinned commit. `--refresh` runs before the commit
+# exists, so it pins the parent; reading there re-verified anchors against the
+# content the commit was about to replace, and the guard proved only that the
+# map had been refreshed. Covered by `validate.py --self-test`.
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for use-case validation" >&2
   exit 1

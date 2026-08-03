@@ -25,10 +25,14 @@ capability live?" — kept honest by `validate.py` and the pre-commit hook.
   every run, so the gap stays visible instead of being assumed away.
 - **Pinned, not floating**: pointers are valid at the frontmatter `as_of`
   commit of their repo — line drift after that commit is expected and fine.
-  The freshness rules below keep the pins from rotting. One consequence worth
-  knowing: `as_of` is the *parent* of the commit being built, so a pointer into
-  a file that same commit edits is checked against the pre-edit copy. Its
-  anchor catches the shift on the next refresh; nothing catches it without one.
+  The freshness rules below keep the pins from rotting. `as_of` is the *parent*
+  of the commit being built, so **in pre-commit mode a pointer into a staged
+  self-repo file is read from the index instead** — reading at the pin checked
+  the anchors against exactly the content the commit was about to replace, and
+  the hook fires precisely because such a file is staged. That hole shipped
+  until 2026-08-03 and is now the last four cases in `--self-test`. Unstaged
+  files, sibling repos and whole-tree runs still read at the pin, which is
+  correct there: drift after the pinned commit is expected and fine.
 - **Diagram ↔ table parity**: every `UC<n>` node in the mermaid diagram must
   have a table row and vice versa (validated).
 - **Shipped only**: a use case must exist in deployed/committed code.
@@ -50,7 +54,10 @@ commit as the change.
 pointer existence and line ranges at the pinned commits, every anchor against
 the lines its pointer names, and diagram/table parity. A drifted anchor is
 reported with the line the target moved to, so the repair is the message.
-`validate.py --self-test` covers the pure readers, including the anchor rule.
+`validate.py --self-test` covers the pure readers plus three git fixtures
+(unpublished-branch refresh, squash-orphaned pin, and the staged-blob read —
+the last asserts the *old* behaviour passing the edit before asserting the new
+one catching it).
 
 **Audit** — read `use-cases.md` top to bottom; anything the project does that
 has no UC row is either missing from the map or not actually a user-facing

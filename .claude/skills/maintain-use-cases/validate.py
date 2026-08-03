@@ -23,7 +23,10 @@ Checks (full mode):
 
 Pre-commit mode adds the freshness contract:
   - use-cases.md staged  -> staged content must fully validate AND its
-    3d-models as_of must equal HEAD (the commit being built upon)
+    3d-models as_of must equal HEAD (the commit being built upon), with every
+    pointer at a *staged* self-repo file read from the index rather than from
+    the pin — the pin is the parent, so without this the anchors are checked
+    against exactly the content the commit is about to replace
   - use-cases.md not staged but a staged file is referenced by a 3d-models
     pointer -> BLOCK (override once with USE_CASES_OK=1 git commit ...)
   - staged files touch experience surfaces (index.html, Makefile, docs/,
@@ -433,9 +436,30 @@ def unreachable_pin(repo: str, rdir: str, pin: str) -> str | None:
     )
 
 
-def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
+def staged_blob(root: str, path: str) -> str | None:
+    """The index's version of `path`, or None if it is staged for deletion."""
+    return try_git(root, "show", f":{path}")
+
+
+def validate_full(
+    doc: Doc, root: str, staged: set[str] | None = None
+) -> tuple[list[str], list[str]]:
+    """Check every pointer. `staged` names files to read from the index instead.
+
+    Without it this reads every pointer target at the pinned `as_of` commit —
+    which for the self-repo is HEAD, i.e. the commit *before* the one being
+    built. That is correct for a whole-tree run and wrong for a pre-commit run:
+    the hook fires precisely because a pointed-at file is staged, `--refresh`
+    then pins the parent, and the anchors are re-verified against content the
+    commit is about to replace. A staged edit that deletes an anchor's literal
+    passes, prints "all valid", and surfaces at some later unrelated refresh
+    attributed to whatever commit is in flight then. Found 2026-08-03 landing a
+    CLAUDE.md edit; nothing had broken, which is the only reason it stayed
+    invisible. Passing the staged set closes it.
+    """
     errors: list[str] = []
     warnings: list[str] = []
+    staged = staged or set()
     if doc.diagram_ucs != doc.table_ucs:
         only_d = ", ".join(sorted(doc.diagram_ucs - doc.table_ucs)) or "-"
         only_t = ", ".join(sorted(doc.table_ucs - doc.diagram_ucs)) or "-"
@@ -468,21 +492,24 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
         for ptr in doc.pointers:
             if ptr.repo != repo:
                 continue
-            blob = try_git(rdir, "cat-file", "-p", f"{pin}:{ptr.path}")
+            if repo == SELF_REPO and ptr.path in staged:
+                blob, where = staged_blob(root, ptr.path), "in the staged content"
+            else:
+                blob, where = try_git(rdir, "cat-file", "-p", f"{pin}:{ptr.path}"), f"at as_of {pin[:12]}"
             if blob is None:
-                errors.append(f"{ptr.repo}:{ptr.path} does not exist at as_of {pin[:12]}")
+                errors.append(f"{ptr.repo}:{ptr.path} does not exist {where}")
                 continue
             nlines = blob.count("\n") + 1
             if ptr.end > nlines:
                 errors.append(
                     f"{ptr.repo}:{ptr.path}:L{ptr.start}-L{ptr.end} exceeds file length "
-                    f"{nlines} at as_of {pin[:12]}"
+                    f"{nlines} {where}"
                 )
                 continue
             if ptr.anchor:
                 miss = anchor_miss(blob, ptr.start, ptr.end, ptr.anchor)
                 if miss:
-                    errors.append(f"{ptr} at as_of {pin[:12]}: {miss}")
+                    errors.append(f"{ptr} {where}: {miss}")
     cat_errors, cat_warnings = check_catalogs(doc, root)
     return errors + cat_errors, warnings + cat_warnings
 
@@ -587,7 +614,8 @@ def mode_staged(root: str) -> int:
     head = try_git(root, "rev-parse", "HEAD")
     if DOC_RELPATH in staged:
         doc = Doc(run_git(root, "show", f":{DOC_RELPATH}"))
-        errors, warnings = validate_full(doc, root)
+        # Read staged files from the index, not from the pin. See validate_full.
+        errors, warnings = validate_full(doc, root, staged=set(staged))
         if head and doc.as_of.get(SELF_REPO) != head:
             errors.append(
                 f"staged {SELF_REPO} as_of {doc.as_of.get(SELF_REPO, '?')[:12]} != HEAD {head[:12]} — "
@@ -859,6 +887,61 @@ def self_test() -> int:
             "a sibling pin is exempt — it is pinned at its own published ref",
             unreachable_pin("bikar", tmp, pinned),
             None,
+        )
+
+    # The one-commit blind spot, reproduced. `20-use-cases` blocks precisely
+    # because a pointed-at file is staged; `--refresh` then pins HEAD — the
+    # *parent* of the commit being built — so every anchor was re-verified
+    # against the content the commit is about to replace. The two expects below
+    # are the same document and the same edit, differing only in where the blob
+    # is read from, and the first one is the shipped behaviour before this fix.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+
+        def write(text: str) -> None:
+            with open(os.path.join(tmp, "CLAUDE.md"), "w", encoding="utf-8") as f:
+                f.write(text)
+
+        git("init", "-q", "-b", "master")
+        write("# header\n- **K9 -> D1.** Every relative link must resolve on disk.\n")
+        git("add", "CLAUDE.md")
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "base")
+        head = run_git(tmp, "rev-parse", "HEAD")
+
+        doc = Doc(
+            f"---\nas_of:\n  {SELF_REPO}: {head}\nrepos: {{}}\n---\n\n"
+            "```mermaid\ngraph TD\n  A[UC1]\n```\n\n"
+            f'| UC1 | rules | `{SELF_REPO}:CLAUDE.md:L2 "K9 -> D1."` |\n'
+        )
+        # The edit the guard exists to notice: the anchored literal is gone.
+        write("# header\n- **D1.** Every relative link must resolve on disk.\n")
+        git("add", "CLAUDE.md")
+
+        expect(
+            "reading at the pin passes an edit that deleted the anchor's literal",
+            validate_full(doc, tmp)[0],
+            [],
+        )
+        staged_errors = validate_full(doc, tmp, staged={"CLAUDE.md"})[0]
+        expect(
+            "reading the staged blob catches it, and says which blob it read",
+            len(staged_errors) == 1 and "in the staged content" in staged_errors[0],
+            True,
+        )
+        expect(
+            "...and names the anchor, so the repair is the finding",
+            "K9 -> D1." in staged_errors[0],
+            True,
+        )
+        # The by-design failure has a mirror: the fix must not invent findings
+        # for files the commit does not touch, or the hook becomes noise.
+        git("rm", "-q", "--cached", "CLAUDE.md")
+        expect(
+            "a pointer at a file staged for deletion is an error, not a pass",
+            "does not exist in the staged content"
+            in (validate_full(doc, tmp, staged={"CLAUDE.md"})[0] or [""])[0],
+            True,
         )
 
     print("self-test:", "PASS" if ok else "FAIL")
