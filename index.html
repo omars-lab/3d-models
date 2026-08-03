@@ -443,10 +443,12 @@
   // itself (OpenSCAD import) rather than of a symmetry-axis validation view —
   // a brick has no view set.
   //
-  // Every spec below is a *shipped default*, and the clutch numbers behind
-  // them have no coupon behind them yet. Sizes and stud counts are exact;
-  // "clutch" is not, and the section note says so rather than letting a
-  // confident spec chip imply otherwise.
+  // Every spec below is a *shipped default*. Sizes, stud counts and anchor
+  // counts are exact — they are read straight off the render. Clutch is not:
+  // coupons now exist for it (LG-F1 for the fit ladder, LG-B2 for the
+  // anchor-only body, LG-P1 for seam registration) and not one of them has
+  // been printed, so every retention claim is still a bet. The section note
+  // says so rather than letting a confident spec chip imply otherwise.
   const BRICKS = [
     { id:"ClassicBrick", file:"Classic-Brick.bkr", name:"Classic 2×4", tag:"Brick",
       desc:"LDraw part 3001 printed straight from the grammar — the reference brick, no art. The one to print first, because it is the piece a real brick has to click into.",
@@ -476,11 +478,23 @@
       desc:"Not square, and perfect anyway. The lattice steps 1 : 1.5, which lands whole on the stud grid every third column — proof that registering is about a rational ratio, not about being square.",
       specs:["8 × 8 studs","3 × 2 stud repeat","grid fit 1.00"], alt:"brick",
       lab:"lego.html?v=1&f=rational-repeat-tile" },
+    { id:"RosetteBrick", file:"Rosette-Brick.bkr", name:"Rosette Brick", tag:"Outline",
+      desc:"A ten-fold rosette whose silhouette is the piece — no relief, because on this one the outline is the art. It sits on a square lattice it does not obey: the body follows the pattern, only the six anti-stud tubes underneath follow the grid. That is the whole bet — a printed piece's outline need not follow the grid so long as its interface does — and nothing has printed it yet.",
+      specs:["6 × 5 studs","10-point silhouette","6 tube anchors"], alt:"brick",
+      lab:"lego.html?v=1&f=rosette-brick" },
     // No lab link: the Lab previews single bricks and cannot place a set —
     // a mural is deliberately absent from its script registry.
     { id:"StarMural", file:"Star-Mural.bkr", name:"Star Mural", tag:"Set",
       desc:"One 3×3 star field cut along the stud grid into four pieces that reconstitute it on a baseplate — the centre star is quartered by both cuts, on purpose. Each seam's two sides come from one planar graph, so the pattern continues across pieces to within the 0.2 mm part gap. The STL is the composed panel for preview; printing uses the per-piece files, and art this large keeps only corner tubes underneath.",
       specs:["2 × 2 pieces","4 × 4 studs each","seam 0.2 mm"], alt:"mural set" },
+    // A measuring instrument, not a display piece, and listed anyway: it is
+    // the object that decides whether the Star Mural above keeps its promise,
+    // and a gallery that shows the claim while hiding the apparatus is the
+    // less honest of the two. Its numbers are the ones still to be settled.
+    // No lab link, for the same reason as the mural — it is a set.
+    { id:"SeamCoupon", file:"Seam-Coupon.bkr", name:"Seam Coupon", tag:"Coupon",
+      desc:"The smallest object that can answer whether a pattern really survives a seam: two 2×2 pieces, one cut, two straight bars crossing it. Two bars and not one because a single bar lands on the panel mid-line, which is exactly where a 2×2 keeps its only anti-stud tube — the anchor solver deletes it, and a coupon with no clutch cannot measure registration. Print it, seat it five times, and measure the jog where each bar crosses. Nothing has, so the prediction that the jog stays inside the 0.2 mm part gap is still only a prediction.",
+      specs:["2 × 1 pieces","2 × 2 studs each","measures the seam"], alt:"coupon" },
   ];
 
   const icons = {

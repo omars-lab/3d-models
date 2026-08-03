@@ -1,0 +1,72 @@
+# Seam-Coupon — the smallest object that can answer CAL-REG-01.
+#
+# Two 2×2-stud pieces, one seam, two straight relief bars crossing it at a
+# right angle. The catalog (3d-models LG-P1) asked for *one* line, and one
+# line is impossible on these pieces: the mural recentres the inscribed
+# pattern onto the panel by its segment bbox, so a lone horizontal bar
+# always lands on the panel mid-line — which is exactly where a 2×2 piece
+# keeps its only anti-stud tube. `solveAnchors` drops any anchor whose
+# ribbed footprint comes within ~3.8 mm of a pocket ring (tube ⌀6.51/2 +
+# rib + 0.4 clearance), so the centred bar deletes the only anchor both
+# pieces have, and a coupon that rests on the baseplate without clutch
+# cannot measure stud registration — the thing it exists to measure. Two
+# bars, symmetric about the mid-line at ±5.5 mm, keep the bbox centred
+# where the art actually is, clear the tube by ≥ 4.25 mm at every legal
+# `bar`, and give two independent jog samples per seating instead of one.
+#
+# Geometry: the panel is `pieces 2 x 1 of 2 x 2` — nominal 32 × 16 mm, one
+# vertical cut at the middle. Each bar is a 24 × $bar mm rectangle running
+# horizontal (perpendicular to the seam), crossing it dead-centre and
+# stopping 4 mm short of each outer edge. The four circles are
+# construction only — each exists to mint one bar's corner points; they
+# show in the SVG but contribute nothing to the relief (the area ledger is
+# the two bars exactly). The cut splits each bar into two 12 mm halves, above the
+# 0.7 mm sliver floor, so the area ledger closes with nothing dropped.
+# The render is warning-free: unlike a centred bar, the offset bars leave
+# the bridged cavity ceiling runs under V12's 10 mm limit.
+#
+# What to measure (catalog LG-P1 has the full protocol):
+#   1. Lateral jog of each bar where it crosses the seam — prediction ≤ the
+#      0.2 mm physical gap (the cut is nominal, the gap is physical,
+#      nothing re-registers art to gap). Measure it, don't eyeball it.
+#   2. Whether the 0.2 mm gap reads as a groove or the eye continues the
+#      lines at arm's length.
+#   3. Whether the two top edges sit level after seating.
+#   4. Seat/unseat five times: repeatable jog (registration) or wander
+#      (clutch slop)?
+#
+# Render:
+#   bikar render patterns/Lego/Seam-Coupon.bkr --format parts --check -o seam-coupon/
+#     (two watertight STLs, one per piece; print with LG-F1's winning
+#      --fit-profile once that rung exists)
+#   bikar render patterns/Lego/Seam-Coupon.bkr --format svg -o SeamCoupon.svg
+#     (the bars alone — confirm both are straight before plastic)
+#
+# Printing is blocked on LG-F1 producing a passing rung — a piece that does
+# not seat has no seam to measure. Every clutch dimension remains an
+# unmeasured bet (CAL-RIB-01, coupon LG-F1).
+
+param plates = 3 range 2..9 step 1
+param relief = 0.8 range 0.8..2.0 step 0.1
+param bar = 2.0 range 1.0..2.5 step 0.5
+
+blueprint bar_cell
+  circle TL center(-12, 5.5) radius $bar / 2
+  divide TL into 4 offset 0
+  circle TR center(12, 5.5) radius $bar / 2
+  divide TR into 4 offset 0
+  circle BL center(-12, -5.5) radius $bar / 2
+  divide BL into 4 offset 0
+  circle BR center(12, -5.5) radius $bar / 2
+  divide BR into 4 offset 0
+
+pattern seam_bars on bar_cell
+  connect cycle [TL.cpt1 TR.cpt1 TR.cpt3 TL.cpt3]
+  connect cycle [BL.cpt1 BR.cpt1 BR.cpt3 BL.cpt3]
+  voids detect
+
+mural SeamCoupon
+  inscribe seam_bars
+  pieces 2 x 1 of 2 x 2
+  height $plates plates
+  relief depth $relief
