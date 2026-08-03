@@ -569,10 +569,13 @@ every sentence in those files.
 The shape of the result is the useful part: **the large majority of the residue
 is citation repair, a fetch, a spec reading or a design decision.** Only about a
 dozen items across all 17 files need a printer, and nearly all of them are
-already owned by a coupon in §3. The rest is work that can be done today.
+already owned by a coupon in §3. The rest is work that can be done today — and a
+re-check on 2026-08-03 found some of it had *already* been done before this
+section was written, which is the subject of §8's fifth check.
 
 Three clusters are worth naming because they change documents rather than
-constants:
+constants. **Two of the three were already closed when this section was
+written** — see each entry; only the unsourced-number cluster is live.
 
 - **The unsourced-number cluster.** `±0.1–0.2 mm printer accuracy` appears as a
   load-bearing premise in at least three docs and has **no vendor source**: the
@@ -584,19 +587,36 @@ constants:
   "PETG ~30% stronger interlayer bonding" claim to disregard until sourced, and
   a "0.2–0.5 mm FDM bow" that is a working placeholder. Only the last of these
   is a print away; the others are re-sourcing or deletion.
-- **The misattribution cluster.** Several quotes are credited to the wrong page —
-  build123d quotes to an HN thread rather than juraph.com, a Manifold speedup to
-  issue #387 rather than PR #4533, the snap-fit Q-factor equations to BASF rather
-  than AlliedSignal, a 1–3 mm bow to a Prusa forum thread that "contains no
-  numbers at all". Each is a one-line fix, and one of them
+- **The misattribution cluster — closed, verified 2026-08-03.** Several quotes
+  were credited to the wrong page. All four are now corrected in the design docs:
+  the build123d quotes cite
+  [juraph](https://juraph.com/kiwi/playing_with_build123d/) with HN 41548945 kept
+  as secondary discussion, the "5–30×" figure cites
+  [openscad PR #4533](https://github.com/openscad/openscad/pull/4533) with
+  discussion #387 named as the independent 11× report, the Q-factor equations are
+  credited to McMaster & Lee of **AlliedSignal**, and the 1–3 mm bow is re-homed
+  to WhyItFailed. The garbled "3m36s → 3.4s" benchmark is deleted rather than
+  re-cited. Anchors:
+  [`piece-composition-design.md`](piece-composition-design.md) Appendix A and
+  [`w2-connector-design.md`](w2-connector-design.md) §3 and Appendix A.
+  One of them
   ([`research/piece-composition-grounding-audit.md`](research/piece-composition-grounding-audit.md))
-  is a **K2 instance the taxonomy already cites**: BOSL2's `screws.scad` was
-  inside the surveyed set and separates the distinction the doc claimed everyone
-  conflates.
-- **The angle-convention line.** `print-validation`'s audit asks for one sentence
-  saying whether θ is measured from vertical or horizontal. The taxonomy calls
-  this out under K10 as "a silent porting hazard" because the two conventions
-  agree at exactly the 45° default. It costs one line and it is not written yet.
+  is the **K2 instance the taxonomy cites**: BOSL2's `screws.scad` was inside
+  the surveyed set and separates the distinction the doc claimed everyone
+  conflates. That correction landed too.
+  The *survey* files still read as first delivered, and should — research is
+  checked in verbatim, so a survey carries an **Errata** section recording what
+  the audit found rather than a rewritten body. Reading a survey line and a doc
+  line side by side will therefore keep showing the old attribution next to the
+  new one; that is the convention working, not residue.
+- **The angle-convention line — closed; it was never open.** `print-validation`'s
+  audit asked for one sentence saying whether θ is measured from vertical or
+  horizontal, and the taxonomy calls this out under K10 as "a silent porting
+  hazard" because the two conventions agree at exactly the 45° default. The
+  sentence shipped in the *same commit as the audit* (`7fdb7e1`, 2026-07-27) and
+  is in [`print-validation-design.md`](print-validation-design.md) under the
+  support-map step: θ from vertical, `d = h·tan θ`, with PrusaSlicer's `h/tan θ`
+  from horizontal named beside it. This entry was wrong for six days.
 
 One item there needs flagging as a *tooling* lesson rather than a finding:
 [`research/derivation-visualization-survey.md`](research/derivation-visualization-survey.md)
@@ -704,7 +724,7 @@ one.
 
 ## 8. Reading this file against itself
 
-Four checks, run before shipping it, in the spirit of
+Five checks, run before shipping it, in the spirit of
 [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md) K7.
 
 - **The headline sequence and the register agree.** §2 puts the machine card
@@ -722,10 +742,26 @@ Four checks, run before shipping it, in the spirit of
   (`CAL-STR-01`). 16 records = 12 on the card + 4 on design coupons — the mural
   bets have coupons but no bikar record yet, which is why the record count did
   not move with the bet count. 28
-  print-gated items = 24 catalog entries + 4 uncatalogued. The magnet-pocket item
-  in §3.7 is deliberately **outside** that 26: no design doc demands it, so
+  print-gated items = 28 catalog entries — 24 coupons plus the four deliverables
+  catalogued on 2026-08-03, which is why this line no longer reads
+  "24 + 4 uncatalogued". The magnet-pocket item
+  in §3.7 is deliberately **outside** that 28: no design doc demands it, so
   counting it would inflate the register with work nobody has asked for. §3.7
   says so in place rather than leaving the arithmetic to look wrong.
+- **Every residue item names what would close it.** Added 2026-08-03, because
+  this check did not exist and §6.3 failed it. Two of that section's three
+  clusters were **already fixed when it was written** on 2026-08-02 — the
+  piece-composition misattributions and the angle-convention line in `7fdb7e1`
+  (2026-07-27, the same commit as the audit that asked for them), the w2 ones in
+  `981d7bc` (2026-07-28) — and the section still listed them as
+  outstanding, one of them as "it costs one line and it is not written yet."
+  Nothing was wrong with the research; the summary of it had simply aged, and a
+  summary of another document's open items is a **claim about that document's
+  current state**, decaying the moment the item is fixed. So each residue entry
+  now carries the anchor that would settle it — a doc, a section, the phrase to
+  look for — which turns re-checking the list into a grep instead of a reread.
+  The entries that stay open (the unsourced-number cluster, §6.1's five LDraw
+  items, §6.2's table) each say what they are waiting on for the same reason.
 - **No hedge was hardened.** Where a source says "may", "expected to",
   "predicted", "estimates" or "not ruled out", this file carries the word.
   The three places that matter most: P5 is *expected to* fail or disappoint on
