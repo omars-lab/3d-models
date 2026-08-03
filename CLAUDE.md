@@ -102,13 +102,12 @@ rule does not transfer.
   one substitution keeps passing it: **an aggregate cannot discharge a claim
   about every part.** `lego-lab` §14 certified every triangle CCW and measured
   one signed volume — which one reversed triangle in 3,764 leaves positive.
-- **K9 → D1.** Every relative link must resolve on disk. This one is universal
-  and needs no marker.
+- **K9 → D1.** Every relative link must resolve on disk; universal, no marker.
 - **K1 → D4. A withdrawal is corpus-wide, not a local edit.** When an audit kills a
   number, grep every doc before calling it fixed and add the literal to `WITHDRAWN`
   in `docs_gate.py`. `±0.1–0.2 mm printer accuracy` died 2026-07-29, was rebuilt in
-  two docs, and stood in `tile-wall` five more days under "the load-bearing facts".
-  D4 catches literal restatements only — §2's "10–20× beyond FDM tolerance" escaped.
+  two docs, and stood five more days in `tile-wall` under "the load-bearing facts".
+  D4 catches literals only — §2's "10–20× beyond FDM tolerance" escaped it.
 - **K9 → the pointer gate.** A backticked path is a claim too, and
   `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`, `make
   validate-pointers`) holds it to this repo, to a sibling **at a git ref** — not
@@ -120,12 +119,11 @@ rule does not transfer.
 - **A knob a coupon prescribes is a claim too.** Every `--param`, `--piece` and
   `--brick-fit` in `.claude/skills/prototype/catalog.md` must name something the
   entry's `.bkr` declares — `.claude/gates/catalog_models.py`, hook
-  `36-catalog-models`, `make validate-catalog`. Two instances built it: W-F1's
-  model file that never existed under the name given, and LG-F1's `--param
-  rib_mm`, "a knob that never existed". The DSL's declaration keywords and the
-  `BrickFit` field set are **harvested from bikar**, not listed — a hand-written
-  list omitted `clip` and turned two correct entries into findings on the first
-  run.
+  `36-catalog-models`, `make validate-catalog`. Built by W-F1's model file that
+  never existed under the name given and LG-F1's `--param rib_mm`. The DSL's
+  declaration keywords and the `BrickFit` field set are **harvested from bikar**,
+  not listed: a listed set omitted `clip` and made findings of two correct
+  entries.
 - **A line number is a claim too, and needs an anchor to be one.** A pointer in
   `.claude/skills/maintain-use-cases/use-cases.md` written `` `repo:path:L137` ``
   asserts the file exists *and* that L137 is the line the label names; only the
