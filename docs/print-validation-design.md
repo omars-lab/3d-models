@@ -185,8 +185,17 @@ and the prototype catalog own the rest.
    V1 spike with the degenerate cases (tangent triangles, vertices on the plane).
 2. Island tracking granularity: per-region overlap is O(layers × regions²) worst case —
    fine for orbs; revisit if girih-field tiles explode region counts.
-3. Should F3 (supports required) ever be an *error* for presets shipped in the gallery?
-   Leaning yes-for-gallery, warn-for-Lab-custom.
+3. **Decided 2026-08-03 — no, F3 warns everywhere** ([`decisions-log.md`](decisions-log.md)
+   D-018). The leaning recorded here (yes-for-gallery, warn-for-Lab-custom) is overruled.
+   Needing supports is a normal printable outcome, so erroring on the gallery path would
+   fail `make orbs` over a condition the slicer is built for — and a per-surface severity
+   would make F3's meaning depend on who called the gate, requiring a `--strict` flag and
+   leaving the severity table unreadable on its own. The warning still fires on the gallery
+   path; what changes is that a human decides rather than the build failing. **F2** (an
+   island that never merges) stays an error — that is the genuinely unprintable case, and
+   the F2/F3 line is now the whole of the difference. Note §4's table already read
+   `warn: supports required` with no per-surface caveat: the decision makes the doc agree
+   with itself rather than requiring a new row.
 
 ## Appendix A — provenance
 
