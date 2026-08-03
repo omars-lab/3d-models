@@ -1042,3 +1042,175 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   discipline that compatibility claims say "LEGO-brand verified; clone
   unmeasured" until this coupon reports; whether the Lab's fit-profile page
   needs a per-plate-brand preset.
+
+---
+
+# Deliverables
+
+The entries above are **coupons** — objects whose only purpose is to yield a
+number. The four below are the **deliverables** the design docs actually
+promise: the finished objects each rung of the C and W ladders exists to make
+possible. They sit last because nothing else in this catalog depends on them,
+and each stays `planned` until the coupons feeding it report.
+
+They were absent from this file until 2026-08-03 even though four design docs
+demanded them, which is what [`docs/backlog.md`](../../../docs/backlog.md) §3.5
+was tracking. Every figure quoted below is from a render of the shipped model at
+bikar `d9b3c84`, not an estimate.
+
+## C1 — Nail-Tile deliverable (the girih tile you can hang)
+
+- **Status**: planned. Not blocked on any coupon — it prints at the FDM floor
+  with no fits, no clips and no mating part. Blocked only on a printer.
+- **Model**: `patterns/Pieces/Nail-Tile.bkr` at declared defaults (`depth` 6,
+  `shaft_d` 3.5, `sink_d` 7, `sink_depth` 2) — an {8/2} octagram inscribed in a
+  100 mm square slab with a countersunk nail hole at the centroid.
+  `bikar render patterns/Pieces/Nail-Tile.bkr --format stl --check -o NailTile.stl`
+  → 528 triangles, **59.9 cm³** of solid, `watertight=true euler=0 degenerate=0
+  minFeature=1.75mm — PASS`. Print flat, art side up, bore vertical.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. Does the countersink seat a real nail head flush, or does the
+    ⌀7 × 2 mm seat need to grow once elephant's foot has had its say? The
+    printed mouth is the dimension to caliper, not the modelled one.
+  - [ ] 2. Does a 100 mm × 6 mm slab with a large void fraction stay flat on the
+    bed, or does it cup at the corners? This is the same question **MC-5**
+    answers for a solid plate — compare against MC-5's number rather than
+    deriving a second one, and if they disagree the void fraction is why.
+  - [ ] 3. Do the octagram's acute interior corners resolve at 0.4 mm, or does
+    the slicer round them into blobs? `minFeature=1.75 mm` is the mesh's answer;
+    the extruder's answer is what this measures.
+  - [ ] 4. Hung on one nail, does the tile sit level and stay put, or does it
+    rotate about the single fixing?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: [`docs/piece-composition-design.md`](../../../docs/piece-composition-design.md)'s
+  countersink geometry; the gallery's first "functional piece" entry; Q2's
+  answer feeds back into whether tile `depth` 6 is enough.
+
+## C2 — Pinned-Tiles deliverable (do the authored fit windows survive plastic?)
+
+- **Status**: planned. Print after **MC-1**: the whole point is the fit windows,
+  and MC-1's ladder is what sets `holeCompMm` for the profile these render under.
+  Printing before it measures the compiler's guess, not the design.
+- **Model**: `patterns/Assemblies/Pinned-Tiles.bkr` at declared defaults
+  (`pin_d` 3, `depth` 6) — two 60 mm slab tiles and two ⌀3 × 12 mm pins.
+  `bikar render patterns/Assemblies/Pinned-Tiles.bkr --format parts --check -o parts/`
+  → four gated parts: TileA and TileB at 532 triangles each
+  (`euler=-2 minFeature=6mm — PASS`), PinA and PinB at 256 each
+  (`euler=2 minFeature=3mm — PASS`). Add `--fit-profile pla_calibrated` once
+  MC-1 has set one; the authored fits stay the contract either way. Pins print
+  upright on the ⌀ face — a pin printed lying down is elliptical (the MC-1 rule,
+  and it transfers because it is a property of the same extrusion, not of the
+  coupon).
+- **Print target**: TBD — record the `--fit-profile` used, or `authored` if none.
+- **What we want to learn**:
+  - [ ] 1. Does the press side (bore ⌀2.90 against a ⌀3.00 pin) actually press —
+    seat once, stay seated, no glue — or does it split the 5 mm border?
+  - [ ] 2. Does the sliding side (⌀3.15) slide *and* hold, or does it rattle?
+    The two answers together are what the ±0.05 window claims; one alone is not.
+  - [ ] 3. With both pins in, do the tiles meet flush, or does the 15 mm pin
+    spacing plus bore tilt leave a visible step? Measure the step, don't eyeball it.
+  - [ ] 4. Seat and unseat TileB five times: does the sliding fit stay a sliding
+    fit, or does it wear open?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: [`docs/c2-assembly-design.md`](../../../docs/c2-assembly-design.md) §8's
+  fit-window claim — Q1 and Q2 together are the only thing that earns it; the
+  `press`/`sliding` offsets in bikar's fit table; whether `--fit-profile` needs a
+  per-material variant beyond PLA and PETG.
+
+## W1 — Nail-Wall 2×2 pilot (what a real tile actually costs)
+
+- **Status**: planned. Print after **C1** — this is four of that tile, and a
+  problem found on one is cheaper than a problem found on four.
+- **Model**: `patterns/Walls/Nail-Wall.bkr` at declared defaults.
+  `bikar render patterns/Walls/Nail-Wall.bkr --format stl --check -o NailTile.stl`
+  emits the **module**, not the wall: 528 triangles, 59.9 cm³, `minFeature=1.75mm
+  — PASS`, with the layout report on stderr reading `4 full, 0 fragment(s),
+  0 dropped — offcut 0.0 cm², uncovered 4.8 cm²` for a 201.2 mm square boundary at
+  `gap 1.2`. Print the module four times. Also render
+  `--format svg -o NailWall.svg` and look at it before committing filament — the
+  pattern-continuity check across the 1.2 mm gaps costs nothing.
+- **Print target**: TBD — this coupon's *purpose* is to record it, so record
+  everything: profile name, infill percentage and pattern, wall count, and
+  wall-clock time per tile.
+- **What we want to learn**:
+  - [ ] 1. **Mass and time for one real tile.**
+    [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1 labels its
+    whole production table *estimates* — "~40–60 g, ~2–4 h at 0.2 mm on a modern
+    small printer" — and makes computing them for real a W3 deliverable. Weigh the
+    tile and read the slicer's actual time. The mesh's 59.9 cm³ is **solid**
+    volume; printed mass is whatever the infill leaves, which is exactly why the
+    estimate needs a print and not arithmetic.
+  - [ ] 2. Does the estimate hold, and in which direction? Every downstream figure
+    in §7.1 — ~36 tiles / ~5 days / ~2 kg for a 0.6 × 0.6 m panel, ~200 tiles /
+    ~4 weeks / ~10 kg for a 1.2 × 1.8 m wall — is this one number multiplied.
+  - [ ] 3. Butted up on a flat surface, do four tiles read as one continuous
+    pattern across the 1.2 mm gaps, or does the gap break the motif? This is the
+    SVG's claim, tested in plastic.
+  - [ ] 4. Does tile-to-tile dimensional variation accumulate across the 2×2, so
+    that the outer corners no longer land on the 201.2 mm boundary?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1's
+  estimate table — Q1 replaces every hedged figure in it with a measured one, and
+  is the input W3's `layout report` production metrics need; the gallery's "what
+  does a wall cost" note.
+
+## W2 — Clip-Wall first full wall (does the joint scale?)
+
+- **Status**: planned. Blocked on **W-F1** (blade clearance — a clip that does
+  not engage has no joint to scale) and then **W-C1** (which jaw variant, and
+  whether capture holds at MC-5's warp). Printing is on hold with the rest of
+  the W series.
+- **Model**: `patterns/Walls/Clip-Wall.bkr` at declared defaults (`depth` 10,
+  `gap` 1.2). Two renders, because the tile and the clip are gated differently:
+  `bikar render patterns/Walls/Clip-Wall.bkr --format stl --check -o ClipTile.stl`
+  → 2,372 triangles, **98.2 cm³**, `watertight=true euler=2 degenerate=0
+  minFeature=2.4mm — PASS`, with `connectors: 1 × CornerClip (StarClip, petg) —
+  1 interior corner, 0 perimeter corners unclipped; screws: 4 × no8 keyhole` on
+  the layout report. Then
+  `bikar render patterns/Walls/Clip-Wall.bkr --format stl --piece StarClip -o StarClip.stl`
+  → 718 triangles, 0.3 cm³, **no `--check`**: the bayonet blade is ~0.6 mm and
+  deliberately sub-floor, so gating it would fail by design (the model's own
+  header says so). Print four tiles and one clip; tiles in the wall's material,
+  clip in PETG, per W-C1's cross-shrinkage rule.
+- **Print target**: whatever W-F1 and W-C1 settled on; render with that
+  `--fit-profile` and change nothing else.
+- **Mating parts**: four #8 pan-head screws — one per tile. Not one: `mount
+  keyhole` is declared on the *tile*, so each placement mints its own keyhole
+  (this catalog entry is why
+  [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md) §8's
+  "hanging on one screw" was corrected on 2026-08-03; see its §11 Q6).
+- **What we want to learn**:
+  - [ ] 1. Does one interior CornerClip actually hold four 100 mm tiles in
+    register, or does the outer perimeter — `0 perimeter corners unclipped` on
+    the BOM only because this wall has no cropped edges — splay?
+  - [ ] 2. Do the four keyholes line up with four screws set from a paper
+    template, or does tile-to-tile variation exceed the keyhole slot? The slot
+    length is the tolerance budget; measure what it actually absorbed.
+  - [ ] 3. Front-face lippage: with the clip engaged from behind, do adjacent
+    tile faces sit level in raking light, or does the joint pull one proud?
+    W-C1 asks this of two tiles; this asks it of a closed 2×2 where four
+    interfaces must agree at once.
+  - [ ] 4. Hang it, then take it down and rehang it. Does the clip survive
+    disassembly, and do the tiles return to the same register?
+  - [ ] 5. Does the engaged joint carry any shear — i.e. could a wall-level
+    mount replace four tile-level ones (**§11 Q6**)? This entry does not decide
+    it, but it is the first object that can show whether the question is worth
+    pursuing.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md)
+  §8's deliverable claim and §11 Q6 (Q5 is its only evidence); the connector BOM's
+  all-four-full clip rule, which Q1 tests at its easiest case before W3 relaxes it
+  to fragments; the gallery's clipped-wall entry.
