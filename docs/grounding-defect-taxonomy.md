@@ -239,13 +239,14 @@ The prompt half is `CLAUDE.md` at the repo root: K1, K2, K7 and K10 as four
 rules, each with the corpus instance that produced it attached.
 
 The gate half is `.claude/gates/docs_gate.py`, wired as
-`.githooks/pre-commit.d/30-docs-gate` and `make validate-docs`. Three rules:
+`.githooks/pre-commit.d/30-docs-gate` and `make validate-docs`. Four rules:
 
 | Rule | Kind | What it checks |
 |---|---|---|
 | **D1** | K9 | every relative markdown link resolves on disk |
 | **D2** | K6 | every `**Validator:**` declaration ships an asserted `PASS:` and `FAIL:` in its own section |
 | **D3** | K4 | every `**Default:**` declaration carries a citation link or a `CAL-*` bet id in its paragraph |
+| **D4** | K1 | a number a grounding audit withdrew is not restated as fact — the bullet or paragraph naming it must say it is withdrawn |
 
 Each rule ships an asserted-PASS and an asserted-FAIL fixture under
 `.claude/gates/fixtures/`, verified by `docs_gate.py --self-test`. This gate
@@ -260,6 +261,25 @@ which is the single defect class its aggregate measurement could see. The gap is
 structural, not an implementation bug: whether a counterexample is the hard one
 is a question about the subject matter. See the K6 refinement in §2.
 
+**Why D4 exists, and what it does not cover.** Added 2026-08-03. A withdrawal is
+a corpus-wide event and was twice handled as a local edit: the 2026-07-29
+lego-lab audit established that no printer vendor publishes an accuracy figure
+at all, `lego-lab-design.md` §3.5 and `print-validation-design.md` were rewritten
+around measured repeatability — and `±0.1–0.2 mm` went on standing in
+`tile-wall-design.md` for five days, in a section headed *"the load-bearing
+facts"*. Unlike D2 and D3, D4 is not marker-scoped: it holds one hand-entered
+list of literals and fires nowhere else, so it needs no cooperation from the
+author. Files under `docs/research/` are exempt, because the convention there is
+a verbatim body plus an Errata section — the withdrawn number is supposed to
+still be in the text.
+
+Its ceiling is the same defect's second site. `tile-wall-design.md` §2 wrote the
+withdrawn figure as *"±0.02 mm sensitivity is 10–20× beyond FDM tolerance"* —
+the same number, expressed as a multiple, with no literal to match. Run against
+the pre-fix file D4 reports **one** finding, at Appendix A, not two. It makes
+the cheapest form of the mistake un-shippable and certifies nothing about the
+expensive form; the fail fixture says so on its own face.
+
 **Measured coverage, 2026-07-30.** Against the 18 files in `docs/` plus
 `CLAUDE.md`:
 
@@ -272,6 +292,9 @@ is a question about the subject matter. See the K6 refinement in §2.
   and 0 `**Default:**` markers.** They are dormant. They constrain docs written
   from now on and do not retro-fit the seven audited docs, which state their
   validators and defaults in free prose.
+- **D4, added 2026-08-03, carries one literal and reports 0 findings on the
+  fixed corpus and 1 on the corpus as it stood that morning.** It is the only
+  one of the four that retro-fits, because it needs nothing from the author.
 
 That is the honest state, and it is a deliberate trade rather than an
 oversight. A rule that infers "this sentence is normative and contains a

@@ -10,6 +10,8 @@ the definitions and the instances each rule is built from.
            asserted FAIL example in its own section.
   D3 (K4)  Every `**Default:**` declaration carries a citation link or a
            CAL-* bet id.
+  D4 (K1)  A number an audit has withdrawn may not be restated as fact. The
+           bullet or paragraph that names it must also say so.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
 and has no false positives by construction — the target either exists on disk
@@ -21,6 +23,24 @@ silently. That is a real limit and it is stated in the taxonomy doc: this gate
 catches an incomplete discipline, not an absent one. It is the same trade
 bikar's check-doc-pointers.ts makes, and it is deliberate — a gate that fires
 on prose it cannot parse gets switched off, which is worse than no gate.
+
+D4 is **literal-scoped**: it knows one list of exact numbers, each entered by
+hand when an audit withdrew it, and it fires nowhere else. It exists because a
+withdrawal is a corpus-wide event and was twice treated as a local edit:
+"±0.1–0.2 mm printer accuracy" was withdrawn on 2026-07-29, corrected in
+lego-lab-design.md and print-validation-design.md, and left standing in
+tile-wall-design.md as a load-bearing premise until 2026-08-03. Research files
+under docs/research/ are exempt: the convention there is a verbatim body plus an
+Errata section, so the withdrawn number is *supposed* to still be in the text —
+the errata note is what carries the correction.
+
+Its reach is a floor, and the defect that built it proves the ceiling. That
+defect had two sites in one file. D4 catches Appendix A's "FDM ±0.1–0.2 mm"
+and does **not** catch §2's "LEGO-class interference (±0.02 mm sensitivity) is
+10–20× beyond FDM tolerance", which restates the same withdrawn figure as a
+multiple and so contains no literal to match. Run against the pre-fix file the
+gate reports one finding, not two. D4 makes the cheapest form of the mistake
+un-shippable; it does not certify that a withdrawn number is gone.
 
 Usage:
   docs_gate.py [FILE ...]     check the given files (default: all docs/**/*.md)
@@ -51,6 +71,26 @@ ASSERT_PASS = re.compile(r"^\s*[-*]?\s*PASS:", re.IGNORECASE)
 ASSERT_FAIL = re.compile(r"^\s*[-*]?\s*FAIL:", re.IGNORECASE)
 
 SKIP_SCHEMES = ("http://", "https://", "mailto:", "ftp://", "data:")
+
+BLOCK_START = re.compile(r"^\s*(?:[-*+]\s|\d+\.\s|#{1,6}\s|>)|^\s*$")
+
+# Numbers an adversarial grounding audit withdrew, and what a doc must say if
+# it names one anyway. Add a row when an audit withdraws a number; never add a
+# row speculatively — every row here is a number that was found restated as
+# fact in a doc after the withdrawal.
+WITHDRAWN: list[tuple[re.Pattern, str, str]] = [
+    (
+        re.compile(r"±\s*0\.1\s*[–-]\s*0\.2\s*mm"),
+        "±0.1–0.2 mm FDM accuracy",
+        "no printer vendor publishes an accuracy figure at all (Bambu X1C and A1 "
+        "spec sheets: zero matches; Prusa MK4S: no number). The rebuilt argument "
+        "is docs/lego-lab-design.md §3.5",
+    ),
+]
+
+# A block escapes D4 by saying, in the block itself, that the number is not
+# being asserted. Anything vaguer than these words is not a withdrawal.
+EXCULPATE = re.compile(r"withdrawn|uncited|corrected|correction", re.IGNORECASE)
 
 
 def strip_code(lines: list[str]) -> list[str]:
@@ -142,6 +182,40 @@ def check_d3_defaults(path: Path, lines: list[str], raw: list[str]) -> list[str]
     return findings
 
 
+def block_at(lines: list[str], i: int) -> str:
+    """The bullet, list item or paragraph containing line i.
+
+    Bullets in these docs run several lines with no blank line between them,
+    so a blank-line paragraph would span a whole list and let one bullet's
+    disclaimer vouch for every other bullet's number. The block therefore also
+    ends at the next list marker or heading.
+    """
+    start = i
+    while start > 0 and not BLOCK_START.match(lines[start]):
+        start -= 1
+    end = i + 1
+    while end < len(lines) and not BLOCK_START.match(lines[end]):
+        end += 1
+    return "\n".join(lines[start:end])
+
+
+def check_d4_withdrawn(path: Path, lines: list[str]) -> list[str]:
+    if "research" in path.parts:
+        return []
+    findings = []
+    for pattern, label, why in WITHDRAWN:
+        for n, line in enumerate(lines):
+            if not pattern.search(line):
+                continue
+            if EXCULPATE.search(block_at(lines, n)):
+                continue
+            findings.append(
+                f"{path.relative_to(ROOT)}:{n + 1}: D4 (K1) restates a withdrawn "
+                f"number as fact: {label} — {why}"
+            )
+    return findings
+
+
 def check_file(path: Path) -> list[str]:
     raw = path.read_text(encoding="utf-8").splitlines()
     lines = strip_code(raw)
@@ -149,6 +223,7 @@ def check_file(path: Path) -> list[str]:
         check_d1_links(path, lines)
         + check_d2_validators(path, lines, raw)
         + check_d3_defaults(path, lines, raw)
+        + check_d4_withdrawn(path, lines)
     )
 
 
@@ -173,6 +248,7 @@ def self_test() -> int:
         "fail/d1-dead-link.md": ["D1 (K9)"],
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
+        "fail/d4-withdrawn-number.md": ["D4 (K1)"],
     }
     ok = True
     for name in sorted((FIXTURES / "pass").glob("*.md")):

@@ -62,9 +62,32 @@ room, v1 ships squares), floors (walking loads), exterior installs, kinematic co
   reports; Alsoufi & Elsayed 2017). **0.2–0.5 mm over 100 mm is our working placeholder
   until the W2 clip coupon measures it per printer** — so back-registration alone risks
   visible steps in raking light.
-- **Retention vs creep vs aging**: LEGO-class interference (±0.02 mm sensitivity) is
-  10–20× beyond FDM tolerance — printed retention must come from compliant geometry or
-  separate reprintable clips. The PLA hazard for spring parts is twofold and the
+- **Retention vs creep vs aging**: printed retention must come from compliant geometry
+  or separate reprintable clips — but **not for the reason v1 of this doc gave.**
+  v1 argued "LEGO-class interference (±0.02 mm sensitivity) is 10–20× beyond FDM
+  tolerance"; both halves are withdrawn as uncited. No printer vendor publishes an
+  accuracy figure at all — the
+  [Bambu X1C](https://public-cdn.bambulab.com/store/bambulab-X1-carbon-tech-specs.pdf)
+  and [A1](https://cdn.shopify.com/s/files/1/0635/8247/0318/files/A1_Spec_EN_1.pdf) spec
+  sheets contain no accuracy, tolerance or repeatability number (grepped for
+  `accur|precis|toler|repeat|deviat`, zero matches in both) and
+  [Prusa's MK4S page](https://www.prusa3d.com/product/original-prusa-mk4s-3d-printer/)
+  claims "Perfect Dimensional Accuracy" with no number — so "FDM tolerance ±0.1–0.2 mm"
+  was uncited by construction; and the source cited for the ±0.02 mm clutch band says
+  the stud/tube interference is **0.1–0.2 mm**, ten times that.
+  [`lego-lab-design.md`](lego-lab-design.md) §3.5 carries the rebuilt argument and lands
+  in the same place from measured *repeatability*: σ ≈ 0.02 mm across 12 nominally
+  identical PLA samples
+  ([Zaborniak et al., *Appl. Sci.* 14(15):6404](https://doi.org/10.3390/app14156404) —
+  an order-of-magnitude figure, since the paper publishes distributions and not a
+  numeric σ), a fit clearance is a *difference* of two such features (σ_fit ≈ √2·σ ≈
+  0.025 mm), and one scalar offset cannot null a bore and a boss at once
+  ([NIST Moylan et al.](https://nvlpubs.nist.gov/nistpubs/jres/119/jres.119.017.pdf):
+  +0.023 mm pins against −0.115 mm holes in the same build). **This transfers because**
+  our clip seats are exactly what those studies measure — small features on a
+  single calibrated FDM machine; it says nothing about 100 mm tile *flatness*, which is
+  the bullet above and is sourced separately. The PLA hazard for spring parts is twofold
+  and the
   *better-sourced* half is not creep: PLA physically ages at room temperature,
   embrittling within days (ductility collapses to a few percent), so an aged PLA arm
   tends to **fracture on engage/disengage flex**; separately, maintained deflection
@@ -363,7 +386,12 @@ Headline sources:
   [GarageFlooringLLC](https://www.garageflooringllc.com/expansion-and-contraction/))
 - **Leveling-clip mechanics** (the front-face registration insight behind §4):
   [DIYTileGuy leveling systems](https://www.diytileguy.com/tile-leveling-systems/)
-- **Precision + tolerance ecosystems**: LEGO ±0.01 mm vs FDM ±0.1–0.2 mm;
+- **Precision + tolerance ecosystems**: FDM process capability — **no vendor publishes
+  an accuracy figure**, so the LEGO-±0.01-vs-FDM-±0.1–0.2 framing this doc used in v1 is
+  withdrawn (§2). What is on file is repeatability
+  ([Zaborniak et al.](https://doi.org/10.3390/app14156404)) and bore-vs-boss asymmetry
+  ([NIST Moylan et al.](https://nvlpubs.nist.gov/nistpubs/jres/119/jres.119.017.pdf)),
+  assembled into an argument in [`lego-lab-design.md`](lego-lab-design.md) §3.5;
   [Multiboard](http://www.multiboard.io/) user tolerance sliders;
   [Printables hex wall panels](https://www.printables.com/model/206002-wallpanel-modular-hexagon-tiles)
 - **Press-fit / snap-fit design**:
