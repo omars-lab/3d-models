@@ -120,8 +120,15 @@ validate-catalog:
 # and not .claude. This builds that shape and asserts each hook skips instead of
 # dying; it is the regression test for a deploy that failed on the gh-pages
 # commit with `[Errno 2] No such file or directory`.
+#
+# The second test covers the other half of "a hook runs in an environment a
+# person does not": git exports GIT_DIR to hooks it launches from a linked
+# worktree, GIT_DIR outranks -C, and validate.py's root then resolved into
+# .claude/skills/. Sibling pointer checks became warn-and-skip, so the hook
+# checked 52 of 119 pointers and exited 0 while the hand-run printed "all valid".
 validate-hooks:
 	${ROOT_DIR}/.githooks/tests/worktree-without-claude.sh
+	${ROOT_DIR}/.githooks/tests/hook-env-git-dir.sh
 
 # Site-graph gate: docs/site-graph.json declares every page this project
 # publishes, every link between them, and each host's exposure. The gate holds
