@@ -8,7 +8,8 @@ contested bets recorded in Appendix B).**
 Scope: the W2 rung of [`tile-wall-design.md`](tile-wall-design.md) §9 — the connector
 library's first shipping member (clipseat + CornerClip), the fit and clip coupons, the
 keyhole mount, wall `connect clips` with a connector BOM, and the Lab's instanced wall
-preview. Deliverable: four tiles clipped into a square hanging on one screw.
+preview. Deliverable: four tiles clipped into a square, hanging on **four** screws —
+`mount keyhole` is declared on the *tile*, so every placement mints its own.
 
 Builds on: [`tile-wall-design.md`](tile-wall-design.md) (the parent design; its §4 corner
 clip and §6 keyhole are adopted and given engineering numbers here; its §10 Q1
@@ -370,7 +371,17 @@ instead of a README. Printing is currently on hold, so both entries land as `pla
 Deliverable pattern: **`patterns/Walls/Clip-Wall.bkr`** — 100 mm tile (`border 5`,
 `depth 10`, clipseat rebate, centroid #8 keyhole), a `clip` declaration, and a
 201.2 × 201.2 wall with `gap 1.2 connect clips` → four full tiles, one interior clip,
-hanging on one screw.
+four screws. Catalog entry **W2**.
+
+> **Corrected 2026-08-03.** This paragraph and §2's scope line both said the
+> deliverable hangs "on one screw". It hangs on four. `mount keyhole` is declared on
+> the **tile**, at its centroid, so a wall mints one keyhole per placement — and the
+> compiler has been saying so all along. Rendering the shipped model prints
+> `screws: 4 × no8 keyhole` on the BOM line beside `1 × CornerClip`. §5's illustrative
+> BOM in this same doc also reads `screws: 4 × no8 keyhole`, for a larger wall; two
+> sections of one doc disagreed and neither needed a source to settle (**K7**).
+> Whether a wall *should* be able to declare a single shared mount is a real design
+> question, and a different one — it is **§11 Q6**, not something this line decided.
 
 ## 9. Lab instanced wall preview — and a survey divergence
 
@@ -429,6 +440,15 @@ the coupons split into one file per part.
   verified by inspection on the first Clip-Wall print.
 - **Q5 — fragment-corner clips.** W2's all-four-full rule leaves some structurally
   fine corners unclipped on cropped walls; per-fragment corner analysis is W3.
+- **Q6 — one mount per tile, or one per wall?** `mount keyhole` is declared on the
+  tile, so an N-tile wall needs N screws. That is the honest reading of the grammar
+  and it is what ships; whether a clipped grid *wants* a wall-level mount — one or
+  two screws carrying a rigid clipped panel, the tiles below hanging off their
+  neighbours — is undecided and partly empirical: it depends on whether the engaged
+  clip carries shear, which **W-C1** measures (its detent/engage questions are about
+  capture, not load). Not a defect in the grammar, and not something the deliverable
+  paragraph should have settled in passing. Raised 2026-08-03 by the correction
+  recorded in §8.
 
 ## 12. Detent geometry — resolved during implementation (commit W2 4/8)
 

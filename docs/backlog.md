@@ -44,7 +44,7 @@ about bets that could be minted.
 | Bets settled by the machine card (MC-1…MC-6) | 7 | 12 of the 16 records |
 | Bets settled by design-specific coupons | 4 | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1) — 4 records |
 | Bets with no coupon anywhere | 1 | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
-| Coupon entries in the prototype catalog | 24 | P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2 |
+| Entries in the prototype catalog | 28 | 24 coupons (P1–P7, MC-1…MC-6, W-F1, W-C1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5) |
 | `.bkr` coupon files that exist today | 5 | `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon` |
 
 **What is already built, so no one re-does it.** The machine card is authored and
@@ -291,18 +291,21 @@ Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not 
 | P6 | R=40 graceful shrink; R=110 warp/adhesion/time; whether strut width should scale with radius | catalog P6 | the `radius` range; the Lab ceiling-margin rule (`2R ≤ min(XYZ) − 10`) | exists — `radius` baked via the Lab | not stated |
 | P7 | which material/finish matches the gallery's gold renders in person | catalog P7 | gallery photography; per-material notes in the Lab machine table | whichever orb P2–P4 crowns | not stated |
 
-### 3.5 Print-gated items with **no catalog entry**
+### 3.5 The four deliverables — catalogued 2026-08-03
 
-These four are demanded by a design doc and have no entry in
-[`catalog.md`](../.claude/skills/prototype/catalog.md). Adding them is itself a
-pre-print task (§4).
+These four are demanded by a design doc and, until 2026-08-03, had **no entry**
+in [`catalog.md`](../.claude/skills/prototype/catalog.md). They now do: entries
+**C1**, **C2**, **W1** and **W2**, in a `# Deliverables` section at the end of
+that file, placed last because nothing else in the catalog depends on them.
+Every figure in them is from a render of the shipped model at bikar `d9b3c84`,
+not an estimate. §4 item 6 is closed.
 
-| item | measures | demanded by | `.bkr` |
-|---|---|---|---|
-| W1 2×2 tile pilot | a real ≈100 mm relief tile's mass and print time — the doc's own figures are **"estimates until the W1 2×2 pilot measures a real tile"** | [`tile-wall-design.md`](tile-wall-design.md) §7.1 | exists — `patterns/Walls/Nail-Wall.bkr`, `patterns/Pieces/Nail-Tile.bkr` |
-| C1 Nail-Tile deliverable | whether the girih tile with a countersunk nail bore prints and hangs as designed | [`piece-composition-design.md`](piece-composition-design.md) | exists — `patterns/Pieces/Nail-Tile.bkr` |
-| C2 Pinned-Tiles deliverable | whether authored ⌀2.90 press / ⌀3.15 sliding sockets against ⌀3.00 printed pins behave as the fit windows claim | [`c2-assembly-design.md`](c2-assembly-design.md) §8 | exists — `patterns/Assemblies/Pinned-Tiles.bkr` |
-| Clip-Wall first full wall | whether the proven joint scales to a four-tile wall on one screw | [`w2-connector-design.md`](w2-connector-design.md) §8 | exists — `patterns/Walls/Clip-Wall.bkr` |
+| item | catalog | measures | demanded by | `.bkr` |
+|---|---|---|---|---|
+| W1 2×2 tile pilot | **W1** | a real ≈100 mm relief tile's mass and print time — the doc's own figures are **"estimates until the W1 2×2 pilot measures a real tile"** | [`tile-wall-design.md`](tile-wall-design.md) §7.1 | exists — `patterns/Walls/Nail-Wall.bkr`, `patterns/Pieces/Nail-Tile.bkr` |
+| C1 Nail-Tile deliverable | **C1** | whether the girih tile with a countersunk nail bore prints and hangs as designed | [`piece-composition-design.md`](piece-composition-design.md) | exists — `patterns/Pieces/Nail-Tile.bkr` |
+| C2 Pinned-Tiles deliverable | **C2** | whether authored ⌀2.90 press / ⌀3.15 sliding sockets against ⌀3.00 printed pins behave as the fit windows claim | [`c2-assembly-design.md`](c2-assembly-design.md) §8 | exists — `patterns/Assemblies/Pinned-Tiles.bkr` |
+| Clip-Wall first full wall | **W2** | whether the proven joint scales to a four-tile wall — hanging on **four** screws, one keyhole per tile, not the one §8 used to claim | [`w2-connector-design.md`](w2-connector-design.md) §8 | exists — `patterns/Walls/Clip-Wall.bkr` |
 
 The tile-wall estimates, quoted with their hedge: a ≈100 mm relief tile at
 "~40–60 g, ~2–4 h at 0.2 mm on a modern small printer", giving ~36 tiles /
@@ -320,7 +323,7 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 24 catalog entries + 4 uncatalogued items = 28 print-gated items**,
+**Count: 28 catalog entries = 28 print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
 
@@ -406,10 +409,17 @@ Checked against the repo, not against memory. Done / not done is stated per item
 5. **Record the profile header before anything is measured.** The card's series
    note says the header *is* the deliverable and "the numbers are meaningless
    without it."
-6. **Add the four uncatalogued items in §3.5 to
-   [`catalog.md`](../.claude/skills/prototype/catalog.md)**, or decide
-   deliberately that they stay out. The catalog's own rule is that an entry needs
-   at least one question answerable by measuring the object; all four have one.
+6. ~~**Add the four uncatalogued items in §3.5 to
+   [`catalog.md`](../.claude/skills/prototype/catalog.md)**~~ — **done 2026-08-03**.
+   All four are in, as entries **C1**, **C2**, **W1** and **W2** under a
+   `# Deliverables` heading at the end of that file. Each was grounded by
+   rendering the shipped model rather than by reading the design doc: that is
+   how the W2 entry found the **"hanging on one screw"** claim that
+   [`w2-connector-design.md`](w2-connector-design.md) §2 and §8 both carried and
+   the compiler had been contradicting all along — a wall mints one keyhole per
+   *tile*, so the deliverable hangs on four. Corrected in that doc, in
+   [`tile-wall-design.md`](tile-wall-design.md) §9 and in §3.5 above, and the
+   design question it was silently deciding is now W2 §11 Q6.
 7. **Look at the fan in a slicer before committing filament** —
    [`calibration-design.md`](calibration-design.md) §8 lists "no raster render
    was eyeballed" as a known weakness, and MC-4 is the piece whose failure mode

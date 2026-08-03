@@ -304,7 +304,9 @@ numbers above, computed instead of estimated.
 - **W2** (with C2): connector library + coupons (fit step gauge, clip coupon: dummy
   corners in *both* rebate variants — §10 Q1 — + one CornerClip), Lab instanced preview,
   keyhole mounts. Deliverable: four
-  tiles clipped into a square hanging on one screw. Prototype catalog gains fit-coupon and
+  tiles clipped into a square, hanging on four screws — one per tile, because
+  `mount keyhole` is a tile-level declaration ([`w2-connector-design.md`](w2-connector-design.md)
+  §8's 2026-08-03 correction and §11 Q6). Prototype catalog gains fit-coupon and
   clip-coupon entries; their measurements calibrate the printer profile and warp default.
 - **W3**: anchor/movement/environment validators, `vary`/`checker`, story pole, chirality
   report, `crop stretch`, production metrics in `layout report` (plates at bed size,
