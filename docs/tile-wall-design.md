@@ -136,6 +136,7 @@ wall Hallway
   module StarTile gap 1.2
   layout centered quartering      # center-out; auto half-module shift pass
   crop clip                       # drop | clip | stretch (piece-composition doc §3)
+  frame                           # perimeter finish — orthogonal to crop (D-017)
   vary rotate alternate 90        # or: checker StarTile RosetteTile
   focal edge left                 # full tiles + centered pattern face this edge
   environment interior            # interior | near_radiator | sunlit
@@ -155,6 +156,30 @@ fragment is narrower than **0.5 × module**, retry with half-module offsets per 
 keep the best scoring layout; remaining sub-half fragments WARN (ERROR on the focal edge).
 `crop clip` 2D-booleans boundary tiles (connectors falling in removed regions are dropped;
 cut edges are connector-free mount edges); `crop drop`/`stretch` per the composition doc.
+
+`frame` is a wall-level perimeter finish and is orthogonal to `crop`
+([`decisions-log.md`](decisions-log.md) D-017): a wall whose grid divides evenly has no
+cropped tiles and can still ask for one.
+
+**Default:** the frame band is **not a constant** — it is `max(tile border, widest
+cropped fragment on that edge)`, derived per edge from the layout the wall already
+computes. The floor is the tile's own `border`, so a frame on an uncut wall reads as a
+continuation of the band every tile carries rather than as a new element; the raising
+term is what makes the band *absorb* the cut, which is the finish D-017 named. The
+convention being implemented is tiling's own — cuts are set to land under trim and away
+from focal sightlines, "full tiles from trim forward"
+([Fine Homebuilding, floor layout](https://www.finehomebuilding.com/project-guides/tiling/floor-layout);
+[Daltile, wall tile installation guide](https://cdn.shopify.com/s/files/1/1996/7489/files/Wall_Tile_Installation_Guide___Daltile.pdf)).
+Those two sources establish **where cuts go, not how wide a band hides them**, and no
+source in Appendix A gives a width — which is precisely why the width is derived from
+the wall's own geometry instead of being declared as a number no one measured.
+
+One consequence worth stating, because it contradicts a naive reading of "frame over a
+raw cut": once the band reaches the widest fragment on an edge, the cropped tiles under
+it are *fully covered*. Printing clipped relief that the frame then hides is waste, so a
+wall that asks for an absorbing frame should emit those positions as `crop drop`, not
+`crop clip`. The two statements stay orthogonal in the grammar and interact in the
+layout engine, which is the only place that knows the fragment widths.
 
 ### 3.3 Connector library
 
@@ -318,6 +343,46 @@ numbers above, computed instead of estimated.
 | adhesive-strip demand > strip budget | ERROR | 1–3 lb/strip, most-reported failure path |
 | screw-anchor demand > derated supply | WARN | pull-out budget (can't realistically fire at field weights) |
 | clip capture < 2× expected warp | WARN | measured coupon warp; placeholder until W2 |
+| adjacent tiles disagree on any border field | ERROR | §8.1, D-016 |
+
+### 8.1 Per-pair border agreement (`checker`, and any wall of mixed tile types)
+
+[`decisions-log.md`](decisions-log.md) D-016 made the shared `border` spec the
+path `checker` is documented on, so that the common failure cannot be written
+down at all. This validator covers the path a tile takes when it *declines* that
+spec and declares its own border — open on purpose, because an asymmetric pairing
+is real tiling practice and D-017's `frame` needs the freedom.
+
+**Validator:** for every **adjacency** in the laid-out wall — not every tile, and
+not every pair of tile *types* — compare the two tiles' border specs along the
+edge they actually share: band width, edge gap, connector type, and each
+connector's position on that edge **expressed in wall coordinates**. Any field
+that differs is an ERROR naming both tiles by grid position, the field, and both
+values.
+
+The wall-coordinate clause is load-bearing, not pedantry. Both outlines wind the
+same way, so the two owners of a shared edge traverse it in *opposite* senses: a
+connector 30 mm along A's edge and one 30 mm along B's edge are the same point
+only when the edge is exactly 60 mm long. Compare the local offsets directly and
+the validator fails walls that assemble and passes walls that do not.
+
+PASS: `checker StarTile RosetteTile`, both `border 5`, both at wall `gap 1.2`,
+both `connector edge pinloop on edges` at the default mid-edge position. Every
+A–B adjacency compares equal on all four fields in wall coordinates, and the wall
+assembles.
+
+FAIL: `checker StarTile TrimTile` on a 100 mm module — both `border 5`, both
+`gap 1.2`, both `connector edge pinloop`. `StarTile` seats its pinloop at the
+50 mm midpoint; `TrimTile` seats its own 30 mm along its own edge, which is 70 mm
+along the shared edge in wall coordinates. Band width agrees, gap agrees,
+connector *type* agrees, and the loops miss each other by 20 mm at every single
+A–B joint in the wall. A compare that stops at connector type reports this wall
+clean — which is why the type check is not the check.
+
+**An aggregate cannot discharge this.** "41 of 42 pairs agree" is not a pass, and
+one comparison over the wall's distinct tile *types* is not a check of its
+adjacencies: a three-type wall has A–C and B–C pairs that no A-vs-B type compare
+ever visits. It is per adjacency, or it is not this validator.
 
 ## 9. Phasing (rides the composition ladder)
 
@@ -346,19 +411,27 @@ numbers above, computed instead of estimated.
    one cannot diverge; a tile may still declare its own border, and then a **per-pair
    validator** walks every adjacency and compares. Keeping that second path open is
    deliberate — an asymmetric pairing is real tiling practice, and D-017's `frame` needs
-   the freedom. Unbuilt: the validator, whose `FAIL:` example must be the hard case (two
-   tiles agreeing on gap and clip *type* but placing the clip at different offsets), not
-   two mismatched gaps.
+   the freedom. **Written up 2026-08-03 as §8.1**, with the hard `FAIL:` the decision
+   asked for (two tiles agreeing on gap, band width and connector *type*, disagreeing on
+   where along the edge the connector sits). Writing it surfaced a second trap the
+   decision had not named: the two owners of a shared edge traverse it in opposite
+   senses, so the comparison has to happen in wall coordinates or it is wrong in both
+   directions. Still unbuilt in bikar — §8.1 is the specification, not the code.
 3. **Decided 2026-08-03 — both finishes, decoupled** ([`decisions-log.md`](decisions-log.md)
    D-017). The `crop clip | crop clip with frame` sketch is **not** what ships: `frame`
    becomes its own wall-level statement, and `crop` keeps deciding only what happens to a
    tile the grid cuts. A frame is a perimeter finish; a crop is what a non-integer grid
    does. Coupled, a wall whose grid divides evenly could not ask for a frame at all, and
    changing `grid 4 4` to `grid 4 5` would make the perimeter finish appear as a side
-   effect of arithmetic. Unbuilt: the band width needs a D3 default declaration, and it is
-   likely a calibration bet rather than a citation — "thick enough that a cut motif reads as
-   intentional" is judged in raking light, and W1's pilot (`uncovered 4.8 cm²`) is the
-   coupon that would carry it.
+   effect of arithmetic. **Settled 2026-08-03 in §3.2**, and *not* the way this entry
+   predicted: the band width is not a calibration bet, because it is not a number. It is
+   `max(tile border, widest cropped fragment on that edge)`, derived per edge from the
+   layout. The bet this entry expected would have been a category error: a bet in
+   [`bets.md`](../.claude/skills/calibrate/bets.md) is a quantity only a physical
+   measurement can settle — a caliper on a printed part, or on a bought one, as
+   `CAL-CLB-01` measures a clone baseplate rather than our printer. The band width is not
+   unknown in that sense at all. The layout engine already computes the widest cropped
+   fragment on every edge, so there is nothing to measure and nothing to bet on.
 
 ## Appendix A — survey sources (kept on file)
 

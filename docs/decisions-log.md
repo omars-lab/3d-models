@@ -1108,6 +1108,15 @@ comparison over the wall's distinct tile *types* is not a check of its
 adjacencies — a `checker` wall with three types has pairs no type-level compare
 visits.
 
+**Specified 2026-08-03** as [`tile-wall-design.md`](tile-wall-design.md) §8.1,
+carrying the hard `FAIL:` this section asked for and the aggregate warning.
+Writing it surfaced a trap this decision did not anticipate: the two owners of a
+shared edge traverse it in **opposite senses**, because both outlines wind the
+same way. So "place the clip at different offsets along the edge" is not a
+directly comparable pair of numbers — 30 mm on each is the same point only on a
+60 mm edge. §8.1 compares in wall coordinates and says why. The bikar
+implementation is still to come; §8.1 is its specification, not its code.
+
 ---
 
 ## D-017 — `frame` is orthogonal to `crop`, not a crop mode
@@ -1149,6 +1158,35 @@ because "thick enough that a cut motif reads as intentional" is a judgement
 about how the wall looks in raking light, which is measured by printing it. W1's
 2×2 pilot already reports `uncovered 4.8 cm²` and is the coupon that would carry
 it.
+
+**Settled 2026-08-03, and the paragraph above is wrong about how.** The band width
+is not a bet, because it is not a free number: it is
+`max(tile border, widest cropped fragment on that edge)`, derived per edge from the
+layout the wall already computes, and declared as a D3 default in
+[`tile-wall-design.md`](tile-wall-design.md) §3.2.
+
+Registering the bet would have been a category error, and naming the test is the
+reusable part. A calibration bet is a quantity that **only a physical measurement can
+settle** — a caliper on a printed part, or on a bought one: `CAL-CLB-01` measures a
+clone baseplate, not our printer, so "property of *(machine, material, nozzle,
+profile)*" is the common case in
+[`bets.md`](../.claude/skills/calibrate/bets.md) but not the defining one.
+
+The band width fails that test outright. It is not an unknown awaiting an instrument:
+the layout engine already computes the widest cropped fragment on every edge, because
+it computes the crop. There is nothing to measure, so there is nothing to bet on. The
+`calibrate` skill names this as its own main failure mode — *"it buys a print to answer
+a question a citation would have answered for free"* — and this one would have bought a
+print to answer a question the **layout** answers for free.
+
+The residual judgement is real but much smaller than the entry assumed: whether a
+designer *wants* the absorbing frame or the raw cut. That is a choice the grammar now
+lets them write either way, not a number anyone has to earn.
+
+What the sources do settle is the convention, not the width: cuts land under trim and
+away from focal sightlines. That is cited in §3.2, with the limit stated in the same
+paragraph — those sources give no millimetre, and neither does anything else in
+Appendix A.
 
 ---
 
