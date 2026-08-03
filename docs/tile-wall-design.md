@@ -346,19 +346,31 @@ numbers above, computed instead of estimated.
    one cannot diverge; a tile may still declare its own border, and then a **per-pair
    validator** walks every adjacency and compares. Keeping that second path open is
    deliberate — an asymmetric pairing is real tiling practice, and D-017's `frame` needs
-   the freedom. Unbuilt: the validator, whose `FAIL:` example must be the hard case (two
-   tiles agreeing on gap and clip *type* but placing the clip at different offsets), not
-   two mismatched gaps.
+   the freedom. **Built** in bikar `2585a40` (PR #71) — and building it *inverted* the
+   hard case this line used to prescribe. The clip position shipped as a corner subset
+   (`clipseat on ne,sw`), not an offset along an edge, and a corner subset is tile-local:
+   `on ne,sw` beside `on nw,se` mates at every shared vertex and is the legal **PASS**.
+   The hard `FAIL:` is **two byte-identical `on ne,sw` declarations**, which fail at every
+   vertex — a field-by-field compare calls them identical and ships a wall that does not
+   assemble. So the validator compares seat state *at a vertex*, not the two records; the
+   full correction is the 2026-08-03 amendment under D-016 in
+   [`decisions-log.md`](decisions-log.md).
 3. **Decided 2026-08-03 — both finishes, decoupled** ([`decisions-log.md`](decisions-log.md)
    D-017). The `crop clip | crop clip with frame` sketch is **not** what ships: `frame`
    becomes its own wall-level statement, and `crop` keeps deciding only what happens to a
    tile the grid cuts. A frame is a perimeter finish; a crop is what a non-integer grid
    does. Coupled, a wall whose grid divides evenly could not ask for a frame at all, and
    changing `grid 4 4` to `grid 4 5` would make the perimeter finish appear as a side
-   effect of arithmetic. Unbuilt: the band width needs a D3 default declaration, and it is
-   likely a calibration bet rather than a citation — "thick enough that a cut motif reads as
-   intentional" is judged in raking light, and W1's pilot (`uncovered 4.8 cm²`) is the
-   coupon that would carry it.
+   effect of arithmetic. **Built** in bikar `fc5adee` (PR #72) as three forms — `frame`,
+   `frame band <mm>`, `frame absorb` — with the band taken *out of* the declared boundary
+   so the grid lays out in the inset field. The band width was indeed a bet rather than a
+   citation: **12 mm as `CAL-FRM-01`**, settled by a coupon of its own, **W-P1**, not by
+   W1's pilot as this line guessed — W1 varies its art and its tile count between prints
+   and cannot hold the field fixed while the margin changes, which is the one comparison
+   the question needs. The arithmetic of `absorb` also turned out not to be the obvious
+   one: one band serves all four sides, so both axes inset equally and their *difference*
+   never changes — `absorb` is impossible unless the boundary's sides already differ by a
+   whole number of pitches, and the solver refuses rather than solving each axis alone.
 
 ## Appendix A — survey sources (kept on file)
 

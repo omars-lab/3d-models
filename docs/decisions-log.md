@@ -1198,6 +1198,52 @@ about how the wall looks in raking light, which is measured by printing it. W1's
 2×2 pilot already reports `uncovered 4.8 cm²` and is the coupon that would carry
 it.
 
+### Built, 2026-08-03 — bikar `fc5adee` (PR #72)
+
+Three forms, and the band is taken **out of** the declared boundary — the grid
+lays out in the inset field, so `boundaryMm` stays what the author wrote and a
+new `fieldMm` reports what the grid actually got:
+
+| Form | Band |
+|---|---|
+| `frame` | the `CAL-FRM-01` default, **12 mm** |
+| `frame band <mm>` | the width stated |
+| `frame absorb` | solved: the narrowest band at or above the floor leaving the grid uncut on **both** axes |
+
+**The bet is a coupon of its own, not W1's.** The paragraph above nominated W1's
+2×2 pilot, and that was wrong for a reason worth keeping: W1 varies its art and
+its tile count between prints, so it cannot hold the field fixed while only the
+margin changes — which is the entire comparison the question needs. **W-P1**
+(`bikar` `patterns/Coupons/Frame-Band-Coupon.bkr`) does: the 2×2 field is pinned
+at 121.2 mm and the *boundary* grows through B06/B12/B20/B30. The ladder can fail
+at both ends — B06 reading as deliberate means the shipped 12 gives up a tile's
+worth of field for nothing; B30 still reading thin means the constant should
+track module size rather than be a constant at all.
+
+W3 renders the band as the ring between the boundary rect and the field rect and
+ships **no printable frame geometry**, so W-P1 says so plainly and takes its
+reading on four printed tiles laid on the field spacing over each rung's 1:1 SVG.
+A coupon that claimed a printed band would be prescribing a part that does not
+exist — the defect `catalog_models.py` exists to catch.
+
+### The absorb arithmetic is not the one the sketch implied
+
+"A band thick enough to swallow the partial motif" reads as a per-axis solve, and
+a per-axis solve is wrong. **One band serves all four sides**, so both axes inset
+by the same `2b` and their *difference never changes*: `absorb` is impossible
+unless the boundary's sides already differ by a whole number of pitches. A solver
+that fitted each axis separately would report success on an ordinary rectangle
+and be wrong **invisibly** — the wall still renders, and the fragments are still
+there. So it refuses, and names which of the two causes it hit (every exact band
+under the floor, versus sides differing by a fraction of a pitch).
+
+And the claim is *measured* rather than restated: the kernel solves the band, then
+the evaluator counts the grid the layout kernel actually produced and throws if a
+fragment survived. A solver that agrees with itself proves nothing. The hard FAIL
+(486 × 400, sides differing by 1.06 pitches) is a test that must throw, per
+[`../CLAUDE.md`](../CLAUDE.md)'s corollary — the by-design failure is the
+load-bearing case.
+
 ---
 
 ## D-018 — F3 (supports required) stays a warning everywhere

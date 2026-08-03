@@ -588,6 +588,64 @@ free-standing strut). Only the clip is exempt, and only where noted.
   `patterns/Walls/Clip-Wall.bkr` as the first full wall once the joint is
   proven.
 
+## W-P1 — Frame band ladder (how wide reads as a margin)
+
+- **Status**: planned (printing on hold, design doc §8). **Not blocked on
+  W-F1 or W-C1** — the frame is a proportion, not a joint, so it needs no
+  clearance number and can be printed the day the queue opens.
+- **Model**: `bikar/patterns/Coupons/Frame-Band-Coupon.bkr` — one 60 mm
+  octagram `FrameTile` and a `FrameWall` whose 2×2 field is held fixed at
+  121.2 mm while the boundary grows with `$band`. Rungs are the band in mm:
+  **B06 / B12** (the shipped guess) **/ B20 / B30**. Render one 1:1 SVG per
+  rung and **one** printable module:
+  `cd bikar && node packages/cli/dist/index.js render
+  patterns/Coupons/Frame-Band-Coupon.bkr --format svg --param band=6
+  -o ../3d-models/build/svg/coupons/W-P1-B06.svg` (and `band=12`, `band=20`,
+  `band=30`), then
+  `node packages/cli/dist/index.js render
+  patterns/Coupons/Frame-Band-Coupon.bkr --format stl --piece FrameTile
+  --check -o ../3d-models/build/stls/coupons/W-P1-FrameTile.stl`.
+  Print **four** `FrameTile`s — the same four serve every rung.
+- **The band is not a printed part, and that is stated on purpose.** W3
+  renders the frame as the ring between the boundary rect and the field
+  rect; there is no frame geometry to slice, so a coupon that claimed a
+  printed band would be prescribing a part that does not exist. The reading
+  is taken on the four printed tiles laid out at the wall's 1.2 mm field
+  spacing on top of each rung's SVG at 1:1 — the plastic supplies the
+  tile's real depth and sheen, the paper supplies the margin under test.
+- **Print target**: TBD — record machine/material/nozzle/layer on first
+  print. Any wall tile material; the finding is proportion, not fit.
+- **What we want to learn**:
+  - [ ] 1. Which rung first reads as a deliberate margin rather than as a
+    wall that ran out of tiles, in raking light at ~2 m? That band is
+    `CAL-FRM-01` / `FRAME_BAND_MM`.
+    **The ladder is built to be able to fail at both ends.** If **B06**
+    already reads as intentional, the shipped 12 mm is over-wide and the
+    wall is giving up a tile's worth of field for nothing. If **B30** still
+    reads thin, the default is under-scaled to the module and the number
+    should track module size rather than be a constant at all — which is a
+    change to the *shape* of the constant, not to its value.
+  - [ ] 2. Does the answer move with viewing distance? A band judged at arm's
+    length and a band judged across a room are different findings, and the
+    wall is hung, so the room distance is the one that governs.
+  - [ ] 3. Does `frame absorb`'s solved band (often much wider than 12 mm —
+    40.6 mm on the doc's 486 × 323.6 worked example) still read as a frame,
+    or as an empty border? If it reads empty, `absorb` is a fit tool and not
+    a finish tool, and the language reference should say so.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Settles**: `CAL-FRM-01` — the wall perimeter trim band, the only bet
+  this coupon carries.
+- **Does not settle**: anything about the joint. The frame changes no
+  clearance, no gap and no clipseat, so W-F1's and W-C1's numbers are
+  untouched by whatever this reads.
+- **Feeds**: `FRAME_BAND_MM_CAL` in `bikar`
+  `packages/core/src/kernel/wall-frame.ts`, which is what a bare `frame`
+  resolves to; the **Perimeter frame (W3)** section of `bikar`
+  `docs/language-reference.md`; and `docs/tile-wall-design.md` §10 Q2.
+
 # LEGO-compatible brick ladder (LG-series)
 
 The LG-series validates the **Lego Lab** work (design doc
