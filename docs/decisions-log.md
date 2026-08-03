@@ -1013,3 +1013,53 @@ the F7 warning it exists to raise. The fourth and fifth are the pair that
 matters, because they pin the by-design label from both sides — it can neither
 be tidied away nor used to hide a real failure. All eight cases (seven plus the
 unmutated control) behave as documented as of 2026-08-03.
+
+---
+
+## D-015 — the use-case map's own pin must be *reachable*, not merely resolvable
+
+**Date:** 2026-08-03 · **Status:** Decided · **Repos:** 3d-models
+
+### Context
+
+D-014's PR was squash-merged, and the squash orphaned the commit the use-case
+map pinned. Every check kept passing: `git cat-file -e` resolved the object,
+`git rev-list --count pin..HEAD` returned a number, so even the staleness
+warning stayed quiet — all because the pre-squash commit was still sitting in
+*this* clone as a dangling object. A fresh clone of `master` cannot resolve it
+at all, and all 116 pointer checks fail together at the first one.
+
+The gate had a check for the wrong thing. "This hash resolves here" is not the
+claim the frontmatter makes; the claim is "these pointers are valid at a commit
+anyone can fetch," and only reachability distinguishes the two.
+
+### Decision
+
+`validate.py`'s full mode errors when this repo's `as_of` is not an ancestor of
+HEAD, naming the squash merge as the usual cause and `--refresh` as the fix.
+
+**Self-repo only, deliberately.** A sibling is pinned at its own published ref
+(`refresh_target` prefers `origin/HEAD`) and has every reason *not* to be an
+ancestor of whatever its checkout has on HEAD — bikar's branches are built in a
+worktree that shares one object database, which is the case `staleness_warning`
+already documents. Applying the ancestry rule to siblings would fire on the
+normal state of every sibling checkout here, and a gate that cries wolf gets
+switched off.
+
+The alternative considered and rejected was pinning this repo to `origin/master`
+rather than HEAD, which would make orphaning structurally impossible. It breaks
+the ordinary case instead: a PR that adds a file *and* a pointer to it cannot
+validate against a published tip where the file does not yet exist. That case
+is already the reason `USE_CASES_OK=1` exists, and making it unrepresentable is
+worse than detecting the rarer failure after the fact.
+
+### The graduation
+
+A real git fixture in `validate.py --self-test` builds a branch, squash-merges
+it to `master`, deletes the branch, and asserts three things in the state that
+shipped: the orphaned pin errors, the object *still resolves* under
+`cat-file -e`, and `staleness_warning` *still returns None* on the count that
+`rev-list` happily produces. The last two are the point — they pin the reason
+the pre-existing checks could not see this, so a later simplification cannot
+quietly reintroduce it. A sibling pin at the same orphaned commit is asserted
+to stay silent.

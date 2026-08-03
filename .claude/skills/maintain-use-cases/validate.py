@@ -8,7 +8,9 @@ Modes:
   validate.py --self-test run the page-catalog reader's own fixtures
 
 Checks (full mode):
-  - frontmatter parses and every as_of hash resolves in its repo
+  - frontmatter parses and every as_of hash resolves in its repo, and this
+    repo's own pin is an ancestor of HEAD — resolving is not the same as being
+    published, and a squash merge tells them apart (see unreachable_pin)
   - every pointer `repo:path:Lstart[-Lend]` names a file that exists at the
     pinned as_of commit and has at least Lend lines
   - a pointer that carries an anchor — `repo:path:Lstart[-Lend] "text"` — has
@@ -400,6 +402,37 @@ def staleness_warning(repo: str, behind: int | None, ahead: int | None) -> str |
     return f"'{repo}' as_of is {behind} commit(s) behind its local HEAD{tail}"
 
 
+def unreachable_pin(repo: str, rdir: str, pin: str) -> str | None:
+    """Say whether this repo's own pin still lives on a branch, or only in this clone.
+
+    A squash merge replaces a branch's commits with one new commit, so the
+    commit the map pinned survives afterwards only as a dangling object in the
+    clone that made it. Every other check here keeps passing on it —
+    `cat-file -e` resolves it, `rev-list pin..HEAD` returns a count, so even
+    the staleness warning stays quiet — while a fresh clone of master cannot
+    resolve it at all and every pointer check fails at once. Reachability is
+    the only thing that separates the two, which is why it is checked rather
+    than inferred from the pin resolving.
+
+    Only for `SELF_REPO`. A sibling is deliberately pinned at its own published
+    ref and has no reason to be an ancestor of whatever its checkout has on
+    HEAD — that case is `staleness_warning`'s, and it is documented there.
+    """
+    if repo != SELF_REPO:
+        return None
+    head = try_git(rdir, "rev-parse", "HEAD")
+    if head is None:
+        return None
+    if try_git(rdir, "merge-base", "--is-ancestor", pin, head) is not None:
+        return None
+    return (
+        f"as_of hash for '{repo}' ({pin[:12]}) is not an ancestor of HEAD ({head[:12]}) — "
+        "it is reachable from no branch, so it exists only in this clone and a fresh "
+        "clone cannot validate this map. A squash merge does this. Re-pin with "
+        ".claude/skills/maintain-use-cases/validate.py --refresh"
+    )
+
+
 def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -418,6 +451,9 @@ def validate_full(doc: Doc, root: str) -> tuple[list[str], list[str]]:
         if try_git(rdir, "cat-file", "-e", f"{pin}^{{commit}}") is None:
             errors.append(f"as_of hash for '{repo}' ({pin[:12]}) does not resolve in {rdir}")
             continue
+        orphan = unreachable_pin(repo, rdir, pin)
+        if orphan:
+            errors.append(orphan)
         head = try_git(rdir, "rev-parse", "HEAD")
         if head and head != pin:
             behind = try_git(rdir, "rev-list", "--count", f"{pin}..{head}")
@@ -772,6 +808,58 @@ def self_test() -> int:
                target, unpushed)
         expect("...and says so, because that pin may not be published",
                ref.startswith("HEAD (no origin ref"), True)
+
+    # A squash merge, reproduced. This is the shape that shipped on 2026-08-03:
+    # PR #23 was squash-merged, the map's pin stayed on the pre-squash commit,
+    # and every check kept passing locally because the object was still in the
+    # clone. The fixture deletes the branch, which is what the merge button does.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+
+        def commit(msg: str) -> str:
+            git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", msg)
+            return run_git(tmp, "rev-parse", "HEAD")
+
+        git("init", "-q", "-b", "master")
+        base = commit("base")
+        git("checkout", "-q", "-b", "feat/map")
+        pinned = commit("map update — the commit as_of records")
+        git("checkout", "-q", "master")
+        squashed = commit("feat/map (#23)")
+        git("branch", "-qD", "feat/map")
+
+        expect(
+            "a pin still on the branch is fine",
+            unreachable_pin(SELF_REPO, tmp, squashed),
+            None,
+        )
+        expect(
+            "so is an older ancestor",
+            unreachable_pin(SELF_REPO, tmp, base),
+            None,
+        )
+        orphaned = unreachable_pin(SELF_REPO, tmp, pinned)
+        expect(
+            "a pin orphaned by a squash merge is an error, not a silent pass",
+            orphaned is not None and "is not an ancestor of HEAD" in orphaned,
+            True,
+        )
+        expect(
+            "...which the pre-existing checks could not see: the object still resolves",
+            try_git(tmp, "cat-file", "-e", f"{pinned}^{{commit}}"),
+            "",
+        )
+        expect(
+            "...and rev-list still returns a count, so staleness stays quiet",
+            staleness_warning(SELF_REPO, int(run_git(tmp, "rev-list", "--count", f"{pinned}..{squashed}")), 1),
+            None,
+        )
+        expect(
+            "a sibling pin is exempt — it is pinned at its own published ref",
+            unreachable_pin("bikar", tmp, pinned),
+            None,
+        )
 
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

@@ -73,6 +73,13 @@ The `as_of == HEAD` rule means the recorded commit is always the parent of
 the commit that last touched the map — as recent as it can possibly be
 without knowing the new hash.
 
+**After a squash merge, re-pin.** Squashing replaces the branch's commits with
+one new commit, so the commit the map pinned survives only as a dangling object
+in the clone that made it — a fresh clone of `master` cannot resolve it and
+every pointer check fails at once. Full mode now errors when this repo's pin is
+not an ancestor of HEAD; it shipped on 2026-08-03 because nothing caught it the
+first time. Fix with `validate.py --refresh` on a follow-up commit.
+
 ## Rules
 
 - Never edit `as_of` hashes by hand — always `validate.py --refresh`.
