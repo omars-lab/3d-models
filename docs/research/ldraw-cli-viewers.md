@@ -18,6 +18,13 @@
   installed and run on 2026-08-02; §8 records what it did, and corrects three
   §1.4 claims the run falsified. Nothing else was re-derived, and no other
   candidate has been run.
+
+  Extended 2026-08-03: §10 records the LDView attempt. The app was installed,
+  measured, and then removed from the disk by the operating system before it
+  rendered anything, so §1.1's install route is blocked on this machine and
+  §1.3's biggest risk is still untested. The three.js route was built out to
+  pixels in its place; §10 confirms three §1.4 claims and falsifies one. Still
+  only two of the twelve candidates have been run.
 -->
 
 # LDraw viewers you can drive from a shell on macOS — what exists, what is free, and what would actually open our file
@@ -922,3 +929,224 @@ This is a **K1** instance caught late: S7's hedge (*may not cull*) was hardened
 into a claim about what gets drawn. It survived §9.3 because §9.3 was looking
 for an explanation of the *number* and did not re-examine the *word* in the
 cell beside it.
+
+---
+
+## 10. The recommended route was removed; the complementary one was run — 2026-08-03
+
+§1 recommends LDView, and §1.4 recommends three.js `LDrawLoader` *as a
+complement rather than an alternative*. On 2026-08-03 the first was installed
+and then removed from the disk by the operating system before it rendered
+anything, and the second was built and run to completion. This section records
+both. It **confirms** three §1.4 claims and **falsifies** one.
+
+### 10.1 LDView: installed, measured, gone
+
+The download matched §1.1 exactly — `LDView_4.7.dmg`, **3,399,129 bytes**, the
+size that section recorded on 2026-08-01 without having downloaded it. The user
+mounted it and moved the app into `/Applications`.
+
+Two of §1.3's "assumed, inferred or untested" items were settled by inspection
+before anything was run:
+
+| §1.3 item | Settled as |
+|---|---|
+| *"That `LDView_4.7.dmg` contains an arm64 or universal binary."* §1.3 even names the command to check with | **Universal.** `lipo -archs` on the bundle executable reported `x86_64 arm64` |
+| *"Gatekeeper. … I make no claim about LDView's signing or notarisation status."* | **Ad-hoc signed, not notarised, quarantined.** `codesign -dv` reported `Signature=adhoc` and identifier `com.cobbsville.LDView`; the file carried `com.apple.quarantine`, set by the downloading browser |
+
+The first render attempt then failed with `exit=127`, and the reason was that
+the executable no longer existed. `ls`, `file`, `xattr` and `codesign` had each
+succeeded against that exact path minutes earlier. Afterwards there was nothing
+in `/Applications`, nothing in `~/.Trash`, and `spctl` returned *"invalid API
+object reference"*. The `.dmg` itself was untouched in `~/Downloads`.
+
+**What is observed and what is inferred.** *Observed:* the app was present,
+then it was absent, and no command issued here deleted it. *Inferred:* macOS
+removed it. The inference rests on three things — no third-party security
+software is installed on this machine (neither `/Library/Application Support`
+nor `/Applications` carries CrowdStrike, SentinelOne, Sophos, Malwarebytes,
+Jamf, ESET, Bitdefender or Trend Micro), the XProtect config is at version
+5298, and the bundle was ad-hoc signed and un-notarised, which is the profile
+Apple's tooling acts on. **No log entry naming the removal was retrieved**, so
+this is the best available explanation and not a measurement. Another Apple
+subsystem, or a mechanism not considered here, would fit the same evidence.
+
+**Consequence for §1.3.** Its "single biggest risk" — whether the CGL pbuffer
+path still runs on macOS 26.5 on Apple Silicon — remains **untested**, and is
+now harder to test rather than easier. §1.1's install route should be read as
+*blocked on this machine as of 2026-08-03*, not as a route nobody has walked
+yet. §1.2's command is unexercised and stays that way.
+
+**What would close it:** building LDView from its own source instead of
+installing the published bundle. Xcode 26.3 and Homebrew are present on this
+machine; `cmake`, `qmake` and `qmake6` are not, so a Qt or CMake toolchain
+install comes first. That was offered on 2026-08-03 alongside the three.js
+route and the three.js route was chosen, so the build is unattempted. A
+notarised upstream build would close it too.
+
+### 10.2 The three.js route, run end to end
+
+Three programs were written and run against the same file §8 produced
+(`Brick-Stack.mpd`, 218,335 bytes, 3,764 type-3 lines in one inline part, two
+type-1 placements). They share one instrument, which is the point of the
+design: `LDrawLoader` reaches outside the file through exactly one method, so
+replacing that method with a recorder that throws turns any external
+resolution into a loud failure instead of a silent fallback to disk.
+
+```js
+// The instrument. fetchData is the loader's only external-I/O method
+// (LDrawLoader.js:574; the sole call site is in ensureDataLoaded).
+const fetchAttempts = [];
+loader.partsCache.fetchData = async (fileName) => {
+  fetchAttempts.push(fileName);
+  throw new Error(`external fetch attempted for "${fileName}"`);
+};
+```
+
+**Parse.** `fetchAttempts` came back **empty**, the cache held exactly
+`bikar-2x4-3p-76a063bd.dat`, and the group carried 2 meshes / 7,528 triangles /
+**0 line segments**. Bounding box **39.5 × 52 × 79.5 LDU**.
+
+That box is worth reading in millimetres, because it is a check on the emitter
+and not on the loader. At 1 LDU = 0.4 mm it is **15.8 × 31.8 mm** — the real
+LEGO 2×4 footprint *including* its 0.2 mm-per-side clearance, not the nominal
+16 × 32. The height decomposes as 24 + 24 + 4: two three-plate bricks plus one
+stud course.
+
+The zero line-segment count confirms §2's fourth observation (*"there are no
+edge lines, so any viewer's 'edges' rendering will show none; a flat-shaded
+blob is the expected result, not a bug"*) by measurement rather than by reading
+the file.
+
+**Render.** The same loader inside headless Chromium under Playwright, three
+camera angles, `1600 × 1200`, canvas screenshotted. `drawCalls: 2` and
+`renderedTriangles: 7528` were read off `WebGLRenderer.info` after the frame,
+so they describe what reached the GPU rather than what was built in memory.
+The images are not checked in — this repo tracks no images under `docs/` — so
+the numbers above and §10.4's per-mesh table are the durable record.
+
+### 10.3 §1.4's claims, checked against the run
+
+| §1.4 claim | Verdict | Evidence |
+|---|---|---|
+| *"Expected, if the export is correct: two placements of one 3,764-triangle block. **That expectation is arithmetic, not an observation.**"* | **Confirmed**, and it is now an observation | 2 meshes × 3,764 area-bearing triangles = 7,528. §10.4 |
+| *"It needs no GUI app, no LDraw parts library, no download from a third party, and no App Store."* | **Confirmed** | Zero external fetch attempts, with the instrument above proving it rather than assuming it |
+| *"Without it the material library is empty and every face falls back to `missingColorMaterial` — `0xFF00FF`, magenta. Source-read, untested."* | **Confirmed**, and now tested | `addDefaultMaterials()` was deliberately not called. Both meshes came back on a material named `__DEFAULT` whose colour reads `#ff00ff`. `__DEFAULT` is `Loader.DEFAULT_MATERIAL_NAME`, which is the name `missingColorMaterial` is constructed with — the same object, reached by the documented path |
+| *"Headless Chromium supplies WebGL via SwiftShader without a window server."* | **Falsified on this machine** | See below |
+
+The falsified claim is the operationally important one. Playwright's default
+`chromium.launch()` selects the **headless shell** build, and it could not
+create a context at all:
+
+```
+Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff,
+GL_VENDOR = Google Inc. (Google), GL_RENDERER = ANGLE (Google, Vulkan 1.3.0
+(SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver-5.0.0),
+GL_VERSION = 5.0.0, Sandboxed = no, … ErrorMessage = BindToCurrentSequence failed
+```
+
+SwiftShader was present and initialised — the failure is downstream of it. The
+fix is one option, and it is worth writing down because the symptom names
+SwiftShader and the cure has nothing to do with SwiftShader:
+
+```js
+// The default headless_shell cannot bring up a WebGL context here.
+// channel:'chromium' is the full browser build, which reaches the GPU
+// through ANGLE/Metal and reports GL_RENDERER = "WebKit WebGL".
+const browser = await chromium.launch({ channel: 'chromium' });
+```
+
+**K1, against this file's own author.** §1.4's sentence carried no hedge, in a
+section that is otherwise careful to mark every untested claim — the paragraph
+around it says *"I did not build or run that harness; it is a described route,
+not a tested one"*, and the SwiftShader sentence sat inside that scope while
+reading like a fact about Chromium. It should have read *"headless Chromium is
+documented to supply WebGL via SwiftShader; untested here."*
+
+**K10 — the transfer condition, now that it is known.** This result is about
+*this machine* (Apple Silicon, macOS 26.5, the Playwright browsers currently in
+`~/Library/Caches/ms-playwright`). Whether `headless_shell` fails the same way
+on Linux CI is **not established here**, and Linux CI is where §1.4 says this
+route belongs. Anyone wiring this into CI should expect to re-settle it there;
+`channel: 'chromium'` is the safer default precisely because it does not depend
+on which answer they get.
+
+### 10.4 The number that had to be disambiguated
+
+§9.4's validator makes **7,528** the FAIL number for this file: it is what the
+read-back reported when it counted buffer slots instead of triangles, against
+3,764 type-3 lines. §10.2's total is also 7,528. The two have different causes,
+and no aggregate can tell them apart — which is the standing D2 warning in
+[`CLAUDE.md`](../../CLAUDE.md) applied to this section's own evidence.
+
+Measured per mesh, by area rather than by slot count:
+
+| Mesh | Slots | Triangles with area | Zero-area slots | Vertices at origin | World Y |
+|---|---|---|---|---|---|
+| 0 | 3,764 | 3,764 | 0 | 0 | −24 |
+| 1 | 3,764 | 3,764 | 0 | 0 | −48 |
+
+So the doubling here is **two placements**, not one placement plus 3,764
+reserved-and-unfilled slots. That is consistent with §9.4's mechanism rather
+than an exception to it: the slot doubling is `doubleSided ? 2 : 1`, and this
+file certifies `0 BFC CERTIFY CCW` on both the model and the part, so nothing
+is double-sided and nothing is reserved. The two world Y values are the two
+type-1 lines, `1 7 0 -24 0 …` and `1 7 0 -48 0 …`, read back unchanged.
+
+**Validator:** a triangle total from this route must be attributed to a cause
+before it is quoted — per-mesh area-bearing counts and distinct world
+transforms, never the sum alone.
+
+- PASS: the table above. Two meshes, each 3,764 with area and 0 without, at two
+  different world Y — a total of 7,528 that means two placements.
+- FAIL: the same 7,528 total arising as one mesh of 3,764 area-bearing
+  triangles plus 3,764 zero-area slots at a single world Y, which is §9.4's
+  measured pre-fix behaviour on the uncertified file. The sum is identical and
+  the meaning is opposite.
+
+### 10.5 What the pictures establish, and what only the counts do
+
+The three-quarter render shows a 2×4 brick with eight studs and correct
+proportions. It does **not** show that there are two of them: the placements
+are 24 LDU apart, they stack flush, and the file has no edge lines, so the seam
+between them is not drawn. A viewer cannot distinguish this image from a single
+six-plate block.
+
+Two things resolved that, and both were extra work rather than a second look at
+the same picture. Rendering from below shows the hollow underside with the
+three tubes a 2×4 brick carries. Rendering the two meshes in different colours
+puts the seam on screen as a clean horizontal boundary at the expected height —
+the upper placement (`y = -48`) above, the lower (`y = -24`) below.
+
+The general point, and the reason this is written down: **on a file with no
+edge lines, a render is evidence of shape and not of structure.** Composition
+claims — how many parts, placed where — have to come from the counts and the
+transforms. This is the same failure the picture-based route was chosen to
+avoid, arriving from the other direction.
+
+### 10.6 What this does not establish
+
+- **Nothing about LDView, LeoCAD, or the other nine candidates in §3.** One of
+  twelve was exercised. The table's predictions for the rest stand exactly as
+  they were, on the evidence they were made with.
+- **Agreement with three.js is not agreement with the LDraw specification.**
+  `LDrawLoader` is one consumer with its own reading. §9.4 already caught it
+  behaving in a way that misled this file's authors once.
+- **No parts library was loaded**, deliberately. Nothing here tests resolution
+  against the official library, the Parts Tracker, or any file that is not
+  self-contained. §5's variant-B experiment — a type-1 line naming a part that
+  does not exist — is still unrun.
+- **The renders used this machine's GPU** through ANGLE/Metal. Nothing here was
+  run headless over SSH, in a container, or in CI.
+- **The physical claim is untested.** 15.8 × 31.8 mm is what the geometry says;
+  whether a printed part in these dimensions clutches is a question for the
+  LG-series coupons, not for a renderer.
+
+### 10.7 Fetch record
+
+**Nothing was fetched.** Every input to this section was local: the `.dmg`
+already in `~/Downloads`, the MPD produced by §8, `three@0.185.1` and
+`@playwright/test` already installed in bikar's `node_modules`, and read-only
+inspection of this machine. The one HTTP server involved was a `127.0.0.1`
+static server started by the render harness to serve the page to Chromium,
+because ES module import maps do not resolve over `file:`.
