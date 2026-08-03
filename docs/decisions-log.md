@@ -930,3 +930,86 @@ V-M5 containment — `packages/core/tests/kernel3d/mural-split.test.ts`), which
 is why this entry records the *decision* and not the defect: what cannot be
 asserted in vitest is that the gap-registered alternative was considered and
 why it lost. That is what this file is for.
+
+---
+
+## D-014 — `make coupons` ships as a gate with a build target for a front door
+
+**Date:** 2026-08-03 · **Status:** Decided · **Repos:** 3d-models
+
+### Context
+
+[`backlog.md`](backlog.md) §4 item 2 and open question 11 left this undecided,
+and question 11 was careful about *why*: the repo's twice-measured precedent is
+to prefer a gate over new machinery
+([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
+[`issue-register-evaluation.md`](issue-register-evaluation.md)), but neither of
+those evaluations is about a build target, so the precedent does not transfer
+cleanly. That is the K10 sentence the backlog wrote rather than assumed, and it
+is what kept the question open.
+
+Three options were on the table:
+
+- **Nothing** — keep typing §6's lines. Rejected on evidence, not taste: §6
+  carries two rules a hand-typed session drops without producing any error.
+  `--piece` is mandatory (without it the CLI renders the file's last solid —
+  "a valid render and a useless coupon"), and the four sub-floor MC-2 rungs
+  must run *without* `--check` or they write nothing. Both failures look like
+  success at the shell.
+- **A thin target** that re-types §6 into the Makefile. Rejected: it creates a
+  second copy of the command lines, so the doc and the build can disagree, and
+  it still verifies nothing. `backlog.md` §4 called the target "a judgement
+  call and not an obligation" and it was right — the *target* was never the
+  valuable part.
+- **A verifier with a target as its entry point (taken).**
+  [`build/verify_machine_card.py`](../build/verify_machine_card.py) reads the
+  rung list and the whole expectation table out of
+  [`calibration-design.md`](calibration-design.md) §7, renders each rung, and
+  diffs the mesh gate's actual output against the row. No number and no rung
+  name is restated in the Makefile or the script.
+
+### Decision
+
+`make coupons` renders and verifies; `make validate-coupons` self-tests the
+verifier. §7's table is the spec, and the only copy of it.
+
+The load-bearing detail is what the verifier does with the four rungs §7 marks
+**FAIL — by design**. MC2Wall04/06/08/10 sit under the 1.2 mm feature floor on
+purpose — rejecting them is what MC-2's wall ladder measures. A verifier that
+asserted "every rung PASSes" would have to be wrong about those four or skip
+them, and skipping is how a gate quietly stops testing the thing it exists for.
+So each of the four is rendered twice: once bare, to write the STL §6 asks for,
+and once under `--check` to assert it *fails*, at the minFeature §7 names. This
+is the one claim in §7 that §6's own command line cannot demonstrate, because
+§6 deliberately never runs `--check` on them.
+
+Two further self-consistency checks come free and are K7 by construction: §6's
+shell block and §7's table must name the same rungs, and the 23 measured
+volumes must sum to the 89.7 cm³ §7 states.
+
+### What would reverse it
+
+A false alarm. `.claude/gates/docs_gate.py`'s house rule is that a gate which
+cries wolf gets switched off, which is worse than no gate — so if the verifier
+starts failing for reasons that are not drift between the doc and the geometry,
+it should be narrowed or removed rather than tolerated. One near-miss already
+happened during authoring and is worth recording: the first piece-set
+cross-check read `MC1FitGaugePress` out of a §6 *comment* whose entire purpose
+was to say that rung is deliberately not rendered, and reported a correct doc as
+broken. Comments are now stripped before the command lines are parsed.
+
+Floating-point noise was the other candidate and is handled by construction:
+each number is compared at the precision §7 chose to print it, so
+`minFeature=4.999999965721486` matches a row that says `5.000` without a
+tolerance constant anyone has to justify.
+
+### The graduation
+
+`make validate-coupons` — seven mutations applied to a scratch copy of the doc,
+each asserting the verifier fires: a drifted triangle count, euler, and
+minFeature; a by-design FAIL relabelled `PASS`; a passing rung relabelled `FAIL
+— by design`; a rung rendered by §6 that §7 does not tabulate; and MC-6 losing
+the F7 warning it exists to raise. The fourth and fifth are the pair that
+matters, because they pin the by-design label from both sides — it can neither
+be tidied away nor used to hide a real failure. All eight cases (seven plus the
+unmutated control) behave as documented as of 2026-08-03.

@@ -368,6 +368,8 @@ recommend, so printing with one measures the brim instead of the threshold.
 
 ## 6. Render commands
 
+`make coupons` in this repo runs all of it and then checks the result against §7's
+table; the block below is what it runs, and is worth reading before trusting either.
 Everything is one command per rung — that is what puts the rung's identity in the
 filename. `bikar` below is `packages/cli/dist/index.js` after a build, or
 `npx tsx packages/cli/src/index.ts` from source.
@@ -452,6 +454,24 @@ a rod is `2`; MC-5's single fiducial through-hole makes it `0`.
 The four `FAIL` rows are the expected outcome described in §3.1, not defects. All four
 are watertight; the gate refuses to write their STLs only because of the feature floor,
 and they render on the `--check`-less command line in §6.
+
+**This table is executable.** `make coupons` renders every rung per §6 and diffs the
+mesh gate's actual output against the row above — including running `--check` on the
+four sub-floor rungs specifically to assert they *fail*, at the minFeature named here.
+So the by-design failures are tested rather than exempted, and relabelling one of them
+`PASS` is caught. It also cross-checks that §6's shell block and this table name the
+same rungs, and that they sum to the total stated below.
+
+**Validator:** `build/verify_machine_card.py` compares each rung's `euler`,
+`watertight`, `degenerate`, `minFeature`, `--check` verdict, triangle count and volume
+against its row, at the decimal precision the row states.
+PASS: `MC1BoreSweep` renders `euler=-10 degenerate=0 minFeature=4.999999965721486mm —
+PASS`, 1572 triangles, 11.8 cm³ — matching row 1 once minFeature is read at the three
+decimals the row writes.
+FAIL: `MC2Wall04` renders `— PASS` under `--check`, or renders at `minFeature=0.45mm`
+against a row that says `0.40`, or `MC6Tower03` raises no F7 warning. Each is a
+mutation `make validate-coupons` applies to a scratch copy of this doc, to confirm the
+verifier reports it; a gate nobody has watched fail is not a gate.
 
 **Independent geometry checks**, because a mesh gate PASS is not the same as "the
 geometry is what was designed":

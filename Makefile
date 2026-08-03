@@ -62,7 +62,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bikar-stamp bricks pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -213,6 +213,28 @@ bricks: bikar-stamp
 		cp "$$bkr" ${ROOT_DIR}/src/Lego/; \
 	done; \
 	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py
+
+# Coupons — the machine card (docs/calibration-design.md), 23 rungs that
+# measure a printer rather than print a thing. Deliberately NOT shaped like
+# `orbs`/`bricks`, which loop over a directory and render each file whole:
+# this is one .bkr holding 26 pieces, and §6 is explicit that omitting
+# `--piece` renders the file's last solid — a plate and a loose pin fused in
+# one STL, "a valid render and a useless coupon".
+#
+# The rung list, the per-rung flags and the expected results are not repeated
+# here. They are read out of the design doc itself by build/verify_machine_card.py,
+# which renders each rung and diffs the mesh gate against §7's table — so a
+# doc edit and a geometry change cannot drift apart silently. Four rungs are
+# expected to FAIL the feature floor (that is what MC-2's wall ladder is for),
+# and the verifier asserts those failures rather than skipping them.
+# `--self-test` mutates the doc seven ways and checks the gate fires each time.
+coupons: bikar-stamp
+	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
+		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
+	@$(PYTHON) ${ROOT_DIR}/build/verify_machine_card.py --bikar-dir "$(BIKAR_DIR)"
+
+validate-coupons:
+	@$(PYTHON) ${ROOT_DIR}/build/verify_machine_card.py --bikar-dir "$(BIKAR_DIR)" --self-test
 
 # Pattern sets — mural presets from the same directory, skipped by `bricks`
 # above because one STL is the wrong shape for them twice over: a mural

@@ -371,19 +371,27 @@ Checked against the repo, not against memory. Done / not done is stated per item
 
 **Not done — do these first.**
 
-1. **Render the machine card to disk.** `build/stls/coupons/` currently holds
-   only the three P1 strut STLs from 2026-07-27; there is no
-   `machine-card/` directory. Run §6's commands verbatim, including the
-   `--check`-less lines for `MC2Wall04/06/08/10` and `--check print` for the
-   MC-6 towers.
-2. **Decide whether a `make coupons` target is worth it.** [`Makefile`](../Makefile)
-   has `orbs`, `cookie-cutters`, `bricks` and the studio targets, and **no coupon
-   target at all** — every coupon today is a hand-typed CLI line. Given
-   `.claude/gates/docs_gate.py`'s house rule that a gate which cries wolf gets
-   switched off, and this repo's stated preference for a gate over a skill, a
-   thin target that regenerates the card is a judgement call and not an
-   obligation; what *is* an obligation is that the lines in §6 are run exactly,
-   because `--piece` is what puts rung identity in the filename.
+1. ~~**Render the machine card to disk.**~~ — **done 2026-08-03**. All 23 rungs
+   are in `build/stls/coupons/machine-card/`, rendered per §6 (the
+   `--check`-less lines for `MC2Wall04/06/08/10`, `--check print` for the MC-6
+   towers), from bikar `60383b5`. Every rung matches
+   [`calibration-design.md`](calibration-design.md) §7's table — euler,
+   watertight, degenerate, minFeature, verdict, triangles, volume — and the 23
+   volumes sum to the 89.7 cm³ §7 states. `build/` is not tracked on master, so
+   the STLs are a local artifact; `make coupons` reproduces them.
+2. ~~**Decide whether a `make coupons` target is worth it.**~~ — **done
+   2026-08-03**, [`Makefile`](../Makefile) `coupons` + `validate-coupons`. The
+   deciding argument was not convenience: §6's command lines carry two
+   non-obvious rules — `--piece` on every line, and *no* `--check` on the four
+   sub-floor MC-2 rungs — that a hand-typed session can drop without any error
+   appearing. The target does not restate them; it runs
+   [`build/verify_machine_card.py`](../build/verify_machine_card.py), which
+   reads the rung list and the expected results out of §7 and diffs the actual
+   mesh gate against them, so the doc and the geometry cannot drift apart
+   quietly. It also runs `--check` on the four by-design failures specifically
+   to assert that they *fail*, which is the one thing §6's own command line
+   cannot show. `make validate-coupons` mutates a scratch copy of the doc seven
+   ways and confirms the verifier fires on each.
 3. ~~**Reconcile W-F1's `.bkr` with its catalog entry**~~ — **done 2026-08-02**,
    see §7 item 1 and [`decisions-log.md`](decisions-log.md) D-008. The coupon it
    needed did not exist and was written; nothing here waits on a printer.
@@ -672,12 +680,15 @@ one.
     `bikar:docs/decisions/2026-08-02-pattern-outline-footprint.md`, designed in
     [`pattern-outline-brick-design.md`](pattern-outline-brick-design.md)), and
     `Rosette-Brick.bkr` was authored against it in the same commit.
-11. **Whether a `make coupons` target is wanted.** §4 states the case both ways
-    and does not decide it. This repo's stated precedent
+11. ~~**Whether a `make coupons` target is wanted.**~~ **Resolved 2026-08-03**:
+    yes, and the precedent question resolved itself. The repo's preference for
+    a gate over new machinery
     ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-    [`issue-register-evaluation.md`](issue-register-evaluation.md)) is to prefer
-    a gate over new machinery, and neither of those evaluations is about a build
-    target, so the precedent does not transfer cleanly.
+    [`issue-register-evaluation.md`](issue-register-evaluation.md)) does not
+    transfer to a build target, as noted here — but what shipped is a gate that
+    happens to have a target as its entry point, so the preference is satisfied
+    rather than bypassed. See §4 item 2 and
+    [`decisions-log.md`](decisions-log.md) D-014.
 
 ---
 

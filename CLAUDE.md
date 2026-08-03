@@ -167,6 +167,26 @@ The checkable invariant is not *does this URL resolve* but *is every
 load-bearing number attributed to a source the research file records as
 actually fetched* — a local check with no network.
 
+## Robustness over ease — especially when offering the choice
+
+Ease is visible at the moment of choosing and robustness is not, so the trade
+is systematically mis-priced unless it is written down. When you present
+options, the cheapest one is not the default, "do nothing" is not neutral, and
+each option must say **what it verifies** — an option that verifies nothing
+should be named as such or not offered.
+
+> *Failure mode, 2026-08-03:* the two options offered for rendering the machine
+> card both produced 23 STLs and **neither checked one of them**, while
+> `calibration-design.md` §7 already shipped a 23-row expectation table. The
+> version that shipped reads that table and diffs the mesh gate against it
+> ([D-014](docs/decisions-log.md)) — and `make coupons` is a verifier with a
+> build target as its front door, not the thin re-typing of §6 that the backlog
+> had framed the decision as. The re-typing was never the valuable part.
+
+Corollary: **the by-design failure is the load-bearing case.** A gate that
+asserts "everything passes" must be wrong about a deliberate failure or skip
+it, and skipping is how a gate stops testing the thing it exists for.
+
 ## Precedent
 
 Before proposing a new skill or hook, read
