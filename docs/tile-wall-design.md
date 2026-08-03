@@ -318,11 +318,24 @@ numbers above, computed instead of estimated.
 1. **Decided 2026-07-27 — settle empirically in W2**: the clip coupon prints both corner
    variants (0.6 mm front rebate and no-rebate proud) and the in-the-flesh comparison in
    raking light picks the default. Neither variant is baked into the grammar before then.
-2. `checker` with two tile types requires identical border/connector geometry — enforce by
-   construction (shared `border` spec) or validate per pair?
-3. Do cropped edge tiles keep their relief clipped mid-motif, or should the border band
-   thicken to absorb the cut (tiler's trim strip, in-language)? Leaning: offer both,
-   `crop clip | crop clip with frame`.
+2. **Decided 2026-08-03 — both** ([`decisions-log.md`](decisions-log.md) D-016). A shared
+   `border` spec is the path `checker` is documented on, so two tile types that reference
+   one cannot diverge; a tile may still declare its own border, and then a **per-pair
+   validator** walks every adjacency and compares. Keeping that second path open is
+   deliberate — an asymmetric pairing is real tiling practice, and D-017's `frame` needs
+   the freedom. Unbuilt: the validator, whose `FAIL:` example must be the hard case (two
+   tiles agreeing on gap and clip *type* but placing the clip at different offsets), not
+   two mismatched gaps.
+3. **Decided 2026-08-03 — both finishes, decoupled** ([`decisions-log.md`](decisions-log.md)
+   D-017). The `crop clip | crop clip with frame` sketch is **not** what ships: `frame`
+   becomes its own wall-level statement, and `crop` keeps deciding only what happens to a
+   tile the grid cuts. A frame is a perimeter finish; a crop is what a non-integer grid
+   does. Coupled, a wall whose grid divides evenly could not ask for a frame at all, and
+   changing `grid 4 4` to `grid 4 5` would make the perimeter finish appear as a side
+   effect of arithmetic. Unbuilt: the band width needs a D3 default declaration, and it is
+   likely a calibration bet rather than a citation — "thick enough that a cut motif reads as
+   intentional" is judged in raking light, and W1's pilot (`uncovered 4.8 cm²`) is the
+   coupon that would carry it.
 
 ## Appendix A — survey sources (kept on file)
 

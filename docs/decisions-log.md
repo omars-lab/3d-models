@@ -1063,3 +1063,127 @@ shipped: the orphaned pin errors, the object *still resolves* under
 the pre-existing checks could not see this, so a later simplification cannot
 quietly reintroduce it. A sibling pin at the same orphaned commit is asserted
 to stay silent.
+
+---
+
+## D-016 — `checker` gets a shared `border` spec *and* a per-pair validator
+
+**Date:** 2026-08-03 · **Status:** Decided · **Repos:** bikar (grammar + validator), 3d-models (doc)
+
+### Context
+
+[`tile-wall-design.md`](tile-wall-design.md) §10 Q2, open since the doc was
+written: `checker` alternates two tile types across a wall, and every A–B
+adjacency is a joint. If the two types disagree about edge gap, clip type or
+clip position, the wall does not assemble. Enforce that by construction, or
+detect it per pair?
+
+### Decision
+
+Both, and in that order.
+
+A `border` declaration is the path `checker` is documented on: two tile types
+that reference one `border` cannot diverge, so the common failure is not a
+defect that gets caught — it is a state that cannot be written down. That is the
+robustness-over-ease call.
+
+A tile may still decline the shared spec and declare its own border, and then
+the **per-pair validator** runs: walk every adjacency in the laid-out wall and
+compare the border fields. Keeping this path open is deliberate — a deliberately
+asymmetric pairing (a trim tile, a border course) is real tiling practice, and
+D-017's `frame` needs exactly that freedom. Making it unrepresentable would have
+forced a grammar change the first time someone wanted one.
+
+### What still has to be built
+
+The validator needs a **PASS:** and a **FAIL:** line per D2, and the `FAIL:` must
+be the hard case, not the easy one. The easy counterexample is two tiles with
+different `edge` gaps; the hard one is two tiles that agree on gap and clip type
+but place the clip at different offsets along the edge — geometrically distinct,
+trivially missed by a field-by-field compare that stops at type. Write that one.
+
+Per D2's standing warning: **an aggregate cannot discharge a claim about every
+pair.** Reporting "41 of 42 pairs agree" is not a pass, and one summary
+comparison over the wall's distinct tile *types* is not a check of its
+adjacencies — a `checker` wall with three types has pairs no type-level compare
+visits.
+
+---
+
+## D-017 — `frame` is orthogonal to `crop`, not a crop mode
+
+**Date:** 2026-08-03 · **Status:** Decided · **Repos:** bikar (grammar), 3d-models (doc)
+
+### Context
+
+[`tile-wall-design.md`](tile-wall-design.md) §10 Q3 asked whether a cropped edge
+tile keeps its relief clipped mid-motif, or whether the border band thickens to
+absorb the cut — the tiler's trim strip, in-language. The doc leaned "offer
+both", and sketched the syntax as `crop clip | crop clip with frame`.
+
+### Decision
+
+Offer both finishes — and **do not attach the frame to the crop.** `frame` is
+its own wall-level statement; `crop` keeps deciding only what happens to a tile
+the grid cuts.
+
+The sketched `crop clip with frame` couples two things that are not the same
+question. A frame is a finish on the wall's perimeter; a crop is what a
+non-integer grid does to a tile. A wall whose grid divides evenly has no cropped
+tiles at all and can still want a frame — under the coupled syntax that wall
+could not ask for one, because it has no `crop` clause to hang it off. The
+coupling also silently makes the finish depend on grid arithmetic: change
+`grid 4 4` to `grid 4 5` and the perimeter finish appears or vanishes as a side
+effect.
+
+Decoupled, the four combinations are all writable and all mean something:
+no frame with a raw cut, a frame over a raw cut, a frame on an uncut wall, and —
+the case worth naming — a frame whose band is thick enough to swallow the
+partial motif, which is what "absorb the cut" originally meant.
+
+### What still has to be built
+
+The band width needs a D3 default declaration, and it does not have a source.
+Either it cites one or it is a calibration bet — and a bet is the likely honest answer,
+because "thick enough that a cut motif reads as intentional" is a judgement
+about how the wall looks in raking light, which is measured by printing it. W1's
+2×2 pilot already reports `uncovered 4.8 cm²` and is the coupon that would carry
+it.
+
+---
+
+## D-018 — F3 (supports required) stays a warning everywhere
+
+**Date:** 2026-08-03 · **Status:** Decided · **Repos:** bikar (gate), 3d-models (doc)
+
+### Context
+
+[`print-validation-design.md`](print-validation-design.md) §8 Q3 asked whether
+F3 should be a hard *error* for the presets shipped in the gallery, and recorded
+a leaning: "yes-for-gallery, warn-for-Lab-custom."
+
+### Decision
+
+**Always warn.** The leaning is overruled.
+
+Needing supports is a normal printable outcome, not a defect — a large fraction
+of good models need them, and the printer handles it. Erroring on the gallery
+path would fail `make orbs` over a condition the slicer is designed for.
+
+The split severity also had a cost the leaning did not price: it makes F3's
+meaning depend on who called the gate. The gate would need a `--strict` flag or
+an equivalent caller-supplied policy, the severity table would stop being
+readable on its own, and every future finding would face the same question. One
+table, one meaning per finding code, is the cheaper invariant to keep true.
+
+This does **not** mean a support-needing preset ships unnoticed. The warning is
+emitted on the gallery path exactly as it is in the Lab; what changes is that a
+human decides, rather than the build failing. F2 (an island that never merges)
+remains an error — that is the genuinely unprintable case, and the distinction
+between the two is now the whole of the difference.
+
+### What this closes and what it does not
+
+§8 Q3 is closed. §8 Q1 (slice representation) and Q2 (island-tracking
+granularity) are untouched and stay open — both are V1-spike decisions, not
+policy.
