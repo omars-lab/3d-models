@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**16 registered bets · 16 `Calibrated` records — 16 provisional, 0 measured · 6 bets with no record in bikar.**
+**17 registered bets · 17 `Calibrated` records — 17 provisional, 0 measured · 6 bets with no record in bikar.**
 
 ## Bets
 
@@ -34,6 +34,7 @@ is opened, clustered, and closed.
 | `CAL-CLB-01` | clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span | `LG-P2` | open — no record in bikar | — |
 | `CAL-ANC-01` | anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control | `LG-B2` | open — no record in bikar | — |
 | `CAL-INW-01` | printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) | `LG-B2` | open — no record in bikar | — |
+| `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -222,4 +223,11 @@ named next print rather than an absence:
 
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** Both are 0.1 mm because 0.1 mm is a round number one layer high at a 0.4 mm nozzle, not because either was measured: the design doc calls the seated state "near stress-free with only a small residual bias" (§5) and never says how small, and no clip has been seated. `antiRattle` too small rattles and too large cracks the tile or bows it out of plane; `backFlush` too small leaves the clip proud of the wall, which is the one thing the sub-flush rule exists to prevent. Coupon W-C1 settles both by seating a printed clip in a printed wall.
+
+### `FRAME_BAND_MM_CAL` — `CAL-FRM-01`
+
+- **Module:** `bikar/packages/core/src/kernel/wall-frame.ts`
+- **Value:** `12`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** A round number at roughly one-eighth of a 100 mm module — wide enough that the eye reads it as a margin, narrow enough not to dominate the field. Chosen, not measured: no frame has been printed, and "reads as intentional" is a raking-light judgement. Coupon W-P1 (2×2 frame pilot, band ladder) settles it.
 
