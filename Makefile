@@ -62,7 +62,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -114,6 +114,16 @@ validate-pointers:
 validate-catalog:
 	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/catalog_models.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) python3 ${ROOT_DIR}/.claude/gates/catalog_models.py
+
+# Count gate: a number in a doc is a claim about a set. Each `<!--count:NAME-->`
+# tag pins the written number to the tool that prints it — the catalog gate for
+# entry counts, the generated .claude/skills/calibrate/bets.md for bet and
+# record counts. `self-test` runs against fixed stub authorities, so it cannot
+# pass by tracking whatever the repo happens to say; its load-bearing fixture is
+# a doc whose table is right and whose second, restating site is stale.
+validate-counts:
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/counts_gate.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/counts_gate.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks

@@ -1,0 +1,27 @@
+#!/bin/sh
+# Count gate (.claude/gates/counts_gate.py). A number in a doc is a claim about
+# a set, and the ones this repo writes are all already printed by something that
+# runs — the catalog gate, and bikar's generated bets.md. A `<!--count:NAME-->`
+# tag pins the written number to its authority.
+#
+# Built 2026-08-03, from a defect with two sites: docs/backlog.md §2's table was
+# stale by three merges, and §8's "Counts reconcile" bullet — whose whole job is
+# to catch that — restated the same wrong figures independently.
+#
+# Whole-file, not --staged: a count can go stale because the *catalog* or the
+# *registry* changed, with no doc staged here at all. That is in fact how every
+# instance of it has happened.
+# Override once: COUNTS_GATE_OK=1 git commit
+[ -n "$COUNTS_GATE_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the count gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 20-use-cases, 30-docs-gate, 35-doc-pointers and
+# 36-catalog-models: `gh-pages` carries `.githooks` and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/counts_gate.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no count gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"
