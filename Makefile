@@ -30,8 +30,28 @@ openscad := $(shell \
 #   make deploy PYTHON=/path/to/python3
 PYTHON ?= python3
 
-BIKAR_DIR := ${HOME}/Workspace/git/bikar
+# `?=`, not `:=`, so the environment can point this somewhere else without
+# putting it on every command line.
+BIKAR_DIR ?= ${HOME}/Workspace/git/bikar
 BIKAR := node $(BIKAR_DIR)/packages/cli/dist/index.js
+
+# Which bikar commit a render came from is not recoverable after the fact: an
+# STL carries no provenance and `build/` is .gitignore'd on master, so the
+# only place the answer could live is a stamp written at build time.
+#
+# The trap is not hypothetical. On 2026-08-02 the default BIKAR_DIR was
+# sitting on a *detached HEAD one commit behind `main`* — because `main` was
+# checked out in a sibling worktree and a repository cannot hold the same
+# branch in two places. `make bricks` would have built from it and said
+# nothing. (That build would in fact have been correct; the point is that
+# nothing here could have told you either way.)
+#
+# So: every brick and set build stamps what it built from, the stamp deploys
+# beside the images, and the detached/dirty cases are *reported*. Only
+# BIKAR_REF fails the build — set it when the answer has to be exact, and
+# leave it empty for ordinary local iteration on unpushed bikar work. A gate
+# that fired on every dirty tree would be switched off within a week.
+BIKAR_REF ?=
 ORB_VIEWS := $(ROOT_DIR)/build/orb-views
 
 # gh-pages deploy
@@ -40,9 +60,9 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # Recursively expanded, not `:=`, because LAB_PAGES is defined further down
 # beside the vendor step that uses it. `:=` here would expand to nothing and
 # deploy a gallery with no studio pages in it.
-DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls src LICENSE README.md
+DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bricks pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bikar-stamp bricks pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-hooks validate-site-graph site-graph
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -159,7 +179,24 @@ orbs:
 # mesh gate, not by a render. build/brick_previews.py therefore draws the
 # mesh itself, via OpenSCAD import(), which lands gold-on-cream exactly
 # where `make web-images` expects it.
-bricks:
+# Records which bikar produced the renders that follow. See BIKAR_REF above.
+bikar-stamp:
+	@set -eu; \
+	sha=$$(git -C "$(BIKAR_DIR)" rev-parse HEAD); \
+	ref=$$(git -C "$(BIKAR_DIR)" rev-parse --abbrev-ref HEAD); \
+	dirty=$$(git -C "$(BIKAR_DIR)" status --porcelain | head -1); \
+	if [ -n "$(BIKAR_REF)" ]; then \
+		want=$$(git -C "$(BIKAR_DIR)" rev-parse "$(BIKAR_REF)^{commit}"); \
+		[ "$$sha" = "$$want" ] \
+			|| { echo "BIKAR_REF wants $(BIKAR_REF) ($$want) but $(BIKAR_DIR) is at $$sha"; exit 1; }; \
+	fi; \
+	mkdir -p ${ROOT_DIR}/build; \
+	printf '%s %s%s\n' "$$sha" "$$ref" "$${dirty:+ +dirty}" > ${ROOT_DIR}/build/bikar-ref.txt; \
+	echo "== bikar $$sha ($$ref)"; \
+	[ -z "$$dirty" ] || echo "   note: working tree is dirty — the stamp says so, the STLs cannot"; \
+	[ "$$ref" != "HEAD" ] || echo "   note: detached HEAD — this is not a branch tip"
+
+bricks: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
 	@[ -d "$(BIKAR_DIR)/patterns/Lego" ] \
@@ -188,7 +225,7 @@ bricks:
 # ungated `--format stl` writes the composed panel — every piece at its
 # layout offset — which is the honest gallery image, because the thing the
 # set promises is the reconstituted pattern, not one fragment.
-pattern-sets:
+pattern-sets: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
 	@[ -d "$(BIKAR_DIR)/patterns/Lego" ] \
