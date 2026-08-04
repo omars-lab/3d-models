@@ -12,6 +12,8 @@ the definitions and the instances each rule is built from.
            CAL-* bet id.
   D4 (K1)  A number an audit has withdrawn may not be restated as fact. The
            bullet or paragraph that names it must also say so.
+  D5 (K9)  A CAL-* bet id that *discharges* a `**Default:**` must be registered
+           in .claude/skills/calibrate/bets.md.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
 and has no false positives by construction — the target either exists on disk
@@ -34,7 +36,30 @@ under docs/research/ are exempt: the convention there is a verbatim body plus an
 Errata section, so the withdrawn number is *supposed* to still be in the text —
 the errata note is what carries the correction.
 
-Its reach is a floor, and the defect that built it proves the ceiling. That
+D5 is **discharge-scoped**, which is narrower than "every CAL id in the corpus"
+and deliberately so. D3 accepts a `**Default:**` that names a bet id *instead*
+of a citation, and it never asked whether the bet exists — so on 2026-08-03
+`docs/text-emit-design.md` shipped three gate-green defaults resting on
+`CAL-TXT-01` and `CAL-TXT-02`, neither of which was registered anywhere. The
+doc said so itself, in a blockquote, which is exactly the "defensible argument
+that management is occurring" this repo's CLAUDE.md warns about.
+
+The rule was measured before it was written, per the C3 tenet. Across the 225
+CAL-id sites in docs/, 20 distinct ids: 17 registered, 3 not. Gating on *every*
+site would have fired 4 times on `CAL-SEA-01` — an id `hemisphere-split-design.md`
+Appendix B and `backlog.md` name precisely to record that it was **deliberately
+not minted**, correct prose that a naive rule would call a defect. Restricted to
+the discharge form, the same corpus gives **5 hits, 5 real**: every CAL id
+sitting inside a `**Default:**` paragraph is load-bearing, and exactly the two
+unregistered ones fire. A CAL id anywhere else — prose, a table, a bullet, an
+open question — is a mention and is not checked.
+
+It fails **loud, not open**: an unreadable registry, or one that parses to
+implausibly few ids, is reported as a finding on the first default it would
+have vouched for. A gate that silently stops checking is worse than one that
+never did (`catalog_models.py`).
+
+D4's reach is a floor, and the defect that built it proves the ceiling. That
 defect had two sites in one file. D4 catches Appendix A's "FDM ±0.1–0.2 mm"
 and does **not** catch §2's "LEGO-class interference (±0.02 mm sensitivity) is
 10–20× beyond FDM tolerance", which restates the same withdrawn figure as a
@@ -58,6 +83,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
+
+# The generated projection of bikar's CAL_BETS array — the only list of bet ids
+# that exists on this side. Generated, never hand-edited, so reading it is
+# reading the records themselves rather than a second copy of them.
+REGISTRY_REL = ".claude/skills/calibrate/bets.md"
+REGISTRY = ROOT / REGISTRY_REL
+
+# Below this, the registry did not parse — a renamed heading, a reformatted
+# table, a truncated write. 17 ids were registered when D5 was written, so any
+# read returning fewer than five means the reader, not the registry, is wrong.
+REGISTRY_MIN_IDS = 5
 
 FENCE = re.compile(r"^\s*(```|~~~)")
 INLINE_CODE = re.compile(r"`[^`]*`")
@@ -182,6 +218,61 @@ def check_d3_defaults(path: Path, lines: list[str], raw: list[str]) -> list[str]
     return findings
 
 
+def registered_bets() -> tuple[set[str], str | None]:
+    """The bet ids `bets.md` registers, and why the read failed if it did.
+
+    Returns `(ids, None)` on a good read and `(set(), reason)` on a bad one.
+    The caller turns a reason into a finding rather than into silence: a
+    registry this gate could not read must not be reported as a registry in
+    which every id was found.
+    """
+    if not REGISTRY.exists():
+        return set(), f"{REGISTRY_REL} does not exist"
+    ids = set(CAL_ID.findall(REGISTRY.read_text(errors="replace")))
+    if len(ids) < REGISTRY_MIN_IDS:
+        return set(), (
+            f"{REGISTRY_REL} parsed to only {len(ids)} bet id(s), "
+            f"below the {REGISTRY_MIN_IDS} this reader expects — regenerate it with "
+            "`cd ../bikar && npm run registry:calibration`"
+        )
+    return ids, None
+
+
+def check_d5_registered_bets(path: Path, lines: list[str], raw: list[str]) -> list[str]:
+    """A bet id that discharges a default must name a bet that exists.
+
+    Scoped to the paragraph D3 reads, for the reason in the module docstring:
+    a CAL id in ordinary prose can legitimately name a bet that was considered
+    and declined, and firing on those is how a gate earns being switched off.
+    """
+    findings = []
+    ids, reason = registered_bets()
+    for lineno, body in sections(lines, DEFAULT):
+        para = [body[0]]
+        for line in body[1:]:
+            if not line.strip():
+                break
+            para.append(line)
+        cited = CAL_ID.findall("\n".join(para))
+        if not cited:
+            continue
+        if reason is not None:
+            findings.append(
+                f"{path.relative_to(ROOT)}:{lineno}: D5 (K9) cannot verify "
+                f"{', '.join(sorted(set(cited)))} — {reason}"
+            )
+            break
+        for bet in sorted(set(cited)):
+            if bet in ids:
+                continue
+            findings.append(
+                f"{path.relative_to(ROOT)}:{lineno}: D5 (K9) default rests on "
+                f"{bet}, which is not registered in {REGISTRY_REL} — "
+                f"add it to CAL_BETS in bikar and regenerate, or cite a source instead"
+            )
+    return findings
+
+
 def block_at(lines: list[str], i: int) -> str:
     """The bullet, list item or paragraph containing line i.
 
@@ -224,6 +315,7 @@ def check_file(path: Path) -> list[str]:
         + check_d2_validators(path, lines, raw)
         + check_d3_defaults(path, lines, raw)
         + check_d4_withdrawn(path, lines)
+        + check_d5_registered_bets(path, lines, raw)
     )
 
 
@@ -249,6 +341,7 @@ def self_test() -> int:
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
+        "fail/d5-unregistered-bet.md": ["D5 (K9)"],
     }
     ok = True
     for name in sorted((FIXTURES / "pass").glob("*.md")):

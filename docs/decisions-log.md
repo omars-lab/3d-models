@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "17 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "19 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the five additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
@@ -1715,11 +1715,25 @@ surface that matters.
 One coupon replaces both paragraphs with a measurement: the same label at a
 descending ladder of cap heights, in both relief directions, printed once.
 
-### The hole this leaves open, stated rather than left to be found
+### The hole this left open — closed 2026-08-04 by D5
 
-The docs gate's D3 rule accepts a `CAL-*` id as provenance for a default. It does
-**not** check that the id is registered. Until `Calibrated<T>` records for
-CAL-TXT-01 and CAL-TXT-02 land in bikar, §6's defaults satisfy the gate with ids
-that resolve to nothing. That is T0 in the design doc's milestones and is written
-into §6 itself, because a gate that can be satisfied by an invented identifier is
-a fact about the gate and belongs where the next person will read it.
+The docs gate's D3 rule accepted a `CAL-*` id as provenance for a default and did
+**not** check that the id was registered, so §6's three defaults were gate-green
+on two ids that resolved to nothing. Writing that admission into the doc is what
+this repo's CLAUDE.md calls a defensible argument that management is occurring;
+the gate is the fix.
+
+T0 landed both halves. Both bets are now in bikar's `CAL_BETS` (coupon `MC-7`,
+catalogued in the same change), and `docs_gate.py` grew **D5**: a CAL id that
+*discharges* a `**Default:**` must appear in the generated registry, or the gate
+fails.
+
+D5 is scoped to the discharge form and not to every CAL id in the corpus, which
+is a measured choice, not a cautious one. Across 225 CAL-id sites in `docs/`
+there are 20 distinct ids, 17 registered. Gating every site fires 4 times on
+`CAL-SEA-01` — an id [`hemisphere-split-design.md`](hemisphere-split-design.md)
+Appendix B names precisely to record that it was **deliberately not minted**.
+That is correct prose, and a rule that calls it a defect is a rule that gets
+switched off. Restricted to the paragraph D3 actually reads, the same corpus
+gives **5 hits, 5 real**, firing on exactly the two ids this decision was about.
+Measure a rule before gating on it — the same tenet C3 was built from.

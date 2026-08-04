@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**17 registered bets · 17 `Calibrated` records — 17 provisional, 0 measured · 6 bets with no record in bikar.**
+**19 registered bets · 17 `Calibrated` records — 17 provisional, 0 measured · 8 bets with no record in bikar.**
 
 ## Bets
 
@@ -35,6 +35,8 @@ is opened, clustered, and closed.
 | `CAL-ANC-01` | anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control | `LG-B2` | open — no record in bikar | — |
 | `CAL-INW-01` | printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) | `LG-B2` | open — no record in bikar | — |
 | `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
+| `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | open — no record in bikar | — |
+| `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -60,6 +62,8 @@ named next print rather than an absence:
 - `CAL-CLB-01` — clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span · coupon `LG-P2`
 - `CAL-ANC-01` — anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control · coupon `LG-B2`
 - `CAL-INW-01` — printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) · coupon `LG-B2`
+- `CAL-TXT-01` — emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine · coupon `MC-7`
+- `CAL-TXT-02` — emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it · coupon `MC-7`
 
 ## Records
 
