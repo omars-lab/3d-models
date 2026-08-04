@@ -86,11 +86,48 @@ Over 296 glyphs:
 | Arial Bold, Arial Regular | 0 | — |
 | Verdana Bold, Tahoma Bold | 0 | — |
 | Source Code Pro Bold, Regular | 0 | — |
-| **DM Sans Bold (wght 700)** | **6 of 37** | `A` `B` `H` `Q` `R` `Y` |
-| **DM Sans Regular (wght 400)** | **6 of 37** | `A` `B` `H` `Q` `R` `Y` |
+| **DM Sans Bold (wght 700)** | **5 of 37** | `A` `B` `H` `Q` `R` |
+| **DM Sans Regular (wght 400)** | **5 of 37** | `A` `B` `H` `Q` `R` |
 
-Totals across all eight faces: 4 self-intersections and 28 cross-contour
-intersections, all of them in DM Sans.
+Totals across all eight faces: 2 self-intersections and 28 cross-contour
+intersections, all of them in DM Sans. Per glyph, as (self, cross), identical at
+both weights: `A` (0, 4) · `B` (1, 0) · `H` (0, 4) · `Q` (0, 4) · `R` (0, 2).
+
+### 2a. This table was measured twice, and the first measurement was wrong
+
+The rows above are the **second** measurement. The first, taken by the script in
+§7 when this file was written, said `6 of 37` — `A B H Q R Y` — and `4`
+self-intersections. Re-derived on 2026-08-04 by an independent implementation
+(`bikar:scripts/bake-glyphs.py`, written from this file's §3 and §4 without
+reusing §7's crossing code), stable across chord tolerances 0.01 / 0.002 / 0.001
+/ 0.0005 and 3 / 6 decimal places:
+
+- **`Y` does not cross, at either weight.** It is a *single* contour of 9
+  points, all straight lines — `DecomposingRecordingPen` yields
+  `moveTo, lineTo ×9, closePath` and nothing else. Of its non-adjacent segment
+  pairs, only two have even overlapping bounding boxes and neither meets
+  transversally. A glyph with one convex-cornered simple contour has nothing to
+  cross.
+- **`B` self-intersects, and the first measurement never named it.** Ring 0
+  (87 points, depth 0), segment 40 `(0.67121, 0.51382) → (0.65527, 0.51688)`
+  properly crosses segment 46 `(0.66047, 0.51459) → (0.68922, 0.52411)` — a
+  ~0.03-cap-height tangle at the waist where the two bowls meet, 0.15 mm at a
+  5 mm cap. It is exactly the class of defect B1 exists to catch, and it is
+  invisible at any rendering size.
+
+The two counts that changed are both small; **the count that did not change is
+the large one.** 28 cross-contour intersections is agreed by both
+implementations, which is what makes the disagreement on the other two credible
+rather than a wholesale methodology gap: had the crossing predicates differed in
+kind, 28 would not have survived.
+
+The lesson is narrower than "check your work". Both scripts share one
+methodology and one author; what caught the error was a *reimplementation with a
+different purpose* — the bake, which had to produce the failing fixture and so
+had to name the failing glyphs one at a time. An aggregate ("6 glyphs cross")
+carries no obligation to be right about any particular member, and that is the
+same substitution CLAUDE.md's D2 note warns about: **an aggregate cannot
+discharge a claim about every part.**
 
 **DM Sans draws `H` as three overlapping rectangles** — two stems and a crossbar,
 each a separate closed contour, with four proper crossings where the bar meets

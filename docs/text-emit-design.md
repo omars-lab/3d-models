@@ -48,7 +48,7 @@ The reasoning is short because the measurement is:
 Four things are genuinely worse under this route than under a single-stroke font,
 and none of them is a reason to change the decision:
 
-1. **The font becomes a correctness input.** DM Sans draws `A B H Q R Y` as
+1. **The font becomes a correctness input.** DM Sans draws `A B H Q R` as
    overlapping contours; an extruder that treats each contour as a ring produces
    interpenetrating prisms. A font can be wrong for us and right for everyone
    else. §4's bake-time checks exist because of this and for no other reason.
@@ -118,6 +118,16 @@ text decision.
 2. **The constant** in bikar, alongside the other vendored-rather-than-depended-on
    data. Rings, per-glyph advance widths, and the kern pairs the 37 glyphs use.
    Nothing else from the font.
+
+   The shipping face's `kern` is **empty, and correctly so**: Source Code Pro
+   Bold is monospaced (`post.isFixedPitch = 1`) and its GPOS carries `mark`,
+   `mkmk` and `size` but no `kern` feature. That is worth writing down because
+   the bake reads only the legacy `kern` table, so an empty result could equally
+   mean *this script cannot see where the face kerns* — which would mis-space
+   every label silently. T1 separated the two by warning on the GPOS **`kern`
+   feature tag**, not on GPOS itself; DM Sans trips it and the shipping face does
+   not. A proportional face is a shaper away, and that is a decision to take when
+   one is chosen, not a gap in this one.
 3. **An extruder**, `solidifyText`, and *not* `solidifyExtrudedPiece`. The latter's
    holes are circles — `PieceHoleSpec` is `{name, x, y, bands: {d, from, to}[]}` in
    `packages/core/src/kernel3d/solidify-piece.ts` — so it cannot take a polygonal
@@ -157,12 +167,20 @@ check nobody can tell is still working.
 
 **B1 — no two contours of a glyph cross, and none crosses itself.**
 Found by DM Sans, which draws `H` as three overlapping rectangles with four
-proper crossings, and does the same in `A B Q R Y`. TrueType permits it and
-renderers resolve it by non-zero winding; an extruder treating each contour as a
-ring does not. Six of the eight faces measured are clean; two are not. **This is
-per-font and must not be written as a general property of outline fonts** — that
-is the K2 shape exactly, and it was drafted that way once before the eighth face
-was measured.
+proper crossings, and does the same in `A Q` (four each) and `R` (two). `B` is
+the other kind: one contour that crosses *itself*, in a 0.15 mm tangle at the
+waist. TrueType permits both and renderers resolve them by non-zero winding; an
+extruder treating each contour as a ring does not. Six of the eight faces
+measured are clean; two are not. **This is per-font and must not be written as a
+general property of outline fonts** — that is the K2 shape exactly, and it was
+drafted that way once before the eighth face was measured.
+
+That glyph list is the corrected one. The research file's first measurement said
+`A B H Q R Y`; `Y` is a single 9-point straight-line contour and cannot cross,
+and the self-intersection in `B` was uncounted. See
+[`outline-font-emit.md` §2a](research/outline-font-emit.md) — the error was
+caught by writing the bake, because the bake had to name the failing glyphs one
+at a time and the survey only had to count them.
 
 **B2 — ring nesting is at most one deep, or the emitter carries depth.**
 Found by Source Code Pro Bold's `0`, which is a **dotted zero**: shell, counter,
@@ -178,10 +196,16 @@ on the font's curves. Rounding to 3 decimal places at cap height 1.0 is 5 µm at
 neighbour. Checking the ideal curve and shipping the rounded one is checking a
 different artifact than the one that fails.
 
-The four faces run through B1–B3 as implemented today come out: Arial Bold,
+The four faces run through B1–B3 by the research script came out: Arial Bold,
 Verdana Bold and Tahoma Bold clean on all six sub-checks; Source Code Pro Bold
 clean on five and failing the winding check on `0` — which is B2's motivating
 case and a defect in the model, not in the font.
+
+**T1 took B2's first branch: the bake carries depth.** `GlyphRing.depth` is
+nesting depth, not a hole flag, and the orientation rule is stated on the type —
+even depths wind CCW, odd depths CW. Source Code Pro Bold's `0` bakes to three
+rings at depths 0, 1 and 2 and passes. The face is not rejected and the dot is
+not dropped.
 
 ## 5. The validator: the gap between letters, not the width of one
 
@@ -268,10 +292,12 @@ matters. One coupon replaces this paragraph with a measurement.
    was run. §5's connectivity results describe the geometry a slicer is handed;
    a slicer's thin-wall handling could rescue or worsen them. This is the single
    largest gap in the whole investigation and one coupon closes most of it.
-4. **Whether the six DM Sans glyphs are repairable by a build-time union.**
-   Almost certainly — three overlapping rectangles is the well-conditioned case —
-   but no union was run, and B1's claim is that the condition is *detectable*,
-   not that it is repaired.
+4. **Whether the five DM Sans glyphs are repairable by a build-time union.**
+   Almost certainly for the four cross-contour cases — three overlapping
+   rectangles is the well-conditioned case — and less obviously for `B`, whose
+   defect is a sub-0.2 mm self-crossing that a union must resolve rather than
+   merge. No union was run, and B1's claim is that the condition is
+   *detectable*, not that it is repaired.
 5. **Whether text belongs on the coupon or beside it.** A label engraved into a
    coupon changes the coupon's own geometry near the label. For MC-2, whose
    measurand is a minimum feature size, that is not obviously harmless.
@@ -285,10 +311,23 @@ No `Calibrated<T>` record ships yet: the constants those bets govern arrive with
 `solidifyText` in T2, and a bet with no record is a registered open bet, not an
 absent one.
 
-**T1 — bake and check.** `scripts/bake-glyphs.py`, the committed constant for
-Source Code Pro Bold, and B1–B3 as a test with DM Sans as the by-design failure.
-The DM Sans case must be *asserted to fail*, not skipped — a check that only ever
-sees clean input stops being a check.
+**T1 — bake and check. Done, 2026-08-04** (bikar
+[#74](https://github.com/NaqshCoffee/bikar/pull/74)). `scripts/bake-glyphs.py`,
+`glyph-data.ts` (Source Code Pro Bold: 37 glyphs, 52 rings, 1158 points, max
+depth 2), `glyph-checks.ts` re-running B1–B3 over the baked data, and 18 tests.
+The DM Sans case is *asserted to fail*, not skipped — a check that only ever sees
+clean input stops being a check — and asserted to fail on **exactly** `A B H Q R`,
+because an aggregate cannot discharge a claim about every part. `Y` and `0` ride
+in the same fixture and are asserted to **pass**, so B1 is shown to discriminate
+rather than merely to be loud on this face.
+
+Two things the implementation found that this doc had wrong. The flattener's
+first closed-form segment count delivered 0.018 cap heights of chord error when
+asked for 0.01, on Source Code Pro Bold's `3`; recursive de Casteljau
+subdivision against the convex-hull bound replaced it, so `chordTolerance` is a
+guarantee (0.00498 worst case, re-measured against a 0.00005 reference) rather
+than an estimate. And the DM Sans glyph list was wrong — see §4's B1 paragraph
+and [`outline-font-emit.md` §2a](research/outline-font-emit.md).
 
 **T2 — extrude and validate.** `solidifyText` over the cap-section machinery, the
 `text` statement, and §5's validator wired into the mesh gate with `MC-4 R12` as

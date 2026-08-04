@@ -122,6 +122,16 @@ WITHDRAWN: list[tuple[re.Pattern, str, str]] = [
         "spec sheets: zero matches; Prusa MK4S: no number). The rebuilt argument "
         "is docs/lego-lab-design.md §3.5",
     ),
+    (
+        re.compile(r"\b6 of 37\b|\b4 self-intersections\b"),
+        "DM Sans's first crossing measurement (6 of 37 glyphs; 4 self-intersections)",
+        "a second, independent implementation (bikar:scripts/bake-glyphs.py) "
+        "re-derived it on 2026-08-04 as 5 of 37 and 2 self-intersections, stable "
+        "across four chord tolerances and two rounding depths: `Y` is a single "
+        "9-point straight-line contour and cannot cross, and the self-crossing in "
+        "`B` went uncounted. The corrected numbers are "
+        "docs/research/outline-font-emit.md §2a",
+    ),
 ]
 
 # A block escapes D4 by saying, in the block itself, that the number is not
@@ -341,6 +351,7 @@ def self_test() -> int:
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
+        "fail/d4-withdrawn-dm-sans.md": ["D4 (K1)"],
         "fail/d5-unregistered-bet.md": ["D5 (K9)"],
     }
     ok = True
