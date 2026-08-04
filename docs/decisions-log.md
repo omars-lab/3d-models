@@ -1487,3 +1487,123 @@ against an authority of 17 → 1 C1 finding **and** `sites["cal-records"] ==
 site count of zero: silent, green, and wrong. `FIXTURE_QUOTED_PAST_ERROR` closes
 the set — a line quoting "14 registered bets" under `<!--count:quote-->` → 0
 findings, so the opt-out is proved to work rather than assumed to.
+
+---
+
+## D-020 — a number a tool can print is not typed, and the list beside it is checked too
+
+**Date:** 2026-08-04 · **Status:** built · **Supersedes:** D-019's "deliberately
+untagged" carve-out for the bet split
+
+### Context
+
+D-019 pinned counts to the tools that print them and its two amendments closed
+the gaps that opening found. The question that started this one was whether the
+repo could go further and *derive* numbers rather than verify typed ones — a
+`--refresh`-style writer that rewrites every marked digit from its authority.
+
+Two measurements decided it, in the order that mattered.
+
+**Feasibility, first.** All 24 marked sites are `<digits> <!--count:NAME-->` and
+so mechanically rewritable; two of them wrap, which a rewriter would have to
+handle exactly as `marks_in` already does. Nothing there blocks a writer.
+
+**Then the risk, which did.** **16 of the 24 marked sites sit in prose that
+enumerates the very ids the number counts.** A writer that bumps the digit and
+leaves the list alone converts a loud, commit-blocking disagreement into a
+silent **K2** — exhaustiveness asserted over a set nobody re-searched. The
+cheapest mechanism was the one that made the corpus worse, which is the
+robustness-over-ease trade in its usual disguise: the digit is what you see, the
+list is what you do not.
+
+**And the audit found the defect it predicted, already live.** `docs/backlog.md`
+§2's row *"Bets settled by design-specific coupons"* read 5. Derived from the
+registry's own Coupon column: MC-1…MC-6 settle 7 bets, `CAL-STR-01` has none, so
+design coupons settle 17 − 7 − 1 = 9. The 5 was the *record* count from the same
+row's note — a number that means something else, borrowed because it was
+adjacent. §8's list of the splits repeated it, summing to 13 against a tagged
+17, while §8's own reconciliation bullet nine hundred lines away had 9 and was
+right.
+
+The reason it was wrong is the finding. §8 named the bet split as **deliberately
+untagged**, reasoning that the registry already prints the record split and *"a
+second derivation of the bet split from the same table is a number this repo
+would then own twice."* That was the one quantity in the section nothing
+checked, and it was wrong at two of its three sites — while every one of the 24
+tagged sites was correct. **The exemption, not the tagging, was what rotted.**
+
+### Decision
+
+**The tenet: a number some tool can print is not typed.** Marked, derived once,
+in one place. "We would own it twice" is not a reason to leave a number
+unchecked — owning it twice is not the hazard, *deriving* it twice is, and one
+derivation behind one marker is neither.
+
+Three consequences, all built:
+
+1. **The bet split is derived.** `authority_bets` now classifies each registry
+   row by its Coupon cell into `cal-bets-mc`, `cal-bets-design` and
+   `cal-bets-no-coupon`, from the same rows the record split already came from.
+   The partition is checked to sum to the header's bet total and its no-record
+   count to match the header's, because a projection that disagrees with the
+   summary it came from is a broken parse, not a second opinion.
+2. **C4: a list beside a marked count must not omit a member.** The three shape
+   choices were each bought with a real would-be false positive:
+   - **One-sided** — only a *missing* id is a finding. §8 legitimately names
+     `CAL-STR-01` next to the design-bet list; set-equality fires on that
+     correct sentence.
+   - **Nearest marker wins**, scope ending at the next marker, the end of a
+     table row, a blank line, or eight lines. §2's registered-bets row carries a
+     17-marker, then a 6-marker, then six ids; attributing those to the first
+     marker reads a correct row as eleven missing.
+   - **Never demands a list.** A marker with no ids after it is not checked. C4
+     completes an enumeration; it does not require one.
+3. **No blind rewriter.** Not built, and the reason is recorded rather than left
+   to be rediscovered: on 16 of 24 sites it would have produced exactly the
+   document C4's by-design fixture is made of — a correct digit above a short
+   list, green on every other rule.
+
+**`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
+on. §1 says "17 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+then names the five additions; the twelve are covered by a number, not by name,
+and rewriting that to list seventeen ids would make the sentence worse rather
+than truer. The digit stays checked, because "this list is short on purpose"
+says nothing about whether the count is right. Every waiver is counted and
+printed in the run summary, at zero as well as above it — an escape hatch whose
+size is only visible when it is in use is one that grows unnoticed.
+
+### Validator
+
+**Validator:** `FIXTURE_SHORT_ENUMERATION` — a three-bet miniature registry in
+which **every count is correct** and the row for the two design bets names one
+of them.
+
+PASS: exactly 1 finding, `C4 count:cal-bets-design … omits CAL-STK-01`. C1, C2
+and C3 all pass this document, which is the point: it is precisely what a
+digit-rewriting fix-it would have produced from the real 2026-08-04 row, and
+every rule that existed before C4 calls it clean.
+`FIXTURE_FULL_ENUMERATION` is its counterpart — the same rows with the missing
+id written in → 0 findings, so C4 is satisfiable by completing the list and not
+only by deleting it.
+
+FAIL: `FIXTURE_ENUMERATION_NEIGHBOURS` carries both shapes that would have made
+C4 unshippable — a total-marker followed by a subset-marker followed by that
+subset's ids, and an enumeration trailed by a neighbouring id that belongs to a
+different quantity → **0 findings**. Under set-equality, or under
+first-marker-wins, this correct document fails. `FIXTURE_PARTIAL_WAIVER` closes
+the set: a waived line whose digit is *also* wrong → 1 C1 finding and 0 C4,
+proving the waiver releases one rule and not the other. A waiver that suppressed
+both would let a single marker retire a number from checking altogether, which
+is the exemption this whole entry is about.
+
+### What this closes and what it does not
+
+Closed: the bet split is derived and checked at all six of its sites; §2's row
+and §8's list are corrected; the enumeration next to a marked count is checked
+for the five quantities whose members are `CAL-*` ids.
+
+Not closed, and deliberately: C4 knows one kind of member. A count of catalog
+entries or of `.bkr` files sits next to lists too, and those lists are not
+checked, because the id vocabulary for them was not measured. Adding a quantity
+to C4 costs a measurement, the same price C3's phrase list charges. The gate
+prints its waiver count so the size of the gap is legible on every run.
