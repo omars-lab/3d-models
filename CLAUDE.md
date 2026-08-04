@@ -92,16 +92,15 @@ rule does not transfer.
   paragraph. Nothing else counts. If no source can settle the number, that is
   exactly what `calibrate` is for; a bet id is a legitimate answer and a bare
   number is not.
-- **K6 → D2.** State a validator as `**Validator:** …` and follow it, in the
-  same section, with a `PASS:` line and a `FAIL:` line. Every K6 instance in
-  the corpus was found by an auditor hand-constructing the counterexample the
-  doc never wrote: `c2-assembly`'s ±0.05 fit windows overlap at gap 0.10;
-  `lego-lab`'s grid-fit formula scores a hexagonal lattice 1.0 while the doc's
-  own table says it cannot; `tile-wall`'s anchor validator "will essentially
-  never fire." The gate cannot check that your `FAIL:` is the *hard* case, and
-  one substitution keeps passing it: **an aggregate cannot discharge a claim
-  about every part.** `lego-lab` §14 certified every triangle CCW and measured
-  one signed volume — which one reversed triangle in 3,764 leaves positive.
+- **K6 → D2.** State a validator as `**Validator:** …` and follow it, in the same
+  section, with a `PASS:` line and a `FAIL:` line. Every K6 instance was found by an
+  auditor hand-constructing the counterexample the doc never wrote: `c2-assembly`'s
+  ±0.05 fit windows overlap at gap 0.10; `lego-lab`'s grid-fit formula scores a
+  hexagonal lattice 1.0 while its own table says it cannot; `tile-wall`'s anchor
+  validator "will essentially never fire." The gate cannot check that your `FAIL:`
+  is the *hard* case, and one substitution keeps passing it: **an aggregate cannot
+  discharge a claim about every part.** `lego-lab` §14 certified every triangle CCW
+  and measured one signed volume — one reversed triangle in 3,764 leaves it positive.
 - **K9 → D1.** Every relative link must resolve on disk; universal, no marker.
 - **K1 → D4. A withdrawal is corpus-wide, not a local edit.** When an audit kills a
   number, grep every doc before calling it fixed and add the literal to `WITHDRAWN`
@@ -111,28 +110,29 @@ rule does not transfer.
 - **K9 → the pointer gate.** A backticked path is a claim too, and
   `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`) holds it to this repo,
   to a sibling **at a git ref** — not whatever someone else has checked out — or
-  to a reasoned entry in `doc-pointer-baseline.json`, a ratchet that shrinks
-  freely and grows only deliberately. A third party's tree, an unwritten file or
-  a proposed module belongs in it; stale does not.
+  to a reasoned entry in `doc-pointer-baseline.json`, a ratchet that shrinks freely
+  and grows only deliberately. An unwritten file belongs in it; stale does not.
 - **A knob a coupon prescribes is a claim too.** Every `--param`, `--piece` and
   `--brick-fit` in `.claude/skills/prototype/catalog.md` must name something the
-  entry's `.bkr` declares — `catalog_models.py`, hook `36-catalog-models`. Built
-  by W-F1's missing model file and LG-F1's `--param rib_mm`. The declaration
-  keywords and `BrickFit` fields are **harvested from bikar**, not listed: a
-  listed set omitted `clip` and made findings of two correct entries.
+  entry's `.bkr` declares — `catalog_models.py`, hook `36-catalog-models`. Built by
+  W-F1's missing model file and LG-F1's `--param rib_mm`. Declaration keywords and
+  `BrickFit` fields are **harvested from bikar**, not listed: a listed set omitted
+  `clip` and made findings of two correct entries.
 - **A line number is a claim too, and needs an anchor to be one.** A use-case
-  pointer written `` `repo:path:L137` `` asserts the file exists *and* that L137
-  is the line the label names; only the first was ever checked. Write
-  `` `3d-models:Makefile:L137 "orbs:"` `` and `validate.py` requires the literal
-  in range at the pinned commit, then reports where it moved. Opt-in; each run
-  prints the anchored/unanchored split. On 2026-08-02, **23 of 44** line claims
-  had drifted while every run said "all valid".
-- **A count is a claim too — and the untagged one is where it rots.**
+  pointer written `` `repo:path:L137` `` asserts the file exists *and* that L137 is
+  the line the label names; only the first was ever checked. Write
+  `` `3d-models:Makefile:L137 "orbs:"` `` and `validate.py` requires the literal in
+  range at the pinned commit, then reports where it moved. Opt-in, and each run
+  prints the split. On 2026-08-02, **23 of 44** had drifted, every run "all valid".
+- **A count is a claim too, and a number a tool can print is not typed.**
   `<!--count:NAME-->` pins a number to the tool that prints it (`counts_gate.py`,
-  hook `37-counts`). Three defects on 2026-08-03, each two sites with one updated,
-  each untagged — so tag-presence is checked (C3), but only in the form measuring
-  **9 hits, 9 real**, never the 60-char window's 117 at ~4%. **Measure a rule
-  before gating on it**, and read across the wrap: two stale numbers were words.
+  hook `37-counts`). Tag-presence is checked (C3) only in the form that measured
+  **9 hits, 9 real**, not the 60-char window's 117 at ~4%: **measure a rule before
+  gating on it**, and read across the wrap — two stale numbers were words. **Nor is
+  the list beside the number:** the quantity §8 exempted to avoid "owning it twice"
+  was wrong at 2 of its 3 sites while all 24 marked ones were right, and 16 of those
+  24 sit next to the ids they count — so C4 checks the list, since rewriting the
+  digit alone turns a blocking failure into a silent K2. [D-020](docs/decisions-log.md)
 
 ### Research is checked in
 
