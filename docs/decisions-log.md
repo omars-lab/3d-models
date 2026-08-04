@@ -1404,3 +1404,86 @@ FAIL: `same-doc-when-resolvable` — the *identical document* with the authority
 present and disagreeing → 1 C1 finding. The pair is the point: the same bytes
 pass when bikar is unreadable and fail when it is readable, which is what proves
 the skip is a skip and not a hole.
+
+### Second amendment, same day — C3, and the rule that had to be measured first
+
+**The question, from the user:** *"do we need hooks to validate presence of
+tags?"* C1 checks a tagged number against its authority and C2 checks that a
+known quantity is tagged *somewhere*. Neither can see a number written in prose
+with no tag — and **all three defects this gate has found were at untagged
+sites**. So the answer was plainly "something must", and the real decision was
+what shape it could take without becoming a prose parser.
+
+That was settled by measurement, not by argument — the method
+[`issue-register-evaluation.md`](issue-register-evaluation.md) used for the issue
+register and the one that killed the link checker. Two candidate detectors, run
+over all 62 documents of `docs/` and `.claude/`:
+
+| Rule | Hits | Real | Precision |
+|---|---|---|---|
+| number within 60 chars of the quantity's vocabulary | 117 | ~5 | **~4%** |
+| number *immediately* before a curated noun phrase | 9 | 9 | **100%** |
+
+The loose rule's noise was not marginal and not tunable: section numbers next to
+the word "records" (`§5.2 records`), "records" used as a **verb** ("the repo
+records", "each entry records"), path fragments (`bikar:patterns/Coupons`), and
+line-number lists. That is the detector CLAUDE.md already describes as one that
+"cries wolf and gets switched off, which is worse than having no gate." It did
+not ship. The tight rule did, as **C3**.
+
+**Decision: C3 is a short list of exact phrases, and stays one.** Each phrase is
+registered beside the quantity it names in `PHRASES`, and the cost of a new
+phrase is measured across the corpus before it is added — not reasoned about.
+Two narrowings in the first hour were each bought with a real false positive,
+which is the standard: an open `\w+` filler slot plus a coupon id donating its
+trailing digit turned `LG-P1 / LG-P2, whose\ncatalog entries` into a finding, so
+the slot became the closed literal `of the` and a `(?<![\w-])` guard went in
+front of the number. C3 consequently misses claims phrased a third way. That is
+the trade, taken deliberately: **a narrow rule that is always right is the only
+kind worth blocking a commit on.**
+
+**What it found immediately**, all in `docs/backlog.md`, all having survived both
+PRs that built this gate:
+
+- the opening status paragraph quoting the registry as "12 registered bets · 16 records" — *under a claim that the registry agrees*; <!--count:quote-->
+- §4's "Seven of the fourteen registered bets and twelve of the sixteen provisional records"; <!--count:quote-->
+- §3.6's "Count: 28 catalog entries = 28 print-gated items", while §8's tagged copy already said 29 — two sites, one updated, a **third** time. <!--count:quote-->
+
+Six wrong numbers, of which **two were spelled as words** ("fourteen", "sixteen") and
+**one wrapped mid-phrase** across a line break. A digit-keyed rule scores zero on
+the first pair; a line-at-a-time rule scores zero on the third.
+
+**`<!--count:quote-->` opts a line out**, and exists for exactly one thing: prose
+whose subject is a number that *was* wrong. This log narrating "the table said
+four when it was six" must be allowed to say four. The marker suppresses the
+**line**, not the claim — so a quotation must be written on one unwrapped line to
+be excused, and a marker cannot silence the lines that follow it. It is a
+quotation mark, not a silencer.
+
+**And C3 opened a hole, which is why it is recorded here rather than only in a
+test.** Tagging one of the three corrections put the number at the end of a line
+and its tag at the start of the next. The tag parse was line-scoped: C1 never saw
+the pair, C3 saw a tag and fell silent, and the site disappeared from the
+per-quantity counts — the run printed `cal-bets-no-record=1 site(s)` for a file
+asserting it twice. **A tag that quietly stops being read is worse than a missing
+one, because a missing one is a C2 finding.** `marks_in` now reads across the
+wrap exactly as C3 does. The per-quantity site count is the only reason this was
+visible at all, which is the argument for printing it on every run.
+
+**Validator (second amendment):** `FIXTURE_UNMARKED_WRAPPED` — the claim
+"Seven of the fourteen registered\nbets and twelve of the sixteen provisional records", <!--count:quote-->
+split mid-phrase by a line break, with no tag.
+
+PASS: exactly 2 C3 findings — `cal-bets` and `cal-records`. A line-at-a-time
+implementation returns 0 here and looks green, which is why this fixture and not
+a single-line one is the by-design failure. `FIXTURE_MARKED_PROSE` is its
+counterpart: the same two sentences, tagged, → 0 findings, proving C3 is
+satisfiable by tagging rather than only by rephrasing. A rule you can only escape
+is a rule that gets escaped.
+
+FAIL: `FIXTURE_WRAPPED_MARKER` — a `99 <!--count:cal-records-->` split across the wrap, <!--count:quote-->
+against an authority of 17 → 1 C1 finding **and** `sites["cal-records"] ==
+1`. Before `marks_in` joined lines this fixture produced **zero** findings and a
+site count of zero: silent, green, and wrong. `FIXTURE_QUOTED_PAST_ERROR` closes
+the set — a line quoting "14 registered bets" under `<!--count:quote-->` → 0
+findings, so the opt-out is proved to work rather than assumed to.

@@ -21,6 +21,10 @@ Rules:
   C1  A marked count equals what its authority prints.
   C2  Every known quantity is marked somewhere, so a quantity cannot quietly
       stop being checked by having its marker deleted.
+  C3  A number written directly in front of a phrase that *names* a known
+      quantity carries that quantity's marker. C1 and C2 are both blind to an
+      unmarked claim, and every defect this gate has caught was found at a site
+      nobody had marked yet.
 
 Authorities, and where each is read from:
 
@@ -43,13 +47,44 @@ Marker syntax, written immediately after the number:
     | Entries in the prototype catalog | 29 <!--count:catalog-entries--> | ... |
 
 The comment is invisible in rendered markdown, so marking a number costs the
-prose nothing. The gate is **marker-scoped** on purpose, in the same trade
-docs_gate.py's D2/D3 make: it cannot know about a count nobody marked, and
-guessing at one by regex over prose would fire on sentences it cannot parse.
-What it does instead is print the per-quantity site count on every run, so a
-quantity asserted in two places and marked in one is visible in the output
-rather than silent. That is the same opt-in-with-the-gap-shown shape the
-use-case validator uses for anchored pointers.
+prose nothing.
+
+C1 and C2 are marker-scoped, and that was the whole gate until 2026-08-03, when
+the question "does anything check that a claim is marked *at all*?" was answered
+by measurement rather than by opinion — the method `docs/issue-register-\
+evaluation.md` and the rejected link checker both used. Over the 62 documents of
+`docs/` and `.claude/`:
+
+  * a number within 60 characters of the quantity's vocabulary → **117 hits,
+    ~5 real (~4% precision)**. Section numbers beside "records", "records" as a
+    verb, path fragments, line-number lists. That rule is the one that "cries
+    wolf and gets switched off, which is worse than having no gate" — it must
+    not ship, and it did not.
+  * a number *immediately* in front of a curated noun phrase → **9 hits, 9 real
+    (100%)**, of which **6 were wrong at the time of writing** and had survived
+    both of this gate's own merges. That is C3.
+
+So C3 is not a prose parser and must never grow into one. It is a short list of
+exact phrases, each registered next to the quantity it names, and the price of
+each phrase is measured before it is added. Two consequences of the measurement
+are load-bearing:
+
+  * **Match across the line wrap.** `backlog.md` §4 read "Seven of the fourteen
+    registered\\nbets" — stale by three, and invisible to every line-at-a-time
+    rule. The wrapped case is the self-test's by-design failure for exactly that
+    reason.
+  * **Match number *words*.** Two of the six stale claims were spelled
+    "fourteen" and "sixteen". A digit-only rule scores zero on them.
+
+`<!--count:quote-->` opts a line out. It exists for one legitimate use: prose
+that deliberately restates a number that *was* wrong — `docs/decisions-log.md`
+narrating "this said four when it was six" must be allowed to say four. It is
+not a silencer for a claim you have not checked.
+
+The gate also prints the per-quantity site count on every run, so a quantity
+asserted in two places and marked in one stays visible in the output. That is
+the same opt-in-with-the-gap-shown shape the use-case validator uses for
+anchored pointers.
 
 Usage:
   counts_gate.py [FILE ...]     check the given files (default: docs/**/*.md)
@@ -73,7 +108,8 @@ GATES = Path(__file__).resolve().parent
 BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
 
 # `29 <!--count:catalog-entries-->` — the number, then the tag naming its
-# authority. Whitespace between them is optional so a table cell can be tight.
+# authority. Whitespace between them is optional so a table cell can be tight,
+# and may be a newline: see `marks_in` for why that matters.
 MARK = re.compile(r"(\d[\d,]*)\s*<!--\s*count:\s*([a-z0-9-]+)\s*-->")
 
 # The generated registry's header line, which is the authority for three of the
@@ -95,6 +131,61 @@ BETS_ROW = re.compile(
     r"^\| `CAL-[A-Z]+-\d+` \| [^|]* \| ([^|]*) \| [^|]* \| ([^|]*) \|\s*$",
     re.MULTILINE,
 )
+
+#: Number words, because two of the six claims C3 first caught were spelled out
+#: ("fourteen registered bets", "sixteen provisional records"). Twenty is the
+#: ceiling on purpose: past that, prose in this repo uses digits, and every word
+#: added to this alternation is another way for the phrase patterns to misfire.
+NUMBER_WORD = (
+    "one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|"
+    "fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty"
+)
+NUMBER = rf"(?:\d[\d,]*|{NUMBER_WORD})"
+
+#: The C3 vocabulary: phrases that make the number in front of them a claim
+#: about a known quantity. Curated, not derived — see the module docstring for
+#: the measurement that set the shape. Add a phrase only after checking what it
+#: costs across the corpus; a phrase that fires on prose it cannot parse takes
+#: the whole gate down with it.
+PHRASES: dict[str, list[str]] = {
+    "cal-bets": [r"registered bets", r"`CAL-\*` bets", r"ids are registered"],
+    "cal-records": [r"`?Calibrated(?:<T>)?`? records", r"provisional records"],
+    "catalog-entries": [r"catalog entries", r"print-gated items"],
+    "coupon-dir-bkr": [r"coupon `\.bkr` files"],
+}
+
+#: `NUMBER`, an optional marker, an optional "of the", then the phrase.
+#:
+#: Both narrowings here were bought with a false positive, not guessed at. The
+#: filler slot was one free `\\w+`, and `LG-P1 / LG-P2, whose\\ncatalog entries`
+#: in a research file duly read as "2 … catalog entries" — a coupon id donating
+#: its digit and "whose" filling the slot. Nothing in the corpus's real claims
+#: uses the open slot, so it costs a finding and buys nothing: it is now the
+#: closed literal `of the`, and `(?<![\\w-])` stops an identifier's trailing
+#: digit from being read as a count. C3 misses "17 of the registered bets"
+#: phrased some third way; that is the intended trade, because a narrow rule
+#: that is always right is the only kind worth blocking a commit on.
+C3 = {
+    name: [
+        re.compile(
+            rf"(?<![\w-])({NUMBER})\s*(<!--\s*count:\s*[a-z0-9-]+\s*-->)?"
+            rf"\s*(?:of the\s+)?{p}",
+            re.I,
+        )
+        for p in patterns
+    ]
+    for name, patterns in PHRASES.items()
+}
+
+#: Opts a line out of **C1 and C3 both**. For prose that quotes a number which
+#: was *known to be* wrong, which the decision log does by design.
+#:
+#: C1 as well as C3, because the first thing written under this marker was
+#: `docs/decisions-log.md` reciting a self-test fixture verbatim —
+#: `99 <!--count:cal-records-->` — and a gate that reads a quoted fixture as an
+#: assertion makes its own validator section unwritable. The marker means "this
+#: line is *about* a number", and that is one fact, not two.
+QUOTE = re.compile(r"<!--\s*count:quote\s*-->")
 
 CATALOG_SUMMARY = re.compile(r"^catalog models: (\d+) entries;", re.MULTILINE)
 
@@ -243,11 +334,51 @@ def resolve_authorities() -> dict[str, tuple[int, str]]:
 
 
 def marks_in(path: Path) -> list[tuple[int, str, int, str]]:
-    """(lineno, quantity, claimed value, the line) for every marker in a file."""
+    """(lineno, quantity, claimed value, the line) for every marker in a file.
+
+    Joined across the line wrap, for the same reason C3 is — and for one more,
+    found the moment C3 shipped: a number at the end of a line with its marker
+    at the start of the next was invisible to a line-scoped parse, so C1 checked
+    nothing while C3 saw the marker and stayed quiet. A marker that silently
+    stops being read is worse than an absent one, because the absent one is a C2
+    finding. Reported against the line the *number* is on.
+    """
+    lines = path.read_text(encoding="utf-8").splitlines()
     out = []
-    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        for value, name in MARK.findall(line):
-            out.append((n, name, int(value.replace(",", "")), line.strip()))
+    for i, line in enumerate(lines):
+        if QUOTE.search(line):
+            continue
+        joined = line + " " + (lines[i + 1] if i + 1 < len(lines) else "")
+        for m in MARK.finditer(joined):
+            if m.start() >= len(line):
+                continue
+            out.append(
+                (i + 1, m.group(2), int(m.group(1).replace(",", "")), line.strip())
+            )
+    return out
+
+
+def unmarked_claims(path: Path) -> list[tuple[int, str, str]]:
+    """(lineno, quantity, the matched text) for every C3 hit lacking a marker.
+
+    Each line is joined to the one after it before matching, and a hit is
+    reported only when it *starts* on the line being scanned. That is what makes
+    a wrapped claim visible: "Seven of the fourteen registered\\nbets" is one
+    claim, and reading lines in isolation is precisely how it stayed stale for
+    three merges.
+    """
+    lines = path.read_text(encoding="utf-8").splitlines()
+    out = []
+    for i, line in enumerate(lines):
+        if QUOTE.search(line):
+            continue
+        joined = line + " " + (lines[i + 1] if i + 1 < len(lines) else "")
+        for name, patterns in C3.items():
+            for pat in patterns:
+                for m in pat.finditer(joined):
+                    if m.start() >= len(line) or m.group(2):
+                        continue
+                    out.append((i + 1, name, m.group(0)))
     return out
 
 
@@ -283,6 +414,16 @@ def check(
                     f"{rel}:{lineno}: C1 count:{name} says {claimed}, "
                     f"{who} says {expected} — {line[:90]}"
                 )
+
+        for lineno, name, text in unmarked_claims(path):
+            rel = path.relative_to(ROOT)
+            findings.append(
+                f"{rel}:{lineno}: C3 «{text.strip()[:70]}» names a quantity this "
+                f"gate knows (count:{name}) but carries no marker, so nothing "
+                f"checks it. Write the number as a digit followed by "
+                f"`<!--count:{name}-->`. If the line is deliberately quoting a "
+                f"number that was wrong, mark it `<!--count:quote-->`."
+            )
 
     for name, count in sorted(sites.items()):
         if count == 0 and name not in skipped:
@@ -345,6 +486,57 @@ FIXTURE_SKIPPED_AUTHORITY = """\
 | Files in `patterns/Coupons/` | 6 <!--count:coupon-dir-bkr--> | bikar is absent |
 """
 
+# C3's load-bearing fixture. The claim wraps mid-phrase — "fourteen registered"
+# ends one line and "bets" begins the next — which is how the real one survived
+# three merges and both of this gate's own PRs. A line-at-a-time implementation
+# passes this fixture, so it is the case that proves C3 reads across the wrap.
+# The second claim is spelled as a word, which a digit-only rule scores zero on.
+FIXTURE_UNMARKED_WRAPPED = """\
+| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | fine |
+| Registered bets | 17 <!--count:cal-bets--> | fine |
+| Records | 17 <!--count:cal-records--> | fine |
+| No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
+
+The card measures the tuple once. Seven of the fourteen registered
+bets and twelve of the sixteen provisional records are on this one card.
+"""
+
+# The same two sentences, unwrapped and marked. Proves C3 is satisfiable by
+# marking rather than only by rephrasing — a rule you can only escape is a rule
+# that gets escaped.
+FIXTURE_MARKED_PROSE = """\
+| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | fine |
+| No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
+
+Seven of the 17 <!--count:cal-bets--> registered bets and twelve of the
+17 <!--count:cal-records--> provisional records are on this one card.
+"""
+
+# The decision log's legitimate use: narrating a number that *was* wrong. Without
+# the opt-out this is a false positive, and a gate that cannot be told "yes, I
+# know, that is the point" gets switched off.
+FIXTURE_QUOTED_PAST_ERROR = """\
+| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | fine |
+| Registered bets | 17 <!--count:cal-bets--> | fine |
+| Records | 17 <!--count:cal-records--> | fine |
+| No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
+
+D-019: the table said 14 registered bets for three merges. <!--count:quote-->
+The fixture reads `99 <!--count:cal-records-->`, which is not a claim. <!--count:quote-->
+"""
+
+# A marker split from its number by the line wrap, and *wrong*. Before
+# `marks_in` read across the wrap this fixture produced zero findings: C1 never
+# saw the pair, and C3 saw a marker and fell silent. Written the day C3 shipped,
+# because that is the day the hole opened.
+FIXTURE_WRAPPED_MARKER = """\
+| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | fine |
+| No record in bikar | 6 <!--count:cal-bets-no-record--> | fine |
+
+The registry reads 17 <!--count:cal-bets--> registered bets and 99
+<!--count:cal-records--> `Calibrated` records.
+"""
+
 FAKE = {
     "catalog-entries": (29, "a stub"),
     "cal-bets": (17, "a stub"),
@@ -364,7 +556,11 @@ def self_test() -> int:
 
     cases: list[tuple[str, str, int, str, dict[str, int], dict]] = [
         ("clean", FIXTURE_OK, 0, "", {}, FAKE),
-        ("one-of-two-stale", FIXTURE_ONE_OF_TWO_STALE, 1, "says 28", {}, FAKE),
+        # 2, not 1: the marked "28" is C1, and the *same sentence* restates it
+        # unmarked as "= 28 catalog entries", which is C3. Both are real, and
+        # the fixture having accidentally contained a C3 site before C3 existed
+        # is itself the argument for C3.
+        ("one-of-two-stale", FIXTURE_ONE_OF_TWO_STALE, 2, "says 28", {}, FAKE),
         ("marker-deleted", FIXTURE_MARKER_DELETED, 1, "C2 quantity", {}, FAKE),
         ("unknown-quantity", FIXTURE_UNKNOWN_QUANTITY, 1, "unknown quantity", {}, FAKE),
         (
@@ -382,6 +578,17 @@ def self_test() -> int:
             "coupon-dir-bkr says 6",
             {"coupon-dir-bkr": 1},
             FAKE_WITH_COUPONS,
+        ),
+        ("unmarked-wrapped", FIXTURE_UNMARKED_WRAPPED, 2, "C3", {}, FAKE),
+        ("marked-prose", FIXTURE_MARKED_PROSE, 0, "", {}, FAKE),
+        ("quoted-past-error", FIXTURE_QUOTED_PAST_ERROR, 0, "", {}, FAKE),
+        (
+            "wrapped-marker",
+            FIXTURE_WRAPPED_MARKER,
+            1,
+            "cal-records says 99",
+            {"cal-records": 1},
+            FAKE,
         ),
     ]
 
