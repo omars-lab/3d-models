@@ -5,7 +5,9 @@ this project. Every physical number in every design doc here is either read out
 of someone else's literature or is an explicitly-labelled unmeasured default,
 and the generated bet registry agrees:
 [`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md) reads
-**12 registered bets · 16 `Calibrated` records — 16 provisional, 0 measured**.
+**17 <!--count:cal-bets--> registered bets · 17 <!--count:cal-records-->
+`Calibrated` records — 17 provisional, 0 measured · 6
+<!--count:cal-bets-no-record--> bets with no record in bikar**.
 
 Scope: this file sequences the work that is blocked on *owning a printer*, and
 separates it from the work that has queued up behind it but is not printer-gated
@@ -29,7 +31,7 @@ is the measurement ceremony. This file is the *order*, the *cost*, and the
 **What has been searched, so the claims below can be read for what they are.**
 `CAL-*` ids were grepped across all three repos of the system: `3d-models`
 (`docs/` and `.claude/`), `bikar` (read-only, via the `bikar-lego-lab` worktree),
-and `qiyas`. Seventeen ids are registered in `CAL_BETS` (twelve at the original
+and `qiyas`. 17 <!--count:cal-bets--> ids are registered in `CAL_BETS` (twelve at the original
 sweep, plus the two mural bets `CAL-REG-01`/`CAL-CLB-01` and the two brick-anchor
 bets `CAL-ANC-01`/`CAL-INW-01` registered 2026-08-02, plus the frame-band bet
 `CAL-FRM-01` registered 2026-08-03);
@@ -84,8 +86,9 @@ plate names what it settles and what it releases.
 · `MC-5` warp plate · `MC-6` bed-contact towers.
 
 **Why first, and why nothing else can honestly go first.** The card measures the
-*(printer, material, nozzle, profile)* tuple once. Seven of the fourteen registered
-bets and twelve of the sixteen provisional records are on this one card. Four
+*(printer, material, nozzle, profile)* tuple once. Seven of the
+17 <!--count:cal-bets--> registered bets and 12 <!--count:cal-mc-records--> of the
+17 <!--count:cal-records--> provisional records are on this one card. Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
 to measure some of warp, wall floor and bore fit before the card existed;
 [`calibration-design.md`](calibration-design.md) §1 is the argument for
@@ -341,7 +344,8 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 28 catalog entries = 28 print-gated items**,
+**Count: 29 <!--count:catalog-entries--> catalog entries = 29
+<!--count:catalog-entries--> print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
 
@@ -836,6 +840,44 @@ Five checks, run before shipping it, in the spirit of
   `.bkr` files exist in `bikar/patterns/Coupons/`" while §2's row above it said
   six. Two sites, one updated — again — which is why `coupon-dir-bkr` is now the
   directory's own file count at `origin/main` rather than anybody's tally.
+
+  **Both of those defects were at sites nobody had tagged**, which C1 and C2 are
+  by construction blind to, so the same day the question "does anything check
+  that a claim is tagged *at all*?" was answered by measuring two candidate
+  rules over all 62 documents of `docs/` and `.claude/` — the method
+  [`issue-register-evaluation.md`](issue-register-evaluation.md) and the
+  rejected link checker both used. A number within 60 characters of the
+  quantity's vocabulary scored **117 hits, ~5 real**; a number *immediately* in
+  front of a curated noun phrase scored **9 hits, 9 real**, and six of those
+  nine were wrong. The narrow rule shipped as **C3** and the loose one did not.
+  What C3 found, all in this file, all surviving the two PRs that built the gate:
+
+  - the opening status paragraph quoting the registry as "12 registered bets · 16 records" — under a claim that the registry **agrees**; <!--count:quote-->
+  - §4's "Seven of the fourteen registered bets and twelve of the sixteen provisional records"; <!--count:quote-->
+  - §3.6's "Count: 28 catalog entries = 28 print-gated items", while the tagged copy in this bullet already said 29 — two sites, one updated, a third time. <!--count:quote-->
+
+  Writing those three is what proved the opt-out is needed rather than merely
+  nice: a paragraph whose subject is *"here are the numbers that were wrong"*
+  cannot be written at all without it, and the same is true of D-019's own
+  validator section, which recites a fixture literal. The marker suppresses the
+  **line** — which is why each item above is one unwrapped line — and it
+  suppresses **C1 as well as C3**, because a line that quotes a tagged number is
+  not asserting it either. A marker that silenced the lines after it would be a
+  silencer; this one is a quotation mark.
+  Two of the six were spelled as **words**, which no digit-keyed rule would have
+  seen, and one wrapped mid-phrase across a line break, which no line-at-a-time
+  rule would have seen; both are now self-test fixtures.
+
+  C3 also opened a hole and closed it in the same hour. Tagging one of the
+  corrections put the number at the end of a line and its tag at the start of
+  the next, and the tag-parse was line-scoped: C1 never saw the pair, C3 saw a
+  tag and fell silent, and the site vanished from the per-quantity counts. The
+  run said `cal-bets-no-record=1 site(s)` when the file asserted it twice. A tag
+  that quietly stops being read is worse than a missing one, because a missing
+  one is a C2 finding — so `marks_in` now reads across the wrap too, and
+  `FIXTURE_WRAPPED_MARKER` is the case that fails without it. The per-quantity
+  site count is what made this visible at all, which is the argument for
+  printing it.
 - **Every residue item names what would close it.** Added 2026-08-03, because
   this check did not exist and §6.3 failed it. Two of that section's three
   clusters were **already fixed when it was written** on 2026-08-02 — the

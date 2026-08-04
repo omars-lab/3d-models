@@ -109,30 +109,30 @@ rule does not transfer.
   two docs, and stood five more days in `tile-wall` under "the load-bearing facts".
   D4 catches literals only — §2's "10–20× beyond FDM tolerance" escaped it.
 - **K9 → the pointer gate.** A backticked path is a claim too, and
-  `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`, `make
-  validate-pointers`) holds it to this repo, to a sibling **at a git ref** — not
-  whatever someone else has checked out — or to a reasoned entry in
-  `doc-pointer-baseline.json`, a ratchet that shrinks freely and grows only
-  deliberately. A third party's tree, an unwritten file or a proposed module
-  belongs in it; stale does not.
+  `.claude/gates/doc_pointers.py` (hook `35-doc-pointers`) holds it to this repo,
+  to a sibling **at a git ref** — not whatever someone else has checked out — or
+  to a reasoned entry in `doc-pointer-baseline.json`, a ratchet that shrinks
+  freely and grows only deliberately. A third party's tree, an unwritten file or
+  a proposed module belongs in it; stale does not.
 - **A knob a coupon prescribes is a claim too.** Every `--param`, `--piece` and
   `--brick-fit` in `.claude/skills/prototype/catalog.md` must name something the
-  entry's `.bkr` declares — `.claude/gates/catalog_models.py`, hook
-  `36-catalog-models`, `make validate-catalog`. Built by W-F1's missing model
-  file and LG-F1's `--param rib_mm`. The declaration keywords and `BrickFit`
-  fields are **harvested from bikar**, not listed: a listed set omitted `clip`
-  and made findings of two correct entries.
+  entry's `.bkr` declares — `catalog_models.py`, hook `36-catalog-models`. Built
+  by W-F1's missing model file and LG-F1's `--param rib_mm`. The declaration
+  keywords and `BrickFit` fields are **harvested from bikar**, not listed: a
+  listed set omitted `clip` and made findings of two correct entries.
 - **A line number is a claim too, and needs an anchor to be one.** A use-case
   pointer written `` `repo:path:L137` `` asserts the file exists *and* that L137
   is the line the label names; only the first was ever checked. Write
   `` `3d-models:Makefile:L137 "orbs:"` `` and `validate.py` requires the literal
-  in range at the pinned commit, then reports where it moved. Opt-in, no
-  false-positive mode; each run prints the anchored/unanchored split. On
-  2026-08-02, **23 of 44** line claims had drifted while every run said "all valid".
-- **A count is a claim too.** `<!--count:NAME-->` pins a number to the tool that
-  prints it — `counts_gate.py`, hook `37-counts`, `make validate-counts`. On
-  2026-08-03 the backlog's tally was three merges stale *and* §8's own "counts
-  reconcile" check restated the wrong figures: the fixture is two sites, one fixed.
+  in range at the pinned commit, then reports where it moved. Opt-in; each run
+  prints the anchored/unanchored split. On 2026-08-02, **23 of 44** line claims
+  had drifted while every run said "all valid".
+- **A count is a claim too — and the untagged one is where it rots.**
+  `<!--count:NAME-->` pins a number to the tool that prints it (`counts_gate.py`,
+  hook `37-counts`). Three defects on 2026-08-03, each two sites with one updated,
+  each untagged — so tag-presence is checked (C3), but only in the form measuring
+  **9 hits, 9 real**, never the 60-char window's 117 at ~4%. **Measure a rule
+  before gating on it**, and read across the wrap: two stale numbers were words.
 
 ### Research is checked in
 
