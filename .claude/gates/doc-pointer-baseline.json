@@ -73,6 +73,11 @@
       "doc": "docs/lego-lab-design.md",
       "path": "lib/block.scad",
       "why": "Third party, same source."
+    },
+    {
+      "doc": "docs/text-emit-design.md",
+      "path": "scripts/bake-glyphs.py",
+      "why": "Proposed module — T1's bake script, to be authored in bikar. The doc names it as a deliverable, not as an existing file."
     }
   ]
 }

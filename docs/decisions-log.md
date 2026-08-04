@@ -1607,3 +1607,119 @@ entries or of `.bkr` files sits next to lists too, and those lists are not
 checked, because the id vocabulary for them was not measured. Adding a quantity
 to C4 costs a measurement, the same price C3's phrase list charges. The gate
 prints its waiver count so the size of the gap is legible on every run.
+
+---
+
+## D-021 — text is emitted from outline-font contours, not from a single-stroke centreline
+
+**Date:** 2026-08-04 · **Status:** Decided · **Repos:** 3d-models (docs), bikar (to build)
+
+### Context
+
+[`calibration-design.md`](calibration-design.md) §8 names the absence of text
+emit as the machine card's biggest structural weakness: 23 coupons that cannot
+say which rung they are. The first research pass
+([`research/text-emit-survey.md`](research/text-emit-survey.md)) took a
+single-stroke Hershey font as the input, measured that giving a centreline width
+requires a polygon offset, measured that a naive offset breaks, and produced four
+routes — every one of them a way to acquire an offset primitive this repo does
+not have.
+
+The assumption that the input is a centreline was never stated, and therefore
+never checked. It was dislodged by a question — *is there a better way to print
+letters; does anything support text natively?* — not by any gate.
+
+### Decision
+
+**Bake outline-font glyph contours into a build-time constant and extrude them.**
+A TrueType/CFF glyph is already closed contours with counters as holes, so there
+is no offset and therefore no union. The design is
+[`text-emit-design.md`](text-emit-design.md); the measurement is
+[`research/outline-font-emit.md`](research/outline-font-emit.md), over 8 faces
+and 296 glyphs.
+
+What the measurement settled, in the order it mattered:
+
+1. **No union — per font, and checked.** Six of eight faces have zero crossing
+   contours across the 37 glyphs a rung label needs. DM Sans has six such glyphs
+   and draws `H` as three overlapping rectangles. "Outline fonts need no union"
+   is a K2 claim and is false; "this font needs none, and the bake script checks"
+   is true and is what ships.
+2. **The payload is coordinates either way.** 13,710 baked bytes against a
+   minified single-stroke face's 7,503 — under 2×, with no runtime font parser,
+   which leaves bikar's 2026-05-07 zero-runtime-dependency position untouched.
+3. **Route A is not "a union we have".** `unionShapes` in
+   `packages/core/src/graph/polygon-union.ts` returns the outer perimeter only
+   and throws on a disconnected result, so every glyph with a counter comes back
+   filled in. This was read, not assumed, and it is why the route comparison
+   moved rather than the doc's tone.
+4. **`solidifyExtrudedPiece` cannot emit a glyph in any font.** Its holes are
+   circles (`PieceHoleSpec` is `{name, x, y, bands}`). The reusable machinery is
+   one level down — the earcut cap builder that already takes outer ring plus
+   reversed hole rings.
+
+### The tenet
+
+**A local test cannot discharge a claim about every part, any more than an
+aggregate can.** The survey's per-join bound named three failing glyphs; testing
+the produced outline directly found thirty, in four break classes, three of them
+non-local. The repo already had the aggregate half of this rule. The local half
+is the same failure wearing a different hat: something cheap was measured and the
+claim was written about something else.
+
+Second, smaller, and recorded because it was nearly published as a fact: a
+stem-width run reported DM Sans Bold `H` at a 0.01 mm stem — false, because the
+distance transform was taken from the drawn segments rather than from the ink
+mask, and those agree only when no contours overlap. Which is the exact condition
+the *previous* check had just found DM Sans to violate. **A finding about the
+input is also a finding about every tool that reads the input**, and nothing made
+that connection until the number came out absurd.
+
+### What this closes and what it does not
+
+Closed: the route question, the payload question, and which face can legally
+ship. `research/text-emit-survey.md` §4 and §5.3 carry marked corrections rather
+than deletions, because how each went wrong is the reusable part.
+
+Not closed: nothing has been printed and no slicer was run. Every number is
+measured from font data, which is the geometry a slicer is handed and not what it
+does with it. Whether the six DM Sans glyphs are repairable by a build-time union
+is untested — the claim is that the condition is detectable, not that it is
+repaired.
+
+---
+
+## D-022 — emboss vs engrave is registered as a bet, not decided
+
+**Date:** 2026-08-04 · **Status:** Decided (to defer) · **Repos:** 3d-models (doc), bikar (bets, to register)
+
+### Context
+
+[`research/text-emit-survey.md`](research/text-emit-survey.md) §3.3 and §6 gather
+three arguments about whether raised or recessed text prints more legibly at
+small sizes, and they point two ways. Engraving is more forgiving of over-extrusion
+and leaves a clean top surface; embossing survives a first layer that squashes and
+does not fill with debris. No source settles it, and the numbers that would settle
+it are all about a machine this project has not characterized — which is what the
+machine card exists to fix.
+
+### Decision
+
+**Register it as a bet rather than adopt a default with a confident face.**
+CAL-TXT-01 carries emboss-vs-engrave and CAL-TXT-02 the minimum legible cap
+height; [`text-emit-design.md`](text-emit-design.md) §6 states engrave and
+5.0 mm as *provisional* sides, with the reasoning that a recessed feature which
+prints badly still leaves a readable part while a raised one leaves debris on the
+surface that matters.
+
+One coupon replaces both paragraphs with a measurement: the same label at a
+descending ladder of cap heights, in both relief directions, printed once.
+
+### The hole this leaves open, stated rather than left to be found
+
+The docs gate's D3 rule accepts a `CAL-*` id as provenance for a default. It does
+**not** check that the id is registered. Until `Calibrated<T>` records for
+CAL-TXT-01 and CAL-TXT-02 land in bikar, §6's defaults satisfy the gate with ids
+that resolve to nothing. That is T0 in the design doc's milestones and is written
+into §6 itself, because a gate that can be satisfied by an invented identifier is
+a fact about the gate and belongs where the next person will read it.
