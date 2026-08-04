@@ -75,11 +75,6 @@
       "why": "Third party, same source."
     },
     {
-      "doc": "docs/text-emit-design.md",
-      "path": "scripts/bake-glyphs.py",
-      "why": "Proposed module — T1's bake script, to be authored in bikar. The doc names it as a deliverable, not as an existing file."
-    },
-    {
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Coupons/Text-Coupon.bkr",
       "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
