@@ -5,8 +5,8 @@ this project. Every physical number in every design doc here is either read out
 of someone else's literature or is an explicitly-labelled unmeasured default,
 and the generated bet registry agrees:
 [`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md) reads
-**17 <!--count:cal-bets--> registered bets · 17 <!--count:cal-records-->
-`Calibrated` records — 17 provisional, 0 measured · 6
+**19 <!--count:cal-bets--> registered bets · 17 <!--count:cal-records-->
+`Calibrated` records — 17 provisional, 0 measured · 8
 <!--count:cal-bets-no-record--> bets with no record in bikar**.
 
 Scope: this file sequences the work that is blocked on *owning a printer*, and
@@ -31,10 +31,11 @@ is the measurement ceremony. This file is the *order*, the *cost*, and the
 **What has been searched, so the claims below can be read for what they are.**
 `CAL-*` ids were grepped across all three repos of the system: `3d-models`
 (`docs/` and `.claude/`), `bikar` (read-only, via the `bikar-lego-lab` worktree),
-and `qiyas`. 17 <!--count:cal-bets--> ids are registered in `CAL_BETS` <!--count:partial--> (twelve at the original
+and `qiyas`. 19 <!--count:cal-bets--> ids are registered in `CAL_BETS` <!--count:partial--> (twelve at the original
 sweep, plus the two mural bets `CAL-REG-01`/`CAL-CLB-01` and the two brick-anchor
 bets `CAL-ANC-01`/`CAL-INW-01` registered 2026-08-02, plus the frame-band bet
-`CAL-FRM-01` registered 2026-08-03);
+`CAL-FRM-01` registered 2026-08-03, plus the two text bets
+`CAL-TXT-01`/`CAL-TXT-02` registered 2026-08-04);
 one more, `CAL-SEA-01`, appears twice in `3d-models` only, in both cases as a bet that
 [`hemisphere-split-design.md`](hemisphere-split-design.md) §Appendix B and its
 grounding audit deliberately **declined to mint**. `qiyas` contains no `CAL-*`
@@ -43,12 +44,12 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 17 <!--count:cal-bets--> | 16 with a coupon, 6 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, and the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`) |
+| Registered `CAL-*` bets | 19 <!--count:cal-bets--> | 18 with a coupon, 8 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, and the two text bets `CAL-TXT-01`/`CAL-TXT-02`) |
 | `Calibrated<T>` records | 17 <!--count:cal-records--> | all provisional, all listed in bikar's `.calibration-baseline.json` |
-| Bets settled by the machine card (MC-1…MC-6) | 7 <!--count:cal-bets-mc--> | 12 <!--count:cal-mc-records--> of the 17 <!--count:cal-records--> records |
+| Bets settled by the machine card (MC-1…MC-7) | 9 <!--count:cal-bets-mc--> | 12 <!--count:cal-mc-records--> of the 17 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 9 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1) — but only 5 <!--count:cal-design-records--> records, because four of the nine have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 1 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
-| Entries in the prototype catalog | 29 <!--count:catalog-entries--> | 25 coupons (P1–P7, MC-1…MC-6, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
+| Entries in the prototype catalog | 30 <!--count:catalog-entries--> | 26 coupons (P1–P7, MC-1…MC-7, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
@@ -86,9 +87,12 @@ plate names what it settles and what it releases.
 · `MC-5` warp plate · `MC-6` bed-contact towers.
 
 **Why first, and why nothing else can honestly go first.** The card measures the
-*(printer, material, nozzle, profile)* tuple once. Seven of the
-17 <!--count:cal-bets--> registered bets and 12 <!--count:cal-mc-records--> of the
-17 <!--count:cal-records--> provisional records are on this one card. Four
+*(printer, material, nozzle, profile)* tuple once. 9 <!--count:cal-bets-mc--> of the
+19 <!--count:cal-bets--> registered bets and 12 <!--count:cal-mc-records--> of the
+17 <!--count:cal-records--> provisional records are settled by an MC-series coupon —
+seven of those bets on the six rungs above, and the two text bets on `MC-7`, which
+is catalogued but cannot be authored until bikar can emit text at all
+([`text-emit-design.md`](text-emit-design.md) §8 T2). Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
 to measure some of warp, wall floor and bore fit before the card existed;
 [`calibration-design.md`](calibration-design.md) §1 is the argument for
@@ -344,7 +348,7 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 29 <!--count:catalog-entries--> catalog entries = 29
+**Count: 30 <!--count:catalog-entries--> catalog entries = 30
 <!--count:catalog-entries--> print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
@@ -792,15 +796,17 @@ Five checks, run before shipping it, in the spirit of
   P2 row lists no `CAL-*` id — consistent with the registry, which gives P2 Q5's
   measurement to MC-6.
 - **Counts reconcile — and are copied from the thing that prints them, not
-  re-derived here.** 17 <!--count:cal-bets--> bets = 7 <!--count:cal-bets-mc--> on the card + 9 <!--count:cal-bets-design--> on design coupons
+  re-derived here.** 19 <!--count:cal-bets--> bets = 9 <!--count:cal-bets-mc--> on the card + 9 <!--count:cal-bets-design--> on design coupons
   (`CAL-RIB-01` LG-F1, `CAL-STK-01` LG-S1, `CAL-DET-01` + `CAL-CLP-01` W-C1,
   `CAL-REG-01` LG-P1, `CAL-CLB-01` LG-P2, `CAL-ANC-01` + `CAL-INW-01` LG-B2,
-  `CAL-FRM-01` W-P1) + 1 <!--count:cal-bets-no-coupon--> with no coupon (`CAL-STR-01`). 17 <!--count:cal-records--> records = 12 <!--count:cal-mc-records--> on the
+  `CAL-FRM-01` W-P1) + 1 <!--count:cal-bets-no-coupon--> with no coupon (`CAL-STR-01`). The card's 9 are the seven
+  on rungs MC-1…MC-6 plus `CAL-TXT-01`/`CAL-TXT-02` on `MC-7`, which is catalogued
+  and unauthored. 17 <!--count:cal-records--> records = 12 <!--count:cal-mc-records--> on the
   card + 5 <!--count:cal-design-records--> on design coupons — four design-coupon bets (the mural pair and the
   brick-anchor pair) have a coupon but no bikar record yet, which is why the
-  record count does not track the bet count. 29 <!--count:catalog-entries--> print-gated items = 29 <!--count:catalog-entries--> catalog
-  entries — 25 coupons plus the four deliverables catalogued on 2026-08-03. The
-  magnet-pocket item in §3.7 is deliberately **outside** that 29: no design doc
+  record count does not track the bet count. 30 <!--count:catalog-entries--> print-gated items = 30 <!--count:catalog-entries--> catalog
+  entries — 26 coupons plus the four deliverables catalogued on 2026-08-03. The
+  magnet-pocket item in §3.7 is deliberately **outside** that 30: no design doc
   demands it, so counting it would inflate the register with work nobody has
   asked for. §3.7 says so in place rather than leaving the arithmetic to look
   wrong.

@@ -245,11 +245,16 @@ the provisional side because a recessed feature that prints badly leaves a
 readable part and an emboss that prints badly leaves debris on the surface that
 matters. One coupon replaces this paragraph with a measurement.
 
-> **`CAL-TXT-01` and `CAL-TXT-02` are proposed ids, not registered ones.**
-> Registering them means adding `Calibrated<T>` records in bikar so the
-> generated bet registry carries them; until that lands, the two defaults above
-> satisfy the docs gate's D3 rule with an id that resolves to nothing. That is a
-> real hole in the gate and it is written here rather than left to be noticed.
+> **Both ids are registered, and the gate now checks that.** `CAL-TXT-01` and
+> `CAL-TXT-02` are in bikar's `CAL_BETS`, settled by coupon `MC-7`, which has a
+> catalog entry of its own. They ship no `Calibrated<T>` record yet, because the
+> constants they govern do not exist until T2 — the same shape as `CAL-OVH-01`,
+> and the registry names it as an open bet rather than a missing one.
+>
+> This paragraph used to admit that the ids were invented and that D3 accepted
+> them anyway. That admission is now a gate: **D5** fails any `**Default:**`
+> discharged by a bet id the registry does not carry. Run against this file at
+> the commit before T0 it reports two findings; after, none.
 
 ## 7. Open questions
 
@@ -273,9 +278,12 @@ matters. One coupon replaces this paragraph with a measurement.
 
 ## 8. Milestones
 
-**T0 — register the bets.** `CAL-TXT-01` and `CAL-TXT-02` as `Calibrated<T>`
-records in bikar, so §6's defaults point at something real. Cheap, and it closes
-the hole §6 admits to.
+**T0 — register the bets. Done, 2026-08-04.** `CAL-TXT-01` and `CAL-TXT-02` are
+in bikar's `CAL_BETS` with coupon `MC-7`, `MC-7` has a catalog entry, and the
+hole §6 used to admit to is now the docs gate's D5 rule rather than a paragraph.
+No `Calibrated<T>` record ships yet: the constants those bets govern arrive with
+`solidifyText` in T2, and a bet with no record is a registered open bet, not an
+absent one.
 
 **T1 — bake and check.** `scripts/bake-glyphs.py`, the committed constant for
 Source Code Pro Bold, and B1–B3 as a test with DM Sans as the by-design failure.

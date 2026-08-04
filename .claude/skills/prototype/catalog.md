@@ -453,6 +453,51 @@ earned until it records its provenance).
   `kernel3d/print-gate.ts` (value **and** provenance record); P2 Q5, the
   point-contact sphere question, which inherits the threshold from here.
 
+## MC-7 — Rung labels (engrave vs emboss)
+
+- **Status**: model to author — needs the `text` statement, which does not exist
+  yet (`docs/text-emit-design.md` §8 milestone T2). Listed here now because
+  `CAL-TXT-01` and `CAL-TXT-02` name this coupon as what settles them, and a bet
+  whose coupon is not written down anywhere is the W-F1 defect over again.
+- **Model**: `bikar/patterns/Coupons/Text-Coupon.bkr` — one plate carrying the
+  same six labels twice, engraved on one half and embossed on the other, at three
+  relief depths. The labels are the real ones, not lorem: `MC-4 R12` is the string
+  that fails the §5 gap validator in Arial Bold at a 5 mm cap (0.181 mm between
+  the `-` and the `4`), so the plate must carry the shipping face's rendering of
+  it and not the failing one.
+- **Print target**: TBD — profile header per the series note. Print **flat on the
+  plate, no supports**: an engraved label's floor and an embossed label's first
+  layer are both first-layer features, and tilting the part measures the tilt.
+- **Settles**: `CAL-TXT-01` (relief direction) and `CAL-TXT-02` (cap height 5.0 mm
+  / relief depth 0.6 mm). Both are provisional and neither carries a `Calibrated`
+  record in bikar yet — they govern 3d-models design-doc defaults, which is the
+  same shape as `CAL-OVH-01`.
+- **What we want to learn**:
+  - [ ] 1. Engraved or embossed — which is actually readable at arm's length on a
+    matte PLA surface. `docs/text-emit-design.md` §6 bets engraved and says
+    plainly that it is a coin flip; §1.2 records that the sources disagree.
+  - [ ] 2. The smallest cap height that still reads. 5.0 mm is the height the §5
+    measurements were taken at and the smallest at which a bold face's thinnest
+    stem clears one nozzle width with margin — it is **not** a legibility
+    measurement, because none was made.
+  - [ ] 3. Whether 0.6 mm of relief is enough, too much, or irrelevant. Three
+    depths on one plate is what makes this answerable in one print.
+  - [ ] 4. What the slicer does to a counter — the enclosed void in `0`, `4`, `A`
+    — at these sizes. §7 Q3 records that nothing was printed and no slicer was
+    run, and calls this the single largest gap in the investigation.
+  - [ ] 5. Whether an engraved label near a measurand contaminates it. §7 Q5:
+    MC-2's measurand *is* a minimum feature size, so a label cut into it is not
+    obviously harmless, and this plate is where that gets decided before the
+    labels go onto the other 23 rungs.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `docs/text-emit-design.md` §6's three defaults (value **and**
+  provenance record, once the constants exist), and `docs/calibration-design.md`
+  §8's "rung identity does not survive onto the part" — the weakness this whole
+  line of work exists to close.
+
 ---
 
 # Tile-wall connector ladder (W-series)
