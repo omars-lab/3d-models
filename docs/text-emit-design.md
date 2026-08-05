@@ -265,6 +265,18 @@ larger cap height, by the monospace face, or by refusing the string, is §7's
 open question. Failing loudly with the number is worth shipping before the fix
 is chosen.
 
+A second, independent legibility failure rides the same gate: **confusability**.
+Two checks (added in [D-023](decisions-log.md)) fire alongside gap and counter —
+`checkLabelCharset`, a single label mixing the slashed `0` and the capital `O`
+(`MC-2 PORT0`), and `checkLabelSetCharset`, two labels on one part that fold to
+the same string (`O3` and `03`). As of [D-025](decisions-log.md) both are wired
+into the mesh gate and **block**: FAIL under `--check`, at the same tier as gap
+and counter, not a warning and not a compile-time refuse. The confusable-pair
+set is deliberately just `0`/`O` — one measured pair, near-zero false alarms —
+and the fix is a rename the author chooses, not an automatic substitution (which
+would make the check unfalsifiable, the same argument §7 Q2 makes against
+auto-tracking).
+
 ## 6. Defaults
 
 **Default:** the shipping face is **Source Code Pro Bold**, licensed under the
@@ -305,10 +317,13 @@ matters. One coupon replaces this paragraph with a measurement.
 
 1. **Emboss or engrave.** §6 bets engrave; `CAL-TXT-01` settles it. A coupon
    carrying both at three relief depths is the whole experiment.
-2. **What to do with a label that fails §5.** Tracking, cap height, face, or
-   refusal. Measured need: +0.219 mm for `MC-4 R12`, +0.369 mm for `WWW`.
-   Automatic tracking is tempting and would make the validator unfalsifiable by
-   construction, which is an argument for refusing rather than fixing.
+2. **What to do with a label that fails §5's *gap* check.** Tracking, cap
+   height, face, or refusal. Measured need: +0.219 mm for `MC-4 R12`, +0.369 mm
+   for `WWW`. Automatic tracking is tempting and would make the validator
+   unfalsifiable by construction, which is an argument for refusing rather than
+   fixing. (The sibling *confusability* failure is settled:
+   [D-025](decisions-log.md) blocks it, on that same unfalsifiability argument.
+   This question is only the continuous, geometry-changing gap case, still open.)
 3. **Whether any of this survives a print.** Nothing was printed and no slicer
    was run. §5's connectivity results describe the geometry a slicer is handed;
    a slicer's thin-wall handling could rescue or worsen them. This is the single
