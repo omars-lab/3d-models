@@ -183,12 +183,22 @@ caught by writing the bake, because the bake had to name the failing glyphs one
 at a time and the survey only had to count them.
 
 **B2 — ring nesting is at most one deep, or the emitter carries depth.**
-Found by Source Code Pro Bold's `0`, which is a **dotted zero**: shell, counter,
-and a dot inside the counter — ink at depth 2. An `outline + holes` model cannot
-express it, and the first implementation of the winding check declared the font
-broken rather than its own model. Either the emitter applies the even-odd rule by
-ring depth, or the bake rejects the face and says which glyph. Silence — where the
-dot is quietly dropped or quietly cut — is the option that is not available.
+Found by Source Code Pro Bold's **default** `0`, which is a **dotted zero**:
+shell, counter, and a dot inside the counter — ink at depth 2. An
+`outline + holes` model cannot express it, and the first implementation of the
+winding check declared the font broken rather than its own model. Either the
+emitter applies the even-odd rule by ring depth, or the bake rejects the face and
+says which glyph. Silence — where the dot is quietly dropped or quietly cut — is
+the option that is not available.
+
+> **The shipping face no longer contains this glyph** ([D-023](decisions-log.md)):
+> the dot could not print, and `0` is now baked from the face's own slashed
+> `zero.a` alternate, which nests only one deep. That removes B2's only depth-2
+> witness from the shipping face, so the witness moved rather than vanishing —
+> `packages/core/tests/kernel3d/fixtures/glyphs-dotted-zero.ts` is the dotted
+> glyph, baked from the same font file, and the test that B2 fires at
+> `--max-depth 1` now runs against it. A check whose by-design failure quietly
+> stops existing is a check that has stopped testing anything.
 
 **B3 — every check runs on the quantised, rounded rings that would ship**, never
 on the font's curves. Rounding to 3 decimal places at cap height 1.0 is 5 µm at a
@@ -203,9 +213,13 @@ case and a defect in the model, not in the font.
 
 **T1 took B2's first branch: the bake carries depth.** `GlyphRing.depth` is
 nesting depth, not a hole flag, and the orientation rule is stated on the type —
-even depths wind CCW, odd depths CW. Source Code Pro Bold's `0` bakes to three
-rings at depths 0, 1 and 2 and passes. The face is not rejected and the dot is
-not dropped.
+even depths wind CCW, odd depths CW. The dotted `0` bakes to three rings at
+depths 0, 1 and 2 and passes. The face is not rejected and the dot is not
+dropped.
+
+That branch was the right one to take and it did not save the glyph. Carrying
+depth means the *mesh* is correct; it says nothing about whether the ink can be
+laid. §5 is where the dot actually died.
 
 ## 5. The validator: the gap between letters, not the width of one
 
@@ -219,14 +233,14 @@ distance between any two rings that are not nested in each other, over the whole
 laid-out label, at the cap height and face in use.
 
 PASS: `LG-B2` in Arial Bold at a 5 mm cap → minimum gap **0.563 mm** at the `-B`
-pair, ≥ 0.4 mm. In Source Code Pro Bold the same label clears **0.898 mm**. All
+pair, ≥ 0.4 mm. In Source Code Pro Bold the same label clears **0.877 mm**. All
 four real labels — `MC-2 R08`, `LG-B2`, `W-F1`, `0000` — pass in both faces.
 
 FAIL: `MC-4 R12` in Arial Bold at a 5 mm cap → **0.181 mm** between the `-` and
 the `4`. Under half a nozzle width: the two beads merge and the label reads
 `MC4`. This is not a constructed counterexample — it is a rung label this project
 wants, in the face a reasonable person would have picked. The harder case is
-`WWW`, at **0.031 mm** in Arial Bold and **0.061 mm** in Source Code Pro Bold,
+`WWW`, at **0.031 mm** in Arial Bold and **0.060 mm** in Source Code Pro Bold,
 which is the one that shows the failure is not confined to one face.
 
 Two properties of this validator are deliberate:
@@ -251,9 +265,11 @@ is chosen.
 **Default:** the shipping face is **Source Code Pro Bold**, licensed under the
 [SIL Open Font License 1.1](https://scripts.sil.org/OFL), which permits embedding
 and redistribution. It is chosen on measurement, not taste: zero crossing
-contours across 37 glyphs, a 0.573 mm thinnest stem at a 5 mm cap, and every real
-label clearing the nozzle by ~1.9× or better. Its one blemish is the dotted zero
-of §4's B2. DM Sans is the alternative and is disqualified for v1 by B1.
+contours across 37 glyphs, a 0.580 mm thinnest stem at a 5 mm cap, and every real
+label clearing the nozzle by ~1.9× or better. Its default `0` is dotted and
+cannot print at the 5 mm cap (§5), so the shipping face bakes the face's own
+slashed `zero.a` alternate in its place — see D-023. DM Sans is the alternative
+and is disqualified for v1 by B1.
 
 **Default:** cap height **5.0 mm**, relief depth **0.6 mm**. Both are provisional
 and both are bets — CAL-TXT-02 covers the cap height at which a rung label stays

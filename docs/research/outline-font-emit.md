@@ -400,3 +400,33 @@ them supplies a number used above.
 - **Every face outside these eight.** 37 glyphs of 8 faces is a sample. The claims
   in §2 and §5 are written as "of the faces measured here", and that is not
   modesty; it is the whole of what was checked.
+
+## Addendum, 2026-08-05 — the shipping face is 2.042, not the 1.017 surveyed here
+
+Every Source Code Pro number above is measured from the file that was **already on
+this machine**, which is version **1.017**. That file's default `0` is a *dotted*
+zero, and §5's spacing floor kills it at the 5 mm cap: 0.289 mm between the dot and
+the counter wall, so the two beads fuse (decision [D-023](../decisions-log.md)).
+The fix chosen was the face's own slashed `zero.a` alternate, which 1.017 does not
+carry — its `zero` OpenType feature is empty. So on 2026-08-05, with permission,
+Source Code Pro Bold **2.042** was downloaded (SIL OFL, sha256
+`b2095e0d…`, 206 804 bytes) and the whole face re-baked from it with `zero → zero.a`.
+
+2.042 shares 1.017's family, upem (1000), cap height (660) and every advance width,
+but its outlines differ in 37 of 39 glyphs, so the shipped measurements move
+slightly. The re-baked shipping face, re-measured by the same §7 scripts:
+
+| Quantity | This survey (1.017) | Shipping face (2.042) |
+|---|---|---|
+| Thinnest sustained stem (§3, §5) | 0.573 mm at `W` | **0.580 mm** at `8` |
+| `LG-B2` min ink gap (§6) | 0.898 mm at `B2` | **0.877 mm** |
+| `WWW` min ink gap (§6) | 0.061 mm at `WW` | **0.060 mm** |
+
+The 1.017 numbers above are **not withdrawn** — they correctly measure the file
+this survey read, and that survey is what chose the face. They are superseded *for
+the shipping face only*, which is why `docs/text-emit-design.md` §6 now quotes the
+2.042 figures and names the version. The slashed zero itself clears the counter
+floor (§5's second validator) by 2.4× — two lobes 0.959 and 0.960 mm across at the
+5 mm cap against a 0.4 mm floor — and, being one ink island, is silent under the
+gap check, which is why that check did not travel alone. Full derivation:
+`bikar-tile-border/packages/core/tests/kernel3d/text-layout.test.ts`.
