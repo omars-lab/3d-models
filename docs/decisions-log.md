@@ -1808,3 +1808,48 @@ A printed CAL-TXT-02 coupon showing the slashed zero is itself confusable (with
 reason the counter check does not model. Either sends the choice back to a
 different glyph or a different face — not back to the dotted default, which the
 6.95 mm number rules out independently of how the slash prints.
+
+## D-024 — a bet→coupon→catalog gate is evaluated and declined: no measured recurrence
+
+**Date:** 2026-08-05 · **Status:** Declined (no gate) · **Repos:** none changed
+
+### Context
+
+A candidate gate — call it "D6" — would assert that every coupon id named in
+bikar's `CAL_BETS`
+([`calibration.ts`](../../bikar/packages/core/src/kernel3d/calibration.ts),
+`settles: { by: 'coupon', coupon: '…' }`) has a matching `## <id>` heading in
+[`catalog.md`](../.claude/skills/prototype/catalog.md). The trigger was a real
+near-miss: on 2026-08-04 a bare `MC-7` bet was registered whose catalog entry did
+not yet exist, and it was caught by hand, not by a gate.
+
+### Decision
+
+**Do not build the gate yet.** CLAUDE.md's Precedent rule — *measure a rule before
+gating on it* — and the two evaluations it cites
+([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
+[`issue-register-evaluation.md`](issue-register-evaluation.md)), which both
+concluded *no skill, and only a gate where recurrence was measured*, set the bar:
+a rule with no measured recurrence does not earn a gate.
+
+The measurement clears the near-miss rather than confirming it. Coverage was
+**13 of 13** on 2026-08-04 and **14 of 14** on 2026-08-05 — every coupon id in
+`CAL_BETS` (`LG-B2 LG-F1 LG-P1 LG-P2 LG-S1 MC-1..MC-7 W-C1 W-P1`) has a catalog
+heading, including the `MC-7` that prompted this. Zero historical violations. The
+hand-catch worked; the register it protects is 14 rows a person can still read in
+one screen.
+
+### The tripwire
+
+Re-evaluate when either holds: a **second** id ships in `CAL_BETS` without a
+catalog heading (recurrence measured, not hypothesised), or the coupon-settled bet
+count grows past the point where a person re-checking the whole list by eye is
+reliable. If built then, the home is
+[`catalog_models.py`](../.claude/gates/catalog_models.py) — which already parses
+the catalog and already reads bikar — as one more claim class, **not** a new hook.
+
+### What this is not
+
+This is not a ruling that the mapping does not matter — it is a ruling that a
+person is currently a better check for it than a gate would be, and that adding
+the gate now would be the register-bloat the repo's own precedent warns against.
