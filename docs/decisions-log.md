@@ -1737,3 +1737,74 @@ That is correct prose, and a rule that calls it a defect is a rule that gets
 switched off. Restricted to the paragraph D3 actually reads, the same corpus
 gives **5 hits, 5 real**, firing on exactly the two ids this decision was about.
 Measure a rule before gating on it — the same tenet C3 was built from.
+
+---
+
+## D-023 — the printable `0` is the face's own slashed alternate, and the whole face is re-baked to get it
+
+**Date:** 2026-08-05 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (bake + checks + face), 3d-models (docs)
+
+### Context
+
+Source Code Pro Bold was chosen as the shipping face in
+[`text-emit-design.md`](text-emit-design.md) §6 on measurement — zero crossing
+contours, a thin stem that clears the nozzle by ~1.9×. But its **default** `0` is
+a *dotted* zero: shell, counter, and a dot inside the counter. At the 5 mm cap
+CAL-TXT-02 bets on, the air between the dot and the counter wall measures
+**0.289 mm** — well under one 0.4 mm bead, so the two fuse and the `0` prints as a
+filled ring. The gap check ([`text-layout.ts`](../../bikar-tile-border/packages/core/src/kernel3d/text-layout.ts)
+`labelMinGap`) caught it: every zero-bearing label on the machine card fails, and
+the dotted zero would need a **6.95 mm** cap — 39% over the bet — to print at all.
+
+### Options on the table
+
+- **Ship the dotted zero at a bigger cap.** Rejected: 6.95 mm breaks CAL-TXT-02's
+  5 mm and every label would have to grow with it. This verifies nothing about the
+  glyph; it just hides it behind a scale the machine card cannot afford.
+- **Mix a second face in for the `0` only.** Rejected: a rung label set in one face
+  with one glyph borrowed from another is the kind of incoherence the reader pays
+  for, and it forks the licence/version story per glyph.
+- **Take the face's own `zero.a` slashed alternate** (Recommended, chosen).
+  Source Code Pro's `zero` OpenType feature maps `zero → zero.a`. The slash joins
+  the ring into one ink island, leaving two *sibling* lobes at depth 1 — the dot
+  and its depth-2 nesting are gone. The catch: 1.017 (the file already on this
+  machine, the one the survey measured) ships an **empty** `zero` feature, so the
+  alternate is only reachable from **2.042**.
+
+### Decision
+
+Download Source Code Pro Bold **2.042** (SIL OFL, sha256 `b2095e0d…`, 206 804
+bytes; user-approved download) and **re-bake the entire face** from it with
+`0 → zero.a`, rather than splice one glyph. 2.042 shares 1.017's family, upem,
+cap height and every advance width but differs in 37 of 39 outlines, so re-baking
+the whole face keeps it internally consistent and forces every quoted number to be
+re-measured against what actually ships (§6, and the research addendum dated today).
+
+Two things ride on the same change, by design:
+
+- **The counter check is not optional.** A slash makes the `0` one ink island, so
+  `labelMinGap` returns `null` and would pass it **without measuring anything** —
+  retiring the only check that caught the dotted zero in the very commit that
+  adopts the fix. `checkLabelCounter` (largest inscribed circle in a counter) is
+  what actually clears the slashed zero: two lobes 0.959 / 0.960 mm across against
+  a 0.4 mm floor, 2.4× margin. Neither check subsumes the other, and
+  `text-layout.test.ts` pins the row that proves it.
+- **The dotted zero is kept as a committed fixture**
+  (`packages/core/tests/kernel3d/fixtures/glyphs-dotted-zero.ts`), baked from the
+  same 2.042 file. It was B2's
+  only depth-2 witness and the only glyph that fails the gap floor; losing it
+  silently is exactly the failure the repo's own rule names — a gate that asserts
+  everything passes must be wrong about a deliberate failure or skip it.
+
+The confusable-charset rule (`checkLabelCharset` / `checkLabelSetCharset`: no label,
+and no plate, mixes `0` with `O`) ships in the same change — a slashed `0` is more
+distinguishable from `O` than the dotted one was, but distinguishable is not a
+licence to place both on one plate.
+
+### What would reverse it
+
+A printed CAL-TXT-02 coupon showing the slashed zero is itself confusable (with
+`8`, or with `O` despite the slash) at the chosen cap, or failing to print for a
+reason the counter check does not model. Either sends the choice back to a
+different glyph or a different face — not back to the dotted default, which the
+6.95 mm number rules out independently of how the slash prints.
