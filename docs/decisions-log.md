@@ -1853,3 +1853,62 @@ the catalog and already reads bikar — as one more claim class, **not** a new h
 This is not a ruling that the mapping does not matter — it is a ruling that a
 person is currently a better check for it than a gate would be, and that adding
 the gate now would be the register-bloat the repo's own precedent warns against.
+
+## D-025 — a confusable label blocks the build, at the same tier as the gap and counter checks
+
+**Date:** 2026-08-05 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (CLI wiring + test), 3d-models (docs)
+
+### Context
+
+D-023 added two confusability checks to bikar's `text-layout.ts` —
+`checkLabelCharset` (a single label mixing the slashed `0` and the capital `O`)
+and `checkLabelSetCharset` (two labels on one part that fold to the same string
+after mapping confusables) — each with a `PASS:`/`FAIL:` example. Both were
+exported and unit-tested but **never called**: the mesh-gate label loop in
+bikar's `packages/cli/src/index.ts` ran only `checkLabelGap` and
+`checkLabelCounter`. So a `text` statement carrying `MC-2 PORT0`, or a plate
+carrying both `O3` and `03`, compiled and wrote an STL. What the build should do
+about such a label was left open — the same shape as
+[`text-emit-design.md`](text-emit-design.md) §7 Q2's "what to do with a label
+that fails §5," which observes that *automatically fixing* a label makes the
+validator unfalsifiable by construction.
+
+### Decision
+
+**Block.** Confusability is the third §5 legibility check and fails under
+`--check` at the **same tier** as gap and counter: the CLI prints
+`label gate: …` with the offending pair and exits 1, and no STL is written. Not
+a warning (a confusable plate would ship silently, which is the failure
+labelling exists to prevent), and not a compile-time refuse (that would make
+charset stricter than its two siblings for no reason). The block is enforced,
+not remembered — it rides the same build target as the mesh gate, per D-014.
+
+Three reasons the block earns its keep rather than crying wolf:
+
+- **The pair set is deliberately tiny.** `CONFUSABLE_PAIRS` is just `['0','O']`;
+  `1`/`l`/`I` are excluded because Source Code Pro draws them apart and no
+  measurement here says that separation fails. A gate that fires on one
+  well-measured pair has a false-positive surface near zero.
+- **A confusable label defeats the point of labelling.** The whole reason T3
+  engraved rung ids onto the coupons was so a person holding the part can name
+  the rung. A label they cannot tell from another is worse than no label.
+- **The fix is a rename, and the author is the one who should choose it.**
+  Auto-substituting `O`→`0` would make the check unfalsifiable — the §7 Q2
+  argument — so the gate names the collision and stops, leaving the rename to the
+  person who knows which rung is which.
+
+The two checks stay separate because neither catches the other's case: `O3` and
+`03` each clear `checkLabelCharset` alone and confuse only side by side, so
+`checkLabelSetCharset` runs once over the piece's whole label set. The gate test
+(bikar `packages/cli/tests/label-gate.test.ts`, PR
+[#78](https://github.com/NaqshCoffee/bikar/pull/78)) carries a by-design failing
+witness for each — `MC-2 PORT0` and a plate with `O3`+`03` — beside the existing
+`WWW`/`MC-2 R08` gap witnesses.
+
+### What this resolves and what it does not
+
+It resolves the **confusability** arm of §7 Q2. It does **not** decide the
+gap/tracking arm — whether a too-tight label (`MC-4 R12` needs +0.219 mm, `WWW`
++0.369 mm) is opened by tracking, a larger cap, the monospace face, or refusal.
+That failure is a continuous measurand with a fix that changes the geometry, and
+it stays open and failing-loudly-with-the-number until a coupon settles it.
