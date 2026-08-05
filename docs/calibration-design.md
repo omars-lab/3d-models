@@ -92,14 +92,20 @@ part six months later. The precedent already exists in the repo and is the same 
 the **W-series sub-floor rule** in `.claude/skills/prototype/catalog.md`, where
 W-C1's ~0.6 mm bayonet blade renders bare and the catalog says so in the entry.
 
-### 3.2 Rung identity is positional, not embossed
+### 3.2 Rung identity: engraved on the plates, positional within them
 
-bikar has no text emit. There is no `text`, no emboss, no engrave — so the trick every
-calibration coupon in the wild uses, where the printed label *is* the answer you read
-off the part (BOSL2's tolerance ladders; Bambu's own fit test), is unavailable. This is
-a real capability gap and the card does not pretend otherwise.
+bikar now emits engraved text on flat plate tops — the `text` statement, wired to the
+mesh gate with a gap-and-counter validator ([`text-emit-design.md`](text-emit-design.md),
+shipped T2). So the four flat-plate coupons carry the printed label the wild uses
+(BOSL2's tolerance ladders; Bambu's own fit test): `MC1BoreSweep` says `MC-1 BORE`,
+`MC1FitLadder` `MC-1 FIT`, `MC3BridgePlate` `MC-3`, `MC5WarpPlate` `MC-5`. The card no
+longer has to be kept in order by hand for those four.
 
-Two mitigations, both deliberate, neither as good as a printed number:
+The capability is **extrude-only**, and that is the boundary of what T3 labelled. A rod
+top, a tube rim and a revolved cone flank have no flat face to engrave, so the 14 rods
+(MC-1 pins and gauges, MC-6 towers), the 7 MC-2 tubes and the MC-4 fan cannot carry a
+label — and are not made to. They keep the two mitigations that always applied, neither
+as good as a printed number but both real:
 
 - **One piece per rung, rendered via `--piece`.** Identity lives in the STL filename
   (`MC2Wall08.stl`), which survives into the slicer's plate and into the sliced file
@@ -109,12 +115,22 @@ Two mitigations, both deliberate, neither as good as a printed number:
   MC-6's towers ascend. The ordering is self-evident in the hand even when the parts
   have been knocked off the plate — you can re-sort MC-2 by eye and be right.
 
-The operational consequence belongs in the print instructions, not in the geometry:
-**bag each rung as it comes off the plate.** An unbagged, unsorted MC-2 tube is an
-unidentifiable tube, and a mis-assigned rung is worse than a missing one because it
-produces a confident wrong number.
+For the round coupons the operational consequence still belongs in the print
+instructions, not in the geometry: **bag each rung as it comes off the plate.** An
+unbagged, unsorted MC-2 tube is an unidentifiable tube, and a mis-assigned rung is worse
+than a missing one because it produces a confident wrong number.
 
-MC-4 is the exception that partly escapes this, and it is why the fan has risers: see
+Within a labelled plate the rungs themselves stay positional — the bores are one
+ascending size ladder — because a per-bore label would collide with the bores it names.
+And two plate labels are placed against, not on, their measurand: `MC-5` is 0.4 mm deep
+(not the 0.6 default) and centred on the bottom edge, far from the four corners and the
+fiducial whose warp it reads, so the recess perturbs opposite corners equally; `MC-3`'s
+label sits at the top edge, clear of the bore line, so it never thins a bridging ceiling
+(the machine card's `.bkr` states both rationales at the label sites). This is §7 Q5 —
+"whether text belongs on the coupon or beside it" — answered per coupon rather than in
+general.
+
+MC-4 escapes the no-label limit a different way, and it is why the fan has risers: see
 §5.4.
 
 ## 4. What the DSL could and could not do
@@ -427,8 +443,8 @@ a rod is `2`; MC-5's single fiducial through-hole makes it `0`.
 
 | Piece | euler | watertight | degenerate | minFeature (mm) | `--check` | tris | vol (cm³) |
 |---|---|---|---|---|---|---|---|
-| `MC1BoreSweep` | −10 | yes | 0 | 5.000 | PASS | 1572 | 11.8 |
-| `MC1FitLadder` | −8 | yes | 0 | 3.825 | PASS | 1312 | 7.5 |
+| `MC1BoreSweep` | −10 | yes | 0 | 5.000 | PASS | 2440 | 11.8 |
+| `MC1FitLadder` | −8 | yes | 0 | 3.825 | PASS | 1776 | 7.5 |
 | `MC1Pin03` | 2 | yes | 0 | 3 | PASS | 256 | 0.1 |
 | `MC1Pin04` | 2 | yes | 0 | 4 | PASS | 256 | 0.2 |
 | `MC1Pin05` | 2 | yes | 0 | 5 | PASS | 256 | 0.3 |
@@ -443,9 +459,9 @@ a rod is `2`; MC-5's single fiducial through-hole makes it `0`.
 | `MC2Wall12` | 0 | yes | 0 | 1.20 | PASS | 768 | 0.7 |
 | `MC2Wall16` | 0 | yes | 0 | 1.60 | PASS | 768 | 1.0 |
 | `MC2Wall20` | 0 | yes | 0 | 2.00 | PASS | 768 | 1.3 |
-| `MC3BridgePlate` | 2 | yes | 0 | 4.500 | PASS | 2076 | 27.5 |
+| `MC3BridgePlate` | 2 | yes | 0 | 4.500 | PASS | 2596 | 27.5 |
 | `MC4OverhangFan` | 0 | yes | 0 | 26.817 | PASS | 4608 | 11.9 |
-| `MC5WarpPlate` | 0 | yes | 0 | 1.6 | PASS | 272 | 15.3 |
+| `MC5WarpPlate` | 0 | yes | 0 | 1.6 | PASS | 720 | 15.3 |
 | `MC6Tower03` | 2 | yes | 0 | 3 | PASS (+F7 warn) | 256 | 0.3 |
 | `MC6Tower05` | 2 | yes | 0 | 5 | PASS (+F7 warn) | 256 | 0.8 |
 | `MC6Tower08` | 2 | yes | 0 | 8 | PASS | 256 | 2.0 |
@@ -454,6 +470,14 @@ a rod is `2`; MC-5's single fiducial through-hole makes it `0`.
 The four `FAIL` rows are the expected outcome described in §3.1, not defects. All four
 are watertight; the gate refuses to write their STLs only because of the feature floor,
 and they render on the `--check`-less command line in §6.
+
+The four flat plates carry more triangles than a bare plate would because each now has
+an engraved coupon id (§3.2): `MC-1 BORE`, `MC-1 FIT`, `MC-3`, `MC-5`. The engraving is
+a blind pocket, so it leaves `euler`, `degenerate`, `watertight` and — because it is
+kept out of the feature-floor measurement — `minFeature` unchanged, and removes too
+little material to move any plate's volume at 0.1 cm³. It changes only the triangle
+count, and every label clears §5's gap-and-counter gate in the shipping face (the same
+`--check` that wrote these rows runs that gate; a merging label would fail the build).
 
 **This table is executable.** `make coupons` renders every rung per §6 and diffs the
 mesh gate's actual output against the row above — including running `--check` on the
@@ -466,7 +490,7 @@ same rungs, and that they sum to the total stated below.
 `watertight`, `degenerate`, `minFeature`, `--check` verdict, triangle count and volume
 against its row, at the decimal precision the row states.
 PASS: `MC1BoreSweep` renders `euler=-10 degenerate=0 minFeature=4.999999965721486mm —
-PASS`, 1572 triangles, 11.8 cm³ — matching row 1 once minFeature is read at the three
+PASS`, 2440 triangles, 11.8 cm³ — matching row 1 once minFeature is read at the three
 decimals the row writes.
 FAIL: `MC2Wall04` renders `— PASS` under `--check`, or renders at `minFeature=0.45mm`
 against a row that says `0.40`, or `MC6Tower03` raises no F7 warning. Each is a
@@ -516,8 +540,11 @@ section, and `calibrate`'s rules forbid it.
   design tables instead (§7), which is a stronger check for a coupon whose failure mode
   is a silently wrong dimension, but it is not the same as looking at it. Look at the
   fan in a slicer before committing filament.
-- **Rung identity does not survive onto the part** (§3.2). This is the card's biggest
-  structural weakness and the one a text-emit capability would fix outright.
+- **Rung identity survives onto the four flat plates but not the round coupons** (§3.2).
+  Text emit (T2) fixed this for the plates outright; the emitter is extrude-only, so the
+  14 rods, 7 tubes and the fan still rely on filename plus size-ordering plus bagging.
+  Extending the emitter to rod tops / tube rims / cone flanks is a genuine second feature,
+  not a placement tweak, and is deferred rather than in this card.
 - **Every rung range is unvalidated** (§2) — MC-3's is argued from `w2` §B.3's survey
   rather than guessed, but a survey is not a caliper either. This is not a weakness to
   be fixed before printing; it is the reason for printing.

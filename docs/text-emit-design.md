@@ -142,10 +142,15 @@ text decision.
 piece MC-4-R12
   ...
   text "MC-4 R12"
-    at (0, -18)
+    at 0, -18
     cap 5
     engrave 0.6
 ```
+
+`at` takes `centroid` or a bare `<x> [,] <y>` point in the piece's own
+coordinates — the same no-parenthesis form `hole … at` uses, so the two
+placement sub-statements read alike. `cap` and `engrave` are optional and
+default to §6's CAL-TXT-02 / CAL-TXT-01.
 
 `face` is deliberately **not** a statement in v1. One shipping face, chosen once
 in §6, keeps the "which faces have we checked?" question answerable — the moment
@@ -349,9 +354,20 @@ and [`outline-font-emit.md` §2a](research/outline-font-emit.md).
 `text` statement, and §5's validator wired into the mesh gate with `MC-4 R12` as
 its asserted failure.
 
-**T3 — label the 23 coupons**, and reprint the machine card that started this.
-Not before T2: labelling coupons with an unvalidated emitter is how you get 23
-parts that say `MC4`.
+**T3 — label the machine card. Done, 2026-08-05.** The emitter T2 shipped is
+extrude-only (§3.2), so of the card's 26 pieces the four flat plates take a
+label and the 14 rods, 7 tubes and 1 revolve do not — a rod top, a tube rim and
+a cone flank have no flat face to engrave. That is not the shortfall it first
+looks like: the plates are exactly the anonymous coupons (a plate with N bores
+reads like any other), while the round coupons self-identify by size in the
+hand, so the extrude-only emitter happens to cover the pieces that most need a
+name. `MC1BoreSweep`/`MC1FitLadder`/`MC3BridgePlate`/`MC5WarpPlate` now carry
+`MC-1 BORE` / `MC-1 FIT` / `MC-3` / `MC-5`; each clears §5's gate in the shipping
+face under the same `--check` that `make coupons` runs, and `MC-5`/`MC-3` place
+their label off the measurand per §7 Q5 (warp corners; bridge ceiling). Not
+before T2: labelling with an unvalidated emitter is how you get parts that say
+`MC4`. Labelling the round coupons waits on an extrude-only emitter growing a
+rod/tube/revolve path — a second feature, not this milestone.
 
 ## Appendix A — what changed in the research, and what it cost
 
