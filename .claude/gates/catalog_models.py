@@ -73,7 +73,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from doc_pointers import _sibling_root, _tracked_at_ref  # noqa: E402
+from doc_pointers import _git_env, _sibling_root, _tracked_at_ref  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_REL = ".claude/skills/prototype/catalog.md"
@@ -238,6 +238,7 @@ def read_from_bikar(rel: str, root: Path = ROOT) -> str | None:
                 capture_output=True,
                 text=True,
                 check=True,
+                env=_git_env(),
             ).stdout
         except subprocess.CalledProcessError:
             continue

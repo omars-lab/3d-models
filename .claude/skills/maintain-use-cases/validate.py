@@ -106,9 +106,41 @@ CATALOG_UC_RE = re.compile(r"\buc:\s*['\"](UC\d+)['\"]")
 CATALOG_SPEC_RE = re.compile(r"^(?P<repo>[\w.-]+):(?P<path>\S+)$")
 
 
+def git_env() -> dict[str, str]:
+    """The environment for every git call here, with git's own repo pointers removed.
+
+    git exports `GIT_DIR` to the hooks it runs from a linked worktree, and those
+    variables outrank `-C`: they name the repository, and `-C` then only sets the
+    directory. Under them `rev-parse --show-toplevel` answered with the *skills*
+    directory rather than the repo root, and `git -C ../bikar` read this repo's
+    object store while still being spelled as a read of bikar.
+
+    Both failures were silent in the direction that matters. Root misresolution
+    made `repo_dir()` look for `.claude/skills/bikar`, miss, and emit the
+    "not checked out locally" **warning** — so a commit from a worktree validated
+    its 52 self-repo pointers, skipped all 67 pinned sibling ones, and exited 0.
+    Running the same command by hand has no `GIT_DIR`, checks all 119, and prints
+    "all valid", which is why the gap survived: the hook and the hand-run disagreed
+    and only the hand-run was ever read.
+
+    `GIT_INDEX_FILE` is deliberately kept. It names the index the commit is being
+    built from, which is exactly what `--staged` needs to read.
+
+    Regression test: `.githooks/tests/hook-env-git-dir.sh` (`make validate-hooks`).
+    """
+    env = os.environ.copy()
+    env.pop("GIT_DIR", None)
+    env.pop("GIT_WORK_TREE", None)
+    return env
+
+
 def run_git(repo_dir: str, *args: str) -> str:
     return subprocess.run(
-        ["git", "-C", repo_dir, *args], capture_output=True, text=True, check=True
+        ["git", "-C", repo_dir, *args],
+        capture_output=True,
+        text=True,
+        check=True,
+        env=git_env(),
     ).stdout.strip()
 
 
@@ -838,7 +870,7 @@ def self_test() -> int:
     # origin/main was undone by the next refresh with no way to notice.
     with tempfile.TemporaryDirectory() as tmp:
         def git(*args: str) -> None:
-            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True, env=git_env())
 
         git("init", "-q", "-b", "main")
         git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "published")
@@ -866,7 +898,7 @@ def self_test() -> int:
     # clone. The fixture deletes the branch, which is what the merge button does.
     with tempfile.TemporaryDirectory() as tmp:
         def git(*args: str) -> None:
-            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True, env=git_env())
 
         def commit(msg: str) -> str:
             git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", msg)
@@ -920,7 +952,7 @@ def self_test() -> int:
     # is read from, and the first one is the shipped behaviour before this fix.
     with tempfile.TemporaryDirectory() as tmp:
         def git(*args: str) -> None:
-            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True)
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True, env=git_env())
 
         def write(text: str) -> None:
             with open(os.path.join(tmp, "CLAUDE.md"), "w", encoding="utf-8") as f:
