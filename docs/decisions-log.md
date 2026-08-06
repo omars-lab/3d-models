@@ -1966,3 +1966,63 @@ clause exposes. It does **not** transcribe LDraw's full ~380-entry palette — o
 the ten names the clause names are grounded; any other colour is reached by its
 integer code, which stays a deliberate no-appearance-claim escape hatch. It also
 does not touch the STL/SVG paths, which have no colour channel to carry.
+
+## D-027 — a brick's studs take their own colour, fixed in the geometry, not on the reference
+
+**Date:** 2026-08-06 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (DSL + emitter + read-back palette + tests), 3d-models (docs)
+
+### Context
+
+D-026 gives a placement one colour, carried on the type-1 line. A two-tone brick —
+blue body, yellow studs, which is what a LEGO brick actually looks like — cannot be
+said that way: the type-1 line has exactly **one** inherit slot (colour 16), so
+everything in the shared block renders the one placement colour. The user, looking
+at `Brick-Stack.mpd` in a viewer and seeing solid-colour bricks, asked whether the
+pins could be coloured separately (task #105). The question underneath: where does a
+second colour live, when the reference line has room for only one?
+
+### Decision
+
+**`place <Piece> [color <name|code>] [studs <name|code>]`** — an optional second
+clause colours the studs independently of the body (chosen "per-brick stud colour"
+over a body-only palette via AskUserQuestion, for full two-tone control). `studs`
+resolves through the same grounded palette and 0–511 range check as `color` (D-026)
+and is independent of it; either clause may appear alone, `color` first when both
+are present. `studs` is a **contextual** word in the parser, not a reserved keyword —
+safe because no assembly statement begins with it.
+
+The mechanism is forced by the single inherit slot, and it is the decision:
+
+- **The stud colour is baked into the triangle text, not the type-1 line.** The body
+  triangles stay colour 16 and inherit the placement colour; the stud triangles carry
+  the explicit stud code. One watertight block, two colour regions — the *mixed-colour
+  inline part*. This was **spiked before implementation** (the load-bearing risk was
+  whether a real LDraw loader renders a mixed-16/explicit block correctly): the spike
+  placed one such part twice and read back a blue body and a red body sharing one
+  yellow-studded part, through three.js `LDrawLoader`.
+- **"Stud" is the top-face plane, exact not heuristic (K10).** A triangle is a stud iff
+  a vertex stands above the body height `H`; `stackBrickSlabs` puts studs in the one
+  slab above `H` and nothing else there, so the body's top face at exactly `H` never
+  trips it. The transfer condition is written in the emitter and the design doc §14.6:
+  it holds only for meshes whose sole geometry above the top face is studs. The emitter
+  **refuses** a stud colour on an empty stud set (a `studs none` brick, a non-brick)
+  rather than colour nothing.
+- **De-dup splits exactly on stud-colour difference.** The block key is the geometry
+  text and the stud code now lives in it, so two bricks with different stud colours
+  mint two blocks and two with the same one still share a block — a consequence that
+  falls out of the existing key, not a special case.
+- **Robustness over ease — the read-back panel learned the palette.** §14.4 preloaded
+  only code 7, so a coloured stud would have rendered as the magenta the panel's trap
+  exists to surface (the same latent gap D-026's coloured bodies had). The read-back
+  now preloads the full ten-colour grounded set with LDConfig's own RGB (§7,
+  `UPDATE 2026-05-29`), and a test asserts a yellow-studded brick reads back at zero
+  unresolved colours with unchanged winding/edge coherence.
+
+### What this resolves and what it does not
+
+It resolves how the pins are coloured apart from the body and closes the panel's
+magenta gap for the whole grounded palette. It does **not** add per-*region* colour
+beyond body-vs-studs (relief faces, walls and bed all stay body colour), and it does
+not widen the grounded palette past D-026's ten names — an arbitrary stud code is the
+same no-appearance-claim escape hatch, now reported as magenta in the panel rather
+than resolved, because the panel has no LDConfig to look it up in.
