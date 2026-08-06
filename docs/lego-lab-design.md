@@ -2110,6 +2110,50 @@ This does not change the part-number discipline of §14.3 (the inline `0 FILE` b
 non-part-number names are untouched) — colour is a property of the *placement*, not the part, so a
 `bikar-…-.dat` block stays one block referenced by differently-coloured type-1 lines.
 
+### 14.6 Per-brick stud colour — the pins painted apart from the body
+
+§14.5 gives the whole part one colour: the type-1 line carries a single code and every triangle in
+the block inherits it (colour 16). A real two-tone brick — blue body, yellow studs — cannot be said
+that way, because the type-1 line has exactly **one** inherit slot. `place` now takes a second,
+optional clause: **`place <Piece> [color <name|code>] [studs <name|code>]`** (D-027, bikar PR
+[#80](https://github.com/NaqshCoffee/bikar/pull/80)). `studs` resolves through the same grounded
+palette and range check as `color` (§14.5), and is independent of it — either clause may appear
+alone, and `color` when present comes first.
+
+The mechanism is forced by the one inherit slot, and it is the load-bearing design fact here:
+
+- **The stud code is baked into the geometry, not the reference.** The body triangles stay colour 16
+  and inherit the placement colour as before; the **stud** triangles are written with the explicit
+  stud code, so they render that colour whatever the type-1 line says. This is the *mixed-colour
+  inline part* — one watertight block, two colour regions — verified before implementation by a spike
+  that placed it twice and read back a blue body and a red body sharing one yellow-studded part.
+- **A stud is identified by the top-face plane, exactly and not heuristically.** A triangle is a stud
+  iff a vertex stands above the brick's body height `H`. `stackBrickSlabs` builds studs as the one
+  slab above `H` and puts nothing else there (§6.2's slab table), so the body's highest face sits at
+  exactly `H` and never trips it. **The transfer condition (K10), stated so it cannot be assumed:**
+  this holds only for meshes whose sole geometry above the top face is studs — every brick this
+  emitter serves. The emitter **refuses** `studs` on a part with an empty stud set (a `studs none`
+  brick, a non-brick) rather than colouring nothing silently.
+- **De-duplication splits when — and only when — the stud colours differ.** The block key is the
+  emitted geometry text, and the stud code now lives *in* that text, so two bricks with different
+  stud colours mint two blocks while two with the same stud colour still share one. `Brick-Stack`
+  (Base blue/yellow, Cap red/green) therefore emits two `0 FILE` blocks where §14.5's one-colour
+  version emitted one — the split is the mechanism, not a regression.
+- **The panel had to learn the palette (robustness, not ease).** §14.4's read-back preloaded only
+  code 7, so a yellow stud would have rendered as the magenta the trap exists to catch — the same gap
+  §14.5's coloured bodies already had. The read-back panel now preloads the full ten-colour grounded
+  set with LDConfig's own RGB (§7, `UPDATE 2026-05-29`), and a read-back test asserts a
+  yellow-studded brick reads back with **zero** unresolved colours and the same winding/edge
+  coherence as the plain brick.
+
+**Validator:** a stud clause is honoured when the block carries the body triangles in colour 16 and
+the stud triangles in the named code, and the read-back renders both with no magenta.
+PASS: `place Base color blue studs yellow` on a studded 2×4 → a block with 2244 triangles in 16
+and 1520 in 14, referenced by a `1 1 …` line, read back at 0 unresolved colours.
+FAIL: `place Plate color blue studs yellow` on a `studs none` plate → the emitter throws (*no
+geometry stands above its top face*), because there are no pins to paint and colouring the empty set
+would be a claim about nothing.
+
 ---
 
 ## Appendix A — sources
