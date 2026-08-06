@@ -49,6 +49,7 @@ the exhaustiveness of §3's viewer survey and §8 records it.
 | S12 | BrickLink Studio — Import formats | https://studiohelp.bricklink.com/hc/en-us/articles/6502277722647-Import-formats | fetched |
 | S13 | This repo's own LEGO survey | [`lego-brick-system-survey.md`](lego-brick-system-survey.md) | read on disk |
 | S14 | This repo's lattice sweep | [`lego-lattice-matrix-sweep.md`](lego-lattice-matrix-sweep.md) | read on disk |
+| S15 | LDraw canonical colour configuration `LDConfig.ldr` | https://library.ldraw.org/library/official/LDConfig.ldr | fetched 2026-08-06 (header `UPDATE 2026-05-29`); §7.4 |
 
 **Retrieval failures, disclosed:**
 
@@ -137,8 +138,9 @@ The consequence for our emitter: geometry inside a generated part should be writ
 in colour 16 so the part takes whatever colour the type-1 line that placed it names.
 A type-1 line at the **top level of a model has no referencing line**, so colour 16
 there has nothing to inherit from; the emitter must name a concrete code. S3's own
-worked example uses codes `7` and `4` at top level. **I did not fetch `LDConfig.ldr`
-and therefore make no claim about which colour name any numeric code renders as.**
+worked example uses codes `7` and `4` at top level. The code → colour-name mapping is
+grounded in §7.4 (S15, `LDConfig.ldr` fetched 2026-08-06): `7` is `Light_Grey`, `4` is
+`Red`. The 2026-08-01 draft left this ungrounded and made no such claim.
 
 ### 1.2 The other line types
 
@@ -790,8 +792,8 @@ Taking the `Cap` line:
 │      └─ <colour>: a concrete code, because a top-level type-1 line has no
 │         referencing line for colour 16 to inherit from (S1). Geometry inside
 │         the referenced block is written in 16 so it takes this code.
-│         (Which code renders as which colour is defined in LDConfig.ldr,
-│         which I did not fetch — see 8.)
+│         (Which code renders as which colour is defined in LDConfig.ldr;
+│         grounded in 7.4 — code 4 is Red, 7 is Light_Grey.)
 │
 └─ line type 1: sub-file reference.
 ```
@@ -813,6 +815,38 @@ difference between options A and B is which filename the type-1 line names. What
 changes is that this two-line file asserts these are LEGO 2×4 bricks, when they are
 0.2 mm narrower per run, carry 4.6 mm studs against 4.8, carry 6.314 mm tubes against
 6.4, and carry clutch ribs that no LEGO element has (§3.5).
+
+### 7.4 The colour palette — grounded, and what the DSL exposes
+
+The 2026-08-01 draft used codes `4` and `7` only because S3's official example did,
+and **made no claim about which colour any code renders as** — the mapping lives in
+`LDConfig.ldr`, which was not fetched (old §8 item 5). It is fetched now: S15, pulled
+2026-08-06 from the canonical `https://library.ldraw.org/library/official/LDConfig.ldr`,
+header `0 !LDRAW_ORG Configuration UPDATE 2026-05-29`. The ten `0 !COLOUR` rows the
+DSL's `place … color <name>` clause names, verbatim from that file:
+
+| DSL name (LDConfig name, lower-cased) | CODE | VALUE (fill) | EDGE |
+|---|---:|---|---|
+| `black` (Black) | 0 | `#1B2A34` | `#808080` |
+| `blue` (Blue) | 1 | `#1E5AA8` | `#333333` |
+| `green` (Green) | 2 | `#00852B` | `#333333` |
+| `red` (Red) | 4 | `#B40000` | `#333333` |
+| `light_grey` (Light_Grey) | 7 | `#8A928D` | `#333333` |
+| `dark_grey` (Dark_Grey) | 8 | `#545955` | `#333333` |
+| `yellow` (Yellow) | 14 | `#FAC80A` | `#333333` |
+| `white` (White) | 15 | `#F4F4F4` | `#333333` |
+| `light_bluish_grey` (Light_Bluish_Grey) | 71 | `#969696` | `#333333` |
+| `dark_bluish_grey` (Dark_Bluish_Grey) | 72 | `#646464` | `#333333` |
+
+Each DSL name is the LDConfig `Name` lower-cased with no synonym invented, so a name
+asserts exactly what LDConfig says that code is — the grounding a bare integer cannot
+carry. `light_grey` (7) is what a placement with no `color` clause inherits, matching
+S3's example default. This is the small solid set only; a caller wanting any other of
+LDraw's 0–511 codes writes the integer directly, which — like the old draft's `4`/`7`
+— asserts nothing about appearance. This palette ships as `LDRAW_COLOUR_NAMES` and
+`resolveLdrawColour` in bikar's `packages/core/src/render/ldraw-emitter.ts` (feature
+[NaqshCoffee/bikar#79](https://github.com/NaqshCoffee/bikar/pull/79)); the DSL clause
+is `place <Piece> [color <name|code>]`.
 
 ---
 
@@ -851,11 +885,15 @@ Each item states what would settle it.
    Standards Board's revision history for S2, or by testing both forms in a viewer that
    reports part status.
 
-5. **UNGROUNDED — not fetched. The numeric colour code → colour name mapping.** It
-   lives in `LDConfig.ldr`; S13 records that the library ships `LDConfig.ldr`,
-   `LDCfgalt.ldr` and `LDConfig_TLG.ldr`, but I did not read any of them. Codes `4` and
-   `7` in §7 are used only because S3's official example uses them; **no claim is made
-   about what colour they render as.**
+5. **GROUNDED 2026-08-06 (was UNGROUNDED — not fetched). The numeric colour code →
+   colour name mapping.** It lives in `LDConfig.ldr`; the 2026-08-01 draft recorded
+   that the library ships it (via S13) but had not read it, so codes `4`/`7` in §7 were
+   used only because S3's example used them, with no claim about their colour. Now
+   fetched: **S15**, `LDConfig.ldr` header `UPDATE 2026-05-29`, and §7.4 records the ten
+   `0 !COLOUR` rows the DSL exposes verbatim (code 4 = Red, 7 = Light_Grey, …). Still
+   bounded: only the ten rows the `place … color` clause names were transcribed, not the
+   full ~380-entry palette — a caller using any other code writes the integer, which
+   asserts nothing about appearance.
 
 6. **Not re-verified. Every `.dat` file dimension in §3.5.** All are quoted from S13's
    first-hand reading of the downloaded library zip on 2026-07-29. Per-file web paths

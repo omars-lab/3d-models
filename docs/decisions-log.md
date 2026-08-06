@@ -1912,3 +1912,57 @@ gap/tracking arm — whether a too-tight label (`MC-4 R12` needs +0.219 mm, `WWW
 +0.369 mm) is opened by tracking, a larger cap, the monospace face, or refusal.
 That failure is a continuous measurand with a fix that changes the geometry, and
 it stays open and failing-loudly-with-the-number until a coupon settles it.
+
+---
+
+## D-026 — a `place` takes a colour by grounded name **or** by bare LDraw code
+
+**Date:** 2026-08-06 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (DSL + emitter + tests), 3d-models (docs)
+
+### Context
+
+An assembly's parts all emitted as one LDraw colour, so `Brick-Stack.mpd` — a
+two-brick stack — read as a single grey blob in every viewer, defeating the whole
+point of exporting the parts as distinct sub-files (task #104; the symptom that
+started it was a user seeing "just black" in `library.ldraw.org/model-viewer`).
+Colour rides the type-1 placement line (`1 <colour> …`), not the part definition,
+so making it real meant giving `place` a way to say which colour. Two sub-questions:
+what does the author write, and is the name→code mapping grounded? The mapping had
+been left **UNGROUNDED — not fetched** in
+[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §8 item 5.
+
+### Decision
+
+**Both — `place <Piece> [color <name|code>]` accepts a grounded colour name or a
+bare integer LDraw code**, chosen by the user over name-only and code-only via
+AskUserQuestion. A name (`red`) is the lower-cased LDConfig colour name; a code
+(`4`) is any integer in LDraw's 0–511 range. The clause reuses the DSL's existing
+`color` keyword — no new token — and an uncoloured `place` keeps the emitter
+default (7, `Light_Grey`), so an all-grey assembly emits **byte-identically** to
+before the feature. It is `--format ldraw` only; STL/SVG ignore it.
+
+Three reasons the both-forms answer earns its keep:
+
+- **A name asserts a grounded fact; a code asserts nothing.** Names are validated
+  against the fetched palette (§7.4, S15 — `LDConfig.ldr` header `UPDATE
+  2026-05-29`, fetched 2026-08-06) and an unknown name is refused with the valid
+  list. That is the K4/grounding discipline: a name means exactly what LDConfig
+  says. A bare integer is the escape hatch for any of the other ~370 codes, and
+  like the old draft's `4`/`7` it asserts nothing about appearance — which is
+  honest, not a gap.
+- **Resolution is deferred to eval, not the parser**, so a bad colour fails
+  **every** output format, not only the one that consumes it — surfacing the error
+  where the author is, per "surface, don't hide."
+- **The grounding was a prerequisite, not a follow-up.** Shipping name support
+  while §7.4 still said "not fetched" would have left the emitter's doc comment
+  pointing at an ungrounded claim — a K9/pointer hazard. So the palette was fetched
+  and §7.4 written in the same change (feature
+  [NaqshCoffee/bikar#79](https://github.com/NaqshCoffee/bikar/pull/79)).
+
+### What this resolves and what it does not
+
+It resolves how per-part colour is authored and grounds the ten-name palette the
+clause exposes. It does **not** transcribe LDraw's full ~380-entry palette — only
+the ten names the clause names are grounded; any other colour is reached by its
+integer code, which stays a deliberate no-appearance-claim escape hatch. It also
+does not touch the STL/SVG paths, which have no colour channel to carry.

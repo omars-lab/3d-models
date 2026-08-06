@@ -2082,6 +2082,34 @@ the tab downloads no WebGL engine. The preview rights LDraw's −Y-up with a rot
 rather than a Y scale of −1, because a mirror has determinant −1 and would flip the winding the
 panel exists to show.
 
+### 14.5 Per-placement colour — the parts read as distinct, not one grey blob
+
+§14.3's emitter wrote every placement at the module default (7, `Light_Grey`), so a multi-part
+assembly like `Brick-Stack` opened as a single grey mass in a viewer — indistinguishable parts
+defeating the reason the export writes one sub-file per brick. `place` now carries an optional
+colour: **`place <Piece> [color <name|code>]`** (D-026, bikar PR
+[#79](https://github.com/NaqshCoffee/bikar/pull/79)). A grounded name — one of the ten in
+[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §7.4, each the lower-cased
+LDConfig colour name — or a bare integer LDraw code (0–511). It rides the type-1 line's colour
+field (§14.3's `1 <colour> …`), which was already the field the panel's magenta trap (§14.4) proved
+the viewer honours; `--format stl`/`svg` have no colour channel and ignore it.
+
+Three properties keep it honest:
+
+- **A name is grounded, a code is not — and both are on purpose.** A name resolves against the
+  fetched palette and an unknown one is refused with the valid list; a code is the escape hatch for
+  any other of LDraw's codes and, exactly like §14.3's `4`/`7`, asserts nothing about appearance.
+- **The all-grey emission is byte-identical to before.** An uncoloured `place` still emits code 7,
+  so this section adds a capability without moving any existing output — the §14.4 read-back cases
+  are unchanged.
+- **Bounded, and stated so (K2).** Only the ten names the clause exposes are grounded, not LDraw's
+  full ~380-entry palette; the mapping is fetched once (S15, header `UPDATE 2026-05-29`) and any
+  other colour is reached by its integer.
+
+This does not change the part-number discipline of §14.3 (the inline `0 FILE` blocks and their
+non-part-number names are untouched) — colour is a property of the *placement*, not the part, so a
+`bikar-…-.dat` block stays one block referenced by differently-coloured type-1 lines.
+
 ---
 
 ## Appendix A — sources
