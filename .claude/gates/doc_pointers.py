@@ -86,6 +86,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
+
+def _git_env() -> dict[str, str]:
+    """Env for a `git -C <sibling>` read, with git's own repo pointers removed.
+
+    `GIT_DIR` outranks `-C` — under it a read spelled as bikar's tree is served
+    from *this* repo's object store. Here that is latent rather than live, because
+    `_exists_in_sibling` tries the working tree before the ref and every sibling
+    file currently exists on disk; it would surface the first time a path exists
+    at the pinned ref but not in the checkout. Scrubbed anyway: the same variable
+    was live in `maintain-use-cases/validate.py`, where it cost 67 pointer checks
+    per worktree commit. `.githooks/tests/hook-env-git-dir.sh` holds all three.
+    """
+    env = os.environ.copy()
+    env.pop("GIT_DIR", None)
+    env.pop("GIT_WORK_TREE", None)
+    return env
+
+
 #: Repo-relative path of the tracked baseline — also the key `git show` uses.
 BASELINE_REL = ".claude/gates/doc-pointer-baseline.json"
 
@@ -302,6 +320,7 @@ def _tracked_at_ref(repo: Path, ref: str) -> frozenset[str] | None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         tree: frozenset[str] | None = frozenset(out.splitlines())
     except (subprocess.CalledProcessError, FileNotFoundError):
