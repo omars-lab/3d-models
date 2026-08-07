@@ -8,17 +8,21 @@ and the design changed: the clutch is now a discrete rib rather than a nominal s
 rather than a fact about LEGO (§3.2). Remaining contested bets, each with its strongest refuting
 source, are in Appendix B.**
 
-Built: **R0, M6, M7, P0, P1 and P2 have shipped** (2026-07-29 → 2026-08-01). P1 shipped its
+Built: **R0, M6, M7, P0, P1, P2 and P3 have shipped** (2026-07-29 → 2026-08-07). P1 shipped its
 **sweep strip**, its design-notes page, its studio index, **multi-piece export** (§10, D-006) — a
 brick mints stud/anti-stud ports from its own lattice and a two-brick assembly exports as two
 printable parts — §5.3's **compatibility matrix, now filled by a real sweep**
 ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)), and the two
 **curated scripts** that make that matrix clickable rather than only readable. P2 then gave the page
 custom mode — the code drawer, `code=` share links, "Open in Studio" and the localStorage draft —
-by *sharing* the Orb Lab's modules rather than forking them. Only P3 has not shipped, and only
-partly: its adjusted-parameter toasts have been in both Labs since P0, which §10's row went on
-calling future work for two phases — what remains there is the brick page's print note and the
-LDraw export. Building P1 produced the finding that a printed brick on a
+by *sharing* the Orb Lab's modules rather than forking them. P3's three items have now all shipped
+(§10, §14) — the process note gated on a *moved* fit (§14.1), the knob that moved named on the panel
+(§14.2), and the LDraw `.ldr` export as an inline-block MPD (§14.3), read back through three.js in a
+studio panel (§14.4) and since given two-tone colour (§14.5, §14.6). Beyond P3's original scope, the
+export grew a headless render tool (§15, D-028): `bikar:scripts/render-ldraw-thumbnails.ts` turns a
+`.mpd` into a *set* of camera angles — not one, because a single view of stacked bricks cannot show
+how many there are (§15.1) — gated by exact counts and tolerant golden pixels (§15.2). Building P1
+produced the finding that a printed brick on a
 printed brick has **no clutch at all** on the shipped defaults, and the coupon (`LG-S1`) that would
 settle where the real ceiling sits; see §10's implementation status. The Lego Lab
 page is live and every clutch dimension in it is adjustable and provenance-tagged. Where building a
@@ -2153,6 +2157,109 @@ and 1520 in 14, referenced by a `1 1 …` line, read back at 0 unresolved colour
 FAIL: `place Plate color blue studs yellow` on a `studs none` plate → the emitter throws (*no
 geometry stands above its top face*), because there are no pins to paint and colouring the empty set
 would be a claim about nothing.
+
+---
+
+## 15. The thumbnail CLI — a `.mpd` to a *set* of PNGs, gated by counts and goldens
+
+§14.3 emits an LDraw file and §14.4 reads it back inside the studio; neither turns it into a
+picture you can put in a PR or a gallery. The gap the user named — *"do we have a CLI to go from
+mod to png?"* — had no answer: nothing in any of the three repos rendered LDraw headlessly. This
+section specifies the tool that closes it, `bikar:scripts/render-ldraw-thumbnails.ts` (bikar PR
+[#82](https://github.com/NaqshCoffee/bikar/pull/82), D-028), and the reason it renders *several*
+angles rather than one.
+
+### 15.1 One picture is not evidence of structure — the finding that shapes the tool
+
+The research behind the render experiment already established the load-bearing constraint, and it
+is why this is not a one-shot screenshotter.
+[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.5 records it directly: a
+three-quarter render of `Brick-Stack` shows a 2×4 brick with eight studs and correct proportions,
+but the two placements are 24 LDU apart, stack flush, and the file carries no edge lines — so the
+seam between them is never drawn, and **a viewer cannot distinguish that image from a single
+six-plate block.** Two things resolved the count, and both were extra work rather than a second
+look at the same picture: a render from below shows the hollow underside with a 2×4's three tubes,
+and rendering the two meshes in different colours puts the seam on screen as a horizontal boundary
+at the expected height. The general point §10.5 draws — **on a file with no edge lines, a render is
+evidence of shape and not of structure** — is the tool's whole shape: the honest output of a
+composition is a *set* of angles beside the numbers, not a single hero frame that can lie about how
+many parts it shows.
+
+So the CLI renders three angles by default (`iso`, `front`, `below`) from a five-preset table
+(`iso, front, below, top, back`), each chosen against that lesson: `iso` reads proportions and
+studs, `front` puts the coloured seam (§14.6) on screen, `below` shows the underside tubes; `top`
+and `back` are there for models the first three leave ambiguous. The angle set is a `--angles` flag,
+not a fixed pipeline, because which views disambiguate a *given* model is a property of that model.
+
+### 15.2 Two gates, deliberately unequal — the counts are hard, the pixels are soft
+
+`--check` holds a render to a committed expectation, and the two halves of that expectation are not
+equal in strength — which is the design decision, not an implementation detail:
+
+- **Counts are the hard gate.** The read-back (§14.4's `readBackLDraw`, the same independent
+  parser) is camera-independent and deterministic, so `--check` deep-compares the *whole* read-back
+  — placements, meshes, triangles, resolved part hashes, winding certification, edge pairing —
+  against `<name>.expected.json` and fails on **any** drift. This is where §10.5's lesson is
+  enforced: the thing a picture cannot establish (how many parts, placed where) is exactly what the
+  counts pin, and they pin it exactly. The comparison is `countsMatch` in
+  `bikar:scripts/thumbnail-gate.ts`, split out of the CLI so a `node --test` can freeze the one
+  property that matters about a gate — that it fires.
+- **Golden pixels are the soft gate.** A render reaches the GPU through ANGLE/Metal
+  ([`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.3), so a byte-exact pixel
+  match is not a thing a driver guarantees. The pixel check is therefore *tolerant*: `pixelDiffRatio`
+  returns the differing-pixel fraction and the CLI compares it against a small `--tolerance` (default
+  0.02), not against zero. A one-pixel wobble passes; a materially different frame blows past it.
+
+The one place the soft gate turns hard is size: a render whose dimensions no longer match the golden
+is not a near-miss to be weighed against a tolerance, so `pixelDiffRatio` returns `null` on a
+dimension mismatch and the CLI fails outright rather than letting a resized frame round away under
+the ratio.
+
+**Validator:** a `--check` run passes iff the read-back deep-matches `<name>.expected.json`
+*and* every angle's differing-pixel fraction is at or under `--tolerance`, with matching
+dimensions.
+PASS: `Brick-Stack.mpd --check` on the committed goldens → `counts: PASS`, each angle
+`PASS (0.000% differ)`, exit 0.
+FAIL: an emitter change that adds a phantom placement (2 → 3) while the three-quarter frame is
+pixel-for-pixel unchanged → `counts` fails and the run exits 1 even though every pixel gate still
+passes. This is the load-bearing case (§10.5, and CLAUDE.md's *"an aggregate cannot discharge a
+claim about every part"*): the drift a picture is blind to is precisely the one the counts catch,
+and the by-design failure is what the witness in `bikar:scripts/thumbnail-gate.test.mjs` freezes —
+a single drifted field, a CCW→CW winding flip, a changed part hash, each made to fail while a
+count-of-fields aggregate would wave it through.
+
+### 15.3 The backend, and the condition under which the goldens are valid (K10)
+
+The render runs in **Playwright's full-Chromium channel** (`channel: 'chromium'`), not the default
+headless shell, and it drives the *same* scene the studio panel shows —
+`bikar:packages/lab/src/ldraw-scene.ts` composed onto `bikar:packages/lab/thumbnail.html` via
+`bikar:packages/lab/src/thumbnail-page.ts` — so a thumbnail is the same brick §14.4 reads back, not
+a second renderer that could disagree. The channel choice is forced, not stylistic:
+[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.3 measured the headless shell
+**failing to create a WebGL context** on this machine class, while full Chromium reaches the GPU
+through ANGLE/Metal and renders.
+
+That is also the transfer condition, and it is stated rather than assumed: **the committed golden
+PNGs are valid only for the backend that produced them** — this machine's Chromium-on-darwin through
+ANGLE/Metal. §10.6 already records that "the renders used this machine's GPU … nothing here was run
+headless over SSH, in a container, or in CI." A different GPU, driver, or OS may shift enough pixels
+to exceed the tolerance without anything being wrong; the response is `--update-goldens` on that
+backend, not a loosened tolerance. **The counts carry no such condition** — the read-back is pure
+geometry with no GPU in the path — which is the deeper reason the hard gate is the count gate and
+the soft gate is the picture: only one of them ports.
+
+### 15.4 Where this stops — a skill now, a gate later
+
+The CLI ships with a witness (`thumbnail-gate.test.mjs`, `node --test`) and its own fixtures
+(`Brick-Stack.mpd` and the three committed goldens), but it is **not yet wired into a pre-commit
+gate** the way the mesh gate or the doc gates are. That is deliberate and matches the user's
+decision (D-028): the render path has a GPU in it, and a gate that renders on every commit would be
+both slow and backend-fragile in exactly the way §15.3 describes. The near-term home is the
+`validate-render` skill (a separate deliverable), which runs the CLI on demand against a model and
+reads the result; graduating it to a hook waits until there is measured recurrence of the defect it
+would catch — the same *no skill/gate before the recurrence is measured* discipline the precedent
+docs settled ([`issue-register-evaluation.md`](issue-register-evaluation.md),
+[`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md)).
 
 ---
 

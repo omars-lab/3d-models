@@ -2026,3 +2026,72 @@ beyond body-vs-studs (relief faces, walls and bed all stay body colour), and it 
 not widen the grounded palette past D-026's ten names — an arbitrary stud code is the
 same no-appearance-claim escape hatch, now reported as magenta in the panel rather
 than resolved, because the panel has no LDConfig to look it up in.
+
+## D-028 — a `.mpd`→PNG CLI renders a *set* of angles, gated by hard counts and soft goldens
+
+**Date:** 2026-08-07 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar (CLI + gate + witness + lab scene, PR [#82](https://github.com/NaqshCoffee/bikar/pull/82) → `1113052`), 3d-models (design doc §15, this entry, use-case map)
+
+### Context
+
+§14.3 emits an LDraw `.mpd` and §14.4 reads it back inside the studio, but nothing
+in any of the three repos turned a model into a picture headlessly. The user asked
+directly — *"do we have a CLI to go from mod to png?"* — and wanted it to produce
+*different screenshots* of a model plus a validation path, all tracked as tasks
+(#106–#109). The research behind the render experiment had already found the
+constraint that shapes the answer: [`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md)
+§10.5 showed a three-quarter render of `Brick-Stack` is pixel-for-pixel a single
+six-plate block — **on a file with no edge lines a render is evidence of shape, not
+of structure** — so a one-shot screenshotter would be a tool that can lie about how
+many parts it shows.
+
+### Decision
+
+Three sub-decisions, each settled with the user via AskUserQuestion:
+
+- **Render backend — Playwright + full Chromium** (`channel: 'chromium'`), not the
+  default headless shell. Forced by §10.3, which measured the shell failing to create
+  a WebGL context on this machine class while full Chromium reaches the GPU through
+  ANGLE/Metal. The CLI drives the *same* Lab scene the studio panel shows
+  (`bikar:packages/lab/src/ldraw-scene.ts` on `bikar:packages/lab/thumbnail.html`), so
+  a thumbnail is the same brick §14.4 reads back, not a second renderer that could
+  disagree.
+- **Validation basis — counts *and* golden pixels, unequal by design.** Not one or the
+  other. **Counts are the hard gate**: the camera-independent read-back is deep-compared
+  whole against `<name>.expected.json` and fails on any drift (`countsMatch`,
+  `bikar:scripts/thumbnail-gate.ts`). **Golden pixels are the soft gate**: a render is
+  GPU-dependent, so the differing-pixel fraction is compared against a small `--tolerance`
+  (default 0.02), not zero — and a size mismatch is a hard `null` fail, not a swallowable
+  ratio. This is the direct enforcement of §10.5: the composition facts a picture cannot
+  establish are exactly what the counts pin, exactly.
+- **A skill now, a gate later.** The path has a GPU in it, so a per-commit render gate
+  would be slow and backend-fragile. The near-term home is a `validate-render` skill
+  that runs the CLI on demand; graduating it to a hook waits until the defect it would
+  catch shows measured recurrence — the *no skill/gate before the recurrence is measured*
+  discipline of [`issue-register-evaluation.md`](issue-register-evaluation.md) and
+  [`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md).
+
+The gate logic is split out of the CLI into `bikar:scripts/thumbnail-gate.ts` so a
+`node --test` witness (`bikar:scripts/thumbnail-gate.test.mjs`) can freeze the one
+property that matters about a gate — that it **fires** — with cases built so a lazy
+aggregate (count fields, average the pixels, ignore image size) passes while the real
+gate fails: a single drifted field, a CCW→CW winding flip, a changed part hash, a
+one-side-only field, a half-flipped frame, a size mismatch.
+
+### The transfer condition, stated so it cannot be assumed (K10)
+
+**The committed golden PNGs are valid only for the backend that produced them** — this
+machine's Chromium-on-darwin through ANGLE/Metal (§10.6: "the renders used this
+machine's GPU … nothing here was run headless over SSH, in a container, or in CI"). A
+different GPU, driver, or OS may shift enough pixels to exceed the tolerance with nothing
+wrong; the response is `--update-goldens` on that backend, not a loosened tolerance. The
+**counts carry no such condition** — the read-back is pure geometry with no GPU in the
+path — which is why the hard gate is the count gate and only the soft gate is the picture:
+only one of the two ports.
+
+### What this resolves and what it does not
+
+It gives the repos a `.mpd`→PNG path that renders several disambiguating angles and can
+hold them to a committed expectation. It does **not** yet ship the `validate-render`
+skill (#108) or any pre-commit render gate (deferred by the third sub-decision), and it
+does not widen coverage past one exercised model — the goldens exist for `Brick-Stack`
+alone, and §10.6's "one of twelve viewers" caveat still stands for everything else.
