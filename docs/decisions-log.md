@@ -2156,3 +2156,51 @@ notes to the palette so the human checklist cannot silently drift. It does **not
 itself into a gate (still deferred, and still awaiting the measured recurrence D-028 requires), and
 it does not widen coverage past `Brick-Stack` — the catalog holds one model, and adding a second is
 the point at which the gate stops being about one fixture and starts being about the set.
+
+## D-030 — the greedy chain is a documented partial: its gap cannot hold a small filler vocabulary
+
+**Date:** 2026-08-08 · **Status:** Decided (measured; the §8 gate prescribed the outcome) · **Repos:** bikar (gap decomposition + clustering + witness tests, PR [#91](https://github.com/NaqshCoffee/bikar/pull/91)), 3d-models (design doc §8/§9, this entry, use-case map)
+
+### Context
+
+M4b is the maclado design doc's asymmetric faithful field, and its §8 gate was written
+before any placement rule existed: *"if no placement rule the survey permits yields whole
+fillers with a closable ribbon, the honest outcome is a documented partial in the decisions
+log, not a distorted-filler orb that fails its own §5.3 validator."* Step 1 shipped the
+greedy tightest-turn chain (`placeSpiralChain`, PR #90) and narrowed §9.1's convergence risk
+to one question: does the inter-winding gap — ≈68% of the sphere at the M4 angle — decompose
+into a small congruence-class set of whole fillers?
+
+### Decision
+
+Measured, and the answer is **no** — for this placement rule. Step 2
+(`bikar:packages/core/src/kernel3d/maclado-gap.ts`) cut the gap by a documented rule (§6:
+spherical Delaunay of the wheel centres, bridges between mutually nearest rim vertices, one
+tile per hull triangle), verified the cut hard (hull count 2·W−4 = 34 exactly; partition
+residual ~1e-9 mm² of 30,772.81 mm²; every rim vertex covered), and clustered the tiles by
+the §5.3 congruence the validator already trusts:
+
+- **34 tiles → 33 congruence classes** at maker tolerance (1e-3 mm / 1e-4 rad).
+- The §9.2 tolerance sweep is what makes the verdict a verdict and not a knob artifact:
+  still 33 classes at 1 mm / 0.1 rad — **three decades looser** — and the count only
+  collapses (to 6) at a tolerance so absurd it equals the ring-size bucket count, the
+  no-information end of the knob.
+- **The cause is the field, not the cut.** The 51 hull edges take **32 distinct centre
+  distances** (43.78 mm — the join distance — up to 76.48 mm): the greedy walk produces a
+  *continuum* of wheel separations, so no cutting rule, this one or any other, could extract
+  a small vocabulary from it. The negative result attaches to `placeSpiralChain`, and any
+  future placement rule that hopes to converge must be built to **quantize its separations**
+  — that is the transfer condition (K10) a successor rule inherits.
+- The aggregate discipline held: an area-compensated distortion (grow one tile 15%,
+  bisect-shrink another) keeps Σ areas exact to sub-µm² while per-tile congruence fails —
+  pinned as a by-design failure in `bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`.
+
+### What this resolves and what it does not
+
+It closes §9.1 and §9.2 **for the greedy chain**: the rule is honest machinery — exact
+joins, free θ, measured gap — but it is a *chain generator*, not a *maclado generator*, and
+the partial is documented here rather than shipped as a distorted-filler orb. It does **not**
+close M4b's question for every permissible rule: the survey space still contains placement
+rules with quantized separations (discrete step words, lattice-guided walks), and whether one
+is worth building is a scope decision for the user, recorded in §8's M4b bullet as the open
+follow-on. The symmetric M4 field is untouched — it remains the shipped, fully validated orb.
