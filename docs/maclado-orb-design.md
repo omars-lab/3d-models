@@ -1,21 +1,27 @@
-# The 9-spike "maclado" orb — design doc (pre-implementation)
+# The 9-spike "maclado" orb — design doc
 
-Status: **DRAFT v1 — pre-implementation. Chosen direction (via AskUserQuestion, 2026-08-08):
-the *faithful* 9-fold maclado, i.e. a new placement-based construction family, NOT a symmetric
-star-ball substitute. No engine code written yet; this doc is written to be audited by
-`ground-design-doc` before any milestone starts.**
+Status: **v2 — M1–M4 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`).**
+Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
+construction family, not a star-order substitute. Staging (AskUserQuestion, 2026-08-08, after M3
+and the pre-M4 validation pass): **symmetric field first** — M4 shipped the 20-wheel dodecahedral
+field, whose closure is forced by symmetry and discharges every §5 validator on a full sphere; the
+genuinely asymmetric faithful-maclado field is an explicit follow-on milestone (§8, M4b). This
+revision also corrects §2, whose v1 conclusion over-hardened the survey's theorem (a K1 defect)
+and was disproved by M4's own construction — the correction is recorded in place, not silently
+rewritten.
 
 Scope: generate, in the bikar engine, a 3D-printable spherical strapwork orb tiled with
 **9-pointed star rosettes** ("wheels") joined by **filler/spacer tiles**, in the deliberately
-non-symmetric manner of Ángel María Martín López's "9-SPIKE 'MACLADO' RIBBON" sphere — the maker
-gives up global radial symmetry so the ribbons run continuously across seams and the fillers stay
-whole.
+non-symmetric manner of Ángel María Martín López's "9-SPIKE 'MACLADO' RIBBON" sphere. The maker
+gives up global radial symmetry; what that asymmetry buys is *densely packed* wheels with *small*
+whole fillers — not whole fillers as such, which M4's symmetric field also keeps (§2, corrected).
 
 Grounding. Every mathematical and prior-art claim traces to the checked-in research survey,
 [`research/maclado-orb-survey.md`](research/maclado-orb-survey.md), and its fetch record (§7 there).
-Every engine claim was verified first-hand against bikar at `origin/main` (`e8b07d5`); the files it
-names all exist at that ref, so the pointers below resolve regardless of which branch the sibling
-checkout sits on. Where a fact could not be sourced, this doc says so rather than inventing it — the
+Every v1 engine claim was verified first-hand against bikar at `origin/main` (`e8b07d5`); pointers
+added by this revision to M4's own files resolve at `d20e3f5` (bikar PR #88's squash commit, now on
+`origin/main`). All named files exist at their stated refs, so the pointers below resolve regardless
+of which branch the sibling checkout sits on. Where a fact could not be sourced, this doc says so rather than inventing it — the
 most important such gap (§6) is load-bearing, not a footnote.
 
 ---
@@ -26,10 +32,11 @@ most important such gap (§6) is load-bearing, not a footnote.
 
 1. **Carry a field of faithful 9-fold wheels over a whole sphere** — each wheel a real
    9-pointed star rosette, not a 8/10/12 substitute — and export a single watertight manifold STL.
-2. **Keep the fillers whole.** The object's fillers read as whole in the source image, and the name
-   *maclado* together with the §2 theorem explain why symmetry must be given up to keep them so — an
-   inference, since the maker's own rationale is not sourced (§6.1). That whole-filler property, not
-   a picture, is the thing this design verifies (§5.3).
+2. **Keep the fillers whole.** The object's fillers read as whole in the source image — an
+   inference, since the maker's own rationale is not sourced (§6.1). (v1 claimed the §2 theorem
+   forces giving up symmetry to keep them whole; M4 disproved that — see §2, corrected. What the
+   maker's asymmetry buys is *small* whole fillers; the symmetric field keeps them whole but
+   wheel-sized.) That whole-filler property, not a picture, is the thing this design verifies (§5.3).
 3. **Run the ribbon unbroken.** Over/under strapwork parity must be globally consistent across
    wheel–filler seams (§5.4).
 4. **Reuse the orb pipeline's tail** — the vertex weld, the manifold gate, and the mesh emitter are
@@ -40,8 +47,10 @@ most important such gap (§6) is load-bearing, not a footnote.
 - **Reproducing Martín López's exact object.** His placement rule is not retrievable (§6). We build
   a faithful 9-fold maclado *in the same spirit*, verified against the property he prizes, and the
   doc never claims fidelity to a construction it could not read.
-- **A symmetric star-ball.** That is a different object with a different star order (§2); it is
-  documented here only to show it is *not* the target.
+- **A symmetric star-ball** in the surveyed sense — a *substituted* star order (10/12) chosen to
+  match a site's full symmetry (§2). M4's dodecahedral field is **not** that object: it keeps the
+  genuine 9-fold wheels and changes only their placement, sitting each on a 3-fold site via
+  C₃ ⊂ C₉. The substituted-order ball remains out of scope.
 - **The browser configurator.** Orb Lab (`orb-lab-design.md`) is knob-driven per-face inscription;
   the maclado family is a distinct engine path and joins the Lab, if ever, only after it ships.
 - **qiyas 3D validation** of the maclado family — the front-hemisphere view-set work stays scoped to
@@ -49,37 +58,58 @@ most important such gap (§6) is load-bearing, not a footnote.
 
 ---
 
-## 2. The load-bearing result: on a sphere, 9-fold *forces* broken symmetry
+## 2. The load-bearing result: what 9-fold actually forces on a sphere — corrected
 
-This is the fact the whole design turns on, and it is a theorem, not an aesthetic preference.
+**Corrected 2026-08-08.** v1 of this section over-hardened the survey's theorem into "the tiling
+must break global symmetry", and M4 disproved that by construction. The true theorem, the false
+step, and what each forces are separated below; the defect is recorded rather than rewritten
+because it is a textbook K1 (a qualifier stripped from our own survey) and the next doc should
+see it.
 
-The finite rotation groups of the sphere are exactly five families — cyclic Cₙ, dihedral Dₙ, and
-the three polyhedral groups T (order 12), O (order 24), I (order 60) — and the rotation-axis orders
-inside the polyhedral groups are **only 2, 3, 4, and 5, never 9**
-([survey §1](research/maclado-orb-survey.md)). Two consequences follow, and the doc states each with
-its condition (survey's K10 note carried through):
+**The theorem (true, unchanged).** The finite rotation groups of the sphere are exactly five
+families — cyclic Cₙ, dihedral Dₙ, and the three polyhedral groups T (order 12), O (order 24),
+I (order 60) — and the rotation-axis orders inside the polyhedral groups are **only 2, 3, 4, and
+5, never 9** ([survey §1](research/maclado-orb-survey.md)). So no site on a sphere can carry a
+wheel's **full** C₉ as site symmetry, and the only group with a 9-fold axis at all is C₉/D₉ — a
+single distinguished axis (the "beach-ball"). A wheel's full 9-fold symmetry is never global.
 
-- A polyhedral group is the only way to place *many* equivalent high-symmetry sites on a sphere, and
-  those sites cap at order 5. So a 9-fold rosette centre **cannot** sit on a symmetry axis of any
-  polyhedral group.
-- The only finite sphere group with a 9-fold axis is C₉/D₉ — a *single* distinguished axis (the
-  "beach-ball": one 9-fold rosette per pole, a band repeated nine times). It cannot distribute a
-  second, inequivalent 9-fold centre over the sphere and still map one onto another by a symmetry.
+**The false step (v1's "therefore").** v1 concluded: *if* the design wants ≥2 nine-fold centres
+spread over the sphere, *then* no global rotation relates them all. That does not follow. A wheel
+placed at a site of order *d* keeps the placement globally symmetric whenever its motif is
+invariant under the site's rotations — it needs C_d ⊂ C₉, i.e. **d dividing 9**, not d = 9. The
+polyhedral axis orders are {2, 3, 4, 5}, and the divisors of 9 among them are exactly {3}: the
+**3-fold axes of the icosahedral group are the unique sites that host 9-fold wheels
+symmetrically** — and they exist, ten axes, twenty poles: the dodecahedron vertices.
 
-**Therefore, conditionally:** *if* the design wants ≥2 nine-fold centres spread over the sphere —
-which this one does — *then* no global rotation relates them all, and the tiling must break global
-symmetry. This is why the maker "gives up radial symmetry": it is forced. (The condition matters:
-a single-axis 9-fold pendant would **not** need to break symmetry, and this doc's conclusion does
-not port to that easier object — survey §1, K10.)
+**The construction (M4, merged as bikar `d20e3f5`).** Each dodecahedron vertex's three neighbours
+sit at 120° of azimuth; a 9-star's tips step 40°; 120 = 3·40, so one spin aligns a tip at all
+three neighbours simultaneously. The 30 dodecahedral edges become exact tip-to-tip joins and the
+12 pentagonal faces close as **congruent 30-gon fillers, whole, forced by symmetry**. Verified
+numerically in `bikar:packages/core/tests/kernel3d/maclado-field.test.ts`: the orbit test
+constructs, for each of the 20 wheels, the global rotation relating it to the first and checks it
+maps the entire 180-tip set onto itself (tolerance 1e-6 mm), and the partition identity
+20·A_wheel + 12·A_filler = 4πR² holds to 9·10⁻¹⁵ relative — the wheels and fillers tile the
+sphere exactly, with the fillers' Girard areas computed through signed interior angles because
+each filler has ten reflex vertices.
 
-The escape hatch the symmetric world uses is to **change the star order**, and confirming this is
-what tells us our object is genuinely new. Kaplan's 3D-printed spherical star balls use **10- or
-12-point stars on a truncated icosahedron / dodecahedron** — never 9 — because those solids' sites
-admit 5/3/2 ([survey §4](research/maclado-orb-survey.md)). Choosing symmetry means abandoning 9;
-keeping 9 means abandoning symmetry. Of the sources surveyed, none offered both (survey §1, and the
-group theory says why). Historically the reconciliation has always been *one dimension down*:
-Bonner classes 9-pointed stars as strictly **non-systematic**, closed by irregular filler regions
-(the "9-and-12" lazo composites) — the same fix the maclado sphere uses (survey §4/§5).
+**What survives, precisely.** Each wheel's *site* symmetry is C₃, not C₉ — six of its nine tips
+are not equivalent to the other three under the global group, and a design demanding full-C₉
+sites must still break symmetry (there are none). And the maker's asymmetry still buys something
+real: his wheels pack densely with small fillers, while the symmetric field's fillers are
+wheel-sized (~19° angular radius, area ≈ 3.3× a wheel). What died is only — but exactly — the
+claim that **whole fillers force broken symmetry**. They don't; the symmetric field keeps them
+whole by construction. (The single-axis caveat from v1 still holds: a 9-fold pendant on one C₉
+axis never needed any of this — survey §1, K10.)
+
+The prior art reads differently in this light, and more sharply. Kaplan's 3D-printed spherical
+star balls use **10- or 12-point stars on a truncated icosahedron / dodecahedron** — the same
+divisor trick, played at full site order (5 divides 10; the site's whole symmetry survives in the
+star) ([survey §4](research/maclado-orb-survey.md)). Playing it with a **proper** divisor — a
+9-fold motif at a 3-fold site, most of the motif's symmetry sacrificed but not all — appears in
+none of the sources surveyed here: Kaplan never places 9, and Bonner classes 9-pointed stars as
+strictly **non-systematic**, closed by irregular filler regions (the "9-and-12" lazo composites)
+(survey §4/§5). Within that surveyed set, the M4 field is a new object: globally icosahedral,
+genuinely 9-fold wheels, whole congruent fillers.
 
 **"Maclado" names this precisely.** It is the Spanish for crystal *twinning*: local order in each
 domain composed into an aggregate whose symmetry is only that of the joining, and whose twin law
@@ -333,39 +363,59 @@ Every milestone lands in bikar first (branch → PR → merge), then surfaces in
 gallery + use-case map) once it produces a mesh. The ordering front-loads the parts that can *fail
 the concept*, so a dead end is found cheap.
 
-- **M1 — one wheel, numeric.** The rosette generator (§5.1) on a sphere: one 9-star, extruded,
-  welded, mesh-gated. *Verifies:* the numeric nonagon closes (5.1's validator) and a single 9-wheel
-  is a watertight shell. Proves the star before the field.
-- **M2 — two wheels, overlapped and welded.** Placement + rim overlap for a pair (§5.2). *Verifies:*
-  the join validator — contact points pair, the seam carries one ribbon. Proves the maclado weld
-  before the closure solver.
-- **M3 — the filler-closure solver (the hard part).** Close the region between placed wheels with
-  whole fillers (§5.3). *Verifies:* the per-filler congruence validator on a real patch. This is the
-  milestone most likely to be hard or to need the placement rule reconsidered; it is scheduled early
-  for that reason.
-- **M4 — the full field + ribbon parity.** Place the whole sphere and thread the woven ribbon (§5.4).
-  *Verifies:* global 2-colourability, and one watertight manifold over the whole sphere (5.5).
-- **M5 — print + gallery.** A `.bkr` source, an STL through the mesh gate, a gallery entry, a
+- **M1 — one wheel, numeric. ✅ Done** (bikar PR #85). The rosette generator (§5.1) on a sphere: one
+  9-star, extruded, welded, mesh-gated. *Verified:* the numeric nonagon closes (5.1's validator) and
+  a single 9-wheel is a watertight shell. Proves the star before the field.
+- **M2 — two wheels, overlapped and welded. ✅ Done** (bikar PR #86). Placement + rim overlap for a
+  pair (§5.2). *Verified:* the join validator — contact points pair, the seam carries one ribbon.
+  Proves the maclado weld before the closure solver.
+- **M3 — the filler-closure solver. ✅ Done** (bikar PR #87, `9352f76`). Close the region between
+  placed wheels with whole fillers (§5.3). *Verified:* the per-filler congruence validator on a real
+  three-wheel patch. Scheduled early because it looked most likely to fail the concept; it did not.
+- **M4 — the full field + ribbon parity. ✅ Done** (bikar PR #88, `d20e3f5`) — as the **symmetric
+  dodecahedral field**, per the staged decision (AskUserQuestion, 2026-08-08): 20 wheels on the
+  dodecahedron vertices via the divisor trick (§2, corrected), 30 exact tip-to-tip joins, 12
+  congruent 30-gon fillers whole by symmetry. *Verified:* every §5 validator on a full sphere —
+  30/30 joins, 12/12 filler congruence, the 20·A_wheel + 12·A_filler = 4πR² partition to 9e-15,
+  the 510-node/900-edge seam graph weaving watertight with 390 alternating crossings and 46 closed
+  strands, and one watertight genus-379 solid (`bikar:packages/core/tests/kernel3d/maclado-field.test.ts`).
+- **M4b — the asymmetric faithful field (follow-on, not started).** The maker's own regime: wheels
+  packed denser than any symmetric site set allows, whole *small* fillers found by search rather
+  than forced by symmetry. This is where §9.1's convergence risk actually lives — M4's symmetric
+  field never exercised it, because its placement is derived, not searched. *Will verify:* the same
+  §5 validators, on a field with no global group to lean on.
+- **M5 — print + gallery (next).** A `.bkr` source, an STL through the mesh gate, a gallery entry, a
   use-case row, and a print sheet stating the nozzle (§7). *Verifies:* the end-to-end path a visitor
   and a printer actually use.
 
-The gate on advancing past M3 is a decision point, not a formality: if no placement rule the survey
-permits yields whole fillers with a closable ribbon, the honest outcome is to record that in the
-decisions log and stop at a documented partial, not to ship a distorted-filler orb that fails its own
-§5.3 validator.
+The gate on advancing past M3 was a decision point, not a formality — and it resolved the cheap way
+for the symmetric field only: symmetry *derives* the placement, so no search was needed. For M4b the
+gate's original wording stands: if no placement rule the survey permits yields whole fillers with a
+closable ribbon, the honest outcome is a documented partial in the decisions log, not a
+distorted-filler orb that fails its own §5.3 validator.
 
 ---
 
 ## 9. Open questions and risks
 
-1. **The placement rule itself (highest risk).** We are inventing what §6 says we could not read.
-   The search may not converge to whole fillers on a full sphere; M3 is where that is discovered. The
-   fallback is a documented partial (a patch, not a sphere), not a relaxed validator.
+1. **The placement rule itself.** ~~Highest risk~~ — **answered by construction for the symmetric
+   field** (M4): the placement is derived from the icosahedral group via the divisor trick (§2,
+   corrected), so there was no search to converge. The risk as originally written — a search that
+   may not find whole fillers on a full sphere — is real but now lives entirely in **M4b**, the
+   asymmetric faithful field. The fallback there is unchanged: a documented partial (a patch, not a
+   sphere), not a relaxed validator.
 2. **Filler congruence tolerance.** §5.3 checks "congruent within tolerance"; the tolerance is a
    knob that trades printability against strictness and must be set from a render sweep, then
-   recorded — it is not asserted here.
-3. **Parity on an asymmetric field.** The woven family's parity solver assumed per-face structure;
-   whether it extends cleanly to an arbitrary welded seam graph (5.4) is unproven until M4.
+   recorded — it is not asserted here. (M4 used 1e-3 mm edge / 1e-4 rad angle and passed 12/12 with
+   symmetry-exact fillers, which exercises the machinery but not the knob — the symmetric field's
+   congruence is exact by construction, so the sweep question stays open for M4b.)
+3. **Parity on an asymmetric field.** ~~Unproven until M4~~ — **proven for arbitrary welded seam
+   graphs**: `weaveSphereGraph` takes any welded node/edge graph, and M4's 510-node/900-edge field
+   graph weaves watertight with 390 alternating crossings. The refusal path is tested by design: a
+   tangent-kiss crossing (two strands meeting an odd number of times at a node) throws rather than
+   silently flipping parity. What M4b adds is only a *bigger, irregular* instance of a solved
+   problem, plus the open possibility that an asymmetric field's seam graph contains a kissing
+   node — in which case the solver refuses loudly, which is the designed outcome.
 4. **The θ preference for a 9-star** (5.1) is deferred to a sweep; the doc exposes θ but does not
    claim a best value.
 
