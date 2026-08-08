@@ -2261,6 +2261,121 @@ would catch — the same *no skill/gate before the recurrence is measured* disci
 docs settled ([`issue-register-evaluation.md`](issue-register-evaluation.md),
 [`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md)).
 
+This holds for the **render**, which has a GPU in it. It does *not* hold for the metadata beside
+the render, which does not — and §16.5 draws that line precisely: the catalog of fixtures and the
+notes beside them are checked with no pixels at all, so that half *is* a pre-commit hook.
+
+---
+
+## 16. The colour gate, its notes, and the catalog they need — a middle strength that ports
+
+§15's two gates leave a gap, and it is exactly the one §14.5–§14.6 exist to close. Those sections
+gave each placement and each stud its own colour *so the parts read apart* — the whole point of
+D-026 was that an assembly must not render as one grey mass. But the two §15 gates cannot see a
+regression back into that mass: the counts are pure geometry and do not change when the colours
+collapse, and the golden pixels do not port (§15.3, K10), so on any backend whose goldens were
+never baked the picture gate is silent too. A model can go all-grey and pass both. This section
+adds the **middle** strength that catches it, the human-readable notes that sit beside it, and the
+GPU-free catalog gate that is the only one of the three that earns a pre-commit hook.
+
+### 16.1 The colour gate — classify to the model's own palette, so it ports where the pixels don't
+
+The gate reads each rendered PNG and classifies every pixel to the nearest colour in **the model's
+own palette plus the scene background** — not the whole LDConfig set, and not an exact-pixel match.
+That is the design choice that makes it survive a GPU it was never baked against: a lit or shadowed
+blue is still nearer to *this model's* blue than to its red, green, or the background, so it counts
+as blue on any backend, where a golden-pixel diff of the same frame would fail on an unfamiliar
+driver. The classifier is `colourCoverage` in `bikar:scripts/thumbnail-gate.ts`; it returns each
+palette colour's share of the foreground (the pixels nearer some colour than the background), so the
+shares are framing-independent and sum to one.
+
+Coverage is accumulated across the *set* of angles — a colour's score is its best coverage in any
+rendered view — and the colours that clear a small area floor (`--colour-min-area`, default 0.01)
+are the model's **observed visible set** (`visibleColours` in the same module). `--check` compares
+that observed set, with `setsEqual`, against a committed `visibleColours`. The one thing this gate
+cannot do is separate two palette colours that are themselves near-neighbours (the two greys); a
+model that emits both leans on the golden gate to tell them apart, which is one more reason the
+three strengths coexist rather than one replacing another.
+
+### 16.2 The expectation is the *visible* set, and occlusion is not a defect
+
+The committed expectation is deliberately a **subset** of the colours the read-back resolves, and
+getting this wrong is the trap the gate is built around. `Brick-Stack` resolves four colours — the
+lower brick's blue body and **yellow studs**, the upper brick's red body and green studs — but the
+lower brick's yellow studs are physically hidden under the upper brick in every angle. They are
+resolved in the geometry and visible in none of the renders, and that is correct, not a fault. A
+gate that asserted "every resolved colour must appear on screen" would false-fail on this fixture
+forever.
+
+So the visible set is **baked from a trusted backend**, exactly like the golden PNGs: `--update-goldens`
+writes the observed `visibleColours` into `<name>.expected.json` alongside the full `colours` the
+read-back resolves. `Brick-Stack.expected.json` records `colours` of four and `visibleColours` of
+three (green, blue, red; yellow correctly absent). The gate never derives the expectation from the
+read-back — that would re-introduce the false-fail — it derives it from what the trusted render
+actually showed.
+
+**Validator:** a `--check` run's colour half passes iff the observed visible set (colours clearing
+`--colour-min-area` in some angle, classified nearest-of-palette) equals the committed
+`visibleColours` by set identity.
+PASS: `Brick-Stack.mpd --check` on the committed goldens → the three visible colours (green, blue,
+red) are each well above the floor and yellow stays absent → `colours: PASS (3 visible, set matches)`.
+FAIL: the D-026 grey blob — the whole model renders as one grey mass — collapses green, red and blue
+onto a single near-background grey, so at least two of them fall to ~0 coverage and drop out of the
+observed set; the set no longer equals the committed `{green, blue, red}` and the run exits 1 **even
+though the counts still PASS and, on a backend whose goldens were never baked, the pixel gate would
+too.** This is the load-bearing case — the regression the other two strengths are blind to — and it
+is what the witness in `bikar:scripts/thumbnail-gate.test.mjs` freezes: a grey-blob frame leaves ≥2
+colours at zero and the set differs, while a genuinely differently-shaded blue still reads blue.
+
+### 16.3 The render notes — a human checklist, bound to the palette so it cannot drift
+
+Beside each fixture sits a `<name>.notes.md` — for the exercised model,
+`bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.notes.md`. It is what a person should be able to
+confirm by eye in the committed PNGs, beside the numbers: a colour legend that names every resolved
+colour (blue, yellow, red, green, with hexes and where each sits), the occluded yellow marked
+explicitly with the reason it is not in `visibleColours`, and a line per baked angle saying what it
+is *for* (`iso` reads proportions and the stud grid, `front` puts the coloured seam on screen,
+`below` shows the underside tubes — §15.1's disambiguation, written down per model). The notes are
+prose, but they are not free-floating prose: §16.4's gate binds them to the palette so they cannot
+quietly fall out of date.
+
+### 16.4 The catalog well-formedness gate — no pixels, so the half that earns a hook
+
+The render is skill-invoked because it needs a GPU (§15.4, D-028). The **catalog** — the `.mpd`
+fixtures and the metadata beside them — needs none, so it is the half that is safe to hook. The
+check is `bikar:scripts/thumbnail-catalog.test.mjs`, picked up wholesale by CI (`test:scripts`) and
+run as a fast local copy by `bikar:.husky/pre-commit` whenever a fixtures-dir file or the test itself
+is staged. It reads files, never renders, and holds three structural invariants: **pairing** (every
+`.mpd` has both an `expected.json` and a `.notes.md`, and no metadata is orphaned), **colour naming**
+(every colour the read-back resolves is named in that model's notes, so the palette cannot grow
+without the notes growing with it — the same catalog↔model coherence the W-F1 gate enforces), and
+**non-vacuity** (an empty catalog is a fail, not a vacuous pass).
+
+**Validator:** the catalog is well-formed iff `catalogViolations` returns empty — every `.mpd` is
+paired with an `expected.json` and a `.notes.md`, no `expected.json`/`.notes.md` is orphaned, and
+every hex in each model's `expected.json` `colours` appears in that model's notes.
+PASS: the committed fixtures — `Brick-Stack.mpd` with its `expected.json` and `notes.md`, all four
+resolved colours named in the notes → no violations, exit 0.
+FAIL: add a colour to `Brick-Stack.expected.json`'s `colours` (or add an `.mpd` with no notes) and
+the gate names the exact gap — *"read-back colour #… is resolved but not named in the notes"* — and
+exits 1. It is the **one** missing colour among otherwise-named ones that must fire: a lazy "are any
+colours named?" check passes the three-of-four case, so the witness builds precisely that catalog and
+asserts the fourth is reported — an aggregate cannot discharge a claim about every part. The hook's
+trigger includes deletions (`--diff-filter=D`), because a removed `.mpd` that strands its
+`expected.json` is exactly the orphan the pairing invariant exists to catch.
+
+### 16.5 Where the boundary sits — exactly at the GPU
+
+The three strengths and their enforcement now line up on one axis: does a GPU sit in the path? The
+**counts** (deterministic geometry) and the **colour set** (nearest-of-palette, shading-robust) both
+port across backends, which is why the colour gate can live in the on-demand `--check` beside the
+counts and mean the same thing everywhere. The **golden pixels** do not port (§15.3), which is why
+they stay soft and tolerant. And the **catalog** has no pixels at all, which is why it — and only it —
+graduates to a pre-commit hook. This is the same discipline as §15.4 and D-028, read one level finer:
+not "the render is a skill, full stop," but "the part with a GPU in it is a skill, and the part
+without one is a gate." The boundary is the GPU, stated so the next model added to the catalog
+inherits the right half of each.
+
 ---
 
 ## Appendix A — sources

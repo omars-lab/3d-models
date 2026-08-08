@@ -2095,3 +2095,64 @@ hold them to a committed expectation. It does **not** yet ship the `validate-ren
 skill (#108) or any pre-commit render gate (deferred by the third sub-decision), and it
 does not widen coverage past one exercised model — the goldens exist for `Brick-Stack`
 alone, and §10.6's "one of twelve viewers" caveat still stands for everything else.
+
+## D-029 — a third `--check` strength (the colour set) plus a GPU-free catalog gate, split at the GPU
+
+**Date:** 2026-08-08 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar (colour gate + `visibleColours` in `bikar:scripts/thumbnail-gate.ts`, the multi-material read-back fix in `bikar:packages/lab/src/ldraw-readback.ts`, PR [#83](https://github.com/NaqshCoffee/bikar/pull/83) → `6dba045`; per-model notes + catalog well-formedness test + hook, PR [#84](https://github.com/NaqshCoffee/bikar/pull/84) → `e8b07d5`), 3d-models (design doc §16, this entry, `validate-render` skill, use-case map)
+
+### Context
+
+D-028's `--check` has two strengths — hard counts, soft golden pixels — and D-026/D-027
+gave each placement and stud its own colour precisely so an assembly reads as distinct
+parts, not one grey mass. But nothing gated the parts *staying* distinct. The counts are
+pure geometry and do not move when the colours collapse; the goldens do not port across
+backends (D-028's K10), so on any machine whose goldens were never baked the pixel gate is
+silent too. A model can regress to an all-grey blob and pass both. The user asked whether we
+needed "a verification catalog of the visual aspects/checklist we expect to see in png per
+model … with all the appropriate hooks."
+
+### Decision
+
+Two sub-decisions, each settled with the user via AskUserQuestion.
+
+- **Checklist = a colour-presence gate plus per-model notes.** A third `--check` strength
+  classifies every foreground pixel to the nearest colour in **the model's own palette plus
+  the background** (not exact pixels, not the whole LDConfig set), accumulates each colour's
+  best coverage across the angle set, and compares the colours clearing a small area floor
+  (`--colour-min-area`, default 0.01) against a committed `visibleColours`. Nearest-of-palette
+  is what makes it **port across backends** where the goldens cannot — a shaded blue is still
+  blue — so it catches the grey blob on a machine the goldens were never baked for. The
+  expectation is deliberately the **visible** set, a subset of the resolved colours: a colour
+  can be wholly occluded in every angle (Brick-Stack's lower-brick yellow studs under the top
+  brick) with nothing wrong, so `visibleColours` is *baked* from a trusted backend by
+  `--update-goldens`, never derived from the read-back — the same discipline as the golden
+  PNGs. Landing it exposed and fixed a latent read-back bug: three's `LDrawLoader` gives a
+  multi-colour brick a material **array**, and the old single-material read reported an empty
+  palette for every multi-colour model. Beside each fixture, a `<name>.notes.md` names every
+  resolved colour (occluded ones marked), explains the `visibleColours` subset, and says what
+  each baked angle is for — the human half of the checklist.
+- **Hook boundary = catalog well-formedness only.** The render keeps a GPU in the path, so it
+  stays skill-invoked (D-028, §15.4) and the colour gate rides along in the on-demand `--check`.
+  What graduates to a pre-commit hook is the **catalog** — the fixtures and the metadata beside
+  them — which needs no pixels: `bikar:scripts/thumbnail-catalog.test.mjs` checks that every
+  `.mpd` is paired with an `expected.json` and a `.notes.md` (none orphaned), that every resolved
+  colour is named in that model's notes (so the palette cannot grow without the notes — the W-F1
+  coherence, ported), and that the catalog is non-empty. CI runs it wholesale (`test:scripts`);
+  `bikar:.husky/pre-commit` runs it on staged fixture changes, deletions included so a stranded
+  `expected.json` is caught as the orphan it is.
+
+### The line, stated so the next model inherits the right half (K10)
+
+The split is the GPU. **Counts** (deterministic geometry) and the **colour set**
+(nearest-of-palette, shading-robust) both port across backends and so mean the same thing
+everywhere — both live in `--check`. **Golden pixels** do not port and stay soft and tolerant.
+The **catalog** has no pixels at all and so is the only one that becomes a hook. Not "the render
+is a skill, full stop," but "the part with a GPU in it is a skill; the part without one is a gate."
+
+### What this resolves and what it does not
+
+It closes the grey-blob gap that counts and un-baked goldens both miss, and it binds the per-model
+notes to the palette so the human checklist cannot silently drift. It does **not** turn the render
+itself into a gate (still deferred, and still awaiting the measured recurrence D-028 requires), and
+it does not widen coverage past `Brick-Stack` — the catalog holds one model, and adding a second is
+the point at which the gate stops being about one fixture and starts being about the set.
