@@ -1,6 +1,9 @@
 # The 9-spike "maclado" orb — design doc
 
-Status: **v2 — M1–M4 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`).**
+Status: **v3 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
+#89 `eb4f19c`); M4b closed as a documented partial for the greedy chain rule (PRs #90 `856db18`,
+#91; [D-030](decisions-log.md)) — the walk's separations form a continuum no cut rule can
+quantize, so the asymmetric faithful field remains unbuilt and honestly so.**
 Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
 construction family, not a star-order substitute. Staging (AskUserQuestion, 2026-08-08, after M3
 and the pre-M4 validation pass): **symmetric field first** — M4 shipped the 20-wheel dodecahedral
@@ -379,7 +382,8 @@ the concept*, so a dead end is found cheap.
   30/30 joins, 12/12 filler congruence, the 20·A_wheel + 12·A_filler = 4πR² partition to 9e-15,
   the 510-node/900-edge seam graph weaving watertight with 390 alternating crossings and 46 closed
   strands, and one watertight genus-379 solid (`bikar:packages/core/tests/kernel3d/maclado-field.test.ts`).
-- **M4b — the asymmetric faithful field (in progress; step 1 done).** The maker's own regime:
+- **M4b — the asymmetric faithful field (documented partial for the greedy chain,
+  [D-030](decisions-log.md)).** The maker's own regime:
   wheels placed by search rather than by symmetry, whole *small* fillers found rather than forced.
   This is where §9.1's convergence risk actually lives — M4's symmetric field never exercised it,
   because its placement is derived, not searched. *Will verify:* the same §5 validators, on a field
@@ -403,9 +407,23 @@ the concept*, so a dead end is found cheap.
     filler search's whole burden, budgeted by an area report that is offered explicitly as an
     aggregate: it budgets the fillers and cannot accept them (acceptance stays per-tile, §5.3).
     (`bikar:packages/core/tests/kernel3d/maclado-spiral.test.ts`)
-  - *Remaining:* extract the inter-winding gap polygons, cluster them by §5.3 congruence (the
-    tolerance-knob sweep of §9.2), and either find a whole-filler set or record the documented
-    partial the gate below prescribes.
+  - *Step 2 shipped, and it settles the question for this rule* (bikar PR #91): the chain's
+    complement is one pinched region, so it is cut by a documented rule (§6, same status as
+    the walk): spherical Delaunay of the wheel centres, bridges between mutually nearest rim
+    vertices, one tile per hull triangle. The cut is verified hard — hull count 2·W−4 = 34
+    exactly, partition residual ~1e-9 mm² of ~30,773 mm², every rim vertex covered — because
+    the verdict it delivers is negative: **34 tiles fall into 33 congruence classes** at maker
+    tolerance, still 33 at 1000× looser (the §9.2 sweep), collapsing only at a tolerance that
+    equals the ring-size bucket count and carries no information. Cause pinned to the field,
+    not the cut: the 51 hull edges take **32 distinct centre distances** — the greedy walk
+    produces a continuum of separations, so no cutting rule could yield a small filler
+    vocabulary from it. Per the gate below, the outcome is the **documented partial**
+    ([D-030](decisions-log.md)), and the transfer condition for any successor rule is that it
+    must *quantize its separations* by construction
+    (`bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`).
+  - *Open follow-on (scope decision, user's):* whether a quantized-separation placement rule
+    (a discrete step word, a lattice-guided walk) is worth building, honestly framed as a new
+    search — the survey does not promise one exists.
 - **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
   `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
   (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates
@@ -435,13 +453,23 @@ distorted-filler orb that fails its own §5.3 validator.
    sphere), not a relaxed validator. *M4b step 1 narrows where the risk sits:* the chain search
    (§8) makes every wheel-to-wheel join exact by construction and never re-touches its own
    windings, so convergence is no longer about joins at all — it is entirely about whether the
-   inter-winding gap decomposes into a small congruence-class set of whole fillers. That question
-   is open and is exactly what M4b's remaining steps test.
+   inter-winding gap decomposes into a small congruence-class set of whole fillers. *M4b step 2
+   answered it for the greedy chain, and the answer is no:* 34 gap tiles fall into 33 congruence
+   classes, tolerance-robust across three decades, because the walk's wheel separations form a
+   continuum (32 distinct centre distances on 51 hull edges) that no cutting rule can quantize.
+   The documented-partial fallback fired as written — [D-030](decisions-log.md). The risk stays
+   open only for placement rules not yet built, and any successor must quantize its separations
+   by construction.
 2. **Filler congruence tolerance.** §5.3 checks "congruent within tolerance"; the tolerance is a
    knob that trades printability against strictness and must be set from a render sweep, then
    recorded — it is not asserted here. (M4 used 1e-3 mm edge / 1e-4 rad angle and passed 12/12 with
    symmetry-exact fillers, which exercises the machinery but not the knob — the symmetric field's
-   congruence is exact by construction, so the sweep question stays open for M4b.)
+   congruence is exact by construction, so the sweep question stayed open for M4b.) *M4b step 2
+   ran the sweep on the greedy chain's 34 gap tiles:* the class count is 33 at 1e-3 mm / 1e-4 rad
+   and **still 33 at 1 mm / 0.1 rad** — the verdict is tolerance-robust, and the knob's loose end
+   is its own by-design failure (at absurd tolerance the count collapses to the ring-size bucket
+   count, 6, which carries no information). The sweep is pinned in
+   `bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`.
 3. **Parity on an asymmetric field.** ~~Unproven until M4~~ — **proven for arbitrary welded seam
    graphs**: `weaveSphereGraph` takes any welded node/edge graph, and M4's 510-node/900-edge field
    graph weaves watertight with 390 alternating crossings. The refusal path is tested by design: a
