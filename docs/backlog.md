@@ -49,7 +49,7 @@ about bets that could be minted.
 | Bets settled by the machine card (MC-1…MC-7) | 9 <!--count:cal-bets-mc--> | 12 <!--count:cal-mc-records--> of the 17 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 9 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1) — but only 5 <!--count:cal-design-records--> records, because four of the nine have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 1 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
-| Entries in the prototype catalog | 30 <!--count:catalog-entries--> | 26 coupons (P1–P7, MC-1…MC-7, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
+| Entries in the prototype catalog | 31 <!--count:catalog-entries--> | 27 coupons (P1–P8, MC-1…MC-7, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
@@ -348,7 +348,7 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 30 <!--count:catalog-entries--> catalog entries = 30
+**Count: 31 <!--count:catalog-entries--> catalog entries = 31
 <!--count:catalog-entries--> print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
@@ -804,9 +804,10 @@ Five checks, run before shipping it, in the spirit of
   and unauthored. 17 <!--count:cal-records--> records = 12 <!--count:cal-mc-records--> on the
   card + 5 <!--count:cal-design-records--> on design coupons — four design-coupon bets (the mural pair and the
   brick-anchor pair) have a coupon but no bikar record yet, which is why the
-  record count does not track the bet count. 30 <!--count:catalog-entries--> print-gated items = 30 <!--count:catalog-entries--> catalog
-  entries — 26 coupons plus the four deliverables catalogued on 2026-08-03. The
-  magnet-pocket item in §3.7 is deliberately **outside** that 30: no design doc
+  record count does not track the bet count. 31 <!--count:catalog-entries--> print-gated items = 31 <!--count:catalog-entries--> catalog
+  entries — 27 coupons (P8, the Maclado orbs, joined 2026-08-08) plus the four
+  deliverables catalogued on 2026-08-03. The
+  magnet-pocket item in §3.7 is deliberately **outside** that 31: no design doc
   demands it, so counting it would inflate the register with work nobody has
   asked for. §3.7 says so in place rather than leaving the arithmetic to look
   wrong.

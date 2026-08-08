@@ -1,0 +1,23 @@
+# Maclado-9 — the 9-spike "maclado" wheel field (Family 3).
+# Ángel María Martín López's nine-fold wheel, placed by the divisor trick:
+# a 9-point wheel is C3-invariant (3 | 9), so its centre may sit on a
+# 3-fold icosahedral axis — the 20 dodecahedron vertices — and 120 = 3·40
+# aligns one tip at all three neighbours at once, making the 30
+# dodecahedral edges exact tip-to-tip joins with 12 congruent 30-gon
+# fillers. See 3d-models docs/maclado-orb-design.md (§2, corrected).
+# Render with: bikar render Maclado-9.bkr --format stl -o out.stl
+
+# strut_width 3 degenerates at radius 60 — the derived cap half-angle
+# (≈20.905°) gives unitMm ≈ 0.229, and width 3 insets the wheel's inner
+# triangles past their inradius. The kernel throws rather than emit
+# slivers, so the default and range here stay below that edge.
+param radius = 60 range 40..110 step 5
+param strut_width = 2 range 1.5..2.5 step 0.25 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+orb Maclado9
+  base wheelfield
+  radius $radius
+  wheel points 9 contact 0.5
+  place rule dodecahedral
+  struts width $strut_width depth $strut_depth

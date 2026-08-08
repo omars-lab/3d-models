@@ -1,0 +1,22 @@
+# Maclado-9-Weave — the 9-spike maclado field as woven ribbons (Family 1
+# treatment of the Family 3 field). The welded seam graph has 390
+# degree-4 crossings and 120 degree-2 free tips; every strand closes with
+# an even crossing count, so strict alternation is globally consistent —
+# 46 linked ribbon loops. See 3d-models docs/maclado-orb-design.md §5.4.
+# Render with: bikar render Maclado-9-Weave.bkr --format stl -o out.stl
+
+# Ribbon 1.2/1.2 with amplitude 0.8 is the tested combination from the
+# M4 field suite; amplitude must stay ≥ (ribbon_depth + 0.4) / 2 or
+# adjacent ribbons fuse silently (the mesh gate is per-tube).
+param radius = 60 range 40..110 step 5
+param amplitude = 0.8 range 0.8..1.6 step 0.1
+param ribbon_width = 1.2 range 0.8..2 step 0.1 advanced
+param ribbon_depth = 1.2 range 0.8..2 step 0.1 advanced
+
+orb Maclado9Weave
+  base wheelfield
+  radius $radius
+  wheel points 9
+  place rule dodecahedral
+  struts width $ribbon_width depth $ribbon_depth
+  weave crossing alternating amplitude $amplitude
