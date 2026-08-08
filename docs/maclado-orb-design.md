@@ -384,9 +384,16 @@ the concept*, so a dead end is found cheap.
   than forced by symmetry. This is where §9.1's convergence risk actually lives — M4's symmetric
   field never exercised it, because its placement is derived, not searched. *Will verify:* the same
   §5 validators, on a field with no global group to lean on.
-- **M5 — print + gallery (next).** A `.bkr` source, an STL through the mesh gate, a gallery entry, a
-  use-case row, and a print sheet stating the nozzle (§7). *Verifies:* the end-to-end path a visitor
-  and a printer actually use.
+- **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
+  `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
+  (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates
+  (`make orbs`: solid 86.8 cm³ genus-379 shell passes with only the sphere-tangency brim warning;
+  weave 8.6 cm³ passes with top-pole support warnings), gallery entries, use-case row UC22, and
+  the P8 print sheet stating the ~0.4 mm-class nozzle assumption (§7). *Verified:* the end-to-end
+  path a visitor and a printer actually use — 17 DSL-seam tests pin the M4 numbers through
+  `compileToGeometry`, including the by-design FAIL that a non-multiple-of-3 point count surfaces
+  the kernel's error rather than vanishing
+  (`bikar:packages/core/tests/kernel3d/wheelfield-orb.test.ts`).
 
 The gate on advancing past M3 was a decision point, not a formality — and it resolved the cheap way
 for the symmetric field only: symmetry *derives* the placement, so no search was needed. For M4b the
@@ -442,3 +449,14 @@ orb Maclado-9
 `wheelfield`, `wheel`, `place`, and `fill` are new; `radius`, `weave`, `struts`, and `project` are
 the existing orb statements. The `place rule` names the heuristic explicitly in the source, so the
 one thing we invented is the one thing the reader sees first.
+
+**As shipped (M5, bikar PR #89).** The sketch survived with four differences, each forced by what
+M4 actually built: `wheel points 9 contact 0.5` replaces `wheel Star-9` (the wheel is
+kernel-constructed, so it is named by its point count, not by a pattern reference); `place rule
+dodecahedral` replaces the spiral heuristic (the symmetric field derives its placement — the
+spiral rule belongs to M4b, which will extend this statement); `fill auto` is gone (filler closure
+is not optional, so it is not a statement); and `project` is refused rather than accepted (the
+field is born on the sphere — there is no flat polyhedron for `faceted` to keep). `inscribe` is
+likewise refused with an error saying the wheel is constructed, not inscribed. Shipped grammar:
+[bikar `docs/language-reference.md`, "base wheelfield — the maclado field (Family
+3)"](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).

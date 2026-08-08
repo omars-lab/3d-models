@@ -195,6 +195,45 @@ floor) — these prints test *reality*, not the mesh.
   |---|------|--------|----------|--------|----------|
 - **Feeds**: gallery photography of real prints; Lab machine-table notes.
 
+## P8 — Maclado orbs (Family 3: the 9-spike wheel field)
+
+- **Status**: planned (after P1 for the real min-strut answer; the weave
+  preset also wants P5's ribbon-gap answer first)
+- **Model**: `patterns/Orbs/Maclado-9.bkr` (genus-379 pierced shell, 20
+  nine-wheels on the dodecahedron vertices, struts 2 × 2.4, 86.8 cm³ at
+  R=60 → `build/stls/Maclado9.stl`, 9,312 tris) and
+  `patterns/Orbs/Maclado-9-Weave.bkr` (46 free ribbon loops over 390
+  alternating crossings, ribbon 1.2 × 1.2, amplitude 0.8, 8.6 cm³ →
+  `build/stls/Maclado9Weave.stl`, 7,200 tris). Design:
+  `docs/maclado-orb-design.md` §7.
+- **Print target**: TBD — **assumes a ~0.4 mm-class nozzle**. That is §7's
+  K10 condition, not a preference: the 2.0 mm unsupported-thin-wall default
+  is nozzle-relative, so a 0.2 or 0.8 mm nozzle shifts the floor and this
+  sheet must be re-derived before printing on one. Record machine/material/
+  nozzle/layer on first print. `--check print` findings to plan around:
+  the solid passes with the sphere-tangency F7 warning only (3.8 mm²
+  first-layer contact — brim or raft); the weave adds F3 mid-air ribbon
+  spans near the top pole (supports required) on top of the same F7.
+- **What we want to learn**:
+  - [ ] 1. Do the 2 mm struts survive as *unsupported* thin walls across the
+    wheel spans? §7's 2.0 mm default is a starting geometry, not a
+    measurement — this print is what graduates it into a calibrated bet,
+    or kills it.
+  - [ ] 2. The weave ribbon (1.2 mm) sits exactly on the mesh gate's FDM
+    floor: does it print at all, and do 390 crossings at amplitude 0.8 stay
+    free or fuse (the script's fusion bound: amplitude ≥
+    (ribbon_depth + 0.4) / 2)?
+  - [ ] 3. Do the twelve 30-gon filler windows print clean rims, or does the
+    wheel/filler boundary need a raised strut floor?
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `strut_width`/`ribbon_width`/`ribbon_depth`/`amplitude`
+  defaults in both Maclado `.bkr` scripts; §7's **Default** (graduation to
+  a `CAL-*` bet per the calibrate ceremony); the Lab weave/FDM notice if
+  maclado's numbers disagree with P5's.
+
 ---
 
 # Machine characterization card (MC-series)
