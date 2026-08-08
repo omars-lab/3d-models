@@ -1,9 +1,9 @@
 ---
 name: validate-render
-description: Turn an LDraw model (.mpd/.ldr) into a set of camera-angle PNGs and validate it against a committed expectation. Use when checking that a brick/assembly export still renders and reads back correctly, when regenerating a model's thumbnails, or before putting a render in a PR or the gallery — the tool renders several angles because one view of stacked bricks cannot show how many there are, and gates them by exact counts plus tolerant golden pixels.
+description: Turn an LDraw model (.mpd/.ldr) into a set of camera-angle PNGs and validate it against a committed expectation. Use when checking that a brick/assembly export still renders and reads back correctly, when regenerating a model's thumbnails, or before putting a render in a PR or the gallery — the tool renders several angles because one view of stacked bricks cannot show how many there are, and gates them by exact counts, a visible-colour set, and tolerant golden pixels.
 ---
 
-# Validate a render — a `.mpd` to a *set* of PNGs, gated two ways
+# Validate a render — a `.mpd` to a *set* of PNGs, gated three ways
 
 The tool is bikar's `bikar:scripts/render-ldraw-thumbnails.ts` (D-028,
 [`docs/decisions-log.md`](../../../docs/decisions-log.md); spec in
@@ -49,12 +49,23 @@ committed expectation, and the two halves are **deliberately unequal**:
   thing a picture cannot establish (how many parts, placed where) is exactly what the counts pin,
   exactly. An aggregate cannot discharge this — a single changed field, a CCW→CW winding flip, or
   a changed part hash must fail, and the witness freezes that.
+- **The colour set is the middle gate — and it ports.** Every foreground pixel is classified to the
+  nearest colour in *the model's own palette plus the background* (not exact pixels, not the whole
+  LDConfig set), each colour's best coverage is accumulated across the angle set, and the colours
+  clearing a small area floor (`--colour-min-area`, default 0.01) are compared as a *set* against a
+  committed `visibleColours`. Because it is nearest-of-palette, a shaded blue still reads blue, so
+  this gate — unlike the pixels — **catches the D-026 grey blob on a backend whose goldens were never
+  baked** (§16). The expectation is the *visible* set, deliberately a subset of the resolved colours:
+  a colour can be wholly occluded in every angle (Brick-Stack's lower-brick yellow studs under the
+  top brick) with nothing wrong, so `visibleColours` is baked by `--update-goldens`, never derived
+  from the read-back. `colours: PASS (3 visible, set matches)` is the good line; a differing set names
+  what is missing or unexpected.
 - **Golden pixels are the soft gate.** A render is GPU/driver dependent, so the differing-pixel
   fraction is compared against a small `--tolerance` (default 0.02), not against zero. A one-pixel
   wobble passes; a materially different frame fails. A size mismatch is a hard fail (not a
   swallowable ratio).
 
-Exit 0 means both passed; nonzero prints which gate fired.
+Exit 0 means all three passed; nonzero prints which gate fired.
 
 **The load-bearing case — read it, don't skip it.** If `--check` reports `counts` failing while
 every angle's pixels still pass, that is the tool working, not a flake: an emitter change added or
@@ -63,8 +74,32 @@ counts pass — is usually the backend, not the model (see K10 below).
 
 **Update goldens (`--update-goldens`).** Only after a render legitimately changed (an intended
 emitter change, verified by reading the new counts), and **only on the same backend that will
-validate against them** (see K10). Writes `<name>.expected.json` + the angle PNGs as the new
-goldens. Commit them with the change that caused them.
+validate against them** (see K10). Writes `<name>.expected.json` (including the baked
+`visibleColours` — the colour gate's expectation is *baked from a trusted backend*, exactly like
+the golden PNGs, never auto-derived from the render, or occlusion would false-fail it) + the angle
+PNGs as the new goldens. Commit them with the change that caused them, and update the model's
+`.notes.md` in the same commit if the visible palette changed — the catalog gate (below) will
+otherwise block the commit.
+
+## The notes and the catalog they belong to
+
+Each model carries a committed `<name>.notes.md` beside its `.mpd` and `.expected.json` — a plain
+colour legend (every resolved hex named, with where it sits and whether it is visible or occluded)
+and a per-angle description of what the picture should show. The notes are the human-readable half
+of the expectation: `visibleColours` says *which* colours a correct render shows, the notes say
+*why*, and the occlusion note is what stops the next person from "fixing" a deliberately-absent
+colour. Brick-Stack's notes name all four resolved hexes and explain that the lower brick's yellow
+studs are occluded under the top brick in every angle, so `visibleColours` is three, not four.
+
+**The catalog is gated, the render is not.** `bikar:scripts/thumbnail-catalog.test.mjs` is the
+GPU-free half — it reads the fixtures directory and holds it to three structural invariants that
+need no pixels: every `.mpd` has both an `.expected.json` and a `.notes.md` (no uncatalogued
+model, no orphaned metadata), every resolved colour is named in the notes (the same catalog↔model
+coherence the W-F1 gate enforces), and the catalog is non-empty (a vacuous pass is not a pass).
+Because it never renders, it runs in bikar CI (`test:scripts`) **and** in the pre-commit hook —
+the only half of `--check` that graduates to a gate, because it is the only half with no GPU and
+no backend fragility in the path. Adding a model without its notes, or growing a model's palette
+without naming the new colour, fails the commit.
 
 ## K10 — the condition under which the goldens are valid
 
@@ -96,5 +131,11 @@ recurrence — record it and propose the gate then, not before.
 - `--update-goldens` changes committed truth: do it only for a verified, intended change, name the
   change in the commit, and never to make a red `--check` go green without understanding why it was
   red.
-- The fixture `bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.mpd` and its three goldens are
-  the one exercised model; §10.6's "one of twelve viewers" caveat still stands for everything else.
+- The colour gate expects the *visible* set, not the resolved set — an occluded colour belonging
+  in `.notes.md` but not `visibleColours` is correct, not a bug. Never add an occluded colour to
+  `visibleColours` to "complete" it; that is what false-fails the next render.
+- When a model's palette changes, update its `.notes.md` in the same commit — the catalog gate
+  (CI + pre-commit) blocks a resolved colour the notes never name.
+- The fixture `bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.mpd` and its goldens, notes, and
+  expectation are the one exercised model; §10.6's "one of twelve viewers" caveat still stands for
+  everything else.
