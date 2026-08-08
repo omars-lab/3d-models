@@ -379,11 +379,33 @@ the concept*, so a dead end is found cheap.
   30/30 joins, 12/12 filler congruence, the 20·A_wheel + 12·A_filler = 4πR² partition to 9e-15,
   the 510-node/900-edge seam graph weaving watertight with 390 alternating crossings and 46 closed
   strands, and one watertight genus-379 solid (`bikar:packages/core/tests/kernel3d/maclado-field.test.ts`).
-- **M4b — the asymmetric faithful field (follow-on, not started).** The maker's own regime: wheels
-  packed denser than any symmetric site set allows, whole *small* fillers found by search rather
-  than forced by symmetry. This is where §9.1's convergence risk actually lives — M4's symmetric
-  field never exercised it, because its placement is derived, not searched. *Will verify:* the same
-  §5 validators, on a field with no global group to lean on.
+- **M4b — the asymmetric faithful field (in progress; step 1 done).** The maker's own regime:
+  wheels placed by search rather than by symmetry, whole *small* fillers found rather than forced.
+  This is where §9.1's convergence risk actually lives — M4's symmetric field never exercised it,
+  because its placement is derived, not searched. *Will verify:* the same §5 validators, on a field
+  with no global group to lean on.
+  - *Why the search walks a chain, counted rather than asserted:* a placed wheel has 3 DOF
+    (2 centre + 1 spin) and an exact tip-to-tip join imposes 3 constraints, so with the global θ
+    knob and the 3-DOF rotation gauge a join graph is generically solvable only while
+    3·J ≤ 3·W − 2; a covering field needs J ≥ 3W/2. M4's field (90 constraints on 61 DOF) closes
+    only because icosahedral symmetry makes the excess degenerate — an asymmetric field gives that
+    up, so its exactly-joined subgraph must stay sparse: a **chain** (J = W−1), solvable one link
+    at a time, with all closure burden on the fillers.
+  - *Step 1 shipped* (bikar PR #90, `856db18`): `placeSpiralChain` — a documented greedy rule
+    (ours, not the maker's, per §6): each wheel's tip 0 aims back along the chain, candidate tips
+    are tried in CCW order (sharpest turn first), first non-overlapping cap wins; every link is
+    exact by construction and still run through the §5.2 validator. Measured, not hoped: at M4's
+    own angle (θ ≈ 20.905°) the chain places **19 wheels — one fewer than the icosahedral 20**, so
+    the greedy rule loses to symmetry at symmetry's own angle; what it buys is that θ is a free
+    knob at all (38 wheels at θ = 15°). Zero incidental welds and zero exact-touch near misses at
+    every probed angle: the windings never re-touch, so M4b fillers will have **free edges, not
+    welds** — the inter-winding gap (≈68% of the sphere by star-rim area at the M4 angle) is the
+    filler search's whole burden, budgeted by an area report that is offered explicitly as an
+    aggregate: it budgets the fillers and cannot accept them (acceptance stays per-tile, §5.3).
+    (`bikar:packages/core/tests/kernel3d/maclado-spiral.test.ts`)
+  - *Remaining:* extract the inter-winding gap polygons, cluster them by §5.3 congruence (the
+    tolerance-knob sweep of §9.2), and either find a whole-filler set or record the documented
+    partial the gate below prescribes.
 - **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
   `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
   (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates
@@ -410,7 +432,11 @@ distorted-filler orb that fails its own §5.3 validator.
    corrected), so there was no search to converge. The risk as originally written — a search that
    may not find whole fillers on a full sphere — is real but now lives entirely in **M4b**, the
    asymmetric faithful field. The fallback there is unchanged: a documented partial (a patch, not a
-   sphere), not a relaxed validator.
+   sphere), not a relaxed validator. *M4b step 1 narrows where the risk sits:* the chain search
+   (§8) makes every wheel-to-wheel join exact by construction and never re-touches its own
+   windings, so convergence is no longer about joins at all — it is entirely about whether the
+   inter-winding gap decomposes into a small congruence-class set of whole fillers. That question
+   is open and is exactly what M4b's remaining steps test.
 2. **Filler congruence tolerance.** §5.3 checks "congruent within tolerance"; the tolerance is a
    knob that trades printability against strictness and must be set from a render sweep, then
    recorded — it is not asserted here. (M4 used 1e-3 mm edge / 1e-4 rad angle and passed 12/12 with
