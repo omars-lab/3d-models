@@ -1,9 +1,12 @@
 # The 9-spike "maclado" orb — design doc
 
-Status: **v3 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
+Status: **v4 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
 #89 `eb4f19c`); M4b closed as a documented partial for the greedy chain rule (PRs #90 `856db18`,
 #91; [D-030](decisions-log.md)) — the walk's separations form a continuum no cut rule can
-quantize, so the asymmetric faithful field remains unbuilt and honestly so.**
+quantize; M4c measured the quantized-lattice successor (PR #92 `ec4518b`;
+[D-031](decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
+[D-032](decisions-log.md)) — tangency touches, overlap weaves, and a shippable woven orb is a
+new decision neither spike has taken.**
 Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
 construction family, not a star-order substitute. Staging (AskUserQuestion, 2026-08-08, after M3
 and the pre-M4 validation pass): **symmetric field first** — M4 shipped the 20-wheel dodecahedral
@@ -369,9 +372,14 @@ the concept*, so a dead end is found cheap.
 - **M1 — one wheel, numeric. ✅ Done** (bikar PR #85). The rosette generator (§5.1) on a sphere: one
   9-star, extruded, welded, mesh-gated. *Verified:* the numeric nonagon closes (5.1's validator) and
   a single 9-wheel is a watertight shell. Proves the star before the field.
-- **M2 — two wheels, overlapped and welded. ✅ Done** (bikar PR #86). Placement + rim overlap for a
-  pair (§5.2). *Verified:* the join validator — contact points pair, the seam carries one ribbon.
-  Proves the maclado weld before the closure solver.
+- **M2 — two wheels, joined tangent. ✅ Done, and narrower than its own title** (bikar PR #86).
+  Placement + join for a pair (§5.2). *Verified:* the join validator — contact points pair, the
+  seam carries one ribbon. Proves the maclado weld before the closure solver.
+  *Narrowing recorded 2026-08-11 ([D-032](decisions-log.md)):* what M2 shipped is the **tangent**
+  reading of §5.2 — centre separation exactly 2θ, one tip-to-tip contact point — not the
+  overlapping rim *arcs* the section describes, and this bullet's original title ("overlapped and
+  welded") asserted the spec, not the implementation. Every milestone through M4c built inside the
+  tangent branch; the overlap reading is measured in **M4d** below.
 - **M3 — the filler-closure solver. ✅ Done** (bikar PR #87, `9352f76`). Close the region between
   placed wheels with whole fillers (§5.3). *Verified:* the per-filler congruence validator on a real
   three-wheel patch. Scheduled early because it looked most likely to fail the concept; it did not.
@@ -451,6 +459,31 @@ the concept*, so a dead end is found cheap.
   solidify/seam/weave machinery consumes it, and whether a lattice-walk orb is worth
   *shipping* (mold economy vs. the full field's 1-class vocabulary) is a separate scope
   decision the measurements above now inform.
+- **M4d — the overlap spike. ✅ Done, and overlap weaves where tangency only touches** (bikar PR
+  #93; [D-032](decisions-log.md)). Prompted by the maker's 2026-08-11 photo and the user's verdict
+  that our orb "looks nothing like" the reference: the root cause is M2's tangent narrowing of
+  §5.2 (see the note on M2 above). The instrument
+  (`bikar:packages/core/src/kernel3d/maclado-overlap.ts`) finds transversal great-arc crossings
+  between two placed wheels' rim outlines, and `checkOverlapWeld` is §5.2's validator in the
+  overlap sense — PASS: an even count (≥2) of transversal crossings, clear of rim vertices, weld
+  nodes at least a strut width apart; FAIL by design: M2's own joined pose, which
+  `checkWheelJoin` accepts but which has exactly **one** degenerate vertex contact — odd parity,
+  impossible for two closed curves in general position, so tangency is a touch, not a weave.
+  Measured at R=60 with 2 mm struts: three pair regimes (tangent touch / tip-aligned overlap with
+  exactly 2 transversal ≈38° crossings on the facing spikes' flanks / gear mesh — offset spins
+  interleave into the neighbour's valleys with zero contact down to ~80% of the join separation,
+  so overlap inherits the tangent branch's ~±8° phase window rather than escaping it). At field
+  scale, growing the M4 caps by ρ ≈ **1.15–1.25** (sites and spins unchanged) puts all 30
+  adjacent pairs in the 2-crossing regime: 60 degree-4 weld nodes for §5.4's parity solver, no
+  degree-6 triple points (inter-pair clearance >35 mm), second-neighbour rims never touching;
+  below the window the tip-cross nodes fuse under the strut width, and by ρ=1.30 the regime
+  changes while the cap-area sum passes 100% of the sphere
+  (`bikar:packages/core/tests/kernel3d/maclado-overlap.test.ts`).
+  What M4d does **not** claim: no welded mesh exists — the crossings are mid-surface rim nodes,
+  welding them into a printable ribbon needs the Family-1 radial over/under sweep or a geometric
+  boolean, and §5.5's manifold gate is combinatorial, blind to whether interpenetrating shells
+  were actually welded. That build is the next milestone-sized decision, and these are its input
+  numbers.
 - **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
   `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
   (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates

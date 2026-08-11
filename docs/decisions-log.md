@@ -2262,3 +2262,70 @@ solidify, seam-graph, or weave machinery consumes lattice walks, and the 18-whee
 4-class vocabulary still trades against the full field's 1-class one. Whether a partial
 lattice orb is worth *shipping* is a new scope decision, now an informed one; until then
 the shipped maclado remains the symmetric M4/M5 field.
+
+## D-032 — the overlap branch measured: tangency touches, overlap weaves, both need phase
+
+**Date:** 2026-08-11 (user decision and measurement, same day) · **Status:** Decided (spike built and measured; welding into a mesh deliberately not attempted) · **Repos:** bikar (overlap instrument + validator + witness tests, PR [#93](https://github.com/NaqshCoffee/bikar/pull/93)), 3d-models (design doc §8 M4d + the M2 narrowing note, this entry, use-case map)
+
+### Context
+
+On 2026-08-11 the maker, Ángel María Martín López, posted a new photo of the 9-spike
+maclado ribbon sphere, and the user's verdict on our shipped orb was direct: *"our orb
+looks nothing like this."* The diagnosis held up: design §5.2 specifies the maclado move as
+wheels that **overlap at the rim** — "a shared rim arc is welded so a ribbon entering one
+wheel continues into its neighbour" — but M2 implemented the *tangent narrowing* of that
+spec: centre separation exactly 2θ, a single tip-to-tip contact point. §8 then marked M2
+"overlapped and welded ✅ Done", and every later milestone (M3 fillers, M4 field, M4b
+chain, M4c lattice) built inside the tangent branch without reopening the reading. That is
+a K1-shaped narrowing of our own spec — the qualifier "overlapping rim **arcs**" quietly
+became "touching rim **points**" — and it is why the shipped orb reads as separated stars
+with large fillers while the reference reads as interpenetrating stars with no designed
+fillers at all. The user chose (AskUserQuestion, 2026-08-11) a bounded overlap spike before
+any orb commitment, M4c discipline: instrument first, measure, record.
+
+### Decision
+
+Spike run (`bikar:packages/core/src/kernel3d/maclado-overlap.ts`). The instrument finds
+transversal great-arc crossings between two placed wheels' 18-segment rim outlines —
+transversality angle and rim-vertex clearance per crossing — and `checkOverlapWeld` is
+§5.2's validator in the overlap sense: PASS requires an even count (≥2) of transversal
+crossings, none through a rim vertex, and weld nodes at least a strut width apart. The
+by-design FAIL is M2's own canonical joined pose: `checkWheelJoin` accepts it (the contact
+is real) while the overlap validator counts exactly **one** degenerate vertex contact —
+odd parity, which two closed curves in general position cannot have. Contact is an
+aggregate; a weave needs transversal crossings, and the tangent branch has none.
+
+Measured at R=60 with 2 mm struts, pinned by 10 tests
+(`bikar:packages/core/tests/kernel3d/maclado-overlap.test.ts`):
+
+- **Three pair regimes.** Tangent (separation 2θ): one vertex contact, not a weave.
+  Tip-aligned overlap: exactly **2 transversal crossings ≈38°** where the facing spikes'
+  flank edges pass through each other — the X of the reference photos. Gear mesh (spin
+  more than ~±8° off tip alignment at 85% separation): the spikes interleave into the
+  neighbour's valley notches with **zero** contact, down to ~80% of the join separation.
+  Overlap therefore *inherits* the tangent branch's phase discipline rather than escaping
+  it — the spin window is narrow either way.
+- **A field-scale window exists and is comfortable.** Growing the M4 field's caps by
+  ratio ρ (site lattice unchanged, so every placement survives): ρ ≈ **1.15–1.25** puts
+  all 30 adjacent pairs in the clean 2-crossing regime — 60 degree-4 weld nodes (exactly
+  what §5.4's parity solver accepts), inter-pair node clearance >35 mm so no degree-6
+  triple points arise, and second-neighbour rims never touch anywhere in the swept range.
+  Below the window the two nodes of a tip-cross fuse (0.76 mm apart at ρ=1.05, under the
+  2 mm strut width); by ρ=1.30 the regime changes (10 crossings per pair, clearances
+  collapse to 0.39 mm). At ρ=1.25 the cap-area sum passes 100% of the sphere — the dense
+  look of the reference — while the weave is still one X per dodecahedral edge.
+
+### What this resolves and what it does not
+
+It settles that the overlap branch is *geometrically cheap where it was feared expensive*:
+no search (the M4 sites and spins carry over unchanged), no triple points, a wide ρ
+window, and a validator that cleanly rejects both the tangent touch and the gear mesh. It
+does **not** ship a woven orb: the crossings are mid-surface rim nodes, and welding them
+into a printable ribbon needs either the Family-1 radial over/under sweep or a geometric
+boolean — and §5.5's manifold gate is combinatorial, so it cannot see whether two
+interpenetrating shells were actually welded (the woven family exploits exactly that).
+Building the welded crossing mesh is the next milestone-sized decision, now an informed
+one; its input numbers are the window above. The dense multi-ring look of the reference
+(second-neighbour crossings, incidental faces) starts past ρ=1.30 and is measured only as
+"regime change" here — going there is a separate, larger step this spike deliberately did
+not take.
