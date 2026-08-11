@@ -421,9 +421,36 @@ the concept*, so a dead end is found cheap.
     ([D-030](decisions-log.md)), and the transfer condition for any successor rule is that it
     must *quantize its separations* by construction
     (`bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`).
-  - *Open follow-on (scope decision, user's):* whether a quantized-separation placement rule
-    (a discrete step word, a lattice-guided walk) is worth building, honestly framed as a new
-    search — the survey does not promise one exists.
+  - *Open follow-on resolved:* the user chose to run the bounded spike (Option A, 2026-08-08,
+    [D-031](decisions-log.md)) — built and measured as **M4c** below.
+- **M4c — the quantized-separation spike. ✅ Done, and quantization delivers** (bikar PR #92,
+  `ec4518b`; [D-031](decisions-log.md)). D-030's transfer condition made concrete: a finite placement
+  *site* set quantizes separations by construction (the trap D-030 pinned — a finite
+  turn-angle menu does not, because 3D rotations do not commute — is dodged by quantizing
+  positions, not steps). The rule is a documented lattice walk
+  (`bikar:packages/core/src/kernel3d/maclado-lattice.ts`): a lowest-index-first DFS path
+  along the M4 field's dodecahedral adjacency, so every consecutive pair joins exactly by
+  the §2 divisor trick and every pairwise separation is drawn from the solid's **5-value**
+  distance table — against the greedy chain's 32-value continuum. Measured with the same
+  instrument, radius, and default tolerance as D-030: an 18-wheel walk cuts into **13 tiles
+  → 4 congruence classes** on 2 distinct separations; a 13-wheel walk gives 12 tiles → 6
+  classes; the full 20-site field closes the sweep at 12 tiles → 1 class. The walks are
+  asymmetric partial fields, so the small vocabulary is quantization's doing, not symmetry
+  in disguise. Making the lattice measurable required generalizing the §6 cut from one tile
+  per hull *triangle* to one tile per hull *face*: every supporting plane of a dodecahedral
+  vertex subset is a face plane of the solid (up to 5 coplanar sites), maximal degeneracy
+  for a triangle-only hull scan, so coplanar supporting triples group into one polygonal
+  face (deduplicated by member set — plane-key rounding splits one face under float dust).
+  *Verified:* the M4b verdict is unchanged under the generalized cut (34 tiles → 33 classes,
+  general-position centres still yield all triangles); Euler closes as W − E + F = 2; the
+  full-field tiles reproduce the 12 filler rings `buildMacladoField` constructs by an
+  independent route; and the by-design failure is load-bearing — a clustered 9-site walk
+  *fails* the partition residual (>1e3 mm²), the instrument's own validity gate, instead of
+  mis-measuring silently (`bikar:packages/core/tests/kernel3d/maclado-lattice.test.ts`).
+  What M4c does **not** claim: the walk is a spike instrument, not a shipped orb — no
+  solidify/seam/weave machinery consumes it, and whether a lattice-walk orb is worth
+  *shipping* (mold economy vs. the full field's 1-class vocabulary) is a separate scope
+  decision the measurements above now inform.
 - **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
   `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
   (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates
