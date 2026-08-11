@@ -2204,3 +2204,61 @@ close M4b's question for every permissible rule: the survey space still contains
 rules with quantized separations (discrete step words, lattice-guided walks), and whether one
 is worth building is a scope decision for the user, recorded in §8's M4b bullet as the open
 follow-on. The symmetric M4 field is untouched — it remains the shipped, fully validated orb.
+
+## D-031 — run the quantized-separation spike; the lattice walk collapses the vocabulary to 4 classes
+
+**Date:** 2026-08-08 (user decision) / 2026-08-11 (measured) · **Status:** Decided (Option A chosen by the user; spike built and measured) · **Repos:** bikar (lattice walk + generalized polygonal gap cut + witness tests, PR [#92](https://github.com/NaqshCoffee/bikar/pull/92)), 3d-models (design doc §8 M4c, this entry, use-case map)
+
+### Context
+
+D-030 left one open follow-on, explicitly the user's scope decision: whether a
+quantized-separation placement rule is worth building at all. A decision memo laid out
+three options — **A**, run a bounded spike that builds candidate quantized placement rules
+and measures them with D-030's own rule-agnostic instruments before committing to any
+solidify/mesh machinery; **B**, stop at the documented partial; **C** (named as not a real
+option), build a full successor rule straight to an orb. The memo carried D-030's trap
+forward as the load-bearing hazard: a finite *turn-angle* menu does not quantize
+non-adjacent separations, because 3D rotations do not commute — the greedy chain itself is
+the measured proof, since its steps already came from a finite alphabet and its separations
+still formed a 32-value continuum. Only a finite placement *site* set quantizes trivially.
+The user chose **A**.
+
+### Decision
+
+Spike run, and quantization delivers. The candidate rule reuses the M4 field's 20
+dodecahedral vertex sites as the finite point set
+(`bikar:packages/core/src/kernel3d/maclado-lattice.ts`): a lowest-index-first DFS walk
+along the field's adjacency, every consecutive pair joined exactly by the §2 divisor trick
+(no search, no near-misses), every pairwise separation drawn by construction from the
+solid's 5-value distance table. Measured with the same instrument, radius, and default
+tolerance that produced D-030's 33-class verdict:
+
+- **18-wheel walk: 13 tiles → 4 congruence classes** on 2 distinct hull-edge separations.
+- 13-wheel walk: 12 tiles → 6 classes on 4 separations.
+- Full 20-site field: 12 tiles → 1 class on 1 separation (the symmetric limit, for scale).
+- Greedy chain, unchanged control: 34 tiles → 33 classes on 32 separations.
+
+The walks are asymmetric partial fields — no global group — so the collapse is
+quantization's doing, not symmetry's. Getting the measurement at all required a real
+instrument fix: every supporting plane of a dodecahedral vertex subset is a face plane of
+the solid (up to 5 coplanar sites), so the M4b triangle-only hull cut mis-counts C(k,3)
+triangles per polygonal face. The cut now groups coplanar supporting triples into one hull
+*face* (deduplicated by member set, because plane-key rounding splits one face into several
+under float dust) and takes one tile per face; for centres in general position every face
+is a triangle, and the M4b tests pin that the chain's 34/33 verdict is byte-for-byte
+unchanged. Cross-checks: Euler W − E + F = 2 on every measured hull; the full-field tiles
+reproduce the 12 filler rings `buildMacladoField` constructs by an independent route; and
+the by-design failure is load-bearing — a clustered 9-site walk *fails* the partition
+residual (>1e3 mm², vs ~1e-10 for the valid walks), so the instrument rejects
+configurations it cannot faithfully cut instead of measuring them wrong
+(`bikar:packages/core/tests/kernel3d/maclado-lattice.test.ts`).
+
+### What this resolves and what it does not
+
+It closes D-030's open follow-on with evidence in the direction the K10 transfer condition
+predicted: a rule that quantizes separations by construction gets a small filler vocabulary
+without full symmetry. It does **not** ship an orb: the walk is a spike instrument — no
+solidify, seam-graph, or weave machinery consumes lattice walks, and the 18-wheel walk's
+4-class vocabulary still trades against the full field's 1-class one. Whether a partial
+lattice orb is worth *shipping* is a new scope decision, now an informed one; until then
+the shipped maclado remains the symmetric M4/M5 field.
