@@ -5,8 +5,8 @@ this project. Every physical number in every design doc here is either read out
 of someone else's literature or is an explicitly-labelled unmeasured default,
 and the generated bet registry agrees:
 [`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md) reads
-**19 <!--count:cal-bets--> registered bets · 17 <!--count:cal-records-->
-`Calibrated` records — 17 provisional, 0 measured · 8
+**19 <!--count:cal-bets--> registered bets · 19 <!--count:cal-records-->
+`Calibrated` records — 19 provisional, 0 measured · 6
 <!--count:cal-bets-no-record--> bets with no record in bikar**.
 
 Scope: this file sequences the work that is blocked on *owning a printer*, and
@@ -44,9 +44,9 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 19 <!--count:cal-bets--> | 18 with a coupon, 8 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, and the two text bets `CAL-TXT-01`/`CAL-TXT-02`) |
-| `Calibrated<T>` records | 17 <!--count:cal-records--> | all provisional, all listed in bikar's `.calibration-baseline.json` |
-| Bets settled by the machine card (MC-1…MC-7) | 9 <!--count:cal-bets-mc--> | 12 <!--count:cal-mc-records--> of the 17 <!--count:cal-records--> records |
+| Registered `CAL-*` bets | 19 <!--count:cal-bets--> | 18 with a coupon, 6 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, and the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`) |
+| `Calibrated<T>` records | 19 <!--count:cal-records--> | all provisional, all listed in bikar's `.calibration-baseline.json` |
+| Bets settled by the machine card (MC-1…MC-7) | 9 <!--count:cal-bets-mc--> | 14 <!--count:cal-mc-records--> of the 19 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 9 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1) — but only 5 <!--count:cal-design-records--> records, because four of the nine have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 1 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist" |
 | Entries in the prototype catalog | 31 <!--count:catalog-entries--> | 27 coupons (P1–P8, MC-1…MC-7, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 4 deliverables C1, C2, W1, W2 catalogued 2026-08-03 (§3.5). Count is the one `make validate-catalog` prints, not a hand tally |
@@ -88,8 +88,8 @@ plate names what it settles and what it releases.
 
 **Why first, and why nothing else can honestly go first.** The card measures the
 *(printer, material, nozzle, profile)* tuple once. 9 <!--count:cal-bets-mc--> of the
-19 <!--count:cal-bets--> registered bets and 12 <!--count:cal-mc-records--> of the
-17 <!--count:cal-records--> provisional records are settled by an MC-series coupon —
+19 <!--count:cal-bets--> registered bets and 14 <!--count:cal-mc-records--> of the
+19 <!--count:cal-records--> provisional records are settled by an MC-series coupon —
 seven of those bets on the six rungs above, and the two text bets on `MC-7`, which
 is catalogued but cannot be authored until bikar can emit text at all
 ([`text-emit-design.md`](text-emit-design.md) §8 T2). Four
@@ -801,7 +801,7 @@ Five checks, run before shipping it, in the spirit of
   `CAL-REG-01` LG-P1, `CAL-CLB-01` LG-P2, `CAL-ANC-01` + `CAL-INW-01` LG-B2,
   `CAL-FRM-01` W-P1) + 1 <!--count:cal-bets-no-coupon--> with no coupon (`CAL-STR-01`). The card's 9 are the seven
   on rungs MC-1…MC-6 plus `CAL-TXT-01`/`CAL-TXT-02` on `MC-7`, which is catalogued
-  and unauthored. 17 <!--count:cal-records--> records = 12 <!--count:cal-mc-records--> on the
+  and unauthored. 19 <!--count:cal-records--> records = 14 <!--count:cal-mc-records--> on the
   card + 5 <!--count:cal-design-records--> on design coupons — four design-coupon bets (the mural pair and the
   brick-anchor pair) have a coupon but no bikar record yet, which is why the
   record count does not track the bet count. 31 <!--count:catalog-entries--> print-gated items = 31 <!--count:catalog-entries--> catalog

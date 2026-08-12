@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**19 registered bets · 17 `Calibrated` records — 17 provisional, 0 measured · 8 bets with no record in bikar.**
+**19 registered bets · 19 `Calibrated` records — 19 provisional, 0 measured · 6 bets with no record in bikar.**
 
 ## Bets
 
@@ -35,8 +35,8 @@ is opened, clustered, and closed.
 | `CAL-ANC-01` | anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control | `LG-B2` | open — no record in bikar | — |
 | `CAL-INW-01` | printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) | `LG-B2` | open — no record in bikar | — |
 | `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
-| `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | open — no record in bikar | — |
-| `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | open — no record in bikar | — |
+| `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | provisional | `LABEL_RELIEF_MM_CAL` |
+| `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | provisional | `LABEL_CAP_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -62,8 +62,6 @@ named next print rather than an absence:
 - `CAL-CLB-01` — clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span · coupon `LG-P2`
 - `CAL-ANC-01` — anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control · coupon `LG-B2`
 - `CAL-INW-01` — printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) · coupon `LG-B2`
-- `CAL-TXT-01` — emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine · coupon `MC-7`
-- `CAL-TXT-02` — emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it · coupon `MC-7`
 
 ## Records
 
@@ -234,4 +232,18 @@ named next print rather than an absence:
 - **Value:** `12`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** A round number at roughly one-eighth of a 100 mm module — wide enough that the eye reads it as a margin, narrow enough not to dominate the field. Chosen, not measured: no frame has been printed, and "reads as intentional" is a raking-light judgement. Coupon W-P1 (2×2 frame pilot, band ladder) settles it.
+
+### `LABEL_RELIEF_MM_CAL` — `CAL-TXT-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/text-layout.ts`
+- **Value:** `0.6`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** Three layers at a 0.2 mm layer height. A round multiple of a layer, not a reading: no coupon has been printed, so neither the depth at which an engraved label catches enough shadow to read nor the height at which an embossed one survives handling is known. Coupon MC-7 carries both directions at three depths.
+
+### `LABEL_CAP_MM_CAL` — `CAL-TXT-02`
+
+- **Module:** `bikar/packages/core/src/kernel3d/text-layout.ts`
+- **Value:** `5`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** The height at which the §5 gap measurements were taken, and the smallest at which Source Code Pro Bold's thinnest stem (0.573 mm at this cap) stays above a 0.4 mm nozzle with margin. No label has been printed and no one has been asked to read one, so this is a geometry floor standing in for a legibility measurement. Coupon MC-7 carries the cap ladder that replaces it.
 
