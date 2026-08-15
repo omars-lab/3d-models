@@ -2329,3 +2329,65 @@ one; its input numbers are the window above. The dense multi-ring look of the re
 (second-neighbour crossings, incidental faces) starts past ρ=1.30 and is measured only as
 "regime change" here — going there is a separate, larger step this spike deliberately did
 not take.
+
+## D-033 — build the welded woven-overlap orb: the D-032 window holds, parity solves, 60 loops ship
+
+**Date:** 2026-08-15 (user decision; built same day) · **Status:** Decided (built, merged in bikar) · **Repos:** bikar (kernel module + DSL statement + preset + tests, PR [#94](https://github.com/NaqshCoffee/bikar/pull/94)), 3d-models (design doc §8 M4e, this entry, gallery entry, use-case map)
+
+### Context
+
+D-032 ended on a deliberate stop: the overlap instrument had measured the field-scale
+window (ρ ≈ 1.15–1.25 puts all 30 adjacent pairs in the clean 2-crossing weave, 60
+degree-4 weld nodes, no triple points) but no welded mesh existed, and building one was
+named "the next milestone-sized decision." The user took it — "build the welded
+woven-overlap orb" — which supersedes the older parked question of whether to ship a
+partial-lattice orb from D-031's spike. One risk was still open from §5.4: the parity
+solver had only ever run on the *tangent* field's seam graph (46 loops over 390
+crossings); whether the crossing network of the *grown* field admits a globally
+consistent over/under alternation — no odd cycle through the dodecahedral 5-rings — was
+unmeasured, and a negative answer would have killed the weave outright.
+
+### Decision
+
+Build it as a graph problem feeding the existing Family-1 sweep, not as a geometric
+boolean. `buildWovenOverlapGraph` (`bikar:packages/core/src/kernel3d/maclado-woven.ts`)
+re-judges the ratio with the D-032 instrument on entry — the refusals are the
+instrument's own, surfaced verbatim, and each is a by-design FAIL in the suite — then
+grows every wheel whole through its placement frame at the grown cap angle, splits each
+rim walk at its measured crossings, and interns everything in one 1e-3 mm pool so the
+two wheels sharing a crossing weld it into one degree-4 node. Two facts made this
+construction complete rather than approximate:
+
+- **The lift is the same lift.** The field's `placeWheelInFrame` at the grown unit and
+  the instrument's `reliftWheel` are both the gnomonic lift, pinned identical on the rim
+  to < 1e-9 mm — so the instrument's crossing points land exactly on the module's grown
+  rims and can be interned, not re-derived.
+- **Only rims interact.** The closest a neighbour's rim comes to a wheel's pole
+  (2θₜ − θ′ ≈ 16.7°) exceeds the valleys' cap angle (≈ 11.9°) throughout the window, so
+  interior lattice edges never need splitting.
+
+Measured (R=60, ribbon 1.2/1.2, amplitude 0.8; identical at ρ 1.15/1.20/1.25):
+**600 nodes, 1020 edges, degree histogram {2:180, 4:420}**, 60 crossing nodes. The
+parity risk resolved **positively**: the solver 2-colors the crossing network with no
+odd alternation cycle, and `weaveSphereGraph` sweeps **60 closed ribbon loops over 420
+alternating crossings** (360 interior + 60 rim welds) into a watertight aggregate-euler-0
+mesh — 4080 vertices, 8160 triangles, ~10.1 cm³ at ρ=1.2. The DSL seam is one contextual
+statement, `overlap <ratio>` on `base wheelfield`, requiring `weave` and a ratio strictly
+above 1, with the window judged by the kernel rather than the parser; the preset is
+`bikar:patterns/Orbs/Maclado-9-Overlap.bkr` and the published-surface count moved
+118 → 119 with its own provenance paragraph.
+
+### What this resolves and what it does not
+
+It closes the D-032 follow-on and discharges §5.4's open risk for the grown field — the
+weave exists, is globally consistent, and ships through the same DSL, gates and gallery
+path as the tangent-field orbs. It does **not** touch the dense multi-ring regime past
+ρ=1.30 (second-neighbour crossings, incidental faces), which stays measured only as
+"regime change," exactly as D-032 scoped it. And no woven-overlap print exists — the
+amplitude-vs-ribbon-depth fusing rule in the preset header and §7's nozzle-class
+condition are stated, unprinted bets, like every orb on the page. What would reverse the
+graph-first construction: a measured case inside the window where the swept ribbons
+physically intersect *between* crossings (the sweep is per-strand and the gate per-tube,
+so inter-strand collision is asserted by the ≥ (ribbon_depth + 0.4)/2 amplitude rule,
+not by a mesh check) — that would force the geometric-boolean branch this decision
+declined.

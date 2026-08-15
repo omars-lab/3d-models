@@ -1,12 +1,14 @@
 # The 9-spike "maclado" orb — design doc
 
-Status: **v4 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
+Status: **v5 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
 #89 `eb4f19c`); M4b closed as a documented partial for the greedy chain rule (PRs #90 `856db18`,
 #91; [D-030](decisions-log.md)) — the walk's separations form a continuum no cut rule can
 quantize; M4c measured the quantized-lattice successor (PR #92 `ec4518b`;
 [D-031](decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
-[D-032](decisions-log.md)) — tangency touches, overlap weaves, and a shippable woven orb is a
-new decision neither spike has taken.**
+[D-032](decisions-log.md)) — tangency touches, overlap weaves; M4e built the welded woven-overlap
+orb D-032 stopped short of (bikar PR #94; [D-033](decisions-log.md)) — the D-032 parity risk
+resolved positively, 60 ribbon loops over 420 crossings, shipped as
+`bikar:patterns/Orbs/Maclado-9-Overlap.bkr`.**
 Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
 construction family, not a star-order substitute. Staging (AskUserQuestion, 2026-08-08, after M3
 and the pre-M4 validation pass): **symmetric field first** — M4 shipped the 20-wheel dodecahedral
@@ -484,6 +486,33 @@ the concept*, so a dead end is found cheap.
   boolean, and §5.5's manifold gate is combinatorial, blind to whether interpenetrating shells
   were actually welded. That build is the next milestone-sized decision, and these are its input
   numbers.
+- **M4e — the welded woven-overlap orb. ✅ Done, and the D-032 parity risk resolves positively**
+  (bikar PR [#94](https://github.com/NaqshCoffee/bikar/pull/94); [D-033](decisions-log.md)).
+  The build M4d deliberately did not take, chosen by the user 2026-08-15.
+  `buildWovenOverlapGraph` (`bikar:packages/core/src/kernel3d/maclado-woven.ts`) judges the
+  ratio with the D-032 instrument first — refusing tangency (ρ=1.0, odd parity through a rim
+  vertex), fused weld nodes (ρ≈1.05, 0.76 mm apart under the 1.2 mm ribbon width; ρ≈1.30,
+  0.39 mm), each refusal a by-design FAIL in the suite — then re-lifts every wheel whole at the
+  grown cap angle (the gnomonic lift through the placement frame is identical on the rim to
+  M4d's `reliftWheel`, pinned < 1e-9 mm), splits each rim walk at its measured crossings, and
+  welds the 60 inter-wheel crossings into degree-4 nodes in one 1e-3 mm pool. The graph across
+  ρ 1.15/1.20/1.25: **600 nodes, 1020 edges, degree histogram {2:180, 4:420}** — interior
+  lattice edges never reach a neighbour's rim in the window (closest approach 2θₜ−θ′ ≈ 16.7°
+  exceeds the valleys' ≈ 11.9° cap angle), so the rim outlines are the only inter-wheel
+  interaction and splitting them is complete. §5.4's open question — could a dodecahedral
+  5-cycle make global alternation inconsistent? — is answered by construction: the parity
+  solver **succeeds**, and `weaveSphereGraph` sweeps **60 closed ribbon loops over 420
+  alternating crossings** (360 interior + the 60 rim welds) into a watertight aggregate-euler-0
+  mesh (`bikar:packages/core/tests/kernel3d/maclado-woven.test.ts`). The DSL seam is one
+  statement: `overlap <ratio>` on `base wheelfield`, requiring `weave` (the pierced shell has
+  no overlap construction) and a ratio strictly above 1, with the window judged by the kernel,
+  not the parser — the end-to-end by-design FAIL widens the preset's param range so the D-032
+  judgment itself is what refuses ρ=1.05
+  (`bikar:packages/core/tests/kernel3d/wheelfield-orb.test.ts`). Shipped as
+  `bikar:patterns/Orbs/Maclado-9-Overlap.bkr` (ρ=1.2 default, ribbon 1.2/1.2, amplitude 0.8).
+  What M4e does **not** claim: the dense multi-ring look past ρ=1.30 (second-neighbour
+  crossings) remains unbuilt, exactly as D-032 scoped it, and no physical print of the woven
+  overlap exists — §7's nozzle-class condition applies unprinted, like every orb here.
 - **M5 — print + gallery. ✅ Done** (bikar PR #89, `eb4f19c`; this repo's PR alongside). The
   `base wheelfield` grammar (Appendix A as-shipped note), two published `.bkr` presets
   (`bikar/patterns/Orbs/Maclado-9.bkr`, `bikar/patterns/Orbs/Maclado-9-Weave.bkr`), STLs through the mesh *and* print gates
