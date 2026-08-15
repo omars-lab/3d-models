@@ -84,9 +84,9 @@
     { "from": "G.index", "to": "G.studio", "at": "index.html:270", "evidence": "href=\"studio.html\"", "visibility": "static" },
     { "from": "G.index", "to": "G.lab",    "at": "index.html:304", "evidence": "href=\"lab.html\"",    "visibility": "static" },
     { "from": "G.index", "to": "G.lego",   "at": "index.html:322", "evidence": "href=\"lego.html\"",   "visibility": "static" },
-    { "from": "G.index", "to": "G.lab",    "at": "index.html:538", "evidence": "Open in Lab",          "visibility": "js-computed",
+    { "from": "G.index", "to": "G.lab",    "at": "index.html:541", "evidence": "Open in Lab",          "visibility": "js-computed",
       "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer" },
-    { "from": "G.index", "to": "G.lego",   "at": "index.html:538", "evidence": "Open in Lab",          "visibility": "js-computed",
+    { "from": "G.index", "to": "G.lego",   "at": "index.html:541", "evidence": "Open in Lab",          "visibility": "js-computed",
       "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none" },
 
     { "from": "G.readme", "to": "G.index", "at": "README.md:7",   "evidence": "https://blog.bytesofpurpose.com/3d-models/", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },

@@ -1,0 +1,30 @@
+# Maclado-9-Overlap — the welded woven-overlap orb (M4e, the D-032
+# follow-on): the 9-spike field grown past tangency so adjacent rims
+# CROSS, with ribbons woven over/under through the crossings — the
+# maker's-reference interpenetrating regime, not the tangent join. The
+# strand network has 420 degree-4 crossings (360 interior lattice + the
+# 60 rim-crossing weld nodes) and 180 free tips; it decomposes into 60
+# linked ribbon loops with globally consistent alternation. The kernel
+# judges the overlap ratio against the D-032 instrument and refuses one
+# whose crossings cannot weld (tangent touch at 1.0, fused weld nodes
+# below ~1.15 or past ~1.25 at this ribbon width). See 3d-models
+# docs/maclado-orb-design.md §5.2 and decision D-032.
+# Render with: bikar render Maclado-9-Overlap.bkr --format stl -o out.stl
+
+# Ribbon 1.2/1.2 with amplitude 0.8 is the tested combination from the
+# M4e suite; amplitude must stay ≥ (ribbon_depth + 0.4) / 2 or adjacent
+# ribbons fuse silently (the mesh gate is per-tube).
+param radius = 60 range 40..110 step 5
+param overlap = 1.2 range 1.15..1.25 step 0.01
+param amplitude = 0.8 range 0.8..1.6 step 0.1
+param ribbon_width = 1.2 range 0.8..2 step 0.1 advanced
+param ribbon_depth = 1.2 range 0.8..2 step 0.1 advanced
+
+orb Maclado9Overlap
+  base wheelfield
+  radius $radius
+  wheel points 9
+  place rule dodecahedral
+  struts width $ribbon_width depth $ribbon_depth
+  weave crossing alternating amplitude $amplitude
+  overlap $overlap
