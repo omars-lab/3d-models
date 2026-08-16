@@ -1,7 +1,11 @@
 # qiyas 3D validation for the wheelfield family — design doc
 
-Status: **v1 — design only, nothing built.** Q0 (this doc + its research) is the
-first milestone; Q1–Q6 in §8 are unstarted. Direction taken by the user on
+Status: **v1 — Q0–Q2 and Q4 done, Q3 in review, Q5–Q6 unstarted.** Q1 (cell
+views) merged as bikar `fe6a86c`; Q2 (ribbon views) is bikar PR #96; Q3 (the
+qiyas audit fixes) is qiyas PR #11; Q4's measurement is §7.1 and it changed the
+plan — it fired §7's validator and made the composite threshold this doc was
+going to record unrecordable, adding Q4a and Q4b in its place. Direction taken
+by the user on
 2026-08-15, after a scoping pass presented four open questions: build **both**
 representations (cell decomposition *and* stroked ribbons), cover **all three**
 Maclado presets, **fix** the qiyas defects that make the ribbon representation
@@ -418,10 +422,12 @@ inter-element spacing by a stated margin before any wheelfield threshold is
 recorded.
 - PASS: over all three presets, all three axes, and both representations, the
   minimum nearest-neighbour centroid separation among scoreable elements is at
-  least 2.5× the acceptance radius — the same margin the classic-orb geometry
-  had — and a deliberately perturbed ground truth (one element displaced by
-  slightly more than the radius) scores measurably worse than the unperturbed
-  one.
+  least 2.5× the acceptance radius — the margin implied by qiyas's own
+  justification for the constant, *not* a margin the classic orb was ever
+  measured to have; see §7.1, which measured it at 1.85× on one classic view
+  and corrects this sentence — and a deliberately perturbed ground truth (one
+  element displaced by slightly more than the radius) scores measurably worse
+  than the unperturbed one.
 - FAIL: any view whose minimum separation is below that margin, **or** a
   perturbation test in which displacing an element leaves the composite
   unchanged. The second is the hard case: it is how a vacuous pass announces
@@ -441,6 +447,90 @@ Deliberately absent: this doc states no default for either the wheelfield pass
 threshold or the `min_view_composite` floor. A number invented here and cited by
 Q6 would be a bare number wearing a citation, which is the K4 failure the
 repo's D3 rule exists to stop.
+
+### 7.1 Q4 result (measured 2026-08-15) — the validator fires on both arms
+
+Q4 ran, on all fifteen view/representation combinations the three presets and
+the classic control produce. The full method, tables and the three programs are
+checked in at
+[`docs/research/qiyas-scorer-acceptance-measurement.md`](research/qiyas-scorer-acceptance-measurement.md).
+The validator above **fails**, on both arms, and one of its own premises was
+wrong.
+
+**The spacing arm fails.** Nearest-neighbour centroid separation, in image
+diagonals, against a 0.0200 radius:
+
+| representation | views | min | median | share under the radius |
+|---|---|---|---|---|
+| classic orb cells (`Weave-Orb`) | 3 | 0.0370–0.0521 | 0.0512–0.0586 | 0% |
+| wheelfield cells (`Maclado-9`, `-Weave`) | 6 | 0.0121–0.0191 | 0.0197–0.0236 | 20–52% |
+| wheelfield ribbons (`-Weave`, `-Overlap`) | 6 | 0.0002–0.0025 | 0.0089–0.0105 | 86–95% |
+
+**And the premise was wrong.** The 2.5× margin above was written as the one
+"the classic-orb geometry had". Measured, `Weave-Orb`'s three view minima are
+1.85×, 2.61× and 2.42× the radius — two of three are under it. The 0.05 figure
+in qiyas's source describes inter-**face** spacing on the sphere; this doc
+ported it to nearest-neighbour **cell centroid** spacing in a projected view,
+where the rim foreshortens, and did not write the transfer sentence. That is a
+K10 defect in the section that sets the K10 test, and §7's PASS line has been
+corrected in place rather than quietly rewritten.
+
+**The perturbation arm fails.** Displacing one element by five times the
+acceptance radius — the hard case the FAIL line named — costs, in composite:
+0.0091–0.0200 on a 40–44-cell classic view, 0.0031–0.0058 on a 101–130-cell
+wheelfield view, and **0.0008–0.0011 on a 370–516-band ribbon view**. The
+composite dilutes as 1/n, and past the radius it saturates: 2× and 5× score
+identically on ten of twelve views, so the number is blind to *how* wrong the
+picture is once an element is out.
+
+Two further findings the arms did not ask for, both independent of wheelfields:
+
+- **Mis-pairing is real and starts at half the radius.** Displacing an element
+  toward its nearest neighbour swaps the assignment on every ribbon view at
+  0.5r, on the two densest wheelfield cell views at 0.9r, and on no classic
+  view inside the radius at all. The spacing statistic predicted the ordering
+  and the behaviour matched it on all fifteen views.
+- **`geometric` is not monotone in the defect.** On `WeaveOrb.face-3` and
+  `WeaveOrb.edge-2`, pushing an element to 2r *raises* the geometric score to a
+  perfect 1.0000, from 0.9888 and 0.9898 at 0.9r: past the radius the pair is
+  discarded and the mean is taken over the exact pairs that remain. Making the
+  defect worse improves one of the three numbers the report prints. This is a
+  property of the scorer, visible on the classic orb, and it is why a report
+  that shows `geometric` alone can point the wrong way.
+
+**So no composite threshold is recordable for these views, at any value.** Not
+0.95, not 0.99: every defect measured scored above 0.9942, most above 0.998.
+`--min-view-threshold` (D-f) keeps its report-only default, and the reason is
+now a measurement instead of a deferral. What replaces it is a count.
+
+**Validator:** a wheelfield view's gate must be a statistic that does not
+dilute with element count — an integer count of unmatched ground-truth
+elements, or a per-pair extreme — and never the composite alone.
+- PASS: the gate's statistic moves by at least one reporting unit when a single
+  element of the largest view (`Maclado-9-Overlap.vertex-3`, 516 bands) is
+  displaced past the acceptance radius. The unmatched count does: 0 → 1.
+- FAIL: a gate whose statistic is any of `composite`, `structural` or
+  `geometric` on their own. Measured on that same view, the composite moves
+  0.0008 for that displacement and `structural` moves 0.0019 — both smaller
+  than the fourth decimal place either is reported to, and `geometric` can move
+  the wrong way entirely.
+
+Still deliberately absent, and now for a stated reason: **the bound on
+`max_drift`.** Every number above compares ground truth against a perturbed
+copy of itself, so the clean per-pair drift is exactly 0.0000 by construction —
+not the floor a real gate must clear. What qiyas's encoder drifts by when it
+recovers bands from an actual rendered PNG is unmeasured, because the local
+`qiyas encode` CLI cannot run here (cairo is missing). Q5's first CI run
+encodes a real render; the bound is measured from that and recorded then.
+
+Two build items follow, both new:
+
+- **Q4a (qiyas).** Expose the per-part statistics `Scores` does not carry:
+  the count of ground-truth elements with no partner inside the radius, and
+  `max_drift`. Neither can be gated on until it is reported.
+- **Q4b (qiyas).** The acceptance radius must scale with the representation
+  rather than be one constant: 0.02 is 5–8× the ribbon field's own p05
+  spacing. What the scaling should be is not settled by this measurement.
 
 ---
 
@@ -476,10 +566,17 @@ the only orb fixture today is per-face closed filled polygons and there is no
 stroke fixture anywhere. Verifies §5's attribute-survival validator, plus one
 regression test per defect.
 
-**Q4 — measure before gating.** The spacing and perturbation measurements of §7,
-the composite distribution, and then — and only then — the recorded threshold and
-`min_view_composite` floor, with the distribution printed beside them. Verifies
-§7's acceptance-radius validator.
+**Q4 — measure before gating. ✅ done 2026-08-15; §7's validator fired.** The
+spacing and perturbation measurements ran on all fifteen view/representation
+combinations. §7.1 records the result: the acceptance radius does not transfer,
+the composite dilutes as 1/n, and **no threshold was recorded, because none is
+recordable** — the outcome this milestone was written to allow rather than the
+one it expected. `min_view_composite` therefore keeps its report-only default
+and the gate becomes a count. Two follow-ons fall out: **Q4a** (qiyas must
+expose the per-part statistics it does not carry) and **Q4b** (the radius must
+scale with the representation). Verified §7's acceptance-radius validator by
+failing it, which is the only way a validator with a hard FAIL case gets
+exercised at all.
 
 **Q5 — CI wiring.** No CI job in either repo runs `orb-validate` at either pinned
 revision; the eleven recorded composites came from a manual local Docker sweep,
@@ -567,6 +664,16 @@ that decides whether D-b's epsilon bound is needed at all.
 | qiyas | `3e547da` on `main`, pushed | working tree clean apart from two untracked skill directories; parser run in memory for D-a |
 | 3d-models | this branch | — |
 
+§7.1's measurement was taken later and at different revisions, because it had to
+run against the code Q1–Q3 shipped rather than the code they replaced:
+
+| Tree | Revision | Status at read |
+|---|---|---|
+| bikar | `cc66cd3` on `feat/orb-ribbon-views` | the PR #96 head — ribbon views must exist before their spacing can be measured |
+| qiyas | `17552cc` on `fix/orb-view-scoreable-split` | the PR #11 head — the scorer is the fixed one, so the numbers describe what will be on `main` |
+
 The full per-file read record, including which files were read versus executed,
 is the closing table of
-[the research file](research/qiyas-wheelfield-validation-survey.md).
+[the research file](research/qiyas-wheelfield-validation-survey.md); §7.1's is
+the header and appendix of
+[its own research file](research/qiyas-scorer-acceptance-measurement.md).
