@@ -1,12 +1,16 @@
 # qiyas 3D validation for the wheelfield family — design doc
 
-Status: **v1 — Q0–Q2 and Q4 done, Q3 in review, Q5–Q6 unstarted.** Q1 (cell
-views) merged as bikar `fe6a86c`; Q2 (ribbon views) is bikar PR #96; Q3 (the
-qiyas audit fixes) is qiyas PR #11; Q4's measurement is §7.1 and it changed the
-plan — it fired §7's validator and made the composite threshold this doc was
-going to record unrecordable, adding Q4a and Q4b in its place. Direction taken
-by the user on
-2026-08-15, after a scoping pass presented four open questions: build **both**
+Status: **v1 — Q0–Q4 and Q6 done, Q5 unstarted.** Q6 is done
+except for the one thing it cannot do alone: the three presets are registered,
+linked from the gallery and badged, but their composites stay `null` until Q5's
+job records one, and the badge says exactly that rather than implying a pass.
+Q1 (cell views) merged as bikar `fe6a86c`; Q2 (ribbon views) as bikar PR #96;
+Q3 (the qiyas audit fixes) as qiyas PR #11; Q6 as bikar PRs #97 and #98, with
+#99 clearing the e2e flake that blocked them. Q4's measurement is §7.1 and it
+changed the plan — it fired §7's validator and made the composite threshold this
+doc was going to record unrecordable, adding Q4a and Q4b in its place, both of
+which are qiyas work and neither of which is done. Direction taken by the user
+on 2026-08-15, after a scoping pass presented four open questions: build **both**
 representations (cell decomposition *and* stroked ribbons), cover **all three**
 Maclado presets, **fix** the qiyas defects that make the ribbon representation
 hard rather than route around them, and **build the CI wiring** that the
@@ -587,16 +591,26 @@ that a deliberately stale recorded composite **fails the job**. That by-design
 failure is the milestone's real exit condition — a wiring that only ever reports
 green has not been shown to be a tripwire at all.
 
-**Q6 — surface the presets.** Record a composite per preset; add the three
-registry entries; add `lab:` links to the three gallery cards; write the badge
-text that carries §6's limitation rather than eliding it. Two potholes found
-during scoping and fixed here: the knob guard that keeps weave amplitude clear
-of ribbon depth reads a parameter named `strut_depth`, so it silently no-ops on
-the weave presets, which name theirs `ribbon_depth`; and orbs have no
-registry-versus-patterns-directory sweep test, though the Lego presets do.
-Verifies: the guard fires on a Maclado preset (a case that must be shown failing
-before the fix), and the sweep test fails when a preset exists on disk and not
-in the registry.
+**Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](decisions-log.md).)*
+Record a composite per preset; add the three registry entries; add `lab:` links
+to the three gallery cards; write the badge text that carries §6's limitation
+rather than eliding it. Two potholes found during scoping and fixed here: the
+knob guard that keeps weave amplitude clear of ribbon depth reads a parameter
+named `strut_depth`, so it silently no-ops on the weave presets, which name
+theirs `ribbon_depth`; and orbs have no registry-versus-patterns-directory sweep
+test, though the Lego presets do. Verifies: the guard fires on a Maclado preset
+(a case that must be shown failing before the fix), and the sweep test fails
+when a preset exists on disk and not in the registry.
+
+Both verifications were satisfied before the fixes shipped — the guard test
+failed on exactly the two `ribbon_depth` presets, the sweep test failed against
+the pre-fix registry — and the fixes went further than the plan in one respect:
+the Lab's own "ribbon gap" readout had gone blind by the same name, so the two
+readers now share one `weaveDepthValue` rather than two lists that can drift
+apart. The composite half is **not** done and is not Q6's to finish: the three
+entries carry `qiyasComposite: null` and a badge reading *not yet
+qiyas-validated*, and the sweep test pins that trio by id so recording the first
+real score requires editing the assertion that says none exists.
 
 ---
 

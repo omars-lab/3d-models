@@ -2391,3 +2391,79 @@ physically intersect *between* crossings (the sweep is per-strand and the gate p
 so inter-strand collision is asserted by the ≥ (ribbon_depth + 0.4)/2 amplitude rule,
 not by a mesh check) — that would force the geometric-boolean branch this decision
 declined.
+
+---
+
+## D-034 — the Lab's coverage gaps are sweeps, not lists: a claim about every preset must read every preset
+
+**Date:** 2026-08-15 · **Status:** Decided (shipped) · **Repos:** bikar (guard + registry + two sweep tests + an e2e seek that verifies itself, PRs [#97](https://github.com/NaqshCoffee/bikar/pull/97), [#98](https://github.com/NaqshCoffee/bikar/pull/98), [#99](https://github.com/NaqshCoffee/bikar/pull/99)), 3d-models (design doc §8 Q6, this entry, gallery `lab:` links)
+
+### Context
+
+Scoping the qiyas half of wheelfield validation meant opening the three Maclado presets
+in the Orb Lab, and two of them could not be opened at all. What that surfaced was not
+one bug but a shape: every claim the Lab makes about "the presets" was written as a
+list in code, and each list had gone stale the moment Family 3 shipped, with nothing
+to say so.
+
+- `patterns/Orbs/` held 14 `.bkr` files and the Lab's registry offered **11**. The
+  three wheelfield presets were rendered by this repo's Makefile and shown on the
+  gallery page while being unreachable in the Lab — the one surface where a reader can
+  turn a knob.
+- `raiseAmplitudeFloor` in `packages/knobs/src/constraints.ts` resolved the weave's
+  depth from a parameter literally named `strut_depth`. `Maclado-9-Weave.bkr` and
+  `Maclado-9-Overlap.bkr` name theirs `ribbon_depth`, so the guard silently did nothing
+  on exactly the two presets whose own headers state the rule it enforces — *amplitude
+  must stay ≥ (ribbon_depth + 0.4) / 2 or adjacent ribbons fuse silently, because the
+  mesh gate is per-tube*. A second reader had gone blind the same way and independently:
+  the Lab's knob panel prints a "ribbon gap" row, `2·amplitude − depth`, marked `✗ fused`
+  under 0.4, and it too read `values.strut_depth` only. The honest readout was absent
+  from the designs that needed it most.
+
+### Decision
+
+Both fixes are sweeps over what is on disk, not longer lists. `orb-presets.test.ts`
+matches registry against directory on file **content** (the registry imports `?raw`, so
+identical source is what proves the chip opens the rendered file) and fails in both
+directions — an orb the Lab cannot open, and a registry entry pointing at nothing.
+`orb-weave-guard.test.ts` finds woven presets by `/^\s*weave crossing /m` in the source
+and tests each **at the corner** (depth at its max, amplitude at its min), asserting
+first that the corner really violates the floor and then that the guard moved it;
+testing at defaults would have passed against a guard that does nothing. Both were shown
+failing before the fix — the guard test on exactly the two Maclado weaves, the sweep
+test against the pre-fix registry.
+
+The depth knob is a **listed** pair, `['strut_depth', 'ribbon_depth']`, not a `_depth`
+suffix match, so an unrelated future knob cannot enrol itself into a printability rule
+by its name; and the two readers now share one exported `weaveDepthValue`, so the next
+name is one edit rather than two that can drift apart again. No shipped default moves:
+both Maclado weaves sit exactly on the floor at their defaults (amplitude 0.8,
+`ribbon_depth` 1.2 → floor 0.8), and the fix changes behaviour only above depth 1.2.
+
+The three presets are registered with `qiyasComposite: null` and a third trust-badge
+state, **"not yet qiyas-validated"** — deliberately distinct from the existing
+custom-design badge, which says something different. A recorded number would be a lie
+(wheelfield views only became scoreable with the ribbon view set, and the CI job that
+would record one is Q5's work), and no badge at all would read as a chip with nothing to
+declare. The trio is pinned by exact id in the sweep test, so recording the first score
+requires editing the assertion that says none exists.
+
+### What this resolves and what it does not
+
+Every committed orb is now openable in the Lab, the gallery's three wheelfield cards
+carry `lab:` links, and neither gap can silently reopen. It does **not** validate the
+wheelfield renders: the composites stay null until Q5 wires the job, and the badge says
+so rather than implying a pass. The amplitude rule remains an asserted print constraint
+rather than a mesh check, exactly as [D-033](#d-033--build-the-welded-woven-overlap-orb-the-d-032-window-holds-parity-solves-60-loops-ship) scoped it — this makes the guard fire on the presets it
+was written for, not stronger.
+
+One thing here is a partial and is recorded as such. The `packages/e2e` loop-closure
+test fails on roughly 40% of CI ubuntu runs and never on macOS, including under 8× and
+20× CPU throttle, and it blocked these merges. Its seek read `document.getAnimations()[0]`
+— whichever animation the document lists first — and turned a missing one into "it is at
+zero" with `?? 0`, either of which lands the frame an arbitrary distance from the time it
+names; it now reads a `path.cell` and **verifies the phase it achieved** against the one
+it asked for, across three cells, failing with the drift in milliseconds. That is a
+removed mechanism and a named failure, **not a demonstrated fix** — it cannot be, from a
+machine that has never reproduced the flake. If it recurs, the next report will say
+whether the seek missed, the frame moved under the shutter, or the seam is real.
