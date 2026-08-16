@@ -1,4 +1,4 @@
-import{C as e}from"./dist-CBzPEJa6.js";function t(t,n,r){return{w:e(t),h:e(n),ox:r.col*8,oy:r.row*8}}var n=[{id:`classic-brick`,title:`Classic 2×4`,blurb:`LDraw's 3001 printed — the reference brick, no art`,source:`# Classic-Brick — the reference part: a plain 2 × 4 with studs on top and
+import{C as e}from"./dist-DtSqD8xM.js";function t(t,n,r){return{w:e(t),h:e(n),ox:r.col*8,oy:r.row*8}}var n=[{id:`classic-brick`,title:`Classic 2×4`,blurb:`LDraw's 3001 printed — the reference brick, no art`,source:`# Classic-Brick — the reference part: a plain 2 × 4 with studs on top and
 # anti-studs underneath, i.e. LDraw \`3001.dat\` printed instead of moulded.
 #
 # It carries no art on purpose. Every other preset here changes one thing
