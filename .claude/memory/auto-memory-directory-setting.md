@@ -21,6 +21,19 @@ warning, memory just keeps landing in the default
 Resolution order: policy → flag → (local → project, only when the project is
 trusted) → user. `CLAUDE_COWORK_MEMORY_PATH_OVERRIDE` short-circuits all of it.
 
+**Measured, not inferred** — three fresh-process `claude -p` runs asking for the
+resolved path, 2026-08-16:
+
+| value in `.claude/settings.local.json` | resolved to |
+|---|---|
+| `.claude/memory` | `~/.claude/projects/<slug>/memory/` — ignored |
+| `$CLAUDE_PROJECT_DIR/.claude/memory` | same — **no variable expansion** |
+| `${CLAUDE_PROJECT_DIR}/.claude/memory` | same |
+| `~/Workspace/git/3d-models/.claude/memory` | the repo path ✅ |
+
+So there is **no repo-relative form.** The `~/` prefix is the shortest thing
+that works, and the full repo path has to be written once per repo.
+
 **Why this was worth writing down:** `~/.claude/settings.json` carried
 `"autoMemoryDirectory": ".claude/memory"` since 2026-01-24 and it had never once
 taken effect — all 36 project memory dirs sat in the default location, and
