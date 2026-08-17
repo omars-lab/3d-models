@@ -123,7 +123,7 @@ script exists behind it.
 
 | Archetype | Recipe | Distinct look | Reference orbs |
 |---|---|---|---|
-| **Rosette** | 2 kite petals per wedge (corner + edge-midpoint contacts), shoulder ring 2N, inner ring 2N → pierced 2N-star core | classical rosettes, petal-tip welds across edges | Rosette-Orb (dodeca, qiyas 0.954), Rosette-Cube-Orb (cube, 0.975) |
+| **Rosette** | 2 kite petals per wedge (corner + edge-midpoint contacts), shoulder ring 2N, inner ring 2N → pierced 2N-star core | classical rosettes, petal-tip welds across edges | Rosette-Orb (dodeca, qiyas 1.000²), Rosette-Cube-Orb (cube, 1.000²) |
 | **Rosette Weave** | midpoint-only kites, shoulders under corners, no `edges from` → all even-degree nodes + `weave` | interlaced closed ribbons (chainmail) | Rosette-Weave-Orb (dodeca, 1.000, 10 strands) |
 | **Star (hexagram)** | inscribed star polygons per face (`connect every k`) | crisp geometric star field | Star-Orb (icosa), Dodeca-Orb, Star-Cube-Orb ({8/3}, 1.000), Star-Octa-Orb (0.992), Star-Tetra-Orb (1.000) |
 | **Hankin star** | `hankin angle θ [delta δ]` polygons-in-contact | authentic PIC stars; θ sweeps acute→obtuse families | Hankin-Orb (dodeca, qiyas 1.000, θ knob 18–80°) |
@@ -141,7 +141,23 @@ Archetype × base compatibility matrix (✅ verified · 🔬 needs calibration s
 
 ¹ Star-Octa's 0.992 is a warn-severity shape-count mismatch on the vertex-4 view (encoded 17
 regions vs 16 declared) — a known qiyas encoder quirk at 4-fold tangencies, not a geometry
-error; the composite still clears the 0.95 gate.
+error; the composite still clears the 0.95 gate. It survives the ² fix below, re-measured in
+CI at 0.9921 with `drop` 0 under qiyas v0.4.0, which is what makes that fix a narrow one
+rather than a general encoder repair.
+
+² **Both rosette numbers moved on 2026-08-17 without the geometry moving.** They read 0.954
+and 0.975 from the day they were first measured until qiyas v0.4.0
+([NaqshCoffee/qiyas#18](https://github.com/NaqshCoffee/qiyas/pull/18)). qiyas's reconciliator
+bucketed two candidate shapes as one when three gates agreed — centroid distance, bounding-box
+IoU, and area agreement — and all three read only bounding boxes, so a pair of petal faces
+either side of a shared edge passed every one of them with **zero** interior overlap. Raising
+the IoU threshold could not separate them: the offending pairs run 0.6284 up to exactly
+1.0000, since a mirror line on an image axis gives the two faces the same box. The fix is a
+disjoint-interior exclusion that computes the actual shared area. 26 pairs collapsed on the
+dodeca and 4 on the cube; recovering them takes both composites to 1.000. The older numbers
+are correct measurements of the validator as it was, and the dated records that quote them —
+`docs/research/qiyas-wheelfield-validation-survey.md` and §10's P2.6 bullet — are left saying
+so. [D-035](decisions-log.md#d-035--the-rosette-composites-were-a-validator-defect-not-a-geometry-one-and-a-bounding-box-cannot-see-a-shared-edge)
 
 Hankin θ calibration (2026-07 sweep): at the default R=60/w=3 the gate passes θ ∈ 10..84
 (θ=6 hard-errors with inset degeneracy), but the envelope narrows at the range corners —
@@ -521,7 +537,9 @@ against template goldens, qiyas orb-validate ≥ 0.95 on new presets.
   custom — not qiyas-validated) backed by a fresh full-sweep of Docker qiyas orb-validate
   composites recorded per script — Rosette 0.954, Rosette-Cube 0.975, Rosette-Weave 1.000,
   Star 1.000, Star-Dodeca 1.000, Weave 0.997 newly recorded; the five P1 scores reproduced
-  exactly — plus ten Playwright specs (six Lab custom-mode, four studio Dials; the Lab
+  exactly (**the two rosette numbers are what P2.6 recorded and are left standing as that
+  record; both read 1.000 from qiyas v0.4.0 on — see footnote ² under §3**) — plus ten
+  Playwright specs (six Lab custom-mode, four studio Dials; the Lab
   preview binds :4613 so a stray default-port vite preview is never silently reused), L6
   guard-rail unit tests in `packages/knobs`, in-page authoring notes, and this repo's
   `make lab-smoke` vendoring check (asset refs + worker chunk), run inside `make lab`.
