@@ -551,21 +551,41 @@ variable survives and the cairo raster path runs: on
 default takes the SVG fast-path and never loads cairo, so it does not test
 this), 17 shapes, `dominant_fold=4` at conf 0.77.
 
-**And qiyas already knew.** `qiyas:Makefile` defines a `CAIRO_DYLD` prefix that
-sets exactly this variable — to `$(brew --prefix)/lib` plus the two system
-directories, because `DYLD_FALLBACK_LIBRARY_PATH` *replaces* the default list
-rather than extending it — and its comment states the cause in the same terms
-reached above, including that it is prefixed onto each recipe line rather than
-exported precisely because SIP strips `DYLD_*` from `/bin/sh`. So the finding
-here is not a new one: **this doc was the stale site**, and the thing to do is
-`make -C <qiyas> local.test` (or `local.test-unit`, `-n auto` and integration
-excluded), not a hand-rolled env var. Docker and CI never see the problem at
-all — the image installs `libcairo2` into `/usr/lib`.
+**qiyas half-knew, and the half it missed is the one that matters.**
+`qiyas:Makefile` defines a `CAIRO_DYLD` prefix setting exactly this variable —
+`$(brew --prefix)/lib` plus the two system directories, because the variable
+*replaces* the default list rather than extending it — and its comment reaches
+the cause above, SIP and `/bin/sh` included. **It does not work.** Measured
+here, its own form, `CAIRO_DYLD uv run pytest tests/test_svg_fast_path.py`,
+fails on collection with `no library called "cairo-2" was found`, variable set.
+
+The reason is one hop further than the comment looked. `uv run pytest` does not
+exec python; it execs `.venv/bin/pytest`, and that file opens `#!/bin/sh` — a
+polyglot that re-execs the venv python on itself. `.venv/bin/qiyas` is the same
+shape. So the protected shell the comment correctly identifies is not only
+upstream of the recipe, it is *inside* the invocation, past the point any
+Makefile can reach. Drop that hop and it works: `uv run python -m pytest` on
+the same file, same variable, **57 passed**; the whole suite through
+`.venv/bin/python -m pytest` is **2871 passed, 4 skipped, 49 xfailed, 2
+xpassed** in 24m06s.
+
+**Validator:** an invocation is cairo-capable when the process that loads cairo
+was exec'd with no SIP-protected binary between it and the environment carrying
+`DYLD_FALLBACK_LIBRARY_PATH`.
+PASS: `uv run python -m qiyas.cli orb-validate …` — `uv` execs python directly.
+FAIL: `uv run qiyas orb-validate …` — `uv` execs `.venv/bin/qiyas`, whose
+`#!/bin/sh` line strips the variable before python starts.
+
+The Makefile's comment says the arrangement was "verified by echoing it from a
+recipe: exported, it prints empty." That verification cannot fail the way the
+thing fails: an echo proves the variable reached the shell, and the shell is
+where it dies. **The check that means something is loading cairo** — which is
+the repo's own rule about not letting a proxy discharge the claim.
 
 The correction is worth carrying because a missing dependency and an unfindable
 one prescribe different work: the first says install something, the second says
-use the entry point that already handles it. Two sites still say "missing" and
-are deliberately left: the
+remove a shell from the exec chain. Two sites still say "missing" and are
+deliberately left: the
 `docs/research/` file is preserved verbatim under its provenance header, and
 D-035's log entry is dated. This one asserts present tense, so it is the one
 that had to move.
