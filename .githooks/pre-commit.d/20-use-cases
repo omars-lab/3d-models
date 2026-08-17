@@ -11,6 +11,9 @@
 # file, never whether the pointer still pointed at the right thing. 23 of 44
 # line claims had drifted by the day it was added.
 #
+# The wholesale form drops --staged and validates every pointer in the map.
+# wholesale: make validate-use-cases
+#
 # Since 2026-08-03 a self-repo pointer is read from what this commit will
 # contain — the index for a staged file, HEAD for the rest — never from the pin.
 # `--refresh` runs before the commit exists, so it pins the parent; reading there

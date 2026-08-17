@@ -8,6 +8,8 @@
 # Whole-tree, not --staged: the check is a ratchet against
 # .claude/gates/doc-pointer-baseline.json, and a staged-only run cannot tell a
 # newly-broken pointer from one the baseline already carries.
+#
+# wholesale: make validate-pointers
 # Override once: DOC_POINTERS_OK=1 git commit
 [ -n "$DOC_POINTERS_OK" ] && exit 0
 if ! command -v python3 >/dev/null 2>&1; then

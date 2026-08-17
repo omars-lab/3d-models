@@ -4,6 +4,8 @@
 # Runs on every commit, not only when the graph is staged: the graph's anchors
 # point at line numbers in index.html and at Makefile:LAB_PAGES, so a commit that
 # never touches the JSON is exactly how it goes stale.
+#
+# wholesale: make validate-site-graph
 [ -n "$SITE_GRAPH_OK" ] && exit 0
 
 if ! command -v python3 >/dev/null 2>&1; then

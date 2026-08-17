@@ -2,10 +2,13 @@
 # Pre-commit dispatcher: runs every executable in .githooks/pre-commit.d/
 # in lexical order; the first failure aborts the commit.
 # Activate on a fresh clone with: make setup-hooks
-# 10-gitleaks     — secret scan on staged hunks (fails closed)
-# 20-use-cases    — use-case map freshness + pointer validation
-# 30-docs-gate    — design-doc gate: dead relative links, validator
-#                   examples, default provenance (DOCS_GATE_OK=1 skips)
+#
+# This used to enumerate three of the hooks. It stayed at three while the
+# directory grew to eight, which is the ordinary fate of a list kept beside the
+# thing it lists — so read the directory instead. Each hook's own header says
+# what it does, and its `# wholesale:` line says how to run it over the whole
+# tree; `make validate` runs all of them that way, and .claude/gates/
+# hook_parity.py fails a hook that declares neither.
 hookdir="$(dirname "$0")/pre-commit.d"
 for hook in "$hookdir"/*; do
   [ -x "$hook" ] || continue
