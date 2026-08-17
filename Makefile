@@ -62,7 +62,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph
+.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -72,8 +72,11 @@ DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bika
 setup-hooks:
 	git -C ${ROOT_DIR} config core.hooksPath .githooks
 	@echo "hooks: core.hooksPath -> .githooks"
-	@echo "  pre-commit.d = gitleaks (staged hunks) + use-cases + docs-gate + site-graph"
+	@# Listed, not enumerated by hand: the hand-written version of this line
+	@# named four hooks while the directory held seven.
+	@echo "  pre-commit.d = $$(ls ${ROOT_DIR}/.githooks/pre-commit.d | tr '\n' ' ')"
 	@echo "  pre-push     = gitleaks full history (this repo has no CI)"
+	@echo "  run them all over the whole tree, any time: make validate"
 	@if ! command -v gitleaks >/dev/null 2>&1; then \
 		echo "  WARNING: gitleaks not installed — commits AND pushes will block."; \
 		echo "           brew install gitleaks   (override: GITLEAKS_OK=1)"; \
@@ -150,6 +153,43 @@ validate-hooks:
 validate-site-graph:
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/site_graph.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/site_graph.py
+
+# Full-history secret scan — the wholesale form of .githooks/pre-commit.d/
+# 10-gitleaks, which sees staged hunks only. Same command .githooks/pre-push
+# runs; `gitleaks git`, not the deprecated `detect`. This existed as a hook and
+# a pre-push line but never as a target, which is precisely the asymmetry that
+# made `validate` unwritable as a hand-listed chain — see hook_parity.py.
+validate-secrets:
+	@command -v gitleaks >/dev/null 2>&1 || { \
+		echo "gitleaks not installed — brew install gitleaks"; exit 1; }
+	gitleaks git ${ROOT_DIR} --no-banner --redact --verbose
+
+# Run every pre-commit gate over the WHOLE TREE, in the order the dispatcher
+# runs them, plus the checks that have no hook behind them. This repo has no
+# CI, so the hooks are the gate set and this is the only way to ask "would all
+# of it pass right now?" without staging something.
+#
+# The list is not written here. Each hook declares its own wholesale form in a
+# `# wholesale:` line, and `hook_parity.py --check` fails on a hook that
+# declares none — so a hook added tomorrow cannot quietly fall out of this
+# target. Measured 2026-08-17: at the moment this was written the hook set and
+# the validate-* target set were not subset-related in either direction, so a
+# chain typed by hand would have shipped wrong. Anything that could not be
+# verified (a missing tool) is named in the summary line, never dropped.
+validate:
+	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --self-test
+	@BIKAR_DIR=$(BIKAR_DIR) PYTHON=$(PYTHON) $(PYTHON) -u ${ROOT_DIR}/.claude/gates/hook_parity.py --run
+
+# As `validate`, but "could not verify" is a failure. For a release or a deploy,
+# where a skipped gate must not read as a pass.
+validate-strict:
+	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --self-test
+	@BIKAR_DIR=$(BIKAR_DIR) PYTHON=$(PYTHON) $(PYTHON) -u ${ROOT_DIR}/.claude/gates/hook_parity.py --run --strict
+
+# Just the coverage claim — instant, no gates run. What the hook checks.
+validate-parity:
+	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --self-test
+	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --check
 
 # Regenerate the ```mermaid block in docs/site-graph.md from the JSON, then
 # re-check — so a hand-edited render cannot outlive the graph it renders.

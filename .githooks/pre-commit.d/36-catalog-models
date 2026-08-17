@@ -8,6 +8,8 @@
 # Whole-file, not --staged: an entry can break because the *model* changed in
 # bikar, with nothing staged here at all.
 # Override once: CATALOG_MODELS_OK=1 git commit
+#
+# wholesale: make validate-catalog
 [ -n "$CATALOG_MODELS_OK" ] && exit 0
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for the catalog↔model gate" >&2

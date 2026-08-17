@@ -1,0 +1,31 @@
+#!/bin/sh
+# Hook-parity gate (.claude/gates/hook_parity.py). Every hook in this directory
+# must declare, in itself, how to run its check over the whole tree — the one
+# line `make validate` reads to build its list.
+#
+# Runs first, and on every commit: it asserts the gate *set* is intact before
+# the gates run. The failure it prevents is a hook added without a declaration,
+# which is how `make validate` would come to cover less than it claims —
+# measured 2026-08-17, the hook set and the validate-* target set were not
+# subset-related in either direction, which is why the list is derived and not
+# typed. Reads eight small files; tens of milliseconds.
+#
+# It gates itself: this file carries the declaration below, so the check that
+# proves the set is covered is inside the set it covers.
+# wholesale: make validate-parity
+[ -n "$HOOK_PARITY_OK" ] && exit 0
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the hook-parity gate" >&2
+  exit 1
+fi
+
+# gh-pages carries .githooks but not .claude, so this hook runs there with no
+# gate to run. Skipping is correct: that branch is generated output.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/hook_parity.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no hook-parity gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+
+exec python3 "$GATE" --check

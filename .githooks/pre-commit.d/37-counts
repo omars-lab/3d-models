@@ -4,6 +4,8 @@
 # runs — the catalog gate, and bikar's generated bets.md. A `<!--count:NAME-->`
 # tag pins the written number to its authority.
 #
+# wholesale: make validate-counts
+#
 # Built 2026-08-03, from a defect with two sites: docs/backlog.md §2's table was
 # stale by three merges, and §8's "Counts reconcile" bullet — whose whole job is
 # to catch that — restated the same wrong figures independently.

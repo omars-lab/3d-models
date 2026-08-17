@@ -1,6 +1,11 @@
 #!/bin/sh
 # Pre-commit secret scan. Activate on a fresh clone with: make setup-hooks
 # (sets core.hooksPath to .githooks). Fails closed: no gitleaks, no commit.
+#
+# The wholesale form scans full history, not the staged hunks — the same scan
+# .githooks/pre-push runs. See .claude/gates/hook_parity.py.
+# wholesale: make validate-secrets
+# wholesale-requires: gitleaks
 if ! command -v gitleaks >/dev/null 2>&1; then
   echo "pre-commit: gitleaks not installed — brew install gitleaks" >&2
   exit 1

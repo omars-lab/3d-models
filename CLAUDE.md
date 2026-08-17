@@ -12,10 +12,10 @@ not reimplement it.
   `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`. The system Node
   is too old and fails in ways that look like code bugs.
 - **Hooks**: `core.hooksPath = .githooks` (run `make setup-hooks` once per
-  clone). `pre-commit.d/10-gitleaks` scans for secrets; `20-use-cases` **blocks**
-  a commit that stages a file the use-case map pins. Fix with
-  `python3 .claude/skills/maintain-use-cases/validate.py --refresh`; override
-  with `USE_CASES_OK=1` only when you know why.
+  clone); each sees only staged files, and `make validate` runs every one of
+  them over the whole tree. `20-use-cases` **blocks** a commit staging a file the
+  map pins: `validate.py --refresh` re-pins hashes and *reports* moved anchors —
+  it does not rewrite them. Override with `USE_CASES_OK=1` only when you know why.
 - **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`,
   `make deploy` (gh-pages worktree). `gh-pages` is a deliberately diverged
   branch — never merge it into `master`.

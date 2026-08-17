@@ -4,6 +4,9 @@
 # PASS+FAIL example (D2/K6), or a default with no citation or CAL-* bet id
 # (D3/K4). Rules and evidence: docs/grounding-defect-taxonomy.md.
 # Override once: DOCS_GATE_OK=1 git commit
+#
+# The wholesale form drops --staged and adds the gate's own --self-test.
+# wholesale: make validate-docs
 [ -n "$DOCS_GATE_OK" ] && exit 0
 if ! command -v python3 >/dev/null 2>&1; then
   echo "pre-commit: python3 not found — needed for the design-doc gate" >&2
