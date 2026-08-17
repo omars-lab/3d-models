@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -99,6 +99,15 @@ validate-use-cases:
 		echo "  or use one that does:  make $@ PYTHON=/path/to/python3"; \
 		exit 1; }
 	$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py
+
+# Clickable editor links for every validated line pointer, in this repo's docs
+# and in the map. Generated on demand and never committed: the URL needs an
+# absolute path, and an absolute path is a claim about one laptop — which is why
+# doc_pointers.py rejects `/Users/...` outright. Validation runs first and a
+# failure prints no links, because a clickable link to a line the tool knows is
+# wrong is worse than no link at all.
+use-case-links:
+	@$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py --links
 
 # Design-doc gate: dead relative links (D1/K9), validators shipped without
 # asserted PASS+FAIL examples (D2/K6), defaults with no citation or CAL-* bet

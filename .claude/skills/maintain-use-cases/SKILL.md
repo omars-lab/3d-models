@@ -12,11 +12,21 @@ capability live?" — kept honest by `validate.py` and the pre-commit hook.
 
 ## The contract
 
-- **Pointer syntax** (must be backticked, in the table only):
-  `` `repo:path:L10` `` or `` `repo:path:L10-L20` ``. `repo` is `3d-models`,
-  `bikar`, or `qiyas`; paths are repo-relative.
+- **Pointer syntax** (must be backticked): `` `repo:path:L10` `` or
+  `` `repo:path:L10-L20` ``. `repo` is `3d-models`, `bikar`, or `qiyas`; paths
+  are repo-relative.
+- **The syntax is checked everywhere, not only here.** `validate.py` scans every
+  markdown file in the repo for it, so a pointer written in `docs/` is held to
+  the same three checks as one in the table. It has to be: an anchored pointer
+  carries a space and a quote, which puts it outside `doc_pointers.py`'s
+  backticked-path class — so before the scan existed, moving a pointer out of
+  this file moved it out of *every* gate. Measured 2026-08-17, a pointer naming
+  line **99999** of a real file, anchored on a literal present nowhere in it,
+  passed `doc_pointers.py`, `docs_gate.py` and this validator at exit 0. The one
+  exemption is the reserved repo name `repo:`, which is how the rule is taught.
+  A pointer naming a repo the frontmatter does not pin is an error, not a skip.
 - **Anchor a pointer that names a specific line**: append a quoted literal that
-  must appear inside the range — `` `3d-models:Makefile:L137 "orbs:"` ``. Write
+  must appear inside the range — `` `3d-models:Makefile:L223 "orbs:"` ``. Write
   one whenever the line number *is* the claim; a bare `:L1` means "this file"
   and needs none. Without an anchor, `--refresh` moves the pin forward and
   re-checks only that the file is long enough, which is how **23 of the map's
@@ -61,6 +71,15 @@ was read from, so it is never ambiguous what was measured.
 (unpublished-branch refresh, squash-orphaned pin, and self-repo live reads —
 the last pins the counterfactual first, asserting that the old read *passed*
 the edit, then that each of the three sources behaves).
+
+**Open one in an editor** — `make use-case-links` prints a `vscode://file/...`
+link per pointer, in this map and in every other doc, marked `anchored` or
+`line only` and tagged when a sibling link lands off-target because that
+checkout has moved past the pin. Generated on demand and never committed: the
+URL needs an absolute path, and `doc_pointers.py` rejects `/Users/...` precisely
+because such a path is a claim about one laptop. A validation failure prints no
+links at all — a clickable link to a line the tool knows is wrong is worse than
+none, because it looks authoritative.
 
 **Audit** — read `use-cases.md` top to bottom; anything the project does that
 has no UC row is either missing from the map or not actually a user-facing

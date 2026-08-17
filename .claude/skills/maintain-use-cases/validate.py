@@ -6,6 +6,7 @@ Modes:
   validate.py --staged    pre-commit mode (called by .githooks/pre-commit.d/20-use-cases)
   validate.py --refresh   rewrite frontmatter as_of hashes to each repo's HEAD, then validate
   validate.py --self-test run the page-catalog reader's own fixtures
+  validate.py --links     print an editor link per validated pointer (never committed)
 
 Checks (full mode):
   - frontmatter parses and every as_of hash resolves in its repo, and this
@@ -52,7 +53,7 @@ widened it: at `5166d5b` L252 was already 8 lines off. `validate.py` printed
 So a pointer may carry an anchor: a quoted literal that must appear somewhere
 inside the lines it names.
 
-    `3d-models:Makefile:L137 "orbs:"` (orbs pipeline target)
+    `3d-models:Makefile:L214 "orbs:"` (orbs pipeline target)
 
 Opt-in on purpose, and the same shape as `site_graph.py`'s G3 `evidence` rule.
 An anchor is checked when present and **counted** when absent — `mode_full`
@@ -62,10 +63,25 @@ into a 1600-line design doc's §12 has no short literal that is stably unique,
 and a gate that demanded one there would be answered with a bad anchor.
 
 Anchoring a pointer moves it out of `doc_pointers.py`'s `BACKTICKED` character
-class (it has no space and no quote), so that gate stops seeing it. Nothing is
-lost: doc_pointers asks whether the path resolves, and the loop below already
-reads the same path out of the pinned commit, which is strictly stronger. Worth
-knowing before wondering why a baseline entry disappeared.
+class (it has no space and no quote), so that gate stops seeing it. Inside the
+map nothing is lost: doc_pointers asks whether the path resolves, and the loop
+below already reads the same path out of the pinned commit, which is strictly
+stronger. Worth knowing before wondering why a baseline entry disappeared.
+
+WHERE THE CHECKS APPLY — the map is not the boundary
+----------------------------------------------------
+That last paragraph held only because the loop below read the map. Outside it,
+the same edit moved a claim *out of every gate*: this file only ever opened
+`DOC_RELPATH`. Measured 2026-08-17, a pointer naming line **99999** of a real
+file, anchored on a literal present nowhere in it, written into
+`docs/orb-pipeline-map.md`, passed `doc_pointers.py`, `docs_gate.py` and this
+validator — three gates, all exit 0.
+
+So `tree_claims` scans every markdown file in the repo for the same syntax and
+`validate_full` checks both sources through one `check_pointer`. The scan is
+universal, not opt-in: a doc that must register to be checked can be forgotten,
+which is the reasoning D1 already uses for relative links. The one exemption is
+the reserved placeholder repo name (see `PLACEHOLDER_REPOS`).
 """
 
 from __future__ import annotations
@@ -501,6 +517,91 @@ def self_blob(root: str, path: str, staged: set[str], at_commit: bool) -> tuple[
         return None, "in the working tree"
 
 
+#: Directories a markdown scan must not descend into. `build/` holds generated
+#: copies of real docs, so scanning it would report every finding twice and make
+#: the verdict depend on whether someone had run `make`.
+SCAN_SKIP_DIRS = frozenset({".git", "node_modules", "build", "dist", ".venv", "__pycache__"})
+
+#: A repo name that means "your repo here". The bare form `repo:path:L10` is how
+#: this rule is *taught* — in CLAUDE.md and in the skill — and a teaching example
+#: is not a claim about a file. Recognising one reserved name is the whole
+#: exemption mechanism: there is deliberately no way for a real repo's pointer to
+#: opt out of being checked, because an opt-out is how the map's own pointers
+#: drifted for months while every run printed "all valid".
+PLACEHOLDER_REPOS = frozenset({"repo"})
+
+
+class Claim(NamedTuple):
+    """One pointer, and the doc and line it is written at.
+
+    The site is carried structurally rather than pre-formatted: three callers
+    need the doc path on its own (to name what to restage, to count docs), and
+    parsing it back out of a display string is the kind of shortcut that breaks
+    the first time a path contains the separator.
+    """
+
+    ptr: Pointer
+    doc: str
+    line: int
+
+    @property
+    def site(self) -> str:
+        return f"{self.doc}:{self.line}: "
+
+
+def tree_claims(root: str) -> list[Claim]:
+    """Every anchored-or-numbered pointer written in markdown OUTSIDE the map.
+
+    Why this exists, measured 2026-08-17: an anchored pointer carries a space and
+    a quote, which puts it outside `doc_pointers.py`'s backticked-path character
+    class, so that gate stops seeing it. Inside the map that loses nothing —
+    `validate_full` reads the same path out of the pinned commit, which is
+    strictly stronger. Outside the map it lost *everything*: this file only ever
+    opened `DOC_RELPATH`, so a pointer written in `docs/` was read by no gate at
+    all. A probe naming line 99999 of a real file, anchored on a literal present
+    nowhere in it, passed doc_pointers, docs_gate and this validator at exit 0.
+
+    So the scan is universal rather than opt-in. A doc does not register to be
+    checked, which means no doc can be forgotten — the same reasoning D1 uses for
+    relative links. The returned site prefix names the file and line the claim is
+    written at, because the reader has to go edit *that*, not the file it points
+    into.
+    """
+    claims: list[Claim] = []
+    for dirpath, dirnames, files in os.walk(root):
+        dirnames[:] = sorted(d for d in dirnames if d not in SCAN_SKIP_DIRS)
+        for name in sorted(files):
+            if not name.endswith(".md"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, name), root)
+            if rel == DOC_RELPATH:
+                continue  # the map is read structurally by Doc, not scanned
+            try:
+                with open(os.path.join(dirpath, name), encoding="utf-8") as f:
+                    lines = f.read().splitlines()
+            except (OSError, UnicodeDecodeError):
+                continue
+            for lineno, line in enumerate(lines, 1):
+                for p in POINTER_RE.finditer(line):
+                    if p.group("repo") in PLACEHOLDER_REPOS:
+                        continue
+                    start = int(p.group("start"))
+                    claims.append(
+                        Claim(
+                            Pointer(
+                                p.group("repo"),
+                                p.group("path"),
+                                start,
+                                int(p.group("end") or start),
+                                p.group("anchor"),
+                            ),
+                            rel,
+                            lineno,
+                        )
+                    )
+    return claims
+
+
 def validate_full(
     doc: Doc, root: str, staged: set[str] | None = None, at_commit: bool = False
 ) -> tuple[list[str], list[str]]:
@@ -509,15 +610,24 @@ def validate_full(
     `staged` names files to read from the index; `at_commit` says the rest of
     this repo should be read at HEAD rather than from the working tree, because
     that is what the commit being built will contain.
+
+    Pointers come from two places and are checked identically: the map's table,
+    and every other markdown file in the tree (`tree_claims`).
     """
     errors: list[str] = []
     warnings: list[str] = []
     staged = staged or set()
+    claims: list[tuple[Pointer, str]] = [(p, "") for p in doc.pointers] + [
+        (c.ptr, c.site) for c in tree_claims(root)
+    ]
     if doc.diagram_ucs != doc.table_ucs:
         only_d = ", ".join(sorted(doc.diagram_ucs - doc.table_ucs)) or "-"
         only_t = ", ".join(sorted(doc.table_ucs - doc.diagram_ucs)) or "-"
         errors.append(f"diagram/table mismatch: diagram-only [{only_d}], table-only [{only_t}]")
-    pointer_repos = {p.repo for p in doc.pointers}
+    # Repos come from both sources: a pointer written in `docs/` against a repo
+    # the map never pins would otherwise be skipped in silence by the loop below,
+    # which iterates the pins rather than the pointers.
+    pointer_repos = {p.repo for p, _ in claims}
     for repo in sorted(pointer_repos - set(doc.as_of)):
         errors.append(f"pointers reference repo '{repo}' but frontmatter as_of has no hash for it")
     for repo, pin in doc.as_of.items():
@@ -542,29 +652,38 @@ def validate_full(
             )
             if warning:
                 warnings.append(warning)
-        for ptr in doc.pointers:
+        for ptr, site in claims:
             if ptr.repo != repo:
                 continue
             if repo == SELF_REPO:
                 blob, where = self_blob(root, ptr.path, staged, at_commit)
             else:
                 blob, where = try_git(rdir, "cat-file", "-p", f"{pin}:{ptr.path}"), f"at as_of {pin[:12]}"
-            if blob is None:
-                errors.append(f"{ptr.repo}:{ptr.path} does not exist {where}")
-                continue
-            nlines = blob.count("\n") + 1
-            if ptr.end > nlines:
-                errors.append(
-                    f"{ptr.repo}:{ptr.path}:L{ptr.start}-L{ptr.end} exceeds file length "
-                    f"{nlines} {where}"
-                )
-                continue
-            if ptr.anchor:
-                miss = anchor_miss(blob, ptr.start, ptr.end, ptr.anchor)
-                if miss:
-                    errors.append(f"{ptr} {where}: {miss}")
+            errors.extend(f"{site}{e}" for e in check_pointer(ptr, blob, where))
     cat_errors, cat_warnings = check_catalogs(doc, root)
     return errors + cat_errors, warnings + cat_warnings
+
+
+def check_pointer(ptr: Pointer, blob: str | None, where: str) -> list[str]:
+    """The three things one pointer claims, checked against one blob.
+
+    Split out of `validate_full` when the same three checks had to run over
+    pointers found outside the map (see `tree_claims`). Two copies of this loop
+    would be two chances for the tree half to drift into a weaker check than the
+    map half — which is the exact defect class this file exists to catch.
+    """
+    if blob is None:
+        return [f"{ptr.repo}:{ptr.path} does not exist {where}"]
+    nlines = blob.count("\n") + 1
+    if ptr.end > nlines:
+        return [
+            f"{ptr.repo}:{ptr.path}:L{ptr.start}-L{ptr.end} exceeds file length {nlines} {where}"
+        ]
+    if ptr.anchor:
+        miss = anchor_miss(blob, ptr.start, ptr.end, ptr.anchor)
+        if miss:
+            return [f"{ptr} {where}: {miss}"]
+    return []
 
 
 def report(errors: list[str], warnings: list[str], context: str) -> int:
@@ -591,6 +710,16 @@ def mode_full(root: str) -> int:
             f"({anchored} anchored, {len(doc.pointers) - anchored} line-number only) "
             f"— all valid: {here} against the working tree, "
             f"{len(doc.pointers) - here} at their pinned commits"
+        )
+        # Reported separately, and always — including at zero. Folding these into
+        # the count above would hide which half the coverage came from, and a
+        # silent zero is indistinguishable from a scan that stopped running.
+        tree = tree_claims(root)
+        t_anchored = sum(1 for c in tree if c.ptr.anchor)
+        docs = len({c.doc for c in tree})
+        print(
+            f"use-cases: {len(tree)} pointer(s) in {docs} doc(s) outside the map "
+            f"({t_anchored} anchored) — all valid"
         )
     return rc
 
@@ -682,16 +811,33 @@ def mode_staged(root: str) -> int:
     except subprocess.CalledProcessError:
         return 0  # map not committed yet — nothing to guard
     referenced = {p.path for p in doc.pointers if p.repo == SELF_REPO}
-    hits = sorted(referenced & set(staged))
-    if hits:
+    # A pointer written in `docs/` blocks on the same terms as one in the map:
+    # the file it names is being edited, so the line number it claims is exactly
+    # what this commit is at risk of invalidating. `holders` maps the edited file
+    # back to the doc that has to be repaired, because "which doc do I fix?" is
+    # the first thing the reader asks and grepping for it is the cost that makes
+    # a gate get overridden out of habit.
+    holders: dict[str, set[str]] = {}
+    for c in tree_claims(root):
+        if c.ptr.repo == SELF_REPO:
+            holders.setdefault(c.ptr.path, set()).add(c.doc)
+    # Reaching here means the map is NOT staged (the staged case returned above),
+    # so every hit against `referenced` names the map as a doc needing review.
+    for path in referenced:
+        holders.setdefault(path, set()).add(DOC_RELPATH)
+    hits = sorted(set(holders) & set(staged))
+    unstaged_docs = sorted({d for h in hits for d in holders[h]} - set(staged))
+    if hits and unstaged_docs:
+        where = "; ".join(f"{h} <- {', '.join(sorted(holders[h]))}" for h in hits)
         if os.environ.get("USE_CASES_OK") == "1":
             print(f"use-cases: override accepted for pointer-referenced files: {', '.join(hits)}", file=sys.stderr)
         else:
             print(
-                "use-cases BLOCK: staged files are referenced by the use-case map "
-                f"({', '.join(hits)}) but {DOC_RELPATH} is not staged.\n"
-                "  Update the map + run validate.py --refresh, stage it, and retry —\n"
-                "  or override once with: USE_CASES_OK=1 git commit ...",
+                "use-cases BLOCK: staged files carry line pointers from documents "
+                f"that are not staged.\n  {where}\n"
+                f"  Not staged: {', '.join(unstaged_docs)}\n"
+                "  Re-check the line numbers (validate.py prints where an anchor moved to),\n"
+                "  stage the doc, and retry — or override once with: USE_CASES_OK=1 git commit ...",
                 file=sys.stderr,
             )
             return 1
@@ -1031,8 +1177,156 @@ def self_test() -> int:
             True,
         )
 
+    # The tree scan, and the probe that motivated it. Before `tree_claims` this
+    # exact document passed doc_pointers, docs_gate and this validator at exit 0
+    # — the pointer was outside the map, and the map was the only thing read.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True, env=git_env())
+
+        def write(rel: str, text: str) -> None:
+            path = os.path.join(tmp, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(text)
+
+        git("init", "-q", "-b", "master")
+        write("Makefile", "# header\norbs:\n\tbikar render\n")
+        write("docs/map.md", 'A stage: `3d-models:Makefile:L2 "orbs:"` and prose.\n')
+        write(
+            "docs/teaching.md",
+            "Write a pointer as `repo:path:L137` — this one names no file.\n",
+        )
+        write("node_modules/pkg/README.md", 'junk `3d-models:Makefile:L99999 "nope"`\n')
+        git("add", "-A")
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "base")
+        head = run_git(tmp, "rev-parse", "HEAD")
+
+        map_doc = Doc(
+            f"---\nas_of:\n  {SELF_REPO}: {head}\nrepos: {{}}\n---\n\n"
+            "```mermaid\ngraph TD\n  A[UC1]\n```\n\n"
+            f"| UC1 | build | `{SELF_REPO}:Makefile:L1` |\n"
+        )
+        found = tree_claims(tmp)
+        expect(
+            "a pointer in a doc outside the map is collected, with its own site",
+            [(c.doc, c.line, c.ptr.path, c.ptr.start) for c in found],
+            [("docs/map.md", 1, "Makefile", 2)],
+        )
+        expect(
+            "...so the teaching placeholder and node_modules are both left out",
+            {c.doc for c in found} & {"docs/teaching.md", "node_modules/pkg/README.md"},
+            set(),
+        )
+        expect(
+            "a valid tree pointer is not an error",
+            validate_full(map_doc, tmp)[0],
+            [],
+        )
+
+        # The by-design failure: the 99999 probe, in a doc the repo really scans.
+        write("docs/map.md", 'A stage: `3d-models:Makefile:L99999 "orbs:"` and prose.\n')
+        probe = validate_full(map_doc, tmp)[0]
+        expect(
+            "the probe that passed three gates is now an error",
+            len(probe) == 1 and "exceeds file length" in probe[0],
+            True,
+        )
+        expect(
+            "...named at the doc and line the reader has to go edit",
+            probe[0].startswith("docs/map.md:1: "),
+            True,
+        )
+
+        # Drift, which is the case the anchor exists for: the file still has the
+        # target, the pointer no longer names where it is.
+        write("Makefile", "# header\n# spacer\n# spacer\norbs:\n\tbikar render\n")
+        write("docs/map.md", 'A stage: `3d-models:Makefile:L2 "orbs:"` and prose.\n')
+        drift = validate_full(map_doc, tmp)[0]
+        expect(
+            "a drifted tree pointer is caught and told where its target moved to",
+            len(drift) == 1 and 'anchor "orbs:" is at L4' in drift[0],
+            True,
+        )
+
+        # A repo the map never pins cannot be checked, so it must not pass quietly.
+        write("docs/map.md", 'See `sacred-patterns:docs/x.md:L3 "y"`.\n')
+        unpinned = validate_full(map_doc, tmp)[0]
+        expect(
+            "a tree pointer at a repo with no as_of pin is an error, not a skip",
+            len(unpinned) == 1 and "as_of has no hash for it" in unpinned[0],
+            True,
+        )
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
+
+
+def mode_links(root: str) -> int:
+    """Print an editor link per pointer, resolved against the local checkouts.
+
+    Generated, never checked in, and the reason is a rule this repo already
+    enforces: an editor URL needs a machine-local absolute path, and
+    `doc_pointers.py` classifies `/Users/…` as never-a-repo-file precisely
+    because such a path is a claim about one laptop. So the links are derived on
+    demand from pointers the gate has already validated, and nothing
+    machine-local is committed.
+
+    Validation runs FIRST and a failure suppresses the links. Printing a
+    clickable link to a line this tool knows is wrong would be the worst
+    possible output: it looks authoritative and lands the reader somewhere else.
+    """
+    with open(os.path.join(root, DOC_RELPATH), encoding="utf-8") as f:
+        doc = Doc(f.read())
+    errors, warnings = validate_full(doc, root)
+    if errors:
+        report(errors, warnings, context="links")
+        print(
+            "use-case links: not printed — a link to a pointer that does not "
+            "validate would point somewhere wrong while looking authoritative.",
+            file=sys.stderr,
+        )
+        return 1
+    rows = [(DOC_RELPATH, 0, p) for p in doc.pointers] + [
+        (c.doc, c.line, c.ptr) for c in tree_claims(root)
+    ]
+    unresolved = 0
+    local_drift = 0
+    for held_in, _, ptr in sorted(rows, key=lambda r: (r[0], r[2].repo, r[2].path, r[2].start)):
+        rdir = doc.repo_dir(ptr.repo, root)
+        if rdir is None:
+            unresolved += 1
+            print(f"  --      {ptr}  (repo '{ptr.repo}' not checked out)")
+            continue
+        target = os.path.join(rdir, ptr.path)
+        marks = ["anchored" if ptr.anchor else "line only"]
+        # A link opens the working tree; a sibling pointer was validated at that
+        # repo's `as_of`. Those are different files whenever the checkout has
+        # moved on, and drift after the pin is *expected* there — so the link is
+        # still printed and the difference is named. Saying nothing would hand
+        # the reader a validated-looking link to a line nobody checked.
+        if ptr.repo != SELF_REPO:
+            try:
+                with open(target, encoding="utf-8") as f:
+                    live = f.read()
+            except OSError:
+                live = None
+            if check_pointer(ptr, live, "in the local checkout"):
+                local_drift += 1
+                marks.append("MOVED since as_of — link is to the working tree")
+        # `vscode://file/<abs>:<line>:<col>` — VS Code's own handler. The scheme
+        # carries a single caret, not a range, so a range pointer opens at its
+        # first line; the range still exists as the thing the anchor is checked
+        # against, which is where it does its work.
+        print(f"vscode://file{target}:{ptr.start}:1")
+        print(f"  {ptr}  [{'; '.join(marks)}]  <- {held_in}")
+    summary = f"use-case links: {len(rows)} link(s) over validated pointers"
+    if unresolved:
+        summary += f"; {unresolved} unresolved (repo not checked out)"
+    if local_drift:
+        summary += f"; {local_drift} sibling link(s) land off-target in the local checkout"
+    print(summary, file=sys.stderr)
+    return 0
 
 
 def main() -> int:
@@ -1046,6 +1340,8 @@ def main() -> int:
             return mode_staged(root)
         if mode == "--refresh":
             return mode_refresh(root)
+        if mode == "--links":
+            return mode_links(root)
         return mode_full(root)
     except ValueError as exc:
         # An unreadable document is a failure, not a skip — report it in the

@@ -19,17 +19,25 @@ use-case pointers had drifted while every run reported *"all valid"*
 ([D-020](decisions-log.md)). So the split here is deliberate:
 
 - **The diagram is for orientation.** Its nodes name stages and functions. It carries
-  no line numbers and no `click` URLs, because nothing in this repo can check either.
-- **The table under each lane is the truth.** Every path in it is a backticked,
-  repo-qualified pointer of the form `bikar:packages/core/src/kernel3d/weld.ts`, which
-  is exactly the form `.claude/gates/doc_pointers.py` resolves against the sibling
-  checkouts on every commit and on `make validate-pointers`. A file that moves or is
-  deleted fails the gate here.
+  no line numbers and no `click` URLs, because a URL in a diagram node is checked by
+  nothing.
+- **The table under each lane is the truth.** Every row is an *anchored* pointer of the
+  form `` `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` ``,
+  the same syntax the use-case map uses: repo, path, line, and the literal that must be
+  on that line. `.claude/skills/maintain-use-cases/validate.py` reads each one out of
+  the named repo at the commit the map pins and fails if the literal is not in range —
+  and when the target has moved, it says which line it moved to.
 
-**No third pointer form was invented for this document.** Line-level anchors of the
-form the use-case map uses are checkable too, but they pin a *literal* at a line, and
-a diagram that names a stage does not have a literal to pin — the honest unit here is
-the file.
+**No third pointer form was invented for this document.** The first draft of this file
+used bare paths, on the reasoning that a stage has no literal to pin. That was wrong
+twice over: the diagram names *functions*, which are exactly literals, and a bare path
+only ever claimed the file exists — so a row could name a module whose function had
+been deleted and still pass. Anchoring makes the row assert what the diagram says.
+
+One row is deliberately still a bare path: `qiyas:docs/local-ci-runbook.md` postdates
+this map's qiyas pin, so there is no line there to anchor against yet. A bare path is
+resolved by `.claude/gates/doc_pointers.py` instead, which is a weaker check honestly
+labelled rather than a stronger one faked.
 
 What the diagram therefore does **not** assert: that the stages shown are the only
 stages, or that a named function is the only entry point into its module. It shows the
@@ -124,16 +132,16 @@ degrades a score cannot merge. Its own docstring calls the re-run *"a tripwire"*
 
 | stage | pointer |
 |---|---|
-| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts` |
-| base solid, subdivision, duals | `bikar:packages/core/src/kernel3d/polyhedra.ts` |
-| face-local 2D ↔ 3D frame | `bikar:packages/core/src/kernel3d/face-frame.ts` |
-| vertex weld | `bikar:packages/core/src/kernel3d/weld.ts` |
-| Family 2 — pierced lattice | `bikar:packages/core/src/kernel3d/solidify-lattice.ts` |
-| Family 1 — over/under solve and ribbons | `bikar:packages/core/src/kernel3d/weave.ts` |
-| Family 3 — maclado field | `bikar:packages/core/src/kernel3d/maclado-field.ts` |
-| Family 3 — welded woven overlap | `bikar:packages/core/src/kernel3d/maclado-woven.ts` |
-| 2D over/under precedent the 3D solve reuses | `bikar:packages/core/src/kernel/strapwork.ts` |
-| void polygons the lattice pierces | `bikar:packages/core/src/graph/face-extractor.ts` |
+| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1268 "function evaluateOrbDecl("` |
+| base solid, subdivision, duals | `bikar:packages/core/src/kernel3d/polyhedra.ts:L210 "export function subdivideGeodesic("` |
+| face-local 2D ↔ 3D frame (`B8`) | `bikar:packages/core/src/kernel3d/face-frame.ts:L93 "export function makeFaceLift("` |
+| vertex weld (`B8`) | `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` |
+| Family 2 — pierced lattice (`B5`) | `bikar:packages/core/src/kernel3d/solidify-lattice.ts:L193 "export function solidifyLattice("` |
+| Family 1 — over/under solve and ribbons (`B6`) | `bikar:packages/core/src/kernel3d/weave.ts:L557 "export function weaveLattice("` |
+| Family 3 — maclado field | `bikar:packages/core/src/kernel3d/maclado-field.ts:L284 "export function buildMacladoField("` |
+| Family 3 — welded woven overlap (`B7`) | `bikar:packages/core/src/kernel3d/maclado-woven.ts:L95 "export function buildWovenOverlapGraph("` |
+| 2D over/under precedent the 3D solve reuses | `bikar:packages/core/src/kernel/strapwork.ts:L411 "export function detectCrossings("` |
+| void polygons the lattice pierces | `bikar:packages/core/src/graph/face-extractor.ts:L298 "export function getBoundedFaces("` |
 
 The branch at `B4` is a real fork in `evaluator.ts`, not a diagram convenience: a
 `weave` statement routes to the ribbon path, a `base wheelfield` declaration routes to
@@ -149,13 +157,13 @@ diagram compresses that.
 
 | stage | pointer |
 |---|---|
-| binary STL | `bikar:packages/core/src/render/mesh-emitter.ts` |
-| per-axis orthographic SVG | `bikar:packages/core/src/render/orb-view-renderer.ts` |
-| symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts` |
-| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts` |
-| ground truth per view | `bikar:packages/core/src/render/gt-emitter.ts` |
-| mesh gate behind `--check` | `bikar:packages/core/src/kernel3d/mesh-gate.ts` |
-| the CLI that fans these out | `bikar:packages/cli/src/index.ts` |
+| binary STL (`E1`) | `bikar:packages/core/src/render/mesh-emitter.ts:L17 "export function emitBinarySTL("` |
+| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L72 "export function renderOrbViewSVG("` |
+| symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts:L39 "export function symmetryViewAxes("` |
+| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L163 "export function projectRibbonPasses("` |
+| ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1911 "export function emitGroundTruth("` |
+| mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L88 "export function meshGate("` |
+| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L924 "case 'render': {"` |
 
 The CLI's `--format` switch is where the fan-out is visible from a shell:
 `--format stl` writes the mesh, `--format views` writes the SVG set. `--check` is what
@@ -166,11 +174,12 @@ own watertight assertion.
 
 | stage | pointer |
 |---|---|
-| view discovery, scoring, the gate | `qiyas:src/qiyas/orb_validate.py` |
-| shape reconciliation and bucketing | `qiyas:src/qiyas/stages/detectors/reconcile.py` |
-| SVG-side primitives | `qiyas:src/qiyas/stages/svg_primitives.py` |
-| symmetry stage | `qiyas:src/qiyas/stages/symmetry.py` |
-| the envelope both sides type against | `qiyas:src/qiyas/schema.py` |
+| view discovery (`Q1`) | `qiyas:src/qiyas/orb_validate.py:L104 "def discover_views("` |
+| per-view scoring (`Q5`, `Q6`) | `qiyas:src/qiyas/orb_validate.py:L189 "def score_encoding_against_gt("` |
+| shape reconciliation and bucketing (`Q3`) | `qiyas:src/qiyas/stages/detectors/reconcile.py:L184 "def reconcile("` |
+| SVG-side primitives (`Q2`) | `qiyas:src/qiyas/stages/svg_primitives.py:L145 "def _read_bikar_metadata("` |
+| symmetry stage | `qiyas:src/qiyas/stages/symmetry.py:L107 "def detect_symmetry("` |
+| the envelope both sides type against | `qiyas:src/qiyas/schema.py:L564 "class Encoding(BaseModel):"` |
 | running CI locally when Actions cannot | `qiyas:docs/local-ci-runbook.md` |
 
 `reconcile` earns its own node rather than folding into the encode stages, because it
@@ -190,10 +199,11 @@ carry them, which is the honest limit of a diagram.
 
 | stage | pointer |
 |---|---|
-| the sweep that measures | `bikar:scripts/sweep-orb-validate.ts` |
-| the test that compares | `bikar:packages/lab/tests/orb-composites.test.ts` |
-| the recorded composites | `bikar:packages/lab/src/scripts.ts` |
-| the build target that publishes | `3d-models:Makefile` |
+| the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L146 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
+| the test that compares (`H2`) | `bikar:packages/lab/tests/orb-composites.test.ts:L87 "const RECORDED_DROP"` |
+| the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L121 "const MAX_DRIFT_CEILING"` |
+| the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L63 "readonly qiyasComposite"` |
+| the build target that publishes (`H5`) | `3d-models:Makefile:L223 "orbs:"` |
 | the gallery design | [`orb-lab-design.md`](orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a

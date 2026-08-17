@@ -121,12 +121,12 @@ rule does not transfer.
   W-F1's missing model file and LG-F1's `--param rib_mm`. Declaration keywords and
   `BrickFit` fields are **harvested from bikar**, not listed: a listed set omitted
   `clip` and made findings of two correct entries.
-- **A line number is a claim too, and needs an anchor to be one.** A use-case
-  pointer written `` `repo:path:L137` `` asserts the file exists *and* that L137 is
-  the line the label names; only the first was ever checked. Write
-  `` `3d-models:Makefile:L137 "orbs:"` `` and `validate.py` requires the literal in
-  range at the pinned commit, then reports where it moved. Opt-in, and each run
-  prints the split. On 2026-08-02, **23 of 44** had drifted, every run "all valid".
+- **Ground a claim in a link the hook re-checks against the diff.** A line number is a
+  claim; the anchor grounds it. Write `` `3d-models:Makefile:L223 "orbs:"` `` — repo,
+  path, line, literal — in *any* markdown here; `validate.py` scans the whole tree, reads
+  each at the pinned commit, and when an edit moves the target it names where it went, so
+  the reminder *is* the repair. Only `` `repo:path:L137` `` is exempt. Unanchored, **23 of
+  44** drifted; scanning only the map let an `L99999` pointer pass three gates at exit 0.
 - **A count is a claim too, and a number a tool can print is not typed.**
   `<!--count:NAME-->` pins a number to the tool that prints it (`counts_gate.py`,
   hook `37-counts`). Tag-presence is checked (C3) only in the form that measured
