@@ -1752,7 +1752,7 @@ contours, a thin stem that clears the nozzle by ~1.9×. But its **default** `0` 
 a *dotted* zero: shell, counter, and a dot inside the counter. At the 5 mm cap
 CAL-TXT-02 bets on, the air between the dot and the counter wall measures
 **0.289 mm** — well under one 0.4 mm bead, so the two fuse and the `0` prints as a
-filled ring. The gap check ([`text-layout.ts`](../../bikar-tile-border/packages/core/src/kernel3d/text-layout.ts)
+filled ring. The gap check (`bikar:packages/core/src/kernel3d/text-layout.ts`,
 `labelMinGap`) caught it: every zero-bearing label on the machine card fails, and
 the dotted zero would need a **6.95 mm** cap — 39% over the bet — to print at all.
 
@@ -2467,3 +2467,141 @@ it asked for, across three cells, failing with the drift in milliseconds. That i
 removed mechanism and a named failure, **not a demonstrated fix** — it cannot be, from a
 machine that has never reproduced the flake. If it recurs, the next report will say
 whether the seek missed, the frame moved under the shutter, or the seam is real.
+
+---
+
+## D-035 — the rosette composites were a validator defect, not a geometry one, and a bounding box cannot see a shared edge
+
+**Date:** 2026-08-17 · **Status:** Decided (shipped) · **Repos:** qiyas (the exclusion + its four tests, PR [#18](https://github.com/NaqshCoffee/qiyas/pull/18); the release, PR [#19](https://github.com/NaqshCoffee/qiyas/pull/19), tag `v0.4.0`), bikar (pin bump + the two recorded composites + `RECORDED_DROP`, PR [#103](https://github.com/NaqshCoffee/bikar/pull/103)), 3d-models (§3 footnote ², the §10 P2.6 note, the P2 badge copy, this entry)
+
+### Context
+
+Two of the fourteen orbs had never scored 1.000. `Rosette-Orb` sat at 0.954 and
+`Rosette-Cube-Orb` at 0.975 from the day they were first measured (2026-07-26), through
+every sweep since. [D-034](#d-034--the-labs-coverage-gaps-are-sweeps-not-lists-a-claim-about-every-preset-must-read-every-preset)'s
+follow-on work carried `drop` out of the qiyas report and into `RECORDED_DROP` in
+`bikar:packages/lab/tests/orb-composites.test.ts`, which pinned the shortfall at 26 shapes
+on the dodeca and 4 on the cube so it could not widen unnoticed. What that pin did **not**
+say is which side the defect was on. Two readings fit the same numbers equally well: bikar
+draws 26 petal faces that are not really there, or qiyas fails to find 26 that are.
+
+The pin also made the question answerable, because it named exactly which shapes went
+missing. They are all petal faces, and every one of them shares a full edge with the face
+it was lost to.
+
+### The measurement that decided it
+
+`_shapes_overlap` in `qiyas:src/qiyas/stages/detectors/reconcile.py` bucketed two candidate
+shapes as one detection of the same region when three gates agreed: centroid distance under
+`dedup_thresh`, bounding-box IoU over 0.6, and areas within 30%. All three read bounding
+boxes and scalars. **None of them can distinguish "one region found twice" from "two regions
+either side of a shared edge"**, and a mirror-image pair of triangles is the worst case for
+all three at once: same area, coincident centroids, and a bounding box that is not merely
+similar but *identical* when the mirror line is an image axis.
+
+Across the 83-image corpus, 120 pairs reached the bucketing decision. Computing the actual
+shared interior area splits them cleanly in two, with nothing in the middle:
+
+| Group | Pairs | Interior-overlap fraction |
+|---|---|---|
+| Genuine duplicates — the same region found twice | 86 | 0.9241 … 1.0000 |
+| Edge-adjacent faces — two regions, one shared boundary | 34 | exactly 0.0000 |
+
+That gap is the whole argument. A constant chosen inside a bimodal gap this wide is a
+constant no plausible re-measurement moves.
+
+### Options
+
+**(a) Raise `_BBOX_IOU_THRESHOLD`.** The obvious cheap fix, and it is not merely
+insufficient — it is impossible. The 34 wrongly-bucketed pairs run IoU **0.6284 up to
+exactly 1.0000**. A threshold that excludes the worst of them excludes every genuine
+duplicate too, because there is no value above 1.0.
+
+**(b) Add a specialist exclusion that computes the real shared area.** A shapely
+intersection over the two candidate polygons, `_MIN_INTERIOR_OVERLAP_FRAC = 0.05`, read off
+the gap above rather than chosen. Adds a runtime dependency edge to shapely, which qiyas
+already carries.
+
+**(c) Accept 0.954 and 0.975 as the honest reading, and keep `RECORDED_DROP` holding them.**
+The status quo. It verifies nothing new, and it leaves 30 real faces invisible to a
+validator whose whole job is to see them — including, silently, on any future design that
+puts two faces either side of an edge.
+
+### Decision
+
+**(b).** The exclusion is the eighth in a file that already has seven, so the shape was
+established; what it adds is the first one that reads geometry rather than a summary of
+geometry. The constant is 0.05 because the measured gap is 0.0000 to 0.9241 — eighteen times
+the constant on one side and zero on the other.
+
+Four tests ship with it, and **the by-design failure is first**: two mirrored triangles
+across a shared edge, at IoU exactly 1.0000, must stay separate. Then its converse — the
+same two triangles genuinely overlapping must still be merged, so the exclusion is not
+simply switching bucketing off. Then two crossing-band cases at 4.08% and 6.19%, which pin
+the constant from both sides: move it and one of the two flips.
+
+**The release is `v0.4.0`, and deliberately not for `v0.3.0`'s reason.** v0.3.0 was a minor
+because the report gained fields (`drop`, `max_drift`); nothing gained a field here, and a
+v0.3.0 report and a v0.4.0 report have the same shape and the same `SCHEMA`. It is a minor
+because **what the encoder finds changed**: wire compatibility is intact and result
+compatibility is not, and a consumer holding recorded numbers has work to do before adopting
+the image. Do not read a policy out of the two samples — minor here does not mean "SCHEMA
+bumped", it means the consumer has work to do.
+
+**The pin and the numbers move in one commit.** `orb-validate.yml`'s `QIYAS_IMAGE`, the two
+`qiyasComposite` values in `packages/lab/src/scripts.ts`, and `RECORDED_DROP`'s two non-zero
+rows are one bikar PR, because the pin is what produced the numbers and a commit that moved
+either half alone would be a red run with a misleading cause. `RECORDED_DROP`'s fourteen keys
+stay — a blanket `toBe(0)` passes vacuously over an empty sweep, so the keys pin coverage
+while the values pin the defect.
+
+### The corpus-wide half, and one thing deliberately not done
+
+`CLAUDE.md`'s D4 says a withdrawal is corpus-wide, so 0.954 and 0.975 were grepped for
+before this was called fixed. Six sites, and they do not all get the same treatment, because
+**a superseded measurement is not a withdrawn number.** 0.954 was a correct measurement of
+the validator as it stood; it is not in the class D4 was built for, which is numbers that
+were never true. So the live claims are corrected — §3's archetype table, §4.3's badge copy
+in the P2 doc — and the dated records that say what was measured on their date are left
+saying it, with a pointer forward: §10's P2.6 bullet, `docs/research/qiyas-wheelfield-validation-survey.md`
+(preserved verbatim under its provenance header, as research files are), and the two
+`.claude/memory/islamic-orb-project.md` entries.
+
+For the same reason **no `WITHDRAWN` row was added to `.claude/gates/docs_gate.py`.** Its
+docstring is explicit that every row there is a number *found restated as fact after the
+withdrawal*, and none has been. A row would also fire on the research file and force
+exculpating words into a document the repo requires to stay verbatim — a gate making a doc
+worse to keep itself quiet.
+
+### What this resolves and what it does not
+
+Twelve of fourteen orbs scored exactly 1.000 before this and thirteen do now. The
+verification chain was walked link by link rather than inferred: qiyas #18 merged, #19
+merged, tag pushed, `publish.yml` green, and the image confirmed live through the packages
+API before bikar's pin was allowed to reference it; then bikar #103's `orb-validate` job
+green in 2m8s — and *a 2m8s pass has the same shape as a skip*, so the log says `swept 14
+orb(s)` and `86 tests` (the with-sweep count, not the 87-case skip count), and the uploaded
+artifact reproduces the macOS numbers exactly on Ubuntu: `drop=0`, `drift=0.0002`, both
+rosettes.
+
+That artifact matters more than usual here, because **the local sweep could not run.** Docker
+would not start on this machine, and the `QIYAS_DIR` fallback dies in cairocffi — macOS
+strips `DYLD_FALLBACK_LIBRARY_PATH` across the `sh` hop the sweep shells out through, so
+qiyas's rasterizer cannot `dlopen` cairo. The recorded numbers came from direct per-orb
+`qiyas orb-validate` runs, and CI's container is the authority that confirmed them. This is
+stated rather than smoothed over: had CI disagreed, the recorded numbers would have been
+wrong and the reason would have been invisible.
+
+**One orb this does not touch, and that is the point.** `Star-Octa-Orb` still scores 0.9921
+and `Weave-Orb` 0.9967, both with `drop` 0 — a *surplus*, the encoder finding more regions
+than the ground truth declares, which is the opposite defect and which `RECORDED_DROP`
+structurally cannot catch. §3's footnote ¹ called Star-Octa a 4-fold-tangency encoder quirk
+and that reading survives, now with a post-fix measurement behind it. A narrow fix that
+leaves a differently-shaped neighbour untouched is evidence the diagnosis was specific.
+
+**What would reverse this:** a measured pair of genuinely-duplicate detections whose interior
+overlap falls below 0.05. The 86-pair floor of 0.9241 says the margin is eighteenfold today,
+but that floor was measured on one corpus of orb and pattern views; a producer emitting
+near-tangent shapes of very different size could land in the gap, and the answer then is to
+re-measure the distribution and move the constant with the new histogram beside it — not to
+widen it because a case failed.
