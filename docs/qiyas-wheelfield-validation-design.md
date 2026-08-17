@@ -1,15 +1,26 @@
 # qiyas 3D validation for the wheelfield family — design doc
 
-Status: **v1 — Q0–Q4 and Q6 done, Q5 unstarted.** Q6 is done
-except for the one thing it cannot do alone: the three presets are registered,
-linked from the gallery and badged, but their composites stay `null` until Q5's
-job records one, and the badge says exactly that rather than implying a pass.
+Status: **v2 — Q0–Q6 all done, and the two follow-ons Q4 spawned with them.**
 Q1 (cell views) merged as bikar `fe6a86c`; Q2 (ribbon views) as bikar PR #96;
 Q3 (the qiyas audit fixes) as qiyas PR #11; Q6 as bikar PRs #97 and #98, with
-#99 clearing the e2e flake that blocked them. Q4's measurement is §7.1 and it
-changed the plan — it fired §7's validator and made the composite threshold this
-doc was going to record unrecordable, adding Q4a and Q4b in its place, both of
-which are qiyas work and neither of which is done. Direction taken by the user
+#99 clearing the e2e flake that blocked them ([D-034](decisions-log.md)). Q4's
+measurement is §7.1 and it changed the plan — it fired §7's validator and made
+the composite threshold this doc was going to record unrecordable, adding Q4a
+and Q4b in its place. **Q4a** shipped as qiyas PR #15, exposing `drop` and
+`max_drift`. **Q4b** shipped as bikar PR #102 (`6157792`) and *inverted its own
+premise*: measured against real renders the acceptance radius needed no scaling
+at all, so no constant changed and the gate became a count instead (§7.1).
+**Q5** shipped as bikar PR #100 (`5349a80`) — see §8 for what its first sweep
+found. Q6's composites, which this line recorded as staying `null` "until Q5's
+job records one", are recorded: `maclado-9` cells **1.000**, `maclado-9-weave`
+**1.000** on both drawings, `maclado-9-overlap` ribbons **1.000** with
+`cells: null` left standing as the geometry answering rather than a missing run.
+Read those 1.000s with the hedge bikar's own registry comment carries: the
+composite matches shapes by centre and scores position and area, it does not
+read `type`, and the claim that these views are *typed* correctly is carried by
+the histogram in `bikar:packages/lab/tests/orb-composites.test.ts`, not by these
+numbers. §6's non-goal is unchanged and load-bearing — none of this verifies
+weave parity. Direction taken by the user
 on 2026-08-15, after a scoping pass presented four open questions: build **both**
 representations (cell decomposition *and* stroked ribbons), cover **all three**
 Maclado presets, **fix** the qiyas defects that make the ribbon representation
@@ -519,22 +530,42 @@ elements, or a per-pair extreme — and never the composite alone.
   than the fourth decimal place either is reported to, and `geometric` can move
   the wrong way entirely.
 
-Still deliberately absent, and now for a stated reason: **the bound on
-`max_drift`.** Every number above compares ground truth against a perturbed
-copy of itself, so the clean per-pair drift is exactly 0.0000 by construction —
-not the floor a real gate must clear. What qiyas's encoder drifts by when it
-recovers bands from an actual rendered PNG is unmeasured, because the local
-`qiyas encode` CLI cannot run here (cairo is missing). Q5's first CI run
-encodes a real render; the bound is measured from that and recorded then.
+Still deliberately absent when this section was written, and now measured: **the
+bound on `max_drift`.** Every number above compares ground truth against a
+perturbed copy of itself, so the clean per-pair drift is exactly 0.0000 by
+construction — not the floor a real gate must clear. What qiyas's encoder drifts
+by when it recovers bands from an actual rendered PNG was unmeasured, because
+the local `qiyas encode` CLI could not run here (cairo is missing).
 
-Two build items follow, both new:
+**The floor, measured in Q4b (bikar PR #102, 54 views over 14 orbs, local qiyas
+at the v0.3.0 commit):** every one of the 54 views reports `max_drift`, and the
+distribution is min 0.0001 / median 0.0002 / max **0.0003**, with **zero views
+at exactly 0.0000** — which is what makes it an encoder measurement rather than
+the by-construction zero above. `max_dist` (`0.02 · √2`) is 0.028284, about
+**100× the worst drift observed**. It did not need a sibling CI run to get
+there: `resolveQiyas` takes `QIYAS_DIR` as well as `QIYAS_IMAGE`, so the local
+checkout measured the floor without waiting for a tag.
 
-- **Q4a (qiyas).** Expose the per-part statistics `Scores` does not carry:
-  the count of ground-truth elements with no partner inside the radius, and
-  `max_drift`. Neither can be gated on until it is reported.
-- **Q4b (qiyas).** The acceptance radius must scale with the representation
-  rather than be one constant: 0.02 is 5–8× the ribbon field's own p05
-  spacing. What the scaling should be is not settled by this measurement.
+Two build items followed, both new, and **both are done — the second one
+disproved its own premise, which is the more useful outcome:**
+
+- **Q4a (qiyas). ✅ Done** — qiyas PR #15 (`a98a657`), SCHEMA 1.25/1.26. Exposes
+  the per-part statistics `Scores` does not carry: `drop`, the count of
+  ground-truth elements with no partner inside the radius, and `max_drift`.
+  Neither could be gated on until it was reported.
+- **Q4b. ✅ Done, and it is not what this bullet asked for** — bikar PR #102
+  (`6157792`), and note it landed as *bikar* work, not the qiyas work predicted
+  here. The premise was that the acceptance radius must scale with the
+  representation, 0.02 being 5–8× the ribbon field's own p05 spacing. Measured,
+  that is not where the loss was: replicating the Hungarian assignment on the
+  four affected views gives `unmatched-by-distance = 0` on all four and
+  `drop == len(gt) − len(encoded)` exactly. **Every drop was a shape the encoder
+  never produced** — widening the radius recovers nothing, narrowing costs
+  nothing. So no constant changed; what shipped instead carries `drop` and
+  `max_drift` into the gate (`RECORDED_DROP` per preset, `MAX_DRIFT_CEILING`
+  0.005, ~17× the worst observed). The 30 drops that motivated all this turned
+  out to be a qiyas validator defect and are now zero —
+  [D-035](decisions-log.md).
 
 ---
 
@@ -582,14 +613,41 @@ scale with the representation). Verified §7's acceptance-radius validator by
 failing it, which is the only way a validator with a hard FAIL case gets
 exercised at all.
 
-**Q5 — CI wiring.** No CI job in either repo runs `orb-validate` at either pinned
-revision; the eleven recorded composites came from a manual local Docker sweep,
-hand-transcribed at bikar `ba5ef85`, and the registry's comment about a CI gate
-making stale values a tripwire has no automation behind it. Q5 decides which
-repo owns the job and how bikar's views reach qiyas, then builds it. Verifies:
-that a deliberately stale recorded composite **fails the job**. That by-design
-failure is the milestone's real exit condition — a wiring that only ever reports
-green has not been shown to be a tripwire at all.
+**Q5 — CI wiring. ✅ Done** (bikar PR #100, `5349a80`). No CI job in either repo
+ran `orb-validate` at either pinned revision; the eleven recorded composites came
+from a manual local Docker sweep, hand-transcribed at bikar `ba5ef85`, and the
+registry's comment about a CI gate making stale values a tripwire had no
+automation behind it. **bikar owns the job** — three pieces:
+`bikar:scripts/sweep-orb-validate.ts` measures (renders all 14 orbs, scores every
+view set), `bikar:packages/lab/tests/orb-composites.test.ts` compares recorded
+against measured, and `bikar:.github/workflows/orb-validate.yml` runs both. qiyas
+arrives as a pinned container (`QIYAS_IMAGE`) or a sibling checkout
+(`QIYAS_DIR`), **exactly one** — both set is an error rather than a precedence
+rule, because a green sweep against a pinned image and a green sweep against a
+working tree are different claims, and the resolved command is recorded in the
+output JSON so a reader can tell which one they hold.
+
+*Exit condition met by construction, not by a green run:* the comparing test was
+mutated four ways and each was caught — a moved composite, a retyped ribbon
+histogram, a `ribbon_pass` in cells, and a cells score where the sweep drew none.
+Q4b added three more by-design failures on the same file (§7.1).
+
+*What the first sweep found, which is the argument for sweeping the directory
+rather than a list:* **three of the five orbs declaring a `weave` drew no ribbon
+views at all** — `Rosette-Weave-Orb`, `Weave-Orb`, `Weave-Dodeca-Orb`.
+`evaluateWovenOrb` never forwarded the `topology` that `weaveLattice` had been
+returning the whole time; only the wheelfield branch did, so the CLI took its
+early return and wrote cells only. Silently, for two weeks. No single-file test
+could have surfaced it. The witness is codified twice, per bikar's tenet 18: a
+directory sweep that automatically covers any woven orb added later, and a
+Lab-side case comparing the presets that declare a weave against the presets that
+have a ribbon score.
+
+*One design change came out of measuring:* `qiyasComposite` is a **pair**, not a
+number. An orb draws cell views, ribbon views, or both, and one number cannot
+speak for two drawings — a mean lets healthy cells hide collapsed ribbons. It is
+now `{cells, ribbons}`, each independently nullable, and the badge shows the
+**minimum** of the drawings actually scored.
 
 **Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](decisions-log.md).)*
 Record a composite per preset; add the three registry entries; add `lab:` links
@@ -621,11 +679,12 @@ real score requires editing the assertion that says none exists.
    Q1 may find that "the cells" require a construction that does not exist yet,
    which would make Q1 substantially larger than a plumbing change. This is the
    largest schedule risk in the plan and it is not yet measured.
-2. **Which repo owns the CI job (Q5)?** bikar produces the views and qiyas scores
-   them; either can own it, and the seam — a published artifact, a container, a
-   checked-in fixture set — is undecided. The one option that must not be chosen
-   silently is "keep doing it by hand and write down the number", which is the
-   status quo this milestone exists to end.
+2. ~~**Which repo owns the CI job (Q5)?**~~ **Answered — bikar owns it**, with
+   the seam a published container pinned by tag (`QIYAS_IMAGE`, today
+   `ghcr.io/naqshcoffee/qiyas:v0.4.0`) or a sibling checkout (`QIYAS_DIR`),
+   exactly one of the two. The option this question named as the one that must
+   not be chosen silently — "keep doing it by hand and write down the number" —
+   is the one that ended. See §8 Q5.
 3. **Does fixing D-c change any classic-orb score?** Unifying the filtering rule
    between the gt path and the recon path could move the eleven recorded
    composites. If it does, that is a finding about the recorded numbers, not a
@@ -634,10 +693,17 @@ real score requires editing the assertion that says none exists.
 4. **Three axes may not be enough coverage** for a 20-wheel field (§6). Whether
    to add axes is deferred until Q4's distribution shows whether the existing
    three already disagree with each other.
-5. **The qiyas revision is now pinned; the classic-orb composites are not.** The
-   eleven recorded numbers have no recorded producing revision beyond a commit
-   message. Q5 should stamp what produced each number, or the first disagreement
-   will be unattributable.
+5. ~~**The qiyas revision is now pinned; the classic-orb composites are not.**~~
+   **Answered, and by re-measurement rather than by stamping.** The worry was
+   that the eleven recorded numbers had no producing revision beyond a commit
+   message, so the first disagreement would be unattributable. Q5's sweep
+   re-derives all fourteen on every relevant push against the pinned image and
+   records the resolved qiyas command in the output JSON, so a recorded number is
+   now checked rather than merely attributed — a stale one fails the job. The
+   attribution question survives only for a number read **outside** that run,
+   which is the case D-035's cascade rule addresses: the image pin and the
+   numbers it produced move in one commit, because a commit that moved either
+   half alone would be a red run with a misleading cause.
 
 ---
 
