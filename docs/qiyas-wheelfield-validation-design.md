@@ -551,9 +551,21 @@ variable survives and the cairo raster path runs: on
 default takes the SVG fast-path and never loads cairo, so it does not test
 this), 17 shapes, `dominant_fold=4` at conf 0.77.
 
+**And qiyas already knew.** `qiyas:Makefile` defines a `CAIRO_DYLD` prefix that
+sets exactly this variable — to `$(brew --prefix)/lib` plus the two system
+directories, because `DYLD_FALLBACK_LIBRARY_PATH` *replaces* the default list
+rather than extending it — and its comment states the cause in the same terms
+reached above, including that it is prefixed onto each recipe line rather than
+exported precisely because SIP strips `DYLD_*` from `/bin/sh`. So the finding
+here is not a new one: **this doc was the stale site**, and the thing to do is
+`make -C <qiyas> local.test` (or `local.test-unit`, `-n auto` and integration
+excluded), not a hand-rolled env var. Docker and CI never see the problem at
+all — the image installs `libcairo2` into `/usr/lib`.
+
 The correction is worth carrying because a missing dependency and an unfindable
 one prescribe different work: the first says install something, the second says
-drop a hop. Two sites still say "missing" and are deliberately left: the
+use the entry point that already handles it. Two sites still say "missing" and
+are deliberately left: the
 `docs/research/` file is preserved verbatim under its provenance header, and
 D-035's log entry is dated. This one asserts present tense, so it is the one
 that had to move.
