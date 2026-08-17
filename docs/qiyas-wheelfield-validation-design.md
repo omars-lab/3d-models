@@ -535,7 +535,28 @@ bound on `max_drift`.** Every number above compares ground truth against a
 perturbed copy of itself, so the clean per-pair drift is exactly 0.0000 by
 construction — not the floor a real gate must clear. What qiyas's encoder drifts
 by when it recovers bands from an actual rendered PNG was unmeasured, because
-the local `qiyas encode` CLI could not run here (cairo is missing).
+the local `qiyas encode` CLI could not be run here.
+
+**And the reason it could not is not the one this section gave.** "Cairo is
+missing" is false: cairo is installed (`brew list` reports it; six
+`libcairo*.dylib` sit in `/opt/homebrew/lib`). What fails is the *lookup* —
+[D-035](decisions-log.md) already recorded the mechanism when the sweep hit it,
+and it applies one level lower than that entry needed to say. `.venv/bin/qiyas`
+is itself a `#!/bin/sh` wrapper, and `/bin/sh` is SIP-protected, so macOS strips
+`DYLD_FALLBACK_LIBRARY_PATH` on that exec and `ctypes.util.find_library` never
+searches Homebrew's prefix. Invoked with no `sh` hop — `.venv/bin/python
+.venv/bin/qiyas`, the venv's python being a symlink rather than a wrapper — the
+variable survives and the cairo raster path runs: on
+`StarOctaOrb.vertex-4.svg` with `--primitives-source raster` (the `auto`
+default takes the SVG fast-path and never loads cairo, so it does not test
+this), 17 shapes, `dominant_fold=4` at conf 0.77.
+
+The correction is worth carrying because a missing dependency and an unfindable
+one prescribe different work: the first says install something, the second says
+drop a hop. Two sites still say "missing" and are deliberately left: the
+`docs/research/` file is preserved verbatim under its provenance header, and
+D-035's log entry is dated. This one asserts present tense, so it is the one
+that had to move.
 
 **The floor, measured in Q4b (bikar PR #102, 54 views over 14 orbs, local qiyas
 at the v0.3.0 commit):** every one of the 54 views reports `max_drift`, and the
