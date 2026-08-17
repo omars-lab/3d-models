@@ -539,56 +539,57 @@ the local `qiyas encode` CLI could not be run here.
 
 **And the reason it could not is not the one this section gave.** "Cairo is
 missing" is false: cairo is installed (`brew list` reports it; six
-`libcairo*.dylib` sit in `/opt/homebrew/lib`). What fails is the *lookup* —
-[D-035](decisions-log.md) already recorded the mechanism when the sweep hit it,
-and it applies one level lower than that entry needed to say. `.venv/bin/qiyas`
-is itself a `#!/bin/sh` wrapper, and `/bin/sh` is SIP-protected, so macOS strips
-`DYLD_FALLBACK_LIBRARY_PATH` on that exec and `ctypes.util.find_library` never
-searches Homebrew's prefix. Invoked with no `sh` hop — `.venv/bin/python
-.venv/bin/qiyas`, the venv's python being a symlink rather than a wrapper — the
-variable survives and the cairo raster path runs: on
-`StarOctaOrb.vertex-4.svg` with `--primitives-source raster` (the `auto`
+`libcairo*.dylib` sit in `/opt/homebrew/lib`). What fails is the *lookup*, and
+[D-035](decisions-log.md) already recorded the mechanism when the sweep hit it:
+SIP strips every `DYLD_*` variable when a protected binary is exec'd, `/bin/sh`
+is protected, and every route in — make, npm, a shell — crosses one, so
+`ctypes.util.find_library` never searches Homebrew's prefix. Set
+`DYLD_FALLBACK_LIBRARY_PATH` past the last shell and the cairo raster path runs:
+on `StarOctaOrb.vertex-4.svg` with `--primitives-source raster` (the `auto`
 default takes the SVG fast-path and never loads cairo, so it does not test
 this), 17 shapes, `dominant_fold=4` at conf 0.77.
 
-**qiyas half-knew, and the half it missed is the one that matters.**
-`qiyas:Makefile` defines a `CAIRO_DYLD` prefix setting exactly this variable —
+`qiyas:Makefile` already does this, as a `CAIRO_DYLD` prefix on its recipes —
 `$(brew --prefix)/lib` plus the two system directories, because the variable
-*replaces* the default list rather than extending it — and its comment reaches
-the cause above, SIP and `/bin/sh` included. **It does not work.** Measured
-here, its own form, `CAIRO_DYLD uv run pytest tests/test_svg_fast_path.py`,
-fails on collection with `no library called "cairo-2" was found`, variable set.
+*replaces* the default list rather than extending it. It works, and it needs no
+change. What was missing was the equivalent in `bikar:scripts/sweep-orb-validate.ts`,
+which is what bikar PR #106 adds.
 
-The reason is one hop further than the comment looked. `uv run pytest` does not
-exec python; it execs `.venv/bin/pytest`, and that file opens `#!/bin/sh` — a
-polyglot that re-execs the venv python on itself. `.venv/bin/qiyas` is the same
-shape. So the protected shell the comment correctly identifies is not only
-upstream of the recipe, it is *inside* the invocation, past the point any
-Makefile can reach. Drop that hop and it works: `uv run python -m pytest` on
-the same file, same variable, **57 passed**; the whole suite through
-`.venv/bin/python -m pytest` is **2871 passed, 4 skipped, 49 xfailed, 2
-xpassed** in 24m06s.
+**A retraction, and the reason it is in the doc rather than only in the diff.**
+An earlier revision of this paragraph asserted the opposite — that `CAIRO_DYLD`
+does not work, because `.venv/bin/qiyas` is itself a `#!/bin/sh` polyglot whose
+exec strips the variable back off before python starts. Every measurement behind
+that was taken in a scratch worktree, and the property it measured belongs to
+the worktree, not to qiyas: a console script's shebang names the venv
+interpreter by absolute path, and where that path passes the kernel's 127-byte
+shebang limit the installer emits the `#!/bin/sh` polyglot instead. That
+worktree's path did. The ordinary checkout's does not. **This is K10 with the
+domains one directory apart** — a rule established under one filesystem layout,
+carried to another without writing the sentence that says why it transfers.
 
-**Validator:** an invocation is cairo-capable when the process that loads cairo
-was exec'd with no SIP-protected binary between it and the environment carrying
-`DYLD_FALLBACK_LIBRARY_PATH`.
-PASS: `uv run python -m qiyas.cli orb-validate …` — `uv` execs python directly.
-FAIL: `uv run qiyas orb-validate …` — `uv` execs `.venv/bin/qiyas`, whose
-`#!/bin/sh` line strips the variable before python starts.
+**Validator:** a venv console script preserves `DYLD_*` across its own exec
+exactly when its first line names the interpreter directly, which it does
+exactly when that line fits the 127-byte shebang limit.
+PASS: `~/Workspace/git/qiyas/.venv/bin/qiyas` opens
+`#!/Users/omareid/Workspace/git/qiyas/.venv/bin/python3`, 54 bytes — and
+`uv run pytest --collect-only tests/test_svg_fast_path.py` errors on collection
+with `no library called "cairo-2" was found` *without* the variable, **57 tests
+collected** with it.
+FAIL: the same file in a worktree 82 characters deeper opens `#!/bin/sh` — and
+there the same command errors *with* the variable set, while
+`uv run python -m pytest` on the same tree passes 57.
 
-The Makefile's comment says the arrangement was "verified by echoing it from a
-recipe: exported, it prints empty." That verification cannot fail the way the
-thing fails: an echo proves the variable reached the shell, and the shell is
-where it dies. **The check that means something is loading cairo** — which is
-the repo's own rule about not letting a proxy discharge the claim.
+The FAIL row is the load-bearing one: it is the case that produced the wrong
+claim, and it is why bikar's sweep invokes `python -m qiyas.cli` rather than the
+console script. A module name reads no shebang, so depth cannot silently undo
+the repair. That is a belt against a deep checkout, not against a broken tool.
 
-The correction is worth carrying because a missing dependency and an unfindable
-one prescribe different work: the first says install something, the second says
-remove a shell from the exec chain. Two sites still say "missing" and are
-deliberately left: the
-`docs/research/` file is preserved verbatim under its provenance header, and
-D-035's log entry is dated. This one asserts present tense, so it is the one
-that had to move.
+The original correction still stands and is worth carrying, because a missing
+dependency and an unfindable one prescribe different work: the first says
+install something, the second says put a variable back after the last shell.
+Two sites still say "missing" and are deliberately left: the `docs/research/`
+file is preserved verbatim under its provenance header, and D-035's log entry
+is dated. This one asserts present tense, so it is the one that had to move.
 
 **The floor, measured in Q4b (bikar PR #102, 54 views over 14 orbs, local qiyas
 at the v0.3.0 commit):** every one of the 54 views reports `max_drift`, and the
