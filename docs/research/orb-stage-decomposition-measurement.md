@@ -18,6 +18,13 @@
   nothing written into either repo and still no `make` target run. That run
   also produced CORRECTION 5 and CORRECTION 6, both of which change numbers
   the morning run shipped.
+  AMENDED AGAIN 2026-08-18 (evening, same machine): section 8 was added
+  from the build itself — bikar branch `feat/orb-timelapse-stages`, commits
+  `587ea34` and `e9cf74e`, PR #107 — and its programs run against
+  `packages/core/src`, not the built bundle, because they import
+  `orbCellStages` which is newer than any `dist/`. That run wrote files
+  into bikar (the module, its tests, the CLI branch) and produced
+  CORRECTION 7, which changes a claim in section 3 of the design doc.
   PREREQUISITE: `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`
   and `cd ~/Workspace/git/bikar`. The system Node is too old and fails in
   ways that look like code bugs.
@@ -628,3 +635,124 @@ and `final` frames, and **neither is a frame the filter produces**:
 - **Prose derivation was not demonstrated.** Section 1 shows the provenance tags
   exist. No caption generator was written, and nothing here shows that derived
   sentences read as prose rather than as telemetry.
+
+---
+
+## 8. What the built generator measured, 2026-08-18 (evening)
+
+Sections 0–7 were taken before anything was written. This section was taken
+*from* the generator, which is why it can answer questions the earlier runs
+could only frame. Feeds `orb-construction-timelapse-design.md` section 11.
+
+**How to re-run.** These are `.ts` files placed under
+`~/Workspace/git/bikar/packages/core/scratch/` and run with `npx tsx`, not
+`node -e` against `dist/`: they import `orbCellStages`, which is newer than any
+built bundle. The scratch directory is git-ignored (`packages/core/scratch/out/`
+is ignored outright and the files below were deleted after each run).
+
+### 8.1 Element-signature diversity, every orb
+
+```ts
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { compileToGeometry, projectOrbViewScene, symmetryViewAxes } from '../src/index.js';
+import { orbCellStages } from '../src/kernel3d/orb-timelapse.js';
+for (const f of readdirSync('patterns/Orbs').filter(x => x.endsWith('.bkr')).sort()) {
+  const r = compileToGeometry(readFileSync(join('patterns/Orbs', f), 'utf-8'));
+  const orb = r.orb3d!;
+  let s;
+  try {
+    s = projectOrbViewScene(r, { radiusMm: orb.radiusMm, projection: orb.projection, view: symmetryViewAxes(orb.base)[0] });
+  } catch { console.log(f, 'no cell decomposition'); continue; }
+  const el = orbCellStages(s, r.orbCells).filter(x => x.kind === 'element');
+  const both = new Set(el.map(x => `${x.sources.join('+')}|${x.sides.join(',')}`)).size;
+  console.log(f, el.length, r.orbCells !== undefined ? 'wheelfield: no sources' : both);
+}
+```
+
+Raw output, transcribed as a table:
+
+| Orb | element frames | distinct signatures |
+| --- | ---: | ---: |
+| `Dodeca-Orb` | 11 | 3 |
+| `Hankin-Orb` | 6 | 2 |
+| `Maclado-9-Overlap` | — | no cell decomposition |
+| `Maclado-9-Weave` | 19 | wheelfield: no `sources` |
+| `Maclado-9` | 19 | wheelfield: no `sources` |
+| `Rosette-Cube-Orb` | 7 | 3 |
+| `Rosette-Orb` | 21 | 4 |
+| `Rosette-Weave-Orb` | 6 | 2 |
+| `Star-Cube-Orb` | 12 | 3 |
+| `Star-Octa-Orb` | 4 | 2 |
+| `Star-Orb` | 10 | 3 |
+| `Star-Tetra-Orb` | 2 | 2 |
+| `Weave-Dodeca-Orb` | 6 | 2 |
+| `Weave-Orb` | 7 | 2 |
+
+**Eleven inscribed orbs: 92 element frames, 28 distinct signatures.** The two
+wheelfield orbs add 38 element frames with no construct names at all.
+
+A separate run split the pair for Star-Orb: 2 distinct `sources` values, 2
+distinct `sides` values, 3 distinct pairs. The two fields cut the sequence
+differently rather than one refining the other — which is why a stage carries
+both, and which corrects this module's first docstring (it claimed 3 distinct
+side counts against 2 signatures).
+
+**This closes the design doc's section 11 question 4** — whether derived prose
+reads as prose. It does not, per frame: a generator asked for twenty sentences
+about Star-Orb has grounds for three.
+
+### 8.2 Where wheelfield fillers land — CORRECTION 7
+
+```ts
+const kindOf = (i: number) => cells[s.polygons[i].patternFaceIndex]?.kind ?? '?';
+const fillerPolys = s.polygons.map((_, i) => i).filter(i => kindOf(i) === 'filler');
+const firstStageOf = (p: number) => st.findIndex(x => x.polygonIndices.includes(p)) + 1;
+console.log(s.polygons.length, fillerPolys.length, [...new Set(fillerPolys.map(firstStageOf))].sort((a,b)=>a-b));
+```
+
+Raw output:
+
+```
+Maclado-9 front cap: 127 polygons, 3 of them filler
+  fillers first appear in stages: 30, 31, 32 of 32
+```
+
+**CORRECTION 7.** The design doc's section 3.2 said the filler cells "are
+excluded from the wheel-by-wheel frames and admitted only at the final frame."
+They are not. A filler carries its own `baseFaceIndex` and therefore arrives as
+its own frame with nothing added to make it do so — the last three frames of
+thirty-two, one each. The ordering was already correct; the **label** was not,
+numbering them on with the wheels so that the front cap read as thirteen units
+when it holds ten wheels and three gap patches. Fixed in bikar `e9cf74e`.
+
+### 8.3 Cell and ribbon sequence lengths, the four orbs that have both
+
+From the same enumeration that totals 302:
+
+| Orb | cell frames | strand frames |
+| --- | ---: | ---: |
+| `Maclado-9-Weave` | 32 | 26 |
+| `Weave-Orb` | 17 | 15 |
+| `Rosette-Weave-Orb` | 9 | 9 |
+| `Weave-Dodeca-Orb` | 9 | 9 |
+
+Two of the four are unequal. Together with the structural fact that the two
+sequences filter **different scenes** — `OrbViewScene` for cells,
+`RibbonViewScene` for ribbons, never merged by `sceneAtStage` — this closes
+section 11 question 3.
+
+### 8.4 What section 8 still did not measure
+
+- **Readability was reasoned about, not tested.** No caption generator was
+  written and no reader was shown one. What is measured is the *ceiling* on
+  distinguishable captions, which is what makes per-frame prose indefensible;
+  whether per-*section* prose reads well is still untested.
+- **One hero view only.** Every number here is the first axis
+  `symmetryViewAxes` returns. Signature diversity on `edge-2` or `face-3` was
+  not measured and may differ, since a different front cap admits different
+  cells.
+- **The 12 fillers, not the 3.** Only the front-cap-visible fillers were
+  located in the sequence. Whether the other nine also arrive as their own
+  frames on other axes follows from the same `baseFaceIndex` argument but was
+  not run.

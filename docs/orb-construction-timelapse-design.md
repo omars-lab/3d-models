@@ -1,9 +1,13 @@
 # Orb construction timelapse
 
-**Status:** DRAFT — nothing implemented. Design only.
+**Status:** the generator is **built** — bikar `587ea34` and `e9cf74e` on branch
+`feat/orb-timelapse-stages` (PR #107), giving `bikar render --format timelapse`.
+The **page** of section 7.3 is not built, and no post has been published. Section
+9's gate is not built either.
 **Grounded by:** [`research/orb-stage-decomposition-measurement.md`](research/orb-stage-decomposition-measurement.md)
 — every number in this document is from that file, measured 2026-08-18 against
-bikar `e0a81cc` and 3d-models `50bac8d`. Where that file marks a figure
+bikar `e0a81cc` and 3d-models `50bac8d`, with sections 8.1–8.3 of that file taken
+from the built generator the same evening. Where that file marks a figure
 NOT VERIFIED, this document marks it too.
 
 ## 1. What this is, and the one fact that decided it
@@ -134,8 +138,16 @@ grouping. Budget for one generator plus a naming pass, not two generators.
 
 The 12 `filler` cells are the honest wrinkle. They belong to no wheel — they are
 what the field needs to close, and they are why 392 is not a multiple of 19.
-They are excluded from the wheel-by-wheel frames and admitted only at the final
-frame.
+
+**Correction, 2026-08-18.** The sentence that stood here said they are "admitted
+only at the final frame." Built and measured, they are not: a filler carries its
+own `baseFaceIndex`, so it arrives as its own frame with no help from anything.
+On Maclado-9's hero view, 3 of the 127 visible polygons are fillers and they are
+the last three frames of thirty-two, one each. The ordering was already right;
+what was wrong was the caption, which numbered them on with the wheels and so
+said the front cap holds thirteen units when it holds ten wheels and three gap
+patches. Fixed in bikar `e9cf74e`, and section 11's second open question closes
+on this measurement.
 
 ### 3.3 Measured frame counts, all 14
 
@@ -581,23 +593,35 @@ and must be falsifiable.
 **First shippable slice: a timelapse format emitting SVG frames for one orb,
 Star-Orb.** Smallest independently useful thing — the frames are inspectable
 immediately — exercising the inscribed two-axis path that covers 11 of 14 orbs,
-at 22 frames.
+at 20 frames.
 
-1. **bikar** — a stage-sequence function inside `packages/core`, returning an
-   ordered array of polygon-index subsets plus stage metadata. Inscribed path
-   only. A pure function over the existing scene; no engine change. Placing it
-   inside core rather than widening the package export is what answers section
-   3.4.
-2. **bikar** — the CLI format, writing numbered SVGs per axis plus a manifest
-   carrying counts, `.bkr` hash and engine version. Ship here; this is the slice.
-3. **bikar** — extend to the wheelfield path via the cell metadata and to the
-   ribbon path via `strandId`. Now all 14.
-4. **bikar** — tests: terminal identity per orb, viewBox invariance per
-   sequence, monotonic polygon counts. This is where section 4.1's FAIL case
-   first turns red.
-5. **3d-models** — the gate, its hook, `make validate` wiring, and the
-   adversarial fixtures. Gate before page, deliberately: the gate is what makes
-   the page's claims worth publishing.
+1. **DONE** (bikar `587ea34`) — a stage-sequence function inside
+   `packages/core`, returning an ordered array of polygon-index subsets plus
+   stage metadata. A pure function over the existing scene; no engine change.
+   Placing it inside core rather than widening the package export is what
+   answers section 3.4. Shipped covering all three paths at once rather than
+   inscribed-only: the wheelfield and ribbon branches were three lines each
+   once the inscribed one existed, and splitting them would have cost more in
+   plumbing than it saved.
+2. **DONE** (bikar `587ea34`) — `--format timelapse`, writing numbered SVGs per
+   axis plus a manifest carrying counts, `.bkr` hash and engine version.
+   Filenames are zero-padded so a lexical sort is the play order.
+3. **DONE** — folded into step 1, see above. All 14, 302 frames.
+4. **DONE** (bikar `587ea34`, `e9cf74e`) — tests: terminal identity per orb,
+   viewBox invariance per sequence, monotonic polygon counts, and the two
+   caption ceilings section 11.4 rests on. Table-driven with each sequence
+   length written out and `null` where a sequence does not exist, because a
+   loop that skipped what it could not build would pass on an orb whose
+   sequence had vanished.
+
+   Note the earlier draft of this step claimed it is "where section 4.1's FAIL
+   case first turns red." It is not, and cannot be: that FAIL case is about
+   *shipped artifacts under `build/`*, which a unit test over compiled scenes
+   never reads. It turns red in step 5 and nowhere earlier.
+5. **NOT BUILT** — **3d-models** — the gate, its hook, `make validate` wiring,
+   and the adversarial fixtures. Gate before page, deliberately: the gate is
+   what makes the page's claims worth publishing. This is where section 4.1's
+   FAIL case turns red.
 6. **3d-models** — the per-orb page generator and the strip and scrubber, under
    a path `DEPLOY_PATHS` already reaches; link it from the card in `index.html`.
 7. **bikar** — the parameter-sweep axis as an opt-in, non-radius parameters
@@ -607,13 +631,103 @@ Steps 1 and 2 are the slice; 3 to 5 the completion; 6 and 7 the feature.
 
 ## 11. Open questions
 
-1. Does the second `overlap` band at `[1.38, 1.60]` produce a *valid* orb, or
-   one that merely compiles? Nothing has measured its printability or run qiyas
-   against it.
-2. Should the wheelfield `filler` cells get their own named stage rather than
-   arriving with the final frame?
-3. What does the page do for the orbs where cells and ribbons both exist — two
-   sequences side by side, or one interleaved?
-4. Does derived prose read as prose, or as telemetry? Section 8's criterion 8 is
-   the correctness check; readability is untested and is the single largest risk
-   to the "blog post for free" premise.
+Three of the four are closed below, each by a measurement taken while building
+the generator rather than by a decision taken about it. The fourth is a question
+about geometry rather than about this document and is tracked on its own.
+
+### 11.1 Open — the second `overlap` band
+
+Does the second `overlap` band at `[1.38, 1.60]` produce a *valid* orb, or one
+that merely compiles? Nothing has measured its printability or run qiyas against
+it, and the sweep that found the band stepped 0.02, so even its edges are
+uncertain to within one step. This blocks nothing here.
+
+### 11.2 Closed — wheelfield fillers need a caption, not a stage
+
+The question was whether the `filler` cells should get their own named stage
+rather than arriving with the final frame. Both halves of it were wrong. A
+filler carries its own `baseFaceIndex`, so it already arrives as its own frame:
+measured on Maclado-9's hero view, the 3 visible fillers are the last three
+frames of thirty-two, one each, and nothing had to be added to make that happen.
+What was wrong was the label. Numbering them on with the wheels told a reader the
+front cap holds thirteen units when it holds ten wheels and three gap patches.
+
+**Answer:** no new stage; label a repeat stage by the cell kind it admits.
+Shipped in bikar `e9cf74e` with the count pinned as a test.
+
+### 11.3 Closed — two sequences, played in order, never interleaved
+
+For the four orbs that have both, interleaving is not a layout choice that was
+rejected — it is not available. The two sequences are filters over **different
+scenes**: `orbCellStages` reads an `OrbViewScene` whose polygons are lifted
+faces, `orbRibbonStages` reads a `RibbonViewScene` whose polygons are swept
+bands. A ribbon frame is not a cell frame with strands added; the two are
+separate projections of the same orb, and compositing them would need a third
+projection that does not exist. `sceneAtStage` is generic over both and merges
+neither.
+
+The frame counts settle what an interleave would cost even if one existed:
+
+| Orb | cell frames | strand frames |
+| --- | ---: | ---: |
+| `Maclado-9-Weave` | 32 | 26 |
+| `Weave-Orb` | 17 | 15 |
+| `Rosette-Weave-Orb` | 9 | 9 |
+| `Weave-Dodeca-Orb` | 9 | 9 |
+
+Two of the four are unequal, so a lockstep interleave would have to stall one
+sequence while the other finished — and the stalled frames would be the
+indistinguishable ones, since a repeated frame is exactly what section 8's
+criterion 5 forbids.
+
+**Answer:** two sequences, each with its own scrubber, the cell sequence first.
+Section 7.2's fallback strip becomes two strips under two headings.
+
+### 11.4 Closed — derived prose is per-section, not per-frame
+
+This was named the single largest risk to the "blog post for free" premise, and
+it is a real one. Measured across every orb that has a cell sequence:
+
+| Orb | element frames | distinct signatures |
+| --- | ---: | ---: |
+| `Star-Tetra-Orb` | 2 | 2 |
+| `Star-Octa-Orb` | 4 | 2 |
+| `Hankin-Orb` | 6 | 2 |
+| `Rosette-Weave-Orb` | 6 | 2 |
+| `Weave-Dodeca-Orb` | 6 | 2 |
+| `Rosette-Cube-Orb` | 7 | 3 |
+| `Weave-Orb` | 7 | 2 |
+| `Star-Orb` | 10 | 3 |
+| `Dodeca-Orb` | 11 | 3 |
+| `Star-Cube-Orb` | 12 | 3 |
+| `Rosette-Orb` | 21 | 4 |
+| `Maclado-9` | 19 | none — wheelfield cells carry no `sources` |
+| `Maclado-9-Weave` | 19 | none — same |
+
+A "signature" is the pair a caption can actually read off a stage: the sorted
+DSL construct names on the polygons it admits, and their distinct side counts.
+Across the eleven inscribed orbs that is **92 element frames carrying 28
+distinct signatures** — and the two wheelfield orbs contribute 38 more frames
+with no construct names at all, because `projectSphericalCells` synthesises a
+spherical cell's source from the projected polygon and there is nothing to read.
+
+So a generator asked for twenty different sentences about Star-Orb's twenty
+frames has grounds for three. It would either repeat itself or invent, and
+inventing is what section 8's criterion 7 exists to forbid.
+
+**Answer: the premise survives in a weaker form, and the page must be built for
+the weaker one.** Prose is generated per *section* — one paragraph for the
+element axis, one for the repeat axis, one per strand pass — naming the
+constructs, the counts and the hedges, all of which are read from the scene.
+Individual frames get an ordinal and nothing else, except at a frame where a
+signature *changes*, which is the only place the source has something new to
+say. Two to four such transitions per orb is not a blog post's worth of
+sentences, but it is exactly the set of moments a reader would want pointed out,
+and it is the set the generator can defend.
+
+The three fields that make this checkable — `sources`, `introduced` and `sides`
+— are on `OrbStage` for this reason. `introduced` was the original design and was
+replaced after measurement: reporting only first appearances made every
+inscribed orb report every construct on frame 1 and nothing thereafter, because
+the union of a pattern's constructs is reached immediately. It is kept for the
+narrower question and is not what a caption should read.
