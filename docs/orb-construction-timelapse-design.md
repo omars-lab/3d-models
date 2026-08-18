@@ -139,27 +139,44 @@ frame.
 
 ### 3.3 Measured frame counts, all 14
 
-One hero symmetry view each. Frame count is `1 base + elements + repeats + 1 final (+ strands)`.
+One hero symmetry view each. Two counts, because they differ and the difference
+is load-bearing: **emitted** is `elements + repeats + strands`, the frames the
+filter actually produces; **notional** adds the base-polyhedron frame section
+3.4 cannot build yet.
 
-| Orb | surface | elements | repeats | strands | frames |
-|---|---|---|---|---|---|
-| Star-Tetra-Orb | inscribed | 2 | 3 | — | 7 |
-| Star-Octa-Orb | inscribed | 4 | 4 | — | 10 |
-| Rosette-Cube-Orb | inscribed | 7 | 3 | — | 12 |
-| Hankin-Orb | inscribed | 6 | 6 | — | 14 |
-| Star-Cube-Orb | inscribed | 12 | 3 | — | 17 |
-| Dodeca-Orb | inscribed | 11 | 6 | — | 19 |
-| Rosette-Weave-Orb | inscribed | 6 | 3 | 9 | 20 |
-| Weave-Dodeca-Orb | inscribed | 6 | 3 | 9 | 20 |
-| Star-Orb | inscribed | 10 | 10 | — | 22 |
-| Rosette-Orb | inscribed | 21 | 6 | — | 29 |
-| Maclado-9 | wheelfield | 19 | 13 | — | 34 |
-| Weave-Orb | inscribed | 7 | 10 | 15 | 34 |
-| Maclado-9-Overlap | wheelfield | — | — | 30 | 31 |
-| Maclado-9-Weave | wheelfield | 19 | 13 | 26 | 60 |
+| Orb | surface | elements | repeats | strands | emitted | notional |
+|---|---|---|---|---|---|---|
+| Star-Tetra-Orb | inscribed | 2 | 3 | — | 5 | 6 |
+| Star-Octa-Orb | inscribed | 4 | 4 | — | 8 | 9 |
+| Rosette-Cube-Orb | inscribed | 7 | 3 | — | 10 | 11 |
+| Hankin-Orb | inscribed | 6 | 6 | — | 12 | 13 |
+| Star-Cube-Orb | inscribed | 12 | 3 | — | 15 | 16 |
+| Dodeca-Orb | inscribed | 11 | 6 | — | 17 | 18 |
+| Rosette-Weave-Orb | inscribed | 6 | 3 | 9 | 18 | 19 |
+| Weave-Dodeca-Orb | inscribed | 6 | 3 | 9 | 18 | 19 |
+| Star-Orb | inscribed | 10 | 10 | — | 20 | 21 |
+| Rosette-Orb | inscribed | 21 | 6 | — | 27 | 28 |
+| Maclado-9 | wheelfield | 19 | 13 | — | 32 | 33 |
+| Weave-Orb | inscribed | 7 | 10 | 15 | 32 | 33 |
+| Maclado-9-Overlap | wheelfield | — | — | 30 | 30 | 30 |
+| Maclado-9-Weave | wheelfield | 19 | 13 | 26 | 58 | 59 |
 
-**329 frames across all 14.** Every number is a count taken from the compiled
-scene. Nobody chose them.
+**302 frames emitted across all 14; 315 notional.** Every number is a count
+taken from the compiled scene. Nobody chose them.
+
+> **Correction (2026-08-18).** This section shipped one day earlier with a
+> single `frames` column totalling **329**, under the rule
+> `1 base + elements + repeats + 1 final (+ strands)`. Writing the frames out to
+> disk rather than hashing them produced 302, and the 27-frame gap resolves
+> exactly: 13 base frames section 3.4 cannot build, and **14 `final` frames that
+> were a double count.** Section 4.1's own validator asserts the last cumulative
+> frame is byte-identical to the full render; re-measured today it is —
+> 13 IDENTICAL, 1 orb with no cell scene, 0 differing — so the `+ 1 final` term
+> counted a frame this document had already proved was the frame before it. The
+> table contradicted a section two doors down, and it survived because nobody
+> wrote the frames out.
+> ([research](research/orb-stage-decomposition-measurement.md) section 6a,
+> CORRECTION 6.)
 
 `elements` is counted on the first visible base face only, so it is a per-unit
 count for one representative unit — not a minimum, not a mean. Faces nearer the
@@ -228,7 +245,7 @@ and it is why Option D is scoped to non-radius parameters.
 attribute, and the last cumulative frame is byte-identical to the orb's shipped
 view SVG.
 
-PASS: all 14 orbs, 329 cumulative frames, one hero view each — exactly one
+PASS: all 14 orbs, 302 cumulative frames, one hero view each — exactly one
 distinct `viewBox` string per orb, and every terminal frame byte-identical to
 the unfiltered render. Star-Orb's pair is `c575552949e9` against
 `c575552949e9`; the other thirteen shas are in the research file.
@@ -367,7 +384,7 @@ Blunt, because the question was asked that way.
 1. **Staged output is already expressible with zero new surface** — not "with a
    flag", with nothing. The renderer's per-element tagging carries the
    information a stage needs, and this was verified by running the filter across
-   all 14 orbs: 329 frames, one distinct viewBox per sequence, every terminal
+   all 14 orbs: 302 frames, one distinct viewBox per sequence, every terminal
    frame byte-identical to the unfiltered render.
 2. **The cost argument does not save a proposal.** Orb body words are contextual
    identifiers rather than reserved keywords, so a new orb statement would cost
@@ -392,26 +409,39 @@ information a stage needs.**
 
 ### 7.1 Cost
 
-Measured, one hero view, all 14 orbs: compiling all 14 costs 94 ms, and
-generating every one of the 329 frames as SVG costs 31 ms on top of it. The
-Maclado Overlap — flagged in the brief as the cost risk for its dense weave — is
-a 12 ms compile.
+Measured, one hero view, all 14 orbs. Compiling all 14 costs 94 ms; generating
+all 302 emitted frames as SVG, compile included, costs **126 ms** (median of
+148 / 124 / 126) and 5.76 MB; writing them to disk adds ~57 ms. The Maclado
+Overlap — flagged in the brief as the cost risk for its dense weave — is a 12 ms
+compile.
 
-Both are single runs on a warm module cache on one machine and should be read
-as orders of magnitude, not benchmarks. No CI measurement was taken, and no
-baseline for the existing `orbs:` target was taken either, so this cost is
-stated as an absolute addition and never as a percentage.
+All figures are on one machine with a warm module cache and should be read as
+orders of magnitude. No CI measurement was taken, and no baseline for the
+existing `orbs:` target was taken either, so this cost is stated as an absolute
+addition and never as a percentage.
 
-NOT VERIFIED: an earlier draft claimed rasterisation dominates per-frame cost
-and that SVG-only is roughly thirty times cheaper. That multiplier rested on a
-rasteriser timing which could not be re-derived and is deliberately omitted. The
-*direction* survives — 31 ms for 329 vector frames is measured — but the
-multiplier must not ship as a number until someone re-runs it.
+**Rasterisation, now measured.** An earlier draft claimed SVG-only is roughly
+thirty times cheaper and could not re-derive it; the multiplier shipped marked
+NOT VERIFIED. Re-run against a writable path, `rsvg-convert 2.62.1` at
+1024x1024, one process per frame: **9.394 s and 9.556 s for the 302 frames —
+31.1 and 31.6 ms each**, against 126 ms for the whole vector pass. The ratio is
+**about 75x, not 30x**, so the correction runs in the direction that strengthens
+the conclusion rather than weakening it.
 
-The mitigation follows from the direction rather than the multiplier: **ship
-SVG, rasterise nothing.** The frames are already vector at the point of
-generation, and a scrubbable sequence does not need a bitmap the way a gallery
-card does.
+The number that changes a decision, though, is not the ratio. **Rasterisation
+cost is a fixed floor, not a function of scene complexity.** The corpus's
+smallest frame — 510 bytes — costs 26.0 ms; its largest, 334x bigger at 170 KB,
+costs 49.5 ms, a 1.9x rise. Process spawn is only 1.1 ms of that (302
+`/usr/bin/true` iterations run in 0.333 s), so the rest is librsvg and cairo
+painting 1,048,576 pixels regardless of what is on them. A timelapse's early
+frames are its simplest, and **rasterising them is no cheaper than rasterising
+the finished orb.** If Option C is ever taken, the lever is one process for many
+frames.
+
+The mitigation is therefore unchanged and better supported: **ship SVG,
+rasterise nothing.** The frames are already vector at the point of generation, a
+scrubbable sequence does not need a bitmap the way a gallery card does, and the
+PNGs are 21 MB against the SVGs' 5.76 MB.
 
 ### 7.2 Output format
 
