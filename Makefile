@@ -62,7 +62,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets
+.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -77,6 +77,7 @@ setup-hooks:
 	@echo "  pre-commit.d = $$(ls ${ROOT_DIR}/.githooks/pre-commit.d | tr '\n' ' ')"
 	@echo "  pre-push     = gitleaks full history (this repo has no CI)"
 	@echo "  run them all over the whole tree, any time: make validate"
+	@echo "                     (or 'make local.ci', the sibling repos' spelling)"
 	@if ! command -v gitleaks >/dev/null 2>&1; then \
 		echo "  WARNING: gitleaks not installed — commits AND pushes will block."; \
 		echo "           brew install gitleaks   (override: GITLEAKS_OK=1)"; \
@@ -190,6 +191,17 @@ validate-strict:
 validate-parity:
 	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --self-test
 	@$(PYTHON) ${ROOT_DIR}/.claude/gates/hook_parity.py --check
+
+# One name across four repos. bikar, qiyas and sacred-patterns each spell this
+# `make local.ci` / `local.ci-strict` / `local.ci-parity`; here the same three
+# checks are `validate*`, because here they are hooks rather than workflows.
+# That distinction is real and the docs keep it — but it is not worth making
+# somebody who just ran `make local.ci` in a sibling repo go and read a Makefile
+# to find out this one calls it something else. Aliases, not copies: one
+# definition, four spellings of its front door.
+local.ci: validate
+local.ci-strict: validate-strict
+local.ci-parity: validate-parity
 
 # Regenerate the ```mermaid block in docs/site-graph.md from the JSON, then
 # re-check — so a hand-edited render cannot outlive the graph it renders.
