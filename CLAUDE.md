@@ -19,6 +19,11 @@ not reimplement it.
 - **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`,
   `make deploy` (gh-pages worktree). `gh-pages` is a deliberately diverged
   branch — never merge it into `master`.
+- **CI**: there is none — no workflows, so `make validate` (alias `make local.ci`,
+  the siblings' spelling) is the only run there is and `make deploy` needs no
+  runner. A billing block is not a red build (`gh run view <id> --json jobs` →
+  `"steps": []` in 2–3 s: nothing measured) and must never stop a merge or a
+  deploy — [`docs/local-ci-runbook.md`](docs/local-ci-runbook.md).
 - **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate` (turn
   UNGROUNDED-and-empirical into a `CAL-*` bet), `prototype` (physical print
   pack), `maintain-use-cases`.
@@ -136,32 +141,28 @@ rule does not transfer.
 
 ### Research is checked in
 
-`ground-design-doc` requires it: the research behind a doc lives in
-`docs/research/*.md` under a provenance header (date, produced-by, which doc it
-feeds), preserved verbatim — not only in a transcript. A doc that points at a
-research file the repo does not have is a **K9**; that shipped in
-`hemisphere-split-design.md` and again here on 2026-07-29, which is why D1
-exists.
+`ground-design-doc` requires it: research lives in `docs/research/*.md` under a
+provenance header (date, produced-by, which doc it feeds), preserved verbatim —
+not only in a transcript. A doc pointing at a research file the repo does not have
+is a **K9**: it shipped in `hemisphere-split-design.md` and again here 2026-07-29,
+which is why D1 exists.
 
 ---
 
 ## The graduation rule
 
-When a defect is found and fixed:
+When a defect is found and fixed, **always** write the test or the doc correction
+that fails before the fix and passes after — that is the whole obligation in the
+normal case. **Only** write a durable narrative record when the fix also produces
+a *tenet*, a rule that changes how the next doc gets written; then it goes in this
+file, or in the taxonomy, not in a register.
 
-1. **Always** write the test or the doc correction that fails before the fix
-   and passes after. This is the whole obligation in the normal case.
-2. **Only** write a durable narrative record when the fix also produces a
-   *tenet* — a rule that changes how the next doc gets written. Then it goes in
-   this file, or in the taxonomy, not in a register.
-
-There is deliberately **no issue catalog** in this repo. The measurement behind
-that decision is in
+There is deliberately **no issue catalog** here. The measurement is in
 [`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md): of 15
-defects traced through git history, 5 graduated into a guard; all 7 fixes in
-July 2026 shipped a test and none needed an entry. Registers that nobody
-re-reads decay into what Richard Cook calls "a defensible argument that
-management is occurring." A test protects behaviour at zero re-reading cost.
+defects traced through git history, 5 graduated into a guard; all 7 fixes in July
+2026 shipped a test and none needed an entry. Registers nobody re-reads decay into
+what Richard Cook calls "a defensible argument that management is occurring." A
+test protects behaviour at zero re-reading cost.
 
 There is also no automated link checker: an 8.4% sample of the repo's 737 URLs
 measured ~11% false alarms against a true dead-link rate under 1%, and *"a gate
@@ -172,11 +173,10 @@ actually fetched* — a local check with no network.
 
 ## Robustness over ease — especially when offering the choice
 
-Ease is visible at the moment of choosing and robustness is not, so the trade
-is systematically mis-priced unless it is written down. When you present
-options, the cheapest one is not the default, "do nothing" is not neutral, and
-each option must say **what it verifies** — an option that verifies nothing
-should be named as such or not offered.
+Ease is visible at the moment of choosing and robustness is not, so the trade is
+systematically mis-priced unless written down. When you present options, the
+cheapest is not the default, "do nothing" is not neutral, and each must say **what
+it verifies** — one that verifies nothing should be named as such or not offered.
 
 > *Failure mode, 2026-08-03:* both options offered for the machine card produced
 > 23 STLs and **neither checked one**, while `calibration-design.md` §7 already
