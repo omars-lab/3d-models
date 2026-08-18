@@ -27,7 +27,6 @@
     "SiteNavigationElement has no properties and no known consumer. The survey behind that",
     "conclusion is docs/research/sitemap-link-graph-survey.md."
   ],
-
   "upstream": {
     "authority": "bikar packages/web/public-surface.json",
     "mirroredOn": "2026-08-02",
@@ -41,15 +40,24 @@
       "the gate says out loud which mode it ran in."
     ]
   },
-
   "surfaces": [
     {
       "id": "gallery",
       "what": "this repo's gh-pages branch — the public gallery",
       "builtBy": "Makefile deploy (DEPLOY_PATHS), plus lab-vendor for the four lab pages",
       "hosts": [
-        { "host": "blog.bytesofpurpose.com", "exposure": "public", "canonical": true, "basePath": "/3d-models/" },
-        { "host": "omars-lab.github.io", "exposure": "public", "basePath": "/3d-models/", "note": "301 to the canonical host; measured 2026-08-02" }
+        {
+          "host": "blog.bytesofpurpose.com",
+          "exposure": "public",
+          "canonical": true,
+          "basePath": "/3d-models/"
+        },
+        {
+          "host": "omars-lab.github.io",
+          "exposure": "public",
+          "basePath": "/3d-models/",
+          "note": "301 to the canonical host; measured 2026-08-02"
+        }
       ]
     },
     {
@@ -58,42 +66,175 @@
       "builtBy": "bikar .github/workflows/deploy.yml",
       "note": "One deployment, three hostnames. Identical bytes; only the Access policy differs.",
       "hosts": [
-        { "host": "bikar-studio.pages.dev", "exposure": "public" },
-        { "host": "*.bikar-studio.pages.dev", "exposure": "public", "note": "per-deployment aliases; permanent, unbounded set" },
-        { "host": "bikar.naqshcoffee.com", "exposure": "access", "accessTeam": "naqshcoffee.cloudflareaccess.com", "canonical": true }
+        {
+          "host": "bikar-studio.pages.dev",
+          "exposure": "public"
+        },
+        {
+          "host": "*.bikar-studio.pages.dev",
+          "exposure": "public",
+          "note": "per-deployment aliases; permanent, unbounded set"
+        },
+        {
+          "host": "bikar.naqshcoffee.com",
+          "exposure": "access",
+          "accessTeam": "naqshcoffee.cloudflareaccess.com",
+          "canonical": true
+        }
       ]
     }
   ],
-
   "nodes": [
-    { "id": "G.index",    "surface": "gallery", "file": "index.html",   "vendored": false, "inRepo": true,  "what": "the gallery index" },
-    { "id": "G.studio",   "surface": "gallery", "file": "studio.html",  "vendored": true,  "inRepo": false, "what": "bikar packages/lab site index" },
-    { "id": "G.lab",      "surface": "gallery", "file": "lab.html",     "vendored": true,  "inRepo": false, "what": "Orb Lab" },
-    { "id": "G.lego",     "surface": "gallery", "file": "lego.html",    "vendored": true,  "inRepo": false, "what": "Lego Lab" },
-    { "id": "G.design",   "surface": "gallery", "file": "design.html",  "vendored": true,  "inRepo": false, "what": "design notes; catalogued status 'preview'" },
-    { "id": "G.readme",   "surface": "gallery", "file": "README.md",    "vendored": false, "inRepo": true,
-      "what": "shipped by Makefile DEPLOY_PATHS, so it is a published page. Its two links to the gallery named two different hosts and one of them, 3d-models.bytesofpurpose.com, was NXDOMAIN — the README's primary call to action, on the deployed branch, contradicting its own §Links. Fixed 2026-08-02; declared here because an undeclared viaHost is exactly what G2 catches." },
-
-    { "id": "S.index",    "surface": "studio",  "file": "index.html",    "inRepo": false, "path": "/",         "what": "studio landing" },
-    { "id": "S.editor",   "surface": "studio",  "file": "editor.html",   "inRepo": false, "path": "/editor",   "what": "the studio proper" },
-    { "id": "S.sessions", "surface": "studio",  "file": "sessions.html", "inRepo": false, "path": "/sessions", "what": "session browser" },
-    { "id": "S.404",      "surface": "studio",  "file": "404.html",      "inRepo": false, "path": "/404",      "what": "not in the Rollup input map by design" }
+    {
+      "id": "G.index",
+      "surface": "gallery",
+      "file": "index.html",
+      "vendored": false,
+      "inRepo": true,
+      "what": "the gallery index"
+    },
+    {
+      "id": "G.studio",
+      "surface": "gallery",
+      "file": "studio.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "bikar packages/lab site index"
+    },
+    {
+      "id": "G.lab",
+      "surface": "gallery",
+      "file": "lab.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "Orb Lab"
+    },
+    {
+      "id": "G.lego",
+      "surface": "gallery",
+      "file": "lego.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "Lego Lab"
+    },
+    {
+      "id": "G.design",
+      "surface": "gallery",
+      "file": "design.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "design notes; catalogued status 'preview'"
+    },
+    {
+      "id": "G.breakdown",
+      "surface": "gallery",
+      "file": "breakdown.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "per-orb construction breakdown; reads build/orb-breakdown/<Orb>/manifest.json, which `make orbs` writes and DEPLOY_PATHS ships"
+    },
+    {
+      "id": "G.readme",
+      "surface": "gallery",
+      "file": "README.md",
+      "vendored": false,
+      "inRepo": true,
+      "what": "shipped by Makefile DEPLOY_PATHS, so it is a published page. Its two links to the gallery named two different hosts and one of them, 3d-models.bytesofpurpose.com, was NXDOMAIN — the README's primary call to action, on the deployed branch, contradicting its own §Links. Fixed 2026-08-02; declared here because an undeclared viaHost is exactly what G2 catches."
+    },
+    {
+      "id": "S.index",
+      "surface": "studio",
+      "file": "index.html",
+      "inRepo": false,
+      "path": "/",
+      "what": "studio landing"
+    },
+    {
+      "id": "S.editor",
+      "surface": "studio",
+      "file": "editor.html",
+      "inRepo": false,
+      "path": "/editor",
+      "what": "the studio proper"
+    },
+    {
+      "id": "S.sessions",
+      "surface": "studio",
+      "file": "sessions.html",
+      "inRepo": false,
+      "path": "/sessions",
+      "what": "session browser"
+    },
+    {
+      "id": "S.404",
+      "surface": "studio",
+      "file": "404.html",
+      "inRepo": false,
+      "path": "/404",
+      "what": "not in the Rollup input map by design"
+    }
   ],
-
   "edges": [
-    { "from": "G.index", "to": "G.studio", "at": "index.html:270", "evidence": "href=\"studio.html\"", "visibility": "static" },
-    { "from": "G.index", "to": "G.lab",    "at": "index.html:304", "evidence": "href=\"lab.html\"",    "visibility": "static" },
-    { "from": "G.index", "to": "G.lego",   "at": "index.html:322", "evidence": "href=\"lego.html\"",   "visibility": "static" },
-    { "from": "G.index", "to": "G.lab",    "at": "index.html:544", "evidence": "Open in Lab",          "visibility": "js-computed",
-      "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer" },
-    { "from": "G.index", "to": "G.lego",   "at": "index.html:544", "evidence": "Open in Lab",          "visibility": "js-computed",
-      "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none" },
-
-    { "from": "G.readme", "to": "G.index", "at": "README.md:7",   "evidence": "https://blog.bytesofpurpose.com/3d-models/", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
-    { "from": "G.readme", "to": "G.index", "at": "README.md:105", "evidence": "omars-lab.github.io/3d-models/",             "visibility": "static", "viaHost": "omars-lab.github.io" },
-
-    { "from": "G.index", "to": "S.index", "at": "index.html:277", "evidence": "bikar.naqshcoffee.com",
-      "visibility": "static", "viaHost": "bikar.naqshcoffee.com",
+    {
+      "from": "G.index",
+      "to": "G.studio",
+      "at": "index.html:270",
+      "evidence": "href=\"studio.html\"",
+      "visibility": "static"
+    },
+    {
+      "from": "G.index",
+      "to": "G.lab",
+      "at": "index.html:304",
+      "evidence": "href=\"lab.html\"",
+      "visibility": "static"
+    },
+    {
+      "from": "G.index",
+      "to": "G.lego",
+      "at": "index.html:322",
+      "evidence": "href=\"lego.html\"",
+      "visibility": "static"
+    },
+    {
+      "from": "G.index",
+      "to": "G.lab",
+      "at": "index.html:551",
+      "evidence": "Open in Lab",
+      "visibility": "js-computed",
+      "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer"
+    },
+    {
+      "from": "G.index",
+      "to": "G.lego",
+      "at": "index.html:551",
+      "evidence": "Open in Lab",
+      "visibility": "js-computed",
+      "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none"
+    },
+    {
+      "from": "G.readme",
+      "to": "G.index",
+      "at": "README.md:7",
+      "evidence": "https://blog.bytesofpurpose.com/3d-models/",
+      "visibility": "static",
+      "viaHost": "blog.bytesofpurpose.com"
+    },
+    {
+      "from": "G.readme",
+      "to": "G.index",
+      "at": "README.md:105",
+      "evidence": "omars-lab.github.io/3d-models/",
+      "visibility": "static",
+      "viaHost": "omars-lab.github.io"
+    },
+    {
+      "from": "G.index",
+      "to": "S.index",
+      "at": "index.html:277",
+      "evidence": "bikar.naqshcoffee.com",
+      "visibility": "static",
+      "viaHost": "bikar.naqshcoffee.com",
       "gated": {
         "why": [
           "Deliberate: the studio is a private authoring tool and this is the sign-in door,",
@@ -105,42 +246,217 @@
           "two decisions are one decision. Tracked as task #63."
         ],
         "decidedOn": "2026-08-02"
-      } },
-
-    { "from": "G.lab",  "to": "G.studio", "at": "bikar packages/lab/lab.html:22",  "repo": "bikar", "visibility": "static" },
-    { "from": "G.lab",  "to": "G.index",  "at": "bikar packages/lab/lab.html:23",  "repo": "bikar", "visibility": "static",
-      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these four pages beside this repo's index.html" },
-    { "from": "G.lego", "to": "G.studio", "at": "bikar packages/lab/lego.html:23", "repo": "bikar", "visibility": "static" },
-    { "from": "G.lego", "to": "G.index",  "at": "bikar packages/lab/lego.html:24", "repo": "bikar", "visibility": "static" },
-
-    { "from": "G.lab",  "to": "S.editor", "at": "bikar packages/lab/src/editor.ts:22", "repo": "bikar",
-      "visibility": "js-computed", "viaHost": "bikar-studio.pages.dev",
-      "note": "STUDIO_EDITOR_URL, consumed by main.ts:323; baked into gh-pages:assets/style-BFfxPe7x.js:3" },
-    { "from": "G.lego", "to": "S.editor", "at": "bikar packages/lab/src/editor.ts:22", "repo": "bikar",
-      "visibility": "js-computed", "viaHost": "bikar-studio.pages.dev",
-      "note": "same constant, consumed by lego-main.ts:423" },
-
-    { "from": "G.studio", "to": "G.lab",    "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed" },
-    { "from": "G.studio", "to": "G.lego",   "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed" },
-    { "from": "G.studio", "to": "G.design", "at": "bikar packages/lab/src/studio-main.ts:56", "repo": "bikar", "visibility": "js-computed",
-      "note": "href built by concatenation, so no URL literal survives minification — this is the only route to G.design and no crawler can see it" },
-    { "from": "G.design", "to": "G.studio", "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
-    { "from": "G.design", "to": "G.lab",    "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
-    { "from": "G.design", "to": "G.lego",   "at": "bikar packages/lab/src/design-main.ts:39", "repo": "bikar", "visibility": "js-computed" },
-
-    { "from": "S.index", "to": "S.editor",   "at": "bikar packages/web/src/catalog.ts:91",  "repo": "bikar", "visibility": "static" },
-    { "from": "S.index", "to": "S.sessions", "at": "bikar packages/web/src/catalog.ts:102", "repo": "bikar", "visibility": "static" },
-    { "from": "S.index", "to": "G.index",    "at": "bikar packages/web/src/catalog.ts:110", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
-    { "from": "S.index", "to": "G.lab",      "at": "bikar packages/web/src/catalog.ts:119", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
-    { "from": "S.index", "to": "G.lego",     "at": "bikar packages/web/src/catalog.ts:128", "repo": "bikar", "visibility": "static", "viaHost": "blog.bytesofpurpose.com" },
-
-    { "from": "S.editor",   "to": "S.index", "at": "bikar packages/web/editor.html:26",    "repo": "bikar", "visibility": "static" },
-    { "from": "S.sessions", "to": "S.index", "at": "bikar packages/web/sessions.html:161", "repo": "bikar", "visibility": "static" },
-    { "from": "S.404", "to": "S.index",    "at": "bikar packages/web/public/404.html:81", "repo": "bikar", "visibility": "static" },
-    { "from": "S.404", "to": "S.editor",   "at": "bikar packages/web/public/404.html:82", "repo": "bikar", "visibility": "static" },
-    { "from": "S.404", "to": "S.sessions", "at": "bikar packages/web/public/404.html:83", "repo": "bikar", "visibility": "static" }
+      }
+    },
+    {
+      "from": "G.lab",
+      "to": "G.studio",
+      "at": "bikar packages/lab/lab.html:22",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.index",
+      "at": "bikar packages/lab/lab.html:23",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these four pages beside this repo's index.html"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.studio",
+      "at": "bikar packages/lab/lego.html:23",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.index",
+      "at": "bikar packages/lab/lego.html:24",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "S.editor",
+      "at": "bikar packages/lab/src/editor.ts:22",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "viaHost": "bikar-studio.pages.dev",
+      "note": "STUDIO_EDITOR_URL, consumed by main.ts:323; baked into gh-pages:assets/style-BFfxPe7x.js:3"
+    },
+    {
+      "from": "G.lego",
+      "to": "S.editor",
+      "at": "bikar packages/lab/src/editor.ts:22",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "viaHost": "bikar-studio.pages.dev",
+      "note": "same constant, consumed by lego-main.ts:423"
+    },
+    {
+      "from": "G.studio",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.studio",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.studio",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "note": "href built by concatenation, so no URL literal survives minification — this is the only route to G.design and no crawler can see it"
+    },
+    {
+      "from": "G.design",
+      "to": "G.studio",
+      "at": "bikar packages/lab/src/design-main.ts:39",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.design",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/design-main.ts:39",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.design",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/design-main.ts:39",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "S.index",
+      "to": "S.editor",
+      "at": "bikar packages/web/src/catalog.ts:91",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.index",
+      "to": "S.sessions",
+      "at": "bikar packages/web/src/catalog.ts:102",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.index",
+      "to": "G.index",
+      "at": "bikar packages/web/src/catalog.ts:110",
+      "repo": "bikar",
+      "visibility": "static",
+      "viaHost": "blog.bytesofpurpose.com"
+    },
+    {
+      "from": "S.index",
+      "to": "G.lab",
+      "at": "bikar packages/web/src/catalog.ts:119",
+      "repo": "bikar",
+      "visibility": "static",
+      "viaHost": "blog.bytesofpurpose.com"
+    },
+    {
+      "from": "S.index",
+      "to": "G.lego",
+      "at": "bikar packages/web/src/catalog.ts:128",
+      "repo": "bikar",
+      "visibility": "static",
+      "viaHost": "blog.bytesofpurpose.com"
+    },
+    {
+      "from": "S.editor",
+      "to": "S.index",
+      "at": "bikar packages/web/editor.html:26",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.sessions",
+      "to": "S.index",
+      "at": "bikar packages/web/sessions.html:161",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.404",
+      "to": "S.index",
+      "at": "bikar packages/web/public/404.html:81",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.404",
+      "to": "S.editor",
+      "at": "bikar packages/web/public/404.html:82",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.404",
+      "to": "S.sessions",
+      "at": "bikar packages/web/public/404.html:83",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.index",
+      "to": "G.breakdown",
+      "at": "index.html:552",
+      "evidence": "href=\"breakdown.html?orb=",
+      "visibility": "js-computed",
+      "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/lab.html:28",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.studio",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "note": "the same pageCard renderer that emits the other page links; breakdown.html is in the catalogue, so it is listed without a second edit"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/breakdown-main.ts:214",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops the pages beside this repo's index.html, same as the lab.html edge above"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/breakdown-main.ts:218",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.studio",
+      "at": "bikar packages/lab/src/breakdown-main.ts:220",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    }
   ],
-
   "fragileIfProtected": {
     "$comment": [
       "Edges that travel through a host that is public today but sits on a surface that",

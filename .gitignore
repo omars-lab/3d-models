@@ -21,6 +21,7 @@ build/*
 /lab.html
 /lego.html
 /design.html
+/breakdown.html
 /assets/
 
 # gh-pages deploy worktree (created by `make deploy`)

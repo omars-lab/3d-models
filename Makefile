@@ -53,6 +53,14 @@ BIKAR := node $(BIKAR_DIR)/packages/cli/dist/index.js
 # that fired on every dirty tree would be switched off within a week.
 BIKAR_REF ?=
 ORB_VIEWS := $(ROOT_DIR)/build/orb-views
+# Per-orb breakdown: the construction stages plus a swept camera, both written
+# by `bikar render --format timelapse`, read by the vendored breakdown.html.
+ORB_BREAKDOWN := $(ROOT_DIR)/build/orb-breakdown
+# 36 frames, one per 10°. Not a tuned number: the page plays them at 110 ms,
+# so 36 is a four-second turn, and the reader who wants a specific angle
+# scrubs rather than waits. Raising it costs render time and bytes on every
+# orb; lowering it makes the turn read as a flip-book.
+ORB_TURNTABLE := 36
 
 # gh-pages deploy
 PAGES_BRANCH := gh-pages
@@ -60,9 +68,9 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # Recursively expanded, not `:=`, because LAB_PAGES is defined further down
 # beside the vendor step that uses it. `:=` here would expand to nothing and
 # deploy a gallery with no studio pages in it.
-DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/bikar-ref.txt src LICENSE README.md
+DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -236,9 +244,44 @@ orbs:
 		$(BIKAR) render "$$bkr" --format stl --check -o ${ROOT_DIR}/build/stls/$$name.stl; \
 		mkdir -p $(ORB_VIEWS)/$$name; \
 		$(BIKAR) render "$$bkr" --format views -o $(ORB_VIEWS)/$$name; \
+		mkdir -p $(ORB_BREAKDOWN)/$$name; \
+		$(BIKAR) render "$$bkr" --format timelapse --turntable $(ORB_TURNTABLE) \
+			-o $(ORB_BREAKDOWN)/$$name; \
 		cp "$$bkr" ${ROOT_DIR}/src/Orbs/; \
 	done; \
+	$(MAKE) -C ${ROOT_DIR} orb-breakdown-index; \
 	cd ${ROOT_DIR} && $(PYTHON) build/orb_previews.py
+
+# The index breakdown.html reads when it is opened with no `?orb=`. Written
+# from what is on disk rather than from the loop above, so an orb whose
+# timelapse failed to write a manifest is absent from the picker instead of
+# being listed and then 404-ing — the page has a not-found state, and the
+# picker is not the place to send someone into it.
+#
+# It also checks the shape of each manifest, and that check earns its keep:
+# `orbs` guards only that bikar's `dist/index.js` *exists*, so a dist built
+# before `--turntable` shipped writes 14 perfectly valid breakdown directories
+# with no `turntable` and no `source` in any of them. Every page state still
+# renders — every one of them the "this orb has no camera sweep" state. That
+# happened here on 2026-08-18. `turntable: []` is a real answer (the woven
+# orbs draw ribbons, not projected cells, and the generator says so), so the
+# claim checked is that the *keys* are there, which a stale dist cannot fake.
+orb-breakdown-index:
+	@set -euo pipefail; \
+	test -d $(ORB_BREAKDOWN) || { echo "no $(ORB_BREAKDOWN) — run 'make orbs'"; exit 1; }; \
+	cd $(ORB_BREAKDOWN); \
+	orbs=$$(for d in */; do [ -f "$${d}manifest.json" ] && echo "$${d%/}"; done | sort); \
+	test -n "$$orbs" || { echo "orb-breakdown-index: no orb wrote a manifest.json"; exit 1; }; \
+	for orb in $$orbs; do \
+		$(PYTHON) -c 'import json,sys; m=json.load(open(sys.argv[1]+"/manifest.json")); \
+missing=[k for k in ("orb","views","frames","turntable","source","sourceSha256","engine") if k not in m]; \
+sys.exit(0) if not missing else sys.exit("orb-breakdown-index: "+sys.argv[1]+"/manifest.json has no "+", ".join(missing)+" — rebuild the bikar CLI (npm run build -w packages/cli) and re-run make orbs")' "$$orb"; \
+	done; \
+	printf '%s\n' "$$orbs" \
+		| $(PYTHON) -c 'import json,sys; json.dump({"orbs": sys.stdin.read().split()}, sys.stdout, indent=2)' \
+		> index.json; \
+	spun=$$(for orb in $$orbs; do $(PYTHON) -c 'import json,sys; print(len(json.load(open(sys.argv[1]+"/manifest.json"))["turntable"]))' "$$orb"; done | grep -cv '^0$$' || true); \
+	echo "orb-breakdown-index: $$(echo "$$orbs" | wc -l | tr -d " ") orb(s), $$spun with a camera sweep"
 
 # Bricks — LEGO-compatible pieces from the same bikar engine (Lego Lab
 # design §10 P0). Same shape as `orbs`, with one difference that is worth
@@ -353,11 +396,14 @@ pattern-sets: bikar-stamp
 # cannot read that one, so a page added there and not here vendors nothing and
 # `lab-smoke` never looks for it. Adding a page is two edits, in two repos, and
 # saying so is cheaper than a cross-repo check that would have to run a build.
-LAB_PAGES = studio.html lab.html lego.html design.html
+LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html
 # The subset that runs the compile worker. studio.html and design.html render
 # from static data, so requiring a worker chunk of them would fail a page that
 # is working exactly as designed.
-LAB_WORKER_PAGES = lab.html lego.html
+# breakdown.html is here for its "Turn it yourself" handoff: the page plays
+# rendered SVG frames with no compile at all, and only recompiles source.bkr in
+# the worker when the reader asks for the live mesh.
+LAB_WORKER_PAGES = lab.html lego.html breakdown.html
 
 lab lego-lab: lab-vendor
 
