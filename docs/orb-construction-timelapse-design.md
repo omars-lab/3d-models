@@ -54,7 +54,7 @@ designs a static SVG derivation sheet for the **2D** pattern pipeline. This
 document is its 3D sibling and deliberately does not duplicate it: that one
 explains how a flat pattern is derived, this one how an orb is assembled from a
 pattern already derived. Two of its scope-outs are load-bearing here and are
-answered rather than inherited — see section 5.3 for the scrubber it deferred,
+answered rather than inherited — see section 7.2 for the scrubber it deferred,
 and section 4.2 for the 3D-solidification argument it promised and never wrote.
 
 ### 1.2 Non-goals

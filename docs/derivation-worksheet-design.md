@@ -37,10 +37,15 @@ would expect it):
 
 - **No interactivity.** No scrubbing, no play button, no click-to-source. The v1 artifact is a
   static SVG sheet. GeoGebra's Navigation Bar and CascadeStudio's timeline (survey §8.4, §5.3)
-  are the obvious next step, and are deferred, not rejected.
+  are the obvious next step, and are deferred, not rejected. That step is now taken in the
+  sibling context: [`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md)
+  §7.2 specifies the scrubber, and states the transfer condition — both artifacts are ordered
+  SVG sequences over one fixed frame, which is the property a scrubber needs and the only one
+  it needs.
 - **No 3D derivation.** The worksheet covers the 2D pattern pipeline only. `piece`/`wall`/`orb`
-  solidification is out of scope for v1 — see §6.3 for why that is a harder problem, not just a
-  bigger one.
+  solidification is out of scope for v1 —
+  [`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) §4.2 is why
+  that is a harder problem, not just a bigger one.
 - **No editing.** The worksheet is a read-only view, like FreeCAD's dependency graph
   ("The dependency graph is purely a visualization tool, therefore it cannot be edited" —
   survey §3.4).
@@ -469,7 +474,8 @@ Rendering rule:
   fold count is available without new computation.
 
 **v1 does not do this for the 3D orb case**, because 3D is out of scope. The 20-face orb is
-listed in the brief as a motivating example and **v1 does not address it.** §6.3.
+listed in the brief as a motivating example and **v1 does not address it.**
+[`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) §4.2.
 
 ### 4.7 Scope-outs, stated explicitly
 
