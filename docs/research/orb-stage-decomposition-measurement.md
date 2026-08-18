@@ -11,6 +11,13 @@
   written into either repo: no file was created, moved or deleted, no
   rasterizer was invoked, and no `make` target was run. Every program is
   read-only and re-runnable by paste.
+  AMENDED 2026-08-18 (afternoon, same day, same machine): section 6a was
+  added by a second run that DID write files and DID invoke a rasterizer —
+  302 SVG frames and 302 PNGs into a session scratchpad outside both repos,
+  which is what the morning run's NOT VERIFIED block asked for. Still
+  nothing written into either repo and still no `make` target run. That run
+  also produced CORRECTION 5 and CORRECTION 6, both of which change numbers
+  the morning run shipped.
   PREREQUISITE: `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`
   and `cd ~/Workspace/git/bikar`. The system Node is too old and fails in
   ways that look like code bugs.
@@ -458,21 +465,134 @@ view, as SVG, costs **31 ms** on top of a **94 ms** compile of all 14. The
 Maclado Overlap — flagged in the brief as the cost risk for its 60 loops — is a
 12 ms compile.
 
+The verbatim label `329 frames` above is the *formula's* count, not the
+program's: the loop that produced this timing generates `elements + repeats +
+strands` frames per orb, which is 302. Section 6a re-derives that and
+CORRECTION 6 explains the 27-frame gap. The timing itself cross-checks cleanly
+against 6a's independent run — 126 ms there for compile-plus-generation, minus
+the 94 ms compile, leaves 32 ms against the 31 ms here.
+
 CORRECTION 4. An earlier draft reported the frame generation as 152 ms and the
 compile as 109 ms. The re-derived figures are 31 ms and 94 ms. The 152 ms
 figure appears to have included compilation; the 109/94 gap is ordinary
 run-to-run variance on a warm cache. Both numbers here are single runs and
 should be read as order-of-magnitude, not as benchmarks.
 
-NOT VERIFIED — rasterisation cost. An earlier draft claimed
-`rsvg-convert` at 1024x1024 costs ~32 ms/frame, from a 10-run 0.317 s loop.
-**This was not re-derived and is deliberately omitted.** `rsvg-convert`
-requires a regular file for `-o` and rejects `/dev/null`
-(`Error opening output "/dev/null": Target file is not a regular file`), and
-this session was forbidden from writing files. Any claim in the design doc that
-rasterisation dominates per-frame cost, or that SVG-only is ~30x cheaper, rests
-on this un-re-derived number and must be marked as such until someone re-runs
-it with a writable output path.
+## 6a. Rasterisation cost — the NOT VERIFIED block, re-derived 2026-08-18
+
+The 2026-08-18 morning run marked this NOT VERIFIED: an earlier draft claimed
+`rsvg-convert` at 1024x1024 costs ~32 ms/frame from a 10-run 0.317 s loop, and
+the figure could not be re-derived because `rsvg-convert` requires a regular
+file for `-o` (it rejects `/dev/null` with
+`Error opening output "/dev/null": Target file is not a regular file`) and that
+session was forbidden from writing files. Re-run the same afternoon against a
+writable scratchpad, on the same machine, `rsvg-convert 2.62.1` /
+`cairo 1.18.4` from `/opt/homebrew/bin`.
+
+Every frame was materialised first — the generator of section 2, writing each
+cumulative frame to disk rather than hashing it:
+
+    node scratch/gen-frames.mjs <outdir>
+
+Output, verbatim:
+
+    wrote 302 SVG frames in 183 ms (compile + project + render + fs.writeFileSync)
+    302
+    6.4M    <outdir>
+
+Then generation again with the `fs.writeFileSync` replaced by a length
+accumulator, three consecutive runs:
+
+    generated 302 SVG frames in 148 ms, 6040825 total bytes, no fs write
+    generated 302 SVG frames in 124 ms, 6040825 total bytes, no fs write
+    generated 302 SVG frames in 126 ms, 6040825 total bytes, no fs write
+
+Then rasterisation, one `rsvg-convert` process per frame at 1024x1024, after a
+discarded warm-up invocation so that first-process library and fontconfig
+loading is not charged to the run:
+
+    time ( for f in frames/*.svg; do rsvg-convert -w 1024 -h 1024 -o "png/$(basename $f .svg).png" "$f"; done )
+
+Output, verbatim, two consecutive runs:
+
+    ( for f in $SP/frames/*.svg; do; rsvg-convert ... done; )  9.394 total
+    ( for f in $SP/frames/*.svg; do; rsvg-convert ... done; )  9.556 total
+    PNGs:      302  size:  21M
+
+Then the fork/exec floor, the same loop body replaced by `/usr/bin/true`:
+
+    ( for f in $SP/frames/*.svg; do; /usr/bin/true; done; )  0.333 total
+
+Then the smallest and largest frame, 20 invocations each:
+
+    smallest: Rosette-Orb.0160.svg      510 bytes      0.521 total
+    largest:  Maclado-9-Overlap.0059.svg   170441 bytes   0.990 total
+
+### What this establishes
+
+| | |
+|---|---|
+| SVG generation, 302 frames, including the 14-file compile | **126 ms** (median of 148 / 124 / 126) |
+| Writing those 302 frames to disk | **~57 ms** (183 − 126), 5.76 MB |
+| Rasterisation, 302 frames, 1024x1024, process per frame | **9.394 s / 9.556 s** → **31.1 / 31.6 ms per frame** |
+| Bare process-spawn floor for 302 iterations | **0.333 s** → 1.1 ms per frame, **3.5%** of rasterisation |
+| Smallest frame (510 B) | 0.521 s / 20 = **26.0 ms** |
+| Largest frame (170,441 B, 334x bigger) | 0.990 s / 20 = **49.5 ms**, only **1.9x** |
+| PNG output size against SVG | 21 MB against 5.76 MB |
+
+CONFIRMED — the ~32 ms/frame figure. Measured 31.1 and 31.6 ms across two full
+302-frame runs. The earlier draft was right about this number and it stands.
+
+CORRECTION 5 — the multiplier was wrong, and wrong in the direction that
+understates the case. The design doc marked "SVG-only is roughly thirty times
+cheaper" as un-re-derived. Re-derived, for the whole corpus, it is
+**9,394 ms against 126 ms — about 75x**, not 30x. The 30x appears to have
+compared a per-frame rasterisation against a per-frame generation cost that had
+compilation folded into it. Whatever its origin, the true ratio is more than
+double the claimed one, and the design doc must be corrected upward rather than
+merely unmarked.
+
+The structurally useful finding is not the ratio, though. **Rasterisation cost
+is a fixed floor, not a function of scene complexity.** A 334x increase in SVG
+size buys a 1.9x increase in rasterisation time; the smallest frame in the
+corpus still costs 26.0 ms. Process spawn accounts for 1.1 ms of that, so the
+remaining ~25 ms is librsvg and cairo initialising and painting 1,048,576
+pixels regardless of what is drawn on them. Consequence for the design: if
+rasterisation is ever wanted (Option C), the lever is **one process for many
+frames**, not simpler frames — and simplifying the early frames, which is what
+a timelapse does by construction, buys nothing at all.
+
+CORRECTION 6 — 302 emitted frames, not 329. The generator writing real files
+emits **302**, and the reconciliation is exact rather than approximate. Section
+2's table totals 329 under the rule `1 base + elements + repeats + 1 final
+(+ strands)`; summing `elements + repeats + strands` alone over the same 14
+rows gives exactly 302. The 27-frame difference is entirely the notional `base`
+and `final` frames, and **neither is a frame the filter produces**:
+
+- The `base` frame needs the base polyhedron drawn alone, which needs
+  `projectSphericalCells` — not reachable from the built bundle (section 7).
+- The `final` frame is **a double count**. Re-run today, rendering the last
+  repeat frame against the full scene for every orb:
+
+      Dodeca-Orb.bkr|lastRepeat=58826178e02e|full=58826178e02e|IDENTICAL
+      Hankin-Orb.bkr|lastRepeat=485734c5fed7|full=485734c5fed7|IDENTICAL
+      Maclado-9-Overlap.bkr|no cell scene
+      Maclado-9-Weave.bkr|lastRepeat=d050c039a16d|full=d050c039a16d|IDENTICAL
+      Maclado-9.bkr|lastRepeat=d050c039a16d|full=d050c039a16d|IDENTICAL
+      Rosette-Cube-Orb.bkr|lastRepeat=4906f5f2c91d|full=4906f5f2c91d|IDENTICAL
+      Rosette-Orb.bkr|lastRepeat=9a18f22e507c|full=9a18f22e507c|IDENTICAL
+      Rosette-Weave-Orb.bkr|lastRepeat=57d5fa4304e6|full=57d5fa4304e6|IDENTICAL
+      Star-Cube-Orb.bkr|lastRepeat=b603361664ca|full=b603361664ca|IDENTICAL
+      Star-Octa-Orb.bkr|lastRepeat=a626cf6e9e10|full=a626cf6e9e10|IDENTICAL
+      Star-Orb.bkr|lastRepeat=c575552949e9|full=c575552949e9|IDENTICAL
+      Star-Tetra-Orb.bkr|lastRepeat=906c21bc99be|full=906c21bc99be|IDENTICAL
+      Weave-Dodeca-Orb.bkr|lastRepeat=0490840de0ce|full=0490840de0ce|IDENTICAL
+
+  13 IDENTICAL, 1 with no cell scene, 0 differing. This is the *same* result
+  the design doc's own terminal-identity validator asserts — and it means the
+  frame formula asserted a separate final frame while a section two doors down
+  proved that frame is byte-identical to the one before it. The doc contradicted
+  itself and the contradiction survived because nobody wrote the frames out.
 
 ## 7. What was not measured
 
@@ -484,9 +604,11 @@ it with a writable output path.
   `edge-2`.
 - **No CI measurement.** All timings are local, single machine, warm module
   cache, macOS on Apple silicon. No GitHub workflow was run.
-- **No baseline for `make orbs`.** Running it writes to `build/`, which this
-  session was forbidden to do. The design doc therefore states the timelapse's
-  cost as an absolute addition and never as a percentage.
+- **No baseline for `make orbs`.** Running it writes to `build/`, which the
+  morning run was forbidden to do, and the afternoon run wrote only to a
+  scratchpad rather than lifting the restriction. The design doc therefore
+  states the timelapse's cost as an absolute addition and never as a
+  percentage. This is the one item on this list section 6a did *not* close.
 - **`projectSphericalCells` is not reachable from the built bundle.** It is
   exported from `packages/core/src/kernel3d/index.ts` but
   `packages/core/package.json` declares exactly one export path
