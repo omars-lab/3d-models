@@ -435,6 +435,81 @@ CAVEAT. The sweep steps 0.02 and therefore locates each band edge only to
 within 0.02. The bands are reported to the sampled endpoints, not to a bisected
 boundary.
 
+### 5.1 Both caveats discharged: the bands re-measured through `linkageGate`
+
+Added 2026-08-19 (D-040). The two caveats above are the reason task #15 stayed
+open, and the instrument that answers them — `linkageGate` — did not exist when
+they were written. It does now, so the sweep was re-run as
+`render --format stl --check`, which reports body count, assembly pieces,
+minimum body clearance and interpenetrating pairs alongside the mesh gate.
+Amplitude held at the shipped 1.4 except where stated.
+
+**Band two merely compiles.** Every ratio in it, bisected edge to bisected
+edge, produces the same two errors:
+
+    1.38  bodies=60 captive=60 undetermined=0 linkedPairs=90 pieces=2 clearance=0.000mm fusedPairs=60  — FAIL
+    1.46  bodies=60 captive=60 undetermined=0 linkedPairs=90 pieces=2 clearance=0.000mm fusedPairs=180 — FAIL
+    1.60  bodies=60 captive=60 undetermined=0 linkedPairs=90 pieces=2 clearance=0.000mm fusedPairs=180 — FAIL
+    1.80  bodies=60 captive=60 undetermined=0 linkedPairs=90 pieces=2 clearance=0.000mm fusedPairs=310 — FAIL
+
+      ERROR L1: linkage holds the ribbons in 2 separate chains — every ribbon is
+      captive within its own chain, but the chains are not linked to each other
+      ERROR L3: 180 body pair(s) occupy the same space (surfaces intersect,
+      closest approach 0.000mm) ...
+
+`pieces=2` is the answer to the open question. Band two is not one object: the
+60 ribbons close into two 30-ribbon chains with no link between them, so the
+print lifts apart into two halves. It is also fused. **Neither is curable by
+amplitude** — the knob that rescued all five orbs of D-039. Swept at ratio 1.44
+across `amplitude` 1.4, 2.0, 2.6, 3.2 and 4.0, `pieces` never leaves 2 and
+`fusedPairs` never falls below 60:
+
+    amp 1.4  pieces=2 fusedPairs=180     amp 2.6  pieces=2 fusedPairs=60
+    amp 2.0  pieces=2 fusedPairs=60      amp 3.2  pieces=2 fusedPairs=60
+                                         amp 4.0  pieces=2 fusedPairs=60
+
+This is consistent with the two bands being different weave regimes rather than
+one solid at two sizes: band two's `captive=60 undetermined=0 linkedPairs=90`
+against band one's `captive=20 undetermined=40 linkedPairs=30`.
+
+**The band edges, bisected to 0.005.** The 0.02 sweep reported
+`[1.08, 1.26]` / dead `[1.28, 1.36]` / `[1.38, 1.60]`. Measured:
+
+| edge | 0.02 sweep said | bisected |
+|---|---|---|
+| band one, lower | 1.08 | in (1.075, 1.08] |
+| band one, upper (welds) | 1.26 | 1.265 welds, 1.270 refused |
+| band two, lower | 1.38 | 1.365 refused, 1.370 welds |
+| band two, upper | **1.60** | **~1.84** |
+
+The last row is not a bisection but a correction: **1.60 was the end of the
+sweep window, not an edge.** 1.68 and 1.80 both weld. Above that three
+different mechanisms refuse in sequence — weld-node spacing at 1.85 (0.42mm),
+crossing-to-crossing spacing at 1.90 (1.17mm), and strand parity from 1.95 up
+("strand 0 passes 21 crossings — a closed strand needs an even count"). A band
+reported to its sampled endpoint reads as a measured edge and is not one.
+
+**Band one is narrower than it compiles, and the declared range overshot it.**
+Welding is not the binding constraint inside band one; body clearance is. Every
+0.01 step the declared `1.15..1.25` admitted, measured:
+
+| overlap | 1.15 | 1.16 | 1.17 | 1.18 | 1.19 | 1.20 | 1.21 | 1.22 | 1.23 | 1.24 | 1.25 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| clearance (mm) | 0.432 | 0.449 | 0.458 | 0.466 | 0.474 | 0.482 | 0.490 | **0.498** | 0.348 | 0.001 | 0.000 |
+| fused pairs | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | **60** |
+
+Clearance climbs to a peak at 1.225 (0.502mm) and then falls off a cliff — a
+third of the floor at 1.23, a four-hundredth at 1.24, and outright
+interpenetration at **1.25, which is the ceiling the range itself declared**.
+The range has been narrowed to `1.15..1.22`, the last step clearing the
+`CAL-CLR-01` floor. The shipped default 1.20 was never at risk; the slider stop
+above it was.
+
+CAVEAT. Everything above is still a *geometric* result, now including
+printability as `linkageGate` defines it. No qiyas score was run against band
+two and none is planned: a solid that comes apart into two pieces is not a
+candidate whose pattern fidelity is worth scoring.
+
 ## 6. Timing
 
 Run:
