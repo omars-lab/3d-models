@@ -48,6 +48,22 @@ which no amount of looking at what is present will find:
       that should be *absent*. An absence rule cannot catch a missing
       picture.
 
+And one containment check, because a picture can contradict the claim it
+makes:
+
+  T7  **A cell stage stays inside the solid the scaffold draws.** The outline
+      is a picture of "the pattern lands on these faces", and on 2026-08-19 it
+      was a false one: the base solid was handed to the renderer as its bare
+      corners, so each edge was drawn as a chord, and a straight line between
+      two points on a sphere runs *inside* it — by 6.6% of the radius on a
+      dodecahedron's edge. The pattern's own cells are dense enough to hug the
+      surface, so they sat *outside* the outline meant to contain them and
+      RosetteWeaveOrb's units visibly burst through it. T6 could not see it:
+      the scaffold was present on every frame, which is all T6 ever asked.
+      `strand` stages are exempt with a reason rather than a threshold — a
+      woven band's amplitude lifts it off the sphere by up to 3.68 mm across
+      the corpus, by design.
+
 **The by-design failure this gate shipped with, and why it is recorded here.**
 On the tree this gate was written against, T3 and T5 both failed on
 Maclado-9-Overlap: its bands cross rather than tile, the projector refuses to
@@ -70,6 +86,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -105,6 +122,65 @@ SCAFFOLD_MARKERS = ("data-orb-scaffold", "data-orb-silhouette")
 
 FILL_RE = re.compile(r'fill="([^"]*)"')
 VIEWBOX_RE = re.compile(r'viewBox="([^"]*)"')
+
+
+# A cell stage must sit inside the solid the scaffold draws. Bands do not:
+# a woven strand's amplitude lifts it clear of the sphere the scaffold
+# traces, by up to 3.68 mm across the corpus, so `strand` is exempt and
+# the exemption has a reason rather than a threshold.
+CONTAINED_KINDS = {"element", "repeat"}
+# Slack for the coordinate rounding in the SVG, not for geometry: frames are
+# written at 4 decimal places, and a vertex the renderer put exactly on a
+# scaffold edge can land either side of it. Measured overhang for every cell
+# stage of all 14 orbs is 0.000 mm, so anything this rule reports is real.
+CONTAINMENT_SLACK_MM = 0.01
+
+PATH_RE = re.compile(r"<path\b([^>]*)>")
+D_RE = re.compile(r'\sd="([^"]+)"')
+COORD_RE = re.compile(r"-?\d+\.?\d*")
+
+
+def _polygons(svg: str) -> tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]:
+    """The scaffold outlines and the drawn shapes of one frame, as point rings."""
+    scaffold: list[list[tuple[float, float]]] = []
+    drawn: list[list[tuple[float, float]]] = []
+    for attrs in PATH_RE.findall(svg):
+        d = D_RE.search(attrs)
+        if not d:
+            continue
+        nums = [float(v) for v in COORD_RE.findall(d.group(1))]
+        ring = list(zip(nums[0::2], nums[1::2]))
+        if "data-orb-scaffold" in attrs:
+            scaffold.append(ring)
+        else:
+            fill = FILL_RE.search(attrs)
+            if fill and fill.group(1).lower() not in ("none", "#ffffff"):
+                drawn.append(ring)
+    return scaffold, drawn
+
+
+def _inside(pt: tuple[float, float], ring: list[tuple[float, float]]) -> bool:
+    x, y = pt
+    hit = False
+    for i, (x1, y1) in enumerate(ring):
+        x2, y2 = ring[(i + 1) % len(ring)]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+            hit = not hit
+    return hit
+
+
+def _distance_to(pt: tuple[float, float], rings: list[list[tuple[float, float]]]) -> float:
+    """How far outside `rings` a point lies, in mm — 0.0 if it is on an edge."""
+    best = math.inf
+    px, py = pt
+    for ring in rings:
+        for i, (ax, ay) in enumerate(ring):
+            bx, by = ring[(i + 1) % len(ring)]
+            dx, dy = bx - ax, by - ay
+            span = dx * dx + dy * dy
+            t = 0.0 if span == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / span))
+            best = min(best, math.hypot(px - (ax + t * dx), py - (ay + t * dy)))
+    return best
 
 
 def _read(path: Path) -> str:
@@ -217,6 +293,36 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
         if stray:
             findings.append(f"{orb}: stage frame {f['file']} fills with {', '.join(stray)}")
 
+    # --- T7: a cell stage stays inside the solid it is being copied onto ----
+    # The scaffold is a picture of a claim — "the pattern lands on these
+    # faces" — and a claim a picture can contradict. It did: the solid was
+    # drawn corner to corner, and a straight line between two points on a
+    # sphere runs inside it, so the pattern overhung its own outline by
+    # 5.8% of the radius on RosetteWeaveOrb. Nothing caught it, because
+    # T6 only ever asked whether the scaffold was *there*.
+    base = next((f for f in frames if f["kind"] == "base"), None)
+    if base is not None:
+        outline, _ = _polygons(_read(d / base["file"]))
+        if not outline:
+            findings.append(f"{orb}: the base frame {base['file']} draws no scaffold at all")
+        else:
+            for f in frames:
+                if f["kind"] not in CONTAINED_KINDS:
+                    continue
+                _, drawn = _polygons(_read(d / f["file"]))
+                worst = 0.0
+                for ring in drawn:
+                    for pt in ring:
+                        if not any(_inside(pt, o) for o in outline):
+                            worst = max(worst, _distance_to(pt, outline))
+                if worst > CONTAINMENT_SLACK_MM:
+                    findings.append(
+                        f"{orb}: {f['file']} overhangs the base solid by {worst:.2f} mm — "
+                        "the pattern is bursting through the outline that is supposed "
+                        "to contain it, so the outline is not the surface the pattern "
+                        "is on"
+                    )
+
     # --- T3: the story ends on the shipped drawing --------------------------
     last = frames[-1]
     if last["kind"] != "complete":
@@ -311,12 +417,17 @@ _SVG = (
 _DONE = _SVG.format(body='<path d="M0 0" fill="#8a8a8a" stroke="#333333" />')
 # What every stage frame carries underneath: the bare solid as an outline, and
 # the sphere's limb, so a viewer has something to watch the pattern land on.
+# Real rings, not `M0 0`: T7 measures whether the pattern sits inside the
+# solid, and a degenerate path cannot fail a containment test — the fixture
+# would pass the rule by having no geometry rather than by satisfying it.
+_FACE = "M-40,-40 L40,-40 L40,40 L-40,40 Z"
+_UNIT = "M-20,-20 L20,-20 L20,20 L-20,20 Z"
 _SCAFFOLD = (
-    '<path d="M0 0" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />'
+    f'<path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />'
     '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
 )
 _BARE = _SVG.format(body=_SCAFFOLD)
-_HELD = _SVG.format(body=_SCAFFOLD + '<path d="M0 0" fill="#c9782e" stroke="#333333" />')
+_HELD = _SVG.format(body=_SCAFFOLD + f'<path d="{_UNIT}" fill="#c9782e" stroke="#333333" />')
 _SPUN = _SVG.format(
     body='<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
     '<path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />'
@@ -427,6 +538,11 @@ def _scaffold_the_finished_drawing(d: Path) -> None:
     p.write_text(_read(p).replace("<path", _SCAFFOLD + "<path", 1), encoding="utf8")
 
 
+def _burst_the_outline(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(_read(p).replace(_UNIT, "M50,50 L58,50 L58,58 L50,58 Z"), encoding="utf8")
+
+
 def _miss_the_orbit(d: Path) -> None:
     p = d / "TestOrb.transition.001.svg"
     p.write_text(_read(p).replace('r="60"', 'r="59"'), encoding="utf8")
@@ -459,6 +575,7 @@ CASES = [
     ("T6 a stage frame in gallery gold", _tint_a_stage_frame, "fills with"),
     ("T6 a stage frame with nothing under it", _strip_the_scaffold, "is missing"),
     ("T6 a scaffold left on the finished drawing", _scaffold_the_finished_drawing, "carries data-orb-scaffold"),
+    ("T7 a unit that bursts through the outline", _burst_the_outline, "overhangs the base solid"),
     ("T4 the tilt lands beside the orbit", _miss_the_orbit, "does not land on the orbit"),
     ("T4 entersAtIndex past the orbit", _enter_off_the_end, "outside a 2-frame orbit"),
     ("T5 a named file that is not there", _lose_a_named_file, "not on disk"),

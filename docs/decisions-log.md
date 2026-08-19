@@ -2781,3 +2781,103 @@ to the page who still cannot say what the flat drawing becomes. The two defects 
 entry fixes were both invisible to every automated check in three repos and were
 found by one person looking at one frame, which is the argument for keeping that test
 in the loop rather than replacing it with the gate.
+
+---
+
+## D-038 — the outline the pattern burst through was a chord polygon; the scaffold now rides the sphere the pattern is on
+
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (`arcPoints` + the `baseSolidCells` rewrite, the failing-first sag test, the repeat caption, the e2e assertion, PR [#114](https://github.com/NaqshCoffee/bikar/pull/114)), 3d-models (T7 and its self-test mutation, criterion 11, the §9 amendments, this entry)
+
+### Context
+
+[D-037](#d-037--d-036s-reversal-test-fired-on-first-reading-the-pattern-had-nothing-under-it-and-the-spins-edge-was-a-detectors-constraint) put the base solid under every stage frame. One day later the same
+reader looked at `breakdown.html?orb=RosetteWeaveOrb` and asked two questions about
+the picture that fix produced: *why is it the same outline every time*, and *why did
+this one break out of it*. They have different answers, and only the second is a
+defect.
+
+**The same outline is correct, and measurable.** Eight of the fourteen orbs sit on a
+dodecahedron seen down the same vertex-3 axis, so eight scaffolds are the same
+drawing because eight orbs are built on the same solid; across all fourteen there are
+**5 distinct scaffold hashes**. `Rosette-Weave-Orb.bkr:46` declares `base dodecahedron`
+and its manifest agrees — `faces: 12, vertices: 20, sides: [5]`. Nothing to fix; the
+page just never said which solid it was drawing.
+
+**Breaking out of the outline was real, and it was the scaffold's fault, not the
+pattern's.** `baseSolidCells` handed each base face over as its bare corners, so the
+renderer drew it corner to corner — and a straight line between two points on a
+sphere runs *inside* it. Measured as a fraction of the radius: **0.0658 on a
+dodecahedron edge, 0.1493 on an icosahedron's**. The pattern's own cells are
+subdivided finely enough that every vertex lands on the sphere, so they hug it, and
+they therefore sit *outside* a chord outline drawn from the same solid. On
+RosetteWeaveOrb the units overhung by **3.50 mm — 5.8% of the radius, over 12% of
+the outline's perimeter**. The outline was not containing the pattern because it was
+never the surface the pattern was on.
+
+A third defect fell out of reading the frame: the repeat caption said *"Everything
+grey behind it is a copy already placed."* That was true when the only grey was
+placed copies. D-037 added a second grey with a different meaning, and on copy 1
+nothing is placed at all — **a caption is a claim about the picture, and the picture
+changed underneath it.**
+
+### Decision
+
+**Hand each base edge over already walked as a great-circle arc.** `arcPoints(a, b)`
+slerps between the corners and the subdivision count is derived, not picked: a
+segment spanning angle `s` puts its midpoint at `cos(s/2)` of the radius, so the step
+holding a sag tolerance `tol` is `2·acos(1 − tol)` and the count follows from the
+arc. `MAX_SCAFFOLD_SAG_RATIO = 0.002` is the tolerance; on RosetteWeaveOrb it takes
+the scaffold from **6 vertices per face to 31**. Slerp and not a normalised lerp,
+because only slerp spaces the points evenly in angle — which is what makes the bound
+hold *per segment* rather than on average.
+
+**The caption names the second grey and says a unit may straddle an edge.** Three of
+RosetteWeaveOrb's six unit-1 petals genuinely cross into neighbouring faces; the
+source says petals *"fuse across edge midpoints and around shoulder points"*. That is
+the pattern working, so the page says so rather than hiding it.
+
+**T7 — a cell stage stays inside the solid the scaffold draws** (criterion 11). The
+scaffold is a picture of a claim and a picture can contradict it; **T6 could not see
+this, because T6 only ever asks whether the scaffold is *there*.** `strand` stages are
+exempt **with a reason rather than a threshold**: a woven band's amplitude lifts it
+off the sphere by design, up to 3.681 mm across the corpus. The 0.01 mm slack is for
+the SVG's 4-decimal rounding, not for geometry.
+
+### Measured
+
+| | before | after |
+|---|---|---|
+| RosetteWeaveOrb overhang | 3.50 mm (5.8% of r), 12% of perimeter | 0.00 mm, 0% |
+| scaffold vertices per face | 6 | 31 |
+| cell stages (element/repeat), all 14 orbs | — | worst 0.000 mm |
+| strand stages, all 14 orbs | — | worst 3.681 mm (by design) |
+
+### Verification
+
+- **The failing-first test is the sag itself**, not a vertex count: it walks every
+  drawn scaffold segment on the corpus orb and asserts the worst midpoint sag is
+  under `MAX_SCAFFOLD_SAG_RATIO`. It fails on the chord polygon and passes on the arc.
+- **T7's by-design failure, reconstructed rather than argued.** T7 was written after
+  its defect was fixed, so nothing on disk could still fail it. The pre-fix tree was
+  rebuilt from the post-fix one by decimating each scaffold ring back to its five
+  corners — exactly what the old code emitted, since the arc walk only interleaves
+  points *between* corners it still emits. Against that reconstruction the gate
+  reports **5 findings on RosetteWeaveOrb** (two `element`, three `repeat`), each
+  **3.69 mm**; against the shipped tree, none. `--self-test` carries the same failure
+  as a fixture mutation, and the fixture gained real ring geometry to carry it — its
+  paths were `d="M0 0"`, and **a degenerate path passes a containment test by having
+  no geometry rather than by satisfying it.**
+- **The qiyas shield held without argument:** the 78-file instrument set hashed
+  before and after — `d4adab2ae356745abfee49e098bbe9a9` both times. `complete`,
+  `transition` and `turntable` frames are byte-identical; only stage frames moved.
+  The scaffold appears in no frame carrying a byte identity, so it *cannot* reach the
+  instrument.
+- bikar: 3686 passed, 3 expected fail, 87 skipped; e2e 87 passed; `make local.ci`
+  exit 0, ci-parity all 26 verified. 3d-models `make validate` green, hook-parity
+  all 11.
+
+**What would reverse this:** a scaffold that is visibly polygonal at some zoom the
+page allows — the tolerance is a fixed fraction of the radius, not of the rendered
+size, so a viewer that scales far past the 120 mm viewBox would eventually show the
+segments. The fix then is to make `MAX_SCAFFOLD_SAG_RATIO` a function of the
+projected size, not to subdivide harder everywhere.
