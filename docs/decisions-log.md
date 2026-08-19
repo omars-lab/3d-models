@@ -2696,3 +2696,88 @@ change to qiyas or to the recorded composites.
 **What would reverse this:** a measured reading of the page by someone new to it
 that still cannot answer "how does the flat drawing become a ball?" — the same
 test this rework was opened by, applied to its result.
+## D-037 — D-036's reversal test fired on first reading: the pattern had nothing under it, and the spin's edge was a detector's constraint
+
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (the scaffold underlay, the display cull, painter ordering, three replacement tests, PR [#113](https://github.com/NaqshCoffee/bikar/pull/113)), 3d-models (T6 rewritten with both halves, two new self-test mutations, the §3.4/§4.1 amendments, this entry)
+
+### Context
+
+[D-036](#d-036--the-breakdown-page-failed-the-only-test-it-had-the-fix-is-five-beats-and-every-sentence-on-it-is-a-measured-number) shipped the five-beat breakdown page and wrote its own reversal
+condition: *"a measured reading of the page by someone new to it that still cannot
+answer 'how does the flat drawing become a ball?'"* That reading happened the next
+day, on the live page, and returned two defects in one screenshot of frame 1/32.
+
+- **The pattern had nothing under it.** The base solid was written once, as frame
+  zero, and never again. From the second frame on, cells accumulated against a blank
+  page — the construction replayed in mid-air rather than on the thing being built.
+  §3.4 had specified the base frame and the implementation delivered exactly that:
+  *a* frame, not *a floor*.
+- **The spin had a ragged edge and a permanent white ring.** Display frames were
+  culled by `DEFAULT_FRONT_CAP_MIN_DOT = 0.3`, whose own docstring says it "keeps
+  qiyas's 2D assumptions valid" — a **detector** constraint governing a picture no
+  detector reads. Two consequences follow from culling whole cells at that threshold,
+  and both are arithmetic rather than opinion: content can never exceed
+  `r·√(1−0.3²) = 0.954r`, so a white annulus sits permanently inside the silhouette;
+  and cells straddling the threshold vanish outright, so the boundary changes shape
+  every frame, which is what reads as flicker when the orb turns.
+
+The second is a **K10** by this repo's taxonomy — a rule ported from one domain to
+another with no sentence saying what must hold for it to transfer. The sentence
+could not be written, so the rule did not transfer.
+
+### Decision
+
+**Every stage frame carries the base solid as a stroke-only scaffold plus the
+sphere's limb; `complete` carries neither.** The construction now replays on a
+shape that stays put, and the terminal identity §4.1 pins is untouched because the
+frame it pins is the one frame that drops both marks.
+
+**Stage frames stay unshaded, deliberately.** A Lambert envelope makes an unplaced
+region and a dim placed one look alike, and that is the single distinction a stage
+frame exists to draw. Shading belongs to the spin, whose job is the opposite one.
+
+**Display frames use `cull: 'back-face'`, tested on the centroid, painter-ordered by
+`meanDot`.** `front-cap` remains the default and nothing qiyas scores asks for the
+new mode. The ordering is not decoration: under the front cap the visible hemisphere
+projects one-to-one onto the disc, so document order *was* a valid depth order; the
+centroid test keeps limb-straddling cells whose far halves fold back over their
+neighbours, and that assumption dies with it.
+
+The cull flips with the style at `t > 0` and not at `t = 0`, which is what preserves
+`transition[0] == complete`.
+
+### The gate had an absence rule where it needed a presence rule
+
+T6 checked that stage frames carry *no* `data-orb-style` and *no*
+`data-orb-silhouette`. Every frame passed for the entire period the base solid was
+missing from all of them, because a rule about marks that should be absent cannot
+see a missing picture. **An absence rule is not a coverage rule**, and the fix is
+that T6 now has two halves that fail in opposite directions: the scaffold and the
+limb must be *present* on every stage frame and *absent* from `complete`.
+
+Measured, in that order: against the tree as it stood, the amended gate produced
+**632 findings across all 14 orbs**, every one of them the new presence half and no
+other rule firing — which is the by-design failure this repo requires a gate to be
+able to produce. After `make orbs` at bikar `57ee49d`: **0**.
+
+### Verification
+
+- Gate `--self-test`: 13 mutations, each firing on its own rule, pristine fixture
+  clean. Two are new — a stage frame with its scaffold stripped, and a scaffold left
+  on the finished drawing.
+- The qiyas shield, re-measured across the whole instrument set rather than argued:
+  78 files (`build/orb-views/<orb>/<orb>.<view>.svg` and `.gt.json`, all 14 orbs)
+  hashed before and after regeneration — **byte-for-byte identical**. `style` absent
+  still means unchanged output. bikar's own orb sweep re-ran the qiyas composites
+  against the branch and they held.
+- The three byte invariants on Star-Orb after the change: `complete` equals the
+  shipped view, `transition[0]` equals `complete`, `transition[last]` equals
+  `turntable[entersAtIndex]`.
+- Suppressing `scaffoldElements` in bikar fails exactly two of twenty timelapse
+  tests and nothing else.
+
+**What would reverse this:** the same test D-036 wrote, applied again — a reader new
+to the page who still cannot say what the flat drawing becomes. The two defects this
+entry fixes were both invisible to every automated check in three repos and were
+found by one person looking at one frame, which is the argument for keeping that test
+in the loop rather than replacing it with the gate.
