@@ -2608,7 +2608,7 @@ widen it because a case failed.
 
 ## D-036 — the breakdown page failed the only test it had; the fix is five beats, and every sentence on it is a measured number
 
-**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (depth cues, the two missing endpoint frames, the highlight, the tilt-in, the ribbon turntable, the rewritten page, PR [#111](https://github.com/NaqshCoffee/bikar/pull/111)), 3d-models (the structural gallery restyle, the stale-artifact wipe in `orbs`, `timelapse_gate.py` and its hook, the §3.4/§4.1/§8/§9 amendments, this entry, PR [#85](https://github.com/NaqshCoffee/3d-models/pull/85))
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (depth cues, the two missing endpoint frames, the highlight, the tilt-in, the ribbon turntable, the rewritten page, PR [#111](https://github.com/NaqshCoffee/bikar/pull/111)), 3d-models (the structural gallery restyle, the stale-artifact wipe in `orbs`, `timelapse_gate.py` and its hook, the §3.4/§4.1/§8/§9 amendments, this entry, PR [#86](https://github.com/omars-lab/3d-models/pull/86))
 
 ### Context
 
