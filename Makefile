@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -136,6 +136,16 @@ validate-catalog:
 validate-counts:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/counts_gate.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/counts_gate.py
+
+# Timelapse gate: the breakdown page's invariants live *across* files — one
+# viewBox over three sequences, a byte identity at each junction between them,
+# and a last stage frame that is the very drawing qiyas scores. None of them
+# can be seen in a single file, and each is broken by an edit that looks local.
+# `--self-test` builds a clean fixture, requires it to come back clean, then
+# mutates it once per rule and requires each mutation to fire.
+validate-timelapse:
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks
@@ -231,6 +241,15 @@ cookie-cutters:
 		| xargs -n 1 bash -c ' \
 			cd ${ROOT_DIR}/src/CookieCutters && make -f ${ROOT_DIR}/Makefile $${0}.png $${0}.stl \
 		'
+# Each orb's output directories are wiped before they are rewritten, and that
+# is the whole fix for a defect that shipped: which drawings an orb produces is
+# decided by what it declares, so the set can *shrink* between two versions of
+# the engine. Maclado-9-Overlap's bands cross rather than tile, and the
+# projector refuses to draw it as cells by design — yet three cell views from
+# the run before that refusal sat in build/orb-views/Maclado9Overlap/ for
+# weeks, scored by qiyas and picked as the gallery hero, because nothing ever
+# removed a file the generator had stopped writing. Regeneration cannot fix a
+# file regeneration no longer touches; only deletion can.
 orbs:
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
@@ -242,6 +261,7 @@ orbs:
 		stem=$$(basename "$$bkr" .bkr); name=$${stem//-/}; \
 		echo "== $$name"; \
 		$(BIKAR) render "$$bkr" --format stl --check -o ${ROOT_DIR}/build/stls/$$name.stl; \
+		rm -rf $(ORB_VIEWS)/$$name $(ORB_BREAKDOWN)/$$name; \
 		mkdir -p $(ORB_VIEWS)/$$name; \
 		$(BIKAR) render "$$bkr" --format views -o $(ORB_VIEWS)/$$name; \
 		mkdir -p $(ORB_BREAKDOWN)/$$name; \
@@ -266,17 +286,18 @@ orbs:
 # happened here on 2026-08-18. `turntable: []` is a real answer (the woven
 # orbs draw ribbons, not projected cells, and the generator says so), so the
 # claim checked is that the *keys* are there, which a stale dist cannot fake.
+#
+# That tuple used to be typed here as well as in the gate that checks it after
+# the fact — two sites for one list, which is the exact shape `counts_gate.py`
+# exists to catch. `timelapse_gate.py --keys` is the single owner now, and this
+# target calls it.
 orb-breakdown-index:
 	@set -euo pipefail; \
 	test -d $(ORB_BREAKDOWN) || { echo "no $(ORB_BREAKDOWN) — run 'make orbs'"; exit 1; }; \
 	cd $(ORB_BREAKDOWN); \
 	orbs=$$(for d in */; do [ -f "$${d}manifest.json" ] && echo "$${d%/}"; done | sort); \
 	test -n "$$orbs" || { echo "orb-breakdown-index: no orb wrote a manifest.json"; exit 1; }; \
-	for orb in $$orbs; do \
-		$(PYTHON) -c 'import json,sys; m=json.load(open(sys.argv[1]+"/manifest.json")); \
-missing=[k for k in ("orb","views","frames","turntable","source","sourceSha256","engine") if k not in m]; \
-sys.exit(0) if not missing else sys.exit("orb-breakdown-index: "+sys.argv[1]+"/manifest.json has no "+", ".join(missing)+" — rebuild the bikar CLI (npm run build -w packages/cli) and re-run make orbs")' "$$orb"; \
-	done; \
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py --keys $(ORB_BREAKDOWN) >/dev/null; \
 	printf '%s\n' "$$orbs" \
 		| $(PYTHON) -c 'import json,sys; json.dump({"orbs": sys.stdin.read().split()}, sys.stdout, indent=2)' \
 		> index.json; \

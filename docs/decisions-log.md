@@ -2605,3 +2605,94 @@ but that floor was measured on one corpus of orb and pattern views; a producer e
 near-tangent shapes of very different size could land in the gap, and the answer then is to
 re-measure the distribution and move the constant with the new histogram beside it — not to
 widen it because a case failed.
+
+## D-036 — the breakdown page failed the only test it had; the fix is five beats, and every sentence on it is a measured number
+
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (depth cues, the two missing endpoint frames, the highlight, the tilt-in, the ribbon turntable, the rewritten page, PR [#111](https://github.com/NaqshCoffee/bikar/pull/111)), 3d-models (the structural gallery restyle, the stale-artifact wipe in `orbs`, `timelapse_gate.py` and its hook, the §3.4/§4.1/§8/§9 amendments, this entry, PR [#86](https://github.com/omars-lab/3d-models/pull/86))
+
+### Context
+
+The per-orb breakdown page shipped on 2026-08-18 with build stages, a 36-frame
+turntable and a live-viewer handoff. It was reported failing its one job the next
+day: **a viewer still could not see how the construction turns into an orb.** The
+audit that followed rendered the frames and read them rather than reading the code
+that wrote them, and found the failure was not one bug.
+
+* Every frame carried the same `#8a8a8a` fill. No shading, no silhouette, nothing
+  ever disappearing around a limb — so a rotating projection read as a wobbling
+  flat mandala, which is the one thing it must not read as.
+* The flat→sphere map ran *before* frame 1. The first frame was already on the
+  sphere, and no flat drawing shipped in any breakdown directory. A newcomer was
+  asked to accept the hardest step in the story before being shown anything.
+* Twenty copies of one pattern unit were indistinguishable, so the repeat stages
+  read as strokes piling up rather than as copies being placed.
+* The stage camera sat 58° up and every turntable frame 18° up, byte-verified as
+  never meeting — and the page played the spin *first*, then jumped back.
+
+### The decision, and the one constraint that shaped it
+
+**Style every surface a human looks at; keep the gray instrument byte-stable.**
+`renderOrbViewSVG` has two consumers with incompatible needs: qiyas's raster
+detector wants a flat, unvarying instrument, and a person wants shading and a
+silhouette. The resolution is that styling is opt-in — `style` absent produces
+character-identical bytes, pinned by a snapshot test written *before* the renderer
+moved. That test is the shield: it protects the recorded composites, the gallery
+recolor and qiyas's ground truth on this change and on every future one, which a
+one-off re-record would not.
+
+**Generality is the acceptance criterion, not a nice-to-have.** Every mechanism is
+driven by what the manifest declares and nothing is keyed on an orb's name. Family
+comes from the frame-kind set — cell-only (9 orbs), cell+strand (4), strand-only
+(1). The highlight is keyed by each stage's *own* domain: `patternFaceIndex` for an
+element stage, `baseFaceIndex` for a repeat stage, `strandId` for a strand stage.
+The base solid is named from a `(faces, sides)` lookup with an honest fallback, so
+"an icosahedron — 20 triangular faces" is a claim about geometry rather than about
+a string someone typed, and the weave census is counted off `orbWeave.passes` — the
+same passes the ribbon renderer draws from — so "60 loops over 420 crossings"
+cannot disagree with the picture beside it.
+
+**Maclado-9-Overlap reaches parity in the same stroke.** It is the orb the page
+most needed to explain and the only one with no camera sweep at all, because the
+sweep projected cells and its bands cross rather than tile. `projectSweepScene`
+now picks cells or ribbons from what the orb can produce, so it spins on its
+ribbons. Its three stale top-level cell views — an artifact of a run *before* the
+engine started refusing to draw it that way — are removed, which closes the
+long-standing terminal-identity failure `orb-construction-timelapse-design.md`
+§4.1 had already written down as its FAIL case.
+
+### Two findings worth keeping, both from building it
+
+**A readout that reads the same on every frame of a moving camera is not a
+readout.** Every tilt-in row reported the *destination's* angles, so frame 0 —
+taken from the stage camera, 58° up on an icosahedron — claimed to be 18° up like
+the orbit it had not yet reached. Found by writing the test that asserts each row
+reports its own axis, and proven by running that test against the old behaviour
+first.
+
+**Regeneration cannot fix a file regeneration no longer writes.** Which drawings
+an orb produces is decided by what it declares, so the set can *shrink* between
+two versions of the engine. Three cell views the projector refuses by design to
+produce sat in `build/orb-views/Maclado9Overlap/` for weeks — scored by qiyas,
+picked as the gallery hero — because `make orbs` only ever wrote files. The fix is
+a `rm -rf` of each orb's output directories before they are rewritten: only
+deletion can remove an artifact the generator has stopped producing.
+
+### What this resolves and what it does not
+
+Closes tasks #14 (the stale views), #17 (the §9 gate) and #35 (Maclado-9-Overlap
+has no sweep). The gate ships having failed twice on purpose, which is the point
+of it: 14 manifests short of five keys from a stale `dist/`, and the Overlap
+mismatch §4.1 predicted.
+
+**Deliberately not built:** a `t`-parameterized flat→sphere wrap morph. It is the
+one beat still told by two endpoints and a caption rather than by animation, and
+it needs new geometry with nothing to reuse — the honest position is that the page
+shows where the drawing starts and where it lands, and says so, rather than
+implying a continuous map it cannot draw. Also unbuilt: a ghosted back hemisphere
+(qiyas's detector reads `fill="none"` elements as stroke outlines, so it would have
+to stay out of the instrument), per-strand highlighting on strand stages, and any
+change to qiyas or to the recorded composites.
+
+**What would reverse this:** a measured reading of the page by someone new to it
+that still cannot answer "how does the flat drawing become a ball?" — the same
+test this rework was opened by, applied to its result.

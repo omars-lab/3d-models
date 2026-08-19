@@ -1,0 +1,37 @@
+#!/bin/sh
+# Timelapse gate (.claude/gates/timelapse_gate.py). The breakdown page's
+# invariants live across files — one viewBox over three sequences, two byte
+# identities at the junctions, and a last stage frame that is the drawing qiyas
+# scores. None of them is visible in any single file, and every one of them is
+# broken by an edit that looks local.
+#
+# wholesale: make validate-timelapse
+#
+# Built 2026-08-19 with two failures already recorded: on the tree it was
+# written against, all 14 manifests were missing five keys (a dist built before
+# the rework) and Maclado-9-Overlap carried three cell views the engine refuses
+# by design to produce.
+#
+# Whole-tree, not --staged: what goes stale here is build/, which is not
+# tracked and so is never staged. A gate scoped to staged files would never
+# have fired on any instance of this.
+# Override once: TIMELAPSE_GATE_OK=1 git commit
+[ -n "$TIMELAPSE_GATE_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the timelapse gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 20-use-cases and the gates after it: `gh-pages`
+# carries `.githooks` and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/timelapse_gate.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no timelapse gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+# Nothing to check before the first `make orbs`, and that is not a failure:
+# a fresh clone has no build/ at all.
+if [ ! -d "$(git rev-parse --show-toplevel)/build/orb-breakdown" ]; then
+  echo "timelapse: no build/orb-breakdown — nothing rendered yet, skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"
