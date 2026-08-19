@@ -609,6 +609,17 @@ would follow, and it stands whichever of section 9's answers is taken.
 10. **Junction identity** *(added 2026-08-19)* — where two sequences meet, the
     last frame of one is byte-identical to the first frame of the other. Added
     because the built page plays three sequences and not one; see section 4.1.
+11. **Containment** *(added 2026-08-19)* — every cell stage's drawn geometry
+    lies inside the scaffold outline the base frame draws. The outline is a
+    picture of a claim, "the pattern lands on these faces", and a picture can
+    contradict it: drawn corner to corner, a base face is a chord polygon and a
+    chord between two points on a sphere runs inside it — 6.6% of the radius on
+    a dodecahedron edge, 14.9% on an icosahedron's — while the pattern's own
+    cells hug the surface, so they sit *outside* the outline meant to contain
+    them. Strand stages are exempt with a reason rather than a threshold: a
+    woven band's amplitude lifts it off the sphere by up to 3.68 mm across the
+    corpus, by design. Criterion 4's material invariance could not see this and
+    neither could criterion 10 — both read marks, and this one reads positions.
 
 ## 9. Skill, or gate?
 
@@ -654,7 +665,8 @@ that plainly rather than letting the status line imply otherwise:
 [`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py) runs
 as hook `38-timelapse` — after `37-counts`, before `40-site-graph`, exactly the
 ordering above — and as `make validate-timelapse`, which `hook_parity.py` pairs
-to the hook. Its six rules cover **criteria 3, 4, 6, 9 and the new 10**, plus a
+to the hook. Its seven rules cover **criteria 3, 4, 6, 9 and the new 10 and
+11**, plus a
 completeness rule (every file the manifest names exists, and no SVG on disk is
 unnamed by it) that no criterion had, because the failure it catches is absence.
 **Criteria 1, 2, 5, 7 and 8 are not checked by it.** Each needs the compiled
@@ -675,13 +687,25 @@ a single instance of the defect it exists for.
 
 **Its by-design failures, both recorded.** The gate's own `--self-test` builds
 a clean fixture, requires it to come back clean, then mutates it once per rule
-and requires each mutation to fire — twelve checks, the first of which is that
+and requires each mutation to fire — fifteen checks, the first of which is that
 the unmutated fixture is silent, because a gate that fires on everything is not
 evidence that it fires on the right thing. Against the real tree it failed
 twice on purpose: 14 manifests short of five keys from a stale `dist/`, and the
 Overlap terminal-identity mismatch section 4.1 predicted. Both are written up
 where they happened — section 4.1, and the gate's own docstring, so a reader who
 finds it green knows it was not always so.
+
+**T7's by-design failure, reconstructed rather than argued** *(2026-08-19)*. T7
+was written after the defect it catches had already been fixed, which is the
+worst position to ship a gate from: nothing on disk could still fail it. So the
+pre-fix tree was rebuilt from the post-fix one — every scaffold ring decimated
+back to its five corners, which is exactly what the old `baseSolidCells`
+emitted, since the arc walk only interleaves points *between* corners it still
+emits. Against that reconstruction the gate reports **5 findings on
+RosetteWeaveOrb**, naming two `element` frames and three `repeat` frames, each
+overhanging by **3.69 mm**; against the shipped tree it reports none. The
+`--self-test` carries the same failure as a fixture mutation that moves a
+pattern ring outside the scaffold square.
 
 **Its by-design failure case**, because a gate that asserts everything passes is
 a gate that has not been tested: **Maclado-9-Overlap must fail criterion 6 on
