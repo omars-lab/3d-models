@@ -2,8 +2,12 @@
 
 **Status:** the generator is **built** — bikar `587ea34` and `e9cf74e` on branch
 `feat/orb-timelapse-stages` (PR #107), giving `bikar render --format timelapse`.
-The **page** of section 7.3 is not built, and no post has been published. Section
-9's gate is not built either.
+The **page** of section 7.3 is **built** (bikar PR #110, 3d-models PR #84) and
+was then **reworked** (bikar PR #111, 3d-models PR #85, 2026-08-19) after it
+failed the only test that matters: a newcomer could not see how the flat drawing
+becomes an orb. Section 9's gate is **built** — [`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py),
+hook `38-timelapse`, `make validate-timelapse` — and it failed on its first run,
+as section 4.1 required it to. No post has been published.
 **Grounded by:** [`research/orb-stage-decomposition-measurement.md`](research/orb-stage-decomposition-measurement.md)
 — every number in this document is from that file, measured 2026-08-18 against
 bikar `e0a81cc` and 3d-models `50bac8d`, with sections 8.1–8.3 of that file taken
@@ -207,6 +211,18 @@ Two ways out, both cheap: widen the export, or place the stage generator inside
 core. Section 7 takes the second, because the generator wants the scene types
 anyway. Either way it is a build-plan line item rather than a filter.
 
+**Built** (bikar PR #111): `baseSolidCells(base)` in `packages/core/src/kernel3d`
+turns the base faces into `SphericalCell[]` and hands them to the existing
+`projectSphericalCells`, so no new projector was written and the export question
+never had to be answered — the generator sits inside core exactly as section 7
+planned. One correction the build produced, which the design had not seen: the
+front-cap cull that is right for small pattern faces is wrong for base faces.
+A whole-face gate at the default `minDot` keeps a face only if *every* vertex
+clears the cap, and a cube's best whole-face `minDot` on its vertex-3 axis is
+**−0.333** — zero faces survive, and the frame that opens the story would have
+been blank. Base frames therefore cull per-face by centroid (`cull: 'back-face'`),
+which is exact on a convex solid and draws the silhouette for free.
+
 ### 3.5 Ribbon stages, and the front-cap hedge
 
 Woven orbs get a second sequence keyed on `strandId` — one loop threaded at a
@@ -273,6 +289,42 @@ and nothing in either repo detects it. This is the case an aggregate would
 hide: 13 orbs passing and one silently comparing against an artifact from a
 different engine version averages to "fine". The validator must be per-orb, and
 it must fail here on its first run.
+
+**It did, on 2026-08-19, and on more than this orb.** `timelapse_gate.py`'s
+first run against the tree reported 14 findings, not one: every manifest was
+missing five keys, because the checked-out `dist/` predated the rework — the
+same stale-dist shape section 7.3's index guard was built for, caught a second
+time by a gate that reads different evidence. Then, with the CLI rebuilt, the
+Overlap failure this section predicted was the one that remained. **Its fix is
+deletion, not regeneration**, and that distinction is the durable part: the
+engine refuses to draw that orb as cells *by design*, so re-running the
+generator can never overwrite those three SVGs — regeneration does not touch a
+file it has stopped writing. `make orbs` now clears each orb's output
+directories before rewriting them, which is the only operation that can remove
+an artifact the generator has stopped producing.
+
+**One clause of this validator is now narrower than it reads**, and the
+narrowing is deliberate: terminal identity is a property of the *stage*
+sequence. The tilt-in and turntable frames are shaded and carry a silhouette,
+so they are byte-identical to nothing, and that is what they are for. The
+sequence therefore ends on an explicit `complete` frame — unstyled, no
+highlight — and it is that frame the gate compares against the shipped view.
+Two further identities take over where invariance used to be the whole story:
+the tilt's first frame **is** the complete frame and its last frame **is** the
+orbit point it enters at, both in bytes, which is what makes the two hand-offs
+between sequences invisible on screen.
+
+**Validator (junctions):** `transition[0]` is byte-identical to the `complete`
+frame and `transition[last]` to `turntable[entersAtIndex]`.
+
+PASS: Star-Orb at `--turntable 12` — 3 tilt frames, entering the orbit at index
+9, both junction pairs equal byte for byte.
+
+FAIL: renaming the tilt's endpoint cameras. The identities hold only because
+the endpoint frames are rendered from the cameras they sit on — `from` at t=0
+and `turntable-9` at t=1 — and a synthetic `transition-0` / `transition-2` id
+is written into `data-orb-view`, changing the bytes while every pixel stays put.
+That is the hard case: the pictures remain correct and the invariant is gone.
 
 ### 4.2 What SVG cannot show — the debt this repays
 
@@ -511,8 +563,16 @@ would follow, and it stands whichever of section 9's answers is taken.
    `wheel`, `param`) and is stable across regenerations of the same geometry.
 3. **Camera invariance** — every frame's `viewBox` attribute is byte-identical
    to every other frame's in the same sequence.
-4. **Material invariance** — fill and stroke constants identical across frames;
-   no per-frame styling.
+4. **Material invariance, per frame class** — the stage frames share one fill
+   and one stroke constant, with the single exception of the highlight tint that
+   marks the copy a frame has just placed. *Amended 2026-08-19:* as first
+   written this criterion said "no per-frame styling" full stop, and the built
+   page breaks that on purpose. The tilt-in ramps its shading with `t` and the
+   turntable frames are fully shaded, because a rotating uniform-gray projection
+   reads as a wobbling flat mandala rather than a turning sphere — the depth cue
+   *is* the proof of sphericity, and forbidding it forbids the beat. What the
+   criterion protects is the comparison in criterion 6, so it now binds the
+   class of frames that comparison is made against.
 5. **One increment per frame** — consecutive frames differ by exactly one
    element on the declared axis, and the polygon count is non-decreasing through
    a cumulative sequence.
@@ -528,6 +588,9 @@ would follow, and it stands whichever of section 9's answers is taken.
 9. **Provenance** — the post records the `.bkr` content hash and the engine
    version it was generated from, so section 4.1's staleness is detectable
    rather than discovered.
+10. **Junction identity** *(added 2026-08-19)* — where two sequences meet, the
+    last frame of one is byte-identical to the first frame of the other. Added
+    because the built page plays three sequences and not one; see section 4.1.
 
 ## 9. Skill, or gate?
 
@@ -567,6 +630,40 @@ since it reads generated artifacts and belongs with the artifact gates. It
 checks criteria 1, 3, 4, 5, 6, 7 and 9 mechanically; criteria 2 and 8 are
 checked as far as counts allow — numeric claims in captions must appear in the
 scene's count table — and no further.
+
+**Built 2026-08-19, and it checks less than this paragraph promised.** Stating
+that plainly rather than letting the status line imply otherwise:
+[`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py) runs
+as hook `38-timelapse` — after `37-counts`, before `40-site-graph`, exactly the
+ordering above — and as `make validate-timelapse`, which `hook_parity.py` pairs
+to the hook. Its six rules cover **criteria 3, 4, 6, 9 and the new 10**, plus a
+completeness rule (every file the manifest names exists, and no SVG on disk is
+unnamed by it) that no criterion had, because the failure it catches is absence.
+**Criteria 1, 2, 5, 7 and 8 are not checked by it.** Each needs the compiled
+scene rather than the artifacts on disk — the frames carry no record of the axis
+they were ordered on, so "one increment per frame" and "no undeclared stage"
+cannot be recovered from the directory. They are checked in bikar's own suite,
+where the scene is in hand — `packages/core/tests/kernel3d/orb-timelapse.test.ts`
+holds "grows monotonically, one cumulative frame at a time" (criterion 5), the
+per-orb frame counts derived from the corpus rather than declared (criterion 1),
+and the stage-label cases that keep a caption to constructs the `.bkr` declares
+(criteria 2 and 7). That split is the honest version of "nine criteria, nine
+predicates" — the criteria were mechanically checkable, but not all of them
+from here.
+
+**Whole-tree, never staged-scoped.** What goes stale here is `build/`, which
+this repo does not track. A gate scoped to staged files would not have fired on
+a single instance of the defect it exists for.
+
+**Its by-design failures, both recorded.** The gate's own `--self-test` builds
+a clean fixture, requires it to come back clean, then mutates it once per rule
+and requires each mutation to fire — twelve checks, the first of which is that
+the unmutated fixture is silent, because a gate that fires on everything is not
+evidence that it fires on the right thing. Against the real tree it failed
+twice on purpose: 14 manifests short of five keys from a stale `dist/`, and the
+Overlap terminal-identity mismatch section 4.1 predicted. Both are written up
+where they happened — section 4.1, and the gate's own docstring, so a reader who
+finds it green knows it was not always so.
 
 **Its by-design failure case**, because a gate that asserts everything passes is
 a gate that has not been tested: **Maclado-9-Overlap must fail criterion 6 on
