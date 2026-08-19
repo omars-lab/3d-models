@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="transition-2" data-projection="spherical">
-  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#dfe3e5" pointer-events="none" />
   <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
   <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
   <g clip-path="url(#orb-limb)">

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-110.00 -110.00 220.00 220.00" width="220" height="220">
-  <rect x="-110.00" y="-110.00" width="220.00" height="220.00" fill="#FFFFFF" pointer-events="none" />
+  <rect x="-110.00" y="-110.00" width="220.00" height="220.00" fill="#dfe3e5" pointer-events="none" />
   <path d="M-50.0000,-50.0000 L0.0000,-100.0000 L50.0000,-50.0000 L14.6447,-35.3553 L0.0000,-70.7107 L-14.6447,-35.3553 L-50.0000,-50.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="1" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="2" />
   <path d="M-100.0000,-0.0000 L-50.0000,-50.0000 L-35.3553,-14.6447 L-70.7107,-0.0000 L-35.3553,14.6447 L-50.0000,50.0000 L-100.0000,-0.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="2" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="3" />
   <path d="M-0.0000,100.0000 L-50.0000,50.0000 L-14.6447,35.3553 L-0.0000,70.7107 L14.6447,35.3553 L50.0000,50.0000 L-0.0000,100.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="3" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="0" />
