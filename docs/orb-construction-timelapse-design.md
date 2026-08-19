@@ -223,6 +223,16 @@ clears the cap, and a cube's best whole-face `minDot` on its vertex-3 axis is
 been blank. Base frames therefore cull per-face by centroid (`cull: 'back-face'`),
 which is exact on a convex solid and draws the silhouette for free.
 
+**Corrected 2026-08-19 ([D-037](decisions-log.md)): a frame is not a floor.**
+This section specified the base solid as *frame 0* and the build delivered
+exactly that — written once and never again, so from the second frame on the
+pattern accumulated against a blank page with nothing to be *on*. The base solid
+is now the **scaffold**: every stage frame draws it underneath as a stroke-only
+outline (`data-orb-scaffold`) together with the sphere's limb, and only the
+`complete` frame drops both, because §4.1 pins that frame byte for byte against
+a shipped view carrying neither. The reading that caught this is the reversal
+test D-036 wrote for itself, returned on the first day the page was live.
+
 ### 3.5 Ribbon stages, and the front-cap hedge
 
 Woven orbs get a second sequence keyed on `strandId` — one loop threaded at a
@@ -307,8 +317,16 @@ an artifact the generator has stopped producing.
 narrowing is deliberate: terminal identity is a property of the *stage*
 sequence. The tilt-in and turntable frames are shaded and carry a silhouette,
 so they are byte-identical to nothing, and that is what they are for. The
-sequence therefore ends on an explicit `complete` frame — unstyled, no
-highlight — and it is that frame the gate compares against the shipped view.
+sequence therefore ends on an explicit `complete` frame — no scaffold, no limb,
+no shading, no highlight — and it is that frame the gate compares against the
+shipped view.
+
+Since [D-037](decisions-log.md) the other stage frames are **not** bare: they
+carry the scaffold and the limb (see §3.4), and `complete` is the one frame that
+drops them. Only that frame has an identity to protect, so only that frame has
+to. Shading is separate and is forbidden on all of them: a Lambert envelope
+makes an unplaced region and a dim placed one look alike, which is the single
+distinction a stage frame exists to draw.
 Two further identities take over where invariance used to be the whole story:
 the tilt's first frame **is** the complete frame and its last frame **is** the
 orbit point it enters at, both in bytes, which is what makes the two hand-offs

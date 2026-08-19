@@ -5,13 +5,15 @@ metadata:
   node_type: memory
   type: project
   originSessionId: b5c27e75-8686-44ff-b3d9-1b6af5f89729
-  modified: 2026-08-02T12:35:01.049Z
+  modified: 2026-08-19T18:55:00.000Z
 ---
 
 The `3d-models` repo publishes a static gallery (`index.html`) of OpenSCAD cookie cutters.
 
 - **Deploy branch:** the live site is served from the **`gh-pages`** branch, which has a **diverged history** from `master` (its own copy of `index.html` + `build/`). Changes on `master` do NOT appear live until ported to `gh-pages` — use `make deploy` (worktree-based; never run a bare `git rebase`/`git checkout gh-pages` in the main worktree, it hijacks it).
 - **Live URL:** `https://blog.bytesofpurpose.com/3d-models/` (omars-lab.github.io/3d-models/ 301-redirects there). The old `3d-models.bytesofpurpose.com` CNAME was deleted on gh-pages (commit "Delete CNAME") and no longer routes; `make deploy` does NOT manage CNAME so it preserves whatever Pages settings dictate.
+- **`make deploy` succeeding is not the site being live.** The push returns immediately; GitHub Pages then builds for ~40 s, and during that window newly-added paths 404 while already-published ones still serve 200 — measured 2026-08-19, when `/breakdown.html` and `/build/orb-breakdown/index.json` 404'd while `/` and `/lab.html` were fine, then both went 200 once the build finished. Do not diagnose a serving bug from that: check `gh api repos/omars-lab/3d-models/pages/builds/latest --jq '.status, .commit'` and wait for `built` at the commit you pushed. Also probe the custom domain directly — the `omars-lab.github.io` 301 makes every path read as a redirect first.
+- **Only `DEPLOY_PATHS` goes live.** `build/orb-views/` is deliberately not in it — that is the gray qiyas instrument set, not a published surface; the gallery ships `build/images/`. A 404 on `build/orb-views/...` is correct, not a missing file.
 - **gh-pages tracks `.DS_Store` files** — they can block `git checkout`/rebase from the main worktree; `make deploy` avoids this by using a separate worktree.
 - **Working dir:** `/Users/omareid/workplace` is a symlink to `/Users/omareid/Workspace` — both paths are the same repo.
 - **OpenSCAD binary:** `/Applications/OpenSCAD-2021.01.app/Contents/MacOS/OpenSCAD` (the `openscad` shell alias may point to a stale/missing path). Cornfield render bg = `#FFFFE5`.

@@ -122,3 +122,32 @@ Known pre-existing bikar issues (NOT ours; verified identical at clean HEAD 86da
 **Lego Lab R0 done + committed but NOT PUSHED (3d-models `4c3b900` + `249cb5a` on master, 2026-07-29)**: design-only phase for a new "Lego Lab" — bikar pattern → pieces → 3D-printed **LEGO-compatible parts** (STL), plan at `.claude/plans/sleepy-yawning-bubble.md` (approved). Five decisions locked by Omar: printed parts NOT a BrickLink/stock-part mosaic; **both** gates (anchorability hard pass/fail + grid-fit score 0..1 with a scale/rotation sweep — his own framing, from "can we play with settings to make a pattern compatible?"); interface is a per-piece DSL option (tile-style/full-brick/edge-stud); true LEGO scale 8 mm pitch; full `/ground-design-doc` ceremony. Ships `docs/lego-lab-design.md` v2, `docs/research/lego-brick-system-survey.md`, `docs/research/lego-lab-grounding-audit.md`, catalog LG-F1/F2/R1/B1/B2/D1. The audit forced four real changes (clutch rib as a kernel feature per MachineBlocks' shrink-everything-then-re-add-clamp-bands architecture; `engage` 1.6→3.2; grid-fit rebuilt on lattice-basis residuals + rotation search because v1 read only vector *lengths* and scored hexagonal 1.0; snap 0.2→0.05 mm) and withdrawn four claims (zero-clearance framing, the 0.02 mm clutch band, the printer-accuracy figure, absolute novelty). Catalog edits trip the use-cases hook (pointer file) — `USE_CASES_OK=1` is correct here, it's UC8, not a new use case. Next: **M6** (`brick` declaration + `kernel3d/brick.ts`) and **M7** (anchor solver + `grid-gate.ts`), but LG-F1/F2 clutch coupons block M6's dimensions and printing is on hold.
 
 **M4 done + committed (3d-models `8de323d`, 2026-07-25; NOT pushed/deployed)**: `make orbs` (bikar CLI → STL w/ mesh gate + views + gold hero-view preview via build/orb_previews.py + rsvg-convert; hero pick = highest fold, tie vertex>face>edge), .bkr vendored to src/Orbs/, index.html "§ 02 — The Orbs" (auto-fit grid), re-tracked build/*.py (process_images.py was collateral of f430461). All 3 orbs `qiyas orb-validate` PASS ≥0.95 (Star 1.000, Weave 0.997, Dodeca 1.000 — Dodeca never seen before). `make deploy` NOT run (pushes gh-pages; needs authorization). Physical print prototype pending.
+
+**Breakdown-page rework — shipped and deployed 2026-08-19.** The per-orb breakdown
+page now teaches construction rather than showing a rotating gray blob: five beats
+(flat drawing → bare base solid → copies tiling the sphere → depth-cued turntable →
+live viewer), every mechanism parameterised by what the manifest declares, zero
+per-orb code. Maclado9Overlap reached parity on a ribbon turntable, and its stale
+shipped cell views were resolved by deletion — the engine refuses to produce them by
+design, so regeneration was impossible and their existence was the defect. The
+scope call that governs future style work: **style every human surface, keep the gray
+instrument byte-stable** — a full re-record is a three-repo cascade repeated on every
+tweak, so `build/orb-views/` top level stays byte-identical and styled variants live
+in a `display/` subdirectory qiyas never discovers. Landed as bikar #111 + #112
+(`9d2336e`), 3d-models #86 + #87 (`39a7542`), gh-pages `6cc1b0f`; guarded by
+`.claude/gates/timelapse_gate.py` (green on all 14 orbs). Closes tasks #14, #17, #35.
+See [[3d-models-deploy]] for why the site 404s for ~40 s after `make deploy` returns.
+
+**Follow-up the same day, D-037 (bikar #113 `57ee49d`):** first live reading of that
+page found two defects no gate could see. The base solid was written once as frame
+zero and never again, so the pattern replayed in mid-air — it is now a persistent
+stroke-only **scaffold** under every stage frame, with the sphere's limb, and only
+`complete` drops both (it is byte-pinned to the shipped view). And the spin's ragged
+edge was `DEFAULT_FRONT_CAP_MIN_DOT = 0.3` — a *detector* constraint applied to a
+picture no detector reads, capping content at `r·√(1−0.3²) = 0.954r` and making the
+boundary change shape every frame; display frames now use `cull: 'back-face'` with
+painter ordering by `meanDot`. **The transferable lesson: an absence rule is not a
+coverage rule.** The gate's T6 asserted stage frames carry *no* style markers, and it
+passed for the whole period the base solid was missing from every frame — a rule about
+marks that should be absent cannot see a missing picture. T6 now fails in both
+directions, and the amendment produced 632 findings on the pre-fix tree, 0 after.

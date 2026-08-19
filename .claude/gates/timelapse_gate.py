@@ -29,9 +29,24 @@ which no amount of looking at what is present will find:
   T5  Every file the manifest names exists, and no `.svg` in the directory is
       unnamed by it. An orphan is the shape of a frame the generator stopped
       writing and nothing removed — see T3's Maclado-9-Overlap case below.
-  T6  Stage frames carry no `data-orb-style` / `data-orb-silhouette`, and
-      their fills come only from the two constants. Shading a stage frame is
-      how T3 gets broken by a change that looks purely cosmetic.
+  T6  **Stage frames wear the scaffold; the complete frame wears nothing.**
+      Every stage frame carries `data-orb-scaffold` and `data-orb-silhouette`
+      — the bare solid drawn as an outline underneath, so the pattern is seen
+      landing on something rather than building up against a blank page. The
+      `complete` frame carries neither, because it is the drawing qiyas
+      scores and T3 pins it byte for byte; a scaffold leaking onto it breaks
+      that identity with a change that looks purely cosmetic. No frame in
+      `frames` carries `data-orb-style`: shading belongs to the spin, and on
+      a stage frame a Lambert envelope makes an unplaced region and a dim
+      placed one look alike — the one distinction a stage frame exists to
+      draw. Fills come only from the constants either way.
+
+      The presence half is not symmetry for its own sake. Until 2026-08-19
+      the base solid was written once, as frame zero, and never again, so
+      from the second frame on there was nothing under the pattern; the gate
+      then said every frame was fine, because it only ever checked for marks
+      that should be *absent*. An absence rule cannot catch a missing
+      picture.
 
 **The by-design failure this gate shipped with, and why it is recorded here.**
 On the tree this gate was written against, T3 and T5 both failed on
@@ -84,6 +99,9 @@ REQUIRED_KEYS = (
 # bikar's DEFAULT_ORB_VIEW_FILL and DEFAULT_ORB_HIGHLIGHT_FILL, plus the card.
 STAGE_FILLS = {"#8a8a8a", "#c9782e", "#ffffff", "none"}
 STAGE_KINDS = {"base", "element", "repeat", "strand", "complete"}
+# What a stage frame wears and the complete frame does not: bikar writes both
+# from `STAGE_STYLE` plus the scaffold underlay, and drops both for `complete`.
+SCAFFOLD_MARKERS = ("data-orb-scaffold", "data-orb-silhouette")
 
 FILL_RE = re.compile(r'fill="([^"]*)"')
 VIEWBOX_RE = re.compile(r'viewBox="([^"]*)"')
@@ -167,18 +185,34 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
         shapes = "; ".join(f"{k} ({len(v)} frame(s), e.g. {v[0]})" for k, v in boxes.items())
         findings.append(f"{orb}: the picture changes size mid-story — {shapes}")
 
-    # --- T6: stage frames are the instrument's own style --------------------
+    # --- T6: the scaffold is on the stages and off the finished drawing -----
     for f in frames:
         if f["kind"] not in STAGE_KINDS:
             findings.append(f"{orb}: {f['file']} has unknown kind {f['kind']!r}")
             continue
         svg = _read(d / f["file"])
-        for marker in ("data-orb-style", "data-orb-silhouette"):
-            if marker in svg:
-                findings.append(
-                    f"{orb}: stage frame {f['file']} carries {marker} — a shaded "
-                    "stage frame cannot be byte-identical to the shipped view"
-                )
+        if "data-orb-style" in svg:
+            findings.append(
+                f"{orb}: {f['file']} carries data-orb-style — shading belongs to "
+                "the spin, and it makes an unplaced region and a dim placed one "
+                "look alike"
+            )
+        if f["kind"] == "complete":
+            for marker in SCAFFOLD_MARKERS:
+                if marker in svg:
+                    findings.append(
+                        f"{orb}: the complete frame {f['file']} carries {marker} — "
+                        "it has to be byte-identical to the shipped view, which "
+                        "carries neither"
+                    )
+        else:
+            for marker in SCAFFOLD_MARKERS:
+                if marker not in svg:
+                    findings.append(
+                        f"{orb}: stage frame {f['file']} is missing {marker} — the "
+                        "pattern is building up against a blank page with nothing "
+                        "under it"
+                    )
         stray = sorted(set(FILL_RE.findall(svg)) - STAGE_FILLS)
         if stray:
             findings.append(f"{orb}: stage frame {f['file']} fills with {', '.join(stray)}")
@@ -271,8 +305,18 @@ _SVG = (
     '<rect x="-70" y="-70" width="140" height="140" fill="#ffffff" />'
     '{body}</svg>'
 )
-_STAGE = _SVG.format(body='<path d="M0 0" fill="#8a8a8a" stroke="#333333" />')
-_HELD = _SVG.format(body='<path d="M0 0" fill="#c9782e" stroke="#333333" />')
+# The finished drawing: no scaffold, no limb, nothing but the pattern. This is
+# what ships as the instrument view and what `complete` and `transition[0]`
+# have to equal byte for byte.
+_DONE = _SVG.format(body='<path d="M0 0" fill="#8a8a8a" stroke="#333333" />')
+# What every stage frame carries underneath: the bare solid as an outline, and
+# the sphere's limb, so a viewer has something to watch the pattern land on.
+_SCAFFOLD = (
+    '<path d="M0 0" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />'
+    '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
+)
+_BARE = _SVG.format(body=_SCAFFOLD)
+_HELD = _SVG.format(body=_SCAFFOLD + '<path d="M0 0" fill="#c9782e" stroke="#333333" />')
 _SPUN = _SVG.format(
     body='<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
     '<path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />'
@@ -286,14 +330,14 @@ def _fixture(tmp: Path) -> Path:
     d = tmp / "build" / "orb-breakdown" / "TestOrb"
     views.mkdir(parents=True)
     d.mkdir(parents=True)
-    (views / "TestOrb.vertex-3.svg").write_text(_STAGE, encoding="utf8")
+    (views / "TestOrb.vertex-3.svg").write_text(_DONE, encoding="utf8")
     (d / "source.bkr").write_text(src, encoding="utf8")
     files = {
         "TestOrb.flat.svg": _SVG.format(body=""),
-        "TestOrb.vertex-3.base.000.svg": _STAGE,
+        "TestOrb.vertex-3.base.000.svg": _BARE,
         "TestOrb.vertex-3.element.001.svg": _HELD,
-        "TestOrb.vertex-3.complete.000.svg": _STAGE,
-        "TestOrb.transition.000.svg": _STAGE,          # == the complete frame
+        "TestOrb.vertex-3.complete.000.svg": _DONE,
+        "TestOrb.transition.000.svg": _DONE,           # == the complete frame
         "TestOrb.transition.001.svg": _SPUN,           # == turntable[1]
         "TestOrb.turntable.000.svg": _SVG.format(body='<path d="M9 9" fill="#6f6f6f" />'),
         "TestOrb.turntable.001.svg": _SPUN,
@@ -369,8 +413,18 @@ def _shade_a_stage_frame(d: Path) -> None:
 
 
 def _tint_a_stage_frame(d: Path) -> None:
-    p = d / "TestOrb.vertex-3.base.000.svg"
-    p.write_text(_read(p).replace('fill="#8a8a8a"', 'fill="#c79a2e"'), encoding="utf8")
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(_read(p).replace('fill="#c9782e"', 'fill="#c79a2e"'), encoding="utf8")
+
+
+def _strip_the_scaffold(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(_read(p).replace(' data-orb-scaffold="true"', ""), encoding="utf8")
+
+
+def _scaffold_the_finished_drawing(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.complete.000.svg"
+    p.write_text(_read(p).replace("<path", _SCAFFOLD + "<path", 1), encoding="utf8")
 
 
 def _miss_the_orbit(d: Path) -> None:
@@ -389,7 +443,7 @@ def _lose_a_named_file(d: Path) -> None:
 
 
 def _leave_an_orphan(d: Path) -> None:
-    (d / "TestOrb.vertex-3.element.099.svg").write_text(_STAGE, encoding="utf8")
+    (d / "TestOrb.vertex-3.element.099.svg").write_text(_HELD, encoding="utf8")
 
 
 def _edit_the_source(d: Path) -> None:
@@ -403,6 +457,8 @@ CASES = [
     ("T3 the story ends on a highlighted copy", _end_on_a_highlight, "not 'complete'"),
     ("T6 a shaded stage frame", _shade_a_stage_frame, "carries data-orb-style"),
     ("T6 a stage frame in gallery gold", _tint_a_stage_frame, "fills with"),
+    ("T6 a stage frame with nothing under it", _strip_the_scaffold, "is missing"),
+    ("T6 a scaffold left on the finished drawing", _scaffold_the_finished_drawing, "carries data-orb-scaffold"),
     ("T4 the tilt lands beside the orbit", _miss_the_orbit, "does not land on the orbit"),
     ("T4 entersAtIndex past the orbit", _enter_off_the_end, "outside a 2-frame orbit"),
     ("T5 a named file that is not there", _lose_a_named_file, "not on disk"),
