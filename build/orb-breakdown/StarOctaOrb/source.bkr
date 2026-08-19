@@ -1,0 +1,38 @@
+# Star-Octa-Orb — octahedral pierced-lattice sphere with a {6/2} hexagram.
+# The same canonical triangle-face hexagram as Star-Orb, on the
+# octahedron's 8 faces: alternating tips land exactly on the triangle's
+# edge midpoints, so the lattice connects across every face boundary and
+# the shell closes watertight. Fewer, larger faces than the icosahedral
+# Star-Orb give a bolder, more open star field.
+# Render with: bikar render Star-Octa-Orb.bkr --format stl -o out.stl
+
+# The hexagram circle stays at the fixed inradius 50 — its tips must land
+# exactly on the edge midpoints or the cross-face weld fails — so the
+# pattern itself has no knobs; only the print dimensions do.
+param radius = 60 range 40..110 step 5
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint tri_face
+  # Face triangle: circumradius 100, corners at 90/210/330 deg — the
+  # canonical orb pattern frame (corners at 90 + k*120, CCW).
+  circle C0 center(0,0) radius 100
+  divide C0 into 3 offset 90
+  polygon tri [C0.cpt0 C0.cpt1 C0.cpt2]
+  # Inradius circle: its 6 points are the 3 edge midpoints (at 30/150/270)
+  # plus 3 points under the corners — the hexagram's tips.
+  circle C1 center(0,0) radius 50
+  divide C1 into 6 offset 30
+
+pattern tri_star on tri_face
+  edges from tri
+  connect every 2 on C1
+  voids detect
+
+orb StarOctaOrb
+  base octahedron
+  radius $radius
+  inscribe tri_star
+  project spherical
+  struts width $strut_width depth $strut_depth
+  pierce voids

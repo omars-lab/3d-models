@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M30.0000,17.3205 L48.9898,28.2843 L35.8648,28.7774 L30.0000,17.3205 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M0.0000,0.0000 L30.0000,17.3205 L14.8557,16.6478 L0.0000,0.0000 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M-30.0000,17.3205 L0.0000,0.0000 L-14.8557,16.6478 L-30.0000,17.3205 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M-48.9898,28.2843 L-30.0000,17.3205 L-35.8648,28.7774 L-48.9898,28.2843 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M-30.0000,17.3205 L-14.8557,16.6478 L-20.0836,31.5579 L-35.8648,28.7774 L-30.0000,17.3205 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="4" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M0.0000,0.0000 L14.8557,16.6478 L0.0000,26.7550 L-14.8557,16.6478 L0.0000,0.0000 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="5" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+</svg>

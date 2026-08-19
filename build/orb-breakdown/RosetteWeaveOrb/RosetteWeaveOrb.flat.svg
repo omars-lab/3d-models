@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110.00 -110.00 220.00 220.00" width="220" height="220">
+  <rect x="-110.00" y="-110.00" width="220.00" height="220.00" fill="#FFFFFF" pointer-events="none" />
+  <path d="M47.5528,-65.4508 L57.0634,-18.5410 L22.3358,-30.7426 L0.0000,-60.0000 L47.5528,-65.4508 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="0" data-sides="4" data-layer="0" data-symmetry-fold="5" data-ring="1" data-angle-index="3" />
+  <path d="M22.3358,-30.7426 L57.0634,-18.5410 L36.1401,11.7426 L35.2671,48.5410 L0.0000,38.0000 L-35.2671,48.5410 L-36.1401,11.7426 L-57.0634,-18.5410 L-22.3358,-30.7426 L0.0000,-60.0000 L22.3358,-30.7426 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="2" data-sides="10" data-layer="0" data-symmetry-fold="5" data-ring="0" data-angle-index="0" />
+  <path d="M-47.5528,-65.4508 L0.0000,-60.0000 L-22.3358,-30.7426 L-57.0634,-18.5410 L-47.5528,-65.4508 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="3" data-sides="4" data-layer="0" data-symmetry-fold="5" data-ring="1" data-angle-index="4" />
+  <path d="M-76.9421,25.0000 L-57.0634,-18.5410 L-36.1401,11.7426 L-35.2671,48.5410 L-76.9421,25.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="4" data-sides="4" data-layer="0" data-symmetry-fold="5" data-ring="1" data-angle-index="0" />
+  <path d="M-0.0000,80.9017 L-35.2671,48.5410 L0.0000,38.0000 L35.2671,48.5410 L-0.0000,80.9017 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="5" data-sides="4" data-layer="0" data-symmetry-fold="5" data-ring="1" data-angle-index="1" />
+  <path d="M76.9421,25.0000 L35.2671,48.5410 L36.1401,11.7426 L57.0634,-18.5410 L76.9421,25.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="6" data-sides="4" data-layer="0" data-symmetry-fold="5" data-ring="1" data-angle-index="2" />
+  <g data-layer="-1" style="display:none">
+    <circle cx="0.0000" cy="0.0000" r="100.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="0" data-ring="0" data-circle-name="C0" />
+    <circle cx="0.0000" cy="0.0000" r="100.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="1" data-ring="0" data-circle-name="Cm" />
+    <circle cx="0.0000" cy="0.0000" r="38.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="2" data-ring="0" data-circle-name="C1" />
+    <circle cx="0.0000" cy="0.0000" r="60.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="3" data-ring="0" data-circle-name="C2" />
+    <line x1="110.0000" y1="-20.0803" x2="-13.7638" y2="-110.0000" stroke="#AAAAAA" stroke-width="0.5" stroke-dasharray="4,4" stroke-linecap="round" data-line-index="0" data-line-name="E4" />
+    <line x1="-79.9197" y1="110.0000" x2="79.9197" y2="-110.0000" stroke="#AAAAAA" stroke-width="0.5" stroke-dasharray="4,4" stroke-linecap="round" data-line-index="1" data-line-name="R0" />
+  </g>
+  <path d="M47.5528,-65.4508 L57.0634,-18.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="0" />
+  <path d="M57.0634,-18.5410 L22.3358,-30.7426" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="1" />
+  <path d="M22.3358,-30.7426 L0.0000,-60.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="2" />
+  <path d="M0.0000,-60.0000 L47.5528,-65.4508" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="3" />
+  <path d="M57.0634,-18.5410 L36.1401,11.7426" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="4" />
+  <path d="M36.1401,11.7426 L35.2671,48.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="5" />
+  <path d="M35.2671,48.5410 L0.0000,38.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="6" />
+  <path d="M0.0000,38.0000 L-35.2671,48.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="7" />
+  <path d="M-35.2671,48.5410 L-36.1401,11.7426" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="8" />
+  <path d="M-36.1401,11.7426 L-57.0634,-18.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="9" />
+  <path d="M-57.0634,-18.5410 L-22.3358,-30.7426" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="10" />
+  <path d="M-22.3358,-30.7426 L0.0000,-60.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="11" />
+  <path d="M-47.5528,-65.4508 L0.0000,-60.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="12" />
+  <path d="M-57.0634,-18.5410 L-47.5528,-65.4508" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="13" />
+  <path d="M-76.9421,25.0000 L-57.0634,-18.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="14" />
+  <path d="M-35.2671,48.5410 L-76.9421,25.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="15" />
+  <path d="M-0.0000,80.9017 L-35.2671,48.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="16" />
+  <path d="M35.2671,48.5410 L-0.0000,80.9017" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="17" />
+  <path d="M76.9421,25.0000 L35.2671,48.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="18" />
+  <path d="M57.0634,-18.5410 L76.9421,25.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="19" />
+  <path d="M-35.2671,48.5410 L-0.0000,38.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="20" />
+  <path d="M-0.0000,38.0000 L35.2671,48.5410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="21" />
+</svg>

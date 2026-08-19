@@ -1,0 +1,662 @@
+{
+  "orb": "Maclado9Overlap",
+  "views": [
+    "vertex-3"
+  ],
+  "frames": [
+    {
+      "file": "Maclado9Overlap.vertex-3.base.000.svg",
+      "view": "vertex-3",
+      "kind": "base",
+      "index": 0,
+      "label": "12-face base solid",
+      "polygons": 6,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        5
+      ]
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.001.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 0,
+      "label": "strand 1",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.002.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 1,
+      "label": "strand 2",
+      "polygons": 42,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.003.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 2,
+      "label": "strand 3",
+      "polygons": 72,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.004.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 3,
+      "label": "strand 4",
+      "polygons": 93,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.005.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 4,
+      "label": "strand 5",
+      "polygons": 114,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.006.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 5,
+      "label": "strand 6",
+      "polygons": 144,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.007.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 6,
+      "label": "strand 7",
+      "polygons": 154,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.008.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 7,
+      "label": "strand 8",
+      "polygons": 165,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.009.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 8,
+      "label": "strand 9",
+      "polygons": 182,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.010.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 9,
+      "label": "strand 10",
+      "polygons": 193,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.011.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 10,
+      "label": "strand 11",
+      "polygons": 203,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.012.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 11,
+      "label": "strand 12",
+      "polygons": 220,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.013.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 12,
+      "label": "strand 13",
+      "polygons": 241,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.014.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 13,
+      "label": "strand 14",
+      "polygons": 262,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.015.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 14,
+      "label": "strand 15",
+      "polygons": 292,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.016.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 15,
+      "label": "strand 16",
+      "polygons": 303,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.017.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 16,
+      "label": "strand 17",
+      "polygons": 313,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.018.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 17,
+      "label": "strand 18",
+      "polygons": 330,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.019.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 18,
+      "label": "strand 19",
+      "polygons": 351,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.020.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 19,
+      "label": "strand 20",
+      "polygons": 372,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.021.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 20,
+      "label": "strand 21",
+      "polygons": 402,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.022.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 21,
+      "label": "strand 22",
+      "polygons": 412,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.023.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 22,
+      "label": "strand 23",
+      "polygons": 423,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.024.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 23,
+      "label": "strand 24",
+      "polygons": 440,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.025.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 24,
+      "label": "strand 25",
+      "polygons": 450,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.026.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 25,
+      "label": "strand 26",
+      "polygons": 461,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.027.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 26,
+      "label": "strand 27",
+      "polygons": 478,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.028.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 27,
+      "label": "strand 28",
+      "polygons": 489,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.029.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 28,
+      "label": "strand 29",
+      "polygons": 499,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.strand.030.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 29,
+      "label": "strand 30",
+      "polygons": 516,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Overlap.vertex-3.complete.001.svg",
+      "view": "vertex-3",
+      "kind": "complete",
+      "index": 1,
+      "label": "the finished weave",
+      "representation": "ribbons",
+      "polygons": 516,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    }
+  ],
+  "turntable": [
+    {
+      "file": "Maclado9Overlap.turntable.000.svg",
+      "index": 0,
+      "azimuthDeg": 0,
+      "elevationDeg": 18,
+      "polygons": 445
+    },
+    {
+      "file": "Maclado9Overlap.turntable.001.svg",
+      "index": 1,
+      "azimuthDeg": 10,
+      "elevationDeg": 18,
+      "polygons": 456
+    },
+    {
+      "file": "Maclado9Overlap.turntable.002.svg",
+      "index": 2,
+      "azimuthDeg": 20,
+      "elevationDeg": 18,
+      "polygons": 481
+    },
+    {
+      "file": "Maclado9Overlap.turntable.003.svg",
+      "index": 3,
+      "azimuthDeg": 30,
+      "elevationDeg": 18,
+      "polygons": 485
+    },
+    {
+      "file": "Maclado9Overlap.turntable.004.svg",
+      "index": 4,
+      "azimuthDeg": 40,
+      "elevationDeg": 18,
+      "polygons": 488
+    },
+    {
+      "file": "Maclado9Overlap.turntable.005.svg",
+      "index": 5,
+      "azimuthDeg": 50,
+      "elevationDeg": 18,
+      "polygons": 470
+    },
+    {
+      "file": "Maclado9Overlap.turntable.006.svg",
+      "index": 6,
+      "azimuthDeg": 60,
+      "elevationDeg": 18,
+      "polygons": 459
+    },
+    {
+      "file": "Maclado9Overlap.turntable.007.svg",
+      "index": 7,
+      "azimuthDeg": 70,
+      "elevationDeg": 18,
+      "polygons": 473
+    },
+    {
+      "file": "Maclado9Overlap.turntable.008.svg",
+      "index": 8,
+      "azimuthDeg": 80,
+      "elevationDeg": 18,
+      "polygons": 494
+    },
+    {
+      "file": "Maclado9Overlap.turntable.009.svg",
+      "index": 9,
+      "azimuthDeg": 90,
+      "elevationDeg": 18,
+      "polygons": 502
+    },
+    {
+      "file": "Maclado9Overlap.turntable.010.svg",
+      "index": 10,
+      "azimuthDeg": 100,
+      "elevationDeg": 18,
+      "polygons": 494
+    },
+    {
+      "file": "Maclado9Overlap.turntable.011.svg",
+      "index": 11,
+      "azimuthDeg": 110,
+      "elevationDeg": 18,
+      "polygons": 470
+    },
+    {
+      "file": "Maclado9Overlap.turntable.012.svg",
+      "index": 12,
+      "azimuthDeg": 120,
+      "elevationDeg": 18,
+      "polygons": 458
+    },
+    {
+      "file": "Maclado9Overlap.turntable.013.svg",
+      "index": 13,
+      "azimuthDeg": 130,
+      "elevationDeg": 18,
+      "polygons": 471
+    },
+    {
+      "file": "Maclado9Overlap.turntable.014.svg",
+      "index": 14,
+      "azimuthDeg": 140,
+      "elevationDeg": 18,
+      "polygons": 486
+    },
+    {
+      "file": "Maclado9Overlap.turntable.015.svg",
+      "index": 15,
+      "azimuthDeg": 150,
+      "elevationDeg": 18,
+      "polygons": 487
+    },
+    {
+      "file": "Maclado9Overlap.turntable.016.svg",
+      "index": 16,
+      "azimuthDeg": 160,
+      "elevationDeg": 18,
+      "polygons": 481
+    },
+    {
+      "file": "Maclado9Overlap.turntable.017.svg",
+      "index": 17,
+      "azimuthDeg": 170,
+      "elevationDeg": 18,
+      "polygons": 456
+    },
+    {
+      "file": "Maclado9Overlap.turntable.018.svg",
+      "index": 18,
+      "azimuthDeg": 180,
+      "elevationDeg": 18,
+      "polygons": 445
+    },
+    {
+      "file": "Maclado9Overlap.turntable.019.svg",
+      "index": 19,
+      "azimuthDeg": 190,
+      "elevationDeg": 18,
+      "polygons": 456
+    },
+    {
+      "file": "Maclado9Overlap.turntable.020.svg",
+      "index": 20,
+      "azimuthDeg": 200,
+      "elevationDeg": 18,
+      "polygons": 481
+    },
+    {
+      "file": "Maclado9Overlap.turntable.021.svg",
+      "index": 21,
+      "azimuthDeg": 210,
+      "elevationDeg": 18,
+      "polygons": 485
+    },
+    {
+      "file": "Maclado9Overlap.turntable.022.svg",
+      "index": 22,
+      "azimuthDeg": 220,
+      "elevationDeg": 18,
+      "polygons": 488
+    },
+    {
+      "file": "Maclado9Overlap.turntable.023.svg",
+      "index": 23,
+      "azimuthDeg": 230,
+      "elevationDeg": 18,
+      "polygons": 470
+    },
+    {
+      "file": "Maclado9Overlap.turntable.024.svg",
+      "index": 24,
+      "azimuthDeg": 240,
+      "elevationDeg": 18,
+      "polygons": 459
+    },
+    {
+      "file": "Maclado9Overlap.turntable.025.svg",
+      "index": 25,
+      "azimuthDeg": 250,
+      "elevationDeg": 18,
+      "polygons": 473
+    },
+    {
+      "file": "Maclado9Overlap.turntable.026.svg",
+      "index": 26,
+      "azimuthDeg": 260,
+      "elevationDeg": 18,
+      "polygons": 494
+    },
+    {
+      "file": "Maclado9Overlap.turntable.027.svg",
+      "index": 27,
+      "azimuthDeg": 270,
+      "elevationDeg": 18,
+      "polygons": 502
+    },
+    {
+      "file": "Maclado9Overlap.turntable.028.svg",
+      "index": 28,
+      "azimuthDeg": 280,
+      "elevationDeg": 18,
+      "polygons": 494
+    },
+    {
+      "file": "Maclado9Overlap.turntable.029.svg",
+      "index": 29,
+      "azimuthDeg": 290,
+      "elevationDeg": 18,
+      "polygons": 470
+    },
+    {
+      "file": "Maclado9Overlap.turntable.030.svg",
+      "index": 30,
+      "azimuthDeg": 300,
+      "elevationDeg": 18,
+      "polygons": 458
+    },
+    {
+      "file": "Maclado9Overlap.turntable.031.svg",
+      "index": 31,
+      "azimuthDeg": 310,
+      "elevationDeg": 18,
+      "polygons": 471
+    },
+    {
+      "file": "Maclado9Overlap.turntable.032.svg",
+      "index": 32,
+      "azimuthDeg": 320,
+      "elevationDeg": 18,
+      "polygons": 486
+    },
+    {
+      "file": "Maclado9Overlap.turntable.033.svg",
+      "index": 33,
+      "azimuthDeg": 330,
+      "elevationDeg": 18,
+      "polygons": 487
+    },
+    {
+      "file": "Maclado9Overlap.turntable.034.svg",
+      "index": 34,
+      "azimuthDeg": 340,
+      "elevationDeg": 18,
+      "polygons": 481
+    },
+    {
+      "file": "Maclado9Overlap.turntable.035.svg",
+      "index": 35,
+      "azimuthDeg": 350,
+      "elevationDeg": 18,
+      "polygons": 456
+    }
+  ],
+  "flat": {
+    "file": "Maclado9Overlap.flat.svg",
+    "relation": "preview"
+  },
+  "transition": {
+    "frames": [
+      {
+        "file": "Maclado9Overlap.transition.000.svg",
+        "index": 0,
+        "azimuthDeg": 315,
+        "elevationDeg": 35,
+        "polygons": 516
+      },
+      {
+        "file": "Maclado9Overlap.transition.001.svg",
+        "index": 1,
+        "azimuthDeg": 312,
+        "elevationDeg": 27,
+        "polygons": 498
+      },
+      {
+        "file": "Maclado9Overlap.transition.002.svg",
+        "index": 2,
+        "azimuthDeg": 310,
+        "elevationDeg": 18,
+        "polygons": 471
+      }
+    ],
+    "entersAtIndex": 31
+  },
+  "turntableRepresentation": "ribbons",
+  "base": {
+    "faces": 12,
+    "vertices": 20,
+    "sides": [
+      5
+    ]
+  },
+  "weave": {
+    "strands": 60,
+    "crossings": 420
+  },
+  "source": "source.bkr",
+  "sourceSha256": "175e22aca434381f584d6c6be34c474b50548d1cf91aceb466744021d27c482d",
+  "engine": "0.1.0"
+}

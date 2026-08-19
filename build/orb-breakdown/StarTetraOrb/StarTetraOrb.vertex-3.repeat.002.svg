@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M-42.4264,24.4949 L0.0000,0.0000 L42.4264,24.4949 L18.9737,32.8634 L-0.0000,16.3299 L-18.9737,32.8634 L-42.4264,24.4949 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="6" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M18.9737,32.8634 L-18.9737,32.8634 L-0.0000,16.3299 L18.9737,32.8634 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M0.0000,-48.9898 L0.0000,0.0000 L-42.4264,24.4949 L-37.9473,0.0000 L-14.1421,-8.1650 L-18.9737,-32.8634 L0.0000,-48.9898 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="6" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="1" data-orb-highlight="true" />
+  <path d="M-37.9473,0.0000 L-18.9737,-32.8634 L-14.1421,-8.1650 L-37.9473,0.0000 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="1" data-orb-highlight="true" />
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="turntable-17" data-projection="spherical">
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <path d="M22.0431,41.3907 L-18.7992,9.4100 L8.6672,9.8050 L25.4531,28.0685 L42.5562,6.9852 L56.9789,3.1047 L22.0431,41.3907 Z" fill="#757575" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="6" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="0" data-orb-style="shaded" />
+  <path d="M50.9635,-23.6875 L56.9789,3.1047 L42.5562,6.9852 L50.9635,-23.6875 Z" fill="#606060" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="0" data-orb-style="shaded" />
+  <path d="M-31.5257,-34.2123 L-8.4072,-48.7204 L-16.8145,-18.0478 L-31.5257,-34.2123 Z" fill="#737373" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="3" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="0" data-orb-style="shaded" />
+  <path d="M-18.7992,9.4100 L-16.8145,-18.0478 L8.6672,9.8050 L-18.7992,9.4100 Z" fill="#868686" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="3" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="0" data-orb-style="shaded" />
+  <path d="M25.4531,28.0685 L8.6672,9.8050 L42.5562,6.9852 L25.4531,28.0685 Z" fill="#7c7c7c" stroke="#333333" stroke-width="0.4" data-face-index="4" data-sides="3" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="0" data-orb-style="shaded" />
+  <path d="M-42.2962,7.0281 L-18.7992,9.4100 L-16.8145,34.8809 L-42.2962,7.0281 Z" fill="#7b7b7b" stroke="#333333" stroke-width="0.4" data-face-index="5" data-sides="3" data-orb-view="turntable-17" data-projection="spherical" data-orb-base-face="3" data-orb-style="shaded" />
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-4" data-projection="spherical">
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M42.4264,0.0000 L0.0000,0.0000 L0.0000,-42.4264 L16.0357,-32.0713 L14.1421,-14.1421 L32.0713,-16.0357 L42.4264,0.0000 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="6" data-orb-view="vertex-4" data-projection="spherical" data-orb-base-face="0" data-orb-highlight="true" />
+  <path d="M16.0357,-32.0713 L0.0000,-42.4264 L16.0357,-48.1070 L16.0357,-32.0713 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-4" data-projection="spherical" data-orb-base-face="0" data-orb-highlight="true" />
+  <path d="M16.0357,-32.0713 L32.0713,-16.0357 L14.1421,-14.1421 L16.0357,-32.0713 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="3" data-orb-view="vertex-4" data-projection="spherical" data-orb-base-face="0" data-orb-highlight="true" />
+  <path d="M42.4264,0.0000 L32.0713,-16.0357 L48.1070,-16.0357 L42.4264,0.0000 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="3" data-orb-view="vertex-4" data-projection="spherical" data-orb-base-face="0" data-orb-highlight="true" />
+</svg>

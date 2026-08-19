@@ -1,0 +1,1060 @@
+{
+  "orb": "Maclado9Weave",
+  "views": [
+    "vertex-3"
+  ],
+  "frames": [
+    {
+      "file": "Maclado9Weave.vertex-3.base.000.svg",
+      "view": "vertex-3",
+      "kind": "base",
+      "index": 0,
+      "label": "12-face base solid",
+      "polygons": 6,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        5
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.001.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 0,
+      "label": "core",
+      "polygons": 1,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        9
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.002.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 1,
+      "label": "triangle 0",
+      "polygons": 2,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.003.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 2,
+      "label": "petal 0",
+      "polygons": 3,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.004.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 3,
+      "label": "triangle 1",
+      "polygons": 4,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.005.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 4,
+      "label": "petal 1",
+      "polygons": 5,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.006.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 5,
+      "label": "triangle 2",
+      "polygons": 6,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.007.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 6,
+      "label": "petal 2",
+      "polygons": 7,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.008.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 7,
+      "label": "triangle 3",
+      "polygons": 8,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.009.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 8,
+      "label": "petal 3",
+      "polygons": 9,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.010.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 9,
+      "label": "triangle 4",
+      "polygons": 10,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.011.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 10,
+      "label": "petal 4",
+      "polygons": 11,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.012.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 11,
+      "label": "triangle 5",
+      "polygons": 12,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.013.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 12,
+      "label": "petal 5",
+      "polygons": 13,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.014.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 13,
+      "label": "triangle 6",
+      "polygons": 14,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.015.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 14,
+      "label": "petal 6",
+      "polygons": 15,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.016.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 15,
+      "label": "triangle 7",
+      "polygons": 16,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.017.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 16,
+      "label": "petal 7",
+      "polygons": 17,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.018.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 17,
+      "label": "triangle 8",
+      "polygons": 18,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.element.019.svg",
+      "view": "vertex-3",
+      "kind": "element",
+      "index": 18,
+      "label": "petal 8",
+      "polygons": 19,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.001.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 0,
+      "label": "unit 1",
+      "polygons": 19,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4,
+        9
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.002.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 1,
+      "label": "unit 2",
+      "polygons": 38,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4,
+        9
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.003.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 2,
+      "label": "unit 3",
+      "polygons": 46,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.004.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 3,
+      "label": "unit 4",
+      "polygons": 54,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.005.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 4,
+      "label": "unit 5",
+      "polygons": 73,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4,
+        9
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.006.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 5,
+      "label": "unit 6",
+      "polygons": 81,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.007.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 6,
+      "label": "unit 7",
+      "polygons": 100,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4,
+        9
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.008.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 7,
+      "label": "unit 8",
+      "polygons": 108,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.009.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 8,
+      "label": "unit 9",
+      "polygons": 116,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.010.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 9,
+      "label": "unit 10",
+      "polygons": 124,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3,
+        4
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.011.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 10,
+      "label": "filler 1",
+      "polygons": 125,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        30
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.012.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 11,
+      "label": "filler 2",
+      "polygons": 126,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        30
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.repeat.013.svg",
+      "view": "vertex-3",
+      "kind": "repeat",
+      "index": 12,
+      "label": "filler 3",
+      "polygons": 127,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        30
+      ]
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.complete.000.svg",
+      "view": "vertex-3",
+      "kind": "complete",
+      "index": 0,
+      "label": "the finished orb",
+      "representation": "cells",
+      "polygons": 127,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.001.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 0,
+      "label": "strand 1",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.002.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 1,
+      "label": "strand 2",
+      "polygons": 42,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.003.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 2,
+      "label": "strand 3",
+      "polygons": 72,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.004.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 3,
+      "label": "strand 4",
+      "polygons": 102,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.005.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 4,
+      "label": "strand 5",
+      "polygons": 132,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.006.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 5,
+      "label": "strand 6",
+      "polygons": 153,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.007.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 6,
+      "label": "strand 7",
+      "polygons": 174,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.008.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 7,
+      "label": "strand 8",
+      "polygons": 198,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.009.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 8,
+      "label": "strand 9",
+      "polygons": 208,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.010.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 9,
+      "label": "strand 10",
+      "polygons": 219,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.011.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 10,
+      "label": "strand 11",
+      "polygons": 243,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.012.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 11,
+      "label": "strand 12",
+      "polygons": 254,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.013.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 12,
+      "label": "strand 13",
+      "polygons": 264,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.014.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 13,
+      "label": "strand 14",
+      "polygons": 285,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.015.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 14,
+      "label": "strand 15",
+      "polygons": 306,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.016.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 15,
+      "label": "strand 16",
+      "polygons": 317,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.017.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 16,
+      "label": "strand 17",
+      "polygons": 327,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.018.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 17,
+      "label": "strand 18",
+      "polygons": 351,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.019.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 18,
+      "label": "strand 19",
+      "polygons": 372,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.020.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 19,
+      "label": "strand 20",
+      "polygons": 393,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.021.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 20,
+      "label": "strand 21",
+      "polygons": 403,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.022.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 21,
+      "label": "strand 22",
+      "polygons": 414,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.023.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 22,
+      "label": "strand 23",
+      "polygons": 424,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.024.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 23,
+      "label": "strand 24",
+      "polygons": 435,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.025.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 24,
+      "label": "strand 25",
+      "polygons": 446,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.strand.026.svg",
+      "view": "vertex-3",
+      "kind": "strand",
+      "index": 25,
+      "label": "strand 26",
+      "polygons": 456,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "Maclado9Weave.vertex-3.complete.001.svg",
+      "view": "vertex-3",
+      "kind": "complete",
+      "index": 1,
+      "label": "the finished weave",
+      "representation": "ribbons",
+      "polygons": 456,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    }
+  ],
+  "turntable": [
+    {
+      "file": "Maclado9Weave.turntable.000.svg",
+      "index": 0,
+      "azimuthDeg": 0,
+      "elevationDeg": 18,
+      "polygons": 397
+    },
+    {
+      "file": "Maclado9Weave.turntable.001.svg",
+      "index": 1,
+      "azimuthDeg": 10,
+      "elevationDeg": 18,
+      "polygons": 413
+    },
+    {
+      "file": "Maclado9Weave.turntable.002.svg",
+      "index": 2,
+      "azimuthDeg": 20,
+      "elevationDeg": 18,
+      "polygons": 430
+    },
+    {
+      "file": "Maclado9Weave.turntable.003.svg",
+      "index": 3,
+      "azimuthDeg": 30,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.004.svg",
+      "index": 4,
+      "azimuthDeg": 40,
+      "elevationDeg": 18,
+      "polygons": 443
+    },
+    {
+      "file": "Maclado9Weave.turntable.005.svg",
+      "index": 5,
+      "azimuthDeg": 50,
+      "elevationDeg": 18,
+      "polygons": 424
+    },
+    {
+      "file": "Maclado9Weave.turntable.006.svg",
+      "index": 6,
+      "azimuthDeg": 60,
+      "elevationDeg": 18,
+      "polygons": 414
+    },
+    {
+      "file": "Maclado9Weave.turntable.007.svg",
+      "index": 7,
+      "azimuthDeg": 70,
+      "elevationDeg": 18,
+      "polygons": 424
+    },
+    {
+      "file": "Maclado9Weave.turntable.008.svg",
+      "index": 8,
+      "azimuthDeg": 80,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.009.svg",
+      "index": 9,
+      "azimuthDeg": 90,
+      "elevationDeg": 18,
+      "polygons": 447
+    },
+    {
+      "file": "Maclado9Weave.turntable.010.svg",
+      "index": 10,
+      "azimuthDeg": 100,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.011.svg",
+      "index": 11,
+      "azimuthDeg": 110,
+      "elevationDeg": 18,
+      "polygons": 425
+    },
+    {
+      "file": "Maclado9Weave.turntable.012.svg",
+      "index": 12,
+      "azimuthDeg": 120,
+      "elevationDeg": 18,
+      "polygons": 413
+    },
+    {
+      "file": "Maclado9Weave.turntable.013.svg",
+      "index": 13,
+      "azimuthDeg": 130,
+      "elevationDeg": 18,
+      "polygons": 423
+    },
+    {
+      "file": "Maclado9Weave.turntable.014.svg",
+      "index": 14,
+      "azimuthDeg": 140,
+      "elevationDeg": 18,
+      "polygons": 443
+    },
+    {
+      "file": "Maclado9Weave.turntable.015.svg",
+      "index": 15,
+      "azimuthDeg": 150,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.016.svg",
+      "index": 16,
+      "azimuthDeg": 160,
+      "elevationDeg": 18,
+      "polygons": 429
+    },
+    {
+      "file": "Maclado9Weave.turntable.017.svg",
+      "index": 17,
+      "azimuthDeg": 170,
+      "elevationDeg": 18,
+      "polygons": 413
+    },
+    {
+      "file": "Maclado9Weave.turntable.018.svg",
+      "index": 18,
+      "azimuthDeg": 180,
+      "elevationDeg": 18,
+      "polygons": 397
+    },
+    {
+      "file": "Maclado9Weave.turntable.019.svg",
+      "index": 19,
+      "azimuthDeg": 190,
+      "elevationDeg": 18,
+      "polygons": 413
+    },
+    {
+      "file": "Maclado9Weave.turntable.020.svg",
+      "index": 20,
+      "azimuthDeg": 200,
+      "elevationDeg": 18,
+      "polygons": 430
+    },
+    {
+      "file": "Maclado9Weave.turntable.021.svg",
+      "index": 21,
+      "azimuthDeg": 210,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.022.svg",
+      "index": 22,
+      "azimuthDeg": 220,
+      "elevationDeg": 18,
+      "polygons": 443
+    },
+    {
+      "file": "Maclado9Weave.turntable.023.svg",
+      "index": 23,
+      "azimuthDeg": 230,
+      "elevationDeg": 18,
+      "polygons": 424
+    },
+    {
+      "file": "Maclado9Weave.turntable.024.svg",
+      "index": 24,
+      "azimuthDeg": 240,
+      "elevationDeg": 18,
+      "polygons": 414
+    },
+    {
+      "file": "Maclado9Weave.turntable.025.svg",
+      "index": 25,
+      "azimuthDeg": 250,
+      "elevationDeg": 18,
+      "polygons": 424
+    },
+    {
+      "file": "Maclado9Weave.turntable.026.svg",
+      "index": 26,
+      "azimuthDeg": 260,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.027.svg",
+      "index": 27,
+      "azimuthDeg": 270,
+      "elevationDeg": 18,
+      "polygons": 447
+    },
+    {
+      "file": "Maclado9Weave.turntable.028.svg",
+      "index": 28,
+      "azimuthDeg": 280,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.029.svg",
+      "index": 29,
+      "azimuthDeg": 290,
+      "elevationDeg": 18,
+      "polygons": 425
+    },
+    {
+      "file": "Maclado9Weave.turntable.030.svg",
+      "index": 30,
+      "azimuthDeg": 300,
+      "elevationDeg": 18,
+      "polygons": 413
+    },
+    {
+      "file": "Maclado9Weave.turntable.031.svg",
+      "index": 31,
+      "azimuthDeg": 310,
+      "elevationDeg": 18,
+      "polygons": 423
+    },
+    {
+      "file": "Maclado9Weave.turntable.032.svg",
+      "index": 32,
+      "azimuthDeg": 320,
+      "elevationDeg": 18,
+      "polygons": 443
+    },
+    {
+      "file": "Maclado9Weave.turntable.033.svg",
+      "index": 33,
+      "azimuthDeg": 330,
+      "elevationDeg": 18,
+      "polygons": 446
+    },
+    {
+      "file": "Maclado9Weave.turntable.034.svg",
+      "index": 34,
+      "azimuthDeg": 340,
+      "elevationDeg": 18,
+      "polygons": 429
+    },
+    {
+      "file": "Maclado9Weave.turntable.035.svg",
+      "index": 35,
+      "azimuthDeg": 350,
+      "elevationDeg": 18,
+      "polygons": 413
+    }
+  ],
+  "flat": {
+    "file": "Maclado9Weave.flat.svg",
+    "relation": "preview"
+  },
+  "transition": {
+    "frames": [
+      {
+        "file": "Maclado9Weave.transition.000.svg",
+        "index": 0,
+        "azimuthDeg": 315,
+        "elevationDeg": 35,
+        "polygons": 456
+      },
+      {
+        "file": "Maclado9Weave.transition.001.svg",
+        "index": 1,
+        "azimuthDeg": 312,
+        "elevationDeg": 27,
+        "polygons": 450
+      },
+      {
+        "file": "Maclado9Weave.transition.002.svg",
+        "index": 2,
+        "azimuthDeg": 310,
+        "elevationDeg": 18,
+        "polygons": 423
+      }
+    ],
+    "entersAtIndex": 31
+  },
+  "turntableRepresentation": "ribbons",
+  "base": {
+    "faces": 12,
+    "vertices": 20,
+    "sides": [
+      5
+    ]
+  },
+  "weave": {
+    "strands": 46,
+    "crossings": 390
+  },
+  "source": "source.bkr",
+  "sourceSha256": "ecdce5881f582a6d606a956fdf334242943b517b5fc9e70e79b6804d86bc3643",
+  "engine": "0.1.0"
+}

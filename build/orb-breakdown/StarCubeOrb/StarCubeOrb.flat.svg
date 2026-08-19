@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110.00 -110.00 220.00 220.00" width="220" height="220">
+  <rect x="-110.00" y="-110.00" width="220.00" height="220.00" fill="#FFFFFF" pointer-events="none" />
+  <path d="M-50.0000,-50.0000 L0.0000,-100.0000 L50.0000,-50.0000 L14.6447,-35.3553 L0.0000,-70.7107 L-14.6447,-35.3553 L-50.0000,-50.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="1" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="2" />
+  <path d="M-100.0000,-0.0000 L-50.0000,-50.0000 L-35.3553,-14.6447 L-70.7107,-0.0000 L-35.3553,14.6447 L-50.0000,50.0000 L-100.0000,-0.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="2" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="3" />
+  <path d="M-0.0000,100.0000 L-50.0000,50.0000 L-14.6447,35.3553 L-0.0000,70.7107 L14.6447,35.3553 L50.0000,50.0000 L-0.0000,100.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="3" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="0" />
+  <path d="M100.0000,0.0000 L50.0000,50.0000 L35.3553,14.6447 L70.7107,0.0000 L35.3553,-14.6447 L50.0000,-50.0000 L100.0000,0.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="4" data-sides="6" data-layer="0" data-shape-id="sq" data-ring="3" data-angle-index="1" />
+  <path d="M14.6447,-35.3553 L50.0000,-50.0000 L35.3553,-14.6447 L20.7107,-20.7107 L14.6447,-35.3553 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="5" data-sides="4" data-layer="0" data-ring="2" data-angle-index="4" />
+  <path d="M14.6447,-35.3553 L0.0000,-29.2893 L-14.6447,-35.3553 L0.0000,-70.7107 L14.6447,-35.3553 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="6" data-sides="4" data-layer="0" data-ring="2" data-angle-index="5" />
+  <path d="M0.0000,-29.2893 L14.6447,-35.3553 L20.7107,-20.7107 L0.0000,-29.2893 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="7" data-sides="3" data-layer="0" data-ring="1" data-angle-index="5" />
+  <path d="M0.0000,-29.2893 L-20.7107,-20.7107 L-14.6447,-35.3553 L0.0000,-29.2893 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="8" data-sides="3" data-layer="0" data-ring="1" data-angle-index="6" />
+  <path d="M-20.7107,-20.7107 L0.0000,-29.2893 L20.7107,-20.7107 L29.2893,0.0000 L20.7107,20.7107 L-0.0000,29.2893 L-20.7107,20.7107 L-29.2893,-0.0000 L-20.7107,-20.7107 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="9" data-sides="8" data-layer="0" data-ring="0" data-angle-index="0" />
+  <path d="M-20.7107,-20.7107 L-35.3553,-14.6447 L-50.0000,-50.0000 L-14.6447,-35.3553 L-20.7107,-20.7107 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="10" data-sides="4" data-layer="0" data-ring="2" data-angle-index="6" />
+  <path d="M-35.3553,-14.6447 L-20.7107,-20.7107 L-29.2893,-0.0000 L-35.3553,-14.6447 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="11" data-sides="3" data-layer="0" data-ring="1" data-angle-index="7" />
+  <path d="M-70.7107,-0.0000 L-35.3553,-14.6447 L-29.2893,-0.0000 L-35.3553,14.6447 L-70.7107,-0.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="12" data-sides="4" data-layer="0" data-ring="2" data-angle-index="7" />
+  <path d="M-35.3553,14.6447 L-29.2893,-0.0000 L-20.7107,20.7107 L-35.3553,14.6447 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="13" data-sides="3" data-layer="0" data-ring="1" data-angle-index="0" />
+  <path d="M-50.0000,50.0000 L-35.3553,14.6447 L-20.7107,20.7107 L-14.6447,35.3553 L-50.0000,50.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="14" data-sides="4" data-layer="0" data-ring="2" data-angle-index="0" />
+  <path d="M-14.6447,35.3553 L-20.7107,20.7107 L-0.0000,29.2893 L-14.6447,35.3553 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="15" data-sides="3" data-layer="0" data-ring="1" data-angle-index="1" />
+  <path d="M-0.0000,70.7107 L-14.6447,35.3553 L-0.0000,29.2893 L14.6447,35.3553 L-0.0000,70.7107 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="16" data-sides="4" data-layer="0" data-ring="2" data-angle-index="1" />
+  <path d="M14.6447,35.3553 L-0.0000,29.2893 L20.7107,20.7107 L14.6447,35.3553 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="17" data-sides="3" data-layer="0" data-ring="1" data-angle-index="2" />
+  <path d="M50.0000,50.0000 L14.6447,35.3553 L20.7107,20.7107 L35.3553,14.6447 L50.0000,50.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="18" data-sides="4" data-layer="0" data-ring="2" data-angle-index="2" />
+  <path d="M35.3553,14.6447 L20.7107,20.7107 L29.2893,0.0000 L35.3553,14.6447 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="19" data-sides="3" data-layer="0" data-ring="1" data-angle-index="3" />
+  <path d="M70.7107,0.0000 L35.3553,14.6447 L29.2893,0.0000 L35.3553,-14.6447 L70.7107,0.0000 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="20" data-sides="4" data-layer="0" data-ring="2" data-angle-index="3" />
+  <path d="M35.3553,-14.6447 L29.2893,0.0000 L20.7107,-20.7107 L35.3553,-14.6447 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="21" data-sides="3" data-layer="0" data-ring="1" data-angle-index="4" />
+  <g data-layer="-1" style="display:none">
+    <circle cx="0.0000" cy="0.0000" r="100.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="0" data-ring="0" data-circle-name="C0" />
+    <circle cx="0.0000" cy="0.0000" r="70.7107" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="1" data-ring="0" data-circle-name="C1" />
+  </g>
+  <path d="M-50.0000,-50.0000 L0.0000,-100.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="0" />
+  <path d="M0.0000,-100.0000 L50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="1" />
+  <path d="M50.0000,-50.0000 L14.6447,-35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="2" />
+  <path d="M14.6447,-35.3553 L0.0000,-70.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="3" />
+  <path d="M0.0000,-70.7107 L-14.6447,-35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="4" />
+  <path d="M-14.6447,-35.3553 L-50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="5" />
+  <path d="M-100.0000,-0.0000 L-50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="6" />
+  <path d="M-50.0000,-50.0000 L-35.3553,-14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="7" />
+  <path d="M-35.3553,-14.6447 L-70.7107,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="8" />
+  <path d="M-70.7107,-0.0000 L-35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="9" />
+  <path d="M-35.3553,14.6447 L-50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="10" />
+  <path d="M-50.0000,50.0000 L-100.0000,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="11" />
+  <path d="M-0.0000,100.0000 L-50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="12" />
+  <path d="M-50.0000,50.0000 L-14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="13" />
+  <path d="M-14.6447,35.3553 L-0.0000,70.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="14" />
+  <path d="M-0.0000,70.7107 L14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="15" />
+  <path d="M14.6447,35.3553 L50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="16" />
+  <path d="M50.0000,50.0000 L-0.0000,100.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="17" />
+  <path d="M100.0000,0.0000 L50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="18" />
+  <path d="M50.0000,50.0000 L35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="19" />
+  <path d="M35.3553,14.6447 L70.7107,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="20" />
+  <path d="M70.7107,0.0000 L35.3553,-14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="21" />
+  <path d="M35.3553,-14.6447 L50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="22" />
+  <path d="M50.0000,-50.0000 L100.0000,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="23" />
+  <path d="M35.3553,-14.6447 L20.7107,-20.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="24" />
+  <path d="M20.7107,-20.7107 L14.6447,-35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="25" />
+  <path d="M14.6447,-35.3553 L0.0000,-29.2893" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="26" />
+  <path d="M0.0000,-29.2893 L-14.6447,-35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="27" />
+  <path d="M20.7107,-20.7107 L0.0000,-29.2893" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="28" />
+  <path d="M0.0000,-29.2893 L-20.7107,-20.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="29" />
+  <path d="M-20.7107,-20.7107 L-14.6447,-35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="30" />
+  <path d="M20.7107,-20.7107 L29.2893,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="31" />
+  <path d="M29.2893,0.0000 L20.7107,20.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="32" />
+  <path d="M20.7107,20.7107 L-0.0000,29.2893" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="33" />
+  <path d="M-0.0000,29.2893 L-20.7107,20.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="34" />
+  <path d="M-20.7107,20.7107 L-29.2893,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="35" />
+  <path d="M-29.2893,-0.0000 L-20.7107,-20.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="36" />
+  <path d="M-20.7107,-20.7107 L-35.3553,-14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="37" />
+  <path d="M-29.2893,-0.0000 L-35.3553,-14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="38" />
+  <path d="M-29.2893,-0.0000 L-35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="39" />
+  <path d="M-20.7107,20.7107 L-35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="40" />
+  <path d="M-20.7107,20.7107 L-14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="41" />
+  <path d="M-0.0000,29.2893 L-14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="42" />
+  <path d="M-0.0000,29.2893 L14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="43" />
+  <path d="M20.7107,20.7107 L14.6447,35.3553" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="44" />
+  <path d="M20.7107,20.7107 L35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="45" />
+  <path d="M29.2893,0.0000 L35.3553,14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="46" />
+  <path d="M29.2893,0.0000 L35.3553,-14.6447" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="47" />
+  <path d="M0.0000,-100.0000 L-100.0000,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="48" />
+  <path d="M-100.0000,-0.0000 L-0.0000,100.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="49" />
+  <path d="M-0.0000,100.0000 L100.0000,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="50" />
+  <path d="M100.0000,0.0000 L0.0000,-100.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="51" />
+  <path d="M50.0000,-50.0000 L-70.7107,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="52" />
+  <path d="M0.0000,-70.7107 L-50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="53" />
+  <path d="M-50.0000,-50.0000 L-0.0000,70.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="54" />
+  <path d="M-70.7107,-0.0000 L50.0000,50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="55" />
+  <path d="M-50.0000,50.0000 L70.7107,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="56" />
+  <path d="M-0.0000,70.7107 L50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="57" />
+  <path d="M50.0000,50.0000 L0.0000,-70.7107" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="58" />
+  <path d="M70.7107,0.0000 L-50.0000,-50.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="59" />
+</svg>

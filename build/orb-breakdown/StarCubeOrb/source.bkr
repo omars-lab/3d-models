@@ -1,0 +1,37 @@
+# Star-Cube-Orb — cubic pierced-lattice sphere with an {8/3} octagram.
+# Each of the 6 square faces carries an eight-pointed star whose tips sit
+# on the face's inradius circle: 4 land exactly on the edge midpoints
+# (shared with the neighboring faces) and 4 under the corners, so the
+# lattice closes watertight across every edge.
+# Render with: bikar render Star-Cube-Orb.bkr --format stl -o out.stl
+
+# The octagram circle stays at the fixed inradius 100*cos(45) — its
+# midpoint tips must land exactly on the edge midpoints or the cross-face
+# weld fails — so the pattern itself has no knobs; only the print
+# dimensions do.
+param radius = 60 range 40..110 step 5
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint sq_star_face
+  # Canonical circumradius-100 square frame (corners at 90 + k*90 CCW).
+  circle C0 center(0,0) radius 100
+  divide C0 into 4 offset 90
+  polygon sq [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3]
+  # Inradius circle: its 8 points are the 4 edge midpoints (at 45 + k*90)
+  # plus 4 points under the corners — the octagram's tips.
+  circle C1 center(0,0) radius 70.7106781187
+  divide C1 into 8 offset 45
+
+pattern sq_octagram on sq_star_face
+  edges from sq
+  connect every 3 on C1
+  voids detect
+
+orb StarCubeOrb
+  base cube
+  radius $radius
+  inscribe sq_octagram
+  project spherical
+  struts width $strut_width depth $strut_depth
+  pierce voids

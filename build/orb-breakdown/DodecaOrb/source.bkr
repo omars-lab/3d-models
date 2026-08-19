@@ -1,0 +1,30 @@
+# Dodeca-Orb — dodecahedral pierced-lattice sphere with a 5-fold star.
+# Each of the 12 pentagonal faces (pattern circumradius 100, corners at
+# 90 + k*72 deg CCW) carries a corner-to-corner pentagram {5/2}: every
+# strut ends on a face corner or runs along a face edge, both shared with
+# the neighboring faces, so the lattice closes watertight (11 voids per
+# face: 5 star tips + 5 edge regions + the central pentagon).
+# Render with: bikar render Dodeca-Orb.bkr --format stl -o out.stl
+
+# The pentagram runs corner-to-corner on the fixed face frame, so the
+# pattern itself has no knobs; only the print dimensions do.
+param radius = 60 range 40..110 step 5
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint pent_face
+  circle C0 center(0,0) radius 100
+  divide C0 into 5 offset 90
+  polygon pent [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4]
+
+pattern pent_star on pent_face
+  edges from pent
+  connect every 2 on C0
+  voids detect
+
+orb DodecaOrb
+  base dodecahedron
+  radius $radius
+  inscribe pent_star
+  project spherical
+  struts width $strut_width depth $strut_depth

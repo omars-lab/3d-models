@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
+  <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M-48.9898,28.2843 L0.0000,56.5685 L48.9898,28.2843 L0.0000,0.0000 L-48.9898,28.2843 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  <path d="M0.0000,0.0000 L48.9898,28.2843 L48.9898,-28.2843 L0.0000,-56.5685 L0.0000,0.0000 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="2" />
+  <path d="M-48.9898,28.2843 L0.0000,0.0000 L0.0000,-56.5685 L-48.9898,-28.2843 L-48.9898,28.2843 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="5" />
+</svg>

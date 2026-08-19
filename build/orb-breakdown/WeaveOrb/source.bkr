@@ -1,0 +1,38 @@
+# Weave-Orb — icosahedral woven-strapwork sphere (Family 1).
+# Each face carries only the {6/2} hexagram (no face-boundary edges — those
+# would make degree-6 nodes, which cannot weave). The hexagram's medial
+# triangle connects the face's edge midpoints, so its edges run straight
+# through into adjacent faces and close into 6 great-circle ribbons (the
+# icosidodecahedron's equators); the other triangle stays interior, giving
+# 20 small triangular ribbons. All 26 ribbons interlace alternately:
+# amplitude 1.6 over a 2.4 ribbon depth leaves a 0.8mm clearance, so the
+# print is a genuinely linked chainmail ball, not a fused lattice.
+# Render with: bikar render Weave-Orb.bkr --format stl -o out.stl
+
+# The hexagram circle stays at the fixed inradius 50 (tips must land on
+# edge midpoints for cross-face closure). Keep amplitude at or above
+# (strut_depth + 0.4) / 2 — the mesh gate is per-tube and cannot see
+# ribbon-ribbon interpenetration, so a too-small amplitude fuses the
+# chainmail silently.
+param radius = 60 range 40..110 step 5
+param amplitude = 1.6 range 1.4..2.6 step 0.2
+param strut_width = 3 range 1.5..6 step 0.5 advanced
+param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
+
+blueprint tri_weave_face
+  # Inradius circle of the canonical circumradius-100 triangle frame: its
+  # 6 points are the 3 edge midpoints (at 30/150/270) plus 3 inner points
+  # under the corners — the hexagram's vertices.
+  circle C1 center(0,0) radius 50
+  divide C1 into 6 offset 30
+
+pattern tri_hexagram on tri_weave_face
+  connect every 2 on C1
+
+orb WeaveOrb
+  base icosahedron
+  radius $radius
+  inscribe tri_hexagram
+  project spherical
+  struts width $strut_width depth $strut_depth
+  weave crossing alternating amplitude $amplitude

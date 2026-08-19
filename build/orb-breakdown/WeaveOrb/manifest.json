@@ -1,0 +1,810 @@
+{
+  "orb": "WeaveOrb",
+  "views": [
+    "vertex-5"
+  ],
+  "frames": [
+    {
+      "file": "WeaveOrb.vertex-5.base.000.svg",
+      "view": "vertex-5",
+      "kind": "base",
+      "index": 0,
+      "label": "20-face base solid",
+      "polygons": 10,
+      "sources": [],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.001.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 0,
+      "label": "element 1",
+      "polygons": 1,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.002.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 1,
+      "label": "element 2",
+      "polygons": 2,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.003.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 2,
+      "label": "element 3",
+      "polygons": 3,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.004.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 3,
+      "label": "element 4",
+      "polygons": 4,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.005.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 4,
+      "label": "element 5",
+      "polygons": 5,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.006.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 5,
+      "label": "element 6",
+      "polygons": 6,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.element.007.svg",
+      "view": "vertex-5",
+      "kind": "element",
+      "index": 6,
+      "label": "element 7",
+      "polygons": 7,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.001.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 0,
+      "label": "unit 1",
+      "polygons": 7,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3,
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.002.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 1,
+      "label": "unit 2",
+      "polygons": 14,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3,
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.003.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 2,
+      "label": "unit 3",
+      "polygons": 21,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3,
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.004.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 3,
+      "label": "unit 4",
+      "polygons": 28,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3,
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.005.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 4,
+      "label": "unit 5",
+      "polygons": 35,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3,
+        6
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.006.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 5,
+      "label": "unit 6",
+      "polygons": 36,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.007.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 6,
+      "label": "unit 7",
+      "polygons": 37,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.008.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 7,
+      "label": "unit 8",
+      "polygons": 38,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.009.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 8,
+      "label": "unit 9",
+      "polygons": 39,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.repeat.010.svg",
+      "view": "vertex-5",
+      "kind": "repeat",
+      "index": 9,
+      "label": "unit 10",
+      "polygons": 40,
+      "sources": [
+        "C1:every:2:#0",
+        "layer:0"
+      ],
+      "introduced": [],
+      "sides": [
+        3
+      ]
+    },
+    {
+      "file": "WeaveOrb.vertex-5.complete.000.svg",
+      "view": "vertex-5",
+      "kind": "complete",
+      "index": 0,
+      "label": "the finished orb",
+      "representation": "cells",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.001.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 0,
+      "label": "strand 1",
+      "polygons": 15,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.002.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 1,
+      "label": "strand 2",
+      "polygons": 27,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.003.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 2,
+      "label": "strand 3",
+      "polygons": 42,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.004.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 3,
+      "label": "strand 4",
+      "polygons": 57,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.005.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 4,
+      "label": "strand 5",
+      "polygons": 69,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.006.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 5,
+      "label": "strand 6",
+      "polygons": 84,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.007.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 6,
+      "label": "strand 7",
+      "polygons": 96,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.008.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 7,
+      "label": "strand 8",
+      "polygons": 111,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.009.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 8,
+      "label": "strand 9",
+      "polygons": 123,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.010.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 9,
+      "label": "strand 10",
+      "polygons": 135,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.011.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 10,
+      "label": "strand 11",
+      "polygons": 138,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.012.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 11,
+      "label": "strand 12",
+      "polygons": 141,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.013.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 12,
+      "label": "strand 13",
+      "polygons": 144,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.014.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 13,
+      "label": "strand 14",
+      "polygons": 147,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.strand.015.svg",
+      "view": "vertex-5",
+      "kind": "strand",
+      "index": 14,
+      "label": "strand 15",
+      "polygons": 150,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.complete.001.svg",
+      "view": "vertex-5",
+      "kind": "complete",
+      "index": 1,
+      "label": "the finished weave",
+      "representation": "ribbons",
+      "polygons": 150,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    }
+  ],
+  "turntable": [
+    {
+      "file": "WeaveOrb.turntable.000.svg",
+      "index": 0,
+      "azimuthDeg": 0,
+      "elevationDeg": 18,
+      "polygons": 155
+    },
+    {
+      "file": "WeaveOrb.turntable.001.svg",
+      "index": 1,
+      "azimuthDeg": 10,
+      "elevationDeg": 18,
+      "polygons": 159
+    },
+    {
+      "file": "WeaveOrb.turntable.002.svg",
+      "index": 2,
+      "azimuthDeg": 20,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.003.svg",
+      "index": 3,
+      "azimuthDeg": 30,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.004.svg",
+      "index": 4,
+      "azimuthDeg": 40,
+      "elevationDeg": 18,
+      "polygons": 165
+    },
+    {
+      "file": "WeaveOrb.turntable.005.svg",
+      "index": 5,
+      "azimuthDeg": 50,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.006.svg",
+      "index": 6,
+      "azimuthDeg": 60,
+      "elevationDeg": 18,
+      "polygons": 160
+    },
+    {
+      "file": "WeaveOrb.turntable.007.svg",
+      "index": 7,
+      "azimuthDeg": 70,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.008.svg",
+      "index": 8,
+      "azimuthDeg": 80,
+      "elevationDeg": 18,
+      "polygons": 170
+    },
+    {
+      "file": "WeaveOrb.turntable.009.svg",
+      "index": 9,
+      "azimuthDeg": 90,
+      "elevationDeg": 18,
+      "polygons": 171
+    },
+    {
+      "file": "WeaveOrb.turntable.010.svg",
+      "index": 10,
+      "azimuthDeg": 100,
+      "elevationDeg": 18,
+      "polygons": 167
+    },
+    {
+      "file": "WeaveOrb.turntable.011.svg",
+      "index": 11,
+      "azimuthDeg": 110,
+      "elevationDeg": 18,
+      "polygons": 161
+    },
+    {
+      "file": "WeaveOrb.turntable.012.svg",
+      "index": 12,
+      "azimuthDeg": 120,
+      "elevationDeg": 18,
+      "polygons": 161
+    },
+    {
+      "file": "WeaveOrb.turntable.013.svg",
+      "index": 13,
+      "azimuthDeg": 130,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.014.svg",
+      "index": 14,
+      "azimuthDeg": 140,
+      "elevationDeg": 18,
+      "polygons": 165
+    },
+    {
+      "file": "WeaveOrb.turntable.015.svg",
+      "index": 15,
+      "azimuthDeg": 150,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.016.svg",
+      "index": 16,
+      "azimuthDeg": 160,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.017.svg",
+      "index": 17,
+      "azimuthDeg": 170,
+      "elevationDeg": 18,
+      "polygons": 159
+    },
+    {
+      "file": "WeaveOrb.turntable.018.svg",
+      "index": 18,
+      "azimuthDeg": 180,
+      "elevationDeg": 18,
+      "polygons": 155
+    },
+    {
+      "file": "WeaveOrb.turntable.019.svg",
+      "index": 19,
+      "azimuthDeg": 190,
+      "elevationDeg": 18,
+      "polygons": 159
+    },
+    {
+      "file": "WeaveOrb.turntable.020.svg",
+      "index": 20,
+      "azimuthDeg": 200,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.021.svg",
+      "index": 21,
+      "azimuthDeg": 210,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.022.svg",
+      "index": 22,
+      "azimuthDeg": 220,
+      "elevationDeg": 18,
+      "polygons": 165
+    },
+    {
+      "file": "WeaveOrb.turntable.023.svg",
+      "index": 23,
+      "azimuthDeg": 230,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.024.svg",
+      "index": 24,
+      "azimuthDeg": 240,
+      "elevationDeg": 18,
+      "polygons": 160
+    },
+    {
+      "file": "WeaveOrb.turntable.025.svg",
+      "index": 25,
+      "azimuthDeg": 250,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.026.svg",
+      "index": 26,
+      "azimuthDeg": 260,
+      "elevationDeg": 18,
+      "polygons": 170
+    },
+    {
+      "file": "WeaveOrb.turntable.027.svg",
+      "index": 27,
+      "azimuthDeg": 270,
+      "elevationDeg": 18,
+      "polygons": 171
+    },
+    {
+      "file": "WeaveOrb.turntable.028.svg",
+      "index": 28,
+      "azimuthDeg": 280,
+      "elevationDeg": 18,
+      "polygons": 167
+    },
+    {
+      "file": "WeaveOrb.turntable.029.svg",
+      "index": 29,
+      "azimuthDeg": 290,
+      "elevationDeg": 18,
+      "polygons": 161
+    },
+    {
+      "file": "WeaveOrb.turntable.030.svg",
+      "index": 30,
+      "azimuthDeg": 300,
+      "elevationDeg": 18,
+      "polygons": 161
+    },
+    {
+      "file": "WeaveOrb.turntable.031.svg",
+      "index": 31,
+      "azimuthDeg": 310,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.032.svg",
+      "index": 32,
+      "azimuthDeg": 320,
+      "elevationDeg": 18,
+      "polygons": 165
+    },
+    {
+      "file": "WeaveOrb.turntable.033.svg",
+      "index": 33,
+      "azimuthDeg": 330,
+      "elevationDeg": 18,
+      "polygons": 163
+    },
+    {
+      "file": "WeaveOrb.turntable.034.svg",
+      "index": 34,
+      "azimuthDeg": 340,
+      "elevationDeg": 18,
+      "polygons": 162
+    },
+    {
+      "file": "WeaveOrb.turntable.035.svg",
+      "index": 35,
+      "azimuthDeg": 350,
+      "elevationDeg": 18,
+      "polygons": 159
+    }
+  ],
+  "flat": {
+    "file": "WeaveOrb.flat.svg",
+    "relation": "lifted"
+  },
+  "transition": {
+    "frames": [
+      {
+        "file": "WeaveOrb.transition.000.svg",
+        "index": 0,
+        "azimuthDeg": 270,
+        "elevationDeg": 58,
+        "polygons": 150
+      },
+      {
+        "file": "WeaveOrb.transition.001.svg",
+        "index": 1,
+        "azimuthDeg": 270,
+        "elevationDeg": 50,
+        "polygons": 154
+      },
+      {
+        "file": "WeaveOrb.transition.002.svg",
+        "index": 2,
+        "azimuthDeg": 270,
+        "elevationDeg": 42,
+        "polygons": 157
+      },
+      {
+        "file": "WeaveOrb.transition.003.svg",
+        "index": 3,
+        "azimuthDeg": 270,
+        "elevationDeg": 34,
+        "polygons": 166
+      },
+      {
+        "file": "WeaveOrb.transition.004.svg",
+        "index": 4,
+        "azimuthDeg": 270,
+        "elevationDeg": 26,
+        "polygons": 167
+      },
+      {
+        "file": "WeaveOrb.transition.005.svg",
+        "index": 5,
+        "azimuthDeg": 270,
+        "elevationDeg": 18,
+        "polygons": 171
+      }
+    ],
+    "entersAtIndex": 27
+  },
+  "turntableRepresentation": "ribbons",
+  "base": {
+    "faces": 20,
+    "vertices": 12,
+    "sides": [
+      3
+    ]
+  },
+  "weave": {
+    "strands": 26,
+    "crossings": 150
+  },
+  "source": "source.bkr",
+  "sourceSha256": "71e3aea661d6bd7a0a5e474d38228c174494d5880e875fe8e77dcbcb11e58459",
+  "engine": "0.1.0"
+}

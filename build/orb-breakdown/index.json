@@ -1,0 +1,18 @@
+{
+  "orbs": [
+    "DodecaOrb",
+    "HankinOrb",
+    "Maclado9",
+    "Maclado9Overlap",
+    "Maclado9Weave",
+    "RosetteCubeOrb",
+    "RosetteOrb",
+    "RosetteWeaveOrb",
+    "StarCubeOrb",
+    "StarOctaOrb",
+    "StarOrb",
+    "StarTetraOrb",
+    "WeaveDodecaOrb",
+    "WeaveOrb"
+  ]
+}
