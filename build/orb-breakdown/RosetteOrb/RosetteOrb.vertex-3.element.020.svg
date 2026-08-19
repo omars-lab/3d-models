@@ -1,5 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M0.0000,0.0000 L-39.6336,5.4018 L-39.6336,40.3631 L0.0000,56.5685 L24.4949,31.6228 L0.0000,0.0000 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M-39.6336,5.4018 L-48.9898,-28.2843 L-54.7723,-14.1421 L-48.9898,28.2843 L-39.6336,40.3631 L-39.6336,5.4018 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M48.9898,-28.2843 L39.6336,-40.3631 L0.0000,-56.5685 L-15.1387,-54.5052 L15.1387,-37.0246 L48.9898,-28.2843 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M15.1387,-37.0246 L-15.1387,-54.5052 L-48.9898,-28.2843 L-39.6336,5.4018 L0.0000,0.0000 L15.1387,-37.0246 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M24.4949,31.6228 L0.0000,56.5685 L15.1387,54.5052 L48.9898,28.2843 L54.7723,14.1421 L24.4949,31.6228 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M54.7723,14.1421 L48.9898,-28.2843 L15.1387,-37.0246 L0.0000,0.0000 L24.4949,31.6228 L54.7723,14.1421 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M-21.2132,2.8912 L0.0000,0.0000 L-12.5315,10.2354 L-21.2132,2.8912 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-39.6336,5.4018 L-21.2132,2.8912 L-26.8333,12.1847 L-39.6336,5.4018 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-42.4264,24.4949 L-39.6336,5.4018 L-35.6723,21.1864 L-42.4264,24.4949 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
@@ -20,4 +29,5 @@
   <path d="M-0.0000,56.5685 L-12.5315,51.0610 L-8.2080,46.0525 L1.7703,49.1117 L-0.0000,56.5685 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="17" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-21.2132,51.8810 L-26.8333,45.2133 L-18.2693,44.6812 L-12.5315,51.0610 L-21.2132,51.8810 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="18" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M24.4949,31.6228 L10.6093,40.1101 L3.0410,34.5965 L10.6093,27.4943 L24.4949,31.6228 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="19" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  </g>
 </svg>

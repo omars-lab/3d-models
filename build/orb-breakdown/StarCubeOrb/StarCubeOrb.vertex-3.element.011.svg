@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#ffffff" pointer-events="none" />
+  <path d="M-48.9898,28.2843 L0.0000,56.5685 L48.9898,28.2843 L0.0000,0.0000 L-48.9898,28.2843 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M0.0000,0.0000 L48.9898,28.2843 L48.9898,-28.2843 L0.0000,-56.5685 L0.0000,0.0000 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <path d="M-48.9898,28.2843 L0.0000,0.0000 L0.0000,-56.5685 L-48.9898,-28.2843 L-48.9898,28.2843 Z" fill="none" stroke="#c8c8c8" stroke-width="0.5" data-orb-scaffold="true" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M0.0000,0.0000 L30.0000,17.3205 L10.9286,27.8520 L0.0000,10.1461 L-10.9286,27.8520 L-30.0000,17.3205 L0.0000,0.0000 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="6" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-26.3840,36.7752 L-30.0000,17.3205 L-10.9286,27.8520 L-16.2359,35.8869 L-26.3840,36.7752 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-26.3840,36.7752 L-22.9610,45.2607 L-26.3840,49.3944 L-42.4264,34.6410 L-26.3840,36.7752 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
@@ -11,4 +17,5 @@
   <path d="M30.0000,17.3205 L26.3840,36.7752 L16.2359,35.8869 L10.9286,27.8520 L30.0000,17.3205 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="8" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M10.9286,27.8520 L16.2359,35.8869 L0.0000,32.0041 L10.9286,27.8520 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="9" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M0.0000,10.1461 L10.9286,27.8520 L0.0000,32.0041 L-10.9286,27.8520 L0.0000,10.1461 Z" fill="#c9782e" stroke="#333333" stroke-width="0.4" data-face-index="10" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
+  </g>
 </svg>
