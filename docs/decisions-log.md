@@ -1564,8 +1564,8 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "19 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
-then names the five additions; the twelve are covered by a number, not by name,
+on. §1 says "20 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
 says nothing about whether the count is right. Every waiver is counted and
@@ -2881,3 +2881,117 @@ page allows — the tolerance is a fixed fraction of the radius, not of the rend
 size, so a viewer that scales far past the 120 mm viewBox would eventually show the
 segments. The fix then is to make `MAX_SCAFFOLD_SAG_RATIO` a function of the
 projected size, not to subdivide harder everywhere.
+
+---
+
+## D-039 — the rule that kept the orbs apart was about centrelines, and a ribbon has width: four of five shipped fused
+
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (`linkageGate`, the five re-cut sources, two re-pinned by-design tests, three re-recorded ribbon hashes, PR [#116](https://github.com/NaqshCoffee/bikar/pull/116)), 3d-models (`CAL-CLR-01`, coupon MC-8, the count reconciliation, this entry)
+
+### Context
+
+The reader looked at `breakdown.html?orb=RosetteWeaveOrb` and asked whether these
+orbs would survive being printed — *"they feel like they would crumble / parts not
+fully connected."* That is a question `meshGate` structurally cannot answer. It asks
+whether the mesh is manifold and whether the struts clear the FDM feature floor; a
+woven orb passes both while being **one lump of plastic**, because a mesh that
+interpenetrates itself everywhere is still a mesh. So `linkageGate` was built to ask
+the other question — are the bodies separate, and is anything holding them together?
+
+Then the gate was run, and it inverted its own premise.
+
+**All five woven sources carried the same prose rule**, unenforced by anything:
+*keep amplitude at or above `(strut_depth + 0.4) / 2`*. It is a statement about where
+two ribbon **centrelines** sit at a crossing, and a ribbon is not a centreline. The
+other ribbon's surface is half a width off the node, and at that offset the
+sinusoidal weave has already decayed toward the sphere — the denser the crossing
+pattern, the less of the amplitude is left where the surfaces actually meet. The rule
+has no term for that, so it cannot be right for two patterns at once.
+
+**The proof is a controlled pair.** `Weave-Orb.bkr` and `Rosette-Weave-Orb.bkr` ship
+identical struts — `width 3`, `depth 2.4` — so the rule prescribes the same floor,
+1.4, for both, and both shipped at 1.6, above it. Measured: Weave-Orb fused **all 75**
+ribbon pairs into a single body; Rosette-Weave-Orb held **0.049 mm**. Same rule, same
+inputs, opposite outcomes. The rule was not slightly wrong about a constant; it was
+missing a variable.
+
+### Decision
+
+**Amplitude is measured, not derived.** Each of the five sources is pinned at the
+first step of its own declared ladder that clears `linkageGate`'s body-clearance
+floor **as `--check` measures it**, and the comment block in each file says so and
+tells the next reader to re-run rather than re-derive. The false rule and the
+consequence sentences it supported (*"nothing can be pulled off the assembly"*, on
+orbs that were one object) are deleted, not softened.
+
+**Two ranges were widened, and that is the load-bearing half.** Two of the measured
+values landed on the *ceiling* of their declared range with ~0.03 mm to spare —
+`Weave-Orb` at 2.6 in `1.4..2.6`, `Maclado-9-Weave` at 1.6 in `0.8..1.6`. A default
+nobody can turn up re-fuses on the next strut-width change with no legal escape, so
+the ranges go to `1.4..3.0` and `0.8..2.0`. Pinning a value at a wall it cannot move
+off is how a measured default quietly becomes an unmeasurable one.
+
+**The floor itself is not measured, and says so.** `MIN_BODY_CLEARANCE_MM = 0.4` was
+lifted from the same prose rule this entry just discredited. Promoting a number from
+a comment to a gate makes the doubt *checkable*; it does not make the number
+*measured*. It ships provisional against **`CAL-CLR-01`**, and coupon **MC-8** — six
+wall pairs printed in place at 0.1…0.8 mm — is what ends it. Not MC-1: a press-fit
+ladder measures two parts assembled, this measures two surfaces never separated, and
+there is no transfer sentence to write between them (**K10**).
+
+### Measured
+
+| orb | amplitude | clearance before | clearance after |
+|---|---|---|---|
+| `Weave-Orb` | 1.6 → **2.6** | 0.000 mm, **75 fused pairs** | 0.438 mm |
+| `Rosette-Weave-Orb` | 1.6 → **2.0** | 0.049 mm, 0 fused | 0.642 mm |
+| `Weave-Dodeca-Orb` | 1.6 → **2.2** | 0.000 mm, **45 fused pairs** | 0.408 mm |
+| `Maclado-9-Weave` | 0.8 → **1.6** | 0.000 mm, **155 fused pairs** | 0.427 mm |
+| `Maclado-9-Overlap` | 0.8 → **1.4** | 0.000 mm, **90 fused pairs** | 0.482 mm |
+
+Four of five were outright interpenetrating; the fifth was at an eighth of the floor.
+**Every woven orb the gallery has ever shipped would have printed as one object.**
+
+### Verification
+
+- **`make orbs` is the front door.** The target already runs `--check` on every
+  source, so the gate would have turned the build red rather than filed a report.
+  After the re-cut: exit 0, 14 orbs, `fusedPairs=0` on all five, every clearance above
+  the floor.
+- **Two by-design failures were silenced by this fix, and both were re-pinned rather
+  than deleted.** This is the part worth remembering:
+  - `linkage-gate.test.ts` demonstrates fusion on WeaveOrb by **reading the amplitude
+    out of the file**. The finding changed the file, so the demonstration would have
+    started passing — a by-design failure that silently stops failing has stopped
+    testing the thing it exists for, and the source it read is exactly what the
+    finding moved. The 1.6 is now a literal in the test, with the reason written above
+    it.
+  - The ribbon-view parity test's wrong-sort demonstration also went quiet. Its real
+    scope was **measured, not guessed**: swept over both woven presets × 3 symmetry
+    views × amplitude 0.8–2.0, the wrong sort is detectable in **exactly 1 of 42**
+    configurations, and the new default is not one of them. Re-pinned at 1.2 — and the
+    *silence* at the shipped amplitude is pinned too, so if a future change makes it
+    detectable again the line fails and the comment gets rewritten instead of
+    outliving its measurement.
+- **The instrument re-record followed its own prescribed order** — regenerate views,
+  re-run the sweep, re-pin composites, **update hashes last**. Three ribbon hashes
+  moved (`vertex-3`, `face-5`, `edge-2` on Maclado-9-Overlap); **no cell hash moved**,
+  because a cell view draws the pattern and not the weave, and amplitude is the one
+  orb parameter only a ribbon view reads. The sweep put every composite exactly where
+  it was pinned — all five `ribbons` at 1.000, `weave-icosa` cells 0.997, StarOcta
+  0.992, drop 0, maxDrift 0.0003 — so `packages/lab/src/scripts.ts` needed no edit. A
+  hash rewritten before that sweep would have asserted the same thing while measuring
+  nothing.
+- **The feared three-repo cascade was one repo, measured rather than assumed:**
+  `build/` is gitignored here, so orb views are build artifacts and not checked-in
+  state, and the sweep runs inside bikar.
+- bikar `npm run ci`: 3708 passed, 3 expected fail, 87 skipped, 0 lint errors; e2e 88
+  passed. qiyas sweep mean composite 1.000, PASS. 3d-models `make validate` green.
+
+**What would reverse this:** MC-8 measuring the floor somewhere other than 0.4. Every
+one of the five is pinned at the first ladder step clearing *this* number, so moving
+it re-cuts all five — which is the argument for the number living in one place with a
+bet id on it rather than in five comments. And MC-8's second question can break the
+shape rather than the value: if a gap held open across layers behaves differently from
+one held open along them, a single `MIN_BODY_CLEARANCE_MM` is the wrong object and the
+gate needs two constants, not a new value for one.

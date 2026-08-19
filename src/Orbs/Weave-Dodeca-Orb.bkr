@@ -7,11 +7,17 @@
 # that interlace alternately — a linked chainmail star-ball.
 # Render with: bikar render Weave-Dodeca-Orb.bkr --format stl -o out.stl
 
-# Keep amplitude at or above (strut_depth + 0.4) / 2 — the mesh gate is
-# per-tube and cannot see ribbon-ribbon interpenetration, so a too-small
-# amplitude fuses the chainmail silently.
+# Amplitude is measured, not derived. The old rule here — keep it at or
+# above (strut_depth + 0.4) / 2 — is a statement about ribbon *centrelines*
+# and ignores that a ribbon has width: the other ribbon's surface sits half
+# a width off the crossing node, where the sinusoidal offset has already
+# decayed, and the denser the crossing pattern the faster it decays. Under
+# that rule 4 of the 5 woven orbs shipped interpenetrating. The value below
+# is the first step that clears linkageGate's {CAL-CLR-01} 0.4mm body
+# clearance floor, measured at 0.408mm; `--check` re-measures it, so change a
+# strut dimension and re-run rather than re-deriving from a formula.
 param radius = 60 range 40..110 step 5
-param amplitude = 1.6 range 1.4..2.6 step 0.2
+param amplitude = 2.2 range 1.4..2.6 step 0.2
 param strut_width = 3 range 1.5..6 step 0.5 advanced
 param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
 
