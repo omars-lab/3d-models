@@ -2995,3 +2995,102 @@ bet id on it rather than in five comments. And MC-8's second question can break 
 shape rather than the value: if a gap held open across layers behaves differently from
 one held open along them, a single `MIN_BODY_CLEARANCE_MM` is the wrong object and the
 gate needs two constants, not a new value for one.
+
+---
+
+## D-040 — the second overlap band builds two chains, not an orb; and the band's reported ceiling was the end of the sweep
+
+**Date:** 2026-08-19 · **Status:** Decided (shipped) · **Repos:** bikar (`Maclado-9-Overlap.bkr` range and header, two new `linkageGate` tests, one re-pinned literal), 3d-models (research §5.1, this entry)
+
+### Context
+
+`Maclado-9-Overlap` declares `param overlap = 1.2`, a cap-growth ratio. A D-032
+sweep found its feasible set is **not an interval**: two bands, `[1.08, 1.26]` and
+`[1.38, 1.60]`, separated by a dead band where 30 of 30 adjacent pairs refuse to
+weld. The two bands are different weave regimes — 750 ribbon polygons against
+516, 270 `over` passes against 192 — so the second is not the first drawn larger.
+
+That measurement carried its own caveat, and the caveat is why the question stayed
+open for two weeks: *"Everything above is a compile-time result. No STL was
+exported, no qiyas score was run, and nothing here says the second band is a
+legitimate solid rather than one that happens to survive the welder."* The
+instrument that could say — `linkageGate` — did not exist. D-039 built it. This
+entry is that instrument turned on the question.
+
+### Decision
+
+**Band two is closed.** It compiles and it is not an orb, so nothing will be built
+on it and the declared range stays inside band one. **Band one's declared range is
+narrowed from `1.15..1.25` to `1.15..1.22`**, because its own ceiling was
+unprintable.
+
+### Measured
+
+Re-run as `render --format stl --check`, amplitude held at the shipped 1.4.
+
+Every ratio in band two, from bisected edge to bisected edge, fails identically:
+
+| overlap | pieces | clearance | fused pairs | verdict |
+|---|---|---|---|---|
+| 1.38 | **2** | 0.000 mm | 60 | FAIL |
+| 1.46 | **2** | 0.000 mm | 180 | FAIL |
+| 1.60 | **2** | 0.000 mm | 180 | FAIL |
+| 1.80 | **2** | 0.000 mm | 310 | FAIL |
+
+`pieces=2` is the finding. The 60 ribbons close into two 30-ribbon chains with no
+link between them: the print lifts apart into two halves. It also interpenetrates
+everywhere. **Neither is curable by amplitude** — the knob that rescued all five
+orbs in D-039. Swept at ratio 1.44 across amplitude 1.4, 2.0, 2.6, 3.2 and 4.0 —
+nearly 3× the shipped value — `pieces` never leaves 2 and `fusedPairs` never falls
+below 60.
+
+**The band's ceiling was never measured.** `[1.38, 1.60]` was reported to the end
+of a sweep that stepped 0.02 and stopped at 1.60. 1.68 and 1.80 both weld; the
+real ceiling is ~1.84, after which three *different* mechanisms refuse in sequence
+(weld-node spacing, crossing-to-crossing spacing, then strand parity). Bisected to
+0.005, the edges are `(1.075, 1.08]`, `1.265 / 1.270`, and `1.365 / 1.370`.
+
+**And the declared range's own ceiling was unprintable.** Inside band one, welding
+is not the binding constraint — body clearance is, and it does not taper toward
+the edge, it falls off a cliff:
+
+| overlap | 1.20 | 1.21 | 1.22 | 1.23 | 1.24 | 1.25 |
+|---|---|---|---|---|---|---|
+| clearance | 0.482 | 0.490 | **0.498** | 0.348 | 0.001 | 0.000 |
+| fused pairs | 0 | 0 | 0 | 0 | 0 | **60** |
+
+At 1.25 — the stop the Lab's slider comes to rest against — 60 body pairs
+interpenetrate. The shipped default 1.20 was never at risk; the value one step
+past it was, and the range invited it.
+
+### The tenet
+
+**A declared range is a promise, and its endpoints are the least tested values in
+it.** A `range lo..hi` becomes a slider, so every value in it is one a user is
+invited to build, and the two a user reaches fastest are the stops. Both were
+wrong here in the same file: `1.25` fuses, and the sibling `amplitude 0.8` fuses
+too. Test the endpoints, not the default — the default is the one value someone
+already looked at.
+
+The test reads the endpoints out of the `.bkr` rather than pinning them, so it
+keeps holding if the range moves again. Against the old range it fails
+`overlap=1.25: expected 60 to be +0`; against the new one it passes.
+
+### Verification
+
+- `both endpoints of the declared overlap range build a printable orb` — fails
+  before the narrowing, passes after (demonstrated, not asserted).
+- `the second overlap band compiles, and is two loose chains rather than an orb` —
+  a by-design failure pinning `pieces=2` at amplitude 1.4 **and** 4.0, so the
+  demonstration cannot be quietly cured by the knob that cured D-039.
+- The widened-source rewrite both tests depend on now asserts it substituted:
+  a drifted literal used to turn the setup into a silent no-op, which fails
+  loudly but for a misleading reason.
+- bikar full suite: 3710 passed, 3 expected fail, 87 skipped.
+
+**What would reverse this:** a welder that could link band two's two chains — the
+piece count is a property of how that regime closes its loops, not of any
+dimension, so it would take a different closure rule rather than a different
+number. The clearance cliff would also move if `CAL-CLR-01` measures the floor
+somewhere other than 0.4 mm, which re-cuts the 1.22 ceiling exactly as it re-cuts
+the five amplitudes.
