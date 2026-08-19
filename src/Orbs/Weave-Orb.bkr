@@ -4,18 +4,25 @@
 # triangle connects the face's edge midpoints, so its edges run straight
 # through into adjacent faces and close into 6 great-circle ribbons (the
 # icosidodecahedron's equators); the other triangle stays interior, giving
-# 20 small triangular ribbons. All 26 ribbons interlace alternately:
-# amplitude 1.6 over a 2.4 ribbon depth leaves a 0.8mm clearance, so the
-# print is a genuinely linked chainmail ball, not a fused lattice.
+# 20 small triangular ribbons. All 26 ribbons interlace alternately into
+# a genuinely linked chainmail ball: every one of the 75 ribbon pairs has
+# linking number 1, so nothing can be pulled off the assembly.
 # Render with: bikar render Weave-Orb.bkr --format stl -o out.stl
 
 # The hexagram circle stays at the fixed inradius 50 (tips must land on
-# edge midpoints for cross-face closure). Keep amplitude at or above
-# (strut_depth + 0.4) / 2 — the mesh gate is per-tube and cannot see
-# ribbon-ribbon interpenetration, so a too-small amplitude fuses the
-# chainmail silently.
+# edge midpoints for cross-face closure).
+#
+# Amplitude is measured, not derived. The old rule here — keep it at or
+# above (strut_depth + 0.4) / 2 — is a statement about ribbon *centrelines*
+# and ignores that a ribbon has width: the other ribbon's surface sits half
+# a width off the crossing node, where the sinusoidal offset has already
+# decayed, and the denser the crossing pattern the faster it decays. Under
+# that rule 4 of the 5 woven orbs shipped interpenetrating. The value below
+# is the first step that clears linkageGate's {CAL-CLR-01} 0.4mm body
+# clearance floor, measured at 0.438mm; `--check` re-measures it, so change a
+# strut dimension and re-run rather than re-deriving from a formula.
 param radius = 60 range 40..110 step 5
-param amplitude = 1.6 range 1.4..2.6 step 0.2
+param amplitude = 2.6 range 1.4..3.0 step 0.2
 param strut_width = 3 range 1.5..6 step 0.5 advanced
 param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
 

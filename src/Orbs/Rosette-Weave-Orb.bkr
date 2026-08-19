@@ -4,19 +4,27 @@
 # no corner petals — those would make odd-degree nodes, which cannot
 # weave). Petals fuse across edge midpoints and around shoulder points,
 # and strand tracing threads them into 10 closed ribbons that interlace
-# alternately: amplitude 1.6 over a 2.4 ribbon depth leaves a 0.8mm
-# clearance, so the print is a linked chainmail flower-ball.
+# alternately into a linked chainmail flower-ball: all 45 ribbon pairs
+# have linking number 1, so nothing can be pulled off the assembly.
 # Render with: bikar render Rosette-Weave-Orb.bkr --format stl -o out.stl
 
 # Ring ranges stay inside the rosette sweet range — the weave adds parity
 # and clearance constraints on top of the lattice's, so the envelope is
-# narrower than the pierced rosettes'. Keep amplitude at or above
-# (strut_depth + 0.4) / 2: the mesh gate is per-tube and cannot see
-# ribbon-ribbon interpenetration.
+# narrower than the pierced rosettes'.
+#
+# Amplitude is measured, not derived. The old rule here — keep it at or
+# above (strut_depth + 0.4) / 2 — is a statement about ribbon *centrelines*
+# and ignores that a ribbon has width: the other ribbon's surface sits half
+# a width off the crossing node, where the sinusoidal offset has already
+# decayed, and the denser the crossing pattern the faster it decays. Under
+# that rule 4 of the 5 woven orbs shipped interpenetrating. The value below
+# is the first step that clears linkageGate's {CAL-CLR-01} 0.4mm body
+# clearance floor, measured at 0.642mm; `--check` re-measures it, so change a
+# strut dimension and re-run rather than re-deriving from a formula.
 param radius = 60 range 40..110 step 5
 param inner = 38 range 24..50 step 2
 param shoulder = 60 range 48..70 step 2
-param amplitude = 1.6 range 1.4..2.6 step 0.2
+param amplitude = 2.0 range 1.4..2.6 step 0.2
 param strut_width = 3 range 1.5..6 step 0.5 advanced
 param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
 

@@ -253,12 +253,14 @@ settles; the registry is `.claude/skills/calibrate/bets.md` and the ceremony tha
 closes a bet is the `calibrate` skill (bikar Tenet 30 — a physical constant is not
 earned until it records its provenance).
 
-- **Model**: all six live in `bikar/patterns/Coupons/Machine-Card.bkr`, one piece
-  per rung so that rung identity survives into the filename — bikar cannot emit
+- **Model**: the six card rungs live in `bikar/patterns/Coupons/Machine-Card.bkr`,
+  one piece per rung so that rung identity survives into the filename — bikar cannot emit
   text, so a coupon cannot label itself and monotone size ordering plus `--piece`
   is the substitute. MC-1 **extends** `patterns/Coupons/Fit-Coupon.bkr` rather
   than replacing it: that file's ⌀3 ladder is correct as far as it goes, and the
-  card adds the ⌀ sweep `holeCompMm` actually needs.
+  card adds the ⌀ sweep `holeCompMm` actually needs. **MC-7 and MC-8 are not on
+  the card** — each is its own plate and its own model, because each is its own
+  job; the six above them are what one job settles.
 - **Authored blind.** No machine exists yet, so every rung range below is a
   bracket around an unknown, not a prediction. A ladder that turns out to need
   re-centring is a **result** — log it and re-cut, per the `calibrate` rules.
@@ -536,6 +538,64 @@ earned until it records its provenance).
   provenance record, once the constants exist), and `docs/calibration-design.md`
   §8's "rung identity does not survive onto the part" — the weakness this whole
   line of work exists to close.
+
+## MC-8 — In-situ clearance ladder (do two surfaces printed in place come apart?)
+
+- **Status**: model to author. Listed now for the same reason MC-7 is: `CAL-CLR-01`
+  names this coupon as what settles it, and a bet whose coupon is written down
+  nowhere is the W-F1 defect over again.
+- **Model**: `bikar/patterns/Coupons/Clearance-Coupon.bkr` — six wall pairs on one
+  base, at gaps **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm**. Each pair is two parallel
+  walls rising from a shared foot, so the part comes off the plate as one object by
+  construction and the reading is whether the two walls are *separate above the
+  foot* — not whether two pieces fell apart. Rung identity survives into the
+  filename via `--piece ClearR10` … `ClearR80`, the same monotone-ordering
+  substitute the rest of the series uses.
+- **Print target**: TBD — full profile header per the series note. Print **flat on
+  the plate, no supports, no brim**: a brim laid across the gap is a bridge between
+  the walls, which is the failure this coupon is trying to observe.
+- **Off-card, like MC-7.** It is not a seventh rung of `Machine-Card.bkr`: the card
+  is printed as one job so its six rungs share one header, and a plate of paired
+  walls at six gaps is its own job. Print it alongside the card and copy the header
+  across if the bed allows — one header, two plates, stated as such.
+- **Settles**: `CAL-CLR-01` (`MIN_BODY_CLEARANCE_MM` 0.4 mm). Provisional, and the
+  bet is currently **inherited doubt, not measurement**: the number was lifted from
+  the prose rule the five weave sources already carried and promoted to a checked
+  floor when `linkageGate` shipped. Nothing has been printed at any of these gaps.
+- **Not MC-1, and the transfer sentence cannot be written.** MC-1's fit ladder is a
+  pin and a bore printed as two parts and then pushed together: it measures how much
+  room two *mating* surfaces need to assemble. This measures the gap between two
+  surfaces that are never separated and never assembled — swept ribbon bodies that
+  pass each other in place. Nothing in a press-fit result says whether 0.3 mm of air
+  between two walls survives being extruded on the same layer, so porting MC-1's
+  number here would be a **K10** with no transfer sentence available.
+- **Sub-floor note.** The 0.1, 0.2 and 0.3 rungs are **below** the floor they exist
+  to measure, so `--check` on those pieces reports FAIL *by design* — same shape as
+  the W-series bayonet blade. Render them without `--check`; that a gate rejects the
+  rungs is the point, not an exemption from the gate.
+- **What we want to learn**:
+  - [ ] 1. Which rungs came off the plate as two walls and which as one. That
+    boundary is the number `MIN_BODY_CLEARANCE_MM` currently guesses at.
+  - [ ] 2. Whether the answer differs **across** layers and **along** them. A gap in
+    the XY plane is held open by two extrusion paths that never touch; a gap in Z is
+    held open by nothing but the absence of an extrusion. The woven orbs cross at
+    every angle in between, so one number covering both is an assumption this plate
+    should either earn or break — and if it breaks, the gate needs two constants.
+  - [ ] 3. Whether the slicer and the caliper agree. `linkageGate` measures triangle
+    geometry; the slicer decides what actually gets extruded, and a gap it quantises
+    away is fused regardless of what the mesh says. Slice the plate and record the
+    smallest rung the preview still shows as two walls, *before* printing it.
+  - [ ] 4. Whether elephant's foot closes a gap that the walls above it hold open.
+    MC-6 measures the foot deliberately; this is where that reading gets spent.
+- **What we learned**: — pending.
+- **Iteration log**:
+  | # | date | change | question | result | decision |
+  |---|------|--------|----------|--------|----------|
+- **Feeds**: `MIN_BODY_CLEARANCE_MM` in `bikar` `kernel3d/linkage-gate.ts` (value
+  **and** provenance record), and — through it — the `amplitude` default in all five
+  woven sources under `bikar/patterns/Orbs/`. Those five are pinned at the first
+  ladder step that clears this floor as measured, not at a formula, so moving the
+  floor re-cuts every one of them. See `docs/decisions-log.md` **D-039**.
 
 ---
 

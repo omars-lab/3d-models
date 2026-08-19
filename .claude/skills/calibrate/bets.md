@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**19 registered bets · 19 `Calibrated` records — 19 provisional, 0 measured · 6 bets with no record in bikar.**
+**20 registered bets · 20 `Calibrated` records — 20 provisional, 0 measured · 6 bets with no record in bikar.**
 
 ## Bets
 
@@ -37,6 +37,7 @@ is opened, clustered, and closed.
 | `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
 | `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | provisional | `LABEL_RELIEF_MM_CAL` |
 | `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | provisional | `LABEL_CAP_MM_CAL` |
+| `CAL-CLR-01` | `MIN_BODY_CLEARANCE_MM` in-situ gap floor: the smallest gap at which two surfaces printed in place come off the plate as two objects rather than one | `MC-8` | provisional | `MIN_BODY_CLEARANCE_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -246,4 +247,11 @@ named next print rather than an absence:
 - **Value:** `5`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The height at which the §5 gap measurements were taken, and the smallest at which Source Code Pro Bold's thinnest stem (0.573 mm at this cap) stays above a 0.4 mm nozzle with margin. No label has been printed and no one has been asked to read one, so this is a geometry floor standing in for a legibility measurement. Coupon MC-7 carries the cap ladder that replaces it.
+
+### `MIN_BODY_CLEARANCE_MM_CAL` — `CAL-CLR-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/linkage-gate.ts`
+- **Value:** `0.4`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** The clearance rule the five weave sources in patterns/Orbs already declare as "amplitude >= (strut_depth + 0.4) / 2", promoted from prose nothing enforced to a checked floor. No coupon has printed a gap ladder in situ and recorded which rungs fused, so the number is inherited doubt rather than measurement. Coupon MC-8 (two parallel walls printed in one job at gaps 0.1/0.2/0.3/0.4/0.6/0.8 mm, recording which rungs come apart by hand) settles it; its sub-floor rungs are expected to FAIL this very gate by design. Not MC-1, whose fit ladder is an assembly clearance between separately printed parts and answers a different question.
 

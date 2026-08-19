@@ -76,6 +76,11 @@
     },
     {
       "doc": ".claude/skills/prototype/catalog.md",
+      "path": "bikar/patterns/Coupons/Clearance-Coupon.bkr",
+      "why": "Model to author — MC-8's in-situ gap ladder. Same shape as Text-Coupon.bkr below: CAL-CLR-01 names MC-8 as what settles it, so the entry exists before the file does. Nothing blocks writing it — the geometry is six wall pairs — it is unwritten because printing is user-held and an unprintable plate settles nothing. Remove this when the file is written."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Coupons/Text-Coupon.bkr",
       "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
     }

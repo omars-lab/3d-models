@@ -14,9 +14,17 @@ single file:
   T2  **One viewBox across stages, tilt and spin.** The page cross-fades
       between them; a frame from a differently-sized projection makes the
       picture jump size mid-story, and nothing about the file says so.
-  T3  **The last stage frame is the shipped view, byte for byte.** The story
-      ends on the drawing qiyas scores. If it does not, the page has been
-      teaching the construction of something else.
+  T3  **The last stage frame is the shipped view, repainted and not redrawn.**
+      The story ends on the drawing qiyas scores. If it does not, the page has
+      been teaching the construction of something else. It is still a byte
+      identity, but against a *derived* expectation: the shipped view with its
+      one background rect repainted onto the page's ground. The frames are
+      static SVGs served as `<img src>`, so the white square inside every grey
+      panel was fixable in the file or not at all — and the instrument set is
+      not a file a page's taste gets to move. Every byte but that rect still
+      has to match, and the rule additionally checks that the shipped view
+      really is white, so it cannot go quiet if `--format views` ever starts
+      writing the ground itself.
   T4  **The two junctions are byte identities.** transition[0] is the complete
       frame and transition[last] is the orbit point it enters at, so neither
       hand-off can jump. They hold because the endpoint frames are rendered
@@ -113,8 +121,25 @@ REQUIRED_KEYS = (
     "engine",
 )
 
+# The one attribute a breakdown frame is allowed to differ from the shipped
+# instrument view by: `DISPLAY_GROUND` in bikar's `packages/cli/src/index.ts`.
+# The frames are static SVGs the page serves as `<img src>`, so no stylesheet
+# can reach inside them — a white square inside a grey panel had to be fixed in
+# the file or not at all, and the instrument set qiyas scores is not a file a
+# page's taste gets to move. So T3 stopped being a whole-file hash and became a
+# byte identity against a *derived* expectation. Every other byte still has to
+# match; the check that `WHITE_RECT` is actually present is what keeps the rule
+# from going quiet if `--format views` ever starts writing the ground itself.
+GROUND = "#dfe3e5"
+WHITE_RECT = 'fill="#ffffff" pointer-events="none"'
+GROUND_RECT = f'fill="{GROUND}" pointer-events="none"'
+
+
 # bikar's DEFAULT_ORB_VIEW_FILL and DEFAULT_ORB_HIGHLIGHT_FILL, plus the card.
-STAGE_FILLS = {"#8a8a8a", "#c9782e", "#ffffff", "none"}
+# `#ffffff` left this set when the card stopped being white, and its leaving is
+# a rule in itself: a stage frame that still paints white is an un-repainted
+# frame, which is the defect, not an exemption from it.
+STAGE_FILLS = {"#8a8a8a", "#c9782e", GROUND, "none"}
 STAGE_KINDS = {"base", "element", "repeat", "strand", "complete"}
 # What a stage frame wears and the complete frame does not: bikar writes both
 # from `STAGE_STYLE` plus the scaffold underlay, and drops both for `complete`.
@@ -337,11 +362,22 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
                 f"{orb}: the complete frame claims to be {shipped.relative_to(ROOT)}, "
                 "which does not exist — run make orbs"
             )
-        elif shipped.read_bytes() != (d / last["file"]).read_bytes():
-            findings.append(
-                f"{orb}: the complete frame is not {shipped.relative_to(ROOT)} byte "
-                "for byte — the page teaches the construction of a drawing nobody ships"
-            )
+        else:
+            white = shipped.read_text(encoding="utf8")
+            if WHITE_RECT not in white:
+                findings.append(
+                    f"{orb}: {shipped.relative_to(ROOT)} does not paint {WHITE_RECT} — "
+                    "the instrument view moved, so the one substitution this rule "
+                    "allows can no longer be the only difference it is checking"
+                )
+            elif white.replace(WHITE_RECT, GROUND_RECT) != (d / last["file"]).read_text(
+                encoding="utf8"
+            ):
+                findings.append(
+                    f"{orb}: the complete frame is not {shipped.relative_to(ROOT)} "
+                    f"repainted onto {GROUND} — the page teaches the construction of "
+                    "a drawing nobody ships"
+                )
 
     # --- T4: both junctions are byte identities -----------------------------
     if transition and transition["frames"]:
@@ -408,13 +444,28 @@ def run(dirs: list[Path], keys_only: bool = False) -> int:
 
 _SVG = (
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -70 140 140">'
-    '<rect x="-70" y="-70" width="140" height="140" fill="#ffffff" />'
+    '<rect x="-70" y="-70" width="140" height="140" {rect} />'
     '{body}</svg>'
 )
-# The finished drawing: no scaffold, no limb, nothing but the pattern. This is
-# what ships as the instrument view and what `complete` and `transition[0]`
-# have to equal byte for byte.
-_DONE = _SVG.format(body='<path d="M0 0" fill="#8a8a8a" stroke="#333333" />')
+# Two grounds, because the whole point of T3's substitution is that they
+# differ: the instrument view keeps the renderer's white default and every
+# frame the page shows is repainted. A fixture painted one colour throughout
+# would pass T3 by never exercising it.
+
+def _shipped_svg(body: str) -> str:
+    return _SVG.format(rect=WHITE_RECT, body=body)
+
+
+def _frame_svg(body: str) -> str:
+    return _SVG.format(rect=GROUND_RECT, body=body)
+
+
+_PATTERN = '<path d="M0 0" fill="#8a8a8a" stroke="#333333" />'
+# The finished drawing: no scaffold, no limb, nothing but the pattern. The
+# instrument version is what ships; the frame version is what `complete` and
+# `transition[0]` have to equal, and the two differ by the ground alone.
+_SHIPPED = _shipped_svg(_PATTERN)
+_DONE = _frame_svg(_PATTERN)
 # What every stage frame carries underneath: the bare solid as an outline, and
 # the sphere's limb, so a viewer has something to watch the pattern land on.
 # Real rings, not `M0 0`: T7 measures whether the pattern sits inside the
@@ -426,10 +477,10 @@ _SCAFFOLD = (
     f'<path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />'
     '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
 )
-_BARE = _SVG.format(body=_SCAFFOLD)
-_HELD = _SVG.format(body=_SCAFFOLD + f'<path d="{_UNIT}" fill="#c9782e" stroke="#333333" />')
-_SPUN = _SVG.format(
-    body='<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
+_BARE = _frame_svg(_SCAFFOLD)
+_HELD = _frame_svg(_SCAFFOLD + f'<path d="{_UNIT}" fill="#c9782e" stroke="#333333" />')
+_SPUN = _frame_svg(
+    '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
     '<path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />'
 )
 
@@ -441,16 +492,16 @@ def _fixture(tmp: Path) -> Path:
     d = tmp / "build" / "orb-breakdown" / "TestOrb"
     views.mkdir(parents=True)
     d.mkdir(parents=True)
-    (views / "TestOrb.vertex-3.svg").write_text(_DONE, encoding="utf8")
+    (views / "TestOrb.vertex-3.svg").write_text(_SHIPPED, encoding="utf8")
     (d / "source.bkr").write_text(src, encoding="utf8")
     files = {
-        "TestOrb.flat.svg": _SVG.format(body=""),
+        "TestOrb.flat.svg": _frame_svg(""),
         "TestOrb.vertex-3.base.000.svg": _BARE,
         "TestOrb.vertex-3.element.001.svg": _HELD,
         "TestOrb.vertex-3.complete.000.svg": _DONE,
         "TestOrb.transition.000.svg": _DONE,           # == the complete frame
         "TestOrb.transition.001.svg": _SPUN,           # == turntable[1]
-        "TestOrb.turntable.000.svg": _SVG.format(body='<path d="M9 9" fill="#6f6f6f" />'),
+        "TestOrb.turntable.000.svg": _frame_svg('<path d="M9 9" fill="#6f6f6f" />'),
         "TestOrb.turntable.001.svg": _SPUN,
     }
     for name, text in files.items():
@@ -512,6 +563,23 @@ def _change_the_shipped_view(d: Path) -> None:
     p.write_text(_read(p).replace('fill="#8a8a8a"', 'fill="#8b8b8b"'), encoding="utf8")
 
 
+def _leave_the_ending_white(d: Path) -> None:
+    # The substitution T3 allows, not made: a `complete` frame still on the
+    # instrument's white ground, alone among grey siblings. It is the exact
+    # frame the reader ends on, and the one the eye would catch last.
+    p = d / "TestOrb.vertex-3.complete.000.svg"
+    p.write_text(_read(p).replace(GROUND_RECT, WHITE_RECT), encoding="utf8")
+
+
+def _repaint_the_shipped_view(d: Path) -> None:
+    # The other direction: `--format views` starts writing the page's ground
+    # too. Nothing about the *frames* is wrong, and a rule that only compared
+    # the derived expectation would go quiet — qiyas's instrument would have
+    # moved and T3 would still say OK.
+    p = d.parents[1] / "orb-views" / "TestOrb" / "TestOrb.vertex-3.svg"
+    p.write_text(_read(p).replace(WHITE_RECT, GROUND_RECT), encoding="utf8")
+
+
 def _end_on_a_highlight(d: Path) -> None:
     def mutate(m):
         m["frames"][-1]["kind"] = "repeat"
@@ -569,7 +637,9 @@ def _edit_the_source(d: Path) -> None:
 CASES = [
     ("T1 a missing manifest key", _drop_key, "has no weave"),
     ("T2 a frame from a different projection", _resize_a_frame, "changes size mid-story"),
-    ("T3 the shipped view moved under the story", _change_the_shipped_view, "byte for byte"),
+    ("T3 the shipped view moved under the story", _change_the_shipped_view, "repainted onto"),
+    ("T3 the ending is left on the instrument's white", _leave_the_ending_white, "repainted onto"),
+    ("T3 the instrument view takes the page's ground", _repaint_the_shipped_view, "does not paint"),
     ("T3 the story ends on a highlighted copy", _end_on_a_highlight, "not 'complete'"),
     ("T6 a shaded stage frame", _shade_a_stage_frame, "carries data-orb-style"),
     ("T6 a stage frame in gallery gold", _tint_a_stage_frame, "fills with"),
