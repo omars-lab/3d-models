@@ -18,13 +18,19 @@ single file:
       The story ends on the drawing qiyas scores. If it does not, the page has
       been teaching the construction of something else. It is still a byte
       identity, but against a *derived* expectation: the shipped view with its
-      one background rect repainted onto the page's ground. The frames are
-      static SVGs served as `<img src>`, so the white square inside every grey
-      panel was fixable in the file or not at all — and the instrument set is
-      not a file a page's taste gets to move. Every byte but that rect still
-      has to match, and the rule additionally checks that the shipped view
-      really is white, so it cannot go quiet if `--format views` ever starts
-      writing the ground itself.
+      background rect repainted onto the page's ground, and wearing the limb.
+      The frames are static SVGs served as `<img src>`, so the white square
+      inside every grey panel was fixable in the file or not at all — and the
+      instrument set is not a file a page's taste gets to move. Every byte but
+      those two named differences still has to match, and the rule checks that
+      the shipped view really is white and really has no limb, so it cannot go
+      quiet if `--format views` ever starts writing either itself.
+
+      The limb joined the derivation on 2026-08-20 rather than the frame
+      losing it. It had been dropped from `complete` alone so that this rule
+      could name a single substitution — which meant the one picture a reader
+      stops on was the one picture with nothing in it saying "this is a ball".
+      A rule about bytes had quietly decided what a reader gets to see.
   T4  **The two junctions are byte identities.** transition[0] is the complete
       frame and transition[last] is the orbit point it enters at, so neither
       hand-off can jump. They hold because the endpoint frames are rendered
@@ -37,13 +43,16 @@ which no amount of looking at what is present will find:
   T5  Every file the manifest names exists, and no `.svg` in the directory is
       unnamed by it. An orphan is the shape of a frame the generator stopped
       writing and nothing removed — see T3's Maclado-9-Overlap case below.
-  T6  **Stage frames wear the scaffold; the complete frame wears nothing.**
-      Every stage frame carries `data-orb-scaffold` and `data-orb-silhouette`
-      — the bare solid drawn as an outline underneath, so the pattern is seen
-      landing on something rather than building up against a blank page. The
-      `complete` frame carries neither, because it is the drawing qiyas
-      scores and T3 pins it byte for byte; a scaffold leaking onto it breaks
-      that identity with a change that looks purely cosmetic. No frame in
+  T6  **Every frame wears the limb; only the unfinished ones wear the
+      scaffold.** The two marks answer different questions and so they part
+      company on the last frame. `data-orb-scaffold` is the bare solid drawn
+      as an outline underneath, so the pattern is seen landing on something
+      rather than building up against a blank page — it answers *how far
+      along is this*, which is moot once nothing is left to place, so the
+      `complete` frame drops it and a scaffold leaking onto the finished orb
+      is still a failure. `data-orb-silhouette` is the sphere's edge, and it
+      answers *is this a ball*: the frame that answers it best is the last
+      one, so every frame carries it. No frame in
       `frames` carries `data-orb-style`: shading belongs to the spin, and on
       a stage frame a Lambert envelope makes an unplaced region and a dim
       placed one look alike — the one distinction a stage frame exists to
@@ -134,6 +143,43 @@ GROUND = "#dfe3e5"
 WHITE_RECT = 'fill="#ffffff" pointer-events="none"'
 GROUND_RECT = f'fill="{GROUND}" pointer-events="none"'
 
+# The second named difference: the limb. A display frame draws the sphere's
+# edge as a circle and clips its content to it; the instrument view draws
+# neither, because qiyas classifies a `fill="none"` element as a foreign
+# contour. The complete frame used to drop the circle to keep this rule short,
+# which cost the sequence its depth cue on the one picture a reader stops on.
+# Under the front-cap cull the clip is a no-op — nothing the front cap keeps
+# reaches the limb — so the pair is decoration on a terminal frame, and naming
+# it here is cheaper than teaching a flat rosette. Written as the literal bytes
+# bikar emits: a silent format change has to fail this, not be absorbed by it.
+SILHOUETTE_RE = re.compile(
+    r'^ {2}<circle cx="0" cy="0" r="([\d.]+)" fill="none" stroke="#333333" '
+    r'stroke-width="0\.4" data-orb-silhouette="true" />$',
+    re.M,
+)
+
+
+def _wearing_limb(shipped: str, radius: str) -> str:
+    """The instrument view with the limb added — the derivation T3 checks against."""
+    # Anchored on the rect element, not on which ground it is painted: the
+    # two substitutions are then order-independent, and this helper is usable
+    # on an instrument view as well as on a repainted one.
+    after_rect = shipped.index("\n", shipped.index("<rect ")) + 1
+    before_close = shipped.rindex("</svg>")
+    limb = (
+        f'  <circle cx="0" cy="0" r="{radius}" fill="none" stroke="#333333" '
+        'stroke-width="0.4" data-orb-silhouette="true" />\n'
+        f'  <clipPath id="orb-limb"><circle cx="0" cy="0" r="{radius}" /></clipPath>\n'
+        '  <g clip-path="url(#orb-limb)">\n'
+    )
+    return (
+        shipped[:after_rect]
+        + limb
+        + shipped[after_rect:before_close]
+        + "  </g>\n"
+        + shipped[before_close:]
+    )
+
 
 # bikar's DEFAULT_ORB_VIEW_FILL and DEFAULT_ORB_HIGHLIGHT_FILL, plus the card.
 # `#ffffff` left this set when the card stopped being white, and its leaving is
@@ -141,9 +187,16 @@ GROUND_RECT = f'fill="{GROUND}" pointer-events="none"'
 # frame, which is the defect, not an exemption from it.
 STAGE_FILLS = {"#8a8a8a", "#c9782e", GROUND, "none"}
 STAGE_KINDS = {"base", "element", "repeat", "strand", "complete"}
-# What a stage frame wears and the complete frame does not: bikar writes both
-# from `STAGE_STYLE` plus the scaffold underlay, and drops both for `complete`.
-SCAFFOLD_MARKERS = ("data-orb-scaffold", "data-orb-silhouette")
+# The two marks a stage frame wears, and they no longer travel together.
+# `data-orb-scaffold` answers *how far along is this* — moot once nothing is
+# left to place, so the complete frame drops it, and a scaffold leaking onto
+# the finished orb is still a real failure. `data-orb-silhouette` answers *is
+# this a sphere*, which the last frame is the best of all of them at saying,
+# so every frame wears it. Until 2026-08-20 the complete frame dropped both,
+# and it dropped the circle only to keep T3's derivation to one substitution —
+# a rule about bytes deciding what a reader gets to see.
+SCAFFOLD_MARK = "data-orb-scaffold"
+LIMB_MARK = "data-orb-silhouette"
 
 FILL_RE = re.compile(r'fill="([^"]*)"')
 VIEWBOX_RE = re.compile(r'viewBox="([^"]*)"')
@@ -298,22 +351,24 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
                 "the spin, and it makes an unplaced region and a dim placed one "
                 "look alike"
             )
+        if LIMB_MARK not in svg:
+            findings.append(
+                f"{orb}: {f['file']} is missing {LIMB_MARK} — nothing in the frame "
+                "says the drawing is on a ball rather than on a plate, and that is "
+                "the whole question the page exists to answer"
+            )
         if f["kind"] == "complete":
-            for marker in SCAFFOLD_MARKERS:
-                if marker in svg:
-                    findings.append(
-                        f"{orb}: the complete frame {f['file']} carries {marker} — "
-                        "it has to be byte-identical to the shipped view, which "
-                        "carries neither"
-                    )
-        else:
-            for marker in SCAFFOLD_MARKERS:
-                if marker not in svg:
-                    findings.append(
-                        f"{orb}: stage frame {f['file']} is missing {marker} — the "
-                        "pattern is building up against a blank page with nothing "
-                        "under it"
-                    )
+            if SCAFFOLD_MARK in svg:
+                findings.append(
+                    f"{orb}: the complete frame {f['file']} carries {SCAFFOLD_MARK} — "
+                    "nothing is left to place, so an outline showing how far along "
+                    "the build is has nothing to show"
+                )
+        elif SCAFFOLD_MARK not in svg:
+            findings.append(
+                f"{orb}: stage frame {f['file']} is missing {SCAFFOLD_MARK} — the "
+                "pattern is building up against a blank page with nothing under it"
+            )
         stray = sorted(set(FILL_RE.findall(svg)) - STAGE_FILLS)
         if stray:
             findings.append(f"{orb}: stage frame {f['file']} fills with {', '.join(stray)}")
@@ -364,19 +419,33 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
             )
         else:
             white = shipped.read_text(encoding="utf8")
+            actual = (d / last["file"]).read_text(encoding="utf8")
+            radius = SILHOUETTE_RE.search(actual)
             if WHITE_RECT not in white:
                 findings.append(
                     f"{orb}: {shipped.relative_to(ROOT)} does not paint {WHITE_RECT} — "
-                    "the instrument view moved, so the one substitution this rule "
-                    "allows can no longer be the only difference it is checking"
+                    "the instrument view moved, so the substitutions this rule allows "
+                    "can no longer be the only differences it is checking"
                 )
-            elif white.replace(WHITE_RECT, GROUND_RECT) != (d / last["file"]).read_text(
-                encoding="utf8"
-            ):
+            elif LIMB_MARK in white or "orb-limb" in white:
+                findings.append(
+                    f"{orb}: {shipped.relative_to(ROOT)} already draws the limb — the "
+                    "instrument set is not supposed to, and a substitution that is "
+                    "already there stops being one this rule can check"
+                )
+            elif radius is None:
+                findings.append(
+                    f"{orb}: the complete frame {last['file']} draws no limb circle in "
+                    "the form this rule names, so there is nothing to derive from"
+                )
+            # The radius is read off the frame under test rather than recomputed
+            # here: the claim is that the limb is the *only* addition, not that
+            # this gate can predict where it sits.
+            elif _wearing_limb(white.replace(WHITE_RECT, GROUND_RECT), radius[1]) != actual:
                 findings.append(
                     f"{orb}: the complete frame is not {shipped.relative_to(ROOT)} "
-                    f"repainted onto {GROUND} — the page teaches the construction of "
-                    "a drawing nobody ships"
+                    f"repainted onto {GROUND} and wearing the limb — the page teaches "
+                    "the construction of a drawing nobody ships"
                 )
 
     # --- T4: both junctions are byte identities -----------------------------
@@ -442,11 +511,18 @@ def run(dirs: list[Path], keys_only: bool = False) -> int:
 # thing, and "everything passes" is exactly the claim a by-design failure has
 # to be able to contradict.
 
+# Laid out the way bikar lays it out — one element per line, two-space indent
+# — because T3's limb derivation is anchored on line boundaries. A fixture in a
+# shape the renderer never emits would prove the rule fires on the fixture.
 _SVG = (
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -70 140 140">'
-    '<rect x="-70" y="-70" width="140" height="140" {rect} />'
-    '{body}</svg>'
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -70 140 140">\n'
+    '  <rect x="-70" y="-70" width="140" height="140" {rect} />\n'
+    "{body}"
+    "</svg>"
 )
+# The radius the fixture's limb is drawn at. Two decimals because that is what
+# the renderer writes, and `SILHOUETTE_RE` reads the digits back out.
+_R = "60.00"
 # Two grounds, because the whole point of T3's substitution is that they
 # differ: the instrument view keeps the renderer's white default and every
 # frame the page shows is repainted. A fixture painted one colour throughout
@@ -460,12 +536,17 @@ def _frame_svg(body: str) -> str:
     return _SVG.format(rect=GROUND_RECT, body=body)
 
 
-_PATTERN = '<path d="M0 0" fill="#8a8a8a" stroke="#333333" />'
+def _limbed(svg: str) -> str:
+    """A display frame: the ground already painted, now wearing the limb."""
+    return _wearing_limb(svg, _R)
+
+
+_PATTERN = '  <path d="M0 0" fill="#8a8a8a" stroke="#333333" />\n'
 # The finished drawing: no scaffold, no limb, nothing but the pattern. The
 # instrument version is what ships; the frame version is what `complete` and
 # `transition[0]` have to equal, and the two differ by the ground alone.
 _SHIPPED = _shipped_svg(_PATTERN)
-_DONE = _frame_svg(_PATTERN)
+_DONE = _limbed(_frame_svg(_PATTERN))
 # What every stage frame carries underneath: the bare solid as an outline, and
 # the sphere's limb, so a viewer has something to watch the pattern land on.
 # Real rings, not `M0 0`: T7 measures whether the pattern sits inside the
@@ -473,15 +554,13 @@ _DONE = _frame_svg(_PATTERN)
 # would pass the rule by having no geometry rather than by satisfying it.
 _FACE = "M-40,-40 L40,-40 L40,40 L-40,40 Z"
 _UNIT = "M-20,-20 L20,-20 L20,20 L-20,20 Z"
-_SCAFFOLD = (
-    f'<path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />'
-    '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
+_SCAFFOLD = f'  <path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />\n'
+_BARE = _limbed(_frame_svg(_SCAFFOLD))
+_HELD = _limbed(
+    _frame_svg(_SCAFFOLD + f'  <path d="{_UNIT}" fill="#c9782e" stroke="#333333" />\n')
 )
-_BARE = _frame_svg(_SCAFFOLD)
-_HELD = _frame_svg(_SCAFFOLD + f'<path d="{_UNIT}" fill="#c9782e" stroke="#333333" />')
-_SPUN = _frame_svg(
-    '<circle r="60" fill="none" stroke="#333333" data-orb-silhouette="true" />'
-    '<path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />'
+_SPUN = _limbed(
+    _frame_svg('  <path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />\n')
 )
 
 
@@ -501,7 +580,7 @@ def _fixture(tmp: Path) -> Path:
         "TestOrb.vertex-3.complete.000.svg": _DONE,
         "TestOrb.transition.000.svg": _DONE,           # == the complete frame
         "TestOrb.transition.001.svg": _SPUN,           # == turntable[1]
-        "TestOrb.turntable.000.svg": _frame_svg('<path d="M9 9" fill="#6f6f6f" />'),
+        "TestOrb.turntable.000.svg": _limbed(_frame_svg('  <path d="M9 9" fill="#6f6f6f" />\n')),
         "TestOrb.turntable.001.svg": _SPUN,
     }
     for name, text in files.items():
@@ -606,6 +685,32 @@ def _scaffold_the_finished_drawing(d: Path) -> None:
     p.write_text(_read(p).replace("<path", _SCAFFOLD + "<path", 1), encoding="utf8")
 
 
+def _blind_the_ending(d: Path) -> None:
+    # The defect this rule was rewritten for, put back. The finished orb is
+    # the picture a reader stops on, and without the limb it is a flat
+    # rosette: nothing in the frame says the drawing is on a ball. It used to
+    # be the *correct* state, held that way so T3 could name one substitution.
+    p = d / "TestOrb.vertex-3.complete.000.svg"
+    p.write_text(SILHOUETTE_RE.sub("", _read(p), count=1), encoding="utf8")
+
+
+def _resize_the_ending_limb(d: Path) -> None:
+    # The limb present but wrong. A presence check would pass this; the point
+    # of deriving the whole file is that the circle has to be the one the
+    # renderer would have drawn, not merely a circle.
+    p = d / "TestOrb.vertex-3.complete.000.svg"
+    p.write_text(_read(p).replace(f'r="{_R}" fill="none"', 'r="59.00" fill="none"'), encoding="utf8")
+
+
+def _limb_the_shipped_view(d: Path) -> None:
+    # The other direction, and the one that makes the rule go quiet rather
+    # than fail: `--format views` starts drawing the limb itself. The frames
+    # would be fine and qiyas's instrument would have grown a contour it
+    # classifies as foreign — exactly what the substitution exists to keep out.
+    p = d.parents[1] / "orb-views" / "TestOrb" / "TestOrb.vertex-3.svg"
+    p.write_text(_limbed(_read(p)), encoding="utf8")
+
+
 def _burst_the_outline(d: Path) -> None:
     p = d / "TestOrb.vertex-3.element.001.svg"
     p.write_text(_read(p).replace(_UNIT, "M50,50 L58,50 L58,58 L50,58 Z"), encoding="utf8")
@@ -613,7 +718,7 @@ def _burst_the_outline(d: Path) -> None:
 
 def _miss_the_orbit(d: Path) -> None:
     p = d / "TestOrb.transition.001.svg"
-    p.write_text(_read(p).replace('r="60"', 'r="59"'), encoding="utf8")
+    p.write_text(_read(p).replace('d="M0 0"', 'd="M0 1"'), encoding="utf8")
 
 
 def _enter_off_the_end(d: Path) -> None:
@@ -645,6 +750,9 @@ CASES = [
     ("T6 a stage frame in gallery gold", _tint_a_stage_frame, "fills with"),
     ("T6 a stage frame with nothing under it", _strip_the_scaffold, "is missing"),
     ("T6 a scaffold left on the finished drawing", _scaffold_the_finished_drawing, "carries data-orb-scaffold"),
+    ("T6 the finished orb left without its limb", _blind_the_ending, "is missing data-orb-silhouette"),
+    ("T3 the ending's limb is a circle but not the right one", _resize_the_ending_limb, "wearing the limb"),
+    ("T3 the instrument view starts drawing the limb", _limb_the_shipped_view, "already draws the limb"),
     ("T7 a unit that bursts through the outline", _burst_the_outline, "overhangs the base solid"),
     ("T4 the tilt lands beside the orbit", _miss_the_orbit, "does not land on the orbit"),
     ("T4 entersAtIndex past the orbit", _enter_off_the_end, "outside a 2-frame orbit"),
