@@ -3094,3 +3094,92 @@ dimension, so it would take a different closure rule rather than a different
 number. The clearance cliff would also move if `CAL-CLR-01` measures the floor
 somewhere other than 0.4 mm, which re-cuts the 1.22 ceiling exactly as it re-cuts
 the five amplitudes.
+
+## D-041 — in a refactor, robust and simplifying outrank cheap: the `display/` shield was the wrong recommendation
+
+**Date:** 2026-08-19 · **Status:** accepted · **Supersedes:** the option ranking
+offered for tasks #53–#58 on 2026-08-19, not the audit findings behind them.
+
+### Context
+
+The [breakdown-page audit](research/orb-stage-decomposition-measurement.md)
+confirmed that the 2D ribbon projection shatters: `orb-ribbons.ts:195` places every
+pass on a **constant** shell at `radiusMm ± amplitudeMm`, while the 3D mesh at
+`weave.ts:479` **interpolates** that offset to zero at the corners. A connected
+solid cannot project to a disconnected figure, so every gap in the drawing is an
+approximation artifact, growing as roughly `2·amplitude·ρ` — which is why
+[D-039](#d-039)'s amplitude re-cut, correct for the print, widened every split by
+75% in the picture.
+
+Two remediations were offered. Fixing the projector changes the qiyas-scored
+instrument set and therefore triggers the three-repo re-record cascade. Applying
+the flattening only to the `display/` variants uses the subdirectory shield that
+already exists and touches no pinned byte. The second was recommended, on the
+ground that it "costs nothing".
+
+That ranking priced only what was visible at the moment of choosing, which is the
+exact failure `CLAUDE.md`'s *Robustness over ease* section exists to prevent. The
+cheap option was recommended **because** it was cheap.
+
+### Decision
+
+**Delete the divergence rather than route around it.** Three rankings are
+reversed:
+
+1. **The projection (#54, #55, #56).** `orb-ribbons.ts` takes its offset from the
+   same function the mesh uses, and the cascade is paid once. The `display/`
+   shield would have made two disagreeing answers to *"where is a ribbon's
+   surface"* permanent, and doubled every future ribbon change. It would also have
+   left the qiyas-scored instrument certifying a picture we had already measured
+   to be false — which is the argument that killed the link checker, turned around:
+   **a gate that cries wolf gets switched off, and an instrument known to be wrong
+   is worse than no instrument.** The cascade is not speculative; its shape was
+   measured when task #52 ran it for D-039.
+2. **The amplitude floors (#53).** Held because narrowing the five declared ranges
+   would silence a by-design test whose point is that the value is *legal*. That
+   coupling is itself the defect: the test reads the shipped orb's floor. Give the
+   fuse-refusal test its own fixture source, then narrow all five ranges to what
+   `linkageGate` measures as printable. One rule survives instead of two — a
+   declared range is a promise measured at **both** endpoints ([D-040](#d-040)).
+3. **`overlap` requires `weave` (#58).** Framed as a side effect of #54; it is its
+   own simplification. Plain lines are the base case and weave is the option, and
+   the parser coupling at `parser.ts:1444-1447` is the only line that says
+   otherwise.
+
+Unchanged: #57's two teaching defects are page-level and independent of all three.
+
+### The tenet
+
+> In a refactor, robust and simplifying outrank cheap. Two code paths that
+> disagree *are* the defect: prefer the change that deletes the divergence to the
+> one that routes around it, price the cascade, and pay it. A one-time migration
+> never buys a permanent fork.
+
+Recorded as a corollary in `CLAUDE.md` under *Robustness over ease*, beside the
+by-design-failure corollary it rhymes with.
+
+### Verification
+
+A tenet is not gate-checkable, and no gate is proposed for it — the precedent in
+[`issue-register-evaluation.md`](issue-register-evaluation.md) is that a rule
+earns a gate by measured recurrence, and this has one instance. What is checkable
+is each reversed ranking:
+
+- **PASS (#54):** after the projector change, `git status` on `build/orb-views`
+  shows ribbon geometry moved and *nothing else*, and the styleless byte-stability
+  snapshot still holds for every non-ribbon view.
+- **FAIL (#54):** any cell-family view byte-changes, or a `display/` variant
+  diverges from its top-level counterpart in anything but style — either means the
+  offset was forked again rather than shared.
+- **PASS (#53):** the fuse-refusal test compiles its own fixture and fails before
+  the ranges are narrowed, passes after; all five orbs' declared floors clear
+  `linkageGate`.
+- **FAIL (#53):** the test still reads a shipped `.bkr`, which reintroduces the
+  coupling under a new name.
+
+### What would reverse this
+
+If the qiyas re-record proves unrepeatable — a ground-truth record that cannot be
+regenerated from sources this repo has — then the shield becomes the honest option
+and must ship **labelled as a known-wrong instrument**, not as a fix. Cost alone
+does not reverse it; only impossibility does.
