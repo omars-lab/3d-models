@@ -1,10 +1,9 @@
 # 3d-models
 
-Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the
-DSL + geometry engine and the producer of record. **qiyas**
-(`~/Workspace/git/qiyas`) validates renders. This repo holds OpenSCAD sources,
-design docs, the gallery, and the gh-pages deploy — it consumes bikar, it does
-not reimplement it.
+Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the DSL
++ geometry engine and the producer of record; **qiyas** (`~/Workspace/git/qiyas`)
+validates renders. This repo holds OpenSCAD sources, design docs, the gallery and
+the gh-pages deploy — it consumes bikar, it does not reimplement it.
 
 ## Mechanics
 
@@ -22,20 +21,19 @@ not reimplement it.
 - **CI**: there is none — no workflows, so `make validate` (alias `make local.ci`,
   the siblings' spelling) is the only run there is and `make deploy` needs no
   runner. A billing block is not a red build (`gh run view <id> --json jobs` →
-  `"steps": []` in 2–3 s: nothing measured) and must never stop a merge or a
-  deploy — [`docs/local-ci-runbook.md`](docs/local-ci-runbook.md).
-- **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate` (turn
-  UNGROUNDED-and-empirical into a `CAL-*` bet), `prototype` (physical print
-  pack), `maintain-use-cases`.
+  `"steps": []` in 2–3 s: nothing measured) and must never stop a merge or a deploy
+  — [`docs/local-ci-runbook.md`](docs/local-ci-runbook.md).
+- **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
+  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`.
 
 ---
 
 ## Design-doc rules
 
-Seven adversarial grounding audits of seven design docs written here produced
-~104 findings. Four failure kinds recur, are preventable by knowing about them,
-and are *not* caught by any gate. Definitions, per-kind instance counts, and
-`file:line` anchors: [`docs/grounding-defect-taxonomy.md`](docs/grounding-defect-taxonomy.md).
+Seven adversarial grounding audits of seven design docs here produced ~104
+findings. Four failure kinds recur, are preventable by knowing about them, and are
+*not* caught by any gate. Definitions, counts and `file:line` anchors:
+[`docs/grounding-defect-taxonomy.md`](docs/grounding-defect-taxonomy.md).
 
 ### K1 — Do not strip a qualifier (7/7 audits)
 
@@ -142,10 +140,9 @@ rule does not transfer.
 ### Research is checked in
 
 `ground-design-doc` requires it: research lives in `docs/research/*.md` under a
-provenance header (date, produced-by, which doc it feeds), preserved verbatim —
-not only in a transcript. A doc pointing at a research file the repo does not have
-is a **K9**: it shipped in `hemisphere-split-design.md` and again here 2026-07-29,
-which is why D1 exists.
+provenance header (date, produced-by, which doc it feeds), preserved verbatim, not
+only in a transcript. A doc pointing at a research file the repo does not have is
+a **K9** — it shipped twice, which is why D1 exists.
 
 ---
 
@@ -157,19 +154,17 @@ normal case. **Only** write a durable narrative record when the fix also produce
 a *tenet*, a rule that changes how the next doc gets written; then it goes in this
 file, or in the taxonomy, not in a register.
 
-There is deliberately **no issue catalog** here. The measurement is in
-[`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md): of 15
-defects traced through git history, 5 graduated into a guard; all 7 fixes in July
-2026 shipped a test and none needed an entry. Registers nobody re-reads decay into
-what Richard Cook calls "a defensible argument that management is occurring." A
-test protects behaviour at zero re-reading cost.
-
-There is also no automated link checker: an 8.4% sample of the repo's 737 URLs
-measured ~11% false alarms against a true dead-link rate under 1%, and *"a gate
-that cries wolf gets switched off, which is worse than having no gate."*
-The checkable invariant is not *does this URL resolve* but *is every
-load-bearing number attributed to a source the research file records as
-actually fetched* — a local check with no network.
+There is deliberately **no issue catalog** here and no automated link checker —
+both rejected on measurement in
+[`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md). Of 15
+defects traced through git history 5 graduated into a guard, and all 7 fixes in
+July 2026 shipped a test and needed no entry: registers nobody re-reads decay
+into what Richard Cook calls "a defensible argument that management is
+occurring." §5.1 measured ~11% false alarms against a true dead-link rate under
+1% — *"a gate that cries wolf gets switched off, which is worse than having no
+gate."* The checkable invariant is not *does this URL resolve* but *is every
+load-bearing number attributed to a source the research file records as actually
+fetched* — local, no network.
 
 ## Robustness over ease — especially when offering the choice
 
@@ -178,22 +173,27 @@ systematically mis-priced unless written down. When you present options, the
 cheapest is not the default, "do nothing" is not neutral, and each must say **what
 it verifies** — one that verifies nothing should be named as such or not offered.
 
-> *Failure mode, 2026-08-03:* both options offered for the machine card produced
-> 23 STLs and **neither checked one**, while `calibration-design.md` §7 already
-> shipped a 23-row expectation table. What shipped diffs the mesh gate against
-> that table ([D-014](docs/decisions-log.md)) — a verifier with a build target as
-> its front door, not the re-typing of §6 the backlog had framed it as.
+> *Failure mode, 2026-08-03:* both options offered for the machine card produced 23
+> STLs and **neither checked one**, while `calibration-design.md` §7 already shipped
+> a 23-row expectation table. What shipped diffs the mesh gate against that table
+> ([D-014](docs/decisions-log.md)) — a verifier with a build target as its front
+> door, not the §6 re-typing the backlog framed it as.
 
 Corollary: **the by-design failure is the load-bearing case.** A gate that
 asserts "everything passes" must be wrong about a deliberate failure or skip
 it, and skipping is how a gate stops testing the thing it exists for.
 
+Corollary: **in a refactor, robust and simplifying outrank cheap.** Two code paths
+that disagree *are* the defect: prefer the change that deletes the divergence to
+the one that routes around it, price the cascade, and pay it. A one-time migration
+never buys a permanent fork — [D-041](docs/decisions-log.md).
+
 ## Precedent
 
 Before proposing a new skill or hook, read
 [`docs/dsl-extension-skill-evaluation.md`](docs/dsl-extension-skill-evaluation.md)
-and [`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md).
-Both evaluated a proposed skill against measured recurrence and both concluded
-*no skill, a gate instead*. Anthropic's own guidance on this file applies to
-this file: bloat makes it ignored — keep it under 200 lines, and prefer
-deleting a rule or converting it to a hook over adding prose.
+and [`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md): both
+evaluated a proposed skill against measured recurrence and both concluded *no
+skill, a gate instead*. Anthropic's own guidance on this file applies to this
+file — bloat makes it ignored, so keep it under 200 lines and prefer deleting a
+rule or converting it to a hook over adding prose.
