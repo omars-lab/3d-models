@@ -2457,6 +2457,13 @@ so rather than implying a pass. The amplitude rule remains an asserted print con
 rather than a mesh check, exactly as [D-033](#d-033--build-the-welded-woven-overlap-orb-the-d-032-window-holds-parity-solves-60-loops-ship) scoped it — this makes the guard fire on the presets it
 was written for, not stronger.
 
+**Superseded 2026-08-19.** The rule the guard enforced is the centreline rule
+[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) withdrew, so the guard, `weaveDepthValue` and the shared depth-knob list are
+all gone in [D-042](#d-042--a-withdrawal-is-corpus-wide-and-three-of-the-four-copies-were-not-markdown). What survives is this decision's *tenet* — a claim about every
+preset must read every preset — and the mechanism that carries it: the
+directory-derived preset sweep, ported into bikar's `linkage-gate.test.ts`
+before the guard file was deleted.
+
 One thing here is a partial and is recorded as such. The `packages/e2e` loop-closure
 test fails on roughly 40% of CI ubuntu runs and never on macOS, including under 8× and
 20× CPU throttle, and it blocked these merges. Its seek read `document.getAnimations()[0]`
@@ -3183,3 +3190,117 @@ If the qiyas re-record proves unrepeatable — a ground-truth record that cannot
 regenerated from sources this repo has — then the shield becomes the honest option
 and must ship **labelled as a known-wrong instrument**, not as a fix. Cost alone
 does not reverse it; only impossibility does.
+
+## D-042 — a withdrawal is corpus-wide, and three of the four copies were not markdown
+
+**Date:** 2026-08-19 · **Status:** accepted · **Extends:**
+[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) · **Supersedes:** the guard mechanism of
+[D-034](#d-034--the-labs-coverage-gaps-are-sweeps-not-lists-a-claim-about-every-preset-must-read-every-preset), not its tenet.
+
+### Context
+
+[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) measured `amplitude >= (strut_depth + 0.4) / 2` and found it wrong —
+it predicts the gap between two ribbon **centrelines**, but a ribbon has width, so
+the other ribbon's surface sits half a width off the crossing node, where the
+sinusoidal offset has already decayed. Four of the five woven orbs shipped fused
+under it. D-039 withdrew it from the prose and re-cut the five defaults from
+measurement.
+
+It kept running. `CLAUDE.md`'s **D4** — *a withdrawal is corpus-wide, not a local
+edit* — is enforced by `docs_gate.py`, which scans **markdown**. Three of the four
+surviving copies were TypeScript, a `.bkr` header field, and a test file:
+
+| # | site | what it did |
+|---|---|---|
+| 1 | five `.bkr` amplitude `range` floors | D-039 moved the **defaults** and left the **floors** behind |
+| 2 | `bikar:packages/knobs/src/constraints.ts` `raiseAmplitudeFloor` | clamped the Lab slider by the rule |
+| 3 | `bikar:packages/lab/src/main.ts` `weaveRows` | printed `2·amplitude − depth` as a ✓/✗ tick |
+| 4 | `bikar:packages/lab/tests/orb-weave-guard.test.ts` | an entire file certifying site 2 |
+
+Site 1 is not cosmetic. A declared range is a **promise**: the parser rejects an
+override outside it (`parser.ts:1136`) and the Lab renders it as a slider, so every
+stop in it is a value someone is invited to build. Swept step by step with
+`linkageGate`, the amplitude at which each preset actually stops fusing turns out to
+equal the value D-039 set as its default — so the floors were offering exactly the
+band D-039 had just measured as unprintable.
+
+Site 3 is the one a user meets. At Weave-Orb amplitude 2.0 with `strut_depth` 2.4
+the Lab printed **`ribbon gap 1.6 mm ✓`** while `linkageGate` measures **60
+interpenetrating pairs and zero clearance** — a green tick at the moment someone
+decides to print. Its companion row, `N interlocked`, was a connected-component
+count, which says how many shells the mesh has and nothing about interlocking:
+strands are swept independently and never booleaned, so two ribbons passing straight
+through each other are still two components.
+
+The evidence that these were one rule, not four coincidences, was already checked in.
+Site 2's own suite contained a test named *`agrees with the Lab ribbon-gap row it
+shares a depth knob with`*, whose comment states that the clamp and the readout are
+"one inequality written two ways".
+
+### Decision
+
+Delete the divergence rather than route around it, per
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation). There is now **one** measurement of ribbon separation in the
+system, `linkageGate`, and the Lab, the CLI and the tests all read it.
+
+Ranges narrowed to the measured floor:
+
+| preset | range before | range now | clearance at the new floor |
+|---|---|---|---|
+| Weave-Orb | `1.4..3.0 step 0.2` | `2.6..3.0` | 0.4384 mm |
+| Weave-Dodeca-Orb | `1.4..2.6 step 0.2` | `2.2..2.6` | 0.4079 mm |
+| Rosette-Weave-Orb | `1.4..2.6 step 0.2` | `2.0..2.6` | 0.6418 mm |
+| Maclado-9-Weave | `0.8..2.0 step 0.1` | `1.6..2.0` | 0.4270 mm |
+| Maclado-9-Overlap | `0.8..1.6 step 0.1` | `1.4..1.6` | 0.4824 mm |
+
+**Validator:** every step of every woven preset's declared amplitude range compiles
+to a mesh on which `linkageGate` reports zero interpenetrating pairs and no `L3`
+finding, and the step **below** the declared floor does not.
+PASS: `Rosette-Weave-Orb` at 2.0, 2.2, 2.4, 2.6 — all four stops, clearance
+0.6418 mm at the floor, no `L3`.
+FAIL: `Weave-Orb` at 2.4 — one step under its floor — where the gate reports an
+`L3` clearance error, so the range cannot be narrowed to a merely cautious value
+and still pass.
+
+The endpoints alone would not discharge this: **an aggregate cannot discharge a
+claim about every part**, and a range is exactly a claim about every part of itself.
+
+Both by-design fuse demonstrations stay on **shipped geometry**, widening the range
+in the fixture text through a helper that throws if the `range` line stops matching.
+This reverses my own earlier plan to give them a hand-built fixture: the module
+header states the property that *a gate demonstrated only on hand-built fixtures has
+not been shown to fire on anything anyone will actually print*, and moving them
+would have traded the load-bearing case for a convenient one.
+
+Site 4's deletion is a net gain in coverage, not a loss. The file had already gone
+structurally dead — it tested "the corner", depth at max and amplitude at min, and
+after D-039's re-cut the corner no longer violated the floor on 4 of 5 presets, so
+it failed with *"this corner does not reach the floor — pick another"*. Its one good
+idea, deriving the preset list from disk by matching `/^\s*weave crossing /m` rather
+than typing it, is [D-034](#d-034--the-labs-coverage-gaps-are-sweeps-not-lists-a-claim-about-every-preset-must-read-every-preset)'s tenet and was ported into the new sweep before the
+file was removed.
+
+### What this resolves and what it does not
+
+It resolves the P1 defect: no woven preset now offers an amplitude that fuses, and
+no surface in the system claims a clearance it did not measure. The Lab's weave rows
+report bodies, how many the gate certifies as held, and the measured minimum
+clearance — with `minBodyClearanceMm === null` printed as *"none within 1.2 mm"*
+rather than as a zero, because it is a pass, not an absence.
+
+It does **not** make 0.4 mm a measured floor. `MIN_BODY_CLEARANCE_MM` stays
+provisional against `CAL-CLR-01`, settled by coupon MC-8; the 0.4 survives the
+withdrawal of the formula around it because that term was always about what a nozzle
+can leave open, never about the geometry the rest of the formula got wrong. Every
+number in the table above moves if MC-8 lands somewhere else.
+
+It also does not extend D4 to non-markdown. The gate still scans prose, and the
+reason this defect was found at all is that a human went looking after D-039, not
+that anything fired. What it leaves behind instead is the sweep test: the ranges are
+now checked against the gate on every run, so this particular rule cannot come back
+silently even though a gate for the general case does not exist.
+
+**What would reverse this:** `CAL-CLR-01` measuring the clearance floor somewhere
+other than 0.4 mm, which re-cuts all five ranges; or a change to the ribbon sweep
+that alters where surfaces actually sit, in which case the sweep test fails and the
+floors are re-measured rather than re-derived.
