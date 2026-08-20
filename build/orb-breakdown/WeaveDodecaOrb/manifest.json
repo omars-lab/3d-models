@@ -185,7 +185,7 @@
       "kind": "strand",
       "index": 0,
       "label": "strand 1",
-      "polygons": 9,
+      "polygons": 12,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -196,7 +196,7 @@
       "kind": "strand",
       "index": 1,
       "label": "strand 2",
-      "polygons": 18,
+      "polygons": 24,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -207,7 +207,7 @@
       "kind": "strand",
       "index": 2,
       "label": "strand 3",
-      "polygons": 27,
+      "polygons": 36,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -218,7 +218,7 @@
       "kind": "strand",
       "index": 3,
       "label": "strand 4",
-      "polygons": 36,
+      "polygons": 48,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -229,7 +229,7 @@
       "kind": "strand",
       "index": 4,
       "label": "strand 5",
-      "polygons": 45,
+      "polygons": 60,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -240,7 +240,7 @@
       "kind": "strand",
       "index": 5,
       "label": "strand 6",
-      "polygons": 54,
+      "polygons": 72,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -251,7 +251,7 @@
       "kind": "strand",
       "index": 6,
       "label": "strand 7",
-      "polygons": 63,
+      "polygons": 84,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -262,7 +262,7 @@
       "kind": "strand",
       "index": 7,
       "label": "strand 8",
-      "polygons": 72,
+      "polygons": 96,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -273,7 +273,7 @@
       "kind": "strand",
       "index": 8,
       "label": "strand 9",
-      "polygons": 81,
+      "polygons": 108,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -285,7 +285,7 @@
       "index": 1,
       "label": "the finished weave",
       "representation": "ribbons",
-      "polygons": 81,
+      "polygons": 108,
       "sources": [],
       "introduced": [],
       "sides": []
@@ -297,252 +297,252 @@
       "index": 0,
       "azimuthDeg": 0,
       "elevationDeg": 18,
-      "polygons": 138
+      "polygons": 184
     },
     {
       "file": "WeaveDodecaOrb.turntable.001.svg",
       "index": 1,
       "azimuthDeg": 10,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.002.svg",
       "index": 2,
       "azimuthDeg": 20,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.003.svg",
       "index": 3,
       "azimuthDeg": 30,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.004.svg",
       "index": 4,
       "azimuthDeg": 40,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.005.svg",
       "index": 5,
       "azimuthDeg": 50,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.006.svg",
       "index": 6,
       "azimuthDeg": 60,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.007.svg",
       "index": 7,
       "azimuthDeg": 70,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.008.svg",
       "index": 8,
       "azimuthDeg": 80,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.009.svg",
       "index": 9,
       "azimuthDeg": 90,
       "elevationDeg": 18,
-      "polygons": 138
+      "polygons": 184
     },
     {
       "file": "WeaveDodecaOrb.turntable.010.svg",
       "index": 10,
       "azimuthDeg": 100,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.011.svg",
       "index": 11,
       "azimuthDeg": 110,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.012.svg",
       "index": 12,
       "azimuthDeg": 120,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.013.svg",
       "index": 13,
       "azimuthDeg": 130,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.014.svg",
       "index": 14,
       "azimuthDeg": 140,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.015.svg",
       "index": 15,
       "azimuthDeg": 150,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.016.svg",
       "index": 16,
       "azimuthDeg": 160,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.017.svg",
       "index": 17,
       "azimuthDeg": 170,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.018.svg",
       "index": 18,
       "azimuthDeg": 180,
       "elevationDeg": 18,
-      "polygons": 132
+      "polygons": 176
     },
     {
       "file": "WeaveDodecaOrb.turntable.019.svg",
       "index": 19,
       "azimuthDeg": 190,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.020.svg",
       "index": 20,
       "azimuthDeg": 200,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.021.svg",
       "index": 21,
       "azimuthDeg": 210,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.022.svg",
       "index": 22,
       "azimuthDeg": 220,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.023.svg",
       "index": 23,
       "azimuthDeg": 230,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.024.svg",
       "index": 24,
       "azimuthDeg": 240,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.025.svg",
       "index": 25,
       "azimuthDeg": 250,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.026.svg",
       "index": 26,
       "azimuthDeg": 260,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.027.svg",
       "index": 27,
       "azimuthDeg": 270,
       "elevationDeg": 18,
-      "polygons": 138
+      "polygons": 184
     },
     {
       "file": "WeaveDodecaOrb.turntable.028.svg",
       "index": 28,
       "azimuthDeg": 280,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.029.svg",
       "index": 29,
       "azimuthDeg": 290,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.030.svg",
       "index": 30,
       "azimuthDeg": 300,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.031.svg",
       "index": 31,
       "azimuthDeg": 310,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.032.svg",
       "index": 32,
       "azimuthDeg": 320,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.033.svg",
       "index": 33,
       "azimuthDeg": 330,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.034.svg",
       "index": 34,
       "azimuthDeg": 340,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     },
     {
       "file": "WeaveDodecaOrb.turntable.035.svg",
       "index": 35,
       "azimuthDeg": 350,
       "elevationDeg": 18,
-      "polygons": 135
+      "polygons": 180
     }
   ],
   "flat": {
@@ -556,21 +556,21 @@
         "index": 0,
         "azimuthDeg": 315,
         "elevationDeg": 35,
-        "polygons": 81
+        "polygons": 108
       },
       {
         "file": "WeaveDodecaOrb.transition.001.svg",
         "index": 1,
         "azimuthDeg": 312,
         "elevationDeg": 27,
-        "polygons": 135
+        "polygons": 180
       },
       {
         "file": "WeaveDodecaOrb.transition.002.svg",
         "index": 2,
         "azimuthDeg": 310,
         "elevationDeg": 18,
-        "polygons": 135
+        "polygons": 180
       }
     ],
     "entersAtIndex": 31
@@ -588,6 +588,6 @@
     "crossings": 90
   },
   "source": "source.bkr",
-  "sourceSha256": "f6eb3e6af1c0fbec205a88a18f630749e42be45b7fb8a957a26aa65b7958f6b2",
+  "sourceSha256": "5d2718f4379086a7ce9cd1546553101387353c43a9adaffdca0b237893cad6d6",
   "engine": "0.1.0"
 }
