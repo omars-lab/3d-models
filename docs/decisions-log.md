@@ -1905,6 +1905,83 @@ The two checks stay separate because neither catches the other's case: `O3` and
 witness for each — `MC-2 PORT0` and a plate with `O3`+`03` — beside the existing
 `WWW`/`MC-2 R08` gap witnesses.
 
+### The fix exposed the next defect: a ring cannot express a fold
+
+Sharing `passRadialOffsetMm` was the correct fix and it did not finish the job.
+With the corners correctly on the centreline, a crossing pass runs
+`+A/2 → +A → +A/2`: it **folds**. The band was drawn as one closed six-point ring,
+and a ring's inner rails cross under a fold. Measured over the 15 symmetry views of
+the five woven orbs:
+
+| construction | self-crossing shapes | worst, as a fraction of a mean band |
+| --- | --- | --- |
+| before D-043 | 0 / 3,743 | — |
+| D-043, one ring per pass | **96 / 3,743** | 1.26× |
+| D-043, one quad per spine segment | **19 / 5,264** | 0.29× |
+
+The pre-fix zero is not a clean bill of health; flattening every corner onto one
+shell is precisely what had been hiding the fold. So each pass is drawn as one quad
+per spine segment. For the two-point sub-spines a trimmed crossing produces this is
+byte-identically the old outline, which is why the `gt-emitter` contract is
+untouched.
+
+Two alternatives were built and measured before this one was kept:
+
+| construction | residual self-crossings | why not |
+| --- | --- | --- |
+| per-point sides, no mitre | 23 | strictly worse than the mitre |
+| frame read from `sweepStrand` itself (r̂ × t̂, edge frames averaged) | **17** — the best count | took the parity-vs-depth by-design failure from 3 cells **back to 0** |
+
+The second is the strongest possible reading of the tenet this entry executes: it
+makes the picture's rails *be* the swept solid's rails, and it deletes `sideVector`,
+`mitredSides` and `RIBBON_MITER_LIMIT` outright. It also re-silenced, at the shipped
+amplitude, the exact boundary the section above had just moved into the light. **A
+gate that stops firing is not a cheaper fix, it is a worse one** — the corollary in
+`CLAUDE.md` that the by-design failure is the load-bearing case, deciding against the
+option that scored best on every other number. Recorded here so the next reader does
+not re-derive it and reach the opposite conclusion from the bow-tie count alone.
+
+### The cascade did not come back clean, which is why it ran first
+
+Order, per the stability test's own docstring: regenerate views → qiyas sweep →
+re-pin composites → **hashes last**.
+
+| preset | before | after |
+| --- | --- | --- |
+| `maclado-9-overlap` ribbons | 1.000, drop 0, drift 0.0003 | **0.999, drop 7, drift 0.0078** |
+| `maclado-9-weave` ribbons | 1.000, drop 0, drift 0.0003 | **0.999, drop 3, drift 0.0145** |
+| `rosette-weave`, `weave-dodeca`, `weave-icosa` ribbons | 1.000, drop 0 | unmoved |
+| all 14 presets, cells | unchanged | unchanged |
+
+The three unmoved woven orbs are exactly the three with no residual self-crossings.
+That correspondence is what ties these numbers to their cause rather than to the
+split in general, and it is the reason the drops are recorded rather than absorbed.
+
+**The picture is right; what is lost is the trace.** qiyas partners one simple
+polygon per shape and a self-crossing outline has no simple partner. The renderer
+emits no `fill-rule`, so SVG's default `nonzero` paints both lobes of a twisted
+ruled quad — which is the projected image of that quad. That absence is now asserted
+in the test suite, so writing `fill-rule` later becomes a visible decision instead of
+a silent one.
+
+Drift is recorded as a **named per-entry exception, not a raised ceiling**. 52 of the
+54 views still measure 0.0001–0.0003, and a ceiling moved to cover two of them stops
+saying anything about the other 52 — the same argument the drop table already makes
+about a blanket `toBe(0)`. Both values stay inside qiyas's own acceptance radius
+(`max_dist` = 0.02·√2 = 0.028284; 0.0145 is 0.51 of it), so this is headroom being
+spent, not a threshold being crossed. A tripwire fires if an exception ever outlives
+its cause.
+
+### The stamp that names the bikar was not wired to the renders
+
+Found while running this cascade. `DEPLOY_PATHS` ships `build/bikar-ref.txt` beside
+`build/stls` and `build/images`, so a reader takes it as *the bikar that produced
+these* — but `orbs` was the one bikar-consuming target that did not depend on
+`bikar-stamp` (`bricks`, `coupons` and `pattern-sets` all did). `make orbs` against
+the freshly merged bikar left the stamp on the **pre-merge sha** while every render
+under it came from the merge. One added prerequisite; the same shape of defect as the
+one this entry is about, two artifacts answering the same question and disagreeing.
+
 ### What this resolves and what it does not
 
 It resolves the **confusability** arm of §7 Q2. It does **not** decide the
@@ -3304,3 +3381,112 @@ silently even though a gate for the general case does not exist.
 other than 0.4 mm, which re-cuts all five ranges; or a change to the ribbon sweep
 that alters where surfaces actually sit, in which case the sweep test fails and the
 floors are re-measured rather than re-derived.
+
+## D-043 — the picture derived the weave's offset a second time, and got the corners wrong
+
+**Date:** 2026-08-19 · **Status:** accepted · **Executes:**
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation)'s
+ruling, and closes the P2 defect that ruling was about.
+
+### Context
+
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation)
+withdrew the `display/` shield and named the cascade the price of fixing the
+projector at source. This is that fix, and running it found the defect was larger
+than the audit had described.
+
+`projectRibbonPasses` put all three spine points of a pass on **one** shell,
+`radiusMm ± amplitudeMm`, chosen by `pass.isOver`. `sweepStrand`, which builds the
+mesh that is actually printed, uses a different rule: ±amplitude at a crossing,
+**0 at a corner**, interpolated between. The two disagreed in two ways at once, not
+one:
+
+- a corner *inherits* `isOver` from the crossing it came from, so every corner was
+  drawn a full amplitude off the shell it is on; and
+- an edge whose two passes disagree on parity had its midpoint drawn **twice**, at
+  two radii `2·amplitude` apart — so the drawn network came apart at exactly the
+  points where the solid runs on unbroken.
+
+Measured on Maclado-9-Overlap's hero view, the gap is **1.09 mm** — of the same
+order as the strut itself, which is why the audit read it as a shattered figure
+rather than as a seam.
+
+### Decision
+
+Delete the divergence rather than teach the projector to imitate the mesh —
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation)'s
+tenet applied to its own case. `passRadialOffsetMm` is exported from `weave.ts` and
+called by both paths. The sweep no longer re-derives parity from the crossing map;
+the passes are built *before* the sweep and the sweep reads them. The projector
+calls the same function and averages over each edge's two passes, so the two bands
+meeting at a midpoint arrive at one radius by construction. Every edge is `edgeOut`
+of exactly one pass and `edgeIn` of exactly one other — the premise the average
+rests on, asserted rather than assumed.
+
+Two defects the same tree was carrying are fixed here, because they are the same
+mistake seen from two other angles:
+
+- **The silhouette was drawn on the centreline the weave rides around.** At
+  `radiusMm` it sits outside the ribbons on a turntable frame and well inside the
+  drawing's edge on a stage frame. Scenes now declare `limbRadiusMm` — `radiusMm`
+  for cells, `radiusMm + amplitudeMm` for ribbons — so each representation answers
+  for its own outline instead of the renderer guessing from culled polygons, which
+  would make the outline breathe across a transition. The K10 in that comment
+  calling the overshoot "a few tenths of a millimetre" was measured on cells and
+  never re-derived for ribbons: it was **1.6 mm**.
+- **Stage frames were built by filtering the finished scene**, in which every
+  under-pass had already been cut for every crossing on the orb — so a loop arrived
+  pre-chopped for a weave that is not in the frame. A gap is a fact about a *pair*
+  of loops, so the drawn subset is now a projector input (`drawnStrandIds`) and not
+  a filter.
+
+### Validator
+
+**Validator:** the drawn ribbon network must be continuous at every shared edge —
+for each junction, the end cross-section of the pass leaving an edge and the start
+cross-section of the pass entering it project to the same two points, and every
+corner sits on the centreline shell (`passRadialOffsetMm === 0`).
+
+PASS: `Maclado-9-Overlap` at the shipped amplitude — all 420 junctions agree to
+under `1e-9`, and every non-crossing pass reports offset exactly 0.
+
+FAIL: the pre-fix projector on the same orb — every corner is off its shell by the
+full amplitude, and each parity-disagreeing edge reports its midpoint at two radii
+`2·amplitude` apart; the largest measured separation is 1.09 mm.
+
+### The by-design test moved with the geometry, and was re-measured
+
+The parity-vs-depth tripwire — a test that fires when bands are painted by weave
+parity instead of by depth — was **re-measured over 42 swept configurations, not
+re-pinned**. The wrong sort used to be detectable only at amplitude 1.2 and below
+(3 of 42), with the shipped 1.4 sitting on the silent side; it is now detectable
+from 1.0 through 2.0 (6 of 42), the shipped default among them, by 0.717 mm. The
+number moved because the geometry did, and the direction is the point: the tripwire
+now covers the configuration that actually ships.
+
+The overlap validator learned one thing in the same stroke: two runs of a single
+under-pass are **one element**, not a pair to order. They share a `patternFaceIndex`
+and a depth by construction, and once the spine is a fold their arms can cross in
+projection seen edge-on. That started as a corner case — 4 pairs on
+Maclado-9-Weave's `edge-2` view at amplitude 1.9 and up, nowhere else in the sweep
+— and the fold-split below made it the ordinary one: every pass is now two elements,
+so the exemption carries the whole weave. Re-measured across the 15 symmetry views
+of the five woven orbs at their shipped parameters: **88 same-pass pairs**, 64 on
+untrimmed crossings, 24 on corners, and 0 on a gapped under-pass, whose two runs are
+cut apart and cannot reach each other.
+
+### What this resolves and what it does not
+
+It resolves the P2 defect and the two absorbed into it. It does **not** introduce a
+flat→sphere morph, ghosted back hemisphere, or any other beat the breakdown page
+still lacks; those remain where the timelapse plan left them.
+
+It also does not make the projector and the sweep the same code — they still build
+different things, a picture and a mesh. What they no longer do is answer the same
+question twice. If a third consumer of weave parity appears, it calls
+`passRadialOffsetMm` or it is the next instance of this defect.
+
+**What would reverse this:** a weave whose corners genuinely do not sit on the
+centreline shell — a variable-amplitude sweep, say — in which case
+`passRadialOffsetMm` grows a parameter and both callers get it, rather than one of
+them re-deriving it.

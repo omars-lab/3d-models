@@ -16,8 +16,13 @@
 # is the first step that clears linkageGate's {CAL-CLR-01} 0.4mm body
 # clearance floor, measured at 0.408mm; `--check` re-measures it, so change a
 # strut dimension and re-run rather than re-deriving from a formula.
+# The range now starts at that value rather than below it. A declared range is
+# a promise the Lab renders as a slider, so every stop in it is a value someone
+# is invited to build; every stop under this one either interpenetrates or
+# leaves less than the floor, measured at every declared step by the linkage
+# gate's "every step of the declared amplitude range prints unfused" (D-042).
 param radius = 60 range 40..110 step 5
-param amplitude = 2.2 range 1.4..2.6 step 0.2
+param amplitude = 2.2 range 2.2..2.6 step 0.2
 param strut_width = 3 range 1.5..6 step 0.5 advanced
 param strut_depth = 2.4 range 1.2..4 step 0.2 advanced
 

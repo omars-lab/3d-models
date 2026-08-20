@@ -259,7 +259,16 @@ cookie-cutters:
 # weeks, scored by qiyas and picked as the gallery hero, because nothing ever
 # removed a file the generator had stopped writing. Regeneration cannot fix a
 # file regeneration no longer touches; only deletion can.
-orbs:
+#
+# `bikar-stamp` is a prerequisite and not a courtesy. DEPLOY_PATHS ships
+# build/bikar-ref.txt beside build/stls and build/images -- both written right
+# here -- so the stamp is read as "the bikar that produced these". This was the
+# one bikar-consuming target that did not depend on it (bricks, coupons and
+# pattern-sets all did), so the deployed stamp named whichever commit happened
+# to be checked out the last time one of *those* ran. Found on 2026-08-19:
+# `make orbs` against a freshly merged bikar left the stamp on the pre-merge
+# sha, and every render below it was from the merge.
+orbs: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
 	@command -v rsvg-convert >/dev/null \
