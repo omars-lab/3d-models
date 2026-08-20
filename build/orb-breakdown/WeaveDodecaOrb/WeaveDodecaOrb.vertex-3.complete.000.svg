@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M-24.2705,24.7172 L-21.2132,2.8912 L-9.2705,22.6728 L-24.2705,24.7172 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-24.2705,24.7172 L-24.2705,37.9489 L-42.4264,24.4949 L-24.2705,24.7172 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-24.2705,37.9489 L-24.2705,24.7172 L-9.2705,22.6728 L0.0000,34.6410 L-9.2705,44.0822 L-24.2705,37.9489 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="5" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
@@ -18,4 +21,5 @@
   <path d="M8.1027,-19.8168 L30.0000,-17.3205 L24.2705,-3.3079 L8.1027,-19.8168 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="15" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M13.1105,16.9256 L24.2705,-3.3079 L33.5410,8.6603 L13.1105,16.9256 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="16" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M42.4264,24.4949 L33.5410,8.6603 L45.0000,2.0444 L42.4264,24.4949 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="17" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
+  </g>
 </svg>

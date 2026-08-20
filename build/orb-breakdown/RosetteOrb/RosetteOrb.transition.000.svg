@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M-21.2132,2.8912 L0.0000,0.0000 L-12.5315,10.2354 L-21.2132,2.8912 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-39.6336,5.4018 L-21.2132,2.8912 L-26.8333,12.1847 L-39.6336,5.4018 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-42.4264,24.4949 L-39.6336,5.4018 L-35.6723,21.1864 L-42.4264,24.4949 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="3" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
@@ -84,4 +87,5 @@
   <path d="M8.1027,-19.8168 L18.5061,-22.9350 L22.6763,-13.0135 L13.0433,-9.5747 L8.1027,-19.8168 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="81" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M24.4949,31.6228 L23.9689,17.1460 L32.7377,11.5936 L36.1841,20.2999 L24.4949,31.6228 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="82" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M13.1105,16.9256 L15.1299,5.7349 L25.3318,6.4703 L23.9689,17.1460 L13.1105,16.9256 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="83" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
+  </g>
 </svg>

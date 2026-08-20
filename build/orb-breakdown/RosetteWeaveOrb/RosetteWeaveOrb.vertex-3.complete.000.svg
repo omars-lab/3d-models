@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-3" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="60.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="60.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M13.1105,16.9256 L11.8002,33.9645 L-0.0681,26.1450 L-5.0126,12.2593 L13.1105,16.9256 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-0.0681,26.1450 L11.8002,33.9645 L-0.0681,42.2005 L-5.0126,51.0867 L-18.2693,44.6812 L-32.2162,39.9636 L-29.5183,30.1589 L-32.2162,15.9670 L-18.2693,18.7029 L-5.0126,12.2593 L-0.0681,26.1450 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="10" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
   <path d="M-21.2132,2.8912 L-5.0126,12.2593 L-18.2693,18.7029 L-32.2162,15.9670 L-21.2132,2.8912 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="0" />
@@ -18,4 +21,5 @@
   <path d="M34.3237,-34.9555 L46.7487,-21.2023 L36.5808,-21.0412 L23.5140,-27.2015 L34.3237,-34.9555 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="15" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M8.1027,-19.8168 L23.5140,-27.2015 L22.6763,-13.0135 L13.1232,-1.7886 L8.1027,-19.8168 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="16" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
   <path d="M13.1105,16.9256 L13.1232,-1.7886 L25.3318,6.4703 L29.9359,19.9166 L13.1105,16.9256 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="17" data-sides="4" data-orb-view="vertex-3" data-projection="spherical" data-orb-base-face="11" />
+  </g>
 </svg>

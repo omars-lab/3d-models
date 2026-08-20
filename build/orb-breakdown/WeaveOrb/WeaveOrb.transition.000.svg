@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-70.00 -70.00 140.00 140.00" width="140" height="140" data-orb-view="vertex-5" data-projection="spherical">
   <rect x="-70.00" y="-70.00" width="140.00" height="140.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="62.60" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="62.60" /></clipPath>
+  <g clip-path="url(#orb-limb)">
   <path d="M55.2243,-0.0000 L53.4538,-4.0125 L54.5593,-4.0125 L56.3299,-0.0000 L55.2243,-0.0000 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="13" data-ribbon-depth="under" data-ribbon-trimmed="true" />
   <path d="M52.6179,-8.5771 L52.8053,-12.2953 L53.9109,-12.2953 L53.7234,-8.5771 L52.6179,-8.5771 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="13" data-ribbon-depth="under" data-ribbon-trimmed="true" />
   <path d="M17.0652,52.5214 L20.3342,49.5976 L20.6759,50.6491 L17.4069,53.5729 L17.0652,52.5214 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="14" data-ribbon-depth="under" data-ribbon-trimmed="true" />
@@ -210,4 +213,5 @@
   <path d="M4.4118,13.5782 L11.0689,19.2005 L9.1093,21.4275 L6.1028,18.7825 L4.4118,13.5782 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="207" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="8" data-ribbon-depth="under" data-ribbon-trimmed="false" />
   <path d="M20.7295,4.4532 L14.2769,0.0000 L19.7491,0.0000 L22.2420,1.9012 L20.7295,4.4532 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="208" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="9" data-ribbon-depth="under" data-ribbon-trimmed="false" />
   <path d="M14.2769,0.0000 L21.6812,-4.5939 L23.1937,-2.0420 L19.7491,0.0000 L14.2769,0.0000 Z" fill="#8a8a8a" stroke="#333333" stroke-width="0.4" data-face-index="209" data-sides="4" data-orb-view="vertex-5" data-projection="spherical" data-strand="9" data-ribbon-depth="under" data-ribbon-trimmed="false" />
+  </g>
 </svg>
