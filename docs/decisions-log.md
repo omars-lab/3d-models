@@ -3229,6 +3229,12 @@ reversed:
    own simplification. Plain lines are the base case and weave is the option, and
    the parser coupling at `parser.ts:1444-1447` is the only line that says
    otherwise.
+   **Reversed by measurement — see [D-044](#d-044--overlap-requires-weave-is-a-kernel-fact-and-the-measurement-is-what-ships).**
+   The coupling is not a parser line. The solid branch has no overlap path at all,
+   and the grown field fails the manifold gate at every ratio the shipped orb
+   declares, so deleting the rule buys either a knob that changes nothing or a mesh
+   that does not close. This item is left standing rather than edited: it is what
+   the ranking believed, and the entry that disproves it is the record.
 
 Unchanged: #57's two teaching defects are page-level and independent of all three.
 
@@ -3490,3 +3496,95 @@ question twice. If a third consumer of weave parity appears, it calls
 centreline shell — a variable-amplitude sweep, say — in which case
 `passRadialOffsetMm` grows a parameter and both callers get it, rather than one of
 them re-deriving it.
+
+
+## D-044 — `overlap` requires `weave` is a kernel fact, and the measurement is what ships
+
+**Date:** 2026-08-20 · **Status:** accepted · **Reverses:** item 3 of
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation)'s
+ranking. **Ships:** bikar #120. **Closes:** task #58.
+
+### Context
+
+[D-041](#d-041--in-a-refactor-robust-and-simplifying-outrank-cheap-the-display-shield-was-the-wrong-recommendation)
+ranked three defects under the *robust and simplifying outrank cheap* tenet and put
+`overlap`-requires-`weave` third, calling it "its own simplification": plain lines
+are the base case, weave is the option, and one parser rule is the only thing
+saying otherwise. The task written from that ranking set a PASS condition —
+
+> a `.bkr` declaring `overlap` and no `weave` compiles and renders plain crossing
+> lines; the existing woven orbs are byte-unchanged
+
+— and a FAIL condition that only tested whether `overlap` was doing double duty on
+the woven path. Neither asked what the *solid* path does with `overlap`.
+
+### What the measurement found
+
+`decl.overlap` has exactly two consumers, and neither is on the solid branch.
+`solidWheelfieldMesh` reaches `solidifyMacladoField(field, params)` and never reads
+it. So deleting the parser rule has two outcomes and both are worse than the error
+it removes.
+
+**Leave the solid path as it is.** The STL is byte-identical to the same file with
+the `overlap` line deleted — the knob changes nothing — while the evaluator still
+withholds `orbCells` under `overlap`, so the orb loses its 2D views as well. A
+silently-ignored knob that breaks the pictures is not a simplification.
+
+**Wire `overlap` through, the obvious completion.** Growing the cap half-angle is
+the grown field as far as the solidifier is concerned; it recomputes `unitMm` from
+`capHalfAngleDeg` and lifts through the same frames. Measured:
+
+| field | watertight | euler | volume mm³ |
+|---|---|---|---|
+| tangent — what `Maclado-9.bkr` ships | **true** | −756 | 40241.1 |
+| grown ×1.15 — bottom of the declared range | false | −36 | 41206.6 |
+| grown ×1.20 — the default | false | −36 | 41522.1 |
+| grown ×1.22 — top of the declared range | false | −36 | 41647.3 |
+
+Growing the caps breaks every tip-to-tip join — the joined tips stop coinciding, so
+the vertex pool stops welding them — and the 12 filler rings were computed for
+tangent rims they no longer meet. What comes out is a shell with open seams, and
+`solidWheelfieldMesh`'s manifold gate raises on it.
+
+Nothing renders plain crossing lines because there is no renderer behind that
+phrase. Crossing rims mean interpenetrating strut bands, bikar has no boolean
+union, and weaving is the one construction it has that resolves a crossing without
+one — by routing over and under. That is not a grammar coupling; it is the reason
+the weave branch exists.
+
+### The decision
+
+No rule is deleted. What ships is the measurement, because the rule had already
+been mis-read once from a reading of the source that was locally correct: `weave`
+*is* optional in the grammar, `Maclado-9.bkr` *does* ship weave-less, and the rule
+*is* six lines. Every one of those is true and the conclusion drawn from them was
+still wrong, so the fix is the thing that makes the next reader stop — *the
+by-design failure is the load-bearing case*, so it is measured rather than skipped.
+
+- `bikar:packages/core/tests/kernel3d/maclado-overlap.test.ts` pins the tangent
+  control against four grown ratios spanning the declared range. It fails if anyone
+  makes the grown field solidifiable without revisiting the rule.
+- The parser error and the `overlap` docstring in `bikar:packages/core/src/dsl/ast.ts`
+  name the measured reason and point at that test, in place of the bare assertion
+  that "the pierced shell has no overlap construction".
+- The parser test's title now says *the solid shell has no overlap branch*, which
+  is the checkable claim, and cites where the why is measured.
+
+### What this does not resolve
+
+It does not say plain crossing lines are unbuildable — only that they are not a
+line deletion. Building them means giving the solid branch its own grown-field
+construction: rim-arc filler rings for the crossed regions, and some resolution of
+the interpenetrating bands at the 60 crossings. That is kernel work of the size the
+weave branch was, and no orb currently asks for it.
+
+It also does not touch the tenet it reverses an item of. *Robust and simplifying
+outrank cheap* is what sent this to measurement in the first place; what the
+measurement corrected was the belief that deleting the rule was the simplifying
+move. The cheap option here was to delete six lines, and it was cheap precisely
+because it did not look at the branch that would have to absorb the consequence.
+
+**What would reverse this:** a solid construction for the grown field that closes —
+at which point the rule narrows from "requires weave" to whatever the new branch
+cannot do, and the test above becomes its acceptance criterion rather than its
+guard.
