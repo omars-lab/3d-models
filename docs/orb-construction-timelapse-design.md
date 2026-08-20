@@ -228,10 +228,19 @@ This section specified the base solid as *frame 0* and the build delivered
 exactly that — written once and never again, so from the second frame on the
 pattern accumulated against a blank page with nothing to be *on*. The base solid
 is now the **scaffold**: every stage frame draws it underneath as a stroke-only
-outline (`data-orb-scaffold`) together with the sphere's limb, and only the
-`complete` frame drops both, because §4.1 pins that frame byte for byte against
-a shipped view carrying neither. The reading that caught this is the reversal
-test D-036 wrote for itself, returned on the first day the page was live.
+outline (`data-orb-scaffold`) together with the sphere's limb. The reading that
+caught this is the reversal test D-036 wrote for itself, returned on the first
+day the page was live.
+
+**Amended 2026-08-20 ([D-045](decisions-log.md)): the two marks part company on
+the last frame.** This paragraph originally had the `complete` frame drop *both*
+the scaffold and the limb, because §4.1 pinned it byte for byte against a
+shipped view carrying neither. Only half of that survives. The scaffold answers
+*how far along is this*, which is moot once nothing is left to place, so it
+still comes off. The limb answers *is this a ball*, and the finished orb is the
+picture a reader stops on — the one frame in the sequence with the most reason
+to say it, and the only one that could not. §4.1's identity now names the limb
+as a second substitution rather than the frame going without it.
 
 ### 3.5 Ribbon stages, and the front-cap hedge
 
@@ -281,7 +290,23 @@ and it is why Option D is scoped to non-radius parameters.
 
 **Validator:** every frame in a sequence carries a byte-identical `viewBox`
 attribute, and the last cumulative frame is byte-identical to the orb's shipped
-view SVG.
+view SVG **modulo the named substitutions** — the background rect repainted to
+`DISPLAY_GROUND`, and the limb (one silhouette circle plus the clip pair that
+goes with it) added. Every other byte still has to match, and the rule asserts
+each substitution bit: the shipped view must actually be white and must
+actually carry no limb, so it cannot go quiet if `--format views` ever starts
+writing either itself.
+
+**Why a substitution and not a relaxation.** Both differences exist because the
+instrument set is not a file a page's taste gets to move: qiyas classifies a
+`fill="none"` element as a foreign contour, so the limb cannot go into the
+scored view. And the limb is *affordable* on a terminal frame for a reason
+worth writing down — under the front-cap cull the clip it installs is a no-op,
+because nothing the front cap keeps reaches the limb at all. It is decoration
+there, and it strips cleanly. That is what lets the gate derive the expectation
+instead of hashing the file, and the derivation reads the radius off the frame
+under test rather than recomputing it: the claim is that the limb is the *only*
+addition, not that the gate can predict where it sits.
 
 PASS: all 14 orbs, 302 cumulative frames, one hero view each — exactly one
 distinct `viewBox` string per orb, and every terminal frame byte-identical to

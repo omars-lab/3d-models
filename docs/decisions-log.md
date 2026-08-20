@@ -3588,3 +3588,82 @@ because it did not look at the branch that would have to absorb the consequence.
 at which point the rule narrows from "requires weave" to whatever the new branch
 cannot do, and the test above becomes its acceptance criterion rather than its
 guard.
+
+---
+
+## D-045 — the finished orb gets its limb back, and the identity names the substitution
+
+**Date:** 2026-08-20 · **Repos:** bikar [#121](https://github.com/NaqshCoffee/bikar/pull/121) → `8dda702`, 3d-models
+**Supersedes:** the second half of D-037's scaffold rule (this log, 2026-08-19)
+**Status:** shipped, deployed
+
+Two teaching defects on the breakdown page. They look unrelated and they are the
+same defect: a correct local rule, still being applied where it had stopped
+being about anything.
+
+### 1. The one picture a reader stops on was the one with no depth cue
+
+Every stage frame and every turntable frame draws the sphere's edge as a circle.
+The `complete` frame did not — and a symmetry-view SVG of a finished orb with no
+limb is a flat rosette. The reason it did not was §4.1: that frame is pinned
+byte for byte against the shipped instrument view, and the instrument view
+cannot carry the circle, because qiyas classifies a `fill="none"` element as a
+foreign contour. So a rule about bytes had quietly decided what a reader gets to
+see.
+
+The identity was never "no differences" — it already named one, the display
+ground. The limb is now the second named substitution. What makes that
+affordable rather than a relaxation is a fact about the cull: **under the
+front-cap cull the clip the silhouette installs is a no-op**, because nothing
+the front cap keeps reaches the limb at all. On a terminal frame the pair is
+decoration and strips cleanly, so the check stays a byte identity against a
+derived expectation, with the radius read off the frame under test rather than
+recomputed — the claim is that the limb is the *only* addition, not that the
+checker can predict where it sits.
+
+**Measured, and it is the by-design failure this change shipped with.** Against
+the tree before regeneration the amended gate reports **32 findings across all
+14 orbs** — every complete frame blind, two findings each for the orbs with one
+and three for the two with two complete frames. `make orbs` against bikar
+`8dda702` clears it: `timelapse: 14 orb breakdown(s) checked / OK`.
+
+### 2. The slider's denominator was the other number
+
+The strand lede read *"each step threads one more loop **of the 60** closed
+loops on the orb"* beside a slider with 30 steps. Both numbers are real — 60 is
+Maclado-9-Overlap's loop census, 30 is how many face the hero camera — but only
+one is the slider's denominator and the sentence named the other, so a reader
+dragging to the end saw a half-built orb and nothing said otherwise. The kernel
+already states the rule where the stages are built: *a strand count here is a
+picture count, not a solid count*, which is §3.5's mandatory hedge. The sentence
+now states both counts, says which is which, and gives the hidden count as the
+subtraction so a reader can check it against what they can see.
+
+### What actually changed, and why it is a refactor and not a patch
+
+The prose moved into `packages/lab/src/breakdown-copy.ts`, a pure module. It had to,
+to be checkable at all: `breakdown-main.ts` touches `document` at import and
+calls `main()` at the bottom, so nothing in it was reachable from a test. **The
+one part of the page a newcomer actually reads was the one part nothing could
+assert on** — which is how a sentence contradicting the widget beside it shipped
+and stayed. Nine tests now cover the census hedges the old code had no way to
+exercise: no `weave` key, every loop facing the camera, and a census smaller
+than the stage count.
+
+Failing before and passing after, in both repos:
+
+| where | before | after |
+| --- | --- | --- |
+| `timelapse-story.test.ts` (2 re-pinned) | fail with `COMPLETE_STYLE.silhouette = false` | pass |
+| `breakdown-copy.test.ts` (3 of 9) | fail with the old sentence restored | pass |
+| `timelapse_gate.py` on the shipped tree | 32 findings / 14 orbs | OK |
+| `timelapse_gate.py --self-test` | 20 cases, 3 of them new | PASS |
+
+**What this does not resolve:** T3 still checks the terminal frame alone. A
+substitution that appeared on a *stage* frame would be caught by T6's fill and
+marker rules rather than by a derivation, which is a weaker check — deliberately,
+because a stage frame has no shipped counterpart to derive from.
+
+**What would reverse this:** qiyas learning to ignore a marked silhouette, at
+which point the instrument view could carry the limb itself and both halves of
+the substitution collapse into a plain byte identity again.

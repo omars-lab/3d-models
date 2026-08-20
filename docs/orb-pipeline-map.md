@@ -158,12 +158,12 @@ diagram compresses that.
 | stage | pointer |
 |---|---|
 | binary STL (`E1`) | `bikar:packages/core/src/render/mesh-emitter.ts:L17 "export function emitBinarySTL("` |
-| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L264 "export function renderOrbViewSVG("` |
+| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L267 "export function renderOrbViewSVG("` |
 | symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts:L39 "export function symmetryViewAxes("` |
 | ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L196 "export function projectRibbonPasses("` |
 | ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1911 "export function emitGroundTruth("` |
 | mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L88 "export function meshGate("` |
-| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2089 "case 'render': {"` |
+| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2128 "case 'render': {"` |
 
 The CLI's `--format` switch is where the fan-out is visible from a shell:
 `--format stl` writes the mesh, `--format views` writes the SVG set. `--check` is what
