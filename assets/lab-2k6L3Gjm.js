@@ -521,9 +521,9 @@ orb Maclado9Weave
 # 60 rim-crossing weld nodes) and 180 free tips; it decomposes into 60
 # linked ribbon loops with globally consistent alternation. The kernel
 # judges the overlap ratio against the D-032 instrument and refuses one
-# whose crossings cannot weld (tangent touch at 1.0, fused weld nodes
-# below ~1.15 or past ~1.25 at this ribbon width). See 3d-models
-# docs/maclado-orb-design.md §5.2 and decision D-032.
+# whose crossings cannot weld (tangent touch at 1.0 is refused by the
+# parser; weld nodes fuse below 1.08 and again across a dead band). See
+# 3d-models docs/maclado-orb-design.md §5.2 and decisions D-032, D-040.
 # Render with: bikar render Maclado-9-Overlap.bkr --format stl -o out.stl
 
 # Ribbon 1.2/1.2 is the tested combination from the M4e suite.
@@ -538,7 +538,21 @@ orb Maclado9Weave
 # clearance floor, measured at 0.482mm; \`--check\` re-measures it, so change a
 # strut dimension and re-run rather than re-deriving from a formula.
 param radius = 60 range 40..110 step 5
-param overlap = 1.2 range 1.15..1.25 step 0.01
+# The overlap window is narrower than what compiles, and what compiles is
+# not one interval. Measured with linkageGate at the amplitude below
+# (D-040): the kernel welds across [1.08, 1.265], refuses a dead band to
+# 1.365, then welds again from 1.37 to ~1.84 — but that second band is not
+# an orb. It builds two separate 30-ribbon chains that are not linked to
+# each other, every value in it interpenetrates, and no amplitude up to 4.0
+# changes either fact. The band this range names is the only one that
+# builds a single linked object.
+#
+# Inside it, body clearance climbs to 0.502mm at 1.225 and then falls off a
+# cliff: 0.348mm at 1.23, 0.001mm at 1.24, and at 1.25 — the ceiling this
+# range used to declare — the ribbons interpenetrate outright. The ceiling
+# is 1.22 because that is the last step whose clearance clears the
+# {CAL-CLR-01} floor; \`--check\` re-measures it.
+param overlap = 1.2 range 1.15..1.22 step 0.01
 param amplitude = 1.4 range 0.8..1.6 step 0.1
 param ribbon_width = 1.2 range 0.8..2 step 0.1 advanced
 param ribbon_depth = 1.2 range 0.8..2 step 0.1 advanced
