@@ -26,7 +26,7 @@ capability live?" — kept honest by `validate.py` and the pre-commit hook.
   exemption is the reserved repo name `repo:`, which is how the rule is taught.
   A pointer naming a repo the frontmatter does not pin is an error, not a skip.
 - **Anchor a pointer that names a specific line**: append a quoted literal that
-  must appear inside the range — `` `3d-models:Makefile:L223 "orbs:"` ``. Write
+  must appear inside the range — `` `3d-models:Makefile:L262 "orbs:"` ``. Write
   one whenever the line number *is* the claim; a bare `:L1` means "this file"
   and needs none. Without an anchor, `--refresh` moves the pin forward and
   re-checks only that the file is long enough, which is how **23 of the map's

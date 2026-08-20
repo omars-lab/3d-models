@@ -1,6 +1,6 @@
 # The orb pipeline, source to badge
 
-**Status:** Living map · **Date:** 2026-08-17 · **Repos:** bikar (construct + emit),
+**Status:** Living map · **Date:** 2026-08-19 · **Repos:** bikar (construct + emit),
 qiyas (validate), 3d-models (publish)
 
 One `.bkr` file becomes a printable STL, a set of per-axis SVG views, a ground-truth
@@ -158,12 +158,12 @@ diagram compresses that.
 | stage | pointer |
 |---|---|
 | binary STL (`E1`) | `bikar:packages/core/src/render/mesh-emitter.ts:L17 "export function emitBinarySTL("` |
-| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L72 "export function renderOrbViewSVG("` |
+| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L257 "export function renderOrbViewSVG("` |
 | symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts:L39 "export function symmetryViewAxes("` |
-| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L163 "export function projectRibbonPasses("` |
+| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L178 "export function projectRibbonPasses("` |
 | ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1911 "export function emitGroundTruth("` |
 | mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L88 "export function meshGate("` |
-| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L924 "case 'render': {"` |
+| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2077 "case 'render': {"` |
 
 The CLI's `--format` switch is where the fan-out is visible from a shell:
 `--format stl` writes the mesh, `--format views` writes the SVG set. `--check` is what
@@ -175,11 +175,11 @@ own watertight assertion.
 | stage | pointer |
 |---|---|
 | view discovery (`Q1`) | `qiyas:src/qiyas/orb_validate.py:L104 "def discover_views("` |
-| per-view scoring (`Q5`, `Q6`) | `qiyas:src/qiyas/orb_validate.py:L189 "def score_encoding_against_gt("` |
+| per-view scoring (`Q5`, `Q6`) | `qiyas:src/qiyas/orb_validate.py:L241 "def score_encoding_against_gt("` |
 | shape reconciliation and bucketing (`Q3`) | `qiyas:src/qiyas/stages/detectors/reconcile.py:L184 "def reconcile("` |
 | SVG-side primitives (`Q2`) | `qiyas:src/qiyas/stages/svg_primitives.py:L145 "def _read_bikar_metadata("` |
 | symmetry stage | `qiyas:src/qiyas/stages/symmetry.py:L107 "def detect_symmetry("` |
-| the envelope both sides type against | `qiyas:src/qiyas/schema.py:L564 "class Encoding(BaseModel):"` |
+| the envelope both sides type against | `qiyas:src/qiyas/schema.py:L576 "class Encoding(BaseModel):"` |
 | running CI locally when Actions cannot | `qiyas:docs/local-ci-runbook.md` |
 
 `reconcile` earns its own node rather than folding into the encode stages, because it
@@ -199,11 +199,11 @@ carry them, which is the honest limit of a diagram.
 
 | stage | pointer |
 |---|---|
-| the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L146 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
+| the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L238 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
 | the test that compares (`H2`) | `bikar:packages/lab/tests/orb-composites.test.ts:L87 "const RECORDED_DROP"` |
 | the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L121 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L63 "readonly qiyasComposite"` |
-| the build target that publishes (`H5`) | `3d-models:Makefile:L223 "orbs:"` |
+| the build target that publishes (`H5`) | `3d-models:Makefile:L262 "orbs:"` |
 | the gallery design | [`orb-lab-design.md`](orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a
@@ -220,10 +220,11 @@ refusal is the reason the recorded numbers mean something.
 - **The 2D pattern engine's internals.** `B2` is a single node standing for the whole
   girih/hankin/star/rosette evaluation, which the orb work reuses unchanged. It is
   bikar's `docs/language-reference.md` and `docs/architecture.md` that decompose it.
-- **Open defects.** As of this date, two views in the sweep are surplus to the gt and
-  the composites carry a recorded shortfall rather than a clean 1.000 across the set.
-  That is a state, not a stage; it belongs in the tracker and the decisions log, and
-  drawing it here would make the map wrong the moment it is fixed.
+- **Open defects.** A defect is a state, not a stage. Which views are currently surplus
+  to the gt, and what the composites currently score, belong in the tracker and in
+  [`decisions-log.md`](decisions-log.md) — restating them here would make the map wrong
+  the moment they are fixed. The first draft of this bullet drew exactly the two numbers
+  it argued against drawing, and they had gone stale within two days.
 - **The CI wiring.** Which workflow runs which half is the subject of
   `qiyas:docs/local-ci-runbook.md`, which covers all three repos and changes on a
   different clock than the geometry does.
