@@ -122,7 +122,7 @@ rule does not transfer.
   `BrickFit` fields are **harvested from bikar**, not listed: a listed set omitted
   `clip` and made findings of two correct entries.
 - **Ground a claim in a link the hook re-checks against the diff.** A line number is a
-  claim; the anchor grounds it. Write `` `3d-models:Makefile:L262 "orbs:"` `` — repo,
+  claim; the anchor grounds it. Write `` `3d-models:Makefile:L271 "orbs:"` `` — repo,
   path, line, literal — in *any* markdown here; `validate.py` scans the whole tree, reads
   each at the pinned commit, and when an edit moves the target it names where it went, so
   the reminder *is* the repair. Only `` `repo:path:L137` `` is exempt. Unanchored, **23 of

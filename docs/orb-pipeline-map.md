@@ -137,7 +137,7 @@ degrades a score cannot merge. Its own docstring calls the re-run *"a tripwire"*
 | face-local 2D ↔ 3D frame (`B8`) | `bikar:packages/core/src/kernel3d/face-frame.ts:L93 "export function makeFaceLift("` |
 | vertex weld (`B8`) | `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` |
 | Family 2 — pierced lattice (`B5`) | `bikar:packages/core/src/kernel3d/solidify-lattice.ts:L193 "export function solidifyLattice("` |
-| Family 1 — over/under solve and ribbons (`B6`) | `bikar:packages/core/src/kernel3d/weave.ts:L557 "export function weaveLattice("` |
+| Family 1 — over/under solve and ribbons (`B6`) | `bikar:packages/core/src/kernel3d/weave.ts:L571 "export function weaveLattice("` |
 | Family 3 — maclado field | `bikar:packages/core/src/kernel3d/maclado-field.ts:L284 "export function buildMacladoField("` |
 | Family 3 — welded woven overlap (`B7`) | `bikar:packages/core/src/kernel3d/maclado-woven.ts:L95 "export function buildWovenOverlapGraph("` |
 | 2D over/under precedent the 3D solve reuses | `bikar:packages/core/src/kernel/strapwork.ts:L411 "export function detectCrossings("` |
@@ -158,12 +158,12 @@ diagram compresses that.
 | stage | pointer |
 |---|---|
 | binary STL (`E1`) | `bikar:packages/core/src/render/mesh-emitter.ts:L17 "export function emitBinarySTL("` |
-| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L257 "export function renderOrbViewSVG("` |
+| per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L264 "export function renderOrbViewSVG("` |
 | symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts:L39 "export function symmetryViewAxes("` |
-| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L178 "export function projectRibbonPasses("` |
+| ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L196 "export function projectRibbonPasses("` |
 | ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1911 "export function emitGroundTruth("` |
 | mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L88 "export function meshGate("` |
-| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2077 "case 'render': {"` |
+| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2089 "case 'render': {"` |
 
 The CLI's `--format` switch is where the fan-out is visible from a shell:
 `--format stl` writes the mesh, `--format views` writes the SVG set. `--check` is what
@@ -201,9 +201,9 @@ carry them, which is the honest limit of a diagram.
 |---|---|
 | the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L238 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
 | the test that compares (`H2`) | `bikar:packages/lab/tests/orb-composites.test.ts:L87 "const RECORDED_DROP"` |
-| the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L121 "const MAX_DRIFT_CEILING"` |
+| the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L133 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L63 "readonly qiyasComposite"` |
-| the build target that publishes (`H5`) | `3d-models:Makefile:L262 "orbs:"` |
+| the build target that publishes (`H5`) | `3d-models:Makefile:L271 "orbs:"` |
 | the gallery design | [`orb-lab-design.md`](orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a

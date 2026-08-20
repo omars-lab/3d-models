@@ -22,6 +22,11 @@
 # is the first step that clears linkageGate's {CAL-CLR-01} 0.4mm body
 # clearance floor, measured at 0.482mm; `--check` re-measures it, so change a
 # strut dimension and re-run rather than re-deriving from a formula.
+# The range now starts at that value rather than below it. A declared range is
+# a promise the Lab renders as a slider, so every stop in it is a value someone
+# is invited to build; every stop under this one either interpenetrates or
+# leaves less than the floor, measured at every declared step by the linkage
+# gate's "every step of the declared amplitude range prints unfused" (D-042).
 param radius = 60 range 40..110 step 5
 # The overlap window is narrower than what compiles, and what compiles is
 # not one interval. Measured with linkageGate at the amplitude below
@@ -38,7 +43,7 @@ param radius = 60 range 40..110 step 5
 # is 1.22 because that is the last step whose clearance clears the
 # {CAL-CLR-01} floor; `--check` re-measures it.
 param overlap = 1.2 range 1.15..1.22 step 0.01
-param amplitude = 1.4 range 0.8..1.6 step 0.1
+param amplitude = 1.4 range 1.4..1.6 step 0.1
 param ribbon_width = 1.2 range 0.8..2 step 0.1 advanced
 param ribbon_depth = 1.2 range 0.8..2 step 0.1 advanced
 
