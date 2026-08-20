@@ -165,3 +165,21 @@ Also confirmed: the silhouette is drawn at `radiusMm`=60 but turntable ribbons r
 **"Normal lines first, weave as an alternative" is NOT nearly free — REFUTED by measurement 2026-08-20 (D-044, bikar #120).** The reasoning was locally correct and the conclusion still wrong: `weave` *is* optional in the grammar, `Maclado-9.bkr` *does* ship weave-less, and the rule *is* six lines — but `solidWheelfieldMesh` never reads `decl.overlap` at all. Delete the rule and either `overlap` becomes a knob that changes nothing (while the evaluator still withholds `orbCells`, so the orb loses its 2D views), or you wire it through and the grown field fails the manifold gate at **every declared ratio**: watertight false, euler −756 → −36 across 1.15..1.22, because growing the caps unwelds every tip-to-tip join and leaves the 12 filler rings short of the rims. Crossing rims mean interpenetrating strut bands, bikar has **no boolean union**, and weaving is the only construction it has that resolves a crossing without one — **the coupling is a kernel fact, not grammar.** Pinned by `the grown field fails the manifold gate at every declared overlap ratio` in `bikar:packages/core/tests/kernel3d/maclado-overlap.test.ts`. The `display/`-shield half of this note was separately killed by [D-041](https://github.com/NaqshCoffee/3d-models/blob/master/docs/decisions-log.md) and executed by D-043.
 
 **Deploy mechanic:** `make deploy` still needs `PYTHON=` pointed at an env with Pillow — see [[3d-models-deploy]].
+
+**2026-08-20 — the five-defect queue is closed, and the repos are at rest.** D-041→D-045 all
+shipped and deployed (gh-pages `7d0ff4e`). D-045 is the last: the terminal `complete` frame now
+wears the silhouette because under the front-cap cull the `orb-limb` clip is a **no-op**, which
+is what makes the pair strip and re-add cleanly — so §4.1's terminal identity gained a *named
+substitution* (ground repaint + limb wrap, each bit asserted by `timelapse_gate.py` T3) rather
+than a relaxation. Scaffold stays off there on purpose: it answers *how far along is this*, moot
+on a finished orb. bikar#121 `8dda702` (incl. `packages/lab/src/breakdown-copy.ts` — the page's
+prose extracted because `breakdown-main.ts` runs `void main()` at import, so no test could reach
+a sentence on it), 3d-models#98 `c40dbc7`.
+
+**Three calls now sit with the user**, handed back as one artifact, *The lattice, the pin, and
+the log*: task #4 (build an orb on the M4c walk — the honest finding is that the shipped
+symmetric field already beats the candidate 1 class to 4, so it is a taste call, not an
+engineering one), task #36 (`--refresh` pins to local HEAD, which is the branch point only on a
+single-commit branch — recommend `merge-base HEAD origin/HEAD`), task #9 (45 D-entries in one
+3,669-line file vs 104 sibling files with frontmatter; D-041 rules out teaching the generator a
+second reader, leaving migrate-or-generate).
