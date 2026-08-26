@@ -247,6 +247,11 @@ minimal `Seam-Coupon.bkr` is authored — bikar `73514f1`); **LG-P2** the clone-
 differential (needs LG-F1's rung and clone plates bought); **P7** material and
 finish.
 
+**MC-8 comes before P5, and is on no plate above.** The in-situ clearance ladder
+is off the card (§3.1) and its own job, so it has no position in Plates 1–4 — but
+P5 asks a ribbon-gap question over the clearance floor MC-8 settles, so printing
+P5 first measures the design and the machine at once. §3.4 carries the argument.
+
 **K10 — where the FDM findings stop.** P5 deliberately crosses a process
 boundary: it prints the same ribbon gap on FDM and orders it from an SLS/MJF
 service. Nothing measured on Plates 1–4 transfers across that boundary. A powder
@@ -279,6 +284,25 @@ today. Volumes and masses are quoted only where the repo states them.
 | MC-6 | smallest footprint that holds a 40 mm column; elephant's foot | §5.6 | `CAL-BED-01`; `print-validation` F7; P2 Q5; `hemisphere-split` A0's headline | exists — 4 towers | 0.3–4.5 cm³ each |
 
 Whole card: **89.7 cm³ / ≈111 g PLA at 100% infill**, repo-stated. Time: not stated.
+
+**Off the card, print-gated all the same: MC-7 and MC-8.** Both are catalogued
+coupons, so both are already inside the entry count §3.6 reconciles — but
+neither had a row above until 2026-08-26, which made §3.1 the one section of this
+register that did not list every print-gated item it claims to. Neither is a rung
+of `Machine-Card.bkr`, so the 89.7 cm³ and the 23 pieces are unchanged by adding
+them: [`catalog.md`](../.claude/skills/prototype/catalog.md) says each "is its own
+job; the six above them are what one job settles."
+
+| id | measures | demanded by | unblocks | `.bkr` | cost |
+|---|---|---|---|---|---|
+| MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
+| MC-8 | the smallest gap at which two surfaces printed *in place* come off the plate as two objects rather than one — six wall pairs on a shared foot at **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm** | `CAL-CLR-01`; [`decisions-log.md`](decisions-log.md) D-039 | `MIN_BODY_CLEARANCE_MM`, and with it every woven orb's amplitude floor (§3.4) | **model to author** — catalogued 2026-08-19; [`catalog.md`](../.claude/skills/prototype/catalog.md) MC-8 names the file, and the pointer baseline carries it as a forward reference until it is written. Unwritten because printing is user-held, not because anything blocks it | not stated |
+
+MC-8's sub-floor rungs are **expected to FAIL** `linkageGate` by design, the same
+way MC-2's four sub-floor rungs fail `--check` (§2 Plate 1): a clearance ladder
+that passes at every rung has not found the floor. Print it flat, **no supports and
+no brim** — the catalog is explicit that "a brim laid across the gap is a bridge
+between the walls, which is the failure this coupon is trying to observe."
 
 ### 3.2 LEGO ladder
 
@@ -318,6 +342,29 @@ of the other two, nor they on it.
 | P5 | does FDM at a 0.8 mm ribbon gap print free-moving ribbons, fuse them, or fill them; the SLS/MJF result at the same gap | catalog P5 | the Lab's tier-3 weave/FDM notice; `amplitude` defaults; the ✓/fused threshold | exists — `Rosette-Weave-Orb.bkr` | 27.9 cm³ |
 | P6 | R=40 graceful shrink; R=110 warp/adhesion/time; whether strut width should scale with radius | catalog P6 | the `radius` range; the Lab ceiling-margin rule (`2R ≤ min(XYZ) − 10`) | exists — `radius` baked via the Lab | not stated |
 | P7 | which material/finish matches the gallery's gold renders in person | catalog P7 | gallery photography; per-material notes in the Lab machine table | whichever orb P2–P4 crowns | not stated |
+
+**What D-039 moved in this ladder, 2026-08-19.** P5's row is unchanged in what it
+asks and changed in what it asks it *over*. All five woven sources used to carry a
+prose rule — amplitude at or above `(strut_depth + 0.4) / 2` — that nothing
+enforced, and `linkageGate` measured it wrong: it is a claim about where two ribbon
+centrelines sit, and a ribbon has width. Weave-Orb and Rosette-Weave-Orb ship
+identical struts, so the rule prescribed the same amplitude for both; Weave-Orb
+fused **all 75** ribbon pairs into one body while Rosette-Weave-Orb held 0.049 mm.
+Four of the five were outright interpenetrating and the fifth sat at an eighth of
+the floor — every woven orb the gallery had ever shipped would have printed as one
+object ([`decisions-log.md`](decisions-log.md) D-039). All five amplitudes were
+re-cut from measurement and `make orbs` now reports `fusedPairs=0` on all five.
+
+Two consequences for this ladder, neither of them settled by printing an orb:
+
+- **P5 now asks its ribbon-gap question above a floor that is itself unmeasured.**
+  `MIN_BODY_CLEARANCE_MM = 0.4` was lifted from the very rule D-039 discredited and
+  survives it only as inherited doubt — the gap term "was always about what a
+  nozzle can leave open." `CAL-CLR-01` is the bet and **MC-8** is the coupon.
+- **So MC-8 comes before P5**, for the reason §2 gives for the card as a whole: a
+  fused ribbon read off an orb cannot be told apart from a machine that cannot hold
+  that gap at all. Print the ladder first and P5 measures the design; print the orb
+  first and P5 measures both at once.
 
 ### 3.5 The four deliverables — catalogued 2026-08-03
 
@@ -373,6 +420,41 @@ not owned anywhere:
 If magnets stay in any design, this needs either a citation or a pocket ladder on
 a plate. It is listed here rather than in §3.5 because no design doc currently
 *demands* it — which is exactly why it would otherwise be lost.
+
+### 3.8 The task board's print items, folded in here 2026-08-26
+
+The working task board carried exactly one print item — *"Print Plate 1 (machine
+card) then Plate 4 (P2 Star-Orb) — user-held"* — and it is now closed, moved here.
+Nothing was lost in the move, because the board item held no fact this file did not
+already hold in more detail:
+
+| the board item said | where it lives here |
+|---|---|
+| blocked on owning a printer; nothing engine-side blocks it | §1 "the printer is no longer a *build* blocker anywhere in the system — it is a **truth** blocker" |
+| all 23 machine-card rungs render (`make coupons`) | §4 "Already done" item 1 and "Not done" item 1, struck 2026-08-03 |
+| `Star-Orb.bkr` is at defaults, 45.7 cm³, 5,040 tris | §2 Plate 4 and §3.4's P2 row, both from the catalog |
+| Plate 1 settles most of the bets; Plate 4 settles none | §2 Plate 1's counts and §2 Plate 4's explicit "settles **no** `CAL-*` bet" |
+| buy caliper / flat reference / feeler gauges / real LEGO parts | §4 "Not done" item 4, with the bagging rule the board item omitted |
+| record the profile header before measuring | §4 "Not done" item 5 |
+| eyeball MC-4's fan in a slicer | §4 "Not done" item 7 |
+| a Bambu A1 / P1S / X1C class machine | §1 "Which printer" — recorded as the *expectation* it is, with the reason the class barely matters for planning |
+
+**And the move is the argument for making it.** The board item's own settle counts
+had gone stale where this file's had not:
+
+- the board said "Plate 1 settles 9 of 19 CAL bets and 14 of 19 provisional records" <!--count:quote-->
+
+against the 10 <!--count:cal-bets-mc--> of 20 <!--count:cal-bets--> and 15
+<!--count:cal-mc-records--> of 20 <!--count:cal-records--> that `bets.md` prints
+today. Both numbers here are tagged and `counts_gate.py` re-checks them against the
+registry on every commit; the board item was a hand tally nothing re-ran, which is
+the same failure §8 records this file committing three times before the gate
+existed. A print queue on a board decays; a print queue next to the tool that
+prints its numbers does not.
+
+**So: this file is the print queue, and the board is not.** Print work that turns
+up later belongs in §3's register with a row, not in a task item — and the register
+is what §2 sequences.
 
 ---
 
@@ -795,6 +877,10 @@ Five checks, run before shipping it, in the spirit of
   uncertain — now records it as settled two-plates-in-sequence (D-008). W-P1 is
   the one W coupon with **no** position in the sequence, and both sections say
   so in the same words: it gates on nothing and nothing gates on it.
+  MC-7 and MC-8 joined §3.1 on 2026-08-26 and are the other two coupons with no
+  plate position: §2 Plate 1 says both are off the card, §3.1 now says it in a row
+  as well, and the one ordering either of them implies — MC-8 before P5 — is
+  stated in both §2 Plate 5 and §3.4 rather than in only one of them.
 - **P2 is not claimed to settle a bet.** §2 Plate 4 says so explicitly and §3.4's
   P2 row lists no `CAL-*` id — consistent with the registry, which gives P2 Q5's
   measurement to MC-6.
