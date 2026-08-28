@@ -3667,3 +3667,55 @@ because a stage frame has no shipped counterpart to derive from.
 **What would reverse this:** qiyas learning to ignore a marked silhouette, at
 which point the instrument view could carry the limb itself and both halves of
 the substitution collapse into a plain byte identity again.
+
+---
+
+## D-046 — the prints tab absorbs one event, and its gate ships with the first plate, not before
+
+**Date:** 2026-08-28 · **Repos:** 3d-models (design only; no build target yet)
+**Status:** design accepted, S1 shipped; S2–S7 pending a physical print
+**Design:** [`prints-tab-design.md`](prints-tab-design.md) ·
+**Research:** [`research/prints-tab-survey.md`](research/prints-tab-survey.md)
+
+The repository records renders, bets, and a queue, but not the one event a printer
+lives by: a plate came off a machine and taught something. A "prints tab" was asked
+for — per-model, per-version records with photos, a backlog, and feedback. The risk
+in building it is not the recording; it is that a second scheduler or a second bet
+registry grows inside it. The design draws the boundary so the tab **absorbs exactly
+one unowned thing** — the print-run record — while it **presents** the queue
+([`backlog.md`](backlog.md) §3.8), **consumes** the bets and protocol, and
+**deletes** the one empty register that pretends to track prints today (the catalog's
+32 Iteration-log tables, 0 rows — the D-041 rule, paid while it costs zero rows).
+
+### The four blockers, and how each was settled
+
+Four questions blocked the build. Two were the author's to settle from precedent,
+two were the user's to decide:
+
+1. **Record format — YAML frontmatter** (author). The `20-use-cases` hook already
+   reads frontmatter records; a print record is the same shape with a prose body a
+   JSON blob cannot carry.
+2. **First run — Plate 1, the machine card** (author). It defines the nine-field
+   profile header every later record inherits, and is the plate the most bets depend
+   on.
+3. **Photo cap — 2048 px / 2 MB** (user). Large enough to read a plate defect at
+   100%, small enough that a repository of prints does not bloat the pack. Photos are
+   source, tracked on master beside their record — the repo's first tracked
+   non-generated binaries.
+4. **Audience — gallery visitors too** (user). This moves the `prints.html` lab page
+   (S7) from "maybe" into committed scope.
+
+### Why the gate does not ship in this PR
+
+The natural instinct is to ship `prints_gate.py` now. The design refuses: a gate
+whose subject set is empty reports green and is indistinguishable from a broken gate
+— the measured lesson of [`issue-register-evaluation.md`](issue-register-evaluation.md)
+§5.1. So the gate ships in S3 **with** the first real record (S2), and R4 makes it
+print the number of records it checked, so "all pass over zero records" can never
+read as coverage. What shipped in this PR is exactly what is buildable without a
+printer: the record format, this decision, the survey, and the forward-reference
+baseline entries for the still-unwritten gate and page.
+
+**What this does not resolve:** no plate has been printed, so no record exists, no
+bet has moved, and the gate is unwritten by design. Those rungs (S2–S7) are tracked
+and wait on the bench — the printer is user-held (Bambu A1/P1S/X1C class).
