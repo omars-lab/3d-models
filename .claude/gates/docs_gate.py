@@ -317,9 +317,23 @@ def check_d4_withdrawn(path: Path, lines: list[str]) -> list[str]:
     return findings
 
 
+def is_print_record(path: Path) -> bool:
+    """A print-run record under docs/prints/ carries a bench operator's account
+    of what a plate measured — a plate can measure a number a later audit
+    withdraws, and the operator's account is the *source*, not a claim to
+    ground. So the grounding rules (D2 validators, D3 defaults, D4 withdrawn
+    literals, D5 bets) do not apply there; D1 (every link resolves) still does.
+    Mirrors how bikar's check-doc-pointers.ts excludes docs/issues/. Keyed on
+    the posix path so a tempdir fixture under .../docs/prints/ is caught too.
+    Design: docs/prints-tab-design.md §4.2."""
+    return "/docs/prints/" in path.as_posix()
+
+
 def check_file(path: Path) -> list[str]:
     raw = path.read_text(encoding="utf-8").splitlines()
     lines = strip_code(raw)
+    if is_print_record(path):
+        return check_d1_links(path, lines)
     return (
         check_d1_links(path, lines)
         + check_d2_validators(path, lines, raw)
@@ -380,6 +394,33 @@ def self_test() -> int:
                       f"got {len(findings)}: {findings}")
             else:
                 print(f"self-test ok: {rel} → {findings[0].split(': ', 1)[1]}")
+    # docs/prints/** exclusion: the D4 fixture (its one link is external, so D1
+    # is clean either way) must report its finding under a normal path and
+    # nothing under a docs/prints/ path — only D1 runs there. Design §4.2.
+    import shutil
+    import tempfile
+    d4 = (FIXTURES / "fail" / "d4-withdrawn-number.md").read_text(encoding="utf-8")
+    # Under ROOT so check_file's relative_to(ROOT) resolves; removed in finally.
+    tmp = Path(tempfile.mkdtemp(prefix=".docs-gate-prints-", dir=ROOT))
+    try:
+        normal = tmp / "docs" / "guide" / "note.md"
+        record = tmp / "docs" / "prints" / "2026-09-14-x" / "index.md"
+        for p in (normal, record):
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(d4, encoding="utf-8")
+        if not check_file(normal):
+            ok = False
+            print("self-test FAIL: D4 content under a normal path should fire, got nothing")
+        else:
+            print("self-test ok: docs/guide/note.md → D4 fires (not excluded)")
+        if check_file(record):
+            ok = False
+            print(f"self-test FAIL: docs/prints/ record should skip D2–D5, got: {check_file(record)}")
+        else:
+            print("self-test ok: docs/prints/.../index.md → grounding rules skipped, D1 only")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 

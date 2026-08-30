@@ -1,11 +1,14 @@
 # Prints tab — design doc (pre-implementation)
 
-Status: **DRAFT, PARTIALLY BUILDABLE.** The record format, the four blocking
-decisions, and this doc are buildable now and land in this PR. The gate
-(`.claude/gates/prints_gate.py`), the rendered tab (`docs/prints.md`), and the
-first real record all wait on a physical print — they ship when there is a subject
-to measure, not before (the "measure before you gate" rule,
-[`docs/issue-register-evaluation.md`](issue-register-evaluation.md) §5.1).
+Status: **DRAFT, PARTIALLY BUILT.** The record format, the four blocking decisions,
+and this doc landed in S1. The gate (`.claude/gates/prints_gate.py`, R1/R2/R4)
+shipped in S3 **before** the first plate — R4 prints its subject count, so an empty
+run is a true `0 records checked`, not a false green, which is the whole content of
+the "measure before you gate" rule ([`docs/issue-register-evaluation.md`](issue-register-evaluation.md)
+§5.1) once you read it correctly. What still waits on a physical print is the first
+real record (S2), gate R3 (S4), and — for real content to render — the tab in its
+populated form (S6/S7). (Corrected 2026-08-30 from "the gate waits on a print"; see
+[`decisions-log.md`](decisions-log.md) D-046's amendment.)
 
 Research: [`research/prints-tab-survey.md`](research/prints-tab-survey.md) — local
 measurements; every zero-state number below is grounded there.
@@ -156,16 +159,19 @@ can rank fourth while settling zero bets, and the tab must say so rather than le
 bet count read as the order. Storing a rank would be a second scheduler, the exact
 thing §2 forbids.
 
-## 7. The gate (ships in S3, with the first real record)
+## 7. The gate (ships in S3, before the first plate — R4 is why)
 
 **Validator:** `.claude/gates/prints_gate.py`, wired to hook
 `.githooks/pre-commit.d/39-prints` and `make validate-prints`, passes iff every
-record directory under `docs/prints/` satisfies R1–R4 below and the count of real
-records it checked is printed to stdout (never a silent green over an empty set).
+record directory under `docs/prints/` satisfies R1, R2 and R4 below (R3 ships in
+S4) and the count of records it checked is printed to stdout (never a silent green
+over an empty set).
 
-PASS: a tree with one record whose pin resolves, whose photo digests match and are
-unique across records, whose settled bet is marked settled in `bets.md`, and the
-gate prints `prints_gate: 1 record checked`.
+PASS: an empty tree — no `docs/prints/` records yet — and the gate prints
+`prints: 0 records checked — docs/prints/ is empty` and exits 0. The printed count is
+what makes this a true pass, not a false one, which is why the gate ships before the
+first plate rather than after. (One populated record passes the same way, printing
+`prints: 1 record(s) checked, …`.)
 
 FAIL: a tree with one record whose `objects[].source_sha256` does not equal the blob
 read at `pins.bikar_ref` — the geometry identity is broken, the record claims to have
@@ -185,8 +191,13 @@ printed a file it did not, and the gate must refuse it rather than pass.
   A gate that says "all pass" over zero records is indistinguishable from a broken
   gate; printing the count is the guard (`docs/issue-register-evaluation.md` §5.1).
 
-The gate ships **with** the first real record (S2 → S3), not before, for exactly the
-R4 reason: an empty subject set reports green and teaches nothing.
+The gate ships **before** the first real record, and R4 is precisely what makes that
+honest: an empty subject set reports a *true* `0 records checked` when the gate prints
+its count, and a false green only when it hides it. R1 and R2 are wired at zero on the
+S3 date. Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
+because there is no settled bet to propagate from until the first one flips. (Corrected
+2026-08-30 from an earlier "ships with the first record, not before" — see
+[D-046](decisions-log.md)'s amendment.)
 
 ## 8. Where it lives
 
@@ -198,18 +209,18 @@ when a nav entry is inserted — that is the S7 hazard, handled in that rung.
 
 ## 9. Sequencing
 
-The rungs are ordered so nothing gates an empty set and nothing renders a record
-that does not exist:
+The rungs are ordered so that what gates an empty set does so *honestly* — printing
+its zero count (S3's R4) — and only R3, which cannot, waits for a record to exist:
 
 | rung | ships | needs a printer? | task |
 |---|---|---|---|
 | S1 | record format + this doc + one filled example (fenced) | no | #65 |
 | S2 | print Plate 1, fill the first real record | **yes** | #67 |
-| S3 | `prints_gate.py` R1/R2/R4 + hook `39-prints` + `docs/prints/**` gate exclusion | yes (needs S2's record) | #66 |
-| S4 | gate R3 two-way propagation | yes (after first bet flips) | #71 |
+| S3 | `prints_gate.py` R1/R2/R4 + hook `39-prints` + `docs/prints/**` gate exclusion | no (R4 makes the zero-state honest) | #66 |
+| S4 | gate R3 two-way propagation | **yes** (after first bet flips) | #71 |
 | S5 | delete the empty Iteration log from the catalog | no (but ordered after S3) | #68 |
-| S6 | rendered `docs/prints.md` tab | yes (renders real records) | #69 |
-| S7 | vendor `prints.html` lab page | yes | #70 |
+| S6 | rendered `docs/prints.md` tab | no (renders the empty state until a record lands) | #69 |
+| S7 | vendor `prints.html` lab page | no (zero-state lab page) | #70 |
 
 Only S1 is in this PR. The printer-gated rungs stay pending; shipping an empty
 `prints_gate.py` into `make validate` would be the anti-pattern this repo warns

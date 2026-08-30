@@ -86,11 +86,6 @@
     },
     {
       "doc": "docs/prints-tab-design.md",
-      "path": ".claude/gates/prints_gate.py",
-      "why": "Proposed module — the prints tab's R1/R2/R4 validator, sequenced to ship in S3 WITH the first real print record (task #66), not before, for the 'measure before you gate' reason the doc's §7 states. Remove this when the gate is written."
-    },
-    {
-      "doc": "docs/prints-tab-design.md",
       "path": "docs/prints.md",
       "why": "Proposed module — the rendered prints tab, sequenced to ship in S6 (task #69) once real records exist to render. Remove this when the page is written."
     },
