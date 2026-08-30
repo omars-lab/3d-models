@@ -37,9 +37,6 @@ floor) — these prints test *reality*, not the mesh.
   - [ ] 4. Support strategy for a small sphere: tree supports' scar severity
     on strut undersides.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `strut_width`/`strut_depth` param mins in every
   `patterns/Orbs/*.bkr`; bikar mesh-gate FDM floor; Lab machine-table
   process notes.
@@ -63,9 +60,6 @@ floor) — these prints test *reality*, not the mesh.
   - [ ] 5. Bed contact: a sphere touches at a point — does the slicer's
     default brim/raft suffice or does the model want a flattened pole?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: harness print-prototype task; gallery print notes;
   `docs/orb-lab-design.md` §5.
 
@@ -103,9 +97,6 @@ floor) — these prints test *reality*, not the mesh.
     one question a print answers better than analysis. (Constrains the engine
     design if we build it.)
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the harness split-export decision task — its verdict
   (build / don't-build / build-with-pins) comes from here.
 
@@ -124,9 +115,6 @@ floor) — these prints test *reality*, not the mesh.
   - [ ] 3. Is the rosette family visually worth being the Lab's default
     preset in the flesh, or does the simpler Star lattice print prettier?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `inner`/`shoulder` ranges in Rosette-*.bkr; Lab default-preset
   choice.
 
@@ -150,9 +138,6 @@ floor) — these prints test *reality*, not the mesh.
     like a rattle (a defect)? Sets the `amplitude` default philosophy —
     fused-solid versus free-moving.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: Lab weave/FDM notice copy; `amplitude` defaults in Weave-*.bkr;
   ribbon-gap ✓/fused threshold (currently 0.4 mm) in the Lab gate rows.
 
@@ -172,9 +157,6 @@ floor) — these prints test *reality*, not the mesh.
     (struts constant-mm look chunkier on small orbs)? If yes, param
     defaults may want a radius-linked note.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `radius` range in every orb script; Lab ceiling-margin rule.
 
 ## P7 — Material and finish pass
@@ -190,9 +172,6 @@ floor) — these prints test *reality*, not the mesh.
   - [ ] 2. Does the choice change print settings enough to warrant per-
     material notes in the Lab's machine table?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: gallery photography of real prints; Lab machine-table notes.
 
 ## P8 — Maclado orbs (Family 3: the 9-spike wheel field)
@@ -226,9 +205,6 @@ floor) — these prints test *reality*, not the mesh.
   - [ ] 3. Do the twelve 30-gon filler windows print clean rims, or does the
     wheel/filler boundary need a raised strut floor?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `strut_width`/`ribbon_width`/`ribbon_depth`/`amplitude`
   defaults in both Maclado `.bkr` scripts; §7's **Default** (graduation to
   a `CAL-*` bet per the calibrate ceremony); the Lab weave/FDM notice if
@@ -304,9 +280,6 @@ earned until it records its provenance).
     assumes — i.e. does one compensation number plus the ladder reproduce the
     measured fits, or do they interact?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `FIT_GAP_MM` and `holeCompMm` in `bikar` `kernel3d/fit-profile.ts`
   (value **and** provenance record); `docs/c2-assembly-design.md` Appendix B.3 and
   B.6; `docs/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
@@ -340,9 +313,6 @@ earned until it records its provenance).
   - [ ] 4. Does the answer move with wall *height* (a short wall is stiffer than a
     tall one), or is a single floor honest?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `DEFAULT_MIN_FEATURE_MM` in `bikar` `kernel3d/mesh-gate.ts` (value
   **and** provenance record); `docs/lego-lab-design.md` Appendix B.5 and the §7.4
   `minFeatureMm: 0.8` override; P1 Q1 and LG-F1 Q5, both of which ask this
@@ -380,9 +350,6 @@ earned until it records its provenance).
   - [ ] 3. Does the droop consume the clearance under the ceiling — the failure
     mode that matters for a cavity roof, as opposed to cosmetic sag.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the bridge-span constant in `bikar` `kernel3d/print-gate.ts` (value
   **and** provenance record); `docs/w2-connector-design.md` Appendix B.3 and §4
   Q4; `docs/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
@@ -414,9 +381,6 @@ earned until it records its provenance).
     vs from horizontal). At 45° the two coincide, which is exactly how convention
     bugs hide.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the overhang threshold in `bikar` `kernel3d/print-gate.ts` (value
   **and** provenance record); `docs/print-validation-design.md` Appendix B.2 and
   the F5 tier split in §3.
@@ -449,9 +413,6 @@ earned until it records its provenance).
   - [ ] 3. Does the bow relax over days, or is the as-printed number the number?
   - [ ] 4. Does a brim change it enough to be worth mandating in the print notes?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `warpMm` in `bikar` `kernel3d/fit-profile.ts` — today literally
   `undefined` pending this measurement (value **and** provenance record);
   `docs/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
@@ -487,9 +448,6 @@ earned until it records its provenance).
   - [ ] 3. Elephant's foot at the base of each tower, measured deliberately here
     so it does not contaminate every other coupon's readings.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `MIN_BED_CONTACT_MM2` and the footprint-ratio rule in `bikar`
   `kernel3d/print-gate.ts` (value **and** provenance record); P2 Q5, the
   point-contact sphere question, which inherits the threshold from here.
@@ -531,9 +489,6 @@ earned until it records its provenance).
     obviously harmless, and this plate is where that gets decided before the
     labels go onto the other 23 rungs.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `docs/text-emit-design.md` §6's three defaults (value **and**
   provenance record, once the constants exist), and `docs/calibration-design.md`
   §8's "rung identity does not survive onto the part" — the weakness this whole
@@ -588,9 +543,6 @@ earned until it records its provenance).
   - [ ] 4. Whether elephant's foot closes a gap that the walls above it hold open.
     MC-6 measures the foot deliberately; this is where that reading gets spent.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `MIN_BODY_CLEARANCE_MM` in `bikar` `kernel3d/linkage-gate.ts` (value
   **and** provenance record), and — through it — the `amplitude` default in all five
   woven sources under `bikar/patterns/Orbs/`. Those five are pinned at the first
@@ -666,9 +618,6 @@ free-standing strut). Only the clip is exempt, and only where noted.
   - [ ] 3. Does the clearance need to differ by tile material (PLA vs
     PETG shrinkage), or is one `gap` good for both?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Settles**: the clip-joint half of `CAL-FIT-01` only. The four fit classes
   and the ⌀ sweep come from MC-1; W-F1 converts them into a blade clearance for
   *this* joint. Warp (Q2) belongs to `CAL-WRP-01` / MC-5.
@@ -719,9 +668,6 @@ free-standing strut). Only the clip is exempt, and only where noted.
   - [ ] 4. Front-face lippage across the joint — do adjacent tiles sit flush,
     or does the clip pull a step between them?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/w2-connector-design.md`
   Appendix B.6) — design-specific, deliberately **not** on the machine card, since
   a detent depth is a property of this clip's bayonet, not of the printer.
@@ -777,9 +723,6 @@ free-standing strut). Only the clip is exempt, and only where noted.
     or as an empty border? If it reads empty, `absorb` is a fit tool and not
     a finish tool, and the language reference should say so.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Settles**: `CAL-FRM-01` — the wall perimeter trim band, the only bet
   this coupon carries.
 - **Does not settle**: anything about the joint. The frame changes no
@@ -902,9 +845,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   - [ ] 6. Does the 0.8 mm-wide rib survive slicing, or does the perimeter path
     swallow it? Inspect the sliced preview *and* the printed part.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Settles**: `CAL-RIB-01` (clutch rib `ribMm`, design doc Appendix B.8) —
   design-specific and deliberately **not** on the machine card. The minimum
   printable wall (Q5) belongs to `CAL-FEA-01` / MC-2.
@@ -961,9 +901,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     this table would be the first, and it is what turns §3.5's process-variance
     argument from literature into a local number.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the `studDia` LEGO profile entry; **design doc §11 Q1 — whether the
   `studs full`/`studs edge` interfaces ship in M6 or at all**; the nozzle
   requirement in the Lab's print notes (P3).
@@ -1029,9 +966,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     An edge cell is wall-bound and an interior cell tube-bound; compare the two
     on the same part before concluding anything about the number.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Settles**: `CAL-STK-01` (printed-onto-printed stud entry: max total radial
   interference).
 - **Feeds**: `STUD_ENTRY_MAX_MM` in `bikar` `kernel3d/lego.ts` — the threshold
@@ -1069,9 +1003,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   - [ ] 3. Is 1×N worth supporting in M6, or should the first release require
     both footprint dimensions ≥ 2 and error on 1×N with a pointer?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the `pinDia` LEGO profile entry; the anchor solver's 1×N branch in
   `bikar` `kernel3d/grid-gate.ts`; design doc §5.2 and §11 Q2.
 
@@ -1100,9 +1031,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     already records that aged PLA embrittles on flex (`w2-connector-design.md`).
   - [ ] 4. PETG vs PLA on the same rung, if both were printed: which retains grip?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: design doc Appendix B.8 (whether a 0.1 mm rib is a durable clutch or
   a one-shot one); the material recommendation in the Lab's print notes (P3); the
   answer to §11 Q6 — whether a geometry-only gate can be honest about clutch.
@@ -1126,9 +1054,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   - [ ] 4. Does the piece butt seamlessly against a neighbouring copy — the
     physical check on the grid-fit score reading 1.0.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: the `relief depth` and `engage` defaults in design doc §4; the P1
   compatibility matrix's first ✅ row; §11 Q4's bridging answer.
 
@@ -1165,9 +1090,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     and compare grip side by side — the number this coupon exists for is the
     *ratio*, not a pass/fail.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: design doc Appendix B.2 (the rotation-lock criterion) and V8's
   WARN-not-ERROR call in §6; the P1 compatibility matrix's 5-fold row.
 
@@ -1207,9 +1129,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
   - [ ] 4. Seat/unseat/reseat both pieces five times: is the jog repeatable
     (stud registration) or does it wander (clutch slop)?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `CAL-REG-01` (open, this is its coupon); design doc §3's
   registration-vs-gap distinction — a measured jog beyond 0.2 mm is the only
   thing that earns an art-side correction (decisions-log D-013's reversal
@@ -1237,9 +1156,6 @@ which is exactly why the ladder sweeps the rib and holds the bore fixed.
     `studDiaMm` compensation, i.e. is "baseplate-compatible" one profile or
     one per plate population?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: `CAL-CLB-01` (open, this is its coupon); the design doc's K2
   discipline that compatibility claims say "LEGO-brand verified; clone
   unmeasured" until this coupon reports; whether the Lab's fit-profile page
@@ -1285,9 +1201,6 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Hung on one nail, does the tile sit level and stay put, or does it
     rotate about the single fixing?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: [`docs/piece-composition-design.md`](../../../docs/piece-composition-design.md)'s
   countersink geometry; the gallery's first "functional piece" entry; Q2's
   answer feeds back into whether tile `depth` 6 is enough.
@@ -1318,9 +1231,6 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Seat and unseat TileB five times: does the sliding fit stay a sliding
     fit, or does it wear open?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: [`docs/c2-assembly-design.md`](../../../docs/c2-assembly-design.md) §8's
   fit-window claim — Q1 and Q2 together are the only thing that earns it; the
   `press`/`sliding` offsets in bikar's fit table; whether `--fit-profile` needs a
@@ -1358,9 +1268,6 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Does tile-to-tile dimensional variation accumulate across the 2×2, so
     that the outer corners no longer land on the 201.2 mm boundary?
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1's
   estimate table — Q1 replaces every hedged figure in it with a measured one, and
   is the input W3's `layout report` production metrics need; the gallery's "what
@@ -1409,9 +1316,6 @@ bikar `d9b3c84`, not an estimate.
     it, but it is the first object that can show whether the question is worth
     pursuing.
 - **What we learned**: — pending.
-- **Iteration log**:
-  | # | date | change | question | result | decision |
-  |---|------|--------|----------|--------|----------|
 - **Feeds**: [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md)
   §8's deliverable claim and §11 Q6 (Q5 is its only evidence); the connector BOM's
   all-four-full clip rule, which Q1 tests at its easiest case before W3 relaxes it
