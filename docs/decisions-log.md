@@ -3673,7 +3673,7 @@ the substitution collapse into a plain byte identity again.
 ## D-046 — the prints tab absorbs one event, and its gate ships with the first plate, not before
 
 **Date:** 2026-08-28 · **Repos:** 3d-models (design only; no build target yet)
-**Status:** design accepted, S1 shipped; S2–S7 pending a physical print
+**Status:** design accepted; S1 + S3 shipped (gate before the first plate — see the 2026-08-30 amendment); S2/S4 pending a physical print, S5–S7 buildable now
 **Design:** [`prints-tab-design.md`](prints-tab-design.md) ·
 **Research:** [`research/prints-tab-survey.md`](research/prints-tab-survey.md)
 
@@ -3716,6 +3716,24 @@ read as coverage. What shipped in this PR is exactly what is buildable without a
 printer: the record format, this decision, the survey, and the forward-reference
 baseline entries for the still-unwritten gate and page.
 
-**What this does not resolve:** no plate has been printed, so no record exists, no
-bet has moved, and the gate is unwritten by design. Those rungs (S2–S7) are tracked
-and wait on the bench — the printer is user-held (Bambu A1/P1S/X1C class).
+**Amendment 2026-08-30 — the gate ships before the first plate, and R4 is why.**
+The reasoning above conflated two things and drew the sequencing wrong. "A gate over
+an empty subject set reports a false green" is true of a gate that *hides* its subject
+count; it is exactly *false* of a gate that prints it. R4 is not a mitigation to add
+later — it is the property that makes wiring the gate at zero records **honest**, and
+so the gate is buildable and correct the moment R4 is in it, no plate required. The
+tenet, sharper than "measure before you gate": *a zero-subject gate is dishonest
+unless it prints its subject count out loud; once it does, it can and should ship
+before its subject exists — the empty run is then a true "0 records checked", not a
+false pass.* S3 (`prints_gate.py` with R1/R2/R4, hook `39-prints`, `make
+validate-prints`, and the `docs/prints/**` grounding-gate exclusion) shipped on this
+amendment's date, ahead of the first plate. Only **R3** (two-way bet propagation)
+stays deferred — it has a real empty-subject problem R4 cannot fix, because there is
+no settled bet to propagate *from* yet; it lands in S4 with the first flip (task #71).
+The prompt for the correction: the reprioritisation that found most of S3–S7
+buildable without the printer, against the earlier claim that it was all printer-gated.
+
+**What this does not resolve:** no plate has been printed, so no record exists and no
+bet has moved. The printer-gated rungs — S2 (print Plate 1, task #67) and S4 (R3,
+task #71) — wait on the bench; the printer is user-held (Bambu A1/P1S/X1C class). The
+record-independent rungs (S5 catalog cleanup #68, S6 page #69, S7 lab page #70) do not.

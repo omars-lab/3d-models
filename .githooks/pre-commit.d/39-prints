@@ -1,0 +1,26 @@
+#!/bin/sh
+# Prints gate (.claude/gates/prints_gate.py). A print-run record under
+# docs/prints/ is checkable or it is not shipped: the geometry it claims to have
+# printed re-resolves against bikar at the commit it pins (R1), its photos exist
+# and are unique across every record (R2), and the gate prints how many records
+# it checked so an empty run reads as "0 records checked", not a false green (R4).
+# The design is docs/prints-tab-design.md §7.
+#
+# wholesale: make validate-prints
+# Override once: PRINTS_GATE_OK=1 git commit
+[ -n "$PRINTS_GATE_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the prints gate" >&2
+  exit 1
+fi
+# Same worktree caveat as the gates before it: `gh-pages` carries `.githooks`
+# and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/prints_gate.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no prints gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+# Whole-tree, not --staged: R2's cross-record photo uniqueness and R1's read of
+# a sibling repo are both facts across files that a staged-only scope cannot see.
+# Cheap at zero records — it prints the count and exits.
+exec python3 "$GATE"

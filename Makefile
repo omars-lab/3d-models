@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md
 
-.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -155,6 +155,18 @@ validate-counts:
 validate-timelapse:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py
+
+# Prints gate: a print-run record under docs/prints/ pins the geometry it
+# printed (R1, re-resolved against bikar at the recorded commit), proves its
+# photos exist and are unique across every record (R2), and prints how many
+# records it checked so an empty tree reads as "0 records checked", never a
+# false green (R4). Design: docs/prints-tab-design.md §7. `--self-test` builds a
+# clean fixture, requires it clean, then mutates it once per rule and requires
+# each to fire. Ships before the first plate on purpose: R4's visible count is
+# what makes wiring the gate at zero records honest rather than broken-looking.
+validate-prints:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks
