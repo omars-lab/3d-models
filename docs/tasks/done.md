@@ -1,6 +1,7 @@
 # Completed session tasks — frozen archive
 
-**What this is:** a one-time snapshot (2026-08-15) of the completed entries in the
+**What this is:** periodic wholesale snapshots (Snapshot 1: 2026-08-15; Snapshot
+2: 2026-08-30) of the completed entries in the
 Claude Code session task list, archived so the task numbers cited elsewhere
 (decisions log entries, memory notes, PR descriptions — e.g. "task #84") keep a
 referent after the live list was pruned. **What this is not:** a register anyone
@@ -15,6 +16,16 @@ Numbers below are the session task ids. Tasks #1–#5 were pruned before this
 archive existed. Open tasks at snapshot time — #10 (print a physical orb
 prototype, user-held) and #119 (M4e: build the welded woven-overlap orb) —
 remain on the live list.
+
+**Two id namespaces live in this file.** The live board was renumbered after
+Snapshot 1, so Snapshot 2's ids are a fresh sequence: old #14 (Snapshot 1, Orb
+Lab configurator) and new #14 (Snapshot 2, Maclado stale cell views) are
+different tasks. Always read an id under its snapshot's date.
+
+---
+
+**▸ Snapshot 1 — 2026-08-15 (the original prune).** Ids in the sections below are
+the pre-renumber board.
 
 ## Orb engine + gallery (M0–M5, Orb Lab)
 
@@ -148,3 +159,81 @@ remain on the live list.
 - #83 — Install the gitleaks pre-commit hook in repos that lack it
 - #84 — Land the held local-guide plugin + reconcile mac-studio divergence (marketplace repo)
 - #85 — Give amazon-scripts (ex work-scripts) a mac-studio remote and push its history
+
+---
+
+**▸ Snapshot 2 — 2026-08-30 (the renumbered board).** Fresh id namespace — see the
+namespace warning in the header. Still open on the live board at this prune:
+user-decision tasks #4 / #9 / #36; printer-independent tasks #8 / #10 / #26 / #49;
+and prints-tab rungs #66–#71 — of which only #67 (print Plate 1 at the bench) and
+#71 (R3, waits on the first settled bet) truly need a printer, the rest being
+buildable now.
+
+## Cross-repo, CI, and deploy hygiene (S2)
+
+- #1 — Unstale the Q5 status in qiyas-wheelfield-validation-design.md
+- #2 — Land the qiyas #20 O-7 cascade end to end
+- #3 — Closed by moving the print queue into docs/backlog.md §3.8
+- #6 — Retract the sh-wrapper overreach from PR #79 and PR #106
+- #7 — Regenerate the cross-repo XREPO decision ledger
+- #21 — Fix the semgrep XSS finding in bikar packages/web/src/sessions.ts
+- #23 — Write the CLAUDE.md tenet: Actions billing must never block a merge or a deploy
+- #24 — Close the gap between make local.ci and what GitHub Actions actually checks
+- #25 — Build the deploy path that does not need a hosted runner
+- #27 — Fix the three red local_only checks on sacred-patterns master
+- #44 — Make the Lab e2e skip measure the Lab, not an env var
+- #45 — Give ci-parity steps the env CI gives them, and make the GHCR login a step
+- #59 — Rebase and land 3d-models #77 — orb pipeline map + line-number checks
+- #60 — Rebase and land bikar #104 — revive two dead pre-commit guards, wire git to the tracked hook dir
+
+## Per-orb breakdown + timelapse arc (S2)
+
+- #11 — Answer: is there a per-orb review UX, a page per orb?
+- #12 — Build a per-orb breakdown page
+- #13 — Design the per-orb construction report (staged build-up)
+- #14 — Fix Maclado-9-Overlap's stale shipped cell views
+- #15 — Investigate the second overlap band at [1.38, 1.60]
+- #16 — Build the bikar stage-sequence generator + --format timelapse
+- #17 — Ship the timelapse invariant gate
+- #18 — Close the open questions in the timelapse design's §11
+- #19 — Re-derive the rasterisation cost the research file marks NOT VERIFIED
+- #20 — Fix the dangling §6.3 reference in derivation-worksheet-design.md
+- #22 — Merge the two open timelapse PRs: bikar #107 and 3d-models #83
+- #28 — bikar: --turntable <n> on --format timelapse
+- #29 — bikar: OrbViewer public camera control
+- #30 — bikar: build packages/lab/breakdown.html
+- #31 — bikar: register breakdown in vite config + catalogue
+- #32 — 3d-models: use-case map entry for the breakdown
+- #33 — 3d-models: wire breakdown into build and deploy
+- #34 — 3d-models: link the breakdown from gallery and Orb Lab
+- #35 — Give Maclado-9-Overlap a camera sweep — the one orb that most needs it has none
+- #37 — bikar: meanDot + baseSolidCells in kernel3d
+- #38 — bikar: OrbViewStyle depth cues + per-unit highlight in the renderer
+- #39 — bikar CLI: flat/base/complete frames, highlight, transition, ribbon turntable
+- #40 — bikar: breakdown page tells the five beats, family-parameterised
+- #41 — 3d-models: gallery restyle + Makefile keys + regeneration
+- #42 — 3d-models: timelapse_gate.py with both by-design failures
+- #43 — 3d-models: doc amendments + decision entry for the breakdown rework
+- #46 — bikar: persistent base-solid scaffold under every stage frame
+- #47 — bikar: fix the turntable limb — back-face cull for display frames
+- #48 — 3d-models: regenerate, amend the timelapse gate, redeploy
+
+## Woven-orb amplitude re-cut — D-039 through D-045 (S2)
+
+- #50 — Re-cut the five woven orbs' amplitude so they print unfused
+- #51 — Re-pin the two by-design tests the amplitude re-cut silenced
+- #52 — Re-record the ribbon instrument: three-repo qiyas cascade
+- #53 — P1 · Every woven orb's declared amplitude floor fuses — narrow the ranges behind a fixture test
+- #54 — P2 · The 2D weave shatters — share the mesh's offset function, cascade APPROVED
+- #55 — Absorbed by #54 · The silhouette circle is not the orb's edge
+- #56 — Absorbed by #54 · Stage frames draw each loop pre-diced for crossings not in the picture
+- #57 — P4 · Two teaching defects on the breakdown page
+- #58 — P3 · Closed by measurement inverting its premise — overlap-requires-weave is a kernel fact (D-044)
+
+## Decision handbacks + prints tab S1 (S2)
+
+- #61 — Hand back #4 (M4c orb) as a visual decision artifact
+- #62 — Hand back #36 (as_of pin under squash merges) as a visual decision artifact
+- #63 — Hand back #9 (this repo's D-log joins the decision hub) as a visual decision artifact
+- #64 — Prints tab: record the 4 resolved decisions + preserve the design in-repo
+- #65 — Prints tab S1: write the run-record format + one filled Plate-1 example
