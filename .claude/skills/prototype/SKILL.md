@@ -27,8 +27,12 @@ decisive learning first). Each entry has:
 - **What we learned** — filled only after a physical print is examined.
   Answer the questions above by number; unexpected findings get their own
   bullets.
-- **Iteration log** — one table row per physical print: date, what changed
-  from the previous iteration, the question it targeted, result, decision.
+- **Print-run records** — each physical print is a checked-in
+  `docs/prints/<YYYY-MM-DD>-<slug>/` directory (geometry pin, process profile,
+  readings, photos), **not** a row in this file. The catalog carries the
+  backlog; the record carries what a plate taught. One register for the
+  print-lesson, not two ([D-046](../../../docs/decisions-log.md)). Format and
+  gate: `docs/prints-tab-design.md` §4, `.claude/gates/prints_gate.py`.
 - **Settles** — the `CAL-…` bets this entry closes, if any (registry:
   `.claude/skills/calibrate/bets.md`). A coupon that measures a property of
   *(machine, material, nozzle, profile)* rather than of this design does not
@@ -45,10 +49,14 @@ answers. Prefer the cheapest print that settles the most downstream questions
 restate the entry's questions; if none would be answered by the print, the
 print is decoration, not a prototype — say so.
 
-**Log a result** — after the user reports on a print: fill "What we learned"
-(numbered answers), append the iteration row, flip Status. Never mark a
-question answered from simulation, slicer preview, or reasoning — only from
-the physical object. Partial answers stay unchecked with a note.
+**Log a result** — after the user reports on a print: create the
+`docs/prints/<YYYY-MM-DD>-<slug>/` record (geometry pin, profile, readings,
+photos — format in `docs/prints-tab-design.md` §4, checked by
+`.claude/gates/prints_gate.py`), then in the catalog fill "What we learned"
+(numbered answers) and flip Status. The record holds the per-plate detail; the
+catalog holds only what was learned. Never mark a question answered from
+simulation, slicer preview, or reasoning — only from the physical object.
+Partial answers stay unchecked with a note.
 
 **Propagate** — a learning is not done until it lands where it changes future
 output. Standing targets:
@@ -90,8 +98,9 @@ Cite the commit hash in the catalog when a propagation lands.
 
 ## Rules
 
-- Date every iteration row.
-- Record settings verbatim (slicer profile names count).
+- Date every print-run record (the directory name carries it).
+- Record settings verbatim (slicer profile names count) — in the record's
+  profile header, which the gate requires.
 - A failed print is a result — log it; "warped, retry" is a learning.
 - New prototype ideas go in the catalog immediately, Status `planned`, with
   at least one question — an entry with no question gets rejected.
