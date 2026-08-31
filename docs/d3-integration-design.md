@@ -6,7 +6,9 @@ needs interactive 2D SVG — a rosette explorer, an orb breakdown, a score overl
 the proper way to reach for d3, given a fourth repo (sacred-patterns) already has a mature
 d3 vocabulary and a stalled React-on-d3 experiment?* This file is the backlog item. It does
 **not** commit an implementation — it scopes one, records the audit that informs it, and
-hands the load-bearing choices back to the user as decisions ([§5](#5-decisions-to-make)).
+carried the load-bearing choices to the user as decisions ([§5](#5-decisions-to-make)), **all
+four of which were settled 2026-08-31** and are now recorded there as the direction a build
+follows.
 
 This is a *prepare-the-approach* item, in the sense [`backlog.md`](backlog.md) reserves for
 work that is queued but not yet a build. It is the visualization-layer sibling of the
@@ -99,8 +101,9 @@ the deps, the teardown-redraw idiom, the DOM-config, and the dual mount.
 ## 3. What "a proper integration" has to decide
 
 The audit gives a pattern; it does not answer *where the layer lives* or *who owns it*. Those
-are the real content of this backlog item, and they are cross-repo, so they are decisions
-([§5](#5-decisions-to-make)) rather than code. Framed as questions:
+are the real content of this backlog item, and they are cross-repo, so they were carried to
+the user as decisions ([§5](#5-decisions-to-make)) rather than settled in code. The four
+questions, as framed for that decision (their answers are in [§5](#5-decisions-to-make)):
 
 - **Q-HOME — where does the shared d3 layer live?** Candidates: (a) a new package inside
   bikar's web workspace, imported by every bikar surface; (b) a standalone package extracted
@@ -126,42 +129,66 @@ are the real content of this backlog item, and they are cross-repo, so they are 
 Phased so each phase answers a question before the next spends effort. Nothing here is
 scheduled; the ordering is the dependency order, not a promise.
 
-- **Phase 0 — this doc.** Scope, audit, decisions surfaced. Done when the user settles
-  [§5](#5-decisions-to-make)'s Q-HOME and Q-SHELL — the two that gate everything downstream.
+- **Phase 0 — this doc.** Scope, audit, decisions. **Done** — the four [§5](#5-decisions-to-make)
+  decisions are settled; only the bikar-studio public-surface keystone remains open.
 - **Phase 1 — one reference surface, end to end.** The
   [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md) is the natural first consumer:
   it is already an SVG instrument, and its own roadmap is *blocked on the same bikar-studio
-  public-surface decision* a shared-package home would settle. Build the d3 layer once, there,
-  in whatever shell Q-SHELL picks, consuming real bikar rosette geometry.
+  public-surface decision*. Build the converter + d3 layer once, there, in a **plain/Lit
+  shell** (Q-SHELL), consuming real bikar rosette geometry through the **d3-agnostic
+  constructs + opt-in converter** (Q-HOME).
 - **Phase 2 — the qiyas overlay.** Render per-view score/diff data (from qiyas JSON) as a d3
   layer on top of a bikar SVG orb view — the "why did this view score 0.67" instrument. This
   is the qiyas↔d3 integration proper, and it is a *data* integration: no Python touches d3.
-- **Phase 3 — decide sacred-patterns' fate.** With one or two surfaces built, the Q-VOCAB
-  answer is cheap to see: either extract the vocabulary into the Q-HOME package, or leave
-  sacred-patterns as an independent gallery and let the explorers keep their own primitives.
+  It consumes the **Q-DATA viz projection** — an extension of qiyas's existing pydantic
+  contract and FastAPI surface, not a new channel (see the qiyas data-model-API item).
+- **Phase 3 — unify the vocabulary.** Per Q-VOCAB, converge the explorers and sacred-patterns
+  on one **common naming convention**, refactoring either side as needed. With one or two
+  surfaces built, how much vocabulary actually gets shared is cheap to see.
 
-**What unblocks what:** Phase 1 needs Q-HOME + Q-SHELL. Phase 2 needs Phase 1's layer + Q-DATA.
-Phase 3 needs Phases 1–2 to have revealed how much vocabulary actually gets shared.
+**What unblocks what:** Phase 1 needs the bikar-studio keystone (Q-HOME/Q-SHELL are settled).
+Phase 2 needs Phase 1's layer + the Q-DATA projection. Phase 3 follows once Phases 1–2 reveal
+how much vocabulary is really shared.
 
 ---
 
-## 5. Decisions to make
+## 5. Decisions, resolved 2026-08-31
 
-These are the user's calls, not tasks. Each blocks the phase that names it.
+The four questions were carried to the user and settled in one sitting. These are the
+directions a build follows; the reasoning the user gave is recorded with each.
 
-1. **Q-HOME** — shared d3 package in bikar's web workspace, a standalone extracted package,
-   or per-surface vendoring? *(Blocks Phase 1.)* Recommendation to weigh: a shared package in
-   bikar keeps the producer of record single-source, at the cost of standing up a new
-   workspace package now.
-2. **Q-SHELL** — React across the bikar surfaces, or a vanilla/Lit bridge? *(Blocks Phase 1.)*
-   The branch's React choice should not decide this by inertia; bikar's surfaces are
-   non-React today.
-3. **Q-VOCAB** — port sacred-patterns' geometry/draw vocabulary into the shared layer, or keep
-   it a separate gallery? *(Blocks Phase 3, informs Phase 1.)*
-4. **Q-DATA** — does the qiyas overlay reuse the current contract output, or need a
-   viz-shaped projection? *(Blocks Phase 2.)*
-5. **The bikar-studio public-surface question**, already flagged by the rosette explorer's
-   roadmap, is the keystone under Q-HOME/Phase 1 — the same decision, surfaced from two docs.
+1. **Q-HOME → an opt-in converter, on top of a d3-agnostic engine.** Not "bake d3 into
+   bikar." The rule the user set: **bikar's core stays d3-agnostic and emits generic,
+   d3-friendly, generally-consumable constructs** — anything can read them, not just d3 — and
+   a **separable, optional converter** maps those constructs to d3 for the surfaces that want
+   it. A bikar user who only needs geometry is never forced to pull in the d3 layer. This is
+   the robust reading of the [`../CLAUDE.md`](../CLAUDE.md) trade: the coupling that would rot
+   (engine tied to one viz library) is designed out; the shared code is the thin adapter.
+   *(Was: bikar-package vs extracted vs per-surface — resolved as a decoupled adapter, home
+   secondary to the decoupling.)*
+2. **Q-SHELL → plain / lightweight, not React.** The shell (controls, layout — the frame
+   around the drawing) is **vanilla or Lit**, matching bikar's existing viewer (plain +
+   three.js). d3 owns the `<svg>` inside a plain container. The react-d3-2024 branch's React
+   shell is therefore **not** adopted — only its geometry/draw vocabulary and the general
+   "framework owns the container, d3 owns its interior" bridge idea carry forward.
+3. **Q-VOCAB → converge on a common naming convention; refactor either side to get there.**
+   Not "import one side's names as-is." The explorers and sacred-patterns should share **one
+   vocabulary under a common naming convention**, and refactoring *either* sacred-patterns or
+   bikar to align the names is explicitly authorized. Effectively share-but-unify.
+4. **Q-DATA → add a viz projection.** qiyas emits **per-shape positions** (`{id, x, y,
+   status}` per view) alongside the existing scalars, so the overlay can point at the exact
+   failing shape, not just badge a view with a number. qiyas stays Python. **Note (found
+   2026-08-31):** qiyas already ships a versioned pydantic JSON contract (a `schema.py` with
+   `SCHEMA_VERSION` 1.27) with generated JSON Schema files under its `contract/schemas` dir,
+   and already runs a FastAPI review server (`qiyas serve`) with a `POST /deconstruct`
+   → encoding JSON and Swagger at `/docs` — so the projection is an *extension of an existing
+   contract and API*, not a new data channel. Scoped separately in the qiyas data-model-API item.
+
+**Still open — the keystone under Q-HOME/Phase 1:** whether the bikar-studio
+(`bikar-studio.pages.dev`) surface stays public. It is the same decision the rosette
+explorer's roadmap already flags, it constrains where the converter/adapter is served from,
+and it remains a pending-user item — the one call [§4](#4-a-sketch-of-the-plan-not-a-commitment)'s
+Phase 1 still waits on.
 
 ---
 
@@ -186,10 +213,12 @@ thread. They are now resolved:
 ## Provenance
 
 Repos read at their working-tree checkouts 2026-08-31: sacred-patterns (`master` and
-`wip/react-d3-2024` at `4ce6e32`), bikar (`main` at `8709471`), qiyas (`main`, Python —
-confirmed no d3 dependency). Sibling files are cited by GitHub permalink at a pinned commit,
-not by local path. If this scoping item graduates to a committed design doc that ships code,
-it must be run through the `ground-design-doc` process — the cross-repo claims pinned to git
-refs, any external d3/React source moved into [`research/`](research) under a provenance
-header, and the whole run through the doc gates (D1–D4) and an adversarial grounding audit.
-Until then this is a plan, and every decision in [§5](#5-decisions-to-make) is open.
+`wip/react-d3-2024` at `4ce6e32`), bikar (`main` at `8709471`), qiyas (`main`, Python — no d3
+dependency, but a versioned pydantic JSON contract and a FastAPI/Swagger surface, see
+[§5](#5-decisions-to-make) Q-DATA). Sibling files are cited by GitHub permalink at a pinned
+commit, not by local path. The four [§5](#5-decisions-to-make) decisions are settled
+2026-08-31; the bikar-studio public-surface keystone is the one call still open. This remains
+a *scoping* item — if it graduates to a committed design doc that ships code, it must be run
+through the `ground-design-doc` process: the cross-repo claims pinned to git refs, any
+external d3/React source moved into [`research/`](research) under a provenance header, and the
+whole run through the doc gates (D1–D4) and an adversarial grounding audit.
