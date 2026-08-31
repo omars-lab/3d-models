@@ -145,7 +145,10 @@ scheduled; the ordering is the dependency order, not a promise.
   `@naqshcoffee/bikar-d3`. The one deliberate divergence — one global baseplate under all pieces,
   not `solveAnchors`' piece-local centered lattice — is kept **in the kernel** as
   `solveAnchorsOnGlobalGrid`, so the page runs the engine's rule rather than re-porting it; this
-  deletes the private artifact's hand-ported anchor copy.
+  deletes the private artifact's hand-ported anchor copy. Follow-on **Track 2 (schema-driven
+  dials) shipped 2026-08-31** (bikar **#126** `cff3cf1`): the pattern dials are generated from the
+  compiled `.bkr`'s own `param` declarations (`compileToGeometry(src).params`, already on the
+  wire as `ParamSpec`), not hand-coded per pattern — which unblocks the pattern picker (1.3).
 - **Phase 2 — the qiyas overlay.** Render per-view score/diff data (from qiyas JSON) as a d3
   layer on top of a bikar SVG orb view — the "why did this view score 0.67" instrument. This
   is the qiyas↔d3 integration proper, and it is a *data* integration: no Python touches d3.

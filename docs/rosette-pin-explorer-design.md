@@ -236,14 +236,15 @@ studio already runs `compileToGeometry` in-browser, so no CLI/endpoint was neede
 recompiles the studio's canonical `Rosette-N.bkr` on every dial change and reads pieces through
 the new d3-agnostic `faceConstructs` adapter (1.2). The seat/drop rule is the kernel's own
 `solveAnchorsOnGlobalGrid` — the global-baseplate divergence lives **in the kernel**, not the
-page — so the hand-port is superseded for the rosette (1.4). The pattern picker (1.3, other
-`.bkr` sources) and the generic dial schema (Track 2) remain open.
+page — so the hand-port is superseded for the rosette (1.4). The **generic dial schema (Track 2)
+shipped 2026-08-31** (bikar PR #126 `cff3cf1`); the pattern picker (1.3, other `.bkr` sources) is
+the last open piece and is now unblocked.
 
 | # | task | priority | blocker / depends | status |
 |---|---|---|---|---|
 | 1.1 | Decide the delivery vehicle: bundle bikar core as ESM/WASM in-page **vs.** a thin compile endpoint (`.bkr` → polygons) | P0 | needs a call on the bikar-studio public-surface question (open user decision) | 🟢 in-page ESM |
 | 1.2 | Expose `compileToGeometry` (or endpoint) returning per-piece polygons in a stable shape | P0 | 1.1 | 🟢 `faceConstructs` adapter |
-| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2; Track 2 (schema) for the dials | 🔴 rosette-only so far |
+| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2 ✓; Track 2 (schema) ✓ — now unblocked | 🔴 rosette-only so far |
 | 1.4 | Replace the hand-ported `rosetteGeometry` path with the engine output; keep the JS port only as an offline fallback | P1 | 1.2 | 🟢 studio page runs the kernel |
 
 ### Track 2 — Config is per-pattern: a schema, not a skill
@@ -253,11 +254,22 @@ page — so the hand-port is superseded for the rosette (1.4). The pattern picke
 - **Answers:** *"Are these config params specific to a pattern? Do we need a Claude skill per
   pattern?"* — Yes, they're rosette-specific; and **no**, no skill is needed at runtime.
 
-| # | task | priority | blocker / depends |
-|---|---|---|---|
-| 2.1 | Surface each `.bkr`'s implied parameter schema from bikar's parser (a rosette declares `angle`/`reach`/`points`) | P1 | Track 1.2 (engine access) |
-| 2.2 | Render dials automatically from that schema (type, range, default) — one generic UI | P1 | 2.1 |
-| 2.3 | *(Optional, build-time only)* an authoring skill to add a NEW pattern / wire it into the picker — not a per-pattern runtime dependency | P2 | none |
+**Shipped 2026-08-31** (bikar PR #126 `cff3cf1`). 2.1 turned out to be **already delivered by the
+parser**: `compileToGeometry(src).params` returns one `ParamSpec` (name / default / min / max /
+step) per `param` line — the schema a knob UI needs was already on the wire, so no core change
+was made. 2.2 wired the web side: `buildPatternDials` builds one dial per `ParamSpec` straight
+off its bounds/step/default (a rangeless spec falls back to a number field), the three hard-coded
+rosette sliders are gone, and state carries a generic `params` map fed back into
+`compileToGeometry({ params })`. One deliberate trade: the old crossover→180/n auto-follow was
+rosette-specific UI sugar the schema can't express, so it was dropped — the objective is one
+generic surface with no per-pattern runtime knowledge, which is exactly what 2.3 concluded no
+runtime skill is needed for.
+
+| # | task | priority | blocker / depends | status |
+|---|---|---|---|---|
+| 2.1 | Surface each `.bkr`'s implied parameter schema from bikar's parser (a rosette declares `angle`/`reach`/`points`) | P1 | Track 1.2 (engine access) | 🟢 already on `result.params` (`ParamSpec`) |
+| 2.2 | Render dials automatically from that schema (type, range, default) — one generic UI | P1 | 2.1 | 🟢 `buildPatternDials` |
+| 2.3 | *(Optional, build-time only)* an authoring skill to add a NEW pattern / wire it into the picker — not a per-pattern runtime dependency | P2 | none | ⚪ not needed at runtime |
 
 ### Track 3 — A real baseplate library
 
@@ -294,7 +306,8 @@ page — so the hand-port is superseded for the rosette (1.4). The pattern picke
 
 1. **P0 — 1.1, 1.2** (engine access): the keystone; unblocks Tracks 1–2. Gated on the
    bikar-studio public-surface decision.
-2. **P1 — 2.1, 2.2** (schema-driven dials) → **1.3, 1.4** (pattern picker + swap the port).
+2. **P1 — 2.1, 2.2** (schema-driven dials, ✓ **done** 2026-08-31) and **1.4** (✓ done) →
+   **1.3** (pattern picker) is the last open non-printer piece, now unblocked.
 3. **P1 — 4.1** (already done) stays; **3.1** (done) stays.
 4. **P2 — 3.2, 4.2** (data-file + tube cap): cheap, no blockers, do opportunistically.
 5. **Printer-gated (🔴, HELD until a Bambu-class printer):** 3.3 (`LG-P2`/`CAL-CLB-01`),
