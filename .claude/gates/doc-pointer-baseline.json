@@ -85,11 +85,6 @@
       "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
     },
     {
-      "doc": "docs/prints-tab-design.md",
-      "path": "docs/prints.md",
-      "why": "Proposed module — the rendered prints tab, sequenced to ship in S6 (task #69) once real records exist to render. Remove this when the page is written."
-    },
-    {
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
       "why": "Deliberately deleted. D-042 names this file as the thing it removed — a whole test file certifying the withdrawn centreline rule — and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
