@@ -132,12 +132,20 @@ scheduled; the ordering is the dependency order, not a promise.
 - **Phase 0 — this doc.** Scope, audit, decisions. **Done** — the four [§5](#5-decisions-to-make)
   decisions are settled, and the bikar-studio public-surface keystone resolved 2026-08-31
   (internal, org-GitHub-gated, internet-reachable).
-- **Phase 1 — one reference surface, end to end.** The
-  [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md) is the natural first consumer:
-  it is already an SVG instrument, and its own roadmap is *blocked on the same bikar-studio
-  public-surface decision*. Build the converter + d3 layer once, there, in a **plain/Lit
-  shell** (Q-SHELL), consuming real bikar rosette geometry through the **d3-agnostic
-  constructs + opt-in converter** (Q-HOME).
+- **Phase 1 — one reference surface, end to end. SHIPPED 2026-08-31.** The
+  [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md) was the natural first consumer:
+  it is already an SVG instrument, and its own roadmap was *blocked on the same bikar-studio
+  public-surface decision*. Built as the studio's `/rosette-explorer` page in a **plain vanilla
+  shell** (Q-SHELL — d3 owns the `<svg>` inside a plain container), consuming real bikar rosette
+  geometry through the **d3-agnostic constructs + opt-in converter** (Q-HOME). Three bikar PRs,
+  no stacking: the core `faceConstructs` adapter + `ribbedRingPoints`/`solveAnchorsOnGlobalGrid`
+  exports (**#123** `42b22b3`), the dropped-anchor positions on the solve (`7674683`), and the
+  page + separable `viz-d3.ts` converter (**#125** `ac26658`). The converter lives web-side (a
+  standalone module, no page state) until a second consumer earns its extraction to
+  `@naqshcoffee/bikar-d3`. The one deliberate divergence — one global baseplate under all pieces,
+  not `solveAnchors`' piece-local centered lattice — is kept **in the kernel** as
+  `solveAnchorsOnGlobalGrid`, so the page runs the engine's rule rather than re-porting it; this
+  deletes the private artifact's hand-ported anchor copy.
 - **Phase 2 — the qiyas overlay.** Render per-view score/diff data (from qiyas JSON) as a d3
   layer on top of a bikar SVG orb view — the "why did this view score 0.67" instrument. This
   is the qiyas↔d3 integration proper, and it is a *data* integration: no Python touches d3.
@@ -147,10 +155,10 @@ scheduled; the ordering is the dependency order, not a promise.
   on one **common naming convention**, refactoring either side as needed. With one or two
   surfaces built, how much vocabulary actually gets shared is cheap to see.
 
-**What unblocks what:** Phase 1's blockers are now all cleared — the bikar-studio keystone
-resolved and Q-HOME/Q-SHELL are settled — so Phase 1 is buildable. Phase 2 needs Phase 1's layer
-plus the Q-DATA join (measured; no qiyas change required). Phase 3 follows once Phases 1–2 reveal
-how much vocabulary is really shared.
+**What unblocks what:** Phase 1's blockers were all cleared — the bikar-studio keystone
+resolved and Q-HOME/Q-SHELL settled — and Phase 1 is now **built** (the `/rosette-explorer` page).
+Phase 2 needs Phase 1's layer plus the Q-DATA join (measured; no qiyas change required). Phase 3
+follows once Phases 1–2 reveal how much vocabulary is really shared.
 
 ---
 
