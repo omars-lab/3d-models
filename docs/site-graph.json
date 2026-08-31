@@ -142,6 +142,14 @@
       "what": "shipped by Makefile DEPLOY_PATHS, so it is a published page. Its two links to the gallery named two different hosts and one of them, 3d-models.bytesofpurpose.com, was NXDOMAIN — the README's primary call to action, on the deployed branch, contradicting its own §Links. Fixed 2026-08-02; declared here because an undeclared viaHost is exactly what G2 catches."
     },
     {
+      "id": "G.prints",
+      "surface": "gallery",
+      "file": "docs/prints.md",
+      "vendored": false,
+      "inRepo": true,
+      "what": "the prints reader (S6), shipped by Makefile DEPLOY_PATHS so it is a published page like README. Edgeless here on purpose: the inbound nav link from index.html shifts every anchored edge below it, so that pin-shift is deferred to S7 when prints.html is vendored (prints-tab-design.md §8). Until then this page is reachable by direct URL, not linked from the gallery."
+    },
+    {
       "id": "S.index",
       "surface": "studio",
       "file": "index.html",

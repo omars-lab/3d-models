@@ -68,7 +68,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # Recursively expanded, not `:=`, because LAB_PAGES is defined further down
 # beside the vendor step that uses it. `:=` here would expand to nothing and
 # deploy a gallery with no studio pages in it.
-DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md
+DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md
 
 .PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
