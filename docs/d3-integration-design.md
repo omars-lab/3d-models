@@ -130,7 +130,8 @@ Phased so each phase answers a question before the next spends effort. Nothing h
 scheduled; the ordering is the dependency order, not a promise.
 
 - **Phase 0 — this doc.** Scope, audit, decisions. **Done** — the four [§5](#5-decisions-to-make)
-  decisions are settled; only the bikar-studio public-surface keystone remains open.
+  decisions are settled, and the bikar-studio public-surface keystone resolved 2026-08-31
+  (internal, org-GitHub-gated, internet-reachable).
 - **Phase 1 — one reference surface, end to end.** The
   [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md) is the natural first consumer:
   it is already an SVG instrument, and its own roadmap is *blocked on the same bikar-studio
@@ -140,14 +141,15 @@ scheduled; the ordering is the dependency order, not a promise.
 - **Phase 2 — the qiyas overlay.** Render per-view score/diff data (from qiyas JSON) as a d3
   layer on top of a bikar SVG orb view — the "why did this view score 0.67" instrument. This
   is the qiyas↔d3 integration proper, and it is a *data* integration: no Python touches d3.
-  It consumes the **Q-DATA viz projection** — an extension of qiyas's existing pydantic
-  contract and FastAPI surface, not a new channel (see the qiyas data-model-API item).
+  It consumes the **Q-DATA viz projection** — measured to be a documented *join* of qiyas's
+  existing `/encoding` + `/diff` outputs, not new fields (see the qiyas data-model-API item, D-API-4).
 - **Phase 3 — unify the vocabulary.** Per Q-VOCAB, converge the explorers and sacred-patterns
   on one **common naming convention**, refactoring either side as needed. With one or two
   surfaces built, how much vocabulary actually gets shared is cheap to see.
 
-**What unblocks what:** Phase 1 needs the bikar-studio keystone (Q-HOME/Q-SHELL are settled).
-Phase 2 needs Phase 1's layer + the Q-DATA projection. Phase 3 follows once Phases 1–2 reveal
+**What unblocks what:** Phase 1's blockers are now all cleared — the bikar-studio keystone
+resolved and Q-HOME/Q-SHELL are settled — so Phase 1 is buildable. Phase 2 needs Phase 1's layer
+plus the Q-DATA join (measured; no qiyas change required). Phase 3 follows once Phases 1–2 reveal
 how much vocabulary is really shared.
 
 ---
@@ -175,20 +177,25 @@ directions a build follows; the reasoning the user gave is recorded with each.
    Not "import one side's names as-is." The explorers and sacred-patterns should share **one
    vocabulary under a common naming convention**, and refactoring *either* sacred-patterns or
    bikar to align the names is explicitly authorized. Effectively share-but-unify.
-4. **Q-DATA → add a viz projection.** qiyas emits **per-shape positions** (`{id, x, y,
-   status}` per view) alongside the existing scalars, so the overlay can point at the exact
-   failing shape, not just badge a view with a number. qiyas stays Python. **Note (found
-   2026-08-31):** qiyas already ships a versioned pydantic JSON contract (a `schema.py` with
-   `SCHEMA_VERSION` 1.27) with generated JSON Schema files under its `contract/schemas` dir,
-   and already runs a FastAPI review server (`qiyas serve`) with a `POST /deconstruct`
-   → encoding JSON and Swagger at `/docs` — so the projection is an *extension of an existing
-   contract and API*, not a new data channel. Scoped separately in the qiyas data-model-API item.
+4. **Q-DATA → a viz projection that is a JOIN, not new qiyas fields (MEASURED 2026-08-31).** The
+   overlay wants **per-shape** `{id, x, y, status}` per view so it can point at the exact failing
+   shape, not just badge a view with a number. A direct measurement (encode a fixture, diff it
+   against another through the qiyas runner) settles how to get it: **`{id, x, y}` is already
+   universal** — `center` (`[x,y]`) and `id` are keys on *every* shape in qiyas's `ShapeUnion` — and
+   **`status` is just the diff bucket the id lands in** (`matched` / `missing_in_recon` /
+   `ambiguous` partitioned all of a fixture's shapes, 0 unknown, 0 uncovered). So Q-DATA is a
+   documented join of `/encoding` + `/diff`, **no new qiyas fields**; qiyas stays Python. One catch
+   the overlay must honor: statuses live in **two id namespaces** — ref-side ids join on
+   `/encoding(ref)`, while `extra_in_recon` (surplus) is recon-side and joins on `/encoding(recon)`.
+   Recorded qiyas-side as D-API-4; the `response_model=` typing that surfaces these schemas in
+   Swagger shipped as qiyas PR #24. Default: the join lives in the d3 overlay, not a new endpoint.
 
-**Still open — the keystone under Q-HOME/Phase 1:** whether the bikar-studio
-(`bikar-studio.pages.dev`) surface stays public. It is the same decision the rosette
-explorer's roadmap already flags, it constrains where the converter/adapter is served from,
-and it remains a pending-user item — the one call [§4](#4-a-sketch-of-the-plan-not-a-commitment)'s
-Phase 1 still waits on.
+**Keystone RESOLVED 2026-08-31 (was open under Q-HOME/Phase 1):** the bikar-studio surface *is*
+public in the sense that its only entry — bikar.naqshcoffee.com — is internet-reachable, but it is
+**gated behind an org GitHub sign-in**, so the audience is internal (org members only). "Internal,
+over the internet." The converter/adapter and the rosette explorer are therefore served from this
+same org-gated surface — reachable over the internet, not open to the world. This unblocks the
+Phase 1 call [§4](#4-a-sketch-of-the-plan-not-a-commitment) was waiting on.
 
 ---
 
