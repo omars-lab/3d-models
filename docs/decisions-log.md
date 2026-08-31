@@ -3737,3 +3737,66 @@ buildable without the printer, against the earlier claim that it was all printer
 bet has moved. The printer-gated rungs — S2 (print Plate 1, task #67) and S4 (R3,
 task #71) — wait on the bench; the printer is user-held (Bambu A1/P1S/X1C class). The
 record-independent rungs (S5 catalog cleanup #68, S6 page #69, S7 lab page #70) do not.
+
+---
+
+## D-047 — round-pattern orb placement is a new statement family, and v1 proves the mechanism before it builds the table
+
+**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`round-orb-placement-design.md`](round-orb-placement-design.md))
+**Status:** v1 shipped (Phase 0 + Phase 1 green in bikar); rule table + fillers are follow-on
+
+Two owner decisions (AskUserQuestion, 2026-08-31) set the shape of the feature that
+finally reads the `place rule` socket the maclado work left declared and never
+consumed. This entry records both, and the one subtle engine result they surfaced.
+
+### The two decisions
+
+1. **Scope — prove the mechanism first.** The request
+   (`bikar:docs/design/round-pattern-orb-placement.md`) named the general capability:
+   place *any* round `.bkr` at the site set of *any* rule, with fillers between discs.
+   The owner scoped v1 to the two lowest rungs instead — place ONE hand-authored round
+   disc on a sphere (watertight, Phase 0), and weld TWO adjacent copies so they share a
+   real welded vertex (Phase 1). The general rule table (all sites per axis class),
+   reproducing the 20-wheel maclado field through this path, a second (icosahedral
+   5-fold) rule, and fillers are an explicit follow-on. *Why:* the four hard parts were
+   already general and shipped (the frame-based placer, the coincidence weld, the
+   solidify tail, the studio's `orbMesh`-without-`orb3d` dispatch); the only missing
+   piece was small — the `place rule` word had exactly one read in the whole repo, a
+   round-trip test. Proving the mechanism on two rungs is cheap and de-risks the table;
+   building the table first would be scope the owner didn't ask for (Tenet 28's inverse —
+   don't build the robust system the owner deferred).
+
+2. **Surface — a new `base sphere` / `place rule` spelling.** The rejected alternative
+   was to route round placement through `base wheelfield` (the maclado family). The owner
+   chose a fresh statement family: `base sphere` reads round-disc placement as its own
+   thing, and the maclado `wheelfield` path — including its dead `placeRule` socket — is
+   left byte-untouched. *Why:* `base wheelfield` builds the kernel's *own* circular wheel
+   and refuses `inscribe`; a user placing *their* disc is a different operation, and
+   conflating them would overload one statement with two constructions. The new
+   `SphereOrbNode` is a separate AST node, and `decl.placeRule` is finally read in
+   `evaluateSphereOrbDecl`.
+
+### The subtle engine result — watertightness is per cap, not aggregate
+
+Two welded discs share their fused contact's vertical rim-wall edge (`out0 → inn0`
+appears in both caps' rim walls — a "doubled wall"), so the aggregate edge-twin check
+reports `watertight === false`. But each cap individually closes. The gate for a
+multi-site placement is therefore `capsWatertight` (every cap's triangle-slice
+individually watertight), which equals aggregate `watertight` for a lone cap. The
+welded pair's union is a deliberate non-manifold pinch — fillers between discs are the
+follow-on, and v1 proves the *weld* (a shared vertex index), not a printable union.
+The frozen witness is `bikar:packages/core/tests/kernel3d/place-cap.test.ts`
+(`weldCount === 1`, `capsWatertight === true`, aggregate `watertight === false`); the
+browser-side companion is `bikar:packages/e2e/tests/round-orb.spec.ts` reading
+`2 sites · 1 weld` off the studio overlay.
+
+### What this does not resolve
+
+The CLI `--check mesh` gate keys on `orb3d || piece3d` and silently skips the sphere-orb
+`orbMesh` path (`round-orb-placement-design.md` §6). The watertight guarantee is real —
+the evaluator throws at compile time — but the dedicated CLI mesh gate does not yet cover
+this path. Closing it (a one-line predicate widen plus the aggregate-vs-caps report
+decision) and an `engine-issues.md` entry are the follow-on's first task. The rule table,
+the maclado-field reproduction (the strongest correctness test, it has a fixture), the
+5-fold rule, fillers, and unifying `MacladoWheel` into the general contact-ring model all
+stay deferred to the follow-on, each a named milestone in the design doc.

@@ -2,8 +2,15 @@
 
 **Status:** draft / working design capture (not yet gate-audited, not yet committed via the
 house `ground-design-doc` process). Produced 2026-08-30 to answer a diagnostic question:
-*the LEGO pins aren't landing where I expect — why?* The artifact is a visual instrument
-built to make that answer visible, not a shipped feature. Last updated 2026-08-30.
+*the LEGO pins aren't landing where I expect — why?* The private artifact is a visual
+instrument (a hand-ported canvas) built to make that answer visible. **Track 1 shipped
+2026-08-31:** the "run bikar, don't re-port it" objective now exists as the bikar-studio
+`/rosette-explorer` page, which runs the *real* kernel (`solveAnchorsOnGlobalGrid` + the real
+clutch lobes) per piece on live geometry — so the seat/drop verdict is the engine's own, not a
+copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
+successor for that concern. See the shipped record in
+[`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
+below. Last updated 2026-08-31.
 
 **Artifact this doc is tied to:**
 [**Petals to Pins — rosette → LEGO-pin explorer**](https://claude.ai/code/artifact/df5788b3-8785-492b-a5f0-92533fbad4e5)
@@ -223,12 +230,21 @@ per task. Legend: **P0** = do first / unblocks the rest · **P1** = next · **P2
   slice (`rosetteGeometry`) by hand, which does not scale to every pattern. Everything that
   makes this "a bikar → LEGO tool" instead of "a rosette toy" sits behind this track.
 
-| # | task | priority | blocker / depends |
-|---|---|---|---|
-| 1.1 | Decide the delivery vehicle: bundle bikar core as ESM/WASM in-page **vs.** a thin compile endpoint (`.bkr` → polygons) | P0 | needs a call on the bikar-studio public-surface question (open user decision) |
-| 1.2 | Expose `compileToGeometry` (or endpoint) returning per-piece polygons in a stable shape | P0 | 1.1 |
-| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2; Track 2 (schema) for the dials |
-| 1.4 | Replace the hand-ported `rosetteGeometry` path with the engine output; keep the JS port only as an offline fallback | P1 | 1.2 |
+**Shipped 2026-08-31** as the bikar-studio `/rosette-explorer` page (bikar PRs #123 `42b22b3`,
+`7674683`, #125 `ac26658`). The delivery vehicle question (1.1) resolved to **in-page ESM** — the
+studio already runs `compileToGeometry` in-browser, so no CLI/endpoint was needed; the page
+recompiles the studio's canonical `Rosette-N.bkr` on every dial change and reads pieces through
+the new d3-agnostic `faceConstructs` adapter (1.2). The seat/drop rule is the kernel's own
+`solveAnchorsOnGlobalGrid` — the global-baseplate divergence lives **in the kernel**, not the
+page — so the hand-port is superseded for the rosette (1.4). The pattern picker (1.3, other
+`.bkr` sources) and the generic dial schema (Track 2) remain open.
+
+| # | task | priority | blocker / depends | status |
+|---|---|---|---|---|
+| 1.1 | Decide the delivery vehicle: bundle bikar core as ESM/WASM in-page **vs.** a thin compile endpoint (`.bkr` → polygons) | P0 | needs a call on the bikar-studio public-surface question (open user decision) | 🟢 in-page ESM |
+| 1.2 | Expose `compileToGeometry` (or endpoint) returning per-piece polygons in a stable shape | P0 | 1.1 | 🟢 `faceConstructs` adapter |
+| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2; Track 2 (schema) for the dials | 🔴 rosette-only so far |
+| 1.4 | Replace the hand-ported `rosetteGeometry` path with the engine output; keep the JS port only as an offline fallback | P1 | 1.2 | 🟢 studio page runs the kernel |
 
 ### Track 2 — Config is per-pattern: a schema, not a skill
 
