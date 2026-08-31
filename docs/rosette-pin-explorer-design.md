@@ -237,14 +237,16 @@ recompiles the studio's canonical `Rosette-N.bkr` on every dial change and reads
 the new d3-agnostic `faceConstructs` adapter (1.2). The seat/drop rule is the kernel's own
 `solveAnchorsOnGlobalGrid` — the global-baseplate divergence lives **in the kernel**, not the
 page — so the hand-port is superseded for the rosette (1.4). The **generic dial schema (Track 2)
-shipped 2026-08-31** (bikar PR #126 `cff3cf1`); the pattern picker (1.3, other `.bkr` sources) is
-the last open piece and is now unblocked.
+shipped 2026-08-31** (bikar PR #126 `cff3cf1`), and the **pattern picker (1.3) shipped the same day**
+(bikar PR #127 `821dfe7`): a roster of flat, origin-centred `.bkr` figures (Rosette-N + Star-N to
+start) with a `<select>` that swaps between them, each pattern's dials generated from its own
+compiled schema — so **Track 1 is fully shipped** and the last open non-printer piece is closed.
 
 | # | task | priority | blocker / depends | status |
 |---|---|---|---|---|
 | 1.1 | Decide the delivery vehicle: bundle bikar core as ESM/WASM in-page **vs.** a thin compile endpoint (`.bkr` → polygons) | P0 | needs a call on the bikar-studio public-surface question (open user decision) | 🟢 in-page ESM |
 | 1.2 | Expose `compileToGeometry` (or endpoint) returning per-piece polygons in a stable shape | P0 | 1.1 | 🟢 `faceConstructs` adapter |
-| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2 ✓; Track 2 (schema) ✓ — now unblocked | 🔴 rosette-only so far |
+| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2 ✓; Track 2 (schema) ✓ | 🟢 roster picker shipped — bikar #127 `821dfe7` (Rosette-N + Star-N; add a pattern = one roster line) |
 | 1.4 | Replace the hand-ported `rosetteGeometry` path with the engine output; keep the JS port only as an offline fallback | P1 | 1.2 | 🟢 studio page runs the kernel |
 
 ### Track 2 — Config is per-pattern: a schema, not a skill
@@ -306,8 +308,9 @@ runtime skill is needed for.
 
 1. **P0 — 1.1, 1.2** (engine access): the keystone; unblocks Tracks 1–2. Gated on the
    bikar-studio public-surface decision.
-2. **P1 — 2.1, 2.2** (schema-driven dials, ✓ **done** 2026-08-31) and **1.4** (✓ done) →
-   **1.3** (pattern picker) is the last open non-printer piece, now unblocked.
+2. **P1 — 2.1, 2.2** (schema-driven dials, ✓ **done** 2026-08-31), **1.4** (✓ done) and
+   **1.3** (pattern picker, ✓ **done** 2026-08-31 — bikar #127): every non-printer piece of
+   Tracks 1–2 is now shipped.
 3. **P1 — 4.1** (already done) stays; **3.1** (done) stays.
 4. **P2 — 3.2, 4.2** (data-file + tube cap): cheap, no blockers, do opportunistically.
 5. **Printer-gated (🔴, HELD until a Bambu-class printer):** 3.3 (`LG-P2`/`CAL-CLB-01`),
