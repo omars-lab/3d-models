@@ -785,6 +785,7 @@ and a number that changes there is not re-typed here.
 | Track 2 — dials generated from each pattern's own compiled schema | shipped 2026-08-31 | explorer doc §6 Track 2 |
 | Phase 2 — the full orb-view instrument: orb `.bkr` → orb-view SVG → qiyas encode (ref + degraded recon) → `/diff` → status overlay on the bikar-rendered SVG | **live**; the `{id,x,y,status}` join is measured (qiyas D-API-4), nothing built yet | d3 doc §4 Phase 2 and §5 Q-DATA |
 | Explorer coupons — physical pin and clutch checks | printer-gated, §3.2 | explorer doc §6 |
+| The Lego open ledger — the residue of the whole Lego stream sorted by what gates it: four unblocked items (widen the roster, ground the explorer doc, plates as data, the tube cap), two download-gated viewers, one decision (§11 Q6's proxy), and the printer-held coupons that §3.2 already owns | added 2026-09-01; the four unblocked items are tracked in the task system | explorer doc §6.6 |
 
 Only the last row needs a printer, which is exactly why the stream was invisible
 to a file organised around what a printer unblocks.
