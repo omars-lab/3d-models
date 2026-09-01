@@ -1,5 +1,7 @@
 # Print backlog — what a printer unblocks, and in what order
 
+Last updated: 2026-09-01 (§6.4 added — the d3 stream's pointer).
+
 Status: **PLANNING DOCUMENT, NOTHING MEASURED.** No print has ever been made on
 this project. Every physical number in every design doc here is either read out
 of someone else's literature or is an explicitly-labelled unmeasured default,
@@ -766,6 +768,26 @@ records that a WebFetch against a GitHub **search** URL returned "Your search di
 not match any code" for a feature that exists in four source files — a confirmed
 false negative. Anyone re-running the ungrounded items above should not trust
 that path.
+
+### 6.4 The d3 stream — the only live non-printer work, and it lived elsewhere
+
+Added 2026-09-01. Until this entry §6 listed nothing from the d3 workstream even
+though it is the only non-printer work actually in flight — it lived in the
+session-scoped task list and in two design docs. This subsection is a **pointer,
+not a copy**: the owning sections are
+[`d3-integration-design.md`](d3-integration-design.md) §4 (phases) and
+[`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) §6 (tracks),
+and a number that changes there is not re-typed here.
+
+| Item | State | Owner |
+|---|---|---|
+| Phase 1 — the rosette explorer on the real kernel (`/rosette-explorer` in bikar-studio) | shipped 2026-08-31 (bikar #123, #125, #127) | d3 doc §4; explorer doc §6 Track 1 |
+| Track 2 — dials generated from each pattern's own compiled schema | shipped 2026-08-31 | explorer doc §6 Track 2 |
+| Phase 2 — the full orb-view instrument: orb `.bkr` → orb-view SVG → qiyas encode (ref + degraded recon) → `/diff` → status overlay on the bikar-rendered SVG | **live**; the `{id,x,y,status}` join is measured (qiyas D-API-4), nothing built yet | d3 doc §4 Phase 2 and §5 Q-DATA |
+| Explorer coupons — physical pin and clutch checks | printer-gated, §3.2 | explorer doc §6 |
+
+Only the last row needs a printer, which is exactly why the stream was invisible
+to a file organised around what a printer unblocks.
 
 ---
 
