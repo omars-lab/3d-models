@@ -152,19 +152,36 @@ scheduled; the ordering is the dependency order, not a promise.
   day** (bikar **#127** `821dfe7`): a roster of flat, origin-centred `.bkr` figures (Rosette-N +
   Star-N) with a `<select>` to swap them, each pattern's dials generated from its own schema — so
   every non-printer piece of Phase 1 (Tracks 1–2) is shipped.
-- **Phase 2 — the qiyas overlay.** Render per-view score/diff data (from qiyas JSON) as a d3
-  layer on top of a bikar SVG orb view — the "why did this view score 0.67" instrument. This
-  is the qiyas↔d3 integration proper, and it is a *data* integration: no Python touches d3.
-  It consumes the **Q-DATA viz projection** — measured to be a documented *join* of qiyas's
-  existing `/encoding` + `/diff` outputs, not new fields (see the qiyas data-model-API item, D-API-4).
+- **Phase 2 — the qiyas overlay. SHIPPED 2026-09-01** as the studio's `/orb-instrument`
+  page, the whole chain in the browser: an orb `.bkr` compiled and rendered to one
+  symmetry-axis view (bikar **#129** `d524766`, the `orbViewSvgs` helper over the same four
+  core exports the editor drives) → qiyas `POST /deconstruct` encodes that exact SVG as the
+  reference → the page drops every Nth shape as the reconstruction → `POST /diff` with both
+  encodings inline (qiyas **#26** `95dd893`, D-API-5 — the second consumer D-API-4 said would
+  earn a route) → each diff bucket carried onto the face it was measured from (bikar **#132**
+  `7824e12`). It is a *data* integration: no Python touches d3, and the stage is the core
+  renderer's own SVG with one `data-status` attribute joined onto each `<path data-face-index>`.
+  The Q-DATA join was re-measured on orb faces before it was built: a shape's **centre is not a
+  key** (orb faces are concave; two shapes' centres fell inside the same neighbouring face),
+  its **ring is** — qiyas keeps bikar-tagged contours vertex-exact, so `evidence.outline`
+  mapped through the viewBox→px affine equals exactly one face ring, 55/55 bijective at 0.0
+  deviation on Star-Orb's hero view. The by-design failures are the load-bearing cases: a ref
+  id in no diff bucket is shown *unknown*, never defaulted to matched; a face no shape claims is
+  drawn *unclaimed*; an id in two buckets throws. A checked-in fixture (the hero SVG, its
+  encoding, the degraded copy, the diff) is pinned to the live render byte for byte and to the
+  encoding's sha256, so a renderer or encoder change turns it red rather than stale, and the
+  page falls back to it — labelled — when no qiyas answers. Found on the way, not fixed: bikar's
+  generated qiyas schema types lag qiyas's `scores` (no `drop`/`surplus`/`max_drift`); the page
+  derives them from the buckets, and the regeneration is queued in [`plan.md`](plan.md) §2.
 - **Phase 3 — unify the vocabulary.** Per Q-VOCAB, converge the explorers and sacred-patterns
   on one **common naming convention**, refactoring either side as needed. With one or two
   surfaces built, how much vocabulary actually gets shared is cheap to see.
 
 **What unblocks what:** Phase 1's blockers were all cleared — the bikar-studio keystone
-resolved and Q-HOME/Q-SHELL settled — and Phase 1 is now **built** (the `/rosette-explorer` page).
-Phase 2 needs Phase 1's layer plus the Q-DATA join (measured; no qiyas change required). Phase 3
-follows once Phases 1–2 reveal how much vocabulary is really shared.
+resolved and Q-HOME/Q-SHELL settled — and Phases 1 and 2 are both **built** (the
+`/rosette-explorer` and `/orb-instrument` pages). Phase 2 did end up needing one qiyas change
+after all — `POST /diff` with inline encodings (D-API-5) — because nothing before it diffed two
+browser-held renders. Phase 3 is now unblocked: two surfaces exist to read the shared vocabulary off.
 
 ---
 
