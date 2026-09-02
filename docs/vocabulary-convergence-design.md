@@ -1,6 +1,6 @@
 # Vocabulary convergence — one face-list vocabulary across the d3 surfaces and sacred-patterns
 
-**Status:** Design, grounded, not yet built. Settles plan §2 row 2.4 / d3 doc §4 Phase 3
+**Status:** Shipped 2026-09-02 (A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`). Settles plan §2 row 2.4 / d3 doc §4 Phase 3
 (Q-VOCAB). Two research files on disk ground it: the vocabulary survey
 ([`research/vocabulary-survey-q-vocab.md`](research/vocabulary-survey-q-vocab.md)) and the
 sacred-patterns rendering-architecture read
@@ -45,14 +45,15 @@ the canon, then grow C the missing layer so its names have something to attach t
 ## 2. The canonical shared vocabulary
 
 Locked from bikar source — A is the reference surface (d3 doc §4 Phase 1), so where A and B
-disagree, **A's name wins** and B is renamed to it. Four load-bearing terms:
+disagree, **A's name wins** and B is renamed to it. Five load-bearing terms:
 
 | term | meaning | source of truth |
 |---|---|---|
 | `index` | a face's **identity ordinal** — its raw position in the geometry's face list, the key every per-face map and the data-join is keyed by | A: `FaceConstruct.index`, `packages/core/src/viz/face-constructs.ts` |
 | `polygon` | a face's **boundary** — the closed, ordered ring of points, in pattern units | A: `FaceConstruct.polygon`, same file |
 | `ring` | a **concentric styling index** — which rosette ring a face sits in, for `ring ==` style rules; **not** a boundary and **not** an identity | A: `FaceConstruct.ring?`, same file |
-| `joinFaces()` | the shared **enter/update/exit data-join** — `selectAll('path.face').data(constructs, key).join('path')`, key `String(f.index)` | A: `joinFaces()`, `packages/web/src/viz-d3.ts` |
+| `faceKey(f)` | the **shared join key** — `String(f.index)`, the one written convention for keying a face; A's `joinFaces()` uses it by default and B's status-binding join calls it directly, so both surfaces key a face the same way | A: `faceKey`, `packages/web/src/viz-d3.ts` |
+| `joinFaces()` | A's **path-creating enter/update/exit data-join** — `selectAll('path.face').data(constructs, faceKey).join('path')` | A: `joinFaces()`, `packages/web/src/viz-d3.ts` |
 
 The collisions to remove (measured in the survey, §"divergence summary"):
 
@@ -60,12 +61,12 @@ The collisions to remove (measured in the survey, §"divergence summary"):
 |---|---|---|---|
 | B | `FaceStatus.faceIndex` | `index` | same concept as A's `index`, spelled differently — a reader can't tell they're one thing |
 | B | `SvgFace.ring` (holds the **boundary**) | `polygon` / `boundary` | B's `ring` names the boundary; A's `ring` names the concentric index. Same word, two meanings — the worst collision, because it reads as agreement |
-| B | inline `.data().join()` in the page | route through `joinFaces()` | B hand-rolls the join A already factored out; one shared join or the "shared vocabulary" is a fiction at the one place it matters |
+| B | face join **keyed ad-hoc** | adopt the shared `faceKey` as the join key | the two surfaces must key a face the same way or "shared vocabulary" is a fiction at the join. B keeps its own `.data().join()` **by design** — it binds `FaceStatus` onto the pre-rendered `<path data-face-index>` nodes and asserts enter/exit are empty, which the path-*creating* `joinFaces()` cannot do; what converges is the key, not the call |
 | B | `ringKey()` (keyed on the boundary) | a boundary-keyed name (e.g. `boundaryKey()`) | follows the `ring`→`polygon` rename so the key's name matches what it keys on |
 
 After the rename, `ring` means exactly one thing across A and B (concentric styling index),
-`index` means exactly one thing (face identity), and both surfaces enter the same
-`joinFaces()`.
+`index` means exactly one thing (face identity), and both surfaces key their face joins by the
+same `faceKey` — A through `joinFaces()`, B through its own status-binding join.
 
 ## 3. The three surfaces today (grounding)
 
@@ -79,7 +80,7 @@ Full tables are in the survey; the shape that matters here:
   own `.data().join()` instead of calling `joinFaces()`. A **thin rename**, no new structure.
 - **C — sacred-patterns.** OO primitives (`Point`/`Line`/`Circle`/`Polygon`/`Star`) whose
   boundaries are lazy `points` getters; eight `draw*` functions construct geometry and emit SVG
-  **inline** through `canvas.ts`'s five `append*` helpers (47 call sites), keeping **no
+  **inline** through `canvas.ts`'s five `append*` helpers (30 call sites in `index.ts`, 23 of them `appendPolygon` across seven `draw*` functions), keeping **no
   face-list** and using d3 only as a DOM shim — never `.data()`/`.join()`
   ([`research/sacred-patterns-render-arch.md`](research/sacred-patterns-render-arch.md) §2–4). A
   **structural gap**, not a rename.
@@ -148,12 +149,16 @@ FAIL: `SvgFace` still carries a `ring` field holding a point array while `FaceCo
 a number — the two-meanings collision the rename exists to remove, now merely split across files
 so no single grep catches it.
 
-**Validator:** B renders through the shared `joinFaces()`, not an inline join — the orb
-instrument's page has no private `.data(...).join(...)`.
-PASS: the `/orb-instrument` page imports and calls `joinFaces()`; `grep -n '\.data(' ` over the
-page source shows only the call inside `joinFaces`'s own module.
-FAIL: the page keeps its own `selectAll('path').data(faces).join(...)` and merely *also* imports
-`joinFaces` — two joins that can drift, the divergence unfixed.
+**Validator:** B keys its face join by the shared `faceKey`, not an ad-hoc key — the orb
+instrument's status join and A's path join identify a face the same way.
+PASS: the `/orb-instrument` page imports `faceKey` from `viz-d3` and its `.data(faces, …)` key
+function returns `faceKey(d)`; the one written keying convention (`viz-d3.ts`, where `faceKey` is
+"shared by every face join") has a single definition and two callers.
+FAIL: the page hard-codes its own key expression (a bare inline `String(d.index)`, or a different
+field) so the two surfaces could key the same face differently — the divergence the shared key
+exists to remove, now merely hidden across two call sites. B keeping its *own* `.data().join()`
+is **not** a failure: it binds status onto existing nodes, a structurally different join from A's
+path-creating one (§2).
 
 **Validator:** sacred-patterns' output is **pixel-identical** across the C refactor — the
 face-list is an internal seam, invisible in the SVG. This is the load-bearing by-design case: a
@@ -176,8 +181,8 @@ same figure at two scales yields non-proportional face lists.
 Two PRs, one per repo, in order — the canon is fixed before C is built against it:
 
 1. **bikar (A↔B rename)** — fresh bikar worktree. Rename `FaceStatus.faceIndex`→`index`; rename
-   B's boundary-holding `ring`→`polygon`/`boundary` and `ringKey()`→a boundary-keyed name; route
-   the orb-instrument page's inline join through `joinFaces()`. Tests fail-before / pass-after
+   B's boundary-holding `ring`→`polygon`/`boundary` and `ringKey()`→a boundary-keyed name; factor
+   the shared `faceKey` into `viz-d3` and key the orb-instrument page's status join by it. Tests fail-before / pass-after
    (the grep validators of §6 as unit assertions). Full `npm run ci` green (grammar conformance,
    keywords snapshot, pointers, decisions). Merge to bikar main.
 2. **sacred-patterns (grow C)** — fresh sacred-patterns worktree. Add `sacred-patterns/src/ts/faces.ts` and the
@@ -248,7 +253,7 @@ Where it does **not** transfer, stated so it is not assumed:
 ## Appendix B — bets and empirical residue
 
 **None.** Convergence is a naming-and-structure change decided entirely by tests — the grep
-validators, the shared-join assertion, and the pixel-identical golden-file check of §6. Nothing
+validators, the shared-key assertion, and the pixel-identical golden-file check of §6. Nothing
 here waits on a printed object or a physical measurement, so no `CAL-*` bet is registered and the
 status line's "no empirical residue" claim holds. The one by-design failure case that carries the
 weight is the golden-file validator: the refactor must leave sacred-patterns' output

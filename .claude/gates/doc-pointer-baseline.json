@@ -88,11 +88,6 @@
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
       "why": "Deliberately deleted. D-042 names this file as the thing it removed \u2014 a whole test file certifying the withdrawn centreline rule \u2014 and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
-    },
-    {
-      "doc": "docs/vocabulary-convergence-design.md",
-      "path": "sacred-patterns/src/ts/faces.ts",
-      "why": "Proposed module \u2014 the C structural refactor's new geometry->FaceConstruct[] mapper (\u00a74). Authored by plan 2.4.d; forward reference until then."
     }
   ]
 }

@@ -175,15 +175,19 @@ scheduled; the ordering is the dependency order, not a promise.
   first page derived them from the buckets. Fixed since (bikar #145 `cdc0331`): the mirror is
   re-vendored, the page reads the scores, and a 3d-models gate (`.claude/gates/schema_mirror.py`)
   holds bikar's copy to qiyas's export at the use-case map's pins — [`plan.md`](plan.md) §2 row 2.9.
-- **Phase 3 — unify the vocabulary.** Per Q-VOCAB, converge the explorers and sacred-patterns
-  on one **common naming convention**, refactoring either side as needed. With one or two
-  surfaces built, how much vocabulary actually gets shared is cheap to see.
+- **Phase 3 — unify the vocabulary. SHIPPED 2026-09-02.** Per Q-VOCAB, all three surfaces now
+  read one face-list vocabulary (`index`, `polygon`, `ring`, `faceKey`, `joinFaces`): A↔B were
+  renamed and joined on a shared `faceKey` (bikar #151 `1083046`), and sacred-patterns was grown
+  a `faceConstructs()` mapper + a `joinFaces()` `<path class="face">` renderer in place of its
+  imperative `<polyline>` primitives — pixel-identical, held to a frozen coordinate golden
+  (sacred-patterns #45 `76e3c17`). The design, the K10 transfer conditions, and the reversal
+  condition are in [`vocabulary-convergence-design.md`](vocabulary-convergence-design.md) (D-050).
 
 **What unblocks what:** Phase 1's blockers were all cleared — the bikar-studio keystone
 resolved and Q-HOME/Q-SHELL settled — and Phases 1 and 2 are both **built** (the
 `/rosette-explorer` and `/orb-instrument` pages). Phase 2 did end up needing one qiyas change
 after all — `POST /diff` with inline encodings (D-API-5) — because nothing before it diffed two
-browser-held renders. Phase 3 is now unblocked: two surfaces exist to read the shared vocabulary off.
+browser-held renders. Phase 3 then shipped against those two surfaces (above).
 
 ---
 
