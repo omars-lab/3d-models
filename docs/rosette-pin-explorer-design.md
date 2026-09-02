@@ -11,7 +11,7 @@ clutch lobes) per piece on live geometry — so the seat/drop verdict is the eng
 copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
 successor for that concern. See the shipped record in
 [`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
-below. Last updated 2026-09-01 — grounded (Appendix A/B); §6.6 is the open ledger.
+below. Last updated 2026-09-02 — 6.6.3 plates as data shipped; §6.6 is the open ledger.
 
 **Artifact this doc is tied to:**
 [**Petals to Pins — rosette → LEGO-pin explorer**](https://claude.ai/code/artifact/df5788b3-8785-492b-a5f0-92533fbad4e5)
@@ -311,7 +311,7 @@ runtime skill is needed for.
 | # | task | priority | blocker / depends |
 |---|---|---|---|
 | 3.1 | Picker with LEGO-brand plate sizes, drawn to scale + fit check | P1 | — · 🟢 **done** |
-| 3.2 | Externalize plates to a data file `{name, studs, mm, brand, thumbnail, buy-link}` | P2 | none |
+| 3.2 | Externalize plates to a data file `{name, studs, mm, brand, thumbnail, buy-link}` — 🟢 the `{id, studs, mm, brand}` half shipped as 6.6.3 (bikar #141 `571cba2`); thumbnail and buy-link stay with 3.4 | P2 | none |
 | 3.3 | Add verified clone plates (Mega, generic) **with measured pitch drift** | P2 | `CAL-CLB-01` bet → coupon **LG-P2**, held on a printer 🔴 |
 | 3.4 | Thumbnails + real buy/affiliate URLs | P2 | data-entry / partner step — **must be real, not fabricated** 🔴 |
 
@@ -362,7 +362,7 @@ for *any* pattern" fastest:
 |---|---|---|---|
 | 6.6.1 | **Widen the roster — 🟢 shipped 2026-09-01** (bikar #134 `85269ac`). Six entries: Rosette-N, Star-N, Girih {10/3}, Girih decagon, Hex field, Star-8 field — one per §5.3 lattice row plus girih. The "flat/centred check per figure" this row priced turned out to be the finding: two of the four tilings compile off-origin (the tiler repeats one way), so the page now recentres on the face bbox and frames the stage from `spanPU`; the roster test asserts each entry centres within 1e-6 and spans what it declares (0.9·spanPU < w ≤ spanPU) | Track 1's objective is *any* pattern; the picker made that a data change and then stopped at two | small — one line each, plus the flat/centred check per figure |
 | 6.6.2 | **Ground this doc — 🟢 shipped 2026-09-01** (3d-models #136). Adversarial audit checked in as `research/rosette-pin-explorer-grounding-audit.md`; Appendix A (sources) and B (seven contested bets, all clustered under existing `CAL-*` ids — none minted). What the audit killed: §5's "measured 0.00 mm in LG-S1" (LG-S1 is unprinted; it *computes*), §3's "7.985 … ~0.24 mm" pitch drift (Lugnet says 7.986 ± 0.002 on beams; Cailliau 7.993 ± 0.007 on a baseplate), the 4.8-vs-5.0 stud split (5.0 is a rounded Lugnet line, not a source), §7's "none address relief across seams" (MachineBlocks ships per-brick relief), two PR shas (#124 `7674683`, #127 `6d17651`) and a link to a directory | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
-| 6.6.3 | **3.2 — plates as data.** `PLATES` is a five-entry const in `bikar:packages/web/src/rosette-explorer.ts`; move it to a data file `{id, studs, mm, brand}` so a plate is added without touching page code. **No thumbnails and no buy links** — those are 3.4, which needs real URLs and a partner, and a fabricated link is worse than none | Track 3's objective is "the plate the user owns"; a const list cannot grow past what one author typed | small |
+| 6.6.3 | **3.2 — plates as data — 🟢 shipped 2026-09-02** (bikar #141 `571cba2`). `PLATES` moved to `bikar:packages/web/src/data/plates.json` as `{id, studs, mm, brand}` plus a default id; `brand: nominal` means no plate was measured and mm is 8 × studs, the only kind on the roster today. The file is data, so `loadPlates` is the gate that keeps that from meaning unchecked: a duplicate id, non-integer studs, a nominal plate whose mm is not 8 × studs, or a default naming no plate all throw by name (the off-nominal mm is the by-design FAIL — the same number passes once a brand is named). The select is populated from the roster like the pattern picker; the status line shows mm and brand. **No thumbnails and no buy links** — those are 3.4, which needs real URLs and a partner, and a fabricated link is worse than none | Track 3's objective is "the plate the user owns"; a const list cannot grow past what one author typed | small |
 | 6.6.4 | **4.2 — the interior-tube cap.** A dial that drops interior tubes and shows the clutch/material trade, with the kernel's floor (≥2 engaged studs + ≥1 anchor, already in the verdict) left visible and un-overridable | Track 4's question — "do we need all these pins?" — has a websearched answer and no instrument | small–medium; UI only until a coupon can price it |
 
 **Gated on a download — a human must fetch an app.** The LDraw export has been opened by
