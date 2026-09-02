@@ -1,6 +1,6 @@
 # Working plan — what we are working against
 
-Last updated: 2026-09-01. This is the **index of record** for active work across the
+Last updated: 2026-09-01 (6.6.1 shipped). This is the **index of record** for active work across the
 three repos: objectives, the priority queue, what shipped, what the audits found, and
 where everything lives. It is a pointer document — a number or a design detail lives
 in the doc that owns it and is linked from here, never re-typed. The live task list
@@ -48,7 +48,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 | 2.1.d | The page: `/orb-instrument` cloned from the rosette explorer's shape — plain shell, d3 owns the SVG interior, one status-mark join in the separable `viz-d3` module keyed by qiyas id; core stays d3-agnostic. Shipped (bikar #132 `7824e12`); verified live in Chrome against a local qiyas on three views and a second orb | 🟢 | — | bikar decision 2026-08-31 d3 viz adapter |
 | 2.1.e | Registration — five real touch points (html file, page marker meta, `PAGE_ROUTES`, rollup input, routing test; there is no site nav and the public-surface file lists hosts and env keys, not pages) + tests that fail without the join, DOM-free like the package's other tests + a checked-in Encoding/Diff fixture pair so the suite needs no server. Shipped in the same PR, plus a catalogue entry the public-surface test demanded | 🟢 | — | `bikar:packages/web/vite.config.ts`, `bikar:packages/web/tests/routing.test.ts` |
 | 2.1.f | Record it: d3 doc §4 Phase 2 → shipped, backlog §6.4 row, §3 here, memory shipped-record bullet | 🟢 | — | this file (3d-models #129) |
-| 2.2 | Explorer open ledger — widen the roster (6.6.1), ground the explorer doc (6.6.2), plates as data (6.6.3), interior-tube cap (6.6.4) | ⚪ | none | explorer doc §6.6 |
+| 2.2 | Explorer open ledger — widen the roster (6.6.1 🟢 2026-09-01, bikar #134 `85269ac`), ground the explorer doc (6.6.2), plates as data (6.6.3), interior-tube cap (6.6.4) | 🔵 | none | explorer doc §6.6 |
 | 2.3 | Memory decomposition — `islamic-orb-project.md` is one 140 KB file; split by topic into one-fact files | ⚪ | none; do before the next append | §4.2 below |
 | 2.4 | d3 Phase 3 — unify the vocabulary across the explorers and sacred-patterns (Q-VOCAB) | ⚪ | after 2.1 shows what is shared | d3 doc §4 Phase 3 |
 | 2.5 | Publish the contract + JSON schema | 🟡 | user: venue and versioning | qiyas `contract/schemas/`, sacred-patterns canonical v1.5 |
@@ -61,6 +61,8 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 
 | Date | What | Where |
 |---|---|---|
+| 2026-09-01 | **Gates give one verdict from any checkout** — self as_of pinned at the published base so a squash merge cannot orphan it; doc_pointers, docs_gate D1 and the use-case validator retry beside the primary clone from a linked worktree; skipped ≠ resolved in the stale-baseline check. Found while landing 6.6.1 from a worktree: FAIL(4) there, OK from the primary | 3d-models #132 `44fba5c`, #133 `b7a8908` |
+| 2026-09-01 | **Explorer roster widened to six** (6.6.1) — girih, hex-field and square-tiling figures join Rosette-N/Star-N, one per Lego Lab §5.3 lattice row; off-origin tilings recentred in the page, stage framed from the declared span | bikar #134 `85269ac`; 3d-models #134 |
 | 2026-09-01 | **d3 Phase 2 shipped** — `/orb-instrument`: orb view rendered in the studio, encoded and diffed by qiyas, every verdict joined onto the face it was measured from; `POST /diff` with inline encodings (D-API-5); the ring, not the centre, is the join key | bikar #129 `d524766`, #132 `7824e12`; qiyas #26 `95dd893`; 3d-models #129 |
 | 2026-09-01 | This working plan created as the index of record | 3d-models #126 `43886f2` |
 | 2026-09-01 | Re-audit follow-through: memory index is an index again, backlog §6.4 points at the d3 stream, dead task ids removed; merge closing-checklist tenet | 3d-models #122 `d9b3c5d`, #123 `4cecb60` |
@@ -90,6 +92,7 @@ tenet each left behind.
 | 4.4 | `backlog.md` presented itself as the durable non-printer sequence but had no d3 entry; the live stream existed only in the task list | backlog §6.4 pointer; this file | Every live stream has a durable home that the task list mirrors, not replaces |
 | 4.5 | A memory claim ("origin authoritative") rested on a subject match; the branch survey had already shown subject matches lie | Content-sentinel verified, then reconciled with local edits kept | A memory line that says X is authoritative names the check that showed it |
 | 4.6 | The live item's task still carried its *measurement* title after the measurement shipped | Retitled to the build; sub-steps 2.1.a–f filed | A task's title is its current deliverable |
+| 4.7 | Three gates and the map's self pin gave a different verdict depending on which checkout ran them: a linked worktree sits one level below the siblings, and a self pin taken at branch HEAD does not survive a squash merge — so a worktree commit failed on 14 false "resolves now" while the primary passed, and master carried an orphaned pin | Sibling fallback via the git common dir in all three gates; self pin at merge-base with origin; self-tests build a primary + worktree + sibling layout and assert both verdicts agree (#132 `44fba5c`, #133 `b7a8908`) | **A gate's verdict must not depend on which checkout runs it** — every gate that touches a path outside the repo gets a worktree self-test; a pin the repo takes on itself is taken at the published base, never at HEAD — memory `gate-verdict-checkout-independent` |
 
 Related precedent on why this is a plan and not a register:
 [`issue-register-evaluation.md`](issue-register-evaluation.md) — registers nobody re-reads
