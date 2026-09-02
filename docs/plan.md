@@ -47,7 +47,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 | 2.1.c | The join: `/encoding(ref)` + `/encoding(recon)` + `/diff` → `{id, x, y, status}` honouring the **two id namespaces** (ref-side buckets join on the ref encoding, `extra_in_recon` on the recon encoding). **Re-measured on orb faces before building:** centre-in-face is not bijective (concave faces); the ring's vertex set is, 55/55 at 0.0 deviation — that is the key `qiyas-join.ts` uses (bikar #132) | 🟢 | — | d3 doc §4 Phase 2 |
 | 2.1.d | The page: `/orb-instrument` cloned from the rosette explorer's shape — plain shell, d3 owns the SVG interior, one status-mark join in the separable `viz-d3` module keyed by qiyas id; core stays d3-agnostic. Shipped (bikar #132 `7824e12`); verified live in Chrome against a local qiyas on three views and a second orb | 🟢 | — | bikar decision 2026-08-31 d3 viz adapter |
 | 2.1.e | Registration — five real touch points (html file, page marker meta, `PAGE_ROUTES`, rollup input, routing test; there is no site nav and the public-surface file lists hosts and env keys, not pages) + tests that fail without the join, DOM-free like the package's other tests + a checked-in Encoding/Diff fixture pair so the suite needs no server. Shipped in the same PR, plus a catalogue entry the public-surface test demanded | 🟢 | — | `bikar:packages/web/vite.config.ts`, `bikar:packages/web/tests/routing.test.ts` |
-| 2.1.f | Record it: d3 doc §4 Phase 2 → shipped, backlog §6.4 row, §3 here, memory shipped-record bullet | 🟢 | — | this file (this PR) |
+| 2.1.f | Record it: d3 doc §4 Phase 2 → shipped, backlog §6.4 row, §3 here, memory shipped-record bullet | 🟢 | — | this file (3d-models #129) |
 | 2.2 | Explorer open ledger — widen the roster (6.6.1), ground the explorer doc (6.6.2), plates as data (6.6.3), interior-tube cap (6.6.4) | ⚪ | none | explorer doc §6.6 |
 | 2.3 | Memory decomposition — `islamic-orb-project.md` is one 140 KB file; split by topic into one-fact files | ⚪ | none; do before the next append | §4.2 below |
 | 2.4 | d3 Phase 3 — unify the vocabulary across the explorers and sacred-patterns (Q-VOCAB) | ⚪ | after 2.1 shows what is shared | d3 doc §4 Phase 3 |
@@ -61,7 +61,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 
 | Date | What | Where |
 |---|---|---|
-| 2026-09-01 | **d3 Phase 2 shipped** — `/orb-instrument`: orb view rendered in the studio, encoded and diffed by qiyas, every verdict joined onto the face it was measured from; `POST /diff` with inline encodings (D-API-5); the ring, not the centre, is the join key | bikar #129 `d524766`, #132 `7824e12`; qiyas #26 `95dd893`; 3d-models this PR |
+| 2026-09-01 | **d3 Phase 2 shipped** — `/orb-instrument`: orb view rendered in the studio, encoded and diffed by qiyas, every verdict joined onto the face it was measured from; `POST /diff` with inline encodings (D-API-5); the ring, not the centre, is the join key | bikar #129 `d524766`, #132 `7824e12`; qiyas #26 `95dd893`; 3d-models #129 |
 | 2026-09-01 | This working plan created as the index of record | 3d-models #126 `43886f2` |
 | 2026-09-01 | Re-audit follow-through: memory index is an index again, backlog §6.4 points at the d3 stream, dead task ids removed; merge closing-checklist tenet | 3d-models #122 `d9b3c5d`, #123 `4cecb60` |
 | 2026-08-31 | Track 1 follow-on 1.3 — pattern picker over an exported roster; Tracks 1–2 fully shipped | bikar #127 `821dfe7`; 3d-models #121 `4f7ab28` |
