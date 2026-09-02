@@ -789,6 +789,19 @@ def self_test() -> int:
     finally:
         ROOT, VIEWS = real_root, real_views
         shutil.rmtree(tmp, ignore_errors=True)
+    # The skip is a verdict too: an absent build/ exits 0 and says so, while a
+    # present-but-empty one still fails — asserted here so a future edit cannot
+    # quietly turn the skip back into the failure the hook and the make target
+    # used to disagree about.
+    with tempfile.TemporaryDirectory() as tmp:
+        absent = main([str(Path(tmp) / "never-built")])
+        ok = absent == 0
+        failures += 0 if ok else 1
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: an absent build/ is a skip, exit 0 (got {absent})")
+        empty = main([tmp])
+        ok = empty == 1
+        failures += 0 if ok else 1
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: a build/ with no manifest is a failure, exit 1 (got {empty})")
     print("self-test: " + ("PASS" if failures == 0 else f"FAIL ({failures})"))
     return 1 if failures else 0
 
@@ -800,8 +813,14 @@ def main(argv: list[str]) -> int:
     rest = [a for a in argv if not a.startswith("--")]
     root = Path(rest[0]) if rest else BREAKDOWN
     if not root.is_dir():
-        print(f"timelapse-gate: no {root} — run make orbs", file=sys.stderr)
-        return 1
+        # Nothing rendered yet is not a failure: a fresh clone or worktree has
+        # no build/ at all. The hook used to make this call and the make target
+        # did not, so `make validate` failed where `git commit` passed — the
+        # gate owns the decision now and both paths share it. An existing
+        # build/ with no manifest in it stays a failure below: that is a build
+        # that ran and produced nothing, which is the thing to look at.
+        print(f"timelapse: no {root} — nothing rendered yet, skipping", file=sys.stderr)
+        return 0
     dirs = sorted(p for p in root.iterdir() if (p / "manifest.json").exists())
     if not dirs:
         print(f"timelapse-gate: no orb under {root} wrote a manifest.json", file=sys.stderr)
