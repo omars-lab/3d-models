@@ -81,6 +81,7 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 import sys
 from pathlib import Path
 
@@ -286,8 +287,40 @@ def _sibling_root(name: str, root: Path) -> Path | None:
         if env:
             p = Path(env).expanduser().resolve()
             return p if p.is_dir() else None
-    p = (root / ".." / name).resolve()
-    return p if p.is_dir() else None
+    for base in _checkout_parents(root):
+        p = (base / name).resolve()
+        if p.is_dir():
+            return p
+    return None
+
+
+def _checkout_parents(root: Path) -> list[Path]:
+    """Directories a sibling may sit beside: this checkout's, then the primary's.
+
+    Siblings are laid out beside the **primary** clone (`~/Workspace/git/bikar`
+    beside `~/Workspace/git/3d-models`). A linked worktree lives one level down
+    (`3d-models.worktrees/<branch>`), so `root/..` there is the worktree folder
+    and no sibling is ever found under it. Found 2026-09-01: from a worktree
+    with `BIKAR_DIR` unset the gate skipped 464 of 569 pointers and then
+    reported every grandfathered one as "resolves now" — see `stale_baseline`.
+    The primary's location comes from git's common dir, read with `GIT_DIR`
+    scrubbed so a hook launch answers the same as a hand run.
+    """
+    out = [root.parent]
+    try:
+        common = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            capture_output=True,
+            text=True,
+            check=True,
+            env=_git_env(),
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return out
+    primary = Path(common).resolve().parent
+    if primary.parent not in out:
+        out.append(primary.parent)
+    return out
 
 
 #: Every tracked path in a sibling, at a ref, cached per (repo, ref).
@@ -487,6 +520,36 @@ def added_entries(
 # --- run ------------------------------------------------------------------
 
 
+
+def stale_baseline(
+    baseline: list[dict[str, str]],
+    *,
+    broken: set[tuple[str, str]],
+    skipped: set[tuple[str, str]],
+    written: set[tuple[str, str]],
+) -> list[str]:
+    """A baselined pointer that resolves now, or is no longer written, is stale.
+
+    A *skipped* one is neither: its sibling is not checked out, so nothing was
+    measured, and an entry cannot be retired on a verdict that was never
+    reached. Before this branch the check was "not broken ⇒ resolves", which
+    from a worktree without siblings retired all fifteen entries at once —
+    including `packages/core/src/nope/does-not-exist.ts`, a path that exists to
+    be missing.
+    """
+    out: list[str] = []
+    for e in baseline:
+        k = (e["doc"], e["path"])
+        if k in broken or k in skipped:
+            continue
+        out.append(
+            f'{BASELINE_REL}: `{e["path"]}` in {e["doc"]} resolves now — delete its entry.'
+            if k in written
+            else f'{BASELINE_REL}: `{e["path"]}` is no longer written in {e["doc"]} — delete its entry.'
+        )
+    return out
+
+
 def run(root: Path, list_all: bool) -> tuple[list[str], str]:
     """Check the tree. Returns (violations, one-line summary)."""
     docs = scanned_docs(root)
@@ -535,18 +598,14 @@ def run(root: Path, list_all: bool) -> tuple[list[str], str]:
             f'      {{ "doc": {json.dumps(p.doc)}, "path": {json.dumps(p.path)} }}' + hint
         )
 
-    # A baselined pointer that resolves now, or is no longer written, is stale.
-    broken_keys = {(p.doc, p.path) for p in broken}
-    still_written = {(p.doc, p.path) for p in pointers}
-    for e in baseline:
-        k = (e["doc"], e["path"])
-        if k in broken_keys:
-            continue
-        violations.append(
-            f'{BASELINE_REL}: `{e["path"]}` in {e["doc"]} resolves now — delete its entry.'
-            if k in still_written
-            else f'{BASELINE_REL}: `{e["path"]}` is no longer written in {e["doc"]} — delete its entry.'
+    violations.extend(
+        stale_baseline(
+            baseline,
+            broken={(p.doc, p.path) for p in broken},
+            skipped={(p.doc, p.path) for p in skipped},
+            written={(p.doc, p.path) for p in pointers},
         )
+    )
 
     previous = previous_baseline(root)
     if previous is not None and os.environ.get("DOC_POINTERS_BASELINE_MAY_GROW") != "1":
@@ -673,6 +732,52 @@ def self_test() -> int:
         f"self-test {'ok  ' if ok else 'FAIL'}: one-out-one-in is seen as growth "
         f"(a count would report 1 == 1 and pass)"
     )
+
+    # A skipped entry is unmeasured. Three entries, three verdicts, one silence.
+    bl = [
+        {"doc": "a.md", "path": "bikar/x.bkr"},
+        {"doc": "a.md", "path": "y.ts"},
+        {"doc": "a.md", "path": "z.md"},
+    ]
+    stale = stale_baseline(
+        bl,
+        broken=set(),
+        skipped={("a.md", "bikar/x.bkr")},
+        written={("a.md", "bikar/x.bkr"), ("a.md", "y.ts")},
+    )
+    ok = (
+        len(stale) == 2
+        and "`y.ts` in a.md resolves now" in stale[0]
+        and "`z.md` is no longer written" in stale[1]
+    )
+    failures += 0 if ok else 1
+    print(
+        f"self-test {'ok  ' if ok else 'FAIL'}: a skipped baseline entry is not reported "
+        f"as resolving (got {len(stale)} stale, want 2 — the resolved and the unwritten)"
+    )
+
+    # From a linked worktree, siblings sit beside the primary clone, not beside
+    # the worktree. Built in a scratch layout so the verdict does not depend on
+    # which checkout runs the self-test.
+    with tempfile.TemporaryDirectory() as tmp:
+        base = Path(tmp)
+        primary = base / "repo"
+        primary.mkdir()
+        (base / "qiyas").mkdir()
+        env = {**_git_env(), "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+        for cmd in (
+            ["git", "init", "-q", "-b", "main"],
+            ["git", "commit", "-q", "--allow-empty", "-m", "root"],
+            ["git", "worktree", "add", "-q", str(base / "repo.worktrees" / "w"), "-b", "w"],
+        ):
+            subprocess.run(cmd, cwd=primary, check=True, env=env, capture_output=True)
+        found = _sibling_root("qiyas", base / "repo.worktrees" / "w")
+        ok = found is not None and found.resolve() == (base / "qiyas").resolve()
+        failures += 0 if ok else 1
+        print(
+            f"self-test {'ok  ' if ok else 'FAIL'}: a sibling beside the primary clone is found "
+            f"from a linked worktree (got {found})"
+        )
 
     print("self-test: " + ("PASS" if failures == 0 else f"FAIL ({failures})"))
     return 0 if failures == 0 else 1
