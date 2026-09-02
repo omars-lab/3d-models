@@ -68,9 +68,9 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # Recursively expanded, not `:=`, because LAB_PAGES is defined further down
 # beside the vendor step that uses it. `:=` here would expand to nothing and
 # deploy a gallery with no studio pages in it.
-DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json
+DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -591,7 +591,7 @@ web-images:
 # and site_graph.py's G4 rule — DEPLOY_PATHS and LAB_PAGES must agree with the
 # nodes docs/site-graph.json marks `vendored` — is precisely a deploy-time
 # invariant. Checking it here costs milliseconds and no network.
-deploy: validate-site-graph web-images lab prints-manifest
+deploy: validate-site-graph web-images lab prints-manifest status-manifest
 	@set -euo pipefail; \
 	cd ${ROOT_DIR}; \
 	git show-ref --verify --quiet refs/heads/${PAGES_BRANCH} \
@@ -644,3 +644,22 @@ validate-branch-guard:
 validate-schema-mirror:
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/schema_mirror.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/schema_mirror.py
+
+# The register status.html reads: three facts about what the gallery was built
+# from — the bikar commit (build/bikar-ref.txt), the use-case map's as_of pins,
+# and the last deploy (the gh-pages tip). Written only by build/status_manifest.py,
+# gitignored, and rebuilt by every deploy so nobody types a provenance into
+# existence; the generator's self-test (pure parsers, a fixture repo on disk, and
+# the by-design failures — a malformed stamp, a fresh clone with no gh-pages) runs
+# before every write. Appended after validate-schema-mirror on purpose: it added
+# no anchored line above it. D-049 §4.
+status-manifest:
+	$(PYTHON) ${ROOT_DIR}/build/status_manifest.py --self-test
+	$(PYTHON) ${ROOT_DIR}/build/status_manifest.py
+
+# Wholesale form of the status self-test — the check with no pre-commit hook
+# behind it (hook_parity.py EXTRA), for the same reason validate-coupons has none:
+# its three inputs are files other gates already own (bikar-ref.txt is gitignored,
+# use-cases.md is gated by 20-use-cases, gh-pages is the deploy's own record), so
+# there is no staged-file trigger to hang a hook on. It regenerates the manifest too.
+validate-status: status-manifest

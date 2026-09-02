@@ -35,3 +35,6 @@ __pycache__/
 # The prints register: written by build/prints_manifest.py (make prints-manifest)
 # from docs/prints/ and shipped by DEPLOY_PATHS. Generated, never typed.
 /prints-manifest.json
+# The status register: written by build/status_manifest.py (make status-manifest)
+# from build/bikar-ref.txt, the use-case map as_of pins, and the gh-pages tip.
+/status-manifest.json

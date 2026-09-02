@@ -150,6 +150,14 @@
       "what": "the prints register (S7, 2026-09-01): one card per plate that came off a machine, read from prints-manifest.json, which build/prints_manifest.py writes from docs/prints/<run>/ and DEPLOY_PATHS ships beside the page. The rendered reader docs/prints.md is still shipped (G.prints-reader) and the page links to it on github.com — the queue is linked, not copied. Until this shipped the node was docs/prints.md itself and edgeless, because the inbound nav link shifts every anchored index.html edge below it; that shift landed with this page."
     },
     {
+      "id": "G.status",
+      "surface": "gallery",
+      "file": "status.html",
+      "vendored": false,
+      "inRepo": true,
+      "what": "the studio status page (D-049 §4, 2026-09-02): three provenance facts read from files and typed by nobody — the bikar commit the gallery was built from (build/bikar-ref.txt), the as_of pins the use-case map was last checked against, and the last deploy (the gh-pages tip). Rendered from status-manifest.json, which build/status_manifest.py writes from those three sources and DEPLOY_PATHS ships beside the page. A 3d-models page, not a bikar lab page (vendored:false): all three facts are this repo's provenance and would be meaningless on bikar's own studio deploy. Its generator's --self-test runs via `make validate-status` (a hook_parity EXTRA — the three inputs are files other gates own, so a commit here has no staged trigger to hang a hook on)."
+    },
+    {
       "id": "S.index",
       "surface": "studio",
       "file": "index.html",
@@ -201,21 +209,21 @@
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:305",
+      "at": "index.html:306",
       "evidence": "href=\"lab.html\"",
       "visibility": "static"
     },
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:323",
+      "at": "index.html:324",
       "evidence": "href=\"lego.html\"",
       "visibility": "static"
     },
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:552",
+      "at": "index.html:553",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer"
@@ -223,7 +231,7 @@
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:552",
+      "at": "index.html:553",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none"
@@ -247,7 +255,7 @@
     {
       "from": "G.index",
       "to": "S.index",
-      "at": "index.html:278",
+      "at": "index.html:279",
       "evidence": "bikar.naqshcoffee.com",
       "visibility": "static",
       "viaHost": "bikar.naqshcoffee.com",
@@ -430,7 +438,7 @@
     {
       "from": "G.index",
       "to": "G.breakdown",
-      "at": "index.html:553",
+      "at": "index.html:554",
       "evidence": "href=\"breakdown.html?orb=",
       "visibility": "js-computed",
       "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
@@ -477,6 +485,13 @@
       "to": "G.prints",
       "at": "index.html:271",
       "evidence": "href=\"prints.html\"",
+      "visibility": "static"
+    },
+    {
+      "from": "G.index",
+      "to": "G.status",
+      "at": "index.html:272",
+      "evidence": "href=\"status.html\"",
       "visibility": "static"
     },
     {
