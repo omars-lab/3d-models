@@ -28,10 +28,7 @@ if [ ! -f "$GATE" ]; then
   echo "pre-commit: no timelapse gate in this worktree ($GATE) — skipping" >&2
   exit 0
 fi
-# Nothing to check before the first `make orbs`, and that is not a failure:
-# a fresh clone has no build/ at all.
-if [ ! -d "$(git rev-parse --show-toplevel)/build/orb-breakdown" ]; then
-  echo "timelapse: no build/orb-breakdown — nothing rendered yet, skipping" >&2
-  exit 0
-fi
+# Nothing to check before the first `make orbs` is the gate's call, not this
+# file's: it skips an absent build/ itself, so `make validate-timelapse` and
+# this hook cannot disagree about it again.
 exec python3 "$GATE"
