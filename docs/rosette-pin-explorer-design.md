@@ -10,7 +10,7 @@ clutch lobes) per piece on live geometry — so the seat/drop verdict is the eng
 copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
 successor for that concern. See the shipped record in
 [`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
-below. Last updated 2026-08-31.
+below. Last updated 2026-09-01 — §6.6 adds the open ledger.
 
 **Artifact this doc is tied to:**
 [**Petals to Pins — rosette → LEGO-pin explorer**](https://claude.ai/code/artifact/df5788b3-8785-492b-a5f0-92533fbad4e5)
@@ -318,6 +318,49 @@ runtime skill is needed for.
    the same wall every LEGO-pin coupon hits (see [backlog.md](backlog.md) §3.2, print-gated).
 
 ---
+
+### 6.6 The open ledger — what is left, by what gates it (2026-09-01)
+
+Tracks 1–2 are shipped and §6.5's printer-held rows are held; this subsection is the residue read
+against the Lego Lab's original five goals
+([`lego-lab-design.md`](lego-lab-design.md) §1). Four of those five are code and all four are
+built — the `brick` declaration, the anchorability gate, the grid-fit score with its sweep, and
+the Lab page. The fifth — **true-scale interoperability verified in plastic** — is the only goal
+still open, and it is open for one reason: no printer. So the ledger sorts by gate, not by
+priority, because the gate is what decides whether a line can move this week.
+
+**Unblocked — needs nothing but the work.** In the order that advances "a bikar → LEGO tool
+for *any* pattern" fastest:
+
+| # | item | why it advances the goal | size |
+|---|---|---|---|
+| 6.6.1 | **Widen the roster.** The picker ships with Rosette-N and Star-N; a roster line is the whole cost of adding a flat, origin-centred figure (§6 Track 1 — 1.3), and none of the girih, hex-field or rational-repeat figures that fill the §5.3 compatibility matrix are on it yet | Track 1's objective is *any* pattern; the picker made that a data change and then stopped at two | small — one line each, plus the flat/centred check per figure |
+| 6.6.2 | **Ground this doc.** The status line still reads *draft, not gate-audited* while §6 has become the roadmap of record for the stream | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
+| 6.6.3 | **3.2 — plates as data.** `PLATES` is a five-entry const in `bikar:packages/web/src/rosette-explorer.ts`; move it to a data file `{id, studs, mm, brand}` so a plate is added without touching page code. **No thumbnails and no buy links** — those are 3.4, which needs real URLs and a partner, and a fabricated link is worse than none | Track 3's objective is "the plate the user owns"; a const list cannot grow past what one author typed | small |
+| 6.6.4 | **4.2 — the interior-tube cap.** A dial that drops interior tubes and shows the clutch/material trade, with the kernel's floor (≥2 engaged studs + ≥1 anchor, already in the verdict) left visible and un-overridable | Track 4's question — "do we need all these pins?" — has a websearched answer and no instrument | small–medium; UI only until a coupon can price it |
+
+**Gated on a download — a human must fetch an app.** The LDraw export has been opened by
+three.js `LDrawLoader` end to end and by LDView (installed, measured, removed —
+[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10). Two readers are still owed
+by [`backlog.md`](backlog.md) §6.1: **LeoCAD**, where the source reading *predicts* the inline
+geometry is silently dropped (the export-succeeds-and-yields-nothing class), and **BrickLink
+Studio**, which is untouched and which nothing in the survey predicts. Neither can be settled by
+code; both need the download that the survey's §1.1 says a human must run.
+
+**Gated on a decision.** `lego-lab-design.md` §11 Q6 leaves one question open: whether a
+compliance proxy (rib deflection × count, or an FEA-lite bending estimate) is worth adding beside
+the geometry gate. The decision can be made now; the *calibration* of whatever it decides cannot,
+because LG-F1 and LG-D1 are the data. A proxy shipped before them is a `CAL-*` bet by
+construction, which is legitimate and must be labelled as one.
+
+**Gated on a printer — held, not blocked.** Every coupon in [`backlog.md`](backlog.md) §3.2
+(LG-F1, F2, R1, S1, D1, B1, B2, P1, P2), and with them 3.3, 3.4's measured-drift half and 4.3
+above. The backlog owns these; they are not re-listed in the task system, per its §3.8.
+
+What this ledger deliberately does **not** carry: the `--format ldraw` thumbnail gate's
+graduation to a hook (`lego-lab-design.md` §15.4 — waits on measured recurrence, by design), Q8's
+general two-vector basis (resolved as a label, D-007), and Track 2.3's authoring skill (not needed
+at runtime). Each is a closed door with its reason on it, not an open item.
 
 ## 7. Web-searched options considered (and why this shape)
 
