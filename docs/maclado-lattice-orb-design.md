@@ -6,7 +6,7 @@ family doc; this doc is one orb). Authorised by the owner in
 [D-049 §5](decisions-log.md) ("build a fourth orb, and use the build to find gaps
 and inconsistencies and make the approach more robust in the process") and, this
 session, resolved to the **18-wheel open shell** among the offered shapes. Ground
-truth pinned to bikar `1083046` (origin/main). Ships with its
+truth pinned to bikar `1083046` (origin/main); grounded 2026-09-02 (Appendix A). Ships with its
 [stop list](#6-the-stop-list-d-049-5) complete and, per D-049 §5, an orb-creation
 skill **only if** that stop list's *instruction* column is non-empty at ship.
 
@@ -30,13 +30,21 @@ classes on two distinct separations.
    close their mutual gaps with fillers, and hem the open boundary so the object
    is a single watertight manifold — the same export contract the family holds
    ([`maclado-orb-design.md`](maclado-orb-design.md) §5.5, §7).
-2. **Keep the four filler classes whole and visible.** The walk's value over the
+2. **Keep the filler classes whole and visible.** The walk's value over the
    symmetric field is *not* mold economy — the symmetric field wins that, one
    class to four ([`maclado-orb-design.md`](maclado-orb-design.md) §8, M4c). Its
-   value is that the four classes are quantization's doing on an asymmetric
-   partial field, and this object is the physical evidence. Whole-filler
-   congruence is verified per tile (§4), the family's standing invariant
-   ([`maclado-orb-design.md`](maclado-orb-design.md) §5.3).
+   value is that the multiple classes are quantization's doing on an asymmetric
+   partial field, and this object is the physical evidence. **A qualifier the open
+   mouth forces:** the "four congruence classes" is M4c's measurement over the
+   *closed* hull decomposition of the eighteen sites (13 tiles → 4 classes, member
+   sizes 8/2/2/1). The open shell fills only the **interior** tiles — those whose
+   bounding wheels are all in the walk — so the emitted fillers are the subset of
+   the 13 that do not border the mouth. The object therefore exhibits **at most**
+   four classes, and the build records how many survive once the mouth tiles are
+   excluded. Whole-filler congruence is still verified per tile against the four
+   canonical templates (§4), the family's standing invariant
+   ([`maclado-orb-design.md`](maclado-orb-design.md) §5.3), so a class the mouth
+   removes is a smaller vocabulary, never a wrong tile.
 3. **Log the build as a process measurement.** Every stop an earlier orb also
    needed is written into §6 labelled *detector* or *instruction*, under the
    D-049 §5 rule. This is the reason the orb is built at all; the object is the
@@ -81,10 +89,11 @@ What exists today, and exactly where the walk stops short of geometry.
   `mesh.stats.watertight`.
 - **Placement grammar names one rule.** `bikar:packages/core/src/kernel3d/placement-rule.ts`
   registers only `dodecahedral` (all twenty sites); the DSL type is
-  `place?: 'dodecahedral'` and `base wheelfield` explicitly refuses a `sites`
-  count (`bikar:packages/core/src/dsl/parser.ts`,
-  `bikar:packages/core/src/dsl/evaluator.ts`). The DSL cannot express "eighteen
-  of twenty" today.
+  `place?: 'dodecahedral'`. A `sites` count *does* exist
+  (`bikar:packages/core/src/dsl/parser.ts`) but only for `base sphere` (v1: 1 or
+  2); `base wheelfield` does not take it
+  (`bikar:packages/core/src/dsl/evaluator.ts`), so the DSL cannot express
+  "eighteen of twenty" today.
 - **The gap machinery already generalises to a partial field.** M4c generalised
   the §6 cut in `bikar:packages/core/src/kernel3d/maclado-gap.ts` from one tile
   per hull *triangle* to one tile per hull *face*, precisely so an asymmetric
@@ -115,10 +124,12 @@ symmetric field has no boundary, so nothing in bikar hems one today.
 2. **Place the eighteen wheels** with the existing `placeWheelInFrame`
    (`bikar:packages/core/src/kernel3d/maclado-field.ts`), unchanged — placement
    is per-site and never assumed the full twenty.
-3. **Close the interior gaps.** Run the M4c hull-face cut
-   (`bikar:packages/core/src/kernel3d/maclado-gap.ts`) over the eighteen wheel
-   centres; each *interior* gap — one whose bounding wheels are all in the walk —
-   is filled by `maclado-filler.ts` and must be congruent to one of the four
+3. **Close the interior gaps.** The M4c hull-face cut
+   (`bikar:packages/core/src/kernel3d/maclado-gap.ts`) is analysis-only today and
+   `buildMacladoField` takes no subset (§2); the new subset-driven filler path
+   (§5) drives the decomposition over the eighteen wheel centres and reuses
+   `maclado-filler.ts`'s emitter. Each *interior* gap — one whose bounding wheels
+   are all in the walk — is emitted and must be congruent to one of the four
    canonical templates (§4). Gaps that bound an unvisited site are **not** filled;
    they open onto the mouth.
 4. **Find the coastline.** The mouth is bounded by a single closed loop of wheel-
@@ -128,8 +139,12 @@ symmetric field has no boundary, so nothing in bikar hems one today.
 5. **Hem the coastline into a watertight solid.** A bowl is a watertight manifold:
    an inner and an outer surface joined along a rim. The rim closes the thick
    shell's cross-section along the coastline, so the object is *visually* open —
-   one mouth — and *topologically* closed, with no boundary edge. Then the
-   family's tail runs unchanged: vertex weld, then `meshGate`
+   one mouth — and *topologically* closed, with no boundary edge. "Watertight"
+   here is the **mesh-manifold** sense `meshGate` enforces — every edge shared by
+   exactly two faces, no boundary edge — not the hobbyist "holds water" sense a
+   vase-mode single-wall surface satisfies while staying non-manifold; the rim is
+   what makes the two coincide. Then the family's tail runs unchanged: vertex
+   weld, then `meshGate`
    ([`maclado-orb-design.md`](maclado-orb-design.md) §5.5).
 
 **The closure invariant** (the family's §5.3, carried, not re-derived): a
@@ -257,13 +272,31 @@ the print constraints ([`maclado-orb-design.md`](maclado-orb-design.md) Appendix
 [`research/maclado-orb-survey.md`](research/maclado-orb-survey.md)). This orb adds
 no new external claim — the walk's numbers (four classes, two separations, the
 hull-face cut) are measured in bikar and cited to M4c above. The grounding audit
-for this doc lands at `docs/research/maclado-lattice-orb-grounding-audit.md`
-before the orb ships (it does not exist yet — the audit runs before 2.10.b).
+is [`research/maclado-lattice-orb-grounding-audit.md`](research/maclado-lattice-orb-grounding-audit.md)
+(2026-09-02): it verified every bikar citation first-hand at commit `1083046`,
+found no fabricated or misattributed citation and no K2 over-claim, and confirmed
+the Martín López attribution is faithfully de-scoped. Its one substantive finding —
+the "four classes" count against the open mouth — is applied in §1 goal 2 and §4.
+The mesh-manifold requirement §3–§4 leans on is a **checked invariant** (`meshGate`),
+not a literature claim, so a citation is optional here; the standard FDM statements
+of it are [Hubs](https://www.hubs.com/knowledge-base/fixing-most-common-stl-file-errors/),
+[Meshy](https://www.meshy.ai/blog/fix-non-manifold-edges-stl-repair) and
+[Tripo3D](https://www.tripo3d.ai/blog/watertight-3d-models).
 
 ## Appendix B — contested bets and open questions
 
-- **The rim wall** — reused from the strut section by the §7 transfer sentence;
-  becomes a `CAL-*` bet only if a coupon shows the mouth needs a thicker hem.
+- **The rim wall** — reused from the strut section by the §7 transfer sentence, so
+  it is the **same quantity** as the family's ~2.0 mm wall default
+  ([`maclado-orb-design.md`](maclado-orb-design.md) §7), not a new bet (one
+  quantity, one bet). That family wall is itself a citation-grounded `**Default:**`
+  the family defers to a coupon; this orb inherits it unchanged.
+- **The unsupported mouth span** — the one thing a closed sphere never has, so the
+  one genuinely new empirical unknown: whether an open shell bows or warps across
+  the mouth regardless of wall thickness. It is deferred exactly as the family wall
+  is — no printer is in the loop (printing is HELD), so it graduates to a `CAL-*`
+  bet when 2.10.b's geometry exists and a mouth coupon can be cut, not before.
+  Apparatus: a printed partial-shell coupon at the chosen mouth radius, measured
+  for flatness of the rim after release and handling.
 - **Mold economy** — the walk's four classes lose to the symmetric field's one
   ([`maclado-orb-design.md`](maclado-orb-design.md) §8). This orb does not dispute
   that; it ships for the measurement (§1 goal 3), and the losing comparison is

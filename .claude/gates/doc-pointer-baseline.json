@@ -91,11 +91,6 @@
     },
     {
       "doc": "docs/maclado-lattice-orb-design.md",
-      "path": "docs/research/maclado-lattice-orb-grounding-audit.md",
-      "why": "Forward-ref: the grounding audit for this doc is authored before the orb ships (2.10.b), not before the doc lands. Removed when the audit is written."
-    },
-    {
-      "doc": "docs/maclado-lattice-orb-design.md",
       "path": "bikar:patterns/Orbs/Maclado-9-Lattice.bkr",
       "why": "Forward-ref: the walk-orb preset is authored in bikar during 2.10.b, after this design doc lands. Removed when the preset ships and the map re-pins it."
     }
