@@ -11,7 +11,11 @@ flowchart LR
     G_lab["lab.html"]
     G_lego["lego.html"]
     G_design["design.html"]
+    G_breakdown["breakdown.html"]
     G_readme["README.md"]
+    G_prints["prints.html"]
+    G_status["status.html"]
+    G_prints-reader["docs/prints.md"]
   end
   subgraph studio["studio — bikar-studio.pages.dev"]
     S_index["index.html"]
@@ -31,8 +35,8 @@ flowchart LR
   G_lab --> G_index
   G_lego --> G_studio
   G_lego --> G_index
-  G_lab -.->|"bikar-studio.pages.dev"| S_editor
-  G_lego -.->|"bikar-studio.pages.dev"| S_editor
+  G_lab -.->|"sign-in wall"| S_editor
+  G_lego -.->|"sign-in wall"| S_editor
   G_studio -.-> G_lab
   G_studio -.-> G_lego
   G_studio -.-> G_design
@@ -49,6 +53,18 @@ flowchart LR
   S_404 --> S_index
   S_404 --> S_editor
   S_404 --> S_sessions
+  G_index -.-> G_breakdown
+  G_lab --> G_breakdown
+  G_studio -.-> G_breakdown
+  G_breakdown -.-> G_index
+  G_breakdown -.-> G_lab
+  G_breakdown -.-> G_studio
+  G_index --> G_prints
+  G_index --> G_status
+  G_studio -.-> G_prints
+  G_prints -.-> G_studio
+  G_prints -.-> G_breakdown
+  G_prints -.-> G_lab
 ```
 
 Solid arrows are links present in the markup. Dotted arrows are computed by
@@ -57,11 +73,15 @@ them. Labelled arrows cross a hostname.
 
 ## Why a declared graph and not a crawler
 
-The one live defect in this graph is the arrow labelled **sign-in wall**:
-[`index.html:277`](../index.html) links the public gallery to
+The arrow this graph exists to make legible is the one labelled **sign-in
+wall**: [`index.html:279`](../index.html) links the public gallery to
 `bikar.naqshcoffee.com`, which sits behind Cloudflare Access. Every visitor but
-the owner lands on a login page. Identical bytes are served publicly at
-`bikar-studio.pages.dev` and nothing links there.
+the owner lands on a login page — deliberately, and the markup now labels the
+link *sign-in* (task #64, 2026-09-02). There is no public twin to repoint it at:
+`bikar-studio.pages.dev` was equalised behind the same Access gate on 2026-09-02
+(task #63), so every studio host is sign-in-walled alike. A crawler cannot see
+any of this — Cloudflare answers it with a login page and HTTP 200 — which is the
+whole reason the graph is declared here rather than discovered.
 
 The survey found a second, simpler one, since fixed: `README.md:7` — the
 README's primary call to action, on the deployed branch — pointed at
@@ -128,13 +148,14 @@ properties of its own and no known consumer.
 whose source page sits on a surface with any public host, must carry a
 `gated.why`.
 
-PASS: `G.index -> S.index` at `index.html:277` carries a `gated.why` recording
+PASS: `G.index -> S.index` at `index.html:279` carries a `gated.why` recording
 that the sign-in door is deliberate, that both bikar catalogues describe it
-wrongly as a walkable loop, and that repointing it at the public twin is the
-same decision as task #63.
+wrongly as a walkable loop, and that keeping the labelled sign-in link — rather
+than repointing it — was the call made once task #63 had equalised every studio
+host behind the same gate (task #64, 2026-09-02).
 
 FAIL: delete that `gated` block and the gate reports —
-*"G1: G.index -> S.index at index.html:277 travels through bikar.naqshcoffee.com,
+*"G1: G.index -> S.index at index.html:279 travels through bikar.naqshcoffee.com,
 declared exposure=\"access\". G.index is publicly reachable, so every visitor but
 the owner gets a login wall."* Run `make site-graph` to watch it: the self-test
 mutates the real graph in memory, one defect at a time, and requires each
