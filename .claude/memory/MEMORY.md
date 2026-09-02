@@ -2,7 +2,7 @@
 
 - [autoMemoryDirectory setting](auto-memory-directory-setting.md) — relative paths and checked-in project settings are silently ignored; use an absolute `~/` path in `settings.local.json`
 - [3D Models deploy](3d-models-deploy.md) — gh-pages diverged branch, OpenSCAD render + image pipeline
-- [Islamic orb project](islamic-orb-project.md) — cross-repo orb build (bikar DSL 3D + qiyas + gallery). The dated shipped-record log (what merged, PR + sha, tenets) is the **Shipped record** section of that file; open work lives in the task system and `docs/backlog.md` §6.4, never here. Durable text cites stable ids (rung, CAL-*, D-number, PR + sha), never task numbers
+- [Islamic orb project](islamic-orb-project.md) — cross-repo orb build (bikar DSL 3D + qiyas + gallery). The dated shipped-record log (what merged, PR + sha, tenets) is the **Shipped record** section of that file; open work lives in the task system, which mirrors `docs/plan.md` (the working plan of record: objectives, priority queue, shipped, audit findings, links) — never here. Durable text cites stable ids (rung, CAL-*, D-number, PR + sha), never task numbers
 - [bikar studio access](bikar-studio-access.md) — only public entry is bikar.naqshcoffee.com, gated behind org GitHub sign-in; internal audience, internet-reachable (settles the public-surface keystone)
 - [gh auto-merge footgun](gh-auto-merge-footgun.md) — `--auto` merges immediately on NaqshCoffee repos; poll to green instead
 - [3d-models use-case hook](3d-models-use-case-hook.md) — pre-commit dispatcher blocks pointer-file commits without map update; USE_CASES_OK=1 override
