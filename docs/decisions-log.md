@@ -4121,3 +4121,62 @@ mere preference for different names is not a reversal condition and does not reo
   is a number (the two-meanings collision, merely split across files); or a sacred-patterns face's
   coordinate string differs from the frozen golden — the refactor changed a pixel, which is a
   regression, not a convergence.
+
+## D-051 — the fourth Family-3 orb ships as an open-shell lattice walk; eight detectors, no orb-creation skill
+
+**Date:** 2026-09-02 · **Repos:** both · **Status:** shipped — bikar #153 (kernel + geometry)
+and #154 (the orb-validate sweep predicate + comparison test) are merged on `main`; the
+preset `patterns/Orbs/Maclado-9-Lattice.bkr` and its Lab entry are live; printing stays HELD
+
+### What shipped
+
+The fourth Family-3 maclado orb (D-030…D-033, D-040, D-044) is the
+closed dodecahedral wheelfield with a **mouth**: an 18-wheel [D-031] lattice walk places
+wheels on 18 of the 20 sites, leaves two adjacent sites open, closes the fillers whose
+congruence class survives, and hems the open rim so the shell stays watertight. It reaches
+the DSL as `place rule latticewalk length <n> start <k>` — the one-word keyword forced by
+the lexer's identifier class, with an eval-time single-mouth gate. The design and its two
+re-litigable choices (the keyword spelling, the mouth gate) are recorded in
+`docs/maclado-lattice-orb-design.md` and, on the engine side, in
+`bikar:docs/decisions/2026-09-02-latticewalk-grammar.md`.
+
+The object is genuinely new in one structural way that drives everything downstream: it is
+the **only** orb in the corpus that declares `orb3d` yet decomposes into neither cells nor a
+weave. `projectOrbViewScene` throws on it, so `render --format views` exits 1 — exactly as a
+2D wheel-pattern disc does. It is validated by mesh topology instead (design doc §4), and the
+Lab registry marks it mesh-only with `qiyasComposite: { cells: null, ribbons: null }` (both
+null = draws neither view; distinct from `qiyasComposite: null`, which means *unmeasured*).
+
+### Seven detectors, no instruction — therefore no skill
+
+[D-049] §5 set the rule: every build stop an earlier orb also needed is logged in the fourth
+orb's §6 as a **detector** (a test or gate could catch it → it becomes that gate in the same
+PR) or an **instruction** (only a prior orb-builder would know it). An orb-creation skill is
+written **iff** the instruction list is non-empty at ship. All eight stops classified as
+detectors, each with an enforcing gate that fired: Lab chip registration, the pattern
+manifest, the public `patternSources` count (122→123), the timelapse corpus `[null, null]`
+row, the `render --format views` exit-1 skip in bikar's sweep (`drawsOrbViews`), the
+compound-keyword parse guard, the ledger's C-collation, and — new in this 3d-models PR —
+the same exit-1 in the `make orbs` publish pipeline, handled by a sibling skip branch that
+keeps the fail-closed `else` net. The instruction column is empty, so **no orb-creation
+skill is written** — the same conclusion, on the same measured grounds, that
+[`docs/issue-register-evaluation.md`](issue-register-evaluation.md) and
+[`docs/dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md) reached for
+their proposed skills: no skill, a gate instead.
+
+**Validator:** the mesh-only orb is skipped by the sweep and reconciled by the comparison
+test, not silently dropped.
+- PASS: `bikar:scripts/sweep-orb-validate.ts` `drawsOrbViews` returns false for
+  `Maclado-9-Lattice.bkr` and true for every cell- or ribbon-bearing orb; the
+  `orb-composites` coverage test's `MESH_ONLY` set is absent from the sweep and its `SWEPT`
+  set is fully present; the pre-check floor asserts `sweep.orbs.length >= SWEPT.length`.
+- FAIL: a mesh-only preset appears in the sweep output (the coverage test's `sweptMeshOnly`
+  assertion fires), or a view-drawing preset is missing from it — either is a registry↔sweep
+  divergence, which is the bug this pair of tests exists to catch.
+
+### Reversal condition
+
+Decided by tests, not a printer — no `CAL-*` bet. The single-mouth gate is a v1
+simplification (grammar decision doc §7): a later orb that deliberately wants more than one
+mouth reopens the gate, not this entry. Nothing else reverses — the keyword spelling is forced
+by the lexer and the weave/overlap refusal is definitional.

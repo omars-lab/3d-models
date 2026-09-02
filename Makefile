@@ -301,10 +301,13 @@ orbs: bikar-stamp
 		elif printf '%s' "$$err" | grep -q 'only produces 2D geometry'; then \
 			rm -rf $(ORB_VIEWS)/$$name; \
 			echo "   SKIP views+timelapse: $$name is a round-pattern orb (STL only) — bikar draws no face-tiled breakdown for it yet (task #80)"; \
+		elif printf '%s' "$$err" | grep -q 'has no cell decomposition'; then \
+			rm -rf $(ORB_VIEWS)/$$name; \
+			echo "   SKIP views+timelapse: $$name is an open-shell wheelfield orb (STL only) — no cell or ribbon views to tile (maclado-lattice doc §4; drawsOrbViews)"; \
 		else \
 			rm -rf $(ORB_VIEWS)/$$name; \
 			printf '%s\n' "$$err" 1>&2; \
-			echo "orbs: $$name failed --format views, and not with the round-pattern refusal — stopping so a real regression is never skipped" 1>&2; \
+			echo "orbs: $$name failed --format views, and not with a recognized no-views refusal (round-pattern 2D or open-shell wheelfield) — stopping so a real regression is never skipped" 1>&2; \
 			exit 1; \
 		fi; \
 	done; \
