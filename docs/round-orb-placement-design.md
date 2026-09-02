@@ -31,7 +31,8 @@ Grounding. Every engine claim below was verified first-hand against the bikar wo
 this session — the placer's frame-based reuse, the coincidence weld, the per-cap watertight
 gate, and the studio's dispatch on `orbMesh` without `orb3d`. Where a fact is a follow-on
 gap rather than a shipped guarantee, this doc says so in place (§6 names the CLI mesh-gate
-gap explicitly rather than implying `--check mesh` covers the sphere-orb path — it does not).
+gap explicitly rather than implying `--check mesh` covers the sphere-orb path — it did not
+when this doc shipped; §6 now records the closure, dated, and what closing it uncovered).
 
 ---
 
@@ -182,7 +183,10 @@ explicit follow-on. v1 proves the *weld* (a shared vertex index — the frozen v
 
 ---
 
-## 6. What v1 does not gate — the CLI mesh-gate gap, stated in the open
+## 6. What v1 did not gate — the CLI mesh-gate gap, stated in the open, then closed
+
+**Closed 2026-09-01/02 in two bikar commits, not one.** The gap below was real when v1
+shipped; what follows is the record as written then, and after it the closure.
 
 The evaluator's `capsWatertight` gate throws at *compile time*, so a sphere orb that fails to
 close cannot be evaluated at all — the guarantee is real. But the **CLI** `--check mesh` gate
@@ -194,6 +198,34 @@ the Playwright overlay), but the CLI's dedicated mesh gate does not yet cover th
 Closing it is a one-line predicate widen (`|| result.orbMesh`) plus the aggregate-vs-caps
 decision about which watertight flag the CLI should report — filed as the follow-on's first
 task, and worth a `bikar:docs/engine-issues.md` entry.
+
+### 6.1 How it closed — and what the predicted one-liner would have missed
+
+- **The widen (bikar `adb4e8c`, 2026-09-01).** Not the predicted `|| result.orbMesh`: the gate
+  now dispatches on a typed declared minimum, `declaredMinFeatureMm(result)`, which reads the
+  strut cross-section from `orb3d`, from a new `sphere3d: SphereOrbProvenance` that
+  `evaluateSphereOrbDecl` returns, or from `piece3d.minFeatureMm`, and `--check` fires whenever
+  that is defined. Witness `bikar:packages/cli/tests/mesh-gate-sphere.test.ts`: `Donut-Hex-Orb`
+  with `--check` prints `mesh gate: watertight=true … — PASS` where before it printed nothing.
+  Engine-issues entry "CLI `--check mesh` silently skips a `base sphere` orb", ✅.
+- **The aggregate-vs-caps decision, measured (bikar `8a01836`, 2026-09-02).** The widen
+  was measured against the by-design case this doc's §5.3 and D-047 name — `Donut-Hex-Weld`,
+  two welded discs — and **failed it**: `watertight=false euler=-25 … — FAIL`, exit 1, on an
+  orb the evaluator had just accepted. `meshGate` read the aggregate `stats.watertight` while
+  `evaluateSphereOrbDecl` reads `capsWatertight ?? watertight`; the single-disc witness is the
+  one orb where the two flags agree, so the red→green test could not see the divergence. And
+  the failure was not academic: this repo's `make orbs` renders every `patterns/Orbs/*.bkr`
+  with `--check` under `set -e`, so the fix that closed the silent skip broke the build at the
+  welded orb. Decision: the gate reads the evaluator's expression — one flag for two gates —
+  and the CLI line prints both, `watertight=false sites=2 welds=N caps=true … — PASS`. The
+  aggregate is reported, never rewritten; a filler that closes the union (§9 item 4) stays
+  follow-on. Witnesses: `bikar:packages/core/tests/kernel3d/mesh-gate.test.ts` (the welded
+  pair passes on caps; a placement whose cap does not close still fails, naming the cap) and
+  a second case in `mesh-gate-sphere.test.ts` (the welded orb exits 0 with both flags).
+
+**Tenet, again:** the by-design failure is the load-bearing case. A widen tested only on the
+orb where both flags agree shipped green and broke the sibling's build; the measurement that
+found it took one command against the orb the design doc had already named.
 
 ---
 
@@ -253,6 +285,7 @@ Each is a named milestone gated behind v1 shipping:
 4. **Fillers** — a closed two-body (then N-body) shell between welded discs, turning the §5.3
    pinch into a printable union. The generic instruments for it (`decomposeWheelGap`,
    `checkFillerClosure`, currently unexported) are noted, not touched.
-5. **The CLI mesh-gate widen** (§6) — cover the `orbMesh` path in `--check mesh`, decide the
-   aggregate-vs-caps report, and add the engine-issue entry.
+5. **The CLI mesh-gate widen** (§6) — **shipped**, bikar `adb4e8c` (the widen) and
+   `8a01836` (caps, not aggregate, after the welded orb failed the widened gate); both
+   engine-issue entries ✅ — §6.1.
 6. **Unify `MacladoWheel`** into the general contact-ring model (v1 runs parallel).

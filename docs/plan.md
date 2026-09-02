@@ -53,7 +53,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 | 2.4 | d3 Phase 3 — unify the vocabulary across the explorers and sacred-patterns (Q-VOCAB) | ⚪ | after 2.1 shows what is shared | d3 doc §4 Phase 3 |
 | 2.5 | Publish the contract + JSON schema | 🟡 | user: venue and versioning | qiyas `contract/schemas/`, sacred-patterns canonical v1.5 |
 | 2.6 | coffee-house-sites issue 1 | 🟡 | user | that repo |
-| 2.7 | First physical print — machine card, LEGO ladder, W-series, orb ladder; prints-tab rungs S2–S7 | 🔴 | a Bambu-class printer | backlog §2–§3, prints-tab doc |
+| 2.7 | First physical print — machine card, LEGO ladder, W-series, orb ladder; prints-tab rungs S2 and S4 (S3, S5–S7 shipped) | 🔴 | a Bambu-class printer | backlog §2–§3, prints-tab doc |
 | 2.8 | Explorer printer-held rows (3.3, 3.4, 4.3) | 🔴 | printer | explorer doc §6.5 item 5 |
 | 2.9 | bikar's generated qiyas schema types lag qiyas: `Scores` lacks `drop`/`surplus`/`max_drift` that `POST /diff` returns. Regenerate from qiyas at `95dd893`, and gate the generator so the drift cannot recur (found building 2.1.d; the page derives the three from the buckets meanwhile) | ⚪ | none | bikar `packages/qiyas-schema` |
 
@@ -61,6 +61,9 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 
 | Date | What | Where |
 |---|---|---|
+| 2026-09-02 | **CLI mesh gate covers sphere orbs, and reads the right flag** — the widen (peer) fired on `base sphere` orbs; measured against the welded pair it failed the by-design case and broke `make orbs`; the gate now reads per-cap closure like the evaluator and prints both flags. Design doc §6.1, D-047 resolution note | bikar `adb4e8c`, `8a01836` |
+| 2026-09-02 | **Direct commits on main/master refused by hook** in both repos; branch protection measured absent (404) and left to the owner with the command written down (D-048). Also: the hook-env parity test masked the ahead/behind count that a concurrent session was moving | bikar #136 `4ac089b`; 3d-models #131 `04f2137` |
+| 2026-09-02 | **Prints tab S7** — `prints.html` vendored into the gallery from bikar's lab page; `prints_manifest.py` writes the register from `docs/prints/*/index.md` through the gate's own parser (an honest zero today); UC24; bikar's `ci` fixed first (rasterizer missing on ubuntu-latest, red on main for four runs) | bikar #130 `e5ccb4f`, #131 `eef7587`, #133 `26c3d6f`; 3d-models #130 `e3f8e11` |
 | 2026-09-01 | **Gates give one verdict from any checkout** — self as_of pinned at the published base so a squash merge cannot orphan it; doc_pointers, docs_gate D1 and the use-case validator retry beside the primary clone from a linked worktree; skipped ≠ resolved in the stale-baseline check. Found while landing 6.6.1 from a worktree: FAIL(4) there, OK from the primary | 3d-models #132 `44fba5c`, #133 `b7a8908` |
 | 2026-09-01 | **Explorer roster widened to six** (6.6.1) — girih, hex-field and square-tiling figures join Rosette-N/Star-N, one per Lego Lab §5.3 lattice row; off-origin tilings recentred in the page, stage framed from the declared span | bikar #134 `85269ac`; 3d-models #134 |
 | 2026-09-01 | **d3 Phase 2 shipped** — `/orb-instrument`: orb view rendered in the studio, encoded and diffed by qiyas, every verdict joined onto the face it was measured from; `POST /diff` with inline encodings (D-API-5); the ring, not the centre, is the join key | bikar #129 `d524766`, #132 `7824e12`; qiyas #26 `95dd893`; 3d-models #129 |

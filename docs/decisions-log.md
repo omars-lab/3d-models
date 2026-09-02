@@ -3801,6 +3801,13 @@ the maclado-field reproduction (the strongest correctness test, it has a fixture
 5-fold rule, fillers, and unifying `MacladoWheel` into the general contact-ring model all
 stay deferred to the follow-on, each a named milestone in the design doc.
 
+*Resolved 2026-09-02, the first item only:* bikar `adb4e8c` widened the gate onto a typed
+`sphere3d` provenance, and measuring that widen against this decision's by-design case — the
+welded pair, aggregate `watertight` false while every cap closes — found it **failing** the
+welded orb and, through `make orbs`, this repo's build. bikar `8a01836` makes `meshGate`
+read `capsWatertight ?? watertight`, the evaluator's own expression, and print both flags.
+Record: `round-orb-placement-design.md` §6.1. The rest of this list stands.
+
 ## D-048 — direct commits on the default branch are refused by hook in both repos; merging on red is branch protection's to stop, and that setting is the owner's
 
 **Date:** 2026-09-02 · **Repos:** bikar (`.husky/pre-commit`, bikar #136), 3d-models (`.githooks/pre-commit.d/00-branch`, this log)
