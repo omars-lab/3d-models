@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json
 
-.PHONY: prints-manifest cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: prints-manifest cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -612,3 +612,10 @@ deploy: validate-site-graph web-images lab prints-manifest
 prints-manifest:
 	$(PYTHON) ${ROOT_DIR}/build/prints_manifest.py --self-test
 	$(PYTHON) ${ROOT_DIR}/build/prints_manifest.py
+
+# Branch guard — the wholesale form of .githooks/pre-commit.d/00-branch. The
+# hook has no tree to check, so its wholesale form is its test: six scratch
+# repos, the guard wired through the dispatcher, master and main refused by git
+# and every other case landing. At the tail so no anchored line above moves.
+validate-branch-guard:
+	${ROOT_DIR}/.githooks/tests/refuse-main-commit.sh

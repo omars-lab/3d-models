@@ -3800,3 +3800,92 @@ decision) and an `engine-issues.md` entry are the follow-on's first task. The ru
 the maclado-field reproduction (the strongest correctness test, it has a fixture), the
 5-fold rule, fillers, and unifying `MacladoWheel` into the general contact-ring model all
 stay deferred to the follow-on, each a named milestone in the design doc.
+
+## D-048 — direct commits on the default branch are refused by hook in both repos; merging on red is branch protection's to stop, and that setting is the owner's
+
+**Date:** 2026-09-02 · **Repos:** bikar (`.husky/pre-commit`, bikar #136), 3d-models (`.githooks/pre-commit.d/00-branch`, this log)
+**Status:** hooks shipped in both repos; branch protection **not applied** — the command is below and the owner runs it
+
+### What was measured
+
+Neither default branch is protected: `gh api repos/NaqshCoffee/bikar/branches/main/protection`
+and `gh api repos/omars-lab/3d-models/branches/master/protection` both answer
+`404 Branch not protected` (2026-09-02). Every norm here says branch → PR →
+squash-merge, and nothing enforced it. Two consequences were observed the same day
+while shipping the prints page (D-046's S7):
+
+1. bikar's `ci` workflow was red on `main` for four consecutive runs, 2026-08-31 →
+   09-02. bikar #121 added an SVG-rasterizer dependency that `ubuntu-latest` does not
+   ship; #125, #128 and #129 merged over the red; bikar #131 added the install step
+   and its `ci-parity.yaml` entry. Then bikar #132 introduced an identifier codespell
+   reads as a misspelling and `main` was red again within the hour (#133, then the
+   rename in #135). A red gate that everyone merges past is a gate that has been
+   switched off — bikar's own `ci.yml` header says so.
+2. A `git commit` on either default branch lands, and the next `git push` publishes
+   it. In bikar that is a commit no pull-request run ever measured; here it is a
+   commit no hook-parity run on a second machine ever saw.
+
+### The decision
+
+Two failure paths, two mechanisms, and only one of them is ours to ship from a repo:
+
+- **The direct-commit path is closed by hook, in both repos, now.** 3d-models
+  `.githooks/pre-commit.d/00-branch` and the first block of bikar `.husky/pre-commit`
+  refuse a commit whose branch is `master` or `main` — both names in both repos, so
+  the rule reads the same in each. Detached HEAD is allowed (no branch to protect;
+  `git worktree add --detach` is how both repos' hook tests build their fixtures)
+  and so is `gh-pages` (a deliberately diverged branch `make deploy` commits to; it
+  is not the default). The override is `BRANCH_OK=1`, the `*_OK=1` convention every
+  other gate here uses, so choosing to skip it leaves a name in the shell history.
+
+  **Validator:** `make validate-branch-guard` here (`.githooks/tests/refuse-main-commit.sh`,
+  the hook's declared wholesale form) and `npm run test:hooks` in bikar, both driving
+  *git* through the wired hook rather than running the file by hand.
+  - PASS: a commit on `feat/topic`, on `gh-pages`, on a detached HEAD, and on
+    `master` with `BRANCH_OK=1` all land.
+  - FAIL: a commit on `master` or `main` is refused **with the guard's own message**.
+    A refusal for any other reason (a scratch repo with no `scripts/`, say) is
+    counted as the guard *not* having run — the vacuous pass the test exists to catch.
+
+- **The merge-on-red path is not closable from inside a repo.** A hook runs on the
+  committer's machine; a squash-merge happens on GitHub. Only branch protection with
+  required status checks stops a merge on red, and applying it is an account-level
+  change with a rule pulling the other way: a billing block is not a red build and
+  must never stop a merge or a deploy (CLAUDE.md, `docs/local-ci-runbook.md`). Required
+  checks that fail-closed during a billing outage would block every merge for as long
+  as the outage lasts.
+
+  So the setting is recorded here as the recommendation, and applied by the owner,
+  not by a session:
+
+  - **bikar `main`**: require a pull request; require the `ci`, `e2e` and `gitleaks`
+    checks; **do not enforce for admins**, so the owner can still merge past a
+    billing block while a red check on an ordinary day stops everyone else.
+  - **3d-models `master`**: require a pull request only. There is no CI to require.
+
+  ```sh
+  gh api -X PUT repos/NaqshCoffee/bikar/branches/main/protection --input - <<'JSON'
+  {"required_status_checks":{"strict":false,"contexts":["ci","e2e","gitleaks"]},
+   "enforce_admins":false,
+   "required_pull_request_reviews":{"required_approving_review_count":0},
+   "restrictions":null}
+  JSON
+  gh api -X PUT repos/omars-lab/3d-models/branches/master/protection --input - <<'JSON'
+  {"required_status_checks":null,"enforce_admins":false,
+   "required_pull_request_reviews":{"required_approving_review_count":0},
+   "restrictions":null}
+  JSON
+  ```
+
+  Until that runs, the hook is the whole gate on direct commits and *nothing* gates a
+  merge on red: the standing practice is to read `main`'s last run before diagnosing
+  a PR's red check (memory `check-main-ci-not-just-the-pr`) and to poll `gh pr checks`
+  to all-pass before `gh pr merge`, never `--auto`.
+
+### What this does not decide
+
+Whether `strict: true` (branch must be up to date before merging) is worth the rebase
+churn with several sessions merging in a day — left off here; it is the setting that
+would have caught #132's codespell failure before merge, at the price of a re-run per
+merge. Revisit if `main` goes red a third time from a merge that was green on its own
+base.
