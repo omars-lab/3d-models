@@ -3811,7 +3811,7 @@ Record: `round-orb-placement-design.md` §6.1. The rest of this list stands.
 ## D-048 — direct commits on the default branch are refused by hook in both repos; merging on red is branch protection's to stop, and that setting is the owner's
 
 **Date:** 2026-09-02 · **Repos:** bikar (`.husky/pre-commit`, bikar #136), 3d-models (`.githooks/pre-commit.d/00-branch`, this log)
-**Status:** hooks shipped in both repos; branch protection **not applied** — the command is below and the owner runs it
+**Status:** hooks shipped in both repos; branch protection **applied 2026-09-02** on the owner's go-ahead and verified by GET — [D-049](#d-049--six-owner-decisions-of-2026-09-02-in-plain-words) §1; the command below is the one that ran
 
 ### What was measured
 
@@ -3884,8 +3884,8 @@ Two failure paths, two mechanisms, and only one of them is ours to ship from a r
   JSON
   ```
 
-  Until that runs, the hook is the whole gate on direct commits and *nothing* gates a
-  merge on red: the standing practice is to read `main`'s last run before diagnosing
+  Until that ran (it did, 2026-09-02 — D-049 §1), the hook was the whole gate on direct
+  commits and *nothing* gated a merge on red. The standing practice stays: to read `main`'s last run before diagnosing
   a PR's red check (memory `check-main-ci-not-just-the-pr`) and to poll `gh pr checks`
   to all-pass before `gh pr merge`, never `--auto`.
 
@@ -3896,3 +3896,167 @@ churn with several sessions merging in a day — left off here; it is the settin
 would have caught #132's codespell failure before merge, at the price of a re-run per
 merge. Revisit if `main` goes red a third time from a merge that was green on its own
 base.
+
+## D-049 — six owner decisions of 2026-09-02, in plain words
+
+**Date:** 2026-09-02 · **Repos:** both · **Status:** all six decided; §1 is applied and verified, §2–§6 are queued as `docs/plan.md` §2 rows 2.10–2.14 with the shape chosen here
+
+### Why this entry exists
+
+Six items were waiting on the owner, not on code: the branch-protection setting D-048
+left to the owner, and five task-board items the 2026-09-01 audit had marked as needing
+a decision (the fourth orb, the decision hub, the status page, the parked Rosette-N
+explorations, the wrap morph). Each was put to the owner as one question with its
+options spelled out plainly and the recommended one listed first. The answers are
+below, one section per question: the question, the options as offered, the answer,
+and what changes because of it. Task numbers appear only to say where a question came
+from; the durable name of each item is its plan row and this entry.
+
+### 1. Branch protection — "apply it now on both repos, or leave it as a recommendation?"
+
+*Options offered:* apply on both repos now (recommended) · apply on bikar only, where
+there is CI to require · leave D-048's recommendation unapplied.
+*Answer:* **apply on both now.**
+
+Applied 2026-09-02 with the two commands in D-048, unchanged, and read back:
+
+| Repo, branch | Required checks | Up-to-date required | Enforced for admins | Approving reviews |
+|---|---|---|---|---|
+| bikar `main` | `ci`, `e2e`, `gitleaks` | no | no | none required |
+| 3d-models `master` | none (there is no CI) | — | no | none required |
+
+In plain terms: a change to bikar's main now needs a pull request whose three checks are
+green; a change to master here needs a pull request. The owner, as admin, can still
+merge past a billing block, which is the case CLAUDE.md says must never stop a merge.
+Every norm in this repo already said branch → PR → merge; what changed is that GitHub
+now refuses the other path, and the hooks from D-048 refuse the commit before it gets
+that far. The first PRs merged under the setting were bikar #138 and #139 and 3d-models
+#135, all polled to green first.
+
+**Validator:** `gh api repos/<owner>/<repo>/branches/<default>/protection` for each repo,
+read as data, not as a screenshot.
+- PASS: bikar answers with exactly the three contexts above and 3d-models answers with
+  no required checks; both answer `enforce_admins.enabled: false`.
+- FAIL: either answers `404 Branch not protected` (the state D-048 measured), or bikar's
+  contexts list lacks one of the three — a merge on red is then possible again and this
+  entry's status line is wrong.
+
+### 2. The wrap morph — "build it straight away, or design it first?"
+
+*Options offered:* write a grounded design doc first, then build (recommended) · build
+directly from the plan's three-line sketch · drop it, the endpoints and the tilt-in are
+enough.
+*Answer:* **design doc first, then build.**
+
+The morph is the beat the breakdown page exists for — the flat drawing visibly
+wrapping onto the sphere — and it was deliberately left out of v1 of
+[`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) because
+nothing in bikar's core interpolates geometry; the flat and sphere endpoints were shipped
+instead. So the doc has to establish, before code, three things a build would otherwise
+guess at: how each vertex travels from the face-lift plane to the sphere as a function of
+one parameter; that the morph frames keep the same viewBox and stay unstyled, so the
+timelapse gate's junction identities still hold at both ends; and what the woven family,
+which has no face lift, shows in that slot. Research goes in `docs/research/` under the
+provenance header, per the design-doc rules. Then one bikar PR and one 3d-models PR,
+never stacked.
+
+### 3. The decision hub — "how does this repo's decision log join bikar's?"
+
+*Options offered:* index only, generated by bikar's ledger script from this file's
+headings, with links and no copying (recommended) · copy each decision into bikar's
+`docs/decisions/` tree · leave the two logs unjoined.
+*Answer:* **index only, generated.**
+
+Each decision keeps one home. bikar's ledger script reads the `## D-0xx —` headings of
+this file and emits an index of links; nothing is transcribed, so nothing can drift
+between two copies. This is the same answer D-004 gave when it refused to mirror
+bikar's generator, now with the join added. It also settles what the cross-repo ledger
+check should block on, which was the open question in front of it: a D-number cited
+across repos that does not exist as a heading in this file, or as a file in bikar's
+tree, is a broken reference and blocks — the same rule the pointer gate already applies
+to paths.
+
+### 4. The studio status page — "what should it show?"
+
+*Options offered:* pins and versions only, read from files (recommended) · pins plus a
+shipped/preview state per surface · a full dashboard with build health.
+*Answer:* **pins and versions.**
+
+The page shows three facts and types none of them: the bikar commit the gallery was
+built from (`build/bikar-ref.txt`), the `as_of` pins the use-cases map was last checked
+against, and the last deploy. It is rendered the way the studio index already is —
+from data the repos hold, with a test that holds it to the filesystem — so it cannot
+say something the files do not. Anything beyond that is a later decision, and the
+"shipped/preview per surface" option is the first candidate if the three facts turn
+out not to be what a visitor asks.
+
+### 5. The fourth orb — "build one on the M4c walk, or call the family done at three?"
+
+*Options offered:* build a fourth orb on the M4c quantized lattice walk (D-031 proved
+the walk gives few tile classes but shipped no orb) · done at three presets · defer
+until after a print.
+*Answer, in the owner's words:* **build a fourth orb, and use the build to find gaps and
+inconsistencies and make the approach more robust in the process — and: "do we also
+need an orb creation skill?"**
+
+The skill question has a precedent in this repo, and the precedent decides it. Two
+earlier proposals for a skill — one to extend the DSL, one for an issue register — were
+each evaluated against measured recurrence and both ended the same way: *no skill, a
+gate instead*, because the thing that was missing was a detector, not more instructions
+([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md) §3,
+[`issue-register-evaluation.md`](issue-register-evaluation.md) §6). Three orbs have been
+built without an orb skill, so no recurrence has been measured yet. The fourth build is
+the measurement, and this is the rule it runs under:
+
+Every time the build stops for something an earlier orb build also needed, the stop is
+written into the build's design doc with one of two labels: **detector** — a test, gate
+or generated file could have caught or produced it — or **instruction** — only a person
+who had built an orb before could have known it. Detector items become gates or tests in
+the same PR that hits them. An orb skill is written only if the instruction list is
+non-empty when the orb ships, and it is then a checklist that points at those entries
+and nothing else.
+
+**Validator:** the fourth orb's design doc carries the stop list with every entry
+labelled.
+- PASS: the orb ships with each stop labelled and each detector item pointing at the
+  gate or test it became; the skill exists if and only if the instruction list has
+  entries.
+- FAIL: a skill proposed before the list exists, or with an empty instruction list, or
+  a detector item that became a paragraph in the skill instead of a check — that is the
+  precedent's "a fourth thing to go stale", and the skill evaluation's verdict applies
+  unchanged.
+
+### 6. The parked Rosette-N explorations — "what happens to the three stashes?"
+
+*Options offered:* record the three value-triples as a sweep table on a pushed branch,
+then drop the stashes (recommended) · keep the stashes where they are · promote one
+triple to the pattern's defaults now.
+*Answer:* **record as a sweep table, then drop.**
+
+Read on 2026-09-02 from the bikar checkout, without applying anything. The committed
+pattern has points 10 (range 5–16), crossover 18 (10–50) and petal reach 0.53 (0.2–0.8).
+The task text said the working tree held points 7; the diff says 5, and the diff is what
+is recorded:
+
+| Where it sits | points | crossover | petal reach | Note |
+|---|---|---|---|---|
+| committed `patterns/Rosettes/Rosette-N.bkr` | 10 | 18 | 0.53 | the defaults |
+| stash@{0} "v3", 2026-08-31 | 5 | 18 | 0.53 | one knob: fewest petals the range allows |
+| stash@{1} "v2", 2026-08-31 | 10 | 38 | 0.54 | crossover far past default; reach barely moved |
+| working tree, uncommitted | 5 | 37 | 0.44 | both at once, reach pulled in |
+
+The note column reads the values; the session that parked them wrote no intent down, so
+none is claimed here. Both stashes also carry the same one-line edit to
+`patterns/.folders.json` filing Rosette-N under Rosettes. What happens: the table goes
+beside the pattern in bikar on a branch merged by PR; the folder edit goes with it if
+the file still lacks the entry; the two stashes are dropped and the working-tree edit
+reverted **only after** that PR is on origin, because a stash is local to one clone and
+is lost with it. Which triple, if any, becomes the pattern's defaults stays the owner's
+call — the table exists so that call can be made from a record instead of from memory.
+
+### What this does not decide
+
+The morph's geometry (the design doc's job); where the status page lives in the studio
+(the page's own catalogue entry decides); and whether a fourth orb changes the
+family's default preset. None of the six needed a source outside the two repos, which
+is why this entry cites decisions and files rather than research.
