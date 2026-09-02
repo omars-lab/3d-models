@@ -1,0 +1,273 @@
+# The lattice-walk maclado orb — design doc (the fourth Family-3 orb)
+
+Status: **design — approach fixed, build not started.** The fourth orb in the
+9-fold maclado family ([`maclado-orb-design.md`](maclado-orb-design.md) is the
+family doc; this doc is one orb). Authorised by the owner in
+[D-049 §5](decisions-log.md) ("build a fourth orb, and use the build to find gaps
+and inconsistencies and make the approach more robust in the process") and, this
+session, resolved to the **18-wheel open shell** among the offered shapes. Ground
+truth pinned to bikar `1083046` (origin/main). Ships with its
+[stop list](#6-the-stop-list-d-049-5) complete and, per D-049 §5, an orb-creation
+skill **only if** that stop list's *instruction* column is non-empty at ship.
+
+---
+
+## 1. What this orb is, and is not
+
+The three shipped maclado presets — `Maclado-9`, `Maclado-9-Weave`,
+`Maclado-9-Overlap` (`bikar:patterns/Orbs/Maclado-9.bkr` and siblings) — are the
+**full symmetric field**: nine-point wheels on all twenty dodecahedral vertices,
+their gaps closed by twelve congruent 30-gon fillers, one filler class. This orb
+is the **quantized lattice walk** measured as M4c
+([`maclado-orb-design.md`](maclado-orb-design.md) §8; bikar #92 `ec4518b`,
+[D-031](decisions-log.md)) made into a shipped object: an 18-site walk along the
+field's dodecahedral adjacency, whose gaps close into **four** filler congruence
+classes on two distinct separations.
+
+**Goals.**
+
+1. **Realise the walk as a printable solid.** Place the eighteen walk wheels,
+   close their mutual gaps with fillers, and hem the open boundary so the object
+   is a single watertight manifold — the same export contract the family holds
+   ([`maclado-orb-design.md`](maclado-orb-design.md) §5.5, §7).
+2. **Keep the four filler classes whole and visible.** The walk's value over the
+   symmetric field is *not* mold economy — the symmetric field wins that, one
+   class to four ([`maclado-orb-design.md`](maclado-orb-design.md) §8, M4c). Its
+   value is that the four classes are quantization's doing on an asymmetric
+   partial field, and this object is the physical evidence. Whole-filler
+   congruence is verified per tile (§4), the family's standing invariant
+   ([`maclado-orb-design.md`](maclado-orb-design.md) §5.3).
+3. **Log the build as a process measurement.** Every stop an earlier orb also
+   needed is written into §6 labelled *detector* or *instruction*, under the
+   D-049 §5 rule. This is the reason the orb is built at all; the object is the
+   vehicle.
+
+**Non-goals, and the one that is load-bearing.**
+
+- **A closed ball is out of scope, because it is not this object.** The twenty
+  wheel positions are fixed by the dodecahedron; a walk chooses an *ordering and
+  a subset*, never a new position. A walk that visits all twenty sites places the
+  same twenty wheels as `Maclado-9` and closes to the same one-class field — it
+  *is* `Maclado-9`, and building it would ship a duplicate. The walk yields a
+  distinct object **only while the field stays partial**, so the open mouth where
+  two sites are unvisited is not a blemish to close over but the condition under
+  which the four-class result exists at all. This is the shape the owner chose.
+- **The weave and overlap treatments** (Family 1) are out of scope here. The
+  four-class result is a property of *filler tiles*, which only the solid
+  (Family 2) field has; a woven walk would trace ribbons and carry none of the
+  measurement this orb exists to make. Solid is not a preference, it is where the
+  claim lives.
+- **Reproducing a specific Martín López object** — the family's standing
+  non-goal ([`maclado-orb-design.md`](maclado-orb-design.md) §1); his placement
+  rule is unretrievable and no walk is claimed to be his.
+
+---
+
+## 2. Engine ground truth — bikar `1083046`
+
+What exists today, and exactly where the walk stops short of geometry.
+
+- **The walk instrument.** `bikar:packages/core/src/kernel3d/maclado-lattice.ts`
+  exports `latticeWalk(field, length, start)` — a lowest-index-first DFS simple
+  path along `field.adjacency` — and `siteSeparations(field, sites, tol)` — the
+  sorted distinct pairwise arc separations of a site subset. Both are **analysis
+  only**: their sole consumer is
+  `bikar:packages/core/tests/kernel3d/maclado-lattice.test.ts`. Nothing in `src/`
+  outside that file turns a walk into a mesh.
+- **The field builder is closed to subsets.** `buildMacladoField` in
+  `bikar:packages/core/src/kernel3d/maclado-field.ts` derives placement from the
+  full icosahedral group and constructs all twenty wheels plus twelve fillers;
+  it takes no site subset. Its solid path `solidifyMacladoField` gates on
+  `mesh.stats.watertight`.
+- **Placement grammar names one rule.** `bikar:packages/core/src/kernel3d/placement-rule.ts`
+  registers only `dodecahedral` (all twenty sites); the DSL type is
+  `place?: 'dodecahedral'` and `base wheelfield` explicitly refuses a `sites`
+  count (`bikar:packages/core/src/dsl/parser.ts`,
+  `bikar:packages/core/src/dsl/evaluator.ts`). The DSL cannot express "eighteen
+  of twenty" today.
+- **The gap machinery already generalises to a partial field.** M4c generalised
+  the §6 cut in `bikar:packages/core/src/kernel3d/maclado-gap.ts` from one tile
+  per hull *triangle* to one tile per hull *face*, precisely so an asymmetric
+  subset's gaps decompose. The filler emitter is
+  `bikar:packages/core/src/kernel3d/maclado-filler.ts`.
+- **The gates a new orb must pass** (all `bikar:packages/core/src/kernel3d/`):
+  `mesh-gate.ts` (`meshGate` — watertight, degenerate-area floor, min feature
+  `CAL-FEA-01`); `print-gate.ts` (`printGate` — bed contact `CAL-BED-01`, and a
+  single-body count, which a shell with a coastline must not violate);
+  `linkage-gate.ts` (`linkageGate` — body clearance `CAL-CLR-01` 0.4 mm, the floor
+  the woven presets cite). The `stl --check` path runs `meshGate` and
+  `linkageGate`; `--check print` adds `printGate`.
+
+The one sentence M4c left open — "whether a lattice-walk orb is worth *shipping*
+… is a separate scope decision" ([`maclado-orb-design.md`](maclado-orb-design.md)
+§8) — is the decision D-049 §5 made. This doc does not re-argue it.
+
+---
+
+## 3. Construction
+
+Five steps. Steps 1 and 3–4 reuse the family's machinery; **step 5 is new** — the
+symmetric field has no boundary, so nothing in bikar hems one today.
+
+1. **Select the walk.** `latticeWalk(field, 18, start)` returns eighteen site
+   indices; the two unvisited sites define the open region. `start` is a
+   parameter (§4 pins its determinism).
+2. **Place the eighteen wheels** with the existing `placeWheelInFrame`
+   (`bikar:packages/core/src/kernel3d/maclado-field.ts`), unchanged — placement
+   is per-site and never assumed the full twenty.
+3. **Close the interior gaps.** Run the M4c hull-face cut
+   (`bikar:packages/core/src/kernel3d/maclado-gap.ts`) over the eighteen wheel
+   centres; each *interior* gap — one whose bounding wheels are all in the walk —
+   is filled by `maclado-filler.ts` and must be congruent to one of the four
+   canonical templates (§4). Gaps that bound an unvisited site are **not** filled;
+   they open onto the mouth.
+4. **Find the coastline.** The mouth is bounded by a single closed loop of wheel-
+   rim arcs and unfilled-gap edges — the coastline. It is computed as the
+   boundary of the placed-and-filled region, and the build asserts it is one loop
+   (a walk that split the field into two mouths would fail here, loudly).
+5. **Hem the coastline into a watertight solid.** A bowl is a watertight manifold:
+   an inner and an outer surface joined along a rim. The rim closes the thick
+   shell's cross-section along the coastline, so the object is *visually* open —
+   one mouth — and *topologically* closed, with no boundary edge. Then the
+   family's tail runs unchanged: vertex weld, then `meshGate`
+   ([`maclado-orb-design.md`](maclado-orb-design.md) §5.5).
+
+**The closure invariant** (the family's §5.3, carried, not re-derived): a
+placement's fillers are accepted only when **each** interior filler is congruent
+to a canonical template within tolerance. An aggregate area or count cannot see
+one stretched tile — the repo's standing lesson
+([`maclado-orb-design.md`](maclado-orb-design.md) §5.3;
+`lego-lab-design.md` §14). The walk has four templates where the symmetric field
+had one, so the check runs against a four-entry template set.
+
+---
+
+## 4. Validators
+
+Each carries the D2 marker and a hand-built counterexample.
+
+**Validator (walk determinism):** `latticeWalk(field, 18, start)` returns the
+same eighteen indices in the same order for a given `start`, independent of run.
+PASS: two evaluations at `start = 0` agree index-for-index. FAIL: a build that
+seeds the DFS from a set iteration order — two runs return the same *set* but a
+different *order*, so a per-order downstream (the coastline's arc sequence)
+silently differs while a membership check passes.
+
+**Validator (per-filler congruence, four classes):** every interior filler is
+congruent to one of the four canonical M4c templates, edge and angle residuals
+below tolerance, checked tile by tile. PASS: a walk whose every interior filler
+individually matches a template. FAIL: one filler stretched — its edges deviate —
+while total filler area and filler count are unchanged, so an area sum or a count
+passes and only the per-tile check fires.
+
+**Validator (coastline is one loop):** the unfilled boundary forms exactly one
+closed loop. PASS: an 18-walk whose two unvisited sites are adjacent or share a
+filler, leaving one connected mouth. FAIL: a walk (or `start`) whose two unvisited
+sites are antipodal and non-adjacent, opening **two** disjoint mouths — the build
+must refuse it, not hem two rims and pass a watertight check that never noticed the
+object has two holes. The 18-of-20 case makes this reachable, so it is gated, not
+assumed.
+
+**Validator (watertight after hemming):** the hemmed solid passes `meshGate` —
+`mesh.stats.watertight` true, no boundary edge. PASS: the hemmed 18-walk shell.
+FAIL: the *un*-hemmed shell (steps 1–4 without step 5) — a thick shell with an
+open coastline has a boundary edge and is not a manifold; if this passes, the rim
+is doing nothing. This is the by-design failure the gate exists to catch.
+
+**Validator (own topology pins):** the orb's genus and Euler characteristic are
+pinned to its **own** measured values, not the full field's. PASS: the 18-walk
+shell matches its recorded genus/Euler. FAIL: the test reuses the symmetric
+field's genus 379 / Euler −756
+(`bikar:packages/core/tests/kernel3d/wheelfield-orb.test.ts`) — a partial field
+with a mouth has fewer tunnels and a different Euler, so those numbers are a wrong
+witness that happens to be near.
+
+---
+
+## 5. What is new in the kernel — the detector surface
+
+Everything the symmetric field never needed, and therefore everything the build
+will stop on. Named here so §6's stops are recognised when they arrive.
+
+- **A partial placement rule.** A `lattice-walk` rule in `placement-rule.ts`
+  driven by `latticeWalk`, taking `length` and `start`; the first placement rule
+  that is not the whole field.
+- **A subset field builder.** `buildMacladoField` parameterised by a site subset,
+  or a sibling that takes one — the first field that is not twenty wheels.
+- **A boundary.** The coastline and its rim (step 4–5) — geometry with no
+  precedent in the family, because a closed sphere has no coastline. This is where
+  the build is most likely to discover an *instruction* (a thing only a prior
+  orb-builder would know) versus a *detector* (a check that could have caught it).
+- **DSL surface.** `place rule lattice-walk length N start K` in the grammar
+  (`parser.ts`, `evaluator.ts`, `ast.ts`), validated on `base wheelfield`.
+- **The preset.** `bikar:patterns/Orbs/Maclado-9-Lattice.bkr` — the only new file
+  3d-models' `make orbs` will glob (`3d-models:Makefile:L290 "patterns/Orbs"`).
+
+---
+
+## 6. The stop list (D-049 §5)
+
+The rule, verbatim in intent: every time the build stops for something an earlier
+orb build also needed, the stop is written here with one label —
+
+- **detector** — a test, gate or generated file could have caught or produced it.
+  Detector items become gates or tests **in the same PR** that hits them.
+- **instruction** — only a person who had built an orb before could have known it.
+
+An orb-creation skill is written **only if** the instruction column is non-empty
+when the orb ships, and it is then a checklist pointing at those entries and
+nothing else. The precedent decides the empty case: two earlier skill proposals
+were each evaluated against measured recurrence and both ended *no skill, a gate
+instead* ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
+[`issue-register-evaluation.md`](issue-register-evaluation.md)).
+
+**Validator (the stop list is honest):** at ship, every entry is labelled and
+every *detector* entry names the gate or test it became. PASS: the orb ships with
+each stop labelled and each detector pointing at its gate/test; the skill exists
+iff the instruction column has entries. FAIL: a skill proposed before the list
+exists, or with an empty instruction column, or a detector entry that named no
+gate — the D-049 §5 failure, restated.
+
+| # | The stop | Label | Became / who knew |
+|---|----------|-------|-------------------|
+| _(populated during the build; empty until 2.10.b hits its first stop)_ | | | |
+
+---
+
+## 7. Print
+
+The family's §7 governs unchanged ([`maclado-orb-design.md`](maclado-orb-design.md)
+§7): the ribbon/strut cross-section, its nozzle-relative K10 condition, and the
+single-watertight-manifold requirement that §4's watertight validator enforces.
+
+The rim (step 5) introduces no new free number: it is the **same thick-shell
+cross-section as the struts, hemmed along the coastline**. This transfers by
+construction — same material, same wall, same shell, only a different edge — so it
+carries the family's wall default without a fresh bet. Should the coastline demand
+a wall the strut section cannot give (a fair mouth radius may want a thicker hem to
+stay rigid), that is an empirical question and graduates to a `CAL-*` bet after a
+coupon, never a bare number here.
+
+---
+
+## Appendix A — sources
+
+The family's survey and grounding carry the 9-fold theorem, the divisor trick, and
+the print constraints ([`maclado-orb-design.md`](maclado-orb-design.md) Appendix A;
+[`research/maclado-orb-survey.md`](research/maclado-orb-survey.md)). This orb adds
+no new external claim — the walk's numbers (four classes, two separations, the
+hull-face cut) are measured in bikar and cited to M4c above. The grounding audit
+for this doc lands at `docs/research/maclado-lattice-orb-grounding-audit.md`
+before the orb ships (it does not exist yet — the audit runs before 2.10.b).
+
+## Appendix B — contested bets and open questions
+
+- **The rim wall** — reused from the strut section by the §7 transfer sentence;
+  becomes a `CAL-*` bet only if a coupon shows the mouth needs a thicker hem.
+- **Mold economy** — the walk's four classes lose to the symmetric field's one
+  ([`maclado-orb-design.md`](maclado-orb-design.md) §8). This orb does not dispute
+  that; it ships for the measurement (§1 goal 3), and the losing comparison is
+  stated, not buried.
+- **`start` selection** — which of the walk seeds gives the fairest single mouth
+  is a taste question left to the build; §4 only requires the chosen one produce
+  one loop.
