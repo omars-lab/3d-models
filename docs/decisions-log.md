@@ -4062,3 +4062,62 @@ The morph's geometry (the design doc's job); where the status page lives in the 
 (the page's own catalogue entry decides); and whether a fourth orb changes the
 family's default preset. None of the six needed a source outside the two repos, which
 is why this entry cites decisions and files rather than research.
+
+## D-050 — the three d3 surfaces converge on one face-list vocabulary; the reversal condition is a measured re-divergence cost, not a taste change
+
+**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`vocabulary-convergence-design.md`](vocabulary-convergence-design.md)
+
+### Why this entry exists
+
+Q-VOCAB asked whether sacred-patterns' geometry/draw vocabulary should be shared with
+the two d3 explorers or left a separate gallery. The owner chose, in their words, **"full
+convergence, refactor C"** — the deepest of the three options: not only rename the A/B
+collisions but grow sacred-patterns the face-list + data-join structure so its vocabulary
+attaches to real code, not just matching labels. This entry records that decision, the one
+correction the build made to the design, and the condition under which it would be undone.
+
+### The decision, as offered and answered
+
+*Options offered:* do nothing, keep C a separate dialect (rejected — forks the vocabulary
+the d3 stream exists to unify) · thin A↔B rename only (adopted as step one, not the whole
+job) · **full convergence, refactor C (chosen)**. *Answer:* **full convergence.** It is the
+robust-over-cheap call (`3d-models/CLAUDE.md`): the deeper refactor deletes the divergence
+rather than routing around it, and it is the only option under which all three surfaces read
+one vocabulary — `index` (face identity), `polygon` (boundary), `ring` (concentric styling
+index only), `faceKey` (the shared join key `String(index)`), `joinFaces` (A's path-creating
+join).
+
+### What shipped, and the K7 the build caught
+
+The design's §2 and §6 (validator #2) said B should "route through `joinFaces()`" and carry
+no private `.data().join()`. The build proved that wrong and the doc was corrected in the same
+PR that records this: the orb-instrument page **keeps its own `.data().join()` by design** — it
+binds `FaceStatus` onto the pre-rendered `<path data-face-index>` nodes and asserts enter and
+exit are both empty, which the path-*creating* `joinFaces()` cannot do. What actually converges
+the two joins is the shared **`faceKey`** (`viz-d3.ts`: "shared by every face join — the
+path-creating `joinFaces` here and the status-binding join on the orb-instrument stage"). So the
+canonical vocabulary gained `faceKey` as a fifth term, and the join convergence is *the key, not
+the call*. sacred-patterns' side is a pure structural addition (`faceConstructs()` mapper +
+`joinFaces()` `<path class="face">` renderer replacing imperative `<polyline>`), held
+pixel-identical by a frozen coordinate golden — the `ring` field stays undefined there by the
+§9 K10 transfer condition (its faces come only from polygons/stars, never circles).
+
+### Reversal condition
+
+This was decided by tests, not by a printer — no `CAL-*` bet. It reverses only if a **fourth
+surface** arrives whose faces cannot be expressed as `{index, polygon, centroid, ring?}` without
+adding producer-less bag fields (Tenet 15) — a curved, streaming, or non-face geometry — **or**
+if maintaining the pixel-identical golden across the face-list seam starts costing more than the
+one-vocabulary benefit returns. Either is a measured cost, re-litigated against this entry; a
+mere preference for different names is not a reversal condition and does not reopen it.
+
+**Validator:** the shared vocabulary is one definition with callers, not parallel copies.
+- PASS: `faceKey` has a single definition in `bikar:packages/web/src/viz-d3.ts` and is imported
+  by both the rosette explorer and the orb-instrument page; `faceIndex` and any boundary-holding
+  `ring` field appear nowhere in bikar web sources; sacred-patterns' `sacred-patterns/test/regression/check.js`
+  passes with the same boundary count and sorted coordinate set as the pre-refactor baseline.
+- FAIL: either surface hard-codes its own key expression so two surfaces could key the same face
+  differently; or `SvgFace` still carries a `ring` holding a point array while `FaceConstruct.ring`
+  is a number (the two-meanings collision, merely split across files); or a sacred-patterns face's
+  coordinate string differs from the frozen golden — the refactor changed a pixel, which is a
+  regression, not a convergence.
