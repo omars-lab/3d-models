@@ -183,10 +183,10 @@ Corollary: **the by-design failure is the load-bearing case.** A gate that
 asserts "everything passes" must be wrong about a deliberate failure or skip
 it, and skipping is how a gate stops testing the thing it exists for.
 
-Corollary: **in a refactor, robust and simplifying outrank cheap.** Two code paths
-that disagree *are* the defect: prefer the change that deletes the divergence to
-the one that routes around it, price the cascade, and pay it. A one-time migration
-never buys a permanent fork — [D-041](docs/decisions-log.md).
+Corollary: **robust and simple beat cheap and easy, even at more work.** The cheap
+fix routes around the defect; the robust one deletes it. Two code paths that disagree
+— or one name with two meanings — *are* the defect: remove it rather than hide it,
+price the cascade, and pay it. A migration never buys a fork — [D-041](docs/decisions-log.md), [D-051](docs/decisions-log.md).
 
 ## Precedent
 
