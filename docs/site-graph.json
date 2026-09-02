@@ -64,16 +64,18 @@
       "id": "studio",
       "what": "bikar packages/web, deployed once to the Cloudflare Pages project bikar-studio",
       "builtBy": "bikar .github/workflows/deploy.yml",
-      "note": "One deployment, three hostnames. Identical bytes; only the Access policy differs.",
+      "note": "One deployment, three hostnames. Identical bytes; all three now behind Cloudflare Access (equalised under task #63, verified live 2026-09-02) — no public studio host remains.",
       "hosts": [
         {
           "host": "bikar-studio.pages.dev",
-          "exposure": "public"
+          "exposure": "access",
+          "accessTeam": "naqshcoffee.cloudflareaccess.com"
         },
         {
           "host": "*.bikar-studio.pages.dev",
-          "exposure": "public",
-          "note": "per-deployment aliases; permanent, unbounded set"
+          "exposure": "access",
+          "accessTeam": "naqshcoffee.cloudflareaccess.com",
+          "note": "per-deployment aliases; permanent, unbounded set — Access covers them too (a hash-alias /editor 302s, verified 2026-09-02)"
         },
         {
           "host": "bikar.naqshcoffee.com",
@@ -262,14 +264,16 @@
       "gated": {
         "why": [
           "Deliberate: the studio is a private authoring tool and this is the sign-in door,",
-          "labelled <em>sign-in</em> in the markup. What is NOT deliberate is that both",
-          "catalogues in bikar (packages/lab/src/catalog.ts:74, packages/web/src/catalog.ts:34-39)",
-          "describe this as the reciprocal loop finally being walkable, which it is not — a",
-          "visitor gets a login wall. Repointing at the public twin bikar-studio.pages.dev",
-          "would make it walkable and would ADD a fourth edge to fragileIfProtected, so the",
-          "two decisions are one decision. Tracked as task #63."
+          "labelled <em>sign-in</em> in the markup. Task #63 equalised the studio's exposure",
+          "(2026-09-02, verified live): bikar-studio.pages.dev now 302s to Access too, so the",
+          "'public twin' this edge could once have been repointed at no longer exists — the",
+          "login wall is intrinsic to every studio host. The 2026-09-02 call (task #64) was to",
+          "KEEP the labelled link: org members browsing the public gallery keep a working path",
+          "to author, non-members get an honest, warned gate. Still not deliberate: both bikar",
+          "catalogues (packages/lab/src/catalog.ts:74, packages/web/src/catalog.ts:34-39)",
+          "describe this as a walkable reciprocal loop, which it is not."
         ],
-        "decidedOn": "2026-08-02"
+        "decidedOn": "2026-09-02"
       }
     },
     {
@@ -308,7 +312,16 @@
       "repo": "bikar",
       "visibility": "js-computed",
       "viaHost": "bikar-studio.pages.dev",
-      "note": "STUDIO_EDITOR_URL, consumed by main.ts:323; baked into gh-pages:assets/style-BFfxPe7x.js:3"
+      "note": "STUDIO_EDITOR_URL, consumed by main.ts:323; baked into gh-pages:assets/style-BFfxPe7x.js:3",
+      "gated": {
+        "why": [
+          "JS-computed editor deep-link. Task #63 put this host behind Access (2026-09-02),",
+          "so a gallery visitor following it meets the sign-in wall like every studio host.",
+          "It rode the then-public pages.dev and was the archetypal fragileIfProtected edge;",
+          "#63 realised that protection, moving it here. Intended for signed-in authors."
+        ],
+        "decidedOn": "2026-09-02"
+      }
     },
     {
       "from": "G.lego",
@@ -317,7 +330,15 @@
       "repo": "bikar",
       "visibility": "js-computed",
       "viaHost": "bikar-studio.pages.dev",
-      "note": "same constant, consumed by lego-main.ts:423"
+      "note": "same constant, consumed by lego-main.ts:423",
+      "gated": {
+        "why": [
+          "JS-computed editor deep-link, same STUDIO_EDITOR_URL as the lab edge. Behind",
+          "Access since task #63 (2026-09-02); the sign-in wall is intended for authors.",
+          "Was a fragileIfProtected edge until #63 realised the protection."
+        ],
+        "decidedOn": "2026-09-02"
+      }
     },
     {
       "from": "G.studio",
@@ -527,14 +548,11 @@
     "$comment": [
       "Edges that travel through a host that is public today but sits on a surface that",
       "also has an Access-protected host — i.e. edges that die the day the exposure is",
-      "equalised (task #63). None of them break a build and none turn a test red, which",
-      "is the whole reason they are counted here rather than remembered. The gate",
-      "recomputes this set and fails if the list disagrees; it is a measured number, not",
-      "an estimate."
+      "equalised (task #63). That day came: #63 put every studio host behind Access",
+      "(2026-09-02), so the two editor edges that rode the then-public pages.dev are now",
+      "gated (see their gated.why) and this set is empty. The gate recomputes it and fails",
+      "if the list disagrees; it is a measured number, not an estimate."
     ],
-    "edges": [
-      "G.lab -> S.editor via bikar-studio.pages.dev",
-      "G.lego -> S.editor via bikar-studio.pages.dev"
-    ]
+    "edges": []
   }
 }

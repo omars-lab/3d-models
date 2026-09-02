@@ -59,7 +59,9 @@ import copy
 import json
 import os
 import re
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -202,27 +204,64 @@ def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
     return out
 
 
+def _git_env() -> dict[str, str]:
+    """Env for a `git -C <sibling>` read, with git's own repo pointers scrubbed —
+    a hook or a linked worktree exports GIT_DIR/GIT_WORK_TREE, and left in place
+    they redirect the read back at THIS repo. The same guard doc_pointers.py uses."""
+    env = dict(os.environ)
+    for v in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
+        env.pop(v, None)
+    return env
+
+
+def _bikar_exposures() -> tuple[dict[str, str], str] | None:
+    """bikar's public-surface.json exposures {host: exposure}, read at its
+    PUBLISHED ref — origin/HEAD, then origin/main, then origin/master — never the
+    working tree. The authority is what bikar has published, not what one checkout
+    happens to have on HEAD: a peer session sitting a few commits behind its own
+    origin (or on an unrelated branch) must not be able to swing this gate's
+    verdict. This is the standing rule doc_pointers.py already follows —
+    `git show` against a ref, never the checkout. Returns ({host: exposure}, ref),
+    or None when no clone or published ref is reachable (CI, or a clone with no
+    origin), in which case the exposures are MIRRORED ONLY."""
+    bikar = Path(os.environ.get("BIKAR_DIR", str(Path.home() / "Workspace/git/bikar")))
+    rel = "packages/web/public-surface.json"
+    for ref in ("origin/HEAD", "origin/main", "origin/master"):
+        try:
+            r = subprocess.run(
+                ["git", "-C", str(bikar), "show", f"{ref}:{rel}"],
+                capture_output=True, text=True, env=_git_env(),
+            )
+        except OSError:
+            return None
+        if r.returncode == 0:
+            return {h["host"]: h["exposure"] for h in json.loads(r.stdout)["hosts"]}, ref
+    return None
+
+
 def cross_check_bikar(graph: dict) -> list[str]:
-    """If a bikar clone is at hand, hold the mirrored exposures to it. Optional
-    by design: bikar is private and absent from CI, and a gate that requires a
-    repo it cannot have would just be switched off."""
-    bikar = os.environ.get("BIKAR_DIR", str(Path.home() / "Workspace/git/bikar"))
-    ps = Path(bikar) / "packages/web/public-surface.json"
-    if not ps.is_file():
-        print(f"  exposures: MIRRORED ONLY — no bikar clone at {ps} to check them against")
+    """Hold the mirrored exposures to bikar's PUBLISHED public-surface.json.
+    Optional by design: bikar is private and absent from CI, and a gate that
+    requires a repo it cannot have would just be switched off. Reads a ref, never
+    the working tree (see _bikar_exposures) — so a stale sibling checkout cannot
+    produce a false verdict."""
+    got = _bikar_exposures()
+    if got is None:
+        print("  exposures: MIRRORED ONLY — no bikar clone / published ref to check them against")
         return []
-    truth = {h["host"]: h["exposure"] for h in json.loads(ps.read_text())["hosts"]}
+    truth, ref = got
+    src = f"bikar {ref}:packages/web/public-surface.json"
     out = []
     for s in graph["surfaces"]:
         for h in s["hosts"]:
             if h["host"] in truth and truth[h["host"]] != h["exposure"]:
                 out.append(
                     f"G6: {h['host']} is declared {h['exposure']!r} here but "
-                    f"{truth[h['host']]!r} in {ps} — which is the authority. The mirror "
+                    f"{truth[h['host']]!r} in {src} — which is the authority. The mirror "
                     f"has drifted, and every G1 verdict above was computed from the "
                     f"stale copy."
                 )
-    print(f"  exposures: cross-checked against {ps}")
+    print(f"  exposures: cross-checked against {src}")
     return out
 
 
@@ -304,8 +343,11 @@ def self_test() -> int:
         raise AssertionError("no vendored node")
 
     def mutate_fragile(g):
-        g["fragileIfProtected"]["edges"] = []
-        return "emptied fragileIfProtected"
+        # The real set is empty (task #63 gated the last two riders), so emptying
+        # it would be a no-op. List a rider the recompute can no longer produce —
+        # pages.dev is now an access host — to force the mismatch G5 exists to catch.
+        g["fragileIfProtected"]["edges"] = ["G.lab -> S.editor via bikar-studio.pages.dev"]
+        return "listed a fragile edge the recompute no longer finds"
 
     cases = [
         ("G1", mutate_ungate),
@@ -325,6 +367,46 @@ def self_test() -> int:
             print(f"                caught: {found[0].splitlines()[0][:120]}")
         else:
             print(f"self-test FAIL: {code} — {what} — NOT CAUGHT")
+            ok = False
+
+    # G6 reads bikar at a PUBLISHED ref, never the working tree — so a sibling
+    # checkout on stale content cannot swing the verdict (the #132/#133 fix, ported
+    # from doc_pointers). Build a scratch bikar whose committed origin/HEAD declares
+    # a host "access" while its working tree is edited to "public", point BIKAR_DIR
+    # at it, and require the read to return the committed value. Before this gate
+    # read a ref it read the tree, and this case would report "public" and fail.
+    with tempfile.TemporaryDirectory() as tmp:
+        fake = Path(tmp) / "bikar"
+        wdir = fake / "packages/web"
+        wdir.mkdir(parents=True)
+        ps = wdir / "public-surface.json"
+        ps.write_text(json.dumps({"hosts": [{"host": "bikar-studio.pages.dev", "exposure": "access"}]}))
+        genv = {**_git_env(), "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+        for cmd in (
+            ["git", "init", "-q", "-b", "main"],
+            ["git", "add", "packages/web/public-surface.json"],
+            ["git", "commit", "-q", "-m", "surface"],
+            ["git", "update-ref", "refs/remotes/origin/main", "main"],
+            ["git", "symbolic-ref", "refs/remotes/origin/HEAD", "refs/remotes/origin/main"],
+        ):
+            subprocess.run(cmd, cwd=fake, check=True, env=genv, capture_output=True)
+        # the working tree drifts to the stale value the old code would have read
+        ps.write_text(json.dumps({"hosts": [{"host": "bikar-studio.pages.dev", "exposure": "public"}]}))
+        old_bikar = os.environ.get("BIKAR_DIR")
+        os.environ["BIKAR_DIR"] = str(fake)
+        try:
+            got = _bikar_exposures()
+        finally:
+            if old_bikar is None:
+                os.environ.pop("BIKAR_DIR", None)
+            else:
+                os.environ["BIKAR_DIR"] = old_bikar
+        if got is not None and got[0].get("bikar-studio.pages.dev") == "access":
+            print("self-test ok:   G6 — read bikar at the published ref, not the working tree")
+            print("                (committed 'access' won over a working tree edited to 'public')")
+        else:
+            print(f"self-test FAIL: G6 — cross-check read the working tree, not the ref (got {got})")
             ok = False
 
     print("\nPASS: the real graph, unmutated, reports nothing (shown above).")
