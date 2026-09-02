@@ -76,6 +76,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -157,6 +158,47 @@ def strip_code(lines: list[str]) -> list[str]:
     return out
 
 
+def _primary_root(root: Path) -> Path | None:
+    """The primary checkout's root when `root` is a linked git worktree, else None.
+
+    A worktree at `X.worktrees/<branch>` sits one directory deeper than the primary
+    clone, so a `../../bikar/...` link that resolves beside the primary lands in
+    `X.worktrees/bikar` from here. The gate's verdict must not depend on which
+    checkout runs it, so a link that escapes this root is re-tried from the primary.
+    GIT_DIR/GIT_WORK_TREE are scrubbed: under a hook they point at the primary and
+    would make every checkout answer as the primary.
+    """
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    try:
+        common = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            capture_output=True, text=True, check=True, env=env,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    primary = Path(common).resolve().parent
+    return None if primary == root.resolve() else primary
+
+
+def link_resolves(doc: Path, bare: str, root: Path = ROOT) -> bool:
+    """True when a relative link target exists — beside this checkout, or, for a
+    target that escapes the checkout, beside the primary clone it is a worktree of."""
+    if (doc.parent / bare).resolve().exists():
+        return True
+    root = root.resolve()
+    resolved = (doc.parent / bare).resolve()
+    if resolved.is_relative_to(root):
+        return False
+    primary = _primary_root(root)
+    if primary is None:
+        return False
+    try:
+        rel = doc.resolve().parent.relative_to(root)
+    except ValueError:
+        return False
+    return (primary / rel / bare).resolve().exists()
+
+
 def check_d1_links(path: Path, lines: list[str]) -> list[str]:
     findings = []
     for n, line in enumerate(lines, 1):
@@ -166,8 +208,7 @@ def check_d1_links(path: Path, lines: list[str]) -> list[str]:
             bare = target.split("#", 1)[0]
             if not bare:
                 continue
-            resolved = (path.parent / bare).resolve()
-            if not resolved.exists():
+            if not link_resolves(path, bare):
                 findings.append(
                     f"{path.relative_to(ROOT)}:{n}: D1 (K9) link target does not "
                     f"exist: {bare}"
@@ -420,6 +461,38 @@ def self_test() -> int:
             print("self-test ok: docs/prints/.../index.md → grounding rules skipped, D1 only")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # D1 must give the same verdict from a linked worktree as from the primary
+    # clone: a `../../sib/f.md` link written for the primary layout escapes a
+    # worktree at `repo.worktrees/w` and must be re-tried beside the primary.
+    import subprocess as _sp
+    base = Path(tempfile.mkdtemp(prefix="docs-gate-wt-"))
+    try:
+        genv = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        genv.update(GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t",
+                    GIT_COMMITTER_EMAIL="t@t")
+        repo = base / "repo"
+        repo.mkdir()
+        _sp.run(["git", "init", "-q", str(repo)], check=True, env=genv)
+        (repo / "docs").mkdir()
+        (repo / "docs" / "a.md").write_text("[x](../../sib/f.md) [y](../../sib/missing.md)\n")
+        _sp.run(["git", "-C", str(repo), "add", "."], check=True, env=genv)
+        _sp.run(["git", "-C", str(repo), "commit", "-qm", "init"], check=True, env=genv)
+        (base / "sib").mkdir()
+        (base / "sib" / "f.md").write_text("sib\n")
+        wt = base / "repo.worktrees" / "w"
+        _sp.run(["git", "-C", str(repo), "worktree", "add", "-q", str(wt)], check=True, env=genv)
+        doc = wt / "docs" / "a.md"
+        got = (link_resolves(doc, "../../sib/f.md", root=wt),
+               link_resolves(doc, "../../sib/missing.md", root=wt),
+               link_resolves(repo / "docs" / "a.md", "../../sib/f.md", root=repo))
+        if got != (True, False, True):
+            ok = False
+            print(f"self-test FAIL: worktree D1 fallback expected (True, False, True), got {got}")
+        else:
+            print("self-test ok: a sibling link resolves from a worktree via the primary; a dead one stays dead")
+    finally:
+        shutil.rmtree(base, ignore_errors=True)
 
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

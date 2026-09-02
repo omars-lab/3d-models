@@ -366,8 +366,8 @@ class Doc:
         rel = self.repos.get(repo)
         if rel is None:
             return None
-        d = os.path.normpath(os.path.join(root, rel))
-        return d if os.path.isdir(os.path.join(d, ".git")) else None
+        # Beside this checkout, else beside the primary clone it is a worktree of.
+        return sibling_checkout(root, rel)
 
 
 def unknown_catalog_ucs(claimed: set[str], carried: set[str]) -> list[str]:
@@ -1315,6 +1315,31 @@ def self_test() -> int:
             True,
         )
 
+    # A sibling pointer must resolve identically from a linked worktree and from
+    # the primary clone: `../sib` from `repo.worktrees/w` is absent, so the lookup
+    # falls back to beside the primary — and stays None when the sibling is absent.
+    with tempfile.TemporaryDirectory() as wtd:
+        def g(cwd: str, *args: str) -> None:
+            subprocess.run(["git", "-C", cwd, *args], check=True, capture_output=True, env=git_env())
+
+        repo = os.path.join(wtd, "repo")
+        os.makedirs(repo)
+        g(repo, "init", "-q")
+        with open(os.path.join(repo, "README"), "w") as fh:
+            fh.write("x\n")
+        g(repo, "add", ".")
+        g(repo, "commit", "-qm", "init")
+        wt = os.path.join(wtd, "repo.worktrees", "w")
+        g(repo, "worktree", "add", "-q", wt)
+        expect("a missing sibling is None from a worktree too", sibling_checkout(wt, "../sib"), None)
+        sib = os.path.join(wtd, "sib")
+        os.makedirs(sib)
+        g(sib, "init", "-q")
+        expect("a sibling beside the primary resolves from the primary", sibling_checkout(repo, "../sib"), sib)
+        got = sibling_checkout(wt, "../sib")
+        expect("the same sibling resolves from a linked worktree",
+               os.path.realpath(got) if got else got, os.path.realpath(sib))
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -1404,6 +1429,34 @@ def main() -> int:
         # An unreadable document is a failure, not a skip — report it in the
         # same voice as every other error and exit non-zero.
         return report([str(exc)], [], context=context)
+
+
+
+def sibling_checkout(root: str, rel: str) -> str | None:
+    """The sibling repo at `rel` from `root`, or from the primary clone when `root`
+    is a linked worktree; None when neither is a git checkout.
+
+    A worktree at `X.worktrees/<branch>` sits one directory deeper than the primary,
+    so `../bikar` from it is `X.worktrees/bikar` — absent — and every sibling pointer
+    became "not checked out locally" from a worktree while the primary said valid.
+    The gate's verdict must not depend on which checkout runs it.
+    """
+    for base in checkout_parents(root):
+        d = os.path.normpath(os.path.join(base, rel))
+        if os.path.isdir(os.path.join(d, ".git")):
+            return d
+    return None
+
+
+def checkout_parents(root: str) -> list[str]:
+    """`root` itself, then the primary clone's root when `root` is a linked worktree."""
+    out = [root]
+    common = try_git(root, "rev-parse", "--path-format=absolute", "--git-common-dir")
+    if common:
+        primary = os.path.dirname(os.path.normpath(common))
+        if primary not in out:
+            out.append(primary)
+    return out
 
 
 if __name__ == "__main__":
