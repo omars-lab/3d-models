@@ -329,6 +329,35 @@ def _tracked_at_ref(repo: Path, ref: str) -> frozenset[str] | None:
     return tree
 
 
+def _shipped_by_makefile(repo: Path, rel: str) -> bool:
+    """Is `rel` a build product `repo`'s Makefile names in what it ships?
+
+    A vendored lab page is gitignored (`.gitignore` `/lab.html`) and exists
+    only where `make lab-vendor` has run — so "does the file exist" answers a
+    question about the local checkout, not about the doc. The rule that
+    actually decides whether `3d-models:lab.html` is a real page is the
+    Makefile's `LAB_PAGES`, and `DEPLOY_PATHS` is what the site ships; a path
+    either list names verbatim resolves whether or not it has been built here.
+    Exactly the named token, nothing under it: `assets` is shipped, but that
+    does not vouch for `assets/no-such.css` — a child is a fresh claim.
+
+    Found the day a docs-only commit from a fresh worktree failed on a pointer
+    that passed in every checkout that had built the site.
+    """
+    makefile = repo / "Makefile"
+    if not makefile.is_file():
+        return False
+    shipped: set[str] = set()
+    for line in makefile.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^(LAB_PAGES|DEPLOY_PATHS)\s*[:?]?=\s*(.*)$", line)
+        if not m:
+            continue
+        for tok in m.group(2).split():
+            if not tok.startswith("$("):
+                shipped.add(tok)
+    return rel in shipped
+
+
 def _exists_in_sibling(repo: Path, rel: str) -> bool:
     """Does `rel` exist in `repo` — in the working tree, or at its upstream ref?
 
@@ -344,7 +373,7 @@ def _exists_in_sibling(repo: Path, rel: str) -> bool:
             continue
         if rel in tree or any(t.startswith(rel.rstrip("/") + "/") for t in tree):
             return True
-    return False
+    return _shipped_by_makefile(repo, rel)
 
 
 def _looks_sibling_relative(path: str) -> bool:
@@ -378,7 +407,7 @@ def resolve_under(path: str, doc: str, root: Path = ROOT) -> str | None:
         label, rest = path.split("/", 1)
 
     if label is None:
-        if (root / path).exists():
+        if (root / path).exists() or _shipped_by_makefile(root, path):
             return "."
         if (root / Path(doc).parent / path).resolve().exists():
             return f"{Path(doc).parent.as_posix()}/ (doc-relative)"
@@ -605,6 +634,22 @@ def self_test() -> int:
         ok = got == expected
         failures += 0 if ok else 1
         print(f"self-test {'ok  ' if ok else 'FAIL'}: {path} → {got} (want {expected}; {why})")
+
+    # A vendored page resolves by the Makefile's rule, not by having been built
+    # here — asserted on the helper, because in a checkout that has run
+    # `make lab-vendor` the presence check would answer first and hide it.
+    rule_cases: list[tuple[str, bool, str]] = [
+        ("lab.html", True, "in LAB_PAGES — gitignored, absent until vendored"),
+        ("docs/prints.md", True, "in DEPLOY_PATHS by name"),
+        ("no-such-page.html", False, "no list names it"),
+        ("assets/no-such.css", False, "under a shipped directory, not named — a child is a fresh claim"),
+        ("$(LAB_PAGES)", False, "a make variable is not a path"),
+    ]
+    for rel, want_shipped, why in rule_cases:
+        got_shipped = _shipped_by_makefile(ROOT, rel)
+        ok = got_shipped == want_shipped
+        failures += 0 if ok else 1
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: shipped({rel}) → {got_shipped} (want {want_shipped}; {why})")
 
     # The link-label rule is positional: same path, three positions, two verdicts.
     line_cases: list[tuple[str, int, str]] = [
