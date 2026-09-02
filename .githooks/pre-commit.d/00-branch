@@ -1,0 +1,48 @@
+#!/bin/sh
+# Branch guard. Refuses a commit made directly on `master` or `main`.
+#
+# Every change here goes branch → PR → squash-merge, docs included (memory:
+# pr-flow-for-all-repos). Nothing enforced it: neither repo's default branch is
+# protected (`gh api repos/<owner>/<repo>/branches/<default>/protection` → 404
+# on both, measured 2026-09-02), so a `git commit` on master lands, and the
+# next `git push` publishes it with no review and — in bikar — no CI having
+# run on it as a pull request. The same day bikar's `ci` workflow was found red
+# on main for four consecutive runs with three PRs merged over it, which is the
+# cheaper failure: this hook cannot stop a merge on red (only branch protection
+# with required checks does — docs/decisions-log.md D-048), but it does close
+# the path where a commit reaches the default branch having been checked by
+# nobody at all.
+#
+# Both names are refused in both repos on purpose: this repo's default is
+# `master`, bikar's is `main`, and one rule spelled the same way in two places
+# is easier to trust than two rules that happen to agree.
+#
+# Detached HEAD is allowed — there is no branch to protect, and `git worktree
+# add --detach` is how the hook tests and `make deploy` build their fixtures.
+# `gh-pages` is allowed: it is a deliberately diverged branch that `make deploy`
+# commits to directly (CLAUDE.md), and it is not the default branch.
+#
+# `git switch -c <topic>` carries staged changes across, so the fix costs one
+# command and loses nothing.
+#
+# Override once, knowing why: BRANCH_OK=1 git commit
+# wholesale: make validate-branch-guard
+[ -n "$BRANCH_OK" ] && exit 0
+
+# Detached HEAD: symbolic-ref fails quietly, and there is nothing to guard.
+branch=$(git symbolic-ref --short -q HEAD) || exit 0
+
+case "$branch" in
+  master|main)
+    cat >&2 <<MSG
+pre-commit: refusing a direct commit on '$branch'.
+  Every change goes branch -> PR -> squash-merge; nothing on this branch is
+  reviewed or (in bikar) run through CI as a pull request otherwise.
+    git switch -c <topic>     # keeps what you have staged
+    git commit ...
+  Override once, knowing why: BRANCH_OK=1 git commit
+MSG
+    exit 1
+    ;;
+esac
+exit 0

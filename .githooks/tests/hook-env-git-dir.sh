@@ -85,9 +85,17 @@ check() {
     fail=1
     return
   fi
-  if ! diff -q "$TMP/clean.out" "$TMP/hook.out" >/dev/null 2>&1; then
+  # The as_of warning counts commits against a sibling's *local HEAD*, which
+  # another session can move between the two runs above — measured 2026-09-02,
+  # "13 commit(s) behind" became "14" mid-test and this reported a GIT_DIR
+  # defect that was not one. The warning's presence and shape are the evidence;
+  # its numbers are the clock. Compare with the clock masked.
+  stable() { sed -E 's/[0-9]+ commit\(s\) behind/N commit(s) behind/; s/, [0-9]+ ahead/, N ahead/' "$1"; }
+  stable "$TMP/clean.out" >"$TMP/clean.norm"
+  stable "$TMP/hook.out" >"$TMP/hook.norm"
+  if ! diff -q "$TMP/clean.norm" "$TMP/hook.norm" >/dev/null 2>&1; then
     echo "FAIL $name — same input, different report under GIT_DIR:"
-    diff "$TMP/clean.out" "$TMP/hook.out" | sed 's/^/       /' | head -12
+    diff "$TMP/clean.norm" "$TMP/hook.norm" | sed 's/^/       /' | head -12
     fail=1
     return
   fi

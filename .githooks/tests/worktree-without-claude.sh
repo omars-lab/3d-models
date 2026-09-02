@@ -23,7 +23,9 @@ trap 'rm -rf "$FIXTURE"' EXIT
 # file that is plainly site output rather than a design doc or a pointer file.
 mkdir -p "$FIXTURE/.githooks"
 cp -R "$HOOKS_DIR/." "$FIXTURE/.githooks/"
-git -C "$FIXTURE" init --quiet
+# On the branch it is shaped like: 00-branch refuses master and main, and
+# init.defaultBranch is main on at least one machine this runs on.
+git init --quiet --initial-branch=gh-pages "$FIXTURE"
 git -C "$FIXTURE" config core.hooksPath .githooks
 git -C "$FIXTURE" config user.email hooks-test@example.invalid
 git -C "$FIXTURE" config user.name "hooks test"

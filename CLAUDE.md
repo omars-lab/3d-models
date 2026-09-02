@@ -10,11 +10,11 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
 - **Node**: prefix every `git`/`npm`/`tsx`/`vitest` invocation with
   `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`. The system Node
   is too old and fails in ways that look like code bugs.
-- **Hooks**: `core.hooksPath = .githooks` (run `make setup-hooks` once per
-  clone); each sees only staged files, and `make validate` runs every one of
-  them over the whole tree. `20-use-cases` **blocks** a commit staging a file the
-  map pins: `validate.py --refresh` re-pins hashes and *reports* moved anchors —
-  it does not rewrite them. Override with `USE_CASES_OK=1` only when you know why.
+- **Hooks**: `core.hooksPath = .githooks` (`make setup-hooks` once per clone);
+  each sees only staged files, and `make validate` runs all of them over the
+  whole tree. `00-branch` refuses a commit on master (`BRANCH_OK=1` overrides).
+  `20-use-cases` **blocks** a commit staging a file the map pins (`USE_CASES_OK=1`
+  overrides): `validate.py --refresh` re-pins hashes and *reports* moved anchors.
 - **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`,
   `make deploy` (gh-pages worktree). `gh-pages` is a deliberately diverged
   branch — never merge it into `master`.
