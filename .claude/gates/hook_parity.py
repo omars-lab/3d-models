@@ -75,6 +75,13 @@ EXTRA = [
         "edited rarely and the check shells out to bikar, which is a sibling "
         "checkout a commit here cannot assume is present.",
     ),
+    (
+        "make validate-status",
+        "Self-tests build/status_manifest.py, the generator behind status.html. "
+        "Not wired to a hook: its three inputs (build/bikar-ref.txt, the "
+        "use-case map's as_of pins, the gh-pages tip) are files other gates "
+        "already own, so a commit here has no staged trigger to hang one on.",
+    ),
 ]
 
 

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery Status</title>
+<meta name="description" content="What the 3D-models gallery was built from — the bikar commit behind the renders, the commits the use-case map was last checked against, and the last deploy. Read from files, typed by nothing.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='2' width='12' height='12' rx='1' fill='none' stroke='%23b4532a' stroke-width='1.4'/%3E%3Cpath d='M5 8.4l2 2 4-4.4' fill='none' stroke='%23b4532a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:      #f3efe6;   /* warm engineering paper          */
+    --paper-2:    #efeade;   /* slightly deeper panel           */
+    --ink:        #1c1a17;   /* near-black ink                  */
+    --ink-soft:   #57514a;   /* muted ink for body copy         */
+    --ink-faint:  #8c8479;   /* faint labels                    */
+    --line:       #d8d1c2;   /* hairline rules                  */
+    --line-2:     #cabfa9;   /* stronger rule                   */
+    --accent:     #b4532a;   /* terracotta — single accent      */
+    --accent-ink: #8c3f1f;
+    --grid:       rgba(120,108,86,0.07);
+    --gold:       #c79a2e;
+    --ok:         #4f7a3a;   /* clean/green state               */
+    --warn:       #a8641b;   /* dirty/attention state           */
+    --radius:     2px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    color:var(--ink);
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 26px 26px, 26px 26px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+  }
+
+  .wrap{ max-width:960px; margin:0 auto; padding:0 clamp(1.1rem,4vw,3rem) 5rem; }
+
+  /* ---------- masthead ---------- */
+  header{
+    border-bottom:1px solid var(--line-2);
+    padding:clamp(2.2rem,6vw,4.2rem) 0 clamp(1.6rem,3vw,2.4rem);
+  }
+  .kicker{
+    display:flex; align-items:center; gap:.9rem;
+    font-size:.72rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:1.5rem;
+  }
+  .kicker .dash{ flex:0 0 34px; height:1px; background:var(--line-2); }
+  .kicker .spec{ margin-left:auto; letter-spacing:.18em; color:var(--ink-soft); }
+
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500; font-size:clamp(2.2rem,6vw,3.4rem);
+    line-height:1.02; letter-spacing:-0.01em; text-wrap:balance;
+    margin-bottom:1.1rem;
+  }
+  .lede{
+    max-width:60ch; color:var(--ink-soft); font-size:.95rem;
+  }
+  .lede a{ color:var(--accent-ink); text-decoration:underline; text-underline-offset:2px; }
+
+  .backlink{
+    display:inline-block; margin-top:1.4rem;
+    font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-faint); text-decoration:none;
+  }
+  .backlink:hover{ color:var(--accent); }
+
+  /* ---------- fact cards ---------- */
+  main{ margin-top:clamp(2rem,5vw,3.2rem); display:grid; gap:1.1rem; }
+
+  .card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-left:2px solid var(--accent);
+    border-radius:var(--radius);
+    padding:clamp(1.1rem,3vw,1.6rem) clamp(1.2rem,3.4vw,1.8rem);
+  }
+  .card h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500; font-size:1.15rem; margin-bottom:.15rem;
+  }
+  .card .src{
+    font-size:.7rem; letter-spacing:.06em; color:var(--ink-faint);
+    margin-bottom:1rem; word-break:break-all;
+  }
+  .card .src code{ color:var(--ink-soft); }
+
+  .rows{ display:grid; gap:.55rem; }
+  .row{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:.5rem .9rem;
+    padding-bottom:.55rem; border-bottom:1px dashed var(--line);
+  }
+  .row:last-child{ border-bottom:0; padding-bottom:0; }
+  .row .k{
+    flex:0 0 8.5rem; font-size:.74rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .row .v{ font-size:.95rem; font-variant-numeric:tabular-nums; }
+  .row .v a{ color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--line-2); }
+  .row .v a:hover{ border-color:var(--accent); }
+  .sha{ font-weight:500; letter-spacing:.02em; }
+  .muted{ color:var(--ink-faint); }
+
+  .pill{
+    display:inline-block; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:.1rem .45rem; border-radius:var(--radius); border:1px solid currentColor;
+    vertical-align:middle;
+  }
+  .pill.clean{ color:var(--ok); }
+  .pill.dirty{ color:var(--warn); }
+
+  .empty{ color:var(--ink-faint); font-style:italic; }
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:clamp(2.4rem,6vw,4rem); padding-top:1.4rem;
+    border-top:1px solid var(--line-2);
+    display:flex; flex-wrap:wrap; gap:.6rem 1.4rem;
+    font-size:.74rem; color:var(--ink-faint);
+  }
+  footer .right{ margin-left:auto; }
+  footer a{ color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line); }
+  footer a:hover{ color:var(--accent); border-color:var(--accent); }
+
+  .note{
+    margin-top:1.6rem; font-size:.78rem; color:var(--ink-soft);
+    max-width:64ch;
+  }
+  #error{ color:var(--warn); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">
+      <span class="dash"></span>
+      Provenance · Read from files
+      <span class="spec">No. 03 — status</span>
+    </div>
+    <h1>What this was built from</h1>
+    <p class="lede">
+      Three facts about the published gallery, each read straight from a file this
+      repository keeps — the <a href="https://github.com/NaqshCoffee/bikar" target="_blank" rel="noopener">bikar</a>
+      commit the renders came from, the commits the
+      <a href=".claude/skills/maintain-use-cases/use-cases.md">use-case map</a> was last
+      checked against, and the last deploy. Nothing on this page is typed by hand; if a
+      file is not there, the page says so rather than guess.
+    </p>
+    <a class="backlink" href="index.html">← back to the gallery</a>
+  </header>
+
+  <main id="app">
+    <p class="empty" id="loading">Reading status-manifest.json…</p>
+  </main>
+
+  <p class="note" id="note"></p>
+
+  <footer>
+    <span class="sig">Coded Cookie Cutters</span>
+    <span id="generated"></span>
+    <span>bikar → STL → gh-pages</span>
+    <span class="right">
+      <a href="https://github.com/omars-lab/3d-models" target="_blank" rel="noopener">View source on GitHub ↗</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+  // The page reads one file and renders it. It never computes a fact; the
+  // manifest is written by build/status_manifest.py from what is on disk, and
+  // the gate holds that generator to the filesystem. See status.html's twin,
+  // prints.html, for the same shape.
+  const GH = "https://github.com";
+  const REPO = { "3d-models": "omars-lab/3d-models", "bikar": "NaqshCoffee/bikar", "qiyas": "NaqshCoffee/qiyas" };
+
+  const el = (t, attrs = {}, kids = []) => {
+    const n = document.createElement(t);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v;
+      else if (k === "html") n.innerHTML = v;
+      else n.setAttribute(k, v);
+    }
+    for (const c of [].concat(kids)) n.append(c);
+    return n;
+  };
+
+  // A sha rendered as a link to that commit on GitHub, when we know the repo.
+  const commit = (repo, sha, short) => {
+    const slug = REPO[repo];
+    const label = el("span", { class: "sha" }, short || (sha ? sha.slice(0, 7) : "—"));
+    if (!slug || !sha) return label;
+    return el("a", { href: `${GH}/${slug}/commit/${sha}`, target: "_blank", rel: "noopener" }, label);
+  };
+
+  const row = (k, valueNode) => el("div", { class: "row" }, [
+    el("span", { class: "k" }, k),
+    el("span", { class: "v" }, valueNode),
+  ]);
+
+  const emptyRow = (k, why) => row(k, el("span", { class: "empty" }, why));
+
+  function card(title, src, rows) {
+    return el("section", { class: "card" }, [
+      el("h2", {}, title),
+      el("p", { class: "src", html: `source · <code>${src}</code>` }),
+      el("div", { class: "rows" }, rows),
+    ]);
+  }
+
+  function render(m) {
+    const app = document.getElementById("app");
+    app.textContent = "";
+
+    // 1 — the bikar commit the renders were built from.
+    let bikarRows;
+    if (m.bikar_ref) {
+      const b = m.bikar_ref;
+      const pill = el("span", {
+        class: "pill " + (b.dirty ? "dirty" : "clean"),
+      }, b.dirty ? "tree was dirty" : "clean tree");
+      bikarRows = [
+        row("commit", commit("bikar", b.sha, b.short)),
+        row("branch", el("span", {}, b.ref)),
+        row("build tree", pill),
+      ];
+    } else {
+      bikarRows = [emptyRow("commit", "no build/bikar-ref.txt yet — nothing rendered")];
+    }
+    app.append(card("bikar — the renders", "build/bikar-ref.txt", bikarRows));
+
+    // 2 — the commits the use-case map was last checked against.
+    const pins = m.as_of || {};
+    const keys = Object.keys(pins);
+    const pinRows = keys.length
+      ? keys.map((repo) => row(repo, commit(repo, pins[repo], pins[repo].slice(0, 7))))
+      : [emptyRow("pins", "no as_of block recorded")];
+    app.append(card("use-case map — the pins", ".claude/skills/maintain-use-cases/use-cases.md · as_of", pinRows));
+
+    // 3 — the last deploy. from_master carries only a short sha (all the deploy
+    // commit's subject records), so it is linked by that short ref on GitHub.
+    let deployRows;
+    if (m.deploy) {
+      const d = m.deploy;
+      const fromMaster = d.from_master
+        ? el("a", { href: `${GH}/${REPO["3d-models"]}/commit/${d.from_master}`, target: "_blank", rel: "noopener" },
+            el("span", { class: "sha" }, d.from_master))
+        : el("span", { class: "empty" }, "not a deploy commit");
+      deployRows = [
+        row("deployed", el("span", {}, d.date)),
+        row("gh-pages", commit("3d-models", d.sha, d.short)),
+        row("from master", fromMaster),
+      ];
+    } else {
+      deployRows = [emptyRow("deploy", "no gh-pages branch — not deployed yet")];
+    }
+    app.append(card("gh-pages — the last deploy", "gh-pages branch tip", deployRows));
+
+    document.getElementById("generated").textContent = "manifest generated " + (m.generated || "—");
+    document.getElementById("note").textContent =
+      "This page is one deploy behind on the deploy fact by construction: the manifest is " +
+      "built before the deploy it ships in commits, so “last deploy” names the previous one.";
+  }
+
+  fetch("status-manifest.json", { cache: "no-store" })
+    .then((r) => { if (!r.ok) throw new Error(r.status + " " + r.statusText); return r.json(); })
+    .then(render)
+    .catch((e) => {
+      const app = document.getElementById("app");
+      app.textContent = "";
+      app.append(el("section", { class: "card" }, [
+        el("h2", {}, "Manifest not readable"),
+        el("p", { class: "src", html: "expected · <code>status-manifest.json</code>" }),
+        el("p", { id: "error", html:
+          `Could not load <code>status-manifest.json</code> (${e.message}). It is generated ` +
+          `by <code>make status-manifest</code> and shipped by the deploy — open this page ` +
+          `over the deployed site or a local server, not <code>file://</code>.` }),
+      ]));
+    });
+</script>
+</body>
+</html>
