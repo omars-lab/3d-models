@@ -2,12 +2,12 @@
   "_comment": [
     "Pointers that do not resolve and are not defects. The gate blocks GROWTH of",
     "this list, not its existence: adding an entry is a deliberate act with a",
-    "reason, removing one is free. `why` is not read by the gate — it is read by",
+    "reason, removing one is free. `why` is not read by the gate \u2014 it is read by",
     "the next person deciding whether the entry still earns its place.",
     "",
     "Three kinds live here, and only three should. (1) A path in SOMEBODY ELSE'S",
-    "tree, cited as evidence — the gate cannot fetch it and a citation is not a",
-    "claim about our repo. (2) A path the doc says DOES NOT EXIST — a forward",
+    "tree, cited as evidence \u2014 the gate cannot fetch it and a citation is not a",
+    "claim about our repo. (2) A path the doc says DOES NOT EXIST \u2014 a forward",
     "reference to a file still to be authored, or a wrong pointer quoted as the",
     "defect under discussion. (3) A module a design doc PROPOSES.",
     "",
@@ -17,17 +17,17 @@
     {
       "doc": "docs/click-to-source-design.md",
       "path": "src/lang/std/artifactGraph-README.md",
-      "why": "Third party — KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."
+      "why": "Third party \u2014 KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."
     },
     {
       "doc": "docs/click-to-source-design.md",
       "path": "min/vs/editor/editor.main.js",
-      "why": "Third party — Monaco's published dist layout, cited for a measured bundle size."
+      "why": "Third party \u2014 Monaco's published dist layout, cited for a measured bundle size."
     },
     {
       "doc": "docs/derivation-worksheet-design.md",
       "path": "swc.rs/schema.json",
-      "why": "Third party — SWC's published config schema, cited for what it does *not* cover."
+      "why": "Third party \u2014 SWC's published config schema, cited for what it does *not* cover."
     },
     {
       "doc": "docs/dsl-extension-skill-evaluation.md",
@@ -37,7 +37,7 @@
     {
       "doc": "docs/dsl-extension-skill-evaluation.md",
       "path": "packages/core/src/nope/does-not-exist.ts",
-      "why": "Deliberately nonexistent — the injected path in that doc's mutation test of a pointer gate."
+      "why": "Deliberately nonexistent \u2014 the injected path in that doc's mutation test of a pointer gate."
     },
     {
       "doc": "docs/dsl-extension-skill-evaluation.md",
@@ -47,7 +47,7 @@
     {
       "doc": "docs/dsl-grammar-formalization.md",
       "path": "TypeScript-Compiler-Notes/GLOSSARY.md",
-      "why": "Third party — a page fetched during the survey, cited for what it fails to state."
+      "why": "Third party \u2014 a page fetched during the survey, cited for what it fails to state."
     },
     {
       "doc": "docs/dsl-grammar-formalization.md",
@@ -62,12 +62,12 @@
     {
       "doc": "docs/hemisphere-split-design.md",
       "path": "kernel3d/split.ts",
-      "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and §Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
+      "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and \u00a7Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
     },
     {
       "doc": "docs/lego-lab-design.md",
       "path": "config/config-default.scad",
-      "why": "Third party — MachineBlocks' OpenSCAD source, cited for its calibration defaults."
+      "why": "Third party \u2014 MachineBlocks' OpenSCAD source, cited for its calibration defaults."
     },
     {
       "doc": "docs/lego-lab-design.md",
@@ -77,17 +77,22 @@
     {
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Coupons/Clearance-Coupon.bkr",
-      "why": "Model to author — MC-8's in-situ gap ladder. Same shape as Text-Coupon.bkr below: CAL-CLR-01 names MC-8 as what settles it, so the entry exists before the file does. Nothing blocks writing it — the geometry is six wall pairs — it is unwritten because printing is user-held and an unprintable plate settles nothing. Remove this when the file is written."
+      "why": "Model to author \u2014 MC-8's in-situ gap ladder. Same shape as Text-Coupon.bkr below: CAL-CLR-01 names MC-8 as what settles it, so the entry exists before the file does. Nothing blocks writing it \u2014 the geometry is six wall pairs \u2014 it is unwritten because printing is user-held and an unprintable plate settles nothing. Remove this when the file is written."
     },
     {
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Coupons/Text-Coupon.bkr",
-      "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
+      "why": "Model to author \u2014 MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md \u00a78. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
     },
     {
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
-      "why": "Deliberately deleted. D-042 names this file as the thing it removed — a whole test file certifying the withdrawn centreline rule — and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
+      "why": "Deliberately deleted. D-042 names this file as the thing it removed \u2014 a whole test file certifying the withdrawn centreline rule \u2014 and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
+    },
+    {
+      "doc": "docs/vocabulary-convergence-design.md",
+      "path": "sacred-patterns/src/ts/faces.ts",
+      "why": "Proposed module \u2014 the C structural refactor's new geometry->FaceConstruct[] mapper (\u00a74). Authored by plan 2.4.d; forward reference until then."
     }
   ]
 }
