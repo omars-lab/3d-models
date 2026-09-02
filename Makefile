@@ -293,11 +293,20 @@ orbs: bikar-stamp
 		$(BIKAR) render "$$bkr" --format stl --check -o ${ROOT_DIR}/build/stls/$$name.stl; \
 		rm -rf $(ORB_VIEWS)/$$name $(ORB_BREAKDOWN)/$$name; \
 		mkdir -p $(ORB_VIEWS)/$$name; \
-		$(BIKAR) render "$$bkr" --format views -o $(ORB_VIEWS)/$$name; \
-		mkdir -p $(ORB_BREAKDOWN)/$$name; \
-		$(BIKAR) render "$$bkr" --format timelapse --turntable $(ORB_TURNTABLE) \
-			-o $(ORB_BREAKDOWN)/$$name; \
-		cp "$$bkr" ${ROOT_DIR}/src/Orbs/; \
+		if err=$$($(BIKAR) render "$$bkr" --format views -o $(ORB_VIEWS)/$$name 2>&1); then \
+			mkdir -p $(ORB_BREAKDOWN)/$$name; \
+			$(BIKAR) render "$$bkr" --format timelapse --turntable $(ORB_TURNTABLE) \
+				-o $(ORB_BREAKDOWN)/$$name; \
+			cp "$$bkr" ${ROOT_DIR}/src/Orbs/; \
+		elif printf '%s' "$$err" | grep -q 'only produces 2D geometry'; then \
+			rm -rf $(ORB_VIEWS)/$$name; \
+			echo "   SKIP views+timelapse: $$name is a round-pattern orb (STL only) — bikar draws no face-tiled breakdown for it yet (task #80)"; \
+		else \
+			rm -rf $(ORB_VIEWS)/$$name; \
+			printf '%s\n' "$$err" 1>&2; \
+			echo "orbs: $$name failed --format views, and not with the round-pattern refusal — stopping so a real regression is never skipped" 1>&2; \
+			exit 1; \
+		fi; \
 	done; \
 	$(MAKE) -C ${ROOT_DIR} orb-breakdown-index; \
 	cd ${ROOT_DIR} && $(PYTHON) build/orb_previews.py

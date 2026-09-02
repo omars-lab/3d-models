@@ -1,8 +1,15 @@
 # Flat→sphere wrap morph for the breakdown page
 
-**Status:** v0 — **designed, not built.** The owner chose "design doc first, then
-build" ([D-049 §2](decisions-log.md)); this is the design. Nothing in bikar or in
-this repo's gate has changed yet. Build order is section 6.
+**Status:** v1 — **built.** The kernel blend, `writeMorph` and the page caption
+shipped in bikar ([NaqshCoffee/bikar#149](https://github.com/NaqshCoffee/bikar/pull/149));
+the gate rule (T8), the `make orbs` 2D-skip robustness and this record shipped in
+[3d-models#148](https://github.com/omars-lab/3d-models/pull/148). The owner chose
+"design doc first, then build" ([D-049 §2](decisions-log.md)); this was the design.
+Where the build corrected the design, the correction is stated in place (§3.6, §6):
+the morph is **not** a contained kind — at `t = 1` its cells are spherical and burst
+the faceted base outline by the very overhang T7 exists to catch, so containment
+cannot hold across the morph run and the frames are kept out of `CONTAINED_KINDS`
+by design.
 **Grounded by:** [`research/orb-wrap-morph-grounding.md`](research/orb-wrap-morph-grounding.md)
 — every engine fact below is a row of its §A (cited as A1…A8), every count a row of
 §B or §D, and every outside source a row of §C marked **fetched**. Sources that
@@ -189,13 +196,20 @@ checkable rather than merely plausible.
 [`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py) grows by
 one kind and two rules; T1–T7 apply to `morph` frames unchanged.
 
-- `STAGE_KINDS` and `CONTAINED_KINDS` gain `morph`; `STAGE_FILLS` is unchanged (a
-  morph frame uses only the placed fill and the ground).
-- **The junction rule** (provisionally **T8**; a containment rule proposed since
-  the gate shipped — tie the drawn outline to the solid the manifest declares — is
-  queued and may take that number first, in which case this is T9 and the next is
-  T10; the gate assigns numbers at build time) is J1 + J2 of §3.4.
-- **The count rule** (provisionally **T9**) is N of §3.4.
+- `STAGE_KINDS` gains `morph`; `STAGE_FILLS` is unchanged (a morph frame uses only
+  the placed fill and the ground). **`CONTAINED_KINDS` does *not* gain `morph`** —
+  the design assumed the bend stayed inside the base outline, but the build proved
+  it cannot: at `t = 1` the cells are spherical and burst the faceted base outline
+  by the very overhang T7 exists to catch, so a containment check on `morph` would
+  fire on every lifted orb by design. Stage frames (`base`/`element`/`repeat`) at
+  `t = 0` remain contained and remain in `CONTAINED_KINDS`; only the sweeping morph
+  frames are excluded.
+- **The morph rule shipped as one rule, T8** — J1, J2 and N of §3.4 checked
+  together on each lifted orb (a separate containment rule, "tie the drawn outline
+  to the solid the manifest declares", remains queued as T9, task #49). J2 lands on
+  the **cells `complete`** frame that immediately follows the morph block, never
+  `frames[-1]`: in the weave family (cell + strand) `frames[-1]` is the ribbon
+  terminal, and the wrap of the *cells* lands one frame earlier.
 - `--self-test` gains the by-design failures for each: a morph run whose first
   frame is the `repeat` frame *with* the highlight (J1 fails on the identity), a
   `repeat` frame with no highlight at all (J1 fails on "changed nothing"), a last
@@ -329,8 +343,10 @@ Two pull requests, never stacked, in this order.
 
 1. Bump `build/bikar-ref.txt`; `make orbs`; confirm by md5 that no file under
    `build/orb-views/` at the top level changed.
-2. Gate: `morph` in `STAGE_KINDS` and `CONTAINED_KINDS`; the junction and count
-   rules; the self-test failures of §3.6.
+2. Gate: `morph` in `STAGE_KINDS` **only** — kept out of `CONTAINED_KINDS` by
+   design (§3.6: at `t = 1` the spherical cells burst the faceted base outline, the
+   overhang T7 exists to catch); the junction and count rules; the self-test
+   failures of §3.6.
 3. Docs: this document's status to **built** with the PR numbers; the parent
    document's status line; plan row; a shipped-record bullet.
 
