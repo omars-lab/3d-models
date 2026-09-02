@@ -1,7 +1,8 @@
 # Petals to Pins — rosette → LEGO-pin explorer (design)
 
-**Status:** draft / working design capture (not yet gate-audited, not yet committed via the
-house `ground-design-doc` process). Produced 2026-08-30 to answer a diagnostic question:
+**Status:** grounded 2026-09-01 — adversarial audit applied
+([`research/rosette-pin-explorer-grounding-audit.md`](research/rosette-pin-explorer-grounding-audit.md)),
+sources in Appendix A, contested bets and divergences in Appendix B. Produced 2026-08-30 to answer a diagnostic question:
 *the LEGO pins aren't landing where I expect — why?* The private artifact is a visual
 instrument (a hand-ported canvas) built to make that answer visible. **Track 1 shipped
 2026-08-31:** the "run bikar, don't re-port it" objective now exists as the bikar-studio
@@ -10,7 +11,7 @@ clutch lobes) per piece on live geometry — so the seat/drop verdict is the eng
 copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
 successor for that concern. See the shipped record in
 [`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
-below. Last updated 2026-09-01 — §6.6 adds the open ledger.
+below. Last updated 2026-09-01 — grounded (Appendix A/B); §6.6 is the open ledger.
 
 **Artifact this doc is tied to:**
 [**Petals to Pins — rosette → LEGO-pin explorer**](https://claude.ai/code/artifact/df5788b3-8785-492b-a5f0-92533fbad4e5)
@@ -67,7 +68,7 @@ footprint can't fit inside the outline; (c) the diameters doing the fitting are 
 unmeasured knobs.
 
 Audience: the maker (this user) debugging the decomposition, plus anyone deciding whether
-the [`mural`](../.claude/plans/) pattern-set path is worth building.
+the [`mural`](lego-pattern-set-design.md) pattern-set path is worth building.
 
 Non-goals: it is **not** a mesh generator and does not claim byte-fidelity with bikar's STL.
 It reimplements bikar's *placement rule* faithfully (the geometry that decides seat/drop),
@@ -107,6 +108,9 @@ Dials exposed (matching the studio's surface):
   ([`kernel/rosette.ts:101`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel/rosette.ts#L101),
   consumed at [`dsl/evaluator.ts:8006`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/dsl/evaluator.ts#L8006)).
   The tool auto-tracks this default when `n` changes unless the user has diverged from it.
+  The kernel's declared range is 0–90°, but petals turn reflex above `rosetteReflexOnsetAngle`
+  `= 45 + 90/n` ([`kernel/rosette.ts:115`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel/rosette.ts#L115)); the slider can
+  reach past that ceiling, and the figure it then draws is legal but not a rosette anyone builds.
 - **Petal reach** `petalFraction`. **Default:** `cos(2φ)/cos(φ)` with `φ = π/n`; same file
   ([`kernel/rosette.ts:132`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel/rosette.ts#L132)).
   Valid range `0 < f < cos(π/n)`.
@@ -126,34 +130,52 @@ verbatim in its footer and in every per-piece detail card, so no number reads as
 
 | quantity | value (mm) | note |
 |---|---|---|
-| stud pitch | **8.0** | LEGO-brand measures **7.985** on Lugnet's survey — a systematic ~0.015/pitch shortfall, ~0.24 mm over a 16-stud span |
+| stud pitch | **8.0** nominal | LDraw 20 LDU; `lego.ts` calls it "the one uncontested number". Measured: **7.993 ± 0.007** across 37 pitches of a 48×48 baseplate (Cailliau) and **7.986 ± 0.002** on a 112-stud wall of Technic beams (Munafo, via the Lugnet FAQ). Over 16 studs that is 0.11–0.22 mm — Appendix B.1 |
 | part relief | 0.2 | `footprintMm(studs) = 8·studs − 0.2` (0.1/side) |
-| stud ⌀ | 4.8 *or* 5.0 | **sources split** — see below (K1 hedge) |
+| stud ⌀ | 4.8 nominal | measured 4.85–4.9 on moulded parts; the "5.0" some pages give is a rounded figure, not a measurement — see below (K1 hedge) and Appendix B.2 |
 | tube (anti-stud) OD | 6.5137 nominal | derived `2·(8/√2 − 4.8/2)` |
 | bore ⌀ | 4.8 | receives the mating stud |
 | pin ⌀ | 3.2 nominal | solid post for 1×N |
-| rib / rib-arc | 0.1 / 0.8 | the clutch lobe; "single most consequential unmeasured number" |
-| default fit | −0.2 diametral | so effective pin ⌀ = **3.0**, effective tube OD = **6.314** |
+| rib / rib-arc | 0.1 / 0.8 | the clutch lobe; "single most consequential unmeasured number" — `CAL-RIB-01`, coupon LG-F1 |
+| default fit | −0.2 diametral | a knob, not a measurement (D-005): effective pin ⌀ = **3.0**, effective tube OD = **6.314**; stud entry is `CAL-STK-01` (LG-S1), plate fit `CAL-CLB-01` (LG-P2) |
 
-**K1 hedge, carried not stripped:** the stud diameter is **not settled**. LEGO's own
-technical drawings and multiple maker references give **⌀4.8 mm**; a widely-cited secondary
-survey (orionrobots) gives **⌀5.0 mm** (and stud height 1.7 vs bikar's 1.6). bikar ships
-**4.8**. The tool uses 4.8 and labels it — it does not launder the split into a single
-"true" number. Resolving it is empirical (a measured plate), i.e. a `CAL-*` bet, not a doc
-edit.
+**K1 hedge, carried not stripped:** the stud diameter is **not settled**, but the split is
+nominal-vs-measured, not 4.8-vs-5.0. The nominal class is **⌀4.8 mm** (LDraw 12 LDU, Bartneck's
+drawings, Brick Owl); the measured class is **4.85–4.9** (Cailliau 4.9; Brighton Toy Museum
+4.88–4.89, "deliberately oversized"; binderclipscorpion 4.88). The **5.0** that orionrobots
+reproduces is Poskanzer's rounded line on the Lugnet FAQ, and orionrobots' tube OD 6.31 and
+wall 0.657 are the tangency formula run with that 5.0 — one rounded number, not an independent
+source (settled in the [Lego Lab audit](research/lego-lab-grounding-audit.md)). Stud height is
+split the same way: 1.6 (LDraw) vs 1.7 (Lugnet, Brick Owl) vs 1.8 (Cailliau, measured). bikar
+ships **4.8**; the tool uses 4.8 and labels it — it does not launder the split into a single
+"true" number. What a *printed* stud measures is empirical and lives inside `CAL-STK-01`'s
+entry rungs, not in a doc edit.
 
-Web-searched dimensional sources (for the grounding file, if this graduates):
-- orionrobots.co.uk — "The Dimensions of LEGO Bricks" (pitch 8, stud ⌀5.0, height 1.7,
-  underside cylinder OD 6.31 / wall 0.657, brick wall 1.5). Fetched 2026-08-29.
-- Lugnet / LEGO fan measurements — pitch **7.985 mm** (the systematic-error figure).
-- brickowl.com dimension pages — returned HTTP 403; not usable as a citable source.
+Dimensional sources, with the fetched text restated in the audit's deep dive 1 so the
+numbers survive link rot (Appendix A lists them):
+- Lugnet FAQ "Dimensions" — Munafo's **7.986 ± 0.002 mm** pitch (Technic beams, 112 studs);
+  Poskanzer's 8 / 5 / 1.7 lines; LDraw 20 LDU.
+- Cailliau — **7.993 ± 0.007 mm** across 37 pitches of a 48×48 baseplate; stud 4.9, height 1.8.
+- orionrobots "LEGO specifications" — a transcription of the above (its "7.985" is a slip for
+  Lugnet's 7.986); the 2005 blog URL first cited here now returns 404.
+- brickowl.com stud-dimensions page — HTTP 403 on both fetches; the seam survey's earlier
+  fetch (1.7 stud height, "8x − 0.2" footprint) is the record.
 
 ---
 
 ## 4. The anchor solve — bikar's rule, run per piece on one baseplate
 
 Ported from `packages/core/src/kernel3d/grid-gate.ts` (`solveAnchors`, `anchorKind`,
-`signedDistToRing`) and `brick.ts` (the lobed pin/tube footprint).
+`signedDistToRing`) and `brick.ts` (the lobed pin/tube footprint). Every number below is pinned
+at bikar `3900371`: [`SNAP_THRESHOLD_MM`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L110), [`ANCHOR_CLEARANCE_MM`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L113),
+[`MIN_SHELL_WALL_MM`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L116), [`MIN_ANCHOR_WALL_MM`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L119), [`anchorKind`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L156),
+[`cellReach`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L256), [`reach`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L276), [`wallMm`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L297), [`anchorability`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/grid-gate.ts#L345);
+lobes at [`brick.ts:393`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/brick.ts#L393) (tube), [`:410`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/brick.ts#L410) (pin), [`ribbedCircle`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/brick.ts#L231),
+[`BRICK_MIN_FEATURE_MM`](https://github.com/NaqshCoffee/bikar/blob/39003717177f5237c8cc4a59498405da616f2607/packages/core/src/kernel3d/brick.ts#L83). The shipped studio page does not call `solveAnchors`: it calls
+[`solveAnchorsOnGlobalGrid`](https://github.com/NaqshCoffee/bikar/blob/74eab002fb25242bb64a8c8b3f20b8a037e5d63a/packages/core/src/kernel3d/grid-gate.ts#L342) (added after the pin, same reach and wall rules, plus
+dropped-anchor positions) and passes `anchorability(sol, +∞, true)` — the shell-wall criterion
+is **skipped by design**, because the page has no 3D body to measure it on
+([`rosette-explorer.ts:308`](https://github.com/NaqshCoffee/bikar/blob/74eab002fb25242bb64a8c8b3f20b8a037e5d63a/packages/web/src/rosette-explorer.ts#L308)).
 
 **One shared grid.** bikar's standalone `solveAnchors` uses a *piece-local, centered*
 lattice sized to the brick's `c×r`. The tool instead lays **one global 8 mm baseplate**
@@ -177,8 +199,8 @@ Per piece (petal or star), in mm on the global grid (offset by the two "grid nud
    → **seated**, recording `wall = clear − outerDia/2 − rib`. If it's inside the outline but
    `clear < reach` → **dropped** (drawn as a dashed ghost). Outside → skipped.
    Tube reach ≈ **3.66 mm**, pin reach ≈ **2.00 mm** (effective diameters).
-5. **Anchorability verdict** (bikar's four criteria, minus shell-wall which needs the 3D
-   body): `studsEngaged ≥ 2` (rotation lock), `seated ≥ 1`,
+5. **Anchorability verdict** — three of bikar's four criteria; shell-wall (≥ 1.2 mm) needs the
+   3D body and is skipped, as above: `studsEngaged ≥ 2` (rotation lock), `seated ≥ 1`,
    `minAnchorWall ≥ 0.8 mm`. PASS/FAIL with the specific failing reason named.
 
 The pin/tube are drawn with their real clutch geometry: tube = circle + 4 lobes at
@@ -205,10 +227,14 @@ mode directly:
   census depending on where the baseplate sits under it. The grid-nudge dials make pins
   appear and disappear — proof that the pattern is not grid-registered by construction, one
   of the open `mural` design questions (`SNAP_THRESHOLD_MM` is a lattice-snap threshold, not
-  a visual-alignment tolerance — the K10 note in the mural plan).
+  a visual-alignment tolerance — the K10 note in
+  [`lego-pattern-set-design.md`](lego-pattern-set-design.md) §3).
 - **Seats, not grip.** Even a seated anchor is geometry only. Clutch is elastic and every
-  diameter is unmeasured (D-005/D-006; printed-onto-printed measured **0.00 mm** clutch on
-  defaults in LG-S1). The tool refuses to say "holds" anywhere — only "seats."
+  diameter is unmeasured (D-005/D-006). Printed-onto-printed interference on the shipped
+  defaults *computes* to 0.00 mm — the −0.2 knob cancels the +0.2 relief — and bikar reports
+  that as a warning; LG-S1 is the coupon that will measure it and has not been printed
+  (`CAL-STK-01`, provisional; Appendix B.3). The tool refuses to say "holds" anywhere — only
+  "seats."
 
 ---
 
@@ -231,14 +257,14 @@ per task. Legend: **P0** = do first / unblocks the rest · **P1** = next · **P2
   makes this "a bikar → LEGO tool" instead of "a rosette toy" sits behind this track.
 
 **Shipped 2026-08-31** as the bikar-studio `/rosette-explorer` page (bikar PRs #123 `42b22b3`,
-`7674683`, #125 `ac26658`). The delivery vehicle question (1.1) resolved to **in-page ESM** — the
+#124 `7674683`, #125 `ac26658`). The delivery vehicle question (1.1) resolved to **in-page ESM** — the
 studio already runs `compileToGeometry` in-browser, so no CLI/endpoint was needed; the page
 recompiles the studio's canonical `Rosette-N.bkr` on every dial change and reads pieces through
 the new d3-agnostic `faceConstructs` adapter (1.2). The seat/drop rule is the kernel's own
 `solveAnchorsOnGlobalGrid` — the global-baseplate divergence lives **in the kernel**, not the
 page — so the hand-port is superseded for the rosette (1.4). The **generic dial schema (Track 2)
 shipped 2026-08-31** (bikar PR #126 `cff3cf1`), and the **pattern picker (1.3) shipped the same day**
-(bikar PR #127 `821dfe7`): a roster of flat, origin-centred `.bkr` figures (Rosette-N + Star-N to
+(bikar PR #127 `6d17651`): a roster of flat, origin-centred `.bkr` figures (Rosette-N + Star-N to
 start) with a `<select>` that swaps between them, each pattern's dials generated from its own
 compiled schema — so **Track 1 is fully shipped** and the last open non-printer piece is closed.
 
@@ -246,7 +272,7 @@ compiled schema — so **Track 1 is fully shipped** and the last open non-printe
 |---|---|---|---|---|
 | 1.1 | Decide the delivery vehicle: bundle bikar core as ESM/WASM in-page **vs.** a thin compile endpoint (`.bkr` → polygons) | P0 | needs a call on the bikar-studio public-surface question (open user decision) | 🟢 in-page ESM |
 | 1.2 | Expose `compileToGeometry` (or endpoint) returning per-piece polygons in a stable shape | P0 | 1.1 | 🟢 `faceConstructs` adapter |
-| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2 ✓; Track 2 (schema) ✓ | 🟢 roster picker shipped — bikar #127 `821dfe7` (Rosette-N + Star-N; add a pattern = one roster line); **widened to six 2026-09-01** — bikar #134 `85269ac`: Girih {10/3}, Girih decagon, a hex field (6-fold tiling) and a Star-8 field (square tiling) join, one figure per §5.3 lattice row plus girih. Measured before adding: the tiler repeats one way from the origin, so tilings compile off-centre (Hex-Tiled centre (300, 259.8), Star-8-Tiled (200, 200)) — the page recentres every figure on its bbox and frames the stage from the declared span (`stageViewBox`), so "origin-centred" stopped being a roster precondition |
+| 1.3 | Pattern picker UI; load `.bkr` sources (rosette, star, girih, maclado…) | P1 | 1.2 ✓; Track 2 (schema) ✓ | 🟢 roster picker shipped — bikar #127 `6d17651` (Rosette-N + Star-N; add a pattern = one roster line); **widened to six 2026-09-01** — bikar #134 `85269ac`: Girih {10/3}, Girih decagon, a hex field (6-fold tiling) and a Star-8 field (square tiling) join, one figure per §5.3 lattice row plus girih. Measured before adding: the tiler repeats one way from the origin, so tilings compile off-centre (Hex-Tiled centre (300, 259.8), Star-8-Tiled (200, 200)) — the page recentres every figure on its bbox and frames the stage from the declared span (`stageViewBox`), so "origin-centred" stopped being a roster precondition |
 | 1.4 | Replace the hand-ported `rosetteGeometry` path with the engine output; keep the JS port only as an offline fallback | P1 | 1.2 | 🟢 studio page runs the kernel |
 
 ### Track 2 — Config is per-pattern: a schema, not a skill
@@ -335,7 +361,7 @@ for *any* pattern" fastest:
 | # | item | why it advances the goal | size |
 |---|---|---|---|
 | 6.6.1 | **Widen the roster — 🟢 shipped 2026-09-01** (bikar #134 `85269ac`). Six entries: Rosette-N, Star-N, Girih {10/3}, Girih decagon, Hex field, Star-8 field — one per §5.3 lattice row plus girih. The "flat/centred check per figure" this row priced turned out to be the finding: two of the four tilings compile off-origin (the tiler repeats one way), so the page now recentres on the face bbox and frames the stage from `spanPU`; the roster test asserts each entry centres within 1e-6 and spans what it declares (0.9·spanPU < w ≤ spanPU) | Track 1's objective is *any* pattern; the picker made that a data change and then stopped at two | small — one line each, plus the flat/centred check per figure |
-| 6.6.2 | **Ground this doc.** The status line still reads *draft, not gate-audited* while §6 has become the roadmap of record for the stream | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
+| 6.6.2 | **Ground this doc — 🟢 shipped 2026-09-01** (3d-models #136). Adversarial audit checked in as `research/rosette-pin-explorer-grounding-audit.md`; Appendix A (sources) and B (seven contested bets, all clustered under existing `CAL-*` ids — none minted). What the audit killed: §5's "measured 0.00 mm in LG-S1" (LG-S1 is unprinted; it *computes*), §3's "7.985 … ~0.24 mm" pitch drift (Lugnet says 7.986 ± 0.002 on beams; Cailliau 7.993 ± 0.007 on a baseplate), the 4.8-vs-5.0 stud split (5.0 is a rounded Lugnet line, not a source), §7's "none address relief across seams" (MachineBlocks ships per-brick relief), two PR shas (#124 `7674683`, #127 `6d17651`) and a link to a directory | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
 | 6.6.3 | **3.2 — plates as data.** `PLATES` is a five-entry const in `bikar:packages/web/src/rosette-explorer.ts`; move it to a data file `{id, studs, mm, brand}` so a plate is added without touching page code. **No thumbnails and no buy links** — those are 3.4, which needs real URLs and a partner, and a fabricated link is worse than none | Track 3's objective is "the plate the user owns"; a const list cannot grow past what one author typed | small |
 | 6.6.4 | **4.2 — the interior-tube cap.** A dial that drops interior tubes and shows the clutch/material trade, with the kernel's floor (≥2 engaged studs + ≥1 anchor, already in the verdict) left visible and un-overridable | Track 4's question — "do we need all these pins?" — has a websearched answer and no instrument | small–medium; UI only until a coupon can price it |
 
@@ -367,17 +393,32 @@ at runtime). Each is a closed door with its reason on it, not an open item.
 Prior art surveyed for how others turn one pattern into griddable pieces, and how rosette
 generators are built:
 
-- **LEGO Art / World Map mosaic UX**, and **dlvoy/base-plate-outliner**, **MachineBlocks** —
-  rectangle-decomposition of an image/region onto the stud grid. Confirms the c×r-on-8-mm
-  decomposition is the standard move; none address *relief continuity across seams*, which
-  is the `mural` plan's hard part (Milestone A, edge-to-edge relief).
+- **LEGO Art / World Map mosaic UX**, **dlvoy/base-plate-outliner**, **MachineBlocks**, and
+  the systems enumerated in [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md)
+  §3 (Finke, Brickapic — snippet-only, pad-print mural vendors) — rectangle-decomposition of an
+  image/region onto the stud grid. Confirms the c×r-on-8-mm decomposition is the standard
+  move. MachineBlocks **does** ship per-brick relief today (`surfacePattern`, SVG emboss/deboss,
+  text, base relief cuts); what none of the systems surveyed there carries is *one relief across
+  piece seams on the LEGO grid*, which is the `mural` plan's hard part (Milestone A, edge-to-edge
+  relief). The novelty, as the Lego Lab audit settled it, is Islamic pattern × LEGO-registered
+  printed part — not "relief on a brick" (Appendix B.4).
 - **Brick Mosaic / Bricklink Studio mosaic tools** — colour-per-stud, not printed relief;
   out of scope here (colour is a `mural` non-goal).
 - **p5.js / Processing Islamic-geometry sketches and Girih editors** — confirm the
   compass-and-straightedge construction the kernel already encodes; nothing to port back,
   bikar's `rosetteGeometry` is the canonical source.
-- **Rosette-generation literature** (n-fold rosettes from a proportioning circle) — matches
-  the kernel's `proportioningRadius = R(1−sinφ)` construction; reassuring, not novel.
+- **Rosette-generation literature** — Lee & Soliman, *The Geometric Rosette* (2014,
+  [PDF](https://tilingsearch.mit.edu/RosetteAnalysis.pdf)) §2: the standard construction's
+  proportioning circle is the circle on the centre A of radius AF where CF = CE = half the
+  n-gon edge, i.e. `R − R·sin(π/n)` — the kernel's `proportioningRadius = R(1−sinφ)` exactly;
+  its "angle ECF = 90° − 180°/n" is the bisector the shoulder solve uses. A. J. Lee, *Islamic
+  Star Patterns*, Muqarnas 4 (1987) and Kaplan's
+  [*Islamic star patterns from polygons in contact*](https://cs.uwaterloo.ca/~csk/other/phd/kaplan_diss_starpatterns_print.pdf)
+  give the "hexagonal arms around a central star" anatomy §2 echoes. One qualifier the
+  literature adds: Lee & Soliman's standard rosette has **one** free parameter beyond n (the
+  crossover angle); bikar's `petalFraction` is a **second, independent** dial, so the kernel
+  is a generalisation and only its default figure can coincide with the standard one — whether
+  it does is an open question (Appendix B.5), not a claim.
 
 **Chosen shape:** a single canvas instrument with a live kernel port + a shared-baseplate
 solver, rather than an image-mosaic tool, because the question is diagnostic (*why these
@@ -414,9 +455,157 @@ user, not a task.
 
 ## Provenance
 
-Ports are of bikar at the working tree checked out 2026-08-29 (`kernel/rosette.ts`,
-`kernel3d/lego.ts`, `kernel3d/grid-gate.ts`, `kernel3d/brick.ts`). LEGO dimensional sources
-fetched 2026-08-29 (orionrobots.co.uk; Lugnet pitch survey). If this graduates to a
-committed design doc, the bikar references must be pinned to a git ref and the web sources
-moved into `docs/research/` under a provenance header per the `ground-design-doc` process,
-and the whole thing run through the doc gates (D1–D4) and an adversarial grounding audit.
+Ports are of bikar at `3900371` (`39003717177f5237c8cc4a59498405da616f2607`: `kernel/rosette.ts`,
+`kernel3d/lego.ts`, `kernel3d/grid-gate.ts`, `kernel3d/brick.ts` — every §2 and §4 link is
+pinned there, and `rosette.ts` is byte-identical at `74eab002`), and the shipped page is read at
+`74eab002` (`74eab002fb25242bb64a8c8b3f20b8a037e5d63a`). The 2026-08-29 web fetches
+(orionrobots, Lugnet) were re-fetched and traced to their primaries on 2026-09-01 by the
+grounding audit, which is the checked-in research record for this doc. The doc gates (D1–D4)
+run on it at every commit.
+
+---
+
+## Appendix A — sources
+
+All fetched by the 2026-09-01 audit unless marked; the fetched text is restated in
+[`research/rosette-pin-explorer-grounding-audit.md`](research/rosette-pin-explorer-grounding-audit.md)
+(deep dives 1–5), so each number below survives a dead link.
+
+**Engine (primary — the thing being ported).**
+- bikar `kernel/rosette.ts`, `kernel3d/lego.ts`, `kernel3d/grid-gate.ts`, `kernel3d/brick.ts` at
+  `3900371` — linked line-by-line in §2 and §4.
+- bikar `packages/web/src/rosette-explorer.ts` and its test at `74eab002` — the shipped page;
+  `solveAnchorsOnGlobalGrid` and the roster.
+- bikar PRs #123 `42b22b3`, #124 `7674683`, #125 `ac26658`, #126 `cff3cf1`, #127 `6d17651`,
+  #134 `85269ac` — merge shas on bikar `main`.
+
+**LEGO dimensions.**
+- Lugnet FAQ, [Dimensions](https://www.lugnet.com/~330/FAQ/Build/dimensions) — Munafo's
+  7.986 ± 0.002 mm pitch (Technic beams, 112 studs = 895 mm); Poskanzer's 8 / 5 / 1.7;
+  Bliss's LDraw 20 LDU.
+- Munafo, [mcg](http://mrob.com/pub/mcg.html) — the measurement behind the Lugnet line.
+- Cailliau, [General considerations](https://www.cailliau.org/Alphabetical/L/Lego/Dimensions/General%20Considerations/%20General%20Considerations-en.html)
+  — 7.993 ± 0.007 mm across 37 pitches of a 48×48 baseplate; stud 4.9, height 1.8, 0.1 mm play
+  per side.
+- Bartneck, [brick](http://www.bartneck.de/wp-content/uploads/2019/04/lego-2x4-brick-dimensions-measurements-3001.pdf)
+  and [plate](http://www.bartneck.de/wp-content/uploads/2019/04/lego-2x4-plate-dimensions-measurements-3020.pdf)
+  drawings — ⌀4.8 stud, ⌀6.51 tube, 0.2 mm gap between bricks.
+- Brighton Toy Museum, [Lego dimensions](http://web.archive.org/web/20260109123620/https://www.brightontoymuseum.co.uk/index/Lego_dimensions)
+  (archive; live page 403) — micrometer 4.88–4.89 stud, "deliberately oversized".
+- binderclipscorpion, [plates between studs](https://binderclipscorpion.com/2023/02/08/should-plates-between-studs-be-an-illegal-lego-building-technique/)
+  — stud 4.88 measured.
+- orionrobots, [LEGO specifications](https://orionrobots.co.uk/pages/lego-specifications.html)
+  — a transcription of Lugnet (7.985 is a slip for 7.986; 6.31 / 0.657 are the tangency
+  formula with a 5.0 stud). Cited for what it is, not as a measurement.
+- Brick Owl stud-dimensions page — 403 on this audit's fetches; recorded in
+  [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) §1 from an earlier fetch.
+- The settled verdicts on the stud-diameter and tube-OD split:
+  [`lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md);
+  the LDraw-primitive reading: [`lego-brick-system-survey.md`](research/lego-brick-system-survey.md) §1.
+
+**Rosette construction.**
+- Lee & Soliman, *The Geometric Rosette: analysis of an Islamic decorative motif* (2014),
+  [PDF](https://tilingsearch.mit.edu/RosetteAnalysis.pdf) — §2 standard construction,
+  characteristics 3, 4, 7, 8.
+- Kaplan, [*Islamic star patterns from polygons in contact*](https://cs.uwaterloo.ca/~csk/other/phd/kaplan_diss_starpatterns_print.pdf)
+  — rosette anatomy, "nearly ideal in the sense given by Lee".
+- A. J. Lee, *Islamic Star Patterns*, Muqarnas 4 (1987) 182 — cited through Kaplan and Lee &
+  Soliman; not fetched.
+
+**Prior art on splitting one pattern across LEGO-compatible pieces.**
+- [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) §3 — the
+  enumeration §7 relies on (LEGO Art 31203, dlvoy, MachineBlocks, Finke, Brickapic, mural vendors).
+- MachineBlocks module docs (fetched by the audit): `surfacePattern`, `surfacePatternSvg`,
+  `svg`/`svgDepth`, `text*`, `baseReliefCut*`.
+
+**House decisions and bets.**
+- [`decisions-log.md`](decisions-log.md) D-005 (knobs backed by `CAL-*` bets) and D-006
+  (studs as ports; the computed 0.00 mm).
+- [`bets.md`](../.claude/skills/calibrate/bets.md) — `CAL-RIB-01`, `CAL-STK-01`, `CAL-CLB-01`,
+  `CAL-REG-01`; 20 provisional, 0 measured at this writing.
+- [`catalog.md`](../.claude/skills/prototype/catalog.md) — LG-S1, LG-F1, LG-R1, LG-P2.
+
+## Appendix B — contested bets and divergences
+
+One entry per claim the audit contested. Each carries the counter-position fairly, then either
+the justification for diverging or the change made. Bet ids are the existing registry's —
+every empirical residue here clusters under a bet that already exists by *the measurement that
+settles it*, so none was minted.
+
+### B.1 Pitch drift across a piece — `CAL-CLB-01`
+
+*Counter-position.* The doc's first draft said "7.985 on Lugnet, ~0.24 mm over 16 studs".
+Lugnet says 7.986 ± 0.002, measured by Munafo on a wall of Technic **beams**; the one fetched
+measurement on a **baseplate** is Cailliau's 7.993 ± 0.007 ("8 mm to within better than one
+hundredth"), and bikar's own `lego.ts` calls 8.0 "the one uncontested number" while the seam
+survey §1.3 reads Cailliau as showing pitch does *not* accumulate error.
+
+*Change made.* The row now carries both measurements, the part each was taken on, and the
+honest span (0.11–0.22 mm over 16 studs). The transfer sentence (K10): Cailliau's figure
+transfers to the explorer's baseplate grid directly, because it was measured on that part class;
+Munafo's beam figure transfers only if beam and plate moulds share a shrinkage allowance, which
+no fetched source states. What a *printed* piece's pitch drifts by against a real plate is
+`CAL-CLB-01`'s "pitch delta across a piece span" (coupon LG-P2, held on a printer); until it
+runs, the grid-nudge dials in §5 are the instrument for the question, not an answer to it.
+
+### B.2 The stud-diameter split — nominal vs measured, not 4.8 vs 5.0
+
+*Counter-position.* orionrobots gives ⌀5.0 and a 6.31 tube; the first draft treated that as a
+second source.
+
+*Change made.* The audit traced 5.0 to Poskanzer's rounded line on Lugnet and 6.31 / 0.657 to the
+tangency formula run with it — one rounded number, not an independent measurement (the Lego Lab
+audit had already settled the tube half). The split that is real is nominal 4.8 (LDraw, Bartneck,
+Brick Owl) against measured 4.85–4.9 (Cailliau, Brighton, binderclipscorpion), and the hedge now
+says so. bikar keeps 4.8; a printed stud's diameter is settled inside `CAL-STK-01`'s entry rungs.
+
+### B.3 "Measured 0.00 mm clutch" — `CAL-STK-01`
+
+*Counter-position.* The first draft's §5 said printed-onto-printed clutch "measured 0.00 mm on
+defaults in LG-S1". LG-S1's catalog entry is *planned, printing on hold, what we learned:
+pending*; D-006 says the interference **computes** to 0.00 mm; the bet registry records 20
+provisional and 0 measured bets. Nothing was measured — the coupon's open question had been
+written as its answer, the taxonomy's K1 pattern.
+
+*Change made.* §5 now says "computes", names D-006 and `CAL-STK-01`, and says LG-S1 has not been
+printed. No conclusion in this doc rests on the number holding.
+
+### B.4 Novelty — "none address relief continuity across seams"
+
+*Counter-position.* MachineBlocks ships per-brick relief today (`surfacePattern`, SVG
+emboss/deboss, text, base relief cuts) and the first draft's one-line dismissal omitted it — a
+system inside the surveyed set under-reported, the `piece-composition` K2 pattern. Off the LEGO
+grid, relief continuity across split prints is a known problem with known answers (alignment
+pins, tabs); pad-print mural vendors carry an *image* across tiles at zero relief.
+
+*Change made.* §7 credits MachineBlocks, scopes the claim to the seam survey §3 enumeration, and
+narrows the novelty to the Lego Lab audit's settled form: Islamic pattern × LEGO-registered
+printed part, with one relief carried across piece seams. Brickapic is named as the nearest
+neighbour and marked snippet-only (403), so it is not claimed either way.
+
+### B.5 One free parameter or two — open, argued
+
+*Counter-position.* Lee & Soliman's standard rosette has one parameter beyond n; the inner
+point's position "is determined by the size of the crossover angle". bikar exposes two dials,
+and the first draft presented both as the rosette's free choices.
+
+*Standing.* bikar's `petalFraction` is a deliberate generalisation, and the doc now says so. Open:
+whether the default `cos(2φ)/cos(φ)` makes the default figure coincide with the standard
+construction. That is a derivation or a numeric check against `rosette-witness.test.ts`, not a
+print — it stays an argued question here rather than a bet, and is the one thing this audit
+found that a later reader can close for free.
+
+### B.6 Three criteria, not four — by design
+
+*Counter-position.* §4 listed bikar's four anchorability criteria; the shipped page passes
+`anchorability(sol, +∞, true)` and never evaluates shell-wall.
+
+*Standing.* Intended: the page has no 3D body to measure a shell wall on, and the divergence is
+now written where the rule is (§4), with the call site linked. The full four-criteria gate still
+runs on every `brick` render in bikar, so a piece the page passes can still fail there.
+
+### B.7 The lobe geometry — `CAL-RIB-01`
+
+Every lobe the page draws inherits the 0.1 mm rib and 0.8 mm arc, both provisional (coupon LG-F1,
+which also gates the pin coupon LG-R1). The page draws them as bikar's own `ribbedCircle` does, so
+when the number moves the drawing moves with it; nothing here claims the lobe holds.
