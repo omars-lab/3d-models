@@ -207,6 +207,15 @@ the operator ([D-046](decisions-log.md)), a lab page `prints.html` is vendored i
 the site (S7); the site has no shared nav bar, so its `site-graph.json` pins shift
 when a nav entry is inserted — that is the S7 hazard, handled in that rung.
 
+S7 shipped 2026-09-01 (bikar #130; the vendoring PR here). What the page reads is
+`prints-manifest.json`, written by `build/prints_manifest.py` from every
+`docs/prints/<run>/index.md` with the gate's own frontmatter parser, gitignored and
+rebuilt by `make deploy` — nobody types a printed plate into existence, and an
+absent `docs/prints/` writes an empty register the page shows as the true state.
+The site ships the manifest, not the record directories: photos are source
+binaries tracked on master, so each record and each photo carries the repository
+URL it is served from. The queue is linked from the page, not copied into it.
+
 ## 9. Sequencing
 
 The rungs are ordered so that what gates an empty set does so *honestly* — printing
@@ -220,7 +229,7 @@ its zero count (S3's R4) — and only R3, which cannot, waits for a record to ex
 | S4 | gate R3 two-way propagation | **yes** (after first bet flips) | #71 |
 | S5 | delete the empty Iteration log from the catalog | no (but ordered after S3) | #68 |
 | S6 | rendered `docs/prints.md` tab | no (renders the empty state until a record lands) | #69 |
-| S7 | vendor `prints.html` lab page | no (zero-state lab page) | #70 |
+| S7 | vendor `prints.html` lab page + the manifest generator | no (zero-state lab page) | shipped 2026-09-01, bikar #130 |
 
 Only S1 is in this PR. The printer-gated rungs stay pending; shipping an empty
 `prints_gate.py` into `make validate` would be the anti-pattern this repo warns

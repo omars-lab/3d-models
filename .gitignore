@@ -22,6 +22,7 @@ build/*
 /lego.html
 /design.html
 /breakdown.html
+/prints.html
 /assets/
 
 # gh-pages deploy worktree (created by `make deploy`)
@@ -30,3 +31,7 @@ build/*
 # Python bytecode (skills/*/validate.py and friends)
 __pycache__/
 *.pyc
+
+# The prints register: written by build/prints_manifest.py (make prints-manifest)
+# from docs/prints/ and shipped by DEPLOY_PATHS. Generated, never typed.
+/prints-manifest.json
