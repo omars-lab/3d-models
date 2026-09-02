@@ -619,3 +619,16 @@ prints-manifest:
 # and every other case landing. At the tail so no anchored line above moves.
 validate-branch-guard:
 	${ROOT_DIR}/.githooks/tests/refuse-main-commit.sh
+
+# Schema-mirror gate: bikar vendors qiyas's exported JSON schemas byte-identical
+# and generates its TypeScript from the copy, and nothing in either repo compares
+# the two — so the mirror lagged qiyas by two stems (Scores' drop/surplus/
+# max_drift, Contour's ribbon fields) with every check green. This reads both
+# schema directories at the use-case map's pinned commits, offline, and names
+# the def and fields that differ. `self-test` runs fixed fixtures, then a tempdir
+# primary + linked worktree + siblings and requires the same failing verdict
+# from both checkouts. Last in the file on purpose: every earlier target is a
+# pinned `Makefile:L<n>` anchor somewhere, and inserting above moved five.
+validate-schema-mirror:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/schema_mirror.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/schema_mirror.py

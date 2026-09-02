@@ -1,0 +1,25 @@
+#!/bin/sh
+# Schema-mirror gate (.claude/gates/schema_mirror.py). bikar vendors qiyas's
+# exported JSON schemas and types its web pages against the copy; nothing in
+# either repo compares copy to source, so the copy lagged qiyas by two stems
+# with every check green (docs/plan.md row 2.9). This reads both at the
+# use-case map's pinned commits and names the def and fields that differ.
+#
+# wholesale: make validate-schema-mirror
+#
+# Whole-tree, not --staged: the drift is between two siblings and shows up here
+# only when `validate.py --refresh` moves a pin — no schema file is ever staged
+# in this repo. Same worktree caveat as 37-counts: `gh-pages` carries
+# `.githooks` and not `.claude`.
+# Override once: SCHEMA_MIRROR_OK=1 git commit
+[ -n "$SCHEMA_MIRROR_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the schema-mirror gate" >&2
+  exit 1
+fi
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/schema_mirror.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no schema-mirror gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"

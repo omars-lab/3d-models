@@ -170,9 +170,11 @@ scheduled; the ordering is the dependency order, not a promise.
   drawn *unclaimed*; an id in two buckets throws. A checked-in fixture (the hero SVG, its
   encoding, the degraded copy, the diff) is pinned to the live render byte for byte and to the
   encoding's sha256, so a renderer or encoder change turns it red rather than stale, and the
-  page falls back to it — labelled — when no qiyas answers. Found on the way, not fixed: bikar's
-  generated qiyas schema types lag qiyas's `scores` (no `drop`/`surplus`/`max_drift`); the page
-  derives them from the buckets, and the regeneration is queued in [`plan.md`](plan.md) §2.
+  page falls back to it — labelled — when no qiyas answers. Found on the way: bikar's
+  generated qiyas schema types lagged qiyas's `scores` (no `drop`/`surplus`/`max_drift`), so the
+  first page derived them from the buckets. Fixed since (bikar #145 `cdc0331`): the mirror is
+  re-vendored, the page reads the scores, and a 3d-models gate (`.claude/gates/schema_mirror.py`)
+  holds bikar's copy to qiyas's export at the use-case map's pins — [`plan.md`](plan.md) §2 row 2.9.
 - **Phase 3 — unify the vocabulary.** Per Q-VOCAB, converge the explorers and sacred-patterns
   on one **common naming convention**, refactoring either side as needed. With one or two
   surfaces built, how much vocabulary actually gets shared is cheap to see.

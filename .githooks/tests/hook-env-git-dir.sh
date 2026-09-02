@@ -113,6 +113,7 @@ check() {
 check "validate.py"        python3 .claude/skills/maintain-use-cases/validate.py
 check "doc_pointers.py"    python3 .claude/gates/doc_pointers.py
 check "catalog_models.py"  python3 .claude/gates/catalog_models.py
+check "schema_mirror.py"   python3 .claude/gates/schema_mirror.py
 
 [ "$fail" -eq 0 ] || { echo "hook-env: a gate's verdict depends on how it was launched"; exit 1; }
 echo "hook-env: every repo-reading gate agrees with itself under git's hook environment"
