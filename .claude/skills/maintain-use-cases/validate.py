@@ -26,9 +26,9 @@ Checks (full mode):
 
 Pre-commit mode adds the freshness contract:
   - use-cases.md staged  -> staged content must fully validate AND its
-    3d-models as_of must equal HEAD (the commit being built upon); self-repo
-    pointers read the index for staged files and HEAD for the rest, so what is
-    checked is what the commit will contain
+    3d-models as_of must equal the published base (merge-base of HEAD with
+    origin's default branch — HEAD itself on a one-commit branch); self-repo
+    pointers read the index for staged files, so what is checked is what ships
   - use-cases.md not staged but a staged file is referenced by a 3d-models
     pointer -> BLOCK (override once with USE_CASES_OK=1 git commit ...)
   - staged files touch experience surfaces (index.html, Makefile, docs/,
@@ -727,7 +727,9 @@ def mode_full(root: str) -> int:
 def refresh_target(repo: str, rdir: str) -> tuple[str | None, str]:
     """Resolve what `--refresh` should pin `repo` to, and say which ref that was.
 
-    For this repo, that is HEAD: the map records the commit it is built upon.
+    For this repo, that is the **published base** — see `published_base` for
+    why HEAD, the obvious answer and the one this used to give, does not
+    survive the merge button.
 
     For a **sibling** repo it deliberately is not. `../bikar` and `../qiyas` are
     other sessions' working checkouts, and their HEAD is routinely a feature
@@ -740,12 +742,35 @@ def refresh_target(repo: str, rdir: str) -> tuple[str | None, str]:
     reported, because it is the case that used to happen silently.
     """
     if repo == SELF_REPO:
-        return try_git(rdir, "rev-parse", "HEAD"), "HEAD"
+        return published_base(rdir)
     for ref in ("origin/HEAD", "origin/main"):
         resolved = try_git(rdir, "rev-parse", "--verify", f"{ref}^{{commit}}")
         if resolved is not None:
             return resolved, ref
     return try_git(rdir, "rev-parse", "HEAD"), "HEAD (no origin ref — pin may be unpublished)"
+
+
+def published_base(rdir: str) -> tuple[str | None, str]:
+    """The newest commit HEAD shares with origin's default branch, and its name.
+
+    The self pin must be an ancestor of every future HEAD (`unreachable_pin`),
+    and branch HEAD is not: a squash merge writes a new commit and deletes the
+    branch, so a pin taken mid-branch names an object reachable from nothing.
+    That shipped on 2026-08-31 — #127 refreshed on its second commit, merged
+    as `36bfc5e`, and `20-use-cases` failed on every pinned-file commit to
+    master after it. The merge-base with the published branch is on master by
+    construction, so it is an ancestor of the squash commit too; on a
+    one-commit branch it *is* HEAD, which is what the old rule required, so
+    nothing that used to pass stops passing.
+
+    Self-repo pointers are read live (`self_blob`), so the pin carries no
+    content — only the ancestry the check above needs.
+    """
+    for ref in ("origin/HEAD", "origin/master", "origin/main"):
+        base = try_git(rdir, "merge-base", "HEAD", ref)
+        if base:
+            return base, f"merge-base(HEAD, {ref})"
+    return try_git(rdir, "rev-parse", "HEAD"), "HEAD (no origin ref — a squash merge will orphan this pin)"
 
 
 def mode_refresh(root: str) -> int:
@@ -800,9 +825,10 @@ def mode_staged(root: str) -> int:
         doc = Doc(run_git(root, "show", f":{DOC_RELPATH}"))
         # Self-repo pointers read what this commit will contain. See self_blob.
         errors, warnings = validate_full(doc, root, staged=set(staged), at_commit=True)
-        if head and doc.as_of.get(SELF_REPO) != head:
+        want, ref = published_base(root)
+        if want and doc.as_of.get(SELF_REPO) != want:
             errors.append(
-                f"staged {SELF_REPO} as_of {doc.as_of.get(SELF_REPO, '?')[:12]} != HEAD {head[:12]} — "
+                f"staged {SELF_REPO} as_of {doc.as_of.get(SELF_REPO, '?')[:12]} != {ref} {want[:12]} — "
                 f"run .claude/skills/maintain-use-cases/validate.py --refresh and restage"
             )
         return report(errors, warnings, context="pre-commit")
@@ -1028,14 +1054,19 @@ def self_test() -> int:
 
         expect("a sibling repo pins to its published tip, not the branch it is on",
                refresh_target("bikar", tmp), (published, "origin/main"))
-        expect("this repo still pins to HEAD — the commit being built upon",
-               refresh_target(SELF_REPO, tmp), (unpushed, "HEAD"))
+        expect("this repo pins to the published base — the newest commit already on origin",
+               refresh_target(SELF_REPO, tmp), (published, "merge-base(HEAD, origin/main)"))
 
         git("update-ref", "-d", "refs/remotes/origin/main")
         target, ref = refresh_target("bikar", tmp)
         expect("with no origin ref it falls back to HEAD rather than refusing",
                target, unpushed)
         expect("...and says so, because that pin may not be published",
+               ref.startswith("HEAD (no origin ref"), True)
+        target, ref = refresh_target(SELF_REPO, tmp)
+        expect("this repo falls back to HEAD the same way",
+               target, unpushed)
+        expect("...and says what that costs",
                ref.startswith("HEAD (no origin ref"), True)
 
     # A squash merge, reproduced. This is the shape that shipped on 2026-08-03:
@@ -1088,6 +1119,32 @@ def self_test() -> int:
             "a sibling pin is exempt — it is pinned at its own published ref",
             unreachable_pin("bikar", tmp, pinned),
             None,
+        )
+
+        # The remedy, on the same shape. A branch with more than one commit is
+        # what #127 had; `--refresh` on it used to pin the branch's HEAD.
+        git("update-ref", "refs/remotes/origin/master", squashed)
+        git("checkout", "-q", "-b", "feat/two")
+        commit("first")
+        two = commit("second — where a --refresh used to pin")
+        target, ref = refresh_target(SELF_REPO, tmp)
+        expect(
+            "--refresh on a two-commit branch pins the published base, not the branch HEAD",
+            (target, ref),
+            (squashed, "merge-base(HEAD, origin/master)"),
+        )
+        git("checkout", "-q", "master")
+        commit("feat/two (#24)")
+        git("branch", "-qD", "feat/two")
+        expect(
+            "...so the pin survives the squash merge",
+            unreachable_pin(SELF_REPO, tmp, target),
+            None,
+        )
+        expect(
+            "...where the branch HEAD would not have (the control)",
+            unreachable_pin(SELF_REPO, tmp, two) is not None,
+            True,
         )
 
     # The one-commit blind spot, reproduced. `20-use-cases` blocks precisely
