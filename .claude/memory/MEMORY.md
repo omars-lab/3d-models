@@ -7,6 +7,7 @@
 - [gh auto-merge footgun](gh-auto-merge-footgun.md) — `--auto` merges immediately on NaqshCoffee repos; poll to green instead
 - [3d-models use-case hook](3d-models-use-case-hook.md) — pre-commit dispatcher blocks pointer-file commits without map update; USE_CASES_OK=1 override
 - [PR flow for all repos](pr-flow-for-all-repos.md) — every change (docs included) goes branch→PR→merge, never direct-to-master; marketplace repo is the exception
+- [Gate verdict is checkout-independent](gate-verdict-checkout-independent.md) — worktree sibling fallback + self pin at the published base (#132, #133); any gate touching paths outside the repo gets a worktree self-test
 - [Stacked-PR stranding](stacked-pr-stranding.md) — never base a PR on another open PR's branch here; merge lands in the parent, not master, and strands it if the parent goes stale
 - [Check main's CI, not just the PR's](check-main-ci-not-just-the-pr.md) — bikar `ci` was red on main for four runs and three PRs merged past it; read main's last run first, fix in its own PR off main, rebase, then poll to green
 
