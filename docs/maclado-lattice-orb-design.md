@@ -1,14 +1,19 @@
 # The lattice-walk maclado orb — design doc (the fourth Family-3 orb)
 
-Status: **design — approach fixed, build not started.** The fourth orb in the
-9-fold maclado family ([`maclado-orb-design.md`](maclado-orb-design.md) is the
-family doc; this doc is one orb). Authorised by the owner in
-[D-049 §5](decisions-log.md) ("build a fourth orb, and use the build to find gaps
-and inconsistencies and make the approach more robust in the process") and, this
-session, resolved to the **18-wheel open shell** among the offered shapes. Ground
-truth pinned to bikar `1083046` (origin/main); grounded 2026-09-02 (Appendix A). Ships with its
-[stop list](#6-the-stop-list-d-049-5) complete and, per D-049 §5, an orb-creation
-skill **only if** that stop list's *instruction* column is non-empty at ship.
+Status: **shipped 2026-09-02** — increment 1 (`bikar#153`, the open-shell kernel)
+and increment 2 (`bikar#154`, the `place rule latticewalk` DSL seam + integration)
+are merged to bikar main; increment 3 is the 3d-models integration (this PR: the
+decision record, the `make orbs` publish-pipeline skip, and the use-case map). The
+fourth orb in the 9-fold maclado family
+([`maclado-orb-design.md`](maclado-orb-design.md) is the family doc; this doc is
+one orb). Authorised by the owner in [D-049 §5](decisions-log.md) ("build a fourth
+orb, and use the build to find gaps and inconsistencies and make the approach more
+robust in the process") and, this session, resolved to the **18-wheel open shell**
+among the offered shapes. Ground truth pinned to bikar `1083046` (origin/main);
+grounded 2026-09-02 (Appendix A). Its [stop list](#6-the-stop-list-d-049-5) is
+complete — **eight detectors, no instruction** — so per D-049 §5 **no orb-creation
+skill is written**. Recorded as [D-051](decisions-log.md). Printing stays HELD (no
+printer in the loop); the mouth-span bet in Appendix B is still deferred.
 
 ---
 
@@ -243,9 +248,35 @@ iff the instruction column has entries. FAIL: a skill proposed before the list
 exists, or with an empty instruction column, or a detector entry that named no
 gate — the D-049 §5 failure, restated.
 
+Increment 1 (the kernel geometry, `bikar#153`) touched only
+`bikar:packages/core/src/kernel3d/maclado-field.ts` and its unit test — the
+boundary §5 flagged as most likely to hide an *instruction* was discharged with
+coastline/rim tests, so it arrived as a detector. Stops 1–7 are from increment 2
+(`bikar#154`), where the orb reaches its public surfaces; stop 8 is from
+increment 3 (this 3d-models PR), where it reaches the publish pipeline.
+
 | # | The stop | Label | Became / who knew |
 |---|----------|-------|-------------------|
-| _(populated during the build; empty until 2.10.b hits its first stop)_ | | | |
+| 1 | A new orb on disk must be registered as a Lab chip. | detector | `bikar:packages/lab/tests/orb-presets.test.ts` "offers every orb on disk" goes red on the unregistered `.bkr`. The test exists because `Maclado-9-Overlap` sat unregistered for a week; fixed by an entry in `bikar:packages/lab/src/scripts.ts`. |
+| 2 | The orb must be listed in the pattern manifest. | detector | `bikar:packages/web/tests/pattern-manifest.test.ts` holds `bikar:patterns/index.json` to the files on disk; fixed by one manifest line. |
+| 3 | The public `patternSources` count is stale (122 → 123). | detector | `bikar:packages/web/tests/public-surface.test.ts` recomputes the count from `bikar:patterns/index.json` and fails on the old number in `bikar:packages/web/public-surface.json`. |
+| 4 | The orb must join the timelapse corpus table, as `[null, null]`. | detector | `bikar:packages/core/tests/kernel3d/orb-timelapse.test.ts` "covers every orb in the corpus" fails until the row is added; the cells-`null` is then forced by the same `projectOrbViewScene` throw the sweep sees, not a free choice. |
+| 5 | `render --format views` exits 1 on the open-shell orb, killing the sweep mid-corpus. | detector | The `orb-validate` CI job went red — the same shape a 2D disc caused (`declaresOrbViews`). Graduated to the finer `drawsOrbViews` in `bikar:scripts/sweep-orb-validate.ts`, witnessed by `bikar:packages/lab/tests/sweep-declares-orb-views.test.ts` and reconciled in `bikar:packages/lab/tests/orb-composites.test.ts` (SWEPT / MESH_ONLY partition). |
+| 6 | `place rule lattice-walk` will not lex — a hyphen is subtraction. | detector | The preset fails to parse and `bikar:packages/lab/tests/orb-presets.test.ts` "parses every registered script" catches it; the keyword is the compound word `latticewalk`, the precedent being `wheelfield` / `dodecahedral`. Recorded in `bikar:docs/decisions/2026-09-02-latticewalk-grammar.md` §3, so no one re-derives it. |
+| 7 | Adding a decision doc regenerates the ledger, which sorted differently on macOS than in CI. | detector | The `coherence` gate went red on a `LEDGER.md` whose deadend rows macOS ordered before CI's C-locale ASCII. Fixed at the root — `export LC_ALL=C` in `bikar:scripts/gen-decision-ledger.sh` — so local `make ledger` == CI. Decisions-infra, not orb-specific, but it stopped this build and any build that logs a decision. |
+| 8 | 3d-models' `make orbs` loop renders `--format views` on every orb; the open-shell orb exits 1 with a message the round-pattern skip does not match, so the loop's `else` branch stops the whole publish build. | detector | Same exit-1 as stop 5, but in the *publish* pipeline (`3d-models:Makefile` `orbs:`) rather than bikar's sweep. Fixed by a sibling skip branch grepping `has no cell decomposition` → STL only, no views/timelapse, no `src/Orbs` copy and no gallery entry (viewless orbs are absent from the gallery, like the round-pattern discs). The `else` stays as the fail-closed net: an unrecognized `--format views` error still stops the build. From increment 3 (this 3d-models PR). |
+
+**The skill decision.** The instruction column is **empty**: every stop an
+earlier orb build also hit was caught by a gate or test, and each became one.
+Stop 6 is the only novel *knowledge* (the lexer's identifier class), and it is
+not orb-specific — it recurs for any compound keyword, is readable from
+`lexer.ts` or the two existing compounds, and is already written down as a
+decision. By the D-049 §5 rule an orb-creation skill is written **iff** the
+instruction column is non-empty, so **no skill is written** — the outcome the
+precedent predicts ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
+[`issue-register-evaluation.md`](issue-register-evaluation.md): *no skill, a gate
+instead*). The eight detectors are the durable record; the next orb build inherits
+them as red tests, not as a checklist to remember.
 
 ---
 
