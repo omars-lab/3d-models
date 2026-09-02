@@ -88,6 +88,16 @@
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
       "why": "Deliberately deleted. D-042 names this file as the thing it removed \u2014 a whole test file certifying the withdrawn centreline rule \u2014 and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
+    },
+    {
+      "doc": "docs/maclado-lattice-orb-design.md",
+      "path": "docs/research/maclado-lattice-orb-grounding-audit.md",
+      "why": "Forward-ref: the grounding audit for this doc is authored before the orb ships (2.10.b), not before the doc lands. Removed when the audit is written."
+    },
+    {
+      "doc": "docs/maclado-lattice-orb-design.md",
+      "path": "bikar:patterns/Orbs/Maclado-9-Lattice.bkr",
+      "why": "Forward-ref: the walk-orb preset is authored in bikar during 2.10.b, after this design doc lands. Removed when the preset ships and the map re-pins it."
     }
   ]
 }
