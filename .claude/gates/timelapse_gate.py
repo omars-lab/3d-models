@@ -81,6 +81,34 @@ makes:
       woven band's amplitude lifts it off the sphere by up to 3.68 mm across
       the corpus, by design.
 
+And one check for the wrap, because the one frame-run that is *not* a still
+picture is the bend, and an interpolation is only honest if its endpoints are
+the frames it claims to join:
+
+  T8  **The morph is the wrap: pinned at both ends, constant in between.** The
+      eleven inscribed orbs end their stages with a run of `morph` frames that
+      bend the flat drawing onto the sphere (the three strand/preview orbs
+      carry `morph: null` and none, and the top-level key and the frame list
+      must agree on which). Three things make that run a wrap rather than a
+      slideshow, and none is visible in any one frame:
+        * *The first morph frame is the last drawing, laid flat.* morph[0] is
+          the last stage frame with its just-placed unit un-highlighted —
+          `#c9782e`→`#8a8a8a` and the `data-orb-highlight` attribute dropped,
+          both of which must actually change something or the junction is
+          testing air.
+        * *The last morph frame is the finished orb, still on its scaffold.*
+          morph[N−1] is the `complete` frame with the scaffold outline still
+          drawn under it; strip those lines and the two are byte-identical, and
+          the strip must remove something.
+        * *The bend neither gains nor drops a cell, and its blend is evenly
+          spaced.* every morph frame draws the same number of cells as the
+          drawing it started from; `t = k/(N−1)`; and `data-blend` sits on the
+          root of exactly the interior frames (an endpoint has to be
+          byte-identical to a frame that carries none, so it cannot carry one).
+      The endpoints are byte identities against frames T3 and T6 have already
+      vouched for, so T8 buys the whole interpolation for the price of its two
+      ends and a count — the same trade T4 makes for the tilt.
+
 **The by-design failure this gate shipped with, and why it is recorded here.**
 On the tree this gate was written against, T3 and T5 both failed on
 Maclado-9-Overlap: its bands cross rather than tile, the projector refuses to
@@ -123,6 +151,7 @@ REQUIRED_KEYS = (
     "turntableRepresentation",
     "transition",
     "flat",
+    "morph",
     "base",
     "weave",
     "source",
@@ -186,7 +215,7 @@ def _wearing_limb(shipped: str, radius: str) -> str:
 # a rule in itself: a stage frame that still paints white is an un-repainted
 # frame, which is the defect, not an exemption from it.
 STAGE_FILLS = {"#8a8a8a", "#c9782e", GROUND, "none"}
-STAGE_KINDS = {"base", "element", "repeat", "strand", "complete"}
+STAGE_KINDS = {"base", "element", "repeat", "strand", "morph", "complete"}
 # The two marks a stage frame wears, and they no longer travel together.
 # `data-orb-scaffold` answers *how far along is this* — moot once nothing is
 # left to place, so the complete frame drops it, and a scaffold leaking onto
@@ -205,7 +234,13 @@ VIEWBOX_RE = re.compile(r'viewBox="([^"]*)"')
 # A cell stage must sit inside the solid the scaffold draws. Bands do not:
 # a woven strand's amplitude lifts it clear of the sphere the scaffold
 # traces, by up to 3.68 mm across the corpus, so `strand` is exempt and
-# the exemption has a reason rather than a threshold.
+# the exemption has a reason rather than a threshold. `morph` is exempt for
+# the opposite reason and just as deliberately: the base frame's outline is
+# the *faceted* solid, and the wrap's whole job is to bend the cells off those
+# flat chords onto the sphere — at t=1 the spherical cells sit outside the
+# faceted outline by the very 6.6% overhang T7 exists to catch, by design.
+# The morph's endpoints are pinned to verified stage/complete frames by T8
+# instead; do not add "morph" here.
 CONTAINED_KINDS = {"element", "repeat"}
 # Slack for the coordinate rounding in the SVG, not for geometry: frames are
 # written at 4 decimal places, and a vertex the renderer put exactly on a
@@ -311,12 +346,14 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
     frames = m["frames"]
     turntable = m["turntable"]
     transition = m["transition"]
+    morph = m["morph"]
 
     # --- T5: named files exist, and nothing on disk is unnamed --------------
     named = {m["source"]}
     if m["flat"]:
         named.add(m["flat"]["file"])
-    for f in frames + turntable + ((transition or {}).get("frames") or []):
+    morph_top = (morph or {}).get("frames") or []
+    for f in frames + turntable + ((transition or {}).get("frames") or []) + morph_top:
         named.add(f["file"])
     for name in sorted(named):
         if not (d / name).exists():
@@ -466,6 +503,120 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
                 f"!= {turntable[enters]['file']} (entersAtIndex {enters})"
             )
 
+    # --- T8: the morph is the wrap, pinned at both ends and constant --------
+    # The one frame-run that interpolates rather than accretes. It is honest
+    # only if its endpoints are the frames it claims to join, so both are byte
+    # identities against frames T3 and T6 have already vouched for, and the
+    # interior is bought with a count and an evenly-spaced blend.
+    morph_rows = [f for f in frames if f["kind"] == "morph"]
+    if (morph is None) != (not morph_rows):
+        findings.append(
+            f"{orb}: manifest morph is {'null' if morph is None else 'present'} but "
+            f"{len(morph_rows)} frame(s) are kind 'morph' — the top-level key the page "
+            "animates and the frame list the story is built from disagree about whether "
+            "this orb wraps"
+        )
+    elif morph_rows:
+        top = morph.get("frames") or []
+        if [r["file"] for r in top] != [f["file"] for f in morph_rows]:
+            findings.append(
+                f"{orb}: morph.frames names {[r['file'] for r in top]} but the frame list's "
+                f"morph rows are {[f['file'] for f in morph_rows]} — the page plays one and "
+                "the story is built from the other"
+            )
+        idx = [i for i, f in enumerate(frames) if f["kind"] == "morph"]
+        if idx != list(range(idx[0], idx[-1] + 1)):
+            findings.append(
+                f"{orb}: the morph frames are scattered through the sequence rather than one "
+                "contiguous bend"
+            )
+        else:
+            before = frames[idx[0] - 1] if idx[0] > 0 else None
+            after = frames[idx[-1] + 1] if idx[-1] + 1 < len(frames) else None
+            if before is None or before["kind"] in ("morph", "complete"):
+                findings.append(
+                    f"{orb}: the morph does not begin right after a stage frame — the bend has "
+                    "to start from the last drawing laid flat"
+                )
+            if after is None or after["kind"] != "complete":
+                findings.append(
+                    f"{orb}: the morph does not end right before the complete frame — the bend "
+                    "has to land on the finished orb"
+                )
+
+        # The cell count the wrap must preserve: what the drawing it starts from draws.
+        stage_before = frames[idx[0] - 1] if idx[0] > 0 else None
+        target = len(_polygons(_read(d / stage_before["file"]))[1]) if stage_before else None
+        n = len(top)
+        for k, fr in enumerate(top):
+            svg = _read(d / fr["file"])
+            t = 0.0 if n == 1 else k / (n - 1)
+            declared = fr.get("t")
+            if declared is None or abs(declared - t) > 1e-9:
+                findings.append(
+                    f"{orb}: {fr['file']} is frame {k} of {n} but declares t={declared}, not "
+                    f"{t:.4f} — the blend from flat to wrapped is not evenly spaced"
+                )
+            blend = re.search(r'<svg\b[^>]*\sdata-blend="([^"]*)"', svg)
+            interior = 0.0 < t < 1.0
+            if interior and (blend is None or blend.group(1) != f"{t:.4f}"):
+                findings.append(
+                    f"{orb}: {fr['file']} is a mid-morph frame but its root carries data-blend="
+                    f"{blend.group(1) if blend else 'nothing'}, not {t:.4f}"
+                )
+            if not interior and blend is not None:
+                findings.append(
+                    f"{orb}: {fr['file']} is an endpoint of the morph but its root carries "
+                    f"data-blend={blend.group(1)} — an endpoint is byte-identical to a frame "
+                    "that has none, so it cannot carry one"
+                )
+            if target is not None:
+                drawn = len(_polygons(svg)[1])
+                if drawn != target:
+                    findings.append(
+                        f"{orb}: {fr['file']} draws {drawn} cells, but the wrap begins with "
+                        f"{target} — the bend is adding or dropping geometry, not just curving it"
+                    )
+
+        # J1: morph[0] is the last stage frame, un-highlighted and de-tinted.
+        if stage_before is not None:
+            stage_txt = _read(d / stage_before["file"])
+            want = stage_txt.replace('fill="#c9782e"', 'fill="#8a8a8a"').replace(
+                ' data-orb-highlight="true"', ""
+            )
+            if want == stage_txt:
+                findings.append(
+                    f"{orb}: the last stage frame {stage_before['file']} has no highlighted "
+                    "unit to neutralise into the morph — the junction has nothing to verify"
+                )
+            elif want != _read(d / morph_rows[0]["file"]):
+                findings.append(
+                    f"{orb}: the first morph frame is not {stage_before['file']} with its "
+                    "highlight neutralised — the wrap does not begin on the drawing just laid down"
+                )
+
+        # J2: morph[N-1] is the complete frame the wrap lands on, scaffold still
+        # drawn. The wrap ends on the frame right after the bend — for a cell orb
+        # that is the terminal `complete`, but for the cell+strand weave family
+        # the morph wraps the CELLS onto a `complete` (representation:"cells") that
+        # sits mid-sequence; the strands are then woven on and the story ends on a
+        # second `complete` (representation:"ribbons") = frames[-1]. So J2 targets
+        # the complete frame immediately following the morph, never frames[-1].
+        landing = frames[idx[-1] + 1] if idx[-1] + 1 < len(frames) else None
+        if landing is not None and landing["kind"] == "complete":
+            end_txt = _read(d / morph_rows[-1]["file"])
+            stripped = re.sub(r'^.*data-orb-scaffold="true".*\n', "", end_txt, flags=re.M)
+            if stripped == end_txt:
+                findings.append(
+                    f"{orb}: the last morph frame {morph_rows[-1]['file']} carries no scaffold "
+                    "to strip — the junction to the complete frame has nothing to verify"
+                )
+            elif stripped != _read(d / landing["file"]):
+                findings.append(
+                    f"{orb}: the last morph frame is not the complete frame {landing['file']} with "
+                    "the scaffold still drawn — the wrap does not land on the finished orb"
+                )
+
     # --- T1 tail: the source round-trips ------------------------------------
     digest = hashlib.sha256((d / m["source"]).read_bytes()).hexdigest()
     if digest != m["sourceSha256"]:
@@ -556,12 +707,45 @@ _FACE = "M-40,-40 L40,-40 L40,40 L-40,40 Z"
 _UNIT = "M-20,-20 L20,-20 L20,20 L-20,20 Z"
 _SCAFFOLD = f'  <path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />\n'
 _BARE = _limbed(_frame_svg(_SCAFFOLD))
+# The last stage frame wears the just-placed unit in gallery gold and marks it
+# `data-orb-highlight` — the two things J1 neutralises to reach the first morph
+# frame, so the fixture must carry both or the junction check would pass on air.
 _HELD = _limbed(
-    _frame_svg(_SCAFFOLD + f'  <path d="{_UNIT}" fill="#c9782e" stroke="#333333" />\n')
+    _frame_svg(
+        _SCAFFOLD
+        + f'  <path d="{_UNIT}" fill="#c9782e" stroke="#333333" data-orb-highlight="true" />\n'
+    )
 )
 _SPUN = _limbed(
     _frame_svg('  <path d="M0 0" fill="#6f6f6f" stroke="#333333" data-orb-style="shaded" />\n')
 )
+# The wrap: three frames bending _HELD onto the finished drawing. morph[0] is
+# _HELD with its highlight neutralised (J1); morph[-1] is the complete frame
+# with the scaffold still under it (J2); the interior frame carries data-blend
+# and the same one drawn cell (T8's count and blend). Built by the same
+# transforms the gate checks, so the clean fixture passes by construction.
+_MORPH0 = _HELD.replace('fill="#c9782e"', 'fill="#8a8a8a"').replace(
+    ' data-orb-highlight="true"', ""
+)
+_MORPHMID = _MORPH0.replace("<svg ", '<svg data-blend="0.5000" ', 1)
+# The scaffold goes in as a clean full line before the pattern, the way bikar
+# writes it: stripping that line has to give the complete frame back byte for
+# byte, so the pattern line must keep its own indent (matching "  <path", not
+# "<path", so the two leading spaces are not eaten by the insertion).
+_MORPH1 = _DONE.replace("  <path", _SCAFFOLD + "  <path", 1)
+
+# The cell+strand weave family (RosetteWeaveOrb, WeaveDodecaOrb, WeaveOrb): the
+# morph wraps the CELLS onto a mid-sequence `complete` (representation:"cells"),
+# then strands are threaded on and the story ends on a SECOND `complete`
+# (representation:"ribbons") — a byte-distinct picture, its own shipped
+# instrument view one directory down. J2 must land the wrap on the cells
+# complete right after the bend, never on frames[-1] (the ribbon terminal), so
+# the fixture carries both completes and _make_weave (below) asserts the shape
+# stays clean. A distinct ribbon pattern, so the terminal cannot accidentally
+# equal the cells complete and hide a J2 that targets the wrong frame.
+_RIBBON = '  <path d="M-10,-10 L10,10" fill="#8a8a8a" stroke="#333333" />\n'
+_RIBBON_SHIPPED = _shipped_svg(_RIBBON)
+_RIBBON_DONE = _limbed(_frame_svg(_RIBBON))
 
 
 def _fixture(tmp: Path) -> Path:
@@ -577,6 +761,9 @@ def _fixture(tmp: Path) -> Path:
         "TestOrb.flat.svg": _frame_svg(""),
         "TestOrb.vertex-3.base.000.svg": _BARE,
         "TestOrb.vertex-3.element.001.svg": _HELD,
+        "TestOrb.vertex-3.morph.000.svg": _MORPH0,     # == _HELD, un-highlighted (J1)
+        "TestOrb.vertex-3.morph.001.svg": _MORPHMID,   # interior: carries data-blend
+        "TestOrb.vertex-3.morph.002.svg": _MORPH1,     # == complete + scaffold (J2)
         "TestOrb.vertex-3.complete.000.svg": _DONE,
         "TestOrb.transition.000.svg": _DONE,           # == the complete frame
         "TestOrb.transition.001.svg": _SPUN,           # == turntable[1]
@@ -591,6 +778,9 @@ def _fixture(tmp: Path) -> Path:
         "frames": [
             {"file": "TestOrb.vertex-3.base.000.svg", "view": "vertex-3", "kind": "base", "index": 0},
             {"file": "TestOrb.vertex-3.element.001.svg", "view": "vertex-3", "kind": "element", "index": 1},
+            {"file": "TestOrb.vertex-3.morph.000.svg", "view": "vertex-3", "kind": "morph", "index": 0},
+            {"file": "TestOrb.vertex-3.morph.001.svg", "view": "vertex-3", "kind": "morph", "index": 1},
+            {"file": "TestOrb.vertex-3.morph.002.svg", "view": "vertex-3", "kind": "morph", "index": 2},
             {
                 "file": "TestOrb.vertex-3.complete.000.svg",
                 "view": "vertex-3",
@@ -612,6 +802,13 @@ def _fixture(tmp: Path) -> Path:
             "entersAtIndex": 1,
         },
         "flat": {"file": "TestOrb.flat.svg", "relation": "lifted"},
+        "morph": {
+            "frames": [
+                {"file": "TestOrb.vertex-3.morph.000.svg", "view": "vertex-3", "index": 0, "t": 0.0},
+                {"file": "TestOrb.vertex-3.morph.001.svg", "view": "vertex-3", "index": 1, "t": 0.5},
+                {"file": "TestOrb.vertex-3.morph.002.svg", "view": "vertex-3", "index": 2, "t": 1.0},
+            ],
+        },
         "base": {"faces": 4, "vertices": 4, "sides": [3]},
         "weave": None,
         "source": "source.bkr",
@@ -739,6 +936,100 @@ def _edit_the_source(d: Path) -> None:
     (d / "source.bkr").write_text("orb SomethingElse\n", encoding="utf8")
 
 
+def _unpair_the_morph(d: Path) -> None:
+    # The top-level key says this orb does not wrap while the frame list still
+    # carries the bend — the page animates one and the story is built from the
+    # other.
+    _edit_manifest(d, lambda m: m.__setitem__("morph", None))
+
+
+def _rename_a_morph_frame(d: Path) -> None:
+    # The played list and the frame-list rows name different frames. Pointed at
+    # a file that exists (the complete frame) so T5 stays quiet and this is the
+    # only rule with anything to say.
+    def mutate(m):
+        m["morph"]["frames"][0]["file"] = "TestOrb.vertex-3.complete.000.svg"
+    _edit_manifest(d, mutate)
+
+
+def _skew_the_blend(d: Path) -> None:
+    def mutate(m):
+        m["morph"]["frames"][1]["t"] = 0.7
+    _edit_manifest(d, mutate)
+
+
+def _flatten_the_blend(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.morph.001.svg"
+    p.write_text(_read(p).replace(' data-blend="0.5000"', ""), encoding="utf8")
+
+
+def _blend_an_endpoint(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.morph.000.svg"
+    p.write_text(_read(p).replace("<svg ", '<svg data-blend="0.0000" ', 1), encoding="utf8")
+
+
+def _drop_a_cell_mid_morph(d: Path) -> None:
+    p = d / "TestOrb.vertex-3.morph.001.svg"
+    unit = f'  <path d="{_UNIT}" fill="#8a8a8a" stroke="#333333" />\n'
+    p.write_text(_read(p).replace(unit, ""), encoding="utf8")
+
+
+def _rehighlight_the_wrap(d: Path) -> None:
+    # The first morph frame keeps the highlight the stage frame had, so it is
+    # not the drawing "just laid down" with its unit neutralised.
+    p = d / "TestOrb.vertex-3.morph.000.svg"
+    p.write_text(_read(p).replace('fill="#8a8a8a"', 'fill="#c9782e"'), encoding="utf8")
+
+
+def _reland_the_wrap(d: Path) -> None:
+    # The last morph frame, scaffold stripped, is no longer the complete frame.
+    p = d / "TestOrb.vertex-3.morph.002.svg"
+    p.write_text(_read(p).replace('d="M0 0"', 'd="M1 1"'), encoding="utf8")
+
+
+def _remove_the_morph(d: Path) -> None:
+    # A strand/preview orb: no wrap at all. morph is null and no frame is kind
+    # 'morph', which is the coherent absence — the gate must pass it.
+    for f in d.glob("*.morph.*.svg"):
+        f.unlink()
+
+    def mutate(m):
+        m["frames"] = [f for f in m["frames"] if f["kind"] != "morph"]
+        m["morph"] = None
+    _edit_manifest(d, mutate)
+
+
+def _make_weave(d: Path) -> None:
+    # Reshape the cell fixture into the cell+strand weave family: the wrap still
+    # lands on the cells `complete`, but strands are threaded on after and the
+    # story ends on a ribbon `complete` — a byte-distinct terminal with its own
+    # shipped view one directory down. Asserted CLEAN (want=None): it is the
+    # regression that a J2 targeting frames[-1] (the ribbon terminal) instead of
+    # the wrap's landing (the cells complete) would fail, and the current
+    # cell-only fixture — where the two coincide — could never catch.
+    ribbons = d.parents[1] / "orb-views" / "TestOrb" / "ribbons"
+    ribbons.mkdir(parents=True)
+    (ribbons / "TestOrb.vertex-3.svg").write_text(_RIBBON_SHIPPED, encoding="utf8")
+    (d / "TestOrb.vertex-3.strand.001.svg").write_text(_BARE, encoding="utf8")
+    (d / "TestOrb.vertex-3.complete.001.svg").write_text(_RIBBON_DONE, encoding="utf8")
+    # The tilt now leaves from the ribbon terminal (T4 ties transition[0] to it).
+    (d / "TestOrb.transition.000.svg").write_text(_RIBBON_DONE, encoding="utf8")
+
+    def mutate(m):
+        m["frames"] += [
+            {"file": "TestOrb.vertex-3.strand.001.svg", "view": "vertex-3", "kind": "strand", "index": 1},
+            {
+                "file": "TestOrb.vertex-3.complete.001.svg",
+                "view": "vertex-3",
+                "kind": "complete",
+                "index": 1,
+                "representation": "ribbons",
+            },
+        ]
+        m["turntableRepresentation"] = "ribbons"
+    _edit_manifest(d, mutate)
+
+
 CASES = [
     ("T1 a missing manifest key", _drop_key, "has no weave"),
     ("T2 a frame from a different projection", _resize_a_frame, "changes size mid-story"),
@@ -758,6 +1049,16 @@ CASES = [
     ("T4 entersAtIndex past the orbit", _enter_off_the_end, "outside a 2-frame orbit"),
     ("T5 a named file that is not there", _lose_a_named_file, "not on disk"),
     ("T5 a frame nothing names", _leave_an_orphan, "named by nothing"),
+    ("T8 the key and the frames disagree that it wraps", _unpair_the_morph, "disagree about whether"),
+    ("T8 the played list names a different frame", _rename_a_morph_frame, "story is built from the other"),
+    ("T8 the blend is not evenly spaced", _skew_the_blend, "evenly spaced"),
+    ("T8 a mid-morph frame with no data-blend", _flatten_the_blend, "mid-morph frame"),
+    ("T8 an endpoint carrying data-blend", _blend_an_endpoint, "endpoint of the morph"),
+    ("T8 the bend drops a cell", _drop_a_cell_mid_morph, "adding or dropping geometry"),
+    ("T8 the wrap does not begin on the last drawing", _rehighlight_the_wrap, "does not begin on the drawing"),
+    ("T8 the wrap does not land on the complete frame", _reland_the_wrap, "land on the finished orb"),
+    ("T8 a null-morph orb is a coherent absence", _remove_the_morph, None),
+    ("T8 the weave family lands on its cells complete, not the ribbon terminal", _make_weave, None),
     ("the source no longer hashes to its pin", _edit_the_source, "sourceSha256"),
 ]
 
