@@ -4180,3 +4180,49 @@ Decided by tests, not a printer — no `CAL-*` bet. The single-mouth gate is a v
 simplification (grammar decision doc §7): a later orb that deliberately wants more than one
 mouth reopens the gate, not this entry. Nothing else reverses — the keyword spelling is forced
 by the lexer and the weave/overlap refusal is definitional.
+## D-052 — data-orb-base-face names one thing, a true base face; the wheelfield unit gets its own honest name
+
+**Decision (owner-directed 2026-09-02):** `data-orb-base-face` (SVG) and gt.json
+`orb_base_face` mean **exactly one thing everywhere — the index of the base-polyhedron
+face a projected element was lifted through.** The overload bikar's contract had carried
+honestly-by-doc but dishonestly-by-name — for wheelfield orbs the same attribute held a
+*generative unit* (wheel 0..19 / filler 20..31), never a base face — is retired. Wheelfield
+cell views carry `data-orb-unit` for that provenance and **omit** `data-orb-base-face`;
+gt.json omits `orb_base_face` for wheelfield shapes exactly as it already does for ribbon
+strands (contract v1.5, "the omission is the claim").
+
+**Why this shape, not the cheap one.** T9 (#49) uncovered the mislabel. The cheap fix routes
+T9 — and every future consumer — around the overload by branching on surface kind, a permanent
+fork the divergence forces on everyone downstream forever. The robust fix deletes the divergence
+at the source so one name carries one meaning; T9 then needs no branch (wheelfield cells carry
+no `data-orb-base-face`, so its base-face subset check is trivially satisfied). This is the
+[D-050](#d-050-the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change) "two-meanings collision" principle one layer down — from the d3
+face-list vocabulary to the SVG/gt/contract attribute — and the CLAUDE.md "robust and simple
+beat cheap and easy" tenet it now states. Ribbons proved the omission discipline; wheelfield
+differs only in that its unit is a single real value, so it is **preserved** under an honest
+name rather than dropped — discarding a real capability to save work would be the cheap trade
+the tenet forbids.
+
+**Blast radius (intrinsic — one name, one meaning is not reachable without all of it),
+non-stacked PRs, each merged green before the next starts:**
+1. **sacred-patterns** canonical `dsl-metadata-contract.md`: rewrite the `data-orb-base-face`
+   row to true-face-only (absent on wheelfield and ribbon cell views); add a `data-orb-unit`
+   row — producer-side provenance whose consumer is 3d-models' T9, qiyas n/a.
+2. **bikar**: SVG split already built (`data-orb-unit` for wheelfield, `data-orb-base-face`
+   for inscribed + base solid); gt-emitter omits `orb_base_face` for the unit kind;
+   `GT_SCHEMA_VERSION` bump; tests; re-vendor the contract byte-identical.
+3. **qiyas**: re-vendor the contract; exempt wheelfield cell views from the strict
+   `data-orb-base-face` presence requirement via `allow_absent` — the same mechanism that
+   exempts ribbon views; re-record the score-neutral gt set (composites must not move).
+4. **3d-models**: bump `build/bikar-ref.txt`; `make orbs` re-record; simplify T9 to a
+   universal base-face check with no surface-branching; close #49.
+
+**Validator:** `data-orb-base-face` / gt `orb_base_face` appears only where the element sits
+on a real base face.
+- PASS: a wheelfield breakdown SVG (Maclado9) carries `data-orb-unit` on its cell paths and
+  **no** `data-orb-base-face`; its gt.json shapes omit `orb_base_face`; qiyas's base-face
+  round-trip stays quiet (neither side declares); every `data-orb-base-face` index that does
+  appear is in `[0, base.faces)`.
+- FAIL: any `data-orb-base-face` (or gt `orb_base_face`) carries a value `>= base.faces` — the
+  wheelfield filler indices 20..31 against a 12- or 20-face base are the hard case, and their
+  presence means the unit is still masquerading as a face.
