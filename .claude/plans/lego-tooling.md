@@ -32,10 +32,10 @@ The authoritative list is `docs/rosette-pin-explorer-design.md` **§6.6** (the o
 
 | Gate | Item | Task |
 |---|---|---|
-| none | Widen the explorer roster past Rosette-N / Star-N | #65 |
-| none | Ground the explorer doc — it is the roadmap of record and reads "draft" | #66 |
-| none | Track 3.2 — `PLATES` const → data file, no fabricated links | #67 |
-| none | Track 4.2 — interior-tube cap dial, kernel floor un-overridable | #68 |
+| none | Widen the explorer roster past Rosette-N / Star-N — 🟢 bikar #134 `85269ac` | #65 done |
+| none | Ground the explorer doc — it is the roadmap of record and reads "draft" — 🟢 3d-models #136 | #66 done |
+| none | Track 3.2 — `PLATES` const → data file, no fabricated links — 🟢 bikar #141 `571cba2` | #67 done |
+| none | Track 4.2 — interior-tube cap dial, kernel floor un-overridable — 🟢 bikar #143 `a4318c9` | #68 done |
 | download (user) | Open the MPD in LeoCAD and BrickLink Studio | #69 |
 | decision (user) | §11 Q6 — ship a clutch compliance proxy as a `CAL-*` bet, or not | #71 |
 | printer (held) | Every LG-* coupon: F1, F2, R1, S1, D1, B1, B2, P1, P2 | none — `backlog.md` §3.2 owns them, per its §3.8 |
@@ -44,9 +44,12 @@ Closed doors, so they are not reopened: §15.4's hook graduation (waits on measu
 Q8's general two-vector basis (D-007, resolved as a label), Track 2.3's authoring skill (not
 needed at runtime).
 
-**Order of attack for the unblocked four:** #65 first (it is the goal's own objective — *any*
-pattern — and costs one line per figure), then #66 (the roadmap of record should not be the
-one un-audited doc), then #67 and #68 opportunistically. None depends on another.
+**Order of attack for the unblocked four** (all shipped 2026-09-01/02, in this order): #65 first
+(it is the goal's own objective — *any* pattern — and costs one line per figure), then #66 (the
+roadmap of record should not be the one un-audited doc), then #67 and #68. Task metadata carries
+the same ordering as `priority` 1–4 and, for the gated rows, `priority` 5–7 with the gate named.
+**Nothing unblocked is left**: every open row below needs the user (a download, a decision) or a
+printer, so the next code-shaped move is whichever of those the user unblocks first.
 
 ## 3. Adjacent, not Lego — tracked so they are not confused with it
 
@@ -68,6 +71,22 @@ one un-audited doc), then #67 and #68 opportunistically. None depends on another
 - **Every code-shaped Lego goal is built.** What remains is gated on things code cannot supply:
   a printer, a downloaded app, or a decision. The ledger in §6.6 exists so that stays visible
   instead of being re-discovered.
+- **A cap on anchors can *lift* a kernel failure, not only preserve a pass** (found building #68).
+  The first draft kept the outermost anchors — exactly the thin-walled ones — and the two-way
+  assertion "verdict unchanged under cap" failed on face #11 at 16 studs because dropping the thin
+  anchor turned a wall FAIL into a PASS. The honest invariant is one-directional, and the retention
+  rule that makes it true by construction is the kernel's own criterion (thickest wall first). A
+  spatial spread would have been a clutch guess, which §11 Q6 says the gate may not make.
+- **An uncommitted `patterns/Rosettes/Rosette-N.bkr` default change in the primary bikar checkout**
+  (points 5, crossover 37, reach 0.44, alongside a `.folders.json` edit) fails 3 of the 17 explorer
+  roster tests (dial defaults, `spanPU`, recentring) — verified green on a clean `origin/main`
+  worktree. It is another session's working tree, not committed; if it lands as-is the roster
+  tests go red. This is the Rosette-N sweep record `docs/plan.md` row 2.14 is about.
+- **A scratch worktree of bikar needs its own `dist`s.** Symlinking the primary checkout's
+  `node_modules` makes `@naqshcoffee/*` resolve to the *primary's* packages, so `tsc` in the
+  worktree typechecks `cli` against whatever core the other checkout has built — five phantom
+  `MeshGateReport` errors here. Fix: a real `node_modules` dir of per-entry symlinks with
+  `@naqshcoffee/*` pointing back into the worktree, then build core / knobs / qiyas-schema.
 
 ## 5. Links
 
@@ -82,7 +101,8 @@ one un-audited doc), then #67 and #68 opportunistically. None depends on another
   https://claude.ai/code/artifact/df5788b3-8785-492b-a5f0-92533fbad4e5
 - The kernel-backed page: `/rosette-explorer` in bikar-studio;
   source `bikar:packages/web/src/rosette-explorer.ts`.
-- This session's PRs (3d-models): #13, #14, #15 (anchors + tenet), #124 (the ledger).
+- This session's PRs (3d-models): #13, #14, #15 (anchors + tenet), #124 (the ledger), #141 (this
+  row). bikar: #143 (the tube cap).
 
 ## 6. How this file stays honest
 
