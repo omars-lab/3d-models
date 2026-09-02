@@ -1,6 +1,6 @@
 # Print backlog — what a printer unblocks, and in what order
 
-Last updated: 2026-09-01 (§6.4 added — the d3 stream's pointer).
+Last updated: 2026-09-01 (§6.4 Phase 2 row → shipped).
 
 Status: **PLANNING DOCUMENT, NOTHING MEASURED.** No print has ever been made on
 this project. Every physical number in every design doc here is either read out
@@ -783,7 +783,7 @@ and a number that changes there is not re-typed here.
 |---|---|---|
 | Phase 1 — the rosette explorer on the real kernel (`/rosette-explorer` in bikar-studio) | shipped 2026-08-31 (bikar #123, #125, #127) | d3 doc §4; explorer doc §6 Track 1 |
 | Track 2 — dials generated from each pattern's own compiled schema | shipped 2026-08-31 | explorer doc §6 Track 2 |
-| Phase 2 — the full orb-view instrument: orb `.bkr` → orb-view SVG → qiyas encode (ref + degraded recon) → `/diff` → status overlay on the bikar-rendered SVG | **live**; the `{id,x,y,status}` join is measured (qiyas D-API-4), nothing built yet | d3 doc §4 Phase 2 and §5 Q-DATA |
+| Phase 2 — the full orb-view instrument: orb `.bkr` → orb-view SVG → qiyas encode (ref + degraded recon) → `/diff` → status overlay on the bikar-rendered SVG | shipped 2026-09-01 (bikar #129, #132; qiyas #26 D-API-5) as `/orb-instrument` | d3 doc §4 Phase 2 and §5 Q-DATA |
 | Explorer coupons — physical pin and clutch checks | printer-gated, §3.2 | explorer doc §6 |
 | The Lego open ledger — the residue of the whole Lego stream sorted by what gates it: four unblocked items (widen the roster, ground the explorer doc, plates as data, the tube cap), two download-gated viewers, one decision (§11 Q6's proxy), and the printer-held coupons that §3.2 already owns | added 2026-09-01; the four unblocked items are tracked in the task system | explorer doc §6.6 |
 | The cross-repo governance stream — the tasks that had no plan anchor until the 2026-09-01 orb-tooling audit: how this repo's decisions log joins a decision hub (a user decision; [D-004](decisions-log.md) chose the local format and rejected mirroring bikar's generator), whether the cross-repo ledger check should block and bring this repo into the loop (gated on that decision), and a studio status page rendered from the repos the way bikar's studio index is rendered from its catalogue, never typed | added 2026-09-01; all on the task board, the hub decision gates the other two; no number re-typed here | bikar's cross-repo-dependencies doc and decision ledger; [D-004](decisions-log.md) |
