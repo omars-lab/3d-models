@@ -8,8 +8,10 @@ failed the only test that matters: a newcomer could not see how the flat drawing
 becomes an orb. Section 9's gate is **built** — [`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py),
 hook `38-timelapse`, `make validate-timelapse` — and it failed on its first run,
 as section 4.1 required it to. No post has been published. The flat→sphere
-**wrap morph** the rework left out is **designed, not built** —
-[`orb-wrap-morph-design.md`](orb-wrap-morph-design.md) (D-049 §2).
+**wrap morph** the rework left out is now **built** —
+[`orb-wrap-morph-design.md`](orb-wrap-morph-design.md) (D-049 §2), shipped in
+NaqshCoffee/bikar#149 (kernel blend + `writeMorph` + caption) and 3d-models#148
+(gate rule T8).
 **Grounded by:** [`research/orb-stage-decomposition-measurement.md`](research/orb-stage-decomposition-measurement.md)
 — every number in this document is from that file, measured 2026-08-18 against
 bikar `e0a81cc` and 3d-models `50bac8d`, with sections 8.1–8.3 of that file taken
