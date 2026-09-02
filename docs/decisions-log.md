@@ -3899,7 +3899,7 @@ base.
 
 ## D-049 — six owner decisions of 2026-09-02, in plain words
 
-**Date:** 2026-09-02 · **Repos:** both · **Status:** all six decided; §1 is applied and verified, §2–§6 are queued as `docs/plan.md` §2 rows 2.10–2.14 with the shape chosen here
+**Date:** 2026-09-02 · **Repos:** both · **Status:** all six decided; §1 is applied and verified and §3 is shipped (sacred-patterns #44 `a89f45a`); §2 and §4–§6 are queued as `docs/plan.md` §2 rows 2.10–2.14 with the shape chosen here
 
 ### Why this entry exists
 
@@ -3975,6 +3975,8 @@ check should block on, which was the open question in front of it: a D-number ci
 across repos that does not exist as a heading in this file, or as a file in bikar's
 tree, is a broken reference and blocks — the same rule the pointer gate already applies
 to paths.
+
+**Shipped 2026-09-02** (sacred-patterns #44 `a89f45a`). One correction the build made to the sentence above: the cross-repo hub is **sacred-patterns'** cross-repo ledger generator, not bikar's within-repo one — the per-repo `LEDGER.md` scripts are each repo's own, but the roll-up that joins all four already lived in sacred-patterns, so that is where the 3d-models index and the citation gate landed. bikar's pre-commit invokes it as a non-blocking NOTE; the block itself fires in sacred-patterns' own pre-commit and in its `make local.ci`. What shipped: a links-only *3d-models decisions — index* section generated from this file's headings at its origin ref, and a corpus-wide citation check that refuses (write) or blocks (`--check`) on a `D-0xx` cited in any of the four repos that resolves to neither a heading here nor a file in bikar's decisions tree. 20 test assertions, two of them regression witnesses this build earned: the citation scan excludes the suite's own fixtures, and the suite unsets the git-hook env vars so its scaffolds stay hermetic when run from a hook.
 
 ### 4. The studio status page — "what should it show?"
 
