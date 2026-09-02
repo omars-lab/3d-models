@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**20 registered bets · 20 `Calibrated` records — 20 provisional, 0 measured · 6 bets with no record in bikar.**
+**21 registered bets · 21 `Calibrated` records — 21 provisional, 0 measured · 6 bets with no record in bikar.**
 
 ## Bets
 
@@ -37,6 +37,7 @@ is opened, clustered, and closed.
 | `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
 | `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | provisional | `LABEL_RELIEF_MM_CAL` |
 | `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | provisional | `LABEL_CAP_MM_CAL` |
+| `CAL-GRP-01` | `CLUTCH_PROXY_FLOOR_MM` — the designed rib crush (rib lobes × `ribMm`) below which a printed brick falls off the LG-D1 hold scale; the §11 Q6 proxy is a bet by construction | `LG-D1` | provisional | `CLUTCH_PROXY_FLOOR_MM_CAL` |
 | `CAL-CLR-01` | `MIN_BODY_CLEARANCE_MM` in-situ gap floor: the smallest gap at which two surfaces printed in place come off the plate as two objects rather than one | `MC-8` | provisional | `MIN_BODY_CLEARANCE_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
@@ -247,6 +248,13 @@ named next print rather than an absence:
 - **Value:** `5`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The height at which the §5 gap measurements were taken, and the smallest at which Source Code Pro Bold's thinnest stem (0.573 mm at this cap) stays above a 0.4 mm nozzle with margin. No label has been printed and no one has been asked to read one, so this is a geometry floor standing in for a legibility measurement. Coupon MC-7 carries the cap ladder that replaces it.
+
+### `CLUTCH_PROXY_FLOOR_MM_CAL` — `CAL-GRP-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/grid-gate.ts`
+- **Value:** `0.4`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** one tube × four lobes × the 0.10 mm default rib — the smallest anchor set the hard gate passes; unmeasured until LG-D1 cycles a printed rib
 
 ### `MIN_BODY_CLEARANCE_MM_CAL` — `CAL-CLR-01`
 

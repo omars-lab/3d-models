@@ -1506,10 +1506,15 @@ deviations from this spec, and additions beyond it.)*
   green tick must have already read it. A test asserts neither verdict can say "will hold", "will
   grip" or "will clutch", so the wording cannot drift back.
 
-  Whether a compliance proxy (rib deflection × count, or an FEA-lite bending estimate) is worth
-  adding stays **open** — that part of Q6 is not resolved and is not resolvable here. LG-F1 and
-  LG-D1 supply the data that would calibrate one, and the caveat names them, so the limit reads as
-  a next measurement rather than a dead end.
+  A compliance proxy now ships — but **as a labelled bet, not a resolution of the physics** (bikar
+  [PR #150](https://github.com/NaqshCoffee/bikar/pull/150)). `clutchProxy()` reports designed rib
+  crush (rib lobes × `ribMm`, lobes = 4 per tube and 3 per pin) against `CLUTCH_PROXY_FLOOR_MM`, a
+  provisional **`CAL-GRP-01`** constant that **settles with LG-D1** at print time; its text carries
+  "a proxy, not a measurement" and the same wording test forbids it saying "will hold", "will grip"
+  or "will clutch". What stays **open** is exactly what a geometry engine cannot close — whether
+  rib-crush actually tracks elastic clutch. LG-F1 and LG-D1 are the measurements that would settle
+  `CAL-GRP-01`, and until one does the proxy is a bet the panel labels as such: a next measurement,
+  not a dead end.
 - **Q7 — position-dependent degenerate triangles from relief pockets. RESOLVED** (bikar
   [PR #42](https://github.com/NaqshCoffee/bikar/pull/42)). Building `Hex-Field-Tile` (§10, P1)
   turned up a mesh-gate failure — 5–6 zero-area triangles — that depended on *where* a motif sat,
