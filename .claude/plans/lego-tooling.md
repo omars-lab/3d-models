@@ -37,7 +37,7 @@ The authoritative list is `docs/rosette-pin-explorer-design.md` **§6.6** (the o
 | none | Track 3.2 — `PLATES` const → data file, no fabricated links — 🟢 bikar #141 `571cba2` | #67 done |
 | none | Track 4.2 — interior-tube cap dial, kernel floor un-overridable — 🟢 bikar #143 `a4318c9` | #68 done |
 | download (user) | Open the MPD in LeoCAD and BrickLink Studio | #69 |
-| decision (user) | §11 Q6 — ship a clutch compliance proxy as a `CAL-*` bet, or not | #71 |
+| decision (user) | §11 Q6 — ship a clutch compliance proxy as a `CAL-*` bet — shipped as `CAL-GRP-01` (rib crush vs `CLUTCH_PROXY_FLOOR_MM`, settles LG-D1) 🟢 bikar #150 | #71 done |
 | printer (held) | Every LG-* coupon: F1, F2, R1, S1, D1, B1, B2, P1, P2 | none — `backlog.md` §3.2 owns them, per its §3.8 |
 
 Closed doors, so they are not reopened: §15.4's hook graduation (waits on measured recurrence),

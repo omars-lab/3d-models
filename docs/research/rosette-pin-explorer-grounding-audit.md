@@ -59,7 +59,7 @@ Traced every occurrence:
 
 - `docs/decisions-log.md` D-006 (~L430): "Total radial interference **computes** to 0.00 mm on the shipped defaults … `CAL-STK-01` is the bet … `LG-S1` the coupon."
 - `.claude/skills/prototype/catalog.md` L908–975, LG-S1: "**Status**: planned (printing on hold…)"; "On the shipped defaults that leaves total radial interference at **0.00 mm** — a stack that seats face-to-face with no clutch at all. bikar reports it as a warning on every `Brick-Stack` render"; Q2 "Does the shipped default really not clutch? **The arithmetic says** 0.00 mm interference. Print the −0.20 rung…"; "**What we learned**: — pending."; print target TBD.
-- `.claude/skills/calibrate/bets.md`: "20<!--count:cal-bets--> registered bets · 20<!--count:cal-records--> `Calibrated` records — **20 provisional, 0 measured**"; CAL-STK-01 provisional (`STUD_ENTRY_MAX_MM_CAL` 0.15 at `lego.ts` L163–170), "LG-S1 settles it".
+- `.claude/skills/calibrate/bets.md`: "21<!--count:cal-bets--> registered bets · 21<!--count:cal-records--> `Calibrated` records — **21 provisional, 0 measured**"; CAL-STK-01 provisional (`STUD_ENTRY_MAX_MM_CAL` 0.15 at `lego.ts` L163–170), "LG-S1 settles it".
 
 The 0.00 mm is stud ⌀ 4.8 minus stud-port entry (4.8 + 0 with −0.2 knob cancelling the +0.2 relief) — a subtraction, reported by bikar as a *warning*, whose whole purpose in LG-S1 is to be tested. The doc's sentence turns the coupon's open question into its answer. This is the exact K1 pattern the taxonomy records for `hemisphere-split` §3.2, and it is the most load-bearing single defect in the doc because §5 uses it to argue that printed-onto-printed stacking is a solved case the explorer need not model.
 
