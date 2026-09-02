@@ -132,11 +132,11 @@ degrades a score cannot merge. Its own docstring calls the re-run *"a tripwire"*
 
 | stage | pointer |
 |---|---|
-| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1268 "function evaluateOrbDecl("` |
+| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1311 "function evaluateOrbDecl("` |
 | base solid, subdivision, duals | `bikar:packages/core/src/kernel3d/polyhedra.ts:L210 "export function subdivideGeodesic("` |
 | face-local 2D ↔ 3D frame (`B8`) | `bikar:packages/core/src/kernel3d/face-frame.ts:L93 "export function makeFaceLift("` |
 | vertex weld (`B8`) | `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` |
-| Family 2 — pierced lattice (`B5`) | `bikar:packages/core/src/kernel3d/solidify-lattice.ts:L193 "export function solidifyLattice("` |
+| Family 2 — pierced lattice (`B5`) | `bikar:packages/core/src/kernel3d/solidify-lattice.ts:L216 "export function solidifyLattice("` |
 | Family 1 — over/under solve and ribbons (`B6`) | `bikar:packages/core/src/kernel3d/weave.ts:L571 "export function weaveLattice("` |
 | Family 3 — maclado field | `bikar:packages/core/src/kernel3d/maclado-field.ts:L284 "export function buildMacladoField("` |
 | Family 3 — welded woven overlap (`B7`) | `bikar:packages/core/src/kernel3d/maclado-woven.ts:L95 "export function buildWovenOverlapGraph("` |
@@ -161,7 +161,7 @@ diagram compresses that.
 | per-axis orthographic SVG (`E2`) | `bikar:packages/core/src/render/orb-view-renderer.ts:L267 "export function renderOrbViewSVG("` |
 | symmetry axes and front-cap projection | `bikar:packages/core/src/kernel3d/orb-views.ts:L39 "export function symmetryViewAxes("` |
 | ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L196 "export function projectRibbonPasses("` |
-| ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1911 "export function emitGroundTruth("` |
+| ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1970 "export function emitGroundTruth("` |
 | mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L88 "export function meshGate("` |
 | the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2128 "case 'render': {"` |
 
@@ -199,7 +199,7 @@ carry them, which is the honest limit of a diagram.
 
 | stage | pointer |
 |---|---|
-| the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L238 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
+| the sweep that measures (`H1`) | `bikar:scripts/sweep-orb-validate.ts:L265 "QIYAS_IMAGE and QIYAS_DIR are both set"` |
 | the test that compares (`H2`) | `bikar:packages/lab/tests/orb-composites.test.ts:L87 "const RECORDED_DROP"` |
 | the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L133 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L63 "readonly qiyasComposite"` |

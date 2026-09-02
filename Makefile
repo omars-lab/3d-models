@@ -68,9 +68,9 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # Recursively expanded, not `:=`, because LAB_PAGES is defined further down
 # beside the vendor step that uses it. `:=` here would expand to nothing and
 # deploy a gallery with no studio pages in it.
-DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md
+DEPLOY_PATHS = index.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json
 
-.PHONY: cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: prints-manifest cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -164,7 +164,7 @@ validate-timelapse:
 # clean fixture, requires it clean, then mutates it once per rule and requires
 # each to fire. Ships before the first plate on purpose: R4's visible count is
 # what makes wiring the gate at zero records honest rather than broken-looking.
-validate-prints:
+validate-prints: prints-manifest
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
 
@@ -447,7 +447,7 @@ pattern-sets: bikar-stamp
 # cannot read that one, so a page added there and not here vendors nothing and
 # `lab-smoke` never looks for it. Adding a page is two edits, in two repos, and
 # saying so is cheaper than a cross-repo check that would have to run a build.
-LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html
+LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html prints.html
 # The subset that runs the compile worker. studio.html and design.html render
 # from static data, so requiring a worker chunk of them would fail a page that
 # is working exactly as designed.
@@ -523,6 +523,7 @@ site:
 	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
 	echo "lego lab http://localhost:${SITE_PORT}/lego.html"; \
 	echo "notes    http://localhost:${SITE_PORT}/design.html"; \
+	echo "prints   http://localhost:${SITE_PORT}/prints.html"; \
 	$(PYTHON) -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
 
 # Map of every user-facing experience and the target that starts it.
@@ -578,7 +579,7 @@ web-images:
 # and site_graph.py's G4 rule — DEPLOY_PATHS and LAB_PAGES must agree with the
 # nodes docs/site-graph.json marks `vendored` — is precisely a deploy-time
 # invariant. Checking it here costs milliseconds and no network.
-deploy: validate-site-graph web-images lab
+deploy: validate-site-graph web-images lab prints-manifest
 	@set -euo pipefail; \
 	cd ${ROOT_DIR}; \
 	git show-ref --verify --quiet refs/heads/${PAGES_BRANCH} \
@@ -600,3 +601,14 @@ deploy: validate-site-graph web-images lab
 		git push origin ${PAGES_BRANCH}; \
 		echo "Deployed to ${PAGES_BRANCH}."; \
 	fi
+
+# The register prints.html reads: one record per docs/prints/<run>/, written by
+# build/prints_manifest.py with the same frontmatter parser the prints gate uses.
+# Gitignored and rebuilt by every deploy — and by every validate-prints, which
+# depends on it — so nobody types a printed plate into existence and the
+# generator's self-test (the gate's own fixture, plus a record it must refuse)
+# runs before every write. An empty or absent docs/prints/ writes
+# {"records": []}, which the page shows as the true state, not as an error.
+prints-manifest:
+	$(PYTHON) ${ROOT_DIR}/build/prints_manifest.py --self-test
+	$(PYTHON) ${ROOT_DIR}/build/prints_manifest.py

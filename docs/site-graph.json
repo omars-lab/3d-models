@@ -144,10 +144,10 @@
     {
       "id": "G.prints",
       "surface": "gallery",
-      "file": "docs/prints.md",
-      "vendored": false,
-      "inRepo": true,
-      "what": "the prints reader (S6), shipped by Makefile DEPLOY_PATHS so it is a published page like README. Edgeless here on purpose: the inbound nav link from index.html shifts every anchored edge below it, so that pin-shift is deferred to S7 when prints.html is vendored (prints-tab-design.md §8). Until then this page is reachable by direct URL, not linked from the gallery."
+      "file": "prints.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "the prints register (S7, 2026-09-01): one card per plate that came off a machine, read from prints-manifest.json, which build/prints_manifest.py writes from docs/prints/<run>/ and DEPLOY_PATHS ships beside the page. The rendered reader docs/prints.md is still shipped (G.prints-reader) and the page links to it on github.com — the queue is linked, not copied. Until this shipped the node was docs/prints.md itself and edgeless, because the inbound nav link shifts every anchored index.html edge below it; that shift landed with this page."
     },
     {
       "id": "S.index",
@@ -180,6 +180,14 @@
       "inRepo": false,
       "path": "/404",
       "what": "not in the Rollup input map by design"
+    },
+    {
+      "id": "G.prints-reader",
+      "surface": "gallery",
+      "file": "docs/prints.md",
+      "vendored": false,
+      "inRepo": true,
+      "what": "the rendered print queue and instructions (S1). Shipped verbatim by DEPLOY_PATHS; linked from prints.html as a github.com blob, which is not a declared surface host, so that edge is not modelled. No page on the site links to it directly."
     }
   ],
   "edges": [
@@ -193,21 +201,21 @@
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:304",
+      "at": "index.html:305",
       "evidence": "href=\"lab.html\"",
       "visibility": "static"
     },
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:322",
+      "at": "index.html:323",
       "evidence": "href=\"lego.html\"",
       "visibility": "static"
     },
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:551",
+      "at": "index.html:552",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer"
@@ -215,7 +223,7 @@
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:551",
+      "at": "index.html:552",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none"
@@ -239,7 +247,7 @@
     {
       "from": "G.index",
       "to": "S.index",
-      "at": "index.html:277",
+      "at": "index.html:278",
       "evidence": "bikar.naqshcoffee.com",
       "visibility": "static",
       "viaHost": "bikar.naqshcoffee.com",
@@ -422,7 +430,7 @@
     {
       "from": "G.index",
       "to": "G.breakdown",
-      "at": "index.html:552",
+      "at": "index.html:553",
       "evidence": "href=\"breakdown.html?orb=",
       "visibility": "js-computed",
       "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
@@ -461,6 +469,41 @@
       "from": "G.breakdown",
       "to": "G.studio",
       "at": "bikar packages/lab/src/breakdown-main.ts:220",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.index",
+      "to": "G.prints",
+      "at": "index.html:271",
+      "evidence": "href=\"prints.html\"",
+      "visibility": "static"
+    },
+    {
+      "from": "G.studio",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.studio",
+      "at": "bikar packages/lab/src/prints-main.ts:121",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/prints-main.ts:123",
+      "repo": "bikar",
+      "visibility": "js-computed"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/prints-main.ts:125",
       "repo": "bikar",
       "visibility": "js-computed"
     }
