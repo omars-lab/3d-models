@@ -458,6 +458,15 @@ prints its numbers does not.
 up later belongs in §3's register with a row, not in a task item — and the register
 is what §2 sequences.
 
+**Folded in again, 2026-09-02.** The board that carried the d3 stream and the
+2.x work reached the same single print item — `#37`, *"first physical print
+prototype (printer-held)"* — and it too is closed into this section rather than
+tracked on the board. It is the same first print §2 sequences: Plate 1 (the
+machine card) then Plate 4 (P2 Star-Orb), gated only on owning a printer, with
+nothing engine-side blocking it (§1). The register already carries every rung it
+would touch, so the task held no fact this file does not. The tenet is unchanged:
+print work lives in §3's register, and the board carries no print queue.
+
 ---
 
 ## 4. Before the first print
