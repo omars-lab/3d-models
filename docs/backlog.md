@@ -1,6 +1,7 @@
 # Print backlog — what a printer unblocks, and in what order
 
-Last updated: 2026-09-01 (§6.4 Phase 2 row → shipped).
+Last updated: 2026-09-02 (§3.8 → folded in the prints-tab board's print-gated
+items — #67 print Plate 1 and #71 gate rule R3).
 
 Status: **PLANNING DOCUMENT, NOTHING MEASURED.** No print has ever been made on
 this project. Every physical number in every design doc here is either read out
@@ -466,6 +467,30 @@ machine card) then Plate 4 (P2 Star-Orb), gated only on owning a printer, with
 nothing engine-side blocking it (§1). The register already carries every rung it
 would touch, so the task held no fact this file does not. The tenet is unchanged:
 print work lives in §3's register, and the board carries no print queue.
+
+**Folded in again, 2026-09-02 (the prints-tab board's print-gated items).**
+The board that carried the prints-tab S-series and the innerHTML/T9 work reached
+a pair of items gated on owning a printer, both now closed into this file rather
+than tracked on the board:
+
+- *"Prints tab S2: print Plate 1 and fill the first run record at the bench"* —
+  the first print §2 already sequences: Plate 1 (the machine card), gated only on
+  owning a printer, nothing engine-side blocking it (§1). "Fill the first run
+  record" is not a new fact either — it is §5's landing sequence (the
+  `Calibrated<T>` status flip, the baseline shrink, the regenerated `bets.md`,
+  the two-way tag, the dated catalog row) and the log lives in
+  [`catalog.md`](../.claude/skills/prototype/catalog.md), not on a board.
+- *"Prints tab S4: add gate rule R3 (two-way propagation) after the first bet
+  flips"* — `prints_gate.py` shipped R1/R2/R4 with hook `39-prints` (that work is
+  done); R3 is the rule that would enforce §5's two-way link (landing-sequence
+  item 4). It is printer-gated **by construction**: there is no measured record
+  for it to check, and no flipped bet for it to hold, until the first print lands
+  — so it waits behind §2 Plate 1 and the §5 propagate step, not on the board.
+
+The register already carries every rung both would touch, so neither held a fact
+this file does not. The tenet is unchanged: print work — and the gate that guards
+the propagate step — lives in §3's register and §5, and the board carries no
+print queue.
 
 ---
 
