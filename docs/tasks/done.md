@@ -305,3 +305,55 @@ PR) and `#73` (the rosette-N seam-spacing-as-a-dial plan, the next session's foc
 - #69 — 2.10.b bikar kernel build: the 18-wheel lattice-walk open shell
 - #70 — 2.10.c 3d-models integration + the skill decision (eight detectors, zero instructions → no skill) + record
 - #71 — 2.13 studio status page (three files-only provenance facts, standalone in 3d-models)
+
+---
+
+**▸ Snapshot 4 — 2026-09-02 (the prints / wrap-morph / innerHTML prune).** Same
+calendar day as Snapshot 3 but a **later, separate prune of a board that was
+renumbered again** after it — so the ids below are yet another **fresh
+sequence**: Snapshot 4's `#4` is the M4c lattice-walk fourth orb, not Snapshot
+2's OrbViewer task or Snapshot 3's `#67`; Snapshot 4's `#72`/`#73` are the mesh-
+gate widening and the d3 Phase-2 status overlay, not Snapshot 3's housekeeping
+PR / rosette-N plan under the same numbers. Read every id under this date. These
+are the completed entries of the board that carried the Prints tab (S-series),
+the flat→sphere wrap morph and round-pattern breakdowns, the studio status page
+and d3 Phase 2, and the master-commit and innerHTML-taint gates. Still open on
+the board at this prune: `#8` (make the cross-repo ledger check block + add
+3d-models to the loop); `#49` (T9 — tie the drawn outline to the manifest's
+solid, owned by another concurrent session); bench-gated `#67` (Prints S2 —
+print Plate 1 and fill the first run record at the bench); and bet-gated `#71`
+(Prints S4 — add gate rule R3, two-way propagation, after the first bet flips,
+blocked by `#67`).
+
+## Prints tab (S-series)
+
+- #66 — Prints tab S3: ship prints_gate.py with R1/R2/R4 + hook 39-prints
+- #68 — Prints tab S5: delete the empty Iteration log from every catalog entry
+- #69 — Prints tab S6: build the rendered docs/prints.md tab
+- #70 — Prints tab S7: vendor the prints.html lab page (audience: gallery visitors)
+
+## Orb breakdown + flat→sphere wrap morph
+
+- #76 — Flat→sphere wrap morph for the breakdown page (deferred from the teach-construction plan)
+- #77 — Wrap morph, bikar PR: kernel blend t + writeMorph + page caption (docs/orb-wrap-morph-design.md §6)
+- #78 — Wrap morph, 3d-models PR: timelapse gate junction + count rules, make orbs, doc statuses
+- #79 — Make `make orbs` robust to non-views orbs (round-pattern STL-only)
+- #80 — bikar: give round-pattern orbs a breakdown (--format timelapse/views for base sphere + place)
+- #72 — Widen bikar `--check mesh` to the orbMesh path (sphere orbs were silently un-gated)
+
+## d3 / studio / decision hub
+
+- #10 — Give the studio a status page fed from the repos, not typed
+- #73 — d3 Phase 2: build the qiyas status overlay from the measured {id,x,y,status} join
+- #9 — Decide how 3d-models' D-0xx log joins the decision hub
+
+## Orbs + sweeps
+
+- #4 — Build the fourth orb on the M4c quantized lattice walk, as the skill-vs-gate measurement
+- #75 — Move the three Rosette-N param explorations out of stashes into a pushed sweep record
+
+## Hooks + security hygiene
+
+- #74 — Refuse direct commits on main/master by hook, in both repos
+- #36 — The as_of pin has no fixed point under squash merges — decide what the pin means
+- #26 — Sweep the remaining interpolated-innerHTML sites in bikar's web package (DOM-node fixes + semgrep taint gate; bikar PR #162)
