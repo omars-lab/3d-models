@@ -237,3 +237,71 @@ buildable now.
 - #63 — Hand back #9 (this repo's D-log joins the decision hub) as a visual decision artifact
 - #64 — Prints tab: record the 4 resolved decisions + preserve the design in-repo
 - #65 — Prints tab S1: write the run-record format + one filled Plate-1 example
+
+---
+
+**▸ Snapshot 3 — 2026-09-02 (the d3 / 2.x prune).** The live board was renumbered
+again after Snapshot 2, so the ids below are a **fresh sequence** — Snapshot 3's
+`#29` is the bikar-studio public-surface keystone, not Snapshot 2's OrbViewer
+camera-control `#29`. Read every id under this date. These are the completed
+entries of the board that carried the d3 stream (Phases 1–3), the rosette
+explorer's open ledger, the memory decomposition, the fourth orb and the studio
+status page — the work [`../plan.md`](../plan.md) §2 rows 2.1–2.13 and §3 record in
+detail. Still open on the board at this prune: user-decision `#36`
+(coffee-house-sites#1); parked `#35` (publish the contract+schema under semver — the
+breakage-detection skill and version-bump hook); standing `#50` (keep `plan.md`
+current); printer-held `#37` (first physical print — **closed by fold-in** into
+[`../backlog.md`](../backlog.md) §3.8 in this same prune, not completed, exactly as
+Snapshot 2 closed its `#3`); and the two live successors `#72` (this housekeeping
+PR) and `#73` (the rosette-N seam-spacing-as-a-dial plan, the next session's focus).
+
+## d3 stream — the studio instruments (Phases 1–3)
+
+- #29 — DECISION: does bikar-studio stay a public surface? (keystone) — org-gated, internet-reachable
+- #30 — qiyas: type the data-model endpoints so the schema reaches OpenAPI
+- #31 — d3 Phase 1: rosette explorer as the reference d3 surface
+- #32 — d3 Phase 2: the full orb-view instrument — orb .bkr → orb-view SVG → qiyas encode ref + degraded recon → diff → status overlay, joined by id
+- #33 — d3 Phase 1 follow-on 1.3: pattern picker for other .bkr in the rosette explorer
+- #34 — d3 Phase 1 follow-on Track 2: generic dial schema from a .bkr's parameters
+- #44 — 2.1.a orb-view SVG from an orb .bkr inside packages/web
+- #45 — 2.1.b getting a browser-rendered SVG into qiyas (POST /diff inline, D-API-5)
+- #46 — 2.1.c the join across the two id namespaces
+- #47 — 2.1.d the /orb-instrument page (rosette-explorer shape, status join in viz-d3)
+- #48 — 2.1.e registration (route table, page marker, routing test, public surface) + fixture
+- #49 — 2.1.f record the Phase 2 ship
+- #51 — bikar qiyas-schema Scores lacked drop/surplus/max_drift — regenerate from the current qiyas OpenAPI
+- #61 — 2.4 d3 Phase 3: unify vocabulary across explorers + sacred-patterns (Q-VOCAB)
+- #62 — 2.4.a preserve the Q-VOCAB vocabulary survey as checked-in research
+- #63 — 2.4.b design doc: vocabulary convergence
+- #64 — 2.4.c execute A↔B convergence in bikar (renames + join refactor + tests)
+- #65 — 2.4.d execute the sacred-patterns structural refactor
+- #66 — 2.4.e record the Phase 3 ship
+
+## Rosette explorer — the open ledger (2.2)
+
+- #52 — 6.6.1 widen the roster past Rosette-N/Star-N (girih, hex-field, rational-repeat)
+- #53 — 6.6.2 ground the rosette explorer design doc (audit, apply, appendices)
+- #54 — 6.6.3 plates as data: PLATES → data/plates.json, gated at load
+- #55 — 6.6.4 interior-tube cap dial (clutch/material trade, kernel floor un-overridable)
+
+## Memory decomposition, use-case map, and house hygiene
+
+- #38 — Prune task-state out of memory; leave only a backlog pointer
+- #39 — Branch/worktree hygiene: delete verified-merged branches, remove stale worktrees (all three repos)
+- #40 — MEMORY.md index line held the whole shipped-record log — move it into the memory file, leave a hook
+- #41 — Stop citing dead session-scoped ids in durable text
+- #42 — Give the d3 stream a durable home in docs/backlog.md
+- #43 — qiyas local main diverged 2 ahead / 3 behind — sentinel-verify before any reset, then reconcile
+- #56 — Use-case map: re-pin bikar pointers at the drifted main, repair 9 moved anchors (+2 in orb-pipeline-map.md)
+- #57 — Use-case map: add rows for the rosette explorer and orb instrument
+- #58 — bikar check-lock-sync: the dry-run inherited npm_config_loglevel=silent and the FAIL message went empty
+
+## Decision hub, the fourth orb, and the studio status page
+
+- #59 — 2.3 split islamic-orb-project.md (152 KB) into one-fact topic memories; archive the log
+- #60 — 2.12 decision hub: cross-repo D-0xx index + citation gate
+- #67 — 2.10 fourth orb on the M4c/D-031 lattice walk (built as process measurement)
+- #68 — 2.10.a design doc for the lattice-walk orb, grounded
+- #69 — 2.10.b bikar kernel build: the 18-wheel lattice-walk open shell
+- #70 — 2.10.c 3d-models integration + the skill decision (eight detectors, zero instructions → no skill) + record
+- #71 — 2.13 studio status page (three files-only provenance facts, standalone in 3d-models)
