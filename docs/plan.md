@@ -1,6 +1,6 @@
 # Working plan — what we are working against
 
-Last updated: 2026-09-02 (2.15 spaced-rosette plan doc shipped). This is the **index of record** for active work across the
+Last updated: 2026-09-07 (2.5 schema published; printer-gated 2.7/2.8 folded into the backlog). This is the **index of record** for active work across the
 three repos: objectives, the priority queue, what shipped, what the audits found, and
 where everything lives. It is a pointer document — a number or a design detail lives
 in the doc that owns it and is linked from here, never re-typed. The live task list
@@ -29,8 +29,10 @@ Rules this file follows:
    next one spends effort on (d3 doc §4).
 2. **Publish the bikar/qiyas contract + JSON schema** — pending the user's call on
    where and how (memory: contract v1.5 accepted, mirrors cascaded).
-3. **The first physical print** — printer-gated. Sequence and what each plate unblocks:
-   [`backlog.md`](backlog.md) §2; record format: [`prints-tab-design.md`](prints-tab-design.md).
+3. **The first physical print** — printer-gated, and tracked in the backlog, not the §2
+   queue. Sequence and what each plate unblocks: [`backlog.md`](backlog.md) §2–§3; the
+   explorer's own printer-held rows in [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md)
+   §6.5; record format: [`prints-tab-design.md`](prints-tab-design.md).
 4. **Keep the house honest** — gates green, memory an index, branches clean, this file
    current. Not a project, a standing obligation (§4 records what happens when it lapses).
 
@@ -38,6 +40,11 @@ Rules this file follows:
 
 State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued · 🟡 pending user ·
 🔴 gated (printer or external).
+
+Printer-gated work is not queued here (objective 3 above): the first physical print lives
+in [`backlog.md`](backlog.md) §2–§3 and the explorer's printer-held rows in
+[`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) §6.5. A row appears here
+only when it needs nothing but work, a user decision, or an external repo.
 
 | # | Item | State | Gate | Owner section |
 |---|---|---|---|---|
@@ -51,10 +58,8 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 | 2.2 | Explorer open ledger — widen the roster (6.6.1 🟢 2026-09-01, bikar #134 `85269ac`), ground the explorer doc (6.6.2 🟢 2026-09-01, 3d-models #136), plates as data (6.6.3 🟢 2026-09-02, bikar #141 `571cba2`), interior-tube cap (6.6.4 🟢 2026-09-02, bikar #143 `a4318c9`). **All four unblocked rows shipped**; what remains in §6.6 is gated on a download, a decision, or a printer | 🟢 | — | explorer doc §6.6 |
 | 2.3 | Memory decomposition — `islamic-orb-project.md` was one 152 KB file; split by topic into one-fact files, the dated ship log archived verbatim. **Shipped 2026-09-02** (3d-models #145): 25 topic memories + a hub overview, each ≤2.5 KB with `name:` = filename and every `[[link]]` resolving; the log is `docs/research/shipped-record.md` (under `research/` for the pointer-gate and D4 exemptions, not root `docs/`) | 🟢 | — | §4.2 below |
 | 2.4 | d3 Phase 3 — unify the vocabulary across the explorers and sacred-patterns (Q-VOCAB). **Shipped 2026-09-02**: A↔B renamed and joined on a shared `faceKey` (bikar #151 `1083046`); sacred-patterns grown a face-list + `<path class="face">` data-join in place of imperative `<polyline>`, pixel-identical (sacred-patterns #45 `76e3c17`). All three surfaces now read `index`/`polygon`/`ring`/`faceKey`/`joinFaces` (D-050) | 🟢 | — | d3 doc §4 Phase 3 |
-| 2.5 | **Publish the contract + JSON schema.** Venue is the restricted GitHub Packages registry (the qiyas-schema package; v0.1.0 and v0.2.0 already released). Versioning locked 2026-09-02 — **0ver**: while the major version is 0, a breaking contract change is released as a minor bump and an additive one as a patch, so the pending 0.3.0 (which is breaking) is correctly versioned. Guardrails shipped: a breakage detector and a version-bump-on-change guard, both wired into bikar's `npm run ci` (bikar #164). Remaining is owner-only — run the publish and push the `schema-v0.3.0` tag. | 🟡 | owner: publish + tag | qiyas `contract/schemas/`, sacred-patterns canonical v1.5 |
+| 2.5 | **Publish the contract + JSON schema.** Venue is the restricted GitHub Packages registry (the qiyas-schema package). Versioning locked 2026-09-02 — **0ver**: while the major version is 0, a breaking contract change is released as a minor bump and an additive one as a patch, so 0.3.0 (breaking) is correctly versioned. Guardrails shipped (bikar #164). **Shipped 2026-09-07** — `@naqshcoffee/qiyas-schema@0.3.0` is live, published by the `schema-v0.3.0` tag push (the workflow's only trigger); v0.1.0 and v0.2.0 preceded it | 🟢 | none | qiyas `contract/schemas/`, sacred-patterns canonical v1.5 |
 | 2.6 | coffee-house-sites issue 1 | 🟡 | user | that repo |
-| 2.7 | First physical print — machine card, LEGO ladder, W-series, orb ladder; prints-tab rungs S2 and S4 (S3, S5–S7 shipped) | 🔴 | a Bambu-class printer | backlog §2–§3, prints-tab doc |
-| 2.8 | Explorer printer-held rows (3.3, 3.4, 4.3) | 🔴 | printer | explorer doc §6.5 item 5 |
 | 2.9 | bikar's generated qiyas schema types lag qiyas: `Scores` lacks `drop`/`surplus`/`max_drift` that `POST /diff` returns. Regenerate from qiyas at `95dd893`, and gate the generator so the drift cannot recur (found building 2.1.d). **Shipped:** re-vendored byte-identical, `Scores` and `Contour` both (bikar #145 `cdc0331`, package 0.3.0 unpublished — the `schema-v0.3.0` tag is the owner's); the orb instrument reads the scores instead of deriving them; the schema-mirror gate here (hook 41, `make validate-schema-mirror`) diffs bikar's copy against qiyas's export at the map's pins | 🟢 | none | bikar `packages/qiyas-schema`; `.claude/gates/schema_mirror.py` |
 | 2.10 | **Fourth orb on the M4c quantized lattice walk**, built as the measurement for the process: every stop an earlier orb also needed is logged and labelled *detector* (becomes a gate or test in the same PR) or *instruction*; an orb skill is written only if the instruction list is non-empty when the orb ships. **Shipped** as the 18-wheel **open shell** (owner's chosen shape) via `place rule latticewalk`: kernel (bikar#153), DSL seam + sweep predicate (bikar#154), 3d-models record + `make orbs` skip (this PR). **Eight detectors, zero instructions → no orb-creation skill** ([D-051](decisions-log.md)) | 🟢 | none | D-049 §5, maclado doc, skill-evaluation precedent |
 | 2.11 | **Flat→sphere wrap morph** for the breakdown page — design doc **shipped** ([`orb-wrap-morph-design.md`](orb-wrap-morph-design.md): the bend is a radial lerp `projectFacePolygon` already holds both ends of, stages draw faceted, `morph` frames inflate to the untouched `complete`, two byte junctions + a count rule for the gate); next one bikar PR (kernel `t`, `writeMorph`, caption) then one 3d-models PR (gate rules, `make orbs`) — **both shipped** (bikar#149, 3d-models#148; gate rule T8) | 🟢 | none | D-049 §2, timelapse doc |
@@ -67,6 +72,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 
 | Date | What | Where |
 |---|---|---|
+| 2026-09-07 | **The contract + JSON schema are published** (2.5). `@naqshcoffee/qiyas-schema@0.3.0` is live on the restricted GitHub Packages registry, released by pushing the `schema-v0.3.0` tag (`cdc0331`, PR #145's re-vendor) — the publish workflow's only trigger, which checks out the tag, asserts the vendored schemas match qiyas's export, runs the pack audit, then publishes. 0.3.0 is a breaking change (SCHEMA 1.27 re-vendor) released as a minor bump under the 0ver rule locked 2026-09-02. Closes the owner-held remainder of 2.5; §2 has no printer-gated rows left either (2.7/2.8 folded into the backlog) | bikar `schema-v0.3.0` |
 | 2026-09-02 | **Contract-publish guardrails shipped and pre-1.0 versioning locked** (2.5). A breakage detector diffs the vendored qiyas schemas against the latest `schema-v*` tag, classifies the change MAJOR/MINOR/PATCH, and can `--assert` a ceiling in CI; a version-bump-on-change guard refuses a staged schema/src edit whose package.json version was not bumped and blocks the same drift in CI (`check:schema-version`). Both are wired into `npm run ci`. Versioning locked to **0ver**: while the major version is 0 a breaking contract change is released as a minor bump and an additive one as a patch, so the pending 0.3.0 (breaking) is correctly versioned. §2.5's gate moves from "user: venue and versioning" to owner-only — run the publish and push the `schema-v0.3.0` tag | bikar #164 |
 | 2026-09-02 | **The spaced-rosette plan is on paper — a rosette as its own pieces, spacing on a dial** (2.15). New design doc [`spaced-rosette-design.md`](spaced-rosette-design.md): bikar's *n* petals + 1 star, each printed individually and laid out on a grid whose inter-piece spacing is a tunable dial. The load-bearing finding from a live concept prototype (radial bloom + continuous/snap toggles): spacing is a **placement transform, not a geometry edit**, so the feature needs no kernel change and no edge-to-edge relief — it is the deliberate **anti-`mural`** (spread pieces apart) at the opposite end of the same inter-piece-gap axis the mural drives to its 0.2 mm minimum. Owner locked radial-primary layout and both mount modes; the K10 line (continuous never seats on a stock baseplate) and the CAL-CLB-01/CAL-STK-01 residue-inheritance are written in. First deliverable is the explorer spacing dial as a schema `param` | 3d-models #161; [`spaced-rosette-design.md`](spaced-rosette-design.md) |
 | 2026-09-02 | **Round-pattern orbs now teach their construction, not just print** (#80, follow-on to 2.11). bikar draws each disc's placement *site* as the base scaffold (`siteScaffoldCells`), so a round-pattern orb's `--format views` yields a `.site` cell view and `--format timelapse` a staged breakdown (base → element → repeat → complete, with a camera sweep) instead of refusing with "only produces 2D geometry". In this repo the `make orbs` SKIP-for-2D branch is **removed**: `Donut-Hex-Orb.bkr` and `Donut-Hex-Weld.bkr` render through the same success path as every other orb and are tracked under `src/Orbs/`; the fail-closed `else` now reads a 2D-only refusal as a real regression, not a silent skip (a skip is how the loop stops testing what it exists for). Breakdown index is **16** orbs (was 14); the HEAD timelapse gate is green on all 16. Still-unmerged **T9** (#49) fails on four orbs for two distinct reasons. The round family (`DonutHexOrb`, `DonutHexWeld`, `base.faces == 0`) labels by *site index*, so any label trips T9's "index past the face count" range check — the carve-out #80 needs, after which the check actively verifies disc placement. Separately, two `base.faces == 12` Maclado orbs fail *independent of this row* and predate it: `Maclado9` on the scaffold-subset check (cells drawn on base faces the per-frame scaffold never outlines) and `Maclado9Weave` on both that and the range check (labels past face 12, drawn from the pattern domain). Resolving those is #49's, not #80's. Because the pre-commit runs the working-tree gate carrying #49's uncommitted T9, this commit rode `TIMELAPSE_GATE_OK=1`; the committed HEAD gate (no T9) is green on all 16. | bikar #158 `69a1e79`; 3d-models #159; `Makefile` `orbs:` |
@@ -153,6 +159,7 @@ holds the merge closing checklist.
 
 - §2.1's state (shipped) agrees with backlog §6.4 (shipped 2026-09-01) and d3 doc §4
   (Phase 2 SHIPPED); the three moved together in the PR that ran 2.1.f.
-- §2.2 lists exactly the four unblocked rows of explorer doc §6.6; §2.8 is its item 5.
+- §2.2 lists exactly the four unblocked rows of explorer doc §6.6; its item 5 is
+  printer-held and lives in explorer doc §6.5, not the §2 queue (§1 objective 3).
 - §3's newest row is this file's own PR only after it merges — the sha is filled in
   by that PR, never predicted.
