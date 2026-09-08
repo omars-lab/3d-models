@@ -28,12 +28,14 @@
 - [Branch state across repos](branch-state-across-repos.md) — remote branch inventory after the 2026-08-30 cleanup, one kept prior-art branch, one superseded branch that must never merge, guards + protection
 - [Owner-gated and on hold](owner-gated-and-on-hold.md) — printing paused (no CAL bet settled), `schema-v*` tag/publish, contract acceptance, Cloudflare/GHCR settings are Omar's
 - [Omar's working preferences](omar-working-preferences.md) — decides via options, faithful over safe, deliverables before polish, PR everything, delete merged branches, memory holds facts not to-dos
-- [bikar studio access](bikar-studio-access.md) — only public entry is bikar.naqshcoffee.com, gated behind org GitHub sign-in; internal audience, internet-reachable (settles the public-surface keystone)
+- [bikar studio access](bikar-studio-access.md) — org-gated but internet-reachable; both bikar.naqshcoffee.com AND (as of 2026-09-02, verified live) bikar-studio.pages.dev now 302 to Access — no anonymous host; #63 lockdown done, only the optional CI service token remains
 - [gh auto-merge footgun](gh-auto-merge-footgun.md) — `--auto` merges immediately on NaqshCoffee repos; poll to green instead
 - [3d-models use-case hook](3d-models-use-case-hook.md) — pre-commit dispatcher blocks pointer-file commits without map update; USE_CASES_OK=1 override
 - [PR flow for all repos](pr-flow-for-all-repos.md) — every change (docs included) goes branch→PR→merge, never direct-to-master; marketplace repo is the exception
 - [Gate verdict is checkout-independent](gate-verdict-checkout-independent.md) — worktree sibling fallback + self pin at the published base (#132, #133); any gate touching paths outside the repo gets a worktree self-test
 - [Stacked-PR stranding](stacked-pr-stranding.md) — never base a PR on another open PR's branch here; merge lands in the parent, not master, and strands it if the parent goes stale
 - [Check main's CI, not just the PR's](check-main-ci-not-just-the-pr.md) — bikar `ci` was red on main for four runs and three PRs merged past it; read main's last run first, fix in its own PR off main, rebase, then poll to green
+- [Decision-id collision](decision-id-collision.md) — two concurrent sessions grabbed the same next D-0xx (both D-051, 2026-09-02); first-merged owns the id, the open PR renumbers corpus-wide (mine → D-052)
+- [Preserve stranded cross-repo work](preserve-stranded-cross-repo-work.md) — isolated worktree for the cherry-pick (never switch the shared checkout), check the sibling's memory-tracking convention first (qiyas keeps memory untracked), verify what actually landed on origin
 
 Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `amazon-scripts-repo` → amazon-scripts, `marketplace-repo-mirror-and-held-branch` → oeid-claude-plugin-marketplace, `check-for-existing-e2e-before-reporting-blocked` and `supabase-paused-project-timeout` → bikar. Named without links because the files are no longer here and a dead relative link is a D1 gate failure.
