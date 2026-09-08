@@ -1150,3 +1150,122 @@ already in `~/Downloads`, the MPD produced by §8, `three@0.185.1` and
 inspection of this machine. The one HTTP server involved was a `127.0.0.1`
 static server started by the render harness to serve the page to Chromium,
 because ES module import maps do not resolve over `file:`.
+
+## 11. Download pages for the two GUI viewers #69 opens — 2026-09-07
+
+#69 is "open the export in the two readers still owed." Both are GUI apps a human
+downloads and drives; the shell survey in §§1–10 could not reach either. Their
+official download pages, with what each is **predicted** to do with our
+inline-geometry MPD (§2), so the open is a test rather than a fishing trip:
+
+- **LeoCAD 25.09** — https://www.leocad.org/download.html
+  **Predicted: resolves the name, then renders nothing.** §4.2 reads LeoCAD's
+  source — it models a file as a list of *placed pieces*, not a mesh, so it
+  registers our `0 FILE …dat` submodel by name and discards the raw type-3
+  triangles inside it: an empty model, no error, no warning. Opening it confirms
+  or breaks that prediction. macOS caveats to record (§3 row 2, §4.2): the
+  Homebrew cask is deprecated and Intel-only, and the official 158 MB dmg's
+  architecture was never established — so note which build you ran and whether it
+  opened at all.
+- **BrickLink Studio** — https://www.bricklink.com/v3/studio/download.page
+  **Predicted: not established** (§3 row 8, unchanged from
+  [`lego-ldraw-export.md`](lego-ldraw-export.md) §3.3). No CLI is known to this
+  survey and its behaviour on our inline-geometry MPD is exactly what the open
+  settles.
+
+Record what each shows in a **§12** when run, mirroring §10's shape: what loaded,
+what rendered (or did not), which build and architecture, and screenshots if any.
+
+## 12. #69 run — LeoCAD renders it in full; §4.2's prediction is falsified — 2026-09-07
+
+Both GUI viewers were installed (§11). LeoCAD was then driven **from the shell**,
+so its half of #69 is measured rather than eyeballed; BrickLink Studio has no CLI
+(§3 row 8) and was opened by hand (§12.3).
+
+### 12.1 LeoCAD 25.09 — measured, and it renders the inline geometry
+
+Input: the checked-in canonical export
+`bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.mpd`, **434,496 bytes** — the
+newer two-tone build, not §8's 218 KB original: **7,528 type-3 triangles across 3
+inline `0 FILE` blocks, 2 type-1 placements**. The binary at
+`/Applications/LeoCAD.app/Contents/MacOS/LeoCAD` is **x86_64** (`lipo -archs`), i.e.
+runs under Rosetta 2 on Apple Silicon — the §4.2 "Intel-only" caveat holds, but it
+did run.
+
+Command (the §4.2 L399 form), wrapped in a 90 s `perl -e 'alarm'` watchdog:
+
+```sh
+/Applications/LeoCAD.app/Contents/MacOS/LeoCAD "$PWD/Brick-Stack.mpd" \
+  -i "$PWD/Brick-Stack-leocad.png" -w 1600 -h 1200
+```
+
+It printed `Saved '…/Brick-Stack-leocad.png'.`, exited **rc=0** in under a second,
+**needed no window server**, and wrote a 15,989-byte PNG. The render shows a
+**complete brick**: an upper **red** brick stacked on a lower **blue** brick (the
+two `place … color` placements), with **green studs** (the distinct baked stud
+colour, D-027 / §14.6) in a **2×5** grid on top. Clean shaded faces, correct
+two-tone, nothing empty.
+
+Independent cross-check: LeoCAD's render is the **same model** as bikar's own
+reference thumbnail `bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.iso.png`
+(produced by the three.js/`LDrawLoader` path of §§8–10) — same red-over-blue body,
+same green studs, same 2×5 grid, differing only in background and camera. Two
+independent readers of the inline geometry agree, which is stronger than either
+alone.
+
+### 12.2 What this settles
+
+**§4.2's headline prediction is falsified.** §4.2 (source-read of an earlier
+LeoCAD) held that LeoCAD models a file as *placed pieces*, would register our
+`0 FILE …dat` submodel by name and then **discard the raw triangles inside it**,
+yielding "an empty model — no error, no placeholder, no warning." The measured
+25.09 run does the opposite: it renders the inline mesh in full. Because the
+emitter deliberately keeps our block names out of all three LDraw part namespaces
+(UC18, `isLDrawPartNumber`), LeoCAD **cannot** be substituting a stock part — the
+pixels are our 7,528 triangles.
+
+The likely reasoning error in §4.2, flagged for a re-audit rather than asserted
+here: LeoCAD renders **loose primitive lines (type 2–5) that sit directly in a
+model/submodel** as that model's own geometry; "a submodel with zero *pieces*" is
+not "a submodel with zero *geometry*." §4.2 should be re-read against LeoCAD
+25.09's actual mesh path before its claim is trusted again. This is the §10-shape
+outcome — a first-hand run **confirms** LeoCAD is installable-and-runnable headless
+here and **falsifies** the empty-render claim.
+
+### 12.3 BrickLink Studio 2.26.8 — parses the parts, renders no solid
+
+Studio has no CLI (§3 row 8), so it was opened by hand: `File → Open` on the same
+`Brick-Stack.mpd`, then Zoom-to-Fit in top and front views.
+
+**Observed.** The file loaded with no crash and no error dialog. The status bar
+read **"2 total parts"** and the Step List's *Step 1* named both inline blocks
+verbatim — **`bikar-2x4-3p-5dea…`** and **`bikar-2x4-3p-028…`** — so Studio parsed
+the two `0 FILE` blocks and kept their names. But no brick appeared: the **front
+view showed nothing**, and the **top view, zoomed to fit, showed only a flat gray
+field of studs on a square grid** — no red/blue body, no green studs, **no colour
+at all**.
+
+**Inferred (kept separate from the above, per §10's discipline).** Studio resolves
+the part *names* but does not render our inline *geometry* as a solid: an empty
+front elevation plus a flat top-down stud field means whatever is drawn has no
+height and no body. From these two views alone I cannot separate (a) a degenerate
+flat footprint Studio built from the mesh from (b) Studio drawing nothing with the
+grid being its own build-plate backdrop — but either way the 7,528-triangle brick
+body does **not** come through, and neither does any baked colour. The economical
+reading: Studio is a BrickLink-**catalog** renderer, has no catalog geometry for a
+custom `bikar-2x4-3p-*` name (kept out of the catalog namespaces on purpose, UC18),
+and so lists the part but cannot draw it.
+
+**The pair, enumerated** — two readers, opposite behaviours on the identical file,
+both now measured rather than predicted:
+
+| Reader | Names resolved? | Inline mesh rendered? | Colour? |
+|---|---|---|---|
+| **LeoCAD 25.09** (§12.1–12.2) | yes | **yes — faithful**, matches bikar's own thumbnail | yes (red / blue / green) |
+| **BrickLink Studio 2.26.8** | yes (`bikar-2x4-3p-*` in Step 1) | **no** — front empty, top a flat gray stud field | no — all gray |
+
+So the §4.2 behaviour — *resolve the name, then fail to render the geometry* — is
+real, but it is **BrickLink Studio's**, not LeoCAD's. #69 is answered: a bikar
+brick export is faithfully readable by an LDraw **mesh** viewer (LeoCAD) and only
+nominally by a **catalog** editor (Studio, which names the part but draws no solid)
+— the honest thing to tell anyone taking one into a LEGO CAD tool.
