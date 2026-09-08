@@ -1,8 +1,11 @@
 ---
 name: git-and-gh-mechanics
-description: git/gh traps met across the orb repos — silent whole-add abort on a bad pathspec, denied amend+force-push, local --delete-branch failing while the remote merge succeeded, fresh branches off origin/main after squash, no-CI merges
-metadata:
+description: "git/gh traps met across the orb repos — silent whole-add abort on a bad pathspec, denied amend+force-push, local --delete-branch failing while the remote merge succeeded, fresh branches off origin/main after squash, no-CI merges"
+metadata: 
+  node_type: memory
   type: feedback
+  originSessionId: 332d42c3-dfe9-490a-9db7-883074290c91
+  modified: 2026-09-08T02:04:05.940Z
 ---
 
 - `git add a b c` with one nonexistent pathspec aborts the ENTIRE add silently; check the commit's "N files changed" before pushing (a PR once shipped without its docs).
@@ -12,6 +15,7 @@ metadata:
 - 3d-models has no CI, so a MERGEABLE/CLEAN PR merges immediately; a "red" check that ran 0 steps in ~2 s is the billing block, not a failure.
 - A rerun of a failed workflow reuses the definition at the original SHA; workflow fixes need a fresh run (`workflow_dispatch`).
 - Verify "merged" by sentinel content in the target branch, not by subject match, before deleting a branch or resetting a diverged local main.
+- A stale `core.worktree` on the MAIN repo (left pointing at a removed linked worktree) makes every git command there fail `fatal: this operation must be run in a work tree`; `git config --unset core.worktree` then `git pull` restores it (sacred-patterns, 2026-09-07). It read-only-verifies fine via `git log`/`show`, which don't need a work tree.
 
 **Why:** each produced a wrong "done" or a lost change once.
 

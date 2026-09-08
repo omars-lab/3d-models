@@ -1,8 +1,11 @@
 ---
 name: gate-verdict-checkout-independent
-description: A gate's verdict must not depend on which checkout runs it — linked worktrees sit one level below the siblings, and a self pin taken at branch HEAD does not survive a squash merge
-metadata:
+description: "A gate's verdict must not depend on which checkout runs it — linked worktrees sit one level below the siblings, and a self pin taken at branch HEAD does not survive a squash merge"
+metadata: 
+  node_type: memory
   type: feedback
+  originSessionId: 416aa36c-c7af-4cf1-91db-d2cdc9668841
+  modified: 2026-09-02T19:56:32.780Z
 ---
 
 A gate's verdict must not depend on which checkout runs it. Two ways it did in 3d-models
@@ -27,3 +30,17 @@ history, ships a self-test that builds a primary + worktree + sibling layout in 
 and asserts the same verdict from both. Do not reach for `BIKAR_DIR`/`USE_CASES_OK=1`
 from a worktree without first checking whether the gate, not the tree, is wrong. Related:
 [[3d-models-use-case-hook]], [[stacked-pr-stranding]].
+
+**Third gate brought under the rule, 2026-09-02 (#158 `2e93495`).** `site_graph.py`'s
+`cross_check_bikar` (the G6 mirror check) read bikar's `public-surface.json` from the
+**working tree** — so a peer session's stale bikar checkout (`public` where origin/main
+says `access`) made it false-fire G6 on every 3d-models commit. It caught me landing the
+truthful `access` mirror: the self-test itself went red against the stale sibling. Fixed
+the same way doc_pointers does it — read at the **published ref** (`git show
+origin/HEAD:packages/web/public-surface.json`, then `origin/main`/`origin/master`), env
+scrubbed of GIT_*; skip to MIRRORED-ONLY when no clone or ref is reachable. Its self-test
+gained a **G6 case**: a scratch bikar whose committed ref says `access` and whose working
+tree says `public`, requiring the read to return `access` (red before, green after). The
+value read for a cross-check must come from the authority (a ref), never a checkout —
+working-tree-OR-ref (doc_pointers' existence check) is fine for *does this path exist* but
+reintroduces drift for *what value does it hold*.
