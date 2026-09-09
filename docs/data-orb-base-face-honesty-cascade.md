@@ -70,27 +70,37 @@ and `qiyas` copies, byte-identical, checked by bikar hook 41 / `3d-models`
 
 4. **3d-models** — the T9 gate + build re-record land **together** (the gate is
    whole-tree and would block every commit until the build passes it):
-   - Bump `build/bikar-ref.txt` to the merged bikar commit.
-   - `make orbs` re-record; verify each wheelfield SVG carries `data-orb-unit` and no
-     `data-orb-base-face`, and every instrument PNG stays byte-identical by md5.
-   - Land the T9 base-face check in `.claude/gates/timelapse_gate.py` (prepared, see
-     §4), now **simplified**: `data-orb-base-face` is always a true face, so the
-     presence/range/subset check is universal with no surface-branching — wheelfield
-     cells carry none, so the subset check is trivially satisfied.
+   - `make orbs` re-record against the merged bikar (`bikar-stamp` rewrites the
+     gitignored `build/bikar-ref.txt` from the built checkout's HEAD); verify each
+     wheelfield breakdown scaffold now carries `data-orb-unit` and no
+     `data-orb-base-face`, while inscribed orbs keep `data-orb-base-face`.
+   - Land the T9 check in `.claude/gates/timelapse_gate.py`, **branched on orb family**
+     — the manifest's own `base` block is the discriminator (`base.faces == 0` ⟺ a
+     faceless wheelfield). A lifted orb (`base.faces > 0`) keeps the base-face
+     presence/range/subset check against `data-orb-base-face`; a wheelfield asks the
+     same three questions of `data-orb-unit`, and treats **any** `data-orb-base-face`
+     as a finding — a claim about a facet the orb does not have. (The earlier plan to
+     make the check *universal* on `data-orb-base-face` was dropped once the scaffold
+     itself was made honest: a wheelfield scaffold now stamps `data-orb-unit`, so the
+     gate must read the unit label, not treat its absence as trivially satisfied — see
+     [`docs/issues/base-face-honesty-scaffold-pivot.md`](issues/base-face-honesty-scaffold-pivot.md).)
    - Close #49.
 
 ## 4. Prepared work (do not lose; rebase onto latest at cascade time)
 
-- **bikar SVG half** — branch `feat/base-face-honest-attr` (bikar worktree
-  `bikar-t9scaffold`): renderer conditional split (`data-orb-unit` vs
-  `data-orb-base-face` keyed on a new `OrbViewScene.baseIndexKind`), kernel + ribbon
-  scene fields, CLI base-solid caller passes `'face'`, and the emitter tests. The full
-  bikar suite was green in the SVG-only state (gt untouched). At cascade time, rebase
-  onto current bikar master before adding step 3.2's gt-emitter change.
-- **3d-models T9 base-face check** — the strict `timelapse_gate.py` (137-line diff vs
-  its shipped form) is preserved as `data-orb-base-face-t9-gate.patch` beside this doc.
-  It is intentionally **not** committed to `timelapse_gate.py`: committed alone it
-  would block every 3d-models commit until `make orbs` re-records. It lands in step 4.
+- **bikar SVG half** — **landed as [#170](https://github.com/NaqshCoffee/bikar/pull/170)**
+  (merged to bikar `c2fa085`). The renderer conditional split (`data-orb-unit` vs
+  `data-orb-base-face` keyed on `OrbViewScene.baseIndexKind`) turned out to need **two
+  layers**, not one: the main polygon loop already read `baseIndexKind`, but the
+  breakdown base solid renders as the *scaffold underlay* (`scaffoldElements`), which
+  stamped `data-orb-base-face` unconditionally, and the `baseSolidScene` that feeds it
+  hardcoded `'face'`. Both had to become family-driven (`OrbViewPlan.baseIndexKind`,
+  derived per family in the CLI) or the drawn views said `unit` while the scaffold
+  under them still said `base-face`. See the issue doc for the diagnosis.
+- **3d-models T9 check** — lands in step 4 as a **family-branched** gate (not the
+  earlier universal-on-`data-orb-base-face` form, superseded by the honest scaffold).
+  `--self-test` grows a wheelfield fixture (`_make_wheelfield`) and three by-design
+  mutators — a claimed face, blanked units, an orphaned unit — that must each fire.
 
 ## 5. "On latest and greatest" — preconditions before starting
 
@@ -107,6 +117,11 @@ and `qiyas` copies, byte-identical, checked by bikar hook 41 / `3d-models`
   `data-orb-unit`, no `data-orb-base-face`; wheelfield gt omits `orb_base_face`.
 - qiyas: composites read exactly the pinned values (the instrument PNG never changed);
   the base-face round-trip stays quiet on wheelfield.
-- 3d-models: `make orbs` diff is only the intended attribute rename; every instrument
-  PNG byte-identical by md5; the simplified T9 gate passes on the re-recorded build and
-  still fails its recorded by-design case (a filler index `>= base.faces`).
+- 3d-models: after `make orbs`, every wheelfield breakdown scaffold carries
+  `data-orb-unit` and no `data-orb-base-face` (spot-checked DonutHexOrb: 0 base-face
+  across all frames), inscribed orbs keep `data-orb-base-face` (StarOrb base frame: 10).
+  The family-branched T9 gate passes on the re-recorded build (16 breakdowns, OK) and
+  its `--self-test` still fires every by-design case — inscribed (a filler index
+  `>= base.faces`, a label the scaffold never draws) and wheelfield (a claimed face,
+  blanked units, an orphaned unit). (`build/` is gitignored — the renders ship via
+  `make deploy`, so the verification is the gate on the fresh build, not a git diff.)

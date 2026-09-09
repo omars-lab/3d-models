@@ -109,6 +109,50 @@ the frames it claims to join:
       vouched for, so T8 buys the whole interpolation for the price of its two
       ends and a count — the same trade T4 makes for the tilt.
 
+Where T7 asks whether the pattern lands *inside* the outline, T9 asks whether
+it lands on the *right* face — a different axis, and one point-in-polygon
+cannot see:
+
+  T9  **A drawn cell names the thing the scaffold outlines, and the scaffold
+      is the set of things that exist.** Which "thing" depends on the orb
+      family, and the manifest's own `base` block says which — so the gate
+      reads the label that family emits rather than guessing from whatever
+      attribute it happens to find (D-052):
+        * An **inscribed** orb (`base.faces > 0`) has a base polyhedron. bikar
+          stamps every scaffold outline with `data-orb-base-face` — one path,
+          one face — and every drawn cell inherits the same label from the face
+          it was copied onto.
+        * A **round-pattern** orb (`base.faces == 0`) has no base solid at all.
+          Its scaffold is disc-site rings and its cells are wheelfield units, so
+          it stamps `data-orb-unit` instead: a wheel seated on a vertex touches
+          three faces and names none, and a `data-orb-base-face` on it would be
+          a claim about a facet the orb does not have. So on a round-pattern
+          frame *any* `data-orb-base-face` is itself the finding.
+      Within a family the labels the frames carry are two claims a viewer never
+      sees spelled out, and the gate holds them to each other:
+        * *Every thing a cell claims is a thing the scaffold draws.* the set of
+          indices the drawn cells name (P) is a subset of the set the scaffold
+          outlines (S). A cell labelled with a face — or a site — the scaffold
+          never drew is a copy placed where the solid has no facet (or the field
+          no site): the exact defect T7 waves through, because a mislabelled
+          cell sitting geometrically inside the right ring passes
+          point-in-polygon and fails here.
+        * *Every label is real.* for an inscribed orb both sets live in
+          `[0, base.faces)`; an index at or past the face count is a stale
+          renderer writing labels the manifest's own `base` block contradicts.
+          (A round-pattern orb declares no site count, so this narrows to the
+          no-face rule above.)
+        * *A scaffold that draws rings draws labels.* if a base or stage frame
+          carries scaffold outlines but not one label of its family's kind among
+          them, the dist that emitted it predates the stamp — the gate would
+          otherwise read an empty S and pass every later frame vacuously, so
+          the absence is the finding.
+      Strand and morph frames are exempt from the subset check the same way
+      they are exempt from T7's containment: a drawn ribbon spans many faces
+      and carries `data-strand`, not a single base face, and a morph frame is
+      a bend, not a placement. T9 reads only the labels the cell frames stamp,
+      so it needs no geometry and no source — the marks are the whole claim.
+
 **The by-design failure this gate shipped with, and why it is recorded here.**
 On the tree this gate was written against, T3 and T5 both failed on
 Maclado-9-Overlap: its bands cross rather than tile, the projector refuses to
@@ -226,6 +270,16 @@ STAGE_KINDS = {"base", "element", "repeat", "strand", "morph", "complete"}
 # a rule about bytes deciding what a reader gets to see.
 SCAFFOLD_MARK = "data-orb-scaffold"
 LIMB_MARK = "data-orb-silhouette"
+# The two labels T9 reads, one per orb family. An inscribed orb has a base
+# polyhedron, so bikar stamps `data-orb-base-face` on its scaffold outline and
+# on every cell copied from it — one path, one face. A round-pattern orb has no
+# base solid at all (`base.faces == 0`): its scaffold is disc-site rings and its
+# cells are wheelfield UNITS, stamped `data-orb-unit`, because a wheel seated on
+# a vertex touches three faces and names none. The manifest's `base` block says
+# which family a frame belongs to, so the gate reads the label that family emits
+# — it does not guess from the attribute it happens to find (D-052).
+BASE_FACE_MARK = "data-orb-base-face"
+UNIT_MARK = "data-orb-unit"
 
 FILL_RE = re.compile(r'fill="([^"]*)"')
 VIEWBOX_RE = re.compile(r'viewBox="([^"]*)"')
@@ -251,6 +305,11 @@ CONTAINMENT_SLACK_MM = 0.01
 PATH_RE = re.compile(r"<path\b([^>]*)>")
 D_RE = re.compile(r'\sd="([^"]+)"')
 COORD_RE = re.compile(r"-?\d+\.?\d*")
+# T9 reads the label bikar stamps on scaffold outlines and on the cells copied
+# from them — a base face for an inscribed orb, a wheelfield unit for a
+# round-pattern one — where T7 reads only geometry.
+BASE_FACE_RE = re.compile(r'data-orb-base-face="(\d+)"')
+UNIT_RE = re.compile(r'data-orb-unit="(\d+)"')
 
 
 def _polygons(svg: str) -> tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]:
@@ -270,6 +329,40 @@ def _polygons(svg: str) -> tuple[list[list[tuple[float, float]]], list[list[tupl
             if fill and fill.group(1).lower() not in ("none", "#ffffff"):
                 drawn.append(ring)
     return scaffold, drawn
+
+
+def _labelled_rings(svg: str, label_re: re.Pattern[str]) -> tuple[set[int], set[int], int]:
+    """(indices the scaffold outlines, indices the drawn cells claim, scaffold ring count).
+
+    `label_re` is the family's index attribute — `BASE_FACE_RE` for an inscribed
+    orb, `UNIT_RE` for a round-pattern one. The scaffold rings are counted even
+    when unlabelled so T9 can tell a stale dist that draws outlines without
+    stamping them from an honest empty frame.
+    """
+    scaffold: set[int] = set()
+    drawn: set[int] = set()
+    scaffold_rings = 0
+    for attrs in PATH_RE.findall(svg):
+        label = label_re.search(attrs)
+        if "data-orb-scaffold" in attrs:
+            scaffold_rings += 1
+            if label:
+                scaffold.add(int(label.group(1)))
+        elif label:
+            fill = FILL_RE.search(attrs)
+            if fill and fill.group(1).lower() not in ("none", "#ffffff"):
+                drawn.add(int(label.group(1)))
+    return scaffold, drawn, scaffold_rings
+
+
+def _base_faces(svg: str) -> tuple[set[int], set[int], int]:
+    """T9's inscribed-orb reading: the `data-orb-base-face` indices."""
+    return _labelled_rings(svg, BASE_FACE_RE)
+
+
+def _base_units(svg: str) -> tuple[set[int], set[int], int]:
+    """T9's round-pattern reading: the `data-orb-unit` indices."""
+    return _labelled_rings(svg, UNIT_RE)
 
 
 def _inside(pt: tuple[float, float], ring: list[tuple[float, float]]) -> bool:
@@ -439,6 +532,83 @@ def check_orb(d: Path) -> list[str]:  # noqa: C901 — one rule per block, read 
                         "to contain it, so the outline is not the surface the pattern "
                         "is on"
                     )
+
+    # --- T9: a drawn cell names a base face the scaffold draws --------------
+    # T7 asks whether the pattern lands inside the outline; T9 asks whether it
+    # lands on the right face. A cell drawn geometrically inside the correct
+    # ring but *labelled* with a face the scaffold never outlined passes
+    # point-in-polygon and is caught only here — the two rules read different
+    # axes of the same claim. The labels are the whole test: no geometry, no
+    # source, just the marks bikar stamps.
+    #
+    # Which mark, though, depends on the orb family, and the manifest's own base
+    # block says which (D-052). An inscribed orb has a base polyhedron
+    # (`base.faces > 0`), so its scaffold and cells carry `data-orb-base-face`
+    # and the checks read faces. A round-pattern orb has no base solid at all
+    # (`base.faces == 0`): its scaffold is disc-site rings and its cells are
+    # wheelfield units carrying `data-orb-unit`, so the same three questions are
+    # asked of units instead — and a `data-orb-base-face` anywhere on it is
+    # itself the finding, a claim about a facet the orb does not have.
+    base_block = m["base"] if isinstance(m.get("base"), dict) else None
+    face_count = base_block.get("faces") if base_block else None
+    wheelfield = face_count == 0
+    for f in frames:
+        if f["kind"] in ("morph", "strand"):
+            continue  # a ribbon spans many faces; a bend is not a placement
+        svg = _read(d / f["file"])
+        if wheelfield:
+            # A faceless field must name no face. Both S and P are read so a
+            # stray label on either the scaffold or a drawn cell is caught.
+            named_faces, drawn_faces, _ = _base_faces(svg)
+            stray = sorted(named_faces | drawn_faces)
+            if stray:
+                findings.append(
+                    f"{orb}: {f['file']} stamps {BASE_FACE_MARK} on face(s) "
+                    f"{', '.join(map(str, stray))}, but the manifest's base block has no "
+                    "faces — a wheelfield seats units on a sphere and names units "
+                    f"({UNIT_MARK}), never a face it does not have"
+                )
+            s_units, p_units, unit_rings = _base_units(svg)
+            if unit_rings and not s_units:
+                findings.append(
+                    f"{orb}: {f['file']} draws {unit_rings} scaffold outline(s) but none "
+                    f"carry {UNIT_MARK} — the dist that emitted it predates the unit "
+                    "stamp, so the gate cannot tell which sites the field has"
+                )
+                continue  # S is unknowable; the subset below reads it
+            if s_units:
+                orphan = sorted(p_units - s_units)
+                if orphan:
+                    findings.append(
+                        f"{orb}: {f['file']} draws cells on site(s) "
+                        f"{', '.join(map(str, orphan))} the scaffold never outlines — a "
+                        "wheel placed where the field has no site"
+                    )
+            continue
+        s_faces, p_faces, rings = _base_faces(svg)
+        if rings and not s_faces:
+            findings.append(
+                f"{orb}: {f['file']} draws {rings} scaffold outline(s) but none carry "
+                f"{BASE_FACE_MARK} — the dist that emitted it predates the stamp, so "
+                "the gate cannot tell which faces the solid has"
+            )
+            continue  # S is unknowable; the checks below both read it
+        if face_count is not None:
+            over = sorted(i for i in s_faces | p_faces if i >= face_count)
+            if over:
+                findings.append(
+                    f"{orb}: {f['file']} labels base face(s) "
+                    f"{', '.join(map(str, over))} on a {face_count}-face solid — an "
+                    "index past the face count the manifest's own base block declares"
+                )
+        if s_faces:
+            orphan = sorted(p_faces - s_faces)
+            if orphan:
+                findings.append(
+                    f"{orb}: {f['file']} draws cells on base face(s) "
+                    f"{', '.join(map(str, orphan))} the scaffold never outlines — a copy "
+                    "placed on a facet that is not on this solid"
+                )
 
     # --- T3: the story ends on the shipped drawing --------------------------
     last = frames[-1]
@@ -705,7 +875,7 @@ _DONE = _limbed(_frame_svg(_PATTERN))
 # would pass the rule by having no geometry rather than by satisfying it.
 _FACE = "M-40,-40 L40,-40 L40,40 L-40,40 Z"
 _UNIT = "M-20,-20 L20,-20 L20,20 L-20,20 Z"
-_SCAFFOLD = f'  <path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" />\n'
+_SCAFFOLD = f'  <path d="{_FACE}" fill="none" stroke="#c8c8c8" data-orb-scaffold="true" data-orb-base-face="0" />\n'
 _BARE = _limbed(_frame_svg(_SCAFFOLD))
 # The last stage frame wears the just-placed unit in gallery gold and marks it
 # `data-orb-highlight` — the two things J1 neutralises to reach the first morph
@@ -713,7 +883,7 @@ _BARE = _limbed(_frame_svg(_SCAFFOLD))
 _HELD = _limbed(
     _frame_svg(
         _SCAFFOLD
-        + f'  <path d="{_UNIT}" fill="#c9782e" stroke="#333333" data-orb-highlight="true" />\n'
+        + f'  <path d="{_UNIT}" fill="#c9782e" stroke="#333333" data-orb-base-face="0" data-orb-highlight="true" />\n'
     )
 )
 _SPUN = _limbed(
@@ -970,7 +1140,10 @@ def _blend_an_endpoint(d: Path) -> None:
 
 def _drop_a_cell_mid_morph(d: Path) -> None:
     p = d / "TestOrb.vertex-3.morph.001.svg"
-    unit = f'  <path d="{_UNIT}" fill="#8a8a8a" stroke="#333333" />\n'
+    # The morph unit inherits the base-face label the stage frame stamped (J1
+    # neutralises the highlight, not the identity), so the literal must carry it
+    # or the replace matches nothing and the drop never happens.
+    unit = f'  <path d="{_UNIT}" fill="#8a8a8a" stroke="#333333" data-orb-base-face="0" />\n'
     p.write_text(_read(p).replace(unit, ""), encoding="utf8")
 
 
@@ -1030,6 +1203,101 @@ def _make_weave(d: Path) -> None:
     _edit_manifest(d, mutate)
 
 
+def _orphan_a_cell(d: Path) -> None:
+    # The unit is relabelled onto a face the scaffold never outlines. It can
+    # still sit geometrically inside the right ring, so T7 waves it through;
+    # T9 reads the label and sees a copy placed on a facet not on this solid.
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(
+        _read(p).replace(
+            'data-orb-base-face="0" data-orb-highlight',
+            'data-orb-base-face="3" data-orb-highlight',
+        ),
+        encoding="utf8",
+    )
+
+
+def _label_past_the_solid(d: Path) -> None:
+    # The base scaffold labels a face index the manifest's own 4-face base block
+    # cannot have — a stale renderer stamping numbers the solid contradicts.
+    p = d / "TestOrb.vertex-3.base.000.svg"
+    p.write_text(_read(p).replace('data-orb-base-face="0"', 'data-orb-base-face="9"'), encoding="utf8")
+
+
+def _strip_the_base_faces(d: Path) -> None:
+    # The scaffold still draws its rings but carries no base-face label — the
+    # dist predates the stamp, and reading an empty S would pass every later
+    # frame vacuously, so the absence is the finding.
+    p = d / "TestOrb.vertex-3.base.000.svg"
+    p.write_text(_read(p).replace(' data-orb-base-face="0"', ""), encoding="utf8")
+
+
+def _make_wheelfield(d: Path) -> None:
+    # Reshape the inscribed fixture into a round-pattern (wheelfield) orb: no
+    # base polyhedron at all (base.faces == 0), so the scaffold rings and the
+    # drawn cells are wheelfield UNITS — data-orb-unit, never data-orb-base-face
+    # — and no wrap morph, because a faceless sphere has no flat end to bend
+    # from. Asserted CLEAN (want=None): this is the honest wheelfield the D-052
+    # fix produces, and the cell-only inscribed fixture — where every scaffold
+    # carries a base face — could never exercise the unit branch.
+    for f in d.glob("*.morph.*.svg"):
+        f.unlink()
+    for name in (
+        "TestOrb.vertex-3.base.000.svg",
+        "TestOrb.vertex-3.element.001.svg",
+        "TestOrb.vertex-3.complete.000.svg",
+    ):
+        p = d / name
+        p.write_text(_read(p).replace("data-orb-base-face=", "data-orb-unit="), encoding="utf8")
+
+    def mutate(m):
+        m["frames"] = [f for f in m["frames"] if f["kind"] != "morph"]
+        m["morph"] = None
+        m["base"] = {"faces": 0, "vertices": 0, "sides": []}
+        m["flat"] = {"file": "TestOrb.flat.svg", "relation": "preview"}
+    _edit_manifest(d, mutate)
+
+
+def _claim_a_face_on_a_wheelfield(d: Path) -> None:
+    # A wheelfield frame stamps data-orb-base-face — a claim about a facet on a
+    # solid the manifest says has zero faces. The honest attribute is the unit.
+    _make_wheelfield(d)
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(
+        _read(p).replace(
+            'data-orb-unit="0" data-orb-highlight',
+            'data-orb-base-face="0" data-orb-highlight',
+        ),
+        encoding="utf8",
+    )
+
+
+def _blank_the_wheelfield_units(d: Path) -> None:
+    # The scaffold still draws its site rings but carries no data-orb-unit — a
+    # dist that predates the unit stamp; reading an empty S would pass every
+    # later frame vacuously, exactly as the base-face absence does, so the
+    # absence is the finding.
+    _make_wheelfield(d)
+    p = d / "TestOrb.vertex-3.base.000.svg"
+    p.write_text(_read(p).replace(' data-orb-unit="0"', ""), encoding="utf8")
+
+
+def _orphan_a_wheelfield_unit(d: Path) -> None:
+    # The wheel is relabelled onto a site the scaffold never outlines. It can
+    # still sit geometrically inside the right ring, so T7 waves it through;
+    # T9 reads the label and sees a wheel placed where the field has no site —
+    # the round-pattern twin of _orphan_a_cell.
+    _make_wheelfield(d)
+    p = d / "TestOrb.vertex-3.element.001.svg"
+    p.write_text(
+        _read(p).replace(
+            'data-orb-unit="0" data-orb-highlight',
+            'data-orb-unit="3" data-orb-highlight',
+        ),
+        encoding="utf8",
+    )
+
+
 CASES = [
     ("T1 a missing manifest key", _drop_key, "has no weave"),
     ("T2 a frame from a different projection", _resize_a_frame, "changes size mid-story"),
@@ -1045,6 +1313,13 @@ CASES = [
     ("T3 the ending's limb is a circle but not the right one", _resize_the_ending_limb, "wearing the limb"),
     ("T3 the instrument view starts drawing the limb", _limb_the_shipped_view, "already draws the limb"),
     ("T7 a unit that bursts through the outline", _burst_the_outline, "overhangs the base solid"),
+    ("T9 a cell labelled with a face the scaffold never draws", _orphan_a_cell, "the scaffold never outlines"),
+    ("T9 a base-face label past the face count", _label_past_the_solid, "past the face count"),
+    ("T9 a scaffold that draws rings but stamps no labels", _strip_the_base_faces, "none carry data-orb-base-face"),
+    ("T9 a faceless wheelfield is a coherent absence of faces", _make_wheelfield, None),
+    ("T9 a wheelfield frame claims a base face it cannot have", _claim_a_face_on_a_wheelfield, "never a face it does not have"),
+    ("T9 a wheelfield scaffold draws sites but stamps no units", _blank_the_wheelfield_units, "none carry data-orb-unit"),
+    ("T9 a wheel placed on a site the field never outlines", _orphan_a_wheelfield_unit, "the field has no site"),
     ("T4 the tilt lands beside the orbit", _miss_the_orbit, "does not land on the orbit"),
     ("T4 entersAtIndex past the orbit", _enter_off_the_end, "outside a 2-frame orbit"),
     ("T5 a named file that is not there", _lose_a_named_file, "not on disk"),
