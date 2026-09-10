@@ -1,5 +1,15 @@
 # Kickoff — make the orb breakdown pages teach construction (task #81)
 
+> **SHIPPED — do not paste this into a new session to build.** The construction the
+> kickoff below hands off is merged and deployed. The teaching fixes it calls for
+> (shaded depth-cued spheres, the flat pattern shown, the spin reading as a turning
+> ball) landed and were verified on the live gallery across the cell, cell+strand and
+> strand-only families. Merges: the restyle + five-beat arc, the flat→sphere wrap morph
+> (bikar #149, 3d-models #148, gate T8), round-pattern orb breakdowns (bikar #158,
+> 3d-models #159, index 16), and base-face honesty (bikar #170 `c2fa085`, 3d-models #170
+> `19e885d`, gate T9, D-052). This file's `task #81` is a fresh-snapshot id, unrelated to
+> `done.md`'s #81. Kept as the historical brief — see plan.md §3 for the shipped record.
+
 Paste the block below into a **clean new session** (fresh, not a fork — the cascade
 context that produced this doc is irrelevant to the build, and this is a multi-day
 effort across two repos). It frames the goal and hands off the non-obvious
