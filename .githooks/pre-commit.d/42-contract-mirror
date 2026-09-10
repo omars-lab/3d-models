@@ -1,0 +1,27 @@
+#!/bin/sh
+# Contract-mirror gate (.claude/gates/contract_mirror.py). sacred-patterns owns
+# the DSL metadata contract; bikar and qiyas each vendor a **prose** copy of
+# dsl-metadata-contract.md carrying a `Mirrored canonical version:` header.
+# Unlike the JSON schemas (byte-identical, guarded by 41-schema-mirror), the
+# prose is hand-maintained, and nothing compared its header to canonical — so a
+# mirror could sit a full amendment behind (v1.5 while canonical accepted v1.6)
+# with every check green. This reads canonical and both mirrors at each repo's
+# default branch (origin/HEAD symref) and names any mirror behind or dangling.
+#
+# wholesale: make validate-contract-mirror
+#
+# Whole-tree, not --staged: the drift is between three siblings, not a file
+# staged in this repo. Same worktree caveat as 41-schema-mirror: `gh-pages`
+# carries `.githooks` and not `.claude`.
+# Override once: CONTRACT_MIRROR_OK=1 git commit
+[ -n "$CONTRACT_MIRROR_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the contract-mirror gate" >&2
+  exit 1
+fi
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/contract_mirror.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no contract-mirror gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"
