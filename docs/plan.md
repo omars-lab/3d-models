@@ -166,3 +166,10 @@ holds the merge closing checklist.
   printer-held and lives in explorer doc §6.5, not the §2 queue (§1 objective 3).
 - §3's newest row is this file's own PR only after it merges — the sha is filled in
   by that PR, never predicted.
+- The §2→§3 move is enforced, not remembered (was task #50): hook 43
+  (`make validate-plan-sync`, gate `.claude/gates/plan_sync.py`) fails a commit that
+  moves a row **into** 🟢 without adding a §3 row, and holds every §3 `(2.N)` citation
+  to a real §2 row. It checks the *transition*, not the resting state: the naive
+  "every 🟢 row appears in §3" form was measured at ~63% false alarms (aggregates like
+  §2.2, decomposed sub-rows, descriptive §3 rows) and deliberately not shipped — the
+  measurement is in the gate's docstring.

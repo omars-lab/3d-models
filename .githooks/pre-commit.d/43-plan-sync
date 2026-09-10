@@ -1,0 +1,32 @@
+#!/bin/sh
+# Plan-sync gate (.claude/gates/plan_sync.py). docs/plan.md is the index of
+# record: §2 is the priority queue (one numbered row per item, with a State
+# mark), §3 is the shipped log (each row citing the queue item it discharges).
+# They must move together — the rule that was task #50, "every PR that moves a
+# §2 row updates §2/§3 in the same PR", remembered by hand until this hook.
+#
+# wholesale: make validate-plan-sync
+#
+# --pre-commit, NOT whole-file: the sync rule is a claim about a *transition* —
+# a row crossing into 🟢 in this very commit — which only a diff (staged vs
+# HEAD) can see. The naive resting-state form ("every 🟢 row appears in §3")
+# was measured at ~63% false alarms on the live file (aggregates, decomposed
+# sub-rows, descriptive §3 rows), the "cries wolf and gets switched off" shape
+# this repo refuses to ship. Over the whole tree there is no diff, so
+# `make validate-plan-sync` runs the resting invariants (PS1/PS2) only; the
+# transition check (PS3) is a no-op there by construction. Full rationale and
+# the measurement live in the gate's docstring.
+# Override once, for a deliberate exception: PLAN_SYNC_OK=1 git commit
+[ -n "$PLAN_SYNC_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the plan-sync gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 37-counts and 41-schema-mirror: `gh-pages` carries
+# `.githooks` and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/plan_sync.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no plan-sync gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE" --pre-commit

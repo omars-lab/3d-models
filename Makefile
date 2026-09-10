@@ -673,3 +673,16 @@ validate-status: status-manifest
 validate-contract-mirror:
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/contract_mirror.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/contract_mirror.py
+
+# Plan-sync gate (hook 43): docs/plan.md's §2 priority queue and §3 shipped log
+# must move together. PS1 (every §3 `(2.N)` citation resolves to a §2 row) and
+# PS2 (every §2 row carries a legal state mark) are resting invariants checked
+# here over the whole tree; PS3 (a row moving into 🟢 requires a new §3 row in
+# the same commit) is a diff and only the pre-commit hook sees it — see the
+# gate docstring for why the resting form of the sync rule cries wolf at ~63%.
+# Self-test first (a two-revision fixture: clean passes, every by-design failure
+# fires), then the real resting check. Appended after validate-contract-mirror
+# for the same anchor reason as validate-schema-mirror.
+validate-plan-sync:
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/plan_sync.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/plan_sync.py
