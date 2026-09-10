@@ -1,5 +1,14 @@
 # Make the orb breakdown pages teach construction — audit + plan
 
+> **SHIPPED — historical audit + plan, not live work.** Every fix this plan specifies is
+> merged and deployed; the audit findings below (A1 flat gray blob, A2 zero depth cues,
+> the spin reading as a wobbling mandala) were verified fixed on the live gallery. Merges:
+> the restyle + five-beat arc, the wrap morph (bikar #149, 3d-models #148, T8), round-pattern
+> breakdowns (bikar #158, 3d-models #159), and base-face honesty (bikar #170 `c2fa085`,
+> 3d-models #170 `19e885d`, T9, D-052). The "NOT in v1" deferred list at the end is partly
+> superseded (the wrap morph shipped). Kept as the record of what was measured and why —
+> see plan.md §3.
+
 ## Context
 
 The breakdown page shipped (bikar #110, 3d-models #84) with build stages, a 36-frame
