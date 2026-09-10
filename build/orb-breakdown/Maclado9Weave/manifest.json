@@ -1042,6 +1042,7 @@
     ],
     "entersAtIndex": 31
   },
+  "morph": null,
   "turntableRepresentation": "ribbons",
   "base": {
     "faces": 12,

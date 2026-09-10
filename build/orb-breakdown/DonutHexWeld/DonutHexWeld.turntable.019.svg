@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.00 -40.00 80.00 80.00" width="80" height="80" data-orb-view="turntable-19" data-projection="spherical">
+  <rect x="-40.00" y="-40.00" width="80.00" height="80.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="30.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="30.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
+  <path d="M29.7288,-4.0178 L29.8334,-0.5214 L28.4894,-1.5523 L28.2424,-9.8126 L29.7288,-4.0178 Z" fill="#484848" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="4" data-orb-view="turntable-19" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M29.8334,-0.5214 L29.7288,3.7224 L28.2424,8.4739 L28.4894,-1.5523 L29.8334,-0.5214 Z" fill="#4a4a4a" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="4" data-orb-view="turntable-19" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  </g>
+</svg>

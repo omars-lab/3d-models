@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "generated": "2026-09-10",
+  "source": "build/bikar-ref.txt, .claude/skills/maintain-use-cases/use-cases.md as_of, gh-pages tip — via build/status_manifest.py",
+  "bikar_ref": {
+    "sha": "eaed8a77e71a9cfcf093dcad67da9d526efcb28c",
+    "short": "eaed8a7",
+    "ref": "HEAD",
+    "dirty": false
+  },
+  "as_of": {
+    "3d-models": "1ee3e9608b14ec72a181a549ecd07b95e7f702db",
+    "bikar": "1b2098ec75533392497c6760708de31fac99ca51",
+    "qiyas": "95dd89321111dc71c9c4032ee2f8551be2724eb4"
+  },
+  "deploy": {
+    "sha": "7d0ff4e9157807420c4dfd45b6fedf87418bae5d",
+    "short": "7d0ff4e",
+    "date": "2026-08-20",
+    "from_master": "c40dbc7"
+  }
+}

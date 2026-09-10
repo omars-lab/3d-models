@@ -298,6 +298,72 @@
       ]
     },
     {
+      "file": "WeaveOrb.vertex-5.morph.000.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 0,
+      "label": "bending onto the sphere, 1 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.morph.001.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 1,
+      "label": "bending onto the sphere, 2 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.morph.002.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 2,
+      "label": "bending onto the sphere, 3 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.morph.003.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 3,
+      "label": "bending onto the sphere, 4 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.morph.004.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 4,
+      "label": "bending onto the sphere, 5 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "WeaveOrb.vertex-5.morph.005.svg",
+      "view": "vertex-5",
+      "kind": "morph",
+      "index": 5,
+      "label": "bending onto the sphere, 6 of 6",
+      "polygons": 40,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
       "file": "WeaveOrb.vertex-5.complete.000.svg",
       "view": "vertex-5",
       "kind": "complete",
@@ -791,6 +857,52 @@
       }
     ],
     "entersAtIndex": 27
+  },
+  "morph": {
+    "frames": [
+      {
+        "file": "WeaveOrb.vertex-5.morph.000.svg",
+        "view": "vertex-5",
+        "index": 0,
+        "t": 0,
+        "polygons": 40
+      },
+      {
+        "file": "WeaveOrb.vertex-5.morph.001.svg",
+        "view": "vertex-5",
+        "index": 1,
+        "t": 0.2,
+        "polygons": 40
+      },
+      {
+        "file": "WeaveOrb.vertex-5.morph.002.svg",
+        "view": "vertex-5",
+        "index": 2,
+        "t": 0.4,
+        "polygons": 40
+      },
+      {
+        "file": "WeaveOrb.vertex-5.morph.003.svg",
+        "view": "vertex-5",
+        "index": 3,
+        "t": 0.6,
+        "polygons": 40
+      },
+      {
+        "file": "WeaveOrb.vertex-5.morph.004.svg",
+        "view": "vertex-5",
+        "index": 4,
+        "t": 0.8,
+        "polygons": 40
+      },
+      {
+        "file": "WeaveOrb.vertex-5.morph.005.svg",
+        "view": "vertex-5",
+        "index": 5,
+        "t": 1,
+        "polygons": 40
+      }
+    ]
   },
   "turntableRepresentation": "ribbons",
   "base": {

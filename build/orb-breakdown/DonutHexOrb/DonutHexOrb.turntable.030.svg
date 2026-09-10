@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.00 -40.00 80.00 80.00" width="80" height="80" data-orb-view="turntable-30" data-projection="spherical">
+  <rect x="-40.00" y="-40.00" width="80.00" height="80.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="30.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="30.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
+  <path d="M-11.6869,-8.5930 L-14.2497,-4.8696 L-19.4673,-5.0139 L-13.4124,-13.8105 L-11.6869,-8.5930 Z" fill="#7c7c7c" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="0" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-14.2497,-4.8696 L-12.5791,-0.8556 L-15.5203,4.4695 L-19.4673,-5.0139 L-14.2497,-4.8696 Z" fill="#7e7e7e" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="1" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-7.4533,-8.3024 L-11.6869,-8.5930 L-13.4124,-13.8105 L-3.4106,-13.1239 L-7.4533,-8.3024 Z" fill="#808080" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="2" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-12.5791,-0.8556 L-14.2497,-4.8696 L-11.6869,-8.5930 L-7.4533,-8.3024 L-5.7827,-4.2883 L-8.3455,-0.5649 L-12.5791,-0.8556 Z" fill="#848484" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="6" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-12.5791,-0.8556 L-8.3455,-0.5649 L-5.5185,5.1562 L-15.5203,4.4695 L-12.5791,-0.8556 Z" fill="#848484" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="4" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-5.7827,-4.2883 L-7.4533,-8.3024 L-3.4106,-13.1239 L0.5364,-3.6405 L-5.7827,-4.2883 Z" fill="#868686" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="5" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M-8.3455,-0.5649 L-5.7827,-4.2883 L0.5364,-3.6405 L-5.5185,5.1562 L-8.3455,-0.5649 Z" fill="#888888" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="6" data-sides="4" data-orb-view="turntable-30" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  </g>
+</svg>

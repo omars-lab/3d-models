@@ -744,6 +744,7 @@
     ],
     "entersAtIndex": 31
   },
+  "morph": null,
   "turntableRepresentation": "cells",
   "base": {
     "faces": 12,

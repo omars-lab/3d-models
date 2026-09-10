@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.00 -40.00 80.00 80.00" width="80" height="80" data-orb-view="turntable-10" data-projection="spherical">
+  <rect x="-40.00" y="-40.00" width="80.00" height="80.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="30.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="30.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
+  </g>
+</svg>

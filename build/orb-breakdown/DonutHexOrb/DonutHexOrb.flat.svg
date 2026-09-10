@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110.00 -110.00 220.00 220.00" width="220" height="220">
+  <rect x="-110.00" y="-110.00" width="220.00" height="220.00" fill="#dfe3e5" pointer-events="none" />
+  <path d="M40.0000,0.0000 L20.0000,-34.6410 L50.0000,-86.6025 L100.0000,0.0000 L40.0000,0.0000 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="0" data-sides="4" data-layer="0" data-ring="1" data-angle-index="3" />
+  <path d="M20.0000,-34.6410 L40.0000,0.0000 L20.0000,34.6410 L-20.0000,34.6410 L-40.0000,-0.0000 L-20.0000,-34.6410 L20.0000,-34.6410 Z" fill="none" fill-opacity="0" stroke="none" data-face-index="1" data-sides="6" data-layer="0" data-ring="0" data-angle-index="0" />
+  <path d="M20.0000,-34.6410 L-20.0000,-34.6410 L-50.0000,-86.6025 L50.0000,-86.6025 L20.0000,-34.6410 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="2" data-sides="4" data-layer="0" data-ring="1" data-angle-index="4" />
+  <path d="M-20.0000,-34.6410 L-40.0000,-0.0000 L-100.0000,-0.0000 L-50.0000,-86.6025 L-20.0000,-34.6410 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="3" data-sides="4" data-layer="0" data-ring="1" data-angle-index="5" />
+  <path d="M-40.0000,-0.0000 L-20.0000,34.6410 L-50.0000,86.6025 L-100.0000,-0.0000 L-40.0000,-0.0000 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="4" data-sides="4" data-layer="0" data-ring="1" data-angle-index="0" />
+  <path d="M-20.0000,34.6410 L20.0000,34.6410 L50.0000,86.6025 L-50.0000,86.6025 L-20.0000,34.6410 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="5" data-sides="4" data-layer="0" data-ring="1" data-angle-index="1" />
+  <path d="M20.0000,34.6410 L40.0000,0.0000 L100.0000,0.0000 L50.0000,86.6025 L20.0000,34.6410 Z" fill="none" fill-opacity="0" stroke="none" class="weld_ring" data-face-class="weld_ring" data-face-index="6" data-sides="4" data-layer="0" data-ring="1" data-angle-index="2" />
+  <g data-layer="-1" style="display:none">
+    <circle cx="0.0000" cy="0.0000" r="100.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="0" data-ring="0" data-circle-name="C0" />
+    <circle cx="0.0000" cy="0.0000" r="40.0000" fill="none" stroke="#333333" stroke-width="1.5" data-circle-index="1" data-ring="0" data-circle-name="C1" />
+  </g>
+  <path d="M40.0000,0.0000 L20.0000,-34.6410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="0" class="weld_ring" />
+  <path d="M20.0000,-34.6410 L50.0000,-86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="1" class="weld_ring" />
+  <path d="M50.0000,-86.6025 L100.0000,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="2" class="weld_ring" />
+  <path d="M100.0000,0.0000 L40.0000,0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="3" class="weld_ring" />
+  <path d="M40.0000,0.0000 L20.0000,34.6410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="4" />
+  <path d="M20.0000,34.6410 L-20.0000,34.6410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="5" />
+  <path d="M-20.0000,34.6410 L-40.0000,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="6" />
+  <path d="M-40.0000,-0.0000 L-20.0000,-34.6410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="7" />
+  <path d="M-20.0000,-34.6410 L20.0000,-34.6410" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="8" />
+  <path d="M-20.0000,-34.6410 L-50.0000,-86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="9" class="weld_ring" />
+  <path d="M-50.0000,-86.6025 L50.0000,-86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="10" class="weld_ring" />
+  <path d="M-40.0000,-0.0000 L-100.0000,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="11" class="weld_ring" />
+  <path d="M-100.0000,-0.0000 L-50.0000,-86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="12" class="weld_ring" />
+  <path d="M-20.0000,34.6410 L-50.0000,86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="13" class="weld_ring" />
+  <path d="M-50.0000,86.6025 L-100.0000,-0.0000" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="14" class="weld_ring" />
+  <path d="M20.0000,34.6410 L50.0000,86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="15" class="weld_ring" />
+  <path d="M50.0000,86.6025 L-50.0000,86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="16" class="weld_ring" />
+  <path d="M100.0000,0.0000 L50.0000,86.6025" fill="none" stroke="#333333" stroke-width="1.5" stroke-linecap="round" data-edge-index="17" class="weld_ring" />
+</svg>

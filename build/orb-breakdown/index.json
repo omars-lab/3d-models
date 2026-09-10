@@ -1,6 +1,8 @@
 {
   "orbs": [
     "DodecaOrb",
+    "DonutHexOrb",
+    "DonutHexWeld",
     "HankinOrb",
     "Maclado9",
     "Maclado9Overlap",

@@ -1,0 +1,47 @@
+# Donut-Hex-Weld — two round patterns at adjacent sites, fused (round-pattern orb, v1).
+#
+# WHAT THIS IS. The whole round-pattern feature in miniature: two donut hexagons
+# (see Donut-Hex-Orb.bkr for the disc) placed at two EDGE-ADJACENT dodecahedron
+# vertices, each aiming a rim contact at the other. The `sites 2` clause asks the
+# rule for its adjacent pair; a shared VertexPool fuses their facing tips into one
+# welded vertex. That single shared vertex is the proof — it is what "the discs
+# touch and weld" means, made concrete.
+#
+# WHAT THE STUDIO OVERLAY SAYS. `2 sites · 1 weld`. Two discs placed; one pair of
+# contacts fused. Measurements, never a verdict — a reviewer confirms the weld by
+# eye; the numbers just report what the placer counted.
+#
+# ON WATERTIGHTNESS. Each cap closes on its own (capsWatertight = true). Their
+# UNION is deliberately a non-manifold pinch at the shared tip — the two rim walls
+# meet at one edge with no filler between them. Fillers (a closed two-body shell)
+# are the explicit follow-on, not v1; v1 proves the WELD, not a printable union.
+# So the studio reports `watertight` from the per-cap flag, and `--format stl`'s
+# aggregate mesh gate is not the gate that certifies this pair.
+#
+# See:  3d-models docs/round-orb-placement-design.md ; bikar#98 (Phase 1).
+
+blueprint donut_hex
+  circle C0 center(0,0) radius 100
+  circle C1 center(0,0) radius 40
+  divide C0 into 6
+  divide C1 into 6
+
+pattern donut_hex on donut_hex
+  connect cycle [C1.cpt0 C1.cpt1 C1.cpt2 C1.cpt3 C1.cpt4 C1.cpt5]
+  connect C1.cpt0 -> C0.cpt0
+  connect C1.cpt1 -> C0.cpt1
+  connect C1.cpt2 -> C0.cpt2
+  connect C1.cpt3 -> C0.cpt3
+  connect C1.cpt4 -> C0.cpt4
+  connect C1.cpt5 -> C0.cpt5
+  connect cycle [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4 C0.cpt5] .weld_ring
+  voids detect
+
+orb DonutHexWeld
+  base sphere
+  radius 30
+  inscribe donut_hex
+  contact .weld_ring
+  place rule dodecahedral
+  sites 2
+  struts width 1.5 depth 1.2

@@ -1,0 +1,49 @@
+# Donut-Hex-Orb — one round pattern placed on a sphere (round-pattern orb, v1).
+#
+# WHAT THIS IS. Most orbs tile a POLYGON pattern across every face of a solid.
+# Some patterns aren't polygon-shaped, they're ROUND — a rosette, a wheel. You
+# can't tile a sphere with discs, but you can drop one at a chosen site and let
+# its rim close into a watertight cap. This is the simplest witness of that new
+# path: `base sphere` + `place rule`, placing THIS disc — not a kernel-generated
+# wheel — at one dodecahedron 3-fold vertex.
+#
+# THE DISC — a "donut hexagon". A central hexagon void (C1) ringed by six
+# trapezoids out to the boundary (C0). Every interior edge is shared by exactly
+# two voids; only the six outer edges are exposed, and the rim wall closes them.
+#
+# THE PLACEMENT LAW. A pattern with Cn rotational symmetry may be centred on a
+# k-fold axis IFF k | n. The donut hexagon has six outer contacts ⇒ C6, and a
+# dodecahedron vertex is a 3-fold axis; 3 | 6, so it is a legal candidate. (A
+# square disc — C4 — would be refused, naming both numbers: 4 % 3 ≠ 0.)
+#
+# HOW THE PLACER FINDS THE RIM. The `contact .weld_ring` clause names the class
+# tagged onto the outer cycle; the placer reads those tagged points as the weld
+# ring and lands them at the cap edge. Declared, never guessed (Tenet 23).
+#
+# Render:  bikar render Donut-Hex-Orb.bkr --format stl -o out.stl
+# See:     3d-models docs/round-orb-placement-design.md ; bikar#98.
+
+blueprint donut_hex
+  circle C0 center(0,0) radius 100
+  circle C1 center(0,0) radius 40
+  divide C0 into 6
+  divide C1 into 6
+
+pattern donut_hex on donut_hex
+  connect cycle [C1.cpt0 C1.cpt1 C1.cpt2 C1.cpt3 C1.cpt4 C1.cpt5]
+  connect C1.cpt0 -> C0.cpt0
+  connect C1.cpt1 -> C0.cpt1
+  connect C1.cpt2 -> C0.cpt2
+  connect C1.cpt3 -> C0.cpt3
+  connect C1.cpt4 -> C0.cpt4
+  connect C1.cpt5 -> C0.cpt5
+  connect cycle [C0.cpt0 C0.cpt1 C0.cpt2 C0.cpt3 C0.cpt4 C0.cpt5] .weld_ring
+  voids detect
+
+orb DonutHexOrb
+  base sphere
+  radius 30
+  inscribe donut_hex
+  contact .weld_ring
+  place rule dodecahedral
+  struts width 1.5 depth 1.2

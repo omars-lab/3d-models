@@ -228,6 +228,39 @@
       ]
     },
     {
+      "file": "HankinOrb.vertex-3.morph.000.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 0,
+      "label": "bending onto the sphere, 1 of 3",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "HankinOrb.vertex-3.morph.001.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 1,
+      "label": "bending onto the sphere, 2 of 3",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "HankinOrb.vertex-3.morph.002.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 2,
+      "label": "bending onto the sphere, 3 of 3",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
       "file": "HankinOrb.vertex-3.complete.000.svg",
       "view": "vertex-3",
       "kind": "complete",
@@ -523,6 +556,31 @@
       }
     ],
     "entersAtIndex": 31
+  },
+  "morph": {
+    "frames": [
+      {
+        "file": "HankinOrb.vertex-3.morph.000.svg",
+        "view": "vertex-3",
+        "index": 0,
+        "t": 0,
+        "polygons": 21
+      },
+      {
+        "file": "HankinOrb.vertex-3.morph.001.svg",
+        "view": "vertex-3",
+        "index": 1,
+        "t": 0.5,
+        "polygons": 21
+      },
+      {
+        "file": "HankinOrb.vertex-3.morph.002.svg",
+        "view": "vertex-3",
+        "index": 2,
+        "t": 1,
+        "polygons": 21
+      }
+    ]
   },
   "turntableRepresentation": "cells",
   "base": {

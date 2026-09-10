@@ -211,6 +211,83 @@
       ]
     },
     {
+      "file": "RosetteCubeOrb.vertex-3.morph.000.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 0,
+      "label": "bending onto the sphere, 1 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.001.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 1,
+      "label": "bending onto the sphere, 2 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.002.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 2,
+      "label": "bending onto the sphere, 3 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.003.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 3,
+      "label": "bending onto the sphere, 4 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.004.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 4,
+      "label": "bending onto the sphere, 5 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.005.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 5,
+      "label": "bending onto the sphere, 6 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
+      "file": "RosetteCubeOrb.vertex-3.morph.006.svg",
+      "view": "vertex-3",
+      "kind": "morph",
+      "index": 6,
+      "label": "bending onto the sphere, 7 of 7",
+      "polygons": 21,
+      "sources": [],
+      "introduced": [],
+      "sides": []
+    },
+    {
       "file": "RosetteCubeOrb.vertex-3.complete.000.svg",
       "view": "vertex-3",
       "kind": "complete",
@@ -534,6 +611,59 @@
       }
     ],
     "entersAtIndex": 22
+  },
+  "morph": {
+    "frames": [
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.000.svg",
+        "view": "vertex-3",
+        "index": 0,
+        "t": 0,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.001.svg",
+        "view": "vertex-3",
+        "index": 1,
+        "t": 0.16666666666666666,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.002.svg",
+        "view": "vertex-3",
+        "index": 2,
+        "t": 0.3333333333333333,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.003.svg",
+        "view": "vertex-3",
+        "index": 3,
+        "t": 0.5,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.004.svg",
+        "view": "vertex-3",
+        "index": 4,
+        "t": 0.6666666666666666,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.005.svg",
+        "view": "vertex-3",
+        "index": 5,
+        "t": 0.8333333333333334,
+        "polygons": 21
+      },
+      {
+        "file": "RosetteCubeOrb.vertex-3.morph.006.svg",
+        "view": "vertex-3",
+        "index": 6,
+        "t": 1,
+        "polygons": 21
+      }
+    ]
   },
   "turntableRepresentation": "cells",
   "base": {

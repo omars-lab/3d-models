@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.00 -40.00 80.00 80.00" width="80" height="80" data-orb-view="turntable-5" data-projection="spherical">
+  <rect x="-40.00" y="-40.00" width="80.00" height="80.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="30.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="30.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
+  <path d="M20.4378,-21.9576 L19.5606,-22.2257 L14.3917,-25.4361 L16.4641,-24.8027 L20.4378,-21.9576 Z" fill="#434343" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="0" data-sides="4" data-orb-view="turntable-5" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M25.3359,-15.9718 L24.4587,-16.2399 L21.5711,-19.3668 L19.5606,-22.2257 L20.4378,-21.9576 L23.3255,-18.8306 L25.3359,-15.9718 Z" fill="#464646" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="6" data-orb-view="turntable-5" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M24.4587,-16.2399 L25.3359,-15.9718 L28.0361,-10.6610 L25.9637,-11.2944 L24.4587,-16.2399 Z" fill="#494949" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="2" data-sides="4" data-orb-view="turntable-5" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M19.5606,-22.2257 L21.5711,-19.3668 L19.1415,-18.6820 L14.3917,-25.4361 L19.5606,-22.2257 Z" fill="#535353" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="3" data-sides="4" data-orb-view="turntable-5" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  <path d="M21.5711,-19.3668 L24.4587,-16.2399 L25.9637,-11.2944 L19.1415,-18.6820 L21.5711,-19.3668 Z" fill="#565656" stroke="#333333" stroke-width="0.4" class="weld_ring" data-face-class="weld_ring" data-face-index="4" data-sides="4" data-orb-view="turntable-5" data-projection="spherical" data-orb-unit="0" data-orb-style="shaded" />
+  </g>
+</svg>

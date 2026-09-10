@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.00 -40.00 80.00 80.00" width="80" height="80" data-orb-view="turntable-10" data-projection="spherical">
+  <rect x="-40.00" y="-40.00" width="80.00" height="80.00" fill="#dfe3e5" pointer-events="none" />
+  <circle cx="0" cy="0" r="30.00" fill="none" stroke="#333333" stroke-width="0.4" data-orb-silhouette="true" />
+  <clipPath id="orb-limb"><circle cx="0" cy="0" r="30.00" /></clipPath>
+  <g clip-path="url(#orb-limb)">
+  <path d="M28.3059,-9.2092 L26.7705,-13.3001 L25.9531,-14.5960 L29.5804,-4.9309 L28.3059,-9.2092 Z" fill="#3f3f3f" stroke="#333333" stroke-width="0.4" data-face-index="0" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M26.7705,-13.3001 L24.7734,-15.9610 L21.2348,-20.8824 L25.9531,-14.5960 L26.7705,-13.3001 Z" fill="#434343" stroke="#333333" stroke-width="0.4" data-face-index="1" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M27.8441,-7.7791 L28.3059,-9.2092 L29.5804,-4.9309 L28.4894,-1.5523 L27.8441,-7.7791 Z" fill="#4b4b4b" stroke="#333333" stroke-width="0.4" data-face-index="2" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M24.7734,-15.9610 L26.7705,-13.3001 L28.3059,-9.2092 L27.8441,-7.7791 L25.8470,-10.4400 L24.3116,-14.5310 L24.7734,-15.9610 Z" fill="#4f4f4f" stroke="#333333" stroke-width="0.4" data-face-index="3" data-sides="6" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M24.7734,-15.9610 L24.3116,-14.5310 L20.1438,-17.5038 L21.2348,-20.8824 L24.7734,-15.9610 Z" fill="#535353" stroke="#333333" stroke-width="0.4" data-face-index="4" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M25.8470,-10.4400 L27.8441,-7.7791 L28.4894,-1.5523 L23.7711,-7.8388 L25.8470,-10.4400 Z" fill="#5b5b5b" stroke="#333333" stroke-width="0.4" data-face-index="5" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  <path d="M24.3116,-14.5310 L25.8470,-10.4400 L23.7711,-7.8388 L20.1438,-17.5038 L24.3116,-14.5310 Z" fill="#5e5e5e" stroke="#333333" stroke-width="0.4" data-face-index="6" data-sides="4" data-orb-view="turntable-10" data-projection="spherical" data-orb-unit="1" data-orb-style="shaded" />
+  </g>
+</svg>
