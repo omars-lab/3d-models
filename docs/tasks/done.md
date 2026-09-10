@@ -357,3 +357,33 @@ blocked by `#67`).
 - #74 — Refuse direct commits on main/master by hook, in both repos
 - #36 — The as_of pin has no fixed point under squash merges — decide what the pin means
 - #26 — Sweep the remaining interpolated-innerHTML sites in bikar's web package (DOM-node fixes + semgrep taint gate; bikar PR #162)
+
+---
+
+**▸ Snapshot 5 — 2026-09-10 (the D-052 base-face-honesty cascade + contract-mirror
+gate prune).** A **continuation of Snapshot 4's board, not a renumber** — the four
+tasks Snapshot 4 listed as still-open all closed here (`#8` cross-repo ledger block,
+`#49` the T9 outline↔solid gate, and the two bench/bet-gated Prints entries `#67` and
+`#71`), and the D-052 cascade added `#81`–`#85` on the same sequence. So Snapshot 4's
+and Snapshot 5's shared ids (`#8`, `#49`, `#67`, `#71`) are the *same* tasks, closed
+here. Still open on the board at this prune: **`#81`** — make the orb breakdown pages
+teach flat→sphere construction, the full plan beyond the T9 gate (spec:
+`.claude/plans/sunny-booping-crescent.md`; new-session brief:
+`.claude/plans/breakdown-pages-kickoff.md`).
+
+## Cross-repo contract + gates (carried open from Snapshot 4, closed here)
+
+- #8 — Make the cross-repo ledger check block, and add 3d-models to the loop
+- #49 — T9: tie the drawn outline to the solid the manifest declares (base-face honesty consumer half, D-052)
+
+## Prints tab (S-series, bench/bet-gated, closed at the bench)
+
+- #67 — Prints tab S2: print Plate 1 and fill the first run record at the bench
+- #71 — Prints tab S4: add gate rule R3 (two-way propagation) after the first bet flips (was blocked by #67)
+
+## D-052 base-face-honesty cascade (four repos: sacred-patterns → bikar → qiyas → 3d-models)
+
+- #82 — Cascade step 2, bikar producer half: gt-emitter conditional `orb_base_face` (face-kind only) + GT_SCHEMA_VERSION 1.29 (bikar squash 09390b8, all 5 CI checks green, composites unmoved)
+- #83 — Cascade step 3, qiyas validator half: mirror to v1.6 + parse-level inertness witness (no validate_dsl_contract.py change, no gt re-record — schema ≥1.24 satisfied by 1.29)
+- #84 — (b) Migration/change-history pointer added to the canonical contract (sacred-patterns #52, ed7206a)
+- #85 — (c) The mirror↔canonical invariant gate: contract_mirror.py + hook 42-contract-mirror + make validate-contract-mirror (3d-models #171, ef9b627)
