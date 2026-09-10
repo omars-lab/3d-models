@@ -14,9 +14,9 @@
     "qiyas": "95dd89321111dc71c9c4032ee2f8551be2724eb4"
   },
   "deploy": {
-    "sha": "7d0ff4e9157807420c4dfd45b6fedf87418bae5d",
-    "short": "7d0ff4e",
-    "date": "2026-08-20",
-    "from_master": "c40dbc7"
+    "sha": "b05c5bd938acccc3fe4bfcfc8b9e5c405d3fb282",
+    "short": "b05c5bd",
+    "date": "2026-09-10",
+    "from_master": "6f8a9ef"
   }
 }
