@@ -660,3 +660,16 @@ status-manifest:
 # use-cases.md is gated by 20-use-cases, gh-pages is the deploy's own record), so
 # there is no staged-file trigger to hang a hook on. It regenerates the manifest too.
 validate-status: status-manifest
+
+# Contract-mirror gate (hook 42): bikar and qiyas each vendor a prose copy of
+# sacred-patterns' dsl-metadata-contract.md, header-stamped with the canonical
+# version it was last vendored from. Nothing compared that header to canonical,
+# so a mirror could sit a full amendment behind with every check green (the
+# schema half is byte-checked by validate-schema-mirror; the prose is not). This
+# reads canonical and both mirrors at each repo's default branch and names any
+# mirror behind or dangling. Self-test first (fixtures + a primary/worktree/
+# siblings layout asserting the same verdict), then the real check. Appended
+# after validate-status for the same anchor reason as validate-schema-mirror.
+validate-contract-mirror:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/contract_mirror.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/contract_mirror.py
