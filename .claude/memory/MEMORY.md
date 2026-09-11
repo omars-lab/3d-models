@@ -12,7 +12,7 @@
 - [Deploy verification](deploy-verification.md) — verify at the bundle not the green run; studio targets Cloudflare `bikar-studio`; deploy on main currently fails on a token permission
 - [Calibration baseline trailer](calibration-baseline-trailer.md) — `Calibration-Baseline-May-Grow:` must be one line in the tip commit's final paragraph
 - [qiyas runtime and gates](qiyas-runtime-and-gates.md) — orb-validate needs the `:dev` image, CI is the score authority, FastAPI only (never Flask), which score fields mean what
-- [Contract and schema mirror](contract-and-schema-mirror.md) — sacred-patterns canonical, qiyas exports, bikar vendors byte-identical, hook 41 compares copy to source at the map's pins
+- [Contract and schema mirror](contract-and-schema-mirror.md) — sacred-patterns canonical, qiyas exports, bikar vendors byte-identical; hook 41 gates the byte-identical schema copy and hook 42 the hand-maintained prose copy (reads canonical at each repo's origin/HEAD default, not a guessed main/master)
 - [Orb kernel facts](orb-kernel-facts.md) — no boolean union, weave is the only crossing resolution, genus = tunnels−1, earcut reflex fillers, aggregates cannot discharge per-part claims
 - [Woven orb clearance](woven-orb-clearance.md) — D-039/D-040: the amplitude rule was about centrelines, clearance gated at 0.4 mm (CAL-CLR-01), range endpoints are the least-tested values
 - [Maclado family facts](maclado-family-facts.md) — Family 3 by decision id D-030…D-033/D-040/D-044, the divisor trick, and the open taste call
