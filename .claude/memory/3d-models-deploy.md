@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: b5c27e75-8686-44ff-b3d9-1b6af5f89729
-  modified: 2026-08-19T18:55:00.000Z
+  modified: 2026-09-10T18:28:14.608Z
 ---
 
 The `3d-models` repo publishes a static gallery (`index.html`) of OpenSCAD cookie cutters.
@@ -14,6 +14,7 @@ The `3d-models` repo publishes a static gallery (`index.html`) of OpenSCAD cooki
 - **Live URL:** `https://blog.bytesofpurpose.com/3d-models/` (omars-lab.github.io/3d-models/ 301-redirects there). The old `3d-models.bytesofpurpose.com` CNAME was deleted on gh-pages (commit "Delete CNAME") and no longer routes; `make deploy` does NOT manage CNAME so it preserves whatever Pages settings dictate.
 - **`make deploy` succeeding is not the site being live.** The push returns immediately; GitHub Pages then builds for ~40 s, and during that window newly-added paths 404 while already-published ones still serve 200 — measured 2026-08-19, when `/breakdown.html` and `/build/orb-breakdown/index.json` 404'd while `/` and `/lab.html` were fine, then both went 200 once the build finished. Do not diagnose a serving bug from that: check `gh api repos/omars-lab/3d-models/pages/builds/latest --jq '.status, .commit'` and wait for `built` at the commit you pushed. Also probe the custom domain directly — the `omars-lab.github.io` 301 makes every path read as a redirect first.
 - **Only `DEPLOY_PATHS` goes live.** `build/orb-views/` is deliberately not in it — that is the gray qiyas instrument set, not a published surface; the gallery ships `build/images/`. A 404 on `build/orb-views/...` is correct, not a missing file.
+- **`make deploy` replaces each `DEPLOY_PATH` wholesale from the source worktree** (`rm -rf` then `cp -R`, Makefile deploy target ~L598-602), so gh-pages `build/stls` and `build/images` become *exactly* what the source worktree holds — no merge with what was live. A "full redeploy" from a fresh worktree that ran **only `make orbs`** therefore DROPS every non-orb artifact (cookie-cutter figures, lego bricks, `StarMural`, coupons) — index.html links `build/stls/<id>.stl` + `build/images/web/<id>.png` for *every* manifest plate, so those all 404. A true full redeploy needs the full build set — `cookie-cutters` + `orbs` + `bricks` + `coupons` + `pattern-sets` (StarMural) — before `make deploy`. To ship only an orb delta without rebuilding the unchanged rest, restore the missing non-orb STLs/images from the prior gh-pages tip into the source worktree's `build/` (`git archive <prior-tip> -- build/stls build/images | tar -x`, then `cp -Rn` so the new orb files win), which also keeps the net gh-pages diff to exactly the intended delta. Hit and recovered 2026-09-10 (orbs-only deploy `b05c5bd` dropped 30 non-orb STLs + 60 images; fixed in `83e045b`). Verify post-deploy with `git diff --diff-filter=D 7d0ff4e <tip>` — only rehashed `assets/*.js` should be deleted.
 - **gh-pages tracks `.DS_Store` files** — they can block `git checkout`/rebase from the main worktree; `make deploy` avoids this by using a separate worktree.
 - **Working dir:** `/Users/omareid/workplace` is a symlink to `/Users/omareid/Workspace` — both paths are the same repo.
 - **OpenSCAD binary:** `/Applications/OpenSCAD-2021.01.app/Contents/MacOS/OpenSCAD` (the `openscad` shell alias may point to a stale/missing path). Cornfield render bg = `#FFFFE5`.

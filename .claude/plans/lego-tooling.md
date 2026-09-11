@@ -55,7 +55,7 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
 
 | Task | What | Gate |
 |---|---|---|
-| #63 | `bikar-studio.pages.dev` exposure-equivalent to the custom domain | user: Cloudflare dashboard + service token + 2 GH secrets |
+| #63 | `bikar-studio.pages.dev` exposure-equivalent to the custom domain | **done 2026-09-02** — lockdown live (302 anon), CI service token minted + admitted + verified (200 w/ token), runbook in bikar `manage-secrets` (PR #157) |
 | #64 | Repoint `index.html:277` off the Access-gated host | blocked by #63 |
 | #52 | Folder round-trip against the live studio | user: a signed-in session behind CF Access |
 
