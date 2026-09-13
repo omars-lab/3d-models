@@ -1,0 +1,26 @@
+{
+  "name": "@3d-models/bambu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Contextualized CLI companion to the setup-bambu-x2d skill: our verbs (setup/status/slice/print/validate) over the griches Bambu MCP transport, the BambuStudio CLI, and AppleScript GUI fallback.",
+  "type": "module",
+  "bin": {
+    "bambu": "bin/bambu"
+  },
+  "scripts": {
+    "bambu": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

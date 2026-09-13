@@ -1,0 +1,19 @@
+{
+  "//": "Copy to .mcp.json (gitignored — it carries the LAN token) and fill in your X2D's values.",
+  "//host": "PRINTER_HOST: the printer's LAN IP (Settings > Network on the touchscreen).",
+  "//serial": "BAMBU_SERIAL: from the device-info screen.",
+  "//token": "BAMBU_TOKEN: the LAN access code. Requires LAN Mode + Developer Mode ON (opens MQTT/FTP).",
+  "//model": "BAMBU_MODEL: x2d. Community MCPs may not list x2d yet — verify with `bambu setup doctor --probe-mcp`.",
+  "mcpServers": {
+    "bambu": {
+      "command": "npx",
+      "args": ["-y", "@griches/bambu-mcp"],
+      "env": {
+        "PRINTER_HOST": "192.168.1.100",
+        "BAMBU_SERIAL": "01P00A000000000",
+        "BAMBU_TOKEN": "<lan-access-code>",
+        "BAMBU_MODEL": "x2d"
+      }
+    }
+  }
+}
