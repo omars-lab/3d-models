@@ -24,8 +24,8 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 | `setup` | `doctor`, `mcp`, `studio` | local checks |
 | `status` | `show`, `monitor`, `camera` | griches MCP |
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`) | BambuStudio CLI |
-| `print` | `send --record`, `pause`, `resume`, `stop` *(phase 3, owner-gated)* | griches MCP |
-| `validate` | `mesh`, `plate`, `record` *(phase 3)* | bikar / prints gate |
+| `print` | `send` (`--record`, `--dry-run`, `--yes`, owner-gated), `pause`, `resume`, `stop` | griches MCP |
+| `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |
 
 `bambu <group> <verb> --help` everywhere — the help *is* the documentation.
 
@@ -43,6 +43,27 @@ Reads the SAME env block the MCP reads, so the CLI and the MCP never disagree ab
 `PRINTER_HOST`, `BAMBU_SERIAL`, `BAMBU_TOKEN`, `BAMBU_MODEL` — from process env, else the `bambu`
 server's `env` in `.mcp.json`. The real `.mcp.json` is gitignored (it carries the token); copy
 [`.mcp.json.example`](../../.mcp.json.example). `bambu setup mcp` prints the block to add.
+
+## Dispatch is owner-gated
+
+`print send` moves real hardware, and printing is on hold until a `CAL-*` bet justifies a plate. So
+it is fail-closed: it prints the owner-gate notice, then refuses unless you pass `--yes` or confirm
+at a TTY. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
+`pause`/`resume` are reversible and immediate.
+
+## Records & validation
+
+`print send --record` scaffolds a draft print record under **`.bambu/records/<date>-<slug>/`** (a
+gitignored staging area — a finished record lives at `docs/prints/<date>-<slug>/`). The scaffold
+pins what a machine can know at dispatch time: the bikar HEAD and each `--object bikar:<path>`'s blob
+sha256 (R1 provenance), leaving readings/photos/`self_ref` as `TODO` for the operator.
+
+The prints gate is **whole-tree** — an incomplete draft under `docs/prints/` would block every
+commit — which is exactly why drafts stage in the gitignored `.bambu/` tree instead. Fill the TODOs,
+add photos, then check with `bambu validate record .bambu/records` before moving the dir into
+`docs/prints/`. Every `validate` verb shells to the existing authority (bikar's `--check`,
+`build/verify_machine_card.py`, `.claude/gates/prints_gate.py`) — one code path, never a second that
+can disagree.
 
 ## Logs
 

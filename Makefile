@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-typecheck
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -686,3 +686,26 @@ validate-contract-mirror:
 validate-plan-sync:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plan_sync.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plan_sync.py
+
+# --- Bambu X2D CLI (tools/bambu) -------------------------------------------
+# BAMBU_DIR is the CLI package; runs need the repo-pinned Node on PATH (the
+# system Node is too old — see tools/bambu/README.md and CLAUDE.md "Node").
+BAMBU_DIR := ${ROOT_DIR}/tools/bambu
+
+# Operator preflight: LAN/Developer-Mode reachable? token present? Studio +
+# ffmpeg installed? X2D model accepted? This depends on the printer + local
+# install, so it is a hand-run check, NOT part of `make validate` (which must
+# pass with no hardware). `--probe-mcp` adds a live MCP handshake.
+bambu-doctor:
+	cd $(BAMBU_DIR) && npx tsx src/index.ts setup doctor
+
+# Typecheck the CLI's TypeScript — the one gate the new tools/bambu code has no
+# hook behind yet. Deliberately NOT a `bambu-validate` alias: mesh/plate/record
+# validation are already first-class here (bikar's --check via the CLI's
+# `validate mesh`; `coupons`/`validate-coupons` for the §7 table; the prints
+# gate via `validate-prints` and the CLI's `validate record`), and re-wrapping
+# them under a new name would fork one check into two paths that can disagree —
+# the exact defect CLAUDE.md's robustness tenet forbids. Needs `npm install` in
+# tools/bambu first.
+bambu-typecheck:
+	cd $(BAMBU_DIR) && npm run typecheck

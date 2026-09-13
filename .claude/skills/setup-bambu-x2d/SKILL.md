@@ -66,14 +66,20 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
 9. **Slice a test plate:** `bambu slice plate <model.stl>` (headless via the BambuStudio CLI;
    `--dry-run` prints the exact invocation, `--settings`/`--filament` pass profiles, and raw
    BambuStudio flags go after `--`). A `.bkr` must be rendered to STL first — slicing is not bikar's job.
-10. **First dispatch is owner-gated.** `bambu print send --record` stays a deliberate call — no CAL
-    bet is settled and printing is on hold. The CLI confirms before sending.
+10. **First dispatch is owner-gated.** `bambu print send <plate.3mf> --record` stays a deliberate
+    call — no CAL bet is settled and printing is on hold. It is fail-closed: it prints the owner-gate
+    notice, then refuses unless you pass `--yes` or confirm at a TTY (`--dry-run` shows what it would
+    send without connecting). `--record` scaffolds a draft under the gitignored `.bambu/records/`.
 
 ## After setup — how we actually print
 
 The CLI groups map to the workflow: `slice` (BambuStudio CLI) → `print send --record` (dispatch via
-the MCP + write a `docs/prints/<date>-<slug>/` record) → `validate record` (the record passes
-[`docs/prints-tab-design.md`](../../../docs/prints-tab-design.md) §4 and the prints gate). A plate is
+the MCP + scaffold a draft record under the gitignored `.bambu/records/`) → fill it in → `validate
+record .bambu/records` (the record passes [`docs/prints-tab-design.md`](../../../docs/prints-tab-design.md)
+§4 and the prints gate) → move the finished dir into `docs/prints/<date>-<slug>/`. Drafts stage in
+`.bambu/` because the prints gate is **whole-tree**: an incomplete record under `docs/prints/` would
+block every commit. `validate mesh <model.bkr>` runs bikar's min-strut/FDM `--check`, and `validate
+plate` runs the 23-rung calibration table (`calibration-design.md` §7, D-014). A plate is
 only a *prototype* if it answers a question — restate the questions first, exactly as the
 [`prototype`](../prototype/SKILL.md) skill requires; if none would be answered, it's decoration.
 Coupons that measure the *(machine, material, nozzle, profile)* settle a `CAL-*` bet via

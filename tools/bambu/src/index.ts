@@ -10,7 +10,8 @@ import { Command } from "commander";
 import { registerSetup } from "./commands/setup.js";
 import { registerStatus } from "./commands/status.js";
 import { registerSlice } from "./commands/slice.js";
-import { registerStubs } from "./commands/stubs.js";
+import { registerPrint } from "./commands/print.js";
+import { registerValidate } from "./commands/validate.js";
 
 const program = new Command();
 
@@ -30,7 +31,8 @@ program
 registerSetup(program);
 registerStatus(program);
 registerSlice(program);
-registerStubs(program);
+registerPrint(program);
+registerValidate(program);
 
 program.parseAsync(process.argv).catch((err) => {
   console.error(err instanceof Error ? err.message : String(err));
