@@ -13,12 +13,8 @@ function notYet(phase: string, what: string): () => void {
 }
 
 export function registerStubs(program: Command): void {
-  const slice = program.command("slice").description("[phase 2] headless slicing via the BambuStudio CLI");
-  slice
-    .command("plate <model>")
-    .description("[phase 2] slice a .bkr/.stl into a sliced .3mf with the X2D dual-nozzle profile")
-    .action(notYet("phase 2", "slicing"));
-
+  // `slice` is implemented in commands/slice.ts (phase 2). print/validate remain phase-3 stubs,
+  // registered so `bambu --help` shows the whole intended surface (the help IS the documentation).
   const print = program.command("print").description("[phase 3] dispatch + print control (owner-gated)");
   print
     .command("send <plate>")

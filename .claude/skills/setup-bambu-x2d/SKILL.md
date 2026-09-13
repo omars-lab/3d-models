@@ -63,7 +63,9 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    before going further; a `!` is a warning you can proceed past.
 8. **Prove transport, read-only:** `bambu status show` returns live temps/AMS. This reaches the
    printer *without sending anything* — trust the pipe before any dispatch.
-9. **Slice a test plate** *(phase 2)*: `bambu slice plate <model>`.
+9. **Slice a test plate:** `bambu slice plate <model.stl>` (headless via the BambuStudio CLI;
+   `--dry-run` prints the exact invocation, `--settings`/`--filament` pass profiles, and raw
+   BambuStudio flags go after `--`). A `.bkr` must be rendered to STL first — slicing is not bikar's job.
 10. **First dispatch is owner-gated.** `bambu print send --record` stays a deliberate call — no CAL
     bet is settled and printing is on hold. The CLI confirms before sending.
 

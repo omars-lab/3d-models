@@ -23,7 +23,7 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 |---|---|---|
 | `setup` | `doctor`, `mcp`, `studio` | local checks |
 | `status` | `show`, `monitor`, `camera` | griches MCP |
-| `slice` | `plate` *(phase 2)* | BambuStudio CLI |
+| `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`) | BambuStudio CLI |
 | `print` | `send --record`, `pause`, `resume`, `stop` *(phase 3, owner-gated)* | griches MCP |
 | `validate` | `mesh`, `plate`, `record` *(phase 3)* | bikar / prints gate |
 
