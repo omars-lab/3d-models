@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Thin shim so `tools/bambu/bin/bambu` runs the TS CLI under the repo-pinned Node.
+# Keeps the call site a single allow-listable command (global CLAUDE.md "one simple command").
+set -euo pipefail
+
+# Repo-pinned Node (system Node is too old and fails in ways that look like code bugs).
+PINNED="$HOME/.nvm/versions/node/v22.22.3/bin"
+if [ -d "$PINNED" ]; then
+  export PATH="$PINNED:$PATH"
+fi
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+exec npx --prefix "$HERE" tsx "$HERE/src/index.ts" "$@"

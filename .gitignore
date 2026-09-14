@@ -32,6 +32,12 @@ build/*
 __pycache__/
 *.pyc
 
+# Bambu CLI (tools/bambu): the real .mcp.json carries the LAN token — never track it
+# (a committed .mcp.json.example documents the shape). Deps + run logs are volatile.
+/.mcp.json
+tools/bambu/node_modules/
+.bambu/
+
 # The prints register: written by build/prints_manifest.py (make prints-manifest)
 # from docs/prints/ and shipped by DEPLOY_PATHS. Generated, never typed.
 /prints-manifest.json
