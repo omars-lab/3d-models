@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-typecheck
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -698,6 +698,13 @@ BAMBU_DIR := ${ROOT_DIR}/tools/bambu
 # pass with no hardware). `--probe-mcp` adds a live MCP handshake.
 bambu-doctor:
 	cd $(BAMBU_DIR) && npx tsx src/index.ts setup doctor
+
+# Passively find the printer on the LAN before any config exists: listens for the
+# X2D's own SSDP broadcast (receive-only — safe during an active print) and reports
+# IP/serial/model + whether it's still cloud-bound. Hardware-dependent, so like
+# bambu-doctor it is NOT part of `make validate`.
+bambu-discover:
+	cd $(BAMBU_DIR) && npx tsx src/index.ts setup discover
 
 # Typecheck the CLI's TypeScript — the one gate the new tools/bambu code has no
 # hook behind yet. Deliberately NOT a `bambu-validate` alias: mesh/plate/record

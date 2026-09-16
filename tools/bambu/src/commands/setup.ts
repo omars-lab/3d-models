@@ -1,9 +1,12 @@
 // `bambu setup` — get the machine wired to Claude Code and prove it before any print.
+//   discover: passively find printers broadcasting on the LAN (zero-touch, print-safe)
 //   doctor  : preflight every dependency and connection, name what's missing
 //   mcp     : write/verify the .mcp.json griches entry
 //   studio  : detect installed Bambu Studio (stable/beta) and guide install
 //
 // doctor is the read-only heart of Phase 1: it runs with no printer and reports honestly.
+// discover is a step earlier: it needs no config at all — it just listens for the
+// printer's own SSDP broadcast, so it can hand `doctor`/`mcp` the host and serial.
 
 import { Command } from "commander";
 import { connect as netConnect } from "node:net";
@@ -13,6 +16,7 @@ import { loadConfig, mask } from "../config.js";
 import { probeStudio } from "../backends/studio-cli.js";
 import { appInstalled } from "../backends/applescript.js";
 import { McpBackend } from "../backends/mcp.js";
+import { discoverPrinters, isCloudBound, DISCOVERY_PORT, type DiscoveredPrinter } from "../backends/discover.js";
 import { runWithTimeout } from "../log.js";
 
 type Status = "PASS" | "WARN" | "FAIL";
@@ -182,8 +186,65 @@ function printChecks(checks: Check[]): number {
   return fails;
 }
 
+/** Render discovered printers as a block per device; cross-reference against configured host. */
+function printDiscovered(printers: DiscoveredPrinter[], timeoutMs: number): number {
+  if (printers.length === 0) {
+    console.log(`  no printers heard in ${Math.round(timeoutMs / 1000)}s.`);
+    console.log("  A Bambu printer broadcasts every ~30s, so try a longer --timeout, and check");
+    console.log("  this machine is on the same LAN/subnet as the printer (not a guest VLAN).");
+    return 1;
+  }
+  const cfg = loadConfig();
+  for (const p of printers) {
+    const label = p.name ? `${p.name} ` : "";
+    console.log(`  ${label}${p.model ? `[${p.model}] ` : ""}${p.ip}`);
+    console.log(`      serial    ${p.serial}`);
+    if (p.firmware) console.log(`      firmware  ${p.firmware}`);
+    if (p.iface) console.log(`      iface     ${p.iface}`);
+    if (p.connectMode) {
+      const cloud = isCloudBound(p);
+      console.log(
+        `      connect   ${p.connectMode}` +
+          (cloud
+            ? "  ← still CLOUD-bound: enable LAN Mode + Developer Mode on the touchscreen"
+            : "  ← LAN-reachable: Developer Mode looks on"),
+      );
+    }
+    if (cfg.host) {
+      console.log(
+        p.ip === cfg.host
+          ? `      config    matches configured PRINTER_HOST`
+          : `      config    NOTE configured PRINTER_HOST=${cfg.host} differs from ${p.ip}`,
+      );
+    } else {
+      console.log(`      config    no PRINTER_HOST set — use ${p.ip} in .mcp.json (see \`bambu setup mcp\`)`);
+    }
+    console.log("");
+  }
+  const cloudBound = printers.filter(isCloudBound).length;
+  console.log(
+    `  ${printers.length} printer(s) found` +
+      (cloudBound > 0
+        ? `; ${cloudBound} still cloud-bound — griches MCP needs LAN Mode + Developer Mode ON first.`
+        : "."),
+  );
+  return 0;
+}
+
 export function registerSetup(program: Command): void {
   const setup = program.command("setup").description("wire the X2D to Claude Code and preflight it");
+
+  setup
+    .command("discover")
+    .description("passively find Bambu printers broadcasting on the LAN (zero-touch; safe during a print)")
+    .option("--timeout <ms>", "how long to listen for a broadcast", (v) => parseInt(v, 10), 8000)
+    .option("--port <port>", "UDP port the printer broadcasts to", (v) => parseInt(v, 10), DISCOVERY_PORT)
+    .action(async (opts: { timeout: number; port: number }) => {
+      console.log(`bambu setup discover — listening ${Math.round(opts.timeout / 1000)}s on UDP ${opts.port} (receive-only)\n`);
+      const printers = await discoverPrinters({ timeoutMs: opts.timeout, port: opts.port });
+      const rc = printDiscovered(printers, opts.timeout);
+      process.exitCode = rc;
+    });
 
   setup
     .command("doctor")
