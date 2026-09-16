@@ -45,7 +45,11 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
 
 ## The setup tasks (do in order)
 
-1. **Network the printer.** Put the X2D on the LAN; note its IP (touchscreen → Settings → Network).
+1. **Network the printer, then find it.** Put the X2D on the LAN. Rather than reading the IP off
+   the touchscreen, run `bambu setup discover`: it passively listens for the printer's own SSDP
+   broadcast (receive-only — safe to run during an active print) and reports IP, serial, model,
+   firmware, and — the tell — `connect cloud`. A printer still `cloud`-bound has **not** had LAN +
+   Developer Mode enabled (step 3), so no host you configure will pass `doctor`'s LAN-reach yet.
 2. **Install Bambu Studio** — stable: <https://bambulab.com/en/download/studio>. Launch it, add the
    X2D. If the printer or its dual-nozzle/auxiliary profiles are missing, install the **2.8.x beta**
    alongside (they coexist). X2D support reference:
@@ -92,8 +96,10 @@ is in [`rubric.md`](rubric.md).
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
+| `discover` finds nothing | wrong subnet / guest VLAN, or long broadcast gap | same LAN as the printer; raise `--timeout` (it broadcasts every ~30s) |
+| `discover` shows `connect cloud` | LAN + Developer Mode not enabled | enable both on the touchscreen (step 3); the field flips off `cloud` |
 | `printer config missing` | env + `.mcp.json` both unset | copy `.mcp.json.example`; `bambu setup mcp` |
-| `LAN reach …:8883 no connection` | Developer Mode off, or wrong IP | re-enable LAN + Developer Mode; recheck the IP |
+| `LAN reach …:8883 no connection` | Developer Mode off, or wrong IP | re-enable LAN + Developer Mode; recheck the IP with `bambu setup discover` |
 | `MCP handshake FAIL` | token/serial wrong, or model unsupported | re-copy the access code; verify `x2d` is accepted (`--probe-mcp`) |
 | `no status-like tool found` | griches renamed/omitted a tool | run `--probe-mcp` to list tools; update the CLI's hints |
 | `Bambu Studio not found` | not installed, or non-standard path | install it, or set `SLICER_PATH` |
