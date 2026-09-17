@@ -40,6 +40,30 @@ Date      ____________
 Caliper   make ____________  resolution ______  zeroed at session start? y / n
 ```
 
+## Pre-flight — settled in software 2026-09-16 (transcribe into the header above at the bench)
+
+The slice path is proven headless against a real X2D profile — `bambu slice plate <coupon.stl>` produced
+valid X2D G-code (`printer_model = Bambu Lab X2D`, `nozzle_diameter = 0.4,0.4` — the dual nozzle is real
+and lives in the *slicer profile*, not the machine target). Select these known-good presets in Bambu
+Studio and copy them into the profile header verbatim; the numbers are meaningless without the header.
+
+| Header field | Confirmed value to select | Note |
+|---|---|---|
+| Slicer | Bambu Studio **2.08.02.61** | ships the full X2D profile family (0.2/0.4/0.6/0.8 nozzle) |
+| Machine | **Bambu Lab X2D 0.4 nozzle** | the card is authored at a 0.4 nozzle (min-feature ladder) |
+| Process | **0.20mm Standard @BBL X2D** | one profile for the whole card; do not change per coupon |
+| Filament | **Bambu PLA Basic @BBL X2D 0.4 nozzle** | one material, one session |
+
+Settings that are **measurements, not preferences** (per [`calibration-design.md`](../calibration-design.md)
+§4): MC-4 fan supports **OFF**, MC-6 towers **bare plate, no brim/raft**. Set them before slicing the plate.
+
+**MC-4 fan — pre-flight eyeball done (the check [`calibration-design.md`](../calibration-design.md) §8 asks
+for before filament).** Sliced supports-off, the fan renders exactly as §5.4 specifies: a single 360°
+`revolve` — a funnel/frustum, base on the bed, flare opening upward, with the six overhang angles as
+concentric riser bands increasing bottom-to-top. No dropped features, correct upright orientation (any
+other orientation is a *different* test). It is a **full revolved funnel, not a one-way ring** — expect a
+bowl, and inspect the **outer underside of the flare** for curl/droop when the part is in hand.
+
 ## Technique (the same for every caliper rung)
 
 - **Cool ≥30 min** before the caliper touches the part (longer for PETG/ABS). A warm part reads large,
