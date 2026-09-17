@@ -10,6 +10,7 @@
 import { Command } from "commander";
 import { registerSetup } from "./commands/setup.js";
 import { registerStatus } from "./commands/status.js";
+import { registerFilament } from "./commands/filament.js";
 import { registerSlice } from "./commands/slice.js";
 import { registerPrint } from "./commands/print.js";
 import { registerValidate } from "./commands/validate.js";
@@ -31,6 +32,7 @@ program
 
 registerSetup(program);
 registerStatus(program);
+registerFilament(program);
 registerSlice(program);
 registerPrint(program);
 registerValidate(program);
