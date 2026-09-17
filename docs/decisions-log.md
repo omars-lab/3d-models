@@ -4437,6 +4437,51 @@ would need the union bikar does not have.
 
 ---
 
+## D-065 — The `--coaster` importer emits the whole coaster block; `size` drives, `unit` is derived
+
+**Date:** 2026-09-17 · **Status:** decided (bikar NaqshCoffee/bikar#207; product doc [`coaster-design.md`](coaster-design.md))
+
+### Context
+
+Slice 2 (P2.7) turns a GeoGebra construction into a height-field coaster. A
+construction's `.bkr` is a fully generated golden, and D-059 forbids sizing by
+mesh transform (scaling a mesh scales walls and relief below the printable floor).
+So the coaster has to re-render from a `--param`, which means the sizing knobs must
+live *in* the emitted file. Two questions had to be settled: does the importer emit
+the `coaster` declaration, or does a downstream step; and what is the knob, given
+that the disc `outline` must enclose an inscribed pattern that is recentred but not
+scaled to it.
+
+### Options on the table
+
+- **(a) The importer emits the coaster block, driven by `size` with `unit`
+  derived** — one const-expression `param unit = ($size - 8) / K` where K is the
+  art's enclosing diameter measured at import; mini and standard are `--param
+  size=40` and `size=90` of one generated file.
+- **(b) The importer emits only the pattern; a hand-written or downstream layer
+  adds the `coaster` block** — keeps the importer simpler but forks the golden into
+  a generated half and a hand-maintained half.
+- **(c) Declare `size` and `unit` as two independent knobs** — no derivation;
+  the user keeps them consistent so the art clears the rim.
+
+### Decision — (a)
+
+The importer emits the whole block and derives `unit` from `size`. (b) breaks the
+"golden is fully generated" invariant and invites the two halves to disagree — a
+fork, which a migration never buys. (c) makes rim-enclosure the user's job at every
+size, which is exactly the silent failure the derived formula removes. `size` is the
+knob because the render commands size the print in millimetres, not in GeoGebra
+units.
+
+### What would reverse this
+
+A pattern whose enclosing diameter cannot be measured at import (an unbounded or
+degenerate construction), or a coaster feature that must scale non-uniformly with
+`size` — either would break the single-`K`, single-knob derivation and force a
+richer sizing model.
+
+---
+
 ## D-053 — the Bambu X2D rides as a single-nozzle-labelled FDM target; the PrintTarget schema is not widened for dual nozzles
 
 **Date:** 2026-09-16 · **Status:** decided (bikar `PrintTarget` entry is the follow-on, A1/#18)

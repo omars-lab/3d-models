@@ -264,7 +264,7 @@ What this repo pins:
 - New reserved words are a G2 delta, each with a §12 row in bikar's grammar
   doc; G1 reports which shipped `.bkr` used one as an identifier.
 
-## 8. The coaster (summary; specified in the coaster doc)
+## 8. The coaster (summary; specified in [`coaster-design.md`](coaster-design.md))
 
 A coaster is a height field over an outline (D-064): flat bottom, top
 `z = base + relief(x, y) + rim(r)`, side wall stitched. Straps, face
