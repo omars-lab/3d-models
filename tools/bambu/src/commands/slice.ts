@@ -83,6 +83,30 @@ interface SliceOpts {
   arrange: boolean;
   timeout: string;
   dryRun?: boolean;
+  strict?: boolean;
+}
+
+// A CLEAN BambuStudio slice is silent — it emits no warning/error lines to stdout/stderr (verified
+// 2026-09-17 against the machine card). So this scan is BEST-EFFORT: there is no documented CLI
+// warning vocabulary to match, and a warning-free slice looks exactly like a warning-suppressed one.
+// It surfaces anything the slicer prints that reads like a warning so it is never swallowed; the
+// AUTHORITATIVE, realized-truth gate is `bambu validate sliced` over the produced .3mf (it reads the
+// gcode toolpath + the slice_info skipped-object flags, which cannot be silently absent).
+const WARNING_RE = /\b(warn(?:ing)?|error|fail(?:ed|ure)?|cannot|could ?not|unable|invalid|not printable|outside\s+(?:the\s+)?print|exceed|collision|skipp?ed)\b/i;
+
+/** Best-effort: lines from the slicer's own output that look like warnings/errors (deduped, capped). */
+function scanSlicerWarnings(stdout: string, stderr: string): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of `${stdout}\n${stderr}`.split("\n")) {
+    const line = raw.trim();
+    if (!line || !WARNING_RE.test(line)) continue;
+    if (seen.has(line)) continue;
+    seen.add(line);
+    out.push(line);
+    if (out.length >= 40) break; // never let a firehose bury the summary
+  }
+  return out;
 }
 
 /** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing. */
@@ -163,8 +187,18 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       return;
     }
     const kb = Math.round(statSync(outPath).size / 1024);
-    ev("slice_done", { out: basename(outPath), kb });
+    const warnings = scanSlicerWarnings(res.stdout, res.stderr);
+    ev("slice_done", { out: basename(outPath), kb, warnings: warnings.length });
     console.log(`sliced → ${outPath} (${kb} KB)`);
+    if (warnings.length > 0) {
+      console.error(`slicer messages (best-effort scan — ${warnings.length}):`);
+      for (const w of warnings) console.error(`  ${w}`);
+      console.error("Gate the realized plate with `bambu validate sliced " + basename(outPath) + "`.");
+      if (opts.strict) {
+        console.error("--strict: treating slicer messages as fatal.");
+        process.exitCode = 1;
+      }
+    }
     return;
   }
 
@@ -207,6 +241,7 @@ export function registerSlice(program: Command): void {
     .option("-p, --plate <n>", "plate index to slice, 0 = all", "0")
     .option("--arrange", "arrange objects before slicing", false)
     .option("-t, --timeout <seconds>", "slice timeout in seconds", "300")
+    .option("--strict", "exit non-zero if the slicer prints any warning/error-looking line", false)
     .option("--dry-run", "print the exact BambuStudio invocation and exit", false)
     .allowUnknownOption(false)
     .action(async (model: string, opts: SliceOpts, cmd: Command) => {
