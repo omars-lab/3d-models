@@ -27,6 +27,15 @@ if [[ ! -f "$MODEL" ]]; then
   exit 2
 fi
 
+# The CLI router imports every backend at load (mqtt among them, added with the first-party MQTT
+# backend, #188). A node_modules predating that dep fails deep inside the router with an opaque
+# ERR_MODULE_NOT_FOUND for 'mqtt' — not an obvious "install your deps". Preflight it here.
+if [[ ! -d "$REPO_ROOT/tools/bambu/node_modules/mqtt" ]]; then
+  echo "slice-smoke: bambu CLI deps missing (no tools/bambu/node_modules/mqtt)." >&2
+  echo "  run: npm --prefix \"$REPO_ROOT/tools/bambu\" install" >&2
+  exit 2
+fi
+
 OUT="$(mktemp -d)"
 trap 'rm -rf "$OUT"' EXIT
 OUT_3MF="smoke.sliced.3mf"
