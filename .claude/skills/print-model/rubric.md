@@ -225,6 +225,16 @@ owner gate, never past it.
 5. **Hand off at the owner gate** — present the plan + the `.3mf` path + the preview PNG, then **STOP**.
    The skill never uploads, never starts a print, never passes `--yes`. Dispatch is Omar's
    `bambu print send` (design §9). Say plainly that the plate is parked at the gate awaiting his call.
+   - **Offer to open the sliced plate in Bambu Studio for visual approval** — `open -b
+     com.bambulab.bambu-studio <plate>.3mf` (the bundle id, not `-a "Bambu Studio"`, which fails — the
+     `.app` bundle name is `BambuStudio`). This loads the sliced project (plate layout + toolpath preview)
+     in the real slicer so the operator can eyeball it at full fidelity — a richer review than the
+     preview PNG, and the natural place to *approve* before dispatch. It **opens a file; it dispatches
+     nothing** — read-only, on the operator's side of the gate. Offer it, don't force it (a headless run
+     or an operator who trusts the PNG skips it). **Approving in Studio does not change where dispatch
+     happens:** the recorded path stays `bambu print send --record` (which writes the
+     `docs/prints/<date>-<slug>/` record). If the operator instead hits *Print* inside Studio, that works
+     but bypasses our record loop — say so, so it is a chosen trade, not a silent gap.
 
 ## Recovery loop — when a print fails or disappoints (task #37)
 

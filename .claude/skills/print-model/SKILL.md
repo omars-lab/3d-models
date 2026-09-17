@@ -54,7 +54,9 @@ advisory shape per decision.
    filament). Each is a line in the plan; the operator decides.
 6. **Compose the plan** — every choice + its one-line why.
 7. **Slice** — `bambu slice plate` → `.3mf` + preview PNG.
-8. **Hand off at the owner gate** — plan + plate + preview. **STOP.** Dispatch is Omar's `print send`.
+8. **Hand off at the owner gate** — plan + plate + preview, plus an offer to open the sliced plate in
+   Bambu Studio for visual approval (`open -b com.bambulab.bambu-studio <plate>.3mf` — read-only, opens a
+   file, dispatches nothing). **STOP.** Dispatch is Omar's recorded `print send --record`.
 
 ## When a print fails or disappoints (the recovery loop)
 
