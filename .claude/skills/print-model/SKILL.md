@@ -98,11 +98,15 @@ The design (PR #191) is complete; this skill is being built out task by task:
   symptom seam ([`rubric.md`](rubric.md) §Recovery loop, task #37); the plate-arrangement reasoning —
   count-and-footprint-as-given, rotate-to-fit as an in-plane Z-rotation (not a re-orientation), the
   libnest2d NFP pack at 0/45/90/135° honouring `spacing`, the strict-win rotate advisory, and the
-  unverified dual-nozzle bed-zoning caveat ([`rubric.md`](rubric.md) §Arrangement, task #42).
+  unverified dual-nozzle bed-zoning caveat ([`rubric.md`](rubric.md) §Arrangement, task #42); the
+  nozzle-recommendation procedure — min-feature-first, default-0.4-and-state-it, the 0.2/0.6/0.8
+  deviation causes (the ~30–40% speed figure attributed not measured), the layer-height/single-wall
+  sanity-check, the thin-wall footgun, and the one-diameter-per-plate K2 caveat
+  ([`rubric.md`](rubric.md) §Nozzle, task #43).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Deepened by later tasks:**
-  nozzle recommendation (#43), proactive
+  proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
   out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
   rather than changing this body.
