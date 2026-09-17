@@ -59,10 +59,25 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    send or monitor a print **from inside Studio** — e.g. the print-model owner-gate's "open the sliced
    plate in Studio and hit Print" review path. Install it if you'll drive prints from Studio's GUI;
    skip it for the headless CLI path.*
-3. **Enable LAN Mode, then Developer Mode** on the printer (touchscreen). This opens MQTT/FTP/live
-   stream. Record the **access code** and **serial number**. Background on the authorization system:
+3. **Enable LAN Mode, then Developer Mode** on the printer touchscreen — the button path is
+   **gear / Settings → LAN Only Mode → ON → Developer Mode → ON** (Developer Mode only appears once
+   LAN-only is on; on the X2D's H2-series firmware these sit under **WLAN / Network**). **Accept the
+   disclaimer** — you own the LAN security from here. This is the step that opens **MQTT 8883 / FTP /
+   live stream**; LAN-only *without* Developer Mode still won't accept MCP control. Then **read the
+   access code** off that same network panel and record it with the **serial**. Labels shift between
+   the X-series and H2-series UIs — if the wording differs, it is still the same two toggles.
+   Step-by-steps: [enable LAN mode](https://wiki.bambulab.com/en/knowledge-sharing/enable-lan-mode) ·
+   [enable Developer Mode](https://wiki.bambulab.com/en/knowledge-sharing/enable-developer-mode).
+   Background on the authorization system:
    [Bambu Connect wiki](https://wiki.bambulab.com/en/software/bambu-connect) ·
    [Bambu's announcement](https://blog.bambulab.com/updates-and-third-party-integration-with-bambu-connect/).
+
+   **Storing the access code (it is a secret).** Two options: (a) paste it into the gitignored
+   `.mcp.json` (`bambu setup mcp` prints the block), or (b) — preferred — keep it encrypted-at-rest
+   with **dotenvx**: `dotenvx set BAMBU_TOKEN "$(pbpaste)"` writes an encrypted `.env` (commit-safe;
+   the private `.env.keys` is gitignored, never committed), then run the CLI under
+   `dotenvx run -- bin/bambu …` so `BAMBU_TOKEN` reaches `process.env` (config precedence is env →
+   `.mcp.json`). Add the non-secret `PRINTER_HOST` / `BAMBU_SERIAL` / `BAMBU_MODEL=x2d` the same way.
 4. **Install Bambu Connect** (the GUI fallback path): <https://wiki.bambulab.com/en/software/bambu-connect>.
 5. **Wire the MCP.** Copy [`.mcp.json.example`](../../../.mcp.json.example) to `.mcp.json` (gitignored
    — it carries the token) and fill in host/serial/token/model=`x2d`. `bambu setup mcp` prints the
@@ -120,4 +135,14 @@ is in [`rubric.md`](rubric.md).
   print it in full (the CLI masks it).
 - **Read-only before write.** `status show` must succeed before any `print send`.
 - **A dispatch is owner-gated** until a CAL bet justifies the print. The CLI confirms before sending.
+- **The safety boundary — our layer guards dispatch and secrets; the firmware guards the hardware.**
+  We never emit raw motion G-code — we hand a slicer-produced `.3mf` to the MCP, so nothing here can
+  drive the toolhead into the bed. Thermal cutoffs, stall / collision detection, homing,
+  filament-runout and dual-nozzle collision avoidance are **all firmware**. The residual first-print
+  risks are operator-side and **non-damaging**: poor first-layer adhesion (spaghetti), no filament
+  loaded, or a dual-nozzle profile mismatch — worst case is a failed print and cleanup, **not a broken
+  machine**. So the two controls that actually matter on a first print are **attend the first layer**
+  and **keep dispatch confirm-before-send**. On Plate 1 this is doubly load-bearing: MC-6 towers print
+  on **bare plate, no brim, by design** (that IS the adhesion test), so first-layer watching is the
+  measurement, not just caution.
 - Full sequencing and the build-vs-buy reasoning: [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
