@@ -4,8 +4,9 @@
 # steps: 144 statements, 144 tagged steps
 # source: reconstructions/7apC5Q9QS-8/construction.ggb-commands sha256:aa7562d6e790f05ccd1a2e79b2cda43ec935fdc5561eb109896abbcb3265a8be
 
-param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
-param unit = ($size - 8) / 5.6569   # mm per GeoGebra unit — derived from size so the inscribed art clears the rim
+param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 4   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 param pause1 = 1
 
 blueprint c_7apC5Q9QS_8_scaffold
@@ -482,8 +483,8 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
   edges from octD
 
 coaster Coaster
-  outline round $size
+  outline square $size
   inscribe c_7apC5Q9QS_8
   base 4
-  relief straps deboss 0.8
+  relief straps emboss 1.2
   strap width 2

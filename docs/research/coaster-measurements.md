@@ -6,6 +6,14 @@ feeds: docs/coaster-design.md
 
 # Coaster render + validator measurements (P2.7)
 
+> **Superseded 2026-09-17 (shape v2, D-066, bikar #208 / 3d-models #239).**
+> The vendored meshes are no longer the round discs measured below: the presets
+> now emit `outline polygon 6 $size rotate 30` (GimTvN9hw4U) and `outline square
+> $size` (7apC5Q9QS-8) with `relief straps emboss 1.2` and a `margin` param. The
+> current render table is in
+> [`coaster-shape-study.md`](coaster-shape-study.md); this file is kept verbatim
+> as the record of what P2.7 produced.
+
 Verbatim measurements from rendering the two construction coasters at mini
 (`--param size=40`) and standard (`--param size=90`), captured while landing the
 `--coaster` importer flag. The design doc cites these numbers; this file is the

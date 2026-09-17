@@ -5,8 +5,9 @@
 # source: reconstructions/GimTvN9hw4U/construction.ggb-commands sha256:6838767cbb24116b0e5986e62e05a0726b246b8ce0028dc1714fc7194525022e
 # renamed: rosette -> rosette_ (reserved word)
 
-param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
-param unit = ($size - 8) / 5.1962   # mm per GeoGebra unit — derived from size so the inscribed art clears the rim
+param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 4.5001   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
 blueprint GimTvN9hw4U_scaffold
   # ────────────────────────────────────────────────────────
@@ -97,8 +98,8 @@ pattern GimTvN9hw4U on GimTvN9hw4U_scaffold
       edges from pet_reflRosette
 
 coaster Coaster
-  outline round $size
+  outline polygon 6 $size rotate 30
   inscribe GimTvN9hw4U
   base 4
-  relief straps deboss 0.8
+  relief straps emboss 1.2
   strap width 2
