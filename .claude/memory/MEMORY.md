@@ -39,3 +39,4 @@
 - [Preserve stranded cross-repo work](preserve-stranded-cross-repo-work.md) — isolated worktree for the cherry-pick (never switch the shared checkout), check the sibling's memory-tracking convention first (qiyas keeps memory untracked), verify what actually landed on origin
 
 Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `amazon-scripts-repo` → amazon-scripts, `marketplace-repo-mirror-and-held-branch` → oeid-claude-plugin-marketplace, `check-for-existing-e2e-before-reporting-blocked` and `supabase-paused-project-timeout` → bikar. Named without links because the files are no longer here and a dead relative link is a D1 gate failure.
+- [Work conflicts by hand](work-conflicts-by-hand.md) — tenet 2026-09-17: resolve every conflict keeping both sides; `-X ours/theirs`, `checkout --ours/--theirs` denied by the guardrail-manager `block-git-ours-theirs` hook (opt-out only via `git-conflicts.conf`)
