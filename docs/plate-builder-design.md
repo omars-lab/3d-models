@@ -3,8 +3,11 @@
 Status: **DRAFT, DESIGN ONLY — NOT A BUILD COMMITMENT.** This doc proposes a frontend
 experience; it builds nothing and pins no schedule. Every path it gives for a *new*
 verb, page, or module is a **target**, not a shipped file. The pivotal question — *where
-the experience lives*, given the printer is LAN-only — is surfaced as an owner decision
-(PB-1, §8) and **not silently chosen**.
+the experience lives*, given the printer is LAN-only — **has been decided by Omar
+(2026-09-17): a separate internal web app, served privately over Tailscale and carrying
+its own skills/tooling, NOT a gh-pages static page** (§3, PB-1 → Option D). The build
+itself is still unscheduled; what remains open is build-or-not and app scope, not the
+architecture.
 
 Provenance: produced 2026-09-17 by a subagent for Omar's request — *"a frontend 'plate
 builder experience' where we can choose specific iteration of our prints, which ones to
@@ -27,7 +30,7 @@ The owners this doc consumes and does not fork:
 - **The existing prints frontend** —
   [`prints-tab-design.md`](prints-tab-design.md) (the record schema §4.1, the manifest
   the page reads §8, and the deliberate omission of cost/time/grams from the tab §11 /
-  [D-046](decisions-log.md), now being amended — see §1).
+  [D-046](decisions-log.md), amended 2026-09-17 to store AND show — see §1).
 - **Arrangement, the owner gate, and the print judgement** —
   [`print-model-design.md`](print-model-design.md) (plate arrangement / grid-pack /
   rotate-to-fit §5.4; the owner-gate handoff §9; the two lifecycle axes §3) and the
@@ -69,10 +72,10 @@ deliberately kept cost / print-time / filament-grams **off the prints-tab displa
 "the tab records what a plate taught, not what it cost." That is a decision about the
 *tab's display surface*, not a ban on computing estimates. Omar's answer PMR-8
 ([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §7)
-reverses the display omission — *store AND show* — in a sibling PR. This doc treats
-"per-iteration estimates are now surface-able" as a **given inherited from that in-flight
-amendment**, and does not re-decide it; if PMR-8 lands the other way, the builder's live
-estimates panel (§6) is blocked on it (noted in §8, open decisions).
+reverses the display omission — *store AND show* — and **landed 2026-09-17 (PR #217):
+D-046 is amended and estimates + MQTT actuals now surface on the tab.** This doc treats
+"per-iteration estimates are surface-able" as a **given, now discharged**, and does not
+re-decide it; the builder's live estimates panel (§6) is therefore unblocked (PB-7, §8).
 
 ---
 
@@ -112,10 +115,12 @@ answer (§6, PB-2; §5, PB-3).
 
 ## 3. Where it lives — the pivotal architecture fork (PB-1)
 
-**This is the one-way-door decision and it is deferred to Omar (§8).** It is surfaced
-here in full because the printer's transport determines what a *web* frontend can and
-cannot verify, and the repo's grain is to name what each option **verifies**, not only
-what it costs ([`CLAUDE.md`](../CLAUDE.md), "Robustness over ease").
+**This was the one-way-door decision; Omar decided it 2026-09-17 → Option D (§8).** It is
+surfaced here in full because the printer's transport determines what a *web* frontend can
+and cannot verify, and the repo's grain is to name what each option **verifies**, not only
+what it costs ([`CLAUDE.md`](../CLAUDE.md), "Robustness over ease"). Options A–C below are
+kept as the considered space that Option D supersedes — the record of *why* a served app,
+not a static page, is the answer.
 
 **The transport constraint.** The X2D is **LAN-only**: live status is first-party
 **MQTT over TLS on 8883** (user `bblp`, the printer's **access code** as password), and
@@ -140,46 +145,58 @@ the credentials: the `bambu` CLI.
 > two halves are drawn apart for exactly this reason; a design that put the live half in
 > the static page would be asserting a reachability the transport does not have.
 
-Three placements were considered here (K2 — these three, not "the only possible
+> **The Tailscale resolution (Omar, 2026-09-17).** The constraint above is specifically a
+> constraint on a **static gh-pages** frontend. It dissolves the moment the frontend is a
+> **served app on a host that sits on the LAN** rather than a static page in a stranger's
+> browser: then the browser talks plain **HTTP to the app**, and the **app** — not the
+> browser — opens the MQTT/TLS and FTPS sockets to the printer and holds the access code
+> **server-side** (PB-5 is satisfied by construction, the secret never leaving the host).
+> The remaining objection to such an app — "an internal server is not something this repo
+> exposes publicly" — is answered by **Tailscale**: the app is published only on the
+> owner's **tailnet**, authenticated by Tailscale's identity, never on the public internet
+> and never on gh-pages. This is why Option D supersedes the hybrid: it delivers the whole
+> visual experience *and* every live capability from one place, with the credential surface
+> reduced to a single private host.
+
+Four placements were considered here (K2 — these four, not "the only possible
 architectures"), each with what it *verifies*:
 
 | Option | Shape | What it VERIFIES | What it costs / cannot verify |
 |---|---|---|---|
-| **A — Hybrid (recommended):** static gh-pages page for **browse + compose + estimate**, a **local `bambu` bridge** (a localhost server wrapping the CLI) for **query / slice / dispatch** | The page everyone can open shows history + additive grams + a fit *advisory* offline; the live half lights up only when the operator runs the bridge on the LAN | Offline: "these iterations exist and their material sums to X g" (from checked-in data). Bridge-on: "the printer is reachable, the real arrangement fits, exact time = T" (a real slice + a real `status`) — each half says which it proves | Needs the operator to run a local process for the live half; the bridge is a new surface (a localhost HTTP wrapper over existing verbs) to build. The static page alone cannot verify anything live |
+| **D — Internal app on Tailscale (CHOSEN):** a **served** web app (its own UI + backend + skills/tooling) running on a LAN host, published privately over the **tailnet**; the browser talks HTTP to the app, the app talks MQTT/FTPS to the X2D and holds the access code server-side | The full visual browse/compose/estimate experience **and** every live capability Omar named — a real `status`, a real fit-slice, exact time — from one place, each labelled estimate-vs-actual; the secret stays on the host (PB-5) and the app is reachable only on the owner's tailnet | Not a public gh-pages page (by design — it is internal); a running host + a Tailscale-published service to build and keep up; more surface than a CLI verb, which is the cost paid for the visual experience Omar asked for |
+| **A — Hybrid:** static gh-pages page for **browse + compose + estimate**, a **local `bambu` bridge** (a localhost server wrapping the CLI) for **query / slice / dispatch** | The page everyone can open shows history + additive grams + a fit *advisory* offline; the live half lights up only when the operator runs the bridge on the LAN | Offline: "these iterations exist and their material sums to X g" (from checked-in data). Bridge-on: "the printer is reachable, the real arrangement fits, exact time = T" (a real slice + a real `status`) — each half says which it proves | Two surfaces, split brain: a public page that can verify nothing live plus a localhost bridge; the operator runs a local process anyway, so Option D's single served app is simpler for the same reach |
 | **B — CLI / TUI only:** the "frontend" is the `bambu` CLI extended with a `plate` verb group; composition happens in a terminal picker | Everything the CLI already can — a real `status`, a real slice, the real owner gate — with no new transport surface and no secret leaving the machine | Not a *visual* browse/drag experience; no shareable page for a gallery visitor; the repo's frontends are web pages, so this diverges from that grain |
 | **C — Static-only composition:** the page is a pure planner (browse + compose + additive estimate + fit advisory) and **emits a spec** the operator feeds to the CLI for the live/slice/dispatch steps | The page verifies exactly the offline claims (identity + additive material + a rough fit); it makes **no** live claim and says so | Cannot query the printer or show exact time at all from the page — the "query printer / current time" parts of Omar's ask are answered only in the CLI, off-page |
 
-**Recommendation (deferred to Omar): Option A (hybrid).** It is the *robust-and-simple*
-choice over the *cheap-and-easy* one ([`CLAUDE.md`](../CLAUDE.md)): the browse/compose/
-estimate surface is a static page (cheap, and honest about verifying only offline
-facts), and the three live capabilities Omar named — *query printer, exact fit, exact
-time* — are served by a **local bridge over the `bambu` CLI**, which is the only place
-the access code legitimately lives (PB-5). The bridge *verifies* what a static page
-cannot: a real `status show` and a real `slice plate` of the *actual* arrangement. The
-cheap option (embed live data in the page, or fake it) verifies nothing and is not
-offered. **This is a decision about how a frontend ships and about touching the
-credential surface — one-way-door and Omar's, not this doc's, to make.** §8 states the
-fork as an open decision rather than closing it here.
+**Decision (Omar, 2026-09-17): Option D — a separate internal app served over Tailscale,
+with its own skills.** It is the *robust-and-simple* choice over the *cheap-and-easy* one
+([`CLAUDE.md`](../CLAUDE.md)): one served app delivers the visual experience and every live
+capability Omar named — *query printer, exact fit, exact time* — because the **app**, not a
+browser, holds the access code (PB-5) and opens the LAN sockets, and Tailscale keeps it
+private without putting it on gh-pages. The hybrid (Option A) reaches the same printer but
+splits into a public page that verifies nothing live plus a localhost bridge the operator
+must run anyway — two surfaces for one job, the fork a migration never buys. The cheap
+option (embed live data in a static page, or fake it) verifies nothing and is not offered.
+**The build is still unscheduled — this decision fixes the architecture, not a timeline.**
 
 ```mermaid
 flowchart LR
-    subgraph Browser [Static gh-pages page &#40;anyone&#41;]
-      P1[Browse iterations from manifest]
-      P2[Compose selection + copy counts]
-      P3[Additive grams / floor time]
-      P4[Fit advisory &#40;rough grid-pack&#41;]
-    end
-    subgraph Local [Local bambu bridge on the LAN &#40;operator only&#41;]
-      B1[status show &#8594; state / AMS / progress]
-      B2[slice plate &#8594; .3mf + exact time]
-      B3[validate + owner gate]
+    subgraph Tailnet [Internal app on the owner's tailnet &#40;Tailscale-authenticated&#41;]
+      subgraph App [Served plate-builder app on a LAN host]
+        P1[Browse iterations from manifest]
+        P2[Compose selection + copy counts]
+        P3[Additive grams / floor time]
+        P4[Fit advisory &#40;rough grid-pack&#41;]
+        B1[status show &#8594; state / AMS / progress]
+        B2[slice plate &#8594; .3mf + exact time]
+        B3[validate + owner gate]
+      end
+      Browser[Browser on the tailnet] -. HTTP .-> App
     end
     Manifest[(prints-manifest.json + stored estimates)] --> P1
-    P2 --> P3 --> P4
-    P4 -. bridge running? .-> B1
-    B1 --> B2 --> B3
-    Printer[[X2D over LAN: MQTT 8883 / FTPS 990]] --- B1
-    Printer --- B2
+    P2 --> P3 --> P4 --> B1 --> B2 --> B3
+    App -- access code held server-side --- Printer
+    Printer[[X2D over LAN: MQTT 8883 / FTPS 990]]
 ```
 
 ---
@@ -358,28 +375,35 @@ what it verifies.
 
 | # | Decision | Options | Recommendation & why |
 |---|---|---|---|
-| **PB-1** | **Where the experience lives (the architecture fork)** | (a) hybrid: static page + local `bambu` bridge; (b) CLI/TUI only; (c) static-only composition, live/slice off-page in the CLI | **(a) — but DEFER to Omar.** (a) verifies the offline claims in a shareable page *and* the live claims via a real `status`/`slice`, each half saying which; (b) verifies all live claims but is not the visual experience asked for; (c) verifies only offline and cannot answer "query printer / current time" on-page. **One-way-door** (how a frontend ships + the credential surface) → Omar's call, restated open below. |
+| **PB-1** | **Where the experience lives (the architecture fork)** | (d) internal app served over Tailscale, its own skills; (a) hybrid: static page + local `bambu` bridge; (b) CLI/TUI only; (c) static-only composition, live/slice off-page in the CLI | **(d) — DECIDED by Omar 2026-09-17.** A served app on a LAN host, published privately on the tailnet: the browser talks HTTP to the app, the app opens the MQTT/FTPS sockets and holds the access code server-side (PB-5), so it delivers the full visual experience *and* every live capability from one place — no gh-pages, no browser-held secret. (a) reaches the same printer but splits into a public page (verifies nothing live) + a localhost bridge the operator runs anyway — two surfaces for one job; (b) verifies all live claims but is not the visual experience asked for; (c) verifies only offline. **One-way-door, and made.** |
 | **PB-2** | Composite time presentation | (a) show Σ unit times as a **floor** `≥ …` + a *slice-for-exact* action; (b) show a single "estimated time" number | **(a).** Plate time ≥ Σ unit times ([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3); (b) presents a lower bound as the answer — a K1 honesty failure. |
 | **PB-3** | Bed-fit surface | (a) in-page **advisory** grid-pack + authoritative fit only at slice; (b) claim authoritative fit in the browser | **(a).** A browser bbox pack is weaker than NFP (§5, K10); only the real slice's arrangement is authoritative. (b) would over-claim reachability the browser lacks. |
 | **PB-4** | Compose → build | (a) **re-slice** the composed arrangement; replay only the unchanged single-plate case (delegated to `reprint`) | **(a).** Any arrangement/quantity change forces a re-slice (PMR-3); a new multi-iteration plate is always such a change. Byte-identical replay is a different verb, not this one. |
-| **PB-5** | Access-code / secret handling | (a) the **bridge/CLI holds the access code** (same env block the CLI reads, [`tools/bambu/README.md`](../tools/bambu/README.md)); the page talks to localhost; (b) put the code in the page | **(a).** The access code is the MQTT password; it must never reach a browser or stdout (memory *secret-check-no-stdout-leak*). (b) verifies nothing and leaks a secret — not offered as viable. |
+| **PB-5** | Access-code / secret handling | (a) the **served app holds the access code server-side** (same env block the CLI reads, [`tools/bambu/README.md`](../tools/bambu/README.md)); the browser talks HTTP to the app, never to the printer; (b) put the code in the page | **(a).** The access code is the MQTT password; it must never reach a browser or stdout (memory *secret-check-no-stdout-leak*). Under PB-1 = Option D the app is the only holder, and the tailnet is the only place it is reachable. (b) verifies nothing and leaks a secret — not offered as viable. |
 | **PB-6** | Iteration browse data source | (a) **project the records** (manifest / `print stats`); (b) a second iteration store the builder maintains | **(a).** Records are the single source of truth; a second store drifts on any hand-edit — the C4 derivable-data hazard ([`CLAUDE.md`](../CLAUDE.md)). |
-| **PB-7** | Estimates surfacing dependency | inherit PMR-8 (store **and** show estimates) as given | **Inherited, not re-decided.** The live panel (§6) depends on PMR-8 landing "show"; if PMR-8 keeps estimates off-surface, §6 is blocked. Flagged open below, not silently assumed away. |
+| **PB-7** | Estimates surfacing dependency | inherit PMR-8 (store **and** show estimates) as given | **Satisfied — PMR-8 resolved 2026-09-17 (PR #217) = "store AND show".** The live panel (§6) needed PMR-8 to land "show", and it did (D-046 amended; estimates + MQTT actuals surface on the tab). No longer a blocker; kept here as the dependency that was discharged. |
 
-### Open owner decisions (for Omar)
+### Owner decisions — resolved and still open
 
-1. **PB-1 — the architecture fork (pivotal, one-way-door).** Hybrid static-page +
-   local-bridge (recommended), CLI/TUI only, or static-only composition. This sets how
-   the experience ships and whether it touches the credential surface. **Not chosen here
-   — Omar's call.**
-2. **Build-or-not / sequencing.** This is design-only. Whether the plate builder is built
+**Resolved (2026-09-17):**
+
+1. **PB-1 — the architecture fork (pivotal, one-way-door). DECIDED → Option D:** a
+   separate internal app served over Tailscale, with its own skills — not gh-pages, not a
+   localhost bridge. The served app holds the access code and opens the LAN sockets; the
+   tailnet keeps it private. (§3.)
+2. **PB-7 — dependency on PMR-8. DISCHARGED:** PMR-8 resolved to "store AND show"
+   (PR #217), so the live estimates panel §6 is unblocked.
+
+**Still open (for Omar):**
+
+3. **Build-or-not / sequencing.** This is design-only. Whether the plate builder is built
    at all, and whether before or after the print-metadata verbs (`reprint`, `stats`) it
-   consumes ship, is a scope/priority call for Omar.
-3. **PB-7 — dependency on PMR-8.** The live estimates panel needs per-iteration estimates
-   *surfaced*. If Omar's PMR-8 answer keeps them stored-but-hidden, §6 must be re-scoped.
-4. **Bridge scope, if PB-1 = hybrid.** Whether the local bridge is a new `bambu plate
-   serve` localhost verb, or the page shells to the CLI another way — a follow-on design,
-   flagged so it is not assumed.
+   consumes ship, is a scope/priority call for Omar. (The architecture is settled; the
+   timeline is not.)
+4. **App scope + stack, once build is greenlit.** What the served app is concretely — the
+   backend that wraps the `bambu` verbs (a thin HTTP service over `status`/`slice`/
+   `validate`/gated `send`), the host it runs on, how it is published on the tailnet, and
+   the shape of "its own skills" — is a follow-on design, flagged so it is not assumed.
 
 ---
 
@@ -389,18 +413,19 @@ what it verifies.
   (§4, like `print list`), the estimate panel sums the stored `estimates:` block (§6),
   the fit advisory is a bbox pack with the authoritative fit deferred to `slice` (§5),
   and dispatch is the existing owner gate (§7) — no new engine, no forked store.
-- **The architecture fork is stated as a fork, not hidden (§3, PB-1).** The doc
-  recommends hybrid *and* leaves the one-way-door decision open for Omar (§8); §3's
-  transport constraint and §8's PB-1 agree that a static page cannot verify the live
-  half.
+- **The architecture fork was stated as a fork, then decided (§3, PB-1 → Option D).** The
+  doc laid out all four placements with what each verifies, and Omar chose the served
+  Tailscale app (2026-09-17); §3, §8's PB-1, and the intro now agree on Option D and on
+  *why* — a static gh-pages page cannot verify the live half, so a served app on the LAN
+  does. The superseded options A–C are kept as the considered space, not hidden.
 - **Grams-exact vs time-floor is consistent everywhere.** §2 (E→K seam), §6 (the panel),
   and PB-2 all say material is additive-exact and time is a floor until a real slice — no
   section shows a summed time as the answer.
-- **Every claim carries its hedge (K1/K2).** The estimates omission is a *display*
-  decision being amended by PMR-8, not a ban (§1); the three architecture options are
-  "considered here", not "the only architectures" (§3); dispatch is unported and needs
-  signed MQTT on X2D, tagged `[X2D-UNCONFIRMED]` (§7); the `.3mf` estimate members are
-  the sibling doc's unverified-here probe (inherited, §4).
+- **Every claim carries its hedge (K1/K2).** The estimates omission was a *display*
+  decision, now amended by PMR-8 (resolved "store AND show", PR #217), never a ban (§1);
+  the four architecture options are "considered here", not "the only architectures" (§3);
+  dispatch is unported and needs signed MQTT on X2D, tagged `[X2D-UNCONFIRMED]` (§7); the
+  `.3mf` estimate members are the sibling doc's unverified-here probe (inherited, §4).
 - **Transfer conditions are written where a rule is ported (K10).** The static-frontend
   pattern (§3), the arrangement heuristic (§5), and the additive rule (§6) each state
   what must hold for the port, and each names the half that does *not* transfer.
