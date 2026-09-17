@@ -1,0 +1,34 @@
+#!/bin/sh
+# Constructions-ledger gate (.claude/gates/constructions_ledger.py). The ledger
+# docs/constructions/ledger.md is the record of each GeoGebra construction on its
+# way from a youtube reconstruction to a naqsh .bkr to a vendored coaster. This
+# hook blocks a commit whose ledger row names a .bkr bikar cannot resolve or an
+# src/Coasters/ STL not on disk, or whose header pins a youtube commit that does
+# not exist; it REPORTS (never blocks) the youtube ids owed a row and the rows
+# behind their own done.md. Override once: CONSTRUCTIONS_OK=1 git commit
+#
+# 44, not 38: the design brief named 38-constructions, but 38-timelapse already
+# holds that slot — a second 38-* would run interleaved with it for no reason, so
+# this rides at the tail with the other late gates.
+#
+# wholesale: make validate-constructions
+[ -n "$CONSTRUCTIONS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the constructions gate" >&2
+  exit 1
+fi
+# Same worktree caveat as the gates before it: `gh-pages` carries `.githooks`
+# and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/constructions_ledger.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no constructions gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+# Fire only when this commit touches the ledger, a coaster mesh, or the gate
+# itself — the three things that can change the verdict. The gate then runs over
+# the whole tree (it reads a sibling and youtube, neither visible in a staged
+# diff), which is also the wholesale form above.
+if git diff --cached --name-only | grep -Eq '^(docs/constructions/ledger\.md|src/Coasters/|\.claude/gates/constructions_ledger\.py$)'; then
+  exec python3 "$GATE"
+fi
+exit 0

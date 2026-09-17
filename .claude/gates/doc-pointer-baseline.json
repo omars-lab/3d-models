@@ -96,16 +96,6 @@
     },
     {
       "doc": "docs/geogebra-construction-import-design.md",
-      "path": "docs/constructions/ledger.md",
-      "why": "Proposed \u2014 the constructions ledger P3.2 writes. Remove this when the file is written."
-    },
-    {
-      "doc": "docs/geogebra-construction-import-design.md",
-      "path": ".claude/gates/constructions_ledger.py",
-      "why": "Proposed \u2014 the ledger gate P3.2 writes. Remove this when the file is written."
-    },
-    {
-      "doc": "docs/geogebra-construction-import-design.md",
       "path": "docs/plates/minis-01.yaml",
       "why": "Proposed \u2014 the first mini-plate manifest P4.2 writes. Remove this when the file is written."
     },
