@@ -55,6 +55,14 @@ research file; this file adds *our* data on top.
 - **Loaded filament, read live (2026-09-17).** `bambu filament` read AMS 0 slot 0 =
   PLA Basic · #F5547C · GFA00 · 100%, plus a loaded external `vir_slot`. Confirms the discovery seam the
   filament decision depends on.
+- **Open the sliced plate in Bambu Studio for visual approval (2026-09-17).** At the owner gate, the
+  sliced `.3mf` opens in the real slicer for a full-fidelity look before dispatch:
+  `open -b com.bambulab.bambu-studio <plate>.3mf`. Proven on the Plate-1 machine card (all 23 rungs load
+  with the toolpath preview). It **opens a file and dispatches nothing** — a read-only review surface on
+  the operator's side of the gate; the recorded dispatch path stays `bambu print send --record`. Footgun:
+  `open -a "Bambu Studio" …` fails ("Unable to find application named 'Bambu Studio'") — the `.app`
+  bundle name is `BambuStudio` with no space, so use the bundle id `com.bambulab.bambu-studio` (stable
+  across a display-name rename), not the display name.
 
 ## Grounded rules, by decision
 
