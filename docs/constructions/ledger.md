@@ -2,9 +2,10 @@
 
 One row per GeoGebra construction on its way from a youtube reconstruction to a
 naqsh (`.bkr`) file bikar renders to a printable coaster this repo vendors. The
-umbrella design is geogebra-construction-import-design.md and the three oracles
-O1/O2/O3 are construction-equivalence.md (both on PR #187, not yet on master —
-so they are named here in prose, not linked, until they land). This file is the
+umbrella design is the
+[GeoGebra construction import design](../geogebra-construction-import-design.md)
+and the three oracles O1/O2/O3 are specified in
+[construction equivalence](../construction-equivalence.md). This file is the
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
@@ -21,11 +22,23 @@ it says so and skips the cross-check rather than passing or failing it.
 Scope of the set (K2): **9 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**0 <!--count:constructions-migrated--> migrated** so far: a row counts as
-migrated once its naqsh cell names a real `.bkr`. `GimTvN9hw4U`'s lowering has
-been measured against all three oracles (equivalence doc, 2026-09-17) but its
-`.bkr` lives on bikar branch `feat/naqsh-import` and is not merged, so its
-naqsh cell — like every other — is still `—`.
+**2 <!--count:constructions-migrated--> migrated** so far: a row counts as
+migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
+`GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
+`piece Coaster` trailer) and `7apC5Q9QS-8` with bikar PR #202. Neither has a vendored
+coaster STL or a catalog entry yet — that is P3.3 of the umbrella plan, which
+waits on the `coaster` declaration (P1.6/P2.7).
+
+Oracle cells read `PASS a/b` — O1: labels compared / failed; O2: centreline
+recall / precision; O3: reference coverage — or `—` when that oracle has not
+been run on the row's `.bkr`. A verdict is only ever the one the equivalence
+doc's validator printed, never a re-typed summary: `GimTvN9hw4U`'s three are in
+[construction equivalence §2–§4](../construction-equivalence.md) and its
+research file; `7apC5Q9QS-8`'s O1 and O2 were run 2026-09-17 on the youtube
+`feat/ggb-coords` verdict scripts against a hero rebuilt with the loop's own
+export (the earlier `export.png` was a stale 5123×5123 square that O2 scored
+recall 0.01; the youtube issue note naqsh-score-stale-hero on that branch has the evidence), and its O3 has
+not been run: no `make reference` for it yet.
 
 ## Columns
 
@@ -47,8 +60,8 @@ naqsh cell — like every other — is still `—`.
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
-| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | — | — | — | — | — | — | — |
-| `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | — | — | — | — |
+| `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | — | — | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | — | — | — | — | — | — | — |
