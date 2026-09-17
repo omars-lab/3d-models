@@ -53,6 +53,19 @@ these settings *are* the experiment** — getting one wrong erases a reading:
   footgun**: this profile can add a brim silently, which turns the adhesion test into a non-test.
 - **MC-2 sub-floor rungs → slice without `--check`.** They fail the mesh check by design; the failure
   is the data.
+- **The slice captures BambuStudio's own slicing warnings and triages them** (`--debug 2`, #52),
+  writing a `<plate>.warnings.json` sidecar the dispatch gate reads. **One warning is expected on
+  Plate 1**: *"object MC2Wall04.stl has floating regions — re-orient or enable support"* — and only on
+  the **0.4 mm** wall rung (measured 2026-09-17; the 0.6 / 0.8 / 1.0 mm rungs slice clean — do not
+  expect it on them). It is by design (below the min-feature floor, `CAL-FEA-01`): **do not add support
+  or re-orient — that defeats the measurement.** `bambu slice` prints it as `✓ expected (by design)`.
+  An *unexpected* warning is different: it **blocks dispatch** (the gate is fail-closed) and must be
+  fixed or, if genuinely by-design, whitelisted in `.claude/gates/expected-slicer-warnings.json` — never
+  waved past. See [`docs/issues/slicer-warnings-cli-visibility-pivot.md`](../../../docs/issues/slicer-warnings-cli-visibility-pivot.md).
+- **Filament grouping (X2D dual-nozzle) → leave it on Plate 1.** With one material the grouping mode is
+  a no-op and Studio's **Filament-Saving** default is already correct — nothing to set, no click to make.
+  Only a *multi-filament* plate reasons Filament-Saving vs Quality vs Custom
+  ([`print-model` rubric](../print-model/rubric.md) §Filament grouping; `bambu slice --filament-map-mode`, #53).
 
 ### 2 — Eyeball the sliced plate before it leaves the screen
 
@@ -61,10 +74,10 @@ supports on MC-4, every coupon on the bed. `calibration-design.md` §8 flags MC-
 *"no raster render was eyeballed"* is its known weakness, and MC-4's failure mode is a silently-wrong
 dimension. Fix the slice now, not after 3 hours of print time.
 
-To see the plate in the slicer itself, open it in Bambu Studio — a read-only, local approval step
-that does **not** dispatch. Until the CLI owns a verb for this (task #51), that is a raw
-`open -a "/Applications/BambuStudio.app" <plate.3mf>` on macOS; a first-class `bambu` verb will
-replace it.
+To see the plate in the slicer itself, run **`bambu slice open <plate.3mf>`** — a read-only, local
+approval step that opens the file in Bambu Studio and dispatches **nothing** (it reports honestly if
+Studio isn't installed rather than failing cryptically). This is the first-class verb that replaced
+the old raw `open -a "/Applications/BambuStudio.app"` (task #51) — use it, not the raw open.
 
 ### 3 — Record the profile header *before anything moves*
 
@@ -90,9 +103,10 @@ the record and the bench sheet agree.
 > reads* run on our first-party MQTT backend (D-055, PR #188). The **dispatch half** — FTPS upload +
 > MQTT `print.project_file` — was deferred and still routes through the griches `McpBackend`, which is
 > not installed, so `print send` fails at connect today. **Task #50 ports it.** Until then the only
-> working dispatch is **Bambu Studio's GUI**: open the sliced `.3mf` (step 2), verify it is the right
-> plate, then Print over LAN to the X2D. The GUI path does **not** fire `--record`, so scaffold the
-> record by hand (or wait for #50) — the header from step 3 is what goes in it. The owner-gate rule is
+> working dispatch is **Bambu Studio's GUI**, and with the plate already open from step 2
+> (`bambu slice open <plate.3mf>`) it is **one click**: confirm it is the right plate, then **Print**
+> → send over LAN to the X2D. The GUI path does **not** fire `--record`, so scaffold the record by
+> hand (or wait for #50) — the header from step 3 is what goes in it. The owner-gate rule is
 > unchanged on either path: the physical send is the operator's, never the skill's.
 
 ### 5 — Attend the print, and print the whole card in one session
