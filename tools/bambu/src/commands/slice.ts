@@ -12,7 +12,8 @@
 // e.g. `make orbs`) and slice the STL. We reject .bkr here rather than silently doing nothing.
 
 import { Command } from "commander";
-import { existsSync, statSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, statSync, readdirSync, writeFileSync, readFileSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
@@ -92,6 +93,95 @@ interface SliceOpts {
   timeout: string;
   dryRun?: boolean;
   strict?: boolean;
+  filamentMapMode?: string;
+}
+
+// ── X2D dual-nozzle filament grouping ────────────────────────────────────────────────────────────
+// The GUI's "Filament Grouping" selector maps to the process-config enum `filament_map_mode`
+// (a ConfigOptionEnum<FilamentMapMode>). Verified 2026-09-17 (BambuStudio 02.08.02.61, X2D presets):
+//   • The enum literals are "Auto For Flush" (Filament-Saving, the DEFAULT — minimise waste/flush),
+//     "Auto For Match" (Quality — prioritise print quality over saving) and "Manual" (a hand-assigned
+//     per-filament `filament_map` array).
+//   • Studio does NOT validate the string — a typo (`Bogus`) slices exit 0 and silently falls back to
+//     the default — so WE own the token→literal mapping and reject anything unknown, rather than letting
+//     a silent no-op through.
+//   • The key must be MERGED INTO the one process JSON: passing it as a second `--load-settings` process
+//     file errors "duplicate process config file". The merged value lands in the sliced 3mf's
+//     project_settings.config / model_settings.config.
+//   • With a single filament the grouping collapses to one group (`filament_maps=1`) regardless of mode
+//     — it is a definitional no-op. So this flag only DOES anything on a multi-filament plate.
+// See docs/issues/x2d-filament-grouping-mode.md.
+
+const FILAMENT_MAP_MODE_ENUM: Record<string, string> = {
+  saving: "Auto For Flush", // Filament-Saving — the default
+  quality: "Auto For Match", // Quality — prioritise print quality over filament saving
+};
+
+/** Map a validated grouping token to Studio's exact enum literal. `manual` is recognised but rejected
+ *  (it needs an explicit per-filament `filament_map` array this command does not generate); anything
+ *  else throws — Studio would silently accept a typo as the default, so we must not. */
+export function filamentMapModeEnum(token: string): string {
+  const t = token.trim().toLowerCase();
+  if (t === "manual") {
+    throw new Error(
+      "--filament-map-mode manual needs an explicit per-filament `filament_map` array, which this " +
+        "command does not generate. Hand-edit the process JSON (add `filament_map`) and pass it with " +
+        "-s, or use `saving` (Filament-Saving, the default) or `quality`.",
+    );
+  }
+  const hit = FILAMENT_MAP_MODE_ENUM[t];
+  if (!hit) {
+    throw new Error(
+      `unknown --filament-map-mode "${token}". Use: saving (Filament-Saving, default), quality, or manual.`,
+    );
+  }
+  return hit;
+}
+
+/** Number of loaded filaments in a ';'-joined --filament list. Grouping only means something with ≥2. */
+export function filamentCount(filament?: string): number {
+  if (!filament) return 0;
+  return filament
+    .split(";")
+    .map((t) => t.trim())
+    .filter(Boolean).length;
+}
+
+/** Merge `filament_map_mode` into the ONE process config among a resolved --settings list. Studio errors
+ *  on a second process file, so the enum must live inside the process JSON itself. Writes the merged copy
+ *  into `scratchDir` and returns the new ';'-joined settings string plus which preset it merged into.
+ *  Throws if no process config is present (the enum has nowhere to go). */
+export function injectFilamentMapMode(
+  settings: string,
+  enumValue: string,
+  scratchDir: string,
+): { settings: string; mergedInto: string } {
+  const paths = settings
+    .split(";")
+    .map((t) => t.trim())
+    .filter(Boolean);
+  let mergedInto = "";
+  const out = paths.map((p) => {
+    let cfg: Record<string, unknown>;
+    try {
+      cfg = JSON.parse(readFileSync(p, "utf8")) as Record<string, unknown>;
+    } catch {
+      return p; // not JSON we can read — leave it (machine configs pass through untouched)
+    }
+    if (cfg.type !== "process") return p;
+    cfg.filament_map_mode = enumValue;
+    const tmp = join(scratchDir, `fmm.${basename(p)}`);
+    writeFileSync(tmp, JSON.stringify(cfg, null, 2) + "\n");
+    mergedInto = p;
+    return tmp;
+  });
+  if (!mergedInto) {
+    throw new Error(
+      "--filament-map-mode needs a process preset in -s/--settings — the enum lives in the process " +
+        "config. Pass the process preset name/path with -s.",
+    );
+  }
+  return { settings: out.join(";"), mergedInto };
 }
 
 // Slicer warnings are captured from BambuStudio's OWN output, not guessed: at `--debug 2` (warning)
@@ -160,6 +250,39 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       process.exitCode = 2;
       return;
     }
+
+    // Dual-nozzle filament grouping. Only meaningful with ≥2 filaments; a single filament collapses to
+    // one group regardless of mode, so we say the no-op out loud rather than pretend to set it.
+    if (opts.filamentMapMode) {
+      let enumValue: string;
+      try {
+        enumValue = filamentMapModeEnum(opts.filamentMapMode);
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 2;
+        return;
+      }
+      if (filamentCount(opts.filament) <= 1) {
+        console.log(
+          `filament grouping: single filament → no-op (grouping needs ≥2 filaments). ` +
+            `The default is Filament-Saving; nothing to set.`,
+        );
+      } else {
+        try {
+          const scratch = mkdtempSync(join(tmpdir(), "bambu-fmm-"));
+          const injected = injectFilamentMapMode(opts.settings ?? "", enumValue, scratch);
+          opts.settings = injected.settings;
+          console.log(
+            `filament grouping: ${opts.filamentMapMode} ("${enumValue}") merged into ${basename(injected.mergedInto)}.`,
+          );
+        } catch (err) {
+          console.error((err as Error).message);
+          process.exitCode = 2;
+          return;
+        }
+      }
+    }
+
     const args = buildStudioArgs(abs, outDir, outFile, opts, raw);
     if (opts.dryRun) {
       console.log("dry run — would execute:");
@@ -303,6 +426,10 @@ export function registerSlice(program: Command): void {
       "filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path",
     )
     .option("-p, --plate <n>", "plate index to slice, 0 = all", "0")
+    .option(
+      "--filament-map-mode <mode>",
+      "X2D dual-nozzle filament grouping: saving (Filament-Saving, default) | quality | manual — only affects a plate with ≥2 filaments",
+    )
     .option("--arrange", "arrange objects before slicing", false)
     .option("-t, --timeout <seconds>", "slice timeout in seconds", "300")
     .option("--strict", "exit non-zero if the slicer prints any warning/error-looking line", false)
