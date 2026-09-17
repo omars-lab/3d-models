@@ -273,13 +273,27 @@ printing: a defect found and fixed on a real plate must leave behind the thing t
 time. Here that thing is a [`best-practices.md`](best-practices.md) example the *next plan is made to
 honor* — the print-plan analogue of "the test that fails before the fix and passes after".
 
-**What graduates (all three must hold):**
+**What graduates — two tracks, and neither is a CAL coupon reading:**
+
+*Track 1 — a physical plate finding* (all three must hold):
 1. It came off **our** machine — a reading from a plate, not a figure from literature.
 2. It is **physical and new** — not a catalog defect we merely re-hit (recovery-loop step 5). Re-hitting
    a known defect changes nothing; a new datum does.
 3. It is a **practice** finding about a decision this skill owns (orientation, supports, brim, filament,
    arrangement, a printability limit) — **not** a `settles: CAL-…` coupon reading. Coupon readings
    propagate through the bet registry, not here (see the boundary below).
+
+*Track 2 — an operational / slice-path / tooling finding* (all three must hold): a learning that surfaces
+while **running the skill** — slicing, arranging, dispatching, reading the device — rather than off a
+plate. It graduates when it is:
+1. **Reproducible in our toolchain** — a behavior of our slicer profiles, the `bambu` CLI, or the
+   device path that we observed and can trigger again, not a one-off guess.
+2. **New** — not already an example or rule here.
+3. About a **step this skill owns or drives**, and **not** a `settles: CAL-…` reading (those still go to
+   the bet registry). *Worked example, 2026-09-17:* the shipped `0.20mm Standard @BBL X2D` profile's
+   `brim_type = auto_brim` silently brims the MC-6 towers — a slice-path footgun caught before any plate,
+   graduated to "Our examples" (PR #210). No plate was printed, so Track 1 would have rejected it; Track 2
+   is exactly for this.
 
 **How it graduates:**
 1. **Carry the provenance.** The example records the plate's process identity — the `how`
@@ -297,6 +311,23 @@ honor* — the print-plan analogue of "the test that fails before the fix and pa
    finding produces a **tenet** — a rule that changes how *every* future plan is made — is a durable
    line written, and it goes in best-practices' grounded-rules section as a `[measured]` rule, never a
    catalog.
+
+**Reusable scripts & recipes — don't leave a repeatable fix as prose.** When a finding's fix is a
+*command sequence you would run again* (the auto_brim fix is: materialize the full process JSON with
+`brim_type` flipped, then slice the 23 rungs with `--arrange` and the trailing-`--` escape hatch), the
+example must not be the only copy of it. In order of preference:
+1. **Push the variation into the tool** ([`CLAUDE.md`](../../../CLAUDE.md) "Run one simple command"): a
+   `bambu` CLI flag or a `make` target, so the call site stays one stable, allow-listable command
+   (`bambu slice plate … --no-brim` beats a re-typed profile dance). The `bambu` CLI and the slice
+   pre-flight are owned elsewhere ([`bambu` skill](../bambu/SKILL.md); coordinate with the branch that
+   owns them before adding a flag — do not fork the verb).
+2. **Else, a script beside this skill** — `scripts/<name>.sh` (or `.py`) in this dir, self-documenting,
+   with the provenance in a header comment. This is the fallback when the fix is too skill-specific to
+   belong in the shared CLI or the owning branch is mid-flight.
+3. **Either way, name it where a run will find it** — reference the flag/target/script by name from the
+   best-practices example that motivated it *and* from [`SKILL.md`](SKILL.md) (the "Best practices +
+   self-healing" section), so the next run reaches for the tool, not the prose. A recipe nobody can
+   find is a recipe that gets re-derived.
 
 **The boundary — graduation is not calibration.** A reading against a `settles: CAL-…` coupon closes a
 bet: value + `Calibrated<T>` status flip, baseline shrink, `bets.md` regenerate, design Appendix B close,

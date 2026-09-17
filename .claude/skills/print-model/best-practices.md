@@ -47,6 +47,9 @@ research file; this file adds *our* data on top.
   printer` (the parent's `compatible_printers` is dropped); **materialize the full process JSON with only
   `brim_type` flipped** and pass it as the process token. Re-sliced: brim 0, supports 0, raft 0. (A loose
   skirt remains — neither brim nor raft, not attached to a coupon, so it does not touch the reads.)
+  **Runnable form:** [`scripts/slice-machine-card.sh`](scripts/slice-machine-card.sh) does both (materialize
+  no-brim + one-command 23-rung slice) — the fallback until a `bambu slice plate … --no-brim` flag lands
+  (rubric §Self-healing, Reusable scripts).
 - **LEGO sources slice clean at 0.4 mm.** `ClassicBrick.stl`, `RosetteBrick.stl`, and `StarBrick.stl`
   all slice by preset name to a valid X2D plate at 0.4 mm — no profile-specific surprise before Plate 2.
 - **Loaded filament, read live (2026-09-17).** `bambu filament` read AMS 0 slot 0 =
