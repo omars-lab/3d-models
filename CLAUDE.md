@@ -24,7 +24,7 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
   `"steps": []` in 2–3 s: nothing measured) and must never stop a merge or a deploy
   — [`docs/local-ci-runbook.md`](docs/local-ci-runbook.md).
 - **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
-  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`.
+  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster).
 
 ---
 
