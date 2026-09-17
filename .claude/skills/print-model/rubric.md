@@ -266,6 +266,45 @@ pointing at the forward decision that owns the fix** (never a silent change):
 The freshness gate (design §6.3, task #39) is what keeps the `feedback`/`status` consistency honest —
 a `failed` record must carry a feedback block; this loop is only the reasoning that fills it.
 
+## Self-healing — how a finding graduates (design §8, task #46)
+
+This is the repo's graduation rule ([`CLAUDE.md`](../../../CLAUDE.md), "The graduation rule") applied to
+printing: a defect found and fixed on a real plate must leave behind the thing that catches it next
+time. Here that thing is a [`best-practices.md`](best-practices.md) example the *next plan is made to
+honor* — the print-plan analogue of "the test that fails before the fix and passes after".
+
+**What graduates (all three must hold):**
+1. It came off **our** machine — a reading from a plate, not a figure from literature.
+2. It is **physical and new** — not a catalog defect we merely re-hit (recovery-loop step 5). Re-hitting
+   a known defect changes nothing; a new datum does.
+3. It is a **practice** finding about a decision this skill owns (orientation, supports, brim, filament,
+   arrangement, a printability limit) — **not** a `settles: CAL-…` coupon reading. Coupon readings
+   propagate through the bet registry, not here (see the boundary below).
+
+**How it graduates:**
+1. **Carry the provenance.** The example records the plate's process identity — the `how`
+   (machine / material / nozzle / layer / profile) and the record dir. *A finding without its profile
+   header is anecdote, not a datum, and does not graduate* (the calibration provenance discipline).
+2. **Prefer a tag-flip over a new rule.** If the finding confirms or refutes a rule already in
+   best-practices, flip *that* rule's confidence tag to `[measured]` with our number and the plate —
+   do not add a second, parallel rule. One owner per fact (D-052 no-fork). A genuinely new finding
+   becomes a new `[measured]` example under "Our examples".
+3. **Make it fails-before / passes-after.** State the example so a plan written *before* it would have
+   repeated the defect and a plan written *after* honors it — that is what makes it a test, not a note.
+4. **Do not open a register.** The example that changes the next plan *is* the durable record; a log
+   nobody re-reads decays ([`CLAUDE.md`](../../../CLAUDE.md) "no issue catalog";
+   [`docs/issue-register-evaluation.md`](../../../docs/issue-register-evaluation.md)). Only when the
+   finding produces a **tenet** — a rule that changes how *every* future plan is made — is a durable
+   line written, and it goes in best-practices' grounded-rules section as a `[measured]` rule, never a
+   catalog.
+
+**The boundary — graduation is not calibration.** A reading against a `settles: CAL-…` coupon closes a
+bet: value + `Calibrated<T>` status flip, baseline shrink, `bets.md` regenerate, design Appendix B close,
+catalog Status flip — the five-step propagate owned by [`prototype`](../prototype/SKILL.md) /
+[`calibrate`](../calibrate/SKILL.md), never this file. best-practices.md graduates *practice* rules; the
+bet registry graduates *measured constants*. Keeping them apart is why the calibration exception (below)
+short-circuits this skill entirely for a coupon plate.
+
 ## The calibration exception
 
 For any plate carrying a `settles: CAL-…` reading, **skip this whole rubric**: coupon settings are

@@ -109,9 +109,15 @@ The design (PR #191) is complete; this skill is being built out task by task:
   task #44); the best-practices reference — the grounded rules for every decision organized by run
   order, each carrying a confidence tag (grounded / attributed / wants-CAL / measured) and its design-§
   owner, on top of our real X2D examples, `**Default:**` numbers left to the design doc (DRY)
-  ([`best-practices.md`](best-practices.md), task #45).
+  ([`best-practices.md`](best-practices.md), task #45); the self-healing graduation — how a physical,
+  new practice finding off our machine graduates into [`best-practices.md`](best-practices.md) (flipping
+  a confidence tag to `[measured]` or adding an example, fails-before / passes-after, no register), and
+  the boundary that keeps it distinct from a CAL-bet settlement ([`rubric.md`](rubric.md) §Self-healing,
+  task #46).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
-- **Deepened by later tasks:**
-  self-healing graduation (#46), which wires physical findings into
-  [`best-practices.md`](best-practices.md) (its `[measured]` tag) rather than changing this body.
+
+**Option A is complete.** Every decision note in [`rubric.md`](rubric.md), the recovery loop, the
+proactive-advisory sweep, and the self-healing graduation are written; the skill reasons a model up to
+the owner gate. What remains is downstream and owner-gated: the dispatch port (§9) and the first real
+plate (#9), which fills best-practices' `[measured]` tag with our own data.

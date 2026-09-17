@@ -135,9 +135,22 @@ procedure is [`rubric.md`](rubric.md) §Proactive advisories):
 Calibration coupons (`settles: CAL-…`) never take advice from this file: their settings are measurements
 fixed by the bench sheet. See [`prototype`](../prototype/SKILL.md) / [`calibrate`](../calibrate/SKILL.md).
 
-## How a finding graduates here (task #46)
+## How a finding graduates here (self-healing, design §8)
 
-1. A plate prints and a defect or a confirmed good setting is observed.
-2. The finding is recorded against the print record's `feedback` (design §6).
-3. If it is *physical and new*, it becomes an example above with the plate it came from — a rule the
-   next plan honors. That is the fails-before / passes-after obligation, applied to printing.
+The full run-time procedure — what graduates, the tag-flip-over-new-rule preference, the fails-before /
+passes-after shape, and the "no register" discipline — is [`rubric.md`](rubric.md) §Self-healing. In
+short:
+
+1. A plate comes off **our** machine and a defect (or a confirmed-good setting) is observed and recorded
+   against the print record's `feedback` block + `photos[]` (design §6). The record is the evidence.
+2. It graduates here only if it is **physical, new** (not a re-hit catalog defect), and a **practice**
+   finding — a `settles: CAL-…` coupon reading is *not* a practice finding; it closes a bet through the
+   [`prototype`](../prototype/SKILL.md) / [`calibrate`](../calibrate/SKILL.md) propagate loop, never
+   this file (the boundary in the rubric).
+3. Carrying its plate's process identity (the `how`: machine / material / nozzle / layer / profile — a
+   finding without a profile header is anecdote, not a datum), it either **flips an existing rule's
+   confidence tag to `[measured]`** with our number and the plate (preferred — one owner per fact,
+   D-052) or becomes a new `[measured]` example under "Our examples".
+4. It is stated so the *next plan honors it* — a plan made before would have repeated the defect, one
+   made after does not: the repo's fails-before / passes-after obligation, applied to printing. No
+   register is opened; this example *is* the durable record.
