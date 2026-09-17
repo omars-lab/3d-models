@@ -105,6 +105,7 @@ is in [`rubric.md`](rubric.md).
 | `Bambu Studio not found` | not installed, or non-standard path | install it, or set `SLICER_PATH` |
 | `camera failed … needs ffmpeg` | ffmpeg absent | `brew install ffmpeg` (only for snapshots) |
 | osascript timed out | a GUI dialog is blocking | dismiss the dialog in the app; GUI fallback can't proceed past a modal |
+| no `bambu-x2d` machine target in bikar | `machines.ts` ships no X2D entry (Bambu side is x1c/p1s/a1/a1-mini) | add the `PrintTarget` in bikar (`packages/knobs/src/machines.ts`); it rides single-nozzle-labelled FDM per **D-053** — the dual nozzle lives in the label + profile header, not a widened schema. Build volume is read off the device, not invented |
 
 ## Rules
 
