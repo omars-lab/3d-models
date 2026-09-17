@@ -76,10 +76,12 @@ The design (PR #191) is complete; this skill is being built out task by task:
 
 - **Done:** filament discovery (`bambu filament`, task #32); the filament-selection procedure —
   match, state-or-ask, the AskUserQuestion shape, the low-remaining footgun ([`rubric.md`](rubric.md)
-  §Filament, task #35).
+  §Filament, task #35); the orientation reasoning — candidate bases, support-burden scoring, the
+  Tweaker-3-or-fall-back path, and the K1 strength advisory ([`rubric.md`](rubric.md) §Orientation,
+  task #33).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
-- **Deepened by later tasks:** orientation reasoning (#33), settings reasoning (#34), the
+- **Deepened by later tasks:** settings reasoning (#34), the
   per-print plan artifact + owner-gate handoff (#36),
   print-issue recovery (#37), arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
