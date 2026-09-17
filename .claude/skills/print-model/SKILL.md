@@ -78,10 +78,12 @@ The design (PR #191) is complete; this skill is being built out task by task:
   match, state-or-ask, the AskUserQuestion shape, the low-remaining footgun ([`rubric.md`](rubric.md)
   §Filament, task #35); the orientation reasoning — candidate bases, support-burden scoring, the
   Tweaker-3-or-fall-back path, and the K1 strength advisory ([`rubric.md`](rubric.md) §Orientation,
-  task #33).
+  task #33); the settings reasoning — supports (tree, threshold-gated), infill (defer-to-profile), and
+  brim/raft (thin-source, attribute-never-assert) ([`rubric.md`](rubric.md) §Supports/infill/brim,
+  task #34).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
-- **Deepened by later tasks:** settings reasoning (#34), the
+- **Deepened by later tasks:** the
   per-print plan artifact + owner-gate handoff (#36),
   print-issue recovery (#37), arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
