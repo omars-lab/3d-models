@@ -387,3 +387,60 @@ teach flat→sphere construction, the full plan beyond the T9 gate (spec:
 - #83 — Cascade step 3, qiyas validator half: mirror to v1.6 + parse-level inertness witness (no validate_dsl_contract.py change, no gt re-record — schema ≥1.24 satisfied by 1.29)
 - #84 — (b) Migration/change-history pointer added to the canonical contract (sacred-patterns #52, ed7206a)
 - #85 — (c) The mirror↔canonical invariant gate: contract_mirror.py + hook 42-contract-mirror + make validate-contract-mirror (3d-models #171, ef9b627)
+
+---
+
+**▸ Snapshot 6 — 2026-09-17 (the GeoGebra-constructions → naqsh → coaster prune).**
+The live board was renumbered again after Snapshot 5, so these ids are a **fresh
+sequence**: Snapshot 6's `#8` is the naqsh construction statements, not Snapshot
+4/5's cross-repo ledger block, and its `#1` is the worktree setup, not Snapshot 2's
+Q5 unstale. The board is the plan "GeoGebra constructions → naqsh (bikar) → STL
+coasters, repeatably" (session plan file iterative-dazzling-finch; decisions
+D-056…D-064 in the [decisions log](../decisions-log.md); the record of what is
+migrated is the [constructions ledger](../constructions/ledger.md)). Task ids
+`P<phase>.<n>` are the plan's own. Still open on the board at this prune: `#12`
+(the later-phases umbrella: P3.1 skill, P3.3 catalog + `make coasters`, P4.x plate
+composer, P5.x corpus), `#17` (youtube's O1/O2 verdict scripts sit on its local
+`feat/ggb-coords` branch until Omar says main), `#21` (CI secrets sync,
+owner-gated), `#24` (session-reflect implementation, waits on the `#23` design
+review), `#27` (P2.7 disc coaster + the product-side coaster design doc, agent
+running) and `#30` (P2.5 cookbook + P2.4 readability rules, agent running).
+
+## Phase 0 — ground and decide (docs only)
+
+- #1 — P0.5 worktrees: `3d-models-constructions` (also the `THREED_MODELS_DIR` every bikar commit's registry hook reads), `bikar-constructions`, youtube per its CLAUDE.md (commits on `main` only when asked)
+- #2 — P0.1 research survey, preserved verbatim under a provenance header (3d-models #187, 18ba47c)
+- #3 — P0.2 umbrella design doc — architecture, rubric + option tables, AST contract, ledger, skill; Default/Validator markers green (3d-models #187)
+- #4 — P0.3 decisions D-A…D-I appended as D-056…D-064 (3d-models #187) — D-055 was taken by master mid-flight, so the whole block renumbered before merge (memory: decision-id-collision-recurred)
+- #5 — P0.4 naqsh names the language, bikar keeps the engine: decision note, doc titles, bikar-dsl skill line, memory naqsh-is-bikar-dsl-synonym (bikar #191, 4c81a52)
+
+## Phase 1 — languages made robust (grammar as source of truth)
+
+- #6 — P1.1 youtube EBNF for `.ggb-commands` + G3-twin conformance test + G2-twin vocabulary fixture; no parser rewrite (youtube main ff58490)
+- #7 — P1.3 youtube `--ast-json` + Pydantic schema with a regenerate-and-byte-compare test (youtube main ff58490); schema vendored byte-identical into bikar's qiyas-schema package (bikar #192, c244794)
+- #8 — P1.4 naqsh construction statements: (a) named points — `point <id> = …`, bare-name PointRefs, `pick`, a *defined* intersect order (bikar #193, 489758c); (b)–(d) transforms, derived lines/circles, `regular` polygons, rotate inside mirror (bikar #197, 93b0216)
+- #9 — P1.5 printer, re-scoped: the first agent looped 9.5 h / 1,348 tool calls / zero files written trying to invert the whole parser for a full-corpus round-trip (memory: subagent-loop-signal); shipped instead as a printer for the statement subset the importer emits, inside bikar #200; the full-corpus round-trip is a follow-on, not a claim
+- #10 — P1.2b youtube coordinate oracle: Playwright + GeoGebra Apps API → `coords.json`, `--scad` → OpenSCAD `reference.stl` (youtube `feat/ggb-coords` 86147cb, 16a7202 — local, see `#17`)
+- #13 — P1.6 kernel half: height-field coaster kernel, structural validators with hard FAIL fixtures, CAL-CST-01…05 registered, design doc coaster-height-field in bikar (bikar #194, 6c6a54d)
+- #26 — P1.6 DSL half: the `coaster` declaration — grammar §10.3, parser, evaluator, `--piece` render, three Tier-0 witnesses, 37 tests (bikar #203, 6b89f6f). Carried finding: CV4 (bottom bevel > 45°) is unexpressible in the surface syntax because `edge` mints an equal rise, so it is exercised only at the validator level; the parser's fall-through keyword list had omitted `mural`
+- #19 — P1.7 highlighting generated from one source: bikar tmLanguage + keywords JSON + lab editor overlay, checked in a real browser (bikar #196, 4456607); youtube Prism grammar + keyword mirror byte-identical (youtube `feat/ggb-highlight` aa6cbe8, ed04bbe — local)
+
+## Phase 2 — transpiler, first constructions, oracles
+
+- #11 — P2.1 `bikar import geogebra` (lowering, fail-loud coverage) + P2.2 first slice GimTvN9hw4U golden and fixture (bikar #200, 3c79b46); oracles on the golden: O1 PASS 23/0, O2 PASS (SSIM 0.983), O3 PASS coverage 1.000
+- #25 — P2.3 fast coaster: `--piece`/`--depth` emit the slice-1 `piece Coaster` trailer, unit range corrected to 8..25 (bikar #201, 50169f1); mini at unit 9 = 40.5 × 46.8 × 4.0 mm, standard at unit 20 = 90.0 × 103.9 × 4.0 mm, mesh + linkage `--check` PASS on both
+- #16 — P2.3b `qiyas mesh compare`, the O3 oracle (qiyas #32, bcd84fa) with the dropped-edge variant as the by-design FAIL; finding carried into the equivalence doc: bikar's extrude solidifies the silhouette, so O3 at the flat stage cannot see interior edges
+- #18 — construction-equivalence design doc + measurements research file (3d-models #187) and CAL-EQV-01, the O2 coverage floor (bikar #195, dcbfb40)
+- #28 — P2.6 second slice 7apC5Q9QS-8, 144/144 lowered (bikar #202, c1c9063). The O2 recall-0.01 FAIL was two defects: a stale square hero export (guard + issue note on youtube `feat/ggb-coords` 49e7e1a; memory o2-stale-hero-export) and the lowerer drawing exported-and-hidden labels (drawn = exported ∧ ¬hidden, unit test + golden); after both O1 PASS 144/0, O2 PASS 1.000/1.000
+
+## Phase 3 — the ledger
+
+- #20 — P3.2 constructions ledger + gate + hook `44-constructions` + SessionStart nudge, self-tested in a fresh worktree, `M60LJNNslHU` as the "no piece by design" row the gate must not skip (3d-models #206, a0dc2f7)
+- #29 — first two migrated rows, verdicts copied from the validators not re-typed, design docs linked (3d-models #219, 73ec316)
+
+## Cross-repo hygiene + skills
+
+- #14 — housekeeping after bikar #191/#192: doc-pointer baseline entries for the merged branches dropped (with #206), sibling pins refreshed and a `youtube:` pin added so the schema-mirror hook compares bikar's vendored AST schema against its producer (with #187)
+- #15 — merged the queued bikar PRs in order — #196, #197, #199, #200 — polling only the required checks, merge at `MERGEABLE CLEAN`, never `--auto`
+- #22 — troubleshoot-ci skill: a red check to a fix in its own PR, causes kept as a sidecar read at run time (bikar #199, 197fd7b)
+- #23 — session-reflect skill design + research census (17 main + 176 subagent transcripts) proposing a census-generated FAQ with a falling-recurrence success metric (3d-models #218, open — awaiting Omar's review; finding: subagent transcripts are separate files, memory subagent-transcripts-are-separate-files)
