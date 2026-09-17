@@ -75,4 +75,12 @@ PY
   -t "$TIMEOUT" \
   -- "${RUNGS[@]:1}"
 
-echo "sliced → $COUPON_DIR/$OUT_3MF   (brim OFF, supports OFF, raft OFF; verify with the .3mf config)"
+echo "sliced → $COUPON_DIR/$OUT_3MF"
+
+# Verify the REALIZED plate, not just the settings (D-014: a build target with a verifier as its front
+# door). The Plate-1 expectations are measurements from the bench sheet, not preferences: 23 objects,
+# the X2D at 0.4 mm, and NO brim/support/raft in the toolpath (the auto_brim footgun this script exists
+# to defeat would show up here as a Brim feature). A non-zero exit fails the whole script.
+echo "verifying the sliced plate …"
+"$BAMBU" validate sliced "$COUPON_DIR/$OUT_3MF" \
+  --bare-plate --expect-objects "${#RUNGS[@]}" --machine X2D --nozzle 0.4
