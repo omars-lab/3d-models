@@ -19,6 +19,7 @@ import { readPlateMeta } from "../threemf.js";
 import { buildHeader, headerToRecordProfile, type RecordProfile } from "../header.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
+import { readSidecar, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 function requireConfigured(mcp: McpBackend): void {
   if (!mcp.configured()) {
@@ -42,6 +43,44 @@ interface SendOpts {
   dryRun?: boolean;
   slug?: string;
   object?: string[]; // --object bikar:<path>[=entry], repeatable
+  allowUnverified?: boolean;
+}
+
+/**
+ * Pre-dispatch warnings gate (#52): never send a plate Studio would warn about. Reads the warnings
+ * sidecar `bambu slice` writes beside the .3mf, classifies it against the by-design manifest, and:
+ *   - no sidecar        → BLOCK (fail-closed: a plate we cannot verify is not dispatched) unless
+ *                         --allow-unverified is passed (the high-bar, loudly-logged override);
+ *   - any UNEXPECTED    → BLOCK (Studio would warn about this);
+ *   - clean / expected  → allow (and the "clean" case is what #50's auto-send will key on).
+ * Returns true iff dispatch may proceed.
+ */
+function warningsGateAllows(plateAbs: string, allowUnverified: boolean): boolean {
+  const sidecar = readSidecar(plateAbs);
+  if (!sidecar) {
+    if (allowUnverified) {
+      console.error("⚠ warnings gate: no capture beside this plate — proceeding under --allow-unverified.");
+      return true;
+    }
+    console.error("✗ warnings gate: no slicer-warnings capture beside this plate.");
+    console.error(`  expected ${basename(sidecarPath(plateAbs))} — re-slice with \`bambu slice plate\` so dispatch`);
+    console.error("  can verify Studio raised nothing unexpected. Override with --allow-unverified only if you must.");
+    return false;
+  }
+  const { expected, unexpected } = classifyWarnings(sidecar.warnings, loadManifest());
+  if (unexpected.length > 0) {
+    console.error(`✗ warnings gate: ${unexpected.length} UNEXPECTED slicer warning(s) — refusing to dispatch:`);
+    for (const w of unexpected) console.error(`    [${w.severity}] ${w.object ?? "(plate)"}: ${w.message}`);
+    console.error("  Studio would warn about this. Fix the model/settings and re-slice, or whitelist it in");
+    console.error("  .claude/gates/expected-slicer-warnings.json if it is genuinely by-design.");
+    return false;
+  }
+  console.error(
+    sidecar.warnings.length === 0
+      ? "✓ warnings gate: clean — no slicer warnings."
+      : `✓ warnings gate: ${expected.length} expected-by-design warning(s), 0 unexpected.`,
+  );
+  return true;
 }
 
 /** Parse a repeated --object "bikar:path" or "bikar:path=ENTRY" into scaffold objects. */
@@ -99,6 +138,16 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
 
   const kb = Math.round(statSync(abs).size / 1024);
+
+  // Pre-dispatch warnings gate (#52) — refuse anything Studio would warn about. Runs before the owner
+  // gate so a blocked plate never even reaches the confirm. --dry-run reports the verdict but does not
+  // block (nothing is sent on a dry run anyway).
+  const gateOk = warningsGateAllows(abs, Boolean(opts.allowUnverified));
+  if (!gateOk && !opts.dryRun) {
+    process.exitCode = 2;
+    return;
+  }
+
   const mcp = new McpBackend();
   requireConfigured(mcp);
 
@@ -205,6 +254,11 @@ export function registerPrint(program: Command): void {
       [] as string[],
     )
     .option("-y, --yes", "skip the confirmation prompt (still logs the owner-gate notice)", false)
+    .option(
+      "--allow-unverified",
+      "dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate)",
+      false,
+    )
     .option("--dry-run", "show what would be sent without connecting or dispatching", false)
     .action(runSend);
 
