@@ -7,7 +7,7 @@ master would do + why", never a silent change). This file is a sibling of
 
 **Where the grounded numbers live.** Every load-bearing figure below — and its hedge (secondary /
 X2D-unconfirmed / thin-source) — is attributed in the print-model design doc
-(docs/print-model-design.md §5, in review as PR #191) and its research file. This checklist carries the
+(docs/print-model-design.md §5, merged in PR #191) and its research file. This checklist carries the
 *shape* of each decision; it does not re-assert a bare default. Tasks #33/#34/#42/#43/#44 deepen the
 rows below and add the formal cited defaults.
 
@@ -28,12 +28,31 @@ rows below and add the formal cited defaults.
 
 Each note below is a stub the named task fleshes out; the design doc section is the grounded source.
 
-- **Filament (§5.5).** Read the loaded trays with `bambu filament`. The X2D frame carries
-  `print.ams.ams[]` (each unit a `tray[]`) and the external spool as `print.vir_slot` (an array on this
-  machine; the H2-family `vt_tray` object may appear instead on other firmware) — confirmed on
-  hardware 2026-09-17 (memory *bambu-x2d-bringup*). A loaded tray reports
-  `tray_type`/`tray_sub_brands`/`tray_color`/`tray_info_idx`/`remain` (`-1` = no RFID). Selection uses
-  **AskUserQuestion** only when the choice is genuinely the operator's (task #35).
+- **Filament (§5.5) — the selection procedure (task #35).** The X2D frame carries `print.ams.ams[]`
+  (each unit a `tray[]`) and the external spool as `print.vir_slot` (an array on this machine; the
+  H2-family `vt_tray` object may appear instead on other firmware) — confirmed on hardware 2026-09-17
+  (memory *bambu-x2d-bringup*). A loaded tray reports
+  `tray_type`/`tray_sub_brands`/`tray_color`/`tray_info_idx`/`remain` (`-1` = no RFID, i.e. *unknown*,
+  not empty). Run the step like this:
+  1. **Read** the loaded slots — `bambu filament` for the summary, `bambu filament --json` for the raw
+     `ams`/`vt_tray`/`vir_slot` frame. The verb already parses both shapes defensively and skips empty
+     trays; a slot is *loaded* when its `tray_type` is non-blank.
+  2. **Nothing loaded → stop and say so.** If no slot is loaded, tell the operator to load a spool;
+     there is no filament decision to make and a filament-less plate settles nothing.
+  3. **Match material to the part's need** — PLA for display/decor and most LEGO/orb work; a tougher
+     material (PETG/ABS/…) only when the part is functional, load-bearing, or heat-exposed *and* the
+     operator has said so. Colour is the operator's taste unless the model fixes it.
+  4. **One clear match → state it, do not ask** (global bias-to-action): e.g. "using the PLA in AMS 0
+     slot 0 — #F5547C, 100% left — display piece, PLA is right." A single loaded PLA against a decor
+     part is not a question.
+  5. **Several plausible → AskUserQuestion** (the one pivotal call): one question, one option per
+     *loaded* slot (empty slots omitted), label `PLA · AMS 0 slot 0 · #F5547C`, description
+     `<sub-brand> · NN% left` (or `remain unknown` when `-1`), the recommended option first with its
+     reason. "Plausible" means two-or-more materials that both fit, or a colour trade the model does
+     not settle — not merely more than one spool present.
+  6. **Footgun — remaining too low.** When the chosen slot's `remain` is a real number and shows a low
+     remaining percentage, flag it in the plan ("slot 0 shows 8% left — may not finish this part");
+     when `remain` is `-1`, state the level is unknown rather than assume full. Never a silent proceed.
 - **Nozzle (§5.1).** 0.4 mm is the general balance; 0.2 for features ≲ 0.4 mm or fine text; 0.6 for
   functional/large parts where detail is non-critical; 0.8 for draft/max-flow. Footgun: a wall thinner
   than the chosen nozzle's single-wall floor cannot print — flag before slicing. Grounded, hedged
