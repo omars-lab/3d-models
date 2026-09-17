@@ -120,4 +120,14 @@ is in [`rubric.md`](rubric.md).
   print it in full (the CLI masks it).
 - **Read-only before write.** `status show` must succeed before any `print send`.
 - **A dispatch is owner-gated** until a CAL bet justifies the print. The CLI confirms before sending.
+- **The safety boundary — our layer guards dispatch and secrets; the firmware guards the hardware.**
+  We never emit raw motion G-code — we hand a slicer-produced `.3mf` to the MCP, so nothing here can
+  drive the toolhead into the bed. Thermal cutoffs, stall / collision detection, homing,
+  filament-runout and dual-nozzle collision avoidance are **all firmware**. The residual first-print
+  risks are operator-side and **non-damaging**: poor first-layer adhesion (spaghetti), no filament
+  loaded, or a dual-nozzle profile mismatch — worst case is a failed print and cleanup, **not a broken
+  machine**. So the two controls that actually matter on a first print are **attend the first layer**
+  and **keep dispatch confirm-before-send**. On Plate 1 this is doubly load-bearing: MC-6 towers print
+  on **bare plate, no brim, by design** (that IS the adhesion test), so first-layer watching is the
+  measurement, not just caution.
 - Full sequencing and the build-vs-buy reasoning: [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
