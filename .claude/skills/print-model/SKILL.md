@@ -56,6 +56,17 @@ advisory shape per decision.
 7. **Slice** — `bambu slice plate` → `.3mf` + preview PNG.
 8. **Hand off at the owner gate** — plan + plate + preview. **STOP.** Dispatch is Omar's `print send`.
 
+## When a print fails or disappoints (the recovery loop)
+
+A second entry point — "why did this warp / string / fail?" — not the forward run. It is a
+**diagnose → revise → re-slice → back to the owner gate** loop that reads against a *named* defect
+catalog (Simplify3D's Print Quality Guide + Bambu's wiki) rather than inventing one, maps the symptom
+to the documented cause, and emits the fix as a one-line advisory pointing at the decision that owns it
+— never a silent change. The seven modeled defects, the symptom→cause→revision table, and the loop steps
+are [`rubric.md`](rubric.md) §Recovery loop; the symptom lands in the record's `feedback` block
+([`prints-tab-design.md`](../../../docs/prints-tab-design.md) §4.1). A physical, new finding graduates
+into [`best-practices.md`](best-practices.md) (self-healing, §8).
+
 ## The calibration exception (never forget it)
 
 For any plate that carries a `settles: CAL-…` reading — a calibration coupon — the skill gives **no
@@ -82,11 +93,13 @@ The design (PR #191) is complete; this skill is being built out task by task:
   brim/raft (thin-source, attribute-never-assert) ([`rubric.md`](rubric.md) §Supports/infill/brim,
   task #34); the per-print plan artifact + slice/preview + owner-gate handoff — the compose→slice→hand-off
   procedure and the stable plan shape, composed-not-stored-twice, stopping at the gate
-  ([`rubric.md`](rubric.md) §Compose → slice → hand off, task #36).
+  ([`rubric.md`](rubric.md) §Compose → slice → hand off, task #36); the print-issue recovery loop —
+  the named-catalog diagnose→revise→re-slice loop, the seven modeled defects, and the `feedback`-block
+  symptom seam ([`rubric.md`](rubric.md) §Recovery loop, task #37).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Deepened by later tasks:**
-  print-issue recovery (#37), arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
+  arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
   out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
   rather than changing this body.
