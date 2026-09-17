@@ -121,6 +121,8 @@ readings:                                  # one per measured quantity
     spread_mm:    0.02
     judged_by:    caliper
     settles:      CAL-FEA-01              # the bet this reading moves, or ~
+    expected:     "≥0.8 mm survives as one clean floor (calibration-design §7)"  # the bench-sheet criterion, required once settles is a real bet (R5)
+    verdict:      brackets                # brackets|above-range|below-range|refutes|no-reading — how the reading landed vs expected (R5)
 photos:                                    # source binaries, tracked on master
   - file:   photos/plate-overview.jpg
     sha256: <digest>
@@ -163,7 +165,7 @@ thing §2 forbids.
 
 **Validator:** `.claude/gates/prints_gate.py`, wired to hook
 `.githooks/pre-commit.d/39-prints` and `make validate-prints`, passes iff every
-record directory under `docs/prints/` satisfies R1, R2 and R4 below (R3 ships in
+record directory under `docs/prints/` satisfies R1, R2, R4 and R5 below (R3 ships in
 S4) and the count of records it checked is printed to stdout (never a silent green
 over an empty set).
 
@@ -190,12 +192,26 @@ printed a file it did not, and the gate must refuse it rather than pass.
 - **R4 — subject count printed.** The gate prints the number of records it checked.
   A gate that says "all pass" over zero records is indistinguishable from a broken
   gate; printing the count is the guard (`docs/issue-register-evaluation.md` §5.1).
+- **R5 — a measured bet states its expectation and verdict (ships in S3, testable now).**
+  Any reading whose `settles` names a real `CAL-…` bet (not `~`) must carry a non-empty
+  `expected` — the bench-sheet criterion the reading was tested against — and a `verdict`
+  from `{brackets, above-range, below-range, refutes, no-reading}` saying how it landed
+  (`brackets` = inside the ladder, the pass; `above/below-range` = every rung passed/failed,
+  re-centre that way; `refutes` = the reading contradicts the design's premise, a finding;
+  `no-reading` = the coupon yielded no measurement but the attempt is logged). This is the
+  per-record *compare* seam — it makes "did the print match what we expected?" structured
+  data the gate checks, not prose an operator may forget. It is the precondition for R3:
+  a reading cannot be propagated to `bets.md` until it has stated what it measured against.
+  Unlike R3, R5 has no empty-subject problem — it fires the moment one reading settles a
+  bet, so it ships now with R1/R2/R4.
 
 The gate ships **before** the first real record, and R4 is precisely what makes that
 honest: an empty subject set reports a *true* `0 records checked` when the gate prints
-its count, and a false green only when it hides it. R1 and R2 are wired at zero on the
+its count, and a false green only when it hides it. R1, R2 and R5 are wired at zero on the
 S3 date. Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
-because there is no settled bet to propagate from until the first one flips. (Corrected
+because there is no settled bet to propagate from until the first one flips. R5 does *not*
+share that problem: it is a per-record invariant that fires on the first reading to name a
+bet, so it ships in S3 as the compare seam R3 will later build on. (Corrected
 2026-08-30 from an earlier "ships with the first record, not before" — see
 [D-046](decisions-log.md)'s amendment.)
 

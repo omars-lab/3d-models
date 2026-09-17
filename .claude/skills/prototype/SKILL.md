@@ -58,6 +58,34 @@ catalog holds only what was learned. Never mark a question answered from
 simulation, slicer preview, or reasoning — only from the physical object.
 Partial answers stay unchecked with a note.
 
+The record is not done until it walks the whole loop — **print → photograph →
+measure → compare → verdict** — not just the measure step:
+
+- **Photograph, per coupon.** A reading the eye cannot re-check later is half a
+  record. Shoot the features the coupon is *about*, in raking light, and list each
+  in `photos[]` with its sha256 (R2). Per machine-card coupon: MC-1 the mated
+  fit pairs and each bore/pin; MC-3 the bridge undersides across the span ladder;
+  MC-4 the **fan underside** (supports were OFF — this is the one whose failure is a
+  silently-wrong dimension); MC-5 all four warp corners against the flat reference;
+  MC-6 the tower bases and any elephant's foot. For a design coupon, shoot the mate
+  against the real part (LEGO stud/brick, clip-in-tile) and the failure surface.
+- **Compare, then record the verdict (R5).** For every reading whose `settles`
+  names a real `CAL-…` bet, read it against the bench-sheet criterion and record
+  both `expected` (the criterion, from
+  [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md)
+  or the coupon's design-doc §7 row) and a `verdict`:
+  - `brackets` — the answer landed **inside** the ladder: the pass. The bet's
+    provisional value is confirmed or refined.
+  - `above-range` / `below-range` — **every rung passed / every rung failed**: not
+    a coupon that "didn't work" — it told you which way to re-centre the ladder.
+  - `refutes` — the reading **contradicts the design's premise** (e.g. the LG-F1
+    rung-0 clutches without a rib): a finding, a success, never deleted.
+  - `no-reading` — the coupon yielded no measurement (didn't print, mis-bagged) but
+    the attempt is logged.
+  The gate refuses a bet-settling reading with no `expected`/`verdict`, so "did it
+  match what we expected?" is a step the record cannot skip, not one a tired
+  operator has to remember.
+
 **Propagate** — a learning is not done until it lands where it changes future
 output. Standing targets:
 

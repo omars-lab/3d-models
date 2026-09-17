@@ -4,8 +4,9 @@
 `docs/prints/<YYYY-MM-DD>-<slug>/` holds one `index.md` whose YAML frontmatter
 pins the geometry a plate printed, the process it printed under, what it measured,
 and the photos that prove it. The design is `docs/prints-tab-design.md`; the rules
-this gate enforces are its §7. Three of the four ship here (R3, two-way bet
-propagation, is held to S4 — there is no settled bet to propagate yet):
+this gate enforces are its §7. Four of the five ship here (R3, two-way bet
+propagation to `bets.md`, is held to S4 — there is no settled bet to propagate yet;
+R5, its per-record precondition, ships now):
 
   R1  **Identity.** Every `objects[].source_sha256` equals the sha256 of
       `objects[].source` read from bikar *at the commit the record pins*
@@ -26,6 +27,15 @@ propagation, is held to S4 — there is no settled bet to propagate yet):
       evaluation.md` §5.1. Printing the count is what makes an empty run honest
       instead of falsely green, and it is why this gate can ship *before* the
       first plate: at zero records it says `0 records checked`, out loud.
+
+  R5  **A measured bet states its expectation and verdict.** Any `readings[]`
+      entry whose `settles` names a real `CAL-…` bet (not `~`) must carry a
+      non-empty `expected` (the bench-sheet criterion it was tested against) and a
+      `verdict` in VERDICT_VOCAB (how it landed vs that criterion). This is the
+      per-record *compare* seam — it turns "did the print match what we expected?"
+      into structured data the gate checks, not prose an operator may forget. It
+      is the precondition for R3 and, unlike R3, has no empty-subject problem: it
+      fires the moment one reading names a bet, so it ships now.
 
 Plus the well-formedness the §4 Validator names: the directory is `index.md` +
 `photos/`, the frontmatter parses and carries every required key, and `run`
@@ -55,6 +65,13 @@ BIKAR_DIR = Path(os.environ.get("BIKAR_DIR", ROOT.parent / "bikar"))
 
 RUN_NAME = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9][a-z0-9-]*$")
 SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
+CAL_ID = re.compile(r"^CAL-[A-Z]+-\d+$")
+
+# R5 — how a reading landed against its written expectation. Grounded in
+# calibration-design.md §2's bracket vocabulary: the pass is the answer landing
+# *inside* the ladder, and every-rung-passes / every-rung-fails is a valid
+# re-centre direction, not a failure.
+VERDICT_VOCAB = frozenset({"brackets", "above-range", "below-range", "refutes", "no-reading"})
 
 REQUIRED_TOP = ("run", "plate", "status", "outcome", "profile", "pins", "objects")
 PROFILE_FIELDS = (
@@ -212,7 +229,26 @@ def check_record(rec: Path, seen_digests: dict[str, str]) -> tuple[list[str], in
                 out.append(f"{name}: R2 photos/{f.name} sits in photos/ "
                            f"but no photos[] entry names it")
 
+    # R5 — a reading that settles a real bet must state what it was tested against
+    # (`expected`) and how it landed (`verdict`). A reading with `settles: ~` is
+    # exempt: it moves no bet, so there is nothing to compare it against.
     readings = data.get("readings") or []
+    for i, rd in enumerate(readings if isinstance(readings, list) else []):
+        if not isinstance(rd, dict):
+            continue
+        settles = rd.get("settles")
+        if not (isinstance(settles, str) and CAL_ID.match(settles)):
+            continue
+        entry = rd.get("entry", f"#{i}")
+        exp = rd.get("expected")
+        if not (isinstance(exp, str) and exp.strip()):
+            out.append(f"{name}: R5 reading {entry} settles {settles} but has no 'expected' "
+                       "— the bench-sheet criterion it was tested against")
+        vd = rd.get("verdict")
+        if not (isinstance(vd, str) and vd in VERDICT_VOCAB):
+            out.append(f"{name}: R5 reading {entry} settles {settles} but 'verdict' "
+                       f"is not one of {sorted(VERDICT_VOCAB)}")
+
     return out, (len(readings) if isinstance(readings, list) else 0), len(listed)
 
 
@@ -286,7 +322,9 @@ def _fixture_record(prints: Path, run_name: str, sha: str, photo: bytes) -> Path
             "piece": "keyhole",
         }],
         "readings": [{"entry": "MC-2", "quantity": "KEYHOLE_FRONT_FLOOR_MM",
-                      "median_mm": 0.79, "settles": "~"}],
+                      "median_mm": 0.79, "settles": "CAL-FEA-01",
+                      "expected": "≥0.8 mm survives as one clean floor",
+                      "verdict": "brackets"}],
         "photos": [{"file": "photos/plate-overview.jpg",
                     "sha256": _sha256_bytes(photo),
                     "of": "the whole plate"}],
@@ -341,6 +379,17 @@ def _duplicate_photo_digest(prints: Path) -> None:
     _fixture_record(prints, "2026-09-20-plate2-machine-card", _FIX_SHA, _FIX_PHOTO)
 
 
+def _drop_expected(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(re.sub(r"\n *expected:.*", "", idx.read_text(), count=1), encoding="utf-8")
+
+
+def _bad_verdict(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace("verdict: brackets", "verdict: looks-good", 1),
+                   encoding="utf-8")
+
+
 CASES = [
     ("frontmatter that does not parse", _corrupt_frontmatter, "frontmatter"),
     ("run key that disagrees with the dir", _mismatch_run, "does not match the directory name"),
@@ -350,6 +399,8 @@ CASES = [
     ("R2 a photo edited after recording", _repaint_a_photo, "does not match the recorded digest"),
     ("R2 a stray binary in photos/", _add_stray_photo, "no photos[] entry names it"),
     ("R2 one JPEG backing two plates", _duplicate_photo_digest, "same sha256 as"),
+    ("R5 a settled reading with no expected", _drop_expected, "has no 'expected'"),
+    ("R5 a settled reading with a bad verdict", _bad_verdict, "'verdict' is not one of"),
 ]
 
 
