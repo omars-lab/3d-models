@@ -1331,6 +1331,8 @@ the mesh gate is the whole automated claim; a printed coaster is what turns the
 relief depth and rim clearance from a render into a measurement. `make coasters`
 re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 `--check`s both meshes; the raw gate output is in
+[`../../../docs/research/coaster-shape-study.md`](../../../docs/research/coaster-shape-study.md)
+(shape v2, the meshes vendored now) and, for the superseded round discs,
 [`../../../docs/research/coaster-measurements.md`](../../../docs/research/coaster-measurements.md).
 
 ## CS-1 — Six-fold star rosette coaster (Sarah Brewer, GimTvN9hw4U)
@@ -1339,19 +1341,21 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Model**: `bikar/patterns/Constructions/GimTvN9hw4U-coaster.bkr` — rendered
   as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
   (standard) by `make coasters` (→ `src/Coasters/GimTvN9hw4U-coaster-mini.stl`
-  and `-standard.stl`). Both pass the mesh gate at the 0.8 mm coaster floor;
-  the mini is 32,240 triangles / 4.5 cm³ and the standard 160,860 triangles /
-  23.8 cm³ — the triangle count scaling with `size` is the visible proof the
-  two are re-rendered, not one mesh scaled.
+  and `-standard.stl`). Shape v2 (D-066): `outline polygon 6 $size
+  rotate 30`, a hexagon `size` across flats fitted to the six-fold art, `relief
+  straps emboss 1.2` on a 4 mm base, `margin 2`. Both pass the mesh gate at
+  the 0.8 mm coaster floor; the mini is 35,508 triangles / 6.6 cm³ and the
+  standard 177,308 triangles / 31.1 cm³ — the triangle count scaling with
+  `size` is the visible proof the two are re-rendered, not one mesh scaled.
 - **Print target**: TBD — record machine/material/nozzle/layer on first print.
 - **What we want to learn**:
-  - [ ] 1. Does the `relief straps deboss 0.8` channel read cleanly at a 0.4 mm
-    nozzle, or does the debossed strap width need to rise for the pattern to be
+  - [ ] 1. Does the `relief straps emboss 1.2` rib read cleanly at a 0.4 mm
+    nozzle, or does the raised strap width need to rise for the pattern to be
     legible in PLA?
   - [ ] 2. Mini vs standard: does the 40 mm size hold the same relief legibility
     the 90 mm does, or does the inscribed art crowd the rim at small `size`?
-  - [ ] 3. First-layer flatness on a 90 mm disc — does the base cup or stay flat
-    off the bed?
+  - [ ] 3. First-layer flatness on a 90 mm hexagon — does the base cup or stay
+    flat off the bed, and do the six corners lift?
 - **What we learned**: — pending.
 - **Feeds**: the `coaster` declaration's default relief depth and base
   thickness; the gallery's coaster entry; the constructions ledger's `coaster`
@@ -1363,9 +1367,11 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Model**: `bikar/patterns/Constructions/7apC5Q9QS-8-coaster.bkr` — rendered
   as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
   (standard) by `make coasters` (→ `src/Coasters/7apC5Q9QS-8-coaster-mini.stl`
-  and `-standard.stl`). Both pass the mesh gate at the 0.8 mm coaster floor;
-  the mini is 32,240 triangles / 4.6 cm³ and the standard 160,860 triangles /
-  23.7 cm³.
+  and `-standard.stl`). Shape v2 (D-066): `outline square $size`, a
+  square of side `size` fitted to the four-fold bbox of the eight-fold art,
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`. Both pass the mesh
+  gate at the 0.8 mm coaster floor; the mini is 40,800 triangles / 7.8 cm³ and
+  the standard 204,300 triangles / 36.6 cm³.
 - **Print target**: TBD — record machine/material/nozzle/layer on first print.
 - **What we want to learn**:
   - [ ] 1. The 8-fold construction is denser than the 6-fold — do the finer
