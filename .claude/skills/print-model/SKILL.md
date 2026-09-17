@@ -77,9 +77,14 @@ print the fixed profile from the sheet. Stated everywhere it could be forgotten.
 ## Best practices + self-healing
 
 [`best-practices.md`](best-practices.md) (read at run time) holds the grounded rules **plus our own
-real examples** as we practice them. It is self-healing: a defect found on a real plate graduates into
-a best-practices example that fails-before / passes-after the next plan — the repo's graduation rule
-([`CLAUDE.md`](../../../CLAUDE.md)) applied to printing.
+real examples** as we practice them. It is self-healing on **two tracks** ([`rubric.md`](rubric.md)
+§Self-healing): a defect found on a real plate *and* an operational/slice-path/tooling finding surfaced
+while running the skill (e.g. a profile default that silently sabotages a coupon) both graduate into a
+best-practices example that fails-before / passes-after the next run — the repo's graduation rule
+([`CLAUDE.md`](../../../CLAUDE.md)) applied to printing. When a fix is a repeatable command sequence,
+it does not stay as prose: it becomes a `bambu` CLI flag / `make` target (preferred) or a script in this
+dir's `scripts/`, named from the example and from here so the next run reaches for the tool. Neither
+track is a `settles: CAL-…` coupon reading — those propagate through the bet registry, never this file.
 
 ## Status of the build
 
