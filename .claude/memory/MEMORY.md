@@ -40,3 +40,4 @@
 - [Coaster Lab in bikar's lab](coaster-lab-in-bikar-lab.md) — decided 2026-09-17: coaster design UI is a Coaster Lab in bikar `packages/lab` (Orb Lab pattern), 3d-model-hub stays the plate builder; starts after shape v2 (#33) fixes the knob set
 
 Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `amazon-scripts-repo` → amazon-scripts, `marketplace-repo-mirror-and-held-branch` → oeid-claude-plugin-marketplace, `check-for-existing-e2e-before-reporting-blocked` and `supabase-paused-project-timeout` → bikar. Named without links because the files are no longer here and a dead relative link is a D1 gate failure.
+- [Work conflicts by hand](work-conflicts-by-hand.md) — tenet 2026-09-17: resolve every conflict keeping both sides; `-X ours/theirs`, `checkout --ours/--theirs` denied by the guardrail-manager `block-git-ours-theirs` hook (opt-out only via `git-conflicts.conf`)
