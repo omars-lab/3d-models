@@ -23,6 +23,7 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 |---|---|---|
 | `setup` | `doctor`, `mcp`, `studio` | local checks |
 | `status` | `show`, `monitor`, `camera` | griches MCP |
+| `header` | `header` (`--plate <plate.3mf>`, `--json`) — auto-pull the bench-sheet profile header | first-party MQTT + `.3mf` |
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`) | BambuStudio CLI |
 | `print` | `send` (`--record`, `--dry-run`, `--yes`, owner-gated), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
 | `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |

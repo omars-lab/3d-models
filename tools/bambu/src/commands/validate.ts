@@ -20,6 +20,7 @@ import { tmpdir } from "node:os";
 import { runWithTimeout, ev } from "../log.js";
 import { locateBikarCli, bikarDir } from "../backends/bikar.js";
 import { repoRoot, recordsDir } from "../paths.js";
+import { readMember, listMembers } from "../threemf.js";
 
 const PYTHON = process.env.PYTHON ?? "python3";
 
@@ -139,23 +140,6 @@ interface SlicedOpts {
   machine?: string;
   nozzle?: string;
   density?: string;
-}
-
-/** unzip -p one member of a .3mf to a string. Small members only (config/json). */
-async function readMember(threemf: string, member: string): Promise<string | null> {
-  const res = await runWithTimeout("unzip", ["-p", threemf, member], {
-    timeoutMs: 30_000,
-    label: "unzip_member",
-  });
-  if (res.code !== 0 || !res.stdout) return null;
-  return res.stdout;
-}
-
-/** List archive members (unzip -Z1). */
-async function listMembers(threemf: string): Promise<string[]> {
-  const res = await runWithTimeout("unzip", ["-Z1", threemf], { timeoutMs: 30_000, label: "unzip_list" });
-  if (res.code !== 0) return [];
-  return res.stdout.split("\n").map((s) => s.trim()).filter(Boolean);
 }
 
 /**

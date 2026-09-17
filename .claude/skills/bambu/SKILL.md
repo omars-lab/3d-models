@@ -28,6 +28,7 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 | Want to… | Verb | Safe to run now? |
 |---|---|---|
 | See temps / AMS / job progress | `status show` · `status monitor` · `status camera` | **read-only** — needs transport (bring-up done) |
+| **Auto-pull the bench-sheet profile header** | `header` (`--plate <plate.3mf>` fills machine/layer/profile/slicer; `--json`) | **read-only** — fills the header off the machine + `.3mf`; the manual fields (ambient/enclosure/caliper) stay yours |
 | Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
 | **List what was printed — and how** | `print list` (`--how` for machine/material/nozzle/profile; `--settles`/`--material`/`--machine`/`--status` filter; `--shipped`/`--drafts`/`--json`) | **always** — reads records, touches no hardware |
 | Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`) | **OWNER-GATED** — see below |

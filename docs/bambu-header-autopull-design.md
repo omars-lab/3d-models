@@ -20,7 +20,7 @@ profile header is anecdote, not calibration").
 But we already read most of that header off the machine. `status show` parses the pushall frame and
 `filament` parses the AMS
 (`3d-models:tools/bambu/src/backends/mqtt.ts:L176 "pushall"`,
-`3d-models:tools/bambu/src/commands/filament.ts:L35-L38 "tray_type"`), and `slice` produces a `.3mf`
+`3d-models:tools/bambu/src/frame.ts:L26 "tray_type"`), and `slice` produces a `.3mf`
 that stamps the machine, profile, layer height and slicer version. So the header is mostly a
 **join** of things the CLI can already reach — not new hardware access. This doc says which fields
 that join can fill, proposes the one verb that fills them, and — mirroring how
@@ -103,7 +103,7 @@ single allow-listable command that emits the operator's artifact directly.
 
 **One code path, reused — not forked (the repo's D-052 tenet).** `header --json` is the builder;
 `print send --record`
-(`3d-models:tools/bambu/src/commands/print.ts:L166 "--record"`) calls **the same builder** to
+(`3d-models:tools/bambu/src/commands/print.ts:L199 "--record"`) calls **the same builder** to
 pre-fill the record's profile header instead of scaffolding it as TODO. The header logic lives in
 one place; the two entry points differ only in destination (stdout vs the record file), never in
 what a field means.
@@ -152,7 +152,7 @@ inspected:
 The transfer sentence, stated (K10): the X2D shares the H2D's `01.02.00.00` firmware track and the
 AMS report shape confirmed here on 2026-09-17, so these fields are plausible — but the frame has
 **already diverged once** on this machine (`vir_slot` array vs the H2 `vt_tray` object,
-`3d-models:tools/bambu/src/commands/filament.ts:L85-L86 "vir_slot"`), so "plausible" is not
+`3d-models:tools/bambu/src/frame.ts:L68 "vir_slot"`), so "plausible" is not
 "observed." Until the observation, `header` prints these three as `unconfirmed` (or omits them and
 falls back to the `.3mf`/SSDP source), never as filled machine truth.
 
