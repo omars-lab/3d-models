@@ -92,6 +92,48 @@ stage therefore sees the silhouette only; interior ink is O2's claim.
 IoU, Hausdorff, volume ratio and worst local deviation of these three pairs are
 measured by `qiyas mesh compare` when it lands (P2.3b) and appended here.
 
+### 3.1 Measured by `qiyas mesh compare` (2026-09-17)
+
+Produced by the P2.3b agent in the qiyas worktree `qiyas-mesh-compare`, branch
+`feat/mesh-compare` at `d93c9b9` (qiyas PR #32,
+https://github.com/NaqshCoffee/qiyas/pull/32); numbers copied from its report and
+from that branch's `docs/mesh-compare.md` (lines 96–110). Fixtures are the files
+of §3 above and §5, vendored into the branch's `tests/fixtures/mesh/`. Grid
+0.2 mm, slice at z = 0.5.
+
+**The measurement that changed the metric.** The reference (42 disjoint petals,
+3637.31 mm² sliced, equal to the raw `.scad` union) is a strict subset of the
+faithful naqsh extrusion (5889 mm²): reference minus print = 0.00 mm². bikar's
+`extrude` fills the star-shaped gaps between petals as bounded faces. On the
+symmetric metrics the plan named, a faithful print therefore scores IoU 0.618,
+the symmetric-difference inscribed disc is 11.66 mm for the faithful print and
+11.46 mm for the dropped ring, and the volume ratio is non-monotonic (a print
+dropping exactly the fill would score 1.0). The verdict gates on directional,
+reference-relative numbers; the symmetric ones are reported as context.
+
+| case (reference vs …) | coverage | local missing (mm) | verdict | gate fired |
+|---|---|---|---|---|
+| `naqsh-smoke` (faithful) | 1.000 | 0.00 | PASS | — |
+| `naqsh-central` (byte-identical to smoke, sha256 equal) | 1.000 | 0.00 | PASS | — |
+| `naqsh-dropped` (outer ring gone) | 0.143 | 10.00 | FAIL | coverage, local |
+| synthetic box vs box | 1.000 | 0.00 | PASS | — |
+| synthetic box vs box + 5 mm notch | 0.938 | 5.20 | FAIL | coverage, local |
+| synthetic box vs box translated 0.5 mm | 0.975 | 0.40 | FAIL | coverage |
+
+| case | iou | hausdorff 2D (mm) | volume ratio | extra fill (mm²) | local symmetric (mm) |
+|---|---|---|---|---|---|
+| `naqsh-smoke` | 0.618 | 25.17 | 0.618 | 2252 | 11.66 |
+| `naqsh-dropped` | 0.136 | 34.64 | 0.190 | 173 | 11.46 |
+
+Thresholds the branch states, and the fixtures that chose them: `coverage_min`
+0.99 (PASS fixtures 1.000; nearest FAIL 0.975, the translation; 1 % slack for
+raster and float noise), `local_max` 1.0 mm (PASS 0.00; genuine missing regions
+≥ 5 mm; above the 0.2 mm grid and the translation's 0.40 mm sliver). The
+symmetric `--iou-min` / `--hausdorff-max` / `--volume-ratio-tol` flags were not
+shipped: each would fail a faithful print or pass the dropped ring. JSON
+`schema_version` 1; `local` is the directional disc, the symmetric value is kept
+as `local_symmetric_mm`. Recorded as bet CAL-EQV-02 in bikar `CAL_BETS`.
+
 ## 4. GeoGebra's own numeric precision (fetched 2026-09-17)
 
 `gh api repos/geogebra/geogebra/contents/source/shared/common/src/main/java/org/geogebra/common/kernel/Kernel.java?ref=main`,

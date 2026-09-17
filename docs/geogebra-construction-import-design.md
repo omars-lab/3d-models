@@ -221,7 +221,7 @@ statement, with line and reason, before writing anything.
 |---|---|---|---|---|
 | O1 geometry | every named object has the same geometry | `coords.json` from the Apps API via Playwright (survey §5) | `bikar render --format parts` label table | per label after fitting the frame; missing or extra label is a FAIL |
 | O2 drawing | the same ink is drawn at the end | hero `export.png` and the view in its `export.ggb` | `bikar render` SVG placed on the export's grid, never aligned | centreline recall/precision (bet `CAL-EQV-01`) plus the loop's edge-SSIM; specified in the [equivalence doc](construction-equivalence.md) |
-| O3 solid | the same region is solid | `coords.json` polygons → generated `.scad` → OpenSCAD 2021.01 `reference.stl`, no bikar code | `piece Coaster extrude …` STL | `qiyas mesh compare`: footprint IoU at mid-height, symmetric Hausdorff, volume ratio, worst local deviation |
+| O3 solid | the same region is solid | `coords.json` polygons → generated `.scad` → OpenSCAD 2021.01 `reference.stl`, no bikar code | `piece Coaster extrude …` STL | `qiyas mesh compare` (qiyas PR #32): reference-relative coverage of the mid-height footprint and the largest unfilled reference disc (bet `CAL-EQV-02`); IoU, Hausdorff and volume ratio reported, not gated — bikar's `extrude` fills the gaps between petals, so the reference is a subset by design; specified in the [equivalence doc](construction-equivalence.md) |
 
 **Default:** the O2 accept threshold is edge-SSIM ≥ 0.70, the youtube loop's
 own `--ssim-min` default, read from `ggb_score.py` in

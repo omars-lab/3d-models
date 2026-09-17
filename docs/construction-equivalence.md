@@ -1,7 +1,8 @@
 # Construction equivalence — three oracles for "GeoGebra ≡ naqsh"
 
-**Status:** O1 and O2 shipped and measured on `GimTvN9hw4U` (2026-09-17); O3's
-comparator is in progress (P2.3b) and its thresholds are not yet stated here.
+**Status:** O1, O2 and O3 shipped and measured on `GimTvN9hw4U` (2026-09-17);
+O3's comparator is [qiyas PR #32](https://github.com/NaqshCoffee/qiyas/pull/32),
+open.
 Feeds from
 [`docs/research/construction-equivalence-measurements.md`](research/construction-equivalence-measurements.md);
 decided as D-062 in [`docs/decisions-log.md`](decisions-log.md); summarised in
@@ -16,7 +17,7 @@ three different claims, and no single score discharges all three:
 |---|---|---|---|---|
 | O1 geometry | every named object has the same geometry | the GeoGebra engine's own numbers, dumped through the Apps API | `bikar points` | one row per authored label |
 | O2 drawing | the same ink is drawn in the final state | the reconstruct loop's hero export and the view it was exported with | `bikar render` SVG, placed on the export's grid | recall and precision of centrelines |
-| O3 solid | the same region is solid in the flat extrusion | OpenSCAD's extrusion of the O1 polygons | `piece … extrude` STL | footprint IoU, Hausdorff, volume ratio, worst local deviation |
+| O3 solid | the reference's solid region is solid in the flat extrusion | OpenSCAD's extrusion of the O1 polygons | `piece … extrude` STL | coverage of the reference footprint and the largest unfilled reference disc |
 
 An aggregate never discharges a per-object claim, so O1 is per label and O3
 must report where the worst deviation is, not only how much area agrees. Each
@@ -139,36 +140,65 @@ bikar code), the naqsh side is `bikar render --piece Coaster --format stl
 Both are in the same frame (millimetres, A at the origin, z from 0 to depth),
 so, as with O2, nothing is aligned and a translated mesh is a FAIL by design.
 
-`qiyas mesh compare a.stl b.stl` (P2.3b, in progress) reports footprint IoU at
-mid-height, symmetric Hausdorff of the footprints, volume ratio, and the
-largest inscribed disc of the symmetric difference with its centre — the
-per-region number, so a dropped petal shows where it was even when the IoU
-stays high. Its thresholds are stated and bet when it lands; this doc does not
-state them yet.
+**O3 is directional, and the measurement forced it.** bikar's `extrude`
+solidifies a pattern's *bounded faces* — every face, including the star-shaped
+gaps between the 42 petals — so the naqsh solid is a strict superset of the
+reference: the reference's 3637 mm² footprint lies entirely inside the
+extrusion's 5889 mm² (reference minus print: 0.00 mm²). The symmetric metrics
+the plan named cannot gate on that: a faithful print scores footprint IoU
+0.618, the symmetric-difference disc is 11.6 mm for the faithful print and for
+the dropped ring alike, and the volume ratio is non-monotonic (a print that
+dropped exactly the fill would score 1.0). The pivot is recorded in the qiyas
+repo's issue note 2026-09-17-o3-interstitial-fill
+([qiyas PR #32](https://github.com/NaqshCoffee/qiyas/pull/32)).
+`qiyas mesh compare reference.stl print.stl` therefore gates on two
+reference-relative numbers and reports the symmetric ones as context:
+
+- **coverage** — the fraction of the reference's mid-height footprint the
+  print covers, on a 0.2 mm grid;
+- **local missing** — the largest inscribed disc of reference region the print
+  leaves unfilled, with its centre: the per-region number, so a dropped petal
+  is located even when coverage stays high.
+
+Reported, never gated: IoU, 2D and 3D Hausdorff, volume ratio, extra fill in
+mm², and the symmetric disc.
+
+**Default:** coverage ≥ 0.99 and local missing ≤ 1.0 mm, bet CAL-EQV-02.
+Measured 2026-09-17
+([research §3.1](research/construction-equivalence-measurements.md#31-measured-by-qiyas-mesh-compare-2026-09-17)):
+the faithful extrusion 1.000 / 0.00 mm, the dropped ring 0.143 / 10.00 mm, a
+synthetic 0.5 mm translation 0.975 / 0.40 mm. The floor leaves 1 % for raster
+and float noise and still catches the translation; the disc sits above the
+0.2 mm grid and above the translation's 0.4 mm sliver. One construction plus
+synthetics chose them, so they are a bet settled by the corpus ladder.
 
 **What the flat stage can and cannot see** (measured 2026-09-17,
 [research §3](research/construction-equivalence-measurements.md#3-oracle-o3--solid-preliminary-2026-09-17-the-comparator-is-p23b)):
-bikar's `extrude` solidifies a pattern's *bounded faces*, so the naqsh STL is
-the pattern's silhouette. Dropping the central rosette produced an STL
-byte-identical to the correct one (380 triangles, 17.7 cm³ both), because
-those edges lie inside the ring's faces and change no face union; dropping the
-ring produced 92 triangles and 2.1 cm³. O3's by-design failure is therefore a
-silhouette change, and interior ink is O2's claim, not O3's. The finished
-coaster (rim, bevel, relief) has no GeoGebra reference at all; its added
-features are validated by the mesh gate, the coaster validators and the
-`CAL-CST-*` bets, never by O3.
+dropping the central rosette produced an STL byte-identical to the correct
+one (380 triangles, 17.7 cm³ both, sha256 equal), because those edges lie
+inside the ring's faces and change no face union; dropping the ring produced
+92 triangles and 2.1 cm³. Solid the extrusion adds beyond the reference — the
+interstitial fill, or an invented region — is expected and reported as extra
+fill, never a FAIL. So interior ink and invented ink are O2's claims; a missing
+solid region is O3's. The finished coaster (rim, bevel, relief) has no GeoGebra
+reference at all; its added features are validated by the mesh gate, the
+coaster validators and the `CAL-CST-*` bets, never by O3.
 
-**Validator:** `O3 PASS` iff every reported metric is inside its threshold;
-exit 1 otherwise, naming which failed. Fixtures fixed before the comparator
-existed, so the thresholds are chosen against them and not the reverse:
-- PASS: (expected, not yet measured) the `GimTvN9hw4U` extrusion against `reference.stl`.
-- FAIL: (expected, not yet measured) the same file with the outer ring's nested block dropped
-  (2.1 cm³ against the reference's 42 petals). The central-rosette drop is
-  *not* a FAIL fixture — it is the identical-file limitation above, asserted
-  as such.
+**Validator:** `O3 PASS` iff coverage ≥ 0.99 and local missing ≤ 1.0 mm;
+exit 1 otherwise, naming which gate fired. The fixtures were fixed before the
+comparator existed and the thresholds chosen against them, not the reverse:
+- PASS: the `GimTvN9hw4U` extrusion against the OpenSCAD reference — coverage
+  1.000, local missing 0.00 mm.
+- FAIL: the same file with the outer ring's nested block dropped — coverage
+  0.143, local missing 10.00 mm, both gates. The hard case is the synthetic
+  0.5 mm translation: coverage 0.975 fails while local missing 0.40 mm passes,
+  so the floor, not the disc, is what catches a shifted mesh. The
+  central-rosette drop is *not* a FAIL fixture — it is the identical-file
+  limitation above, asserted as such and tested in qiyas.
 
-The measured numbers replace "expected" when P2.3b lands; a fixture that
-surprises is re-measured, not re-thresholded.
+Run: `make reference IN=<export.ggb> OUT=<dir>` in the youtube repo, then
+`qiyas mesh compare <dir>/reference.stl <print.stl>` (JSON score,
+`schema_version` 1, exit 1 on FAIL).
 
 ## 5. What each oracle cannot see
 
@@ -176,7 +206,7 @@ surprises is re-measured, not re-thresholded.
 |---|---|---|
 | O1 | anything not named: a `Sequence` orbit, which objects are hidden, what the pattern layer draws | O2, O3 |
 | O2 | ink outside the export's view (clipped on both sides alike); colour and fill; a label swap between two objects that draw the same ink | O1 |
-| O3 (flat) | interior edges that change no bounded face; everything the coaster adds after extrusion | O2; the coaster validators and `CAL-CST-*` |
+| O3 (flat) | interior edges that change no bounded face; solid added beyond the reference (the interstitial fill, an invented region); everything the coaster adds after extrusion | O2 and its precision; the coaster validators and `CAL-CST-*` |
 
 ## 6. Where each runs
 
@@ -184,7 +214,7 @@ surprises is re-measured, not re-thresholded.
 |---|---|---|---|
 | O1 | youtube | `make naqsh-coords ID=… NAQSH=…` | per commit of a `.bkr` (fast, numeric) |
 | O2 | youtube | `make naqsh-score ID=… NAQSH=…` | per construction |
-| O3 | qiyas + youtube | `make reference IN=… OUT=…` then `qiyas mesh compare` | per coaster, before the catalog entry |
+| O3 | qiyas + youtube | `make reference IN=… OUT=…` then `qiyas mesh compare` (qiyas PR #32) | per coaster, before the catalog entry |
 
 All three take the golden `patterns/Constructions/<id>.bkr` from bikar once
 `bikar import geogebra` produces it (P2.2); until then they were run on a
