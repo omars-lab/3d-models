@@ -105,6 +105,7 @@ This project is open source. Please see the LICENSE file for details.
 - **Live Gallery**: [View Interactive Gallery](https://blog.bytesofpurpose.com/3d-models/) — also served at [omars-lab.github.io/3d-models](https://omars-lab.github.io/3d-models/), which 301s here
 - **OpenSCAD Documentation**: [OpenSCAD User Manual](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual)
 - **3D Printing Guide**: [Ultimaker Cura](https://ultimaker.com/software/ultimaker-cura)
+- **Coaster shape study** (2026-09-17): [rendered variants and the four options](https://claude.ai/artifact/22EcRMQzqCvLYcbn6mqHez) — outline, relief and bezel choices for the construction coasters (private artifact)
 
 ---
 
