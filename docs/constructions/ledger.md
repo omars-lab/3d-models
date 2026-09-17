@@ -25,9 +25,9 @@ one per reconstruction that has a `construction.ggb-commands` at the pin —
 **2 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
-`piece Coaster` trailer) and `7apC5Q9QS-8` with bikar PR #202. Neither has a vendored
-coaster STL or a catalog entry yet — that is P3.3 of the umbrella plan, which
-waits on the `coaster` declaration (P1.6/P2.7).
+`piece Coaster` trailer) and `7apC5Q9QS-8` with bikar PR #202. Both now vendor a standard (90 mm) coaster
+mesh under `src/Coasters/` and carry a prototype-catalog entry (`CS-1`, `CS-2`)
+— P3.3 of the umbrella plan, which built on the `coaster` declaration (P1.6/P2.7).
 
 Oracle cells read `PASS a/b` — O1: labels compared / failed; O2: centreline
 recall / precision; O3: reference coverage — or `—` when that oracle has not
@@ -48,8 +48,10 @@ not been run: no `make reference` for it yet.
 - **O1 / O2 / O3** — the three equivalence oracles: per-label geometry, drawing
   recall/precision, and solid coverage. `—` until the naqsh file exists to run
   them against.
-- **coaster** — the vendored mesh, `src/Coasters/<id>.stl`; `—` until printed
-  art exists. The gate FAILS a row that names an `.stl` not on disk here.
+- **coaster** — the vendored mesh, `src/Coasters/<id>-coaster-standard.stl`
+  (the 90 mm standard `make coasters` writes; the 40 mm mini is validated on
+  every build but not carried in git); `—` until that mesh is vendored. The
+  gate FAILS a row that names an `.stl` not on disk here.
 - **catalog** — the prototype-catalog id, once the coaster is catalogued.
 - **printed** — the print record under `docs/prints/`, once a plate ships.
 - **no piece by design** — the sentinel for a mechanism-only video with no final
@@ -60,8 +62,8 @@ not been run: no `make reference` for it yet.
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
-| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | — | — | — | — |
-| `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | — | — | — |
+| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | — | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
+| `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | — | — | — | — | — | — | — |

@@ -21,8 +21,15 @@ piece placed at its layout offset, written ungated by `make pattern-sets`
 (the per-piece gate already ran in the `--format parts` pass). The set's
 gallery claim is the reconstituted pattern, so that is what gets drawn.
 
-Usage:  python3 build/brick_previews.py          # bricks (build/.brick-names)
-        python3 build/brick_previews.py --sets   # mural sets (build/.set-names)
+A coaster gets the same treatment as a brick: the `coaster` declaration has
+no per-axis view set and no qiyas composite either, so its gallery claim is
+the mesh `make coasters` wrote (the 90 mm standard), drawn by the same
+`import()` path and the same three-quarter camera — one shared angle, not a
+per-model number nobody measured.
+
+Usage:  python3 build/brick_previews.py             # bricks (build/.brick-names)
+        python3 build/brick_previews.py --sets      # mural sets (build/.set-names)
+        python3 build/brick_previews.py --coasters  # coasters (build/.coaster-names)
 Deps:   OpenSCAD  (the same binary the cookie-cutter targets use)
 """
 import glob
@@ -86,9 +93,13 @@ def main():
         sys.exit("OpenSCAD not found — brick previews need the same binary as `make cookie-cutters`")
     # Each make target records which stems it just wrote, so this script
     # previews those and not the orbs or cookie cutters sharing build/stls/.
-    sets = "--sets" in sys.argv[1:]
-    names_file = "build/.set-names" if sets else NAMES_FILE
-    target = "make pattern-sets" if sets else "make bricks"
+    args = sys.argv[1:]
+    if "--coasters" in args:
+        kind, names_file, target = "coaster", "build/.coaster-names", "make coasters"
+    elif "--sets" in args:
+        kind, names_file, target = "set", "build/.set-names", "make pattern-sets"
+    else:
+        kind, names_file, target = "brick", NAMES_FILE, "make bricks"
     if not os.path.exists(names_file):
         sys.exit(f"{names_file} missing — run `{target}`, which writes it")
     with open(names_file) as fh:
@@ -101,7 +112,6 @@ def main():
             sys.exit(f"{stl} missing — `{target}` did not write it")
         render(binary, stl, f"{OUT_DIR}/{name}.png")
         print(f"{name}.png")
-    kind = "set" if sets else "brick"
     print(f"rendered {len(names)} {kind} preview(s) -> {OUT_DIR}")
 
 

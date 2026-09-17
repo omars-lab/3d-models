@@ -153,20 +153,23 @@ mesh scales walls and relief below the FDM floor).
 
 ### 6. Catalog entry — `CS-<n>` + `make coasters`
 
-Add a catalog entry `CS-<n>` in `.claude/skills/prototype/catalog.md` (the harvested
-`--param size` / `--piece <Name>` must name something the `.bkr` declares — hook 36
-checks it). `make coasters` renders STL + views for `patterns/Constructions/*.bkr`
-and vendors into `src/Coasters/<id>.stl`.
+Add a catalog entry `CS-<n>` in `.claude/skills/prototype/catalog.md` (the render
+selects the disc with `--coaster Coaster` — matching the `coaster <Name>` declaration,
+not `--piece`; the harvested `--param size` must name a `param` the `.bkr` declares —
+hook 36 checks it). `make coasters` loops `patterns/Constructions/*-coaster.bkr`, renders and
+`--check`s **both** sizes (`--param size=40`/`90`), and vendors the 90 mm standard as
+`src/Coasters/<id>-coaster-standard.stl` (the 40 mm mini is validated every build but
+gitignored, not carried in git); it also writes the gallery preview PNG.
 - Verifies: the coaster is reproducible from a checked-in command and vendored for
   the gallery.
-- PASS: `make coasters` produces `src/Coasters/<id>.stl`; hook 36 passes.
+- PASS: `make coasters` produces `src/Coasters/<id>-coaster-standard.stl`; hook 36 passes.
 - FAIL: a catalog knob names nothing in the `.bkr` (hook 36) — fix the entry.
 
 ### 7. Ledger row — `docs/constructions/ledger.md`
 
 Fill the row's cells: **naqsh** = `bikar/patterns/Constructions/<id>.bkr`, the three
-oracle verdicts (verbatim), **coaster** = `src/Coasters/<id>.stl`, **catalog** =
-`CS-<n>`. Then `make validate-constructions` (gate `.claude/gates/constructions_ledger.py`,
+oracle verdicts (verbatim), **coaster** = `src/Coasters/<id>-coaster-standard.stl`,
+**catalog** = `CS-<n>`. Then `make validate-constructions` (gate `.claude/gates/constructions_ledger.py`,
 hook 38): it FAILS a row whose `.bkr`/`.stl` path does not resolve and REPORTS any
 youtube id without a row.
 - Verifies: the record matches disk and every migrated construction is accounted for.
