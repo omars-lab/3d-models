@@ -31,6 +31,76 @@ export type PrinterStatus = Record<string, unknown> & {
   _age_seconds?: number | null;
 };
 
+/**
+ * Options for the `print.project_file` command that starts a print from an ALREADY-UPLOADED file
+ * (#50). The three fields the RE corpus disagrees on for a dual-nozzle X2D — `bedType`, `amsMapping`,
+ * `md5` — are exposed so they can be settled against a ground-truth capture without a code change
+ * (see docs/issues/first-party-dispatch.md; treat as a CAL-shaped bet). The rest carry grounded
+ * defaults that two independent working clients (pybambu, bambulabs_api) send.
+ */
+export interface ProjectFileOptions {
+  /** Bare remote filename at the FTP root, from FtpsBackend.uploadFile (e.g. "plate_1.3mf"). */
+  remoteName: string;
+  /** Which plate's gcode inside the .3mf to run. Default 1 → param "Metadata/plate_1.gcode". */
+  plate?: number;
+  /** Job display name. Default: remoteName without its .3mf extension. */
+  subtaskName?: string;
+  /** [X2D-UNCONFIRMED] plate profile. Default "auto" (firmware detects). */
+  bedType?: string;
+  /** [X2D-UNCONFIRMED] filament→slot map. Default [0]; dual-nozzle firmware may need a nozzle field. */
+  amsMapping?: number[] | string;
+  /** [X2D-UNCONFIRMED] file checksum. Default "" (accepted on P1/A1; X1-class historically validated it). */
+  md5?: string;
+  useAms?: boolean; // default false (single filament / external spool)
+  bedLeveling?: boolean; // default true
+  flowCali?: boolean; // default true
+  vibrationCali?: boolean; // default true
+  layerInspect?: boolean; // default false
+  timelapse?: boolean; // default false
+  sequenceId?: string; // echo-back id; default "0"
+}
+
+/** A `print.*` request payload as the firmware expects it: `{ print: { ... } }`. */
+export type PrintRequest = { print: Record<string, unknown> };
+
+/**
+ * Build the `print.project_file` payload for a LAN-mode, local-file print (pure; unit-tested). The
+ * command references the file uploaded to the FTP root as `ftp:///<name>` (three slashes: empty host
+ * + /<name>), and runs the plate's gcode inside the .3mf via `param`. All four *_id fields are the
+ * string "0" — the RE spec annotates each "Always 0 for local prints".
+ */
+export function buildProjectFileCommand(opts: ProjectFileOptions): PrintRequest {
+  const plate = opts.plate ?? 1;
+  const name = opts.remoteName;
+  return {
+    print: {
+      sequence_id: opts.sequenceId ?? "0",
+      command: "project_file",
+      param: `Metadata/plate_${plate}.gcode`,
+      url: `ftp:///${name}`,
+      subtask_name: opts.subtaskName ?? name.replace(/\.3mf$/i, ""),
+      project_id: "0",
+      profile_id: "0",
+      task_id: "0",
+      subtask_id: "0",
+      md5: opts.md5 ?? "",
+      bed_type: opts.bedType ?? "auto",
+      bed_leveling: opts.bedLeveling ?? true,
+      flow_cali: opts.flowCali ?? true,
+      vibration_cali: opts.vibrationCali ?? true,
+      layer_inspect: opts.layerInspect ?? false,
+      timelapse: opts.timelapse ?? false,
+      use_ams: opts.useAms ?? false,
+      ams_mapping: opts.amsMapping ?? [0],
+    },
+  };
+}
+
+/** Build a `print.{pause,resume,stop}` control payload (pure; unit-tested). */
+export function buildPrintControlCommand(command: "pause" | "resume" | "stop", sequenceId = "0"): PrintRequest {
+  return { print: { sequence_id: sequenceId, command } };
+}
+
 export class MqttBackend {
   private client: mqtt.MqttClient | null = null;
   private lastStatus: Record<string, unknown> = {};
@@ -180,6 +250,32 @@ export class MqttBackend {
     });
     await new Promise((r) => setTimeout(r, settleMs));
     return this.getCachedStatus();
+  }
+
+  /** Publish a request payload on device/<serial>/request. Fire-and-forget; the printer acks on report. */
+  private async publishRequest(payload: PrintRequest): Promise<void> {
+    if (!this.client) throw new Error("MQTT not connected");
+    await new Promise<void>((resolve, reject) => {
+      this.client!.publish(this.requestTopic, JSON.stringify(payload), (err) => (err ? reject(err) : resolve()));
+    });
+  }
+
+  /**
+   * Start a print from a file ALREADY UPLOADED to the FTP root (#50). OWNER-GATED — the caller owns
+   * the confirm; this method only publishes once told to. Returns the command it sent so the caller
+   * can log/record the exact payload.
+   */
+  async startProjectFile(opts: ProjectFileOptions): Promise<PrintRequest> {
+    const cmd = buildProjectFileCommand(opts);
+    ev("mqtt_project_file", { url: String(cmd.print.url), param: String(cmd.print.param) });
+    await this.publishRequest(cmd);
+    return cmd;
+  }
+
+  /** Send a `print.{pause,resume,stop}` control command. */
+  async sendPrintControl(command: "pause" | "resume" | "stop"): Promise<void> {
+    ev("mqtt_print_control", { command });
+    await this.publishRequest(buildPrintControlCommand(command));
   }
 
   getCachedStatus(): PrinterStatus {
