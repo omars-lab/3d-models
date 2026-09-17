@@ -278,6 +278,10 @@ a different distance.
 - **D-068**: a border with its own pattern and per-region colour are coaster-level
   clauses composing patterns, sequenced after the interlock (#34) and the lab (#35);
   nothing of them ships yet. See [`decisions-log.md`](decisions-log.md).
+- **D-069** (interlock, #34): a self-mating half-edge dovetail on every straight
+  edge, walls emitted exact, CV8/CV9 added, refused with `round`, a bottom chamfer
+  and `trivet`; opt-in at import because it widens the margin. Designed, not built:
+  [`coaster-interlock-design.md`](coaster-interlock-design.md).
 
 ## 9. Not yet
 
@@ -303,8 +307,12 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
   because it has no single `K` measure and no regular edge for an interlock
   ([`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md)). A
   star or lobed coaster would need an `outline trace` mode with its own sizing rule.
-- **Interlocking edges (#34)** — dovetail tabs on alternating polygon edges, full
-  thickness, clearance a `CAL-*` bet; round outlines cannot tile. Not in the grammar.
+- **Interlocking edges (#34)** — designed as D-069, not in the grammar yet:
+  [`coaster-interlock-design.md`](coaster-interlock-design.md). Alternating tab/slot
+  edges were dropped because they tile by translation on the hexagon only; the
+  self-mating profile costs a wider margin (`depth + clearance + strap/2`, 5.15 mm at
+  the worked numbers) and needs a tab-neck bet (CAL-CST-06) that is not registered
+  until the bikar implementation lands.
 - **Border band (#36) and colour regions (#37)** — the language today has neither:
   bikar's `border` declaration is a *tile edge profile*, not a pattern band, and
   `color` is a 2D render attribute that no STL carries. The direction (D-068) is a
