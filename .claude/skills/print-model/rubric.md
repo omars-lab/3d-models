@@ -79,8 +79,29 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      operator decides between less support and a stronger part.
   5. **Advisory shape:** "laid flat on the base face: least support; note the layer lines run across
      the pin — weaker there" — one line, what a master would do and why, never a silent re-orient.
-- **Supports / infill / brim (§5.3).** Tree supports for point contacts; defer infill to the profile;
-  attribute brim/raft to the named community source (thin source) — never assert bare (task #34).
+- **Supports / infill / brim (§5.3) — the settings procedure (task #34).** Three sub-decisions, each
+  an advisory line, never a silent change. Grounded in design §5.3 / research Topic 5.
+  - **Supports.** Needed only where an overhang exceeds the support threshold (the slicer profile's
+    default angle; the X2D's own limit `CAL-OVH-01` is unmeasured, so the profile value is advisory).
+    Read the orientation (§5.2) chosen first — a good base often removes the need entirely. When
+    support *is* needed, prefer **tree** for point contacts (branches from a small base, less
+    material/time than a grid; interface layers cap it under the model). The advisory **names the max
+    overhang** so the operator can see the why: "no supports — max overhang 38° is under the limit",
+    or "tree supports under the two arms only".
+  - **Infill.** **Defer to the slicer profile's default density and pattern**; advise a change only on
+    a stated cause — load-bearing part → denser; display-only → lighter. Do **not** assert a bare
+    default number (the profile owns it). The eight fill patterns are named from the source, not
+    invented: Concentric, Rectilinear, Monotonic, Monotonic Line, Aligned Rectilinear, Hilbert Curve,
+    Archimedean Chords, Octagram Spiral (research Topic 5). Advisory: "leaving the profile's 15% —
+    bump to 30% only if this bears load".
+  - **Brim / raft — THIN SOURCE, attribute never assert.** No authoritative Bambu page settles
+    brim-vs-raft; the research found community guidance only (design §5.3, research Topic 5). So
+    **attribute** any brim/raft advice to that community source and never state it bare: brim =
+    adhesion for a small footprint or warp-prone corners; raft = a full base only for a very warpy
+    material or an uneven bed (rarely). Advisory: "a small footprint like this can lift at the
+    corners; a brim would help (community guidance — no vendor spec)". If a real plate ever settles
+    this on *our* machine, it graduates into [`best-practices.md`](best-practices.md) with our own
+    datum (§8 self-healing).
 - **Arrangement (§5.4).** libnest2d No-Fit-Polygon packing at 0/45/90/135°; the rotate-to-fit advisory
   fires only when a rotated pack fits strictly more copies. Verify slicer flags at run time before
   relying on them. Dual-nozzle bed zoning on the X2D is unverified — do not assume a uniformly usable
