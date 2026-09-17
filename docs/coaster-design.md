@@ -25,8 +25,9 @@ the same operation rather than two code paths that could disagree
 
 The `outline` bounds the disc; the pattern is **inscribed** into it as relief. The
 pattern is recentred on its bounding-box centre but **not** scaled to the outline
-— so the outline must be large enough to enclose the inscribed art, a condition
-§5 resolves.
+— so the outline must be large enough to enclose the inscribed art. §5 arranges that
+by construction and CV7 (§7) checks it, because the sampler drops cells outside the
+outline silently.
 
 ## 2. The two slices
 
@@ -38,16 +39,18 @@ one kind of part or the other, never both in one file.
   outline — `piece Name` / `extrude <pattern> depth $depth`, on the existing piece
   machinery. `param unit` sets millimetres per GeoGebra unit; mini and standard are
   two values of one param, never two files (D-059).
-- **Slice 2 — `--coaster Name`** (P2.7): a height-field disc that inscribes the
-  pattern — `coaster Name` / `outline round $size` / `inscribe <pattern>` / `base`
-  / `relief straps deboss` / `strap width`. This is the slice this doc is about;
-  the importer emits the whole block (`bikar/packages/core/src/import/geogebra/emit.ts`),
-  so the golden stays fully generated and re-renders from `--param`, never from a
-  mesh transform (D-065).
+- **Slice 2 — `--coaster Name`** (P2.7, reshaped by shape v2): a height-field slab
+  that inscribes the pattern — `coaster Name` / `outline <fitted> $size` /
+  `inscribe <pattern>` / `base` / `relief straps emboss` / `strap width`. This is
+  the slice this doc is about; the importer emits the whole block
+  (`bikar/packages/core/src/import/geogebra/emit.ts`), so the golden stays fully
+  generated and re-renders from `--param`, never from a mesh transform (D-065), and
+  it **fits the outline to the art** — a corner-up hexagon for GimTvN9hw4U, a square
+  for 7apC5Q9QS-8 (D-066, §5).
 
 The two generated coaster goldens — `GimTvN9hw4U-coaster.bkr` and
 `7apC5Q9QS-8-coaster.bkr` — ship in bikar under `patterns/Constructions/` (added
-by NaqshCoffee/bikar#207).
+by NaqshCoffee/bikar#207, reshaped by NaqshCoffee/bikar#208).
 
 ## 3. Relief modes
 
@@ -57,50 +60,83 @@ relief (whole bounded faces raised or carved), and the `trivet` **cut-through**
 mode (§7, CV6b). Each is either an `emboss` (raised above the base) or a `deboss`
 (carved into it).
 
-The **importer emits exactly one**: `relief straps deboss` — the pattern's
-strapwork debossed into the top. Face relief, emboss and trivet are reachable by
-hand-editing the emitted `.bkr` but the import path never writes them, so the
-worked examples below and the validator evidence in
-[`research/coaster-measurements.md`](research/coaster-measurements.md) cover the
-strap-deboss coaster only. This is a statement about the two constructions
+The **importer emits exactly one**: `relief straps emboss 1.2` — the pattern's
+strapwork standing 1.2 mm proud of the slab, so the pattern reads as the object and
+the slab as its ground (shape v2, D-066; P2.7 emitted `relief straps deboss 0.8`,
+whose record is [`research/coaster-measurements.md`](research/coaster-measurements.md)).
+Face relief, deboss and trivet are reachable by hand-editing the emitted `.bkr` but
+the import path never writes them, so the worked examples below and the validator
+evidence in [`research/coaster-shape-study.md`](research/coaster-shape-study.md)
+cover the strap-emboss coaster only. This is a statement about the two constructions
 imported here and the importer's one emitted mode, not a claim about every coaster
 the grammar can express.
 
-## 4. Rim and edge profiles
+## 4. Rim, margin and edge profiles
 
 `rim(r)` and the bottom `edge` (a chamfer or fillet) are further height
 contributions, governed by CV4 and CV5 (§7). The **importer emits neither**: the
-disc it writes has a square side wall meeting the plate at 90°, and no rim
-profile. So on every coaster this pipeline produces today CV4 and CV5 report "not
+slab it writes has a square side wall meeting the plate at 90°, and no rim profile.
+What it does control is the flat ground between the art and the outline — the
+`margin` knob of §5, 2 mm by default, the smallest flat border Omar asked for
+("minimize the flat borders around the edges"). A raised bezel around that margin is
+the `rim` clause, hand-added per model, not emitted. So on every coaster this pipeline produces today CV4 and CV5 report "not
 applicable" (§7) — they exist for hand-authored or future coasters that declare a
 bottom edge, and they are stated here rather than dropped so the "not applicable"
 is a recorded fact, not a silent skip.
 
-## 5. Sizing: mini and standard from one file
+## 5. Sizing: the outline fitted to the art, mini and standard from one file
 
-The disc auto-scales to the inscribed art. `size` (the finished disc diameter, mm)
-is the one print knob; `unit` (mm per GeoGebra unit) is **derived** from it, so the
-art clears the rim by a constant margin at every size. The importer writes
-`param unit = ($size - 8) / K`, where `K` is the pattern's enclosing diameter in
-GeoGebra units — measured off the lowered pattern at import — and `8` is twice the
-4 mm rim margin. The parser inlines the `size` literal when it reads the file, so a
-round-tripped `.bkr` carries a plain number, not the expression.
+The slab is **fitted** to the inscribed art (D-066). At import, bikar takes the
+convex hull of the drawn pattern and measures it against **seven fixed outline
+candidates** — `round`, `square`, `polygon 4 rotate 45` (a diamond), `polygon 6
+rotate 0` (flat-up hexagon), `polygon 6 rotate 30` (corner-up), `polygon 8 rotate 0`
+and `polygon 8 rotate 22.5` — computing for each the span `K` in that outline's own
+measure (diameter, side, or across flats; rounded up to 4 decimals) and the area it
+encloses. The least area wins, an earlier candidate winning a tie. The CLI prints the
+verdict as a `note:` so the choice is visible, never silent. This is a claim about
+those seven candidates, not about every outline the grammar can express; a pattern
+whose hull fits none of them well still gets the least-bad of the seven.
+
+`size` (the finished slab's across-flats measure, mm) stays the one print knob;
+`margin` (the flat ground between the art and the outline, mm) is the second,
+exposed because it is the border Omar wants minimal; `unit` (mm per GeoGebra unit)
+is **derived** from both:
+
+```
+param size = 90 range 40..120
+param margin = 2 range 1..10
+param unit = ($size - 2 * $margin) / K
+```
+
+The parser inlines the literals when it reads the file, so a round-tripped `.bkr`
+carries a plain number, not the expression. Because `K` is measured in the fitted
+outline's own measure, the art's extreme points sit exactly `margin` inside the
+outline's flats — and CV7 (§7) checks that they do.
 
 One file is therefore both sizes: `--param size=90` is the standard, `--param
-size=40` the mini. Because `base`, deboss depth and `strap width` stay in absolute
-millimetres, only the disc diameter and the art's scale change between them — never
-the mesh, and never a wall driven below the printable floor (D-059).
+size=40` the mini. `base`, emboss height and `strap width` stay in absolute
+millimetres, so only the outline and the art's scale change between them — never the
+mesh, and never a wall driven below the printable floor (D-059).
 
-Measured spans (both from `--check` renders, full record in
-[`research/coaster-measurements.md`](research/coaster-measurements.md)):
+Fitted outlines and measured spans (full record in
+[`research/coaster-shape-study.md`](research/coaster-shape-study.md)):
 
-| Construction | K (units) | mini (size=40) | standard (size=90) |
-|---|---|---|---|
-| GimTvN9hw4U | 5.1962 | 40.0 × 40.0 × 4.0 mm, 32240 tris, 4.5 cm³ | 90.0 × 90.0 × 4.0 mm, 160860 tris, 23.8 cm³ |
-| 7apC5Q9QS-8 | 5.6569 | 40.0 × 40.0 × 4.0 mm, 32240 tris, 4.6 cm³ | 90.0 × 90.0 × 4.0 mm, 160860 tris, 23.7 cm³ |
+| Construction | fitted outline | K (units) | least area vs round (units²) | mini (size=40) | standard (size=90) |
+|---|---|---|---|---|---|
+| GimTvN9hw4U | `polygon 6 $size rotate 30` | 4.5001 across flats | 17.54 vs 21.21 | 40.0 × 46.0 × 5.2 mm, 35508 tris, 6.6 cm³ | 90.0 × 104.0 × 5.2 mm, 177308 tris, 31.1 cm³ |
+| 7apC5Q9QS-8 | `square $size` | 4 side | 16.00 vs 25.13 | 40.0 × 40.0 × 5.2 mm, 40800 tris, 7.8 cm³ | 90.0 × 90.0 × 5.2 mm, 204300 tris, 36.6 cm³ |
 
-The `size` default (90 mm) and the 4 mm rim margin are product/framing choices, not
-calibrated numbers — see §9.
+A corner-up hexagon is `size` across its flats and `size / cos 30°` corner to corner,
+so the 90 mm GimTvN9hw4U coaster is 104 mm tall; `size` names the flats because that
+is the measure the art is fitted in. The `size` default (90 mm), the `margin` default
+(2 mm) and the emboss height (1.2 mm) are product/framing choices, not calibrated
+numbers — see §9.
+
+The earlier claim that the P2.7 round discs clipped their art is **withdrawn**: `K`
+was measured at import (5.1962 and 5.6569 units, the enclosing diameters), and at
+`size=90` the art spanned 82 mm inside the 90 mm disc. What the round disc wasted was
+area, not art — 21.21 units² around a 17.54 hexagon — and that is what the fit
+removes ([`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md)).
 
 ## 6. Print orientation
 
@@ -112,13 +148,13 @@ the coaster's own structural validators run inside evaluation
 
 ## 7. Structural validators
 
-The seven structural validators CV1–CV6b are each a query on the height field
+The eight structural validators CV1–CV7 are each a query on the height field
 (`bikar/packages/core/src/kernel3d/coaster-validate.ts`); a failing one throws
-during evaluation, so a coaster that renders has passed all seven. Each FAIL below
+during evaluation, so a coaster that renders has passed all eight. Each FAIL below
 is the hard case — the dimensionally-valid geometry that is nonetheless
-unprintable — not a trivially malformed one. The worked strap-deboss coaster
-(`base 4`, `relief straps deboss 0.8`, `strap width 2`) satisfies every one, which
-is why it renders (§5).
+unprintable, or the pattern that is silently wrong — not a trivially malformed one.
+The worked strap-emboss coaster (`base 4`, `relief straps emboss 1.2`, `strap width
+2`, `margin 2`) satisfies every one, which is why it renders (§5).
 
 The calibrated floors and ceilings these validators read are stated as defaults,
 each discharged by its registered bet:
@@ -135,8 +171,10 @@ All five are **provisional** bets, not settled numbers (§9).
 
 **Validator:** the solid slab left under the deepest deboss pocket is at least the
 deboss floor (`CAL-CST-03` = 0.6 mm), so it does not print translucent and cup.
-- PASS: `base 4` over a `0.8` deboss leaves a 3.20 mm floor — the worked coaster,
-  measured 3.20 mm at both sizes.
+- PASS: the P2.7 coaster's `base 4` over a `0.8` deboss left a 3.20 mm floor,
+  measured at both sizes. The worked emboss coaster has no deboss at all and reports
+  "no deboss region to floor" — not applicable, carried as such (K1), not a pass on
+  a floor it never measured.
 - FAIL: a `deboss 3.8` into the same 4 mm base leaves a 0.2 mm floor — two layers,
   below the 0.6 mm floor. The disc is still watertight and dimensionally valid;
   only the field query catches it.
@@ -152,7 +190,7 @@ deboss floor (`CAL-CST-03` = 0.6 mm), so it does not print translucent and cup.
 
 **Validator:** relief height ÷ strap width is at most the aspect ceiling
 (`CAL-CST-04` = 2.0), so a raised rib does not delaminate along the layer lines.
-- PASS: `0.8 / 2` = 0.40 — the worked coaster.
+- PASS: `1.2 / 2` = 0.60 — the worked emboss coaster (the P2.7 deboss was 0.40).
 - FAIL: a `2.0` mm emboss on a `0.8` mm strap = 2.5, a rib two and a half times
   taller than it is wide.
 
@@ -206,13 +244,40 @@ one aggregate number. It cannot stand in for CV6a's per-neck check — a coaster
 be one connected body while a single 0.6 mm neck inside it is too thin, so both
 validators are needed and neither subsumes the other.
 
+### CV7 — the inscribed art is enclosed
+
+**Validator:** every strap end sits at least half a strap width inside the outline
+and every face vertex sits inside it, measured as the exact signed inward distance
+to the outline (`outlineInset` in `bikar/packages/core/src/kernel3d/coaster.ts`: the
+nearest flat, edge or arc). The sampler drops cells beyond the outline without a
+finding, so without CV7 a too-small outline prints a *cropped* pattern that passes
+`--check` — the mesh is valid, the art is wrong. The worst point is named with its
+location so the fix is a number, not a search. This transfers only to **convex**
+outlines — round, square and the regular polygons the grammar has — because the
+inset is computed against the nearest boundary feature; a concave outline would need
+a different distance.
+- PASS: the worked coasters — the closest strap end is 2.00 mm inside (the `margin`),
+  limit 1.00 mm (half the 2 mm strap), so the art clears the outline by 1.00 mm; the
+  message names the point, e.g. `(-43.00, 19.31)` for GimTvN9hw4U at size 90.
+- FAIL: a strap whose **centreline** is inside but whose width spills — its end
+  0.5 mm inside a 2 mm strap: `only 0.50 mm inside the outline (needs ≥ 1.00 mm
+  inside)`. A strap 5 mm past the outline reports `5.00 mm outside`. A relief with no
+  art passes and says so ("no art to enclose"), not silently.
+
 ## 8. Decisions
 
 - **D-064** (logged): a coaster is a height field over an outline; cut-through is a
   trivet mode. The premise this doc builds on.
-- **D-065** (this work): the `--coaster` importer emits the whole coaster block,
-  and drives the file from a `size` knob with `unit` derived from it. See
-  [`decisions-log.md`](decisions-log.md).
+- **D-065** (P2.7): the `--coaster` importer emits the whole coaster block,
+  and drives the file from a `size` knob with `unit` derived from it.
+- **D-066** (shape v2): the outline is the least-area fit of seven fixed candidates,
+  `margin` is a knob, the relief is an emboss, `rotate` orients a polygon outline,
+  and CV7 checks enclosure.
+- **D-067**: a coaster design UI is a Coaster Lab in bikar's lab, not a page in the
+  hub; it starts once this knob set is stable.
+- **D-068**: a border with its own pattern and per-region colour are coaster-level
+  clauses composing patterns, sequenced after the interlock (#34) and the lab (#35);
+  nothing of them ships yet. See [`decisions-log.md`](decisions-log.md).
 
 ## 9. Not yet
 
@@ -222,15 +287,28 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
   first principles (perimeter widths, layer counts), not measurements; CS-1 has not
   run the calibration ladder, and no physical coaster has been printed (owner-gated,
   D-060). The validators are only as right as the bets.
-- **`size` default (90 mm) and rim margin (4 mm) are ungrounded.** They are
-  product/framing choices with no bet and no source. If either ever binds a real
-  decision it wants a `CAL-*` bet, not a bare number; until then they are named here
-  as choices, not defaults.
-- **The importer emits one relief mode.** Only `relief straps deboss` with a square
-  wall and no rim ships from the import path; face relief, emboss, rim profiles,
+- **`size` default (90 mm), `margin` default (2 mm) and the 1.2 mm emboss are
+  ungrounded.** They are product/framing choices with no bet and no source. If any
+  ever binds a real decision it wants a `CAL-*` bet, not a bare number; until then
+  they are named here as choices, not defaults. (The 1.2 mm emboss on a 2 mm strap
+  is an aspect of 0.60 against CAL-CST-04's 2.0 ceiling, which is a check, not a
+  source.)
+- **The importer emits one relief mode.** Only `relief straps emboss` with a square
+  wall and no rim ships from the import path; face relief, deboss, rim profiles,
   bottom edges and `trivet` are grammar features this pipeline does not exercise, so
-  CV4 and CV5 have no worked coaster and report not-applicable on everything
+  CV1, CV4 and CV5 have no worked coaster and report not-applicable on everything
   produced here.
-- **Enclosure is not validated.** The derived-`unit` formula keeps the art inside
-  the rim by construction, but no validator asserts the inscribed art actually fits
-  the outline; a hand-edited `unit` or `size` could push art past the rim silently.
+- **Seven candidates, no traced outline.** A pattern whose hull fits none of the
+  seven gets the least-bad of them; a traced (non-regular) outline was rejected
+  because it has no single `K` measure and no regular edge for an interlock
+  ([`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md)). A
+  star or lobed coaster would need an `outline trace` mode with its own sizing rule.
+- **Interlocking edges (#34)** — dovetail tabs on alternating polygon edges, full
+  thickness, clearance a `CAL-*` bet; round outlines cannot tile. Not in the grammar.
+- **Border band (#36) and colour regions (#37)** — the language today has neither:
+  bikar's `border` declaration is a *tile edge profile*, not a pattern band, and
+  `color` is a 2D render attribute that no STL carries. The direction (D-068) is a
+  coaster-level `border <pattern> width <mm>` clause and named regions exported as
+  separate bodies (`--format parts`) for a filament map in the 3MF; the X2D's AMS
+  assignment happens in the slicer, not in bikar.
+- **Coaster Lab (#35)** — after this knob set is stable (D-067).
