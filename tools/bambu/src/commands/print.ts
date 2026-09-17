@@ -14,6 +14,7 @@ import { basename, extname, resolve } from "node:path";
 import { McpBackend } from "../backends/mcp.js";
 import { confirm } from "../prompt.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
+import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
 
 function requireConfigured(mcp: McpBackend): void {
@@ -173,6 +174,14 @@ export function registerPrint(program: Command): void {
     .option("-y, --yes", "skip the confirmation prompt (still logs the owner-gate notice)", false)
     .option("--dry-run", "show what would be sent without connecting or dispatching", false)
     .action(runSend);
+
+  print
+    .command("list")
+    .description("list every print record — shipped (docs/prints/) + drafts (.bambu/records/), newest first")
+    .option("--shipped", "only the shipped docs/prints/ records", false)
+    .option("--drafts", "only the gitignored .bambu/records/ drafts", false)
+    .option("--json", "emit the records as JSON instead of a table", false)
+    .action((opts: { shipped?: boolean; drafts?: boolean; json?: boolean }) => runPrintList(opts));
 
   print
     .command("pause")
