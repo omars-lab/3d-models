@@ -57,9 +57,28 @@ Each note below is a stub the named task fleshes out; the design doc section is 
   functional/large parts where detail is non-critical; 0.8 for draft/max-flow. Footgun: a wall thinner
   than the chosen nozzle's single-wall floor cannot print — flag before slicing. Grounded, hedged
   numbers and the dual-nozzle caveat are design §5.1 (task #43).
-- **Orientation (§5.2).** Minimize support volume (Tweaker-3 objective); **report** the layer-line
-  direction as a strength advisory but do not claim to have optimized for strength — no surveyed tool
-  does (task #33).
+- **Orientation (§5.2) — the reasoning procedure (task #33).** Which face goes down, chosen to
+  minimize support while staying printable. The objective is Tweaker-3's — least support *volume*
+  subject to printability (design §5.2, research Topic 3) — **not** part strength. Run it like this:
+  1. **Enumerate candidate bases** — the natural "down" for the part's function plus each large flat
+     face that could sit on the bed. A part with an obvious flat bottom usually has one strong
+     candidate; a rounded/organic part has several.
+  2. **Score each candidate by support burden** — which surfaces become overhangs past the support
+     threshold (the slicer profile's default angle; the X2D's own overhang limit `CAL-OVH-01` is not
+     yet measured, so treat the profile value as advisory, not a gate) and how much bed contact the
+     base gives. Prefer the orientation with the least support that still has adequate bed contact —
+     a tiny-contact tip-down that "needs no support" but will not adhere is not printable.
+  3. **Pick the scriptable path honestly.** Tweaker-3's headless CLI is the intended auto-orient
+     (design §5.2), but do not assume it is installed — **verify it is on PATH at run time**; if it
+     is not, fall back to the slicer's built-in auto-orient (BambuStudio/OrcaSlicer) or reason from
+     the candidate faces by hand. Never report that a tool oriented the part when none ran.
+  4. **K1 — report strength, do not claim to optimize it.** No surveyed tool optimizes layer-line
+     strength / anisotropy (design §5.2). So **report** the layer-line direction as an advisory
+     ("layer lines run across the pin — that is the weak axis") but never claim the orientation was
+     chosen for strength. When function makes a weak axis unacceptable, surface the trade so the
+     operator decides between less support and a stronger part.
+  5. **Advisory shape:** "laid flat on the base face: least support; note the layer lines run across
+     the pin — weaker there" — one line, what a master would do and why, never a silent re-orient.
 - **Supports / infill / brim (§5.3).** Tree supports for point contacts; defer infill to the profile;
   attribute brim/raft to the named community source (thin source) — never assert bare (task #34).
 - **Arrangement (§5.4).** libnest2d No-Fit-Polygon packing at 0/45/90/135°; the rotate-to-fit advisory
