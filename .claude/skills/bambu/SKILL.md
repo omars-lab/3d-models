@@ -29,10 +29,35 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 |---|---|---|
 | See temps / AMS / job progress | `status show` · `status monitor` · `status camera` | **read-only** — needs transport (bring-up done) |
 | Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
-| **List what has been printed** | `print list` (`--shipped` / `--drafts` / `--json`) | **always** — reads records, touches no hardware |
+| **List what was printed — and how** | `print list` (`--how` for machine/material/nozzle/profile; `--settles`/`--material`/`--machine`/`--status` filter; `--shipped`/`--drafts`/`--json`) | **always** — reads records, touches no hardware |
 | Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`) | **OWNER-GATED** — see below |
 | Pause / resume / stop a running job | `print pause` · `print resume` · `print stop` | acts on live hardware |
 | Gate a mesh / plate / record | `validate mesh <bkr>` · `validate plate` · `validate record [dir]` | local, no hardware |
+
+## Slicing an X2D plate
+
+The known-good X2D trio (from the bench sheet) is passed by **preset display name** — `slice` resolves
+each name to its bundled JSON automatically:
+
+```
+tools/bambu/bin/bambu slice plate <abs-path-to.stl> \
+  --settings "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D" \
+  --filament "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+```
+
+A valid X2D slice writes gcode with `printer_model = Bambu Lab X2D` and `nozzle_diameter = 0.4,0.4`.
+Two footguns worth knowing:
+
+- **`--settings`/`--filament` take profile JSON *paths*, not names — at the BambuStudio layer.** A bare
+  name to the raw CLI fails with `can not find setting file`. Our `slice` resolves a name → the bundled
+  `…/BambuStudio.app/Contents/Resources/profiles/<vendor>/{machine,process,filament}/<name>.json`, so
+  the names above work; an absolute JSON path still passes through for a hand-edited profile.
+- **`npm --prefix tools/bambu run bambu -- slice …` runs with cwd = `tools/bambu`**, so a *relative*
+  STL path resolves against the wrong root (`no such file`). Pass the STL as an **absolute path**, or
+  invoke `tools/bambu/bin/bambu` from the repo root.
+
+Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a given STL with the trio
+*by name* and asserts the X2D gcode header — it fails if name-resolution ever breaks again.
 
 ## The rails (do not route around them)
 

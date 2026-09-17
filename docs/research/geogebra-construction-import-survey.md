@@ -318,7 +318,7 @@ recommends copying for `.ggb-commands`.
 
 - `docs/decisions-log.md` ends at **D-052** on `origin/master`. Open PRs #182 and #183
   (`gh pr list --repo omars-lab/3d-models`, 2026-09-16) claim **D-053** and **D-054**,
-  so the next free id is **D-055**; re-check the open-PR list before merging
+  so the next free id is **D-056**; re-check the open-PR list before merging
   (`decision-id-collision`: first merged owns the id, the open PR renumbers).
 - `.claude/gates/docs_gate.py` rules D1–D5; `docs/research/` is exempt from D4
   (the `"research" in path.parts` test at L345).
@@ -339,7 +339,7 @@ in this table needs a `CAL-*` bet.
 | reserved words in naqsh | 130 | §11 |
 | `_CMD_TYPE` keys / `_POLYMORPHIC` | 40 / 7 | §2.1 |
 | reconstructions in corpus | 9 (+ `_techniques`) | §1 |
-| latest decision id / next free | D-052 / D-055 | §12 |
+| latest decision id / next free | D-052 / D-056 | §12 |
 
 ## 14. Unverified and open
 

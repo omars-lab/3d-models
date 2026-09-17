@@ -12,7 +12,7 @@
 // e.g. `make orbs`) and slice the STL. We reject .bkr here rather than silently doing nothing.
 
 import { Command } from "commander";
-import { existsSync, statSync } from "node:fs";
+import { existsSync, statSync, readdirSync } from "node:fs";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
@@ -20,6 +20,59 @@ import { locateStudio } from "../backends/studio-cli.js";
 import { appInstalled, activateApp } from "../backends/applescript.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
+
+// BambuStudio's --load-settings/--load-filaments take JSON *file paths*, not preset display names —
+// a bare name fails with "operator(): can not find setting file". But the human-facing docs (the
+// bench sheet, calibration-design) name presets by their display name ("Bambu Lab X2D 0.4 nozzle").
+// So we resolve a name → its bundled JSON here, keeping ONE spelling of a profile across CLI + docs.
+// The presets ship inside the app: <app>/Contents/Resources/profiles/<Vendor>/{machine,process,
+// filament}/<name>.json. An argument that already resolves to a file passes through untouched (the
+// power-user escape hatch for a hand-edited profile).
+
+/** <app>/Contents/MacOS/BambuStudio → <app>/Contents/Resources/profiles, or null if absent. */
+function profilesRoot(studioBin: string): string | null {
+  const root = join(dirname(dirname(studioBin)), "Resources", "profiles");
+  return existsSync(root) ? root : null;
+}
+
+/** Find "<name>.json" under any vendor's given subdirs (BBL first, since the X2D is a Bambu Lab machine). */
+function findPreset(root: string, subdirs: string[], name: string): string | null {
+  const dirs = readdirSync(root, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+  const vendors = ["BBL", ...dirs.filter((d) => d !== "BBL")];
+  for (const vendor of vendors) {
+    for (const sub of subdirs) {
+      const p = join(root, vendor, sub, `${name}.json`);
+      if (existsSync(p)) return p;
+    }
+  }
+  return null;
+}
+
+/** Resolve each ';'-joined token: an existing file passes through; a preset name → its bundled JSON.
+ *  Throws with a clear, actionable message (listing where it looked) rather than deferring to the
+ *  slicer's opaque "can not find setting file". */
+function resolvePresetList(value: string, kind: "settings" | "filament", studioBin: string): string {
+  const subdirs = kind === "filament" ? ["filament"] : ["machine", "process"];
+  const root = profilesRoot(studioBin);
+  return value
+    .split(";")
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .map((tok) => {
+      const asPath = resolve(tok);
+      if (existsSync(asPath)) return asPath; // already a JSON path
+      const hit = root ? findPreset(root, subdirs, tok) : null;
+      if (hit) return hit;
+      throw new Error(
+        root
+          ? `could not resolve ${kind} preset "${tok}" — looked for "${tok}.json" under ` +
+            `${subdirs.map((s) => `${root}/*/${s}/`).join(", ")}. ` +
+            `Check the exact preset name (e.g. \`bambu setup studio\` lists X2D profiles), or pass an absolute JSON path.`
+          : `cannot resolve preset "${tok}": BambuStudio profiles dir not found under the app bundle — pass an absolute JSON path.`,
+      );
+    })
+    .join(";");
+}
 
 interface SliceOpts {
   out?: string;
@@ -76,6 +129,16 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
   const studioBin = locateStudio();
 
   if (order[0] === "studio-cli" && studioBin) {
+    // Resolve preset names → bundled JSON paths before building args, so --dry-run shows the real
+    // (resolved) command and a bad name fails here with a clear message, not inside the slicer.
+    try {
+      if (opts.settings) opts.settings = resolvePresetList(opts.settings, "settings", studioBin);
+      if (opts.filament) opts.filament = resolvePresetList(opts.filament, "filament", studioBin);
+    } catch (err) {
+      console.error((err as Error).message);
+      process.exitCode = 2;
+      return;
+    }
     const args = buildStudioArgs(abs, outDir, outFile, opts, raw);
     if (opts.dryRun) {
       console.log("dry run — would execute:");
@@ -134,10 +197,13 @@ export function registerSlice(program: Command): void {
     .option("-o, --out <file>", "output filename (default: <model>.sliced.3mf)")
     .option("-d, --outputdir <dir>", "output directory (default: alongside the input)")
     .option(
-      "-s, --settings <paths>",
-      'machine + process settings, semicolon-joined (BambuStudio --load-settings)',
+      "-s, --settings <names|paths>",
+      'machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths',
     )
-    .option("-f, --filament <paths>", "filament settings, semicolon-joined (BambuStudio --load-filaments)")
+    .option(
+      "-f, --filament <names|paths>",
+      "filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path",
+    )
     .option("-p, --plate <n>", "plate index to slice, 0 = all", "0")
     .option("--arrange", "arrange objects before slicing", false)
     .option("-t, --timeout <seconds>", "slice timeout in seconds", "300")

@@ -5,7 +5,7 @@ O3's comparator is [qiyas PR #32](https://github.com/NaqshCoffee/qiyas/pull/32),
 open.
 Feeds from
 [`docs/research/construction-equivalence-measurements.md`](research/construction-equivalence-measurements.md);
-decided as D-062 in [`docs/decisions-log.md`](decisions-log.md); summarised in
+decided as D-063 in [`docs/decisions-log.md`](decisions-log.md); summarised in
 [§6 of the umbrella design](geogebra-construction-import-design.md#6-equivalence-three-oracles-d-062).
 
 ## 1. Why three
@@ -34,7 +34,7 @@ side is `bikar points`, which prints every named point, circle, line and
 polygon in millimetres.
 
 **The frame is divided out, never fitted.** The lowering puts A at the origin
-and B one unit along +x (D-061), so the naqsh side divided by its `unit` param
+and B one unit along +x (D-062), so the naqsh side divided by its `unit` param
 is already in GeoGebra units; no translation, rotation or scale is estimated.
 Then, label by label: points by `x, y`; circles by centre and radius from the
 equation; lines by both naqsh endpoints lying on the reference line; segments

@@ -89,8 +89,10 @@ human account a JSON blob cannot. Required keys:
 ```yaml
 run:      2026-09-14-plate1-machine-card   # equals the directory name
 plate:    "Plate 1 — Machine Card"         # human title
-status:   printed                          # sliced|printed|measured|propagated|abandoned
+status:   printed                          # the 10-state lifecycle (print-model-design §3.1): draft|planned|sliced|printing|paused|printed|failed|measured|propagated|abandoned (R6)
 outcome:  readings                         # readings|no-reading|partial
+sheet:    docs/prints/plate-1-bench-sheet.md  # optional — the bench sheet this print realizes; many prints → one sheet, so no uniqueness (R7)
+plate_3mf: 2026-09-14-plate1-machine-card.3mf  # the sliced plate this print came off; REQUIRED once status is sliced-or-later (R10). Named, not resolved — the .3mf may be large/gitignored
 profile:                                   # the nine-field process identity (protocol.md)
   machine:        "Bambu A1"
   material:       "PLA Basic"
@@ -104,11 +106,12 @@ profile:                                   # the nine-field process identity (pr
 pins:                                      # geometry identity, re-resolvable (R1)
   bikar_ref:  8dda702fc943d1876c56fe14b5b608ed53ea51e8
   self_ref:   <commit this record was recorded at, for two-way propagation>
-objects:                                   # one per printed object on the plate
+objects:                                   # one per DISTINCT printed object on the plate
   - entry:        MC-2
     source:       bikar:patterns/Coupons/Machine-Card.bkr
     source_sha256: fdc100884e34c0aeffc517a5335d3df2ce79d718c9ee8a31a7f4330643d0a0e4
     piece:        keyhole
+    count:        1                        # copies of THIS object on the plate; optional (default 1); int ≥ 1 (R8)
     params:       {}
     check:        "keyhole front floor prints without bridging sag"
     outcome:      printed                  # printed|did-not-print|abandoned
@@ -128,7 +131,18 @@ photos:                                    # source binaries, tracked on master
     sha256: <digest>
     of:     "the whole plate, raking light"
     why:    "shows the keyhole floor intact"
+feedback:                                   # optional — the recovery loop's account (task #37); a mapping when present (R9)
+  symptom:   "warp lift at corner C"        # what went wrong, if anything
+  cause:     "small footprint, no brim"     # the operator's / skill's diagnosis
+  next:      "add a brim, re-slice"         # the remedy tried next
 ```
+
+**On `objects[].count` (R8).** `objects[]` lists *distinct* geometries; `count` records
+how many copies of each the plate carried, so a plate of nine identical clips is one
+object with `count: 9`, not nine entries. This is the repeated-element multiplicity the
+plate-arrangement work (task #42) packs and the query (task #40) sums; omitting it means
+one copy. The `count`-vs-entries split keeps identity (R1, one `source_sha256` per
+geometry) orthogonal to multiplicity.
 
 ### 4.2 The body is ungated prose
 
@@ -165,9 +179,9 @@ thing §2 forbids.
 
 **Validator:** `.claude/gates/prints_gate.py`, wired to hook
 `.githooks/pre-commit.d/39-prints` and `make validate-prints`, passes iff every
-record directory under `docs/prints/` satisfies R1, R2, R4 and R5 below (R3 ships in
-S4) and the count of records it checked is printed to stdout (never a silent green
-over an empty set).
+record directory under `docs/prints/` satisfies R1, R2, R4, R5, R6, R7, R8 and R9
+below (R3 ships in S4) and the count of records it checked is printed to stdout
+(never a silent green over an empty set).
 
 PASS: an empty tree — no `docs/prints/` records yet — and the gate prints
 `prints: 0 records checked — docs/prints/ is empty` and exits 0. The printed count is
@@ -204,11 +218,59 @@ printed a file it did not, and the gate must refuse it rather than pass.
   a reading cannot be propagated to `bets.md` until it has stated what it measured against.
   Unlike R3, R5 has no empty-subject problem — it fires the moment one reading settles a
   bet, so it ships now with R1/R2/R4.
+- **R6 — status is a lifecycle state.** `status` is one of the ten plate/record states
+  `{draft, planned, sliced, printing, paused, printed, failed, measured, propagated,
+  abandoned}` ([`print-model-design.md`](print-model-design.md) §3.1). This is a
+  *membership* check only; the consistency between a state and the fields it implies
+  (a `measured` carries a reading, a `sliced` names a `.3mf`) is the freshness rules
+  R10–R14 below (task #39, §6.3), not R6.
+- **R7 — a named sheet resolves.** The optional `sheet` — the bench sheet this print
+  realizes — must be a repo-relative path that resolves to a file. Many prints map to
+  one sheet (re-prints, repeated attempts of one plate), so there is deliberately **no**
+  uniqueness constraint; the rule only forbids a dangling pointer.
+- **R8 — repeated-element count.** Each `objects[].count` defaults to 1 when omitted
+  and, when present, must be a plain integer ≥ 1 (`bool` excluded — `count: true` is a
+  mistake, not one copy). It is the multiplicity §4.1 splits from identity.
+- **R9 — feedback is a mapping.** The optional `feedback` block (task #37's recovery
+  account) must be a mapping when present. Its *required-when* rules (a `failed` record
+  carries feedback) are R11 below, not this structural check.
+
+The **freshness rules (R10–R14)** — the "freshness gate" of
+[`print-model-design.md`](print-model-design.md) §6.3 (task #39). R1–R9 check a record
+is *well-formed*; these check its `status` is backed by the *evidence that state
+implies* (§3.1's Validator), so the lifecycle cannot lie. They live in the same
+`prints_gate.py` as R1–R9, not a second gate file — the checks read the same parsed
+frontmatter, and one parser / one hook / one self-test is the repo's no-fork rule
+([`CLAUDE.md`](../CLAUDE.md), [D-052](decisions-log.md)) applied here.
+
+- **R10 — a sliced-or-later plate names its `.3mf`.** A record whose `status` is at or
+  past `sliced` (`sliced printing paused printed failed measured propagated`) carries a
+  `plate_3mf` naming the plate it sliced / came off (§3.1). Presence + `.3mf` suffix
+  only — like R7's `sheet`, the artifact may be large or gitignored, so the record must
+  *name* it, not resolve it on disk.
+- **R11 — a terminal-physical record carries a feedback block.** A `printed`, `failed`,
+  `measured`, or `propagated` record carries a `feedback` block, present even if empty
+  (§6.3 PASS for `printed`; the recovery loop, task #37, for `failed`). R9 checks it is
+  a mapping; R11 checks it is there at all for these states.
+- **R12 — a `measured` record carries a reading.** `status: measured` with an empty
+  `readings[]` is refused — it claims a measurement while carrying none (§6.3 FAIL).
+  *Hard case (K6/D2):* a `feedback` block does **not** discharge it — `measured`
+  specifically requires a reading, so R12 checks readings, not feedback.
+- **R13 — a `propagated` record names a bet.** `status: propagated` carries at least one
+  `readings[].settles` naming a real `CAL-…` bet, not `~` (§3.1 FAIL). *Hard case
+  (K6/D2):* the aggregate "the record has readings" cannot discharge it — one reading
+  with a real `settles` is required.
+- **R14 — a shipped record is past planning.** The whole-tree gate only sees records
+  under `docs/prints/` — shipped ones — so a shipped record still at `draft`/`planned`
+  is the drift §6.3 names: the plan artifact is composed-not-stored (§2), so a shipped
+  pre-slice record must be reconciled past planning first.
 
 The gate ships **before** the first real record, and R4 is precisely what makes that
 honest: an empty subject set reports a *true* `0 records checked` when the gate prints
-its count, and a false green only when it hides it. R1, R2 and R5 are wired at zero on the
-S3 date. Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
+its count, and a false green only when it hides it. R1, R2, R5, R6, R7, R8, R9 and the
+freshness rules R10–R14 are wired at zero (each a per-record invariant with no
+empty-subject problem — a record either satisfies its state's evidence or it does not).
+Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
 because there is no settled bet to propagate from until the first one flips. R5 does *not*
 share that problem: it is a per-record invariant that fires on the first reading to name a
 bet, so it ships in S3 as the compare seam R3 will later build on. (Corrected
@@ -271,7 +333,8 @@ load-bearing rows:
 
 | the job | the question | answered by |
 |---|---|---|
-| Know what I've proven | "What have I actually printed?" | the records list (empty today) |
+| Know what I've proven | "What have I actually printed?" | the records list (empty today); `bambu print list` |
+| Reprint from a number | "How did I print it — machine/material/nozzle/profile?" | `print list --how`, the process-identity subset of §4.1's profile |
 | Know what's next | "What should I print next, and why?" | the queue (§6), transcluded from backlog |
 | Improve a design | "Where do I capture what a print taught?" | the run record body + readings (§4) |
 | Trust a number | "Which bet did this plate settle?" | `readings[].settles` → `bets.md` (§7 R3) |

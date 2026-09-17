@@ -3,7 +3,7 @@
 Status: **v1 — grounded in
 [`research/geogebra-construction-import-survey.md`](research/geogebra-construction-import-survey.md)
 (every number below cites a survey section or a `CAL-*` bet); decisions
-recorded as D-055…D-063 in [`decisions-log.md`](decisions-log.md).**
+recorded as D-056…D-064 in [`decisions-log.md`](decisions-log.md).**
 Scope: how any GeoGebra construction — the nine youtube reconstructions first,
 any `.ggb` eventually — becomes a naqsh (`.bkr`) file that bikar renders, how
 that file is proven equivalent to its source, how the flat art becomes a
@@ -15,7 +15,7 @@ in phases P2, P1.6 and P4 of §11 and are **not linked here until they exist**
 (K9: a link to an unwritten file is a defect, not a promise).
 
 Naming: **naqsh is the language, bikar is the engine.** A "naqsh file" is a
-`.bkr` file. No package, directory or extension is renamed (D-055).
+`.bkr` file. No package, directory or extension is renamed (D-056).
 
 ---
 
@@ -34,7 +34,7 @@ Naming: **naqsh is the language, bikar is the engine.** A "naqsh file" is a
    and mirrored byte-identically into the consumer.
 4. **Equivalence is three claims, three oracles.** Per-label geometry, what is
    drawn, and what is solid. No oracle implies another (§6).
-5. **A coaster is a height field** (D-063): manifold by construction, one
+5. **A coaster is a height field** (D-064): manifold by construction, one
    kernel for rim, bevel and relief, every printability check a query on the
    same field.
 6. **Many on a plate, none by hand.** A manifest re-renders each variant from
@@ -43,8 +43,8 @@ Naming: **naqsh is the language, bikar is the engine.** A "naqsh file" is a
    names the unmigrated ids, and a skill that walks the steps.
 
 Non-goals: dispatching a print (owner-gated; minis ride Plate 1 or the plate
-after it, D-059); importing GeoGebra scripting, text or sliders as animation;
-a new literal-carrying syntax for arbitrary free points (D-061 defers it).
+after it, D-060); importing GeoGebra scripting, text or sliders as animation;
+a new literal-carrying syntax for arbitrary free points (D-062 defers it).
 
 ## 2. Ground truth (from the survey)
 
@@ -95,7 +95,7 @@ states what it verifies (R4); one that verifies nothing is named as such.
 | Path | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | Verdict |
 |---|---|---|---|---|---|---|---|---|---|
 | A. GeoGebra `--export=svg` → OpenSCAD `import()` → STL | 2 | 2 | 0 | 0 | 0 | 2/1 | 0 | 0 | Rejected: frozen, closed polygons only (survey §7), verifies nothing. |
-| B. XML → `.ggb-commands` → JSON AST → `bikar import geogebra` | 2 | 2 | 2 | 2 | 2 | 1/2 | 2 | 2 | **Chosen** (D-056). |
+| B. XML → `.ggb-commands` → JSON AST → `bikar import geogebra` | 2 | 2 | 2 | 2 | 2 | 1/2 | 2 | 2 | **Chosen** (D-057). |
 | C. Python emits `.bkr` text in youtube | 1 | 0 | 2 | 1 | 1 | 2/1 | 1 | 1 | Rejected: naqsh syntax encoded in the repo that does not own the grammar; no evaluator to check semantics. |
 | D. TypeScript re-parser of `.ggb-commands` in bikar | 0 | 0 | 2 | 2 | 1 | 1/1 | 1 | 2 | Rejected: a second parser of one grammar. |
 | E. Headless Apps-API coordinate dump → `polygon` literals | 2 | 2 | 0 | 1 | 1 | 1/1 | 0 | 0 | Rejected as the path; **kept as oracle O1's reference side** (§6). |
@@ -108,7 +108,7 @@ env (survey §2.4); the grammar is line-regular except one nested `Sequence`
 form the parser already special-cases; a Lark grammar beside the parser is a
 second source of truth, and replacing the parser is the big-bang rewrite this
 repo already rejected for naqsh. Ohm, Peggy and Chevrotain are rejected for
-bikar on the same grounds (D-060).
+bikar on the same grounds (D-061).
 
 ### 4.3 Plate composer
 
@@ -186,7 +186,7 @@ vendored tree is split by stem, `ggb_construction` is held to youtube at a
 youtube has no remote — and the rest to qiyas. The pin is owed the moment
 bikar's pin vendors the stem: that state is a finding, not a skip.
 
-### 5.2 Root frame and free values (D-061)
+### 5.2 Root frame and free values (D-062)
 
 GeoGebra free points are root-circle aliases: `A` is the centre, `B` and `D`
 are the 0° and 90° division points of the unit circle. A free point off that
@@ -196,7 +196,7 @@ no new literal-carrying syntax. A `frame` block for arbitrary free points is
 deferred to a bikar `dsl-design` decision, opened only when a public fixture
 needs it.
 
-### 5.3 What lowering must refuse (D-057)
+### 5.3 What lowering must refuse (D-058)
 
 Unknown command; free point off the root frame; a single-output `Intersect`
 that yields ≠ 1 hit; a `Sequence` whose step and range do not prove a full
@@ -215,7 +215,7 @@ statement, with line and reason, before writing anything.
   that meet twice, which is every `{E,F} = Intersect` in the corpus written
   with one label.
 
-## 6. Equivalence: three oracles (D-062)
+## 6. Equivalence: three oracles (D-063)
 
 | Oracle | Claim | Reference side | naqsh side | Compare |
 |---|---|---|---|---|
@@ -266,7 +266,7 @@ What this repo pins:
 
 ## 8. The coaster (summary; specified in the coaster doc)
 
-A coaster is a height field over an outline (D-063): flat bottom, top
+A coaster is a height field over an outline (D-064): flat bottom, top
 `z = base + relief(x, y) + rim(r)`, side wall stitched. Straps, face
 emboss/deboss and the edge chamfer or fillet are all height contributions.
 Cut-through is a `trivet` mode, not a coaster. bikar has no boolean union, so
@@ -274,7 +274,7 @@ this is the only shape that is manifold by construction with one kernel.
 
 Two slices: slice 1 is `piece Coaster` / `extrude <pattern> depth $depth` on
 the existing machinery, with `param unit` setting millimetres per GeoGebra unit
-(mini and standard are two values of one param, never two files, D-058).
+(mini and standard are two values of one param, never two files, D-059).
 Slice 2 is a `coaster` declaration with `outline`, `inscribe`, `base`,
 `relief`, `strap width`, `rim`, `edge` and `trivet`.
 
@@ -297,7 +297,7 @@ keyed by file hash + params), the STLs are handed to the Bambu Studio CLI as
 multiple inputs with `--arrange 1 --export-3mf` (survey §8). Dynamic size is
 always a `--param` re-render; mesh `--scale` exists only as a flagged escape
 hatch that prints a warning, because scaling a mesh scales walls and relief
-below the printable floor (D-058).
+below the printable floor (D-059).
 
 **Default:** the `--bed x2d` footprint is 256 × 256 mm, the X2D single-nozzle
 build area ([survey §9](research/geogebra-construction-import-survey.md), a
@@ -353,7 +353,7 @@ passes after. Tier-0 witnesses precede any composite golden.
 
 | Phase | Tasks | Blocks on |
 |---|---|---|
-| 0 Ground and decide | P0.1 survey · P0.2 this doc · P0.3 decisions D-055…D-063 · P0.4 bikar naqsh-name decision + titles · P0.5 worktrees | — |
+| 0 Ground and decide | P0.1 survey · P0.2 this doc · P0.3 decisions D-056…D-064 · P0.4 bikar naqsh-name decision + titles · P0.5 worktrees | — |
 | 1 Languages made robust | P1.1 youtube EBNF + conformance + vocabulary fixture · P1.2 `ggb_from_xml.py` · P1.2b `ggb_coords.py` (O1 dump + O3 reference) · P1.3 `--ast-json` + Pydantic schema + bikar mirror · P1.4 naqsh construction statements (a)–(d) · P1.5 bikar printer + round-trip gate · P1.6 `coaster` declaration + height-field kernel + validators + `CAL-CST-*` · P1.7 highlighting generated from the fixtures (bikar + youtube) | P0.4, P0.5 |
 | 2 Transpiler, first construction, cookbook | P2.1 `bikar import geogebra` · P2.2 `GimTvN9hw4U` golden + O1/O2 · P2.3 slice-1 coaster · P2.3b `qiyas mesh compare` (O3) · P2.4 readability rules + header · P2.5 cookbook with conformance test · P2.6 `7apC5Q9QS-8` · P2.7 disc coaster | P1.3, P1.4, P1.5, P1.2b |
 | 3 Repeatable process | P3.1 skill · P3.2 ledger + gate + hook · P3.3 catalog `CS-*`, `make coasters`, gallery section | P2.5, P2.7, P2.2 |
@@ -389,8 +389,8 @@ O3 gates the catalog entry). P1.2, P1.6 and P1.7 are off the critical path.
 - Headless STL from GeoGebra (survey §14): not needed; not claimed.
 - Whether Bambu Studio's `--arrange 1` places every manifest reliably; the
   first plate answers it and P2 of §4.3 is the fallback.
-- The `frame` block (D-061): deferred until a fixture needs it.
-- Decision ids: D-055…D-063 assume PRs #182 (D-053) and #183 (D-054) merge
+- The `frame` block (D-062): deferred until a fixture needs it.
+- Decision ids: D-056…D-064 assume PRs #182 (D-053) and #183 (D-054) merge
   first; the first-merged PR owns an id and the open one renumbers
   (survey §12).
 
