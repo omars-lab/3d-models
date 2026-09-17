@@ -458,9 +458,8 @@ calibration data" (session plan binary-tickling-kay; decisions D-053/D-054 in th
 **`#9`** — slice a real plate + the first owner-gated dispatch, which stays
 CAL-bet-gated and owner-physical (filament is loaded; the remaining steps are Omar's
 caliper/instruments, the Plate 1 slice-to-`.3mf`, and `bambu print send --record`).
-The Phase-A slice profile + MC-4 pre-flight (A4/A5, tasks `#21`/`#22`) rode the
-still-open `feat/x2d-slice-preflight` branch (PR #185); their whole-card slice +
-auto_brim finding landed separately in #210.
+The Phase-A slice profile + MC-4 pre-flight (A4/A5, tasks `#21`/`#22`) landed via PR
+#185; their whole-card slice + auto_brim finding landed separately in #210.
 
 ## Bring-up + the bambu CLI foundation
 
@@ -482,8 +481,8 @@ auto_brim finding landed separately in #210.
 - #18 — `A1`: register `bambu-x2d` as a `PrintTarget` in bikar `machines.ts` (bikar)
 - #19 — `A2`: decide the dual-nozzle representation — X2D rides single-nozzle-labelled FDM, `PrintTarget` not widened (D-053) (3d-models #222, relanded onto master; original #182 fell behind master and was superseded)
 - #20 — `A3`: re-verify the machine card reproduces (`make coupons` + `make validate-coupons`, local — proves the Plate-1 substrate intact before asking for filament)
-- #21 — `A4`: ready the slice path for the X2D profile (rode PR #185, still open; the whole-card slice + auto_brim footgun recorded in #210)
-- #22 — `A5`: eyeball the MC-4 overhang fan in the slicer before filament (rode PR #185, still open)
+- #21 — `A4`: ready the slice path for the X2D profile — proven headless against a real X2D profile, the known-good preset trio recorded in the bench sheet (3d-models #185; the whole-card slice + auto_brim footgun recorded in #210)
+- #22 — `A5`: eyeball the MC-4 overhang fan in the slicer before filament — pre-flight eyeballed supports-off (3d-models #185)
 - #23 — `A6`: capture the X2D-profile-gap discovery in memory/skill — the machines.ts gap + a SKILL.md troubleshoot row for the missing machine target (memory bambu-x2d-bringup; 3d-models #184)
 - #24 — `A7`: the pre-populated Plate 1 bench sheet Omar carries to the printer (3d-models #180)
 - #25 — `A8`: encode the print→photograph→compare→verdict loop — the compare-verdict gate R5 + the prototype seams (3d-models #180)
