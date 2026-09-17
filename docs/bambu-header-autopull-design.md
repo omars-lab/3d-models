@@ -19,7 +19,7 @@ profile header is anecdote, not calibration").
 
 But we already read most of that header off the machine. `status show` parses the pushall frame and
 `filament` parses the AMS
-(`3d-models:tools/bambu/src/backends/mqtt.ts:L176 "pushall"`,
+(`3d-models:tools/bambu/src/backends/mqtt.ts:L246 "pushall"`,
 `3d-models:tools/bambu/src/frame.ts:L26 "tray_type"`), and `slice` produces a `.3mf`
 that stamps the machine, profile, layer height and slicer version. So the header is mostly a
 **join** of things the CLI can already reach — not new hardware access. This doc says which fields
@@ -103,7 +103,7 @@ single allow-listable command that emits the operator's artifact directly.
 
 **One code path, reused — not forked (the repo's D-052 tenet).** `header --json` is the builder;
 `print send --record`
-(`3d-models:tools/bambu/src/commands/print.ts:L248 "--record"`) calls **the same builder** to
+(`3d-models:tools/bambu/src/commands/print.ts:L311 "--record"`) calls **the same builder** to
 pre-fill the record's profile header instead of scaffolding it as TODO. The header logic lives in
 one place; the two entry points differ only in destination (stdout vs the record file), never in
 what a field means.

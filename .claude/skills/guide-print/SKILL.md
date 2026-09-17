@@ -99,15 +99,19 @@ would send without connecting). **Never pass `--yes` on the owner's behalf.** `-
 draft under the gitignored `.bambu/records/` — pre-filled with the same header builder as step 3, so
 the record and the bench sheet agree.
 
-> **Transport gap (as of 2026-09-17 — read before you rely on the command above).** Only *status
-> reads* run on our first-party MQTT backend (D-055, PR #188). The **dispatch half** — FTPS upload +
-> MQTT `print.project_file` — was deferred and still routes through the griches `McpBackend`, which is
-> not installed, so `print send` fails at connect today. **Task #50 ports it.** Until then the only
-> working dispatch is **Bambu Studio's GUI**, and with the plate already open from step 2
-> (`bambu slice open <plate.3mf>`) it is **one click**: confirm it is the right plate, then **Print**
-> → send over LAN to the X2D. The GUI path does **not** fire `--record`, so scaffold the record by
-> hand (or wait for #50) — the header from step 3 is what goes in it. The owner-gate rule is
-> unchanged on either path: the physical send is the operator's, never the skill's.
+> **Dispatch is first-party now (as of 2026-09-17, #50).** Both halves — FTPS upload (:990) + MQTT
+> `print.project_file` — ride backends we own, alongside the status read (D-055). `print send` no
+> longer routes through the uninstallable griches MCP. Run `bambu print send <plate.3mf> --record`
+> and it uploads over FTPS then starts the print over MQTT; `--dry-run` prints the exact FTPS target
+> and MQTT payload *without connecting* — always eyeball that first. **One caveat on the very first
+> real send:** three payload fields are still a CAL-shaped bet for the dual-nozzle X2D (`bed_type`,
+> `ams_mapping`, `md5`) — before trusting the first dispatch, diff the `--dry-run` payload against a
+> BambuStudio ground-truth capture ([`docs/issues/first-party-dispatch.md`](../../../docs/issues/first-party-dispatch.md)).
+> The **Bambu Studio GUI** remains a fine alternative — with the plate already open from step 2
+> (`bambu slice open <plate.3mf>`) it is **one click**: confirm the plate, **Print** → send over LAN
+> — but the GUI path does **not** fire `--record`, so scaffold the record by hand if you use it. The
+> owner-gate rule is unchanged on either path: the physical send — and any `--yes` — is the
+> operator's, never the skill's.
 
 ### 5 — Attend the print, and print the whole card in one session
 

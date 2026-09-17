@@ -1,18 +1,28 @@
-// `bambu print` — dispatch + print control via the griches MCP.
-//   send <plate.3mf> [--record] : upload a sliced .3mf and start it (OWNER-GATED, confirm-before-send)
-//   pause | resume | stop        : control the running print (stop confirms)
+// `bambu print` — dispatch + print control over our first-party LAN transport (#50).
+//   send <plate.3mf> [--record] : upload a sliced .3mf (FTPS 990) + start it (MQTT project_file)
+//                                  — OWNER-GATED, confirm-before-send
+//   pause | resume | stop        : control the running print via MQTT (stop confirms)
+//   list                         : enumerate print records (delegates to print-list)
 //
-// Dispatch is the one verb that moves real hardware, and printing is on hold until a CAL bet
-// justifies a plate (memory: owner-gated-and-on-hold). So `send` is fail-closed: it refuses unless
-// the operator passes --yes or confirms at a TTY, and --dry-run shows exactly what it WOULD do
-// without connecting. Tool names are matched by hint (griches may rename them / the X2D may differ),
-// so a missing tool degrades to a clear error, never a crash.
+// Why first-party (extends D-055): the griches MCP that once backed this was never installable
+// (@griches/bambu-mcp is unpublished, ships no build), so both halves of dispatch now ride code we
+// own — FtpsBackend for the upload, MqttBackend.startProjectFile for the start. Dispatch is the one
+// verb that moves real hardware and printing is on hold until a CAL bet justifies a plate (memory:
+// owner-gated-and-on-hold), so `send` is fail-closed: it refuses unless the operator passes --yes or
+// confirms at a TTY, and --dry-run prints the EXACT FTPS target + MQTT payload it WOULD send without
+// connecting — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
-import { existsSync, statSync, readFileSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { basename, extname, resolve } from "node:path";
-import { McpBackend } from "../backends/mcp.js";
-import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
+import { FtpsBackend, remoteUploadName } from "../backends/ftps.js";
+import {
+  MqttBackend,
+  buildProjectFileCommand,
+  type PrinterStatus,
+  type ProjectFileOptions,
+} from "../backends/mqtt.js";
+import { loadConfig, type PrinterConfig } from "../config.js";
 import { confirm } from "../prompt.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { readPlateMeta } from "../threemf.js";
@@ -21,20 +31,13 @@ import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
 import { readSidecar, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
-function requireConfigured(mcp: McpBackend): void {
-  if (!mcp.configured()) {
+/** Dispatch needs host+serial+token: FTPS uses host+token, the project_file topic needs the serial. */
+function requireConfigured(cfg: PrinterConfig): void {
+  if (!cfg.host || !cfg.serial || !cfg.token) {
     console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (or .mcp.json).");
     console.error("Run `bambu setup doctor` to see what's missing.");
     process.exit(1);
   }
-}
-
-function renderResult(result: unknown): string {
-  const r = result as { content?: Array<{ type?: string; text?: string }> };
-  if (r?.content?.length) {
-    return r.content.map((c) => (c.type === "text" && c.text ? c.text : JSON.stringify(c))).join("\n");
-  }
-  return JSON.stringify(result, null, 2);
 }
 
 interface SendOpts {
@@ -44,6 +47,13 @@ interface SendOpts {
   slug?: string;
   object?: string[]; // --object bikar:<path>[=entry], repeatable
   allowUnverified?: boolean;
+  plate?: string; // --plate N (commander passes a string)
+  bedType?: string; // [X2D-UNCONFIRMED] override the default "auto"
+  amsMapping?: string; // [X2D-UNCONFIRMED] comma-ints ("0" / "-1,0") or "none"
+  md5?: string; // [X2D-UNCONFIRMED] override the default ""
+  bedLeveling?: boolean; // --no-bed-leveling → false
+  flowCali?: boolean; // --no-flow-cali → false
+  vibrationCali?: boolean; // --no-vibration-cali → false
 }
 
 /**
@@ -52,7 +62,7 @@ interface SendOpts {
  *   - no sidecar        → BLOCK (fail-closed: a plate we cannot verify is not dispatched) unless
  *                         --allow-unverified is passed (the high-bar, loudly-logged override);
  *   - any UNEXPECTED    → BLOCK (Studio would warn about this);
- *   - clean / expected  → allow (and the "clean" case is what #50's auto-send will key on).
+ *   - clean / expected  → allow.
  * Returns true iff dispatch may proceed.
  */
 function warningsGateAllows(plateAbs: string, allowUnverified: boolean): boolean {
@@ -94,6 +104,39 @@ function parseObjects(specs: string[] | undefined): ScaffoldObject[] {
     const [src = "TODO", entry] = spec.split("=");
     return { entry: entry ?? `obj-${i + 1}`, source: src.startsWith("bikar:") ? src : `bikar:${src}` };
   });
+}
+
+/** Parse the [X2D-UNCONFIRMED] --ams-mapping flag: comma-ints, "none" (empty-string form), or unset. */
+function parseAmsMapping(spec: string | undefined): number[] | string | undefined {
+  if (spec === undefined) return undefined; // let the builder default to [0]
+  const t = spec.trim().toLowerCase();
+  if (t === "none" || t === "") return ""; // the OpenBambuAPI empty-string form (some firmware wants this)
+  const nums = spec.split(",").map((s) => Number(s.trim()));
+  if (nums.some((n) => !Number.isInteger(n))) {
+    throw new Error(`--ams-mapping must be comma-separated integers (e.g. "0" or "-1,0") or "none", got "${spec}"`);
+  }
+  return nums;
+}
+
+/** Assemble the ProjectFileOptions from the flags — throws (caught by the caller) on a bad flag. */
+function buildProjectOptions(remoteName: string, opts: SendOpts): ProjectFileOptions {
+  let plate: number | undefined;
+  if (opts.plate !== undefined) {
+    plate = Number(opts.plate);
+    if (!Number.isInteger(plate) || plate < 1) {
+      throw new Error(`--plate must be a positive integer (the plate index inside the .3mf), got "${opts.plate}"`);
+    }
+  }
+  return {
+    remoteName,
+    plate,
+    bedType: opts.bedType,
+    amsMapping: parseAmsMapping(opts.amsMapping),
+    md5: opts.md5,
+    bedLeveling: opts.bedLeveling,
+    flowCali: opts.flowCali,
+    vibrationCali: opts.vibrationCali,
+  };
 }
 
 /**
@@ -148,16 +191,34 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     return;
   }
 
-  const mcp = new McpBackend();
-  requireConfigured(mcp);
+  // Build (and validate) the dispatch options before any network — a bad --plate/--ams-mapping fails
+  // fast, not after an upload.
+  let projectOpts: ProjectFileOptions;
+  try {
+    projectOpts = buildProjectOptions(remoteUploadName(abs), opts);
+  } catch (err) {
+    console.error((err as Error).message);
+    process.exitCode = 2;
+    return;
+  }
+
+  const cfg = loadConfig();
+  requireConfigured(cfg);
 
   // Owner gate, stated out loud before anything reaches the printer.
   console.error("⚠ Dispatch is owner-gated: this sends a plate to the physical X2D.");
-  console.error(`  plate: ${basename(abs)} (${kb} KB) → ${mcp.config.host ?? "(host unset)"}`);
+  console.error(`  plate: ${basename(abs)} (${kb} KB) → ${cfg.host ?? "(host unset)"}`);
   console.error("  Printing is on hold until a CAL bet justifies a plate (see the setup skill).");
 
+  const command = buildProjectFileCommand(projectOpts);
+
   if (opts.dryRun) {
-    console.log("dry run — would upload the .3mf and start a print via the MCP (no send performed).");
+    console.log("dry run — would dispatch WITHOUT sending (no upload, no publish performed):");
+    console.log(`  1. FTPS implicit-TLS upload → ${cfg.host}:990 (user bblp) STOR /${projectOpts.remoteName}`);
+    console.log(`  2. MQTT publish → device/${cfg.serial}/request:`);
+    console.log(JSON.stringify(command, null, 2));
+    console.log("  [X2D-UNCONFIRMED] bed_type / ams_mapping / md5 — diff this payload against a BambuStudio");
+    console.log("  ground-truth capture before the first real send (docs/issues/first-party-dispatch.md).");
     if (opts.record) console.log("would also scaffold a draft record under .bambu/records/.");
     return;
   }
@@ -168,29 +229,34 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     return;
   }
 
+  const ftps = new FtpsBackend(cfg);
+  const mqtt = new MqttBackend(cfg);
   try {
-    await mcp.connect();
-    // Upload the file, then start the print. Both tool names are hint-matched.
-    const uploadTool = (await mcp.findTool("upload")) ?? (await mcp.findTool("send", "file"));
-    const printTool =
-      (await mcp.findTool("print", "start")) ?? (await mcp.findTool("start", "print")) ?? (await mcp.findTool("print"));
-    if (!printTool) {
-      const tools = (await mcp.listTools()).map((t) => t.name).join(", ");
-      throw new Error(`no print/dispatch tool found. Available: ${tools}`);
-    }
     ev("dispatch_start", { plate: basename(abs), kb });
-    if (uploadTool) {
-      const data = readFileSync(abs).toString("base64");
-      console.log(renderResult(await mcp.call(uploadTool, { name: basename(abs), data })));
+    // 1. Upload the .3mf to the FTP root over implicit FTPS.
+    console.error(`uploading ${basename(abs)} over FTPS (implicit TLS, :990)…`);
+    const remote = await ftps.uploadFile(abs);
+    console.error(`uploaded → /${remote}. Starting the print…`);
+    // 2. Start the print from the uploaded file over MQTT.
+    await mqtt.connect();
+    const sent = await mqtt.startProjectFile({ ...projectOpts, remoteName: remote });
+    // Best-effort confirmation: give the printer a beat, then read back its state so the operator
+    // sees it took. The publish already happened; a failed read never un-dispatches it.
+    let state = "(unconfirmed)";
+    try {
+      const status = await mqtt.requestStatus();
+      state = String(status.gcode_state ?? status.mc_print_stage ?? "(unconfirmed)");
+    } catch {
+      /* status read is a nicety, not the dispatch */
     }
-    console.log(renderResult(await mcp.call(printTool, { file: basename(abs), name: basename(abs) })));
-    ev("dispatch_done", { plate: basename(abs) });
-    console.log(`dispatched ${basename(abs)}.`);
+    ev("dispatch_done", { plate: basename(abs), state });
+    console.log(`dispatched ${basename(abs)} (${String(sent.print.url)}) — printer state: ${state}.`);
+    console.log("Watch it with `bambu status monitor`.");
   } catch (err) {
     console.error(`dispatch failed: ${(err as Error).message}`);
     process.exitCode = 1;
   } finally {
-    await mcp.close();
+    await mqtt.close();
   }
 
   if (opts.record) {
@@ -213,38 +279,35 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
 }
 
-/** Shared body for pause/resume/stop. `stop` confirms first; pause/resume are reversible. */
+/** Shared body for pause/resume/stop over MQTT. `stop` confirms first; pause/resume are reversible. */
 async function runControl(verb: "pause" | "resume" | "stop", opts: { yes?: boolean }): Promise<void> {
   if (verb === "stop" && !(await confirm("Stop the running print?", Boolean(opts.yes)))) {
     console.error("refused — not stopping. Pass --yes (or confirm at a TTY).");
     process.exitCode = 2;
     return;
   }
-  const mcp = new McpBackend();
-  requireConfigured(mcp);
+  const cfg = loadConfig();
+  requireConfigured(cfg);
+  const mqtt = new MqttBackend(cfg);
   try {
-    await mcp.connect();
-    const tool = (await mcp.findTool(verb)) ?? (await mcp.findTool("print", verb));
-    if (!tool) {
-      const tools = (await mcp.listTools()).map((t) => t.name).join(", ");
-      throw new Error(`no '${verb}' tool found. Available: ${tools}`);
-    }
+    await mqtt.connect();
     ev(`${verb}_call`, {});
-    console.log(renderResult(await mcp.call(tool)));
+    await mqtt.sendPrintControl(verb);
+    console.log(`${verb} sent.`);
   } catch (err) {
     console.error(`${verb} failed: ${(err as Error).message}`);
     process.exitCode = 1;
   } finally {
-    await mcp.close();
+    await mqtt.close();
   }
 }
 
 export function registerPrint(program: Command): void {
-  const print = program.command("print").description("dispatch + print control via the MCP (owner-gated)");
+  const print = program.command("print").description("dispatch + print control over first-party FTPS+MQTT (owner-gated)");
 
   print
     .command("send <plate>")
-    .description("upload a sliced .3mf and start it — OWNER-GATED, confirm-before-send")
+    .description("upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-send")
     .option("--record", "scaffold a draft print record under .bambu/records/", false)
     .option("--slug <slug>", "slug for the record run name (default: derived from the plate)")
     .option(
@@ -253,13 +316,20 @@ export function registerPrint(program: Command): void {
       (v: string, acc: string[]) => [...acc, v],
       [] as string[],
     )
+    .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
+    .option("--bed-type <type>", "[X2D-UNCONFIRMED] plate profile: auto|cool_plate|eng_plate|hot_plate|textured_plate (default auto)")
+    .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→slot map: comma-ints e.g. "0" or "-1,0", or "none" (default "0")')
+    .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
+    .option("--no-bed-leveling", "skip auto bed-leveling before this print")
+    .option("--no-flow-cali", "skip flow calibration before this print")
+    .option("--no-vibration-cali", "skip vibration calibration before this print")
     .option("-y, --yes", "skip the confirmation prompt (still logs the owner-gate notice)", false)
     .option(
       "--allow-unverified",
       "dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate)",
       false,
     )
-    .option("--dry-run", "show what would be sent without connecting or dispatching", false)
+    .option("--dry-run", "print the exact FTPS target + MQTT payload without connecting or dispatching", false)
     .action(runSend);
 
   print
