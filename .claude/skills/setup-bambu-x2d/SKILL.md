@@ -54,10 +54,25 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    X2D. If the printer or its dual-nozzle/auxiliary profiles are missing, install the **2.8.x beta**
    alongside (they coexist). X2D support reference:
    <https://bambulab.com/en/support/804923811139526656>.
-3. **Enable LAN Mode, then Developer Mode** on the printer (touchscreen). This opens MQTT/FTP/live
-   stream. Record the **access code** and **serial number**. Background on the authorization system:
+3. **Enable LAN Mode, then Developer Mode** on the printer touchscreen — the button path is
+   **gear / Settings → LAN Only Mode → ON → Developer Mode → ON** (Developer Mode only appears once
+   LAN-only is on; on the X2D's H2-series firmware these sit under **WLAN / Network**). **Accept the
+   disclaimer** — you own the LAN security from here. This is the step that opens **MQTT 8883 / FTP /
+   live stream**; LAN-only *without* Developer Mode still won't accept MCP control. Then **read the
+   access code** off that same network panel and record it with the **serial**. Labels shift between
+   the X-series and H2-series UIs — if the wording differs, it is still the same two toggles.
+   Step-by-steps: [enable LAN mode](https://wiki.bambulab.com/en/knowledge-sharing/enable-lan-mode) ·
+   [enable Developer Mode](https://wiki.bambulab.com/en/knowledge-sharing/enable-developer-mode).
+   Background on the authorization system:
    [Bambu Connect wiki](https://wiki.bambulab.com/en/software/bambu-connect) ·
    [Bambu's announcement](https://blog.bambulab.com/updates-and-third-party-integration-with-bambu-connect/).
+
+   **Storing the access code (it is a secret).** Two options: (a) paste it into the gitignored
+   `.mcp.json` (`bambu setup mcp` prints the block), or (b) — preferred — keep it encrypted-at-rest
+   with **dotenvx**: `dotenvx set BAMBU_TOKEN "$(pbpaste)"` writes an encrypted `.env` (commit-safe;
+   the private `.env.keys` is gitignored, never committed), then run the CLI under
+   `dotenvx run -- bin/bambu …` so `BAMBU_TOKEN` reaches `process.env` (config precedence is env →
+   `.mcp.json`). Add the non-secret `PRINTER_HOST` / `BAMBU_SERIAL` / `BAMBU_MODEL=x2d` the same way.
 4. **Install Bambu Connect** (the GUI fallback path): <https://wiki.bambulab.com/en/software/bambu-connect>.
 5. **Wire the MCP.** Copy [`.mcp.json.example`](../../../.mcp.json.example) to `.mcp.json` (gitignored
    — it carries the token) and fill in host/serial/token/model=`x2d`. `bambu setup mcp` prints the
