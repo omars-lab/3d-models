@@ -12,6 +12,13 @@ its own — it routes through the [`bambu`](../bambu/SKILL.md) CLI (slice/dispat
 [`calibrate`](../calibrate/SKILL.md) (turning a reading into an earned number). First-time hardware
 wiring is a different skill — [`setup-bambu-x2d`](../setup-bambu-x2d/SKILL.md).
 
+**Where this sits next to [`print-model`](../print-model/SKILL.md):** they are two halves of one
+arc. `print-model` is the *planning* front-half — "how should I print this model": it reasons nozzle,
+orientation, supports/infill/brim and plate arrangement and hands back a reviewable plan + sliced
+plate + preview, stopping **at** the owner gate. `guide-print` is the *execution* back-half — it
+picks up at that gate and walks record-header → dispatch → attend → measure → propagate. So for an
+arbitrary model, run `print-model` first to decide *how*, then this skill to *run and read* it.
+
 The worked example throughout is **Plate 1** (the machine card), because it is the print that has to
 go first — but the seven steps are the shape of *any* print session.
 
@@ -32,10 +39,14 @@ Two things must be true, or stop and say so:
 ### 1 — Slice with the settings that are *measurements, not preferences*
 
 `bambu slice plate <model.stl> --settings "<machine>;<process>" --filament "<pla>"` (preset names
-resolve to the bundle JSONs). The known-good Plate-1 trio and the full slicer-settings rationale live
-in [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md) and
-[`docs/calibration-design.md`](../../../docs/calibration-design.md) §4. **On the machine card these
-settings *are* the experiment** — getting one wrong erases a reading:
+resolve to the bundle JSONs). **For an ordinary model the *choice* of settings is
+[`print-model`](../print-model/SKILL.md)'s job** — nozzle, orientation, supports/infill/brim,
+arrangement — and it hands you the sliced plate; come here to run it. **On a calibration plate the
+settings are not a choice — they are fixed measurements** set by the bench sheet, and this is exactly
+the exception `print-model` carves out. The known-good Plate-1 trio and the full slicer-settings
+rationale live in [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md)
+and [`docs/calibration-design.md`](../../../docs/calibration-design.md) §4. **On the machine card
+these settings *are* the experiment** — getting one wrong erases a reading:
 
 - **MC-4 fan → supports OFF.** A support column would hide the overhang the coupon exists to measure.
 - **MC-6 towers → bare plate, no brim/raft.** Watch the `0.20mm Standard @BBL X2D` **`auto_brim`
