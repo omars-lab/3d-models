@@ -80,11 +80,12 @@ The design (PR #191) is complete; this skill is being built out task by task:
   Tweaker-3-or-fall-back path, and the K1 strength advisory ([`rubric.md`](rubric.md) §Orientation,
   task #33); the settings reasoning — supports (tree, threshold-gated), infill (defer-to-profile), and
   brim/raft (thin-source, attribute-never-assert) ([`rubric.md`](rubric.md) §Supports/infill/brim,
-  task #34).
+  task #34); the per-print plan artifact + slice/preview + owner-gate handoff — the compose→slice→hand-off
+  procedure and the stable plan shape, composed-not-stored-twice, stopping at the gate
+  ([`rubric.md`](rubric.md) §Compose → slice → hand off, task #36).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
-- **Deepened by later tasks:** the
-  per-print plan artifact + owner-gate handoff (#36),
+- **Deepened by later tasks:**
   print-issue recovery (#37), arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
   out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
