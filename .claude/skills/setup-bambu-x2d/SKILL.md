@@ -54,6 +54,11 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    X2D. If the printer or its dual-nozzle/auxiliary profiles are missing, install the **2.8.x beta**
    alongside (they coexist). X2D support reference:
    <https://bambulab.com/en/support/804923811139526656>.
+   *Optional — Studio's **Network Plugin**: not needed for our CLI dispatch (`bambu print send` goes
+   over MCP → MQTT/FTPS via Developer Mode, step 3). It is Studio's own component, required only to
+   send or monitor a print **from inside Studio** — e.g. the print-model owner-gate's "open the sliced
+   plate in Studio and hit Print" review path. Install it if you'll drive prints from Studio's GUI;
+   skip it for the headless CLI path.*
 3. **Enable LAN Mode, then Developer Mode** on the printer (touchscreen). This opens MQTT/FTP/live
    stream. Record the **access code** and **serial number**. Background on the authorization system:
    [Bambu Connect wiki](https://wiki.bambulab.com/en/software/bambu-connect) ·
