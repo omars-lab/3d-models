@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "21 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "23 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
@@ -4279,3 +4279,142 @@ subprocess spawned for the read.
 - FAIL: `status show` still requires `@griches/bambu-mcp` to be spawnable (it 404s, so this would report
   "cannot reach MCP" rather than reading status) — the hard case is proving the read no longer depends on
   a package that cannot be installed.
+
+## D-056 — naqsh names the language; bikar keeps the engine, the repo, the packages and `.bkr`
+
+**Decision (owner-directed 2026-09-16):** "naqsh" is the name of the DSL and a synonym for
+"the bikar DSL"; bikar remains the name of the engine, the repo, the CLI and the
+`@naqshcoffee/*` packages; the file extension stays `.bkr`. "Make a new naqsh file" produces a
+`.bkr`. Docs are titled "naqsh (the language) — bikar (the engine)". No package, directory or
+extension is renamed. Recorded on the bikar side as
+`bikar/docs/decisions/2026-09-16-naqsh-language-name.md`.
+
+**Options on the table:** (a) rename everything — ~357 `.bkr` files, every gate that matches
+the extension, every catalog `--param` pointer, for no product value; (b) rename the packages
+only — one name with two meanings, the exact defect D-052 removed one layer down; (c) the
+synonym. (c) taken: zero cascade, and the language gets a name a person can say.
+
+**What would reverse this:** a second language shipping from bikar, at which point "the bikar
+DSL" would be ambiguous and the extension would have to carry the name.
+
+## D-057 — Import is construction-level, one parser per language, bridged by a JSON AST
+
+**Decision:** a GeoGebra construction enters naqsh through
+`geogebra.xml → .ggb-commands → ggb_build.py --ast-json → bikar import geogebra`. The
+`.ggb-commands` grammar is parsed only by the youtube repo's `ggb_build.py`; naqsh is parsed
+only by bikar's `parser.ts`; the bridge is a JSON AST whose Pydantic schema the producer owns
+and the consumer vendors byte-identically (the hook-41 pattern). Rubric and the four rejected
+paths: [`geogebra-construction-import-design.md`](geogebra-construction-import-design.md) §4.1.
+
+**Why this shape:** the files are recipes, not coordinates
+([survey §2.3](research/geogebra-construction-import-survey.md)), so a coordinate import
+freezes the construction and verifies nothing; a Python emitter of `.bkr` text puts naqsh
+syntax in a repo that does not own the grammar; a TypeScript re-parser of `.ggb-commands` is
+a second parser of one grammar. A GeoGebra-saved file has the same `<command>` blocks as ours
+(survey §3), so the XML front end makes the path general, not corpus-specific.
+
+**What would reverse this:** GeoGebra publishing a machine-readable command-level export that
+makes the `.ggb-commands` intermediate redundant, or the AST schema growing a construct
+that the youtube parser cannot project without a semantic pass that belongs in bikar.
+
+## D-058 — Unsupported input fails loud and enumerated; coverage is a printed table
+
+**Decision:** `bikar import geogebra` exits non-zero on an unknown command, a free point off
+the root frame, a single-output intersect with ≠ 1 hit, a `Sequence` that is neither a full
+orbit nor a `for`, or a post-mangling keyword collision. Every refusal is printed with line
+and reason before anything is written; `--lenient <Cmd>` is the only way to drop a statement
+and the drop is recorded in the emitted file's header. `--coverage` prints the histogram.
+
+**Why:** "any GeoGebra code" is a claim about a set (K2). A silent drop turns that claim
+into a lie the render-diff may not catch — a dropped hidden scaffold line changes nothing
+visible and everything dependent on it.
+
+**What would reverse this:** nothing about the enumeration; the *set* of refusals shrinks
+as the cookbook grows, and that is the point.
+
+## D-059 — Dynamic STLs re-render from `--param`; mesh `--scale` is a flagged escape hatch only
+
+**Decision:** mini and standard coasters are two values of one `param` in one file, never
+two files and never a scaled mesh. The plate composer re-renders every variant through bikar;
+its mesh `--scale` passthrough prints a warning naming this entry.
+
+**Why:** scaling a mesh scales walls, straps and relief with it, and a 40 % mini of a
+standard coaster puts every strap below the printable-feature floor `CAL-FEA-01` governs.
+The `param` re-render keeps the walls at their declared millimetres and changes only the
+pattern's unit.
+
+**What would reverse this:** a print-target model in bikar that scales geometry *and*
+re-applies feature floors after scaling — at which point mesh scaling would be a render,
+not a cheat.
+
+## D-060 — Minis ride Plate 1 or the plate right after; no coaster print is dispatched from this work
+
+**Decision (owner-directed 2026-09-16):** printing stays owner-gated. The first mini coasters
+are added to the next plate Omar dispatches, through the existing compare-verdict loop and
+`docs/prints/` record; nothing in Phases 0–4 sends a job. The `CAL-CST-*` bets settle on
+that plate.
+
+**What would reverse this:** a measured `CAL-CST-01`/`02` and an owner decision to run a
+coaster-only plate.
+
+## D-061 — Grammar is the source of truth for both languages; hand-rolled parser + conformance, no generator
+
+**Decision:** `.ggb-commands` gets a normative EBNF in the youtube repo held to its parser by
+G1/G2/G3 twins (identity sweep, vocabulary fixture, every ```ggb fence parses and every
+```ggb invalid fence dies); naqsh's grammar gains the construction productions under the
+same gates. Highlighters and the cookbook are generated from, or tested against, the same
+fixtures. Lark, Ohm, Peggy and Chevrotain are rejected
+([survey §10](research/geogebra-construction-import-survey.md)): a grammar file beside a
+hand-rolled parser is a second source of truth unless it replaces the parser, and replacing
+the parser is the rewrite [`dsl-grammar-formalization.md`](dsl-grammar-formalization.md)
+already rejected for naqsh.
+
+**What would reverse this:** the `.ggb-commands` grammar growing past line-regular (nested
+expressions beyond the one `Sequence` form), where a generator's error recovery would earn
+its second source of truth.
+
+## D-062 — GeoGebra free points are root-circle aliases; off-frame free points are a transpile error
+
+**Decision:** `A` is the unit circle's centre, `B` and `D` its 0° and 90° division points;
+any other free point is refused with "rewrite relative to A, B". Free numbers become
+`param`s. A `frame` block for arbitrary free points is deferred to a bikar `dsl-design`
+decision, opened only when a public `.ggb` fixture needs it.
+
+**Why:** it preserves the relative-construction tenet with no new literal-carrying syntax and
+covers 9/9 reconstructions (survey §1: the only free-point literals are `(0,0)`, `(1,0)`,
+`(0,1)` plus one technique snippet).
+
+**What would reverse this:** the first real file — not a hypothetical — whose construction
+starts from a free point that is not a division of the root circle.
+
+## D-063 — "GeoGebra ≡ naqsh" is three claims with three oracles; the reference extruder is OpenSCAD
+
+**Decision:** O1 per-label geometry (Apps-API coordinate dump vs naqsh evaluation, per label,
+frame-fitted), O2 drawing (edge-SSIM vs the hero export at the loop's own 0.70), O3 solid
+(GeoGebra coords → OpenSCAD `polygon` + `linear_extrude` → `reference.stl`, compared to the
+naqsh STL by `qiyas mesh compare`). O3 runs on the flat extruded pattern, before rim, bevel or
+relief exist. No oracle implies another.
+
+**Why OpenSCAD for the reference:** a reference STL built with bikar's own kernel proves
+nothing about bikar; OpenSCAD 2021.01 is installed, independent, and needs two primitives
+(survey §7). **Why per label:** an aggregate score cannot discharge a per-object claim — the
+hard case is a `pick` swap onto a mirror image, invisible to O2 on a symmetric drawing.
+
+**What would reverse this:** GeoGebra exposing a headless STL export (survey §14, unverified),
+which would replace O3's reference side but not O1 or O2.
+
+## D-064 — A coaster is a height field over an outline; cut-through is a trivet mode
+
+**Decision:** flat bottom, top `z = base + relief(x, y) + rim(r)`, side wall stitched.
+Straps, face emboss/deboss and the rim chamfer or fillet are height contributions; every
+structural validator is a query on the same field; `trivet` is the opt-in cut-through mode
+with its own connectivity check.
+
+**Why:** bikar has no boolean union, so the height field is the one shape that is manifold
+by construction with a single kernel, and it makes bevel and relief the same operation rather
+than two code paths that could disagree. Numbers are bets `CAL-CST-01…05`, registered before
+the coaster doc states one.
+
+**What would reverse this:** a coaster feature that is not a function of `(x, y)` — an
+undercut, a through-channel below the rim — which no height field can express and which
+would need the union bikar does not have.
