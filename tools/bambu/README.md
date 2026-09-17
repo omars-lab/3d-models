@@ -65,12 +65,19 @@ add photos, then check with `bambu validate record .bambu/records` before moving
 `build/verify_machine_card.py`, `.claude/gates/prints_gate.py`) — one code path, never a second that
 can disagree.
 
-`print list` answers "what has this machine printed?" — it reads **both** trees (shipped
-`docs/prints/` + draft `.bambu/records/`), newest first, tagging each row's source; `--shipped` /
-`--drafts` narrow it and `--json` emits the raw records. It parses nothing itself: it shells to the
-same `prints_gate.py` (its read-only `--list` projection), so the list and the gate can never
-disagree about a record, and a record that does not parse is shown as broken rather than hidden.
-Today it is honestly empty — nothing has been printed yet.
+`print list` answers "what has this machine printed?" — and, with `--how`, "how did I print it?".
+It reads **both** trees (shipped `docs/prints/` + draft `.bambu/records/`), newest first, tagging
+each row's source. The default table shows the *what* (plate / status / objects / readings /
+settles); `--how` swaps in the **process identity** — machine / material / nozzle / layer / profile
+— so a plate can be reprinted from a number, not a memory. Four filters turn the list into a query:
+`--settles <CAL-id>`, `--material`, `--machine` (substring, case-insensitive) and `--status`
+(exact) — combined with AND, reporting "N of M" and distinguishing "no match" from the zero-record
+baseline. `--shipped` / `--drafts` narrow the trees and `--json` emits the raw records (`how` and
+all). It parses nothing itself: it shells to the same `prints_gate.py` (its read-only `--list`
+projection, which slices the `how` from the record's nine-field profile), so the list and the gate
+can never disagree about a record, and a record that does not parse is shown as broken rather than
+hidden — even under a filter, since hiding a broken record is the one failure this verb exists to
+avoid. Today it is honestly empty — nothing has been printed yet.
 
 ## Logs
 
