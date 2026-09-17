@@ -3738,6 +3738,22 @@ bet has moved. The printer-gated rungs — S2 (print Plate 1, task #67) and S4 (
 task #71) — wait on the bench; the printer is user-held (Bambu A1/P1S/X1C class). The
 record-independent rungs (S5 catalog cleanup #68, S6 page #69, S7 lab page #70) do not.
 
+**Amendment 2026-09-17 — print time and filament grams DO surface on the tab (PMR-8).**
+The original design (`prints-tab-design.md` §11) named cost, print time and filament
+grams as *out of scope for the display* — "the tab records what a plate taught, not what
+it cost." With a real printer now on the LAN and the print-metadata design landing
+per-iteration estimates plus MQTT-measured actuals
+([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3.1),
+Omar decided (2026-09-17, PMR-8) the tab **should show time and filament grams** — the
+pre-print estimate, and the post-print actual once the machine reports it. This reverses
+only the *display* half of the §11 line, and only for time and grams. It does **not**
+touch what D-046 actually defends: the boundary against a *second scheduler or a second
+bet registry* growing inside the tab. Surfacing a number the record already stores adds
+neither. What stays out of scope is a **monetary** cost figure — the repo holds no
+filament prices, and inventing a spool-price×grams number would fabricate a measurement
+the way the bench-sheet rule forbids. `prints-tab-design.md` §11 carries the matching
+amendment; the tab answers "how long / how much filament," not "how many dollars."
+
 ---
 
 ## D-047 — round-pattern orb placement is a new statement family, and v1 proves the mechanism before it builds the table

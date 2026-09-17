@@ -339,10 +339,17 @@ load-bearing rows:
 | Improve a design | "Where do I capture what a print taught?" | the run record body + readings (§4) |
 | Trust a number | "Which bet did this plate settle?" | `readings[].settles` → `bets.md` (§7 R3) |
 | See it | "What did the plate look like?" | `photos[]` (§5) |
+| Plan the run | "How long, and how much filament?" | the `estimates` block (pre-print) and, once it runs, the MQTT `actuals` — surfaced on the tab (D-046 amendment 2026-09-17, PMR-8) |
 
-Rows the UX deliberately does **not** answer (cost, print time, filament grams) are
-named as out of scope here rather than hidden — the tab records what a plate taught,
-not what it cost.
+**Amendment 2026-09-17 (PMR-8, [D-046](decisions-log.md)).** Print *time* and *filament
+grams* — estimate before the print, MQTT-measured actual after
+([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3.1) —
+**do** now surface on the tab: Omar asked for them, and showing a number the record
+already stores adds no second scheduler or bet registry, which is the boundary D-046
+actually defends (§2). What stays out of scope is a *monetary* cost figure (a spool price
+× grams): the repo does not hold filament prices, and inventing one would fabricate a
+number the way §3.3.1 refuses to. So the tab answers "how long / how much filament,"
+not "how many dollars."
 
 ## 12. Read against itself (K7)
 

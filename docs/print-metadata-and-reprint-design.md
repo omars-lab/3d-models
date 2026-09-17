@@ -238,6 +238,61 @@ Estimates are per-**iteration** (they depend only on geometry + slice inputs, wh
 iteration key fixes), so all records sharing an `iteration.id` carry identical estimates;
 R15 (§3.4) checks that.
 
+### 3.3.1 Estimate vs actual, and per-piece vs per-plate (PMR-3 / PMR-4 resolved 2026-09-17)
+
+Two distinctions §3.3 above collapsed, separated after Omar's answers. Conflating either
+fabricates precision, which the bench-sheet rule forbids
+([`plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)).
+
+**Estimate (pre-print) vs actual (post-print) — different fields, different sources.**
+
+- **`estimates`** — the *pre-print prediction*, from the sliced `.3mf`'s own numbers
+  (PMR-4 option (a), still behind the §3.3 de-risk probe) or from a single-piece
+  estimation slice (below). It exists *before* the plate is dispatched, which is what the
+  owner gate and the plate-builder frontend (tracked separately) need. It is a
+  prediction, and stays labelled as one.
+- **`actuals`** — the *post-print ground truth*, from the printer's **MQTT device
+  report** (PMR-4 answer, Omar 2026-09-17), read over the same first-party MQTT transport
+  `status show` already proves ([`status.ts`](../tools/bambu/src/commands/status.ts)).
+  This is what the machine actually consumed — measured, not attributed, the repo's
+  standing bias. It populates the `estimates.confirmed_by` field §3.3 left open, closing
+  the loop: predicted X g, the device reported Y g.
+
+MQTT reports an actual only *after* a print, so it cannot be the pre-print estimate — the
+estimate stays the `.3mf`/estimation-slice number until the plate runs, then the MQTT
+actual lands *beside* it. R15 (§3.4) governs `estimates` only (the prediction is
+geometry-fixed, so it is identical across records sharing an iteration id); `actuals` are
+per-**record** (two prints of one iteration can consume slightly different grams — spool
+and moisture variance) and R15 does not constrain them.
+
+**Per-piece vs per-plate — the estimation slice.** A `.3mf` is a whole plate and may hold
+several products (§5), so a whole-plate `.3mf` cannot answer "how much does *this one
+piece* cost." The primitive that can:
+
+> A **single-piece estimation slice** slices one copy of a piece *alone on the bed*, only
+> to read its unit numbers. It is a fixture — **never dispatched** (not a plate we would
+> print) — cached by the piece's `iteration.id` (slice-once, reuse).
+
+What it yields, with the hedge each number carries (K1):
+
+- **Filament length & grams — additive and exact for the piece's own extrusion.** A piece
+  lays the same object filament whether alone or crowded, so `N copies ⇒ N × unit` holds
+  for the material the *objects* consume. The hedge (K1): plate-level overhead — a
+  prime/wipe tower, a purge on a filament change, the plate skirt/brim — is **not**
+  per-piece and is counted once at the plate, never multiplied per copy. On a
+  single-material plate that overhead is small; across a filament change it is real.
+- **Time — a per-piece floor, not exact.** A real multi-object plate adds inter-object
+  travel and can raise per-layer minimum-time waits, so `plate time ≥ Σ(unit times)`. An
+  honest plate *time* needs slicing the real arrangement; the unit time is a lower bound
+  and a composition hint, not a plate total.
+
+So `plate estimate = Σ(unit estimates) + plate overhead` — exact for grams, a floor for
+time. The grams math (area = π·(d/2)², volume × density) is already realized in
+[`validate.ts`](../tools/bambu/src/commands/validate.ts)'s `deriveGrams`, so the
+estimation slice reuses one spelling of it, not a second. This primitive feeds the reprint
+quantity flow (§4.4): `reprint --qty n` can show the material a new quantity costs
+*before* it re-slices, because grams compose.
+
 ### 3.4 Proposed gate rules (additive to `prints_gate.py`, NOT built here)
 
 These are **proposals** for [`.claude/gates/prints_gate.py`](../.claude/gates/prints_gate.py),
@@ -298,6 +353,7 @@ verb; the physical send stays the existing owner-gated `print send`
 ```
 bambu print reprint it-9f3c1a2b4d5e            # resolve → stage a draft record at the owner gate
 bambu print reprint keyhole-r3                  # a label also resolves (→ its it-<sha12>)
+bambu print reprint it-9f3c1a2b4d5e --qty 6     # sole-product-on-plate → re-slice 6 copies (§4.4)
 bambu print reprint it-9f3c1a2b4d5e --re-slice  # rebuild the .3mf from the recipe instead of replaying
 bambu print reprint it-9f3c1a2b4d5e --dry-run   # show what it WOULD stage, touch nothing
 ```
@@ -324,6 +380,12 @@ the weaker-but-more-portable one (reproduce-from-recipe) a stated, opt-in choice
 robustness-over-ease framing [`CLAUDE.md`](../CLAUDE.md) asks for: each path names what
 it verifies.
 
+**This default is narrowed by §4.4.** "Replay by default" holds **only when the request
+is byte-identical to the stored plate** — same products, same arrangement, same quantity.
+A change in quantity or product selection is not a case for the `--re-slice` fallback; it
+makes re-slice the *correct* path, chosen automatically. §4.4 is the rule that decides
+which case a given `reprint` is.
+
 ### 4.3 Staging and the gate
 
 `reprint` scaffolds a **new draft record** under `.bambu/records/<today>-<slug>/`
@@ -337,9 +399,13 @@ prints the owner-gate notice and hands off to `print send`, never passing `--yes
 ```mermaid
 flowchart TD
     A["bambu print reprint <id>"] --> B[Read records via gate --list, resolve the iteration id/label]
-    B --> C{Stored .3mf present AND sha256 matches?}
-    C -- yes, default --> D[Replay: reuse the stored .3mf]
-    C -- no / --re-slice --> E[Re-slice from iteration.key via bambu slice]
+    B --> S{Was it the sole product on its plate? §4.4}
+    S -- one of several --> E[Re-slice just this piece at --qty]
+    S -- sole product --> Q{--qty equals the stored plate's copy count?}
+    Q -- no, different quantity --> E
+    Q -- yes, identical plate --> C{Stored .3mf present AND sha256 matches?}
+    C -- yes, default --> D[Replay: reuse the stored .3mf byte-for-byte]
+    C -- no / --re-slice --> E
     E --> F{Slice produced a .3mf?}
     F -- no --> G[Error: recipe no longer slices — report why]
     F -- yes --> D
@@ -347,6 +413,50 @@ flowchart TD
     H --> I[Owner gate: print owner-gate notice]
     I --> J([STOP — dispatch is Omar's `print send --yes`])
 ```
+
+### 4.4 Sole-product detection and quantity (PMR-3, refined by Omar 2026-09-17)
+
+A `.3mf` is a whole plate, and the plate that carried a liked iteration may have held
+*other* products (§5). So "reprint this iteration" is ambiguous until we know *how much of
+what* — and the answer decides replay-vs-re-slice deterministically, without a guess:
+
+1. **Sole-product detection.** From the plate's `objects[]` (§5), the target iteration was
+   the plate's *sole product* iff every object on that plate resolves to the same
+   `iteration.id`. `reprint` computes this from the record — no new store, no second
+   source of truth (§6).
+2. **Quantity.** When the iteration *was* the sole product, `reprint` asks for the copy
+   count (`--qty <n>`, else it prompts). The stored plate already *is* some quantity — its
+   `Σcopies` (R8/§6) — so the operator may ask for that many again, or a different number.
+   When the iteration was *one of several* products, there is nothing to replay for "just
+   this piece," so `--qty` is required (defaulting to the copies it had on that plate).
+3. **The replay-vs-re-slice rule falls out of (1)–(2):**
+   - **Exact replay is valid only for the identical plate** — the target was the sole
+     product, `--qty` equals the stored `Σcopies`, *and* the stored `.3mf` is present with
+     a matching sha256 (§4.2). Only then does the byte-identical guarantee hold.
+   - **Any change forces a re-slice** — a different `--qty`, or pulling the sole product
+     off a plate that also held other products. The arrangement changes, so the stored
+     `.3mf` no longer describes what will print; `reprint` re-slices the piece at the
+     requested quantity, packing it with the print-model arrangement / grid-pack
+     ([`print-model-design.md`](print-model-design.md) §arrangement; PMR-2, no new
+     packer). Replaying a mixed plate to get one piece, or replaying the old count to get
+     a new one, would print the *wrong thing* — the footgun this rule removes.
+
+So the §4.2 default is *narrowed, not contradicted* (K7): replay is the default **only**
+on a byte-identical request; a quantity or product-selection change makes re-slice the
+correct path chosen automatically, and the `--re-slice` flag remains only the explicit
+override for "re-slice even though replay is valid" (e.g. after a slicer upgrade). Because
+grams compose (§3.3.1), `reprint --qty n` can show the material a new quantity will cost
+*before* it re-slices — the estimation slice and the quantity-aware reprint are the same
+machinery seen twice.
+
+> **Validator (PMR-3):** `reprint` replays iff *sole-product ∧ qty = stored Σcopies ∧
+> `.3mf` present ∧ sha256 matches*; otherwise it re-slices.
+> **PASS:** a plate whose only object is `it-9f3c…` ×4, `reprint it-9f3c… --qty 4` with the
+> stored `.3mf` intact → byte-identical replay.
+> **FAIL (the hard case):** the *same* plate, `reprint it-9f3c… --qty 6` → the arrangement
+> is not the stored one, so a replay of the `.3mf` would print 4, not 6 — the rule must
+> re-slice, and a "the `.3mf` exists and its sha matches" check alone (an aggregate on the
+> file) cannot discharge the per-request quantity claim.
 
 ---
 
@@ -485,12 +595,12 @@ there if and when the design is accepted.
 |---|---|---|---|
 | PMR-1 | Iteration id shape | (a) content hash `it-<sha12>`; (b) monotonic `<piece>@vNN` | **(a).** No central allocator, so concurrent sessions cannot collide (the D-055 / *decision-id-collision-recurred* failure); re-derivable, matching gate R1's existing hash-at-a-commit identity discipline. |
 | PMR-2 | Where the iteration config lives | (a) additive `iteration:` block in the record frontmatter; (b) a separate `docs/prints/iterations/<id>.yaml` registry | **(a).** (b) duplicates the geometry/process pins the record already owns — two paths that can disagree, the fork [D-052](decisions-log.md) forbids. Extend the schema; project the registry (§6). |
-| PMR-3 | Reprint: replay vs re-slice | (a) replay stored `.3mf` by default, `--re-slice` opt-in; (b) always re-slice; (c) always replay | **(a).** Replay verifies *byte-identical*; re-slice verifies *reproducible-from-recipe*. Neither is free; default to the stronger guarantee, name the trade, offer the fallback when the `.3mf` is gone (robustness-over-ease: each path says what it verifies). |
-| PMR-4 | Grams / estimate sourcing mechanism | (a) parse the sliced `.3mf` (`slice-3mf`); (b) MQTT device report; (c) manual entry only | **(a) with a de-risk probe first**, (c) as the honest fallback until the probe lands. The `.3mf` prediction comes from the same slice that made the plate, so it cannot drift from it — but the exact X2D `.3mf` member names are **unverified here** (§3.3, K2), so probe before hard-coding. |
+| PMR-3 | Reprint: replay vs re-slice | (a) replay stored `.3mf` by default, `--re-slice` opt-in; (b) always re-slice; (c) always replay | **(a), resolved & refined (Omar 2026-09-17, §4.4): quantity-aware.** Replay verifies *byte-identical*; re-slice verifies *reproducible-from-recipe*. A `.3mf` is a whole plate, so `reprint` first detects whether the target was the plate's *sole product* and asks `--qty`; replay is valid **only** on a byte-identical request (sole product, qty = stored Σcopies, `.3mf` sha intact), and any quantity/product change re-slices automatically. `--re-slice` stays the override for "re-slice even when replay is valid." |
+| PMR-4 | Grams / estimate sourcing mechanism | (a) parse the sliced `.3mf` (`slice-3mf`); (b) MQTT device report; (c) manual entry only | **Resolved (Omar 2026-09-17): (b) for the post-print ACTUAL, (a) for the pre-print ESTIMATE (§3.3.1).** MQTT reports what the machine actually consumed — measured, not attributed — and populates `estimates.confirmed_by`; but it exists only *after* a print, so the pre-print estimate the owner gate needs stays (a) the `.3mf`/estimation-slice number (still behind the §3.3 de-risk probe), (c) the honest fallback. Two fields, two sources — not a contradiction, a completion. |
 | PMR-5 | Estimate honesty when unknown | (a) `~` + `source: ~`; (b) a `0` default | **(a).** A fabricated `0` reads as "weighs nothing"; `~` reads as "not known" — never fake a measurement (the bench-sheet rule against filling a row from a preview, [`plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)). |
 | PMR-6 | Metrics surface | (a) `print stats` + `list --count-by`, reading records; (b) a second counter store | **(a).** Records are the single source of truth; a second store drifts on any hand-edit. Project, don't duplicate — the C4 derivable-count hazard ([`CLAUDE.md`](../CLAUDE.md)). |
 | PMR-7 | `--help` | (a) fix group desc + per-verb examples + owner-gate note; (b) leave help to the SKILL doc | **(a).** The `--help` *is* the reference ([`bambu` SKILL](../.claude/skills/bambu/SKILL.md)); a stale group description is a K7 self-contradiction (§7). |
-| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Owner call — defer to Omar.** [`prints-tab-design.md`](prints-tab-design.md) §11 and [D-046](decisions-log.md) deliberately kept cost/time/grams *off the tab*. This doc only proposes *storing* estimates (§3.3); changing the *tab display* is a decision about published state and is Omar's, not this doc's, to make. |
+| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Resolved (Omar 2026-09-17): (b) — store AND show time/grams on the tab.** This reverses the specific §11 / [D-046](decisions-log.md) choice to keep cost/time/grams *off* the display. Recorded as a 2026-09-17 amendment to D-046 and a [`prints-tab-design.md`](prints-tab-design.md) §11 update — the display now surfaces the estimate (and, once a print runs, the MQTT actual, §3.3.1), while still holding the line D-046 actually cares about: no *second scheduler or bet registry*. Showing a number the record already stores is not that. |
 
 ---
 
@@ -507,10 +617,18 @@ there if and when the design is accepted.
 - **No new concept where one exists.** §2.1 binds "iteration" to §3's existing
   `(geometry, process)` version rather than inventing a parallel unit — consistent with
   PM-4 in [`print-model-design.md`](print-model-design.md) §10 and PMR-2 here.
-- **The estimates claim carries its hedge (K1/K2).** §1 and §3.3 both state that the
-  tab's omission of grams (§11) is a *display* decision, not a storage ban, and that the
-  X2D `.3mf` field names are unverified — neither is hardened into a ruling, and PMR-8
-  leaves the tab-display question open for the owner rather than deciding it here.
+- **The estimates claim carries its hedge (K1/K2).** §3.3 / §3.3.1 keep the X2D `.3mf`
+  field names *unverified* (the PMR-4 de-risk probe still gates the parser), keep the
+  estimate labelled a prediction distinct from the MQTT actual, and carry the grams-are-
+  additive claim with its plate-overhead hedge — none hardened into a ruling. PMR-8 is now
+  *resolved* to show-on-tab (Omar 2026-09-17); §11's reversal is recorded as an amendment
+  to D-046, not a silent edit, and D-046's real subject (no second scheduler/registry) is
+  left standing.
+- **§4.2 and §4.4 agree, not contradict (K7).** §4.2 states "replay by default"; §4.4
+  narrows that default to a byte-identical request and says so explicitly in both
+  sections. The §4.3 flowchart routes sole-product/quantity *before* the sha check, so the
+  diagram, §4.2 and §4.4 tell one story — a quantity change re-slices, it does not replay
+  the wrong count.
 - **No proposed rule ships without its counterexample.** R15 and R16 (§3.4) are each
   written with a PASS and a by-design FAIL, per the gate-with-a-self-test discipline;
   this doc does not add them to `prints_gate.py`, it specifies them for a later PR.
