@@ -331,6 +331,27 @@
     </p>
 
     <div class="grid" id="grid-bricks"></div>
+
+    <div class="section-head" id="coasters">
+      <span class="no">§ 04</span>
+      <h2>The Coasters</h2>
+      <span class="rule"></span>
+      <span class="count" id="count-coasters"></span>
+    </div>
+    <p class="section-note">
+      The same <em>bikar</em> grammar laid flat. Each of these began as a
+      GeoGebra construction video — a step-by-step Islamic-geometry
+      walkthrough — traced into pattern grammar and then debossed into the top
+      face of a printable disc, so the drawing becomes something you can set a
+      cup on. Every coaster is one knob deep: <em>size</em> sets the finished
+      diameter, and the inscribed art rescales with it, so the same source
+      renders a 40&nbsp;mm mini or a 90&nbsp;mm standard — never a mesh scaled
+      after the fact, always re-drawn at the new size. The mesh gate is the
+      whole automated check here; a printed coaster is what turns the relief
+      depth into a measurement.
+    </p>
+
+    <div class="grid" id="grid-coasters"></div>
   </main>
 
   <footer>
@@ -511,6 +532,15 @@
       specs:["2 × 1 pieces","2 × 2 studs each","measures the seam"], alt:"coupon" },
   ];
 
+  const COASTERS = [
+    { id:"GimTvN9hw4U", file:"GimTvN9hw4U-coaster.bkr", name:"Six-Fold Rosette", tag:"Coaster",
+      desc:"A 20-step six-fold star rosette from a Sarah Brewer GeoGebra walkthrough, traced into naqsh and debossed into a 90 mm disc. The construction is the whole design — no outline shaping, just the pattern sunk where a cup would sit.",
+      specs:["90 mm disc","4 mm base","6-fold rosette"] },
+    { id:"7apC5Q9QS-8", file:"7apC5Q9QS-8-coaster.bkr", name:"Eight-Fold Rosette", tag:"Coaster",
+      desc:"An eight-fold rosette walkthrough carried the same way — a denser construction than the six-fold, which is why its mini is the one to print first: the test of whether the finer strap crossings still read at 40 mm.",
+      specs:["90 mm disc","4 mm base","8-fold rosette"] },
+  ];
+
   const icons = {
     code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
     dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 21h14"/></svg>',
@@ -581,6 +611,14 @@
     plate(m, i, BRICKS.length,
           `${GH}/src/Lego/${m.file}`,
           'brick — OpenSCAD render of the bikar mesh')));
+
+  const gridCoasters = document.getElementById('grid-coasters');
+  document.getElementById('count-coasters').textContent =
+    String(COASTERS.length).padStart(2,'0') + ' plates';
+  COASTERS.forEach((m, i) => gridCoasters.appendChild(
+    plate(m, i, COASTERS.length,
+          `${GH}/src/Coasters/${m.file}`,
+          'coaster — OpenSCAD render of the bikar mesh')));
 </script>
 </body>
 </html>

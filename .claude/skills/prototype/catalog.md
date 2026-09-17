@@ -1320,3 +1320,60 @@ bikar `d9b3c84`, not an estimate.
   §8's deliverable claim and §11 Q6 (Q5 is its only evidence); the connector BOM's
   all-four-full clip rule, which Q1 tests at its easiest case before W3 relaxes it
   to fragments; the gallery's clipped-wall entry.
+
+# Coaster ladder (CS-series)
+
+Flat coasters that carry a GeoGebra construction as debossed relief, migrated
+from Sarah Brewer walkthroughs into naqsh by the `import-construction` path and
+rendered through the `coaster` declaration (umbrella plan P1.6/P2.7). Unlike an
+orb or a brick these have no symmetry-axis view set and no qiyas composite, so
+the mesh gate is the whole automated claim; a printed coaster is what turns the
+relief depth and rim clearance from a render into a measurement. `make coasters`
+re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
+`--check`s both meshes; the raw gate output is in
+[`../../../docs/research/coaster-measurements.md`](../../../docs/research/coaster-measurements.md).
+
+## CS-1 — Six-fold star rosette coaster (Sarah Brewer, GimTvN9hw4U)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/GimTvN9hw4U-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/GimTvN9hw4U-coaster-mini.stl`
+  and `-standard.stl`). Both pass the mesh gate at the 0.8 mm coaster floor;
+  the mini is 32,240 triangles / 4.5 cm³ and the standard 160,860 triangles /
+  23.8 cm³ — the triangle count scaling with `size` is the visible proof the
+  two are re-rendered, not one mesh scaled.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. Does the `relief straps deboss 0.8` channel read cleanly at a 0.4 mm
+    nozzle, or does the debossed strap width need to rise for the pattern to be
+    legible in PLA?
+  - [ ] 2. Mini vs standard: does the 40 mm size hold the same relief legibility
+    the 90 mm does, or does the inscribed art crowd the rim at small `size`?
+  - [ ] 3. First-layer flatness on a 90 mm disc — does the base cup or stay flat
+    off the bed?
+- **What we learned**: — pending.
+- **Feeds**: the `coaster` declaration's default relief depth and base
+  thickness; the gallery's coaster entry; the constructions ledger's `coaster`
+  cell for `GimTvN9hw4U`.
+
+## CS-2 — Eight-fold rosette coaster (Sarah Brewer, 7apC5Q9QS-8)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/7apC5Q9QS-8-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/7apC5Q9QS-8-coaster-mini.stl`
+  and `-standard.stl`). Both pass the mesh gate at the 0.8 mm coaster floor;
+  the mini is 32,240 triangles / 4.6 cm³ and the standard 160,860 triangles /
+  23.7 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The 8-fold construction is denser than the 6-fold — do the finer
+    strap crossings survive at `size=40`, or is the mini too busy to print
+    legibly?
+  - [ ] 2. Does the denser relief change the first-layer/adhesion story versus
+    CS-1 at the same size?
+- **What we learned**: — pending.
+- **Feeds**: the `coaster` declaration's relief-legibility floor at small
+  `size`; the gallery's coaster entry; the constructions ledger's `coaster`
+  cell for `7apC5Q9QS-8`.

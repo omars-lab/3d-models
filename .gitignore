@@ -49,3 +49,9 @@ tools/bambu/node_modules/
 # The status register: written by build/status_manifest.py (make status-manifest)
 # from build/bikar-ref.txt, the use-case map as_of pins, and the gh-pages tip.
 /status-manifest.json
+
+# Coasters: `make coasters` renders and --checks BOTH sizes into src/Coasters/,
+# but only the 90 mm standard is vendored (it is the gallery mesh and the mesh
+# the constructions ledger's `coaster` cell names). The 40 mm mini is a
+# regenerable size variant — validated on every build, not carried in git.
+src/Coasters/*-mini.stl
