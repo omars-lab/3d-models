@@ -106,10 +106,12 @@ The design (PR #191) is complete; this skill is being built out task by task:
   (leftover ≥ one more footprint), scale-up guarded to no-fixed-dimension parts, and the four footgun
   catches *collected* from the decisions that own them (not re-derived), each a one-line offer never an
   auto-change, with the calibration short-circuit ([`rubric.md`](rubric.md) §Proactive advisories,
-  task #44).
+  task #44); the best-practices reference — the grounded rules for every decision organized by run
+  order, each carrying a confidence tag (grounded / attributed / wants-CAL / measured) and its design-§
+  owner, on top of our real X2D examples, `**Default:**` numbers left to the design doc (DRY)
+  ([`best-practices.md`](best-practices.md), task #45).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Deepened by later tasks:**
-  the best-practices reference (#45) and self-healing graduation (#46). Each fleshes
-  out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
-  rather than changing this body.
+  self-healing graduation (#46), which wires physical findings into
+  [`best-practices.md`](best-practices.md) (its `[measured]` tag) rather than changing this body.

@@ -7,9 +7,20 @@ fails-before / passes-after the next plan — the repo's graduation rule
 hedges are attributed in the print-model design doc (docs/print-model-design.md, PR #191) and its
 research file; this file adds *our* data on top.
 
-> **Seeded scaffold (task #31).** The examples below are the ones this project has already produced.
-> Task #45 grounds the general rules in full; task #46 wires the self-healing graduation so physical
-> findings land here automatically.
+> **How to read this file.** Every rule below carries a **confidence tag** so a plan can weight it
+> honestly — a master states how sure they are, not just what they'd do:
+> - **[grounded]** — cited to a source the research file records as actually fetched.
+> - **[attributed]** — from a named community/secondary source, carried *with its hedge* (K1); we have
+>   not measured it on this machine, so it is advice, not a datum.
+> - **[wants-CAL]** — unmeasured on *our* X2D; a real plate would settle it. The bet id, where one is
+>   registered, is named so a reading can close it.
+> - **[measured]** — our own datum from a plate that came off *this* machine. There are none yet; task
+>   #46 wires the graduation that fills this tag, and every [attributed]/[wants-CAL] rule is a candidate
+>   to be *replaced* by a [measured] one the first time a plate settles it.
+>
+> Numbers and their `**Default:**` markers live in the design doc (docs/print-model-design.md §5.x),
+> which owns them; this file states the *rule* and its confidence and points there — it never restates a
+> default (DRY, one owner per number).
 
 ## Our examples (real, from this project)
 
@@ -26,16 +37,98 @@ research file; this file adds *our* data on top.
   PLA Basic · #F5547C · GFA00 · 100%, plus a loaded external `vir_slot`. Confirms the discovery seam the
   filament decision depends on.
 
-## Grounded rules (seed — deepened by #45)
+## Grounded rules, by decision
 
-- **Nozzle single-wall floor.** A wall thinner than the chosen nozzle's single-wall floor cannot print;
-  catch it before slicing rather than letting the slicer silently drop the wall.
-- **Orientation minimizes support, not strength.** Report the layer-line direction as a weakness
-  advisory; do not claim strength was optimized (no surveyed tool does it).
-- **Defer to the profile.** Infill density/pattern default to the slicer profile; advise a change only
-  on a stated cause (load-bearing → denser; display → lighter).
-- **Brim/raft is thin-sourced.** Attribute any brim/raft advice to the named community source; never
-  assert it bare. When a real plate settles it, replace the community rule with our own datum here.
+The rules the design doc grounds, organized in the order a run works the decisions (§4). Each names the
+design section that owns its numbers and carries the source's own hedge.
+
+### Nozzle (design §5.1, research Topic 8)
+
+- **[grounded] Start from the default, then justify every deviation.** The default nozzle is the design
+  §5.1 `**Default:**` marker (advisory — the source that sets it was bot-blocked, so §5.1 flags it as
+  such); a plan states it and only moves off it for a *stated* cause.
+- **[grounded] Min-feature drives it down.** A fine feature or fine text below the default's comfortable
+  floor calls for the smaller nozzle; a large/functional part with no fine feature can go up for speed.
+- **[attributed] The larger-nozzle speed win (~30–40% faster than the default) is attributed, not
+  measured.** It rides in as a community figure; it **[wants-CAL]** a real timing bet before a plan
+  treats it as fact.
+- **[grounded] Sanity bounds.** Layer height sits at roughly a quarter-to-three-quarters of the nozzle
+  diameter, and the single-wall floor is about one nozzle diameter — use these to catch an impossible
+  combination before slicing (see the footgun below).
+- **[wants-CAL] One nozzle diameter per plate on the X2D's dual head is a K2 upper bound**, not a
+  confirmed capability — `[X2D-UNCONFIRMED — H2-proxy]` in the research. Never promise mixed-nozzle on
+  one plate as if it were tested.
+
+### Orientation (design §5.2)
+
+- **[grounded] Orientation minimizes support burden, not strength.** Score candidate bases by the
+  support they require; pick the cheapest sound base. This is what the surveyed tools (Tweaker-3 and
+  peers) actually optimize.
+- **[grounded] Layer-line strength is *reported*, never *claimed-optimized* (K1).** If a load axis runs
+  across the layer lines, say so as a weakness advisory — no surveyed tool orients for strength, so a
+  plan must not imply it did.
+- **[grounded] Reorienting to delete supports beats adding them.** If a cheaper base removes the support
+  a part would otherwise need, that is the offer — surfaced by the §7 footgun sweep.
+
+### Supports / infill / brim (design §5.3)
+
+- **[grounded] Supports are tree-type and threshold-gated.** Advise supports only past the overhang
+  threshold the design grounds; below it, none.
+- **[grounded] Defer infill to the profile.** Density and pattern default to the slicer profile; advise a
+  change only on a *stated* cause — load-bearing → denser, pure display → lighter. A bare infill number
+  is a D3 violation and a preference masquerading as a fact.
+- **[attributed] Brim/raft is thin-sourced — attribute, never assert.** Any brim/raft advice carries its
+  named community source (§5.3 marks the sources as thin/secondary). It **[wants-CAL]**; when a real
+  plate settles adhesion, the community rule is replaced by our datum here.
+
+### Arrangement (design §5.4, research Topic 4)
+
+- **[grounded] Count and footprint are inputs, not guesses.** Pack the given repeats; rotate-to-fit is an
+  in-plane **Z-rotation**, never a re-orientation (that would undo the §5.2 decision).
+- **[grounded] Nesting honours spacing.** The libnest2d NFP pack tries 0/45/90/135° and honours the
+  `spacing` minimum gap; a by-object sequence expands each arrange polygon by `max(spacing,
+  extruder_radius)`.
+- **[grounded] A rotate advisory fires only on a strict win.** Offer a rotation only when it strictly
+  increases the count or strictly frees bed; never churn the layout for a tie.
+- **[wants-CAL] Dual-nozzle bed-zoning is an unconfirmed upper bound** (`[X2D-UNCONFIRMED]`), same K2
+  caveat as the nozzle note.
+
+### Filament (design §5.5)
+
+- **[grounded] Match the loaded filament, state the match, ask only when several are plausible.** Bias to
+  action: one clear match is chosen and *stated*; `AskUserQuestion` is reserved for the genuinely
+  ambiguous case (design §5.5, and the global "stop and ask" rule).
+- **[grounded] Wrong-filament-for-the-use is a footgun, not a silent accept.** PLA on a functional or
+  heat-exposed part is surfaced as a §7 advisory pointing at this decision.
+- **[grounded] Low remaining is a footgun.** A tray too low to finish the plate is flagged before slicing,
+  not discovered mid-print.
+
+### Freshness (design §6.3)
+
+- **[grounded] A record is fresh or it is anecdote.** A reading without its profile header, or a stale
+  record, is not calibration; the freshness hook/gate (task #39) keeps records current so a reprint reads
+  from a number, not a memory.
+
+## Proactive-advisory rules (design §7)
+
+The §7 sweep is an *offer* layer, never an auto-change — these are the rules it applies (the run-time
+procedure is [`rubric.md`](rubric.md) §Proactive advisories):
+
+- **[grounded] Fill unused bed** only when the leftover area is ≥ one more part footprint; reuse the
+  §5.4 pack, and stay silent on a near-full plate.
+- **[grounded] Scale-up is for no-fixed-dimension parts only.** Never offer to scale a dimensioned or
+  functional part (a LEGO stud, an orb at spec, a coupon, any mating part) — scaling breaks it — and it
+  is always a question, never an assumption.
+- **[grounded] The footgun catches are collected from the decisions that own them** (thin wall §5.1,
+  removable supports §5.2, fragile layer-line §5.2, wrong filament §5.5), not re-derived in the sweep.
+- **[grounded] Say nothing when nothing fires.** No invented advice.
+
+## The one footgun that is a hard stop, not an offer
+
+- **[grounded] A wall thinner than the chosen nozzle's single-wall floor cannot print.** Catch it before
+  slicing rather than let the slicer silently drop the wall or Arachne it to a single bead. The fix is a
+  *smaller nozzle*, not a silent drop — surfaced as the §7 thin-wall footgun, and grounded against the
+  MC-2 wall ladder once `CAL-FEA-01` settles the floor on our machine.
 
 ## The calibration exception
 
