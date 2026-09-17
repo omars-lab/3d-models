@@ -363,6 +363,15 @@ measurement happened while carrying none; the gate refuses it rather than let th
 lifecycle lie. (Hard case: the presence of a `feedback` block does not discharge it —
 `measured` specifically requires a reading.)
 
+Enforced as rules **R10–R14** of `.claude/gates/prints_gate.py` (the "freshness gate"
+is that rule-set, not a second gate file): R10 a sliced-or-later record names its
+`.3mf`; R11 a terminal-physical record carries a `feedback` block; R12 `measured`
+carries a reading; R13 `propagated` names a bet; R14 a shipped record is past planning.
+They live beside R1–R9 because they read the same parsed frontmatter — one parser, one
+hook, one self-test, the no-fork rule ([`CLAUDE.md`](../CLAUDE.md)) applied. The
+per-rule by-design failure is in the gate's `--self-test`. Details:
+[`prints-tab-design.md`](prints-tab-design.md) §7.
+
 ## 7. Proactive advisories (the "sage" surface)
 
 The advisories are what make the skill a master rather than a slicer front-end. Each

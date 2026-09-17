@@ -92,6 +92,7 @@ plate:    "Plate 1 — Machine Card"         # human title
 status:   printed                          # the 10-state lifecycle (print-model-design §3.1): draft|planned|sliced|printing|paused|printed|failed|measured|propagated|abandoned (R6)
 outcome:  readings                         # readings|no-reading|partial
 sheet:    docs/prints/plate-1-bench-sheet.md  # optional — the bench sheet this print realizes; many prints → one sheet, so no uniqueness (R7)
+plate_3mf: 2026-09-14-plate1-machine-card.3mf  # the sliced plate this print came off; REQUIRED once status is sliced-or-later (R10). Named, not resolved — the .3mf may be large/gitignored
 profile:                                   # the nine-field process identity (protocol.md)
   machine:        "Bambu A1"
   material:       "PLA Basic"
@@ -221,8 +222,8 @@ printed a file it did not, and the gate must refuse it rather than pass.
   `{draft, planned, sliced, printing, paused, printed, failed, measured, propagated,
   abandoned}` ([`print-model-design.md`](print-model-design.md) §3.1). This is a
   *membership* check only; the consistency between a state and the fields it implies
-  (a `measured` carries a reading, a `sliced` names a `.3mf`) is the freshness gate's
-  job (task #39, §6.3), not this gate's.
+  (a `measured` carries a reading, a `sliced` names a `.3mf`) is the freshness rules
+  R10–R14 below (task #39, §6.3), not R6.
 - **R7 — a named sheet resolves.** The optional `sheet` — the bench sheet this print
   realizes — must be a repo-relative path that resolves to a file. Many prints map to
   one sheet (re-prints, repeated attempts of one plate), so there is deliberately **no**
@@ -232,12 +233,43 @@ printed a file it did not, and the gate must refuse it rather than pass.
   mistake, not one copy). It is the multiplicity §4.1 splits from identity.
 - **R9 — feedback is a mapping.** The optional `feedback` block (task #37's recovery
   account) must be a mapping when present. Its *required-when* rules (a `failed` record
-  carries feedback) are the freshness gate's (task #39), not this structural check.
+  carries feedback) are R11 below, not this structural check.
+
+The **freshness rules (R10–R14)** — the "freshness gate" of
+[`print-model-design.md`](print-model-design.md) §6.3 (task #39). R1–R9 check a record
+is *well-formed*; these check its `status` is backed by the *evidence that state
+implies* (§3.1's Validator), so the lifecycle cannot lie. They live in the same
+`prints_gate.py` as R1–R9, not a second gate file — the checks read the same parsed
+frontmatter, and one parser / one hook / one self-test is the repo's no-fork rule
+([`CLAUDE.md`](../CLAUDE.md), [D-052](decisions-log.md)) applied here.
+
+- **R10 — a sliced-or-later plate names its `.3mf`.** A record whose `status` is at or
+  past `sliced` (`sliced printing paused printed failed measured propagated`) carries a
+  `plate_3mf` naming the plate it sliced / came off (§3.1). Presence + `.3mf` suffix
+  only — like R7's `sheet`, the artifact may be large or gitignored, so the record must
+  *name* it, not resolve it on disk.
+- **R11 — a terminal-physical record carries a feedback block.** A `printed`, `failed`,
+  `measured`, or `propagated` record carries a `feedback` block, present even if empty
+  (§6.3 PASS for `printed`; the recovery loop, task #37, for `failed`). R9 checks it is
+  a mapping; R11 checks it is there at all for these states.
+- **R12 — a `measured` record carries a reading.** `status: measured` with an empty
+  `readings[]` is refused — it claims a measurement while carrying none (§6.3 FAIL).
+  *Hard case (K6/D2):* a `feedback` block does **not** discharge it — `measured`
+  specifically requires a reading, so R12 checks readings, not feedback.
+- **R13 — a `propagated` record names a bet.** `status: propagated` carries at least one
+  `readings[].settles` naming a real `CAL-…` bet, not `~` (§3.1 FAIL). *Hard case
+  (K6/D2):* the aggregate "the record has readings" cannot discharge it — one reading
+  with a real `settles` is required.
+- **R14 — a shipped record is past planning.** The whole-tree gate only sees records
+  under `docs/prints/` — shipped ones — so a shipped record still at `draft`/`planned`
+  is the drift §6.3 names: the plan artifact is composed-not-stored (§2), so a shipped
+  pre-slice record must be reconciled past planning first.
 
 The gate ships **before** the first real record, and R4 is precisely what makes that
 honest: an empty subject set reports a *true* `0 records checked` when the gate prints
-its count, and a false green only when it hides it. R1, R2, R5, R6, R7, R8 and R9 are
-wired at zero on the S3 date (each a per-record invariant with no empty-subject problem).
+its count, and a false green only when it hides it. R1, R2, R5, R6, R7, R8, R9 and the
+freshness rules R10–R14 are wired at zero (each a per-record invariant with no
+empty-subject problem — a record either satisfies its state's evidence or it does not).
 Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
 because there is no settled bet to propagate from until the first one flips. R5 does *not*
 share that problem: it is a per-record invariant that fires on the first reading to name a
