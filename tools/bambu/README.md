@@ -24,7 +24,7 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 | `setup` | `doctor`, `mcp`, `studio` | local checks |
 | `status` | `show`, `monitor`, `camera` | griches MCP |
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`) | BambuStudio CLI |
-| `print` | `send` (`--record`, `--dry-run`, `--yes`, owner-gated), `pause`, `resume`, `stop` | griches MCP |
+| `print` | `send` (`--record`, `--dry-run`, `--yes`, owner-gated), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
 | `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |
 
 `bambu <group> <verb> --help` everywhere — the help *is* the documentation.
@@ -64,6 +64,13 @@ add photos, then check with `bambu validate record .bambu/records` before moving
 `docs/prints/`. Every `validate` verb shells to the existing authority (bikar's `--check`,
 `build/verify_machine_card.py`, `.claude/gates/prints_gate.py`) — one code path, never a second that
 can disagree.
+
+`print list` answers "what has this machine printed?" — it reads **both** trees (shipped
+`docs/prints/` + draft `.bambu/records/`), newest first, tagging each row's source; `--shipped` /
+`--drafts` narrow it and `--json` emits the raw records. It parses nothing itself: it shells to the
+same `prints_gate.py` (its read-only `--list` projection), so the list and the gate can never
+disagree about a record, and a record that does not parse is shown as broken rather than hidden.
+Today it is honestly empty — nothing has been printed yet.
 
 ## Logs
 

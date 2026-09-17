@@ -1,0 +1,75 @@
+---
+name: bambu
+description: Drive the Bambu X2D printer from Claude Code via the tools/bambu CLI — check status, slice a bikar plate, dispatch a print, list what has been printed, and validate/log a print record. Use whenever the task is talking to the printer day-to-day (status, slice, print send/list, validate record) — not first-time setup, which is the setup-bambu-x2d skill. Reach here for "what has it printed?", "slice this", "send this to the printer", "check the printer", "log this print".
+---
+
+# Drive the Bambu X2D with the `bambu` CLI
+
+`tools/bambu` is our one command over the printer: it turns a bikar `.bkr`/STL into a sliced plate,
+a dispatched print, and a logged record — each as a single, allow-listable call. This skill is the
+**day-to-day usage** front door (status → slice → dispatch → list → record). First-time bring-up
+(LAN + Developer Mode, wiring the MCP, installing Bambu Studio) is a different job — see
+[`setup-bambu-x2d`](../setup-bambu-x2d/SKILL.md).
+
+**Consume, don't reimplement.** The CLI owns only our verbs and their ordering; transport is the
+griches MCP, slicing is the BambuStudio CLI, geometry is bikar, and the record schema is the prints
+gate. Route to those authorities — never re-implement one. The `--help` on every verb *is* the
+reference: [`tools/bambu/README.md`](../../../tools/bambu/README.md).
+
+## Run it
+
+From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/bambu`,
+`npm run bambu -- <group> <verb>`). Node is pinned to v22.22.3 —
+`export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"` first, or bare `node` fails oddly.
+`bambu <group> <verb> --help` everywhere.
+
+## The verb map — reach for the verb, not the MCP
+
+| Want to… | Verb | Safe to run now? |
+|---|---|---|
+| See temps / AMS / job progress | `status show` · `status monitor` · `status camera` | **read-only** — needs transport (bring-up done) |
+| Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
+| **List what has been printed** | `print list` (`--shipped` / `--drafts` / `--json`) | **always** — reads records, touches no hardware |
+| Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`) | **OWNER-GATED** — see below |
+| Pause / resume / stop a running job | `print pause` · `print resume` · `print stop` | acts on live hardware |
+| Gate a mesh / plate / record | `validate mesh <bkr>` · `validate plate` · `validate record [dir]` | local, no hardware |
+
+## The rails (do not route around them)
+
+- **Dispatch is owner-gated and fail-closed.** `print send` moves real hardware, and **printing is on
+  hold until a `CAL-*` bet justifies a plate** (memory *owner-gated-and-on-hold*). It prints the
+  owner-gate notice and refuses unless you pass `--yes` or confirm at a TTY. Use `--dry-run` to show
+  exactly what it *would* do without connecting. Never pass `--yes` on the user's behalf — the first
+  filament is Omar's call.
+- **There is an active print on the machine** — status/discovery are passive and read-only by design;
+  do not `print pause/stop` or otherwise interfere with a running job unless asked.
+- **A record is a plate that came off a machine**, written by `print send --record` into the gitignored
+  `.bambu/records/<date>-<slug>/` draft staging, then promoted to `docs/prints/<date>-<slug>/` once it
+  ships. The prints gate is **whole-tree**, so an incomplete draft under `docs/prints/` blocks every
+  commit — that is why drafts stage under `.bambu/` first. Fill the TODOs + photos, then
+  `bambu validate record .bambu/records` before moving the dir.
+- **A reading without a profile header is anecdote, not calibration.** Logging a print is not done at
+  "measure" — it walks **print → photograph → measure → compare → verdict**, and the gate refuses a
+  bet-settling reading with no `expected`/`verdict`. That loop is owned by
+  [`prototype`](../prototype/SKILL.md); the bench sheet you carry to the printer is
+  [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md).
+
+## Where this fits
+
+- **Bring-up not done yet?** The X2D is on the LAN but still cloud-bound; `status`/`send` need the
+  transport, which needs LAN Mode + Developer Mode toggled at the touchscreen. That is
+  [`setup-bambu-x2d`](../setup-bambu-x2d/SKILL.md) + memory *bambu-x2d-bringup*.
+- **Deciding what to print next / logging what a plate taught?** That is the calibration workflow:
+  [`prototype`](../prototype/SKILL.md) (the catalog + record loop) and
+  [`calibrate`](../calibrate/protocol.md) (the `CAL-*` bets, registry
+  [`bets.md`](../calibrate/bets.md)). Nothing has been printed yet — **21 bets, 0 measured** — so
+  `print list` is honestly empty and Plate 1 (the machine card) is the keystone.
+- **The whole campaign** — what to print, in what order, and why — is
+  [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md); the master backlog is
+  [`docs/backlog.md`](../../../docs/backlog.md).
+
+## One-command discipline
+
+Keep every call a single allow-listable command: no `cd … &&`, no gratuitous pipes, no heredoc
+scripts. A variation belongs in the CLI as a flag (`--settings`, `--object`, `--json`), not in the
+shell around it — that is the whole reason the CLI exists.

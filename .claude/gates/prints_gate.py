@@ -258,6 +258,44 @@ def record_dirs(prints: Path) -> list[Path]:
     return sorted(p for p in prints.iterdir() if p.is_dir() and (p / "index.md").exists())
 
 
+def list_records(prints: Path) -> list[dict]:
+    """Read-only projection of every record under `prints`, for `bambu print list`.
+
+    One parser, not two: the CLI must never re-implement frontmatter reading, so it
+    shells here instead. This is a *list*, not the gate — a record that does not
+    parse is surfaced with an `error` and never silently dropped, because for the
+    operator "a record is broken" is different news from "there is no record"
+    (the opposite call from `build/prints_manifest.py`, which hides an unparseable
+    record from the public page). Newest first is the caller's job; this returns
+    directory order.
+    """
+    out: list[dict] = []
+    for rec in record_dirs(prints):
+        data, err = parse_frontmatter((rec / "index.md").read_text(encoding="utf-8"))
+        if data is None:
+            out.append({"run": rec.name, "error": err})
+            continue
+        readings = data.get("readings") or []
+        readings = readings if isinstance(readings, list) else []
+        settles = sorted({
+            rd["settles"] for rd in readings
+            if isinstance(rd, dict) and isinstance(rd.get("settles"), str)
+            and CAL_ID.match(rd["settles"])
+        })
+        objects = data.get("objects") or []
+        out.append({
+            "run": data.get("run", rec.name),
+            "date": rec.name[:10] if RUN_NAME.match(rec.name) else None,
+            "plate": data.get("plate"),
+            "status": data.get("status"),
+            "outcome": data.get("outcome"),
+            "objects": len(objects) if isinstance(objects, list) else 0,
+            "readings": len(readings),
+            "settles": settles,
+        })
+    return out
+
+
 def run(prints: Path) -> int:
     dirs = record_dirs(prints)
     seen: dict[str, str] = {}
@@ -450,6 +488,27 @@ def self_test() -> int:
         print(f"self-test {'ok  ' if ok else 'FAIL'}: R1 unverified when bikar is absent"
               + ("" if ok else f" — got findings={found}, skipped={skipped}"))
         failures += 0 if ok else 1
+
+        # list_records: the CLI's read-only projection. A clean fixture lists one
+        # record with the fields `bambu print list` prints, and a broken record is
+        # surfaced with an error, not dropped (the by-design case for a *list*).
+        case = tmp / "list-records"
+        case.mkdir()
+        prints = _build_fixture(case)
+        listed = list_records(prints)
+        one = listed[0] if listed else {}
+        ok = (len(listed) == 1 and one.get("plate") == "Plate 1 — Machine Card"
+              and one.get("objects") == 1 and one.get("readings") == 1
+              and one.get("settles") == ["CAL-FEA-01"] and one.get("date") == "2026-09-14")
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: list_records projects a clean record"
+              + ("" if ok else f" — got {listed}"))
+        failures += 0 if ok else 1
+        _corrupt_frontmatter(prints)
+        listed = list_records(prints)
+        ok = len(listed) == 1 and "error" in listed[0]
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: list_records surfaces a broken record, not drops it"
+              + ("" if ok else f" — got {listed}"))
+        failures += 0 if ok else 1
     finally:
         _BLOB_RESOLVER = None
         shutil.rmtree(tmp, ignore_errors=True)
@@ -462,6 +521,10 @@ def main(argv: list[str]) -> int:
         return self_test()
     rest = [a for a in argv if not a.startswith("--")]
     prints = Path(rest[0]) if rest else PRINTS
+    if "--list" in argv:
+        import json
+        print(json.dumps({"records": list_records(prints)}, ensure_ascii=False))
+        return 0
     return run(prints)
 
 
