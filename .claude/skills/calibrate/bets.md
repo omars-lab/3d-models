@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**23 registered bets · 21 `Calibrated` records — 21 provisional, 0 measured · 8 bets with no record in bikar.**
+**28 registered bets · 26 `Calibrated` records — 26 provisional, 0 measured · 8 bets with no record in bikar.**
 
 ## Bets
 
@@ -41,6 +41,11 @@ is opened, clustered, and closed.
 | `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | provisional | `LABEL_CAP_MM_CAL` |
 | `CAL-GRP-01` | `CLUTCH_PROXY_FLOOR_MM` — the designed rib crush (rib lobes × `ribMm`) below which a printed brick falls off the LG-D1 hold scale; the §11 Q6 proxy is a bet by construction | `LG-D1` | provisional | `CLUTCH_PROXY_FLOOR_MM_CAL` |
 | `CAL-CLR-01` | `MIN_BODY_CLEARANCE_MM` in-situ gap floor: the smallest gap at which two surfaces printed in place come off the plate as two objects rather than one | `MC-8` | provisional | `MIN_BODY_CLEARANCE_MM_CAL` |
+| `CAL-CST-01` | `STRAP_WIDTH_MIN_MM` coaster strap/neck floor: the narrowest strap or neck between debossed regions that prints as a solid rib rather than two touching walls | `CS-1` | provisional | `STRAP_WIDTH_MIN_MM_CAL` |
+| `CAL-CST-02` | `MINI_MIN_FEATURE_MM` mini-coaster feature floor: the smallest relief feature that stays legible at ~40 mm scale | `CS-1` | provisional | `MINI_MIN_FEATURE_MM_CAL` |
+| `CAL-CST-03` | `DEBOSS_FLOOR_MIN_MM` coaster deboss floor: the thinnest solid slab left under the deepest deboss pocket before it prints translucent and cups | `CS-1` | provisional | `DEBOSS_FLOOR_MIN_MM_CAL` |
+| `CAL-CST-04` | `RELIEF_ASPECT_MAX` coaster relief aspect ceiling: the tallest raised rib per unit width before it delaminates along the layer lines | `CS-1` | provisional | `RELIEF_ASPECT_MAX_CAL` |
+| `CAL-CST-05` | `ELEPHANT_FOOT_MM` coaster bottom-chamfer floor: the least chamfer run that clears the first-layer elephant's foot | `CS-1` | provisional | `ELEPHANT_FOOT_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -266,4 +271,39 @@ named next print rather than an absence:
 - **Value:** `0.4`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** The clearance the five weave sources in patterns/Orbs used to state as "amplitude >= (strut_depth + 0.4) / 2", promoted from prose nothing enforced to a checked floor. That rule is withdrawn (D-039 measured it against centrelines when a ribbon has width, and D-042 removed the last three places still running it); the 0.4 survives it, because the gap term was always about what a nozzle can leave open and never about the geometry the rest of the formula got wrong. No coupon has printed a gap ladder in situ and recorded which rungs fused, so the number is inherited doubt rather than measurement. Coupon MC-8 (two parallel walls printed in one job at gaps 0.1/0.2/0.3/0.4/0.6/0.8 mm, recording which rungs come apart by hand) settles it; its sub-floor rungs are expected to FAIL this very gate by design. Not MC-1, whose fit ladder is an assembly clearance between separately printed parts and answers a different question.
+
+### `STRAP_WIDTH_MIN_MM_CAL` — `CAL-CST-01`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `0.8`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** two perimeter widths (2 × 0.4 mm nozzle) — a strap or neck thinner than two extrusions has no solid core between its walls. Provisional until CS-1 prints the ladder.
+
+### `MINI_MIN_FEATURE_MM_CAL` — `CAL-CST-02`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `1`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** the smallest relief feature legible on a ~40 mm mini coaster: 2.5 perimeter widths, one notch above the strap floor so a mini strap reads as a line rather than a smear. Provisional until CS-1 prints the mini calibration tile.
+
+### `DEBOSS_FLOOR_MIN_MM_CAL` — `CAL-CST-03`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `0.6`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** three 0.2 mm layers — a floor thinner than three layers under a deboss pocket prints translucent and cups. Provisional until CS-1 measures a deboss ladder.
+
+### `RELIEF_ASPECT_MAX_CAL` — `CAL-CST-04`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `2`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** aspect ratio 2:1 — a raised rib taller than twice its width delaminates along the layer lines and snaps off in handling. Provisional until CS-1 prints the rib ladder.
+
+### `ELEPHANT_FOOT_MM_CAL` — `CAL-CST-05`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `0.4`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** one perimeter width of first-layer squish: the bottom chamfer must inset at least this far or the elephant foot eats it. Provisional until CS-1 measures the squish.
 
