@@ -93,6 +93,36 @@ It also cross-checks the loaded nozzle against the sliced-for nozzle and flags a
 
 ### 4 — Dispatch (owner-gated — the operator's call, never the skill's)
 
+**Before you dispatch — the pre-send gate.** This is the checklist that answers *"are we ready to
+print?"* — the symmetric bookend to the two gates at the top. Every line must be green, or stop and
+say which one is red. It is a checklist, not a vibe: each item names *what verifies it*, and none is
+skippable.
+
+1. **Warnings sidecar present and clean.** A `<plate>.warnings.json` exists beside the `.3mf` and
+   carries only warnings expected **by design** (Plate 1: exactly the one `MC2Wall04` 0.4 mm
+   floating-regions line — the 0.6 / 0.8 / 1.0 mm rungs slice clean). *Verify:* `bambu print send
+   --dry-run` reports the gate verdict. **No sidecar → the gate is fail-closed and `print send`
+   refuses** — re-slice at `--debug 2` (step 1, #55) to produce it. Never wave a missing or dirty
+   sidecar past with `--allow-unverified` — that is the one move this gate exists to stop.
+2. **First-real-send ground-truth diff done — first dispatch to *this machine* only.** Run `bambu
+   print send <plate.3mf> --dry-run` and diff its `print.project_file` payload field-for-field
+   against a **BambuStudio GUI MQTT capture** (send one plate from the GUI with a sniffer on
+   `device/<serial>/request`). Correct any of the three X2D-UNCONFIRMED fields (`bed_type`,
+   `ams_mapping`, `md5`) — or wire the flag — and close the bet with a one-line note. The exact
+   Plate-1 payload to diff is checked in at
+   [`docs/issues/first-party-dispatch.md`](../../../docs/issues/first-party-dispatch.md). Once closed
+   for this machine it stays closed; later sends skip this line.
+3. **Nozzle matches.** `bambu header --plate <plate.3mf>` shows **no** `⚠ NOZZLE MISMATCH` (step 3).
+   A mismatch means the loaded nozzle isn't the one the plate was sliced for — stop.
+4. **Filament loaded and correct.** The material the slice assumed (type + colour) is actually loaded,
+   and there is enough of it for the plate's estimated grams (Plate 1 ≈ 111 g PLA). Confirm at the
+   AMS/external-spool readout, not from memory.
+5. **Owner is at the machine.** Dispatch is owner-gated: watching the first layer is a non-damaging
+   risk only a present human catches (step 5), and the physical send — and any `--yes` — is the
+   operator's, never the skill's.
+
+Then, and only then:
+
 `bambu print send <plate.3mf> --record`. It is fail-closed: it prints the owner-gate notice and
 refuses unless the operator passes `--yes` or confirms at a TTY (`--dry-run` shows exactly what it
 would send without connecting). **Never pass `--yes` on the owner's behalf.** `--record` scaffolds a
@@ -157,6 +187,10 @@ the measured value; flip the catalog Status and date the iteration row. `validat
 
 - **Dispatch is owner-gated.** The skill walks to the send and stops. The physical send — and any
   `--yes` — is the owner's, every time.
+- **The pre-send gate is a checklist, not a vibe.** Before any dispatch, walk step 4's five lines —
+  sidecar clean · ground-truth diff done (first send) · nozzle matches · filament right · owner
+  present — and stop at the first red one. "Are we ready to print?" is answered by that list, never
+  by feel.
 - **The header is the deliverable.** Record it before measuring; numbers without it are anecdote.
 - **Slicer settings on a calibration plate are measurements.** Supports/brim/`--check` choices are
   part of the experiment, not taste — verify them in the preview (step 2) before dispatch.

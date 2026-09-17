@@ -103,6 +103,16 @@
       "doc": "docs/geogebra-construction-import-design.md",
       "path": "docs/design/construction-ast-export.md",
       "why": "Somebody else's tree \u2014 the youtube repo's design doc for the AST export (P1.3), cited as the producer's account. youtube is not a sibling this gate resolves (no remote, pinned only by the schema-mirror gate once its schema commit lands)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/GimTvN9hw4U-coaster-mini.stl",
+      "why": "Gitignored build output. .gitignore:57 deliberately excludes src/Coasters/*-mini.stl \u2014 `make coasters` renders both sizes but only the standard size is vendored; the 40 mm mini is regenerated on demand. The catalog documents both variants, so this pointer resolves only where `make coasters` has run. Baselined per the CLAUDE.md rule that an unwritten (here deliberately-uncommitted) file belongs in the baseline; its `-standard.stl` sibling is tracked and resolves normally. Introduced by #247 (e47ce9a)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/7apC5Q9QS-8-coaster-mini.stl",
+      "why": "Gitignored build output \u2014 same as the GimTvN9hw4U mini above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Introduced by #247 (e47ce9a)."
     }
   ]
 }

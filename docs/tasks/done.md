@@ -516,3 +516,29 @@ The Phase-A slice profile + MC-4 pre-flight (A4/A5, tasks `#21`/`#22`) landed vi
 - #41 — `docs/print-model-design.md`: lifecycle, mermaid diagrams, decisions + the run-time rubric (3d-models #191)
 - #47 — the plate-builder frontend-experience design doc (the served operator front end; now the seed of the private 3d-model-hub repo, Option D)
 - #48 — reconcile the print-metadata design with Omar's PMR answers + the estimation-slice primitive (3d-models #217)
+
+---
+
+**▸ Snapshot 8 — 2026-09-17 (first-party dispatch + the dogfooding gates).** A
+**continuation of Snapshot 7's board, not a renumber** — `#50`–`#57` sit on the same
+fresh sequence Snapshot 7 opened (`#8` = X2D bring-up), so Snapshot 8's `#50` is the
+first-party dispatch port, not Snapshot 1's Lego M7 anchor solver or Snapshot 2's
+woven re-cut `#50`. These closed the transport gap and the pre-dispatch honesty gates
+that stood between the sliced Plate 1 and a send. Still open on the board at this
+prune: **`#9`** — dogfood guide-print to a physical Plate 1 print, now blocked only by
+`#9b` (the warnings sidecar, owned by the concurrent slice-preflight session) and the
+owner-gated physical send; its dispatch dependency (`#50`) is delivered and proven by
+`--dry-run`. `#9a` (the checked-in ground-truth diff surface) shipped with the
+guide-print pre-send-gate work in this same prune.
+
+## First-party dispatch + the pre-dispatch gates
+
+- #50 — port `bambu print send` to first-party dispatch: FTPS :990 implicit-TLS upload + MQTT `print.project_file`, retiring the uninstallable griches MCP from the dispatch path; 18 builder unit tests, `--dry-run` review surface, pivot doc first-party-dispatch.md, the three X2D-UNCONFIRMED CAL fields (bed_type/ams_mapping/md5) exposed as flags (3d-models #243)
+- #51 — `bambu slice open <plate.3mf>`: a first-class read-only verb that opens a sliced plate in Bambu Studio for visual approval and dispatches nothing, replacing the raw `open -a` (3d-models, guide-print step 2)
+- #52 — the pre-dispatch warnings gate: capture Studio's own slicing warnings, classify against expected-by-design, and fail-closed on an unexpected one (or a missing `<plate>.warnings.json` sidecar) so `print send` never dispatches what Studio would warn about
+- #53 — reason the X2D dual-nozzle filament-grouping mode in print-model + `bambu slice --filament-map-mode` — a no-op on a single-material plate (Studio's Filament-Saving default is already correct), a real choice only on a multi-filament plate
+- #54 — fold the dogfooding findings into guide-print: warnings triage, grouping mode, open-in-Studio, the GUI one-click alternative
+- #55 — slice at `--debug 2` so Studio's slicing warnings surface headlessly into the sidecar the gate reads
+- #56 — correct the sub-floor-rung assumption: only `MC2Wall04` (0.4 mm) floats by design; the 0.6 / 0.8 / 1.0 mm rungs slice clean and must not expect the warning (measured 2026-09-17)
+- #57 — guard against re-slicing an already-sliced `.3mf` (its embedded custom presets aren't in the bundle, so a re-slice silently loses them)
+- #9a — the checked-in ground-truth diff surface: the exact Plate-1 `project_file` payload to diff against a BambuStudio GUI capture, appended to first-party-dispatch.md; the guide-print step-4 pre-send gate + the "are we ready to print?" checklist shipped alongside

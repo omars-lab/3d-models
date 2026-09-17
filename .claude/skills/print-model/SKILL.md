@@ -120,7 +120,10 @@ accepts input).
 7. **Slice** — `bambu slice plate` → `.3mf` + preview PNG.
 8. **Hand off at the owner gate** — plan + plate + preview, plus an offer to open the sliced plate in
    Bambu Studio for visual approval (`open -b com.bambulab.bambu-studio <plate>.3mf` — read-only, opens a
-   file, dispatches nothing). **STOP.** Dispatch is Omar's recorded `print send --record`.
+   file, dispatches nothing). **STOP.** Dispatch is Omar's recorded `print send --record` — the
+   execution back-half (record header → **pre-send gate** → dispatch → attend → measure → propagate)
+   is [`guide-print`](../guide-print/SKILL.md), whose step-4 pre-send gate is the go/no-go checklist
+   that answers "are we ready to print?" before any filament moves.
 
 ## When a print fails or disappoints (the recovery loop)
 
