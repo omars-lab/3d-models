@@ -53,10 +53,35 @@ Each note below is a stub the named task fleshes out; the design doc section is 
   6. **Footgun — remaining too low.** When the chosen slot's `remain` is a real number and shows a low
      remaining percentage, flag it in the plan ("slot 0 shows 8% left — may not finish this part");
      when `remain` is `-1`, state the level is unknown rather than assume full. Never a silent proceed.
-- **Nozzle (§5.1).** 0.4 mm is the general balance; 0.2 for features ≲ 0.4 mm or fine text; 0.6 for
-  functional/large parts where detail is non-critical; 0.8 for draft/max-flow. Footgun: a wall thinner
-  than the chosen nozzle's single-wall floor cannot print — flag before slicing. Grounded, hedged
-  numbers and the dual-nozzle caveat are design §5.1 (task #43).
+- **Nozzle (§5.1) — the recommendation procedure (task #43).** Which of 0.2 / 0.4 / 0.6 / 0.8 mm, on
+  a stated cause, never a silent pick. The grounded, hedged numbers and their citations live in design
+  §5.1 — this is how the skill *uses* them; it does not restate the `**Default:**` markers (§5.1 owns
+  them). Run it like this:
+  1. **Read the model's minimum feature first** — the driving input. Note the thinnest wall, the
+     finest text/detail, and the overall size, from the model read (SKILL §How-one-run-flows step 1).
+  2. **Default to 0.4 mm and state it** — the general-purpose balance (design §5.1, cited there;
+     advisory, as the source page was bot-blocked at fetch). Global bias-to-action: a normal part on
+     the standard nozzle is *stated*, not asked. Deviate only on a cause the model gives:
+     - **0.2 mm** when the minimum feature is ≲ 0.4 mm or fine surface text matters — worth the time
+       penalty. This is the crisp-detail case (LEGO studs, fine engraving).
+     - **0.6 mm** when the part is functional/large and detail is non-critical. The "~30–40% faster
+       than 0.4" figure is **attributed and non-official** (§5.1, wants a `CAL-*` bet) — offer it as a
+       reported speed win, never as our measured number.
+     - **0.8 mm** for draft prototyping and max-flow infill only.
+  3. **Sanity-check the layer height and the single-wall floor** — layer ≈ 25–75% of nozzle diameter,
+     minimum single-wall ≈ one nozzle diameter (design §5.1, advisory endpoints pending a page
+     re-check, not a hard gate). These bound what the chosen nozzle can actually resolve.
+  4. **Footgun — thin wall below the floor.** If the model's thinnest wall is under the chosen nozzle's
+     single-wall floor (a 0.5 mm wall on a 0.8 nozzle cannot print), flag it **before slicing** — the
+     slicer would silently drop or Arachne-thin it. The fix is usually a *smaller* nozzle, which loops
+     back to step 1's min-feature read; surface the trade (finer wall vs. slower print), never auto-switch.
+  5. **K2 — one diameter per plate, for now.** That all four diameters ship *per-nozzle* on the X2D
+     specifically is `[X2D-UNCONFIRMED — H2-proxy]`, and mixing two diameters at once is an **open
+     capability, not an assumed one** (design §5.1). So recommend a *single* nozzle for the whole plate
+     until mixed-nozzle is confirmed on this machine; do not plan a two-diameter plate on spec.
+  6. **Advisory shape:** "0.4 mm — general-purpose, no feature under 0.4; 0.6 would cut time ~30–40%
+     (reported, not measured) if you can lose the fine detail" — one line, what a master would do and
+     why, the operator decides.
 - **Orientation (§5.2) — the reasoning procedure (task #33).** Which face goes down, chosen to
   minimize support while staying printable. The objective is Tweaker-3's — least support *volume*
   subject to printability (design §5.2, research Topic 3) — **not** part strength. Run it like this:
