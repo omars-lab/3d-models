@@ -4226,3 +4226,56 @@ on a real base face.
 - FAIL: any `data-orb-base-face` (or gt `orb_base_face`) carries a value `>= base.faces` — the
   wheelfield filler indices 20..31 against a 12- or 20-face base are the hard case, and their
   presence means the unit is still masquerading as a face.
+
+## D-055 — the printer status read is ours to own: a first-party MQTT backend replaces the spawned griches MCP for `status` (amends D-054)
+
+**Decision (owner-directed 2026-09-16):** the `bambu status` verbs read the printer over a
+**first-party MQTT backend** (`tools/bambu/src/backends/mqtt.ts`) that we own, not by spawning the
+community griches MCP as a subprocess. This **amends the transport half of D-054**: D-054's survey
+picked griches as the control/status transport and left slicing in our CLI; this narrows that — griches
+is retained only as a **reference** for the LAN command shapes, and the status read path is
+reimplemented directly against the printer's MQTT broker. Dispatch (FTPS upload + `print.project_file`)
+and the camera pull are **not** ported here; they still route through the griches `McpBackend` until a
+later, owner-gated PR moves them the same way. The one third-party dependency the new backend adds is
+the `mqtt` client library — the same one griches uses — pinned to an exact version.
+
+**Why this reverses part of a decision that had not shipped.** D-054 was a *survey* decision recorded
+before the transport was ever exercised end-to-end. Inspecting the griches implementation to make the
+call (the inspection Omar asked for) turned up two facts that break the original premise:
+
+1. **The wiring could never have run.** The CLI spawned `npx -y @griches/bambu-mcp`, but that package
+   is **not published to npm** (a 404), and the GitHub source ships no build output — its `bin` points
+   at a compiled file the repo does not contain. So the "primary transport" of D-054 had zero working
+   invocations. A decision whose mechanism does not execute is not a load-bearing decision.
+2. **The read path is small and stable.** The Bambu LAN status read is: connect `mqtts` to the printer
+   on the TLS port, subscribe `device/<serial>/report`, publish one `pushing.pushall` request, and read
+   the cached JSON frame. That is ~40 lines against a library we already trust, versus spawning an
+   unpinned third-party server and handing it the LAN token. The griches code is clean (LAN-only MQTT/FTP
+   to the printer host, no telemetry, no install scripts), but *cleanliness is not the axis* — owning a
+   small, stable read path is simpler and more robust than depending on an unbuilt, unpublished, moving
+   subprocess. This is the CLAUDE.md "robust and simple beat cheap and easy" tenet: the cheap path reused
+   someone else's control surface; the robust path deletes the dependency for the capability we actually
+   need now.
+
+**What this buys, concretely.** No `npx` fetch of an unpinned package at status time; no third-party
+process receiving the decrypted `BAMBU_TOKEN`; a `status show` that works the moment LAN + Developer
+Mode are on, with `--json` for the raw frame and a summary otherwise. It also lets us delete a genuine
+leak on the MCP path that survives for the not-yet-ported verbs: `McpBackend` was spreading the entire
+`process.env` into the spawned server — under `dotenvx run` that is every decrypted secret — now narrowed
+to `PATH`/`HOME`/proxy vars plus the four printer variables.
+
+**Reversal condition.** If the dispatch/AMS/camera surface turns out to be large or fast-moving enough
+that reimplementing it first-party costs more than it saves — the exact trade D-054 was right about for
+a *broad* control surface — those capabilities stay on a vendored, pinned, locally-built griches rather
+than an unpinned `npx`. The status read does not clear that bar; a full dual-nozzle print-dispatch path
+might. The griches inspection notes and the two-layer split it validated live in D-054's design doc
+(landing in PR #183); this entry is the amendment to apply once that lands.
+
+**Validator:** `bambu status show` reaches the printer using only the first-party backend, with no MCP
+subprocess spawned for the read.
+- PASS: with LAN + Developer Mode on and no other MQTT client connected, `status show` prints live temps
+  and `gcode_state` from a `device/<serial>/report` frame; `pgrep -f griches` finds nothing during the
+  call; the token never leaves `process.env` (masked in every log line).
+- FAIL: `status show` still requires `@griches/bambu-mcp` to be spawnable (it 404s, so this would report
+  "cannot reach MCP" rather than reading status) — the hard case is proving the read no longer depends on
+  a package that cannot be installed.
