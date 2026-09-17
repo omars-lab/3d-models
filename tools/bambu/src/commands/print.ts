@@ -12,8 +12,11 @@ import { Command } from "commander";
 import { existsSync, statSync, readFileSync } from "node:fs";
 import { basename, extname, resolve } from "node:path";
 import { McpBackend } from "../backends/mcp.js";
+import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
 import { confirm } from "../prompt.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
+import { readPlateMeta } from "../threemf.js";
+import { buildHeader, headerToRecordProfile, type RecordProfile } from "../header.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
 
@@ -52,6 +55,34 @@ function parseObjects(specs: string[] | undefined): ScaffoldObject[] {
     const [src = "TODO", entry] = spec.split("=");
     return { entry: entry ?? `obj-${i + 1}`, source: src.startsWith("bikar:") ? src : `bikar:${src}` };
   });
+}
+
+/**
+ * Pre-fill the record's profile header from the SAME builder `bambu header` uses (D-052: one code
+ * path). The .3mf being dispatched IS the `--plate`, so machine/nozzle/layer/profile/slicer come off
+ * it; the printer-side material/chamber come from a best-effort MQTT read. Every step is best-effort:
+ * a missing printer or an unreadable frame degrades to the plain TODO scaffold, never a crash — and
+ * never a fabricated field (the builder leaves unconfirmed/manual fields out of the record profile).
+ */
+async function buildRecordProfile(plateFile: string): Promise<RecordProfile | undefined> {
+  try {
+    const plateMeta = await readPlateMeta(plateFile);
+    let frame: PrinterStatus = {};
+    const mqtt = new MqttBackend();
+    if (mqtt.configured()) {
+      try {
+        await mqtt.connect();
+        frame = await mqtt.requestStatus();
+      } catch {
+        /* printer unreachable — fill only the slice-side fields from the .3mf */
+      } finally {
+        await mqtt.close();
+      }
+    }
+    return headerToRecordProfile(buildHeader(frame, plateMeta));
+  } catch {
+    return undefined; // fall back to the TODO scaffold
+  }
 }
 
 async function runSend(plate: string, opts: SendOpts): Promise<void> {
@@ -116,11 +147,13 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   if (opts.record) {
     try {
       const slug = opts.slug ?? basename(abs, ".3mf").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+      const profile = await buildRecordProfile(abs);
       const dir = await scaffoldRecord({
         slug,
         plateName: basename(abs, ".3mf"),
         plateFile: abs,
         objects: parseObjects(opts.object),
+        profile,
       });
       console.log(`scaffolded draft record → ${dir}`);
       console.log("Fill the TODOs + photos, then `bambu validate record .bambu/records` before moving it to docs/prints/.");

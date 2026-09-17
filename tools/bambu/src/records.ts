@@ -16,6 +16,7 @@ import { basename, join } from "node:path";
 import { bikarHead, bikarBlobSha } from "./backends/bikar.js";
 import { recordsDir } from "./paths.js";
 import { ev } from "./log.js";
+import type { RecordProfile } from "./header.js";
 
 const TODO = "TODO";
 /** A 64-hex placeholder the gate will flag as "not the blob" until a real print is recorded. */
@@ -33,6 +34,7 @@ export interface ScaffoldOpts {
   objects: ScaffoldObject[]; // one per printed object; source must be bikar:<path>
   date?: string; // YYYY-MM-DD, defaults to today (local)
   baseDir?: string; // defaults to <cwd>/.bambu/records
+  profile?: RecordProfile; // machine-known header fields (from `bambu header`), pre-filling the block
 }
 
 function today(): string {
@@ -75,6 +77,11 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     });
   }
 
+  // The SAME header builder that `bambu header` prints pre-fills these where the machine + .3mf
+  // actually answered; a field the builder could not fill honestly stays TODO for the operator
+  // (D-052: one code path, not a fork — the header logic lives in header.ts, consumed here and there).
+  const p = opts.profile ?? {};
+  const pf = (v: string | undefined): string => (v && v.trim() ? v : TODO);
   const fm = [
     "---",
     `run: ${run}`,
@@ -82,15 +89,15 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     "status: draft", // draft | measured | … (operator sets the real state)
     `outcome: ${TODO}`, // what the plate answered — readings | scrapped | …
     "profile:",
-    `  machine: ${TODO}`,
-    `  material: ${TODO}`,
-    `  spool: ${TODO}`,
-    `  nozzle_mm: ${TODO}`,
-    `  nozzle_type: ${TODO}`,
-    `  layer_mm: ${TODO}`,
-    `  slicer_profile: ${JSON.stringify(basename(opts.plateFile))}`,
-    `  ambient_c: ${TODO}`,
-    `  instrument: ${TODO}`,
+    `  machine: ${pf(p.machine)}`,
+    `  material: ${pf(p.material)}`,
+    `  spool: ${pf(p.spool)}`,
+    `  nozzle_mm: ${pf(p.nozzle_mm)}`,
+    `  nozzle_type: ${pf(p.nozzle_type)}`,
+    `  layer_mm: ${pf(p.layer_mm)}`,
+    `  slicer_profile: ${JSON.stringify(p.slicer_profile ?? basename(opts.plateFile))}`,
+    `  ambient_c: ${TODO}`, // manual — the printer cannot know room temp (chamber ≠ room)
+    `  instrument: ${TODO}`, // manual — the operator's caliper
     "pins:",
     `  bikar_ref: ${bikarRef}`,
     `  self_ref: ${TODO}`,

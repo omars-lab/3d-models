@@ -25,7 +25,19 @@ source disagree, the source wins — tell me and I will fix the sheet.
 
 ---
 
-## Profile header — fill before measuring anything
+## Profile header — auto-pull it, then complete the blanks
+
+**Do not hand-transcribe this block.** Run
+`tools/bambu/bin/bambu header --plate <plate.3mf>` at the bench (read-only — it reaches the printer
+without moving it and reads the sliced plate you are about to run), paste its output here, and then
+complete **only the blanks it left**: ambient room temp, enclosure open/closed, the caliper line, and
+any settings you changed from the profile. The verb fills machine / firmware / material / nozzle /
+layer / profile / slicer / date from the machine + the `.3mf`, so a mistyped nozzle or a forgotten
+profile name can no longer turn a reading into anecdote. Fields the X2D has not been observed to
+answer (spool id, the frame's nozzle, get-version firmware) print `unconfirmed` — never a made-up
+value; fill those by hand if you know them. The pre-flight trio below is the **input** to `--plate`:
+you slice with it, then `header` reads it back out of the `.3mf`, so this sheet and the file cannot
+silently disagree.
 
 ```
 Machine   ______________________  firmware ____________

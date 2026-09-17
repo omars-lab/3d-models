@@ -20,6 +20,7 @@
 
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
+import { collectSlots, colorHex, type Slot } from "../frame.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
@@ -27,78 +28,6 @@ function requireConfigured(b: { configured(): boolean }): void {
     console.error("Run `bambu setup doctor` to see what's missing.");
     process.exit(1);
   }
-}
-
-/** One filament slot as we surface it, from an AMS tray or the external spool. */
-interface Tray {
-  id?: string;
-  tray_type?: string; // "PLA", "PETG", … ; "" when the slot is empty
-  tray_color?: string; // RRGGBBAA hex
-  tray_sub_brands?: string; // e.g. "PLA Basic"
-  tray_info_idx?: string; // Bambu filament-profile id, e.g. "GFA00"
-  remain?: number; // percent remaining; -1 = no RFID / unknown
-}
-
-interface Slot {
-  where: string; // human label: "AMS 0 · slot 1" or "External spool"
-  tray: Tray;
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  // Arrays are `typeof "object"` too — exclude them, or an array-valued key (the X2D reports
-  // `vir_slot` as an array, verified 2026-09-17 on 20P6AJ641401412) is mistaken for one tray.
-  return typeof v === "object" && v !== null && !Array.isArray(v);
-}
-
-/**
- * Pull every filament slot out of a report frame, tolerant of the shapes the H2/X2D line is reported
- * to drift across. Handles `print.ams` as either `{ ams: [ {tray:[…]} ] }` (documented) or a bare
- * `[ {tray:[…]} ]`, plus `print.vt_tray` and the newer `print.vir_slot` external-spool key.
- */
-function collectSlots(s: PrinterStatus): Slot[] {
-  const slots: Slot[] = [];
-
-  // Physical AMS units. `s.ams` is documented as an object carrying an `ams` array; accept a bare
-  // array too rather than assume the wrapper is always present.
-  const amsRaw = (s as Record<string, unknown>).ams;
-  const units = Array.isArray(amsRaw)
-    ? amsRaw
-    : isRecord(amsRaw) && Array.isArray(amsRaw.ams)
-      ? amsRaw.ams
-      : [];
-  units.forEach((unit, ui) => {
-    if (!isRecord(unit)) return;
-    const unitId = typeof unit.id === "string" ? unit.id : String(ui);
-    const trays = Array.isArray(unit.tray) ? unit.tray : [];
-    trays.forEach((tray, ti) => {
-      if (!isRecord(tray)) return;
-      const trayId = typeof tray.id === "string" ? tray.id : String(ti);
-      slots.push({ where: `AMS ${unitId} · slot ${trayId}`, tray: tray as Tray });
-    });
-  });
-
-  // External spool: the H2-family `vt_tray` object (sentinel id "254") and/or the X2D's `vir_slot`,
-  // which arrives as an ARRAY of slots. Tag each with its slot id so two array entries are legible.
-  const label = (base: string, t: unknown): string =>
-    isRecord(t) && typeof t.id === "string" ? `${base} ${t.id}` : base;
-  for (const [key, base] of [
-    ["vt_tray", "External spool"],
-    ["vir_slot", "External spool (vir_slot)"],
-  ] as const) {
-    const ext = (s as Record<string, unknown>)[key];
-    if (isRecord(ext)) slots.push({ where: label(base, ext), tray: ext as Tray });
-    else if (Array.isArray(ext))
-      ext.forEach((t) => isRecord(t) && slots.push({ where: label(base, t), tray: t as Tray }));
-  }
-
-  return slots;
-}
-
-/** "#RRGGBB" from an "RRGGBBAA" hex, or null when it is missing / the empty sentinel. */
-function colorHex(raw: string | undefined): string | null {
-  if (!raw || /^0*$/.test(raw)) return null;
-  const rgb = raw.slice(0, 6);
-  return /^[0-9a-fA-F]{6}$/.test(rgb) ? `#${rgb.toUpperCase()}` : null;
 }
 
 function renderTray(slot: Slot): string {
