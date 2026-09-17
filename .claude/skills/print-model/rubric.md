@@ -102,10 +102,41 @@ Each note below is a stub the named task fleshes out; the design doc section is 
     corners; a brim would help (community guidance — no vendor spec)". If a real plate ever settles
     this on *our* machine, it graduates into [`best-practices.md`](best-practices.md) with our own
     datum (§8 self-healing).
-- **Arrangement (§5.4).** libnest2d No-Fit-Polygon packing at 0/45/90/135°; the rotate-to-fit advisory
-  fires only when a rotated pack fits strictly more copies. Verify slicer flags at run time before
-  relying on them. Dual-nozzle bed zoning on the X2D is unverified — do not assume a uniformly usable
-  bed (task #42).
+- **Arrangement (§5.4) — packing repeats and rotate-to-fit (task #42).** How many copies fit on one
+  plate, and when rotating a part lets more fit. Grounded in design §5.4 / research Topic 4. Run it
+  like this:
+  1. **Take the count and the footprint as given.** The repeat count (how many of each distinct
+     piece) comes from the model read (SKILL §How-one-run-flows step 1). The footprint is the part's
+     2-D outline **in the base-down orientation already chosen by §5.2** — arrangement *follows*
+     orientation, it never re-picks which face is down.
+  2. **Know what rotate-to-fit is — and is not.** "Rotate to fit" is a **Z-rotation**: the part spins
+     about the vertical axis *on the bed*, changing only its packing footprint. It does **not** change
+     which face is down, so it cannot undo §5.2's support/strength decision or §5.3's supports. Keep
+     the two separate in the plan: orientation is a face, arrangement is an in-plane angle.
+  3. **Pack with the real nester at the four angles.** libnest2d No-Fit-Polygon packing — the same
+     lib BambuStudio/Orca/PrusaSlicer share — trying at most **0 / 45 / 90 / 135°** (research Topic 4).
+     Honour the profile's **`spacing`** (minimum gap); in a **by-object** print sequence the arrange
+     polygon is expanded by `max(spacing, extruder_radius)` so the toolhead clears already-printed
+     parts, so by-object packs looser than all-at-once — say which sequence the count assumes. Never
+     pack to the bare bed edge.
+  4. **Pick the scriptable path honestly.** The intended auto-arrange is the OrcaSlicer headless CLI
+     (`--arrange --orient --rotate --scale --slice --export-3mf`), but the research flags the per-flag
+     prose as needing a `--help` re-check — so **verify the exact flags at run time** before relying on
+     them. Fall back to the slicer GUI (`A` arranges all and adds plates as needed; `Shift-A` the
+     selected plate only) or a hand grid estimate (`floor(bedX/(footprintX+spacing)) ×
+     floor(bedY/(footprintY+spacing))`). Never report that a tool packed the plate when none ran.
+  5. **Rotate-to-fit advisory — fires only on a strict win.** Offer the rotation **only** when a
+     rotated pack fits *strictly more* copies than 0°; a tie is not a reason to rotate. State both
+     counts and the trade so the operator chooses: "9 fit as-is; rotating 45° fits 12 — denser pack,
+     slightly more toolhead travel. Want the denser one?" Never silently rotate.
+  6. **K2 — dual-nozzle bed zoning is unverified.** A forum report notes auto-arrange not using the
+     H2D's L/R-nozzle-only bed areas (research Topic 4, `[X2D-UNCONFIRMED]`). Until confirmed on this
+     X2D, do **not** assume the whole bed is uniformly usable: treat the full bed footprint as an
+     **upper bound** on capacity and flag the uncertainty in the plan rather than promising a count
+     the zoning might forbid.
+  7. **Calibration exception.** A coupon plate's layout is *authored*, not packed — the machine card
+     is one fixed plate (calibration-design §7), so arrangement does **not** repack a plate that
+     carries a `settles: CAL-…` reading. See §The calibration exception; steps 3–6 short-circuit.
 - **Proactive advisories (§7).** Fill-bed, scale-up, and the footgun catches — each a one-line offer in
   the plan, never an auto-change (task #44).
 

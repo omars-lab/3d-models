@@ -95,11 +95,14 @@ The design (PR #191) is complete; this skill is being built out task by task:
   procedure and the stable plan shape, composed-not-stored-twice, stopping at the gate
   ([`rubric.md`](rubric.md) §Compose → slice → hand off, task #36); the print-issue recovery loop —
   the named-catalog diagnose→revise→re-slice loop, the seven modeled defects, and the `feedback`-block
-  symptom seam ([`rubric.md`](rubric.md) §Recovery loop, task #37).
+  symptom seam ([`rubric.md`](rubric.md) §Recovery loop, task #37); the plate-arrangement reasoning —
+  count-and-footprint-as-given, rotate-to-fit as an in-plane Z-rotation (not a re-orientation), the
+  libnest2d NFP pack at 0/45/90/135° honouring `spacing`, the strict-win rotate advisory, and the
+  unverified dual-nozzle bed-zoning caveat ([`rubric.md`](rubric.md) §Arrangement, task #42).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Deepened by later tasks:**
-  arrangement/rotate-to-fit (#42), nozzle recommendation (#43), proactive
+  nozzle recommendation (#43), proactive
   advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
   out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
   rather than changing this body.
