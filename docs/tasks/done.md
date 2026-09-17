@@ -444,3 +444,76 @@ running) and `#30` (P2.5 cookbook + P2.4 readability rules, agent running).
 - #15 — merged the queued bikar PRs in order — #196, #197, #199, #200 — polling only the required checks, merge at `MERGEABLE CLEAN`, never `--auto`
 - #22 — troubleshoot-ci skill: a red check to a fix in its own PR, causes kept as a sidecar read at run time (bikar #199, 197fd7b)
 - #23 — session-reflect skill design + research census (17 main + 176 subagent transcripts) proposing a census-generated FAQ with a falling-recurrence success metric (3d-models #218, open — awaiting Omar's review; finding: subagent transcripts are separate files, memory subagent-transcripts-are-separate-files)
+
+---
+
+**▸ Snapshot 7 — 2026-09-17 (the first-print campaign — bambu CLI, the print-model
+skill, and X2D bring-up prep).** The live board was renumbered again after Snapshot
+6, so these ids are a **fresh sequence**: Snapshot 7's `#8` is the X2D live-hardware
+bring-up, not Snapshot 6's naqsh construction statements or Snapshot 4/5's ledger
+block. The board is the plan "First-print campaign — turning the X2D into settled
+calibration data" (session plan binary-tickling-kay; decisions D-053/D-054 in the
+[decisions log](../decisions-log.md), D-055 amending D-054). The A-numbers
+(`A1…A11`) are the plan's own Phase-A ids. Still open on the board at this prune:
+**`#9`** — slice a real plate + the first owner-gated dispatch, which stays
+CAL-bet-gated and owner-physical (filament is loaded; the remaining steps are Omar's
+caliper/instruments, the Plate 1 slice-to-`.3mf`, and `bambu print send --record`).
+The Phase-A slice profile + MC-4 pre-flight (A4/A5, tasks `#21`/`#22`) rode the
+still-open `feat/x2d-slice-preflight` branch (PR #185); their whole-card slice +
+auto_brim finding landed separately in #210.
+
+## Bring-up + the bambu CLI foundation
+
+- #8 — X2D live-hardware bring-up (LAN + Developer Mode + transport proof). The touchscreen toggle is owner-physical; transport was proven read-only end-to-end by the first-party MQTT backend (`status show` → live temps/state off the device), memory bambu-x2d-bringup
+- #10 — merge the bambu phases 1–3 PR: the `setup-bambu-x2d` skill + `tools/bambu` CLI (3d-models #177)
+- #11 — merge the blog PR documenting the printer bring-up (omars-lab.github.io #225)
+- #12 — refresh the use-case map's stale as_of base + repair 18 drifted bikar anchors (3d-models #178)
+- #13 — encrypt the blog `.env` with dotenvx + a commit-time secret hook (blog repo)
+- #14 — `bambu setup discover`: passive, print-safe LAN printer discovery, zero-touch (3d-models #179)
+- #15 — carry the dotenvx v1→v2 fixes back to bikar (bikar)
+- #16 — a stale `build/orb-breakdown` dist tripped the 38-timelapse gate (74 findings); rebuilt so the gate reads current
+- #17 — pin/migrate dotenvx v1→v2 in bikar + the blog env-sync (an unpinned `npx` was resolving 2.28) (bikar, blog)
+- #26 — `A9`: `bambu print list` — enumerate print history from the records (3d-models #181)
+- #27 — the day-to-day bambu-CLI usage skill, the front door over the verbs (3d-models #181)
+- #30 — first-party MQTT `status` backend that retires the spawned MCP for reads (D-055, amends D-054) (3d-models #188)
+
+## Phase A — X2D software prep (no printer, no touchscreen)
+
+- #18 — `A1`: register `bambu-x2d` as a `PrintTarget` in bikar `machines.ts` (bikar)
+- #19 — `A2`: decide the dual-nozzle representation — X2D rides single-nozzle-labelled FDM, `PrintTarget` not widened (D-053) (3d-models #222, relanded onto master; original #182 fell behind master and was superseded)
+- #20 — `A3`: re-verify the machine card reproduces (`make coupons` + `make validate-coupons`, local — proves the Plate-1 substrate intact before asking for filament)
+- #21 — `A4`: ready the slice path for the X2D profile (rode PR #185, still open; the whole-card slice + auto_brim footgun recorded in #210)
+- #22 — `A5`: eyeball the MC-4 overhang fan in the slicer before filament (rode PR #185, still open)
+- #23 — `A6`: capture the X2D-profile-gap discovery in memory/skill — the machines.ts gap + a SKILL.md troubleshoot row for the missing machine target (memory bambu-x2d-bringup; 3d-models #184)
+- #24 — `A7`: the pre-populated Plate 1 bench sheet Omar carries to the printer (3d-models #180)
+- #25 — `A8`: encode the print→photograph→compare→verdict loop — the compare-verdict gate R5 + the prototype seams (3d-models #180)
+- #28 — `A10`: grounded survey of Bambu control/slicing transport options, research checked in under a provenance header (3d-models #223, relanded; original #183 superseded)
+- #29 — `A11`: the `tools/bambu` CLI design doc — the two-layer split, mermaid, a recorded decision (D-054) (3d-models #223, relanded)
+
+## The print-model skill (the sage-operator driver)
+
+- #31 — scaffold the print-model skill dir + SKILL.md front door (3d-models #193)
+- #32 — filament discovery: the `bambu filament` verb reads AMS trays + external spool, read-only (3d-models #192)
+- #33 — best-orientation reasoning for a piece (3d-models #196)
+- #34 — settings reasoning: infill / supports / brim / raft (3d-models #197)
+- #35 — the AskUserQuestion filament-selection step (3d-models #195)
+- #36 — the per-print plan artifact + slice/preview + the owner-gate handoff (3d-models #199)
+- #37 — print-issue feedback + the recovery loop (3d-models #200)
+- #42 — plate arrangement: pack repeated pieces on a grid, rotate-to-fit (3d-models #203)
+- #43 — nozzle-diameter recommendation (0.2 / 0.4 / 0.6 / 0.8) (3d-models #204)
+- #44 — the proactive-advisory sweep: fill unused bed, scale-up, catch footguns (3d-models #205)
+- #45 — the best-practices reference, grounded in full + our real examples (3d-models #208)
+- #46 — the self-healing loop: physical-iteration findings graduate into best-practices examples (3d-models #209)
+- #49 — the task-tracked lifecycle + the questions-intro + the sage input-critique principle (3d-models #220)
+
+## Print metadata + the prints gate
+
+- #38 — the print-metadata schema: lifecycle status, feedback, sheet↔print + repeated-element mapping (rules R6–R9) (3d-models #198)
+- #39 — the freshness rules R10–R14: a record's status must match its evidence (3d-models #201)
+- #40 — the print-history query: what we printed AND how — `print list --how` + filters (3d-models #202)
+
+## Design docs
+
+- #41 — `docs/print-model-design.md`: lifecycle, mermaid diagrams, decisions + the run-time rubric (3d-models #191)
+- #47 — the plate-builder frontend-experience design doc (the served operator front end; now the seed of the private 3d-model-hub repo, Option D)
+- #48 — reconcile the print-metadata design with Omar's PMR answers + the estimation-slice primitive (3d-models #217)
