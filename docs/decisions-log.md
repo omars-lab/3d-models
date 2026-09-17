@@ -4609,6 +4609,63 @@ hand in the slicer.
 
 ---
 
+## D-069 — Coaster interlock is a self-mating half-edge dovetail on every straight edge
+
+**Date:** 2026-09-17 · **Status:** designed, not built (task #34; design doc [`coaster-interlock-design.md`](coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
+
+### Context
+
+Omar asked for coasters whose edges "plug into other coasters … like legos". The
+coaster is a height field over a fitted regular outline (D-064…D-066), printed flat
+with no supports, in a kernel with no boolean union. The outline is one of seven
+candidates: a square, a diamond, two hexagons, two octagons and a round. Whatever
+the joint is, it has to be an outline change, and "like legos" means any tile onto
+any other with no rule to remember.
+
+### Options on the table
+
+- **(a) Self-mating half-edge dovetail** — on every straight edge a tab on the first
+  half (centred at L/4, protruding) and a slot on the second half (centred at 3L/4,
+  the tab's 180° image, offset by a clearance). A neighbour traverses the shared edge
+  the other way, so tab meets slot on every edge in every orientation, on every
+  polygonal candidate.
+- **(b) Alternating dovetail edges** — tab, slot, tab, slot around the polygon. The
+  first thing proposed. Tiles by translation only when the opposite edge has the
+  other parity, i.e. N/2 odd: the hexagon. On the square, the diamond and the
+  octagon every other tile must be turned one edge, and two tiles placed the obvious
+  way collide tab on tab.
+- **(c) S-profile edge** — a wave and its inverse. Prints flat, but holds only by
+  friction; nothing locks in the plane.
+- **(d) Side studs and holes** — pins printed sideways are overhangs on a flat
+  coaster, and a hole through a side wall is a solid the height field cannot express.
+
+### Decision — (a)
+
+The self-mating profile is the only one that scores full marks on the ask itself.
+With it come four rulings the design doc carries: the joint is part of the outline
+ring and its walls are emitted **exact**, not from the 0.4 mm grid staircase, because
+a staircase wall carries more error than the 0.15 mm clearance the joint holds; the
+relief stays clipped to the nominal outline (tabs plain, slots empty); a new CV8
+checks the art against the **slotted** ring, since a slot cuts `depth + clearance`
+into the margin CV7 was satisfied with — the shipped `margin 2` fails it by 1.15 mm
+and `margin 4` still fails by 0.15 mm — and CV9 checks the land beside each slot; and
+`interlock` is refused with `outline round`, with a bottom chamfer (the polygon
+offset is unverified on a reflex ring, K10) and with `trivet`. The clearance default
+is CAL-FIT-01's `sliding` rung; the tab neck gets no default until a CAL-CST-06 bet
+is registered with the implementation. The importer emits the clause only behind
+`--interlock`, because the interlock costs the tight border of D-066 (`margin ≥ depth
++ clearance + strap/2`, 5.15 mm at the worked numbers instead of 2 mm) and a lone
+coaster should keep it.
+
+### What would reverse it
+
+A printed pair (coupon MC-1's clearance reading, then two mated minis) that will not
+seat at any rung of the fit ladder, or a neck that snaps at the sizes the mini
+octagon allows (0.99 mm of land at 3 mm neck and depth) — either sends the joint
+back to (b) on the hexagon only, or to a shallower profile with a flare knob.
+
+---
+
 ## D-053 — the Bambu X2D rides as a single-nozzle-labelled FDM target; the PrintTarget schema is not widened for dual nozzles
 
 **Date:** 2026-09-16 · **Status:** decided (bikar `PrintTarget` entry is the follow-on, A1/#18)
