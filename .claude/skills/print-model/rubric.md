@@ -109,6 +109,45 @@ Each note below is a stub the named task fleshes out; the design doc section is 
 - **Proactive advisories (§7).** Fill-bed, scale-up, and the footgun catches — each a one-line offer in
   the plan, never an auto-change (task #44).
 
+## Compose → slice → hand off — the plan artifact (task #36)
+
+The last three steps of a run (SKILL §How-one-run-flows 6–8): turn the decisions above into one
+reviewable **plan artifact**, slice it, and stop at the owner gate. The plan is **composed, not stored
+twice** (design §2) — it is *presented* to the operator, not written into `docs/prints/` as a second
+copy of the record. The record schema ([`prints-tab-design.md`](../../../docs/prints-tab-design.md)
+§4.1) owns a print's stored identity; a print that is only *planned* has no record yet. On the record
+axis (design §3.1) the plate sits at `planned` after step 6 and `sliced` after step 7 — parked at the
+owner gate, never past it.
+
+1. **Compose the plan** — one artifact, every decision with its one-line "what a master would do + why",
+   in the order the operator would act on them. The shape (keep it this stable so two runs read alike):
+   - **Model** — what it is, bounds, min feature, and the repeat count (how many of each distinct piece).
+   - **Filament** — the chosen slot and why (or the AskUserQuestion outcome), carrying the low-remaining
+     footgun if it fired (§Filament).
+   - **Nozzle → orientation → supports/infill/brim → arrangement** — one line each, the advisory shape
+     from the rows above; orientation carries the layer-line/weak-axis note (K1), never a strength claim.
+   - **Advisories** — fill-bed / scale-up offers and any footgun catches, each a line the operator
+     decides on (§7, task #44).
+   - **Slice result** (filled by step 2) — the exact profile name, the `.3mf` path, the preview.
+   This artifact is the deliverable even if slicing cannot run (design §9): a plan + reasoning handed to
+   the operator has value on its own.
+2. **Slice** — `bambu slice plate <model>` → a sliced `.3mf`. A `.bkr` is **not** a slicer input: render
+   it to STL first (the 3d-models build, e.g. `make orbs`) and slice the STL — the verb rejects a `.bkr`
+   rather than silently doing nothing. Name the **profile explicitly** in the plan (e.g. the X2D 0.4 mm
+   preset); it is part of the print's identity, not a preference, and the same spelling the record's
+   `profile.slicer_profile` will later carry. If no headless BambuStudio binary is found the verb exits
+   non-zero and cannot produce a `.3mf` — say so and hand off the plan alone; do not fake a slice.
+3. **Pull the preview** — the plate preview is the Metadata/plate_1.png member inside the sliced
+   `.3mf` (a zip). Extract it with `unzip -p` (the sliced file, that archive member, redirected to a
+   `.png`); it is the same asset the record's `photos[]` and the prints page use — extract it, do not
+   re-render one.
+4. **Footgun re-check on the sliced result** (§7) — thin wall vs the nozzle's single-wall floor, needless
+   supports, fragile layer direction, wrong filament. An issue found is a one-line advisory; on the
+   operator's say-so, revise the plan and re-slice (back to step 1). Never auto-change a setting.
+5. **Hand off at the owner gate** — present the plan + the `.3mf` path + the preview PNG, then **STOP**.
+   The skill never uploads, never starts a print, never passes `--yes`. Dispatch is Omar's
+   `bambu print send` (design §9). Say plainly that the plate is parked at the gate awaiting his call.
+
 ## The calibration exception
 
 For any plate carrying a `settles: CAL-…` reading, **skip this whole rubric**: coupon settings are
