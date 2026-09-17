@@ -4226,3 +4226,81 @@ on a real base face.
 - FAIL: any `data-orb-base-face` (or gt `orb_base_face`) carries a value `>= base.faces` — the
   wheelfield filler indices 20..31 against a 12- or 20-face base are the hard case, and their
   presence means the unit is still masquerading as a face.
+
+---
+
+## D-053 — the Bambu X2D rides as a single-nozzle-labelled FDM target; the PrintTarget schema is not widened for dual nozzles
+
+**Date:** 2026-09-16 · **Status:** decided (bikar `PrintTarget` entry is the follow-on, A1/#18)
+
+### Context
+
+A physical Bambu X2D now exists on the LAN, and the first-print campaign
+([`.claude/plans/binary-tickling-kay.md`](../.claude/plans/binary-tickling-kay.md))
+cannot record a reading against "the X2D" until the machine exists in bikar's menu.
+That menu is `bikar:packages/knobs/src/machines.ts` `MACHINES` — ten `PrintTarget`
+entries, none the X2D, all single-nozzle. The schema is
+`PrintTarget = { id, label, xMm, yMm, zMm, process: 'fdm' | 'powder' }` (bikar
+`packages/knobs/src/machines.ts`, `interface PrintTarget`, read at `8efe040`): **no
+nozzle-diameter field and no tool-count / dual-nozzle concept at all.** The X2D is the first dual-nozzle machine
+the project has touched, so the question surfaces here for the first time: does adding
+it force a schema change?
+
+### Options on the table
+
+- **(a) Add `bambu-x2d` as one more single-nozzle-labelled FDM `PrintTarget`** — build
+  envelope only, exactly like the other nine. The dual nozzle is carried by the *slicer
+  profile*, not the knob, and the label may note it (`Bambu X2D (…, dual-nozzle)`) without
+  the schema knowing what that means.
+- **(b) Widen `PrintTarget`** now — a `nozzles`/`toolCount` (and per-tool nozzle diameter)
+  field — so the machine menu models the second nozzle as structured data.
+
+### Decision — (a)
+
+The X2D enters bikar as a single-nozzle-labelled FDM target. The `PrintTarget` schema is
+**not** widened. Reversal condition below.
+
+### Why this shape, not the cheap-looking widening
+
+The instinct is that a dual-nozzle machine "needs" a dual-nozzle field, but nothing in
+bikar consumes one. `PrintTarget` exists to check the radius knob against a **build
+envelope** (`radiusCeilingMm`, `machines.ts:91`); `process` drives future supports-vs-powder
+advice copy. **No knob branches on nozzle count** — the geometry bikar authors is
+nozzle-count-agnostic, and the second nozzle is a *slicer* concern (tool assignment, purge,
+ooze) that lives in the Bambu Studio profile, downstream of the DSL. Adding a field no
+producer writes and no consumer reads is a schema that lies by omission the moment a second
+dual-nozzle machine disagrees with the shape of the guess — the classic case of modelling a
+capability before a caller needs it.
+
+This is the CLAUDE.md **"a migration never buys a fork"** / **"robust and simple beat cheap
+and easy"** tenet applied forward: option (b) looks more honest but forks the schema on a
+distinction the code cannot yet act on, and a widening done speculatively has to be *un*-done
+or reworked when the real requirement finally names the field's shape. The per-tuple honesty
+the calibration protocol already enforces is untouched by this: a reading is scoped to
+*(printer, material, nozzle, profile)* by the record's profile header
+([`.claude/skills/calibrate/protocol.md`](../.claude/skills/calibrate/protocol.md)), where the
+nozzle is named explicitly — so "which nozzle printed this" is captured at the record, exactly
+where it is measured, and never needed as a `PrintTarget` field to stay honest. Widening the
+knob schema would record the nozzle in a *second* place that could disagree with the header —
+the two-names-one-meaning defect the log keeps deciding against
+([D-052](#d-052-data-orb-base-face-names-one-thing-a-true-base-face-the-wheelfield-unit-gets-its-own-honest-name),
+[D-050](#d-050-the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change)).
+
+### What would reverse it
+
+A **knob that must branch on nozzle count or per-tool nozzle diameter** — e.g. a
+multi-material orb whose clearance or wall rule changes with which tool lays which bead, or a
+build-check that a two-colour plate exceeds a per-tool envelope. On that day the field earns
+its place because a real consumer reads it, and the widening carries the caller that motivated
+it. Until then, a dual-nozzle machine is a single-nozzle envelope with a truthful label. Note
+also that all four existing Bambu entries and the X2D publish a 256³-class envelope; if the
+X2D's real build volume differs it is read off the machine at bring-up, never invented
+(A1/#18 leaves it TODO-marked rather than guessed).
+
+**Validator:** the machine menu models only what a knob consumes.
+- PASS: `bambu-x2d` is a `PrintTarget` with the same six fields as every other entry; its dual
+  nozzle appears in the `label` string and in each print record's profile header, and nowhere
+  in the schema; `radiusCeilingMm(x2d)` and every knob compile and run unchanged.
+- FAIL: a `nozzles`/`toolCount` field is added to `PrintTarget` while no knob, build-check, or
+  advice-copy path reads it — a widened schema whose only reader is a test asserting the field
+  exists is the by-design failure this decision forbids.
