@@ -37,6 +37,26 @@ R5, its per-record precondition, ships now):
       is the precondition for R3 and, unlike R3, has no empty-subject problem: it
       fires the moment one reading names a bet, so it ships now.
 
+  R6  **Status is a lifecycle state.** `status` is one of the ten plate/record
+      states (`draft planned sliced printing paused printed failed measured
+      propagated abandoned`, print-model-design.md §3.1). Membership only — the
+      consistency between a state and the fields it implies (a `measured` carries a
+      reading, a `sliced` names a `.3mf`) is the freshness gate's (task #39).
+
+  R7  **A named sheet resolves.** The optional `sheet` — the bench sheet this print
+      realizes — is a repo path that must resolve to a file. Many prints map to one
+      sheet (re-prints, repeated attempts), so there is deliberately no uniqueness
+      constraint; only that the pointer is not dangling.
+
+  R8  **Repeated-element count is a positive integer.** Each `objects[].count` (the
+      copies of that object on the plate) defaults to 1 when omitted and, when
+      present, must be a plain int >= 1 — `bool` excluded, since `count: true` is a
+      mistake, not one copy.
+
+  R9  **Feedback is a mapping.** The optional `feedback` block (the recovery loop's
+      symptom/notes, task #37) must be a mapping when present. Its required-when
+      rules (a `failed` record carries feedback) are the freshness gate's (#39).
+
 Plus the well-formedness the §4 Validator names: the directory is `index.md` +
 `photos/`, the frontmatter parses and carries every required key, and `run`
 equals the directory name.
@@ -72,6 +92,17 @@ CAL_ID = re.compile(r"^CAL-[A-Z]+-\d+$")
 # *inside* the ladder, and every-rung-passes / every-rung-fails is a valid
 # re-centre direction, not a failure.
 VERDICT_VOCAB = frozenset({"brackets", "above-range", "below-range", "refutes", "no-reading"})
+
+# R6 — the full plate/record lifecycle (print-model-design.md §3.1). It extends the
+# five states this schema first shipped (sliced/printed/measured/propagated/abandoned)
+# with the pre-slice states the print-model skill owns (draft/planned) and the
+# in-flight states read from the device (printing/paused/failed). This gate checks
+# *membership* only; the state->required-field consistency (a `measured` carries a
+# reading, a `sliced` names a .3mf) is the freshness gate's job (task #39, §6.3).
+STATUS_VOCAB = frozenset({
+    "draft", "planned", "sliced", "printing", "paused",
+    "printed", "failed", "measured", "propagated", "abandoned",
+})
 
 REQUIRED_TOP = ("run", "plate", "status", "outcome", "profile", "pins", "objects")
 PROFILE_FIELDS = (
@@ -156,6 +187,31 @@ def check_record(rec: Path, seen_digests: dict[str, str]) -> tuple[list[str], in
     if data.get("run") != name:
         out.append(f"{name}: run key '{data.get('run')}' does not match the directory name")
 
+    # R6 — status is a member of the lifecycle vocabulary (design §3.1). Only
+    # membership here; the state->required-field consistency is the freshness gate's
+    # (task #39). status is in REQUIRED_TOP, so it is present by the time we get here.
+    status = data.get("status")
+    if status not in STATUS_VOCAB:
+        out.append(f"{name}: R6 status '{status}' is not one of {sorted(STATUS_VOCAB)}")
+
+    # R7 — sheet<->print (many-to-one). A record may name the bench sheet it realizes;
+    # many prints (re-prints, repeated attempts) map to one sheet, so there is no
+    # uniqueness constraint — only that the named sheet resolves to a file in the repo.
+    sheet = data.get("sheet")
+    if sheet is not None:
+        if not isinstance(sheet, str) or not sheet.strip():
+            out.append(f"{name}: R7 sheet is present but is not a path string")
+        elif not (ROOT / sheet).is_file():
+            out.append(f"{name}: R7 sheet '{sheet}' does not resolve to a file in the repo")
+
+    # R9 — feedback block: optional; when present it must be a mapping (the recovery
+    # loop, task #37, reads symptom/notes out of it). Its *required-when* rules (a
+    # `failed` record carries a feedback block) are the freshness gate's (task #39),
+    # not this structural shape check.
+    feedback = data.get("feedback")
+    if feedback is not None and not isinstance(feedback, dict):
+        out.append(f"{name}: R9 feedback is present but is not a mapping")
+
     profile = data.get("profile") or {}
     if not isinstance(profile, dict):
         out.append(f"{name}: profile is not a mapping")
@@ -179,6 +235,14 @@ def check_record(rec: Path, seen_digests: dict[str, str]) -> tuple[list[str], in
             continue
         for f in _missing(obj, OBJECT_FIELDS):
             out.append(f"{name}: objects[{i}] is missing '{f}'")
+        # R8 — repeated-element multiplicity. `count` is optional (a lone piece omits
+        # it, meaning 1); when present it is how many copies of this object the plate
+        # carried, so it must be a plain int >= 1. bool is an int subclass in Python
+        # and `count: true` is a mistake, not a count of 1 — exclude it explicitly.
+        entry_id = obj.get("entry", f"#{i}")
+        count = obj.get("count", 1)
+        if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+            out.append(f"{name}: R8 objects {entry_id} count {count!r} is not an integer >= 1")
         src = obj.get("source", "")
         decl = obj.get("source_sha256", "")
         entry = obj.get("entry", f"#{i}")
@@ -358,6 +422,7 @@ def _fixture_record(prints: Path, run_name: str, sha: str, photo: bytes) -> Path
             "source": f"bikar:{_FIX_SRC_PATH}",
             "source_sha256": sha,
             "piece": "keyhole",
+            "count": 2,  # R8 — two copies of this coupon on the plate
         }],
         "readings": [{"entry": "MC-2", "quantity": "KEYHOLE_FRONT_FLOOR_MM",
                       "median_mm": 0.79, "settles": "CAL-FEA-01",
@@ -428,6 +493,31 @@ def _bad_verdict(prints: Path) -> None:
                    encoding="utf-8")
 
 
+def _bad_status(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace("status: measured", "status: half-done", 1),
+                   encoding="utf-8")
+
+
+def _dangling_sheet(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace(
+        "outcome: readings", "outcome: readings\nsheet: docs/prints/no-such-sheet.md", 1),
+        encoding="utf-8")
+
+
+def _bad_count(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace("count: 2", "count: 0", 1), encoding="utf-8")
+
+
+def _bad_feedback(prints: Path) -> None:
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace(
+        "outcome: readings", "outcome: readings\nfeedback: just a string", 1),
+        encoding="utf-8")
+
+
 CASES = [
     ("frontmatter that does not parse", _corrupt_frontmatter, "frontmatter"),
     ("run key that disagrees with the dir", _mismatch_run, "does not match the directory name"),
@@ -439,6 +529,10 @@ CASES = [
     ("R2 one JPEG backing two plates", _duplicate_photo_digest, "same sha256 as"),
     ("R5 a settled reading with no expected", _drop_expected, "has no 'expected'"),
     ("R5 a settled reading with a bad verdict", _bad_verdict, "'verdict' is not one of"),
+    ("R6 a status outside the lifecycle vocab", _bad_status, "R6 status 'half-done' is not one of"),
+    ("R7 a sheet that does not resolve", _dangling_sheet, "R7 sheet 'docs/prints/no-such-sheet.md'"),
+    ("R8 a count that is not >= 1", _bad_count, "R8 objects MC-2 count 0 is not an integer >= 1"),
+    ("R9 a feedback that is not a mapping", _bad_feedback, "R9 feedback is present but is not a mapping"),
 ]
 
 
