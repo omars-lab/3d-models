@@ -148,6 +148,46 @@ owner gate, never past it.
    The skill never uploads, never starts a print, never passes `--yes`. Dispatch is Omar's
    `bambu print send` (design §9). Say plainly that the plate is parked at the gate awaiting his call.
 
+## Recovery loop — when a print fails or disappoints (task #37)
+
+A second entry point, not part of the forward run: the operator says "why did this warp / string /
+fail?" (SKILL description). The loop is **diagnose → revise → re-slice → back to the owner gate**
+(design §6.2), and it **reads against a named catalog — it does not invent a defect taxonomy.** The
+catalog is Simplify3D's Print Quality Guide plus Bambu's own print-quality wiki (design §6.1, research
+Topic 6); attribute a cause to it, carry its hedge (K1), and never assert a bare fix number the source
+does not give.
+
+The defects the skill models are **enumerated, not "all defects" (K2)** — seven, from design §6.1. For
+each, map the symptom to the catalog's documented cause, then emit the revision as a **one-line advisory
+pointing at the forward decision that owns the fix** (never a silent change):
+
+| Symptom (operator / photo) | Catalog defect | Documented cause (attribute, don't assert) | Advisory revision → owning decision |
+|---|---|---|---|
+| corners lift off the bed | warping / poor bed adhesion | material shrinks as it cools; small or sharp-cornered footprint | a brim helps (community guidance, §Brim/raft); check first-layer adhesion — never bare numbers |
+| fine hairs / blobs between parts | stringing / oozing | filament oozes on travel moves; retraction/temp off | more retraction or a lower nozzle temp, *attributed to the catalog* |
+| layers offset partway up | layer shift | mechanical skip or too-fast motion | lower speed/accel; the mechanical half is the operator's, not a slice change |
+| gaps / thin or blobby walls | under- / over-extrusion | flow miscalibrated | this is a **calibration** matter — defer to [`calibrate`](../calibrate/SKILL.md)/the bench sheet, not a taste advisory |
+| first layer bulges out at the base | elephant's foot | first-layer squish + bed heat | first-layer compensation / lower bed temp, attributed |
+| rough scars where supports touched | support scarring | supports too dense, or touching a show face | tree supports + more interface gap, or **reorient to remove them** (§Orientation) |
+| underside of an overhang curls/droops | overhang droop | overhang past the printable angle; cooling | better cooling or supports, or reorient (§Orientation). The X2D's own angle `CAL-OVH-01` is unmeasured — advisory, not a gate |
+
+**The loop, step by step (design §6.2):**
+1. **Symptom in** — from the operator directly, or read from the record's `feedback` block
+   (`prints-tab-design.md` §4.1, shipped task #38): `feedback.symptom` is the finding, `feedback.cause`
+   the diagnosis, `feedback.next` the remedy tried. A photo attaches to the record's `photos[]`.
+2. **Map to the catalog** — pick the defect + its documented cause from the table; if the symptom does
+   not match a modeled defect, say so (K2) rather than force-fit one.
+3. **Propose the revision** — one-line advisory pointing at the owning forward decision above.
+4. **On the operator's say-so**, revise the plan → re-slice (the §Compose → slice → hand off procedure)
+   → back to the owner gate. The record moves `failed → planned` on the record axis (design §3.1).
+5. **If the finding is physical and new** — not already in the catalog, observed on *our* machine — it
+   graduates into [`best-practices.md`](best-practices.md) as a fails-before / passes-after example (the
+   self-healing seam, design §8, task #46). A catalog defect we merely re-hit does not graduate; a new
+   datum does.
+
+The freshness gate (design §6.3, task #39) is what keeps the `feedback`/`status` consistency honest —
+a `failed` record must carry a feedback block; this loop is only the reasoning that fills it.
+
 ## The calibration exception
 
 For any plate carrying a `settles: CAL-…` reading, **skip this whole rubric**: coupon settings are
