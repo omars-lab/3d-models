@@ -177,11 +177,27 @@ export function registerPrint(program: Command): void {
 
   print
     .command("list")
-    .description("list every print record — shipped (docs/prints/) + drafts (.bambu/records/), newest first")
+    .description("list every print record — what came off the plate and (--how) how it was printed")
     .option("--shipped", "only the shipped docs/prints/ records", false)
     .option("--drafts", "only the gitignored .bambu/records/ drafts", false)
+    .option("--how", "show the process identity (machine/material/nozzle/layer/profile) instead of outcome", false)
+    .option("--settles <cal>", "only records settling a bet whose CAL id contains this (e.g. CAL-FIT)")
+    .option("--material <m>", "only records printed in a material containing this (e.g. PLA)")
+    .option("--machine <m>", "only records printed on a machine containing this (e.g. X2D)")
+    .option("--status <s>", "only records at this exact lifecycle status (e.g. measured)")
     .option("--json", "emit the records as JSON instead of a table", false)
-    .action((opts: { shipped?: boolean; drafts?: boolean; json?: boolean }) => runPrintList(opts));
+    .action(
+      (opts: {
+        shipped?: boolean;
+        drafts?: boolean;
+        how?: boolean;
+        settles?: string;
+        material?: string;
+        machine?: string;
+        status?: string;
+        json?: boolean;
+      }) => runPrintList(opts),
+    );
 
   print
     .command("pause")

@@ -333,7 +333,8 @@ load-bearing rows:
 
 | the job | the question | answered by |
 |---|---|---|
-| Know what I've proven | "What have I actually printed?" | the records list (empty today) |
+| Know what I've proven | "What have I actually printed?" | the records list (empty today); `bambu print list` |
+| Reprint from a number | "How did I print it — machine/material/nozzle/profile?" | `print list --how`, the process-identity subset of §4.1's profile |
 | Know what's next | "What should I print next, and why?" | the queue (§6), transcluded from backlog |
 | Improve a design | "Where do I capture what a print taught?" | the run record body + readings (§4) |
 | Trust a number | "Which bet did this plate settle?" | `readings[].settles` → `bets.md` (§7 R3) |

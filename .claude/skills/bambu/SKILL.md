@@ -29,7 +29,7 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 |---|---|---|
 | See temps / AMS / job progress | `status show` · `status monitor` · `status camera` | **read-only** — needs transport (bring-up done) |
 | Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
-| **List what has been printed** | `print list` (`--shipped` / `--drafts` / `--json`) | **always** — reads records, touches no hardware |
+| **List what was printed — and how** | `print list` (`--how` for machine/material/nozzle/profile; `--settles`/`--material`/`--machine`/`--status` filter; `--shipped`/`--drafts`/`--json`) | **always** — reads records, touches no hardware |
 | Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`) | **OWNER-GATED** — see below |
 | Pause / resume / stop a running job | `print pause` · `print resume` · `print stop` | acts on live hardware |
 | Gate a mesh / plate / record | `validate mesh <bkr>` · `validate plate` · `validate record [dir]` | local, no hardware |
