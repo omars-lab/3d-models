@@ -37,5 +37,6 @@
 - [Check main's CI, not just the PR's](check-main-ci-not-just-the-pr.md) — bikar `ci` was red on main for four runs and three PRs merged past it; read main's last run first, fix in its own PR off main, rebase, then poll to green
 - [Decision-id collision](decision-id-collision.md) — two concurrent sessions grabbed the same next D-0xx (both D-051, 2026-09-02); first-merged owns the id, the open PR renumbers corpus-wide (mine → D-052)
 - [Preserve stranded cross-repo work](preserve-stranded-cross-repo-work.md) — isolated worktree for the cherry-pick (never switch the shared checkout), check the sibling's memory-tracking convention first (qiyas keeps memory untracked), verify what actually landed on origin
+- [Coaster Lab in bikar's lab](coaster-lab-in-bikar-lab.md) — decided 2026-09-17: coaster design UI is a Coaster Lab in bikar `packages/lab` (Orb Lab pattern), 3d-model-hub stays the plate builder; starts after shape v2 (#33) fixes the knob set
 
 Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `amazon-scripts-repo` → amazon-scripts, `marketplace-repo-mirror-and-held-branch` → oeid-claude-plugin-marketplace, `check-for-existing-e2e-before-reporting-blocked` and `supabase-paused-project-timeout` → bikar. Named without links because the files are no longer here and a dead relative link is a D1 gate failure.

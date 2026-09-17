@@ -4482,6 +4482,133 @@ richer sizing model.
 
 ---
 
+## D-066 — The coaster outline is the least-area fit of seven fixed candidates; `margin` is a knob; the relief is an emboss
+
+**Date:** 2026-09-17 · **Status:** decided (Omar, AskUserQuestion: "A: pattern outline + emboss"; bikar NaqshCoffee/bikar#208; product doc [`coaster-design.md`](coaster-design.md) §5, §7 CV7; pivot record [`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md))
+
+### Context
+
+Omar asked for the pattern to "pop out more", for coasters that are "hexagonal,
+square, etc based on the pattern", and to "minimize the flat borders around the
+edges" — or to trace the outer border and add a bezel. The P2.7 disc (D-065) was a
+round outline with the strapwork debossed and a fixed 4 mm ring of flat plate. Both
+constructions' convex hulls were measured (23 vertices for GimTvN9hw4U, 8 for
+7apC5Q9QS-8): neither is a regular polygon, so a traced outline has no single `K`
+measure to derive `unit` from and no regular edge for a later interlock.
+
+### Options on the table
+
+- **(a) Least-area fit from seven candidates** — `round`, `square`, `polygon 4
+  rotate 45`, `polygon 6 rotate 0`, `polygon 6 rotate 30`, `polygon 8 rotate 0`,
+  `polygon 8 rotate 22.5`; `K` measured in each candidate's own measure, least
+  enclosed area wins, the CLI prints the verdict; `margin` a knob (`unit = ($size -
+  2 * $margin) / K`); `relief straps emboss 1.2`; `rotate` added to the polygon
+  outline grammar; CV7 checks enclosure. Corner-up hexagon for GimTvN9hw4U (17.54
+  vs 21.21 units² round), square for 7apC5Q9QS-8 (16.00 vs 25.13).
+- **(b) Trace the convex hull** — the tightest possible outline, but no single
+  sizing measure, no regular edge for #34, and a 23-gon side wall.
+- **(c) Keep the round disc, add a bezel** — pops the pattern but wastes the area
+  the fit removes and does not answer "based on the pattern".
+
+### Decision — (a)
+
+The fit is a claim about seven candidates, stated as such (K2), never "the best
+outline". The retraction that came with it: the P2.7 discs were **not** clipped —
+`K` was measured at import and the art spanned 82 mm inside a 90 mm disc; the
+defect was wasted area and a NaN hull probe in the study script, and the pivot
+record says so.
+
+### What would reverse this
+
+A pattern whose hull fits none of the seven candidates well enough to matter (a
+star, a lobed rosette), which would need an `outline trace` mode with its own sizing
+rule; or a concave outline, which breaks CV7's nearest-feature inset.
+
+---
+
+## D-067 — A coaster design UI is a Coaster Lab in bikar's lab, not a page in 3d-model-hub
+
+**Date:** 2026-09-17 · **Status:** decided (Omar, comment on the shape-study artifact: "coaster lab in bikars lab sounds good"; task #35, after #33)
+
+### Context
+
+Omar asked whether 3d-model-hub needs its own coaster builder. A coaster is a
+`.bkr` with three or four params (`size`, `margin`, relief height, rim); a design
+form is a thin layer over the same declaration re-rendered through bikar — exactly
+what the Orb Lab in `packages/lab` already is.
+
+### Options on the table
+
+- **(a) Coaster Lab in bikar `packages/lab`** — the Orb Lab pattern: knobs are DSL
+  params, touched-set overrides, the print target never in share URLs. The hub
+  stays the plate builder and lists coaster iterations with their params.
+- **(b) A coaster form in 3d-model-hub** — the hub already holds the printer
+  secret and the plate composer; adding a design surface there duplicates bikar's
+  param → render loop in a second codebase.
+- **(c) No UI; `.bkr` and `--param` only** — verifies nothing new and leaves the
+  per-model choices (rim on/off, margin) to hand edits.
+
+### Decision — (a)
+
+The lab lives where the evaluator lives. It starts only after shape v2 (D-066)
+fixes the knob set, so the form is built once against a stable param list.
+
+### What would reverse this
+
+A coaster knob that cannot be a DSL param (a per-print, per-filament choice with no
+geometry), which would belong to the plate composer and pull the form back toward
+the hub.
+
+---
+
+## D-068 — Border band and colour regions are coaster-level clauses, sequenced after the interlock and the lab
+
+**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 colour; product doc [`coaster-design.md`](coaster-design.md) §9)
+
+### Context
+
+Omar asked three things of the printed coaster: can the border carry a different
+pattern from the field; will colour selection be part of the Coaster Lab; and does
+the language have a "border" component that composes with a pattern component and
+takes its own colour, translating to different filaments on the X2D. The language
+today has neither. bikar's `border` declaration is a *tile edge profile*, not a band
+that holds art; `color` is a 2D render attribute that no STL carries; the X2D's AMS
+filament assignment happens in the slicer against a 3MF, not in bikar.
+
+### Options on the table
+
+- **(a) Coaster-level composition** — `border <pattern> width <mm>` as a clause
+  of the `coaster` block, the inner art inset by the band; named regions (`field`,
+  `border`, `straps`) exported as separate bodies (`--format parts`) so the plate
+  composer can map region → filament in the 3MF. The language composes two
+  patterns; the colour lives in the export, not the geometry.
+- **(b) A second `coaster` overlaid on the first** — two declarations, one ring
+  and one field, unioned. bikar has no boolean union, so the ring would need to be
+  a second body anyway; and the pair shares no `size`, so the derivation of D-065
+  splits.
+- **(c) Colour as a DSL attribute on 3D declarations** — `color` on `coaster`
+  regions, emitted into the STL by convention. STL carries no colour; the attribute
+  would be a promise the format cannot keep (K10: a 2D attribute does not transfer
+  to a colourless mesh format).
+
+### Decision — (a) as direction, not yet built
+
+A border is a coaster clause that composes a second pattern; colour is a per-region
+export that becomes a filament map in the 3MF. Sequenced **after** the interlock
+(#34), because the tab geometry decides what a border band's outer edge is, and
+**after** the Coaster Lab (#35, D-067), because the lab is where the region →
+filament choice is made and shown. (b) forks the knob set; (c) claims a transfer
+the format cannot make.
+
+### What would reverse this
+
+A multi-body export the slicer will not accept as one object with per-part
+filaments, or a border band that the interlock tabs cannot cross cleanly — either
+sends the border back to a single-body, single-colour clause with colour applied by
+hand in the slicer.
+
+---
+
 ## D-053 — the Bambu X2D rides as a single-nozzle-labelled FDM target; the PrintTarget schema is not widened for dual nozzles
 
 **Date:** 2026-09-16 · **Status:** decided (bikar `PrintTarget` entry is the follow-on, A1/#18)
