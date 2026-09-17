@@ -89,8 +89,9 @@ human account a JSON blob cannot. Required keys:
 ```yaml
 run:      2026-09-14-plate1-machine-card   # equals the directory name
 plate:    "Plate 1 — Machine Card"         # human title
-status:   printed                          # sliced|printed|measured|propagated|abandoned
+status:   printed                          # the 10-state lifecycle (print-model-design §3.1): draft|planned|sliced|printing|paused|printed|failed|measured|propagated|abandoned (R6)
 outcome:  readings                         # readings|no-reading|partial
+sheet:    docs/prints/plate-1-bench-sheet.md  # optional — the bench sheet this print realizes; many prints → one sheet, so no uniqueness (R7)
 profile:                                   # the nine-field process identity (protocol.md)
   machine:        "Bambu A1"
   material:       "PLA Basic"
@@ -104,11 +105,12 @@ profile:                                   # the nine-field process identity (pr
 pins:                                      # geometry identity, re-resolvable (R1)
   bikar_ref:  8dda702fc943d1876c56fe14b5b608ed53ea51e8
   self_ref:   <commit this record was recorded at, for two-way propagation>
-objects:                                   # one per printed object on the plate
+objects:                                   # one per DISTINCT printed object on the plate
   - entry:        MC-2
     source:       bikar:patterns/Coupons/Machine-Card.bkr
     source_sha256: fdc100884e34c0aeffc517a5335d3df2ce79d718c9ee8a31a7f4330643d0a0e4
     piece:        keyhole
+    count:        1                        # copies of THIS object on the plate; optional (default 1); int ≥ 1 (R8)
     params:       {}
     check:        "keyhole front floor prints without bridging sag"
     outcome:      printed                  # printed|did-not-print|abandoned
@@ -128,7 +130,18 @@ photos:                                    # source binaries, tracked on master
     sha256: <digest>
     of:     "the whole plate, raking light"
     why:    "shows the keyhole floor intact"
+feedback:                                   # optional — the recovery loop's account (task #37); a mapping when present (R9)
+  symptom:   "warp lift at corner C"        # what went wrong, if anything
+  cause:     "small footprint, no brim"     # the operator's / skill's diagnosis
+  next:      "add a brim, re-slice"         # the remedy tried next
 ```
+
+**On `objects[].count` (R8).** `objects[]` lists *distinct* geometries; `count` records
+how many copies of each the plate carried, so a plate of nine identical clips is one
+object with `count: 9`, not nine entries. This is the repeated-element multiplicity the
+plate-arrangement work (task #42) packs and the query (task #40) sums; omitting it means
+one copy. The `count`-vs-entries split keeps identity (R1, one `source_sha256` per
+geometry) orthogonal to multiplicity.
 
 ### 4.2 The body is ungated prose
 
@@ -165,9 +178,9 @@ thing §2 forbids.
 
 **Validator:** `.claude/gates/prints_gate.py`, wired to hook
 `.githooks/pre-commit.d/39-prints` and `make validate-prints`, passes iff every
-record directory under `docs/prints/` satisfies R1, R2, R4 and R5 below (R3 ships in
-S4) and the count of records it checked is printed to stdout (never a silent green
-over an empty set).
+record directory under `docs/prints/` satisfies R1, R2, R4, R5, R6, R7, R8 and R9
+below (R3 ships in S4) and the count of records it checked is printed to stdout
+(never a silent green over an empty set).
 
 PASS: an empty tree — no `docs/prints/` records yet — and the gate prints
 `prints: 0 records checked — docs/prints/ is empty` and exits 0. The printed count is
@@ -204,11 +217,28 @@ printed a file it did not, and the gate must refuse it rather than pass.
   a reading cannot be propagated to `bets.md` until it has stated what it measured against.
   Unlike R3, R5 has no empty-subject problem — it fires the moment one reading settles a
   bet, so it ships now with R1/R2/R4.
+- **R6 — status is a lifecycle state.** `status` is one of the ten plate/record states
+  `{draft, planned, sliced, printing, paused, printed, failed, measured, propagated,
+  abandoned}` ([`print-model-design.md`](print-model-design.md) §3.1). This is a
+  *membership* check only; the consistency between a state and the fields it implies
+  (a `measured` carries a reading, a `sliced` names a `.3mf`) is the freshness gate's
+  job (task #39, §6.3), not this gate's.
+- **R7 — a named sheet resolves.** The optional `sheet` — the bench sheet this print
+  realizes — must be a repo-relative path that resolves to a file. Many prints map to
+  one sheet (re-prints, repeated attempts of one plate), so there is deliberately **no**
+  uniqueness constraint; the rule only forbids a dangling pointer.
+- **R8 — repeated-element count.** Each `objects[].count` defaults to 1 when omitted
+  and, when present, must be a plain integer ≥ 1 (`bool` excluded — `count: true` is a
+  mistake, not one copy). It is the multiplicity §4.1 splits from identity.
+- **R9 — feedback is a mapping.** The optional `feedback` block (task #37's recovery
+  account) must be a mapping when present. Its *required-when* rules (a `failed` record
+  carries feedback) are the freshness gate's (task #39), not this structural check.
 
 The gate ships **before** the first real record, and R4 is precisely what makes that
 honest: an empty subject set reports a *true* `0 records checked` when the gate prints
-its count, and a false green only when it hides it. R1, R2 and R5 are wired at zero on the
-S3 date. Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
+its count, and a false green only when it hides it. R1, R2, R5, R6, R7, R8 and R9 are
+wired at zero on the S3 date (each a per-record invariant with no empty-subject problem).
+Only **R3** waits for S4 — it has an empty-subject problem R4 cannot fix,
 because there is no settled bet to propagate from until the first one flips. R5 does *not*
 share that problem: it is a per-record invariant that fires on the first reading to name a
 bet, so it ships in S3 as the compare seam R3 will later build on. (Corrected
