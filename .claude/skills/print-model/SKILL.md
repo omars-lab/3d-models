@@ -16,6 +16,65 @@ print-model design doc (docs/print-model-design.md, merged in PR #191). This fil
 front door; the decision detail is in [`rubric.md`](rubric.md), read at run time so it can sharpen
 without editing this body.
 
+## What this skill resolves — it asks only what you haven't answered
+
+A run settles a fixed set of questions. For any the operator has **not** already given, the skill
+uses **AskUserQuestion** to settle it; for any they **have** given, it does not re-ask — but it does
+**review and critique** the answer (see the next section), never rubber-stamp it. The questions, in
+run order:
+
+1. **What to print** — which model / piece(s), and how many of each.
+2. **What filament** — which loaded AMS slot, and is it right for this part? ([`rubric.md`](rubric.md) §Filament)
+3. **Which nozzle** — 0.2 / 0.4 / 0.6 / 0.8 mm. (§Nozzle)
+4. **How to orient it** — which face goes down. (§Orientation)
+5. **Supports / infill / brim** — any, and which. (§Supports/infill/brim)
+6. **How to place on the plate** — how many fit, rotate-to-fit, fill the unused bed. (§Arrangement)
+7. **What the part is for** — display vs functional / load-bearing / heat-exposed. Not a slice knob of
+   its own; it **steers** 2–6 (filament choice, infill, nozzle, the scale-up guard) and is the single
+   fact that most changes the answers, so ask it early if the operator hasn't said.
+
+Global bias-to-action still holds: a **single clear answer is stated, not asked** (a lone loaded PLA
+against a decor part is not a question). AskUserQuestion is reserved for the genuinely ambiguous fork —
+one question at the fork, one option per real choice, the recommended option first with its reason.
+
+## It never blindly accepts input — it reviews and critiques
+
+The print-**master** ethos is not "do what you're told"; it is "keep the operator from getting in
+their own way." So an answer the operator **provides** is an input to judge, not a command to obey:
+
+- Say the operator asks to **print a part flat**, but that base needs a support forest a different
+  face avoids — the skill **says so** and recommends the better base. It does not silently print flat,
+  and it does not silently override to the better face either: it surfaces the trade and the operator
+  decides (§Orientation).
+- A **filament wrong for a stated functional use** (PLA on a load-bearing or heat-exposed part) is a
+  footgun line in the plan, not a quiet proceed (§Filament step 6, §Proactive advisories).
+- A request to **scale a dimensioned part** (a LEGO stud at 4.8 mm, an orb at spec, any mating part)
+  is **refused as a footgun** — scaling breaks the fit — rather than obeyed (§Proactive advisories step 2).
+
+Every critique is the same one-line *"what a master would do + why"* — an offer, never an auto-change
+(the invariant the whole rubric enforces). The **one** place the skill overrides rather than advises is
+the calibration exception: a coupon's settings are *measurements fixed by the bench sheet*, not
+preferences, and are not up for a taste debate (§The calibration exception).
+
+## It tracks the job as tasks
+
+A print job is a multi-step process with an owner gate at the end, so the skill keeps it **visible and
+resumable** by tracking it as tasks (`TaskCreate` / `TaskUpdate`), not by holding the state in its head:
+
+- **One task per print job**, subject = model + plate (e.g. "Print: 12× Star-Orb on one X2D plate"),
+  created `in_progress` when the run starts.
+- **The lifecycle stages advance on the task** as each is settled: agree **what to print** →
+  **filament** → **nozzle / orientation / supports·infill·brim** → **arrangement** → **slice + preview**
+  → **owner-gate handoff (STOP)**. A stage flips to done only when its decision is actually made — an
+  AskUserQuestion answered, or an answer stated and not contested — so a glance at the task shows exactly
+  where the job is parked.
+- **The job task stays `in_progress` at the owner gate — never auto-completed.** It closes only when
+  Omar dispatches (`bambu print send --record`) or cancels; the skill never marks a print done it did
+  not send. A failed or disappointing print re-opens the task through the recovery loop.
+- **Resumable:** because the state lives in the task, a run interrupted after filament resumes at
+  orientation without re-asking what it already settled — the "asks only what you haven't answered" rule
+  reads the task, not just the latest message.
+
 ## The boundary — own the judgement, consume the verbs
 
 The one design risk is re-implementing a slicer, a transport, or the record schema instead of
@@ -39,9 +98,12 @@ orchestrating the ones that already exist. So:
 ## How one run flows
 
 Read-only device discovery and local reasoning throughout; the only hardware write is downstream of
-the gate and outside this skill. Work the decisions in this order, consulting [`rubric.md`](rubric.md)
-for each — it holds the questions to answer, the inputs to read, the grounded heuristic, and the
-advisory shape per decision.
+the gate and outside this skill. Open the **job task** first (§It tracks the job as tasks), then work
+the decisions in this order — **each step advances that task** — consulting [`rubric.md`](rubric.md)
+for each: it holds the questions to answer, the inputs to read, the grounded heuristic, and the
+advisory shape per decision. Ask each question only if the operator has not already answered it, and
+review — never rubber-stamp — the answers they did give (§What this skill resolves, §It never blindly
+accepts input).
 
 1. **Read the model** — bounds, minimum feature, repeated pieces.
 2. **Discover filament** — `bambu filament` lists the loaded AMS trays + external spool (read-only).
@@ -123,6 +185,9 @@ The design (PR #191) is complete; this skill is being built out task by task:
   task #46).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
+- **Orchestration (#49):** the questions-intro (§What this skill resolves), the input-critique
+  principle (§It never blindly accepts input), and the task-tracked, resumable lifecycle (§It tracks
+  the job as tasks) — the print-master driver over the reasoning above.
 
 **Option A is complete.** Every decision note in [`rubric.md`](rubric.md), the recovery loop, the
 proactive-advisory sweep, and the self-healing graduation are written; the skill reasons a model up to
