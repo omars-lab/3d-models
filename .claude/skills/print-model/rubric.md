@@ -162,8 +162,30 @@ Each note below is a stub the named task fleshes out; the design doc section is 
   7. **Calibration exception.** A coupon plate's layout is *authored*, not packed — the machine card
      is one fixed plate (calibration-design §7), so arrangement does **not** repack a plate that
      carries a `settles: CAL-…` reading. See §The calibration exception; steps 3–6 short-circuit.
-- **Proactive advisories (§7).** Fill-bed, scale-up, and the footgun catches — each a one-line offer in
-  the plan, never an auto-change (task #44).
+- **Proactive advisories (§7) — the "sage" sweep (task #44).** The pass that makes the skill a master
+  rather than a slicer front-end: after the decisions above are made (nozzle → orientation →
+  supports/infill/brim → arrangement) and *before* composing the plan, sweep for "is the operator
+  getting in their own way?". Every item is **one line in the plan, an offer, never an auto-change** —
+  a master would not do X because Y, and the operator decides. Grounded in design §7. Run it like this:
+  1. **Fill unused bed.** Take the packed footprint from §5.4 and the bed size; if the leftover area is
+     **≥ one more part footprint**, offer to use it: "room for N more copies, or another queued piece —
+     want to fill the plate?" Reuse §5.4's pack (do not re-nest by hand). Only fire on a real ≥1-part
+     gap — a nearly-full plate gets no nag.
+  2. **Scale up — only a part with no fixed dimension.** A small part alone on a large bed → "this is
+     4 cm on a 25 cm bed; scale 2× if you meant it bigger?" **Guard:** never offer scale-up on a
+     **dimensioned or functional** part — a LEGO stud (4.8 mm matters), an orb at spec, a coupon, any
+     part that mates with something — scaling those *breaks* them. Scale-up is for decorative,
+     free-size pieces, and even then it is a question, never an assumption that bigger was meant.
+  3. **Collect the footgun catches — do not re-derive them.** The four footguns are each *owned* by the
+     decision that found them; this sweep gathers them into the plan, it does not recompute them:
+     - **thin wall < single-wall floor** — §Nozzle step 4 (§5.1).
+     - **supports where reorienting removes them** — §Orientation (§5.2): if a cheaper base exists, say so.
+     - **fragile layer-line on a load axis** — §Orientation step 4 (§5.2), *reported* not claimed-optimized.
+     - **loaded filament wrong for the stated use** — §Filament (§5.5): PLA on a functional/heat part.
+  4. **Say nothing when there is nothing to say.** If the plate is full, the part is correctly sized,
+     and no footgun fired, the sweep adds no lines — a master does not invent advice to look busy.
+  5. **Calibration exception.** A coupon plate (`settles: CAL-…`) skips this whole sweep — its layout,
+     size, and profile are fixed by the bench sheet (see §The calibration exception).
 
 ## Compose → slice → hand off — the plan artifact (task #36)
 

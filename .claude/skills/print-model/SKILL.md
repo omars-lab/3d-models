@@ -102,11 +102,14 @@ The design (PR #191) is complete; this skill is being built out task by task:
   nozzle-recommendation procedure — min-feature-first, default-0.4-and-state-it, the 0.2/0.6/0.8
   deviation causes (the ~30–40% speed figure attributed not measured), the layer-height/single-wall
   sanity-check, the thin-wall footgun, and the one-diameter-per-plate K2 caveat
-  ([`rubric.md`](rubric.md) §Nozzle, task #43).
+  ([`rubric.md`](rubric.md) §Nozzle, task #43); the proactive-advisory sweep — fill-unused-bed
+  (leftover ≥ one more footprint), scale-up guarded to no-fixed-dimension parts, and the four footgun
+  catches *collected* from the decisions that own them (not re-derived), each a one-line offer never an
+  auto-change, with the calibration short-circuit ([`rubric.md`](rubric.md) §Proactive advisories,
+  task #44).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Deepened by later tasks:**
-  proactive
-  advisories (#44), the best-practices reference (#45), and self-healing graduation (#46). Each fleshes
+  the best-practices reference (#45) and self-healing graduation (#46). Each fleshes
   out its row in [`rubric.md`](rubric.md) or its section in [`best-practices.md`](best-practices.md)
   rather than changing this body.
