@@ -4226,3 +4226,60 @@ on a real base face.
 - FAIL: any `data-orb-base-face` (or gt `orb_base_face`) carries a value `>= base.faces` — the
   wheelfield filler indices 20..31 against a 12- or 20-face base are the hard case, and their
   presence means the unit is still masquerading as a face.
+
+---
+
+## D-054 — the bambu CLI backend is a two-layer local split (BambuStudio CLI slices, MCP drives), AppleScript is the GUI floor
+
+**Date:** 2026-09-16 · **Status:** decided, and matches what phases 1–3 shipped · **Full record:**
+[`bambu-cli-design.md`](bambu-cli-design.md) · **Grounded in:**
+[`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md)
+
+### Context
+
+`tools/bambu`'s backend — griches MCP for transport, BambuStudio CLI for slicing, AppleScript as a
+GUI floor — was picked *inside* the phase 1–3 build (#177) with **no checked-in survey and no
+recorded decision**, the one grounding step this repo otherwise never skips. This entry closes that
+gap retroactively. A real web survey of **16 options + an AppleScript fallback** was run
+([the survey](research/bambu-control-transport-survey.md)) and scored against an explicit
+robustness / AI-friendliness / OSS / local / headless / maintenance / X2D-support / slice **rubric**
+(carried into [the design doc](bambu-cli-design.md)).
+
+### Options on the table
+
+- **(a) Two-layer local split** — BambuStudio CLI (`--slice`) for slicing + Developer-Mode
+  MQTT+FTPS (via the griches MCP, MIT) for drive/upload/camera; AppleScript only for GUI-only
+  Bambu-Connect steps.
+- **(b) One integrated MCP** — DMontgomery40's `bambu-printer-mcp` drives *and* slices in one backend
+  (it shells to BambuStudio internally), GPL-2.0.
+- **(c) Hosted slicing** — printago.io (commercial, cloud).
+- **(d) Cloud API** — `bambulab-cloud-py` (reverse-engineered Bambu Cloud).
+
+### Decision — (a)
+
+The rubric ranks the two-layer split highest on Robustness **and** AI-friendliness simultaneously,
+and it is what the router already encodes (`slice → [studio-cli, applescript]`, every drive
+capability `→ [mcp]`). No single open, local tool does both jobs well; the one that spans both (b)
+does it by shelling to BambuStudio anyway — buying integration for a GPL-2.0 dependency without
+removing the two-layer reality. (c) and (d) fail the repo's local-only/open-source preference
+(cloud routing, commercial lock-in, and (d) is the least-robust reverse-engineered *cloud* surface).
+AppleScript stays the last-resort floor — brittle UI-scripting, focus-stealing, macOS-only — used
+only where a step is genuinely GUI-only (Bambu Connect auth/dispatch) and never for slicing or
+status, which have deterministic alternatives. Full reasoning, the rubric, and the mermaid router
+diagram are in [`bambu-cli-design.md`](bambu-cli-design.md).
+
+### What would reverse it
+
+The slice layer reverses to **Helio slicer-cli** (self-contained slicer binary) if we want to drop
+the full-Studio dependency or if BambuStudio breaks headless X2D dual-nozzle; the drive layer
+reverses to a **thin direct MQTT+FTPS client / `bambulabs_api`** if the griches MCP goes
+unmaintained, and toward **cloud** only if Bambu permanently closes the Developer-Mode LAN path — a
+robustness downgrade taken under duress. The AppleScript floor contracts to nothing the day
+Bambu-Connect-gated steps get a headless path.
+
+**Validator:** the CLI never drives a GUI for a job that has a headless path.
+- PASS: `preferenceFor("slice", …)` returns `["studio-cli", "applescript"]` (CLI first, GUI only if
+  no CLI); `preferenceFor("status", …)` returns `["mcp"]` and never `applescript`.
+- FAIL: any drive capability (status/control/upload/ams/camera) lists `applescript`, or `slice`
+  returns `applescript` **ahead of** `studio-cli` when Studio is present — routing a deterministic
+  job through focus-stealing UI scripting is exactly what the two-layer split forbids.
