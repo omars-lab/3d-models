@@ -17,7 +17,7 @@ import { basename, dirname, extname, join, resolve } from "node:path";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
 import { locateStudio } from "../backends/studio-cli.js";
-import { appInstalled, activateApp } from "../backends/applescript.js";
+import { locateStudioApp, openFileInApp } from "../backends/applescript.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
 
@@ -203,13 +203,12 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
   }
 
   // No headless binary. Fall back to the GUI if Studio.app is present — honest about the limit.
-  const studioApp = ["Bambu Studio.app", "BambuStudio.app", "BambuStudio-beta.app"].find(appInstalled);
+  const studioApp = locateStudioApp();
   if (studioApp) {
     console.error("No headless BambuStudio binary found — opening the model in Studio's GUI.");
     console.error("Slicing there is manual: arrange, pick the X2D profile, and export the sliced 3mf.");
     try {
-      await activateApp(studioApp.replace(/\.app$/, ""));
-      await runWithTimeout("open", ["-a", studioApp, abs], { timeoutMs: 15_000, label: "studio_open" });
+      await openFileInApp(studioApp, abs);
     } catch (err) {
       console.error(`could not open Studio: ${(err as Error).message}`);
     }
@@ -220,6 +219,35 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
   console.error("BambuStudio not found. Install it, or set SLICER_PATH to the CLI binary.");
   console.error("Run `bambu setup doctor` / `bambu setup studio` for guidance.");
   process.exitCode = 1;
+}
+
+// `bambu slice open <plate>` — open a sliced plate (or any model) in the Bambu Studio GUI so the
+// operator can eyeball it before dispatch. Read-only and local: it opens a file, changes nothing on
+// the printer, and sits BEFORE the owner gate. This is the first-party replacement for a raw
+// `open -a BambuStudio <file>` in the guide-print runbook — so there is one spelling of "open it in
+// Studio" that reports honestly when Studio is missing.
+async function runOpen(input: string): Promise<void> {
+  const abs = resolve(input);
+  if (!existsSync(abs)) {
+    console.error(`no such file: ${input}`);
+    process.exitCode = 1;
+    return;
+  }
+  const studioApp = locateStudioApp();
+  if (!studioApp) {
+    console.error("BambuStudio not found under /Applications. Install it (`bambu setup studio`),");
+    console.error("or open the file manually.");
+    process.exitCode = 1;
+    return;
+  }
+  try {
+    ev("studio_open", { file: basename(abs), app: studioApp });
+    await openFileInApp(studioApp, abs);
+    console.log(`opened ${abs} in ${studioApp.replace(/\.app$/, "")}`);
+  } catch (err) {
+    console.error(`could not open Studio: ${(err as Error).message}`);
+    process.exitCode = 1;
+  }
 }
 
 export function registerSlice(program: Command): void {
@@ -248,5 +276,12 @@ export function registerSlice(program: Command): void {
       // Anything after `--` is forwarded verbatim to the BambuStudio CLI.
       const raw = cmd.args.slice(1);
       await runSlice(model, opts, raw);
+    });
+
+  slice
+    .command("open <plate>")
+    .description("open a sliced plate (or model) in the Bambu Studio GUI to eyeball before dispatch")
+    .action(async (plate: string) => {
+      await runOpen(plate);
     });
 }
