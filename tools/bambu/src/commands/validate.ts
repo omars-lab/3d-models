@@ -15,12 +15,13 @@
 
 import { Command } from "commander";
 import { existsSync } from "node:fs";
-import { extname, join, resolve } from "node:path";
+import { basename, extname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { runWithTimeout, ev } from "../log.js";
 import { locateBikarCli, bikarDir } from "../backends/bikar.js";
 import { repoRoot, recordsDir } from "../paths.js";
 import { readMember, listMembers } from "../threemf.js";
+import { readSidecar, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 const PYTHON = process.env.PYTHON ?? "python3";
 
@@ -259,6 +260,10 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   const supportRealized = realizedCount(hist, "Support");
   const raftRealized = realizedCount(hist, "Raft");
 
+  // --- slicer warnings (from the sidecar `bambu slice` writes; classified vs the by-design manifest) ---
+  const sidecar = readSidecar(abs);
+  const warnClass = sidecar ? classifyWarnings(sidecar.warnings, loadManifest()) : null;
+
   // ---- report (always) ----
   console.log(`sliced plate: ${abs}`);
   console.log(`  printer   : ${printerModel}  nozzle ${nozzles.length ? nozzles.join(",") : "?"} mm`);
@@ -277,6 +282,14 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
       `  filament  : ${usedM.toFixed(2)} m → ~${grams.toFixed(0)} g PLA [derived @ ${density} g/cm³, Ø${FILAMENT_DIAMETER_MM} mm; slice ships 0 g]`,
     );
   }
+  if (warnClass) {
+    console.log(
+      `  warnings  : ${sidecar!.warnings.length} captured — ${warnClass.expected.length} expected, ${warnClass.unexpected.length} unexpected` +
+        (sidecar!.studio_version ? ` (Studio ${sidecar!.studio_version})` : ""),
+    );
+  } else {
+    console.log(`  warnings  : (no sidecar — re-slice with \`bambu slice\` to capture; see ${basename(sidecarPath(abs))})`);
+  }
 
   // ---- assertions ----
   const failures: string[] = [];
@@ -284,6 +297,14 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   // Always-on: a silently dropped/skipped object is never acceptable (the c2-assembly K1 footgun).
   if (skippedObjects.length > 0) {
     failures.push(`slicer SKIPPED ${skippedObjects.length} object(s): ${skippedObjects.join(", ")}`);
+  }
+
+  // Always-on: an UNEXPECTED slicer warning (one no by-design manifest rule covers) is never
+  // acceptable to ship — it is exactly what Studio would warn about before a print (#52).
+  if (warnClass) {
+    for (const w of warnClass.unexpected) {
+      failures.push(`UNEXPECTED slicer warning [${w.severity}] ${w.object ?? "(plate)"}: ${w.message}`);
+    }
   }
 
   if (opts.expectObjects !== undefined) {

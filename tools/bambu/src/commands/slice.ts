@@ -12,12 +12,20 @@
 // e.g. `make orbs`) and slice the STL. We reject .bkr here rather than silently doing nothing.
 
 import { Command } from "commander";
-import { existsSync, statSync, readdirSync } from "node:fs";
+import { existsSync, statSync, readdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
 import { locateStudio } from "../backends/studio-cli.js";
 import { locateStudioApp, openFileInApp } from "../backends/applescript.js";
+import {
+  parseSlicerWarnings,
+  classifyWarnings,
+  loadManifest,
+  studioVersionFrom,
+  sidecarPath,
+  type WarningsSidecar,
+} from "../backends/warnings.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
 
@@ -86,32 +94,21 @@ interface SliceOpts {
   strict?: boolean;
 }
 
-// A CLEAN BambuStudio slice is silent — it emits no warning/error lines to stdout/stderr (verified
-// 2026-09-17 against the machine card). So this scan is BEST-EFFORT: there is no documented CLI
-// warning vocabulary to match, and a warning-free slice looks exactly like a warning-suppressed one.
-// It surfaces anything the slicer prints that reads like a warning so it is never swallowed; the
-// AUTHORITATIVE, realized-truth gate is `bambu validate sliced` over the produced .3mf (it reads the
-// gcode toolpath + the slice_info skipped-object flags, which cannot be silently absent).
-const WARNING_RE = /\b(warn(?:ing)?|error|fail(?:ed|ure)?|cannot|could ?not|unable|invalid|not printable|outside\s+(?:the\s+)?print|exceed|collision|skipp?ed)\b/i;
+// Slicer warnings are captured from BambuStudio's OWN output, not guessed: at `--debug 2` (warning)
+// the headless CLI emits the same per-object advisory the GUI shows, as a structured
+// `plate N: found [NON_CRITICAL] slicing warnings: <msg>` line (measured 2026-09-17 — at the default
+// log level it is silent, which is why the earlier "a clean slice is silent" conclusion was wrong).
+// `parseSlicerWarnings` reads exactly those lines; everything else the slicer prints is ignored. The
+// captured warnings are classified against the by-design manifest and written to a sidecar beside the
+// .3mf so the dispatch gate (`bambu print send`) can refuse a plate carrying an UNEXPECTED warning
+// without re-slicing. See backends/warnings.ts.
 
-/** Best-effort: lines from the slicer's own output that look like warnings/errors (deduped, capped). */
-function scanSlicerWarnings(stdout: string, stderr: string): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of `${stdout}\n${stderr}`.split("\n")) {
-    const line = raw.trim();
-    if (!line || !WARNING_RE.test(line)) continue;
-    if (seen.has(line)) continue;
-    seen.add(line);
-    out.push(line);
-    if (out.length >= 40) break; // never let a firehose bury the summary
-  }
-  return out;
-}
-
-/** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing. */
+/** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing.
+ *  `--debug 2` raises the log level to `warning` so slicing warnings reach stdout (they are silent at
+ *  the default level); it does not change the slice, only what is reported. */
 function buildStudioArgs(input: string, outDir: string, outFile: string, opts: SliceOpts, raw: string[]): string[] {
   const args: string[] = [];
+  args.push("--debug", "2"); // surface slicing warnings (see note above)
   if (opts.settings) args.push("--load-settings", opts.settings);
   if (opts.filament) args.push("--load-filaments", opts.filament);
   if (opts.arrange) args.push("--arrange", "1");
@@ -187,17 +184,56 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       return;
     }
     const kb = Math.round(statSync(outPath).size / 1024);
-    const warnings = scanSlicerWarnings(res.stdout, res.stderr);
-    ev("slice_done", { out: basename(outPath), kb, warnings: warnings.length });
+
+    // Capture BambuStudio's own slicing warnings, classify against the by-design manifest, and write
+    // a sidecar beside the .3mf so `bambu print send` can gate dispatch without re-slicing.
+    const combined = `${res.stdout}\n${res.stderr}`;
+    const warnings = parseSlicerWarnings(combined);
+    const { expected, unexpected } = classifyWarnings(warnings, loadManifest());
+    const sidecar: WarningsSidecar = {
+      tool: "bambu slice",
+      sliced_at: new Date().toISOString(),
+      studio_version: studioVersionFrom(combined),
+      warnings,
+    };
+    try {
+      writeFileSync(sidecarPath(outPath), JSON.stringify(sidecar, null, 2) + "\n");
+    } catch (err) {
+      console.error(`warning: could not write warnings sidecar: ${(err as Error).message}`);
+    }
+    ev("slice_done", {
+      out: basename(outPath),
+      kb,
+      warnings: warnings.length,
+      expected: expected.length,
+      unexpected: unexpected.length,
+    });
     console.log(`sliced → ${outPath} (${kb} KB)`);
-    if (warnings.length > 0) {
-      console.error(`slicer messages (best-effort scan — ${warnings.length}):`);
-      for (const w of warnings) console.error(`  ${w}`);
-      console.error("Gate the realized plate with `bambu validate sliced " + basename(outPath) + "`.");
-      if (opts.strict) {
-        console.error("--strict: treating slicer messages as fatal.");
-        process.exitCode = 1;
+
+    if (warnings.length === 0) {
+      console.log("slicer warnings: none — clean.");
+    } else {
+      if (expected.length > 0) {
+        console.log(`slicer warnings: ${expected.length} expected (by design):`);
+        for (const { warning, rule } of expected) {
+          const who = warning.object ?? "(plate)";
+          console.log(`  ✓ ${who}: ${warning.message}`);
+          console.log(`      expected — ${rule.reason}${rule.settles ? ` [${rule.settles}]` : ""}`);
+        }
       }
+      if (unexpected.length > 0) {
+        console.error(`slicer warnings: ${unexpected.length} UNEXPECTED — dispatch will be blocked:`);
+        for (const w of unexpected) {
+          const who = w.object ?? "(plate)";
+          console.error(`  ✗ [${w.severity}] ${who}: ${w.message}`);
+        }
+        console.error("Eyeball it (`bambu slice open " + basename(outPath) + "`), fix the model/settings and re-slice,");
+        console.error("or add a rule to .claude/gates/expected-slicer-warnings.json if it is genuinely by-design.");
+      }
+    }
+    // Fail non-zero when a warning would block dispatch, or under --strict for any warning at all.
+    if (unexpected.length > 0 || (opts.strict && warnings.length > 0)) {
+      process.exitCode = 1;
     }
     return;
   }

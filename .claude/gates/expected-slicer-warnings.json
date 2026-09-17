@@ -1,0 +1,12 @@
+{
+  "_doc": "Expected (by-design) BambuStudio slicing warnings — the whitelist for `bambu`'s pre-dispatch warnings gate (#52). A warning captured from a `--debug 2` slice is EXPECTED only if a rule here covers it (message regex, plus object + severity when constrained); anything else is UNEXPECTED and blocks dispatch. Grounded, not guessed: every rule cites what was measured and the CAL bet the by-design failure belongs to. Add a rule only when a warning is genuinely by-design and understood; a new warning appearing on a plate SHOULD block until a human decides it is expected. Measure before adding: slice the coupon at `--debug 2` and confirm the exact object + message.",
+  "rules": [
+    {
+      "object": "^MC2Wall04\\b",
+      "message": "floating regions",
+      "severity": "non_critical",
+      "reason": "MC-2 wall ladder, 0.4 mm rung — below DEFAULT_MIN_FEATURE_MM = 1.2 mm and built to fail at the thin end (calibration-design §2: every rung is a bracket around an unknown). The floating-regions advisory is the expected symptom of the sub-floor wall, NOT a plate to re-orient or add support to — doing so would defeat the CAL-FEA-01 measurement. Measured 2026-09-17 on Bambu Lab X2D 0.4 nozzle / 0.20mm Standard @BBL X2D / PLA Basic: of the wall rungs 04/06/08/10/12/16/20, ONLY 0.4 mm raises this; 0.6 mm and up slice clean.",
+      "settles": "CAL-FEA-01"
+    }
+  ]
+}
