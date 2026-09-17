@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -730,3 +730,36 @@ bambu-typecheck:
 validate-constructions:
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/constructions_ledger.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/constructions_ledger.py
+
+# Coasters — flat printable coasters that carry an inscribed GeoGebra
+# construction, from the `coaster` declaration bikar added (umbrella plan
+# P1.6/P2.7). Same shape as `bricks`, and same reason: a coaster has no
+# per-symmetry-axis view set and no qiyas composite, so its gallery claim is
+# the mesh itself, drawn by build/brick_previews.py --coasters via OpenSCAD
+# import() where `make web-images` expects it.
+#
+# Two sizes per coaster, both RE-RENDERED from `--param size=` — never
+# mesh-scaled (umbrella plan D-D): a 40 mm mini and a 90 mm standard, each
+# `--check`ed on its own mesh. The standard is the gallery/download mesh and
+# the vendored src/Coasters/<id>-coaster-standard.stl the constructions ledger
+# points at; both sizes and the .bkr source are committed under src/Coasters/.
+coasters: bikar-stamp
+	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
+		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
+	@ls $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr >/dev/null 2>&1 \
+		|| { echo "no *-coaster.bkr in $(BIKAR_DIR)/patterns/Constructions — the coaster presets live on bikar's constructions work; override with 'make coasters BIKAR_DIR=...'"; exit 1; }
+	@set -euo pipefail; \
+	mkdir -p ${ROOT_DIR}/build/stls ${ROOT_DIR}/build/images ${ROOT_DIR}/src/Coasters; \
+	: > ${ROOT_DIR}/build/.coaster-names; \
+	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
+		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
+		echo "== $$id"; \
+		$(BIKAR) render "$$bkr" --coaster Coaster --param size=40 --format stl --check \
+			-o ${ROOT_DIR}/src/Coasters/$$stem-mini.stl; \
+		$(BIKAR) render "$$bkr" --coaster Coaster --param size=90 --format stl --check \
+			-o ${ROOT_DIR}/src/Coasters/$$stem-standard.stl; \
+		cp ${ROOT_DIR}/src/Coasters/$$stem-standard.stl ${ROOT_DIR}/build/stls/$$id.stl; \
+		echo "$$id" >> ${ROOT_DIR}/build/.coaster-names; \
+		cp "$$bkr" ${ROOT_DIR}/src/Coasters/; \
+	done; \
+	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py --coasters
