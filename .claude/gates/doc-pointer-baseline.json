@@ -88,6 +88,31 @@
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
       "why": "Deliberately deleted. D-042 names this file as the thing it removed \u2014 a whole test file certifying the withdrawn centreline rule \u2014 and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
+    },
+    {
+      "doc": "docs/geogebra-construction-import-design.md",
+      "path": "schemas/ggb-construction.schema.json",
+      "why": "Proposed \u2014 the AST contract P1.3 writes in the youtube repo (no sibling root here) and mirrors into bikar. Remove this when the mirror lands and the doc can point at bikar's copy."
+    },
+    {
+      "doc": "docs/geogebra-construction-import-design.md",
+      "path": "docs/constructions/ledger.md",
+      "why": "Proposed \u2014 the constructions ledger P3.2 writes. Remove this when the file is written."
+    },
+    {
+      "doc": "docs/geogebra-construction-import-design.md",
+      "path": ".claude/gates/constructions_ledger.py",
+      "why": "Proposed \u2014 the ledger gate P3.2 writes. Remove this when the file is written."
+    },
+    {
+      "doc": "docs/geogebra-construction-import-design.md",
+      "path": "docs/plates/minis-01.yaml",
+      "why": "Proposed \u2014 the first mini-plate manifest P4.2 writes. Remove this when the file is written."
+    },
+    {
+      "doc": "docs/decisions-log.md",
+      "path": "bikar/docs/decisions/2026-09-16-naqsh-language-name.md",
+      "why": "Written on bikar branch feat/naqsh-constructions (P0.4) and not yet merged, so the sibling checkout predates it. Remove this when the bikar PR merges and the path resolves at origin/main."
     }
   ]
 }
