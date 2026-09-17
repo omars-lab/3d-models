@@ -1,0 +1,23 @@
+#!/bin/sh
+# Encrypted-env gate (.claude/gates/check_env_encrypted.sh). `.env` here is
+# deliberately NOT gitignored — dotenvx encrypts every value so the file is
+# commit-safe — which means nothing but this hook stands between a plaintext
+# `.env` (written by `dotenvx decrypt`, an editor, a rotation) and the public
+# history. Runs after 10-gitleaks, which matches secret *patterns*; this checks
+# the *shape* of every staged .env* line, so a token gitleaks has no rule for
+# is still refused. `.env.keys` (the private key) is blocked under any name.
+# Override once: ENV_ENCRYPTED_OK=1 git commit
+#
+# The wholesale form checks every tracked .env* file and runs the self-test.
+# wholesale: make validate-env
+[ -n "$ENV_ENCRYPTED_OK" ] && exit 0
+git diff --cached --name-only --diff-filter=ACM | grep -qE '(^|/)\.env($|\.)' || exit 0
+# Same worktree caveat as 30-docs-gate: `gh-pages` carries `.githooks` and not
+# `.claude`. But an env file staged there is exactly the leak this exists for,
+# so unlike the docs gate this fails closed instead of skipping.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/check_env_encrypted.sh"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: an .env* file is staged but this worktree has no $GATE — refusing" >&2
+  exit 1
+fi
+exec sh "$GATE" --staged

@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -763,3 +763,12 @@ coasters: bikar-stamp
 		cp "$$bkr" ${ROOT_DIR}/src/Coasters/; \
 	done; \
 	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py --coasters
+
+# Encrypted-env gate — the wholesale form of .githooks/pre-commit.d/
+# 11-env-encrypted. `.env` is commit-safe only while every value in it is
+# `encrypted:…`; this checks every tracked .env* file's shape and runs the
+# gate's own by-design failures (a plaintext value, the private key, a
+# commented-out secret) so a green run means the gate was tested, not idle.
+validate-env:
+	@sh ${ROOT_DIR}/.claude/gates/check_env_encrypted.sh --self-test
+	@cd ${ROOT_DIR} && sh .claude/gates/check_env_encrypted.sh
