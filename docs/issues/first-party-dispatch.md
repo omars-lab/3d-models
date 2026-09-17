@@ -80,6 +80,45 @@ publish are exercised only when Omar dispatches a real plate — `send` stays fa
 without `--yes` or a TTY confirm), and the skill never passes `--yes` on Omar's behalf. The
 ground-truth diff above is the first thing that real send does.
 
+## The exact Plate-1 payload to diff (the review surface)
+
+This is what `bambu print send build/…/plate-1-machine-card.sliced.3mf --plate 1 --dry-run` publishes
+to `device/<serial>/request` (rendered from the pure `buildProjectFileCommand`, so it is byte-for-byte
+what a real send would put on the wire — the upload lands over FTPS at `<host>:990` as
+`STOR /plate-1-machine-card.sliced.3mf` first). **This block is the ground-truth diff surface:** send
+one plate from the BambuStudio GUI with a sniffer on the same topic and compare field-for-field. The
+three `[X2D-UNCONFIRMED]` fields are the only ones expected to possibly differ; anything else that
+differs is a bug to fix here before the first real send.
+
+```json
+{
+  "print": {
+    "sequence_id": "0",
+    "command": "project_file",
+    "param": "Metadata/plate_1.gcode",
+    "url": "ftp:///plate-1-machine-card.sliced.3mf",
+    "subtask_name": "plate-1-machine-card.sliced",
+    "project_id": "0",
+    "profile_id": "0",
+    "task_id": "0",
+    "subtask_id": "0",
+    "md5": "",
+    "bed_type": "auto",
+    "bed_leveling": true,
+    "flow_cali": true,
+    "vibration_cali": true,
+    "layer_inspect": false,
+    "timelapse": false,
+    "use_ams": false,
+    "ams_mapping": [0]
+  }
+}
+```
+
+`md5` / `bed_type` / `ams_mapping` are the three CAL-shaped fields from the table above — the diff
+closes the bet by confirming or correcting exactly these. The operator runbook consumes this from
+[`guide-print`](../../.claude/skills/guide-print/SKILL.md) step 4's pre-send gate (line 2).
+
 ## Files
 
 - `tools/bambu/src/backends/ftps.ts` — the FTPS upload backend (new).
