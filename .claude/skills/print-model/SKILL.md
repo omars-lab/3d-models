@@ -109,8 +109,10 @@ accepts input).
 2. **Discover filament** — `bambu filament` lists the loaded AMS trays + external spool (read-only).
 3. **Pick filament** — one clear match is chosen and *stated*; only when several are plausible does it
    **AskUserQuestion** (bias to action; reserve the question for the pivotal call).
-4. **Decide nozzle** (0.2/0.4/0.6/0.8) → **orientation** → **supports/infill/brim** → **arrangement**
-   (pack repeats, rotate-to-fit) — each a one-line "what a master would do + why", never a silent change.
+4. **Decide nozzle** (0.2/0.4/0.6/0.8) → **orientation** → **supports/infill/brim** → **filament
+   grouping** (X2D dual-nozzle — one filament: a stated no-op, default Filament-Saving; ≥2: reason
+   Saving/Quality/Custom) → **arrangement** (pack repeats, rotate-to-fit) — each a one-line "what a
+   master would do + why", never a silent change.
 5. **Proactive advisories** — leftover bed → more copies / another piece / scale up; footgun catches
    (wall thinner than the nozzle's single-wall floor, needless supports, fragile layer direction, wrong
    filament). Each is a line in the plan; the operator decides.
@@ -183,6 +185,10 @@ The design (PR #191) is complete; this skill is being built out task by task:
   a confidence tag to `[measured]` or adding an example, fails-before / passes-after, no register), and
   the boundary that keeps it distinct from a CAL-bet settlement ([`rubric.md`](rubric.md) §Self-healing,
   task #46).
+- **Filament grouping (#53):** the X2D dual-nozzle mode decision — single filament is a stated no-op
+  (default Filament-Saving is correct), ≥2 filaments reasons Saving/Quality/Custom; verified settable
+  headlessly via `bambu slice --filament-map-mode` (merged into the process preset)
+  ([`rubric.md`](rubric.md) §Filament grouping, [`x2d-filament-grouping-mode`](../../../docs/issues/x2d-filament-grouping-mode.md)).
 - **This scaffold (#31):** the skill dir, this front door, the rubric checklist, the seeded
   best-practices file.
 - **Orchestration (#49):** the questions-intro (§What this skill resolves), the input-critique

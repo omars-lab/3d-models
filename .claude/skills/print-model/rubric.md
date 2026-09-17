@@ -16,6 +16,7 @@ rows below and add the formal cited defaults.
 | Decision | Questions we answer | Inputs read | Heuristic (grounded — see design §5) | Advisory shape |
 |---|---|---|---|---|
 | **Filament** | Which loaded filament, and is it right for this part? | AMS `ams[].tray[]` + external spool (`vt_tray`/`vir_slot`); model use | match `tray_type` to the part's need; if several plausible, **ask** | AskUserQuestion when ambiguous; else "using PLA in slot 2 because …" |
+| **Filament grouping** (X2D dual-nozzle) | Which grouping mode — and does it even matter here? | filament *count* on the plate | 1 filament → no-op, Filament-Saving default is right; ≥2 → reason Saving vs Quality vs Custom | "single filament → grouping is a no-op, default Filament-Saving" / "2 colours: Quality — fewer cross-nozzle swaps" |
 | **Nozzle** | 0.2 / 0.4 / 0.6 / 0.8 mm? | model min feature; functional vs display; part size | 0.4 as the general balance; deviate only on a stated cause (§5.1) | "0.6 mm — functional, no fine detail, faster; 0.4 to keep studs crisp" |
 | **Orientation** | Which face down; minimize supports? | mesh overhangs, contact area, contour | Tweaker-3 objective: minimize support volume (not strength) | "laid flat: least support; layer lines run across the pin — weak there" |
 | **Supports** | Any? normal or tree? threshold angle? | overhang angles vs threshold | tree for point contacts; none if overhangs ≤ threshold | "no supports — max overhang 38° is under the limit" |
@@ -53,6 +54,26 @@ Each note below is a stub the named task fleshes out; the design doc section is 
   6. **Footgun — remaining too low.** When the chosen slot's `remain` is a real number and shows a low
      remaining percentage, flag it in the plan ("slot 0 shows 8% left — may not finish this part");
      when `remain` is `-1`, state the level is unknown rather than assume full. Never a silent proceed.
+- **Filament grouping (X2D dual-nozzle) — the mode decision (task #53).** The X2D's two nozzles let
+  Studio *group* filaments across them; the GUI's "Filament Grouping" selector is the process-config
+  enum `filament_map_mode` (verified settable headlessly — [`x2d-filament-grouping-mode`](../../../docs/issues/x2d-filament-grouping-mode.md)).
+  Decide it **by filament count**, and lead with the honest no-op:
+  1. **One filament on the plate → it is a no-op. Say so and move on.** With a single filament the slice
+     collapses to one group (`filament_maps=1`) whatever the mode, and Studio's default is already
+     Filament-Saving. State it — "single filament → grouping has no effect; default Filament-Saving is
+     correct" — rather than offering a knob that does nothing. **Every current-campaign plate is
+     single-material, so this is the usual branch.**
+  2. **Two or more filaments/colours → reason the mode, then recommend.** `saving` (Filament-Saving,
+     `Auto For Flush` — minimise waste/flush; the default) vs `quality` (`Auto For Match` — fewer
+     cross-nozzle changes, better surface, more flush) vs `manual`/Custom (a hand-assigned per-filament
+     nozzle map). Default to `saving` and name the trade; recommend `quality` when the part's surface
+     matters more than filament economy. Never silently pick.
+  3. **It rides `bambu slice`, not a knob.** When a mode other than the default is wanted, pass
+     `bambu slice plate … --filament-map-mode <saving|quality|manual>` — it merges the enum into the
+     process preset (single filament → it prints the no-op note and changes nothing). `manual` needs an
+     explicit `filament_map` array the CLI does not synthesise; the plan says so rather than faking one.
+  4. **Calibration exception.** A coupon plate's profile is fixed by the bench sheet — do not add or
+     change a grouping mode on a plate carrying a `settles: CAL-…` reading.
 - **Nozzle (§5.1) — the recommendation procedure (task #43).** Which of 0.2 / 0.4 / 0.6 / 0.8 mm, on
   a stated cause, never a silent pick. The grounded, hedged numbers and their citations live in design
   §5.1 — this is how the skill *uses* them; it does not restate the `**Default:**` markers (§5.1 owns
@@ -154,11 +175,12 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      rotated pack fits *strictly more* copies than 0°; a tie is not a reason to rotate. State both
      counts and the trade so the operator chooses: "9 fit as-is; rotating 45° fits 12 — denser pack,
      slightly more toolhead travel. Want the denser one?" Never silently rotate.
-  6. **K2 — dual-nozzle bed zoning is unverified.** A forum report notes auto-arrange not using the
-     H2D's L/R-nozzle-only bed areas (research Topic 4, `[X2D-UNCONFIRMED]`). Until confirmed on this
-     X2D, do **not** assume the whole bed is uniformly usable: treat the full bed footprint as an
-     **upper bound** on capacity and flag the uncertainty in the plan rather than promising a count
-     the zoning might forbid.
+  6. **K2 — dual-nozzle bed zoning is unverified** (distinct from filament *grouping*, which now **is**
+     verified — see §Filament grouping). A forum report notes auto-arrange not using the H2D's
+     L/R-nozzle-only bed areas (research Topic 4, `[X2D-UNCONFIRMED]`). Until confirmed on this X2D, do
+     **not** assume the whole bed is uniformly usable: treat the full bed footprint as an **upper bound**
+     on capacity and flag the uncertainty in the plan rather than promising a count the zoning might
+     forbid.
   7. **Calibration exception.** A coupon plate's layout is *authored*, not packed — the machine card
      is one fixed plate (calibration-design §7), so arrangement does **not** repack a plate that
      carries a `settles: CAL-…` reading. See §The calibration exception; steps 3–6 short-circuit.
