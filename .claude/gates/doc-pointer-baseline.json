@@ -85,6 +85,21 @@
       "why": "Model to author \u2014 MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md \u00a78. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
     },
     {
+      "doc": "docs/print-model-design.md",
+      "path": ".claude/skills/print-model/SKILL.md",
+      "why": "Proposed module — the print-model skill this doc designs (task #31). The doc lands first as the keystone that unblocks the build; remove this when the skill is scaffolded."
+    },
+    {
+      "doc": "docs/print-model-design.md",
+      "path": ".claude/skills/print-model/rubric.md",
+      "why": "Proposed module — the run-time decision rubric (§5) kept beside SKILL.md so it sharpens without editing the skill body (task #31/#33-#35). Remove when written."
+    },
+    {
+      "doc": "docs/print-model-design.md",
+      "path": ".claude/skills/print-model/best-practices.md",
+      "why": "Proposed module — the grounded, self-healing best-practices reference (§8, tasks #45/#46). Remove when written."
+    },
+    {
       "doc": "docs/decisions-log.md",
       "path": "bikar:packages/lab/tests/orb-weave-guard.test.ts",
       "why": "Deliberately deleted. D-042 names this file as the thing it removed \u2014 a whole test file certifying the withdrawn centreline rule \u2014 and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
