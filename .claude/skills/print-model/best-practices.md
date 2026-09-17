@@ -31,6 +31,22 @@ research file; this file adds *our* data on top.
 - **MC-4 overhang fan → supports OFF.** The calibration fan coupon is sliced deliberately with supports
   off (its whole point is to read unsupported overhang) — a calibration case where the setting is a
   *measurement*, not a choice. Pre-flight eyeballed OK (full 360° funnel, base on bed, flare up).
+- **The whole 23-rung machine card slices onto one plate in one command.** No composite STL and no CLI
+  change: pass one rung as the `slice plate <model>` positional and the other 22 after `--`, with
+  `--arrange` — the verb forwards the trailing STLs to BambuStudio as model files and libnest2d packs
+  them (`bambu slice plate MC1BoreSweep.stl --arrange -s "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL
+  X2D" -f "Bambu PLA Basic @BBL X2D 0.4 nozzle" -- <22 more .stl>`). Sliced 2026-09-17 to a valid
+  23-object X2D `.3mf` (89.7 cm³, one material/profile/session — the card's hard requirement).
+- **Card slice → brim OFF is not a no-op; the default profile fights you.** The shipped
+  `0.20mm Standard @BBL X2D` process carries `brim_type = auto_brim`, which **silently brims the MC-6
+  towers** (found on the 2026-09-17 slice: a `; FEATURE: Brim` block inside MC6Tower05's footprint) —
+  brim on an adhesion coupon invalidates `CAL-BED-01`, and on the MC-5 plate would mask warp
+  (`CAL-WRP-01`). The bench-sheet pre-flight already *requires* "bare plate, no brim/raft"; this is the
+  mechanism that makes it non-trivial. Fix: force `brim_type = no_brim` plate-wide. Headless, an
+  *inheriting stub* (`"inherits": "0.20mm Standard @BBL X2D"`) is rejected `process not compatible with
+  printer` (the parent's `compatible_printers` is dropped); **materialize the full process JSON with only
+  `brim_type` flipped** and pass it as the process token. Re-sliced: brim 0, supports 0, raft 0. (A loose
+  skirt remains — neither brim nor raft, not attached to a coupon, so it does not touch the reads.)
 - **LEGO sources slice clean at 0.4 mm.** `ClassicBrick.stl`, `RosetteBrick.stl`, and `StarBrick.stl`
   all slice by preset name to a valid X2D plate at 0.4 mm — no profile-specific surprise before Plate 2.
 - **Loaded filament, read live (2026-09-17).** `bambu filament` read AMS 0 slot 0 =
