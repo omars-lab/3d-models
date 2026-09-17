@@ -220,7 +220,7 @@ statement, with line and reason, before writing anything.
 | Oracle | Claim | Reference side | naqsh side | Compare |
 |---|---|---|---|---|
 | O1 geometry | every named object has the same geometry | `coords.json` from the Apps API via Playwright (survey §5) | `bikar render --format parts` label table | per label after fitting the frame; missing or extra label is a FAIL |
-| O2 drawing | the same objects are visible at the end | hero `export.png` from the reconstruct loop | `bikar render --format views` | edge-SSIM via `ggb_score.py --align --mask-ref` |
+| O2 drawing | the same ink is drawn at the end | hero `export.png` and the view in its `export.ggb` | `bikar render` SVG placed on the export's grid, never aligned | centreline recall/precision (bet `CAL-EQV-01`) plus the loop's edge-SSIM; specified in the [equivalence doc](construction-equivalence.md) |
 | O3 solid | the same region is solid | `coords.json` polygons → generated `.scad` → OpenSCAD 2021.01 `reference.stl`, no bikar code | `piece Coaster extrude …` STL | `qiyas mesh compare`: footprint IoU at mid-height, symmetric Hausdorff, volume ratio, worst local deviation |
 
 **Default:** the O2 accept threshold is edge-SSIM ≥ 0.70, the youtube loop's
@@ -231,9 +231,9 @@ published source — it is the loop's own bar, inherited rather than bet because
 regression check against that loop, not a print quantity. The naqsh
 render must clear the same bar the reconstruction cleared.
 
-O1 tolerance, O3 thresholds and the frame-fitting procedure are specified in
-the equivalence doc (P2), which registers its own bets; nothing here states
-them. O3 compares the **flat extruded pattern** only: rim, bevel and relief
+O1 tolerance, O2's coverage floor, O3 thresholds and the frame procedure are
+specified in [`docs/construction-equivalence.md`](construction-equivalence.md),
+which registers its own bets; nothing here states them. O3 compares the **flat extruded pattern** only: rim, bevel and relief
 have no GeoGebra reference and are validated by the mesh gate, the coaster
 validators and the `CAL-CST-*` bets. An aggregate score never discharges a
 per-object claim, so O1 is per label and O3 reports the worst local deviation,

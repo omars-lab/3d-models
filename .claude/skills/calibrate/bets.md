@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**21 registered bets · 21 `Calibrated` records — 21 provisional, 0 measured · 6 bets with no record in bikar.**
+**22 registered bets · 21 `Calibrated` records — 21 provisional, 0 measured · 7 bets with no record in bikar.**
 
 ## Bets
 
@@ -34,6 +34,7 @@ is opened, clustered, and closed.
 | `CAL-CLB-01` | clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span | `LG-P2` | open — no record in bikar | — |
 | `CAL-ANC-01` | anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control | `LG-B2` | open — no record in bikar | — |
 | `CAL-INW-01` | printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) | `LG-B2` | open — no record in bikar | — |
+| `CAL-EQV-01` | oracle O2 centreline-coverage floor: the recall and precision of the hero export's skeleton by the naqsh render's (0.98) below which a construction import is refused as not drawing the same thing | none — not a print quantity — settled by measuring the corpus ladder (the second construction 7apC5Q9QS-8 and each rung after it) for the margin between a correct import and the smallest single-statement drop, not by a coupon | open — no record in bikar | — |
 | `CAL-FRM-01` | wall perimeter trim band: the width at which a frame reads as a deliberate margin rather than as a wall that ran out of tiles | `W-P1` | provisional | `FRAME_BAND_MM_CAL` |
 | `CAL-TXT-01` | emitted text relief direction: whether an engraved or an embossed rung label is the more legible and the more survivable on this machine | `MC-7` | provisional | `LABEL_RELIEF_MM_CAL` |
 | `CAL-TXT-02` | emitted text size: the cap height at which a rung label stays legible, and the relief depth that carries it | `MC-7` | provisional | `LABEL_CAP_MM_CAL` |
@@ -64,6 +65,7 @@ named next print rather than an absence:
 - `CAL-CLB-01` — clone-baseplate clutch and pitch delta vs LEGO-brand across a piece span · coupon `LG-P2`
 - `CAL-ANC-01` — anchor-only clutch: retention ratio of a pattern-outline body (tubes/pins, no side walls) vs a rectangular control · coupon `LG-B2`
 - `CAL-INW-01` — printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) · coupon `LG-B2`
+- `CAL-EQV-01` — oracle O2 centreline-coverage floor: the recall and precision of the hero export's skeleton by the naqsh render's (0.98) below which a construction import is refused as not drawing the same thing · coupon none — not a print quantity — settled by measuring the corpus ladder (the second construction 7apC5Q9QS-8 and each rung after it) for the margin between a correct import and the smallest single-statement drop, not by a coupon
 
 ## Records
 
