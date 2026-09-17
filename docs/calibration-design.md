@@ -86,6 +86,21 @@ Those four rungs are rendered **without** `--check`. Their meshes are still wate
 (`euler = 0`, torus topology, verified — §7), which is the property that actually
 matters for a file that is about to be sliced.
 
+**The mesh-gate floor and the slicer's warning are two different rulers — do not conflate
+them.** `meshGate` FAILs all four rungs because all four sit below the 1.2 mm feature
+floor. BambuStudio's *slicer*, sliced at `--debug 2`, is stricter about a different thing
+— printable geometry — and (measured 2026-09-17, X2D 0.4-nozzle / 0.20mm Standard @BBL X2D
+/ PLA Basic) raises a `NON_CRITICAL … floating regions` advisory on **only the 0.4 mm rung
+(`MC2Wall04`)**; 0.6, 0.8 and 1.0 mm slice clean despite failing the mesh gate. The full
+assembled Plate 1 (23 objects) likewise emits exactly one slicing warning — `MC2Wall04`.
+This corrects an earlier assumption that all four sub-floor rungs would warp in the slicer.
+That single advisory is **expected and by design** (the thin end of a bracket the coupon
+exists to explore, `CAL-FEA-01`): the operator must **not** re-orient it or enable support,
+which would defeat the measurement. It is whitelisted in
+`.claude/gates/expected-slicer-warnings.json` so the pre-dispatch warnings gate clears it
+rather than blocking Plate 1 — see
+[`docs/issues/slicer-warnings-cli-visibility-pivot.md`](issues/slicer-warnings-cli-visibility-pivot.md).
+
 No `--min-feature` override flag is added, and adding one is explicitly out of scope.
 A flag that silences the gate for a coupon is a flag that silences it for a shipped
 part six months later. The precedent already exists in the repo and is the same shape:

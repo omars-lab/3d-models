@@ -144,6 +144,12 @@ wall nom | printed? | single clean perimeter? | caliper (median) | note
 > The result is the **lowest rung that is still solid and clean**. That number is the machine's real
 > minimum feature — it moves `DEFAULT_MIN_FEATURE_MM` for every part in the repo.
 
+> **Slicer warning is expected on the 0.4 mm rung only.** When you slice Plate 1, BambuStudio raises one
+> `floating regions` advisory — on `MC2Wall04` (0.4 mm) and nothing else (0.6/0.8/1.0 slice clean even
+> though they are sub-floor for the mesh gate). That is by design: it is the thin end of this ladder.
+> **Do not** re-orient the wall or turn on supports to make it go away — that would ruin the measurement.
+> The pre-dispatch warnings gate already whitelists it, so it will not block the print.
+
 ## MC-3 — bridge plate → `CAL-BRG-01` (the ≤10 mm rule)
 
 Eight blind bores spanned as bridges; **the bore diameter is the span**. Visual, per rung. Record the
