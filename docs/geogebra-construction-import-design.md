@@ -149,21 +149,42 @@ highlighter generator, never generated output.
 ### 5.1 The AST contract (summary; the schema is the contract)
 
 One JSON document per construction, produced by `ggb_build.py --ast-json` after
-`expand()` and `parse()`:
+`expand()` and `parse()` (shipped 2026-09-17; youtube's
+`docs/design/construction-ast-export.md` is the producer's own account):
 
-- `construction`: `{ id, source_path, source_sha256, title?, url? }`.
-- `statements[]`, in source order, each `{ line, src, t?, kind, … }` where
+- `schema_version`: `1`.
+- `construction`: `{ id, source_path, source_sha256, title?, url? }` — `title`
+  and `url` only for a `construction.ggb-commands`, never for a technique
+  snippet, whose header quotes *other* videos.
+- `statements[]`, in source order, one per authored line, each
+  `{ line, src, t?, kind, outputs[] }` where `line` is the authored line (slider
+  expansion keeps lines 1:1) and
   `kind ∈ { point_literal, number_decl, command, multi_out, sequence }`;
-  a `command` carries `{ out, cmd, args[] }`, a `multi_out` carries
-  `{ outs[], cmd, args[] }`, a `sequence` keeps its nested form
-  `{ outs[], body: command, var, lo, hi }`.
-- `directives`: `{ views[], hides[], hide_except[], exports[], styles[], labels[] }`.
+  a `point_literal` adds `coords`, a `number_decl` adds `{ value, is_angle }`,
+  a `command` / `multi_out` adds `{ cmd, args[] }` with args typed
+  `label | number | list`, a `sequence` keeps its nested form
+  `{ body: { cmd, target, angle, centre }, var, lo, hi, angles_rad[] }` — the
+  angle verbatim and evaluated, one output per `Sequence`.
+- `outputs[]` per statement, each `{ label, type?, hidden_at_end, exported }`:
+  `type` is `infer_type`'s best effort (`null` for a command outside its table,
+  e.g. `UnitVector`); `hidden_at_end` is the presenter's hide as the final XML
+  shows it (a free number is always hidden by the emitter, so there it is not
+  the presenter's choice); `exported` is `@export` membership. There is no
+  separate labels list: the outputs are the label table.
+- `directives`: `{ views[], hides[], exports[], styles[] }` — `@hide except`
+  is a `hides[]` entry with `keep_only: true`.
 - `cached_coords{}`: label → `[x, y]` when the source XML carried them (empty
-  for files written by `ggb_build.py`).
+  for files written by `ggb_build.py`; `--cached-coords` supplies them).
 
 Pydantic models are the source; `schemas/ggb-construction.schema.json` is
-checked in with a regenerate-and-byte-compare test; bikar vendors the schema
-byte-identically (the hook-41 pattern) and generates its types from it.
+checked in with a regenerate-and-byte-compare test (`make schema-sync`); bikar
+vendors it byte-identically as `packages/qiyas-schema/schemas/ggb_construction.json`
+and generates `GgbConstruction` from it. Byte identity is this repo's
+schema-mirror gate's job (hook 41, `.claude/gates/schema_mirror.py`): bikar's
+vendored tree is split by stem, `ggb_construction` is held to youtube at a
+`youtube` pin in the use-case map's `as_of` block — a local commit, since
+youtube has no remote — and the rest to qiyas. The pin is owed the moment
+bikar's pin vendors the stem: that state is a finding, not a skip.
 
 ### 5.2 Root frame and free values (D-061)
 

@@ -32,6 +32,18 @@ after JSON parsing but not before is still a finding: the runbook demands the
 vendored copy be byte-identical, so a reformatted copy is a copy that was not
 produced by the runbook.
 
+A SECOND PRODUCER (2026-09-17). youtube's `scripts/ggb_ast.py --dump-schema`
+writes `schemas/ggb-construction.schema.json`, the construction AST that
+`bikar import geogebra` reads, and bikar vendors it into the same directory as
+`ggb_construction.json` (`docs/geogebra-construction-import-design.md` §5.1).
+Same runbook, same byte rule, same lag — so the same gate: bikar's vendored tree
+is split by stem, `ggb_construction` is held to youtube and everything else to
+qiyas. youtube has no remote, so its `as_of` pin is a local commit of that
+checkout, and the pin is **owed the moment bikar's pin vendors the stem**: a
+bikar pin that carries `ggb_construction.json` while the map pins no youtube
+commit is a finding, not a skip, since that is exactly when the mirror can drift
+unseen. Before bikar vendors it there is nothing to compare and nothing is said.
+
 SKIPS. A sibling that is not checked out at all is a warning and a skip, in the
 same words the other sibling-reading gates use ("not checked out locally") so
 `.githooks/tests/hook-env-git-dir.sh` can hold this gate to the same rule as
@@ -64,16 +76,23 @@ ROOT = Path(__file__).resolve().parents[2]
 #: Where each repo keeps the contract, relative to its root.
 QIYAS_SCHEMAS = "src/qiyas/contract/schemas"
 BIKAR_SCHEMAS = "packages/qiyas-schema/schemas"
+YOUTUBE_SCHEMAS = "schemas"
 
-#: The map whose `as_of` block pins both siblings.
+#: The one stem in bikar's vendored tree whose producer is youtube, and the
+#: name the producer writes it under (`Path.stem` of `ggb-construction.schema.json`).
+GGB_STEM_BIKAR = "ggb_construction"
+GGB_STEM_YOUTUBE = "ggb-construction.schema"
+
+#: The map whose `as_of` block pins the siblings.
 USE_CASES_REL = ".claude/skills/maintain-use-cases/use-cases.md"
 
-PIN_LINE = re.compile(r"^\s+(bikar|qiyas):\s*([0-9a-f]{40})\s*$")
+PIN_LINE = re.compile(r"^\s+(bikar|qiyas|youtube):\s*([0-9a-f]{40})\s*$")
 
 REPAIR = (
     "repair: in bikar, follow .claude/skills/release-the-schema-mirror/SKILL.md "
-    "(re-vendor byte-identical from qiyas, regenerate src/*.ts, bump the package), "
-    "merge, then `python3 .claude/skills/maintain-use-cases/validate.py --refresh` here"
+    "(re-vendor byte-identical from qiyas — or from youtube `make schema-sync` for "
+    "ggb_construction.json — regenerate src/*.ts, bump the package), merge, then "
+    "`python3 .claude/skills/maintain-use-cases/validate.py --refresh` here"
 )
 
 
@@ -81,7 +100,7 @@ REPAIR = (
 
 
 def read_pins(root: Path) -> dict[str, str]:
-    """The `bikar` and `qiyas` commits from the use-case map's `as_of` block."""
+    """The `bikar`, `qiyas` and (when pinned) `youtube` commits from the map's `as_of` block."""
     text = (root / USE_CASES_REL).read_text(encoding="utf-8")
     head = text.split("\n---", 2)[0] if text.startswith("---") else ""
     pins: dict[str, str] = {}
@@ -147,10 +166,10 @@ def _shape_diff(name: str, ours: dict, theirs: dict) -> list[str]:
     return out
 
 
-def describe_difference(stem: str, bikar: bytes, qiyas: bytes) -> str:
+def describe_difference(stem: str, bikar: bytes, theirs: bytes, producer: str = "qiyas") -> str:
     """One finding line for a stem whose bytes differ, naming what differs."""
     try:
-        b, q = json.loads(bikar), json.loads(qiyas)
+        b, q = json.loads(bikar), json.loads(theirs)
     except ValueError:
         return f"{stem}.json: bytes differ and at least one side is not JSON"
     if b == q:
@@ -161,7 +180,7 @@ def describe_difference(stem: str, bikar: bytes, qiyas: bytes) -> str:
         if name not in bd:
             details.append(f"$defs.{name} missing in bikar")
         elif name not in qd:
-            details.append(f"$defs.{name} missing in qiyas")
+            details.append(f"$defs.{name} missing in {producer}")
         else:
             details.extend(_shape_diff(name, bd[name], qd[name]))
     if not details:
@@ -169,17 +188,24 @@ def describe_difference(stem: str, bikar: bytes, qiyas: bytes) -> str:
     return f"{stem}.json differs: " + "; ".join(details)
 
 
-def compare(bikar: dict[str, bytes], qiyas: dict[str, bytes]) -> list[str]:
-    """Findings between bikar's vendored copy and qiyas's export. Empty means mirrored."""
+def compare(bikar: dict[str, bytes], theirs: dict[str, bytes], producer: str = "qiyas") -> list[str]:
+    """Findings between bikar's vendored copy and `producer`'s export. Empty means mirrored."""
     findings: list[str] = []
-    for stem in sorted(set(bikar) | set(qiyas)):
+    for stem in sorted(set(bikar) | set(theirs)):
         if stem not in bikar:
-            findings.append(f"{stem}.json: qiyas ships it, bikar does not vendor it")
-        elif stem not in qiyas:
-            findings.append(f"{stem}.json: bikar vendors it, qiyas no longer ships it")
-        elif bikar[stem] != qiyas[stem]:
-            findings.append(describe_difference(stem, bikar[stem], qiyas[stem]))
+            findings.append(f"{stem}.json: {producer} ships it, bikar does not vendor it")
+        elif stem not in theirs:
+            findings.append(f"{stem}.json: bikar vendors it, {producer} no longer ships it")
+        elif bikar[stem] != theirs[stem]:
+            findings.append(describe_difference(stem, bikar[stem], theirs[stem], producer))
     return findings
+
+
+def split_vendored(bikar: dict[str, bytes]) -> tuple[dict[str, bytes], dict[str, bytes]]:
+    """bikar's vendored tree as (the qiyas-owned stems, the youtube-owned stem or empty)."""
+    qiyas_side = {k: v for k, v in bikar.items() if k != GGB_STEM_BIKAR}
+    youtube_side = {k: v for k, v in bikar.items() if k == GGB_STEM_BIKAR}
+    return qiyas_side, youtube_side
 
 
 # -------------------------------------------------------------------------- run
@@ -204,7 +230,39 @@ def run(root: Path) -> tuple[list[str], list[str]]:
         if not tree:
             return [f"{name}@{pins[name][:12]} has no *.json under {rel_dir}"], warnings
         trees[name] = tree
-    return compare(trees["bikar"], trees["qiyas"]), warnings
+    qiyas_side, youtube_side = split_vendored(trees["bikar"])
+    findings = compare(qiyas_side, trees["qiyas"])
+    findings += _ggb_pair(root, pins, youtube_side, warnings)
+    return findings, warnings
+
+
+def _ggb_pair(root: Path, pins: dict[str, str], vendored: dict[str, bytes], warnings: list[str]) -> list[str]:
+    """Findings for bikar's `ggb_construction.json` against youtube's schema at the youtube pin.
+
+    Nothing to say while bikar's pin does not vendor the stem and the map pins no
+    youtube commit. Once bikar vendors it the pin is owed (a finding); once pinned,
+    the pair is held byte-identical like the qiyas stems.
+    """
+    pin = pins.get("youtube")
+    if pin is None:
+        if not vendored:
+            return []
+        return [
+            f"bikar@{pins['bikar'][:12]} vendors {GGB_STEM_BIKAR}.json but {USE_CASES_REL} pins no "
+            "youtube commit — add `youtube:` to as_of (and `youtube: ../youtube` to repos) at the "
+            f"youtube commit whose {YOUTUBE_SCHEMAS}/{GGB_STEM_YOUTUBE}.json it was copied from"
+        ]
+    repo = _sibling_root("youtube", root)
+    if repo is None:
+        warnings.append("repo 'youtube' not checked out locally — skipped the ggb_construction mirror check")
+        return []
+    tree = schemas_at(repo, pin, YOUTUBE_SCHEMAS)
+    if tree is None:
+        return [f"youtube pin {pin[:12]} is not in {repo} — youtube has no remote; re-pin with `validate.py --refresh`"]
+    theirs = {GGB_STEM_BIKAR: tree[GGB_STEM_YOUTUBE]} if GGB_STEM_YOUTUBE in tree else {}
+    if not theirs:
+        return [f"youtube@{pin[:12]} has no {YOUTUBE_SCHEMAS}/{GGB_STEM_YOUTUBE}.json — run `make schema-sync` there and commit"]
+    return compare(vendored, theirs, producer="youtube")
 
 
 def report(findings: list[str], warnings: list[str], pins: dict[str, str] | None) -> int:
@@ -214,9 +272,10 @@ def report(findings: list[str], warnings: list[str], pins: dict[str, str] | None
         return 0
     label = ""
     if pins:
-        label = f" (bikar@{pins['bikar'][:12]} vs qiyas@{pins['qiyas'][:12]})"
+        label = f" (bikar@{pins['bikar'][:12]} vs qiyas@{pins['qiyas'][:12]}"
+        label += f", youtube@{pins['youtube'][:12]})" if "youtube" in pins else ")"
     if not findings:
-        print(f"schema-mirror: bikar's vendored qiyas contract matches qiyas{label}")
+        print(f"schema-mirror: bikar's vendored contracts match their producers{label}")
         return 0
     print(f"schema-mirror: {len(findings)} finding(s){label}")
     for f in findings:
@@ -248,6 +307,22 @@ def _doc(scores_props: list[str], required: list[str]) -> bytes:
 FOUR = ["structural", "geometric", "symmetry", "composite"]
 SEVEN = FOUR + ["drop", "surplus", "max_drift"]
 QIYAS_FIXTURE = {"diff": _doc(SEVEN, FOUR + ["drop", "surplus"]), "encoding": b'{"a": 1}\n'}
+
+#: youtube's export, in the shape `ggb_ast.py --dump-schema` writes (indent 2, sorted keys, newline).
+GGB_FIXTURE = (
+    json.dumps(
+        {
+            "$defs": {"Source": {"properties": {"id": {"type": "string"}}, "required": ["id"], "type": "object"}},
+            "properties": {"construction": {"$ref": "#/$defs/Source"}, "statements": {"type": "array"}},
+            "required": ["construction", "statements"],
+            "title": "GgbConstruction",
+            "type": "object",
+        },
+        indent=2,
+        sort_keys=True,
+    )
+    + "\n"
+).encode()
 
 #: name → (bikar tree, wanted finding count, substring every wanted finding carries)
 FIXTURE_CASES: list[tuple[str, dict[str, bytes], int, str]] = [
@@ -310,11 +385,16 @@ def _layout_case(tmp: Path) -> bool:
     check" runs would agree too.
     """
     qiyas_sha = _init_repo(tmp / "qiyas", {f"{QIYAS_SCHEMAS}/{k}.json": v for k, v in QIYAS_FIXTURE.items()})
+    youtube_sha = _init_repo(tmp / "youtube", {f"{YOUTUBE_SCHEMAS}/{GGB_STEM_YOUTUBE}.json": GGB_FIXTURE})
     lagging = FIXTURE_CASES[1][1]
-    bikar_sha = _init_repo(tmp / "bikar", {f"{BIKAR_SCHEMAS}/{k}.json": v for k, v in lagging.items()})
-    map_text = (
-        f"---\nname: use-cases\nas_of:\n  3d-models: {'0' * 40}\n  bikar: {bikar_sha}\n  qiyas: {qiyas_sha}\n---\n"
-    )
+    # bikar's copy of the youtube schema is JSON-equal but reformatted: the
+    # second-producer failure the qiyas fixtures cannot see. It must be held to
+    # youtube, and must NOT be reported to qiyas as "qiyas no longer ships it".
+    vendored = {f"{BIKAR_SCHEMAS}/{k}.json": v for k, v in lagging.items()}
+    vendored[f"{BIKAR_SCHEMAS}/{GGB_STEM_BIKAR}.json"] = json.dumps(json.loads(GGB_FIXTURE)).encode()
+    bikar_sha = _init_repo(tmp / "bikar", vendored)
+    pinned = f"---\nname: use-cases\nas_of:\n  3d-models: {'0' * 40}\n  bikar: {bikar_sha}\n  qiyas: {qiyas_sha}\n"
+    map_text = pinned + f"  youtube: {youtube_sha}\n---\n"
     primary = tmp / "3d-models"
     _init_repo(primary, {USE_CASES_REL: map_text.encode()})
     wt = tmp / "3d-models.worktrees" / "gate"
@@ -324,20 +404,32 @@ def _layout_case(tmp: Path) -> bool:
         env=_git_env(),
         capture_output=True,
     )
+    unpinned = tmp / "3d-models-unpinned"
+    _init_repo(unpinned, {USE_CASES_REL: (pinned + "---\n").encode()})
     saved = os.environ.pop("BIKAR_DIR", None)
     try:
         verdicts = {name: run(root) for name, root in (("primary", primary), ("worktree", wt))}
+        owed = run(unpinned)
     finally:
         if saved is not None:
             os.environ["BIKAR_DIR"] = saved
     ok = True
     for name, (findings, warnings) in verdicts.items():
-        hit = len(findings) == 1 and "Scores.properties lacks in bikar" in findings[0] and not warnings
+        hit = (
+            len(findings) == 2
+            and "Scores.properties lacks in bikar" in findings[0]
+            and findings[1].startswith(f"{GGB_STEM_BIKAR}.json: JSON-equal but not byte-identical")
+            and not warnings
+        )
         ok &= hit
         print(f"self-test {'ok  ' if hit else 'FAIL'}: layout/{name} → {findings or warnings or 'nothing'}")
     if verdicts["primary"] != verdicts["worktree"]:
         print("self-test FAIL: primary and worktree disagree")
         ok = False
+    findings, warnings = owed
+    hit = len(findings) == 2 and "pins no youtube commit" in findings[1] and not warnings
+    ok &= hit
+    print(f"self-test {'ok  ' if hit else 'FAIL'}: layout/unpinned-youtube → {findings or warnings or 'nothing'}")
     return ok
 
 
