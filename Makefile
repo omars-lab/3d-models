@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -716,3 +716,17 @@ bambu-discover:
 # tools/bambu first.
 bambu-typecheck:
 	cd $(BAMBU_DIR) && npm run typecheck
+
+# Constructions-ledger gate (hook 44): docs/constructions/ledger.md holds one row
+# per GeoGebra construction on its way from a youtube reconstruction to a naqsh
+# .bkr to a vendored coaster. The gate BLOCKS a row that names a .bkr bikar cannot
+# resolve (via the sibling convention doc_pointers owns) or an src/Coasters/ STL
+# not on disk, and a header pin youtube cannot resolve; it REPORTS (non-blocking)
+# the youtube ids at the pin owed a row and the rows still saying "attempted" for
+# a done id. youtube and bikar are read at a ref, never a working tree, so the
+# verdict is checkout-independent (memory: gate-verdict-checkout-independent).
+# `--self-test` builds a scratch youtube repo + a primary/worktree layout and
+# requires every by-design failure to fire before the real run.
+validate-constructions:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/constructions_ledger.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/constructions_ledger.py

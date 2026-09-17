@@ -139,6 +139,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from doc_pointers import _sibling_root, _tracked_at_ref  # noqa: E402
+from constructions_ledger import ledger_counts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 GATES = Path(__file__).resolve().parent
@@ -425,6 +426,14 @@ def resolve_authorities() -> tuple[dict[str, tuple[int, str]], dict[str, list[st
         "cal-bets-design": (bets["cal-bets-design"], rows),
         "cal-bets-no-coupon": (bets["cal-bets-no-coupon"], rows),
     }
+    # The constructions ledger is its own authority: the header's totals are held
+    # to the rows below them, so a header claiming nine while ten rows exist is
+    # the same stale-count defect this gate was built for. Sourced from this
+    # repo, never a sibling, so it is not skippable.
+    lc = ledger_counts(ROOT)
+    ledger = "`.claude/gates/constructions_ledger.py` (rows of `docs/constructions/ledger.md`)"
+    out["constructions-total"] = (lc["constructions-total"], ledger)
+    out["constructions-migrated"] = (lc["constructions-migrated"], ledger)
     coupons = authority_coupon_dir()
     if coupons is not None:
         out["coupon-dir-bkr"] = (
