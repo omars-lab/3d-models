@@ -1,0 +1,125 @@
+---
+name: guide-print
+description: Walk the operator through executing one physical print end-to-end — prep the plate, record the profile header, dispatch (owner-gated), attend the print, then measure and propagate. Use for "walk me through a print", "how do I print this", "what do I do to print", "I'm at the printer, now what", "ready this for the machine", "run the print". Not first-time hardware setup (setup-bambu-x2d) and not the CLI verb reference (bambu) — this is the human session runbook that stitches those together.
+---
+
+# Guide a print session, end to end
+
+This is the **operator runbook**: the ordered, mostly-physical procedure for turning a chosen model
+into a *measured* print without skipping the steps a tired operator forgets. It owns no mechanics of
+its own — it routes through the [`bambu`](../bambu/SKILL.md) CLI (slice/dispatch/record), the
+[`prototype`](../prototype/SKILL.md) skill (the photograph→compare→verdict loop), and
+[`calibrate`](../calibrate/SKILL.md) (turning a reading into an earned number). First-time hardware
+wiring is a different skill — [`setup-bambu-x2d`](../setup-bambu-x2d/SKILL.md).
+
+The worked example throughout is **Plate 1** (the machine card), because it is the print that has to
+go first — but the seven steps are the shape of *any* print session.
+
+## Before you touch the slicer — the gates
+
+Two things must be true, or stop and say so:
+
+1. **Transport is proven read-only.** `bambu status show` returns live temps/state. If it doesn't,
+   this is a setup problem — go to [`setup-bambu-x2d`](../setup-bambu-x2d/SKILL.md), not here.
+2. **A reason to print exists.** A plate is a *prototype* only if it answers a question
+   ([`prototype`](../prototype/SKILL.md) restates them first); a coupon is worth filament only if it
+   settles a `CAL-*` bet ([`calibrate`](../calibrate/SKILL.md)). If neither, it's decoration — say
+   so before spending plastic. **Dispatch stays owner-gated** until a bet justifies it: the operator
+   sends, never the skill.
+
+## The seven steps
+
+### 1 — Slice with the settings that are *measurements, not preferences*
+
+`bambu slice plate <model.stl> --settings "<machine>;<process>" --filament "<pla>"` (preset names
+resolve to the bundle JSONs). The known-good Plate-1 trio and the full slicer-settings rationale live
+in [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md) and
+[`docs/calibration-design.md`](../../../docs/calibration-design.md) §4. **On the machine card these
+settings *are* the experiment** — getting one wrong erases a reading:
+
+- **MC-4 fan → supports OFF.** A support column would hide the overhang the coupon exists to measure.
+- **MC-6 towers → bare plate, no brim/raft.** Watch the `0.20mm Standard @BBL X2D` **`auto_brim`
+  footgun**: this profile can add a brim silently, which turns the adhesion test into a non-test.
+- **MC-2 sub-floor rungs → slice without `--check`.** They fail the mesh check by design; the failure
+  is the data.
+
+### 2 — Eyeball the sliced plate before it leaves the screen
+
+Pull the plate preview (`Metadata/plate_*.png` inside the `.3mf`) and *look*: no brim under MC-6, no
+supports on MC-4, every coupon on the bed. `calibration-design.md` §8 flags MC-4 specifically —
+*"no raster render was eyeballed"* is its known weakness, and MC-4's failure mode is a silently-wrong
+dimension. Fix the slice now, not after 3 hours of print time.
+
+### 3 — Record the profile header *before anything moves*
+
+**A reading without a profile header is anecdote, not calibration.** Run
+`bambu header --plate <plate.3mf>` — it joins the live printer frame with the sliced `.3mf` and fills
+most of the header (machine, layer height, profile, slicer version, and the loaded material's
+type/colour/brand) automatically. Paste its output onto the bench sheet and **hand-complete only the
+blanks it leaves** — ambient room temp, enclosure open/closed, caliper make + that you zeroed it, and
+the date. Fields the machine didn't answer render `unconfirmed` rather than fabricated (firmware, for
+one — read that from `bambu setup discover`'s SSDP line); it never invents a number.
+It also cross-checks the loaded nozzle against the sliced-for nozzle and flags a mismatch loudly:
+**do not dispatch through a `⚠ NOZZLE MISMATCH`.**
+
+### 4 — Dispatch (owner-gated — the operator's call, never the skill's)
+
+`bambu print send <plate.3mf> --record`. It is fail-closed: it prints the owner-gate notice and
+refuses unless the operator passes `--yes` or confirms at a TTY (`--dry-run` shows exactly what it
+would send without connecting). **Never pass `--yes` on the owner's behalf.** `--record` scaffolds a
+draft under the gitignored `.bambu/records/` — pre-filled with the same header builder as step 3, so
+the record and the bench sheet agree.
+
+### 5 — Attend the print, and print the whole card in one session
+
+The residual first-print risks are operator-side and **non-damaging** (poor first-layer adhesion, no
+filament, a profile mismatch) — the firmware owns collision/thermal/runout. So the two controls that
+matter are **watch the first layer** and **confirm-before-send** (step 4). On Plate 1 this is doubly
+load-bearing: MC-6 prints on bare plate *by design*, so watching the first layer **is** the adhesion
+measurement. Print the card in **one material, one profile, one session** — "a card printed across
+two sessions is two half-cards."
+
+### 6 — Measure, highest-leverage first
+
+Cool ≥30 min before a caliper touches it; three readings per feature, report the **median** (a spread
+>0.05 mm is itself a result); bores = two orthogonal diameters at mid-height; walls away from seams;
+hand judgements recorded **with who judged**. Order (from the plan):
+
+1. **MC-1 fit ladder — fingers, zero instruments, highest leverage.** Settles `CAL-FIT-01` the moment
+   the plate is off the bed. Do this first.
+2. **MC-3 bridge / MC-4 fan / MC-6 towers — eyes + photos**, supports off. Sag, curl, tower survival.
+3. **MC-1 bores + MC-2 walls — caliper.** Moves the repo-wide min-feature floor — the single most
+   consequential number.
+4. **MC-5 warp — feeler gauge on glass/granite**, all four corners (the *pattern* separates warp from
+   bed-levelling, so record all four, not the worst).
+
+**Bag and label each rung as it comes off** — rung identity does not survive onto the plastic, and a
+mis-bagged rung is worse than a missing one. The per-coupon PASS / borderline / FAIL scales are
+pre-filled in the bench sheet; the photograph checklist and the compare-to-expectation step are
+[`prototype`](../prototype/SKILL.md)'s job.
+
+### 7 — Propagate (the step that gets skipped)
+
+A refuting reading is a **success**, not a broken coupon — several coupons are built to fail at both
+ends, and *every rung passing or every rung failing is a valid result* (it tells you which way to
+move). For every measurement, the five-step propagate in
+[`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md) (Phase D) must all
+happen or the bet stays open: flip the constant *and* its `Calibrated<T>` status together (naming
+machine/material/nozzle/profile/date/coupon); pull the entry out of bikar's calibration baseline;
+regenerate `bets.md` via the registry (never hand-edit); close the design doc's `[CAL-…]` entry with
+the measured value; flip the catalog Status and date the iteration row. `validate record <dir>` +
+`make validate-prints` gate the record before commit.
+
+## Rules
+
+- **Dispatch is owner-gated.** The skill walks to the send and stops. The physical send — and any
+  `--yes` — is the owner's, every time.
+- **The header is the deliverable.** Record it before measuring; numbers without it are anecdote.
+- **Slicer settings on a calibration plate are measurements.** Supports/brim/`--check` choices are
+  part of the experiment, not taste — verify them in the preview (step 2) before dispatch.
+- **One material, one profile, one session** for a card that must be read as a set.
+- **Attend the first layer.** It is the one non-damaging risk that a human catches and the firmware
+  doesn't.
+- **A refuting reading is a result.** Never delete a reading that contradicts the design.
+- Full campaign sequencing and the per-coupon expectation tables:
+  [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
