@@ -61,6 +61,11 @@ supports on MC-4, every coupon on the bed. `calibration-design.md` §8 flags MC-
 *"no raster render was eyeballed"* is its known weakness, and MC-4's failure mode is a silently-wrong
 dimension. Fix the slice now, not after 3 hours of print time.
 
+To see the plate in the slicer itself, open it in Bambu Studio — a read-only, local approval step
+that does **not** dispatch. Until the CLI owns a verb for this (task #51), that is a raw
+`open -a "/Applications/BambuStudio.app" <plate.3mf>` on macOS; a first-class `bambu` verb will
+replace it.
+
 ### 3 — Record the profile header *before anything moves*
 
 **A reading without a profile header is anecdote, not calibration.** Run
@@ -80,6 +85,15 @@ refuses unless the operator passes `--yes` or confirms at a TTY (`--dry-run` sho
 would send without connecting). **Never pass `--yes` on the owner's behalf.** `--record` scaffolds a
 draft under the gitignored `.bambu/records/` — pre-filled with the same header builder as step 3, so
 the record and the bench sheet agree.
+
+> **Transport gap (as of 2026-09-17 — read before you rely on the command above).** Only *status
+> reads* run on our first-party MQTT backend (D-055, PR #188). The **dispatch half** — FTPS upload +
+> MQTT `print.project_file` — was deferred and still routes through the griches `McpBackend`, which is
+> not installed, so `print send` fails at connect today. **Task #50 ports it.** Until then the only
+> working dispatch is **Bambu Studio's GUI**: open the sliced `.3mf` (step 2), verify it is the right
+> plate, then Print over LAN to the X2D. The GUI path does **not** fire `--record`, so scaffold the
+> record by hand (or wait for #50) — the header from step 3 is what goes in it. The owner-gate rule is
+> unchanged on either path: the physical send is the operator's, never the skill's.
 
 ### 5 — Attend the print, and print the whole card in one session
 
