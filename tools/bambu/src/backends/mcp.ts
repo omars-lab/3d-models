@@ -40,16 +40,25 @@ export class McpBackend {
       ? process.env.BAMBU_MCP_ARGS.split(" ")
       : ["-y", "@griches/bambu-mcp"];
     ev("mcp_connect_start", { cmd, args: `"${args.join(" ")}"` });
+    // Narrow the child's environment (D-055 hardening): pass only what npx/node need to launch
+    // (PATH, HOME, plus proxy vars if set) and the four printer vars — NOT the whole process.env.
+    // Under `dotenvx run` the parent env carries every decrypted secret; a transport server has no
+    // business seeing anything but the printer config it connects with.
+    const passthrough: Record<string, string> = {};
+    for (const k of ["PATH", "HOME", "TMPDIR", "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "npm_config_cache"]) {
+      const v = process.env[k];
+      if (v) passthrough[k] = v;
+    }
     const transport = new StdioClientTransport({
       command: cmd,
       args,
       env: {
-        ...process.env,
+        ...passthrough,
         PRINTER_HOST: this.config.host ?? "",
         BAMBU_SERIAL: this.config.serial ?? "",
         BAMBU_TOKEN: this.config.token ?? "",
         BAMBU_MODEL: this.config.model ?? "",
-      } as Record<string, string>,
+      },
     });
     const client = new Client({ name: "3d-models-bambu-cli", version: "0.1.0" }, { capabilities: {} });
     const timer = setTimeout(() => {
