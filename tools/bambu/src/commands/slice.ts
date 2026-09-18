@@ -28,6 +28,7 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
+import { registerCompose } from "./compose.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
 
@@ -61,7 +62,7 @@ function findPreset(root: string, subdirs: string[], name: string): string | nul
 /** Resolve each ';'-joined token: an existing file passes through; a preset name → its bundled JSON.
  *  Throws with a clear, actionable message (listing where it looked) rather than deferring to the
  *  slicer's opaque "can not find setting file". */
-function resolvePresetList(value: string, kind: "settings" | "filament", studioBin: string): string {
+export function resolvePresetList(value: string, kind: "settings" | "filament", studioBin: string): string {
   const subdirs = kind === "filament" ? ["filament"] : ["machine", "process"];
   const root = profilesRoot(studioBin);
   return value
@@ -194,10 +195,19 @@ export function injectFilamentMapMode(
 // .3mf so the dispatch gate (`bambu print send`) can refuse a plate carrying an UNEXPECTED warning
 // without re-slicing. See backends/warnings.ts.
 
-/** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing.
- *  `--debug 2` raises the log level to `warning` so slicing warnings reach stdout (they are silent at
- *  the default level); it does not change the slice, only what is reported. */
-function buildStudioArgs(input: string, outDir: string, outFile: string, opts: SliceOpts, raw: string[]): string[] {
+/** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing,
+ *  and so `slice plate` (one input) and `slice compose` (N inputs onto one plate) share ONE spelling
+ *  of the invocation — the reuse boundary docs/plate-composer-design.md §2 draws. `--debug 2` raises
+ *  the log level to `warning` so slicing warnings reach stdout (they are silent at the default level);
+ *  it does not change the slice, only what is reported. Multiple trailing model paths are how the
+ *  Bambu Studio CLI composes several objects onto one plate (compose research Topic 1). */
+export function buildStudioArgs(
+  inputs: string[],
+  outDir: string,
+  outFile: string,
+  opts: { settings?: string; filament?: string; arrange: boolean; plate: string },
+  raw: string[],
+): string[] {
   const args: string[] = [];
   args.push("--debug", "2"); // surface slicing warnings (see note above)
   if (opts.settings) args.push("--load-settings", opts.settings);
@@ -207,7 +217,7 @@ function buildStudioArgs(input: string, outDir: string, outFile: string, opts: S
   args.push("--outputdir", outDir);
   args.push("--export-3mf", outFile);
   args.push(...raw); // escape hatch for version-specific flags we don't model
-  args.push(input);
+  args.push(...inputs); // one input for `slice plate`; N for `slice compose`
   return args;
 }
 
@@ -284,7 +294,7 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       }
     }
 
-    const args = buildStudioArgs(abs, outDir, outFile, opts, raw);
+    const args = buildStudioArgs([abs], outDir, outFile, opts, raw);
     if (opts.dryRun) {
       console.log("dry run — would execute:");
       console.log([studioBin, ...args].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" "));
@@ -449,4 +459,9 @@ export function registerSlice(program: Command): void {
     .action(async (plate: string) => {
       await runOpen(plate);
     });
+
+  // `slice compose <plate.yaml>` — many rendered pieces onto one plate. Lives in compose.ts but is a
+  // sibling subverb of this same `slice` group (docs/plate-composer-design.md §1), reusing the helpers
+  // exported above (resolvePresetList, buildStudioArgs) rather than forking the invocation.
+  registerCompose(slice);
 }

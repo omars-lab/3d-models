@@ -24,7 +24,11 @@ const TODO_SHA = "0".repeat(64);
 
 export interface ScaffoldObject {
   entry: string; // e.g. "MC-2" — the machine-card rung / plate-object id
-  source: string; // "bikar:<path>" — bikar source path
+  source: string; // "bikar:<path>" — bikar source path (any @ref is stripped; the ref lives in pins)
+  piece?: string; // the bikar piece rendered (optional; the plate composer always sets it)
+  params?: Record<string, unknown>; // the --param overrides this object was rendered at
+  count?: number; // R8 multiplicity — copies of this object on the plate (omitted ⇒ 1)
+  iteration?: string; // it-<sha12> — the iteration identity (src/iteration.ts); the plate↔iteration map
 }
 
 export interface ScaffoldOpts {
@@ -41,12 +45,21 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function yamlList(objs: Array<Record<string, string>>): string {
-  // Minimal, stable YAML for the object/photo lists — deterministic key order, always quoted.
+/** Emit the objects[] list, typing each value: strings quoted, `count` a bare int, `params` inline
+ *  JSON (a valid YAML flow mapping). A generic all-quoted emitter would write `count: "2"`, which the
+ *  prints gate rejects (R8 needs a real int) — so objects get their own emitter. Keys are emitted in a
+ *  fixed, stable order; optional keys are skipped when absent. */
+function yamlObjects(objs: Array<Record<string, unknown>>): string {
+  const ORDER = ["entry", "source", "source_sha256", "piece", "params", "count", "iteration"];
+  const emit = (v: unknown): string => {
+    if (typeof v === "number") return String(v);
+    if (v && typeof v === "object") return JSON.stringify(v); // params → inline flow mapping (valid YAML)
+    return JSON.stringify(v); // strings quoted
+  };
   return objs
     .map((o) =>
-      Object.entries(o)
-        .map(([k, v], i) => `${i === 0 ? "  - " : "    "}${k}: ${JSON.stringify(v)}`)
+      ORDER.filter((k) => o[k] !== undefined)
+        .map((k, i) => `${i === 0 ? "  - " : "    "}${k}: ${emit(o[k])}`)
         .join("\n"),
     )
     .join("\n");
@@ -66,14 +79,21 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
   mkdirSync(join(rec, "photos"), { recursive: true });
 
   const bikarRef = (await bikarHead()) ?? TODO;
-  const objectBlocks: Array<Record<string, string>> = [];
+  const objectBlocks: Array<Record<string, unknown>> = [];
   for (const o of opts.objects) {
-    const path = o.source.startsWith("bikar:") ? o.source.slice("bikar:".length) : o.source;
+    // A source may arrive as `bikar:<path>` or `bikar:<path>@<ref>` — the ref lives in pins.bikar_ref,
+    // so strip it before both the blob lookup and the recorded source (R1 resolves path @ that pin).
+    const raw = o.source.startsWith("bikar:") ? o.source.slice("bikar:".length) : o.source;
+    const path = raw.split("@")[0] ?? raw;
     const sha = bikarRef !== TODO ? await bikarBlobSha(bikarRef, path) : null;
     objectBlocks.push({
       entry: o.entry,
       source: `bikar:${path}`,
       source_sha256: sha ?? TODO_SHA,
+      piece: o.piece,
+      params: o.params,
+      count: o.count,
+      iteration: o.iteration,
     });
   }
 
@@ -102,7 +122,7 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     `  bikar_ref: ${bikarRef}`,
     `  self_ref: ${TODO}`,
     "objects:",
-    yamlList(objectBlocks),
+    yamlObjects(objectBlocks),
     "photos: []",
     "readings: []",
     "---",

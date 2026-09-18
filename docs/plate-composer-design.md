@@ -145,8 +145,12 @@ items:
 - **`params`** are bikar `--param` overrides; they and the bkr hash form the render-cache
   key (§7) and the iteration key's geometry half (§3).
 - **`count`** is the physical multiplicity on this plate → `objects[].count` (R8).
-- **`piece`** names the bikar piece to render (as `slice plate` and the record schema
-  already use `piece`).
+- **`piece`** names a bikar **piece/tile/clip** to render (as `slice plate` and the record
+  schema already use `piece`). It is **optional**: omit it and bikar renders the file's
+  default last solid — which is what a plain `orb` (e.g. `Star-Orb.bkr`) declares, since an
+  `orb` is not a named piece; a named piece/tile/clip is the only geometry `--piece` reaches.
+  In the iteration key an omitted piece is the empty string (a stable identity component),
+  and the record's `objects[].piece` key is then left absent rather than written empty.
 
 The composer renders each **distinct** `{bkr, params}` once (cache), then places `count`
 copies of the resulting STL, letting `--arrange 1` position them (§6).
