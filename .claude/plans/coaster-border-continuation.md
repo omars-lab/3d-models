@@ -5,14 +5,29 @@ continuation of [`iterative-dazzling-finch.md`](iterative-dazzling-finch.md) (th
 GeoGebra → naqsh → coaster plan, still authoritative for architecture, decisions D-A…D-I and the
 phase map). Read this file first; open the umbrella only when a phase-level question comes up.*
 
-**Start here in a clear session (2026-09-17, after the Snapshot 9 commit):**
+**STATUS 2026-09-18 — task #36 (the coaster border) is DONE. §§1–3 and §2b are complete;
+skip to §4 for what is left.**
+
+- bikar **PR #212** MERGED (`1a3e3e2`): validators CV7/CV11, importer `--border`, docs (D-071).
+- 3d-models **PR #257** MERGED (border design), **#260** MERGED (this plan + Snapshot 9),
+  **#262** MERGED (CS-5 bordered-coaster slice).
+- The A/B/C hybrid split shipped with **zero cherry-pick conflicts across four pieces**; the
+  pattern is now the `delegate-parallel-work` skill + `delegate-nudge` hook (3d-models **#263**
+  MERGED). See `parallel-opus-subagents-in-worktrees` (memory).
+- Worktrees `bikar-border{,-a,-b,-c}` and `bikar-placeborder` are removed. Still lingering:
+  `~/Workspace/git/3d-models-constructions` sits on the merged `feat/coaster-border-catalog`
+  (agent D's branch) — safe to `git worktree remove` once no session holds it.
+- Live TaskList seeded 2026-09-18 from §4: #1 P4.1 · #2 #37-colour · #3 P4.2 · #4 P4.3 ·
+  #5 P5.1 · #6 P5.2 · #7 P5.3 · #8 #17-youtube · #9 #21-secrets · #10 #24-reflect.
+- **Next design pass in flight (2026-09-18):** P4.1 plate-composer design (D-072) and #37
+  coaster-colour design (D-073) fanned out to subagents on `feat/next-design-docs` (one PR).
+
+*Historical entry point (kept for provenance — all three steps are now complete):*
 
 1. This file's copy of record is `3d-models/.claude/plans/coaster-border-continuation.md` on
-   `master` once 3d-models **PR #260** merges (Omar's merge); until then it sits on
-   `chore/plans-and-done-snapshot` in the `3d-models-constructions` worktree, and an identical
-   untracked copy sits in the shared checkout `~/Workspace/git/3d-models/.claude/plans/`.
-2. Confirm §0 with `git -C ~/Workspace/git/bikar-border worktree list` (four border worktrees
-   at `f5d1781`) and `gh pr view 260 -R omars-lab/3d-models`.
+   `master` (3d-models **PR #260**, merged).
+2. Confirm §0 with `git -C ~/Workspace/git/bikar-border worktree list` and
+   `gh pr view 260 -R omars-lab/3d-models`.
 3. Spawn agents A, B and C per §2b (three Agent calls in one message, `subagent_type`
    general-purpose, model Opus, each brief = §0–§2 + its own row); integrate serially; then D.
 
