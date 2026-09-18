@@ -215,27 +215,38 @@ a 'border' component we compose with a pattern component and can assign colour i
 translates to different filaments on X2D?" Status: **not today** — bikar colour exists only in 2D
 (`edges color`, `palette`, language-reference §7.5); STL carries no colour; a coaster STL is one
 body. The border kernel (#36) records the first region split (band vs field in `reliefAppliesAt`),
-which is the hook this builds on. Route, in order:
+which is the hook this builds on. Route, in order (**STATUS 2026-09-18** in each step):
 
-1. **Design doc first** in 3d-models `docs/coaster-colour-design.md` (rubric, options, D-072+;
-   re-read the last D-id on `origin/master` before minting). Region vocabulary: `base | straps |
-   border`, symbolic names never filament ids — the DSL says what is distinct, the print manifest
-   says which spool.
-2. **DSL**: `coaster` gains `color <region> <PaletteName>`; grammar §10.3 production + G3 fences;
-   parser dispatch (contextual identifier like `border`); evaluator resolves the palette name.
-3. **Kernel/CLI**: `bikar render --format parts` for a coaster splits the height field by region
-   into watertight bodies sharing coincident faces (slab to z = base; emboss straps as prisms on
-   it; the band likewise). Requires **emboss** — deboss leaves nothing to colour (Option A of #33
-   already chose emboss). Each body passes `--check` on its own.
-4. **Plate composer** (P4.1 below): manifest maps palette name → AMS slot and writes per-object
-   `extruder` into the project 3MF. Bambu Studio CLI `--load-filaments` loads profiles; whether
-   per-object assignment must already be in the input 3MF is **unverified** — check it in the
-   P4.1 research file before building.
+1. **Design doc** `docs/coaster-colour-design.md` — **DONE** (D-073). §5 amended to **D-074**
+   (pinch detection + `--pinch` strategies) and §6 resolved after the headless-CLI research; both
+   land in 3d-models **PR #267** (this branch). Region vocabulary `base | straps | border`,
+   symbolic names never filament ids.
+2. **DSL** `color <region> <PaletteName>` — **DONE**, bikar **PR #213** (`6e845eb`, part 2/5):
+   ast/parser/evaluator + grammar + tests. Region set + per-region uniqueness checked at *parse*
+   time; border-without-clause + undeclared-palette at *eval* time (the §4 split, K7). Awaiting
+   Omar's merge (CI billing-blocked, not a real failure).
+3. **Kernel/CLI** `bikar render --format parts` — **IN PROGRESS (Option B, D-074)**. The naïve
+   "split into watertight bodies sharing coincident faces, each `--check`-clean" is provably
+   impossible for saddled patterns (a pinch at any interior `z = base` → an edge shared by four
+   faces → non-manifold, unmakeable). So the kernel **detects** every pinch (four-faces test) and
+   resolves it by a CLI flag `--pinch fillet|merge|error` (`fillet` default: raise to the
+   printable floor CAL-PIN-01; `merge`: recolour the pinch to `base`, union stays exact; `error`:
+   refuse with `(x, y)`). Border outer wall decomposes into stacked base+border panels. Still
+   requires emboss (deboss → empty body → refuse); each *non-pinch* body still `--check`-clean
+   individually (aggregate cannot discharge a per-part claim). Borderless-emboss split machinery
+   already built + verified (union == single to ~1e-14) in worktree `bikar-coaster-colour` on
+   `feat/coaster-parts-split` (stacked on #213); resuming there to add detection + strategies +
+   the border fix. See design §5.
+4. **Plate composer** (P4.1 below): manifest maps palette name → AMS slot. §6 **RESOLVED** —
+   per-object filament→slot must be **baked into the input 3MF** (`extruder` in
+   `Metadata/model_settings.config`, `paint_color` in `3D/Objects/*.model`, Application metadata
+   must start with `BambuStudio-`); `--load-filaments` is override-only. Research file
+   `docs/research/coaster-ams-3mf-contract.md` (PR #267). Gated on part 3's per-region STL output.
 5. **Coaster Lab** (`bikar/packages/lab`, Orb Lab pattern, D-067): colour per region is a knob
    that edits the `color` statements (Lego Lab `visibleColours` precedent), preview tinted per
-   region.
+   region. After #213 lands.
 
-Depends on #36 merged. The composer part depends on P4.1.
+Depends on #36 merged (done). The composer part depends on P4.1 and part 3's output.
 
 ### #12 — Later phases of the umbrella plan (P4.x plate composer, P5.x corpus)
 

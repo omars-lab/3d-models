@@ -1,12 +1,14 @@
 # Coaster colour regions — a symbolic name per region, one body per colour, a filament map at the slicer
 
-*Status: designed (task #37, decision D-073). The direction is D-068 (coaster-level
+*Status: designed (task #37, decisions D-073, D-074). The direction is D-068 (coaster-level
 composition): a coaster's cells already split into named regions; this doc gives those
 regions a colour vocabulary in the DSL, a per-body export so each region prints in its own
 filament, and a Coaster Lab knob to set it. It builds directly on the border band of
 [`coaster-border-design.md`](coaster-border-design.md) (D-071), which recorded the first
-region split (band vs field), and on the emboss decision of D-066. It adds no new solid and
-no new bet. Research on file: [`research/coaster-colour-research.md`](research/coaster-colour-research.md).*
+region split (band vs field), and on the emboss decision of D-066. It adds no new solid; the
+region split adds one bet, **CAL-PIN-01** (the pinch floor for a two-filament interface, §5.3),
+introduced when the naïve split proved a K7 contradiction (D-074). Research on file:
+[`research/coaster-colour-research.md`](research/coaster-colour-research.md).*
 
 ## 1. The ask
 
@@ -151,48 +153,111 @@ is written, so the rule is allowed to cross (K10).
 
 ## 5. Kernel and CLI — `--format parts` splits the height field by region
 
-`bikar render <coaster> --format parts` splits the one height field into one watertight
-body per region that has at least one cell:
+`bikar render <coaster> --format parts` splits the one height field into one body per region
+that has at least one cell:
 
-1. **`base`** is the slab prism to `z = base`.
+1. **`base`** is the slab prism to `z = base` (the full top face, including under the relief).
 2. **`straps`** is the field relief — emboss prisms standing on the slab's top face.
 3. **`border`** is the band relief — emboss prisms on the slab's top face, present only with
    a `border` clause.
 
-The bodies **share coincident faces** at the slab top where a relief prism meets the slab,
-so their union is exactly the single-body `--format stl` mesh with no gap and no overlapping
-volume. Each body is closed on its own and passes `--check` (the mesh gate every coaster
-render already runs, [`coaster-design.md`](coaster-design.md)) independently. This reuses
-the existing kernel: `reliefAppliesAt` already reads by region (D-071); `--format parts`
-changes only *how the sampled field is assembled into meshes*, not what is sampled.
+This reuses the existing kernel: `reliefAppliesAt` already reads by region (D-071); `--format
+parts` changes only *how the sampled field is assembled into meshes*, not what is sampled. The
+split still requires an **emboss** ([D-066](decisions-log.md)): a deboss removes material and
+leaves the slab's own colour, so a debossed region has no raised body to carry a filament and
+is refused (the transfer condition on the split — meaningful only while the relief embosses).
 
-The split requires an **emboss**, which is already the decided relief mode — a deboss
-removes material and leaves the slab's own colour, so a debossed region has no raised body
-to carry a filament ([D-066](decisions-log.md)). This is the transfer condition on the
-split: it is meaningful only while the relief embosses; a future debossed region exports an
-empty body, which the Validator below refuses rather than silently emitting.
+### 5.1 The naïve split has a proven limit (D-074)
 
-**Validator:** `bikar render <coaster> --format parts` emits exactly one watertight body per
-non-empty region, each passing `--check` on its own, and the union of the bodies is
-face-coincident with the single-body `--format stl` mesh (no gap, no overlap). Every named
-region either carries ≥ 1 cell and a body, or is absent from the file; a region named by a
-`color` statement but holding no cell is refused. Because an aggregate cannot discharge a
-per-part claim, each body is checked on its own — a valid *total* triangle count does not
-certify three valid bodies.
-- PASS: the §4 bordered hexagon with `color base Slab`, `color straps Gold`, `color border
-  Gold` — three regions, three watertight bodies, each `--check` clean; re-merging the three
-  reproduces the one-body STL exactly.
-- FAIL: (the hard case) a coaster whose `border` run holds no whole motif — CV11's `N = 0` case
-  ([`coaster-border-design.md`](coaster-border-design.md) §6.2) — so the `border` body would
-  be **empty**: `--format parts` errors (a zero-triangle body mapped to a spool is a phantom
-  filament the composer cannot detect), and separately, a split whose strap prisms meet the
-  slab on a **non-coincident seam** leaves a non-manifold edge that fails `--check` on the
-  merged mesh though each body reads closed alone. Both are by-design failures this Validator
-  exists to catch; neither is visible in a total triangle count.
+The first draft of this section asked for two invariants at once — **(A)** the union of the
+bodies is *exactly* the single-body `--format stl` mesh, and **(B)** each body is watertight
+and **2-manifold** on its own. For any coaster whose relief descends to `z = base` at an
+*interior* point of a region — every sharp strap apex and every strap crossing (octagram,
+sharp hexagon) — the two **cannot both hold**, so asserting both was a K7 contradiction. While
+a strap stays fused to the slab, the slab's `base` mm of thickness carries it; cutting it off
+at `z = base` severs that and leaves a genuine **zero-width pinch** — one edge shared by four
+oriented faces (two relief-top, two slab-top). The body is closed and volume-correct but not
+2-manifold, and no re-tessellation fixes it: the two sub-wedges meet only along a zero-width
+seam. It is also physically unmakeable — a second-filament sliver that is zero-width *and*
+zero-height cannot be extruded. (Verified 2026-09-18: the exact split holds to ~1e-14 for
+every pinch-free emboss coaster; only saddled patterns fail (B), and the `base` body is always
+2-manifold.)
 
-FAIL is exercised the way the border's CV11(ii) is — by building a spec whose region split is
-forced to an empty body or a seam offset — because a manifold defect is a kernel fault, not a
-grammar one.
+### 5.2 Sharp-edge (pinch) detection
+
+Before assembling the split bodies the kernel **detects** every pinch. A pinch is exactly an
+edge that, after the region cut at `z = base`, is shared by four oriented faces — the
+*four-faces-at-an-edge* test — equivalently a saddle of the height field pinned to `z = base`
+inside a region footprint, where the resulting body thickness falls below the printable floor.
+The detector reports each pinch with its `(x, y)` and the two cells that meet, so a strategy
+can act cell-locally and a refusal can name the spot. This is **not** the kernel's existing
+`desaddle`, which fixes bowties in the *solid mask* only; height-field pinches are edge-adjacent
+axis pinches or single anti-diagonal-raised cells, neither a mask bowtie — a new detector is
+required, not a reuse.
+
+### 5.3 Handling strategies — `--pinch <fillet|merge|error>`
+
+How a detected pinch is resolved is a **manufacturing** choice, not a design-intent one, so it
+is a CLI flag on `render --format parts`, never a DSL statement (K10 transfer note: the DSL
+says *what the coaster is*; the spool count and the pinch policy say *how this copy is made* —
+the same reason the palette name, not a slot id, lives in the source). `--format stl` is never
+altered by any strategy.
+
+- **`fillet` (default).** On the split bodies *only*, raise each pinch to the printable floor
+  so the body becomes 2-manifold. Preserves colour intent — a gold star tip stays gold, a hair
+  thicker. The per-region STL then differs from the single-body mesh **only inside cells
+  thinner than the floor** — geometry no printer could reproduce anyway.
+- **`merge`.** Reassign each pinching cell to the adjacent `base` region, so no thin separate
+  body is created. The split stays **exactly** union == single. Cost: the very tip loses its
+  colour (it prints in the `base` filament). Deterministic; changes colour, not geometry.
+- **`error`.** Refuse the whole render, naming each pinch `(x, y)` and the physical reason —
+  "the relief kisses the slab at a zero-width notch no printer can make in a second colour —
+  thicken/separate the motif, choose `--pinch fillet|merge`, or render `--format stl`." For an
+  author who would rather redesign the motif than let the tool decide.
+
+`--pinch keep` (emit the closed but non-manifold body) is **deliberately not offered**: it
+verifies nothing a slicer can trust and ships geometry the printer chokes on.
+
+**Default:** `fillet`, and the pinch floor is **CAL-PIN-01** — `fillet` raises any pinch
+thinner than the coaster's `featureFloorMm` (0.80 mm today — `STRAP_WIDTH_MIN_MM`,
+[`coaster-design.md`](coaster-design.md)) up to that floor, and CAL-PIN-01 owns whether that
+single-filament strap floor is the right threshold for a *two-filament interface* pinch, which
+no source here settles — a bet, not a bare number.
+
+### 5.4 The border outer wall (second defect, D-074)
+
+Where a border motif reaches full relief height at the outer outline edge, the single mesh
+emits one tall wall panel `0 → top`; the split must reconstruct it as **stacked** `base`
+(`0 → base`) + `border` (`base → top`) panels sharing a `z = base` mid-edge with matching
+triangulation, or the oriented faces do not cancel and union ≠ single even with no pinch. This
+panel decomposition is required for the §4 bordered example to satisfy the Validator; it is
+independent of the pinch obstruction (it fails even on pinch-free borders).
+
+### 5.5 Validator
+
+**Validator:** `bikar render <coaster> --format parts --pinch fillet` emits exactly one
+2-manifold body per non-empty region, **each passing `--check` on its own** — because an
+aggregate cannot discharge a per-part claim, a valid *total* triangle count does not certify
+three valid bodies; one pinched body among many stays hidden in a total. The union of the
+bodies equals the single-body `--format stl` mesh **everywhere outside cells thinner than
+CAL-PIN-01** (exactly, under `--pinch merge`; up to the fillet floor, under `--pinch fillet`).
+A region named by a `color` statement but holding no cell is refused; a debossed region (no
+raised body, D-066) is refused.
+- PASS: the §4 bordered hexagon, `color base Slab`, `color straps Gold`, `color border Gold`,
+  under `--pinch fillet` — three bodies, each 2-manifold and `--check` clean *individually*;
+  the border outer wall decomposes into stacked base+border panels (§5.4); re-merging
+  reproduces the single-body STL everywhere outside the sub-floor fillet notches.
+- FAIL: the hard cases, each caught **per body, not in aggregate** — (i) the octagram under
+  `--pinch error` refuses, naming a pinch `(x, y)`, the by-design refusal the strategy exists
+  to give; (ii) a single strap body left with one unfilleted pinch (a strategy-resolution bug)
+  fails `--check` on **that body alone** — four faces at the pinch edge — while the other two
+  bodies and the total triangle count read clean; (iii) a debossed coloured region → empty
+  body → error; (iv) a `color straps Gold` naming a region with zero relief cells → refused
+  (a zero-triangle body mapped to a spool is a phantom filament the composer cannot detect).
+
+FAIL is exercised by constructing the pinched / empty / debossed spec — because a manifold
+defect is a kernel fault, not a grammar one — and the pinch FAIL uses a *saddled* pattern
+(octagram), the case the naïve split provably could not make, not a gentle one it always could.
 
 ## 6. Plate composer — palette name → AMS slot (a dependency, not owned here)
 
@@ -245,20 +310,33 @@ reasoning (classify to the model's own palette so it ports where pixels do not) 
 
 - **D-073**: coaster colour is `color <region> <PaletteName>` over the three symbolic regions
   `base | straps | border`; the region names what is distinct and never a filament id; the
-  kernel exports one watertight body per non-empty region via `--format parts` (each passing
-  `--check`, the split requiring emboss, D-066); the plate composer maps palette name → AMS
-  slot (P4.1, dependency, not designed here); a Coaster Lab knob edits the `color` statements
-  and tints the preview per region. See [`decisions-log.md`](decisions-log.md).
+  kernel exports one body per non-empty region via `--format parts` (each passing `--check`,
+  the split requiring emboss, D-066; the pinch handling is **D-074**); the plate composer maps
+  palette name → AMS slot (P4.1, dependency, not designed here); a Coaster Lab knob edits the
+  `color` statements and tints the preview per region. See [`decisions-log.md`](decisions-log.md).
+- **D-074**: the naïve split's two invariants — union *exactly* == the single body **and** each
+  body 2-manifold — are provably incompatible for saddled patterns (a pinch at any interior
+  `z = base`, §5.1), a K7 contradiction in the first draft of §5. Resolution: **detect** every
+  pinch (§5.2) and resolve it by a CLI strategy `--pinch fillet|merge|error` (§5.3), `fillet`
+  the default. `fillet` raises pinches to the printable floor (**CAL-PIN-01**), so union ==
+  single holds everywhere outside sub-floor notches; `merge` keeps union exact by recolouring
+  the pinch to `base`; `error` refuses with coordinates. The border outer wall is decomposed
+  into stacked base+border panels (§5.4). `--format stl` is unchanged. Chosen over scoping the
+  feature to pinch-free coasters (the earlier Option A) because Option B makes every pattern
+  print. See [`decisions-log.md`](decisions-log.md).
 - **D-068** is the direction this builds; **D-071** gives the first region split; **D-066**
   fixes the relief as an emboss; **D-067** places the Lab — all unchanged.
 
 ## 9. Not yet
 
-- **Nothing has been printed**, and the route adds **no new bet**: the coloured bodies are
-  the same seated emboss straps on the same slab as a single-filament coaster (CAL-CST-01's
+- **Nothing has been printed**, and the route adds **no new *print* bet**: the coloured bodies
+  are the same seated emboss straps on the same slab as a single-filament coaster (CAL-CST-01's
   case, [`coaster-design.md`](coaster-design.md)) — same load, same adhesion, same shells.
   The multi-material interface between two filaments on the shared slab face is a print-time
   adhesion question the plate-composer's first print (P4.3) records, not a geometry bet here.
+  The one bet the split *does* add is **CAL-PIN-01** (§5.3): a *geometry* threshold — the pinch
+  floor below which `fillet` thickens — not a print/adhesion bet, and settled by measuring a
+  two-filament interface, not by this print.
 - **The composer's 3MF contract is now settled** (§6, [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md)):
   the headless CLI needs per-object filament baked into the input 3MF, `--load-filaments` is
   override-only. What remains open is the composer's *implementation* of that emit recipe (and

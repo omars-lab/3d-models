@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**30 registered bets · 27 `Calibrated` records — 27 provisional, 0 measured · 9 bets with no record in bikar.**
+**31 registered bets · 27 `Calibrated` records — 27 provisional, 0 measured · 10 bets with no record in bikar.**
 
 ## Bets
 
@@ -48,6 +48,7 @@ is opened, clustered, and closed.
 | `CAL-CST-05` | `ELEPHANT_FOOT_MM` coaster bottom-chamfer floor: the least chamfer run that clears the first-layer elephant's foot | `CS-1` | provisional | `ELEPHANT_FOOT_MM_CAL` |
 | `CAL-CST-06` | coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 | `CS-1` | open — no record in bikar | — |
 | `CAL-CST-07` | `FREESTANDING_STRAP_MIN_MM` minimal-coaster strap floor: the narrowest free-standing strap (`outline pattern`, no slab behind it) that prints as a solid wall with a perimeter on each face rather than as two unbonded shells — the floor CV2 enforces for a pattern outline | `CS-4` | provisional | `FREESTANDING_STRAP_MIN_MM_CAL` |
+| `CAL-PIN-01` | coaster colour-split pinch floor: the minimum thickness to which `--format parts --pinch fillet` raises a relief pinch (where a region body meets the slab at z = base at an interior point) so a two-filament interface prints as a solid sliver rather than a zero-width seam — whether the single-filament `STRAP_WIDTH_MIN_MM` (CAL-CST-01) transfers to a two-filament boundary | none — needs a two-filament interface coupon laddering the raised-sliver thickness across a colour boundary — not yet designed; the plate composer first print (P4.3) is the earliest surface that would expose it. Registered OPEN so the pinch floor does not age into an earned number | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -76,6 +77,7 @@ named next print rather than an absence:
 - `CAL-EQV-01` — oracle O2 centreline-coverage floor: the recall and precision of the hero export's skeleton by the naqsh render's (0.98) below which a construction import is refused as not drawing the same thing · coupon none — not a print quantity — settled by measuring the corpus ladder (the second construction 7apC5Q9QS-8 and each rung after it) for the margin between a correct import and the smallest single-statement drop, not by a coupon
 - `CAL-EQV-02` — oracle O3 solid-coverage gate: the fraction of the OpenSCAD reference footprint the naqsh extrusion covers (0.99) and the largest disc of reference region the extrusion leaves unfilled (1.0 mm) beyond which a construction's flat solid is refused · coupon none — not a print quantity — chosen against one construction (GimTvN9hw4U: faithful 1.000/0.00 mm, dropped ring 0.143/10 mm, a 0.5 mm translation 0.975/0.4 mm) and settled by the corpus ladder, the same instrument as CAL-EQV-01
 - `CAL-CST-06` — coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 · coupon `CS-1`
+- `CAL-PIN-01` — coaster colour-split pinch floor: the minimum thickness to which `--format parts --pinch fillet` raises a relief pinch (where a region body meets the slab at z = base at an interior point) so a two-filament interface prints as a solid sliver rather than a zero-width seam — whether the single-filament `STRAP_WIDTH_MIN_MM` (CAL-CST-01) transfers to a two-filament boundary · coupon none — needs a two-filament interface coupon laddering the raised-sliver thickness across a colour boundary — not yet designed; the plate composer first print (P4.3) is the earliest surface that would expose it. Registered OPEN so the pinch floor does not age into an earned number
 
 ## Records
 
