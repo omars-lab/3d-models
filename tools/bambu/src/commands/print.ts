@@ -29,7 +29,7 @@ import { readPlateMeta } from "../threemf.js";
 import { buildHeader, headerToRecordProfile, type RecordProfile } from "../header.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
-import { readSidecar, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
+import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 /** Dispatch needs host+serial+token: FTPS uses host+token, the project_file topic needs the serial. */
 function requireConfigured(cfg: PrinterConfig): void {
@@ -58,26 +58,35 @@ interface SendOpts {
 
 /**
  * Pre-dispatch warnings gate (#52): never send a plate Studio would warn about. Reads the warnings
- * sidecar `bambu slice` writes beside the .3mf, classifies it against the by-design manifest, and:
- *   - no sidecar        → BLOCK (fail-closed: a plate we cannot verify is not dispatched) unless
- *                         --allow-unverified is passed (the high-bar, loudly-logged override);
+ * sidecar `bambu slice` writes beside the .3mf, verifies it describes THIS plate, classifies it
+ * against the by-design manifest, and:
+ *   - no sidecar        → BLOCK (fail-closed: a plate we cannot verify is not dispatched);
+ *   - stale sidecar     → BLOCK (source_sha256 ≠ the .3mf on disk — it was sliced from other bytes);
+ *   - unverifiable      → BLOCK (a legacy sidecar with no source_sha256 cannot be proven fresh);
  *   - any UNEXPECTED    → BLOCK (Studio would warn about this);
  *   - clean / expected  → allow.
+ * Each BLOCK is overridable only by --allow-unverified (the high-bar, loudly-logged escape hatch).
  * Returns true iff dispatch may proceed.
  */
 function warningsGateAllows(plateAbs: string, allowUnverified: boolean): boolean {
-  const sidecar = readSidecar(plateAbs);
-  if (!sidecar) {
+  const { sidecar, status } = sidecarFreshness(plateAbs);
+  if (status !== "fresh") {
+    const reason =
+      status === "missing"
+        ? "no slicer-warnings capture beside this plate"
+        : status === "stale"
+          ? "the capture beside this plate was sliced from different .3mf bytes (STALE)"
+          : "the capture beside this plate predates freshness tracking and cannot be verified";
     if (allowUnverified) {
-      console.error("⚠ warnings gate: no capture beside this plate — proceeding under --allow-unverified.");
+      console.error(`⚠ warnings gate: ${reason} — proceeding under --allow-unverified.`);
       return true;
     }
-    console.error("✗ warnings gate: no slicer-warnings capture beside this plate.");
-    console.error(`  expected ${basename(sidecarPath(plateAbs))} — re-slice with \`bambu slice plate\` so dispatch`);
-    console.error("  can verify Studio raised nothing unexpected. Override with --allow-unverified only if you must.");
+    console.error(`✗ warnings gate: ${reason}.`);
+    console.error(`  expected a fresh ${basename(sidecarPath(plateAbs))} — re-slice with \`bambu slice plate\` so`);
+    console.error("  dispatch can verify Studio raised nothing unexpected. Override with --allow-unverified only if you must.");
     return false;
   }
-  const { expected, unexpected } = classifyWarnings(sidecar.warnings, loadManifest());
+  const { expected, unexpected } = classifyWarnings(sidecar!.warnings, loadManifest());
   if (unexpected.length > 0) {
     console.error(`✗ warnings gate: ${unexpected.length} UNEXPECTED slicer warning(s) — refusing to dispatch:`);
     for (const w of unexpected) console.error(`    [${w.severity}] ${w.object ?? "(plate)"}: ${w.message}`);
@@ -86,9 +95,9 @@ function warningsGateAllows(plateAbs: string, allowUnverified: boolean): boolean
     return false;
   }
   console.error(
-    sidecar.warnings.length === 0
-      ? "✓ warnings gate: clean — no slicer warnings."
-      : `✓ warnings gate: ${expected.length} expected-by-design warning(s), 0 unexpected.`,
+    sidecar!.warnings.length === 0
+      ? "✓ warnings gate: clean — no slicer warnings (capture verified fresh for this plate)."
+      : `✓ warnings gate: ${expected.length} expected-by-design warning(s), 0 unexpected (fresh).`,
   );
   return true;
 }

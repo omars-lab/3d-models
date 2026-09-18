@@ -117,7 +117,10 @@ accepts input).
    (wall thinner than the nozzle's single-wall floor, needless supports, fragile layer direction, wrong
    filament). Each is a line in the plan; the operator decides.
 6. **Compose the plan** — every choice + its one-line why.
-7. **Slice** — `bambu slice plate` → `.3mf` + preview PNG.
+7. **Slice** — `bambu slice plate` → `.3mf` + preview PNG + a `<plate>.warnings.json` sidecar
+   (Studio's own warnings, stamped with the plate's `source_sha256`). Any later edit that regenerates
+   the `.3mf` **must** be followed by a re-slice — a stale sidecar is refused at the pre-send gate
+   (#62), the same as a missing one.
 8. **Hand off at the owner gate** — plan + plate + preview, plus an offer to open the sliced plate in
    Bambu Studio for visual approval (`open -b com.bambulab.bambu-studio <plate>.3mf` — read-only, opens a
    file, dispatches nothing). **STOP.** Dispatch is Omar's recorded `print send --record` — the

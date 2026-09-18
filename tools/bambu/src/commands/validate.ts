@@ -21,7 +21,7 @@ import { runWithTimeout, ev } from "../log.js";
 import { locateBikarCli, bikarDir } from "../backends/bikar.js";
 import { repoRoot, recordsDir } from "../paths.js";
 import { readMember, listMembers } from "../threemf.js";
-import { readSidecar, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
+import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 const PYTHON = process.env.PYTHON ?? "python3";
 
@@ -261,7 +261,7 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   const raftRealized = realizedCount(hist, "Raft");
 
   // --- slicer warnings (from the sidecar `bambu slice` writes; classified vs the by-design manifest) ---
-  const sidecar = readSidecar(abs);
+  const { sidecar, status: warnFreshness } = sidecarFreshness(abs);
   const warnClass = sidecar ? classifyWarnings(sidecar.warnings, loadManifest()) : null;
 
   // ---- report (always) ----
@@ -283,9 +283,16 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
     );
   }
   if (warnClass) {
+    const freshNote =
+      warnFreshness === "fresh"
+        ? "fresh"
+        : warnFreshness === "stale"
+          ? "STALE — sidecar was sliced from different .3mf bytes; re-slice"
+          : "unverifiable — legacy sidecar, no source hash; re-slice to bind it";
     console.log(
       `  warnings  : ${sidecar!.warnings.length} captured — ${warnClass.expected.length} expected, ${warnClass.unexpected.length} unexpected` +
-        (sidecar!.studio_version ? ` (Studio ${sidecar!.studio_version})` : ""),
+        (sidecar!.studio_version ? ` (Studio ${sidecar!.studio_version})` : "") +
+        ` [${freshNote}]`,
     );
   } else {
     console.log(`  warnings  : (no sidecar — re-slice with \`bambu slice\` to capture; see ${basename(sidecarPath(abs))})`);
