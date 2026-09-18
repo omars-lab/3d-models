@@ -5044,3 +5044,59 @@ If a print measures CAL-PIN-01 and finds a two-filament interface needs a floor 
 thicken) — a default flip, not a redesign. If bikar gains true per-face material attributes that
 slice to multi-material without a per-body split, the whole split — and the pinch problem with
 it — becomes unnecessary (the D-073 reversal condition).
+
+---
+
+## D-075 — Coaster plate colour maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
+
+Design: [`coaster-colour-design.md`](coaster-colour-design.md) §6 and
+[`plate-composer-design.md`](plate-composer-design.md). Implements the dependency
+[D-074](decisions-log.md) §6 named but left to the composer. Grounded in
+[`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the headless-CLI
+3MF/AMS contract) and bikar #215 (the `<Coaster>.parts.json` sidecar this reads).
+
+### The two questions
+
+bikar splits a coloured coaster into one STL per region body (`base`/`straps`/`border`) and a
+`<Coaster>.parts.json` sidecar tagging each body with the author's palette **name** + hex. The
+composer must turn that into a plate the X2D slices in multiple filaments. Two sub-questions:
+**(i)** which logical filament slot does each palette get; **(ii)** how does the assignment reach
+the slicer, given the research finding that the headless CLI has **no flag** to assign objects to
+slots at slice time — the mapping must be baked into the *input* 3MF (§6, BambuStudio#9666).
+
+### Options on the table
+
+- **(i-a) First-seen palette order, slot 1 = the plate default filament** (chosen). Deterministic
+  (coaster order, then region order), a shared palette name shares a slot, untagged regions fall to
+  slot 1. Reproducible `--load-filaments` order; no hidden global palette registry.
+- **(i-b) A fixed global palette→slot table.** Rejected: a table is a second place the palette
+  lives (bikar already owns the palette), and it forks — it would drift from the `.bkr` `palette`
+  (CLAUDE.md "a migration never buys a fork").
+- **(ii-a) Assemble the input 3MF ourselves** — each coaster one object with the region bodies as
+  parts (shared coordinate frame), each part carrying `<metadata key="extruder">`, then slice that
+  (chosen). Robust: the region parts stay registered through `--arrange` (which packs *objects*, not
+  loose STLs), and the slot assignment is under our control.
+- **(ii-b) Hand the loose region STLs to Studio's `--arrange`, then post-process the exported 3MF.**
+  Rejected: `--arrange` treats each STL as an independent object and would scatter one coaster's
+  base/straps/border across the plate — the bodies must stay coincident to register as one coaster.
+
+### Decision — (i-a) + (ii-a)
+
+The pure mapping is `tools/bambu/src/ams.ts` (`buildAmsSlotMap`), landed with unit tests as **part
+4b-i**: slot 1 the plate default, distinct palettes to slots 2+ in first-seen order, a name that
+resolves to two hexes is an error, the count capped at the AMS capacity the caller supplies (the
+module's fallback is one unit's four slots; the composer passes the real capacity in 4b-ii). It also emits
+the `project_settings.config` parallel arrays (`filament_type`/`filament_colour`/`filament_id`,
+every colour slot reusing the default's material + a non-empty id so no slot silently routes to the
+external spool, §6). Wiring compose to render coaster items `--format parts`, assemble the multi-part
+input 3MF, and slice it with `--load-filaments` in slot order is **part 4b-ii** — deferred because it
+is the one piece that needs the slicer to verify end-to-end, and the print itself is owner-gated
+(CAL-CST-01 unsettled; §9 adds no new print bet).
+
+### What would reverse it
+
+A **logical** slot is not a **physical** AMS slot — the physical mapping is resolved at print time
+by colour match (§6 caveat), so nothing here claims a spool. If a slice proves `--arrange` can keep
+loose region STLs of one object registered (it cannot today), (ii-b) would drop the assembler. If
+bikar gains `--format 3mf` emitting the multi-part object with extruder tags, the composer stops
+assembling and just slices — the mapping rule (i-a) stays.
