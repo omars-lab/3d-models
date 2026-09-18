@@ -1,0 +1,36 @@
+{
+  "title": "Plate 1 — machine card · what to photograph",
+  "footnote": "Placed from the .3mf object transforms + mesh bounds. Elevation faces are box silhouettes projected from the geometry, not renders — they show footprint + height, not surface detail.",
+  "groups": {
+    "MC1": [90, 130, 200],
+    "MC2": [120, 120, 140],
+    "MC3": [90, 170, 150],
+    "MC4": [210, 140, 70],
+    "MC5": [170, 160, 90],
+    "MC6": [180, 100, 160]
+  },
+  "tiers": {
+    "1": {
+      "color": [220, 40, 40],
+      "width": 9,
+      "legend": "TIER 1 — shoot now: MC4 fan UNDERSIDE · MC6 T03 fallen tower+birdsnest · MC1 fit ladder + gauge"
+    },
+    "2": {
+      "color": [230, 170, 30],
+      "width": 5,
+      "legend": "TIER 2 — also: MC1 bores · MC5 warp plate+corners · MC3 bridge · MC6 T05/08/12 survivors"
+    }
+  },
+  "highlights": {
+    "MC4OverhangFan": {"tier": 1, "why": "fan UNDERSIDE — CAL-OVH-01 open; its failure is a silently-wrong dimension (supports were OFF)"},
+    "MC6Tower03": {"tier": 1, "why": "the FALLEN tower + birdsnest — CAL-BED-01 survival boundary; adhesion-vs-stiffness read"},
+    "MC1FitLadder": {"tier": 1, "why": "the ladder that seated nothing — CAL-FIT-01 refutes; shoot each rung mated (or not) with the gauge"},
+    "MC1FitGauge": {"tier": 1, "why": "the gauge rod none of the rungs took — the other half of the CAL-FIT-01 pair; check its base for elephant's foot"},
+    "MC1BoreSweep": {"tier": 2, "why": "the bores — CAL-HOL-01 holeCompMm; caliper each bore and each pin, only the difference is the number (#61)"},
+    "MC5WarpPlate": {"tier": 2, "why": "flat plate + all four corners against a reference — CAL-WRP-01 warpMm (feeler, #61)"},
+    "MC3BridgePlate": {"tier": 2, "why": "the clean bridge ceilings across the span ladder — CAL-BRG-01 (settled: brackets ≤10 mm)"},
+    "MC6Tower05": {"tier": 2, "why": "survivor tower — boundary context for the ⌀3 that fell"},
+    "MC6Tower08": {"tier": 2, "why": "survivor tower — boundary context"},
+    "MC6Tower12": {"tier": 2, "why": "survivor tower — boundary context"}
+  }
+}
