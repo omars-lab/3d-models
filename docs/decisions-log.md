@@ -4918,3 +4918,76 @@ Bambu-Connect-gated steps get a headless path.
 - FAIL: any drive capability (status/control/upload/ams/camera) lists `applescript`, or `slice`
   returns `applescript` **ahead of** `studio-cli` when Studio is present — routing a deterministic
   job through focus-stealing UI scripting is exactly what the two-layer split forbids.
+
+## D-072 — A `plate.yaml` item is an authoring surface, not an identity; `slice compose` extends the existing `slice` group
+
+Design: [`plate-composer-design.md`](plate-composer-design.md). P4.1 adds a `slice compose
+<plate.yaml>` subverb to the **existing** `slice` command group in `tools/bambu` (sibling to the
+shipped `slice plate` / `slice mesh`), composing many models onto one arranged X2D plate.
+
+### Options on the table
+
+- **(a) Manifest invents its own plate/item id** — a second identity for a printable thing,
+  parallel to the print record's `it-<sha12>` iteration key.
+- **(b) Items are authoring triples that resolve to the existing iteration id** — `{bkr, piece,
+  params}` is the geometry half of the iteration key; the composer resolves each item to
+  `it-<sha12>` and writes it to `objects[].iteration`.
+- **(c) Frontend-only composition** — leave composition to the plate-builder UI
+  ([`plate-builder-design.md`](plate-builder-design.md)); no CLI compose verb.
+- **(d) Do nothing** — keep single-model `slice plate` only.
+
+### Decision — (b)
+
+A migration never buys a fork ([D-052](decisions-log.md), `CLAUDE.md`). The `{bkr, piece, params}`
+triple already **is** the geometry half of the print-record iteration key
+([print-metadata-and-reprint-design.md](print-metadata-and-reprint-design.md) §2.2); the plate's
+single `slice_profile` completes the fifth field. The composer resolves each item to `it-<sha12>`
+and writes it to the record's `objects[].iteration` (the one map); the manifest stores no parallel
+id, and the render-cache key (bkr-hash + params) coincides with the key's geometry half, so cache
+and identity cannot disagree. An item may also be written directly as `{iteration, count}` and
+resolves the same way. `slice compose` reuses `slice.ts` helpers (preset list, Studio args, filament
+map, warnings sidecar, backend router); the manifest parse, per-item render+cache, `--bed`
+pre-check and iteration-id resolution are the only genuinely new parts. The bed-fit pre-check runs
+before the slicer and is per-part **and** aggregate (an aggregate area check cannot discharge a
+per-part fit claim); PASS/FAIL cases are in the design doc's Validator.
+
+### What would reverse it
+
+Per-item (mixed) slice profiles would break the "the triple IS the geometry half by construction"
+transfer condition — then an item needs a fuller identity and (b) is revisited. If `--arrange`
+proves unreliable in headless X2D, the self-owned 2D packer (umbrella P2) replaces it, recorded in
+`docs/issues/`.
+
+## D-073 — Coaster colour is per-region symbolic labels compiled to per-body export, never painted pixels or a DSL-bound slot
+
+Design: [`coaster-colour-design.md`](coaster-colour-design.md). Extends the border's band/field
+region split ([D-071](decisions-log.md)) to a full region vocabulary with per-region colour that
+maps to X2D AMS filaments.
+
+### Options on the table
+
+- **(a) `color <region> <PaletteName>`** — a symbolic per-region label reusing the existing
+  `color`/`palette` vocabulary; the print manifest maps the name to a spool.
+- **(b) Bind an AMS slot / filament id directly in the DSL** — the coaster source names the
+  physical spool.
+- **(c) Paint the single body** — 2D-style ink on the one coaster STL.
+- **(d) Do nothing** — keep the one-body, one-colour coaster.
+
+### Decision — (a)
+
+Region vocabulary `base | straps | border`, symbolic names — the DSL says what is *distinct*, the
+print manifest says which *spool*, so the source never couples to a printer's slots (rejecting (b)).
+An STL carries no colour and a coaster is one body, so ink does not transfer to 3D (rejecting (c)):
+`bikar render --format parts` splits the height field into one watertight body per non-empty region,
+each passing `--check`, their union face-coincident with the one-body STL. This requires an
+**emboss** relief ([D-066](decisions-log.md)); a deboss leaves an empty body and is refused. The
+plate composer ([D-072](decisions-log.md)) maps the palette name to an AMS slot. Whether per-object
+filament assignment can be written by the **headless** Bambu Studio CLI (vs. only the GUI after
+import) is UNVERIFIED and flagged in both the design and research files.
+
+### What would reverse it
+
+If bikar gains true per-face material attributes on a single mesh that slice to multi-material
+without a per-body split, the `--format parts` split becomes unnecessary. If headless per-object
+3MF assignment proves impossible, colour routing falls back to GUI-assisted assignment (a
+robustness downgrade), recorded in `docs/issues/`.
