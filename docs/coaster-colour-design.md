@@ -318,6 +318,18 @@ per-body Validator (watertightness), because the print's correctness is that eac
 separate body, not that a render shows a given colour. The pixel gate does not transfer; its
 reasoning (classify to the model's own palette so it ports where pixels do not) does.
 
+**Shipped (bikar #216, [D-076](decisions-log.md)).** Two build choices §7 left open were
+settled: (Q1) the **four splittable** presets (8-fold and 6-fold, plain + border) gained a real
+`palette` block and default `color` statements — Slab `#333333` / Gold `#d4af37` (+ Copper
+`#b87333` on the border pair) — so the knob offers real choices out of the box; the four
+non-splittable presets (interlock, minimal) stay palette-free, a colour they cannot split into
+bodies being a claim the geometry would not honour. (Q2) the tint is a **full per-region 3D
+tint**: `evaluate` splits with `buildCoasterParts({pinch:'fillet'})` into a *separate* tint mesh
+carrying a per-triangle colour channel, so the gate/STL keep the original solid mesh and a
+non-splittable coaster (or any split error) falls back to bronze and hides the Colours section.
+The kernel change is one field — `CoasterResultProvenance.palette` exposes the inscribed
+pattern's full palette so the knob offers the *choices*, not just the resolved colours.
+
 ## 8. Decisions
 
 - **D-073**: coaster colour is `color <region> <PaletteName>` over the three symbolic regions
@@ -337,6 +349,15 @@ reasoning (classify to the model's own palette so it ports where pixels do not) 
   into stacked base+border panels (§5.4). `--format stl` is unchanged. Chosen over scoping the
   feature to pinch-free coasters (the earlier Option A) because Option B makes every pattern
   print. See [`decisions-log.md`](decisions-log.md).
+- **D-076**: the Lab colour knob ships (bikar #216, part 5). Two build choices: (Q1) add a
+  `palette` block + default `color` statements to the **four splittable** presets only — chosen
+  over a global fallback palette, which would fork from the `.bkr` palette the kernel resolves
+  against (as D-075 rejected a global slot table); (Q2) a **full per-region 3D tint** through a
+  separate `coasterTint` mesh — chosen over a flat swatch legend, so the author sees each body
+  on the geometry and bronze/STL/gate output stays byte-identical when nothing is tinted.
+  `CoasterResultProvenance.palette` carries the choices; the tint splits with the export's own
+  `fillet` default so preview and exported bodies never disagree. See
+  [`decisions-log.md`](decisions-log.md).
 - **D-068** is the direction this builds; **D-071** gives the first region split; **D-066**
   fixes the relief as an emboss; **D-067** places the Lab — all unchanged.
 

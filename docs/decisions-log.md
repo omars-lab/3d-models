@@ -5100,3 +5100,60 @@ by colour match (§6 caveat), so nothing here claims a spool. If a slice proves 
 loose region STLs of one object registered (it cannot today), (ii-b) would drop the assembler. If
 bikar gains `--format 3mf` emitting the multi-part object with extruder tags, the composer stops
 assembling and just slices — the mapping rule (i-a) stays.
+
+## D-076 — The Coaster Lab colour knob adds a `palette` block to the splittable presets and tints the whole preview per region
+
+Design: [`coaster-colour-design.md`](coaster-colour-design.md) §7. Ships the knob that
+[D-073](decisions-log.md) named ("a Coaster Lab knob edits the `color` statements and tints the
+preview per region"), on the region split [D-074](decisions-log.md) and the palette grammar
+[D-073](decisions-log.md) provide. bikar #216 (part 5).
+
+### The two questions the design left to the build
+
+§7 fixed the knob's *shape* — one dropdown per present region, each offering the names in the
+file's own `palette`, the preview tinted per region — but two build choices were open:
+
+- **(Q1) Where do the choices come from?** The shipped presets carry **no** `palette` or `color`
+  statements, so a knob classifying to "the model's own palette" would have nothing to offer on a
+  fresh preset.
+- **(Q2) How far does the preview tint go?** The Lab viewer paints one bronze material; a per-region
+  tint means a new colour channel through the protocol, the evaluator, and the canvas shader.
+
+### Options on the table
+
+- **(Q1-a) Add a `palette` block + default `color` statements to the presets** (chosen), narrowed
+  to the **four splittable** presets (8-fold and 6-fold, plain + border). The knob offers real
+  choices out of the box, and the presets demonstrate the feature. The four non-splittable presets
+  (interlock, minimal) stay untouched — a palette they cannot split into bodies would be a claim the
+  geometry does not honour.
+- **(Q1-b) Ship a global default palette the knob falls back to.** Rejected for the same reason
+  D-075 rejected a global slot table: the palette would live in a second place and fork from the
+  `.bkr` `palette` the kernel already resolves against (CLAUDE.md "a migration never buys a fork").
+- **(Q2-a) Full per-region 3D tint** (chosen): `evaluate` splits the built coaster with
+  `buildCoasterParts({pinch:'fillet'})` (D-074), concatenates the region bodies into a **separate**
+  `coasterTint` mesh carrying a parallel per-triangle `triRgb` channel, and the viewer prefers it —
+  so the gate/STL keep the original solid mesh untouched and bronze output stays byte-identical when
+  nothing is tinted. Non-splittable presets and any split error fall back to bronze and hide the
+  Colours section.
+- **(Q2-b) A flat swatch legend beside the preview, no 3D tint.** Rejected: the author would not see
+  which body is which region on the actual geometry — the thing the split produces — and a saddled
+  pattern's region boundaries are exactly where a legend cannot show them.
+
+### Decision — (Q1-a) + (Q2-a)
+
+Landed as bikar #216. The knob edits the `color <region> <name>` statements in the editor buffer
+(the `setCoasterColor` line editor) and flips to custom mode, exactly as the numeric knobs edit
+their params; "default (one colour)" removes the statement. The core change is one field —
+`CoasterResultProvenance.palette` exposes the inscribed pattern's full palette so the knob has the
+*choices*, not just the resolved colours. The four splittable presets gain Slab `#333333` / Gold
+`#d4af37` (+ Copper `#b87333` on the border pair) — a neutral default open to a later taste call.
+
+### What would reverse it
+
+The tint is a **preview**, not a print claim: correctness stays per-body geometry (the §5
+Validator, watertightness), never the render colour — the note §7 carries and the on-screen caption
+repeats. If the presets later grow a shared house palette worth naming once, that palette still
+lives in each `.bkr` (Q1-b stays rejected); a Lab that reads it from one place would only be sound
+if the kernel read it there too. If bikar exposes region bodies without the fillet pinch
+(`--pinch` other than the default), the tint would follow the chosen strategy — it splits with the
+same default the export does, so the preview and the exported bodies never disagree.
