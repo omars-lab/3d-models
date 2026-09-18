@@ -745,7 +745,9 @@ validate-constructions:
 # points at; both sizes and the .bkr source are committed under src/Coasters/.
 # An interlocked golden (`<id>-interlock-coaster.bkr`, D-069) rides the same
 # glob and lands as id `<id>-interlock`; its preview is two tiles mated, because
-# a single tile with tabs does not explain itself.
+# a single tile with tabs does not explain itself. A minimal golden
+# (`<id>-minimal-coaster.bkr`, D-070) rides it too, as id `<id>-minimal`; its
+# `--check` runs at the free-standing strap floor (CAL-CST-07), not the slab's.
 # The two sizes are defined once here: the renders take them as `--param size=`
 # and the preview pass takes the standard as the mate offset for an interlocked
 # tile's two-tile picture (build/brick_previews.py --mate).

@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "29 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "30 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
@@ -4668,7 +4668,7 @@ back to (b) on the hexagon only, or to a shallower profile with a flare knob.
 
 ## D-070 — The minimal coaster is `outline pattern`: the strap silhouette is the solid
 
-**Date:** 2026-09-17 · **Status:** designed, being built (task #38; design doc [`coaster-minimal-design.md`](coaster-minimal-design.md); bikar branch `feat/coaster-minimal`, PR after NaqshCoffee/bikar#209)
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#211 (`5152cfd`: `outline pattern`, the kernel's signed inset, CV10, `CAL-CST-07`, `--minimal`, two presets in the Coaster Lab); catalogued here as CS-4 (design doc [`coaster-minimal-design.md`](coaster-minimal-design.md)); the free-standing strap floor stays provisional until CS-4 prints (task #38)
 
 ### Context
 

@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**29 registered bets · 26 `Calibrated` records — 26 provisional, 0 measured · 9 bets with no record in bikar.**
+**30 registered bets · 27 `Calibrated` records — 27 provisional, 0 measured · 9 bets with no record in bikar.**
 
 ## Bets
 
@@ -47,6 +47,7 @@ is opened, clustered, and closed.
 | `CAL-CST-04` | `RELIEF_ASPECT_MAX` coaster relief aspect ceiling: the tallest raised rib per unit width before it delaminates along the layer lines | `CS-1` | provisional | `RELIEF_ASPECT_MAX_CAL` |
 | `CAL-CST-05` | `ELEPHANT_FOOT_MM` coaster bottom-chamfer floor: the least chamfer run that clears the first-layer elephant's foot | `CS-1` | provisional | `ELEPHANT_FOOT_MM_CAL` |
 | `CAL-CST-06` | coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 | `CS-1` | open — no record in bikar | — |
+| `CAL-CST-07` | `FREESTANDING_STRAP_MIN_MM` minimal-coaster strap floor: the narrowest free-standing strap (`outline pattern`, no slab behind it) that prints as a solid wall with a perimeter on each face rather than as two unbonded shells — the floor CV2 enforces for a pattern outline | `CS-4` | provisional | `FREESTANDING_STRAP_MIN_MM_CAL` |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -308,4 +309,11 @@ named next print rather than an absence:
 - **Value:** `0.4`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** one perimeter width of first-layer squish: the bottom chamfer must inset at least this far or the elephant foot eats it. Provisional until CS-1 measures the squish.
+
+### `FREESTANDING_STRAP_MIN_MM_CAL` — `CAL-CST-07`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `1.6`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** four perimeters at 0.4 mm — two shells per side so the wall has an inner and outer perimeter and no gap-fill; a free-standing strap has no slab behind it. NOT measured. Provisional until CS-4 prints the free-standing strap ladder.
 

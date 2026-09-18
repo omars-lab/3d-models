@@ -1,7 +1,8 @@
 # Minimal coasters — the pattern is the solid
 
-*Status: designed here, being built in bikar (task #38, branch `feat/coaster-minimal`,
-PR to follow NaqshCoffee/bikar#209). Decision D-070. This is the third coaster form
+*Status: built — bikar NaqshCoffee/bikar#211 (`5152cfd`) ships `outline pattern`, CV10
+and `CAL-CST-07`; catalogued here as CS-4, vendored by `make coasters`, rostered in
+the Coaster Lab. The strap floor is provisional until CS-4 prints (task #38). Decision D-070. This is the third coaster form
 after the fitted slab of [`coaster-design.md`](coaster-design.md) and the interlocked
 slab of [`coaster-interlock-design.md`](coaster-interlock-design.md); it lives in the
 same `coaster` kernel and adds no new solid.*
