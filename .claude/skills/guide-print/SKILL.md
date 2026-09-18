@@ -33,6 +33,17 @@ Two things must be true, or stop and say so:
    settles a `CAL-*` bet ([`calibrate`](../calibrate/SKILL.md)). If neither, it's decoration — say
    so before spending plastic. **Dispatch stays owner-gated** until a bet justifies it: the operator
    sends, never the skill.
+3. **No measurement is worth the machine.** A coupon that could **physically damage** the printer is
+   never sliced-for-dispatch or sent, no matter what bet it would settle — the value of any reading is
+   capped by the cost of the hardware. Draw the line where FDM does: **cosmetic / geometry failures are
+   not damage and stay fair game** — floating regions, a dropped thin wall, a sagging bridge, an
+   overhang that curls are *the data* a by-design coupon exists to produce, and several coupons are
+   built to fail (K10). What crosses the line is a **hardware-risk** failure: a part that detaches and
+   is dragged into a blob the nozzle plows through, a toolpath into the bed/gantry, anything that could
+   crash the nozzle or scar the plate. Such a coupon is only acceptable with **active mitigation** —
+   on-device failure/spaghetti detection **and** a watched first layer **and** small part mass — and
+   absent that mitigation, **drop or redesign the coupon; never risk the printer to close a bet.**
+   (The firmware owns collision/thermal/runout; this tenet owns the geometry we *choose* to send.)
 
 ## The seven steps
 
@@ -201,6 +212,10 @@ the measured value; flip the catalog Status and date the iteration row. `validat
 
 ## Rules
 
+- **No measurement is worth the machine.** A coupon that could physically damage the printer is never
+  sent (gate 3). Cosmetic/geometry failures are the data and stay fair game; a hardware-risk failure
+  (a detached part dragged into a blob, a crash into bed/gantry) needs active mitigation or the coupon
+  is dropped/redesigned. Never risk the printer to close a bet.
 - **Dispatch is owner-gated.** The skill walks to the send and stops. The physical send — and any
   `--yes` — is the owner's, every time.
 - **The pre-send gate is a checklist, not a vibe.** Before any dispatch, walk step 4's five lines —
