@@ -28,7 +28,7 @@ is zero rows.
 ## 2. Every calibration bet is unsettled — no print has moved a number
 
 The bet registry's generated census line reports that not one bet has been settled
-by a measured print. Read verbatim from the tool, it carries 28
+by a measured print. Read verbatim from the tool, it carries 29
 <!--count:cal-bets--> registered bets and 26 <!--count:cal-records-->
 `Calibrated` records — all provisional, **0 measured**, and 6 bets with no record in
 bikar (`grep -nE 'registered bets' .claude/skills/calibrate/bets.md`).

@@ -27,13 +27,24 @@ the mesh `make coasters` wrote (the 90 mm standard), drawn by the same
 `import()` path and the same three-quarter camera — one shared angle, not a
 per-model number nobody measured.
 
+An interlocked coaster (a name ending `-interlock`, D-069) is drawn as two
+tiles mated, because one tile with tabs does not explain itself. The second
+copy is the same STL translated by the nominal size (`--mate <mm>`, the
+Makefile's standard size) along the across-flats axis — the axis of the
+smaller footprint extent, which is the across-flats axis for the axis-aligned
+square and hexagon outlines the importer emits (a square is the same both
+ways). Tabs protrude and slots recede by the same depth, so a translation by
+exactly the nominal size seats tab in slot with the modelled clearance and no
+overlap. No boolean: OpenSCAD previews two imports side by side.
+
 Usage:  python3 build/brick_previews.py             # bricks (build/.brick-names)
         python3 build/brick_previews.py --sets      # mural sets (build/.set-names)
-        python3 build/brick_previews.py --coasters  # coasters (build/.coaster-names)
+        python3 build/brick_previews.py --coasters --mate 90  # coasters (build/.coaster-names)
 Deps:   OpenSCAD  (the same binary the cookie-cutter targets use)
 """
 import glob
 import os
+import struct
 import subprocess
 import sys
 import tempfile
@@ -63,9 +74,34 @@ def openscad():
     return which("openscad")
 
 
-def render(binary, stl, out):
+def footprint_extent(stl):
+    """(x extent, y extent) of a binary STL's vertices, in mm."""
+    with open(stl, "rb") as fh:
+        fh.seek(80)
+        (count,) = struct.unpack("<I", fh.read(4))
+        lo = [float("inf")] * 2
+        hi = [float("-inf")] * 2
+        for _ in range(count):
+            rec = fh.read(50)
+            for v in range(3):
+                x, y = struct.unpack_from("<ff", rec, 12 + 12 * v)
+                lo[0], hi[0] = min(lo[0], x), max(hi[0], x)
+                lo[1], hi[1] = min(lo[1], y), max(hi[1], y)
+    return hi[0] - lo[0], hi[1] - lo[1]
+
+
+def mate_offset(stl, mate_mm):
+    """Translation that seats a second copy of an interlocked tile against the first."""
+    ex, ey = footprint_extent(stl)
+    return (mate_mm, 0) if ex <= ey else (0, mate_mm)
+
+
+def render(binary, stl, out, mate=None):
     with tempfile.NamedTemporaryFile("w", suffix=".scad", delete=False) as fh:
         fh.write(f'import("{os.path.abspath(stl)}");\n')
+        if mate is not None:
+            dx, dy = mate
+            fh.write(f'translate([{dx}, {dy}, 0]) import("{os.path.abspath(stl)}");\n')
         scad = fh.name
     try:
         subprocess.run(
@@ -94,6 +130,7 @@ def main():
     # Each make target records which stems it just wrote, so this script
     # previews those and not the orbs or cookie cutters sharing build/stls/.
     args = sys.argv[1:]
+    mate_mm = float(args[args.index("--mate") + 1]) if "--mate" in args else None
     if "--coasters" in args:
         kind, names_file, target = "coaster", "build/.coaster-names", "make coasters"
     elif "--sets" in args:
@@ -110,8 +147,11 @@ def main():
         stl = f"{STL_DIR}/{name}.stl"
         if not os.path.exists(stl):
             sys.exit(f"{stl} missing — `{target}` did not write it")
-        render(binary, stl, f"{OUT_DIR}/{name}.png")
-        print(f"{name}.png")
+        mated = kind == "coaster" and name.endswith("-interlock")
+        if mated and mate_mm is None:
+            sys.exit(f"{name} is interlocked — `--mate <mm>` (the standard size) is required to draw the pair")
+        render(binary, stl, f"{OUT_DIR}/{name}.png", mate_offset(stl, mate_mm) if mated else None)
+        print(f"{name}.png" + (" (two tiles mated)" if mated else ""))
     print(f"rendered {len(names)} {kind} preview(s) -> {OUT_DIR}")
 
 

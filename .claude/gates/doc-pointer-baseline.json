@@ -113,6 +113,16 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/7apC5Q9QS-8-coaster-mini.stl",
       "why": "Gitignored build output \u2014 same as the GimTvN9hw4U mini above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Introduced by #247 (e47ce9a)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "bikar/patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr",
+      "why": "Lands with NaqshCoffee/bikar#209 (open; its required checks report FAILURE with zero steps under the billing block, so the squash merge waits on an admin). The file exists on that PR head (bf19e51) and is vendored here as src/Coasters/GimTvN9hw4U-interlock-coaster.bkr, which resolves. Delete this entry when #209 merges \u2014 the ratchet shrinks freely."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "bikar/patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr",
+      "why": "Same as the GimTvN9hw4U interlock golden above \u2014 on NaqshCoffee/bikar#209, vendored as src/Coasters/7apC5Q9QS-8-interlock-coaster.bkr. Delete when #209 merges."
     }
   ]
 }

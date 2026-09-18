@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "28 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "29 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
@@ -4611,7 +4611,7 @@ hand in the slicer.
 
 ## D-069 — Coaster interlock is a self-mating half-edge dovetail on every straight edge
 
-**Date:** 2026-09-17 · **Status:** designed, not built (task #34; design doc [`coaster-interlock-design.md`](coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#209 (grammar, kernel, CV8/CV9, importer `--interlock`, CAL-CST-06 registered), 3d-models catalog CS-3 + gallery (task #34; design doc [`coaster-interlock-design.md`](coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
 
 ### Context
 
