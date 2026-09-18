@@ -4666,6 +4666,64 @@ back to (b) on the hexagon only, or to a shallower profile with a flare knob.
 
 ---
 
+## D-070 — The minimal coaster is `outline pattern`: the strap silhouette is the solid
+
+**Date:** 2026-09-17 · **Status:** designed, being built (task #38; design doc [`coaster-minimal-design.md`](coaster-minimal-design.md); bikar branch `feat/coaster-minimal`, PR after NaqshCoffee/bikar#209)
+
+### Context
+
+Omar asked for "a version of the coasters where the pattern is not on a solid under
+it — where it's the pattern, vertically extruded with round outer edges along the
+perimeter of pattern": minimal coasters. The coaster kernel is a height field over
+an outline (D-064), and every form so far has a slab: the pattern is relief on
+ground. This form has no ground — the strap network is the whole piece, open cells
+are through-holes, and the top edge carries a round-over along every strap and hole.
+
+### Options on the table
+
+- **(a) `outline pattern`** — a fourth outline alternative: the outline *is* the
+  inscribed pattern's strap silhouette. The kernel's classification and top-edge
+  drop both read one signed inset, `strap/2 − distToStraps`, in place of the ring
+  distance; the mesh path is unchanged because the flat-based assembler already walls
+  every boundary loop, holes included, for `trivet`.
+- **(b) A `minimal` clause on a fitted outline** — keep `outline polygon …` and add a
+  statement that drops the ground. The fitted outline is then sized, checked (CV7)
+  and named for a slab that is never printed: one word with two meanings.
+- **(c) `piece … extrude` of a 2D offset** — the plan's slice-1 path. No height
+  field, so no round-over without a second bevel kernel, and none of CV1–CV9 runs.
+- **(d) Boolean the open cells out of a slab** — bikar has no boolean (D-064).
+
+### Decision — (a)
+
+`outline pattern`, with `inscribe`, `base` and `strap width` required, `relief`
+forbidden (the pattern is the solid), and `rim`, `trivet`, `interlock` and any
+bottom `edge` refused as evaluation errors; a top `edge chamfer|fillet` is the
+round-over. Three rulings ride with it: **CV10** caps the round-over at half the
+strap width, because past it the two round-overs cross and every strap crests below
+`base` with no other validator seeing it; **CV2 gets a new bet, CAL-CST-07** (1.6 mm,
+four perimeters, coupon CS-4), because CAL-CST-01 was bet for a strap seated on a
+slab and a free-standing rib differs in load, adhesion and shell topology — the
+transfer sentence cannot be written; and **CV6b is the by-design failure** of the
+form, since nothing but the straps joins the piece. CV7 passes with a stated reason
+(the outline follows the art). The importer emits it behind `--minimal`, exclusive
+with `--interlock`; the presets carry knobs `size`, `strap`, `round` and no
+`margin`, with `unit = (size − strap) / K` so the strap's outer edge lands on `size`.
+
+(b) was the cheap fix and is exactly a fork — two meanings of `outline`, with CV7
+measuring an outline that does not exist — which CLAUDE.md says to delete rather
+than hide.
+
+### What would reverse it
+
+A printed CS-4 mini that flexes or snaps at `strap 3`, `base 4` — a lattice has no
+stiffness validator and its stiffness is topological, so the fix is a stiffness bet
+and possibly a mandatory joining ring from #36, not a change of grammar. Or a real
+pattern whose straps pass close enough to leave sub-perimeter sliver voids that the
+slicer bridges, which would add a minimum-void CV11 before this form ships beyond the
+two goldens.
+
+---
+
 ## D-053 — the Bambu X2D rides as a single-nozzle-labelled FDM target; the PrintTarget schema is not widened for dual nozzles
 
 **Date:** 2026-09-16 · **Status:** decided (bikar `PrintTarget` entry is the follow-on, A1/#18)
