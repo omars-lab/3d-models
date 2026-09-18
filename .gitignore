@@ -23,6 +23,7 @@ build/*
 /design.html
 /breakdown.html
 /prints.html
+/coaster.html
 /assets/
 
 # gh-pages deploy worktree (created by `make deploy`)
