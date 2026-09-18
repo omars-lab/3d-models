@@ -217,8 +217,17 @@ def _missing(container: dict, keys) -> list[str]:
     return [k for k in keys if k not in container]
 
 
-def check_record(rec: Path, seen_digests: dict[str, str]) -> tuple[list[str], int, int]:
-    """Findings for one record dir, plus (readings, photos) counted for R4."""
+def check_record(
+    rec: Path, seen_digests: dict[str, str], shipped: bool = True
+) -> tuple[list[str], int, int]:
+    """Findings for one record dir, plus (readings, photos) counted for R4.
+
+    `shipped` says whether this record lives in the shipped tree (docs/prints/) vs.
+    the gitignored staging area (.bambu/records/, what `bambu validate record` scans
+    by default). Only R14 depends on it: a pre-slice status is drift once *shipped*,
+    but is exactly what a fresh `--record` draft looks like in staging. Every other
+    rule is location-independent, so `shipped` defaults True (whole-tree callers).
+    """
     name = rec.name
     out: list[str] = []
     index = rec / "index.md"
@@ -411,14 +420,25 @@ def check_record(rec: Path, seen_digests: dict[str, str]) -> tuple[list[str], in
                            "names a bet — it claims to have moved a constant while "
                            "pointing at nothing")
 
-        # R14 — a shipped record (only docs/prints/ is seen here) must be reconciled
-        # past planning before it ships (§6.3, §3.2): the plan artifact is composed-
-        # not-stored, so a shipped `draft`/`planned` record is drift.
-        if rec_status in PRE_SHIP_STATES:
+        # R14 — a shipped record (docs/prints/) must be reconciled past planning before
+        # it ships (§6.3, §3.2): the plan artifact is composed-not-stored, so a shipped
+        # `draft`/`planned` record is drift. Scoped to the shipped tree: the very same
+        # status is legitimate in the staging area (.bambu/records/), where a fresh
+        # `--record` draft is always pre-slice — firing R14 there would refuse the draft
+        # the scaffold's own closing line tells the operator to gate.
+        if shipped and rec_status in PRE_SHIP_STATES:
             out.append(f"{name}: R14 status '{rec_status}' is pre-slice but the record is "
                        "shipped under docs/prints/ — reconcile it past planning first")
 
     return out, (len(readings) if isinstance(readings, list) else 0), len(listed)
+
+
+def is_shipped_tree(prints: Path) -> bool:
+    """True when `prints` is the shipped tree (docs/prints/), False for a staging area
+    (.bambu/records/). R14's only input — the shipped-vs-staging distinction is the
+    path, not the record: docs/prints/ is where a record has shipped."""
+    p = prints.resolve()
+    return p.name == "prints" and p.parent.name == "docs"
 
 
 def record_dirs(prints: Path) -> list[Path]:
@@ -475,11 +495,12 @@ def list_records(prints: Path) -> list[dict]:
 
 def run(prints: Path) -> int:
     dirs = record_dirs(prints)
+    shipped = is_shipped_tree(prints)
     seen: dict[str, str] = {}
     findings: list[str] = []
     readings = photos = skipped = 0
     for rec in dirs:
-        f, r, p = check_record(rec, seen)
+        f, r, p = check_record(rec, seen, shipped=shipped)
         skipped += sum(1 for x in f if x.startswith("__skip__"))
         findings += [x for x in f if not x.startswith("__skip__")]
         readings += r
@@ -496,7 +517,8 @@ def run(prints: Path) -> int:
 
     # R4: the count is the point. It is printed on success, empty or not.
     if n == 0:
-        print("prints: 0 records checked — docs/prints/ is empty (nothing printed yet)")
+        where = "docs/prints/" if shipped else f"{prints}/"
+        print(f"prints: 0 records checked — {where} is empty (nothing printed yet)")
     else:
         tail = f"; {skipped} source pin(s) not verified (bikar not checked out)" if skipped else ""
         print(f"prints: {n} record(s) checked, {readings} reading(s), {photos} photo(s){tail}")
@@ -745,6 +767,31 @@ def self_test() -> int:
         print(f"self-test {'ok  ' if ok else 'FAIL'}: R1 unverified when bikar is absent"
               + ("" if ok else f" — got findings={found}, skipped={skipped}"))
         failures += 0 if ok else 1
+
+        # R14 is a shipped-tree rule. A fresh `--record` draft is always pre-slice and
+        # lives in the staging area (.bambu/records/, what `bambu validate record` scans
+        # by default) — R14 must NOT fire there, or the gate would refuse the very draft
+        # the scaffold's own closing line tells the operator to check. The same record
+        # under docs/prints/ (shipped) still fires R14 (the `_shipped_planned` case above).
+        _BLOB_RESOLVER = lambda ref, path: (  # noqa: E731
+            ("ok", _FIX_SHA) if path == _FIX_SRC_PATH else ("missing", None))
+        case = tmp / "r14-staging-draft-is-not-drift"
+        staging = case / ".bambu" / "records"
+        _fixture_record(staging, "2026-09-14-plate1-machine-card", _FIX_SHA, _FIX_PHOTO)
+        idx = staging / "2026-09-14-plate1-machine-card" / "index.md"
+        idx.write_text(idx.read_text().replace("status: measured", "status: draft", 1),
+                       encoding="utf-8")
+        seen = {}
+        found = []
+        shipped = is_shipped_tree(staging)
+        for rec in record_dirs(staging):
+            f, _, _ = check_record(rec, seen, shipped=shipped)
+            found += [x for x in f if not x.startswith("__skip__")]
+        ok = shipped is False and not any("R14" in f for f in found)
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: R14 does not fire on a draft in staging"
+              + ("" if ok else f" — shipped={shipped}, found={found or 'nothing'}"))
+        failures += 0 if ok else 1
+        _BLOB_RESOLVER = None
 
         # list_records: the CLI's read-only projection. A clean fixture lists one
         # record with the fields `bambu print list` prints, and a broken record is
