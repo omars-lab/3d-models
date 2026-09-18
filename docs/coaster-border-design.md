@@ -1,6 +1,6 @@
 # Coaster border band — a second pattern around the field
 
-*Status: designed, not built (task #36, decision D-071). The direction is D-068 (a):
+*Status: built (task #36, decision D-071). The direction is D-068 (a):
 `border <pattern> width <mm>` as a clause of the `coaster` block, the field art inset
 by the band. This is the fourth coaster form after the fitted slab of
 [`coaster-design.md`](coaster-design.md), the interlocked slab of
@@ -119,7 +119,7 @@ The stretch is `|C/N − ℓ| / ℓ ≤ 1/(2N)`; CV11 reports `N` and the stretc
 | coaster | outline | `W` | `h = ℓ` | run | `N` | ground per end / stretch |
 |---|---|---|---|---|---|---|
 | standard | hexagon 90 across flats (`F = 51.96`) | 8 | 6 | `U = 51.96 − 9.24 = 42.72` | 7 | 0.36 mm |
-| mini | hexagon 40 across flats (`F = 23.09`) | 4 | 2 | `U = 23.09 − 4.62 = 18.47` | 9 | 0.24 mm |
+| mini | hexagon 40 across flats (`F = 23.09`) | 4 | 2 | `U = 23.09 − 4.62 = 18.47` | 9 | 0.2376 mm |
 | standard | round ⌀90 | 8 | 6 | `R_m = 41`, `C = 257.6` | 43 | −0.2 % |
 | mini | round ⌀40 | 4 | 2 | `R_m = 18`, `C = 113.1` | 57 | −0.8 % |
 
@@ -176,6 +176,12 @@ mechanism `interlock` and `outline pattern` already use):
 - `border … width W` with `W − w − t ≤ 0` — the band is narrower than its own strap
   and round-over need; the message prints all three numbers.
 - a run that holds no whole motif — §6.2 CV11's FAIL, an error like every CV FAIL.
+- a degenerate motif cell — `placeBorder` (the §5 placement function) throws a
+  `coaster:`-prefixed error on a cell whose bounding box is empty, i.e. `L ≤ 0` or
+  `H ≤ 0` (a border pattern with no drawn segment to bound). It also throws
+  `coaster:` when handed an `outline pattern` coaster, the kernel-side guard behind
+  the grammar refusal above: the band is relief on ground and a minimal coaster has
+  none.
 
 `trivet` is allowed: it cuts the band's straps through like the field's, and CV6b
 decides whether what is left is one body. `interlock` is allowed and composes as

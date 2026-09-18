@@ -1458,3 +1458,47 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: `CAL-CST-07` (the free-standing strap floor, provisional at 1.6 mm
   in bikar's baseline); the `--minimal` importer's default `strap` and `round`;
   the gallery's two minimal entries; the Coaster Lab's minimal presets.
+
+## CS-5 — Bordered coasters (a second pattern in a band, D-071)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/GimTvN9hw4U-border-coaster.bkr` and
+  `bikar/patterns/Constructions/7apC5Q9QS-8-border-coaster.bkr` — the CS-1 and
+  CS-2 constructions re-emitted by the importer's `--border` flag, rendered as
+  `--coaster Coaster` at `--param size=40 --param border=4` (mini) and `--param
+  size=90` (standard, at the golden's default `border = 8`) by `make coasters`
+  (→ `src/Coasters/<id>-border-coaster-mini.stl` and `-standard.stl`; the gallery
+  preview is a single standard tile shot from above, where a band reads as a
+  band). Each carries a second pattern — a stock chevron `<id>_border` — laid by
+  the kernel into a `border <pattern> width $border` band that follows the
+  outline (D-071): the field art is inset by the band, `border … width W` strip-
+  maps one motif cell per flat of the hexagon / square (affine, plain `W × W`
+  corners) into the strap-safe band `[w/2 + t, W − w/2]`, relieved by the one
+  `relief straps emboss 1.2`. CV7 measures the field's enclosure against the
+  band's inner edge, and CV11 checks that every flat holds at least one whole
+  motif and every placed strap stays inside the band. All four renders pass the
+  mesh gate at the 0.8 mm coaster floor with one body: the six-fold mini (band
+  4 mm, size 40) is 35,508 triangles / 6.8 cm³ and its standard (band 8 mm, size
+  90) 177,308 / 31.8 cm³; the eight-fold mini 40,800 / 7.9 cm³ and its standard
+  204,300 / 37.2 cm³ — a little above the plain CS-1/CS-2 volumes, the band's
+  relief being what the ground gains. The band is in mm and **does not scale with
+  `size`** (design §7): the golden's default 8 mm band starves a 40 mm mini, so
+  the mini alone re-renders at `border=4`, the second knob this entry carries.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print;
+  a mini of each is the first print, on the plate after Plate 1, beside the CS-3
+  mated pair and the CS-4 minimals.
+- **What we want to learn**:
+  - [ ] 1. Does a 2 mm chevron at 1.2 mm emboss read as a *border* at arm's
+    length, or as noise beside the field construction? (design §10's first
+    question — the band adds no new bet, its straps being CAL-CST-01's seated-
+    strap-on-a-slab case exactly.)
+  - [ ] 2. Do the plain `W × W` corners of a polygon outline (§2's accepted cost)
+    look intentional, like a picture frame, or like a gap the placement missed?
+  - [ ] 3. On the round-outline variant (not yet vendored), does the tangential
+    stretch that closes the ring show at the seam, or is it invisible below the
+    0.4 mm sampling pitch as §3 predicts?
+- **What we learned**: — pending.
+- **Feeds**: the `--border` importer's default `border` band width and its stock
+  chevron motif; the gallery's two bordered entries; colour regions (#37) — the
+  band vs field split (the kernel's `band` bit) is the region this is the first
+  form to carry; the Coaster Lab's bordered presets.

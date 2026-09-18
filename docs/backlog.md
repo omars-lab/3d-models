@@ -53,7 +53,7 @@ about bets that could be minted.
 | Bets settled by the machine card (MC-1…MC-8) | 10 <!--count:cal-bets-mc--> | 15 <!--count:cal-mc-records--> of the 27 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 17 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1), `CAL-GRP-01` (LG-D1), `CAL-CST-01` + `CAL-CST-02` + `CAL-CST-03` + `CAL-CST-04` + `CAL-CST-05` + `CAL-CST-06` (CS-1), `CAL-CST-07` (CS-4) — but only 12 <!--count:cal-design-records--> records, because five of the seventeen have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 3 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist"; `CAL-EQV-01` and `CAL-EQV-02`, the O2 and O3 coverage floors — not print quantities, settled by the corpus ladder |
-| Entries in the prototype catalog | 36 <!--count:catalog-entries--> | 28 coupons (P1–P8, MC-1…MC-8, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 6 deliverables C1, C2, W1, W2 (catalogued 2026-08-03, §3.5) and the coasters CS-1…CS-4 (P3.3, D-069, D-070). Count is the one `make validate-catalog` prints, not a hand tally |
+| Entries in the prototype catalog | 37 <!--count:catalog-entries--> | 28 coupons (P1–P8, MC-1…MC-8, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 6 deliverables C1, C2, W1, W2 (catalogued 2026-08-03, §3.5) and the coasters CS-1…CS-5 (P3.3, D-069, D-070, D-071). Count is the one `make validate-catalog` prints, not a hand tally |
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
@@ -401,7 +401,7 @@ a W3 deliverable of `layout report`.
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
-**Count: 36 <!--count:catalog-entries--> catalog entries = 36
+**Count: 37 <!--count:catalog-entries--> catalog entries = 37
 <!--count:catalog-entries--> print-gated items**,
 plus 4 items that are blocked on apparatus, calendar time or a vendor beyond the
 printer.
@@ -954,10 +954,10 @@ Five checks, run before shipping it, in the spirit of
   27 <!--count:cal-records--> records = 15 <!--count:cal-mc-records--> on the
   card + 12 <!--count:cal-design-records--> on design coupons — five design-coupon bets (the mural pair, the
   brick-anchor pair and the interlock tab-neck bet `CAL-CST-06`) have a coupon but no bikar record yet, which is why the
-  record count does not track the bet count. 36 <!--count:catalog-entries--> print-gated items = 36 <!--count:catalog-entries--> catalog
+  record count does not track the bet count. 37 <!--count:catalog-entries--> print-gated items = 37 <!--count:catalog-entries--> catalog
   entries — 28 coupons (P8, the Maclado orbs, joined 2026-08-08; MC-8, the
   in-situ clearance ladder, 2026-08-19) plus the four
-  deliverables catalogued on 2026-08-03 and the four coasters CS-1…CS-4 (P3.3). The
+  deliverables catalogued on 2026-08-03 and the five coasters CS-1…CS-5 (P3.3). The
   magnet-pocket item in §3.7 is deliberately **outside** that 31: no design doc
   demands it, so counting it would inflate the register with work nobody has
   asked for. §3.7 says so in place rather than leaving the arithmetic to look
