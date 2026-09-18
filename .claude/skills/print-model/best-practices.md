@@ -50,6 +50,34 @@ research file; this file adds *our* data on top.
   **Runnable form:** [`scripts/slice-machine-card.sh`](scripts/slice-machine-card.sh) does both (materialize
   no-brim + one-command 23-rung slice) — the fallback until a `bambu slice plate … --no-brim` flag lands
   (rubric §Self-healing, Reusable scripts).
+- **N copies of ONE MakerWorld model onto one plate — same mechanism, no `--copies` flag (2026-09-18).**
+  The fun-print ask "print 20 of this egg" (find-model pulls the *Mini Twisted Dragon Egg*,
+  makerworld.com/en/models/2993035 → here to pack). There is no `bambu slice --copies N`; `--arrange`
+  packs the objects *present*, it does not *multiply* one. The card example already showed the trick:
+  N total instances = 1 positional + (N−1) of the **same file** after `--`, with `--arrange`; libnest2d
+  packs them. **Runnable form:** [`scripts/slice-copies.sh`](scripts/slice-copies.sh) `<model> <N>` —
+  defaults to the X2D trio, `OUT`/`OUTDIR` env-overridable — the fallback until a `bambu slice plate …
+  --copies N` flag lands. Verified N=3 and N=5 on the egg STL → valid X2D plate, objects = N, 0.4 mm.
+  Gotchas found doing it for real:
+  - **A decorative/organic model raises a by-design "floating regions" warning per copy** (the egg is a
+    supportless overhang by design; raw-STL `--arrange` = 1 warning/copy, so N=20 → 20). The calibration-
+    grade `bambu print send` gate is **fail-closed** and blocks on them; so does `validate sliced` (its
+    warnings check is baked in — no flag tolerates a by-design advisory). For a fun print, **send from the
+    Bambu Studio GUI** (`bambu slice open <plate>` → Print) — it shows the note but does not block. Only
+    whitelist in `.claude/gates/expected-slicer-warnings.json` if it is genuinely by-design *and* you want
+    the gated CLI path. **Do not "fix" it with supports** on a model built to print without them. This is
+    why `slice-copies.sh` treats a warnings-but-sliced exit as a *note* and runs `validate sliced` only for
+    the displayed facts (objects/machine/nozzle/realized brim) rather than as a hard gate on a warnings slice.
+  - **An authored `.3mf` warns less than the raw STL.** Slicing the vendor's oriented `.3mf` raised only
+    1 floating-regions warning where 20 raw-STL copies raised 20 — the author's on-bed orientation removes
+    most of the overhang the auto-arrange re-introduces. Prefer the authored `.3mf` when the vendor ships one.
+  - **`-o` footgun: pass a BASENAME, steer with `-d`.** `slice plate` resolves `-o` relative to the input
+    model's directory, so an **absolute** `-o` gets *concatenated* onto the input dir (`…/Downloads//private/
+    tmp/…`) and the slice fails (exit 243). `slice-copies.sh` always passes `-o <basename>` + `-d <OUTDIR>`.
+  - **NOT the `.3mf` regex-repack path.** Hand-editing the `.3mf` `<build>` to replicate the build item
+    works but is a second, fragile code path (segfaults BambuStudio if `Metadata/*.config` members are
+    dropped; must preserve `<build p:UUID=…>`). `--arrange` over repeated positionals reuses a capability
+    the slicer already owns — one code path, no surgery (repo tenet "a migration never buys a fork").
 - **LEGO sources slice clean at 0.4 mm.** `ClassicBrick.stl`, `RosetteBrick.stl`, and `StarBrick.stl`
   all slice by preset name to a valid X2D plate at 0.4 mm — no profile-specific surprise before Plate 2.
 - **Loaded filament, read live (2026-09-17).** `bambu filament` read AMS 0 slot 0 =

@@ -171,6 +171,11 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      them. Fall back to the slicer GUI (`A` arranges all and adds plates as needed; `Shift-A` the
      selected plate only) or a hand grid estimate (`floor(bedX/(footprintX+spacing)) ×
      floor(bedY/(footprintY+spacing))`). Never report that a tool packed the plate when none ran.
+     **For N copies of ONE model** (a fun-print "print 20 of this", when the count is not already in the
+     model), there is no `--copies` flag: pack 1 positional + (N−1) of the same file after `--` with
+     `--arrange`. The runnable form is [`scripts/slice-copies.sh`](scripts/slice-copies.sh) `<model> <N>` —
+     see [`best-practices.md`](best-practices.md) "Our examples" for the gotchas (by-design floating-regions
+     block the gated send → GUI; authored `.3mf` warns less than raw STL; the `-o` basename footgun).
   5. **Rotate-to-fit advisory — fires only on a strict win.** Offer the rotation **only** when a
      rotated pack fits *strictly more* copies than 0°; a tie is not a reason to rotate. State both
      counts and the trade so the operator chooses: "9 fit as-is; rotating 45° fits 12 — denser pack,
