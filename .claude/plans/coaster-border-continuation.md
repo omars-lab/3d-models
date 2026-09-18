@@ -5,13 +5,24 @@ continuation of [`iterative-dazzling-finch.md`](iterative-dazzling-finch.md) (th
 GeoGebra → naqsh → coaster plan, still authoritative for architecture, decisions D-A…D-I and the
 phase map). Read this file first; open the umbrella only when a phase-level question comes up.*
 
+**Start here in a clear session (2026-09-17, after the Snapshot 9 commit):**
+
+1. This file's copy of record is `3d-models/.claude/plans/coaster-border-continuation.md` on
+   `master` once 3d-models **PR #260** merges (Omar's merge); until then it sits on
+   `chore/plans-and-done-snapshot` in the `3d-models-constructions` worktree, and an identical
+   untracked copy sits in the shared checkout `~/Workspace/git/3d-models/.claude/plans/`.
+2. Confirm §0 with `git -C ~/Workspace/git/bikar-border worktree list` (four border worktrees
+   at `f5d1781`) and `gh pr view 260 -R omars-lab/3d-models`.
+3. Spawn agents A, B and C per §2b (three Agent calls in one message, `subagent_type`
+   general-purpose, model Opus, each brief = §0–§2 + its own row); integrate serially; then D.
+
 ## 0. Where things stand (verified on disk, not from memory)
 
 | Repo / worktree | Branch | State |
 |---|---|---|
 | `~/Workspace/git/bikar-border` | `feat/coaster-border` off `origin/main` 5152cfd (#211 minimal coaster) | one commit `f5d1781` (checkpoint, not pushed): `ast.ts`, `parser.ts`, `evaluator.ts`, `coaster.ts` edits + new `coaster-border.ts` and its test (Fable subagent, 12/12). `npx vitest run coaster`: 7 files, 158 tests passing. |
 | `~/Workspace/git/bikar-placeborder` | detached at 5152cfd | subagent scratch worktree; its two files are already copied into `bikar-border`. Remove it (`git worktree remove`) after the border PR merges. |
-| `~/Workspace/git/3d-models-constructions` | (check with `git branch --show-current`) at 32ca662 | design doc `docs/coaster-border-design.md` merged as 3d-models #257 (D-071). The catalog/gallery slice (CS-5) is not started. |
+| `~/Workspace/git/3d-models-constructions` | `chore/plans-and-done-snapshot` (74ef6bb) = 3d-models **PR #260** (this plan + `docs/tasks/done.md` Snapshot 9), open, **Omar merges** (the auto-mode classifier refuses an unattended merge) | design doc `docs/coaster-border-design.md` merged as 3d-models #257 (D-071). The catalog/gallery slice (CS-5) is not started. Once #260 is merged, branch D off the new `origin/master`. |
 | `~/Workspace/git/3d-models` (shared checkout) | `feat/x2d-slice-preflight` | **another session's branch — never commit here.** |
 
 Merged inputs the border builds on: bikar #209 interlock (D-069), #210 Coaster Lab (D-067),
@@ -157,10 +168,11 @@ the two `render --check` commands of §2 step 5, one fix-up commit if anything c
 CV11 message the docs quote), push, PR. Then spawn D. Delete the three `-a/-b/-c` worktrees and
 branches after the PR merges; they are never pushed.
 
-**Worktree commands** (main session, one per agent, from `bikar-border`):
-`git worktree add ../bikar-border-a -b feat/coaster-border-a BASE` — then in the new worktree
-`npm ci` and `npm run build` (fresh bikar worktrees need both:
-`bikar-registry-hook-reads-shared-checkout`).
+**Worktree commands — DONE 2026-09-17:** `bikar-border-a`, `-b` and `-c` exist at `BASE` on
+`feat/coaster-border-a/-b/-c` (`git -C ~/Workspace/git/bikar-border worktree list` shows all
+three). What is **not** done in them: `npm ci` and `npm run build` — fresh bikar worktrees need
+both (`bikar-registry-hook-reads-shared-checkout`), so each agent brief starts with those two
+commands in its own worktree. No agent has been spawned yet.
 
 ## 3. Then the 3d-models slice (CS-5), branch off `origin/master` in `3d-models-constructions`
 
