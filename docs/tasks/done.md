@@ -542,3 +542,37 @@ guide-print pre-send-gate work in this same prune.
 - #56 — correct the sub-floor-rung assumption: only `MC2Wall04` (0.4 mm) floats by design; the 0.6 / 0.8 / 1.0 mm rungs slice clean and must not expect the warning (measured 2026-09-17)
 - #57 — guard against re-slicing an already-sliced `.3mf` (its embedded custom presets aren't in the bundle, so a re-slice silently loses them)
 - #9a — the checked-in ground-truth diff surface: the exact Plate-1 `project_file` payload to diff against a BambuStudio GUI capture, appended to first-party-dispatch.md; the guide-print step-4 pre-send gate + the "are we ready to print?" checklist shipped alongside
+
+---
+
+**▸ Snapshot 9 — 2026-09-17 (the coaster forms — shape v2, interlock, Coaster Lab,
+minimal).** A **continuation of Snapshot 6's constructions board, not of Snapshot
+7/8's first-print board**: `#27` and `#30` are the two "agent running" ids Snapshot 6
+left open, and `#31`–`#38` were minted on that same sequence afterwards — so this
+snapshot's `#33` is coaster shape v2, not an id on the first-print board (Snapshot 7's
+`#13` is the blog `.env`). The board is still the plan "GeoGebra constructions →
+naqsh (bikar) → STL coasters" (session plan iterative-dazzling-finch), now carried
+by its self-contained continuation
+[coaster-border-continuation](../../.claude/plans/coaster-border-continuation.md);
+decisions D-065…D-071 in the [decisions log](../decisions-log.md). Still open on
+the board at this prune: `#12` (the later-phases umbrella: P4.x plate composer,
+P5.x corpus), `#17` (youtube's O1/O2 verdict scripts on its local `feat/ggb-coords`
+until Omar says main), `#21` (CI secrets sync, owner-gated), `#24` (session-reflect
+implementation, waits on the `#23` design review), **`#36`** (the coaster border,
+D-071: design shipped in 3d-models #257, bikar implementation checkpointed at
+f5d1781 on `feat/coaster-border`, validators/importer/docs remaining per the
+continuation plan §2) and `#37` (colour regions → per-body export → filament map).
+
+## Phase 2/3 remainder — the first coasters into the catalog
+
+- #27 — P2.7 disc coaster from the GimTvN9hw4U golden: mini `size=40` / standard `size=90`, `--check` both; the importer emits the coaster block itself, `--coaster` beside `--piece` (bikar #207, 05d12ff); the product-side coaster design doc + D-065 (3d-models #227, 6bb053b)
+- #30 — P2.5 GeoGebra → naqsh cookbook, held to the importer by a conformance test + the G3 fence glob (bikar #204, 035b0df); P2.4 readability rules + `validate --style constructions` (bikar #206, 1d42690)
+- #31 — P3.3 catalog + gallery + `make coasters` for the two migrated coasters, CS-1/CS-2 (3d-models #244, 41a4939)
+- #32 — P3.1 `import-construction` skill: GeoGebra construction → naqsh → coaster, rubric read at run time (3d-models #230, 6c06590)
+
+## Coaster forms (D-066…D-070)
+
+- #33 — shape v2: outline fitted to the art (hex / square / octagon), `rotate` and `margin` knobs, CV7 enclosure, the "clipped" claim retracted — design + D-066…D-068 (3d-models #239, 50de1ba); bikar implementation (bikar #208, 48b28b9); CS-1/CS-2 re-vendored from bikar main at shape v2 (3d-models #247, e47ce9a)
+- #34 — interlock: self-mating half-edge dovetail on every straight edge, D-069 — design (3d-models #245, 97e6952); bikar grammar `interlock`, slotted ring + exact wall, CV8/CV9, `--interlock` importer flag, CAL-CST-06 (bikar #209, 89b63fd); CS-3 + mated-pair gallery previews, D-069 → built (3d-models #250, 1ab40f2)
+- #35 — Coaster Lab in bikar's lab on the Orb Lab pattern, D-067: live structural-check panel, the knobs ARE the param block, roster pinned to `patterns/Constructions/*-coaster.bkr` by a presets test that sweeps mini and standard (bikar #210, 3b7b6f8); vendored into the gallery (3d-models #253, 2f600c3); pointer baseline shrunk once its paths resolved on bikar main (3d-models #254, b33606e)
+- #38 — minimal coasters: `outline pattern`, the strap network itself extruded with a rounded top edge and no slab; CAL-CST-07 free-standing floor, CV10 round-over check — design D-070 (3d-models #251, 8688876); bikar (bikar #211, 5152cfd); CS-4 + gallery pair, D-070 → built (3d-models #255, fa86bab)
