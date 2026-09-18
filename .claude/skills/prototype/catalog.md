@@ -1383,3 +1383,40 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the `coaster` declaration's relief-legibility floor at small
   `size`; the gallery's coaster entry; the constructions ledger's `coaster`
   cell for `7apC5Q9QS-8`.
+
+## CS-3 — Interlocked coasters (self-mating dovetail edges, D-069)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr` and
+  `bikar/patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr` — the CS-1 and
+  CS-2 constructions re-emitted by the importer's `--interlock` flag, rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/<id>-interlock-coaster-mini.stl`
+  and `-standard.stl`; the gallery preview is two standard tiles mated along one
+  edge). Each straight edge carries `interlock dovetail $neck $depth clearance
+  $clearance` (D-069): a half-edge tab on one half of the edge and the matching
+  slot on the other, so any two tiles of the same `size` plug together
+  edge-to-edge and a single tile mates with itself rotated. Knobs `--param
+  neck=3` (2..5), `--param depth=3` (2..5), `--param clearance=0.15`
+  (0.05..0.35, the `CAL-FIT-01` ladder from snug to free); `margin` is derived
+  (`2 + depth + clearance`) so the art clears the slot floor. All four renders
+  pass the mesh gate at the 1.2 mm strap floor: the six-fold mini is 33,948
+  triangles / 6.3 cm³ and its standard 174,428 / 30.8 cm³; the eight-fold mini
+  39,112 / 7.4 cm³ and its standard 200,612 / 36.2 cm³ — slightly below the
+  plain CS-1/CS-2 volumes because the slots remove more than the tabs add.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print;
+  a mated pair of minis is the first print, on the plate after Plate 1.
+- **What we want to learn**:
+  - [ ] 1. `CAL-CST-06` — does a 3 mm tab neck survive a hand pull-apart at full
+    slab height in PLA, or does the neck floor need to rise (the knob range stops
+    at 5)?
+  - [ ] 2. Fit: at `clearance=0.15` does the dovetail seat by hand and hold, bind
+    (needs the next rung up), or rattle (needs the next rung down)? One reading
+    per rung printed, never interpolated.
+  - [ ] 3. Do the slot floors (a 0.4 mm-pitch staircase in the collar loft) print
+    clean at 0.2 mm layers, or do they need the bottom chamfer the design
+    refuses on interlocked tiles?
+- **What we learned**: — pending.
+- **Feeds**: `CAL-CST-06` (the tab-neck floor, registered in bikar with no
+  record); the `interlock` clause's default `clearance`; the gallery's two
+  interlocked entries; the plate composer's mated-pair arrangement (P4.x).

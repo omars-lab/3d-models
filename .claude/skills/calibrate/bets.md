@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**28 registered bets · 26 `Calibrated` records — 26 provisional, 0 measured · 8 bets with no record in bikar.**
+**29 registered bets · 26 `Calibrated` records — 26 provisional, 0 measured · 9 bets with no record in bikar.**
 
 ## Bets
 
@@ -46,6 +46,7 @@ is opened, clustered, and closed.
 | `CAL-CST-03` | `DEBOSS_FLOOR_MIN_MM` coaster deboss floor: the thinnest solid slab left under the deepest deboss pocket before it prints translucent and cups | `CS-1` | provisional | `DEBOSS_FLOOR_MIN_MM_CAL` |
 | `CAL-CST-04` | `RELIEF_ASPECT_MAX` coaster relief aspect ceiling: the tallest raised rib per unit width before it delaminates along the layer lines | `CS-1` | provisional | `RELIEF_ASPECT_MAX_CAL` |
 | `CAL-CST-05` | `ELEPHANT_FOOT_MM` coaster bottom-chamfer floor: the least chamfer run that clears the first-layer elephant's foot | `CS-1` | provisional | `ELEPHANT_FOOT_MM_CAL` |
+| `CAL-CST-06` | coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 | `CS-1` | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -73,6 +74,7 @@ named next print rather than an absence:
 - `CAL-INW-01` — printed integrity of a 1.5 mm inset cavity wall following a concave lobed outline (Arachne corner rounding, elephant-foot comp vs thin-wall guard) · coupon `LG-B2`
 - `CAL-EQV-01` — oracle O2 centreline-coverage floor: the recall and precision of the hero export's skeleton by the naqsh render's (0.98) below which a construction import is refused as not drawing the same thing · coupon none — not a print quantity — settled by measuring the corpus ladder (the second construction 7apC5Q9QS-8 and each rung after it) for the margin between a correct import and the smallest single-statement drop, not by a coupon
 - `CAL-EQV-02` — oracle O3 solid-coverage gate: the fraction of the OpenSCAD reference footprint the naqsh extrusion covers (0.99) and the largest disc of reference region the extrusion leaves unfilled (1.0 mm) beyond which a construction's flat solid is refused · coupon none — not a print quantity — chosen against one construction (GimTvN9hw4U: faithful 1.000/0.00 mm, dropped ring 0.143/10 mm, a 0.5 mm translation 0.975/0.4 mm) and settled by the corpus ladder, the same instrument as CAL-EQV-01
+- `CAL-CST-06` — coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 · coupon `CS-1`
 
 ## Records
 

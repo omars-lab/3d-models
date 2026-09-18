@@ -1,8 +1,8 @@
 # Coaster interlock — edges that plug into each other
 
-*Status: designed, not built (task #34). Decision D-069. Measurements in
+*Status: built — NaqshCoffee/bikar#209 (task #34), catalogued as CS-3 in 3d-models. Decision D-069. Measurements in
 [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md). The
-bikar implementation follows shape v2 (NaqshCoffee/bikar#208) and lands in the same
+bikar implementation follows shape v2 (NaqshCoffee/bikar#208) and landed in the same
 `coaster` kernel this doc extends:
 [`coaster-design.md`](coaster-design.md).*
 
@@ -220,8 +220,8 @@ finding, not a cropped mat. The `clearance` range is the fit ladder's endpoints,
 the Coaster Lab (#35) can offer snug…free as a slider without inventing numbers.
 The neck and depth defaults are choices, not defaults in the D3 sense (§10).
 
-The catalog carries an interlocked variant as its own entry beside CS-1/CS-2 once
-the bikar PR lands; the gallery shows two mated tiles, because a single tile with
+The catalog carries the interlocked variant as its own entry (CS-3) beside
+CS-1/CS-2; the gallery shows two mated tiles, because a single tile with
 tabs does not explain itself.
 
 ## 9. Decisions
@@ -242,8 +242,9 @@ tabs does not explain itself.
   on the coaster: it takes the pull that separates two tiles. CAL-CST-01 floors an
   unloaded strap and is cited in CV9 as necessary only. The loaded floor is a new
   bet, **CAL-CST-06** (tab neck floor: the narrowest dovetail neck that survives a
-  hand pull apart at full slab height), to be registered in bikar's `CAL_BETS` and
-  `bets.md` with the implementation, settled on coupon CS-1 alongside CAL-CST-01…05.
+  hand pull apart at full slab height), registered in bikar's `CAL_BETS` and
+  `bets.md` with the implementation (NaqshCoffee/bikar#209, no `Calibrated` record
+  yet), settled on coupon CS-1 alongside CAL-CST-01…05.
   Until it exists this doc states no default for the neck; `neck = 3` in §8 is a
   choice, like `size` and `margin` in [`coaster-design.md`](coaster-design.md) §9.
 - **Head = neck + depth** (a 26.6° flare) is a construction choice with no source.

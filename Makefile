@@ -743,6 +743,14 @@ validate-constructions:
 # `--check`ed on its own mesh. The standard is the gallery/download mesh and
 # the vendored src/Coasters/<id>-coaster-standard.stl the constructions ledger
 # points at; both sizes and the .bkr source are committed under src/Coasters/.
+# An interlocked golden (`<id>-interlock-coaster.bkr`, D-069) rides the same
+# glob and lands as id `<id>-interlock`; its preview is two tiles mated, because
+# a single tile with tabs does not explain itself.
+# The two sizes are defined once here: the renders take them as `--param size=`
+# and the preview pass takes the standard as the mate offset for an interlocked
+# tile's two-tile picture (build/brick_previews.py --mate).
+COASTER_MINI_MM := 40
+COASTER_STANDARD_MM := 90
 coasters: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
@@ -754,15 +762,15 @@ coasters: bikar-stamp
 	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
 		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
 		echo "== $$id"; \
-		$(BIKAR) render "$$bkr" --coaster Coaster --param size=40 --format stl --check \
+		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) --format stl --check \
 			-o ${ROOT_DIR}/src/Coasters/$$stem-mini.stl; \
-		$(BIKAR) render "$$bkr" --coaster Coaster --param size=90 --format stl --check \
+		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_STANDARD_MM) --format stl --check \
 			-o ${ROOT_DIR}/src/Coasters/$$stem-standard.stl; \
 		cp ${ROOT_DIR}/src/Coasters/$$stem-standard.stl ${ROOT_DIR}/build/stls/$$id.stl; \
 		echo "$$id" >> ${ROOT_DIR}/build/.coaster-names; \
 		cp "$$bkr" ${ROOT_DIR}/src/Coasters/; \
 	done; \
-	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py --coasters
+	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py --coasters --mate $(COASTER_STANDARD_MM)
 
 # Encrypted-env gate — the wholesale form of .githooks/pre-commit.d/
 # 11-env-encrypted. `.env` is commit-safe only while every value in it is
