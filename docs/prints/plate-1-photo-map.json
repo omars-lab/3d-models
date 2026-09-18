@@ -1,6 +1,6 @@
 {
   "title": "Plate 1 — machine card · what to photograph",
-  "footnote": "Footprints + labels placed from the .3mf object transforms + mesh bounds (top-down, Y up).",
+  "footnote": "Placed from the .3mf object transforms + mesh bounds. Elevation faces are box silhouettes projected from the geometry, not renders — they show footprint + height, not surface detail.",
   "groups": {
     "MC1": [90, 130, 200],
     "MC2": [120, 120, 140],

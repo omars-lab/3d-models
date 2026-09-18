@@ -72,7 +72,9 @@ measure → compare → verdict** — not just the measure step:
   *Which coupon is which on the plate* is a top-down photo map, not a memory game:
   `make plate-photo-map` (`build/plate_photo_map.py`) rings the shoot-these coupons
   on a footprint render read from the sliced `.3mf`, and also writes a printable
-  contact sheet beside the slicer's own baked thumbnails. The ring set is data — a
+  contact sheet: the slicer's own baked thumbnails plus all six orthographic faces
+  (top/bottom, front/back, left/right) projected from the geometry, so the fan and
+  tower undersides on the flipped plate are located, not guessed. The ring set is data — a
   JSON sidecar next to the bench sheet (Plate 1: `docs/prints/plate-1-photo-map.json`),
   so it stays this same per-coupon list, reviewable. Print the sheet with the bench sheet.
 - **Compare, then record the verdict (R5).** For every reading whose `settles`

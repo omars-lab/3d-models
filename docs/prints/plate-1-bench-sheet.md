@@ -218,10 +218,14 @@ answers the bridge, the overhang, and the wall.
 
 Which coupon is which, and which ones to shoot, read off the plate top-down. Regenerate with
 `make plate-photo-map` (from the sliced `.3mf`); the red rings are shoot-now, amber also-useful.
-The contact sheet pairs it with the slicer's own baked thumbnails — isometric print thumbnail, top
-view, id map.
+The contact sheet pairs the annotated faces with the slicer's own baked thumbnails — isometric
+print thumbnail, top view, id map — then adds all six orthographic faces (top/bottom, front/back,
+left/right) projected from the geometry. Top and bottom carry the full id set; the elevations are
+box silhouettes that show which coupons stand tall (towers, fan) and where the undersides are, and
+label only the ringed coupons. Bottom is the mirror you see when you flip the plate to shoot fan
+undersides, bridge undersides, and tower feet.
 
-![Plate 1 print contact sheet — the annotated top-down photo map with the coupons to photograph ringed, beside the slicer's baked isometric / top / id thumbnails](plate-1-contact-sheet.png)
+![Plate 1 print contact sheet — the slicer's baked isometric / top / id thumbnails above the six annotated orthographic faces, with the coupons to photograph ringed](plate-1-contact-sheet.png)
 
 ## Priority order — what to test, most leverage first
 
