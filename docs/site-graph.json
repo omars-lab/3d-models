@@ -136,6 +136,14 @@
       "what": "per-orb construction breakdown; reads build/orb-breakdown/<Orb>/manifest.json, which `make orbs` writes and DEPLOY_PATHS ships"
     },
     {
+      "id": "G.coaster",
+      "surface": "gallery",
+      "file": "coaster.html",
+      "vendored": true,
+      "inRepo": false,
+      "what": "the Coaster Lab (D-067): size a rosette coaster for the printer in the room and read, live, whether its eight structural CV checks and the mesh gate pass. A bikar packages/lab entry, vendored by lab-vendor beside the other lab pages; the hub stays the plate builder, this page configures and verifies one coaster."
+    },
+    {
       "id": "G.readme",
       "surface": "gallery",
       "file": "README.md",
@@ -225,7 +233,7 @@
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:592",
+      "at": "index.html:595",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer"
@@ -233,7 +241,7 @@
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:592",
+      "at": "index.html:595",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none"
@@ -459,7 +467,7 @@
     {
       "from": "G.index",
       "to": "G.breakdown",
-      "at": "index.html:593",
+      "at": "index.html:596",
       "evidence": "href=\"breakdown.html?orb=",
       "visibility": "js-computed",
       "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
@@ -516,6 +524,13 @@
       "visibility": "static"
     },
     {
+      "from": "G.index",
+      "to": "G.coaster",
+      "at": "index.html:352",
+      "evidence": "href=\"coaster.html\"",
+      "visibility": "static"
+    },
+    {
       "from": "G.studio",
       "to": "G.prints",
       "at": "bikar packages/lab/src/studio-main.ts:56",
@@ -542,6 +557,47 @@
       "at": "bikar packages/lab/src/prints-main.ts:125",
       "repo": "bikar",
       "visibility": "js-computed"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.studio",
+      "at": "bikar packages/lab/coaster.html:27",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.index",
+      "at": "bikar packages/lab/coaster.html:28",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these pages beside this repo's index.html, same as the lab.html and breakdown.html edges"
+    },
+    {
+      "from": "G.coaster",
+      "to": "S.editor",
+      "at": "bikar packages/lab/src/editor.ts:22",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "viaHost": "bikar-studio.pages.dev",
+      "note": "STUDIO_EDITOR_URL, consumed by coaster-main.ts:338 (openStudioLink) — the same constant the Orb and Lego Lab editor edges ride",
+      "gated": {
+        "why": [
+          "JS-computed 'open in studio' deep-link, the same STUDIO_EDITOR_URL as the lab and",
+          "lego editor edges. Every studio host is behind Access since task #63 (2026-09-02),",
+          "so a gallery visitor following it meets the sign-in wall — intended for signed-in",
+          "authors, not a walkable loop."
+        ],
+        "decidedOn": "2026-09-02"
+      }
+    },
+    {
+      "from": "G.studio",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "repo": "bikar",
+      "visibility": "js-computed",
+      "note": "the same pageCard renderer that emits the other page links; coaster.html is in the catalogue (status 'live'), so it is listed without a second edit"
     }
   ],
   "fragileIfProtected": {

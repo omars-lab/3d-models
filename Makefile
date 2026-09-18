@@ -456,14 +456,14 @@ pattern-sets: bikar-stamp
 # cannot read that one, so a page added there and not here vendors nothing and
 # `lab-smoke` never looks for it. Adding a page is two edits, in two repos, and
 # saying so is cheaper than a cross-repo check that would have to run a build.
-LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html prints.html
+LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html prints.html coaster.html
 # The subset that runs the compile worker. studio.html and design.html render
 # from static data, so requiring a worker chunk of them would fail a page that
 # is working exactly as designed.
 # breakdown.html is here for its "Turn it yourself" handoff: the page plays
 # rendered SVG frames with no compile at all, and only recompiles source.bkr in
 # the worker when the reader asks for the live mesh.
-LAB_WORKER_PAGES = lab.html lego.html breakdown.html
+LAB_WORKER_PAGES = lab.html lego.html breakdown.html coaster.html
 
 lab lego-lab: lab-vendor
 
