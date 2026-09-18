@@ -5028,8 +5028,9 @@ The kernel **detects** every pinch (the four-faces-at-an-edge test, §5.2) and r
 CLI flag `--pinch fillet|merge|error` (§5.3) — a manufacturing choice, so a flag, never a DSL
 statement (K10). **`fillet`** (default) raises each pinch to the printable floor on the split
 bodies only, so union == single holds everywhere outside sub-floor notches (`--format stl`
-untouched); **`merge`** recolours the pinch cell to `base`, keeping union exact at the cost of
-the tip's colour; **`error`** refuses with each pinch's `(x, y)`. `--pinch keep` is deliberately
+untouched); **`merge`** recolours the pinch tip to `base` — exact on a pinch-free coaster, a
+sub-floor residual (≈5·10⁻⁴ rel.) on a saddled one per §5.1 — at the cost of the tip's colour;
+**`error`** refuses with each pinch's `(x, y)`. `--pinch keep` is deliberately
 not offered. The pinch floor is **CAL-PIN-01** — whether the single-filament `featureFloorMm`
 (0.80 mm) is the right threshold for a two-filament interface is a bet, not a bare number. The
 border outer wall is decomposed into stacked base+border panels (§5.4), an independent fix the

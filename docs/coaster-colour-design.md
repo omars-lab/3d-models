@@ -207,9 +207,12 @@ altered by any strategy.
   so the body becomes 2-manifold. Preserves colour intent — a gold star tip stays gold, a hair
   thicker. The per-region STL then differs from the single-body mesh **only inside cells
   thinner than the floor** — geometry no printer could reproduce anyway.
-- **`merge`.** Reassign each pinching cell to the adjacent `base` region, so no thin separate
-  body is created. The split stays **exactly** union == single. Cost: the very tip loses its
-  colour (it prints in the `base` filament). Deterministic; changes colour, not geometry.
+- **`merge`.** Reassign each pinching cell's tip to the `base` body — it prints in the `base`
+  filament — so no thin separate body is created and every body stays 2-manifold. For a
+  **pinch-free** coaster this is a no-op and union == single exactly; for a **saddled** one
+  §5.1 forbids exact union alongside manifold bodies, so a sub-floor residual (≈5·10⁻⁴ rel.)
+  remains at each merged pinch. The trade is the tip's colour, not a printable geometry change.
+  Deterministic.
 - **`error`.** Refuse the whole render, naming each pinch `(x, y)` and the physical reason —
   "the relief kisses the slab at a zero-width notch no printer can make in a second colour —
   thicken/separate the motif, choose `--pinch fillet|merge`, or render `--format stl`." For an
@@ -240,9 +243,11 @@ independent of the pinch obstruction (it fails even on pinch-free borders).
 aggregate cannot discharge a per-part claim, a valid *total* triangle count does not certify
 three valid bodies; one pinched body among many stays hidden in a total. The union of the
 bodies equals the single-body `--format stl` mesh **everywhere outside cells thinner than
-CAL-PIN-01** (exactly, under `--pinch merge`; up to the fillet floor, under `--pinch fillet`).
-A region named by a `color` statement but holding no cell is refused; a debossed region (no
-raised body, D-066) is refused.
+CAL-PIN-01**; on a pinch-free coaster it is exact under either strategy. §5.1 forbids exact
+union alongside manifold bodies on a saddled pattern, so both strategies leave a sub-floor
+residual there — `fillet` up to the floor it raises, `merge` a ≈5·10⁻⁴ residual at each
+recoloured pinch. A region named by a `color` statement but holding no cell is refused; a
+debossed region (no raised body, D-066) is refused.
 - PASS: the §4 bordered hexagon, `color base Slab`, `color straps Gold`, `color border Gold`,
   under `--pinch fillet` — three bodies, each 2-manifold and `--check` clean *individually*;
   the border outer wall decomposes into stacked base+border panels (§5.4); re-merging
@@ -319,8 +324,9 @@ reasoning (classify to the model's own palette so it ports where pixels do not) 
   `z = base`, §5.1), a K7 contradiction in the first draft of §5. Resolution: **detect** every
   pinch (§5.2) and resolve it by a CLI strategy `--pinch fillet|merge|error` (§5.3), `fillet`
   the default. `fillet` raises pinches to the printable floor (**CAL-PIN-01**), so union ==
-  single holds everywhere outside sub-floor notches; `merge` keeps union exact by recolouring
-  the pinch to `base`; `error` refuses with coordinates. The border outer wall is decomposed
+  single holds everywhere outside sub-floor notches; `merge` recolours the pinch tip to `base`
+  (exact on pinch-free coasters, a sub-floor residual on saddled ones, per §5.1); `error`
+  refuses with coordinates. The border outer wall is decomposed
   into stacked base+border panels (§5.4). `--format stl` is unchanged. Chosen over scoping the
   feature to pinch-free coasters (the earlier Option A) because Option B makes every pattern
   print. See [`decisions-log.md`](decisions-log.md).
