@@ -120,9 +120,13 @@ skippable.
    for this machine it stays closed; later sends skip this line.
 3. **Nozzle matches.** `bambu header --plate <plate.3mf>` shows **no** `⚠ NOZZLE MISMATCH` (step 3).
    A mismatch means the loaded nozzle isn't the one the plate was sliced for — stop.
-4. **Filament loaded and correct.** The material the slice assumed (type + colour) is actually loaded,
-   and there is enough of it for the plate's estimated grams (Plate 1 ≈ 111 g PLA). Confirm at the
-   AMS/external-spool readout, not from memory.
+4. **Filament loaded and correct.** The material the slice assumed (type + colour) is actually loaded.
+   Confirm the *type and colour* at the AMS/external-spool readout, not from memory. On **quantity**,
+   don't over-think a tight spool: the X2D has a runout sensor and **pauses mid-print, prompting you to
+   load more, then resumes on the same layer** — so a spool that's tight against the sliced estimate is
+   fine to *start* (the slice reports the grams; Plate 1 ≈ 70 g by filament length, the dispatch-relevant
+   figure, not the 111 g solid-volume equivalent). The runout backstop means only a *clearly* insufficient
+   spool is worth stopping for; stay reachable to feed it when it nudges.
 5. **Owner is at the machine.** Dispatch is owner-gated: watching the first layer is a non-damaging
    risk only a present human catches (step 5), and the physical send — and any `--yes` — is the
    operator's, never the skill's.
@@ -157,6 +161,12 @@ matter are **watch the first layer** and **confirm-before-send** (step 4). On Pl
 load-bearing: MC-6 prints on bare plate *by design*, so watching the first layer **is** the adhesion
 measurement. Print the card in **one material, one profile, one session** — "a card printed across
 two sessions is two half-cards."
+
+**Runout is a pause, not a failure.** If the spool runs out, the X2D's runout sensor pauses the job,
+retracts, and prompts you to load more; it resumes on the same layer once you feed it. This is why a
+tight-but-close spool (step 4) does not block a start — the "one session" rule is about *material and
+profile continuity*, not an uninterrupted clock, and a runout pause + reload keeps the card one card.
+Stay reachable for the nudge rather than pre-aborting over grams.
 
 ### 6 — Measure, highest-leverage first
 
