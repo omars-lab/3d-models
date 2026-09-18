@@ -214,6 +214,15 @@ The mesh gate is silent on MC-3's 2 mm bridged ceiling and MC-4's 2 mm fan wall 
 about **mesh soundness only** (watertight, non-degenerate), not printability. Only the physical part
 answers the bridge, the overhang, and the wall.
 
+## What to photograph — the plate map
+
+Which coupon is which, and which ones to shoot, read off the plate top-down. Regenerate with
+`make plate-photo-map` (from the sliced `.3mf`); the red rings are shoot-now, amber also-useful.
+The contact sheet pairs it with the slicer's own baked thumbnails — isometric print thumbnail, top
+view, id map.
+
+![Plate 1 print contact sheet — the annotated top-down photo map with the coupons to photograph ringed, beside the slicer's baked isometric / top / id thumbnails](plate-1-contact-sheet.png)
+
 ## Priority order — what to test, most leverage first
 
 1. **MC-1 fit ladder — by fingers, zero instruments.** Do this the moment the plate is off the bed;

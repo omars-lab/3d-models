@@ -196,7 +196,9 @@ hand judgements recorded **with who judged**. Order (from the plan):
 **Bag and label each rung as it comes off** — rung identity does not survive onto the plastic, and a
 mis-bagged rung is worse than a missing one. The per-coupon PASS / borderline / FAIL scales are
 pre-filled in the bench sheet; the photograph checklist and the compare-to-expectation step are
-[`prototype`](../prototype/SKILL.md)'s job.
+[`prototype`](../prototype/SKILL.md)'s job. Carry the **photo map** to the bench so you shoot the
+right coupons: `make plate-photo-map` renders it from the sliced `.3mf` (a top-down map with the
+shoot-these coupons ringed, plus a printable contact sheet) — it is embedded in the bench sheet.
 
 ### 7 — Propagate (the step that gets skipped)
 

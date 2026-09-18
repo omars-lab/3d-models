@@ -408,6 +408,21 @@ coupons: bikar-stamp
 validate-coupons:
 	@$(PYTHON) ${ROOT_DIR}/build/verify_machine_card.py --bikar-dir "$(BIKAR_DIR)" --self-test
 
+# Photo map — a top-down render of a sliced plate with the coupons to photograph
+# ringed, the visual index of `prototype`'s per-coupon photograph checklist. The
+# *what to shoot* set is data (a JSON sidecar next to the bench sheet), not code,
+# so the same target serves any plate: override PLATE / HL / PHOTO_MAP. Reads the
+# gitignored sliced .3mf under build/, so slice the plate first (`bambu slice`).
+PLATE ?= ${ROOT_DIR}/build/stls/coupons/machine-card/plate-1-machine-card.sliced.3mf
+HL ?= ${ROOT_DIR}/docs/prints/plate-1-photo-map.json
+PHOTO_MAP ?= ${ROOT_DIR}/docs/prints/plate-1-photo-map.png
+CONTACT_SHEET ?= ${ROOT_DIR}/docs/prints/plate-1-contact-sheet.png
+plate-photo-map:
+	@[ -f "$(PLATE)" ] \
+		|| { echo "sliced plate not found: $(PLATE) — slice it first (bambu slice plate ...)"; exit 1; }
+	@$(PYTHON) ${ROOT_DIR}/build/plate_photo_map.py "$(PLATE)" "$(HL)" "$(PHOTO_MAP)" \
+		--contact-sheet "$(CONTACT_SHEET)"
+
 # Pattern sets — mural presets from the same directory, skipped by `bricks`
 # above because one STL is the wrong shape for them twice over: a mural
 # prints as one gated STL *per piece*, and the single-mesh `--check` path

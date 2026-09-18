@@ -69,6 +69,12 @@ measure → compare → verdict** — not just the measure step:
   silently-wrong dimension); MC-5 all four warp corners against the flat reference;
   MC-6 the tower bases and any elephant's foot. For a design coupon, shoot the mate
   against the real part (LEGO stud/brick, clip-in-tile) and the failure surface.
+  *Which coupon is which on the plate* is a top-down photo map, not a memory game:
+  `make plate-photo-map` (`build/plate_photo_map.py`) rings the shoot-these coupons
+  on a footprint render read from the sliced `.3mf`, and also writes a printable
+  contact sheet beside the slicer's own baked thumbnails. The ring set is data — a
+  JSON sidecar next to the bench sheet (Plate 1: `docs/prints/plate-1-photo-map.json`),
+  so it stays this same per-coupon list, reviewable. Print the sheet with the bench sheet.
 - **Compare, then record the verdict (R5).** For every reading whose `settles`
   names a real `CAL-…` bet, read it against the bench-sheet criterion and record
   both `expected` (the criterion, from
