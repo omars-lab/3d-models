@@ -16,6 +16,7 @@
 // `no filament colors found in projects`, `can not find system preset file` on a re-slice) is NOT a
 // slicing warning and must never be classified as one — only the `found … slicing warnings:` form is.
 
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { repoRoot } from "../paths.js";
@@ -153,7 +154,21 @@ export interface WarningsSidecar {
   tool: string;
   sliced_at: string;
   studio_version: string | null;
+  /** SHA-256 of the exact .3mf bytes these warnings were captured for. Lets the dispatch gate refuse
+   *  a STALE sidecar (one sitting beside a .3mf it was not sliced from) — not only a missing one.
+   *  Optional for backward-compat: a legacy sidecar without it cannot be proven fresh ⇒ unverifiable. */
+  source_sha256?: string;
   warnings: SlicerWarning[];
+}
+
+/** SHA-256 of a file's bytes, or null if it is missing/unreadable. Content-based, so the freshness
+ *  verdict survives worktrees, checkouts and mtime noise that an mtime dependency would trip on. */
+export function hashFile(path: string): string | null {
+  try {
+    return createHash("sha256").update(readFileSync(path)).digest("hex");
+  } catch {
+    return null;
+  }
 }
 
 /** Read a sidecar; null if absent/unreadable (the caller decides whether absence blocks). */
@@ -167,6 +182,23 @@ export function readSidecar(threemfPath: string): WarningsSidecar | null {
   } catch {
     return null;
   }
+}
+
+/** Whether a sidecar corresponds to the .3mf on disk right now:
+ *   - "missing"      → no sidecar beside the plate;
+ *   - "unverifiable" → sidecar present but pre-dates source_sha256 (legacy) or the .3mf is unreadable;
+ *   - "stale"        → sidecar's source_sha256 does not match the current .3mf bytes;
+ *   - "fresh"        → hashes match — the warnings describe THIS plate.
+ *  A dispatch gate treats everything but "fresh" as fail-closed. */
+export type Freshness = "missing" | "unverifiable" | "stale" | "fresh";
+
+export function sidecarFreshness(threemfPath: string): { sidecar: WarningsSidecar | null; status: Freshness } {
+  const sidecar = readSidecar(threemfPath);
+  if (!sidecar) return { sidecar: null, status: "missing" };
+  if (!sidecar.source_sha256) return { sidecar, status: "unverifiable" };
+  const actual = hashFile(threemfPath);
+  if (!actual) return { sidecar, status: "unverifiable" };
+  return { sidecar, status: actual === sidecar.source_sha256 ? "fresh" : "stale" };
 }
 
 /** The BambuStudio version banner it prints on every slice — kept for the sidecar's provenance. */

@@ -25,6 +25,7 @@ import {
   loadManifest,
   studioVersionFrom,
   sidecarPath,
+  hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
 
@@ -317,6 +318,7 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       tool: "bambu slice",
       sliced_at: new Date().toISOString(),
       studio_version: studioVersionFrom(combined),
+      source_sha256: hashFile(outPath) ?? undefined, // binds this capture to THESE .3mf bytes
       warnings,
     };
     try {

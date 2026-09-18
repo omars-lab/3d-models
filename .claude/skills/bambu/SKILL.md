@@ -67,6 +67,12 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   owner-gate notice and refuses unless you pass `--yes` or confirm at a TTY. Use `--dry-run` to show
   exactly what it *would* do without connecting. Never pass `--yes` on the user's behalf — the first
   filament is Omar's call.
+- **`slice` and `print send` share one honesty contract.** `slice plate` captures Studio's own
+  warnings and writes a `<plate>.warnings.json` sidecar stamped with the sliced `.3mf`'s
+  `source_sha256`; `print send` refuses to dispatch unless that sidecar is **present, fresh (hash
+  matches the plate on disk), and free of unexpected warnings** — fail-closed on missing, stale, or
+  legacy-no-hash alike (#52/#62). The fix is always to re-slice, never `--allow-unverified` (the loud,
+  high-bar override). `validate plate` prints the freshness verdict without dispatching.
 - **There is an active print on the machine** — status/discovery are passive and read-only by design;
   do not `print pause/stop` or otherwise interfere with a running job unless asked.
 - **A record is a plate that came off a machine**, written by `print send --record` into the gitignored
