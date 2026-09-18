@@ -267,11 +267,18 @@ defect is a kernel fault, not a grammar one — and the pinch FAIL uses a *saddl
 ## 6. Plate composer — palette name → AMS slot (a dependency, not owned here)
 
 The per-body 3MF and the AMS-slot map are the **plate composer's** job (umbrella task P4.1),
-which has its own design target, docs/plate-composer-design.md (not yet written — named in
-prose, not linked, because a link to a missing file is a D1 failure). This doc hands the
-composer a clean contract: N named bodies, each tagged with its region's palette name. The
-composer maps *palette name → AMS slot* and writes the project 3MF; the slicer binds a
-physical spool.
+which has its own design target, [`plate-composer-design.md`](plate-composer-design.md) §"AMS
+colour slots". This doc hands the composer a clean contract: N named bodies, each tagged with
+its region's palette name. The composer maps *palette name → AMS slot* and writes the project
+3MF; the slicer binds a physical spool.
+
+**The mapping is now designed and half-built ([D-075](decisions-log.md)).** The rule: slot 1 is
+the plate's default filament, each distinct palette name takes the next logical slot in first-seen
+order, a shared name shares a slot, and an untagged region falls to the default. The pure map lives
+in `tools/bambu/src/ams.ts` (`buildAmsSlotMap`, unit-tested) as **part 4b-i**; wiring compose to
+render `--format parts`, assemble the multi-part input 3MF, and slice it with `--load-filaments` is
+**part 4b-ii**, deferred because it is the piece that needs the slicer to verify end-to-end (and the
+print is owner-gated, §9). A **logical** slot is not a **physical** AMS slot (see the K1 caveat below).
 
 **VERIFIED / RESOLVED (was UNVERIFIED), the composer's to implement:** the headless-CLI 3MF
 contract is now settled by [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md).

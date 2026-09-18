@@ -335,4 +335,36 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
 - **Per-item slice profiles** (a mixed-profile plate) would break the §3 transfer
   condition and are out of scope; the manifest carries one plate profile until a real need
   names the shape.
-</content>
+
+## 12. AMS colour slots — palette name → logical slot (coaster plates, D-075)
+
+A coaster authored with `color <region> <PaletteName>` (bikar; `coaster-colour-design.md`)
+renders under `--format parts` to one STL per region body plus a `<Coaster>.parts.json` sidecar
+tagging each body with the author's palette name + hex ([bikar #215](https://github.com/NaqshCoffee/bikar/pull/215)).
+The composer turns that into a multi-filament plate the X2D slices. Two halves ([D-075](decisions-log.md)):
+
+**The slot map (part 4b-i, built).** `tools/bambu/src/ams.ts` `buildAmsSlotMap` reads the sidecars
+and assigns each palette a 1-based **logical** filament slot: slot 1 is the plate's default filament
+(`profile.filament`), each distinct palette name takes the next slot in first-seen order (coaster
+order, then part order), a name shared across bodies shares a slot, an untagged region falls to the
+default, and a name resolving to two hexes is refused. The count is capped at the AMS capacity the
+caller supplies (the module's fallback is one unit's four slots). It also emits the
+`project_settings.config` parallel arrays — `filament_type`/`filament_colour`/`filament_id`, every
+colour slot reusing the default's material and a **non-empty** id so no slot silently routes to the
+external spool ([research/coaster-ams-3mf-contract.md](research/coaster-ams-3mf-contract.md)).
+
+> **K1 — logical slot ≠ physical AMS slot.** The slice carries only the logical filament index
+> order; the physical spool is bound at print time by colour match. Nothing here claims a spool.
+
+**The 3MF assembly + slice (part 4b-ii, deferred).** The headless CLI has **no flag** to assign
+objects to slots at slice time — the assignment must be baked into the *input* 3MF (BambuStudio#9666).
+So the composer assembles one 3MF per plate where each coaster is one **object** with its region
+bodies as **parts** (shared coordinate frame, so `--arrange` packs whole coasters, not loose bodies),
+each part carrying `<metadata key="extruder" value="K"/>` for its slot, root Application metadata
+`BambuStudio-<ver>`, then slices with `--load-filaments` in slot order. This is deferred: it is the
+one piece that needs the slicer to verify end-to-end, and printing is owner-gated (§11).
+
+> **K10 — why the loose-STL path (what §5 does today) does not transfer here.** `--arrange` treats
+> each input STL as an independent object; a coaster's base/straps/border must stay coincident to
+> register as one coaster, so a coloured plate assembles a multi-part input 3MF instead of handing
+> loose STLs to `--arrange` (D-075 option ii-b, rejected).
