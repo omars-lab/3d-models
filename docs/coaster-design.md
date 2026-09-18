@@ -283,6 +283,11 @@ a different distance.
   and `trivet`; opt-in at import because it widens the margin. Built in
   NaqshCoffee/bikar#209, catalogued as CS-3:
   [`coaster-interlock-design.md`](coaster-interlock-design.md).
+- **D-070** (minimal, #38): `outline pattern` — the strap silhouette is the solid,
+  no slab, open cells are through-holes, a top round-over follows every strap edge;
+  `relief` forbidden, `rim`/`trivet`/`interlock`/bottom edges refused, CV10 caps the
+  round-over, CV2 floors at a new free-standing bet CAL-CST-07. Designed, being built:
+  [`coaster-minimal-design.md`](coaster-minimal-design.md).
 
 ## 9. Not yet
 
@@ -322,4 +327,8 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
   coaster-level `border <pattern> width <mm>` clause and named regions exported as
   separate bodies (`--format parts`) for a filament map in the 3MF; the X2D's AMS
   assignment happens in the slicer, not in bikar.
+- **Minimal coasters (#38)** — designed as D-070, being built in bikar:
+  [`coaster-minimal-design.md`](coaster-minimal-design.md). The pattern's strap
+  network is the whole piece; it costs a lattice's stiffness (no validator) and a new
+  free-standing strap bet (CAL-CST-07, coupon CS-4) that CAL-CST-01 cannot stand in for.
 - **Coaster Lab (#35)** — after this knob set is stable (D-067).
