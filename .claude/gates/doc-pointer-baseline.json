@@ -113,16 +113,6 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/7apC5Q9QS-8-coaster-mini.stl",
       "why": "Gitignored build output — same as the GimTvN9hw4U mini above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Introduced by #247 (e47ce9a)."
-    },
-    {
-      "doc": ".claude/skills/maintain-use-cases/use-cases.md",
-      "path": "bikar:packages/lab/coaster.html",
-      "why": "Lands with NaqshCoffee/bikar#210 (open) — the Coaster Lab page (D-067), a bikar packages/lab entry. It exists on that PR head and is vendored here by `make lab` as coaster.html (gitignored). Delete this entry when #210 merges — the ratchet shrinks freely."
-    },
-    {
-      "doc": ".claude/skills/maintain-use-cases/use-cases.md",
-      "path": "bikar:packages/lab/src/coaster-main.ts",
-      "why": "Lands with NaqshCoffee/bikar#210 (open) — the Coaster Lab page controller, trimmed from lego-main.ts. Same as the coaster.html entry above; delete when #210 merges."
     }
   ]
 }
