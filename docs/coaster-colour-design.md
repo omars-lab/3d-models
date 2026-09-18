@@ -119,14 +119,27 @@ coaster Coaster
   color border Gold
 ```
 
-Refusals, each an evaluation error naming the clause (the `coaster:`-prefixed mechanism the
-border and interlock clauses use):
+Refusals split by phase in the shipped grammar ([bikar PR #213](https://github.com/NaqshCoffee/bikar/pull/213)):
+two are structural and caught at **parse** time (`ParseError`), two are semantic and caught at
+**evaluation** time (the `coaster:`-prefixed mechanism the border and interlock clauses use).
+The split is not cosmetic — a parse error is raised before any coaster is evaluated, on the token
+text alone, while an evaluation error needs the coaster's regions and the `palette` block in hand.
 
-- `color border …` on a coaster with no `border` clause — the region does not exist; the
-  message names `border` and lists the regions the coaster has.
-- `color … <name>` where `<name>` is not in any `palette` block — undeclared, as above.
-- `color <region>` repeated for the same region — one colour per region; the second is
-  refused with the first still in force.
+Parse errors (`ParseError`), from the grammar itself:
+
+- `color <region> …` where `<region>` is **not** in the closed set `base | straps | border` —
+  the `RegionName` production admits only those three, so any other token is rejected by the
+  parser, not the evaluator.
+- `color <region>` repeated for the same region — per-region uniqueness is enforced at parse
+  time; the second statement is a `ParseError`, the first still in force.
+
+Evaluation errors, naming the clause:
+
+- `color border …` on a coaster with no `border` clause — the region name parses (it is in the
+  closed set) but the coaster does not carry it; the message names `border` and lists the regions
+  the coaster has.
+- `color … <name>` where `<name>` is not in any `palette` block — the palette name is undeclared,
+  resolved (and refused) by the evaluator against the file's `palette` block.
 
 **K10 transfer condition.** The palette-name vocabulary is being carried from the 2D SVG
 world (§1) into the 3D per-body world. This transfers **because a palette name is a
@@ -190,15 +203,26 @@ composer a clean contract: N named bodies, each tagged with its region's palette
 composer maps *palette name → AMS slot* and writes the project 3MF; the slicer binds a
 physical spool.
 
-**UNVERIFIED (K1/K2), and the composer's to settle:** whether the headless Bambu Studio CLI
-requires per-object filament/`extruder` assignment to be present already in the *input* 3MF,
-or whether `--load-filaments` plus the slicer's reported slot-by-order mapping is enough.
-The research (§6) shows the *GUI* can assign a filament per body after importing a multi-body
-3MF, and one non-primary source reports the slicer "matches color groups to slots by order,
-not by hex value" — but the wiki pages could not be fetched (recorded as unverified
-snippets), and none establishes the *CLI* contract. The colour route does not depend on the
-answer; the composer must fetch the primary wiki and settle it before building (research §6
-lists the URLs).
+**VERIFIED / RESOLVED (was UNVERIFIED), the composer's to implement:** the headless-CLI 3MF
+contract is now settled by [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md).
+The answer, scoped to headless CLI slicing: **per-object filament→slot assignment must be
+baked into the *input* 3MF** — the CLI has no flag that maps objects or painted regions to
+slots at slice time. The mapping lives in the 3MF as per-object/part `extruder` attributes in
+`Metadata/model_settings.config` and per-triangle `paint_color` bitmasks in `3D/Objects/*.model`,
+and the slicer only honours them when the 3MF's Application metadata starts with `BambuStudio-`
+(else it imports single-colour, BambuStudio#9666). `--load-filaments` is **override-only**: it
+loads filament profiles into the slots the 3MF *already declares*, by list order, and does not
+create or reassign them (settings precedence: command line > `--load-settings`/`--load-filaments`
+> values embedded in the 3MF). This confirms the earlier hedge's cautious reading was right: the
+GUI-can-assign-after-import behaviour does **not** carry to the CLI. So the composer must emit the
+per-body `extruder` tags (and any `paint_color`) into the 3MF itself — it cannot lean on
+`--load-filaments` to do the assignment. The colour route does not depend on the answer; this
+resolves the dependency for the composer, it does not move ownership here.
+
+**Caveat carried (K1), do not overclaim:** the finding is about *headless CLI* slicing, and a
+**logical filament slot ≠ a physical AMS slot** — the CLI slice carries only the logical filament
+index order; the physical AMS mapping is resolved interactively / at print time by colour match.
+`--load-filaments` silently under-fills or errors if its count exceeds the slots the 3MF uses.
 
 ## 7. Coaster Lab knob
 
@@ -235,8 +259,11 @@ reasoning (classify to the model's own palette so it ports where pixels do not) 
   case, [`coaster-design.md`](coaster-design.md)) — same load, same adhesion, same shells.
   The multi-material interface between two filaments on the shared slab face is a print-time
   adhesion question the plate-composer's first print (P4.3) records, not a geometry bet here.
-- **The composer's 3MF contract is unverified** (§6); it is the one open, load-bearing
-  question and it belongs to the composer doc, not this one.
+- **The composer's 3MF contract is now settled** (§6, [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md)):
+  the headless CLI needs per-object filament baked into the input 3MF, `--load-filaments` is
+  override-only. What remains open is the composer's *implementation* of that emit recipe (and
+  the logical-vs-physical AMS-slot binding at print time) — it belongs to the composer doc, not
+  this one.
 - **Region-scoped relief.** A region embossed while another is debossed is a second relief
   statement scoped to a region; the region bit is where that scope would attach
   ([`coaster-border-design.md`](coaster-border-design.md) §10). A debossed region carries no
