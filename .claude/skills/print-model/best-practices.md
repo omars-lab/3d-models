@@ -78,6 +78,25 @@ research file; this file adds *our* data on top.
     works but is a second, fragile code path (segfaults BambuStudio if `Metadata/*.config` members are
     dropped; must preserve `<build p:UUID=…>`). `--arrange` over repeated positionals reuses a capability
     the slicer already owns — one code path, no surgery (repo tenet "a migration never buys a fork").
+- **Spread copies on an EVEN grid derived from the shape — the default for a display layout (2026-09-18).**
+  Tight packing (`--arrange`/`slice-copies.sh`) minimizes bed use — right for production, wrong when the
+  ask is "lay these out evenly with room between them and a margin around the edge". **Default rule for
+  spacing multiple copies of one piece as a display:** divide the bed into N equal cells per axis and
+  **centre one piece in each cell**. With bed `B`, footprint `f`, `N` cells on an axis: `pitch = B/N`;
+  cell centres at `pitch·(i+0.5)`; **inter-piece gap = pitch − f**, and **edge margin = (pitch − f)/2 =
+  gap/2** — so the gaps between pieces are all equal *and* the wall clearance is half a gap, which reads
+  as uniform and always leaves an edge margin. This uses the whole bed for a given N, so it is the
+  **maximum even spread at that count**. **The grid dimension is derived from shape size:** the most cells
+  that still fit a min gap is `N = floor(B/(f + min_gap))` — that is why 25 twisted-dragon-eggs land as
+  5×5 (footprint ~29.8 mm on the 256 mm X2D bed → pitch 51.2, gap 21.4, edge margin 10.7 mm). Requires
+  `pitch ≥ f` or the pieces collide (the tool refuses it). **Runnable form:**
+  [`scripts/grid-plate.sh`](scripts/grid-plate.sh) `<model> <rows> <cols>` (or `--count N`) →
+  [`scripts/grid_plate.py`](scripts/grid_plate.py) bakes the grid positions into a `.3mf` and the wrapper
+  slices with **`--arrange` OFF** so BambuStudio keeps the authored positions. A fallback until a
+  `bambu slice plate … --grid RxC` / `--layout even` flag lands. **Bonus found doing it:** the grid `.3mf`
+  raised only **2** floating-regions warnings vs **25** for raw-STL `--arrange` at the same count — baking
+  the STL's authored orientation and *not* re-arranging avoids the re-orientation that reintroduces the
+  overhang. Use `slice-copies.sh` for a tight production pack; `grid-plate.sh` for a spaced display grid.
 - **LEGO sources slice clean at 0.4 mm.** `ClassicBrick.stl`, `RosetteBrick.stl`, and `StarBrick.stl`
   all slice by preset name to a valid X2D plate at 0.4 mm — no profile-specific surprise before Plate 2.
 - **Loaded filament, read live (2026-09-17).** `bambu filament` read AMS 0 slot 0 =
@@ -145,6 +164,16 @@ design section that owns its numbers and carries the source's own hedge.
   extruder_radius)`.
 - **[grounded] A rotate advisory fires only on a strict win.** Offer a rotation only when it strictly
   increases the count or strictly frees bed; never churn the layout for a tie.
+- **[grounded] Tight pack vs. even display grid is an *intent* choice — ask which, then use the matching
+  tool.** libnest2d packing (above) minimizes bed use (production: fit the most / free the most bed). A
+  **display** layout wants the opposite — copies spread evenly with a margin around the edge. Default for
+  the display case: an **even grid derived from the shape footprint** (bed ÷ N equal cells, one piece
+  centred per cell → equal gaps, edge margin = gap/2; grid dim `N = floor(bed/(footprint+min_gap))`). The
+  spacing is exact arithmetic (grounded in geometry, not a machine bet); slice-verified on eggs at 5×5
+  (25 objects placed where computed) — but the **print quality** of a spread grid is **[wants-CAL]** until
+  a plate comes off *this* X2D. See "Our examples" for the formula and the runnable
+  [`scripts/grid-plate.sh`](scripts/grid-plate.sh); the tight-pack path is
+  [`scripts/slice-copies.sh`](scripts/slice-copies.sh).
 - **[wants-CAL] Dual-nozzle bed-zoning is an unconfirmed upper bound** (`[X2D-UNCONFIRMED]`), same K2
   caveat as the nozzle note.
 

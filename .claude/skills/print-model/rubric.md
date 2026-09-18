@@ -172,10 +172,20 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      selected plate only) or a hand grid estimate (`floor(bedX/(footprintX+spacing)) ×
      floor(bedY/(footprintY+spacing))`). Never report that a tool packed the plate when none ran.
      **For N copies of ONE model** (a fun-print "print 20 of this", when the count is not already in the
-     model), there is no `--copies` flag: pack 1 positional + (N−1) of the same file after `--` with
-     `--arrange`. The runnable form is [`scripts/slice-copies.sh`](scripts/slice-copies.sh) `<model> <N>` —
-     see [`best-practices.md`](best-practices.md) "Our examples" for the gotchas (by-design floating-regions
-     block the gated send → GUI; authored `.3mf` warns less than raw STL; the `-o` basename footgun).
+     model), there is no `--copies` flag — and the layout depends on *intent*:
+     - **Tight production pack** (fit the most / free the most bed): 1 positional + (N−1) of the same file
+       after `--` with `--arrange` (libnest2d). Runnable: [`scripts/slice-copies.sh`](scripts/slice-copies.sh)
+       `<model> <N>`.
+     - **Even display grid** (spread evenly, room between pieces, margin around the edge): a nester cannot
+       do this — it is deterministic placement. Default to an **even grid derived from the shape
+       footprint**: divide the bed into N equal cells per axis, centre one piece per cell → equal gaps and
+       an edge margin of gap/2; grid dim `N = floor(bed/(footprint+min_gap))`, or a target `rows×cols`.
+       Runnable: [`scripts/grid-plate.sh`](scripts/grid-plate.sh) `<model> <rows> <cols>` (or `--count N`),
+       which bakes positions into a `.3mf` and slices with `--arrange` OFF.
+     When the ask is ambiguous, ask which (tight vs spaced) before slicing. See
+     [`best-practices.md`](best-practices.md) "Our examples" for both formulas and the gotchas (by-design
+     floating-regions block the gated send → GUI; authored `.3mf`/grid warns far less than raw-STL
+     `--arrange`; the `-o` basename footgun).
   5. **Rotate-to-fit advisory — fires only on a strict win.** Offer the rotation **only** when a
      rotated pack fits *strictly more* copies than 0°; a tie is not a reason to rotate. State both
      counts and the trade so the operator chooses: "9 fit as-is; rotating 45° fits 12 — denser pack,
