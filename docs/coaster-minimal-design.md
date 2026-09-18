@@ -292,6 +292,9 @@ lattice only when the holes show.
   second offset and is not asked for.
 - **The pattern must be connected.** CV6b refuses a pattern whose straps do not all
   touch; there is no clause to add a ring or a bar that joins them. D-068's border
-  band (#36) is the clause that would, and it is sequenced after this.
+  band (#36) is the clause that could, once its straps can be *solid* rather than
+  relief: the first border slice (D-071,
+  [`coaster-border-design.md`](coaster-border-design.md) §10) refuses `outline
+  pattern`.
 - **Colour regions (#37)** are unchanged in direction; a minimal coaster is one body
   and has no region to colour separately until #36 gives it a second.

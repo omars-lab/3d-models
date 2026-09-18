@@ -276,8 +276,9 @@ a different distance.
 - **D-067**: a coaster design UI is a Coaster Lab in bikar's lab, not a page in the
   hub; it starts once this knob set is stable.
 - **D-068**: a border with its own pattern and per-region colour are coaster-level
-  clauses composing patterns, sequenced after the interlock (#34) and the lab (#35);
-  nothing of them ships yet. See [`decisions-log.md`](decisions-log.md).
+  clauses composing patterns, sequenced after the interlock (#34) and the lab (#35).
+  The border is designed as **D-071** ([`coaster-border-design.md`](coaster-border-design.md));
+  colour (#37) is still direction only. See [`decisions-log.md`](decisions-log.md).
 - **D-069** (interlock, #34): a self-mating half-edge dovetail on every straight
   edge, walls emitted exact, CV8/CV9 added, refused with `round`, a bottom chamfer
   and `trivet`; opt-in at import because it widens the margin. Built in
@@ -321,12 +322,14 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
   the worked numbers) and rides a tab-neck bet (CAL-CST-06), registered in bikar's
   `CAL_BETS` (coupon CS-1) with no `Calibrated` record yet; the interlocked builds
   are catalog entry CS-3.
-- **Border band (#36) and colour regions (#37)** — the language today has neither:
-  bikar's `border` declaration is a *tile edge profile*, not a pattern band, and
-  `color` is a 2D render attribute that no STL carries. The direction (D-068) is a
-  coaster-level `border <pattern> width <mm>` clause and named regions exported as
+- **Border band (#36)** — designed as D-071, not yet built:
+  [`coaster-border-design.md`](coaster-border-design.md). `border <pattern> width
+  <mm>` lays a motif cell along each flat or around the ring inside the outline;
+  the field is inset by the band and CV7 measures against the band's inner edge.
+- **Colour regions (#37)** — the direction (D-068) is named regions exported as
   separate bodies (`--format parts`) for a filament map in the 3MF; the X2D's AMS
-  assignment happens in the slicer, not in bikar.
+  assignment happens in the slicer, not in bikar. The border design gives the
+  kernel its first region bit (`band`); the export is still unwritten.
 - **Minimal coasters (#38)** — designed as D-070, being built in bikar:
   [`coaster-minimal-design.md`](coaster-minimal-design.md). The pattern's strap
   network is the whole piece; it costs a lattice's stiffness (no validator) and a new
