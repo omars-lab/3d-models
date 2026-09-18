@@ -753,6 +753,12 @@ validate-constructions:
 # tile's two-tile picture (build/brick_previews.py --mate).
 COASTER_MINI_MM := 40
 COASTER_STANDARD_MM := 90
+# The border band (D-071) is a mm knob that does NOT scale with `size` (design
+# §7): the golden's default `border = 8` holds 7 chevrons on a 90 mm standard but
+# starves a 40 mm mini, so the mini alone re-renders with a 4 mm band. Applied by a
+# `case` on the id inside the loop, to the `*-border` goldens only — the plain,
+# interlock and minimal goldens carry no `border` param and must not be passed one.
+COASTER_MINI_BORDER_MM := 4
 coasters: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
@@ -764,7 +770,9 @@ coasters: bikar-stamp
 	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
 		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
 		echo "== $$id"; \
-		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) --format stl --check \
+		mini_extra=""; \
+		case "$$id" in *-border) mini_extra="--param border=$(COASTER_MINI_BORDER_MM)" ;; esac; \
+		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) $$mini_extra --format stl --check \
 			-o ${ROOT_DIR}/src/Coasters/$$stem-mini.stl; \
 		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_STANDARD_MM) --format stl --check \
 			-o ${ROOT_DIR}/src/Coasters/$$stem-standard.stl; \
