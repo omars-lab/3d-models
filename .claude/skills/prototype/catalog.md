@@ -1420,3 +1420,41 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: `CAL-CST-06` (the tab-neck floor, registered in bikar with no
   record); the `interlock` clause's default `clearance`; the gallery's two
   interlocked entries; the plate composer's mated-pair arrangement (P4.x).
+
+## CS-4 — Minimal coasters (the pattern is the solid, D-070)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr` and
+  `bikar/patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr` — the CS-1 and
+  CS-2 constructions re-emitted by the importer's `--minimal` flag, rendered as
+  `--coaster Coaster` at `--param size=40` (mini) and `--param size=90` (standard)
+  by `make coasters` (→ `src/Coasters/<id>-minimal-coaster-mini.stl` and
+  `-standard.stl`). `outline pattern` (D-070): there is no slab — the strap
+  network of the inscribed construction is the whole piece, every open cell is a
+  through-hole, and the top edge carries a quarter-round along every strap and
+  hole. Knobs `--param strap=3` (1.6..5, the free-standing wall width, floored by
+  CV2 at `CAL-CST-07`) and `--param round=1` (0..1.5, the top-edge run, held by
+  CV10 to `2·round ≤ strap`); `unit` is derived (`(size − strap)/K`) so the strap
+  network spans `size` across. All four renders pass the mesh gate at the 1.6 mm
+  free-standing floor with `minFeature` 3 mm and one body: the six-fold mini is
+  32,956 triangles / 4.7 cm³ and its standard 103,524 / 14.0 cm³; the eight-fold
+  mini 38,960 / 5.7 cm³ and its standard 136,568 / 18.9 cm³ — roughly half the
+  plain CS-1/CS-2 volumes, because the ground is gone.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print;
+  a mini of each is the first print, on the plate after Plate 1, beside the CS-3
+  mated pair.
+- **What we want to learn**:
+  - [ ] 1. `CAL-CST-07` — does a 3 mm free-standing strap print as one solid
+    wall (two perimeters a side, no gap-fill), and how far down the strap ladder
+    (2.4, 2.0, 1.6) does it stay one wall before it splits into two unbonded
+    shells? One reading per rung printed, never interpolated.
+  - [ ] 2. Does a 4 mm-tall strap network with no ground stay flat and stiff
+    enough to pick up by one edge, or does the mini flex and the standard need
+    the strap raised? (`coaster-minimal-design.md` §10's first question.)
+  - [ ] 3. Does the 1 mm quarter-round read as a rounded edge at 0.2 mm layers
+    (five steps), or does it print as a visible staircase that a 0.12 mm layer
+    would need?
+- **What we learned**: — pending.
+- **Feeds**: `CAL-CST-07` (the free-standing strap floor, provisional at 1.6 mm
+  in bikar's baseline); the `--minimal` importer's default `strap` and `round`;
+  the gallery's two minimal entries; the Coaster Lab's minimal presets.

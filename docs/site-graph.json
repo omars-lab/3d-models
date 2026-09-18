@@ -233,7 +233,7 @@
     {
       "from": "G.index",
       "to": "G.lab",
-      "at": "index.html:595",
+      "at": "index.html:604",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "11 per-model deep links, lab.html?v=1&f=…, rendered by the card renderer"
@@ -241,7 +241,7 @@
     {
       "from": "G.index",
       "to": "G.lego",
-      "at": "index.html:595",
+      "at": "index.html:604",
       "evidence": "Open in Lab",
       "visibility": "js-computed",
       "note": "7 per-model deep links, lego.html?v=1&f=… — the StarMural Set entry deliberately carries none"
@@ -467,7 +467,7 @@
     {
       "from": "G.index",
       "to": "G.breakdown",
-      "at": "index.html:596",
+      "at": "index.html:605",
       "evidence": "href=\"breakdown.html?orb=",
       "visibility": "js-computed",
       "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
