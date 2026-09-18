@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "30 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "31 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
@@ -4991,3 +4991,56 @@ If bikar gains true per-face material attributes on a single mesh that slice to 
 without a per-body split, the `--format parts` split becomes unnecessary. If headless per-object
 3MF assignment proves impossible, colour routing falls back to GUI-assisted assignment (a
 robustness downgrade), recorded in `docs/issues/`.
+
+## D-074 — The coaster region split detects height-field pinches and resolves them by a `--pinch` strategy (fillet default); it is not scoped away
+
+Design: [`coaster-colour-design.md`](coaster-colour-design.md) §5. Amends the split mechanism of
+[D-073](decisions-log.md); the region vocabulary and the palette-name-never-a-slot rule are
+unchanged.
+
+### The contradiction
+
+The first draft of §5 asserted two invariants together — **(A)** the union of the split bodies
+is *exactly* the single-body `--format stl` mesh, and **(B)** each body is watertight and
+2-manifold on its own. For any coaster whose relief descends to `z = base` at an *interior*
+point of a region (every sharp strap apex, every strap crossing — octagram, sharp hexagon), the
+two cannot both hold: cutting a strap body off the slab at `z = base` leaves a **zero-width
+pinch**, one edge shared by four oriented faces, a closed volume-correct body that is not
+2-manifold and cannot be re-tessellated into one. The pinch is also physically unmakeable in a
+second filament (zero width and zero height). This was a K7 self-contradiction found by
+implementation, not a code bug — verified 2026-09-18: the exact split holds to ~1e-14 for every
+pinch-free emboss coaster, and only saddled patterns fail (B).
+
+### Options on the table
+
+- **(A) Scope `--format parts` to pinch-free (borderless) emboss coasters** and refuse the rest
+  with a precise physical message. Ships now, union stays exact for what it accepts, but the §4
+  flagship refuses and border is deferred.
+- **(B) Detect pinches and resolve them by a customizable strategy** (chosen). Every pattern
+  splits into printable bodies; the union invariant is redefined to hold outside sub-floor
+  notches; adds one geometry bet (CAL-PIN-01) and the border panel-decomposition fix.
+- **(C) Weaken the per-body gate** to "closed + volume-correct." Rejected: it emits non-manifold
+  STL no slicer should trust and hides the defect instead of deleting it.
+
+### Decision — (B), with detection and a strategy knob
+
+The kernel **detects** every pinch (the four-faces-at-an-edge test, §5.2) and resolves it by a
+CLI flag `--pinch fillet|merge|error` (§5.3) — a manufacturing choice, so a flag, never a DSL
+statement (K10). **`fillet`** (default) raises each pinch to the printable floor on the split
+bodies only, so union == single holds everywhere outside sub-floor notches (`--format stl`
+untouched); **`merge`** recolours the pinch tip to `base` — exact on a pinch-free coaster, a
+sub-floor residual (≈5·10⁻⁴ rel.) on a saddled one per §5.1 — at the cost of the tip's colour;
+**`error`** refuses with each pinch's `(x, y)`. `--pinch keep` is deliberately
+not offered. The pinch floor is **CAL-PIN-01** — whether the single-filament `featureFloorMm`
+(0.80 mm) is the right threshold for a two-filament interface is a bet, not a bare number. The
+border outer wall is decomposed into stacked base+border panels (§5.4), an independent fix the
+§4 example needs even with no pinch. Chosen over (A) because the ask is that *every* pattern
+print, and (B) makes it so while (A) turns the flagship away.
+
+### What would reverse it
+
+If a print measures CAL-PIN-01 and finds a two-filament interface needs a floor so large that
+`fillet` visibly distorts tips, `merge` becomes the sensible default (recolour rather than
+thicken) — a default flip, not a redesign. If bikar gains true per-face material attributes that
+slice to multi-material without a per-body split, the whole split — and the pinch problem with
+it — becomes unnecessary (the D-073 reversal condition).
