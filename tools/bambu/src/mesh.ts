@@ -100,3 +100,96 @@ export function stlBounds(path: string): Bounds {
   if (!b) throw new Error(`could not read STL bounds from ${path} — not a valid STL, or it has no vertices`);
   return b;
 }
+
+// ── STL → indexed mesh (for the 3MF assembler, part 4b-ii) ─────────────────────────────────────────
+// A 3MF `<mesh>` is INDEXED: a `<vertices>` list of unique points and a `<triangles>` list of index
+// triples. STL is the opposite — every triangle carries its own three vertices, with coincident points
+// repeated verbatim. So embedding a bikar STL in a 3MF means de-duplicating: coincident vertices must
+// collapse to one index or the mesh reads as a cloud of disconnected facets and the slicer flags it
+// non-manifold. We key the dedup on the vertices' exact value (bikar emits coincident corners as
+// identical floats, so no rounding is needed — and rounding would risk welding genuinely distinct
+// points), reusing the same buffer reader the bounds path already trusts.
+
+/** An indexed triangle mesh: `vertices` is a flat [x,y,z, x,y,z, …] list of unique points; `triangles`
+ *  is a flat [v1,v2,v3, …] list of 0-based indices into it. Flat arrays keep a 200k-triangle body cheap
+ *  to build and to serialise. */
+export interface IndexedMesh {
+  vertices: number[];
+  triangles: number[];
+}
+
+/** Dedup accumulator: a coincident vertex collapses to the first index that carried its exact x/y/z. */
+class MeshBuilder {
+  vertices: number[] = [];
+  triangles: number[] = [];
+  private index = new Map<string, number>();
+  private vertex(x: number, y: number, z: number): number {
+    // Value key: bikar writes a shared corner as identical floats, so string equality of the canonical
+    // number matches without a tolerance (see the module note above).
+    const key = `${x},${y},${z}`;
+    const hit = this.index.get(key);
+    if (hit !== undefined) return hit;
+    const id = this.vertices.length / 3;
+    this.vertices.push(x, y, z);
+    this.index.set(key, id);
+    return id;
+  }
+  triangle(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): void {
+    // Drop a degenerate facet (two corners coincide): it carries no surface, and a 0-area triangle is a
+    // slicer warning, not geometry. A body of all-degenerates leaves triangles empty — caught by caller.
+    const a = this.vertex(ax, ay, az);
+    const b = this.vertex(bx, by, bz);
+    const c = this.vertex(cx, cy, cz);
+    if (a === b || b === c || a === c) return;
+    this.triangles.push(a, b, c);
+  }
+  result(): IndexedMesh {
+    return { vertices: this.vertices, triangles: this.triangles };
+  }
+}
+
+function indexedFromBinary(buf: Buffer): IndexedMesh | null {
+  if (buf.length < 84) return null;
+  const tris = buf.readUInt32LE(80);
+  if (buf.length < 84 + tris * 50) return null;
+  const mb = new MeshBuilder();
+  for (let t = 0; t < tris; t++) {
+    const base = 84 + t * 50 + 12; // skip the 12-byte normal
+    const o0 = base, o1 = base + 12, o2 = base + 24;
+    mb.triangle(
+      buf.readFloatLE(o0), buf.readFloatLE(o0 + 4), buf.readFloatLE(o0 + 8),
+      buf.readFloatLE(o1), buf.readFloatLE(o1 + 4), buf.readFloatLE(o1 + 8),
+      buf.readFloatLE(o2), buf.readFloatLE(o2 + 4), buf.readFloatLE(o2 + 8),
+    );
+  }
+  return mb.result();
+}
+
+function indexedFromAscii(text: string): IndexedMesh | null {
+  const mb = new MeshBuilder();
+  const re = /vertex\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)/g;
+  const c: number[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    c.push(Number(m[1]), Number(m[2]), Number(m[3]));
+    if (c.length === 9) {
+      mb.triangle(c[0]!, c[1]!, c[2]!, c[3]!, c[4]!, c[5]!, c[6]!, c[7]!, c[8]!);
+      c.length = 0;
+    }
+  }
+  return mb.result();
+}
+
+/** Parse an in-memory STL buffer to an indexed mesh, or null if it has no readable triangles. */
+export function stlToIndexedMeshFromBuffer(buf: Buffer): IndexedMesh | null {
+  const mesh = looksAscii(buf) ? indexedFromAscii(buf.toString("latin1")) : indexedFromBinary(buf);
+  if (!mesh || mesh.triangles.length === 0) return null;
+  return mesh;
+}
+
+/** Read an STL file and return its indexed mesh, or throw a clear error if it cannot be parsed. */
+export function stlToIndexedMesh(path: string): IndexedMesh {
+  const mesh = stlToIndexedMeshFromBuffer(readFileSync(path));
+  if (!mesh) throw new Error(`could not read STL mesh from ${path} — not a valid STL, or it has no triangles`);
+  return mesh;
+}
