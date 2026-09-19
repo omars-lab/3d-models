@@ -15,9 +15,10 @@ That one scores; this one writes. They loop.
 
 ## The standard is shared
 
-The arc, the seven clarity rules, the glossary-via-footnotes pattern, and a worked
-good/bad rewrite all live in [`../design-craft.md`](../design-craft.md). **Read it
-first, every run.** Author to it; do not reinvent the structure here.
+The arc, the eight clarity rules, the glossary-via-footnotes pattern, the
+diagram-with-legend pattern, and a worked good/bad rewrite all live in
+[`../design-craft.md`](../design-craft.md). **Read it first, every run.** Author to
+it; do not reinvent the structure here.
 
 ## Process
 
@@ -39,6 +40,11 @@ not on facts. So the move is:
   patterns are rings of tiles, like a dartboard" earns the right to then say
   "faces bucketed by centroid distance."
 - **Gloss** — footnote every domain term at first use; collect them in `## Glossary`.
+- **Draw** — every pipeline, data flow, before/after, or "which branch wins" decision
+  gets a Mermaid diagram (C8), with node labels that reuse the glossary terms and a
+  one-line footnote-linked legend beneath it. When a paragraph traces "A → B → C,"
+  replace or accompany it with the picture; don't leave the reader to build it in their
+  head. See design-craft.md §"Diagrams — show it, don't only tell it."
 
 Keep the appendix rich. Deferring jargon is not deleting it — the specialist who needs
 the `file:line` anchor still finds it, just not in the reader's way.
@@ -57,8 +63,8 @@ it, gloss its terms, and lead it with a plain sentence.
 ### 4. Loop with review-design until it passes
 
 Run [`review-design`](../review-design/SKILL.md) on the result. Apply every finding.
-Re-run. Repeat until the verdict is `PASS (7/7)`. Do not stop at "better" — the bar is
-the full rubric green, because a newcomer needs all seven, not most.
+Re-run. Repeat until the verdict is `PASS (8/8)`. Do not stop at "better" — the bar is
+the full rubric green, because a newcomer needs all eight, not most.
 
 Each pass should converge: if the same criterion fails twice, the fix wasn't concrete
 enough — go back to the rubric's PASS wording for that rule and write to it literally.

@@ -20,8 +20,8 @@ bars and still fail this one.
 ## The standard is shared, not built in
 
 The rubric lives in [`../design-craft.md`](../design-craft.md) — the arc a good doc
-follows, the seven clarity rules (C1–C7), the glossary-via-footnotes pattern, and a
-worked good/bad example. **Read it first, every run.** It is the authority; this file
+follows, the eight clarity rules (C1–C8), the glossary-via-footnotes pattern, the
+diagram-with-legend pattern, and a worked good/bad example. **Read it first, every run.** It is the authority; this file
 is only the process for applying it. When you find a failure the rubric doesn't name,
 add it *there*, not here.
 
@@ -35,7 +35,7 @@ a product name, an acronym, a file path, a decision id — mark it. That first-r
 confusion is the data; you cannot recover it on a second read once you've decoded the
 doc, so capture it now.
 
-### 2. Score each criterion C1–C7
+### 2. Score each criterion C1–C8
 
 For each rule in the rubric, decide PASS or FAIL against *this* doc, and for a FAIL
 pin the exact line where a newcomer first falls off. Be concrete about the failure —
@@ -50,6 +50,9 @@ The most common and most damaging failures, in order:
   first-paragraph proper noun with no footnote is the single worst offender.
 - **C4 jargon in the body.** `file:line` anchors and grammar productions in the prose
   instead of an appendix.
+- **C8 walls of text.** A pipeline or data flow explained in paragraphs with no
+  diagram. If you find yourself re-reading a paragraph to trace "A → B → C," that
+  paragraph wanted a Mermaid diagram — say so and sketch the nodes.
 
 ### 3. Report — one fix per failing criterion
 
@@ -62,8 +65,8 @@ Output a findings list, most-damaging first. Each finding:
         appendix", or "footnote `bikar` as: ...". Never "make it clearer.">
 ```
 
-End with a one-line **verdict**: `PASS` only if all seven criteria pass, else
-`FAIL (n/7)` naming which failed. A doc that fails is not ready to merge.
+End with a one-line **verdict**: `PASS` only if all eight criteria pass, else
+`FAIL (n/8)` naming which failed. A doc that fails is not ready to merge.
 
 ### 4. Offer the rewrite, don't sneak it
 

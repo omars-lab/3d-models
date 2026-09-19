@@ -82,9 +82,19 @@ a FAIL so the check is not a matter of taste.
   with a sentence that carries the point in plain words; the machinery follows.
 - **C7 — A concrete example early.** At least one worked, specific scenario appears
   in the first half of the doc, not only in an appendix.
+- **C8 — A diagram for each concept a reader would picture.** Any pipeline, data
+  flow, before/after, or decision the doc explains in more than a paragraph of prose
+  gets a Mermaid[^mermaid] diagram, not just a wall of text. A doc that describes "A
+  becomes B, which the splitter turns into C" and draws nothing has failed C8. Node
+  labels use the glossary terms, and a one-line legend under the diagram links those
+  terms back to their footnotes (see the diagram section below).
 
 A doc **passes** when every rule passes. A single unglossed product name in the
 first paragraph is a C1/C3 fail on its own — the newcomer is lost at sentence one.
+
+[^mermaid]: **Mermaid** — a way to write a diagram as plain text in a fenced code
+    block (```` ```mermaid ````); GitHub and most markdown viewers render it as an
+    actual picture, so the diagram lives in the doc and version-controls like prose.
 
 ---
 
@@ -110,6 +120,39 @@ A good footnote defines the term in **plain words a newcomer knows**, not in mor
 jargon. `[^ams]: the AMS` is useless; `[^ams]: **AMS** — the printer's automatic
 material system, the carousel that feeds up to four filament spools so one print
 can use several colours` is a definition.
+
+---
+
+## Diagrams — show it, don't only tell it
+
+Prose is the wrong tool for a shape. A pipeline, a data flow, a before/after, or a
+"which branch wins" decision is understood in seconds from a picture and slowly (or
+never) from a paragraph. Draw them with Mermaid, which lives in the doc as text:
+
+````markdown
+```mermaid
+flowchart LR
+  design["colours a designer picks"] --> screen["2D drawing — keeps colour"]
+  design --> print["3D print — colour dropped today"]
+```
+
+**In the diagram:** design → the editor[^editor]; 2D drawing[^twod]; 3D print[^print].
+````
+
+Two rules make a diagram pull its weight:
+
+- **Label nodes with the glossary terms.** A node called `2D drawing` ties straight to
+  the `[^twod]` footnote; a node called `the flat SVG path` makes the reader do the
+  mapping themselves. Reuse the exact words the glossary defines.
+- **Add a one-line legend that links the terms to their footnotes.** GitHub does not
+  make Mermaid nodes clickable, so put the footnote references in a plain markdown line
+  right under the diagram — `**In the diagram:** editor[^editor], AMS[^ams]`. A footnote
+  may be referenced as many times as you like, so this costs nothing and works in every
+  renderer. That is the "refs in the diagram link to the footnotes" move, done portably.
+
+One good diagram per hard concept beats three paragraphs describing it. Keep each
+diagram to the one idea it carries; a diagram that needs its own paragraph to decode
+has the same disease as the prose it replaced.
 
 ---
 
@@ -182,9 +225,10 @@ Notice the *content is the same*. Nothing technical was dropped. It was **reorde
 | C5 | Mental model before mechanism | A plain sentence or analogy precedes the how | First explanation of the idea is a mechanism |
 | C6 | Plain-language lead | Each hard section opens with a plain sentence carrying the point | A section starts mid-machinery |
 | C7 | Concrete example early | A worked scenario in the first half | Examples only in an appendix, or none |
+| C8 | A diagram per concept | Each pipeline/flow/decision has a Mermaid diagram with a footnote-linked legend | A multi-paragraph concept is drawn nowhere; walls of text |
 
 A review reports one finding per failing criterion, each with the line it fails at and
-a concrete rewrite — never "make it clearer." The bar to **pass** is all seven green.
+a concrete rewrite — never "make it clearer." The bar to **pass** is all eight green.
 
 ---
 
