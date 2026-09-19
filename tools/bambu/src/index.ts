@@ -8,6 +8,8 @@
 // for the build sequencing.
 
 import { Command } from "commander";
+import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { registerSetup } from "./commands/setup.js";
 import { registerStatus } from "./commands/status.js";
 import { registerFilament } from "./commands/filament.js";
@@ -15,6 +17,7 @@ import { registerHeader } from "./commands/header.js";
 import { registerSlice } from "./commands/slice.js";
 import { registerPrint } from "./commands/print.js";
 import { registerValidate } from "./commands/validate.js";
+import { dumpFlags } from "./flags.js";
 
 const program = new Command();
 
@@ -38,6 +41,24 @@ registerHeader(program);
 registerSlice(program);
 registerPrint(program);
 registerValidate(program);
+
+// The CLI describes its own flag surface (see src/flags.ts). Hidden: it is a maintenance verb for the
+// gate/make target, not a user-facing one, so it stays out of --help. `--write` regenerates the
+// checked-in FLAGS.md next to this module; without it the reference prints to stdout for inspection.
+program
+  .command("dump-flags", { hidden: true })
+  .description("Emit the generated flag reference (maintenance verb for `make bambu-flags`).")
+  .option("--write", "write FLAGS.md next to the CLI instead of printing to stdout")
+  .action((opts: { write?: boolean }) => {
+    const body = dumpFlags(program);
+    if (opts.write) {
+      const out = fileURLToPath(new URL("../FLAGS.md", import.meta.url));
+      writeFileSync(out, body);
+      console.error(`wrote ${out}`);
+    } else {
+      process.stdout.write(body);
+    }
+  });
 
 program.parseAsync(process.argv).catch((err) => {
   console.error(err instanceof Error ? err.message : String(err));

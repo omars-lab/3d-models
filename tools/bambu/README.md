@@ -19,6 +19,12 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 
 ## Command groups
 
+> **Every flag, generated:** [`FLAGS.md`](FLAGS.md) lists every subcommand, argument and option,
+> emitted from the CLI itself by `bambu dump-flags` (regenerate: `make bambu-flags`). Hook
+> `45-bambu-flags` blocks a commit whose CLI surface moved without it, so the reference never
+> drifts. The table below is the human map; `FLAGS.md` and `bambu <group> <verb> --help` are the
+> authoritative, always-current detail.
+
 | Group | Verbs | Backend |
 |---|---|---|
 | `setup` | `doctor`, `mcp`, `studio` | local checks |
