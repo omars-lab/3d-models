@@ -1,186 +1,232 @@
-# Radial-band colour — the ring a polygon sits in is a print region, reusing one binning
+# Radial-band colour — print each ring of a pattern in its own colour
 
-*Status: designed (task #25, [D-078](decisions-log.md); the id is re-verified against origin/master
-at merge, per the collision rule). Omar asked to colour different polygons differently within one construction,
-and for tooling to colour the polygons whose centroids are equidistant from the construction's
-centre. The finding that shapes this doc: bikar **already** groups a construction's faces into
-concentric rings by centroid distance and **already** lets an author colour a ring — as 2D SVG
-ink. This doc does not invent radial binning; it carries the ring a polygon already sits in
-into the 3D per-region export, so a ring prints in its own filament. It builds directly on
-[`coaster-colour-design.md`](coaster-colour-design.md) (D-073, D-074), whose region→body→slot
-route it reuses wholesale, and adds one read-only enumeration verb. It adds no new solid and no
-new binning. Research on file: [`research/radial-band-colour-research.md`](research/radial-band-colour-research.md).*
+Our decorative patterns are built from many small tiles[^face] arranged in rings around
+a centre, like the rings of a dartboard. A designer can already choose a colour for each
+ring and see it on screen — but today, when the pattern is 3D-printed, that colour is
+thrown away and the whole object comes out in a single material. **This design carries a
+ring's colour through to the print**, so a coaster[^coaster] can come off the printer
+with a gold inner ring and a copper outer one, each in its own filament[^filament] —
+and it does so *without adding any new way to say "this ring is that colour"*, because
+our design language already has one.
 
-## 1. The ask
+*Status: designed (task #25, decision [D-078](decisions-log.md); the decision id is
+re-verified against `origin/master` at merge, per the id-collision rule). The research
+this doc rests on is on file at
+[`research/radial-band-colour-research.md`](research/radial-band-colour-research.md).*
 
-Omar (2026-09-19): *"in the color mapping process, in the same constructions, i want to be able
-to color different polygons differently"* and *"have tooling to make it easier to apply colors
-on polygons that have midpoints that are equidistant from midpoint of construction."*
+## The problem
 
-The second sentence names a specific grouping: polygons whose centroid is the same distance from
-the construction's centre — concentric **radial bands**. The ask is two things: (1) a way to say
-"this band is that colour" that reaches a print, and (2) tooling to see which bands a construction
-has before colouring them.
+A designer opens the pattern editor[^editor], picks colours for a pattern's rings, and
+sees exactly what they expect on screen. They send it to the printer expecting those
+colours. Instead the whole piece prints in one colour.
 
-Read as a careful colleague would, against the code: bikar already answers most of (1) for the
-**2D** render and none of it for the **3D** print, and answers none of (2). The precise state:
+The reason is that a colour chosen in the editor lives only on the **2D drawing**[^twod].
+When bikar[^bikar] turns a design into something a printer can build, it takes a
+completely separate path — one that has never looked at those 2D colours. So the colour
+is real on screen and gone on the print bed.
 
-- **Binning already exists.** bikar buckets faces into concentric rings by centroid distance from
-  the construction centre (the centre of the first circle, else the origin), innermost = ring 0.
-  This is the `ring` fill selector, shipped in the pattern grammar.
-- **2D colouring already exists.** `fill where ring == N color <Name>` tints ring `N` in the SVG,
-  and each face carries a `data-ring` attribute in the output.
-- **It is 2D ink only.** Exactly as [`coaster-colour-design.md`](coaster-colour-design.md) §1
-  records for every colour clause bikar has, `fill … color` "never reaches the height-field
-  kernel"; the 3D path exports one body per coaster with no colour.
-- **The 3D split knows nothing of rings.** `bikar render --format parts` ([bikar PR #275](https://github.com/NaqshCoffee/bikar/pull/275))
-  splits the height field into one body per **coaster region** — a fixed three-name set
-  `base`, `straps`, `border` — by a relief/inset test, not by which ring a face sits in.
-- **No enumeration.** There is no verb that lists a construction's rings, so an author writing
-  `fill where ring == N` is guessing `N`.
+Concretely: a designer draws a coaster whose centre tile should be gold and whose outer
+band should be copper. On screen it is gold and copper. The printed coaster is one flat
+colour. There is, today, no way to get the two colours they drew onto the physical part.
 
-So the feature is a bridge and a verb, not a grammar: carry the ring index the kernel already
-computes into the region-split the exporter already runs, and add a way to list the rings.
+## Why it matters
 
-## 2. Options and the rubric
+Multi-colour is the whole reason to own the printer we have: it carries several
+filament spools and can switch between them within a single print (that carousel is the
+"AMS"[^ams]). A pipeline that drops colour on the way to the print bed wastes that
+hardware — every patterned print is monochrome no matter what the designer drew.
 
-Rubric (0/1/2), the same five axes as [`coaster-colour-design.md`](coaster-colour-design.md) §2 so
-the two colour routes are judged alike: **R1 the DSL stays about geometry** (a band names a
-geometric fact — equal centroid radius — not a hardware slot); **R2 one radial system** (reuse the
-shipped ring binning and the shipped colour clause; add no second way to say "a band"); **R3
-checkable** (a per-body validator with a constructible FAIL, not a total); **R4 costs the grammar
-little** (ideally zero new productions); **R5 ports** (the band survives into the 2D render, the
-parts manifest, and the Lab, and is not printer-specific).
+The request is recurring and specific. Omar, 2026-09-19: *"in the color mapping process,
+in the same constructions, i want to be able to color different polygons differently"*
+and *"have tooling to make it easier to apply colors on polygons that have midpoints
+that are equidistant from midpoint of construction."* That second sentence names the
+grouping precisely — tiles whose centres are the same distance from the middle — which
+is exactly a **ring**.
 
-| Option | R1 | R2 | R3 | R4 | R5 | Verdict |
-|---|---|---|---|---|---|---|
-| (a) **Reuse `fill where ring … color`** — the ring an author already colours in 2D becomes a print region; `--format parts` emits one body per coloured ring; the composer maps palette name → AMS slot exactly as for coaster regions | 2 | 2 | 2 | 2 | 2 | **chosen** |
-| (b) `color band <i> <Name>` — a new coaster-block statement naming a band by index | 2 | 0 | 2 | 1 | 1 | adds a **second** radial system beside the shipped `fill where ring`; two clauses that mean "the i-th ring" is one name with two spellings — the divergence the [robustness tenet](../CLAUDE.md) calls the defect itself |
-| (c) `color ring <r0>..<r1> <Name>` — explicit radius bounds in mm | 1 | 0 | 1 | 1 | 1 | most control over where a band starts, but the author must know the radii, and it still adds a second radial system; the shipped binning already opens a band at each radial gap |
-| (d) Do nothing — the ring stays 2D ink | 2 | 2 | — | 2 | — | does not answer the ask (no colour reaches the print); kept as the honest baseline that verifies nothing |
+## The idea
 
-(a) wins because the one thing the DSL should own — *which faces are one band* — is already
-owned by the shipped ring binning, and the one thing it should not own — *which spool* — is
-already handed to the manifest by [`coaster-colour-design.md`](coaster-colour-design.md). The
-feature adds no way to name a band because bikar already has one. Decision **D-078** (2026-09-19,
-Omar chose (a) from a rendered comparison of (a)/(b)/(c)).
+A ring is just the tiles that sit the same distance out from the centre. The key insight
+is that bikar **already** works these rings out — it has to, in order to colour them on
+screen. So this feature invents no new geometry and no new grammar. It does two things:
 
-## 3. What already exists, and what this adds
+1. **Carry the rings the engine already computed into the step that splits a model into
+   separately-coloured pieces for printing.** A coloured ring becomes its own piece, in
+   its own filament.
+2. **Add a small read-only command that lists a pattern's rings** — their radius, how
+   many tiles each holds, and what colour (if any) the designer gave them — so a designer
+   knows which ring they are about to colour instead of guessing.
 
-The honest split, so the review knows what is new versus reused:
+That is the entire design: a *bridge* (item 1) and a *listing command* (item 2), plus one
+rule for what happens when a ring's colour and a coaster's built-in regions[^region] disagree.
 
-**Reused, unchanged (shipped in bikar):**
-- The ring binning — faces bucketed by centroid distance from the centre, ring 0 innermost, a new
-  ring opened at each radial gap.
-- The colour clause — `fill where ring == N color <Name>` and the `palette` block it names.
-- The 2D carry — each face emits a `data-ring` index; per-ring animation already keys off it.
-- The region→body→slot route — `--format parts` writes one watertight body per region plus a
-  `.parts.json` manifest carrying `paletteName`/`hex`, which the plate composer maps to an AMS slot
-  ([`coaster-colour-design.md`](coaster-colour-design.md) §4, [bikar PR #275](https://github.com/NaqshCoffee/bikar/pull/275)).
+## How it works
 
-**Added by this doc (proposed, task #25):**
-- **§4 — the bridge:** a face's ring index becomes a region key the `--format parts` split honours,
-  so a coloured ring exports as its own body.
-- **§5 — the `bands` verb:** a read-only CLI verb that lists a construction's rings (index, centroid
-  radius, face count) so the author knows which `N` to colour.
-- **§6 — the region × ring rule:** how a radial band coexists with a coaster's `base/straps/border`
-  without multiplying bodies (the design decision that needs stating, not the easy part).
+### Carrying a ring's colour into the print (the bridge)
 
-## 4. The bridge — a ring is a region source
+Plainly: when bikar splits a coaster into printable pieces, each piece should be "all the
+tiles the designer painted the same colour," and a coloured ring is one such group.
 
-`--format parts` today keys each output body on a coaster region computed from the **height field**
-on a grid: a cell is `straps` or `border` by a relief/inset test, `base` otherwise
-([`coaster-colour-design.md`](coaster-colour-design.md) §3). Ring membership lives on the **2D
-faces**, not the grid — the recon's one real awkwardness. The bridge is a lookup, not a new split:
+The mechanism has one wrinkle worth stating. bikar's print-splitter, `--format parts`
+(shipped in [bikar PR #275](https://github.com/NaqshCoffee/bikar/pull/275)), decides
+which piece a bit of the model belongs to by walking a **grid** over the coaster's raised
+surface[^heightfield] — not by walking the 2D tiles where ring membership lives. So the
+bridge is a lookup that connects the two:
 
-1. Each grid cell that carries relief samples the 2D face it falls inside (the exporter already
-   walks the faces to raise the field; the face index is in hand at sample time).
-2. That face's ring index is read from the binning the kernel already computed.
-3. The body key becomes the **palette name the author assigned to that ring**, not the ring index —
-   so two rings the author gave the same colour merge into one body (one filament, one slot), and a
-   ring the author left uncoloured falls to the coaster's own region key (§6). Keying on the colour,
-   not the index, is what keeps the body count at the number of filaments rather than the number of
-   rings.
+1. Each raised grid cell already knows which 2D tile sits under it (the splitter
+   walks the tiles to raise the surface in the first place).
+2. That tile's ring is read from the grouping the engine already computed.
+3. The piece a cell belongs to becomes **the palette[^palette] name the designer assigned
+   to that ring** — the colour, not the ring number. Keying on the colour means two rings
+   painted the same colour merge into one piece (one filament), and a ring left unpainted
+   falls back to the coaster's own regions (see precedence, below). This is what keeps the
+   number of printed pieces equal to the number of *colours*, not the number of rings.
 
-A construction that is not a coaster (a bare pattern) has no height field to split; for it, "reach
-the 3D print" is out of scope here — this doc bridges rings into the **coaster** export, the only
-3D solid bikar ships. A bare pattern keeps its 2D ring colour unchanged. (Stated so §6 and the
-status line do not over-claim: this is a coaster-print feature, not a general-solid one.)
+A pattern that is not a coaster has no raised surface to split, so "reach the 3D print" is
+out of scope for it here — this bridges rings into the **coaster** print, the only solid
+bikar currently builds. A bare pattern keeps its on-screen ring colour unchanged.
 
-## 5. The `bands` verb — enumerate before you colour
+### Listing a pattern's rings (the `bands` command)
 
-A read-only verb modelled on the existing `points` verb (which enumerates a construction's named
-points without rendering): `bikar bands <construction.bkr>` prints one line per ring —
+Plainly: before a designer can say "colour ring 1 gold," they need to know the pattern
+*has* a ring 1 and which tiles are in it. `bikar bands <pattern>` prints that list, one
+line per ring — modelled on the existing `points` command, which lists a construction's
+named points without drawing anything:
 
 ```
-ring  radius   faces  colour
+ring  radius   tiles  colour
 0     0.00     3      —
 1     8.24     6      Gold
 2     14.10    6      —
 ```
 
-`radius` is the mean centroid distance of the ring's faces from the centre; `colour` is the palette
-name if a `fill where ring == N` assigns one, `—` otherwise. The data is already in the evaluation
-result (the per-face ring indices and colours); the verb is a formatter over it, no kernel change.
-It answers "which `N` do I write" and "did my `fill` clause hit the ring I meant" in one place.
+`radius` is the mean distance of the ring's tiles from the centre; `colour` is the
+palette name the designer assigned, or `—` if none. The data already exists after the
+pattern is evaluated, so this command is a formatter, not new engine work. It answers
+both "which ring number do I write?" and "did my colour land on the ring I meant?"
 
-**Validator:** `bikar bands <c.bkr>` lists every distinct ring index the binning produced, exactly
-once each, in ascending index order, and the count of listed rings equals the number of distinct
-`data-ring` values in the same construction's 2D render.
+**Validator:** `bikar bands <pattern>` lists every distinct ring the engine found, each
+once, in ascending order, and the number of rings listed equals the number of distinct
+ring values in the same pattern's on-screen render.
 
-PASS: a rosette whose faces fall in three radial gaps lists rings 0, 1, 2 — three lines — and its
-SVG carries `data-ring` values {0, 1, 2}.
+PASS: a rosette whose tiles fall into three rings lists rings 0, 1, 2 — three lines — and
+its on-screen render marks tiles with exactly the ring values {0, 1, 2}.
 
-FAIL: a construction whose faces all sit at one radius lists two or more rings, or lists ring 0
-twice, or lists a ring absent from the SVG's `data-ring` set — any of these means the verb and the
-renderer disagree about the binning, which is the bug the validator exists to catch.
+FAIL: a pattern whose tiles all sit at one radius lists two or more rings, or lists ring 0
+twice, or lists a ring that never appears in the render — each means the command and the
+renderer disagree about the grouping, which is the bug this validator exists to catch.
 
-## 6. Region × ring — the rule that stops bodies multiplying
+### When a ring colour and a coaster region disagree (the precedence rule)
 
-A coaster already partitions its cells into `base`, `straps`, `border` (a relief distinction). A
-ring partitions faces radially (a planar distinction). The two are **orthogonal**: naïvely, a body
-per (region × ring) pair could be many bodies, most empty, and would blow past the AMS slot count
-(§7). The rule that prevents this, and the one design choice a reader must check:
+This is the one design choice a reviewer should check, because it is what stops the number
+of printed pieces from exploding.
 
-**A ring colour, when present on a face, overrides that face's coaster-region key for the split.**
-So the body set is: one body per palette name assigned to any ring, plus the coaster's own
-`base/straps/border` bodies for the faces no ring colour claimed. The author gets exactly as many
-bodies as they gave colours — never the Cartesian product.
+A coaster already divides itself into three built-in regions by shape — `base`,
+`straps`, `border`. A ring divides tiles by distance. The two divisions are independent,
+so naïvely a coaster could produce one piece for *every* combination of (region × ring) —
+mostly empty, and far more pieces than the printer has filament slots. The rule that
+prevents this:
 
-This is the K7 check against [`coaster-colour-design.md`](coaster-colour-design.md): that doc's
-`color <region> <Name>` and this doc's `fill where ring … color` can both be written in one file,
-and the precedence above is the single rule that resolves them — ring colour wins on the faces it
-covers, region colour holds elsewhere. Without this sentence the two features would each claim the
-same face and the split would be ambiguous; with it, there is one owner per face.
+**A ring's colour, where a designer set one, wins over that tile's built-in coaster
+region.** So the pieces are: one per colour a designer assigned to any ring, plus the
+coaster's own `base`/`straps`/`border` pieces for the tiles no ring colour claimed. A
+designer gets exactly as many pieces as they used colours — never the full grid of
+combinations. Every tile has exactly one owner, so the split is never ambiguous.
 
-**Default:** when a face is claimed by neither a ring colour nor an explicit `color <region>`, its
-body is the coaster region `base` — the same default [`coaster-colour-design.md`](coaster-colour-design.md)
-§3 already ships (**CAL-PIN-01** governs the two-filament pinch floor at any resulting interface,
-unchanged by this doc).
+**Default:** a tile claimed by neither a ring colour nor an explicit coaster-region colour
+belongs to the `base` region — the same default
+[`coaster-colour-design.md`](coaster-colour-design.md) §3 already ships, and **CAL-PIN-01**
+still governs the two-filament pinch floor at any resulting colour boundary, unchanged by
+this doc.
 
-## 7. The AMS bound — bands are cheap, slots are not
+## Alternatives and the decision
 
-Each printed body binds to one AMS slot at the slicer ([`coaster-colour-design.md`](coaster-colour-design.md)
-§4). The useful number of coloured bands is therefore bounded by the number of filament slots the
-printer offers, not by the number of rings the geometry has. This is why radial *bands* (a handful)
-are the right granularity and per-*polygon* colour (potentially hundreds) is not — the ask's own
-"equidistant" grouping is what keeps the colour count inside the slot budget.
+Three ways to let a designer name a coloured band were on the table, judged on five axes
+(the same axes [`coaster-colour-design.md`](coaster-colour-design.md) §2 uses, so the two
+colour routes are graded alike): **R1** the language stays about geometry, not hardware;
+**R2** one radial system, not two; **R3** the result is checkable; **R4** it costs the
+grammar little; **R5** it carries into the on-screen render, the print, and the editor.
 
-The exact slot count is **not grounded in either repo** (the recon found no in-repo constant; the
-X2D is dual-nozzle with per-unit AMS trays plus one external spool). So this doc states the bound
-qualitatively and defers the number: the `bands` verb and the composer should **warn, not cap**,
-when the distinct-colour count exceeds the slots the live printer reports via `bambu filament`,
-and the number is confirmed against that output before any print — not hard-coded here. (Writing a
-slot cap as a `**Default:**` with a guessed number would be a K4 violation; the honest record is
-"verify against the device," and the print itself is owner-gated regardless.)
+| Option | R1 | R2 | R3 | R4 | R5 | Verdict |
+|---|---|---|---|---|---|---|
+| (a) **Reuse the ring colour a designer already sets on screen** — that ring becomes a print piece, mapped to a filament exactly as coaster regions already are | 2 | 2 | 2 | 2 | 2 | **chosen** |
+| (b) A new "colour band *N*" statement naming a band by number | 2 | 0 | 2 | 1 | 1 | adds a *second* way to say "the Nth ring" beside the one that ships — one idea with two spellings, the divergence our [robustness tenet](../CLAUDE.md) calls the defect itself |
+| (c) A "colour ring *r0*..*r1*" statement with explicit radii in mm | 1 | 0 | 1 | 1 | 1 | most control, but the designer must know the radii, and it still adds a second radial system |
+| (d) Do nothing — the colour stays on screen only | 2 | 2 | — | 2 | — | does not answer the ask; kept as the honest baseline that verifies nothing |
 
-## 8. Status and scope
+(a) wins because the one thing the language *should* own — which tiles form a band — is
+already owned by the shipped ring grouping, and the one thing it should *not* own — which
+filament spool — is already handed off by the coaster colour work. The feature adds no way
+to name a band because one already exists. Decision **D-078** (2026-09-19; Omar chose (a)
+from a rendered comparison of (a)/(b)/(c)).
 
-- **Grammar:** no new production. Reuse `fill where ring == N color <Name>` (shipped).
-- **Kernel:** the §4 bridge (face ring index → region key in `--format parts`) and the §6
-  precedence rule. One bikar PR.
-- **CLI:** the §5 `bands` verb. May be the same PR or a follow-up; it is read-only and independent.
-- **Composer/AMS:** no change to the palette-name → slot mapping; it already keys on palette name.
-- **Out of scope:** ring colour into a bare (non-coaster) 3D solid (bikar ships none); an explicit
-  radius grammar (option (c), rejected); any slot-count constant (§7).
-- **Bets:** none new. §7's slot bound is a device fact to read, not a calibration to earn.
+## Scope and status
+
+- **Grammar:** no new production. The existing on-screen ring-colour clause is reused.
+- **Engine:** the bridge (a tile's ring → its print piece) and the precedence rule. One
+  bikar change.
+- **Command:** the read-only `bands` listing. May ship with the bridge or follow it; it is
+  independent.
+- **Filament mapping:** unchanged — it already keys on the palette name.
+- **Out of scope:** ring colour into a non-coaster solid (bikar builds none); an
+  explicit-radius grammar (option (c), rejected); any fixed filament-slot count (see the
+  glossary note on the AMS, and the appendix).
+- **Calibration bets:** none new. The filament-slot limit is a fact to read off the live
+  printer, not a number to earn — the appendix explains why this doc states no slot count.
+
+## Glossary
+
+[^coaster]: **coaster** — a small flat disc (the kind you set a mug on). It is the one
+    physical object bikar currently builds a printable 3D solid for, so it is the running
+    example throughout this doc.
+[^filament]: **filament** — the spool of plastic a 3D printer melts to build a part. One
+    part printed in one filament is one colour; multi-colour needs a separate piece per
+    filament.
+[^editor]: **editor** — the in-browser design tool (the "Lab") where a designer draws a
+    pattern and picks its colours before printing.
+[^twod]: **2D drawing** — the flat, on-screen version of a design (an image), as opposed
+    to the 3D solid that gets printed. Colours have always lived here.
+[^bikar]: **bikar** — our in-house engine that turns a design written in our small design
+    language into both the on-screen drawing and the 3D model a printer builds. It is a
+    separate repository this product consumes.
+[^ams]: **AMS** — the printer's Automatic Material System: the carousel that holds several
+    filament spools and feeds them in turn, so one print can use several colours. The
+    number of spools it holds is a property of the specific printer, not a fixed constant
+    (see the appendix).
+[^heightfield]: **raised surface / height field** — bikar builds a coaster by raising a
+    flat slab to different heights across a fine grid; the pattern's relief is that grid of
+    heights. The print-splitter walks this grid, which is why the bridge has to connect a
+    grid cell back to the flat tile beneath it.
+[^face]: **tile (face)** — one small polygon of a pattern: the enclosed area bounded by the
+    lines and circles a designer drew. A pattern is many tiles; a ring is a set of tiles at
+    the same distance from the centre.
+[^palette]: **palette** — the named set of colours a design declares (e.g. `Slab`, `Gold`,
+    `Copper`). A ring or region is coloured by naming a palette entry, and that name is what
+    later maps to a filament spool.
+[^region]: **coaster region** — one of a coaster's three built-in structural parts, split
+    by shape rather than by colour: `base` (the slab), `straps` (raised bands), and
+    `border` (the rim). These predate rings and are what the print-splitter uses today.
+
+## Appendix — where this lives, and the ungrounded number
+
+The exact source locations for every mechanism above (the ring-grouping function, the
+per-tile ring data retained after evaluation, the coaster region enum, and the
+`--format parts` splitter) are pinned with file-and-line anchors in the research file,
+[`research/radial-band-colour-research.md`](research/radial-band-colour-research.md), and
+are cited there against a bikar commit rather than repeated here — bikar internals are
+referenced by pull request, not by cross-repo path, so a moved line in the sibling repo
+does not silently rot this doc.
+
+Two facts from that research shape the design and are worth stating plainly:
+
+- The coaster region set (`base`/`straps`/`border`) is a fixed three-value list hard-coded
+  in three separate places in bikar. The bridge deliberately does **not** extend that list;
+  a ring's colour becomes a print piece *alongside* the regions, resolved by the precedence
+  rule, precisely so this hard-coded set is left untouched.
+- **The printer's filament-slot count is not recorded anywhere in either repository.** The
+  printer is dual-nozzle with per-unit spool trays plus one external spool, but the usable
+  number is a live device fact. So this doc states the bound qualitatively and pins no
+  number: the `bands` command and the plate composer should **warn — not refuse —** when a
+  design uses more distinct colours than the live printer reports it can load, and the count
+  is confirmed against the real printer before any print. Writing a slot count here as a
+  fixed default would be a guess dressed as a fact; the honest record is "read it from the
+  device," and the print itself is owner-gated regardless.
