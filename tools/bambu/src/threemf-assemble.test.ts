@@ -7,6 +7,7 @@ import {
   buildContentTypes,
   buildProjectSettingsConfig,
   buildThreeMfMembers,
+  stripApplicationTag,
   writeThreeMf,
   xmlEscape,
 } from "./threemf-assemble.js";
@@ -161,5 +162,45 @@ describe("writeThreeMf — a relative outPath resolves against the caller's cwd,
       process.chdir(prev);
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe("stripApplicationTag — the headless-safe copy for the geometry slice", () => {
+  it("rewrites the versioned Application tag to bare BambuStudio, touching nothing else", () => {
+    const { map, coasters } = assemblyFrom([borderSidecar("Star")]);
+    const members = buildThreeMfMembers(coasters, map, DEF, APP);
+    const stripped = stripApplicationTag(members);
+    // The versioned tag SIGSEGVs the headless slicer; bare BambuStudio slices exit 0 (pivot doc §1).
+    expect(members["3D/3dmodel.model"]).toContain(
+      `<metadata name="Application">${APP}</metadata>`,
+    );
+    expect(stripped["3D/3dmodel.model"]).toContain(
+      '<metadata name="Application">BambuStudio</metadata>',
+    );
+    expect(stripped["3D/3dmodel.model"]).not.toContain(APP);
+    // Every other member is carried through byte-identical — only the root model is rewritten.
+    for (const key of Object.keys(members)) {
+      if (key === "3D/3dmodel.model") continue;
+      expect(stripped[key]).toBe(members[key]);
+    }
+  });
+
+  it("does not mutate the input members (returns a fresh object)", () => {
+    const { map, coasters } = assemblyFrom([borderSidecar("Star")]);
+    const members = buildThreeMfMembers(coasters, map, DEF, APP);
+    const before = members["3D/3dmodel.model"];
+    stripApplicationTag(members);
+    expect(members["3D/3dmodel.model"]).toBe(before);
+  });
+
+  it("throws when there is no versioned Application tag to strip (already bare, or absent)", () => {
+    // A members object whose root model has no `BambuStudio-<ver>` tag: stripping is a no-op the caller
+    // must not silently accept — an unstripped tagged file would SIGSEGV the verify slice.
+    const bare = { "3D/3dmodel.model": '<metadata name="Application">BambuStudio</metadata>' };
+    expect(() => stripApplicationTag(bare)).toThrow(/Application/);
+  });
+
+  it("throws when the root model member is missing entirely", () => {
+    expect(() => stripApplicationTag({})).toThrow(/3D\/3dmodel\.model/);
   });
 });

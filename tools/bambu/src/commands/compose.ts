@@ -191,7 +191,7 @@ interface ComposeOpts {
 
 /** One resolved on-plate item: its geometry pins, the count, and (filled after render) its footprint
  *  and cached STL path. `source` carries the @ref for the iteration key; the record strips it. */
-interface ResolvedItem {
+export interface ResolvedItem {
   entry: string; // stable per-item label on the plate (compose orders them c1, c2, …)
   sourcePath: string; // "<path>" (no bikar: prefix, no @ref)
   sourceAtRef: string; // "bikar:<path>@<ref>" for the iteration key
@@ -251,6 +251,65 @@ export function findIterationGeometry(
   return hits[0]?.geom ?? null;
 }
 
+/** Resolve every manifest item to its geometry pins + iteration id. D-072: an item is the GEOMETRY
+ *  HALF of the key, completed by the plate's one slice profile — the manifest mints no parallel id, so
+ *  nothing forks (CLAUDE.md "a migration never buys a fork"). Shared by `slice compose` (loose-STL
+ *  plates) and `slice coaster` (multi-part colour plates), so both derive the same it-<sha12> for the
+ *  same recipe. Throws an item-indexed error; the caller maps it to an exit code. */
+export async function resolveManifestItems(
+  items: ManifestItem[],
+  bikarRef: string,
+  sliceProfile: { settings: string; filament: string },
+): Promise<ResolvedItem[]> {
+  const resolved: ResolvedItem[] = [];
+  let n = 0;
+  for (const item of items) {
+    n += 1;
+    let sourcePath: string;
+    let piece: string;
+    let params: Record<string, number>;
+    if (isIterationItem(item)) {
+      const geom = findIterationGeometry(
+        item.iteration,
+        listRecordDirs(),
+        (d) => (existsSync(join(d, "index.md")) ? readFileSync(join(d, "index.md"), "utf8") : null),
+      );
+      if (!geom) {
+        throw new Error(
+          `items[${n - 1}]: iteration ${item.iteration} is not in any record yet, so its recipe cannot ` +
+            `be re-rendered. Author it as {bkr, piece, params} instead (reprint-by-id needs a record that carries the id).`,
+        );
+      }
+      sourcePath = geom.sourcePath;
+      piece = geom.piece;
+      params = geom.params;
+    } else {
+      sourcePath = item.bkr.replace(/^bikar:/, "");
+      piece = item.piece ?? ""; // "" ⇒ the file's default last solid (bikar renders it without --piece)
+      params = item.params ?? {};
+    }
+    const sourceSha256 = await blobSha(bikarRef, sourcePath);
+    const key: IterationKey = {
+      source: `bikar:${sourcePath}@${bikarRef}`,
+      source_sha256: sourceSha256,
+      piece,
+      params,
+      slice_profile: sliceProfile,
+    };
+    resolved.push({
+      entry: `c${n}`,
+      sourcePath,
+      sourceAtRef: `bikar:${sourcePath}@${bikarRef}`,
+      piece,
+      params,
+      count: item.count ?? 1,
+      sourceSha256,
+      iteration: iterationId(key),
+    });
+  }
+  return resolved;
+}
+
 async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]): Promise<void> {
   const absManifest = resolve(manifestPath);
   if (!existsSync(absManifest)) {
@@ -303,56 +362,11 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     return;
   }
 
-  // 3. Resolve each manifest item to its geometry pins + iteration id. The iteration key's fifth field
-  //    (slice_profile) is the plate's, taken from the DISPLAY names (not the resolved JSON paths, §3.2).
+  // 3. Resolve each manifest item to its geometry pins + iteration id (shared with `slice coaster`).
   const sliceProfile = { settings: settingsName, filament: filamentName };
-  const resolved: ResolvedItem[] = [];
+  let resolved: ResolvedItem[];
   try {
-    let n = 0;
-    for (const item of manifest.items) {
-      n += 1;
-      let sourcePath: string;
-      let piece: string;
-      let params: Record<string, number>;
-      if (isIterationItem(item)) {
-        const geom = findIterationGeometry(
-          item.iteration,
-          listRecordDirs(),
-          (d) => (existsSync(join(d, "index.md")) ? readFileSync(join(d, "index.md"), "utf8") : null),
-        );
-        if (!geom) {
-          throw new Error(
-            `items[${n - 1}]: iteration ${item.iteration} is not in any record yet, so its recipe cannot ` +
-              `be re-rendered. Author it as {bkr, piece, params} instead (reprint-by-id needs a record that carries the id).`,
-          );
-        }
-        sourcePath = geom.sourcePath;
-        piece = geom.piece;
-        params = geom.params;
-      } else {
-        sourcePath = item.bkr.replace(/^bikar:/, "");
-        piece = item.piece ?? ""; // "" ⇒ the file's default last solid (bikar renders it without --piece)
-        params = item.params ?? {};
-      }
-      const sourceSha256 = await blobSha(bikarRef, sourcePath);
-      const key: IterationKey = {
-        source: `bikar:${sourcePath}@${bikarRef}`,
-        source_sha256: sourceSha256,
-        piece,
-        params,
-        slice_profile: sliceProfile,
-      };
-      resolved.push({
-        entry: `c${n}`,
-        sourcePath,
-        sourceAtRef: `bikar:${sourcePath}@${bikarRef}`,
-        piece,
-        params,
-        count: item.count ?? 1,
-        sourceSha256,
-        iteration: iterationId(key),
-      });
-    }
+    resolved = await resolveManifestItems(manifest.items, bikarRef, sliceProfile);
   } catch (err) {
     console.error((err as Error).message);
     process.exitCode = 2;

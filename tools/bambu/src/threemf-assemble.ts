@@ -284,6 +284,26 @@ export function buildThreeMfMembers(
   };
 }
 
+/** Return a copy of the members with the root `Application` metadata rewritten from `BambuStudio-<ver>`
+ *  to bare `BambuStudio`. This is the HEADLESS geometry-verify copy ONLY: the versioned tag drives the
+ *  headless CLI into the GL project-restore path and SIGSEGVs it, while the bare form loads as an
+ *  imported model and slices `exit 0` (docs/issues/coaster-3mf-filament-shape-and-export-hang.md §1,
+ *  bisection table). The shipped artifact KEEPS the versioned tag — it is the #9666 colour contract the
+ *  GUI (which has a GL context) honours — so this is never what gets printed, only what gets geometry-
+ *  checked. Per-part `extruder`/colour config is untouched; only the one metadata value changes. */
+export function stripApplicationTag(members: ThreeMfMembers): ThreeMfMembers {
+  const root = members["3D/3dmodel.model"];
+  if (root === undefined) throw new Error("cannot strip Application tag: no 3D/3dmodel.model member");
+  const stripped = root.replace(
+    /(<metadata name="Application">)BambuStudio-[^<]*(<\/metadata>)/,
+    "$1BambuStudio$2",
+  );
+  if (stripped === root) {
+    throw new Error('cannot strip Application tag: no `<metadata name="Application">BambuStudio-…` found');
+  }
+  return { ...members, "3D/3dmodel.model": stripped };
+}
+
 /** Write the members under a scratch dir and zip them into `outPath` (a .3mf is a zip). Shells out to
  *  `zip` — the same no-bundled-zip-lib convention `threemf.ts` uses for reading (unzip). */
 export function writeThreeMf(members: ThreeMfMembers, outPath: string, scratchDir: string): void {

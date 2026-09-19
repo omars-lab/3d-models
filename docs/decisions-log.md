@@ -5157,3 +5157,67 @@ lives in each `.bkr` (Q1-b stays rejected); a Lab that reads it from one place w
 if the kernel read it there too. If bikar exposes region bodies without the fillet pinch
 (`--pinch` other than the default), the tint would follow the chosen strategy — it splits with the
 same default the export does, so the preview and the exported bodies never disagree.
+
+## D-077 — The coaster colour plate is a separate `slice coaster` verb; headless verifies GEOMETRY on a tag-stripped copy while colour is a GUI check
+
+Builds part 4b-ii of [D-075](decisions-log.md) (the palette→slot map baked into a multi-part input
+3MF). Design: [`plate-composer-design.md`](plate-composer-design.md) §12. Grounded in
+[`docs/issues/coaster-3mf-filament-shape-and-export-hang.md`](issues/coaster-3mf-filament-shape-and-export-hang.md)
+(the bisection that isolated the headless crash) and
+[`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the #9666 contract).
+
+### The two questions the build forced
+
+D-075 said "the composer assembles" a multi-part 3MF and the doc named `--load-filaments` as the
+slice. Wiring it end-to-end against the real slicer surfaced two forks the design had not settled:
+**(Q1)** does the colour path fold into `slice compose` or stand as its own verb; **(Q2)** how is
+the assembled plate verified, given that `--load-filaments`/`--load-settings` behave differently
+from the plan.
+
+### Options on the table
+
+- **(Q1-a) A separate `slice coaster` verb** (chosen). `compose` renders each item `--format stl`
+  and hands loose solids to `--arrange 1 --export-3mf`; a colour plate cannot — a coaster's
+  base/straps/border must stay coincident to register as one coaster (K10), so the assignment is
+  baked into a multi-part input 3MF the verb assembles itself. The verb reuses `compose`'s manifest
+  parse, item resolution (the D-072 iteration key — a coaster reprinted from either verb derives the
+  same `it-<sha12>`, nothing forks), bed-fit pre-check, and record scaffolder.
+- **(Q1-b) A `--colour` flag on `slice compose`.** Rejected: one action with two output shapes
+  (loose STLs vs an assembled multi-part 3MF) and two arrange semantics behind one name — the "one
+  name, two meanings *is* the defect" trap (CLAUDE.md "robust over easy"). The shared machinery is
+  already factored out (`resolveManifestItems`), so a second verb costs no duplication.
+- **(Q2-a) Split the honest signals: headless GEOMETRY on a tag-stripped copy, colour by GUI load**
+  (chosen). The versioned `Application=BambuStudio-<ver>` tag SIGSEGVs the headless slicer (the
+  pivot doc's bisection: bare `BambuStudio` exits 0, the versioned tag crashes in the native-project
+  GL path), so the **shipped** 3MF keeps the versioned tag — the GUI has GL and honours the #9666
+  colour contract — and `--verify-geometry` slices a **tag-stripped copy** (no `--export-3mf`; that
+  hangs headless), asserting exit 0 + the loaded object count. Colour is a GUI check (`bambu slice
+  open`): `--load-settings machine;process` overrides the embedded filament arrays and clamps every
+  part to slot 1, so a headless slice **cannot** read per-region colour (pivot doc §4).
+- **(Q2-b) Trust the headless `result.json` filament count as the colour signal.** Rejected on
+  measurement: §4 shows `result.json` reports one filament slot under `--load-settings` even when the
+  file carries three colours in `project_settings.config` and extruders 2/3/4 per part — an aggregate
+  that cannot discharge the per-part claim (CLAUDE.md: "an aggregate cannot discharge a claim about
+  every part").
+
+### Decision — (Q1-a) + (Q2-a)
+
+`bambu slice coaster <plate.yaml>` (`tools/bambu/src/commands/coaster.ts`) renders each distinct
+recipe once with `bikar render --format parts`, builds the palette→slot map keyed by iteration id
+(`ams.ts`), pre-checks the bed on whole-coaster union footprints, assembles the tagged 3MF
+(`threemf-assemble.ts` `buildThreeMfMembers`/`writeThreeMf`), and — unless `--no-verify-geometry` —
+slices a `stripApplicationTag` copy, resolving the manifest's preset **display names** to their
+system-profile JSON paths (`resolvePresetList`, since `--load-settings` does a filename lookup, not
+a registry lookup). Proven end-to-end on the committed bikar fixture
+`patterns/Constructions/7apC5Q9QS-8-border-coaster.bkr` (3 regions Slab/Gold/Copper): 2 copies →
+one 3MF, 2 objects × 3 parts, extruders 2/3/4 per region, four filament slots, `--verify-geometry`
+PASS (2 objects loaded, tag-stripped).
+
+### What would reverse it
+
+If a future BambuStudio headless build stops crashing on the versioned tag AND stops overriding the
+embedded filament arrays under `--load-settings`, the verify could read colour headless and the
+tag-strip step would fall away — the shipped-tag decision is pinned to the crash, not to the design.
+If a headless flag ever assigns objects to slots at slice time (BambuStudio#9666 resolved), the
+baked-in extruder metadata becomes optional and the two verbs could reconverge. Colour remains a GUI
+gate until one of those changes; the print itself stays owner-gated (§11).
