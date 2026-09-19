@@ -44,6 +44,11 @@ tools/bambu/node_modules/
 # `dotenvx run -- bin/bambu …` so the values reach process.env.
 /.env.keys
 
+# Bambu/BambuStudio slicer output: the CLI writes result.json to the CWD on a
+# slice/export (error_string, layer_height, plate_index). A per-run artifact,
+# never source — the real slice outputs live under .bambu/ and docs/prints/.
+/result.json
+
 # The prints register: written by build/prints_manifest.py (make prints-manifest)
 # from docs/prints/ and shipped by DEPLOY_PATHS. Generated, never typed.
 /prints-manifest.json
