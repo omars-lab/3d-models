@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**31 registered bets · 27 `Calibrated` records — 27 provisional, 0 measured · 10 bets with no record in bikar.**
+**32 registered bets · 28 `Calibrated` records — 28 provisional, 0 measured · 10 bets with no record in bikar.**
 
 ## Bets
 
@@ -48,6 +48,7 @@ is opened, clustered, and closed.
 | `CAL-CST-05` | `ELEPHANT_FOOT_MM` coaster bottom-chamfer floor: the least chamfer run that clears the first-layer elephant's foot | `CS-1` | provisional | `ELEPHANT_FOOT_MM_CAL` |
 | `CAL-CST-06` | coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 | `CS-1` | open — no record in bikar | — |
 | `CAL-CST-07` | `FREESTANDING_STRAP_MIN_MM` minimal-coaster strap floor: the narrowest free-standing strap (`outline pattern`, no slab behind it) that prints as a solid wall with a perimeter on each face rather than as two unbonded shells — the floor CV2 enforces for a pattern outline | `CS-4` | provisional | `FREESTANDING_STRAP_MIN_MM_CAL` |
+| `CAL-CST-08` | `TWIST_MAX_LEAN_DEG` coaster twist ceiling: the largest wall-lean angle (from vertical, `atan(rim_radius · twist/base)`) a helical strap on a twist coaster (`outline pattern` + `twist`) prints without support — deliberately not ported from CAL-OVH-01 because a free-standing strap can peel from its own lower course, a different support problem than a static slab face; the ceiling CV12 enforces | `CS-5` | provisional | `TWIST_MAX_LEAN_DEG_CAL` |
 | `CAL-PIN-01` | coaster colour-split pinch floor: the minimum thickness to which `--format parts --pinch fillet` raises a relief pinch (where a region body meets the slab at z = base at an interior point) so a two-filament interface prints as a solid sliver rather than a zero-width seam — whether the single-filament `STRAP_WIDTH_MIN_MM` (CAL-CST-01) transfers to a two-filament boundary | none — needs a two-filament interface coupon laddering the raised-sliver thickness across a colour boundary — not yet designed; the plate composer first print (P4.3) is the earliest surface that would expose it. Registered OPEN so the pinch floor does not age into an earned number | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
@@ -318,4 +319,11 @@ named next print rather than an absence:
 - **Value:** `1.6`
 - **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
 - **Basis:** four perimeters at 0.4 mm — two shells per side so the wall has an inner and outer perimeter and no gap-fill; a free-standing strap has no slab behind it. NOT measured. Provisional until CS-4 prints the free-standing strap ladder.
+
+### `TWIST_MAX_LEAN_DEG_CAL` — `CAL-CST-08`
+
+- **Module:** `bikar/packages/core/src/kernel3d/coaster.ts`
+- **Value:** `45`
+- **Status:** provisional — must appear in `bikar/.calibration-baseline.json`
+- **Basis:** geometric self-support angle placeholder (45° from vertical). NOT measured. Provisional until coupon CS-5 (a twist ladder) measures the wall-lean at which a helical strap first needs support; deliberately not ported from CAL-OVH-01 (K10).
 

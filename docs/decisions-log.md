@@ -1481,7 +1481,7 @@ counterpart: the same two sentences, tagged, → 0 findings, proving C3 is
 satisfiable by tagging rather than only by rephrasing. A rule you can only escape
 is a rule that gets escaped.
 
-FAIL: `FIXTURE_WRAPPED_MARKER` — a `99 <!--count:cal-records-->` split across the wrap, <!--count:quote-->
+FAIL: `FIXTURE_WRAPPED_MARKER` — a `28 <!--count:cal-records-->` split across the wrap, <!--count:quote-->
 against an authority of 17 → 1 C1 finding **and** `sites["cal-records"] ==
 1`. Before `marks_in` joined lines this fixture produced **zero** findings and a
 site count of zero: silent, green, and wrong. `FIXTURE_QUOTED_PAST_ERROR` closes
@@ -1564,7 +1564,7 @@ Three consequences, all built:
    list, green on every other rule.
 
 **`<!--count:partial-->`** waives C4, and **not** C1, on the line it is written
-on. §1 says "31 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
+on. §1 says "32 <!--count:cal-bets--> ids are registered (twelve at the original sweep, plus …)" and
 then names the six additions; the twelve are covered by a number, not by name,
 and rewriting that to list seventeen ids would make the sentence worse rather
 than truer. The digit stays checked, because "this list is short on purpose"
