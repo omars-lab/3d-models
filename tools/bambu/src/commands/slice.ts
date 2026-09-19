@@ -29,6 +29,7 @@ import {
   type WarningsSidecar,
 } from "../backends/warnings.js";
 import { registerCompose } from "./compose.js";
+import { registerCoaster } from "./coaster.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
 
@@ -464,4 +465,9 @@ export function registerSlice(program: Command): void {
   // sibling subverb of this same `slice` group (docs/plate-composer-design.md §1), reusing the helpers
   // exported above (resolvePresetList, buildStudioArgs) rather than forking the invocation.
   registerCompose(slice);
+
+  // `slice coaster <plate.yaml>` — a multi-filament COLOUR plate: bikar `--format parts` region bodies
+  // assembled into a per-region AMS 3MF (coaster.ts, plate-composer-design.md §12). A distinct pipeline
+  // from compose (parts render + direct 3MF assembly + tag-stripped geometry verify), not a mode of it.
+  registerCoaster(slice);
 }

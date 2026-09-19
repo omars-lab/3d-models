@@ -356,13 +356,28 @@ external spool ([research/coaster-ams-3mf-contract.md](research/coaster-ams-3mf-
 > **K1 — logical slot ≠ physical AMS slot.** The slice carries only the logical filament index
 > order; the physical spool is bound at print time by colour match. Nothing here claims a spool.
 
-**The 3MF assembly + slice (part 4b-ii, deferred).** The headless CLI has **no flag** to assign
-objects to slots at slice time — the assignment must be baked into the *input* 3MF (BambuStudio#9666).
-So the composer assembles one 3MF per plate where each coaster is one **object** with its region
-bodies as **parts** (shared coordinate frame, so `--arrange` packs whole coasters, not loose bodies),
-each part carrying `<metadata key="extruder" value="K"/>` for its slot, root Application metadata
-`BambuStudio-<ver>`, then slices with `--load-filaments` in slot order. This is deferred: it is the
-one piece that needs the slicer to verify end-to-end, and printing is owner-gated (§11).
+**The 3MF assembly + verify (part 4b-ii, built — `bambu slice coaster`, [D-077](decisions-log.md)).**
+The headless CLI has **no flag** to assign objects to slots at slice time — the assignment must be
+baked into the *input* 3MF (BambuStudio#9666). So a **separate** verb (sibling to `slice compose`,
+not folded into it: a colour plate cannot hand loose STLs to `--arrange`, K10 below) renders each
+item with `bikar render --format parts`, maps palettes to slots (part 4b-i), and assembles one 3MF
+per plate — each coaster one **object** with its region bodies as **parts** in a shared coordinate
+frame (so `--arrange` packs whole coasters, not loose bodies), each part carrying
+`<metadata key="extruder" value="K"/>` for its slot, root Application metadata `BambuStudio-<ver>`.
+It reuses `compose`'s manifest parse + item resolution (the D-072 iteration key, so a coaster reprinted
+from either verb derives the same `it-<sha12>`), the bed-fit pre-check, and the record scaffolder. It
+**never dispatches** — that is `print send`, owner-gated (§11).
+
+> **The verification pivot ([docs/issues/coaster-3mf-filament-shape-and-export-hang.md](issues/coaster-3mf-filament-shape-and-export-hang.md), D-077).**
+> The original plan — slice the assembled file end-to-end with `--load-filaments` — does not survive the
+> headless build. (1) The **versioned** `Application=BambuStudio-<ver>` tag SIGSEGVs the headless slicer
+> (native-project GL path); the shipped 3MF keeps the versioned tag (the GUI has GL and honours the
+> #9666 colour contract), so the headless **geometry** check runs on a **tag-stripped copy**. (2)
+> `--load-settings machine;process` overrides the 3MF's embedded filament arrays, clamping every part to
+> slot 1, so a headless slice **cannot** verify per-region colour. The honest signals split: `slice
+> coaster --verify-geometry` asserts exit 0 + the loaded object count on the tag-stripped copy (preset
+> display names resolved to their system-profile JSON paths via `resolvePresetList`, since `--load-settings`
+> does a filename lookup, not a registry lookup); **colour is a GUI check** — `bambu slice open`.
 
 > **K10 — why the loose-STL path (what §5 does today) does not transfer here.** `--arrange` treats
 > each input STL as an independent object; a coaster's base/straps/border must stay coincident to
