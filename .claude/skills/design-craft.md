@@ -46,24 +46,39 @@ why → how, plain → technical:
    becomes possible if we do.
 4. **The idea.** The proposed approach in plain language — the *mental model*,
    an analogy if one helps — before any mechanism.
-5. **The pieces and where they live.** For any design that spans more than one
-   component or repository: a component diagram grouped by repo/package (who owns
-   what, where the boundaries fall), and a diagram of the *data model it touches* —
-   the classes/types, scoped to the impacted slice, each marked new/changed/reused
+5. **Context and interactions.** The zoomed-out map, and the first structural
+   picture in the doc: a context diagram with the thing being built in the middle,
+   the **actors** (the people/roles who use it) and the **neighbouring systems or
+   components** it touches around it, and **labeled arrows for the interactions** —
+   who calls what, what data crosses. This orients the reader in the landscape
+   before any internals.
+6. **Use cases.** The use cases this **enables or impacts**, each phrased as *an
+   actor doing something*, drawn as a use-case diagram (actors linked to the
+   capabilities). This is what makes "who benefits, and how" concrete.
+7. **The user-facing surface.** How the change shows up to a user: which app, which
+   page(s) or screen(s), and whether it adds or changes a **tab, page, button, or
+   command** — or an explicit "no user-facing surface" when it is a format/CLI/
+   internal change. A reader should never have to guess whether, or where, anything
+   appears in a UI.
+8. **The pieces and where they live.** The zoom-in. For any design that spans more
+   than one component or repository: a component diagram grouped by repo/package (who
+   owns what, where the boundaries fall), and a diagram of the *data model it touches*
+   — the classes/types, scoped to the impacted slice, each marked new/changed/reused
    with a one-line reason. Skip only for a change wholly inside one small component.
-6. **How it works.** The mechanism. Still readable; introduce each domain term
+9. **How it works.** The mechanism. Still readable; introduce each domain term
    with a footnote the first time it appears.
-7. **Alternatives and the decision.** The options that were on the table, the one
-   chosen, and *why the rejected ones lost* (a doc with one option is an
-   announcement, not a design).
-8. **Glossary.** Footnote definitions of every domain term, collected.
-9. **Appendix.** The deep detail: `file:line` anchors, grammar productions, kernel
-   internals, precedence edge-cases, exhaustive tables. Jargon lives **here**.
+10. **Alternatives and the decision.** The options that were on the table, the one
+    chosen, and *why the rejected ones lost* (a doc with one option is an
+    announcement, not a design).
+11. **Glossary.** Footnote definitions of every domain term, collected.
+12. **Appendix.** The deep detail: `file:line` anchors, grammar productions, kernel
+    internals, precedence edge-cases, exhaustive tables. Jargon lives **here**.
 
-**The dividing line:** sections 1–4 carry *no unexplained jargon*. The components
-map (5) is where type and package names first appear, and even there each is glossed;
-a reader should not need to be a specialist until section 6, where every term is still
-footnoted. Everything a specialist needs and a newcomer doesn't goes to the appendix (9).
+**The dividing line:** sections 1–4 carry *no unexplained jargon*. The context,
+use-case, and surface sections (5–7) name actors, components, and pages, and even
+there each is glossed; a reader should not need to be a specialist until section 9,
+where every term is still footnoted. Everything a specialist needs and a newcomer
+doesn't goes to the appendix (12).
 
 ---
 
@@ -105,6 +120,23 @@ a FAIL so the check is not a matter of taste.
   data-model view to package level too. A reader must be able to tell which repo/package
   owns each piece and why each touched type is on the list. (Skip only for a change
   wholly inside one small component — say so.)
+- **C10 — Context diagram first, with the interactions labeled.** Before any
+  component or class diagram, the doc shows a context diagram: the thing being built
+  in the middle, the **actors** (roles who use it) and **neighbouring systems** it
+  touches around it, and **labeled arrows** for what crosses between them (who calls
+  what, what data flows). This is the reader's first structural picture and orients
+  them in the landscape. A doc that dives into internal packages before showing the
+  outside world it sits in has failed C10.
+- **C11 — Use cases named and drawn.** The doc lists the use cases it **enables or
+  impacts**, each as *an actor doing something* ("a designer colours a ring", "a
+  print operator loads the matching filaments"), and draws a use-case diagram linking
+  actors to those capabilities. Naming the actors and their goals is what makes "who
+  benefits" checkable rather than assumed.
+- **C12 — The user-facing surface is named.** The doc states how the change reaches a
+  user: which app, which page(s)/screen(s), and whether it adds or changes a **tab,
+  page, button, or command** — or says explicitly "no user-facing surface" for a
+  format/CLI/internal change. A reader must never have to guess whether, or where,
+  the feature appears in a UI.
 
 A doc **passes** when every rule passes. A single unglossed product name in the
 first paragraph is a C1/C3 fail on its own — the newcomer is lost at sentence one.
@@ -209,6 +241,49 @@ flowchart TB
 ```
 ````
 
+### The context diagram and the use-case diagram (C10, C11)
+
+These come **before** the component and class diagrams: they show the outside world
+first, then the arc zooms in. Mermaid has no native UML context or use-case shape, so
+both are drawn with `flowchart`, which every renderer supports.
+
+- **Context diagram (C10) — the system in its landscape.** The thing you are building
+  sits in the middle; the **actors** (roles) and **neighbouring systems** sit around
+  it; the **arrows are labeled with what crosses** (a call, a file, a piece of data).
+  Keep it to one hop out — this is orientation, not the component diagram. Distinguish
+  actors from systems with shape or a `subgraph` so a reader sees who is a person and
+  what is a machine.
+
+  ````markdown
+  ```mermaid
+  flowchart LR
+    designer(["designer"]) -->|"picks ring colours"| feature["radial-band colour"]
+    feature -->|"one STL per colour + manifest"| composer["plate composer"]
+    composer -->|"multi-part 3MF"| printer["printer / AMS"]
+    operator(["print operator"]) -->|"loads matching filaments"| printer
+  ```
+
+  **In the diagram:** the feature[^feature]; plate composer[^composer]; AMS[^ams].
+  ````
+
+- **Use-case diagram (C11) — actors and their goals.** One node per **actor**, one per
+  **use case** phrased as a goal ("colour a ring", "load the matching filaments"), an
+  edge from each actor to the use cases they perform. Mark a use case *new* or
+  *impacted* the way the class diagram marks types, so the reader sees what this design
+  adds versus what it changes.
+
+  ````markdown
+  ```mermaid
+  flowchart LR
+    d(["designer"]) --> uc1["colour a ring (impacted)"]
+    d --> uc2["preview the coloured print (new)"]
+    op(["print operator"]) --> uc3["load filaments per colour (new)"]
+  ```
+  ````
+
+Name the actors once and reuse those exact names in the use-case list prose, so the
+diagram and the text point at the same people.
+
 ---
 
 ## Good vs bad — the same content, two openings
@@ -282,9 +357,12 @@ Notice the *content is the same*. Nothing technical was dropped. It was **reorde
 | C7 | Concrete example early | A worked scenario in the first half | Examples only in an appendix, or none |
 | C8 | A diagram per concept | Each pipeline/flow/decision has a Mermaid diagram with a footnote-linked legend | A multi-paragraph concept is drawn nowhere; walls of text |
 | C9 | Components + data model | A component diagram shows repo/package boundaries, and a class/ERD diagram of the *touched* types (scoped, marked new/changed/reused, each with a why) | Ownership/boundaries unclear; the structural diagram draws the whole model not the impacted slice; or a touched type has no reason |
+| C10 | Context diagram first | A context diagram (system in the middle, actors + neighbouring systems around it, arrows labeled with what crosses) precedes any internal diagram | No context view; or the doc opens on internal packages before showing the outside world it sits in |
+| C11 | Use cases named + drawn | Use cases enabled/impacted are listed as *actor + goal* and drawn as a use-case diagram | Use cases are absent, or listed with no actors, or never drawn |
+| C12 | User-facing surface named | The doc names the app, page(s), and any new/changed tab/page/button/command — or explicitly "no user-facing surface" | A reader can't tell whether or where the change appears in a UI |
 
 A review reports one finding per failing criterion, each with the line it fails at and
-a concrete rewrite — never "make it clearer." The bar to **pass** is all nine green.
+a concrete rewrite — never "make it clearer." The bar to **pass** is all twelve green.
 
 ---
 

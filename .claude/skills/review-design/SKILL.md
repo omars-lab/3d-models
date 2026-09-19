@@ -20,7 +20,7 @@ bars and still fail this one.
 ## The standard is shared, not built in
 
 The rubric lives in [`../design-craft.md`](../design-craft.md) — the arc a good doc
-follows, the nine clarity rules (C1–C9), the glossary-via-footnotes pattern, the
+follows, the twelve clarity rules (C1–C12), the glossary-via-footnotes pattern, the
 diagram-with-legend pattern, and a worked good/bad example. **Read it first, every run.** It is the authority; this file
 is only the process for applying it. When you find a failure the rubric doesn't name,
 add it *there*, not here.
@@ -35,7 +35,7 @@ a product name, an acronym, a file path, a decision id — mark it. That first-r
 confusion is the data; you cannot recover it on a second read once you've decoded the
 doc, so capture it now.
 
-### 2. Score each criterion C1–C9
+### 2. Score each criterion C1–C12
 
 For each rule in the rubric, decide PASS or FAIL against *this* doc, and for a FAIL
 pin the exact line where a newcomer first falls off. Be concrete about the failure —
@@ -59,6 +59,18 @@ The most common and most damaging failures, in order:
   types are named in prose but never drawn and reasoned. Watch the level too: a
   data-model diagram that draws the whole model instead of the impacted slice fails
   C9 as surely as one that is missing.
+- **C10 no context diagram, or internals first.** The doc drops the reader into
+  packages and classes without ever drawing the outside world — the actors and
+  neighbouring systems it sits among, with the interactions labeled. Flag it if the
+  first structural picture is a component/class diagram rather than a context one.
+- **C11 use cases missing or actor-less.** No list of the use cases the design
+  enables or impacts, or a list with no named actor, or one that is never drawn as a
+  use-case diagram. "Who does what, and what's new versus changed" should be legible
+  at a glance.
+- **C12 user-facing surface left to guess.** The reader cannot tell which app, page,
+  tab, button, or command the change surfaces in — and the doc never says "no
+  user-facing surface" for an internal/CLI/format change. Silence here is a fail; an
+  explicit "none, this is a CLI-only change" is a pass.
 
 ### 3. Report — one fix per failing criterion
 
@@ -71,8 +83,8 @@ Output a findings list, most-damaging first. Each finding:
         appendix", or "footnote `bikar` as: ...". Never "make it clearer.">
 ```
 
-End with a one-line **verdict**: `PASS` only if all nine criteria pass, else
-`FAIL (n/9)` naming which failed. A doc that fails is not ready to merge.
+End with a one-line **verdict**: `PASS` only if all twelve criteria pass, else
+`FAIL (n/12)` naming which failed. A doc that fails is not ready to merge.
 
 ### 4. Offer the rewrite, don't sneak it
 
