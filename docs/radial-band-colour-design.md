@@ -1,7 +1,7 @@
 # Radial-band colour — the ring a polygon sits in is a print region, reusing one binning
 
-*Status: designed (task #25, decision D-078 pending — the id is minted at merge, see the
-decisions log). Omar asked to colour different polygons differently within one construction,
+*Status: designed (task #25, [D-078](decisions-log.md); the id is re-verified against origin/master
+at merge, per the collision rule). Omar asked to colour different polygons differently within one construction,
 and for tooling to colour the polygons whose centroids are equidistant from the construction's
 centre. The finding that shapes this doc: bikar **already** groups a construction's faces into
 concentric rings by centroid distance and **already** lets an author colour a ring — as 2D SVG

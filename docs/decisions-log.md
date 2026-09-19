@@ -5221,3 +5221,52 @@ tag-strip step would fall away — the shipped-tag decision is pinned to the cra
 If a headless flag ever assigns objects to slots at slice time (BambuStudio#9666 resolved), the
 baked-in extruder metadata becomes optional and the two verbs could reconverge. Colour remains a GUI
 gate until one of those changes; the print itself stays owner-gated (§11).
+
+## D-078 — Radial-band colour reuses the shipped `fill where ring` clause as a print region; no second radial grammar
+
+Answers task #25 (Omar 2026-09-19: "color different polygons differently in the same
+construction", with tooling for "polygons whose midpoints are equidistant from midpoint of
+construction"). Design: [`radial-band-colour-design.md`](radial-band-colour-design.md). Grounded in
+[`research/radial-band-colour-research.md`](research/radial-band-colour-research.md), which found
+the radial binning and the colour clause already shipped in bikar (`computeRingBins`, the `ring`
+fill selector, `data-ring` in the SVG) — 2D SVG ink that never reaches the height-field kernel, with
+no verb to enumerate rings. Builds on the region→body→slot route of [D-073](decisions-log.md)/[D-074](decisions-log.md)/[D-075](decisions-log.md).
+
+### The fork
+
+The ask straddles two disjoint colour systems: the 2D per-polygon `fill where ring == N color`
+and the 3D coaster `color <region>` (a fixed base/straps/border enum, bikar #216). How should an
+author say "this radial band is that colour" so it reaches a print?
+
+### Options (rendered a/b/c for Omar, who chose (a))
+
+- **(a) Reuse `fill where ring … color`** (chosen). The ring an author already colours in 2D
+  becomes a print region: `--format parts` carries the face's ring index into the region split so a
+  coloured ring exports as its own AMS body, keyed on palette name. Zero new grammar; one read-only
+  `bands` enumeration verb. Scores 2/2/2/2/2 on the coaster-colour rubric.
+- **(b) `color band <i> <Name>`** — a new coaster-block statement. Rejected: adds a second radial
+  system beside the shipped `fill where ring` — one concept ("the i-th ring") with two spellings,
+  the "one name, two meanings *is* the defect" trap (CLAUDE.md "robust over easy"; cf. D-077 Q1-b,
+  D-052).
+- **(c) `color ring <r0>..<r1> <Name>`** — explicit radius bounds. Rejected: more author control
+  over band edges, but still a second radial system, and the author must know the radii the shipped
+  binning already derives from the geometry's radial gaps.
+
+### Decision and the load-bearing rule
+
+Reuse (a). The one choice a reader must check is §6's precedence: **a ring colour, where present on
+a face, overrides that face's coaster-region key for the split** — so the body set is one body per
+palette name any ring carries, plus the coaster's own base/straps/border bodies for the faces no
+ring colour claimed. Without this rule a face is claimed by both `color <region>` and
+`fill where ring`, and the split is ambiguous; with it there is one owner per face and the body
+count is the number of colours, never the region × ring product (K7 against
+[`coaster-colour-design.md`](coaster-colour-design.md)). The AMS slot count that bounds useful bands
+is a device fact read via `bambu filament` (warn, not cap), not a guessed constant — no new bet.
+
+### Scope and what would reverse it
+
+Scope: the bridge into the **coaster** export (the only 3D solid bikar ships) and the `bands` verb.
+A bare pattern keeps its 2D ring colour unchanged. If bikar ever ships a second splittable 3D solid,
+the bridge generalises to it; if an author ever needs band edges the gap-clustering does not
+produce, option (c)'s explicit radii could be added **as a selector on the same `fill` clause**, not
+as a second statement — the reuse decision holds.
