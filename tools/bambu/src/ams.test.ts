@@ -98,7 +98,7 @@ describe("filamentArrays — project_settings.config parallel arrays (§6)", () 
     const map = buildAmsSlotMap([sc], { defaultFilament: "PLA Basic" });
     const arrays = filamentArrays(map, { type: "PLA", id: "GFA00", hex: "#ffffff" });
     expect(arrays.filament_type).toEqual(["PLA", "PLA", "PLA"]);
-    expect(arrays.filament_id).toEqual(["GFA00", "GFA00", "GFA00"]); // non-empty per slot (§6)
+    expect(arrays.filament_ids).toEqual(["GFA00", "GFA00", "GFA00"]); // plural key, non-empty per slot (§6)
     expect(arrays.filament_colour).toEqual(["#ffffff", "#333333", "#d4af37"]); // slot 1 = default hex
   });
 });

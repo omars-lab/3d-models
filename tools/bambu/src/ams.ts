@@ -127,22 +127,26 @@ export interface FilamentDefaults {
   hex: string; // the default filament's colour (slot 1)
 }
 /** Parallel arrays for `project_settings.config` (§6): one entry per logical slot, in slot order.
- *  Every colour slot reuses the default's type + id (same material) and overrides only the colour. */
+ *  Every colour slot reuses the default's type + id (same material) and overrides only the colour.
+ *  The per-slot product-id array is `filament_ids` (plural): the scalar key `filament_id` is a single
+ *  string in Bambu's config schema, and emitting an array there makes the JSON config parser throw
+ *  `type must be string, but is array` and segfaults the loader — see
+ *  docs/issues/coaster-3mf-filament-shape-and-export-hang.md. */
 export interface FilamentArrays {
   filament_type: string[];
   filament_colour: string[];
-  filament_id: string[];
+  filament_ids: string[];
 }
 export function filamentArrays(map: AmsSlotMap, defaults: FilamentDefaults): FilamentArrays {
   const filament_type: string[] = [];
   const filament_colour: string[] = [];
-  const filament_id: string[] = [];
+  const filament_ids: string[] = [];
   for (const s of map.slots) {
     filament_type.push(defaults.type);
-    filament_id.push(defaults.id);
+    filament_ids.push(defaults.id);
     filament_colour.push(s.paletteName === null ? defaults.hex : (s.hex ?? defaults.hex));
   }
-  return { filament_type, filament_colour, filament_id };
+  return { filament_type, filament_colour, filament_ids };
 }
 
 /** The 1-based `extruder` slot for one coaster region — the value the 3MF assembler (4b-ii) writes
