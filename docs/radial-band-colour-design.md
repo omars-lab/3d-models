@@ -82,6 +82,117 @@ ring is a set of tiles at the same distance out; the print piece prints in one
 filament[^filament], loaded into one slot of the AMS[^ams]. The **proposed** branch is
 the whole feature; the **today** branch is what it replaces.
 
+## The pieces and where they live
+
+This feature spans a boundary between two repositories, and knowing which side owns
+what is most of understanding it. **bikar**[^bikar] is the engine and the *producer of
+record*: it computes the rings and writes the printable pieces. **This product
+(3d-models)** is a *consumer*: it reads bikar's output and lays it out for the printer.
+**qiyas**[^qiyas] validates the render. Almost all of the work is a bikar change, in two
+of its packages; this repo only reads a manifest bikar already emits.
+
+```mermaid
+flowchart TB
+  subgraph bikar["bikar — the engine (producer of record)"]
+    subgraph core["package: core"]
+      dsl["dsl — parser, AST, evaluator"]
+      grph["graph — tiles and their centres"]
+      thm["theme — groups tiles into rings"]
+      k3d["kernel3d — splits a coaster into pieces"]
+    end
+    cli["package: cli — render, parts, bands"]
+  end
+  subgraph tdm["3d-models — consumer (this repo)"]
+    plate["plate composer — colour to filament slot"]
+  end
+  subgraph qiyas["qiyas — validator"]
+    val["checks the render"]
+  end
+  dsl --> grph --> thm --> k3d --> cli
+  cli -->|"parts manifest + one STL per colour"| plate
+  plate --> val
+```
+
+**In the diagram:** the ring grouping lives in bikar[^bikar]'s *theme* package; the
+coaster[^coaster] split into pieces lives in *kernel3d*[^kernel3d]; the parts split[^parts]
+and the new `bands` command are in *cli*; this repo's plate composer maps each colour to
+one AMS[^ams] slot; qiyas[^qiyas] validates. The boxes that change are named in the table
+below.
+
+### The data model we touch (and why)
+
+Only the types this feature reads or changes — **not the whole engine.** Each is marked
+*reused* (we read it, unchanged), *changed* (existing code we modify), or *new*. Drawing
+just the impacted slice is deliberate: the point is to show the blast radius, not the
+model. The exact source locations stay in the [research file](research/radial-band-colour-research.md);
+here we show the shape and the reason.
+
+```mermaid
+classDiagram
+  class Face {
+    <<reused>>
+    centroid
+    vertices
+  }
+  class EvaluationResult {
+    <<reused>>
+    faces
+    faceRings
+    faceColors
+  }
+  class PaletteNode {
+    <<reused>>
+    name
+    colors
+  }
+  class CoasterRegion {
+    <<enum, kept as-is>>
+    base
+    straps
+    border
+  }
+  class buildCoasterParts {
+    <<changed>>
+    consultsFaceRings()
+  }
+  class PartsManifest {
+    <<changed>>
+    region
+    paletteName
+    hex
+  }
+  class bandsVerb {
+    <<new>>
+    listRings()
+  }
+  EvaluationResult o-- Face
+  EvaluationResult o-- PaletteNode
+  buildCoasterParts ..> EvaluationResult : reads faceRings
+  buildCoasterParts ..> CoasterRegion : precedence
+  buildCoasterParts ..> PartsManifest : writes
+  bandsVerb ..> EvaluationResult : reads faceRings
+```
+
+**In the diagram:** a tile[^face] is a `Face`; the `faceRings` on the evaluation result is
+the ring grouping the engine already computed; a `PaletteNode` is a palette[^palette]; the
+three `CoasterRegion` values are the coaster regions[^region]. Solid diamonds are
+"contains"; dashed arrows are "reads / writes."
+
+| Type or function | Package | Status | Why we touch it |
+|---|---|---|---|
+| `Face` (its centre) | core · graph | reused | ring grouping keys off each tile's distance from the centre; already computed and retained |
+| `EvaluationResult.faceRings` | core · evaluator | reused | the per-tile ring index the bridge reads; already survives evaluation, so no new geometry |
+| `PaletteNode` | core · dsl | reused | the colour name a ring carries becomes the print piece's key |
+| `CoasterRegion` | core · kernel3d | kept as-is | the three built-in regions; deliberately **not** extended — the precedence rule lets a ring colour win *alongside* them, leaving this hard-coded enum untouched |
+| `buildCoasterParts()` | core · kernel3d | **changed** | today it splits by grid and region only; it must also consult `faceRings` via the grid→tile→ring lookup (the bridge) |
+| parts manifest | cli | **changed** | the region key widens from the three-value enum to "one piece per colour"; the `paletteName`/`hex` fields it already emits are reused |
+| `bands` verb | cli | **new** | a read-only command that lists a pattern's rings — radius, tile count, colour — so a designer sees what they are colouring |
+
+Why class level and not package level for this table: the impact set is seven units,
+small enough to name each with its reason. A larger blast radius would be drawn at
+package level instead — the rule is to draw the data model at whatever level lets every
+touched unit carry a one-line *why*.
+
 ## How it works
 
 ### Carrying a ring's colour into the print (the bridge)
@@ -254,6 +365,15 @@ from a rendered comparison of (a)/(b)/(c)).
 [^region]: **coaster region** — one of a coaster's three built-in structural parts, split
     by shape rather than by colour: `base` (the slab), `straps` (raised bands), and
     `border` (the rim). These predate rings and are what the print-splitter uses today.
+[^qiyas]: **qiyas** — our validation service (a separate repository). It re-renders a
+    design and checks the output matches what bikar produced; it is the last stage before
+    a design is trusted, and does not build geometry itself.
+[^kernel3d]: **kernel3d** — the part of bikar that turns a flat design into the 3D solid a
+    printer builds, as opposed to the 2D on-screen drawing. The coaster's print-splitter
+    lives here.
+[^parts]: **parts split** — bikar's mode (`--format parts`) that exports a model as several
+    separate STL files, one per coloured piece, plus a small manifest naming each piece's
+    colour. It is the input a multi-colour print needs.
 
 ## Appendix — where this lives, and the ungrounded number
 
