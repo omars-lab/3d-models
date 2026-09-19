@@ -1,0 +1,41 @@
+# minis-01 — the first coaster plate (plan P4.2)
+#
+# Every migrated construction (constructions ledger: GimTvN9hw4U = CS-1,
+# 7apC5Q9QS-8 = CS-2) at mini size, two copies each, one relief variant each —
+# the plate after Plate 1 (the machine card). Composed by `bambu slice compose`
+# (docs/plate-composer-design.md): each item renders once through bikar, then
+# `--arrange` packs the copies onto one X2D bed.
+#
+# WHY THE PLAIN `-coaster.bkr`, NOT `-border-coaster.bkr` (a deliberate choice,
+# not the plan's parenthetical): `slice compose` hands loose STLs to `--arrange`,
+# so it is a MONOCHROME plate. The `-border-coaster` variants now carry a
+# `color border …` statement (#37), and a coloured coaster must keep its region
+# bodies coincident as one object — that is `bambu slice coaster`'s job, a
+# separate colour plate (plate-composer-design.md §12, K10), never a compose
+# plate that would silently drop the colour. The plan's "bordered ones border=4"
+# predates that colour split; a bordered/coloured mini plate is a future
+# `slice coaster` manifest, not this one.
+#
+# The plain mini is also the right content for what P4.3 settles: the emboss
+# straps at size=40 exercise the strap-width floor CAL-CST-01 directly.
+#
+# Validate (no hardware, no slicer): renders both items + runs the bed-fit
+# pre-check, stops before the slicer —
+#   bambu slice compose docs/plates/minis-01.yaml --dry-run
+
+bed: x2d                        # 256 × 256 mm (D-053); the fit pre-check runs against it
+profile:                        # the ONE slice profile the plate is sliced under — the
+                                # confirmed X2D family proven headless on Plate 1
+                                # (docs/prints/plate-1-bench-sheet.md)
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"   # -s (machine;process)
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"                 # -f
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-coaster.bkr   # CS-1, six-fold star rosette
+    piece:  Coaster
+    params: { size: 40 }        # mini; margin keeps its 2 mm default → unit = (40-4)/4 = 9 mm
+    count:  2
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-coaster.bkr   # CS-2, eight-fold rosette
+    piece:  Coaster
+    params: { size: 40 }
+    count:  2

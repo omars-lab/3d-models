@@ -96,11 +96,6 @@
     },
     {
       "doc": "docs/geogebra-construction-import-design.md",
-      "path": "docs/plates/minis-01.yaml",
-      "why": "Proposed — the first mini-plate manifest P4.2 writes. Remove this when the file is written."
-    },
-    {
-      "doc": "docs/geogebra-construction-import-design.md",
       "path": "docs/design/construction-ast-export.md",
       "why": "Somebody else's tree — the youtube repo's design doc for the AST export (P1.3), cited as the producer's account. youtube is not a sibling this gate resolves (no remote, pinned only by the schema-mirror gate once its schema commit lands)."
     },
