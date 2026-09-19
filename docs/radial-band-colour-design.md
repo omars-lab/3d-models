@@ -82,6 +82,68 @@ ring is a set of tiles at the same distance out; the print piece prints in one
 filament[^filament], loaded into one slot of the AMS[^ams]. The **proposed** branch is
 the whole feature; the **today** branch is what it replaces.
 
+## Context and interactions
+
+Before the internals, here is the landscape this feature sits in — who uses it and what
+it talks to. Two people touch it: a **designer**, who chooses the colours, and a **print
+operator**, who loads the physical filament spools. Between them sit four systems: the
+editor[^editor] where colours are picked, the engine (bikar[^bikar]) where the feature
+does its work, this repo's plate composer[^composer] that arranges pieces for a print,
+and the printer with its AMS[^ams]. qiyas[^qiyas] checks the result. The arrows say what
+crosses each boundary.
+
+```mermaid
+flowchart LR
+  designer(["designer"]) -->|"picks ring colours in the editor"| feat["radial-band colour"]
+  feat -->|"one coloured piece per ring + a manifest"| composer["plate composer (this repo)"]
+  composer -->|"multi-part plate, one filament per colour"| printer["printer + AMS"]
+  operator(["print operator"]) -->|"loads the matching filaments"| printer
+  composer -.->|"render verified by"| qiyas["qiyas validator"]
+```
+
+**In the diagram:** the feature runs inside the engine (bikar[^bikar]); a designer picks
+colours in the editor[^editor]; the plate composer[^composer] lives in this repo; the
+printer feeds filament from the AMS[^ams]; qiyas[^qiyas] validates. The rounded nodes are
+people; the rectangles are systems.
+
+## Use cases
+
+The feature enables or changes three concrete things an actor can do. Each is marked
+*new* (not possible before) or *impacted* (possible before, changed by this design).
+
+- **A designer colours a ring and it survives into the print** — *impacted.* Colouring a
+  ring already worked on screen; this design carries that colour through to the 3D print
+  instead of dropping it.
+- **A designer lists a pattern's rings before colouring** — *new.* The read-only
+  `bands` command reports each ring's radius, tile count, and current colour, so the
+  designer colours a known ring instead of guessing.
+- **A print operator loads one filament per ring colour** — *new.* Because each coloured
+  ring becomes its own piece with a named colour in the manifest, the operator can map
+  colours to AMS[^ams] slots.
+
+Downstream, the plate composer[^composer] is *impacted*: a single model now arrives as
+several coloured pieces rather than one, which it already knows how to lay out.
+
+```mermaid
+flowchart LR
+  d(["designer"]) --> uc1["colour a ring so it prints in that colour (impacted)"]
+  d --> uc2["list a pattern's rings before colouring (new — bands)"]
+  op(["print operator"]) --> uc3["load one filament per ring colour (new)"]
+```
+
+## The user-facing surface
+
+**Almost none of this is a new screen.** A designer already colours rings in the
+editor[^editor]'s Coaster Lab today, with the same controls; nothing about that page, its
+tabs, or its buttons changes. What changes is the *result* — a coloured pattern now
+prints in those colours instead of coming out monochrome.
+
+The one genuinely new surface is a **command-line command**, `bands`, that lists a
+pattern's rings. It adds no page, tab, or button — it is a read-only report an author (or
+a script) runs from the bikar[^bikar] CLI. The parts split it feeds (`--format parts`)
+already exists. So the honest summary: **one new CLI command; no new GUI surface; the
+visible payoff is that printed patterns are finally multi-colour.**
+
 ## The pieces and where they live
 
 This feature spans a boundary between two repositories, and knowing which side owns
@@ -374,6 +436,10 @@ from a rendered comparison of (a)/(b)/(c)).
 [^parts]: **parts split** — bikar's mode (`--format parts`) that exports a model as several
     separate STL files, one per coloured piece, plus a small manifest naming each piece's
     colour. It is the input a multi-colour print needs.
+[^composer]: **plate composer** — the tool in this repo (3d-models) that arranges one or
+    more models onto a printer's build plate and maps each piece's colour to a filament
+    slot, producing the file the printer slices. It consumes bikar's parts split; it does
+    not build geometry itself.
 
 ## Appendix — where this lives, and the ungrounded number
 
