@@ -48,7 +48,7 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 32 <!--count:cal-bets--> | 27 with a coupon, 10 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, the equivalence bets `CAL-EQV-01`/`CAL-EQV-02`, the interlock tab-neck bet `CAL-CST-06`, and the coaster colour-split pinch bet `CAL-PIN-01`) |
+| Registered `CAL-*` bets | 32 <!--count:cal-bets--> | 28 with a coupon, 10 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, the equivalence bets `CAL-EQV-01`/`CAL-EQV-02`, the interlock tab-neck bet `CAL-CST-06`, and the coaster colour-split pinch bet `CAL-PIN-01`) |
 | `Calibrated<T>` records | 28 <!--count:cal-records--> | all provisional, all listed in bikar's `.calibration-baseline.json` |
 | Bets settled by the machine card (MC-1…MC-8) | 10 <!--count:cal-bets-mc--> | 15 <!--count:cal-mc-records--> of the 28 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 18 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1), `CAL-GRP-01` (LG-D1), `CAL-CST-01` + `CAL-CST-02` + `CAL-CST-03` + `CAL-CST-04` + `CAL-CST-05` + `CAL-CST-06` (CS-1), `CAL-CST-07` (CS-4), `CAL-CST-08` (CS-5) — but only 13 <!--count:cal-design-records--> records, because five of the eighteen have a coupon and no `Calibrated` record yet |
