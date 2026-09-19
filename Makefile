@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env bambu-flags validate-bambu-flags
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -805,3 +805,16 @@ coasters: bikar-stamp
 validate-env:
 	@sh ${ROOT_DIR}/.claude/gates/check_env_encrypted.sh --self-test
 	@cd ${ROOT_DIR} && sh .claude/gates/check_env_encrypted.sh
+
+# bambu CLI flag reference. `bambu dump-flags` emits tools/bambu/FLAGS.md from the
+# commander tree, so the reference cannot be wrong about a flag the way a hand-kept
+# table drifts. `make bambu-flags` regenerates it; `validate-bambu-flags` (hook 45)
+# self-tests the gate then diffs the checked-in copy, blocking a commit whose CLI
+# surface moved without the reference. (D-0xx / task #11.)
+bambu-flags:
+	@cd $(BAMBU_DIR) && ./bin/bambu dump-flags --write
+
+validate-bambu-flags:
+	@sh ${ROOT_DIR}/.claude/gates/bambu_flags_gate.sh --self-test
+	@cd ${ROOT_DIR} && sh .claude/gates/bambu_flags_gate.sh
+
