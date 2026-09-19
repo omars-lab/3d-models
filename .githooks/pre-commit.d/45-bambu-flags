@@ -1,0 +1,27 @@
+#!/bin/sh
+# bambu CLI flag reference gate (.claude/gates/bambu_flags_gate.sh). Every `--flag` the CLI answers
+# to is generated into tools/bambu/FLAGS.md from the commander tree; a hand-written table (README,
+# the bambu skill) drifts the moment a `.option()` is added. This blocks a commit whose CLI surface
+# changed without the reference being regenerated — `make bambu-flags` fixes it.
+#
+# wholesale: make validate-bambu-flags
+# wholesale-requires: node
+#
+# Scoped, unlike the count gate: FLAGS.md can only drift from a change under tools/bambu/src (the
+# command/flag definitions) or to FLAGS.md itself. A commit that touches neither cannot have moved
+# the surface, and requiring the Node toolchain for every unrelated commit would be friction with no
+# check behind it. The wholesale form (make validate-bambu-flags) always runs regardless.
+# Override once: BAMBU_FLAGS_OK=1 git commit
+[ -n "$BAMBU_FLAGS_OK" ] && exit 0
+
+# Only fire when the CLI surface (or its reference) is in this commit.
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+echo "$staged" | grep -qE '^tools/bambu/src/|^tools/bambu/FLAGS\.md$' || exit 0
+
+# Same worktree caveat as the other gates: `gh-pages` carries `.githooks` and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/bambu_flags_gate.sh"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no bambu-flags gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec sh "$GATE"
