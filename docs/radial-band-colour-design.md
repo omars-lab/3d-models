@@ -29,6 +29,15 @@ Concretely: a designer draws a coaster whose centre tile should be gold and whos
 band should be copper. On screen it is gold and copper. The printed coaster is one flat
 colour. There is, today, no way to get the two colours they drew onto the physical part.
 
+```mermaid
+flowchart LR
+  D["colours a designer picks"] --> S["2D drawing — keeps the colour"]
+  D --> P["3D print — colour dropped today"]
+```
+
+**In the diagram:** the designer picks colours in the editor[^editor]; the
+2D drawing[^twod] carries them; the 3D print is where they are lost today.
+
 ## Why it matters
 
 Multi-colour is the whole reason to own the printer we have: it carries several
@@ -59,6 +68,20 @@ screen. So this feature invents no new geometry and no new grammar. It does two 
 That is the entire design: a *bridge* (item 1) and a *listing command* (item 2), plus one
 rule for what happens when a ring's colour and a coaster's built-in regions[^region] disagree.
 
+```mermaid
+flowchart LR
+  pat["pattern of tiles"] --> eng["engine groups tiles into rings"]
+  eng --> today["today: colour stops at the 2D drawing"]
+  eng --> bridge["proposed: ring carried into the print split"]
+  bridge --> piece["one print piece per colour"]
+  piece --> slot["one filament slot in the AMS"]
+```
+
+**In the diagram:** the engine is bikar[^bikar]; a tile[^face] is one polygon and a
+ring is a set of tiles at the same distance out; the print piece prints in one
+filament[^filament], loaded into one slot of the AMS[^ams]. The **proposed** branch is
+the whole feature; the **today** branch is what it replaces.
+
 ## How it works
 
 ### Carrying a ring's colour into the print (the bridge)
@@ -80,6 +103,19 @@ bridge is a lookup that connects the two:
    painted the same colour merge into one piece (one filament), and a ring left unpainted
    falls back to the coaster's own regions (see precedence, below). This is what keeps the
    number of printed pieces equal to the number of *colours*, not the number of rings.
+
+```mermaid
+flowchart LR
+  cell["raised grid cell"] --> tile["the tile beneath it"]
+  tile --> ring["the tile's ring"]
+  ring --> name["the palette name<br/>the designer gave that ring"]
+  name --> piece["the print piece"]
+```
+
+**In the diagram:** the grid cell belongs to the coaster's raised surface (height
+field[^heightfield]); the tile[^face] is the polygon under it; the palette[^palette]
+name (the colour) — not the ring number — is what decides the piece, so same-colour
+rings merge.
 
 A pattern that is not a coaster has no raised surface to split, so "reach the 3D print" is
 out of scope for it here — this bridges rings into the **coaster** print, the only solid
@@ -131,6 +167,19 @@ region.** So the pieces are: one per colour a designer assigned to any ring, plu
 coaster's own `base`/`straps`/`border` pieces for the tiles no ring colour claimed. A
 designer gets exactly as many pieces as they used colours — never the full grid of
 combinations. Every tile has exactly one owner, so the split is never ambiguous.
+
+```mermaid
+flowchart TD
+  t["a tile"] --> q{"did the designer<br/>colour its ring?"}
+  q -- yes --> r["piece = the ring's colour<br/>(wins)"]
+  q -- no --> q2{"does its coaster<br/>region have a colour?"}
+  q2 -- yes --> reg["piece = that region"]
+  q2 -- no --> base["piece = base region"]
+```
+
+**In the diagram:** a tile[^face] takes its ring's colour if it has one; only if it
+doesn't does its coaster region[^region] decide. This is the single rule that keeps one
+owner per tile.
 
 **Default:** a tile claimed by neither a ring colour nor an explicit coaster-region colour
 belongs to the `base` region — the same default
