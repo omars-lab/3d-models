@@ -20,7 +20,7 @@ bars and still fail this one.
 ## The standard is shared, not built in
 
 The rubric lives in [`../design-craft.md`](../design-craft.md) — the arc a good doc
-follows, the eight clarity rules (C1–C8), the glossary-via-footnotes pattern, the
+follows, the nine clarity rules (C1–C9), the glossary-via-footnotes pattern, the
 diagram-with-legend pattern, and a worked good/bad example. **Read it first, every run.** It is the authority; this file
 is only the process for applying it. When you find a failure the rubric doesn't name,
 add it *there*, not here.
@@ -35,7 +35,7 @@ a product name, an acronym, a file path, a decision id — mark it. That first-r
 confusion is the data; you cannot recover it on a second read once you've decoded the
 doc, so capture it now.
 
-### 2. Score each criterion C1–C8
+### 2. Score each criterion C1–C9
 
 For each rule in the rubric, decide PASS or FAIL against *this* doc, and for a FAIL
 pin the exact line where a newcomer first falls off. Be concrete about the failure —
@@ -53,6 +53,12 @@ The most common and most damaging failures, in order:
 - **C8 walls of text.** A pipeline or data flow explained in paragraphs with no
   diagram. If you find yourself re-reading a paragraph to trace "A → B → C," that
   paragraph wanted a Mermaid diagram — say so and sketch the nodes.
+- **C9 no component or data-model view.** The doc spans repos/packages but never
+  shows the boundaries (which side owns what) or the classes it touches. Flag it if
+  you cannot tell, from the doc, which component a change lands in, or if the touched
+  types are named in prose but never drawn and reasoned. Watch the level too: a
+  data-model diagram that draws the whole model instead of the impacted slice fails
+  C9 as surely as one that is missing.
 
 ### 3. Report — one fix per failing criterion
 
@@ -65,8 +71,8 @@ Output a findings list, most-damaging first. Each finding:
         appendix", or "footnote `bikar` as: ...". Never "make it clearer.">
 ```
 
-End with a one-line **verdict**: `PASS` only if all eight criteria pass, else
-`FAIL (n/8)` naming which failed. A doc that fails is not ready to merge.
+End with a one-line **verdict**: `PASS` only if all nine criteria pass, else
+`FAIL (n/9)` naming which failed. A doc that fails is not ready to merge.
 
 ### 4. Offer the rewrite, don't sneak it
 

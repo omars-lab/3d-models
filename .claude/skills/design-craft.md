@@ -46,18 +46,24 @@ why → how, plain → technical:
    becomes possible if we do.
 4. **The idea.** The proposed approach in plain language — the *mental model*,
    an analogy if one helps — before any mechanism.
-5. **How it works.** The mechanism. Still readable; introduce each domain term
+5. **The pieces and where they live.** For any design that spans more than one
+   component or repository: a component diagram grouped by repo/package (who owns
+   what, where the boundaries fall), and a diagram of the *data model it touches* —
+   the classes/types, scoped to the impacted slice, each marked new/changed/reused
+   with a one-line reason. Skip only for a change wholly inside one small component.
+6. **How it works.** The mechanism. Still readable; introduce each domain term
    with a footnote the first time it appears.
-6. **Alternatives and the decision.** The options that were on the table, the one
+7. **Alternatives and the decision.** The options that were on the table, the one
    chosen, and *why the rejected ones lost* (a doc with one option is an
    announcement, not a design).
-7. **Glossary.** Footnote definitions of every domain term, collected.
-8. **Appendix.** The deep detail: `file:line` anchors, grammar productions, kernel
+8. **Glossary.** Footnote definitions of every domain term, collected.
+9. **Appendix.** The deep detail: `file:line` anchors, grammar productions, kernel
    internals, precedence edge-cases, exhaustive tables. Jargon lives **here**.
 
-**The dividing line:** sections 1–4 carry *no unexplained jargon*. A reader should
-not need to be a specialist until section 5, and even there every term is footnoted.
-Everything a specialist needs and a newcomer doesn't goes to the appendix (8).
+**The dividing line:** sections 1–4 carry *no unexplained jargon*. The components
+map (5) is where type and package names first appear, and even there each is glossed;
+a reader should not need to be a specialist until section 6, where every term is still
+footnoted. Everything a specialist needs and a newcomer doesn't goes to the appendix (9).
 
 ---
 
@@ -88,6 +94,17 @@ a FAIL so the check is not a matter of taste.
   becomes B, which the splitter turns into C" and draws nothing has failed C8. Node
   labels use the glossary terms, and a one-line legend under the diagram links those
   terms back to their footnotes (see the diagram section below).
+- **C9 — Components and the data model, at the right level.** A design that spans more
+  than one component or repository shows **(a)** a component diagram that groups nodes
+  by repo/package, so ownership and the boundaries between them are visible, and **(b)**
+  a diagram of the data model it touches — classes/types, **scoped to the impacted set**
+  and marked *new*/*changed*/*reused*, each carrying a one-line reason it is touched.
+  Draw the *system* at package/component level; draw the *data model* at class level,
+  but only for the slice you touch — never the whole model. If the touched set is too
+  large to name each class with a reason (roughly more than ten), collapse the
+  data-model view to package level too. A reader must be able to tell which repo/package
+  owns each piece and why each touched type is on the list. (Skip only for a change
+  wholly inside one small component — say so.)
 
 A doc **passes** when every rule passes. A single unglossed product name in the
 first paragraph is a C1/C3 fail on its own — the newcomer is lost at sentence one.
@@ -153,6 +170,44 @@ Two rules make a diagram pull its weight:
 One good diagram per hard concept beats three paragraphs describing it. Keep each
 diagram to the one idea it carries; a diagram that needs its own paragraph to decode
 has the same disease as the prose it replaced.
+
+### The two structural diagrams a cross-component design owes (C9)
+
+Concept diagrams (above) explain *how the idea works*. A design that spans components
+or repos owes two more that explain *where the work lands* — this is what makes repo
+isolation visible instead of implied:
+
+- **A component diagram — the system at package level.** Group the nodes with Mermaid
+  `subgraph`s, one per repo or package, so the boundaries and ownership are the first
+  thing a reader sees. Put the data flow *across* the boundaries on the edges
+  (`cli -->|"parts manifest"| plate`). This answers "which repo owns what, and what
+  crosses between them."
+- **A data-model diagram — the impact at class level.** A Mermaid `classDiagram` of
+  the types the feature touches — **only** the touched ones — each tagged `<<new>>`,
+  `<<changed>>`, or `<<reused>>`, with the relationships (contains, reads, writes) as
+  edges. Pair it with a short table: *type · package · status · why we touch it.* The
+  "why" column is the point; a type with no reason to be on the list should not be.
+
+**Pick the level so every unit carries a why.** Draw the system at package level and
+the data model at class level — but only for the slice you touch. Class level is not
+overwhelming when it is scoped to the blast radius (a handful of types); it becomes
+overwhelming the moment it tries to draw the whole model. If the touched set is larger
+than you can name with one reason each, that is the signal to draw *that* view at
+package level too. State which level you chose and why, in one line.
+
+````markdown
+```mermaid
+flowchart TB
+  subgraph engine["engine (producer)"]
+    a["package: core — grouping"]
+    b["package: cli — export"]
+  end
+  subgraph app["this repo (consumer)"]
+    c["composer"]
+  end
+  a --> b -->|"manifest"| c
+```
+````
 
 ---
 
@@ -226,9 +281,10 @@ Notice the *content is the same*. Nothing technical was dropped. It was **reorde
 | C6 | Plain-language lead | Each hard section opens with a plain sentence carrying the point | A section starts mid-machinery |
 | C7 | Concrete example early | A worked scenario in the first half | Examples only in an appendix, or none |
 | C8 | A diagram per concept | Each pipeline/flow/decision has a Mermaid diagram with a footnote-linked legend | A multi-paragraph concept is drawn nowhere; walls of text |
+| C9 | Components + data model | A component diagram shows repo/package boundaries, and a class/ERD diagram of the *touched* types (scoped, marked new/changed/reused, each with a why) | Ownership/boundaries unclear; the structural diagram draws the whole model not the impacted slice; or a touched type has no reason |
 
 A review reports one finding per failing criterion, each with the line it fails at and
-a concrete rewrite — never "make it clearer." The bar to **pass** is all eight green.
+a concrete rewrite — never "make it clearer." The bar to **pass** is all nine green.
 
 ---
 

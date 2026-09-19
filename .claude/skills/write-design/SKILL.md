@@ -15,7 +15,7 @@ That one scores; this one writes. They loop.
 
 ## The standard is shared
 
-The arc, the eight clarity rules, the glossary-via-footnotes pattern, the
+The arc, the nine clarity rules, the glossary-via-footnotes pattern, the
 diagram-with-legend pattern, and a worked good/bad rewrite all live in
 [`../design-craft.md`](../design-craft.md). **Read it first, every run.** Author to
 it; do not reinvent the structure here.
@@ -44,7 +44,12 @@ not on facts. So the move is:
   gets a Mermaid diagram (C8), with node labels that reuse the glossary terms and a
   one-line footnote-linked legend beneath it. When a paragraph traces "A → B → C,"
   replace or accompany it with the picture; don't leave the reader to build it in their
-  head. See design-craft.md §"Diagrams — show it, don't only tell it."
+  head. And when the design spans components or repos, add the two structural diagrams
+  (C9): a component diagram grouped by repo/package (who owns what), and a class-level
+  data-model diagram scoped to the *touched* types (new/changed/reused, each with a
+  one-line why) plus its table. Draw the system at package level, the data model at
+  class level for the impacted slice only. See design-craft.md §"Diagrams — show it,
+  don't only tell it" and §"The two structural diagrams a cross-component design owes."
 
 Keep the appendix rich. Deferring jargon is not deleting it — the specialist who needs
 the `file:line` anchor still finds it, just not in the reader's way.
@@ -52,8 +57,9 @@ the `file:line` anchor still finds it, just not in the reader's way.
 ### 3. Write the arc
 
 Follow design-craft.md §"The arc": title + premise → problem → why it matters → the
-idea (mental model) → how it works → alternatives + decision → glossary → appendix.
-Sections 1–4 carry no unglossed jargon; that is the line.
+idea (mental model) → the pieces and where they live (component + data-model diagrams,
+for a cross-component design) → how it works → alternatives + decision → glossary →
+appendix. Sections 1–4 carry no unglossed jargon; that is the line.
 
 For an *existing* doc, this usually means: write a fresh premise/problem/idea opening,
 then keep the old technical sections but demote the deepest ones into `## Appendix`,
@@ -63,8 +69,8 @@ it, gloss its terms, and lead it with a plain sentence.
 ### 4. Loop with review-design until it passes
 
 Run [`review-design`](../review-design/SKILL.md) on the result. Apply every finding.
-Re-run. Repeat until the verdict is `PASS (8/8)`. Do not stop at "better" — the bar is
-the full rubric green, because a newcomer needs all eight, not most.
+Re-run. Repeat until the verdict is `PASS (9/9)`. Do not stop at "better" — the bar is
+the full rubric green, because a newcomer needs all nine, not most.
 
 Each pass should converge: if the same criterion fails twice, the fix wasn't concrete
 enough — go back to the rubric's PASS wording for that rule and write to it literally.
