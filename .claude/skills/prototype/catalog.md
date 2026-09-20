@@ -1502,3 +1502,32 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   chevron motif; the gallery's two bordered entries; colour regions (#37) — the
   band vs field split (the kernel's `band` bit) is the region this is the first
   form to carry; the Coaster Lab's bordered presets.
+
+## CS-6 — Seven-fold star rosette coaster (Sarah Brewer, tA8eSdVx_EQ)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/tA8eSdVx_EQ-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/tA8eSdVx_EQ-coaster-mini.stl`
+  and `-standard.stl`). Frame is a **heptagon** ([D-079](../../../docs/decisions-log.md)):
+  `outline polygon 7 $size rotate 0`, pinned at import with `--coaster-outline
+  polygon:7:0` so the seven flats sit under the star's lobes. The least-area
+  fitter (D-066) has no heptagon candidate and would default to the octagon
+  here (6,710 vs the heptagon's 6,826 mm² slab @ 90 mm); the pin overrides only
+  *which* shape emits — CV7 still measures containment and passes at 40/90/120.
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` / `color straps Gold`. Both pass the mesh gate at the 0.8 mm
+  coaster floor; the mini is 34,688 triangles / 6.1 cm³ and the standard 172,748
+  triangles / 29.1 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. Seven-fold is the first odd frame with no axis parallel to a plate
+    edge — does the heptagon read as an intentional picture frame, or does the
+    tilt look like a placement that missed square?
+  - [ ] 2. The seven star points reach closer to the flats than the eight-fold
+    art does to its square — do the point tips survive the 0.8 mm floor legibly
+    at `size=40`, or is the mini too tight at the rim?
+- **What we learned**: — pending.
+- **Feeds**: the first use of the `--coaster-outline` frame pin (D-079); the
+  gallery's coaster entry; the constructions ledger's `coaster` and `catalog`
+  cells for `tA8eSdVx_EQ`.
