@@ -1,0 +1,120 @@
+# naqsh construction — tA8eSdVx_EQ
+# title: the C7 orbit of one line
+# url: https://www.youtube.com/watch?v=tA8eSdVx_EQ
+# steps: 30 statements, 30 tagged steps
+# source: reconstructions/tA8eSdVx_EQ/construction.ggb-commands sha256:5f3f48e99524d7db1e775ff64c33ce915eb9ea8d3a74034ba1b751828a2bda80
+
+param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 2.7886   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint tA8eSdVx_EQ_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:12  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=00:14  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=00:28  C = Rotate(A, -128.571429°, B)
+  point C = rotate A by -128.571429 around B
+  # t=00:28  poly1 = Polygon(A, B, 7)
+  polygon poly1 = regular 7 from A to B
+  # ────────────────────────────────────────────────────────
+  # t=00:47  m = PerpendicularBisector(A, B)
+  bisector m from A to B
+  # ────────────────────────────────────────────────────────
+  # t=00:49  n = PerpendicularBisector(B, C)
+  bisector n from B to C
+  # ────────────────────────────────────────────────────────
+  # t=00:55  H = Intersect(m, n)
+  point H = intersect m n
+  # ────────────────────────────────────────────────────────
+  # t=00:58  I = Midpoint(A, B)
+  point I = midpoint A B
+  # ────────────────────────────────────────────────────────
+  # t=01:00  J = Midpoint(B, C)
+  point J = midpoint B C
+  # ────────────────────────────────────────────────────────
+  # t=01:05  c = Circle(B, I)
+  circle c center(B) through I
+  # ────────────────────────────────────────────────────────
+  # t=01:09  p = Line(B, H)
+  line p from B to H
+  # ────────────────────────────────────────────────────────
+  # t=01:12  K = Intersect(c, p, 2)
+  point K = intersect c p pick 2
+  # ────────────────────────────────────────────────────────
+  # t=01:16  d = Circle(H, I)
+  circle d center(H) through I
+  # ────────────────────────────────────────────────────────
+  # t=01:37  Bp = Rotate(B, 24°, K)
+  point Bp = rotate B by 24 around K
+  # ────────────────────────────────────────────────────────
+  # t=01:45  lb = Line(K, Bp)
+  line lb from K to Bp
+  # ────────────────────────────────────────────────────────
+  # t=02:18  rb = AngleBisector(A, B, H)
+  line rb = bisect angle A B H
+  # ────────────────────────────────────────────────────────
+  # t=02:31  L = Intersect(lb, m)
+  point L = intersect lb m
+  # ────────────────────────────────────────────────────────
+  # t=02:37  lp = Reflect(lb, p)
+  line lp = reflect lb across p
+  # ────────────────────────────────────────────────────────
+  # t=02:40  lpp = Reflect(lp, n)
+  line lpp = reflect lp across n
+  # ────────────────────────────────────────────────────────
+  # t=02:43  O = Intersect(lpp, p)
+  point O = intersect lpp p
+  # ────────────────────────────────────────────────────────
+  # t=02:45  M = Intersect(lp, lpp)
+  point M = intersect lp lpp
+  # ────────────────────────────────────────────────────────
+  # t=02:49  lpr = Reflect(lp, rb)
+  line lpr = reflect lp across rb
+  # ────────────────────────────────────────────────────────
+  # t=02:51  N = Intersect(lp, rb)
+  point N = intersect lp rb
+  # ────────────────────────────────────────────────────────
+  # t=02:58  q1 = Polygon(K, L, O, M)
+  polygon q1 [ K L O M ]
+  # ────────────────────────────────────────────────────────
+  # t=03:03  ls = Reflect(lpr, m)
+  line ls = reflect lpr across m
+  # ────────────────────────────────────────────────────────
+  # t=03:13  P = Intersect(ls, p)
+  point P = intersect ls p
+  # ────────────────────────────────────────────────────────
+  # t=03:16  Np = Reflect(N, p)
+  point Np = reflect N across p
+  # ────────────────────────────────────────────────────────
+  # t=03:23  poly2 = Polygon(P, I, N, K, Np, J)
+  polygon poly2 [ P I N K Np J ]
+
+pattern tA8eSdVx_EQ on tA8eSdVx_EQ_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=03:58  l1 = Sequence(Rotate(q1, 2*pi*i/7, H), i, 0, 6)
+  rotate 7 around H
+    edges from q1
+  # ────────────────────────────────────────────────────────
+  # t=04:40  l2 = Sequence(Rotate(poly2, 2*pi*i/7, H), i, 0, 6)
+  rotate 7 around H
+    edges from poly2
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline polygon 7 $size rotate 0
+  inscribe tA8eSdVx_EQ
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

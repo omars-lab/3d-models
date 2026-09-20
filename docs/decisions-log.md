@@ -5270,3 +5270,69 @@ A bare pattern keeps its 2D ring colour unchanged. If bikar ever ships a second 
 the bridge generalises to it; if an author ever needs band edges the gap-clustering does not
 produce, option (c)'s explicit radii could be added **as a selector on the same `fill` clause**, not
 as a second statement — the reuse decision holds.
+
+## D-079 — A construction may pin its coaster frame; the least-area fitter stays the default, and the pin is measured, not traced
+
+Builds on the least-area outline fit ([D-066](decisions-log.md)…[D-068](decisions-log.md),
+pivot [`coaster-outline-fit-pivot`](issues/coaster-outline-fit-pivot.md)) and lands with the
+seven-fold construction tA8eSdVx_EQ (the C7 orbit of one line). Mechanism in bikar
+PR&nbsp;#223 (`--coaster-outline` → `CoasterEmitSpec.outline`). Frame facts measured by the
+kernel and rendered in the *Heptagon Frame Decision* artifact.
+
+### The fork the seventh construction forced
+
+The fitter ranks **seven fixed candidates** (round; square; `polygon 4 rot 45`;
+`polygon 6 rot 0/30`; `polygon 8 rot 0/22.5`) by enclosed area and keeps the least — and
+there is **no heptagon among them**. For a seven-fold art the least-area winner is the octagon
+(`K = 2.8719`, slab 6&nbsp;710&nbsp;mm² @ 90&nbsp;mm), an eight-sided frame on a seven-fold
+motif. The area metric cannot see that mismatch; the frame is a taste call the fitter was never
+built to make. Omar chose the **heptagon** — a frame whose flats sit under the star's lobes.
+
+### Options on the table
+
+- **(a) A per-import frame pin** (chosen). `--coaster-outline round|square|polygon:N[:ROT]`
+  sets `CoasterEmitSpec.outline`; `resolveCoasterFit` overrides only *which* shape emits and
+  measures it with the same span/area machinery the fitter uses, so `unit` still clears the art
+  by `margin` around whatever is pinned. The result carries `pinned: true`, the default fit is
+  unchanged and still reported as `coasterFit`, and **CV7 stays the containment authority** —
+  a pin that cannot hold its art throws like any other. tA8eSdVx_EQ pins `polygon:7:0`
+  (`K = 2.7886`, `outline polygon 7`); the emitted slab is byte-identical to the approved
+  portrait and passes CV7 at 40/90/120. The difference goes into the tool **as data** for one
+  construction (CLAUDE.md, "robust over easy").
+- **(b) Flip the fitter to "match the art's symmetry."** Rejected: it re-frames a *shipped*
+  golden. 7apC5Q9QS-8 is eight-fold yet its least-area fit is the **square** (16.00 vs 25.13
+  units² round — [`coaster-outline-fit-pivot`](issues/coaster-outline-fit-pivot.md) Pivot&nbsp;2);
+  a symmetry rule would make it an octagon and change CS-2. One rule cannot satisfy three goldens
+  that genuinely disagree (GimTvN9hw4U → hexagon, 7apC5Q9QS-8 → square, tA8eSdVx_EQ → heptagon by
+  taste), so the frame is a per-construction call, not a global rule (K10 — a convention proven on
+  one piece does not transfer to the set).
+- **(c) Add heptagon as an eighth fit candidate.** Rejected: it would still lose on area to the
+  octagon here (6&nbsp;826 vs 6&nbsp;710&nbsp;mm²), so it changes nothing without also changing the
+  ranking key — which is option (b) in disguise. The pin expresses the taste directly and leaves
+  the ranking untouched.
+
+### Decision — (a)
+
+The frame is heptagon (`--coaster-outline polygon:7:0`); the least-area fitter remains the
+default for every construction that does not pin. All four candidate frames for this art **pass
+CV7** — round is the *loosest*, not impossible:
+
+| Frame | `K` | Slab @ 90&nbsp;mm | vs octagon | CV7 |
+|---|---|---|---|---|
+| **Heptagon (7)** — chosen | 2.7886 | 6&nbsp;826&nbsp;mm² | +1.7% | pass |
+| Octagon (8) — least-area default | 2.8719 | 6&nbsp;710&nbsp;mm² | base | pass |
+| Round | 3.0654 | 6&nbsp;362&nbsp;mm² | −5.2% | pass |
+| Square (4) | 2.8603 | 8&nbsp;100&nbsp;mm² | +20.7% | pass |
+
+This **withdraws** an earlier claim (the first *Frame Decision* artifact) that the round frame was
+"geometrically impossible — CV7 fails at every size." That was wrong: it held the octagon's `K`
+fixed while swapping the outline, so the art overran the circle. At its own `K` the round frame
+fits — it is simply the loosest, with the smallest art and the widest blank ring. The artifact is
+corrected and republished. (K1 — a withdrawal is corpus-wide; no other doc carries the claim.)
+
+### What would reverse it
+
+If slab economy outweighed symmetry for this piece, the octagon is already the default and the pin
+drops — the decision is pinned to Omar's taste call for a seven-fold art, not to any measured
+constraint. Nothing about the pin mechanism reverses: it is the general way a construction overrides
+its frame, exercised here for the first time.

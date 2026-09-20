@@ -108,6 +108,11 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/7apC5Q9QS-8-coaster-mini.stl",
       "why": "Gitignored build output — same as the GimTvN9hw4U mini above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Introduced by #247 (e47ce9a)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/tA8eSdVx_EQ-coaster-mini.stl",
+      "why": "Gitignored build output — same as the two coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The heptagon-framed seven-fold coaster (CS-6, D-079); introduced with the tA8eSdVx_EQ migration."
     }
   ]
 }
