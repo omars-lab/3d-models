@@ -1532,6 +1532,34 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   gallery's coaster entry; the constructions ledger's `coaster` and `catalog`
   cells for `tA8eSdVx_EQ`.
 
+## CS-7 — Eight-fold rosette coaster (Sarah Brewer, lEfWSogWscs)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/lEfWSogWscs-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/lEfWSogWscs-coaster-mini.stl`
+  and `-standard.stl`). Frame is the **least-area default fit** (D-066), no pin:
+  the eight-fold art's own symmetry lands the octagon as the least-area winner,
+  so `outline polygon 8 $size rotate 0` is what the fitter emits — no
+  `--coaster-outline` override (contrast CS-6's pinned heptagon, D-079).
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` / `color straps Gold`. Both pass the mesh gate at the 0.8 mm
+  coaster floor; the mini is 33,840 triangles / 6.2 cm³ and the standard 169,716
+  triangles / 29.3 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The Itimad ad-Daula pattern is an interlaced eight-fold with long
+    straight runs that meet at shallow angles — do those grazing strap crossings
+    stay legible at `size=40`, or do the near-parallel runs blur into each other
+    on the mini?
+  - [ ] 2. The octagon frame is the default fit here (not pinned): do the eight
+    flats sit convincingly under the art's own eight-fold symmetry, or does the
+    disc still want a rotation the least-area metric cannot see?
+- **What we learned**: — pending.
+- **Feeds**: the first default-fit octagon coaster from an eight-fold
+  construction; the gallery's coaster entry; the constructions ledger's
+  `coaster` and `catalog` cells for `lEfWSogWscs`.
+
 ## CS-8 — Eight-fold star rosette coaster (Sarah Brewer, rDuxHF3xMOc)
 
 - **Status**: planned
