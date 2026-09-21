@@ -166,7 +166,7 @@ assemble a multi-filament COLOUR plate (bikar --format parts → per-region AMS 
 
 ### `bambu print`
 
-dispatch + print control over first-party FTPS+MQTT (owner-gated)
+catalog, capture, dispatch and control prints — `list`/`capture` are local & read-only; `send`/`pause`/`stop` move real hardware and are owner-gated
 
 ### `bambu print send`
 
@@ -191,6 +191,17 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-se
 | `-y, --yes` | skip the confirmation prompt (still logs the owner-gate notice) |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |
 | `--dry-run` | print the exact FTPS target + MQTT payload without connecting or dispatching |
+
+### `bambu print capture`
+
+read the printer's MQTT device report → scaffold a DRAFT record (counts a GUI print) — read-only, no owner gate
+
+| Flag | Description |
+|---|---|
+| `--slug <slug>` | slug for the record run name (default: the printer's subtask_name, else 'captured-print') |
+| `--plate <file>` | the sliced .3mf that was printed — fills the slice-side profile fields (machine/nozzle/layer/profile) |
+| `-O, --object <spec>` | printed object as bikar:<path>[=ENTRY] (repeatable) — pins R1 provenance in the record |
+| `--json` | print the built actuals + raw frame as JSON instead of scaffolding a record |
 
 ### `bambu print list`
 
