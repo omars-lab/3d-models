@@ -1531,3 +1531,38 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the first use of the `--coaster-outline` frame pin (D-079); the
   gallery's coaster entry; the constructions ledger's `coaster` and `catalog`
   cells for `tA8eSdVx_EQ`.
+
+## CS-8 — Eight-fold star rosette coaster (Sarah Brewer, rDuxHF3xMOc)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/rDuxHF3xMOc-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/rDuxHF3xMOc-coaster-mini.stl`
+  and `-standard.stl`). Frame is a **square** (`outline square $size`) — the
+  eight-fold art sits square to the plate, its four axial lines (`bot`/`rgt`/
+  `top`/`lft`) parallel to the coaster edges. The construction is the first here
+  built almost entirely from **Sequence orbits and reflected orbits**: the art
+  layer is four `Sequence(Rotate(...))` families (`m1`/`m2`/`m3`) plus two
+  reflected copies (`m2'` across `s`, then the whole `{m1,m2,m3,m2'}` set
+  reflected across `lft` as `l1` and across `top` as `l1'`). This is the
+  construction that drove the bikar importer fix (PR #227): a `Reflect` of a
+  brace-group **list literal** — `Reflect({m1, m2, m3, m2'}, lft)` — now lowers
+  into a conjugated orbit (`q1_l1`, `poly2_l1`, …) rather than being refused.
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`). Both pass the
+  mesh gate at the 0.8 mm coaster floor (watertight, euler 2, 0 degenerate,
+  minFeature 1.2 mm); the mini is 40,800 triangles / 7.5 cm³ and the standard
+  204,300 triangles / 35.9 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The square frame puts the eight-fold star's four axial points right at
+    the mid-edge of the plate — do those tips read as deliberately reaching the
+    frame, or too close to the rim at `size=40`?
+  - [ ] 2. This is the densest art of the set (204,300 triangles vs the
+    seven-fold's 172,748) from the nested reflected orbits — does the strap
+    relief stay legible where the reflected families overlap near the centre, or
+    does the emboss crowd into mush?
+- **What we learned**: — pending.
+- **Feeds**: the bikar list-literal importer fix (PR #227); the gallery's coaster
+  entry; the constructions ledger's `coaster` and `catalog` cells for
+  `rDuxHF3xMOc`.

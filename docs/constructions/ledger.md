@@ -22,15 +22,17 @@ it says so and skips the cross-check rather than passing or failing it.
 Scope of the set (K2): **9 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**3 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**4 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
-`piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, and `tA8eSdVx_EQ`
+`piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
 with bikar PR #223 (its heptagon frame pinned via `--coaster-outline`,
-[D-079](../decisions-log.md)). All three now vendor a standard (90 mm) coaster
-mesh under `src/Coasters/` and carry a prototype-catalog entry (`CS-1`, `CS-2`,
-`CS-6`) — P3.3 of the umbrella plan, which built on the `coaster` declaration
-(P1.6/P2.7).
+[D-079](../decisions-log.md)), and `rDuxHF3xMOc` with bikar PR #227 (the
+importer now lowers a `Reflect`/`Rotate` of a brace-group **list literal**
+into a conjugated orbit rather than refusing it). All four now vendor a
+standard (90 mm) coaster mesh under `src/Coasters/` and carry a
+prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-8`) — P3.3 of the
+umbrella plan, which built on the `coaster` declaration (P1.6/P2.7).
 
 Oracle cells read `PASS a/b` — O1: labels compared / failed; O2: centreline
 recall / precision; O3: reference coverage — or `—` when that oracle has not
@@ -71,6 +73,6 @@ not been run: no `make reference` for it yet.
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | — | — | — | — | — | — | — |
-| `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | — | — | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | — | — | — | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
