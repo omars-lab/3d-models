@@ -1,0 +1,240 @@
+# naqsh construction — rDuxHF3xMOc
+# title: 8-fold star rosette with sequences in GeoGebra
+# url: https://www.youtube.com/watch?v=rDuxHF3xMOc
+# steps: 47 statements, 47 tagged steps
+# source: reconstructions/rDuxHF3xMOc/construction.ggb-commands sha256:f964d2ea6dd813ecd624bf12a7c67db55d4c3e2045b07d041ce38d40ab9f9132
+# renamed: L' -> L_p (apostrophe is not an identifier character)
+# renamed: K' -> K_p (apostrophe is not an identifier character)
+# renamed: M' -> M_p (apostrophe is not an identifier character)
+# renamed: m2' -> m2_p (apostrophe is not an identifier character)
+# renamed: l1' -> l1_p (apostrophe is not an identifier character)
+
+param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 4.8285   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint rDuxHF3xMOc_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=01:09  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=01:12  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=01:49  C = Rotate(A, -135°, B)
+  point C = rotate A by -135 around B
+  # t=01:49  D = Rotate(B, -135°, C)
+  point D = rotate B by -135 around C
+  # t=01:49  E = Rotate(C, -135°, D)
+  point E = rotate C by -135 around D
+  # t=01:49  F = Rotate(D, -135°, E)
+  point F = rotate D by -135 around E
+  # t=01:49  G = Rotate(E, -135°, F)
+  point G = rotate E by -135 around F
+  # t=01:49  H = Rotate(F, -135°, G)
+  point H = rotate F by -135 around G
+  # ────────────────────────────────────────────────────────
+  # t=01:53  poly1 = Polygon(A, B, C, D, E, F, G, H)
+  polygon poly1 [ A B C D E F G H ]
+  # ────────────────────────────────────────────────────────
+  # t=02:11  bot = Line(A, B)
+  line bot from A to B
+  # ────────────────────────────────────────────────────────
+  # t=02:13  rgt = Line(C, D)
+  line rgt from C to D
+  # ────────────────────────────────────────────────────────
+  # t=02:15  top = Line(E, F)
+  line top from E to F
+  # ────────────────────────────────────────────────────────
+  # t=02:17  lft = Line(G, H)
+  line lft from G to H
+  # ────────────────────────────────────────────────────────
+  # t=02:29  s   = PerpendicularBisector(A, B)
+  bisector s from A to B
+  # ────────────────────────────────────────────────────────
+  # t=02:33  rad = PerpendicularBisector(A, C)
+  bisector rad from A to C
+  # ────────────────────────────────────────────────────────
+  # t=02:47  O   = Intersect(s, rad)
+  point O = intersect s rad
+  # ────────────────────────────────────────────────────────
+  # t=03:05  I   = Intersect(s, bot)
+  point I = intersect s bot
+  # ────────────────────────────────────────────────────────
+  # t=03:18  gBC = Segment(B, C)
+  segment gBC from B to C
+  # ────────────────────────────────────────────────────────
+  # t=03:22  c   = Circle(B, I)
+  circle c center(B) through I
+  # ────────────────────────────────────────────────────────
+  # t=03:26  J   = Rotate(I, -135°, B)
+  point J = rotate I by -135 around B
+  # ────────────────────────────────────────────────────────
+  # t=03:48  K   = Intersect(c, rad, 2)
+  point K = intersect c rad pick 2
+  # ────────────────────────────────────────────────────────
+  # t=04:11  pl  = Line(K, s)
+  line pl through K parallel s
+  # ────────────────────────────────────────────────────────
+  # t=04:38  bis = AngleBisector(A, B, O)
+  line bis = bisect angle A B O
+  # ────────────────────────────────────────────────────────
+  # t=04:57  L   = Intersect(pl, bis)
+  point L = intersect pl bis
+  # ────────────────────────────────────────────────────────
+  # t=05:08  plr = Reflect(pl, rad)
+  line plr = reflect pl across rad
+  # ────────────────────────────────────────────────────────
+  # t=05:14  M   = Intersect(plr, s)
+  point M = intersect plr s
+  # ────────────────────────────────────────────────────────
+  # t=05:20  L'  = Reflect(L, s)
+  point L_p = reflect L across s
+  # ────────────────────────────────────────────────────────
+  # t=05:23  K'  = Reflect(K, s)
+  point K_p = reflect K across s
+  # ────────────────────────────────────────────────────────
+  # t=05:31  poly2 = Polygon(I, L, K, M, K', L')
+  polygon poly2 [ I L K M K_p L_p ]
+  # ────────────────────────────────────────────────────────
+  # t=05:58  plrs = Reflect(plr, s)
+  line plrs = reflect plr across s
+  # ────────────────────────────────────────────────────────
+  # t=06:06  N    = Intersect(plrs, rad)
+  point N = intersect plrs rad
+  # ────────────────────────────────────────────────────────
+  # t=06:14  M'   = Reflect(M, rad)
+  point M_p = reflect M across rad
+  # ────────────────────────────────────────────────────────
+  # t=06:21  q1   = Polygon(K, M, N, M')
+  polygon q1 [ K M N M_p ]
+  # ────────────────────────────────────────────────────────
+  # t=06:40  lIJ  = Line(I, J)
+  line lIJ from I to J
+  # ────────────────────────────────────────────────────────
+  # t=06:57  P    = Intersect(lIJ, plr)
+  point P = intersect lIJ plr
+  # ────────────────────────────────────────────────────────
+  # t=07:09  lIJr = Reflect(lIJ, gBC)
+  line lIJr = reflect lIJ across gBC
+  # ────────────────────────────────────────────────────────
+  # t=07:20  Q    = Intersect(lIJr, bot)
+  point Q = intersect lIJr bot
+  # ────────────────────────────────────────────────────────
+  # t=07:29  poly3 = Polygon(I, L, K, P, J, Q)
+  polygon poly3 [ I L K P J Q ]
+  # ────────────────────────────────────────────────────────
+  # t=07:41  S    = Intersect(bot, rgt)
+  point S = intersect bot rgt
+  # ────────────────────────────────────────────────────────
+  # t=07:43  R    = Intersect(lIJ, rgt)
+  point R = intersect lIJ rgt
+  # ────────────────────────────────────────────────────────
+  # t=07:51  q2   = Polygon(S, R, J, Q)
+  polygon q2 [ S R J Q ]
+  # ────────────────────────────────────────────────────────
+  # t=13:58  m2' = Reflect(m2, s)
+  point O_m2_p = reflect O across s
+  # t=13:58  m2' = Reflect(m2, s)
+  polygon poly3_m2_p = reflect poly3 across s
+  # ────────────────────────────────────────────────────────
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  point O_l1 = reflect O across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  polygon q1_l1 = reflect q1 across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  polygon poly2_l1 = reflect poly2 across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  point O_l12 = reflect O across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  polygon poly3_l1 = reflect poly3 across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  point O_l13 = reflect O across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  polygon q2_l1 = reflect q2 across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  point O_m2_p_l1 = reflect O_m2_p across lft
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  polygon poly3_m2_p_l1 = reflect poly3_m2_p across lft
+  # ────────────────────────────────────────────────────────
+  # t=17:04  l1' = Reflect(l1, top)
+  point O_l1_l1_p = reflect O_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  polygon q1_l1_l1_p = reflect q1_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  polygon poly2_l1_l1_p = reflect poly2_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  point O_l12_l1_p = reflect O_l12 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  polygon poly3_l1_l1_p = reflect poly3_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  point O_l13_l1_p = reflect O_l13 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  polygon q2_l1_l1_p = reflect q2_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  point O_m2_p_l1_l1_p = reflect O_m2_p_l1 across top
+  # t=17:04  l1' = Reflect(l1, top)
+  polygon poly3_m2_p_l1_l1_p = reflect poly3_m2_p_l1 across top
+
+pattern rDuxHF3xMOc on rDuxHF3xMOc_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=11:34  m1 = Sequence(Rotate({q1, poly2}, i * 45°, O), i, 0, 7)
+  rotate 8 around O
+    edges from q1
+    edges from poly2
+  # ────────────────────────────────────────────────────────
+  # t=13:32  m2 = Sequence(Rotate({poly3}, i * 90°, O), i, 0, 3)
+  rotate 4 around O
+    edges from poly3
+  # ────────────────────────────────────────────────────────
+  # t=13:58  m2' = Reflect(m2, s)
+  rotate 4 around O_m2_p
+    edges from poly3_m2_p
+  # ────────────────────────────────────────────────────────
+  # t=14:40  m3 = Sequence(Rotate({q2}, i * 90°, O), i, 0, 3)
+  rotate 4 around O
+    edges from q2
+  # ────────────────────────────────────────────────────────
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  rotate 8 around O_l1
+    edges from q1_l1
+    edges from poly2_l1
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  rotate 4 around O_l12
+    edges from poly3_l1
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  rotate 4 around O_l13
+    edges from q2_l1
+  # t=16:43  l1  = Reflect({m1, m2, m3, m2'}, lft)
+  rotate 4 around O_m2_p_l1
+    edges from poly3_m2_p_l1
+  # ────────────────────────────────────────────────────────
+  # t=17:04  l1' = Reflect(l1, top)
+  rotate 8 around O_l1_l1_p
+    edges from q1_l1_l1_p
+    edges from poly2_l1_l1_p
+  # t=17:04  l1' = Reflect(l1, top)
+  rotate 4 around O_l12_l1_p
+    edges from poly3_l1_l1_p
+  # t=17:04  l1' = Reflect(l1, top)
+  rotate 4 around O_l13_l1_p
+    edges from q2_l1_l1_p
+  # t=17:04  l1' = Reflect(l1, top)
+  rotate 4 around O_m2_p_l1_l1_p
+    edges from poly3_m2_p_l1_l1_p
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline square $size
+  inscribe rDuxHF3xMOc
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold
