@@ -20,7 +20,7 @@ bars and still fail this one.
 ## The standard is shared, not built in
 
 The rubric lives in [`../design-craft.md`](../design-craft.md) — the arc a good doc
-follows, the twelve clarity rules (C1–C12), the glossary-via-footnotes pattern, the
+follows, the thirteen clarity rules (C1–C13), the glossary-via-footnotes pattern, the
 diagram-with-legend pattern, and a worked good/bad example. **Read it first, every run.** It is the authority; this file
 is only the process for applying it. When you find a failure the rubric doesn't name,
 add it *there*, not here.
@@ -35,7 +35,7 @@ a product name, an acronym, a file path, a decision id — mark it. That first-r
 confusion is the data; you cannot recover it on a second read once you've decoded the
 doc, so capture it now.
 
-### 2. Score each criterion C1–C12
+### 2. Score each criterion C1–C13
 
 For each rule in the rubric, decide PASS or FAIL against *this* doc, and for a FAIL
 pin the exact line where a newcomer first falls off. Be concrete about the failure —
@@ -71,6 +71,12 @@ The most common and most damaging failures, in order:
   tab, button, or command the change surfaces in — and the doc never says "no
   user-facing surface" for an internal/CLI/format change. Silence here is a fail; an
   explicit "none, this is a CLI-only change" is a pass.
+- **C13 options compared on cost alone.** A doc with real alternatives ranks them by
+  effort/cost and stops there — no dominating-variant search (was a version that keeps
+  the benefit without the worst cost even looked for?), no short-term-challenge or
+  long-term-ownership view, or it offers a "verifies nothing" option as the quiet
+  default. A single-option doc is exempt. Flag it if you cannot tell *why* the chosen
+  option beats its alternatives on more than price.
 
 ### 3. Report — one fix per failing criterion
 
@@ -83,8 +89,8 @@ Output a findings list, most-damaging first. Each finding:
         appendix", or "footnote `bikar` as: ...". Never "make it clearer.">
 ```
 
-End with a one-line **verdict**: `PASS` only if all twelve criteria pass, else
-`FAIL (n/12)` naming which failed. A doc that fails is not ready to merge.
+End with a one-line **verdict**: `PASS` only if all thirteen criteria pass, else
+`FAIL (n/13)` naming which failed. A doc that fails is not ready to merge.
 
 ### 4. Offer the rewrite, don't sneak it
 
