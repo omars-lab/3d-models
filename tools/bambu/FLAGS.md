@@ -78,6 +78,15 @@ read-only view of loaded filament (AMS trays + external spool)
 |---|---|
 | `--json` | print the raw ams/vt_tray frame instead of a summary |
 
+### `bambu filament-sync`
+
+reconcile a sliced plate's logical AMS slots against loaded trays, by colour match
+
+| Flag | Description |
+|---|---|
+| `--plate <file.3mf>` | the sliced .3mf whose filament_colour[] gives the logical slots |
+| `--json` | emit the reconciliation as JSON instead of the operator summary |
+
 ### `bambu header`
 
 auto-pull the bench-sheet profile header from the printer (+ a sliced --plate .3mf)
