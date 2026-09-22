@@ -69,7 +69,10 @@ why → how, plain → technical:
    with a footnote the first time it appears.
 10. **Alternatives and the decision.** The options that were on the table, the one
     chosen, and *why the rejected ones lost* (a doc with one option is an
-    announcement, not a design).
+    announcement, not a design). Evaluate each option along the axes in
+    §"Evaluating options" below — not cost alone — so the reader chooses between
+    *consequences*, and so the search for a dominating variant (the version that
+    keeps an option's benefit without its worst cost) actually happens on the page.
 11. **Glossary.** Footnote definitions of every domain term, collected.
 12. **Appendix.** The deep detail: `file:line` anchors, grammar productions, kernel
     internals, precedence edge-cases, exhaustive tables. Jargon lives **here**.
@@ -79,6 +82,43 @@ use-case, and surface sections (5–7) name actors, components, and pages, and e
 there each is glossed; a reader should not need to be a specialist until section 9,
 where every term is still footnoted. Everything a specialist needs and a newcomer
 doesn't goes to the appendix (12).
+
+---
+
+## Evaluating options
+
+The alternatives section (arc item 10) is where most designs are actually won or lost,
+and cost is the axis that gets over-weighed because it is the only one visible at the
+moment of choosing. Robustness, lock-in, and what an option *verifies* are invisible
+then and decisive later. So put every option through the same questions — the answers,
+not the labels, are what the reader compares:
+
+1. **Is there a dominating variant?** Before accepting an option at its worst framing,
+   look for a version that keeps its benefit and drops its biggest cost. "Rebuild the
+   geometry engine" (huge) became "self-bootstrap the engine we already have" (small)
+   only because someone asked this — see
+   [`../../docs/cached-coords-producer-design.md`](../../docs/cached-coords-producer-design.md).
+   A rejected option is only truly rejected once its dominating variant was searched
+   for and not found.
+2. **Pros, cons, and downstream implications.** What it buys, what it costs, and what
+   it *commits you to or rules out next* — the door it closes, the dependency it adds,
+   who it affects. A bare label with a cost is not a decision aid.
+3. **Short-term challenges.** What breaks or blocks *this quarter* if you pick it,
+   including spike risk on anything still marked "unverified" — name the fragile
+   fallback the spike might land on, not just the happy path.
+4. **Long-term ownership (build vs. reuse).** Does it move you toward owning the
+   capability or toward depending on someone else's, and is that the right direction
+   for this capability? This is a strategic axis, not a cost one; a cheap reuse that
+   entrenches a third-party runtime at the centre of the pipeline can lose to a small
+   build that ends the dependency.
+5. **What it verifies.** Every option is scored on what it checks against ground
+   truth. An option that verifies nothing is named as such, never offered as the
+   quiet default (CLAUDE.md "robustness over ease").
+
+Render the comparison — a table, or each option under these headings — so the reader
+decides from the rendered consequences, then state the recommendation and its reason
+in one line. Record the decision, and what would reverse it, in
+[`../../docs/decisions-log.md`](../../docs/decisions-log.md).
 
 ---
 
@@ -137,6 +177,12 @@ a FAIL so the check is not a matter of taste.
   page, button, or command** — or says explicitly "no user-facing surface" for a
   format/CLI/internal change. A reader must never have to guess whether, or where,
   the feature appears in a UI.
+- **C13 — Options evaluated on more than cost.** A doc with real alternatives scores
+  each option on the axes in §"Evaluating options" — a dominating-variant search, the
+  short-term challenges, the long-term ownership (build vs. reuse) view, and what it
+  verifies — not on cost alone, and states the recommendation with its reason. A
+  single-option doc is exempt (it is an announcement, per arc item 10, not a design
+  with a decision to defend).
 
 A doc **passes** when every rule passes. A single unglossed product name in the
 first paragraph is a C1/C3 fail on its own — the newcomer is lost at sentence one.
@@ -360,9 +406,10 @@ Notice the *content is the same*. Nothing technical was dropped. It was **reorde
 | C10 | Context diagram first | A context diagram (system in the middle, actors + neighbouring systems around it, arrows labeled with what crosses) precedes any internal diagram | No context view; or the doc opens on internal packages before showing the outside world it sits in |
 | C11 | Use cases named + drawn | Use cases enabled/impacted are listed as *actor + goal* and drawn as a use-case diagram | Use cases are absent, or listed with no actors, or never drawn |
 | C12 | User-facing surface named | The doc names the app, page(s), and any new/changed tab/page/button/command — or explicitly "no user-facing surface" | A reader can't tell whether or where the change appears in a UI |
+| C13 | Options evaluated on more than cost | A doc with real alternatives scores each on a dominating-variant search, short-term challenges, long-term ownership (build vs. reuse), and what it verifies — then recommends with a reason | Options compared on cost/effort alone; no dominating-variant search; no ownership view; or a "verifies nothing" option offered as the quiet default (single-option docs are exempt) |
 
 A review reports one finding per failing criterion, each with the line it fails at and
-a concrete rewrite — never "make it clearer." The bar to **pass** is all twelve green.
+a concrete rewrite — never "make it clearer." The bar to **pass** is all thirteen green.
 
 ---
 

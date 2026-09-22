@@ -5336,3 +5336,43 @@ If slab economy outweighed symmetry for this piece, the octagon is already the d
 drops — the decision is pinned to Omar's taste call for a seven-fold art, not to any measured
 constraint. Nothing about the pin mechanism reverses: it is the general way a construction overrides
 its frame, exercised here for the first time.
+
+## D-080 — The `cached_coords` producer for arc-bearing imports is bikar self-bootstrap (B′), not a GeoGebra dump (A) or a new engine (B)
+
+The eighth construction (nmEjCTzMbDg, task&nbsp;#34) is the first with `CircularArc`s. Its base
+import needs a `cached_coords` map so the importer can fix each arc's major/minor sweep — it
+**refuses rather than guesses** without one (bikar PR&nbsp;#234; K1/K10). The plumbing to feed the
+map exists (youtube `ggb_build.py --ast-json --cached-coords`); the **producer** never did. Full
+options analysis, the live probe that proved the engine is otherwise complete, and the faithfulness
+argument are in [`cached-coords-producer-design.md`](cached-coords-producer-design.md).
+
+### The fork
+
+Four ways to produce the coords: **(A)** drive GeoGebra and read its coordinates back; **(B)** build
+a from-scratch geometry evaluator; **(B′)** self-bootstrap — import minus the arcs (`--lenient
+e_1,f_1,g_1`), let **bikar** evaluate the 9 upstream endpoints, read them back as `cached_coords`,
+re-import with arcs; **(C)** compute nmEj's coords once now via B′'s mechanism to unblock PR-5.
+
+### Decision — C now, B′ general, A fallback, B rejected
+
+- **Now:** **C** — produce nmEj's coords via B′'s `--lenient` readback and stage PR-5; this is also
+  B′'s first proof.
+- **General producer:** **B′**. It is the dominating variant of B (owns the capability using the
+  engine we already have, no rebuild) and, unlike A, is **self-consistent** — the coords come from
+  the very engine that renders the coaster, so no two-engine divergence can pick a wrong arc
+  direction.
+- **Fallback:** **A**, documented, un-built.
+- **Rejected:** **B** — a from-scratch engine is the "rebuilding GeoGebra" Omar ruled out
+  (2026-09-21: "go with a if b means rebuilding geogebra"). B′ is the version of B that does **not**
+  rebuild GeoGebra, which is why the decision lands on it rather than A.
+
+This decision graduated a reusable rule for evaluating options — the dominating-variant search,
+short-term challenges, and long-term build-vs-reuse ownership axes — now baked into the `design-note`
+skill's rubric.
+
+### What would reverse it
+
+If bikar's evaluated endpoints prove not geometrically faithful to the source (an intersect-index or
+conic-branch convention picking a different root than GeoGebra, traced from a failed O2/O3
+video-fidelity check), fall back to A for that class of construction and record why in the design
+doc. B stays rejected regardless.

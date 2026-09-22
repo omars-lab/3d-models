@@ -1,9 +1,12 @@
 # Print metadata, per-iteration config, reprint & metrics — design doc (pre-implementation)
 
-Status: **DRAFT, NOT BUILT.** Every path this doc gives under `tools/bambu/src/commands/`
-or `.claude/gates/` for a *new* verb, field, or rule is a **target**, not a shipped
-file — this doc proposes changes, it does not make them. What already exists is
-audited in §1 and is not re-specified here.
+Status: **DRAFT, mostly NOT BUILT.** Every path this doc gives under
+`tools/bambu/src/commands/` or `.claude/gates/` for a *new* verb, field, or rule is a
+**target**, not a shipped file — this doc proposes changes, it does not make them. What
+already exists is audited in §1 and is not re-specified here. **One exception, shipped
+2026-09-21:** the post-print `actuals` block and the `bambu print capture` verb that
+writes it (§3.3.1 "Shipped") — the iteration id, reprint, estimates, and metrics remain
+targets.
 
 Provenance: produced 2026-09-17 by a subagent for Omar's request — *cataloging +
 reprint of a liked iteration, good `--help`, per-iteration / per-`.3mf` metadata,
@@ -44,6 +47,7 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 | Slice a model to a `.3mf` (`slice plate`, preset-name resolution) | **yes** | [`slice.ts`](../tools/bambu/src/commands/slice.ts) |
 | Record validation verb | **yes** | `validate record` ([`validate.ts`](../tools/bambu/src/commands/validate.ts)) |
 | Record scaffold on dispatch (`print send --record`) | **yes** | [`print.ts`](../tools/bambu/src/commands/print.ts) + [`records.ts`](../tools/bambu/src/records.ts) |
+| **Post-print `actuals` capture (GUI prints → a counted draft, `print capture`)** | **yes, shipped 2026-09-21** | [`actuals.ts`](../tools/bambu/src/actuals.ts) + [`print.ts`](../tools/bambu/src/commands/print.ts) `capture` verb; §3.3.1 "Shipped" |
 | Owner-gated dispatch (fail-closed, `--yes`/TTY confirm) | **yes** | [`print.ts`](../tools/bambu/src/commands/print.ts); [`print-model-design.md`](print-model-design.md) §9 |
 | **Stable iteration id (a piece at a param-set + slice profile, re-derivable)** | **no** | — the gap (§2) |
 | **`.3mf` ↔ its recipe (params + slice-profile inputs) stored per record** | **partial** | record names the `.3mf` (`plate_3mf`, R10) but not the params/profile inputs that produced it |
@@ -264,6 +268,32 @@ actual lands *beside* it. R15 (§3.4) governs `estimates` only (the prediction i
 geometry-fixed, so it is identical across records sharing an iteration id); `actuals` are
 per-**record** (two prints of one iteration can consume slightly different grams — spool
 and moisture variance) and R15 does not constrain them.
+
+> **Shipped (2026-09-21) — the `actuals` block + `bambu print capture`.** The metadata gap
+> this closes: a record was only ever written by `print send --record`, so a print started
+> from the **Studio GUI** was seen by nothing and `docs/prints/` under-counted what we
+> actually printed (the record count *is* the metric, §6 — no separate counter, C4-safe).
+> `bambu print capture` reads the printer's MQTT device report (**read-only** — a `pushall`
+> status read, print-safe like `status show`; **no owner gate**, nothing is dispatched) and
+> scaffolds a DRAFT under `.bambu/records/` carrying an `actuals:` block, which the operator
+> fills and promotes to `docs/prints/` exactly as a `--record` draft.
+> - **Honesty (the design's Validator, K1/K2).** [`buildActuals`](../tools/bambu/src/actuals.ts)
+>   is a pure function that fills a field ONLY from a frame key that carried it: the
+>   state/progress/layer/temperature keys `status show` already reads live off the X2D are
+>   `filled`; **filament-consumed grams is `unconfirmed`** — not observed on the X2D report,
+>   so it is *never* fabricated, and the verbatim frame is persisted to `device-report.json`
+>   beside the record so the first real print (#63) settles the field name **with no code
+>   change** (the same [X2D-UNCONFIRMED]-then-confirm discipline the dispatch payload uses).
+>   `estimates.confirmed_by` therefore stays `~` until that field is confirmed — the loop is
+>   wired, not yet closed on grams.
+> - **No new gate rule (measure a rule before gating, [`CLAUDE.md`](../CLAUDE.md)).** The
+>   block is additive frontmatter; [`prints_gate.py`](../.claude/gates/prints_gate.py) reads
+>   required keys and ignores extras, so a captured draft passes with only the expected
+>   placeholder-provenance findings until the operator pins real objects. When a real capture
+>   exists, a rule over `actuals` can be added against *that* ground truth.
+> - **Tests.** [`actuals.test.ts`](../tools/bambu/src/actuals.test.ts) (PASS: a running
+>   frame; FAIL-guard: an idle frame fabricates nothing) and the capture-emission cases in
+>   [`records.test.ts`](../tools/bambu/src/records.test.ts).
 
 **Per-piece vs per-plate — the estimation slice.** A `.3mf` is a whole plate and may hold
 several products (§5), so a whole-plate `.3mf` cannot answer "how much does *this one
