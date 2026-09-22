@@ -15,7 +15,7 @@ That one scores; this one writes. They loop.
 
 ## The standard is shared
 
-The arc, the twelve clarity rules, the glossary-via-footnotes pattern, the
+The arc, the thirteen clarity rules, the glossary-via-footnotes pattern, the
 diagram-with-legend pattern, and a worked good/bad rewrite all live in
 [`../design-craft.md`](../design-craft.md). **Read it first, every run.** Author to
 it; do not reinvent the structure here.
@@ -78,8 +78,8 @@ it, gloss its terms, and lead it with a plain sentence.
 ### 4. Loop with review-design until it passes
 
 Run [`review-design`](../review-design/SKILL.md) on the result. Apply every finding.
-Re-run. Repeat until the verdict is `PASS (12/12)`. Do not stop at "better" — the bar
-is the full rubric green, because a newcomer needs all twelve, not most.
+Re-run. Repeat until the verdict is `PASS (13/13)`. Do not stop at "better" — the bar
+is the full rubric green, because a newcomer needs all thirteen, not most.
 
 Each pass should converge: if the same criterion fails twice, the fix wasn't concrete
 enough — go back to the rubric's PASS wording for that rule and write to it literally.
