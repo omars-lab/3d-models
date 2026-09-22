@@ -103,7 +103,7 @@ single allow-listable command that emits the operator's artifact directly.
 
 **One code path, reused — not forked (the repo's D-052 tenet).** `header --json` is the builder;
 `print send --record`
-(`3d-models:tools/bambu/src/commands/print.ts:L320 "--record"`) calls **the same builder** to
+(`3d-models:tools/bambu/src/commands/print.ts:L427 "--record"`) calls **the same builder** to
 pre-fill the record's profile header instead of scaffolding it as TODO. The header logic lives in
 one place; the two entry points differ only in destination (stdout vs the record file), never in
 what a field means.
