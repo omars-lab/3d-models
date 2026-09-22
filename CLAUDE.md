@@ -154,17 +154,17 @@ normal case. **Only** write a durable narrative record when the fix also produce
 a *tenet*, a rule that changes how the next doc gets written; then it goes in this
 file, or in the taxonomy, not in a register.
 
-There is deliberately **no issue catalog** here and no automated link checker —
-both rejected on measurement in
-[`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md). Of 15
-defects traced through git history 5 graduated into a guard, and all 7 fixes in
-July 2026 shipped a test and needed no entry: registers nobody re-reads decay
-into what Richard Cook calls "a defensible argument that management is
-occurring." §5.1 measured ~11% false alarms against a true dead-link rate under
-1% — *"a gate that cries wolf gets switched off, which is worse than having no
-gate."* The checkable invariant is not *does this URL resolve* but *is every
-load-bearing number attributed to a source the research file records as actually
-fetched* — local, no network.
+There is deliberately **no issue catalog** and no automated link checker — both
+[rejected on measurement](docs/issue-register-evaluation.md): 5 of 15 defects
+graduated into a guard, all 7 July-2026 fixes shipped a test and needed no entry,
+and §5.1 measured ~11% false alarms against a <1% dead-link rate. The
+checkable invariant is not *does this URL resolve* but *is every load-bearing number
+attributed to a source the research file records as fetched*.
+
+**Self-improvement is part of finishing.** The same logic runs on friction, not only
+defects: a *recurring* workflow's manual or undocumented step gets fixed in the PR that
+hit it — a friction into tooling as a defect into a guard. The **construction migrations**
+([ledger](docs/constructions/ledger.md)) each fill the gap the last one left.
 
 ## Robustness over ease — especially when offering the choice
 
