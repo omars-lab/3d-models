@@ -32,6 +32,8 @@ export interface PlateMeta {
   printSettingsId: string | null; // print_settings_id — the process profile name
   filamentSettingsId: string | null; // filament_settings_id — the filament profile name
   slicerVersion: string | null; // Application / X-BBL-Client-Version, e.g. "BambuStudio-02.08.02.61"
+  filamentColours: string[]; // filament_colour[] in slice/logical order — one per logical AMS slot
+  filamentTypes: string[]; // filament_type[] in the same order; "" for a slot the config left blank
 }
 
 function firstString(v: unknown): string | null {
@@ -65,6 +67,8 @@ export function parseProjectSettings(json: string): PlateMeta {
       printSettingsId: null,
       filamentSettingsId: null,
       slicerVersion: null,
+      filamentColours: [],
+      filamentTypes: [],
     };
   }
   const nozzle = s.nozzle_diameter;
@@ -76,6 +80,8 @@ export function parseProjectSettings(json: string): PlateMeta {
     printSettingsId: firstString(s.print_settings_id),
     filamentSettingsId: firstString(s.filament_settings_id),
     slicerVersion: firstString(s.version) ?? firstString(s.Application) ?? firstString(s["X-BBL-Client-Version"]),
+    filamentColours: Array.isArray(s.filament_colour) ? s.filament_colour.map(String) : [],
+    filamentTypes: Array.isArray(s.filament_type) ? s.filament_type.map(String) : [],
   };
 }
 

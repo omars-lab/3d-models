@@ -301,6 +301,23 @@ resolves the dependency for the composer, it does not move ownership here.
 index order; the physical AMS mapping is resolved interactively / at print time by colour match.
 `--load-filaments` silently under-fills or errors if its count exceeds the slots the 3MF uses.
 
+**Closing the binding at the bench — `bambu filament-sync`.** The logical→physical step the caveat
+names is no longer left to eyeballing at the Studio GUI: `bambu filament-sync --plate <sliced.3mf>`
+reads the plate's `filament_colour[]`/`filament_type[]` (its logical slot order, out of
+`Metadata/project_settings.config`) and the printer's live AMS trays (the same read-only
+`pushing.pushall` frame `bambu filament` uses, moving nothing), and matches them **by colour**, one
+tray per slot. It prints, per logical slot, the physical tray to load — always with the measured
+RGB distance beside it, so a generous match tolerance can never hide a wrong pick. It **asks**
+(exit 1) only for the pivotal cases a human must settle: a colour with no loaded tray in range
+(`LOAD`), a near-tie between two trays (`ASK`), or a colour match whose material differs (`ASK`);
+a clear match and a low-remaining spool are stated, not asked (`docs/print-model-design.md` §5.5).
+The whole match is the pure, unit-tested `reconcile()` in `tools/bambu/src/filament-sync.ts`
+(colour parse, distance, greedy one-tray-per-slot assignment, and each classification exercised in
+`filament-sync.test.ts`, including the near-tie, the material mismatch and the missing colour); the
+tolerance/ambiguity/low-remain constants live there with their rationale, not as prose here. This
+is the discovery seam the print-model skill's §5.5 filament step builds on — it does not bind the
+spool for you, it tells you exactly how to, and gates a print script that wants to check first.
+
 ## 7. Coaster Lab knob
 
 The Coaster Lab lives in `bikar/packages/lab` (the Orb Lab pattern, [D-067](decisions-log.md)).

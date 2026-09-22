@@ -1,0 +1,152 @@
+# naqsh construction — nmEjCTzMbDg
+# title: n-fold flower in GeoGebra Classic 5
+# url: https://www.youtube.com/watch?v=nmEjCTzMbDg
+# steps: 38 statements, 38 tagged steps
+# source: reconstructions/nmEjCTzMbDg/construction.ggb-commands sha256:b3524c5717ebb5c0a6285389991b251d03c624d747aba2fa7e6733150a49e486
+# renamed: c' -> c_p (apostrophe is not an identifier character)
+# renamed: I' -> I_p (apostrophe is not an identifier character)
+# renamed: M' -> M_p (apostrophe is not an identifier character)
+# renamed: P' -> P_p (apostrophe is not an identifier character)
+# renamed: ring -> ring_ (reserved word)
+
+param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 11.7376   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint nmEjCTzMbDg_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:39  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=00:43  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=00:57  C = Rotate(A, -160°, B)
+  point C = rotate A by -160 around B
+  # t=00:57  poly1 = Polygon(A, B, 18)
+  polygon poly1 = regular 18 from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:18  m = PerpendicularBisector(A, B)
+  bisector m from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:23  p = PerpendicularBisector(A, C)
+  bisector p from A to C
+  # ────────────────────────────────────────────────────────
+  # t=01:28  H = Intersect(m, p)
+  point H = intersect m p
+  # ────────────────────────────────────────────────────────
+  # t=01:32  I = Midpoint(A, B)
+  point I = midpoint A B
+  # ────────────────────────────────────────────────────────
+  # t=01:34  c = Circle(B, I)
+  circle c center(B) through I
+  # ────────────────────────────────────────────────────────
+  # t=01:40  J = Rotate(I, -80°, B)
+  point J = rotate I by -80 around B
+  # t=01:40  K = Reflect(J, B)
+  point K = rotate J by 180 around B
+  # ────────────────────────────────────────────────────────
+  # t=01:53  d = Parabola(J, m)
+  parabola d focus J directrix m
+  # ────────────────────────────────────────────────────────
+  # t=02:12  L = Intersect(d, p, 2)
+  point L = intersect d p pick 2
+  # ────────────────────────────────────────────────────────
+  # t=02:19  e = Circle(L, J)
+  circle e center(L) through J
+  # ────────────────────────────────────────────────────────
+  # t=02:27  M = ClosestPoint(m, L)
+  point M = closest m to L
+  # ────────────────────────────────────────────────────────
+  # t=02:32  N = Reflect(J, L)
+  point N = rotate J by 180 around L
+  # ────────────────────────────────────────────────────────
+  # t=02:34  q = Parabola(N, m)
+  parabola q focus N directrix m
+  # ────────────────────────────────────────────────────────
+  # t=02:41  O = Intersect(q, p, 2)
+  point O = intersect q p pick 2
+  # ────────────────────────────────────────────────────────
+  # t=02:44  r = Circle(O, N)
+  circle r center(O) through N
+  # ────────────────────────────────────────────────────────
+  # t=02:47  P = ClosestPoint(m, O)
+  point P = closest m to O
+  # ────────────────────────────────────────────────────────
+  # t=03:18  s = Circle(H, K)
+  circle s center(H) through K
+  # ────────────────────────────────────────────────────────
+  # t=03:42  c' = Reflect(c, s)
+  circle c_p = invert c in s
+  # ────────────────────────────────────────────────────────
+  # t=03:56  Q = Center(c')
+  point Q = center c_p
+  # ────────────────────────────────────────────────────────
+  # t=04:11  t = Hyperbola(H, Q, K)
+  hyperbola t foci H Q through K
+  # ────────────────────────────────────────────────────────
+  # t=04:35  S = Rotate(K, -10°, H)
+  point S = rotate K by -10 around H
+  # t=04:35  R = Intersect(t, m, 2)
+  point R = intersect t m pick 2
+  # ────────────────────────────────────────────────────────
+  # t=04:38  c_1 = Circle(R, S)
+  circle c_1 center(R) through S
+  # ────────────────────────────────────────────────────────
+  # t=04:49  d_1 = Reflect(c_1, s)
+  circle d_1 = invert c_1 in s
+  # t=04:49  D = Center(d_1)
+  point D = center d_1
+  # ────────────────────────────────────────────────────────
+  # t=05:12  I' = Reflect(I, p)
+  point I_p = reflect I across p
+  # ────────────────────────────────────────────────────────
+  # t=05:14  M' = Reflect(M, p)
+  point M_p = reflect M across p
+  # ────────────────────────────────────────────────────────
+  # t=05:21  P' = Reflect(P, p)
+  point P_p = reflect P across p
+  # ────────────────────────────────────────────────────────
+  # t=05:32  e_1 = CircularArc(O, P, P')
+  circle e_1_host center(O) through P
+  # ────────────────────────────────────────────────────────
+  # t=05:35  f_1 = CircularArc(L, M, M')
+  circle f_1_host center(L) through M
+  # ────────────────────────────────────────────────────────
+  # t=05:38  g_1 = CircularArc(B, I, I')
+  circle g_1_host center(B) through I
+  # ────────────────────────────────────────────────────────
+  # t=06:10  T = Reflect(S, D)
+  point T = rotate S by 180 around D
+  # ────────────────────────────────────────────────────────
+  # t=06:12  a = Segment(H, T)
+  segment a from H to T
+  # ────────────────────────────────────────────────────────
+  # t=07:45  ring = Sequence(Rotate({e_1, f_1, g_1, d_1, a}, 2*pi*i/18, H), i, 0, 17)
+  divide d_1 into 2
+
+pattern nmEjCTzMbDg on nmEjCTzMbDg_scaffold
+  # t=07:45  ring = Sequence(Rotate({e_1, f_1, g_1, d_1, a}, 2*pi*i/18, H), i, 0, 17)
+  rotate 18 around H
+    connect arc P -> P_p on e_1_host major
+    connect arc M -> M_p on f_1_host major
+    connect arc I -> I_p on g_1_host major
+    connect arc d_1.cpt0 -> d_1.cpt1 on d_1
+    connect arc d_1.cpt1 -> d_1.cpt0 on d_1 major
+    connect H -> T
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline round $size
+  inscribe nmEjCTzMbDg
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

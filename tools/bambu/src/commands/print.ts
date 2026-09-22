@@ -27,6 +27,7 @@ import { confirm } from "../prompt.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { readPlateMeta } from "../threemf.js";
 import { buildHeader, headerToRecordProfile, type RecordProfile } from "../header.js";
+import { buildActuals, actualsToRecord, actualsAreEmpty } from "../actuals.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
@@ -155,25 +156,33 @@ function buildProjectOptions(remoteName: string, opts: SendOpts): ProjectFileOpt
  * a missing printer or an unreadable frame degrades to the plain TODO scaffold, never a crash — and
  * never a fabricated field (the builder leaves unconfirmed/manual fields out of the record profile).
  */
-async function buildRecordProfile(plateFile: string): Promise<RecordProfile | undefined> {
+/** The profile block from a frame we ALREADY read + (optionally) the sliced .3mf. Pure of MQTT — the
+ *  caller owns the read — so `print capture` (which already holds a frame) and `print send --record`
+ *  share one profile builder (D-052: one code path). Without a plate, material/spool still fill from
+ *  the frame's AMS; the slice-side fields stay TODO. */
+async function recordProfileFrom(frame: PrinterStatus, plateFile?: string): Promise<RecordProfile | undefined> {
   try {
-    const plateMeta = await readPlateMeta(plateFile);
-    let frame: PrinterStatus = {};
-    const mqtt = new MqttBackend();
-    if (mqtt.configured()) {
-      try {
-        await mqtt.connect();
-        frame = await mqtt.requestStatus();
-      } catch {
-        /* printer unreachable — fill only the slice-side fields from the .3mf */
-      } finally {
-        await mqtt.close();
-      }
-    }
+    const plateMeta = plateFile ? await readPlateMeta(plateFile) : null;
     return headerToRecordProfile(buildHeader(frame, plateMeta));
   } catch {
     return undefined; // fall back to the TODO scaffold
   }
+}
+
+async function buildRecordProfile(plateFile: string): Promise<RecordProfile | undefined> {
+  let frame: PrinterStatus = {};
+  const mqtt = new MqttBackend();
+  if (mqtt.configured()) {
+    try {
+      await mqtt.connect();
+      frame = await mqtt.requestStatus();
+    } catch {
+      /* printer unreachable — fill only the slice-side fields from the .3mf */
+    } finally {
+      await mqtt.close();
+    }
+  }
+  return recordProfileFrom(frame, plateFile);
 }
 
 async function runSend(plate: string, opts: SendOpts): Promise<void> {
@@ -288,6 +297,99 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
 }
 
+interface CaptureOpts {
+  slug?: string;
+  plate?: string; // path to the .3mf that was printed (optional) — fills the slice-side profile fields
+  object?: string[]; // --object bikar:<path>[=entry], repeatable — pins R1 provenance, as `send --record`
+  json?: boolean;
+}
+
+/** A trimmed string from a frame key, or undefined. Local to slug/label derivation (no shape drift). */
+function frameString(frame: PrinterStatus, key: string): string | undefined {
+  const v = frame[key];
+  if (v == null) return undefined;
+  const s = String(v).trim();
+  return s || undefined;
+}
+
+/**
+ * `bambu print capture` — read the printer's MQTT device report and scaffold a DRAFT record carrying
+ * an `actuals:` block (the #71 metadata gap: a print started from the Studio GUI is seen by nothing, so
+ * `docs/prints/` stays empty and the record count under-reports what we actually printed). This is
+ * READ-ONLY and print-safe — `requestStatus` sends a pushall and reads the cached frame; it moves no
+ * axis and starts/stops nothing (mqtt.ts). No owner gate: nothing is dispatched. The operator fills
+ * provenance/photos/readings and promotes the draft to docs/prints/, exactly as a `--record` draft.
+ */
+async function runCapture(opts: CaptureOpts): Promise<void> {
+  const cfg = loadConfig();
+  requireConfigured(cfg); // MQTT needs host + serial + token
+
+  // Resolve the (optional) .3mf up front so a bad path fails before we touch the network.
+  let plateAbs: string | undefined;
+  if (opts.plate) {
+    plateAbs = resolve(opts.plate);
+    if (!existsSync(plateAbs)) {
+      console.error(`no such file: ${opts.plate} (omit --plate to capture without slice-side profile fields)`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  // Read the device report (read-only). A best-effort read: an unreachable printer is a hard failure
+  // here (unlike --record, there is nothing else to write), so report it and stop.
+  let frame: PrinterStatus = {};
+  const mqtt = new MqttBackend(cfg);
+  try {
+    ev("capture_read_start", {});
+    await mqtt.connect();
+    frame = await mqtt.requestStatus();
+  } catch (err) {
+    console.error(`could not read the printer report: ${(err as Error).message}`);
+    process.exitCode = 1;
+    return;
+  } finally {
+    await mqtt.close();
+  }
+
+  const actuals = buildActuals(frame);
+  if (opts.json) {
+    console.log(JSON.stringify({ actuals, raw: frame }, null, 2));
+    return;
+  }
+  if (actualsAreEmpty(actuals)) {
+    console.error("⚠ the report carried no print-state fields (state/progress/layer/job) — is a print running or");
+    console.error("  just finished? Scaffolding anyway; the verbatim frame lands in device-report.json to inspect.");
+  }
+
+  const job = frameString(frame, "subtask_name");
+  const slug = (opts.slug ?? job ?? "captured-print").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  const plateName = job ?? "(captured print)";
+  const profile = await recordProfileFrom(frame, plateAbs);
+
+  try {
+    const dir = await scaffoldRecord({
+      slug,
+      plateName,
+      plateFile: plateAbs ?? job ?? "captured",
+      objects: parseObjects(opts.object),
+      profile,
+      via: "bambu print capture",
+      capture: {
+        actuals: actualsToRecord(actuals),
+        capturedAt: actuals.captured_at.value ?? new Date().toISOString(),
+        rawFrame: frame,
+      },
+    });
+    ev("capture_done", { dir, state: actuals.state.value ?? "" });
+    console.log(`captured → ${dir}`);
+    console.log(`  printer state: ${actuals.state.value ?? "(none)"}  progress: ${actuals.progress_pct.value ?? "?"}%  layer: ${actuals.layer.value ?? "?"}`);
+    console.log("Fill the object provenance + TODOs, then `bambu validate record .bambu/records` before moving it to docs/prints/.");
+  } catch (err) {
+    console.error(`capture scaffold failed: ${(err as Error).message}`);
+    process.exitCode = 1;
+  }
+}
+
 /** Shared body for pause/resume/stop over MQTT. `stop` confirms first; pause/resume are reversible. */
 async function runControl(verb: "pause" | "resume" | "stop", opts: { yes?: boolean }): Promise<void> {
   if (verb === "stop" && !(await confirm("Stop the running print?", Boolean(opts.yes)))) {
@@ -312,7 +414,12 @@ async function runControl(verb: "pause" | "resume" | "stop", opts: { yes?: boole
 }
 
 export function registerPrint(program: Command): void {
-  const print = program.command("print").description("dispatch + print control over first-party FTPS+MQTT (owner-gated)");
+  const print = program
+    .command("print")
+    .description(
+      "catalog, capture, dispatch and control prints — `list`/`capture` are local & read-only; " +
+        "`send`/`pause`/`stop` move real hardware and are owner-gated",
+    );
 
   print
     .command("send <plate>")
@@ -340,6 +447,26 @@ export function registerPrint(program: Command): void {
     )
     .option("--dry-run", "print the exact FTPS target + MQTT payload without connecting or dispatching", false)
     .action(runSend);
+
+  print
+    .command("capture")
+    .description("read the printer's MQTT device report → scaffold a DRAFT record (counts a GUI print) — read-only, no owner gate")
+    .option("--slug <slug>", "slug for the record run name (default: the printer's subtask_name, else 'captured-print')")
+    .option("--plate <file>", "the sliced .3mf that was printed — fills the slice-side profile fields (machine/nozzle/layer/profile)")
+    .option(
+      "-O, --object <spec>",
+      "printed object as bikar:<path>[=ENTRY] (repeatable) — pins R1 provenance in the record",
+      (v: string, acc: string[]) => [...acc, v],
+      [] as string[],
+    )
+    .option("--json", "print the built actuals + raw frame as JSON instead of scaffolding a record", false)
+    .addHelpText(
+      "after",
+      "\nExample (after a print you started from Bambu Studio):\n" +
+        "  bambu print capture --plate build/plate.3mf -O bikar:patterns/Coupons/Machine-Card.bkr=MC-1\n" +
+        "Then fill the draft's TODOs and `bambu validate record .bambu/records` before moving it to docs/prints/.",
+    )
+    .action((opts: CaptureOpts) => runCapture(opts));
 
   print
     .command("list")

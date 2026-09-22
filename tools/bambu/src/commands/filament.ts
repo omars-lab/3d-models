@@ -18,9 +18,13 @@
 // `print.vt_tray` object (absent here). Parsing the array defensively is what surfaced the loaded
 // external slot — see isRecord() below, where the array-vs-object trap actually bit.
 
+import { existsSync } from "node:fs";
+import { extname, resolve } from "node:path";
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
 import { collectSlots, colorHex, type Slot } from "../frame.js";
+import { readPlateMeta } from "../threemf.js";
+import { logicalSlotsFromPlate, physicalTraysFromSlots, reconcile, renderReport } from "../filament-sync.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
@@ -83,6 +87,54 @@ export function registerFilament(program: Command): void {
         }
       } catch (err) {
         console.error(`filament failed: ${(err as Error).message}`);
+        process.exitCode = 1;
+      } finally {
+        await mqtt.close();
+      }
+    });
+
+  program
+    .command("filament-sync")
+    .description("reconcile a sliced plate's logical AMS slots against loaded trays, by colour match")
+    .requiredOption("--plate <file.3mf>", "the sliced .3mf whose filament_colour[] gives the logical slots")
+    .option("--json", "emit the reconciliation as JSON instead of the operator summary")
+    .action(async (opts: { plate: string; json?: boolean }) => {
+      // Read the plate first (no printer needed) so a bad path fails before we connect.
+      const abs = resolve(opts.plate);
+      if (!existsSync(abs)) {
+        console.error(`no such file: ${opts.plate}`);
+        process.exitCode = 2;
+        return;
+      }
+      if (extname(abs).toLowerCase() !== ".3mf") {
+        console.error(`--plate expects a sliced .3mf, got '${extname(abs)}'. Slice first: bambu slice coaster ...`);
+        process.exitCode = 2;
+        return;
+      }
+      const meta = await readPlateMeta(abs);
+      if (!meta) {
+        console.error(`could not read ${opts.plate} as a sliced .3mf (no Metadata/project_settings.config). Is it sliced?`);
+        process.exitCode = 2;
+        return;
+      }
+      const logical = logicalSlotsFromPlate(meta.filamentColours, meta.filamentTypes);
+
+      const mqtt = new MqttBackend();
+      requireConfigured(mqtt);
+      try {
+        await mqtt.connect();
+        const s = await mqtt.requestStatus();
+        const physical = physicalTraysFromSlots(collectSlots(s));
+        const report = reconcile(logical, physical);
+        if (opts.json) {
+          console.log(JSON.stringify(report, null, 2));
+        } else {
+          console.log(renderReport(report));
+        }
+        // Exit non-zero when a human must act, so a print script can gate on it.
+        if (report.needsOperator) process.exitCode = 1;
+      } catch (err) {
+        console.error(`filament-sync failed: ${(err as Error).message}`);
         process.exitCode = 1;
       } finally {
         await mqtt.close();
