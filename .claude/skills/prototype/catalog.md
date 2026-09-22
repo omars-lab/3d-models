@@ -1532,6 +1532,34 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   gallery's coaster entry; the constructions ledger's `coaster` and `catalog`
   cells for `tA8eSdVx_EQ`.
 
+## CS-7 — Eight-fold rosette coaster (Sarah Brewer, lEfWSogWscs)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/lEfWSogWscs-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/lEfWSogWscs-coaster-mini.stl`
+  and `-standard.stl`). Frame is the **least-area default fit** (D-066), no pin:
+  the eight-fold art's own symmetry lands the octagon as the least-area winner,
+  so `outline polygon 8 $size rotate 0` is what the fitter emits — no
+  `--coaster-outline` override (contrast CS-6's pinned heptagon, D-079).
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` / `color straps Gold`. Both pass the mesh gate at the 0.8 mm
+  coaster floor; the mini is 33,840 triangles / 6.2 cm³ and the standard 169,716
+  triangles / 29.3 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The Itimad ad-Daula pattern is an interlaced eight-fold with long
+    straight runs that meet at shallow angles — do those grazing strap crossings
+    stay legible at `size=40`, or do the near-parallel runs blur into each other
+    on the mini?
+  - [ ] 2. The octagon frame is the default fit here (not pinned): do the eight
+    flats sit convincingly under the art's own eight-fold symmetry, or does the
+    disc still want a rotation the least-area metric cannot see?
+- **What we learned**: — pending.
+- **Feeds**: the first default-fit octagon coaster from an eight-fold
+  construction; the gallery's coaster entry; the constructions ledger's
+  `coaster` and `catalog` cells for `lEfWSogWscs`.
+
 ## CS-8 — Eight-fold star rosette coaster (Sarah Brewer, rDuxHF3xMOc)
 
 - **Status**: planned
@@ -1566,3 +1594,44 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the bikar list-literal importer fix (PR #227); the gallery's coaster
   entry; the constructions ledger's `coaster` and `catalog` cells for
   `rDuxHF3xMOc`.
+
+## CS-9 — n-fold flower coaster (Sarah Brewer, nmEjCTzMbDg)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/nmEjCTzMbDg-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/nmEjCTzMbDg-coaster-mini.stl`
+  and `-standard.stl`). Frame is **round** (`outline round $size`) — the first
+  round-framed coaster of the migrated set (CS-6 heptagon, CS-7 octagon, CS-8
+  square). It is also the first **open line-art** construction here: the art is
+  drawn straps and segments, not closed filled polygons, which is exactly what
+  bikar PR-5 (#243) shipped ("first open line-art"). The scaffold is built from
+  **conic loci and circle inversion** rather than rotate/reflect orbits — a
+  `parabola d focus J directrix m`, a `hyperbola t foci H Q through K`, and two
+  `invert … in s` circle inversions (`c_p`, `d_1`) whose centres seed the arc
+  host circles. The pattern is `rotate 18 around H` over six `connect` lines:
+  three major strap arcs (`connect arc P -> P_p on e_1_host major`, `… M -> M_p
+  on f_1_host major`, `… I -> I_p on g_1_host major`), the two `d_1` arcs
+  (minor + major), and the `H -> T` spoke segment. This is the construction
+  that drove the full bikar arc engine: the arc-drawing surface (PR-4a #233),
+  the arc-importer lowering (PR-4b #234), and the B′ `--emit-coords`
+  cached_coords self-bootstrap ([D-080](../../../docs/decisions-log.md), #236)
+  that supplies the arc-endpoint coords the `CircularArc` importer refuses to
+  guess. `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`). Both pass the
+  mesh gate at the 0.8 mm coaster floor (watertight, euler 2, 0 degenerate,
+  minFeature 1.2 mm) and the linkage gate (1 body); the mini is 32,240 triangles
+  / 6.4 cm³ and the standard 160,860 triangles / 31.7 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. This is the only open line-art coaster — the straps are drawn arcs,
+    not the boundary of a filled region. Does an embossed open arc of `strap
+    width 2` read as crisply as the closed-polygon reliefs of CS-6…CS-8, or do
+    the free arc ends look unfinished at `size=40`?
+  - [ ] 2. The 18-fold flower is the sparsest art of the set (160,860 triangles
+    vs the eight-fold's 204,300) — at the round rim, do the petal arcs reach the
+    frame deliberately, or leave an awkward margin the square/octagon frames hid?
+- **What we learned**: — pending.
+- **Feeds**: the bikar arc engine (PR-4a #233, PR-4b #234, B′ #236 / D-080,
+  PR-5 #243); the gallery's coaster entry; the constructions ledger's `coaster`
+  and `catalog` cells for `nmEjCTzMbDg`.

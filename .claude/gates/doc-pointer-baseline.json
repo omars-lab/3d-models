@@ -116,8 +116,18 @@
     },
     {
       "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/lEfWSogWscs-coaster-mini.stl",
+      "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The default-fit octagon eight-fold coaster (CS-7, bikar PR #225); introduced with the lEfWSogWscs migration."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/rDuxHF3xMOc-coaster-mini.stl",
       "why": "Gitignored build output — same as the three coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The square-framed eight-fold coaster (CS-8); introduced with the rDuxHF3xMOc migration (bikar list-literal importer fix, PR #227)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/nmEjCTzMbDg-coaster-mini.stl",
+      "why": "Gitignored build output — same as the four coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The round-framed n-fold flower coaster (CS-9); introduced with the nmEjCTzMbDg migration (bikar arc engine PR-5 #243, B′ cached_coords self-bootstrap D-080)."
     }
   ]
 }

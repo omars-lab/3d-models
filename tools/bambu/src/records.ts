@@ -17,6 +17,7 @@ import { bikarHead, bikarBlobSha } from "./backends/bikar.js";
 import { recordsDir } from "./paths.js";
 import { ev } from "./log.js";
 import type { RecordProfile } from "./header.js";
+import type { RecordActuals } from "./actuals.js";
 
 const TODO = "TODO";
 /** A 64-hex placeholder the gate will flag as "not the blob" until a real print is recorded. */
@@ -31,6 +32,16 @@ export interface ScaffoldObject {
   iteration?: string; // it-<sha12> — the iteration identity (src/iteration.ts); the plate↔iteration map
 }
 
+/** Post-print ground truth captured off the printer's MQTT device report (actuals.ts). Present only
+ *  for a `bambu print capture` scaffold — a `--record` dispatch draft is written before the print runs,
+ *  so it has no actuals yet. The verbatim `rawFrame` is persisted beside index.md so a field the
+ *  builder left unconfirmed (filament grams) stays recoverable and settles with no code change. */
+export interface CaptureData {
+  actuals: RecordActuals; // the filled fields, projected by actualsToRecord
+  capturedAt: string; // when the frame was cached (or the clock, if it carried no timestamp)
+  rawFrame: unknown; // the whole report frame, written to device-report.json
+}
+
 export interface ScaffoldOpts {
   slug: string; // <slug> in the run name; date is prepended
   plateName: string; // human-readable plate label
@@ -39,6 +50,8 @@ export interface ScaffoldOpts {
   date?: string; // YYYY-MM-DD, defaults to today (local)
   baseDir?: string; // defaults to <cwd>/.bambu/records
   profile?: RecordProfile; // machine-known header fields (from `bambu header`), pre-filling the block
+  capture?: CaptureData; // present for `print capture`: the actuals block + raw frame
+  via?: string; // the verb that scaffolded it, for the closing note (default: send --record)
 }
 
 function today(): string {
@@ -63,6 +76,29 @@ function yamlObjects(objs: Array<Record<string, unknown>>): string {
         .join("\n"),
     )
     .join("\n");
+}
+
+/** Emit the `actuals:` block from a capture. Only genuinely-filled fields are present in `actuals`
+ *  (actualsToRecord drops unconfirmed/absent ones), so this writes exactly what the machine answered
+ *  plus the provenance pointers — `source` (this came off MQTT, not a slice) and `raw` (the verbatim
+ *  frame beside index.md, so an unconfirmed field like filament grams is still recoverable). The
+ *  prints gate does not read this block (it is additive; measure a rule before gating it), so its only
+ *  job is to be honest, well-formed YAML. */
+function yamlActuals(cap: CaptureData): string {
+  const ORDER: (keyof RecordActuals)[] = [
+    "state", "progress_pct", "layer", "remaining_min", "job", "error", "nozzle_c", "bed_c", "chamber_c", "filament_g",
+  ];
+  const lines = [
+    "actuals:",
+    "  source: mqtt-device-report", // where these came from — never a slice-time estimate
+    "  raw: device-report.json", // the verbatim frame, for fields the builder left unconfirmed
+    `  captured_at: ${JSON.stringify(cap.capturedAt)}`,
+  ];
+  for (const k of ORDER) {
+    const v = cap.actuals[k];
+    if (v !== undefined) lines.push(`  ${k}: ${JSON.stringify(v)}`);
+  }
+  return lines.join("\n");
 }
 
 /**
@@ -125,9 +161,18 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     yamlObjects(objectBlocks),
     "photos: []",
     "readings: []",
+    ...(opts.capture ? [yamlActuals(opts.capture)] : []),
     "---",
     "",
-    `Draft record scaffolded by \`bambu print send --record\` for **${opts.plateName}**.`,
+    `Draft record scaffolded by \`${opts.via ?? "bambu print send --record"}\` for **${opts.plateName}**.`,
+    ...(opts.capture
+      ? [
+          "",
+          "The `actuals:` block is the printer's own MQTT device report — what the print actually did;",
+          "the verbatim frame is in `device-report.json` beside this file (a field the builder could not",
+          "confirm on the X2D, e.g. filament grams, is recoverable there).",
+        ]
+      : []),
     "",
     "Before moving this dir into `docs/prints/`, fill every `TODO`, add the plate photos under",
     "`photos/` (and list them with their sha256), record the measurements under `readings`, and",
@@ -136,6 +181,9 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
   ].join("\n");
 
   writeFileSync(join(rec, "index.md"), fm);
-  ev("record_scaffold", { run, dir: rec, objects: opts.objects.length });
+  if (opts.capture) {
+    writeFileSync(join(rec, "device-report.json"), JSON.stringify(opts.capture.rawFrame, null, 2) + "\n");
+  }
+  ev("record_scaffold", { run, dir: rec, objects: opts.objects.length, capture: Boolean(opts.capture) });
   return rec;
 }
