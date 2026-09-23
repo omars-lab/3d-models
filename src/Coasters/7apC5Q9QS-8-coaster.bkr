@@ -481,6 +481,9 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
   edges from octC
   # t=23:19  octD = Reflect(octB, f)
   edges from octD
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
 
 coaster Coaster
   outline square $size
@@ -488,3 +491,5 @@ coaster Coaster
   base 4
   relief straps emboss 1.2
   strap width 2
+  color base Slab
+  color straps Gold

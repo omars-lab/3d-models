@@ -96,6 +96,9 @@ pattern GimTvN9hw4U on GimTvN9hw4U_scaffold
   rotate 6 around G
     rotate 6 around G_reflRosette
       edges from pet_reflRosette
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
 
 coaster Coaster
   outline polygon 6 $size rotate 30
@@ -103,3 +106,5 @@ coaster Coaster
   base 4
   relief straps emboss 1.2
   strap width 2
+  color base Slab
+  color straps Gold
