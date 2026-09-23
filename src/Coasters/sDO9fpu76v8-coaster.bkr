@@ -1,0 +1,334 @@
+# naqsh construction — sDO9fpu76v8
+# title: Royal Alcazar 6-fold reflection tessellation
+# url: https://www.youtube.com/watch?v=sDO9fpu76v8
+# steps: 87 statements, 77 tagged steps
+# source: reconstructions/sDO9fpu76v8/construction.ggb-commands sha256:ffb1ca403e4af5c6dac560c88b1037d897b0365b34f65aaa064681426c2ff78e
+
+param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 6.5397   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+param G = 0.33333333333
+
+blueprint sDO9fpu76v8_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:57  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=01:05  B = (0, 1)
+  point B = unit.cpt1
+  # ────────────────────────────────────────────────────────
+  # t=01:26  poly1 = Polygon(A, B, 6)
+  polygon poly1 = regular 6 from A to B
+  # ────────────────────────────────────────────────────────
+  # t=02:33  cG = Circle(A, G)
+  circle cG center(A) radius $G * $unit
+  # ────────────────────────────────────────────────────────
+  # t=02:50  segAB = Segment(A, B)
+  segment segAB from A to B
+  # ────────────────────────────────────────────────────────
+  # t=02:53  H = Intersect(cG, segAB)
+  point H = intersect cG segAB
+  # ────────────────────────────────────────────────────────
+  # t=03:06  cB = Circle(B, G)
+  circle cB center(B) radius $G * $unit
+  # ────────────────────────────────────────────────────────
+  # t=03:10  J = Intersect(cB, segAB)
+  point J = intersect cB segAB
+  # ────────────────────────────────────────────────────────
+  # t=03:15  I = Midpoint(A, B)
+  point I = midpoint A B
+  # ────────────────────────────────────────────────────────
+  # t=03:23  cI = Circle(I, G)
+  circle cI center(I) radius $G * $unit
+  # ────────────────────────────────────────────────────────
+  # t=03:55  O = Centroid(poly1)
+  point O = centroid poly1
+  # ────────────────────────────────────────────────────────
+  # t=03:50  lAD = Line(A, O)
+  line lAD from A to O
+  # ────────────────────────────────────────────────────────
+  # t=03:52  lBE = Line(B, O)
+  line lBE from B to O
+  # ────────────────────────────────────────────────────────
+  # t=04:00  axisN = Line(O, I)
+  line axisN from O to I
+  # ────────────────────────────────────────────────────────
+  # t=04:06  p = PerpendicularLine(J, segAB)
+  line p through J perpendicular segAB
+  # ────────────────────────────────────────────────────────
+  # t=04:11  q = PerpendicularLine(H, segAB)
+  line q through H perpendicular segAB
+  # ────────────────────────────────────────────────────────
+  # t=04:22  {Llo, L} = Intersect(cI, axisN)
+  intersect LloL_ cI axisN
+  # t=04:22  {Llo, L} = Intersect(cI, axisN)
+  point Llo = LloL_.cpt0
+  # t=04:22  {Llo, L} = Intersect(cI, axisN)
+  point L = LloL_.cpt1
+  # ────────────────────────────────────────────────────────
+  # t=04:49  nR = Reflect(axisN, lAD)
+  line nR = reflect axisN across lAD
+  # ────────────────────────────────────────────────────────
+  # t=04:51  pR = Reflect(p, lAD)
+  line pR = reflect p across lAD
+  # ────────────────────────────────────────────────────────
+  # t=04:53  qR = Reflect(q, lAD)
+  line qR = reflect q across lAD
+  # ────────────────────────────────────────────────────────
+  # t=05:04  r = PerpendicularLine(O, axisN)
+  line r through O perpendicular axisN
+  # ────────────────────────────────────────────────────────
+  # t=05:09  nRR = Reflect(nR, r)
+  line nRR = reflect nR across r
+  # ────────────────────────────────────────────────────────
+  # t=05:11  pRR = Reflect(pR, r)
+  line pRR = reflect pR across r
+  # ────────────────────────────────────────────────────────
+  # t=05:13  qRR = Reflect(qR, r)
+  line qRR = reflect qR across r
+  # ────────────────────────────────────────────────────────
+  # t=05:53  s = PerpendicularLine(L, axisN)
+  line s through L perpendicular axisN
+  # ────────────────────────────────────────────────────────
+  # t=06:05  sR = Reflect(s, lAD)
+  line sR = reflect s across lAD
+  # ────────────────────────────────────────────────────────
+  # t=06:07  sRR = Reflect(sR, r)
+  line sRR = reflect sR across r
+  # ────────────────────────────────────────────────────────
+  # t=06:24  t = PerpendicularBisector(L, I)
+  bisector t from L to I
+  # ────────────────────────────────────────────────────────
+  # t=06:30  tR = Reflect(t, lAD)
+  line tR = reflect t across lAD
+  # ────────────────────────────────────────────────────────
+  # t=06:32  tRR = Reflect(tR, r)
+  line tRR = reflect tR across r
+  # ────────────────────────────────────────────────────────
+  # t=07:08  K = Intersect(nR, tR)
+  point K = intersect nR tR
+  # ────────────────────────────────────────────────────────
+  # t=07:26  {aPerp, a} = AngleBisector(r, nR)
+  line aPerp = bisect angle r nR
+  # t=07:26  {aPerp, a} = AngleBisector(r, nR)
+  line a = bisect angle r nR other
+  # ────────────────────────────────────────────────────────
+  # t=07:50  pRR1 = Reflect(pR, a)
+  line pRR1 = reflect pR across a
+  # ────────────────────────────────────────────────────────
+  # t=07:53  qRR1 = Reflect(qR, a)
+  line qRR1 = reflect qR across a
+  # ────────────────────────────────────────────────────────
+  # t=08:12  f1 = Reflect(pRR1, nRR)
+  line f1 = reflect pRR1 across nRR
+  # ────────────────────────────────────────────────────────
+  # t=08:14  b = Reflect(qRR1, nRR)
+  line b = reflect qRR1 across nRR
+  # ────────────────────────────────────────────────────────
+  # t=08:20  g1 = Reflect(f1, axisN)
+  line g1 = reflect f1 across axisN
+  # ────────────────────────────────────────────────────────
+  # t=08:23  bp = Reflect(b, axisN)
+  line bp = reflect b across axisN
+  # ────────────────────────────────────────────────────────
+  # t=08:44  M = Intersect(lAD, t)
+  point M = intersect lAD t
+  # ────────────────────────────────────────────────────────
+  # t=08:58  h1 = PerpendicularLine(M, r)
+  line h1 through M perpendicular r
+  # ────────────────────────────────────────────────────────
+  # t=09:17  N0 = Intersect(qR, g1)
+  point N0 = intersect qR g1
+  # ────────────────────────────────────────────────────────
+  # t=09:19  P0 = Intersect(lAD, qR)
+  point P0 = intersect lAD qR
+  # ────────────────────────────────────────────────────────
+  # t=09:21  Q0 = Intersect(q, pRR1)
+  point Q0 = intersect q pRR1
+  # ────────────────────────────────────────────────────────
+  # t=09:24  R0 = Intersect(nR, g1)
+  point R0 = intersect nR g1
+  # ────────────────────────────────────────────────────────
+  # t=09:32  kite = Polygon(N0, P0, Q0, R0)
+  polygon kite [ N0 P0 Q0 R0 ]
+  # ────────────────────────────────────────────────────────
+  # t=09:38  S0 = Reflect(H, lAD)
+  point S0 = reflect H across lAD
+  # ────────────────────────────────────────────────────────
+  # t=09:40  T0 = Intersect(g1, h1)
+  point T0 = intersect g1 h1
+  # ────────────────────────────────────────────────────────
+  # t=09:43  tri = Polygon(S0, N0, T0)
+  polygon tri [ S0 N0 T0 ]
+  # ────────────────────────────────────────────────────────
+  # lAF = Line(A, S0)
+  line lAF from A to S0
+  # ────────────────────────────────────────────────────────
+  # t=10:08  iK = Line(K, S0)
+  line iK from K to S0
+  # ────────────────────────────────────────────────────────
+  # t=10:48  {jK2, jK} = AngleBisector(iK, nR)
+  line jK2 = bisect angle iK nR
+  # t=10:48  {jK2, jK} = AngleBisector(iK, nR)
+  line jK = bisect angle iK nR other
+  # ────────────────────────────────────────────────────────
+  # t=11:12  V0 = Intersect(jK, lAF)
+  point V0 = intersect jK lAF
+  # ────────────────────────────────────────────────────────
+  # t=11:22  kV = PerpendicularLine(V0, iK)
+  line kV through V0 perpendicular iK
+  # ────────────────────────────────────────────────────────
+  # t=11:35  W0 = Intersect(nR, kV)
+  point W0 = intersect nR kV
+  # ────────────────────────────────────────────────────────
+  # t=11:37  Z0 = Intersect(qR, kV)
+  point Z0 = intersect qR kV
+  # ────────────────────────────────────────────────────────
+  # t=11:55  V1 = Reflect(V0, nR)
+  point V1 = reflect V0 across nR
+  # ────────────────────────────────────────────────────────
+  # S1 = Reflect(S0, nR)
+  point S1 = reflect S0 across nR
+  # Z1 = Reflect(Z0, nR)
+  point Z1 = reflect Z0 across nR
+  # ────────────────────────────────────────────────────────
+  # t=12:00  lK = PerpendicularLine(K, iK)
+  line lK through K perpendicular iK
+  # ────────────────────────────────────────────────────────
+  # t=12:30  W2 = Reflect(W0, lK)
+  point W2 = reflect W0 across lK
+  # ────────────────────────────────────────────────────────
+  # V2 = Reflect(V0, lK)
+  point V2 = reflect V0 across lK
+  # S2 = Reflect(S0, lK)
+  point S2 = reflect S0 across lK
+  # ────────────────────────────────────────────────────────
+  # t=12:47  W3 = Reflect(W0, iK)
+  point W3 = reflect W0 across iK
+  # ────────────────────────────────────────────────────────
+  # V3 = Reflect(V1, iK)
+  point V3 = reflect V1 across iK
+  # S3 = Reflect(S1, iK)
+  point S3 = reflect S1 across iK
+  # Z3 = Reflect(Z1, iK)
+  point Z3 = reflect Z1 across iK
+  # W4 = Reflect(W2, iK)
+  point W4 = reflect W2 across iK
+  # V4 = Reflect(V2, iK)
+  point V4 = reflect V2 across iK
+  # ────────────────────────────────────────────────────────
+  # t=12:54  star8 = Polygon(V3, W3, Z0, S0, V0, W0, V1, S1, Z1, W2, V2, S2, V4, W4, Z3, S3)
+  polygon star8 [ V3 W3 Z0 S0 V0 W0 V1 S1 Z1 W2 V2 S2 V4 W4 Z3 S3 ]
+  # ────────────────────────────────────────────────────────
+  # t=13:28  B1 = Intersect(bp, segAB)
+  point B1 = intersect bp segAB
+  # ────────────────────────────────────────────────────────
+  # t=13:32  C1 = Reflect(B1, t)
+  point C1 = reflect B1 across t
+  # ────────────────────────────────────────────────────────
+  # t=13:45  D1 = Intersect(t, bp)
+  point D1 = intersect t bp
+  # ────────────────────────────────────────────────────────
+  # t=13:47  E1 = Reflect(D1, lAD)
+  point E1 = reflect D1 across lAD
+  # ────────────────────────────────────────────────────────
+  # t=14:03  Ap = Reflect(A, t)
+  point Ap = reflect A across t
+  # ────────────────────────────────────────────────────────
+  # t=14:15  F1 = Reflect(B1, h1)
+  point F1 = reflect B1 across h1
+  # ────────────────────────────────────────────────────────
+  # t=14:16  G1 = Reflect(D1, h1)
+  point G1 = reflect D1 across h1
+  # ────────────────────────────────────────────────────────
+  # t=14:17  H1 = Reflect(C1, h1)
+  point H1 = reflect C1 across h1
+  # ────────────────────────────────────────────────────────
+  # t=14:21  App = Reflect(Ap, h1)
+  point App = reflect Ap across h1
+  # ────────────────────────────────────────────────────────
+  # t=14:27  Tp = Reflect(T0, t)
+  point Tp = reflect T0 across t
+  # ────────────────────────────────────────────────────────
+  # t=14:35  star6 = Polygon(Tp, Ap, C1, D1, B1, A, T0, E1, F1, G1, H1, App)
+  polygon star6 [ Tp Ap C1 D1 B1 A T0 E1 F1 G1 H1 App ]
+  # ────────────────────────────────────────────────────────
+  # t=16:10  m2b = Reflect(m2, nRR)
+  point O_m2b = reflect O across nRR
+  # t=16:10  m2b = Reflect(m2, nRR)
+  polygon tri_m2b = reflect tri across nRR
+  # ────────────────────────────────────────────────────────
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  point O_lay1 = reflect O across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  polygon kite_lay1 = reflect kite across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  point O_lay12 = reflect O across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  polygon tri_lay1 = reflect tri across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  point O_m2b_lay1 = reflect O_m2b across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  polygon tri_m2b_lay1 = reflect tri_m2b across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  point O_lay13 = reflect O across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  polygon star8_lay1 = reflect star8 across tR
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  polygon star6_lay1 = reflect star6 across tR
+
+pattern sDO9fpu76v8 on sDO9fpu76v8_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=15:46  m1 = Sequence(Rotate(kite, pi*i/6, O), i, 0, 11)
+  rotate 12 around O
+    edges from kite
+  # ────────────────────────────────────────────────────────
+  # t=15:51  m2 = Sequence(Rotate(tri, pi*i/3, O), i, 0, 5)
+  rotate 6 around O
+    edges from tri
+  # ────────────────────────────────────────────────────────
+  # t=16:10  m2b = Reflect(m2, nRR)
+  rotate 6 around O_m2b
+    edges from tri_m2b
+  # ────────────────────────────────────────────────────────
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  rotate 12 around O_lay1
+    edges from kite_lay1
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  rotate 6 around O_lay12
+    edges from tri_lay1
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  rotate 6 around O_m2b_lay1
+    edges from tri_m2b_lay1
+  # t=17:58  lay1 = Reflect({m1, m2, m2b, m3}, tR)
+  rotate 6 around O_lay13
+    edges from star8_lay1
+    edges from star6_lay1
+  # ────────────────────────────────────────────────────────
+  # t=18:41  lay2 = Sequence(Rotate(lay1, 5*pi*i/3, O), i, 0, 5)
+  rotate 6 around O
+    rotate 12 around O_lay1
+      edges from kite_lay1
+    rotate 6 around O_lay12
+      edges from tri_lay1
+    rotate 6 around O_m2b_lay1
+      edges from tri_m2b_lay1
+    rotate 6 around O_lay13
+      edges from star8_lay1
+      edges from star6_lay1
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline polygon 6 $size rotate 0
+  inscribe sDO9fpu76v8
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

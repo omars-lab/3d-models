@@ -128,6 +128,16 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/nmEjCTzMbDg-coaster-mini.stl",
       "why": "Gitignored build output — same as the four coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The round-framed n-fold flower coaster (CS-9); introduced with the nmEjCTzMbDg migration (bikar arc engine PR-5 #243, B′ cached_coords self-bootstrap D-080)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/n3IidKfXE1I-coaster-mini.stl",
+      "why": "Gitignored build output — same as the five coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The square-framed 12-6-4 variable-angle star coaster (CS-10); introduced with the n3IidKfXE1I vendoring (bikar migration PR #229)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/sDO9fpu76v8-coaster-mini.stl",
+      "why": "Gitignored build output — same as the six coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The hexagon-framed Royal Alcazar tessellation coaster (CS-11); introduced with the sDO9fpu76v8 vendoring (bikar migration PR #228)."
     }
   ]
 }

@@ -22,7 +22,7 @@ it says so and skips the cross-check rather than passing or failing it.
 Scope of the set (K2): **9 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**6 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**8 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -33,10 +33,16 @@ bikar PR #227 (the importer now lowers a `Reflect`/`Rotate` of a brace-group
 **list literal** into a conjugated orbit rather than refusing it), and
 `nmEjCTzMbDg` with bikar PR-5 #243 (the first **open line-art** construction —
 conic loci and circle inversion drawn as `connect arc … major` straps, resolved
-by the B′ `--emit-coords` cached_coords self-bootstrap, [D-080](../decisions-log.md)).
-All six now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
-carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`)
-— P3.3 of the umbrella plan, which built on the `coaster` declaration (P1.6/P2.7).
+by the B′ `--emit-coords` cached_coords self-bootstrap, [D-080](../decisions-log.md)),
+`sDO9fpu76v8` with bikar PR #228 (the first **tessellation** rather than a
+rosette — a hexagonal cell reflected into its neighbour and the layer rotated
+six-fold, on the set's first hexagonal frame), and `n3IidKfXE1I` with bikar
+PR #229 (three rotational orbits about three different centres, the "12-6-4",
+with the walkthrough's slider angle pinned at 23.5°).
+All eight now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
+`CS-10`, `CS-11`) — P3.3 of the umbrella plan, which built on the `coaster`
+declaration (P1.6/P2.7).
 
 Oracle cells read `PASS a/b` — O1: labels compared / failed; O2: centreline
 recall / precision; O3: reference coverage — or `—` when that oracle has not
@@ -75,8 +81,8 @@ not been run: no `make reference` for it yet.
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | — | — | — | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
-| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | — | — | — | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | — | — | — | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | — | — | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
-| `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | — | — | — | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | — | — | — | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |

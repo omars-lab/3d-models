@@ -1,0 +1,233 @@
+# naqsh construction — n3IidKfXE1I
+# title: Variable-angled 12-6-4 Star Rosette Pattern
+# url: https://youtu.be/n3IidKfXE1I
+# steps: 65 statements, 61 tagged steps
+# source: reconstructions/n3IidKfXE1I/construction.ggb-commands sha256:b93288707e9ffa7dcd88563208545e1b642ef2026261c2c9a1c2ad831d4d62e0
+# renamed: O' -> O_p (apostrophe is not an identifier character)
+
+param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 5.2321   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint n3IidKfXE1I_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=03:02  A = (0, 0)
+  point A = unit.mpt
+  # t=03:02  B = (1, 0)
+  point B = unit.cpt0
+  # t=03:02  poly1 = Polygon(A, B, 12)
+  polygon poly1 = regular 12 from A to B
+  # ────────────────────────────────────────────────────────
+  # Lv = Rotate(B, 150°, A)
+  point Lv = rotate B by 150 around A
+  # Cv = Rotate(A, -150°, B)
+  point Cv = rotate A by -150 around B
+  # Pv = Rotate(B, 270°, A)
+  point Pv = rotate B by 270 around A
+  # ────────────────────────────────────────────────────────
+  # t=03:25  poly2 = Polygon(A, Lv, 6)
+  polygon poly2 = regular 6 from A to Lv
+  # t=03:25  poly3 = Polygon(Cv, B, 6)
+  polygon poly3 = regular 6 from Cv to B
+  # ────────────────────────────────────────────────────────
+  # t=04:48  k_1 = PerpendicularBisector(A, B)
+  bisector k_1 from A to B
+  # ────────────────────────────────────────────────────────
+  # t=04:53  l_1 = PerpendicularBisector(Pv, A)
+  bisector l_1 from Pv to A
+  # ────────────────────────────────────────────────────────
+  # t=05:13  m_1 = PerpendicularBisector(A, Lv)
+  bisector m_1 from A to Lv
+  # ────────────────────────────────────────────────────────
+  # t=05:37  O = Intersect(k_1, m_1)
+  point O = intersect k_1 m_1
+  # ────────────────────────────────────────────────────────
+  # t=05:39  V = Intersect(k_1, l_1)
+  point V = intersect k_1 l_1
+  # t=05:39  W = Intersect(m_1, l_1)
+  point W = intersect m_1 l_1
+  # ────────────────────────────────────────────────────────
+  # t=06:27  Z = Midpoint(A, B)
+  point Z = midpoint A B
+  # t=06:27  A_1 = Midpoint(A, Lv)
+  point A_1 = midpoint A Lv
+  # t=06:27  B_1 = Midpoint(A, Pv)
+  point B_1 = midpoint A Pv
+  # ────────────────────────────────────────────────────────
+  # t=06:36  c_1 = Circle(A, Z)
+  circle c_1 center(A) through Z
+  # ────────────────────────────────────────────────────────
+  # t=06:51  n_1 = Segment(O, A)
+  segment n_1 from O to A
+  # t=06:51  p_1 = Segment(W, A)
+  segment p_1 from W to A
+  # ────────────────────────────────────────────────────────
+  # t=07:00  P = Intersect(c_1, n_1)
+  point P = intersect c_1 n_1
+  # ────────────────────────────────────────────────────────
+  # t=07:01  D_1 = Intersect(c_1, p_1)
+  point D_1 = intersect c_1 p_1
+  # ────────────────────────────────────────────────────────
+  # t=07:08  d_1 = Circle(O, P)
+  circle d_1 center(O) through P
+  # t=07:08  e_1 = Circle(W, D_1)
+  circle e_1 center(W) through D_1
+  # ────────────────────────────────────────────────────────
+  # t=10:16  O' = Rotate(O, 23.5°, P)
+  point O_p = rotate O by 23.5 around P
+  # ────────────────────────────────────────────────────────
+  # t=11:03  q_1 = Line(P, O')
+  line q_1 from P to O_p
+  # ────────────────────────────────────────────────────────
+  # t=12:14  r_1 = AngleBisector(P, A, Z)
+  line r_1 = bisect angle P A Z
+  # ────────────────────────────────────────────────────────
+  # t=13:03  C_1 = Intersect(m_1, q_1)
+  point C_1 = intersect m_1 q_1
+  # ────────────────────────────────────────────────────────
+  # t=13:51  s_1 = Reflect(r_1, n_1)
+  line s_1 = reflect r_1 across n_1
+  # ────────────────────────────────────────────────────────
+  # t=13:58  t_1 = Reflect(q_1, n_1)
+  line t_1 = reflect q_1 across n_1
+  # ────────────────────────────────────────────────────────
+  # t=14:55  b_1 = Reflect(q_1, r_1)
+  line b_1 = reflect q_1 across r_1
+  # ────────────────────────────────────────────────────────
+  # t=15:10  a_1 = Reflect(t_1, s_1)
+  line a_1 = reflect t_1 across s_1
+  # ────────────────────────────────────────────────────────
+  # t=15:44  f_2 = Reflect(q_1, m_1)
+  line f_2 = reflect q_1 across m_1
+  # ────────────────────────────────────────────────────────
+  # t=15:50  F_1 = Intersect(f_2, n_1)
+  point F_1 = intersect f_2 n_1
+  # ────────────────────────────────────────────────────────
+  # t=15:55  G_1 = Intersect(t_1, k_1)
+  point G_1 = intersect t_1 k_1
+  # ────────────────────────────────────────────────────────
+  # t=16:33  q1 = Polygon(P, C_1, F_1, G_1)
+  polygon q1 [ P C_1 F_1 G_1 ]
+  # ────────────────────────────────────────────────────────
+  # X = Intersect(t_1, s_1)
+  point X = intersect t_1 s_1
+  # ────────────────────────────────────────────────────────
+  # t=16:49  H_1 = Reflect(P, m_1)
+  point H_1 = reflect P across m_1
+  # ────────────────────────────────────────────────────────
+  # t=16:52  I_1 = Reflect(X, m_1)
+  point I_1 = reflect X across m_1
+  # ────────────────────────────────────────────────────────
+  # t=16:58  poly4 = Polygon(C_1, H_1, I_1, A_1, X, P)
+  polygon poly4 [ C_1 H_1 I_1 A_1 X P ]
+  # ────────────────────────────────────────────────────────
+  # t=18:56  n_2 = Reflect(a_1, m_1)
+  line n_2 = reflect a_1 across m_1
+  # ────────────────────────────────────────────────────────
+  # t=19:05  q_2 = AngleBisector(W, A, Lv)
+  line q_2 = bisect angle W A Lv
+  # ────────────────────────────────────────────────────────
+  # t=19:12  J_1 = Intersect(n_2, q_2)
+  point J_1 = intersect n_2 q_2
+  # ────────────────────────────────────────────────────────
+  # t=19:24  r_2 = Reflect(n_2, q_2)
+  line r_2 = reflect n_2 across q_2
+  # ────────────────────────────────────────────────────────
+  # t=19:35  s_2 = Reflect(r_2, p_1)
+  line s_2 = reflect r_2 across p_1
+  # ────────────────────────────────────────────────────────
+  # t=19:41  K_1 = Intersect(s_2, m_1)
+  point K_1 = intersect s_2 m_1
+  # ────────────────────────────────────────────────────────
+  # t=19:50  L_1 = Reflect(J_1, m_1)
+  point L_1 = reflect J_1 across m_1
+  # t=19:50  M_1 = Reflect(D_1, m_1)
+  point M_1 = reflect D_1 across m_1
+  # ────────────────────────────────────────────────────────
+  # t=19:55  poly5 = Polygon(J_1, A_1, L_1, M_1, K_1, D_1)
+  polygon poly5 [ J_1 A_1 L_1 M_1 K_1 D_1 ]
+  # ────────────────────────────────────────────────────────
+  # t=21:10  Ev = Rotate(A, 90°, B)
+  point Ev = rotate A by 90 around B
+  # t=21:10  f_3 = Segment(A, Ev)
+  segment f_3 from A to Ev
+  # ────────────────────────────────────────────────────────
+  # t=21:44  g_3 = Reflect(b_1, q_2)
+  line g_3 = reflect b_1 across q_2
+  # ────────────────────────────────────────────────────────
+  # t=21:58  h_3 = AngleBisector(B, A, Ev)
+  line h_3 = bisect angle B A Ev
+  # ────────────────────────────────────────────────────────
+  # t=22:08  R_1 = Intersect(g_3, h_3)
+  point R_1 = intersect g_3 h_3
+  # ────────────────────────────────────────────────────────
+  # t=22:20  i_3 = Reflect(g_3, h_3)
+  line i_3 = reflect g_3 across h_3
+  # ────────────────────────────────────────────────────────
+  # t=22:32  N_1 = Intersect(c_1, f_3)
+  point N_1 = intersect c_1 f_3
+  # t=22:32  c_3 = Circle(V, N_1)
+  circle c_3 center(V) through N_1
+  # ────────────────────────────────────────────────────────
+  # t=23:03  j_3 = Reflect(i_3, f_3)
+  line j_3 = reflect i_3 across f_3
+  # t=23:03  Q_1 = Intersect(j_3, k_1)
+  point Q_1 = intersect j_3 k_1
+  # t=23:03  S_1 = Reflect(R_1, k_1)
+  point S_1 = reflect R_1 across k_1
+  # t=23:03  T_2 = Reflect(N_1, k_1)
+  point T_2 = reflect N_1 across k_1
+  # ────────────────────────────────────────────────────────
+  # t=23:48  poly6 = Polygon(Z, R_1, N_1, Q_1, T_2, S_1)
+  polygon poly6 [ Z R_1 N_1 Q_1 T_2 S_1 ]
+
+pattern n3IidKfXE1I on n3IidKfXE1I_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=03:02  poly1 = Polygon(A, B, 12)
+  edges from poly1
+  # ────────────────────────────────────────────────────────
+  # t=03:25  poly2 = Polygon(A, Lv, 6)
+  edges from poly2
+  # t=03:25  poly3 = Polygon(Cv, B, 6)
+  edges from poly3
+  # ────────────────────────────────────────────────────────
+  # t=16:33  q1 = Polygon(P, C_1, F_1, G_1)
+  edges from q1
+  # ────────────────────────────────────────────────────────
+  # t=16:58  poly4 = Polygon(C_1, H_1, I_1, A_1, X, P)
+  edges from poly4
+  # ────────────────────────────────────────────────────────
+  # t=18:22  m1 = Sequence(Rotate({q1, poly4}, pi*i/6, O), i, 0, 11)
+  rotate 12 around O
+    edges from q1
+    edges from poly4
+  # ────────────────────────────────────────────────────────
+  # t=19:55  poly5 = Polygon(J_1, A_1, L_1, M_1, K_1, D_1)
+  edges from poly5
+  # ────────────────────────────────────────────────────────
+  # t=20:34  m2 = Sequence(Rotate({poly5}, pi*i/3, W), i, 0, 5)
+  rotate 6 around W
+    edges from poly5
+  # ────────────────────────────────────────────────────────
+  # t=23:48  poly6 = Polygon(Z, R_1, N_1, Q_1, T_2, S_1)
+  edges from poly6
+  # ────────────────────────────────────────────────────────
+  # t=24:22  m3 = Sequence(Rotate({poly6}, pi*i/2, V), i, 0, 3)
+  rotate 4 around V
+    edges from poly6
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline square $size
+  inscribe n3IidKfXE1I
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

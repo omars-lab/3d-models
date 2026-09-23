@@ -1635,3 +1635,76 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the bikar arc engine (PR-4a #233, PR-4b #234, B′ #236 / D-080,
   PR-5 #243); the gallery's coaster entry; the constructions ledger's `coaster`
   and `catalog` cells for `nmEjCTzMbDg`.
+
+## CS-10 — Variable-angled 12-6-4 star rosette coaster (Sarah Brewer, n3IidKfXE1I)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/n3IidKfXE1I-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/n3IidKfXE1I-coaster-mini.stl`
+  and `-standard.stl`). Frame is a **square** (`outline square $size`), like
+  CS-8. The art is three rotational orbits about three *different* centres —
+  the "12-6-4" of the title: `rotate 12 around O` over the kite `q1` and the
+  hexagon `poly4`, `rotate 6 around W` over `poly5`, and `rotate 4 around V`
+  over `poly6`, where `O`, `V` and `W` are the pairwise intersections of three
+  perpendicular bisectors of the root frame. The "variable angle" is the single
+  free rotation `point O_p = rotate O by 23.5 around P` that the walkthrough
+  drives from a slider; here it is pinned at 23.5° (the video's final value),
+  so the coaster is one member of the family, not the family. Migrated with
+  bikar PR #229. `relief straps emboss 1.2` on a 4 mm base, `margin 2`,
+  `strap width 2`, `color base Slab` (`#333333`) / `color straps Gold`
+  (`#d4af37`). Both pass the mesh gate at the 0.8 mm coaster floor (watertight,
+  euler 2, 0 degenerate, minFeature 1.2 mm) and the linkage gate (1 body); the
+  mini is 40,800 triangles / 7.2 cm³ and the standard 204,300 triangles /
+  35.0 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. Three orbits about three centres means the 6-fold and 4-fold stars
+    sit off the plate centre, near the square's edges and corners — do the
+    partial stars cut by the `margin 2` rim read as a tiling continuing past the
+    frame, or as truncated fragments at `size=40`?
+  - [ ] 2. The 23.5° pin is one slider position of many — is the relief legible
+    enough at this angle that a second pin (say the 15° and 30° ends of the
+    slider's range) is worth a `--param` knob, or does the strap density at the
+    orbit overlaps decide the angle for us?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster`
+  and `catalog` cells for `n3IidKfXE1I`.
+
+## CS-11 — Royal Alcazar six-fold reflection tessellation coaster (Sarah Brewer, sDO9fpu76v8)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/sDO9fpu76v8-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/sDO9fpu76v8-coaster-mini.stl`
+  and `-standard.stl`). Frame is a **hexagon** (`outline polygon 6 $size
+  rotate 0`, `size` measured across flats) — the first six-sided frame of the
+  set, matching the six-fold tessellation it carries. This is the first
+  **tessellation** coaster rather than a rosette: the art is one hexagonal
+  cell's kite (`kite`), triangle (`tri`), eight-point star (`star8`) and
+  six-point star (`star6`) rotated about the cell centroid `O`, reflected once
+  across `tR` into a neighbouring cell (`lay1`), and the whole layer rotated
+  `rotate 6 around O` to close the ring (`lay2`) — the largest orbit tree in the
+  set, nested three deep. The `param G = 0.33333333333` is the walkthrough's
+  module ratio (the small circle radius that seeds every intersection).
+  Migrated with bikar PR #228 (which also fixed stray-quote titles in the
+  importer). `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap
+  width 2`, `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`).
+  Both pass the mesh gate at the 0.8 mm coaster floor (watertight, euler 2, 0
+  degenerate, minFeature 1.2 mm) and the linkage gate (1 body); the mini is
+  35,508 triangles / 6.8 cm³ and the standard 177,308 triangles / 33.2 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. A tessellation has no centre motif — the eye reads it as a field. On
+    a hexagonal plate cut at `margin 2`, does the field read as a deliberate
+    tile of a larger wall (the Alcazar wall it came from), or does the eye hunt
+    for a missing centre at `size=40`?
+  - [ ] 2. The hexagonal frame is the first non-square, non-round outline with
+    straight sides that meet the art's own symmetry axes — do the strap ends
+    land on the flats cleanly, or does the reflected layer `lay1` overrun a
+    flat so the rim clips a kite mid-strap?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster`
+  and `catalog` cells for `sDO9fpu76v8`; the bordered-coaster variant CS-5 (a
+  tessellation is the natural candidate for the band, since it has no centre to
+  protect).
