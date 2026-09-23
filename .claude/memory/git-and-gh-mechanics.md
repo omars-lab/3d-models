@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 332d42c3-dfe9-490a-9db7-883074290c91
-  modified: 2026-09-23T03:44:18.873Z
+  modified: 2026-09-23T05:00:14.379Z
 ---
 
 - `git add a b c` with one nonexistent pathspec aborts the ENTIRE add silently; check the commit's "N files changed" before pushing (a PR once shipped without its docs).
@@ -17,6 +17,8 @@ metadata:
 - Verify "merged" by sentinel content in the target branch, not by subject match, before deleting a branch or resetting a diverged local main.
 - Never read `master:<file>` — read `origin/master:<file>`. The local `master` ref is checked out in the `3d-models-pm` worktree and lags (41a4939 vs origin 1d7112b, 2026-09-22); reading it produced a false "bets.md drift" that drove a whole regenerate-and-PR decision for nothing. Same for bikar: its default is `main`, and `origin/master` there resolves to nothing — a `git diff HEAD origin/master` against it "differs" on every file.
 - Squash-merged branches aren't dead by ancestry (`git cherry` still shows their patches); a branch is dead when a content diff of the files it touched vs `origin/master` is empty. 8 remote leftovers cleared that way 2026-09-22. A one-branch `git push origin --delete` passes the auto-mode classifier; the multi-branch form is denied as destructive until Omar says "run". Likewise a chained `git branch -D X && git push origin --delete X` is denied as [Git Destructive] even for one branch — run the local delete and the remote delete as two separate commands and both pass (2026-09-22).
+- **zsh word-split trap in "is this branch dead" loops:** `files=$(git diff --name-only …); git diff A B -- $files` under zsh passes the whole multi-line string as ONE pathspec, matches nothing, and reports an EMPTY diff for every branch — a false "all merged" verdict (2026-09-22, every bikar and youtube branch). Run such loops under `bash -c '…'` or split with `${(f)files}`. And diff against the branch's PR **merge commit** (`gh pr list --state all --json headRefName,mergeCommit`), not current main, which has moved on.
+- bikar's `.husky/pre-push` ran `make local.ci-strict` (~5 min, fails closed) on EVERY push including `git push origin --delete <branch>`; fixed by bikar #244 (deletion-only pushes skip, mixed pushes still gate, wiring test 4d proves both). Hooks come from the worktree you push FROM, so a fix on a branch is usable immediately by pushing from that worktree.
 - A stale `core.worktree` on the MAIN repo (left pointing at a removed linked worktree) makes every git command there fail `fatal: this operation must be run in a work tree`; `git config --unset core.worktree` then `git pull` restores it (sacred-patterns, 2026-09-07). It read-only-verifies fine via `git log`/`show`, which don't need a work tree.
 
 **Why:** each produced a wrong "done" or a lost change once.
