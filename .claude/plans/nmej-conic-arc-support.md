@@ -160,6 +160,7 @@ conditions). Document the arc-edge model in 3d-models docs/ (design-doc home) as
   refuses rather than guesses when absent (K1/K10). Reflect-across-point (#230), Parabola/Hyperbola
   loci (#232), `invert` (#231) and `Sequence(Rotate({…}))` (#227) all lowered silently — **no other
   gap.** Our `make ast` emitted `cached_coords: {}`, which is why the arcs refused.
+> Superseded — see State above (producer built in bikar #236, nmEj shipped via #243).
 - **⚠ PR-5's one remaining input is `cached_coords`, and its PRODUCER IS UNBUILT.** The plumbing
   exists (`ggb_build.py --ast-json --cached-coords <{label:[x,y]}.json>`, youtube), but the coords
   source is deferred: `youtube:docs/design/construction-ast-export.md` §cached_coords points at
