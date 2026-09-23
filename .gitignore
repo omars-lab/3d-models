@@ -37,6 +37,11 @@ __pycache__/
 /.mcp.json
 tools/bambu/node_modules/
 .bambu/
+# dotenvx: .env is encrypted-at-rest (commit-safe), but .env.keys is the PRIVATE
+# decryption key — never track it. Config lives here via `dotenvx set` (BAMBU_TOKEN
+# is the LAN access code; host/serial/model are non-secret). Run the CLI under
+# `dotenvx run -- bin/bambu …` so the values reach process.env.
+/.env.keys
 
 # The prints register: written by build/prints_manifest.py (make prints-manifest)
 # from docs/prints/ and shipped by DEPLOY_PATHS. Generated, never typed.
