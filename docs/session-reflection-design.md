@@ -1,15 +1,17 @@
 # Session-reflection: a measured FAQ that answers what sessions re-derive
 
-**Status:** the tool is built (2026-09-25): `tools/session_reflect.py` ships the
-three verbs of §4 and the fixture self-test of §8. The FAQ, its evidence sidecar,
-the count authority, the Makefile target and the skill are not built yet. The
-census it rests on is
+**Status:** built except the skill (2026-09-25). `tools/session_reflect.py` ships
+the three verbs of §4 and the fixture self-test of §8. [faq.md](faq.md) and its
+empty sidecar `docs/faq-evidence.jsonl` exist, with no entries yet. The
+`faq-questions` count authority is registered, and `make validate-reflect` is at
+the end of the Makefile. Still to build: the skill (§5), and the first real
+`update-faq` run, which a person has to review. The census this rests on is
 [research/session-reflection-census.md](research/session-reflection-census.md),
 run 2026-09-17 over 17 main sessions + 176 subagent transcripts (241,226 lines,
-80,203 assistant turns) with the prototype that preceded the tool. Two output
-files this doc names — docs/faq.md and docs/faq-evidence.jsonl — do **not** exist
-yet; they are written in plain prose here, not backticked, because a backticked
-path is a claim this repo's pointer gate resolves on disk.
+80,203 assistant turns) with the prototype that preceded the tool. The proposal
+file (docs/faq-proposal.md) is written in plain prose here, not backticked,
+because it exists only after a run and a backticked path is a claim this repo's
+pointer gate resolves on disk.
 
 The problem this addresses is narrow and measured: sessions re-derive the same
 repo facts, and the fix has to survive the failure the two precedents here
@@ -140,8 +142,9 @@ and its `transcript-archaeology` skill) for authorship vs read-back. **Transfer
 condition (K10):** that reader assumes subagents appear inline as
 `isSidechain:true`; the census measured that this is **false** in the current
 Claude Code layout (subagents are separate files under `subagents/`). So the
-shared reader transfers only once it walks that subtree — the tool already
-does, and porting the fix back to bikar is an open question (§9).
+shared reader transfers only once it walks that subtree. This tool always has,
+and bikar's reader has too since bikar #246 (2026-09-25), so the condition now
+holds on both sides.
 
 ## 5. How the skill updates the FAQ (tool proposes, human confirms)
 
@@ -177,11 +180,13 @@ evidence: faq-evidence.jsonl#q-014
   a `<n>` placeholder; a real entry carries the line and literal.)
 - **metrics line** — the recurrence evidence, in the census's robust unit
   (distinct sessions) with authored/raw split and the date span.
-- **A count marker** pins the question total to the tool that prints it, in this
-  repo's counts-gate syntax — the number, then a `<!--count:NAME-->` tag naming a
-  new authority `session_reflect.py census` supplies. Registering that authority
-  in `counts_gate.py` is part of shipping (§9); until then the FAQ carries no live
-  marker, because an unbacked marker is a C1 finding by design.
+- **A count marker** pins the question total to the tool that computes it, in
+  this repo's counts-gate syntax: the number, then `<!--count:faq-questions-->`.
+  The authority in `counts_gate.py` counts the FAQ's entries with the tool's own
+  `read_faq`, the same parser `show` and `update-faq` use. This section first
+  planned to take the count from `census`, but census reads this machine's
+  transcripts, which a fresh clone does not have. A committed count has to be
+  re-checkable from the repo alone, so the build reads the file instead.
 
 ### docs/faq-evidence.jsonl — the sidecar
 
@@ -250,8 +255,10 @@ validate-reflect:
 
 It runs the tool's own self-test, then an audit that every answered entry still
 verifies (`show --audit` exits nonzero on an "answer not taking"). It is not wired
-into `validate` (the aggregate) until the FAQ has answered entries to audit;
-promoting it is gated on the fixtures and the shared-reader port landing.
+into `validate` (the aggregate) until the FAQ has answered entries to audit. The
+fixtures and the shared-reader port have both landed, so that is the one thing
+left to wait for. Even then, the audit reads this machine's transcripts, so it
+can join the local run but never a check that runs on a fresh clone.
 
 ## 10. Relation to memory and transcript-archaeology
 
@@ -296,10 +303,10 @@ the precedents named), *Grounded* (each number attributed to a fetched source),
 
 1. **Mint CAL-LOOP-01** and gather more loop positives before fixing the §7
    threshold; one data point cannot set it.
-2. **Register the `faq-…` count authority** in `counts_gate.py` so the FAQ's
-   question total is gated like every other count here.
-3. **Port the subagent-subtree fix** back to bikar's reader, whose `isSidechain`
-   assumption the census falsified.
+2. ~~Register the `faq-…` count authority.~~ Done 2026-09-25 as `faq-questions`
+   (§6).
+3. ~~Port the subagent-subtree fix to bikar's reader.~~ Done 2026-09-25, bikar
+   #246 (§4).
 4. **Clustering precision.** Signal (c) is ~4–6/10 at best;
    does `update-faq` over-propose enough to waste the human's time? Measure the accept/discard ratio
    on the first real run and treat a low accept rate as the signal to narrow.
