@@ -247,7 +247,7 @@ _______________________________________________________________________________
 ---
 
 *After the bench: hand these readings back and I run the five-step propagate
-([`backlog.md`](../backlog.md) §5) — constant + `Calibrated<T>` status flip together, the entry leaves
+([print register](../tasks/coaster-pipeline/backlog.md) §5) — constant + `Calibrated<T>` status flip together, the entry leaves
 bikar's `.calibration-baseline.json`, `bets.md` is regenerated (never hand-edited), the design-doc
 Appendix B entry closes with the measured value, and the catalog Status flips with the number and commit
 hashes. A refuting reading propagates the same way — it is not deleted.*

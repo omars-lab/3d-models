@@ -25,7 +25,7 @@ A **print** is the one event this repository does not yet record: a physical pla
 came off a machine, taught something, and that lesson should attach to the exact
 geometry-and-process that produced it. The prints tab **records that event**,
 **presents** the queue and backlog that already own scheduling
-([`backlog.md`](backlog.md) §3.8), **consumes** the bets and protocol that already
+([print register](tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol that already
 own calibration, and **deletes** the one empty register that pretends to track
 prints today.
 
@@ -38,7 +38,7 @@ thing:
 - **Absorbs (new, unowned):** the *print-run record* — a checked-in per-run
   directory pinning geometry, process, outcome, readings, and photos.
 - **Presents (owned elsewhere, transcluded not copied):** the queue and backlog
-  order, from [`backlog.md`](backlog.md) §3.8. The tab shows the order; it does
+  order, from [print register](tasks/coaster-pipeline/backlog.md) §3.8. The tab shows the order; it does
   **not** store a rank integer (§6).
 - **Consumes (owned elsewhere, read-only):** the calibration bets
   (`.claude/skills/calibrate/bets.md`), the print protocol
@@ -169,7 +169,7 @@ repo's first tracked non-generated binaries.
 ## 6. Priority is presented, never stored
 
 The tab shows print order, but stores no rank integer. Order is
-[`backlog.md`](backlog.md) §3.8's argument, transcluded. Beside each item the tab
+[print register](tasks/coaster-pipeline/backlog.md) §3.8's argument, transcluded. Beside each item the tab
 shows how many bets it would settle — **which is explicitly not the rank**: a plate
 can rank fourth while settling zero bets, and the tab must say so rather than let the
 bet count read as the order. Storing a rank would be a second scheduler, the exact

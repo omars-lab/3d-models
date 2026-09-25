@@ -669,7 +669,7 @@ def self_test() -> int:
     """
     cases: list[tuple[str, str | None, str]] = [
         # (path, expected — "resolve" | "miss" | "skipped" | "dropped", why)
-        ("docs/backlog.md", "resolve", "a local doc, the plain case"),
+        ("docs/plan.md", "resolve", "a local doc, the plain case"),
         ("docs/no-such-file.md", "miss", "the defect this gate exists for"),
         ("kernel3d/corner-clip.ts", "resolve", "bikar src shorthand, no prefix"),
         ("bikar/patterns/Coupons/Clip-Coupon.bkr", "resolve", "sibling-prefixed"),
@@ -684,7 +684,7 @@ def self_test() -> int:
     ]
     failures = 0
     for path, expected, why in cases:
-        doc = "docs/backlog.md"
+        doc = "docs/plan.md"
         if not pointers_in_line(f"see `{path}` for the shape"):
             got = "dropped"
         else:

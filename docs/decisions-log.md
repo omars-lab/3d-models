@@ -523,7 +523,7 @@ this decision cleared up.
 ### Context
 
 Three documents disagreed about what catalog entry **W-F1** is, which
-[`backlog.md`](backlog.md) §7 item 1 had already flagged without resolving.
+[print register](tasks/coaster-pipeline/backlog.md) §7 item 1 had already flagged without resolving.
 [`catalog.md`](../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
 clipseat questions — which clearance seats a clip firmly, does it differ by tile
 material — while its **Model** line pointed at `Fit-Coupon.bkr`, which is a plate
@@ -939,7 +939,7 @@ why it lost. That is what this file is for.
 
 ### Context
 
-[`backlog.md`](backlog.md) §4 item 2 and open question 11 left this undecided,
+[print register](tasks/coaster-pipeline/backlog.md) §4 item 2 and open question 11 left this undecided,
 and question 11 was careful about *why*: the repo's twice-measured precedent is
 to prefer a gate over new machinery
 ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
@@ -3683,7 +3683,7 @@ for — per-model, per-version records with photos, a backlog, and feedback. The
 in building it is not the recording; it is that a second scheduler or a second bet
 registry grows inside it. The design draws the boundary so the tab **absorbs exactly
 one unowned thing** — the print-run record — while it **presents** the queue
-([`backlog.md`](backlog.md) §3.8), **consumes** the bets and protocol, and
+([print register](tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol, and
 **deletes** the one empty register that pretends to track prints today (the catalog's
 32 Iteration-log tables, 0 rows — the D-041 rule, paid while it costs zero rows).
 

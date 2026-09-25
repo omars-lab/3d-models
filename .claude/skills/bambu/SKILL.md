@@ -98,7 +98,7 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   `print list` is honestly empty and Plate 1 (the machine card) is the keystone.
 - **The whole campaign** — what to print, in what order, and why — is
   [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md); the master backlog is
-  [`docs/backlog.md`](../../../docs/backlog.md).
+  [print register](../../../docs/tasks/coaster-pipeline/backlog.md).
 
 ## One-command discipline
 
