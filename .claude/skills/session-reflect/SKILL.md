@@ -33,9 +33,16 @@ transcripts under `~/.claude/projects/`, subagent files included. Add
 
 1. **Look.** `python3 tools/session_reflect.py census`
    It prints four signals. Only two of them turn into FAQ candidates:
-   - *Known-fact probes* and *search commands* (`grep`, `rg`, `find`) become
-     candidates. The probes are a fixed list, `FACT_PROBES` in the tool, drawn
-     from memory. To track a new fact, add one line there.
+   - *Known-fact probes* and *searches* (`grep`, `rg`) become candidates, but
+     only in sessions that **re-derived** them. A session re-derives a fact
+     when, at its first use, a failed tool result just before names the fact
+     or it grepped for the fact's term. Typing a fact it already knew does
+     not count. A grep counts only when it searches for one specific name
+     (`BIKAR_DIR`, `patternSources`), not an outline scan like `grep ^##`.
+     Section (d) shows each fact split three ways: after a failure, by
+     searching, already knew it. The probes are a fixed list, `FACT_PROBES`
+     in the tool, drawn from memory. To track a new fact, add one line there.
+     Why the rule is this narrow: [the issue note](../../../docs/issues/faq-counted-use-not-rederivation.md).
    - *Question-shaped thinking* ("where is", "how does") is printed for you to
      read, but it is never proposed. The census found it right only 4 to 6 times
      in 10.
@@ -46,7 +53,7 @@ transcripts under `~/.claude/projects/`, subagent files included. Add
      proven.
 2. **Propose.** `python3 tools/session_reflect.py update-faq`
    This writes docs/faq-proposal.md next to the FAQ. Each candidate has the
-   number of sessions that worked it out and a ready evidence line. It also
+   number of sessions that re-derived it, how, and a ready evidence line. It also
    re-measures every question already answered. It never touches `docs/faq.md`.
    `--min-sessions N` (default 3) raises or lowers the bar for a candidate.
 3. **Stop for review.** Tell the person the proposal is ready. Give them the
@@ -75,23 +82,24 @@ transcripts under `~/.claude/projects/`, subagent files included. Add
 ## Reading `show`
 
 `python3 tools/session_reflect.py show [Q-NNN]` compares, for each answered
-question, the share of sessions that worked the fact out before the answer date
-with the share after it. It counts **authored** hits only, meaning text the
-assistant wrote itself. A fact that merely came back in a tool result is not
-counted.
+question, the share of sessions that re-derived the fact before the answer date
+with the share after it. It counts **re-derivations** only: a session that uses
+the fact correctly with no failure and no search is the answer working, and is
+not counted. A fact that merely came back in a tool result is not counted
+either.
 
 | Verdict | Meaning | What to do |
 |---|---|---|
 | taking | fewer sessions re-derive it since the answer | nothing |
 | pending | no session has started since the answer | wait |
-| no baseline | nothing authored it before the answer | question whether it belongs in the FAQ |
+| no baseline | nothing re-derived it before the answer | question whether it belongs in the FAQ |
 | ANSWER NOT TAKING | as many sessions or more still work it out | reopen: move the answer to where sessions look, or rewrite it |
 | BROKEN | an entry has an answer but no evidence line with a cluster and a date | fix the sidecar |
 
-`--audit` exits 1 on the last two. One caution applies even to authored hits: a
-session that *recalls* the answer and types it looks the same as one that worked
-it out again. So "not taking" means "still being typed". It is strong evidence,
-not proof. Say so when you report it.
+`--audit` exits 1 on the last two. One caution remains: a session that greps
+to *confirm* an answer it half-remembers looks the same as one that never knew
+it. So "not taking" means "still being looked up". It is strong evidence, not
+proof. Say so when you report it.
 
 ## Where this sits
 
