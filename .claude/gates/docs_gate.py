@@ -68,8 +68,12 @@ gate reports one finding, not two. D4 makes the cheapest form of the mistake
 un-shippable; it does not certify that a withdrawn number is gone.
 
 Usage:
-  docs_gate.py [FILE ...]     check the given files (default: all docs/**/*.md)
-  docs_gate.py --staged       check staged markdown files only
+  docs_gate.py [FILE ...]     check the given files (default: every markdown file
+                              under docs/ and .claude/, plus CLAUDE.md; .claude/
+                              files get the link check D1 only)
+  docs_gate.py --staged       check staged markdown files; when the commit renames
+                              or deletes a file, also run D1 on every other file,
+                              since their links into it are what break
   docs_gate.py --self-test    run the PASS/FAIL fixtures and verify the gate
 """
 
@@ -209,8 +213,9 @@ def check_d1_links(path: Path, lines: list[str]) -> list[str]:
             if not bare:
                 continue
             if not link_resolves(path, bare):
+                shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
                 findings.append(
-                    f"{path.relative_to(ROOT)}:{n}: D1 (K9) link target does not "
+                    f"{shown}:{n}: D1 (K9) link target does not "
                     f"exist: {bare}"
                 )
     return findings
@@ -370,10 +375,19 @@ def is_print_record(path: Path) -> bool:
     return "/docs/prints/" in path.as_posix()
 
 
+def is_claude_config(path: Path) -> bool:
+    """A skill, loop prompt, plan or memory file under .claude/ is not a design
+    doc: it quotes the markers to teach them and states no defaults of its own.
+    So only D1 applies there — its links must still resolve, because a loop
+    follows them. The gate's own fixtures live under .claude/ too and keep
+    every rule, since they exist to show each rule firing."""
+    return "/.claude/" in path.as_posix() and FIXTURES not in path.parents
+
+
 def check_file(path: Path) -> list[str]:
     raw = path.read_text(encoding="utf-8").splitlines()
     lines = strip_code(raw)
-    if is_print_record(path):
+    if is_print_record(path) or is_claude_config(path):
         return check_d1_links(path, lines)
     return (
         check_d1_links(path, lines)
@@ -384,15 +398,48 @@ def check_file(path: Path) -> list[str]:
     )
 
 
-def staged_markdown() -> list[Path]:
-    out = subprocess.run(
-        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.split()
-    return [ROOT / p for p in out if p.endswith(".md") and (ROOT / p).exists()]
+def _git_lines(root: Path, *args: str) -> list[str]:
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    return subprocess.run(
+        ["git", "-C", str(root), *args], capture_output=True, text=True, check=True, env=env,
+    ).stdout.splitlines()
+
+
+def staged_markdown(root: Path = ROOT) -> list[Path]:
+    out = _git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=ACMR")
+    return [root / p for p in out if p.endswith(".md") and (root / p).exists()]
+
+
+def stages_a_removal(root: Path = ROOT) -> bool:
+    """True when the commit renames or deletes a file. Links *to* that file sit
+    in other docs the commit does not stage, so checking only the staged files
+    passes a rename that breaks them — measured 2026-09-25: renaming
+    docs/tasks/parked/done.md committed clean with five inbound links dead."""
+    return bool(_git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=DR"))
+
+
+def tree_markdown(root: Path = ROOT) -> list[Path]:
+    """Every markdown file whose links are checked: docs/, CLAUDE.md and .claude/,
+    tracked or new, but not gitignored."""
+    out = _git_lines(root, "ls-files", "-co", "--exclude-standard", "--",
+                     "docs", ".claude", "CLAUDE.md")
+    return sorted(root / p for p in out if p.endswith(".md") and (root / p).exists())
+
+
+def staged_findings(root: Path = ROOT) -> tuple[list[str], int]:
+    """Every rule on the staged files; D1 on the rest of the tree as well when
+    the commit renames or deletes something."""
+    staged = [p for p in staged_markdown(root) if FIXTURES not in p.parents]
+    findings = [f for p in staged for f in check_file(p)]
+    checked = len(staged)
+    if stages_a_removal(root):
+        done = set(staged)
+        for p in tree_markdown(root):
+            if p in done or FIXTURES in p.parents:
+                continue
+            findings += check_d1_links(p, strip_code(p.read_text(encoding="utf-8").splitlines()))
+            checked += 1
+    return findings, checked
 
 
 def self_test() -> int:
@@ -494,6 +541,49 @@ def self_test() -> int:
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
+    # Links break where the renamed file is linked *from*, not where it moved,
+    # and .claude/ files are linked from loops that follow them. Both are
+    # exercised in a throwaway repo: a doc under .claude/ keeps D1 but not the
+    # design-doc rules, the whole-tree list reaches it, and a staged rename
+    # fails the commit through a link in a file the commit does not touch.
+    base = Path(tempfile.mkdtemp(prefix="docs-gate-rename-"))
+    try:
+        repo = base / "repo"
+        (repo / "docs").mkdir(parents=True)
+        (repo / ".claude" / "skills").mkdir(parents=True)
+        _sp.run(["git", "init", "-q", str(repo)], check=True, env=genv)
+        (repo / "docs" / "target.md").write_text("target\n")
+        (repo / "docs" / "linker.md").write_text("[t](target.md)\n")
+        skill = repo / ".claude" / "skills" / "note.md"
+        skill.write_text(d4 + "\n[t](../../docs/target.md) [gone](../../docs/none.md)\n")
+        _sp.run(["git", "-C", str(repo), "add", "."], check=True, env=genv)
+        _sp.run(["git", "-C", str(repo), "commit", "-qm", "init"], check=True, env=genv)
+
+        codes = [f.split(": ")[1].split(" ")[0] for f in check_file(skill)]
+        if codes != ["D1"]:
+            ok = False
+            print(f"self-test FAIL: a .claude/ doc should get D1 only (one dead link), got {codes}")
+        else:
+            print("self-test ok: a .claude/ doc gets D1 only — its dead link fires, its D4 text does not")
+        if skill not in tree_markdown(repo):
+            ok = False
+            print("self-test FAIL: the whole-tree list should include .claude/ markdown")
+        else:
+            print("self-test ok: the whole-tree list reaches .claude/")
+
+        skill.write_text("[t](../../docs/target.md)\n")
+        _sp.run(["git", "-C", str(repo), "commit", "-qam", "fix"], check=True, env=genv)
+        _sp.run(["git", "-C", str(repo), "mv", "docs/target.md", "docs/moved.md"], check=True, env=genv)
+        found, _ = staged_findings(repo)
+        hit = sorted({Path(f.split(":")[0]).name for f in found})
+        if hit != ["linker.md", "note.md"]:
+            ok = False
+            print(f"self-test FAIL: a staged rename should fail on both unstaged linkers, got {found}")
+        else:
+            print("self-test ok: a staged rename fails on links in files the commit does not touch")
+    finally:
+        shutil.rmtree(base, ignore_errors=True)
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -509,23 +599,21 @@ def main() -> int:
         return self_test()
 
     if args.staged:
-        targets = staged_markdown()
-    elif args.files:
-        targets = [p if p.is_absolute() else (ROOT / p) for p in args.files]
+        findings, checked = staged_findings()
     else:
-        targets = sorted((ROOT / "docs").rglob("*.md")) + [ROOT / "CLAUDE.md"]
-
-    targets = [p for p in targets if FIXTURES not in p.parents]
-
-    findings = []
-    for path in targets:
-        findings.extend(check_file(path))
+        if args.files:
+            targets = [p if p.is_absolute() else (ROOT / p) for p in args.files]
+        else:
+            targets = tree_markdown()
+        targets = [p for p in targets if FIXTURES not in p.parents]
+        findings = [f for p in targets for f in check_file(p)]
+        checked = len(targets)
 
     for f in findings:
         print(f, file=sys.stderr)
     if findings:
         print(
-            f"\ndocs-gate: {len(findings)} finding(s) in {len(targets)} file(s). "
+            f"\ndocs-gate: {len(findings)} finding(s) in {checked} file(s). "
             "See docs/grounding-defect-taxonomy.md. Override once with "
             "DOCS_GATE_OK=1 git commit",
             file=sys.stderr,

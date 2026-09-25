@@ -2,6 +2,9 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-25 — the link check now catches what a rename or delete breaks elsewhere, covers
+  `.claude/` files, and `make validate` installs `tools/bambu`'s packages in a fresh worktree
+  (3d-models #313).
 - 2026-09-25 — the `manage-tasks` skill: moves a finished or open task to the right
   `docs/tasks/<loop>/` file, by the routing rules beside it (3d-models #311).
 - 2026-09-25 — one backlog and done list per loop in `docs/tasks/<loop>/`; the old
