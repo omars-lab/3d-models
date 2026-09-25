@@ -4,8 +4,12 @@
 the three verbs of §4 and the fixture self-test of §8. [faq.md](faq.md) and its
 empty sidecar `docs/faq-evidence.jsonl` exist, with no entries yet. The
 `faq-questions` count authority is registered, `make validate-reflect` is at
-the end of the Makefile, and the skill (§5) is written. What is left is the first
-real `update-faq` run, which a person has to review. The census this rests on is
+the end of the Makefile, and the skill (§5) is written. The first real
+`update-faq` run proposed 79 candidates that were mostly outline greps and
+facts sessions already knew, so the tool now counts a session only when it
+**re-derives** a fact (after a failure naming it, or by searching for it), not
+when it uses it — [issues/faq-counted-use-not-rederivation.md](issues/faq-counted-use-not-rederivation.md).
+The rerun proposes 6, which a person has to review. The census this rests on is
 [research/session-reflection-census.md](research/session-reflection-census.md),
 run 2026-09-17 over 17 main sessions + 176 subagent transcripts (241,226 lines,
 80,203 assistant turns) with the prototype that preceded the tool. The proposal
@@ -92,8 +96,11 @@ measurement rather than a hope:
 4. **The metric is honest about the census's confound.** Post-answer recurrence
    is measured on **authored** hits (tool_use inputs the session generated), not
    read-backs, because the census showed raw occurrence conflates re-derivation
-   with recalling the answer. A residual confound remains and is stated in the
-   entry, not hidden.
+   with recalling the answer. Authored is still not enough: a session that
+   *uses* a fact it already knows authors it too, and the first real run found
+   that is nearly every use. So a hit counts only when the session re-derived
+   the fact — a failure naming it, or a search for it, just before its first
+   use (§4). A residual confound remains and is stated in the entry, not hidden.
 
 ## 4. The tool: `tools/session_reflect.py`
 
@@ -112,7 +119,7 @@ proposal a human accepts (§5).
   human, per the signal-c precision finding. It also re-measures already-answered
   entries so their metrics stay live.
 - **`show`** — prints one `## Q-NNN` (or the whole FAQ) with its live recurrence:
-  the pre-answer authored rate against the latest, flagging "answer not taking"
+  the pre-answer re-derivation rate against the latest, flagging "answer not taking"
   when a shipped answer has not reduced recurrence (§3.3). This is the view that
   makes the FAQ falsifiable.
 
@@ -121,20 +128,30 @@ Choices the build made that this section left open:
 - **Authored** means the probe matches content the assistant generated on that
   line (a tool_use input, a thinking block, a text block). Matching the raw line
   would count a tool_result echo, which is a read-back.
-- **Recurrence** is the share of sessions that authored the fact, split by
+- **Re-derived** is narrower than authored. At the first line where a
+  transcript file authors a fact, the session re-derived it if, within the 12
+  lines before or on that line, a failed tool result names the fact or a
+  `grep`/`rg` searched for the fact's term. Otherwise it *knew it*, which does
+  not count, and neither does a failure after the first use. A search-command
+  cluster counts a session when it greps for one specific name (§4 Candidates).
+- **Recurrence** is the share of sessions that re-derived the fact, split by
   whether the session *started* before the answer date or on/after it. A
   subagent counts toward its parent session. Sessions, not occurrences, because
   §1 found occurrence inflated 3–10× by read-backs.
-- **Candidates** come from the fact probes and from search-verb command shapes
-  (`grep`, `rg`, `find`) only, following §1's signal-b finding that git plumbing
-  is never a re-derivation. Question shapes are printed by `census` for a human
+- **Candidates** come from the fact probes and from `grep`/`rg` command shapes
+  only, following §1's signal-b finding that git plumbing is never a
+  re-derivation, and a cluster must be *re-derived* in the minimum number of
+  sessions. A grep counts only when its term names one specific thing: an
+  identifier with an underscore, camelCase, or all caps of four or more
+  characters. `grep ^##`, `grep export` and `find .` are outline scans; they
+  made up most of the first run's 79 candidates. Question shapes are printed by `census` for a human
   to read, but never proposed, following signal c.
 - **The proposal** is written to docs/faq-proposal.md by default. Each candidate
   carries a ready evidence line, so accepting it means pasting that line into
   the sidecar and adding the `answered` date.
 - **`show` verdicts**: *taking* (post-answer share below pre-answer), *ANSWER NOT
   TAKING* (equal or higher), *pending* (no session since the answer), *no
-  baseline* (nothing authored before it), *BROKEN* (an answered entry with no
+  baseline* (nothing re-derived it before), *BROKEN* (an answered entry with no
   sidecar record). `--audit` exits nonzero on *not taking* and *BROKEN*.
 
 The tool shares bikar's transcript reader semantics (`bikar:scripts/transcript.py`
@@ -168,7 +185,7 @@ proposal is staged beside it and diffed, so what the human accepted is reviewabl
 **Answer.** v22.22.3, prefixed on every git/npm/tsx call. Grounded at
 `3d-models:CLAUDE.md:L<n>` "v22.22.3".
 
-metrics: sessions 13 · occ 14557 (authored 12980) · first 2026-07-29 · last 2026-09-17
+metrics: re-derived in 4 sessions (after a failure 1, by searching 3, already knew it 90) · used in 13 · occ 14557 (authored 12980) · first 2026-07-29 · last 2026-09-17
 evidence: faq-evidence.jsonl#q-014
 ```
 
@@ -178,7 +195,9 @@ evidence: faq-evidence.jsonl#q-014
   re-checks against the diff, so an answer that drifts is caught. (Shown here with
   a `<n>` placeholder; a real entry carries the line and literal.)
 - **metrics line** — the recurrence evidence, in the census's robust unit
-  (distinct sessions) with authored/raw split and the date span.
+  (distinct sessions): how many re-derived it and how, how many used it, the
+  authored/raw split and the date span. (The example's numbers are illustrative;
+  the real Node fact is re-derived in 0 sessions.)
 - **A count marker** pins the question total to the tool that computes it, in
   this repo's counts-gate syntax: the number, then `<!--count:faq-questions-->`.
   The authority in `counts_gate.py` counts the FAQ's entries with the tool's own
@@ -216,13 +235,13 @@ default. Minting CAL-LOOP-01 (and gathering more positives) is an open question.
 ## 8. Verification
 
 **Validator:** an answered question must show falling post-answer recurrence, or
-be re-opened — measured on authored hits, per §3.4.
+be re-opened — measured on re-derivations, per §3.4.
 
 - PASS: `Q-014` ships an answer dated 2026-09-18; `show Q-014` finds sessions
-  started after that date carry the fact at a lower authored-per-session rate than
+  started after that date re-derive the fact at a lower per-session rate than
   before, or not at all. The entry stays answered.
 - FAIL: `Q-014`'s answer ships, yet post-answer sessions re-derive it at the same
-  or higher authored rate. `show` flags it "answer not taking" and re-opens the
+  or higher rate. `show` flags it "answer not taking" and re-opens the
   entry. The register-failure mode (an answer written but not working) is thus a
   **loud** result, not a silent one.
 
@@ -236,8 +255,12 @@ fixtures with fixed expectations, the way `counts_gate.py --self-test` pins its
 authorities so it cannot go green by reading nothing. The PASS set also plants a
 read-back-only session that must not count as authored, a hit reachable only
 through a subagent file, and an edited file read 45 times that the loop detector
-must leave alone. A mutant that drops the subagent walk and counts read-backs as
-authored fails 6 of the 10 checks.
+must leave alone. It plants the three ways to re-derive a fact (a hook failure,
+a grep, a failure inside a subagent), a session that knew the fact and only hit
+the failure afterwards, a fact every session types and none re-derives, and an
+outline grep beside a specific-name grep. A mutant that counts every first use
+as re-derived fails 4 of the 12 checks; one that drops the subagent walk and
+counts read-backs fails 7.
 
 ## 9. Makefile target
 
@@ -309,6 +332,10 @@ the precedents named), *Grounded* (each number attributed to a fetched source),
 4. **Clustering precision.** Signal (c) is ~4–6/10 at best;
    does `update-faq` over-propose enough to waste the human's time? Measure the accept/discard ratio
    on the first real run and treat a low accept rate as the signal to narrow.
+   The first run was narrowed before review: 79 candidates, nearly all outline
+   greps and known facts, became 6 once only re-derivation counted
+   ([issue](issues/faq-counted-use-not-rederivation.md)). The ratio is still to
+   be measured on those 6.
 5. **Does the confound bite?** If `show`'s recurrence check cannot distinguish recall from
    re-derivation even on authored hits, the success metric weakens to "the fact is
    still being typed", which is softer than "still being re-derived". Watch the

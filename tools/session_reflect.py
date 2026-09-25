@@ -16,7 +16,7 @@ Three verbs:
               PROPOSAL beside the FAQ. Never writes the FAQ and never writes
               an answer: the human merges, discards and writes the prose (§5).
   show        print FAQ entries with live recurrence: the share of sessions
-              that authored the fact before the answer date vs after it.
+              that re-derived the fact before the answer date vs after it.
               `show --audit` exits 1 on any "answer not taking" (§8 FAIL).
 
 Authored vs read-back: a probe hit counts as AUTHORED only when it is in
@@ -24,6 +24,14 @@ content the assistant generated — a tool_use input, a thinking block, a text
 block. A hit in a tool_result or attachment is a read-back, and the census
 showed read-backs inflate raw occurrence 3-10x. Recurrence is always measured
 in distinct sessions, the census's robust unit.
+
+Used vs re-derived: authoring a fact only shows a session USED it, and the
+first real run found that nearly every use was a session that already knew it
+(docs/issues/faq-counted-use-not-rederivation.md). A session RE-DERIVES a fact
+when, at that file's first authored use, a failed tool result in the WINDOW
+lines before it names the fact, or it grepped for the fact's own term. For a
+search-command cluster, a grep/rg for one specific name is the re-derivation.
+Candidates, `show` and the verdicts count re-derivation only.
 
 Transcript layout: the main session is `<slug>/<uuid>.jsonl`; each subagent is
 a separate file `<slug>/<uuid>/subagents/agent-<id>.jsonl`, attributed to its
@@ -53,7 +61,7 @@ import os
 import re
 import sys
 import tempfile
-from collections import defaultdict
+from collections import defaultdict, deque
 from pathlib import Path
 
 PROJECTS = Path.home() / ".claude" / "projects"
@@ -99,10 +107,16 @@ FACT_PROBES = {
 
 SHAPE_CMDS = ("grep", "rg", "find", "ls", "cat", "git", "sed", "head", "tail", "awk")
 # Signal (b) precision: git plumbing re-reads at ~0/10, a search verb carrying
-# a code identifier at ~7/10 — so only search verbs become FAQ candidates.
-SEARCH_VERBS = ("grep", "rg", "find")
+# a code identifier at ~7/10 — so only a grep/rg for a specific name
+# (`specific_name`) counts as a lookup. `find`'s first argument is a
+# directory, not what is being looked for, so it is left out.
+SEARCH_VERBS = ("grep", "rg")
 
 SAMPLES = 12
+
+# A failure counts as leading to a fact when it sits at most this many
+# transcript lines before the line that uses the fact.
+WINDOW = 12
 
 
 # ---------------------------------------------------------------- transcripts
@@ -162,13 +176,23 @@ def authored_text(entry) -> str:
     return "\n".join(parts)
 
 
-def cmd_shape(cmd: str) -> str | None:
-    """Normalize a Bash command to a repeatable SHAPE.
+def error_text(entry) -> str:
+    """The text of every failed tool_result on this line, or ''."""
+    if entry.get("type") != "user":
+        return ""
+    out = []
+    for b in blocks(entry):
+        if b.get("type") == "tool_result" and b.get("is_error"):
+            c = b.get("content")
+            if isinstance(c, list):
+                c = "\n".join(x.get("text", "") for x in c if isinstance(x, dict))
+            out.append(str(c or ""))
+    return "\n".join(out)
 
-    First real token + the first flag-less argument, digits folded, so
-    `grep -rn "orbs:" Makefile` and `grep -rn "foo" x` share a family only when
-    they share the search vocabulary, not just the verb.
-    """
+
+def verb_and_arg(cmd: str) -> tuple[str, str] | None:
+    """The first real token of a command's last `&&` step and its first
+    flag-less argument: `grep -rn "orbs:" Makefile` -> ("grep", "orbs:")."""
     if not cmd:
         return None
     tok = cmd.split("&&")[-1].strip().split()
@@ -176,11 +200,38 @@ def cmd_shape(cmd: str) -> str | None:
         tok = tok[1:]
     if not tok:
         return None
-    verb = tok[0].split("/")[-1]
-    if verb not in SHAPE_CMDS:
-        return None
     arg = next((t.strip("'\"") for t in tok[1:] if not t.startswith("-")), "")
-    return f"{verb} {re.sub(r'[0-9]+', 'N', arg)}"[:60]
+    return tok[0].split("/")[-1], arg
+
+
+def cmd_shape(cmd: str) -> str | None:
+    """Normalize a Bash command to a repeatable SHAPE.
+
+    First real token + the first flag-less argument, digits folded, so
+    `grep -rn "orbs:" Makefile` and `grep -rn "foo" x` share a family only when
+    they share the search vocabulary, not just the verb.
+    """
+    va = verb_and_arg(cmd)
+    if not va or va[0] not in SHAPE_CMDS:
+        return None
+    return f"{va[0]} {re.sub(r'[0-9]+', 'N', va[1])}"[:60]
+
+
+def search_term(cmd: str) -> str | None:
+    """What a grep/rg command searches for, or None when it is not a search."""
+    va = verb_and_arg(cmd)
+    return va[1] if va and va[0] in SEARCH_VERBS else None
+
+
+def specific_name(term: str) -> bool:
+    """A search term that names one thing in the code: `BIKAR_DIR`,
+    `SCHEMA_VERSION`, `parseSeam`. Keywords (`def`, `export`), headings (`^##`)
+    and short all-caps words are routine outline scans, not a fact being
+    looked up — the first real run proposed 69 of those and almost nothing else."""
+    if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", term):
+        return False
+    return "_" in term or bool(re.search(r"[a-z][A-Z]", term)) or \
+        (term.isupper() and len(term) >= 4)
 
 
 # --------------------------------------------------------------------- census
@@ -188,7 +239,8 @@ def cmd_shape(cmd: str) -> str | None:
 
 def new_cluster():
     return {"sessions": set(), "authored": defaultdict(int), "occ": 0,
-            "authored_occ": 0, "first": None, "last": None, "samples": []}
+            "authored_occ": 0, "first": None, "last": None, "samples": [],
+            "contexts": [], "rederived": defaultdict(int), "how": defaultdict(int)}
 
 
 def hit(c, sid, line, ts, authored):
@@ -216,6 +268,8 @@ def census(files: list[tuple[Path, str, str]]) -> dict:
 
     for path, sid, agent in files:
         stats["main_sessions" if agent == "main" else "subagent_files"] += 1
+        recent = deque()                       # (line, kind, text): recent failures, reads, commands
+        mentioned = set()                      # facts this file has already authored
         with path.open(errors="replace") as fh:
             for i, raw in enumerate(fh):
                 stats["lines"] += 1
@@ -235,10 +289,35 @@ def census(files: list[tuple[Path, str, str]]) -> dict:
                 if etype == "assistant":
                     stats["assistant_turns"] += 1
                 mine = authored_text(e)
+                while recent and i - recent[0][0] > WINDOW:
+                    recent.popleft()
+                now = []                       # this line's own reads and commands
+                for b in blocks(e) if etype == "assistant" else ():
+                    if b.get("type") == "tool_use":
+                        inp = b.get("input", {}) or {}
+                        if b.get("name") in READ_TOOLS and inp.get("file_path"):
+                            now.append((i, "read", inp["file_path"]))
+                        elif b.get("name") == "Bash" and inp.get("command"):
+                            now.append((i, "bash", inp["command"]))
 
                 for name, pat in FACT_PROBES.items():
                     if pat.search(raw):
-                        hit(clusters[f"fact:{name}"], sid, i, ts, bool(pat.search(mine)))
+                        c = clusters[f"fact:{name}"]
+                        authored = bool(pat.search(mine))
+                        hit(c, sid, i, ts, authored)
+                        if authored and name not in mentioned:
+                            mentioned.add(name)
+                            ev = list(recent) + now
+                            c["contexts"].append([sid, i, [(k, t[:160]) for _, k, t in ev]])
+                            how = learned(pat, ev)
+                            c["how"][how] += 1
+                            if how != "knew":
+                                c["rederived"][sid] += 1
+
+                err = error_text(e)
+                if err:
+                    recent.append((i, "fail", err))
+                recent.extend(now)
 
                 if etype != "assistant":
                     continue
@@ -260,9 +339,14 @@ def census(files: list[tuple[Path, str, str]]) -> dict:
                         elif name in WRITE_TOOLS and fp:
                             wrote.add((sid, agent, fp))
                         elif name == "Bash":
-                            shape = cmd_shape((inp.get("command") or "").strip())
+                            cmd = (inp.get("command") or "").strip()
+                            shape = cmd_shape(cmd)
                             if shape:
-                                hit(clusters[f"cmd:{shape}"], sid, i, ts, True)
+                                c = clusters[f"cmd:{shape}"]
+                                hit(c, sid, i, ts, True)
+                                if specific_name(search_term(cmd) or ""):
+                                    c["rederived"][sid] += 1   # the search is the lookup
+                                    c["how"]["search"] += 1
                     elif bt in ("thinking", "text"):
                         txt = b.get("thinking") or b.get("text") or ""
                         for name, pat in QUESTION_SHAPES.items():
@@ -280,17 +364,30 @@ def loops(C: dict, threshold: int = LOOP_READS_PROVISIONAL) -> list[tuple]:
                   reverse=True)
 
 
+def learned(pat: re.Pattern, ev: list[tuple]) -> str:
+    """How a session came to a fact at its first use: 'failure' when a failed
+    tool result just before it names the fact (the use-cases hook's block
+    message names USE_CASES_OK), 'search' when it grepped for the fact's own
+    term, 'knew' otherwise. Only the first two are re-derivation: a fact used
+    correctly with no failure and no search is an answer that is working."""
+    if any(k == "fail" and pat.search(t) for _, k, t in ev):
+        return "failure"
+    if any(k == "bash" and pat.search(search_term(t) or "") for _, k, t in ev):
+        return "search"
+    return "knew"
+
+
 def candidate(key: str) -> bool:
-    if key.startswith("fact:"):
-        return True
-    verb = key[4:].split(" ", 1)[0]
-    return verb in SEARCH_VERBS
+    return key.startswith("fact:") or key.startswith("cmd:")
 
 
 def metrics_line(c: dict) -> str:
-    return (f"metrics: sessions {len(c['authored'])} · occ {c['occ']} "
-            f"(authored {c['authored_occ']}) · first {(c['first'] or '-')[:10]} "
-            f"· last {(c['last'] or '-')[:10]}")
+    how = c["how"]
+    return (f"metrics: re-derived in {len(c['rederived'])} sessions "
+            f"(after a failure {how['failure']}, by searching {how['search']}, "
+            f"already knew it {how['knew']}) · used in {len(c['authored'])} · "
+            f"occ {c['occ']} (authored {c['authored_occ']}) · "
+            f"first {(c['first'] or '-')[:10]} · last {(c['last'] or '-')[:10]}")
 
 
 def emit_census(C: dict, min_reads: int, jsonpath: str | None) -> None:
@@ -324,10 +421,12 @@ def emit_census(C: dict, min_reads: int, jsonpath: str | None) -> None:
         print(f"{len(q['sessions']):3d} {q['occ']:6d}  {name}")
 
     print("\n## (d) known recurring repo facts (literal probes)")
-    print("authored-sessions occ authored first_utc last_utc fact")
+    print("re-derived (failure/search/knew at first use per file) used-in occ first_utc last_utc fact")
     facts = [(k[5:], c) for k, c in C["clusters"].items() if k.startswith("fact:")]
-    for name, c in sorted(facts, key=lambda x: -len(x[1]["authored"])):
-        print(f"{len(c['authored']):3d} {c['occ']:6d} {c['authored_occ']:6d}  "
+    for name, c in sorted(facts, key=lambda x: (-len(x[1]["rederived"]), -len(x[1]["authored"]))):
+        h = c["how"]
+        print(f"{len(c['rederived']):3d} ({h['failure']}/{h['search']}/{h['knew']}) "
+              f"{len(c['authored']):4d} {c['occ']:6d}  "
               f"{(c['first'] or '-')[:10]} {(c['last'] or '-')[:10]}  {name}")
 
     if jsonpath:
@@ -335,13 +434,40 @@ def emit_census(C: dict, min_reads: int, jsonpath: str | None) -> None:
             "stats": {k: (dict(v) if isinstance(v, defaultdict) else v) for k, v in s.items()},
             "loops": [{"session": sid, "agent": agent, "file": fp, "reads": n}
                       for n, sid, agent, fp in flagged],
-            "clusters": {k: {"sessions": sorted(c["authored"]), "occ": c["occ"],
+            "clusters": {k: {"sessions": sorted(c["authored"]),
+                             "rederived": sorted(c["rederived"]), "how": dict(c["how"]),
+                             "occ": c["occ"],
                              "authored": c["authored_occ"], "first": c["first"],
                              "last": c["last"], "samples": c["samples"]}
                          for k, c in C["clusters"].items() if len(c["sessions"]) >= 2},
         }
         Path(jsonpath).write_text(json.dumps(out, indent=1))
         print(f"\n[json written: {jsonpath}]")
+
+
+def emit_contexts(C: dict, want: str) -> None:
+    """What came just before each file's first use of a fact: the failed tool
+    results in the WINDOW lines before it. This is how a fact's failure
+    signature is found from real transcripts rather than guessed."""
+    for key, c in sorted(C["clusters"].items()):
+        if not key.startswith("fact:") or (want != "all" and want not in key):
+            continue
+        ctx = c["contexts"]
+        kinds = {k: sum(1 for _, _, ev in ctx if any(x == k for x, _ in ev))
+                 for k in ("fail", "read", "bash")}
+        print(f"## {key[5:]}: {len(ctx)} first use(s); within {WINDOW} lines before: "
+              f"a failure {kinds['fail']}, a Read {kinds['read']}, a command {kinds['bash']}")
+        for sid, line, ev in ctx:
+            shown =[(k, t) for k, t in ev if k in ("fail", "read") or kinds_search(t)]
+            if shown:
+                print(f"  {sid} {line}")
+                for k, t in shown:
+                    print(f"    {k:4s} | " + " ".join(t.split())[:140])
+
+
+def kinds_search(cmd: str) -> bool:
+    """True when a command is a search (grep, rg) rather than an action."""
+    return search_term(cmd) is not None
 
 
 # ------------------------------------------------------------------------ FAQ
@@ -370,15 +496,17 @@ def read_faq(faq: Path, evidence: Path) -> list[dict]:
 
 
 def recurrence(C: dict, key: str, answered: str) -> dict:
-    """Share of sessions that authored the cluster, before vs on/after `answered`."""
+    """Share of sessions that re-derived the cluster, before vs on/after `answered`.
+    Re-derived, not used: a fact every session is meant to type (the Node prefix)
+    would otherwise read as an answer that never takes."""
     c = C["clusters"].get(key)
-    authored = set(c["authored"]) if c else set()
+    rederived = set(c["rederived"]) if c else set()
     pre = [s for s, ts in C["start"].items() if ts[:10] < answered]
     post = [s for s, ts in C["start"].items() if ts[:10] >= answered]
 
     def rate(ss):
-        hits = sum(1 for s in ss if s in authored)
-        return {"sessions": len(ss), "authored": hits,
+        hits = sum(1 for s in ss if s in rederived)
+        return {"sessions": len(ss), "rederived": hits,
                 "rate": round(hits / len(ss), 3) if ss else None}
 
     return {"pre": rate(pre), "post": rate(post)}
@@ -389,7 +517,7 @@ def verdict(rec: dict) -> str:
     if not post["sessions"]:
         return "pending (no sessions since the answer)"
     if not pre["rate"]:
-        return "no baseline (nothing authored before the answer)"
+        return "no baseline (nothing re-derived it before the answer)"
     if post["rate"] < pre["rate"]:
         return "taking"
     return "ANSWER NOT TAKING"
@@ -414,7 +542,7 @@ def show(C: dict, entries: list[dict], only: str | None) -> tuple[list[str], int
         lines.append(f"  cluster {rec['cluster']}  answered {rec['answered']}")
         for side in ("pre", "post"):
             x = r[side]
-            lines.append(f"  {side:4s}: {x['authored']}/{x['sessions']} sessions authored "
+            lines.append(f"  {side:4s}: {x['rederived']}/{x['sessions']} sessions re-derived it "
                          f"({x['rate'] if x['rate'] is not None else '-'})")
         lines.append(f"  verdict: {v}" + (" — re-open the entry" if v.startswith("ANSWER") else ""))
         failing += v.startswith("ANSWER")
@@ -430,13 +558,13 @@ def proposal(C: dict, entries: list[dict], min_sessions: int) -> str:
            "write and an anchored pointer to where the fact lives; its evidence line",
            "goes in the sidecar with `answered` set to the day the answer ships.",
            ""]
-    cands = sorted(((len(c["authored"]), k, c) for k, c in C["clusters"].items()
-                    if candidate(k) and k not in taken and len(c["authored"]) >= min_sessions),
+    cands = sorted(((len(c["rederived"]), k, c) for k, c in C["clusters"].items()
+                    if candidate(k) and k not in taken and len(c["rederived"]) >= min_sessions),
                    key=lambda x: (-x[0], x[1]))
-    out.append(f"## Candidates ({len(cands)} at >= {min_sessions} authoring sessions)")
+    out.append(f"## Candidates ({len(cands)} re-derived in >= {min_sessions} sessions)")
     for n, (_, key, c) in enumerate(cands, 1):
         rec = {"id": f"cand-{n:03d}", "cluster": key,
-               "sessions": sorted(c["authored"]), "samples": c["samples"],
+               "sessions": sorted(c["rederived"]), "samples": c["samples"],
                "occ": c["occ"], "authored": c["authored_occ"],
                "first": c["first"], "last": c["last"]}
         out += ["", f"### cand-{n:03d} — {key}", "", metrics_line(c), "",
@@ -463,8 +591,10 @@ def _entry(ts, kind, payload):
         name = "Read" if kind == "read" else "Edit"
         content = [{"type": "tool_use", "name": name, "input": {"file_path": payload}}]
     else:  # a tool_result echoing text back: a read-back, never authored
-        return {"type": "user", "timestamp": ts,
-                "message": {"content": [{"type": "tool_result", "content": payload}]}}
+        res = {"type": "tool_result", "content": payload}
+        if kind == "fail":
+            res["is_error"] = True
+        return {"type": "user", "timestamp": ts, "message": {"content": [res]}}
     return {"type": "assistant", "timestamp": ts, "message": {"content": content}}
 
 
@@ -473,50 +603,72 @@ def _write(path: Path, rows: list[tuple]) -> None:
     path.write_text("".join(json.dumps(_entry(*r)) + "\n" for r in rows))
 
 
-def fixture_rederivation(d: Path) -> None:
-    """PASS fixture: a planted re-derivation census must surface, plus one loop.
+BLOCKED = "pre-commit 20-use-cases: staged file is pinned; re-run with USE_CASES_OK=1"
+COMMIT = "USE_CASES_OK=1 git commit -m wip"
 
-    s1-s3 each author `v22.22.3` (s3 only inside a subagent, so the subtree walk
-    is load-bearing); s4 only reads it back and must NOT count; s1's subagent
-    reads parser.ts 45 times and writes nothing (the loop); s2 reads model.ts
-    45 times but edits it (normal work, must not flag).
+
+def fixture_rederivation(d: Path) -> None:
+    """PASS fixture: planted re-derivations must surface, plain use must not.
+
+    USE_CASES_OK is re-derived three ways: s1 after the hook's block message
+    names it, s2 by grepping for it, s3 after a failure inside a subagent (so
+    the subtree walk is load-bearing). s5 types it with no failure and no
+    search — it already knew — and a failure *after* its first use must not
+    turn that into a re-derivation. Every session types the Node prefix and
+    none re-derives it, so it must not be proposed. s4 only reads both facts
+    back. `grep parseSeam` (a specific name) in 3 sessions is a candidate;
+    `grep ^##` (an outline scan) in the same 3 is not. s1's subagent reads
+    parser.ts 45 times and writes nothing (the loop); s2 reads model.ts 45
+    times but edits it (normal work, must not flag).
     """
     node = "export PATH=$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"
     _write(d / "s1.jsonl", [("2026-09-01T10:00:00Z", "bash", f"{node}; git status"),
-                            ("2026-09-01T10:01:00Z", "bash", "grep -rn parseSeam src")])
+                            ("2026-09-01T10:00:30Z", "fail", BLOCKED),
+                            ("2026-09-01T10:00:40Z", "bash", COMMIT),
+                            ("2026-09-01T10:01:00Z", "bash", "grep -rn parseSeam src"),
+                            ("2026-09-01T10:01:10Z", "bash", "grep -n '^##' docs/a.md")])
     _write(d / "s1/subagents/agent-a1.jsonl",
            [("2026-09-01T10:02:00Z", "read", "/r/src/parser.ts")] * 45)
     _write(d / "s2.jsonl", [("2026-09-02T10:00:00Z", "think", "need v22.22.3 here"),
-                            ("2026-09-02T10:01:00Z", "bash", "grep -rn parseSeam src")]
+                            ("2026-09-02T10:00:30Z", "bash", "grep -rn USE_CASES_OK .githooks"),
+                            ("2026-09-02T10:01:00Z", "bash", "grep -rn parseSeam src"),
+                            ("2026-09-02T10:01:10Z", "bash", "grep -n '^##' docs/b.md")]
            + [("2026-09-02T10:02:00Z", "read", "/r/src/model.ts")] * 45
            + [("2026-09-02T10:03:00Z", "edit", "/r/src/model.ts")])
-    _write(d / "s3.jsonl", [("2026-09-03T10:00:00Z", "bash", "grep -rn parseSeam src")])
-    _write(d / "s3/subagents/agent-b1.jsonl", [("2026-09-03T10:01:00Z", "bash", node)])
-    _write(d / "s4.jsonl", [("2026-09-04T10:00:00Z", "result", "PATH has v22.22.3 on it")])
+    _write(d / "s3.jsonl", [("2026-09-03T10:00:00Z", "bash", "grep -rn parseSeam src"),
+                            ("2026-09-03T10:00:10Z", "bash", "grep -n '^##' docs/c.md")])
+    _write(d / "s3/subagents/agent-b1.jsonl", [("2026-09-03T10:01:00Z", "bash", node),
+                                               ("2026-09-03T10:01:30Z", "fail", BLOCKED),
+                                               ("2026-09-03T10:01:40Z", "bash", COMMIT)])
+    _write(d / "s4.jsonl", [("2026-09-04T10:00:00Z", "result",
+                             "PATH has v22.22.3 on it; USE_CASES_OK is set")])
+    _write(d / "s5.jsonl", [("2026-09-05T10:00:00Z", "bash", f"{node}; {COMMIT}"),
+                            ("2026-09-05T10:00:30Z", "fail", BLOCKED),
+                            ("2026-09-05T10:00:40Z", "bash", COMMIT)])
 
 
 def fixture_not_taking(d: Path) -> tuple[Path, Path]:
-    """FAIL fixture: Q-001's answer shipped 2026-09-10 yet recurrence continued.
+    """FAIL fixture: Q-001's answer shipped 2026-09-10 yet re-derivation continued.
 
-    Before: 1 of 2 sessions authored `gh-pages` (0.5). After: 2 of 2 (1.0) —
-    `show` must flag it. Q-002 (`gitleaks`) fell from 2/2 to 0/2 and must pass,
-    and Q-003 has no answer, so both other verdicts are exercised too.
+    Before: 1 of 2 sessions grepped for `deployBranch` (0.5). After: 2 of 2
+    (1.0) — `show` must flag it. Q-002 (`GITLEAKS_CONFIG`) fell from 2/2 to 0/2
+    and must pass, and Q-003 has no answer, so both other verdicts are
+    exercised too.
     """
-    rows = {"p1": ("2026-09-01", "git log gh-pages", "gitleaks git"),
-            "p2": ("2026-09-02", "git status", "gitleaks detect"),
-            "q1": ("2026-09-11", "git log gh-pages", "git status"),
-            "q2": ("2026-09-12", "git diff gh-pages", "git status")}
+    rows = {"p1": ("2026-09-01", "grep -rn deployBranch .", "grep -rn GITLEAKS_CONFIG ."),
+            "p2": ("2026-09-02", "git status", "grep -rn GITLEAKS_CONFIG ."),
+            "q1": ("2026-09-11", "grep -rn deployBranch .", "git status"),
+            "q2": ("2026-09-12", "grep -rn deployBranch src", "git status")}
     for sid, (day, a, b) in rows.items():
         _write(d / f"{sid}.jsonl", [(f"{day}T10:00:00Z", "bash", a),
                                     (f"{day}T10:01:00Z", "bash", b)])
     faq, ev = d / "faq.md", d / "faq-evidence.jsonl"
     faq.write_text("# FAQ\n\n## Q-001 — Which branch is the deploy?\n\n**Answer.** gh-pages.\n\n"
-                   "## Q-002 — Is gitleaks wired?\n\n**Answer.** Yes.\n\n"
+                   "## Q-002 — Where is the gitleaks config?\n\n**Answer.** Here.\n\n"
                    "## Q-003 — Still open?\n\nNo answer yet.\n")
-    ev.write_text(json.dumps({"id": "q-001", "cluster": "fact:gh-pages diverged branch",
+    ev.write_text(json.dumps({"id": "q-001", "cluster": "cmd:grep deployBranch",
                               "answered": "2026-09-10"}) + "\n"
-                  + json.dumps({"id": "q-002",
-                                "cluster": "fact:ci/e2e/gitleaks required on bikar main",
+                  + json.dumps({"id": "q-002", "cluster": "cmd:grep GITLEAKS_CONFIG",
                                 "answered": "2026-09-10"}) + "\n")
     return faq, ev
 
@@ -536,19 +688,25 @@ def self_test() -> int:
         a = Path(tmp) / "rederivation"
         fixture_rederivation(a)
         C = census(transcripts(a))
+        hook = C["clusters"]["fact:use-cases hook / USE_CASES_OK"]
         node = C["clusters"]["fact:v22.22.3 node PATH prefix"]
         check("PASS fixture: walks main + subagent files",
-              (C["stats"]["main_sessions"], C["stats"]["subagent_files"]), (4, 2))
-        check("planted fact surfaces in the authoring sessions only",
-              sorted(node["authored"]), ["s1", "s2", "s3"])
+              (C["stats"]["main_sessions"], C["stats"]["subagent_files"]), (5, 2))
+        check("re-derived after a failure, by a search, and inside a subagent",
+              sorted(hook["rederived"]), ["s1", "s2", "s3"])
+        check("how each file first came to it (a later failure does not count)",
+              dict(hook["how"]), {"failure": 2, "search": 1, "knew": 1})
         check("read-back session is seen but not authored",
-              "s4" in node["sessions"] and "s4" not in node["authored"], True)
+              "s4" in hook["sessions"] and "s4" not in hook["authored"], True)
+        check("a fact every session types but none re-derives",
+              (len(node["authored"]), len(node["rederived"])), (4, 0))
         check("planted search re-derivation surfaces",
-              sorted(C["clusters"]["cmd:grep parseSeam"]["authored"]), ["s1", "s2", "s3"])
+              sorted(C["clusters"]["cmd:grep parseSeam"]["rederived"]), ["s1", "s2", "s3"])
         props = proposal(C, [], 3)
-        check("update-faq proposes both planted clusters",
-              ("fact:v22.22.3 node PATH prefix" in props, "cmd:grep parseSeam" in props),
-              (True, True))
+        check("update-faq proposes the re-derived clusters only",
+              ("fact:use-cases hook" in props, "cmd:grep parseSeam" in props,
+               "fact:v22.22.3" in props, "cmd:grep ^##" in props),
+              (True, True, False, False))
         check("git plumbing is never a candidate", "cmd:git status" in props, False)
         check("loop detector flags the no-write subagent only",
               [(sid, agent, fp) for _, sid, agent, fp in loops(C)],
@@ -561,13 +719,13 @@ def self_test() -> int:
         verdicts = {e["id"]: (verdict(recurrence(C, e["record"]["cluster"],
                                                  e["record"]["answered"]))
                               if e["record"] else "open") for e in entries}
-        check("FAIL fixture: continued recurrence is flagged, a falling one passes",
+        check("FAIL fixture: continued re-derivation is flagged, a falling one passes",
               verdicts, {"Q-001": "ANSWER NOT TAKING", "Q-002": "taking", "Q-003": "open"})
         _, failing = show(C, entries, None)
         check("show --audit would exit nonzero", failing, 1)
         cands, remeasured = proposal(C, entries, 1).split("## Answered")
         check("an answered cluster is re-measured, not re-proposed",
-              ("fact:gh-pages" in cands, "### Q-001" in remeasured,
+              ("cmd:grep deployBranch" in cands, "### Q-001" in remeasured,
                "verdict: ANSWER NOT TAKING" in remeasured),
               (False, True, True))
 
@@ -596,6 +754,9 @@ def main() -> int:
     c.add_argument("--min-reads", type=int, default=15)
     c.add_argument("--json", default=None)
     c.add_argument("--self-test", action="store_true")
+    c.add_argument("--context", default=None, metavar="FACT",
+                   help="print the failures just before each file's first use of the "
+                        "facts whose name contains FACT ('all' for every fact)")
 
     u = sub.add_parser("update-faq")
     inputs_args(u)
@@ -613,7 +774,11 @@ def main() -> int:
     if a.verb == "census":
         if a.self_test:
             return self_test()
-        emit_census(census(inputs(a)), a.min_reads, a.json)
+        C = census(inputs(a))
+        if a.context:
+            emit_contexts(C, a.context)
+        else:
+            emit_census(C, a.min_reads, a.json)
         return 0
 
     entries = read_faq(Path(a.faq), Path(a.evidence))
