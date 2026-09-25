@@ -1,7 +1,8 @@
 # Print backlog — what a printer unblocks, and in what order
 
-Last updated: 2026-09-02 (§3.8 → folded in the prints-tab board's print-gated
-items — #67 print Plate 1 and #71 gate rule R3).
+Last updated: 2026-09-25 (§6's open non-printer items moved to the per-loop backlogs
+under [`tasks/`](tasks); this file is now the print-gated register the first-print loop's
+[backlog](tasks/coaster-pipeline/backlog.md) points into).
 
 Status: **PLANNING DOCUMENT, NOTHING MEASURED.** No print has ever been made on
 this project. Every physical number in every design doc here is either read out
@@ -646,64 +647,26 @@ the fact precisely so it is not logged as "the coupon didn't work."
 ## 6. Queued behind the same work, but **not** printer-gated
 
 These have accumulated alongside the print backlog and need something other than
-a printer. Filing them here rather than above is the point of this document.
+a printer. Since 2026-09-25 the open ones live in the per-loop backlogs under
+[`tasks/`](tasks), and no-loop work in [`tasks/parked/backlog.md`](tasks/parked/backlog.md);
+the subsections below stay as pointers so links into them still land.
 
-### 6.1 The LDraw afternoon — needs a `.dmg`, not a printer
+### 6.1 The LDraw afternoon — moved
 
-`--format ldraw` shipped with Lego Lab P3 (bikar `a10f4f6`, PR #53), and
-[`lego-lab-design.md`](lego-lab-design.md) §10 records the one thing §14.3 asked
-for that is **not** done: *"no LDraw viewer has opened the output."*
-[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) costs the run.
-Five items are outstanding, and one of them is the reason to do this soon:
+Moved on 2026-09-25 to [`tasks/parked/backlog.md`](tasks/parked/backlog.md), "LDraw export,
+never opened in a viewer": the five open viewer questions and how to run them. This file
+now holds only printer-gated work; the per-loop backlogs are indexed in
+[`.claude/loop-prompts/README.md`](../.claude/loop-prompts/README.md).
 
-1. **The fifth item** — LeoCAD's `lcModel::LoadLDraw` appears to drop line types
-   2–5 into `mFileLines`, read back only by `SaveLDraw`. Our MPD is two type-1
-   lines and 3,764 type-3 triangles, and the name resolves, so the **predicted**
-   outcome is an empty model and no error at all. §14.3.1 flags this itself:
-   *"K1 — this is a source reading, not an observation"*, and what has not been
-   ruled out is some other path reconstituting those lines. This is the
-   export-succeeds-and-yields-the-wrong-thing class the whole section exists to
-   avoid, so it is worth settling before anyone relies on the format.
-2. LeoCAD's behaviour on an unresolvable reference, and whether it resolves names
-   against same-file `0 FILE` blocks.
-3. BrickLink Studio on an inline-defined part, on import and round-trip —
-   **untouched**, and §14.3.1 says nothing in the viewer survey predicts it,
-   because Studio maps LDraw parts onto its own catalogue.
-4. Whether `0 BFC CERTIFY CCW` is safe to emit — derivable, but "has never been
-   rendered in a BFC-checking viewer", so it stays out "until someone looks."
-5. LDView's parts-tracker behaviour after a failed lookup — §14.3.1 records this
-   as having **largely dissolved** for a well-formed file, surviving only for a
-   malformed one.
+### 6.2 Other non-printer work found in the same sweep — moved
 
-**How it is actually run, with the doc's hedge intact.** Nothing LDraw is
-installed on this machine, and the research found no Homebrew formula or cask for
-LDView, LeoCAD or Studio — so this is a manual download first. LDView is the
-candidate to reach for, with `-VerifyLDrawDir=0` so it runs with no parts library
-(our MPD references nothing outside itself). But the macOS off-screen path is
-claimed **on the strength of `MacOSX/LDView/main.m` and nothing else**, rests on
-CGL pbuffers (a deprecated Apple API), and LDView's own help hedges it —
-*"if your video card allows this to run without displaying a window."* Untested.
-The survey is also explicitly bounded: **twelve named tools, not the space of
-LDraw software** (§14.3.1's own K2 note).
-
-### 6.2 Other non-printer work found in the same sweep
-
-| item | what it needs | source |
-|---|---|---|
-| `--format ldraw` opened in three viewers | downloads (§6.1) | [`lego-lab-design.md`](lego-lab-design.md) §14.3.1 |
-| §11 Q6's compliance proxy — whether rib-deflection or an FEA-lite bending estimate is worth adding to the grid gate | a decision, then code; **calibrating** it needs LG-F1 and LG-D1 | [`lego-lab-design.md`](lego-lab-design.md) §11 Q6, explicitly left open |
-| `layout report` production metrics (W3): plates at the declared bed size, spool count, calendar estimate | code — though the per-tile input is the W1 pilot in §3.5 | [`tile-wall-design.md`](tile-wall-design.md) §7.1 |
-| `tile-wall` §10 Q2 — `checker` border parity | **decided 2026-08-03, D-016: both** — shared `border` spec as the documented path, per-pair validator for tiles that decline it. **Built** in bikar `2585a40` (PR #71) — and building it *inverted* the `FAIL:` this row used to prescribe: the position shipped as a tile-local corner subset, so "different offsets" is the legal PASS and two **byte-identical** declarations are the hard FAIL | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-016 |
-| `tile-wall` §10 Q3 — cropped-edge finish | **decided 2026-08-03, D-017: both finishes, but `frame` is orthogonal to `crop`** — not the `crop clip with frame` sketch. **Built** in bikar `fc5adee` (PR #72) as `frame` / `frame band <mm>` / `frame absorb`. The band width is a bet, `CAL-FRM-01` at 12 mm — but settled by a coupon of its own, **W-P1**, not by W1 as this row guessed: W1 varies its art and its tile count between prints and cannot hold the field fixed while the margin changes | [`tile-wall-design.md`](tile-wall-design.md) §10, [`decisions-log.md`](decisions-log.md) D-017 |
-| `print-validation` §8 Q3 — F3 severity | **decided 2026-08-03, D-018: always warn**, overruling the doc's own leaning. Nothing to build — §4's table already read `warn`; the decision makes the doc agree with itself | [`print-validation-design.md`](print-validation-design.md) §8, [`decisions-log.md`](decisions-log.md) D-018 |
-| `lego-lab` §11 Q8's grammar gap — the rhombic lattice row `gridFit` can score but no `.bkr` can produce | **resolved as a label**, [`decisions-log.md`](decisions-log.md) D-007; widening the grammar to a general two-vector basis remains an unbuilt option | [`lego-lab-design.md`](lego-lab-design.md) §11 Q8 |
-| The `polygon`/`C.mpt` evaluator asymmetry MC-4 had to work around | a bikar issue; "not worked around here beyond this idiom" | [`calibration-design.md`](calibration-design.md) §4 |
-| No polygon-offset primitive — MC-4's wall thickness co-varies with the angle under test | a bikar feature; "if a future version of bikar gains a polygon offset, this is the coupon to re-cut first" | [`calibration-design.md`](calibration-design.md) §5.4, §8 |
-| No text emit — rung identity cannot be printed onto a part | a bikar feature; §8 calls it "the card's biggest structural weakness and the one a text-emit capability would fix outright" | [`calibration-design.md`](calibration-design.md) §3.2 |
-
-The last three are worth reading together: all three are engine capabilities
-whose absence shaped the coupons, and none of them blocks a print. They are the
-list to consult if the first card comes back hard to read.
+The open rows moved on 2026-09-25: the Lego Lab Q6 and Q8 questions and the two bikar engine
+gaps (`polygon`/`C.mpt` asymmetry, no polygon offset) to
+[`tasks/parked/backlog.md`](tasks/parked/backlog.md); the tile-wall `layout report` metrics
+(W3) to [`tasks/print-infrastructure/backlog.md`](tasks/print-infrastructure/backlog.md). The
+closed rows are recorded where they were decided: `tile-wall` Q2 and Q3 as
+[D-016 and D-017](decisions-log.md) (built in bikar PR #71 and #72), `print-validation` Q3 as
+[D-018](decisions-log.md). Text emit, the third engine gap, has shipped.
 
 ### 6.3 The research files' own residue — mostly not printer work
 
@@ -822,8 +785,12 @@ and a number that changes there is not re-typed here.
 | The Lego open ledger — the residue of the whole Lego stream sorted by what gates it: four unblocked items (widen the roster, ground the explorer doc, plates as data, the tube cap), two download-gated viewers, one decision (§11 Q6's proxy), and the printer-held coupons that §3.2 already owns | added 2026-09-01; the four unblocked items are tracked in the task system | explorer doc §6.6 |
 | The cross-repo governance stream — the tasks that had no plan anchor until the 2026-09-01 orb-tooling audit: how this repo's decisions log joins a decision hub (a user decision; [D-004](decisions-log.md) chose the local format and rejected mirroring bikar's generator), whether the cross-repo ledger check should block and bring this repo into the loop (gated on that decision), and a studio status page rendered from the repos the way bikar's studio index is rendered from its catalogue, never typed | added 2026-09-01; all on the task board, the hub decision gates the other two; no number re-typed here | bikar's cross-repo-dependencies doc and decision ledger; [D-004](decisions-log.md) |
 
-Only the last row needs a printer, which is exactly why the stream was invisible
+Only the explorer-coupons row needs a printer, which is exactly why the stream was invisible
 to a file organised around what a printer unblocks.
+
+The governance row, still open, moved on 2026-09-25 to
+[`tasks/parked/backlog.md`](tasks/parked/backlog.md), "Cross-repo governance". The rest of
+this table is shipped and stays as the record.
 
 ---
 

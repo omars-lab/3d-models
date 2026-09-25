@@ -42,19 +42,24 @@ The send itself stays Omar's.
 
 ## Each pass of the loop
 
+0. **Read the backlog,**
+   [`docs/tasks/print-infrastructure/backlog.md`](../../docs/tasks/print-infrastructure/backlog.md).
+   If it holds a known friction, take the top one and go to step 3.
 1. **Run the whole line on a real plate, stopping short of the send.** Take `minis-01`, or
    write a new manifest that mixes things `minis-01` doesn't cover, then compose, slice,
    preflight and filament-sync it. Use the documented commands exactly as a newcomer would.
 2. **Find the first friction.** The first step that needed a hand edit, a guessed flag, a
    file read to understand an error, a slice with no preview, or a check that passes on bad
-   input. Only that one step.
+   input. Fix only that one step; write every other friction the run hit into the backlog.
 3. **Fix it at the source,** where the tool, the manifest schema, or the error message lives.
    A new check needs a case that fails, not only one that passes (CLAUDE.md, "the by-design
    failure"). A picture of the plate beats a line of text saying it is fine.
 4. **Ship it.** Open one PR from its own worktree, then merge it and delete that branch.
    Re-run step 1 to show the friction is gone.
-5. **Record it.** Update the plate-composer design, or add a `docs/issues/<slug>.md` if the
-   approach changed.
+5. **Record it,** in the same PR. Move the item to the
+   [done list](../../docs/tasks/print-infrastructure/done.md) with the date and PR number.
+   Update the plate-composer design, or add a `docs/issues/<slug>.md` if the approach changed.
+   Work for another loop goes into that loop's backlog ([README](README.md)).
 6. **Wait when the line runs clean.** Say so in one line, then schedule the next wakeup
    30 to 60 minutes out. A clean pass on a harder plate is the goal getting closer.
 

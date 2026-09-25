@@ -41,7 +41,9 @@ The youtube repo calls one video taken all the way a **rung**, and the sequence 
 4. **Close the gaps.** Name every place the tooling made the rung harder. Fix the small ones
    with a test. File the big ones as numbered gaps in the plan.
 5. **Hand it on.** When the rung is done, add a line to `done.md` saying what the tooling can
-   now do. Tell the catalog loop the id is ready to migrate.
+   now do. Hand the id to the catalog loop by adding it to 3d-models'
+   [`docs/tasks/catalog-expansion/backlog.md`](../../docs/tasks/catalog-expansion/backlog.md)
+   as a reconstruction ready to migrate.
 6. **Stop** when: no candidate can be screened today; the next rung needs a gap bigger than
    one rung; the same step fails the same way twice (run `youtube-retro`); or Omar's own
    limit is reached. Say which one, then schedule the next wakeup 30 to 60 minutes out.
