@@ -1,0 +1,59 @@
+# minis-02 — one mini of each coaster style, both constructions
+#
+# Omar asked (2026-09-25) for "a mini of each of these different styles", after
+# minis-01 showed only the solid style (pattern raised on a full slab). This plate
+# puts every style bikar can print on a one-filament plate side by side, for CS-1
+# (GimTvN9hw4U) and CS-2 (7apC5Q9QS-8), one copy each at size 40:
+#
+#   solid     `-coaster`            pattern raised 1.2 mm on a 4 mm slab
+#   minimal   `-minimal-coaster`    the pattern alone — straps only, holes where
+#                                   the empty spaces are, no slab behind them
+#   interlock `-interlock-coaster`  solid, with dovetail tabs and slots on every edge
+#   twist     `-twist-coaster`      minimal, twisted up its height (CS-2 only — no
+#                                   CS-1 twist file exists)
+#
+# Left off, on purpose:
+#   border  `-border-coaster` carries `color border …`, so it needs `bambu slice
+#           coaster` on a colour plate; compose would drop the colour (see minis-01).
+#   framed openwork (a frame with holes in the empty spaces) does not exist yet:
+#           `trivet` cuts the relief region, and on these patterns the face region
+#           covers the straps too, so it cuts the whole inside away. Tracked in
+#           docs/tasks/catalog-expansion/backlog.md.
+#
+# Validate (no hardware, no slicer):
+#   bambu slice compose docs/plates/minis-02.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-coaster.bkr            # CS-1 solid
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr    # CS-1 minimal
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr  # CS-1 interlock
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-coaster.bkr            # CS-2 solid
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr    # CS-2 minimal
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr  # CS-2 interlock
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-twist-coaster.bkr      # CS-2 twist
+    piece:  Coaster
+    params: { size: 40 }
+    count:  1
