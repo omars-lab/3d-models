@@ -34,13 +34,14 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
 ## Each pass of the loop
 
 1. **Look before acting.** `git fetch` in 3d-models and bikar. Read `origin/master` and
-   `origin/main`, never the local refs, which lag. Run `gh pr list` in both repos. Run
-   `make validate`. If main is red, fixing it comes first.
+   `origin/main`, never the local refs, which lag. Run `make validate`. If main is red,
+   fixing it comes first. Reviewing, merging and cleaning up other PRs, branches and
+   worktrees is not this loop's job; that is [`consolidation.md`](consolidation.md).
 2. **Pick the top item by ROI** from the list below. That means what moves the goal most,
    for the least effort and risk. State the ranking in one line and do the item. Don't ask
    which one to take.
-3. **Ship it.** One branch per item, off `origin/master` (never off another open PR). Then a
-   PR, a merge, and cleanup, following CLAUDE.md and memory.
+3. **Ship it.** One branch per item, off `origin/master` (never off another open PR), in its
+   own worktree. Open a PR, merge it, and delete that item's branch and worktree. Nothing more.
 4. **Record it.** Update the plan's status line or the task board. If the approach changed,
    add a `docs/issues/<slug>.md`.
 5. **Wait when blocked.** If every remaining item needs Omar, send one short message naming
@@ -56,11 +57,10 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
 2. **Keep minis-01 ready to send.** Re-compose after any coaster change. Run the slice and
    preflight and filament-sync against the live AMS trays, and check that each item's
    bikar pin matches bikar main. Stop at the send: dispatching is Omar's.
-3. **New constructions.** If `make validate-constructions` or the youtube reconstructions
-   list shows an id missing from the ledger, migrate it with the `import-construction`
-   skill. That is one bikar PR plus one 3d-models PR. When a construction needs something
-   bikar can't express, add it to bikar in its own PR first; that is how the last
-   migrations went.
+3. **Tooling that blocks this plate.** If friction in composing, slicing or filament-sync
+   stops minis-01, fix only that. General tooling work belongs to
+   [`print-infrastructure.md`](print-infrastructure.md), and new designs to
+   [`catalog-expansion.md`](catalog-expansion.md).
 4. **Standard-size plate (P5.2).** Only after item 1 has settled the CAL-CST numbers.
 5. **FAQ (task #10).** After Omar marks each of the six candidates (regenerate them with
    `python3 tools/session_reflect.py update-faq`) as keep or discard and writes the answers,
