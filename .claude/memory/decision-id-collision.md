@@ -21,6 +21,9 @@ shared insertion point, not as a clean error, and GitHub reported #153 as
 recheck it at merge time, not when the PR opened.
 
 **How to apply:**
+- **Take the id from `python3 tools/next_id.py next D`** (reads origin/master and
+  every branch), and hook `46-decision-ids` blocks a clash at commit (added 2026-09-25
+  after the second collision, [[decision-id-collision-recurred]]).
 - **First-merged owns the id.** The PR still open yields and renumbers; never
   renumber what is already on master.
 - **Renumber corpus-wide, like a K1 withdrawal.** `git grep -n "D-0NN"` before
