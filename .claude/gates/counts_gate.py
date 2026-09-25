@@ -48,6 +48,12 @@ Authorities, and where each is read from:
                        published ref. Skippable: when bikar is unreachable the
                        quantity is labelled `[skipped]` in the summary rather
                        than folded into a clean run
+  faq-questions        the `## Q-NNN` entries of `docs/faq.md`, parsed by
+                       `tools/session_reflect.py`'s own `read_faq`: the parser
+                       that `show` and `update-faq` use, so the gate and the
+                       tool cannot disagree about what an entry is. Read from
+                       the file, not from a census, because a census reads this
+                       machine's transcripts and a fresh clone has none
 
 Marker syntax, written immediately after the number:
 
@@ -142,6 +148,9 @@ from doc_pointers import _sibling_root, _tracked_at_ref  # noqa: E402
 from constructions_ledger import ledger_counts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+
+from session_reflect import EVIDENCE, FAQ, read_faq  # noqa: E402
 GATES = Path(__file__).resolve().parent
 BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
 
@@ -434,6 +443,11 @@ def resolve_authorities() -> tuple[dict[str, tuple[int, str]], dict[str, list[st
     ledger = "`.claude/gates/constructions_ledger.py` (rows of `docs/constructions/ledger.md`)"
     out["constructions-total"] = (lc["constructions-total"], ledger)
     out["constructions-migrated"] = (lc["constructions-migrated"], ledger)
+    # The FAQ's question total, from the file itself: this repo, never skippable.
+    out["faq-questions"] = (
+        len(read_faq(FAQ, EVIDENCE)),
+        "`tools/session_reflect.py` `read_faq` (entries of `docs/faq.md`)",
+    )
     coupons = authority_coupon_dir()
     if coupons is not None:
         out["coupon-dir-bkr"] = (
