@@ -26,6 +26,16 @@ robust, visualizable, easy to configure way"), catalog expansion ("find new patt
 reconstruct") and video reconstruction ("deconstructing a video, iterating on it"). There are
 five in all, listed in `.claude/loop-prompts/README.md`.
 
+**Each loop has its own backlog and done list at `docs/tasks/<loop>/{backlog,done}.md`**
+(decided 2026-09-25). They live under `docs/tasks/`, not under `.claude/` and not in a
+`docs/loops/` folder; Omar: "there shouldnt be loops under docs", then "it should be
+docs/tasks/<loop>/{backlog,done}.md". The prompt says how a pass runs and the backlog says what
+comes next. A pass adds what it finds to the matching loop's backlog, and the PR that ships an
+item moves it to the done list. Work no loop owns goes in `docs/tasks/parked/backlog.md`.
+`docs/backlog.md` stays in place as the print-gated register, because the count gates read it.
+`docs/tasks/done.md` is frozen at Snapshot 10 so old task ids still resolve. The video loop
+keeps its lists in the youtube repo.
+
 **How to apply:** when the state changes, update the matching file rather than writing a new
 one. A new loop gets its own file only when it has a different goal. Related:
 [[omar-working-preferences]], [[branch-state-across-repos]].

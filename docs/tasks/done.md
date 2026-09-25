@@ -1,5 +1,11 @@
 # Completed session tasks — frozen archive
 
+**Frozen at Snapshot 10 (2026-09-25).** Finished work now goes in each loop's own done list,
+`docs/tasks/<loop>/done.md`, beside that loop's backlog — indexed in
+[`.claude/loop-prompts/README.md`](../../.claude/loop-prompts/README.md). This file stays so
+the task ids cited elsewhere keep a referent; each per-loop done list links back to the
+sections here that came before it.
+
 **What this is:** periodic wholesale snapshots (Snapshot 1: 2026-08-15; Snapshot
 2: 2026-08-30) of the completed entries in the
 Claude Code session task list, archived so the task numbers cited elsewhere

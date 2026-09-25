@@ -22,18 +22,17 @@ queue has grown by screened sources, each with a written GO or NO-GO.
 
 - **[Ledger](../../docs/constructions/ledger.md):** 8 migrated (CS-1, 2, 6 to 11), 1 with no
   piece by design (`M60LJNNslHU`), 0 remaining of the rows it lists.
-- **One gap already known:** youtube has `bknVRSMcLj0` reconstructed (Imamzadeh Isma'il
-  12-fold kite tile, 82/82 steps, mean score 0.877), and it has **no ledger row**. That is the
-  first item. Also find out why the ledger check didn't catch it.
-- **Blank checks:** several ledger rows have "—" in the O1, O2 and O3 columns. Filling one in
-  is catalog work too.
+- **The open items** — the `bknVRSMcLj0` reconstruction with no ledger row, the blank O1, O2
+  and O3 cells, the empty candidate queue — are in the backlog,
+  [`docs/tasks/catalog-expansion/backlog.md`](../../docs/tasks/catalog-expansion/backlog.md).
+  What shipped goes in its [done list](../../docs/tasks/catalog-expansion/done.md).
 - **Sources:** youtube's discovery wiki (creators, concepts, a relevance file) and its
   `youtube-discover` / `youtube-discovery` skills. So far every construction comes from one
   creator, Sarah Brewer.
 
 ## Each pass of the loop
 
-1. **Take stock.** Compare youtube's `reconstructions/` folder with the ledger rows, and
+1. **Take stock.** Read the backlog. Compare youtube's `reconstructions/` folder with the ledger rows, and
    look at the blank oracle cells. Check youtube's ladder (`make ladder` in that repo) for
    candidates.
 2. **Pick by ROI:**
@@ -51,8 +50,10 @@ queue has grown by screened sources, each with a written GO or NO-GO.
 3. **Ship it.** One PR per repo, each from its own worktree. When a construction needs
    something bikar can't express, add that to bikar in its own PR first; that is how the
    earlier migrations went.
-4. **Record it.** The ledger row, the count, and the screening verdict. Take any new D- id
-   from `python3 tools/next_id.py next D`.
+4. **Record it,** in the same PR. The ledger row, the count, and the screening verdict. Move
+   the item to the done list with the date and PR number; add new finds, including screened
+   candidates and hand-offs, to the backlog. Take any new D- id from
+   `python3 tools/next_id.py next D`.
 5. **Wait when there's nothing to migrate and the queue is full.** Say so in one line, then
    schedule the next wakeup 30 to 60 minutes out.
 
