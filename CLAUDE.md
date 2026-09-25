@@ -15,14 +15,14 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
   whole tree. `00-branch` refuses a commit on master (`BRANCH_OK=1` overrides).
   `20-use-cases` **blocks** a commit staging a file the map pins (`USE_CASES_OK=1`
   overrides): `validate.py --refresh` re-pins hashes and *reports* moved anchors.
-- **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`,
-  `make deploy` (gh-pages worktree). `gh-pages` is a deliberately diverged
-  branch — never merge it into `master`.
+- **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`, `make deploy`
+  (gh-pages worktree). `gh-pages` is deliberately diverged — never merge it into `master`.
 - **CI**: there is none — no workflows, so `make validate` (alias `make local.ci`,
   the siblings' spelling) is the only run there is and `make deploy` needs no
   runner. A billing block is not a red build (`gh run view <id> --json jobs` →
-  `"steps": []` in 2–3 s: nothing measured) and must never stop a merge or a deploy
-  — [`docs/local-ci-runbook.md`](docs/local-ci-runbook.md).
+  `"steps": []` in 2–3 s: nothing measured) and never stops a merge or deploy — [runbook](docs/local-ci-runbook.md).
+- **New D-/Q- ids**: `python3 tools/next_id.py next D`, never last id + 1 from your
+  checkout (D-051, D-055 were taken twice); hook `46-decision-ids` blocks a clash.
 - **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
   (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster).
 

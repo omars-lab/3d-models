@@ -826,3 +826,11 @@ validate-reflect:
 	$(PYTHON) $(ROOT_DIR)/tools/session_reflect.py census --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/session_reflect.py show --audit
 
+
+# Id-clash gate — the wholesale form of .githooks/pre-commit.d/46-decision-ids.
+# Self-tests tools/next_id.py on a throwaway repo (a stale id, a rebased id, an
+# id another branch claims, a duplicate), then checks the working tree against
+# origin/master. Take a new D-/Q- id with `python3 tools/next_id.py next D`.
+validate-ids:
+	$(PYTHON) $(ROOT_DIR)/tools/next_id.py --self-test
+	$(PYTHON) $(ROOT_DIR)/tools/next_id.py check

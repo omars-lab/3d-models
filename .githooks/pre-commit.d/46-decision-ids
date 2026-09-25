@@ -1,0 +1,25 @@
+#!/bin/sh
+# Id-clash gate (tools/next_id.py check). Two sessions have twice taken the
+# same next decision id (D-051, D-055) because each read "last id + 1" from its
+# own checkout. This blocks a commit that stages decisions-log.md or faq.md when
+# one id heads two entries, or when an id this branch added is already on
+# origin/master under a different title — first merged owns it, so renumber
+# with `python3 tools/next_id.py next D`. It judges against origin/master as of
+# the last fetch; it does not fetch. Override once: IDS_OK=1 git commit
+#
+# wholesale: make validate-ids
+[ -n "$IDS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the id-clash gate" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `tools/`.
+TOOL="$(git rev-parse --show-toplevel)/tools/next_id.py"
+if [ ! -f "$TOOL" ]; then
+  echo "pre-commit: no id tool in this worktree ($TOOL) — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^(docs/decisions-log\.md|docs/faq\.md|tools/next_id\.py)$'; then
+  exec python3 "$TOOL" check --staged
+fi
+exit 0
