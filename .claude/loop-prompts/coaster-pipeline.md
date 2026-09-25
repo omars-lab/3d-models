@@ -43,7 +43,7 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
    one line and do the item. Don't ask which one to take.
 3. **Ship it.** One branch per item, off `origin/master` (never off another open PR), in its
    own worktree. Open a PR, merge it, and delete that item's branch and worktree. Nothing more.
-4. **Record it,** in the same PR. Move the item from the backlog to the
+4. **Record it** with the `manage-tasks` skill, in the same PR. Move the item from the backlog to the
    [done list](../../docs/tasks/coaster-pipeline/done.md) with the date and PR number. Add
    anything the pass found but didn't do to the backlog, or to another loop's backlog if it is
    that loop's job (see the [README](README.md)). If the approach changed, add a

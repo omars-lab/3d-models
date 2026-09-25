@@ -56,7 +56,7 @@ The send itself stays Omar's.
    failure"). A picture of the plate beats a line of text saying it is fine.
 4. **Ship it.** Open one PR from its own worktree, then merge it and delete that branch.
    Re-run step 1 to show the friction is gone.
-5. **Record it,** in the same PR. Move the item to the
+5. **Record it** with the `manage-tasks` skill, in the same PR. Move the item to the
    [done list](../../docs/tasks/print-infrastructure/done.md) with the date and PR number.
    Update the plate-composer design, or add a `docs/issues/<slug>.md` if the approach changed.
    Work for another loop goes into that loop's backlog ([README](README.md)).

@@ -39,7 +39,7 @@ when a full pass finds nothing to do, and that memory says so with the date.
    empty. Then `git branch -D` and `git push origin --delete` as two separate commands.
    Fast-forward the local default, and move the detached worktrees to it with
    `checkout --detach`.
-4. **Record it.** Add a line to the
+4. **Record it** with the `manage-tasks` skill. Add a line to the
    [done list](../../docs/tasks/consolidation/done.md) with the date, counts and PRs. Anything
    left for a later pass (a PR waiting on Omar, a branch still in use) goes in the
    [backlog](../../docs/tasks/consolidation/backlog.md). Update
