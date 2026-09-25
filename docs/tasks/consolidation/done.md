@@ -2,6 +2,9 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-25 — Omar logged in to LastPass and bikar's CI secrets were pushed with
+  `make setup-secrets`: 4 Cloudflare Pages secrets and 6 GitHub Actions secrets, all overwriting
+  existing ones; the 3 optional `QIYAS_*` secrets are not in `.env` and were skipped (no PR).
 - 2026-09-25 — the link check now catches what a rename or delete breaks elsewhere, covers
   `.claude/` files, and `make validate` installs `tools/bambu`'s packages in a fresh worktree
   (3d-models #313).

@@ -11,7 +11,3 @@ another session is still using, a trap that needs a fix in its own PR.
 
 Last full pass 2026-09-25: 0 open PRs and 0 stashes in all six repos; state in the
 [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
-
-1. **Push bikar's CI secrets — waiting on Omar.** `make setup-secrets` in bikar needs his
-   LastPass login; nothing to do until he runs it. Moved from the coaster-pipeline backlog on
-   2026-09-25 (board #9).
