@@ -814,7 +814,11 @@ validate-env:
 bambu-flags:
 	@cd $(BAMBU_DIR) && ./bin/bambu dump-flags --write
 
+# A fresh worktree has no tools/bambu/node_modules; install them here rather than
+# fail every `make validate` in a new worktree. The gate script itself still
+# refuses to install, so a commit that never touches the CLI is not made to.
 validate-bambu-flags:
+	@[ -d ${ROOT_DIR}/tools/bambu/node_modules ] || npm ci --silent --prefix ${ROOT_DIR}/tools/bambu
 	@sh ${ROOT_DIR}/.claude/gates/bambu_flags_gate.sh --self-test
 	@cd ${ROOT_DIR} && sh .claude/gates/bambu_flags_gate.sh
 
