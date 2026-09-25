@@ -34,13 +34,14 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
 ## Each pass of the loop
 
 1. **Look before acting.** `git fetch` in 3d-models and bikar. Read `origin/master` and
-   `origin/main`, never the local refs, which lag. Run `gh pr list` in both repos. Run
-   `make validate`. If main is red, fixing it comes first.
+   `origin/main`, never the local refs, which lag. Run `make validate`. If main is red,
+   fixing it comes first. Reviewing, merging and cleaning up other PRs, branches and
+   worktrees is not this loop's job; that is [`consolidation.md`](consolidation.md).
 2. **Pick the top item by ROI** from the list below. That means what moves the goal most,
    for the least effort and risk. State the ranking in one line and do the item. Don't ask
    which one to take.
-3. **Ship it.** One branch per item, off `origin/master` (never off another open PR). Then a
-   PR, a merge, and cleanup, following CLAUDE.md and memory.
+3. **Ship it.** One branch per item, off `origin/master` (never off another open PR), in its
+   own worktree. Open a PR, merge it, and delete that item's branch and worktree. Nothing more.
 4. **Record it.** Update the plan's status line or the task board. If the approach changed,
    add a `docs/issues/<slug>.md`.
 5. **Wait when blocked.** If every remaining item needs Omar, send one short message naming
