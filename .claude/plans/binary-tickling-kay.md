@@ -8,12 +8,12 @@
 
 A physical **Bambu X2D** now exists on the LAN (`192.168.1.186`, serial `20P6AJ641401412`,
 firmware `01.02.00.00`). For the entire life of this project **nothing has ever been printed** —
-`docs/backlog.md` opens with *"PLANNING DOCUMENT, NOTHING MEASURED"* and the bet registry agrees:
+`docs/tasks/coaster-pipeline/backlog.md` opens with *"PLANNING DOCUMENT, NOTHING MEASURED"* and the bet registry agrees:
 **21 registered CAL bets · 21 `Calibrated` records — 21 provisional, 0 measured**. Every physical
 number in every design doc is either quoted from someone else's literature or an explicitly-labelled
 unmeasured default.
 
-The printer is therefore **not a build blocker — it is a truth blocker** (`backlog.md` §1). All
+The printer is therefore **not a build blocker — it is a truth blocker** (`docs/tasks/coaster-pipeline/backlog.md` §1). All
 geometry is authored and mesh-verified; the machine card renders, the Lego engine phases are
 complete, the orbs render. What is missing is a single honest measurement of *this* machine. This
 plan sequences the work that owning a printer unblocks, in the order the backlog proves is the only
@@ -108,7 +108,7 @@ Each its own branch → PR (PR-flow for all repos; stage by name; no `git add -A
 ## Phase B — owner-gated physical steps (Omar; I hand these off explicitly)
 
 - **B1. Toggle LAN Mode + Developer Mode** on the X2D touchscreen; read the access code. (Unblocks #8.)
-- **B2. Buy / locate the instruments** the protocol assumes (`backlog.md` §4 not-done #4): a caliper
+- **B2. Buy / locate the instruments** the protocol assumes (`docs/tasks/coaster-pipeline/backlog.md` §4 not-done #4): a caliper
   (make + resolution recorded, zeroed at session start), a flat reference (granite plate or float glass) and
   feeler gauges for MC-5, plus **at least one real LEGO plate and one real LEGO 2×4 brick** for the LG series.
   Bags + a marker — rung identity does not survive onto the part; a mis-bagged rung "is worse than a missing one."
@@ -118,7 +118,7 @@ Each its own branch → PR (PR-flow for all repos; stage by name; no `git add -A
 
 ## Phase C — the print campaign (each plate settles, then propagates)
 
-Order is fixed by *downstream work unblocked per plate* (`backlog.md` §2), not document age.
+Order is fixed by *downstream work unblocked per plate* (`docs/tasks/coaster-pipeline/backlog.md` §2), not document age.
 
 - **Plate 1 — machine card, all six coupons, one session** (`MC-1`…`MC-6`; 89.7 cm³ / ≈111 g PLA).
   *Why nothing else can go first:* settles **10 of 21 bets / 15 of 21 records** by measuring the machine
@@ -146,7 +146,7 @@ Order is fixed by *downstream work unblocked per plate* (`backlog.md` §2), not 
 
 ## Phase D — propagate after each reading (the step that gets skipped)
 
-For every measurement, all five must happen or the bet stays open (`backlog.md` §5): (1) the constant's value
+For every measurement, all five must happen or the bet stays open (`docs/tasks/coaster-pipeline/backlog.md` §5): (1) the constant's value
 **and** its `Calibrated<T>` status flip together to `measured` naming machine/material/nozzle/profile/date/coupon;
 (2) the entry comes **out** of bikar's `.calibration-baseline.json` (baseline may only shrink);
 (3) `bets.md` regenerated via `npm run registry:calibration`, never hand-edited; (4) the design doc's Appendix B
@@ -268,7 +268,7 @@ is untestable on a straight rod (reads 100% every rung) — it rides `CAL-BED-01
 
 - `bikar:packages/knobs/src/machines.ts` — add the `bambu-x2d` `PrintTarget` (Phase A1).
 - `docs/decisions-log.md` — dual-nozzle representation decision (Phase A2).
-- `docs/backlog.md` — the campaign master; update Plate statuses as prints land.
+- `docs/tasks/coaster-pipeline/backlog.md` — the campaign master; update Plate statuses as prints land.
 - `.claude/skills/prototype/catalog.md` — where each coupon's result is logged (Phase D5).
 - `.claude/skills/prototype/SKILL.md` — extend to script the photograph + compare-verdict seams (Phase A8).
 - `docs/prints-tab-design.md` (`readings[]`/`objects[]` schema) + `.claude/gates/prints_gate.py` — add `expected`/`verdict` fields + the compare check; ship gate R3 (Phase A8).
@@ -302,7 +302,7 @@ is untestable on a straight rod (reads 100% every rung) — it rides `CAL-BED-01
 
 ## Sequencing & tracking
 
-**Phase A is complete** (software prep, all merged — see `docs/tasks/done.md` Snapshot 7 and the live board
+**Phase A is complete** (software prep, all merged — see `docs/tasks/coaster-pipeline/done.md` and `docs/tasks/print-infrastructure/done.md`, Snapshot 7, and the live board
 tasks #18–#49). The campaign is now in **Phase E — dogfooding `guide-print` to a clean Plate-1 print**,
 which is the current focus. Order:
 

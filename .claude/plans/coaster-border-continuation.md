@@ -37,7 +37,7 @@ skip to §4 for what is left.**
 |---|---|---|
 | `~/Workspace/git/bikar-border` | `feat/coaster-border` off `origin/main` 5152cfd (#211 minimal coaster) | one commit `f5d1781` (checkpoint, not pushed): `ast.ts`, `parser.ts`, `evaluator.ts`, `coaster.ts` edits + new `coaster-border.ts` and its test (Fable subagent, 12/12). `npx vitest run coaster`: 7 files, 158 tests passing. |
 | `~/Workspace/git/bikar-placeborder` | detached at 5152cfd | subagent scratch worktree; its two files are already copied into `bikar-border`. Remove it (`git worktree remove`) after the border PR merges. |
-| `~/Workspace/git/3d-models-constructions` | `chore/plans-and-done-snapshot` (74ef6bb) = 3d-models **PR #260** (this plan + `docs/tasks/done.md` Snapshot 9), open, **Omar merges** (the auto-mode classifier refuses an unattended merge) | design doc `docs/coaster-border-design.md` merged as 3d-models #257 (D-071). The catalog/gallery slice (CS-5) is not started. Once #260 is merged, branch D off the new `origin/master`. |
+| `~/Workspace/git/3d-models-constructions` | `chore/plans-and-done-snapshot` (74ef6bb) = 3d-models **PR #260** (this plan + the done list's Snapshot 9, now in `docs/tasks/catalog-expansion/done.md`), open, **Omar merges** (the auto-mode classifier refuses an unattended merge) | design doc `docs/coaster-border-design.md` merged as 3d-models #257 (D-071). The catalog/gallery slice (CS-5) is not started. Once #260 is merged, branch D off the new `origin/master`. |
 | `~/Workspace/git/3d-models` (shared checkout) | `feat/x2d-slice-preflight` | **another session's branch — never commit here.** |
 
 Merged inputs the border builds on: bikar #209 interlock (D-069), #210 Coaster Lab (D-067),

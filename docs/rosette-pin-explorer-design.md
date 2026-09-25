@@ -341,7 +341,7 @@ runtime skill is needed for.
 4. **P2 — 3.2, 4.2** (data-file + tube cap): cheap, no blockers, do opportunistically.
 5. **Printer-gated (🔴, HELD until a Bambu-class printer):** 3.3 (`LG-P2`/`CAL-CLB-01`),
    3.4 (real links), 4.3 (`LG-F1`/`LG-R1`). These cannot close without a measured part —
-   the same wall every LEGO-pin coupon hits (see [backlog.md](backlog.md) §3.2, print-gated).
+   the same wall every LEGO-pin coupon hits (see [print register](tasks/coaster-pipeline/backlog.md) §3.2, print-gated).
 
 ---
 
@@ -368,7 +368,7 @@ for *any* pattern" fastest:
 **Gated on a download — a human must fetch an app.** The LDraw export has been opened by
 three.js `LDrawLoader` end to end and by LDView (installed, measured, removed —
 [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10). Two readers are still owed
-by [`backlog.md`](backlog.md) §6.1: **LeoCAD**, where the source reading *predicts* the inline
+by the [parked backlog](tasks/parked/backlog.md), "LDraw export, never opened in a viewer": **LeoCAD**, where the source reading *predicts* the inline
 geometry is silently dropped (the export-succeeds-and-yields-nothing class), and **BrickLink
 Studio**, which is untouched and which nothing in the survey predicts. Neither can be settled by
 code; both need the download that the survey's §1.1 says a human must run.
@@ -379,7 +379,7 @@ the geometry gate. The decision can be made now; the *calibration* of whatever i
 because LG-F1 and LG-D1 are the data. A proxy shipped before them is a `CAL-*` bet by
 construction, which is legitimate and must be labelled as one.
 
-**Gated on a printer — held, not blocked.** Every coupon in [`backlog.md`](backlog.md) §3.2
+**Gated on a printer — held, not blocked.** Every coupon in [print register](tasks/coaster-pipeline/backlog.md) §3.2
 (LG-F1, F2, R1, S1, D1, B1, B2, P1, P2), and with them 3.3, 3.4's measured-drift half and 4.3
 above. The backlog owns these; they are not re-listed in the task system, per its §3.8.
 

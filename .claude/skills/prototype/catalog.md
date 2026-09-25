@@ -1172,7 +1172,7 @@ possible. They sit last because nothing else in this catalog depends on them,
 and each stays `planned` until the coupons feeding it report.
 
 They were absent from this file until 2026-08-03 even though four design docs
-demanded them, which is what [`docs/backlog.md`](../../../docs/backlog.md) §3.5
+demanded them, which is what [print register](../../../docs/tasks/coaster-pipeline/backlog.md) §3.5
 was tracking. Every figure quoted below is from a render of the shipped model at
 bikar `d9b3c84`, not an estimate.
 

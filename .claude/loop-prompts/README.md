@@ -14,7 +14,7 @@ pass runs; the backlog says *what* is next; the done list says what shipped.
 | [`catalog-expansion.md`](catalog-expansion.md) | Find new patterns and turn reconstructions into catalog coasters | 3d-models, bikar, youtube | [backlog](../../docs/tasks/catalog-expansion/backlog.md) | [done](../../docs/tasks/catalog-expansion/done.md) |
 | [`video-reconstruction.md`](video-reconstruction.md) | Rebuild one tutorial video as a proved GeoGebra construction | youtube | youtube: `.claude/plans/learning-from-youtube.md` | youtube: `docs/tasks/done.md` |
 | [`consolidation.md`](consolidation.md) | Merge PRs, clean up branches, worktrees and stashes, and lose nothing | all six repos | [backlog](../../docs/tasks/consolidation/backlog.md) | [done](../../docs/tasks/consolidation/done.md) |
-| — | Open work no loop owns | — | [parked](../../docs/tasks/parked/backlog.md) | — |
+| — | Work no loop owns | — | [parked](../../docs/tasks/parked/backlog.md) | [done](../../docs/tasks/parked/done.md) |
 
 Work flows from reconstruction to catalog, then to the print infrastructure, then to the
 printed plate. Consolidation runs beside all of them. The video loop keeps its lists in the
@@ -30,12 +30,17 @@ youtube repo, where it runs; they are not copied here.
   with the date and the PR number. Delete the line from the backlog rather than marking it
   done there.
 
-## The older records
+## The older records, split by loop
 
-- [`docs/backlog.md`](../../docs/backlog.md) is the full print-gated register: plates 1 to 5,
-  every coupon, and every `CAL-*` bet with what it waits on. It stays where it is, because the
-  count checks read it and many docs link into its sections. The first-print backlog points
-  into it.
-- [`docs/tasks/done.md`](../../docs/tasks/done.md) holds the session task board's snapshots 1
-  to 10 and is frozen at 2026-09-25. Task ids cited elsewhere (`#37`, `#84`) resolve there.
-  New finished work goes in the per-loop done lists.
+On 2026-09-25 the two single lists were split into these files; git history has the originals.
+
+- The print-gated register (plates 1 to 5, every coupon, every `CAL-*` bet and what it waits
+  on) was `docs/backlog.md`. It is now the second half of the
+  [first-print backlog](../../docs/tasks/coaster-pipeline/backlog.md), with its section
+  numbers kept, so "backlog §3.8" still names the same section. `docs/backlog.md` is left as a
+  short page that says where each section went.
+- The session task board's snapshots 1 to 10 were `docs/tasks/done.md`. Each snapshot's
+  sections moved to the done list of the loop they belong to, and work no loop owns (orbs, Lego
+  Lab, d3) to the [parked done list](../../docs/tasks/parked/done.md). A task id like `#37`
+  means something only under its snapshot, because the board was renumbered; each done list
+  keeps the snapshot notes that say which numbering applies.

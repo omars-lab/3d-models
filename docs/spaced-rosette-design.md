@@ -149,7 +149,7 @@ FAIL: the same layout labelled "seats on a stock baseplate" (the K2 non-goal ass
   parts`, tests, a decision doc), sequenced after the explorer confirms the layout.
 - **The empirical residue is already someone else's bet.** Whether a *snap-to-studs* spaced array
   actually seats on a printed-onto-stock plate is plate fit and stud entry — the same measurements
-  the LEGO coupons in [`backlog.md`](backlog.md) §3.2 already hold (held on a printer). Per the
+  the LEGO coupons in [print register](tasks/coaster-pipeline/backlog.md) §3.2 already hold (held on a printer). Per the
   grounding process, one measurement is one bet: this feature mints **no** new bet, it inherits
   those. A *continuous* mount is a new printed object whose own fit is the same wall.
 

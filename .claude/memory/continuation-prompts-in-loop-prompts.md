@@ -32,9 +32,15 @@ five in all, listed in `.claude/loop-prompts/README.md`.
 docs/tasks/<loop>/{backlog,done}.md". The prompt says how a pass runs and the backlog says what
 comes next. A pass adds what it finds to the matching loop's backlog, and the PR that ships an
 item moves it to the done list. Work no loop owns goes in `docs/tasks/parked/backlog.md`.
-`docs/backlog.md` stays in place as the print-gated register, because the count gates read it.
-`docs/tasks/done.md` is frozen at Snapshot 10 so old task ids still resolve. The video loop
-keeps its lists in the youtube repo.
+The old single lists were then split for real, the same day. Omar: "i want to split the
+content up ... its checked into git". Git history is the archive, so no frozen copy is kept.
+The print-gated register (`docs/backlog.md` §1–§5, §7, §8) is now the second half of the
+coaster-pipeline backlog, with its section numbers kept. §6's closed history went to
+`docs/tasks/parked/done.md`. `docs/backlog.md` is now only a page saying where each section
+went; a research file links to it, and research stays word for word. `docs/tasks/done.md` is
+gone: each snapshot's sections sit in the matching loop's done list. Each snapshot's note came
+with them, because task ids were renumbered. The count gate scans all of `docs/`, so the count
+tags simply moved with the text. The video loop keeps its lists in the youtube repo.
 
 **How to apply:** when the state changes, update the matching file rather than writing a new
 one. A new loop gets its own file only when it has a different goal. Related:

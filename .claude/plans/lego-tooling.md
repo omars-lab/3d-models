@@ -17,7 +17,7 @@ five concrete goals are `docs/lego-lab-design.md` §1; their state on 2026-09-01
 | 1 | A `brick` declaration compiling to a watertight printable solid with pattern relief | **built** (M6) | lego-lab-design §4, §7, §10 |
 | 2 | Anchorability as a hard pass/fail gate | **built** (M7) | §5.2, §5.3; `grid-gate.ts` |
 | 3 | Grid fit as a 0..1 score with a tuning path | **built** (M7 + P1 sweep strip) | §5.3, `research/lego-lattice-matrix-sweep.md` |
-| 4 | True-scale interoperability **verified in plastic** | **open — the only open goal** | `docs/backlog.md` §3.2; printer on hold |
+| 4 | True-scale interoperability **verified in plastic** | **open — the only open goal** | `docs/tasks/coaster-pipeline/backlog.md` §3.2; printer on hold |
 | 5 | The Lego Lab page | **built** (P0–P3) | §9, §14 |
 
 Beyond the five: multi-piece export (D-006), `mural` (UC20), `footprint outline` (UC21), LDraw
@@ -28,7 +28,7 @@ shipped; each has its section in the doc named above.
 ## 2. What is left, by what gates it
 
 The authoritative list is `docs/rosette-pin-explorer-design.md` **§6.6** (the open ledger).
-`docs/backlog.md` §6.4 points at it. Summary, with the task that tracks each:
+`docs/tasks/parked/done.md` records the d3 stream beside it. Summary, with the task that tracks each:
 
 | Gate | Item | Task |
 |---|---|---|
@@ -38,7 +38,7 @@ The authoritative list is `docs/rosette-pin-explorer-design.md` **§6.6** (the o
 | none | Track 4.2 — interior-tube cap dial, kernel floor un-overridable — 🟢 bikar #143 `a4318c9` | #68 done |
 | download (user) | Open the MPD in LeoCAD and BrickLink Studio | #69 |
 | decision (user) | §11 Q6 — ship a clutch compliance proxy as a `CAL-*` bet — shipped as `CAL-GRP-01` (rib crush vs `CLUTCH_PROXY_FLOOR_MM`, settles LG-D1) 🟢 bikar #150 | #71 done |
-| printer (held) | Every LG-* coupon: F1, F2, R1, S1, D1, B1, B2, P1, P2 | none — `backlog.md` §3.2 owns them, per its §3.8 |
+| printer (held) | Every LG-* coupon: F1, F2, R1, S1, D1, B1, B2, P1, P2 | none — the print register (`docs/tasks/coaster-pipeline/backlog.md`) §3.2 owns them, per its §3.8 |
 
 Closed doors, so they are not reopened: §15.4's hook graduation (waits on measured recurrence),
 Q8's general two-vector basis (D-007, resolved as a label), Track 2.3's authoring skill (not
@@ -94,7 +94,7 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
   `docs/rosette-pin-explorer-design.md` (§6 roadmap, §6.6 ledger),
   `docs/lego-pattern-set-design.md` (mural), `docs/pattern-outline-brick-design.md`,
   `docs/d3-integration-design.md` §4 (the explorer is d3 Phase 1).
-- Backlog: `docs/backlog.md` §3.2 (LEGO ladder), §6.1 (LDraw viewers), §6.4 (d3 stream pointer).
+- Backlog: `docs/tasks/coaster-pipeline/backlog.md` §3.2 (LEGO ladder); LDraw viewers in `docs/tasks/parked/backlog.md`; the d3 stream in `docs/tasks/parked/done.md`.
 - Research: `docs/research/ldraw-cli-viewers.md` §10 (what was actually run),
   `docs/research/lego-lattice-matrix-sweep.md`.
 - The explorer artifact (the original diagnostic; the studio page superseded it):
@@ -109,5 +109,5 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
 A task number here is a *pointer into the session task system*, which is the one place that may
 carry them (memory rule: durable docs cite stable ids, never task numbers — this file is a plan,
 not a durable doc, which is why it is allowed to). When a task closes, update §2 and the doc's
-§6.6 in the same change. When a printer arrives, §2's last row moves to `backlog.md` §4's
+§6.6 in the same change. When a printer arrives, §2's last row moves to the print register's §4's
 "before the first print" sequence and this file records the date.

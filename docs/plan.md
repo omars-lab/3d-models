@@ -14,7 +14,7 @@ Rules this file follows:
   A PR that moves a §2 row and does not touch this file is not done.
 - **Pointer, not copy.** Owning sections: [`d3-integration-design.md`](d3-integration-design.md)
   §4 (phases) and §5 (decisions); [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md)
-  §6 (tracks), §6.5 (priority order), §6.6 (open ledger); [`backlog.md`](backlog.md)
+  §6 (tracks), §6.5 (priority order), §6.6 (open ledger); [print register](tasks/coaster-pipeline/backlog.md)
   (print-gated sequence, §6.4 the d3 pointer); [`decisions-log.md`](decisions-log.md).
 - The older `.claude/plans/*.md` files are plan-mode transcripts of shipped work
   (mural, calibration, lab, breakdown) and are historical, not this file's competitors.
@@ -31,7 +31,7 @@ Rules this file follows:
 2. **Publish the bikar/qiyas contract + JSON schema** — pending the user's call on
    where and how (memory: contract v1.5 accepted, mirrors cascaded).
 3. **The first physical print** — printer-gated, and tracked in the backlog, not the §2
-   queue. Sequence and what each plate unblocks: [`backlog.md`](backlog.md) §2–§3; the
+   queue. Sequence and what each plate unblocks: [print register](tasks/coaster-pipeline/backlog.md) §2–§3; the
    explorer's own printer-held rows in [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md)
    §6.5; record format: [`prints-tab-design.md`](prints-tab-design.md).
 4. **Keep the house honest** — gates green, memory an index, branches clean, this file
@@ -43,7 +43,7 @@ State marks: 🟢 shipped · 🔵 live (being built) · ⚪ unblocked, queued ·
 🔴 gated (printer or external).
 
 Printer-gated work is not queued here (objective 3 above): the first physical print lives
-in [`backlog.md`](backlog.md) §2–§3 and the explorer's printer-held rows in
+in [print register](tasks/coaster-pipeline/backlog.md) §2–§3 and the explorer's printer-held rows in
 [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) §6.5. A row appears here
 only when it needs nothing but work, a user decision, or an external repo.
 
@@ -67,7 +67,7 @@ only when it needs nothing but work, a user decision, or an external repo.
 | 2.12 | **Decision hub** — the cross-repo ledger script (sacred-patterns' cross-repo generator, *not* bikar's within-repo one) indexes this repo's `## D-0xx` headings as links, nothing copied; the cross-repo citation check blocks on a D-number that resolves in neither this file's headings nor bikar's decisions tree. **Shipped** (sacred-patterns #44 `a89f45a`): index section + citation gate + 20 test assertions; the block fires in sacred-patterns' own pre-commit and `make local.ci`, and bikar's pre-commit runs it as a non-blocking NOTE | 🟢 | — | D-049 §3, D-004 |
 | 2.13 | **Studio status page** — three facts read from files, none typed: bikar commit the gallery was built from, use-cases `as_of` pins, last deploy; rendered like the studio index, with a test holding it to the filesystem. **Shipped 2026-09-02** (3d-models #156): `status.html` at the gallery root (a 3d-models page, **not** a bikar lab page — all three facts are this repo's provenance and would be meaningless on bikar's own studio deploy), reading `status-manifest.json` that `build/status_manifest.py` writes from `build/bikar-ref.txt` + the map's `as_of` + the `gh-pages` tip; each absent source is a named null, and the generator's `--self-test` builds a real fixture repo and asserts every fact — and every zero-state — against disk. `make validate-status` runs it as a `hook_parity` EXTRA (no staged trigger, so no hook); UC27 + G.status added | 🟢 | none | D-049 §4 |
 | 2.14 | **Rosette-N sweep record** — the three parked value-triples plus the working tree as a table beside the pattern in bikar (`patterns/Rosettes/Rosette-N.sweep.md`, bikar #142 `6bcf5c5`, corrected #144 `56ab23b`); stashes dropped and the working tree reverted 2026-09-02 after re-reading each against the table | 🟢 | none | D-049 §6 |
-| 2.15 | **Spaced Rosette — a rosette as its own pieces on a spaced grid, spacing on a dial.** bikar already decomposes Rosette-*n* into *n* petals + 1 star; each prints on its own and lays out on a grid whose inter-piece **spacing is a tunable dial** (0 → composes the rosette, open it → they step apart). The load-bearing find: spacing is a **placement transform, not geometry** — no kernel change, no edge-to-edge relief, so this is the anti-`mural` (opposite end of the same inter-piece axis). Owner decisions 2026-09-02 from a live prototype: **radial layout** primary (blooms, keeps symmetry), **both mounts** (continuous + snap-to-studs toggle). First deliverable = the explorer spacing dial (a schema `param`, Track 2). Empirical residue inherits [`CAL-CLB-01`](backlog.md) + `CAL-STK-01`, no new bet | ⚪ | none for the dial; printer only for physical fit, already those bets | [`spaced-rosette-design.md`](spaced-rosette-design.md) |
+| 2.15 | **Spaced Rosette — a rosette as its own pieces on a spaced grid, spacing on a dial.** bikar already decomposes Rosette-*n* into *n* petals + 1 star; each prints on its own and lays out on a grid whose inter-piece **spacing is a tunable dial** (0 → composes the rosette, open it → they step apart). The load-bearing find: spacing is a **placement transform, not geometry** — no kernel change, no edge-to-edge relief, so this is the anti-`mural` (opposite end of the same inter-piece axis). Owner decisions 2026-09-02 from a live prototype: **radial layout** primary (blooms, keeps symmetry), **both mounts** (continuous + snap-to-studs toggle). First deliverable = the explorer spacing dial (a schema `param`, Track 2). Empirical residue inherits [`CAL-CLB-01`](tasks/coaster-pipeline/backlog.md) + `CAL-STK-01`, no new bet | ⚪ | none for the dial; printer only for physical fit, already those bets | [`spaced-rosette-design.md`](spaced-rosette-design.md) |
 
 ## 3. Shipped — this stream, newest first
 
@@ -146,7 +146,7 @@ no CORS when hosted).
 **Design docs here.** [`d3-integration-design.md`](d3-integration-design.md) ·
 [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) ·
 [`lego-lab-design.md`](lego-lab-design.md) · [`prints-tab-design.md`](prints-tab-design.md) ·
-[`backlog.md`](backlog.md) · [`decisions-log.md`](decisions-log.md) ·
+[print register](tasks/coaster-pipeline/backlog.md) · [`decisions-log.md`](decisions-log.md) ·
 [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md).
 
 **Sibling docs.** bikar decision `bikar:docs/decisions/2026-08-31-d3-viz-adapter.md`
@@ -160,7 +160,8 @@ holds the merge closing checklist.
 
 ## 6. Reading this file against itself
 
-- §2.1's state (shipped) agrees with backlog §6.4 (shipped 2026-09-01) and d3 doc §4
+- §2.1's state (shipped) agrees with the d3 stream table, once backlog §6.4 and now in
+  [`tasks/parked/done.md`](tasks/parked/done.md) (shipped 2026-09-01), and d3 doc §4
   (Phase 2 SHIPPED); the three moved together in the PR that ran 2.1.f.
 - §2.2 lists exactly the four unblocked rows of explorer doc §6.6; its item 5 is
   printer-held and lives in explorer doc §6.5, not the §2 queue (§1 objective 3).

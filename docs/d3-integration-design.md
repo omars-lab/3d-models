@@ -10,7 +10,7 @@ carried the load-bearing choices to the user as decisions ([§5](#5-decisions-to
 four of which were settled 2026-08-31** and are now recorded there as the direction a build
 follows.
 
-This is a *prepare-the-approach* item, in the sense [`backlog.md`](backlog.md) reserves for
+This is a *prepare-the-approach* item, in the sense [print register](tasks/coaster-pipeline/backlog.md) reserves for
 work that is queued but not yet a build. It is the visualization-layer sibling of the
 [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md), which is the first concrete
 consumer that will need this decision settled.
