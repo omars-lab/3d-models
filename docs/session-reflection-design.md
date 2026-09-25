@@ -1,11 +1,11 @@
 # Session-reflection: a measured FAQ that answers what sessions re-derive
 
-**Status:** built except the skill (2026-09-25). `tools/session_reflect.py` ships
+**Status:** built (2026-09-25). `tools/session_reflect.py` ships
 the three verbs of §4 and the fixture self-test of §8. [faq.md](faq.md) and its
 empty sidecar `docs/faq-evidence.jsonl` exist, with no entries yet. The
-`faq-questions` count authority is registered, and `make validate-reflect` is at
-the end of the Makefile. Still to build: the skill (§5), and the first real
-`update-faq` run, which a person has to review. The census this rests on is
+`faq-questions` count authority is registered, `make validate-reflect` is at
+the end of the Makefile, and the skill (§5) is written. What is left is the first
+real `update-faq` run, which a person has to review. The census this rests on is
 [research/session-reflection-census.md](research/session-reflection-census.md),
 run 2026-09-17 over 17 main sessions + 176 subagent transcripts (241,226 lines,
 80,203 assistant turns) with the prototype that preceded the tool. The proposal
@@ -148,8 +148,7 @@ holds on both sides.
 
 ## 5. How the skill updates the FAQ (tool proposes, human confirms)
 
-The `session-reflect` skill (proposed at .claude/skills/session-reflect/, not yet
-written) runs the loop: `census` → `update-faq` → the human reads the
+The [`session-reflect` skill](../.claude/skills/session-reflect/SKILL.md) runs the loop: `census` → `update-faq` → the human reads the
 proposal, merges or discards clusters, and **writes the answer prose**. The tool
 supplies everything measurable (the question cluster, counts, evidence pointers,
 the anchored code pointer where the answer lives) and nothing judgemental: it
