@@ -1,0 +1,60 @@
+# minis-03 — the openwork styles, and every mating style as a pair
+#
+# Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
+# Two new styles shipped in bikar on 2026-09-25 (`openwork frame <mm>`), and Omar
+# asked the same day that pegs minis print two at a time "since they need to fit
+# together". So this plate carries, for CS-1 (GimTvN9hw4U) and CS-2 (7apC5Q9QS-8),
+# at size 40:
+#
+#   minimal-frame ×1  `-minimal-frame-coaster`  a solid frame round the edge, the
+#                                               straps standing inside, every empty
+#                                               space cut through
+#   minimal-pegs  ×2  `-minimal-pegs-coaster`   minimal-frame with dovetails in the
+#                                               frame — two, so the pair can be
+#                                               pushed together to test the fit
+#   interlock     ×2  `-interlock-coaster`      plain with dovetails — minis-02 has
+#                                               one copy, which cannot show the fit
+#
+# Straps at 1.6 mm on the openwork styles: at 40 mm the default 2 mm closes the
+# holes up, and 1.6 mm is the freestanding floor (CAL-CST-07). The pegs frame stays
+# at the file's default (slot depth + clearance + 2.5 mm). Every item passed the mesh
+# gate and the linkage gate (one body) at exactly these params on 2026-09-25.
+#
+# Left off, on purpose:
+#   plain, minimal, twist  already on minis-02, one copy is all they need.
+#   border  carries `color border …`, so it needs a colour plate (`bambu slice
+#           coaster`); compose would drop the colour (see minis-01).
+#
+# Validate (no hardware, no slicer):
+#   bambu slice compose docs/plates/minis-03.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-frame-coaster.bkr  # CS-1 minimal-frame
+    piece:  Coaster
+    params: { size: 40, strap: 1.6 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-pegs-coaster.bkr   # CS-1 minimal-pegs (pair)
+    piece:  Coaster
+    params: { size: 40, strap: 1.6 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr      # CS-1 interlock (pair)
+    piece:  Coaster
+    params: { size: 40 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-frame-coaster.bkr  # CS-2 minimal-frame
+    piece:  Coaster
+    params: { size: 40, strap: 1.6 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-pegs-coaster.bkr   # CS-2 minimal-pegs (pair)
+    piece:  Coaster
+    params: { size: 40, strap: 1.6 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr      # CS-2 interlock (pair)
+    piece:  Coaster
+    params: { size: 40 }
+    count:  2

@@ -36,7 +36,14 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 
 ## Owner-gated
 
-Sending a print and which filament to load. Other owner-gated work lives where its loop is:
+Sending a print and which filament to load. Waiting on Omar to send:
+
+- [minis-03](../../plates/minis-03.yaml) — the openwork styles (minimal-frame, and
+  minimal-pegs as a pair) plus interlock as a pair, CS-1 and CS-2. Dry-run placed all ten
+  2026-09-25. The pairs are pushed together to judge the dovetail fit; what they show goes
+  into the print-coaster-samples skill's `sample-rules.md`.
+
+Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
 in [parked](../parked/backlog.md).
 
