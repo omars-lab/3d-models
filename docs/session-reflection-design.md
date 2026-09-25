@@ -1,10 +1,12 @@
 # Session-reflection: a measured FAQ that answers what sessions re-derive
 
-**Status:** design, not built. The census it rests on is
+**Status:** the tool is built (2026-09-25): `tools/session_reflect.py` ships the
+three verbs of §4 and the fixture self-test of §8. The FAQ, its evidence sidecar,
+the count authority, the Makefile target and the skill are not built yet. The
+census it rests on is
 [research/session-reflection-census.md](research/session-reflection-census.md),
 run 2026-09-17 over 17 main sessions + 176 subagent transcripts (241,226 lines,
-80,203 assistant turns). The one artefact that exists is the prototype miner
-`tools/session_reflect.py`, flagged as a prototype in its own header. Two output
+80,203 assistant turns) with the prototype that preceded the tool. Two output
 files this doc names — docs/faq.md and docs/faq-evidence.jsonl — do **not** exist
 yet; they are written in plain prose here, not backticked, because a backticked
 path is a claim this repo's pointer gate resolves on disk.
@@ -93,14 +95,14 @@ measurement rather than a hope:
 
 ## 4. The tool: `tools/session_reflect.py`
 
-One prototype file, three verbs. It never writes docs/faq.md itself; it writes a
+One file, three verbs. It never writes docs/faq.md itself; it writes a
 proposal a human accepts (§5).
 
 - **`census`** — streams every transcript (main + the `subagents/` subtree; the
   census documents why the subtree is not optional), classifies assistant blocks,
   and emits the four signals with session/occurrence counts and sample pointers.
-  Read-only. This verb exists and runs today (the prototype spells it as the
-  `--census` flag; the shipped tool moves to the subcommand form used here).
+  Read-only. (The prototype spelled it as a `--census` flag; the research file
+  keeps that spelling because it records the run as it happened.)
 - **`update-faq`** — clusters census hits into candidate questions, each with its
   metrics and evidence, and writes a *proposal* beside docs/faq.md (never the FAQ
   directly). Clustering is coarse on purpose: it groups by fact-probe and by
@@ -112,12 +114,33 @@ proposal a human accepts (§5).
   when a shipped answer has not reduced recurrence (§3.3). This is the view that
   makes the FAQ falsifiable.
 
+Choices the build made that this section left open:
+
+- **Authored** means the probe matches content the assistant generated on that
+  line (a tool_use input, a thinking block, a text block). Matching the raw line
+  would count a tool_result echo, which is a read-back.
+- **Recurrence** is the share of sessions that authored the fact, split by
+  whether the session *started* before the answer date or on/after it. A
+  subagent counts toward its parent session. Sessions, not occurrences, because
+  §1 found occurrence inflated 3–10× by read-backs.
+- **Candidates** come from the fact probes and from search-verb command shapes
+  (`grep`, `rg`, `find`) only, following §1's signal-b finding that git plumbing
+  is never a re-derivation. Question shapes are printed by `census` for a human
+  to read, but never proposed, following signal c.
+- **The proposal** is written to docs/faq-proposal.md by default. Each candidate
+  carries a ready evidence line, so accepting it means pasting that line into
+  the sidecar and adding the `answered` date.
+- **`show` verdicts**: *taking* (post-answer share below pre-answer), *ANSWER NOT
+  TAKING* (equal or higher), *pending* (no session since the answer), *no
+  baseline* (nothing authored before it), *BROKEN* (an answered entry with no
+  sidecar record). `--audit` exits nonzero on *not taking* and *BROKEN*.
+
 The tool shares bikar's transcript reader semantics (`bikar:scripts/transcript.py`
 and its `transcript-archaeology` skill) for authorship vs read-back. **Transfer
 condition (K10):** that reader assumes subagents appear inline as
 `isSidechain:true`; the census measured that this is **false** in the current
 Claude Code layout (subagents are separate files under `subagents/`). So the
-shared reader transfers only once it walks that subtree — the prototype already
+shared reader transfers only once it walks that subtree — the tool already
 does, and porting the fix back to bikar is an open question (§9).
 
 ## 5. How the skill updates the FAQ (tool proposes, human confirms)
@@ -199,15 +222,18 @@ be re-opened — measured on authored hits, per §3.4.
   entry. The register-failure mode (an answer written but not working) is thus a
   **loud** result, not a silent one.
 
-**By-design failure is the load-bearing case.** The tool will ship two fixture
-transcripts: one with a planted re-derivation `census` must surface as a cluster
+**By-design failure is the load-bearing case.** The tool ships two fixture
+transcript sets, built in a temp directory by the self-test itself: one with a planted re-derivation `census` must surface as a cluster
 (the PASS), and one where an answer exists but recurrence continues, which `show`
 must flag rather than pass (the FAIL). A reflection tool that only ever reports
 "everything is answered" has stopped testing the thing it exists for — the
 corollary CLAUDE.md draws for every gate here. `census --self-test` runs both
 fixtures with fixed expectations, the way `counts_gate.py --self-test` pins its
-authorities so it cannot go green by reading nothing. (The prototype ships the
-`census` miner only; the fixtures and `--self-test` are part of this design.)
+authorities so it cannot go green by reading nothing. The PASS set also plants a
+read-back-only session that must not count as authored, a hit reachable only
+through a subagent file, and an edited file read 45 times that the loop detector
+must leave alone. A mutant that drops the subagent walk and counts read-backs as
+authored fails 6 of the 10 checks.
 
 ## 9. Makefile target
 
@@ -224,7 +250,7 @@ validate-reflect:
 
 It runs the tool's own self-test, then an audit that every answered entry still
 verifies (`show --audit` exits nonzero on an "answer not taking"). It is not wired
-into `validate` (the aggregate) while the tool is a prototype;
+into `validate` (the aggregate) until the FAQ has answered entries to audit;
 promoting it is gated on the fixtures and the shared-reader port landing.
 
 ## 10. Relation to memory and transcript-archaeology
