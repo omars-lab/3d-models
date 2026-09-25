@@ -576,3 +576,63 @@ continuation plan §2) and `#37` (colour regions → per-body export → filamen
 - #34 — interlock: self-mating half-edge dovetail on every straight edge, D-069 — design (3d-models #245, 97e6952); bikar grammar `interlock`, slotted ring + exact wall, CV8/CV9, `--interlock` importer flag, CAL-CST-06 (bikar #209, 89b63fd); CS-3 + mated-pair gallery previews, D-069 → built (3d-models #250, 1ab40f2)
 - #35 — Coaster Lab in bikar's lab on the Orb Lab pattern, D-067: live structural-check panel, the knobs ARE the param block, roster pinned to `patterns/Constructions/*-coaster.bkr` by a presets test that sweeps mini and standard (bikar #210, 3b7b6f8); vendored into the gallery (3d-models #253, 2f600c3); pointer baseline shrunk once its paths resolved on bikar main (3d-models #254, b33606e)
 - #38 — minimal coasters: `outline pattern`, the strap network itself extruded with a rounded top edge and no slab; CAL-CST-07 free-standing floor, CV10 round-over check — design D-070 (3d-models #251, 8688876); bikar (bikar #211, 5152cfd); CS-4 + gallery pair, D-070 → built (3d-models #255, fa86bab)
+
+---
+
+**▸ Snapshot 10 — 2026-09-25 (plates, colour regions, the construction migrations,
+the consolidation).** **A fresh id sequence, not a continuation of Snapshot 9.** The
+live board was rebuilt from the continuation plan's later phases, so this snapshot's
+`#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
+colour-regions id. Where a title below cites a second number (e.g. "#37 part 2",
+"#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
+was carried over from. Decisions D-072…D-080 are in the [decisions log](../decisions-log.md).
+Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
+a physical print), `#6` (P5.2 standard-size plate, after the CAL-CST-* bets are
+measured), `#7` (P5.3 frame block, only if a public GeoGebra fixture needs it), `#9`
+(push bikar CI secrets, owner-gated) and `#10` (session-reflect skill, after Omar
+reviews the 3d-models #218 design).
+
+## Plates and the bambu CLI (P4.x)
+
+- #1 — P4.1 `bambu slice compose`, the plate composer with a shared `it-<sha12>` helper — design D-072 (3d-models #264, 83703d4); implementation (3d-models #265, bd83fe6)
+- #3 — P4.2 minis-01, the first coaster compose plate (3d-models #280, c450fd4)
+- #11 — bambu CLI help gate: a generated flag reference held in sync by hook 45 (3d-models #273, fc8ecd8)
+- #19 — `bambu ams` read verb + filament-sync: reconcile a plate's logical AMS slots to the live trays by colour (3d-models #285, 7c022fa)
+
+## Coaster colour regions → per-body export → AMS filament map (old #37)
+
+- #2 — the umbrella: a coaster's colour regions become separate bodies that land on separate AMS slots, plus a Coaster Lab knob — design D-073 (3d-models #264, 83703d4); closed by #12–#18 below
+- #12 — part 2: `color <region> <PaletteName>` grammar + evaluator (bikar #213, a325d73)
+- #13 — §6 research: the headless BambuStudio 3MF → AMS filament-assignment contract (3d-models #267, 871762a)
+- #14 — part 3: `--format parts` region body split, pinch detection and `--pinch` strategies, D-074 (bikar #214, 726d567); the `.parts.json` sidecar (bikar #215, 1649389)
+- #15 — part 4: palette name → AMS logical slot map for coaster plates, D-075 (3d-models #271, 58612a3)
+- #16 — part 5: Coaster Lab per-region colour knob + full per-region 3D tint (bikar #216, 6746237); D-076 recorded (3d-models #272, 1a79fef)
+- #17 — K7 reconcile of the design doc's §4 error phases against bikar's parse-time checks (3d-models #267, 871762a)
+- #18 — part 4b-ii: multi-part coaster → AMS 3MF assembler + the headless-crash pivot (3d-models #274, d96ea8c); `slice coaster` verb end to end, bikar `--format parts` → `--load-filaments` (3d-models #275, ce86591)
+
+## Coaster kernel features
+
+- #20–#24 — twist / helix extrude, T1–T5: lofted-ring solid, the `twist <deg>` statement and its conflict refusal, evaluator + render wiring, CV12 + CAL-CST-08, Lab preset + tests (bikar #217, 42ce6dd); CAL-CST-08 mirrored into the calibrate bets file (3d-models #279, 2c1dbb0; count fix #281, 5ed8031)
+- #25 — radial-band colouring: the ring a polygon sits in is a print region, D-078 — design (3d-models #277, 6d67693); `bands` verb (bikar #219, 103caa8); ring colour onto the height field (bikar #220, f68a536); `--format parts` split by ring colour (bikar #221, 2e45cd5)
+- #26 — emit-golden fix: `emitBkr` round-trips palette + color blocks (bikar #218, 60b5ff4)
+- #28, #30 — rods relief: investigated as a Coaster Lab option, then built as path A, half-round height-field straps (bikar #226, 5a588e5)
+
+## Construction migrations (P5.1)
+
+- #5 — P5.1 umbrella, the five remaining constructions; ledger at 8 migrated / 1 by design / 0 remaining; closed by #29 and #32–#39
+- #29 — lEfWSogWscs (Tomb of Itimad ad-Daula): bikar golden (bikar #225, 28f3989); CS-7 standard STL + catalog entry (3d-models #284, 4d7f072)
+- #32 — rDuxHF3xMOc, 8-fold star rosette with Sequences: list-literal transforms lowered (bikar #227, 2da2e68); CS-8 (3d-models #287, eadf605)
+- #33 — sDO9fpu76v8, Royal Alcazar pattern (bikar #228, cc35d6d); CS-11 (3d-models #294, 350d134)
+- #34, #38 — nmEjCTzMbDg, n-fold flower, the first open line-art migration, via the B′ self-bootstrapped coords (bikar #243, 87ea3b4); CS-9 (3d-models #291, 34ad03b)
+- #35 — n3IidKfXE1I, variable-angled 12-6-4 star rosette (bikar #229, 0191780); CS-10 (3d-models #294, 350d134)
+- #36 — the self-improvement loop: each migration fills the gap the last one hit — point reflection (bikar #230), circle inversion (bikar #231), conic loci (bikar #232), arc straps (bikar #233), CircularArc/Circle/Segment lowering (bikar #234); written up as a tenet (3d-models #286, fe0b764)
+- #37 — B′: `--emit-coords` / evaluatedCoords, bikar self-bootstraps `cached_coords` (bikar #236, 07f1bf3); decision D-080 (3d-models #290, 265a4e3)
+- #39 — the printer emits `connect points`, nmEj's last engine gap (bikar #238, f201377)
+
+## Skills, repo hygiene and the consolidation
+
+- #27 — design-craft skills: `review-design` + `write-design` for newcomer-readable design docs (3d-models #278, d2a63a4)
+- #31 — regenerate the calibrate bets file: **closed with no change.** The "28/26 → 32/28 drift" came from reading the lagging local `master` ref instead of `origin/master`; nothing needed regenerating
+- #8 — youtube's O1/O2 verdict scripts (old #17) onto youtube main: four local branches hand-merged with a both-sides no-loss proof (youtube c22a60c, e34a7aa, 8d1eaeb; env-check fix 6d359b1; youtube has no remote)
+- #40 — track the dotenvx-encrypted `.env`, gated by gitleaks + hook 11-env-encrypted (3d-models #299, efb708e)
+- #41 — consolidate branches and worktrees: 3d-models is master + gh-pages, bikar is main, youtube is main (3d-models #295–#298; bikar #244, #245, #226)
