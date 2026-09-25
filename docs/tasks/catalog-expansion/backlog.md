@@ -20,6 +20,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 3. **The queue is empty.** Fewer than three screened GO candidates, and every construction so
    far comes from one creator (Sarah Brewer). Crawl out from youtube's discovery wiki for new
    creators, fold counts and tilings; screen each and write GO or NO-GO with the date.
+4. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
+   from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
 
 ## Handed to the video loop
 

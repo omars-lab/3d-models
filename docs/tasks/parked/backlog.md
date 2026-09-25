@@ -4,6 +4,14 @@ Moved here on 2026-09-25 from [`docs/backlog.md`](../../backlog.md) §6, which h
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
+## The FAQ — waiting on Omar
+
+The `session-reflect` skill proposed six FAQ candidates in the untracked proposal file in
+`docs/`. Omar marks each keep or discard and writes the answers (regenerate the candidates with
+`python3 tools/session_reflect.py update-faq`). Then one PR, per that skill, with ids from
+`python3 tools/next_id.py next Q`. Never write an FAQ answer yourself. Moved from the
+coaster-pipeline backlog on 2026-09-25 (board #10).
+
 ## LDraw export, never opened in a viewer
 
 `--format ldraw` shipped with Lego Lab P3 (bikar `a10f4f6`, PR #53), and

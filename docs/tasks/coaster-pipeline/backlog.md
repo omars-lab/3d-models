@@ -20,16 +20,12 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
 4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
-5. **FAQ (board #10)** — waits on Omar marking the six candidates (regenerate them with
-   `python3 tools/session_reflect.py update-faq`) keep or discard and writing the answers.
-   Then one PR, per the `session-reflect` skill; ids from `python3 tools/next_id.py next Q`.
-   Never write an FAQ answer yourself.
-6. **frame block (P5.3)** — only if a public GeoGebra file needs one (board #7).
 
 ## Owner-gated
 
-Sending a print, which filament to load, `make setup-secrets` for bikar CI (board #9), the FAQ
-review.
+Sending a print and which filament to load. Other owner-gated work lives where its loop is:
+bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
+in [parked](../parked/backlog.md).
 
 ## After this plate
 
