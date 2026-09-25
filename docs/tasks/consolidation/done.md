@@ -2,6 +2,10 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-25 — the `manage-tasks` skill: moves a finished or open task to the right
+  `docs/tasks/<loop>/` file, by the routing rules beside it (3d-models #311).
+- 2026-09-25 — one backlog and done list per loop in `docs/tasks/<loop>/`; the old
+  `docs/tasks/done.md` and `docs/backlog.md` split into them by loop (3d-models #309, #310).
 - 2026-09-25 — full pass across all six repos: 3d-models is master + gh-pages, bikar main,
   youtube main; 0 open PRs, 0 stashes (3d-models #295–#298, #301; bikar #226, #244–#246).
 

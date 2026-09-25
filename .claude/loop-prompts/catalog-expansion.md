@@ -50,7 +50,7 @@ queue has grown by screened sources, each with a written GO or NO-GO.
 3. **Ship it.** One PR per repo, each from its own worktree. When a construction needs
    something bikar can't express, add that to bikar in its own PR first; that is how the
    earlier migrations went.
-4. **Record it,** in the same PR. The ledger row, the count, and the screening verdict. Move
+4. **Record it,** in the same PR (the `manage-tasks` skill moves the task lines). The ledger row, the count, and the screening verdict. Move
    the item to the done list with the date and PR number; add new finds, including screened
    candidates and hand-offs, to the backlog. Take any new D- id from
    `python3 tools/next_id.py next D`.

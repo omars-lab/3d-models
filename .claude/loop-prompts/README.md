@@ -22,6 +22,10 @@ youtube repo, where it runs; they are not copied here.
 
 ## How a loop uses its backlog and done list
 
+The [`manage-tasks`](../skills/manage-tasks/SKILL.md) skill does the moving below: it picks
+the right loop's file by its [routing rules](../skills/manage-tasks/routing.md) and writes the
+line in the right place.
+
 - **Read the backlog first.** Take the top item by ROI.
 - **Feed it as you go.** Work a pass finds but does not do goes into the backlog as one line
   that says where it came from. Work that belongs to another loop goes into *that* loop's
