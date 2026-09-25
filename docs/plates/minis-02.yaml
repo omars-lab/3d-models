@@ -9,8 +9,15 @@
 #   minimal   `-minimal-coaster`    the pattern alone — straps only, holes where
 #                                   the empty spaces are, no slab behind them
 #   interlock `-interlock-coaster`  solid, with dovetail tabs and slots on every edge
-#   twist     `-twist-coaster`      minimal, twisted up its height (CS-2 only — no
-#                                   CS-1 twist file exists)
+#   twist     `-twist-coaster`      minimal, twisted up its height (CS-1 only, see
+#                                   below)
+#
+# The twist is CS-1's, not CS-2's (Omar, 2026-09-25: the first cut was "too tall",
+# should be "the pattern with holes" and "should twist more"). CS-2's pattern is too
+# dense at 40 mm to show holes, even at the 1.6 mm strap floor; CS-1's opens clearly
+# with straps at 1.6. Height 6 (down from 10) with twist 15 (up from 5) is as far as
+# it goes: CV12 caps the wall lean at 45° from vertical, and at this outline's 22.8 mm
+# radius that allows about 2.5° of twist per mm of height (twist 20 at height 6 leans 53°).
 #
 # Left off, on purpose:
 #   border  `-border-coaster` carries `color border …`, so it needs `bambu slice
@@ -53,7 +60,7 @@ items:
     piece:  Coaster
     params: { size: 40 }
     count:  1
-  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-twist-coaster.bkr      # CS-2 twist
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-twist-coaster.bkr      # CS-1 twist (bikar #247)
     piece:  Coaster
-    params: { size: 40 }
+    params: { size: 40, height: 6, twist: 15, strap: 1.6 }
     count:  1
