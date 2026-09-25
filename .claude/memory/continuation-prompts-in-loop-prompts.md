@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: b317004f-c205-413f-8ef8-7b5f99a1b742
-  modified: 2026-09-25T17:23:47.155Z
+  modified: 2026-09-25T17:25:55.745Z
 ---
 
 A continuation prompt for a new clean session is a committed file in `.claude/loop-prompts/<slug>.md`,
@@ -20,6 +20,11 @@ focused", "working back in ROI priority order", "the goal should be clear".
 **One loop, one job.** The product loop (`coaster-pipeline.md`, #307) never does PR, branch or
 worktree consolidation. That is its own loop, `consolidation.md`. Omar, the same day: "pr
 consolidation shouldnt be looped for in this ... separate loop prompt".
+
+Later the same day Omar added three more loops: print infrastructure ("churn out prints in
+robust, visualizable, easy to configure way"), catalog expansion ("find new patterns to
+reconstruct") and video reconstruction ("deconstructing a video, iterating on it"). There are
+five in all, listed in `.claude/loop-prompts/README.md`.
 
 **How to apply:** when the state changes, update the matching file rather than writing a new
 one. A new loop gets its own file only when it has a different goal. Related:

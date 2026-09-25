@@ -57,11 +57,10 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
 2. **Keep minis-01 ready to send.** Re-compose after any coaster change. Run the slice and
    preflight and filament-sync against the live AMS trays, and check that each item's
    bikar pin matches bikar main. Stop at the send: dispatching is Omar's.
-3. **New constructions.** If `make validate-constructions` or the youtube reconstructions
-   list shows an id missing from the ledger, migrate it with the `import-construction`
-   skill. That is one bikar PR plus one 3d-models PR. When a construction needs something
-   bikar can't express, add it to bikar in its own PR first; that is how the last
-   migrations went.
+3. **Tooling that blocks this plate.** If friction in composing, slicing or filament-sync
+   stops minis-01, fix only that. General tooling work belongs to
+   [`print-infrastructure.md`](print-infrastructure.md), and new designs to
+   [`catalog-expansion.md`](catalog-expansion.md).
 4. **Standard-size plate (P5.2).** Only after item 1 has settled the CAL-CST numbers.
 5. **FAQ (task #10).** After Omar marks each of the six candidates (regenerate them with
    `python3 tools/session_reflect.py update-faq`) as keep or discard and writes the answers,
