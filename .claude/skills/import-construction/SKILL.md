@@ -1,6 +1,6 @@
 ---
 name: import-construction
-description: Migrate a GeoGebra construction into a naqsh (`.bkr`) file bikar renders to a printable coaster, end to end. Use for "import/migrate this GeoGebra construction to naqsh", "make a naqsh file from this .ggb", "make a coaster from this construction", "do the next construction in the ledger", "add construction <video-id>". Drives the three fidelity oracles (O1/O2/O3) and the readability review, refuses unsupported input loudly, and stops at one bikar PR + one 3d-models PR — it never dispatches a print.
+description: Migrate a GeoGebra construction into a naqsh (`.bkr`) file bikar renders to a printable coaster, end to end. Use for "import/migrate this GeoGebra construction to naqsh", "make a naqsh file from this .ggb", "make a coaster from this construction", "do the next construction in the ledger", "add construction <video-id>", or "what do we call this coaster style" (the style names live in coaster-styles.md). Drives the three fidelity oracles (O1/O2/O3) and the readability review, refuses unsupported input loudly, and stops at one bikar PR + one 3d-models PR — it never dispatches a print.
 ---
 
 # import-construction — a GeoGebra construction → naqsh → coaster
@@ -134,6 +134,8 @@ Record only the verdict the validator printed, into the ledger's oracle cells �
 never a re-typed summary (an aggregate cannot discharge a per-label claim).
 
 ### 5. Coaster + `--check` at both sizes
+
+Name a new style file, card or preset from [`coaster-styles.md`](coaster-styles.md) — the file suffix is the name of record.
 
 The importer appends the coaster trailer with `--coaster <Name>` (a height-field
 disc, `param size` in mm — mini and standard are two values of one param, never two
