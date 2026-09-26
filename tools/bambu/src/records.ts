@@ -63,7 +63,7 @@ function today(): string {
  *  prints gate rejects (R8 needs a real int) — so objects get their own emitter. Keys are emitted in a
  *  fixed, stable order; optional keys are skipped when absent. */
 function yamlObjects(objs: Array<Record<string, unknown>>): string {
-  const ORDER = ["entry", "source", "source_sha256", "piece", "params", "count", "iteration"];
+  const ORDER = ["entry", "source", "source_sha256", "piece", "params", "count", "iteration", "verdict", "notes"];
   const emit = (v: unknown): string => {
     if (typeof v === "number") return String(v);
     if (v && typeof v === "object") return JSON.stringify(v); // params → inline flow mapping (valid YAML)
@@ -130,6 +130,9 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
       params: o.params,
       count: o.count,
       iteration: o.iteration,
+      // R15: once printed, each piece says what it taught at these params — keep | adjust | drop.
+      verdict: TODO,
+      notes: [],
     });
   }
 
@@ -142,6 +145,7 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     "---",
     `run: ${run}`,
     `plate: ${JSON.stringify(opts.plateName)}`,
+    `plate_3mf: ${JSON.stringify(basename(opts.plateFile))}`, // R10: the plate it was sliced as
     "status: draft", // draft | measured | … (operator sets the real state)
     `outcome: ${TODO}`, // what the plate answered — readings | scrapped | …
     "profile:",
@@ -175,7 +179,8 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
       : []),
     "",
     "Before moving this dir into `docs/prints/`, fill every `TODO`, add the plate photos under",
-    "`photos/` (and list them with their sha256), record the measurements under `readings`, and",
+    "`photos/` (and list them with their sha256), give every object a `verdict` (keep, adjust or",
+    "drop) and `notes` on what it showed at its params, record the measurements under `readings`, and",
     "check it with `bambu validate record .bambu/records`. The prints gate is the authority.",
     "",
   ].join("\n");

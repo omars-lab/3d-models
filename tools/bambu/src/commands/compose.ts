@@ -33,6 +33,7 @@ import { resolvePresetList, buildStudioArgs } from "./slice.js";
 import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
+import { recordProfileFrom } from "../header.js";
 import { recordsDir } from "../paths.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
@@ -535,7 +536,11 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       iteration: r.iteration,
     }));
     try {
-      const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects });
+      // The slice-side profile (machine, nozzle, layer, presets) comes off the .3mf just written —
+      // the same builder `print send --record` uses; compose never reads the printer, so the frame
+      // is empty and the printer-side fields (spool, loaded material) stay TODO.
+      const profile = await recordProfileFrom({}, outPath);
+      const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects, profile });
       console.log(`draft record → ${dir} (fill TODOs, add photos, then \`bambu validate record\`).`);
     } catch (err) {
       console.error(`warning: could not scaffold record: ${(err as Error).message}`);

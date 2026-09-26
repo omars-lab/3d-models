@@ -1,6 +1,6 @@
 ---
 name: review-print
-description: Look at every piece before it goes on a plate or gets sliced, and decide whether it is worth printing at all — render each one top-down at the exact size and params it will print, read the picture, score it against the rubric (does it read as the pattern at that size, does the art fill its shape, is it a good object in the hand), and leave off anything that fails, with the reason written down. Use before any `bambu slice compose` / `slice plate`, when building a samples or minis plate, when adding new patterns or styles to a plate, and for "is this worth printing", "review the print", "check the plate before I send it", "look at it first". Passing the mesh gate is not this — a piece can be one clean watertight body and still be a slab with pinholes or half-empty art. Runs inside print-coaster-samples and print-model; never sends.
+description: Look at every piece before it goes on a plate or gets sliced, and decide whether it is worth printing at all — render each one top-down at the exact size and params it will print, read the picture, score it against the rubric (does it read as the pattern at that size, does the art fill its shape, is it a good object in the hand), and leave off anything that fails, with the reason written down. Use before any `bambu slice compose` / `slice plate`, when building a samples or minis plate, when adding new patterns or styles to a plate, and for "is this worth printing", "review the print", "check the plate before I send it", "look at it first". Passing the mesh gate is not this — a piece can be one clean watertight body and still be a slab with pinholes or half-empty art. Also use when a print comes back — Omar sends photos or says how the pieces came out ("too small", "loose", "looks great") — to write the print record with a verdict per piece. Runs inside print-coaster-samples and print-model; never sends.
 ---
 
 # review-print — look at it before you print it
@@ -51,7 +51,29 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
 
 ## When a print comes back
 
-If something that passed this review disappoints in the hand, add what the eye missed to
-[`rubric.md`](rubric.md) as a new check, with the date and plate. If a number would have
-caught it, re-measure over the pieces on record and adjust the flag. The rubric changes; this
-file does not need to.
+Photos, or a line like "too small" or "a bit loose", mean the plate has printed. Record it the
+same day, so what it taught is tied to the exact piece and size.
+
+1. **Start from the draft.** `slice compose` wrote one at `.bambu/records/<date>-<plate>/`
+   with every piece, its `params`, and the printer settings read off the `.3mf`. Copy it to
+   `docs/prints/<date>-<plate>/`, set `status: printed`, and fill what the machine could not
+   know: the filament actually loaded, and `~` for anything nobody recorded. Never guess.
+2. **Give every piece its own `verdict` and `notes`.** `keep` (print it again as is),
+   `adjust` (right idea, change its params) or `drop` (do not print it again). The notes use
+   Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
+   from the file's formula, says so. One note for the whole plate goes in `feedback`, and it
+   does not replace the per-piece verdicts.
+3. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
+   and check there is no location data in them first.
+4. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
+   verdict per piece.
+5. **Carry the lesson forward.** Write a rule for the next plate in the calling skill's rules
+   ([`sample-rules.md`](../print-coaster-samples/sample-rules.md) for samples). If the eye
+   missed it before the print, add a check to [`rubric.md`](rubric.md), with the date and
+   plate. If a number would have caught it, re-measure over the pieces on record and move the
+   flag.
+6. **Ship it** as a PR. The record is what the Prints page and the Coaster Lab show against
+   each style.
+
+Hand feel is not a measurement. "Loose" goes in the notes, and a bet moves only on a reading
+under `readings` (the print-model skill's compare loop).

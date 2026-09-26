@@ -85,4 +85,22 @@ describe("scaffoldRecord — capture writes an actuals block + raw frame", () =>
     expect(existsSync(join(dir, "device-report.json"))).toBe(false);
     expect(md).toContain("bambu print send --record"); // the default verb note
   });
+
+  it("names the plate's .3mf and leaves every object a verdict to fill (R10, R15)", async () => {
+    const dir = await scaffoldRecord({
+      slug: "pair",
+      plateName: "pair",
+      plateFile: "/x/build/plates/pair.plate.3mf",
+      objects: [
+        { entry: "c1", source: "bikar:a.bkr", params: { size: 40 } },
+        { entry: "c2", source: "bikar:b.bkr", count: 2 },
+      ],
+      date: "2026-09-26",
+      baseDir: base,
+    });
+    const md = readFileSync(join(dir, "index.md"), "utf8");
+    expect(md).toContain('plate_3mf: "pair.plate.3mf"');
+    expect(md.match(/ {4}verdict: "TODO"/g)).toHaveLength(2); // one per piece, not one per plate
+    expect(md.match(/ {4}notes: \[\]/g)).toHaveLength(2);
+  });
 });

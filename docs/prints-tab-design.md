@@ -115,6 +115,9 @@ objects:                                   # one per DISTINCT printed object on 
     params:       {}
     check:        "keyhole front floor prints without bridging sag"
     outcome:      printed                  # printed|did-not-print|abandoned
+    verdict:      keep                     # keep|adjust|drop — what this piece taught at these params (R15)
+    notes:                                 # optional — the owner's words about THIS piece
+      - "floor intact, no sag"
 readings:                                  # one per measured quantity
   - entry:        MC-2
     question:     "does the 0.8 mm keyhole floor survive the bridge?"
@@ -264,6 +267,15 @@ frontmatter, and one parser / one hook / one self-test is the repo's no-fork rul
   under `docs/prints/` — shipped ones — so a shipped record still at `draft`/`planned`
   is the drift §6.3 names: the plan artifact is composed-not-stored (§2), so a shipped
   pre-slice record must be reconciled past planning first.
+- **R15 — a printed piece carries its verdict.** In a `printed`, `failed`, `measured` or
+  `propagated` record, every `objects[]` entry has a `verdict` (`keep`: print it again as
+  is; `adjust`: right idea, change its params; `drop`: do not print it again) and an
+  optional `notes` list. The plate's `feedback` block speaks for the whole plate, and a
+  plate mixes pieces: minis-03 (2026-09-26) held a minimal-frame that read well and a
+  pegs pair that fitted loosely, both at size 40. Only a per-piece field ties "too small"
+  or "loose" to the `params` it was printed at, which is what the Coaster Lab shows
+  against each style. *Hard case (K6/D2):* one verdict on the plate does not discharge it;
+  every object needs its own. Added 2026-09-26.
 
 The gate ships **before** the first real record, and R4 is precisely what makes that
 honest: an empty subject set reports a *true* `0 records checked` when the gate prints

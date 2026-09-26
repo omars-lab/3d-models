@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — First print record in `docs/prints/`: minis-03, with photos and a verdict and
+  notes for each piece at the size it printed. Every printed piece now needs its own verdict
+  (prints gate R15). `slice compose` fills the printer settings from the `.3mf`. The
+  review-print skill has a step for recording a print when it comes back.
 - 2026-09-26 — minis-03 printed by Omar (5 pieces: CS-1, CS-2 and rDux minimal-frame, and a
   CS-1 minimal-pegs pair). It read well, but at 40 mm it was too small, and the mated pegs had a
   wide solid band at the join and a slightly loose fit. The lessons are in `sample-rules.md`
