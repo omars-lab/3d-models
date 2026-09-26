@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — Joins sample plate (KEY-1): one mated pair per join on CS-1 at 80 mm, split across [minis-05](../../plates/minis-05.yaml) (plain, butterfly key with a 0.05/0.10/0.15 key ladder, tab) and [minis-06](../../plates/minis-06.yaml) (dovetail, slim dovetail), every piece through the mesh gate and the review sheet; closes the joins item — the print waits on Omar in the coaster-pipeline backlog
 - 2026-09-26 — Margin ruler on every join gallery picture: the solid band between the two patterns, measured off the built mesh and held by a test to two of each file's declared frames within the 0.4 mm grid — none 6.0, dovetail 11.1, slim dovetail 8.4, key 5.7, tab 5.8 mm (bikar #259)
 - 2026-09-26 — Tab join: `interlock tab`, a tab on every other hexagon edge whose head drops into the neighbour's pattern opening, fit check CV-T1 (size 55–120 mm), the six-fold minimal-tab coaster, and two pinhole fixes shared with the key (bikar #258)
 - 2026-09-26 — Join gallery in the Coaster Lab: "How each join works" opens a card per join, each a picture of two 80 mm six-fold coasters mated as the engine builds them with the seam enlarged, and "Use this join" switches the open coaster; `npm run coaster-join-pairs` draws the pictures and a test holds them to the joins (bikar #257)

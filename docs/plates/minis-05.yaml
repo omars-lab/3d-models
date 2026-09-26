@@ -1,0 +1,88 @@
+# minis-05 — the joins side by side (the KEY-1 plate), part 1: the thin-band joins
+#
+# Ten 80 mm coasters do not fit one X2D bed (the dry run: 76812 mm² of parts on a 65536 mm²
+# bed), so the joins are split across two plates, never dropped. This plate carries the plain
+# frame and the two joins that keep its band (key, tab) plus the keys; minis-06 carries the two
+# dovetails. The plain pair is on this plate because it is the band both halves are judged
+# against.
+#
+# Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
+# Omar, 2026-09-26, after minis-04: the pegged coasters' border is still too wide; build each
+# join in docs/coaster-borderless-joins-design.md except magnets. All five now ship in bikar
+# and are chosen in the Coaster Lab's join selector. The two plates put one mated pair of each on
+# the same six-fold pattern (CS-1, GimTvN9hw4U), so the band between the two patterns and the
+# feel of each join can be judged in the hand, side by side.
+#
+# Every piece is at the minis-04 size: size 80, height 1.4, the file-default 2 mm strap.
+# The band is the solid margin between the two patterns once a pair is mated, as the Lab's
+# join gallery ruler measures it off the mesh at 80 mm (bikar #259).
+#
+#   none           ×2  `-minimal-frame-coaster`  band 6.0 mm — the plain 3 mm frame; nothing
+#                                                holds the pair, it is the band the others are held to
+#   butterfly key  ×2  `-minimal-key-coaster`    band 5.7 mm — the coaster (piece Coaster); the
+#                                                pocket does not change with clearance
+#   key            ×6  `-minimal-key-coaster`    piece Key, two each at clearance 0.05 / 0.10 /
+#                                                0.15 — the KEY-1 ladder: which is neither loose
+#                                                nor stuck
+#   tab            ×2  `-minimal-tab-coaster`    band 5.8 mm — clearance 0.10, down from the
+#                                                file's 0.15, as the pegs went on minis-04
+#
+# Checked 2026-09-26: every piece here and on minis-06 passes the mesh gate (`--check`) at
+# these params, from bikar origin/main 30247bc, and the review-print sheet read all five
+# coaster styles as the pattern with the art filling the hexagon (open 0.38–0.47, no bare cells).
+#
+# What to read off it when it comes back:
+#   - the band of each pair, next to the plain pair and the dovetails on minis-06;
+#   - the pull feel of each key clearance, and whether a key falls out when one coaster is lifted;
+#   - whether a coaster alone looks wrong with its notches or its tabs;
+#   - whether the tab's neck (2 mm, 1.4 mm tall) survives mating a few times.
+#
+# Risks:
+#   - the keys are about 8 × 4 mm and 1.4 mm tall: seven layers on a small footprint, which can
+#     lift or be knocked off the bed.
+#   - a 1.4 mm frame is seven 0.2 mm layers; every tab and key is that thin too, so they may
+#     snap or flex before they hold. minis-04 asks the same question of the dovetail.
+#
+# Left off, on purpose:
+#   magnets                    Omar: "except magnets for now".
+#   the key at frame 2         the design doc's second KEY-1 row. The slim dovetail already
+#                              asks whether a narrower frame survives; a thinner key frame waits
+#                              on the first answer.
+#   a strap-height key         the design doc's KEY-1 row; the key file makes keys as tall as
+#                              the frame only.
+#   other patterns             the tab ships on hexagons only, and one pattern keeps the
+#                              comparison fair.
+#
+# Validate (no hardware, no slicer):
+#   bambu slice compose docs/plates/minis-05.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-frame-coaster.bkr  # none (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-key-coaster.bkr    # butterfly key (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-key-coaster.bkr    # key, clearance 0.05
+    piece:  Key
+    params: { size: 80, height: 1.4, clearance: 0.05 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-key-coaster.bkr    # key, clearance 0.10
+    piece:  Key
+    params: { size: 80, height: 1.4, clearance: 0.1 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-key-coaster.bkr    # key, clearance 0.15
+    piece:  Key
+    params: { size: 80, height: 1.4, clearance: 0.15 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-tab-coaster.bkr    # tab (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4, clearance: 0.1 }
+    count:  2

@@ -32,21 +32,18 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
      default at `~/Workspace/git/bikar-main`; until then pass `BIKAR_DIR`. Found by the same run.
    - **`slice compose` writes the `.3mf` to the working directory**, not `build/plates/`, so
      running it from the repo root leaves an untracked file there. Found by the minis-02 run.
-4. **Next sample plate from what minis-03 taught** (printed 2026-09-26). Minis go to 70 mm.
-   The pegs pair tries a clearance ladder (0.10 and 0.05). A shallower dovetail (`depth` 2)
-   would narrow the solid band at the join. Rules and reasons are in the print-coaster-samples
-   skill's `sample-rules.md`. Render the pair joined and review it before composing.
-   - **Make it the joins plate** (Omar, 2026-09-26, after minis-04: "the ones with pegs,
-     border still too big"). One mated pair per join, same construction: slim dovetail
-     (neck 2, depth 2, wall 2.1 — shipped, bikar #253), butterfly key with its keys, and the
-     tab once each lands (see the [catalog-expansion backlog](../catalog-expansion/backlog.md)
-     item 1). Show the joined-pair review sheet before composing. Options and sources:
-     [`coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
-5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
+4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
-Sending a print and which filament to load. Nothing is waiting on Omar to send right now.
+Sending a print and which filament to load.
+
+- **The joins plates, [minis-05](../../plates/minis-05.yaml) and
+  [minis-06](../../plates/minis-06.yaml)** — waiting on Omar. One mated pair per join on
+  CS-1 at 80 mm: plain frame, butterfly key (with keys at clearance 0.05 / 0.10 / 0.15) and
+  tab on minis-05, dovetail and slim dovetail on minis-06 (ten coasters do not fit one bed).
+  Mesh gate, review sheet and compose dry run all pass (2026-09-26). The review sheet goes to
+  Omar first; the send and the filament are his.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review

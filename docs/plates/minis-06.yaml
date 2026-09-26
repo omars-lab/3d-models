@@ -1,0 +1,33 @@
+# minis-06 — the joins side by side (the KEY-1 plate), part 2: the dovetails
+#
+# The second half of minis-05: ten 80 mm coasters do not fit one X2D bed, so the two dovetail
+# joins print here. Their bands are the ones the thinner joins on minis-05 set out to beat;
+# minis-05's plain pair is the reference for both plates. Same pattern (CS-1, GimTvN9hw4U),
+# same size (80), height 1.4, file-default 2 mm strap. Checks, risks and what was left off
+# are in the minis-05 header.
+#
+#   dovetail       ×2  `-minimal-pegs-coaster`   band 11.1 mm — the control, clearance 0.10
+#                                                as on minis-04
+#   slim dovetail  ×2  `-minimal-pegs-coaster`   band 8.4 mm — neck 2, depth 2, wall 2.1 (the
+#                                                Lab's preset), clearance 0.10
+#
+# The dovetail pair repeats minis-04's. If minis-04 has printed by the time this one goes,
+# its pair answers the same question and this plate can carry the slim pair alone.
+#
+# Validate (no hardware, no slicer):
+#   bambu slice compose docs/plates/minis-06.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-pegs-coaster.bkr   # dovetail (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4, clearance: 0.1 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-pegs-coaster.bkr   # slim dovetail (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4, clearance: 0.1, neck: 2, depth: 2, wall: 2.1 }
+    count:  2
