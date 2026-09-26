@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — `slice plate` and `slice compose` write the plate picture next to the 3MF
+  (`<plate>.preview.png`) and print its path, so the plate can be looked at before sending
+  without unzipping it; the deploy strips it with the rest of the slicer output. A draft record
+  now names the command that made it (3d-models #PR)
 - 2026-09-26 — Every `bambu` command refuses a word it does not take. `validate plate` used to
   ignore a plate file and pass the machine-card table, "all 23 rungs match". Found by the
   first minis-01 run (3d-models #339)

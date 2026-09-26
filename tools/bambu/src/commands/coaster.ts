@@ -371,7 +371,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
       iteration: r.iteration,
     }));
     try {
-      const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects });
+      const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects, via: "bambu slice coaster" });
       console.log(`draft record → ${dir} (verify colours in the GUI: \`bambu slice open ${outFile}\`).`);
     } catch (err) {
       console.error(`warning: could not scaffold record: ${(err as Error).message}`);

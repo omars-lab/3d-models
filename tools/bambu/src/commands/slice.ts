@@ -28,6 +28,7 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
+import { writePlatePreview } from "../threemf.js";
 import { registerCompose } from "./compose.js";
 import { registerCoaster } from "./coaster.js";
 
@@ -345,6 +346,8 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       unexpected: unexpected.length,
     });
     console.log(`sliced → ${outPath} (${kb} KB)`);
+    const preview = await writePlatePreview(outPath);
+    console.log(preview ? `plate picture → ${preview} (look before sending)` : "plate picture: none in the 3MF.");
 
     if (warnings.length === 0) {
       console.log("slicer warnings: none — clean.");
