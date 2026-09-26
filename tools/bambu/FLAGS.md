@@ -162,7 +162,7 @@ assemble a multi-filament COLOUR plate (bikar --format parts → per-region AMS 
 | Flag | Description |
 |---|---|
 | `-o, --out <file>` | output filename (default: <manifest>.plate.3mf) |
-| `-d, --outputdir <dir>` | output directory (default: current dir) |
+| `-d, --outputdir <dir>` | output directory (default: build/plates at the repo root, else the current dir) |
 | `-s, --settings <names|paths>` | machine + process, semicolon-joined — overrides the manifest profile |
 | `-f, --filament <name|path>` | the plate's default (slot-1) filament — overrides the manifest profile |
 | `--bed <name>` | bed footprint for the fit pre-check (x2d = 256×256 mm) |
