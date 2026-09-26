@@ -1,29 +1,37 @@
-# minis-03 — the openwork styles, and every mating style as a pair
+# minis-03 — a minimal-frame of every pattern that reads at mini size, and one pegs pair
 #
 # Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
-# Two new styles shipped in bikar on 2026-09-25 (`openwork frame <mm>`), and Omar
-# asked the same day that pegs minis print two at a time "since they need to fit
-# together". So this plate carries, for CS-1 (GimTvN9hw4U) and CS-2 (7apC5Q9QS-8),
-# at size 40:
+# minis-01 and minis-02 carry only two patterns (CS-1 GimTvN9hw4U, CS-2 7apC5Q9QS-8).
+# Omar asked on 2026-09-25 for "as many minimals of different patterns" as fit, even
+# smaller, and fewer pegs. Eight patterns were tried; three read well at 40 mm and are on
+# this plate (review-print skill: every piece looked at top-down before it went on):
 #
-#   minimal-frame ×1  `-minimal-frame-coaster`  a solid frame round the edge, the
-#                                               straps standing inside, every empty
-#                                               space cut through
-#   minimal-pegs  ×2  `-minimal-pegs-coaster`   minimal-frame with dovetails in the
-#                                               frame — two, so the pair can be
-#                                               pushed together to test the fit
-#   interlock     ×2  `-interlock-coaster`      plain with dovetails — minis-02 has
-#                                               one copy, which cannot show the fit
+#   minimal-frame ×1 each  `-minimal-frame-coaster`  a solid frame round the edge, the
+#                                                    straps standing inside, every empty
+#                                                    space cut through
+#   minimal-pegs  ×2       `-minimal-pegs-coaster`   CS-1 only — minimal-frame with
+#                                                    dovetails in the frame, two so the
+#                                                    pair can be pushed together
 #
-# Straps at 1.6 mm on the openwork styles: at 40 mm the default 2 mm closes the
-# holes up, and 1.6 mm is the freestanding floor (CAL-CST-07). The pegs frame stays
-# at the file's default (slot depth + clearance + 2.5 mm). Every item passed the mesh
-# gate and the linkage gate (one body) at exactly these params on 2026-09-25.
+# rDux's minimal-frame is new (bikar feat/minimal-frame-all-patterns, 2026-09-25). All at
+# 40 mm, the smallest the files allow; straps 1.6 mm (the freestanding floor, CAL-CST-07);
+# frames at the default 3 mm. Every item passed the
+# mesh gate and the linkage gate (one body) at exactly these params on 2026-09-25.
 #
 # Left off, on purpose:
-#   plain, minimal, twist  already on minis-02, one copy is all they need.
-#   border  carries `color border …`, so it needs a colour plate (`bambu slice
-#           coaster`); compose would drop the colour (see minis-01).
+#   sDO9fpu76v8, nmEjCTzMbDg  too dense for a mini: at 40 mm each is a solid slab with
+#                      pinholes. Tried at 60 and 70 mm they were still mostly solid, big
+#                      discs — Omar, 2026-09-25: "dont seem like they would be meaningful
+#                      prints". They belong on a full-size plate, if anywhere.
+#   n3IidKfXE1I        incomplete: the art is a partial patch that does not fill the square —
+#                      Omar: "felt incomplete".
+#   lEfWSogWscs, tA8eSdVx_EQ  big bare wedges between the art and the frame — Omar: "lots
+#                      of weird empty space".
+#   interlock          minis-02 has one of each pattern; the CS-1 pegs pair tests the
+#                      dovetail fit on this plate.
+#   CS-2 minimal-pegs  one pegs pair is enough to test the fit.
+#   minimal (no frame) CS-1/CS-2 are on minis-02; clipped tilings need the frame to
+#                      stay one piece.
 #
 # Validate (no hardware, no slicer):
 #   bambu slice compose docs/plates/minis-03.yaml --dry-run
@@ -34,7 +42,7 @@ profile:
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
 items:
-  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-frame-coaster.bkr  # CS-1 minimal-frame
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-frame-coaster.bkr  # CS-1 six-fold star rosette (hexagon)
     piece:  Coaster
     params: { size: 40, strap: 1.6 }
     count:  1
@@ -42,19 +50,11 @@ items:
     piece:  Coaster
     params: { size: 40, strap: 1.6 }
     count:  2
-  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr      # CS-1 interlock (pair)
-    piece:  Coaster
-    params: { size: 40 }
-    count:  2
-  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-frame-coaster.bkr  # CS-2 minimal-frame
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-frame-coaster.bkr  # CS-2 eight-fold rosette (square)
     piece:  Coaster
     params: { size: 40, strap: 1.6 }
     count:  1
-  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-pegs-coaster.bkr   # CS-2 minimal-pegs (pair)
+  - bkr:    bikar:patterns/Constructions/rDuxHF3xMOc-minimal-frame-coaster.bkr  # CS-8 eight-fold star rosette tiling (square)
     piece:  Coaster
     params: { size: 40, strap: 1.6 }
-    count:  2
-  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr      # CS-2 interlock (pair)
-    piece:  Coaster
-    params: { size: 40 }
-    count:  2
+    count:  1

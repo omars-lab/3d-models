@@ -38,10 +38,11 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 
 Sending a print and which filament to load. Waiting on Omar to send:
 
-- [minis-03](../../plates/minis-03.yaml) — the openwork styles (minimal-frame, and
-  minimal-pegs as a pair) plus interlock as a pair, CS-1 and CS-2. Dry-run placed all ten
-  2026-09-25. The pairs are pushed together to judge the dovetail fit; what they show goes
-  into the print-coaster-samples skill's `sample-rules.md`.
+- [minis-03](../../plates/minis-03.yaml) — minimal-frame of CS-1, CS-2 and rDux, plus a CS-1
+  minimal-pegs pair: 5 pieces, a clean slice, loaded in Bambu Studio 2026-09-25. Five other
+  patterns came off after the [review-print](../../../.claude/skills/review-print/SKILL.md)
+  look. The pegs pair is pushed together to judge the dovetail fit; what it shows goes into
+  the print-coaster-samples skill's `sample-rules.md`.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
