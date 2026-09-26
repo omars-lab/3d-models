@@ -603,6 +603,10 @@ web-images:
 # and site_graph.py's G4 rule — DEPLOY_PATHS and LAB_PAGES must agree with the
 # nodes docs/site-graph.json marks `vendored` — is precisely a deploy-time
 # invariant. Checking it here costs milliseconds and no network.
+#
+# build/stls also holds local slicer output (`bambu slice` writes .3mf, .gcode
+# and result.json under build/stls/coupons/); no page links it, so it is
+# stripped from the worktree after the copy and never reaches the public site.
 deploy: validate-site-graph web-images lab prints-manifest status-manifest
 	@set -euo pipefail; \
 	cd ${ROOT_DIR}; \
@@ -616,6 +620,7 @@ deploy: validate-site-graph web-images lab prints-manifest status-manifest
 		cp -R "$$p" "${PAGES_WORKTREE}/$$p"; \
 	done; \
 	find ${PAGES_WORKTREE} -name '.DS_Store' -not -path '*/.git/*' -delete; \
+	find ${PAGES_WORKTREE}/build/stls -type f \( -name '*.gcode' -o -name '*.3mf' -o -name 'result.json' \) -delete; \
 	cd ${PAGES_WORKTREE}; \
 	git add -A; \
 	if git diff --cached --quiet; then \
