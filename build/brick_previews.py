@@ -27,7 +27,7 @@ the mesh `make coasters` wrote (the 90 mm standard), drawn by the same
 `import()` path and the same three-quarter camera — one shared angle, not a
 per-model number nobody measured.
 
-An interlocked coaster (a name ending `-interlock`, D-069) is drawn as two
+An interlocked coaster (a name ending `-interlock` or `-minimal-pegs`, D-069) is drawn as two
 tiles mated, because one tile with tabs does not explain itself. The second
 copy is the same STL translated by the nominal size (`--mate <mm>`, the
 Makefile's standard size) along the across-flats axis — the axis of the
@@ -147,12 +147,28 @@ def main():
         stl = f"{STL_DIR}/{name}.stl"
         if not os.path.exists(stl):
             sys.exit(f"{stl} missing — `{target}` did not write it")
-        mated = kind == "coaster" and name.endswith("-interlock")
+        mated = kind == "coaster" and name.endswith(("-interlock", "-minimal-pegs"))
         if mated and mate_mm is None:
             sys.exit(f"{name} is interlocked — `--mate <mm>` (the standard size) is required to draw the pair")
         render(binary, stl, f"{OUT_DIR}/{name}.png", mate_offset(stl, mate_mm) if mated else None)
         print(f"{name}.png" + (" (two tiles mated)" if mated else ""))
     print(f"rendered {len(names)} {kind} preview(s) -> {OUT_DIR}")
+    if kind == "coaster":
+        require_gallery_cards(names)
+
+
+def require_gallery_cards(names):
+    """Fail when a coaster was built but the gallery has no card for it.
+
+    `make coasters` builds every bikar `*-coaster.bkr`, but the gallery's
+    `COASTERS` list in index.html is written by hand, so a new style shipped in
+    bikar used to build a preview no page showed (twist, 2026-09-25)."""
+    with open("index.html") as fh:
+        page = fh.read()
+    missing = [n for n in names if f'id:"{n}"' not in page]
+    if missing:
+        sys.exit("no gallery card in index.html COASTERS for: " + ", ".join(missing)
+                 + " — add one named \"<Pattern> · <style>\" (coaster-styles.md)")
 
 
 if __name__ == "__main__":
