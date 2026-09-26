@@ -1,10 +1,10 @@
-# minis-03 — one minimal-frame of every pattern, and one pegs pair
+# minis-03 — a minimal-frame of every pattern that reads at mini size, and one pegs pair
 #
 # Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
 # minis-01 and minis-02 carry only two patterns (CS-1 GimTvN9hw4U, CS-2 7apC5Q9QS-8).
 # Omar asked on 2026-09-25 for "as many minimals of different patterns" as fit, even
-# smaller, and fewer pegs. So this plate carries the openwork style for all eight
-# patterns bikar has a coaster for:
+# smaller, and fewer pegs. Eight patterns were tried; three read well at 40 mm and are on
+# this plate (review-print skill: every piece looked at top-down before it went on):
 #
 #   minimal-frame ×1 each  `-minimal-frame-coaster`  a solid frame round the edge, the
 #                                                    straps standing inside, every empty
@@ -13,19 +13,20 @@
 #                                                    dovetails in the frame, two so the
 #                                                    pair can be pushed together
 #
-# The six minimal-frames beyond CS-1/CS-2 are new (bikar
-# feat/minimal-frame-all-patterns, 2026-09-25).
-#
-# Sizes: 40 mm, the smallest the files allow, except where 40 mm closes the pattern up.
-#   sDO9fpu76v8 (Royal Alcazar) at 60 — at 40 it is a solid hexagon with pinholes.
-#   nmEjCTzMbDg (n-fold flower) at 70 — at 40 it is a solid disc with a ring of dots;
-#     even at 90 only the centre rosette opens, the outer rings stay thin slits. It is
-#     here so every pattern is represented, not because it makes good openwork.
-# Straps at 1.6 mm everywhere (the freestanding floor, CAL-CST-07); frames at the
-# default 3 mm. Every item passed the mesh gate and the linkage gate (one body) at
-# exactly these params on 2026-09-25.
+# rDux's minimal-frame is new (bikar feat/minimal-frame-all-patterns, 2026-09-25). All at
+# 40 mm, the smallest the files allow; straps 1.6 mm (the freestanding floor, CAL-CST-07);
+# frames at the default 3 mm. Every item passed the
+# mesh gate and the linkage gate (one body) at exactly these params on 2026-09-25.
 #
 # Left off, on purpose:
+#   sDO9fpu76v8, nmEjCTzMbDg  too dense for a mini: at 40 mm each is a solid slab with
+#                      pinholes. Tried at 60 and 70 mm they were still mostly solid, big
+#                      discs — Omar, 2026-09-25: "dont seem like they would be meaningful
+#                      prints". They belong on a full-size plate, if anywhere.
+#   n3IidKfXE1I        incomplete: the art is a partial patch that does not fill the square —
+#                      Omar: "felt incomplete".
+#   lEfWSogWscs, tA8eSdVx_EQ  big bare wedges between the art and the frame — Omar: "lots
+#                      of weird empty space".
 #   interlock          minis-02 has one of each pattern; the CS-1 pegs pair tests the
 #                      dovetail fit on this plate.
 #   CS-2 minimal-pegs  one pegs pair is enough to test the fit.
@@ -56,24 +57,4 @@ items:
   - bkr:    bikar:patterns/Constructions/rDuxHF3xMOc-minimal-frame-coaster.bkr  # CS-8 eight-fold star rosette tiling (square)
     piece:  Coaster
     params: { size: 40, strap: 1.6 }
-    count:  1
-  - bkr:    bikar:patterns/Constructions/lEfWSogWscs-minimal-frame-coaster.bkr  # tomb of Itimad ad-Daula (octagon)
-    piece:  Coaster
-    params: { size: 40, strap: 1.6 }
-    count:  1
-  - bkr:    bikar:patterns/Constructions/n3IidKfXE1I-minimal-frame-coaster.bkr  # 12-6-4 star rosette (square)
-    piece:  Coaster
-    params: { size: 40, strap: 1.6 }
-    count:  1
-  - bkr:    bikar:patterns/Constructions/tA8eSdVx_EQ-minimal-frame-coaster.bkr  # 7-fold star rosette (heptagon)
-    piece:  Coaster
-    params: { size: 40, strap: 1.6 }
-    count:  1
-  - bkr:    bikar:patterns/Constructions/sDO9fpu76v8-minimal-frame-coaster.bkr  # Royal Alcazar 6-fold (hexagon)
-    piece:  Coaster
-    params: { size: 60, strap: 1.6 }
-    count:  1
-  - bkr:    bikar:patterns/Constructions/nmEjCTzMbDg-minimal-frame-coaster.bkr  # n-fold flower (round)
-    piece:  Coaster
-    params: { size: 70, strap: 1.6 }
     count:  1
