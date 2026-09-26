@@ -48,6 +48,28 @@ export async function bikarBlobSha(ref: string, path: string): Promise<string | 
   return createHash("sha256").update(Buffer.from(res.stdout, "utf8")).digest("hex");
 }
 
+/**
+ * Is `ref` on bikar's origin/main? "yes", "no", or "unknown" when there is no origin/main to ask.
+ * A plate composed from a branch commit pins a sha a squash merge later replaces; the prints gate
+ * (R16) refuses a record that pins one. Reads refs only, never fetches.
+ */
+export async function bikarRefOnMain(ref: string): Promise<"yes" | "no" | "unknown"> {
+  if (!bikarIsCheckedOut()) return "unknown";
+  const main = await runWithTimeout(
+    "git",
+    ["-C", bikarDir(), "rev-parse", "--verify", "--quiet", "origin/main"],
+    { timeoutMs: 10_000, label: "bikar_main" },
+  );
+  if (main.code !== 0 || main.timedOut) return "unknown";
+  const res = await runWithTimeout(
+    "git",
+    ["-C", bikarDir(), "merge-base", "--is-ancestor", ref, "origin/main"],
+    { timeoutMs: 10_000, label: "bikar_on_main" },
+  );
+  if (res.timedOut) return "unknown";
+  return res.code === 0 ? "yes" : "no";
+}
+
 /** The bikar commit a scaffold should pin (its current HEAD), or null if unreadable. */
 export async function bikarHead(): Promise<string | null> {
   if (!bikarIsCheckedOut()) return null;

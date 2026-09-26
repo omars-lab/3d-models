@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — `slice compose` warns when the bikar HEAD is not on `origin/main`, and the prints
+  gate refuses a record whose bikar pin is not on main (R16). minis-03's draft had pinned a
+  branch commit a squash merge replaced (3d-models #338)
+
 ## From the session task board, before the split
 
 Finished work up to 2026-09-25 was kept on one list, `docs/tasks/done.md`, as ten snapshots
