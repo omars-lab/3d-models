@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — `slice coaster` writes a colour plate picture too (`<plate>.preview.png`): bikar's
+  drawing of each distinct coaster, side by side, in the slot colours the slot map reports. It
+  names any region a drawing does not paint in its slot colour. It shows the coasters, not the
+  bed layout (3d-models #PR)
 - 2026-09-26 — A second run, on scratch plates that mix what minis-01 doesn't: 40, 60 and 80 mm
   pieces on one compose plate came out clean. The colour path (`slice coaster`, a border
   coaster) wrote its 3MF into the repo root; it now writes to build/plates like compose, and its
