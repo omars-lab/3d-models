@@ -2,6 +2,9 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — Every `bambu` command refuses a word it does not take. `validate plate` used to
+  ignore a plate file and pass the machine-card table, "all 23 rungs match". Found by the
+  first minis-01 run (3d-models #PR)
 - 2026-09-26 — `slice compose` warns when the bikar HEAD is not on `origin/main`, and the prints
   gate refuses a record whose bikar pin is not on main (R16). minis-03's draft had pinned a
   branch commit a squash merge replaced (3d-models #338)
