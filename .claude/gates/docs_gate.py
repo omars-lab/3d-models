@@ -380,8 +380,18 @@ def is_claude_config(path: Path) -> bool:
     doc: it quotes the markers to teach them and states no defaults of its own.
     So only D1 applies there — its links must still resolve, because a loop
     follows them. The gate's own fixtures live under .claude/ too and keep
-    every rule, since they exist to show each rule firing."""
-    return "/.claude/" in path.as_posix() and FIXTURES not in path.parents
+    every rule, since they exist to show each rule firing.
+
+    Judged on the path *inside the repo* when the file is under ROOT: a
+    worktree checked out at `<repo>/.claude/worktrees/<name>/` has `/.claude/`
+    in every absolute path, and matching that silently skipped D2–D5 for the
+    whole tree (docs/issues/docs-gate-worktree-under-claude.md)."""
+    if FIXTURES in path.parents:
+        return False
+    resolved = path.resolve()
+    if resolved.is_relative_to(ROOT):
+        return resolved.relative_to(ROOT).parts[:1] == (".claude",)
+    return "/.claude/" in path.as_posix()
 
 
 def check_file(path: Path) -> list[str]:
