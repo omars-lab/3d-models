@@ -1,0 +1,71 @@
+# minis-04 — minis-03 at twice the span and half the height, plus the twist
+#
+# Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
+# minis-03 came back "much too small" at 40 mm, with the pegs pair "a bit loose" and
+# "big spaces between the patterns" once mated (print record docs/prints/2026-09-26-minis-03/).
+# Omar, 2026-09-26: "i also want the prototypes to be half the hight and 2x l and w. i also
+# didnt see a twisted prototype". So this plate is the same patterns:
+#
+#   size    80 mm, twice minis-03's 40
+#   height  1.4 mm base, half minis-03's total: 1.4 + the 1.2 mm the straps stand above it
+#           = 2.6 mm, down from 4 + 1.2 = 5.2 mm. The `height` knob is new (bikar
+#           feat/coaster-height-knob); the relief stays 1.2 so the straps still stand proud.
+#   strap   the file default (2 mm). The 1.6 mm floor was only there to open the holes
+#           at 40 mm; at 80 they are open at 2 (review-print sheet, 2026-09-26).
+#
+#   minimal-frame ×1 each  `-minimal-frame-coaster`  CS-1, CS-2, CS-8 — all three kept on
+#                                                    minis-03 and read well again at 80 mm
+#   minimal-pegs  ×2       `-minimal-pegs-coaster`   CS-1 — clearance 0.10, down from 0.15
+#                                                    which was "a bit loose"; at 80 mm the
+#                                                    solid band where the pair joins is
+#                                                    about 14% of the span, not 28%
+#   twist         ×1       `-twist-coaster`          CS-1 — height 4, twist 4°
+#
+# The twist does not halve. CV12 caps the wall lean at 45° from vertical, and at 80 mm the
+# rim sits at r = 46 mm, so the ceiling is about 1.2° of twist per mm of height: twist 4 at
+# height 4 passes, twist 5 leans 45.1° and is refused. The file's height floor is 4 (half of
+# minis-02's 6 would be 3). So the twist piece is height 4, the tallest thing on the plate.
+# At the cap the rim still leans about as far as minis-02's did; the total turn is smaller
+# because the piece is wider. The 45° cap is itself a provisional bet (CAL-CST-08), and this
+# piece sits right at it.
+#
+# Risks to look for when it comes back:
+#   - a 1.4 mm frame is seven 0.2 mm layers; the pegs' dovetail tabs are that thick too,
+#     so they may snap or flex instead of holding.
+#   - 2.6 mm total may be too floppy for an 80 mm openwork piece to stay flat.
+#
+# Left off, on purpose — same reasons as minis-03:
+#   sDO9fpu76v8, nmEjCTzMbDg  near-solid discs even at 60–70 mm.
+#   n3IidKfXE1I               the art does not fill the square.
+#   lEfWSogWscs, tA8eSdVx_EQ  bare wedges between the art and the frame.
+#   border                    needs a colour plate (`bambu slice coaster`).
+#
+# Validate (no hardware, no slicer):
+#   bambu slice compose docs/plates/minis-04.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-frame-coaster.bkr  # CS-1 six-fold star rosette (hexagon)
+    piece:  Coaster
+    params: { size: 80, height: 1.4 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-minimal-pegs-coaster.bkr   # CS-1 minimal-pegs (pair)
+    piece:  Coaster
+    params: { size: 80, height: 1.4, clearance: 0.1 }
+    count:  2
+  - bkr:    bikar:patterns/Constructions/7apC5Q9QS-8-minimal-frame-coaster.bkr  # CS-2 eight-fold rosette (square)
+    piece:  Coaster
+    params: { size: 80, height: 1.4 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/rDuxHF3xMOc-minimal-frame-coaster.bkr  # CS-8 eight-fold star rosette tiling (square)
+    piece:  Coaster
+    params: { size: 80, height: 1.4 }
+    count:  1
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-twist-coaster.bkr          # CS-1 twist
+    piece:  Coaster
+    params: { size: 80, strap: 1.6, height: 4, twist: 4 }
+    count:  1
