@@ -17,8 +17,12 @@ plate, then anything you can't see before sending, then config ergonomics.
    "Not configured": this machine has no printer config (host, serial and token). Setting it
    is Omar's; after that, run `bambu filament-sync --plate build/plates/minis-01.plate.3mf` and
    log what it shows.
-2. **A second manifest that mixes what minis-01 doesn't** — sizes, a bordered coaster, a
-   multi-colour one — to find the frictions a single-kind plate hides.
+2. **See a colour plate before sending.** `slice coaster` assembles the colour 3MF but cannot
+   slice it with pictures headless (`--export-3mf` hangs, see
+   [the issue note](../../issues/coaster-3mf-filament-shape-and-export-hang.md)), so the only way
+   to see the plate and its region colours is to open it in Bambu Studio. A picture drawn from
+   the bikar parts, one colour per AMS slot, would show it without the GUI. Found by a
+   scratch colour plate (the CS-1 border coaster at 80 mm), 2026-09-26.
 
 ## Found elsewhere, maybe this loop's
 

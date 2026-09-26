@@ -52,6 +52,7 @@ import {
 import { stlToIndexedMesh, stlBounds, footprint, type Bounds, type IndexedMesh } from "../mesh.js";
 import { resolvePresetList } from "./slice.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
+import { platesDir } from "../paths.js";
 
 // **Default:** the plate's slot-1 filament — the material every colour slot reuses and the id that keeps
 // each slot off the external spool (a non-empty product id, §6). PLA / GFA00 (Bambu PLA Basic) / white.
@@ -293,7 +294,9 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   );
 
   // 8. The output paths + the Application version tag (the shipped artifact keeps the versioned tag).
-  const outDir = opts.outputdir ? resolve(opts.outputdir) : process.cwd();
+  // build/plates, like `slice compose`: the current dir put a stray 3MF in the repo root, untracked and
+  // one `git add` from being committed (a scratch colour plate, 2026-09-26).
+  const outDir = opts.outputdir ? resolve(opts.outputdir) : platesDir();
   const outFile = opts.out ?? `${basename(absManifest).replace(/\.ya?ml$/i, "")}.plate.3mf`;
   const outPath = join(outDir, outFile);
   const probe = await probeStudio();
@@ -322,6 +325,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   }
 
   // 9. Assemble the shipped (tagged) 3MF.
+  mkdirSync(outDir, { recursive: true });
   let members;
   try {
     members = buildThreeMfMembers(coasters, map, DEFAULT_FILAMENT, appVersion);
@@ -372,13 +376,13 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
     }));
     try {
       const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects, via: "bambu slice coaster" });
-      console.log(`draft record → ${dir} (verify colours in the GUI: \`bambu slice open ${outFile}\`).`);
+      console.log(`draft record → ${dir} (verify colours in the GUI: \`bambu slice open ${outPath}\`).`);
     } catch (err) {
       console.error(`warning: could not scaffold record: ${(err as Error).message}`);
     }
   }
 
-  console.log(`colour check is a GUI step: \`bambu slice open ${outFile}\` — the headless slice cannot read per-region colour (see docs/issues/coaster-3mf-filament-shape-and-export-hang.md §4).`);
+  console.log(`colour check is a GUI step: \`bambu slice open ${outPath}\` — the headless slice cannot read per-region colour (see docs/issues/coaster-3mf-filament-shape-and-export-hang.md §4).`);
 }
 
 /** Slice a TAG-STRIPPED copy of the assembled members headless and assert exit 0 + the expected object
@@ -450,7 +454,7 @@ export function registerCoaster(slice: Command): void {
     .command("coaster <plate.yaml>")
     .description("assemble a multi-filament COLOUR plate (bikar --format parts → per-region AMS 3MF) for the X2D")
     .option("-o, --out <file>", "output filename (default: <manifest>.plate.3mf)")
-    .option("-d, --outputdir <dir>", "output directory (default: current dir)")
+    .option("-d, --outputdir <dir>", "output directory (default: build/plates at the repo root, else the current dir)")
     .option("-s, --settings <names|paths>", "machine + process, semicolon-joined — overrides the manifest profile")
     .option("-f, --filament <name|path>", "the plate's default (slot-1) filament — overrides the manifest profile")
     .option("--bed <name>", "bed footprint for the fit pre-check (x2d = 256×256 mm)", "x2d")
