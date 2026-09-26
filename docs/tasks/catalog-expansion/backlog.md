@@ -13,16 +13,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    [joins design](../../coaster-borderless-joins-design.md) except magnets, each selectable
    in the Coaster Lab. One sibling style file per join (`-minimal-frame` none,
    `-minimal-pegs` dovetail and slim dovetail, `-minimal-key`, `-minimal-tab`).
-   - **Join row in the Coaster Lab** — switches between a construction's join files and
-     keeps size, height, strap and clearance; in review (bikar, branch
-     `feat/coaster-lab-join-row`).
-   - **Butterfly key** — a notch mid-edge and a separate bow-tie key: an `interlock key`
-     clause, the key as its own piece, a fit check (CV-K1). In progress (bikar, branch
-     `feat/coaster-key-join`).
-   - **Tab into the neighbour's opening** — `interlock tab` and a `-minimal-tab` file. Starts
-     after the key lands; both touch the same kernel files.
-   - **Join gallery in the Coaster Lab** — one example construction, every join shown side
-     by side, mated.
+   - **Tab into the neighbour's opening** — `interlock tab` and a `-minimal-tab` file, with
+     a fit check; in progress (bikar, branch `feat/coaster-tab-join`). Its PR adds the tab picture
+     the join gallery test requires.
+   - **A sample plate of the joins (KEY-1)** and a review sheet, for Omar to judge before
+     anything prints.
    - **Not now**: bevel overlap, a tray, art carried across the seam, strap-end joints,
      magnets (Omar: "except magnets for now"). Reasons are in the design doc.
 2. **`bknVRSMcLj0` has no ledger row.** youtube reconstructed it (Imamzadeh Isma'il 12-fold

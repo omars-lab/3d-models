@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — Join gallery in the Coaster Lab: "How each join works" opens a card per join, each a picture of two 80 mm six-fold coasters mated as the engine builds them with the seam enlarged, and "Use this join" switches the open coaster; `npm run coaster-join-pairs` draws the pictures and a test holds them to the joins (bikar #257)
+- 2026-09-26 — Size chips respect the coaster's range: Mini is dimmed on the butterfly-key coaster (60–120 mm) and says why, instead of producing an error (bikar #256)
+- 2026-09-26 — Butterfly key: a notch mid-edge and a separate bow-tie key, `interlock key`, the key as its own piece, fit check CV-K1, and the six-fold minimal-key coaster (bikar #255)
+- 2026-09-26 — Join row in the Coaster Lab: switches between a construction's join files (none, dovetail, slim dovetail, key) and keeps size, height and strap (bikar #254)
 - 2026-09-26 — Slim dovetail: a `wall` knob on both minimal-pegs coasters (floor 2.1 mm, where CV8 still clears); at neck 2, depth 2, wall 2.1 the frame drops from 5.65 to 4.2 mm and the band between joined patterns from about 11 to 8.4 mm (bikar #253)
 - 2026-09-26 — Joins design: ways to join openwork coasters that reuse the frame instead of widening it, with sourced research (3d-models #330)
 - 2026-09-25 — The Eight-Fold Star Rosette coaster (CS-8) has all four cells of its square: the video stops at three, so the coaster alone adds the fourth, marked coaster-only; the construction stays faithful (bikar #250)
