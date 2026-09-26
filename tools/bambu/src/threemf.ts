@@ -4,6 +4,9 @@
 // parse (`parseProjectSettings`) so the header BUILDER can be unit-tested against fixture metadata
 // with no zip, no printer, and no filesystem.
 
+import { copyFileSync, existsSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { runWithTimeout } from "./log.js";
 
 /** unzip -p one member of a .3mf to a string. Small members only (config/json). */
@@ -21,6 +24,34 @@ export async function listMembers(threemf: string): Promise<string[]> {
   const res = await runWithTimeout("unzip", ["-Z1", threemf], { timeoutMs: 30_000, label: "unzip_list" });
   if (res.code !== 0) return [];
   return res.stdout.split("\n").map((s) => s.trim()).filter(Boolean);
+}
+
+/** Where the plate picture for a sliced `.3mf` goes: next to it, as `<name>.preview.png`. */
+export function previewPathFor(threemf: string): string {
+  return threemf.replace(/\.3mf$/i, "") + ".preview.png";
+}
+
+/**
+ * Copy the picture Bambu Studio draws of a sliced plate (`Metadata/plate_<n>.png`) out of the `.3mf`
+ * to `previewPathFor(threemf)`, so the plate can be looked at before sending without unzipping it.
+ * `unzip -p` would pass the PNG through a utf8 string, so this extracts to a temp dir and copies.
+ * Returns the picture's path, or null when the plate has no picture (an unsliced export).
+ */
+export async function writePlatePreview(threemf: string, plate = 1): Promise<string | null> {
+  const tmp = mkdtempSync(join(tmpdir(), "bambu-preview-"));
+  try {
+    const res = await runWithTimeout("unzip", ["-o", "-j", threemf, `Metadata/plate_${plate}.png`, "-d", tmp], {
+      timeoutMs: 30_000,
+      label: "unzip_preview",
+    });
+    const png = join(tmp, `plate_${plate}.png`);
+    if (res.code !== 0 || res.timedOut || !existsSync(png)) return null;
+    const out = previewPathFor(threemf);
+    copyFileSync(png, out);
+    return out;
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 }
 
 /** The slice-side header fields the `.3mf` stamps — every value comes from a key the file carried. */

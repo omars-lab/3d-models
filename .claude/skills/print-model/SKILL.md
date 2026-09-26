@@ -84,7 +84,8 @@ orchestrating the ones that already exist. So:
   match, nozzle, orientation, supports/infill/brim, grid arrangement of repeats, proactive advisories.
   This is the judgement a CLI verb cannot carry.
 - **Presents:** the plan artifact + the plate preview PNG pulled from the sliced `.3mf` (its
-  Metadata/plate_1.png archive member), the same asset the bambu skill already extracts.
+  Metadata/plate_1.png archive member). `bambu slice plate` and `slice compose` write it next to
+  the `.3mf` as `<plate>.preview.png` and print its path.
 - **Consumes (read-only, owned elsewhere):** transport + slicing + records via the
   [`bambu` skill / CLI](../bambu/SKILL.md) (`status`, `filament`, `slice plate`, `print list`,
   `print send`, `validate record`); geometry via bikar; the record schema via

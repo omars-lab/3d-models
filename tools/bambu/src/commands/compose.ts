@@ -35,6 +35,7 @@ import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir } from "../paths.js";
+import { writePlatePreview } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
@@ -532,6 +533,8 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   }
   ev("compose_done", { out: basename(outPath), kb, warnings: warnings.length, unexpected: unexpected.length });
   console.log(`composed → ${outPath} (${kb} KB, ${inputs.length} objects from ${resolved.length} variant(s))`);
+  const preview = await writePlatePreview(outPath);
+  console.log(preview ? `plate picture → ${preview} (look before sending)` : "plate picture: none in the 3MF.");
 
   // 9. Scaffold the plate record with resolved objects[].iteration provenance (§7). Stops at a draft
   //    under .bambu/records/ and the OWNER GATE — compose never dispatches (that is `print send`).
@@ -551,7 +554,14 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       // the same builder `print send --record` uses; compose never reads the printer, so the frame
       // is empty and the printer-side fields (spool, loaded material) stay TODO.
       const profile = await recordProfileFrom({}, outPath);
-      const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects, profile });
+      const dir = await scaffoldRecord({
+        slug,
+        plateName: outFile,
+        plateFile: outPath,
+        objects,
+        profile,
+        via: "bambu slice compose",
+      });
       console.log(`draft record → ${dir} (fill TODOs, add photos, then \`bambu validate record\`).`);
     } catch (err) {
       console.error(`warning: could not scaffold record: ${(err as Error).message}`);
