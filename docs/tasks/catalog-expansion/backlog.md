@@ -13,9 +13,6 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    [joins design](../../coaster-borderless-joins-design.md) except magnets, each selectable
    in the Coaster Lab. One sibling style file per join (`-minimal-frame` none,
    `-minimal-pegs` dovetail and slim dovetail, `-minimal-key`, `-minimal-tab`).
-   - **Tab into the neighbour's opening** — `interlock tab` and a `-minimal-tab` file, with
-     a fit check; in progress (bikar, branch `feat/coaster-tab-join`). Its PR adds the tab picture
-     the join gallery test requires.
    - **A sample plate of the joins (KEY-1)** and a review sheet, for Omar to judge before
      anything prints.
    - **Not now**: bevel overlap, a tray, art carried across the seam, strap-end joints,
