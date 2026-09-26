@@ -2,7 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
-- 2026-09-25 — The gallery has a named card for every coaster style, "<Pattern> · <style>" as the Lab titles them, and `make coasters` fails on a coaster with no card; pegs previews drawn as mated pairs (3d-models, this PR)
+- 2026-09-25 — The gallery has a named card for every coaster style, "<Pattern> · <style>" as the Lab titles them, and `make coasters` fails on a coaster with no card; pegs previews drawn as mated pairs (3d-models #318)
 - 2026-09-25 — Openwork coasters: `openwork frame <mm>` and the minimal-frame and minimal-pegs styles for CS-1 and CS-2 (bikar #248)
 
 ## From the session task board, before the split
