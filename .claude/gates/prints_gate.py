@@ -102,6 +102,14 @@ plate's physical progression:
       (K6/D2): one verdict on the plate does not discharge the rule; every object needs
       its own.
 
+  R16 **The pin is on bikar main.** `pins.bikar_ref` must be reachable from bikar's
+      `origin/main`. R1 reads the blob at the pin, and a commit on a branch that was
+      later squash-merged still reads fine while its object sits in the local store, then
+      fails once git cleans it up: minis-03's draft pinned `db68768a`, on no branch after
+      bikar #251 squash-merged (2026-09-26). This rule fails it the day it is written, not
+      the day the object is gone. If bikar is not checked out, or has no `origin/main`,
+      the check is skipped and counted, like R1.
+
 Plus the well-formedness the §4 Validator names: the directory is `index.md` +
 `photos/`, the frontmatter parses and carries every required key, and `run`
 equals the directory name.
@@ -179,6 +187,8 @@ OBJECT_FIELDS = ("entry", "source", "source_sha256")
 # Set by self_test() to a stub keyed on the fixture's pins, so R1 can be exercised
 # without a bikar checkout. In production it stays None and the git reader runs.
 _BLOB_RESOLVER = None
+# The same, for R16's "is the pin on bikar main" question.
+_MAIN_RESOLVER = None
 
 
 def _sha256_bytes(b: bytes) -> str:
@@ -212,6 +222,29 @@ def resolve_blob_sha(ref: str, path: str) -> tuple[str, str | None]:
     if proc.returncode != 0:
         return ("missing", None)
     return ("ok", _sha256_bytes(proc.stdout))
+
+
+def pin_on_main(ref: str) -> str:
+    """R16: `ok` when `ref` is reachable from bikar's origin/main, `off-main` when it is
+    not (or is not a commit bikar has), `skip` when there is no bikar or no origin/main
+    to ask. Reads refs only; it never fetches, so a pin newer than the last fetch reads
+    as off-main, and the message says to fetch."""
+    if _MAIN_RESOLVER is not None:
+        return _MAIN_RESOLVER(ref)
+    if not (BIKAR_DIR / ".git").exists():
+        return "skip"
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}  # see resolve_blob_sha
+    has_main = subprocess.run(
+        ["git", "-C", str(BIKAR_DIR), "rev-parse", "--verify", "--quiet", "origin/main"],
+        capture_output=True, env=env,
+    )
+    if has_main.returncode != 0:
+        return "skip"
+    proc = subprocess.run(
+        ["git", "-C", str(BIKAR_DIR), "merge-base", "--is-ancestor", ref, "origin/main"],
+        capture_output=True, env=env,
+    )
+    return "ok" if proc.returncode == 0 else "off-main"
 
 
 def parse_frontmatter(text: str) -> tuple[dict | None, str | None]:
@@ -304,6 +337,14 @@ def check_record(
     bikar_ref = pins.get("bikar_ref") if isinstance(pins, dict) else None
     if not bikar_ref:
         out.append(f"{name}: pins.bikar_ref is missing — geometry cannot be re-resolved")
+    else:
+        # R16 — the pin is a commit on bikar main, not a branch commit a squash replaces.
+        on_main = pin_on_main(str(bikar_ref))
+        if on_main == "skip":
+            out.append(f"__skip__{name}:bikar_ref")
+        elif on_main == "off-main":
+            out.append(f"{name}: R16 pins.bikar_ref {str(bikar_ref)[:12]} is not on bikar origin/main "
+                       "— pin the merge commit on main (fetch bikar first if it merged since)")
 
     # R1 — identity, per object, at the pinned commit.
     objects = data.get("objects") or []
@@ -567,6 +608,7 @@ def run(prints: Path) -> int:
 # ---------------------------------------------------------------------------
 
 _FIX_REF = "8dda702fc943d1876c56fe14b5b608ed53ea51e8"
+_FIX_BRANCH_REF = "db68768a" + "0" * 32  # R16's case: a branch commit, as minis-03's draft pinned
 _FIX_SRC_PATH = "patterns/Coupons/Machine-Card.bkr"
 _FIX_BLOB = b"orb MachineCard\n// a canned coupon blob for the fixture\n"
 _FIX_SHA = _sha256_bytes(_FIX_BLOB)
@@ -735,6 +777,13 @@ def _propagated_no_bet(prints: Path) -> None:
     idx.write_text(text, encoding="utf-8")
 
 
+def _pin_off_main(prints: Path) -> None:
+    # R16: the pin is a branch commit that never landed on main (the stub below knows
+    # only the fixture's ref as on main). Its blob still reads, so R1 alone passes it.
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace(_FIX_REF, _FIX_BRANCH_REF, 1), encoding="utf-8")
+
+
 def _shipped_planned(prints: Path) -> None:
     # R14: a record shipped under docs/prints/ but still at a pre-slice state.
     idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
@@ -771,6 +820,8 @@ CASES = [
      "R15 objects MC-2 verdict None is not one of"),
     ("R15 notes that are not a list", _bad_piece_notes,
      "R15 objects MC-2 notes is not a list"),
+    ("R16 a pin that is not on bikar main", _pin_off_main,
+     "R16 pins.bikar_ref db68768a0000 is not on bikar origin/main"),
 ]
 
 
@@ -778,9 +829,10 @@ def self_test() -> int:
     import shutil
     import tempfile
 
-    global _BLOB_RESOLVER  # noqa: PLW0603 — stub the sibling repo for the fixture
+    global _BLOB_RESOLVER, _MAIN_RESOLVER  # noqa: PLW0603 — stub the sibling repo for the fixture
     _BLOB_RESOLVER = lambda ref, path: (  # noqa: E731
         ("ok", _FIX_SHA) if path == _FIX_SRC_PATH else ("missing", None))
+    _MAIN_RESOLVER = lambda ref: "ok" if ref == _FIX_REF else "off-main"  # noqa: E731
     failures = 0
     tmp = Path(tempfile.mkdtemp(prefix="prints-gate-"))
     try:
@@ -804,7 +856,9 @@ def self_test() -> int:
             print(f"self-test {'ok  ' if ok else 'FAIL'}: {label}" + ("" if ok else f" — {why}"))
 
         # R1 skip path: with no resolver and no bikar, a pin is unverified, not a fail.
+        # The git-backed cases below read real refs for R16 too, so drop both stubs.
         _BLOB_RESOLVER = None
+        _MAIN_RESOLVER = None
         case = tmp / "r1-skip-when-bikar-absent"
         case.mkdir()
         prints = _build_fixture(case)

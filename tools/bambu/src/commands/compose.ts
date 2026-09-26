@@ -19,7 +19,7 @@ import { parse as parseYaml } from "yaml";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
 import { locateStudio } from "../backends/studio-cli.js";
-import { locateBikarCli, bikarDir, bikarHead, bikarBlobSha } from "../backends/bikar.js";
+import { locateBikarCli, bikarDir, bikarHead, bikarBlobSha, bikarRefOnMain } from "../backends/bikar.js";
 import {
   parseSlicerWarnings,
   classifyWarnings,
@@ -361,6 +361,16 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     console.error(`could not read bikar HEAD at ${bikarDir()} — is it a git checkout?`);
     process.exitCode = 1;
     return;
+  }
+  // A branch commit is pinned into the plate, then replaced when the branch squash-merges; the
+  // record written from this plate would fail the prints gate (R16). Say so now, not at the record.
+  const onMain = await bikarRefOnMain(bikarRef);
+  if (onMain === "no") {
+    console.error(`⚠ bikar HEAD ${bikarRef.slice(0, 12)} is not on origin/main (${bikarDir()}).`);
+    console.error("  A plate composed now pins a commit a squash merge will replace, and its print record");
+    console.error("  will fail the prints gate (R16). Merge the bikar change, fast-forward, and compose again.");
+  } else if (onMain === "unknown") {
+    console.error(`⚠ could not tell whether bikar HEAD ${bikarRef.slice(0, 12)} is on origin/main.`);
   }
 
   // 3. Resolve each manifest item to its geometry pins + iteration id (shared with `slice coaster`).
