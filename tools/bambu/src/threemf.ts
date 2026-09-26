@@ -91,3 +91,26 @@ export async function readPlateMeta(threemf: string): Promise<PlateMeta | null> 
   if (!raw) return null;
   return parseProjectSettings(raw);
 }
+
+/**
+ * The 1-based filament ids plate `plate` actually prints with, from `Metadata/slice_info.config`
+ * (`<plate><metadata key="index" value="N"/> … <filament id="1" …/>`). project_settings lists every
+ * filament in the project, used or not; a send must map only the used ones, or an unused slot would
+ * demand a tray the print never touches. PURE. [] when the plate is absent or lists none.
+ */
+export function parseUsedFilaments(xml: string, plate = 1): number[] {
+  for (const block of xml.match(/<plate>[\s\S]*?<\/plate>/g) ?? []) {
+    const index = block.match(/<metadata\s+key="index"\s+value="(\d+)"/);
+    if (!index || Number(index[1]) !== plate) continue;
+    const ids = [...block.matchAll(/<filament\s+id="(\d+)"/g)].map((m) => Number(m[1]));
+    return [...new Set(ids)].sort((a, b) => a - b);
+  }
+  return [];
+}
+
+/** Read the used filament ids of one plate. null when the .3mf has no slice_info (not sliced). */
+export async function readUsedFilaments(threemf: string, plate = 1): Promise<number[] | null> {
+  const raw = await readMember(threemf, "Metadata/slice_info.config");
+  if (!raw) return null;
+  return parseUsedFilaments(raw, plate);
+}

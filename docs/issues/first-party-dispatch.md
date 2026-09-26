@@ -49,7 +49,8 @@ default two clients actually send:
 
 - all four `project_id` / `profile_id` / `task_id` / `subtask_id` are the string `"0"` ("Always 0
   for a local print"); `sequence_id` `"0"`;
-- `use_ams: false` (single filament / external spool), `bed_leveling: true`, `flow_cali: true`,
+- `use_ams: false` (single filament / external spool — the builder default only; since 2026-09-26
+  `print send` sets it from the loaded trays, see below), `bed_leveling: true`, `flow_cali: true`,
   `vibration_cali: true`, `layer_inspect: false`, `timelapse: false`.
 
 Three fields the sources **disagree on for a dual-nozzle X2D** are exposed as overridable options
@@ -59,14 +60,15 @@ bet** — a value we believe but have not yet confirmed on *this* machine:
 | field | default | why unconfirmed |
 |---|---|---|
 | `bed_type` | `"auto"` | firmware auto-detects on most models; some builds want an explicit plate name |
-| `ams_mapping` | `[0]` | dual-nozzle firmware may need a nozzle index, or the empty-string form (`--ams-mapping none`) |
+| `ams_mapping` | matched from the loaded trays (the builder default `[0]` is no longer sent) | dual-nozzle firmware may need a nozzle index, or the empty-string form (`--ams-mapping none`) |
 | `md5` | `""` (empty) | accepted on P1/A1-class; X1-class historically validated the checksum |
 
 **How the bet gets settled (deferred to the physical send, owner-gated):** before the first real
 dispatch, diff this payload against a **BambuStudio ground-truth capture** — send one plate from the
 GUI with an MQTT sniffer on `device/<serial>/request` and compare Studio's `project_file` fields to
 ours, field for field. `bambu print send --dry-run` prints the exact payload we would publish for
-that diff **without connecting** — it is the review surface. Any field Studio sets differently gets
+that diff **without uploading or publishing** (it reads the loaded trays to fill `ams_mapping`) — it is
+the review surface. Any field Studio sets differently gets
 corrected here (or wired to its flag) and the bet closes with a one-line note.
 
 ## Why verification stops at the gate
@@ -116,8 +118,34 @@ differs is a bug to fix here before the first real send.
 ```
 
 `md5` / `bed_type` / `ams_mapping` are the three CAL-shaped fields from the table above — the diff
-closes the bet by confirming or correcting exactly these. The operator runbook consumes this from
+closes the bet by confirming or correcting exactly these. (This block predates 2026-09-26: a send
+now puts the matched tray in `ams_mapping` and sets `use_ams` to match — next section.) The operator runbook consumes this from
 [`guide-print`](../../.claude/skills/guide-print/SKILL.md) step 4's pre-send gate (line 2).
+
+## 2026-09-26: the send picks the tray
+
+**What went wrong.** Every send published `use_ams: false` with `ams_mapping: [0]` — feed from
+the external spool — and `print send` had no way to say otherwise. The external spool on our X2D
+is empty, so a CLI send would have printed nothing. The minis-01 run found it (2026-09-25), and
+minis-01 and minis-02 went out from Bambu Studio instead.
+
+**What replaced it.** Without `--ams-mapping`, `print send` now reads the plate's *used* filaments
+(`Metadata/slice_info.config`, not the project's full filament list) and the loaded trays (a
+read-only status request). It matches them by colour with the same `filament-sync` match, and
+sends one tray number per filament, with -1 for the ones the plate does not print with. `use_ams`
+is true when any of those is an AMS tray. Trays are numbered `unit*4 + tray`, and the external
+spool by its id `254`, the numbering OpenBambuAPI documents for Studio's sends. An AMS HT unit
+(id 128 and up) has no number we are sure of, so a match to one is refused.
+
+**It refuses rather than choose.** A missing colour, a near-tie, a material mismatch or an
+unnumbered tray stops the send, and it prints the loaded trays with their numbers so the operator
+can pass `--ams-mapping`. That is the usual case today: our slices carry Studio's default green
+`#00AE42`, not the colour that is loaded, so the operator names the tray, and choosing the
+filament stays Omar's.
+
+**Still unconfirmed on the X2D.** The tray numbering, and whether dual-nozzle firmware also wants a
+per-nozzle field beside `ams_mapping`, are settled only by the Studio capture above. The numbers
+come from OpenBambuAPI, not from this machine.
 
 ## Files
 

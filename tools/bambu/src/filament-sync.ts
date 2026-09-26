@@ -28,6 +28,7 @@ export interface PhysicalTray {
   hex: string | null; // "#RRGGBB" or null when the tray is empty / has no RFID colour
   type: string | null; // "PLA" or null when empty
   remain: number | null; // percent left; null when the tray does not report it, -1 = unknown (no RFID)
+  index?: number | null; // the tray number a send puts in ams_mapping (frame.ts trayIndex); null = unknown
 }
 
 export type MatchStatus =
@@ -96,6 +97,7 @@ export function physicalTraysFromSlots(slots: Slot[]): PhysicalTray[] {
       hex: colorHex(s.tray.tray_color),
       type,
       remain: s.tray.remain ?? null,
+      index: s.index ?? null,
     });
   }
   return out;
@@ -232,4 +234,39 @@ export function renderReport(r: SyncReport): string {
       ? "Operator action needed before printing (see ASK/LOAD above)."
       : "Matched with warnings (see warn above).";
   return `${lines.join("\n")}\n\n${verdict}`;
+}
+
+/** True when any filament feeds from an AMS tray (0–253); 254/255 are the external spool, -1 unused. */
+export function feedsFromAms(mapping: number[]): boolean {
+  return mapping.some((i) => i >= 0 && i < 254);
+}
+
+/** What a send puts in `use_ams` / `ams_mapping`, or why it will not choose for the operator. */
+export type AmsPlan =
+  | { ok: true; amsMapping: number[]; useAms: boolean }
+  | { ok: false; reason: string };
+
+/**
+ * Turn a reconciliation into a send's `ams_mapping`: one entry per filament the project declares
+ * (position i = filament i+1), the bound tray's number for each filament the plate uses, -1 for the
+ * rest. `use_ams` follows from it. Refuses — never guesses — when a used filament has no clean match
+ * (missing, a near-tie, a material mismatch) or its tray has no known number: which spool feeds the
+ * print is the operator's call, made with `--ams-mapping`, not a default. The old default fed the
+ * empty external spool on every send (found by the minis-01 run, 2026-09-25).
+ */
+export function planAmsMapping(report: SyncReport, filamentCount: number, used: number[]): AmsPlan {
+  if (used.length === 0) return { ok: false, reason: "the plate lists no used filament (is it sliced?)" };
+  const bySlot = new Map(report.bindings.map((b) => [b.logical.slot, b]));
+  const mapping: number[] = Array.from({ length: Math.max(filamentCount, ...used) }, () => -1);
+  const problems: string[] = [];
+  for (const id of used) {
+    const b = bySlot.get(id);
+    if (!b) problems.push(`filament ${id} has no colour in the plate to match a tray by`);
+    else if (b.status !== "matched" && b.status !== "low-remain") problems.push(`filament ${id} is ${b.status}`);
+    else if (b.tray?.index === null || b.tray?.index === undefined)
+      problems.push(`filament ${id} matched ${b.tray?.where}, which has no known tray number`);
+    else mapping[id - 1] = b.tray.index;
+  }
+  if (problems.length > 0) return { ok: false, reason: problems.join("; ") };
+  return { ok: true, amsMapping: mapping, useAms: feedsFromAms(mapping) };
 }
