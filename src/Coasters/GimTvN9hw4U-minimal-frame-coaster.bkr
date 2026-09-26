@@ -1,0 +1,109 @@
+# naqsh construction — GimTvN9hw4U
+# title: Simple 20-step Six-Fold Star Rosette
+# url: https://www.youtube.com/watch?v=GimTvN9hw4U
+# steps: 26 statements, 25 tagged steps
+# source: reconstructions/GimTvN9hw4U/construction.ggb-commands sha256:6838767cbb24116b0e5986e62e05a0726b246b8ce0028dc1714fc7194525022e
+# renamed: rosette -> rosette_ (reserved word)
+# style: minimal-frame — the straps stand free inside a solid frame, the empty spaces cut through (openwork, docs/design/coaster-openwork.md)
+
+param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param strap = 2 range 1.6..5   # mm, strap width — a freestanding wall once the slab is cut away, floored at CAL-CST-07 (1.6 mm)
+param frame = 3 range 2..10   # mm, the solid frame inside the edge — also a freestanding wall
+param margin = $frame - 1   # mm, the art sits 1 mm into the frame so every outer strap end joins it
+param unit = ($size - 2 * $margin) / 4.5001   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint GimTvN9hw4U_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:43  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=00:59  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=01:15  C = Rotate(A, -120°, B)
+  point C = rotate A by -120 around B
+  # t=01:15  D = Rotate(B, -120°, C)
+  point D = rotate B by -120 around C
+  # t=01:15  E = Rotate(C, -120°, D)
+  point E = rotate C by -120 around D
+  # t=01:15  F = Rotate(D, -120°, E)
+  point F = rotate D by -120 around E
+  # ────────────────────────────────────────────────────────
+  # t=01:31  poly1 = Polygon(A, B, C, D, E, F)
+  polygon poly1 [ A B C D E F ]
+  # ────────────────────────────────────────────────────────
+  # t=01:39  l = PerpendicularBisector(A, B)
+  bisector l from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:44  m = PerpendicularBisector(A, C)
+  bisector m from A to C
+  # ────────────────────────────────────────────────────────
+  # t=01:51  G = Intersect(l, m)
+  point G = intersect l m
+  # ────────────────────────────────────────────────────────
+  # t=01:54  f = Line(A, B)
+  line f from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:57  H = Intersect(l, f)
+  point H = intersect l f
+  # ────────────────────────────────────────────────────────
+  # t=02:00  c = Circle(B, H)
+  circle c center(B) through H
+  # ────────────────────────────────────────────────────────
+  # t=02:08  I = Midpoint(A, C)
+  point I = midpoint A C
+  # ────────────────────────────────────────────────────────
+  # t=02:36  n = Line(I, l)
+  line n through I parallel l
+  # ────────────────────────────────────────────────────────
+  # t=02:53  p = Line(B, F)
+  line p from B to F
+  # ────────────────────────────────────────────────────────
+  # t=03:07  J = Intersect(n, p)
+  point J = intersect n p
+  # ────────────────────────────────────────────────────────
+  # t=03:14  np = Reflect(n, m)
+  line np = reflect n across m
+  # ────────────────────────────────────────────────────────
+  # t=03:27  K = Intersect(l, np)
+  point K = intersect l np
+  # ────────────────────────────────────────────────────────
+  # t=03:37  Ip = Reflect(I, l)
+  point Ip = reflect I across l
+  # ────────────────────────────────────────────────────────
+  # t=03:41  Jp = Reflect(J, l)
+  point Jp = reflect J across l
+  # ────────────────────────────────────────────────────────
+  # t=03:50  pet = Polygon(H, J, I, K, Ip, Jp)
+  polygon pet [ H J I K Ip Jp ]
+  # ────────────────────────────────────────────────────────
+  # de = Line(D, E)
+  line de from D to E
+  # ────────────────────────────────────────────────────────
+  # t=05:34  reflRosette = Reflect(rosette, de)
+  point G_reflRosette = reflect G across de
+  # t=05:34  reflRosette = Reflect(rosette, de)
+  polygon pet_reflRosette = reflect pet across de
+
+pattern GimTvN9hw4U on GimTvN9hw4U_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=05:18  rosette = Sequence(Rotate(pet, pi*i/3, G), i, 0, 5)
+  rotate 6 around G
+    edges from pet
+  # ────────────────────────────────────────────────────────
+  # t=06:04  tess = Sequence(Rotate(reflRosette, pi*i/3, G), i, 0, 5)
+  rotate 6 around G
+    rotate 6 around G_reflRosette
+      edges from pet_reflRosette
+
+coaster Coaster
+  outline polygon 6 $size rotate 30
+  inscribe GimTvN9hw4U
+  base 4
+  relief straps emboss 1.2
+  strap width $strap
+  openwork frame $frame
