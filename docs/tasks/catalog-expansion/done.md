@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — Slim dovetail: a `wall` knob on both minimal-pegs coasters (floor 2.1 mm, where CV8 still clears); at neck 2, depth 2, wall 2.1 the frame drops from 5.65 to 4.2 mm and the band between joined patterns from about 11 to 8.4 mm (bikar #253)
+- 2026-09-26 — Joins design: ways to join openwork coasters that reuse the frame instead of widening it, with sourced research (3d-models #330)
 - 2026-09-25 — The Eight-Fold Star Rosette coaster (CS-8) has all four cells of its square: the video stops at three, so the coaster alone adds the fourth, marked coaster-only; the construction stays faithful (bikar #250)
 - 2026-09-25 — The Coaster Lab picks presets from pictures grouped by pattern, captioned by style; `npm run coaster-thumbnails` captures them, and a test fails when a preset has no picture (bikar #249)
 - 2026-09-25 — The gallery has a named card for every coaster style, "<Pattern> · <style>" as the Lab titles them, and `make coasters` fails on a coaster with no card; pegs previews drawn as mated pairs (3d-models #318)

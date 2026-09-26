@@ -36,6 +36,12 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
    The pegs pair tries a clearance ladder (0.10 and 0.05). A shallower dovetail (`depth` 2)
    would narrow the solid band at the join. Rules and reasons are in the print-coaster-samples
    skill's `sample-rules.md`. Render the pair joined and review it before composing.
+   - **Make it the joins plate** (Omar, 2026-09-26, after minis-04: "the ones with pegs,
+     border still too big"). One mated pair per join, same construction: slim dovetail
+     (neck 2, depth 2, wall 2.1 — shipped, bikar #253), butterfly key with its keys, and the
+     tab once each lands (see the [catalog-expansion backlog](../catalog-expansion/backlog.md)
+     item 1). Show the joined-pair review sheet before composing. Options and sources:
+     [`coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
 5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
