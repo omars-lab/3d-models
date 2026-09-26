@@ -25,8 +25,7 @@ import {
 import { loadConfig, type PrinterConfig } from "../config.js";
 import { confirm } from "../prompt.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
-import { readPlateMeta } from "../threemf.js";
-import { buildHeader, headerToRecordProfile, type RecordProfile } from "../header.js";
+import { recordProfileFrom, type RecordProfile } from "../header.js";
 import { buildActuals, actualsToRecord, actualsAreEmpty } from "../actuals.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
@@ -156,19 +155,6 @@ function buildProjectOptions(remoteName: string, opts: SendOpts): ProjectFileOpt
  * a missing printer or an unreadable frame degrades to the plain TODO scaffold, never a crash — and
  * never a fabricated field (the builder leaves unconfirmed/manual fields out of the record profile).
  */
-/** The profile block from a frame we ALREADY read + (optionally) the sliced .3mf. Pure of MQTT — the
- *  caller owns the read — so `print capture` (which already holds a frame) and `print send --record`
- *  share one profile builder (D-052: one code path). Without a plate, material/spool still fill from
- *  the frame's AMS; the slice-side fields stay TODO. */
-async function recordProfileFrom(frame: PrinterStatus, plateFile?: string): Promise<RecordProfile | undefined> {
-  try {
-    const plateMeta = plateFile ? await readPlateMeta(plateFile) : null;
-    return headerToRecordProfile(buildHeader(frame, plateMeta));
-  } catch {
-    return undefined; // fall back to the TODO scaffold
-  }
-}
-
 async function buildRecordProfile(plateFile: string): Promise<RecordProfile | undefined> {
   let frame: PrinterStatus = {};
   const mqtt = new MqttBackend();

@@ -92,6 +92,16 @@ plate's physical progression:
       `planned` is the drift §6.3 names: the plan artifact is composed-not-stored
       (§2), so a shipped pre-slice record must be reconciled past planning first.
 
+  R15 **A printed piece carries its verdict.** In a `printed`, `failed`, `measured` or
+      `propagated` record, every `objects[]` entry carries a `verdict` in
+      PIECE_VERDICTS (`keep` — print it again as is; `adjust` — the idea is right, change
+      its params; `drop` — do not print it again), and the optional `notes` is a list of
+      non-empty strings. The plate-level `feedback` cannot answer "was *this* piece good
+      at *these* params": minis-03 (2026-09-26) mixed a good minimal-frame and a loose
+      pegs pair at one size, and one plate note could not tell them apart. Hard case
+      (K6/D2): one verdict on the plate does not discharge the rule; every object needs
+      its own.
+
 Plus the well-formedness the §4 Validator names: the directory is `index.md` +
 `photos/`, the frontmatter parses and carries every required key, and `run`
 equals the directory name.
@@ -150,6 +160,8 @@ POST_SLICE_STATES = frozenset({
 })
 FEEDBACK_STATES = frozenset({"printed", "failed", "measured", "propagated"})
 PRE_SHIP_STATES = frozenset({"draft", "planned"})
+# R15 — what the owner decided about one printed piece at the params it printed at.
+PIECE_VERDICTS = ("keep", "adjust", "drop")
 
 REQUIRED_TOP = ("run", "plate", "status", "outcome", "profile", "pins", "objects")
 PROFILE_FIELDS = (
@@ -188,9 +200,14 @@ def resolve_blob_sha(ref: str, path: str) -> tuple[str, str | None]:
     git_dir = BIKAR_DIR / ".git"
     if not git_dir.exists():
         return ("skip", None)
+    # Drop the GIT_* variables a hook runs under: pre-commit exports GIT_DIR and
+    # GIT_INDEX_FILE for *this* repo, and `git -C bikar` would obey them and look for
+    # the bikar commit in 3d-models' object store — every R1 "missing" on commit and
+    # "ok" by hand (the first shipped record, minis-03, 2026-09-26).
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
     proc = subprocess.run(
         ["git", "-C", str(BIKAR_DIR), "cat-file", "-p", f"{ref}:{path}"],
-        capture_output=True,
+        capture_output=True, env=env,
     )
     if proc.returncode != 0:
         return ("missing", None)
@@ -400,6 +417,23 @@ def check_record(
             out.append(f"{name}: R11 status '{rec_status}' requires a 'feedback' block "
                        "(present, even if empty — §6.3), and none is set")
 
+        # R15 — every printed piece carries its own verdict; notes, when present, are a
+        # list of non-empty strings. Per object, not per plate (K6/D2).
+        if rec_status in FEEDBACK_STATES:
+            for i, obj in enumerate(objects):
+                if not isinstance(obj, dict):
+                    continue
+                entry_id = obj.get("entry", f"#{i}")
+                verdict = obj.get("verdict")
+                if verdict not in PIECE_VERDICTS:
+                    out.append(f"{name}: R15 objects {entry_id} verdict {verdict!r} is not one of "
+                               f"{', '.join(PIECE_VERDICTS)} — say what this piece taught")
+                notes = obj.get("notes", [])
+                if not (isinstance(notes, list)
+                        and all(isinstance(n, str) and n.strip() for n in notes)):
+                    out.append(f"{name}: R15 objects {entry_id} notes is not a list of "
+                               "non-empty strings")
+
         # R12 — a `measured` record carries at least one reading (§6.3 FAIL). Hard case
         # (K6/D2): a `feedback` block does NOT discharge it, so this checks readings.
         if rec_status == "measured" and not readings_list:
@@ -562,6 +596,8 @@ def _fixture_record(prints: Path, run_name: str, sha: str, photo: bytes) -> Path
             "source_sha256": sha,
             "piece": "keyhole",
             "count": 2,  # R8 — two copies of this coupon on the plate
+            "verdict": "keep",  # R15 — a measured record says what each piece taught
+            "notes": ["keyhole floor intact"],
         }],
         "readings": [{"entry": "MC-2", "quantity": "KEYHOLE_FRONT_FLOOR_MM",
                       "median_mm": 0.79, "settles": "CAL-FEA-01",
@@ -669,6 +705,19 @@ def _drop_feedback(prints: Path) -> None:
     idx.write_text(re.sub(r"\n *feedback: \{\}", "", idx.read_text(), count=1), encoding="utf-8")
 
 
+def _drop_piece_verdict(prints: Path) -> None:
+    # R15: a measured record whose one piece carries no verdict.
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(re.sub(r"\n *verdict: keep", "", idx.read_text(), count=1), encoding="utf-8")
+
+
+def _bad_piece_notes(prints: Path) -> None:
+    # R15: notes written as one string, not a list.
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(re.sub(r"notes:\n *- keyhole floor intact", "notes: keyhole floor intact",
+                          idx.read_text(), count=1), encoding="utf-8")
+
+
 def _measured_no_readings(prints: Path) -> None:
     # R12: status stays `measured` but readings[] is emptied — the §6.3 FAIL case.
     idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
@@ -718,6 +767,10 @@ CASES = [
      "R13 status 'propagated' but no readings[].settles"),
     ("R14 a shipped record still at planned", _shipped_planned,
      "R14 status 'planned' is pre-slice"),
+    ("R15 a printed piece with no verdict", _drop_piece_verdict,
+     "R15 objects MC-2 verdict None is not one of"),
+    ("R15 notes that are not a list", _bad_piece_notes,
+     "R15 objects MC-2 notes is not a list"),
 ]
 
 
@@ -792,6 +845,38 @@ def self_test() -> int:
               + ("" if ok else f" — shipped={shipped}, found={found or 'nothing'}"))
         failures += 0 if ok else 1
         _BLOB_RESOLVER = None
+
+        # A pre-commit hook exports GIT_DIR for *this* repo; `git -C bikar` must not
+        # inherit it, or every R1 pin reads as "missing" (minis-03, 2026-09-26).
+        fake_bikar = tmp / "fake-bikar"
+        fake_bikar.mkdir()
+        clean = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        git = lambda *a: subprocess.run(  # noqa: E731
+            ["git", "-C", str(fake_bikar), *a], capture_output=True, text=True, env=clean,
+            check=True).stdout.strip()
+        git("init", "-q")
+        (fake_bikar / "a.bkr").write_text("x\n", encoding="utf-8")
+        git("add", "a.bkr")
+        git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "t")
+        head = git("rev-parse", "HEAD")
+        other = tmp / "other-repo"
+        other.mkdir()
+        subprocess.run(["git", "-C", str(other), "init", "-q"], env=clean, check=True)
+        saved_dir, saved_env = BIKAR_DIR, os.environ.get("GIT_DIR")
+        BIKAR_DIR = fake_bikar
+        os.environ["GIT_DIR"] = str(other / ".git")
+        try:
+            status, _ = resolve_blob_sha(head, "a.bkr")
+        finally:
+            BIKAR_DIR = saved_dir
+            if saved_env is None:
+                os.environ.pop("GIT_DIR", None)
+            else:
+                os.environ["GIT_DIR"] = saved_env
+        ok = status == "ok"
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: R1 ignores a hook's GIT_DIR"
+              + ("" if ok else f" — got {status}"))
+        failures += 0 if ok else 1
 
         # list_records: the CLI's read-only projection. A clean fixture lists one
         # record with the fields `bambu print list` prints, and a broken record is

@@ -14,7 +14,7 @@
 // the exact paper blanks. Fabricating a blank the machine did not answer is the by-design FAIL.
 
 import type { PrinterStatus } from "./backends/mqtt.js";
-import type { PlateMeta } from "./threemf.js";
+import { readPlateMeta, type PlateMeta } from "./threemf.js";
 import { colorHex, loadedSlot, pick, type Tray } from "./frame.js";
 
 /** How a field got its value — drives both rendering and the honesty guarantee. */
@@ -250,4 +250,18 @@ export function headerToRecordProfile(h: Header): RecordProfile {
     layer_mm: val(h.layer_height),
     slicer_profile: val(h.profile),
   };
+}
+
+/** The profile block from a frame we ALREADY read + (optionally) the sliced .3mf. Pure of MQTT — the
+ *  caller owns the read — so `print capture` (which already holds a frame) and `print send --record`
+ *  share one profile builder (D-052: one code path), and so does `slice compose`, which
+ *  passes an empty frame: it never talks to the printer, so only the slice-side fields fill. Without a plate, material/spool still fill from
+ *  the frame's AMS; the slice-side fields stay TODO. */
+export async function recordProfileFrom(frame: PrinterStatus, plateFile?: string): Promise<RecordProfile | undefined> {
+  try {
+    const plateMeta = plateFile ? await readPlateMeta(plateFile) : null;
+    return headerToRecordProfile(buildHeader(frame, plateMeta));
+  } catch {
+    return undefined; // fall back to the TODO scaffold
+  }
 }
