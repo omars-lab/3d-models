@@ -179,6 +179,25 @@ blueprint rDuxHF3xMOc_scaffold
   point O_m2_p_l1_l1_p = reflect O_m2_p_l1 across top
   # t=17:04  l1' = Reflect(l1, top)
   polygon poly3_m2_p_l1_l1_p = reflect poly3_m2_p_l1 across top
+  # ────────────────────────────────────────────────────────
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  point O_coaster_fill = reflect O across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  polygon q1_coaster_fill = reflect q1 across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  polygon poly2_coaster_fill = reflect poly2 across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  point O_coaster_fill2 = reflect O across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  polygon poly3_coaster_fill = reflect poly3 across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  point O_coaster_fill3 = reflect O across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  polygon q2_coaster_fill = reflect q2 across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  point O_m2_p_coaster_fill = reflect O_m2_p across top
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  polygon poly3_m2_p_coaster_fill = reflect poly3_m2_p across top
 
 pattern rDuxHF3xMOc on rDuxHF3xMOc_scaffold
   # ────────────────────────────────────────────────────────
@@ -226,6 +245,20 @@ pattern rDuxHF3xMOc on rDuxHF3xMOc_scaffold
   # t=17:04  l1' = Reflect(l1, top)
   rotate 4 around O_m2_p_l1_l1_p
     edges from poly3_m2_p_l1_l1_p
+  # ────────────────────────────────────────────────────────
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  rotate 8 around O_coaster_fill
+    edges from q1_coaster_fill
+    edges from poly2_coaster_fill
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  rotate 4 around O_coaster_fill2
+    edges from poly3_coaster_fill
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  rotate 4 around O_coaster_fill3
+    edges from q2_coaster_fill
+  # coaster_fill = Reflect({m1, m2, m3, m2'}, top)   # coaster only — not in the video
+  rotate 4 around O_m2_p_coaster_fill
+    edges from poly3_m2_p_coaster_fill
   palette pal
     Slab = #333333
     Gold = #d4af37
