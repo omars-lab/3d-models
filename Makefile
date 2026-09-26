@@ -32,7 +32,7 @@ PYTHON ?= python3
 
 # `?=`, not `:=`, so the environment can point this somewhere else without
 # putting it on every command line.
-BIKAR_DIR ?= ${HOME}/Workspace/git/bikar
+BIKAR_DIR ?= ${HOME}/Workspace/git/bikar-main
 BIKAR := node $(BIKAR_DIR)/packages/cli/dist/index.js
 
 # Which bikar commit a render came from is not recoverable after the fact: an

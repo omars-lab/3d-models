@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — Every tool that defaults to a bikar checkout now defaults to `~/Workspace/git/bikar-main` (the Makefile, the `bambu` tool, the prints and site-graph gates, `verify_machine_card.py`), not the bare repo whose leftover files were a 12 September build; and `slice compose` writes its `.3mf` to `build/plates/` at the repo root, not the working directory
 - 2026-09-26 — The Coaster Lab shows each coaster style's print history: a Printed panel with every piece printed from the open file, read from the `prints-manifest.json` the site deploys, with its plate, verdict, knobs and notes, and a line when the file has changed since the print (bikar #260)
 - 2026-09-26 — Joins sample plate (KEY-1): one mated pair per join on CS-1 at 80 mm, split across [minis-05](../../plates/minis-05.yaml) (plain, butterfly key with a 0.05/0.10/0.15 key ladder, tab) and [minis-06](../../plates/minis-06.yaml) (dovetail, slim dovetail), every piece through the mesh gate and the review sheet; closes the joins item — the print waits on Omar in the coaster-pipeline backlog
 - 2026-09-26 — First print record in `docs/prints/`: minis-03, with photos and a verdict and

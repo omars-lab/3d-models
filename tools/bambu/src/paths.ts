@@ -22,3 +22,9 @@ export function recordsDir(): string {
   const root = repoRoot();
   return join(root ?? process.cwd(), ".bambu", "records");
 }
+
+/** Where `slice compose` writes a plate's .3mf: repo-root/build/plates (gitignored), else cwd. */
+export function platesDir(start = process.cwd()): string {
+  const root = repoRoot(start);
+  return root ? join(root, "build", "plates") : start;
+}

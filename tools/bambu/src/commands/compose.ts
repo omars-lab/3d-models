@@ -12,7 +12,7 @@
 // mints no parallel id, so nothing forks (CLAUDE.md "a migration never buys a fork", D-052).
 
 import { Command } from "commander";
-import { existsSync, readFileSync, writeFileSync, mkdtempSync, statSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
@@ -34,7 +34,7 @@ import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
-import { recordsDir } from "../paths.js";
+import { platesDir, recordsDir } from "../paths.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
@@ -428,7 +428,8 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     const stl = cache.get(cacheKeyOf(r))!;
     for (let c = 0; c < r.count; c++) inputs.push(stl);
   }
-  const outDir = opts.outputdir ? resolve(opts.outputdir) : process.cwd();
+  const outDir = opts.outputdir ? resolve(opts.outputdir) : platesDir();
+  mkdirSync(outDir, { recursive: true });
   const outFile = opts.out ?? `${basename(absManifest).replace(/\.ya?ml$/i, "")}.plate.3mf`;
   const outPath = join(outDir, outFile);
 
@@ -581,7 +582,7 @@ export function registerCompose(slice: Command): void {
     .command("compose <plate.yaml>")
     .description("compose many bikar-rendered pieces onto one X2D plate (a manifest → one sliced .3mf)")
     .option("-o, --out <file>", "output filename (default: <manifest>.plate.3mf)")
-    .option("-d, --outputdir <dir>", "output directory (default: current dir)")
+    .option("-d, --outputdir <dir>", "output directory (default: build/plates at the repo root, else the current dir)")
     .option(
       "-s, --settings <names|paths>",
       "machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths)",
