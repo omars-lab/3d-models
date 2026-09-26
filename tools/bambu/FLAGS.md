@@ -140,7 +140,7 @@ compose many bikar-rendered pieces onto one X2D plate (a manifest → one sliced
 | Flag | Description |
 |---|---|
 | `-o, --out <file>` | output filename (default: <manifest>.plate.3mf) |
-| `-d, --outputdir <dir>` | output directory (default: current dir) |
+| `-d, --outputdir <dir>` | output directory (default: build/plates at the repo root, else the current dir) |
 | `-s, --settings <names|paths>` | machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths) |
 | `-f, --filament <names|paths>` | filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path) |
 | `--bed <name>` | bed footprint for the fit pre-check (x2d = 256×256 mm) |

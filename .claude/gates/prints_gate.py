@@ -126,7 +126,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 PRINTS = ROOT / "docs" / "prints"
-BIKAR_DIR = Path(os.environ.get("BIKAR_DIR", ROOT.parent / "bikar"))
+BIKAR_DIR = Path(os.environ.get("BIKAR_DIR", Path.home() / "Workspace/git/bikar-main"))
 
 RUN_NAME = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9][a-z0-9-]*$")
 SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")

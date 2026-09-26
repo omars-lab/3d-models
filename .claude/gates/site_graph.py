@@ -224,7 +224,7 @@ def _bikar_exposures() -> tuple[dict[str, str], str] | None:
     `git show` against a ref, never the checkout. Returns ({host: exposure}, ref),
     or None when no clone or published ref is reachable (CI, or a clone with no
     origin), in which case the exposures are MIRRORED ONLY."""
-    bikar = Path(os.environ.get("BIKAR_DIR", str(Path.home() / "Workspace/git/bikar")))
+    bikar = Path(os.environ.get("BIKAR_DIR", str(Path.home() / "Workspace/git/bikar-main")))
     rel = "packages/web/public-surface.json"
     for ref in ("origin/HEAD", "origin/main", "origin/master"):
         try:
