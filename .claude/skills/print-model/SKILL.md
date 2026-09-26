@@ -85,7 +85,9 @@ orchestrating the ones that already exist. So:
   This is the judgement a CLI verb cannot carry.
 - **Presents:** the plan artifact + the plate preview PNG pulled from the sliced `.3mf` (its
   Metadata/plate_1.png archive member). `bambu slice plate` and `slice compose` write it next to
-  the `.3mf` as `<plate>.preview.png` and print its path.
+  the `.3mf` as `<plate>.preview.png` and print its path. A colour plate has no such member (it
+  cannot be sliced with pictures headless), so `slice coaster` writes the same file from bikar's
+  drawing of each coaster in its slot colours — the coasters, not the bed layout.
 - **Consumes (read-only, owned elsewhere):** transport + slicing + records via the
   [`bambu` skill / CLI](../bambu/SKILL.md) (`status`, `filament`, `slice plate`, `print list`,
   `print send`, `validate record`); geometry via bikar; the record schema via

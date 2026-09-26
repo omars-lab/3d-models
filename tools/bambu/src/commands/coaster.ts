@@ -53,6 +53,8 @@ import { stlToIndexedMesh, stlBounds, footprint, type Bounds, type IndexedMesh }
 import { resolvePresetList } from "./slice.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { platesDir } from "../paths.js";
+import { previewPathFor } from "../threemf.js";
+import { svgRenderArgs, composeColourPreview, checkDrawing } from "../colour-preview.js";
 
 // **Default:** the plate's slot-1 filament — the material every colour slot reuses and the id that keeps
 // each slot off the external spool (a non-empty product id, §6). PLA / GFA00 (Bambu PLA Basic) / white.
@@ -347,6 +349,17 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   console.log("AMS logical slots (load the physical AMS to match — logical ≠ physical, K1):");
   for (const line of slotTable) console.log(line);
 
+  // 9b. The plate picture Studio cannot draw headless: bikar's SVG of each distinct coaster, whose region
+  //     fills are the sidecar hexes the slot map reports. A drawing that misses a slot colour is named, and
+  //     a failed picture never blocks the plate (it is a look, not a gate).
+  try {
+    const preview = await writeColourPreview(resolved, rendered, bikarCli, outPath, scratch);
+    console.log(`plate picture → ${preview.path} (look before sending; one drawing per distinct coaster, not the bed layout)`);
+    for (const m of preview.missing) console.log(`  ⚠ ${m}`);
+  } catch (err) {
+    console.error(`warning: no plate picture: ${(err as Error).message}`);
+  }
+
   // 10. Verify GEOMETRY headless on a TAG-STRIPPED copy (the versioned tag SIGSEGVs the headless CLI;
   //     colour is verified by a GUI load — `bambu slice open`). No `--export-3mf` (it hangs headless, §3).
   if (opts.verifyGeometry) {
@@ -383,6 +396,38 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   }
 
   console.log(`colour check is a GUI step: \`bambu slice open ${outPath}\` — the headless slice cannot read per-region colour (see docs/issues/coaster-3mf-filament-shape-and-export-hang.md §4).`);
+}
+
+/** Draw each distinct recipe with `bikar render --format svg` (same source, piece, params as its parts
+ *  render), check each drawing paints every region's slot colour, and compose them into
+ *  `<plate>.preview.png`. Returns the picture's path and any region a drawing does not show. */
+async function writeColourPreview(
+  resolved: ResolvedItem[],
+  rendered: Map<string, RenderedCoaster>,
+  bikarCli: string,
+  outPath: string,
+  scratch: string,
+): Promise<{ path: string; missing: string[] }> {
+  const svgs: string[] = [];
+  const missing: string[] = [];
+  const seen = new Set<string>();
+  for (const r of resolved) {
+    if (seen.has(r.iteration)) continue;
+    seen.add(r.iteration);
+    const svg = join(scratch, `${r.iteration}.svg`);
+    const args = svgRenderArgs(bikarCli, resolve(bikarDir(), r.sourcePath), r.piece || undefined, r.params, svg);
+    const res = await runWithTimeout("node", args, { timeoutMs: 180_000, label: "bikar_render_svg" });
+    if (res.code !== 0 || res.timedOut || !existsSync(svg)) {
+      throw new Error(`bikar render --format svg failed for ${r.entry} (${r.sourcePath})`);
+    }
+    for (const m of checkDrawing(svg, rendered.get(r.iteration)!.sidecar.parts)) {
+      missing.push(`item ${r.entry}: the drawing does not show region ${m}`);
+    }
+    svgs.push(svg);
+  }
+  const path = previewPathFor(outPath);
+  await composeColourPreview(svgs, path);
+  return { path, missing };
 }
 
 /** Slice a TAG-STRIPPED copy of the assembled members headless and assert exit 0 + the expected object
