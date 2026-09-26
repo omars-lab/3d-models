@@ -21,8 +21,12 @@ one when a print teaches something new.
 4. **It is a good object in the hand.** Ask whether Omar would pick it up and keep it. For a
    coaster that means a flat, steady top with the pattern clearly visible. For a sample it
    means it answers the question it was printed for.
-5. **Completeness never outranks a good piece.** "Every pattern represented" is not a reason to
-   print one that fails 1–4. (The minis-03 mistake: the failing renders were already on disk.)
+5. **A mating pair is judged joined.** Picture the two pieces pushed together. The solid band
+   at the join is two frames plus the dovetail. If that band is wide next to the art, the pair
+   reads as two patterns with a wall between them. (minis-03 CS-1 pegs at 40 mm: about 11 mm of
+   solid between the patterns. "big spaces between the patterns", Omar, 2026-09-26.)
+6. **Completeness never outranks a good piece.** "Every pattern represented" is not a reason to
+   print one that fails 1–5. (The minis-03 mistake: the failing renders were already on disk.)
 
 ## What the numbers catch
 

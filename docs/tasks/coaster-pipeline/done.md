@@ -2,6 +2,11 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — minis-03 printed by Omar (5 pieces: CS-1, CS-2 and rDux minimal-frame, and a
+  CS-1 minimal-pegs pair). It read well, but at 40 mm it was too small, and the mated pegs had a
+  wide solid band at the join and a slightly loose fit. The lessons are in `sample-rules.md`
+  and the review-print rubric.
+
 ## From the session task board, before the split
 
 Finished work up to 2026-09-25 was kept on one list, `docs/tasks/done.md`, as ten snapshots

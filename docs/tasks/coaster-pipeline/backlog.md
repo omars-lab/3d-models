@@ -32,17 +32,15 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
      default at `~/Workspace/git/bikar-main`; until then pass `BIKAR_DIR`. Found by the same run.
    - **`slice compose` writes the `.3mf` to the working directory**, not `build/plates/`, so
      running it from the repo root leaves an untracked file there. Found by the minis-02 run.
-4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
+4. **Next sample plate from what minis-03 taught** (printed 2026-09-26). Minis go to 70 mm.
+   The pegs pair tries a clearance ladder (0.10 and 0.05). A shallower dovetail (`depth` 2)
+   would narrow the solid band at the join. Rules and reasons are in the print-coaster-samples
+   skill's `sample-rules.md`. Render the pair joined and review it before composing.
+5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
-Sending a print and which filament to load. Waiting on Omar to send:
-
-- [minis-03](../../plates/minis-03.yaml) — minimal-frame of CS-1, CS-2 and rDux, plus a CS-1
-  minimal-pegs pair: 5 pieces, a clean slice, loaded in Bambu Studio 2026-09-25. Five other
-  patterns came off after the [review-print](../../../.claude/skills/review-print/SKILL.md)
-  look. The pegs pair is pushed together to judge the dovetail fit; what it shows goes into
-  the print-coaster-samples skill's `sample-rules.md`.
+Sending a print and which filament to load. Nothing is waiting on Omar to send right now.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
