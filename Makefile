@@ -843,3 +843,9 @@ validate-reflect:
 validate-ids:
 	$(PYTHON) $(ROOT_DIR)/tools/next_id.py --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/next_id.py check
+
+# The review-print skill's measuring tool (tools/print_review.py): its self-test
+# must tell an even lattice from a pinhole slab and a half-filled square. The
+# review itself is by eye — this only keeps the numbers honest.
+validate-print-review:
+	$(PYTHON) $(ROOT_DIR)/tools/print_review.py --self-test

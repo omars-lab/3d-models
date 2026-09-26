@@ -26,6 +26,10 @@ comments and replies.
    `node packages/cli/dist/index.js render patterns/Constructions/<file> --format stl --check --param size=40 [--param …] -o <scratch>.stl`
    run from the bikar checkout. A FAIL means change the params or leave that sample off, with the
    reason in the plate header.
+   **Then review every piece by eye** with the [review-print](../review-print/SKILL.md) skill:
+   the top-down sheet, the rubric, a verdict for each piece, and the sheet shown to Omar. Passing
+   the mesh gate does not make a sample worth printing. A near-solid disc or half-empty art is
+   left off, even if that leaves a pattern out.
 4. **Write the plate** as a `minis-NN.yaml` in `docs/plates/` (next free number; update the latest
    unprinted one instead if the user is adding to it). The header says what the plate is for,
    one line per style using the style names, and what was left off and why — the minis-02 header

@@ -34,6 +34,10 @@ When a print teaches something new, add or correct a rule here, with the date an
 ## Checks every plate passes before the owner gate
 
 - Every item passes the mesh gate (`--check`) at the exact params on the plate.
+- Every item passed the [review-print](../review-print/SKILL.md) look: it reads as its pattern
+  at 40 mm and its art fills the shape. minis-03 dropped five minimal-frames on sight
+  (2026-09-25). Two were near-solid discs (sDO9, nmEj); three had half-empty or wedge-gapped
+  art (n3Ii, lEfW, tA8e). **Omar would rather have fewer patterns than a bad sample.**
 - `bambu slice compose <plate> --dry-run` places every item.
 - The header names each style by its name in `coaster-styles.md` and lists what was left off and
   why. A sample dropped with no reason written down is a gap the next session cannot see.

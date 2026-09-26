@@ -105,7 +105,8 @@ advisory shape per decision. Ask each question only if the operator has not alre
 review — never rubber-stamp — the answers they did give (§What this skill resolves, §It never blindly
 accepts input).
 
-1. **Read the model** — bounds, minimum feature, repeated pieces.
+1. **Read the model** — bounds, minimum feature, repeated pieces — and **look at it** with the
+   [review-print](../review-print/SKILL.md) skill: a piece that is not worth printing stops here.
 2. **Discover filament** — `bambu filament` lists the loaded AMS trays + external spool (read-only).
 3. **Pick filament** — one clear match is chosen and *stated*; only when several are plausible does it
    **AskUserQuestion** (bias to action; reserve the question for the pivotal call).
