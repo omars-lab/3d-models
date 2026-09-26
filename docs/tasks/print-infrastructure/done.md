@@ -5,7 +5,7 @@ Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 - 2026-09-26 — A second run, on scratch plates that mix what minis-01 doesn't: 40, 60 and 80 mm
   pieces on one compose plate came out clean. The colour path (`slice coaster`, a border
   coaster) wrote its 3MF into the repo root; it now writes to build/plates like compose, and its
-  "open in the GUI" hint gives the full path (3d-models #PR)
+  "open in the GUI" hint gives the full path (3d-models #341)
 - 2026-09-26 — `slice plate` and `slice compose` write the plate picture next to the 3MF
   (`<plate>.preview.png`) and print its path, so the plate can be looked at before sending
   without unzipping it; the deploy strips it with the rest of the slicer output. A draft record
