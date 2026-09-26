@@ -192,14 +192,14 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-se
 | `-O, --object <spec>` | printed object as bikar:<path>[=ENTRY] (repeatable) — pins R1 provenance in the record |
 | `--plate <n>` | plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode) |
 | `--bed-type <type>` | [X2D-UNCONFIRMED] plate profile: auto\|cool_plate\|eng_plate\|hot_plate\|textured_plate (default auto) |
-| `--ams-mapping <spec>` | [X2D-UNCONFIRMED] filament→slot map: comma-ints e.g. "0" or "-1,0", or "none" (default "0") |
+| `--ams-mapping <spec>` | [X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays) |
 | `--md5 <hex>` | [X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty) |
 | `--no-bed-leveling` | skip auto bed-leveling before this print |
 | `--no-flow-cali` | skip flow calibration before this print |
 | `--no-vibration-cali` | skip vibration calibration before this print |
 | `-y, --yes` | skip the confirmation prompt (still logs the owner-gate notice) |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |
-| `--dry-run` | print the exact FTPS target + MQTT payload without connecting or dispatching |
+| `--dry-run` | print the exact FTPS target + MQTT payload without uploading or dispatching (reads the loaded trays) |
 
 ### `bambu print capture`
 

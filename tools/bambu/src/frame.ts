@@ -34,6 +34,24 @@ export interface Tray {
 export interface Slot {
   where: string; // human label: "AMS 0 · slot 1" or "External spool"
   tray: Tray;
+  /** The tray's number in a send's `ams_mapping`, or null when we cannot say it for sure (trayIndex). */
+  index?: number | null;
+}
+
+/**
+ * A tray's number in the `ams_mapping` of a `project_file` send: `unit*4 + tray` for a 4-slot AMS
+ * unit, and the external spool's own id (254, the documented `vt_tray` sentinel; 255 for a second
+ * spool) for the spool — the numbering OpenBambuAPI documents for Bambu Studio's sends. An AMS HT
+ * unit (id 128 and up, one tray) is numbered differently and none has been seen on the X2D, so it
+ * gets null: a send refuses a plate it cannot map rather than guess a number.
+ */
+export function trayIndex(unitId: string | null, trayId: string): number | null {
+  const tray = Number(trayId);
+  if (trayId.trim() === "" || !Number.isInteger(tray) || tray < 0) return null;
+  if (unitId === null) return tray === 254 || tray === 255 ? tray : null;
+  const unit = Number(unitId);
+  if (unitId.trim() === "" || !Number.isInteger(unit) || unit < 0 || unit >= 128 || tray > 3) return null;
+  return unit * 4 + tray;
 }
 
 /**
@@ -57,7 +75,7 @@ export function collectSlots(s: PrinterStatus): Slot[] {
     trays.forEach((tray, ti) => {
       if (!isRecord(tray)) return;
       const trayId = typeof tray.id === "string" ? tray.id : String(ti);
-      slots.push({ where: `AMS ${unitId} · slot ${trayId}`, tray: tray as Tray });
+      slots.push({ where: `AMS ${unitId} · slot ${trayId}`, tray: tray as Tray, index: trayIndex(unitId, trayId) });
     });
   });
 
@@ -68,9 +86,11 @@ export function collectSlots(s: PrinterStatus): Slot[] {
     ["vir_slot", "External spool (vir_slot)"],
   ] as const) {
     const ext = (s as Record<string, unknown>)[key];
-    if (isRecord(ext)) slots.push({ where: label(base, ext), tray: ext as Tray });
+    const index = (t: Record<string, unknown>): number | null =>
+      trayIndex(null, typeof t.id === "string" ? t.id : "254");
+    if (isRecord(ext)) slots.push({ where: label(base, ext), tray: ext as Tray, index: index(ext) });
     else if (Array.isArray(ext))
-      ext.forEach((t) => isRecord(t) && slots.push({ where: label(base, t), tray: t as Tray }));
+      ext.forEach((t) => isRecord(t) && slots.push({ where: label(base, t), tray: t as Tray, index: index(t) }));
   }
 
   return slots;

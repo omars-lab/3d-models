@@ -19,13 +19,12 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 3. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
-   - **`bambu print send` always feeds from the external spool.** `tools/bambu/src/backends/mqtt.ts`
-     sends `use_ams: false` and `ams_mapping: [0]` unless told otherwise, and `print send` has
-     no flag to tell it; `dispatch.test.ts` asserts the `false`. Our external spool is empty, so
-     a CLI send would print nothing. Set `use_ams` from the plate's AMS mapping, fix the test,
-     and check `bed_type`, `ams_mapping` and `md5` against one Bambu Studio send (the
-     first-party dispatch issue note lists them as unconfirmed). Until then, minis-01 and
-     minis-02 go out from Bambu Studio. Found by the minis-01 run, 2026-09-25.
+   - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
+     numbers in `ams_mapping` are still unconfirmed on the X2D (the
+     [first-party dispatch note](../../issues/first-party-dispatch.md) lists them). Needs the
+     printer config on this machine (`bambu setup doctor` says it is missing) and one send from
+     Studio while the request topic is read. Until then, plates go out from Bambu Studio.
+     Found by the minis-01 run, 2026-09-25.
 4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated

@@ -10,7 +10,7 @@
 // verb that moves real hardware and printing is on hold until a CAL bet justifies a plate (memory:
 // owner-gated-and-on-hold), so `send` is fail-closed: it refuses unless the operator passes --yes or
 // confirms at a TTY, and --dry-run prints the EXACT FTPS target + MQTT payload it WOULD send without
-// connecting — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
+// uploading or publishing (it only reads the loaded trays to fill ams_mapping) — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
 import { existsSync, statSync } from "node:fs";
@@ -30,6 +30,17 @@ import { buildActuals, actualsToRecord, actualsAreEmpty } from "../actuals.js";
 import { runPrintList } from "./print-list.js";
 import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
+import { collectSlots } from "../frame.js";
+import { readPlateMeta, readUsedFilaments } from "../threemf.js";
+import {
+  feedsFromAms,
+  logicalSlotsFromPlate,
+  physicalTraysFromSlots,
+  planAmsMapping,
+  reconcile,
+  renderReport,
+  type AmsPlan,
+} from "../filament-sync.js";
 
 /** Dispatch needs host+serial+token: FTPS uses host+token, the project_file topic needs the serial. */
 function requireConfigured(cfg: PrinterConfig): void {
@@ -117,7 +128,7 @@ function parseObjects(specs: string[] | undefined): ScaffoldObject[] {
 
 /** Parse the [X2D-UNCONFIRMED] --ams-mapping flag: comma-ints, "none" (empty-string form), or unset. */
 function parseAmsMapping(spec: string | undefined): number[] | string | undefined {
-  if (spec === undefined) return undefined; // let the builder default to [0]
+  if (spec === undefined) return undefined; // runSend matches the plate to the loaded trays
   const t = spec.trim().toLowerCase();
   if (t === "none" || t === "") return ""; // the OpenBambuAPI empty-string form (some firmware wants this)
   const nums = spec.split(",").map((s) => Number(s.trim()));
@@ -171,6 +182,38 @@ async function buildRecordProfile(plateFile: string): Promise<RecordProfile | un
   return recordProfileFrom(frame, plateFile);
 }
 
+/**
+ * Which trays this plate feeds from, read off the printer: the plate's used filaments matched by
+ * colour to the loaded trays (the `filament-sync` match), turned into `ams_mapping` + `use_ams`.
+ * A read-only status request — nothing moves. Prints the match and every loaded tray's number, so a
+ * refusal already shows the operator what to pass to --ams-mapping.
+ */
+async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConfig): Promise<AmsPlan> {
+  const meta = await readPlateMeta(plateAbs);
+  const used = await readUsedFilaments(plateAbs, plate);
+  if (!meta || used === null) return { ok: false, reason: "the .3mf carries no slice metadata (is it sliced?)" };
+  const mqtt = new MqttBackend(cfg);
+  let frame: PrinterStatus;
+  try {
+    await mqtt.connect();
+    frame = await mqtt.requestStatus();
+  } catch (err) {
+    return { ok: false, reason: `could not read the loaded trays: ${(err as Error).message}` };
+  } finally {
+    await mqtt.close();
+  }
+  const slots = collectSlots(frame);
+  const logical = logicalSlotsFromPlate(meta.filamentColours, meta.filamentTypes).filter((l) => used.includes(l.slot));
+  const report = reconcile(logical, physicalTraysFromSlots(slots));
+  console.error(renderReport(report));
+  console.error("loaded trays (the number --ams-mapping takes):");
+  for (const sl of slots) {
+    const type = (sl.tray.tray_type ?? "").trim();
+    if (type) console.error(`  ${sl.index ?? "?"}  ${sl.where}: ${type} ${sl.tray.tray_color?.slice(0, 6) ?? ""}`);
+  }
+  return planAmsMapping(report, meta.filamentColours.length, used);
+}
+
 async function runSend(plate: string, opts: SendOpts): Promise<void> {
   const abs = resolve(plate);
   if (!existsSync(abs)) {
@@ -208,6 +251,25 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
 
   const cfg = loadConfig();
   requireConfigured(cfg);
+
+  // Which spool feeds the print. Without --ams-mapping the send matches the plate to the loaded
+  // trays and refuses when the match is not clean; the old default fed the external spool, which is
+  // empty here, on every send (found by the minis-01 run, 2026-09-25).
+  if (projectOpts.amsMapping === undefined) {
+    const plan = await planFromPrinter(abs, projectOpts.plate ?? 1, cfg);
+    if (!plan.ok) {
+      console.error(`✗ filament: ${plan.reason}.`);
+      console.error("  Pick the trays with --ams-mapping: one number per filament in the plate, -1 for unused.");
+      if (opts.dryRun) console.error("  (dry run — a real send stops here.)");
+      process.exitCode = 2;
+      return;
+    }
+    projectOpts.amsMapping = plan.amsMapping;
+    projectOpts.useAms = plan.useAms;
+  } else {
+    projectOpts.useAms = Array.isArray(projectOpts.amsMapping) && feedsFromAms(projectOpts.amsMapping);
+  }
+  console.error(`filament: ams_mapping ${JSON.stringify(projectOpts.amsMapping)}, use_ams ${projectOpts.useAms}.`);
 
   // Owner gate, stated out loud before anything reaches the printer.
   console.error("⚠ Dispatch is owner-gated: this sends a plate to the physical X2D.");
@@ -420,7 +482,7 @@ export function registerPrint(program: Command): void {
     )
     .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
     .option("--bed-type <type>", "[X2D-UNCONFIRMED] plate profile: auto|cool_plate|eng_plate|hot_plate|textured_plate (default auto)")
-    .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→slot map: comma-ints e.g. "0" or "-1,0", or "none" (default "0")')
+    .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays)')
     .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
     .option("--no-bed-leveling", "skip auto bed-leveling before this print")
     .option("--no-flow-cali", "skip flow calibration before this print")
@@ -431,7 +493,7 @@ export function registerPrint(program: Command): void {
       "dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate)",
       false,
     )
-    .option("--dry-run", "print the exact FTPS target + MQTT payload without connecting or dispatching", false)
+    .option("--dry-run", "print the exact FTPS target + MQTT payload without uploading or dispatching (reads the loaded trays)", false)
     .action(runSend);
 
   print

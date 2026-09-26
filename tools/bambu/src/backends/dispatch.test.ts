@@ -47,6 +47,8 @@ describe("buildProjectFileCommand — grounded defaults", () => {
     expect(p.sequence_id).toBe("0");
   });
 
+  // use_ams:false is only the builder's default. `print send` never relies on it: it always sets
+  // use_ams and ams_mapping from the loaded trays or --ams-mapping (ams-mapping.test.ts).
   it("carries the grounded calibration/AMS defaults for a single-filament LAN print", () => {
     expect(p.use_ams).toBe(false);
     expect(p.bed_leveling).toBe(true);

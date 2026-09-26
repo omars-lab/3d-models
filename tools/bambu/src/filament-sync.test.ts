@@ -49,8 +49,8 @@ describe("physicalTraysFromSlots", () => {
     ];
     const trays = physicalTraysFromSlots(slots);
     expect(trays).toEqual([
-      { where: "AMS 0 · slot 1", hex: "#FF0000", type: "PLA", remain: 80 },
-      { where: "External spool", hex: "#0000FF", type: "PETG", remain: -1 },
+      { where: "AMS 0 · slot 1", hex: "#FF0000", type: "PLA", remain: 80, index: null },
+      { where: "External spool", hex: "#0000FF", type: "PETG", remain: -1, index: null },
     ]);
   });
 });
