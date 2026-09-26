@@ -24,7 +24,7 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
 - **New D-/Q- ids**: `python3 tools/next_id.py next D`, never last id + 1 from your
   checkout (D-051, D-055 were taken twice); hook `46-decision-ids` blocks a clash.
 - **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
-  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster), `manage-tasks` (move a finished or open task to the right `docs/tasks/<loop>/` file).
+  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster), `manage-tasks` (move a finished or open task to the right `docs/tasks/<loop>/` file), `print-coaster-samples` (a minis plate, mating styles as pairs).
 
 ---
 
