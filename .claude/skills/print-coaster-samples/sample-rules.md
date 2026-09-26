@@ -14,7 +14,11 @@ When a print teaches something new, add or correct a rule here, with the date an
 
 ## Mini params
 
-- **Size 40** — the mini size the Coaster Lab's size chip and the minis plates use.
+- **Not 40 mm — too small.** minis-01 to minis-03 used 40, the Coaster Lab's size chip. Printed,
+  minis-03 was "much too small" (Omar, 2026-09-26). The next sample plate goes up to **70 mm**.
+  That is a guess, not a measured size: 70 is under the 90 mm full coaster and still fits
+  several pieces on a plate. Correct it when that plate comes back. Re-run review-print at the
+  new size, because the straps and holes change with it.
 - **Straps at 1.6 mm for every style where the holes are the point** — minimal, minimal-frame,
   minimal-pegs, twist. At 40 mm the default 2 mm strap closes the holes up; 1.6 mm opens them and
   is still the freestanding floor (CAL-CST-07), so the gate passes. (Openwork previews,
@@ -24,6 +28,17 @@ When a print teaches something new, add or correct a rule here, with the date an
   40 mm to show holes even at 1.6 mm, so the twist sample is CS-1's. (minis-02 header.)
 - **Pegs frame**: leave `frame` at the file's default (`depth + clearance + 2.5`); narrower breaks
   CV8 on CS-2 at 90 mm and the kernel refuses anything under `depth + clearance + 1.6`.
+- **Pegs: the join is two frames of solid.** With the defaults (depth 3, clearance 0.15), each
+  frame is about 5.7 mm. Mated, the two patterns sit about 11 mm apart. At 40 mm that band is
+  over a quarter of the piece, and it reads as "big spaces between the patterns" (minis-03,
+  Omar, 2026-09-26). The frame width is fixed in mm, so a bigger size shrinks the band's share
+  (about 16% at 70 mm). A shallower dovetail (`depth` 2) also allows a narrower frame. Whether
+  depth 2 still passes CV8 and still holds is not yet checked: render it and review the pair
+  before putting it on a plate.
+- **Pegs fit: 0.15 mm clearance was a bit loose** on minis-03 (CS-1 pair, pink PLA, X2D; Omar,
+  2026-09-26: "a bit loose"). That is one hand-feel reading, not a measurement. It points
+  CAL-FIT-01 tighter but does not settle it. Next time, print a clearance ladder: one pair at
+  0.10 and one pair at 0.05, the low end of the file's range.
 
 ## What goes on a different plate
 
