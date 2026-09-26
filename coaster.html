@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Served by the studio at /coaster once `scripts/vendor-labs.mjs` copies
+         this into packages/web/dist. `check-deploy.sh` greps the deployed body
+         for this marker, so a status code cannot pass on the SPA fallback. -->
+    <meta name="bikar-page" content="coaster" />
+    <title>Coaster Lab — printable rosette coasters</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23d6b254' stroke-width='1.5'/%3E%3Ccircle cx='8' cy='8' r='2.5' fill='none' stroke='%23d6b254' stroke-width='1.2'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="Tune a 3D-printable rosette coaster with sliders — the structural CV validators run live beside the mesh gate, each showing the measured number against the print floor it is held to."
+    />
+    <script type="module" crossorigin src="./assets/coaster-C6hxEdQD.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/dist-C49kJYEf.js">
+    <link rel="modulepreload" crossorigin href="./assets/style-BFHcl7lz.js">
+    <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-EeOZK34R.js">
+    <link rel="modulepreload" crossorigin href="./assets/worker-host-DV2pcHZL.js">
+    <link rel="stylesheet" crossorigin href="./assets/style-BPUuQBzt.css">
+    <link rel="stylesheet" crossorigin href="./assets/coaster--5qcRaPO.css">
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Coaster Lab</h1>
+      <p class="tagline">
+        Size a rosette coaster for the printer in the room — the checks below say what will print,
+        each with the number it turned on.
+      </p>
+      <a class="gallery-link" href="./studio.html">&larr; Studio</a>
+      <a class="gallery-link" href="./index.html">&larr; Gallery</a>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>Coaster</h2>
+          <div id="coaster-chips" class="chips"></div>
+        </section>
+        <section>
+          <h2>Size</h2>
+          <div id="size-chips" class="chips"></div>
+          <p class="fit-intro">
+            A shortcut for the <code>size</code> knob — mini (40&nbsp;mm) and standard (90&nbsp;mm)
+            set the same param the slider does.
+          </p>
+        </section>
+        <section>
+          <h2>Knobs</h2>
+          <div id="knob-panel"></div>
+        </section>
+        <section id="relief-section" hidden>
+          <h2>Relief shape</h2>
+          <div id="relief-shape-control" class="chips"></div>
+          <p class="target-note">
+            <strong>Band</strong> is a flat-topped strap; <strong>rods</strong> makes each strap a
+            half-round rod, so lines read as equal cylinders and junctions round off. Same
+            footprint, width and height &mdash; only the top profile changes, and every structural
+            check is shared.
+          </p>
+        </section>
+        <section id="colours-section" hidden>
+          <h2>Colours</h2>
+          <div id="color-knobs"></div>
+          <p class="target-note">
+            Each region prints in its own filament. Colour is a preview and an AMS map — print
+            correctness is per-body geometry, not the render colour.
+          </p>
+        </section>
+        <section>
+          <h2>Structural checks</h2>
+          <p class="fit-intro">
+            Every coaster validator the script's <code>coaster</code> block reaches (CV1&ndash;CV7
+            for a solid slab, CV8&ndash;CV9 for an interlocked one, CV10 for a minimal one), live. A
+            coaster that fails one describes a part that will not print, so a failure blocks the
+            mesh rather than showing here as a warning.
+          </p>
+          <div id="findings-panel" class="gate-panel"></div>
+        </section>
+        <section>
+          <h2>Print target</h2>
+          <select id="machine-select" aria-label="Print target machine"></select>
+          <div id="custom-dims" hidden>
+            <label>X <input id="dim-x" type="number" min="50" max="1000" /></label>
+            <label>Y <input id="dim-y" type="number" min="50" max="1000" /></label>
+            <label>Z <input id="dim-z" type="number" min="50" max="1000" /></label>
+            <span class="unit">mm</span>
+          </div>
+          <p id="target-note" class="target-note"></p>
+        </section>
+        <section class="actions">
+          <button id="stl-button" disabled>Download STL</button>
+          <button id="copy-link">Copy link</button>
+        </section>
+        <section>
+          <h2>Mesh gate</h2>
+          <div id="gate-panel" class="gate-panel"></div>
+        </section>
+        <div id="error-panel" class="error-panel" hidden></div>
+      </aside>
+      <div class="lab-stage">
+        <button
+          id="code-toggle"
+          class="code-toggle"
+          aria-expanded="false"
+          title="Show the script source — edit it to make this coaster your own"
+        >
+          Code
+        </button>
+        <canvas
+          id="orb-canvas"
+          aria-label="3D coaster preview — drag to rotate, scroll to zoom"
+        ></canvas>
+        <div id="spinner" class="spinner" hidden>
+          <span id="spinner-label">computing&hellip;</span>
+          <button id="stop-button" class="stop-button" hidden>Stop</button>
+        </div>
+        <div id="code-drawer" class="code-drawer" hidden>
+          <div id="drawer-resize" class="drawer-resize" aria-hidden="true"></div>
+          <div class="drawer-header">
+            <span class="drawer-title">Code</span>
+            <span class="drawer-hint">edits re-evaluate after a pause</span>
+            <button id="bake-button" title="Write the current knob values into the param defaults">
+              Write values into code
+            </button>
+            <button
+              id="bkr-download"
+              title="Download this script as a .bkr file, knob values baked in"
+            >
+              Download .bkr
+            </button>
+            <a
+              id="open-studio"
+              target="_blank"
+              rel="noopener"
+              title="Open this script in Bikar Studio — the full pattern editor"
+            >
+              Open in Studio
+            </a>
+            <button id="drawer-hide" title="Hide the code drawer">Hide</button>
+          </div>
+          <div class="editor-body">
+            <pre id="editor-gutter" class="editor-gutter" aria-hidden="true"></pre>
+            <div class="code-area">
+              <pre id="code-hl" class="hl" aria-hidden="true"></pre>
+              <textarea
+                id="code-editor"
+                spellcheck="false"
+                autocapitalize="off"
+                autocomplete="off"
+                maxlength="65536"
+                aria-label="Coaster script source"
+              ></textarea>
+            </div>
+          </div>
+          <details class="authoring-help">
+            <summary>Authoring notes</summary>
+            <ul>
+              <li>
+                <code>param</code> lines become sliders, and the range on the line is the range on
+                the slider. A coaster's knobs come from its <code>param</code> lines; the structural
+                checks come from the <code>coaster</code> block the script declares.
+              </li>
+              <li>
+                A coaster you typed is checked exactly like one that shipped: the CV validators and
+                the mesh gate read the geometry in front of them. If your script declares an
+                <code>orb</code> or a <code>brick</code> rather than a <code>coaster</code>, the
+                panels say so instead of guessing.
+              </li>
+              <li>
+                Runaway evaluations are stopped after a time budget (Stop appears sooner). Browsers
+                differ on out-of-memory: some kill the worker, Safari may kill the tab &mdash; save
+                your work with Download or Copy link.
+              </li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </main>
+    <div id="toast" class="toast" hidden></div>
+  </body>
+</html>

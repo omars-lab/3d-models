@@ -1,0 +1,176 @@
+# naqsh construction — lEfWSogWscs
+# title: Pattern from the tomb of Itimad ad-Daula in Agra, India
+# url: https://www.youtube.com/watch?v=lEfWSogWscs
+# steps: 49 statements, 49 tagged steps
+# source: reconstructions/lEfWSogWscs/construction.ggb-commands sha256:abc8a7a2a19204979013350afba0321050f6231e917eeab7d7c0274abb7f0004
+
+param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 2.4143   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint lEfWSogWscs_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:18  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=00:25  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=00:55  C = Rotate(A, -135°, B)
+  point C = rotate A by -135 around B
+  # t=00:55  D = Rotate(B, -135°, C)
+  point D = rotate B by -135 around C
+  # t=00:55  E = Rotate(C, -135°, D)
+  point E = rotate C by -135 around D
+  # t=00:55  F = Rotate(D, -135°, E)
+  point F = rotate D by -135 around E
+  # t=00:55  G = Rotate(E, -135°, F)
+  point G = rotate E by -135 around F
+  # t=00:55  H = Rotate(F, -135°, G)
+  point H = rotate F by -135 around G
+  # ────────────────────────────────────────────────────────
+  # t=01:09  poly1 = Polygon(A, B, C, D, E, F, G, H)
+  polygon poly1 [ A B C D E F G H ]
+  # ────────────────────────────────────────────────────────
+  # t=01:23  l = PerpendicularBisector(A, B)
+  bisector l from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:28  m = PerpendicularBisector(B, C)
+  bisector m from B to C
+  # ────────────────────────────────────────────────────────
+  # t=01:36  cen = Intersect(l, m)
+  point cen = intersect l m
+  # ────────────────────────────────────────────────────────
+  # t=01:44  J = Midpoint(A, B)
+  point J = midpoint A B
+  # t=01:44  K = Midpoint(B, C)
+  point K = midpoint B C
+  # ────────────────────────────────────────────────────────
+  # t=01:51  c = Circle(B, J)
+  circle c center(B) through J
+  # ────────────────────────────────────────────────────────
+  # t=03:41  d = Circle(cen, 0.5)
+  circle d center(cen) radius 0.5 * $unit
+  # ────────────────────────────────────────────────────────
+  # t=02:06  vB = Line(B, l)
+  line vB through B parallel l
+  # ────────────────────────────────────────────────────────
+  # t=02:14  {Lo, L} = Intersect(c, vB)
+  intersect LoL_ c vB
+  # t=02:14  {Lo, L} = Intersect(c, vB)
+  point Lo = LoL_.cpt0
+  # t=02:14  {Lo, L} = Intersect(c, vB)
+  point L = LoL_.cpt1
+  # ────────────────────────────────────────────────────────
+  # t=02:20  rJL = Line(J, L)
+  line rJL from J to L
+  # ────────────────────────────────────────────────────────
+  # t=02:31  fI = Line(cen, rJL)
+  line fI through cen parallel rJL
+  # ────────────────────────────────────────────────────────
+  # t=02:37  M = Midpoint(H, A)
+  point M = midpoint H A
+  # ────────────────────────────────────────────────────────
+  # t=02:55  lMK = Line(M, K)
+  line lMK from M to K
+  # ────────────────────────────────────────────────────────
+  # t=03:03  aI = Line(cen, lMK)
+  line aI through cen parallel lMK
+  # ────────────────────────────────────────────────────────
+  # t=03:47  C1 = Intersect(aI, vB)
+  point C1 = intersect aI vB
+  # ────────────────────────────────────────────────────────
+  # t=04:11  V  = Rotate(C1, 45°, cen)
+  point V = rotate C1 by 45 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:14  W  = Rotate(C1, 90°, cen)
+  point W = rotate C1 by 90 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:16  Z  = Rotate(C1, 135°, cen)
+  point Z = rotate C1 by 135 around cen
+  # t=04:16  A1 = Rotate(C1, 180°, cen)
+  point A1 = rotate C1 by 180 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:09  T  = Rotate(C1, 225°, cen)
+  point T = rotate C1 by 225 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:19  B1 = Rotate(C1, 270°, cen)
+  point B1 = rotate C1 by 270 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:13  U  = Rotate(C1, 315°, cen)
+  point U = rotate C1 by 315 around cen
+  # ────────────────────────────────────────────────────────
+  # t=04:26  b  = Line(T, U)
+  line b from T to U
+  # ────────────────────────────────────────────────────────
+  # t=04:30  lA1B1 = Line(A1, B1)
+  line lA1B1 from A1 to B1
+  # ────────────────────────────────────────────────────────
+  # t=05:16  iB = Line(cen, B)
+  line iB from cen to B
+  # ────────────────────────────────────────────────────────
+  # t=05:27  D1 = Intersect(iB, b)
+  point D1 = intersect iB b
+  # ────────────────────────────────────────────────────────
+  # t=05:01  h1 = Line(D1, l)
+  line h1 through D1 parallel l
+  # ────────────────────────────────────────────────────────
+  # t=05:32  E1 = Intersect(h1, lA1B1)
+  point E1 = intersect h1 lA1B1
+  # ────────────────────────────────────────────────────────
+  # t=05:36  S  = Intersect(h1, lMK)
+  point S = intersect h1 lMK
+  # ────────────────────────────────────────────────────────
+  # t=05:40  F1 = Intersect(h1, rJL)
+  point F1 = intersect h1 rJL
+  # ────────────────────────────────────────────────────────
+  # t=05:43  G1 = Reflect(E1, l)
+  point G1 = reflect E1 across l
+  # t=05:43  Sp = Reflect(S, l)
+  point Sp = reflect S across l
+  # t=05:43  H1 = Reflect(F1, l)
+  point H1 = reflect F1 across l
+  # ────────────────────────────────────────────────────────
+  # t=05:48  g1 = Line(U, l)
+  line g1 through U parallel l
+  # ────────────────────────────────────────────────────────
+  # t=05:50  dL = Line(D1, L)
+  line dL from D1 to L
+  # ────────────────────────────────────────────────────────
+  # t=05:52  I1 = Intersect(g1, dL)
+  point I1 = intersect g1 dL
+  # ────────────────────────────────────────────────────────
+  # t=05:55  J1 = Intersect(g1, lMK)
+  point J1 = intersect g1 lMK
+  # ────────────────────────────────────────────────────────
+  # t=06:12  poly2 = Polygon(Sp, S, F1, J, H1)
+  polygon poly2 [ Sp S F1 J H1 ]
+  # ────────────────────────────────────────────────────────
+  # t=06:42  poly3 = Polygon(B1, D1, U, I1, L, J1, S, E1)
+  polygon poly3 [ B1 D1 U I1 L J1 S E1 ]
+
+pattern lEfWSogWscs on lEfWSogWscs_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=01:09  poly1 = Polygon(A, B, C, D, E, F, G, H)
+  edges from poly1
+  # ────────────────────────────────────────────────────────
+  # t=07:37  motif = Sequence(Rotate({poly2, poly3}, pi*i/4, cen), i, 0, 7)
+  rotate 8 around cen
+    edges from poly2
+    edges from poly3
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline polygon 8 $size rotate 0
+  inscribe lEfWSogWscs
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

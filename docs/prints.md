@@ -35,19 +35,19 @@ it defines the process-profile header every later plate reuses (design doc §10)
 
 ## Queue — what to print next
 
-The order is not decided here. It is [`backlog.md`](backlog.md) §3.8's argument,
+The order is not decided here. It is [print register](tasks/coaster-pipeline/backlog.md) §3.8's argument,
 presented — this page stores no rank of its own, because a second scheduler is the
 one thing the design forbids ([design doc](prints-tab-design.md) §6). Read the
 backlog for the live order and the reasoning; the plates in flight are:
 
 - **Plate 1 — Machine Card.** Defines the profile header and carries the readings
   the most bets depend on; it is first for that reason, not because it is cheap.
-  → [`backlog.md`](backlog.md) §3.8, [`bets.md`](../.claude/skills/calibrate/bets.md)
+  → [print register](tasks/coaster-pipeline/backlog.md) §3.8, [`bets.md`](../.claude/skills/calibrate/bets.md)
 - **Plate 4 — the star orb.** The flagship confidence print. It settles no
   calibration bet at all — which is exactly why the queue order and the
   "bets it would settle" figure are shown as two different things, never one. A
   plate can rank high and settle nothing.
-  → [`backlog.md`](backlog.md) §3.8
+  → [print register](tasks/coaster-pipeline/backlog.md) §3.8
 
 Beside each plate, the populated tab shows how many bets a run would settle. That
 figure is **not** the rank, and the number itself is owned by

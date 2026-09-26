@@ -1,0 +1,494 @@
+# naqsh construction — 7apC5Q9QS-8
+# title: Geogebra for Beginners 8-Fold Rosette Walkthrough
+# url: https://www.youtube.com/watch?v=7apC5Q9QS-8
+# steps: 144 statements, 144 tagged steps
+# source: reconstructions/7apC5Q9QS-8/construction.ggb-commands sha256:aa7562d6e790f05ccd1a2e79b2cda43ec935fdc5561eb109896abbcb3265a8be
+
+param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param neck = 3 range 2..5   # mm, dovetail neck at the edge line
+param depth = 3 range 2..5   # mm, how far the tab protrudes / the slot cuts in
+param clearance = 0.15 range 0.05..0.35   # mm, CAL-FIT-01 ladder: snug .. free
+param margin = 2 + $depth + $clearance   # mm, the plain 2 mm border plus what the slot eats
+param unit = ($size - 2 * $margin) / 4   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+param pause1 = 1
+
+blueprint c_7apC5Q9QS_8_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=01:32  A = (0, 0)
+  point A = unit.mpt
+  # t=01:32  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=01:45  c = Circle(A, B)
+  circle c center(A) through B
+  # ────────────────────────────────────────────────────────
+  # t=03:03  f = Line(A, B)
+  line f from A to B
+  # t=03:03  g = PerpendicularLine(A, f)
+  line g through A perpendicular f
+  # ────────────────────────────────────────────────────────
+  # t=03:44  h = Rotate(f, 22.5°, A)
+  line h = rotate f by 22.5 around A
+  # t=03:44  i = Rotate(f, 45°, A)
+  line i = rotate f by 45 around A
+  # t=03:44  j = Rotate(f, 67.5°, A)
+  line j = rotate f by 67.5 around A
+  # t=03:44  k = Rotate(f, 112.5°, A)
+  line k = rotate f by 112.5 around A
+  # t=03:44  l = Rotate(f, 135°, A)
+  line l = rotate f by 135 around A
+  # t=03:44  m = Rotate(f, 157.5°, A)
+  line m = rotate f by 157.5 around A
+  # ────────────────────────────────────────────────────────
+  # t=05:46  sqR = PerpendicularLine(B, f)
+  line sqR through B perpendicular f
+  # t=05:46  sqT = Rotate(sqR, 90°, A)
+  line sqT = rotate sqR by 90 around A
+  # t=05:46  sqL = Rotate(sqR, 180°, A)
+  line sqL = rotate sqR by 180 around A
+  # t=05:46  sqB = Rotate(sqR, 270°, A)
+  line sqB = rotate sqR by 270 around A
+  # t=05:46  P1 = Intersect(sqR, sqT)
+  point P1 = intersect sqR sqT
+  # t=05:46  P2 = Intersect(sqT, sqL)
+  point P2 = intersect sqT sqL
+  # t=05:46  P3 = Intersect(sqL, sqB)
+  point P3 = intersect sqL sqB
+  # t=05:46  P4 = Intersect(sqB, sqR)
+  point P4 = intersect sqB sqR
+  # t=05:46  sq = Polygon(P1, P2, P3, P4)
+  polygon sq [ P1 P2 P3 P4 ]
+  # ────────────────────────────────────────────────────────
+  # t=06:50  D = (0, 1)
+  point D = unit.cpt1
+  # t=06:50  C = Intersect(k, sqT)
+  point C = intersect k sqT
+  # ────────────────────────────────────────────────────────
+  # t=07:47  d = Circle(C, D)
+  circle d center(C) through D
+  # ────────────────────────────────────────────────────────
+  # t=07:50  E = Intersect(d, k, 1)
+  point E = intersect d k pick 1
+  # ────────────────────────────────────────────────────────
+  # t=08:24  p = Line(E, g)
+  line p through E parallel g
+  # ────────────────────────────────────────────────────────
+  # t=09:20  p1 = Reflect(p, k)
+  line p1 = reflect p across k
+  # ────────────────────────────────────────────────────────
+  # t=09:30  p2 = Reflect(p1, g)
+  line p2 = reflect p1 across g
+  # ────────────────────────────────────────────────────────
+  # t=09:40  p3 = Reflect(p2, j)
+  line p3 = reflect p2 across j
+  # ────────────────────────────────────────────────────────
+  # t=10:30  q = AngleBisector(D, C, E)
+  line q = bisect angle D C E
+  # ────────────────────────────────────────────────────────
+  # t=10:50  p4 = Reflect(p, q)
+  line p4 = reflect p across q
+  # ────────────────────────────────────────────────────────
+  # t=11:20  r = Reflect(p4, g)
+  line r = reflect p4 across g
+  # ────────────────────────────────────────────────────────
+  # t=11:42  G = Intersect(p, p4)
+  point G = intersect p p4
+  # ────────────────────────────────────────────────────────
+  # t=11:50  F = Intersect(p3, r)
+  point F = intersect p3 r
+  # ────────────────────────────────────────────────────────
+  # t=11:56  H = Intersect(p1, p2)
+  point H = intersect p1 p2
+  # ────────────────────────────────────────────────────────
+  # t=11:58  I = Intersect(p3, p2)
+  point I = intersect p3 p2
+  # ────────────────────────────────────────────────────────
+  # t=12:09  pet1 = Polygon(D, G, E, H, I, F)
+  polygon pet1 [ D G E H I F ]
+  # ────────────────────────────────────────────────────────
+  # t=12:24  pet2 = Reflect(pet1, j)
+  polygon pet2 = reflect pet1 across j
+  # ────────────────────────────────────────────────────────
+  # t=12:29  pet3 = Reflect(pet1, i)
+  polygon pet3 = reflect pet1 across i
+  # ────────────────────────────────────────────────────────
+  # t=12:32  pet4 = Reflect(pet1, h)
+  polygon pet4 = reflect pet1 across h
+  # ────────────────────────────────────────────────────────
+  # t=12:35  pet5 = Reflect(pet1, f)
+  polygon pet5 = reflect pet1 across f
+  # ────────────────────────────────────────────────────────
+  # t=12:41  pet6 = Reflect(pet1, m)
+  polygon pet6 = reflect pet1 across m
+  # ────────────────────────────────────────────────────────
+  # t=13:05  pet7 = Reflect(pet1, l)
+  polygon pet7 = reflect pet1 across l
+  # ────────────────────────────────────────────────────────
+  # t=13:10  pet8 = Reflect(pet1, k)
+  polygon pet8 = reflect pet1 across k
+  # ────────────────────────────────────────────────────────
+  # t=13:15  L1 = Reflect(p4, l)
+  line L1 = reflect p4 across l
+  # ────────────────────────────────────────────────────────
+  # t=13:20  O1 = Intersect(L1, sqT)
+  point O1 = intersect L1 sqT
+  # t=13:20  O2 = Intersect(L1, p4)
+  point O2 = intersect L1 p4
+  # t=13:20  O3 = Intersect(p4, sqL)
+  point O3 = intersect p4 sqL
+  # ────────────────────────────────────────────────────────
+  # t=13:29  oct1 = Polygon(P2, O1, O2, O3)
+  polygon oct1 [ P2 O1 O2 O3 ]
+  # ────────────────────────────────────────────────────────
+  # t=13:40  H2 = Rotate(H, 45°, A)
+  point H2 = rotate H by 45 around A
+  # t=13:40  H3 = Rotate(H, 90°, A)
+  point H3 = rotate H by 90 around A
+  # t=13:40  H4 = Rotate(H, 135°, A)
+  point H4 = rotate H by 135 around A
+  # t=13:40  H5 = Rotate(H, 180°, A)
+  point H5 = rotate H by 180 around A
+  # t=13:40  H6 = Rotate(H, 225°, A)
+  point H6 = rotate H by 225 around A
+  # t=13:40  H7 = Rotate(H, 270°, A)
+  point H7 = rotate H by 270 around A
+  # t=13:40  H8 = Rotate(H, 315°, A)
+  point H8 = rotate H by 315 around A
+  # ────────────────────────────────────────────────────────
+  # t=13:52  pL1 = Reflect(p1, f)
+  line pL1 = reflect p1 across f
+  # ────────────────────────────────────────────────────────
+  # t=13:56  pL2 = Reflect(p2, f)
+  line pL2 = reflect p2 across f
+  # ────────────────────────────────────────────────────────
+  # t=14:00  pH1 = Reflect(p, i)
+  line pH1 = reflect p across i
+  # ────────────────────────────────────────────────────────
+  # t=14:02  pH2 = Reflect(p3, i)
+  line pH2 = reflect p3 across i
+  # ────────────────────────────────────────────────────────
+  # t=14:09  T22 = Intersect(h, p1)
+  point T22 = intersect h p1
+  # t=14:09  T67 = Intersect(j, p1)
+  point T67 = intersect j p1
+  # t=14:09  T112 = Intersect(k, p2)
+  point T112 = intersect k p2
+  # t=14:09  T157 = Intersect(m, p2)
+  point T157 = intersect m p2
+  # ────────────────────────────────────────────────────────
+  # t=14:14  T202 = Intersect(h, pL2)
+  point T202 = intersect h pL2
+  # t=14:14  T247 = Intersect(j, pL2)
+  point T247 = intersect j pL2
+  # t=14:14  T292 = Intersect(k, pL1)
+  point T292 = intersect k pL1
+  # t=14:14  T337 = Intersect(m, pL1)
+  point T337 = intersect m pL1
+  # ────────────────────────────────────────────────────────
+  # t=14:34  star = Polygon(H, T112, H2, T157, H3, T202, H4, T247, H5, T292, H6, T337, H7, T22, H8, T67)
+  polygon star [ H T112 H2 T157 H3 T202 H4 T247 H5 T292 H6 T337 H7 T22 H8 T67 ]
+  # ────────────────────────────────────────────────────────
+  # t=14:43  oct2 = Reflect(oct1, g)
+  polygon oct2 = reflect oct1 across g
+  # ────────────────────────────────────────────────────────
+  # t=15:10  oct3 = Reflect(oct1, f)
+  polygon oct3 = reflect oct1 across f
+  # ────────────────────────────────────────────────────────
+  # t=15:15  oct4 = Reflect(oct2, f)
+  polygon oct4 = reflect oct2 across f
+  # ────────────────────────────────────────────────────────
+  # t=19:05  petN1 = Reflect(pet1, sqT)
+  polygon petN1 = reflect pet1 across sqT
+  # t=19:05  petN2 = Reflect(pet2, sqT)
+  polygon petN2 = reflect pet2 across sqT
+  # t=19:05  petN8 = Reflect(pet8, sqT)
+  polygon petN8 = reflect pet8 across sqT
+  # t=19:05  petN3 = Reflect(pet3, sqT)
+  polygon petN3 = reflect pet3 across sqT
+  # t=19:05  petN7 = Reflect(pet7, sqT)
+  polygon petN7 = reflect pet7 across sqT
+  # t=19:05  starN = Reflect(star, sqT)
+  polygon starN = reflect star across sqT
+  # t=19:05  octN1 = Reflect(oct1, sqT)
+  polygon octN1 = reflect oct1 across sqT
+  # t=19:05  octN2 = Reflect(oct2, sqT)
+  polygon octN2 = reflect oct2 across sqT
+  # t=19:05  Bl = Rotate(B, 180°, A)
+  point Bl = rotate B by 180 around A
+  # t=19:05  Fa = Rotate(G, 270°, A)
+  point Fa = rotate G by 270 around A
+  # t=19:05  Fb = Rotate(F, 90°, A)
+  point Fb = rotate F by 90 around A
+  # t=19:05  I3 = Rotate(I, 90°, A)
+  point I3 = rotate I by 90 around A
+  # t=19:05  I8 = Rotate(I, 315°, A)
+  point I8 = rotate I by 315 around A
+  # t=19:05  petT3 = Polygon(B, Fa, I8, H7)
+  polygon petT3 [ B Fa I8 H7 ]
+  # t=19:05  petT7 = Polygon(Bl, Fb, I3, H3)
+  polygon petT7 [ Bl Fb I3 H3 ]
+  # t=19:05  starT = Polygon(H7, T22, H8, T67, H, T112, H2, T157, H3)
+  polygon starT [ H7 T22 H8 T67 H T112 H2 T157 H3 ]
+  # ────────────────────────────────────────────────────────
+  # t=19:24  starNh = Reflect(starT, sqT)
+  polygon starNh = reflect starT across sqT
+  # t=19:24  petN3h = Reflect(petT3, sqT)
+  polygon petN3h = reflect petT3 across sqT
+  # t=19:24  petN7h = Reflect(petT7, sqT)
+  polygon petN7h = reflect petT7 across sqT
+  # ────────────────────────────────────────────────────────
+  # t=20:06  petL1 = Polygon(D, G, E, H)
+  polygon petL1 [ D G E H ]
+  # t=20:06  starQ2 = Polygon(A, H, T112, H2, T157, H3)
+  polygon starQ2 [ A H T112 H2 T157 H3 ]
+  # ────────────────────────────────────────────────────────
+  # t=20:54  petW1 = Reflect(petN1, l)
+  polygon petW1 = reflect petN1 across l
+  # t=20:54  petW2 = Reflect(petN2, l)
+  polygon petW2 = reflect petN2 across l
+  # t=20:54  petW8 = Reflect(petN8, l)
+  polygon petW8 = reflect petN8 across l
+  # t=20:54  petW3h = Reflect(petN3h, l)
+  polygon petW3h = reflect petN3h across l
+  # t=20:54  petW7h = Reflect(petN7h, l)
+  polygon petW7h = reflect petN7h across l
+  # t=20:54  starWh = Reflect(starNh, l)
+  polygon starWh = reflect starNh across l
+  # t=20:54  octW1 = Reflect(octN1, l)
+  polygon octW1 = reflect octN1 across l
+  # t=20:54  octW2 = Reflect(octN2, l)
+  polygon octW2 = reflect octN2 across l
+  # ────────────────────────────────────────────────────────
+  # t=21:04  petE1 = Reflect(petN1, i)
+  polygon petE1 = reflect petN1 across i
+  # t=21:04  petE2 = Reflect(petN2, i)
+  polygon petE2 = reflect petN2 across i
+  # t=21:04  petE8 = Reflect(petN8, i)
+  polygon petE8 = reflect petN8 across i
+  # t=21:04  petE3h = Reflect(petN3h, i)
+  polygon petE3h = reflect petN3h across i
+  # t=21:04  petE7h = Reflect(petN7h, i)
+  polygon petE7h = reflect petN7h across i
+  # t=21:04  starEh = Reflect(starNh, i)
+  polygon starEh = reflect starNh across i
+  # t=21:04  octE1 = Reflect(octN1, i)
+  polygon octE1 = reflect octN1 across i
+  # t=21:04  octE2 = Reflect(octN2, i)
+  polygon octE2 = reflect octN2 across i
+  # ────────────────────────────────────────────────────────
+  # t=21:35  petS1 = Reflect(petN1, f)
+  polygon petS1 = reflect petN1 across f
+  # t=21:35  petS2 = Reflect(petN2, f)
+  polygon petS2 = reflect petN2 across f
+  # t=21:35  petS8 = Reflect(petN8, f)
+  polygon petS8 = reflect petN8 across f
+  # t=21:35  petS3h = Reflect(petN3h, f)
+  polygon petS3h = reflect petN3h across f
+  # t=21:35  petS7h = Reflect(petN7h, f)
+  polygon petS7h = reflect petN7h across f
+  # t=21:35  starSh = Reflect(starNh, f)
+  polygon starSh = reflect starNh across f
+  # t=21:35  octS1 = Reflect(octN1, f)
+  polygon octS1 = reflect octN1 across f
+  # t=21:35  octS2 = Reflect(octN2, f)
+  polygon octS2 = reflect octN2 across f
+  # ────────────────────────────────────────────────────────
+  # t=21:57  petNW1 = Rotate(pet8, 180°, P2)
+  polygon petNW1 = rotate pet8 by 180 around P2
+  # t=21:57  petNW7h = Rotate(petT7, 180°, P2)
+  polygon petNW7h = rotate petT7 by 180 around P2
+  # t=21:57  petNW1h = Rotate(petL1, 180°, P2)
+  polygon petNW1h = rotate petL1 by 180 around P2
+  # t=21:57  octNW = Rotate(oct1, 180°, P2)
+  polygon octNW = rotate oct1 by 180 around P2
+  # t=21:57  starNWh = Reflect(starNh, sqL)
+  polygon starNWh = reflect starNh across sqL
+  # ────────────────────────────────────────────────────────
+  # t=22:20  starNWq = Rotate(starQ2, 180°, P2)
+  polygon starNWq = rotate starQ2 by 180 around P2
+  # ────────────────────────────────────────────────────────
+  # t=22:44  petNE1 = Reflect(petNW1, g)
+  polygon petNE1 = reflect petNW1 across g
+  # t=22:44  petNE7h = Reflect(petNW7h, g)
+  polygon petNE7h = reflect petNW7h across g
+  # t=22:44  petNE1h = Reflect(petNW1h, g)
+  polygon petNE1h = reflect petNW1h across g
+  # t=22:44  octNE = Reflect(octNW, g)
+  polygon octNE = reflect octNW across g
+  # t=22:44  starNEq = Reflect(starNWq, g)
+  polygon starNEq = reflect starNWq across g
+  # ────────────────────────────────────────────────────────
+  # t=22:58  petSW1 = Reflect(petNW1, f)
+  polygon petSW1 = reflect petNW1 across f
+  # t=22:58  petSW7h = Reflect(petNW7h, f)
+  polygon petSW7h = reflect petNW7h across f
+  # t=22:58  petSW1h = Reflect(petNW1h, f)
+  polygon petSW1h = reflect petNW1h across f
+  # t=22:58  octSW = Reflect(octNW, f)
+  polygon octSW = reflect octNW across f
+  # t=22:58  starSWq = Reflect(starNWq, f)
+  polygon starSWq = reflect starNWq across f
+  # t=22:58  petSE1 = Reflect(petNE1, f)
+  polygon petSE1 = reflect petNE1 across f
+  # t=22:58  petSE7h = Reflect(petNE7h, f)
+  polygon petSE7h = reflect petNE7h across f
+  # t=22:58  petSE1h = Reflect(petNE1h, f)
+  polygon petSE1h = reflect petNE1h across f
+  # t=22:58  octSE = Reflect(octNE, f)
+  polygon octSE = reflect octNE across f
+  # t=22:58  starSEq = Reflect(starNEq, f)
+  polygon starSEq = reflect starNEq across f
+  # ────────────────────────────────────────────────────────
+  # t=23:10  Q0 = Reflect(O1, g)
+  point Q0 = reflect O1 across g
+  # t=23:10  Q1 = Reflect(O2, g)
+  point Q1 = reflect O2 across g
+  # t=23:10  octA = Polygon(O2, O1, 8)
+  polygon octA = regular 8 from O2 to O1
+  # t=23:10  octB = Polygon(Q0, Q1, 8)
+  polygon octB = regular 8 from Q0 to Q1
+  # ────────────────────────────────────────────────────────
+  # t=23:19  octC = Reflect(octA, f)
+  polygon octC = reflect octA across f
+  # t=23:19  octD = Reflect(octB, f)
+  polygon octD = reflect octB across f
+
+pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=12:09  pet1 = Polygon(D, G, E, H, I, F)
+  edges from pet1
+  # ────────────────────────────────────────────────────────
+  # t=12:24  pet2 = Reflect(pet1, j)
+  edges from pet2
+  # ────────────────────────────────────────────────────────
+  # t=12:29  pet3 = Reflect(pet1, i)
+  edges from pet3
+  # ────────────────────────────────────────────────────────
+  # t=12:32  pet4 = Reflect(pet1, h)
+  edges from pet4
+  # ────────────────────────────────────────────────────────
+  # t=12:35  pet5 = Reflect(pet1, f)
+  edges from pet5
+  # ────────────────────────────────────────────────────────
+  # t=12:41  pet6 = Reflect(pet1, m)
+  edges from pet6
+  # ────────────────────────────────────────────────────────
+  # t=13:05  pet7 = Reflect(pet1, l)
+  edges from pet7
+  # ────────────────────────────────────────────────────────
+  # t=13:10  pet8 = Reflect(pet1, k)
+  edges from pet8
+  # ────────────────────────────────────────────────────────
+  # t=14:34  star = Polygon(H, T112, H2, T157, H3, T202, H4, T247, H5, T292, H6, T337, H7, T22, H8, T67)
+  edges from star
+  # ────────────────────────────────────────────────────────
+  # t=19:05  petN1 = Reflect(pet1, sqT)
+  edges from petN1
+  # t=19:05  petN2 = Reflect(pet2, sqT)
+  edges from petN2
+  # t=19:05  petN8 = Reflect(pet8, sqT)
+  edges from petN8
+  # ────────────────────────────────────────────────────────
+  # t=19:24  starNh = Reflect(starT, sqT)
+  edges from starNh
+  # t=19:24  petN3h = Reflect(petT3, sqT)
+  edges from petN3h
+  # t=19:24  petN7h = Reflect(petT7, sqT)
+  edges from petN7h
+  # ────────────────────────────────────────────────────────
+  # t=20:54  petW1 = Reflect(petN1, l)
+  edges from petW1
+  # t=20:54  petW2 = Reflect(petN2, l)
+  edges from petW2
+  # t=20:54  petW8 = Reflect(petN8, l)
+  edges from petW8
+  # t=20:54  petW3h = Reflect(petN3h, l)
+  edges from petW3h
+  # t=20:54  petW7h = Reflect(petN7h, l)
+  edges from petW7h
+  # t=20:54  starWh = Reflect(starNh, l)
+  edges from starWh
+  # ────────────────────────────────────────────────────────
+  # t=21:04  petE1 = Reflect(petN1, i)
+  edges from petE1
+  # t=21:04  petE2 = Reflect(petN2, i)
+  edges from petE2
+  # t=21:04  petE8 = Reflect(petN8, i)
+  edges from petE8
+  # t=21:04  petE3h = Reflect(petN3h, i)
+  edges from petE3h
+  # t=21:04  petE7h = Reflect(petN7h, i)
+  edges from petE7h
+  # t=21:04  starEh = Reflect(starNh, i)
+  edges from starEh
+  # ────────────────────────────────────────────────────────
+  # t=21:35  petS1 = Reflect(petN1, f)
+  edges from petS1
+  # t=21:35  petS2 = Reflect(petN2, f)
+  edges from petS2
+  # t=21:35  petS8 = Reflect(petN8, f)
+  edges from petS8
+  # t=21:35  petS3h = Reflect(petN3h, f)
+  edges from petS3h
+  # t=21:35  petS7h = Reflect(petN7h, f)
+  edges from petS7h
+  # t=21:35  starSh = Reflect(starNh, f)
+  edges from starSh
+  # ────────────────────────────────────────────────────────
+  # t=21:57  petNW1 = Rotate(pet8, 180°, P2)
+  edges from petNW1
+  # t=21:57  petNW7h = Rotate(petT7, 180°, P2)
+  edges from petNW7h
+  # t=21:57  petNW1h = Rotate(petL1, 180°, P2)
+  edges from petNW1h
+  # ────────────────────────────────────────────────────────
+  # t=22:20  starNWq = Rotate(starQ2, 180°, P2)
+  edges from starNWq
+  # ────────────────────────────────────────────────────────
+  # t=22:44  petNE1 = Reflect(petNW1, g)
+  edges from petNE1
+  # t=22:44  petNE7h = Reflect(petNW7h, g)
+  edges from petNE7h
+  # t=22:44  petNE1h = Reflect(petNW1h, g)
+  edges from petNE1h
+  # t=22:44  starNEq = Reflect(starNWq, g)
+  edges from starNEq
+  # ────────────────────────────────────────────────────────
+  # t=22:58  petSW1 = Reflect(petNW1, f)
+  edges from petSW1
+  # t=22:58  petSW7h = Reflect(petNW7h, f)
+  edges from petSW7h
+  # t=22:58  petSW1h = Reflect(petNW1h, f)
+  edges from petSW1h
+  # t=22:58  starSWq = Reflect(starNWq, f)
+  edges from starSWq
+  # t=22:58  petSE1 = Reflect(petNE1, f)
+  edges from petSE1
+  # t=22:58  petSE7h = Reflect(petNE7h, f)
+  edges from petSE7h
+  # t=22:58  petSE1h = Reflect(petNE1h, f)
+  edges from petSE1h
+  # t=22:58  starSEq = Reflect(starNEq, f)
+  edges from starSEq
+  # ────────────────────────────────────────────────────────
+  # t=23:10  octA = Polygon(O2, O1, 8)
+  edges from octA
+  # t=23:10  octB = Polygon(Q0, Q1, 8)
+  edges from octB
+  # ────────────────────────────────────────────────────────
+  # t=23:19  octC = Reflect(octA, f)
+  edges from octC
+  # t=23:19  octD = Reflect(octB, f)
+  edges from octD
+
+coaster Coaster
+  outline square $size
+  inscribe c_7apC5Q9QS_8
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  interlock dovetail $neck $depth clearance $clearance
