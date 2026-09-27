@@ -8,17 +8,17 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 
 ## Open, in ROI order
 
-1. **Oracle FAILs in the ledger, and one cell with no verdict** (runs of 2026-09-27,
-   [what each tool printed](../../research/ledger-oracle-runs-2026-09-27.md)).
-   - `n3IidKfXE1I` O2 has no verdict: youtube's `naqsh_score.py` treats `ggb_score.py`'s
-     FAIL exit (2) as a crash. Once youtube accepts exit 2, re-run `make naqsh-score` and
-     record what it prints.
-   - Find out why each FAIL fails, then fix the `.bkr` or explain the gap: `n3IidKfXE1I`
-     O1 (lines `r_3`, `s_3` missing) and O3 0.133 (the GeoGebra file tiles a field, the
-     `.bkr` draws one cell); `nmEjCTzMbDg` O1 (points `R`, `D`, `T` off, and O1 cannot
-     compare parabolas, hyperbolas or arcs yet) and O2 (the naqsh drawing shows
-     construction circles the export hides); `rDuxHF3xMOc` O2 recall 0.8381 (the export
-     draws two full-width construction lines the `.bkr` does not).
+1. **`nmEjCTzMbDg` still FAILs O1 and O2, and waits on youtube.** Causes found on
+   2026-09-27 ([the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md)). The
+   youtube source's `R = Intersect(t, m, 2)` picks the other root in bikar. The patch,
+   `Intersect(t, m, S)`, is proposed there and has not been made. Once youtube takes it:
+   - regenerate the bikar fixture and goldens;
+   - re-vendor the coaster and look at it (it is near-solid now: **do not print it**);
+   - re-run O1 and O2.
+
+   What O1 still cannot compare (parabolas, hyperbolas, arcs, the `*_host` circles) is
+   youtube's to add. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
+   (2) as a crash. That patch is in the same note.
 2. **The queue is empty.** Fewer than three screened GO candidates, and every construction so
    far comes from one creator (Sarah Brewer). Crawl out from youtube's discovery wiki for new
    creators, fold counts and tilings; screen each and write GO or NO-GO with the date.

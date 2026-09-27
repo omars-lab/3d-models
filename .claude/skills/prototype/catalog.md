@@ -1642,27 +1642,29 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Model**: `bikar/patterns/Constructions/n3IidKfXE1I-coaster.bkr` — rendered
   as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
   (standard) by `make coasters` (→ `src/Coasters/n3IidKfXE1I-coaster-mini.stl`
-  and `-standard.stl`). Frame is a **square** (`outline square $size`), like
-  CS-8. The art is three rotational orbits about three *different* centres —
-  the "12-6-4" of the title: `rotate 12 around O` over the kite `q1` and the
-  hexagon `poly4`, `rotate 6 around W` over `poly5`, and `rotate 4 around V`
-  over `poly6`, where `O`, `V` and `W` are the pairwise intersections of three
-  perpendicular bisectors of the root frame. The "variable angle" is the single
-  free rotation `point O_p = rotate O by 23.5 around P` that the walkthrough
-  drives from a slider; here it is pinned at 23.5° (the video's final value),
-  so the coaster is one member of the family, not the family. Migrated with
-  bikar PR #229. `relief straps emboss 1.2` on a 4 mm base, `margin 2`,
-  `strap width 2`, `color base Slab` (`#333333`) / `color straps Gold`
-  (`#d4af37`). Both pass the mesh gate at the 0.8 mm coaster floor (watertight,
-  euler 2, 0 degenerate, minFeature 1.2 mm) and the linkage gate (1 body); the
-  mini is 40,800 triangles / 7.2 cm³ and the standard 204,300 triangles /
-  35.0 cm³.
+  and `-standard.stl`). Frame is **round** (`outline round $size`). The
+  construction is three rotational orbits about three *different* centres, the
+  "12-6-4" of the title: 12-fold about `O`, 6-fold about `W` and 4-fold about
+  `V`. The finished tile `l1` puts them together. The coaster leaves `l1` off
+  (`--coaster-omit l1`) and draws the 12-fold rosette `m1` alone, 3.7321
+  units across, because the whole field fit to 90 mm renders near-solid. The
+  "variable angle" is the one free rotation
+  `point O_p = rotate O by 23.5 around P` that the walkthrough drives from a
+  slider. Here it is pinned at 23.5° (the video's final value), so the coaster
+  is one member of the family, not the family. First migrated with bikar PR
+  #229 from a draft of the construction. It was re-imported from the finished
+  construction on 2026-09-27 (see the
+  [oracle FAILs note](../../../docs/research/ledger-oracle-fails-2026-09-27.md)).
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`). Both pass the
+  mesh gate at the 0.8 mm coaster floor (watertight, euler 2, 0 degenerate,
+  minFeature 1.2 mm) and the linkage gate (1 body). The mini is 32,240
+  triangles / 5.8 cm³ and the standard 160,860 triangles / 27.4 cm³.
 - **Print target**: TBD — record machine/material/nozzle/layer on first print.
 - **What we want to learn**:
-  - [ ] 1. Three orbits about three centres means the 6-fold and 4-fold stars
-    sit off the plate centre, near the square's edges and corners — do the
-    partial stars cut by the `margin 2` rim read as a tiling continuing past the
-    frame, or as truncated fragments at `size=40`?
+  - [ ] 1. The coaster draws only the 12-fold rosette. Is that a fair stand-in
+    for a "12-6-4" pattern? Or is a larger coaster that keeps `l1`'s 6-fold and
+    4-fold units worth making, since the whole field is near-solid at 90 mm?
   - [ ] 2. The 23.5° pin is one slider position of many — is the relief legible
     enough at this angle that a second pin (say the 15° and 30° ends of the
     slider's range) is worth a `--param` knob, or does the strap density at the
