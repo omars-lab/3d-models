@@ -63,16 +63,27 @@ same day, so what it taught is tied to the exact piece and size.
    Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
    from the file's formula, says so. One note for the whole plate goes in `feedback`, and it
    does not replace the per-piece verdicts.
-3. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
+   If no draft exists, run `bambu slice compose <plate>` again to make one. It writes to
+   `build/plates/`, never over `.bambu/plates/`. Then check that its meshes match the printed
+   `.3mf` before you trust the hashes, as minis-04 did.
+3. **Check the slice before you blame the piece.** Holes, a tight or loose fit, or weak straps
+   can come from the slicer settings as easily as from the design. minis-03 and minis-04 both
+   printed on Studio's built-in values instead of the X2D preset, because Studio's command line
+   ignores `inherits`. Find the defect in the cause tables of
+   [`print-quality-design.md`](../../../docs/print-quality-design.md), write the suspects in
+   the piece's notes, and say whether the settings actually used were the preset's. A reading
+   from a slice that did not carry the preset does not move a bet. Write that in `feedback`, as
+   the minis-04 record does.
+4. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
    and check there is no location data in them first.
-4. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
+5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
    verdict per piece.
-5. **Carry the lesson forward.** Write a rule for the next plate in the calling skill's rules
+6. **Carry the lesson forward.** Write a rule for the next plate in the calling skill's rules
    ([`sample-rules.md`](../print-coaster-samples/sample-rules.md) for samples). If the eye
    missed it before the print, add a check to [`rubric.md`](rubric.md), with the date and
    plate. If a number would have caught it, re-measure over the pieces on record and move the
    flag.
-6. **Ship it** as a PR. The record is what the Prints page and the Coaster Lab show against
+7. **Ship it** as a PR. The record is what the Prints page and the Coaster Lab show against
    each style.
 
 Hand feel is not a measurement. "Loose" goes in the notes, and a bet moves only on a reading

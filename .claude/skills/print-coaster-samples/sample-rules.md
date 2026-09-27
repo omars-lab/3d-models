@@ -40,11 +40,18 @@ When a print teaches something new, add or correct a rule here, with the date an
   (about 14% at 80 mm). A shallower dovetail (`depth` 2) also allows a narrower frame. Whether
   depth 2 still passes CV8 and still holds is not yet checked: render it and review the pair
   before putting it on a plate.
-- **Pegs fit: 0.15 mm clearance was a bit loose** on minis-03 (CS-1 pair, pink PLA, X2D; Omar,
-  2026-09-26: "a bit loose"). That is one hand-feel reading, not a measurement. It points
-  CAL-FIT-01 tighter but does not settle it. Next time, print a clearance ladder: one pair at
-  0.10 and one pair at 0.05, the low end of the file's range. minis-04 carries only the 0.10
-  pair, one step tighter; if it is still loose, the next plate tries 0.05.
+- **Pegs fit: no reading so far counts.** minis-03 at 0.15 mm was "a bit loose" and minis-04
+  at 0.10 came back "too tight" (Omar, 2026-09-26). Both are hand feel, and both plates were
+  sliced on Studio's built-in defaults, not the X2D preset (elephant-foot compensation 0, not
+  0.15; see [`print-quality-design.md`](../../../docs/print-quality-design.md)). minis-04 also
+  changed size and height along with clearance, and bikar's slot is not a true offset of the
+  tab. So **do not move CAL-FIT-01 on these two**, and do not read "0.10 is too tight" as a
+  rule. The next clearance test is the design's T1 ladder: several pairs at 1.4 mm, one size,
+  only clearance varying, sliced after the preset fix. (minis-03, minis-04.)
+- **The pegs border is too big even at 80 mm.** Omar, 2026-09-26, on minis-04: "the peg
+  system border is too big". The dovetail band there is about 11 mm, as the frame rule gives.
+  The narrower joins are on minis-05 (key, tab, plain) and minis-06 (slim dovetail, band
+  8.4 mm). Pick from what those show rather than another dovetail pair at the default knobs.
 
 ## What goes on a different plate
 
@@ -60,6 +67,12 @@ When a print teaches something new, add or correct a rule here, with the date an
   (2026-09-25). Two were near-solid discs (sDO9, nmEj); three had half-empty or wedge-gapped
   art (n3Ii, lEfW, tA8e). **Omar would rather have fewer patterns than a bad sample.**
 - `bambu slice compose <plate> --dry-run` places every item.
+- **The slice carries the whole preset chain.** minis-03 and minis-04 printed on Studio's
+  built-in values for about 54 process and 50 filament settings, because Studio's command line
+  does not follow a preset's `inherits`. Their tiny holes and tight pegs fit those values.
+  Until `tools/bambu` flattens the chain before slicing, a sample plate says nothing reliable
+  about fit or strap width. After that, check that the slice's settings match the preset's.
+  (minis-04, 2026-09-26.)
 - The header names each style by its name in `coaster-styles.md` and lists what was left off and
   why. A sample dropped with no reason written down is a gap the next session cannot see.
 - Nothing is sent. The send, the filament and whether to print at all are Omar's.
