@@ -1,6 +1,6 @@
 ---
 name: import-construction
-description: Migrate a GeoGebra construction into a naqsh (`.bkr`) file bikar renders to a printable coaster, end to end. Use for "import/migrate this GeoGebra construction to naqsh", "make a naqsh file from this .ggb", "make a coaster from this construction", "do the next construction in the ledger", "add construction <video-id>", or "what do we call this coaster style" (the style names live in coaster-styles.md). Drives the three fidelity oracles (O1/O2/O3) and the readability review, refuses unsupported input loudly, and stops at one bikar PR + one 3d-models PR — it never dispatches a print.
+description: Migrate a GeoGebra construction into a naqsh (`.bkr`) file bikar renders to a printable coaster, end to end. Use for "import/migrate this GeoGebra construction to naqsh", "make a naqsh file from this .ggb", "make a coaster from this construction", "do the next construction in the ledger", "add construction <video-id>", "make a coaster from this video", a pasted construction-video link (a YouTube tutorial, a Facebook reel or fb.watch link — e.g. a compass-and-straightedge drawing), or "what do we call this coaster style" (the style names live in coaster-styles.md). Drives the three fidelity oracles (O1/O2/O3) and the readability review, refuses unsupported input loudly, and stops at one bikar PR + one 3d-models PR — it never dispatches a print.
 ---
 
 # import-construction — a GeoGebra construction → naqsh → coaster
@@ -38,6 +38,13 @@ advance the corpus: "migrate `<id>`", "next construction in the ledger", "make a
 coaster from this `.ggb`". If the input is a raw `.ggb`/`geogebra.xml` from anywhere
 (not only our reconstructions), start at step 1 — the front-end reads any GeoGebra
 file, not just ours.
+
+If the input is a **video link** (YouTube, a Facebook reel, Instagram), there is no
+construction yet: in the youtube repo, its **youtube-download** / **youtube-study** skills fetch
+it logged-out for personal study (`yt-study.sh prep <link>` keeps the video and a `source.md`
+provenance note in the data dir, never in a repo) and rebuild it as
+`reconstructions/<id>/construction.ggb-commands`. Come back at step 1 with that id. A link
+that needs a login is a stop, not a thing to get around.
 
 ## The steps
 
