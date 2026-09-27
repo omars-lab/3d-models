@@ -2,6 +2,14 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — Omar set the rule that the 3,000 included GitHub minutes a month have to be
+  enough, and the spending limit stays at $0. To make that hold:
+  - qiyas's CI, Secret scan and Decision coherence are hand-started, and the pre-push hook runs
+    the fast test half (qiyas #34);
+  - bikar deploys by hand, with `make web-deploy` or `gh workflow run deploy.yml` (bikar #267);
+  - hifth's checks all run in its hooks, WebKit included, with the Linux golden set retired and
+    Lighthouse run by hand (hifth #119);
+  - the plan records these calls (3d-models #356, `.claude/plans/ci-spend.md`).
 - 2026-09-25 — Omar logged in to LastPass and bikar's CI secrets were pushed with
   `make setup-secrets`: 4 Cloudflare Pages secrets and 6 GitHub Actions secrets, all overwriting
   existing ones; the 3 optional `QIYAS_*` secrets are not in `.env` and were skipped (no PR).
