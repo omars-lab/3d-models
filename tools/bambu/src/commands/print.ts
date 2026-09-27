@@ -3,6 +3,7 @@
 //                                  — OWNER-GATED, confirm-before-send
 //   pause | resume | stop        : control the running print via MQTT (stop confirms)
 //   list                         : enumerate print records (delegates to print-list)
+//   verdict <run> <entry> <v>    : set one printed piece's keep|adjust|drop (+ notes) in docs/prints/
 //
 // Why first-party (extends D-055): the griches MCP that once backed this was never installable
 // (@griches/bambu-mcp is unpublished, ships no build), so both halves of dispatch now ride code we
@@ -28,6 +29,8 @@ import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom, type RecordProfile } from "../header.js";
 import { buildActuals, actualsToRecord, actualsAreEmpty } from "../actuals.js";
 import { runPrintList } from "./print-list.js";
+import { repoRoot } from "../paths.js";
+import { setVerdict, VerdictError } from "../verdict.js";
 import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 import { collectSlots } from "../frame.js";
@@ -461,6 +464,29 @@ async function runControl(verb: "pause" | "resume" | "stop", opts: { yes?: boole
   }
 }
 
+function runVerdict(run: string, entry: string, verdict: string, opts: { note: string[]; json?: boolean }): void {
+  const root = repoRoot();
+  if (!root) {
+    console.error("bambu print verdict: run it inside the 3d-models repo");
+    process.exitCode = 2;
+    return;
+  }
+  try {
+    const c = setVerdict(root, run, entry, verdict, opts.note);
+    ev("print_verdict", { run, entry, from: c.from ?? "-", to: c.to, notes_added: c.notesAdded.length, changed: c.changed });
+    if (opts.json) console.log(JSON.stringify(c));
+    else if (!c.changed) console.log(`${run} ${entry}: already ${c.to}, nothing changed`);
+    else {
+      const notes = c.notesAdded.length ? `, ${c.notesAdded.length} note${c.notesAdded.length === 1 ? "" : "s"} added` : "";
+      console.log(`${run} ${entry}: ${c.from ?? "no verdict"} → ${c.to}${notes}`);
+    }
+  } catch (e) {
+    if (!(e instanceof VerdictError)) throw e;
+    console.error(`bambu print verdict: ${e.message}`);
+    process.exitCode = 2;
+  }
+}
+
 export function registerPrint(program: Command): void {
   const print = program
     .command("print")
@@ -538,6 +564,20 @@ export function registerPrint(program: Command): void {
         status?: string;
         json?: boolean;
       }) => runPrintList(opts),
+    );
+
+  print
+    .command("verdict <run> <entry> <verdict>")
+    .description("set one printed piece's verdict (keep | adjust | drop) in docs/prints/<run>/index.md — local file edit only")
+    .option(
+      "-n, --note <text>",
+      "a note on what the piece showed (repeatable; a note already there is not added twice)",
+      (v: string, acc: string[]) => [...acc, v],
+      [] as string[],
+    )
+    .option("--json", "print the change as JSON", false)
+    .action((run: string, entry: string, verdict: string, opts: { note: string[]; json?: boolean }) =>
+      runVerdict(run, entry, verdict, opts),
     );
 
   print
