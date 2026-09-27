@@ -47,8 +47,9 @@ PR #229 (three rotational orbits about three different centres, the "12-6-4",
 with the walkthrough's slider angle pinned at 23.5°), and `bknVRSMcLj0` with
 bikar PR #268 (the first construction that **orbits an orbit** — one tile
 cell reflected across two sides of its square and the pair orbited four-fold
-into a wall, lowered to `rotate` blocks nested three deep; its whole-wall
-coaster reads nearly solid, see `CS-12`).
+into a wall, lowered to `rotate` blocks nested three deep; the whole wall read
+as a solid slab at coaster size, so its coaster inscribes one repeat cell, see
+`CS-12`).
 All nine now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
 `CS-10`, `CS-11`, `CS-12`) — P3.3 of the umbrella plan, which built on the

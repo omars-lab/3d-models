@@ -3,11 +3,12 @@
 # url: https://www.youtube.com/watch?v=bknVRSMcLj0
 # steps: 83 statements, 82 tagged steps
 # source: reconstructions/bknVRSMcLj0/construction.ggb-commands sha256:6cce6419bf9ebbca1030b2d8cd7022d2eecc5793933fe91dbf13e9f233755920
+# coaster only: omits R6 — drawn in the video, left off the coaster
 
-param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
 param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
-param unit = ($size - 2 * $margin) / 3.5359   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+param unit = ($size - 2 * $margin) / 1.5591   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
 blueprint bknVRSMcLj0_scaffold
   # ────────────────────────────────────────────────────────
@@ -321,45 +322,12 @@ pattern bknVRSMcLj0 on bknVRSMcLj0_scaffold
       edges from Q1_R2
       edges from Q2_R2
       edges from Q3_R2
-  # ────────────────────────────────────────────────────────
-  # t=17:41  R6 = Sequence(Rotate({R4, R5}, pi*i/2, E1), i, 0, 3)
-  rotate 4 around E1
-    rotate 6 around E1_R4
-      edges from Q1_R4
-      edges from Q2_R4
-      edges from Q3_R4
-    rotate 4 around E1_R42
-      edges from Q4_R4
-      edges from Q5_R4
-      edges from Q6_R4
-      edges from Q7_R4
-      edges from Q8_R4
-      edges from Q9_R4
-      rotate 6 around E1_R2_R4
-        edges from Q1_R2_R4
-        edges from Q2_R2_R4
-        edges from Q3_R2_R4
-    rotate 6 around E1_R4_R5
-      edges from Q1_R4_R5
-      edges from Q2_R4_R5
-      edges from Q3_R4_R5
-    rotate 4 around E1_R42_R5
-      edges from Q4_R4_R5
-      edges from Q5_R4_R5
-      edges from Q6_R4_R5
-      edges from Q7_R4_R5
-      edges from Q8_R4_R5
-      edges from Q9_R4_R5
-      rotate 6 around E1_R2_R4_R5
-        edges from Q1_R2_R4_R5
-        edges from Q2_R2_R4_R5
-        edges from Q3_R2_R4_R5
   palette pal
     Slab = #333333
     Gold = #d4af37
 
 coaster Coaster
-  outline square $size
+  outline round $size
   inscribe bknVRSMcLj0
   base $height
   relief straps emboss 1.2
