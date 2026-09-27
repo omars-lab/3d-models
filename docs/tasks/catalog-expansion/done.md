@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — Ran the three fidelity checks on every blank cell in the constructions ledger and recorded what each printed: 11 PASS, 5 FAIL, and two cells with a written reason (`n3IidKfXE1I` O2, the scorer crashes; `nmEjCTzMbDg` O3, nothing solid to compare); the FAILs and the crash stay in backlog item 2 (3d-models PR pending)
+
 - 2026-09-27 — Lobed wave outline: a coaster edge of scallops drawn with compass arcs (bikar #266)
 - 2026-09-27 — The import-construction skill sends a pasted construction-video link to the youtube repo's video loop instead of treating it as a GeoGebra construction (3d-models #354)
 - 2026-09-27 — On a relief coaster a strap cell stays part of the strap instead of being raised with the fill (bikar #263)
