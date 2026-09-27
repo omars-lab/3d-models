@@ -112,8 +112,8 @@ slice a .stl/.3mf/.step/.obj into a sliced .3mf
 |---|---|
 | `-o, --out <file>` | output filename (default: <model>.sliced.3mf) |
 | `-d, --outputdir <dir>` | output directory (default: alongside the input) |
-| `-s, --settings <names|paths>` | machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths |
-| `-f, --filament <names|paths>` | filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path |
+| `-s, --settings <names|paths>` | machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths; each inherits chain is flattened before slicing |
+| `-f, --filament <names|paths>` | filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path; its inherits chain is flattened before slicing |
 | `-p, --plate <n>` | plate index to slice, 0 = all |
 | `--filament-map-mode <mode>` | X2D dual-nozzle filament grouping: saving (Filament-Saving, default) \| quality \| manual — only affects a plate with ≥2 filaments |
 | `--arrange` | arrange objects before slicing |
@@ -141,8 +141,8 @@ compose many bikar-rendered pieces onto one X2D plate (a manifest → one sliced
 |---|---|
 | `-o, --out <file>` | output filename (default: <manifest>.plate.3mf) |
 | `-d, --outputdir <dir>` | output directory (default: build/plates at the repo root, else the current dir) |
-| `-s, --settings <names|paths>` | machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths) |
-| `-f, --filament <names|paths>` | filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path) |
+| `-s, --settings <names|paths>` | machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths; each inherits chain is flattened before slicing) |
+| `-f, --filament <names|paths>` | filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path; its inherits chain is flattened before slicing) |
 | `--bed <name>` | bed footprint for the fit pre-check (x2d = 256×256 mm) |
 | `--arrange` | auto-arrange the objects on the plate (libnest2d in the slicer) |
 | `--no-arrange` | do not auto-arrange (objects keep authored positions) |

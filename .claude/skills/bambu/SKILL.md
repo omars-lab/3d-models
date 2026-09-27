@@ -38,7 +38,10 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 ## Slicing an X2D plate
 
 The known-good X2D trio (from the bench sheet) is passed by **preset display name** — `slice` resolves
-each name to its bundled JSON automatically:
+each name to its bundled JSON, then flattens that file's `inherits` chain into one full JSON, because
+the Studio CLI does not follow `inherits` itself (BambuStudio #6836) and would fall back to its built-in
+values for every key the top file leaves to a parent. After slicing it checks the 3MF's
+`project_settings.config` against the flattened chain and fails the slice on any key that differs:
 
 ```
 tools/bambu/bin/bambu slice plate <abs-path-to.stl> \

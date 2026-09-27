@@ -45,7 +45,11 @@ research file; this file adds *our* data on top.
   mechanism that makes it non-trivial. Fix: force `brim_type = no_brim` plate-wide. Headless, an
   *inheriting stub* (`"inherits": "0.20mm Standard @BBL X2D"`) is rejected `process not compatible with
   printer` (the parent's `compatible_printers` is dropped); **materialize the full process JSON with only
-  `brim_type` flipped** and pass it as the process token. Re-sliced: brim 0, supports 0, raft 0. (A loose
+  `brim_type` flipped** and pass it as the process token. (The cause is wider than the stub: the Studio CLI
+  does not follow `inherits` at all, BambuStudio #6836, so *any* preset handed over unflattened slices on
+  Studio's built-in values for every key a parent sets. `bambu slice plate`/`compose` now flatten every
+  chain themselves and check the 3MF afterwards — `tools/bambu/src/preset-chain.ts`; a stub passed through
+  `bambu` has not been re-tried.) Re-sliced: brim 0, supports 0, raft 0. (A loose
   skirt remains — neither brim nor raft, not attached to a coupon, so it does not touch the reads.)
   **Runnable form:** [`scripts/slice-machine-card.sh`](scripts/slice-machine-card.sh) does both (materialize
   no-brim + one-command 23-rung slice) — the fallback until a `bambu slice plate … --no-brim` flag lands

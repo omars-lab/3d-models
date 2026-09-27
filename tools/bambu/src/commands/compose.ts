@@ -3,8 +3,8 @@
 // A subverb of the `slice` command group (sibling to `slice plate`/`slice open`). It reads a manifest
 // of items, renders each variant through bikar (once, cached), runs a bed-fit pre-check, then hands ALL
 // the STLs to the Bambu Studio CLI in one `--arrange 1 --export-3mf` invocation — one composed plate.
-// It is NOT a new CLI or top-level command; it reuses `slice.ts`'s preset resolver, argv builder and
-// warnings sidecar, and the `records.ts` scaffolder. Full spec: docs/plate-composer-design.md.
+// It is NOT a new CLI or top-level command; it reuses `slice.ts`'s preset resolver and flattener,
+// the check that the slice carried the flattened presets, the argv builder and warnings sidecar, and the `records.ts` scaffolder. Full spec: docs/plate-composer-design.md.
 //
 // The one genuinely new idea (D-072): a manifest item is not an identity — it is the GEOMETRY HALF of
 // an iteration key, completed by the plate's one slice profile and resolved to `it-<sha12>` (src/
@@ -29,7 +29,8 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
-import { resolvePresetList, buildStudioArgs } from "./slice.js";
+import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs } from "./slice.js";
+import type { FlattenedPreset } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
@@ -447,10 +448,19 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const studioBin = locateStudio();
   let settingsResolved = settingsName;
   let filamentResolved = filamentName;
+  let presets: FlattenedPreset[] = [];
   if (studioBin) {
     try {
-      settingsResolved = resolvePresetList(settingsName, "settings", studioBin);
-      filamentResolved = resolvePresetList(filamentName, "filament", studioBin);
+      // Names → files → one flattened file per preset (the CLI does not follow `inherits`).
+      const prepared = prepareSlicePresets(
+        settingsName,
+        filamentName,
+        studioBin,
+        mkdtempSync(join(tmpdir(), "bambu-presets-")),
+      );
+      settingsResolved = prepared.settings ?? settingsName;
+      filamentResolved = prepared.filament ?? filamentName;
+      presets = prepared.presets;
     } catch (err) {
       console.error((err as Error).message);
       process.exitCode = 2;
@@ -513,6 +523,10 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     return;
   }
   const kb = Math.round(statSync(outPath).size / 1024);
+  if (!(await enforceSliceCarriesPresets(outPath, presets))) {
+    process.exitCode = 1;
+    return;
+  }
 
   // Warnings sidecar — same capture/classify/sidecar as `slice plate`, so `bambu print send` can gate
   // the composed plate without re-slicing.
@@ -605,11 +619,11 @@ export function registerCompose(slice: Command): void {
     .option("-d, --outputdir <dir>", "output directory (default: build/plates at the repo root, else the current dir)")
     .option(
       "-s, --settings <names|paths>",
-      "machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths)",
+      "machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths; each inherits chain is flattened before slicing)",
     )
     .option(
       "-f, --filament <names|paths>",
-      "filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path)",
+      "filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path; its inherits chain is flattened before slicing)",
     )
     .option("--bed <name>", "bed footprint for the fit pre-check (x2d = 256×256 mm)", "x2d")
     .option("--arrange", "auto-arrange the objects on the plate (libnest2d in the slicer)", true)
