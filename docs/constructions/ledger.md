@@ -100,7 +100,7 @@ coverage 1.000 (min 0.99), local 0.400 mm at (35.541, -24.459) (max 1)`.
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
-| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | FAIL 62/2 | no verdict: the scorer crashes (see notes) | FAIL 0.133 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
+| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
@@ -110,8 +110,25 @@ coverage 1.000 (min 0.99), local 0.400 mm at (35.541, -24.459) (max 1)`.
 
 The cells filled on 2026-09-27 come from the lines each tool printed that day,
 kept in [the 2026-09-27 oracle runs](../research/ledger-oracle-runs-2026-09-27.md)
-with the commands and the tree each ran on. Two cells hold a reason instead of a
-verdict: `n3IidKfXE1I`'s O2, because youtube's O2 scorer stops with an error
-instead of printing FAIL when its edge check fails (the fix is youtube's to make);
-and `nmEjCTzMbDg`'s O3, because an open line-art construction has no polygons to
+with the commands and the tree each ran on. One cell holds a reason instead of a
+verdict: `nmEjCTzMbDg`'s O3, because an open line-art construction has no polygons to
 build a reference from and its `.bkr` has no piece to extrude.
+
+The FAILs were worked through the same day, in
+[the 2026-09-27 oracle FAILs note](../research/ledger-oracle-fails-2026-09-27.md):
+
+- **`n3IidKfXE1I`**: re-run, now PASS on all three. Its `.bkr` had been imported
+  from a draft of the construction that stopped before the final assembly. The
+  re-imported coaster leaves off the finished tile `l1` and draws the 12-fold
+  rosette only, because the whole field was near-solid at 90 mm. The O2 cell no
+  longer needs the scorer fix, but the youtube scorer bug is still open.
+- **`nmEjCTzMbDg`**: the FAILs stay. Two causes:
+  - one was a bikar bug, now fixed: the rim circles drew only half their outline;
+  - the other is in the youtube source: `R = Intersect(t, m, 2)` picks the other
+    root in bikar. The fix is proposed there.
+
+  **Do not print this coaster.** Until the youtube fix lands, it is built on the
+  wrong `R` and renders near-solid.
+- **`rDuxHF3xMOc`** O2: **by design**. The GeoGebra export keeps the tile's four
+  full-width bounding lines visible, because the video shows them. The coaster
+  draws the tile only. The FAIL stays. With those four lines hidden, recall is 1.0.

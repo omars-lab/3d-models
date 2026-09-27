@@ -2,6 +2,12 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — Oracle FAILs worked through, in [the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md):
+  - `n3IidKfXE1I` had been imported from a draft of its construction. Re-imported from the finished one, it now passes all three checks: O1 PASS 64/0, O2 PASS 1.0/1.0, O3 PASS 1.000. Its coaster draws the open 12-fold rosette, because the whole field was near-solid at 90 mm.
+  - `nmEjCTzMbDg`: the rim circles drew only half their outline. That bikar import bug is fixed. Its other cause, a wrong root for `R`, is in the youtube source and proposed there.
+  - `rDuxHF3xMOc` O2 is by design: the export shows four bounding lines the coaster cannot draw.
+
+  (bikar #269, 3d-models #PR)
 - 2026-09-27 — `bknVRSMcLj0`, the Imamzadeh Isma'il 12-fold kite tile, migrated: ninth construction, O1 PASS 79/0, O2 PASS 1.000/1.000, O3 PASS 1.000, coaster vendored as CS-12 (bikar #268). The whole-wall coaster read as a solid gold square at 90 mm, so the coaster now inscribes one repeat cell on a round slab, about 2.3 times larger, through a new importer option `--coaster-omit R6` (bikar #268). The ledger gate now fails when a youtube reconstruction on `main` has no row, or a row is not at the pin — it had only noted a missing row, and only at a pin that predated this one (3d-models #360)
 - 2026-09-27 — Ran the three fidelity checks on every blank cell in the constructions ledger and recorded what each printed: 11 PASS, 5 FAIL, and two cells with a written reason (`n3IidKfXE1I` O2, the scorer crashes; `nmEjCTzMbDg` O3, nothing solid to compare); the FAILs and the crash stay in the backlog's "Oracle FAILs" item (3d-models #359)
 

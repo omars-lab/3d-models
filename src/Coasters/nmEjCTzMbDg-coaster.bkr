@@ -10,6 +10,7 @@
 # renamed: ring -> ring_ (reserved word)
 
 param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * $margin) / 11.7376   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
@@ -127,7 +128,7 @@ blueprint nmEjCTzMbDg_scaffold
   segment a from H to T
   # ────────────────────────────────────────────────────────
   # t=07:45  ring = Sequence(Rotate({e_1, f_1, g_1, d_1, a}, 2*pi*i/18, H), i, 0, 17)
-  divide d_1 into 2
+  divide d_1 into 4
 
 pattern nmEjCTzMbDg on nmEjCTzMbDg_scaffold
   # t=07:45  ring = Sequence(Rotate({e_1, f_1, g_1, d_1, a}, 2*pi*i/18, H), i, 0, 17)
@@ -136,7 +137,9 @@ pattern nmEjCTzMbDg on nmEjCTzMbDg_scaffold
     connect arc M -> M_p on f_1_host major
     connect arc I -> I_p on g_1_host major
     connect arc d_1.cpt0 -> d_1.cpt1 on d_1
-    connect arc d_1.cpt1 -> d_1.cpt0 on d_1 major
+    connect arc d_1.cpt1 -> d_1.cpt2 on d_1
+    connect arc d_1.cpt2 -> d_1.cpt3 on d_1
+    connect arc d_1.cpt3 -> d_1.cpt0 on d_1
     connect H -> T
   palette pal
     Slab = #333333
@@ -145,7 +148,7 @@ pattern nmEjCTzMbDg on nmEjCTzMbDg_scaffold
 coaster Coaster
   outline round $size
   inscribe nmEjCTzMbDg
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab
