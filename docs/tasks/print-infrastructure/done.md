@@ -2,6 +2,10 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — Enter a piece's verdict on the 3d-model-hub page: keep/adjust/drop plus a note; the hub runs `bambu print verdict` in its own writable 3d-models worktree and opens one PR per run, adding later verdicts to it (3d-model-hub #8). Its first live run is Omar's first real verdict
+- 2026-09-27 — `bambu print verdict <run> <entry> <keep|adjust|drop>` sets one printed piece's verdict in its record and adds notes under it, editing only those lines and refusing an unknown piece, a verdict the prints gate would reject, or a note with a line break (3d-models #355)
+- 2026-09-27 — Multi-colour printing design: two independent researchers and a checker, consolidated into the one doc to act on (3d-models #352)
+- 2026-09-27 — The 3d-model-hub page: a server with one seam to the `bambu` CLI and a test that no secret leaks, a page with the printer panel and the print register, running in the background on the tailnet and reading its own 3d-models worktree kept at origin/master, plus two install-script fixes (3d-model-hub #2–#7)
 - 2026-09-26 — The minis-01 run is finished: filament-sync matched the plate's one filament
   (green PLA #00AE42) to AMS slot 3, an exact colour match, so the plate is ready to send. The
   "Not configured" it first stopped at was wrong: the printer config was in the repo's encrypted
