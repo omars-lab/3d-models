@@ -85,7 +85,7 @@ async function runDoctor(opts: { probeMcp?: boolean }): Promise<Check[]> {
     detail:
       missing.length === 0
         ? `source=${cfg.source} host=${cfg.host} serial=${cfg.serial} token=${mask(cfg.token)} model=${cfg.model ?? "(unset)"}`
-        : `missing ${missing.join(", ")} — set env or .mcp.json (see .mcp.json.example)`,
+        : `missing ${missing.join(", ")} — set env, .mcp.json (see .mcp.json.example), or the repo .env with its .env.keys`,
   });
 
   // 2. Model = x2d

@@ -2,6 +2,11 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-26 — The minis-01 run is finished: filament-sync matched the plate's one filament
+  (green PLA #00AE42) to AMS slot 3, an exact colour match, so the plate is ready to send. The
+  "Not configured" it first stopped at was wrong: the printer config was in the repo's encrypted
+  .env all along, and nothing read it. bambu now falls back to that .env, decrypted with the key
+  in .env.keys, after the environment and .mcp.json (3d-models #343)
 - 2026-09-26 — `slice coaster` writes a colour plate picture too (`<plate>.preview.png`): bikar's
   drawing of each distinct coaster, side by side, in the slot colours the slot map reports. It
   names any region a drawing does not paint in its slot colour. It shows the coasters, not the
