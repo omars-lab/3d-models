@@ -1,8 +1,8 @@
 # Cutting GitHub Actions down to what only GitHub can do
 
-*Plan, 2026-09-27. Reviewed the same day against the workflow files and partly carried out:
-qiyas now has the pre-push hook (#1's laptop half). What was checked, what changed, and what is
-left for the owner are in [the last section](#review-and-progress-2026-09-27).*
+*Plan, 2026-09-27. It was reviewed and carried out the same day. #1, #2, #3, #5 and #6 are
+merged (qiyas #34, bikar #267, hifth #119), and the spending limit stays at $0. What was checked,
+what changed, and what is left are in [the last section](#review-and-progress-2026-09-27).*
 
 ## What should the session that picks this up do?
 
@@ -365,19 +365,22 @@ above no longer breaks it.
 
 ## What can only the owner do?
 
-- **Raise the spending limit or keep it at $0.** Changing the $0 limit on the organisation, or
-  adding a payment method, is a billing setting only the owner can change. Even $5 buys about
-  830 extra Linux minutes. That is not needed if #1 and #2 land, but it is a buffer.
-- **Say yes to installing WebKit** on this laptop, so the iPhone tests can move into pre-push.
-- **Decide whether qiyas's slow and integration tests may leave the routine run** (#2), and
-  where the full suite runs instead.
-- **Decide whether hifth PRs should show GitHub ticks at all.** With #5, they will not.
-- **Switch the three qiyas workflows to hand-started** (#1). A session's attempt to make this
-  edit was refused by the session's safety check, which treats turning off a repo's checks and
-  secret scan on GitHub as the owner's call. Everything around it is in place, so it is the
-  three-line `on:` change shown above, nothing else.
-- **Choose how bikar deploys** (#3): once a day, by hand, or from the laptop (which needs the
-  Cloudflare token there).
+The owner decided all of these on 2026-09-27.
+
+- **The spending limit stays at $0.** The owner said "i don't want to increase ci/cd spend" and
+  "I want our monthy spend to be enough". The 3,000 included minutes a month have to cover
+  everything, so no buffer gets bought.
+- **Install WebKit: yes.** The iPhone tests now run in hifth's pre-push.
+- **qiyas's slow and integration tests leave the routine run (#2).** The hook runs the fast
+  half. The whole suite runs before a release as a hand-started `ci.yml`
+  (`gh workflow run ci.yml --ref <branch>`, about 70 min). It runs on GitHub's x86_64 runner, not
+  the laptop, because the edge-case fixtures are pinned to x86_64 and drift on ARM.
+- **hifth PRs show no GitHub ticks.** Every check is in the hooks.
+- **The three qiyas workflows are hand-started (#1).** The owner gave the permission that the
+  session's safety check had asked for.
+- **bikar deploys by hand (#3).** Two ways: `make web-deploy` from the laptop (no minutes), or
+  `gh workflow run deploy.yml`.
+- **hifth's Linux golden set is retired**, and Lighthouse is run by hand before a release (#6).
 
 ## How was this measured?
 
@@ -430,16 +433,29 @@ billing summary), qiyas's 62-minute test step (run 35225937198), bikar's run of 
 - **qiyas PR [NaqshCoffee/qiyas#34](https://github.com/NaqshCoffee/qiyas/pull/34):** `.githooks/pre-push` runs `make local.prepush`, the same
   list as `make local.ci` with pytest's fast half (`make local.test-fast`); `ci-parity.yaml` names its gate workflows in
   `pr_blocking_workflows` (the bikar #241 change, with its self-tests); the Test entry gains a
-  `prepush:` command that the checker insists carries a reason. The three workflows still run
-  on GitHub until the owner flips them, so for now the hook is extra, not a replacement.
+  `prepush:` command that the checker insists carries a reason.
+- **#1 and #2, qiyas (merged as the same qiyas #34, after the owner's go):** CI, Secret scan and
+  Decision coherence are `workflow_dispatch` only. qiyas `CLAUDE.md` says the pre-push hook is the
+  only check on a push, and that the whole suite runs before a release as a hand-started
+  `ci.yml`. On its push the hook ran 2,415 tests in 136 s and `ci-parity: all 18 verified`.
+- **#3, bikar ([NaqshCoffee/bikar#267](https://github.com/NaqshCoffee/bikar/pull/267)):** `deploy.yml` is
+  `workflow_dispatch` only. bikar `CLAUDE.md` says a merge to main is not live until someone runs
+  `make web-deploy` or `gh workflow run deploy.yml`. Its pre-push hook passed (`ci-parity: all 41
+  verified`).
+- **#5 and #6, hifth ([omars-lab/hifth#119](https://github.com/omars-lab/hifth/pull/119)):** `ci.yml` is deleted. The
+  hooks are one line each (`make pre-commit`, `make pre-push`), and pre-push runs every
+  Playwright project, iPhone on WebKit included. The Linux golden set is gone. `deploy.yml`
+  publishes Pages from a fresh clone. Lighthouse is `make lighthouse`, run by hand. Measured
+  cost: 16 s for a commit, 2 min 38 s for a push.
 
 ### What is left, and whose it is
 
 | item | status | who |
 | --- | --- | --- |
-| #1 flip qiyas's three workflows to hand-started | ready: a three-line `on:` edit per file | owner (refused as a session edit) |
-| #2 slow tests off the routine run | done on the laptop side: the hook runs the fast half | owner decides once #1 flips, because then the full suite only runs by hand |
-| #3 bikar deploy cadence | three ways written up | owner |
+| #1 qiyas's three workflows hand-started | done, qiyas #34 | — |
+| #2 slow tests off the routine run | done: fast half in the hook, whole suite as a hand-started `ci.yml` before a release | whoever cuts a qiyas release |
+| #3 bikar deploy by hand | done, bikar #267; the first laptop `make web-deploy` has not been run yet | the next session that has to ship the studio |
 | #4 no `gh pr update-branch` | a habit | every session |
-| #5 hifth checks into hooks | not started: needs WebKit (owner), a call on the Linux golden set, and the deploy rewrite; saves $0 | dedicated hifth session, after the owner's calls |
-| #6 hifth Lighthouse off every push | not started: it gates the Pages deploy (`needs:`), so it moves with #5's deploy rewrite | with #5 |
+| #5 hifth checks into hooks | done, hifth #119 | — |
+| #6 hifth Lighthouse off every push | done, hifth #119: `make lighthouse` by hand | whoever releases hifth |
+| spending limit | stays at $0: the included minutes must last the month | owner |
