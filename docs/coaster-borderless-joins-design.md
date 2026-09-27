@@ -91,8 +91,11 @@ are unverified).
   symmetric end to end. Every candidate outline (square, hexagon, octagon) is centrally
   symmetric, so a neighbour's opening is the mirror of ours across the seam. There is no
   tab/slot parity to track (compare study §3).
-- **Fit:** play in the pull direction is the clearance at *both* wings, `2c`. Today's
-  dovetail has one face, `c`. So a key at c = 0.05 plays about like a dovetail at 0.10.
+- **Fit:** play in the pull direction is the clearance at *both* wings, `2c`. The
+  dovetail, now a true offset of its tab (bikar #262), plays `c·√5 ≈ 2.24c` on its
+  26.57° flanks, so a key at the same `c` plays 0.89× a dovetail. The key's default is
+  therefore the dovetail's own 0.15 per face, no longer half of it
+  ([bikar #264](https://github.com/NaqshCoffee/bikar/pull/264)).
   **Tuning the fit only means reprinting keys:** a clearance ladder of keys is a
   five-minute plate, not a plate of coasters.
 - **How it looks:** a key as tall as the frame (1.4 mm) sits flush and shows as a low plug

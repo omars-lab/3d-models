@@ -169,7 +169,7 @@ flank including the head corner.
 FAIL: any point closer than that, as today's kernel gives at the tab's head corner
 (about 0.047 mm). The straight edges beside the joint are excluded: they butt by design.
 
-Change 3 shipped in [bikar #262](https://github.com/NaqshCoffee/bikar/pull/262): the slot is now the tab offset outward by c, corners mitred. At c = 0.10 the head-corner gap went from 0.0465 mm to 0.1000 mm, and a test fails the old kernel in all 27 cases (c 0.05, 0.10, 0.15 × three neck/depth pairs). Only the first c/√5 of each flank, at the slot mouth, opens to at most 1.118c. Side effect: pull-apart play is now about 2.24c, where it was about 1.07c. The key and tab clearance defaults were set against the old reasoning and are being revisited. Pieces printed before it, minis-03 and minis-04 included, have the old slot.
+Change 3 shipped in [bikar #262](https://github.com/NaqshCoffee/bikar/pull/262): the slot is now the tab offset outward by c, corners mitred. At c = 0.10 the head-corner gap went from 0.0465 mm to 0.1000 mm, and a test fails the old kernel in all 27 cases (c 0.05, 0.10, 0.15 × three neck/depth pairs). Only the first c/√5 of each flank, at the slot mouth, opens to at most 1.118c. Side effect: pull-apart play is now about 2.24c, where it was about 1.07c. The key and tab clearance defaults were set against the old reasoning; the key's moved from 0.075 to the dovetail's 0.15 per face and the tab's stays at 0.15 ([bikar #264](https://github.com/NaqshCoffee/bikar/pull/264)). Pieces printed before it, minis-03 and minis-04 included, have the old slot.
 
 **Default:** after change 1, a plate uses Bambu's X2D 0.20 mm Standard chain unchanged,
 including elephant-foot compensation 0.15 and 5 top layers, as

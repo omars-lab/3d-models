@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — The butterfly key's default clearance is the dovetail's 0.15 per face, no longer half of it: since the true-offset slot the dovetail plays about 2.24c, so a halved key played 0.45× it and a full-c key plays 0.89×; the tab stays at 0.15 (bikar #264)
 - 2026-09-26 — `bambu print send` no longer always feeds from the empty external spool: it matches the plate's used filaments to the loaded trays and sends their numbers in `ams_mapping`, with `use_ams` set to match, and refuses (listing the trays) when the match is not clean, so the operator picks with `--ams-mapping` (3d-models #337)
 - 2026-09-26 — Every tool that defaults to a bikar checkout now defaults to `~/Workspace/git/bikar-main` (the Makefile, the `bambu` tool, the prints and site-graph gates, `verify_machine_card.py`), not the bare repo whose leftover files were a 12 September build; and `slice compose` writes its `.3mf` to `build/plates/` at the repo root, not the working directory (3d-models #336)
 - 2026-09-26 — The Coaster Lab shows each coaster style's print history: a Printed panel with every piece printed from the open file, read from the `prints-manifest.json` the site deploys, with its plate, verdict, knobs and notes, and a line when the file has changed since the print (bikar #260)
