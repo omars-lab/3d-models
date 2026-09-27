@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — `bknVRSMcLj0`, the Imamzadeh Isma'il 12-fold kite tile, migrated: ninth construction, O1 PASS 79/0, O2 PASS 1.000/1.000, O3 PASS 1.000, coaster vendored as CS-12 (bikar #268). The ledger gate now fails when a youtube reconstruction on `main` has no row, or a row is not at the pin — it had only noted a missing row, and only at a pin that predated this one (3d-models #THISPR)
 - 2026-09-27 — Ran the three fidelity checks on every blank cell in the constructions ledger and recorded what each printed: 11 PASS, 5 FAIL, and two cells with a written reason (`n3IidKfXE1I` O2, the scorer crashes; `nmEjCTzMbDg` O3, nothing solid to compare); the FAILs and the crash stay in backlog item 2 (3d-models #359)
 
 - 2026-09-27 — Lobed wave outline: a coaster edge of scallops drawn with compass arcs (bikar #266)

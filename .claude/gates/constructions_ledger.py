@@ -33,19 +33,31 @@ What this gate BLOCKS on (exit 1), each a claim that is false on disk right now:
       cross-checks; it never passes them silently and never fails on an absent
       sibling.
 
-What this gate REPORTS (non-blocking, exit 0 — the 20-use-cases reminder shape):
+  L3  A youtube reconstruction with no ledger row, or a row the pin cannot see.
+      "Reconstruction" is read at two commits: the pin, and youtube's default
+      branch tip (`main`, else `master`, else `origin/HEAD` — a ref, never the
+      working tree, so the verdict does not move with whatever branch youtube
+      has checked out). An id at either with no row FAILS: a row is owed. A row
+      whose id is not a reconstruction at the pin FAILS too: the pin lags the
+      row and must be advanced, or the row's youtube column is dated to a
+      commit that never had it. Until 2026-09-27 the first half was only a
+      report, and only at the pin, so `bknVRSMcLj0` — reconstructed in youtube
+      after the pin was taken — sat unledgered with every gate green
+      (docs/issues/constructions-ledger-missed-new-reconstruction.md).
 
-  * every youtube reconstruction id at the pin that has no ledger row (a row is
-    owed), and
+What this gate REPORTS (non-blocking, exit 0):
+
   * every id the pin's done.md lists whose ledger row still says "attempted"
     (the row is behind its own source).
 
-Both need youtube at the pin; both are skipped-with-a-line when it is absent.
+It needs youtube at the pin, and is skipped-with-a-line when youtube is absent,
+as are L2's resolve and all of L3.
 
 `--session` prints one line — "N constructions not yet migrated: <ids>" — for a
-SessionStart hook, and nothing at all when N is 0. "Not yet migrated" excludes
-both a row with a real `.bkr` (done) and the by-design row (complete by design):
-neither is work waiting to be done.
+SessionStart hook, plus one "N youtube reconstructions have no ledger row: <ids>"
+line when rows are owed, and nothing at all when both are 0. "Not yet migrated"
+excludes both a row with a real `.bkr` (done) and the by-design row (complete by
+design): neither is work waiting to be done.
 
 Whole-tree, not staged-scoped: L1 reads a sibling repo and the reports read
 youtube, neither visible in a staged diff. Cheap — it parses one markdown table
@@ -219,6 +231,20 @@ def youtube_recon_ids(yt: Path, pin: str) -> set[str]:
     return ids
 
 
+#: Where youtube's current work lives, most specific first. youtube has no
+#: remote today, so its local `main` is the record; `origin/HEAD` is the
+#: fallback for a clone that does have one.
+TIP_REFS = ("refs/heads/main", "refs/heads/master", "refs/remotes/origin/HEAD")
+
+
+def youtube_tip(yt: Path) -> str | None:
+    """The first of TIP_REFS that names a commit, as a ref name; None if none do."""
+    for ref in TIP_REFS:
+        if _git(yt, "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}").returncode == 0:
+            return ref
+    return None
+
+
 def done_ids(yt: Path, pin: str, candidates: set[str]) -> set[str]:
     """Which of `candidates` the pin's docs/tasks/done.md mentions."""
     proc = _git(yt, "show", f"{pin}:docs/tasks/done.md")
@@ -249,6 +275,7 @@ def check(
     ledger_path = ledger_path or (root / LEDGER_REL)
     findings: list[str] = []
     reports: list[str] = []
+    owed: list[str] = []
 
     if not ledger_path.exists():
         return (
@@ -303,13 +330,26 @@ def check(
                 f"in {yt} — re-pin the header to a commit that exists."
             )
         else:
+            # L3 — every reconstruction has a row, and the pin sees every row.
             recon = youtube_recon_ids(yt, pin)
             have = {r.id for r in rows}
-            for cid in sorted(recon - have):
-                reports.append(
-                    f"{rel}: youtube id {cid} exists at the pin but has no ledger "
-                    f"row — a row is owed."
+            tip = youtube_tip(yt)
+            at_tip = youtube_recon_ids(yt, tip) if tip else set()
+            for cid in sorted((recon | at_tip) - have):
+                where = "the pin" if cid in recon else f"youtube {tip.rsplit('/', 1)[-1]}"
+                owed.append(cid)
+                findings.append(
+                    f"{rel}: L3 youtube reconstruction {cid} exists at {where} but has "
+                    f"no ledger row — a row is owed. Add one (youtube `attempted`, the "
+                    f"other cells `—` until the work lands) and advance the pin."
                 )
+            for r in rows:
+                if r.id not in recon:
+                    findings.append(
+                        f"{rel}:{r.lineno}: L3 {r.id} has a row but no reconstruction "
+                        f"at the pin {pin[:12]} — advance the pin to a youtube commit "
+                        f"that has it."
+                    )
             done = done_ids(yt, pin, have)
             for r in rows:
                 if r.id in done and r.youtube == "attempted":
@@ -324,6 +364,7 @@ def check(
         "migrated": sum(1 for r in rows if r.migrated),
         "by_design": sum(1 for r in rows if r.by_design),
         "unmigrated": unmigrated,
+        "owed": owed,
         "pin": pin,
         "date": date,
     }
@@ -355,39 +396,55 @@ Youtube pin: `{pin}` (2026-09-17)
 |---|---|---|---|---|---|---|---|---|---|
 | `AAAAAAAAAAA` | first | done | — | — | — | — | — | — | — |
 | `BBBBBBBBBBB` | mechanism | done | no piece by design | — | — | — | no piece by design | — | — |
+| `CCCCCCCCCCC` | added after the old pin | done | — | — | — | — | — | — | — |
 """
 
 
-def _init_youtube(yt: Path) -> str:
-    """A scratch youtube repo with two reconstructions and a done.md. Returns the pin."""
+def _init_youtube(yt: Path) -> tuple[str, str]:
+    """A scratch youtube repo shaped like the bknVRSMcLj0 miss. Returns (old_pin, pin).
+
+    `old_pin` has AAAAAAAAAAA and BBBBBBBBBBB; the next commit on `main` (`pin`)
+    adds CCCCCCCCCCC, the way bknVRSMcLj0 landed in youtube after the ledger's
+    pin was taken. A third commit on a feature branch — left CHECKED OUT, so it
+    is youtube's working tree — adds DDDDDDDDDDD, which is not on `main` and so
+    owes no row yet: the gate reads refs, not whatever youtube has checked out.
+    """
     yt.mkdir(parents=True, exist_ok=True)
     env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
            "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
-    # core.hooksPath is set repo-wide for this clone, so a bare `git init` scratch
-    # repo would otherwise fire this project's own pre-commit hooks on its seed
-    # commit. Point it at nothing: the scratch repo is not the project.
-    subprocess.run(["git", "-C", str(yt), "init", "-q"], check=True, env=env)
-    subprocess.run(["git", "-C", str(yt), "config", "core.hooksPath", "/dev/null"],
-                   check=True, env=env)
-    for cid in ("AAAAAAAAAAA", "BBBBBBBBBBB"):
+
+    def git(*args: str) -> str:
+        return subprocess.run(["git", "-C", str(yt), *args], capture_output=True,
+                              text=True, check=True, env=env).stdout.strip()
+
+    def recon(cid: str) -> None:
         d = yt / "reconstructions" / cid
         d.mkdir(parents=True)
         (d / "construction.ggb-commands").write_text("A = (0,0)\n", encoding="utf-8")
-    # A third reconstruction with no row in the ledger — the "row is owed" report.
-    d = yt / "reconstructions" / "CCCCCCCCCCC"
-    d.mkdir(parents=True)
-    (d / "construction.ggb-commands").write_text("A = (0,0)\n", encoding="utf-8")
+
+    def commit(msg: str, done: str) -> str:
+        (yt / "docs" / "tasks" / "done.md").write_text(f"done: {done}\n", encoding="utf-8")
+        git("add", "-A")
+        git("commit", "-q", "-m", msg)
+        return git("rev-parse", "HEAD")
+
+    git("init", "-q", "-b", "main")
+    # core.hooksPath is set repo-wide for this clone, so a bare `git init` scratch
+    # repo would otherwise fire this project's own pre-commit hooks on its seed
+    # commit. Point it at nothing: the scratch repo is not the project.
+    git("config", "core.hooksPath", "/dev/null")
+    recon("AAAAAAAAAAA")
+    recon("BBBBBBBBBBB")
     (yt / "reconstructions" / "_techniques").mkdir()
     (yt / "reconstructions" / "_techniques" / "note.md").write_text("snippet\n", encoding="utf-8")
-    tasks = yt / "docs" / "tasks"
-    tasks.mkdir(parents=True)
-    (tasks / "done.md").write_text("done: AAAAAAAAAAA BBBBBBBBBBB CCCCCCCCCCC\n", encoding="utf-8")
-    subprocess.run(["git", "-C", str(yt), "add", "-A"], check=True, env=env)
-    subprocess.run(["git", "-C", str(yt), "commit", "-q", "-m", "seed"], check=True, env=env)
-    return subprocess.run(
-        ["git", "-C", str(yt), "rev-parse", "HEAD"],
-        capture_output=True, text=True, check=True, env=env,
-    ).stdout.strip()
+    (yt / "docs" / "tasks").mkdir(parents=True)
+    old_pin = commit("seed", "AAAAAAAAAAA BBBBBBBBBBB")
+    recon("CCCCCCCCCCC")
+    pin = commit("add C", "AAAAAAAAAAA BBBBBBBBBBB CCCCCCCCCCC")
+    git("checkout", "-q", "-b", "feat/d")
+    recon("DDDDDDDDDDD")
+    commit("add D", "AAAAAAAAAAA BBBBBBBBBBB CCCCCCCCCCC DDDDDDDDDDD")
+    return old_pin, pin
 
 
 def self_test() -> int:
@@ -398,7 +455,7 @@ def self_test() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="constructions-gate-"))
     try:
         yt = tmp / "youtube"
-        pin = _init_youtube(yt)
+        old_pin, pin = _init_youtube(yt)
         primary = tmp / "3d-models"
         (primary / "docs" / "constructions").mkdir(parents=True)
         (primary / ".git").mkdir()  # enough for relative_to; youtube passed explicitly
@@ -409,7 +466,8 @@ def self_test() -> int:
             return check(root=primary, ledger_path=ledger, yt=kw.get("yt", yt))
 
         def case(label: str, body: str, want_findings: int, want_report: str | None,
-                 must_pass_report_absent: str | None = None, **kw) -> None:
+                 must_pass_report_absent: str | None = None,
+                 want_finding: str | None = None, **kw) -> None:
             nonlocal failures
             findings, reports, _stats = run(body, **kw)
             ok = len(findings) == want_findings
@@ -417,18 +475,33 @@ def self_test() -> int:
                 ok = ok and any(want_report in r for r in reports)
             if must_pass_report_absent is not None:
                 ok = ok and not any(must_pass_report_absent in r for r in reports)
+            if want_finding is not None:
+                ok = ok and any(want_finding in f for f in findings)
             print(f"self-test {'ok  ' if ok else 'FAIL'}: {label}"
                   + ("" if ok else f" — findings={findings} reports={reports}"))
             failures += 0 if ok else 1
 
         clean = _CLEAN_LEDGER.format(pin=pin)
-        # The clean ledger still owes a row for CCCCCCCCCCC (that is a report, not
-        # a finding), so it blocks nothing.
+        # Every reconstruction on youtube main has a row and the pin sees them all.
+        # DDDDDDDDDDD sits only on the checked-out feature branch: owed nothing yet.
         case("clean ledger blocks nothing", clean, 0, None)
         # The by-design row passed with no path — no finding attributable to it.
         case("by-design row needs no .bkr", clean, 0, None)
-        # An id in youtube at the pin with no row is REPORTED, exit 0.
-        case("missing row is reported, not failed", clean, 0, "CCCCCCCCCCC")
+
+        def drop_c(body: str) -> str:
+            return "\n".join(l for l in body.splitlines() if "CCCCCCCCCCC" not in l) + "\n"
+
+        # L3: an id at the pin with no row FAILS (was a non-blocking report).
+        case("missing row at the pin FAILS", drop_c(clean), 1, None,
+             want_finding="CCCCCCCCCCC exists at the pin")
+        # L3, the bknVRSMcLj0 miss itself: the pin predates the reconstruction and
+        # the row was never written. Reading only the pin saw nothing owed; reading
+        # youtube main too FAILS it.
+        case("pin lags youtube main, row missing FAILS", drop_c(_CLEAN_LEDGER.format(pin=old_pin)),
+             1, None, want_finding="CCCCCCCCCCC exists at youtube main")
+        # L3: the row is written but the pin was not advanced — the pin cannot see it.
+        case("row the pin cannot see FAILS", _CLEAN_LEDGER.format(pin=old_pin), 1, None,
+             want_finding="advance the pin")
 
         # L1: a naqsh path that does not resolve FAILS. (bikar unreachable in the
         # scratch layout would make it a skip; force a real bikar path shape that
@@ -522,6 +595,9 @@ def main(argv: list[str]) -> int:
         unmig = stats.get("unmigrated") or []
         if unmig:
             print(f"{len(unmig)} constructions not yet migrated: {', '.join(unmig)}")
+        owed = stats.get("owed") or []
+        if owed:
+            print(f"{len(owed)} youtube reconstructions have no ledger row: {', '.join(owed)}")
         return 0
 
     for r in reports:
@@ -536,7 +612,8 @@ def main(argv: list[str]) -> int:
     if findings:
         print(
             f"\nconstructions-gate: {len(findings)} finding(s). A row may not claim "
-            "a file that is not there. Override once with CONSTRUCTIONS_OK=1 git commit",
+            "a file that is not there, and every youtube reconstruction owes a row. "
+            "Override once with CONSTRUCTIONS_OK=1 git commit",
             file=sys.stderr,
         )
         return 1

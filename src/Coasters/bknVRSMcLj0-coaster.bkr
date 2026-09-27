@@ -1,0 +1,368 @@
+# naqsh construction — bknVRSMcLj0
+# title: Imamzadeh Isma'il Shrine, Isfahan
+# url: https://www.youtube.com/watch?v=bknVRSMcLj0
+# steps: 83 statements, 82 tagged steps
+# source: reconstructions/bknVRSMcLj0/construction.ggb-commands sha256:6cce6419bf9ebbca1030b2d8cd7022d2eecc5793933fe91dbf13e9f233755920
+
+param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
+param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param unit = ($size - 2 * $margin) / 3.5359   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+
+blueprint bknVRSMcLj0_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # t=00:27  A = (0, 0)
+  point A = unit.mpt
+  # ────────────────────────────────────────────────────────
+  # t=00:35  B = (1, 0)
+  point B = unit.cpt0
+  # ────────────────────────────────────────────────────────
+  # t=00:51  C = Rotate(A, -90°, B)
+  point C = rotate A by -90 around B
+  # t=00:51  D = Rotate(B, -90°, C)
+  point D = rotate B by -90 around C
+  # t=00:51  poly1 = Polygon(A, B, C, D)
+  polygon poly1 [ A B C D ]
+  # t=00:51  f1 = Segment(A, B)
+  segment f1 from A to B
+  # t=00:51  g1 = Segment(B, C)
+  segment g1 from B to C
+  # t=00:51  h1 = Segment(C, D)
+  segment h1 from C to D
+  # t=00:51  i1 = Segment(D, A)
+  segment i1 from D to A
+  # ────────────────────────────────────────────────────────
+  # t=01:30  j1 = PerpendicularBisector(A, B)
+  bisector j1 from A to B
+  # ────────────────────────────────────────────────────────
+  # t=01:34  k1 = PerpendicularBisector(B, C)
+  bisector k1 from B to C
+  # ────────────────────────────────────────────────────────
+  # t=01:39  E1 = Intersect(j1, k1)
+  point E1 = intersect j1 k1
+  # ────────────────────────────────────────────────────────
+  # t=01:46  F1 = Intersect(j1, h1)
+  point F1 = intersect j1 h1
+  # t=01:46  G1 = Intersect(k1, i1)
+  point G1 = intersect k1 i1
+  # t=01:46  H1 = Intersect(j1, f1)
+  point H1 = intersect j1 f1
+  # t=01:46  I1 = Intersect(k1, g1)
+  point I1 = intersect k1 g1
+  # ────────────────────────────────────────────────────────
+  # t=02:36  F2 = Rotate(F1, -30°, E1)
+  point F2 = rotate F1 by -30 around E1
+  # ────────────────────────────────────────────────────────
+  # t=02:46  l1 = Line(E1, F2)
+  line l1 from E1 to F2
+  # ────────────────────────────────────────────────────────
+  # t=03:15  J1 = Intersect(l1, h1)
+  point J1 = intersect l1 h1
+  # ────────────────────────────────────────────────────────
+  # t=03:23  c1 = Circle(J1, C)
+  circle c1 center(J1) through C
+  # ────────────────────────────────────────────────────────
+  # t=03:27  {K1, K2} = Intersect(c1, l1)
+  intersect K1K2_ c1 l1
+  # t=03:27  {K1, K2} = Intersect(c1, l1)
+  point K1 = K1K2_.cpt0
+  # t=03:27  {K1, K2} = Intersect(c1, l1)
+  point K2 = K1K2_.cpt1
+  # ────────────────────────────────────────────────────────
+  # t=03:35  m1 = PerpendicularLine(K1, l1)
+  line m1 through K1 perpendicular l1
+  # ────────────────────────────────────────────────────────
+  # t=03:42  L1 = Intersect(m1, h1)
+  point L1 = intersect m1 h1
+  # ────────────────────────────────────────────────────────
+  # t=03:58  n1 = PerpendicularLine(L1, h1)
+  line n1 through L1 perpendicular h1
+  # ────────────────────────────────────────────────────────
+  # t=04:12  l2 = Reflect(l1, j1)
+  line l2 = reflect l1 across j1
+  # ────────────────────────────────────────────────────────
+  # t=04:18  M1 = Intersect(l2, n1)
+  point M1 = intersect l2 n1
+  # ────────────────────────────────────────────────────────
+  # t=04:48  N1 = Intersect(m1, g1)
+  point N1 = intersect m1 g1
+  # ────────────────────────────────────────────────────────
+  # t=04:52  p1 = PerpendicularLine(N1, m1)
+  line p1 through N1 perpendicular m1
+  # ────────────────────────────────────────────────────────
+  # t=04:56  O1 = Intersect(p1, f1)
+  point O1 = intersect p1 f1
+  # ────────────────────────────────────────────────────────
+  # t=05:00  q1 = PerpendicularLine(L1, m1)
+  line q1 through L1 perpendicular m1
+  # ────────────────────────────────────────────────────────
+  # t=05:04  P1 = Intersect(q1, i1)
+  point P1 = intersect q1 i1
+  # ────────────────────────────────────────────────────────
+  # t=05:08  r1 = Line(O1, P1)
+  line r1 from O1 to P1
+  # ────────────────────────────────────────────────────────
+  # t=05:42  a1 = PerpendicularLine(O1, f1)
+  line a1 through O1 perpendicular f1
+  # ────────────────────────────────────────────────────────
+  # t=05:48  s1 = PerpendicularLine(N1, g1)
+  line s1 through N1 perpendicular g1
+  # ────────────────────────────────────────────────────────
+  # t=05:51  t1 = PerpendicularLine(P1, i1)
+  line t1 through P1 perpendicular i1
+  # ────────────────────────────────────────────────────────
+  # t=06:04  d1 = Circle(E1, M1)
+  circle d1 center(E1) through M1
+  # ────────────────────────────────────────────────────────
+  # t=06:09  Q0 = Rotate(M1, -30°, E1)
+  point Q0 = rotate M1 by -30 around E1
+  # ────────────────────────────────────────────────────────
+  # t=06:24  W3 = Rotate(Q0, -150°, M1)
+  point W3 = rotate Q0 by -150 around M1
+  # t=06:24  W4 = Rotate(M1, -150°, W3)
+  point W4 = rotate M1 by -150 around W3
+  # t=06:24  W5 = Rotate(W3, -150°, W4)
+  point W5 = rotate W3 by -150 around W4
+  # t=06:24  W6 = Rotate(W4, -150°, W5)
+  point W6 = rotate W4 by -150 around W5
+  # t=06:24  W7 = Rotate(W5, -150°, W6)
+  point W7 = rotate W5 by -150 around W6
+  # t=06:24  W8 = Rotate(W6, -150°, W7)
+  point W8 = rotate W6 by -150 around W7
+  # t=06:24  W9 = Rotate(W7, -150°, W8)
+  point W9 = rotate W7 by -150 around W8
+  # t=06:24  W10 = Rotate(W8, -150°, W9)
+  point W10 = rotate W8 by -150 around W9
+  # t=06:24  W11 = Rotate(W9, -150°, W10)
+  point W11 = rotate W9 by -150 around W10
+  # t=06:24  W12 = Rotate(W10, -150°, W11)
+  point W12 = rotate W10 by -150 around W11
+  # t=06:24  poly2 = Polygon(Q0, M1, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12)
+  polygon poly2 [ Q0 M1 W3 W4 W5 W6 W7 W8 W9 W10 W11 W12 ]
+  # ────────────────────────────────────────────────────────
+  # t=07:21  m2 = Segment(W10, W11)
+  segment m2 from W10 to W11
+  # ────────────────────────────────────────────────────────
+  # poly3 = Reflect(poly2, m2)
+  polygon poly3 = reflect poly2 across m2
+  # ────────────────────────────────────────────────────────
+  # t=07:24  m3 = Segment(Q0, M1)
+  segment m3 from Q0 to M1
+  # ────────────────────────────────────────────────────────
+  # t=07:30  poly4 = Reflect(poly2, m3)
+  polygon poly4 = reflect poly2 across m3
+  # ────────────────────────────────────────────────────────
+  # t=07:55  E2 = Reflect(W12, m2)
+  point E2 = reflect W12 across m2
+  # ────────────────────────────────────────────────────────
+  # t=08:14  c2 = Circle(E2, W11)
+  circle c2 center(E2) through W11
+  # ────────────────────────────────────────────────────────
+  # t=08:25  {S1, S2} = Intersect(c2, l1)
+  intersect S1S2_ c2 l1
+  # t=08:25  {S1, S2} = Intersect(c2, l1)
+  point S1 = S1S2_.cpt0
+  # t=08:25  {S1, S2} = Intersect(c2, l1)
+  point S2 = S1S2_.cpt1
+  # ────────────────────────────────────────────────────────
+  # t=08:55  U2 = Midpoint(N1, E2)
+  point U2 = midpoint N1 E2
+  # ────────────────────────────────────────────────────────
+  # t=09:20  U1 = Reflect(U2, s1)
+  point U1 = reflect U2 across s1
+  # t=09:20  U0 = Midpoint(U2, U1)
+  point U0 = midpoint U2 U1
+  # t=09:20  U3 = Rotate(U2, 90°, U0)
+  point U3 = rotate U2 by 90 around U0
+  # ────────────────────────────────────────────────────────
+  # t=09:44  V2 = Reflect(U2, m2)
+  point V2 = reflect U2 across m2
+  # t=09:44  V1 = Reflect(U1, m2)
+  point V1 = reflect U1 across m2
+  # t=09:44  V3 = Reflect(U3, m2)
+  point V3 = reflect U3 across m2
+  # ────────────────────────────────────────────────────────
+  # t=09:58  Q1 = Polygon(E1, V2, V3, V1)
+  polygon Q1 [ E1 V2 V3 V1 ]
+  # ────────────────────────────────────────────────────────
+  # t=10:09  Q2 = Polygon(V2, W12, W11, V3)
+  polygon Q2 [ V2 W12 W11 V3 ]
+  # ────────────────────────────────────────────────────────
+  # t=10:11  Q3 = Polygon(V1, W10, W11, V3)
+  polygon Q3 [ V1 W10 W11 V3 ]
+  # ────────────────────────────────────────────────────────
+  # t=10:14  Q4 = Polygon(W12, K1, E2, W11)
+  polygon Q4 [ W12 K1 E2 W11 ]
+  # ────────────────────────────────────────────────────────
+  # t=10:38  P2 = Reflect(W11, m1)
+  point P2 = reflect W11 across m1
+  # ────────────────────────────────────────────────────────
+  # t=10:44  Q5 = Polygon(K1, S2, P2, E2)
+  polygon Q5 [ K1 S2 P2 E2 ]
+  # ────────────────────────────────────────────────────────
+  # t=11:07  r2 = Line(J1, P2)
+  line r2 from J1 to P2
+  # ────────────────────────────────────────────────────────
+  # t=11:19  Y1 = Reflect(E2, r2)
+  point Y1 = reflect E2 across r2
+  # t=11:19  X1 = Reflect(S2, r2)
+  point X1 = reflect S2 across r2
+  # ────────────────────────────────────────────────────────
+  # t=11:26  Q6 = Polygon(X1, C, Y1, P2)
+  polygon Q6 [ X1 C Y1 P2 ]
+  # ────────────────────────────────────────────────────────
+  # t=11:32  Q7 = Polygon(J1, X1, P2, S2)
+  polygon Q7 [ J1 X1 P2 S2 ]
+  # ────────────────────────────────────────────────────────
+  # t=11:47  T1 = Intersect(a1, h1)
+  point T1 = intersect a1 h1
+  # ────────────────────────────────────────────────────────
+  # t=12:00  Z1 = Reflect(E2, l1)
+  point Z1 = reflect E2 across l1
+  # ────────────────────────────────────────────────────────
+  # t=12:07  Q8 = Polygon(K1, S2, T1, Z1)
+  polygon Q8 [ K1 S2 T1 Z1 ]
+  # ────────────────────────────────────────────────────────
+  # t=12:10  Q9 = Polygon(W12, K1, Z1, Q0)
+  polygon Q9 [ W12 K1 Z1 Q0 ]
+  # ────────────────────────────────────────────────────────
+  # t=13:55  R2 = Reflect(R1, m2)
+  point E1_R2 = reflect E1 across m2
+  # t=13:55  R2 = Reflect(R1, m2)
+  polygon Q1_R2 = reflect Q1 across m2
+  # t=13:55  R2 = Reflect(R1, m2)
+  polygon Q2_R2 = reflect Q2 across m2
+  # t=13:55  R2 = Reflect(R1, m2)
+  polygon Q3_R2 = reflect Q3 across m2
+  # ────────────────────────────────────────────────────────
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  point E1_R4 = reflect E1 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q1_R4 = reflect Q1 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q2_R4 = reflect Q2 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q3_R4 = reflect Q3 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  point E1_R42 = reflect E1 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q4_R4 = reflect Q4 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q5_R4 = reflect Q5 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q6_R4 = reflect Q6 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q7_R4 = reflect Q7 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q8_R4 = reflect Q8 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q9_R4 = reflect Q9 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  point E1_R2_R4 = reflect E1_R2 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q1_R2_R4 = reflect Q1_R2 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q2_R2_R4 = reflect Q2_R2 across g1
+  # t=15:52  R4 = Reflect({R1, R3}, g1)
+  polygon Q3_R2_R4 = reflect Q3_R2 across g1
+  # ────────────────────────────────────────────────────────
+  # t=16:20  R5 = Reflect(R4, h1)
+  point E1_R4_R5 = reflect E1_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q1_R4_R5 = reflect Q1_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q2_R4_R5 = reflect Q2_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q3_R4_R5 = reflect Q3_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  point E1_R42_R5 = reflect E1_R42 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q4_R4_R5 = reflect Q4_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q5_R4_R5 = reflect Q5_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q6_R4_R5 = reflect Q6_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q7_R4_R5 = reflect Q7_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q8_R4_R5 = reflect Q8_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q9_R4_R5 = reflect Q9_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  point E1_R2_R4_R5 = reflect E1_R2_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q1_R2_R4_R5 = reflect Q1_R2_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q2_R2_R4_R5 = reflect Q2_R2_R4 across h1
+  # t=16:20  R5 = Reflect(R4, h1)
+  polygon Q3_R2_R4_R5 = reflect Q3_R2_R4 across h1
+
+pattern bknVRSMcLj0 on bknVRSMcLj0_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=13:32  R1 = Sequence(Rotate({Q1, Q2, Q3}, pi*i/3, E1), i, 0, 5)
+  rotate 6 around E1
+    edges from Q1
+    edges from Q2
+    edges from Q3
+  # ────────────────────────────────────────────────────────
+  # t=14:45  R3 = Sequence(Rotate({Q4, Q5, Q6, Q7, Q8, Q9, R2}, pi*i/2, E1), i, 0, 3)
+  rotate 4 around E1
+    edges from Q4
+    edges from Q5
+    edges from Q6
+    edges from Q7
+    edges from Q8
+    edges from Q9
+    rotate 6 around E1_R2
+      edges from Q1_R2
+      edges from Q2_R2
+      edges from Q3_R2
+  # ────────────────────────────────────────────────────────
+  # t=17:41  R6 = Sequence(Rotate({R4, R5}, pi*i/2, E1), i, 0, 3)
+  rotate 4 around E1
+    rotate 6 around E1_R4
+      edges from Q1_R4
+      edges from Q2_R4
+      edges from Q3_R4
+    rotate 4 around E1_R42
+      edges from Q4_R4
+      edges from Q5_R4
+      edges from Q6_R4
+      edges from Q7_R4
+      edges from Q8_R4
+      edges from Q9_R4
+      rotate 6 around E1_R2_R4
+        edges from Q1_R2_R4
+        edges from Q2_R2_R4
+        edges from Q3_R2_R4
+    rotate 6 around E1_R4_R5
+      edges from Q1_R4_R5
+      edges from Q2_R4_R5
+      edges from Q3_R4_R5
+    rotate 4 around E1_R42_R5
+      edges from Q4_R4_R5
+      edges from Q5_R4_R5
+      edges from Q6_R4_R5
+      edges from Q7_R4_R5
+      edges from Q8_R4_R5
+      edges from Q9_R4_R5
+      rotate 6 around E1_R2_R4_R5
+        edges from Q1_R2_R4_R5
+        edges from Q2_R2_R4_R5
+        edges from Q3_R2_R4_R5
+  palette pal
+    Slab = #333333
+    Gold = #d4af37
+
+coaster Coaster
+  outline square $size
+  inscribe bknVRSMcLj0
+  base $height
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  color straps Gold

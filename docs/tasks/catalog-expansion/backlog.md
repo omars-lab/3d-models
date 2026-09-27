@@ -8,9 +8,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 
 ## Open, in ROI order
 
-1. **`bknVRSMcLj0` has no ledger row.** youtube reconstructed it (Imamzadeh Isma'il 12-fold
-   kite tile, 82/82 steps, mean score 0.877). Migrate it with the `import-construction` skill,
-   and find out why nothing flagged the missing row — a check that should have failed.
+1. **A one-cell coaster for `bknVRSMcLj0` (CS-12).** Its coaster inscribes the whole wall, so
+   the ~3 mm kites fill in under 2 mm straps and the 90 mm preview reads as a nearly solid
+   gold square. Look before printing it. The likely fix is an importer option that inscribes
+   only the unit cell (the rosette `R1` and its four-fold orbit `R3`) so the fit scales it up;
+   a thinner strap is the cheaper thing to try first. Either way, render it and show the
+   review sheet before it goes on a plate.
 2. **Oracle FAILs in the ledger, and one cell with no verdict** (runs of 2026-09-27,
    [what each tool printed](../../research/ledger-oracle-runs-2026-09-27.md)).
    - `n3IidKfXE1I` O2 has no verdict: youtube's `naqsh_score.py` treats `ggb_score.py`'s
