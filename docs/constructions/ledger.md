@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `8c219d2c44ec72abf586523266f5e9976f7ef416` (2026-09-17)
+Youtube pin: `6d359b11203984c87180f7b542eccda71014ce92` (2026-09-27)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -17,12 +17,16 @@ with a `construction.ggb-commands` exists at the pin) or **done** (that id is
 listed in the pin's docs/tasks/done.md) — is read at that commit and nowhere
 else, so the column does not shift when someone checks out a different youtube
 branch. The gate re-reads youtube at this pin; when youtube is not checked out
-it says so and skips the cross-check rather than passing or failing it.
+it says so and skips the cross-check rather than passing or failing it. It also
+reads youtube's `main` branch (a ref, not the working tree) and fails when a
+reconstruction there has no row here, or when a row's id is not at the pin — so
+a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
+did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **9 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **10 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**8 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**9 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -40,11 +44,16 @@ by the B′ `--emit-coords` cached_coords self-bootstrap, [D-080](../decisions-l
 rosette — a hexagonal cell reflected into its neighbour and the layer rotated
 six-fold, on the set's first hexagonal frame), and `n3IidKfXE1I` with bikar
 PR #229 (three rotational orbits about three different centres, the "12-6-4",
-with the walkthrough's slider angle pinned at 23.5°).
-All eight now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+with the walkthrough's slider angle pinned at 23.5°), and `bknVRSMcLj0` with
+bikar PR #268 (the first construction that **orbits an orbit** — one tile
+cell reflected across two sides of its square and the pair orbited four-fold
+into a wall, lowered to `rotate` blocks nested three deep; the whole wall read
+as a solid slab at coaster size, so its coaster inscribes one repeat cell, see
+`CS-12`).
+All nine now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
-`CS-10`, `CS-11`) — P3.3 of the umbrella plan, which built on the `coaster`
-declaration (P1.6/P2.7).
+`CS-10`, `CS-11`, `CS-12`) — P3.3 of the umbrella plan, which built on the
+`coaster` declaration (P1.6/P2.7).
 
 Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
 centreline recall / precision; O3: reference coverage — or `—` when that oracle
@@ -56,6 +65,13 @@ research file; `7apC5Q9QS-8`'s O1 and O2 were run 2026-09-17 on the youtube
 export (the earlier `export.png` was a stale 5123×5123 square that O2 scored
 recall 0.01; the youtube issue note naqsh-score-stale-hero on that branch has the evidence); every
 other cell was run 2026-09-27 — see [Oracle notes](#oracle-notes) under the table.
+The exception is `bknVRSMcLj0`, added later that day: its three were run at its
+migration, on youtube `main`
+against the migrated `.bkr` and printed, verbatim:
+O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2 `O2 PASS: edge-SSIM
+0.8288 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 16 (advisory)`; O3
+(`make reference` from its `export.ggb`, then `qiyas mesh compare`) `O3 PASS:
+coverage 1.000 (min 0.99), local 0.400 mm at (35.541, -24.459) (max 1)`.
 
 ## Columns
 
@@ -82,6 +98,7 @@ other cell was run 2026-09-27 — see [Oracle notes](#oracle-notes) under the ta
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
+| `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | FAIL 62/2 | no verdict: the scorer crashes (see notes) | FAIL 0.133 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |

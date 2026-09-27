@@ -1708,3 +1708,38 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   and `catalog` cells for `sDO9fpu76v8`; the bordered-coaster variant CS-5 (a
   tessellation is the natural candidate for the band, since it has no centre to
   protect).
+
+## CS-12 — Imamzadeh Isma'il 12-fold kite tile coaster (Sarah Brewer, bknVRSMcLj0)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/bknVRSMcLj0-coaster.bkr` — rendered
+  as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
+  (standard) by `make coasters` (→ `src/Coasters/bknVRSMcLj0-coaster-mini.stl`
+  and `-standard.stl`). Frame is **round** (`outline round $size`), the
+  least-area fit of 7 candidates at 1.5591 GeoGebra units. The art is one
+  repeat cell of the tile on the Imamzadeh Isma'il shrine in Isfahan: a
+  six-fold rosette of three kites (`rotate 6 around E1`) and a four-fold orbit
+  of six more kites and a reflected rosette (`rotate 4 around E1`) — four
+  rosettes around a fifth. The video goes on to reflect that cell across two
+  sides of its square and orbit the pair four-fold into a wall (`R6`, the
+  first construction in the set that orbits an orbit); the coaster leaves `R6`
+  off (`bikar import geogebra … --coaster Coaster --coaster-omit R6`), because
+  the whole wall in a 90 mm square left kites about 3 mm across under 2 mm
+  straps and read as a solid gold slab. The one cell draws about 2.3 times
+  larger. Migrated with bikar PR #268.
+  `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
+  `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`). Both pass
+  the mesh gate at the 0.8 mm coaster floor (watertight, euler 2, 0 degenerate,
+  minFeature 1.2 mm) and the linkage gate (1 body); the mini is 32,240
+  triangles / 6.1 cm³ and the standard 160,860 triangles / 28.7 cm³.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The Lab thumbnail shows open kites between the straps at
+    `size=90`. Do they still read at `size=40`, where the openings are
+    under half the size, or does the mini fill in?
+  - [ ] 2. Does the printed cell read as the Imamzadeh Isma'il tile, or does
+    it need the wall to be recognised (i.e. is a larger coaster, or a
+    two-cell crop, worth trying)?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster`
+  and `catalog` cells for `bknVRSMcLj0`.

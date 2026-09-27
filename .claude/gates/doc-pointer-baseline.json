@@ -138,6 +138,11 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/sDO9fpu76v8-coaster-mini.stl",
       "why": "Gitignored build output — same as the six coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The hexagon-framed Royal Alcazar tessellation coaster (CS-11); introduced with the sDO9fpu76v8 vendoring (bikar migration PR #228)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/bknVRSMcLj0-coaster-mini.stl",
+      "why": "Gitignored build output — same as the seven coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The square-framed Imamzadeh Isma'il 12-fold kite tile coaster (CS-12); introduced with the bknVRSMcLj0 migration (bikar PR #268)."
     }
   ]
 }
