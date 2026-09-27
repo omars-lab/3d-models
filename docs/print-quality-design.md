@@ -160,6 +160,8 @@ FAIL: any one key holds Studio's built-in value where the chain sets another, su
 top_surface_pattern zig-zag. A check on a handful of keys cannot pass this; one key left
 behind is the defect.
 
+Change 1 shipped in [#349](https://github.com/omars-lab/3d-models/pull/349): `bambu slice` now flattens each chain and runs this check after every plate and compose slice. The minis-04 re-slice passes, and the old minis-04 settings fail on 128 keys.
+
 **Validator (change 3):** for the tab and slot at n = 3, d = 3, c = 0.10, compute the
 shortest distance from every tab edge to the slot outline at the mated position.
 PASS: the flank and head distances are each at least c less 0.001 mm, along the whole
