@@ -63,6 +63,9 @@ same day, so what it taught is tied to the exact piece and size.
    Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
    from the file's formula, says so. One note for the whole plate goes in `feedback`, and it
    does not replace the per-piece verdicts.
+   Once the record is in `docs/prints/`, set each one with
+   `bambu print verdict <run> <entry> keep|adjust|drop -n "<note>"`. It changes only that
+   piece's lines and refuses an unknown piece or verdict. The hub page calls the same command.
    If no draft exists, run `bambu slice compose <plate>` again to make one. It writes to
    `build/plates/`, never over `.bambu/plates/`. Then check that its meshes match the printed
    `.3mf` before you trust the hashes, as minis-04 did.

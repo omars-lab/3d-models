@@ -227,6 +227,21 @@ list every print record — what came off the plate and (--how) how it was print
 | `--status <s>` | only records at this exact lifecycle status (e.g. measured) |
 | `--json` | emit the records as JSON instead of a table |
 
+### `bambu print verdict`
+
+set one printed piece's verdict (keep \| adjust \| drop) in docs/prints/<run>/index.md — local file edit only
+
+| Argument | Required | Description |
+|---|---|---|
+| `run` | yes |  |
+| `entry` | yes |  |
+| `verdict` | yes |  |
+
+| Flag | Description |
+|---|---|
+| `-n, --note <text>` | a note on what the piece showed (repeatable; a note already there is not added twice) |
+| `--json` | print the change as JSON |
+
 ### `bambu print pause`
 
 pause the running print

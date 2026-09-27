@@ -87,7 +87,15 @@ all). It parses nothing itself: it shells to the same `prints_gate.py` (its read
 projection, which slices the `how` from the record's nine-field profile), so the list and the gate
 can never disagree about a record, and a record that does not parse is shown as broken rather than
 hidden — even under a filter, since hiding a broken record is the one failure this verb exists to
-avoid. Today it is honestly empty — nothing has been printed yet.
+avoid.
+
+`print verdict <run> <entry> <keep|adjust|drop> [-n <note>]…` sets one printed piece's verdict in
+`docs/prints/<run>/index.md` and adds notes under it. It edits the lines in place, so the diff is the
+verdict line and the new notes, nothing else. It then reads the YAML back to check the edit landed.
+It refuses an unknown piece (and names the ones there are), a verdict the prints gate would reject,
+and a note with a line break. A note already there is not added twice, so a repeat changes nothing.
+It only edits the file; committing it is up to the caller. The 3d-model-hub page calls it for
+"enter a verdict".
 
 ## Logs
 
