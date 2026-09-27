@@ -44,8 +44,8 @@ When a print teaches something new, add or correct a rule here, with the date an
   at 0.10 came back "too tight" (Omar, 2026-09-26). Both are hand feel, and both plates were
   sliced on Studio's built-in defaults, not the X2D preset (elephant-foot compensation 0, not
   0.15; see [`print-quality-design.md`](../../../docs/print-quality-design.md)). minis-04 also
-  changed size and height along with clearance, and bikar's slot is not a true offset of the
-  tab. So **do not move CAL-FIT-01 on these two**, and do not read "0.10 is too tight" as a
+  changed size and height along with clearance, and bikar's slot was not yet a true offset of
+  the tab (fixed in bikar #262, after both printed). So **do not move CAL-FIT-01 on these two**, and do not read "0.10 is too tight" as a
   rule. The next clearance test is the design's T1 ladder: several pairs at 1.4 mm, one size,
   only clearance varying, sliced after the preset fix. (minis-03, minis-04.)
 - **The pegs border is too big even at 80 mm.** Omar, 2026-09-26, on minis-04: "the peg
