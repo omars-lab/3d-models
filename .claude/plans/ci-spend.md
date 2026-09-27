@@ -1,6 +1,8 @@
 # Cutting GitHub Actions down to what only GitHub can do
 
-*Plan, 2026-09-27. Nothing below has been changed yet; this is the proposal.*
+*Plan, 2026-09-27. Reviewed the same day against the workflow files and partly carried out:
+qiyas now has the pre-push hook (#1's laptop half). What was checked, what changed, and what is
+left for the owner are in [the last section](#review-and-progress-2026-09-27).*
 
 ## What should the session that picks this up do?
 
@@ -68,6 +70,10 @@ About 20 merged changes a month is enough to use the whole organisation's allowa
 alone. The test step runs the whole suite, including tests the suite itself marks `slow` and
 `integration`. Nothing filters them out.
 
+Three qiyas workflows run on every PR and every push to main: `ci.yml` (the first three rows),
+`secret-scan.yml` and `decision-coherence.yml` (only when decision docs change). Two more,
+`publish.yml` (on a version tag) and `measure-floors-linux.yml` (by hand), do not run per change.
+
 ### bikar: already mostly fixed, one piece left
 
 Before 21 September, a merged bikar change cost about **34 minutes**. That was 16 on the PR and
@@ -83,6 +89,12 @@ instead. What still runs on every push to main:
 | --- | --- | --- | --- |
 | Deploy to Cloudflare Pages | 47 | 2 | ≈ 350 *(estimate)* |
 | Sync patterns to Supabase | 17 | 1 | ≈ 65 *(estimate)* |
+
+These are what the two would cost once minutes are available again. Right now they cost nothing,
+because every bikar run since 18 September has failed before starting (300 of the 300 most recent
+runs, checked at review). The deploy also has a laptop path: `make web-deploy` runs the same
+bundle secret scan before publishing and the same three checks after (bikar's Makefile, read
+at bikar main `e061ca4`), but it needs the Cloudflare token on the laptop.
 
 ### hifth: free, but here is its shape
 
@@ -142,8 +154,8 @@ local-hooks rule.
 
 | # | change | saves (per month) | effort |
 | --- | --- | --- | --- |
-| 1 | qiyas: stop running CI on every PR and push; run it in the pre-push hook, the way bikar does | **≈ 1,400–3,000 min** *(estimate: August's 1,422 was a quiet month)* | small: qiyas already has `make local.ci` and a check that it matches CI |
-| 2 | qiyas: when CI does run, skip the tests marked `slow` and `integration` | most of the 62 min per run *(not measured)* | tiny: one flag |
+| 1 | qiyas: stop running its three per-change workflows (CI, Secret scan, Decision coherence) on every PR and push; run them in the pre-push hook, the way bikar does | **≈ 1,400–3,000 min** *(estimate: August's 1,422 was a quiet month)* | small, but not only a trigger edit: qiyas's check that `make local.ci` matches CI found the workflows by their `pull_request` trigger, so dropping the trigger would have made it fail on every entry (bikar #241 hit the same). **Done at review** in the qiyas hook PR; the trigger edit itself is left for the owner |
+| 2 | qiyas: when CI does run, skip the tests marked `slow` and `integration` | most of the 62 min per run *(not measured on GitHub)* | tiny: one pytest flag, `-m 'not slow and not integration' -n auto`, now `make local.test-fast` in the qiyas hook PR |
 | 3 | bikar: deploy once per batch, not on every push to main | ≈ 250–300 min *(estimate)* | small |
 | 4 | Never `gh pr update-branch`; bring main in locally before pushing | doubles as the fix for #1 in any repo still running PR checks | habit, no code |
 | 5 | hifth: move every check into the local hooks; GitHub keeps only deploy | $0 (free repo); faster feedback, no hidden red | medium: hook and `make` wiring |
@@ -156,8 +168,13 @@ local-hooks rule.
   has `make local.ci` / `local.ci-strict` plus a check that they cover every CI step. bikar
   has made the same switch already, so this is proven.
 - **Cons:** the qiyas tests take 62 minutes on GitHub's two-core machine. A push that waits an
-  hour is not workable, so this only works together with #2 (split fast and slow). The laptop
-  is probably much faster, but that is not measured yet.
+  hour is not workable, so this only works together with #2 (split fast and slow). Measured at
+  review on this laptop (18 cores): `make local.test-unit`, everything but the four
+  `integration` files, ran 2,415 tests green in **5 min 10 s**. Leaving out the three `slow` tests as well
+  (`-m 'not slow and not integration' -n auto`, now `make local.test-fast`) ran 2,412 green in
+  **3 min 04 s**, and 149 s inside the hook on the first real push. Most of what is left is a
+  handful of unmarked corpus tests at 76–120 s each, so #2's con (a slow test nobody marked
+  stays slow) is real, but a 3-minute push wait is workable.
 - **Implications:** the slow and integration tests stop running on every change. They run by
   hand (`make` target, or the workflow started by hand) before a release, or once a night on the
   laptop. A regression that only the slow tests catch is found at that point, not on the PR.
@@ -165,7 +182,10 @@ local-hooks rule.
 
 ### 2 · qiyas: skip the slow tests on routine runs
 
-- **Pros:** one flag (`-m "not slow and not integration"`); the markers already exist.
+- **Pros:** one flag; the markers already exist (four whole files are `integration`, three
+  single tests are `slow`). `make local.test-fast` (qiyas hook PR) applies
+  `-m 'not slow and not integration'` with `-n auto` (all cores); `make local.test-unit`, which
+  drops only `integration`, is left as it is because the coverage gate reads it.
 - **Cons:** it depends on the markers being accurate. A slow test nobody marked stays slow.
 - **Implications:** the full suite needs a named home (a `make` target and a manual workflow),
   or it quietly stops being run at all.
@@ -176,7 +196,10 @@ local-hooks rule.
   a day, keeps the site current and cuts most of that.
 - **Cons:** a merged change is not live until the next deploy.
 - **Implications:** when a change needs to be seen live, someone has to start the deploy. The
-  pattern sync (1 minute, and only when pattern files change) can stay as it is.
+  pattern sync (1 minute, and only when pattern files change) can stay as it is. A third way,
+  not in the first draft: deploy from the laptop with `make web-deploy`, which runs the same
+  scan and checks as the workflow. That costs no minutes at all, but it needs the Cloudflare
+  token and account id on the laptop, which is the owner's call.
 
 ### 4 · Stop `update-branch`
 
@@ -216,17 +239,24 @@ local-hooks rule.
 ### Already in place, or not worth doing
 
 - **Cancel older runs on the same branch:** hifth, bikar and qiyas already have this.
-- **Docs-only changes skip checks:** qiyas and bikar already skip markdown and `docs/`. hifth
-  would not need this once #5 lands.
-- **Caching installs:** already on (pnpm cache and uv cache), and install steps take 2–3 s.
+- **Docs-only changes skip checks:** qiyas's CI and bikar's deploy already skip markdown and
+  `docs/`. qiyas's secret scan deliberately does not (a key pasted into a README is still
+  leaked). hifth would not need this once #5 lands.
+- **Caching installs:** already on (pnpm in hifth, npm in bikar, uv in qiyas), and install
+  steps take 2–3 s.
   Nothing to gain.
 - **Moving off macOS runners:** every job in all three repos already runs on Linux.
 - **Shorter time limits:** they only change what a hung job costs, not a normal run. The
-  exception is qiyas's 120-minute limit, which can drop to 20 once #2 lands.
+  first draft said qiyas's 120-minute limit could drop to 20 once #2 lands; with CI hand-started
+  and running the whole suite, 120 stays.
 
 ## What would hifth's setup look like?
 
 ### Two `make` targets that the hooks and every other caller share
+
+A sketch. Two names in it do not exist yet and would be written with it: `gates:fast` (hifth's
+`gates` script minus `gate:assets` and `gate:pages`) and `etl-check` (hifth's Makefile has
+`etl`, which rebuilds the data, but no target that only compares it with what is committed).
 
 ```make
 # Before each commit: ~25 s. Fast checks, and the slow asset checks only when assets are staged.
@@ -301,24 +331,22 @@ today.
 ### qiyas, the one that saves money
 
 ```yaml
-# ci.yml: on every change, only the fast half, and only by hand or on main
+# ci.yml, secret-scan.yml, decision-coherence.yml: hand-started only, as bikar #241 did.
+# (The first draft kept `push: [main]` here, which contradicted #1's "stop running CI on
+# every PR and push" and the owner's rule that GitHub is not a backup for the hooks.)
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths-ignore: ['**.md', 'docs/**', '.claude/**', 'CHANGELOG.md']
-jobs:
-  lint-test:
-    timeout-minutes: 20
-    steps:
-      # ...unchanged setup...
-      - run: uv run pytest -m "not slow and not integration"
 ```
 
-Add a qiyas `.githooks/pre-push` that runs `make local.ci`, with the same fast-test filter, as
-bikar does. A separate hand-started workflow (or `make local.ci-full`) runs the whole suite before
-a release. **Measure the laptop time of the fast half before switching**, because it is not
-measured yet.
+The whole suite stays in `ci.yml` for a hand-started run before a release, and in
+`make local.ci` on the laptop. Its 120-minute limit can stay: it only ever runs by hand now.
+
+The laptop half is done (qiyas PR, linked in the last section): `.githooks/pre-push` runs
+`make local.prepush`, which is `make local.ci`'s list with one change, the Test step's
+`prepush:` command (`make local.test-fast`, measured at 3 min 04 s). The qiyas check that the
+local list matches CI now reads which workflows are gates from a list in `ci-parity.yaml`
+(`pr_blocking_workflows`) instead of from their `pull_request` trigger, so the trigger edit
+above no longer breaks it.
 
 ## What should change in how sessions work?
 
@@ -344,6 +372,12 @@ measured yet.
 - **Decide whether qiyas's slow and integration tests may leave the routine run** (#2), and
   where the full suite runs instead.
 - **Decide whether hifth PRs should show GitHub ticks at all.** With #5, they will not.
+- **Switch the three qiyas workflows to hand-started** (#1). A session's attempt to make this
+  edit was refused by the session's safety check, which treats turning off a repo's checks and
+  secret scan on GitHub as the owner's call. Everything around it is in place, so it is the
+  three-line `on:` change shown above, nothing else.
+- **Choose how bikar deploys** (#3): once a day, by hand, or from the laptop (which needs the
+  Cloudflare token there).
 
 ## How was this measured?
 
@@ -355,3 +389,57 @@ measured yet.
 - **Run counts:** the run lists for each repo. The bikar search stops at 1,000 results, so its
   August count is partial. Its minutes come from billing, not from the count.
 - **Laptop times:** each check run once on this laptop on 2026-09-27, all passing.
+- **Laptop times, qiyas (added at review):** `make local.test-unit` (2,415 passed, 5 min 10 s)
+  and the `not slow and not integration` run (2,412 passed, 3 min 04 s), each once on this
+  laptop (18 cores) on 2026-09-27, all passing; plus the hook's own run on its first push
+  (all 18 steps verified, pytest 149 s).
+
+## Review and progress, 2026-09-27
+
+A second session read every workflow the plan names, in qiyas, bikar and hifth (their `main`
+at review time), and checked the numbers it could reach again: September's 3,006 minutes (the
+billing summary), qiyas's 62-minute test step (run 35225937198), bikar's run of failures since
+18 September, the 32 hifth gates, and the $5 ≈ 830 minutes sum ($0.006 a minute). They held.
+3d-models has no workflows, so nothing here changes it.
+
+### What the review found, and what was fixed in this file
+
+1. **#1 said "stop running CI on every PR and push", but the qiyas sketch kept `push: [main]`.**
+   The two disagreed. Fixed: the sketch is hand-started only, as #1 and the owner's rule say.
+2. **#1 was not only a trigger edit.** qiyas's parity check found its gates by the
+   `pull_request` trigger, so removing the trigger would have failed it on every entry. bikar
+   #241 had to fix the same thing. Now fixed in qiyas (below), and the effort cell says so.
+3. **#1 named only CI.** qiyas has three per-change workflows (CI, Secret scan, Decision
+   coherence). Now named.
+4. **The fast half was unmeasured.** Now measured: 3 min 04 s without the `slow` and
+   `integration` tests (5 min 10 s without only `integration`).
+5. **bikar's deploy can run on the laptop.** `make web-deploy` runs the same scan and checks as
+   the workflow. The "what cannot run on the laptop" section is about hifth's GitHub Pages
+   deploy, not bikar's. Added as a third choice under #3.
+6. **bikar's deploys cost nothing right now**, because every run since 18 September fails before
+   starting. The ≈350 minutes a month is what they will cost once minutes return. Said so.
+7. **The hifth sketch uses two names that do not exist yet** (`gates:fast`, `etl-check`). Marked
+   as new.
+8. **Small wording:** bikar caches npm, not pnpm; qiyas's secret scan deliberately does not
+   skip docs; the 120-minute limit stays, because CI keeps the whole suite.
+9. **Branch protection does not stand in the way.** qiyas and hifth `main` have no protection,
+   and bikar's required checks list is empty, so hand-started workflows block no merge.
+
+### What was done
+
+- **qiyas PR [NaqshCoffee/qiyas#34](https://github.com/NaqshCoffee/qiyas/pull/34):** `.githooks/pre-push` runs `make local.prepush`, the same
+  list as `make local.ci` with pytest's fast half (`make local.test-fast`); `ci-parity.yaml` names its gate workflows in
+  `pr_blocking_workflows` (the bikar #241 change, with its self-tests); the Test entry gains a
+  `prepush:` command that the checker insists carries a reason. The three workflows still run
+  on GitHub until the owner flips them, so for now the hook is extra, not a replacement.
+
+### What is left, and whose it is
+
+| item | status | who |
+| --- | --- | --- |
+| #1 flip qiyas's three workflows to hand-started | ready: a three-line `on:` edit per file | owner (refused as a session edit) |
+| #2 slow tests off the routine run | done on the laptop side: the hook runs the fast half | owner decides once #1 flips, because then the full suite only runs by hand |
+| #3 bikar deploy cadence | three ways written up | owner |
+| #4 no `gh pr update-branch` | a habit | every session |
+| #5 hifth checks into hooks | not started: needs WebKit (owner), a call on the Linux golden set, and the deploy rewrite; saves $0 | dedicated hifth session, after the owner's calls |
+| #6 hifth Lighthouse off every push | not started: it gates the Pages deploy (`needs:`), so it moves with #5's deploy rewrite | with #5 |
