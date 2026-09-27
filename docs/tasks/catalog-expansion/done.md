@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27 — New construction candidates from creators other than Sarah Brewer, screened by two independent researchers and a checker: 29 ids, 10 GO in rebuild order, the four disagreements settled on the sources ([the consolidated screen](../../research/candidate-screen-2026-09-27.md)); the top three handed to the video loop (3d-models #363, #364)
 - 2026-09-27 — Oracle FAILs worked through, in [the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md):
   - `n3IidKfXE1I` had been imported from a draft of its construction. Re-imported from the finished one, it now passes all three checks: O1 PASS 64/0, O2 PASS 1.0/1.0, O3 PASS 1.000. Its coaster draws the open 12-fold rosette, because the whole field was near-solid at 90 mm.
   - `nmEjCTzMbDg`: the rim circles drew only half their outline. That bikar import bug is fixed. Its other cause, a wrong root for `R`, is in the youtube source and proposed there.
