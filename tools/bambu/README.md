@@ -48,8 +48,11 @@ npx tsx src/index.ts setup doctor        # or: ./bin/bambu setup doctor
 
 Reads the SAME env block the MCP reads, so the CLI and the MCP never disagree about the printer:
 `PRINTER_HOST`, `BAMBU_SERIAL`, `BAMBU_TOKEN`, `BAMBU_MODEL` — from process env, else the `bambu`
-server's `env` in `.mcp.json`. The real `.mcp.json` is gitignored (it carries the token); copy
-[`.mcp.json.example`](../../.mcp.json.example). `bambu setup mcp` prints the block to add.
+server's `env` in `.mcp.json`, else the repo's `.env`. The real `.mcp.json` is gitignored (it
+carries the token); copy [`.mcp.json.example`](../../.mcp.json.example). `bambu setup mcp` prints
+the block to add. The `.env` is checked in with dotenvx-encrypted values; bambu decrypts them with
+the `DOTENV_PRIVATE_KEY` from the gitignored `.env.keys` beside it (or from the environment). With
+no key, the printer keys stay unset rather than being passed on encrypted.
 
 ## Dispatch is owner-gated
 

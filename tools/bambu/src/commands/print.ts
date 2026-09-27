@@ -45,7 +45,7 @@ import {
 /** Dispatch needs host+serial+token: FTPS uses host+token, the project_file topic needs the serial. */
 function requireConfigured(cfg: PrinterConfig): void {
   if (!cfg.host || !cfg.serial || !cfg.token) {
-    console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (or .mcp.json).");
+    console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (env, .mcp.json, or the repo .env with its .env.keys).");
     console.error("Run `bambu setup doctor` to see what's missing.");
     process.exit(1);
   }

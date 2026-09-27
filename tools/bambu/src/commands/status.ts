@@ -13,7 +13,7 @@ import { McpBackend } from "../backends/mcp.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
-    console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (or .mcp.json).");
+    console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (env, .mcp.json, or the repo .env with its .env.keys).");
     console.error("Run `bambu setup doctor` to see what's missing.");
     process.exit(1);
   }

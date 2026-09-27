@@ -75,9 +75,10 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    **Storing the access code (it is a secret).** Two options: (a) paste it into the gitignored
    `.mcp.json` (`bambu setup mcp` prints the block), or (b) — preferred — keep it encrypted-at-rest
    with **dotenvx**: `dotenvx set BAMBU_TOKEN "$(pbpaste)"` writes an encrypted `.env` (commit-safe;
-   the private `.env.keys` is gitignored, never committed), then run the CLI under
-   `dotenvx run -- bin/bambu …` so `BAMBU_TOKEN` reaches `process.env` (config precedence is env →
-   `.mcp.json`). Add the non-secret `PRINTER_HOST` / `BAMBU_SERIAL` / `BAMBU_MODEL=x2d` the same way.
+   the private `.env.keys` is gitignored, never committed). The CLI reads that `.env` itself,
+   decrypting it with the key in `.env.keys`, so a bare `bin/bambu …` works; no `dotenvx run`
+   wrapper is needed (config precedence is env → `.mcp.json` → `.env`). Add the non-secret
+   `PRINTER_HOST` / `BAMBU_SERIAL` / `BAMBU_MODEL=x2d` the same way.
 4. **Install Bambu Connect** (the GUI fallback path): <https://wiki.bambulab.com/en/software/bambu-connect>.
 5. **Wire the MCP.** Copy [`.mcp.json.example`](../../../.mcp.json.example) to `.mcp.json` (gitignored
    — it carries the token) and fill in host/serial/token/model=`x2d`. `bambu setup mcp` prints the
