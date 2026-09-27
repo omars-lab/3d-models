@@ -12,7 +12,7 @@
 // e.g. `make orbs`) and slice the STL. We reject .bkr here rather than silently doing nothing.
 
 import { Command } from "commander";
-import { existsSync, statSync, readdirSync, writeFileSync, readFileSync, mkdtempSync } from "node:fs";
+import { existsSync, statSync, readdirSync, writeFileSync, readFileSync, mkdtempSync, renameSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { runWithTimeout, ev } from "../log.js";
@@ -28,7 +28,17 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
-import { writePlatePreview } from "../threemf.js";
+import { readMember, writePlatePreview } from "../threemf.js";
+import {
+  compareSliceToPresets,
+  flattenPresetList,
+  formatMismatch,
+  studioPresetLookup,
+  type FlattenedPreset,
+  type PresetConfig,
+  type PresetLookup,
+  type SliceComparison,
+} from "../preset-chain.js";
 import { registerCompose } from "./compose.js";
 import { registerCoaster } from "./coaster.js";
 
@@ -85,6 +95,85 @@ export function resolvePresetList(value: string, kind: "settings" | "filament", 
       );
     })
     .join(";");
+}
+
+// ── The preset chain ─────────────────────────────────────────────────────────────────────────────
+// The CLI reads each preset file as-is and does not follow `inherits` to its parents (BambuStudio
+// #6836), so a bundled leaf preset alone slices with Studio's built-in values for everything its
+// parents set (docs/research/print-quality-verification.md §1.2). Every slice therefore resolves
+// names to files, flattens each file's chain (preset-chain.ts), hands the CLI the flattened copies,
+// and afterwards checks the sliced 3MF carries every key the chain sets.
+
+export interface PreparedPresets {
+  settings?: string; // flattened machine + process paths, ';'-joined
+  filament?: string; // flattened filament paths, ';'-joined
+  presets: FlattenedPreset[]; // what the slice must carry, for `checkSliceCarriesPresets`
+}
+
+/** Resolve names → files (`resolvePresetList`), then flatten each file's chain into `scratchDir`.
+ *  Throws on an unknown name or a missing parent, naming it. */
+export function prepareSlicePresets(
+  settings: string | undefined,
+  filament: string | undefined,
+  studioBin: string,
+  scratchDir: string,
+): PreparedPresets {
+  const root = profilesRoot(studioBin);
+  const lookup: PresetLookup = root ? studioPresetLookup(root) : () => null;
+  const out: PreparedPresets = { presets: [] };
+  if (settings) {
+    const flat = flattenPresetList(resolvePresetList(settings, "settings", studioBin), lookup, scratchDir);
+    out.settings = flat.list;
+    out.presets.push(...flat.presets);
+  }
+  if (filament) {
+    const flat = flattenPresetList(resolvePresetList(filament, "filament", studioBin), lookup, scratchDir);
+    out.filament = flat.list;
+    out.presets.push(...flat.presets);
+  }
+  return out;
+}
+
+/** Read the sliced 3MF's project settings and compare every key the flattened chain sets. Returns
+ *  the mismatches (empty = pass), or null when the 3MF carries no project settings at all. */
+export async function checkSliceCarriesPresets(
+  threemf: string,
+  presets: FlattenedPreset[],
+): Promise<SliceComparison | null> {
+  const raw = await readMember(threemf, "Metadata/project_settings.config");
+  if (!raw) return null;
+  return compareSliceToPresets(JSON.parse(raw) as PresetConfig, presets);
+}
+
+/** Report the check; on any mismatch move the plate aside (so nothing sends it) and return false. */
+export async function enforceSliceCarriesPresets(threemf: string, presets: FlattenedPreset[]): Promise<boolean> {
+  if (presets.length === 0) return true;
+  const result = await checkSliceCarriesPresets(threemf, presets);
+  const mismatches = result?.mismatches ?? null;
+  if (result && result.mismatches.length === 0) {
+    console.log(`preset check: PASS — the slice carries every value its ${presets.length} flattened preset(s) set.`);
+    if (result.notInSlice.length > 0) {
+      console.log(
+        `  ${result.notInSlice.length} key(s) the presets set are not options in this Studio build (not in the ` +
+          `slice at all): ${result.notInSlice.join(", ")}`,
+      );
+    }
+    return true;
+  }
+  const rejected = threemf.replace(/\.3mf$/i, "") + ".presets-mismatch.3mf";
+  try {
+    renameSync(threemf, rejected);
+  } catch {
+    /* leave it; the non-zero exit still fails the slice */
+  }
+  if (!mismatches) {
+    console.error(`preset check: FAIL — ${basename(threemf)} carries no Metadata/project_settings.config.`);
+  } else {
+    console.error(`preset check: FAIL — ${mismatches.length} key(s) differ from the flattened preset chain:`);
+    for (const m of mismatches) console.error(`  ✗ ${formatMismatch(m)}`);
+  }
+  console.error(`The plate was moved aside to ${rejected}; do not send it.`);
+  return false;
 }
 
 interface SliceOpts {
@@ -253,11 +342,19 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
   const studioBin = locateStudio();
 
   if (order[0] === "studio-cli" && studioBin) {
-    // Resolve preset names → bundled JSON paths before building args, so --dry-run shows the real
-    // (resolved) command and a bad name fails here with a clear message, not inside the slicer.
+    // Resolve preset names → bundled JSON paths and flatten each chain before building args, so
+    // --dry-run shows the real command and a bad name or missing parent fails here, not in the slicer.
+    let presets: FlattenedPreset[] = [];
     try {
-      if (opts.settings) opts.settings = resolvePresetList(opts.settings, "settings", studioBin);
-      if (opts.filament) opts.filament = resolvePresetList(opts.filament, "filament", studioBin);
+      const prepared = prepareSlicePresets(
+        opts.settings,
+        opts.filament,
+        studioBin,
+        mkdtempSync(join(tmpdir(), "bambu-presets-")),
+      );
+      opts.settings = prepared.settings;
+      opts.filament = prepared.filament;
+      presets = prepared.presets;
     } catch (err) {
       console.error((err as Error).message);
       process.exitCode = 2;
@@ -320,6 +417,10 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       return;
     }
     const kb = Math.round(statSync(outPath).size / 1024);
+    if (!(await enforceSliceCarriesPresets(outPath, presets))) {
+      process.exitCode = 1;
+      return;
+    }
 
     // Capture BambuStudio's own slicing warnings, classify against the by-design manifest, and write
     // a sidecar beside the .3mf so `bambu print send` can gate dispatch without re-slicing.
@@ -435,11 +536,11 @@ export function registerSlice(program: Command): void {
     .option("-d, --outputdir <dir>", "output directory (default: alongside the input)")
     .option(
       "-s, --settings <names|paths>",
-      'machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths',
+      'machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths; each inherits chain is flattened before slicing',
     )
     .option(
       "-f, --filament <names|paths>",
-      "filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path",
+      "filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path; its inherits chain is flattened before slicing",
     )
     .option("-p, --plate <n>", "plate index to slice, 0 = all", "0")
     .option(

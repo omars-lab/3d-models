@@ -50,7 +50,7 @@ import {
   type AssemblyCoaster,
 } from "../threemf-assemble.js";
 import { stlToIndexedMesh, stlBounds, footprint, type Bounds, type IndexedMesh } from "../mesh.js";
-import { resolvePresetList } from "./slice.js";
+import { prepareSlicePresets } from "./slice.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { platesDir } from "../paths.js";
 import { previewPathFor } from "../threemf.js";
@@ -451,9 +451,9 @@ async function verifyGeometry(
   // the manifest's display names to their system-profile JSON paths, exactly as `slice compose` does.
   let loadSettings: string;
   try {
-    const settingsPaths = resolvePresetList(settingsName, "settings", studioBin);
-    const filamentPath = resolvePresetList(filamentName, "filament", studioBin);
-    loadSettings = `${settingsPaths};${filamentPath}`;
+    // Flattened, as every slice is: the CLI does not follow a preset's `inherits` (preset-chain.ts).
+    const prepared = prepareSlicePresets(settingsName, filamentName, studioBin, scratch);
+    loadSettings = `${prepared.settings};${prepared.filament}`;
   } catch (err) {
     console.error(`geometry verify: ${(err as Error).message}`);
     return false;

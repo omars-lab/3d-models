@@ -91,6 +91,19 @@ from the file's frame rule (`depth + clearance + 2.5`, twice), not measured on t
 The plate was sliced green in the `.3mf`. The filament actually loaded (pink) was mapped in
 Bambu Studio at send time, and the spool was not recorded.
 
+This plate, and the minis-04 plate sliced the same day, were sliced with Bambu Studio's built-in
+defaults in place of most of the named presets. The slicer command line reads each preset file as
+it is and does not follow `inherits` (BambuStudio #6836), so every value the X2D machine, process
+and PLA Basic presets take from a parent fell back. Checked against the flattened preset chain, the
+minis-03 `.3mf`'s `project_settings.config` differs on 128 keys (22 machine, 42 process, 64
+filament). They include elephant foot compensation 0 (not 0.15), 4 top layers (not 5), the arachne
+wall generator (not classic), zig-zag top surfaces (not monotonic line), the aux fan off (not 70%),
+a 20% minimum part fan (not 100%), a 45 °C plate (not 55 °C), and Studio's generic start G-code. So
+the `slicer_profile` above names what was asked for, not what was sliced. If Studio re-sliced at
+send time from the project's own settings, the print used these values too; that step was not
+recorded. The pieces judged here are the fallback slice, not the preset. `bambu slice` now flattens
+each chain and checks the result.
+
 The plate was composed from a bikar branch commit (`db68768a`) that the squash merge of bikar
 #251 replaced. `pins.bikar_ref` names that merge on bikar main instead. The four pattern files
 hash the same at both commits, so the pieces are the ones printed.
