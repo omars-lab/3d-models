@@ -1,5 +1,8 @@
 # Multicolour constructions — filled, coloured shapes on a coaster
 
+> **Superseded by [multicolor-design.md](multicolor-design.md)** (the checker's consolidated
+> design, 2026-09-27). This is researcher A's design, kept as the record it was built from.
+
 Today a construction coaster is only its lines: the pattern's straps stand up from a slab.
 This design fills some of the **shapes** the lines enclose (stars, petals, polygons) and gives
 them colours, so one coaster prints in several filaments on the X2D with the AMS.

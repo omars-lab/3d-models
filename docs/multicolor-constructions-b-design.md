@@ -1,5 +1,8 @@
 # Multicolour constructions — filled shapes, one colour per matching ring (design B)
 
+> **Superseded by [multicolor-design.md](multicolor-design.md)** (the checker's consolidated
+> design, 2026-09-27). This is researcher B's design, kept as the record it was built from.
+
 **Status:** proposal from researcher B of two independent researchers; a later agent merges both
 designs. Nothing here is built, no decision id is taken, and nothing is printed. Research and
 measurements: [`research/multicolor-constructions-b.md`](research/multicolor-constructions-b.md).
