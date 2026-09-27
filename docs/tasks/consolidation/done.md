@@ -2,6 +2,18 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-27: fourth pass, with 0 open PRs and 0 stashes in any repo. Every deleted branch
+  was first proved dead, either by a content diff against its PR's merge commit or as an
+  ancestor of it.
+  - **3d-models:** 8 local branches deleted (7 `worktree-agent-*` and
+    `docs/multicolor-constructions`) and 9 remote.
+  - **bikar:** 5 local branches deleted and 6 remote (#252–#265); `bikar-main` was
+    fast-forwarded to origin/main.
+  - **qiyas:** `merge-nudge-hook` deleted from the remote.
+  - **qiyas and 3d-model-hub:** main fast-forwarded in both.
+  - **hifth:** 9 merged local branches deleted. Its remote branches are left for Omar
+    (see the backlog).
+
 - 2026-09-27 — Omar set the rule that the 3,000 included GitHub minutes a month have to be
   enough, and the spending limit stays at $0. To make that hold:
   - qiyas's CI, Secret scan and Decision coherence are hand-started, and the pre-push hook runs
