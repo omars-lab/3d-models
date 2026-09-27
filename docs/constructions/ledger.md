@@ -46,16 +46,16 @@ carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
 `CS-10`, `CS-11`) — P3.3 of the umbrella plan, which built on the `coaster`
 declaration (P1.6/P2.7).
 
-Oracle cells read `PASS a/b` — O1: labels compared / failed; O2: centreline
-recall / precision; O3: reference coverage — or `—` when that oracle has not
-been run on the row's `.bkr`. A verdict is only ever the one the equivalence
+Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
+centreline recall / precision; O3: reference coverage — or `—` when that oracle
+has not been run on the row's `.bkr`. A verdict is only ever the one the equivalence
 doc's validator printed, never a re-typed summary: `GimTvN9hw4U`'s three are in
 [construction equivalence §2–§4](../construction-equivalence.md) and its
 research file; `7apC5Q9QS-8`'s O1 and O2 were run 2026-09-17 on the youtube
 `feat/ggb-coords` verdict scripts against a hero rebuilt with the loop's own
 export (the earlier `export.png` was a stale 5123×5123 square that O2 scored
-recall 0.01; the youtube issue note naqsh-score-stale-hero on that branch has the evidence), and its O3 has
-not been run: no `make reference` for it yet.
+recall 0.01; the youtube issue note naqsh-score-stale-hero on that branch has the evidence); every
+other cell was run 2026-09-27 — see [Oracle notes](#oracle-notes) under the table.
 
 ## Columns
 
@@ -79,12 +79,22 @@ not been run: no `make reference` for it yet.
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
-| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | — | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
+| `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
-| `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | — | — | — | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
-| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | — | — | — | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
-| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | — | — | — | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
-| `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | — | — | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
-| `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | — | — | — | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
-| `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | — | — | — | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
+| `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
+| `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | FAIL 62/2 | no verdict: the scorer crashes (see notes) | FAIL 0.133 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
+| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
+| `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
+| `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
+| `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | PASS 28/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
+
+## Oracle notes
+
+The cells filled on 2026-09-27 come from the lines each tool printed that day,
+kept in [the 2026-09-27 oracle runs](../research/ledger-oracle-runs-2026-09-27.md)
+with the commands and the tree each ran on. Two cells hold a reason instead of a
+verdict: `n3IidKfXE1I`'s O2, because youtube's O2 scorer stops with an error
+instead of printing FAIL when its edge check fails (the fix is youtube's to make);
+and `nmEjCTzMbDg`'s O3, because an open line-art construction has no polygons to
+build a reference from and its `.bkr` has no piece to extrude.
