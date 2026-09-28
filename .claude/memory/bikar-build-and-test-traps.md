@@ -5,10 +5,11 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: b317004f-c205-413f-8ef8-7b5f99a1b742
-  modified: 2026-09-23T05:10:01.112Z
+  modified: 2026-09-28T12:03:19.844Z
 ---
 
 - `packages/core/dist/` is gitignored; a stale build makes `npm run typecheck` in `cli`/`lab` fail with phantom missing-export or implicit-any errors. `npm run build` (core, knobs, qiyas-schema) first. A fresh worktree needs `npm ci` + `npm run build` before tsc/vitest resolve `@naqshcoffee/*`.
+- bikar's bare `make build` is the **Docker** image build (fails on the package token), not the TypeScript build. The TS build is `make local.build`; the full check is `make local.build local.ci`. Wrong target cost one wasted run on 2026-09-28.
 - A scratch worktree that symlinks the primary's `node_modules` resolves `@naqshcoffee/*` to the *primary's* packages. Build a real `node_modules` of per-entry symlinks with `@naqshcoffee/*` pointing into the worktree.
 - vitest include patterns are repo-root-relative: run from bikar root. Playwright specs run from `packages/e2e`.
 - Editing `constraints.ts` needs `bikar-knobs` rebuilt before the Lab sees it.
