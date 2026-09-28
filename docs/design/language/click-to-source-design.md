@@ -1126,7 +1126,7 @@ fetched text. Fetch failures are listed at the end so the gaps are visible rathe
 **In-repo**
 
 - `bikar/docs/dsl-metadata-contract.md` · `bikar/docs/architecture.md`
-- `docs/derivation-worksheet-design.md` · `docs/research/derivation-visualization-survey.md`
+- `docs/design/language/derivation-worksheet-design.md` · `docs/research/derivation-visualization-survey.md`
 
 **Fetches that failed, and what was used instead**
 

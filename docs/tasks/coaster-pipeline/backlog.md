@@ -153,7 +153,7 @@ plate names what it settles and what it releases.
 28 <!--count:cal-records--> provisional records are settled by an MC-series coupon —
 seven of those bets on the six rungs above, the two text bets on `MC-7`, which
 is catalogued but cannot be authored until bikar can emit text at all
-([`text-emit-design.md`](../../text-emit-design.md) §8 T2), and the body-clearance bet
+([`text-emit-design.md`](../../design/language/text-emit-design.md) §8 T2), and the body-clearance bet
 on `MC-8`, catalogued 2026-08-19 and authorable today — it is unwritten because
 printing is user-held, not because anything blocks it. Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
@@ -355,7 +355,7 @@ job; the six above them are what one job settles."
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
-| MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](../../text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
+| MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](../../design/language/text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
 | MC-8 | the smallest gap at which two surfaces printed *in place* come off the plate as two objects rather than one — six wall pairs on a shared foot at **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm** | `CAL-CLR-01`; [`decisions-log.md`](../../decisions-log.md) D-039 | `MIN_BODY_CLEARANCE_MM`, and with it every woven orb's amplitude floor (§3.4) | **model to author** — catalogued 2026-08-19; [`catalog.md`](../../../.claude/skills/prototype/catalog.md) MC-8 names the file, and the pointer baseline carries it as a forward reference until it is written. Unwritten because printing is user-held, not because anything blocks it | not stated |
 
 MC-8's sub-floor rungs are **expected to FAIL** `linkageGate` by design, the same

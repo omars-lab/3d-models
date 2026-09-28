@@ -10,7 +10,7 @@ CAL-ZZZ-99 and ships from the coupon reading.
 
 This satisfies D3, which asks only that a default name a bet id *or* a citation
 and never asked whether the bet exists. That is the gap D5 closes, and this
-file is the shape it shipped in: `docs/text-emit-design.md` carried three
+file is the shape it shipped in: `docs/design/language/text-emit-design.md` carried three
 gate-green defaults on two ids that were registered nowhere.
 
 `CAL-ZZZ-99` is chosen so it can never become real by accident — `ZZZ` is not a

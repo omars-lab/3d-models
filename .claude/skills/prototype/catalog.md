@@ -455,7 +455,7 @@ earned until it records its provenance).
 ## MC-7 — Rung labels (engrave vs emboss)
 
 - **Status**: model to author — needs the `text` statement, which does not exist
-  yet (`docs/text-emit-design.md` §8 milestone T2). Listed here now because
+  yet (`docs/design/language/text-emit-design.md` §8 milestone T2). Listed here now because
   `CAL-TXT-01` and `CAL-TXT-02` name this coupon as what settles them, and a bet
   whose coupon is not written down anywhere is the W-F1 defect over again.
 - **Model**: `bikar/patterns/Coupons/Text-Coupon.bkr` — one plate carrying the
@@ -473,7 +473,7 @@ earned until it records its provenance).
   same shape as `CAL-OVH-01`.
 - **What we want to learn**:
   - [ ] 1. Engraved or embossed — which is actually readable at arm's length on a
-    matte PLA surface. `docs/text-emit-design.md` §6 bets engraved and says
+    matte PLA surface. `docs/design/language/text-emit-design.md` §6 bets engraved and says
     plainly that it is a coin flip; §1.2 records that the sources disagree.
   - [ ] 2. The smallest cap height that still reads. 5.0 mm is the height the §5
     measurements were taken at and the smallest at which a bold face's thinnest
@@ -489,7 +489,7 @@ earned until it records its provenance).
     obviously harmless, and this plate is where that gets decided before the
     labels go onto the other 23 rungs.
 - **What we learned**: — pending.
-- **Feeds**: `docs/text-emit-design.md` §6's three defaults (value **and**
+- **Feeds**: `docs/design/language/text-emit-design.md` §6's three defaults (value **and**
   provenance record, once the constants exist), and `docs/design/printing/calibration-design.md`
   §8's "rung identity does not survive onto the part" — the weakness this whole
   line of work exists to close.

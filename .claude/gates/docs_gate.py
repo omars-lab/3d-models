@@ -61,7 +61,7 @@ the errata note is what carries the correction.
 D5 is **discharge-scoped**, which is narrower than "every CAL id in the corpus"
 and deliberately so. D3 accepts a `**Default:**` that names a bet id *instead*
 of a citation, and it never asked whether the bet exists — so on 2026-08-03
-`docs/text-emit-design.md` shipped three gate-green defaults resting on
+`docs/design/language/text-emit-design.md` shipped three gate-green defaults resting on
 `CAL-TXT-01` and `CAL-TXT-02`, neither of which was registered anywhere. The
 doc said so itself, in a blockquote, which is exactly the "defensible argument
 that management is occurring" this repo's CLAUDE.md warns about.

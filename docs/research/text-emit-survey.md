@@ -54,7 +54,7 @@ re-run. Everything in §3 is somebody's shop guidance and is labelled as such.
 > follow from its premise, and **§5.3**, whose per-join bound names three failing
 > glyphs where direct testing finds thirty. §1, §2, §3 and §5.1–§5.2 stand as
 > written; §6's route list is superseded by the five-route comparison in
-> [`../text-emit-design.md`](../text-emit-design.md) §2.
+> [`../design/language/text-emit-design.md`](../design/language/text-emit-design.md) §2.
 
 ## 1. The Hershey fonts: provenance
 

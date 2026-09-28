@@ -26,7 +26,7 @@ Each design doc carries a `status`: idea, draft, decided, built or superseded.
 ![[bases/design-docs.base]]
 
 Not yet built: [tower sleeve](design/printing/tower-sleeve-design.md) (an idea),
-[click-to-source](click-to-source-design.md) and [Orb Lab P2](orb-lab-p2-design.md) (drafts).
+[click-to-source](design/language/click-to-source-design.md) and [Orb Lab P2](orb-lab-p2-design.md) (drafts).
 The full list is the table above, or the files at the top of this folder.
 
 ## Research

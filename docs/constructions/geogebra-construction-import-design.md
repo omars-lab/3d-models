@@ -74,7 +74,7 @@ naqsh has `PointRef = IDENT "." PointId` and no bare named points; its
 single-object transforms; `bisector` is the perpendicular bisector; there is no
 angle bisector, parallel/perpendicular line, midpoint, centroid or
 `circle … through`. See
-[`../dsl-grammar-formalization.md`](../dsl-grammar-formalization.md) for the gate
+[`../design/language/dsl-grammar-formalization.md`](../design/language/dsl-grammar-formalization.md) for the gate
 numbering this doc reuses.
 
 ## 3. The rubric

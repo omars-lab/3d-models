@@ -10,14 +10,14 @@ decisions:
 # Text emit on printed parts — implementation design doc
 
 Status: **v1 — grounded in two research files and one reversal.**
-[`research/text-emit-survey.md`](research/text-emit-survey.md) measured the
+[`../../research/text-emit-survey.md`](../../research/text-emit-survey.md) measured the
 single-stroke centreline route and found it needs a polygon offset this repo does
-not have; [`research/outline-font-emit.md`](research/outline-font-emit.md) then
+not have; [`../../research/outline-font-emit.md`](../../research/outline-font-emit.md) then
 measured the outline-font route the survey had talked itself out of, over eight
 faces and 296 glyphs, and found it needs no offset at all. **The survey's §4 and
 §5.3 carry marked corrections**; everything else in it stands.
 
-Scope: closing the gap [`design/printing/calibration-design.md`](design/printing/calibration-design.md) §3.2
+Scope: closing the gap [`../printing/calibration-design.md`](../printing/calibration-design.md) §3.2
 records — *"bikar has no text emit. There is no `text`, no emboss, no engrave"* —
 which §8 of the same doc calls the machine card's biggest structural weakness,
 because a card whose 23 coupons cannot say which rung they are is a card you have
@@ -27,10 +27,10 @@ Deliverable: a rung label that survives being printed and read. `MC-4 R12`,
 emitted onto the coupon it names, legible at arm's length, with the gate that
 would have caught it if it were not.
 
-Builds on: [`design/printing/calibration-design.md`](design/printing/calibration-design.md) (§7's 23-row
+Builds on: [`../printing/calibration-design.md`](../printing/calibration-design.md) (§7's 23-row
 expectation table is what the labels are *for*, and D-014's mesh gate is where a
 text failure should surface). Rides:
-[`piece-composition-design.md`](piece-composition-design.md) — text is a feature
+[`../../piece-composition-design.md`](../../piece-composition-design.md) — text is a feature
 on a piece, not a piece.
 
 ---
@@ -45,7 +45,7 @@ The reasoning is short because the measurement is:
 - A TrueType/CFF glyph is **already closed contours with counters as holes**.
   The survey's whole problem — a centreline has no width, so it needs an offset,
   so it needs a union — does not arise.
-  ([`research/outline-font-emit.md`](research/outline-font-emit.md) §0, §2.)
+  ([`../../research/outline-font-emit.md`](../../research/outline-font-emit.md) §0, §2.)
 - The flattening runs in a **build script**, so what ships is 13,710 bytes of
   coordinates against a single-stroke face's 7,503 — under 2×, for a route that
   adds no geometry machinery to the engine (§3 of the research).
@@ -72,7 +72,7 @@ and none of them is a reason to change the decision:
 ### 1.2 What this decision does not settle
 
 **Emboss or engrave** stays open, on purpose. The sources disagree
-([`research/text-emit-survey.md`](research/text-emit-survey.md) §3.3 and §6 give
+([`../../research/text-emit-survey.md`](../../research/text-emit-survey.md) §3.3 and §6 give
 three arguments pointing two ways), and one coupon settles what no amount of
 reading will. It is registered as a bet in §6, per the standing preference for
 turning an ungrounded empirical number into a bet rather than into a confident
@@ -91,7 +91,7 @@ know what E is better *than*".
 | Runtime payload | 7.5 KB | 7.5 KB | 7.5 KB + library | 7.5 KB | 13.7 KB |
 | New runtime dependency | no | no | **yes** | no | **no** |
 | Emits a valid single mesh | yes | **no** — relies on slicer behaviour | yes | yes | yes |
-| Glyph coverage | 37/37 after the union works | 37/37 | 7/37 clean today ([survey](research/text-emit-survey.md) §5.3, corrected) | fixes 2 of 4 break classes | **37/37 measured** |
+| Glyph coverage | 37/37 after the union works | 37/37 | 7/37 clean today ([survey](../../research/text-emit-survey.md) §5.3, corrected) | fixes 2 of 4 break classes | **37/37 measured** |
 | Real kerned type | no | no | no | no | **yes** |
 
 Two of those cells deserve a sentence rather than a tick:
@@ -192,7 +192,7 @@ drafted that way once before the eighth face was measured.
 That glyph list is the corrected one. The research file's first measurement said
 `A B H Q R Y`; `Y` is a single 9-point straight-line contour and cannot cross,
 and the self-intersection in `B` was uncounted. See
-[`outline-font-emit.md` §2a](research/outline-font-emit.md) — the error was
+[`outline-font-emit.md` §2a](../../research/outline-font-emit.md) — the error was
 caught by writing the bake, because the bake had to name the failing glyphs one
 at a time and the survey only had to count them.
 
@@ -205,7 +205,7 @@ emitter applies the even-odd rule by ring depth, or the bake rejects the face an
 says which glyph. Silence — where the dot is quietly dropped or quietly cut — is
 the option that is not available.
 
-> **The shipping face no longer contains this glyph** ([D-023](decisions-log.md)):
+> **The shipping face no longer contains this glyph** ([D-023](../../decisions-log.md)):
 > the dot could not print, and `0` is now baked from the face's own slashed
 > `zero.a` alternate, which nests only one deep. That removes B2's only depth-2
 > witness from the shipping face, so the witness moved rather than vanishing —
@@ -275,10 +275,10 @@ open question. Failing loudly with the number is worth shipping before the fix
 is chosen.
 
 A second, independent legibility failure rides the same gate: **confusability**.
-Two checks (added in [D-023](decisions-log.md)) fire alongside gap and counter —
+Two checks (added in [D-023](../../decisions-log.md)) fire alongside gap and counter —
 `checkLabelCharset`, a single label mixing the slashed `0` and the capital `O`
 (`MC-2 PORT0`), and `checkLabelSetCharset`, two labels on one part that fold to
-the same string (`O3` and `03`). As of [D-025](decisions-log.md) both are wired
+the same string (`O3` and `03`). As of [D-025](../../decisions-log.md) both are wired
 into the mesh gate and **block**: FAIL under `--check`, at the same tier as gap
 and counter, not a warning and not a compile-time refuse. The confusable-pair
 set is deliberately just `0`/`O` — one measured pair, near-zero false alarms —
@@ -331,7 +331,7 @@ matters. One coupon replaces this paragraph with a measurement.
    for `WWW`. Automatic tracking is tempting and would make the validator
    unfalsifiable by construction, which is an argument for refusing rather than
    fixing. (The sibling *confusability* failure is settled:
-   [D-025](decisions-log.md) blocks it, on that same unfalsifiability argument.
+   [D-025](../../decisions-log.md) blocks it, on that same unfalsifiability argument.
    This question is only the continuous, geometry-changing gap case, still open.)
 3. **Whether any of this survives a print.** Nothing was printed and no slicer
    was run. §5's connectivity results describe the geometry a slicer is handed;
@@ -372,7 +372,7 @@ asked for 0.01, on Source Code Pro Bold's `3`; recursive de Casteljau
 subdivision against the convex-hull bound replaced it, so `chordTolerance` is a
 guarantee (0.00498 worst case, re-measured against a 0.00005 reference) rather
 than an estimate. And the DM Sans glyph list was wrong — see §4's B1 paragraph
-and [`outline-font-emit.md` §2a](research/outline-font-emit.md).
+and [`outline-font-emit.md` §2a](../../research/outline-font-emit.md).
 
 **T2 — extrude and validate.** `solidifyText` over the cap-section machinery, the
 `text` statement, and §5's validator wired into the mesh gate with `MC-4 R12` as
@@ -406,7 +406,7 @@ letters — does anything support text natively?* The answer took one measuremen
 pass and inverted the conclusion.
 
 The generalisable part is not "consider outline fonts". It is that
-[`research/text-emit-survey.md`](research/text-emit-survey.md) §4 had already
+[`../../research/text-emit-survey.md`](../../research/text-emit-survey.md) §4 had already
 written the reason to dismiss them, and its reason was a K10 failure in plain
 sight: a constraint that is true of **font matching in a static bundle** was
 carried to **outline extraction** without the sentence saying why it transfers.

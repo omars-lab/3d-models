@@ -67,7 +67,7 @@ can name the construction element without a human typing it.
 
 ### 1.1 Relation to the derivation worksheet
 
-[`derivation-worksheet-design.md`](derivation-worksheet-design.md) already
+[`design/language/derivation-worksheet-design.md`](design/language/derivation-worksheet-design.md) already
 designs a static SVG derivation sheet for the **2D** pattern pipeline. This
 document is its 3D sibling and deliberately does not duplicate it: that one
 explains how a flat pattern is derived, this one how an orb is assembled from a
@@ -392,7 +392,7 @@ will make them appear. The honest sequence ends at "the pattern, complete, on
 the sphere", and the jump from there to the shipped STL is exactly the jump the
 timelapse does not show.
 
-This is the argument [`derivation-worksheet-design.md`](derivation-worksheet-design.md)
+This is the argument [`design/language/derivation-worksheet-design.md`](design/language/derivation-worksheet-design.md)
 promised twice at a `§6.3` it never wrote — the reference dangles, its section 6
 has no subsections, and it is not a typo for the `§2.6.3` that file cites
 elsewhere, since that one is about tile blocks while both `§6.3` citations sit
@@ -575,7 +575,7 @@ no-JavaScript fallback.
   rasterisation pass, and takes pacing away from the reader.
 
 The scrubber is not a new idea in this repo and the transfer condition is
-already written: [`derivation-worksheet-design.md`](derivation-worksheet-design.md)
+already written: [`design/language/derivation-worksheet-design.md`](design/language/derivation-worksheet-design.md)
 scopes out interactivity for its v1 while recording that a navigation bar and a
 timeline are "the obvious next step, and are deferred, not rejected." This is
 that next step, in the sibling context — and it transfers because both artifacts

@@ -1634,7 +1634,7 @@ letters; does anything support text natively?* — not by any gate.
 **Bake outline-font glyph contours into a build-time constant and extrude them.**
 A TrueType/CFF glyph is already closed contours with counters as holes, so there
 is no offset and therefore no union. The design is
-[`text-emit-design.md`](text-emit-design.md); the measurement is
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md); the measurement is
 [`research/outline-font-emit.md`](research/outline-font-emit.md), over 8 faces
 and 296 glyphs.
 
@@ -1707,7 +1707,7 @@ machine card exists to fix.
 
 **Register it as a bet rather than adopt a default with a confident face.**
 CAL-TXT-01 carries emboss-vs-engrave and CAL-TXT-02 the minimum legible cap
-height; [`text-emit-design.md`](text-emit-design.md) §6 states engrave and
+height; [`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 states engrave and
 5.0 mm as *provisional* sides, with the reasoning that a recessed feature which
 prints badly still leaves a readable part while a raised one leaves debris on the
 surface that matters.
@@ -1747,7 +1747,7 @@ Measure a rule before gating on it — the same tenet C3 was built from.
 ### Context
 
 Source Code Pro Bold was chosen as the shipping face in
-[`text-emit-design.md`](text-emit-design.md) §6 on measurement — zero crossing
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 on measurement — zero crossing
 contours, a thin stem that clears the nozzle by ~1.9×. But its **default** `0` is
 a *dotted* zero: shell, counter, and a dot inside the counter. At the 5 mm cap
 CAL-TXT-02 bets on, the air between the dot and the counter wall measures
@@ -1869,7 +1869,7 @@ bikar's `packages/cli/src/index.ts` ran only `checkLabelGap` and
 `checkLabelCounter`. So a `text` statement carrying `MC-2 PORT0`, or a plate
 carrying both `O3` and `03`, compiled and wrote an STL. What the build should do
 about such a label was left open — the same shape as
-[`text-emit-design.md`](text-emit-design.md) §7 Q2's "what to do with a label
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §7 Q2's "what to do with a label
 that fails §5," which observes that *automatically fixing* a label makes the
 validator unfalsifiable by construction.
 
@@ -4382,7 +4382,7 @@ same gates. Highlighters and the cookbook are generated from, or tested against,
 fixtures. Lark, Ohm, Peggy and Chevrotain are rejected
 ([survey §10](research/geogebra-construction-import-survey.md)): a grammar file beside a
 hand-rolled parser is a second source of truth unless it replaces the parser, and replacing
-the parser is the rewrite [`dsl-grammar-formalization.md`](dsl-grammar-formalization.md)
+the parser is the rewrite [`design/language/dsl-grammar-formalization.md`](design/language/dsl-grammar-formalization.md)
 already rejected for naqsh.
 
 **What would reverse this:** the `.ggb-commands` grammar growing past line-regular (nested
