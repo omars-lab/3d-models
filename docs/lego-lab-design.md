@@ -1462,7 +1462,7 @@ deviations from this spec, and additions beyond it.)*
 
   **Validator:** V12 warns, and never refuses, when the measured span exceeds that ceiling. It is a
   warning because the ceiling is transcribed from someone else's slicer preset: the same appendix
-  that credits it ([`print-validation-design.md`](print-validation-design.md) B.4) records community
+  that credits it ([`design/printing/print-validation-design.md`](design/printing/print-validation-design.md) B.4) records community
   bridging at 20–80 mm on tuned machines, so a refusal would be this project asserting a limit it
   has never printed against. Coupon MC-3 settles it.
   - PASS: `Classic-Brick` at its defaults — 4.88 mm, every candidate anchored, no message.

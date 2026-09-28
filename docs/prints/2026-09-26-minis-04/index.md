@@ -79,7 +79,7 @@ readings: []
 photos: []
 feedback:
   symptom: "tiny holes in the print; the pegs pair's border is too big and the pegs fit too tight"
-  cause: "the slice ran on Studio's built-in defaults, not the X2D preset: our slicer passed only the top preset file and Studio's command line does not follow `inherits`, so elephant-foot compensation was 0 (preset 0.15), the top was 4 layers / 0.6 mm (preset 5 / 1.0), walls were Arachne and the top zig-zag. The holes fit those settings; the tight pegs fit compensation 0 plus the slot shape; the border is the dovetail frame rule by design. Causes ranked in docs/print-quality-design.md; none measured."
+  cause: "the slice ran on Studio's built-in defaults, not the X2D preset: our slicer passed only the top preset file and Studio's command line does not follow `inherits`, so elephant-foot compensation was 0 (preset 0.15), the top was 4 layers / 0.6 mm (preset 5 / 1.0), walls were Arachne and the top zig-zag. The holes fit those settings; the tight pegs fit compensation 0 plus the slot shape; the border is the dovetail frame rule by design. Causes ranked in docs/design/printing/print-quality-design.md; none measured."
   next: "flatten the preset chain and re-slice minis-04 to compare previews; fix the slot offset in bikar; then a clearance ladder at 1.4 mm (T1) before CAL-FIT-01 moves; the narrower joins are on minis-05 and minis-06"
 ---
 
@@ -94,7 +94,7 @@ different slice. Only the pegs pair also needs a change to the piece itself.
 only the top preset file, and the command line ignores `inherits` (BambuStudio #6836). About 54
 process and 50 filament settings fell back to Studio's built-in values. So this plate, like
 minis-03, says nothing reliable about clearance or strap width on the real X2D preset. The
-diagnosis and the fix order are in [`print-quality-design.md`](../../print-quality-design.md).
+diagnosis and the fix order are in [`print-quality-design.md`](../../design/printing/print-quality-design.md).
 
 One thing is unknown: whether Omar's send from Bambu Studio re-sliced the file. If it did, the
 desktop app would have followed `inherits`, and the settings above would not describe the print.

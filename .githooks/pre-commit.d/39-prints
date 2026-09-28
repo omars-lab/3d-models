@@ -4,7 +4,7 @@
 # printed re-resolves against bikar at the commit it pins (R1), its photos exist
 # and are unique across every record (R2), and the gate prints how many records
 # it checked so an empty run reads as "0 records checked", not a false green (R4).
-# The design is docs/prints-tab-design.md §7.
+# The design is docs/design/printing/prints-tab-design.md §7.
 #
 # wholesale: make validate-prints
 # Override once: PRINTS_GATE_OK=1 git commit

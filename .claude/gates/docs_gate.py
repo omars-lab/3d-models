@@ -1038,7 +1038,7 @@ def is_print_record(path: Path) -> bool:
     literals, D5 bets) do not apply there; D1 (every link resolves) still does.
     Mirrors how bikar's check-doc-pointers.ts excludes docs/issues/. Keyed on
     the posix path so a tempdir fixture under .../docs/prints/ is caught too.
-    Design: docs/prints-tab-design.md §4.2."""
+    Design: docs/design/printing/prints-tab-design.md §4.2."""
     return "/docs/prints/" in path.as_posix()
 
 

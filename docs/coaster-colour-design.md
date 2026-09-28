@@ -277,7 +277,7 @@ defect is a kernel fault, not a grammar one — and the pinch FAIL uses a *saddl
 ## 6. Plate composer — palette name → AMS slot (a dependency, not owned here)
 
 The per-body 3MF and the AMS-slot map are the **plate composer's** job (umbrella task P4.1),
-which has its own design target, [`plate-composer-design.md`](plate-composer-design.md) §"AMS
+which has its own design target, [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md) §"AMS
 colour slots". This doc hands the composer a clean contract: N named bodies, each tagged with
 its region's palette name. The composer maps *palette name → AMS slot* and writes the project
 3MF; the slicer binds a physical spool.
@@ -320,7 +320,7 @@ tray per slot. It prints, per logical slot, the physical tray to load — always
 RGB distance beside it, so a generous match tolerance can never hide a wrong pick. It **asks**
 (exit 1) only for the pivotal cases a human must settle: a colour with no loaded tray in range
 (`LOAD`), a near-tie between two trays (`ASK`), or a colour match whose material differs (`ASK`);
-a clear match and a low-remaining spool are stated, not asked (`docs/print-model-design.md` §5.5).
+a clear match and a low-remaining spool are stated, not asked (`docs/design/printing/print-model-design.md` §5.5).
 The whole match is the pure, unit-tested `reconcile()` in `tools/bambu/src/filament-sync.ts`
 (colour parse, distance, greedy one-tray-per-slot assignment, and each classification exercised in
 `filament-sync.test.ts`, including the near-tie, the material mismatch and the missing colour); the

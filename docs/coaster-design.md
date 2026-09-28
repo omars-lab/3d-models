@@ -152,7 +152,7 @@ Fixed: **flat, top face up, no supports**. The height field has a flat bottom by
 construction, so the whole footprint is the first layer and the relief prints as
 unsupported top detail (D-064). `--check` runs the mesh gate on every render, and
 the coaster's own structural validators run inside evaluation
-([`print-validation-design.md`](print-validation-design.md)).
+([`design/printing/print-validation-design.md`](design/printing/print-validation-design.md)).
 
 ## 7. Structural validators
 

@@ -96,7 +96,7 @@ Each its own branch → PR (PR-flow for all repos; stage by name; no `git add -A
      against the bench-sheet expectation and records a verdict, using §2's three-outcome vocabulary
      (`brackets` / `every-rung-passes` / `every-rung-fails`) plus the hand scales (`press/snug/sliding/free`,
      `clean/sagging/drooping/failed`).
-   - **Add `expected` + `verdict` fields** to the record schema (`docs/prints-tab-design.md` `readings[]` /
+   - **Add `expected` + `verdict` fields** to the record schema (`docs/design/printing/prints-tab-design.md` `readings[]` /
      `objects[]`) so the comparison is structured data, not prose, and **add a `prints_gate.py` check**: any
      reading carrying `settles: CAL-…` must carry an `expected` and a `verdict`. This turns the compare seam
      into an enforced invariant — the repo's "a gate over a skill" idiom — and finally motivates shipping the
@@ -271,8 +271,8 @@ is untestable on a straight rod (reads 100% every rung) — it rides `CAL-BED-01
 - `docs/tasks/coaster-pipeline/backlog.md` — the campaign master; update Plate statuses as prints land.
 - `.claude/skills/prototype/catalog.md` — where each coupon's result is logged (Phase D5).
 - `.claude/skills/prototype/SKILL.md` — extend to script the photograph + compare-verdict seams (Phase A8).
-- `docs/prints-tab-design.md` (`readings[]`/`objects[]` schema) + `.claude/gates/prints_gate.py` — add `expected`/`verdict` fields + the compare check; ship gate R3 (Phase A8).
-- `docs/calibration-design.md` §7 (23-row table) / §6 (render commands) / §4 (slicer settings) / §2 (bracket philosophy) — the card spec.
+- `docs/design/printing/prints-tab-design.md` (`readings[]`/`objects[]` schema) + `.claude/gates/prints_gate.py` — add `expected`/`verdict` fields + the compare check; ship gate R3 (Phase A8).
+- `docs/design/printing/calibration-design.md` §7 (23-row table) / §6 (render commands) / §4 (slicer settings) / §2 (bracket philosophy) — the card spec.
 - `.claude/skills/calibrate/protocol.md` — the profile header, technique rules, judgement scales, blank bench sheet (source for the pre-populated one).
 - `docs/prints/plate-1-bench-sheet.md` (new, Phase A7) — the pre-populated Plate 1 bench sheet Omar carries to the printer.
 - `.claude/skills/guide-print/SKILL.md` — the operator runbook dogfooded in Phase E; #54 folds in the findings (warnings triage, grouping mode, open verb, one-click / auto-send flow).

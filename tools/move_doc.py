@@ -83,7 +83,6 @@ SIBLINGS = (
 
 # Link and code-span shapes, the same ones the docs gate reads.
 FENCE = re.compile(r"^\s*(```|~~~)")
-INLINE_CODE = re.compile(r"`[^`\n]*`")
 LINK = re.compile(r"(\[[^\]]*\]\()([^)\s]+)((?:\s+\"[^\"]*\")?\))")
 WIKILINK = re.compile(r"(!?\[\[)([^\[\]|#^]*)([^\[\]]*\]\])")
 BACKTICKED = re.compile(r"`([A-Za-z0-9_.@/-]+)`")
@@ -250,8 +249,29 @@ def resolve_from(from_dir: str, bare: str) -> str:
     return posixpath.relpath(full, VROOT)
 
 
-def code_spans(line: str) -> list[tuple[int, int]]:
-    return [(m.start(), m.end()) for m in INLINE_CODE.finditer(line)]
+def code_spans(line: str, open_at_start: bool = False) -> tuple[list[tuple[int, int]], bool]:
+    """The code spans on one line, and whether one is still open at its end.
+    CommonMark lets a span wrap onto the next line of the same paragraph, so a
+    line can start inside one (`open_at_start`); pairing backticks line by line
+    would then pair them wrongly and hide a link after them. docs/ forbids the
+    wrap (docs gate D6), but skills and plans outside it still have ~150."""
+    spans, i = [], 0
+    if open_at_start:
+        j = line.find("`")
+        if j < 0:
+            return [(0, len(line))], True
+        spans.append((0, j + 1))
+        i = j + 1
+    while True:
+        j = line.find("`", i)
+        if j < 0:
+            return spans, False
+        k = line.find("`", j + 1)
+        if k < 0:
+            spans.append((j, len(line)))
+            return spans, True
+        spans.append((j, k + 1))
+        i = k + 1
 
 
 def inside(spans: list[tuple[int, int]], i: int) -> bool:
@@ -361,16 +381,20 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
 
     lines = text.split("\n")
     in_fence = False
+    span_open = False  # a code span wrapped onto this line from the one above
     for i, line in enumerate(lines):
         n = i + 1
         if is_md:
             if FENCE.match(line):
                 in_fence = not in_fence
-            if not in_fence and not FENCE.match(line):
-                spans = code_spans(line)
+            if in_fence or FENCE.match(line) or not line.strip():
+                span_open = False  # a paragraph ends, and an unclosed backtick with it
+            else:
+                opened = span_open
+                spans, span_open = code_spans(line, opened)
                 line = LINK.sub(lambda m: m.group(0) if inside(spans, m.start())
                                 else fix_link_match(n, m), line)
-                spans = code_spans(line)
+                spans, _ = code_spans(line, opened)
                 line = WIKILINK.sub(lambda m: m.group(0) if inside(spans, m.start())
                                     else m.group(1) + fix_wikilink(n, m.group(2)) + m.group(3), line)
                 if not research:
@@ -693,6 +717,14 @@ def unit_cases(failures: list[str]) -> None:
             ("docs/plan.md", "`a-design/pic.png`", "`design/c/a-design/pic.png`", "a doc-relative backticked path"),
             ("docs/plan.md", "![[a-design/pic.png]] [[a-design]]", "![[design/c/a-design/pic.png]] [[a-design]]",
              "a path wikilink moves, a bare one stays"),
+            (".claude/s/x.md", "run `validate\nrecord` then [a](../../docs/a-design.md) and `y`",
+             "run `validate\nrecord` then [a](../../docs/design/c/a-design.md) and `y`",
+             "a code span wrapped from the line above does not hide the link after it"),
+            (".claude/s/x.md", "an open ` tick\n\n[a](../../docs/a-design.md) `x`",
+             "an open ` tick\n\n[a](../../docs/design/c/a-design.md) `x`",
+             "a blank line closes a paragraph's unpaired backtick"),
+            (".claude/s/x.md", "run `validate\n[a](../../docs/a-design.md)` here",
+             "run `validate\n[a](../../docs/a-design.md)` here", "a link inside a wrapped span is a mention"),
         ]
         for rel, before, want, why in cases:
             got, _ = rewrite_text(rel, before, mp, rx)

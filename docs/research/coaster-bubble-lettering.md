@@ -240,7 +240,7 @@ the design doc; the print target stays out of share URLs by existing convention.
 - **How colour works today.** `color <region> <PaletteName>` tags a region (D-073), and
   `bikar render --format parts` splits the height field into one body per region
   ([coaster-colour-design.md](../coaster-colour-design.md) §4–§5). The plate composer maps
-  palette name to an AMS slot ([plate-composer-design.md](../plate-composer-design.md)).
+  palette name to an AMS slot ([plate-composer-design.md](../design/printing/plate-composer-design.md)).
 - **Letters would be a fourth region**, `text`. That changes a written-down set of three
   (`CoasterRegion`, and the Lab's `REGION_ORDER`, `coaster-colors.ts` line 16).
 - **Domes have a feather edge.** A dome falls to zero height at the letter edge, which is exactly
@@ -335,5 +335,5 @@ All fetched 2026-09-26.
   [outline-font-emit.md](outline-font-emit.md), [text-emit-survey.md](text-emit-survey.md),
   [coaster-colour-design.md](../coaster-colour-design.md),
   [coaster-minimal-design.md](../coaster-minimal-design.md),
-  [plate-composer-design.md](../plate-composer-design.md).
+  [plate-composer-design.md](../design/printing/plate-composer-design.md).
 - bikar at `origin/main` (read 2026-09-26): files and line numbers as cited in §2–§6.

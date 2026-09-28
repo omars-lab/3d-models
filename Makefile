@@ -160,7 +160,7 @@ validate-timelapse:
 # printed (R1, re-resolved against bikar at the recorded commit), proves its
 # photos exist and are unique across every record (R2), and prints how many
 # records it checked so an empty tree reads as "0 records checked", never a
-# false green (R4). Design: docs/prints-tab-design.md §7. `--self-test` builds a
+# false green (R4). Design: docs/design/printing/prints-tab-design.md §7. `--self-test` builds a
 # clean fixture, requires it clean, then mutates it once per rule and requires
 # each to fire. Ships before the first plate on purpose: R4's visible count is
 # what makes wiring the gate at zero records honest rather than broken-looking.
@@ -386,7 +386,7 @@ bricks: bikar-stamp
 	done; \
 	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py
 
-# Coupons — the machine card (docs/calibration-design.md), 23 rungs that
+# Coupons — the machine card (docs/design/printing/calibration-design.md), 23 rungs that
 # measure a printer rather than print a thing. Deliberately NOT shaped like
 # `orbs`/`bricks`, which loop over a directory and render each file whole:
 # this is one .bkr holding 26 pieces, and §6 is explicit that omitting

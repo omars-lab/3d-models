@@ -33,7 +33,7 @@ Rules this file follows:
 3. **The first physical print** — printer-gated, and tracked in the backlog, not the §2
    queue. Sequence and what each plate unblocks: [print register](tasks/coaster-pipeline/backlog.md) §2–§3; the
    explorer's own printer-held rows in [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md)
-   §6.5; record format: [`prints-tab-design.md`](prints-tab-design.md).
+   §6.5; record format: [`design/printing/prints-tab-design.md`](design/printing/prints-tab-design.md).
 4. **Keep the house honest** — gates green, memory an index, branches clean, this file
    current. Not a project, a standing obligation (§4 records what happens when it lapses).
 
@@ -145,7 +145,7 @@ no CORS when hosted).
 
 **Design docs here.** [`d3-integration-design.md`](d3-integration-design.md) ·
 [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) ·
-[`lego-lab-design.md`](lego-lab-design.md) · [`prints-tab-design.md`](prints-tab-design.md) ·
+[`lego-lab-design.md`](lego-lab-design.md) · [`design/printing/prints-tab-design.md`](design/printing/prints-tab-design.md) ·
 [print register](tasks/coaster-pipeline/backlog.md) · [`decisions-log.md`](decisions-log.md) ·
 [`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md).
 

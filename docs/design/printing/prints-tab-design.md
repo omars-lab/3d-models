@@ -10,13 +10,13 @@ Status: **DRAFT, PARTIALLY BUILT.** The record format, the four blocking decisio
 and this doc landed in S1. The gate (`.claude/gates/prints_gate.py`, R1/R2/R4)
 shipped in S3 **before** the first plate — R4 prints its subject count, so an empty
 run is a true `0 records checked`, not a false green, which is the whole content of
-the "measure before you gate" rule ([`docs/design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)
+the "measure before you gate" rule ([`docs/design/process/issue-register-evaluation.md`](../process/issue-register-evaluation.md)
 §5.1) once you read it correctly. What still waits on a physical print is the first
 real record (S2), gate R3 (S4), and — for real content to render — the tab in its
 populated form (S6/S7). (Corrected 2026-08-30 from "the gate waits on a print"; see
-[`decisions-log.md`](decisions-log.md) D-046's amendment.)
+[`../../decisions-log.md`](../../decisions-log.md) D-046's amendment.)
 
-Research: [`research/prints-tab-survey.md`](research/prints-tab-survey.md) — local
+Research: [`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) — local
 measurements; every zero-state number below is grounded there.
 Visual design review: published artifact "Zero Prints, One Register"
 (https://claude.ai/code/artifact/6849e2d5-1558-4a48-a09a-cdbfb5b4c462) carries the
@@ -31,7 +31,7 @@ A **print** is the one event this repository does not yet record: a physical pla
 came off a machine, taught something, and that lesson should attach to the exact
 geometry-and-process that produced it. The prints tab **records that event**,
 **presents** the queue and backlog that already own scheduling
-([print register](tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol that already
+([print register](../../tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol that already
 own calibration, and **deletes** the one empty register that pretends to track
 prints today.
 
@@ -44,7 +44,7 @@ thing:
 - **Absorbs (new, unowned):** the *print-run record* — a checked-in per-run
   directory pinning geometry, process, outcome, readings, and photos.
 - **Presents (owned elsewhere, transcluded not copied):** the queue and backlog
-  order, from [print register](tasks/coaster-pipeline/backlog.md) §3.8. The tab shows the order; it does
+  order, from [print register](../../tasks/coaster-pipeline/backlog.md) §3.8. The tab shows the order; it does
   **not** store a rank integer (§6).
 - **Consumes (owned elsewhere, read-only):** the calibration bets
   (`.claude/skills/calibrate/bets.md`), the print protocol
@@ -52,7 +52,7 @@ thing:
   ([`calibration-design.md`](calibration-design.md)).
 - **Deletes (a divergence, per D-041):** the empty **Iteration log** tables in the
   prototype catalog — 32 tables, 0 rows
-  ([`research/prints-tab-survey.md`](research/prints-tab-survey.md) §1). One
+  ([`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) §1). One
   register for the print-lesson, not two. Paid now while it costs zero rows.
 
 ## 3. A "version" is a (geometry, process) pair
@@ -63,7 +63,7 @@ it is the pair of identities that together determine what a plate can teach:
 - **Geometry identity:** the `.bkr` source path, the blob's `sha256`, the bikar
   commit the blob was read at, and the piece selected. Two prints of the same file
   at different commits are different versions; the pin makes that checkable
-  ([`research/prints-tab-survey.md`](research/prints-tab-survey.md) §4).
+  ([`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) §4).
 - **Process identity:** the nine-field profile header the print protocol already
   defines (`.claude/skills/calibrate/protocol.md`) — machine, material, spool,
   nozzle diameter, nozzle type, layer height, slicer profile, ambient temperature,
@@ -167,18 +167,18 @@ mirroring how bikar's `check-doc-pointers.ts` excludes `docs/issues/`.
 
 A record photo is capped at **2048 px on the long edge and 2 MB per file**,
 re-encoded before commit — a policy the user chose, recorded in
-[D-046](decisions-log.md) (not a measured engineering default, so no `**Default:**`
+[D-046](../../decisions-log.md) (not a measured engineering default, so no `**Default:**`
 marker: its provenance is the decision, not a source). Rationale: large enough to
 read a plate defect at 100%, small enough
 that a repository of prints does not bloat the pack. Photos are tracked on master
 beside their record (not under `build/`, which `make orbs` wipes — 
-[`research/prints-tab-survey.md`](research/prints-tab-survey.md) §3), and are the
+[`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) §3), and are the
 repo's first tracked non-generated binaries.
 
 ## 6. Priority is presented, never stored
 
 The tab shows print order, but stores no rank integer. Order is
-[print register](tasks/coaster-pipeline/backlog.md) §3.8's argument, transcluded. Beside each item the tab
+[print register](../../tasks/coaster-pipeline/backlog.md) §3.8's argument, transcluded. Beside each item the tab
 shows how many bets it would settle — **which is explicitly not the rank**: a plate
 can rank fourth while settling zero bets, and the tab must say so rather than let the
 bet count read as the order. Storing a rank would be a second scheduler, the exact
@@ -249,7 +249,7 @@ is *well-formed*; these check its `status` is backed by the *evidence that state
 implies* (§3.1's Validator), so the lifecycle cannot lie. They live in the same
 `prints_gate.py` as R1–R9, not a second gate file — the checks read the same parsed
 frontmatter, and one parser / one hook / one self-test is the repo's no-fork rule
-([`CLAUDE.md`](../CLAUDE.md), [D-052](decisions-log.md)) applied here.
+([`CLAUDE.md`](../../../CLAUDE.md), [D-052](../../decisions-log.md)) applied here.
 
 - **R10 — a sliced-or-later plate names its `.3mf`.** A record whose `status` is at or
   past `sliced` (`sliced printing paused printed failed measured propagated`) carries a
@@ -292,13 +292,13 @@ because there is no settled bet to propagate from until the first one flips. R5 
 share that problem: it is a per-record invariant that fires on the first reading to name a
 bet, so it ships in S3 as the compare seam R3 will later build on. (Corrected
 2026-08-30 from an earlier "ships with the first record, not before" — see
-[D-046](decisions-log.md)'s amendment.)
+[D-046](../../decisions-log.md)'s amendment.)
 
 ## 8. Where it lives
 
 Records live at `docs/prints/<run>/`. A rendered reader, `docs/prints.md`, is built
 into the site as a tab (S6). Because the audience includes gallery visitors, not just
-the operator ([D-046](decisions-log.md)), a lab page `prints.html` is vendored into
+the operator ([D-046](../../decisions-log.md)), a lab page `prints.html` is vendored into
 the site (S7); the site has no shared nav bar, so its `site-graph.json` pins shift
 when a nav entry is inserted — that is the S7 hazard, handled in that rung.
 
@@ -332,7 +332,7 @@ against.
 
 ## 10. The four decisions, resolved
 
-All four blockers were resolved 2026-08-28 ([D-046](decisions-log.md)):
+All four blockers were resolved 2026-08-28 ([D-046](../../decisions-log.md)):
 
 1. **Record dependency format** — YAML frontmatter, matching the `20-use-cases`
    precedent (resolved by author).
@@ -358,7 +358,7 @@ load-bearing rows:
 | See it | "What did the plate look like?" | `photos[]` (§5) |
 | Plan the run | "How long, and how much filament?" | the `estimates` block (pre-print) and, once it runs, the MQTT `actuals` — surfaced on the tab (D-046 amendment 2026-09-17, PMR-8) |
 
-**Amendment 2026-09-17 (PMR-8, [D-046](decisions-log.md)).** Print *time* and *filament
+**Amendment 2026-09-17 (PMR-8, [D-046](../../decisions-log.md)).** Print *time* and *filament
 grams* — estimate before the print, MQTT-measured actual after
 ([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3.1) —
 **do** now surface on the tab: Omar asked for them, and showing a number the record

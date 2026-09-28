@@ -26,8 +26,8 @@ hedged as such (§3.3, K2/K10). The schema owner is
 [`prints-tab-design.md`](prints-tab-design.md); the lifecycle owner is
 [`print-model-design.md`](print-model-design.md). This doc **references** both and
 proposes only *additive* fields, verbs, and gate rules — it forks neither
-([`CLAUDE.md`](../CLAUDE.md), "A migration never buys a fork",
-[D-052](decisions-log.md)).
+([`CLAUDE.md`](../../../CLAUDE.md), "A migration never buys a fork",
+[D-052](../../decisions-log.md)).
 
 ---
 
@@ -40,7 +40,7 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 
 | Capability | Present? | Where |
 |---|---|---|
-| Per-run record schema (geometry + process + outcome + photos) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; enforced by [`.claude/gates/prints_gate.py`](../.claude/gates/prints_gate.py) |
+| Per-run record schema (geometry + process + outcome + photos) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; enforced by [`.claude/gates/prints_gate.py`](../../../.claude/gates/prints_gate.py) |
 | "A version is a `(geometry, process)` pair" — the identity concept | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §3 |
 | Geometry identity pins (`objects[].source`, `source_sha256`, `pins.bikar_ref`, `piece`, `params`) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; gate rule R1 |
 | Process identity (nine-field `profile` block) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; gate `PROFILE_FIELDS` |
@@ -49,16 +49,16 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 | `photos[]` with sha256 + cross-record uniqueness | **yes** | gate rule R2 |
 | Sheet ↔ print mapping (many prints → one bench sheet) | **yes** | `sheet:` key, gate rule R7 |
 | Ten-state lifecycle (`draft`…`abandoned`) + freshness rules | **yes** | [`print-model-design.md`](print-model-design.md) §3.1; gate R6, R10–R14 |
-| Record dir naming `docs/prints/<YYYY-MM-DD>-<slug>/` | **yes** | gate `RUN_NAME`; draft staging under `.bambu/records/<date>-<slug>/` ([`records.ts`](../tools/bambu/src/records.ts)) |
-| Cataloging / list verb (`print list`, `--how`, filters, `--json`) | **yes** | [`print-list.ts`](../tools/bambu/src/commands/print-list.ts) |
-| Slice a model to a `.3mf` (`slice plate`, preset-name resolution) | **yes** | [`slice.ts`](../tools/bambu/src/commands/slice.ts) |
-| Record validation verb | **yes** | `validate record` ([`validate.ts`](../tools/bambu/src/commands/validate.ts)) |
-| Record scaffold on dispatch (`print send --record`) | **yes** | [`print.ts`](../tools/bambu/src/commands/print.ts) + [`records.ts`](../tools/bambu/src/records.ts) |
-| **Post-print `actuals` capture (GUI prints → a counted draft, `print capture`)** | **yes, shipped 2026-09-21** | [`actuals.ts`](../tools/bambu/src/actuals.ts) + [`print.ts`](../tools/bambu/src/commands/print.ts) `capture` verb; §3.3.1 "Shipped" |
-| Owner-gated dispatch (fail-closed, `--yes`/TTY confirm) | **yes** | [`print.ts`](../tools/bambu/src/commands/print.ts); [`print-model-design.md`](print-model-design.md) §9 |
+| Record dir naming `docs/prints/<YYYY-MM-DD>-<slug>/` | **yes** | gate `RUN_NAME`; draft staging under `.bambu/records/<date>-<slug>/` ([`records.ts`](../../../tools/bambu/src/records.ts)) |
+| Cataloging / list verb (`print list`, `--how`, filters, `--json`) | **yes** | [`print-list.ts`](../../../tools/bambu/src/commands/print-list.ts) |
+| Slice a model to a `.3mf` (`slice plate`, preset-name resolution) | **yes** | [`slice.ts`](../../../tools/bambu/src/commands/slice.ts) |
+| Record validation verb | **yes** | `validate record` ([`validate.ts`](../../../tools/bambu/src/commands/validate.ts)) |
+| Record scaffold on dispatch (`print send --record`) | **yes** | [`print.ts`](../../../tools/bambu/src/commands/print.ts) + [`records.ts`](../../../tools/bambu/src/records.ts) |
+| **Post-print `actuals` capture (GUI prints → a counted draft, `print capture`)** | **yes, shipped 2026-09-21** | [`actuals.ts`](../../../tools/bambu/src/actuals.ts) + [`print.ts`](../../../tools/bambu/src/commands/print.ts) `capture` verb; §3.3.1 "Shipped" |
+| Owner-gated dispatch (fail-closed, `--yes`/TTY confirm) | **yes** | [`print.ts`](../../../tools/bambu/src/commands/print.ts); [`print-model-design.md`](print-model-design.md) §9 |
 | **Stable iteration id (a piece at a param-set + slice profile, re-derivable)** | **no** | — the gap (§2) |
 | **`.3mf` ↔ its recipe (params + slice-profile inputs) stored per record** | **partial** | record names the `.3mf` (`plate_3mf`, R10) but not the params/profile inputs that produced it |
-| **Print estimates: time, filament length, grams** | **no — deliberately omitted from the tab UX today** | [`prints-tab-design.md`](prints-tab-design.md) §11 names *cost / print time / filament grams* out of scope for the tab; `slice` reports only the `.3mf` file size in KB ([`slice.ts`](../tools/bambu/src/commands/slice.ts)) |
+| **Print estimates: time, filament length, grams** | **no — deliberately omitted from the tab UX today** | [`prints-tab-design.md`](prints-tab-design.md) §11 names *cost / print time / filament grams* out of scope for the tab; `slice` reports only the `.3mf` file size in KB ([`slice.ts`](../../../tools/bambu/src/commands/slice.ts)) |
 | **Reprint verb (resolve a liked iteration → owner gate)** | **no** | the gap (§4) |
 | **Plate ↔ iteration links (each on-plate object → its iteration id)** | **no** | `objects[]` pins geometry but carries no iteration id (§5) |
 | **Metrics ("how many times printed piece / iteration X?")** | **no** | the gap (§6) |
@@ -67,7 +67,7 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 does not say "never capture grams"; it says the *prints tab UX* deliberately does not
 *display* cost / print time / filament grams, because "the tab records what a plate
 taught, not what it cost." That is a decision about the **tab's display surface**
-(owned by [D-046](decisions-log.md)), not a ban on *storing* a slice-time estimate for
+(owned by [D-046](../../decisions-log.md)), not a ban on *storing* a slice-time estimate for
 reprint and planning. This doc proposes storing estimates as an additive per-iteration
 block (§3.3) and treats *whether they surface in the tab* as an open owner decision
 (PMR-8, §7) rather than silently overturning §11.
@@ -84,7 +84,7 @@ identity)* that together determine what a plate can teach. Omar's "iteration" is
 same unit — a **piece at a specific parameter set and slice profile** — plus the two
 things §3 stopped short of: a *stable id* to name it by, and the machinery to *reprint*
 and *count* it. So this doc does **not** introduce a parallel concept (that would be the
-fork [`CLAUDE.md`](../CLAUDE.md) forbids); it names the one that already exists.
+fork [`CLAUDE.md`](../../../CLAUDE.md) forbids); it names the one that already exists.
 
 > **K10 — the transfer condition.** §3's `(geometry, process)` pair was defined to
 > answer *"can two plates teach the same number?"* (calibration). Reusing it as a
@@ -152,7 +152,7 @@ record realizes. Two placements were considered (PMR-2, §7); the recommended on
 **additive `iteration:` (and `estimates:`) block inside the existing record
 frontmatter**, because a separate `docs/prints/iterations/<id>.yaml` registry would
 duplicate the geometry/process pins the record already owns — two code paths that can
-disagree, the exact fork [`CLAUDE.md`](../CLAUDE.md) and [D-052](decisions-log.md)
+disagree, the exact fork [`CLAUDE.md`](../../../CLAUDE.md) and [D-052](../../decisions-log.md)
 forbid. Records that share an `iteration.id` carry identical recipe fields, and a
 proposed gate rule (R15, §3.4) checks that consistency so the id cannot lie.
 
@@ -160,7 +160,7 @@ proposed gate rule (R15, §3.4) checks that consistency so the id cannot lie.
 YAML, plus a derived view (`bambu print iterations`, §6) that projects the distinct
 iterations out of the records — one store, projected, exactly as `print list` already
 projects records through the gate's read-only `--list` seam
-([`print-list.ts`](../tools/bambu/src/commands/print-list.ts)).
+([`print-list.ts`](../../../tools/bambu/src/commands/print-list.ts)).
 
 ### 3.2 The `iteration` block — worked example
 
@@ -215,11 +215,11 @@ estimates:                                    # slice-time PREDICTIONS (§3.3) �
 ### 3.3 Estimates — time, length, and grams (the honest bit)
 
 Grams is **blank today** for a concrete reason: `bambu slice` reports only the sliced
-`.3mf`'s file size in KB ([`slice.ts`](../tools/bambu/src/commands/slice.ts)); nothing
+`.3mf`'s file size in KB ([`slice.ts`](../../../tools/bambu/src/commands/slice.ts)); nothing
 in the pipeline reads a filament weight. A sliced `.3mf` is a zip whose `Metadata/`
 holds a plate preview and the plate gcode — verified in this repo
 ([`print-model-design.md`](print-model-design.md) §2 names the Metadata/plate_1.png
-preview member; [`research/print-model-research.md`](research/print-model-research.md)
+preview member; [`../../research/print-model-research.md`](../../research/print-model-research.md)
 Topic 7 names the Metadata/plate_X.gcode member). BambuStudio is *documented elsewhere*
 to also embed
 per-filament weight/length and a time prediction in the sliced `.3mf`.
@@ -229,7 +229,7 @@ per-filament weight/length and a time prediction in the sliced `.3mf`.
 > repo** — only the preview and gcode members are (above). So the estimate parser
 > (PMR-4) MUST be built as a *de-risk probe first* — slice one real X2D plate, open the
 > `.3mf`, and record the actual member/field names in
-> [`research/print-model-research.md`](research/print-model-research.md) — before any
+> [`../../research/print-model-research.md`](../../research/print-model-research.md) — before any
 > code hard-codes a path. Until that probe lands, `estimates.filament_g` is legitimately
 > `~` and `estimates.source: ~`, and the record is still well-formed.
 
@@ -253,7 +253,7 @@ R15 (§3.4) checks that.
 
 Two distinctions §3.3 above collapsed, separated after Omar's answers. Conflating either
 fabricates precision, which the bench-sheet rule forbids
-([`plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)).
+([`plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md)).
 
 **Estimate (pre-print) vs actual (post-print) — different fields, different sources.**
 
@@ -264,7 +264,7 @@ fabricates precision, which the bench-sheet rule forbids
   prediction, and stays labelled as one.
 - **`actuals`** — the *post-print ground truth*, from the printer's **MQTT device
   report** (PMR-4 answer, Omar 2026-09-17), read over the same first-party MQTT transport
-  `status show` already proves ([`status.ts`](../tools/bambu/src/commands/status.ts)).
+  `status show` already proves ([`status.ts`](../../../tools/bambu/src/commands/status.ts)).
   This is what the machine actually consumed — measured, not attributed, the repo's
   standing bias. It populates the `estimates.confirmed_by` field §3.3 left open, closing
   the loop: predicted X g, the device reported Y g.
@@ -284,7 +284,7 @@ and moisture variance) and R15 does not constrain them.
 > status read, print-safe like `status show`; **no owner gate**, nothing is dispatched) and
 > scaffolds a DRAFT under `.bambu/records/` carrying an `actuals:` block, which the operator
 > fills and promotes to `docs/prints/` exactly as a `--record` draft.
-> - **Honesty (the design's Validator, K1/K2).** [`buildActuals`](../tools/bambu/src/actuals.ts)
+> - **Honesty (the design's Validator, K1/K2).** [`buildActuals`](../../../tools/bambu/src/actuals.ts)
 >   is a pure function that fills a field ONLY from a frame key that carried it: the
 >   state/progress/layer/temperature keys `status show` already reads live off the X2D are
 >   `filled`; **filament-consumed grams is `unconfirmed`** — not observed on the X2D report,
@@ -293,14 +293,14 @@ and moisture variance) and R15 does not constrain them.
 >   change** (the same [X2D-UNCONFIRMED]-then-confirm discipline the dispatch payload uses).
 >   `estimates.confirmed_by` therefore stays `~` until that field is confirmed — the loop is
 >   wired, not yet closed on grams.
-> - **No new gate rule (measure a rule before gating, [`CLAUDE.md`](../CLAUDE.md)).** The
->   block is additive frontmatter; [`prints_gate.py`](../.claude/gates/prints_gate.py) reads
+> - **No new gate rule (measure a rule before gating, [`CLAUDE.md`](../../../CLAUDE.md)).** The
+>   block is additive frontmatter; [`prints_gate.py`](../../../.claude/gates/prints_gate.py) reads
 >   required keys and ignores extras, so a captured draft passes with only the expected
 >   placeholder-provenance findings until the operator pins real objects. When a real capture
 >   exists, a rule over `actuals` can be added against *that* ground truth.
-> - **Tests.** [`actuals.test.ts`](../tools/bambu/src/actuals.test.ts) (PASS: a running
+> - **Tests.** [`actuals.test.ts`](../../../tools/bambu/src/actuals.test.ts) (PASS: a running
 >   frame; FAIL-guard: an idle frame fabricates nothing) and the capture-emission cases in
->   [`records.test.ts`](../tools/bambu/src/records.test.ts).
+>   [`records.test.ts`](../../../tools/bambu/src/records.test.ts).
 
 **Per-piece vs per-plate — the estimation slice.** A `.3mf` is a whole plate and may hold
 several products (§5), so a whole-plate `.3mf` cannot answer "how much does *this one
@@ -325,17 +325,17 @@ What it yields, with the hedge each number carries (K1):
 
 So `plate estimate = Σ(unit estimates) + plate overhead` — exact for grams, a floor for
 time. The grams math (area = π·(d/2)², volume × density) is already realized in
-[`validate.ts`](../tools/bambu/src/commands/validate.ts)'s `deriveGrams`, so the
+[`validate.ts`](../../../tools/bambu/src/commands/validate.ts)'s `deriveGrams`, so the
 estimation slice reuses one spelling of it, not a second. This primitive feeds the reprint
 quantity flow (§4.4): `reprint --qty n` can show the material a new quantity costs
 *before* it re-slices, because grams compose.
 
 ### 3.4 Proposed gate rules (additive to `prints_gate.py`, NOT built here)
 
-These are **proposals** for [`.claude/gates/prints_gate.py`](../.claude/gates/prints_gate.py),
+These are **proposals** for [`.claude/gates/prints_gate.py`](../../../.claude/gates/prints_gate.py),
 to be implemented in a later PR alongside their `--self-test` by-design-failure fixtures
 (the repo's graduation rule: a rule ships with the counterexample it rejects,
-[`CLAUDE.md`](../CLAUDE.md)). They read the same parsed frontmatter as R1–R14 — one
+[`CLAUDE.md`](../../../CLAUDE.md)). They read the same parsed frontmatter as R1–R14 — one
 parser, no second gate file.
 
 - **R15 — an iteration id matches its key.** When an `iteration:` block is present,
@@ -365,7 +365,7 @@ only on the new fields), and the schema is extended, not replaced (PMR-2, no for
 
 `bambu slice` takes the profile as `--settings "machine;process"` and
 `--filament "<name>"`, resolving each preset *display name* to its bundled JSON
-([`slice.ts`](../tools/bambu/src/commands/slice.ts); [`bambu` SKILL](../.claude/skills/bambu/SKILL.md)).
+([`slice.ts`](../../../tools/bambu/src/commands/slice.ts); [`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md)).
 `iteration.key.slice_profile.settings` / `.filament` store **those exact strings**, so a
 reprint feeds them straight back to `slice` with no re-spelling. This is deliberately
 *not* re-derived from the nine-field `profile` block: the process `profile` is the
@@ -384,7 +384,7 @@ filament preset names that `profile` does not carry (§2.1, K10).
 in `tools/bambu/src/commands/`) resolves a liked iteration and re-parks it at the same
 owner gate a fresh print stops at — it **never dispatches**. It is the read-and-stage
 verb; the physical send stays the existing owner-gated `print send`
-([`print.ts`](../tools/bambu/src/commands/print.ts); [`print-model-design.md`](print-model-design.md)
+([`print.ts`](../../../tools/bambu/src/commands/print.ts); [`print-model-design.md`](print-model-design.md)
 §9, Option A).
 
 ```
@@ -414,7 +414,7 @@ fallback**, and when replaying, verify the stored `.3mf` against
 is the same lie R15 guards against). If the `.3mf` is gone, `reprint` says so and
 suggests `--re-slice`. This makes the strong guarantee (byte-identical) the default and
 the weaker-but-more-portable one (reproduce-from-recipe) a stated, opt-in choice — the
-robustness-over-ease framing [`CLAUDE.md`](../CLAUDE.md) asks for: each path names what
+robustness-over-ease framing [`CLAUDE.md`](../../../CLAUDE.md) asks for: each path names what
 it verifies.
 
 **This default is narrowed by §4.4.** "Replay by default" holds **only when the request
@@ -426,7 +426,7 @@ which case a given `reprint` is.
 ### 4.3 Staging and the gate
 
 `reprint` scaffolds a **new draft record** under `.bambu/records/<today>-<slug>/`
-(reusing [`records.ts`](../tools/bambu/src/records.ts)'s scaffolder), inheriting the
+(reusing [`records.ts`](../../../tools/bambu/src/records.ts)'s scaffolder), inheriting the
 resolved `iteration.id`, `key`, `estimates`, and the geometry pins, and setting
 `status: sliced` with the resolved `plate_3mf`. The operator fills readings/photos after
 the print and promotes it to `docs/prints/` exactly as today — so a reprint is countable
@@ -553,7 +553,7 @@ the logical relationships, not two physical stores. There is one store (the reco
 The question "how many times did we print piece / iteration X?" is answered by **reading
 the records** — the single source of truth — never a second counter store (which would
 drift the moment a record was edited by hand). This is the same call
-[`print-list.ts`](../tools/bambu/src/commands/print-list.ts) already makes: project
+[`print-list.ts`](../../../tools/bambu/src/commands/print-list.ts) already makes: project
 through the gate's read-only `--list` seam. Two shapes were considered (PMR-6, §7):
 
 **Recommended: a new `bambu print stats` verb**, plus a `--count-by` on the existing
@@ -578,7 +578,7 @@ named set of records):
 
 Because reprints scaffold a fresh record sharing the prior `iteration.id` (§4.3), the
 reprint tally is just #records for that id — no separate reprint field is stored (it
-would be a derivable-count-stored-twice, the C4 hazard [`CLAUDE.md`](../CLAUDE.md) warns
+would be a derivable-count-stored-twice, the C4 hazard [`CLAUDE.md`](../../../CLAUDE.md) warns
 of). When a written metric ever lands in a *committed doc* (e.g. a records summary), it
 must carry a `<!--count:NAME-->` tag so `counts_gate.py` pins it to the tool that prints
 it; a metric printed live by `stats` needs no tag (it is computed, not typed).
@@ -591,15 +591,15 @@ it; a metric printed live by `stats` needs no tag (it is computed, not typed).
 and `.option()` — usable, but three gaps:
 
 1. **The `print` group description is stale and over-broad.** It reads *"dispatch +
-   print control via the MCP (owner-gated)"* ([`print.ts`](../tools/bambu/src/commands/print.ts)),
+   print control via the MCP (owner-gated)"* ([`print.ts`](../../../tools/bambu/src/commands/print.ts)),
    yet `print list` touches no hardware and is not owner-gated, `print send` now uses
-   first-party MQTT for status (the MCP note is partly stale, [`index.ts` header](../tools/bambu/src/commands/print.ts)),
+   first-party MQTT for status (the MCP note is partly stale, [`index.ts` header](../../../tools/bambu/src/commands/print.ts)),
    and after this doc the group also gains `reprint` and `stats`. A reader of
    `bambu print --help` is told the whole group is an owner-gated MCP surface, which is a K7
    contradiction with its own subcommands.
 2. **No examples.** No verb carries a worked invocation; the known-good X2D slice trio,
    the reprint call, and the `--how`/`--json` shapes live only in the SKILL doc
-   ([`bambu` SKILL](../.claude/skills/bambu/SKILL.md)), not at `--help`.
+   ([`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md)), not at `--help`.
 3. **The owner gate is stated only in `send`'s one-line description**, not surfaced
    where a reader scanning the group would see it.
 
@@ -614,7 +614,7 @@ and `.option()` — usable, but three gaps:
 - Put the owner-gate warning in the `reprint` help too, since `reprint` ends *at* the
   gate and a reader must know it stops rather than sends.
 - Keep every example a single allow-listable command (no `cd &&`, no pipes) — the
-  one-command discipline the [`bambu` SKILL](../.claude/skills/bambu/SKILL.md) already
+  one-command discipline the [`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md) already
   states.
 
 ---
@@ -623,21 +623,21 @@ and `.option()` — usable, but three gaps:
 
 Each names the options, the recommendation (first), and the reasoning. The repo's
 standing biases apply: **a migration over a fork**, **a gate over a new tool**, and
-**robust-and-simple over cheap-and-easy** ([`CLAUDE.md`](../CLAUDE.md)). These ids are
+**robust-and-simple over cheap-and-easy** ([`CLAUDE.md`](../../../CLAUDE.md)). These ids are
 local to this doc (`PMR-*`); they are **not** entries in
-[`decisions-log.md`](decisions-log.md), which this doc does not touch — promote them
+[`../../decisions-log.md`](../../decisions-log.md), which this doc does not touch — promote them
 there if and when the design is accepted.
 
 | # | Decision | Options | Recommendation & why |
 |---|---|---|---|
 | PMR-1 | Iteration id shape | (a) content hash `it-<sha12>`; (b) monotonic `<piece>@vNN` | **(a).** No central allocator, so concurrent sessions cannot collide (the D-055 / *decision-id-collision-recurred* failure); re-derivable, matching gate R1's existing hash-at-a-commit identity discipline. |
-| PMR-2 | Where the iteration config lives | (a) additive `iteration:` block in the record frontmatter; (b) a separate `docs/prints/iterations/<id>.yaml` registry | **(a).** (b) duplicates the geometry/process pins the record already owns — two paths that can disagree, the fork [D-052](decisions-log.md) forbids. Extend the schema; project the registry (§6). |
+| PMR-2 | Where the iteration config lives | (a) additive `iteration:` block in the record frontmatter; (b) a separate `docs/prints/iterations/<id>.yaml` registry | **(a).** (b) duplicates the geometry/process pins the record already owns — two paths that can disagree, the fork [D-052](../../decisions-log.md) forbids. Extend the schema; project the registry (§6). |
 | PMR-3 | Reprint: replay vs re-slice | (a) replay stored `.3mf` by default, `--re-slice` opt-in; (b) always re-slice; (c) always replay | **(a), resolved & refined (Omar 2026-09-17, §4.4): quantity-aware.** Replay verifies *byte-identical*; re-slice verifies *reproducible-from-recipe*. A `.3mf` is a whole plate, so `reprint` first detects whether the target was the plate's *sole product* and asks `--qty`; replay is valid **only** on a byte-identical request (sole product, qty = stored Σcopies, `.3mf` sha intact), and any quantity/product change re-slices automatically. `--re-slice` stays the override for "re-slice even when replay is valid." |
 | PMR-4 | Grams / estimate sourcing mechanism | (a) parse the sliced `.3mf` (`slice-3mf`); (b) MQTT device report; (c) manual entry only | **Resolved (Omar 2026-09-17): (b) for the post-print ACTUAL, (a) for the pre-print ESTIMATE (§3.3.1).** MQTT reports what the machine actually consumed — measured, not attributed — and populates `estimates.confirmed_by`; but it exists only *after* a print, so the pre-print estimate the owner gate needs stays (a) the `.3mf`/estimation-slice number (still behind the §3.3 de-risk probe), (c) the honest fallback. Two fields, two sources — not a contradiction, a completion. |
-| PMR-5 | Estimate honesty when unknown | (a) `~` + `source: ~`; (b) a `0` default | **(a).** A fabricated `0` reads as "weighs nothing"; `~` reads as "not known" — never fake a measurement (the bench-sheet rule against filling a row from a preview, [`plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)). |
-| PMR-6 | Metrics surface | (a) `print stats` + `list --count-by`, reading records; (b) a second counter store | **(a).** Records are the single source of truth; a second store drifts on any hand-edit. Project, don't duplicate — the C4 derivable-count hazard ([`CLAUDE.md`](../CLAUDE.md)). |
-| PMR-7 | `--help` | (a) fix group desc + per-verb examples + owner-gate note; (b) leave help to the SKILL doc | **(a).** The `--help` *is* the reference ([`bambu` SKILL](../.claude/skills/bambu/SKILL.md)); a stale group description is a K7 self-contradiction (§7). |
-| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Resolved (Omar 2026-09-17): (b) — store AND show time/grams on the tab.** This reverses the specific §11 / [D-046](decisions-log.md) choice to keep cost/time/grams *off* the display. Recorded as a 2026-09-17 amendment to D-046 and a [`prints-tab-design.md`](prints-tab-design.md) §11 update — the display now surfaces the estimate (and, once a print runs, the MQTT actual, §3.3.1), while still holding the line D-046 actually cares about: no *second scheduler or bet registry*. Showing a number the record already stores is not that. |
+| PMR-5 | Estimate honesty when unknown | (a) `~` + `source: ~`; (b) a `0` default | **(a).** A fabricated `0` reads as "weighs nothing"; `~` reads as "not known" — never fake a measurement (the bench-sheet rule against filling a row from a preview, [`plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md)). |
+| PMR-6 | Metrics surface | (a) `print stats` + `list --count-by`, reading records; (b) a second counter store | **(a).** Records are the single source of truth; a second store drifts on any hand-edit. Project, don't duplicate — the C4 derivable-count hazard ([`CLAUDE.md`](../../../CLAUDE.md)). |
+| PMR-7 | `--help` | (a) fix group desc + per-verb examples + owner-gate note; (b) leave help to the SKILL doc | **(a).** The `--help` *is* the reference ([`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md)); a stale group description is a K7 self-contradiction (§7). |
+| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Resolved (Omar 2026-09-17): (b) — store AND show time/grams on the tab.** This reverses the specific §11 / [D-046](../../decisions-log.md) choice to keep cost/time/grams *off* the display. Recorded as a 2026-09-17 amendment to D-046 and a [`prints-tab-design.md`](prints-tab-design.md) §11 update — the display now surfaces the estimate (and, once a print runs, the MQTT actual, §3.3.1), while still holding the line D-046 actually cares about: no *second scheduler or bet registry*. Showing a number the record already stores is not that. |
 
 ---
 
@@ -649,7 +649,7 @@ there if and when the design is accepted.
   (two records, one id, differing keys), not a trivially malformed file.
 - **The flagship flow is buildable by the machinery proposed.** `reprint` (§4) resolves
   via the same `--list` projection §6's `stats` uses and stages via the same
-  [`records.ts`](../tools/bambu/src/records.ts) scaffolder `print send --record` uses —
+  [`records.ts`](../../../tools/bambu/src/records.ts) scaffolder `print send --record` uses —
   no new store, no forked parser.
 - **No new concept where one exists.** §2.1 binds "iteration" to §3's existing
   `(geometry, process)` version rather than inventing a parallel unit — consistent with

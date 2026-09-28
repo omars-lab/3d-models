@@ -1,6 +1,6 @@
 // The post-print ACTUALS builder — what the machine actually did, read from its MQTT device report.
 //
-// This is the completion of the record loop the design named (docs/print-metadata-and-reprint-design.md
+// This is the completion of the record loop the design named (docs/design/printing/print-metadata-and-reprint-design.md
 // §3.3.1, PMR-4): the `profile` block says what a plate was printed *under*; `actuals` says what the
 // print *did* — state, progress, layers, temperatures. It exists so a print started from the Studio
 // GUI (which `print send --record` never sees) can still become a counted record: `bambu print capture`

@@ -26,7 +26,7 @@ feeds:
 
 ## 0. What this file is, and what it is not
 
-[`calibration-design.md`](../calibration-design.md) §3.2 records that "bikar has
+[`calibration-design.md`](../design/printing/calibration-design.md) §3.2 records that "bikar has
 no text emit. There is no `text`, no emboss, no engrave", and §8 calls the
 resulting loss of rung identity "the card's biggest structural weakness and the
 one a text-emit capability would fix outright." This file is the research behind
@@ -247,7 +247,7 @@ printable geometry means giving it a width, which is the stroke-to-outline
 operation, which is a polygon offset. [`backlog.md`](../backlog.md) §6.2 records
 that bikar has no polygon-offset primitive — the same absence that already forces
 MC-4's wall thickness to co-vary with the angle under test
-([`calibration-design.md`](../calibration-design.md) §5.4, §8).
+([`calibration-design.md`](../design/printing/calibration-design.md) §5.4, §8).
 
 So the question is whether the offset can be done *analytically* for this
 restricted case. Offsetting an **open polyline** is genuinely easier than
@@ -389,7 +389,7 @@ status is untested.) This is the export-succeeds-and-yields-the-wrong-thing clas
 that [`lego-lab-design.md`](../lego-lab-design.md) §14.3 exists to avoid.
 
 **C. Don't use a font.** The requirement in
-[`calibration-design.md`](../calibration-design.md) §3.2 is *rung identity*, not
+[`calibration-design.md`](../design/printing/calibration-design.md) §3.2 is *rung identity*, not
 arbitrary text: a rung must say which rung it is. A row of dots, a notch count,
 or a small binary pip field says that with **convex primitives bikar already
 has**, no offset, no union, and features an order of magnitude above the

@@ -104,7 +104,7 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
 
 The CLI groups map to the workflow: `slice` (BambuStudio CLI) → `print send --record` (dispatch via
 the MCP + scaffold a draft record under the gitignored `.bambu/records/`) → fill it in → `validate
-record .bambu/records` (the record passes [`docs/prints-tab-design.md`](../../../docs/prints-tab-design.md)
+record .bambu/records` (the record passes [`docs/design/printing/prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md)
 §4 and the prints gate) → move the finished dir into `docs/prints/<date>-<slug>/`. Drafts stage in
 `.bambu/` because the prints gate is **whole-tree**: an incomplete record under `docs/prints/` would
 block every commit. `validate mesh <model.bkr>` runs bikar's min-strut/FDM `--check`, and `validate
@@ -113,7 +113,7 @@ only a *prototype* if it answers a question — restate the questions first, exa
 [`prototype`](../prototype/SKILL.md) skill requires; if none would be answered, it's decoration.
 Coupons that measure the *(machine, material, nozzle, profile)* settle a `CAL-*` bet via
 [`calibrate`](../calibrate/SKILL.md), against the expectation table in
-[`docs/calibration-design.md`](../../../docs/calibration-design.md) §7. Render/thumbnail checks are
+[`docs/design/printing/calibration-design.md`](../../../docs/design/printing/calibration-design.md) §7. Render/thumbnail checks are
 [`validate-render`](../validate-render/SKILL.md)'s job. The per-print rubric the CLI reads at runtime
 is in [`rubric.md`](rubric.md).
 

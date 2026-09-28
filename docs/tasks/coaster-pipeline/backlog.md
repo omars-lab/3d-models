@@ -79,7 +79,7 @@ it.
 Three related documents already exist and this one does not replace them:
 [`.claude/skills/prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md)
 is the per-coupon detail and the place results get logged;
-[`calibration-design.md`](../../calibration-design.md) is the machine card's coupon
+[`calibration-design.md`](../../design/printing/calibration-design.md) is the machine card's coupon
 design doc; [`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md)
 is the measurement ceremony. This file is the *order*, the *cost*, and the
 *ledger of what is still missing*.
@@ -114,7 +114,7 @@ about bets that could be minted.
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
-every rung renders: [`calibration-design.md`](../../calibration-design.md) §7 carries a
+every rung renders: [`calibration-design.md`](../../design/printing/calibration-design.md) §7 carries a
 23-piece verification table with euler, watertightness, triangle count and volume
 per piece, and its own status line says **"AUTHORED, UNPRINTED … no calibration
 bet is settled."** The Lego engine phases M6/M7/P0/P1/P2/P3 are all marked
@@ -158,7 +158,7 @@ on `MC-8`, catalogued 2026-08-19 and authorable today — it is unwritten becaus
 printing is user-held, not because anything blocks it. Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
 to measure some of warp, wall floor and bore fit before the card existed;
-[`calibration-design.md`](../../calibration-design.md) §1 is the argument for
+[`calibration-design.md`](../../design/printing/calibration-design.md) §1 is the argument for
 collapsing them, and both W-F1 Q2 and LG-F1 Q5 have already been **re-pointed**
 at MC-5 and MC-2 respectively in the catalog. Printing a design coupon before the
 card means measuring the printer inside a clip, a brick and an orb, and then not
@@ -172,7 +172,7 @@ rather than asserting the plate.
 
 **Cost, as the repo states it:** total solid volume across all 23 pieces
 **89.7 cm³**, "roughly 111 g of PLA at 100% infill, less in practice"
-([`calibration-design.md`](../../calibration-design.md) §7). `MC3BridgePlate` alone is
+([`calibration-design.md`](../../design/printing/calibration-design.md) §7). `MC3BridgePlate` alone is
 27.5 cm³ and `MC5WarpPlate` 15.3 cm³. Print time: **not stated**.
 
 **Three things this plate will not do.** `MC-2`'s four sub-floor rungs FAIL
@@ -336,7 +336,7 @@ today. Volumes and masses are quoted only where the repo states them.
 
 | id | measures | demanded by | unblocks | `.bkr` | cost as stated |
 |---|---|---|---|---|---|
-| MC-1 | bore ⌀ drift 3–10 mm, and which gap seats as press/snug/sliding/free | [`calibration-design.md`](../../calibration-design.md) §5.1 | `CAL-FIT-01`, `CAL-HOL-01`; `c2-assembly` B.3+B.6, `piece-composition` B.2; W-F1's conversion | exists — `Machine-Card.bkr`, 9 pieces | 11.8 + 7.5 cm³ plates + 6 pins ≤1.2 cm³ each |
+| MC-1 | bore ⌀ drift 3–10 mm, and which gap seats as press/snug/sliding/free | [`calibration-design.md`](../../design/printing/calibration-design.md) §5.1 | `CAL-FIT-01`, `CAL-HOL-01`; `c2-assembly` B.3+B.6, `piece-composition` B.2; W-F1's conversion | exists — `Machine-Card.bkr`, 9 pieces | 11.8 + 7.5 cm³ plates + 6 pins ≤1.2 cm³ each |
 | MC-2 | thinnest wall that prints as a handleable feature, **and the direction of the error** | §5.2 | `CAL-FEA-01` (3 records); `lego-lab` B.5 and the §7.4 floor override; P1 Q1; LG-F1 Q5 | exists — 7 tube rungs | 0.2–1.3 cm³ per rung |
 | MC-3 | first bridge span that **sags** (not fails), ⌀4–25 mm | §5.3 | `CAL-BRG-01`; `w2-connector` B.3, `print-validation` B.4, `lego-lab` §11 Q4 / V12 | exists — 1 plate | 27.5 cm³ |
 | MC-4 | first overhang angle showing curl or droop, 20–60° from vertical | §5.4 | `CAL-OVH-01`; `print-validation` B.2 and the F5 tier split | exists — 1 revolve | 11.9 cm³ |
@@ -559,7 +559,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
 
 1. The machine card is authored and every rung's geometry is verified —
    23 pieces, euler, watertightness and volume in
-   [`calibration-design.md`](../../calibration-design.md) §7, plus independent
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §7, plus independent
    silhouette and Pappus checks on MC-4 and z-level checks on MC-3.
 2. All 6 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
    `bikar/patterns/Coupons/`. This line said **four** until 2026-08-03, two
@@ -577,7 +577,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
 5. The build envelope check exists: the Lab's machine dropdown and
    `radiusCeilingMm` already clamp the radius knob to `min(XYZ) − 10`.
 6. The bikar CLI is built in the working checkout, so every render command in
-   [`calibration-design.md`](../../calibration-design.md) §6 runs today.
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §6 runs today.
 
 **Not done — do these first.**
 
@@ -585,7 +585,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    are in `build/stls/coupons/machine-card/`, rendered per §6 (the
    `--check`-less lines for `MC2Wall04/06/08/10`, `--check print` for the MC-6
    towers), from bikar `60383b5`. Every rung matches
-   [`calibration-design.md`](../../calibration-design.md) §7's table — euler,
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §7's table — euler,
    watertight, degenerate, minFeature, verdict, triangles, volume — and the 23
    volumes sum to the 89.7 cm³ §7 states. `build/` is not tracked on master, so
    the STLs are a local artifact; `make coupons` reproduces them.
@@ -628,7 +628,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    [`tile-wall-design.md`](../../tile-wall-design.md) §9 and in §3.5 above, and the
    design question it was silently deciding is now W2 §11 Q6.
 7. **Look at the fan in a slicer before committing filament** —
-   [`calibration-design.md`](../../calibration-design.md) §8 lists "no raster render
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §8 lists "no raster render
    was eyeballed" as a known weakness, and MC-4 is the piece whose failure mode
    would be a silently wrong dimension.
 
@@ -695,7 +695,7 @@ For any reading, the full landing sequence is:
 A reading that **refutes** the design is a success outcome of `calibrate` and
 must not be deleted: "bury it and the next person re-runs the print." A ladder
 that brackets wrong — every rung passing, or every rung failing — is also a
-result, and [`calibration-design.md`](../../calibration-design.md) §2 says so before
+result, and [`calibration-design.md`](../../design/printing/calibration-design.md) §2 says so before
 the fact precisely so it is not logged as "the coupon didn't work."
 
 ---
@@ -739,7 +739,7 @@ one.
    [`tile-wall-design.md`](../../tile-wall-design.md) §7.1's, and that section labels
    its whole table as estimates pending the W1 pilot.
 5. **Mass or volume for the LG and W series.** The catalog states volumes for the
-   P-series and [`calibration-design.md`](../../calibration-design.md) §7 states them
+   P-series and [`calibration-design.md`](../../design/printing/calibration-design.md) §7 states them
    for all 23 MC pieces. Neither states one for any LG or W coupon, and I did not
    compute any — a render would give a number, but it would be mine and not the
    repo's.

@@ -8,16 +8,16 @@ status: decided
 It merges two independent write-ups and a check of both:
 
 - researcher A: [`print-quality-a-design.md`](print-quality-a-design.md), sources in
-  [`research/print-quality-a.md`](research/print-quality-a.md);
+  [`../../research/print-quality-a.md`](../../research/print-quality-a.md);
 - researcher B: [`print-quality-b-design.md`](print-quality-b-design.md), sources in
-  [`research/print-quality-b.md`](research/print-quality-b.md);
+  [`../../research/print-quality-b.md`](../../research/print-quality-b.md);
 - the checker's log of what was re-opened and what it says:
-  [`research/print-quality-verification.md`](research/print-quality-verification.md)
+  [`../../research/print-quality-verification.md`](../../research/print-quality-verification.md)
   (cited below as "verification §n").
 
 No decision id is taken here.
 
-**The question.** Omar on minis-04 ([`plates/minis-04.yaml`](plates/minis-04.yaml)),
+**The question.** Omar on minis-04 ([`../../plates/minis-04.yaml`](../../plates/minis-04.yaml)),
 2026-09-26: "i see tiny holes on the print and the peg system border is too big and
 pegs too tight". What caused each, and what do we change?
 
@@ -125,13 +125,13 @@ already on plates:
 
 | Join | Band | Plate |
 |---|---|---|
-| dovetail, minis-04 knobs (neck 3, depth 3, wall 2.5) | ~11.1 mm | [`plates/minis-04.yaml`](plates/minis-04.yaml) |
-| slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [`plates/minis-06.yaml`](plates/minis-06.yaml) |
-| no join (plain pair) | ~6.0 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
-| tab into the neighbour's opening | ~5.8 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
-| butterfly key | ~5.7 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
+| dovetail, minis-04 knobs (neck 3, depth 3, wall 2.5) | ~11.1 mm | [`../../plates/minis-04.yaml`](../../plates/minis-04.yaml) |
+| slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
+| no join (plain pair) | ~6.0 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| tab into the neighbour's opening | ~5.8 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| butterfly key | ~5.7 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
 
-The ranked options are in [`coaster-borderless-joins-design.md`](coaster-borderless-joins-design.md).
+The ranked options are in [`../../coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
 The slim dovetail sits at the kernel's frame floor; the key needs a separate part and its
 own ladder; the tab gives no pull-apart lock. B adds one idea on neither plate: thicken
 the frame only behind each slot (a bikar kernel change). Which looks and holds best is

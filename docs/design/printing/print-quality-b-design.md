@@ -6,12 +6,12 @@ status: superseded
 
 **Status:** research draft, 2026-09-26. Nothing in it has been printed or measured. It is
 one of two independent write-ups on the same question. The sources are in
-[`research/print-quality-b.md`](research/print-quality-b.md), each marked as a fetched
+[`../../research/print-quality-b.md`](../../research/print-quality-b.md), each marked as a fetched
 page or a search snippet. No decision id is taken here.
 
 **The question.** How do we make small, thin, openwork PLA coasters print better on the
 Bambu X2D? And what caused what Omar saw on the minis-04 plate
-([`plates/minis-04.yaml`](plates/minis-04.yaml)) on 2026-09-26: "i see tiny holes on the
+([`../../plates/minis-04.yaml`](../../plates/minis-04.yaml)) on 2026-09-26: "i see tiny holes on the
 print and the peg system border is too big and pegs too tight"?
 
 ## 1. The short answer
@@ -51,7 +51,7 @@ print and the peg system border is too big and pegs too tight"?
 ## 2. The fault under both defects: presets not flattened
 
 **What we found.** `resolvePresetList` in
-[`../tools/bambu/src/commands/slice.ts`](../tools/bambu/src/commands/slice.ts) turns a
+[`../../../tools/bambu/src/commands/slice.ts`](../../../tools/bambu/src/commands/slice.ts) turns a
 preset name into the bundled leaf file and passes it to `--load-settings` as it is. The
 leaf `0.20mm Standard @BBL X2D` sets only a few keys, such as wall and gap-fill speeds.
 The rest come from its parents: `fdm_process_dual_0.20_nozzle_0.4`, then
@@ -183,21 +183,21 @@ knobs of GimTvN9hw4U-minimal-pegs-coaster.bkr in bikar (depth 3, clearance 0.1, 
 
 | Join | Band | Plate |
 |---|---|---|
-| dovetail, default knobs | 11.1 mm | [`plates/minis-06.yaml`](plates/minis-06.yaml) |
-| slim dovetail (neck 2, depth 2, wall 2.1, c 0.1) | 8.4 mm | [`plates/minis-06.yaml`](plates/minis-06.yaml) |
-| tab into the neighbour's opening (c 0.1) | 5.8 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
-| butterfly key | 5.7 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
-| no join (plain pair) | 6.0 mm | [`plates/minis-05.yaml`](plates/minis-05.yaml) |
+| dovetail, default knobs | 11.1 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
+| slim dovetail (neck 2, depth 2, wall 2.1, c 0.1) | 8.4 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
+| tab into the neighbour's opening (c 0.1) | 5.8 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| butterfly key | 5.7 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| no join (plain pair) | 6.0 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
 
 The floors on the dovetail:
 - `wall` is at least 2.1, because the art sits 1 mm into the frame and the enclosure
   check needs at least 1 mm.
 - The kernel refuses a frame under `depth + c + 1.6`
-  ([`sample-rules.md`](../.claude/skills/print-coaster-samples/sample-rules.md)).
+  ([`sample-rules.md`](../../../.claude/skills/print-coaster-samples/sample-rules.md)).
 
 So the dovetail cannot get much narrower than the slim version without a kernel change.
 The ranked alternatives are in
-[`coaster-borderless-joins-design.md`](coaster-borderless-joins-design.md).
+[`../../coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
 
 One idea not on minis-05 or minis-06: **thicken the frame only behind each slot** and
 keep the plain margin elsewhere. The band would drop to about the plain 6 mm except at

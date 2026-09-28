@@ -7,7 +7,7 @@ decisions:
 # Print Validation Gate — design doc (pre-implementation)
 
 Status: **DRAFT v2 — no implementation yet.** Revised after an adversarial grounding
-audit ([research/print-validation-grounding-audit.md](research/print-validation-grounding-audit.md);
+audit ([../../research/print-validation-grounding-audit.md](../../research/print-validation-grounding-audit.md);
 counter-evidence and divergences in Appendix B). v1→v2: the overhang default moved from
 a fixed 45° to the slicer-standard auto rule (half extrusion width) with the angle
 convention stated, F5 split into error/warn tiers (Arachne prints far below one
@@ -191,7 +191,7 @@ and the prototype catalog own the rest.
    V1 spike with the degenerate cases (tangent triangles, vertices on the plane).
 2. Island tracking granularity: per-region overlap is O(layers × regions²) worst case —
    fine for orbs; revisit if girih-field tiles explode region counts.
-3. **Decided 2026-08-03 — no, F3 warns everywhere** ([`decisions-log.md`](decisions-log.md)
+3. **Decided 2026-08-03 — no, F3 warns everywhere** ([`../../decisions-log.md`](../../decisions-log.md)
    D-018). The leaning recorded here (yes-for-gallery, warn-for-Lab-custom) is overruled.
    Needing supports is a normal printable outcome, so erroring on the gallery path would
    fail `make orbs` over a condition the slicer is built for — and a per-surface severity
@@ -206,7 +206,7 @@ and the prototype catalog own the rest.
 ## Appendix A — provenance
 
 v1 called its thresholds "slicer-community defaults, deliberately uncited." The grounding
-audit ([`research/print-validation-grounding-audit.md`](research/print-validation-grounding-audit.md))
+audit ([`../../research/print-validation-grounding-audit.md`](../../research/print-validation-grounding-audit.md))
 showed they are citable from primary sources — and that two of them disagreed with
 shipped slicer defaults (see Appendix B). Sources now on file:
 
@@ -234,11 +234,11 @@ shipped slicer defaults (see Appendix B). Sources now on file:
   [PADT self-supporting guidelines](https://www.padtinc.com/2017/07/12/towards-self-supporting-design-for-additive-manufacturing-part-1-standard-guidelines/)
 - The **2D boolean/offset engine** this gate shares with composition (scaled-integer
   coordinates, post-simplify, sliver culling) is sourced in
-  [`research/code-cad-composition-survey.md`](research/code-cad-composition-survey.md) §5
+  [`../../research/code-cad-composition-survey.md`](../../research/code-cad-composition-survey.md) §5
   (Clipper2 and its WASM ports) — whose pitfall (2), "inset by more than half the local
   feature width deletes geometry silently," is exactly the mechanism F5 exploits.
 - The FDM **dimensional-tolerance context** that motivates layer-resolved neck checks is
-  sourced in [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md)
+  sourced in [`../../research/tile-craft-field-survey.md`](../../research/tile-craft-field-survey.md)
   §7: holes print 0.1–0.3 mm undersize and external dimensions ~0.1 mm oversize — the
   asymmetry matters for necks bounded by holes.
 
@@ -248,12 +248,12 @@ defaults, print evidence moves them.
 ## Appendix B — counter-evidence and divergences
 
 Each entry records the strongest counter-position found by the grounding audit
-([`research/print-validation-grounding-audit.md`](research/print-validation-grounding-audit.md)),
+([`../../research/print-validation-grounding-audit.md`](../../research/print-validation-grounding-audit.md)),
 with either our justification for diverging or the design change it forced.
 
 Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
 measurement can. The id is the bet's entry in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which
 names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
 Tenet 30 — a physical constant is not earned until it records its provenance).
 

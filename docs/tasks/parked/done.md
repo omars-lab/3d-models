@@ -299,7 +299,7 @@ section was written, and the third closed on 2026-08-03; see each entry.
   number ran on **2026-07-29** and the fix was applied the same week to
   [`lego-lab-design.md`](../../lego-lab-design.md) §3.5 (rebuilt from measured
   repeatability, σ ≈ 0.02 mm) and to
-  [`print-validation-design.md`](../../print-validation-design.md) Appendix A. It was
+  [`print-validation-design.md`](../../design/printing/print-validation-design.md) Appendix A. It was
   never applied to [`tile-wall-design.md`](../../tile-wall-design.md), which is a
   different *lineage* — a different survey, a different audit — that happens to
   share the number. So this was not research debt awaiting a fetch; it was a
@@ -354,7 +354,7 @@ section was written, and the third closed on 2026-08-03; see each entry.
   horizontal, and the taxonomy calls this out under K10 as "a silent porting
   hazard" because the two conventions agree at exactly the 45° default. The
   sentence shipped in the *same commit as the audit* (`7fdb7e1`, 2026-07-27) and
-  is in [`print-validation-design.md`](../../print-validation-design.md) under the
+  is in [`print-validation-design.md`](../../design/printing/print-validation-design.md) under the
   support-map step: θ from vertical, `d = h·tan θ`, with PrusaSlicer's `h/tan θ`
   from horizontal named beside it. This entry was wrong for six days.
 

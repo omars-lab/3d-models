@@ -4,7 +4,7 @@
 // of items, renders each variant through bikar (once, cached), runs a bed-fit pre-check, then hands ALL
 // the STLs to the Bambu Studio CLI in one `--arrange 1 --export-3mf` invocation — one composed plate.
 // It is NOT a new CLI or top-level command; it reuses `slice.ts`'s preset resolver and flattener,
-// the check that the slice carried the flattened presets, the argv builder and warnings sidecar, and the `records.ts` scaffolder. Full spec: docs/plate-composer-design.md.
+// the check that the slice carried the flattened presets, the argv builder and warnings sidecar, and the `records.ts` scaffolder. Full spec: docs/design/printing/plate-composer-design.md.
 //
 // The one genuinely new idea (D-072): a manifest item is not an identity — it is the GEOMETRY HALF of
 // an iteration key, completed by the plate's one slice profile and resolved to `it-<sha12>` (src/
@@ -122,7 +122,7 @@ export function parseManifest(text: string): PlateManifest {
 
 // ── The bed and the fit pre-check (§6) ──────────────────────────────────────────────────────────
 // **Default:** the x2d bed footprint is 256 × 256 mm — the X2D single-nozzle build area (D-053; the
-// K1 note in docs/plate-composer-design.md §6 carries the dual-nozzle narrowing to 235.5 mm). The
+// K1 note in docs/design/printing/plate-composer-design.md §6 carries the dual-nozzle narrowing to 235.5 mm). The
 // pre-check is a NECESSARY condition only: it never claims a plate tiles — that is --arrange's job.
 
 export interface Bed {
@@ -219,7 +219,7 @@ async function blobSha(ref: string, path: string): Promise<string> {
 
 /** Scan the record store (drafts + finished) for the newest record whose objects carry `id`, and
  *  return its geometry (source path + piece + params) so a `{iteration}` manifest item can re-render
- *  the same recipe. This is the reprint-by-id lookup docs/plate-composer-design.md §3 defers to; it
+ *  the same recipe. This is the reprint-by-id lookup docs/design/printing/plate-composer-design.md §3 defers to; it
  *  reads records only (no re-slice here). Returns null if no record names the id yet. */
 export function findIterationGeometry(
   id: string,
