@@ -7,9 +7,9 @@ decisions:
 # GeoGebra constructions → naqsh → coasters — umbrella design doc
 
 Status: **v1 — grounded in
-[`research/geogebra-construction-import-survey.md`](research/geogebra-construction-import-survey.md)
+[`../research/geogebra-construction-import-survey.md`](../research/geogebra-construction-import-survey.md)
 (every number below cites a survey section or a `CAL-*` bet); decisions
-recorded as D-056…D-064 in [`decisions-log.md`](decisions-log.md).**
+recorded as D-056…D-064 in [`../decisions-log.md`](../decisions-log.md).**
 Scope: how any GeoGebra construction — the nine youtube reconstructions first,
 any `.ggb` eventually — becomes a naqsh (`.bkr`) file that bikar renders, how
 that file is proven equivalent to its source, how the flat art becomes a
@@ -74,7 +74,7 @@ naqsh has `PointRef = IDENT "." PointId` and no bare named points; its
 single-object transforms; `bisector` is the perpendicular bisector; there is no
 angle bisector, parallel/perpendicular line, midpoint, centroid or
 `circle … through`. See
-[`dsl-grammar-formalization.md`](dsl-grammar-formalization.md) for the gate
+[`../dsl-grammar-formalization.md`](../dsl-grammar-formalization.md) for the gate
 numbering this doc reuses.
 
 ## 3. The rubric
@@ -231,14 +231,14 @@ statement, with line and reason, before writing anything.
 
 **Default:** the O2 accept threshold is edge-SSIM ≥ 0.70, the youtube loop's
 own `--ssim-min` default, read from `ggb_score.py` in
-[survey §2.2](research/geogebra-construction-import-survey.md). The metric is scikit-image's
+[survey §2.2](../research/geogebra-construction-import-survey.md). The metric is scikit-image's
 [`structural_similarity`](https://scikit-image.org/docs/stable/api/skimage.metrics.html) over Canny edges; the number has no
 published source — it is the loop's own bar, inherited rather than bet because O2 is a
 regression check against that loop, not a print quantity. The naqsh
 render must clear the same bar the reconstruction cleared.
 
 O1 tolerance, O2's coverage floor, O3 thresholds and the frame procedure are
-specified in [`docs/construction-equivalence.md`](construction-equivalence.md),
+specified in [`docs/constructions/construction-equivalence.md`](construction-equivalence.md),
 which registers its own bets; nothing here states them. O3 compares the **flat extruded pattern** only: rim, bevel and relief
 have no GeoGebra reference and are validated by the mesh gate, the coaster
 validators and the `CAL-CST-*` bets. An aggregate score never discharges a
@@ -270,7 +270,7 @@ What this repo pins:
 - New reserved words are a G2 delta, each with a §12 row in bikar's grammar
   doc; G1 reports which shipped `.bkr` used one as an identifier.
 
-## 8. The coaster (summary; specified in [`coaster-design.md`](coaster-design.md))
+## 8. The coaster (summary; specified in [`../coaster-design.md`](../coaster-design.md))
 
 A coaster is a height field over an outline (D-064): flat bottom, top
 `z = base + relief(x, y) + rim(r)`, side wall stitched. Straps, face
@@ -291,9 +291,9 @@ bottom chamfer vs elephant's foot, one connected solid above the floor with
 every neck wider than the strap floor, and `trivet` connectivity. Their
 defaults are bets `CAL-CST-01…05`, registered in bikar's calibration registry
 before the coaster doc states a single number
-([`calibration-design.md`](calibration-design.md)). Print orientation is fixed
+([`../calibration-design.md`](../calibration-design.md)). Print orientation is fixed
 flat, top up, no supports; `--check` runs on every render
-([`print-validation-design.md`](print-validation-design.md)).
+([`../print-validation-design.md`](../print-validation-design.md)).
 
 ## 9. The plate composer (summary; specified in the plate doc)
 
@@ -306,7 +306,7 @@ hatch that prints a warning, because scaling a mesh scales walls and relief
 below the printable floor (D-059).
 
 **Default:** the `--bed x2d` footprint is 256 × 256 mm, the X2D single-nozzle
-build area ([survey §9](research/geogebra-construction-import-survey.md), a
+build area ([survey §9](../research/geogebra-construction-import-survey.md), a
 secondary source because [bambulab.com/en/x2d/specs](https://bambulab.com/en/x2d/specs)
 returned 403 to the fetcher), the
 same value this repo's confirmed slice profile records.
@@ -403,6 +403,6 @@ O3 gates the catalog entry). P1.2, P1.6 and P1.7 are off the critical path.
 ## Appendix A — sources
 
 All web and tree sources, with fetch dates and what was unreachable, are in
-[`research/geogebra-construction-import-survey.md`](research/geogebra-construction-import-survey.md)
+[`../research/geogebra-construction-import-survey.md`](../research/geogebra-construction-import-survey.md)
 §15. Defect kinds referenced by K-number are defined in
-[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md).
+[`../guides/grounding-defect-taxonomy.md`](../guides/grounding-defect-taxonomy.md).

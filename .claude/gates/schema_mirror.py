@@ -35,7 +35,7 @@ produced by the runbook.
 A SECOND PRODUCER (2026-09-17). youtube's `scripts/ggb_ast.py --dump-schema`
 writes `schemas/ggb-construction.schema.json`, the construction AST that
 `bikar import geogebra` reads, and bikar vendors it into the same directory as
-`ggb_construction.json` (`docs/geogebra-construction-import-design.md` §5.1).
+`ggb_construction.json` (`docs/constructions/geogebra-construction-import-design.md` §5.1).
 Same runbook, same byte rule, same lag — so the same gate: bikar's vendored tree
 is split by stem, `ggb_construction` is held to youtube and everything else to
 qiyas. youtube has no remote, so its `as_of` pin is a local commit of that

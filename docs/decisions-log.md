@@ -4320,7 +4320,7 @@ DSL" would be ambiguous and the extension would have to carry the name.
 `.ggb-commands` grammar is parsed only by the youtube repo's `ggb_build.py`; naqsh is parsed
 only by bikar's `parser.ts`; the bridge is a JSON AST whose Pydantic schema the producer owns
 and the consumer vendors byte-identically (the hook-41 pattern). Rubric and the four rejected
-paths: [`geogebra-construction-import-design.md`](geogebra-construction-import-design.md) §4.1.
+paths: [`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md) §4.1.
 
 **Why this shape:** the files are recipes, not coordinates
 ([survey §2.3](research/geogebra-construction-import-survey.md)), so a coordinate import
@@ -5344,7 +5344,7 @@ import needs a `cached_coords` map so the importer can fix each arc's major/mino
 **refuses rather than guesses** without one (bikar PR&nbsp;#234; K1/K10). The plumbing to feed the
 map exists (youtube `ggb_build.py --ast-json --cached-coords`); the **producer** never did. Full
 options analysis, the live probe that proved the engine is otherwise complete, and the faithfulness
-argument are in [`cached-coords-producer-design.md`](cached-coords-producer-design.md).
+argument are in [`constructions/cached-coords-producer-design.md`](constructions/cached-coords-producer-design.md).
 
 ### The fork
 

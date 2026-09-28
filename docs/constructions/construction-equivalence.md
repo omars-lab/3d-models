@@ -8,8 +8,8 @@ status: built
 O3's comparator is [qiyas PR #32](https://github.com/NaqshCoffee/qiyas/pull/32),
 open.
 Feeds from
-[`docs/research/construction-equivalence-measurements.md`](research/construction-equivalence-measurements.md);
-decided as D-063 in [`docs/decisions-log.md`](decisions-log.md); summarised in
+[`docs/research/construction-equivalence-measurements.md`](../research/construction-equivalence-measurements.md);
+decided as D-063 in [`docs/decisions-log.md`](../decisions-log.md); summarised in
 [§6 of the umbrella design](geogebra-construction-import-design.md#6-equivalence-three-oracles-d-063).
 
 ## 1. Why three
@@ -52,12 +52,12 @@ the naqsh pattern layer, or a conjugate the lowering introduced).
 equality precision is `STANDARD_PRECISION = 1E-8` and its loosest is
 `MIN_PRECISION = 1E-5`, both constants in ([Kernel.java at c281ae2, lines 271–286](https://github.com/geogebra/geogebra/blob/c281ae22b34ea2bf7f281767751d033e2fbfedf3/source/shared/common/src/main/java/org/geogebra/common/kernel/Kernel.java#L271-L286),
 fetched 2026-09-17, quoted in
-[research §4](research/construction-equivalence-measurements.md#4-geogebras-own-numeric-precision-fetched-2026-09-17));
+[research §4](../research/construction-equivalence-measurements.md#4-geogebras-own-numeric-precision-fetched-2026-09-17));
 `1e-6` sits between the two, a hundred times looser than the engine's standard
 so a legitimately different evaluation order cannot fail it, and ten times
 tighter than the loosest bar the engine itself accepts. The largest residual
 measured on the 23 compared labels is `9.9e-13`
-([research §1](research/construction-equivalence-measurements.md#1-oracle-o1--per-label-geometry-run-2026-09-17)),
+([research §1](../research/construction-equivalence-measurements.md#1-oracle-o1--per-label-geometry-run-2026-09-17)),
 seven orders inside it.
 
 **Validator:** O1 passes iff every compared label is within tolerance and no
@@ -105,14 +105,14 @@ invented shape costs precision instead of being cropped away. Inside it:
 **Default:** recall ≥ 0.98 and precision ≥ 0.98, bet CAL-EQV-01. The
 correct file scores 1.000 at four unit sizes and the smallest single-statement
 drop (one rosette of seven) 0.858
-([research §2](research/construction-equivalence-measurements.md#2-oracle-o2--drawing-run-2026-09-17));
+([research §2](../research/construction-equivalence-measurements.md#2-oracle-o2--drawing-run-2026-09-17));
 the bet is settled by the corpus ladder, not a print — the second construction
 (`7apC5Q9QS-8`, 144 statements with curves) is the first test of the margin,
 and a false FAIL there is loud where a looser floor would fail silently.
 
 **Default:** edge-SSIM ≥ 0.70, inherited from the reconstruct loop's own
 `--ssim-min` as recorded in the
-[import survey §2.2](research/geogebra-construction-import-survey.md); the
+[import survey §2.2](../research/geogebra-construction-import-survey.md); the
 metric is scikit-image's
 [`structural_similarity`](https://scikit-image.org/docs/stable/api/skimage.metrics.html)
 over Canny edges.
@@ -169,7 +169,7 @@ mm², and the symmetric disc.
 
 **Default:** coverage ≥ 0.99 and local missing ≤ 1.0 mm, bet CAL-EQV-02.
 Measured 2026-09-17
-([research §3.1](research/construction-equivalence-measurements.md#31-measured-by-qiyas-mesh-compare-2026-09-17)):
+([research §3.1](../research/construction-equivalence-measurements.md#31-measured-by-qiyas-mesh-compare-2026-09-17)):
 the faithful extrusion 1.000 / 0.00 mm, the dropped ring 0.143 / 10.00 mm, a
 synthetic 0.5 mm translation 0.975 / 0.40 mm. The floor leaves 1 % for raster
 and float noise and still catches the translation; the disc sits above the
@@ -177,7 +177,7 @@ and float noise and still catches the translation; the disc sits above the
 synthetics chose them, so they are a bet settled by the corpus ladder.
 
 **What the flat stage can and cannot see** (measured 2026-09-17,
-[research §3](research/construction-equivalence-measurements.md#3-oracle-o3--solid-preliminary-2026-09-17-the-comparator-is-p23b)):
+[research §3](../research/construction-equivalence-measurements.md#3-oracle-o3--solid-preliminary-2026-09-17-the-comparator-is-p23b)):
 dropping the central rosette produced an STL byte-identical to the correct
 one (380 triangles, 17.7 cm³ both, sha256 equal), because those edges lie
 inside the ring's faces and change no face union; dropping the ring produced

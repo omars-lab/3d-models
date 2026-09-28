@@ -110,7 +110,7 @@ and again 2026-09-18 (this session), so the number rests on secondary corroborat
   — is the value the repo uses for the X2D's footprint, and a `--bed x2d` default of
   256 × 256 mm is consistent with D-053, not a new claim.
 - The bed value **256 × 256 mm** is already stated as a `**Default:**` for the sibling
-  `--bed x2d` in [`geogebra-construction-import-design.md`](../geogebra-construction-import-design.md)
+  `--bed x2d` in [`geogebra-construction-import-design.md`](../constructions/geogebra-construction-import-design.md)
   §9, with this same 403/secondary-source caveat. The plate-composer doc restates it so
   the two docs agree (K7 across the corpus).
 
@@ -142,7 +142,7 @@ Two facts bound what a pre-slicer check can honestly assert:
 
 This mirrors the plate-builder doc's advisory-vs-authoritative fit split
 ([`plate-builder-design.md`](../plate-builder-design.md) §5) and the geogebra doc's own
-`**Validator:**` note ([`geogebra-construction-import-design.md`](../geogebra-construction-import-design.md)
+`**Validator:**` note ([`geogebra-construction-import-design.md`](../constructions/geogebra-construction-import-design.md)
 §9) that "the hard case is a manifest whose area fits but whose pieces do not tile …
 only the slicer's arrange result catches."
 
