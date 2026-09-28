@@ -1,0 +1,10 @@
+# POC 2 — one CS-1 radial openwork coaster, straps + four orbit colours, hand-cut bodies via shim.
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr
+    piece:  Coaster
+    count:  1
