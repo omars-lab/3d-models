@@ -1,5 +1,7 @@
 ---
 id: GimTvN9hw4U
+aliases:
+  - GimTvN9hw4U
 title: Simple 20-step Six-Fold Star Rosette
 family: constructions
 status: printed
@@ -24,7 +26,7 @@ tags:
   - coaster
 ---
 
-# Simple 20-step Six-Fold Star Rosette (CS-1)
+# Simple 20-step Six-Fold Star Rosette (CS-1) ^wtsm68
 
 A six-fold star rosette, rebuilt step by step from
 [Sarah Brewer's video](https://www.youtube.com/watch?v=GimTvN9hw4U). It is the first
