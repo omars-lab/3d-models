@@ -6,7 +6,9 @@ should have options to configure all of these in a robust easy to use fashion in
 which orbits are filled, each orbit's colour, flush or lowered, and a live coloured preview, with
 the Lab preview and the printed parts coming from one code path.
 
-*Status: consolidated design, the one to act on. Nothing here is built. It supersedes the two
+*Status: consolidated design, the one to act on. §10 steps 1–5 are built (bikar
+[#271](https://github.com/NaqshCoffee/bikar/pull/271)–[#274](https://github.com/NaqshCoffee/bikar/pull/274),
+3d-models #381; pictures below); the Coaster Lab controls (§5, steps 6–8) are not. It supersedes the two
 research designs it was built from, researcher A's [colour-preview-design-a.md](colour-preview-design-a.md)
 (raw notes: [research/colour-preview-2026-09-28-a.md](research/colour-preview-2026-09-28-a.md)) and
 researcher B's [colour-preview-design-b.md](colour-preview-design-b.md) (raw notes:
@@ -26,6 +28,26 @@ the bikar code at `f8796fc` (branch `feat/orbit-radial-fill`, open bikar
 | Recommendation | **One bikar function turns the split bodies into a coloured picture**, and both the Lab viewer and a new `bikar render --format preview` call it. Before that, one shared body-to-colour function, because the Lab and the CLI already work out colours in two places (§3) |
 | Lab controls | An **Orbits** panel: one row per orbit with a fill tick and a colour; presets *odd, even, inner half, outer half, all, none*; a fill-height slider once the `fills` clause exists. Every control rewrites `.bkr` lines, like today's colour knob (§5) |
 | Does *odd* give the snowflake? | **Yes, on CS-1.** Orbits are numbered outwards by radius; the snowflake is orbits 1, 3, 5, 7 = *odd* (checker ran `bikar bands`, §9). *Alternate* is ambiguous (start at 0 or 1), so the Lab says *odd* and *even* |
+
+### What it looks like now
+
+Both pictures come from `bikar render --format preview` on bikar main (`654fae2`), drawn from the
+same split bodies the printer gets, so the colors here are the colors that print. They were
+re-rendered for this doc and are byte-identical to the step-4 check.
+
+| Fill coaster | Border coaster |
+|---|---|
+| ![7apC5Q9QS-8 fill coaster: gold straps, ruby stars, dark base](colour-preview-design/fill-preview.png) | ![7apC5Q9QS-8 border coaster: gold lattice, copper zigzag border, dark base](colour-preview-design/border-preview.png) |
+| `7apC5Q9QS-8-fill-coaster.bkr`: straps gold, the inner stars ruby, the other faces and the base dark | `7apC5Q9QS-8-border-coaster.bkr`: lattice gold, zigzag border copper, base dark |
+
+The stepped edges are in the mesh, not the picture: the kernel's outlines sit on a fine grid, an
+open kernel issue separate from color.
+
+The earlier proof-of-concept pictures, made by hand before the pipeline existed (OpenSCAD
+`color()` over bikar's per-orbit meshes, [colour.scad](research/colour-poc-2026-09-28/colour.scad)):
+[every orbit filled, top view](research/colour-poc-2026-09-28/all-orbits-top.png),
+[the snowflake (odd orbits)](research/colour-poc-2026-09-28/snowflake-iso.png) and
+[lowered fills](research/colour-poc-2026-09-28/lowered-strip.png).
 
 ## 1. What exists today
 

@@ -10,6 +10,12 @@ not, do we need another CAD tool? Scope addition: make orbits, colours, flush vs
 live coloured preview easy to set in Coaster Lab, with the Lab preview and the printed parts
 coming from one code path.
 
+**Pictures:** this proposal was written before any colored picture existed. What got built from it,
+with the pictures it now makes, is in the consolidated design:
+[What it looks like now](colour-preview-design.md#what-it-looks-like-now).
+
+![Fill coaster from bikar render --format preview: gold straps, ruby stars](colour-preview-design/fill-preview.png)
+
 ## 1. Short answer
 
 1. **Colours per orbit already work** on slab coasters (`outline square` / `polygon` with
