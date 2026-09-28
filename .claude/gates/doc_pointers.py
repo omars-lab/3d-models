@@ -526,6 +526,37 @@ def added_entries(
     return [e for e in current if (e["doc"], e["path"]) not in before]
 
 
+def renames_since_head(root: Path) -> dict[str, str]:
+    """Files renamed between HEAD and the working tree (staged or not), old -> new.
+
+    `tools/move_doc.py` moves a note and rewrites the baseline keys that name it;
+    without this, the rewritten key reads as a new entry and the append-block
+    refuses an ordinary move.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "diff", "-M", "--name-status", "HEAD"],
+            cwd=root, capture_output=True, text=True, check=True, env=_git_env(),
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return {}
+    pairs = {}
+    for line in out.splitlines():
+        parts = line.split("\t")
+        if len(parts) == 3 and parts[0].startswith("R"):
+            pairs[parts[1]] = parts[2]
+    return pairs
+
+
+def carry_renames(previous: list[dict[str, str]], renames: dict[str, str]) -> list[dict[str, str]]:
+    """The previous baseline as it reads after the renames: a moved doc's entry
+    is the same entry, not growth. A path the entry names is carried too."""
+    return [
+        {**e, "doc": renames.get(e["doc"], e["doc"]), "path": renames.get(e["path"], e["path"])}
+        for e in previous
+    ]
+
+
 # --- run ------------------------------------------------------------------
 
 
@@ -618,7 +649,7 @@ def run(root: Path, list_all: bool) -> tuple[list[str], str]:
 
     previous = previous_baseline(root)
     if previous is not None and os.environ.get("DOC_POINTERS_BASELINE_MAY_GROW") != "1":
-        added = added_entries(previous, baseline)
+        added = added_entries(carry_renames(previous, renames_since_head(root)), baseline)
         if added:
             violations.append(
                 f"{BASELINE_REL} GREW by {len(added)} entr{'y' if len(added) == 1 else 'ies'}:\n"
@@ -753,6 +784,18 @@ def self_test() -> int:
     print(
         f"self-test {'ok  ' if ok else 'FAIL'}: one-out-one-in is seen as growth "
         f"(a count would report 1 == 1 and pass)"
+    )
+
+    # A moved doc keeps its entries: the key follows the rename, and is not growth.
+    # A real addition in the same change still is.
+    prev = [{"doc": "docs/a.md", "path": "x.ts"}]
+    cur = [{"doc": "docs/design/a.md", "path": "x.ts"}, {"doc": "docs/design/a.md", "path": "new.ts"}]
+    added = added_entries(carry_renames(prev, {"docs/a.md": "docs/design/a.md"}), cur)
+    ok = [e["path"] for e in added] == ["new.ts"]
+    failures += 0 if ok else 1
+    print(
+        f"self-test {'ok  ' if ok else 'FAIL'}: a moved doc's baseline entry is carried, "
+        f"a new one beside it is growth (got {[e['path'] for e in added]})"
     )
 
     # A skipped entry is unmeasured. Three entries, three verdicts, one silence.

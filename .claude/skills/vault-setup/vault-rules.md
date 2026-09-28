@@ -69,6 +69,12 @@ The audit shows: `bases`, each with the notes that embed it. A base embedded now
   GitHub shows it as raw `[[...]]`.
 - Every wikilink must name a file in the vault (D1). Research bodies are exempt, like every other
   D1 rule, because they are kept verbatim.
+- **One exception to verbatim: a link target in a research body moves with the note it points
+  at.** A target is an address, not researched content, so `tools/move_doc.py` rewrites it (and a
+  label that is the target itself, written out as a path). A path named in research
+  prose — in a sentence or a provenance header — stays as written, and the mover lists it.
+- A bare `[[name]]` finds a note wherever it sits, so a move leaves it alone; the mover flags a
+  move that makes a name stop being unique.
 
 The audit shows: `links` — markdown count, wikilink count, broken wikilinks (must be 0).
 
@@ -91,7 +97,8 @@ The audit shows: `opaque file names`, which should be 0.
 ## 6. Graph colors by kind of page
 
 The graph view colors pages by folder (research gray, issues red, wiki green, catalog amber,
-constructions purple, tasks light blue, prints orange, design docs blue). The groups live in
+constructions purple, tasks light blue, prints orange, design docs blue — `design/` or a
+`-design` name, so a doc is blue before and after it moves). The groups live in
 `tools/vault_audit.py` and are merged into the vault's local graph settings (graph.json, not committed) by `--setup-graph`.
 
 The audit shows: `graph color groups`, at least as many as the tool defines.

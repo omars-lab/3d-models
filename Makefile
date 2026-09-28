@@ -882,6 +882,13 @@ validate-ids:
 validate-print-review:
 	$(PYTHON) $(ROOT_DIR)/tools/print_review.py --self-test
 
+# The note mover (tools/move_doc.py): moves a docs/ note and rewrites every
+# reference to it. Its self-test moves a real note in a copy of this repo and
+# requires the docs gate and the pointer gate to stay green, then puts back one
+# link and one pointer the mover fixed and requires each gate to fire.
+validate-move-doc:
+	$(PYTHON) $(ROOT_DIR)/tools/move_doc.py --self-test
+
 # No-hole check on the coaster pictures (docs/colour-preview-design.md §7): each
 # picture bikar drew has transparent corners, no see-through pixel inside the
 # coaster, a coaster in it, and nothing cut off at the frame. Self-test first, so

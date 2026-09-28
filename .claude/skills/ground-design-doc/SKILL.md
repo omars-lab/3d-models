@@ -81,7 +81,9 @@ refuting/complicating sources total.
 
 ### 3. Apply the results (after the agents report back)
 
-- **Preserve the report verbatim** in `docs/research/<doc-slug>-grounding-audit.md` with
+- **Preserve the report verbatim** (a link *target* in it still moves when the note it points at
+  moves — `tools/move_doc.py`, [vault rules](../vault-setup/vault-rules.md) §3) in
+  `docs/research/<doc-slug>-grounding-audit.md` with
   a provenance header as YAML frontmatter: `date:`, `produced-by:` and `feeds:`, a list of
   single-quoted wikilinks to the docs it feeds (`- '[[<doc-slug>]]'`), so the doc's backlinks
   in Obsidian list it ([vault rules](../vault-setup/vault-rules.md) §1). Extract

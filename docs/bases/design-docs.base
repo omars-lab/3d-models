@@ -1,8 +1,9 @@
 filters:
   and:
     - file.ext == "md"
-    - '!file.path.contains("/")'
     - file.hasProperty("status")
+    - '!file.inFolder("prints")'
+    - '!file.inFolder("catalog")'
 formulas:
   linked_from: file.backlinks.length
 properties:

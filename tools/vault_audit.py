@@ -60,8 +60,14 @@ GRAPH_GROUPS = [
     ("path:constructions/", "#9b59b6"),     # constructions: purple
     ("path:tasks/", "#5bc0de"),             # tasks: light blue
     ("path:prints/", "#e67e22"),            # prints: orange
-    ('file:"-design"', "#337ab7"),          # design docs: blue
+    # design docs: blue. Both forms, so it holds before and after a note
+    # moves under docs/design/ (tools/move_doc.py).
+    ('path:design/ OR file:"-design"', "#337ab7"),
 ]
+
+# Queries an earlier GRAPH_GROUPS wrote. --setup-graph drops them, so a changed
+# query replaces its old group instead of sitting beside it.
+RETIRED_GRAPH_QUERIES = {'file:"-design"'}
 
 # A name that is an id: a YouTube id (11 chars, mixed case or digits), a hash,
 # a bare number. Words joined by hyphens are fine.
@@ -247,7 +253,7 @@ def setup_graph(vault: Path) -> str:
             data = json.loads(path.read_text(encoding="utf-8"))
         except ValueError:
             return f"left alone: {path} is not valid JSON — fix it by hand first"
-    ours = {q for q, _ in GRAPH_GROUPS}
+    ours = {q for q, _ in GRAPH_GROUPS} | RETIRED_GRAPH_QUERIES
     kept = [g for g in data.get("colorGroups", []) if g.get("query") not in ours]
     data["colorGroups"] = [{"query": q, "color": {"a": 1, "rgb": hex_to_int(c)}}
                            for q, c in GRAPH_GROUPS] + kept
