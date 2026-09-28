@@ -8,10 +8,10 @@ prints the coaster in several filaments on the X2D with the AMS.
 built from, researcher A's [multicolor-constructions-design.md](multicolor-constructions-design.md)
 and researcher B's [multicolor-constructions-b-design.md](multicolor-constructions-b-design.md),
 which stay as the record. The checker's raw notes, measurements and re-fetched sources are in
-[research/multicolor-verification.md](research/multicolor-verification.md). No decision id is
-taken: the look (§3) and the grammar change (§2) are Omar's to approve; an id is taken with
-`tools/next_id.py` when he does. Nothing here has been sliced in the Bambu Studio window or
-printed.*
+[research/multicolor-verification.md](research/multicolor-verification.md). The grammar change
+(§2, the `orbit` word) was approved on 2026-09-27 as [D-081](decisions-log.md#d-081--pieces-are-grouped-by-orbit-about-the-patterns-true-centre-and-the-openwork-coaster-fills-chosen-orbits-solid),
+together with filling chosen orbits solid on the openwork coaster. The look (§3) and the colours
+are still Omar's to approve. Nothing here has been sliced in the Bambu Studio window or printed.*
 
 ## 0. What this doc decides, in one screen
 
