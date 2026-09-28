@@ -1,5 +1,7 @@
 ---
 date: 2026-09-02
+feeds:
+  - '[[plan|plan row 2.3]]'
 ---
 
 # Shipped record — the Islamic orb project, 2026-07-23 → 2026-09-02
