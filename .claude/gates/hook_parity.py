@@ -82,6 +82,12 @@ EXTRA = [
         "use-case map's as_of pins, the gh-pages tip) are files other gates "
         "already own, so a commit here has no staged trigger to hang one on.",
     ),
+    (
+        "make validate-coaster-pictures",
+        "The no-hole check on the coaster pictures `make coasters` draws. Not "
+        "wired to a hook: the pictures are untracked build/ output, so no commit "
+        "stages them, and the check skips itself before the first render.",
+    ),
 ]
 
 

@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env bambu-flags validate-bambu-flags validate-reflect
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env bambu-flags validate-bambu-flags validate-reflect validate-coaster-pictures
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -779,6 +779,21 @@ COASTER_STANDARD_MM := 90
 # `case` on the id inside the loop, to the `*-border` goldens only — the plain,
 # interlock and minimal goldens carry no `border` param and must not be passed one.
 COASTER_MINI_BORDER_MM := 4
+# A coaster whose `size` range starts above the mini (the key and tab joins
+# need 60 and 55 mm) has no mini: bikar refuses the override, and the loop logs
+# `coaster-mini skip: <id> — <reason>` instead of stopping every coaster after it.
+#
+# The gallery picture (docs/colour-preview-design.md step 5): every coaster
+# bikar can split is drawn by `bikar render --format preview` straight into
+# build/images/<id>.png, in its filament colours and with no background, so no
+# colour key runs over it. Which coasters those are is bikar's call, not a list
+# here: a coaster the split refuses (openwork, slab-reshaping joins such as
+# interlock, pegs, key and tab, `edge fillet … top`) logs one line,
+# `coaster-picture fallback: <id> — <bikar's refusal>`, and keeps the OpenSCAD
+# picture. Only a refusal falls back — bikar's refusals start `Error: coaster`;
+# any other failure (a missing rasterizer) stops the build rather than quietly
+# degrading the gallery. The drawn names go to build/.coaster-previewed, which
+# brick_previews.py skips and `make validate-coaster-pictures` checks.
 coasters: bikar-stamp
 	@[ -f "$(BIKAR_DIR)/packages/cli/dist/index.js" ] \
 		|| { echo "bikar CLI not built — run 'npm run build' in $(BIKAR_DIR)"; exit 1; }
@@ -787,16 +802,33 @@ coasters: bikar-stamp
 	@set -euo pipefail; \
 	mkdir -p ${ROOT_DIR}/build/stls ${ROOT_DIR}/build/images ${ROOT_DIR}/src/Coasters; \
 	: > ${ROOT_DIR}/build/.coaster-names; \
+	: > ${ROOT_DIR}/build/.coaster-previewed; \
 	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
 		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
 		echo "== $$id"; \
 		mini_extra=""; \
 		case "$$id" in *-border) mini_extra="--param border=$(COASTER_MINI_BORDER_MM)" ;; esac; \
-		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) $$mini_extra --format stl --check \
-			-o ${ROOT_DIR}/src/Coasters/$$stem-mini.stl; \
+		if ! err=$$($(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) $$mini_extra --format stl --check \
+			-o ${ROOT_DIR}/src/Coasters/$$stem-mini.stl 2>&1); then \
+			case "$$err" in \
+				*"param override size=$(COASTER_MINI_MM) is outside its declared range"*) \
+					echo "coaster-mini skip: $$id — $$(printf '%s\n' "$$err" | grep -m1 'outside its declared range' | sed 's/^Error: //')" ;; \
+				*) printf '%s\n' "$$err" >&2; exit 1 ;; \
+			esac; \
+		else printf '%s\n' "$$err"; fi; \
 		$(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_STANDARD_MM) --format stl --check \
 			-o ${ROOT_DIR}/src/Coasters/$$stem-standard.stl; \
 		cp ${ROOT_DIR}/src/Coasters/$$stem-standard.stl ${ROOT_DIR}/build/stls/$$id.stl; \
+		if err=$$($(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_STANDARD_MM) --format preview \
+			-o ${ROOT_DIR}/build/images/$$id.png 2>&1 >/dev/null); then \
+			echo "$$id" >> ${ROOT_DIR}/build/.coaster-previewed; \
+			echo "coaster-picture: $$id — bikar --format preview"; \
+		else \
+			case "$$err" in \
+				"Error: coaster"*) echo "coaster-picture fallback: $$id — $$(printf '%s\n' "$$err" | head -1 | sed 's/^Error: //')" ;; \
+				*) printf '%s\n' "$$err" >&2; exit 1 ;; \
+			esac; \
+		fi; \
 		echo "$$id" >> ${ROOT_DIR}/build/.coaster-names; \
 		cp "$$bkr" ${ROOT_DIR}/src/Coasters/; \
 	done; \
@@ -849,3 +881,11 @@ validate-ids:
 # review itself is by eye — this only keeps the numbers honest.
 validate-print-review:
 	$(PYTHON) $(ROOT_DIR)/tools/print_review.py --self-test
+
+# No-hole check on the coaster pictures (docs/colour-preview-design.md §7): each
+# picture bikar drew has transparent corners, no see-through pixel inside the
+# coaster, a coaster in it, and nothing cut off at the frame. Self-test first, so
+# a green run means the by-design failures fired. Skips when nothing is rendered.
+validate-coaster-pictures:
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py
