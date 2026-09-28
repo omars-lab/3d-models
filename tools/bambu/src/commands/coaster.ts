@@ -1,8 +1,8 @@
-// `bambu slice coaster <plate.yaml>` — a multi-filament COLOUR plate for the X2D AMS.
+// `bambu slice coaster <plate.yaml>` — a multi-filament COLOR plate for the X2D AMS.
 //
 // A subverb of the `slice` command group, sibling to `slice compose`. Where `compose` renders each item
 // as one solid (`--format stl`) and hands the loose STLs to BambuStudio's `--arrange 1 --export-3mf`,
-// a COLOUR plate cannot: a coaster's base/straps/border must stay coincident to register as ONE coaster
+// a COLOR plate cannot: a coaster's base/straps/border must stay coincident to register as ONE coaster
 // (K10, plate-composer-design.md §12), and the headless CLI has no flag to assign an object to an AMS
 // slot — the assignment must be baked into the INPUT 3MF (#9666). So this verb:
 //   1. renders each item with `bikar render --format parts` → one STL per region body + a sidecar
@@ -11,7 +11,7 @@
 //   3. ASSEMBLES the multi-part 3MF directly (src/threemf-assemble.ts) — each coaster one object, its
 //      region bodies parts carrying `<metadata key="extruder">`, root `Application=BambuStudio-<ver>`;
 //   4. VERIFIES geometry headless on a TAG-STRIPPED copy (the versioned tag SIGSEGVs the headless
-//      slicer — docs/issues/coaster-3mf-filament-shape-and-export-hang.md §1), and leaves the colour
+//      slicer — docs/issues/coaster-3mf-filament-shape-and-export-hang.md §1), and leaves the color
 //      check to a GUI load (`bambu slice open`), which the pivot doc §4 shows is the only honest signal.
 //
 // It reuses `compose.ts`'s manifest parse + item resolution (the D-072 iteration key: an item is the
@@ -54,11 +54,11 @@ import { prepareSlicePresets } from "./slice.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { platesDir } from "../paths.js";
 import { previewPathFor } from "../threemf.js";
-import { svgRenderArgs, composeColourPreview, checkDrawing } from "../colour-preview.js";
+import { svgRenderArgs, composeColorPreview, checkDrawing } from "../color-preview.js";
 
-// **Default:** the plate's slot-1 filament — the material every colour slot reuses and the id that keeps
+// **Default:** the plate's slot-1 filament — the material every color slot reuses and the id that keeps
 // each slot off the external spool (a non-empty product id, §6). PLA / GFA00 (Bambu PLA Basic) / white.
-// Resolving the id + colour from the actual `profile.filament` preset JSON is a follow-up; a wrong id
+// Resolving the id + color from the actual `profile.filament` preset JSON is a follow-up; a wrong id
 // would only mis-label slot 1's product, not mis-assign a region (the region→slot map is exact). (D-075.)
 const DEFAULT_FILAMENT: FilamentDefaults = { type: "PLA", id: "GFA00", hex: "#ffffff" };
 
@@ -197,7 +197,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   }
   if (!settingsName || !filamentName) {
     console.error(
-      "a colour plate needs one slice profile — set `profile.settings` + `profile.filament` in the " +
+      "a color plate needs one slice profile — set `profile.settings` + `profile.filament` in the " +
         "manifest, or pass -s/--settings and -f/--filament. Slot 1 is the plate's default filament.",
     );
     process.exitCode = 2;
@@ -297,7 +297,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
 
   // 8. The output paths + the Application version tag (the shipped artifact keeps the versioned tag).
   // build/plates, like `slice compose`: the current dir put a stray 3MF in the repo root, untracked and
-  // one `git add` from being committed (a scratch colour plate, 2026-09-26).
+  // one `git add` from being committed (a scratch color plate, 2026-09-26).
   const outDir = opts.outputdir ? resolve(opts.outputdir) : platesDir();
   const outFile = opts.out ?? `${basename(absManifest).replace(/\.ya?ml$/i, "")}.plate.3mf`;
   const outPath = join(outDir, outFile);
@@ -309,8 +309,8 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   const slotTable = map.slots.map((s) => `  slot ${s.slot}: ${s.paletteName ?? "(plate default)"} ${s.hex ?? DEFAULT_FILAMENT.hex}`);
 
   if (opts.dryRun) {
-    console.log(`colour plate: ${resolved.length} coaster variant(s), ${coasters.length} object(s), bed ${bed.label}`);
-    console.log("AMS logical slots (palette name → slot; physical spool bound at print time by colour):");
+    console.log(`color plate: ${resolved.length} coaster variant(s), ${coasters.length} object(s), bed ${bed.label}`);
+    console.log("AMS logical slots (palette name → slot; physical spool bound at print time by color):");
     for (const line of slotTable) console.log(line);
     console.log(`bed-fit pre-check: ${check.ok ? "PASS (necessary only — --arrange decides tiling)" : "FAIL"}`);
     for (const f of check.failures) console.log(`  ✗ ${f}`);
@@ -350,10 +350,10 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   for (const line of slotTable) console.log(line);
 
   // 9b. The plate picture Studio cannot draw headless: bikar's SVG of each distinct coaster, whose region
-  //     fills are the sidecar hexes the slot map reports. A drawing that misses a slot colour is named, and
+  //     fills are the sidecar hexes the slot map reports. A drawing that misses a slot color is named, and
   //     a failed picture never blocks the plate (it is a look, not a gate).
   try {
-    const preview = await writeColourPreview(resolved, rendered, bikarCli, outPath, scratch);
+    const preview = await writeColorPreview(resolved, rendered, bikarCli, outPath, scratch);
     console.log(`plate picture → ${preview.path} (look before sending; one drawing per distinct coaster, not the bed layout)`);
     for (const m of preview.missing) console.log(`  ⚠ ${m}`);
   } catch (err) {
@@ -361,7 +361,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   }
 
   // 10. Verify GEOMETRY headless on a TAG-STRIPPED copy (the versioned tag SIGSEGVs the headless CLI;
-  //     colour is verified by a GUI load — `bambu slice open`). No `--export-3mf` (it hangs headless, §3).
+  //     color is verified by a GUI load — `bambu slice open`). No `--export-3mf` (it hangs headless, §3).
   if (opts.verifyGeometry) {
     const studioBin = locateStudio();
     if (!studioBin) {
@@ -389,19 +389,19 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
     }));
     try {
       const dir = await scaffoldRecord({ slug, plateName: outFile, plateFile: outPath, objects, via: "bambu slice coaster" });
-      console.log(`draft record → ${dir} (verify colours in the GUI: \`bambu slice open ${outPath}\`).`);
+      console.log(`draft record → ${dir} (verify colors in the GUI: \`bambu slice open ${outPath}\`).`);
     } catch (err) {
       console.error(`warning: could not scaffold record: ${(err as Error).message}`);
     }
   }
 
-  console.log(`colour check is a GUI step: \`bambu slice open ${outPath}\` — the headless slice cannot read per-region colour (see docs/issues/coaster-3mf-filament-shape-and-export-hang.md §4).`);
+  console.log(`color check is a GUI step: \`bambu slice open ${outPath}\` — the headless slice cannot read per-region color (see docs/issues/coaster-3mf-filament-shape-and-export-hang.md §4).`);
 }
 
 /** Draw each distinct recipe with `bikar render --format svg` (same source, piece, params as its parts
- *  render), check each drawing paints every region's slot colour, and compose them into
+ *  render), check each drawing paints every region's slot color, and compose them into
  *  `<plate>.preview.png`. Returns the picture's path and any region a drawing does not show. */
-async function writeColourPreview(
+async function writeColorPreview(
   resolved: ResolvedItem[],
   rendered: Map<string, RenderedCoaster>,
   bikarCli: string,
@@ -426,7 +426,7 @@ async function writeColourPreview(
     svgs.push(svg);
   }
   const path = previewPathFor(outPath);
-  await composeColourPreview(svgs, path);
+  await composeColorPreview(svgs, path);
   return { path, missing };
 }
 
@@ -473,7 +473,7 @@ async function verifyGeometry(
     if (tail) console.error(tail);
     return false;
   }
-  // result.json (written by --debug 2) records the objects the slicer actually loaded. Colour is NOT
+  // result.json (written by --debug 2) records the objects the slicer actually loaded. Color is NOT
   // checked here (§4: --load-settings overrides the embedded filament arrays); only geometry.
   const resultPath = join(outDir, "result.json");
   if (existsSync(resultPath)) {
@@ -483,13 +483,13 @@ async function verifyGeometry(
       };
       const loaded = result.sliced_plates?.[0]?.objects?.length ?? 0;
       ev("coaster_verify_done", { loaded, expected: coasters.length });
-      console.log(`geometry verify: PASS — sliced clean headless, ${loaded} object(s) loaded (tag-stripped copy; colour is a GUI check).`);
+      console.log(`geometry verify: PASS — sliced clean headless, ${loaded} object(s) loaded (tag-stripped copy; color is a GUI check).`);
       return true;
     } catch {
       /* result.json unreadable — fall through to the exit-code-only verdict */
     }
   }
-  console.log("geometry verify: PASS — sliced clean headless (tag-stripped copy; colour is a GUI check).");
+  console.log("geometry verify: PASS — sliced clean headless (tag-stripped copy; color is a GUI check).");
   return true;
 }
 
@@ -497,7 +497,7 @@ async function verifyGeometry(
 export function registerCoaster(slice: Command): void {
   slice
     .command("coaster <plate.yaml>")
-    .description("assemble a multi-filament COLOUR plate (bikar --format parts → per-region AMS 3MF) for the X2D")
+    .description("assemble a multi-filament COLOR plate (bikar --format parts → per-region AMS 3MF) for the X2D")
     .option("-o, --out <file>", "output filename (default: <manifest>.plate.3mf)")
     .option("-d, --outputdir <dir>", "output directory (default: build/plates at the repo root, else the current dir)")
     .option("-s, --settings <names|paths>", "machine + process, semicolon-joined — overrides the manifest profile")

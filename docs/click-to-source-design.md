@@ -550,7 +550,7 @@ protected: Location loc;
 `Location::toRelativeString` (`AST.cc`), which returns the literal string `"location unknown"` when
 absent, appended by `printutils.h:96`.
 
-**Picking is a GPU colour-ID buffer, not a raycast.** `MouseSelector.h`: *"Grab the of the Tree
+**Picking is a GPU color-ID buffer, not a raycast.** `MouseSelector.h`: *"Grab the of the Tree
 element that was rendered at a specific location"* [sic]. `MouseSelector.cc:95-153` renders to an
 offscreen FBO with an ID shader, then
 `glReadPixels(…, GL_RGB, …); const int index = color[0] | (color[1]<<8) | (color[2]<<16);` — a
@@ -1108,7 +1108,7 @@ fetched text. Fetch failures are listed at the end so the gaps are visible rathe
   - KCL language server — https://github.com/KittyCAD/modeling-app/tree/main/rust/kcl-language-server
 - OpenSCAD
   - `Location` / `ASTNode` — https://raw.githubusercontent.com/openscad/openscad/master/src/core/AST.h · .../src/core/AST.cc
-  - colour-ID picking — https://raw.githubusercontent.com/openscad/openscad/master/src/gui/MouseSelector.h · .../MouseSelector.cc
+  - color-ID picking — https://raw.githubusercontent.com/openscad/openscad/master/src/gui/MouseSelector.h · .../MouseSelector.cc
   - right-click → ancestor menu → `SELECTED`/`IMPACTED` — https://raw.githubusercontent.com/openscad/openscad/master/src/gui/MainWindow.cc
   - message stamping — .../src/utils/printutils.h
   - GUI manual (out of date re: source navigation) — https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_User_Interface

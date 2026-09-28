@@ -88,7 +88,7 @@ export function buildHeader(frame: PrinterStatus, plate: PlateMeta | null, now: 
   const hex = colorHex(tray.tray_color);
   const material_color = hex
     ? filled(hex, "AMS tray_color")
-    : manual("operator (no colour in the frame)");
+    : manual("operator (no color in the frame)");
   const material_brand = type ? materialBrand(tray) : manual("operator (no loaded tray)");
 
   // Spool id: tray_uuid is H2-proxy — not observed on the X2D AMS as of 2026-09-17. Fill it ONLY if
@@ -203,7 +203,7 @@ export function renderHeader(h: Header): string {
   }
   lines.push(`Machine   ${show(h.machine, "______________________")}  firmware ${show(h.firmware, "____________")}`);
   lines.push(
-    `Material  brand ${show(h.material_brand, "______________")}  type ${show(h.material_type, "______")}  COLOUR ${show(h.material_color, "______________")}  (colour changes flow — record it)`,
+    `Material  brand ${show(h.material_brand, "______________")}  type ${show(h.material_type, "______")}  COLOR ${show(h.material_color, "______________")}  (color changes flow — record it)`,
   );
   lines.push(`Spool     ${show(h.spool_id, "______________________")}  (so a re-measure can rule the spool in or out)`);
   lines.push(

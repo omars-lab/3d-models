@@ -9,7 +9,7 @@ import type { IndexedMesh } from "../mesh.js";
 // These pin the two pure steps `slice coaster` does before it touches bikar or BambuStudio: expanding a
 // rendered recipe into per-copy plate objects with the right extruder per region (step 7), and measuring
 // a coaster's whole footprint as the UNION of its region bodies (K10: the bodies share a frame, so the
-// bed packs a coaster, not loose bodies). A wrong extruder mis-assigns a colour; a summed footprint would
+// bed packs a coaster, not loose bodies). A wrong extruder mis-assigns a color; a summed footprint would
 // reject a coaster that fits.
 
 const stubMesh: IndexedMesh = { vertices: [0, 0, 0, 1, 0, 0, 1, 1, 0], triangles: [0, 1, 2] };

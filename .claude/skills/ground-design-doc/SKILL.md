@@ -158,5 +158,5 @@ settled: that needs the physical object, and it belongs to `prototype` and
   embedded as a PNG, with its source committed next to it so it can be re-shot. ASCII
   art is only a fallback, and the doc says why (e.g. the thing cannot be rendered yet).
   Say which parts of the picture are real data and which are placeholders. Example:
-  `docs/colour-preview-design/lab-controls-mockup.html` → `.png`, embedded in
-  `colour-preview-design.md` §5 (review thread leu4yg, 2026-09-28).
+  `docs/color-preview-design/lab-controls-mockup.html` → `.png`, embedded in
+  `color-preview-design.md` §5 (review thread leu4yg, 2026-09-28).

@@ -37,20 +37,20 @@ be same color"**.
 - **The ring centre is not the symmetry centre in general.** `findCenter(env)` in bikar
   `packages/core/src/dsl/evaluator.ts` (line 10060) returns the first circle's centre. In the
   construction files that is `(0,0)`, which is often not the rosette's centre.
-- **The ring colour reaches the print** (D-078, [radial-band-colour-design.md](../radial-band-colour-design.md)).
+- **The ring colour reaches the print** (D-078, [radial-band-color-design.md](../radial-band-color-design.md)).
   `--format parts` (D-073) writes one watertight STL per piece — `base`, `straps`, `border`,
   and one per palette colour name — plus a `<Coaster>.parts.json` sidecar. A ring colour
   overrides the face's region. Each piece is gated on its own under `--check`.
 - **`--format parts` refuses** deboss, `outline pattern`, and the slab-reshaping clauses
   (interlock, key, tab, rim, trivet, openwork, edges). So the minimal, minimal-frame, pegs, key,
   tab, interlock and twist styles cannot be split today; plain and border can
-  ([coaster-colour-design.md](../coaster-colour-design.md)).
+  ([coaster-color-design.md](../coaster-color-design.md)).
 - **Colour to slot** (D-075): palette name → logical AMS slot by first-seen order, slot 1 is the
   plate default, a shared name shares one slot. `bambu slice coaster` (D-077) writes a
   multi-part 3MF with per-part extruder metadata; headless slicing checks geometry only, colour
   is checked in the Bambu Studio window ([coaster-ams-3mf-contract.md](coaster-ams-3mf-contract.md)).
 - **The plate picture is drawn from the 2D drawing**, not from the split bodies
-  (`tools/bambu/src/colour-preview.ts`). It can show a colour the bodies do not have.
+  (`tools/bambu/src/color-preview.ts`). It can show a colour the bodies do not have.
 - **Relief targets:** `relief straps|faces|both emboss <mm>`. Under `both` every enclosed face is
   raised; a raised face with no fill colour falls into the `straps` piece.
 - **The coaster is one height field** over a grid of pitch

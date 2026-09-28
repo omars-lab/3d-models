@@ -33,7 +33,7 @@ Read every run. Add a rule when a recipe comes back wrong, and say which recipe 
 ## The words
 
 - **Plain words, American spelling.** "color", "center", "gray", "neighbor". Identifiers
-  and file names keep their own spelling (`coaster-colour-design.md`).
+  and file names keep their own spelling (`coaster-color-design.md`).
 - **"Watch out" is the mistake people actually make**, with the check name bikar reports
   (CV2, CV7) when there is one, so a reader can match the error they got.
 - **Reference by GitHub URL**

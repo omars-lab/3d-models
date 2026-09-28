@@ -187,7 +187,7 @@ async function buildRecordProfile(plateFile: string): Promise<RecordProfile | un
 
 /**
  * Which trays this plate feeds from, read off the printer: the plate's used filaments matched by
- * colour to the loaded trays (the `filament-sync` match), turned into `ams_mapping` + `use_ams`.
+ * color to the loaded trays (the `filament-sync` match), turned into `ams_mapping` + `use_ams`.
  * A read-only status request — nothing moves. Prints the match and every loaded tray's number, so a
  * refusal already shows the operator what to pass to --ams-mapping.
  */
@@ -206,7 +206,7 @@ async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConf
     await mqtt.close();
   }
   const slots = collectSlots(frame);
-  const logical = logicalSlotsFromPlate(meta.filamentColours, meta.filamentTypes).filter((l) => used.includes(l.slot));
+  const logical = logicalSlotsFromPlate(meta.filamentColors, meta.filamentTypes).filter((l) => used.includes(l.slot));
   const report = reconcile(logical, physicalTraysFromSlots(slots));
   console.error(renderReport(report));
   console.error("loaded trays (the number --ams-mapping takes):");
@@ -214,7 +214,7 @@ async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConf
     const type = (sl.tray.tray_type ?? "").trim();
     if (type) console.error(`  ${sl.index ?? "?"}  ${sl.where}: ${type} ${sl.tray.tray_color?.slice(0, 6) ?? ""}`);
   }
-  return planAmsMapping(report, meta.filamentColours.length, used);
+  return planAmsMapping(report, meta.filamentColors.length, used);
 }
 
 async function runSend(plate: string, opts: SendOpts): Promise<void> {

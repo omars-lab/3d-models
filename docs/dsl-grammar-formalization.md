@@ -137,7 +137,7 @@ parser (§5.3) and the single biggest caveat on any EBNF that gets written (§6)
 
 `preprocessSource` (`bikar/packages/core/src/dsl/lexer.ts:314-331`) rewrites the source *string*
 line by line, replacing `#RRGGBB` with a `__hex_RRGGBB` identifier so that the `#` comment
-character does not eat colour literals. `lex()` then converts those identifiers back into
+character does not eat color literals. `lex()` then converts those identifiers back into
 `HexColor` tokens. The trigger set is four tokens — `=`, `color`, `stroke`, `fill`:
 
 ```ts
@@ -218,7 +218,7 @@ diagnostic.
 four preprocessor triggers happen to cover all five. Two demonstrated failure modes when they do
 not line up:
 
-- **Line-scoped rewriting.** `a =` / newline / `    #ffffff` silently drops the colour — the hex
+- **Line-scoped rewriting.** `a =` / newline / `    #ffffff` silently drops the color — the hex
   becomes a comment, and the `=` is left dangling.
 - **A position the triggers do not cover.** `values [#ff0000, #00ff00]` inside an `animate`
   keyframe swallows the rest of the line and reports
@@ -249,7 +249,7 @@ Six of eight probed names (`edge`, `void`, `face`, `color`, `radius`, `line`) fa
 `safe_name` and `star` pass. The mechanism: `parsePalette` (`parser.ts:2820`+) loops only
 `while (this.peek().type === TokenType.Identifier)`, so a keyword-named entry silently terminates
 the palette, and the failure surfaces later as a **top-level structure error pointing at the
-colour's own line**. The message tells the author their file's top level is wrong when one colour
+color's own line**. The message tells the author their file's top level is wrong when one color
 name is wrong.
 
 The exposure today is zero (0 of 1,300 assignment-LHS names collide) — but the exposure is
@@ -567,7 +567,7 @@ Keyword       ::= /* one of the 123 entries in KEYWORDS, tokens.ts:197+ */
 | `NumExpr` / `ConstExpr` precedence | `parseNumericExpr` → `parseAddSub` chain, `parser.ts:2243`+; needs its own production group |
 | The 40 contextual keywords | 25 value-matched + 8 `MATH_FUNCTIONS` (`parser.ts:2231`) + 7 orb solids. Only `range`/`step`/`advanced` appear above |
 | `for` / `repeat` / `rotate` / `mirror` / `face` bodies | **structurally inexpressible** — see LAYOUT below |
-| Hex colours | **structurally inexpressible** — `#RRGGBB` is not produced by the lexer; it is produced by a source rewrite before lexing (§2.4) |
+| Hex colors | **structurally inexpressible** — `#RRGGBB` is not produced by the lexer; it is produced by a source rewrite before lexing (§2.4) |
 | Comments | `consumeComment` discards them; they never reach the parser, so no production can mention them |
 
 **LAYOUT — the note that must accompany any `.bkr` grammar.** Seven productions above and below
@@ -951,16 +951,16 @@ trade this project declines.**
 
 **B.3 Calling the hex/comment preprocessor a latent hazard rather than a live bug.**
 *Counter-evidence:* it rewrites source text before lexing, it corrupts 186 lines' worth of column
-data (D1), it admits `#abcg` and `#abcdef0123` as valid colours (D2), and it hijacks the
+data (D1), it admits `#abcg` and `#abcdef0123` as valid colors (D2), and it hijacks the
 `__hex_*` identifier namespace with no guard. That is four demonstrated failures, not a
 theoretical concern, and calling it "latent" understates it.
-*Why the bet stands:* the specific catastrophe — a genuine comment silently eaten as a colour —
+*Why the bet stands:* the specific catastrophe — a genuine comment silently eaten as a color —
 could not be constructed after four probe families, because a comment `#` is either line-leading
 (no trigger precedes it) or preceded by code that would have to end in a bare
 `=`/`color`/`stroke`/`fill`. **But the reason the surface is empty is a convention, not a
 mechanism: 0 of 327 files use a trailing inline comment, obeying a rule
 `language-reference.md:838` states and `lexer.ts:86` does not enforce.** The first author who
-writes `circle C0 center(0,0) radius 100  # outer ring` after a colour assignment on the same
+writes `circle C0 center(0,0) radius 100  # outer ring` after a color assignment on the same
 line finds the edge. D1 and D2 should be fixed in Phase 0 regardless of anything else in this doc.
 
 **B.4 Adopting the 327-file corpus as the oracle when 326 of them are valid.**

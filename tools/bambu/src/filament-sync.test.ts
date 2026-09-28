@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  colourDistance,
+  colorDistance,
   logicalSlotsFromPlate,
   physicalTraysFromSlots,
   reconcile,
@@ -18,7 +18,7 @@ const tray = (where: string, hex: string | null, type: string | null, remain: nu
   remain,
 });
 
-describe("rgb / colourDistance", () => {
+describe("rgb / colorDistance", () => {
   it("parses #RRGGBB, #RGB, #RRGGBBAA and bare RRGGBBAA to the same triple", () => {
     expect(rgb("#FF0000")).toEqual([255, 0, 0]);
     expect(rgb("#f00")).toEqual([255, 0, 0]);
@@ -28,20 +28,20 @@ describe("rgb / colourDistance", () => {
     expect(rgb(null)).toBeNull();
   });
 
-  it("is 0 for identical colours and symmetric", () => {
-    expect(colourDistance("#123456", "#123456")).toBe(0);
-    expect(colourDistance("#000000", "#ffffff")).toBeCloseTo(441.67, 1);
-    expect(colourDistance("#ff0000", "#00ff00")).toBe(colourDistance("#00ff00", "#ff0000"));
+  it("is 0 for identical colors and symmetric", () => {
+    expect(colorDistance("#123456", "#123456")).toBe(0);
+    expect(colorDistance("#000000", "#ffffff")).toBeCloseTo(441.67, 1);
+    expect(colorDistance("#ff0000", "#00ff00")).toBe(colorDistance("#00ff00", "#ff0000"));
   });
 
-  it("returns Infinity when either colour is unparseable, so it never wins a match", () => {
-    expect(colourDistance("#ff0000", null)).toBe(Infinity);
-    expect(colourDistance("nope", "#ff0000")).toBe(Infinity);
+  it("returns Infinity when either color is unparseable, so it never wins a match", () => {
+    expect(colorDistance("#ff0000", null)).toBe(Infinity);
+    expect(colorDistance("nope", "#ff0000")).toBe(Infinity);
   });
 });
 
 describe("physicalTraysFromSlots", () => {
-  it("drops empty trays and normalises colour to #RRGGBB", () => {
+  it("drops empty trays and normalises color to #RRGGBB", () => {
     const slots: Slot[] = [
       { where: "AMS 0 · slot 1", tray: { tray_type: "PLA", tray_color: "FF0000FF", remain: 80 } },
       { where: "AMS 0 · slot 2", tray: { tray_type: "", tray_color: "" } }, // empty → dropped
@@ -56,8 +56,8 @@ describe("physicalTraysFromSlots", () => {
 });
 
 describe("logicalSlotsFromPlate", () => {
-  it("numbers slots 1-based, skips colourless slots, pads missing types with ''", () => {
-    const logical = logicalSlotsFromPlate(["#FF0000", "not-a-colour", "#00FF00"], ["PLA"]);
+  it("numbers slots 1-based, skips colorless slots, pads missing types with ''", () => {
+    const logical = logicalSlotsFromPlate(["#FF0000", "not-a-color", "#00FF00"], ["PLA"]);
     expect(logical).toEqual([
       { slot: 1, hex: "#FF0000", type: "PLA" },
       { slot: 3, hex: "#00FF00", type: "" }, // slot 2 skipped; type padded blank
@@ -66,7 +66,7 @@ describe("logicalSlotsFromPlate", () => {
 });
 
 describe("reconcile — the clean case", () => {
-  it("binds each colour to its closest tray, each tray once, and reports ok", () => {
+  it("binds each color to its closest tray, each tray once, and reports ok", () => {
     const logical = logicalSlotsFromPlate(["#FF0000", "#0000FF"], ["PLA", "PLA"]);
     const trays = [tray("AMS 0 · slot 1", "#0000EE", "PLA", 90), tray("AMS 0 · slot 2", "#EE0000", "PLA", 90)];
     const r = reconcile(logical, trays);
@@ -79,7 +79,7 @@ describe("reconcile — the clean case", () => {
 });
 
 describe("reconcile — the hard cases", () => {
-  it("flags a missing colour when no tray is within tolerance", () => {
+  it("flags a missing color when no tray is within tolerance", () => {
     const logical = logicalSlotsFromPlate(["#00FF00"], ["PLA"]);
     const r = reconcile(logical, [tray("AMS 0 · slot 1", "#FF0000", "PLA")]); // only red loaded
     expect(r.bindings[0]!.status).toBe("missing");
@@ -88,7 +88,7 @@ describe("reconcile — the hard cases", () => {
     expect(r.ok).toBe(false);
   });
 
-  it("flags a material mismatch when the colour matches but the type differs", () => {
+  it("flags a material mismatch when the color matches but the type differs", () => {
     const logical = logicalSlotsFromPlate(["#FF0000"], ["PLA"]);
     const r = reconcile(logical, [tray("AMS 0 · slot 1", "#FF0000", "PETG", 90)]);
     expect(r.bindings[0]!.status).toBe("material-mismatch");
@@ -122,7 +122,7 @@ describe("reconcile — the hard cases", () => {
     expect(r.bindings[0]!.status).toBe("matched");
   });
 
-  it("never binds one tray to two slots — the second same-colour slot goes missing", () => {
+  it("never binds one tray to two slots — the second same-color slot goes missing", () => {
     const logical = logicalSlotsFromPlate(["#FF0000", "#FF0000"], ["PLA", "PLA"]);
     const r = reconcile(logical, [tray("AMS 0 · slot 1", "#FF0000", "PLA", 90)]); // only one red tray
     expect(r.bindings[0]!.status).toBe("matched");
@@ -139,11 +139,11 @@ describe("reconcile — the hard cases", () => {
     expect(a.bindings[1]!.tray?.where).toBe("t-b");
   });
 
-  it("reports 'nothing to reconcile' when the plate has no coloured slots", () => {
+  it("reports 'nothing to reconcile' when the plate has no colored slots", () => {
     const r = reconcile([], [tray("AMS 0 · slot 1", "#FF0000", "PLA")]);
     expect(r.ok).toBe(false);
     expect(r.needsOperator).toBe(false);
-    expect(renderReport(r)).toMatch(/no coloured filament slots/);
+    expect(renderReport(r)).toMatch(/no colored filament slots/);
   });
 });
 
@@ -159,7 +159,7 @@ describe("renderReport", () => {
   it("names the tolerance on a missing line", () => {
     const logical = logicalSlotsFromPlate(["#00FF00"], ["PLA"]);
     const out = renderReport(reconcile(logical, [tray("AMS 0 · slot 1", "#FF0000", "PLA")]));
-    expect(out).toContain(`load this colour`);
+    expect(out).toContain(`load this color`);
     expect(out).toContain(`Δ${MATCH_TOLERANCE}`);
   });
 });

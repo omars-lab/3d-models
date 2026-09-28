@@ -70,7 +70,7 @@ and doesn't.
     the merge that touches only the process config and preserves its other keys.
 - **`print-model` requirements step** (`.claude/skills/print-model/rubric.md` §Filament grouping):
   single-material → grouping is a no-op, say the Filament-Saving default is correct and move on;
-  multi-material/multi-colour → reason Filament-Saving (minimise waste/flush) vs Quality (fewer
+  multi-material/multi-color → reason Filament-Saving (minimise waste/flush) vs Quality (fewer
   cross-nozzle swaps, better surface) vs Custom, and recommend — never silently pick. This also
   upgrades the §Arrangement `[X2D-UNCONFIRMED]` dual-nozzle caveat: the *grouping* mechanism is now
   verified; only auto-arrange bed-zoning remains unconfirmed.
@@ -79,6 +79,6 @@ and doesn't.
 
 `manual` (Custom) grouping is not synthesised — a correct per-filament `filament_map` array is a real
 design decision per plate, and inventing one would be exactly the "capability nothing verifies" trap.
-And the **grouping *behaviour*** (which nozzle each colour lands on, flush savings) is only verified as
+And the **grouping *behaviour*** (which nozzle each color lands on, flush savings) is only verified as
 *accepted and recorded*; its print-quality effect can't be measured until a real multi-material plate
 exists — noted here so a future session does not re-derive the mechanism.

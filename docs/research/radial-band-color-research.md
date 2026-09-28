@@ -1,14 +1,14 @@
 ---
 date: 2026-09-19
 feeds:
-  - '[[radial-band-colour-design]]'
+  - '[[radial-band-color-design]]'
 ---
 
 <!--
 provenance:
   date: 2026-09-19
   produced-by: subagent (Claude Opus 4.8) for Omar, read-only recon in worktree 3d-models-bands
-  feeds: docs/radial-band-colour-design.md (the radial-band colour route, task #25, D-078)
+  feeds: docs/radial-band-color-design.md (the radial-band colour route, task #25, D-078)
   method: in-repo reads at the bikar sibling checkout present on this machine
           (~/Workspace/git/bikar-emit, a worktree off bikar main) and the 3d-models checkout
           (~/Workspace/git/3d-models). All anchors are file:line at those checkouts on the date

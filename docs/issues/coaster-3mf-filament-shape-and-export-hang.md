@@ -17,7 +17,7 @@ its output below was run live; raw per-run logs are under the session scratchpad
 ## What surfaced it
 
 Part 4b-ii assembles a multi-part 3MF from the bikar `--format parts` region bodies and bakes the
-palette→slot colours into it, so the X2D prints each coaster region in a different AMS filament. The
+palette→slot colors into it, so the X2D prints each coaster region in a different AMS filament. The
 first assembled 3MF **crashed the slicer on load** (SIGSEGV, exit -11), and the multi-region
 positive controls **hung for 150 s**. Neither cause was the one first assumed. This records what the
 evidence actually showed, isolated to a single element in each case.
@@ -25,7 +25,7 @@ evidence actually showed, isolated to a single element in each case.
 ## 1. The load crash: `Application=BambuStudio-<version>` drives the headless CLI into the GL project path
 
 The crash was bisected on the *known-good* structure (one object, three coincident part-components,
-`model_settings.config` extruders 1/2/3, `project_settings.config` with three colours — this slices
+`model_settings.config` extruders 1/2/3, `project_settings.config` with three colors — this slices
 `exit 0`). Adding the original crashing file's root-model header elements **one at a time**:
 
 | fixture      | change vs the working baseline                         | result            |
@@ -68,7 +68,7 @@ metadata) is treated as an imported model and loads fine.
 *Transfer condition (why this is a headless artifact, not a slicer bug):* the crash is on the
 project/preview restore step that needs GL. It should **not** be assumed to reproduce with a display
 attached — the GUI has a GL context and loads the same file. That is exactly why the shipped artifact
-keeps the tag (§4) and the *colour* check is a GUI load, while the headless *geometry* check runs on
+keeps the tag (§4) and the *color* check is a GUI load, while the headless *geometry* check runs on
 a tag-stripped copy.
 
 ## 2. Retracted lead: `filament_id` as an array is a recovered error, not the crash
@@ -113,9 +113,9 @@ build, not the filament file** — same GL/preview family as §1. My earlier "a 
 stock preset crashes the loader" hypothesis is **withdrawn**: the custom-filament slice (B) produced
 a full gcode exactly as the stock slice did.
 
-## 4. `result.json` does NOT reflect the embedded colour map under `--load-settings`
+## 4. `result.json` does NOT reflect the embedded color map under `--load-settings`
 
-The working fixtures carry three colours in `project_settings.config` and extruders 1/2/3 in
+The working fixtures carry three colors in `project_settings.config` and extruders 1/2/3 in
 `model_settings.config`, yet every one of them reports a **single** filament slot:
 
 ```
@@ -128,8 +128,8 @@ result.json → return_code 0, filaments: [ {filament_id:"unknown", id:1, ...} ]
 `--load-settings machine;process` loads a **single-filament** process and **overrides** the 3MF's
 embedded filament arrays; the extruder=2/3 parts clamp to slot 1. `main_used_g` is `0.0` even in the
 single-STL D run, so the gram field is not a signal in this fast path either. **Consequence: a
-headless slice with `--load-settings` cannot verify the per-region colour assignment** — the honest
-headless signals are exit code, the `objects[]`/parts structure, and geometry only. Colour
+headless slice with `--load-settings` cannot verify the per-region color assignment** — the honest
+headless signals are exit code, the `objects[]`/parts structure, and geometry only. Color
 assignment has to be verified by a **GUI load** (the GUI reads the embedded `model_settings` /
 `project_settings`), or by a headless slice that loads the 3MF's own filament config instead of
 overriding it with a single-filament process (open follow-up).
@@ -143,17 +143,17 @@ any CLI flag.
 ## What this changes in the code
 
 1. **`threemf-assemble.ts` keeps the `Application=BambuStudio-<version>` tag** in the shipped 3MF —
-   it is the #9666 colour contract for the GUI/print artifact, and the GUI (with GL) loads it fine.
+   it is the #9666 color contract for the GUI/print artifact, and the GUI (with GL) loads it fine.
    The crash is a *headless* artifact, so the **headless geometry check slices a tag-stripped copy**
-   and the **colour check is a GUI load + screenshot**, not a headless slice.
+   and the **color check is a GUI load + screenshot**, not a headless slice.
 2. **`filament_id` is emitted as a scalar** (one product id); the per-slot palette goes under
    `filament_ids` (+ `filament_settings_id`, `filament_colour`, `filament_type`). Correctness fix
    from §2, not the crash fix. The assembler test asserting the plural key is updated to match.
 3. **Per-region assignment is baked into `model_settings.config`** as an `extruder` index per part,
    not delegated to `--load-filament-ids`, which §4 shows does not surface as slots.
 4. **Verification path (§4):** headless slice (no `--export-3mf`, tag stripped) verifies exit 0 +
-   `objects[]`/parts; a GUI load verifies the per-region colours. `result.json` filament-slot count
-   is explicitly *not* used as the colour signal.
+   `objects[]`/parts; a GUI load verifies the per-region colors. `result.json` filament-slot count
+   is explicitly *not* used as the color signal.
 
 ## Sources (web, 2026-09-18)
 

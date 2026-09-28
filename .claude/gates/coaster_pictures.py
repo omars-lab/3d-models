@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """No-hole check for the coaster pictures `make coasters` draws.
 
-docs/colour-preview-design.md §7, last validator: a gallery PNG has no hole
+docs/color-preview-design.md §7, last validator: a gallery PNG has no hole
 inside the coaster. `make coasters` draws a coaster with `bikar render --format
 preview` when bikar can split it, and falls back to the OpenSCAD picture
 (build/brick_previews.py) when bikar refuses. bikar's picture has no
-background, so no colour key runs over it; this gate is what says so.
+background, so no color key runs over it; this gate is what says so.
 
 For every picture bikar drew (the names in build/.coaster-previewed), in
 build/images/ and, once `make web-images` has run, in build/images/web/:
@@ -13,7 +13,7 @@ build/images/ and, once `make web-images` has run, in build/images/web/:
   P1  all four corners are fully transparent (no background was drawn);
   P2  no hole: every pixel that is not fully opaque is joined to the image
       edge through other not-fully-opaque pixels. A see-through pixel walled
-      in by coaster is a hole — a pinhole between faces, or a colour key that
+      in by coaster is a hole — a pinhole between faces, or a color key that
       ate a lit face;
   P3  the coaster is there: at least MIN_OPAQUE of the picture is opaque, so
       an empty or all-transparent PNG cannot pass P1 and P2 by having nothing;
@@ -22,7 +22,7 @@ build/images/ and, once `make web-images` has run, in build/images/web/:
       to PAD px, so its edge is not the render frame);
   P5  the web copy is the raw picture cropped and nothing else: inside the
       box around the visible pixels, the two alpha channels are equal pixel
-      for pixel. This is the check that catches a colour key eating a cream
+      for pixel. This is the check that catches a color key eating a cream
       body. P2 cannot: keyed straps reach the outer ring, so the see-through
       region is joined to the outside (measured 2026-09-28 on 7apC5Q9QS-8-fill
       with its straps repainted #fffde8 — the old key made 123k px
@@ -128,7 +128,7 @@ def same_alpha_as_raw(raw: Path, web: Path) -> list[str]:
     """P5: the web copy is the raw picture cropped, not keyed.
 
     Both are cut to the bounding box of their visible pixels and their alpha
-    compared pixel for pixel. A colour key that ate a body changes the alpha
+    compared pixel for pixel. A color key that ate a body changes the alpha
     inside that box even where the eaten region reaches the silhouette's edge,
     which is exactly where P2 is blind."""
     a = Image.open(raw).convert("RGBA").getchannel("A")

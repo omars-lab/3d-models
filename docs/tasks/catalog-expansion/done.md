@@ -15,7 +15,7 @@ Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 - 2026-09-27 — Lobed wave outline: a coaster edge of scallops drawn with compass arcs (bikar #266)
 - 2026-09-27 — The import-construction skill sends a pasted construction-video link to the youtube repo's video loop instead of treating it as a GeoGebra construction (3d-models #354)
 - 2026-09-27 — On a relief coaster a strap cell stays part of the strap instead of being raised with the fill (bikar #263)
-- 2026-09-27 — Flush colour fills keep their straps and pass the mesh gate (bikar #261)
+- 2026-09-27 — Flush color fills keep their straps and pass the mesh gate (bikar #261)
 - 2026-09-26 — Joins sample plate (KEY-1): one mated pair per join on CS-1 at 80 mm, split across [minis-05](../../plates/minis-05.yaml) (plain, butterfly key with a 0.05/0.10/0.15 key ladder, tab) and [minis-06](../../plates/minis-06.yaml) (dovetail, slim dovetail), every piece through the mesh gate and the review sheet; closes the joins item — the print waits on Omar in the coaster-pipeline backlog
 - 2026-09-26 — Margin ruler on every join gallery picture: the solid band between the two patterns, measured off the built mesh and held by a test to two of each file's declared frames within the 0.4 mm grid — none 6.0, dovetail 11.1, slim dovetail 8.4, key 5.7, tab 5.8 mm (bikar #259)
 - 2026-09-26 — Tab join: `interlock tab`, a tab on every other hexagon edge whose head drops into the neighbour's pattern opening, fit check CV-T1 (size 55–120 mm), the six-fold minimal-tab coaster, and two pinhole fixes shared with the key (bikar #258)
@@ -39,11 +39,11 @@ once**, so an id means something only under its snapshot: Snapshot 1's #14 and S
 #14 are different tasks. Each snapshot's own note below says which sequence it uses. Newest
 first.
 
-**▸ Snapshot 10 — 2026-09-25 (plates, colour regions, the construction migrations,
+**▸ Snapshot 10 — 2026-09-25 (plates, color regions, the construction migrations,
 the consolidation).** **A fresh id sequence, not a continuation of Snapshot 9.** The
 live board was rebuilt from the continuation plan's later phases, so this snapshot's
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
-colour-regions id. Where a title below cites a second number (e.g. "#37 part 2",
+color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
 was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
@@ -54,7 +54,7 @@ reviews the 3d-models #218 design).
 
 ### Coaster kernel features
 - #20–#24 — twist / helix extrude, T1–T5: lofted-ring solid, the `twist <deg>` statement and its conflict refusal, evaluator + render wiring, CV12 + CAL-CST-08, Lab preset + tests (bikar #217, 42ce6dd); CAL-CST-08 mirrored into the calibrate bets file (3d-models #279, 2c1dbb0; count fix #281, 5ed8031)
-- #25 — radial-band colouring: the ring a polygon sits in is a print region, D-078 — design (3d-models #277, 6d67693); `bands` verb (bikar #219, 103caa8); ring colour onto the height field (bikar #220, f68a536); `--format parts` split by ring colour (bikar #221, 2e45cd5)
+- #25 — radial-band coloring: the ring a polygon sits in is a print region, D-078 — design (3d-models #277, 6d67693); `bands` verb (bikar #219, 103caa8); ring color onto the height field (bikar #220, f68a536); `--format parts` split by ring color (bikar #221, 2e45cd5)
 - #26 — emit-golden fix: `emitBkr` round-trips palette + color blocks (bikar #218, 60b5ff4)
 - #28, #30 — rods relief: investigated as a Coaster Lab option, then built as path A, half-round height-field straps (bikar #226, 5a588e5)
 
@@ -85,7 +85,7 @@ until Omar says main), `#21` (CI secrets sync, owner-gated), `#24` (session-refl
 implementation, waits on the `#23` design review), **`#36`** (the coaster border,
 D-071: design shipped in 3d-models #257, bikar implementation checkpointed at
 f5d1781 on `feat/coaster-border`, validators/importer/docs remaining per the
-continuation plan §2) and `#37` (colour regions → per-body export → filament map).
+continuation plan §2) and `#37` (color regions → per-body export → filament map).
 
 ### Phase 2/3 remainder — the first coasters into the catalog
 - #27 — P2.7 disc coaster from the GimTvN9hw4U golden: mini `size=40` / standard `size=90`, `--check` both; the importer emits the coaster block itself, `--coaster` beside `--piece` (bikar #207, 05d12ff); the product-side coaster design doc + D-065 (3d-models #227, 6bb053b)

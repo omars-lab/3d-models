@@ -45,7 +45,7 @@ the canon, then grow C the missing layer so its names have something to attach t
   fork: "share the vocabulary" ≠ "import the code".)
 - **Not** a visual redesign of any surface. Every pixel sacred-patterns emits today it must
   still emit after (§6, the golden-file validator); the refactor is invisible in the output.
-- **Not** colour, animation, or curved-face vocabulary. C has no curved primitives and A/B's
+- **Not** color, animation, or curved-face vocabulary. C has no curved primitives and A/B's
   `isCurved` has no C analog; that field stays bikar-only until a curved figure needs it.
 
 ## 2. The canonical shared vocabulary

@@ -241,7 +241,7 @@ earned until it records its provenance).
   bracket around an unknown, not a prediction. A ladder that turns out to need
   re-centring is a **result** — log it and re-cut, per the `calibrate` rules.
 - **Print target** for the whole series: record the full profile header from
-  `.claude/skills/calibrate/protocol.md` (machine, material *and colour*, spool,
+  `.claude/skills/calibrate/protocol.md` (machine, material *and color*, spool,
   nozzle ⌀ and type, layer height, profile verbatim, ambient, date, caliper)
   before anything is measured. That header **is** the deliverable; the numbers
   are meaningless without it.
@@ -1499,7 +1499,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
     0.4 mm sampling pitch as §3 predicts?
 - **What we learned**: — pending.
 - **Feeds**: the `--border` importer's default `border` band width and its stock
-  chevron motif; the gallery's two bordered entries; colour regions (#37) — the
+  chevron motif; the gallery's two bordered entries; color regions (#37) — the
   band vs field split (the kernel's `band` bit) is the region this is the first
   form to carry; the Coaster Lab's bordered presets.
 

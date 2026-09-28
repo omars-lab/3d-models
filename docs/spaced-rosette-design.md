@@ -53,7 +53,7 @@ doc, not a `mural` mode:
 | kernel work | Milestone A, edge-to-edge relief | **none** — see §2 |
 
 **Non-goals.** Cutting a pattern (that is the `mural`); carrying relief across a gap (there is no
-shared seam here — every piece is whole); colour; and any claim that a *continuous*-mount array
+shared seam here — every piece is whole); color; and any claim that a *continuous*-mount array
 mates a stock baseplate (it does not — §3, and this is the K2 line the doc must not cross).
 
 ## 2. The pieces are bikar's, and spacing never touches them

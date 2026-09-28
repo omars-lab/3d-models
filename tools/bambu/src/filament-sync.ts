@@ -1,49 +1,49 @@
 // filament-sync — reconcile a sliced plate's LOGICAL AMS slots against the printer's PHYSICAL trays
-// by colour match, so the operator knows which spool to load where before a coaster plate prints.
+// by color match, so the operator knows which spool to load where before a coaster plate prints.
 //
-// The gap this closes is the §6 caveat of docs/coaster-colour-design.md and the K1/logical≠physical
+// The gap this closes is the §6 caveat of docs/coaster-color-design.md and the K1/logical≠physical
 // note in tools/bambu/src/ams.ts: a sliced 3MF carries only a LOGICAL filament order (slot 1, 2, …
-// each a palette colour), never a binding to a physical AMS tray. BambuStudio resolves that binding
-// interactively at print time by colour. This module does the same match head-of-time and prints it,
+// each a palette color), never a binding to a physical AMS tray. BambuStudio resolves that binding
+// interactively at print time by color. This module does the same match head-of-time and prints it,
 // so `bambu filament sync --plate <3mf>` answers "load AMS slot N with which spool?" from live trays.
 //
 // PURE — no IO, no printer, no filesystem. The command layer (commands/filament.ts) reads the plate
 // (threemf.ts) and the live trays (frame.ts collectSlots) and hands them here. That keeps the match
 // unit-testable: the whole of the operator-facing decision is `reconcile()`, exercised in
-// filament-sync.test.ts against hand-built colour cases, including the deliberately hard ones
-// (a near-tie, a material mismatch, a missing colour).
+// filament-sync.test.ts against hand-built color cases, including the deliberately hard ones
+// (a near-tie, a material mismatch, a missing color).
 
 import { colorHex, type Slot } from "./frame.js";
 
-/** One logical filament slot as the slice declared it: 1-based, a colour, and a material type. */
+/** One logical filament slot as the slice declared it: 1-based, a color, and a material type. */
 export interface LogicalSlot {
   slot: number; // 1-based, = position in the 3MF's filament_colour[] + 1
-  hex: string; // "#RRGGBB" — the colour the slice wants in this slot
+  hex: string; // "#RRGGBB" — the color the slice wants in this slot
   type: string; // "PLA", "PETG", … ; "" when the config left it blank
 }
 
 /** One physical tray the printer reports loaded, normalised out of a frame Slot. */
 export interface PhysicalTray {
   where: string; // "AMS 0 · slot 1" / "External spool" — the label to tell the operator
-  hex: string | null; // "#RRGGBB" or null when the tray is empty / has no RFID colour
+  hex: string | null; // "#RRGGBB" or null when the tray is empty / has no RFID color
   type: string | null; // "PLA" or null when empty
   remain: number | null; // percent left; null when the tray does not report it, -1 = unknown (no RFID)
   index?: number | null; // the tray number a send puts in ams_mapping (frame.ts trayIndex); null = unknown
 }
 
 export type MatchStatus =
-  | "matched" // a tray within the colour tolerance, material agrees — load it, no question
-  | "material-mismatch" // colour is close enough but the material differs — operator must confirm
+  | "matched" // a tray within the color tolerance, material agrees — load it, no question
+  | "material-mismatch" // color is close enough but the material differs — operator must confirm
   | "low-remain" // matched, but the tray reports little filament left — warn, do not block
   | "ambiguous" // two loaded trays are ~equally close — the operator's call which to use
-  | "missing"; // no loaded tray is within tolerance of this colour — load a spool
+  | "missing"; // no loaded tray is within tolerance of this color — load a spool
 
 export interface SlotBinding {
   logical: LogicalSlot;
   tray: PhysicalTray | null; // the chosen physical tray, or null when missing
   runnerUp: PhysicalTray | null; // the second-closest, when it made the match ambiguous
   status: MatchStatus;
-  distance: number | null; // colour distance to the chosen tray (0 = exact), null when missing
+  distance: number | null; // color distance to the chosen tray (0 = exact), null when missing
 }
 
 export interface SyncReport {
@@ -53,11 +53,11 @@ export interface SyncReport {
 }
 
 // --- tunables. These decide auto-match vs. ask; the report ALWAYS prints the measured distance, so a
-// generous tolerance never hides a mistake — the operator sees the number and the colours either way
+// generous tolerance never hides a mistake — the operator sees the number and the colors either way
 // (docs/print-model-design.md §5.5: "one clear match is chosen and stated, not asked"). ---
 
-/** Max colour distance (0–441.7, the RGB-cube diagonal) still called a match. 60 ≈ a shade's worth of
- *  drift — comfortably separates distinct palette colours while tolerating RFID/screen variance. */
+/** Max color distance (0–441.7, the RGB-cube diagonal) still called a match. 60 ≈ a shade's worth of
+ *  drift — comfortably separates distinct palette colors while tolerating RFID/screen variance. */
 export const MATCH_TOLERANCE = 60;
 /** When the runner-up tray is within this of the best, the choice is a near-tie → ask the operator. */
 export const AMBIGUITY_MARGIN = 15;
@@ -76,9 +76,9 @@ export function rgb(hex: string | null | undefined): [number, number, number] | 
 
 /** Euclidean distance in the RGB cube (0 = identical, ~441.7 = black↔white). Symmetric, deterministic.
  *  A weighted/CIELAB metric would track perception better but adds a table for a match the operator
- *  eyeballs anyway; plain RGB is enough to separate palette colours and keeps the function trivially
- *  testable. Returns Infinity when either colour is unparseable so such a pair never wins a match. */
-export function colourDistance(a: string | null | undefined, b: string | null | undefined): number {
+ *  eyeballs anyway; plain RGB is enough to separate palette colors and keeps the function trivially
+ *  testable. Returns Infinity when either color is unparseable so such a pair never wins a match. */
+export function colorDistance(a: string | null | undefined, b: string | null | undefined): number {
   const x = rgb(a);
   const y = rgb(b);
   if (!x || !y) return Infinity;
@@ -103,12 +103,12 @@ export function physicalTraysFromSlots(slots: Slot[]): PhysicalTray[] {
   return out;
 }
 
-/** Turn a sliced plate's filament_colour[]/filament_type[] into 1-based logical slots. Colour is the
- *  spine — a slot with no colour cannot be matched, so it is skipped (it is a config the slice never
- *  filled, not a real print slot). Types shorter than colours pad with "" (blank, not a guess). */
-export function logicalSlotsFromPlate(colours: string[], types: string[]): LogicalSlot[] {
+/** Turn a sliced plate's filament_colour[]/filament_type[] into 1-based logical slots. Color is the
+ *  spine — a slot with no color cannot be matched, so it is skipped (it is a config the slice never
+ *  filled, not a real print slot). Types shorter than colors pad with "" (blank, not a guess). */
+export function logicalSlotsFromPlate(colors: string[], types: string[]): LogicalSlot[] {
   const out: LogicalSlot[] = [];
-  colours.forEach((raw, i) => {
+  colors.forEach((raw, i) => {
     const hex = rgb(raw) ? `#${rgb(raw)!.map((n) => n.toString(16).padStart(2, "0")).join("")}`.toUpperCase() : null;
     if (!hex) return;
     out.push({ slot: i + 1, hex, type: (types[i] ?? "").trim() });
@@ -123,7 +123,7 @@ interface ReconcileOpts {
 }
 
 /**
- * Match every logical slot to a physical tray by colour, each tray used at most once.
+ * Match every logical slot to a physical tray by color, each tray used at most once.
  *
  * Greedy on the global best pair: of all (unbound slot, unused tray) pairs, bind the closest first,
  * then the next, and so on. Greedy-by-least-distance is optimal-enough here (≤ a handful of slots)
@@ -150,13 +150,13 @@ export function reconcile(
   // Global-greedy assignment: repeatedly take the closest unbound (slot, tray) pair.
   const pairs: Array<{ si: number; ti: number; d: number }> = [];
   logical.forEach((l, si) =>
-    physical.forEach((t, ti) => pairs.push({ si, ti, d: colourDistance(l.hex, t.hex) })),
+    physical.forEach((t, ti) => pairs.push({ si, ti, d: colorDistance(l.hex, t.hex) })),
   );
   pairs.sort((a, b) => a.d - b.d || a.si - b.si || a.ti - b.ti);
   for (const { si, ti, d } of pairs) {
     if (d === Infinity) break; // nothing parseable left to bind
     if (chosen.has(si) || usedTray.has(ti)) continue;
-    if (d > tolerance) continue; // too far to be this slot's colour
+    if (d > tolerance) continue; // too far to be this slot's color
     chosen.set(si, { trayIdx: ti, distance: d });
     usedTray.add(ti);
   }
@@ -174,7 +174,7 @@ export function reconcile(
     let runnerDist = Infinity;
     physical.forEach((t, ti) => {
       if (ti === c.trayIdx) return;
-      const d = colourDistance(l.hex, t.hex);
+      const d = colorDistance(l.hex, t.hex);
       if (d < runnerDist) {
         runnerDist = d;
         runnerUp = t;
@@ -206,10 +206,10 @@ const MARK: Record<MatchStatus, string> = {
   missing: "LOAD",
 };
 
-/** One line per logical slot: what to load where, with the measured colour distance always shown. */
+/** One line per logical slot: what to load where, with the measured color distance always shown. */
 export function renderReport(r: SyncReport): string {
   if (r.bindings.length === 0) {
-    return "The plate declares no coloured filament slots (nothing to reconcile).";
+    return "The plate declares no colored filament slots (nothing to reconcile).";
   }
   const lines = r.bindings.map((b) => {
     const l = b.logical;
@@ -221,11 +221,11 @@ export function renderReport(r: SyncReport): string {
       case "low-remain":
         return `[${mark}] ${head} → ${b.tray!.where} (${b.tray!.type} ${b.tray!.hex ?? "?"}, Δ${b.distance!.toFixed(0)}) — LOW: ${b.tray!.remain}% left`;
       case "material-mismatch":
-        return `[${mark}] ${head} → ${b.tray!.where} colour matches (Δ${b.distance!.toFixed(0)}) but is ${b.tray!.type}, not ${l.type} — confirm the swap`;
+        return `[${mark}] ${head} → ${b.tray!.where} color matches (Δ${b.distance!.toFixed(0)}) but is ${b.tray!.type}, not ${l.type} — confirm the swap`;
       case "ambiguous":
         return `[${mark}] ${head} → ${b.tray!.where} (Δ${b.distance!.toFixed(0)}) or ${b.runnerUp!.where} (${b.runnerUp!.type} ${b.runnerUp!.hex ?? "?"}) — near-tie, pick one`;
       case "missing":
-        return `[${mark}] ${head} → no loaded tray within Δ${MATCH_TOLERANCE} — load this colour`;
+        return `[${mark}] ${head} → no loaded tray within Δ${MATCH_TOLERANCE} — load this color`;
     }
   });
   const verdict = r.ok
@@ -261,7 +261,7 @@ export function planAmsMapping(report: SyncReport, filamentCount: number, used: 
   const problems: string[] = [];
   for (const id of used) {
     const b = bySlot.get(id);
-    if (!b) problems.push(`filament ${id} has no colour in the plate to match a tray by`);
+    if (!b) problems.push(`filament ${id} has no color in the plate to match a tray by`);
     else if (b.status !== "matched" && b.status !== "low-remain") problems.push(`filament ${id} is ${b.status}`);
     else if (b.tray?.index === null || b.tray?.index === undefined)
       problems.push(`filament ${id} matched ${b.tray?.where}, which has no known tray number`);

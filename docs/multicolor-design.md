@@ -4,10 +4,10 @@ decisions:
   - D-081
 ---
 
-# Multicolour constructions — the consolidated design
+# Multicolor constructions — the consolidated design
 
-A construction coaster today is only its lines: straps standing up from a one-colour slab. This
-design fills some of the **shapes** the lines enclose, gives them colours by Omar's rule, and
+A construction coaster today is only its lines: straps standing up from a one-color slab. This
+design fills some of the **shapes** the lines enclose, gives them colors by Omar's rule, and
 prints the coaster in several filaments on the X2D with the AMS.
 
 *Status: consolidated design, the one to act on. It supersedes the two research designs it was
@@ -16,19 +16,19 @@ and researcher B's [multicolor-constructions-b-design.md](multicolor-constructio
 which stay as the record. The checker's raw notes, measurements and re-fetched sources are in
 [research/multicolor-verification.md](research/multicolor-verification.md). The grammar change
 (§2, the `orbit` word) was approved on 2026-09-27 as [D-081](decisions-log.md#d-081--pieces-are-grouped-by-orbit-about-the-patterns-true-centre-and-the-openwork-coaster-fills-chosen-orbits-solid),
-together with filling chosen orbits solid on the openwork coaster. The look (§3) and the colours
+together with filling chosen orbits solid on the openwork coaster. The look (§3) and the colors
 are still Omar's to approve. Nothing here has been sliced in the Bambu Studio window or printed.*
 
 ## 0. What this doc decides, in one screen
 
 | Question | Recommendation | One-line reason |
 |---|---|---|
-| How are shapes grouped into colour classes? | A new fill word **`orbit`**: faces that a rotation (or, where the pattern has a mirror line, a reflection) about the pattern's centre carries onto each other | It is Omar's rule stated as a test the engine can check face by face; `ring` breaks it on 7 of the 8 coasters measured |
+| How are shapes grouped into color classes? | A new fill word **`orbit`**: faces that a rotation (or, where the pattern has a mirror line, a reflection) about the pattern's centre carries onto each other | It is Omar's rule stated as a test the engine can check face by face; `ring` breaks it on 7 of the 8 coasters measured |
 | Which word? | **`orbit`**, not `class` | `class` already means `.class` tags and `classify` in the language; `orbit` is already the importer's word for exactly these copies |
 | Where is the centre? | The **area-weighted centroid** of the faces, refused when the faces have no symmetry about it | Any symmetry of the face set fixes that point; B's "outermost `rotate N around`" rule refuses 7apC5Q9QS-8, which has no such block |
-| Flush or lowered fills? | **Build flush first; add the fill height as one knob on the same path; the look is Omar's call** | Flush builds and passes every gate today (reproduced); lowered halves the colour-change layers but needs a parser and kernel change first |
-| How do colours reach the printer? | The shipped route: `--format parts` → multi-part 3MF → `bambu slice coaster` | Both researchers agree; nothing new on the printer side |
-| How many colours? | **Warn, not cap**, slots read from the machine (D-078), not A's fixed 4 | D-078 already decided it; A's cap contradicts a shipped decision |
+| Flush or lowered fills? | **Build flush first; add the fill height as one knob on the same path; the look is Omar's call** | Flush builds and passes every gate today (reproduced); lowered halves the color-change layers but needs a parser and kernel change first |
+| How do colors reach the printer? | The shipped route: `--format parts` → multi-part 3MF → `bambu slice coaster` | Both researchers agree; nothing new on the printer side |
+| How many colors? | **Warn, not cap**, slots read from the machine (D-078), not A's fixed 4 | D-078 already decided it; A's cap contradicts a shipped decision |
 | bikar PR #261 | The two kernel fixes are sound and should land; the prototype preset should wait for Omar's look call | §9 |
 
 ## 1. The ask and how the rule is read
@@ -38,15 +38,15 @@ Omar, 2026-09-26: "alternative version of concatructiona ... where we have multi
 "shapes that are translationns same midpoint from center should be same color".
 
 Both researchers read the rule the same way, and this doc keeps it: two filled shapes share a
-colour when one is a copy of the other moved about the pattern's centre (in a rosette the move is a
+color when one is a copy of the other moved about the pattern's centre (in a rosette the move is a
 rotation, so "translation" is read as "moved copy") **and** their centres sit the same distance from
-the pattern's centre. Each such group is a **colour class**.
+the pattern's centre. Each such group is a **color class**.
 
 This is close to, but not the same as, the ask D-078 answered on 2026-09-19 ("polygons whose
 midpoints are equidistant from midpoint of construction"), which chose the radius-only `ring`
 ([D-078](decisions-log.md)). The new rule adds **same shape**, and §2 shows the difference is real.
 
-## 2. Colour classes: the `orbit` word
+## 2. Color classes: the `orbit` word
 
 ### 2.1 What was measured
 
@@ -59,7 +59,7 @@ compared the engine's rings with the classes. The checker re-ran it on bikar mai
 - On the **other 7** plain construction coasters, most classes are spread over several rings
   (GimTvN9hw4U: 7 of 8 classes split; sDO9fpu76v8: 34 of 35). The cause is the ring centre: the
   engine measures from the first circle defined, which is (0,0), not the rosette's centre, on those
-  files. So colouring by `ring` gives matching shapes different colours — the opposite of the rule.
+  files. So coloring by `ring` gives matching shapes different colors — the opposite of the rule.
 - On all 8 files, "congruent and same radius" gives the same classes as the stricter orbit test.
   B's worry that the two could differ did not occur in this set. The survey is these 8 files only.
 
@@ -116,27 +116,27 @@ A's 0.05 mm radius tolerance was justified by a 0.22 mm gap between two **differ
 7apC5Q9QS-8 (rings 9 and 10); the congruence test already separates those, so that gap never
 bounds the tolerance. B's hard pair (§7) is the gap that does.
 
-### 2.4 Choosing which orbits carry colour
+### 2.4 Choosing which orbits carry color
 
 Both researchers agree: the author picks, nothing is merged automatically.
 
 1. `bikar bands <file>` lists orbits (id, member count, sides, area, radius) beside rings.
 2. `fill void where orbit == N color <Name>`. Several orbits may share a palette name; that is how
    a design has more classes than spools (7apC5Q9QS-8 has 16 classes).
-3. Unfilled orbits keep the base colour (how depends on §3).
+3. Unfilled orbits keep the base color (how depends on §3).
 
 ## 3. The look: flush or lowered fills
 
 The coaster is one height field on a 0.4 mm grid (CAL-FEA-01) and every printed body is cut from
-it by column, so neighbouring colour bodies share faces exactly, with no overlap, no gap and no
+it by column, so neighbouring color bodies share faces exactly, with no overlap, no gap and no
 boolean union. Both researchers found this and it holds for every option below.
 
 | Option | What it is | Pros | Cons | Implications |
 |---|---|---|---|---|
-| **Flush** (A) | `relief both`: filled faces rise to the strap height; unfilled faces are filled with the base colour name so they rise in the slab colour | **Builds today** with #261's two fixes; all four bodies pass `--format parts --check` at 90 and 80 mm (reproduced); a flat top, like a mosaic | Every relief layer holds every colour: at 0.2 mm layers, 6 layers × (colours) changes; the only line between two colours is the colour edge, so any bleed is on the top face | No grammar change; the unfilled-face trick is one extra `fill` line |
-| **Lowered** (B, "cloisonné") | Fills rise less than the straps (B proposes 0.4–0.8 mm against 1.2 mm straps) | Fewer multicolour layers: at 0.6 mm, 3 of the 6 relief layers hold several colours and the top 3 hold only the strap colour — about half the colour changes, if purge scales with changes as the fetched guides say; a strap wall stands at every colour edge, where a ghost of the previous colour would show | **Does not build today**: the parser refuses a second `relief` clause and the kernel has one relief height; the fill depth has no source | A parser change and a kernel change (a top height per body); the depth needs a print to settle |
-| Face-down mosaic (B's C) | Coaster printed upside down, colour in the first layers on the bed | Crisp flat face | Loses the raised straps; multicolour first layer with small islands; a new split mode | A second style, not a variant; not pursued now |
-| Stained glass, full-height plugs, height terraces (B's D, E, F) | — | F works without an AMS | D needs the openwork split refusal lifted; E makes every layer multicolour; F cannot put two colours in one layer | Out of scope for the X2D path |
+| **Flush** (A) | `relief both`: filled faces rise to the strap height; unfilled faces are filled with the base color name so they rise in the slab color | **Builds today** with #261's two fixes; all four bodies pass `--format parts --check` at 90 and 80 mm (reproduced); a flat top, like a mosaic | Every relief layer holds every color: at 0.2 mm layers, 6 layers × (colors) changes; the only line between two colors is the color edge, so any bleed is on the top face | No grammar change; the unfilled-face trick is one extra `fill` line |
+| **Lowered** (B, "cloisonné") | Fills rise less than the straps (B proposes 0.4–0.8 mm against 1.2 mm straps) | Fewer multicolor layers: at 0.6 mm, 3 of the 6 relief layers hold several colors and the top 3 hold only the strap color — about half the color changes, if purge scales with changes as the fetched guides say; a strap wall stands at every color edge, where a ghost of the previous color would show | **Does not build today**: the parser refuses a second `relief` clause and the kernel has one relief height; the fill depth has no source | A parser change and a kernel change (a top height per body); the depth needs a print to settle |
+| Face-down mosaic (B's C) | Coaster printed upside down, color in the first layers on the bed | Crisp flat face | Loses the raised straps; multicolor first layer with small islands; a new split mode | A second style, not a variant; not pursued now |
+| Stained glass, full-height plugs, height terraces (B's D, E, F) | — | F works without an AMS | D needs the openwork split refusal lifted; E makes every layer multicolor; F cannot put two colors in one layer | Out of scope for the X2D path |
 
 **What the evidence says.** A's case against a lowered fill ("a mug rocks if the fills stand
 proud"; "grooves") does not hold for B's version: B's fills sit *below* the straps, so a mug sits
@@ -160,7 +160,7 @@ build-order default, not a verdict on the look.
 `relief both emboss 1.2 fills 0.6` — straps to 1.2 mm, every face to 0.6 mm; omitted, faces go to
 the strap height (flush). B's alternative, a second clause `relief faces emboss 0.6 filled`, needs
 the parser to accept two relief clauses and gives `relief faces` a second reading; the one-clause
-form avoids both. Under either form, unfilled faces take the base colour name, as in the prototype.
+form avoids both. Under either form, unfilled faces take the base color name, as in the prototype.
 
 ### 3.1 Strap wins (both researchers; built in #261)
 
@@ -171,21 +171,21 @@ fill must use the same rule. Measured on bikar main: without it the prototype's 
 to its outer ring (euler 0) **and every mesh gate still passes** — the case §7's second validator
 exists for.
 
-## 4. Getting the colours to the printer
+## 4. Getting the colors to the printer
 
 Both researchers agree, and the route is shipped: `--format parts` writes one body per palette
 name plus base and straps ([D-073](decisions-log.md), [D-074](decisions-log.md)); palette name →
 logical AMS slot by first-seen order is baked into a multi-part input 3MF
 ([D-075](decisions-log.md)); `bambu slice coaster` slices it headless, verifying geometry, while
-colour is checked in the Studio window ([D-077](decisions-log.md)). Since #349 the slicer flattens
-each preset chain and checks the slice carries it. Separate STLs per colour were considered by both
+color is checked in the Studio window ([D-077](decisions-log.md)). Since #349 the slicer flattens
+each preset chain and checks the slice carries it. Separate STLs per color were considered by both
 and rejected: registration by hand every print, and D-075's contract thrown away.
 
-### 4.1 How many colours
+### 4.1 How many colors
 
 - **Slots are read from the machine** with `bambu filament`, which lists the loaded trays; it was
   confirmed on the live X2D on 2026-09-17. Both researchers agree.
-- A proposed "at most 4 colours per coaster"; B follows D-078's **"warn, not cap"**. D-078 is a
+- A proposed "at most 4 colors per coaster"; B follows D-078's **"warn, not cap"**. D-078 is a
   shipped decision, so the slice step warns when palette names exceed loaded trays and does not
   refuse. A's §7.1 "the slice step refuses" is dropped.
 - The AMS slot count (4 per unit) and the X2D maximum ("up to 25 colours" with many units) are
@@ -199,25 +199,25 @@ and rejected: registration by hand every print, and D-075's contract thrown away
   guide, fetched; not X2D-specific).
 - Dark-to-light changes show bleed most (Sovol, bambureviews, fetched). The hard test is a light
   fill next to a dark strap.
-- Whether the X2D's second nozzle cuts purge for a two-colour coaster: B said no fetched source
+- Whether the X2D's second nozzle cuts purge for a two-color coaster: B said no fetched source
   states it; A said "may, not confirmed". A forum thread fetched on 2026-09-27 has users saying one
   AMS can feed both nozzles through the track switch, with "lower amount of purging", at the cost of
   a full retract per nozzle change. User reports only; **unverified**.
 
 ## 5. Printability
 
-- **Bed side.** The slab is one colour and every colour body starts at the slab top, so the first
-  layer has no colour change. Both agree; true by construction of the height field.
+- **Bed side.** The slab is one color and every color body starts at the slab top, so the first
+  layer has no color change. Both agree; true by construction of the height field.
 - **Smallest fill.** Under flush, #261's second fix hands any tip thinner than one 0.4 mm cell back
   to the strap, so a fill loses sub-cell tips (A, measured). B proposed that a face narrower than the
   strap floor CAL-CST-01 is not filled at all. That floor was set for one filament; it transfers to a
-  fill only if a two-colour pocket prints at least as well as a one-colour rib, which is the open
+  fill only if a two-color pocket prints at least as well as a one-color rib, which is the open
   question CAL-PIN-01 carries. Neither is measured on a print.
 - **Pinches.** A fill corner meeting the slab is the two-filament interface CAL-PIN-01 names (both
   agree); the shipped `--pinch fillet` applies.
-- **Edges.** Colour edges step at the 0.4 mm grid. How that looks at arm's length is unknown.
+- **Edges.** Color edges step at the 0.4 mm grid. How that looks at arm's length is unknown.
 - **Styles.** `--format parts` refuses deboss, `outline pattern` and the slab-reshaping clauses, so
-  only the plain and border styles can carry fills today (both agree; [coaster-colour-design.md](coaster-colour-design.md)).
+  only the plain and border styles can carry fills today (both agree; [coaster-color-design.md](coaster-color-design.md)).
 
 ## 6. What a `.bkr` says
 
@@ -253,14 +253,14 @@ After the grammar change, on any symmetric construction:
 
 ## 7. Validators
 
-**Validator:** every face in an orbit carries the same colour, checked face by face. For every face
+**Validator:** every face in an orbit carries the same color, checked face by face. For every face
 that is a member of an orbit, (a) a rotation about the centre — or, where §2.3 admits mirrors, a
 reflection — carries the orbit's first member onto this face within τ, and (b) this face's palette
-name equals the first member's. It reports the first failing face. A count of colours per orbit
+name equals the first member's. It reports the first failing face. A count of colors per orbit
 cannot stand in for it: one odd face in a ring of twelve leaves every total looking right.
 
 PASS: 7apC5Q9QS-8 with orbit 0 and orbit 3 in Ruby and every other orbit in Slab — every face maps
-onto its orbit's first member and carries its colour (the prototype's colouring, since orbits equal
+onto its orbit's first member and carries its color (the prototype's coloring, since orbits equal
 rings on this file).
 
 FAIL: the rDux coaster measured about the wrong centre O, or grouped by radius with any tolerance of
@@ -293,7 +293,7 @@ re-read unless it says otherwise.
 
 | Claim | Who | Verdict | Evidence |
 |---|---|---|---|
-| The shapes are the engine's bounded faces; `fill void where … color` already colours them | both | agree | fill-resolver.ts read at main |
+| The shapes are the engine's bounded faces; `fill void where … color` already colors them | both | agree | fill-resolver.ts read at main |
 | `ring` is measured from the first circle's centre, not the rosette's | both | agree | evaluator.ts `findCenter` L10060 |
 | Rings equal classes on 7apC5Q9QS-8 (16 and 16, none split), with mirrors counted as the same class | both | agree, reproduced | verification §2 |
 | Rings split classes on the other 7 files | both | agree, reproduced | verification §2 (split counts 3 to 34) |
@@ -307,21 +307,21 @@ re-read unless it says otherwise.
 | Tolerance 0.05 mm on radius (A) vs 1e-3 × unit on the orbit test (B) | disagree | B's orbit test is τ-independent for merges; 0.02 passes every class | verification §4 |
 | Filling eats half of each strap; the strap must win within half a strap width | both | agree; A built and tested it | #261 tests fail 2 of 6 on main |
 | Corner-only touches make both bodies non-watertight once straps win | A only | reproduced via A's tests; the watertight test passes on main because the defect needs fix 1 first | verification §6 |
-| Unfilled faces rise in the strap colour under `relief both` | A only (B: `relief faces` raises every face) | agree in substance | coaster.ts read |
+| Unfilled faces rise in the strap color under `relief both` | A only (B: `relief faces` raises every face) | agree in substance | coaster.ts read |
 | Flush builds and passes the mesh gate at 90 and 80 mm | A only | reproduced (euler 2, 184, 18, −200 at both sizes) | verification §6 |
 | A lower fill cannot be written today | B only | confirmed: one relief height in the AST, and a second `relief` clause is refused | verification §5 |
 | "A mug rocks if the fills stand proud" (against lowered) | A only | does not apply to B's fills, which sit below the straps | geometry |
-| Lowered fills cut colour-change layers | B only | arithmetic holds at 0.2 mm layers; purge scaling rests on fetched guides, not an X2D measurement | bambureviews and Sovol, fetched |
+| Lowered fills cut color-change layers | B only | arithmetic holds at 0.2 mm layers; purge scaling rests on fetched guides, not an X2D measurement | bambureviews and Sovol, fetched |
 | Straps as walls hide bleed | B only | plausible, **unmeasured** | — |
-| Purge scales with colour transitions, not colour count | both (different sources) | agree; both sources fetched | bambureviews, Sovol |
+| Purge scales with color transitions, not color count | both (different sources) | agree; both sources fetched | bambureviews, Sovol |
 | Dark-to-light shows bleed most | both | agree; fetched | Sovol, bambureviews |
 | Each change purges to the chute then a prime tower | A only | fetched, user reports on an older printer | Bambu forum, Printago |
-| 4 slots per AMS; X2D up to 25 colours | both | **snippet-only**; fetch refused again (402, 403) | verification §7 |
-| At most 4 colours per coaster, the slice step refuses beyond | A only | **contradicted by D-078** ("warn, not cap") | [D-078](decisions-log.md) |
+| 4 slots per AMS; X2D up to 25 colors | both | **snippet-only**; fetch refused again (402, 403) | verification §7 |
+| At most 4 colors per coaster, the slice step refuses beyond | A only | **contradicted by D-078** ("warn, not cap") | [D-078](decisions-log.md) |
 | Second nozzle may cut purge | A (hedged); B: no source | forum users say yes for one AMS feeding both nozzles; user reports, **unverified** | verification §7 |
-| Only plain and border styles can be split | both | agree | coaster-colour-design |
+| Only plain and border styles can be split | both | agree | coaster-color-design |
 | No boolean union; bodies share faces | both | agree | height-field split |
-| First layer is one colour | both | agree; by construction | height-field split |
+| First layer is one color | both | agree; by construction | height-field split |
 
 ## 9. bikar PR #261 — verdict
 
@@ -330,18 +330,18 @@ re-read unless it says otherwise.
 - Fix 1 (strap wins on `relief both`): its tests fail on main and pass on the branch; it removes a
   defect the mesh gate cannot see (§7); it changes no shipped coaster, because no `.bkr` on main uses
   `relief both`.
-- Fix 2 (corner-only touches go to the strap): runs only when a colour is present, only moves cells
-  from a colour body to its region body, and ends because colour cells strictly fall. Its test does
+- Fix 2 (corner-only touches go to the strap): runs only when a color is present, only moves cells
+  from a color body to its region body, and ends because color cells strictly fall. Its test does
   not fail on main by itself — the defect appears only with fix 1 in — so it and fix 1 should land
   together.
 - The branch merges with main (8e68778, which touched the same file in #262) without conflict, and
   the kernel test folder passes (71 files, 1149 tests).
 
 **The prototype preset is technically safe but should not merge yet.** It passes every gate, but
-merging it publishes a Coaster Lab preset, a thumbnail and a public-surface entry with a colour
-choice Omar has not seen, colours by `ring` (right on this one file only), and fixes the look to
+merging it publishes a Coaster Lab preset, a thumbnail and a public-surface entry with a color
+choice Omar has not seen, colors by `ring` (right on this one file only), and fixes the look to
 flush before §3's taste call. Recommended: split the PR — the fixes and their tests (with the
-fixture moved beside the tests) first; the preset after Omar picks the look and colours. Merging is
+fixture moved beside the tests) first; the preset after Omar picks the look and colors. Merging is
 Omar's; nothing was merged here.
 
 ## 10. Next steps, smallest first
@@ -362,11 +362,11 @@ Omar's; nothing was merged here.
 
 ## 11. Still unverified
 
-- No slice of a coloured coaster has been opened in the Studio window, and nothing has been printed.
+- No slice of a colored coaster has been opened in the Studio window, and nothing has been printed.
 - Bleed, purge per change and time on the X2D; whether strap walls hide bleed; whether the second
   nozzle cuts purge.
-- How visible the 0.4 mm staircase is on colour edges.
-- The AMS slot count and the X2D colour maximum (snippet-only).
+- How visible the 0.4 mm staircase is on color edges.
+- The AMS slot count and the X2D color maximum (snippet-only).
 - The fill depth for a lowered fill; the minimum fill width (CAL-PIN-01 and CAL-CST-01 do not
   transfer until a coupon shows it).
 - Whether the lowered fill needs fix 2 too (likely, since its cells are raised, but not built).
@@ -388,5 +388,5 @@ Omar's; nothing was merged here.
   scale. The orbit test covers merges without it.
 - **K10, purge:** the guides are general Bambu Studio advice; they transfer to the X2D if it flushes
   per change like other AMS printers, which no fetched source tests.
-- **K10, CAL-CST-01 → fill width:** transfers only if a two-colour pocket prints at least as well
-  as a one-colour rib; not shown.
+- **K10, CAL-CST-01 → fill width:** transfers only if a two-color pocket prints at least as well
+  as a one-color rib; not shown.

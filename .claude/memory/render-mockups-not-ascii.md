@@ -13,7 +13,7 @@ commit the HTML next to the PNG, and embed the PNG. When the real tool can draw 
 (`bikar render --format preview`, the Lab), use that instead of a mockup. Label which parts are
 real data (e.g. orbit rows from `bikar bands`) and which are stand-ins.
 
-**Why:** Omar, review thread leu4yg on `colour-preview-design-a.md` §5 (2026-09-28): "Why is the
+**Why:** Omar, review thread leu4yg on `color-preview-design-a.md` §5 (2026-09-28): "Why is the
 code block here text? why couldnt we have implemented HTML and got a screenshot of it and embedded
 into doc? we should update our wokring model to take this paproach into consideration." Same day,
 thread e7b42d: "why don't i see any images of color in this?" A doc about how something looks

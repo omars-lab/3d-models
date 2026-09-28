@@ -60,7 +60,7 @@ per-model ruling.
 Prefer, in order: **a Bambu-tuned `.3mf` on MakerWorld** (one-click, profile included) → **a well-liked
 `.3mf` on Printables** → **an `.stl` with a permissive licence and a real popularity signal**. Break ties
 on: licence fit for the intended use, printability for FDM on the X2D (no unsupported thin overhangs the
-part can't afford), size vs the 256 mm bed, and colour count vs the loaded AMS.
+part can't afford), size vs the 256 mm bed, and color count vs the loaded AMS.
 
 ## What always gets recorded (provenance)
 

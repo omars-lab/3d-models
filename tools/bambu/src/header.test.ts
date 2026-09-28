@@ -48,7 +48,7 @@ describe("buildHeader — PASS case (frame tray + X2D --plate)", () => {
   const plate = parseProjectSettings(X2D_PLATE_JSON);
   const h = buildHeader(LOADED_FRAME, plate, new Date("2026-09-17T12:00:00Z"));
 
-  it("fills material type / colour / brand from the AMS tray", () => {
+  it("fills material type / color / brand from the AMS tray", () => {
     expect(h.material_type).toMatchObject({ value: "PLA", state: "filled" });
     expect(h.material_color).toMatchObject({ value: "#F5547C", state: "filled" });
     expect(h.material_brand).toMatchObject({ value: "PLA Basic", state: "filled" });
@@ -85,7 +85,7 @@ describe("buildHeader — PASS case (frame tray + X2D --plate)", () => {
     const text = renderHeader(h);
     expect(text).toContain("Bambu Lab X2D 0.4 nozzle");
     expect(text).toContain("type PLA");
-    expect(text).toContain("COLOUR #F5547C");
+    expect(text).toContain("COLOR #F5547C");
     expect(text).toContain("diameter 0.4,0.4 mm");
     expect(text).toContain("Date      2026-09-17");
   });

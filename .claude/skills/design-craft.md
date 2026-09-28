@@ -168,7 +168,7 @@ a FAIL so the check is not a matter of taste.
   them in the landscape. A doc that dives into internal packages before showing the
   outside world it sits in has failed C10.
 - **C11 — Use cases named and drawn.** The doc lists the use cases it **enables or
-  impacts**, each as *an actor doing something* ("a designer colours a ring", "a
+  impacts**, each as *an actor doing something* ("a designer colors a ring", "a
   print operator loads the matching filaments"), and draws a use-case diagram linking
   actors to those capabilities. Naming the actors and their goals is what makes "who
   benefits" checkable rather than assumed.
@@ -214,7 +214,7 @@ The renderer[^renderer] turns a construction[^construction] into an SVG.
 A good footnote defines the term in **plain words a newcomer knows**, not in more
 jargon. `[^ams]: the AMS` is useless; `[^ams]: **AMS** — the printer's automatic
 material system, the carousel that feeds up to four filament spools so one print
-can use several colours` is a definition.
+can use several colors` is a definition.
 
 ---
 
@@ -227,8 +227,8 @@ never) from a paragraph. Draw them with Mermaid, which lives in the doc as text:
 ````markdown
 ```mermaid
 flowchart LR
-  design["colours a designer picks"] --> screen["2D drawing — keeps colour"]
-  design --> print["3D print — colour dropped today"]
+  design["colors a designer picks"] --> screen["2D drawing — keeps color"]
+  design --> print["3D print — color dropped today"]
 ```
 
 **In the diagram:** design → the editor[^editor]; 2D drawing[^twod]; 3D print[^print].
@@ -303,8 +303,8 @@ both are drawn with `flowchart`, which every renderer supports.
   ````markdown
   ```mermaid
   flowchart LR
-    designer(["designer"]) -->|"picks ring colours"| feature["radial-band colour"]
-    feature -->|"one STL per colour + manifest"| composer["plate composer"]
+    designer(["designer"]) -->|"picks ring colors"| feature["radial-band color"]
+    feature -->|"one STL per color + manifest"| composer["plate composer"]
     composer -->|"multi-part 3MF"| printer["printer / AMS"]
     operator(["print operator"]) -->|"loads matching filaments"| printer
   ```
@@ -313,7 +313,7 @@ both are drawn with `flowchart`, which every renderer supports.
   ````
 
 - **Use-case diagram (C11) — actors and their goals.** One node per **actor**, one per
-  **use case** phrased as a goal ("colour a ring", "load the matching filaments"), an
+  **use case** phrased as a goal ("color a ring", "load the matching filaments"), an
   edge from each actor to the use cases they perform. Mark a use case *new* or
   *impacted* the way the class diagram marks types, so the reader sees what this design
   adds versus what it changes.
@@ -321,9 +321,9 @@ both are drawn with `flowchart`, which every renderer supports.
   ````markdown
   ```mermaid
   flowchart LR
-    d(["designer"]) --> uc1["colour a ring (impacted)"]
-    d --> uc2["preview the coloured print (new)"]
-    op(["print operator"]) --> uc3["load filaments per colour (new)"]
+    d(["designer"]) --> uc1["color a ring (impacted)"]
+    d --> uc2["preview the colored print (new)"]
+    op(["print operator"]) --> uc3["load filaments per color (new)"]
   ```
   ````
 
@@ -338,13 +338,13 @@ The clearest way to see the rules is one real doc opener, before and after.
 
 ### Bad — reads like a diff
 
-> # Radial-band colour — the ring a polygon sits in is a print region, reusing one binning
+> # Radial-band color — the ring a polygon sits in is a print region, reusing one binning
 >
-> Omar asked to colour different polygons differently within one construction. The
+> Omar asked to color different polygons differently within one construction. The
 > finding that shapes this doc: bikar **already** groups a construction's faces into
-> concentric rings by centroid distance and **already** lets an author colour a ring —
+> concentric rings by centroid distance and **already** lets an author color a ring —
 > as 2D SVG ink. This doc carries the ring a polygon already sits in into the 3D
-> per-region export... It builds directly on `coaster-colour-design.md` (D-073, D-074),
+> per-region export... It builds directly on `coaster-color-design.md` (D-073, D-074),
 > whose region→body→slot route it reuses wholesale.
 
 Why it fails the newcomer:
@@ -361,21 +361,21 @@ Why it fails the newcomer:
 
 ### Good — reads like an explanation
 
-> # Radial-band colour — print each ring of a pattern in its own colour
+> # Radial-band color — print each ring of a pattern in its own color
 >
 > Our patterns are made of many small tiles arranged in rings around a centre — like
-> the rings of a dartboard. Today a designer can colour those rings on screen, but when
-> the pattern is 3D-printed the colour is lost and the whole thing comes out one colour.
+> the rings of a dartboard. Today a designer can color those rings on screen, but when
+> the pattern is 3D-printed the color is lost and the whole thing comes out one color.
 >
-> **This design lets a ring's colour survive into the print**, so a printed coaster can
+> **This design lets a ring's color survive into the print**, so a printed coaster can
 > have a gold inner ring and a copper outer one, each in its own filament — with no new
-> way to *say* "this ring is that colour," because our design language already has one.
+> way to *say* "this ring is that color," because our design language already has one.
 >
 > ## The problem
 >
-> A designer picks colours for a pattern[^pattern] in our editor and sees them on
-> screen. They send it to the printer expecting those colours. Instead every ring comes
-> out the same colour, because the colour a designer chose never travels from the 2D
+> A designer picks colors for a pattern[^pattern] in our editor and sees them on
+> screen. They send it to the printer expecting those colors. Instead every ring comes
+> out the same color, because the color a designer chose never travels from the 2D
 > drawing to the 3D print...
 
 Why it passes: the premise is in the title and first sentence (C1); the dartboard

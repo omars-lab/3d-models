@@ -16,8 +16,14 @@ import type { Command } from "commander";
 /** First line of a (possibly multi-line) description — the table cell wants the summary, not the
  *  whole help paragraph. Pipes are escaped so a description never breaks the markdown table. */
 function firstLine(text: string | undefined): string {
-  const line = (text ?? "").split("\n")[0]!.trim();
-  return line.replace(/\|/g, "\\|");
+  return pipes((text ?? "").split("\n")[0]!.trim());
+}
+
+/** Escape every pipe in a table cell. The flags column needs it as much as the description: a
+ *  `<names|paths>` placeholder split its row into three cells (docs gate D7), and a pipe inside
+ *  backticks still ends a GitHub table cell. */
+function pipes(cell: string): string {
+  return cell.replace(/\|/g, "\\|");
 }
 
 /** One command's section: heading (full path), description, positional args, then options. A command
@@ -33,7 +39,7 @@ function section(path: string, cmd: Command): string {
     lines.push("", "| Argument | Required | Description |", "|---|---|---|");
     for (const a of args) {
       const req = a.required ? "yes" : "no";
-      lines.push(`| \`${a.name()}${a.variadic ? "…" : ""}\` | ${req} | ${firstLine(a.description)} |`);
+      lines.push(`| \`${pipes(a.name())}${a.variadic ? "…" : ""}\` | ${req} | ${firstLine(a.description)} |`);
     }
   }
 
@@ -43,7 +49,7 @@ function section(path: string, cmd: Command): string {
   if (opts.length > 0) {
     lines.push("", "| Flag | Description |", "|---|---|");
     for (const o of opts) {
-      lines.push(`| \`${o.flags}\` | ${firstLine(o.description)} |`);
+      lines.push(`| \`${pipes(o.flags)}\` | ${firstLine(o.description)} |`);
     }
   }
   return lines.join("\n");
@@ -79,7 +85,7 @@ export function dumpFlags(program: Command): string {
   const rootOpts = program.options.filter((o) => !o.hidden);
   if (rootOpts.length > 0) {
     header.push(`### \`${root}\` (global)`, "", "| Flag | Description |", "|---|---|");
-    for (const o of rootOpts) header.push(`| \`${o.flags}\` | ${firstLine(o.description)} |`);
+    for (const o of rootOpts) header.push(`| \`${pipes(o.flags)}\` | ${firstLine(o.description)} |`);
     header.push("");
   }
 

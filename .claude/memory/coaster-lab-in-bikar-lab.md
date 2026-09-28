@@ -24,4 +24,4 @@ plates.
 era backlog) defines the knob set; write the decision line in `docs/decisions-log.md` with
 the shape v2 PR. Related open idea: interlocking dovetail edges (task #34).
 
-**2026-09-28:** Omar: "we should have options to configure all of these in a robust easy to use fashion in coaster lab" — about radial fill (which orbits are solid, D-081), per-orbit colour, flush vs lowered, and a coloured preview. New coaster options belong in the Coaster Lab as controls, not only as comments in a `.bkr`. The Lab preview and the printed parts come from one code path.
+**2026-09-28:** Omar: "we should have options to configure all of these in a robust easy to use fashion in coaster lab" — about radial fill (which orbits are solid, D-081), per-orbit color, flush vs lowered, and a colored preview. New coaster options belong in the Coaster Lab as controls, not only as comments in a `.bkr`. The Lab preview and the printed parts come from one code path.

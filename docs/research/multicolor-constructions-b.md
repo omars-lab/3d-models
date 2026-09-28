@@ -28,7 +28,7 @@ origin/main on 2026-09-26). Paths below are bikar paths, written plainly because
 sibling repo.
 
 1. **Colour regions on a coaster exist.** A `palette` block plus
-   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-colour-design.md`](../coaster-colour-design.md)).
+   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-color-design.md`](../coaster-color-design.md)).
    `bikar render --format parts` splits the coaster height field into one watertight body per
    colour, as stacked columns cut at `z = base`, and writes a `<Coaster>.parts.json` sidecar
    (fields `region`, `stl`, `triangles`, `paletteName`, `hex`) — bikar packages/cli/src/index.ts,
@@ -47,7 +47,7 @@ sibling repo.
    copy with the Application tag stripped; colour is a GUI check because `--load-settings` clamps
    every part to slot 1.
 5. **`fill where ring == N color X` carries into the print split** ([D-078](../decisions-log.md),
-   [`radial-band-colour-design.md`](../radial-band-colour-design.md)): where a face carries a ring
+   [`radial-band-color-design.md`](../radial-band-color-design.md)): where a face carries a ring
    colour it wins over the face's coaster region; `bikar bands` lists the rings. D-078 chose to
    **warn, not cap** on colour count and to read the slot count from the device.
 6. **`bambu filament`** (`tools/bambu/src/commands/filament.ts`) lists the loaded trays read-only

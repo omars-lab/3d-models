@@ -17,10 +17,10 @@ skip to §4 for what is left.**
 - Worktrees `bikar-border{,-a,-b,-c}` and `bikar-placeborder` are removed. Still lingering:
   `~/Workspace/git/3d-models-constructions` sits on the merged `feat/coaster-border-catalog`
   (agent D's branch) — safe to `git worktree remove` once no session holds it.
-- Live TaskList seeded 2026-09-18 from §4: #1 P4.1 · #2 #37-colour · #3 P4.2 · #4 P4.3 ·
+- Live TaskList seeded 2026-09-18 from §4: #1 P4.1 · #2 #37-color · #3 P4.2 · #4 P4.3 ·
   #5 P5.1 · #6 P5.2 · #7 P5.3 · #8 #17-youtube · #9 #21-secrets · #10 #24-reflect.
 - **Next design pass in flight (2026-09-18):** P4.1 plate-composer design (D-072) and #37
-  coaster-colour design (D-073) fanned out to subagents on `feat/next-design-docs` (one PR).
+  coaster-color design (D-073) fanned out to subagents on `feat/next-design-docs` (one PR).
 
 *Historical entry point (kept for provenance — all three steps are now complete):*
 
@@ -208,16 +208,16 @@ commands in its own worktree. No agent has been spawned yet.
 Task ids are the session TaskList ids. Each entry says what is done, what remains, where the
 files are, and who gates it. Nothing here depends on the umbrella plan being open.
 
-### #37 — Coaster colour regions → per-body export → filament map (X2D AMS), Coaster Lab knob
+### #37 — Coaster color regions → per-body export → filament map (X2D AMS), Coaster Lab knob
 
 Omar's ask (2026-09-17): "will this be part of our coaster lab? color selection?" and "do we have
-a 'border' component we compose with a pattern component and can assign colour individually that
-translates to different filaments on X2D?" Status: **not today** — bikar colour exists only in 2D
-(`edges color`, `palette`, language-reference §7.5); STL carries no colour; a coaster STL is one
+a 'border' component we compose with a pattern component and can assign color individually that
+translates to different filaments on X2D?" Status: **not today** — bikar color exists only in 2D
+(`edges color`, `palette`, language-reference §7.5); STL carries no color; a coaster STL is one
 body. The border kernel (#36) records the first region split (band vs field in `reliefAppliesAt`),
 which is the hook this builds on. Route, in order (**STATUS 2026-09-18** in each step):
 
-1. **Design doc** `docs/coaster-colour-design.md` — **DONE** (D-073). §5 amended to **D-074**
+1. **Design doc** `docs/coaster-color-design.md` — **DONE** (D-073). §5 amended to **D-074**
    (pinch detection + `--pinch` strategies) and §6 resolved after the headless-CLI research; both
    land in 3d-models **PR #267** (this branch). Region vocabulary `base | straps | border`,
    symbolic names never filament ids.
@@ -230,7 +230,7 @@ which is the hook this builds on. Route, in order (**STATUS 2026-09-18** in each
    impossible for saddled patterns (a pinch at any interior `z = base` → an edge shared by four
    faces → non-manifold, unmakeable). So the kernel **detects** every pinch (four-faces test) and
    resolves it by a CLI flag `--pinch fillet|merge|error` (`fillet` default: raise to the
-   printable floor CAL-PIN-01; `merge`: recolour the pinch to `base`, union stays exact; `error`:
+   printable floor CAL-PIN-01; `merge`: recolor the pinch to `base`, union stays exact; `error`:
    refuse with `(x, y)`). Border outer wall decomposes into stacked base+border panels. Still
    requires emboss (deboss → empty body → refuse); each *non-pinch* body still `--check`-clean
    individually (aggregate cannot discharge a per-part claim). Borderless-emboss split machinery
@@ -242,8 +242,8 @@ which is the hook this builds on. Route, in order (**STATUS 2026-09-18** in each
    `Metadata/model_settings.config`, `paint_color` in `3D/Objects/*.model`, Application metadata
    must start with `BambuStudio-`); `--load-filaments` is override-only. Research file
    `docs/research/coaster-ams-3mf-contract.md` (PR #267). Gated on part 3's per-region STL output.
-5. **Coaster Lab** (`bikar/packages/lab`, Orb Lab pattern, D-067): colour per region is a knob
-   that edits the `color` statements (Lego Lab `visibleColours` precedent), preview tinted per
+5. **Coaster Lab** (`bikar/packages/lab`, Orb Lab pattern, D-067): color per region is a knob
+   that edits the `color` statements (Lego Lab `visibleColors` precedent), preview tinted per
    region. After #213 lands.
 
 Depends on #36 merged (done). The composer part depends on P4.1 and part 3's output.

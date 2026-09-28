@@ -98,7 +98,7 @@ the old raw `open -a "/Applications/BambuStudio.app"` (task #51) — use it, not
 **A reading without a profile header is anecdote, not calibration.** Run
 `bambu header --plate <plate.3mf>` — it joins the live printer frame with the sliced `.3mf` and fills
 most of the header (machine, layer height, profile, slicer version, and the loaded material's
-type/colour/brand) automatically. Paste its output onto the bench sheet and **hand-complete only the
+type/color/brand) automatically. Paste its output onto the bench sheet and **hand-complete only the
 blanks it leaves** — ambient room temp, enclosure open/closed, caliper make + that you zeroed it, and
 the date. Fields the machine didn't answer render `unconfirmed` rather than fabricated (firmware, for
 one — read that from `bambu setup discover`'s SSDP line); it never invents a number.
@@ -131,8 +131,8 @@ skippable.
    for this machine it stays closed; later sends skip this line.
 3. **Nozzle matches.** `bambu header --plate <plate.3mf>` shows **no** `⚠ NOZZLE MISMATCH` (step 3).
    A mismatch means the loaded nozzle isn't the one the plate was sliced for — stop.
-4. **Filament loaded and correct.** The material the slice assumed (type + colour) is actually loaded.
-   Confirm the *type and colour* at the AMS/external-spool readout, not from memory. On **quantity**,
+4. **Filament loaded and correct.** The material the slice assumed (type + color) is actually loaded.
+   Confirm the *type and color* at the AMS/external-spool readout, not from memory. On **quantity**,
    don't over-think a tight spool: the X2D has a runout sensor and **pauses mid-print, prompting you to
    load more, then resumes on the same layer** — so a spool that's tight against the sliced estimate is
    fine to *start* (the slice reports the grams; Plate 1 ≈ 70 g by filament length, the dispatch-relevant

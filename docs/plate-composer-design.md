@@ -343,9 +343,9 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
   condition and are out of scope; the manifest carries one plate profile until a real need
   names the shape.
 
-## 12. AMS colour slots — palette name → logical slot (coaster plates, D-075)
+## 12. AMS color slots — palette name → logical slot (coaster plates, D-075)
 
-A coaster authored with `color <region> <PaletteName>` (bikar; `coaster-colour-design.md`)
+A coaster authored with `color <region> <PaletteName>` (bikar; `coaster-color-design.md`)
 renders under `--format parts` to one STL per region body plus a `<Coaster>.parts.json` sidecar
 tagging each body with the author's palette name + hex ([bikar #215](https://github.com/NaqshCoffee/bikar/pull/215)).
 The composer turns that into a multi-filament plate the X2D slices. Two halves ([D-075](decisions-log.md)):
@@ -357,16 +357,16 @@ order, then part order), a name shared across bodies shares a slot, an untagged 
 default, and a name resolving to two hexes is refused. The count is capped at the AMS capacity the
 caller supplies (the module's fallback is one unit's four slots). It also emits the
 `project_settings.config` parallel arrays — `filament_type`/`filament_colour`/`filament_id`, every
-colour slot reusing the default's material and a **non-empty** id so no slot silently routes to the
+color slot reusing the default's material and a **non-empty** id so no slot silently routes to the
 external spool ([research/coaster-ams-3mf-contract.md](research/coaster-ams-3mf-contract.md)).
 
 > **K1 — logical slot ≠ physical AMS slot.** The slice carries only the logical filament index
-> order; the physical spool is bound at print time by colour match. Nothing here claims a spool.
+> order; the physical spool is bound at print time by color match. Nothing here claims a spool.
 
 **The 3MF assembly + verify (part 4b-ii, built — `bambu slice coaster`, [D-077](decisions-log.md)).**
 The headless CLI has **no flag** to assign objects to slots at slice time — the assignment must be
 baked into the *input* 3MF (BambuStudio#9666). So a **separate** verb (sibling to `slice compose`,
-not folded into it: a colour plate cannot hand loose STLs to `--arrange`, K10 below) renders each
+not folded into it: a color plate cannot hand loose STLs to `--arrange`, K10 below) renders each
 item with `bikar render --format parts`, maps palettes to slots (part 4b-i), and assembles one 3MF
 per plate — each coaster one **object** with its region bodies as **parts** in a shared coordinate
 frame (so `--arrange` packs whole coasters, not loose bodies), each part carrying
@@ -379,14 +379,14 @@ from either verb derives the same `it-<sha12>`), the bed-fit pre-check, and the 
 > The original plan — slice the assembled file end-to-end with `--load-filaments` — does not survive the
 > headless build. (1) The **versioned** `Application=BambuStudio-<ver>` tag SIGSEGVs the headless slicer
 > (native-project GL path); the shipped 3MF keeps the versioned tag (the GUI has GL and honours the
-> #9666 colour contract), so the headless **geometry** check runs on a **tag-stripped copy**. (2)
+> #9666 color contract), so the headless **geometry** check runs on a **tag-stripped copy**. (2)
 > `--load-settings machine;process` overrides the 3MF's embedded filament arrays, clamping every part to
-> slot 1, so a headless slice **cannot** verify per-region colour. The honest signals split:
+> slot 1, so a headless slice **cannot** verify per-region color. The honest signals split:
 > `slice coaster --verify-geometry` asserts exit 0 + the loaded object count on the tag-stripped copy (preset
 > display names resolved to their system-profile JSON paths via `resolvePresetList`, since `--load-settings`
-> does a filename lookup, not a registry lookup); **colour is a GUI check** — `bambu slice open`.
+> does a filename lookup, not a registry lookup); **color is a GUI check** — `bambu slice open`.
 
 > **K10 — why the loose-STL path (what §5 does today) does not transfer here.** `--arrange` treats
 > each input STL as an independent object; a coaster's base/straps/border must stay coincident to
-> register as one coaster, so a coloured plate assembles a multi-part input 3MF instead of handing
+> register as one coaster, so a colored plate assembles a multi-part input 3MF instead of handing
 > loose STLs to `--arrange` (D-075 option ii-b, rejected).

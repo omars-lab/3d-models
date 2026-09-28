@@ -15,7 +15,8 @@ function fixture(): Command {
     .description("run a build | fast")
     .argument("<target>", "what to build")
     .option("--watch", "rebuild on change")
-    .option("--jobs <n>", "parallelism | default 1");
+    .option("--jobs <n>", "parallelism | default 1")
+    .option("--from <names|paths>", "where to read");
   grp.command("secret", { hidden: true }).description("internal use").option("--force", "no prompt");
   return p;
 }
@@ -52,6 +53,11 @@ describe("dumpFlags — the generated flag reference", () => {
       expect(out).toContain(desc);
     }
     expect(out).not.toContain("run a build | fast");
+  });
+
+  it("escapes a pipe in a flag's placeholder too, so its row keeps two cells", () => {
+    expect(out).toContain("| `--from <names\\|paths>` | where to read |");
+    expect(out).not.toContain("<names|paths>");
   });
 
   it("omits a hidden command and its options entirely", () => {

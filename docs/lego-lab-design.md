@@ -27,7 +27,7 @@ custom mode — the code drawer, `code=` share links, "Open in Studio" and the l
 by *sharing* the Orb Lab's modules rather than forking them. P3's three items have now all shipped
 (§10, §14) — the process note gated on a *moved* fit (§14.1), the knob that moved named on the panel
 (§14.2), and the LDraw `.ldr` export as an inline-block MPD (§14.3), read back through three.js in a
-studio panel (§14.4) and since given two-tone colour (§14.5, §14.6). Beyond P3's original scope, the
+studio panel (§14.4) and since given two-tone color (§14.5, §14.6). Beyond P3's original scope, the
 export grew a headless render tool (§15, D-028): `bikar:scripts/render-ldraw-thumbnails.ts` turns a
 `.mpd` into a *set* of camera angles — not one, because a single view of stacked bricks cannot show
 how many there are (§15.1) — gated by exact counts and tolerant golden pixels (§15.2). Building P1
@@ -91,7 +91,7 @@ standalone tiles with no stud system.
 **Non-goals for LG** (reserved words error with an LG2 pointer): stock-part mosaic generation and
 BrickLink/Rebrickable BOMs; Technic geometry (axle holes, pin holes, ⌀4.8 bars); SNOT/sideways
 mounting; hinges and any continuously-rotating joint; minifig-scale anything; multi-piece
-*structural* stability analysis; colour.
+*structural* stability analysis; color.
 
 ## 2. Engine ground truth
 
@@ -1096,7 +1096,7 @@ Deliberate deviations from this spec:
 - **Brick previews are a mesh render, not a validation view.** The orbs get axis views because
   qiyas composites them; there is no brick view set and no brick composite, and a brick's claim is
   made by its two grid gates and the mesh gate, not by a picture. So `brick_previews.py` renders the
-  STL through OpenSCAD's `import()` at the Cornfield preview colours the existing
+  STL through OpenSCAD's `import()` at the Cornfield preview colors the existing
   `process_images.py` already keys to transparency — the gallery's image chain, reused whole, with
   no second pipeline.
 
@@ -2088,7 +2088,7 @@ triangle row was counting those slots; it now counts area, and reports the slots
 
 **Two `LDrawLoader` traps, found by running it rather than by reading it.**
 `addDefaultMaterials()` throws unless `setConditionalLineMaterial()` ran first; and it registers
-colour codes 16 and 24 only, so our type-1 lines' code 7 falls through to `missingColorMaterial`
+color codes 16 and 24 only, so our type-1 lines' code 7 falls through to `missingColorMaterial`
 and the brick draws magenta while the file is entirely correct — an export that reads as broken
 when it is not. The panel supplies its own one-line `0 !COLOUR` table through `preloadMaterials`
 via a `data:` URI, which costs no network and, load-bearingly, **leaves the model bytes untouched**:
@@ -2100,38 +2100,38 @@ the tab downloads no WebGL engine. The preview rights LDraw's −Y-up with a rot
 rather than a Y scale of −1, because a mirror has determinant −1 and would flip the winding the
 panel exists to show.
 
-### 14.5 Per-placement colour — the parts read as distinct, not one grey blob
+### 14.5 Per-placement color — the parts read as distinct, not one grey blob
 
 §14.3's emitter wrote every placement at the module default (7, `Light_Grey`), so a multi-part
 assembly like `Brick-Stack` opened as a single grey mass in a viewer — indistinguishable parts
 defeating the reason the export writes one sub-file per brick. `place` now carries an optional
-colour: **`place <Piece> [color <name|code>]`** (D-026, bikar PR
+color: **`place <Piece> [color <name|code>]`** (D-026, bikar PR
 [#79](https://github.com/NaqshCoffee/bikar/pull/79)). A grounded name — one of the ten in
 [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §7.4, each the lower-cased
-LDConfig colour name — or a bare integer LDraw code (0–511). It rides the type-1 line's colour
+LDConfig color name — or a bare integer LDraw code (0–511). It rides the type-1 line's color
 field (§14.3's `1 <colour> …`), which was already the field the panel's magenta trap (§14.4) proved
-the viewer honours; `--format stl`/`svg` have no colour channel and ignore it.
+the viewer honours; `--format stl`/`svg` have no color channel and ignore it.
 
 Three properties keep it honest:
 
 - **A name is grounded, a code is not — and both are on purpose.** A name resolves against the
   fetched palette and an unknown one is refused with the valid list; a code is the escape hatch for
   any other of LDraw's codes and, exactly like §14.3's `4`/`7`, asserts nothing about appearance.
-- **The all-grey emission is byte-identical to before.** An uncoloured `place` still emits code 7,
+- **The all-grey emission is byte-identical to before.** An uncolored `place` still emits code 7,
   so this section adds a capability without moving any existing output — the §14.4 read-back cases
   are unchanged.
 - **Bounded, and stated so (K2).** Only the ten names the clause exposes are grounded, not LDraw's
   full ~380-entry palette; the mapping is fetched once (S15, header `UPDATE 2026-05-29`) and any
-  other colour is reached by its integer.
+  other color is reached by its integer.
 
 This does not change the part-number discipline of §14.3 (the inline `0 FILE` blocks and their
-non-part-number names are untouched) — colour is a property of the *placement*, not the part, so a
-`bikar-…-.dat` block stays one block referenced by differently-coloured type-1 lines.
+non-part-number names are untouched) — color is a property of the *placement*, not the part, so a
+`bikar-…-.dat` block stays one block referenced by differently-colored type-1 lines.
 
-### 14.6 Per-brick stud colour — the pins painted apart from the body
+### 14.6 Per-brick stud color — the pins painted apart from the body
 
-§14.5 gives the whole part one colour: the type-1 line carries a single code and every triangle in
-the block inherits it (colour 16). A real two-tone brick — blue body, yellow studs — cannot be said
+§14.5 gives the whole part one color: the type-1 line carries a single code and every triangle in
+the block inherits it (color 16). A real two-tone brick — blue body, yellow studs — cannot be said
 that way, because the type-1 line has exactly **one** inherit slot. `place` now takes a second,
 optional clause: **`place <Piece> [color <name|code>] [studs <name|code>]`** (D-027, bikar PR
 [#80](https://github.com/NaqshCoffee/bikar/pull/80)). `studs` resolves through the same grounded
@@ -2140,10 +2140,10 @@ alone, and `color` when present comes first.
 
 The mechanism is forced by the one inherit slot, and it is the load-bearing design fact here:
 
-- **The stud code is baked into the geometry, not the reference.** The body triangles stay colour 16
-  and inherit the placement colour as before; the **stud** triangles are written with the explicit
-  stud code, so they render that colour whatever the type-1 line says. This is the *mixed-colour
-  inline part* — one watertight block, two colour regions — verified before implementation by a spike
+- **The stud code is baked into the geometry, not the reference.** The body triangles stay color 16
+  and inherit the placement color as before; the **stud** triangles are written with the explicit
+  stud code, so they render that color whatever the type-1 line says. This is the *mixed-color
+  inline part* — one watertight block, two color regions — verified before implementation by a spike
   that placed it twice and read back a blue body and a red body sharing one yellow-studded part.
 - **A stud is identified by the top-face plane, exactly and not heuristically.** A triangle is a stud
   iff a vertex stands above the brick's body height `H`. `stackBrickSlabs` builds studs as the one
@@ -2151,25 +2151,25 @@ The mechanism is forced by the one inherit slot, and it is the load-bearing desi
   exactly `H` and never trips it. **The transfer condition (K10), stated so it cannot be assumed:**
   this holds only for meshes whose sole geometry above the top face is studs — every brick this
   emitter serves. The emitter **refuses** `studs` on a part with an empty stud set (a `studs none`
-  brick, a non-brick) rather than colouring nothing silently.
-- **De-duplication splits when — and only when — the stud colours differ.** The block key is the
+  brick, a non-brick) rather than coloring nothing silently.
+- **De-duplication splits when — and only when — the stud colors differ.** The block key is the
   emitted geometry text, and the stud code now lives *in* that text, so two bricks with different
-  stud colours mint two blocks while two with the same stud colour still share one. `Brick-Stack`
-  (Base blue/yellow, Cap red/green) therefore emits two `0 FILE` blocks where §14.5's one-colour
+  stud colors mint two blocks while two with the same stud color still share one. `Brick-Stack`
+  (Base blue/yellow, Cap red/green) therefore emits two `0 FILE` blocks where §14.5's one-color
   version emitted one — the split is the mechanism, not a regression.
 - **The panel had to learn the palette (robustness, not ease).** §14.4's read-back preloaded only
   code 7, so a yellow stud would have rendered as the magenta the trap exists to catch — the same gap
-  §14.5's coloured bodies already had. The read-back panel now preloads the full ten-colour grounded
+  §14.5's colored bodies already had. The read-back panel now preloads the full ten-color grounded
   set with LDConfig's own RGB (§7, `UPDATE 2026-05-29`), and a read-back test asserts a
-  yellow-studded brick reads back with **zero** unresolved colours and the same winding/edge
+  yellow-studded brick reads back with **zero** unresolved colors and the same winding/edge
   coherence as the plain brick.
 
-**Validator:** a stud clause is honoured when the block carries the body triangles in colour 16 and
+**Validator:** a stud clause is honoured when the block carries the body triangles in color 16 and
 the stud triangles in the named code, and the read-back renders both with no magenta.
 PASS: `place Base color blue studs yellow` on a studded 2×4 → a block with 2244 triangles in 16
-and 1520 in 14, referenced by a `1 1 …` line, read back at 0 unresolved colours.
+and 1520 in 14, referenced by a `1 1 …` line, read back at 0 unresolved colors.
 FAIL: `place Plate color blue studs yellow` on a `studs none` plate → the emitter throws (*no
-geometry stands above its top face*), because there are no pins to paint and colouring the empty set
+geometry stands above its top face*), because there are no pins to paint and coloring the empty set
 would be a claim about nothing.
 
 ---
@@ -2193,7 +2193,7 @@ but the two placements are 24 LDU apart, stack flush, and the file carries no ed
 seam between them is never drawn, and **a viewer cannot distinguish that image from a single
 six-plate block.** Two things resolved the count, and both were extra work rather than a second
 look at the same picture: a render from below shows the hollow underside with a 2×4's three tubes,
-and rendering the two meshes in different colours puts the seam on screen as a horizontal boundary
+and rendering the two meshes in different colors puts the seam on screen as a horizontal boundary
 at the expected height. The general point §10.5 draws — **on a file with no edge lines, a render is
 evidence of shape and not of structure** — is the tool's whole shape: the honest output of a
 composition is a *set* of angles beside the numbers, not a single hero frame that can lie about how
@@ -2201,7 +2201,7 @@ many parts it shows.
 
 So the CLI renders three angles by default (`iso`, `front`, `below`) from a five-preset table
 (`iso, front, below, top, back`), each chosen against that lesson: `iso` reads proportions and
-studs, `front` puts the coloured seam (§14.6) on screen, `below` shows the underside tubes; `top`
+studs, `front` puts the colored seam (§14.6) on screen, `below` shows the underside tubes; `top`
 and `back` are there for models the first three leave ambiguous. The angle set is a `--angles` flag,
 not a fixed pipeline, because which views disambiguate a *given* model is a property of that model.
 
@@ -2281,74 +2281,74 @@ notes beside them are checked with no pixels at all, so that half *is* a pre-com
 
 ---
 
-## 16. The colour gate, its notes, and the catalog they need — a middle strength that ports
+## 16. The color gate, its notes, and the catalog they need — a middle strength that ports
 
 §15's two gates leave a gap, and it is exactly the one §14.5–§14.6 exist to close. Those sections
-gave each placement and each stud its own colour *so the parts read apart* — the whole point of
+gave each placement and each stud its own color *so the parts read apart* — the whole point of
 D-026 was that an assembly must not render as one grey mass. But the two §15 gates cannot see a
-regression back into that mass: the counts are pure geometry and do not change when the colours
+regression back into that mass: the counts are pure geometry and do not change when the colors
 collapse, and the golden pixels do not port (§15.3, K10), so on any backend whose goldens were
 never baked the picture gate is silent too. A model can go all-grey and pass both. This section
 adds the **middle** strength that catches it, the human-readable notes that sit beside it, and the
 GPU-free catalog gate that is the only one of the three that earns a pre-commit hook.
 
-### 16.1 The colour gate — classify to the model's own palette, so it ports where the pixels don't
+### 16.1 The color gate — classify to the model's own palette, so it ports where the pixels don't
 
-The gate reads each rendered PNG and classifies every pixel to the nearest colour in **the model's
+The gate reads each rendered PNG and classifies every pixel to the nearest color in **the model's
 own palette plus the scene background** — not the whole LDConfig set, and not an exact-pixel match.
 That is the design choice that makes it survive a GPU it was never baked against: a lit or shadowed
 blue is still nearer to *this model's* blue than to its red, green, or the background, so it counts
 as blue on any backend, where a golden-pixel diff of the same frame would fail on an unfamiliar
-driver. The classifier is `colourCoverage` in `bikar:scripts/thumbnail-gate.ts`; it returns each
-palette colour's share of the foreground (the pixels nearer some colour than the background), so the
+driver. The classifier is `colorCoverage` in `bikar:scripts/thumbnail-gate.ts`; it returns each
+palette color's share of the foreground (the pixels nearer some color than the background), so the
 shares are framing-independent and sum to one.
 
-Coverage is accumulated across the *set* of angles — a colour's score is its best coverage in any
-rendered view — and the colours that clear a small area floor (`--colour-min-area`, default 0.01)
-are the model's **observed visible set** (`visibleColours` in the same module). `--check` compares
-that observed set, with `setsEqual`, against a committed `visibleColours`. The one thing this gate
-cannot do is separate two palette colours that are themselves near-neighbours (the two greys); a
+Coverage is accumulated across the *set* of angles — a color's score is its best coverage in any
+rendered view — and the colors that clear a small area floor (`--color-min-area`, default 0.01)
+are the model's **observed visible set** (`visibleColors` in the same module). `--check` compares
+that observed set, with `setsEqual`, against a committed `visibleColors`. The one thing this gate
+cannot do is separate two palette colors that are themselves near-neighbours (the two greys); a
 model that emits both leans on the golden gate to tell them apart, which is one more reason the
 three strengths coexist rather than one replacing another.
 
 ### 16.2 The expectation is the *visible* set, and occlusion is not a defect
 
-The committed expectation is deliberately a **subset** of the colours the read-back resolves, and
-getting this wrong is the trap the gate is built around. `Brick-Stack` resolves four colours — the
+The committed expectation is deliberately a **subset** of the colors the read-back resolves, and
+getting this wrong is the trap the gate is built around. `Brick-Stack` resolves four colors — the
 lower brick's blue body and **yellow studs**, the upper brick's red body and green studs — but the
 lower brick's yellow studs are physically hidden under the upper brick in every angle. They are
 resolved in the geometry and visible in none of the renders, and that is correct, not a fault. A
-gate that asserted "every resolved colour must appear on screen" would false-fail on this fixture
+gate that asserted "every resolved color must appear on screen" would false-fail on this fixture
 forever.
 
 So the visible set is **baked from a trusted backend**, exactly like the golden PNGs: `--update-goldens`
-writes the observed `visibleColours` into `<name>.expected.json` alongside the full `colours` the
-read-back resolves. `Brick-Stack.expected.json` records `colours` of four and `visibleColours` of
+writes the observed `visibleColors` into `<name>.expected.json` alongside the full `colors` the
+read-back resolves. `Brick-Stack.expected.json` records `colors` of four and `visibleColors` of
 three (green, blue, red; yellow correctly absent). The gate never derives the expectation from the
 read-back — that would re-introduce the false-fail — it derives it from what the trusted render
 actually showed.
 
-**Validator:** a `--check` run's colour half passes iff the observed visible set (colours clearing
-`--colour-min-area` in some angle, classified nearest-of-palette) equals the committed
-`visibleColours` by set identity.
-PASS: `Brick-Stack.mpd --check` on the committed goldens → the three visible colours (green, blue,
-red) are each well above the floor and yellow stays absent → `colours: PASS (3 visible, set matches)`.
+**Validator:** a `--check` run's color half passes iff the observed visible set (colors clearing
+`--color-min-area` in some angle, classified nearest-of-palette) equals the committed
+`visibleColors` by set identity.
+PASS: `Brick-Stack.mpd --check` on the committed goldens → the three visible colors (green, blue,
+red) are each well above the floor and yellow stays absent → `colors: PASS (3 visible, set matches)`.
 FAIL: the D-026 grey blob — the whole model renders as one grey mass — collapses green, red and blue
 onto a single near-background grey, so at least two of them fall to ~0 coverage and drop out of the
 observed set; the set no longer equals the committed `{green, blue, red}` and the run exits 1 **even
 though the counts still PASS and, on a backend whose goldens were never baked, the pixel gate would
 too.** This is the load-bearing case — the regression the other two strengths are blind to — and it
 is what the witness in `bikar:scripts/thumbnail-gate.test.mjs` freezes: a grey-blob frame leaves ≥2
-colours at zero and the set differs, while a genuinely differently-shaded blue still reads blue.
+colors at zero and the set differs, while a genuinely differently-shaded blue still reads blue.
 
 ### 16.3 The render notes — a human checklist, bound to the palette so it cannot drift
 
 Beside each fixture sits a `<name>.notes.md` — for the exercised model,
 `bikar:scripts/fixtures/ldraw-thumbnails/Brick-Stack.notes.md`. It is what a person should be able to
-confirm by eye in the committed PNGs, beside the numbers: a colour legend that names every resolved
-colour (blue, yellow, red, green, with hexes and where each sits), the occluded yellow marked
-explicitly with the reason it is not in `visibleColours`, and a line per baked angle saying what it
-is *for* (`iso` reads proportions and the stud grid, `front` puts the coloured seam on screen,
+confirm by eye in the committed PNGs, beside the numbers: a color legend that names every resolved
+color (blue, yellow, red, green, with hexes and where each sits), the occluded yellow marked
+explicitly with the reason it is not in `visibleColors`, and a line per baked angle saying what it
+is *for* (`iso` reads proportions and the stud grid, `front` puts the colored seam on screen,
 `below` shows the underside tubes — §15.1's disambiguation, written down per model). The notes are
 prose, but they are not free-floating prose: §16.4's gate binds them to the palette so they cannot
 quietly fall out of date.
@@ -2360,20 +2360,20 @@ fixtures and the metadata beside them — needs none, so it is the half that is 
 check is `bikar:scripts/thumbnail-catalog.test.mjs`, picked up wholesale by CI (`test:scripts`) and
 run as a fast local copy by `bikar:.husky/pre-commit` whenever a fixtures-dir file or the test itself
 is staged. It reads files, never renders, and holds three structural invariants: **pairing** (every
-`.mpd` has both an `expected.json` and a `.notes.md`, and no metadata is orphaned), **colour naming**
-(every colour the read-back resolves is named in that model's notes, so the palette cannot grow
+`.mpd` has both an `expected.json` and a `.notes.md`, and no metadata is orphaned), **color naming**
+(every color the read-back resolves is named in that model's notes, so the palette cannot grow
 without the notes growing with it — the same catalog↔model coherence the W-F1 gate enforces), and
 **non-vacuity** (an empty catalog is a fail, not a vacuous pass).
 
 **Validator:** the catalog is well-formed iff `catalogViolations` returns empty — every `.mpd` is
 paired with an `expected.json` and a `.notes.md`, no `expected.json`/`.notes.md` is orphaned, and
-every hex in each model's `expected.json` `colours` appears in that model's notes.
+every hex in each model's `expected.json` `colors` appears in that model's notes.
 PASS: the committed fixtures — `Brick-Stack.mpd` with its `expected.json` and `notes.md`, all four
-resolved colours named in the notes → no violations, exit 0.
-FAIL: add a colour to `Brick-Stack.expected.json`'s `colours` (or add an `.mpd` with no notes) and
-the gate names the exact gap — *"read-back colour #… is resolved but not named in the notes"* — and
-exits 1. It is the **one** missing colour among otherwise-named ones that must fire: a lazy "are any
-colours named?" check passes the three-of-four case, so the witness builds precisely that catalog and
+resolved colors named in the notes → no violations, exit 0.
+FAIL: add a color to `Brick-Stack.expected.json`'s `colors` (or add an `.mpd` with no notes) and
+the gate names the exact gap — *"read-back color #… is resolved but not named in the notes"* — and
+exits 1. It is the **one** missing color among otherwise-named ones that must fire: a lazy "are any
+colors named?" check passes the three-of-four case, so the witness builds precisely that catalog and
 asserts the fourth is reported — an aggregate cannot discharge a claim about every part. The hook's
 trigger includes deletions (`--diff-filter=D`), because a removed `.mpd` that strands its
 `expected.json` is exactly the orphan the pairing invariant exists to catch.
@@ -2381,8 +2381,8 @@ trigger includes deletions (`--diff-filter=D`), because a removed `.mpd` that st
 ### 16.5 Where the boundary sits — exactly at the GPU
 
 The three strengths and their enforcement now line up on one axis: does a GPU sit in the path? The
-**counts** (deterministic geometry) and the **colour set** (nearest-of-palette, shading-robust) both
-port across backends, which is why the colour gate can live in the on-demand `--check` beside the
+**counts** (deterministic geometry) and the **color set** (nearest-of-palette, shading-robust) both
+port across backends, which is why the color gate can live in the on-demand `--check` beside the
 counts and mean the same thing everywhere. The **golden pixels** do not port (§15.3), which is why
 they stay soft and tolerant. And the **catalog** has no pixels at all, which is why it — and only it —
 graduates to a pre-commit hook. This is the same discipline as §15.4 and D-028, read one level finer:

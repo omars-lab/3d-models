@@ -20,7 +20,7 @@
 - [Breakdown page instrument](breakdown-page-instrument.md) — projector gaps are artifacts, `display/` shield killed by D-041, re-record order hashes last, wrap-morph is a radial lerp
 - [Orb Lab conventions](orb-lab-conventions.md) — knobs are DSL params, touched-set overrides, print target never in share URLs, knobs live in packages/knobs, walls via custom script only
 - [Composition and wall facts](composition-and-wall-facts.md) — clips never route through connect, clip exempt from the FDM floor, mural STL fails `--check` by design, `crop stretch` unshipped
-- [Lego Lab and LDraw facts](lego-lab-and-ldraw-facts.md) — grounded LDConfig colour names, stud colour in the inline block, thumbnail gates split at the GPU, `visibleColours` is baked
+- [Lego Lab and LDraw facts](lego-lab-and-ldraw-facts.md) — grounded LDConfig color names, stud color in the inline block, thumbnail gates split at the GPU, `visibleColors` is baked
 - [Text-emit facts](text-emit-facts.md) — face baked from Source Code Pro 2.042 for the slashed zero, confusables BLOCK, extrude-only labels, `make coupons BIKAR_DIR=`
 - [bikar secrets and Supabase](bikar-secrets-and-supabase.md) — dotenvx key in LastPass `dotenvx/bikar` keyed by origin remote, secrets set by pipe, 42P10 guard lives in coffee-house-sites
 - [Studio folder store](studio-folder-store.md) — root is an absent key never `''`; `.folders.json` is a three-state dev-only overlay; a folder is a label

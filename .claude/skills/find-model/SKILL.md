@@ -30,7 +30,7 @@ dispatches**: slicing, the plan, and the physical send all belong to the skills 
 
 1. **Pin the ask down** — turn "find a model for X" into search terms + the constraints that matter:
    what it is *for* (display / functional / mechanical), rough size vs the X2D bed
-   (256 × 256 × 256 mm), whether it must be **free / commercial-use**, single- vs multi-colour, and
+   (256 × 256 × 256 mm), whether it must be **free / commercial-use**, single- vs multi-color, and
    any must-have features. State the assumptions you make; don't interrogate.
 2. **Search the sources, in order** — work the ranked list in [`sources.md`](sources.md). Start with
    **Thangs** (it indexes across MakerWorld, Printables, Thingiverse, Cults3D — best for "is this out

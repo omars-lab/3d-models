@@ -3,9 +3,9 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { composeColourPreview, missingRegionColours, svgColours, svgRenderArgs } from "./colour-preview.js";
+import { composeColorPreview, missingRegionColors, svgColors, svgRenderArgs } from "./color-preview.js";
 
-// A colour plate had no picture: `slice coaster` cannot slice with pictures headless, so seeing the
+// A color plate had no picture: `slice coaster` cannot slice with pictures headless, so seeing the
 // regions meant opening Bambu Studio (a scratch border-coaster plate, 2026-09-26). The picture is now
 // drawn from bikar's SVG, whose fills are the sidecar hexes the slot map reports.
 const parts = [
@@ -14,24 +14,24 @@ const parts = [
   { region: "border", stl: "C-border.stl", triangles: 1, paletteName: "Copper", hex: "#B87333" },
 ];
 
-describe("missingRegionColours", () => {
-  it("passes a drawing that paints every region's slot colour (fill or stroke, any case)", () => {
+describe("missingRegionColors", () => {
+  it("passes a drawing that paints every region's slot color (fill or stroke, any case)", () => {
     const svg = '<svg><rect fill="#FFFFFF"/><path fill="#333333"/><path stroke="#D4AF37"/><path style="stroke:#b87333"/></svg>';
-    expect(missingRegionColours(svg, parts)).toEqual([]);
+    expect(missingRegionColors(svg, parts)).toEqual([]);
   });
 
   it("names the region a drawing leaves out", () => {
     const svg = '<svg><path fill="#333333"/><path stroke="#d4af37"/></svg>';
-    expect(missingRegionColours(svg, parts)).toEqual(["border (Copper #B87333)"]);
+    expect(missingRegionColors(svg, parts)).toEqual(["border (Copper #B87333)"]);
   });
 
-  it("does not ask the drawing for a region with no palette colour", () => {
+  it("does not ask the drawing for a region with no palette color", () => {
     const untagged = [{ region: "body", stl: "b.stl", triangles: 1, paletteName: null, hex: null }];
-    expect(missingRegionColours("<svg/>", untagged)).toEqual([]);
+    expect(missingRegionColors("<svg/>", untagged)).toEqual([]);
   });
 
-  it("reads only real colours, not none or gradients", () => {
-    expect([...svgColours('<path fill="none" stroke="url(#g)"/><path fill="#abc"/>')]).toEqual(["#abc"]);
+  it("reads only real colors, not none or gradients", () => {
+    expect([...svgColors('<path fill="none" stroke="url(#g)"/><path fill="#abc"/>')]).toEqual(["#abc"]);
   });
 });
 
@@ -48,15 +48,15 @@ describe("svgRenderArgs", () => {
   });
 });
 
-describe("composeColourPreview", () => {
-  it("lays two drawings side by side in their own colours", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "bambu-colour-preview-"));
+describe("composeColorPreview", () => {
+  it("lays two drawings side by side in their own colors", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "bambu-color-preview-"));
     const svg = (hex: string) =>
       `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="${hex}"/></svg>`;
     writeFileSync(join(dir, "a.svg"), svg("#d4af37"));
     writeFileSync(join(dir, "b.svg"), svg("#b87333"));
     const out = join(dir, "plate.preview.png");
-    await composeColourPreview([join(dir, "a.svg"), join(dir, "b.svg")], out, 20);
+    await composeColorPreview([join(dir, "a.svg"), join(dir, "b.svg")], out, 20);
     const size = execFileSync("magick", ["identify", "-format", "%wx%h", out]).toString();
     expect(size).toBe("40x20");
     const px = (x: number) => execFileSync("magick", [out, "-format", `%[hex:p{${x},10}]`, "info:"]).toString().slice(0, 6);

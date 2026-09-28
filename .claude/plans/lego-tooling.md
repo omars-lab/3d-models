@@ -21,7 +21,7 @@ five concrete goals are `docs/lego-lab-design.md` §1; their state on 2026-09-01
 | 5 | The Lego Lab page | **built** (P0–P3) | §9, §14 |
 
 Beyond the five: multi-piece export (D-006), `mural` (UC20), `footprint outline` (UC21), LDraw
-export + read-back + two-tone colour (§14.3–14.6), the thumbnail CLI and colour gate (§15–16),
+export + read-back + two-tone color (§14.3–14.6), the thumbnail CLI and color gate (§15–16),
 and the rosette → LEGO-pin explorer running the real kernel in bikar-studio (Tracks 1–2). All
 shipped; each has its section in the doc named above.
 

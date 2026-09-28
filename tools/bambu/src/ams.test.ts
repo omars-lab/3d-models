@@ -67,10 +67,10 @@ describe("buildAmsSlotMap — palette name → logical slot (D-075)", () => {
     expect(map.assignments.get("B")!.get("base")).toBe(3);
   });
 
-  it("rejects a palette name that resolves to two different colours", () => {
+  it("rejects a palette name that resolves to two different colors", () => {
     const a = sidecar("A", [["straps", "Gold", "#d4af37"]]);
     const b = sidecar("B", [["straps", "Gold", "#ffd700"]]); // same name, different hex
-    expect(() => buildAmsSlotMap([a, b], { defaultFilament: "PLA Basic" })).toThrow(/two colours/);
+    expect(() => buildAmsSlotMap([a, b], { defaultFilament: "PLA Basic" })).toThrow(/two colors/);
   });
 
   it("rejects a plate that needs more slots than the AMS has", () => {
@@ -90,7 +90,7 @@ describe("buildAmsSlotMap — palette name → logical slot (D-075)", () => {
 });
 
 describe("filamentArrays — project_settings.config parallel arrays (§6)", () => {
-  it("reuses the default type+id for every slot and overrides only the colour", () => {
+  it("reuses the default type+id for every slot and overrides only the color", () => {
     const sc = sidecar("Star", [
       ["base", "Slab", "#333333"],
       ["straps", "Gold", "#d4af37"],

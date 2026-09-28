@@ -2,97 +2,97 @@
 status: superseded
 ---
 
-# Coloured coaster previews and Coaster Lab colour controls — design (researcher B) ^e7b42d
+# Colored coaster previews and Coaster Lab color controls — design (researcher B) ^e7b42d
 
 **Status:** proposal from researcher B of two; a checker consolidates both. Raw findings,
-experiments and sources: [`docs/research/colour-preview-2026-09-28-b.md`](research/colour-preview-2026-09-28-b.md).
+experiments and sources: [`docs/research/color-preview-2026-09-28-b.md`](research/color-preview-2026-09-28-b.md).
 Builds on [`docs/multicolor-design.md`](multicolor-design.md) (orbits, flush vs lowered, the
 printer route) and does not repeat it.
 
-**The question (Omar):** can we alternate or customise colours on the PNGs we generate, and if
-not, do we need another CAD tool? Scope addition: make orbits, colours, flush vs lowered and a
-live coloured preview easy to set in Coaster Lab, with the Lab preview and the printed parts
+**The question (Omar):** can we alternate or customise colors on the PNGs we generate, and if
+not, do we need another CAD tool? Scope addition: make orbits, colors, flush vs lowered and a
+live colored preview easy to set in Coaster Lab, with the Lab preview and the printed parts
 coming from one code path.
 
 **Pictures:** this proposal was written before any colored picture existed. What got built from it,
 with the pictures it now makes, is in the consolidated design:
-[What it looks like now](colour-preview-design.md#what-it-looks-like-now).
+[What it looks like now](color-preview-design.md#what-it-looks-like-now).
 
-![Fill coaster from bikar render --format preview: gold straps, ruby stars](colour-preview-design/fill-preview.png)
+![Fill coaster from bikar render --format preview: gold straps, ruby stars](color-preview-design/fill-preview.png)
 
 ## 1. Short answer
 
-1. **Colours per orbit already work** on slab coasters (`outline square` / `polygon` with
-   `relief`): I coloured the CS-1 coaster's orbits alternately ruby and teal, and the printer
+1. **Colors per orbit already work** on slab coasters (`outline square` / `polygon` with
+   `relief`): I colored the CS-1 coaster's orbits alternately ruby and teal, and the printer
    parts, an OpenSCAD picture and the Coaster Lab view all showed the same thing (research §2).
-2. **Our PNGs are one colour only because of how they are made.** The gallery script imports the
-   single whole-coaster STL into OpenSCAD with a fixed colour scheme; the catalog thumbnails
-   capture preset coasters that have no colours set, so they come out Lab bronze.
+2. **Our PNGs are one color only because of how they are made.** The gallery script imports the
+   single whole-coaster STL into OpenSCAD with a fixed color scheme; the catalog thumbnails
+   capture preset coasters that have no colors set, so they come out Lab bronze.
 3. **No new CAD software is needed.** The installed OpenSCAD 2021.01 draws one `color()` per part
-   STL in about half a second, and the Lab already paints the split parts in colour.
+   STL in about half a second, and the Lab already paints the split parts in color.
 4. **The one real gap is in bikar's kernel, not in any renderer:** openwork coasters
-   (`outline pattern`, including the radial GimTvN9hw4U variants) are refused by the colour
-   split, so they cannot be coloured by any tool until the split handles them.
+   (`outline pattern`, including the radial GimTvN9hw4U variants) are refused by the color
+   split, so they cannot be colored by any tool until the split handles them.
 5. **Flush fills build today; lowered fills do not** (a grammar and kernel change already
    proposed in [multicolor-design §3](multicolor-design.md#3-the-look-flush-or-lowered-fills)).
 
 ## 2. What exists today
 
-| Picture | Made by | Coloured? | Same code as the printed parts? |
+| Picture | Made by | Colored? | Same code as the printed parts? |
 |---|---|---|---|
 | Gallery / coaster PNGs | `build/brick_previews.py` → OpenSCAD `import()` of the one `--format stl` mesh, Cornfield scheme | No, one gold | No: the whole mesh, not the parts |
-| Catalog / Lab thumbnails | bikar `scripts/render-coaster-thumbnails.ts`, Playwright capture of the Lab canvas | Only if the preset sets colours (none do) | **Yes**: the Lab tints the `buildCoasterParts` bodies |
-| Coaster Lab live view | bikar `packages/lab`, `coasterTintMesh` over `buildCoasterParts` | Yes, base/straps/border knobs plus whatever the source colours | **Yes** (with pinch fixed to `fillet`, the CLI default) |
+| Catalog / Lab thumbnails | bikar `scripts/render-coaster-thumbnails.ts`, Playwright capture of the Lab canvas | Only if the preset sets colors (none do) | **Yes**: the Lab tints the `buildCoasterParts` bodies |
+| Coaster Lab live view | bikar `packages/lab`, `coasterTintMesh` over `buildCoasterParts` | Yes, base/straps/border knobs plus whatever the source colors | **Yes** (with pinch fixed to `fillet`, the CLI default) |
 | `bambu slice coaster` `<plate>.preview.png` | `renderCoasterTopSVG` flat top view | Yes | **No**: drawn from the spec; its check only asks that each hex appears somewhere |
-| Bambu Studio plate thumbnails | Studio GUI slice | Yes, in filament colours | Yes (it reads the 3MF) but GUI only: headless export hangs and overrides colours ([issue](issues/coaster-3mf-filament-shape-and-export-hang.md)) |
+| Bambu Studio plate thumbnails | Studio GUI slice | Yes, in filament colors | Yes (it reads the 3MF) but GUI only: headless export hangs and overrides colors ([issue](issues/coaster-3mf-filament-shape-and-export-hang.md)) |
 
-## 3. Options for coloured static PNGs
+## 3. Options for colored static PNGs
 
 | # | Option | Pros | Cons | Implications |
 |---|---|---|---|---|
-| **A** | **OpenSCAD `color(hex) import(part.stl)` per manifest part** (a parts mode in `brick_previews.py`) | Installed; ~0.5 s per coaster; draws the exact STLs the printer gets; same camera and background as today's gallery | Needs `--format parts` to run in `make coasters` (extra build time, not measured for all coasters); only works where the split works; a cream palette colour would be keyed out as background by `process_images.py` (tolerance 14 around `#FFFFE5`) | Small change in this repo; the gallery becomes a check of the split, not only a picture. Openwork coasters stay one colour until the kernel change (§5) |
+| **A** | **OpenSCAD `color(hex) import(part.stl)` per manifest part** (a parts mode in `brick_previews.py`) | Installed; ~0.5 s per coaster; draws the exact STLs the printer gets; same camera and background as today's gallery | Needs `--format parts` to run in `make coasters` (extra build time, not measured for all coasters); only works where the split works; a cream palette color would be keyed out as background by `process_images.py` (tolerance 14 around `#FFFFE5`) | Small change in this repo; the gallery becomes a check of the split, not only a picture. Openwork coasters stay one color until the kernel change (§5) |
 | **B** | **Lab capture** (the existing Playwright thumbnail script, extended to take custom source) | Pixel-identical to what Omar sees in the Lab; already the thumbnail path | Needs Vite plus a headless browser; 184 px; dark Lab background, not the gallery's | Right for catalog thumbnails and for "what the Lab shows"; a second picture style next to the gallery's |
-| C | Flat top-view SVG (`renderCoasterTopSVG`) | Exists; fast; no 3D | Drawn from the spec, not the split: a shrunk or missing body still looks right | Keep as a quick plate sheet, never as the proof of colours |
-| D | Bambu Studio thumbnails | The slicer's own picture | Headless path blocked (hang, colour override, crash); GUI only | Cannot be automated today |
-| E | three.js / F3D / other 3MF viewers | General tools | Bambu keeps colour in its own config files (`filament_colour`, `extruder`), not in core 3MF materials (printago, fetched), so they would not show our colours without extra work; F3D not installed | A new dependency that reads the same STLs A already reads |
+| C | Flat top-view SVG (`renderCoasterTopSVG`) | Exists; fast; no 3D | Drawn from the spec, not the split: a shrunk or missing body still looks right | Keep as a quick plate sheet, never as the proof of colors |
+| D | Bambu Studio thumbnails | The slicer's own picture | Headless path blocked (hang, color override, crash); GUI only | Cannot be automated today |
+| E | three.js / F3D / other 3MF viewers | General tools | Bambu keeps color in its own config files (`filament_colour`, `extruder`), not in core 3MF materials (printago, fetched), so they would not show our colors without extra work; F3D not installed | A new dependency that reads the same STLs A already reads |
 | F | Blender headless | Best-looking renders | Not installed; heavy; still reads the same part STLs | Only worth it for marketing renders, not for checking |
 | G | Another CAD system | — | Nothing it would add: the geometry and the split live in bikar | Rejected: none of the options above lacks a CAD feature |
 
 ## 4. Recommendation
 
-**One code path: the split (`buildCoasterParts`).** Every coloured picture is drawn from the
+**One code path: the split (`buildCoasterParts`).** Every colored picture is drawn from the
 bodies it makes, never from the spec.
 
-1. **Gallery PNGs → Option A.** When a coaster has colours, `make coasters` also runs
+1. **Gallery PNGs → Option A.** When a coaster has colors, `make coasters` also runs
    `--format parts`, and `brick_previews.py --coasters` writes one `color(hex) import(stl)` per
-   manifest part instead of one `import()`. Coasters without colours keep today's picture.
-2. **Catalog / Lab thumbnails → Option B**, as today; once presets carry orbit colours, the
+   manifest part instead of one `import()`. Coasters without colors keep today's picture.
+2. **Catalog / Lab thumbnails → Option B**, as today; once presets carry orbit colors, the
    thumbnails pick them up with no change.
 3. **Kernel:** lift the openwork refusal for filled faces — a straps body plus one body per fill
-   colour, cut by the same column rule and strap-wins rule the slab split uses
+   color, cut by the same column rule and strap-wins rule the slab split uses
    ([multicolor-design §3.1](multicolor-design.md#31-strap-wins-both-researchers-built-in-261)).
    This unlocks the radial variants in the Lab, the gallery and the printer at once. Printability
-   of small colour islands on an openwork coaster is not measured.
+   of small color islands on an openwork coaster is not measured.
 4. **Lab controls → §6.**
 
 **Default:** the gallery camera stays `0,0,0,60,0,25,0` with `--viewall --autocenter`, as in
-[brick_previews.py at 5938f31](https://github.com/omars-lab/3d-models/blob/5938f3145eb697abf3fc25cff50c9b82b6627951/build/brick_previews.py), so a coloured picture sits beside the
+[brick_previews.py at 5938f31](https://github.com/omars-lab/3d-models/blob/5938f3145eb697abf3fc25cff50c9b82b6627951/build/brick_previews.py), so a colored picture sits beside the
 existing ones unchanged in framing.
 
 **Transfer conditions (K10).** OpenSCAD draws `color()` only in its preview render, not in a full
 (CGAL) render ([OpenSCAD manual](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations),
 fetched). Option A works because `brick_previews.py` exports the PNG without `--render`, which is
 preview mode — seen working on 2021.01. If the script ever adds `--render`, or moves to a build
-that changes this, the colours are lost without an error. The Lab-to-parts match holds because
+that changes this, the colors are lost without an error. The Lab-to-parts match holds because
 both call `buildCoasterParts` with pinch `fillet`; a CLI run with `--pinch merge` would differ.
 
 ## 5. Validators
 
-**Validator:** the coloured PNG's `.scad` imports every part in `<name>.parts.json` exactly once,
+**Validator:** the colored PNG's `.scad` imports every part in `<name>.parts.json` exactly once,
 with that part's hex, and imports nothing else (in particular not the whole `--format stl` mesh).
 PASS: the 7apC5Q9QS-8-fill manifest's four parts (base, Slab, Ruby, straps) each appear once with
 their hex, and no other `import()` is present.
-FAIL: a `.scad` that imports the whole coaster STL in one colour, or drops the `Ruby` part — the
+FAIL: a `.scad` that imports the whole coaster STL in one color, or drops the `Ruby` part — the
 picture would still look plausible, which is why the check reads the `.scad`, not the pixels.
 
 **Validator:** for the same source and params, the Lab's per-part triangle counts equal the
@@ -105,14 +105,14 @@ is not showing what prints.
 must show the straps body shrunk to its outer ring.
 PASS: Option A's picture shows the missing inner straps (it draws the shrunk body).
 FAIL: the spec-drawn top-view SVG (Option C) — it still shows every strap and every hex is
-present, so `missingRegionColours` passes. This is the case per-part pictures exist for: an
+present, so `missingRegionColors` passes. This is the case per-part pictures exist for: an
 aggregate check (every hex somewhere) cannot vouch for every body.
 
-## 6. Coaster Lab: configuring orbits, colours and depth
+## 6. Coaster Lab: configuring orbits, colors and depth
 
 ### 6.1 What the Lab does today
 
-A live coloured view built from the split (§2), colour knobs for base, straps and border that
+A live colored view built from the split (§2), color knobs for base, straps and border that
 rewrite `color <region> <name>` lines in the source (D-076, `setCoasterColor`), numeric params
 from `packages/knobs` with touched-set overrides, and share URLs that leave out the print target.
 There is no per-orbit control, and openwork coasters show bronze because the split refuses them.
@@ -122,7 +122,7 @@ There is no per-orbit control, and openwork coasters show bronze because the spl
 | Control | Params (numbers) or source edit? | Grammar change? |
 |---|---|---|
 | Which orbits are filled | **Source edit**: `fill void where orbit == N color <Name>` lines, one per filled orbit, written by a pure `setOrbitFill(source, orbit, name \| null)` in the style of `setCoasterColor` | No (the `orbit ==` form ran on the bikar branch I tested; D-081) |
-| Colour of each orbit | Same source edit (the `<Name>` in that line) — params are numbers only, so colours cannot be params | No |
+| Color of each orbit | Same source edit (the `<Name>` in that line) — params are numbers only, so colors cannot be params | No |
 | Palette hexes | Source edit of the `palette` block (later; the first version picks from the names the file declares) | No |
 | Flush vs lowered | **Param** once it exists: `relief both emboss 1.2 fills $fill_mm`, flush when omitted | **Yes**: `fills <mm>` is proposed, not built ([multicolor-design §3](multicolor-design.md#3-the-look-flush-or-lowered-fills)); that a param may sit in this clause is assumed from `base $height`, not checked |
 | Presets (odd, even, inner, outer, all, none) | Computed in the Lab from the orbit list, then applied as source edits | No |
@@ -130,8 +130,8 @@ There is no per-orbit control, and openwork coasters show bronze because the spl
 
 Why source edits and not 0/1 params per orbit: the number of orbits differs per construction, a
 fixed list of `$orbitN_on` params would be wrong for most files, and whether `where` clauses can
-read params was not checked. Source edits are how D-076 already solved colours, and the edited
-source is what the share URL carries, so a shared link reproduces the colours exactly.
+read params was not checked. Source edits are how D-076 already solved colors, and the edited
+source is what the share URL carries, so a shared link reproduces the colors exactly.
 
 The Lab also needs the orbit list (id, member count, radius) from the worker — the same function
 `bikar bands` prints — so the panel shows real orbits, not guesses.
@@ -139,12 +139,12 @@ The Lab also needs the orbit list (id, member count, radius) from the worker —
 ### 6.3 Rough UI (piece counts and radii are illustrative)
 
 ```
-+-- Colours --------------------------------------------------+
++-- Colors --------------------------------------------------+
 | Base    [ Slab  v]   Straps [ Gold v]   Border [ none v]     |
 +-- Orbits ---------------------------------------------------+
 | Preset: [ Odd ] [ Even ] [ Inner ] [ Outer ] [ All ] [ None ]|
 |                                                             |
-|  #  pieces  radius   filled  colour                         |
+|  #  pieces  radius   filled  color                         |
 |  0     8     6 mm     [x]    [ Teal v]                      |
 |  1    16    11 mm     [x]    [ Ruby v]                      |
 |  2     8    15 mm     [ ]    ( base )                       |
@@ -165,7 +165,7 @@ message) instead of showing bronze silently.
 
 ## 7. Read against itself (K7) and hedges kept (K1, K2)
 
-- §1 says "per-orbit colours work today" only for slab styles; §4 item 3 and §6.1 agree that
+- §1 says "per-orbit colors work today" only for slab styles; §4 item 3 and §6.1 agree that
   openwork does not.
 - The first validator's PASS names four parts, matching research §2, experiment 1; the
   second's counts match experiment 2.

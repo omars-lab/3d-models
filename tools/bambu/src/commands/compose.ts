@@ -257,7 +257,7 @@ export function findIterationGeometry(
 /** Resolve every manifest item to its geometry pins + iteration id. D-072: an item is the GEOMETRY
  *  HALF of the key, completed by the plate's one slice profile — the manifest mints no parallel id, so
  *  nothing forks (CLAUDE.md "a migration never buys a fork"). Shared by `slice compose` (loose-STL
- *  plates) and `slice coaster` (multi-part colour plates), so both derive the same it-<sha12> for the
+ *  plates) and `slice coaster` (multi-part color plates), so both derive the same it-<sha12> for the
  *  same recipe. Throws an item-indexed error; the caller maps it to an exit code. */
 export async function resolveManifestItems(
   items: ManifestItem[],

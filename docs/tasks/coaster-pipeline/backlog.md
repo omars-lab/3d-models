@@ -105,11 +105,11 @@ about bets that could be minted.
 
 | | Count | Note |
 |---|---|---|
-| Registered `CAL-*` bets | 32 <!--count:cal-bets--> | 28 with a coupon, 10 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, the equivalence bets `CAL-EQV-01`/`CAL-EQV-02`, the interlock tab-neck bet `CAL-CST-06`, and the coaster colour-split pinch bet `CAL-PIN-01`) |
+| Registered `CAL-*` bets | 32 <!--count:cal-bets--> | 28 with a coupon, 10 <!--count:cal-bets-no-record--> without a record in bikar (`CAL-OVH-01`, `CAL-STR-01`, the two mural bets `CAL-REG-01`/`CAL-CLB-01`, the two brick-anchor bets `CAL-ANC-01`/`CAL-INW-01`, the equivalence bets `CAL-EQV-01`/`CAL-EQV-02`, the interlock tab-neck bet `CAL-CST-06`, and the coaster color-split pinch bet `CAL-PIN-01`) |
 | `Calibrated<T>` records | 28 <!--count:cal-records--> | all provisional, all listed in bikar's `.calibration-baseline.json` |
 | Bets settled by the machine card (MC-1…MC-8) | 10 <!--count:cal-bets-mc--> | 15 <!--count:cal-mc-records--> of the 28 <!--count:cal-records--> records |
 | Bets settled by design-specific coupons | 18 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1), `CAL-GRP-01` (LG-D1), `CAL-CST-01` + `CAL-CST-02` + `CAL-CST-03` + `CAL-CST-04` + `CAL-CST-05` + `CAL-CST-06` (CS-1), `CAL-CST-07` (CS-4), `CAL-CST-08` (CS-5) — but only 13 <!--count:cal-design-records--> records, because five of the eighteen have a coupon and no `Calibrated` record yet |
-| Bets with no coupon anywhere | 4 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist"; `CAL-EQV-01` and `CAL-EQV-02`, the O2 and O3 coverage floors — not print quantities, settled by the corpus ladder; `CAL-PIN-01`, the coaster colour-split pinch floor — needs a two-filament interface coupon, not yet designed |
+| Bets with no coupon anywhere | 4 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist"; `CAL-EQV-01` and `CAL-EQV-02`, the O2 and O3 coverage floors — not print quantities, settled by the corpus ladder; `CAL-PIN-01`, the coaster color-split pinch floor — needs a two-filament interface coupon, not yet designed |
 | Entries in the prototype catalog | 44 <!--count:catalog-entries--> | 28 coupons (P1–P8, MC-1…MC-8, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2) + the 6 deliverables C1, C2, W1, W2 (catalogued 2026-08-03, §3.5) and the coasters CS-1…CS-12 (P3.3, D-069, D-070, D-071; CS-7 the octagon-framed lEfWSogWscs, CS-8 the square-framed eight-fold rDuxHF3xMOc, CS-9 the round-framed n-fold flower nmEjCTzMbDg, CS-10 the square-framed 12-6-4 star n3IidKfXE1I, CS-11 the hexagon-framed Royal Alcazar tessellation sDO9fpu76v8, CS-12 the round-framed one cell of the Imamzadeh Isma'il kite tile bknVRSMcLj0). Count is the one `make validate-catalog` prints, not a hand tally |
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
@@ -132,7 +132,7 @@ X1C class machine" as the *expectation* it is, not as a fact this repo asserts �
 and note that under
 [`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md)
 it does not matter for planning, because every number below is a property of the
-*(machine, material, colour, spool, nozzle, layer, profile)* tuple and has to be
+*(machine, material, color, spool, nozzle, layer, profile)* tuple and has to be
 re-earned on any other one.
 
 ---
@@ -826,7 +826,7 @@ Five checks, run before shipping it, in the spirit of
   the plate count is three.
   28 <!--count:cal-records--> records = 15 <!--count:cal-mc-records--> on the
   card + 13 <!--count:cal-design-records--> on design coupons — five design-coupon bets (the mural pair, the
-  brick-anchor pair the interlock tab-neck bet `CAL-CST-06`, and the coaster colour-split pinch bet `CAL-PIN-01`) have a coupon but no bikar record yet, which is why the
+  brick-anchor pair the interlock tab-neck bet `CAL-CST-06`, and the coaster color-split pinch bet `CAL-PIN-01`) have a coupon but no bikar record yet, which is why the
   record count does not track the bet count. 44 <!--count:catalog-entries--> print-gated items = 44 <!--count:catalog-entries--> catalog
   entries — 28 coupons (P8, the Maclado orbs, joined 2026-08-08; MC-8, the
   in-situ clearance ladder, 2026-08-19) plus the four

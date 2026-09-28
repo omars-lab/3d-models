@@ -21,7 +21,7 @@
 #
 # Left off, on purpose:
 #   border  `-border-coaster` carries `color border …`, so it needs `bambu slice
-#           coaster` on a colour plate; compose would drop the colour (see minis-01).
+#           coaster` on a color plate; compose would drop the color (see minis-01).
 #   framed openwork (a frame with holes in the empty spaces) does not exist yet:
 #           `trivet` cuts the relief region, and on these patterns the face region
 #           covers the straps too, so it cuts the whole inside away. Tracked in

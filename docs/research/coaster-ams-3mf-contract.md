@@ -1,14 +1,14 @@
 ---
 date: 2026-09-18
 feeds:
-  - '[[coaster-colour-design]]'
+  - '[[coaster-color-design]]'
 ---
 
 <!--
 provenance:
   date: 2026-09-18
   produced-by: research subagent (Claude Opus 4.8), 3d-models session
-  feeds: docs/coaster-colour-design.md §6 (part 4) — the headless-CLI 3MF/AMS contract
+  feeds: docs/coaster-color-design.md §6 (part 4) — the headless-CLI 3MF/AMS contract
   method: web research of the Bambu Studio CLI wiki, the Bambu Lab 3MF colour-parsing and
           multi-colour wiki pages, and corroborating third-party writeups; records the settled
           answer to the §6 open question ("does headless BambuStudio need per-object filament
@@ -18,7 +18,7 @@ provenance:
 # Research — coaster AMS / 3MF headless-CLI contract
 
 This file settles the one open, load-bearing question that
-[`coaster-colour-research.md`](coaster-colour-research.md) §6 left as an "(unverified
+[`coaster-color-research.md`](coaster-color-research.md) §6 left as an "(unverified
 snippet)": whether the **headless** Bambu Studio / Orca CLI can assign objects (or painted
 regions) to filament slots at slice time, or whether that mapping must already be **baked
 into the input 3MF**. The findings below are recorded verbatim as the settled answer.

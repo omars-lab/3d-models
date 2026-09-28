@@ -1,7 +1,7 @@
 ---
 date: 2026-09-28
 feeds:
-  - '[[colour-preview-design-b]]'
+  - '[[color-preview-design-b]]'
 ---
 
 # Colour previews for coasters — raw findings (researcher B)
@@ -9,7 +9,7 @@ feeds:
 - **Date:** 2026-09-28
 - **Produced by:** researcher B (one of two independent researchers; the other researcher's
   files were not read)
-- **Feeds:** [`docs/colour-preview-design-b.md`](../colour-preview-design-b.md)
+- **Feeds:** [`docs/color-preview-design-b.md`](../color-preview-design-b.md)
 - **Question (Omar):** "Do we have the ability to alternate colors / customize colors on the
   PNGs we are generating? If not, would we need to integrate an alternate CAD software?"
   Plus the scope addition: configure orbits, colours, flush vs lowered and a live preview in
@@ -83,10 +83,10 @@ The bikar CLI makes a PNG only by rasterizing an SVG with `rsvg-convert` or `mag
 - `writeColourPreview` (`tools/bambu/src/commands/coaster.ts:L404`) writes
   `<plate>.preview.png` from `renderCoasterTopSVG` (`bikar:packages/core/src/render/coaster-top-renderer.ts:L213`),
   which draws from the **spec**, not from the split bodies.
-- Its check `missingRegionColours` (`tools/bambu/src/colour-preview.ts:L20`) only asks whether
+- Its check `missingRegionColours` (`tools/bambu/src/color-preview.ts:L20`) only asks whether
   each manifest hex appears somewhere in the SVG — an aggregate. A body that the split shrank or
   lost (for example straps winning an overlap) would still pass, since the SVG never saw the split.
-- `composeColourPreview` (`tools/bambu/src/colour-preview.ts:L45`) appends the images.
+- `composeColourPreview` (`tools/bambu/src/color-preview.ts:L45`) appends the images.
 
 ### 1.6 Bambu Studio cannot make the colour picture headless
 
