@@ -6,6 +6,6 @@ renamed after the link was written, so a click opens the file and scrolls nowher
 `decisions-log.md` had four of these to D-039 alone.
 
 The taxonomy's K9 section is
-[here](../../../../docs/grounding-defect-taxonomy.md#k9--broken-pointer).
+[here](../../../../docs/guides/grounding-defect-taxonomy.md#k9--broken-pointer).
 
 Expected: exactly one finding, `D1 (K9)`.

@@ -786,8 +786,8 @@ one.
 11. ~~**Whether a `make coupons` target is wanted.**~~ **Resolved 2026-08-03**:
     yes, and the precedent question resolved itself. The repo's preference for
     a gate over new machinery
-    ([`dsl-extension-skill-evaluation.md`](../../dsl-extension-skill-evaluation.md),
-    [`issue-register-evaluation.md`](../../issue-register-evaluation.md)) does not
+    ([`dsl-extension-skill-evaluation.md`](../../design/process/dsl-extension-skill-evaluation.md),
+    [`issue-register-evaluation.md`](../../design/process/issue-register-evaluation.md)) does not
     transfer to a build target, as noted here — but what shipped is a gate that
     happens to have a target as its entry point, so the preference is satisfied
     rather than bypassed. See §4 item 2 and
@@ -798,7 +798,7 @@ one.
 ## 8. Reading this file against itself
 
 Five checks, run before shipping it, in the spirit of
-[`grounding-defect-taxonomy.md`](../../grounding-defect-taxonomy.md) K7.
+[`grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md) K7.
 
 - **The headline sequence and the register agree.** §2 puts the machine card
   first; §3.1 shows no MC coupon blocked on anything. §2 puts the LG ladder
@@ -885,7 +885,7 @@ Five checks, run before shipping it, in the spirit of
   by construction blind to, so the same day the question "does anything check
   that a claim is tagged *at all*?" was answered by measuring two candidate
   rules over all 62 documents of `docs/` and `.claude/` — the method
-  [`issue-register-evaluation.md`](../../issue-register-evaluation.md) and the
+  [`issue-register-evaluation.md`](../../design/process/issue-register-evaluation.md) and the
   rejected link checker both used. A number within 60 characters of the
   quantity's vocabulary scored **117 hits, ~5 real**; a number *immediately* in
   front of a curated noun phrase scored **9 hits, 9 real**, and six of those

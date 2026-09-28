@@ -91,7 +91,7 @@ The runner-free form in each repo:
 | sacred-patterns | `make local.ci` (`gate-parity.yaml`) | `make deploy` (gh-pages worktree) |
 
 Each sibling carries its own runbook — bikar and qiyas at
-`docs/local-ci-runbook.md`, sacred-patterns at `local-gate-runbook.md` beside
+`docs/guides/local-ci-runbook.md`, sacred-patterns at `local-gate-runbook.md` beside
 it — each under its own checkout, not this one. They
 are named that way rather than linked because a relative link into a sibling
 would resolve against whatever someone happens to have on disk, which is exactly

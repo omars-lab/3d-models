@@ -127,7 +127,7 @@ tenet each left behind.
 | 4.7 | Three gates and the map's self pin gave a different verdict depending on which checkout ran them: a linked worktree sits one level below the siblings, and a self pin taken at branch HEAD does not survive a squash merge — so a worktree commit failed on 14 false "resolves now" while the primary passed, and master carried an orphaned pin | Sibling fallback via the git common dir in all three gates; self pin at merge-base with origin; self-tests build a primary + worktree + sibling layout and assert both verdicts agree (#132 `44fba5c`, #133 `b7a8908`) | **A gate's verdict must not depend on which checkout runs it** — every gate that touches a path outside the repo gets a worktree self-test; a pin the repo takes on itself is taken at the published base, never at HEAD — memory `gate-verdict-checkout-independent` |
 
 Related precedent on why this is a plan and not a register:
-[`issue-register-evaluation.md`](issue-register-evaluation.md) — registers nobody re-reads
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) — registers nobody re-reads
 decay; this file is re-read because §2 is the queue we pull from.
 
 ## 5. Links
@@ -147,7 +147,7 @@ no CORS when hosted).
 [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) ·
 [`lego-lab-design.md`](lego-lab-design.md) · [`prints-tab-design.md`](prints-tab-design.md) ·
 [print register](tasks/coaster-pipeline/backlog.md) · [`decisions-log.md`](decisions-log.md) ·
-[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md).
+[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md).
 
 **Sibling docs.** bikar decision `bikar:docs/decisions/2026-08-31-d3-viz-adapter.md`
 (core d3-agnostic, one converter module, page registration pattern); qiyas scoping

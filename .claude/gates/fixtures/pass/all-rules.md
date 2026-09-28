@@ -7,12 +7,12 @@ the gate has a false positive.
 ## D1 — relative links resolve
 
 The taxonomy this gate is built from:
-[grounding-defect-taxonomy.md](../../../../docs/grounding-defect-taxonomy.md).
+[grounding-defect-taxonomy.md](../../../../docs/guides/grounding-defect-taxonomy.md).
 An absolute link is not checked: [Anthropic](https://www.anthropic.com).
 A heading link resolves by GitHub's slug, where the dash in a heading leaves two
 hyphens: [see below](#d3--defaults-carry-provenance). It also resolves by the
 heading text, the form Obsidian writes: [D2](#D2%20—%20validators%20ship%20both%20examples).
-Into another file too: [the taxonomy's K9](../../../../docs/grounding-defect-taxonomy.md#k9--misdirected-pointer).
+Into another file too: [the taxonomy's K9](../../../../docs/guides/grounding-defect-taxonomy.md#k9--misdirected-pointer).
 And onto a block id review-md wrote: [this line](#^fixture-block). ^fixture-block
 An obsidian link lands through the vault mapping:
 [CS-1, minimal](obsidian://open?vault=docs&file=catalog%2Fpatterns%2Fsimple-20-step-six-fold-star-rosette-cs-1.md%23minimal),

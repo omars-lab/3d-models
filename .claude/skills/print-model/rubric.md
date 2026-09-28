@@ -354,7 +354,7 @@ plate. It graduates when it is:
    repeated the defect and a plan written *after* honors it — that is what makes it a test, not a note.
 4. **Do not open a register.** The example that changes the next plan *is* the durable record; a log
    nobody re-reads decays ([`CLAUDE.md`](../../../CLAUDE.md) "no issue catalog";
-   [`docs/issue-register-evaluation.md`](../../../docs/issue-register-evaluation.md)). Only when the
+   [`docs/design/process/issue-register-evaluation.md`](../../../docs/design/process/issue-register-evaluation.md)). Only when the
    finding produces a **tenet** — a rule that changes how *every* future plan is made — is a durable
    line written, and it goes in best-practices' grounded-rules section as a `[measured]` rule, never a
    catalog.

@@ -21,9 +21,16 @@ What it rewrites, in every tracked text file:
   - a backticked path a doc writes relative to itself (`example-design/x.png`),
     and a link label that repeats its own target ([`../x.md`](../x.md)).
 
+What it leaves as written:
+  - another repo's path written `<repo>:docs/x.md` (`qiyas:docs/x.md` is
+    qiyas's file even when this repo has one of the same name).
+
 What it leaves as written, and lists:
   - research/ prose. A research file is kept verbatim, so only its link targets
     move (a target is an address, not researched content);
+  - the docs gate's fixtures (.claude/gates/fixtures/), the same way: their text
+    is test input and stays, but a link to a real note must keep resolving or
+    the gate's own self-test goes red;
   - review-md comment files. They are conversation, and review-md owns them;
   - a path it cannot tie to this repo (`3d-models-constructions/docs/x.md`);
   - files git does not track (another session's work);
@@ -81,6 +88,8 @@ LINK = re.compile(r"(\[[^\]]*\]\()([^)\s]+)((?:\s+\"[^\"]*\")?\))")
 WIKILINK = re.compile(r"(!?\[\[)([^\[\]|#^]*)([^\[\]]*\]\])")
 BACKTICKED = re.compile(r"`([A-Za-z0-9_.@/-]+)`")
 PATHISH = re.compile(r"[A-Za-z0-9_.@-]*(?:/[A-Za-z0-9_.@-]+)+/?")
+# `qiyas:` just before a path: the path is that repo's, not this one's.
+OTHER_REPO = re.compile(r"(?<![\w.-])(?!3d-models:)[\w-]+:\Z")
 SKIP_SCHEMES = ("http://", "https://", "mailto:", "ftp://", "data:", "obsidian://")
 
 # Relative-path arithmetic runs against a deep made-up root, so a link that
@@ -257,7 +266,8 @@ def is_comment_file(rel: str) -> bool:
 def rooted_pattern(mapper: Mapper) -> re.Pattern[str] | None:
     """`docs/<old>` wherever it is written as a path from the repo root: alone,
     or after `3d-models/` or `3d-models:`. Not after another path segment —
-    `3d-models-constructions/docs/x.md` names a different checkout."""
+    `3d-models-constructions/docs/x.md` names a different checkout — and not
+    after another repo's `name:` (`qiyas:docs/local-ci-runbook.md` is qiyas's)."""
     alts = []
     for m in mapper.moves:
         # A file path may end a sentence (`docs/a.md.`) but not run on (`docs/a.md.bak`).
@@ -265,7 +275,7 @@ def rooted_pattern(mapper: Mapper) -> re.Pattern[str] | None:
         alts.append(re.escape(m.old) + tail)
     if not alts:
         return None
-    return re.compile(r"(?:(?<=3d-models/)|(?<![\w./-]))(" + "|".join(alts) + ")")
+    return re.compile(r"(?:(?<=3d-models/)|(?<=3d-models:)|(?<![\w./:-]))(" + "|".join(alts) + ")")
 
 
 def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None) -> tuple[str, list[Change]]:
@@ -274,7 +284,7 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
     moved = new_rel != rel
     old_dir, new_dir = posixpath.dirname(rel), posixpath.dirname(new_rel)
     is_md = rel.endswith(".md")
-    research = rel.startswith(RESEARCH)
+    research = rel.startswith((RESEARCH, FIXTURES))  # link targets move, prose is kept
     in_vault = rel.startswith("docs/")
     changes: list[Change] = []
 
@@ -383,7 +393,8 @@ def leftovers(rel: str, text: str, mapper: Mapper, why: str) -> list[Leftover]:
     names = {posixpath.basename(m.old) for m in mapper.moves}
     out = []
     for n, line in enumerate(text.split("\n"), 1):
-        tokens = [m.group(0) for m in PATHISH.finditer(line)]
+        tokens = [m.group(0) for m in PATHISH.finditer(line)
+                  if not OTHER_REPO.search(line, 0, m.start())]
         tokens += [m.group(2) for m in LINK.finditer(line)]
         for tok in tokens:
             bare = unquote(tok.split("#", 1)[0]).rstrip("/")
@@ -420,6 +431,8 @@ class Report:
 def area(rel: str) -> str:
     if rel.startswith(RESEARCH):
         return "research"
+    if rel.startswith(FIXTURES):
+        return "gate fixtures"
     if rel == USE_CASES:
         return "use-case map"
     if rel == BASELINE:
@@ -449,7 +462,23 @@ def candidates(root: Path, mapper: Mapper, files: list[str]) -> list[str]:
     hits = set(git(root, *args, check=False).splitlines())
     hits |= {f for f in files if mapper.map(f) is not None and f.endswith(".md")}
     known = set(files)
-    return sorted(f for f in hits if f in known and not f.startswith(FIXTURES) and f != SELF)
+    return sorted(f for f in hits if f in known and f != SELF)
+
+
+def names_ours(body: str, needle: str, sibling_has_own: bool) -> bool:
+    """Whether a sibling's line names this repo's `needle` (a `docs/...` path).
+    Tied to 3d-models (`3d-models/docs/x.md`, `3d-models:docs/x.md`, 3d-models
+    `docs/x.md`) it does; after another repo's name (`qiyas:docs/x.md`) it does
+    not; bare, it does only when the sibling has no file of that name itself."""
+    for m in re.finditer(re.escape(needle) + r"(?![\w-]|\.[\w-])", body):
+        before = body[:m.start()]
+        if re.search(r"3d-models[/:]?\s*`?\Z", before):
+            return True
+        if re.search(r"[\w-]+[:/]\Z", before):
+            continue
+        if not sibling_has_own:
+            return True
+    return False
 
 
 def sibling_refs(root: Path, moves: list[Move]) -> tuple[list[str], list[str]]:
@@ -474,11 +503,11 @@ def sibling_refs(root: Path, moves: list[Move]) -> tuple[list[str], list[str]]:
         out = git(repo, *args, ref, "--", check=False)
         for line in out.splitlines():
             _, path, lineno, body = (line.split(":", 3) + ["", "", ""])[:4]
-            # A sibling may have a docs/<same name> of its own; a mention there
-            # counts only when the line ties it to 3d-models.
-            own = [nd for nd in needles if nd in body and subprocess.run(
-                ["git", "-C", str(repo), "cat-file", "-e", f"{ref}:{nd}"], capture_output=True).returncode == 0]
-            if own and "3d-models" not in body:
+            # A sibling may have a docs/<same name> of its own, or name a third
+            # repo's (`qiyas:docs/x.md`); only a mention of ours is listed.
+            if not any(names_ours(body, nd, subprocess.run(
+                    ["git", "-C", str(repo), "cat-file", "-e", f"{ref}:{nd}"],
+                    capture_output=True).returncode == 0) for nd in needles if nd in body):
                 continue
             hits.append(f"{name}:{path}:{lineno}: {body.strip()[:160]}")
     return searched, hits
@@ -500,7 +529,9 @@ def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple
         if changes:
             report.changes[rel] = changes
             new_texts[rel] = new
-        why = "research prose, kept as written" if rel.startswith(RESEARCH) else "not tied to this repo"
+        why = ("research prose, kept as written" if rel.startswith(RESEARCH)
+               else "gate fixture text, kept as written" if rel.startswith(FIXTURES)
+               else "not tied to this repo")
         report.left += leftovers(rel, new, mapper, why)
         names = {posixpath.basename(m.old) for m in moves if not m.is_dir}
         report.name_only += sum(len(re.findall(r"(?<![\w/.(-])" + re.escape(nm) + r"(?![\w-])", new))
@@ -645,12 +676,18 @@ def unit_cases(failures: list[str]) -> None:
             ("docs/a-design.md", "see [the top](#top)", "see [the top](#top)", "a same-page #part"),
             ("docs/research/r.md", "[a](../a-design.md)", "[a](../design/c/a-design.md)", "research: the link target moves"),
             ("docs/research/r.md", "from `docs/a-design.md` §3", "from `docs/a-design.md` §3", "research: prose is kept"),
+            (".claude/gates/fixtures/pass/f.md", "[t](../../../../docs/a-design.md#k9)",
+             "[t](../../../../docs/design/c/a-design.md#k9)", "a gate fixture: the link target moves"),
+            (".claude/gates/fixtures/pass/f.md", "shipped as `docs/a-design.md`", "shipped as `docs/a-design.md`",
+             "a gate fixture: its text is test input, kept"),
             (".claude/x.md", "`docs/a-design.md`", "`docs/design/c/a-design.md`", "a backticked pointer"),
             (".claude/x.md", "`3d-models:docs/a-design.md:L1 \"# A\"`",
              "`3d-models:docs/design/c/a-design.md:L1 \"# A\"`", "a use-case map anchor"),
             ("tools/t.py", "# docs/a-design.md §2", "# docs/design/c/a-design.md §2", "a code comment"),
             ("tools/t.py", "docs/a-design/pic.png", "docs/design/c/a-design/pic.png", "a path into the moved folder"),
             (".claude/x.md", "`wt-x/docs/a-design.md`", "`wt-x/docs/a-design.md`", "another checkout's path"),
+            ("docs/plan.md", "`qiyas:docs/a-design.md` and bikar:docs/a-design.md",
+             "`qiyas:docs/a-design.md` and bikar:docs/a-design.md", "another repo's path, `repo:` prefixed"),
             (".claude/x.md", "`docs/a-design.md.bak` docs/a-design-b.md", "`docs/a-design.md.bak` docs/a-design-b.md",
              "a longer name that starts the same"),
             ("docs/plan.md", "`a-design/pic.png`", "`design/c/a-design/pic.png`", "a doc-relative backticked path"),
@@ -661,10 +698,22 @@ def unit_cases(failures: list[str]) -> None:
             got, _ = rewrite_text(rel, before, mp, rx)
             _check(got == want, f"{why}: {before!r} -> {got!r}" + ("" if got == want else f" (want {want!r})"),
                    failures)
+        nd = "docs/a-design.md"
+        for body, own, want, why in [
+            ("see 3d-models `docs/a-design.md`", True, True, "a sibling line tying the path to 3d-models"),
+            ("Design: 3d-models/docs/a-design.md §3", True, True, "a sibling's `3d-models/docs/...`"),
+            ("[`docs/a-design.md`](docs/a-design.md), as 3d-models does", True, False,
+             "a sibling's own file of the same name, 3d-models named elsewhere on the line"),
+            ("`bikar:docs/a-design.md` and `qiyas:docs/a-design.md`", False, False, "a third repo's path"),
+            ("per `docs/a-design.md`", False, True, "a bare path the sibling has no file for"),
+        ]:
+            _check(names_ours(body, nd, own) == want, f"sibling grep: {why}", failures)
         left = leftovers("docs/research/r.md", "from `docs/a-design.md` §3", mp, "research")
         _check(len(left) == 1, "research prose that still names the old place is listed", failures)
         left = leftovers("docs/plan.md", "[a](design/c/a-design.md)", mp, "x")
         _check(not left, "a rewritten link is not listed as left over", failures)
+        left = leftovers("docs/plan.md", "`qiyas:docs/a-design.md`", mp, "x")
+        _check(not left, "another repo's `qiyas:docs/...` path is not listed as left over", failures)
 
 
 def copy_repo(src: Path, dst: Path) -> None:

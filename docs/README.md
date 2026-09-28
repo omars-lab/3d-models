@@ -16,7 +16,7 @@ How the vault is set up, and the rules it is checked against:
   [print infrastructure](tasks/print-infrastructure/backlog.md),
   [consolidation](tasks/consolidation/backlog.md), [parked](tasks/parked/backlog.md).
 - [Decisions log](decisions-log.md) — every D-0xx, with the options and why.
-- [FAQ](faq.md) and the [grounding defect taxonomy](grounding-defect-taxonomy.md) — how docs
+- [FAQ](faq.md) and the [grounding defect taxonomy](guides/grounding-defect-taxonomy.md) — how docs
   here go wrong, and how to write one that does not.
 
 ## Design docs
@@ -71,6 +71,6 @@ September 2026), [bubble lettering on coasters](research/coaster-bubble-letterin
 
 ## Maps and runbooks
 
-- [Orb pipeline map](orb-pipeline-map.md) — the orb pipeline, source to badge.
-- [Local CI runbook](local-ci-runbook.md) — the checks run here, with no hosted runner.
+- [Orb pipeline map](guides/orb-pipeline-map.md) — the orb pipeline, source to badge.
+- [Local CI runbook](guides/local-ci-runbook.md) — the checks run here, with no hosted runner.
 - [Site graph](site-graph.md) — the gallery's pages and how they link.

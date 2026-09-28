@@ -110,7 +110,7 @@ Two more measurements from the same survey, which is checked in at
   every crawler run missed it entirely.
 - The URL-scraping proof-of-concept produced a false positive on its first run:
   a URL inside an HTML comment. That is the failure class
-  [`issue-register-evaluation.md`](issue-register-evaluation.md) measured when it
+  [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measured when it
   concluded this repo should have no link checker — ~11% false alarms against a
   true dead-link rate under 1%, and *"a gate that cries wolf gets switched off."*
 

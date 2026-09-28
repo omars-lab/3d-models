@@ -5,9 +5,9 @@ qiyas (validate), 3d-models (publish)
 
 One `.bkr` file becomes a printable STL, a set of per-axis SVG views, a ground-truth
 JSON, a score, and a badge in the Lab. That path crosses three repositories, and no
-single repo's docs own it: [`orb-lab-design.md`](orb-lab-design.md) describes the
+single repo's docs own it: [`../orb-lab-design.md`](../orb-lab-design.md) describes the
 product end, bikar's `docs/architecture.md` the engine end, and
-[`qiyas-wheelfield-validation-design.md`](qiyas-wheelfield-validation-design.md) the
+[`../qiyas-wheelfield-validation-design.md`](../qiyas-wheelfield-validation-design.md) the
 scoring end. This file is the seam between them — the picture a reader needs before
 any of the three make sense.
 
@@ -16,7 +16,7 @@ any of the three make sense.
 A diagram full of code pointers is a document full of things that can quietly stop
 being true. This repo has already measured that failure: on 2026-08-02, 23 of 44
 use-case pointers had drifted while every run reported *"all valid"*
-([D-020](decisions-log.md)). So the split here is deliberate:
+([D-020](../decisions-log.md)). So the split here is deliberate:
 
 - **The diagram is for orientation.** Its nodes name stages and functions. It carries
   no line numbers and no `click` URLs, because a URL in a diagram node is checked by
@@ -186,7 +186,7 @@ own watertight assertion.
 is where the last validator defect lived: three bucketing gates that all read bounding
 boxes and scalars could not tell *one region found twice* from *two regions either
 side of a shared edge*, and two rosette orbs carried a shortfall for three weeks that
-was qiyas's, not bikar's ([D-035](decisions-log.md)).
+was qiyas's, not bikar's ([D-035](../decisions-log.md)).
 
 Note what `Q5` implies about reading a single number. `geometric` is not monotone in
 the input — an element moving further away can raise it — which is why `drop` sits
@@ -204,7 +204,7 @@ carry them, which is the honest limit of a diagram.
 | the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L133 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L64 "readonly qiyasComposite"` |
 | the build target that publishes (`H5`) | `3d-models:Makefile:L283 "orbs:"` |
-| the gallery design | [`orb-lab-design.md`](orb-lab-design.md) |
+| the gallery design | [`../orb-lab-design.md`](../orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a
 pinned container image or an explicit sibling checkout, because *"a sweep against a
@@ -214,7 +214,7 @@ refusal is the reason the recorded numbers mean something.
 ## What this map deliberately does not draw
 
 - **Any number.** Composites, drops and drift ceilings live in the files above and in
-  [`decisions-log.md`](decisions-log.md), where a change to one is a reviewed edit. A
+  [`../decisions-log.md`](../decisions-log.md), where a change to one is a reviewed edit. A
   number copied into a diagram is a number with no owner — the failure this repo
   withdrew a printer-accuracy figure over.
 - **The 2D pattern engine's internals.** `B2` is a single node standing for the whole
@@ -222,7 +222,7 @@ refusal is the reason the recorded numbers mean something.
   bikar's `docs/language-reference.md` and `docs/architecture.md` that decompose it.
 - **Open defects.** A defect is a state, not a stage. Which views are currently surplus
   to the gt, and what the composites currently score, belong in the tracker and in
-  [`decisions-log.md`](decisions-log.md) — restating them here would make the map wrong
+  [`../decisions-log.md`](../decisions-log.md) — restating them here would make the map wrong
   the moment they are fixed. The first draft of this bullet drew exactly the two numbers
   it argued against drawing, and they had gone stale within two days.
 - **The CI wiring.** Which workflow runs which half is the subject of

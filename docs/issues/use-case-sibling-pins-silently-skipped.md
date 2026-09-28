@@ -20,7 +20,7 @@ failed it. The summary line still said "all valid".
 
 Restoring the paths and pinning each sibling at its current default-branch tip showed:
 
-- **28 pointers had drifted** in the 11 days: 26 in the map and 2 in `docs/orb-pipeline-map.md`.
+- **28 pointers had drifted** in the 11 days: 26 in the map and 2 in `docs/guides/orb-pipeline-map.md`.
   Each one was moved to the line its quoted text is on now. None of the claims next to them had
   gone false.
 - **Two pointers had never been checked at all**, even before #246, because the validator could

@@ -5,16 +5,16 @@ status: built
 # Session-reflection: a measured FAQ that answers what sessions re-derive
 
 **Status:** built (2026-09-25). `tools/session_reflect.py` ships
-the three verbs of §4 and the fixture self-test of §8. [faq.md](faq.md) and its
+the three verbs of §4 and the fixture self-test of §8. [../../faq.md](../../faq.md) and its
 empty sidecar `docs/faq-evidence.jsonl` exist, with no entries yet. The
 `faq-questions` count authority is registered, `make validate-reflect` is at
 the end of the Makefile, and the skill (§5) is written. The first real
 `update-faq` run proposed 79 candidates that were mostly outline greps and
 facts sessions already knew, so the tool now counts a session only when it
 **re-derives** a fact (after a failure naming it, or by searching for it), not
-when it uses it — [issues/faq-counted-use-not-rederivation.md](issues/faq-counted-use-not-rederivation.md).
+when it uses it — [../../issues/faq-counted-use-not-rederivation.md](../../issues/faq-counted-use-not-rederivation.md).
 The rerun proposes 6, which a person has to review. The census this rests on is
-[research/session-reflection-census.md](research/session-reflection-census.md),
+[../../research/session-reflection-census.md](../../research/session-reflection-census.md),
 run 2026-09-17 over 17 main sessions + 176 subagent transcripts (241,226 lines,
 80,203 assistant turns) with the prototype that preceded the tool. The proposal
 file (docs/faq-proposal.md) is written in plain prose here, not backticked,
@@ -169,7 +169,7 @@ holds on both sides.
 
 ## 5. How the skill updates the FAQ (tool proposes, human confirms)
 
-The [`session-reflect` skill](../.claude/skills/session-reflect/SKILL.md) runs the loop: `census` → `update-faq` → the human reads the
+The [`session-reflect` skill](../../../.claude/skills/session-reflect/SKILL.md) runs the loop: `census` → `update-faq` → the human reads the
 proposal, merges or discards clusters, and **writes the answer prose**. The tool
 supplies everything measurable (the question cluster, counts, evidence pointers,
 the anchored code pointer where the answer lives) and nothing judgemental: it
@@ -273,7 +273,7 @@ running the tool's own self-test then a census, matching the `validate-docs` /
 `validate-counts` shape:
 
 ```
-# ---- session reflection (docs/session-reflection-design.md) ----
+# ---- session reflection (docs/design/process/session-reflection-design.md) ----
 validate-reflect:
 	$(PYTHON) $(ROOT_DIR)/tools/session_reflect.py census --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/session_reflect.py show --audit
@@ -338,7 +338,7 @@ the precedents named), *Grounded* (each number attributed to a fetched source),
    on the first real run and treat a low accept rate as the signal to narrow.
    The first run was narrowed before review: 79 candidates, nearly all outline
    greps and known facts, became 6 once only re-derivation counted
-   ([issue](issues/faq-counted-use-not-rederivation.md)). The ratio is still to
+   ([issue](../../issues/faq-counted-use-not-rederivation.md)). The ratio is still to
    be measured on those 6.
 5. **Does the confound bite?** If `show`'s recurrence check cannot distinguish recall from
    re-derivation even on authored hits, the success metric weakens to "the fact is

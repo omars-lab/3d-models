@@ -10,7 +10,7 @@ Status: **DRAFT, PARTIALLY BUILT.** The record format, the four blocking decisio
 and this doc landed in S1. The gate (`.claude/gates/prints_gate.py`, R1/R2/R4)
 shipped in S3 **before** the first plate — R4 prints its subject count, so an empty
 run is a true `0 records checked`, not a false green, which is the whole content of
-the "measure before you gate" rule ([`docs/issue-register-evaluation.md`](issue-register-evaluation.md)
+the "measure before you gate" rule ([`docs/design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)
 §5.1) once you read it correctly. What still waits on a physical print is the first
 real record (S2), gate R3 (S4), and — for real content to render — the tab in its
 populated form (S6/S7). (Corrected 2026-08-30 from "the gate waits on a print"; see
@@ -214,7 +214,7 @@ printed a file it did not, and the gate must refuse it rather than pass.
   is load-bearing — it is what catches a settled bet with no evidence behind it.
 - **R4 — subject count printed.** The gate prints the number of records it checked.
   A gate that says "all pass" over zero records is indistinguishable from a broken
-  gate; printing the count is the guard (`docs/issue-register-evaluation.md` §5.1).
+  gate; printing the count is the guard (`docs/design/process/issue-register-evaluation.md` §5.1).
 - **R5 — a measured bet states its expectation and verdict (ships in S3, testable now).**
   Any reading whose `settles` names a real `CAL-…` bet (not `~`) must carry a non-empty
   `expected` — the bench-sheet criterion the reading was tested against — and a `verdict`

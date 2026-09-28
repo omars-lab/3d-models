@@ -40,8 +40,10 @@ changes without this file changing.
 `python3 tools/move_doc.py <old> <new> --dry-run` first, then without `--dry-run`; a whole
 folder goes in one run with `--plan <file>` (one `old new` pair per line). It `git mv`s the note
 with its review comments and picture folder, rewrites every link, pointer and path to it, and
-lists what it could not rewrite — research prose, review threads, and the sibling repos (bikar
-checks `3d-models/docs/...` pointers, so a move it names needs a bikar PR right behind). Never
+lists what it could not rewrite — research prose, the docs gate's fixture text, review threads,
+and the sibling repos. bikar's pointer check reads a backticked `3d-models/docs/...` path, so a
+sibling line of that shape needs a bikar PR right behind the move; a code comment or a bare
+mention breaks nothing and is only listed. Never
 move a note by hand or in Obsidian: Obsidian rewrites only the links it knows, not the pointer
 baseline, the use-case map or code comments. `make validate-move-doc` runs its self-test.
 

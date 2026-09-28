@@ -118,8 +118,8 @@ the two ports across backends. When you must validate somewhere the goldens don'
 The render path has a GPU in it, so a gate that rendered on every commit would be both slow and
 backend-fragile in exactly the way K10 describes. Graduating this to a hook waits until the defect
 it would catch shows **measured recurrence** — the same *no skill/gate before the recurrence is
-measured* discipline as [`docs/issue-register-evaluation.md`](../../../docs/issue-register-evaluation.md)
-and [`docs/dsl-extension-skill-evaluation.md`](../../../docs/dsl-extension-skill-evaluation.md). If
+measured* discipline as [`docs/design/process/issue-register-evaluation.md`](../../../docs/design/process/issue-register-evaluation.md)
+and [`docs/design/process/dsl-extension-skill-evaluation.md`](../../../docs/design/process/dsl-extension-skill-evaluation.md). If
 you find yourself running `--check` by hand to catch the same regression a third time, that is the
 recurrence — record it and propose the gate then, not before.
 

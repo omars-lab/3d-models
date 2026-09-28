@@ -2,7 +2,7 @@
 """Design-doc gate for 3d-models.
 
 Five grounding rules (D1–D5), each derived from a failure kind measured across the seven
-grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
+grounding audits in docs/research/. See docs/guides/grounding-defect-taxonomy.md for
 the definitions and the instances each rule is built from. D6 and D7 are render
 rules: they catch markdown that does not render as written — D6 in Obsidian's
 editor, D7 on GitHub and in Obsidian alike, D8 in Obsidian's properties.
@@ -1472,7 +1472,7 @@ def main() -> int:
     if findings:
         print(
             f"\ndocs-gate: {len(findings)} finding(s) in {checked} file(s). "
-            "See docs/grounding-defect-taxonomy.md. Override once with "
+            "See docs/guides/grounding-defect-taxonomy.md. Override once with "
             "DOCS_GATE_OK=1 git commit",
             file=sys.stderr,
         )

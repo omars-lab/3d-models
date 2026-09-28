@@ -662,12 +662,12 @@ would follow, and it stands whichever of section 9's answers is taken.
 two documents that both answered "no skill". Read against their standard —
 **measured recurrence**, not plausibility — the answer here is not close.
 
-[`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md)
+[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md)
 rejected its skill on a finding it stated bluntly: the documentation was wrong
 in ways nothing could detect, so the fix is a detector rather than more
 documentation. Its gate then failed open on the first draft, and closing the
 predicate took the violation count from 5 to 31.
-[`issue-register-evaluation.md`](issue-register-evaluation.md) measures 48
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measures 48
 defect fixes across 426 commits with 12 registered, and kills its own proposal
 on the observation that a good register entry existed and the same defect class
 shipped six more times anyway.

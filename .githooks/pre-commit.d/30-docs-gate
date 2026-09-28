@@ -2,7 +2,7 @@
 # Design-doc gate (.claude/gates/docs_gate.py). Blocks a commit whose staged
 # markdown carries a dead relative link (D1/K9), a validator with no asserted
 # PASS+FAIL example (D2/K6), or a default with no citation or CAL-* bet id
-# (D3/K4). Rules and evidence: docs/grounding-defect-taxonomy.md.
+# (D3/K4). Rules and evidence: docs/guides/grounding-defect-taxonomy.md.
 # Override once: DOCS_GATE_OK=1 git commit
 #
 # The wholesale form drops --staged and adds the gate's own --self-test.

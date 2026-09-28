@@ -12,7 +12,7 @@ opinion that has learned to sound permanent.
 ## 0. Why this file exists when the repo rejects registers
 
 [`CLAUDE.md`](../CLAUDE.md) says there is *deliberately no issue catalog* here,
-and [`issue-register-evaluation.md`](issue-register-evaluation.md) measured why:
+and [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measured why:
 a good issue document sat unread for 76 days while the class it described
 shipped six more times. That argument is about **defects**, and it turns on a
 specific fact — a defect has a test, and the test protects the behaviour at zero
@@ -129,7 +129,7 @@ either marker. Both rules match nothing today.
 ### Decision
 
 **A — leave dormant.** The criterion already recorded in
-[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md) §3.1 stands: *if
+[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md) §3.1 stands: *if
 the next two design docs carry no markers, D2 and D3 should be deleted, not
 extended.*
 
@@ -243,8 +243,8 @@ documents are never kept up to date"* while already running past 460 lines, and
 decisions taken *after* a measurement are not part of the measurement. C is real
 scaffolding — a directory convention, a generator, a gate — proposed for three
 entries, and the repo's standing precedent on new machinery
-([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](issue-register-evaluation.md)) is that it has to
+([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)) is that it has to
 be earned by measured recurrence first. It stays available if this file outgrows
 itself.
 
@@ -274,7 +274,7 @@ the whole tree — markdown, vendored `supabase/functions/*` — while the repo'
 own gate is a narrow glob over `packages/*/src`, `packages/*/tests`, `scripts`,
 and `packages/web/functions`. The two measure different sets, and only one of
 them is the gate. That is a **K5** by
-[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md): measured the
+[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md): measured the
 wrong object, then reasoned about the number as though it were the right one.
 
 It reached a plan because a number that *looks* like a gate result was not
@@ -942,8 +942,8 @@ why it lost. That is what this file is for.
 [print register](tasks/coaster-pipeline/backlog.md) §4 item 2 and open question 11 left this undecided,
 and question 11 was careful about *why*: the repo's twice-measured precedent is
 to prefer a gate over new machinery
-([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](issue-register-evaluation.md)), but neither of
+([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)), but neither of
 those evaluations is about a build target, so the precedent does not transfer
 cleanly. That is the K10 sentence the backlog wrote rather than assumed, and it
 is what kept the question open.
@@ -1415,7 +1415,7 @@ sites**. So the answer was plainly "something must", and the real decision was
 what shape it could take without becoming a prose parser.
 
 That was settled by measurement, not by argument — the method
-[`issue-register-evaluation.md`](issue-register-evaluation.md) used for the issue
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) used for the issue
 register and the one that killed the link checker. Two candidate detectors, run
 over all 62 documents of `docs/` and `.claude/`:
 
@@ -1827,8 +1827,8 @@ not yet exist, and it was caught by hand, not by a gate.
 
 **Do not build the gate yet.** CLAUDE.md's Precedent rule — *measure a rule before
 gating on it* — and the two evaluations it cites
-([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](issue-register-evaluation.md)), which both
+([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)), which both
 concluded *no skill, and only a gate where recurrence was measured*, set the bar:
 a rule with no measured recurrence does not earn a gate.
 
@@ -2144,8 +2144,8 @@ Three sub-decisions, each settled with the user via AskUserQuestion:
   would be slow and backend-fragile. The near-term home is a `validate-render` skill
   that runs the CLI on demand; graduating it to a hook waits until the defect it would
   catch shows measured recurrence — the *no skill/gate before the recurrence is measured*
-  discipline of [`issue-register-evaluation.md`](issue-register-evaluation.md) and
-  [`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md).
+  discipline of [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) and
+  [`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md).
 
 The gate logic is split out of the CLI into `bikar:scripts/thumbnail-gate.ts` so a
 `node --test` witness (`bikar:scripts/thumbnail-gate.test.mjs`) can freeze the one
@@ -3251,7 +3251,7 @@ by-design-failure corollary it rhymes with.
 ### Verification
 
 A tenet is not gate-checkable, and no gate is proposed for it — the precedent in
-[`issue-register-evaluation.md`](issue-register-evaluation.md) is that a rule
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) is that a rule
 earns a gate by measured recurrence, and this has one instance. What is checkable
 is each reversed ranking:
 
@@ -3709,7 +3709,7 @@ two were the user's to decide:
 
 The natural instinct is to ship `prints_gate.py` now. The design refuses: a gate
 whose subject set is empty reports green and is indistinguishable from a broken gate
-— the measured lesson of [`issue-register-evaluation.md`](issue-register-evaluation.md)
+— the measured lesson of [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)
 §5.1. So the gate ships in S3 **with** the first real record (S2), and R4 makes it
 print the number of records it checked, so "all pass over zero records" can never
 read as coverage. What shipped in this PR is exactly what is buildable without a
@@ -3874,7 +3874,7 @@ Two failure paths, two mechanisms, and only one of them is ours to ship from a r
   committer's machine; a squash-merge happens on GitHub. Only branch protection with
   required status checks stops a merge on red, and applying it is an account-level
   change with a rule pulling the other way: a billing block is not a red build and
-  must never stop a merge or a deploy (CLAUDE.md, `docs/local-ci-runbook.md`). Required
+  must never stop a merge or a deploy (CLAUDE.md, `docs/guides/local-ci-runbook.md`). Required
   checks that fail-closed during a billing outage would block every merge for as long
   as the outage lasts.
 
@@ -4021,8 +4021,8 @@ The skill question has a precedent in this repo, and the precedent decides it. T
 earlier proposals for a skill — one to extend the DSL, one for an issue register — were
 each evaluated against measured recurrence and both ended the same way: *no skill, a
 gate instead*, because the thing that was missing was a detector, not more instructions
-([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md) §3,
-[`issue-register-evaluation.md`](issue-register-evaluation.md) §6). Three orbs have been
+([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) §3,
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) §6). Three orbs have been
 built without an orb skill, so no recurrence has been measured yet. The fourth build is
 the measurement, and this is the rule it runs under:
 
@@ -4176,8 +4176,8 @@ compound-keyword parse guard, the ledger's C-collation, and — new in this 3d-m
 the same exit-1 in the `make orbs` publish pipeline, handled by a sibling skip branch that
 keeps the fail-closed `else` net. The instruction column is empty, so **no orb-creation
 skill is written** — the same conclusion, on the same measured grounds, that
-[`docs/issue-register-evaluation.md`](issue-register-evaluation.md) and
-[`docs/dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md) reached for
+[`docs/design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) and
+[`docs/design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) reached for
 their proposed skills: no skill, a gate instead.
 
 **Validator:** the mesh-only orb is skipped by the sweep and reconciled by the comparison

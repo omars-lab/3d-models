@@ -405,4 +405,4 @@ O3 gates the catalog entry). P1.2, P1.6 and P1.7 are off the critical path.
 All web and tree sources, with fetch dates and what was unreachable, are in
 [`research/geogebra-construction-import-survey.md`](research/geogebra-construction-import-survey.md)
 §15. Defect kinds referenced by K-number are defined in
-[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md).
+[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md).

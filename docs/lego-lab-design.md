@@ -1719,7 +1719,7 @@ remove the hand:
 Check 1 lives in bikar because that is where the pages are; check 2 lives here because that is where
 the map is. Neither is a new gate — check 2 is a rule inside the `maintain-use-cases` validator the
 repo already runs on every commit, per this repo's standing precedent that a measured recurrence
-earns [a gate rather than a skill](dsl-extension-skill-evaluation.md).
+earns [a gate rather than a skill](design/process/dsl-extension-skill-evaluation.md).
 
 **Validator:** the index is complete exactly when the catalogue and the package agree, in both
 directions.
@@ -2272,8 +2272,8 @@ both slow and backend-fragile in exactly the way §15.3 describes. The near-term
 `validate-render` skill (a separate deliverable), which runs the CLI on demand against a model and
 reads the result; graduating it to a hook waits until there is measured recurrence of the defect it
 would catch — the same *no skill/gate before the recurrence is measured* discipline the precedent
-docs settled ([`issue-register-evaluation.md`](issue-register-evaluation.md),
-[`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md)).
+docs settled ([`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md),
+[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md)).
 
 This holds for the **render**, which has a GPU in it. It does *not* hold for the metadata beside
 the render, which does not — and §16.5 draws that line precisely: the catalog of fixtures and the
