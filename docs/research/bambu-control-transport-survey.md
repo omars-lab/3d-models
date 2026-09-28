@@ -1,7 +1,8 @@
 ---
-produced: 2026-09-16
+date: 2026-09-16
 produced-by: web research (Claude subagent), real WebSearch/WebFetch
-feeds: docs/bambu-cli-design.md (the tools/bambu CLI transport design)
+feeds:
+  - '[[bambu-cli-design|bambu-cli-design (the tools/bambu CLI transport design)]]'
 scope: survey of ways to drive a Bambu X2D + slice headless, to ground the CLI backend choice
 ---
 

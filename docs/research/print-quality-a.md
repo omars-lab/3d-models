@@ -1,7 +1,8 @@
 ---
 date: 2026-09-26
 produced-by: research agent A (Claude Opus 5.5) — WebSearch, WebFetch, a browser-UA fetch for wiki.bambulab.com (WebFetch got HTTP 402 there), `gh issue view` for the BambuStudio GitHub issue, and a read of the Bambu Studio system profiles shipped inside the app on this machine
-feeds: docs/print-quality-a-design.md
+feeds:
+  - '[[print-quality-a-design]]'
 ---
 
 # Print quality for thin openwork PLA coasters on the X2D — sources

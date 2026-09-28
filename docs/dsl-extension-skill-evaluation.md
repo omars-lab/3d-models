@@ -1,3 +1,14 @@
+---
+status: decided
+decisions:
+  - D-004
+  - D-014
+  - D-024
+  - D-028
+  - D-049
+  - D-051
+---
+
 # Evaluating an `extend-the-dsl` skill with hook-validated code pointers
 
 **Date:** 2026-07-30 · **Status:** COMPLETE — verdict reached and implemented

@@ -1,7 +1,8 @@
 ---
 date: 2026-09-26
 produced-by: a Claude research subagent (WebSearch + WebFetch), plus two local renders of bikar's committed minimal-frame coasters at size 80 (`bikar render … --format views --param size=80`, bikar-main at 383c0a1), read by eye
-feeds: docs/coaster-borderless-joins-design.md
+feeds:
+  - '[[coaster-borderless-joins-design]]'
 ---
 
 # Borderless coaster joins — sources and what they show

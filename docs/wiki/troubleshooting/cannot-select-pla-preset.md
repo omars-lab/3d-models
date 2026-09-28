@@ -1,5 +1,5 @@
 ---
-title: "Cannot select PLA…PLA" in the AMS dialog
+title: '"Cannot select PLA…PLA" in the AMS dialog'
 symptom: The filament dialog refuses to map a PLA spool to a PLA slot ("Cannot select…")
 kind: filament-mapping
 proof: screenshot

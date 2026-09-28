@@ -1,3 +1,9 @@
+---
+date: 2026-07-28
+feeds:
+  - '[[w2-connector-design]]'
+---
+
 <!-- Produced 2026-07-28 by a Claude deep-research subagent (WebSearch/WebFetch); checked in verbatim.
      Feeds: docs/w2-connector-design.md (Appendix A). Companion plan input for bikar W2 implementation. -->
 

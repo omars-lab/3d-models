@@ -1,3 +1,12 @@
+---
+status: decided
+decisions:
+  - D-021
+  - D-022
+  - D-023
+  - D-025
+---
+
 # Text emit on printed parts — implementation design doc
 
 Status: **v1 — grounded in two research files and one reversal.**

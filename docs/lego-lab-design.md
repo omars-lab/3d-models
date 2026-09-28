@@ -1,3 +1,12 @@
+---
+status: decided
+decisions:
+  - D-003
+  - D-005
+  - D-006
+  - D-013
+---
+
 # Lego Lab — pattern → piece → LEGO-compatible printed part (LG) — implementation design doc
 
 Status: **v2 — through the adversarial grounding audit

@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Coloured previews and the Coaster Lab colour controls — design (researcher A)
 
 Omar, 2026-09-28: "Do we have the ability to alternate colors / customize colors on the PNGs we

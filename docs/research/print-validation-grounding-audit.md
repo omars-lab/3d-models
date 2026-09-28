@@ -1,3 +1,9 @@
+---
+date: 2026-07-27
+feeds:
+  - '[[print-validation-design]]'
+---
+
 <!-- Adversarial grounding audit produced 2026-07-27 by a research subagent.
      Audits docs/print-validation-design.md: verifies its thresholds/defaults against
      slicer source and docs (CuraEngine, PrusaSlicer, Bambu Studio), hunts

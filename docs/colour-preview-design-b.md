@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Coloured coaster previews and Coaster Lab colour controls — design (researcher B) ^e7b42d
 
 **Status:** proposal from researcher B of two; a checker consolidates both. Raw findings,

@@ -1,3 +1,9 @@
+---
+date: 2026-07-30
+feeds:
+  - '[[hemisphere-split-design]]'
+---
+
 # Hemisphere-split STL export — prior-art survey
 
 Research backing [`../hemisphere-split-design.md`](../hemisphere-split-design.md) (task #11).

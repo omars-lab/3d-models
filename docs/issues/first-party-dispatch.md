@@ -1,3 +1,7 @@
+---
+date: 2026-09-17
+---
+
 # Dispatch went first-party (FTPS + MQTT) — the griches MCP never ran
 
 *Issue slug: `first-party-dispatch`. Written 2026-09-17, during #50 (port `bambu print send`

@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-022
+---
+
 # Hemisphere-split STL export (task #11) — implementation design doc
 
 Status: **v2 — grounded in a read-only audit of the bikar tree, a prior-art survey, and direct

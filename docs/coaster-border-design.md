@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-071
+---
+
 # Coaster border band — a second pattern around the field
 
 *Status: built (task #36, decision D-071). The direction is D-068 (a):

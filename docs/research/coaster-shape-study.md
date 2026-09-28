@@ -1,7 +1,10 @@
 ---
 date: 2026-09-17
-produced-by: this session — bikar `feat/coaster-shape-v2` (PR NaqshCoffee/bikar#208) dist: `shape_study.mjs` (convex hull of the drawn art, the seven-candidate fit, `evaluate().coaster3d.findings`), `bikar render … --check` at size 40 and 90, `stl_bbox.mjs` over the written STLs, `cell_radius.py` over the study's OpenSCAD top views
-feeds: docs/coaster-design.md, docs/issues/coaster-outline-fit-pivot.md, docs/decisions-log.md D-066
+produced-by: "this session — bikar `feat/coaster-shape-v2` (PR NaqshCoffee/bikar#208) dist: `shape_study.mjs` (convex hull of the drawn art, the seven-candidate fit, `evaluate().coaster3d.findings`), `bikar render … --check` at size 40 and 90, `stl_bbox.mjs` over the written STLs, `cell_radius.py` over the study's OpenSCAD top views"
+feeds:
+  - '[[coaster-design]]'
+  - '[[issues/coaster-outline-fit-pivot]]'
+  - '[[decisions-log|decisions-log D-066]]'
 ---
 
 # Coaster shape study (shape v2)

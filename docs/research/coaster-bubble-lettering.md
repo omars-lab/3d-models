@@ -1,3 +1,7 @@
+---
+date: 2026-09-26
+---
+
 <!--
   Research produced 2026-09-26 by a research subagent (Claude Opus 5.5) under
   the 3d-models design-doc rules (K1, K2, K7, K10).

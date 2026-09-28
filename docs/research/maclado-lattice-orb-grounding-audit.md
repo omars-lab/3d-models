@@ -1,3 +1,9 @@
+---
+date: 2026-09-02
+feeds:
+  - '[[maclado-lattice-orb-design]]'
+---
+
 <!--
 Provenance: adversarial grounding audit of docs/maclado-lattice-orb-design.md.
 Date: 2026-09-02. Produced-by: general-purpose research agent (WebSearch/WebFetch +

@@ -1,3 +1,9 @@
+---
+date: 2026-09-28
+feeds:
+  - '[[colour-preview-design-b]]'
+---
+
 # Colour previews for coasters — raw findings (researcher B)
 
 - **Date:** 2026-09-28

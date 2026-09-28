@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Multicolour constructions — filled shapes, one colour per matching ring (design B)
 
 > **Superseded by [multicolor-design.md](multicolor-design.md)** (the checker's consolidated

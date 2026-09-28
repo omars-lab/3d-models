@@ -1,3 +1,7 @@
+---
+date: 2026-09-17
+---
+
 # The X2D "Filament Grouping" mode *is* headlessly settable — and a no-op for our single-material prints
 
 *Issue slug: `x2d-filament-grouping-mode`. Written 2026-09-17, during #53. Ties to

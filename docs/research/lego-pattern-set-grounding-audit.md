@@ -1,3 +1,10 @@
+---
+date: 2026-08-02
+feeds:
+  - '[[lego-pattern-set-design]]'
+  - '[[lego-baseplate-seam-survey]]'
+---
+
 <!--
   Provenance: adversarial grounding audit of docs/lego-pattern-set-design.md
   Date: 2026-08-02

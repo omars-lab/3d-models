@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Orb Lab P2 — Custom Orbs + Studio Dials: Validation Plan & Design
 
 Status: **DRAFT for review — P2 planning (P0/P1 shipped)**

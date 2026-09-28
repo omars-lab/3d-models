@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-054
+---
+
 # `tools/bambu` — backend & transport design
 
 **Status:** grounded 2026-09-16 · **Grounded in:**

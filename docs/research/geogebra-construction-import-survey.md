@@ -1,3 +1,12 @@
+---
+date: 2026-09-16
+feeds:
+  - '[[geogebra-construction-import-design]]'
+  - '[[construction-equivalence]]'
+  - '[[coaster-design]]'
+  - '[[plate-composer-design]]'
+---
+
 <!-- Produced 2026-09-16 by Claude (WebFetch/WebSearch + local reads of the youtube, bikar and 3d-models trees, and `--help` of the installed tools); checked in verbatim. Feeds: docs/geogebra-construction-import-design.md, docs/construction-equivalence.md, docs/coaster-design.md, docs/plate-composer-design.md. -->
 
 # GeoGebra construction import — research survey

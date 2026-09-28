@@ -1,0 +1,23 @@
+# Pivots and dead ends (docs/issues/), newest first.
+# Rules: .claude/skills/vault-setup/vault-rules.md
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("issues")
+formulas:
+  linked_from: file.backlinks.length
+properties:
+  note.date:
+    displayName: Date
+  formula.linked_from:
+    displayName: Linked from
+views:
+  - type: table
+    name: Newest first
+    order:
+      - file.name
+      - note.date
+      - formula.linked_from
+    sort:
+      - property: note.date
+        direction: DESC

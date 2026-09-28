@@ -1,3 +1,10 @@
+---
+date: 2026-09-28
+feeds:
+  - '[[colour-preview-design]]'
+  - '[[multicolor-design]]'
+---
+
 # Colour proofs of concept — is it only an engine change?
 
 - **Date:** 2026-09-28

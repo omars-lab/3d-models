@@ -1,3 +1,7 @@
+---
+date: 2026-09-27
+---
+
 # The constructions ledger missed a new youtube reconstruction
 
 Found 2026-09-27 while migrating `bknVRSMcLj0` (the Imamzadeh Isma'il 12-fold kite tile). It had

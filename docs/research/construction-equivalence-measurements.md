@@ -1,3 +1,9 @@
+---
+date: 2026-09-17
+feeds:
+  - '[[construction-equivalence]]'
+---
+
 <!-- Produced 2026-09-17 by Claude (local runs of the youtube O1/O2 oracles, bikar render, OpenSCAD 2021.01; one `gh api` fetch of GeoGebra's Kernel.java); checked in verbatim. Feeds: docs/construction-equivalence.md. -->
 
 # Construction equivalence — measurements

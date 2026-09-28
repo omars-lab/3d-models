@@ -1,7 +1,8 @@
 ---
 date: 2026-09-17
 produced-by: bikar `feat/disc-coaster` (PR NaqshCoffee/bikar#207) — `bikar render … --coaster … --check` and a direct `evaluate()` of the two coaster goldens
-feeds: docs/coaster-design.md
+feeds:
+  - '[[coaster-design]]'
 ---
 
 # Coaster render + validator measurements (P2.7)

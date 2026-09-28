@@ -1,3 +1,9 @@
+---
+date: 2026-07-29
+feeds:
+  - '[[lego-lab-design]]'
+---
+
 <!-- Produced 2026-07-29 during Lego Lab R0 (WebSearch/WebFetch + first-hand reading of the official
      LDraw parts library, downloaded and extracted locally). Checked in verbatim.
      Feeds: docs/lego-lab-design.md (Appendix A) and the LG coupon ladder in

@@ -1,3 +1,7 @@
+---
+status: decided
+---
+
 # Ports, Connect & Assembly (C2) — implementation design doc
 
 Status: **v2 — grounded in a targeted implementation survey

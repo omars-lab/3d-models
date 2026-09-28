@@ -1,7 +1,8 @@
 ---
 date: 2026-09-26
 produced-by: research agent B (Claude Opus 5.5), one of two independent print-quality researchers; web search and fetch, `gh api` for GitHub issues, and a read of the Bambu Studio 02.08.02.61 preset files and the minis-04 sliced 3MF on this machine
-feeds: docs/print-quality-b-design.md
+feeds:
+  - '[[print-quality-b-design]]'
 ---
 
 # Print quality research B: small openwork PLA coasters on the X2D

@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # qiyas 3D validation for the wheelfield family — design doc
 
 Status: **v2 — Q0–Q6 all done, and the two follow-ons Q4 spawned with them.**

@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-013
+---
+
 # Lego Pattern Set — one pattern → c×r pinned pieces (`mural`) — design doc
 
 Status: **v1 — drafted 2026-08-02, through the adversarial grounding audit (C4) the same day

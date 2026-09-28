@@ -1,3 +1,9 @@
+---
+date: 2026-09-18
+feeds:
+  - '[[coaster-colour-design]]'
+---
+
 <!--
 provenance:
   date: 2026-09-18

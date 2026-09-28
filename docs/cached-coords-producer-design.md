@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-080
+---
+
 # Design: producing `cached_coords` for arc-bearing construction imports
 
 > Status: decided 2026-09-21 (D-080). Consumer: bikar `import geogebra`. Producer:

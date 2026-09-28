@@ -1,3 +1,10 @@
+---
+date: 2026-07-27
+feeds:
+  - '[[piece-composition-design]]'
+  - '[[code-cad-composition-survey]]'
+---
+
 <!-- Adversarial grounding audit produced 2026-07-27 by a research subagent.
      Audits docs/piece-composition-design.md and docs/research/code-cad-composition-survey.md:
      verifies citations say what we claim, hunts counter-evidence, drafts divergence

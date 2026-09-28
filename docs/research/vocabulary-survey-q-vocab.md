@@ -1,3 +1,10 @@
+---
+date: 2026-09-02
+feeds:
+  - '[[vocabulary-convergence-design]]'
+  - '[[plan]]'
+---
+
 <!--
 provenance:
   date: 2026-09-02

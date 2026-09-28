@@ -1,3 +1,9 @@
+---
+status: draft
+decisions:
+  - D-061
+---
+
 # `.bkr` grammar formalization — design/audit doc
 
 Status: **DRAFT v1 — grounded in a first-party audit of the bikar parser

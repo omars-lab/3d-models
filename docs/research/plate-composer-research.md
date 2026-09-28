@@ -1,3 +1,9 @@
+---
+date: 2026-09-18
+feeds:
+  - '[[plate-composer-design]]'
+---
+
 <!-- provenance: date=2026-09-18; produced-by=claude-opus-4-8 subagent for Omar; feeds=docs/plate-composer-design.md -->
 
 # Plate composer (`slice compose`) — grounded research

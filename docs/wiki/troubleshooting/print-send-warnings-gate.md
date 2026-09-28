@@ -1,5 +1,5 @@
 ---
-title: "bambu print send" refuses to dispatch
+title: '"bambu print send" refuses to dispatch'
 symptom: bambu print send blocks with a warnings-gate error instead of sending the plate
 kind: machine
 proof: slice-only

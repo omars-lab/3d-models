@@ -1,3 +1,9 @@
+---
+date: 2026-08-08
+feeds:
+  - '[[maclado-orb-design]]'
+---
+
 <!--
   Research produced 2026-08-08 by Claude Opus 4.8 (sub-agent) under the
   3d-models design-doc rules, for the faithful-9-fold "maclado" orb.

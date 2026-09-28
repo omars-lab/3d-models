@@ -1,3 +1,10 @@
+---
+date: 2026-09-27
+feeds:
+  - '[[constructions/ledger]]'
+  - '[[tasks/catalog-expansion/backlog]]'
+---
+
 <!-- Produced 2026-09-27 by Claude (local runs of the youtube O1/O2/O3 targets against a bikar branch, bikar CLI renders, qiyas mesh compare, GeoGebra coordinate dumps); checked in verbatim. Feeds: docs/constructions/ledger.md (the n3IidKfXE1I, nmEjCTzMbDg and rDuxHF3xMOc oracle cells and notes) and docs/tasks/catalog-expansion/backlog.md (item "Oracle FAILs"). -->
 
 # Ledger oracle FAILs, 2026-09-27

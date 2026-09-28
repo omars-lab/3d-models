@@ -1,3 +1,9 @@
+---
+date: 2026-07-30
+feeds:
+  - '[[issue-register-evaluation]]'
+---
+
 <!--
   Provenance: adversarial web-research report, produced 2026-07-30 by a
   background research agent (general-purpose, WebSearch + WebFetch).

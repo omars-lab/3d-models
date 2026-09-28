@@ -1,3 +1,17 @@
+---
+status: decided
+decisions:
+  - D-004
+  - D-014
+  - D-019
+  - D-024
+  - D-028
+  - D-041
+  - D-046
+  - D-049
+  - D-051
+---
+
 # Evaluating an issue-register skill with reminder hooks
 
 **Date:** 2026-07-30 · **Status:** COMPLETE — verdict reached; §6 items 1, 2, 3

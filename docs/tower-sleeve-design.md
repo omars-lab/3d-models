@@ -1,3 +1,7 @@
+---
+status: idea
+---
+
 # Tower-Sleeve — captured product idea
 
 Status: **IDEA — UNSPECCED. A bench proof-of-concept exists** (an MC-6 tower rod

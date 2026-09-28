@@ -1,3 +1,9 @@
+---
+date: 2026-09-28
+feeds:
+  - '[[colour-preview-design-a]]'
+---
+
 # Colour previews — raw findings (researcher A)
 
 - **Date:** 2026-09-28

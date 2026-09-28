@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-069
+---
+
 # Coaster interlock — edges that plug into each other
 
 *Status: built — NaqshCoffee/bikar#209 (task #34), catalogued as CS-3 in 3d-models. Decision D-069. Measurements in

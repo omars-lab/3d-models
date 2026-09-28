@@ -1,3 +1,10 @@
+---
+status: built
+decisions:
+  - D-014
+  - D-021
+---
+
 # Machine Card — coupon design doc
 
 Status: **AUTHORED, UNPRINTED.** The `.bkr` exists, every rung renders, and every

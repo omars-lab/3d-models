@@ -1,3 +1,9 @@
+---
+date: 2026-07-30
+feeds:
+  - '[[hemisphere-split-design]]'
+---
+
 # Adversarial grounding audit — `hemisphere-split-design.md`
 
 Produced by an adversarial audit agent on 2026-07-30 against the design doc and its survey, with

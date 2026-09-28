@@ -1,3 +1,9 @@
+---
+status: draft
+decisions:
+  - D-046
+---
+
 # Prints tab — design doc (pre-implementation)
 
 Status: **DRAFT, PARTIALLY BUILT.** The record format, the four blocking decisions,

@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # The 9-spike "maclado" orb — design doc
 
 Status: **v5 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,

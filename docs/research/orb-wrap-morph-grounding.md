@@ -1,3 +1,9 @@
+---
+date: 2026-09-02
+feeds:
+  - '[[orb-wrap-morph-design]]'
+---
+
 <!-- Produced 2026-09-02 by a Claude session (WebSearch/WebFetch + local bikar and 3d-models tree reads); checked in verbatim. Feeds: docs/orb-wrap-morph-design.md (every code fact and every source it cites is recorded here). -->
 
 # Grounding: the flat→sphere wrap morph

@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # Orb Lab — design doc (pre-implementation)
 
 Status: **DRAFT v2 — revised after design review with Omar (resolved decisions in §11). No

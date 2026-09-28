@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-057
+---
+
 # GeoGebra constructions → naqsh → coasters — umbrella design doc
 
 Status: **v1 — grounded in

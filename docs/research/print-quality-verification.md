@@ -1,7 +1,8 @@
 ---
 date: 2026-09-26
 produced-by: print-quality checker (Claude Opus 5.5)
-feeds: docs/print-quality-design.md
+feeds:
+  - '[[print-quality-design]]'
 checks: docs/research/print-quality-a.md, docs/research/print-quality-b.md
 ---
 

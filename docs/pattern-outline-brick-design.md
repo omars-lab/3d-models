@@ -1,3 +1,7 @@
+---
+status: decided
+---
+
 # Pattern-Outline Brick Bodies — `footprint outline` — design doc
 
 Status: **v2 — drafted and adversarially audited 2026-08-02

@@ -1,3 +1,9 @@
+---
+date: 2026-08-01
+feeds:
+  - '[[lego-lab-design]]'
+---
+
 <!--
   Research produced 2026-08-01 by Claude (Opus 5) under the 3d-models
   design-doc rules, for the LDraw half of Lego Lab phase P3.

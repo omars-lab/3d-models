@@ -1,3 +1,9 @@
+---
+date: 2026-07-28
+feeds:
+  - '[[c2-assembly-design]]'
+---
+
 <!-- Produced 2026-07-28 by a Claude deep-research subagent (WebSearch/WebFetch); checked in verbatim.
      Feeds: docs/c2-assembly-design.md (Appendix A). Companion plan input for bikar C2 implementation. -->
 

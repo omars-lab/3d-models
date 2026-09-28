@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-078
+---
+
 # Radial-band colour — print each ring of a pattern in its own colour
 
 Our decorative patterns are built from many small tiles[^face] arranged in rings around

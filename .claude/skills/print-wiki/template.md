@@ -1,5 +1,5 @@
 ---
-title: <Phenomenon in plain words, e.g. "Floating regions" slicer warning>
+title: <Phenomenon in plain words, e.g. '"Floating regions" slicer warning' — single-quote a title that starts with a quote, or the YAML breaks and Obsidian drops every property>
 symptom: <the exact words the operator sees — the warning text, error dialog, or visible defect>
 kind: slicer-warning | mesh-flag | print-defect | filament-mapping | tolerance | machine
 proof: print-record | slice-only | screenshot

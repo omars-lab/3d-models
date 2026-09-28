@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-081
+---
+
 # Multicolour constructions — the consolidated design
 
 A construction coaster today is only its lines: straps standing up from a one-colour slab. This

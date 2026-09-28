@@ -1,3 +1,9 @@
+---
+date: 2026-08-02
+feeds:
+  - '[[pattern-outline-brick-design]]'
+---
+
 <!--
 Provenance: adversarial research survey, produced 2026-08-02 by a Claude
 Fable 5 background research agent (raw LDraw .dat downloads, web fetches,

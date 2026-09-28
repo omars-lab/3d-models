@@ -1,7 +1,8 @@
 ---
 date: 2026-09-27
 produced-by: researcher B (Claude Opus 5.5), one of two independent candidate screeners; web research (web search, page fetch, YouTube oEmbed and yt-dlp metadata-only reads, thumbnails viewed locally and not kept)
-feeds: docs/tasks/catalog-expansion/backlog.md item 2 ("The queue is empty")
+feeds:
+  - '[[tasks/catalog-expansion/backlog|catalog-expansion backlog item 2 ("The queue is empty")]]'
 ---
 
 # Construction candidates from other creators: screen B

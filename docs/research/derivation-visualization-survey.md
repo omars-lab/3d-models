@@ -1,3 +1,9 @@
+---
+date: 2026-07-29
+feeds:
+  - '[[derivation-worksheet-design]]'
+---
+
 <!-- Research report produced 2026-07-29 by five deep-research subagents plus first-party PDF
      mining and local engine experiments (prior art for visualising how a part is composed:
      CSG trees, parametric feature trees/timelines, dataflow node graphs, code-CAD provenance

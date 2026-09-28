@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Click-to-source — implementation design doc
 
 Status: **DRAFT v1 — grounded in first-party experiments against the bikar tree (a working

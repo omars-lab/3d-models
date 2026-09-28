@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-050
+---
+
 # Vocabulary convergence — one face-list vocabulary across the d3 surfaces and sacred-patterns
 
 **Status:** Shipped 2026-09-02 (A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`). Settles plan §2 row 2.4 / d3 doc §4 Phase 3

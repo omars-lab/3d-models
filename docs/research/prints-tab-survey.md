@@ -1,3 +1,9 @@
+---
+date: 2026-08-28
+feeds:
+  - '[[prints-tab-design]]'
+---
+
 <!-- Produced 2026-08-28 by Claude (Opus 4.8), local tree measurements only — no web sources. Sources: MEASUREMENT RUNS against the 3d-models tree at 91ad069 and the bikar tree at ref 8dda702 (the ref build/bikar-ref.txt pins). Feeds: docs/prints-tab-design.md (its zero-state and identity claims derive from this file). WHAT WAS RUN: the shell commands quoted verbatim beside each number below; every count is reproducible on the same two refs. -->
 
 # Prints tab — zero-state survey (local measurement)

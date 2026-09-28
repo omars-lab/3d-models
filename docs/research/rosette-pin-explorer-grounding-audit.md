@@ -1,3 +1,9 @@
+---
+date: 2026-09-01
+feeds:
+  - '[[rosette-pin-explorer-design]]'
+---
+
 <!--
   Grounding audit produced 2026-09-01 by an adversarial research agent
   (Agent tool, general-purpose) run under .claude/skills/ground-design-doc.

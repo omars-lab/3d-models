@@ -5,12 +5,13 @@ Five grounding rules (D1–D5), each derived from a failure kind measured across
 grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
 the definitions and the instances each rule is built from. D6 and D7 are render
 rules: they catch markdown that does not render as written — D6 in Obsidian's
-editor, D7 on GitHub and in Obsidian alike.
+editor, D7 on GitHub and in Obsidian alike, D8 in Obsidian's properties.
 
   D1 (K9)  Every relative markdown link resolves on disk, and its `#part`, on
            a link to a markdown file, names a heading or `^block-id` there.
            An `obsidian://` link is checked the same way, through the vault
-           mapping in obsidian-vaults.json.
+           mapping in obsidian-vaults.json. A `[[wikilink]]` in the docs/
+           vault must name a file there, found the way Obsidian finds it.
   D2 (K6)  Every `**Validator:**` declaration ships an asserted PASS and an
            asserted FAIL example in its own section.
   D3 (K4)  Every `**Default:**` declaration carries a citation link or a
@@ -25,6 +26,8 @@ editor, D7 on GitHub and in Obsidian alike.
            `--fix-code-spans FILE ...` rewraps without changing what renders.
   D7 (render)  Every table row has as many cells as its header. A pipe splits
            a cell even inside backticks, so a literal one is written \\|.
+  D8 (render)  YAML frontmatter parses. Obsidian drops every property of a note
+           whose frontmatter does not, and says nothing.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
 and has no false positives by construction for the file part — the target
@@ -113,6 +116,9 @@ REGISTRY = ROOT / REGISTRY_REL
 REGISTRY_MIN_IDS = 5
 
 FENCE = re.compile(r"^\s*(```|~~~)")
+# `[[target]]`, `[[target#heading|alias]]`, `![[embed]]`. The target is what is
+# checked; a heading after `#` is not, since Obsidian only greys such a link out.
+WIKILINK = re.compile(r"!?\[\[([^\[\]|#^]*)[^\[\]]*\]\]")
 INLINE_CODE = re.compile(r"`[^`]*`")
 LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 HEADING = re.compile(r"^#{1,6}\s")
@@ -338,6 +344,71 @@ def check_obsidian(url: str, root: Path = ROOT, vaults: list[dict] | None = None
     return None
 
 
+def vault_of(path: Path) -> Path | None:
+    """The Obsidian vault a file sits in: docs/ for this repo, the fixtures folder
+    for the self-test. Anywhere else — CLAUDE.md, .claude/ — a `[[x]]` is not a
+    vault link (memory files use it for memory slugs), so it is not checked."""
+    p = path.resolve()
+    for vault in (ROOT / "docs", FIXTURES):
+        if p.is_relative_to(vault.resolve()):
+            return vault
+    return None
+
+
+_VAULT_FILES: dict[Path, list[str]] = {}
+
+
+def vault_files(vault: Path) -> list[str]:
+    """Every file in the vault, as a lower-case vault-relative path."""
+    key = vault.resolve()
+    if key not in _VAULT_FILES:
+        _VAULT_FILES[key] = [
+            f.relative_to(key).as_posix().lower() for f in key.rglob("*")
+            if f.is_file() and ".obsidian" not in f.relative_to(key).parts]
+    return _VAULT_FILES[key]
+
+
+def wikilink_resolves(vault: Path, target: str) -> bool:
+    """Obsidian's rule: a bare name matches any file with that name, `.md` may be
+    left off, and a partial path matches the end of a vault path. Case-blind."""
+    t = target.strip().lower()
+    names = (t, t + ".md")
+    return any(f in names or f.endswith(tuple("/" + n for n in names))
+               for f in vault_files(vault))
+
+
+def frontmatter_end(lines: list[str]) -> int:
+    """Index of the closing `---` of YAML frontmatter, or -1 when there is none."""
+    if not lines or lines[0].strip() != "---":
+        return -1
+    for i, line in enumerate(lines[1:], 1):
+        if line.strip() == "---":
+            return i
+    return -1
+
+
+def check_wikilinks(path: Path, lines: list[str]) -> list[str]:
+    """A `[[wikilink]]` in the vault names a file in it. Measured before gating,
+    2026-09-28: the vault's only live wikilinks were ~35 memory-file slugs in
+    research/shipped-record.md, a verbatim record that says they are left as
+    written — so research/ bodies are exempt, as D4 exempts them, and their
+    frontmatter (`feeds:`) is not. D1 never read `[[..]]`, so these were unchecked."""
+    vault = vault_of(path)
+    if vault is None:
+        return []
+    shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+    body_exempt = "research" in path.resolve().relative_to(vault.resolve()).parts
+    fm_end = frontmatter_end(lines)
+    findings = []
+    for n, line in enumerate(lines, 1):
+        if body_exempt and n - 1 > fm_end:
+            break
+        for target in WIKILINK.findall(line):
+            if target.strip() and not wikilink_resolves(vault, target):
+                findings.append(f"{shown}:{n}: D1 (K9) wikilink names no file in the vault: {target}")
+    return findings
+
+
 def check_d1_links(path: Path, lines: list[str]) -> list[str]:
     """A link's file must exist, and a `#part` on a link to a markdown file must
     name a heading or block id in it. Measured before gating, 2026-09-27: 15 of
@@ -373,7 +444,7 @@ def check_d1_links(path: Path, lines: list[str]) -> list[str]:
                     f"{shown}:{n}: D1 (K9) no heading or block id "
                     f"#{fragment} in {bare or 'this file'}"
                 )
-    return findings
+    return findings + check_wikilinks(path, lines)
 
 
 def sections(lines: list[str], marker: re.Pattern) -> list[tuple[int, list[str]]]:
@@ -630,8 +701,10 @@ def check_d7_tables(path: Path, raw: list[str]) -> list[str]:
     the separator row under the header matches it. A row with an extra
     unescaped pipe (a `|` inside backticks is one) silently loses the cells
     past the header's count; a separator that does not match the header means
-    the block is not a table at all. Asked for in review thread 7rlhya."""
-    findings, in_fence, i = [], False, 0
+    the block is not a table at all. Asked for in review thread 7rlhya.
+    Frontmatter is YAML, not a table: a `feeds:` wikilink with an `|alias`
+    right above the closing `---` looks like a header and its separator."""
+    findings, in_fence, i = [], False, frontmatter_end(raw) + 1
     while i < len(raw):
         line = raw[i]
         if FENCE.match(line):
@@ -660,6 +733,30 @@ def check_d7_tables(path: Path, raw: list[str]) -> list[str]:
             continue
         i += 1
     return findings
+
+
+def check_d8_frontmatter(path: Path, raw: list[str]) -> list[str]:
+    """D8 (render): YAML frontmatter parses. Measured before gating, 2026-09-28:
+    5 of the 20 notes with frontmatter did not — three troubleshooting titles
+    that open with a quoted phrase (`title: "X" in Y`) and two `produced-by:`
+    values holding `: ` — and Obsidian showed none of their properties."""
+    end = frontmatter_end(raw)
+    if end < 0:
+        return []
+    shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+    try:
+        import yaml
+    except ImportError:
+        return [f"{shown}:1: D8 (render) cannot check frontmatter: PyYAML is not installed"]
+    try:
+        yaml.safe_load("\n".join(raw[1:end]))
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        line = mark.line + 2 if mark else 1
+        why = getattr(e, "problem", None) or str(e).splitlines()[0]
+        return [f"{shown}:{line}: D8 (render) frontmatter is not valid YAML ({why}), so Obsidian "
+                "drops every property — quote a value that starts with a quote or holds ': '"]
+    return []
 
 
 def is_print_record(path: Path) -> bool:
@@ -699,7 +796,7 @@ def check_file(path: Path) -> list[str]:
     render = check_d7_tables(path, raw)
     if is_claude_config(path):
         return check_d1_links(path, lines) + render
-    render = check_d6_code_spans(path, raw) + render
+    render = check_d6_code_spans(path, raw) + check_d8_frontmatter(path, raw) + render
     if is_print_record(path):
         return check_d1_links(path, lines) + render
     return (
@@ -788,6 +885,7 @@ def self_test() -> int:
         "fail/d1-dead-link.md": ["D1 (K9)"],
         "fail/d1-dead-heading.md": ["D1 (K9) no heading"],
         "fail/d1-dead-obsidian.md": ["D1 (K9) obsidian link no heading"],
+        "fail/d1-dead-wikilink.md": ["D1 (K9) wikilink"],
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
@@ -795,6 +893,7 @@ def self_test() -> int:
         "fail/d5-unregistered-bet.md": ["D5 (K9)"],
         "fail/d6-wrapped-code-span.md": ["D6 (render)"],
         "fail/d7-table-pipe.md": ["D7 (render)"],
+        "fail/d8-broken-frontmatter.md": ["D8 (render)"],
     }
     ok = True
     for name in sorted((FIXTURES / "pass").glob("*.md")):

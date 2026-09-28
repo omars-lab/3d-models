@@ -1,3 +1,9 @@
+---
+status: decided
+decisions:
+  - D-008
+---
+
 # Wall Connectors, Coupons & Mounts (W2) — implementation design doc
 
 Status: **v2 — grounded in a targeted snap-fit/detent/keyhole/warp survey
