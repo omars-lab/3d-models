@@ -6,6 +6,7 @@
 # renamed: rosette -> rosette_ (reserved word)
 
 param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param neck = 3 range 2..5   # mm, dovetail neck at the edge line
 param depth = 3 range 2..5   # mm, how far the tab protrudes / the slot cuts in
 param clearance = 0.15 range 0.05..0.35   # mm, CAL-FIT-01 ladder: snug .. free
@@ -103,7 +104,7 @@ pattern GimTvN9hw4U on GimTvN9hw4U_scaffold
 coaster Coaster
   outline polygon 6 $size rotate 30
   inscribe GimTvN9hw4U
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   interlock dovetail $neck $depth clearance $clearance
