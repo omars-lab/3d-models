@@ -465,6 +465,22 @@ def candidates(root: Path, mapper: Mapper, files: list[str]) -> list[str]:
     return sorted(f for f in hits if f in known and f != SELF)
 
 
+def names_ours(body: str, needle: str, sibling_has_own: bool) -> bool:
+    """Whether a sibling's line names this repo's `needle` (a `docs/...` path).
+    Tied to 3d-models (`3d-models/docs/x.md`, `3d-models:docs/x.md`, 3d-models
+    `docs/x.md`) it does; after another repo's name (`qiyas:docs/x.md`) it does
+    not; bare, it does only when the sibling has no file of that name itself."""
+    for m in re.finditer(re.escape(needle) + r"(?![\w-]|\.[\w-])", body):
+        before = body[:m.start()]
+        if re.search(r"3d-models[/:]?\s*`?\Z", before):
+            return True
+        if re.search(r"[\w-]+[:/]\Z", before):
+            continue
+        if not sibling_has_own:
+            return True
+    return False
+
+
 def sibling_refs(root: Path, moves: list[Move]) -> tuple[list[str], list[str]]:
     """Read-only grep of each sibling repo at its origin ref."""
     parent = Path(git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").strip()).parent.parent
@@ -487,11 +503,11 @@ def sibling_refs(root: Path, moves: list[Move]) -> tuple[list[str], list[str]]:
         out = git(repo, *args, ref, "--", check=False)
         for line in out.splitlines():
             _, path, lineno, body = (line.split(":", 3) + ["", "", ""])[:4]
-            # A sibling may have a docs/<same name> of its own; a mention there
-            # counts only when the line ties it to 3d-models.
-            own = [nd for nd in needles if nd in body and subprocess.run(
-                ["git", "-C", str(repo), "cat-file", "-e", f"{ref}:{nd}"], capture_output=True).returncode == 0]
-            if own and "3d-models" not in body:
+            # A sibling may have a docs/<same name> of its own, or name a third
+            # repo's (`qiyas:docs/x.md`); only a mention of ours is listed.
+            if not any(names_ours(body, nd, subprocess.run(
+                    ["git", "-C", str(repo), "cat-file", "-e", f"{ref}:{nd}"],
+                    capture_output=True).returncode == 0) for nd in needles if nd in body):
                 continue
             hits.append(f"{name}:{path}:{lineno}: {body.strip()[:160]}")
     return searched, hits
@@ -682,6 +698,16 @@ def unit_cases(failures: list[str]) -> None:
             got, _ = rewrite_text(rel, before, mp, rx)
             _check(got == want, f"{why}: {before!r} -> {got!r}" + ("" if got == want else f" (want {want!r})"),
                    failures)
+        nd = "docs/a-design.md"
+        for body, own, want, why in [
+            ("see 3d-models `docs/a-design.md`", True, True, "a sibling line tying the path to 3d-models"),
+            ("Design: 3d-models/docs/a-design.md §3", True, True, "a sibling's `3d-models/docs/...`"),
+            ("[`docs/a-design.md`](docs/a-design.md), as 3d-models does", True, False,
+             "a sibling's own file of the same name, 3d-models named elsewhere on the line"),
+            ("`bikar:docs/a-design.md` and `qiyas:docs/a-design.md`", False, False, "a third repo's path"),
+            ("per `docs/a-design.md`", False, True, "a bare path the sibling has no file for"),
+        ]:
+            _check(names_ours(body, nd, own) == want, f"sibling grep: {why}", failures)
         left = leftovers("docs/research/r.md", "from `docs/a-design.md` §3", mp, "research")
         _check(len(left) == 1, "research prose that still names the old place is listed", failures)
         left = leftovers("docs/plan.md", "[a](design/c/a-design.md)", mp, "x")
