@@ -12,8 +12,12 @@ baseline entry that resolves is stale by the ratchet rule. The fix is not to shr
 baseline (the entries are correct by design) but to remove the build output first:
 
 ```
-rm -f src/Coasters/*-mini.stl && make validate
+find src/Coasters -name '*-mini.stl' -delete
+make validate
 ```
+
+Use `find`, not `rm -f src/Coasters/*-mini.stl`: zsh (the default shell here) stops with
+"no matches found" when there are no minis, and `-f` does not save it (2026-09-28, #383).
 
 A fresh worktree off origin/master has no minis and needs nothing (2026-09-17, #255 and
 the border-design PR). Related: [[3d-models-deploy]], [[use-cases-refresh-surfaces-anchor-drift]].
