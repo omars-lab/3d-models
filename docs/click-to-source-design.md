@@ -459,8 +459,8 @@ It feeds exactly two things, and neither is picking a shape:
    (`StandardUtils.js:54`, `this.currentLineNumber = CascadeStudioUtils.getCallingLocation()[0]`)
    into `modelHistory`. The UI is a **strip of dots**, scrubbed with `mousedown`/`mousemove` on
    `this._timelineTrack` (`CascadeView.js:405-414`). Selecting a step calls
-   `_onHistoryStepChange(lineNumber)` → `editor.deltaDecorations(…, [{ range: new
-   monaco.Range(lineNumber,1,lineNumber,1), options: { isWholeLine: true, … } }])` +
+   `_onHistoryStepChange(lineNumber)` →
+   `editor.deltaDecorations(…, [{ range: new monaco.Range(lineNumber,1,lineNumber,1), options: { isWholeLine: true, … } }])` +
    `revealLineInCenter` (`CascadeMain.js:370-386`). **The thing you click is a dot on a timeline,
    not a face.**
 2. **Gizmo write-back.** `postMessage({type:"createTransformHandle", payload:{…, lineAndColumn}})`
@@ -513,8 +513,8 @@ Three transferable design facts:
   `codeRefLookup?: 'first' | 'last'`. §3.5 declined to pick a winner; Zoo's experience says a
   policy parameter eventually shows up regardless. Recorded as Q3.
 
-Editor is **CodeMirror 6** (`selections.ts:2`, `import { EditorSelection } from
-'@codemirror/state'`), with a first-party Lezer grammar package. Selection flows both ways
+Editor is **CodeMirror 6** (`selections.ts:2`,
+`import { EditorSelection } from '@codemirror/state'`), with a first-party Lezer grammar package. Selection flows both ways
 (`handleSelectionBatch` → `EditorSelection.create`, `selections.ts:1385-1397`; `codeToIdSelections`
 at :1932 pushes highlights back to the engine), and drag→edit does a real AST mod plus `recast`
 (`sceneEntities.ts:1395`) rather than CascadeStudio's regex.
@@ -580,8 +580,8 @@ it** without inventing the ancestry OpenSCAD gets for free.
 
 **CadQuery ecosystem — a claim examined and found false.** jupyter-cadquery's `replay.py` (676
 lines) is often described as recovering source position via `inspect.stack()`. It does not:
-**`inspect` is never imported.** The full import set is `traceback, dataclasses, typing, cadquery,
-IPython, ipywidgets, ocp_tessellate, ocp_vscode, cad_viewer_widget`, and `traceback` appears only in
+**`inspect` is never imported.** The full import set is
+`traceback, dataclasses, typing, cadquery, IPython, ipywidgets, ocp_tessellate, ocp_vscode, cad_viewer_widget`, and `traceback` appears only in
 an exception handler. It monkeypatches `__getattribute__` on `cq.Workplane`/`cq.Sketch` to record
 `{func, args, kwargs, obj, children}`, and the UI is a `SelectMultiple` of **synthesized** call
 strings (`"%s%s%s" % ("| "*level, func, args)` → `box(10, 20) => _v1`). **No filename, no line
@@ -619,8 +619,8 @@ For bikar the derived-state model is the better fit — a plural, per-render map
 wholesale rather than diffed — and it is what Zoo, the only product shipping this feature, chose.
 **None of which changes §5.5's finding that there is nothing to click.**
 
-**LSP: the right frame for a different feature.** `Position` is `{line: uinteger, character:
-uinteger}`, both zero-based, `Range` is two Positions, `Location` is `{uri, range}` (LSP 3.17). The
+**LSP: the right frame for a different feature.** `Position` is
+`{line: uinteger, character: uinteger}`, both zero-based, `Range` is two Positions, `Location` is `{uri, range}` (LSP 3.17). The
 `character` offset is in **UTF-16 code units** by default — 3.17 added `PositionEncodingKind`
 negotiation — with the spec's own example: *"in a string of the form `a𐐀b` the character offset of
 `a` is 0, the character offset of `𐐀` is 1 and the character offset of b is 3."* Zoo sidesteps this
@@ -771,8 +771,8 @@ either.
 
 269 of the 812 lines sit inside a `# Construction:` block, across the 31 files that have one.
 
-**Decision: the lexer emits comments into a side list on `FileNode` — `comments?: readonly
-{ line: number; column: number; text: string }[]` — ordered by position. Comments are *not* attached
+**Decision: the lexer emits comments into a side list on `FileNode` —
+`comments?: readonly { line: number; column: number; text: string }[]` — ordered by position. Comments are *not* attached
 to nodes, and `Token[]` is *not* changed.**
 
 | Option | Verdict |

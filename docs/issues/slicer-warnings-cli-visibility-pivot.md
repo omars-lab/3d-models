@@ -71,8 +71,8 @@ sidecar is fail-closed — `bambu print send` blocks (exit 2) unless `--allow-un
   sidecar, and exits non-zero on any unexpected warning.
 - **`bambu print send`** runs the gate *before* the owner gate: clean/expected → proceed;
   unexpected or no-sidecar → block (exit 2); `--allow-unverified` overrides with a ⚠.
-- **`bambu validate sliced`** reads the sidecar and reports `warnings : N captured — X
-  expected, Y unexpected`, failing on any unexpected.
+- **`bambu validate sliced`** reads the sidecar and reports
+  `warnings : N captured — X expected, Y unexpected`, failing on any unexpected.
 
 ## Verified (live, 2026-09-17)
 
@@ -81,8 +81,8 @@ Sliced `MC2Wall04.stl` at `--debug 2` with the X2D presets:
 - The advisory is captured into `MC2Wall04.sliced.3mf.warnings.json` (1 warning, non_critical,
   object `MC2Wall04.stl`).
 - `bambu validate sliced` → `warnings : 1 captured — 1 expected, 0 unexpected`.
-- `bambu print send --dry-run` → `✓ warnings gate: 1 expected-by-design warning(s), 0
-  unexpected.`
+- `bambu print send --dry-run` →
+  `✓ warnings gate: 1 expected-by-design warning(s), 0 unexpected.`
 - A plate with the sidecar removed → `✗ warnings gate: no slicer-warnings capture …`,
   process exit **2** (dispatch blocked); `--allow-unverified` proceeds with a ⚠.
 

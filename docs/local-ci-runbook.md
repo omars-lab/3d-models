@@ -1,8 +1,8 @@
 # Local CI runbook — the run that does not need a hosted runner
 
 **This repo has no `.github/workflows` directory.** That is not an oversight and
-not a gap to be closed later: everything this repo gates is a hook, `make
-validate` runs every one of them over the whole tree, and `make deploy` pushes
+not a gap to be closed later: everything this repo gates is a hook,
+`make validate` runs every one of them over the whole tree, and `make deploy` pushes
 the gallery from a `gh-pages` worktree on this machine. There is nothing here
 that a GitHub Actions billing block can stop.
 
@@ -105,8 +105,8 @@ output, you have not run it.
 **The trap the whole arrangement exists to name:** *a fallback weaker than the
 thing it falls back from.* The fallback is used at exactly the moment nothing
 else is watching, so the asymmetry stays invisible until it costs something.
-bikar had it in all three of its publishing paths, measured 2026-08-18 — `make
-web-deploy` published a bundle its own secret scanner had never seen, and then
+bikar had it in all three of its publishing paths, measured 2026-08-18 —
+`make web-deploy` published a bundle its own secret scanner had never seen, and then
 verified nothing had landed. There is no undo downstream of a publish: a version
 on GitHub Packages cannot be reused, and a key in a shipped bundle has been
 served. This repo's `make deploy` is the same shape and holds to the same rule —

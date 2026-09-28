@@ -123,8 +123,8 @@ The stretch is `|C/N − ℓ| / ℓ ≤ 1/(2N)`; CV11 reports `N` and the stretc
 | standard | round ⌀90 | 8 | 6 | `R_m = 41`, `C = 257.6` | 43 | −0.2 % |
 | mini | round ⌀40 | 4 | 2 | `R_m = 18`, `C = 113.1` | 57 | −0.8 % |
 
-**Height.** Nothing changes in the height formula of D-064: `top = base + relief +
-rim − drop`. What changes is *which straps and faces* `reliefAppliesAt` consults at
+**Height.** Nothing changes in the height formula of D-064:
+`top = base + relief + rim − drop`. What changes is *which straps and faces* `reliefAppliesAt` consults at
 `p`: the field's where `ι(p) ≥ W`, the placed band's where `0 < ι(p) < W`. One
 `relief` statement (target, direction, height) and one `strap width` govern both;
 a band that wanted its own relief height would be a second knob set, and §10 says
@@ -192,8 +192,8 @@ decides whether what is left is one body. `interlock` is allowed and composes as
 In `bikar/packages/core/src/kernel3d/coaster.ts` and one new module beside it for
 the placement:
 
-1. **A second art channel.** `CoasterSpec.border?: { pattern: CoasterPattern,
-   widthMm }` carries the *unplaced* motif cell; `buildCoaster` places it once
+1. **A second art channel.**
+   `CoasterSpec.border?: { pattern: CoasterPattern, widthMm }` carries the *unplaced* motif cell; `buildCoaster` places it once
    (`placeBorder(outline, cell, widthMm, strapWidthMm, topRunMm) → CoasterPattern`
    in mm) before sampling, and the placed straps and faces are what the predicates
    read. Placement is a pure function of the outline and the cell, so it is unit
@@ -284,8 +284,8 @@ seated straps on a slab, which is CAL-CST-01's case exactly (same load, same
 adhesion, same shells — the K10 sentence the minimal doc could not write, written),
 so no new floor is introduced. What *is* new is that the band **does not scale
 with `size`**: an 8 mm band on a 40 mm mini leaves a 20 mm field and, with a long
-motif, no motif at all (§6.2). So the mini sets its own: `--param size=40 --param
-border=4`, the second knob the catalog entry carries. A fraction-of-size band was
+motif, no motif at all (§6.2). So the mini sets its own:
+`--param size=40 --param border=4`, the second knob the catalog entry carries. A fraction-of-size band was
 considered and rejected — every other knob is in mm, and a strap in a 4 mm band is
 the same 2 mm strap as in an 8 mm one.
 
@@ -298,8 +298,8 @@ the coaster block, a **stock motif pattern** `<id>_border` — a chevron: three 
 at the cell's corners and apex and two segments between their centres, written in
 the same statements a person would use — and the §4 block with the `border` clause
 and the two knobs of §7. The stock motif is a starting point the author replaces by
-editing one identifier; a border imported from a second construction (`--border-from
-<ast.json>`) is the real prize and is §10.
+editing one identifier; a border imported from a second construction
+(`--border-from <ast.json>`) is the real prize and is §10.
 
 The catalog carries the bordered variant as CS-5 beside CS-1…CS-4; the gallery
 shows it from above, where a band reads as a band.

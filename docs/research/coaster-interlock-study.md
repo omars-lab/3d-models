@@ -121,8 +121,8 @@ The cost in art: at size 40 with `margin 5.15` the art spans 29.7 mm instead of
 - `signedDistToRing(p, ring)` in `grid-gate.ts` is exact for any simple ring,
   positive inside, and is what CV8 reads against the slotted ring. The probe's
   numbers in §5 come from a copy of it.
-- `sampleField(spec)` masks cells on the 0.4 mm grid (`COASTER_GRID_PITCH_MM =
-  PERIMETER_WIDTH_MM`), and the mesh's side wall is built from `boundaryLoops(field)`
+- `sampleField(spec)` masks cells on the 0.4 mm grid
+  (`COASTER_GRID_PITCH_MM = PERIMETER_WIDTH_MM`), and the mesh's side wall is built from `boundaryLoops(field)`
   — the **grid-cell staircase**, not the exact ring. That is invisible on a plain
   coaster (a 0.4 mm stair on a 90 mm edge) and fatal on a joint: a tab and a slot
   whose walls are quantised to 0.4 mm cells carry up to ±0.2 mm of staircase per

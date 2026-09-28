@@ -294,7 +294,7 @@ lattice only when the holes show.
   touch; there is no clause to add a ring or a bar that joins them. D-068's border
   band (#36) is the clause that could, once its straps can be *solid* rather than
   relief: the first border slice (D-071,
-  [`coaster-border-design.md`](coaster-border-design.md) §10) refuses `outline
-  pattern`.
+  [`coaster-border-design.md`](coaster-border-design.md) §10) refuses
+  `outline pattern`.
 - **Colour regions (#37)** are unchanged in direction; a minimal coaster is one body
   and has no region to colour separately until #36 gives it a second.

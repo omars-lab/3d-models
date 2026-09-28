@@ -504,8 +504,8 @@ same rungs, and that they sum to the total stated below.
 **Validator:** `build/verify_machine_card.py` compares each rung's `euler`,
 `watertight`, `degenerate`, `minFeature`, `--check` verdict, triangle count and volume
 against its row, at the decimal precision the row states.
-PASS: `MC1BoreSweep` renders `euler=-10 degenerate=0 minFeature=4.999999965721486mm —
-PASS`, 2440 triangles, 11.8 cm³ — matching row 1 once minFeature is read at the three
+PASS: `MC1BoreSweep` renders
+`euler=-10 degenerate=0 minFeature=4.999999965721486mm — PASS`, 2440 triangles, 11.8 cm³ — matching row 1 once minFeature is read at the three
 decimals the row writes.
 FAIL: `MC2Wall04` renders `— PASS` under `--check`, or renders at `minFeature=0.45mm`
 against a row that says `0.40`, or `MC6Tower03` raises no F7 warning. Each is a

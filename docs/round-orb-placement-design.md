@@ -141,8 +141,8 @@ orb-views tabs. It gets the `.orb-3d-canvas` and the solid-view bar (2D toggle) 
 UI code.
 
 The only new UI is two measurements in the overlay. The `solidDetail` string
-(`bikar:packages/web/src/solid-view.ts`) already read `<name> · 3D · N tris · X cm³ ·
-watertight`; it now also reports `N site(s) · N weld(s)`, sourced from `orbMesh.stats`
+(`bikar:packages/web/src/solid-view.ts`) already read
+`<name> · 3D · N tris · X cm³ · watertight`; it now also reports `N site(s) · N weld(s)`, sourced from `orbMesh.stats`
 (`siteCount`, `weldCount`, `capsWatertight` — all set by the placer). Singular/plural is
 handled ("1 site" / "2 sites", "0 welds" / "1 weld"). The discipline is the one the
 `solid-preview` spec pins: **measurements, never a verdict** — the overlay never prints
@@ -190,8 +190,8 @@ shipped; what follows is the record as written then, and after it the closure.
 
 The evaluator's `capsWatertight` gate throws at *compile time*, so a sphere orb that fails to
 close cannot be evaluated at all — the guarantee is real. But the **CLI** `--check mesh` gate
-(`bikar:packages/cli/src/index.ts`) keys on `if (checkMode() !== 'none' && (result.orb3d ||
-result.piece3d))`. A sphere orb has `orbMesh` but **no** `orb3d`/`piece3d`, so `--check mesh`
+(`bikar:packages/cli/src/index.ts`) keys on
+`if (checkMode() !== 'none' && (result.orb3d || result.piece3d))`. A sphere orb has `orbMesh` but **no** `orb3d`/`piece3d`, so `--check mesh`
 silently *skips* the sphere-orb path. This is an honest follow-on gap, not a Phase-1 blocker:
 the watertight guarantee is enforced three ways over (the evaluator throw, the frozen vitest,
 the Playwright overlay), but the CLI's dedicated mesh gate does not yet cover this path.

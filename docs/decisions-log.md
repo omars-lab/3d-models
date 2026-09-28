@@ -547,8 +547,8 @@ existed; the clip joint had no fit coupon at all.
 
 A second defect fell out of the same reading. `Fit-Coupon.bkr` was cutting its
 ladder at `+0.10 / +0.20 / +0.30` while the shipped `FIT_GAP_MM`
-(`kernel3d/fit-profile.ts`) is `press −0.10 / snug +0.05 / sliding +0.15 /
-free +0.35`. It had drifted from the constant it calibrates and nothing noticed,
+(`kernel3d/fit-profile.ts`) is
+`press −0.10 / snug +0.05 / sliding +0.15 / free +0.35`. It had drifted from the constant it calibrates and nothing noticed,
 because only one of its rungs carried a `connect`.
 
 ### Decision
@@ -1007,8 +1007,8 @@ tolerance constant anyone has to justify.
 
 `make validate-coupons` — seven mutations applied to a scratch copy of the doc,
 each asserting the verifier fires: a drifted triangle count, euler, and
-minFeature; a by-design FAIL relabelled `PASS`; a passing rung relabelled `FAIL
-— by design`; a rung rendered by §6 that §7 does not tabulate; and MC-6 losing
+minFeature; a by-design FAIL relabelled `PASS`; a passing rung relabelled
+`FAIL — by design`; a rung rendered by §6 that §7 does not tabulate; and MC-6 losing
 the F7 warning it exists to raise. The fourth and fifth are the pair that
 matters, because they pin the by-design label from both sides — it can neither
 be tidied away nor used to hide a real failure. All eight cases (seven plus the
@@ -1383,8 +1383,8 @@ Reading bikar means reading it **at a published ref** — `origin/HEAD`,
 checkout routinely sits on a detached HEAD belonging to another session (D-001),
 and a gate whose verdict depends on someone else's checkout teaches you to
 ignore it. When bikar is unreachable at all — a fresh clone, the `gh-pages`
-worktree — the quantity is **skipped, and labelled `[skipped: bikar not
-readable]` in the summary**, never folded into a clean run.
+worktree — the quantity is **skipped, and labelled
+`[skipped: bikar not readable]` in the summary**, never folded into a clean run.
 
 And the extension found the same defect again on its first pass, in exactly the
 quantity that had been left untagged: §4 item 2 of `docs/backlog.md` read *"All
@@ -1482,8 +1482,8 @@ satisfiable by tagging rather than only by rephrasing. A rule you can only escap
 is a rule that gets escaped.
 
 FAIL: `FIXTURE_WRAPPED_MARKER` — a `28 <!--count:cal-records-->` split across the wrap, <!--count:quote-->
-against an authority of 17 → 1 C1 finding **and** `sites["cal-records"] ==
-1`. Before `marks_in` joined lines this fixture produced **zero** findings and a
+against an authority of 17 → 1 C1 finding **and**
+`sites["cal-records"] == 1`. Before `marks_in` joined lines this fixture produced **zero** findings and a
 site count of zero: silent, green, and wrong. `FIXTURE_QUOTED_PAST_ERROR` closes
 the set — a line quoting "14 registered bets" under `<!--count:quote-->` → 0
 findings, so the opt-out is proved to work rather than assumed to.
@@ -2021,8 +2021,8 @@ before the feature. It is `--format ldraw` only; STL/SVG ignore it.
 Three reasons the both-forms answer earns its keep:
 
 - **A name asserts a grounded fact; a code asserts nothing.** Names are validated
-  against the fetched palette (§7.4, S15 — `LDConfig.ldr` header `UPDATE
-  2026-05-29`, fetched 2026-08-06) and an unknown name is refused with the valid
+  against the fetched palette (§7.4, S15 — `LDConfig.ldr` header
+  `UPDATE 2026-05-29`, fetched 2026-08-06) and an unknown name is refused with the valid
   list. That is the K4/grounding discipline: a name means exactly what LDConfig
   says. A bare integer is the escape hatch for any of the other ~370 codes, and
   like the old draft's `4`/`7` it asserts nothing about appearance — which is
@@ -2663,8 +2663,8 @@ Twelve of fourteen orbs scored exactly 1.000 before this and thirteen do now. Th
 verification chain was walked link by link rather than inferred: qiyas #18 merged, #19
 merged, tag pushed, `publish.yml` green, and the image confirmed live through the packages
 API before bikar's pin was allowed to reference it; then bikar #103's `orb-validate` job
-green in 2m8s — and *a 2m8s pass has the same shape as a skip*, so the log says `swept 14
-orb(s)` and `86 tests` (the with-sweep count, not the 87-case skip count), and the uploaded
+green in 2m8s — and *a 2m8s pass has the same shape as a skip*, so the log says
+`swept 14 orb(s)` and `86 tests` (the with-sweep count, not the 87-case skip count), and the uploaded
 artifact reproduces the macOS numbers exactly on Ubuntu: `drop=0`, `drift=0.0002`, both
 rosettes.
 
@@ -3316,8 +3316,8 @@ strands are swept independently and never booleaned, so two ribbons passing stra
 through each other are still two components.
 
 The evidence that these were one rule, not four coincidences, was already checked in.
-Site 2's own suite contained a test named *`agrees with the Lab ribbon-gap row it
-shares a depth knob with`*, whose comment states that the clamp and the readout are
+Site 2's own suite contained a test named
+*`agrees with the Lab ribbon-gap row it shares a depth knob with`*, whose comment states that the clamp and the readout are
 "one inequality written two ways".
 
 ### Decision
@@ -3725,8 +3725,8 @@ so the gate is buildable and correct the moment R4 is in it, no plate required. 
 tenet, sharper than "measure before you gate": *a zero-subject gate is dishonest
 unless it prints its subject count out loud; once it does, it can and should ship
 before its subject exists — the empty run is then a true "0 records checked", not a
-false pass.* S3 (`prints_gate.py` with R1/R2/R4, hook `39-prints`, `make
-validate-prints`, and the `docs/prints/**` grounding-gate exclusion) shipped on this
+false pass.* S3 (`prints_gate.py` with R1/R2/R4, hook `39-prints`,
+`make validate-prints`, and the `docs/prints/**` grounding-gate exclusion) shipped on this
 amendment's date, ahead of the first plate. Only **R3** (two-way bet propagation)
 stays deferred — it has a real empty-subject problem R4 cannot fix, because there is
 no settled bet to propagate *from* yet; it lands in S4 with the first flip (task #71).
@@ -4456,8 +4456,8 @@ scaled to it.
 
 - **(a) The importer emits the coaster block, driven by `size` with `unit`
   derived** — one const-expression `param unit = ($size - 8) / K` where K is the
-  art's enclosing diameter measured at import; mini and standard are `--param
-  size=40` and `size=90` of one generated file.
+  art's enclosing diameter measured at import; mini and standard are
+  `--param size=40` and `size=90` of one generated file.
 - **(b) The importer emits only the pattern; a hand-written or downstream layer
   adds the `coaster` block** — keeps the importer simpler but forks the golden into
   a generated half and a hand-maintained half.
@@ -4498,11 +4498,11 @@ measure to derive `unit` from and no regular edge for a later interlock.
 
 ### Options on the table
 
-- **(a) Least-area fit from seven candidates** — `round`, `square`, `polygon 4
-  rotate 45`, `polygon 6 rotate 0`, `polygon 6 rotate 30`, `polygon 8 rotate 0`,
+- **(a) Least-area fit from seven candidates** — `round`, `square`,
+  `polygon 4 rotate 45`, `polygon 6 rotate 0`, `polygon 6 rotate 30`, `polygon 8 rotate 0`,
   `polygon 8 rotate 22.5`; `K` measured in each candidate's own measure, least
-  enclosed area wins, the CLI prints the verdict; `margin` a knob (`unit = ($size -
-  2 * $margin) / K`); `relief straps emboss 1.2`; `rotate` added to the polygon
+  enclosed area wins, the CLI prints the verdict; `margin` a knob
+  (`unit = ($size - 2 * $margin) / K`); `relief straps emboss 1.2`; `rotate` added to the polygon
   outline grammar; CV7 checks enclosure. Corner-up hexagon for GimTvN9hw4U (17.54
   vs 21.21 units² round), square for 7apC5Q9QS-8 (16.00 vs 25.13).
 - **(b) Trace the convex hull** — the tightest possible outline, but no single
@@ -4653,8 +4653,8 @@ and `margin 4` still fails by 0.15 mm — and CV9 checks the land beside each sl
 offset is unverified on a reflex ring, K10) and with `trivet`. The clearance default
 is CAL-FIT-01's `sliding` rung; the tab neck gets no default until a CAL-CST-06 bet
 is registered with the implementation. The importer emits the clause only behind
-`--interlock`, because the interlock costs the tight border of D-066 (`margin ≥ depth
-+ clearance + strap/2`, 5.15 mm at the worked numbers instead of 2 mm) and a lone
+`--interlock`, because the interlock costs the tight border of D-066
+(`margin ≥ depth + clearance + strap/2`, 5.15 mm at the worked numbers instead of 2 mm) and a lone
 coaster should keep it.
 
 ### What would reverse it
@@ -4921,16 +4921,16 @@ Bambu-Connect-gated steps get a headless path.
 
 ## D-072 — A `plate.yaml` item is an authoring surface, not an identity; `slice compose` extends the existing `slice` group
 
-Design: [`plate-composer-design.md`](plate-composer-design.md). P4.1 adds a `slice compose
-<plate.yaml>` subverb to the **existing** `slice` command group in `tools/bambu` (sibling to the
+Design: [`plate-composer-design.md`](plate-composer-design.md). P4.1 adds a
+`slice compose <plate.yaml>` subverb to the **existing** `slice` command group in `tools/bambu` (sibling to the
 shipped `slice plate` / `slice mesh`), composing many models onto one arranged X2D plate.
 
 ### Options on the table
 
 - **(a) Manifest invents its own plate/item id** — a second identity for a printable thing,
   parallel to the print record's `it-<sha12>` iteration key.
-- **(b) Items are authoring triples that resolve to the existing iteration id** — `{bkr, piece,
-  params}` is the geometry half of the iteration key; the composer resolves each item to
+- **(b) Items are authoring triples that resolve to the existing iteration id** —
+  `{bkr, piece, params}` is the geometry half of the iteration key; the composer resolves each item to
   `it-<sha12>` and writes it to `objects[].iteration`.
 - **(c) Frontend-only composition** — leave composition to the plate-builder UI
   ([`plate-builder-design.md`](plate-builder-design.md)); no CLI compose verb.
@@ -5191,8 +5191,8 @@ from the plan.
   pivot doc's bisection: bare `BambuStudio` exits 0, the versioned tag crashes in the native-project
   GL path), so the **shipped** 3MF keeps the versioned tag — the GUI has GL and honours the #9666
   colour contract — and `--verify-geometry` slices a **tag-stripped copy** (no `--export-3mf`; that
-  hangs headless), asserting exit 0 + the loaded object count. Colour is a GUI check (`bambu slice
-  open`): `--load-settings machine;process` overrides the embedded filament arrays and clamps every
+  hangs headless), asserting exit 0 + the loaded object count. Colour is a GUI check
+  (`bambu slice open`): `--load-settings machine;process` overrides the embedded filament arrays and clamps every
   part to slot 1, so a headless slice **cannot** read per-region colour (pivot doc §4).
 - **(Q2-b) Trust the headless `result.json` filament count as the colour signal.** Rejected on
   measurement: §4 shows `result.json` reports one filament slot under `--load-settings` even when the
@@ -5349,8 +5349,8 @@ argument are in [`cached-coords-producer-design.md`](cached-coords-producer-desi
 ### The fork
 
 Four ways to produce the coords: **(A)** drive GeoGebra and read its coordinates back; **(B)** build
-a from-scratch geometry evaluator; **(B′)** self-bootstrap — import minus the arcs (`--lenient
-e_1,f_1,g_1`), let **bikar** evaluate the 9 upstream endpoints, read them back as `cached_coords`,
+a from-scratch geometry evaluator; **(B′)** self-bootstrap — import minus the arcs
+(`--lenient e_1,f_1,g_1`), let **bikar** evaluate the 9 upstream endpoints, read them back as `cached_coords`,
 re-import with arcs; **(C)** compute nmEj's coords once now via B′'s mechanism to unblock PR-5.
 
 ### Decision — C now, B′ general, A fallback, B rejected

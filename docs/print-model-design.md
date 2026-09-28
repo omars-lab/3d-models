@@ -76,8 +76,8 @@ The plate states below extend the record `status` enum already shipped in
 (`sliced | printed | measured | propagated | abandoned`). The skill adds the
 *pre-slice* states (`draft`, `planned`) it owns, and the *in-flight* states
 (`printing`, `paused`, `failed`) read from the device. The in-flight set maps onto
-the Bambu report frame's `gcode_state` (`IDLE / PREPARE / RUNNING / PAUSE / FINISH /
-FAILED`) — the device-side enum the `status` verb already reads
+the Bambu report frame's `gcode_state`
+(`IDLE / PREPARE / RUNNING / PAUSE / FINISH / FAILED`) — the device-side enum the `status` verb already reads
 ([`research/print-model-research.md`](research/print-model-research.md) Topic 7).
 
 `measured` and `propagated` are **this project's post-print additions with no prior
@@ -115,8 +115,7 @@ stateDiagram-v2
 ```
 
 **Validator:** a record's `status` is well-formed iff its value is one of
-`{draft, planned, sliced, printing, paused, printed, failed, measured, propagated,
-abandoned}` **and** the record carries the fields that state requires — a `sliced`
+`{draft, planned, sliced, printing, paused, printed, failed, measured, propagated, abandoned}` **and** the record carries the fields that state requires — a `sliced`
 record names a `.3mf`; a `printed` record names the plate it came off; a `measured`
 record carries at least one `readings[]` entry; a `propagated` record carries a
 `readings[].settles` naming a bet. The freshness gate (§6.3, task #39) enforces this.
@@ -400,8 +399,8 @@ becomes a best-practices example that fails-before / passes-after the next plan 
 same fix-ships-a-test discipline, applied to printing.
 
 The first seeded examples are the ones this project already produced: the known-good
-X2D Plate-1 trio (machine `Bambu Lab X2D 0.4 nozzle` · process `0.20mm Standard @BBL
-X2D` · filament `Bambu PLA Basic @BBL X2D 0.4 nozzle`), the MC-4 fan sliced with
+X2D Plate-1 trio (machine `Bambu Lab X2D 0.4 nozzle` · process
+`0.20mm Standard @BBL X2D` · filament `Bambu PLA Basic @BBL X2D 0.4 nozzle`), the MC-4 fan sliced with
 **supports off**, and the three LEGO sources that slice clean at 0.4 mm — all recorded
 in memory *bambu-x2d-bringup* and the Plate-1 bench sheet.
 

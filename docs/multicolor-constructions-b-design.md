@@ -238,8 +238,8 @@ coaster pattern
    `fill where … color …` statement keeps its shape.
 2. **`bikar classes`**, a listing verb like `bikar bands`.
 3. **A fill height for filled faces only.** `relief faces` today raises every face, with one
-   height shared with the straps (research §1 item 9). The proposal adds `filled`: `relief faces
-   emboss <mm> filled` raises only faces that carry a fill colour, next to a `relief straps`
+   height shared with the straps (research §1 item 9). The proposal adds `filled`:
+   `relief faces emboss <mm> filled` raises only faces that carry a fill colour, next to a `relief straps`
    clause. The new word matters: changing plain `relief faces` to mean "filled only" would give
    one phrase two meanings across old and new files. Whether the parser accepts two relief
    clauses today was not checked; if not, that is part of this change.

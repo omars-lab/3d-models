@@ -11,7 +11,7 @@ The only drawn art is `@export ring*` (line 124) = `Sequence(Rotate({e_1, f_1, g
 | member | kind | role | status |
 |--------|------|------|--------|
 | `e_1`,`f_1`,`g_1` | **CircularArc(centre, start, end)** | the three scallops (DRAWN) | net-new curved edge |
-| `d_1` | **Circle** (rim circle) DRAWN | net-new: full circle as a drawn element |
+| `d_1` | **Circle** | the rim circle (DRAWN) | net-new: full circle as a drawn element |
 | `a` | Segment | the spoke | supported |
 
 Scaffolding (all `@hide`-den, never drawn — lines 103–104, 116):

@@ -595,8 +595,8 @@ one thing we invented is the one thing the reader sees first.
 
 **As shipped (M5, bikar PR #89).** The sketch survived with four differences, each forced by what
 M4 actually built: `wheel points 9 contact 0.5` replaces `wheel Star-9` (the wheel is
-kernel-constructed, so it is named by its point count, not by a pattern reference); `place rule
-dodecahedral` replaces the spiral heuristic (the symmetric field derives its placement — the
+kernel-constructed, so it is named by its point count, not by a pattern reference);
+`place rule dodecahedral` replaces the spiral heuristic (the symmetric field derives its placement — the
 spiral rule belongs to M4b, which will extend this statement); `fill auto` is gone (filler closure
 is not optional, so it is not a statement); and `project` is refused rather than accepted (the
 field is born on the sphere — there is no flat polyhedron for `faceted` to keep). `inscribe` is

@@ -140,11 +140,11 @@ Everything here was verified against the `openscad` `master` source
 
 The three-stage pipeline is explicit in the log. From `src/gui/MainWindow.cc`
 (https://github.com/openscad/openscad/blob/master/src/gui/MainWindow.cc), in order:
-`"Parsing design (AST generation)..."` (line 1856), `"Compiling design (CSG Tree
-generation)..."` (986), `"Compiling design (CSG Products generation)..."` (1043), `"Compiling
-design (CSG Products normalization)..."` (1072), `"Compiling highlights (%1$d CSG Trees)..."`
-(1093), `"Compiling background (%1$d CSG Trees)..."` (1109), `"Normalized tree has %1$d
-elements!"` (1125/1130), `"CSG normalization resulted in an empty tree"` (1086).
+`"Parsing design (AST generation)..."` (line 1856),
+`"Compiling design (CSG Tree generation)..."` (986), `"Compiling design (CSG Products generation)..."` (1043),
+`"Compiling design (CSG Products normalization)..."` (1072), `"Compiling highlights (%1$d CSG Trees)..."`
+(1093), `"Compiling background (%1$d CSG Trees)..."` (1109),
+`"Normalized tree has %1$d elements!"` (1125/1130), `"CSG normalization resulted in an empty tree"` (1086).
 
 The official architecture diagram is in-repo at
 https://github.com/openscad/openscad/blob/master/doc/OpenSCAD-csg.pdf; its node names are
@@ -768,8 +768,8 @@ this._historyMeshCache = {};   // stepIndex → [facelist, edgelist]
 this._historyCurrentStep = -1; // -1 = showing final result (default)
 ```
 
-Layout is a **horizontal overlay track inside the 3D viewport** (`div.cs-timeline >
-div.cs-timeline-track`), one element per step, with a **virtual final slot**:
+Layout is a **horizontal overlay track inside the 3D viewport**
+(`div.cs-timeline > div.cs-timeline-track`), one element per step, with a **virtual final slot**:
 `if (closestIndex >= this._historySteps.length) this._showFinalResult();`
 `CascadeMain.js` closes the loop into the editor via Monaco `deltaDecorations` (line highlight +
 glyph-margin marker).

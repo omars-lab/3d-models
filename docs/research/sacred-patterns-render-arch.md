@@ -65,8 +65,8 @@ loaded via `<script>` at runtime, not bundled. **All appends are one-shot `.appe
 **Anything face-list-shaped today? Absent.** No array-of-closed-polygons-with-metadata survives past
 a render call. Closest is transient `Polygon[]`/`Hexagon[]` arrays some `draw*` build before looping
 (e.g. `nonagonsThatFormA6PointStarCenteredAt` -> `Polygon[]`, `index.ts:175-198`) — but they carry **no
-index/id, no centroid, no class tag, no ring field**, immediately consumed by `_.forEach(..., p ->
-appendPolygon(svg, p.lines, theme))`.
+index/id, no centroid, no class tag, no ring field**, immediately consumed by
+`_.forEach(..., p -> appendPolygon(svg, p.lines, theme))`.
 
 **Which bikar `FaceConstruct` fields (`index`,`polygon`,`centroid`,`colorHex`,`classes`,`ring`,`isCurved`
 — `bikar/packages/core/src/viz/face-constructs.ts:16-39`) already exist:**
@@ -93,8 +93,8 @@ keyed by `String(f.index)`), fed by `faceConstructs()` at `bikar/packages/core/s
 ## 5. Build/test/gate constraints
 
 - No CI — every enforced check is a git hook; `gate-parity.yaml` maps each hook to its whole-tree form
-  so `make local.ci` runs what the hooks partially cover. `pre-commit::typecheck-lint` -> `npm run lint &&
-  npm run typecheck`, gated on staged `^src/ts/.*\.ts$`.
+  so `make local.ci` runs what the hooks partially cover. `pre-commit::typecheck-lint` ->
+  `npm run lint && npm run typecheck`, gated on staged `^src/ts/.*\.ts$`.
 - **The binding constraint: `test/regression/check.js`** — a golden-file test. Loads the built UMD bundle
   into jsdom, calls `drawHexagonWithSurroundingNonagons('d6', 100, 6, {...},{...})` (`check.js:67`) and
   asserts against `test/regression/reference.svg`: **exact count** of `points="..."` values (`:98-104`),

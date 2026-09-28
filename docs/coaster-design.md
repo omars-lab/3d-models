@@ -88,8 +88,8 @@ is a recorded fact, not a silent skip.
 
 The slab is **fitted** to the inscribed art (D-066). At import, bikar takes the
 convex hull of the drawn pattern and measures it against **seven fixed outline
-candidates** — `round`, `square`, `polygon 4 rotate 45` (a diamond), `polygon 6
-rotate 0` (flat-up hexagon), `polygon 6 rotate 30` (corner-up), `polygon 8 rotate 0`
+candidates** — `round`, `square`, `polygon 4 rotate 45` (a diamond),
+`polygon 6 rotate 0` (flat-up hexagon), `polygon 6 rotate 30` (corner-up), `polygon 8 rotate 0`
 and `polygon 8 rotate 22.5` — computing for each the span `K` in that outline's own
 measure (diameter, side, or across flats; rounded up to 4 decimals) and the area it
 encloses. The least area wins, an earlier candidate winning a tie. The CLI prints the
@@ -113,8 +113,8 @@ carries a plain number, not the expression. Because `K` is measured in the fitte
 outline's own measure, the art's extreme points sit exactly `margin` inside the
 outline's flats — and CV7 (§7) checks that they do.
 
-One file is therefore both sizes: `--param size=90` is the standard, `--param
-size=40` the mini. `base`, emboss height and `strap width` stay in absolute
+One file is therefore both sizes: `--param size=90` is the standard,
+`--param size=40` the mini. `base`, emboss height and `strap width` stay in absolute
 millimetres, so only the outline and the art's scale change between them — never the
 mesh, and never a wall driven below the printable floor (D-059).
 
@@ -153,8 +153,8 @@ The eight structural validators CV1–CV7 are each a query on the height field
 during evaluation, so a coaster that renders has passed all eight. Each FAIL below
 is the hard case — the dimensionally-valid geometry that is nonetheless
 unprintable, or the pattern that is silently wrong — not a trivially malformed one.
-The worked strap-emboss coaster (`base 4`, `relief straps emboss 1.2`, `strap width
-2`, `margin 2`) satisfies every one, which is why it renders (§5).
+The worked strap-emboss coaster (`base 4`, `relief straps emboss 1.2`,
+`strap width 2`, `margin 2`) satisfies every one, which is why it renders (§5).
 
 The calibrated floors and ceilings these validators read are stated as defaults,
 each discharged by its registered bet:
@@ -260,8 +260,8 @@ a different distance.
   limit 1.00 mm (half the 2 mm strap), so the art clears the outline by 1.00 mm; the
   message names the point, e.g. `(-43.00, 19.31)` for GimTvN9hw4U at size 90.
 - FAIL: a strap whose **centreline** is inside but whose width spills — its end
-  0.5 mm inside a 2 mm strap: `only 0.50 mm inside the outline (needs ≥ 1.00 mm
-  inside)`. A strap 5 mm past the outline reports `5.00 mm outside`. A relief with no
+  0.5 mm inside a 2 mm strap:
+  `only 0.50 mm inside the outline (needs ≥ 1.00 mm inside)`. A strap 5 mm past the outline reports `5.00 mm outside`. A relief with no
   art passes and says so ("no art to enclose"), not silently.
 
 ## 8. Decisions
@@ -323,8 +323,8 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
   `CAL_BETS` (coupon CS-1) with no `Calibrated` record yet; the interlocked builds
   are catalog entry CS-3.
 - **Border band (#36)** — designed as D-071, not yet built:
-  [`coaster-border-design.md`](coaster-border-design.md). `border <pattern> width
-  <mm>` lays a motif cell along each flat or around the ring inside the outline;
+  [`coaster-border-design.md`](coaster-border-design.md).
+  `border <pattern> width <mm>` lays a motif cell along each flat or around the ring inside the outline;
   the field is inset by the band and CV7 measures against the band's inner edge.
 - **Colour regions (#37)** — the direction (D-068) is named regions exported as
   separate bodies (`--format parts`) for a filament map in the 3MF; the X2D's AMS

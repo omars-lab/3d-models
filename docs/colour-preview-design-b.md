@@ -1,4 +1,4 @@
-# Coloured coaster previews and Coaster Lab colour controls — design (researcher B)
+# Coloured coaster previews and Coaster Lab colour controls — design (researcher B) ^e7b42d
 
 **Status:** proposal from researcher B of two; a checker consolidates both. Raw findings,
 experiments and sources: [`docs/research/colour-preview-2026-09-28-b.md`](research/colour-preview-2026-09-28-b.md).
@@ -9,6 +9,12 @@ printer route) and does not repeat it.
 not, do we need another CAD tool? Scope addition: make orbits, colours, flush vs lowered and a
 live coloured preview easy to set in Coaster Lab, with the Lab preview and the printed parts
 coming from one code path.
+
+**Pictures:** this proposal was written before any colored picture existed. What got built from it,
+with the pictures it now makes, is in the consolidated design:
+[What it looks like now](colour-preview-design.md#what-it-looks-like-now).
+
+![Fill coaster from bikar render --format preview: gold straps, ruby stars](colour-preview-design/fill-preview.png)
 
 ## 1. Short answer
 

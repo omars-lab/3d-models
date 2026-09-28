@@ -6,8 +6,8 @@ to a transport we own).*
 ## What the design assumed, and why it broke
 
 The transport survey (`D-054`) picked the **griches `@griches/bambu-mcp`** MCP server as the
-control transport for everything the CLI does to the printer — status, dispatch, camera. `bambu
-print send` was wired to spawn it (`npx -y @griches/bambu-mcp`), find an `upload` tool and a
+control transport for everything the CLI does to the printer — status, dispatch, camera.
+`bambu print send` was wired to spawn it (`npx -y @griches/bambu-mcp`), find an `upload` tool and a
 `print`/`start` tool, base64 the `.3mf` up and call print.
 
 That path **was never exercised end-to-end**, and it can't be: `@griches/bambu-mcp` is not on npm
