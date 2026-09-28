@@ -70,7 +70,7 @@ PAGES_WORKTREE := $(ROOT_DIR)/.gh-pages
 # deploy a gallery with no studio pages in it.
 DEPLOY_PATHS = index.html status.html $(LAB_PAGES) assets build/images build/stls build/orb-breakdown build/bikar-ref.txt src LICENSE README.md docs/prints.md prints-manifest.json status-manifest.json
 
-.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env bambu-flags validate-bambu-flags validate-reflect validate-coaster-pictures
+.PHONY: prints-manifest status-manifest validate-status cookie-cutters orbs orb-breakdown-index bikar-stamp bricks coasters coupons validate-coupons pattern-sets lab lego-lab lab-vendor lab-smoke web-images deploy setup-hooks site experiences validate-use-cases use-case-links validate-docs validate-pointers validate-catalog validate-counts validate-timelapse validate-prints validate-constructions validate-hooks validate-branch-guard validate-site-graph site-graph validate validate-strict validate-parity validate-secrets local.ci local.ci-strict local.ci-parity bambu-doctor bambu-discover bambu-typecheck validate-env bambu-flags validate-bambu-flags validate-reflect validate-coaster-pictures cookbook validate-cookbook
 
 # One-time per clone: route git hooks to the tracked .githooks/ dir
 # (pre-commit dispatches .githooks/pre-commit.d/: gitleaks secret scan,
@@ -889,3 +889,16 @@ validate-print-review:
 validate-coaster-pictures:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py
+
+# The naqsh cookbook (docs/cookbook/): draw every recipe's picture from the
+# snippet on its page, then check every naqsh keyword has a recipe or a line on
+# the README's not-yet list. A snippet bikar refuses fails the run. How to add a
+# recipe: .claude/skills/maintain-cookbook/.
+cookbook:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/tools/cookbook_render.py --all
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py
+
+# The coverage half only — instant, no drawing. What hook 47-cookbook runs.
+validate-cookbook:
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py

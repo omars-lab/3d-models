@@ -66,6 +66,8 @@ September 2026), [bubble lettering on coasters](research/coaster-bubble-letterin
 ## Patterns and constructions
 
 - [Pattern catalog plan](catalog/plan.md) and the [constructions ledger](constructions/ledger.md).
+- [naqsh cookbook](cookbook/README.md) — recipes for the language, each with a picture of what
+  one knob changes.
 
 ## Maps and runbooks
 
