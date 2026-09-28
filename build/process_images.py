@@ -29,15 +29,28 @@ def near_bg(r, g, b):
             and abs(b - BG[2]) <= TOL)
 
 
+def drawn_without_background(im):
+    """True when all four corners are already fully transparent.
+
+    `bikar render --format preview` draws a coaster in its filament colours with
+    no background. Keying cream out of that picture would punch holes in a cream
+    or near-cream body (docs/colour-preview-design.md §7), so it is only cropped.
+    An OpenSCAD render has an opaque cream background, so it is keyed as before."""
+    w, h = im.size
+    a = im.getchannel("A")
+    return all(a.getpixel(p) == 0 for p in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)))
+
+
 def process(path):
     im = Image.open(path).convert("RGBA")
     px = im.load()
     w, h = im.size
-    for y in range(h):
-        for x in range(w):
-            r, g, b, a = px[x, y]
-            if near_bg(r, g, b):
-                px[x, y] = (r, g, b, 0)
+    if not drawn_without_background(im):
+        for y in range(h):
+            for x in range(w):
+                r, g, b, a = px[x, y]
+                if near_bg(r, g, b):
+                    px[x, y] = (r, g, b, 0)
     bbox = im.getbbox()
     if bbox:
         l, t, rr, bb = bbox

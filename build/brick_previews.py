@@ -37,6 +37,12 @@ ways). Tabs protrude and slots recede by the same depth, so a translation by
 exactly the nominal size seats tab in slot with the modelled clearance and no
 overlap. No boolean: OpenSCAD previews two imports side by side.
 
+A coaster bikar can split into colour bodies is no longer drawn here: `make
+coasters` has bikar draw it (`render --format preview`, in its filament colours
+and with no background) and lists it in build/.coaster-previewed, which this
+script skips. What is left are the coasters bikar refuses to split — openwork
+and the slab-reshaping joins, so every mated pair — and they keep this picture.
+
 Usage:  python3 build/brick_previews.py             # bricks (build/.brick-names)
         python3 build/brick_previews.py --sets      # mural sets (build/.set-names)
         python3 build/brick_previews.py --coasters --mate 90  # coasters (build/.coaster-names)
@@ -142,8 +148,19 @@ def main():
     with open(names_file) as fh:
         names = [line.strip() for line in fh if line.strip()]
 
+    # A coaster bikar drew itself (`--format preview`, listed by `make coasters`
+    # in build/.coaster-previewed) already has its picture; only the coasters
+    # bikar refused to split fall back to the OpenSCAD picture drawn here.
+    drawn = set()
+    if kind == "coaster" and os.path.exists("build/.coaster-previewed"):
+        with open("build/.coaster-previewed") as fh:
+            drawn = {line.strip() for line in fh if line.strip()}
+
     os.makedirs(OUT_DIR, exist_ok=True)
     for name in names:
+        if name in drawn:
+            print(f"{name}.png (bikar --format preview, not redrawn)")
+            continue
         stl = f"{STL_DIR}/{name}.stl"
         if not os.path.exists(stl):
             sys.exit(f"{stl} missing — `{target}` did not write it")
@@ -152,7 +169,8 @@ def main():
             sys.exit(f"{name} is interlocked — `--mate <mm>` (the standard size) is required to draw the pair")
         render(binary, stl, f"{OUT_DIR}/{name}.png", mate_offset(stl, mate_mm) if mated else None)
         print(f"{name}.png" + (" (two tiles mated)" if mated else ""))
-    print(f"rendered {len(names)} {kind} preview(s) -> {OUT_DIR}")
+    print(f"rendered {len(names) - len(drawn & set(names))} {kind} preview(s) -> {OUT_DIR}"
+          + (f", {len(drawn & set(names))} drawn by bikar" if drawn else ""))
     if kind == "coaster":
         require_gallery_cards(names)
 
