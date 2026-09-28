@@ -91,6 +91,11 @@ only BRAT and review-md.
     and treat renaming a heading like renaming a file, since every link to it breaks;
   - review-md writes a `^id` onto a passage someone comments on. Keep it when editing that
     passage; deleting it cuts the thread loose from its text.
+- **The docs gate checks `obsidian://` links too.** [`obsidian-vaults.json`](../../.claude/gates/obsidian-vaults.json)
+  maps each vault (by name, id or folder) to its folder in the repo, so a link written into a
+  doc must open a note that exists, land on a heading or `^id` it has, and, for a review-md
+  link, name a thread the note has. Both `vault=docs` and `path=` links open the note in
+  Obsidian (checked 2026-09-27). A new vault goes in that file before links to it will pass.
 - **Every picture a session sends of a pattern carries its note link** in the caption. The skill
   makes that a rule, and it applies to review sheets and plate pictures too.
 - **The public gallery gets no `obsidian://` links**, because they only work on Omar's machine.

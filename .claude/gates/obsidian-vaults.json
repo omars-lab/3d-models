@@ -1,0 +1,11 @@
+{
+  "_about": "Which repo folder each Obsidian vault is, so docs_gate.py can check an obsidian:// link against the file it opens. A link names its vault by name or id (vault=) or by folder (path=); each is matched here. The id and path come from ~/Library/Application Support/obsidian/obsidian.json on Omar's machine (2026-09-27). The link opens the main checkout; the gate checks this checkout, so a link is judged against the tree it ships with.",
+  "vaults": [
+    {
+      "name": "docs",
+      "id": "3dm0d0c5a7a10901",
+      "path": "~/Workspace/git/3d-models/docs",
+      "repo_dir": "docs"
+    }
+  ]
+}
