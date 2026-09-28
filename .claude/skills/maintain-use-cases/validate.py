@@ -21,8 +21,11 @@ Checks (full mode):
   - the mermaid diagram and the pointer table declare the same UC ids
   - every `uc:` id declared by a frontmatter `page_catalogs` source is a use
     case this map carries (see check_catalogs below)
-  - warns when a repo's as_of lags its local HEAD (missing cross-repo
-    checkouts are warn-and-skip, never a failure)
+  - warns when a repo's as_of lags its local HEAD
+  - every repo the map pins must be readable: a sibling whose `repos:` path is
+    not a git checkout is an ERROR, not a skip (see SKIP_ENV below for the one
+    loud opt-out), and a pointer-shaped span the pointer syntax cannot read is
+    an ERROR too (see malformed_pointers)
 
 Pre-commit mode adds the freshness contract:
   - use-cases.md staged  -> staged content must fully validate AND its
@@ -82,6 +85,24 @@ So `tree_claims` scans every markdown file in the repo for the same syntax and
 universal, not opt-in: a doc that must register to be checked can be forgotten,
 which is the reasoning D1 already uses for relative links. The one exemption is
 the reserved placeholder repo name (see `PLACEHOLDER_REPOS`).
+
+AN UNREADABLE SIBLING IS A FAILURE, NOT A SKIP
+----------------------------------------------
+Until 2026-09-28 a sibling this file could not find was a *warning* — "not
+checked out locally — skipped its pointer checks" — and the run still printed
+"all valid: … N at their pinned commits". On 2026-09-17 (#246, d220bb6) an edit
+to the frontmatter replaced `repos: bikar: ../bikar` (and qiyas, youtube) with
+the commit hashes that belong under `as_of:`. From then on no sibling resolved,
+every bikar, qiyas and youtube pointer was skipped on every run, and `make
+validate` stayed green for 11 days while 28 bikar anchors drifted. Write-up:
+docs/issues/use-case-sibling-pins-silently-skipped.md.
+
+So a repo the map pins must be readable, or the run fails and says which path
+it tried. A `repos:` value shaped like a commit hash is rejected by name, since
+that is the exact edit that did it. For a machine that genuinely lacks a
+sibling there is one opt-out, `USE_CASES_SKIP_MISSING_SIBLINGS=1`: it turns the
+failure back into a warning that says SKIPPED and how many pointers went
+unchecked, and the summary line stops saying "all valid" about them.
 """
 
 from __future__ import annotations
@@ -120,6 +141,19 @@ UC_RE = re.compile(r"\bUC\d+\b")
 # a UC id quoted in prose above the data does not become a claim.
 CATALOG_UC_RE = re.compile(r"\buc:\s*['\"](UC\d+)['\"]")
 CATALOG_SPEC_RE = re.compile(r"^(?P<repo>[\w.-]+):(?P<path>\S+)$")
+# The start of anything shaped like a pointer, whether or not POINTER_RE can
+# read the rest. A span that opens like a pointer and does not parse as one is
+# not a pointer to the checks below — it is invisible to them. Measured
+# 2026-09-28: one map pointer carried an anchor with a backtick in it
+# (`...index.ts:L519 "The `--format parts` path (C2)"`), POINTER_RE cannot
+# match that, and it had gone unchecked while its target moved 305 lines.
+POINTER_START_RE = re.compile(r"`(?P<repo>[\w.-]+):(?P<path>[^`\s:]+):L\d+")
+# A `repos:` value that is a commit hash rather than a path — the edit that
+# made every sibling pointer skip for 11 days (see the module docstring).
+HASH_RE = re.compile(r"^[0-9a-f]{7,40}$")
+# The one way to run with a sibling missing. Loud on purpose: see
+# `unreadable_repo`.
+SKIP_ENV = "USE_CASES_SKIP_MISSING_SIBLINGS"
 
 
 def git_env() -> dict[str, str]:
@@ -341,6 +375,24 @@ class Doc:
         self.catalogs: list[tuple[str, str]] = string_specs(meta, "page_catalogs")
         if SELF_REPO not in self.as_of:
             raise ValueError(f"{DOC_RELPATH}: frontmatter as_of is missing '{SELF_REPO}'")
+        # `repos:` says where each pinned sibling lives. Both of these used to
+        # fall through to "not checked out locally" and a skip; they are map
+        # defects, not machine state, so they fail before any git call.
+        for name, rel in self.repos.items():
+            if HASH_RE.match(rel):
+                raise ValueError(
+                    f"{DOC_RELPATH}: frontmatter repos.{name} is '{rel}', a commit hash — "
+                    f"`repos:` holds the path to the checkout (e.g. ../{name}); "
+                    "the hash belongs under `as_of:`"
+                )
+        for name in self.as_of:
+            if name != SELF_REPO and name not in self.repos:
+                raise ValueError(
+                    f"{DOC_RELPATH}: as_of pins '{name}' but `repos:` gives no path to it, "
+                    "so none of its pointers could be read — add `"
+                    f"{name}: ../{name}` under `repos:`"
+                )
+        self.malformed: list[tuple[int, str]] = malformed_pointers(text)
         diagrams = [text for info, text in fenced_blocks(body) if info == "mermaid"]
         if not diagrams:
             raise ValueError(f"{DOC_RELPATH}: no mermaid diagram found")
@@ -370,6 +422,52 @@ class Doc:
         return sibling_checkout(root, rel)
 
 
+def malformed_pointers(text: str) -> list[tuple[int, str]]:
+    """(line, excerpt) for each span that opens like a pointer but does not parse.
+
+    Such a span is not checked by anything: POINTER_RE skips it, so it is not a
+    claim to `check_pointer`, and it carries a line number and a space, so it is
+    not a path to `doc_pointers.py`. The one found on 2026-09-28 had a backtick
+    inside its anchor. The fix is always in the doc — an anchor may not contain
+    a backtick or a double quote — so this names the line and stops.
+    """
+    out: list[tuple[int, str]] = []
+    for lineno, line in enumerate(text.split("\n"), 1):
+        parsed = {m.start() for m in POINTER_RE.finditer(line)}
+        for m in POINTER_START_RE.finditer(line):
+            if m.group("repo") in PLACEHOLDER_REPOS or m.start() in parsed:
+                continue
+            out.append((lineno, line[m.start() : m.start() + 90]))
+    return out
+
+
+def malformed_errors(site: str, found: list[tuple[int, str]]) -> list[str]:
+    return [
+        f"{site}:{lineno}: {excerpt!r}… opens like a pointer but does not parse as one, "
+        "so no check reads it — an anchor may not contain a backtick or a double quote"
+        for lineno, excerpt in found
+    ]
+
+
+def unreadable_repo(doc: Doc, repo: str, root: str, what: str) -> tuple[list[str], list[str]]:
+    """An error for a pinned repo that cannot be read — or, opted out, a loud warning.
+
+    `what` says what goes unchecked (its pointers, its page catalog), so the
+    skip warning can say so. The phrase "not checked out locally" is kept
+    because `.githooks/tests/hook-env-git-dir.sh` greps for it.
+    """
+    rel = doc.repos.get(repo, "?")
+    tried = " or ".join(os.path.normpath(os.path.join(b, rel)) for b in checkout_parents(root))
+    msg = f"repo '{repo}' not checked out locally — repos.{repo} is '{rel}' and there is no git checkout at {tried}"
+    if os.environ.get(SKIP_ENV) == "1":
+        return [], [f"SKIPPED ({SKIP_ENV}=1): {msg}; {what} NOT checked"]
+    return [
+        f"{msg}. Its {what} would go unchecked, so this is a failure, not a skip. "
+        f"Fix the path — or, on a machine without that repo, run with {SKIP_ENV}=1 "
+        "to skip it with a warning"
+    ], []
+
+
 def unknown_catalog_ucs(claimed: set[str], carried: set[str]) -> list[str]:
     """Ids a catalog claims that the map does not carry, in id order."""
     return sorted(claimed - carried, key=lambda u: int(u[2:]))
@@ -385,10 +483,10 @@ def check_catalogs(doc: Doc, root: str) -> tuple[list[str], list[str]]:
     UC16 before UC16 exists here is a page making a promise nothing delivers.
 
     Read at the pinned `as_of`, like every other cross-repo read in this file,
-    and warn-and-skip on an absent checkout or an absent file for the same
-    reason — a pin that predates the catalog is a stale pin, not a defect in
-    the catalog, and failing on it would make `--refresh` the only way to
-    commit anything.
+    and warn-and-skip on an absent file — a pin that predates the catalog is a
+    stale pin, not a defect in the catalog, and failing on it would make
+    `--refresh` the only way to commit anything. An absent *checkout* is not
+    that case: it fails like every other unreadable sibling (`unreadable_repo`).
     """
     errors: list[str] = []
     warnings: list[str] = []
@@ -399,7 +497,9 @@ def check_catalogs(doc: Doc, root: str) -> tuple[list[str], list[str]]:
             continue
         rdir = doc.repo_dir(repo, root)
         if rdir is None:
-            warnings.append(f"repo '{repo}' not checked out locally — skipped its page-catalog check")
+            e, w = unreadable_repo(doc, repo, root, f"page catalog {repo}:{path}")
+            errors += e
+            warnings += w
             continue
         blob = try_git(rdir, "cat-file", "-p", f"{pin}:{path}")
         if blob is None:
@@ -568,6 +668,35 @@ def tree_claims(root: str) -> list[Claim]:
     into.
     """
     claims: list[Claim] = []
+    for rel, text in markdown_files(root):
+        for lineno, line in enumerate(text.splitlines(), 1):
+            for p in POINTER_RE.finditer(line):
+                if p.group("repo") in PLACEHOLDER_REPOS:
+                    continue
+                start = int(p.group("start"))
+                claims.append(
+                    Claim(
+                        Pointer(
+                            p.group("repo"),
+                            p.group("path"),
+                            start,
+                            int(p.group("end") or start),
+                            p.group("anchor"),
+                        ),
+                        rel,
+                        lineno,
+                    )
+                )
+    return claims
+
+
+def markdown_files(root: str) -> list[tuple[str, str]]:
+    """(relative path, text) for every markdown file the tree scan reads — not the map.
+
+    One walk for both `tree_claims` and `tree_malformed`, so the two can never
+    disagree about which files are in scope.
+    """
+    out: list[tuple[str, str]] = []
     for dirpath, dirnames, files in os.walk(root):
         dirnames[:] = sorted(d for d in dirnames if d not in SCAN_SKIP_DIRS)
         for name in sorted(files):
@@ -578,28 +707,15 @@ def tree_claims(root: str) -> list[Claim]:
                 continue  # the map is read structurally by Doc, not scanned
             try:
                 with open(os.path.join(dirpath, name), encoding="utf-8") as f:
-                    lines = f.read().splitlines()
+                    out.append((rel, f.read()))
             except (OSError, UnicodeDecodeError):
                 continue
-            for lineno, line in enumerate(lines, 1):
-                for p in POINTER_RE.finditer(line):
-                    if p.group("repo") in PLACEHOLDER_REPOS:
-                        continue
-                    start = int(p.group("start"))
-                    claims.append(
-                        Claim(
-                            Pointer(
-                                p.group("repo"),
-                                p.group("path"),
-                                start,
-                                int(p.group("end") or start),
-                                p.group("anchor"),
-                            ),
-                            rel,
-                            lineno,
-                        )
-                    )
-    return claims
+    return out
+
+
+def tree_malformed(root: str) -> list[tuple[str, list[tuple[int, str]]]]:
+    """`malformed_pointers` over every doc `tree_claims` reads, docs with none left out."""
+    return [(rel, found) for rel, text in markdown_files(root) if (found := malformed_pointers(text))]
 
 
 def validate_full(
@@ -630,10 +746,16 @@ def validate_full(
     pointer_repos = {p.repo for p, _ in claims}
     for repo in sorted(pointer_repos - set(doc.as_of)):
         errors.append(f"pointers reference repo '{repo}' but frontmatter as_of has no hash for it")
+    errors += malformed_errors(DOC_RELPATH, doc.malformed)
+    for rel, found in tree_malformed(root):
+        errors += malformed_errors(rel, found)
     for repo, pin in doc.as_of.items():
         rdir = doc.repo_dir(repo, root)
         if rdir is None:
-            warnings.append(f"repo '{repo}' not checked out locally — skipped its pointer checks")
+            n = sum(1 for p, _ in claims if p.repo == repo)
+            e, w = unreadable_repo(doc, repo, root, f"{n} pointer(s)")
+            errors += e
+            warnings += w
             continue
         if try_git(rdir, "cat-file", "-e", f"{pin}^{{commit}}") is None:
             errors.append(f"as_of hash for '{repo}' ({pin[:12]}) does not resolve in {rdir}")
@@ -705,11 +827,22 @@ def mode_full(root: str) -> int:
         # unrelated lines, and a bare count is what would have shown it.
         anchored = sum(1 for p in doc.pointers if p.anchor)
         here = sum(1 for p in doc.pointers if p.repo == SELF_REPO)
+        # Only reachable with SKIP_ENV set: without it an unreadable repo is an
+        # error and rc is 1. "all valid" must not be said about pointers that
+        # were never read — that sentence is what hid the 11-day skip.
+        skipped = {r for r in doc.as_of if doc.repo_dir(r, root) is None}
+        unread = sum(1 for p in doc.pointers if p.repo in skipped)
+        verdict = "all valid" if not unread else "valid where checked"
+        tail = (
+            f", {unread} NOT CHECKED ({', '.join(sorted(skipped))} skipped via {SKIP_ENV})"
+            if unread
+            else ""
+        )
         print(
             f"use-cases: {len(doc.table_ucs)} use cases, {len(doc.pointers)} pointers "
             f"({anchored} anchored, {len(doc.pointers) - anchored} line-number only) "
-            f"— all valid: {here} against the working tree, "
-            f"{len(doc.pointers) - here} at their pinned commits"
+            f"— {verdict}: {here} against the working tree, "
+            f"{len(doc.pointers) - here - unread} at their pinned commits{tail}"
         )
         # Reported separately, and always — including at zero. Folding these into
         # the count above would hide which half the coverage came from, and a
@@ -717,9 +850,11 @@ def mode_full(root: str) -> int:
         tree = tree_claims(root)
         t_anchored = sum(1 for c in tree if c.ptr.anchor)
         docs = len({c.doc for c in tree})
+        t_unread = sum(1 for c in tree if c.ptr.repo in skipped)
+        t_verdict = "all valid" if not t_unread else f"valid where checked, {t_unread} NOT CHECKED"
         print(
             f"use-cases: {len(tree)} pointer(s) in {docs} doc(s) outside the map "
-            f"({t_anchored} anchored) — all valid"
+            f"({t_anchored} anchored) — {t_verdict}"
         )
     return rc
 
@@ -1340,8 +1475,133 @@ def self_test() -> int:
         expect("the same sibling resolves from a linked worktree",
                os.path.realpath(got) if got else got, os.path.realpath(sib))
 
+    ok = self_test_unreadable_sibling(expect) and ok
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
+
+
+def self_test_unreadable_sibling(expect) -> bool:
+    """The 11-day silent skip, reproduced, and each way it could come back.
+
+    d220bb6 wrote commit hashes where `repos:` wants paths. Every sibling then
+    failed to resolve, the validator warned "not checked out locally" and
+    skipped, and the run said "all valid". Each case below is a by-design
+    failure that must fire, next to the control that must not.
+    Returns True when every expect passed (the caller's `ok` is not ours).
+    """
+    import contextlib
+    import io
+
+    failed_before = []
+
+    def check(name: str, got: object, want: object) -> None:
+        if got != want:
+            failed_before.append(name)
+        expect(name, got, want)
+
+    saved = os.environ.pop(SKIP_ENV, None)  # a caller's opt-out must not leak in
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            def g(cwd: str, *args: str) -> str:
+                return subprocess.run(
+                    ["git", "-C", cwd, "-c", "user.email=t@t", "-c", "user.name=t", *args],
+                    check=True, capture_output=True, text=True, env=git_env(),
+                ).stdout.strip()
+
+            def write(path: str, text: str) -> None:
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(text)
+
+            repo = os.path.join(tmp, "repo")
+            sib = os.path.join(tmp, "sib")
+            for d in (repo, sib):
+                os.makedirs(d)
+                g(d, "init", "-q", "-b", "main")
+            write(os.path.join(sib, "a.ts"), "export function f() {}\n")
+            g(sib, "add", "a.ts")
+            g(sib, "commit", "-q", "-m", "sib")
+            sib_head = g(sib, "rev-parse", "HEAD")
+            write(os.path.join(repo, "README"), "x\n")
+            g(repo, "add", "README")
+            g(repo, "commit", "-q", "-m", "base")
+            head = g(repo, "rev-parse", "HEAD")
+
+            def text(repos_block: str, cell: str = '`sib:a.ts:L1 "export function f("`') -> str:
+                return (
+                    f"---\nas_of:\n  {SELF_REPO}: {head}\n  sib: {sib_head}\n{repos_block}---\n\n"
+                    "```mermaid\ngraph TD\n  A[UC1]\n```\n\n"
+                    f"| UC1 | x | {cell} |\n"
+                )
+
+            good = Doc(text("repos:\n  sib: ../sib\n"))
+            check("control: a sibling at its path is read and passes",
+                  validate_full(good, repo), ([], []))
+
+            def refused(t: str) -> str:
+                try:
+                    Doc(t)
+                except ValueError as exc:
+                    return str(exc)
+                return ""
+
+            check("repos: holding the pin hash instead of a path is refused by name (the d220bb6 edit)",
+                  "a commit hash" in refused(text(f"repos:\n  sib: {sib_head}\n")), True)
+            check("as_of pinning a sibling that repos: gives no path to is refused",
+                  "gives no path" in refused(text("repos: {}\n")), True)
+
+            gone = Doc(text("repos:\n  sib: ../gone\n"))
+            errors, warnings = validate_full(gone, repo)
+            check("a repos: path with no checkout behind it FAILS — it used to warn and skip",
+                  len(errors) == 1 and "not checked out locally" in errors[0]
+                  and "failure, not a skip" in errors[0], True)
+            check("...and it is not also reported as a mere warning", warnings, [])
+
+            write(os.path.join(repo, DOC_RELPATH), text("repos:\n  sib: ../gone\n"))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+                rc = mode_full(repo)
+            check("the whole-tree run exits non-zero on it", rc, 1)
+
+            os.environ[SKIP_ENV] = "1"
+            try:
+                errors, warnings = validate_full(gone, repo)
+                check(f"{SKIP_ENV}=1 turns it back into a skip...", errors, [])
+                check("...that says SKIPPED and what went unchecked",
+                      len(warnings) == 1 and warnings[0].startswith("SKIPPED")
+                      and "1 pointer(s) NOT checked" in warnings[0], True)
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+                    rc = mode_full(repo)
+                summary = out.getvalue().splitlines()[0] if out.getvalue() else ""
+                check("...and the summary no longer says 'all valid' over the skipped pointers",
+                      rc == 0 and "all valid" not in summary and "1 NOT CHECKED" in summary, True)
+            finally:
+                os.environ.pop(SKIP_ENV, None)
+
+            catalog = Doc(text("repos:\n  sib: ../gone\npage_catalogs:\n  - sib:a.ts\n"))
+            check("a page catalog in an unreadable repo fails too",
+                  any("page catalog sib:a.ts" in e for e in check_catalogs(catalog, repo)[0]), True)
+
+            # The pointer nothing read: a backtick inside the anchor.
+            broken = '`sib:a.ts:L1 "The `f` function"`'
+            check("a backtick in an anchor makes the pointer unparseable (the premise)",
+                  POINTER_RE.search(broken), None)
+            bad = Doc(text("repos:\n  sib: ../sib\n", cell=broken))
+            errors = validate_full(bad, repo)[0]
+            check("...so a span that opens like a pointer and does not parse is an error in the map",
+                  len(errors) == 1 and "does not parse" in errors[0]
+                  and errors[0].startswith(f"{DOC_RELPATH}:"), True)
+            write(os.path.join(repo, "docs", "note.md"), f"See {broken}.\n")
+            errors = validate_full(good, repo)[0]
+            check("...and in any other doc, named at its line",
+                  len(errors) == 1 and errors[0].startswith("docs/note.md:1:"), True)
+            check("the teaching placeholder is still not a claim",
+                  malformed_pointers('`repo:path:L137 "x `y`"`'), [])
+    finally:
+        if saved is not None:
+            os.environ[SKIP_ENV] = saved
+    return not failed_before
 
 
 def mode_links(root: str) -> int:

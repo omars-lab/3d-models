@@ -92,7 +92,7 @@ setup-hooks:
 	fi
 
 # Validate the actor/use-case map's hash-pinned code pointers.
-validate-use-cases:
+validate-use-cases: validate-use-cases-self-test
 	@$(PYTHON) -c "import yaml" 2>/dev/null || { \
 		echo "PyYAML required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
 		echo "  install it there:  $(PYTHON) -m pip install pyyaml"; \
@@ -902,3 +902,12 @@ cookbook:
 validate-cookbook:
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py
+
+# The use-case validator's own fixtures, run before every `validate-use-cases`
+# (a prerequisite there, and a target here at the tail so no pinned Makefile
+# line moves). Until 2026-09-28 they ran only by hand, so nothing proved that the
+# by-design failures — a sibling repo the map cannot read, a pointer that does
+# not parse — still fire. docs/issues/use-case-sibling-pins-silently-skipped.md
+.PHONY: validate-use-cases-self-test
+validate-use-cases-self-test:
+	$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py --self-test

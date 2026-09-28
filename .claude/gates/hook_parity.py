@@ -29,7 +29,9 @@ One line, in the file it describes, which cannot be edited from a distance. A
 hook with no declaration is a hard failure, and an entry naming a hook that no
 longer exists cannot happen because the hooks are the enumeration.
 
-`--check`  every hook declares its wholesale form. Instant, no side effects.
+`--check`  every hook declares its wholesale form, and `core.hooksPath` is
+           exactly `.githooks` — so each worktree runs its own branch's hooks
+           (see `hooks_path_problem`). Instant, no side effects.
 `--run`    run each declaration in hook order, then the extras below.
 `--self-test`  the by-design failures fire (see `_self_test`).
 
@@ -44,6 +46,7 @@ cries wolf gets switched off, which is worse than having no gate — so
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -139,8 +142,51 @@ def load_hooks(hook_dir: Path = HOOK_DIR) -> tuple[list[Hook], list[str]]:
     return hooks, problems
 
 
+HOOKS_PATH = ".githooks"
+
+
+def hooks_path_problem(value: str | None) -> str | None:
+    """Say what is wrong with `core.hooksPath`, or None when it is exactly `.githooks`.
+
+    Relative on purpose. git resolves a relative hooksPath against the work tree
+    it runs in, so each worktree runs *its own branch's* hooks. An absolute path
+    names one checkout, and every other worktree then runs that checkout's hooks
+    instead: a branch that fixes or adds a hook is gated by the old copy, and a
+    hook deleted on master still fires everywhere. Found 2026-09-28 set to
+    `/Users/omareid/Workspace/git/3d-models/.githooks` in the shared config, for
+    an unknown time. Unset is the other failure: then no hook runs at all.
+    Write-up: docs/issues/use-case-sibling-pins-silently-skipped.md.
+    """
+    if value == HOOKS_PATH:
+        return None
+    if not value:
+        why = "is not set, so no pre-commit hook runs at all"
+    elif os.path.isabs(value):
+        why = (
+            f"is the absolute path '{value}', so every worktree runs that one checkout's "
+            "hooks instead of its own branch's"
+        )
+    else:
+        why = f"is '{value}', not '{HOOKS_PATH}', so the tracked hooks do not run"
+    return f"git config core.hooksPath {why}. Fix: make setup-hooks"
+
+
+def read_hooks_path(root: Path = ROOT) -> str | None:
+    step = subprocess.run(
+        ["git", "-C", str(root), "config", "--get", "core.hooksPath"],
+        capture_output=True, text=True,
+    )
+    return step.stdout.strip() or None
+
+
 def check(hook_dir: Path = HOOK_DIR, quiet: bool = False) -> int:
     hooks, problems = load_hooks(hook_dir)
+    # Only for the real hook directory: the self-test's fixture dirs are not a
+    # clone and have no config to hold to anything.
+    if hook_dir == HOOK_DIR:
+        wrong = hooks_path_problem(read_hooks_path())
+        if wrong:
+            problems.insert(0, wrong)
     if problems:
         if not quiet:
             print("hook-parity --check FAILED:\n", file=sys.stderr)
@@ -282,6 +328,33 @@ def _self_test() -> int:
         print(f"  {'ok  ' if not fired else 'FAIL'}  a non-executable file is ignored")
         if fired:
             failures += 1
+
+        # core.hooksPath. The absolute value is the one found in the shared
+        # config on 2026-09-28; it is read back through a real git config so the
+        # reader is tested too, not only the rule.
+        repo = Path(tmp) / "hooks-path-repo"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q", str(repo)], check=True, capture_output=True)
+        path_cases = [
+            ("core.hooksPath = .githooks", HOOKS_PATH, False),
+            ("core.hooksPath = an absolute path to one checkout",
+             "/Users/omareid/Workspace/git/3d-models/.githooks", True),
+            ("core.hooksPath unset", None, True),
+            ("core.hooksPath = git's own default dir", ".git/hooks", True),
+        ]
+        for label, value, must_fail in path_cases:
+            if value is None:
+                subprocess.run(["git", "-C", str(repo), "config", "--unset", "core.hooksPath"],
+                               capture_output=True)
+            else:
+                subprocess.run(["git", "-C", str(repo), "config", "core.hooksPath", value],
+                               check=True, capture_output=True)
+            problem = hooks_path_problem(read_hooks_path(repo))
+            fired = problem is not None
+            ok = fired == must_fail and (not fired or "make setup-hooks" in problem)
+            print(f"  {'ok  ' if ok else 'FAIL'}  {label}: {'fires' if fired else 'passes'}")
+            if not ok:
+                failures += 1
 
     if failures:
         print(f"hook-parity --self-test: {failures} case(s) behaved wrongly", file=sys.stderr)

@@ -132,7 +132,7 @@ degrades a score cannot merge. Its own docstring calls the re-run *"a tripwire"*
 
 | stage | pointer |
 |---|---|
-| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1383 "function evaluateOrbDecl("` |
+| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1517 "function evaluateOrbDecl("` |
 | base solid, subdivision, duals | `bikar:packages/core/src/kernel3d/polyhedra.ts:L210 "export function subdivideGeodesic("` |
 | face-local 2D ↔ 3D frame (`B8`) | `bikar:packages/core/src/kernel3d/face-frame.ts:L93 "export function makeFaceLift("` |
 | vertex weld (`B8`) | `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` |
@@ -163,7 +163,7 @@ diagram compresses that.
 | ribbon projection into a view | `bikar:packages/core/src/kernel3d/orb-ribbons.ts:L196 "export function projectRibbonPasses("` |
 | ground truth per view (`E3`) | `bikar:packages/core/src/render/gt-emitter.ts:L1996 "export function emitGroundTruth("` |
 | mesh gate behind `--check` (`E4`) | `bikar:packages/core/src/kernel3d/mesh-gate.ts:L99 "export function meshGate("` |
-| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L2526 "case 'render': {"` |
+| the CLI that fans these out | `bikar:packages/cli/src/index.ts:L3223 "case 'render': {"` |
 
 The CLI's `--format` switch is where the fan-out is visible from a shell:
 `--format stl` writes the mesh, `--format views` writes the SVG set. `--check` is what
