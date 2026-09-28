@@ -1,0 +1,34 @@
+#!/bin/sh
+# Post-commit: re-anchor review-md comment threads to the commit that just landed.
+#
+# A comment Omar leaves in Obsidian on a note with uncommitted edits is stamped
+# "working". When a session then commits that note, review-md's own
+# scripts/reanchor-comments.mjs moves the thread onto the commit. The Obsidian
+# plugin can't do it: it isn't running when the terminal commits. The script
+# rewrites only the comment file and leaves it as an unstaged change, so commit it
+# next. Plan: docs/catalog/plan.md, "review-md".
+#
+# It runs review-md's script from a review-md checkout beside this repo's main
+# clone (or $REVIEW_MD_DIR), not a copy, so there is one version of it. A
+# post-commit hook can't undo the commit, so every problem here is a note, never a
+# failure.
+
+# Nothing to do until a comment file exists: this keeps the hook free until then.
+[ -n "$(git ls-files -co --exclude-standard -- '*.comments.md' | head -1)" ] || exit 0
+
+# Siblings sit beside the main clone, not beside a linked worktree.
+common="$(cd "$(git rev-parse --git-common-dir)" && pwd)"
+dir="${REVIEW_MD_DIR:-$(dirname "$(dirname "$common")")/review-md}"
+script="$dir/scripts/reanchor-comments.mjs"
+
+if [ ! -f "$script" ]; then
+  echo "post-commit: no review-md checkout at $dir — comment threads not re-anchored (set REVIEW_MD_DIR)" >&2
+  exit 0
+fi
+if ! command -v node >/dev/null 2>&1; then
+  echo "post-commit: node not on PATH — comment threads not re-anchored" >&2
+  exit 0
+fi
+
+node "$script" --quiet || echo "post-commit: re-anchoring comment threads failed (see above)" >&2
+exit 0

@@ -150,7 +150,16 @@ NOT_REPO_PREFIX = re.compile(r"^(?:iterations|input|output|tmp)/")
 #: superseded filename shows up a handful of times — which is what the baseline
 #: is for. If the log starts producing baseline entries faster than decisions,
 #: this is the list to add it to.
-EXCLUDED: list[re.Pattern[str]] = [re.compile(r"^docs/research/")]
+#:
+#: review-md comment files (`.<note>.comments.md`, next to the note) are also
+#: excluded: a comment is conversation, not a claim the repo makes. A reviewer
+#: writing "put it in `tools/x.py` instead" names a file that does not exist
+#: yet, on purpose. Measured 2026-09-27 with a probe comment: this gate flagged
+#: that path twice, once in the thread data and once in the rendered copy.
+EXCLUDED: list[re.Pattern[str]] = [
+    re.compile(r"^docs/research/"),
+    re.compile(r"(^|/)\.[^/]+\.comments\.md$"),
+]
 
 #: Sibling repos that may prefix a pointer, as a **closed set**. An open
 #: predicate ("any lowercase first segment might be a repo") fails open: it
@@ -721,6 +730,19 @@ def self_test() -> int:
         ok = got_n == want
         failures += 0 if ok else 1
         print(f"self-test {'ok  ' if ok else 'FAIL'}: {line!r} → {got_n} claim(s) (want {want}; {why})")
+
+    # A review-md comment file sits beside its note and is never scanned; the
+    # note beside it still is.
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as scratch:
+        base = Path(scratch)
+        (base / "docs" / "catalog").mkdir(parents=True)
+        (base / "docs" / "catalog" / "plan.md").write_text("plan\n")
+        (base / "docs" / "catalog" / ".plan.comments.md").write_text("see `tools/none.py`\n")
+        got_docs = scanned_docs(base)
+    ok = got_docs == ["docs/catalog/plan.md"]
+    failures += 0 if ok else 1
+    print(f"self-test {'ok  ' if ok else 'FAIL'}: a review-md comment file is not scanned (got {got_docs})")
 
     # The append-block must see a swap, which is why it is a set and not a count.
     prev = [{"doc": "a.md", "path": "x.ts"}]
