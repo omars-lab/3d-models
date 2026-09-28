@@ -9,7 +9,11 @@ the gate has a false positive.
 The taxonomy this gate is built from:
 [grounding-defect-taxonomy.md](../../../../docs/grounding-defect-taxonomy.md).
 An absolute link is not checked: [Anthropic](https://www.anthropic.com).
-A fragment-only link is not checked: [see below](#d3--defaults-carry-provenance).
+A heading link resolves by GitHub's slug, where the dash in a heading leaves two
+hyphens: [see below](#d3--defaults-carry-provenance). It also resolves by the
+heading text, the form Obsidian writes: [D2](#D2%20—%20validators%20ship%20both%20examples).
+Into another file too: [the taxonomy's K9](../../../../docs/grounding-defect-taxonomy.md#k9--misdirected-pointer).
+And onto a block id review-md wrote: [this line](#^fixture-block). ^fixture-block
 
 A marker shown as code is a mention, not a use: writing `**Validator:**` or
 `**Default:**` inline — as this file and `CLAUDE.md` both must, to document the

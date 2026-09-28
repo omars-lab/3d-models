@@ -5,7 +5,8 @@ Three rules, each derived from a failure kind measured across the seven
 grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
 the definitions and the instances each rule is built from.
 
-  D1 (K9)  Every relative markdown link resolves on disk.
+  D1 (K9)  Every relative markdown link resolves on disk, and its `#part`, on
+           a link to a markdown file, names a heading or `^block-id` there.
   D2 (K6)  Every `**Validator:**` declaration ships an asserted PASS and an
            asserted FAIL example in its own section.
   D3 (K4)  Every `**Default:**` declaration carries a citation link or a
@@ -16,8 +17,9 @@ the definitions and the instances each rule is built from.
            in .claude/skills/calibrate/bets.md.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
-and has no false positives by construction — the target either exists on disk
-or it does not.
+and has no false positives by construction for the file part — the target
+either exists on disk or it does not. The `#part` depends on a slug rule, so it
+accepts both readers of these files: GitHub's slug and Obsidian's heading text.
 
 D2 and D3 are **marker-scoped**: they check that the discipline, once entered,
 is completed. A doc that declares no validators and no defaults passes them
@@ -203,20 +205,85 @@ def link_resolves(doc: Path, bare: str, root: Path = ROOT) -> bool:
     return (primary / rel / bare).resolve().exists()
 
 
+HEADING_TEXT = re.compile(r"^#{1,6}\s+(.*?)\s*#*\s*$")
+BLOCK_ID = re.compile(r"\s\^([A-Za-z0-9-]+)\s*$")
+MD_LINK_TEXT = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+
+
+def github_slug(heading: str) -> str:
+    """GitHub's anchor for a heading: the rendered text, lowercased, with every
+    character that is not a letter, digit, space, `-` or `_` dropped, and spaces
+    turned into `-`. So `D-050 — the three` becomes `d-050--the-three`: the dash
+    goes and both spaces stay."""
+    text = MD_LINK_TEXT.sub(r"\1", heading).strip().lower()
+    return re.sub(r"[^\w\- ]", "", text).replace(" ", "-")
+
+
+_ANCHORS: dict[Path, set[str]] = {}
+
+
+def anchors(target: Path) -> set[str]:
+    """Every `#part` a link into `target` may use: each heading's GitHub slug
+    (with GitHub's `-1`, `-2` for repeats), the heading text itself (Obsidian's
+    form, case-folded), and `^id` for each block id review-md writes."""
+    key = target.resolve()
+    if key in _ANCHORS:
+        return _ANCHORS[key]
+    out: set[str] = set()
+    seen: dict[str, int] = {}
+    in_fence = False
+    for line in target.read_text(encoding="utf-8").splitlines():
+        if FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        m = HEADING_TEXT.match(line)
+        if m:
+            slug = github_slug(m.group(1))
+            n = seen.get(slug, 0)
+            seen[slug] = n + 1
+            out.add(slug if n == 0 else f"{slug}-{n}")
+            out.add(m.group(1).strip().casefold())
+        b = BLOCK_ID.search(line)
+        if b:
+            out.add("^" + b.group(1))
+    _ANCHORS[key] = out
+    return out
+
+
+def fragment_resolves(target: Path, fragment: str) -> bool:
+    from urllib.parse import unquote
+    frag = unquote(fragment)
+    have = anchors(target)
+    return frag in have or frag.casefold() in have
+
+
 def check_d1_links(path: Path, lines: list[str]) -> list[str]:
+    """A link's file must exist, and a `#part` on a link to a markdown file must
+    name a heading or block id in it. Measured before gating, 2026-09-27: 15 of
+    54 heading links in docs/ were dead (a renamed heading, a renumbered
+    decision, a one-hyphen slug for a heading with a dash) while every file
+    they named existed — the file check had been dropping the `#part`."""
     findings = []
+    shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
     for n, line in enumerate(lines, 1):
         for target in LINK.findall(line):
-            if target.startswith(SKIP_SCHEMES) or target.startswith("#"):
+            if target.startswith(SKIP_SCHEMES):
                 continue
-            bare = target.split("#", 1)[0]
-            if not bare:
-                continue
-            if not link_resolves(path, bare):
-                shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+            bare, _, fragment = target.partition("#")
+            if bare and not link_resolves(path, bare):
                 findings.append(
                     f"{shown}:{n}: D1 (K9) link target does not "
                     f"exist: {bare}"
+                )
+                continue
+            file = (path.parent / bare).resolve() if bare else path
+            if fragment and file.suffix == ".md" and file.is_file() \
+                    and not fragment_resolves(file, fragment):
+                findings.append(
+                    f"{shown}:{n}: D1 (K9) no heading or block id "
+                    f"#{fragment} in {bare or 'this file'}"
                 )
     return findings
 
@@ -435,7 +502,18 @@ def stages_a_removal(root: Path = ROOT) -> bool:
     in other docs the commit does not stage, so checking only the staged files
     passes a rename that breaks them — measured 2026-09-25: renaming
     docs/tasks/parked/done.md committed clean with five inbound links dead."""
-    return bool(_git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=DR"))
+    if _git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=DR"):
+        return True
+    return stages_a_heading_change(root)
+
+
+def stages_a_heading_change(root: Path = ROOT) -> bool:
+    """True when the commit removes or rewrites a heading line in a markdown
+    file. A heading is a link target like a file, and the links into it sit in
+    files the commit does not stage."""
+    diff = _git_lines(root, "diff", "--cached", "-U0", "--", "*.md")
+    return any(HEADING.match(line[1:]) for line in diff
+               if line.startswith("-") and not line.startswith("---"))
 
 
 def tree_markdown(root: Path = ROOT) -> list[Path]:
@@ -471,6 +549,7 @@ def self_test() -> int:
     """
     expected = {
         "fail/d1-dead-link.md": ["D1 (K9)"],
+        "fail/d1-dead-heading.md": ["D1 (K9) no heading"],
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
@@ -603,6 +682,25 @@ def self_test() -> int:
 
         skill.write_text("[t](../../docs/target.md)\n")
         _sp.run(["git", "-C", str(repo), "commit", "-qam", "fix"], check=True, env=genv)
+
+        # A heading is a link target too: renaming it in a staged file must
+        # fail on the unstaged file that links to it.
+        (repo / "docs" / "target.md").write_text("# Title\n")
+        (repo / "docs" / "linker.md").write_text("[t](target.md#title)\n")
+        _sp.run(["git", "-C", str(repo), "commit", "-qam", "heading"], check=True, env=genv)
+        (repo / "docs" / "target.md").write_text("# Renamed\n")
+        _sp.run(["git", "-C", str(repo), "add", "docs/target.md"], check=True, env=genv)
+        _ANCHORS.clear()
+        found, _ = staged_findings(repo)
+        if [Path(f.split(":")[0]).name for f in found] != ["linker.md"]:
+            ok = False
+            print(f"self-test FAIL: a staged heading rename should fail on the unstaged linker, got {found}")
+        else:
+            print("self-test ok: a staged heading rename fails on a link in a file the commit does not touch")
+        _sp.run(["git", "-C", str(repo), "reset", "-q", "--hard"], check=True, env=genv)
+        (repo / "docs" / "linker.md").write_text("[t](target.md)\n")
+        _sp.run(["git", "-C", str(repo), "commit", "-qam", "unlink"], check=True, env=genv)
+        _ANCHORS.clear()
         _sp.run(["git", "-C", str(repo), "mv", "docs/target.md", "docs/moved.md"], check=True, env=genv)
         found, _ = staged_findings(repo)
         hit = sorted({Path(f.split(":")[0]).name for f in found})
