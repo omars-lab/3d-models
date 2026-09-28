@@ -122,6 +122,12 @@ face to its colour. The bodies must reunite into the single mesh, cell for cell.
 if kept, rounds only the outer boundary of the union (as `f8796fc` does now), so each body's
 top edge where it meets another body stays square.
 
+**Proved by hand, 2026-09-28** ([the proofs](research/colour-poc-2026-09-28.md)): the snowflake's four orbit
+fill bodies (orbits 1, 3, 5, 7, in three colours) were cut in OpenSCAD (filled minus plain) and fed to `bambu slice coaster` in place of
+bikar's parts output. The pipeline assembled a 4-slot 3MF that sliced clean headless, with no
+change downstream. So the split above is the only missing piece for a coloured radial coaster.
+Printing one is still the owner-gated first-layer question below.
+
 **The printing risk this opens (A raised it; B's "small colour islands" is the same risk).** On a
 slab coaster the first layer is one colour and colour starts above it
 ([multicolor-design §5](multicolor-design.md#5-printability)). An openwork coaster has no slab:
