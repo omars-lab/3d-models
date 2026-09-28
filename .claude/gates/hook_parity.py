@@ -83,6 +83,12 @@ EXTRA = [
         "already own, so a commit here has no staged trigger to hang one on.",
     ),
     (
+        "make validate-move-doc",
+        "Self-tests tools/move_doc.py against the docs gate and the pointer gate "
+        "on a copy of the repo. Not wired to a hook: no commit stages the mover's "
+        "trigger, but a gate change can break it, so the wholesale run keeps it honest.",
+    ),
+    (
         "make validate-coaster-pictures",
         "The no-hole check on the coaster pictures `make coasters` draws. Not "
         "wired to a hook: the pictures are untracked build/ output, so no commit "

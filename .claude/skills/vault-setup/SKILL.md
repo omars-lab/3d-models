@@ -35,6 +35,16 @@ changes without this file changing.
    read the PNG. The live vault is the main checkout's `docs/`, so check after the change is on
    master, or copy a `.base` in under a scratch name, look, and delete it.
 
+## Moving a note
+
+`python3 tools/move_doc.py <old> <new> --dry-run` first, then without `--dry-run`; a whole
+folder goes in one run with `--plan <file>` (one `old new` pair per line). It `git mv`s the note
+with its review comments and picture folder, rewrites every link, pointer and path to it, and
+lists what it could not rewrite — research prose, review threads, and the sibling repos (bikar
+checks `3d-models/docs/...` pointers, so a move it names needs a bikar PR right behind). Never
+move a note by hand or in Obsidian: Obsidian rewrites only the links it knows, not the pointer
+baseline, the use-case map or code comments. `make validate-move-doc` runs its self-test.
+
 ## Why markdown links stay
 
 Bodies keep `[text](path.md)` links: GitHub renders them, the docs gate checks them (D1), and
