@@ -68,12 +68,12 @@ describe("parseUsedFilaments", () => {
 });
 
 describe("planAmsMapping", () => {
-  const plan = (colours: string[], used: number[], f: PrinterStatus) => {
-    const logical = logicalSlotsFromPlate(colours, colours.map(() => "PLA")).filter((l) => used.includes(l.slot));
-    return planAmsMapping(reconcile(logical, physicalTraysFromSlots(collectSlots(f))), colours.length, used);
+  const plan = (colors: string[], used: number[], f: PrinterStatus) => {
+    const logical = logicalSlotsFromPlate(colors, colors.map(() => "PLA")).filter((l) => used.includes(l.slot));
+    return planAmsMapping(reconcile(logical, physicalTraysFromSlots(collectSlots(f))), colors.length, used);
   };
 
-  it("maps a single-colour plate to the AMS tray that holds its colour, and feeds from the AMS", () => {
+  it("maps a single-color plate to the AMS tray that holds its color, and feeds from the AMS", () => {
     const p = plan(["#FFFFFF"], [1], frame([{ id: "0", type: "PLA", color: "000000FF" }, { id: "2", type: "PLA", color: "FFFFFFFF" }]));
     expect(p).toEqual({ ok: true, amsMapping: [2], useAms: true });
   });

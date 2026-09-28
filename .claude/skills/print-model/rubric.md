@@ -16,7 +16,7 @@ rows below and add the formal cited defaults.
 | Decision | Questions we answer | Inputs read | Heuristic (grounded — see design §5) | Advisory shape |
 |---|---|---|---|---|
 | **Filament** | Which loaded filament, and is it right for this part? | AMS `ams[].tray[]` + external spool (`vt_tray`/`vir_slot`); model use | match `tray_type` to the part's need; if several plausible, **ask** | AskUserQuestion when ambiguous; else "using PLA in slot 2 because …" |
-| **Filament grouping** (X2D dual-nozzle) | Which grouping mode — and does it even matter here? | filament *count* on the plate | 1 filament → no-op, Filament-Saving default is right; ≥2 → reason Saving vs Quality vs Custom | "single filament → grouping is a no-op, default Filament-Saving" / "2 colours: Quality — fewer cross-nozzle swaps" |
+| **Filament grouping** (X2D dual-nozzle) | Which grouping mode — and does it even matter here? | filament *count* on the plate | 1 filament → no-op, Filament-Saving default is right; ≥2 → reason Saving vs Quality vs Custom | "single filament → grouping is a no-op, default Filament-Saving" / "2 colors: Quality — fewer cross-nozzle swaps" |
 | **Nozzle** | 0.2 / 0.4 / 0.6 / 0.8 mm? | model min feature; functional vs display; part size | 0.4 as the general balance; deviate only on a stated cause (§5.1) | "0.6 mm — functional, no fine detail, faster; 0.4 to keep studs crisp" |
 | **Orientation** | Which face down; minimize supports? | mesh overhangs, contact area, contour | Tweaker-3 objective: minimize support volume (not strength) | "laid flat: least support; layer lines run across the pin — weak there" |
 | **Supports** | Any? normal or tree? threshold angle? | overhang angles vs threshold | tree for point contacts; none if overhangs ≤ threshold | "no supports — max overhang 38° is under the limit" |
@@ -42,14 +42,14 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      there is no filament decision to make and a filament-less plate settles nothing.
   3. **Match material to the part's need** — PLA for display/decor and most LEGO/orb work; a tougher
      material (PETG/ABS/…) only when the part is functional, load-bearing, or heat-exposed *and* the
-     operator has said so. Colour is the operator's taste unless the model fixes it.
+     operator has said so. Color is the operator's taste unless the model fixes it.
   4. **One clear match → state it, do not ask** (global bias-to-action): e.g. "using the PLA in AMS 0
      slot 0 — #F5547C, 100% left — display piece, PLA is right." A single loaded PLA against a decor
      part is not a question.
   5. **Several plausible → AskUserQuestion** (the one pivotal call): one question, one option per
      *loaded* slot (empty slots omitted), label `PLA · AMS 0 slot 0 · #F5547C`, description
      `<sub-brand> · NN% left` (or `remain unknown` when `-1`), the recommended option first with its
-     reason. "Plausible" means two-or-more materials that both fit, or a colour trade the model does
+     reason. "Plausible" means two-or-more materials that both fit, or a color trade the model does
      not settle — not merely more than one spool present.
   6. **Footgun — remaining too low.** When the chosen slot's `remain` is a real number and shows a low
      remaining percentage, flag it in the plan ("slot 0 shows 8% left — may not finish this part");
@@ -63,7 +63,7 @@ Each note below is a stub the named task fleshes out; the design doc section is 
      Filament-Saving. State it — "single filament → grouping has no effect; default Filament-Saving is
      correct" — rather than offering a knob that does nothing. **Every current-campaign plate is
      single-material, so this is the usual branch.**
-  2. **Two or more filaments/colours → reason the mode, then recommend.** `saving` (Filament-Saving,
+  2. **Two or more filaments/colors → reason the mode, then recommend.** `saving` (Filament-Saving,
      `Auto For Flush` — minimise waste/flush; the default) vs `quality` (`Auto For Match` — fewer
      cross-nozzle changes, better surface, more flush) vs `manual`/Custom (a hand-assigned per-filament
      nozzle map). Default to `saving` and name the trade; recommend `quality` when the part's surface

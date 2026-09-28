@@ -13,13 +13,13 @@ by the band. This is the fourth coaster form after the fitted slab of
 [`coaster-interlock-design.md`](coaster-interlock-design.md) and the minimal lattice
 of [`coaster-minimal-design.md`](coaster-minimal-design.md); it lives in the same
 `coaster` kernel, adds no new solid, and is the first form with two named regions,
-which is what colour (#37) needs.*
+which is what color (#37) needs.*
 
 ## 1. The ask
 
 Omar (D-068 context, 2026-09-17): can the border carry a different pattern from the
 field; does the language have a "border" component that composes with a pattern
-component and takes its own colour. D-068 chose coaster-level composition and
+component and takes its own color. D-068 chose coaster-level composition and
 sequenced it after the interlock (#34, D-069) and the lab (#35, D-067), both of which
 have shipped. What is left to decide here is not *whether* but *how a second pattern
 is laid into a band that follows an outline the importer chooses per construction*
@@ -34,7 +34,7 @@ is laid into a band that follows an outline the importer chooses per constructio
 - **The field moves in.** The band replaces the outer part of what `margin` used to
   be; the field's art is inset by the band width plus `margin`, and CV7 measures
   enclosure against the band's inner edge, not the outline.
-- **Colour is a region, not a geometry.** The kernel records which cells are band and
+- **Color is a region, not a geometry.** The kernel records which cells are band and
   which are field; the per-region export is #37 and is not designed here.
 
 ## 2. Options and the rubric
@@ -343,6 +343,6 @@ shows it from above, where a band reads as a band.
 - **A border from a second construction.** `--border-from <ast.json>` lowers a
   second GeoGebra file as the motif. The placement does not care where the cell came
   from; the importer's header and mangling table would need a second source.
-- **Colour regions (#37)** now have their region: the `band` bit. The per-body
+- **Color regions (#37)** now have their region: the `band` bit. The per-body
   export (`--format parts`) and the filament map are #37's, unchanged in direction
   (D-068).

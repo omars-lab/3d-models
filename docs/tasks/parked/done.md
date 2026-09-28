@@ -243,12 +243,12 @@ the pre-renumber board.
 - #76 — Correct the read-back triangle count and the "both sides kept" claim
 - #80 — Graduate the winding-coherence check into a bikar test
 - #91 — Settle the LDraw render experiment (LDView removed by the OS; three.js route run instead)
-- #105 — Per-brick stud (pin) colour in LDraw export
+- #105 — Per-brick stud (pin) color in LDraw export
 - #106 — Design: LDraw thumbnail CLI + validation skill
 - #107 — Build the LDraw multi-angle thumbnail CLI
 - #108 — Build the LDraw render-validation skill
 - #109 — PR + merge + use-case map + record the thumbnail CLI/skill
-- #110 — Add a colour-presence gate to the thumbnail --check (bikar)
+- #110 — Add a color-presence gate to the thumbnail --check (bikar)
 - #111 — Per-model render-notes + GPU-free catalog well-formedness test/hook (bikar)
 - #112 — Record the visual checklist: design doc §16 + D-029 + skill + map (3d-models)
 

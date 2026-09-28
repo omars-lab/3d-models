@@ -60,7 +60,7 @@ baseplate itself. Nothing here emits a parts list.
 **Non-goals for this family**: irregular (pattern-outline) piece shapes — every piece is a
 rectangle on the stud grid; spans across more than one baseplate (the LEGO Art World Map's
 Technic-pin panel joining, and its reported flex problems, are exactly the territory we are
-staying out of — survey §3); colour; scaling the pattern to fit (real-scale rule: the pattern is
+staying out of — survey §3); color; scaling the pattern to fit (real-scale rule: the pattern is
 recentred, never scaled, and a pattern too big for the declared piece array is an error naming the
 smallest array that fits); curved or clipped baseplate outlines.
 

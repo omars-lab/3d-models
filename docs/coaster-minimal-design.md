@@ -302,5 +302,5 @@ lattice only when the holes show.
   relief: the first border slice (D-071,
   [`coaster-border-design.md`](coaster-border-design.md) §10) refuses
   `outline pattern`.
-- **Colour regions (#37)** are unchanged in direction; a minimal coaster is one body
-  and has no region to colour separately until #36 gives it a second.
+- **Color regions (#37)** are unchanged in direction; a minimal coaster is one body
+  and has no region to color separately until #36 gives it a second.

@@ -264,5 +264,5 @@ tabs does not explain itself.
 - **Octagons do not tile the plane alone**; an octagon mat needs square fillers of
   the octagon's edge length, which is a different outline and cannot mate (previous
   bullet). The octagon candidate keeps the interlock for pairs and strips only.
-- **The border band (#36) and colour regions (#37)** are unchanged in direction
+- **The border band (#36) and color regions (#37)** are unchanged in direction
   (D-068) and now have a stated edge to stop at: the nominal outline.

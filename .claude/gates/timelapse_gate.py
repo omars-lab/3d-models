@@ -846,7 +846,7 @@ _SVG = (
 _R = "60.00"
 # Two grounds, because the whole point of T3's substitution is that they
 # differ: the instrument view keeps the renderer's white default and every
-# frame the page shows is repainted. A fixture painted one colour throughout
+# frame the page shows is repainted. A fixture painted one color throughout
 # would pass T3 by never exercising it.
 
 def _shipped_svg(body: str) -> str:

@@ -575,7 +575,7 @@ section, and `calibrate`'s rules forbid it.
 
 The protocol is not optional and it is not in this document — it is
 [`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md),
-which carries the profile header (machine, material *and colour*, spool, nozzle type,
+which carries the profile header (machine, material *and color*, spool, nozzle type,
 layer height, verbatim profile name, ambient, date, instrument), the technique rules
 (three readings, median, two orthogonal bore diameters, light jaw pressure, 30 minutes
 of cooling), the per-coupon judgement scales, and the blank data sheet. A reading

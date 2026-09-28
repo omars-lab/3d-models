@@ -37,8 +37,8 @@ ways). Tabs protrude and slots recede by the same depth, so a translation by
 exactly the nominal size seats tab in slot with the modelled clearance and no
 overlap. No boolean: OpenSCAD previews two imports side by side.
 
-A coaster bikar can split into colour bodies is no longer drawn here: `make
-coasters` has bikar draw it (`render --format preview`, in its filament colours
+A coaster bikar can split into color bodies is no longer drawn here: `make
+coasters` has bikar draw it (`render --format preview`, in its filament colors
 and with no background) and lists it in build/.coaster-previewed, which this
 script skips. What is left are the coasters bikar refuses to split — openwork
 and the slab-reshaping joins, so every mated pair — and they keep this picture.

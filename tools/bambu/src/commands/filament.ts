@@ -1,5 +1,5 @@
 // `bambu filament` — read-only view of the filament the printer has loaded (AMS + external spool).
-//   list (default) : the loaded trays, one line each — material, colour, brand, remaining
+//   list (default) : the loaded trays, one line each — material, color, brand, remaining
 //
 // This is the discovery seam the print-model skill (docs/design/printing/print-model-design.md §5.5) builds on: pick
 // the filament before deciding nozzle/settings. It reaches the printer WITHOUT moving it — the same
@@ -95,7 +95,7 @@ export function registerFilament(program: Command): void {
 
   program
     .command("filament-sync")
-    .description("reconcile a sliced plate's logical AMS slots against loaded trays, by colour match")
+    .description("reconcile a sliced plate's logical AMS slots against loaded trays, by color match")
     .requiredOption("--plate <file.3mf>", "the sliced .3mf whose filament_colour[] gives the logical slots")
     .option("--json", "emit the reconciliation as JSON instead of the operator summary")
     .action(async (opts: { plate: string; json?: boolean }) => {
@@ -117,7 +117,7 @@ export function registerFilament(program: Command): void {
         process.exitCode = 2;
         return;
       }
-      const logical = logicalSlotsFromPlate(meta.filamentColours, meta.filamentTypes);
+      const logical = logicalSlotsFromPlate(meta.filamentColors, meta.filamentTypes);
 
       const mqtt = new MqttBackend();
       requireConfigured(mqtt);

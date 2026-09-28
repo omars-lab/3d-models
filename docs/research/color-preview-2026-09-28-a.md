@@ -1,14 +1,14 @@
 ---
 date: 2026-09-28
 feeds:
-  - '[[colour-preview-design-a]]'
+  - '[[color-preview-design-a]]'
 ---
 
 # Colour previews — raw findings (researcher A)
 
 - **Date:** 2026-09-28
 - **Produced by:** researcher A (one of two independent researchers; a checker consolidates later)
-- **Feeds:** [colour-preview-design-a.md](../colour-preview-design-a.md)
+- **Feeds:** [color-preview-design-a.md](../color-preview-design-a.md)
 - **Question (Omar):** "Do we have the ability to alternate colors / customize colors on the PNGs we
   are generating? If not, would we need to integrate an alternate CAD software?" — plus, later, the
   Coaster Lab controls to drive it.
@@ -24,7 +24,7 @@ feeds:
 | 3 | 3d-models gallery, orbs | `make orbs` → `bikar render --format views` SVGs → `build/orb_previews.py` restyles → `rsvg-convert` (`Makefile:286-312`) | Per-face colour already: `renderOrbViewSVG` fills each face from the pattern's `faceColors`, else `#8a8a8a` (bikar `packages/core/src/render/orb-view-renderer.ts:12,306-322`) | Orbs, not coasters |
 | 4 | bikar CLI `render --image` | `packages/cli/src/rasterize.ts` shells to `rsvg-convert` or `magick` and reads the PNG header back | Whatever the SVG says | 2D drawing |
 | 5 | bikar CLI coaster `--format views` | `renderCoasterTopSVG` (bikar `packages/core/src/render/coaster-top-renderer.ts:213`), called at `packages/cli/src/index.ts:1018-1033`; input is the coaster **spec** plus region colours and palette (`index.ts:1000-1015`) | Region + palette colours, top-down 2D | **No** — drawn from the spec, not from `buildCoasterParts` |
-| 6 | 3d-models `bambu slice coaster` colour plate picture (#342) | `tools/bambu/src/colour-preview.ts`: `bikar render --format svg` per coaster → `rsvg-convert` → `magick +append` | Region colours, top-down | No — 2D drawing. Its only check, `missingRegionColours` (`:19-27`), asks that every sidecar hex *appears somewhere* in the SVG — an aggregate, it cannot say the right region is in the right colour |
+| 6 | 3d-models `bambu slice coaster` colour plate picture (#342) | `tools/bambu/src/color-preview.ts`: `bikar render --format svg` per coaster → `rsvg-convert` → `magick +append` | Region colours, top-down | No — 2D drawing. Its only check, `missingRegionColours` (`:19-27`), asks that every sidecar hex *appears somewhere* in the SVG — an aggregate, it cannot say the right region is in the right colour |
 | 7 | Coaster Lab live viewer | Canvas-2D painter's-algorithm renderer, no WebGL (bikar `packages/lab/src/viewer.ts:1-7`); per-triangle `triRgb` tint, shade `0.4 + 0.6·max(0, n·l)` (`viewer.ts:54-110`, bronze `[214,178,84]` at `:40`) | **Per-body palette colour already** | **Yes** — `evaluate.ts:385` calls `buildCoasterParts(built, { pinch: 'fillet' })`, the export's own default, and `coasterTintMesh` (`evaluate.ts:324-354`) colours each body by its key; `coaster-main.ts:691` shows `coasterTint ?? mesh` |
 | 8 | Coaster Lab picker thumbnails | `scripts/render-coaster-thumbnails.ts` (bikar root): Playwright opens `coaster.html?f=<id>`, waits for `data-tris`, copies the viewer canvas | Same as #7 | Yes (same as #7). **Looked:** `coaster-thumbs/eight-fold-rosette-fill.png` shows gold straps, dark slab, ruby stars; `six-fold-rosette-radial.png` is all bronze |
 | 9 | 3d-models `tools/print_review.py sheet` | Top-down silhouette of each STL for the look-before-you-print review | Black/white mask | Single STL |

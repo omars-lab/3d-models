@@ -1,19 +1,19 @@
-// Assemble a multi-part, multi-filament input 3MF for a coloured coaster plate (part 4b-ii; D-075,
+// Assemble a multi-part, multi-filament input 3MF for a colored coaster plate (part 4b-ii; D-075,
 // docs/design/printing/plate-composer-design.md §12; the contract is docs/research/coaster-ams-3mf-contract.md).
 //
 // WHY this exists: the headless BambuStudio/Orca CLI has NO flag to map objects or regions to filament
 // slots at slice time — the assignment must be baked into the INPUT 3MF (BambuStudio#9666, the settled
-// research answer). So a coloured plate is not the loose-STL `--arrange` path `slice compose` uses for a
-// mono-colour plate (that path treats each STL as an independent object). Instead every coaster becomes
+// research answer). So a colored plate is not the loose-STL `--arrange` path `slice compose` uses for a
+// mono-color plate (that path treats each STL as an independent object). Instead every coaster becomes
 // ONE object whose region bodies are PARTS sharing the coaster's coordinate frame, so `--arrange` packs
 // whole coasters, not loose bodies (the §12 K10 note). Each part carries `<metadata key="extruder"
 // value="K"/>` for its logical slot, and the root model carries `Application: BambuStudio-<ver>` — the
-// gate that makes the slicer honour per-part assignment at all (else it imports single-colour, #9666).
+// gate that makes the slicer honour per-part assignment at all (else it imports single-color, #9666).
 //
 // WHAT is verifiable here vs. at the owner gate: this module builds a structurally valid 3MF (a ZIP of
 // OPC parts) whose XML/config members this file's tests pin against the contract, and which re-reads
 // through the same `unzip` path `threemf.ts` uses. That BambuStudio ACCEPTS it and slices each region in
-// its slot colour is confirmed by loading the assembled plate in BambuStudio and reading the render (the
+// its slot color is confirmed by loading the assembled plate in BambuStudio and reading the render (the
 // screenshot check) — NOT claimed by this module. Printing stays owner-gated (§11).
 
 import { execFileSync } from "node:child_process";
@@ -36,8 +36,8 @@ export interface AssemblyCoaster {
   bodies: AssemblyBody[];
 }
 
-/** The default filament the plate is sliced in — slot 1, and the material/id every colour slot reuses
- *  (only the colour is overridden per slot; §6 / research contract). The `ams.ts` type is the source of
+/** The default filament the plate is sliced in — slot 1, and the material/id every color slot reuses
+ *  (only the color is overridden per slot; §6 / research contract). The `ams.ts` type is the source of
  *  truth; re-exported here so the assembler's boundary reads clearly at its call site. */
 export type DefaultFilamentSpec = FilamentDefaults;
 
@@ -172,7 +172,7 @@ export function buildRootModel(coasters: IdCoaster[], appVersion: string, uuid: 
     XML_HEADER,
     '<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" unit="millimeter" xml:lang="en-US" requiredextensions="p" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021">\n',
     // The Application metadata MUST start with "BambuStudio-" or the slicer ignores per-part extruder
-    // assignment and imports the plate single-colour (research contract; #9666).
+    // assignment and imports the plate single-color (research contract; #9666).
     ` <metadata name="Application">${xmlEscape(appVersion)}</metadata>\n`,
     ' <metadata name="BambuStudio:3mfVersion">1</metadata>\n',
     " <resources>\n",
@@ -199,7 +199,7 @@ export function buildRootModel(coasters: IdCoaster[], appVersion: string, uuid: 
 // The per-object + per-part extruder assignment. Each assembly object lists its region bodies as
 // `<part id=meshId subtype="normal_part">` (part id === the component objectid), each carrying the
 // `extruder` metadata for its slot. The object-level extruder is the first part's (a harmless default;
-// the per-part values are what colour the regions).
+// the per-part values are what color the regions).
 
 export function buildModelSettingsConfig(coasters: IdCoaster[]): string {
   const out: string[] = [XML_HEADER, "<config>\n"];
@@ -222,10 +222,10 @@ export function buildModelSettingsConfig(coasters: IdCoaster[]): string {
 }
 
 // ── Metadata/project_settings.config ─────────────────────────────────────────────────────────────────
-// The filament slot declaration: parallel arrays sized to the logical slot count, every colour slot
+// The filament slot declaration: parallel arrays sized to the logical slot count, every color slot
 // reusing the default's material + a NON-EMPTY id (an empty id silently routes to the external spool),
-// only the colour overridden per slot (research contract). This member declares how many slots there
-// are and their colours; each part's `extruder` metadata (buildModelSettingsConfig) is what routes a
+// only the color overridden per slot (research contract). This member declares how many slots there
+// are and their colors; each part's `extruder` metadata (buildModelSettingsConfig) is what routes a
 // region to a slot.
 //
 // Key shapes are NOT interchangeable: `filament_colour`, `filament_type` and the per-slot product-id
@@ -256,7 +256,7 @@ export interface ThreeMfMembers {
   [archivePath: string]: string;
 }
 
-/** Build every 3MF member for a coloured plate, in memory. `appVersion` is the BambuStudio version tag
+/** Build every 3MF member for a colored plate, in memory. `appVersion` is the BambuStudio version tag
  *  (must start with "BambuStudio-"); `map` + `def` come from the plate's palette-name → slot mapping. */
 export function buildThreeMfMembers(
   coasters: AssemblyCoaster[],
@@ -267,7 +267,7 @@ export function buildThreeMfMembers(
   if (coasters.length === 0) throw new Error("cannot assemble a 3MF with no coasters");
   if (!appVersion.startsWith("BambuStudio-")) {
     throw new Error(
-      `3MF Application metadata must start with "BambuStudio-" or the slicer ignores per-part colour ` +
+      `3MF Application metadata must start with "BambuStudio-" or the slicer ignores per-part color ` +
         `assignment (research contract; #9666) — got "${appVersion}"`,
     );
   }
@@ -288,9 +288,9 @@ export function buildThreeMfMembers(
  *  to bare `BambuStudio`. This is the HEADLESS geometry-verify copy ONLY: the versioned tag drives the
  *  headless CLI into the GL project-restore path and SIGSEGVs it, while the bare form loads as an
  *  imported model and slices `exit 0` (docs/issues/coaster-3mf-filament-shape-and-export-hang.md §1,
- *  bisection table). The shipped artifact KEEPS the versioned tag — it is the #9666 colour contract the
+ *  bisection table). The shipped artifact KEEPS the versioned tag — it is the #9666 color contract the
  *  GUI (which has a GL context) honours — so this is never what gets printed, only what gets geometry-
- *  checked. Per-part `extruder`/colour config is untouched; only the one metadata value changes. */
+ *  checked. Per-part `extruder`/color config is untouched; only the one metadata value changes. */
 export function stripApplicationTag(members: ThreeMfMembers): ThreeMfMembers {
   const root = members["3D/3dmodel.model"];
   if (root === undefined) throw new Error("cannot strip Application tag: no 3D/3dmodel.model member");

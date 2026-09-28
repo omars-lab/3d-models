@@ -406,8 +406,8 @@ generators are built:
   piece seams on the LEGO grid*, which is the `mural` plan's hard part (Milestone A, edge-to-edge
   relief). The novelty, as the Lego Lab audit settled it, is Islamic pattern × LEGO-registered
   printed part — not "relief on a brick" (Appendix B.4).
-- **Brick Mosaic / Bricklink Studio mosaic tools** — colour-per-stud, not printed relief;
-  out of scope here (colour is a `mural` non-goal).
+- **Brick Mosaic / Bricklink Studio mosaic tools** — color-per-stud, not printed relief;
+  out of scope here (color is a `mural` non-goal).
 - **p5.js / Processing Islamic-geometry sketches and Girih editors** — confirm the
   compass-and-straightedge construction the kernel already encodes; nothing to port back,
   bikar's `rosetteGeometry` is the canonical source.

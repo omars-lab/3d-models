@@ -4,19 +4,19 @@ Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
 - 2026-09-27 — Enter a piece's verdict on the 3d-model-hub page: keep/adjust/drop plus a note; the hub runs `bambu print verdict` in its own writable 3d-models worktree and opens one PR per run, adding later verdicts to it (3d-model-hub #8). Its first live run is Omar's first real verdict
 - 2026-09-27 — `bambu print verdict <run> <entry> <keep|adjust|drop>` sets one printed piece's verdict in its record and adds notes under it, editing only those lines and refusing an unknown piece, a verdict the prints gate would reject, or a note with a line break (3d-models #355)
-- 2026-09-27 — Multi-colour printing design: two independent researchers and a checker, consolidated into the one doc to act on (3d-models #352)
+- 2026-09-27 — Multi-color printing design: two independent researchers and a checker, consolidated into the one doc to act on (3d-models #352)
 - 2026-09-27 — The 3d-model-hub page: a server with one seam to the `bambu` CLI and a test that no secret leaks, a page with the printer panel and the print register, running in the background on the tailnet and reading its own 3d-models worktree kept at origin/master, plus two install-script fixes (3d-model-hub #2–#7)
 - 2026-09-26 — The minis-01 run is finished: filament-sync matched the plate's one filament
-  (green PLA #00AE42) to AMS slot 3, an exact colour match, so the plate is ready to send. The
+  (green PLA #00AE42) to AMS slot 3, an exact color match, so the plate is ready to send. The
   "Not configured" it first stopped at was wrong: the printer config was in the repo's encrypted
   .env all along, and nothing read it. bambu now falls back to that .env, decrypted with the key
   in .env.keys, after the environment and .mcp.json (3d-models #343)
-- 2026-09-26 — `slice coaster` writes a colour plate picture too (`<plate>.preview.png`): bikar's
-  drawing of each distinct coaster, side by side, in the slot colours the slot map reports. It
-  names any region a drawing does not paint in its slot colour. It shows the coasters, not the
+- 2026-09-26 — `slice coaster` writes a color plate picture too (`<plate>.preview.png`): bikar's
+  drawing of each distinct coaster, side by side, in the slot colors the slot map reports. It
+  names any region a drawing does not paint in its slot color. It shows the coasters, not the
   bed layout (3d-models #342)
 - 2026-09-26 — A second run, on scratch plates that mix what minis-01 doesn't: 40, 60 and 80 mm
-  pieces on one compose plate came out clean. The colour path (`slice coaster`, a border
+  pieces on one compose plate came out clean. The color path (`slice coaster`, a border
   coaster) wrote its 3MF into the repo root; it now writes to build/plates like compose, and its
   "open in the GUI" hint gives the full path (3d-models #341)
 - 2026-09-26 — `slice plate` and `slice compose` write the plate picture next to the 3MF
@@ -39,11 +39,11 @@ once**, so an id means something only under its snapshot: Snapshot 1's #14 and S
 #14 are different tasks. Each snapshot's own note below says which sequence it uses. Newest
 first.
 
-**▸ Snapshot 10 — 2026-09-25 (plates, colour regions, the construction migrations,
+**▸ Snapshot 10 — 2026-09-25 (plates, color regions, the construction migrations,
 the consolidation).** **A fresh id sequence, not a continuation of Snapshot 9.** The
 live board was rebuilt from the continuation plan's later phases, so this snapshot's
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
-colour-regions id. Where a title below cites a second number (e.g. "#37 part 2",
+color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
 was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
@@ -56,15 +56,15 @@ reviews the 3d-models #218 design).
 - #1 — P4.1 `bambu slice compose`, the plate composer with a shared `it-<sha12>` helper — design D-072 (3d-models #264, 83703d4); implementation (3d-models #265, bd83fe6)
 - #3 — P4.2 minis-01, the first coaster compose plate (3d-models #280, c450fd4)
 - #11 — bambu CLI help gate: a generated flag reference held in sync by hook 45 (3d-models #273, fc8ecd8)
-- #19 — `bambu ams` read verb + filament-sync: reconcile a plate's logical AMS slots to the live trays by colour (3d-models #285, 7c022fa)
+- #19 — `bambu ams` read verb + filament-sync: reconcile a plate's logical AMS slots to the live trays by color (3d-models #285, 7c022fa)
 
-### Coaster colour regions → per-body export → AMS filament map (old #37)
-- #2 — the umbrella: a coaster's colour regions become separate bodies that land on separate AMS slots, plus a Coaster Lab knob — design D-073 (3d-models #264, 83703d4); closed by #12–#18 below
+### Coaster color regions → per-body export → AMS filament map (old #37)
+- #2 — the umbrella: a coaster's color regions become separate bodies that land on separate AMS slots, plus a Coaster Lab knob — design D-073 (3d-models #264, 83703d4); closed by #12–#18 below
 - #12 — part 2: `color <region> <PaletteName>` grammar + evaluator (bikar #213, a325d73)
 - #13 — §6 research: the headless BambuStudio 3MF → AMS filament-assignment contract (3d-models #267, 871762a)
 - #14 — part 3: `--format parts` region body split, pinch detection and `--pinch` strategies, D-074 (bikar #214, 726d567); the `.parts.json` sidecar (bikar #215, 1649389)
 - #15 — part 4: palette name → AMS logical slot map for coaster plates, D-075 (3d-models #271, 58612a3)
-- #16 — part 5: Coaster Lab per-region colour knob + full per-region 3D tint (bikar #216, 6746237); D-076 recorded (3d-models #272, 1a79fef)
+- #16 — part 5: Coaster Lab per-region color knob + full per-region 3D tint (bikar #216, 6746237); D-076 recorded (3d-models #272, 1a79fef)
 - #17 — K7 reconcile of the design doc's §4 error phases against bikar's parse-time checks (3d-models #267, 871762a)
 - #18 — part 4b-ii: multi-part coaster → AMS 3MF assembler + the headless-crash pivot (3d-models #274, d96ea8c); `slice coaster` verb end to end, bikar `--format parts` → `--load-filaments` (3d-models #275, ce86591)
 

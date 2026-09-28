@@ -9,11 +9,11 @@
 # WHY THE PLAIN `-coaster.bkr`, NOT `-border-coaster.bkr` (a deliberate choice,
 # not the plan's parenthetical): `slice compose` hands loose STLs to `--arrange`,
 # so it is a MONOCHROME plate. The `-border-coaster` variants now carry a
-# `color border …` statement (#37), and a coloured coaster must keep its region
+# `color border …` statement (#37), and a colored coaster must keep its region
 # bodies coincident as one object — that is `bambu slice coaster`'s job, a
-# separate colour plate (plate-composer-design.md §12, K10), never a compose
-# plate that would silently drop the colour. The plan's "bordered ones border=4"
-# predates that colour split; a bordered/coloured mini plate is a future
+# separate color plate (plate-composer-design.md §12, K10), never a compose
+# plate that would silently drop the color. The plan's "bordered ones border=4"
+# predates that color split; a bordered/colored mini plate is a future
 # `slice coaster` manifest, not this one.
 #
 # The plain mini is also the right content for what P4.3 settles: the emboss

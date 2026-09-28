@@ -38,7 +38,7 @@
 #   sDO9fpu76v8, nmEjCTzMbDg  near-solid discs even at 60–70 mm.
 #   n3IidKfXE1I               the art does not fill the square.
 #   lEfWSogWscs, tA8eSdVx_EQ  bare wedges between the art and the frame.
-#   border                    needs a colour plate (`bambu slice coaster`).
+#   border                    needs a color plate (`bambu slice coaster`).
 #
 # Validate (no hardware, no slicer):
 #   bambu slice compose docs/plates/minis-04.yaml --dry-run

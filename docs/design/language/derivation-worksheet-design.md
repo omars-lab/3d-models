@@ -77,7 +77,7 @@ qualify assumptions in the brief that commissioned this work; those are marked �
   `grep -rn "polygon-clipping" packages/` returns nothing. There is no boolean library to
   visualize even if one wanted to.
 - **⚠ `fill void where … color …` is a styling rule, not a combining op.** `evalFill` pushes to
-  `env.fillRules` (`bikar/packages/core/src/dsl/evaluator.ts`). It selects faces for colour; it
+  `env.fillRules` (`bikar/packages/core/src/dsl/evaluator.ts`). It selects faces for color; it
   does not create or destroy geometry. Drawing it as a combining step would be a lie.
 - **The real union op is exact directed-edge cancellation.** `unionPatternFaces` in
   `evaluator.ts` unions bounded faces by cancelling twin directed edges — an arrangement-walk
@@ -173,7 +173,7 @@ steps per file: median=10  p90=16  max=85
 ### 2.7 The renderer is reusable unmodified
 
 `renderSVG` already accepts and draws circles, construction lines, named points
-(`emitNamedPoints`), segments, faces, face colours, layers and strapwork, and emits the full
+(`emitNamedPoints`), segments, faces, face colors, layers and strapwork, and emits the full
 `data-*` set. `orb-view-renderer.ts` / `--format views` is the in-tree precedent for a second
 renderer composing over the same primitives. `compileDSL` in `packages/core/src/index.ts` is a
 single-call-site adapter (`evaluate` → `renderSVG` with a fixed 20-field mapping) — a clean seam
@@ -297,7 +297,7 @@ operation on the objects being drawn.** Applying it to the ops that exist:
 | `unionPatternFaces` | exact directed-edge cancellation over bounded faces | *"merge faces (edge cancellation)"* | **yes — ∪, this is a union of point sets** |
 | `boundary X = union(...)` | arrangement-walk polygon union | *"boundary X = union(…)"* | **yes — ∪** |
 | `clip pattern to <B>` | partitions the arrangement, stamps `partial` / `clippedAtBoundary` | *"clip to B — N faces marked partial"* | **no.** It is a partition + annotation, not a difference. Nothing is removed. |
-| `fill void where …` | pushes a styling rule to `env.fillRules` | *"fill rule: void → colour"* | **no.** It is a style, not geometry. |
+| `fill void where …` | pushes a styling rule to `env.fillRules` | *"fill rule: void → color"* | **no.** It is a style, not geometry. |
 | `wave N` / `layer N` | tags the construction pass | grouping header, not a step | n/a |
 | `rotate` / `mirror` body | replays statements under a transform | *"rotate 60° ×6"* | no |
 | z-band `hole` (3D, out of v1 scope) | in-plane difference within a band | — | **yes — ∖, the brief's example is correct** |
@@ -369,7 +369,7 @@ one SVG sheet of small multiples. `svg-renderer.ts` is not modified.**
 - **Precedent in-tree**: `orb-view-renderer.ts` / `--format views` already does exactly this
   shape of thing — a second renderer that arranges output from the shared primitives.
 - **The renderer is already sufficient** (§2.7): circles, construction lines, named points,
-  segments, faces, colours, layers, plus the full `data-*` provenance set.
+  segments, faces, colors, layers, plus the full `data-*` provenance set.
 - **Surface**: a new `--format worksheet` alongside `--format views`. Output is a single SVG.
 - **Not the Lab.** `packages/lab` (vendored into `3d-models/lab.html` + `assets/`) is the natural
   home for the *interactive* version and is where a scrub bar would live. v1 is static (§1
@@ -491,9 +491,9 @@ Beyond the §1 non-goals:
   separate change under that document's governance.
 - **No claim that this replaces `patterns/Petal Tutorial/`.** The hand-maintained series encodes
   editorial choices a mechanical walk does not reproduce (§2.8).
-- **No colour-as-referent scheme.** Byrne's 1847 substitution of coloured glyphs for alphabetic
+- **No color-as-referent scheme.** Byrne's 1847 substitution of colored glyphs for alphabetic
   labels (survey §8.2) is the most interesting unexplored idea in the survey and is deliberately
-  deferred; bikar's colour channel is already carrying `fill` rules and would collide.
+  deferred; bikar's color channel is already carrying `fill` rules and would collide.
 - **No two-level scoring.** Euclidea's simultaneous L (tool moves) / E (elementary moves) scoring
   maps suggestively onto `.bkr` statements vs. underlying construction primitives, and is
   deferred.
@@ -633,7 +633,7 @@ supplied fixed viewBox. Proves §2.7's claim that no renderer change is needed.
 shared viewBox, per-panel labels. `--format worksheet` in the CLI.
 
 **Phase 4 — ghosting and deltas.** Final-state grey underlay; per-step added-primitive
-highlighting in accent colour (§4.4 items 3–4).
+highlighting in accent color (§4.4 items 3–4).
 
 **Phase 5 — grouping.** `--worksheet-detail` with `full` / `waves` / `phases`; the
 no-tags-present degradation notice; V4 auto-fallback.

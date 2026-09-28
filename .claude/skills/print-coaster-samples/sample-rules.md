@@ -55,8 +55,8 @@ When a print teaches something new, add or correct a rule here, with the date an
 
 ## What goes on a different plate
 
-- **Border** carries a `color border …` line, so it needs a colour plate (`bambu slice coaster`).
-  Compose drops the colour, so leave border off a compose plate and say so in the header.
+- **Border** carries a `color border …` line, so it needs a color plate (`bambu slice coaster`).
+  Compose drops the color, so leave border off a compose plate and say so in the header.
   (minis-01.)
 
 ## Checks every plate passes before the owner gate

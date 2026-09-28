@@ -12,7 +12,7 @@ anecdote, not calibration (bikar Tenet 30).
 | Field | Note |
 |---|---|
 | Machine | model + firmware version |
-| Material | brand, type, **and colour** — pigment changes effective flow; a "PLA" reading is not transferable across colours, let alone brands |
+| Material | brand, type, **and color** — pigment changes effective flow; a "PLA" reading is not transferable across colors, let alone brands |
 | Spool | so a re-measure can rule the spool in or out |
 | Nozzle | diameter **and** type (brass / hardened / CHT — they do not flow alike) |
 | Layer height | |
@@ -74,7 +74,7 @@ Some rungs are not caliper questions, and pretending otherwise invents precision
 Fill at the bench, not from memory.
 
 ```
-PROFILE: machine ______ material ______ colour ______ spool ______
+PROFILE: machine ______ material ______ color ______ spool ______
          nozzle ______ layer ______ profile ______ ambient ______
          date ______ caliper ______ (zeroed: y/n)
 

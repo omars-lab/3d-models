@@ -21,7 +21,7 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
 - **Done: the pipeline, phases 0 to 4.2.** GeoGebra → naqsh (`.bkr`) → STL works. The
   `import-construction` skill repeats it. The
   [ledger](../../docs/constructions/ledger.md) reads 8 migrated, 1 no-piece by design,
-  0 remaining. The catalog, gallery and `make coasters` are live. Border, colour regions →
+  0 remaining. The catalog, gallery and `make coasters` are live. Border, color regions →
   AMS slots, twist, radial bands and rods relief are all in. `bambu slice compose` builds a
   plate. [`minis-01`](../../docs/plates/minis-01.yaml) is the first mini plate (P4.2).
 - **Missing: the print.** Nothing is printed. The CAL-CST bets are unmeasured

@@ -239,13 +239,13 @@ the design doc; the print target stays out of share URLs by existing convention.
 
 - **How colour works today.** `color <region> <PaletteName>` tags a region (D-073), and
   `bikar render --format parts` splits the height field into one body per region
-  ([coaster-colour-design.md](../coaster-colour-design.md) §4–§5). The plate composer maps
+  ([coaster-color-design.md](../coaster-color-design.md) §4–§5). The plate composer maps
   palette name to an AMS slot ([plate-composer-design.md](../design/printing/plate-composer-design.md)).
 - **Letters would be a fourth region**, `text`. That changes a written-down set of three
   (`CoasterRegion`, and the Lab's `REGION_ORDER`, `coaster-colors.ts` line 16).
 - **Domes have a feather edge.** A dome falls to zero height at the letter edge, which is exactly
   the zero-width "pinch" the colour split already found for sharp straps (D-074;
-  [coaster-colour-design.md](../coaster-colour-design.md) §5.1). The existing `--pinch fillet`
+  [coaster-color-design.md](../coaster-color-design.md) §5.1). The existing `--pinch fillet`
   handling may cover it; a simpler fix is to stand each dome on a short vertical skirt (say one or
   two layers), so the letter body never thins to zero at its edge. Which is better is open.
 - **The split refuses several styles.** `assertSplittable` (`coaster.ts` line 2628) refuses
@@ -333,7 +333,7 @@ All fetched 2026-09-26.
   http://cubifyfans.blogspot.com/2015/01/considerations-for-embossing-3d-printed.html
 - In-repo: [text-emit-design.md](../design/language/text-emit-design.md),
   [outline-font-emit.md](outline-font-emit.md), [text-emit-survey.md](text-emit-survey.md),
-  [coaster-colour-design.md](../coaster-colour-design.md),
+  [coaster-color-design.md](../coaster-color-design.md),
   [coaster-minimal-design.md](../coaster-minimal-design.md),
   [plate-composer-design.md](../design/printing/plate-composer-design.md).
 - bikar at `origin/main` (read 2026-09-26): files and line numbers as cited in §2–§6.

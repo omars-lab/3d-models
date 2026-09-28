@@ -59,10 +59,10 @@ exists** in `packages/lab/src/design/tokens.css`, and precedence runs the user's
 words, then the project's system, then your choices. So the plan's job is to
 fill gaps and to decide this note's *one* distinguishing move — a figure layout,
 a comparison table, an accent restricted to the option being argued for. When
-the plan proposes a colour or a face the tokens already answer, drop that part
+the plan proposes a color or a face the tokens already answer, drop that part
 of the plan; do not fork the palette for one page.
 
-A section drawing takes its colour from `tokens.css` class names, never from
+A section drawing takes its color from `tokens.css` class names, never from
 inline fills. A note that wants its own accent restyles the classes — it does
 not re-render the geometry.
 
@@ -77,7 +77,7 @@ published, because `docs/decisions-log.md` cites it.
   `brickScriptById` and **throw** when the preset is missing — a renamed preset
   must break the page, not silently draw a different brick.
 - Hand-authored marks go in `overlays` and nowhere else. That list is dashed and
-  warn-coloured on purpose: a reader has to be able to tell a claim from a
+  warn-colored on purpose: a reader has to be able to tell a claim from a
   measurement without reading the caption. A `phantom` says *declared and not
   cut*; a `rod` says *arrives from off-drawing*.
 - Every figure goes through `figure({ svg, caption, from })`. `from` names the

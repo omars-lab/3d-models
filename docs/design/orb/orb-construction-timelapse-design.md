@@ -277,7 +277,7 @@ padding, identical across the three views of one orb. It is computed from
 cannot move it.
 
 There is no lighting to hold still either. The pipeline is flat-shaded SVG, not
-a lit 3D render: two colour literals, recoloured on the way to the gallery by
+a lit 3D render: two color literals, recolored on the way to the gallery by
 [`../../../build/orb_previews.py`](../../../build/orb_previews.py).
 
 This document sets **no default of its own** — no padding value, no scale, no

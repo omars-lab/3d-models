@@ -47,7 +47,7 @@ Confirmed column carries the survey's hedge verbatim.
 | Machine (preset name) | .3mf `printer_settings_id` + G-code `printer_model` | **confirmed-in-repo** (`printer_model = Bambu Lab X2D`, PR #189) |
 | firmware | `setup discover` (SSDP) today; `get_version` `module[].sw_ver` richer | **value confirmed-in-repo** (`01.02.00.00`); get_version-over-MQTT **H2-proxy — unconfirmed** |
 | Material — type | AMS `tray_type` | **confirmed-in-repo** (PR #192) |
-| Material — colour | AMS `tray_color` (`RRGGBBAA` → `#RRGGBB`) | **confirmed-in-repo** (`#F5547C`) — hex, not a colour name |
+| Material — color | AMS `tray_color` (`RRGGBBAA` → `#RRGGBB`) | **confirmed-in-repo** (`#F5547C`) — hex, not a color name |
 | Material — brand | AMS `tray_sub_brands` + Bambu vendor from `tray_info_idx` | **confirmed for Bambu RFID spools**; third-party spool = **manual** |
 | Spool id | AMS `tray_uuid` (Studio tray SN) | **H2-proxy — unconfirmed** (not seen 2026-09-17); Bambu-RFID only, else **manual** |
 | Nozzle — diameter | .3mf `nozzle_diameter` (G-code `0.4,0.4`); frame `nozzle_diameter` as cross-check | **.3mf confirmed-in-repo**; frame field **H2-proxy — unconfirmed** |
@@ -62,7 +62,7 @@ Confirmed column carries the survey's hedge verbatim.
 | Caliper make / resolution / zeroed | — | **manual** (operator's instrument) |
 
 **The tally the CLI acts on.** Nine fields are machine-read outright (machine, firmware value, type,
-colour, nozzle diameter, layer height, profile, slicer version, date); two more (brand, spool id)
+color, nozzle diameter, layer height, profile, slicer version, date); two more (brand, spool id)
 are machine-read for official Bambu RFID spools and manual otherwise; nozzle type is best-effort;
 and five are genuinely manual (settings-changed narration, ambient room temp, enclosure state, and
 the three caliper sub-fields). So the verb below **fills nine-to-twelve of sixteen** and leaves the
@@ -88,7 +88,7 @@ as a labelled blank.
 bambu header [--plate <file.3mf>] [--json]
 ```
 
-- Without `--plate`: fills the **printer-side** fields (firmware, material type/colour/brand,
+- Without `--plate`: fills the **printer-side** fields (firmware, material type/color/brand,
   nozzle, chamber-as-proxy, date) and marks the **slice-side** fields (machine, layer height,
   profile, slicer version) `TODO — pass --plate`.
 - With `--plate`: also fills machine / layer height / profile / slicer version from the `.3mf`, and
@@ -163,7 +163,7 @@ falls back to the `.3mf`/SSDP source), never as filled machine truth.
 **Validator:** `bambu header` fills a field only from a source that actually carried it, and never
 prints a genuinely-manual field as machine-known.
 - PASS: with a live frame that carries `tray_type`/`tray_color` and a `--plate` whose
-  `printer_settings_id` is an X2D preset, the output fills material type/colour and machine/profile,
+  `printer_settings_id` is an X2D preset, the output fills material type/color and machine/profile,
   and leaves `Ambient room ~____°C`, `enclosure: open / closed` and the caliper line as blanks.
 - FAIL: the frame is missing `nozzle_diameter` (the X2D-unconfirmed case) yet the header prints a
   nozzle diameter with no `--plate` to source it from — i.e. it **fabricates** an unobserved field

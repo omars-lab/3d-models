@@ -105,7 +105,7 @@ are unverified).
 - **How it looks:** a key as tall as the frame (1.4 mm) sits flush and shows as a low plug
   in each opening. A key as tall as the straps (2.6 mm) looks like **a strap crossing the
   seam**, so the art reads as continuing from one coaster to the next. It can also be a
-  contrasting colour, as Nakashima's walnut keys are (S10).
+  contrasting color, as Nakashima's walnut keys are (S10).
 - **Kernel work (medium):** (1) a new coaster clause, for example
   `interlock key $waist clearance $c`, that cuts the exact bow-tie pocket at each edge midpoint and needs
   `openwork`; (2) the wing-room check in §5; (3) the key itself as a solid, which may
@@ -364,7 +364,7 @@ loss), and the mock answers them without committing bikar to a clause.
 ## 8. Open questions for Omar
 
 1. **Loose keys or tabs built into the coaster?** Keys (A) give the narrowest band and fit
-   tuning without reprinting coasters, and can be an accent colour; they can get lost.
+   tuning without reprinting coasters, and can be an accent color; they can get lost.
    Tabs (B) can't get lost, but on squares and octagons they need a turn-every-other-tile
    rule.
 2. **Notches on a coaster used alone:** fine, or worth the recessed-notch version (A2), where

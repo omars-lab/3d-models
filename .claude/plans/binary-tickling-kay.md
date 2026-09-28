@@ -217,7 +217,7 @@ onto the bench sheet: **every rung passing, or every rung failing, is a valid re
 way to move — not a coupon that didn't work"), and **a reading that refutes the design is a success**
 (several coupons are "built to fail at both ends": W-F1 Q1, W-P1 Q1, and LG-F1 Q2 / LG-S1 Q2 each treat a
 design-refuting reading as the finding). Also: **a reading without a profile header is anecdote, not
-calibration** — record machine/material/**colour**/spool/nozzle/layer/profile-name/ambient/date/caliper-zeroed
+calibration** — record machine/material/**color**/spool/nozzle/layer/profile-name/ambient/date/caliper-zeroed
 before measuring, and print the whole card in **one material, one profile, one session**.
 
 **Technique (protocol.md):** cool ≥30 min before the caliper touches it; three readings per feature, report

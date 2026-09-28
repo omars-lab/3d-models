@@ -16,7 +16,7 @@ is [`coaster-pipeline.md`](coaster-pipeline.md)), and it does not tidy PRs
 command.** Every step checks its own output and says clearly why when it fails. The result can
 be looked at before anything is sent, and the next plate costs less effort than the last one.
 
-Met when a new plate (a mix of coasters, sizes and colours) goes from a new YAML file to a
+Met when a new plate (a mix of coasters, sizes and colors) goes from a new YAML file to a
 sliced, previewed plate with filament mapped to the loaded AMS trays:
 - with no hand edits,
 - with no step that lives only in someone's head,
@@ -28,15 +28,15 @@ The send itself stays Omar's.
 ## What exists (check it; don't rebuild it)
 
 - **The `bambu` CLI** (`tools/bambu/src/commands/`): `slice plate`, `slice compose` (a plate
-  from a manifest), `slice coaster` (colour regions become a multi-part AMS 3MF),
-  filament-sync (maps the plate's slots to the live trays by colour), `print capture`, and
+  from a manifest), `slice coaster` (color regions become a multi-part AMS 3MF),
+  filament-sync (maps the plate's slots to the live trays by color), `print capture`, and
   `validate`. Hook 45 keeps its flag reference in sync.
 - **Plate manifests**: [`minis-01.yaml`](../../docs/plates/minis-01.yaml), the first one.
 - **Designs of record**: [`plate-composer-design.md`](../../docs/design/printing/plate-composer-design.md)
-  and [`coaster-colour-design.md`](../../docs/coaster-colour-design.md).
+  and [`coaster-color-design.md`](../../docs/coaster-color-design.md).
 - **Skills**: `print-model` (plan a print), `guide-print` (run one at the bench), `bambu`
   (day-to-day CLI), `find-model` (outside models). Coaster Lab in bikar sets each design's
-  knobs and colours.
+  knobs and colors.
 - **Plans**: the phase map, P4.x, is in [`iterative-dazzling-finch.md`](../plans/iterative-dazzling-finch.md).
   The printer side, gates R1 to R5, is in [`binary-tickling-kay.md`](../plans/binary-tickling-kay.md).
 
@@ -68,7 +68,7 @@ The send itself stays Omar's.
 1. Anything that lets a bad plate look good: a check that passes wrongly, a silent fallback,
    a wrong filament mapping.
 2. Anything done by hand on every plate.
-3. Anything you cannot see before sending: previews, the contact sheet, per-region colour.
+3. Anything you cannot see before sending: previews, the contact sheet, per-region color.
 4. Config ergonomics: defaults, shorter manifests, clearer errors.
 
 ## Never

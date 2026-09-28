@@ -483,9 +483,9 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
   # t=23:19  octD = Reflect(octB, f)
   edges from octD
   # ────────────────────────────────────────────────────────
-  # Fill colours, one per symmetry ring (multicolour constructions, 3d-models
+  # Fill colors, one per symmetry ring (multicolor constructions, 3d-models
   # docs/multicolor-constructions-design.md). Omar's rule, 2026-09-26: shapes that are
-  # the same shape at the same distance from the centre get the same colour. On this
+  # the same shape at the same distance from the centre get the same color. On this
   # construction the engine's rings ARE those classes (16 rings, 16 congruence-and-radius
   # classes, none split) because its first circle sits on the rosette centre; that does
   # not hold on the other constructions (see the design doc).

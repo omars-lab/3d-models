@@ -655,7 +655,7 @@ here so the panel does not rediscover them:
 
 - `addDefaultMaterials()` throws unless `setConditionalLineMaterial()` is called
   first (three ≥ 0.18x). §1.4's recipe omits this and does not run as written.
-- `addDefaultMaterials()` registers **only colour codes 16 and 24**. Our
+- `addDefaultMaterials()` registers **only color codes 16 and 24**. Our
   placements carry code 7, so a panel that stops there renders magenta. It needs
   a real `LDConfig` subset, or it will look broken while being correct.
 
@@ -1992,29 +1992,29 @@ it stays open and failing-loudly-with-the-number until a coupon settles it.
 
 ---
 
-## D-026 — a `place` takes a colour by grounded name **or** by bare LDraw code
+## D-026 — a `place` takes a color by grounded name **or** by bare LDraw code
 
 **Date:** 2026-08-06 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (DSL + emitter + tests), 3d-models (docs)
 
 ### Context
 
-An assembly's parts all emitted as one LDraw colour, so `Brick-Stack.mpd` — a
+An assembly's parts all emitted as one LDraw color, so `Brick-Stack.mpd` — a
 two-brick stack — read as a single grey blob in every viewer, defeating the whole
 point of exporting the parts as distinct sub-files (task #104; the symptom that
 started it was a user seeing "just black" in `library.ldraw.org/model-viewer`).
-Colour rides the type-1 placement line (`1 <colour> …`), not the part definition,
-so making it real meant giving `place` a way to say which colour. Two sub-questions:
+Color rides the type-1 placement line (`1 <colour> …`), not the part definition,
+so making it real meant giving `place` a way to say which color. Two sub-questions:
 what does the author write, and is the name→code mapping grounded? The mapping had
 been left **UNGROUNDED — not fetched** in
 [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §8 item 5.
 
 ### Decision
 
-**Both — `place <Piece> [color <name|code>]` accepts a grounded colour name or a
+**Both — `place <Piece> [color <name|code>]` accepts a grounded color name or a
 bare integer LDraw code**, chosen by the user over name-only and code-only via
-AskUserQuestion. A name (`red`) is the lower-cased LDConfig colour name; a code
+AskUserQuestion. A name (`red`) is the lower-cased LDConfig color name; a code
 (`4`) is any integer in LDraw's 0–511 range. The clause reuses the DSL's existing
-`color` keyword — no new token — and an uncoloured `place` keeps the emitter
+`color` keyword — no new token — and an uncolored `place` keeps the emitter
 default (7, `Light_Grey`), so an all-grey assembly emits **byte-identically** to
 before the feature. It is `--format ldraw` only; STL/SVG ignore it.
 
@@ -2027,7 +2027,7 @@ Three reasons the both-forms answer earns its keep:
   says. A bare integer is the escape hatch for any of the other ~370 codes, and
   like the old draft's `4`/`7` it asserts nothing about appearance — which is
   honest, not a gap.
-- **Resolution is deferred to eval, not the parser**, so a bad colour fails
+- **Resolution is deferred to eval, not the parser**, so a bad color fails
   **every** output format, not only the one that consumes it — surfacing the error
   where the author is, per "surface, don't hide."
 - **The grounding was a prerequisite, not a follow-up.** Shipping name support
@@ -2038,30 +2038,30 @@ Three reasons the both-forms answer earns its keep:
 
 ### What this resolves and what it does not
 
-It resolves how per-part colour is authored and grounds the ten-name palette the
+It resolves how per-part color is authored and grounds the ten-name palette the
 clause exposes. It does **not** transcribe LDraw's full ~380-entry palette — only
-the ten names the clause names are grounded; any other colour is reached by its
+the ten names the clause names are grounded; any other color is reached by its
 integer code, which stays a deliberate no-appearance-claim escape hatch. It also
-does not touch the STL/SVG paths, which have no colour channel to carry.
+does not touch the STL/SVG paths, which have no color channel to carry.
 
-## D-027 — a brick's studs take their own colour, fixed in the geometry, not on the reference
+## D-027 — a brick's studs take their own color, fixed in the geometry, not on the reference
 
 **Date:** 2026-08-06 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar-tile-border (DSL + emitter + read-back palette + tests), 3d-models (docs)
 
 ### Context
 
-D-026 gives a placement one colour, carried on the type-1 line. A two-tone brick —
+D-026 gives a placement one color, carried on the type-1 line. A two-tone brick —
 blue body, yellow studs, which is what a LEGO brick actually looks like — cannot be
-said that way: the type-1 line has exactly **one** inherit slot (colour 16), so
-everything in the shared block renders the one placement colour. The user, looking
-at `Brick-Stack.mpd` in a viewer and seeing solid-colour bricks, asked whether the
-pins could be coloured separately (task #105). The question underneath: where does a
-second colour live, when the reference line has room for only one?
+said that way: the type-1 line has exactly **one** inherit slot (color 16), so
+everything in the shared block renders the one placement color. The user, looking
+at `Brick-Stack.mpd` in a viewer and seeing solid-color bricks, asked whether the
+pins could be colored separately (task #105). The question underneath: where does a
+second color live, when the reference line has room for only one?
 
 ### Decision
 
 **`place <Piece> [color <name|code>] [studs <name|code>]`** — an optional second
-clause colours the studs independently of the body (chosen "per-brick stud colour"
+clause colors the studs independently of the body (chosen "per-brick stud color"
 over a body-only palette via AskUserQuestion, for full two-tone control). `studs`
 resolves through the same grounded palette and 0–511 range check as `color` (D-026)
 and is independent of it; either clause may appear alone, `color` first when both
@@ -2070,9 +2070,9 @@ safe because no assembly statement begins with it.
 
 The mechanism is forced by the single inherit slot, and it is the decision:
 
-- **The stud colour is baked into the triangle text, not the type-1 line.** The body
-  triangles stay colour 16 and inherit the placement colour; the stud triangles carry
-  the explicit stud code. One watertight block, two colour regions — the *mixed-colour
+- **The stud color is baked into the triangle text, not the type-1 line.** The body
+  triangles stay color 16 and inherit the placement color; the stud triangles carry
+  the explicit stud code. One watertight block, two color regions — the *mixed-color
   inline part*. This was **spiked before implementation** (the load-bearing risk was
   whether a real LDraw loader renders a mixed-16/explicit block correctly): the spike
   placed one such part twice and read back a blue body and a red body sharing one
@@ -2082,24 +2082,24 @@ The mechanism is forced by the single inherit slot, and it is the decision:
   slab above `H` and nothing else there, so the body's top face at exactly `H` never
   trips it. The transfer condition is written in the emitter and the design doc §14.6:
   it holds only for meshes whose sole geometry above the top face is studs. The emitter
-  **refuses** a stud colour on an empty stud set (a `studs none` brick, a non-brick)
-  rather than colour nothing.
-- **De-dup splits exactly on stud-colour difference.** The block key is the geometry
-  text and the stud code now lives in it, so two bricks with different stud colours
+  **refuses** a stud color on an empty stud set (a `studs none` brick, a non-brick)
+  rather than color nothing.
+- **De-dup splits exactly on stud-color difference.** The block key is the geometry
+  text and the stud code now lives in it, so two bricks with different stud colors
   mint two blocks and two with the same one still share a block — a consequence that
   falls out of the existing key, not a special case.
 - **Robustness over ease — the read-back panel learned the palette.** §14.4 preloaded
-  only code 7, so a coloured stud would have rendered as the magenta the panel's trap
-  exists to surface (the same latent gap D-026's coloured bodies had). The read-back
-  now preloads the full ten-colour grounded set with LDConfig's own RGB (§7,
+  only code 7, so a colored stud would have rendered as the magenta the panel's trap
+  exists to surface (the same latent gap D-026's colored bodies had). The read-back
+  now preloads the full ten-color grounded set with LDConfig's own RGB (§7,
   `UPDATE 2026-05-29`), and a test asserts a yellow-studded brick reads back at zero
-  unresolved colours with unchanged winding/edge coherence.
+  unresolved colors with unchanged winding/edge coherence.
 
 ### What this resolves and what it does not
 
-It resolves how the pins are coloured apart from the body and closes the panel's
-magenta gap for the whole grounded palette. It does **not** add per-*region* colour
-beyond body-vs-studs (relief faces, walls and bed all stay body colour), and it does
+It resolves how the pins are colored apart from the body and closes the panel's
+magenta gap for the whole grounded palette. It does **not** add per-*region* color
+beyond body-vs-studs (relief faces, walls and bed all stay body color), and it does
 not widen the grounded palette past D-026's ten names — an arbitrary stud code is the
 same no-appearance-claim escape hatch, now reported as magenta in the panel rather
 than resolved, because the panel has no LDConfig to look it up in.
@@ -2173,16 +2173,16 @@ skill (#108) or any pre-commit render gate (deferred by the third sub-decision),
 does not widen coverage past one exercised model — the goldens exist for `Brick-Stack`
 alone, and §10.6's "one of twelve viewers" caveat still stands for everything else.
 
-## D-029 — a third `--check` strength (the colour set) plus a GPU-free catalog gate, split at the GPU
+## D-029 — a third `--check` strength (the color set) plus a GPU-free catalog gate, split at the GPU
 
-**Date:** 2026-08-08 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar (colour gate + `visibleColours` in `bikar:scripts/thumbnail-gate.ts`, the multi-material read-back fix in `bikar:packages/lab/src/ldraw-readback.ts`, PR [#83](https://github.com/NaqshCoffee/bikar/pull/83) → `6dba045`; per-model notes + catalog well-formedness test + hook, PR [#84](https://github.com/NaqshCoffee/bikar/pull/84) → `e8b07d5`), 3d-models (design doc §16, this entry, `validate-render` skill, use-case map)
+**Date:** 2026-08-08 · **Status:** Decided (user, via AskUserQuestion) · **Repos:** bikar (color gate + `visibleColors` in `bikar:scripts/thumbnail-gate.ts`, the multi-material read-back fix in `bikar:packages/lab/src/ldraw-readback.ts`, PR [#83](https://github.com/NaqshCoffee/bikar/pull/83) → `6dba045`; per-model notes + catalog well-formedness test + hook, PR [#84](https://github.com/NaqshCoffee/bikar/pull/84) → `e8b07d5`), 3d-models (design doc §16, this entry, `validate-render` skill, use-case map)
 
 ### Context
 
 D-028's `--check` has two strengths — hard counts, soft golden pixels — and D-026/D-027
-gave each placement and stud its own colour precisely so an assembly reads as distinct
+gave each placement and stud its own color precisely so an assembly reads as distinct
 parts, not one grey mass. But nothing gated the parts *staying* distinct. The counts are
-pure geometry and do not move when the colours collapse; the goldens do not port across
+pure geometry and do not move when the colors collapse; the goldens do not port across
 backends (D-028's K10), so on any machine whose goldens were never baked the pixel gate is
 silent too. A model can regress to an all-grey blob and pass both. The user asked whether we
 needed "a verification catalog of the visual aspects/checklist we expect to see in png per
@@ -2192,35 +2192,35 @@ model … with all the appropriate hooks."
 
 Two sub-decisions, each settled with the user via AskUserQuestion.
 
-- **Checklist = a colour-presence gate plus per-model notes.** A third `--check` strength
-  classifies every foreground pixel to the nearest colour in **the model's own palette plus
-  the background** (not exact pixels, not the whole LDConfig set), accumulates each colour's
-  best coverage across the angle set, and compares the colours clearing a small area floor
-  (`--colour-min-area`, default 0.01) against a committed `visibleColours`. Nearest-of-palette
+- **Checklist = a color-presence gate plus per-model notes.** A third `--check` strength
+  classifies every foreground pixel to the nearest color in **the model's own palette plus
+  the background** (not exact pixels, not the whole LDConfig set), accumulates each color's
+  best coverage across the angle set, and compares the colors clearing a small area floor
+  (`--color-min-area`, default 0.01) against a committed `visibleColors`. Nearest-of-palette
   is what makes it **port across backends** where the goldens cannot — a shaded blue is still
   blue — so it catches the grey blob on a machine the goldens were never baked for. The
-  expectation is deliberately the **visible** set, a subset of the resolved colours: a colour
+  expectation is deliberately the **visible** set, a subset of the resolved colors: a color
   can be wholly occluded in every angle (Brick-Stack's lower-brick yellow studs under the top
-  brick) with nothing wrong, so `visibleColours` is *baked* from a trusted backend by
+  brick) with nothing wrong, so `visibleColors` is *baked* from a trusted backend by
   `--update-goldens`, never derived from the read-back — the same discipline as the golden
   PNGs. Landing it exposed and fixed a latent read-back bug: three's `LDrawLoader` gives a
-  multi-colour brick a material **array**, and the old single-material read reported an empty
-  palette for every multi-colour model. Beside each fixture, a `<name>.notes.md` names every
-  resolved colour (occluded ones marked), explains the `visibleColours` subset, and says what
+  multi-color brick a material **array**, and the old single-material read reported an empty
+  palette for every multi-color model. Beside each fixture, a `<name>.notes.md` names every
+  resolved color (occluded ones marked), explains the `visibleColors` subset, and says what
   each baked angle is for — the human half of the checklist.
 - **Hook boundary = catalog well-formedness only.** The render keeps a GPU in the path, so it
-  stays skill-invoked (D-028, §15.4) and the colour gate rides along in the on-demand `--check`.
+  stays skill-invoked (D-028, §15.4) and the color gate rides along in the on-demand `--check`.
   What graduates to a pre-commit hook is the **catalog** — the fixtures and the metadata beside
   them — which needs no pixels: `bikar:scripts/thumbnail-catalog.test.mjs` checks that every
   `.mpd` is paired with an `expected.json` and a `.notes.md` (none orphaned), that every resolved
-  colour is named in that model's notes (so the palette cannot grow without the notes — the W-F1
+  color is named in that model's notes (so the palette cannot grow without the notes — the W-F1
   coherence, ported), and that the catalog is non-empty. CI runs it wholesale (`test:scripts`);
   `bikar:.husky/pre-commit` runs it on staged fixture changes, deletions included so a stranded
   `expected.json` is caught as the orphan it is.
 
 ### The line, stated so the next model inherits the right half (K10)
 
-The split is the GPU. **Counts** (deterministic geometry) and the **colour set**
+The split is the GPU. **Counts** (deterministic geometry) and the **color set**
 (nearest-of-palette, shading-robust) both port across backends and so mean the same thing
 everywhere — both live in `--check`. **Golden pixels** do not port and stay soft and tolerant.
 The **catalog** has no pixels at all and so is the only one that becomes a hook. Not "the render
@@ -4561,16 +4561,16 @@ the hub.
 
 ---
 
-## D-068 — Border band and colour regions are coaster-level clauses, sequenced after the interlock and the lab
+## D-068 — Border band and color regions are coaster-level clauses, sequenced after the interlock and the lab
 
-**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 colour; product doc [`coaster-design.md`](coaster-design.md) §9)
+**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 color; product doc [`coaster-design.md`](coaster-design.md) §9)
 
 ### Context
 
 Omar asked three things of the printed coaster: can the border carry a different
-pattern from the field; will colour selection be part of the Coaster Lab; and does
+pattern from the field; will color selection be part of the Coaster Lab; and does
 the language have a "border" component that composes with a pattern component and
-takes its own colour, translating to different filaments on the X2D. The language
+takes its own color, translating to different filaments on the X2D. The language
 today has neither. bikar's `border` declaration is a *tile edge profile*, not a band
 that holds art; `color` is a 2D render attribute that no STL carries; the X2D's AMS
 filament assignment happens in the slicer against a 3MF, not in bikar.
@@ -4581,19 +4581,19 @@ filament assignment happens in the slicer against a 3MF, not in bikar.
   of the `coaster` block, the inner art inset by the band; named regions (`field`,
   `border`, `straps`) exported as separate bodies (`--format parts`) so the plate
   composer can map region → filament in the 3MF. The language composes two
-  patterns; the colour lives in the export, not the geometry.
+  patterns; the color lives in the export, not the geometry.
 - **(b) A second `coaster` overlaid on the first** — two declarations, one ring
   and one field, unioned. bikar has no boolean union, so the ring would need to be
   a second body anyway; and the pair shares no `size`, so the derivation of D-065
   splits.
-- **(c) Colour as a DSL attribute on 3D declarations** — `color` on `coaster`
-  regions, emitted into the STL by convention. STL carries no colour; the attribute
+- **(c) Color as a DSL attribute on 3D declarations** — `color` on `coaster`
+  regions, emitted into the STL by convention. STL carries no color; the attribute
   would be a promise the format cannot keep (K10: a 2D attribute does not transfer
-  to a colourless mesh format).
+  to a colorless mesh format).
 
 ### Decision — (a) as direction, not yet built
 
-A border is a coaster clause that composes a second pattern; colour is a per-region
+A border is a coaster clause that composes a second pattern; color is a per-region
 export that becomes a filament map in the 3MF. Sequenced **after** the interlock
 (#34), because the tab geometry decides what a border band's outer edge is, and
 **after** the Coaster Lab (#35, D-067), because the lab is where the region →
@@ -4604,7 +4604,7 @@ the format cannot make.
 
 A multi-body export the slicer will not accept as one object with per-part
 filaments, or a border band that the interlock tabs cannot cross cleanly — either
-sends the border back to a single-body, single-colour clause with colour applied by
+sends the border back to a single-body, single-color clause with color applied by
 hand in the slicer.
 
 ---
@@ -4754,7 +4754,7 @@ will get; the kernel is the only party that does.
   kernel: one reserved word per style and art inside the kernel, the composition
   D-068 rejected.
 - **(e) 2D composition in the pattern layer** — one `inscribe` of a nested pattern:
-  CV7 cannot tell band from field, and no region exists for colour (#37).
+  CV7 cannot tell band from field, and no region exists for color (#37).
 
 ### Decision — (b)
 
@@ -4847,7 +4847,7 @@ the two-names-one-meaning defect the log keeps deciding against
 
 A **knob that must branch on nozzle count or per-tool nozzle diameter** — e.g. a
 multi-material orb whose clearance or wall rule changes with which tool lays which bead, or a
-build-check that a two-colour plate exceeds a per-tool envelope. On that day the field earns
+build-check that a two-color plate exceeds a per-tool envelope. On that day the field earns
 its place because a real consumer reads it, and the widening carries the caller that motivated
 it. Until then, a dual-nozzle machine is a single-nozzle envelope with a truthful label. Note
 also that all four existing Bambu entries and the X2D publish a 256³-class envelope; if the
@@ -4958,10 +4958,10 @@ transfer condition — then an item needs a fuller identity and (b) is revisited
 proves unreliable in headless X2D, the self-owned 2D packer (umbrella P2) replaces it, recorded in
 `docs/issues/`.
 
-## D-073 — Coaster colour is per-region symbolic labels compiled to per-body export, never painted pixels or a DSL-bound slot
+## D-073 — Coaster color is per-region symbolic labels compiled to per-body export, never painted pixels or a DSL-bound slot
 
-Design: [`coaster-colour-design.md`](coaster-colour-design.md). Extends the border's band/field
-region split ([D-071](decisions-log.md)) to a full region vocabulary with per-region colour that
+Design: [`coaster-color-design.md`](coaster-color-design.md). Extends the border's band/field
+region split ([D-071](decisions-log.md)) to a full region vocabulary with per-region color that
 maps to X2D AMS filaments.
 
 ### Options on the table
@@ -4971,13 +4971,13 @@ maps to X2D AMS filaments.
 - **(b) Bind an AMS slot / filament id directly in the DSL** — the coaster source names the
   physical spool.
 - **(c) Paint the single body** — 2D-style ink on the one coaster STL.
-- **(d) Do nothing** — keep the one-body, one-colour coaster.
+- **(d) Do nothing** — keep the one-body, one-color coaster.
 
 ### Decision — (a)
 
 Region vocabulary `base | straps | border`, symbolic names — the DSL says what is *distinct*, the
 print manifest says which *spool*, so the source never couples to a printer's slots (rejecting (b)).
-An STL carries no colour and a coaster is one body, so ink does not transfer to 3D (rejecting (c)):
+An STL carries no color and a coaster is one body, so ink does not transfer to 3D (rejecting (c)):
 `bikar render --format parts` splits the height field into one watertight body per non-empty region,
 each passing `--check`, their union face-coincident with the one-body STL. This requires an
 **emboss** relief ([D-066](decisions-log.md)); a deboss leaves an empty body and is refused. The
@@ -4989,12 +4989,12 @@ import) is UNVERIFIED and flagged in both the design and research files.
 
 If bikar gains true per-face material attributes on a single mesh that slice to multi-material
 without a per-body split, the `--format parts` split becomes unnecessary. If headless per-object
-3MF assignment proves impossible, colour routing falls back to GUI-assisted assignment (a
+3MF assignment proves impossible, color routing falls back to GUI-assisted assignment (a
 robustness downgrade), recorded in `docs/issues/`.
 
 ## D-074 — The coaster region split detects height-field pinches and resolves them by a `--pinch` strategy (fillet default); it is not scoped away
 
-Design: [`coaster-colour-design.md`](coaster-colour-design.md) §5. Amends the split mechanism of
+Design: [`coaster-color-design.md`](coaster-color-design.md) §5. Amends the split mechanism of
 [D-073](decisions-log.md); the region vocabulary and the palette-name-never-a-slot rule are
 unchanged.
 
@@ -5028,8 +5028,8 @@ The kernel **detects** every pinch (the four-faces-at-an-edge test, §5.2) and r
 CLI flag `--pinch fillet|merge|error` (§5.3) — a manufacturing choice, so a flag, never a DSL
 statement (K10). **`fillet`** (default) raises each pinch to the printable floor on the split
 bodies only, so union == single holds everywhere outside sub-floor notches (`--format stl`
-untouched); **`merge`** recolours the pinch tip to `base` — exact on a pinch-free coaster, a
-sub-floor residual (≈5·10⁻⁴ rel.) on a saddled one per §5.1 — at the cost of the tip's colour;
+untouched); **`merge`** recolors the pinch tip to `base` — exact on a pinch-free coaster, a
+sub-floor residual (≈5·10⁻⁴ rel.) on a saddled one per §5.1 — at the cost of the tip's color;
 **`error`** refuses with each pinch's `(x, y)`. `--pinch keep` is deliberately
 not offered. The pinch floor is **CAL-PIN-01** — whether the single-filament `featureFloorMm`
 (0.80 mm) is the right threshold for a two-filament interface is a bet, not a bare number. The
@@ -5040,16 +5040,16 @@ print, and (B) makes it so while (A) turns the flagship away.
 ### What would reverse it
 
 If a print measures CAL-PIN-01 and finds a two-filament interface needs a floor so large that
-`fillet` visibly distorts tips, `merge` becomes the sensible default (recolour rather than
+`fillet` visibly distorts tips, `merge` becomes the sensible default (recolor rather than
 thicken) — a default flip, not a redesign. If bikar gains true per-face material attributes that
 slice to multi-material without a per-body split, the whole split — and the pinch problem with
 it — becomes unnecessary (the D-073 reversal condition).
 
 ---
 
-## D-075 — Coaster plate colour maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
+## D-075 — Coaster plate color maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
 
-Design: [`coaster-colour-design.md`](coaster-colour-design.md) §6 and
+Design: [`coaster-color-design.md`](coaster-color-design.md) §6 and
 [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). Implements the dependency
 [D-074](decisions-log.md) §6 named but left to the composer. Grounded in
 [`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the headless-CLI
@@ -5057,7 +5057,7 @@ Design: [`coaster-colour-design.md`](coaster-colour-design.md) §6 and
 
 ### The two questions
 
-bikar splits a coloured coaster into one STL per region body (`base`/`straps`/`border`) and a
+bikar splits a colored coaster into one STL per region body (`base`/`straps`/`border`) and a
 `<Coaster>.parts.json` sidecar tagging each body with the author's palette **name** + hex. The
 composer must turn that into a plate the X2D slices in multiple filaments. Two sub-questions:
 **(i)** which logical filament slot does each palette get; **(ii)** how does the assignment reach
@@ -5087,7 +5087,7 @@ The pure mapping is `tools/bambu/src/ams.ts` (`buildAmsSlotMap`), landed with un
 resolves to two hexes is an error, the count capped at the AMS capacity the caller supplies (the
 module's fallback is one unit's four slots; the composer passes the real capacity in 4b-ii). It also emits
 the `project_settings.config` parallel arrays (`filament_type`/`filament_colour`/`filament_id`,
-every colour slot reusing the default's material + a non-empty id so no slot silently routes to the
+every color slot reusing the default's material + a non-empty id so no slot silently routes to the
 external spool, §6). Wiring compose to render coaster items `--format parts`, assemble the multi-part
 input 3MF, and slice it with `--load-filaments` in slot order is **part 4b-ii** — deferred because it
 is the one piece that needs the slicer to verify end-to-end, and the print itself is owner-gated
@@ -5096,14 +5096,14 @@ is the one piece that needs the slicer to verify end-to-end, and the print itsel
 ### What would reverse it
 
 A **logical** slot is not a **physical** AMS slot — the physical mapping is resolved at print time
-by colour match (§6 caveat), so nothing here claims a spool. If a slice proves `--arrange` can keep
+by color match (§6 caveat), so nothing here claims a spool. If a slice proves `--arrange` can keep
 loose region STLs of one object registered (it cannot today), (ii-b) would drop the assembler. If
 bikar gains `--format 3mf` emitting the multi-part object with extruder tags, the composer stops
 assembling and just slices — the mapping rule (i-a) stays.
 
-## D-076 — The Coaster Lab colour knob adds a `palette` block to the splittable presets and tints the whole preview per region
+## D-076 — The Coaster Lab color knob adds a `palette` block to the splittable presets and tints the whole preview per region
 
-Design: [`coaster-colour-design.md`](coaster-colour-design.md) §7. Ships the knob that
+Design: [`coaster-color-design.md`](coaster-color-design.md) §7. Ships the knob that
 [D-073](decisions-log.md) named ("a Coaster Lab knob edits the `color` statements and tints the
 preview per region"), on the region split [D-074](decisions-log.md) and the palette grammar
 [D-073](decisions-log.md) provide. bikar #216 (part 5).
@@ -5117,7 +5117,7 @@ file's own `palette`, the preview tinted per region — but two build choices we
   statements, so a knob classifying to "the model's own palette" would have nothing to offer on a
   fresh preset.
 - **(Q2) How far does the preview tint go?** The Lab viewer paints one bronze material; a per-region
-  tint means a new colour channel through the protocol, the evaluator, and the canvas shader.
+  tint means a new color channel through the protocol, the evaluator, and the canvas shader.
 
 ### Options on the table
 
@@ -5134,7 +5134,7 @@ file's own `palette`, the preview tinted per region — but two build choices we
   `coasterTint` mesh carrying a parallel per-triangle `triRgb` channel, and the viewer prefers it —
   so the gate/STL keep the original solid mesh untouched and bronze output stays byte-identical when
   nothing is tinted. Non-splittable presets and any split error fall back to bronze and hide the
-  Colours section.
+  Colors section.
 - **(Q2-b) A flat swatch legend beside the preview, no 3D tint.** Rejected: the author would not see
   which body is which region on the actual geometry — the thing the split produces — and a saddled
   pattern's region boundaries are exactly where a legend cannot show them.
@@ -5143,22 +5143,22 @@ file's own `palette`, the preview tinted per region — but two build choices we
 
 Landed as bikar #216. The knob edits the `color <region> <name>` statements in the editor buffer
 (the `setCoasterColor` line editor) and flips to custom mode, exactly as the numeric knobs edit
-their params; "default (one colour)" removes the statement. The core change is one field —
+their params; "default (one color)" removes the statement. The core change is one field —
 `CoasterResultProvenance.palette` exposes the inscribed pattern's full palette so the knob has the
-*choices*, not just the resolved colours. The four splittable presets gain Slab `#333333` / Gold
+*choices*, not just the resolved colors. The four splittable presets gain Slab `#333333` / Gold
 `#d4af37` (+ Copper `#b87333` on the border pair) — a neutral default open to a later taste call.
 
 ### What would reverse it
 
 The tint is a **preview**, not a print claim: correctness stays per-body geometry (the §5
-Validator, watertightness), never the render colour — the note §7 carries and the on-screen caption
+Validator, watertightness), never the render color — the note §7 carries and the on-screen caption
 repeats. If the presets later grow a shared house palette worth naming once, that palette still
 lives in each `.bkr` (Q1-b stays rejected); a Lab that reads it from one place would only be sound
 if the kernel read it there too. If bikar exposes region bodies without the fillet pinch
 (`--pinch` other than the default), the tint would follow the chosen strategy — it splits with the
 same default the export does, so the preview and the exported bodies never disagree.
 
-## D-077 — The coaster colour plate is a separate `slice coaster` verb; headless verifies GEOMETRY on a tag-stripped copy while colour is a GUI check
+## D-077 — The coaster color plate is a separate `slice coaster` verb; headless verifies GEOMETRY on a tag-stripped copy while color is a GUI check
 
 Builds part 4b-ii of [D-075](decisions-log.md) (the palette→slot map baked into a multi-part input
 3MF). Design: [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md) §12. Grounded in
@@ -5170,33 +5170,33 @@ Builds part 4b-ii of [D-075](decisions-log.md) (the palette→slot map baked int
 
 D-075 said "the composer assembles" a multi-part 3MF and the doc named `--load-filaments` as the
 slice. Wiring it end-to-end against the real slicer surfaced two forks the design had not settled:
-**(Q1)** does the colour path fold into `slice compose` or stand as its own verb; **(Q2)** how is
+**(Q1)** does the color path fold into `slice compose` or stand as its own verb; **(Q2)** how is
 the assembled plate verified, given that `--load-filaments`/`--load-settings` behave differently
 from the plan.
 
 ### Options on the table
 
 - **(Q1-a) A separate `slice coaster` verb** (chosen). `compose` renders each item `--format stl`
-  and hands loose solids to `--arrange 1 --export-3mf`; a colour plate cannot — a coaster's
+  and hands loose solids to `--arrange 1 --export-3mf`; a color plate cannot — a coaster's
   base/straps/border must stay coincident to register as one coaster (K10), so the assignment is
   baked into a multi-part input 3MF the verb assembles itself. The verb reuses `compose`'s manifest
   parse, item resolution (the D-072 iteration key — a coaster reprinted from either verb derives the
   same `it-<sha12>`, nothing forks), bed-fit pre-check, and record scaffolder.
-- **(Q1-b) A `--colour` flag on `slice compose`.** Rejected: one action with two output shapes
+- **(Q1-b) A `--color` flag on `slice compose`.** Rejected: one action with two output shapes
   (loose STLs vs an assembled multi-part 3MF) and two arrange semantics behind one name — the "one
   name, two meanings *is* the defect" trap (CLAUDE.md "robust over easy"). The shared machinery is
   already factored out (`resolveManifestItems`), so a second verb costs no duplication.
-- **(Q2-a) Split the honest signals: headless GEOMETRY on a tag-stripped copy, colour by GUI load**
+- **(Q2-a) Split the honest signals: headless GEOMETRY on a tag-stripped copy, color by GUI load**
   (chosen). The versioned `Application=BambuStudio-<ver>` tag SIGSEGVs the headless slicer (the
   pivot doc's bisection: bare `BambuStudio` exits 0, the versioned tag crashes in the native-project
   GL path), so the **shipped** 3MF keeps the versioned tag — the GUI has GL and honours the #9666
-  colour contract — and `--verify-geometry` slices a **tag-stripped copy** (no `--export-3mf`; that
-  hangs headless), asserting exit 0 + the loaded object count. Colour is a GUI check
+  color contract — and `--verify-geometry` slices a **tag-stripped copy** (no `--export-3mf`; that
+  hangs headless), asserting exit 0 + the loaded object count. Color is a GUI check
   (`bambu slice open`): `--load-settings machine;process` overrides the embedded filament arrays and clamps every
-  part to slot 1, so a headless slice **cannot** read per-region colour (pivot doc §4).
-- **(Q2-b) Trust the headless `result.json` filament count as the colour signal.** Rejected on
+  part to slot 1, so a headless slice **cannot** read per-region color (pivot doc §4).
+- **(Q2-b) Trust the headless `result.json` filament count as the color signal.** Rejected on
   measurement: §4 shows `result.json` reports one filament slot under `--load-settings` even when the
-  file carries three colours in `project_settings.config` and extruders 2/3/4 per part — an aggregate
+  file carries three colors in `project_settings.config` and extruders 2/3/4 per part — an aggregate
   that cannot discharge the per-part claim (CLAUDE.md: "an aggregate cannot discharge a claim about
   every part").
 
@@ -5216,34 +5216,34 @@ PASS (2 objects loaded, tag-stripped).
 ### What would reverse it
 
 If a future BambuStudio headless build stops crashing on the versioned tag AND stops overriding the
-embedded filament arrays under `--load-settings`, the verify could read colour headless and the
+embedded filament arrays under `--load-settings`, the verify could read color headless and the
 tag-strip step would fall away — the shipped-tag decision is pinned to the crash, not to the design.
 If a headless flag ever assigns objects to slots at slice time (BambuStudio#9666 resolved), the
-baked-in extruder metadata becomes optional and the two verbs could reconverge. Colour remains a GUI
+baked-in extruder metadata becomes optional and the two verbs could reconverge. Color remains a GUI
 gate until one of those changes; the print itself stays owner-gated (§11).
 
-## D-078 — Radial-band colour reuses the shipped `fill where ring` clause as a print region; no second radial grammar
+## D-078 — Radial-band color reuses the shipped `fill where ring` clause as a print region; no second radial grammar
 
 Answers task #25 (Omar 2026-09-19: "color different polygons differently in the same
 construction", with tooling for "polygons whose midpoints are equidistant from midpoint of
-construction"). Design: [`radial-band-colour-design.md`](radial-band-colour-design.md). Grounded in
-[`research/radial-band-colour-research.md`](research/radial-band-colour-research.md), which found
-the radial binning and the colour clause already shipped in bikar (`computeRingBins`, the `ring`
+construction"). Design: [`radial-band-color-design.md`](radial-band-color-design.md). Grounded in
+[`research/radial-band-color-research.md`](research/radial-band-color-research.md), which found
+the radial binning and the color clause already shipped in bikar (`computeRingBins`, the `ring`
 fill selector, `data-ring` in the SVG) — 2D SVG ink that never reaches the height-field kernel, with
 no verb to enumerate rings. Builds on the region→body→slot route of [D-073](decisions-log.md)/[D-074](decisions-log.md)/[D-075](decisions-log.md).
 
 ### The fork
 
-The ask straddles two disjoint colour systems: the 2D per-polygon `fill where ring == N color`
+The ask straddles two disjoint color systems: the 2D per-polygon `fill where ring == N color`
 and the 3D coaster `color <region>` (a fixed base/straps/border enum, bikar #216). How should an
-author say "this radial band is that colour" so it reaches a print?
+author say "this radial band is that color" so it reaches a print?
 
 ### Options (rendered a/b/c for Omar, who chose (a))
 
-- **(a) Reuse `fill where ring … color`** (chosen). The ring an author already colours in 2D
+- **(a) Reuse `fill where ring … color`** (chosen). The ring an author already colors in 2D
   becomes a print region: `--format parts` carries the face's ring index into the region split so a
-  coloured ring exports as its own AMS body, keyed on palette name. Zero new grammar; one read-only
-  `bands` enumeration verb. Scores 2/2/2/2/2 on the coaster-colour rubric.
+  colored ring exports as its own AMS body, keyed on palette name. Zero new grammar; one read-only
+  `bands` enumeration verb. Scores 2/2/2/2/2 on the coaster-color rubric.
 - **(b) `color band <i> <Name>`** — a new coaster-block statement. Rejected: adds a second radial
   system beside the shipped `fill where ring` — one concept ("the i-th ring") with two spellings,
   the "one name, two meanings *is* the defect" trap (CLAUDE.md "robust over easy"; cf. D-077 Q1-b,
@@ -5254,19 +5254,19 @@ author say "this radial band is that colour" so it reaches a print?
 
 ### Decision and the load-bearing rule
 
-Reuse (a). The one choice a reader must check is §6's precedence: **a ring colour, where present on
+Reuse (a). The one choice a reader must check is §6's precedence: **a ring color, where present on
 a face, overrides that face's coaster-region key for the split** — so the body set is one body per
 palette name any ring carries, plus the coaster's own base/straps/border bodies for the faces no
-ring colour claimed. Without this rule a face is claimed by both `color <region>` and
+ring color claimed. Without this rule a face is claimed by both `color <region>` and
 `fill where ring`, and the split is ambiguous; with it there is one owner per face and the body
-count is the number of colours, never the region × ring product (K7 against
-[`coaster-colour-design.md`](coaster-colour-design.md)). The AMS slot count that bounds useful bands
+count is the number of colors, never the region × ring product (K7 against
+[`coaster-color-design.md`](coaster-color-design.md)). The AMS slot count that bounds useful bands
 is a device fact read via `bambu filament` (warn, not cap), not a guessed constant — no new bet.
 
 ### Scope and what would reverse it
 
 Scope: the bridge into the **coaster** export (the only 3D solid bikar ships) and the `bands` verb.
-A bare pattern keeps its 2D ring colour unchanged. If bikar ever ships a second splittable 3D solid,
+A bare pattern keeps its 2D ring color unchanged. If bikar ever ships a second splittable 3D solid,
 the bridge generalises to it; if an author ever needs band edges the gap-clustering does not
 produce, option (c)'s explicit radii could be added **as a selector on the same `fill` clause**, not
 as a second statement — the reuse decision holds.
@@ -5399,7 +5399,7 @@ polar plot?". Settles the `orbit` call left open by [`multicolor-design.md`](mul
 - **`orbit` plus openwork fill** (chosen): the `orbit` word from `multicolor-design.md` §2.3, which
   groups pieces that a rotation (or a mirror, where the pattern has one) about the centre carries
   onto each other, then teach the openwork coaster to make a chosen orbit solid. Leaves `ring`
-  alone and unblocks the multi-colour work on CS-1 and the other files where rings split.
+  alone and unblocks the multi-color work on CS-1 and the other files where rings split.
 - **Move `ring`'s centre**: rejected, because it changes what `ring == N` means in every file that
   already selects by ring.
 - **A hand-picked list for CS-1 only**: rejected, because nothing would check the list and it would
@@ -5407,8 +5407,8 @@ polar plot?". Settles the `orbit` call left open by [`multicolor-design.md`](mul
 
 ### What stays open
 
-Which orbits to fill on CS-1 is a taste call, made from rendered variants. The multi-colour calls
-(flush or lowered fills, the colours) are still Omar's.
+Which orbits to fill on CS-1 is a taste call, made from rendered variants. The multi-color calls
+(flush or lowered fills, the colors) are still Omar's.
 
 ## D-082 — The docs vault uses Obsidian's core Bases for live views; Dataview and other community query plugins stay out
 
@@ -5466,3 +5466,70 @@ Obsidian rewrites a `.base` file when the view is saved in the app: it dropped t
 of `design-docs.base` and wrote `note.status` as `status` in `groupBy` and `order`. Every view is
 now written in that form, what each is for moved to [vault rules §2](../.claude/skills/vault-setup/vault-rules.md#2-views-core-bases-one-file-per-area),
 and the gate refuses a comment line or a `note.` name there (D10).
+
+## D-083 — American "color" everywhere, held by a gate; bikar does the same in #277
+
+Omar, 2026-09-28, in review thread e7b42d on
+[`color-preview-design-b.md`](color-preview-design-b.md), asked why the docs used the British
+spelling, then chose "American everywhere". The mix was an accident: the naqsh keyword and most
+code already said `color`, while the docs, skills, the `tools/bambu` code and 23 tracked file paths
+said British "colour".
+
+### Options
+
+- **American everywhere, with a gate** (chosen): one spelling in prose, identifiers and file names,
+  in this repo and in bikar ([bikar #277](https://github.com/NaqshCoffee/bikar/pull/277)). The naqsh
+  keyword is `color`, so a reader who learns the language meets one word, and a search for
+  "color" finds everything.
+- **Leave the mix**: no work, but every search needs both spellings, and the same idea keeps two
+  names — the "one name, two meanings" defect the robustness tenet tells us to remove
+  ([CLAUDE.md](../CLAUDE.md#robustness-over-ease--especially-when-offering-the-choice)).
+- **British everywhere**: would mean renaming the naqsh keyword and every `color` in bikar's code
+  and grammar, a far larger change for no gain.
+
+### What changed and what was kept
+
+Every use in this repo's docs, skills, memory, loop prompts, plans, tools, Makefile, hooks, `.bkr`
+comments and the gallery page became "color", case kept, including the bikar names #277 renamed
+(`visibleColors`, `--color-min-area`, `studsColor`, `resolveLdrawColor`, `LDRAW_COLOR_NAMES`,
+`parseOptionalPlaceColors` and the rest). Files were moved, not copied:
+[`color-preview-design.md`](color-preview-design.md) and its `-a`, `-b` and picture folder,
+[`coaster-color-design.md`](coaster-color-design.md),
+[`radial-band-color-design.md`](radial-band-color-design.md), four research files and the POC
+folder, and `tools/bambu/src/color-preview.ts` with its test. Review sidecars moved with their notes.
+
+Kept as written, because the name is not ours to change or the text is a quote:
+
+- names a file format or another program owns: Bambu Studio's `filament_colour` and
+  `extruder_colour` config keys, LDraw's `!COLOUR` meta-command and its `1 <colour>` line syntax;
+- `docs/research/*`: research is checked in verbatim, so only link targets that pointed at a moved
+  file were changed (an address, not the text);
+- review-md sidecars (`.<note>.comments.md`): only Obsidian writes them, and they hold the
+  reviewers' own words;
+- two quotes from outside sources, one anchor and one heading literal that point into verbatim
+  research, and the names a past branch and a past worktree had.
+
+### The gate
+
+[`.claude/gates/color_spelling.py`](../.claude/gates/color_spelling.py) (hook `48-color-spelling`,
+`make validate-color-spelling`) fails on British "colour" in any case, inside any word, in a
+tracked file's text or name, unless the line holds an allowed token or the file matches an allowed
+path. Every entry carries its reason (`--list`). It mirrors the color-spelling check bikar adds in
+[#277](https://github.com/NaqshCoffee/bikar/pull/277): an allowed token is cut out before the test,
+so a line with `!COLOUR` and a new misspelled identifier still fails.
+
+**Validator:** `python3 .claude/gates/color_spelling.py --self-test`
+PASS: `0 !COLOUR Black CODE 0` in a doc gives no finding, and a tree holding only that exits 0.
+FAIL: a staged doc with a new identifier spelled the British way (the self-test builds `foo` plus
+the old word) gives one finding and exit 1.
+
+### Pairing with bikar
+
+bikar #277 renames bikar's side and keeps one allowed token, the old name of
+[`color-preview-design.md`](color-preview-design.md), for its comments that name this repo's
+file. That token and those comments change in a small bikar PR right after this one merges. The
+use-case map's three UC18 anchors on renamed bikar functions can only be re-pinned once #277 is on
+bikar main.
+
+**What would reverse it:** a file format or tool we must write that requires the British spelling in
+a place the allow list cannot name narrowly — then add a token with its reason, not a path.

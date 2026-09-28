@@ -71,7 +71,7 @@ describe("buildModelSettingsConfig — per-part extruder assignment (§12 / rese
 });
 
 describe("buildProjectSettingsConfig — filament slot declaration", () => {
-  it("emits parallel arrays sized to the slot count, colours in slot order, non-empty ids", () => {
+  it("emits parallel arrays sized to the slot count, colors in slot order, non-empty ids", () => {
     const { map } = assemblyFrom([borderSidecar("Star")]);
     const json = JSON.parse(buildProjectSettingsConfig(map, DEF));
     expect(json.filament_colour).toEqual(["#ffffff", "#333333", "#d4af37", "#b87333"]);
@@ -96,7 +96,7 @@ describe("buildRootModel — the Application gate + assembly components", () => 
     expect((root.match(/<component p:path="\/3D\/Objects\/object_1.model"/g) ?? []).length).toBe(6);
   });
 
-  it("refuses an Application tag that would make the slicer drop colour (research contract / #9666)", () => {
+  it("refuses an Application tag that would make the slicer drop color (research contract / #9666)", () => {
     const { map, coasters } = assemblyFrom([borderSidecar("Star")]);
     expect(() => buildThreeMfMembers(coasters, map, DEF, "OrcaSlicer-2.0")).toThrow(/BambuStudio-/);
   });

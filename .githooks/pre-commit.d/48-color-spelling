@@ -1,0 +1,21 @@
+#!/bin/sh
+# Color-spelling gate (.claude/gates/color_spelling.py). 3d-models spells it
+# "color" (D-083, paired with bikar #277); this blocks a commit that stages the
+# British spelling in a file's text or name outside the gate's allow list, where
+# every entry carries its reason (`python3 .claude/gates/color_spelling.py --list`).
+# Override once: COLOR_SPELLING_OK=1 git commit
+#
+# wholesale: make validate-color-spelling
+[ -n "$COLOR_SPELLING_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the color-spelling gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 36-catalog-models: `gh-pages` carries `.githooks`
+# and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/color_spelling.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no color-spelling gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE" --staged

@@ -783,10 +783,10 @@ COASTER_MINI_BORDER_MM := 4
 # need 60 and 55 mm) has no mini: bikar refuses the override, and the loop logs
 # `coaster-mini skip: <id> — <reason>` instead of stopping every coaster after it.
 #
-# The gallery picture (docs/colour-preview-design.md step 5): every coaster
+# The gallery picture (docs/color-preview-design.md step 5): every coaster
 # bikar can split is drawn by `bikar render --format preview` straight into
-# build/images/<id>.png, in its filament colours and with no background, so no
-# colour key runs over it. Which coasters those are is bikar's call, not a list
+# build/images/<id>.png, in its filament colors and with no background, so no
+# color key runs over it. Which coasters those are is bikar's call, not a list
 # here: a coaster the split refuses (openwork, slab-reshaping joins such as
 # interlock, pegs, key and tab, `edge fillet … top`) logs one line,
 # `coaster-picture fallback: <id> — <bikar's refusal>`, and keeps the OpenSCAD
@@ -889,7 +889,7 @@ validate-print-review:
 validate-move-doc:
 	$(PYTHON) $(ROOT_DIR)/tools/move_doc.py --self-test
 
-# No-hole check on the coaster pictures (docs/colour-preview-design.md §7): each
+# No-hole check on the coaster pictures (docs/color-preview-design.md §7): each
 # picture bikar drew has transparent corners, no see-through pixel inside the
 # coaster, a coaster in it, and nothing cut off at the frame. Self-test first, so
 # a green run means the by-design failures fired. Skips when nothing is rendered.
@@ -909,6 +909,15 @@ cookbook:
 validate-cookbook:
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/gates/cookbook_coverage.py
+
+# The color-spelling gate — the wholesale form of
+# .githooks/pre-commit.d/48-color-spelling. 3d-models spells it "color" (D-083);
+# the British spelling fails anywhere outside the gate's allow list, each entry
+# with its reason (`--list`). Self-test first, so green means the FAIL case fired.
+.PHONY: validate-color-spelling
+validate-color-spelling:
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/color_spelling.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/color_spelling.py
 
 # The use-case validator's own fixtures, run before every `validate-use-cases`
 # (a prerequisite there, and a target here at the tail so no pinned Makefile

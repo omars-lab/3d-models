@@ -21,7 +21,7 @@ differ between profiles. Same material family, different calibrated profile → 
 
 The related "why is this slot the primary?" question is separate and benign: a **single-filament** plate
 defaults to the **lowest AMS slot** (A1). That slot being "primary" is just the default assignment for a
-one-colour job, not a special property of the spool.
+one-color job, not a special property of the spool.
 
 ## Is it a concern?
 

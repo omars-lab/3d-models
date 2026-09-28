@@ -135,16 +135,16 @@ minis-01 and minis-02 went out from Bambu Studio instead.
 
 **What replaced it.** Without `--ams-mapping`, `print send` now reads the plate's *used* filaments
 (`Metadata/slice_info.config`, not the project's full filament list) and the loaded trays (a
-read-only status request). It matches them by colour with the same `filament-sync` match, and
+read-only status request). It matches them by color with the same `filament-sync` match, and
 sends one tray number per filament, with -1 for the ones the plate does not print with. `use_ams`
 is true when any of those is an AMS tray. Trays are numbered `unit*4 + tray`, and the external
 spool by its id `254`, the numbering OpenBambuAPI documents for Studio's sends. An AMS HT unit
 (id 128 and up) has no number we are sure of, so a match to one is refused.
 
-**It refuses rather than choose.** A missing colour, a near-tie, a material mismatch or an
+**It refuses rather than choose.** A missing color, a near-tie, a material mismatch or an
 unnumbered tray stops the send, and it prints the loaded trays with their numbers so the operator
 can pass `--ams-mapping`. That is the usual case today: our slices carry Studio's default green
-`#00AE42`, not the colour that is loaded, so the operator names the tray, and choosing the
+`#00AE42`, not the color that is loaded, so the operator names the tray, and choosing the
 filament stays Omar's.
 
 **Still unconfirmed on the X2D.** The tray numbering, and whether dual-nozzle firmware also wants a

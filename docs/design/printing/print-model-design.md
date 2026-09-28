@@ -323,7 +323,7 @@ before any selection logic is built, to confirm the *X2D* frame actually carries
 assumes a tray shape it has not seen on this device.
 
 Selection uses **AskUserQuestion** only when the choice is genuinely the operator's —
-several plausible filaments loaded, or a material/colour trade the model does not
+several plausible filaments loaded, or a material/color trade the model does not
 settle. One clear match is chosen and *stated*, not asked (global rule: bias to
 action; reserve the question for the pivotal call).
 

@@ -1,14 +1,14 @@
 ---
 date: 2026-09-18
 feeds:
-  - '[[coaster-colour-design]]'
+  - '[[coaster-color-design]]'
 ---
 
 <!--
 provenance:
   date: 2026-09-18
   produced-by: subagent (Claude Opus 4.8) for Omar, in worktree 3d-models-colour on feat/design-colour
-  feeds: docs/coaster-colour-design.md (the coaster colour-region / per-body export / filament-map route, D-073)
+  feeds: docs/coaster-color-design.md (the coaster colour-region / per-body export / filament-map route, D-073)
   method: in-repo reads at the sibling checkouts present on this machine
           (~/Workspace/git/bikar on feat/bambu-x2d-print-target, ~/Workspace/git/3d-models on feat/x2d-slice-preflight)
           plus one WebSearch pass for Bambu AMS / 3MF facts. External snippets that could not be

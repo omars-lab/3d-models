@@ -44,11 +44,11 @@ once**, so an id means something only under its snapshot: Snapshot 1's #14 and S
 #14 are different tasks. Each snapshot's own note below says which sequence it uses. Newest
 first.
 
-**▸ Snapshot 10 — 2026-09-25 (plates, colour regions, the construction migrations,
+**▸ Snapshot 10 — 2026-09-25 (plates, color regions, the construction migrations,
 the consolidation).** **A fresh id sequence, not a continuation of Snapshot 9.** The
 live board was rebuilt from the continuation plan's later phases, so this snapshot's
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
-colour-regions id. Where a title below cites a second number (e.g. "#37 part 2",
+color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
 was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on

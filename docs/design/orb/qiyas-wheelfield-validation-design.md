@@ -127,7 +127,7 @@ run recorded in the research file:
   `OrbViewPolygon.minDot` is computed and never read by any consumer. The
   classic orbs measured zero such pairs on every axis, which is why the
   whole-face front cap has been sufficient for them and is not sufficient here.
-- **Every semantic channel is empty**: no face colours, no face classes, no
+- **Every semantic channel is empty**: no face colors, no face classes, no
   source primitives, `face_class` / `shape_id` / `authored_region` all null.
 
 So the work in front of us is roughly: one large bikar milestone to make the

@@ -41,7 +41,7 @@ silently disagree.
 
 ```
 Machine   ______________________  firmware ____________
-Material  brand ______________  type ______  COLOUR ______________  (colour changes flow — record it)
+Material  brand ______________  type ______  COLOR ______________  (color changes flow — record it)
 Spool     ______________________  (so a re-measure can rule the spool in or out)
 Nozzle    diameter ______  type ______  (brass / hardened / CHT — they do not flow alike)
 Layer height ______

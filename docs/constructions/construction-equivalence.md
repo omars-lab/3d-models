@@ -209,7 +209,7 @@ Run: `make reference IN=<export.ggb> OUT=<dir>` in the youtube repo, then
 | Oracle | Blind to | Covered by |
 |---|---|---|
 | O1 | anything not named: a `Sequence` orbit, which objects are hidden, what the pattern layer draws | O2, O3 |
-| O2 | ink outside the export's view (clipped on both sides alike); colour and fill; a label swap between two objects that draw the same ink | O1 |
+| O2 | ink outside the export's view (clipped on both sides alike); color and fill; a label swap between two objects that draw the same ink | O1 |
 | O3 (flat) | interior edges that change no bounded face; solid added beyond the reference (the interstitial fill, an invented region); everything the coaster adds after extrusion | O2 and its precision; the coaster validators and `CAL-CST-*` |
 
 ## 6. Where each runs

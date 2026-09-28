@@ -274,7 +274,7 @@ cannot discharge a claim about every part — `lego-lab-design.md` §14's one-re
 
 The strapwork ribbon alternates over/under at each crossing; on a closed surface every closed ribbon
 must return to its starting over/under state, which holds iff the crossing graph is consistently
-2-colourable ([survey §5](../../research/maclado-orb-survey.md), flagged there as an engine invariant to
+2-colorable ([survey §5](../../research/maclado-orb-survey.md), flagged there as an engine invariant to
 verify, not a sourced theorem). The existing woven family solves 2D crossing parity
 (`bikar:packages/core/src/kernel3d/weave.ts`), but its solver carries a **valence contract that is
 the real transfer condition** (§3): its crossing detector accepts only degree-2 and degree-4 nodes
@@ -284,7 +284,7 @@ placement/closure stages guarantee every welded node is 2- or 4-valent — other
 be generalised past its degree-4 assumption. This condition, not just "solve it on the welded graph",
 is what M4 must establish (§9.3).
 
-**Validator:** a woven maclado orb is accepted only when its crossing graph 2-colours consistently;
+**Validator:** a woven maclado orb is accepted only when its crossing graph 2-colors consistently;
 an odd cycle is surfaced as an error naming the offending ribbon, never silently flipped.
 PASS: a placement whose welded crossing graph is bipartite — every closed ribbon returns to its
 start state.
