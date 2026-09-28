@@ -16,7 +16,7 @@ follows.
 
 This is a *prepare-the-approach* item, in the sense [print register](../../tasks/coaster-pipeline/backlog.md) reserves for
 work that is queued but not yet a build. It is the visualization-layer sibling of the
-[rosette → LEGO-pin explorer](../../rosette-pin-explorer-design.md), which is the first concrete
+[rosette → LEGO-pin explorer](../pieces/rosette-pin-explorer-design.md), which is the first concrete
 consumer that will need this decision settled.
 
 ---
@@ -137,7 +137,7 @@ scheduled; the ordering is the dependency order, not a promise.
   decisions are settled, and the bikar-studio public-surface keystone resolved 2026-08-31
   (internal, org-GitHub-gated, internet-reachable).
 - **Phase 1 — one reference surface, end to end. SHIPPED 2026-08-31.** The
-  [rosette → LEGO-pin explorer](../../rosette-pin-explorer-design.md) was the natural first consumer:
+  [rosette → LEGO-pin explorer](../pieces/rosette-pin-explorer-design.md) was the natural first consumer:
   it is already an SVG instrument, and its own roadmap was *blocked on the same bikar-studio
   public-surface decision*. Built as the studio's `/rosette-explorer` page in a **plain vanilla
   shell** (Q-SHELL — d3 owns the `<svg>` inside a plain container), consuming real bikar rosette

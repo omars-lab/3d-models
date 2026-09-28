@@ -153,7 +153,7 @@ FAIL: the same layout labelled "seats on a stock baseplate" (the K2 non-goal ass
   `--format parts`, tests, a decision doc), sequenced after the explorer confirms the layout.
 - **The empirical residue is already someone else's bet.** Whether a *snap-to-studs* spaced array
   actually seats on a printed-onto-stock plate is plate fit and stud entry — the same measurements
-  the LEGO coupons in [print register](tasks/coaster-pipeline/backlog.md) §3.2 already hold (held on a printer). Per the
+  the LEGO coupons in [print register](../../tasks/coaster-pipeline/backlog.md) §3.2 already hold (held on a printer). Per the
   grounding process, one measurement is one bet: this feature mints **no** new bet, it inherits
   those. A *continuous* mount is a new printed object whose own fit is the same wall.
 
@@ -161,7 +161,7 @@ FAIL: the same layout labelled "seats on a stock baseplate" (the K2 non-goal ass
 
 The geometry, dimensions, and anchor rules are bikar's, grounded line-by-line in
 [`rosette-pin-explorer-design.md`](rosette-pin-explorer-design.md) §2 and §4 and its checked-in
-[audit](research/rosette-pin-explorer-grounding-audit.md); this doc adds no new number. The two
+[audit](../../research/rosette-pin-explorer-grounding-audit.md); this doc adds no new number. The two
 decisions in the header were made by the owner against a live prototype (this session) that draws
 the real pieces with the radial/grid and continuous/snap toggles. The `mural` relationship (§1) is
 read against [`lego-pattern-set-design.md`](lego-pattern-set-design.md) directly.

@@ -158,6 +158,6 @@ corrections; the design doc (`../tile-wall-design.md`) applies them:
    traces to thewave.engineer, which actually states the stud/tube interference is
    **0.1–0.2 mm**, ten times that. The *lesson* — raw interference fits cannot be the
    retention mechanism between printed tiles — survives, but on the argument rebuilt in
-   [`../lego-lab-design.md`](../lego-lab-design.md) §3.5 from measured repeatability
+   [`../design/pieces/lego-lab-design.md`](../design/pieces/lego-lab-design.md) §3.5 from measured repeatability
    (σ ≈ 0.02 mm) and bore-vs-boss asymmetry (NIST Moylan), which `../tile-wall-design.md`
    §2 now carries.

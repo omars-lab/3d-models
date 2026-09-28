@@ -152,7 +152,7 @@ WITHDRAWN: list[tuple[re.Pattern, str, str]] = [
         "±0.1–0.2 mm FDM accuracy",
         "no printer vendor publishes an accuracy figure at all (Bambu X1C and A1 "
         "spec sheets: zero matches; Prusa MK4S: no number). The rebuilt argument "
-        "is docs/lego-lab-design.md §3.5",
+        "is docs/design/pieces/lego-lab-design.md §3.5",
     ),
     (
         re.compile(r"\b6 of 37\b|\b4 self-intersections\b"),

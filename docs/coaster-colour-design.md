@@ -338,7 +338,7 @@ The preview **tints each region** by the palette hex, so the author sees the thr
 before export.
 
 This reuses the Lego Lab precedent that a render is classified to *the model's own palette*,
-not a global set ([`lego-lab-design.md`](lego-lab-design.md) §16.1). The transfer note (K10):
+not a global set ([`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §16.1). The transfer note (K10):
 the Lab borrows the **region-is-a-named-colour** idea and the per-model palette, **not** the
 Lego pixel/`visibleColours` gate — a coaster's regions are checked geometrically by the §5
 per-body Validator (watertightness), because the print's correctness is that each region is a

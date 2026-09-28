@@ -30,7 +30,7 @@ would have caught it if it were not.
 Builds on: [`../printing/calibration-design.md`](../printing/calibration-design.md) (§7's 23-row
 expectation table is what the labels are *for*, and D-014's mesh gate is where a
 text failure should surface). Rides:
-[`../../piece-composition-design.md`](../../piece-composition-design.md) — text is a feature
+[`../pieces/piece-composition-design.md`](../pieces/piece-composition-design.md) — text is a feature
 on a piece, not a piece.
 
 ---

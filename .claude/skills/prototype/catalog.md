@@ -281,8 +281,8 @@ earned until it records its provenance).
     measured fits, or do they interact?
 - **What we learned**: — pending.
 - **Feeds**: `FIT_GAP_MM` and `holeCompMm` in `bikar` `kernel3d/fit-profile.ts`
-  (value **and** provenance record); `docs/c2-assembly-design.md` Appendix B.3 and
-  B.6; `docs/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
+  (value **and** provenance record); `docs/design/pieces/c2-assembly-design.md` Appendix B.3 and
+  B.6; `docs/design/pieces/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
   which is why one plate closes both; W-F1's blade-clearance conversion.
 
 ## MC-2 — Wall ladder (minimum printable feature)
@@ -314,7 +314,7 @@ earned until it records its provenance).
     tall one), or is a single floor honest?
 - **What we learned**: — pending.
 - **Feeds**: `DEFAULT_MIN_FEATURE_MM` in `bikar` `kernel3d/mesh-gate.ts` (value
-  **and** provenance record); `docs/lego-lab-design.md` Appendix B.5 and the §7.4
+  **and** provenance record); `docs/design/pieces/lego-lab-design.md` Appendix B.5 and the §7.4
   `minFeatureMm: 0.8` override; P1 Q1 and LG-F1 Q5, both of which ask this
   question in design-specific form.
 
@@ -351,8 +351,8 @@ earned until it records its provenance).
     mode that matters for a cavity roof, as opposed to cosmetic sag.
 - **What we learned**: — pending.
 - **Feeds**: the bridge-span constant in `bikar` `kernel3d/print-gate.ts` (value
-  **and** provenance record); `docs/w2-connector-design.md` Appendix B.3 and §4
-  Q4; `docs/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
+  **and** provenance record); `docs/design/pieces/w2-connector-design.md` Appendix B.3 and §4
+  Q4; `docs/design/pieces/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
   cavity ceiling bridging cleanly) and §11 Q4.
 
 ## MC-4 — Overhang fan
@@ -415,7 +415,7 @@ earned until it records its provenance).
 - **What we learned**: — pending.
 - **Feeds**: `warpMm` in `bikar` `kernel3d/fit-profile.ts` — today literally
   `undefined` pending this measurement (value **and** provenance record);
-  `docs/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
+  `docs/design/pieces/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
   rather than re-measuring the printer.
 
 ## MC-6 — Bed-contact towers
@@ -554,7 +554,7 @@ earned until it records its provenance).
 # Tile-wall connector ladder (W-series)
 
 The W-series validates the **modular tile-wall** work (design docs
-`docs/tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
+`docs/design/pieces/tile-wall-design.md`, `docs/design/pieces/w2-connector-design.md`), not the orbs.
 These coupons decide the connector grammar — clipseat fit and the printed
 CornerClip — in plastic before any full wall is committed. Same learning-ladder
 rule: the fit coupon (W-F1) settles the blade clearance the clip coupon (W-C1)
@@ -668,11 +668,11 @@ free-standing strut). Only the clip is exempt, and only where noted.
   - [ ] 4. Front-face lippage across the joint — do adjacent tiles sit flush,
     or does the clip pull a step between them?
 - **What we learned**: — pending.
-- **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/w2-connector-design.md`
+- **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/design/pieces/w2-connector-design.md`
   Appendix B.6) — design-specific, deliberately **not** on the machine card, since
   a detent depth is a property of this clip's bayonet, not of the printer.
 - **Feeds**: the clipseat grammar default (rebate vs proud) in
-  `docs/w2-connector-design.md` §10 and every `clipseat` in
+  `docs/design/pieces/w2-connector-design.md` §10 and every `clipseat` in
   `patterns/Walls/*.bkr`; the mesh-gate sub-floor exemption for bayonet clips
   (`bikar` `kernel3d/corner-clip.ts` minFeature) if Q3 disproves durability;
   `patterns/Walls/Clip-Wall.bkr` as the first full wall once the joint is
@@ -731,12 +731,12 @@ free-standing strut). Only the clip is exempt, and only where noted.
 - **Feeds**: `FRAME_BAND_MM_CAL` in `bikar`
   `packages/core/src/kernel/wall-frame.ts`, which is what a bare `frame`
   resolves to; the **Perimeter frame (W3)** section of `bikar`
-  `docs/language-reference.md`; and `docs/tile-wall-design.md` §10 Q2.
+  `docs/language-reference.md`; and `docs/design/pieces/tile-wall-design.md` §10 Q2.
 
 # LEGO-compatible brick ladder (LG-series)
 
 The LG-series validates the **Lego Lab** work (design doc
-`docs/lego-lab-design.md`, survey `docs/research/lego-brick-system-survey.md`) —
+`docs/design/pieces/lego-lab-design.md`, survey `docs/research/lego-brick-system-survey.md`) —
 turning a bikar pattern into a 3D-printed part that clutches into real LEGO at
 true 8 mm scale.
 
@@ -1201,7 +1201,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Hung on one nail, does the tile sit level and stay put, or does it
     rotate about the single fixing?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/piece-composition-design.md`](../../../docs/piece-composition-design.md)'s
+- **Feeds**: [`docs/design/pieces/piece-composition-design.md`](../../../docs/design/pieces/piece-composition-design.md)'s
   countersink geometry; the gallery's first "functional piece" entry; Q2's
   answer feeds back into whether tile `depth` 6 is enough.
 
@@ -1231,7 +1231,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Seat and unseat TileB five times: does the sliding fit stay a sliding
     fit, or does it wear open?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/c2-assembly-design.md`](../../../docs/c2-assembly-design.md) §8's
+- **Feeds**: [`docs/design/pieces/c2-assembly-design.md`](../../../docs/design/pieces/c2-assembly-design.md) §8's
   fit-window claim — Q1 and Q2 together are the only thing that earns it; the
   `press`/`sliding` offsets in bikar's fit table; whether `--fit-profile` needs a
   per-material variant beyond PLA and PETG.
@@ -1253,7 +1253,7 @@ bikar `d9b3c84`, not an estimate.
   wall-clock time per tile.
 - **What we want to learn**:
   - [ ] 1. **Mass and time for one real tile.**
-    [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1 labels its
+    [`docs/design/pieces/tile-wall-design.md`](../../../docs/design/pieces/tile-wall-design.md) §7.1 labels its
     whole production table *estimates* — "~40–60 g, ~2–4 h at 0.2 mm on a modern
     small printer" — and makes computing them for real a W3 deliverable. Weigh the
     tile and read the slicer's actual time. The mesh's 59.9 cm³ is **solid**
@@ -1268,7 +1268,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Does tile-to-tile dimensional variation accumulate across the 2×2, so
     that the outer corners no longer land on the 201.2 mm boundary?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1's
+- **Feeds**: [`docs/design/pieces/tile-wall-design.md`](../../../docs/design/pieces/tile-wall-design.md) §7.1's
   estimate table — Q1 replaces every hedged figure in it with a measured one, and
   is the input W3's `layout report` production metrics need; the gallery's "what
   does a wall cost" note.
@@ -1296,7 +1296,7 @@ bikar `d9b3c84`, not an estimate.
 - **Mating parts**: four #8 pan-head screws — one per tile. Not one: `mount
   keyhole` is declared on the *tile*, so each placement mints its own keyhole
   (this catalog entry is why
-  [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md) §8's
+  [`docs/design/pieces/w2-connector-design.md`](../../../docs/design/pieces/w2-connector-design.md) §8's
   "hanging on one screw" was corrected on 2026-08-03; see its §11 Q6).
 - **What we want to learn**:
   - [ ] 1. Does one interior CornerClip actually hold four 100 mm tiles in
@@ -1316,7 +1316,7 @@ bikar `d9b3c84`, not an estimate.
     it, but it is the first object that can show whether the question is worth
     pursuing.
 - **What we learned**: — pending.
-- **Feeds**: [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md)
+- **Feeds**: [`docs/design/pieces/w2-connector-design.md`](../../../docs/design/pieces/w2-connector-design.md)
   §8's deliverable claim and §11 Q6 (Q5 is its only evidence); the connector BOM's
   all-four-full clip rule, which Q1 tests at its easiest case before W3 relaxes it
   to fragments; the gallery's clipped-wall entry.

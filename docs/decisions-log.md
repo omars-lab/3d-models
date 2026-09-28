@@ -159,7 +159,7 @@ docs becomes worth revisiting.
 
 ### Context
 
-[`lego-lab-design.md`](lego-lab-design.md) §10 marks R0 complete and puts
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 marks R0 complete and puts
 **LG-F1/F2/R1 — physical clutch coupons — directly before M6**, with the note
 that they *"block M6's dimensions."* Those coupons need a printer, which is
 owner-held and on hold. M6 as specified therefore cannot proceed.
@@ -294,7 +294,7 @@ qiyas's half is still unmeasured; task #13 should be re-scoped to that alone.
 
 ### Context
 
-D-003 deferred M6 because [`lego-lab-design.md`](lego-lab-design.md) §10 says
+D-003 deferred M6 because [`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 says
 the clutch coupons *"block M6's dimensions"*, and the coupons need a printer.
 The owner's direction: build the Lab UI, with the disputed values exposed as
 adjustable parameters, *because* real prints are coming and the Lab is where
@@ -355,7 +355,7 @@ change the Lab surfaces rather than hides.
 
 ### Context
 
-[`lego-lab-design.md`](lego-lab-design.md) §10 lists **multi-piece export** in
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 lists **multi-piece export** in
 P1. Scoping it surfaced a defect: a `brick` accepts a declared socket-role
 `port`, an `assembly` will `connect` a rod into it, and the C2 fit ladder checks
 the pin against the socket diameter and passes — but `buildBrick` never reads
@@ -527,7 +527,7 @@ Three documents disagreed about what catalog entry **W-F1** is, which
 [`catalog.md`](../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
 clipseat questions — which clearance seats a clip firmly, does it differ by tile
 material — while its **Model** line pointed at `Fit-Coupon.bkr`, which is a plate
-of bores and pins. [`w2-connector-design.md`](w2-connector-design.md) §8 named a
+of bores and pins. [`design/pieces/w2-connector-design.md`](design/pieces/w2-connector-design.md) §8 named a
 third thing, `Fit-Step-Gauge.bkr`, a file that has never existed in any repo.
 
 Reading the geometry rather than the docs settled which description was wrong.
@@ -883,17 +883,17 @@ pitch. Two candidate rules were on the table:
   interrupted per seam. The cut lines are injected into the pattern's own
   planar-graph extraction, so both sides of every seam carry bit-identical
   vertex coordinates by construction
-  ([design §5](lego-pattern-set-design.md)).
+  ([design §5](design/pieces/lego-pattern-set-design.md)).
 - **Gap-registered cut (rejected).** Pre-shrink each piece's art to the
   `8n − 0.2` body so relief runs flush to the physical edge. Rejected because
   it double-counts the inset — `PART_RELIEF_MM` transfers as a *physical-gap
   prediction*, not a pattern-registration offset, which is the repo's named
-  K10 defect ([design §3.2](lego-pattern-set-design.md)) — and because a
+  K10 defect ([design §3.2](design/pieces/lego-pattern-set-design.md)) — and because a
   per-piece offset mints per-piece coordinates, demoting seam continuity from
   an identity to a tolerance claim needing its own gate.
 
 **Is this the mosaic lego-lab ruled out?**
-[`lego-lab-design.md`](lego-lab-design.md) L78 lists "stock-part mosaic
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) L78 lists "stock-part mosaic
 generation and BrickLink/Rebrickable BOMs" as an LG non-goal, and `mosaic` was
 accordingly rejected as the declaration's name (bikar decision
 `2026-08-02-mural-panelization`). The ruling: L78 excludes composing pictures
@@ -901,7 +901,7 @@ out of *purchased* LEGO parts — palette quantization, part BOMs. A mural is
 the other branch: **printed** pieces carrying continuous engraved relief that
 no purchasable part has, mounted on a stock baseplate. The non-goal stands
 untouched; the family does not enter it
-([design §1](lego-pattern-set-design.md)).
+([design §1](design/pieces/lego-pattern-set-design.md)).
 
 ### Decision
 
@@ -1072,7 +1072,7 @@ to stay silent.
 
 ### Context
 
-[`tile-wall-design.md`](tile-wall-design.md) §10 Q2, open since the doc was
+[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q2, open since the doc was
 written: `checker` alternates two tile types across a wall, and every A–B
 adjacency is a joint. If the two types disagree about edge gap, clip type or
 clip position, the wall does not assemble. Enforce that by construction, or
@@ -1164,7 +1164,7 @@ it — here it skipped, silently, the newest thing it covered.
 
 ### Context
 
-[`tile-wall-design.md`](tile-wall-design.md) §10 Q3 asked whether a cropped edge
+[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q3 asked whether a cropped edge
 tile keeps its relief clipped mid-motif, or whether the border band thickens to
 absorb the cut — the tiler's trim strip, in-language. The doc leaned "offer
 both", and sketched the syntax as `crop clip | crop clip with frame`.

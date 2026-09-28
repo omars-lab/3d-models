@@ -202,7 +202,7 @@ them joins through the coaster's own openings.
   neck bet CAL-CST-06 (§10).
 - [`coaster-interlock-study.md`](coaster-interlock-study.md) §3: alternating tab/slot edges
   tile by translation on the hexagon only.
-- [`../tile-wall-design.md`](../tile-wall-design.md) §4: a separate `CornerClip` that drops
+- [`../design/pieces/tile-wall-design.md`](../design/pieces/tile-wall-design.md) §4: a separate `CornerClip` that drops
   into a `clipseat` recess across the joint. This is the repo's own precedent for a separate
   connector.
 - bikar `docs/design/coaster-openwork.md` §3: `frame ≥ depth + clearance + 1.6`, the

@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Lego Lab = bikar pattern → LEGO-compatible printed parts at true 8 mm pitch, printed parts not a stock-part mosaic, both gates (anchorability hard pass/fail + grid-fit 0..1 with scale/rotation sweep), interface as a per-piece DSL option (`docs/lego-lab-design.md`). `footprint outline` is the third footprint arm (requires `inscribe`, changes the shape never the lattice; V18 refuses cusps sharper than ≈23.1°).
+Lego Lab = bikar pattern → LEGO-compatible printed parts at true 8 mm pitch, printed parts not a stock-part mosaic, both gates (anchorability hard pass/fail + grid-fit 0..1 with scale/rotation sweep), interface as a per-piece DSL option (`docs/design/pieces/lego-lab-design.md`). `footprint outline` is the third footprint arm (requires `inscribe`, changes the shape never the lattice; V18 refuses cusps sharper than ≈23.1°).
 
 - **D-026** (bikar #79 `2d60b00`): `place <Piece> color <c>` takes a bare LDraw code or a grounded name — every name is the LDConfig name lower-cased, fetched 2026-08-06, no synonyms; resolution deferred to eval so a bad name fails every format.
 - **D-027** (bikar #80 `0f497df`): `studs <c>` paints stud triangles inside the inline block (one inherit slot on a type-1 line); a stud is exactly a triangle with a vertex above body height H; emitter refuses `studs` on an empty stud set.

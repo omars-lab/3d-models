@@ -285,7 +285,7 @@ frame-count constant. Every such value is inherited unchanged from a renderer
 this design does not modify, and marking an inherited constant `**Default:**`
 would claim a decision that was not made here. There is house precedent for
 declining the marker on exactly these grounds at
-[`../../lego-lab-design.md`](../../lego-lab-design.md), where a copy limit is left unmarked
+[`../pieces/lego-lab-design.md`](../pieces/lego-lab-design.md), where a copy limit is left unmarked
 "because no measurement settles it and pretending otherwise would put a number
 in Appendix B that no coupon can close." The same reasoning applies in the
 other direction: a number someone else already settled is not this document's

@@ -7,7 +7,7 @@ decisions:
 # Lego Pattern Set — one pattern → c×r pinned pieces (`mural`) — design doc
 
 Status: **v1 — drafted 2026-08-02, through the adversarial grounding audit (C4) the same day
-([research/lego-pattern-set-grounding-audit.md](research/lego-pattern-set-grounding-audit.md):
+([../../research/lego-pattern-set-grounding-audit.md](../../research/lego-pattern-set-grounding-audit.md):
 two internal-consistency defects and one misattributed citation found and fixed in place; all four
 Appendix-B bets survived counter-evidence search). Every clutch or registration claim below
 remains provisional until the LG-P coupons print.** The kernel prerequisite (§7, bikar
@@ -22,10 +22,10 @@ adjacently on a store-bought baseplate reconstitute the pattern in top view — 
 the 0.2 mm designed seam.
 
 Builds on: [`lego-lab-design.md`](lego-lab-design.md) (the `brick` declaration, anchor solver, both
-gates — a mural piece **is** a brick); [`research/lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md)
+gates — a mural piece **is** a brick); [`../../research/lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md)
 (the Appendix-A survey behind every dimensional claim here);
 [`tile-wall-design.md`](tile-wall-design.md) (what does *not* transfer — §3);
-[`decisions-log.md`](decisions-log.md) (D-013 will record the cut rule and the L78 ruling — C5; D-008 through D-012 are already
+[`../../decisions-log.md`](../../decisions-log.md) (D-013 will record the cut rule and the L78 ruling — C5; D-008 through D-012 are already
 assigned, a numbering collision the C4 audit caught).
 
 **Decisions locked by Omar, 2026-08-01, before this doc was written.** (1) Rectangular grid tiles
@@ -65,7 +65,7 @@ recentred, never scaled, and a pattern too big for the declared piece array is a
 smallest array that fits); curved or clipped baseplate outlines.
 
 **Prior art, and the gap this fills.** Of the systems surveyed in
-[`research/lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) §3 —
+[`../../research/lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md) §3 —
 LEGO Art 31203, Mosaic Maker, dlvoy/base-plate-outliner, MachineBlocks, Finke's printed bricks,
 and the Printables/Thingiverse results the survey's searches returned — **none was found that
 splits one continuous relief pattern across multiple LEGO-compatible printed pieces and validates
@@ -74,7 +74,7 @@ mosaic services tile 1×1 studs where the grid *is* the image. The claim is scop
 set, not to the world; but within it, LG-P1 has no published predecessor.
 
 Two near-misses found by the C4 audit
-([research/lego-pattern-set-grounding-audit.md](research/lego-pattern-set-grounding-audit.md))
+([../../research/lego-pattern-set-grounding-audit.md](../../research/lego-pattern-set-grounding-audit.md))
 sharpen rather than defeat the gap claim. Brickapic
 ([bricksly.net/tools/brickapic](https://bricksly.net/tools/brickapic), unfetched — 403, snippet
 only) splits one mosaic image across multiple 32×32/48×48 baseplates and re-renders "a grid
@@ -355,7 +355,7 @@ the section gets corrected in place and the deviation recorded, per house conven
 ## Appendix A — sources
 
 The research behind every dimensional, prior-art, and acuity claim in this document is checked in
-verbatim at [`research/lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md)
+verbatim at [`../../research/lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md)
 (produced 2026-08-02; provenance header names this doc as its consumer). Per-claim fetch status —
 including which numbers are **snippet-only** and which fetches failed — is recorded there, not
 duplicated here. Load-bearing items used above: LDraw 3811/4186 part files (8.0 mm pitch, 1.6 mm
@@ -364,7 +364,7 @@ absence finding on clone-plate pitch consistency (§2.2), the split-pattern prio
 the acuity/FDM-error numbers (§4).
 
 The C4 adversarial grounding audit of this document is preserved verbatim at
-[`research/lego-pattern-set-grounding-audit.md`](research/lego-pattern-set-grounding-audit.md)
+[`../../research/lego-pattern-set-grounding-audit.md`](../../research/lego-pattern-set-grounding-audit.md)
 (2026-08-02): claim-by-claim verdicts, the counter-evidence deep dives behind §1's near-miss
 paragraph and B.1's tuned-printer divergence, citation spot-checks (five fetched, all confirmed
 except B.4's bulge attribution, fixed), and the two K7 defects this revision corrects.
@@ -372,7 +372,7 @@ except B.4's bulge attribution, fixed), and the two K7 defects this revision cor
 ## Appendix B — contested bets and divergences
 
 Entries tagged `[CAL-…]` are empirical bets no source can close; ids live in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which names the
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which names the
 settling coupon. The status line at the top of this document claims no audit and no measurement;
 these entries are why.
 
@@ -390,7 +390,7 @@ on the best available printer; "one to two orders of magnitude" is the uncalibra
 LG-P1 (two 2×2 pieces, one motif crossing the seam, on one genuine and one clone plate) measures
 apparent seam width and jog. Until it prints, "reconstitutes the pattern" is a bet. LG-P1 is
 print-gated and **held** pending a printer; its catalog entry in
-[`.claude/skills/prototype/catalog.md`](../.claude/skills/prototype/catalog.md) is authored in C8
+[`.claude/skills/prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md) is authored in C8
 and did not exist when this doc first shipped (audit finding 10).
 
 **B.2 — Clone-plate behaviour.** [CAL-CLB-01 — coupon LG-P2] §3.3's scoping ("LEGO-brand verified;

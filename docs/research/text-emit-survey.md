@@ -386,7 +386,7 @@ self-intersecting meshes and overlapping shells as the class basic repair cannot
 fix. (All fetched 2026-08-04 via search summary; **the PrusaSlicer issue was not
 read in full and no slicer was run** — this is documentary, and route B's real
 status is untested.) This is the export-succeeds-and-yields-the-wrong-thing class
-that [`lego-lab-design.md`](../lego-lab-design.md) §14.3 exists to avoid.
+that [`lego-lab-design.md`](../design/pieces/lego-lab-design.md) §14.3 exists to avoid.
 
 **C. Don't use a font.** The requirement in
 [`calibration-design.md`](../design/printing/calibration-design.md) §3.2 is *rung identity*, not

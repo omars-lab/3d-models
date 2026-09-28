@@ -65,12 +65,12 @@
       "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and §Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
     },
     {
-      "doc": "docs/lego-lab-design.md",
+      "doc": "docs/design/pieces/lego-lab-design.md",
       "path": "config/config-default.scad",
       "why": "Third party — MachineBlocks' OpenSCAD source, cited for its calibration defaults."
     },
     {
-      "doc": "docs/lego-lab-design.md",
+      "doc": "docs/design/pieces/lego-lab-design.md",
       "path": "lib/block.scad",
       "why": "Third party, same source."
     },
