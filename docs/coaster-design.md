@@ -9,7 +9,7 @@ decisions:
 # The coaster (product design)
 
 The umbrella
-([`geogebra-construction-import-design.md`](geogebra-construction-import-design.md)
+([`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md)
 §8) owns the pipeline from a GeoGebra construction to a printable coaster; this
 doc owns the coaster itself — what it is, the two ways a construction becomes one,
 its structural validators and the numbers that back them. The geometry engine is

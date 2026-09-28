@@ -6,7 +6,7 @@ description: Migrate a GeoGebra construction into a naqsh (`.bkr`) file bikar re
 # import-construction — a GeoGebra construction → naqsh → coaster
 
 This skill runs the repeatable pipeline the umbrella design owns
-([`../../../docs/geogebra-construction-import-design.md`](../../../docs/geogebra-construction-import-design.md)):
+([`../../../docs/constructions/geogebra-construction-import-design.md`](../../../docs/constructions/geogebra-construction-import-design.md)):
 a youtube reconstruction's GeoGebra construction becomes a `.bkr` of record in
 bikar, is proven equivalent by three oracles, becomes a coaster, and lands in
 this repo's ledger and catalog. It advises and verifies; it **never** dispatches
@@ -114,7 +114,7 @@ lines, and the `<pattern>_scaffold` split.
 
 Run in the youtube worktree, `BIKAR_DIR` pointing at the bikar worktree whose CLI
 has `points`. Details and thresholds: [`rubric.md`](rubric.md) "Fidelity checks"
-and [`../../../docs/construction-equivalence.md`](../../../docs/construction-equivalence.md).
+and [`../../../docs/constructions/construction-equivalence.md`](../../../docs/constructions/construction-equivalence.md).
 
 - **O1 geometry** — `make naqsh-coords ID=<id> NAQSH=<id>.bkr`. Per authored label,
   GeoGebra's own numbers (dumped through the Apps API) vs `bikar points`, the frame

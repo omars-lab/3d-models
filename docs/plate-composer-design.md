@@ -12,7 +12,7 @@ decisions:
 flag, or file is a **target**, not a shipped file. This is task #12 P4.1 of
 [`.claude/plans/coaster-border-continuation.md`](../.claude/plans/coaster-border-continuation.md)
 §4. It specifies the composer that
-[`geogebra-construction-import-design.md`](geogebra-construction-import-design.md) §9
+[`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md) §9
 summarizes and defers to "the plate doc" — this one. Its key decision is
 [D-072](decisions-log.md); the decisions-log entry is written at integration, not here.
 Research on file: [`research/plate-composer-research.md`](research/plate-composer-research.md).*
@@ -238,7 +238,7 @@ as a guarantee — tiling is the slicer's `--arrange` result, not the pre-check'
 The complement — a plate whose parts' areas fit but that does **not tile** (concave/no-fit
 shapes) — is deliberately **not** the pre-check's claim to make: the pre-check passes it,
 and `--arrange` is the authority that catches a genuine no-fit, exactly as
-[`geogebra-construction-import-design.md`](geogebra-construction-import-design.md) §9 and
+[`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md) §9 and
 [`plate-builder-design.md`](plate-builder-design.md) §5 draw the advisory-vs-authoritative
 line.
 

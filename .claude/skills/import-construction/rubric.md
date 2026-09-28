@@ -5,7 +5,7 @@ rules** (would a person author this file?) and the **fidelity checks** (is it th
 same construction?). The readability rules apply to every construction `.bkr`,
 transpiled or hand-written; the fidelity checks are the three oracles' pass
 conditions, grounded in
-[`../../../docs/construction-equivalence.md`](../../../docs/construction-equivalence.md).
+[`../../../docs/constructions/construction-equivalence.md`](../../../docs/constructions/construction-equivalence.md).
 
 ## Readability rules — the checklist
 
@@ -66,7 +66,7 @@ it, so the disc auto-scales to the inscribed art (render mini/standard via
 An aggregate never discharges a per-object claim, so O1 is **per label** and O3
 reports **where** the worst deviation is, not only how much agrees. All three are
 run before a construction earns a catalog entry. Full spec, blind spots and
-provenance: [`../../../docs/construction-equivalence.md`](../../../docs/construction-equivalence.md).
+provenance: [`../../../docs/constructions/construction-equivalence.md`](../../../docs/constructions/construction-equivalence.md).
 
 ### O1 — per-label geometry (`make naqsh-coords`)
 

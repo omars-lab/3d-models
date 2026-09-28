@@ -29,7 +29,7 @@ systematically mis-priced unless these are written down. This is the same reason
 CLAUDE.md "robustness over ease". The dominating-variant search is what turned "rebuild
 GeoGebra's geometry engine" (huge, rejected) into "self-bootstrap the bikar kernel we
 already have" (small, chosen) — [D-080](../../docs/decisions-log.md), the
-[cached-coords producer design doc](../../docs/cached-coords-producer-design.md).
+[cached-coords producer design doc](../../docs/constructions/cached-coords-producer-design.md).
 
 **Confirmation (Omar, 2026-09-21):** "b prime sounds good if its a good long term
 investment, continue" — the **long-term-ownership axis was the deciding factor**, not

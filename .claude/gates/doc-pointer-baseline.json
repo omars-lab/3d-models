@@ -90,12 +90,12 @@
       "why": "Deliberately deleted. D-042 names this file as the thing it removed — a whole test file certifying the withdrawn centreline rule — and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
     },
     {
-      "doc": "docs/geogebra-construction-import-design.md",
+      "doc": "docs/constructions/geogebra-construction-import-design.md",
       "path": "schemas/ggb-construction.schema.json",
       "why": "Proposed — the AST contract P1.3 writes in the youtube repo (no sibling root here) and mirrors into bikar. Remove this when the mirror lands and the doc can point at bikar's copy."
     },
     {
-      "doc": "docs/geogebra-construction-import-design.md",
+      "doc": "docs/constructions/geogebra-construction-import-design.md",
       "path": "docs/design/construction-ast-export.md",
       "why": "Somebody else's tree — the youtube repo's design doc for the AST export (P1.3), cited as the producer's account. youtube is not a sibling this gate resolves (no remote, pinned only by the schema-mirror gate once its schema commit lands)."
     },
