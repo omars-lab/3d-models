@@ -1,3 +1,9 @@
+---
+date: 2026-09-27
+feeds:
+  - '[[multicolor-design]]'
+---
+
 <!--
 provenance:
   date: 2026-09-27

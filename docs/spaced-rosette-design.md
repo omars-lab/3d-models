@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Spaced Rosette — a rosette as individual pieces on a spaced grid — design doc
 
 Status: **v1 plan — drafted 2026-09-02, after a live concept prototype (this session) that

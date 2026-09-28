@@ -1,3 +1,7 @@
+---
+status: decided
+---
+
 # Coloured coaster pictures and the Coaster Lab colour controls — the consolidated design
 
 Omar, 2026-09-28: "Do we have the ability to alternate colors / customize colors on the PNGs we

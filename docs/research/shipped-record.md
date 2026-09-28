@@ -1,3 +1,7 @@
+---
+date: 2026-09-02
+---
+
 # Shipped record — the Islamic orb project, 2026-07-23 → 2026-09-02
 
 What this is: the dated ship log that used to live in the auto-memory file

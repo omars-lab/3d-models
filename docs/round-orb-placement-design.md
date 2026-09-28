@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-047
+---
+
 # Placing a round pattern on a sphere — design doc
 
 Status: **v1 — Phase 0 + Phase 1 built and green in bikar (`packages/core`), witnesses

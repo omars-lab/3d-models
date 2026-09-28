@@ -1,3 +1,9 @@
+---
+status: draft
+decisions:
+  - D-018
+---
+
 # Print Validation Gate — design doc (pre-implementation)
 
 Status: **DRAFT v2 — no implementation yet.** Revised after an adversarial grounding

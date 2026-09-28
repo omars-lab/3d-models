@@ -1,3 +1,7 @@
+---
+date: 2026-09-18
+---
+
 # The coaster→AMS 3MF: the `BambuStudio-<version>` Application tag SIGSEGVs the headless slicer, and `--export-3mf` hangs it
 
 *Pivot for #37 part 4b-ii. Written 2026-09-18 against BambuStudio 02.08.02.61 on macOS 25.6

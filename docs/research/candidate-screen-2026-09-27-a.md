@@ -1,7 +1,8 @@
 ---
 date: 2026-09-27
 produced-by: researcher A (Claude Opus 5.5), web research — WebSearch, WebFetch, YouTube oEmbed and watch-page metadata, YouTube storyboard sprite sheets and thumbnails, the GeoGebra materials API
-feeds: docs/tasks/catalog-expansion/backlog.md item 2 (screen new construction candidates)
+feeds:
+  - '[[tasks/catalog-expansion/backlog|catalog-expansion backlog item 2 (screen new construction candidates)]]'
 ---
 
 # Candidate screen A, 2026-09-27

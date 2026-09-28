@@ -1,3 +1,7 @@
+---
+date: 2026-09-28
+---
+
 # The table was fine; a wrapped code span broke it
 
 Review thread 7rlhya (2026-09-28) on

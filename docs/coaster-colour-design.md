@@ -1,3 +1,13 @@
+---
+status: decided
+decisions:
+  - D-073
+  - D-074
+  - D-075
+  - D-076
+  - D-078
+---
+
 # Coaster colour regions — a symbolic name per region, one body per colour, a filament map at the slicer
 
 *Status: designed (task #37, decisions D-073, D-074). The direction is D-068 (coaster-level

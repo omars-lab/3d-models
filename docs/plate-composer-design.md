@@ -1,3 +1,11 @@
+---
+status: draft
+decisions:
+  - D-072
+  - D-075
+  - D-077
+---
+
 # Plate composer — many rendered pieces onto one X2D plate
 
 *Status: DRAFT, DESIGN ONLY — NOT BUILT. Every path this doc gives for a new subverb,

@@ -1,5 +1,5 @@
 ---
-title: "Floating regions" slicer warning
+title: '"Floating regions" slicer warning'
 symptom: Bambu Studio flags "floating regions" / unsupported overhang after slicing
 kind: slicer-warning
 proof: slice-only

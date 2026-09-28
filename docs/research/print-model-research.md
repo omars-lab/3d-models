@@ -1,3 +1,9 @@
+---
+date: 2026-09-16
+feeds:
+  - '[[print-model-design]]'
+---
+
 <!-- provenance: date=2026-09-16; produced-by=claude-opus-4-8 research subagent; feeds=docs/print-model-design.md -->
 
 # print-model skill — grounded web research

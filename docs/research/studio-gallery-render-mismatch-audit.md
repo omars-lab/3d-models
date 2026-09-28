@@ -1,3 +1,9 @@
+---
+date: 2026-08-02
+feeds:
+  - '[[lego-lab-design]]'
+---
+
 <!--
 provenance
   date:         2026-08-02

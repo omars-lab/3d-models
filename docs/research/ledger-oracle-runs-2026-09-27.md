@@ -1,3 +1,9 @@
+---
+date: 2026-09-27
+feeds:
+  - '[[constructions/ledger]]'
+---
+
 <!-- Produced 2026-09-27 by Claude (local runs of the youtube O1/O2/O3 targets, bikar CLI, qiyas mesh compare); checked in verbatim. Feeds: docs/constructions/ledger.md (the oracle cells). -->
 
 # Ledger oracle runs, 2026-09-27

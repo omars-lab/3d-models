@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Derivation Worksheet — implementation design doc
 
 Status: **DRAFT v1 — grounded in a derivation-visualization survey

@@ -1,3 +1,9 @@
+---
+date: 2026-08-02
+feeds:
+  - '[[lego-pattern-set-design]]'
+---
+
 <!-- Produced 2026-08-02 during the mural (pattern → pinned tile set) design work, by a research
      agent using WebSearch/WebFetch plus raw curl fetches of individual LDraw part files from
      library.ldraw.org. Checked in verbatim per the ground-design-doc convention.

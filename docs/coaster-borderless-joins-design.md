@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Coaster joins without a wide border
 
 *Status: proposal, 2026-09-26. Nothing here is built or printed. The sources and what

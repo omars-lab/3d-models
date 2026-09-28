@@ -1,3 +1,7 @@
+---
+status: decided
+---
+
 # Auto-pulling the print profile header from the printer
 
 **Status:** design, grounded 2026-09-17 · **Grounded in:**

@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # Session-reflection: a measured FAQ that answers what sessions re-derive
 
 **Status:** built (2026-09-25). `tools/session_reflect.py` ships

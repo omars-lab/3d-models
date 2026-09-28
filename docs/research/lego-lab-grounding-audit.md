@@ -1,3 +1,9 @@
+---
+date: 2026-07-29
+feeds:
+  - '[[lego-lab-design]]'
+---
+
 <!--
   Grounding audit produced 2026-07-29 by an adversarial research agent
   (Agent tool, general-purpose) run under .claude/skills/ground-design-doc.

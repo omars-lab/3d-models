@@ -1,3 +1,9 @@
+---
+date: 2026-09-26
+feeds:
+  - '[[multicolor-constructions-design]]'
+---
+
 <!--
 provenance:
   date: 2026-09-26

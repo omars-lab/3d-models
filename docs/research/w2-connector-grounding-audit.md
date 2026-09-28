@@ -1,3 +1,9 @@
+---
+date: 2026-07-28
+feeds:
+  - '[[w2-connector-design]]'
+---
+
 <!-- Produced 2026-07-28 by a Claude adversarial grounding-audit subagent (WebSearch/WebFetch + local bikar tree reads); checked in verbatim. Audits: docs/w2-connector-design.md (its Appendix B is derived from this report). -->
 
 # Grounding audit: docs/w2-connector-design.md

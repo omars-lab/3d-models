@@ -1,7 +1,10 @@
 ---
 date: 2026-09-17
-produced-by: this session — bikar `feat/coaster-shape-v2` (PR NaqshCoffee/bikar#208) dist: `interlock_probe.mjs` (the two goldens evaluated at size 40 and 90 with `margin` overridden, the fitted outline's ring, a self-mating dovetail ring built on it, and the signed distance of every drawn segment endpoint to both rings), `edge_lengths.mjs` (side length and edge parity of the seven outline candidates), and a read of `coaster.ts`, `coaster-validate.ts` and `grid-gate.ts` at bikar 30db06a
-feeds: docs/coaster-interlock-design.md, docs/coaster-design.md §9, docs/decisions-log.md D-069
+produced-by: "this session — bikar `feat/coaster-shape-v2` (PR NaqshCoffee/bikar#208) dist: `interlock_probe.mjs` (the two goldens evaluated at size 40 and 90 with `margin` overridden, the fitted outline's ring, a self-mating dovetail ring built on it, and the signed distance of every drawn segment endpoint to both rings), `edge_lengths.mjs` (side length and edge parity of the seven outline candidates), and a read of `coaster.ts`, `coaster-validate.ts` and `grid-gate.ts` at bikar 30db06a"
+feeds:
+  - '[[coaster-interlock-design]]'
+  - '[[coaster-design|coaster-design §9]]'
+  - '[[decisions-log|decisions-log D-069]]'
 ---
 
 # Coaster interlock study

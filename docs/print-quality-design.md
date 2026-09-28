@@ -1,3 +1,7 @@
+---
+status: decided
+---
+
 # Print quality for thin openwork coasters on the X2D
 
 **Status:** consolidated design, 2026-09-26. Nothing in it has been printed or measured.

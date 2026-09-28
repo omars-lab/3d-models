@@ -1,3 +1,9 @@
+---
+date: 2026-09-17
+feeds:
+  - '[[session-reflection-design]]'
+---
+
 <!-- provenance: date=2026-09-17; produced-by=claude-opus-4-8 (session_reflect.py --census prototype, run by hand); feeds=docs/session-reflection-design.md; scope=measured census of the local Claude Code transcripts for 3d-models, with a glance at the bikar and youtube sibling slugs -->
 
 # Session-reflection census — what actually gets re-derived

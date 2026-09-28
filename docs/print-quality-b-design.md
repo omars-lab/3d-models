@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Print quality for thin openwork coasters (researcher B)
 
 **Status:** research draft, 2026-09-26. Nothing in it has been printed or measured. It is

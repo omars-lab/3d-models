@@ -1,3 +1,9 @@
+---
+date: 2026-07-31
+feeds:
+  - '[[lego-lab-design]]'
+---
+
 <!--
   Measurement run 2026-07-31 by bikar `scripts/sweep-lattice-matrix.ts`
   (bikar PR #37), executed against bikar `origin/main` at c60faf2.

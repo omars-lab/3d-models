@@ -1,3 +1,9 @@
+---
+date: 2026-08-15
+feeds:
+  - '[[qiyas-wheelfield-validation-design]]'
+---
+
 <!--
   Research produced 2026-08-15 by Claude Fable 5 (two parallel Explore
   sub-agents) under the 3d-models design-doc rules, for extending qiyas 3D

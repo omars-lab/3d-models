@@ -1,3 +1,9 @@
+---
+date: 2026-08-04
+feeds:
+  - '[[text-emit-design]]'
+---
+
 <!--
   Research produced 2026-08-04 by Claude (Opus 5) under the 3d-models
   design-doc rules, for the text-emit capability that

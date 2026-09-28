@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Multicolour constructions — filled, coloured shapes on a coaster
 
 > **Superseded by [multicolor-design.md](multicolor-design.md)** (the checker's consolidated

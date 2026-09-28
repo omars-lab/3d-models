@@ -1,3 +1,7 @@
+---
+status: superseded
+---
+
 # Print quality for thin openwork PLA coasters on the X2D (research A)
 
 Status: proposal, 2026-09-26. Nothing here has been printed or measured yet. Sources and fetch

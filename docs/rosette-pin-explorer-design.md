@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # Petals to Pins — rosette → LEGO-pin explorer (design)
 
 **Status:** grounded 2026-09-01 — adversarial audit applied

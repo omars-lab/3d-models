@@ -1,7 +1,8 @@
 ---
 date: 2026-09-27
 produced-by: checker (Claude Opus 5.5), consolidating the two independent screens [candidate-screen-2026-09-27-a.md](candidate-screen-2026-09-27-a.md) (researcher A, 3d-models #363) and [candidate-screen-2026-09-27-b.md](candidate-screen-2026-09-27-b.md) (researcher B, 3d-models #364); sources re-opened with yt-dlp metadata-only reads, YouTube thumbnails and storyboard sprite sheets, GeoGebra pages, the GeoGebra materials API and preview images
-feeds: docs/tasks/catalog-expansion/backlog.md item 2 (screened construction candidates)
+feeds:
+  - '[[tasks/catalog-expansion/backlog|catalog-expansion backlog item 2 (screened construction candidates)]]'
 ---
 
 # Candidate screen, consolidated, 2026-09-27

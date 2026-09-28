@@ -1,3 +1,7 @@
+---
+date: 2026-09-09
+---
+
 # The base-face honesty fix had two layers, and the gate branches on family
 
 *Issue slug: `base-face-honesty-scaffold-pivot`. Written 2026-09-09, during the

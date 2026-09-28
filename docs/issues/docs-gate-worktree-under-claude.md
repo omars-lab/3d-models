@@ -1,3 +1,7 @@
+---
+date: 2026-09-26
+---
+
 # Docs gate skipped its grounding rules inside a `.claude/worktrees/` checkout
 
 Found 2026-09-26 while validating `docs/research/coaster-bubble-lettering.md` from an agent

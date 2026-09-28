@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # print-model skill — design doc (pre-implementation)
 
 Status: **DRAFT, NOT BUILT.** This doc and its companion research

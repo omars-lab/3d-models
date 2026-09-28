@@ -1,3 +1,9 @@
+---
+date: 2026-09-26
+feeds:
+  - '[[multicolor-constructions-b-design]]'
+---
+
 # Multicolour constructions — research notes (researcher B)
 
 - **Date:** 2026-09-26

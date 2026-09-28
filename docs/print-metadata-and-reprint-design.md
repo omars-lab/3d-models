@@ -1,3 +1,10 @@
+---
+status: draft
+decisions:
+  - D-046
+  - D-072
+---
+
 # Print metadata, per-iteration config, reprint & metrics — design doc (pre-implementation)
 
 Status: **DRAFT, mostly NOT BUILT.** Every path this doc gives under

@@ -1,7 +1,8 @@
 ---
-produced: 2026-09-17
+date: 2026-09-17
 produced-by: design task — auto-pull the print profile header from the printer (Claude, real WebSearch/WebFetch)
-feeds: docs/bambu-header-autopull-design.md (the CLI/skill design that fills the bench-sheet header)
+feeds:
+  - '[[bambu-header-autopull-design|bambu-header-autopull-design (the CLI/skill design that fills the bench-sheet header)]]'
 scope: for each Plate-1 bench-sheet "profile header" field, find the machine-readable source (MQTT report frame / info.get_version / AMS tray / sliced .3mf metadata / BambuStudio --version) — or establish it is genuinely manual
 ---
 

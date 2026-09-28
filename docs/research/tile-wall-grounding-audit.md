@@ -1,3 +1,10 @@
+---
+date: 2026-07-27
+feeds:
+  - '[[tile-wall-design]]'
+  - '[[tile-craft-field-survey]]'
+---
+
 <!-- Adversarial grounding audit produced 2026-07-27 by a research subagent.
      Audits docs/tile-wall-design.md and docs/research/tile-craft-field-survey.md:
      verifies citations say what we claim, hunts counter-evidence, drafts divergence

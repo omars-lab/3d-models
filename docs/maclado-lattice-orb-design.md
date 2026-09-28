@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # The lattice-walk maclado orb — design doc (the fourth Family-3 orb)
 
 Status: **shipped 2026-09-02** — increment 1 (`bikar#153`, the open-shell kernel)

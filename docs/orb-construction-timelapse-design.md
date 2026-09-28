@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-049
+---
+
 # Orb construction timelapse
 
 **Status:** the generator is **built** — bikar `587ea34` and `e9cf74e` on branch

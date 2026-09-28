@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # Construction equivalence — three oracles for "GeoGebra ≡ naqsh"
 
 **Status:** O1, O2 and O3 shipped and measured on `GimTvN9hw4U` (2026-09-17);

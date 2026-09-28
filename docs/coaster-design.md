@@ -1,3 +1,11 @@
+---
+status: built
+decisions:
+  - D-065
+  - D-066
+  - D-068
+---
+
 # The coaster (product design)
 
 The umbrella

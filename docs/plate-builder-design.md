@@ -1,3 +1,9 @@
+---
+status: draft
+decisions:
+  - D-072
+---
+
 # Plate-builder frontend experience — design doc (pre-implementation)
 
 Status: **DRAFT, DESIGN ONLY — NOT A BUILD COMMITMENT.** This doc proposes a frontend

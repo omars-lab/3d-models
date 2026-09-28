@@ -1,3 +1,7 @@
+---
+date: 2026-09-17
+---
+
 # The CLI *does* surface Studio's slicing warnings — at `--debug 2`
 
 *Issue slug: `slicer-warnings-cli-visibility-pivot`. Written 2026-09-17, during #52

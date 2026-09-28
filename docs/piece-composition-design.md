@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Piece Composition DSL — design doc (pre-implementation)
 
 Status: **DRAFT v2 — grounded in a prior-art survey (§3, sources in Appendix A) and

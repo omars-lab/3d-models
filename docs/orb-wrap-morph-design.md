@@ -1,3 +1,7 @@
+---
+status: built
+---
+
 # Flat→sphere wrap morph for the breakdown page
 
 **Status:** v1 — **built.** The kernel blend, `writeMorph` and the page caption

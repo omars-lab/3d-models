@@ -1,3 +1,10 @@
+---
+status: draft
+decisions:
+  - D-016
+  - D-017
+---
+
 # Tile + Wall Layout DSL — design doc (pre-implementation)
 
 Status: **DRAFT v2 — grounded in a tiling-craft + interlocking-panel field survey

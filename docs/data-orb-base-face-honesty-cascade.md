@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # Cascade: `data-orb-base-face` names one thing, a true base face (#49 follow-through)
 
 **Status:** PLANNED 2026-09-02. Decision recorded in

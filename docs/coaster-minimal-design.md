@@ -1,3 +1,9 @@
+---
+status: built
+decisions:
+  - D-070
+---
+
 # Minimal coasters — the pattern is the solid
 
 *Status: built — bikar NaqshCoffee/bikar#211 (`5152cfd`) ships `outline pattern`, CV10

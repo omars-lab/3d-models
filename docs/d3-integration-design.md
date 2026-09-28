@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # A proper d3 integration for the bikar / qiyas surfaces (scoping)
 
 **Status:** SCOPING / backlog capture (not yet gate-audited, not built). Produced 2026-08-31

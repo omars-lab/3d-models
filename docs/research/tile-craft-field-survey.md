@@ -1,3 +1,9 @@
+---
+date: 2026-07-27
+feeds:
+  - '[[tile-wall-design]]'
+---
+
 <!-- Research report produced 2026-07-27 by a deep-research subagent (tile-craft field survey:
      layout doctrine, ANSI/TCNA movement rules, leveling clips, garage-tile interconnects,
      snap-fit/press-fit tolerances, keyhole mounting, anchor budgets).

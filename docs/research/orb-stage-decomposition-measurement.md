@@ -1,3 +1,9 @@
+---
+date: 2026-08-18
+feeds:
+  - '[[orb-construction-timelapse-design]]'
+---
+
 <!--
   Research produced 2026-08-18 by Claude Opus 5, under the 3d-models
   design-doc rules, to ground docs/orb-construction-timelapse-design.md.

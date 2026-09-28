@@ -1,3 +1,7 @@
+---
+date: 2026-09-17
+---
+
 # The coaster outline is fitted to the art, not traced from it — and the "clipped" claim was wrong
 
 *Issue slug: `coaster-outline-fit-pivot`. Written 2026-09-17 while landing coaster

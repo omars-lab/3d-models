@@ -1,3 +1,9 @@
+---
+date: 2026-07-27
+feeds:
+  - '[[piece-composition-design]]'
+---
+
 <!-- Research report produced 2026-07-27 by a deep-research subagent (code-CAD prior art:
      BOSL2, CadQuery/build123d, OnShape/Fusion, Manifold, Clipper2, CGA, Tsugite, 3MF, KCL).
      Feeds docs/piece-composition-design.md — its §3 borrow/avoid table, §8 Manifold policy,

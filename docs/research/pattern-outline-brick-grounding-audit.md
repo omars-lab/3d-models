@@ -1,3 +1,9 @@
+---
+date: 2026-08-02
+feeds:
+  - '[[pattern-outline-brick-design]]'
+---
+
 <!--
 Provenance: adversarial grounding audit (C4), produced 2026-08-02 by a Claude
 Fable 5 background audit agent (bikar source verification at main 73514f1,
