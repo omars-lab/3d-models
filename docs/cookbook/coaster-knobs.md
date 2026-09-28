@@ -237,10 +237,11 @@ Related: [strap width](#strap-width), [join coasters](#join-coasters-edge-to-edg
 
 `interlock dovetail <neck> <depth>` cuts a tab and a matching slot on every straight
 edge, so any edge of one coaster fits any edge of another. The picture shows two copies
-pushed together. `clearance` is the gap left around the tab, and it decides whether the
-fit is snug or free.
+pushed together, with the tab at 2, 3 and 5 mm: a bigger tab and its slot take more of the
+margin. `clearance` is the gap left around the tab, and it decides whether the fit is
+snug or free.
 
-<!-- recipe: coaster-interlock; mate: 90 -->
+<!-- recipe: coaster-interlock; mate: 90; swap: dovetail 2 2 | dovetail 3 3 | dovetail 5 5 -->
 ```bkr
 pattern star
   circle c center(0, 0) radius 30
@@ -255,7 +256,7 @@ coaster Coaster
   strap width 2
   interlock dovetail 3 3 clearance 0.15
 ```
-![Two hexagonal coasters joined by a dovetail](img/coaster-interlock.png)
+![Two hexagonal coasters joined by a dovetail, with 2, 3 and 5 mm tabs](img/coaster-interlock.png)
 
 **Watch out:** a dovetail needs a straight edge, so a round or lobed outline is refused.
 The slot also cuts into the margin, so the art has to clear the slot as well as the edge
