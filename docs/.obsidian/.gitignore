@@ -6,6 +6,13 @@
 # BRAT's data.json has a token field. It is empty: BRAT 2.x keeps tokens in
 # Obsidian's secret store instead. Never paste a token there; gitleaks would
 # block the commit.
+#
+# Also local on purpose: graph.json (Obsidian rewrites it every time the graph
+# view moves; `tools/vault_audit.py --setup-graph` merges our color groups into
+# it) and core-plugins.json (Bases, Properties, Graph and Backlinks are core
+# plugins; the audit reports any that are off on this machine). The views
+# themselves are notes, docs/bases/*.base, and are committed like any note.
+# Rules: ../../.claude/skills/vault-setup/vault-rules.md
 /*
 !/.gitignore
 !/app.json

@@ -222,7 +222,7 @@ costly after step 2. Comment on the one you disagree with.
 | Pictures are committed into the vault | Obsidian and review-md can only show what is on disk, and a picture thread needs a stable file. | Link to bikar's pictures in place: no copies, but they fall outside the vault and a sibling checkout's state decides what shows. |
 | Links name the vault by path | Every docs vault is called "docs". | Name-based links are shorter, but open the wrong vault. |
 | The review-md agent plugin is set per repo | Only our repos are touched. | A global install covers every repo, but that is Omar's config to change, not ours. |
-| No Dataview or other query plugins | The index is generated, so it needs no plugin and reads the same on GitHub. | Dataview makes live tables, but they show as raw code everywhere outside Obsidian. |
+| No Dataview or other query plugins | The index is generated, so it needs no plugin and reads the same on GitHub. Live views elsewhere in the vault use core Bases ([D-082](../decisions-log.md#d-082--the-docs-vault-uses-obsidians-core-bases-for-live-views-dataview-and-other-community-query-plugins-stay-out)). | Dataview makes live tables, but they show as raw code everywhere outside Obsidian. |
 
 ## Not in this plan
 

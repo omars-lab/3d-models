@@ -1,0 +1,43 @@
+# Design docs by where they stand. A doc joins by carrying a `status:` property
+# (idea, draft, decided, built, superseded); hubs such as plan.md carry none.
+# Rules: .claude/skills/vault-setup/vault-rules.md
+filters:
+  and:
+    - file.ext == "md"
+    - '!file.path.contains("/")'
+    - file.hasProperty("status")
+formulas:
+  linked_from: file.backlinks.length
+properties:
+  note.status:
+    displayName: Status
+  note.decisions:
+    displayName: Decisions
+  formula.linked_from:
+    displayName: Linked from
+views:
+  - type: table
+    name: By status
+    groupBy:
+      property: note.status
+      direction: ASC
+    order:
+      - file.name
+      - note.decisions
+      - formula.linked_from
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Open
+    filters:
+      or:
+        - note.status == "idea"
+        - note.status == "draft"
+    order:
+      - file.name
+      - note.status
+      - formula.linked_from
+    sort:
+      - property: formula.linked_from
+        direction: DESC

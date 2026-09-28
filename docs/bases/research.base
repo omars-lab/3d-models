@@ -1,0 +1,35 @@
+# Research notes, newest first, with the docs each one feeds. `feeds:` holds
+# wikilinks, so a doc's backlinks pane lists the research behind it.
+# Rules: .claude/skills/vault-setup/vault-rules.md
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("research")
+formulas:
+  linked_from: file.backlinks.length
+properties:
+  note.date:
+    displayName: Date
+  note.feeds:
+    displayName: Feeds
+  formula.linked_from:
+    displayName: Linked from
+views:
+  - type: table
+    name: Newest first
+    order:
+      - file.name
+      - note.date
+      - note.feeds
+      - formula.linked_from
+    sort:
+      - property: note.date
+        direction: DESC
+  - type: table
+    name: Feeds nothing
+    filters:
+      and:
+        - '!file.hasProperty("feeds")'
+    order:
+      - file.name
+      - note.date

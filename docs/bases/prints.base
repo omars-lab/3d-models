@@ -1,0 +1,28 @@
+# Print records (docs/prints/<run>/index.md), newest first. The properties are
+# the ones the prints gate requires, so a record that is here passed it.
+# Rules: .claude/skills/vault-setup/vault-rules.md
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("prints")
+    - file.hasProperty("run")
+properties:
+  note.run:
+    displayName: Run
+  note.plate:
+    displayName: Plate
+  note.status:
+    displayName: Status
+  note.outcome:
+    displayName: Outcome
+views:
+  - type: table
+    name: Newest first
+    order:
+      - note.run
+      - note.plate
+      - note.status
+      - note.outcome
+    sort:
+      - property: note.run
+        direction: DESC

@@ -82,7 +82,9 @@ refuting/complicating sources total.
 ### 3. Apply the results (after the agents report back)
 
 - **Preserve the report verbatim** in `docs/research/<doc-slug>-grounding-audit.md` with
-  a short HTML-comment provenance header (date, produced-by, which doc it feeds). Extract
+  a provenance header as YAML frontmatter: `date:`, `produced-by:` and `feeds:`, a list of
+  single-quoted wikilinks to the docs it feeds (`- '[[<doc-slug>]]'`), so the doc's backlinks
+  in Obsidian list it ([vault rules](../vault-setup/vault-rules.md) §1). Extract
   it from the agent transcript with jq rather than retyping it:
   `jq -rs '[.[] | select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text] | last' <task output file>`
 - **Fix misgrounded citations first** — a link that doesn't say what we claim is worse

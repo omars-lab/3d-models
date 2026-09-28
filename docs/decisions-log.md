@@ -5409,3 +5409,43 @@ polar plot?". Settles the `orbit` call left open by [`multicolor-design.md`](mul
 
 Which orbits to fill on CS-1 is a taste call, made from rendered variants. The multi-colour calls
 (flush or lowered fills, the colours) are still Omar's.
+
+## D-082 — The docs vault uses Obsidian's core Bases for live views; Dataview and other community query plugins stay out
+
+Omar, 2026-09-28: "In obsidian, are we making proper use of the sql mechanism, plugins, links?"
+and "do we have a good skill to analyze and revisit our obsidian setup?". Answered by the
+[`vault-setup`](../.claude/skills/vault-setup/SKILL.md) skill and its measuring tool,
+`tools/vault_audit.py`; the rules it checks against are in
+[`vault-rules.md`](../.claude/skills/vault-setup/vault-rules.md).
+
+### What was measured
+
+- Before this change the vault had no Bases views, no graph color groups, and properties on 20 of
+  166 notes (none on the 66 top-level design docs). 5 of those 20 had frontmatter that is not
+  valid YAML, so Obsidian showed none of their properties — found only when a live Bases table
+  came up two rows short.
+- Links: 1,020 markdown links between notes and 27 wikilinks, all of them in the research
+  shipped-record's archived body. 15 notes had no link pointing at them.
+- Community plugins: BRAT and review-md, both already chosen for the review workflow.
+
+### Options
+
+- **Core Bases, embedded on a home page** (chosen): Bases ships with Obsidian (1.9+), is on in
+  this vault, stores each view as a small YAML `.base` file, and reads the same properties the
+  notes already carry. Views are live in Obsidian. On GitHub an embed shows as a plain line of
+  text, so the home page also carries ordinary markdown links to every area.
+- **Dataview**: inline queries and JavaScript views, more than Bases can express. Rejected for
+  now because nothing we need goes past what Bases does (filter, group, sort, count backlinks),
+  it is community code the vault would have to trust and update, and its queries show as raw
+  code blocks everywhere outside Obsidian. Revisit if a view needs something Bases cannot say,
+  and name that view when you do.
+- **No views, only generated indexes** (the catalog's way): stays right for the catalog, whose
+  index is written by a tool. For design docs, research, issues and prints it would mean another
+  generator to keep in step, where a `.base` file is the whole feature.
+
+### What it commits us to
+
+Properties are data a view depends on, so the docs gate now checks that frontmatter parses (D8)
+and that a wikilink names a file in the vault (D1). Links in note bodies stay markdown, because
+GitHub renders them and D1 checks them; wikilinks go in properties such as `feeds:`, where
+Obsidian's backlinks pick them up.

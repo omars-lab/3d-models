@@ -1,0 +1,32 @@
+# Print troubleshooting notes (docs/wiki/troubleshooting/), grouped by kind.
+# The properties are the print-wiki skill's template.
+# Rules: .claude/skills/vault-setup/vault-rules.md
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("wiki/troubleshooting")
+properties:
+  note.title:
+    displayName: Title
+  note.symptom:
+    displayName: Symptom
+  note.kind:
+    displayName: Kind
+  note.proof:
+    displayName: Proof
+  note.first_seen:
+    displayName: First seen
+views:
+  - type: table
+    name: By kind
+    groupBy:
+      property: note.kind
+      direction: ASC
+    order:
+      - note.title
+      - note.symptom
+      - note.proof
+      - note.first_seen
+    sort:
+      - property: note.first_seen
+        direction: DESC
