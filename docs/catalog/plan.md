@@ -79,8 +79,18 @@ only BRAT and review-md.
   vault is called "docs", and review-md ships its own `docs/` dev vault. The links therefore
   name the vault by its folder path (`path=`), not by name. That path is Omar's main checkout,
   `~/Workspace/git/3d-models/docs`.
-  - The catch: that checkout is shared and currently 19 commits behind master. The vault only
-    shows what has been pulled into it, so step 1 includes keeping it current.
+  - The catch: that checkout is shared, and the vault only shows what has been pulled into it.
+    A session that merges a note change fast-forwards that checkout afterwards.
+- **Write the note so its parts can be linked.** A link can land on a heading (the note's link
+  plus #minimal opened the CS-1 note at that heading, checked in Obsidian 2026-09-27), but not
+  on a table cell or a bare picture. So:
+  - anything someone may want to link to on its own (a style, a print, a picture) gets its own
+    heading, with the picture under it — not a cell in a picture grid;
+  - heading text is part of the link, like a file name: name it after something that doesn't
+    change (the style name from [the coaster styles](../../.claude/skills/import-construction/coaster-styles.md)),
+    and treat renaming a heading like renaming a file, since every link to it breaks;
+  - review-md writes a `^id` onto a passage someone comments on. Keep it when editing that
+    passage; deleting it cuts the thread loose from its text.
 - **Every picture a session sends of a pattern carries its note link** in the caption. The skill
   makes that a rule, and it applies to review sheets and plate pictures too.
 - **The public gallery gets no `obsidian://` links**, because they only work on Omar's machine.
@@ -104,7 +114,8 @@ bookkeeping, and a skill does only the part that needs judgement. So:
   pattern has no note, or a note's generated part is out of date. It reads bikar at a git ref,
   like the pointer gate, so the verdict doesn't depend on what is checked out.
 - **A skill** (`pattern-catalog`). It covers:
-  - writing the hand-written part of a note;
+  - writing the hand-written part of a note, and laying out every note so its parts can be
+    linked (the rule in "Deep links" above; the generated top follows it too);
   - adding a planned pattern;
   - answering "where is the note for …" and "give me the link to …";
   - adding the note link to every pattern picture a session sends.

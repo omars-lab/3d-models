@@ -100,6 +100,12 @@ The wiki lives under `docs/`, so **`.claude/gates/docs_gate.py` already runs on 
   or cite the record/PR instead (prefer records over line numbers — they don't drift).
 - **Withdrawn literals (D4)** — a number an audit has killed stays killed corpus-wide.
 
+**Write the entry so its parts can be linked.** `docs/` is an Obsidian vault, and a link can land
+on a heading (the entry's link plus #what-to-do) but not on a table cell. Give anything worth
+linking on its own its own heading, keep heading text stable (renaming one breaks links the way
+renaming a file does), and keep any `^id` that review-md wrote onto a commented passage. The full
+rule is in the "Deep links" section of `docs/catalog/plan.md`.
+
 Beyond the gate, apply the grounding taxonomy this repo already teaches (CLAUDE.md K1/K2/K7/K10):
 carry the hedge (K1), do not claim exhaustiveness over machines/materials you did not test (K2), read
 the entry against itself (K7), and state the transfer conditions when a rule ported from one
