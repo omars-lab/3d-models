@@ -2535,7 +2535,7 @@ rather than a mesh check, exactly as [D-033](#d-033--build-the-welded-woven-over
 was written for, not stronger.
 
 **Superseded 2026-08-19.** The rule the guard enforced is the centreline rule
-[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) withdrew, so the guard, `weaveDepthValue` and the shared depth-knob list are
+[D-039](#d-039--the-rule-that-kept-the-orbs-apart-was-about-centrelines-and-a-ribbon-has-width-four-of-five-shipped-fused) withdrew, so the guard, `weaveDepthValue` and the shared depth-knob list are
 all gone in [D-042](#d-042--a-withdrawal-is-corpus-wide-and-three-of-the-four-copies-were-not-markdown). What survives is this decision's *tenet* — a claim about every
 preset must read every preset — and the mechanism that carries it: the
 directory-derived preset sweep, ported into bikar's `linkage-gate.test.ts`
@@ -3192,7 +3192,7 @@ pass on a **constant** shell at `radiusMm ± amplitudeMm`, while the 3D mesh at
 `weave.ts:479` **interpolates** that offset to zero at the corners. A connected
 solid cannot project to a disconnected figure, so every gap in the drawing is an
 approximation artifact, growing as roughly `2·amplitude·ρ` — which is why
-[D-039](#d-039)'s amplitude re-cut, correct for the print, widened every split by
+[D-039](#d-039--the-rule-that-kept-the-orbs-apart-was-about-centrelines-and-a-ribbon-has-width-four-of-five-shipped-fused)'s amplitude re-cut, correct for the print, widened every split by
 75% in the picture.
 
 Two remediations were offered. Fixing the projector changes the qiyas-scored
@@ -3224,7 +3224,7 @@ reversed:
    coupling is itself the defect: the test reads the shipped orb's floor. Give the
    fuse-refusal test its own fixture source, then narrow all five ranges to what
    `linkageGate` measures as printable. One rule survives instead of two — a
-   declared range is a promise measured at **both** endpoints ([D-040](#d-040)).
+   declared range is a promise measured at **both** endpoints ([D-040](#d-040--the-second-overlap-band-builds-two-chains-not-an-orb-and-the-bands-reported-ceiling-was-the-end-of-the-sweep)).
 3. **`overlap` requires `weave` (#58).** Framed as a side effect of #54; it is its
    own simplification. Plain lines are the base case and weave is the option, and
    the parser coupling at `parser.ts:1444-1447` is the only line that says
@@ -3277,12 +3277,12 @@ does not reverse it; only impossibility does.
 ## D-042 — a withdrawal is corpus-wide, and three of the four copies were not markdown
 
 **Date:** 2026-08-19 · **Status:** accepted · **Extends:**
-[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) · **Supersedes:** the guard mechanism of
+[D-039](#d-039--the-rule-that-kept-the-orbs-apart-was-about-centrelines-and-a-ribbon-has-width-four-of-five-shipped-fused) · **Supersedes:** the guard mechanism of
 [D-034](#d-034--the-labs-coverage-gaps-are-sweeps-not-lists-a-claim-about-every-preset-must-read-every-preset), not its tenet.
 
 ### Context
 
-[D-039](#d-039--the-woven-orbs-print-as-one-lump-and-the-rule-that-said-otherwise-was-about-centrelines) measured `amplitude >= (strut_depth + 0.4) / 2` and found it wrong —
+[D-039](#d-039--the-rule-that-kept-the-orbs-apart-was-about-centrelines-and-a-ribbon-has-width-four-of-five-shipped-fused) measured `amplitude >= (strut_depth + 0.4) / 2` and found it wrong —
 it predicts the gap between two ribbon **centrelines**, but a ribbon has width, so
 the other ribbon's surface sits half a width off the crossing node, where the
 sinusoidal offset has already decayed. Four of the five woven orbs shipped fused
@@ -4212,7 +4212,7 @@ T9 — and every future consumer — around the overload by branching on surface
 fork the divergence forces on everyone downstream forever. The robust fix deletes the divergence
 at the source so one name carries one meaning; T9 then needs no branch (wheelfield cells carry
 no `data-orb-base-face`, so its base-face subset check is trivially satisfied). This is the
-[D-050](#d-050-the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change) "two-meanings collision" principle one layer down — from the d3
+[D-050](#d-050--the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change) "two-meanings collision" principle one layer down — from the d3
 face-list vocabulary to the SVG/gt/contract attribute — and the CLAUDE.md "robust and simple
 beat cheap and easy" tenet it now states. Ribbons proved the omission discipline; wheelfield
 differs only in that its unit is a single real value, so it is **preserved** under an honest
@@ -4376,8 +4376,8 @@ coaster-only plate.
 ## D-061 — Grammar is the source of truth for both languages; hand-rolled parser + conformance, no generator
 
 **Decision:** `.ggb-commands` gets a normative EBNF in the youtube repo held to its parser by
-G1/G2/G3 twins (identity sweep, vocabulary fixture, every ```ggb fence parses and every
-```ggb invalid fence dies); naqsh's grammar gains the construction productions under the
+G1/G2/G3 twins (identity sweep, vocabulary fixture, every `` ```ggb `` fence parses and every
+`` ```ggb invalid `` fence dies); naqsh's grammar gains the construction productions under the
 same gates. Highlighters and the cookbook are generated from, or tested against, the same
 fixtures. Lark, Ohm, Peggy and Chevrotain are rejected
 ([survey §10](research/geogebra-construction-import-survey.md)): a grammar file beside a
@@ -4840,8 +4840,8 @@ nozzle is named explicitly — so "which nozzle printed this" is captured at the
 where it is measured, and never needed as a `PrintTarget` field to stay honest. Widening the
 knob schema would record the nozzle in a *second* place that could disagree with the header —
 the two-names-one-meaning defect the log keeps deciding against
-([D-052](#d-052-data-orb-base-face-names-one-thing-a-true-base-face-the-wheelfield-unit-gets-its-own-honest-name),
-[D-050](#d-050-the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change)).
+([D-052](#d-052--data-orb-base-face-names-one-thing-a-true-base-face-the-wheelfield-unit-gets-its-own-honest-name),
+[D-050](#d-050--the-three-d3-surfaces-converge-on-one-face-list-vocabulary-the-reversal-condition-is-a-measured-re-divergence-cost-not-a-taste-change)).
 
 ### What would reverse it
 

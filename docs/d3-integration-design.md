@@ -6,7 +6,7 @@ needs interactive 2D SVG — a rosette explorer, an orb breakdown, a score overl
 the proper way to reach for d3, given a fourth repo (sacred-patterns) already has a mature
 d3 vocabulary and a stalled React-on-d3 experiment?* This file is the backlog item. It does
 **not** commit an implementation — it scopes one, records the audit that informs it, and
-carried the load-bearing choices to the user as decisions ([§5](#5-decisions-to-make)), **all
+carried the load-bearing choices to the user as decisions ([§5](#5-decisions-resolved-2026-08-31)), **all
 four of which were settled 2026-08-31** and are now recorded there as the direction a build
 follows.
 
@@ -102,8 +102,8 @@ the deps, the teardown-redraw idiom, the DOM-config, and the dual mount.
 
 The audit gives a pattern; it does not answer *where the layer lives* or *who owns it*. Those
 are the real content of this backlog item, and they are cross-repo, so they were carried to
-the user as decisions ([§5](#5-decisions-to-make)) rather than settled in code. The four
-questions, as framed for that decision (their answers are in [§5](#5-decisions-to-make)):
+the user as decisions ([§5](#5-decisions-resolved-2026-08-31)) rather than settled in code. The four
+questions, as framed for that decision (their answers are in [§5](#5-decisions-resolved-2026-08-31)):
 
 - **Q-HOME — where does the shared d3 layer live?** Candidates: (a) a new package inside
   bikar's web workspace, imported by every bikar surface; (b) a standalone package extracted
@@ -129,7 +129,7 @@ questions, as framed for that decision (their answers are in [§5](#5-decisions-
 Phased so each phase answers a question before the next spends effort. Nothing here is
 scheduled; the ordering is the dependency order, not a promise.
 
-- **Phase 0 — this doc.** Scope, audit, decisions. **Done** — the four [§5](#5-decisions-to-make)
+- **Phase 0 — this doc.** Scope, audit, decisions. **Done** — the four [§5](#5-decisions-resolved-2026-08-31)
   decisions are settled, and the bikar-studio public-surface keystone resolved 2026-08-31
   (internal, org-GitHub-gated, internet-reachable).
 - **Phase 1 — one reference surface, end to end. SHIPPED 2026-08-31.** The
@@ -259,8 +259,8 @@ thread. They are now resolved:
 Repos read at their working-tree checkouts 2026-08-31: sacred-patterns (`master` and
 `wip/react-d3-2024` at `4ce6e32`), bikar (`main` at `8709471`), qiyas (`main`, Python — no d3
 dependency, but a versioned pydantic JSON contract and a FastAPI/Swagger surface, see
-[§5](#5-decisions-to-make) Q-DATA). Sibling files are cited by GitHub permalink at a pinned
-commit, not by local path. The four [§5](#5-decisions-to-make) decisions are settled
+[§5](#5-decisions-resolved-2026-08-31) Q-DATA). Sibling files are cited by GitHub permalink at a pinned
+commit, not by local path. The four [§5](#5-decisions-resolved-2026-08-31) decisions are settled
 2026-08-31; the bikar-studio public-surface keystone is the one call still open. This remains
 a *scoping* item — if it graduates to a committed design doc that ships code, it must be run
 through the `ground-design-doc` process: the cross-repo claims pinned to git refs, any

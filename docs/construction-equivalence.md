@@ -6,7 +6,7 @@ open.
 Feeds from
 [`docs/research/construction-equivalence-measurements.md`](research/construction-equivalence-measurements.md);
 decided as D-063 in [`docs/decisions-log.md`](decisions-log.md); summarised in
-[§6 of the umbrella design](geogebra-construction-import-design.md#6-equivalence-three-oracles-d-062).
+[§6 of the umbrella design](geogebra-construction-import-design.md#6-equivalence-three-oracles-d-063).
 
 ## 1. Why three
 

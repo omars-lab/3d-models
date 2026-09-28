@@ -104,7 +104,8 @@ rule does not transfer.
   is the *hard* case, and one substitution keeps passing it: **an aggregate cannot
   discharge a claim about every part.** `lego-lab` §14 certified every triangle CCW
   and measured one signed volume — one reversed triangle in 3,764 leaves it positive.
-- **K9 → D1.** Every relative link must resolve on disk; universal, no marker.
+- **K9 → D1.** Every relative link must resolve on disk, `#heading` included — a renamed
+  heading breaks links like a renamed file (15 of 54 were dead when this was added); universal, no marker.
 - **K1 → D4. A withdrawal is corpus-wide, not a local edit.** When an audit kills a
   number, grep every doc before calling it fixed and add the literal to `WITHDRAWN`
   in `docs_gate.py`. `±0.1–0.2 mm printer accuracy` died 2026-07-29, was rebuilt in
