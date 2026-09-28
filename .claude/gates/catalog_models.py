@@ -223,10 +223,21 @@ def read_from_bikar(rel: str, root: Path = ROOT) -> str | None:
     bikar = _sibling_root("bikar", root)
     if bikar is None:
         return None
-    p = bikar / rel
-    if p.is_file():
-        return p.read_text(encoding="utf-8")
     import subprocess
+
+    # A bare repo has no working tree, but files can still sit in its folder:
+    # `~/Workspace/git/bikar` held a day-old `docs/grammar.md` that lacked
+    # `openwork` (found 2026-09-28 by cookbook_coverage.py). Only a real
+    # checkout's files count.
+    bare = subprocess.run(
+        ["git", "-C", str(bikar), "rev-parse", "--is-bare-repository"],
+        capture_output=True,
+        text=True,
+        env=_git_env(),
+    ).stdout.strip()
+    p = bikar / rel
+    if bare != "true" and p.is_file():
+        return p.read_text(encoding="utf-8")
 
     for ref in ("origin/HEAD", "origin/main", "origin/master", "HEAD"):
         tree = _tracked_at_ref(bikar, ref)
