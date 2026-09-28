@@ -130,7 +130,7 @@ is caught when it is committed rather than when someone reads it. The rules are 
 | `research/*.md` | `date`, `feeds` | — | all |
 | `issues/*.md` | `date` | — | all |
 | any note outside `prints/` and `catalog/` | a `status`, if it has one, of idea, draft, decided, built, superseded | — | notes with a `status` |
-| `coaster-*-design.md`, at the root or in `design/coaster/` | — | The ask, Options and the rubric, Grammar, Decisions, Not yet | status decided or built |
+| `design/coaster/coaster-*-design.md` | — | The ask, Options and the rubric, Grammar, Decisions, Not yet | status decided or built |
 
 - The troubleshooting and audit outlines are **read from their templates when the gate runs**, not
   copied into the gate. Change the template and the check follows.

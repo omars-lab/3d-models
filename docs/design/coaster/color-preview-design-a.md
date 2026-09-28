@@ -11,7 +11,7 @@ should have options to configure all of these in a robust easy to use fashion in
 *Status: researcher A's design, one of two independent passes; a checker will consolidate. Nothing
 here is built. It builds on [multicolor-design.md](multicolor-design.md) (how shapes are grouped
 into colors, flush vs lowered, how colors reach the printer) and does not redo it. Raw findings,
-file:line evidence and sources: [research/color-preview-2026-09-28-a.md](research/color-preview-2026-09-28-a.md).*
+file:line evidence and sources: [../../research/color-preview-2026-09-28-a.md](../../research/color-preview-2026-09-28-a.md).*
 
 ## 0. The answer in one screen
 
@@ -33,7 +33,7 @@ Ten PNG paths were found (research §1). Only three matter for coasters:
    parts.
 2. **Coaster Lab viewer and its thumbnails** — splits the coaster with `buildCoasterParts` using
    the export's own pinch default and paints each body by its palette color
-   ([D-076](decisions-log.md)). This is already a colored preview from the printed bodies, but it
+   ([D-076](../../decisions-log.md)). This is already a colored preview from the printed bodies, but it
    lives only in a browser canvas; the PNGs of it are Playwright screenshots.
 3. **Color plate picture** from `bambu slice coaster` (#342) — a top-down 2D drawing made from the
    coaster's description, not from the split bodies. Its check only asks that each palette color
@@ -53,7 +53,7 @@ printer gets?
 | **B. bikar's own renderer, shared by Lab and CLI** (recommended) | Same bodies **by construction**: one function takes the map `buildCoasterParts` returns plus the color map the sidecar is written from | One code path for Lab, CLI and gallery; no new tool (`rsvg-convert` is already what bikar's `rasterize.ts` uses); tried in scratch: 1024 px in about 2 s; transparent background removes the cream-key problem | A bikar change (move the Lab viewer's projection, shading and body-color code into core, add `--format preview`); depth sort by triangle centre is approximate — fine on a flat coaster, untested on tall walls | Gallery coasters move off OpenSCAD; the Lab viewer and the gallery then cannot drift |
 | C. Render the parts **3MF** with a 3MF viewer (3MF Consortium viewer, or F3D) | The actual file the slicer opens, including the palette-to-slot bake | Checks one link further down the chain than A or B | New dependency plus a headless browser; per-object color support is **snippet-only** for the 3MF viewer, and the fetched F3D options page does not mention 3MF | A second renderer again; worth it only if the 3MF bake itself goes wrong, which the slicer check (D-077) already watches |
 | D. **Blender** headless | Whatever it is fed (the part STLs) | Photo-real material, lighting, shadows | Not installed; a large dependency for a flat coaster; its manual returned 403, so nothing about it is grounded here | A third toolchain to keep working; a product-photo job, not a preview job |
-| E. Bambu Studio thumbnails | The sliced plate | The printer's own view | Headless 3MF export hangs ([coaster-3mf issue](issues/coaster-3mf-filament-shape-and-export-hang.md)); color is a window check by D-077 | Not available headless today |
+| E. Bambu Studio thumbnails | The sliced plate | The printer's own view | Headless 3MF export hangs ([coaster-3mf issue](../../issues/coaster-3mf-filament-shape-and-export-hang.md)); color is a window check by D-077 | Not available headless today |
 | F. Keep the top-down 2D drawing | Nothing about the bodies: drawn from the description | Exists | A merged pinch tip or a lost strap would still draw correctly | Fine as a plate legend; not a preview of the print |
 
 Why B over A: A is quicker, but it creates two renderers that can disagree, which this repo treats
@@ -93,7 +93,7 @@ Until then, the preview work (§4) is useful on the plain and border styles, whi
 
 The preview reuses the gallery's camera and size rather than choosing new ones: the three-quarter
 view `0,0,0,60,0,25,0` (OpenSCAD's rotation-only camera form, read with `--viewall --autocenter`)
-and 1024 px square, both as [`build/brick_previews.py`](../build/brick_previews.py) sets them. These
+and 1024 px square, both as [`build/brick_previews.py`](../../../build/brick_previews.py) sets them. These
 are house choices, not measured values — one shared angle, so a colored and an uncolored coaster
 sit side by side in the gallery at the same angle.
 

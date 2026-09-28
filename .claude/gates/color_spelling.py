@@ -51,8 +51,8 @@ ALLOWED_TOKENS: list[tuple[str, str]] = [
      "cited by a use-case map anchor"),
     ("bikar-coaster-colour", "the name a past worktree had; a record names it as it was"),
     ("feat/coaster-colour-regions", "the name a past branch had; a record names it as it was"),
-    ("reduce colour changes", "quoted from Sovol's guide (docs/multicolor-design.md)"),
-    ('"up to 25 colours"', "quoted from Bambu's store page snippet (docs/multicolor-design.md)"),
+    ("reduce colour changes", "quoted from Sovol's guide (docs/design/coaster/multicolor-design.md)"),
+    ('"up to 25 colours"', "quoted from Bambu's store page snippet (docs/design/coaster/multicolor-design.md)"),
     ('British "colour"', "the decision record (D-083) naming the old spelling once"),
 ]
 

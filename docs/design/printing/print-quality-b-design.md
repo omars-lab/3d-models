@@ -197,7 +197,7 @@ The floors on the dovetail:
 
 So the dovetail cannot get much narrower than the slim version without a kernel change.
 The ranked alternatives are in
-[`../../coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
+[`../coaster/coaster-borderless-joins-design.md`](../coaster/coaster-borderless-joins-design.md).
 
 One idea not on minis-05 or minis-06: **thicken the frame only behind each slot** and
 keep the plain margin elsewhere. The band would drop to about the plain 6 mm except at

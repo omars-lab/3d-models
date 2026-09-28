@@ -9,7 +9,7 @@ decisions:
 # The coaster (product design)
 
 The umbrella
-([`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md)
+([`../../constructions/geogebra-construction-import-design.md`](../../constructions/geogebra-construction-import-design.md)
 §8) owns the pipeline from a GeoGebra construction to a printable coaster; this
 doc owns the coaster itself — what it is, the two ways a construction becomes one,
 its structural validators and the numbers that back them. The geometry engine is
@@ -71,10 +71,10 @@ mode (§7, CV6b). Each is either an `emboss` (raised above the base) or a `debos
 The **importer emits exactly one**: `relief straps emboss 1.2` — the pattern's
 strapwork standing 1.2 mm proud of the slab, so the pattern reads as the object and
 the slab as its ground (shape v2, D-066; P2.7 emitted `relief straps deboss 0.8`,
-whose record is [`research/coaster-measurements.md`](research/coaster-measurements.md)).
+whose record is [`../../research/coaster-measurements.md`](../../research/coaster-measurements.md)).
 Face relief, deboss and trivet are reachable by hand-editing the emitted `.bkr` but
 the import path never writes them, so the worked examples below and the validator
-evidence in [`research/coaster-shape-study.md`](research/coaster-shape-study.md)
+evidence in [`../../research/coaster-shape-study.md`](../../research/coaster-shape-study.md)
 cover the strap-emboss coaster only. This is a statement about the two constructions
 imported here and the importer's one emitted mode, not a claim about every coaster
 the grammar can express.
@@ -127,7 +127,7 @@ millimetres, so only the outline and the art's scale change between them — nev
 mesh, and never a wall driven below the printable floor (D-059).
 
 Fitted outlines and measured spans (full record in
-[`research/coaster-shape-study.md`](research/coaster-shape-study.md)):
+[`../../research/coaster-shape-study.md`](../../research/coaster-shape-study.md)):
 
 | Construction | fitted outline | K (units) | least area vs round (units²) | mini (size=40) | standard (size=90) |
 |---|---|---|---|---|---|
@@ -144,7 +144,7 @@ The earlier claim that the P2.7 round discs clipped their art is **withdrawn**: 
 was measured at import (5.1962 and 5.6569 units, the enclosing diameters), and at
 `size=90` the art spanned 82 mm inside the 90 mm disc. What the round disc wasted was
 area, not art — 21.21 units² around a 17.54 hexagon — and that is what the fit
-removes ([`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md)).
+removes ([`../../issues/coaster-outline-fit-pivot.md`](../../issues/coaster-outline-fit-pivot.md)).
 
 ## 6. Print orientation
 
@@ -152,7 +152,7 @@ Fixed: **flat, top face up, no supports**. The height field has a flat bottom by
 construction, so the whole footprint is the first layer and the relief prints as
 unsupported top detail (D-064). `--check` runs the mesh gate on every render, and
 the coaster's own structural validators run inside evaluation
-([`design/printing/print-validation-design.md`](design/printing/print-validation-design.md)).
+([`../printing/print-validation-design.md`](../printing/print-validation-design.md)).
 
 ## 7. Structural validators
 
@@ -286,7 +286,7 @@ a different distance.
 - **D-068**: a border with its own pattern and per-region color are coaster-level
   clauses composing patterns, sequenced after the interlock (#34) and the lab (#35).
   The border is designed as **D-071** ([`coaster-border-design.md`](coaster-border-design.md));
-  color (#37) is still direction only. See [`decisions-log.md`](decisions-log.md).
+  color (#37) is still direction only. See [`../../decisions-log.md`](../../decisions-log.md).
 - **D-069** (interlock, #34): a self-mating half-edge dovetail on every straight
   edge, walls emitted exact, CV8/CV9 added, refused with `round`, a bottom chamfer
   and `trivet`; opt-in at import because it widens the margin. Built in
@@ -320,7 +320,7 @@ Honest gaps, so the next session inherits them rather than rediscovering them:
 - **Seven candidates, no traced outline.** A pattern whose hull fits none of the
   seven gets the least-bad of them; a traced (non-regular) outline was rejected
   because it has no single `K` measure and no regular edge for an interlock
-  ([`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md)). A
+  ([`../../issues/coaster-outline-fit-pivot.md`](../../issues/coaster-outline-fit-pivot.md)). A
   star or lobed coaster would need an `outline trace` mode with its own sizing rule.
 - **Interlocking edges (#34)** — designed as D-069 and built in bikar (NaqshCoffee/bikar#209:
   grammar `interlock dovetail`, CV8/CV9, importer `--interlock`):

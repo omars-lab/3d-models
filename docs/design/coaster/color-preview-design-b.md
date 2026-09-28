@@ -5,8 +5,8 @@ status: superseded
 # Colored coaster previews and Coaster Lab color controls — design (researcher B) ^e7b42d
 
 **Status:** proposal from researcher B of two; a checker consolidates both. Raw findings,
-experiments and sources: [`docs/research/color-preview-2026-09-28-b.md`](research/color-preview-2026-09-28-b.md).
-Builds on [`docs/multicolor-design.md`](multicolor-design.md) (orbits, flush vs lowered, the
+experiments and sources: [`docs/research/color-preview-2026-09-28-b.md`](../../research/color-preview-2026-09-28-b.md).
+Builds on [`docs/design/coaster/multicolor-design.md`](multicolor-design.md) (orbits, flush vs lowered, the
 printer route) and does not repeat it.
 
 **The question (Omar):** can we alternate or customise colors on the PNGs we generate, and if
@@ -44,7 +44,7 @@ with the pictures it now makes, is in the consolidated design:
 | Catalog / Lab thumbnails | bikar `scripts/render-coaster-thumbnails.ts`, Playwright capture of the Lab canvas | Only if the preset sets colors (none do) | **Yes**: the Lab tints the `buildCoasterParts` bodies |
 | Coaster Lab live view | bikar `packages/lab`, `coasterTintMesh` over `buildCoasterParts` | Yes, base/straps/border knobs plus whatever the source colors | **Yes** (with pinch fixed to `fillet`, the CLI default) |
 | `bambu slice coaster` `<plate>.preview.png` | `renderCoasterTopSVG` flat top view | Yes | **No**: drawn from the spec; its check only asks that each hex appears somewhere |
-| Bambu Studio plate thumbnails | Studio GUI slice | Yes, in filament colors | Yes (it reads the 3MF) but GUI only: headless export hangs and overrides colors ([issue](issues/coaster-3mf-filament-shape-and-export-hang.md)) |
+| Bambu Studio plate thumbnails | Studio GUI slice | Yes, in filament colors | Yes (it reads the 3MF) but GUI only: headless export hangs and overrides colors ([issue](../../issues/coaster-3mf-filament-shape-and-export-hang.md)) |
 
 ## 3. Options for colored static PNGs
 

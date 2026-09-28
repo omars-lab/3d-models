@@ -9,7 +9,7 @@ feeds:
 - **Date:** 2026-09-28
 - **Produced by:** researcher B (one of two independent researchers; the other researcher's
   files were not read)
-- **Feeds:** [`docs/color-preview-design-b.md`](../color-preview-design-b.md)
+- **Feeds:** [`docs/color-preview-design-b.md`](../design/coaster/color-preview-design-b.md)
 - **Question (Omar):** "Do we have the ability to alternate colors / customize colors on the
   PNGs we are generating? If not, would we need to integrate an alternate CAD software?"
   Plus the scope addition: configure orbits, colours, flush vs lowered and a live preview in

@@ -822,11 +822,8 @@ FOLDER_RULES: tuple[FolderRule, ...] = (
         # print records and catalog notes have their own status sets and gates
         exclude=("docs/prints/**", "docs/catalog/**")),
     FolderRule(
-        # The root path is where these notes are today, design/coaster/ where the
-        # folder move puts them; the rule reads both so the move changes nothing.
         # The hub, coaster-design.md, does not match the glob.
-        "coaster feature",
-        ("docs/coaster-*-design.md", "docs/design/coaster/coaster-*-design.md"),
+        "coaster feature", ("docs/design/coaster/coaster-*-design.md",),
         statuses=("decided", "built"),
         headings=("The ask", "Options and the rubric", "Grammar", "Decisions", "Not yet")),
 )
@@ -1411,13 +1408,11 @@ def self_test_outlines() -> bool:
         ("status-unknown.md", fx("status-unknown.md"), "docs/x-design.md", "status `shipped`"),
         ("status-unknown.md under prints/", fx("status-unknown.md"), "docs/prints/r/index.md", None),
         ("status-unknown.md under catalog/", fx("status-unknown.md"), "docs/catalog/patterns/x.md", None),
-        ("coaster.md at the root", fx("coaster.md"), "docs/coaster-x-design.md", None),
         ("coaster.md in design/coaster/", fx("coaster.md"), "docs/design/coaster/coaster-x-design.md", None),
-        ("coaster-out-of-order.md at the root", coaster_bad, "docs/coaster-x-design.md", "out of order"),
         ("coaster-out-of-order.md in design/coaster/", coaster_bad,
          "docs/design/coaster/coaster-x-design.md", "out of order"),
         ("coaster-out-of-order.md as a draft", coaster_bad.replace("status: built", "status: draft"),
-         "docs/coaster-x-design.md", None),
+         "docs/design/coaster/coaster-x-design.md", None),
     ]
     for label, text, rel, want in cases:
         got = check_d9_outline(Path(rel), text.splitlines(), rel=rel)

@@ -13,7 +13,7 @@ them colors, so one coaster prints in several filaments on the X2D with the AMS.
 
 *Status: proposed, with a working prototype. The research, the survey and every web source
 (fetched or search-summary only) are in
-[`research/multicolor-constructions.md`](research/multicolor-constructions.md). The prototype
+[`../../research/multicolor-constructions.md`](../../research/multicolor-constructions.md). The prototype
 is bikar [PR #261](https://github.com/NaqshCoffee/bikar/pull/261) (branch `feat/multicolor-fills`), not merged. No decision id is taken
 here; one is taken with `tools/next_id.py` when Omar picks.*
 
@@ -79,7 +79,7 @@ construction A and C agree (16 rings, 16 classes, none split), which needs no gr
 (7apC5Q9QS-8, r = 40.48 and 40.70 mm), so the tolerance must stay well below that; 0.05 mm is
 still about five times the 0.01 mm gap the engine's `ring` binning uses today
 ([`fill-resolver.ts` `TOLERANCE = 1e-2`](https://github.com/NaqshCoffee/bikar/blob/main/packages/core/src/theme/fill-resolver.ts#L429)).
-Both measured radii are from [research §2](research/multicolor-constructions.md#2-survey--do-the-engines-rings-match-omars-colour-classes).
+Both measured radii are from [research §2](../../research/multicolor-constructions.md#2-survey--do-the-engines-rings-match-omars-colour-classes).
 This transfers to another construction only if its closest two real classes are more than
 about four tolerances apart; the class lister should print the smallest gap so that is visible.
 
@@ -146,7 +146,7 @@ summary; the X2D count W2 was not fetched). The design does **not** assume a num
 slots are read from the machine with `bambu filament`, which reads the live tray list (confirmed
 on the X2D 2026-09-17). **Default:** at most 4 colors per coaster, one AMS, the count W1
 states for one unit ([Bambu Lab AMS page](https://us.store.bambulab.com/products/ams-multicolor-printing),
-search summary only; [research §4](research/multicolor-constructions.md#4-web-sources-2026-09-26)).
+search summary only; [research §4](../../research/multicolor-constructions.md#4-web-sources-2026-09-26)).
 This transfers to Omar's machine only if one AMS is what is loaded; `bambu filament` says.
 
 **Purge and time.** Each color change purges the old filament to the chute and then onto a prime

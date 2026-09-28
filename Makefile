@@ -783,7 +783,7 @@ COASTER_MINI_BORDER_MM := 4
 # need 60 and 55 mm) has no mini: bikar refuses the override, and the loop logs
 # `coaster-mini skip: <id> — <reason>` instead of stopping every coaster after it.
 #
-# The gallery picture (docs/color-preview-design.md step 5): every coaster
+# The gallery picture (docs/design/coaster/color-preview-design.md step 5): every coaster
 # bikar can split is drawn by `bikar render --format preview` straight into
 # build/images/<id>.png, in its filament colors and with no background, so no
 # color key runs over it. Which coasters those are is bikar's call, not a list
@@ -889,7 +889,7 @@ validate-print-review:
 validate-move-doc:
 	$(PYTHON) $(ROOT_DIR)/tools/move_doc.py --self-test
 
-# No-hole check on the coaster pictures (docs/color-preview-design.md §7): each
+# No-hole check on the coaster pictures (docs/design/coaster/color-preview-design.md §7): each
 # picture bikar drew has transparent corners, no see-through pixel inside the
 # coaster, a coaster in it, and nothing cut off at the frame. Self-test first, so
 # a green run means the by-design failures fired. Skips when nothing is rendered.

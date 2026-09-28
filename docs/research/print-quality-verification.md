@@ -153,7 +153,7 @@ Play reaches zero at e ≈ 0.016 mm for c = 0.10 and e ≈ 0.025 mm for c = 0.15
 `2c − 6.5e`: the overgrowth factor agrees, but B's clearance factor assumes the slot is
 c wider along the whole flank, which the kernel does not build.
 
-[`../coaster-interlock-design.md`](../coaster-interlock-design.md) says the slot is
+[`../design/coaster/coaster-interlock-design.md`](../design/coaster/coaster-interlock-design.md) says the slot is
 "offset outward by the clearance `c` on every face" and that the probe only
 "approximates that". The kernel builds the approximation, so the doc and the kernel
 disagree about what `c` means at the head.
@@ -174,7 +174,7 @@ disagree about what `c` means at the head.
   (diametral)", and Appendix B.3 says it "transcribes Creative3DP's calibrated-printer
   press-fit ladder verbatim, including its instruction to keep fit gap and printer
   compensation separate".
-- [`../coaster-interlock-design.md`](../coaster-interlock-design.md) sets the coaster
+- [`../design/coaster/coaster-interlock-design.md`](../design/coaster/coaster-interlock-design.md) sets the coaster
   clearance default to 0.15 from CAL-FIT-01's sliding step. Its transfer sentence does
   not mention the step from diametral to per-face, nor that the ladder assumes printer
   compensation is applied separately. So A's point that this port is missing a K10
