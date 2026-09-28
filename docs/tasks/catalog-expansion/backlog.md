@@ -45,6 +45,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    grouped about the pattern's true centre) and openwork fill. Then render 3 or 4 fill patterns;
    Omar picks one, and the CS-1 note gets a `radial` heading and picture. Asked by Omar on
    2026-09-27 (board #96).
+   - **Colour and Lab controls** (Omar, 2026-09-28): colouring the radial fills, coloured
+     gallery PNGs, and an Orbits panel in Coaster Lab. Act on
+     [colour-preview-design.md](../../colour-preview-design.md), §10 lists the bikar PRs,
+     smallest first. The radial coaster needs the openwork split and the top-fillet split (§4)
+     before it can print in more than one colour.
 
 ## Handed to the video loop
 
