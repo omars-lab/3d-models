@@ -415,9 +415,19 @@ def _git_lines(root: Path, *args: str) -> list[str]:
     ).stdout.splitlines()
 
 
+def is_comment_file(p: str) -> bool:
+    """A review-md comment file, `.<note>.comments.md` next to its note. Comments
+    are conversation, not claims: a reviewer's "see [the old draft](x.md)" may
+    name a file that is gone. Measured 2026-09-27 with a probe comment: D1 fired
+    on its link, so every rule skips these files."""
+    name = Path(p).name
+    return name.startswith(".") and name.endswith(".comments.md")
+
+
 def staged_markdown(root: Path = ROOT) -> list[Path]:
     out = _git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=ACMR")
-    return [root / p for p in out if p.endswith(".md") and (root / p).exists()]
+    return [root / p for p in out
+            if p.endswith(".md") and not is_comment_file(p) and (root / p).exists()]
 
 
 def stages_a_removal(root: Path = ROOT) -> bool:
@@ -430,10 +440,11 @@ def stages_a_removal(root: Path = ROOT) -> bool:
 
 def tree_markdown(root: Path = ROOT) -> list[Path]:
     """Every markdown file whose links are checked: docs/, CLAUDE.md and .claude/,
-    tracked or new, but not gitignored."""
+    tracked or new, but not gitignored, and not review-md comment files."""
     out = _git_lines(root, "ls-files", "-co", "--exclude-standard", "--",
                      "docs", ".claude", "CLAUDE.md")
-    return sorted(root / p for p in out if p.endswith(".md") and (root / p).exists())
+    return sorted(root / p for p in out
+                  if p.endswith(".md") and not is_comment_file(p) and (root / p).exists())
 
 
 def staged_findings(root: Path = ROOT) -> tuple[list[str], int]:
@@ -564,6 +575,10 @@ def self_test() -> int:
         _sp.run(["git", "init", "-q", str(repo)], check=True, env=genv)
         (repo / "docs" / "target.md").write_text("target\n")
         (repo / "docs" / "linker.md").write_text("[t](target.md)\n")
+        # A review-md comment file linking the same target: the rename below
+        # breaks its link too, and it must not be reported.
+        comments = repo / "docs" / ".linker.comments.md"
+        comments.write_text("[t](target.md) [gone](none.md)\n")
         skill = repo / ".claude" / "skills" / "note.md"
         skill.write_text(d4 + "\n[t](../../docs/target.md) [gone](../../docs/none.md)\n")
         _sp.run(["git", "-C", str(repo), "add", "."], check=True, env=genv)
@@ -580,6 +595,11 @@ def self_test() -> int:
             print("self-test FAIL: the whole-tree list should include .claude/ markdown")
         else:
             print("self-test ok: the whole-tree list reaches .claude/")
+        if comments in tree_markdown(repo):
+            ok = False
+            print("self-test FAIL: the whole-tree list should skip review-md comment files")
+        else:
+            print("self-test ok: the whole-tree list skips review-md comment files")
 
         skill.write_text("[t](../../docs/target.md)\n")
         _sp.run(["git", "-C", str(repo), "commit", "-qam", "fix"], check=True, env=genv)
