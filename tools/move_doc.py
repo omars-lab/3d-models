@@ -21,6 +21,10 @@ What it rewrites, in every tracked text file:
   - a backticked path a doc writes relative to itself (`example-design/x.png`),
     and a link label that repeats its own target ([`../x.md`](../x.md)).
 
+What it leaves as written:
+  - another repo's path written `<repo>:docs/x.md` (`qiyas:docs/x.md` is
+    qiyas's file even when this repo has one of the same name).
+
 What it leaves as written, and lists:
   - research/ prose. A research file is kept verbatim, so only its link targets
     move (a target is an address, not researched content);
@@ -81,6 +85,8 @@ LINK = re.compile(r"(\[[^\]]*\]\()([^)\s]+)((?:\s+\"[^\"]*\")?\))")
 WIKILINK = re.compile(r"(!?\[\[)([^\[\]|#^]*)([^\[\]]*\]\])")
 BACKTICKED = re.compile(r"`([A-Za-z0-9_.@/-]+)`")
 PATHISH = re.compile(r"[A-Za-z0-9_.@-]*(?:/[A-Za-z0-9_.@-]+)+/?")
+# `qiyas:` just before a path: the path is that repo's, not this one's.
+OTHER_REPO = re.compile(r"(?<![\w.-])(?!3d-models:)[\w-]+:\Z")
 SKIP_SCHEMES = ("http://", "https://", "mailto:", "ftp://", "data:", "obsidian://")
 
 # Relative-path arithmetic runs against a deep made-up root, so a link that
@@ -257,7 +263,8 @@ def is_comment_file(rel: str) -> bool:
 def rooted_pattern(mapper: Mapper) -> re.Pattern[str] | None:
     """`docs/<old>` wherever it is written as a path from the repo root: alone,
     or after `3d-models/` or `3d-models:`. Not after another path segment —
-    `3d-models-constructions/docs/x.md` names a different checkout."""
+    `3d-models-constructions/docs/x.md` names a different checkout — and not
+    after another repo's `name:` (`qiyas:docs/local-ci-runbook.md` is qiyas's)."""
     alts = []
     for m in mapper.moves:
         # A file path may end a sentence (`docs/a.md.`) but not run on (`docs/a.md.bak`).
@@ -265,7 +272,7 @@ def rooted_pattern(mapper: Mapper) -> re.Pattern[str] | None:
         alts.append(re.escape(m.old) + tail)
     if not alts:
         return None
-    return re.compile(r"(?:(?<=3d-models/)|(?<![\w./-]))(" + "|".join(alts) + ")")
+    return re.compile(r"(?:(?<=3d-models/)|(?<=3d-models:)|(?<![\w./:-]))(" + "|".join(alts) + ")")
 
 
 def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None) -> tuple[str, list[Change]]:
@@ -383,7 +390,8 @@ def leftovers(rel: str, text: str, mapper: Mapper, why: str) -> list[Leftover]:
     names = {posixpath.basename(m.old) for m in mapper.moves}
     out = []
     for n, line in enumerate(text.split("\n"), 1):
-        tokens = [m.group(0) for m in PATHISH.finditer(line)]
+        tokens = [m.group(0) for m in PATHISH.finditer(line)
+                  if not OTHER_REPO.search(line, 0, m.start())]
         tokens += [m.group(2) for m in LINK.finditer(line)]
         for tok in tokens:
             bare = unquote(tok.split("#", 1)[0]).rstrip("/")
@@ -651,6 +659,8 @@ def unit_cases(failures: list[str]) -> None:
             ("tools/t.py", "# docs/a-design.md §2", "# docs/design/c/a-design.md §2", "a code comment"),
             ("tools/t.py", "docs/a-design/pic.png", "docs/design/c/a-design/pic.png", "a path into the moved folder"),
             (".claude/x.md", "`wt-x/docs/a-design.md`", "`wt-x/docs/a-design.md`", "another checkout's path"),
+            ("docs/plan.md", "`qiyas:docs/a-design.md` and bikar:docs/a-design.md",
+             "`qiyas:docs/a-design.md` and bikar:docs/a-design.md", "another repo's path, `repo:` prefixed"),
             (".claude/x.md", "`docs/a-design.md.bak` docs/a-design-b.md", "`docs/a-design.md.bak` docs/a-design-b.md",
              "a longer name that starts the same"),
             ("docs/plan.md", "`a-design/pic.png`", "`design/c/a-design/pic.png`", "a doc-relative backticked path"),
@@ -665,6 +675,8 @@ def unit_cases(failures: list[str]) -> None:
         _check(len(left) == 1, "research prose that still names the old place is listed", failures)
         left = leftovers("docs/plan.md", "[a](design/c/a-design.md)", mp, "x")
         _check(not left, "a rewritten link is not listed as left over", failures)
+        left = leftovers("docs/plan.md", "`qiyas:docs/a-design.md`", mp, "x")
+        _check(not left, "another repo's `qiyas:docs/...` path is not listed as left over", failures)
 
 
 def copy_repo(src: Path, dst: Path) -> None:
