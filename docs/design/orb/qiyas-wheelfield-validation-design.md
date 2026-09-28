@@ -7,7 +7,7 @@ status: built
 Status: **v2 — Q0–Q6 all done, and the two follow-ons Q4 spawned with them.**
 Q1 (cell views) merged as bikar `fe6a86c`; Q2 (ribbon views) as bikar PR #96;
 Q3 (the qiyas audit fixes) as qiyas PR #11; Q6 as bikar PRs #97 and #98, with
-#99 clearing the e2e flake that blocked them ([D-034](decisions-log.md)). Q4's
+#99 clearing the e2e flake that blocked them ([D-034](../../decisions-log.md)). Q4's
 measurement is §7.1 and it changed the plan — it fired §7's validator and made
 the composite threshold this doc was going to record unrecordable, adding Q4a
 and Q4b in its place. **Q4a** shipped as qiyas PR #15, exposing `drop` and
@@ -43,7 +43,7 @@ commit) and qiyas at
 [`3e547da`](https://github.com/NaqshCoffee/qiyas/commit/3e547da) (`main`). The
 survey that produced them, with every `file:line` anchor and the in-memory
 measurement run behind the numbers in §2 and §3, is checked in at
-[`docs/research/qiyas-wheelfield-validation-survey.md`](research/qiyas-wheelfield-validation-survey.md).
+[`docs/research/qiyas-wheelfield-validation-survey.md`](../../research/qiyas-wheelfield-validation-survey.md).
 Where this doc states a number as *measured*, it was measured once, by that run,
 on deterministic geometry code; no tolerance sweep was performed on any of them.
 
@@ -472,7 +472,7 @@ repo's D3 rule exists to stop.
 Q4 ran, on all fifteen view/representation combinations the three presets and
 the classic control produce. The full method, tables and the three programs are
 checked in at
-[`docs/research/qiyas-scorer-acceptance-measurement.md`](research/qiyas-scorer-acceptance-measurement.md).
+[`docs/research/qiyas-scorer-acceptance-measurement.md`](../../research/qiyas-scorer-acceptance-measurement.md).
 The validator above **fails**, on both arms, and one of its own premises was
 wrong.
 
@@ -544,7 +544,7 @@ the local `qiyas encode` CLI could not be run here.
 **And the reason it could not is not the one this section gave.** "Cairo is
 missing" is false: cairo is installed (`brew list` reports it; six
 `libcairo*.dylib` sit in `/opt/homebrew/lib`). What fails is the *lookup*, and
-[D-035](decisions-log.md) already recorded the mechanism when the sweep hit it:
+[D-035](../../decisions-log.md) already recorded the mechanism when the sweep hit it:
 SIP strips every `DYLD_*` variable when a protected binary is exec'd, `/bin/sh`
 is protected, and every route in — make, npm, a shell — crosses one, so
 `ctypes.util.find_library` never searches Homebrew's prefix. Set
@@ -623,7 +623,7 @@ disproved its own premise, which is the more useful outcome:**
   `max_drift` into the gate (`RECORDED_DROP` per preset, `MAX_DRIFT_CEILING`
   0.005, ~17× the worst observed). The 30 drops that motivated all this turned
   out to be a qiyas validator defect and are now zero —
-  [D-035](decisions-log.md).
+  [D-035](../../decisions-log.md).
 
 ---
 
@@ -707,7 +707,7 @@ speak for two drawings — a mean lets healthy cells hide collapsed ribbons. It 
 now `{cells, ribbons}`, each independently nullable, and the badge shows the
 **minimum** of the drawings actually scored.
 
-**Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](decisions-log.md).)*
+**Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](../../decisions-log.md).)*
 Record a composite per preset; add the three registry entries; add `lab:` links
 to the three gallery cards; write the badge text that carries §6's limitation
 rather than eliding it. Two potholes found during scoping and fixed here: the
@@ -812,6 +812,6 @@ run against the code Q1–Q3 shipped rather than the code they replaced:
 
 The full per-file read record, including which files were read versus executed,
 is the closing table of
-[the research file](research/qiyas-wheelfield-validation-survey.md); §7.1's is
+[the research file](../../research/qiyas-wheelfield-validation-survey.md); §7.1's is
 the header and appendix of
-[its own research file](research/qiyas-scorer-acceptance-measurement.md).
+[its own research file](../../research/qiyas-scorer-acceptance-measurement.md).

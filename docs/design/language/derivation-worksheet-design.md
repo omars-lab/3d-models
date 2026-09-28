@@ -5,7 +5,7 @@ status: draft
 # Derivation Worksheet — implementation design doc
 
 Status: **DRAFT v1 — grounded in a derivation-visualization survey
-([`research/derivation-visualization-survey.md`](research/derivation-visualization-survey.md),
+([`../../research/derivation-visualization-survey.md`](../../research/derivation-visualization-survey.md),
 sources in Appendix A) and in first-party experiments against the bikar tree
 (measurements in §2 and §3; contested bets recorded in Appendix B).**
 Scope: a *visual math worksheet* — a rendered artifact that shows how a bikar part is composed,
@@ -42,13 +42,13 @@ would expect it):
 - **No interactivity.** No scrubbing, no play button, no click-to-source. The v1 artifact is a
   static SVG sheet. GeoGebra's Navigation Bar and CascadeStudio's timeline (survey §8.4, §5.3)
   are the obvious next step, and are deferred, not rejected. That step is now taken in the
-  sibling context: [`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md)
+  sibling context: [`../orb/orb-construction-timelapse-design.md`](../orb/orb-construction-timelapse-design.md)
   §7.2 specifies the scrubber, and states the transfer condition — both artifacts are ordered
   SVG sequences over one fixed frame, which is the property a scrubber needs and the only one
   it needs.
 - **No 3D derivation.** The worksheet covers the 2D pattern pipeline only. `piece`/`wall`/`orb`
   solidification is out of scope for v1 —
-  [`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) §4.2 is why
+  [`../orb/orb-construction-timelapse-design.md`](../orb/orb-construction-timelapse-design.md) §4.2 is why
   that is a harder problem, not just a bigger one.
 - **No editing.** The worksheet is a read-only view, like FreeCAD's dependency graph
   ("The dependency graph is purely a visualization tool, therefore it cannot be edited" —
@@ -199,7 +199,7 @@ Appendix B.4 address this; it is not fully solved.
 ## 3. What the survey established
 
 The load-bearing facts, with the design consequence stated. Full citations in Appendix A;
-detail in [`research/derivation-visualization-survey.md`](research/derivation-visualization-survey.md).
+detail in [`../../research/derivation-visualization-survey.md`](../../research/derivation-visualization-survey.md).
 
 **3.1 A derivation cannot be recovered from a finished artifact — four independent literatures
 agree.** Fayolle & Friedrich count `(1/(n+1))·C(2n,n)·2ⁿ·(2|P|)ⁿ⁺¹` distinct CSG trees per solid
@@ -479,7 +479,7 @@ Rendering rule:
 
 **v1 does not do this for the 3D orb case**, because 3D is out of scope. The 20-face orb is
 listed in the brief as a motivating example and **v1 does not address it.**
-[`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) §4.2.
+[`../orb/orb-construction-timelapse-design.md`](../orb/orb-construction-timelapse-design.md) §4.2.
 
 ### 4.7 Scope-outs, stated explicitly
 
@@ -649,7 +649,7 @@ click-to-source; 3D.
 
 > **Correction (2026-07-29).** The parenthetical this list originally carried — *"CascadeStudio
 > recovers the line from the stack, Zoo keeps source ranges — both cheap, survey §12.7"* — was
-> wrong in both halves, and `docs/click-to-source-design.md` records the measurements.
+> wrong in both halves, and `docs/design/language/click-to-source-design.md` records the measurements.
 > **CascadeStudio does not implement click-to-source at all**: the stack trick is real but drives a
 > timeline scrubber, its viewport carries only a `mousemove` listener, and its `Face Index: N`
 > tooltip is never joined to a line number. The survey's §12.7 was accurate about *step*→source;
@@ -956,7 +956,7 @@ Two further findings compound it:
    this.**
 
    > **Correction (2026-07-29) — the cost claim above is wrong, but the conclusion survives for a
-   > different reason.** `docs/click-to-source-design.md` measured it. "Threading token positions
+   > different reason.** `docs/design/language/click-to-source-design.md` measured it. "Threading token positions
    > into every AST node" is the cost of *expression*-level spans (101 tagged construction sites,
    > 76 distinct tags, 166 object literals). Click-to-source needs only *statement* granularity,
    > and `parseStatement` (`bikar/packages/core/src/dsl/parser.ts:2167`) and `parseDeclaration`
@@ -1203,7 +1203,7 @@ grows a field on nearly every node, and *that* is the change that would most pla
 versioned IR, because spans are the first AST content a second process would want. *Resolved by:*
 costing the span-threading change before promising click-to-source anywhere.
 
-> **Q11 — RESOLVED 2026-07-29** by `docs/click-to-source-design.md`, and it resolved against the
+> **Q11 — RESOLVED 2026-07-29** by `docs/design/language/click-to-source-design.md`, and it resolved against the
 > question's own framing. **Yes, spans are required; no, they do not change the IR calculus.**
 > Spans land on ~1,405 statement and declaration nodes, not "nearly every node", via a +9/−2-line
 > patch at two dispatch chokepoints — so the AST growth this question worried about does not
@@ -1227,7 +1227,7 @@ costing the span-threading change before promising click-to-source anywhere.
 ## Appendix A — sources
 
 Full detail, quotations, and access failures in
-[`research/derivation-visualization-survey.md`](research/derivation-visualization-survey.md).
+[`../../research/derivation-visualization-survey.md`](../../research/derivation-visualization-survey.md).
 
 **CSG as a visual formalism**
 - Requicha, "Representations for Rigid Solids," *ACM Computing Surveys* 12(4), 1980 — https://dl.acm.org/doi/10.1145/356827.356833 · PDF https://lvelho.impa.br/i3d14/modtec/p437-requicha.pdf
@@ -1330,7 +1330,7 @@ Full detail, quotations, and access failures in
 - `bikar/packages/core/src/{dsl/evaluator.ts, dsl/construction-tree.ts, dsl/ast.ts, dsl/parser.ts, dsl/lexer.ts, graph/half-edge.ts, render/svg-renderer.ts, render/orb-view-renderer.ts, render/gt-emitter.ts, kernel3d/solidify-slabs.ts, contract-conformance.ts, index.ts}`
 - `bikar/packages/qiyas-schema/{package.json, tsup.config.ts, scripts/codegen.mjs}`, `bikar/scripts/check-publish-config.js`, `bikar/packages/cli/src/index.ts`, `bikar/packages/lab/src/evaluate.ts`
 - `qiyas/src/qiyas/schema.py`
-- `3d-models/docs/piece-composition-design.md`, `3d-models/docs/w2-connector-design.md`, `3d-models/docs/c2-assembly-design.md`
+- `3d-models/docs/design/pieces/piece-composition-design.md`, `3d-models/docs/design/pieces/w2-connector-design.md`, `3d-models/docs/design/pieces/c2-assembly-design.md`
 
 ---
 

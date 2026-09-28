@@ -161,7 +161,7 @@ disjoint-interior exclusion that computes the actual shared area. 26 pairs colla
 dodeca and 4 on the cube; recovering them takes both composites to 1.000. The older numbers
 are correct measurements of the validator as it was, and the dated records that quote them —
 `docs/research/qiyas-wheelfield-validation-survey.md` and §10's P2.6 bullet — are left saying
-so. [D-035](decisions-log.md#d-035--the-rosette-composites-were-a-validator-defect-not-a-geometry-one-and-a-bounding-box-cannot-see-a-shared-edge)
+so. [D-035](../../decisions-log.md#d-035--the-rosette-composites-were-a-validator-defect-not-a-geometry-one-and-a-bounding-box-cannot-see-a-shared-edge)
 
 Hankin θ calibration (2026-07 sweep): at the default R=60/w=3 the gate passes θ ∈ 10..84
 (θ=6 hard-errors with inset degeneracy), but the envelope narrows at the range corners —

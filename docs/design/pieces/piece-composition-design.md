@@ -6,7 +6,7 @@ status: draft
 
 Status: **DRAFT v2 — grounded in a prior-art survey (§3, sources in Appendix A) and
 revised after an adversarial grounding audit
-([research/piece-composition-grounding-audit.md](research/piece-composition-grounding-audit.md);
+([../../research/piece-composition-grounding-audit.md](../../research/piece-composition-grounding-audit.md);
 counter-evidence and divergences in Appendix B). No implementation yet.**
 v1→v2: the novelty claim was narrowed (BOSL2's screws.scad, SolidWorks Hole
 Wizard/TolAnalyst, and Gridfinity all ship fit contracts — what's novel is
@@ -304,10 +304,10 @@ idiom.
 ## Appendix A — survey sources
 
 The full URL-annotated research report is checked in at
-[`research/code-cad-composition-survey.md`](research/code-cad-composition-survey.md)
+[`../../research/code-cad-composition-survey.md`](../../research/code-cad-composition-survey.md)
 (see its Errata section for two citation corrections found by the audit), and the
 adversarial grounding audit behind the v1→v2 changes at
-[`research/piece-composition-grounding-audit.md`](research/piece-composition-grounding-audit.md).
+[`../../research/piece-composition-grounding-audit.md`](../../research/piece-composition-grounding-audit.md).
 Headline sources:
 
 - **BOSL2**: [attachments.scad](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad),
@@ -350,7 +350,7 @@ Headline sources:
   [KCL patternTransform](https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform)
 - **Printed-fit clearances**: the §4.3 ladder transcribes the
   [Creative3DP press-fit ladder](https://tools.creative3dp.com/blog/press-fit-tolerances-3d-printing/)
-  (see [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md) §7)
+  (see [`../../research/tile-craft-field-survey.md`](../../research/tile-craft-field-survey.md) §7)
   plus the [Qidi guide](https://qidi3d.com/blogs/print-lab/3d-printed-snap-fit-joints-clearance-guide);
   **counter-position**: the
   [Hubs snap-fit guide](https://www.hubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/)
@@ -365,12 +365,12 @@ Headline sources:
 ## Appendix B — counter-evidence and divergences
 
 Each entry records the strongest counter-position found by the grounding audit
-([`research/piece-composition-grounding-audit.md`](research/piece-composition-grounding-audit.md)),
+([`../../research/piece-composition-grounding-audit.md`](../../research/piece-composition-grounding-audit.md)),
 with either our justification for diverging or the design change it forced.
 
 Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
 measurement can. The id is the bet's entry in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which
 names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
 Tenet 30 — a physical constant is not earned until it records its provenance).
 

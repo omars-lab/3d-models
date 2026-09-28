@@ -14,16 +14,16 @@ carried the load-bearing choices to the user as decisions ([§5](#5-decisions-re
 four of which were settled 2026-08-31** and are now recorded there as the direction a build
 follows.
 
-This is a *prepare-the-approach* item, in the sense [print register](tasks/coaster-pipeline/backlog.md) reserves for
+This is a *prepare-the-approach* item, in the sense [print register](../../tasks/coaster-pipeline/backlog.md) reserves for
 work that is queued but not yet a build. It is the visualization-layer sibling of the
-[rosette → LEGO-pin explorer](rosette-pin-explorer-design.md), which is the first concrete
+[rosette → LEGO-pin explorer](../pieces/rosette-pin-explorer-design.md), which is the first concrete
 consumer that will need this decision settled.
 
 ---
 
 ## 1. The three repos and where d3 actually sits today
 
-The system is deliberately split (see [`../CLAUDE.md`](../CLAUDE.md)): **bikar** is the DSL
+The system is deliberately split (see [`../../../CLAUDE.md`](../../../CLAUDE.md)): **bikar** is the DSL
 + geometry engine and producer of record, **qiyas** validates renders, and this repo
 consumes bikar. A fourth repo, **sacred-patterns**, predates all of them and is the original
 d3 project. Grounded against each repo's working tree, 2026-08-31:
@@ -43,7 +43,7 @@ Two facts fall out of this table and shape everything below:
 - **bikar is not a d3 project and sacred-patterns is.** So the interesting question is not
   "add d3 to bikar" but **"where does the d3 layer live, and does sacred-patterns' vocabulary
   get shared or stay separate?"** — a cross-repo boundary question, which is exactly the kind
-  [`../CLAUDE.md`](../CLAUDE.md) says to price before writing code.
+  [`../../../CLAUDE.md`](../../../CLAUDE.md) says to price before writing code.
 
 ---
 
@@ -113,7 +113,7 @@ questions, as framed for that decision (their answers are in [§5](#5-decisions-
   bikar's web workspace, imported by every bikar surface; (b) a standalone package extracted
   from sacred-patterns; (c) no shared package — each surface vendors what it needs. (a) keeps
   the producer of record as the single source; (c) is cheapest now and forks the vocabulary
-  later — the trade [`../CLAUDE.md`](../CLAUDE.md) names ("robust and simplifying outrank
+  later — the trade [`../../../CLAUDE.md`](../../../CLAUDE.md) names ("robust and simplifying outrank
   cheap in a refactor").
 - **Q-SHELL — React, or not?** The branch chose React 18. bikar's surfaces are currently
   non-React (three.js + vanilla/Vite). Adopting React is a real commitment across those
@@ -137,7 +137,7 @@ scheduled; the ordering is the dependency order, not a promise.
   decisions are settled, and the bikar-studio public-surface keystone resolved 2026-08-31
   (internal, org-GitHub-gated, internet-reachable).
 - **Phase 1 — one reference surface, end to end. SHIPPED 2026-08-31.** The
-  [rosette → LEGO-pin explorer](rosette-pin-explorer-design.md) was the natural first consumer:
+  [rosette → LEGO-pin explorer](../pieces/rosette-pin-explorer-design.md) was the natural first consumer:
   it is already an SVG instrument, and its own roadmap was *blocked on the same bikar-studio
   public-surface decision*. Built as the studio's `/rosette-explorer` page in a **plain vanilla
   shell** (Q-SHELL — d3 owns the `<svg>` inside a plain container), consuming real bikar rosette
@@ -178,7 +178,7 @@ scheduled; the ordering is the dependency order, not a promise.
   generated qiyas schema types lagged qiyas's `scores` (no `drop`/`surplus`/`max_drift`), so the
   first page derived them from the buckets. Fixed since (bikar #145 `cdc0331`): the mirror is
   re-vendored, the page reads the scores, and a 3d-models gate (`.claude/gates/schema_mirror.py`)
-  holds bikar's copy to qiyas's export at the use-case map's pins — [`plan.md`](plan.md) §2 row 2.9.
+  holds bikar's copy to qiyas's export at the use-case map's pins — [`../../plan.md`](../../plan.md) §2 row 2.9.
 - **Phase 3 — unify the vocabulary. SHIPPED 2026-09-02.** Per Q-VOCAB, all three surfaces now
   read one face-list vocabulary (`index`, `polygon`, `ring`, `faceKey`, `joinFaces`): A↔B were
   renamed and joined on a shared `faceKey` (bikar #151 `1083046`), and sacred-patterns was grown
@@ -205,7 +205,7 @@ directions a build follows; the reasoning the user gave is recorded with each.
    d3-friendly, generally-consumable constructs** — anything can read them, not just d3 — and
    a **separable, optional converter** maps those constructs to d3 for the surfaces that want
    it. A bikar user who only needs geometry is never forced to pull in the d3 layer. This is
-   the robust reading of the [`../CLAUDE.md`](../CLAUDE.md) trade: the coupling that would rot
+   the robust reading of the [`../../../CLAUDE.md`](../../../CLAUDE.md) trade: the coupling that would rot
    (engine tied to one viz library) is designed out; the shared code is the thin adapter.
    *(Was: bikar-package vs extracted vs per-surface — resolved as a decoupled adapter, home
    secondary to the decoupling.)*
@@ -268,5 +268,5 @@ commit, not by local path. The four [§5](#5-decisions-resolved-2026-08-31) deci
 2026-08-31; the bikar-studio public-surface keystone is the one call still open. This remains
 a *scoping* item — if it graduates to a committed design doc that ships code, it must be run
 through the `ground-design-doc` process: the cross-repo claims pinned to git refs, any
-external d3/React source moved into [`research/`](research) under a provenance header, and the
+external d3/React source moved into [`../../research/`](../../research) under a provenance header, and the
 whole run through the doc gates (D1–D4) and an adversarial grounding audit.

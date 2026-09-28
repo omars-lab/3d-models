@@ -48,7 +48,7 @@ The constant is declared at `qiyas:src/qiyas/orb_validate.py:71` and justified
 in place by classic-orb face spacing: faces sit "~0.05 diagonals apart", so a
 0.02-diagonal radius is "far below inter-face spacing". That is a K10 transfer
 claim about one family of pictures being made on behalf of another, and
-[`docs/qiyas-wheelfield-validation-design.md`](../qiyas-wheelfield-validation-design.md)
+[`docs/qiyas-wheelfield-validation-design.md`](../design/orb/qiyas-wheelfield-validation-design.md)
 §7 made checking it a precondition for recording any threshold.
 
 **The short answer: it does not transfer, the design doc's own PASS margin was

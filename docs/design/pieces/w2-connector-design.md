@@ -7,9 +7,9 @@ decisions:
 # Wall Connectors, Coupons & Mounts (W2) — implementation design doc
 
 Status: **v2 — grounded in a targeted snap-fit/detent/keyhole/warp survey
-([`research/w2-connector-coupon-survey.md`](research/w2-connector-coupon-survey.md),
+([`../../research/w2-connector-coupon-survey.md`](../../research/w2-connector-coupon-survey.md),
 sources in Appendix A) and revised per the adversarial grounding audit
-([`research/w2-connector-grounding-audit.md`](research/w2-connector-grounding-audit.md);
+([`../../research/w2-connector-grounding-audit.md`](../../research/w2-connector-grounding-audit.md);
 contested bets recorded in Appendix B).**
 Scope: the W2 rung of [`tile-wall-design.md`](tile-wall-design.md) §9 — the connector
 library's first shipping member (clipseat + CornerClip), the fit and clip coupons, the
@@ -75,7 +75,7 @@ Facts verified against the bikar tree that shape the design:
 
 ## 3. What the survey established (the load-bearing facts)
 
-From [`research/w2-connector-coupon-survey.md`](research/w2-connector-coupon-survey.md);
+From [`../../research/w2-connector-coupon-survey.md`](../../research/w2-connector-coupon-survey.md);
 numbers restated so the doc stands alone.
 
 - **Snap-arm sizing comes from the Bayer/Covestro guide** (the primary source, fetched
@@ -351,7 +351,7 @@ compiles them):
   > profile's `holeCompMm` "shared with C2's fit coupon procedure". Two things were
   > wrong. The filename never existed: what shipped is `Fit-Coupon.bkr`, and as a
   > *machine* measurement it was in turn superseded by MC-1's `MC1FitLadder`
-  > (catalog: [`.claude/skills/prototype/catalog.md`](../.claude/skills/prototype/catalog.md)).
+  > (catalog: [`.claude/skills/prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md)).
   > And the joint
   > was the wrong one — a bore-and-pin number does not transfer to a bayonet blade
   > that drops down a channel and then sweeps sideways under load, because a blade
@@ -518,16 +518,16 @@ not the number.
 ## Appendix A — survey sources
 
 Primary source file, checked in verbatim with all URLs and access-failure notes:
-[`research/w2-connector-coupon-survey.md`](research/w2-connector-coupon-survey.md)
+[`../../research/w2-connector-coupon-survey.md`](../../research/w2-connector-coupon-survey.md)
 (research date 2026-07-28; §1 cantilever snap-fit engineering, §2 bayonet/detent
 geometry, §3 keyhole dimensions + face-down bridging, §4 warp measurement, §5 printed
 wall-system joints + tile-leveling clips, §6 three.js instancing). It deliberately
-does not re-cover [`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md)
+does not re-cover [`../../research/tile-craft-field-survey.md`](../../research/tile-craft-field-survey.md)
 (the parent doc's survey) or
-[`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md).
+[`../../research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md).
 
 The adversarial grounding audit of this doc is checked in verbatim at
-[`research/w2-connector-grounding-audit.md`](research/w2-connector-grounding-audit.md)
+[`../../research/w2-connector-grounding-audit.md`](../../research/w2-connector-grounding-audit.md)
 (audit date 2026-07-28). The survey file itself is checked in verbatim and is not
 edited retroactively — the attribution errors the audit found in it (the Unionfab
 strain band, the Prusa-forum 1–3 mm figure, the Bambu-forum practice bundle, the
@@ -576,12 +576,12 @@ Key direct sources (full list in the survey; attributions corrected per the audi
 ## Appendix B — contested bets and why they stand
 
 One entry per claim the grounding audit contested; the audit report
-([`research/w2-connector-grounding-audit.md`](research/w2-connector-grounding-audit.md))
+([`../../research/w2-connector-grounding-audit.md`](../../research/w2-connector-grounding-audit.md))
 is the evidence trail for each.
 
 Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
 measurement can. The id is the bet's entry in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which
 names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
 Tenet 30 — a physical constant is not earned until it records its provenance).
 

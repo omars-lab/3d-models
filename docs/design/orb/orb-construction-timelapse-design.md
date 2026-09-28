@@ -11,14 +11,14 @@ decisions:
 The **page** of section 7.3 is **built** (bikar PR #110, 3d-models PR #84) and
 was then **reworked** (bikar PR #111, 3d-models PR #85, 2026-08-19) after it
 failed the only test that matters: a newcomer could not see how the flat drawing
-becomes an orb. Section 9's gate is **built** — [`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py),
+becomes an orb. Section 9's gate is **built** — [`../../../.claude/gates/timelapse_gate.py`](../../../.claude/gates/timelapse_gate.py),
 hook `38-timelapse`, `make validate-timelapse` — and it failed on its first run,
 as section 4.1 required it to. No post has been published. The flat→sphere
 **wrap morph** the rework left out is now **built** —
 [`orb-wrap-morph-design.md`](orb-wrap-morph-design.md) (D-049 §2), shipped in
 NaqshCoffee/bikar#149 (kernel blend + `writeMorph` + caption) and 3d-models#148
 (gate rule T8).
-**Grounded by:** [`research/orb-stage-decomposition-measurement.md`](research/orb-stage-decomposition-measurement.md)
+**Grounded by:** [`../../research/orb-stage-decomposition-measurement.md`](../../research/orb-stage-decomposition-measurement.md)
 — every number in this document is from that file, measured 2026-08-18 against
 bikar `e0a81cc` and 3d-models `50bac8d`, with sections 8.1–8.3 of that file taken
 from the built generator the same evening. Where that file marks a figure
@@ -26,7 +26,7 @@ NOT VERIFIED, this document marks it too.
 
 ## 1. What this is, and the one fact that decided it
 
-Today an orb is one finished picture on a card in [`../index.html`](../index.html):
+Today an orb is one finished picture on a card in [`../../../index.html`](../../../index.html):
 a render, a sentence, three chips, three links to Source, STL and the Lab.
 There is no page per orb and no view of how the thing is *made*.
 
@@ -67,7 +67,7 @@ can name the construction element without a human typing it.
 
 ### 1.1 Relation to the derivation worksheet
 
-[`derivation-worksheet-design.md`](derivation-worksheet-design.md) already
+[`../language/derivation-worksheet-design.md`](../language/derivation-worksheet-design.md) already
 designs a static SVG derivation sheet for the **2D** pattern pipeline. This
 document is its 3D sibling and deliberately does not duplicate it: that one
 explains how a flat pattern is derived, this one how an orb is assembled from a
@@ -201,7 +201,7 @@ taken from the compiled scene. Nobody chose them.
 > counted a frame this document had already proved was the frame before it. The
 > table contradicted a section two doors down, and it survived because nobody
 > wrote the frames out.
-> ([research](research/orb-stage-decomposition-measurement.md) section 6a,
+> ([research](../../research/orb-stage-decomposition-measurement.md) section 6a,
 > CORRECTION 6.)
 
 `elements` is counted on the first visible base face only, so it is a per-unit
@@ -233,7 +233,7 @@ clears the cap, and a cube's best whole-face `minDot` on its vertex-3 axis is
 been blank. Base frames therefore cull per-face by centroid (`cull: 'back-face'`),
 which is exact on a convex solid and draws the silhouette for free.
 
-**Corrected 2026-08-19 ([D-037](decisions-log.md)): a frame is not a floor.**
+**Corrected 2026-08-19 ([D-037](../../decisions-log.md)): a frame is not a floor.**
 This section specified the base solid as *frame 0* and the build delivered
 exactly that — written once and never again, so from the second frame on the
 pattern accumulated against a blank page with nothing to be *on*. The base solid
@@ -242,7 +242,7 @@ outline (`data-orb-scaffold`) together with the sphere's limb. The reading that
 caught this is the reversal test D-036 wrote for itself, returned on the first
 day the page was live.
 
-**Amended 2026-08-20 ([D-045](decisions-log.md)): the two marks part company on
+**Amended 2026-08-20 ([D-045](../../decisions-log.md)): the two marks part company on
 the last frame.** This paragraph originally had the `complete` frame drop *both*
 the scaffold and the limb, because §4.1 pinned it byte for byte against a
 shipped view carrying neither. Only half of that survives. The scaffold answers
@@ -278,14 +278,14 @@ cannot move it.
 
 There is no lighting to hold still either. The pipeline is flat-shaded SVG, not
 a lit 3D render: two colour literals, recoloured on the way to the gallery by
-[`../build/orb_previews.py`](../build/orb_previews.py).
+[`../../../build/orb_previews.py`](../../../build/orb_previews.py).
 
 This document sets **no default of its own** — no padding value, no scale, no
 frame-count constant. Every such value is inherited unchanged from a renderer
 this design does not modify, and marking an inherited constant `**Default:**`
 would claim a decision that was not made here. There is house precedent for
 declining the marker on exactly these grounds at
-[`lego-lab-design.md`](lego-lab-design.md), where a copy limit is left unmarked
+[`../pieces/lego-lab-design.md`](../pieces/lego-lab-design.md), where a copy limit is left unmarked
 "because no measurement settles it and pretending otherwise would put a number
 in Appendix B that no coupon can close." The same reasoning applies in the
 other direction: a number someone else already settled is not this document's
@@ -356,7 +356,7 @@ sequence therefore ends on an explicit `complete` frame — no scaffold, no limb
 no shading, no highlight — and it is that frame the gate compares against the
 shipped view.
 
-Since [D-037](decisions-log.md) the other stage frames are **not** bare: they
+Since [D-037](../../decisions-log.md) the other stage frames are **not** bare: they
 carry the scaffold and the limb (see §3.4), and `complete` is the one frame that
 drops them. Only that frame has an identity to protect, so only that frame has
 to. Shading is separate and is forbidden on all of them: a Lambert envelope
@@ -392,7 +392,7 @@ will make them appear. The honest sequence ends at "the pattern, complete, on
 the sphere", and the jump from there to the shipped STL is exactly the jump the
 timelapse does not show.
 
-This is the argument [`derivation-worksheet-design.md`](derivation-worksheet-design.md)
+This is the argument [`../language/derivation-worksheet-design.md`](../language/derivation-worksheet-design.md)
 promised twice at a `§6.3` it never wrote — the reference dangles, its section 6
 has no subsections, and it is not a typo for the `§2.6.3` that file cites
 elsewhere, since that one is about tile blocks while both `§6.3` citations sit
@@ -404,7 +404,7 @@ buys them by giving up byte-identity.
 
 ## 5. Options
 
-Per [`../CLAUDE.md`](../CLAUDE.md)'s robustness-over-ease rule, the cheapest
+Per [`../../../CLAUDE.md`](../../../CLAUDE.md)'s robustness-over-ease rule, the cheapest
 option is not the default and "do nothing" is not neutral. Each says what it
 verifies.
 
@@ -575,7 +575,7 @@ no-JavaScript fallback.
   rasterisation pass, and takes pacing away from the reader.
 
 The scrubber is not a new idea in this repo and the transfer condition is
-already written: [`derivation-worksheet-design.md`](derivation-worksheet-design.md)
+already written: [`../language/derivation-worksheet-design.md`](../language/derivation-worksheet-design.md)
 scopes out interactivity for its v1 while recording that a navigation bar and a
 timeline are "the obvious next step, and are deferred, not rejected." This is
 that next step, in the sibling context — and it transfers because both artifacts
@@ -593,12 +593,12 @@ the deploy are.
 
 Concretely: a new `render --format timelapse` writing under bikar's build
 directory alongside the existing views output, consumed by a new page per orb in
-3d-models. The `orbs:` target in [`../Makefile`](../Makefile) already loops all
+3d-models. The `orbs:` target in [`../../../Makefile`](../../../Makefile) already loops all
 14 doing an STL check and then views; this is a third line in that loop.
 
 Two pinned things must move together. `DEPLOY_PATHS` does **not** currently
 include `docs/`, so the timelapse pages must not live under `docs/` unless that
-list changes — and [`../.claude/gates/site_graph.py`](../.claude/gates/site_graph.py)
+list changes — and [`../../../.claude/gates/site_graph.py`](../../../.claude/gates/site_graph.py)
 pins both `DEPLOY_PATHS` and `LAB_PAGES` by content, so changing either is a
 deliberate, gated act rather than an edit. Put the pages where `DEPLOY_PATHS`
 already reaches. Separately, bikar's studio catalogue is pinned by its own test,
@@ -658,16 +658,16 @@ would follow, and it stands whichever of section 9's answers is taken.
 
 ## 9. Skill, or gate?
 
-[`../CLAUDE.md`](../CLAUDE.md)'s Precedent section governs this and points at
+[`../../../CLAUDE.md`](../../../CLAUDE.md)'s Precedent section governs this and points at
 two documents that both answered "no skill". Read against their standard —
 **measured recurrence**, not plausibility — the answer here is not close.
 
-[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md)
+[`../process/dsl-extension-skill-evaluation.md`](../process/dsl-extension-skill-evaluation.md)
 rejected its skill on a finding it stated bluntly: the documentation was wrong
 in ways nothing could detect, so the fix is a detector rather than more
 documentation. Its gate then failed open on the first draft, and closing the
 predicate took the violation count from 5 to 31.
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measures 48
+[`../process/issue-register-evaluation.md`](../process/issue-register-evaluation.md) measures 48
 defect fixes across 426 commits with 12 registered, and kills its own proposal
 on the observation that a good register entry existed and the same defect class
 shipped six more times anyway.
@@ -697,7 +697,7 @@ scene's count table — and no further.
 
 **Built 2026-08-19, and it checks less than this paragraph promised.** Stating
 that plainly rather than letting the status line imply otherwise:
-[`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py) runs
+[`../../../.claude/gates/timelapse_gate.py`](../../../.claude/gates/timelapse_gate.py) runs
 as hook `38-timelapse` — after `37-counts`, before `40-site-graph`, exactly the
 ordering above — and as `make validate-timelapse`, which `hook_parity.py` pairs
 to the hook. Its seven rules cover **criteria 3, 4, 6, 9 and the new 10 and
@@ -757,8 +757,8 @@ least twice under geometry changes. If the gate is by then catching the same
 class of authored-prose defect repeatedly *and* the fix needs judgement the
 predicate cannot encode, the premise becomes measurable and this section should
 be rewritten against real counts. The shape to copy on that day is
-[`../.claude/skills/prototype/SKILL.md`](../.claude/skills/prototype/SKILL.md),
-whose prescriptions live in a [`catalog.md`](../.claude/skills/prototype/catalog.md)
+[`../../../.claude/skills/prototype/SKILL.md`](../../../.claude/skills/prototype/SKILL.md),
+whose prescriptions live in a [`catalog.md`](../../../.claude/skills/prototype/catalog.md)
 policed by its own gate — because a skill's prescriptions are themselves claims
 and must be falsifiable.
 

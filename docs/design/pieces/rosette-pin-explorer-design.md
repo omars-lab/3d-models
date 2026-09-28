@@ -5,7 +5,7 @@ status: built
 # Petals to Pins — rosette → LEGO-pin explorer (design)
 
 **Status:** grounded 2026-09-01 — adversarial audit applied
-([`research/rosette-pin-explorer-grounding-audit.md`](research/rosette-pin-explorer-grounding-audit.md)),
+([`../../research/rosette-pin-explorer-grounding-audit.md`](../../research/rosette-pin-explorer-grounding-audit.md)),
 sources in Appendix A, contested bets and divergences in Appendix B. Produced 2026-08-30 to answer a diagnostic question:
 *the LEGO pins aren't landing where I expect — why?* The private artifact is a visual
 instrument (a hand-ported canvas) built to make that answer visible. **Track 1 shipped
@@ -14,7 +14,7 @@ instrument (a hand-ported canvas) built to make that answer visible. **Track 1 s
 clutch lobes) per piece on live geometry — so the seat/drop verdict is the engine's own, not a
 copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
 successor for that concern. See the shipped record in
-[`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
+[`../orb/d3-integration-design.md`](../orb/d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
 below. Last updated 2026-09-02 — 6.6.3 plates as data shipped; §6.6 is the open ledger.
 
 **Artifact this doc is tied to:**
@@ -149,7 +149,7 @@ drawings, Brick Owl); the measured class is **4.85–4.9** (Cailliau 4.9; Bright
 4.88–4.89, "deliberately oversized"; binderclipscorpion 4.88). The **5.0** that orionrobots
 reproduces is Poskanzer's rounded line on the Lugnet FAQ, and orionrobots' tube OD 6.31 and
 wall 0.657 are the tangency formula run with that 5.0 — one rounded number, not an independent
-source (settled in the [Lego Lab audit](research/lego-lab-grounding-audit.md)). Stud height is
+source (settled in the [Lego Lab audit](../../research/lego-lab-grounding-audit.md)). Stud height is
 split the same way: 1.6 (LDraw) vs 1.7 (Lugnet, Brick Owl) vs 1.8 (Cailliau, measured). bikar
 ships **4.8**; the tool uses 4.8 and labels it — it does not launder the split into a single
 "true" number. What a *printed* stud measures is empirical and lives inside `CAL-STK-01`'s
@@ -345,7 +345,7 @@ runtime skill is needed for.
 4. **P2 — 3.2, 4.2** (data-file + tube cap): cheap, no blockers, do opportunistically.
 5. **Printer-gated (🔴, HELD until a Bambu-class printer):** 3.3 (`LG-P2`/`CAL-CLB-01`),
    3.4 (real links), 4.3 (`LG-F1`/`LG-R1`). These cannot close without a measured part —
-   the same wall every LEGO-pin coupon hits (see [print register](tasks/coaster-pipeline/backlog.md) §3.2, print-gated).
+   the same wall every LEGO-pin coupon hits (see [print register](../../tasks/coaster-pipeline/backlog.md) §3.2, print-gated).
 
 ---
 
@@ -365,14 +365,14 @@ for *any* pattern" fastest:
 | # | item | why it advances the goal | size |
 |---|---|---|---|
 | 6.6.1 | **Widen the roster — 🟢 shipped 2026-09-01** (bikar #134 `85269ac`). Six entries: Rosette-N, Star-N, Girih {10/3}, Girih decagon, Hex field, Star-8 field — one per §5.3 lattice row plus girih. The "flat/centred check per figure" this row priced turned out to be the finding: two of the four tilings compile off-origin (the tiler repeats one way), so the page now recentres on the face bbox and frames the stage from `spanPU`; the roster test asserts each entry centres within 1e-6 and spans what it declares (0.9·spanPU < w ≤ spanPU) | Track 1's objective is *any* pattern; the picker made that a data change and then stopped at two | small — one line each, plus the flat/centred check per figure |
-| 6.6.2 | **Ground this doc — 🟢 shipped 2026-09-01** (3d-models #136). Adversarial audit checked in as `research/rosette-pin-explorer-grounding-audit.md`; Appendix A (sources) and B (seven contested bets, all clustered under existing `CAL-*` ids — none minted). What the audit killed: §5's "measured 0.00 mm in LG-S1" (LG-S1 is unprinted; it *computes*), §3's "7.985 … ~0.24 mm" pitch drift (Lugnet says 7.986 ± 0.002 on beams; Cailliau 7.993 ± 0.007 on a baseplate), the 4.8-vs-5.0 stud split (5.0 is a rounded Lugnet line, not a source), §7's "none address relief across seams" (MachineBlocks ships per-brick relief), two PR shas (#124 `7674683`, #127 `6d17651`) and a link to a directory | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
+| 6.6.2 | **Ground this doc — 🟢 shipped 2026-09-01** (3d-models #136). Adversarial audit checked in as `../../research/rosette-pin-explorer-grounding-audit.md`; Appendix A (sources) and B (seven contested bets, all clustered under existing `CAL-*` ids — none minted). What the audit killed: §5's "measured 0.00 mm in LG-S1" (LG-S1 is unprinted; it *computes*), §3's "7.985 … ~0.24 mm" pitch drift (Lugnet says 7.986 ± 0.002 on beams; Cailliau 7.993 ± 0.007 on a baseplate), the 4.8-vs-5.0 stud split (5.0 is a rounded Lugnet line, not a source), §7's "none address relief across seams" (MachineBlocks ships per-brick relief), two PR shas (#124 `7674683`, #127 `6d17651`) and a link to a directory | every other design doc here went through `ground-design-doc`; the roadmap of record cannot be the one exception | medium — one audit agent, apply, appendices |
 | 6.6.3 | **3.2 — plates as data — 🟢 shipped 2026-09-02** (bikar #141 `571cba2`). `PLATES` moved to `bikar:packages/web/src/data/plates.json` as `{id, studs, mm, brand}` plus a default id; `brand: nominal` means no plate was measured and mm is 8 × studs, the only kind on the roster today. The file is data, so `loadPlates` is the gate that keeps that from meaning unchecked: a duplicate id, non-integer studs, a nominal plate whose mm is not 8 × studs, or a default naming no plate all throw by name (the off-nominal mm is the by-design FAIL — the same number passes once a brand is named). The select is populated from the roster like the pattern picker; the status line shows mm and brand. **No thumbnails and no buy links** — those are 3.4, which needs real URLs and a partner, and a fabricated link is worse than none | Track 3's objective is "the plate the user owns"; a const list cannot grow past what one author typed | small |
 | 6.6.4 | **4.2 — the interior-tube cap — 🟢 shipped 2026-09-02** (bikar #143 `a4318c9`). A *Pin count* dial caps how many anchors each piece keeps; the verdict is re-run on the capped solution, so the readout is the kernel's verdict on what the piece actually carries. The census reports the trade as a geometric count — *capped by the dial*, *clutch lobes (kept)* at 4 per tube and 3 per pin, one table the drawing also reads — and never as a grip prediction: the kernel's `CLUTCH_CAVEAT` sits under the dial verbatim and a test holds every note on the page to §11 Q6 (no hold / grip). The floor is the kernel's, not the dial's: every cap clamps at one anchor, and the retention rule is *thickest wall first* — the kernel's own printability criterion, the only preference with a rule behind it (a spatial spread would be a clutch guess). So a cap can only raise a piece's thinnest wall: the test pins that a cap never fails a piece the kernel passes, and that at 16 studs at least one piece the kernel fails on a thin anchor passes capped — the clause is exercised, not merely permitted. Capped anchors draw as a dashed amber ring, distinct from the kernel's own drops. Same PR: the page footer stops claiming LG-S1 *measured* the 0.00 mm interference (B.3) | Track 4's question — "do we need all these pins?" — has a websearched answer and, until 4.3 prints, no instrument; this makes the trade visible and countable | small–medium; UI only until a coupon can price it |
 
 **Gated on a download — a human must fetch an app.** The LDraw export has been opened by
 three.js `LDrawLoader` end to end and by LDView (installed, measured, removed —
-[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10). Two readers are still owed
-by the [parked backlog](tasks/parked/backlog.md), "LDraw export, never opened in a viewer": **LeoCAD**, where the source reading *predicts* the inline
+[`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md) §10). Two readers are still owed
+by the [parked backlog](../../tasks/parked/backlog.md), "LDraw export, never opened in a viewer": **LeoCAD**, where the source reading *predicts* the inline
 geometry is silently dropped (the export-succeeds-and-yields-nothing class), and **BrickLink
 Studio**, which is untouched and which nothing in the survey predicts. Neither can be settled by
 code; both need the download that the survey's §1.1 says a human must run.
@@ -383,7 +383,7 @@ the geometry gate. The decision can be made now; the *calibration* of whatever i
 because LG-F1 and LG-D1 are the data. A proxy shipped before them is a `CAL-*` bet by
 construction, which is legitimate and must be labelled as one.
 
-**Gated on a printer — held, not blocked.** Every coupon in [print register](tasks/coaster-pipeline/backlog.md) §3.2
+**Gated on a printer — held, not blocked.** Every coupon in [print register](../../tasks/coaster-pipeline/backlog.md) §3.2
 (LG-F1, F2, R1, S1, D1, B1, B2, P1, P2), and with them 3.3, 3.4's measured-drift half and 4.3
 above. The backlog owns these; they are not re-listed in the task system, per its §3.8.
 
@@ -398,7 +398,7 @@ Prior art surveyed for how others turn one pattern into griddable pieces, and ho
 generators are built:
 
 - **LEGO Art / World Map mosaic UX**, **dlvoy/base-plate-outliner**, **MachineBlocks**, and
-  the systems enumerated in [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md)
+  the systems enumerated in [`lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md)
   §3 (Finke, Brickapic — snippet-only, pad-print mural vendors) — rectangle-decomposition of an
   image/region onto the stud grid. Confirms the c×r-on-8-mm decomposition is the standard
   move. MachineBlocks **does** ship per-brick relief today (`surfacePattern`, SVG emboss/deboss,
@@ -472,7 +472,7 @@ run on it at every commit.
 ## Appendix A — sources
 
 All fetched by the 2026-09-01 audit unless marked; the fetched text is restated in
-[`research/rosette-pin-explorer-grounding-audit.md`](research/rosette-pin-explorer-grounding-audit.md)
+[`../../research/rosette-pin-explorer-grounding-audit.md`](../../research/rosette-pin-explorer-grounding-audit.md)
 (deep dives 1–5), so each number below survives a dead link.
 
 **Engine (primary — the thing being ported).**
@@ -502,10 +502,10 @@ All fetched by the 2026-09-01 audit unless marked; the fetched text is restated 
   — a transcription of Lugnet (7.985 is a slip for 7.986; 6.31 / 0.657 are the tangency
   formula with a 5.0 stud). Cited for what it is, not as a measurement.
 - Brick Owl stud-dimensions page — 403 on this audit's fetches; recorded in
-  [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) §1 from an earlier fetch.
+  [`lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md) §1 from an earlier fetch.
 - The settled verdicts on the stud-diameter and tube-OD split:
-  [`lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md);
-  the LDraw-primitive reading: [`lego-brick-system-survey.md`](research/lego-brick-system-survey.md) §1.
+  [`lego-lab-grounding-audit.md`](../../research/lego-lab-grounding-audit.md);
+  the LDraw-primitive reading: [`lego-brick-system-survey.md`](../../research/lego-brick-system-survey.md) §1.
 
 **Rosette construction.**
 - Lee & Soliman, *The Geometric Rosette: analysis of an Islamic decorative motif* (2014),
@@ -517,17 +517,17 @@ All fetched by the 2026-09-01 audit unless marked; the fetched text is restated 
   Soliman; not fetched.
 
 **Prior art on splitting one pattern across LEGO-compatible pieces.**
-- [`lego-baseplate-seam-survey.md`](research/lego-baseplate-seam-survey.md) §3 — the
+- [`lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md) §3 — the
   enumeration §7 relies on (LEGO Art 31203, dlvoy, MachineBlocks, Finke, Brickapic, mural vendors).
 - MachineBlocks module docs (fetched by the audit): `surfacePattern`, `surfacePatternSvg`,
   `svg`/`svgDepth`, `text*`, `baseReliefCut*`.
 
 **House decisions and bets.**
-- [`decisions-log.md`](decisions-log.md) D-005 (knobs backed by `CAL-*` bets) and D-006
+- [`../../decisions-log.md`](../../decisions-log.md) D-005 (knobs backed by `CAL-*` bets) and D-006
   (studs as ports; the computed 0.00 mm).
-- [`bets.md`](../.claude/skills/calibrate/bets.md) — `CAL-RIB-01`, `CAL-STK-01`, `CAL-CLB-01`,
+- [`bets.md`](../../../.claude/skills/calibrate/bets.md) — `CAL-RIB-01`, `CAL-STK-01`, `CAL-CLB-01`,
   `CAL-REG-01`; 20 provisional, 0 measured at this writing.
-- [`catalog.md`](../.claude/skills/prototype/catalog.md) — LG-S1, LG-F1, LG-R1, LG-P2.
+- [`catalog.md`](../../../.claude/skills/prototype/catalog.md) — LG-S1, LG-F1, LG-R1, LG-P2.
 
 ## Appendix B — contested bets and divergences
 

@@ -41,7 +41,7 @@ edges are a new kind of geometry and should wait.** §4 says why.
 ### 2.1 Text in bikar
 
 bikar has one text path, built for engraving rung labels on calibration pieces
-([text-emit-design.md](../text-emit-design.md)).
+([text-emit-design.md](../design/language/text-emit-design.md)).
 
 | Piece | Where (bikar `origin/main`) | What it does |
 |---|---|---|
@@ -331,7 +331,7 @@ All fetched 2026-09-26.
   direct fetch returned HTTP 402).
 - Cubify fans blog, "Considerations for embossing 3D printed vertical surfaces" —
   http://cubifyfans.blogspot.com/2015/01/considerations-for-embossing-3d-printed.html
-- In-repo: [text-emit-design.md](../text-emit-design.md),
+- In-repo: [text-emit-design.md](../design/language/text-emit-design.md),
   [outline-font-emit.md](outline-font-emit.md), [text-emit-survey.md](text-emit-survey.md),
   [coaster-colour-design.md](../coaster-colour-design.md),
   [coaster-minimal-design.md](../coaster-minimal-design.md),

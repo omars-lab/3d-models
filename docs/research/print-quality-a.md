@@ -153,7 +153,7 @@ keep fit allowance and printer compensation separate. Boxes: sliding +0.15 per m
 0.5 mm × 45° lead-in chamfer helps. Its test coupon changes one dimension by 0.05 at a time. It
 cites Prusa "at least 0.3mm", Hubs 0.5 mm, Markforged 0.05 interference, and MDPI IT11–IT13.
 This is the page `CAL-FIT-01`'s ladder was transcribed from (see
-[`../c2-assembly-design.md`](../c2-assembly-design.md) §B.3).
+[`../design/pieces/c2-assembly-design.md`](../design/pieces/c2-assembly-design.md) §B.3).
 
 **Prusa — Modeling with 3D printing in mind** — https://help.prusa3d.com/article/modeling-with-3d-printing-in-mind_164135 — **fetched**.
 "An initial good measurement for movable parts is at least 0.3 mm" — the page does not say

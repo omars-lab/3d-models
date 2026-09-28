@@ -104,7 +104,7 @@ output. Standing targets:
   disproves it.
 - Orb Lab process copy — machine table / weave FDM notice in bikar
   `packages/lab` (then re-run `make lab` here to vendor).
-- `docs/orb-lab-design.md` — §5 print guidance, §10 status.
+- `docs/design/orb/orb-lab-design.md` — §5 print guidance, §10 status.
 - The harness task list (print-prototype and split-export tasks) and the
   project memory.
 

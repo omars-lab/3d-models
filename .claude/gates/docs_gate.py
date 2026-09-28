@@ -61,7 +61,7 @@ the errata note is what carries the correction.
 D5 is **discharge-scoped**, which is narrower than "every CAL id in the corpus"
 and deliberately so. D3 accepts a `**Default:**` that names a bet id *instead*
 of a citation, and it never asked whether the bet exists — so on 2026-08-03
-`docs/text-emit-design.md` shipped three gate-green defaults resting on
+`docs/design/language/text-emit-design.md` shipped three gate-green defaults resting on
 `CAL-TXT-01` and `CAL-TXT-02`, neither of which was registered anywhere. The
 doc said so itself, in a blockquote, which is exactly the "defensible argument
 that management is occurring" this repo's CLAUDE.md warns about.
@@ -152,7 +152,7 @@ WITHDRAWN: list[tuple[re.Pattern, str, str]] = [
         "±0.1–0.2 mm FDM accuracy",
         "no printer vendor publishes an accuracy figure at all (Bambu X1C and A1 "
         "spec sheets: zero matches; Prusa MK4S: no number). The rebuilt argument "
-        "is docs/lego-lab-design.md §3.5",
+        "is docs/design/pieces/lego-lab-design.md §3.5",
     ),
     (
         re.compile(r"\b6 of 37\b|\b4 self-intersections\b"),

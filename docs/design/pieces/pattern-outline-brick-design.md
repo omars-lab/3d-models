@@ -5,7 +5,7 @@ status: decided
 # Pattern-Outline Brick Bodies — `footprint outline` — design doc
 
 Status: **v2 — drafted and adversarially audited 2026-08-02
-([`research/pattern-outline-brick-grounding-audit.md`](research/pattern-outline-brick-grounding-audit.md));
+([`../../research/pattern-outline-brick-grounding-audit.md`](../../research/pattern-outline-brick-grounding-audit.md));
 findings F1–F7 applied same day, and the audit's two demanded computations (F3 cusp floor, F4
 component count) were executed against the rosette corpus — results in §5.** The kernel side is
 already built and tested in bikar (§2); this doc specifies the missing language surface.
@@ -22,12 +22,12 @@ coupon the lego-lab doc calls the load-bearing test of the anchor-only clutch be
 
 Builds on: [`lego-lab-design.md`](lego-lab-design.md) (the `brick` declaration, the two body
 cases, Appendix B.7's inset caveat);
-[`research/pattern-outline-dsl-surface-survey.md`](research/pattern-outline-dsl-surface-survey.md)
+[`../../research/pattern-outline-dsl-surface-survey.md`](../../research/pattern-outline-dsl-surface-survey.md)
 (the Appendix-A survey behind every prior-art and precedent claim here);
-[`research/pattern-outline-body-clutch-survey.md`](research/pattern-outline-body-clutch-survey.md)
+[`../../research/pattern-outline-body-clutch-survey.md`](../../research/pattern-outline-body-clutch-survey.md)
 (non-rectangular LEGO prior art and the clutch counter-case);
-[print register](tasks/coaster-pipeline/backlog.md) note 10 (the blocker this doc resolves);
-[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) (the house precedent on
+[print register](../../tasks/coaster-pipeline/backlog.md) note 10 (the blocker this doc resolves);
+[`../process/dsl-extension-skill-evaluation.md`](../process/dsl-extension-skill-evaluation.md) (the house precedent on
 when a DSL extension deserves process, and what a wrong pointer costs).
 
 ---
@@ -340,7 +340,7 @@ seated rung.
 
 The research behind this doc is checked in, verbatim, with provenance headers:
 
-- [`research/pattern-outline-dsl-surface-survey.md`](research/pattern-outline-dsl-surface-survey.md) —
+- [`../../research/pattern-outline-dsl-surface-survey.md`](../../research/pattern-outline-dsl-surface-survey.md) —
   brick-generator prior art (brickify, LEGO.scad, MachineBlocks, base-plate-outliner — fetched;
   two more known only as unverified snippets), CAD DSL mode precedent (OpenSCAD `resize auto`,
   CadQuery, JSCAD), the explicit-vs-implicit argument both ways (Rust editions, Python
@@ -350,11 +350,11 @@ The research behind this doc is checked in, verbatim, with provenance headers:
   <https://doc.rust-lang.org/edition-guide/editions/index.html>,
   <https://doc.cgal.org/latest/Straight_skeleton_2/index.html>,
   <https://www.angusj.com/clipper2/Docs/Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm>.
-- [`research/pattern-outline-body-clutch-survey.md`](research/pattern-outline-body-clutch-survey.md) —
+- [`../../research/pattern-outline-body-clutch-survey.md`](../../research/pattern-outline-body-clutch-survey.md) —
   LEGO's own non-rectangular parts and their clutch strategies, printed irregular-outline prior
   art, the steelmanned case against anchor-only clutch, FDM printability of concave outlines and
   1.5 mm inset walls, rotation lock on two anchors.
-- [`research/pattern-outline-brick-grounding-audit.md`](research/pattern-outline-brick-grounding-audit.md) —
+- [`../../research/pattern-outline-brick-grounding-audit.md`](../../research/pattern-outline-brick-grounding-audit.md) —
   the adversarial grounding audit of this doc (C4): claim-by-claim verdicts, 8/8 §2 code facts
   verified line-exact, citation spot-checks, findings F1–F7 with the paste-ready corrections
   this v2 applied, and the two computations (§5) it demanded before the flagship could be

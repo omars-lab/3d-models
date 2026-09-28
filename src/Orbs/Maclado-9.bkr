@@ -4,7 +4,7 @@
 # 3-fold icosahedral axis — the 20 dodecahedron vertices — and 120 = 3·40
 # aligns one tip at all three neighbours at once, making the 30
 # dodecahedral edges exact tip-to-tip joins with 12 congruent 30-gon
-# fillers. See 3d-models docs/maclado-orb-design.md (§2, corrected).
+# fillers. See 3d-models docs/design/orb/maclado-orb-design.md (§2, corrected).
 # Render with: bikar render Maclado-9.bkr --format stl -o out.stl
 
 # strut_width 3 degenerates at radius 60 — the derived cap half-angle

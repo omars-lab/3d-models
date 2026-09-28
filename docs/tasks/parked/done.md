@@ -47,7 +47,7 @@ blocked by `#67`).
 
 ### Orb breakdown + flat→sphere wrap morph
 - #76 — Flat→sphere wrap morph for the breakdown page (deferred from the teach-construction plan)
-- #77 — Wrap morph, bikar PR: kernel blend t + writeMorph + page caption (docs/orb-wrap-morph-design.md §6)
+- #77 — Wrap morph, bikar PR: kernel blend t + writeMorph + page caption (docs/design/orb/orb-wrap-morph-design.md §6)
 - #78 — Wrap morph, 3d-models PR: timelapse gate junction + count rules, make orbs, doc statuses
 - #79 — Make `make orbs` robust to non-views orbs (round-pattern STL-only)
 - #80 — bikar: give round-pattern orbs a breakdown (--format timelapse/views for base sphere + place)
@@ -297,10 +297,10 @@ section was written, and the third closed on 2026-08-03; see each entry.
 
   What this entry got wrong is *why* it was still open. The audit that killed the
   number ran on **2026-07-29** and the fix was applied the same week to
-  [`lego-lab-design.md`](../../lego-lab-design.md) §3.5 (rebuilt from measured
+  [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §3.5 (rebuilt from measured
   repeatability, σ ≈ 0.02 mm) and to
   [`print-validation-design.md`](../../design/printing/print-validation-design.md) Appendix A. It was
-  never applied to [`tile-wall-design.md`](../../tile-wall-design.md), which is a
+  never applied to [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md), which is a
   different *lineage* — a different survey, a different audit — that happens to
   share the number. So this was not research debt awaiting a fetch; it was a
   correction that stopped at a document boundary and sat for five days inside a
@@ -321,7 +321,7 @@ section was written, and the third closed on 2026-08-03; see each entry.
   The four adjacent items were checked in the same pass and none is live: the
   "0.02 mm clutch band" is corrected in `lego-lab-design.md` §3.5, the
   "7–10% PETG design band" is withdrawn as apparently synthesized in
-  [`w2-connector-design.md`](../../w2-connector-design.md) B.1 with the ~2% endpoint
+  [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) B.1 with the ~2% endpoint
   re-derived three ways, the "PETG ~30% stronger interlayer bonding" claim never
   reached a design doc and carries errata item 3 in the survey, and the
   "0.2–0.5 mm FDM bow" is labelled a placeholder in both docs that use it — it
@@ -337,8 +337,8 @@ section was written, and the third closed on 2026-08-03; see each entry.
   credited to McMaster & Lee of **AlliedSignal**, and the 1–3 mm bow is re-homed
   to WhyItFailed. The garbled "3m36s → 3.4s" benchmark is deleted rather than
   re-cited. Anchors:
-  [`piece-composition-design.md`](../../piece-composition-design.md) Appendix A and
-  [`w2-connector-design.md`](../../w2-connector-design.md) §3 and Appendix A.
+  [`piece-composition-design.md`](../../design/pieces/piece-composition-design.md) Appendix A and
+  [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §3 and Appendix A.
   One of them
   ([`research/piece-composition-grounding-audit.md`](../../research/piece-composition-grounding-audit.md))
   is the **K2 instance the taxonomy cites**: BOSL2's `screws.scad` was inside
@@ -372,8 +372,8 @@ Added 2026-09-01. Until this entry §6 listed nothing from the d3 workstream eve
 though it is the only non-printer work actually in flight — it lived in the
 session-scoped task list and in two design docs. This subsection is a **pointer,
 not a copy**: the owning sections are
-[`d3-integration-design.md`](../../d3-integration-design.md) §4 (phases) and
-[`rosette-pin-explorer-design.md`](../../rosette-pin-explorer-design.md) §6 (tracks),
+[`d3-integration-design.md`](../../design/orb/d3-integration-design.md) §4 (phases) and
+[`rosette-pin-explorer-design.md`](../../design/pieces/rosette-pin-explorer-design.md) §6 (tracks),
 and a number that changes there is not re-typed here.
 
 | Item | State | Owner |

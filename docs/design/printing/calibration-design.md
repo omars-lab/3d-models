@@ -117,7 +117,7 @@ W-C1's ~0.6 mm bayonet blade renders bare and the catalog says so in the entry.
 ### 3.2 Rung identity: engraved on the plates, positional within them
 
 bikar now emits engraved text on flat plate tops — the `text` statement, wired to the
-mesh gate with a gap-and-counter validator ([`../../text-emit-design.md`](../../text-emit-design.md),
+mesh gate with a gap-and-counter validator ([`../language/text-emit-design.md`](../language/text-emit-design.md),
 shipped T2). So the four flat-plate coupons carry the printed label the wild uses
 (BOSL2's tolerance ladders; Bambu's own fit test): `MC1BoreSweep` says `MC-1 BORE`,
 `MC1FitLadder` `MC-1 FIT`, `MC3BridgePlate` `MC-3`, `MC5WarpPlate` `MC-5`. The card no

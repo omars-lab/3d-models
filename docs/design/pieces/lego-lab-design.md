@@ -10,7 +10,7 @@ decisions:
 # Lego Lab — pattern → piece → LEGO-compatible printed part (LG) — implementation design doc
 
 Status: **v2 — through the adversarial grounding audit
-([`research/lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md)). Four claims lost
+([`../../research/lego-lab-grounding-audit.md`](../../research/lego-lab-grounding-audit.md)). Four claims lost
 and the design changed: the clutch is now a discrete rib rather than a nominal surface (§3.8, §7.6),
 `engage` defaults to 3.2 mm rather than 1.6 (§3.6), the grid-fit measure runs on repeat-vector
 *components* rather than lengths (§5.3), and the tangency tube ⌀ is recorded as a derived datum
@@ -21,7 +21,7 @@ Built: **R0, M6, M7, P0, P1, P2 and P3 have shipped** (2026-07-29 → 2026-08-07
 **sweep strip**, its design-notes page, its studio index, **multi-piece export** (§10, D-006) — a
 brick mints stud/anti-stud ports from its own lattice and a two-brick assembly exports as two
 printable parts — §5.3's **compatibility matrix, now filled by a real sweep**
-([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)), and the two
+([`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md)), and the two
 **curated scripts** that make that matrix clickable rather than only readable. P2 then gave the page
 custom mode — the code drawer, `code=` share links, "Open in Studio" and the localStorage draft —
 by *sharing* the Orb Lab's modules rather than forking them. P3's three items have now all shipped
@@ -44,7 +44,7 @@ LEGO-compatible part** — a body carrying pattern relief, with studs and/or ant
 LEGO 8 mm lattice so it clutches into real LEGO — plus the two gates that make "is this pattern
 LEGO-compatible?" a measurable question, and the Lego Lab page that puts both in front of a user.
 
-Builds on: [`orb-lab-design.md`](orb-lab-design.md) (the Lab is a copy of its architecture, §9);
+Builds on: [`../orb/orb-lab-design.md`](../orb/orb-lab-design.md) (the Lab is a copy of its architecture, §9);
 [`tile-wall-design.md`](tile-wall-design.md) (`brick` is a `tile`-class specialization);
 [`w2-connector-design.md`](w2-connector-design.md) §7 (the slab-stack solidifier this rides, the
 precedent for a documented mesh-gate exemption, and — §3.8 — the detent-rib architecture this doc
@@ -145,9 +145,9 @@ in this section against the same commit and found no defects.
 
 ## 3. What the survey established (the load-bearing facts)
 
-Full derivations and citations in [`research/lego-brick-system-survey.md`](research/lego-brick-system-survey.md);
+Full derivations and citations in [`../../research/lego-brick-system-survey.md`](../../research/lego-brick-system-survey.md);
 every claim below was re-attacked in
-[`research/lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md) and this section
+[`../../research/lego-lab-grounding-audit.md`](../../research/lego-lab-grounding-audit.md) and this section
 records the post-audit position, including where the audit won.
 
 ### 3.1 The dimensional standard
@@ -583,7 +583,7 @@ The **Measured** column is a sweep, not a prediction: five bases across one
 shared interval, 2–20 mm at a 0.005 mm step (finer than the snap threshold, so
 a snapping scale cannot fall between samples), pitch 8 mm, θ maximized by
 `gridFit`. Run and full commentary:
-[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+[`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md).
 
 | Lattice | Ratio | Measured (max fit · at scale · repeat unit) | Authorable | Typical families |
 |---|---|---|---|---|
@@ -609,7 +609,7 @@ which are facts about the gate; without it the table silently mixes the two.
 
 The alternative — adding a general two-vector `basis` statement so every score
 in the table becomes reachable — was argued with the geometry compiled beside
-it and was **not** taken: [`decisions-log.md`](decisions-log.md) D-007, and the
+it and was **not** taken: [`../../decisions-log.md`](../../decisions-log.md) D-007, and the
 `lattice-basis` design note (§12) it was decided from.
 
 **"At the right scale" is plural.** `square` scores 1.0 at every divisor of the
@@ -670,7 +670,7 @@ declaration describes geometry that was never built. A `brick` has no `hole` sta
 feature the exported mesh does not contain — the mesh is identical with and without it, while a
 `connect` against it still passes the C2 fit check. `kind axis` is exempt: it states no dimension,
 so there is nothing the kernel can have failed to cut. Found while scoping multi-piece export
-([`decisions-log.md`](decisions-log.md) D-006) and pinned by
+([`../../decisions-log.md`](../../decisions-log.md) D-006) and pinned by
 `bikar:packages/core/tests/kernel3d/brick-phantom-port.test.ts`.
 
 ## 7. Kernel — the brick cell partition over `solidifySlabStack`
@@ -996,9 +996,9 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`decisions-log.md`](decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`../../decisions-log.md`](../../decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
-| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that was **not** done is the check that needs no code: no LDraw viewer had opened the output. **Partly discharged 2026-08-02** (bikar `49aab9f`, PR #62) — the Lab grew the export button §14.3 specified but never got, and a fourth tab that reads the file back through three.js `LDrawLoader` and prints the signed volume of what it built (§14.4). One third-party reader, continuously; not the twelve-tool afternoon, and not an official LDraw implementation. |
+| **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that was **not** done is the check that needs no code: no LDraw viewer had opened the output. **Partly discharged 2026-08-02** (bikar `49aab9f`, PR #62) — the Lab grew the export button §14.3 specified but never got, and a fourth tab that reads the file back through three.js `LDrawLoader` and prints the signed volume of what it built (§14.4). One third-party reader, continuously; not the twelve-tool afternoon, and not an official LDraw implementation. |
 
 **Why the coupons stopped being a gate.** This table originally put LG-F1/F2/R1 before M6 because
 the coupons settle the dimensions M6 would otherwise have to guess. That ordering is right for a
@@ -1007,7 +1007,7 @@ a five-rung `ribMm` ladder crossed with three `engage` values — and the Lab ru
 without a new plate. So the dependency inverts. M6 and M7 ship with every disputed value adjustable
 and provenance-tagged, the coupons become the Lab's first *input*, and each print narrows a knob
 rather than unblocking a phase. Recorded as
-[`decisions-log.md`](decisions-log.md) D-005, which supersedes D-003.
+[`../../decisions-log.md`](../../decisions-log.md) D-005, which supersedes D-003.
 
 The condition that keeps this honest is already in §9: the panel must say, per value, whether the
 active number came from a coupon or is still an unmeasured default. A `CAL-*` id with no measurement
@@ -1017,7 +1017,7 @@ behind it has to read as *unmeasured* in the UI. Without that, "adjustable" sile
 ### Implementation status
 
 **R0 — research and grounding — 2026-07-29.** `docs/research/lego-brick-system-survey.md` (field
-survey, LDraw library read first-hand), `docs/lego-lab-design.md` v1 → v2,
+survey, LDraw library read first-hand), `docs/design/pieces/lego-lab-design.md` v1 → v2,
 `docs/research/lego-lab-grounding-audit.md` (audit preserved verbatim),
 `.claude/skills/prototype/catalog.md` (LG ladder). Design changes forced by the audit: clutch rib
 promoted to a first-class kernel feature (§3.8, §7.6); `engage` default 1.6 → 3.2 (§3.6); grid-fit
@@ -1124,8 +1124,8 @@ claims are claims about what a reader *sees*, so at least one test per claim has
 **P1 (part) — the multi-piece decision and V11 — 2026-07-31.** bikar `617bee1` (PR #34: the
 design-notes page §12, the studio index §13, and the `multi-piece-export` note as `preview`) and
 `3b31fab` (PR #35: V11, and the same note closed to `decided`). 3d-models: this revision, plus
-[`decisions-log.md`](decisions-log.md) D-006 and the
-[`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+[`../../decisions-log.md`](../../decisions-log.md) D-006 and the
+[`design-note`](../../../.claude/skills/design-note/SKILL.md) skill.
 
 Multi-piece export is **decided, not built**: `export parts` on a `brick` assembly is studs-as-ports
 — a stud mints an outward port and the tube beneath the ceiling mints its mate, so the joint names
@@ -1152,7 +1152,7 @@ remembered.
 
 **P1 (part) — studs-as-ports built — 2026-07-31.** bikar `c60faf2` (PR #36). 3d-models: this
 revision, plus the `LG-S1` coupon in
-[`prototype/catalog.md`](../.claude/skills/prototype/catalog.md).
+[`prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md).
 
 D-006 is now geometry that renders. A `brick` mints its own ports from the lattice it already
 built — `stud_c<col>r<row>` on the top face, `anti_c<col>r<row>` on the bed — and
@@ -1198,7 +1198,7 @@ test that asserts the brick parts carry a floor and `Pinned-Tiles.bkr`'s parts c
 **P1 (part) — the compatibility matrix measured — 2026-07-31.** bikar `3ad9158` (PR #37:
 `scripts/sweep-lattice-matrix.ts`, `packages/core/tests/kernel3d/lattice-matrix.test.ts`).
 3d-models: this revision's §5.3, plus
-[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+[`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md).
 
 §5.3's table shipped an **Expected** column and a prediction in a table reads exactly like a
 measurement in one. It is now a **Measured** column: five bases over one shared interval, 2–20 mm
@@ -1462,7 +1462,7 @@ deviations from this spec, and additions beyond it.)*
 
   **Validator:** V12 warns, and never refuses, when the measured span exceeds that ceiling. It is a
   warning because the ceiling is transcribed from someone else's slicer preset: the same appendix
-  that credits it ([`design/printing/print-validation-design.md`](design/printing/print-validation-design.md) B.4) records community
+  that credits it ([`../printing/print-validation-design.md`](../printing/print-validation-design.md) B.4) records community
   bridging at 20–80 mm on tuned machines, so a refusal would be this project asserting a limit it
   has never printed against. Coupon MC-3 settles it.
   - PASS: `Classic-Brick` at its defaults — 4.88 mm, every candidate anchored, no message.
@@ -1566,7 +1566,7 @@ deviations from this spec, and additions beyond it.)*
   what K7 is about, so it is written down here rather than left for a reader to discover. Three ways
   out: widen the grammar with a general two-vector basis, or mark the row in §5.3 as
   kernel-reachable-only, or drop the row. **Resolved: label the row** —
-  [`decisions-log.md`](decisions-log.md) D-007. §5.3 gains an **Authorable** column and the
+  [`../../decisions-log.md`](../../decisions-log.md) D-007. §5.3 gains an **Authorable** column and the
   sentence saying why; the grammar is unchanged; the row stays, because it is the 5-fold case an
   Islamic-pattern reader will look for. The three options were drawn side by side, with the
   geometry compiled, in the `lattice-basis` design note (§12).
@@ -1622,7 +1622,7 @@ a hand-ordered list of documents is a list that will eventually be wrong about w
 current.
 
 **Where the decision itself lives is unchanged.** A note is the *argument*; the outcome still goes
-to [`decisions-log.md`](decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
+to [`../../decisions-log.md`](../../decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
 the relevant section here. The note is not a third register — it is the worked page a `D-NNN` line
 compresses.
 
@@ -1630,8 +1630,8 @@ compresses.
 
 | Note | Argues | Status |
 |---|---|---|
-| `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`decisions-log.md`](decisions-log.md) D-006) |
-| `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`decisions-log.md`](decisions-log.md) D-007) |
+| `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`../../decisions-log.md`](../../decisions-log.md) D-006) |
+| `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`../../decisions-log.md`](../../decisions-log.md) D-007) |
 | `span-and-border` | §11 Q4 and Q5: what actually bounds the bridged span, and which sources V13 may judge | **decided** — by measurement, recorded in §11 above rather than as a `D-NNN`, because neither was a choice between designs |
 
 `lattice-basis` extends the page's "compiled, not drawn" rule to a second kind of figure, and the
@@ -1697,7 +1697,7 @@ which `lego-presets.test.ts` independently pins to `Star-Brick.bkr` alone.
 Four pages is the point at which "which page do I want?" becomes a real question, and the honest
 answer is not a list of filenames — it is *who each page is for and what they walk away with*. That
 is the actor/use-case map's question, already answered, in
-[`../.claude/skills/maintain-use-cases/use-cases.md`](../.claude/skills/maintain-use-cases/use-cases.md).
+[`../../../.claude/skills/maintain-use-cases/use-cases.md`](../../../.claude/skills/maintain-use-cases/use-cases.md).
 So the index does not invent an answer; it points into that one.
 
 `studio.html` is rendered entirely from `packages/lab/src/catalog.ts`, which holds every page, the
@@ -1719,7 +1719,7 @@ remove the hand:
 Check 1 lives in bikar because that is where the pages are; check 2 lives here because that is where
 the map is. Neither is a new gate — check 2 is a rule inside the `maintain-use-cases` validator the
 repo already runs on every commit, per this repo's standing precedent that a measured recurrence
-earns [a gate rather than a skill](design/process/dsl-extension-skill-evaluation.md).
+earns [a gate rather than a skill](../process/dsl-extension-skill-evaluation.md).
 
 **Validator:** the index is complete exactly when the catalogue and the package agree, in both
 directions.
@@ -1758,7 +1758,7 @@ minting a UC for it would put an entry in the map that no code delivers.
 §10's P3 row names three items. Two are refinements of surfaces that already exist (§14.1, §14.2).
 The third — the LDraw export — was blocked on a question about the format rather than about our
 code: a generated brick is not an LDraw part and has no part number, so a type-1 line has nothing
-to reference. [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) answers it, and
+to reference. [`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md) answers it, and
 §14.3 is the spec that follows. **It also refutes the row's own cost estimate**, which is corrected
 in §10 and explained in §14.3.
 
@@ -1857,7 +1857,7 @@ brick that comes out is printable, and the reader is being told what it cost, no
 
 ### 14.3 The LDraw export
 
-Grounding: [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md), 2026-08-01, seven
+Grounding: [`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md), 2026-08-01, seven
 LDraw specification documents plus three viewers, read against bikar at `9cca1ae`.
 
 **The row's framing was wrong, and this is the correction.** §10 called the export *"a text emit,
@@ -1880,7 +1880,7 @@ line names.
 
 **Default:** 1 LDU = 0.4 mm, from the
 [LDraw File Format Specification 1.0.2](https://www.ldraw.org/article/218.html) as fetched and
-quoted in [`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §1.3. The spec gives *two*
+quoted in [`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md) §1.3. The spec gives *two*
 conversions and calls both approximations; the other, 1/64 in = 0.396875 mm, makes a stud pitch of
 7.9375 mm. **K10 — why 0.4 transfers and 1/64 in does not:** 20 LDU × 0.4 reproduces §3.1's
 8.0 mm pitch exactly, which is the pitch every dimension in this doc was derived under and the
@@ -1976,7 +1976,7 @@ not as bets: no coupon, no calipers, one afternoon.
 
 #### 14.3.1 The afternoon, costed — and a fifth item the four did not anticipate
 
-Grounding: [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md), 2026-08-01, twelve
+Grounding: [`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md), 2026-08-01, twelve
 named candidates. **K2 — that is a survey of twelve tools, not of the space of LDraw software;**
 the session had no search budget left, so there was no exploratory search and the candidate set is
 the one the brief named plus what could be reached by following links.
@@ -2021,7 +2021,7 @@ of an empty model came from and where no run has yet been made.
 
 ### 14.4 The read-back panel — what a second reader can settle without the afternoon
 
-Decided in [`decisions-log.md` D-009](decisions-log.md); shipped bikar `49aab9f` (PR #62).
+Decided in [`decisions-log.md` D-009](../../decisions-log.md); shipped bikar `49aab9f` (PR #62).
 
 §14.3.1 costs an afternoon of *installing* viewers. One reader needs no install: three.js
 `LDrawLoader` is an npm dependency, so it can sit inside the Lego Lab and read the export back on
@@ -2039,7 +2039,7 @@ culls nothing. So the panel prints two numbers beside the picture, and those are
 > reading of S7's *"may not cull"* that the one reader we have does not satisfy: three builds a
 > `FrontSide` mesh from the authored winding whether the file certifies or not. What NOCERTIFY
 > constrains is what a consumer may *discard*; what it draws instead is unspecified. See
-> [`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4.
+> [`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md) §9.4.
 
 **Validator:** the read-back passes when every type-1 line resolves against a `0 FILE` block in the
 same file, the signed volume of the built geometry is positive in LDraw's right-handed −Y-up frame,
@@ -2107,7 +2107,7 @@ assembly like `Brick-Stack` opened as a single grey mass in a viewer — indisti
 defeating the reason the export writes one sub-file per brick. `place` now carries an optional
 colour: **`place <Piece> [color <name|code>]`** (D-026, bikar PR
 [#79](https://github.com/NaqshCoffee/bikar/pull/79)). A grounded name — one of the ten in
-[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §7.4, each the lower-cased
+[`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md) §7.4, each the lower-cased
 LDConfig colour name — or a bare integer LDraw code (0–511). It rides the type-1 line's colour
 field (§14.3's `1 <colour> …`), which was already the field the panel's magenta trap (§14.4) proved
 the viewer honours; `--format stl`/`svg` have no colour channel and ignore it.
@@ -2187,7 +2187,7 @@ angles rather than one.
 
 The research behind the render experiment already established the load-bearing constraint, and it
 is why this is not a one-shot screenshotter.
-[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.5 records it directly: a
+[`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md) §10.5 records it directly: a
 three-quarter render of `Brick-Stack` shows a 2×4 brick with eight studs and correct proportions,
 but the two placements are 24 LDU apart, stack flush, and the file carries no edge lines — so the
 seam between them is never drawn, and **a viewer cannot distinguish that image from a single
@@ -2219,7 +2219,7 @@ equal in strength — which is the design decision, not an implementation detail
   `bikar:scripts/thumbnail-gate.ts`, split out of the CLI so a `node --test` can freeze the one
   property that matters about a gate — that it fires.
 - **Golden pixels are the soft gate.** A render reaches the GPU through ANGLE/Metal
-  ([`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.3), so a byte-exact pixel
+  ([`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md) §10.3), so a byte-exact pixel
   match is not a thing a driver guarantees. The pixel check is therefore *tolerant*: `pixelDiffRatio`
   returns the differing-pixel fraction and the CLI compares it against a small `--tolerance` (default
   0.02), not against zero. A one-pixel wobble passes; a materially different frame blows past it.
@@ -2249,7 +2249,7 @@ headless shell, and it drives the *same* scene the studio panel shows —
 `bikar:packages/lab/src/ldraw-scene.ts` composed onto `bikar:packages/lab/thumbnail.html` via
 `bikar:packages/lab/src/thumbnail-page.ts` — so a thumbnail is the same brick §14.4 reads back, not
 a second renderer that could disagree. The channel choice is forced, not stylistic:
-[`research/ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §10.3 measured the headless shell
+[`../../research/ldraw-cli-viewers.md`](../../research/ldraw-cli-viewers.md) §10.3 measured the headless shell
 **failing to create a WebGL context** on this machine class, while full Chromium reaches the GPU
 through ANGLE/Metal and renders.
 
@@ -2272,8 +2272,8 @@ both slow and backend-fragile in exactly the way §15.3 describes. The near-term
 `validate-render` skill (a separate deliverable), which runs the CLI on demand against a model and
 reads the result; graduating it to a hook waits until there is measured recurrence of the defect it
 would catch — the same *no skill/gate before the recurrence is measured* discipline the precedent
-docs settled ([`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md),
-[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md)).
+docs settled ([`../process/issue-register-evaluation.md`](../process/issue-register-evaluation.md),
+[`../process/dsl-extension-skill-evaluation.md`](../process/dsl-extension-skill-evaluation.md)).
 
 This holds for the **render**, which has a GPU in it. It does *not* hold for the metadata beside
 the render, which does not — and §16.5 draws that line precisely: the catalog of fixtures and the
@@ -2394,10 +2394,10 @@ inherits the right half of each.
 
 ## Appendix A — sources
 
-Full survey with derivations: [`research/lego-brick-system-survey.md`](research/lego-brick-system-survey.md).
-Adversarial audit, preserved verbatim: [`research/lego-lab-grounding-audit.md`](research/lego-lab-grounding-audit.md).
+Full survey with derivations: [`../../research/lego-brick-system-survey.md`](../../research/lego-brick-system-survey.md).
+Adversarial audit, preserved verbatim: [`../../research/lego-lab-grounding-audit.md`](../../research/lego-lab-grounding-audit.md).
 LDraw format research behind §14.3, with its own fetch record and ten ungrounded items:
-[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md).
+[`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md).
 
 **Primary, read in full**
 
@@ -2522,7 +2522,7 @@ Each entry: the bet, the strongest source against it, and either why we diverge 
 
 Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a measurement
 can. The id is the bet's entry in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which names the
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which names the
 coupon that settles it; the ceremony is the `calibrate` skill (bikar Tenet 30 — a physical
 constant is not earned until it records its provenance).
 

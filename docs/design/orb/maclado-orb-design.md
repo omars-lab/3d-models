@@ -6,11 +6,11 @@ status: built
 
 Status: **v5 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
 #89 `eb4f19c`); M4b closed as a documented partial for the greedy chain rule (PRs #90 `856db18`,
-#91; [D-030](decisions-log.md)) — the walk's separations form a continuum no cut rule can
+#91; [D-030](../../decisions-log.md)) — the walk's separations form a continuum no cut rule can
 quantize; M4c measured the quantized-lattice successor (PR #92 `ec4518b`;
-[D-031](decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
-[D-032](decisions-log.md)) — tangency touches, overlap weaves; M4e built the welded woven-overlap
-orb D-032 stopped short of (bikar PR #94; [D-033](decisions-log.md)) — the D-032 parity risk
+[D-031](../../decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
+[D-032](../../decisions-log.md)) — tangency touches, overlap weaves; M4e built the welded woven-overlap
+orb D-032 stopped short of (bikar PR #94; [D-033](../../decisions-log.md)) — the D-032 parity risk
 resolved positively, 60 ribbon loops over 420 crossings, shipped as
 `bikar:patterns/Orbs/Maclado-9-Overlap.bkr`.**
 Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
@@ -29,7 +29,7 @@ gives up global radial symmetry; what that asymmetry buys is *densely packed* wh
 whole fillers — not whole fillers as such, which M4's symmetric field also keeps (§2, corrected).
 
 Grounding. Every mathematical and prior-art claim traces to the checked-in research survey,
-[`research/maclado-orb-survey.md`](research/maclado-orb-survey.md), and its fetch record (§7 there).
+[`../../research/maclado-orb-survey.md`](../../research/maclado-orb-survey.md), and its fetch record (§7 there).
 Every v1 engine claim was verified first-hand against bikar at `origin/main` (`e8b07d5`); pointers
 added by this revision to M4's own files resolve at `d20e3f5` (bikar PR #88's squash commit, now on
 `origin/main`). All named files exist at their stated refs, so the pointers below resolve regardless
@@ -81,7 +81,7 @@ see it.
 **The theorem (true, unchanged).** The finite rotation groups of the sphere are exactly five
 families — cyclic Cₙ, dihedral Dₙ, and the three polyhedral groups T (order 12), O (order 24),
 I (order 60) — and the rotation-axis orders inside the polyhedral groups are **only 2, 3, 4, and
-5, never 9** ([survey §1](research/maclado-orb-survey.md)). So no site on a sphere can carry a
+5, never 9** ([survey §1](../../research/maclado-orb-survey.md)). So no site on a sphere can carry a
 wheel's **full** C₉ as site symmetry, and the only group with a 9-fold axis at all is C₉/D₉ — a
 single distinguished axis (the "beach-ball"). A wheel's full 9-fold symmetry is never global.
 
@@ -116,7 +116,7 @@ axis never needed any of this — survey §1, K10.)
 The prior art reads differently in this light, and more sharply. Kaplan's 3D-printed spherical
 star balls use **10- or 12-point stars on a truncated icosahedron / dodecahedron** — the same
 divisor trick, played at full site order (5 divides 10; the site's whole symmetry survives in the
-star) ([survey §4](research/maclado-orb-survey.md)). Playing it with a **proper** divisor — a
+star) ([survey §4](../../research/maclado-orb-survey.md)). Playing it with a **proper** divisor — a
 9-fold motif at a 3-fold site, most of the motif's symmetry sacrificed but not all — appears in
 none of the sources surveyed here: Kaplan never places 9, and Bonner classes 9-pointed stars as
 strictly **non-systematic**, closed by irregular filler regions (the "9-and-12" lazo composites)
@@ -125,12 +125,12 @@ genuinely 9-fold wheels, whole congruent fillers.
 
 **"Maclado" names this precisely.** It is the Spanish for crystal *twinning*: local order in each
 domain composed into an aggregate whose symmetry is only that of the joining, and whose twin law
-"is not a symmetry operation of the untwinned crystal" ([survey §2](research/maclado-orb-survey.md)).
+"is not a symmetry operation of the untwinned crystal" ([survey §2](../../research/maclado-orb-survey.md)).
 Each wheel is a domain with local C₉; the sphere is the aggregate; the ribbons and fillers are the
 join. That is the whole design in one word. (The twin-law wording quoted here is from Wikipedia's
 *Crystal twinning*; the canonical IUCr dictionary entry was unreachable in the survey — HTTP 403 —
 and has not been checked, so the exact phrasing is provisional and should be re-verified against
-IUCr before being quoted as canonical — [survey §2](research/maclado-orb-survey.md).)
+IUCr before being quoted as canonical — [survey §2](../../research/maclado-orb-survey.md).)
 
 ---
 
@@ -214,7 +214,7 @@ through.
 
 A wheel is a 9-pointed star rosette inscribed in a bounding cell by the polygons-in-contact (PIC)
 rule: a contact point on each cell edge, two rays grown at a **contact angle** θ, star motifs where
-rays meet ([survey §4/§5](research/maclado-orb-survey.md)). The nonagon is **not**
+rays meet ([survey §4/§5](../../research/maclado-orb-survey.md)). The nonagon is **not**
 compass-straightedge constructible (9 = 3², Gauss–Wantzel; survey §5), so its 20°/40° geometry is
 produced numerically — θ = 2πk/9 by direct trig — and there is no exact construction to check
 against.
@@ -274,7 +274,7 @@ cannot discharge a claim about every part — `lego-lab-design.md` §14's one-re
 
 The strapwork ribbon alternates over/under at each crossing; on a closed surface every closed ribbon
 must return to its starting over/under state, which holds iff the crossing graph is consistently
-2-colourable ([survey §5](research/maclado-orb-survey.md), flagged there as an engine invariant to
+2-colourable ([survey §5](../../research/maclado-orb-survey.md), flagged there as an engine invariant to
 verify, not a sourced theorem). The existing woven family solves 2D crossing parity
 (`bikar:packages/core/src/kernel3d/weave.ts`), but its solver carries a **valence contract that is
 the real transfer condition** (§3): its crossing detector accepts only degree-2 and degree-4 nodes
@@ -326,7 +326,7 @@ self-intersection check rather than claiming this gate already rejects band-soup
 ## 6. What is NOT retrievable — and why that shapes the whole design
 
 This section is not a caveat; it is a design constraint, carried verbatim from the survey's K1
-qualifiers ([survey §3](research/maclado-orb-survey.md)).
+qualifiers ([survey §3](../../research/maclado-orb-survey.md)).
 
 1. **Martín López's exact 9-SPIKE placement rule is not retrievable.** The specific object was found
    on no web-indexed page; his active channel is Facebook, which is not indexed and was not
@@ -358,7 +358,7 @@ specific to a thin ribbon sphere.
 about 2.0 mm, within a [1.2–2.5 mm band for a ~0.4 mm
 nozzle](https://www.raise3d.com/blog/3d-printing-wall-thickness/) — because a strapwork ribbon is an
 *unsupported* thin wall over most of its length, so it sits above the 0.8 mm supported-wall floor.
-K10 condition (carried from [survey §6](research/maclado-orb-survey.md)): this is nozzle-relative and
+K10 condition (carried from [survey §6](../../research/maclado-orb-survey.md)): this is nozzle-relative and
 transfers only for ~0.4 mm-class nozzles; a 0.2 mm or 0.8 mm nozzle shifts the floor and the print
 sheet must state the assumed nozzle. This number is a starting geometry, not a measured result —
 there is no printer in the loop yet (task #10 is on hold), so it will graduate to a calibrated bet
@@ -381,7 +381,7 @@ the concept*, so a dead end is found cheap.
 - **M2 — two wheels, joined tangent. ✅ Done, and narrower than its own title** (bikar PR #86).
   Placement + join for a pair (§5.2). *Verified:* the join validator — contact points pair, the
   seam carries one ribbon. Proves the maclado weld before the closure solver.
-  *Narrowing recorded 2026-08-11 ([D-032](decisions-log.md)):* what M2 shipped is the **tangent**
+  *Narrowing recorded 2026-08-11 ([D-032](../../decisions-log.md)):* what M2 shipped is the **tangent**
   reading of §5.2 — centre separation exactly 2θ, one tip-to-tip contact point — not the
   overlapping rim *arcs* the section describes, and this bullet's original title ("overlapped and
   welded") asserted the spec, not the implementation. Every milestone through M4c built inside the
@@ -397,7 +397,7 @@ the concept*, so a dead end is found cheap.
   the 510-node/900-edge seam graph weaving watertight with 390 alternating crossings and 46 closed
   strands, and one watertight genus-379 solid (`bikar:packages/core/tests/kernel3d/maclado-field.test.ts`).
 - **M4b — the asymmetric faithful field (documented partial for the greedy chain,
-  [D-030](decisions-log.md)).** The maker's own regime:
+  [D-030](../../decisions-log.md)).** The maker's own regime:
   wheels placed by search rather than by symmetry, whole *small* fillers found rather than forced.
   This is where §9.1's convergence risk actually lives — M4's symmetric field never exercised it,
   because its placement is derived, not searched. *Will verify:* the same §5 validators, on a field
@@ -432,13 +432,13 @@ the concept*, so a dead end is found cheap.
     not the cut: the 51 hull edges take **32 distinct centre distances** — the greedy walk
     produces a continuum of separations, so no cutting rule could yield a small filler
     vocabulary from it. Per the gate below, the outcome is the **documented partial**
-    ([D-030](decisions-log.md)), and the transfer condition for any successor rule is that it
+    ([D-030](../../decisions-log.md)), and the transfer condition for any successor rule is that it
     must *quantize its separations* by construction
     (`bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`).
   - *Open follow-on resolved:* the user chose to run the bounded spike (Option A, 2026-08-08,
-    [D-031](decisions-log.md)) — built and measured as **M4c** below.
+    [D-031](../../decisions-log.md)) — built and measured as **M4c** below.
 - **M4c — the quantized-separation spike. ✅ Done, and quantization delivers** (bikar PR #92,
-  `ec4518b`; [D-031](decisions-log.md)). D-030's transfer condition made concrete: a finite placement
+  `ec4518b`; [D-031](../../decisions-log.md)). D-030's transfer condition made concrete: a finite placement
   *site* set quantizes separations by construction (the trap D-030 pinned — a finite
   turn-angle menu does not, because 3D rotations do not commute — is dodged by quantizing
   positions, not steps). The rule is a documented lattice walk
@@ -466,7 +466,7 @@ the concept*, so a dead end is found cheap.
   *shipping* (mold economy vs. the full field's 1-class vocabulary) is a separate scope
   decision the measurements above now inform.
 - **M4d — the overlap spike. ✅ Done, and overlap weaves where tangency only touches** (bikar PR
-  #93; [D-032](decisions-log.md)). Prompted by the maker's 2026-08-11 photo and the user's verdict
+  #93; [D-032](../../decisions-log.md)). Prompted by the maker's 2026-08-11 photo and the user's verdict
   that our orb "looks nothing like" the reference: the root cause is M2's tangent narrowing of
   §5.2 (see the note on M2 above). The instrument
   (`bikar:packages/core/src/kernel3d/maclado-overlap.ts`) finds transversal great-arc crossings
@@ -491,7 +491,7 @@ the concept*, so a dead end is found cheap.
   were actually welded. That build is the next milestone-sized decision, and these are its input
   numbers.
 - **M4e — the welded woven-overlap orb. ✅ Done, and the D-032 parity risk resolves positively**
-  (bikar PR [#94](https://github.com/NaqshCoffee/bikar/pull/94); [D-033](decisions-log.md)).
+  (bikar PR [#94](https://github.com/NaqshCoffee/bikar/pull/94); [D-033](../../decisions-log.md)).
   The build M4d deliberately did not take, chosen by the user 2026-08-15.
   `buildWovenOverlapGraph` (`bikar:packages/core/src/kernel3d/maclado-woven.ts`) judges the
   ratio with the D-032 instrument first — refusing tangency (ρ=1.0, odd parity through a rim
@@ -550,7 +550,7 @@ distorted-filler orb that fails its own §5.3 validator.
    answered it for the greedy chain, and the answer is no:* 34 gap tiles fall into 33 congruence
    classes, tolerance-robust across three decades, because the walk's wheel separations form a
    continuum (32 distinct centre distances on 51 hull edges) that no cutting rule can quantize.
-   The documented-partial fallback fired as written — [D-030](decisions-log.md). The risk stays
+   The documented-partial fallback fired as written — [D-030](../../decisions-log.md). The risk stays
    open only for placement rules not yet built, and any successor must quantize its separations
    by construction.
 2. **Filler congruence tolerance.** §5.3 checks "congruent within tolerance"; the tolerance is a

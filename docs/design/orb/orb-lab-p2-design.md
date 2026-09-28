@@ -7,7 +7,7 @@ status: draft
 Status: **DRAFT for review — P2 planning (P0/P1 shipped)**
 Provenance: drafted by a planning subagent from the shipped P0/P1 code (2026-07-27); adopted as the P2 working plan.
 Scope: `f=custom` code editing in the Lab with lz-string URLs and author-declared knobs; worker hardening against pathological scripts; the bikar studio **Dials** tab; the shared knob layer's new home; test plan and milestone slicing.
-Companion: `docs/orb-lab-design.md` (§10 P2 line item; §6.3 custom URLs; §7 knobs⇄code; §8 studio tab). All file references verified against the working trees at `~/Workspace/git/bikar` and `~/Workspace/git/qiyas` (2026-07-27).
+Companion: `docs/design/orb/orb-lab-design.md` (§10 P2 line item; §6.3 custom URLs; §7 knobs⇄code; §8 studio tab). All file references verified against the working trees at `~/Workspace/git/bikar` and `~/Workspace/git/qiyas` (2026-07-27).
 
 **Engine-change-free phase.** Everything P2 needs from the engine already exists and is public: `parse(source, options?)` (param extraction without evaluation, `packages/core/src/dsl/index.ts`), `compileToGeometry(source, { params })` (override entry point, `packages/core/src/index.ts:45`), `ParamSpec` on `EvaluationResult.params`, and the hard-error contract for out-of-range overrides (`parser.ts:528/658/665` — unknown name, non-finite, out-of-range are all `ParseError`s with author-facing messages; **the engine never clamps, by design**). P2 touches only `packages/lab`, `packages/web`, one new workspace package, and tests.
 

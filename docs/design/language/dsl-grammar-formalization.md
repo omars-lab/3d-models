@@ -718,7 +718,7 @@ not a follow-up.
 
 ## 10. Interaction with the parallel click-to-source design
 
-*Flagged, not resolved. `docs/click-to-source-design.md` is owned by other work and is not
+*Flagged, not resolved. `docs/design/language/click-to-source-design.md` is owned by other work and is not
 modified here.*
 
 Two findings from this audit **raise** that proposal's cost, and one **lowers** it.
@@ -918,7 +918,7 @@ verbatim from these fetches.
   `bikar/docs/lessons.md:387-402` ·
   `bikar/docs/decisions/2026-05-07-polygon-clipping-dep.md`
 - `sacred-patterns/sessions/bikar-medallion-10/girih-network/girih-star4.bkr` (commit `fa12d1b`)
-- `3d-models/docs/derivation-worksheet-design.md` §5.1, §8.5 (house style; gates E1–E3)
+- `3d-models/docs/design/language/derivation-worksheet-design.md` §5.1, §8.5 (house style; gates E1–E3)
 
 ---
 

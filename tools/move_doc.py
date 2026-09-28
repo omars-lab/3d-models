@@ -28,9 +28,9 @@ What it leaves as written:
 What it leaves as written, and lists:
   - research/ prose. A research file is kept verbatim, so only its link targets
     move (a target is an address, not researched content);
-  - the docs gate's fixtures (.claude/gates/fixtures/), the same way: their text
-    is test input and stays, but a link to a real note must keep resolving or
-    the gate's own self-test goes red;
+  - the docs gate's fixtures (.claude/gates/fixtures/) are not on this list:
+    their prose is test input, but the pointer gate reads them (it skips
+    research/), so a link or backticked path to a real note moves with it;
   - review-md comment files. They are conversation, and review-md owns them;
   - a path it cannot tie to this repo (`3d-models-constructions/docs/x.md`);
   - files git does not track (another session's work);
@@ -304,7 +304,7 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
     moved = new_rel != rel
     old_dir, new_dir = posixpath.dirname(rel), posixpath.dirname(new_rel)
     is_md = rel.endswith(".md")
-    research = rel.startswith((RESEARCH, FIXTURES))  # link targets move, prose is kept
+    research = rel.startswith(RESEARCH)  # link targets move, prose is kept
     in_vault = rel.startswith("docs/")
     changes: list[Change] = []
 
@@ -553,9 +553,7 @@ def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple
         if changes:
             report.changes[rel] = changes
             new_texts[rel] = new
-        why = ("research prose, kept as written" if rel.startswith(RESEARCH)
-               else "gate fixture text, kept as written" if rel.startswith(FIXTURES)
-               else "not tied to this repo")
+        why = "research prose, kept as written" if rel.startswith(RESEARCH) else "not tied to this repo"
         report.left += leftovers(rel, new, mapper, why)
         names = {posixpath.basename(m.old) for m in moves if not m.is_dir}
         report.name_only += sum(len(re.findall(r"(?<![\w/.(-])" + re.escape(nm) + r"(?![\w-])", new))
@@ -702,8 +700,8 @@ def unit_cases(failures: list[str]) -> None:
             ("docs/research/r.md", "from `docs/a-design.md` §3", "from `docs/a-design.md` §3", "research: prose is kept"),
             (".claude/gates/fixtures/pass/f.md", "[t](../../../../docs/a-design.md#k9)",
              "[t](../../../../docs/design/c/a-design.md#k9)", "a gate fixture: the link target moves"),
-            (".claude/gates/fixtures/pass/f.md", "shipped as `docs/a-design.md`", "shipped as `docs/a-design.md`",
-             "a gate fixture: its text is test input, kept"),
+            (".claude/gates/fixtures/pass/f.md", "shipped as `docs/a-design.md`", "shipped as `docs/design/c/a-design.md`",
+             "a gate fixture: the pointer gate reads it, so a pointer to a real note moves"),
             (".claude/x.md", "`docs/a-design.md`", "`docs/design/c/a-design.md`", "a backticked pointer"),
             (".claude/x.md", "`3d-models:docs/a-design.md:L1 \"# A\"`",
              "`3d-models:docs/design/c/a-design.md:L1 \"# A\"`", "a use-case map anchor"),

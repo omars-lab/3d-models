@@ -7,7 +7,7 @@ description: Turn an LDraw model (.mpd/.ldr) into a set of camera-angle PNGs and
 
 The tool is bikar's `bikar:scripts/render-ldraw-thumbnails.ts` (D-028,
 [`docs/decisions-log.md`](../../../docs/decisions-log.md); spec in
-[`docs/lego-lab-design.md`](../../../docs/lego-lab-design.md) §15). This skill is the
+[`docs/design/pieces/lego-lab-design.md`](../../../docs/design/pieces/lego-lab-design.md) §15). This skill is the
 procedure for running it and reading its result — the CLI, the gate logic
 (`bikar:scripts/thumbnail-gate.ts`), the witness (`bikar:scripts/thumbnail-gate.test.mjs`)
 and the fixtures all live in bikar. It renders the *same* scene the studio read-back panel

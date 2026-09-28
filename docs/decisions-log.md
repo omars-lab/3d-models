@@ -159,7 +159,7 @@ docs becomes worth revisiting.
 
 ### Context
 
-[`lego-lab-design.md`](lego-lab-design.md) §10 marks R0 complete and puts
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 marks R0 complete and puts
 **LG-F1/F2/R1 — physical clutch coupons — directly before M6**, with the note
 that they *"block M6's dimensions."* Those coupons need a printer, which is
 owner-held and on hold. M6 as specified therefore cannot proceed.
@@ -294,7 +294,7 @@ qiyas's half is still unmeasured; task #13 should be re-scoped to that alone.
 
 ### Context
 
-D-003 deferred M6 because [`lego-lab-design.md`](lego-lab-design.md) §10 says
+D-003 deferred M6 because [`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 says
 the clutch coupons *"block M6's dimensions"*, and the coupons need a printer.
 The owner's direction: build the Lab UI, with the disputed values exposed as
 adjustable parameters, *because* real prints are coming and the Lab is where
@@ -355,7 +355,7 @@ change the Lab surfaces rather than hides.
 
 ### Context
 
-[`lego-lab-design.md`](lego-lab-design.md) §10 lists **multi-piece export** in
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 lists **multi-piece export** in
 P1. Scoping it surfaced a defect: a `brick` accepts a declared socket-role
 `port`, an `assembly` will `connect` a rod into it, and the C2 fit ladder checks
 the pin against the socket diameter and passes — but `buildBrick` never reads
@@ -527,7 +527,7 @@ Three documents disagreed about what catalog entry **W-F1** is, which
 [`catalog.md`](../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
 clipseat questions — which clearance seats a clip firmly, does it differ by tile
 material — while its **Model** line pointed at `Fit-Coupon.bkr`, which is a plate
-of bores and pins. [`w2-connector-design.md`](w2-connector-design.md) §8 named a
+of bores and pins. [`design/pieces/w2-connector-design.md`](design/pieces/w2-connector-design.md) §8 named a
 third thing, `Fit-Step-Gauge.bkr`, a file that has never existed in any repo.
 
 Reading the geometry rather than the docs settled which description was wrong.
@@ -883,17 +883,17 @@ pitch. Two candidate rules were on the table:
   interrupted per seam. The cut lines are injected into the pattern's own
   planar-graph extraction, so both sides of every seam carry bit-identical
   vertex coordinates by construction
-  ([design §5](lego-pattern-set-design.md)).
+  ([design §5](design/pieces/lego-pattern-set-design.md)).
 - **Gap-registered cut (rejected).** Pre-shrink each piece's art to the
   `8n − 0.2` body so relief runs flush to the physical edge. Rejected because
   it double-counts the inset — `PART_RELIEF_MM` transfers as a *physical-gap
   prediction*, not a pattern-registration offset, which is the repo's named
-  K10 defect ([design §3.2](lego-pattern-set-design.md)) — and because a
+  K10 defect ([design §3.2](design/pieces/lego-pattern-set-design.md)) — and because a
   per-piece offset mints per-piece coordinates, demoting seam continuity from
   an identity to a tolerance claim needing its own gate.
 
 **Is this the mosaic lego-lab ruled out?**
-[`lego-lab-design.md`](lego-lab-design.md) L78 lists "stock-part mosaic
+[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) L78 lists "stock-part mosaic
 generation and BrickLink/Rebrickable BOMs" as an LG non-goal, and `mosaic` was
 accordingly rejected as the declaration's name (bikar decision
 `2026-08-02-mural-panelization`). The ruling: L78 excludes composing pictures
@@ -901,7 +901,7 @@ out of *purchased* LEGO parts — palette quantization, part BOMs. A mural is
 the other branch: **printed** pieces carrying continuous engraved relief that
 no purchasable part has, mounted on a stock baseplate. The non-goal stands
 untouched; the family does not enter it
-([design §1](lego-pattern-set-design.md)).
+([design §1](design/pieces/lego-pattern-set-design.md)).
 
 ### Decision
 
@@ -1072,7 +1072,7 @@ to stay silent.
 
 ### Context
 
-[`tile-wall-design.md`](tile-wall-design.md) §10 Q2, open since the doc was
+[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q2, open since the doc was
 written: `checker` alternates two tile types across a wall, and every A–B
 adjacency is a joint. If the two types disagree about edge gap, clip type or
 clip position, the wall does not assemble. Enforce that by construction, or
@@ -1164,7 +1164,7 @@ it — here it skipped, silently, the newest thing it covered.
 
 ### Context
 
-[`tile-wall-design.md`](tile-wall-design.md) §10 Q3 asked whether a cropped edge
+[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q3 asked whether a cropped edge
 tile keeps its relief clipped mid-motif, or whether the border band thickens to
 absorb the cut — the tiler's trim strip, in-language. The doc leaned "offer
 both", and sketched the syntax as `crop clip | crop clip with frame`.
@@ -1634,7 +1634,7 @@ letters; does anything support text natively?* — not by any gate.
 **Bake outline-font glyph contours into a build-time constant and extrude them.**
 A TrueType/CFF glyph is already closed contours with counters as holes, so there
 is no offset and therefore no union. The design is
-[`text-emit-design.md`](text-emit-design.md); the measurement is
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md); the measurement is
 [`research/outline-font-emit.md`](research/outline-font-emit.md), over 8 faces
 and 296 glyphs.
 
@@ -1707,7 +1707,7 @@ machine card exists to fix.
 
 **Register it as a bet rather than adopt a default with a confident face.**
 CAL-TXT-01 carries emboss-vs-engrave and CAL-TXT-02 the minimum legible cap
-height; [`text-emit-design.md`](text-emit-design.md) §6 states engrave and
+height; [`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 states engrave and
 5.0 mm as *provisional* sides, with the reasoning that a recessed feature which
 prints badly still leaves a readable part while a raised one leaves debris on the
 surface that matters.
@@ -1731,7 +1731,7 @@ fails.
 D5 is scoped to the discharge form and not to every CAL id in the corpus, which
 is a measured choice, not a cautious one. Across 225 CAL-id sites in `docs/`
 there are 20 distinct ids, 17 registered. Gating every site fires 4 times on
-`CAL-SEA-01` — an id [`hemisphere-split-design.md`](hemisphere-split-design.md)
+`CAL-SEA-01` — an id [`design/orb/hemisphere-split-design.md`](design/orb/hemisphere-split-design.md)
 Appendix B names precisely to record that it was **deliberately not minted**.
 That is correct prose, and a rule that calls it a defect is a rule that gets
 switched off. Restricted to the paragraph D3 actually reads, the same corpus
@@ -1747,7 +1747,7 @@ Measure a rule before gating on it — the same tenet C3 was built from.
 ### Context
 
 Source Code Pro Bold was chosen as the shipping face in
-[`text-emit-design.md`](text-emit-design.md) §6 on measurement — zero crossing
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 on measurement — zero crossing
 contours, a thin stem that clears the nozzle by ~1.9×. But its **default** `0` is
 a *dotted* zero: shell, counter, and a dot inside the counter. At the 5 mm cap
 CAL-TXT-02 bets on, the air between the dot and the counter wall measures
@@ -1869,7 +1869,7 @@ bikar's `packages/cli/src/index.ts` ran only `checkLabelGap` and
 `checkLabelCounter`. So a `text` statement carrying `MC-2 PORT0`, or a plate
 carrying both `O3` and `03`, compiled and wrote an STL. What the build should do
 about such a label was left open — the same shape as
-[`text-emit-design.md`](text-emit-design.md) §7 Q2's "what to do with a label
+[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §7 Q2's "what to do with a label
 that fails §5," which observes that *automatically fixing* a label makes the
 validator unfalsifiable by construction.
 
@@ -3758,7 +3758,7 @@ amendment; the tab answers "how long / how much filament," not "how many dollars
 
 ## D-047 — round-pattern orb placement is a new statement family, and v1 proves the mechanism before it builds the table
 
-**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`round-orb-placement-design.md`](round-orb-placement-design.md))
+**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`design/orb/round-orb-placement-design.md`](design/orb/round-orb-placement-design.md))
 **Status:** v1 shipped (Phase 0 + Phase 1 green in bikar); rule table + fillers are follow-on
 
 Two owner decisions (AskUserQuestion, 2026-08-31) set the shape of the feature that
@@ -3966,7 +3966,7 @@ enough.
 
 The morph is the beat the breakdown page exists for — the flat drawing visibly
 wrapping onto the sphere — and it was deliberately left out of v1 of
-[`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) because
+[`design/orb/orb-construction-timelapse-design.md`](design/orb/orb-construction-timelapse-design.md) because
 nothing in bikar's core interpolates geometry; the flat and sphere endpoints were shipped
 instead. So the doc has to establish, before code, three things a build would otherwise
 guess at: how each vertex travels from the face-lift plane to the sphere as a function of
@@ -4081,7 +4081,7 @@ is why this entry cites decisions and files rather than research.
 
 ## D-050 — the three d3 surfaces converge on one face-list vocabulary; the reversal condition is a measured re-divergence cost, not a taste change
 
-**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`vocabulary-convergence-design.md`](vocabulary-convergence-design.md)
+**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`design/orb/vocabulary-convergence-design.md`](design/orb/vocabulary-convergence-design.md)
 
 ### Why this entry exists
 
@@ -4153,7 +4153,7 @@ congruence class survives, and hems the open rim so the shell stays watertight. 
 the DSL as `place rule latticewalk length <n> start <k>` — the one-word keyword forced by
 the lexer's identifier class, with an eval-time single-mouth gate. The design and its two
 re-litigable choices (the keyword spelling, the mouth gate) are recorded in
-`docs/maclado-lattice-orb-design.md` and, on the engine side, in
+`docs/design/orb/maclado-lattice-orb-design.md` and, on the engine side, in
 `bikar:docs/decisions/2026-09-02-latticewalk-grammar.md`.
 
 The object is genuinely new in one structural way that drives everything downstream: it is
@@ -4382,7 +4382,7 @@ same gates. Highlighters and the cookbook are generated from, or tested against,
 fixtures. Lark, Ohm, Peggy and Chevrotain are rejected
 ([survey §10](research/geogebra-construction-import-survey.md)): a grammar file beside a
 hand-rolled parser is a second source of truth unless it replaces the parser, and replacing
-the parser is the rewrite [`dsl-grammar-formalization.md`](dsl-grammar-formalization.md)
+the parser is the rewrite [`design/language/dsl-grammar-formalization.md`](design/language/dsl-grammar-formalization.md)
 already rejected for naqsh.
 
 **What would reverse this:** the `.ggb-commands` grammar growing past line-regular (nested

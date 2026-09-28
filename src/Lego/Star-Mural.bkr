@@ -14,7 +14,7 @@
 # footprint then clips 0.1 mm per side, which is what the seam interrupts.
 # Nothing here re-registers the art to the gap — the gap is physical, the
 # cut is nominal, and conflating the two is the K10 defect the design doc
-# (3d-models `docs/lego-pattern-set-design.md` §3) exists to name.
+# (3d-models `docs/design/pieces/lego-pattern-set-design.md` §3) exists to name.
 #
 # Expect a V12 bridge warning per piece, and it is the set's honest price:
 # an anchor may not sit within its ribbed reach of a pocket edge, and a

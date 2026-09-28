@@ -5,9 +5,9 @@ status: decided
 # Ports, Connect & Assembly (C2) — implementation design doc
 
 Status: **v2 — grounded in a targeted implementation survey
-([`research/c2-assembly-implementation-survey.md`](research/c2-assembly-implementation-survey.md),
+([`../../research/c2-assembly-implementation-survey.md`](../../research/c2-assembly-implementation-survey.md),
 sources in Appendix A) and revised after an adversarial grounding audit
-([`research/c2-assembly-grounding-audit.md`](research/c2-assembly-grounding-audit.md);
+([`../../research/c2-assembly-grounding-audit.md`](../../research/c2-assembly-grounding-audit.md);
 counter-evidence and divergences recorded in Appendix B).**
 Scope: the C2 rung of the composition ladder promised in
 [`piece-composition-design.md`](piece-composition-design.md) §9 — explicit `port`
@@ -77,7 +77,7 @@ Facts verified against the bikar tree that the design leans on:
 
 ## 3. What the survey established (the load-bearing facts)
 
-From [`research/c2-assembly-implementation-survey.md`](research/c2-assembly-implementation-survey.md);
+From [`../../research/c2-assembly-implementation-survey.md`](../../research/c2-assembly-implementation-survey.md);
 numbers restated here so the doc stands alone.
 
 - **Slicers re-arrange independently imported objects by default.** PrusaSlicer, Bambu
@@ -440,14 +440,14 @@ implementation, not in this doc.
 ## Appendix A — survey sources
 
 Primary source file, checked in verbatim with all URLs:
-[`research/c2-assembly-implementation-survey.md`](research/c2-assembly-implementation-survey.md)
+[`../../research/c2-assembly-implementation-survey.md`](../../research/c2-assembly-implementation-survey.md)
 (research date 2026-07-28; §1 multi-part export + slicer behavior, §2 BOSL2/build123d
 mating math, §3 contract-validation precedents, §4 coupon methodology, §5 pin
 engineering, §6 assembly parameters). The adversarial audit behind Appendix B is
 likewise checked in verbatim:
-[`research/c2-assembly-grounding-audit.md`](research/c2-assembly-grounding-audit.md)
+[`../../research/c2-assembly-grounding-audit.md`](../../research/c2-assembly-grounding-audit.md)
 (audit date 2026-07-28). Neither re-covers
-[`research/code-cad-composition-survey.md`](research/code-cad-composition-survey.md)
+[`../../research/code-cad-composition-survey.md`](../../research/code-cad-composition-survey.md)
 (the parent doc's survey: BOSL2/build123d overviews, OnShape/Fusion mate vocabularies,
 Gridfinity, the Creative3DP fit ladder).
 
@@ -488,7 +488,7 @@ and [joints docs](https://build123d.readthedocs.io/en/latest/joints.html),
 ## Appendix B — counter-evidence and divergences
 
 From the adversarial grounding audit
-([`research/c2-assembly-grounding-audit.md`](research/c2-assembly-grounding-audit.md),
+([`../../research/c2-assembly-grounding-audit.md`](../../research/c2-assembly-grounding-audit.md),
 audit date 2026-07-28). Each entry records the strongest counter-position found, with
 its link and a fair summary, then either our justification for diverging or the change
 the audit forced. Where a claim was narrowed, §3 above already carries the corrected
@@ -496,7 +496,7 @@ wording — these entries are the record of why.
 
 Entries tagged `[CAL-…]` are **empirical** bets that no source can close — only a
 measurement can. The id is the bet's entry in the registry
-([`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)), which
+([`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)), which
 names the coupon that settles it; the ceremony is the `calibrate` skill (bikar
 Tenet 30 — a physical constant is not earned until it records its provenance).
 

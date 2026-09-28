@@ -8,12 +8,12 @@ decisions:
 
 **Status:** Shipped 2026-09-02 (A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`). Settles plan §2 row 2.4 / d3 doc §4 Phase 3
 (Q-VOCAB). Two research files on disk ground it: the vocabulary survey
-([`research/vocabulary-survey-q-vocab.md`](research/vocabulary-survey-q-vocab.md)) and the
+([`../../research/vocabulary-survey-q-vocab.md`](../../research/vocabulary-survey-q-vocab.md)) and the
 sacred-patterns rendering-architecture read
-([`research/sacred-patterns-render-arch.md`](research/sacred-patterns-render-arch.md)). No
+([`../../research/sacred-patterns-render-arch.md`](../../research/sacred-patterns-render-arch.md)). No
 empirical residue — this is a naming-and-structure change decided by tests, not by a printer
 (Appendix B). Reversal condition recorded as D-050 in
-[`decisions-log.md`](decisions-log.md).
+[`../../decisions-log.md`](../../decisions-log.md).
 
 ## 1. What this settles
 
@@ -88,7 +88,7 @@ Full tables are in the survey; the shape that matters here:
   boundaries are lazy `points` getters; eight `draw*` functions construct geometry and emit SVG
   **inline** through `canvas.ts`'s five `append*` helpers (30 call sites in `index.ts`, 23 of them `appendPolygon` across seven `draw*` functions), keeping **no
   face-list** and using d3 only as a DOM shim — never `.data()`/`.join()`
-  ([`research/sacred-patterns-render-arch.md`](research/sacred-patterns-render-arch.md) §2–4). A
+  ([`../../research/sacred-patterns-render-arch.md`](../../research/sacred-patterns-render-arch.md) §2–4). A
   **structural gap**, not a rename.
 
 ## 4. The sacred-patterns structural refactor (the C work)
@@ -246,11 +246,11 @@ Where it does **not** transfer, stated so it is not assumed:
 
 ## Appendix A — survey sources
 
-- [`research/vocabulary-survey-q-vocab.md`](research/vocabulary-survey-q-vocab.md) — the
+- [`../../research/vocabulary-survey-q-vocab.md`](../../research/vocabulary-survey-q-vocab.md) — the
   cross-surface vocabulary tables (A/B/C) and the divergence measurement (thin-rename A↔B vs
   deep-refactor C), read from bikar and sacred-patterns source at the pinned commits in its
   provenance header.
-- [`research/sacred-patterns-render-arch.md`](research/sacred-patterns-render-arch.md) — the
+- [`../../research/sacred-patterns-render-arch.md`](../../research/sacred-patterns-render-arch.md) — the
   sacred-patterns rendering-architecture read: render entry path, the `append*` layer, the
   primitive object model, d3-as-shim, the golden-file constraint, and the refactor seam.
 - Primary source of the canonical names: bikar's `packages/core/src/viz/face-constructs.ts`

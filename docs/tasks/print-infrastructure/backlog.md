@@ -18,6 +18,6 @@ Nothing open. The next plate run feeds this list.
 
 - `layout report` production metrics for the tile wall (W3): plates at the declared bed size,
   spool count, calendar estimate —
-  [`tile-wall-design.md`](../../tile-wall-design.md) §7.1. Not coaster work; take it only if a
+  [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §7.1. Not coaster work; take it only if a
   plate-count report for coasters needs the same code. Moved from
   [`../../backlog.md`](../../backlog.md) §6.2 on 2026-09-25.

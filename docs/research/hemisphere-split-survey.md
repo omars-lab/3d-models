@@ -6,7 +6,7 @@ feeds:
 
 # Hemisphere-split STL export — prior-art survey
 
-Research backing [`../hemisphere-split-design.md`](../hemisphere-split-design.md) (task #11).
+Research backing [`../design/orb/hemisphere-split-design.md`](../design/orb/hemisphere-split-design.md) (task #11).
 Two read-only investigations, preserved as delivered:
 
 - **§0** — code grounding of the bikar tree (what exists, what is absent), every claim carrying

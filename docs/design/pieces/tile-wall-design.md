@@ -9,7 +9,7 @@ decisions:
 
 Status: **DRAFT v2 — grounded in a tiling-craft + interlocking-panel field survey
 (§2, sources in Appendix A) and revised after an adversarial grounding audit
-([`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md);
+([`../../research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md);
 counter-evidence and divergences in Appendix B). No implementation yet.**
 v1→v2: connectors became opt-in (`connect none` default), the clip's "zero-strain" claim
 became "low-preload" with prior art cited, the PLA rule's rationale moved from
@@ -348,7 +348,7 @@ numbers above, computed instead of estimated.
 1. **Decided 2026-07-27 — settle empirically in W2**: the clip coupon prints both corner
    variants (0.6 mm front rebate and no-rebate proud) and the in-the-flesh comparison in
    raking light picks the default. Neither variant is baked into the grammar before then.
-2. **Decided 2026-08-03 — both** ([`decisions-log.md`](decisions-log.md) D-016). A shared
+2. **Decided 2026-08-03 — both** ([`../../decisions-log.md`](../../decisions-log.md) D-016). A shared
    `border` spec is the path `checker` is documented on, so two tile types that reference
    one cannot diverge; a tile may still declare its own border, and then a **per-pair
    validator** walks every adjacency and compares. Keeping that second path open is
@@ -361,8 +361,8 @@ numbers above, computed instead of estimated.
    vertex — a field-by-field compare calls them identical and ships a wall that does not
    assemble. So the validator compares seat state *at a vertex*, not the two records; the
    full correction is the 2026-08-03 amendment under D-016 in
-   [`decisions-log.md`](decisions-log.md).
-3. **Decided 2026-08-03 — both finishes, decoupled** ([`decisions-log.md`](decisions-log.md)
+   [`../../decisions-log.md`](../../decisions-log.md).
+3. **Decided 2026-08-03 — both finishes, decoupled** ([`../../decisions-log.md`](../../decisions-log.md)
    D-017). The `crop clip | crop clip with frame` sketch is **not** what ships: `frame`
    becomes its own wall-level statement, and `crop` keeps deciding only what happens to a
    tile the grid cuts. A frame is a perimeter finish; a crop is what a non-integer grid
@@ -382,10 +382,10 @@ numbers above, computed instead of estimated.
 ## Appendix A — survey sources (kept on file)
 
 The full URL-annotated research report is checked in at
-[`research/tile-craft-field-survey.md`](research/tile-craft-field-survey.md) — every rule
+[`../../research/tile-craft-field-survey.md`](../../research/tile-craft-field-survey.md) — every rule
 in §2/§5/§8 traces to a linked primary source there — and the adversarial grounding audit
 behind the v1→v2 changes at
-[`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md).
+[`../../research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md).
 Headline sources:
 
 - **Layout doctrine, sliver rule, quartering**:
@@ -449,7 +449,7 @@ Headline sources:
 ## Appendix B — counter-evidence and divergences
 
 Each entry records the strongest counter-position found by the grounding audit
-([`research/tile-wall-grounding-audit.md`](research/tile-wall-grounding-audit.md)), with
+([`../../research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md)), with
 either our justification for diverging or the design change it forced.
 
 ### B.1 Why connectors are opt-in (the counter-evidence won)

@@ -5,7 +5,7 @@ status: draft
 # Cascade: `data-orb-base-face` names one thing, a true base face (#49 follow-through)
 
 **Status:** PLANNED 2026-09-02. Decision recorded in
-[D-052](decisions-log.md). This doc is the actionable checklist for the four-repo
+[D-052](../../decisions-log.md). This doc is the actionable checklist for the four-repo
 change; it does **not** re-argue the decision. Deferred deliberately so it runs on
 clean, current masters (see §5) rather than across the seven in-flight bikar worktrees
 that vendor the contract today.
@@ -87,7 +87,7 @@ and `qiyas` copies, byte-identical, checked by bikar hook 41 / `3d-models`
      make the check *universal* on `data-orb-base-face` was dropped once the scaffold
      itself was made honest: a wheelfield scaffold now stamps `data-orb-unit`, so the
      gate must read the unit label, not treat its absence as trivially satisfied — see
-     [`docs/issues/base-face-honesty-scaffold-pivot.md`](issues/base-face-honesty-scaffold-pivot.md).)
+     [`docs/issues/base-face-honesty-scaffold-pivot.md`](../../issues/base-face-honesty-scaffold-pivot.md).)
    - Close #49.
 
 ## 4. Prepared work (do not lose; rebase onto latest at cascade time)

@@ -10,13 +10,13 @@ are merged to bikar main; increment 3 is the 3d-models integration (this PR: the
 decision record, the `make orbs` publish-pipeline skip, and the use-case map). The
 fourth orb in the 9-fold maclado family
 ([`maclado-orb-design.md`](maclado-orb-design.md) is the family doc; this doc is
-one orb). Authorised by the owner in [D-049 §5](decisions-log.md) ("build a fourth
+one orb). Authorised by the owner in [D-049 §5](../../decisions-log.md) ("build a fourth
 orb, and use the build to find gaps and inconsistencies and make the approach more
 robust in the process") and, this session, resolved to the **18-wheel open shell**
 among the offered shapes. Ground truth pinned to bikar `1083046` (origin/main);
 grounded 2026-09-02 (Appendix A). Its [stop list](#6-the-stop-list-d-049-5) is
 complete — **eight detectors, no instruction** — so per D-049 §5 **no orb-creation
-skill is written**. Recorded as [D-051](decisions-log.md). Printing stays HELD (no
+skill is written**. Recorded as [D-051](../../decisions-log.md). Printing stays HELD (no
 printer in the loop); the mouth-span bet in Appendix B is still deferred.
 
 ---
@@ -29,7 +29,7 @@ The three shipped maclado presets — `Maclado-9`, `Maclado-9-Weave`,
 their gaps closed by twelve congruent 30-gon fillers, one filler class. This orb
 is the **quantized lattice walk** measured as M4c
 ([`maclado-orb-design.md`](maclado-orb-design.md) §8; bikar #92 `ec4518b`,
-[D-031](decisions-log.md)) made into a shipped object: an 18-site walk along the
+[D-031](../../decisions-log.md)) made into a shipped object: an 18-site walk along the
 field's dodecahedral adjacency, whose gaps close into **four** filler congruence
 classes on two distinct separations.
 
@@ -242,8 +242,8 @@ An orb-creation skill is written **only if** the instruction column is non-empty
 when the orb ships, and it is then a checklist pointing at those entries and
 nothing else. The precedent decides the empty case: two earlier skill proposals
 were each evaluated against measured recurrence and both ended *no skill, a gate
-instead* ([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)).
+instead* ([`../process/dsl-extension-skill-evaluation.md`](../process/dsl-extension-skill-evaluation.md),
+[`../process/issue-register-evaluation.md`](../process/issue-register-evaluation.md)).
 
 **Validator (the stop list is honest):** at ship, every entry is labelled and
 every *detector* entry names the gate or test it became. PASS: the orb ships with
@@ -277,8 +277,8 @@ not orb-specific — it recurs for any compound keyword, is readable from
 `lexer.ts` or the two existing compounds, and is already written down as a
 decision. By the D-049 §5 rule an orb-creation skill is written **iff** the
 instruction column is non-empty, so **no skill is written** — the outcome the
-precedent predicts ([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md): *no skill, a gate
+precedent predicts ([`../process/dsl-extension-skill-evaluation.md`](../process/dsl-extension-skill-evaluation.md),
+[`../process/issue-register-evaluation.md`](../process/issue-register-evaluation.md): *no skill, a gate
 instead*). The eight detectors are the durable record; the next orb build inherits
 them as red tests, not as a checklist to remember.
 
@@ -304,10 +304,10 @@ coupon, never a bare number here.
 
 The family's survey and grounding carry the 9-fold theorem, the divisor trick, and
 the print constraints ([`maclado-orb-design.md`](maclado-orb-design.md) Appendix A;
-[`research/maclado-orb-survey.md`](research/maclado-orb-survey.md)). This orb adds
+[`../../research/maclado-orb-survey.md`](../../research/maclado-orb-survey.md)). This orb adds
 no new external claim — the walk's numbers (four classes, two separations, the
 hull-face cut) are measured in bikar and cited to M4c above. The grounding audit
-is [`research/maclado-lattice-orb-grounding-audit.md`](research/maclado-lattice-orb-grounding-audit.md)
+is [`../../research/maclado-lattice-orb-grounding-audit.md`](../../research/maclado-lattice-orb-grounding-audit.md)
 (2026-09-02): it verified every bikar citation first-hand at commit `1083046`,
 found no fabricated or misattributed citation and no K2 over-claim, and confirmed
 the Martín López attribution is faithfully de-scoped. Its one substantive finding —

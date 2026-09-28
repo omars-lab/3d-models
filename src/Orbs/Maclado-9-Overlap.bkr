@@ -8,7 +8,7 @@
 # judges the overlap ratio against the D-032 instrument and refuses one
 # whose crossings cannot weld (tangent touch at 1.0 is refused by the
 # parser; weld nodes fuse below 1.08 and again across a dead band). See
-# 3d-models docs/maclado-orb-design.md §5.2 and decisions D-032, D-040.
+# 3d-models docs/design/orb/maclado-orb-design.md §5.2 and decisions D-032, D-040.
 # Render with: bikar render Maclado-9-Overlap.bkr --format stl -o out.stl
 
 # Ribbon 1.2/1.2 is the tested combination from the M4e suite.

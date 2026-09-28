@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-The `/rosette-explorer` page recompiles the canonical `Rosette-N.bkr` live (taken from STARTER_PATTERNS, never re-typed), reads pieces via `faceConstructs`, and runs the real `solveAnchorsOnGlobalGrid` + `ribbedRingPoints` + kernel `anchorability` — it deleted a hand-ported anchor copy because two code paths that disagree ARE the defect. Its one divergence (global baseplate vs piece-local lattice) lives in the kernel, not the page. Source of record: `docs/rosette-pin-explorer-design.md`.
+The `/rosette-explorer` page recompiles the canonical `Rosette-N.bkr` live (taken from STARTER_PATTERNS, never re-typed), reads pieces via `faceConstructs`, and runs the real `solveAnchorsOnGlobalGrid` + `ribbedRingPoints` + kernel `anchorability` — it deleted a hand-ported anchor copy because two code paths that disagree ARE the defect. Its one divergence (global baseplate vs piece-local lattice) lives in the kernel, not the page. Source of record: `docs/design/pieces/rosette-pin-explorer-design.md`.
 
 - **Roster precondition measured per entry** (bikar #134 `85269ac`): "flat, origin-centred" was false for tilings (Hex-Tiled compiles at (300, 259.8)); the page recentres on the face bbox and frames from the declared span rather than editing public presets. The cheap "one line each" estimate hid the only real work.
 - **Param bleed**: Star-N declares neither `crossover` nor `petal_reach` and `compileToGeometry` THROWS on an unknown override, so dials are cleared before reseeding on a pattern swap.

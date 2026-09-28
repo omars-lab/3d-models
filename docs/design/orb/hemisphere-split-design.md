@@ -8,9 +8,9 @@ decisions:
 
 Status: **v2 — grounded in a read-only audit of the bikar tree, a prior-art survey, and direct
 measurement of the shipped engine
-([`research/hemisphere-split-survey.md`](research/hemisphere-split-survey.md), sources in
+([`../../research/hemisphere-split-survey.md`](../../research/hemisphere-split-survey.md), sources in
 Appendix A); revised after an adversarial grounding audit
-([`research/hemisphere-split-grounding-audit.md`](research/hemisphere-split-grounding-audit.md)),
+([`../../research/hemisphere-split-grounding-audit.md`](../../research/hemisphere-split-grounding-audit.md)),
 whose findings rewrote most of v1's numbers. Counter-evidence and divergences in Appendix B.**
 
 Scope: the decision deferred twice by [`orb-lab-design.md`](orb-lab-design.md) — in its non-goals
@@ -23,7 +23,7 @@ benefit that survives measurement is not a split at all — it is **rotating the
 outright. Where more bed contact than that is genuinely wanted, document the slicer's own cut tool
 (Option C). The split is fully specified below (§4–§8) so that it *can* be built, because the
 go/no-go is not this document's to close — prototype **P3** owns it
-([`.claude/skills/prototype/catalog.md`](../.claude/skills/prototype/catalog.md)). But the evidence
+([`.claude/skills/prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md)). But the evidence
 moves the prior a long way toward "don't", and §9.2 states what P3 would have to show to flip it.
 
 ---
@@ -100,7 +100,7 @@ Tracked in §10 Q1.
 ## 2. Engine ground truth
 
 Read from the bikar tree, not inferred; line numbers preserved in
-[`research/hemisphere-split-survey.md`](research/hemisphere-split-survey.md) §0 and re-verified
+[`../../research/hemisphere-split-survey.md`](../../research/hemisphere-split-survey.md) §0 and re-verified
 against `origin/main` during the grounding audit.
 
 **The mesh and its watertightness test.** `OrbMesh` is indexed triangles
@@ -610,7 +610,7 @@ wants an inner+outer brim (Prusa's "≥ 3 mm brim").
 
 ### 9.2 What P3 would have to show to flip this to A
 
-Per [`catalog.md`](../.claude/skills/prototype/catalog.md), P3 owns the verdict and is blocked on
+Per [`catalog.md`](../../../.claude/skills/prototype/catalog.md), P3 owns the verdict and is blocked on
 P2 (task #10, on hold). Recording the flip conditions now so P3 returns a decision rather than
 observations:
 
@@ -666,9 +666,9 @@ closes as **built-elsewhere**, not as **won't-fix**.
 ## Appendix A — survey sources
 
 Full survey with per-claim URLs and verified/snippet tagging:
-[`research/hemisphere-split-survey.md`](research/hemisphere-split-survey.md). Adversarial audit of
+[`../../research/hemisphere-split-survey.md`](../../research/hemisphere-split-survey.md). Adversarial audit of
 this doc against those sources and the engine:
-[`research/hemisphere-split-grounding-audit.md`](research/hemisphere-split-grounding-audit.md).
+[`../../research/hemisphere-split-grounding-audit.md`](../../research/hemisphere-split-grounding-audit.md).
 Load-bearing sources:
 
 **Slicer / CAD primary (read from source or official docs)**

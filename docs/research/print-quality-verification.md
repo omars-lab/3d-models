@@ -170,7 +170,7 @@ disagree about what `c` means at the head.
 - [`../../.claude/skills/calibrate/bets.md`](../../.claude/skills/calibrate/bets.md),
   CAL-FIT-01: press −0.1, snug 0.05, sliding 0.15, free 0.35, basis "Literature-shaped
   FDM clearance ladder ... no pin and socket have been printed".
-- [`../c2-assembly-design.md`](../c2-assembly-design.md) §5 calls these "**Intent gaps**
+- [`../design/pieces/c2-assembly-design.md`](../design/pieces/c2-assembly-design.md) §5 calls these "**Intent gaps**
   (diametral)", and Appendix B.3 says it "transcribes Creative3DP's calibrated-printer
   press-fit ladder verbatim, including its instruction to keep fit gap and printer
   compensation separate".

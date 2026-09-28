@@ -42,7 +42,7 @@ design-note        — what a section drawing can settle, and what was chosen
 Name the decision, the doc section it argues about, and **the alternatives that
 are actually on the table** — with the one that gets rejected still written
 down, because a note with one option is an announcement. Write the eyebrow
-first (`3d-models · docs/lego-lab-design.md · §10 P1`): if you cannot name the
+first (`3d-models · docs/design/pieces/lego-lab-design.md · §10 P1`): if you cannot name the
 section this argues about, the note has no home and probably no reader.
 
 Set `status: 'open'` and leave `decision` unset. A note that opens already
