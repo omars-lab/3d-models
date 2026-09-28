@@ -1,8 +1,8 @@
 # Fixture: D4 must fire on a withdrawn number restated as fact
 
 Asserted FAIL fixture for rule D4 (K1), taken verbatim from the defect that
-built the rule. The 2026-07-29 lego-lab audit found `±0.1–0.2 mm printer
-accuracy` has no vendor source; the correction was applied to two docs, and this
+built the rule. The 2026-07-29 lego-lab audit found
+`±0.1–0.2 mm printer accuracy` has no vendor source; the correction was applied to two docs, and this
 line went on standing in `tile-wall-design.md`'s Appendix A for five days.
 (The number is written as code above so it counts as a mention, not a use — the
 same rule the other markers get.)

@@ -27,9 +27,9 @@ the same 119 830-byte, 42-polygon reference the equivalence doc measured.
 - **O1:** `make naqsh-coords ID=<id> NAQSH=<bikar>/patterns/Constructions/<id>.bkr OUT=<scratch> BIKAR_DIR=<bikar>` in youtube.
 - **O2:** `make naqsh-score ID=<id> NAQSH=… OUT=<scratch> BIKAR_DIR=<bikar>` in youtube. For
   `n3IidKfXE1I`, `nmEjCTzMbDg` and `rDuxHF3xMOc` the hero was first rebuilt with the loop's
-  own two commands (`scripts/ggb-build.sh --in reconstructions/<id>/construction.ggb-commands
-  --out render/export.ggb --export`, then `scripts/ggb-render.sh --dpi 96 --out
-  render/export.png render/export.ggb`) into a scratch data dir passed as `YT_OUTPUT_DIR`;
+  own two commands
+  (`scripts/ggb-build.sh --in reconstructions/<id>/construction.ggb-commands --out render/export.ggb --export`, then
+  `scripts/ggb-render.sh --dpi 96 --out render/export.png render/export.ggb`) into a scratch data dir passed as `YT_OUTPUT_DIR`;
   each printed `ev=export_size … verdict=ok`. The shared data dir was not touched.
 - **O3:** `make reference IN=reconstructions/<id>/construction.ggb-commands OUT=<dir>/coords.json UNIT=20 DEPTH=4`
   in youtube, then `bikar render <id>.bkr --piece Coaster --format stl --check -o <dir>/print.stl`,
@@ -64,8 +64,8 @@ edge-SSIM check fails (`sys.exit(0 if passed else 2)`), and exits 1 on a usage e
 `scripts/naqsh_score.py` accepts only exit 0 or 1 from it and treats 2 as a crash. So an
 SSIM failure stops the scorer before it prints the O2 line. The fix belongs in youtube
 (accept 2 as a scored result) and is reported there, not made here. A scratch copy with
-only that line changed printed `O2 FAIL: edge-SSIM 0.3312 (min 0.7), recall 0.1473
-precision 0.8153 …` — a diagnostic, not the tool's verdict, so it is not in the ledger.
+only that line changed printed
+`O2 FAIL: edge-SSIM 0.3312 (min 0.7), recall 0.1473 precision 0.8153 …` — a diagnostic, not the tool's verdict, so it is not in the ledger.
 
 What the crops show (looked at, not inferred): `rDuxHF3xMOc`'s export draws two
 full-width construction lines that the `.bkr` does not — the only difference visible in

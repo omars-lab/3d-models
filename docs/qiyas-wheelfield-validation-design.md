@@ -366,8 +366,8 @@ and here is why that is legal".
 
 **Validator:** the orb attributes must survive on an element that carries no
 `data-sides`.
-- PASS: a `<path fill="none" stroke="#333" data-orb-view="face-5"
-  data-projection="spherical">` with no `data-sides` parses to a contour whose
+- PASS: a
+  `<path fill="none" stroke="#333" data-orb-view="face-5" data-projection="spherical">` with no `data-sides` parses to a contour whose
   `orb_view` is `"face-5"` and whose `orb_projection` is `"spherical"`, and an
   `orb-validate` run over a views directory whose elements are all such paths
   raises no `orb-view-attr-mismatch`.

@@ -159,8 +159,8 @@ least its limit, measured as the exact signed distance to that ring
 an interlocked coaster needs, because a slot cuts `d + c` into the margin CV7 was
 satisfied with. The worst point is named.
 - PASS: the goldens with `margin 5.15`, `n = d = 3`, `c = 0.15`: the worst strap end
-  sits 2.00 mm inside the slotted ring (limit 1.00) at both sizes, e.g. `(30.99,
-  −28.12)` for GimTvN9hw4U at size 90.
+  sits 2.00 mm inside the slotted ring (limit 1.00) at both sizes, e.g.
+  `(30.99, −28.12)` for GimTvN9hw4U at size 90.
 - FAIL: the same goldens with `margin 4` — CV7 passes at 4.00 mm, four times its
   limit, and CV8 reports `0.85 mm inside the slotted ring (needs ≥ 1.00 mm)` at
   `(−5.33, −15.40)` for GimTvN9hw4U at size 40. With the shipped `margin 2` the
@@ -178,8 +178,8 @@ negative means the slot has broken through the vertex.
 - PASS: every polygonal candidate at both sizes with `n = d = 3`, `c = 0.15`: the
   smallest land is the octagon at size 40, 0.99 mm (limit 0.80); the hexagon at 40
   has 2.62 mm, the square 6.85 mm.
-- FAIL: the octagon at size 40 with `n = d = 4`: `land −0.01 mm on edge 0 (needs ≥
-  0.80 mm)` — the slot reaches the vertex. With `n = d = 5` it is −1.01 mm. Both
+- FAIL: the octagon at size 40 with `n = d = 4`:
+  `land −0.01 mm on edge 0 (needs ≥ 0.80 mm)` — the slot reaches the vertex. With `n = d = 5` it is −1.01 mm. Both
   pass CV8 comfortably; only the edge itself is too short.
 
 ## 7. Sizing: what the interlock costs
@@ -195,8 +195,8 @@ From the study (§4, §5), `n = d = 3`, `c = 0.15`:
 | square 90 | 90.00 | 19.35 | 4.15 mm | 79.7 mm |
 | octagon 90 | 37.28 | 6.17 | 4.15 mm | 79.7 mm |
 
-The interlock trades the minimal flat border of D-066 for a border of `margin ≥ d +
-c + w/2` — with the worked numbers 5.15 mm instead of 2 mm. On a mini that is a
+The interlock trades the minimal flat border of D-066 for a border of
+`margin ≥ d + c + w/2` — with the worked numbers 5.15 mm instead of 2 mm. On a mini that is a
 picture 29.7 mm wide instead of 36 mm. That trade is the reason the importer emits
 the clause only when asked (§8): a lone coaster and a mat tile are different
 products, and the plain one keeps its tight border.

@@ -47,8 +47,8 @@ be same color"**.
   (`tools/bambu/src/colour-preview.ts`). It can show a colour the bodies do not have.
 - **Relief targets:** `relief straps|faces|both emboss <mm>`. Under `both` every enclosed face is
   raised; a raised face with no fill colour falls into the `straps` piece.
-- **The coaster is one height field** over a grid of pitch `COASTER_GRID_PITCH_MM =
-  PERIMETER_WIDTH_MM` (0.4 mm, bet CAL-FEA-01). Pieces are cut from that one field, so two
+- **The coaster is one height field** over a grid of pitch
+  `COASTER_GRID_PITCH_MM = PERIMETER_WIDTH_MM` (0.4 mm, bet CAL-FEA-01). Pieces are cut from that one field, so two
   neighbouring pieces share their faces exactly: no overlap and no gap, and no boolean union is
   needed. The price is a staircase edge at the grid pitch.
 
@@ -111,8 +111,8 @@ face in Slab (the base colour), straps in Gold.
    `--format stl --check` on the whole coaster passes too (one body, 41.7 cm³). Re-run at
    `--param size=80`: the same four bodies pass with the same euler numbers.
 4. **Unfilled faces rise in the strap colour under `relief both`.** To keep them the slab colour
-   they must be filled with the base palette name (the prototype does `ring != 0 and ring != 3
-   color Slab`). "Only the filled faces rise" would need a new relief target.
+   they must be filled with the base palette name (the prototype does
+   `ring != 0 and ring != 3 color Slab`). "Only the filled faces rise" would need a new relief target.
 5. **The plate picture lied before fix 1**: the 2D drawing showed gold straps that the bodies
    did not have. A top-down picture of the actual bodies (a z-buffer of the STLs in their
    sidecar colours) showed the loss. The design doc proposes that check as a tool.

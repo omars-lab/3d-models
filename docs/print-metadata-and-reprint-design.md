@@ -356,8 +356,8 @@ only on the new fields), and the schema is extended, not replaced (PMR-2, no for
 
 ### 3.5 One spelling of the slice profile
 
-`bambu slice` takes the profile as `--settings "machine;process"` and `--filament
-"<name>"`, resolving each preset *display name* to its bundled JSON
+`bambu slice` takes the profile as `--settings "machine;process"` and
+`--filament "<name>"`, resolving each preset *display name* to its bundled JSON
 ([`slice.ts`](../tools/bambu/src/commands/slice.ts); [`bambu` SKILL](../.claude/skills/bambu/SKILL.md)).
 `iteration.key.slice_profile.settings` / `.filament` store **those exact strings**, so a
 reprint feeds them straight back to `slice` with no re-spelling. This is deliberately
@@ -587,8 +587,8 @@ and `.option()` — usable, but three gaps:
    print control via the MCP (owner-gated)"* ([`print.ts`](../tools/bambu/src/commands/print.ts)),
    yet `print list` touches no hardware and is not owner-gated, `print send` now uses
    first-party MQTT for status (the MCP note is partly stale, [`index.ts` header](../tools/bambu/src/commands/print.ts)),
-   and after this doc the group also gains `reprint` and `stats`. A reader of `bambu
-   print --help` is told the whole group is an owner-gated MCP surface, which is a K7
+   and after this doc the group also gains `reprint` and `stats`. A reader of
+   `bambu print --help` is told the whole group is an owner-gated MCP surface, which is a K7
    contradiction with its own subcommands.
 2. **No examples.** No verb carries a worked invocation; the known-good X2D slice trio,
    the reprint call, and the `--how`/`--json` shapes live only in the SKILL doc

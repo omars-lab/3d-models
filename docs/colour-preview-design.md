@@ -6,7 +6,9 @@ should have options to configure all of these in a robust easy to use fashion in
 which orbits are filled, each orbit's colour, flush or lowered, and a live coloured preview, with
 the Lab preview and the printed parts coming from one code path.
 
-*Status: consolidated design, the one to act on. Nothing here is built. It supersedes the two
+*Status: consolidated design, the one to act on. §10 steps 1–5 are built (bikar
+[#271](https://github.com/NaqshCoffee/bikar/pull/271)–[#274](https://github.com/NaqshCoffee/bikar/pull/274),
+3d-models #381; pictures below); the Coaster Lab controls (§5, steps 6–8) are not. It supersedes the two
 research designs it was built from, researcher A's [colour-preview-design-a.md](colour-preview-design-a.md)
 (raw notes: [research/colour-preview-2026-09-28-a.md](research/colour-preview-2026-09-28-a.md)) and
 researcher B's [colour-preview-design-b.md](colour-preview-design-b.md) (raw notes:
@@ -26,6 +28,26 @@ the bikar code at `f8796fc` (branch `feat/orbit-radial-fill`, open bikar
 | Recommendation | **One bikar function turns the split bodies into a coloured picture**, and both the Lab viewer and a new `bikar render --format preview` call it. Before that, one shared body-to-colour function, because the Lab and the CLI already work out colours in two places (§3) |
 | Lab controls | An **Orbits** panel: one row per orbit with a fill tick and a colour; presets *odd, even, inner half, outer half, all, none*; a fill-height slider once the `fills` clause exists. Every control rewrites `.bkr` lines, like today's colour knob (§5) |
 | Does *odd* give the snowflake? | **Yes, on CS-1.** Orbits are numbered outwards by radius; the snowflake is orbits 1, 3, 5, 7 = *odd* (checker ran `bikar bands`, §9). *Alternate* is ambiguous (start at 0 or 1), so the Lab says *odd* and *even* |
+
+### What it looks like now
+
+Both pictures come from `bikar render --format preview` on bikar main (`654fae2`), drawn from the
+same split bodies the printer gets, so the colors here are the colors that print. They were
+re-rendered for this doc and are byte-identical to the step-4 check.
+
+| Fill coaster | Border coaster |
+|---|---|
+| ![7apC5Q9QS-8 fill coaster: gold straps, ruby stars, dark base](colour-preview-design/fill-preview.png) | ![7apC5Q9QS-8 border coaster: gold lattice, copper zigzag border, dark base](colour-preview-design/border-preview.png) |
+| `7apC5Q9QS-8-fill-coaster.bkr`: straps gold, the inner stars ruby, the other faces and the base dark | `7apC5Q9QS-8-border-coaster.bkr`: lattice gold, zigzag border copper, base dark |
+
+The stepped edges are in the mesh, not the picture: the kernel's outlines sit on a fine grid, an
+open kernel issue separate from color.
+
+The earlier proof-of-concept pictures, made by hand before the pipeline existed (OpenSCAD
+`color()` over bikar's per-orbit meshes, [colour.scad](research/colour-poc-2026-09-28/colour.scad)):
+[every orbit filled, top view](research/colour-poc-2026-09-28/all-orbits-top.png),
+[the snowflake (odd orbits)](research/colour-poc-2026-09-28/snowflake-iso.png) and
+[lowered fills](research/colour-poc-2026-09-28/lowered-strip.png).
 
 ## 1. What exists today
 
@@ -85,8 +107,8 @@ path" requirement that is broken now.
    culling, back faces darker) so the Lab looks the same after the move.
 2. **Lab viewer** draws that list on its canvas. Behaviour unchanged; thumbnails, which copy the
    canvas, follow for free.
-3. **CLI** `bikar render <file> --coaster <name> --format preview -o <file>.png [--pinch …]
-   [--mate <dx,dy>]`: evaluates, splits with the same pinch option `--format parts` takes, writes
+3. **CLI**
+   `bikar render <file> --coaster <name> --format preview -o <file>.png [--pinch …] [--mate <dx,dy>]`: evaluates, splits with the same pinch option `--format parts` takes, writes
    the polygon list as SVG with no background, and rasterises with `rasterize.ts`. It **refuses
    exactly where `--format parts` refuses**, with the same message, so a picture never promises a
    split the printer cannot get. `--mate` draws the second copy the gallery shows for mating
@@ -144,30 +166,14 @@ rewrite, as today's `color <region>` knob in `packages/lab/src/coaster-colors.ts
 are tracked; editing a preset makes it "custom"; the print target never enters a share link. A
 custom coaster's source already travels in the share link, so fills and colours travel with it.
 
-```
-+-- Colours ----------------------------------------------------+
-| Base [ Slab v]   Straps [ Gold v]   Border [ none v]          |
-+-- Orbits (about the pattern's centre) ------------------------+
-| Presets: [Odd] [Even] [Inner half] [Outer half] [All] [None]  |
-|          [Snowflake]  <- a committed preset file, not a rule  |
-|                                                               |
-|  #  shape    pieces  radius    fill  colour                   |
-|  0  12-gon      1     0.0 mm   [ ]   ( open )                 |
-|  1  hexagon     6    11.2 mm   [x]   [ Ruby v]                |
-|  2  12-gon      6    19.3 mm   [ ]   ( open )                 |
-|  3  hexagon     6    22.3 mm   [x]   [ Teal v]                |
-|  ...                                                          |
-|  (hover a row -> that orbit outlines in the 3D view)          |
-| Palette: * Slab #333333  * Gold #d4af37  * Ruby #9b1b30 [+]   |
-+-- Fill height ------------------------------------------------+
-|  Lowered 0.4 ----------o---------- 1.2 mm Flush               |
-|  (greyed out until the `fills` clause exists; flush until then)|
-+-- Parts (from the split the printer gets) --------------------+
-|  base 177k  Ruby 42k  Teal 53k  straps 77k tris      [PASS]   |
-|  or, where the split refuses: the kernel's message, verbatim  |
-+---------------------------------------------------------------+
- Live view: the §3.2 function. Rows 0-3 are CS-1's real orbits at 90 mm.
-```
+![Coaster Lab color controls mockup: Colors, Orbits with presets and eight orbit rows, Fill height greyed out, Parts row, and the snowflake preview](colour-preview-design/lab-controls-mockup.png)
+
+A mockup, not the Lab: [lab-controls-mockup.html](colour-preview-design/lab-controls-mockup.html)
+in the Lab's own colors and classes (copied from bikar `packages/lab/src/style.css` and
+`coaster.css`), screenshotted with headless Chrome. The eight orbit rows are the CS-1 radial
+coaster's real orbits (`bikar bands`, as §9 run 1) with *odd* ticked; the view is the hand-made POC
+picture of those fills, standing in for the §3.2 function. The Parts row reads as it will once
+openwork splits (§10 step 8); today this coaster shows the refusal there.
 
 - **Orbit rows** come from `computeOrbits` in core (what `bikar bands` prints), added to the Lab's
   evaluate reply. Each ticked row is one `fill void where orbit == N color <Name>` line, written by
@@ -329,8 +335,8 @@ Each is one bikar PR unless it says otherwise; none needs the printer.
    it. Second validator as a test. No visible change.
 3. **Core preview function** moved from the Lab viewer; Lab switched to it (§3.2 items 1–2). First
    and fourth validators as tests. The Lab must look the same: compare a thumbnail before and after.
-4. **`bikar render --format preview`** with `--pinch` and `--mate`, same refusals as `--format
-   parts`. Hard-case validator as a test.
+4. **`bikar render --format preview`** with `--pinch` and `--mate`, same refusals as
+   `--format parts`. Hard-case validator as a test.
 5. **3d-models PR:** `make coasters` uses `--format preview` for coloured, splittable coasters; the
    no-hole validator on its output. Look at the PNGs before merging.
 6. **Orbit list in the evaluate reply; Orbits panel** with ticks, colours, presets and the parts
@@ -361,7 +367,7 @@ reading the sidecar, with the colour key skipped for those files.
   complete. §5's refusal row shows the message rather than a colour it cannot print.
 - §0 says the Lab and printer do not yet share one code path; §3.1 names the two copies and §10
   step 2 removes them before anything else builds on them.
-- §5's sketch rows 0–3 are CS-1's real orbits from §9 run 1, and *odd* ticks 1 and 3 — consistent
+- §5's mockup rows 0–7 are CS-1's real orbits from §9 run 1, and *odd* ticks 1, 3, 5 and 7 — consistent
   with the snowflake.
 - The first validator's PASS numbers were measured by both researchers on `buildCoasterParts`, the
   function §3 reuses; its FAIL uses the pinch option, not the renderer.

@@ -97,8 +97,8 @@ Read from the bikar tree, not inferred; line numbers preserved in
 [`research/hemisphere-split-survey.md`](research/hemisphere-split-survey.md) §0 and re-verified
 against `origin/main` during the grounding audit.
 
-**The mesh and its watertightness test.** `OrbMesh` is indexed triangles `{vertices, triangles,
-stats}` (`kernel3d/solidify-lattice.ts:31-35`). `meshStats` (`:115-148`) builds a directed-edge map
+**The mesh and its watertightness test.** `OrbMesh` is indexed triangles
+`{vertices, triangles, stats}` (`kernel3d/solidify-lattice.ts:31-35`). `meshStats` (`:115-148`) builds a directed-edge map
 and sets `watertight = bad === 0 && volume > 0`, where `bad` counts any directed edge whose
 reversed twin does not occur exactly once (`:130-135`, `:146`). **This is exactly a closed
 *edge*-manifold test.** An open boundary edge has no twin, so every rim edge of an uncapped half is
@@ -140,14 +140,14 @@ There is no plane clip, half-space, CSG or boolean on an `OrbMesh` anywhere, and
 zero runtime dependencies.
 
 **Emission and CLI.** `emitBinarySTL` (`render/mesh-emitter.ts:17`) is one mesh → one buffer.
-`--format parts` (`cli/src/index.ts:303-333`) is the multi-file precedent and a good one: `-o
-<directory>` required (`:317-321`), **DSL opt-in required** (`export parts`, else an error at
+`--format parts` (`cli/src/index.ts:303-333`) is the multi-file precedent and a good one:
+`-o <directory>` required (`:317-321`), **DSL opt-in required** (`export parts`, else an error at
 `:313-316`; rationale `:299-301` — "the declaration is the printable-unit contract, not a CLI
 convenience"), all parts gated before any is written (`:204-220`), files named
 `<Assembly>-<Piece>.stl` (`:326`). Nothing is written when a gate fails (`:475`).
 
-**Orb facts.** All 11 shipped orbs default to `radius 60` (⌀120), `strut_width 3`, `strut_depth
-2.4`; radius range `40..110`. `strut_width` and `strut_depth` are themselves parameters with ranges
+**Orb facts.** All 11 shipped orbs default to `radius 60` (⌀120), `strut_width 3`,
+`strut_depth 2.4`; radius range `40..110`. `strut_width` and `strut_depth` are themselves parameters with ranges
 `1.5..6` and `1.2..4` (`patterns/Orbs/Star-Orb.bkr:11-12`), expressed in **absolute millimetres** —
 `solidifyLattice` converts strut width into pattern space via `unitMm` (`:208-209`) precisely so the
 printed strut is the authored mm at any radius. Declared min feature is
@@ -293,8 +293,8 @@ Note the gap in the record: the Loctite guide has sections for ABS, ASA, PMMA, a
 
 ### 3.5 The measured scorecard — what splitting actually buys
 
-Run against the shipped engine (`npx tsx packages/cli/src/index.ts render patterns/Orbs/Star-Orb.bkr
---format stl --check print`, 2026-07-30):
+Run against the shipped engine
+(`npx tsx packages/cli/src/index.ts render patterns/Orbs/Star-Orb.bkr --format stl --check print`, 2026-07-30):
 
 ```
 mesh gate: watertight=true euler=-396 degenerate=0 minFeature=2.4mm (floor 1.2mm) — PASS

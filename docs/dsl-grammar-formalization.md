@@ -319,7 +319,7 @@ tolerated failure.
 
 | Notation | Fit for `.bkr` | Note |
 |---|---|---|
-| **W3C XML EBNF** | **chosen** | `*`/`+`/`?`/`()`/`|` plus the exclusion operator: *"A - B means any string that matches A but does not match B"* — needed for `identifier - keyword`, which is exactly the soft-keyword situation in §2.2 |
+| **W3C XML EBNF** | **chosen** | `*`/`+`/`?`/`()`/`\|` plus the exclusion operator: *"A - B means any string that matches A but does not match B"* — needed for `identifier - keyword`, which is exactly the soft-keyword situation in §2.2 |
 | ABNF (RFC 5234) | poor | designed for byte-oriented internet protocols; *"balances compactness and simplicity with reasonable representational power"* — its strengths (value ranges, case rules) are irrelevant here |
 | ISO 14977 EBNF | rejected | the terminator-heavy syntax is unpleasant to read and is not what the neighbouring specs use |
 | PEG | rejected **as the spec notation** | Ford's ordered choice *"solve[s] the ambiguity problem by not introducing ambiguity in the first place"* — which means a PEG **cannot report** that the grammar is ambiguous. §2.3's genuine ambiguity would be silently papered over, which is the opposite of what a spec is for. |
@@ -649,8 +649,8 @@ the grammar makes is a claim `parser.ts` agrees with.
 
 ### 8.1 Triaged
 
-| | Failure | Enforcement class |
-|---|---|---|
+| Failure | Enforcement class |
+|---|---|
 | D1 column corruption | **not a gate** — it is a bug with a five-line fix; gate it only via a regression test on the fix |
 | D2 hex validation leaks | **warning** initially — tightening the regex may reject files in the corpus; run G1 first to find out |
 | D3 trigger/position mismatch | **gate (G3)** — the grammar names the five `HexColor` positions and the test asserts the trigger set covers them |

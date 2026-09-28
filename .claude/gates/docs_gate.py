@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Design-doc gate for 3d-models.
 
-Three rules, each derived from a failure kind measured across the seven
+Five grounding rules (D1–D5), each derived from a failure kind measured across the seven
 grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
-the definitions and the instances each rule is built from.
+the definitions and the instances each rule is built from. D6 and D7 are render
+rules: they catch markdown that does not render as written — D6 in Obsidian's
+editor, D7 on GitHub and in Obsidian alike.
 
   D1 (K9)  Every relative markdown link resolves on disk, and its `#part`, on
            a link to a markdown file, names a heading or `^block-id` there.
@@ -17,6 +19,12 @@ the definitions and the instances each rule is built from.
            bullet or paragraph that names it must also say so.
   D5 (K9)  A CAL-* bet id that *discharges* a `**Default:**` must be registered
            in .claude/skills/calibrate/bets.md.
+  D6 (render)  An inline code span opens and closes on one line. Obsidian's
+           editor pairs backticks per line, so one wrapped span shows the rest
+           of the file as raw text. Not run under .claude/ (not in the vault).
+           `--fix-code-spans FILE ...` rewraps without changing what renders.
+  D7 (render)  Every table row has as many cells as its header. A pipe splits
+           a cell even inside backticks, so a literal one is written \\|.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
 and has no false positives by construction for the file part — the target
@@ -510,6 +518,150 @@ def check_d4_withdrawn(path: Path, lines: list[str]) -> list[str]:
     return findings
 
 
+TABLE_SEPARATOR = re.compile(r"^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$")
+
+
+def check_d6_code_spans(path: Path, raw: list[str]) -> list[str]:
+    """D6 (render): an inline code span opens and closes on one line.
+
+    CommonMark lets a span run across a line break, and GitHub and Obsidian's
+    reading view render one fine. Obsidian's editor (Live Preview, where the
+    docs are read and reviewed) pairs backticks line by line, so every backtick
+    after the break pairs with the wrong partner, and an odd count left at the
+    end of a paragraph leaves the rest of the file unrendered: headings, bold
+    and tables show as raw text. Built from construction-equivalence.md §4,
+    whose wrapped `bikar render … --check` span left §5 and §6's tables as raw
+    pipes (review thread 7rlhya, 2026-09-28).
+
+    Scoped to files outside .claude/, which is not in the Obsidian vault. One
+    finding per span, on the line it opens: the line that closes it is skipped
+    up to the closing run, then read on."""
+    findings, in_fence, carry = [], False, None
+    for n, line in enumerate(raw, 1):
+        if FENCE.match(line):
+            in_fence, carry = not in_fence, None
+            continue
+        if not line.strip():
+            carry = None
+        if in_fence or line.startswith("    ") and not line.lstrip().startswith(("-", "*", "|")):
+            continue
+        if carry:
+            close = re.compile(rf"(?<!`){carry}(?!`)").search(line)
+            if not close:
+                continue
+            line, carry = line[close.end():], None
+        p = unclosed_backtick(line)
+        if p is not None:
+            carry = re.match(r"`+", line[p:]).group()
+            findings.append(
+                f"{path.relative_to(ROOT)}:{n}: D6 (render) a code span runs onto the "
+                "next line, so Obsidian's editor shows the rest of the file as raw "
+                "text — keep each span on one line (docs_gate.py --fix-code-spans FILE)"
+            )
+    return findings
+
+
+def unclosed_backtick(line: str) -> int | None:
+    """Index of the first backtick run on the line with no closing run of the
+    same length after it, or None when every span on the line closes."""
+    i = 0
+    while (m := re.compile(r"`+").search(line, i)):
+        run = m.group()
+        close = re.compile(rf"(?<!`){run}(?!`)").search(line, m.end())
+        if not close:
+            return m.start()
+        i = close.end()
+    return None
+
+
+def fix_code_spans(raw: list[str]) -> list[str]:
+    """Rewrap so no code span crosses a line break, without changing what any
+    renderer shows: the whole word holding the unclosed backtick moves down to
+    the start of the next line (a soft break renders as a space, so the text is
+    the same), or the next line is joined up when the word starts its line.
+    Lines D6 cannot fix safely — the next line is blank, a new block, or would
+    start like one — are left for a hand fix and still reported."""
+    out, in_fence, i = list(raw), False, 0
+    while i < len(out):
+        line = out[i]
+        if FENCE.match(line):
+            in_fence = not in_fence
+            i += 1
+            continue
+        code = line.startswith("    ") and not line.lstrip().startswith(("-", "*", "|"))
+        p = None if in_fence or code or line.lstrip().startswith("|") else unclosed_backtick(line)
+        nxt = out[i + 1] if i + 1 < len(out) else ""
+        if p is None:
+            i += 1
+            continue
+        if not nxt.strip() or FENCE.match(nxt) or HEADING.match(nxt.lstrip()) \
+                or re.match(r"^\s*(?:[-*+]\s|\d+\.\s|>|\|)", nxt):
+            # Left for a hand fix. The next line's first backtick closes this
+            # span, so reading it as an opener would move the wrong word.
+            i += 2
+            continue
+        while p > 0 and not line[p - 1].isspace():
+            p -= 1
+        head, word = line[:p].rstrip(), line[p:]
+        body = nxt.lstrip()
+        if not head.strip() or re.fullmatch(r"\s*(?:[-*+]|\d+\.)", head) \
+                or re.match(r"(?:[-*+]\s|\d+\.\s|#|>)", word):
+            out[i] = line.rstrip() + " " + body
+            del out[i + 1]
+        else:
+            out[i] = head
+            out[i + 1] = nxt[: len(nxt) - len(body)] + word.rstrip() + " " + body
+            i += 1
+    return out
+
+
+def table_cells(line: str) -> int:
+    """Cells in a table row, split the way GitHub and Obsidian split them: on
+    every unescaped pipe, inside a code span too, with the optional leading
+    and trailing pipe not counted."""
+    s = line.strip()
+    s = s[1:] if s.startswith("|") else s
+    s = s[:-1] if s.endswith("|") and not s.endswith("\\|") else s
+    return len(re.split(r"(?<!\\)\|", s))
+
+
+def check_d7_tables(path: Path, raw: list[str]) -> list[str]:
+    """D7 (render): every row of a table has as many cells as its header, and
+    the separator row under the header matches it. A row with an extra
+    unescaped pipe (a `|` inside backticks is one) silently loses the cells
+    past the header's count; a separator that does not match the header means
+    the block is not a table at all. Asked for in review thread 7rlhya."""
+    findings, in_fence, i = [], False, 0
+    while i < len(raw):
+        line = raw[i]
+        if FENCE.match(line):
+            in_fence = not in_fence
+        elif (not in_fence and "|" in line and i + 1 < len(raw)
+              and TABLE_SEPARATOR.match(raw[i + 1]) and "-" in raw[i + 1]):
+            want = table_cells(line)
+            got = table_cells(raw[i + 1])
+            if got != want:
+                findings.append(
+                    f"{path.relative_to(ROOT)}:{i + 2}: D7 (render) table separator has "
+                    f"{got} cells, header has {want} — the block does not render as a table"
+                )
+            j = i + 2
+            while j < len(raw) and raw[j].strip() and "|" in raw[j]:
+                got = table_cells(raw[j])
+                if got != want:
+                    findings.append(
+                        f"{path.relative_to(ROOT)}:{j + 1}: D7 (render) table row has "
+                        f"{got} cells, header has {want} — "
+                        + ("escape a literal pipe as \\|, even inside backticks" if got > want
+                           else "a cell is missing, so the columns shift")
+                    )
+                j += 1
+            i = j
+            continue
+        i += 1
+    return findings
+
+
 def is_print_record(path: Path) -> bool:
     """A print-run record under docs/prints/ carries a bench operator's account
     of what a plate measured — a plate can measure a number a later audit
@@ -544,10 +696,15 @@ def is_claude_config(path: Path) -> bool:
 def check_file(path: Path) -> list[str]:
     raw = path.read_text(encoding="utf-8").splitlines()
     lines = strip_code(raw)
-    if is_print_record(path) or is_claude_config(path):
-        return check_d1_links(path, lines)
+    render = check_d7_tables(path, raw)
+    if is_claude_config(path):
+        return check_d1_links(path, lines) + render
+    render = check_d6_code_spans(path, raw) + render
+    if is_print_record(path):
+        return check_d1_links(path, lines) + render
     return (
         check_d1_links(path, lines)
+        + render
         + check_d2_validators(path, lines, raw)
         + check_d3_defaults(path, lines, raw)
         + check_d4_withdrawn(path, lines)
@@ -636,6 +793,8 @@ def self_test() -> int:
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
         "fail/d4-withdrawn-dm-sans.md": ["D4 (K1)"],
         "fail/d5-unregistered-bet.md": ["D5 (K9)"],
+        "fail/d6-wrapped-code-span.md": ["D6 (render)"],
+        "fail/d7-table-pipe.md": ["D7 (render)"],
     }
     ok = True
     for name in sorted((FIXTURES / "pass").glob("*.md")):
@@ -838,10 +997,20 @@ def main() -> int:
     ap.add_argument("files", nargs="*", type=Path)
     ap.add_argument("--staged", action="store_true")
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--fix-code-spans", action="store_true",
+                    help="rewrap the given files so no code span crosses a line (D6), then check them")
     args = ap.parse_args()
 
     if args.self_test:
         return self_test()
+
+    if args.fix_code_spans:
+        for p in args.files:
+            raw = p.read_text(encoding="utf-8").splitlines()
+            fixed = fix_code_spans(raw)
+            if fixed != raw:
+                p.write_text("\n".join(fixed) + "\n", encoding="utf-8")
+                print(f"rewrapped {p}")
 
     if args.staged:
         findings, checked = staged_findings()

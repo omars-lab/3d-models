@@ -38,8 +38,8 @@ print and the peg system border is too big and pegs too tight"?
    butt with zero designed gap, and its flanks lean at 26.6°. Clearance also dropped from
    0.15 to 0.10 between minis-03 and minis-04, while the pieces went from 4 mm to 1.4 mm
    thick and from 40 mm to 80 mm across. That is three changes in one step.
-4. **Border too big.** Not a print defect but geometry. The dovetail's frame is `depth +
-   clearance + wall`, and the seam band between two pieces is twice that: about 11 mm on
+4. **Border too big.** Not a print defect but geometry. The dovetail's frame is
+   `depth + clearance + wall`, and the seam band between two pieces is twice that: about 11 mm on
    the default knobs. The minis-05 and minis-06 plates already carry the narrower
    options (§5). Which to keep is a question of hold against looks, and only a print
    answers it.

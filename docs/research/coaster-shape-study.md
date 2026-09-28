@@ -55,8 +55,7 @@ The least area wins; an earlier row wins a tie.
 
 The emitted golden carries `4.5001`: the importer's own measurement lands a float
 hair above 4.5 and the ceil keeps it, so the CLI note reads
-`coaster outline fitted to the art: polygon 6 rotate 30, 4.5001 GeoGebra units span
-across flats (least area of 7 candidates)`.
+`coaster outline fitted to the art: polygon 6 rotate 30, 4.5001 GeoGebra units span across flats (least area of 7 candidates)`.
 
 **7apC5Q9QS-8**
 
@@ -77,8 +76,8 @@ The `round` rows reproduce P2.7's `K` exactly (5.1962 and 5.6569 in
 
 ## 3. Render `--check` at both sizes (shape-v2 goldens)
 
-Command shape: `bikar render patterns/Constructions/<c>-coaster.bkr --format stl
---check --param size=<size> -o out.stl`. Bounding boxes read back off the written
+Command shape:
+`bikar render patterns/Constructions/<c>-coaster.bkr --format stl --check --param size=<size> -o out.stl`. Bounding boxes read back off the written
 STL.
 
 | Construction | outline | size | bbox x × y × z (mm) | triangles | STL | volume | mesh gate | linkage gate |
@@ -88,8 +87,8 @@ STL.
 | 7apC5Q9QS-8 | square | 40 | 40.00 × 40.00 × 5.20 | 40800 | 1992 KiB | 7.8 cm³ | PASS | PASS |
 | 7apC5Q9QS-8 | square | 90 | 90.00 × 90.00 × 5.20 | 204300 | 9976 KiB | 36.6 cm³ | PASS | PASS |
 
-Mesh gate line at every render: `watertight=true euler=2 degenerate=0
-minFeature=1.2mm (floor 0.8mm) — PASS` (the 1.2 mm is the emboss height); linkage
+Mesh gate line at every render:
+`watertight=true euler=2 degenerate=0 minFeature=1.2mm (floor 0.8mm) — PASS` (the 1.2 mm is the emboss height); linkage
 gate `bodies=1 pointContacts=0 errors=0 warn=0 — PASS`. `size` is the across-flats
 measure, so the corner-up hexagon stands `size / cos 30°` tall (103.92 mm, sampled to
 104.00 at the grid pitch); z is `base 4` + `emboss 1.2`.

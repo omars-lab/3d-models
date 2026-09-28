@@ -58,8 +58,8 @@ seven orders inside it.
 
 **Validator:** O1 passes iff every compared label is within tolerance and no
 label is missing or unaccounted for on either side; exit 1 otherwise.
-- PASS: `GimTvN9hw4U`, hand-transcribed lowering — `23 compared, 0 failed,
-  17 skipped/extra`, every skip and extra with its reason on its own row.
+- PASS: `GimTvN9hw4U`, hand-transcribed lowering —
+  `23 compared, 0 failed, 17 skipped/extra`, every skip and extra with its reason on its own row.
 - FAIL: the same file with `rotate A by 120 around B` for `by -120` — C and
   every label derived from it leave tolerance on the first row that uses them;
   the hard case is a `pick` swap that lands on a mirror-image intersection,
@@ -135,8 +135,8 @@ Run: `make naqsh-score ID=<video-id> NAQSH=<file.bkr>` in the youtube repo
 O2 cannot say what is solid. O3 compares two STLs of the flat extrusion: the
 reference is OpenSCAD's `linear_extrude` of the polygons in the O1 dump
 (`make reference` in the youtube repo — 42 polygons for `GimTvN9hw4U`, no
-bikar code), the naqsh side is `bikar render --piece Coaster --format stl
---check` of the same file with `piece Coaster` / `extrude <pattern> depth`.
+bikar code), the naqsh side is
+`bikar render --piece Coaster --format stl --check` of the same file with `piece Coaster` / `extrude <pattern> depth`.
 Both are in the same frame (millimetres, A at the origin, z from 0 to depth),
 so, as with O2, nothing is aligned and a translated mesh is a FAIL by design.
 
@@ -219,4 +219,4 @@ Run: `make reference IN=<export.ggb> OUT=<dir>` in the youtube repo, then
 All three take the golden `patterns/Constructions/<id>.bkr` from bikar once
 `bikar import geogebra` produces it (P2.2); until then they were run on a
 hand-transcribed lowering of the same construction, which is what every number
-above measures.
+above measures. ^7rlhya

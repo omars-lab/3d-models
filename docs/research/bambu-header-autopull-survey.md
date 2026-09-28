@@ -78,8 +78,8 @@ once here (`vir_slot` array vs the H2 `vt_tray` object, PR #192).*
 Each row: bench-sheet field → the source we would read → status for the X2D.
 
 1. **Machine** (preset display name). Source: the sliced `.3mf` — `Metadata/project_settings.config`
-   `printer_settings_id`, cross-checked against the plate G-code header `printer_model = Bambu Lab
-   X2D`. Also derivable from `BAMBU_MODEL=x2d` env. **[CONFIRMED-IN-REPO]** — we slice X2D plates and
+   `printer_settings_id`, cross-checked against the plate G-code header
+   `printer_model = Bambu Lab X2D`. Also derivable from `BAMBU_MODEL=x2d` env. **[CONFIRMED-IN-REPO]** — we slice X2D plates and
    the G-code reads `printer_model = Bambu Lab X2D` (PR #189).
 
 2. **firmware**. Two routes. (a) `setup discover` SSDP already reports it — **[CONFIRMED-IN-REPO]**

@@ -56,8 +56,8 @@ The feature is wiring the existing 2D `ring` binning into the 3D region-split pa
 
 ## Q2.5 — The radial-band primitive already exists (2D)
 
-- `packages/core/src/theme/fill-resolver.ts:413` `computeRingBins(faces, center): Map<faceIdx,
-  ringIdx>` — "Bucket faces into concentric rings by centroid distance… Bin 0 is innermost";
+- `packages/core/src/theme/fill-resolver.ts:413`
+  `computeRingBins(faces, center): Map<faceIdx, ringIdx>` — "Bucket faces into concentric rings by centroid distance… Bin 0 is innermost";
   1-D clustering of `sqrt(dx²+dy²)` with `TOLERANCE = 1e-2` opening a new ring
   (`fill-resolver.ts:428-439`). This is exactly the ask's grouping.
 - Called in eval: `evaluator.ts:6304` `computeRingBins(planarGraph.faces, center)`.
@@ -71,8 +71,8 @@ The feature is wiring the existing 2D `ring` binning into the 3D region-split pa
 
 ## Q3 — Region → body split (`--format parts`, bikar PR #275)
 
-- Kernel: `kernel3d/coaster.ts:2236` `buildCoasterParts(built, {pinch})` → `Map<CoasterPartRegion,
-  OrbMesh>`; `CoasterPartRegion = 'base'|'straps'|'border'` (`coaster.ts:1685`).
+- Kernel: `kernel3d/coaster.ts:2236` `buildCoasterParts(built, {pinch})` →
+  `Map<CoasterPartRegion, OrbMesh>`; `CoasterPartRegion = 'base'|'straps'|'border'` (`coaster.ts:1685`).
 - Assignment is geometric by height field on a grid, NOT by polygon identity:
   `coaster.ts:1700` `cellRaised()`, `coaster.ts:1722` `reliefRegionCells(field, spec, band)` splits
   raised cells into `straps` vs `border` by cell-centre inset (`coaster.ts:1729-1733`); `base` =

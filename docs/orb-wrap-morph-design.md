@@ -85,8 +85,8 @@ between.*
 
 ## 2. Scope, stated rather than assumed
 
-The eleven `flat.relation: 'lifted'` orbs are in (§B). Each declares `project
-spherical` (A4) and each has a face lift, so each has both ends of the bend.
+The eleven `flat.relation: 'lifted'` orbs are in (§B). Each declares
+`project spherical` (A4) and each has a face lift, so each has both ends of the bend.
 
 Out, with the reason, and each gets `morph: null` in the manifest so the page and
 the gate can tell "no morph" from "manifest from an older build" (T1):

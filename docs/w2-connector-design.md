@@ -256,8 +256,8 @@ wall StarWall
   connect clips                    # default: connect none (parent doc B.1)
 ```
 
-`connect clips` requires the module tile to declare a clipseat and, if a `clip … for
-<moduleTile>` is declared in-file, cross-checks its gap against the wall's — a clip
+`connect clips` requires the module tile to declare a clipseat and, if a
+`clip … for <moduleTile>` is declared in-file, cross-checks its gap against the wall's — a clip
 generated for a different gap is a compile error.
 
 ## 5. Clip placement is layout-derived — not `connect`-derived

@@ -245,8 +245,7 @@ but it is not this bug.
 
 At roughly 14:47 the `bikar` worktree read `760b5cb`. At **14:51:46** it was
 checked out to `origin/main` by something outside this audit (reflog:
-`bfb1bae HEAD@{2026-08-02 14:51:46 -0500}: checkout: moving from
-feat/edge-to-edge-relief to origin/main`). My STL renders ran at 14:52:02 and
+`bfb1bae HEAD@{2026-08-02 14:51:46 -0500}: checkout: moving from feat/edge-to-edge-relief to origin/main`). My STL renders ran at 14:52:02 and
 14:52:25 — *after* that checkout.
 
 This briefly produced a false reading: I grepped the "stale" checkout's

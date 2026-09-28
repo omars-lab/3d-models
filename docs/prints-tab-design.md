@@ -222,8 +222,7 @@ printed a file it did not, and the gate must refuse it rather than pass.
   Unlike R3, R5 has no empty-subject problem — it fires the moment one reading settles a
   bet, so it ships now with R1/R2/R4.
 - **R6 — status is a lifecycle state.** `status` is one of the ten plate/record states
-  `{draft, planned, sliced, printing, paused, printed, failed, measured, propagated,
-  abandoned}` ([`print-model-design.md`](print-model-design.md) §3.1). This is a
+  `{draft, planned, sliced, printing, paused, printed, failed, measured, propagated, abandoned}` ([`print-model-design.md`](print-model-design.md) §3.1). This is a
   *membership* check only; the consistency between a state and the fields it implies
   (a `measured` carries a reading, a `sliced` names a `.3mf`) is the freshness rules
   R10–R14 below (task #39, §6.3), not R6.

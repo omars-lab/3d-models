@@ -22,8 +22,8 @@ Studio CLI in one `--arrange 1 --export-3mf` invocation, producing one composed 
 
 Plan §4 P4.1: `tools/bambu slice compose <plate.yaml>` — a manifest of items
 `{bkr, piece, params, count}`; render each variant via bikar (cache keyed by bkr-hash +
-params); collect STLs; call the Bambu Studio CLI with all inputs `--arrange 1
---export-3mf`; `--dry-run` prints the argv; `--bed x2d` = 256 × 256 mm with an
+params); collect STLs; call the Bambu Studio CLI with all inputs
+`--arrange 1 --export-3mf`; `--dry-run` prints the argv; `--bed x2d` = 256 × 256 mm with an
 area/count pre-check that fails *before* the slicer; per-object provenance
 `bikar:<path>@<ref>` in the plate record; a mesh `--scale` passthrough that prints the
 dynamic-STL warning. The first consumer is the mini plate
@@ -59,8 +59,8 @@ So the composer adds a *manifest → render loop → multi-input slice → recor
 reuses everything `slice plate` proved. It keeps the flag surface consistent with its
 sibling: `-o/--out`, `-d/--outputdir`, `-s/--settings`, `-f/--filament`, `--arrange`,
 `--dry-run`, `-t/--timeout`, `--strict` carry the same meaning as on `slice plate`; the
-only additions are the `<plate.yaml>` argument and `--bed` (§6). (There is no `slice
-mesh` or `--bed` in the repo today — both are named here as targets, not as shipped
+only additions are the `<plate.yaml>` argument and `--bed` (§6). (There is no
+`slice mesh` or `--bed` in the repo today — both are named here as targets, not as shipped
 surface, to keep the claim honest.)
 
 ## 3. The pivotal question: the manifest does not fork the iteration model (D-072)
@@ -103,8 +103,8 @@ half* of an iteration key, completed by the plate's slice profile and resolved t
 > would break — an item would need its own profile to complete its key — and that is the
 > condition under which the reconciliation would have to be revisited, not assumed.
 
-**An item may also be written directly as an iteration id** — `{iteration: it-<sha12>,
-count}` — for "put this exact known recipe on the plate." The composer resolves that
+**An item may also be written directly as an iteration id** —
+`{iteration: it-<sha12>, count}` — for "put this exact known recipe on the plate." The composer resolves that
 through the record store the way
 [`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §4's
 `reprint` does (newest record with that id → its `key`), then re-renders and re-slices,
@@ -175,9 +175,8 @@ variants would render, cache hits/misses) and the resolved iteration ids, then t
 Studio command line with every input. A dry run is a single allow-listable command that
 lets a reader inspect the whole plan before a byte is sliced.
 
-The Studio invocation is `buildStudioArgs` extended to take an array of inputs: `--debug
-2 --load-settings <machine;process> --load-filaments <filament> --arrange 1 --slice 0
---outputdir <dir> --export-3mf <out> <stl1> <stl2> …`. `--slice 0` slices all plates;
+The Studio invocation is `buildStudioArgs` extended to take an array of inputs:
+`--debug 2 --load-settings <machine;process> --load-filaments <filament> --arrange 1 --slice 0 --outputdir <dir> --export-3mf <out> <stl1> <stl2> …`. `--slice 0` slices all plates;
 multiple trailing model paths are how the Bambu Studio CLI composes several objects onto
 one plate ([`research/plate-composer-research.md`](research/plate-composer-research.md)
 Topic 1).
@@ -374,8 +373,8 @@ from either verb derives the same `it-<sha12>`), the bed-fit pre-check, and the 
 > (native-project GL path); the shipped 3MF keeps the versioned tag (the GUI has GL and honours the
 > #9666 colour contract), so the headless **geometry** check runs on a **tag-stripped copy**. (2)
 > `--load-settings machine;process` overrides the 3MF's embedded filament arrays, clamping every part to
-> slot 1, so a headless slice **cannot** verify per-region colour. The honest signals split: `slice
-> coaster --verify-geometry` asserts exit 0 + the loaded object count on the tag-stripped copy (preset
+> slot 1, so a headless slice **cannot** verify per-region colour. The honest signals split:
+> `slice coaster --verify-geometry` asserts exit 0 + the loaded object count on the tag-stripped copy (preset
 > display names resolved to their system-profile JSON paths via `resolvePresetList`, since `--load-settings`
 > does a filename lookup, not a registry lookup); **colour is a GUI check** — `bambu slice open`.
 

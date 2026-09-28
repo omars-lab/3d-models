@@ -151,3 +151,10 @@ settled: that needs the physical object, and it belongs to `prototype` and
   systems…"), never stated absolutely.
 - Link rot happens: restate load-bearing numbers/claims in the research file itself so
   the doc survives dead links.
+- **Show a picture, not ASCII art.** A mockup of a UI, a layout or a part is rendered
+  (HTML in the product's own styles, or the real tool: `bikar render`, the Lab) and
+  embedded as a PNG, with its source committed next to it so it can be re-shot. ASCII
+  art is only a fallback, and the doc says why (e.g. the thing cannot be rendered yet).
+  Say which parts of the picture are real data and which are placeholders. Example:
+  `docs/colour-preview-design/lab-controls-mockup.html` → `.png`, embedded in
+  `colour-preview-design.md` §5 (review thread leu4yg, 2026-09-28).

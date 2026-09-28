@@ -21,8 +21,8 @@ bikar is read at `origin/main` = `6356bb3` (the `bikar-main` work tree, HEAD equ
 origin/main on 2026-09-26). Paths below are bikar paths, written plainly because they live in the
 sibling repo.
 
-1. **Colour regions on a coaster exist.** A `palette` block plus `color base|straps|border
-   <Name>` ([D-073](../decisions-log.md), design [`coaster-colour-design.md`](../coaster-colour-design.md)).
+1. **Colour regions on a coaster exist.** A `palette` block plus
+   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-colour-design.md`](../coaster-colour-design.md)).
    `bikar render --format parts` splits the coaster height field into one watertight body per
    colour, as stacked columns cut at `z = base`, and writes a `<Coaster>.parts.json` sidecar
    (fields `region`, `stl`, `triangles`, `paletteName`, `hex`) — bikar packages/cli/src/index.ts,
