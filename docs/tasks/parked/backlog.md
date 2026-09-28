@@ -4,6 +4,13 @@ Moved here on 2026-09-25 from [`docs/backlog.md`](../../backlog.md) §6, which h
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
+## Pattern catalog vault — plan written, step 1 next
+
+[`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
+pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
+through BRAT, and a check plus a skill that keep it current. Step 1 needs Omar in Obsidian
+(trust the vault, install BRAT and review-md). Asked for by Omar, 2026-09-27.
+
 ## The FAQ — waiting on Omar
 
 The `session-reflect` skill proposed six FAQ candidates in the untracked proposal file in
