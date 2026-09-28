@@ -32,11 +32,38 @@ construction in the ledger (CS-1), and most coaster styles were first tried on i
 
 ## Pictures
 
-| Solid | Minimal frame |
-|---|---|
-| ![solid](../media/GimTvN9hw4U/GimTvN9hw4U-solid.png) | ![minimal frame](../media/GimTvN9hw4U/GimTvN9hw4U-minimal-frame.png) |
-| **Minimal pegs** | **Twist** |
-| ![minimal pegs](../media/GimTvN9hw4U/GimTvN9hw4U-minimal-pegs.png) | ![twist](../media/GimTvN9hw4U/GimTvN9hw4U-twist.png) |
+One heading per style, so each picture has its own link: the note's link plus the style
+name, for example #minimal.
+
+### plain
+
+The straps raised on a full slab.
+
+![plain](../media/GimTvN9hw4U/GimTvN9hw4U-plain.png)
+
+### minimal
+
+The straps alone: no slab and no frame, every empty space a hole.
+
+![minimal](../media/GimTvN9hw4U/GimTvN9hw4U-minimal.png)
+
+### minimal-frame
+
+A solid frame round the edge, the straps inside it.
+
+![minimal frame](../media/GimTvN9hw4U/GimTvN9hw4U-minimal-frame.png)
+
+### minimal-pegs
+
+minimal-frame with dovetails cut into the frame, so tiles join.
+
+![minimal pegs](../media/GimTvN9hw4U/GimTvN9hw4U-minimal-pegs.png)
+
+### twist
+
+minimal, twisted up its height.
+
+![twist](../media/GimTvN9hw4U/GimTvN9hw4U-twist.png)
 
 ## Checks against the video
 
@@ -52,13 +79,16 @@ video's GeoGebra construction pass:
 | Plate | Styles of this pattern on it |
 |---|---|
 | [minis-01](../../plates/minis-01.yaml) | the plain coaster |
-| [minis-02](../../plates/minis-02.yaml) | solid, minimal, interlock, twist |
+| [minis-02](../../plates/minis-02.yaml) | plain, minimal, interlock, twist |
 | [minis-03](../../plates/minis-03.yaml) | minimal frame, minimal pegs |
 | [minis-04](../../plates/minis-04.yaml) | minimal frame, minimal pegs, twist |
 | [minis-05](../../plates/minis-05.yaml) | frame pair, key pair, key at three clearances, tab pair |
 | [minis-06](../../plates/minis-06.yaml) | dovetail and slim dovetail pairs |
 
 ## Prints
+
+Only minis-03 and minis-04 have print records so far. The plain, minimal and interlock
+pieces (minis-01 and minis-02) have not come back yet.
 
 | Print | Piece | Verdict | What was seen |
 |---|---|---|---|
