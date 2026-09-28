@@ -1,9 +1,9 @@
 # 3d-models
 
-Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the DSL
-+ geometry engine and the producer of record; **qiyas** (`~/Workspace/git/qiyas`)
-validates renders. This repo holds OpenSCAD sources, design docs, the gallery and
-the gh-pages deploy — it consumes bikar, it does not reimplement it.
+Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the DSL + geometry
+engine and producer of record; **qiyas** (`~/Workspace/git/qiyas`) validates renders. This repo
+holds OpenSCAD sources, design docs, the gallery and the gh-pages deploy, and consumes bikar.
+**Learning from tutorial videos is youtube's** (`~/Workspace/git/youtube`: its loop and queue).
 
 ## Mechanics
 

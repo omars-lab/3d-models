@@ -5,7 +5,7 @@ as_of:
   3d-models: 0ece6fee082ff06d31bbd921dfdbbbde3b7168fd
   bikar: 69b016b2485c3ac3753d1d3b99c8782f12c3b1b0
   qiyas: e546bcb150fb676f8cf703c85398b7038d582874
-  youtube: 6d359b11203984c87180f7b542eccda71014ce92
+  youtube: 0a9d5bbce05b5cc15b01517424e7c4ce59afa6bd
 repos:
   bikar: ../bikar
   qiyas: ../qiyas

@@ -12,13 +12,13 @@ pass runs; the backlog says *what* is next; the done list says what shipped.
 | [`coaster-pipeline.md`](coaster-pipeline.md) | Get the first coaster plate printed, and measure the calibration numbers from it | 3d-models | [backlog](../../docs/tasks/coaster-pipeline/backlog.md) | [done](../../docs/tasks/coaster-pipeline/done.md) |
 | [`print-infrastructure.md`](print-infrastructure.md) | Turn a short config file into a reviewed, send-ready plate with one command | 3d-models | [backlog](../../docs/tasks/print-infrastructure/backlog.md) | [done](../../docs/tasks/print-infrastructure/done.md) |
 | [`catalog-expansion.md`](catalog-expansion.md) | Find new patterns and turn reconstructions into catalog coasters | 3d-models, bikar, youtube | [backlog](../../docs/tasks/catalog-expansion/backlog.md) | [done](../../docs/tasks/catalog-expansion/done.md) |
-| [`video-reconstruction.md`](video-reconstruction.md) | Rebuild one tutorial video (YouTube, or a Facebook reel fetched logged-out) as a proved GeoGebra construction | youtube | youtube: `.claude/plans/learning-from-youtube.md` | youtube: `docs/tasks/done.md` |
+| video-reconstruction (prompt in youtube: `.claude/loop-prompts/video-reconstruction.md`) | Rebuild one tutorial video (YouTube, or a Facebook reel fetched logged-out) as a proved GeoGebra construction | youtube | youtube: `.claude/plans/learning-from-youtube.md` | youtube: `docs/tasks/done.md` |
 | [`consolidation.md`](consolidation.md) | Merge PRs, clean up branches, worktrees and stashes, and lose nothing | all six repos | [backlog](../../docs/tasks/consolidation/backlog.md) | [done](../../docs/tasks/consolidation/done.md) |
 | — | Work no loop owns | — | [parked](../../docs/tasks/parked/backlog.md) | [done](../../docs/tasks/parked/done.md) |
 
 Work flows from reconstruction to catalog, then to the print infrastructure, then to the
 printed plate. Consolidation runs beside all of them. The video loop keeps its lists in the
-youtube repo, where it runs; they are not copied here.
+youtube repo, where it runs, and so does its prompt (moved there 2026-09-28); neither is copied here.
 
 ## How a loop uses its backlog and done list
 
