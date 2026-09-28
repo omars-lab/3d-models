@@ -60,7 +60,7 @@
       "why": "Third party, same recorded negative result."
     },
     {
-      "doc": "docs/hemisphere-split-design.md",
+      "doc": "docs/design/orb/hemisphere-split-design.md",
       "path": "kernel3d/split.ts",
       "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and §Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
     },

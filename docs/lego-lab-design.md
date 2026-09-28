@@ -44,7 +44,7 @@ LEGO-compatible part** — a body carrying pattern relief, with studs and/or ant
 LEGO 8 mm lattice so it clutches into real LEGO — plus the two gates that make "is this pattern
 LEGO-compatible?" a measurable question, and the Lego Lab page that puts both in front of a user.
 
-Builds on: [`orb-lab-design.md`](orb-lab-design.md) (the Lab is a copy of its architecture, §9);
+Builds on: [`design/orb/orb-lab-design.md`](design/orb/orb-lab-design.md) (the Lab is a copy of its architecture, §9);
 [`tile-wall-design.md`](tile-wall-design.md) (`brick` is a `tile`-class specialization);
 [`w2-connector-design.md`](w2-connector-design.md) §7 (the slab-stack solidifier this rides, the
 precedent for a documented mesh-gate exemption, and — §3.8 — the detent-rib architecture this doc

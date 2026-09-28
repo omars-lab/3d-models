@@ -6,7 +6,7 @@ date: 2026-09-09
 
 *Issue slug: `base-face-honesty-scaffold-pivot`. Written 2026-09-09, during the
 #49 / D-052 cascade. Companion to
-[`data-orb-base-face-honesty-cascade.md`](../data-orb-base-face-honesty-cascade.md).*
+[`data-orb-base-face-honesty-cascade.md`](../design/orb/data-orb-base-face-honesty-cascade.md).*
 
 ## What the defect was
 

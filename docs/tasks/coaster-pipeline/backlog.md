@@ -98,7 +98,7 @@ bets `CAL-ANC-01`/`CAL-INW-01` registered 2026-08-02, plus the frame-band bet
 `CAL-TXT-01`/`CAL-TXT-02` registered 2026-08-04, plus the body-clearance bet
 `CAL-CLR-01` registered 2026-08-19);
 one more, `CAL-SEA-01`, appears twice in `3d-models` only, in both cases as a bet that
-[`hemisphere-split-design.md`](../../hemisphere-split-design.md) §Appendix B and its
+[`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) §Appendix B and its
 grounding audit deliberately **declined to mint**. `qiyas` contains no `CAL-*`
 id at all. That is the whole set as it exists on disk today; it is not a claim
 about bets that could be minted.
@@ -396,8 +396,8 @@ of the other two, nor they on it.
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
 | P1 | smallest `strut_width` that prints clean; whether the floor needs to be orientation-aware; star-tip acute voids; tree-support scarring | catalog P1 | `strut_width`/`strut_depth` mins in every `patterns/Orbs/*.bkr`; the mesh-gate FDM floor. **Q1 is MC-2's question in strut form** | exists — CLI param override, STLs already on disk | 15.8 / 20.3 / 28.2 cm³; **≈80 g PLA for the trio** |
-| P2 | whole-sphere printability; print time and mass at defaults; dimensional accuracy; handling strength; bed contact | catalog P2; [`orb-lab-design.md`](../../orb-lab-design.md) §5 | the harness print-prototype task; gallery print notes | exists — `Star-Orb.bkr` at defaults | 45.7 cm³, 5,040 tris |
-| P3 | whether flat-down halves beat the whole print by enough to justify engine work; seam visibility; hand alignment; `vertex` vs `face` cut plane | [`hemisphere-split-design.md`](../../hemisphere-split-design.md) §9.2 | the split-export go/no-go — the doc **recommends not building** and hands P3 the verdict | slicer-side cut of `StarOrb.stl`; no engine work | not stated |
+| P2 | whole-sphere printability; print time and mass at defaults; dimensional accuracy; handling strength; bed contact | catalog P2; [`orb-lab-design.md`](../../design/orb/orb-lab-design.md) §5 | the harness print-prototype task; gallery print notes | exists — `Star-Orb.bkr` at defaults | 45.7 cm³, 5,040 tris |
+| P3 | whether flat-down halves beat the whole print by enough to justify engine work; seam visibility; hand alignment; `vertex` vs `face` cut plane | [`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) §9.2 | the split-export go/no-go — the doc **recommends not building** and hands P3 the verdict | slicer-side cut of `StarOrb.stl`; no engine work | not stated |
 | P4 | do petal-zigzag sliver voids resolve or fuse; does `inner` at its 16 mm floor print | catalog P4 | `inner`/`shoulder` ranges; the Lab's default-preset choice | exists — `Rosette-Orb.bkr` | 47.0 cm³ |
 | P5 | does FDM at a 0.8 mm ribbon gap print free-moving ribbons, fuse them, or fill them; the SLS/MJF result at the same gap | catalog P5 | the Lab's tier-3 weave/FDM notice; `amplitude` defaults; the ✓/fused threshold | exists — `Rosette-Weave-Orb.bkr` | 27.9 cm³ |
 | P6 | R=40 graceful shrink; R=110 warp/adhesion/time; whether strut width should scale with radius | catalog P6 | the `radius` range; the Lab ceiling-margin rule (`2R ≤ min(XYZ) − 10`) | exists — `radius` baked via the Lab | not stated |
@@ -454,7 +454,7 @@ a W3 deliverable of `layout report`.
 | item | why a printer is not enough |
 |---|---|
 | `CAL-STR-01` — Z-layer strength ratio | The registry's own coupon field reads **"none — measuring it needs a load rig, which does not exist; registered so the gap is visible."** Consumers: [`c2-assembly-design.md`](../../c2-assembly-design.md) B.5. |
-| Adhesive seam strength per mm² on an FFF lap face (P3 Q2) | [`hemisphere-split-design.md`](../../hemisphere-split-design.md) Appendix B declines to mint `CAL-SEA-01` for a feature the same doc recommends not building. A print gives the halves; the *number* needs a tensile setup this repo does not have. Recorded, deliberately, as an open question rather than a bet. |
+| Adhesive seam strength per mm² on an FFF lap face (P3 Q2) | [`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) Appendix B declines to mint `CAL-SEA-01` for a feature the same doc recommends not building. A print gives the halves; the *number* needs a tensile setup this repo does not have. Recorded, deliberately, as an open question rather than a bet. |
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 

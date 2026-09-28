@@ -47,7 +47,7 @@ blocked by `#67`).
 
 ### Orb breakdown + flat→sphere wrap morph
 - #76 — Flat→sphere wrap morph for the breakdown page (deferred from the teach-construction plan)
-- #77 — Wrap morph, bikar PR: kernel blend t + writeMorph + page caption (docs/orb-wrap-morph-design.md §6)
+- #77 — Wrap morph, bikar PR: kernel blend t + writeMorph + page caption (docs/design/orb/orb-wrap-morph-design.md §6)
 - #78 — Wrap morph, 3d-models PR: timelapse gate junction + count rules, make orbs, doc statuses
 - #79 — Make `make orbs` robust to non-views orbs (round-pattern STL-only)
 - #80 — bikar: give round-pattern orbs a breakdown (--format timelapse/views for base sphere + place)
@@ -372,7 +372,7 @@ Added 2026-09-01. Until this entry §6 listed nothing from the d3 workstream eve
 though it is the only non-printer work actually in flight — it lived in the
 session-scoped task list and in two design docs. This subsection is a **pointer,
 not a copy**: the owning sections are
-[`d3-integration-design.md`](../../d3-integration-design.md) §4 (phases) and
+[`d3-integration-design.md`](../../design/orb/d3-integration-design.md) §4 (phases) and
 [`rosette-pin-explorer-design.md`](../../rosette-pin-explorer-design.md) §6 (tracks),
 and a number that changes there is not re-typed here.
 

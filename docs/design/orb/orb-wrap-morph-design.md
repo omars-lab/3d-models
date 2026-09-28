@@ -8,13 +8,13 @@ status: built
 shipped in bikar ([NaqshCoffee/bikar#149](https://github.com/NaqshCoffee/bikar/pull/149));
 the gate rule (T8), the `make orbs` 2D-skip robustness and this record shipped in
 [3d-models#148](https://github.com/omars-lab/3d-models/pull/148). The owner chose
-"design doc first, then build" ([D-049 §2](decisions-log.md)); this was the design.
+"design doc first, then build" ([D-049 §2](../../decisions-log.md)); this was the design.
 Where the build corrected the design, the correction is stated in place (§3.6, §6):
 the morph is **not** a contained kind — at `t = 1` its cells are spherical and burst
 the faceted base outline by the very overhang T7 exists to catch, so containment
 cannot hold across the morph run and the frames are kept out of `CONTAINED_KINDS`
 by design.
-**Grounded by:** [`research/orb-wrap-morph-grounding.md`](research/orb-wrap-morph-grounding.md)
+**Grounded by:** [`../../research/orb-wrap-morph-grounding.md`](../../research/orb-wrap-morph-grounding.md)
 — every engine fact below is a row of its §A (cited as A1…A8), every count a row of
 §B or §D, and every outside source a row of §C marked **fetched**. Sources that
 could not be fetched are listed there and not cited here.
@@ -197,7 +197,7 @@ checkable rather than merely plausible.
 
 ### 3.6 The gate
 
-[`../.claude/gates/timelapse_gate.py`](../.claude/gates/timelapse_gate.py) grows by
+[`../../../.claude/gates/timelapse_gate.py`](../../../.claude/gates/timelapse_gate.py) grows by
 one kind and two rules; T1–T7 apply to `morph` frames unchanged.
 
 - `STAGE_KINDS` gains `morph`; `STAGE_FILLS` is unchanged (a morph frame uses only

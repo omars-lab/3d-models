@@ -61,7 +61,7 @@ floor) — these prints test *reality*, not the mesh.
     default brim/raft suffice or does the model want a flattened pole?
 - **What we learned**: — pending.
 - **Feeds**: harness print-prototype task; gallery print notes;
-  `docs/orb-lab-design.md` §5.
+  `docs/design/orb/orb-lab-design.md` §5.
 
 ## P3 — Hemisphere-split Star-Orb — harness task: "decide FDM-friendly hemisphere-split STL export"
 
@@ -73,7 +73,7 @@ floor) — these prints test *reality*, not the mesh.
   is an `edge-2` axis, so "cut at z = 0" gets a 491 mm² / 16-piece
   cross-section; the `vertex` plane gives one continuous 898 mm² annulus and
   the `face` plane gives 175 mm² in 12 pieces
-  ([`hemisphere-split-design.md`](../../../docs/hemisphere-split-design.md) §3.5).
+  ([`hemisphere-split-design.md`](../../../docs/design/orb/hemisphere-split-design.md) §3.5).
 - **Print target**: TBD (same machine as P2 for a fair comparison).
 - **What we want to learn**:
   - [ ] 1. Does flat-down/no-support halves beat the whole-sphere print on
@@ -184,7 +184,7 @@ floor) — these prints test *reality*, not the mesh.
   `patterns/Orbs/Maclado-9-Weave.bkr` (46 free ribbon loops over 390
   alternating crossings, ribbon 1.2 × 1.2, amplitude 0.8, 8.6 cm³ →
   `build/stls/Maclado9Weave.stl`, 7,200 tris). Design:
-  `docs/maclado-orb-design.md` §7.
+  `docs/design/orb/maclado-orb-design.md` §7.
 - **Print target**: TBD — **assumes a ~0.4 mm-class nozzle**. That is §7's
   K10 condition, not a preference: the 2.0 mm unsupported-thin-wall default
   is nozzle-relative, so a 0.2 or 0.8 mm nozzle shifts the floor and this

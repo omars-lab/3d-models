@@ -5,9 +5,9 @@ qiyas (validate), 3d-models (publish)
 
 One `.bkr` file becomes a printable STL, a set of per-axis SVG views, a ground-truth
 JSON, a score, and a badge in the Lab. That path crosses three repositories, and no
-single repo's docs own it: [`../orb-lab-design.md`](../orb-lab-design.md) describes the
+single repo's docs own it: [`../design/orb/orb-lab-design.md`](../design/orb/orb-lab-design.md) describes the
 product end, bikar's `docs/architecture.md` the engine end, and
-[`../qiyas-wheelfield-validation-design.md`](../qiyas-wheelfield-validation-design.md) the
+[`../design/orb/qiyas-wheelfield-validation-design.md`](../design/orb/qiyas-wheelfield-validation-design.md) the
 scoring end. This file is the seam between them — the picture a reader needs before
 any of the three make sense.
 
@@ -204,7 +204,7 @@ carry them, which is the honest limit of a diagram.
 | the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L133 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L64 "readonly qiyasComposite"` |
 | the build target that publishes (`H5`) | `3d-models:Makefile:L283 "orbs:"` |
-| the gallery design | [`../orb-lab-design.md`](../orb-lab-design.md) |
+| the gallery design | [`../design/orb/orb-lab-design.md`](../design/orb/orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a
 pinned container image or an explicit sibling checkout, because *"a sweep against a

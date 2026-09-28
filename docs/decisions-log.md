@@ -1731,7 +1731,7 @@ fails.
 D5 is scoped to the discharge form and not to every CAL id in the corpus, which
 is a measured choice, not a cautious one. Across 225 CAL-id sites in `docs/`
 there are 20 distinct ids, 17 registered. Gating every site fires 4 times on
-`CAL-SEA-01` — an id [`hemisphere-split-design.md`](hemisphere-split-design.md)
+`CAL-SEA-01` — an id [`design/orb/hemisphere-split-design.md`](design/orb/hemisphere-split-design.md)
 Appendix B names precisely to record that it was **deliberately not minted**.
 That is correct prose, and a rule that calls it a defect is a rule that gets
 switched off. Restricted to the paragraph D3 actually reads, the same corpus
@@ -3758,7 +3758,7 @@ amendment; the tab answers "how long / how much filament," not "how many dollars
 
 ## D-047 — round-pattern orb placement is a new statement family, and v1 proves the mechanism before it builds the table
 
-**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`round-orb-placement-design.md`](round-orb-placement-design.md))
+**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`design/orb/round-orb-placement-design.md`](design/orb/round-orb-placement-design.md))
 **Status:** v1 shipped (Phase 0 + Phase 1 green in bikar); rule table + fillers are follow-on
 
 Two owner decisions (AskUserQuestion, 2026-08-31) set the shape of the feature that
@@ -3966,7 +3966,7 @@ enough.
 
 The morph is the beat the breakdown page exists for — the flat drawing visibly
 wrapping onto the sphere — and it was deliberately left out of v1 of
-[`orb-construction-timelapse-design.md`](orb-construction-timelapse-design.md) because
+[`design/orb/orb-construction-timelapse-design.md`](design/orb/orb-construction-timelapse-design.md) because
 nothing in bikar's core interpolates geometry; the flat and sphere endpoints were shipped
 instead. So the doc has to establish, before code, three things a build would otherwise
 guess at: how each vertex travels from the face-lift plane to the sphere as a function of
@@ -4081,7 +4081,7 @@ is why this entry cites decisions and files rather than research.
 
 ## D-050 — the three d3 surfaces converge on one face-list vocabulary; the reversal condition is a measured re-divergence cost, not a taste change
 
-**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`vocabulary-convergence-design.md`](vocabulary-convergence-design.md)
+**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`design/orb/vocabulary-convergence-design.md`](design/orb/vocabulary-convergence-design.md)
 
 ### Why this entry exists
 
@@ -4153,7 +4153,7 @@ congruence class survives, and hems the open rim so the shell stays watertight. 
 the DSL as `place rule latticewalk length <n> start <k>` — the one-word keyword forced by
 the lexer's identifier class, with an eval-time single-mouth gate. The design and its two
 re-litigable choices (the keyword spelling, the mouth gate) are recorded in
-`docs/maclado-lattice-orb-design.md` and, on the engine side, in
+`docs/design/orb/maclado-lattice-orb-design.md` and, on the engine side, in
 `bikar:docs/decisions/2026-09-02-latticewalk-grammar.md`.
 
 The object is genuinely new in one structural way that drives everything downstream: it is

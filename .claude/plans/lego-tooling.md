@@ -93,7 +93,7 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
 - Design docs: `docs/lego-lab-design.md` (§10 implementation status, §11 open questions),
   `docs/rosette-pin-explorer-design.md` (§6 roadmap, §6.6 ledger),
   `docs/lego-pattern-set-design.md` (mural), `docs/pattern-outline-brick-design.md`,
-  `docs/d3-integration-design.md` §4 (the explorer is d3 Phase 1).
+  `docs/design/orb/d3-integration-design.md` §4 (the explorer is d3 Phase 1).
 - Backlog: `docs/tasks/coaster-pipeline/backlog.md` §3.2 (LEGO ladder); LDraw viewers in `docs/tasks/parked/backlog.md`; the d3 stream in `docs/tasks/parked/done.md`.
 - Research: `docs/research/ldraw-cli-viewers.md` §10 (what was actually run),
   `docs/research/lego-lattice-matrix-sweep.md`.

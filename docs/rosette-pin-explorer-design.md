@@ -14,7 +14,7 @@ instrument (a hand-ported canvas) built to make that answer visible. **Track 1 s
 clutch lobes) per piece on live geometry — so the seat/drop verdict is the engine's own, not a
 copy. The canvas artifact remains the original diagnostic; the studio page is the kernel-backed
 successor for that concern. See the shipped record in
-[`d3-integration-design.md`](d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
+[`design/orb/d3-integration-design.md`](design/orb/d3-integration-design.md) §4 and [§6 Track 1](#track-1--run-bikar-dont-re-port-it)
 below. Last updated 2026-09-02 — 6.6.3 plates as data shipped; §6.6 is the open ledger.
 
 **Artifact this doc is tied to:**
