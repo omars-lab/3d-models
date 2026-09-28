@@ -13,7 +13,7 @@ through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 
 Step 1 is in place (2026-09-27): all of `docs/` is the vault, BRAT and review-md 0.1.1 are
 installed in it, its plugin settings are committed, comment files are skipped by the docs and
 pointer gates, a post-commit hook re-anchors comment threads, and the CS-1 note
-[`GimTvN9hw4U`](../../catalog/patterns/GimTvN9hw4U.md) is written by hand. Step 1 is done when
+[Simple 20-step Six-Fold Star Rosette](../../catalog/patterns/simple-20-step-six-fold-star-rosette-cs-1.md) is written by hand. Step 1 is done when
 Omar comments on that note in Obsidian and a session answers with `reviews reply`. Step 2 (the
 sync tool) comes after.
 

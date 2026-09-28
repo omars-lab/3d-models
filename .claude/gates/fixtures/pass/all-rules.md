@@ -15,8 +15,8 @@ heading text, the form Obsidian writes: [D2](#D2%20—%20validators%20ship%20bot
 Into another file too: [the taxonomy's K9](../../../../docs/grounding-defect-taxonomy.md#k9--misdirected-pointer).
 And onto a block id review-md wrote: [this line](#^fixture-block). ^fixture-block
 An obsidian link lands through the vault mapping:
-[CS-1, minimal](obsidian://open?vault=docs&file=catalog%2Fpatterns%2FGimTvN9hw4U.md%23minimal),
-and a review-md one too: <obsidian://review-md-open?vault=docs&file=catalog%2Fpatterns%2FGimTvN9hw4U.md>.
+[CS-1, minimal](obsidian://open?vault=docs&file=catalog%2Fpatterns%2Fsimple-20-step-six-fold-star-rosette-cs-1.md%23minimal),
+and a review-md one too: <obsidian://review-md-open?vault=docs&file=catalog%2Fpatterns%2Fsimple-20-step-six-fold-star-rosette-cs-1.md>.
 
 A marker shown as code is a mention, not a use: writing `**Validator:**` or
 `**Default:**` inline — as this file and `CLAUDE.md` both must, to document the

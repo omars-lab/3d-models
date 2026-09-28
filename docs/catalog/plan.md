@@ -44,9 +44,17 @@ A new folder, `docs/catalog/`, holds:
 - **index.md**: the catalog page. It has a table per family (constructions and their coasters,
   stars, rosettes, orbs, lego, coupons, planned). Each row shows a small picture, the name, the
   status and a link to the note.
-- **patterns/`<id>`.md**: one note per pattern.
-  - A rebuilt video's id is its YouTube id (`GimTvN9hw4U`). A library pattern's id is its bikar
-    file name (`Rosette-12`).
+- **patterns/`<name>`.md**: one note per pattern, named so a person can read it, because
+  Obsidian shows the file name as the note's title (Omar, 2026-09-28: "Titles shouldnt be
+  youtube ids ... it should be a human legible name").
+  - The file name is the `title` property in lowercase words joined by `-`, then the catalog
+    id when there is one: `simple-20-step-six-fold-star-rosette-cs-1.md`.
+  - The pattern's id stays in the frontmatter. A rebuilt video's id is its YouTube id
+    (`GimTvN9hw4U`); a library pattern's id is its bikar file name (`Rosette-12`). The id is
+    also listed under `aliases`, so searching Obsidian for the id, or linking `[[GimTvN9hw4U]]`,
+    still finds the note.
+  - Tools find a note by its `id` property, never by its file name.
+  - bikar's `.bkr` files keep their ids as names. They are code, not notes.
   - The top of the note is **generated**: pictures, source video and creator, bikar files,
     coaster styles, oracle results, prints and their verdicts, status.
   - The bottom is **written by hand**: what makes the pattern work, what went wrong, what to
@@ -55,20 +63,22 @@ A new folder, `docs/catalog/`, holds:
   lobed, border, interlock, fill). Each shows every pattern made in that style. Style names come
   from [`coaster-styles.md`](../../.claude/skills/import-construction/coaster-styles.md).
 - **media/`<id>`/**: the pictures for each note, named `<id>-<style>.png`, so any picture's file
-  name says which note it belongs to.
+  name says which pattern it belongs to. Pictures keep the id: nobody reads them as titles.
 
 **Status** is one of: planned, rebuilding, built, printed, rejected. **A planned pattern gets
 its note on the day it is queued.** Its link then never changes as the pattern moves from queued
 to built to printed. That is what makes "deep-link a pattern we want to make" work.
 
-The frontmatter uses plain Obsidian properties: id, title, family, status, source, creator,
+The frontmatter uses plain Obsidian properties: id, aliases (the id again), title, family, status, source, creator,
 catalog id (`CS-n`), bikar files, tags. Obsidian reads these without a plugin, so the vault needs
 only BRAT and review-md.
 
 ## Deep links
 
-- **A note's path never changes.** It is named by an id that never changes. A rename would break
-  every link, review-md's threads included, so there are none.
+- **A note's path is set once**, from its title, on the day the note is made. Editing the title
+  later does not rename the file. A rename is a deliberate edit that moves the note's comment
+  file with it and fixes every link in the same change; the docs gate fails on any link left
+  dead.
 - **Inside the repo**, notes link to each other with ordinary relative Markdown links. The
   docs gate already checks that those resolve.
 - **From outside the repo** (a chat, a picture sent to your phone, a review sheet, Coaster Lab
