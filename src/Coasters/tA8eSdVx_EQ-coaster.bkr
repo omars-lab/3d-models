@@ -5,6 +5,7 @@
 # source: reconstructions/tA8eSdVx_EQ/construction.ggb-commands sha256:5f3f48e99524d7db1e775ff64c33ce915eb9ea8d3a74034ba1b751828a2bda80
 
 param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * $margin) / 2.7886   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
@@ -113,7 +114,7 @@ pattern tA8eSdVx_EQ on tA8eSdVx_EQ_scaffold
 coaster Coaster
   outline polygon 7 $size rotate 0
   inscribe tA8eSdVx_EQ
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

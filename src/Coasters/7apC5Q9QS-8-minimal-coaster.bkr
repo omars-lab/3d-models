@@ -5,6 +5,7 @@
 # source: reconstructions/7apC5Q9QS-8/construction.ggb-commands sha256:aa7562d6e790f05ccd1a2e79b2cda43ec935fdc5561eb109896abbcb3265a8be
 
 param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
 param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
 param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
 param unit = ($size - $strap) / 4   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
@@ -486,6 +487,6 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
 coaster Coaster
   outline pattern
   inscribe c_7apC5Q9QS_8
-  base 4
+  base $height
   strap width $strap
   edge fillet $round top

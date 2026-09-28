@@ -5,6 +5,7 @@
 # source: reconstructions/7apC5Q9QS-8/construction.ggb-commands sha256:aa7562d6e790f05ccd1a2e79b2cda43ec935fdc5561eb109896abbcb3265a8be
 
 param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param border = 8 range 3..15   # mm, chevron band width, measured inward from the edge
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * ($border + $margin)) / 4   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
@@ -500,7 +501,7 @@ coaster Coaster
   outline square $size
   inscribe c_7apC5Q9QS_8
   border c_7apC5Q9QS_8_border width $border
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

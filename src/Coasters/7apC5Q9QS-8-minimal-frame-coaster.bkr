@@ -6,6 +6,7 @@
 # style: minimal-frame — the straps stand free inside a solid frame, the empty spaces cut through (openwork, docs/design/coaster-openwork.md)
 
 param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param height = 4 range 1.4..16   # mm, frame height — the straps stand above it
 param strap = 2 range 1.6..5   # mm, strap width — a freestanding wall once the slab is cut away, floored at CAL-CST-07 (1.6 mm)
 param frame = 3 range 2..10   # mm, the solid frame inside the edge — also a freestanding wall
 param margin = $frame - 1   # mm, the art sits 1 mm into the frame so every outer strap end joins it
@@ -488,7 +489,7 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
 coaster Coaster
   outline square $size
   inscribe c_7apC5Q9QS_8
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width $strap
   openwork frame $frame

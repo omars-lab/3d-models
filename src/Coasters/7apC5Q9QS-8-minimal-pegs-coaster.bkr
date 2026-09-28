@@ -6,11 +6,13 @@
 # style: minimal-pegs — the minimal-frame coaster with a dovetail on every edge (openwork + interlock, docs/design/coaster-openwork.md)
 
 param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param height = 4 range 1.4..16   # mm, frame height — the straps stand above it
 param neck = 3 range 2..5   # mm, dovetail neck at the edge line
 param depth = 3 range 2..5   # mm, how far the tab protrudes / the slot cuts in
 param clearance = 0.15 range 0.05..0.35   # mm, CAL-FIT-01 ladder: snug .. free
 param strap = 2 range 1.6..5   # mm, strap width — a freestanding wall once the slab is cut away, floored at CAL-CST-07 (1.6 mm)
-param frame = $depth + $clearance + 2.5   # mm, the solid frame: what the slot eats plus a 2.5 mm wall (the kernel needs 1.6 mm; the extra keeps the art clear of the slot, CV8)
+param wall = 2.5 range 2.1..5   # mm, solid wall behind the slot — floored at 2.1: the art sits 1 mm into the frame and CV8 needs it ≥ 1 mm clear of the slot (2.0 ties CV8 on CS-2)
+param frame = $depth + $clearance + $wall   # mm, the solid frame: what the slot eats plus the wall
 param margin = $frame - 1   # mm, the art sits 1 mm into the frame so every outer strap end joins it
 param unit = ($size - 2 * $margin) / 4   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 param pause1 = 1
@@ -491,7 +493,7 @@ pattern c_7apC5Q9QS_8 on c_7apC5Q9QS_8_scaffold
 coaster Coaster
   outline square $size
   inscribe c_7apC5Q9QS_8
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width $strap
   interlock dovetail $neck $depth clearance $clearance
