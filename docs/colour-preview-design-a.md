@@ -99,6 +99,12 @@ colours.
 
 ## 5. Coaster Lab controls ^leu4yg
 
+**Rendered mockup:** the text sketch below is superseded by a rendered HTML mockup
+([source](colour-preview-design/lab-controls-mockup.html)), explained in the consolidated design at
+[§5](colour-preview-design.md#5-coaster-lab-controls).
+
+![Coaster Lab color controls mockup](colour-preview-design/lab-controls-mockup.png)
+
 Lab rules kept: a knob is a `.bkr` edit (numeric knobs are `param`s; colour, which has no param,
 is a line rewrite like today's `color <region>` knob); touched knobs are tracked; a preset turns
 into "custom" when edited; the print target never enters a share link. A custom coaster's source

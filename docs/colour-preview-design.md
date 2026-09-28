@@ -166,30 +166,14 @@ rewrite, as today's `color <region>` knob in `packages/lab/src/coaster-colors.ts
 are tracked; editing a preset makes it "custom"; the print target never enters a share link. A
 custom coaster's source already travels in the share link, so fills and colours travel with it.
 
-```
-+-- Colours ----------------------------------------------------+
-| Base [ Slab v]   Straps [ Gold v]   Border [ none v]          |
-+-- Orbits (about the pattern's centre) ------------------------+
-| Presets: [Odd] [Even] [Inner half] [Outer half] [All] [None]  |
-|          [Snowflake]  <- a committed preset file, not a rule  |
-|                                                               |
-|  #  shape    pieces  radius    fill  colour                   |
-|  0  12-gon      1     0.0 mm   [ ]   ( open )                 |
-|  1  hexagon     6    11.2 mm   [x]   [ Ruby v]                |
-|  2  12-gon      6    19.3 mm   [ ]   ( open )                 |
-|  3  hexagon     6    22.3 mm   [x]   [ Teal v]                |
-|  ...                                                          |
-|  (hover a row -> that orbit outlines in the 3D view)          |
-| Palette: * Slab #333333  * Gold #d4af37  * Ruby #9b1b30 [+]   |
-+-- Fill height ------------------------------------------------+
-|  Lowered 0.4 ----------o---------- 1.2 mm Flush               |
-|  (greyed out until the `fills` clause exists; flush until then)|
-+-- Parts (from the split the printer gets) --------------------+
-|  base 177k  Ruby 42k  Teal 53k  straps 77k tris      [PASS]   |
-|  or, where the split refuses: the kernel's message, verbatim  |
-+---------------------------------------------------------------+
- Live view: the §3.2 function. Rows 0-3 are CS-1's real orbits at 90 mm.
-```
+![Coaster Lab color controls mockup: Colors, Orbits with presets and eight orbit rows, Fill height greyed out, Parts row, and the snowflake preview](colour-preview-design/lab-controls-mockup.png)
+
+A mockup, not the Lab: [lab-controls-mockup.html](colour-preview-design/lab-controls-mockup.html)
+in the Lab's own colors and classes (copied from bikar `packages/lab/src/style.css` and
+`coaster.css`), screenshotted with headless Chrome. The eight orbit rows are the CS-1 radial
+coaster's real orbits (`bikar bands`, as §9 run 1) with *odd* ticked; the view is the hand-made POC
+picture of those fills, standing in for the §3.2 function. The Parts row reads as it will once
+openwork splits (§10 step 8); today this coaster shows the refusal there.
 
 - **Orbit rows** come from `computeOrbits` in core (what `bikar bands` prints), added to the Lab's
   evaluate reply. Each ticked row is one `fill void where orbit == N color <Name>` line, written by
@@ -383,7 +367,7 @@ reading the sidecar, with the colour key skipped for those files.
   complete. §5's refusal row shows the message rather than a colour it cannot print.
 - §0 says the Lab and printer do not yet share one code path; §3.1 names the two copies and §10
   step 2 removes them before anything else builds on them.
-- §5's sketch rows 0–3 are CS-1's real orbits from §9 run 1, and *odd* ticks 1 and 3 — consistent
+- §5's mockup rows 0–7 are CS-1's real orbits from §9 run 1, and *odd* ticks 1, 3, 5 and 7 — consistent
   with the snowflake.
 - The first validator's PASS numbers were measured by both researchers on `buildCoasterParts`, the
   function §3 reuses; its FAIL uses the pinch option, not the renderer.
