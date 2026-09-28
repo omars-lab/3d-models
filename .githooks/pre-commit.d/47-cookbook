@@ -1,0 +1,24 @@
+#!/bin/sh
+# Cookbook coverage (.claude/gates/cookbook_coverage.py). Every naqsh statement
+# keyword bikar's grammar declares has a recipe in docs/cookbook/ or a line on
+# the README's "Not in the cookbook yet" list. Omar, 2026-09-28: "as we add new
+# mechanisms to our language, we should be extending the cookbook".
+#
+# Whole-tree, not --staged: a keyword can land in bikar with nothing staged here.
+# Override once: COOKBOOK_OK=1 git commit
+# Let the not-yet list grow on purpose: COOKBOOK_NOT_YET_MAY_GROW=1 git commit
+#
+# wholesale: make validate-cookbook
+[ -n "$COOKBOOK_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the cookbook coverage gate" >&2
+  exit 1
+fi
+# Same worktree caveat as 36-catalog-models: `gh-pages` carries `.githooks`
+# and not `.claude`.
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/cookbook_coverage.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no cookbook coverage gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+exec python3 "$GATE"
