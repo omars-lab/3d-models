@@ -7,6 +7,8 @@ the definitions and the instances each rule is built from.
 
   D1 (K9)  Every relative markdown link resolves on disk, and its `#part`, on
            a link to a markdown file, names a heading or `^block-id` there.
+           An `obsidian://` link is checked the same way, through the vault
+           mapping in obsidian-vaults.json.
   D2 (K6)  Every `**Validator:**` declaration ships an asserted PASS and an
            asserted FAIL example in its own section.
   D3 (K4)  Every `**Default:**` declaration carries a citation link or a
@@ -259,16 +261,94 @@ def fragment_resolves(target: Path, fragment: str) -> bool:
     return frag in have or frag.casefold() in have
 
 
+VAULTS_FILE = Path(__file__).resolve().parent / "obsidian-vaults.json"
+OBSIDIAN_AUTOLINK = re.compile(r"<(obsidian://[^>\s]+)>")
+
+
+def load_vaults(path: Path = VAULTS_FILE) -> list[dict]:
+    import json
+    return json.loads(path.read_text(encoding="utf-8"))["vaults"]
+
+
+def _vault_file(root: Path, vault: dict, rel: str) -> Path | None:
+    """The file `rel` names inside a vault, in this checkout. Obsidian lets a
+    link leave off `.md`, so both spellings are tried."""
+    base = root / vault["repo_dir"]
+    for cand in (rel, rel + ".md"):
+        p = (base / cand).resolve()
+        if p.is_relative_to(base.resolve()) and p.is_file():
+            return p
+    return None
+
+
+def check_obsidian(url: str, root: Path = ROOT, vaults: list[dict] | None = None) -> str | None:
+    """Why an `obsidian://` link opens nothing, or None when it lands.
+
+    The link names a vault by name or id (`vault=`) or by folder (`path=`);
+    `obsidian-vaults.json` maps each of ours to a folder in this repo, and the
+    file, `#heading` and review-md `thread` are checked there. A vault not in
+    that table is a finding: nothing here can say the link works."""
+    from urllib.parse import parse_qs, urlsplit
+    vaults = load_vaults() if vaults is None else vaults
+    parts = urlsplit(url)
+    action = parts.netloc
+    q = {k: v[0] for k, v in parse_qs(parts.query).items()}
+    if "path" in q:
+        target, _, frag = q["path"].partition("#")
+        for v in vaults:
+            vroot = os.path.expanduser(v["path"]).rstrip("/")
+            if target == vroot or target.startswith(vroot + "/"):
+                vault, rel = v, target[len(vroot) + 1:]
+                break
+        else:
+            return f"path {target} is in no vault listed in obsidian-vaults.json"
+    else:
+        name = q.get("vault")
+        if name is None:
+            return "names no vault (vault= or path=)"
+        vault = next((v for v in vaults if name in (v["name"], v["id"])), None)
+        if vault is None:
+            return f"vault {name} is not listed in obsidian-vaults.json"
+        if "file" not in q:
+            return None
+        rel, _, frag = q["file"].partition("#")
+    frag = frag or parts.fragment
+    if not rel:
+        return None
+    file = _vault_file(root, vault, rel)
+    if file is None:
+        return f"no file {rel} in vault {vault['name']} ({vault['repo_dir']}/)"
+    if frag and not fragment_resolves(file, frag):
+        return f"no heading or block id #{frag} in {vault['repo_dir']}/{rel}"
+    thread = q.get("thread") if action.startswith("review-md-") else None
+    if thread:
+        comments = file.with_name(f".{file.stem}.comments.md")
+        known = "^" + thread in anchors(file) or (
+            comments.is_file() and thread in comments.read_text(encoding="utf-8"))
+        if not known:
+            return f"no review-md thread {thread} on {vault['repo_dir']}/{rel}"
+    return None
+
+
 def check_d1_links(path: Path, lines: list[str]) -> list[str]:
     """A link's file must exist, and a `#part` on a link to a markdown file must
     name a heading or block id in it. Measured before gating, 2026-09-27: 15 of
     54 heading links in docs/ were dead (a renamed heading, a renumbered
     decision, a one-hyphen slug for a heading with a dash) while every file
-    they named existed — the file check had been dropping the `#part`."""
+    they named existed — the file check had been dropping the `#part`.
+
+    An `obsidian://` link is held to the same standard through the vault
+    mapping (`check_obsidian`); before, D1 read one as a relative path and
+    failed every such link, right or wrong."""
     findings = []
     shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
     for n, line in enumerate(lines, 1):
-        for target in LINK.findall(line):
+        for target in LINK.findall(line) + OBSIDIAN_AUTOLINK.findall(line):
+            if target.startswith("obsidian://"):
+                why = check_obsidian(target)
+                if why:
+                    findings.append(f"{shown}:{n}: D1 (K9) obsidian link {why}")
+                continue
             if target.startswith(SKIP_SCHEMES):
                 continue
             bare, _, fragment = target.partition("#")
@@ -550,6 +630,7 @@ def self_test() -> int:
     expected = {
         "fail/d1-dead-link.md": ["D1 (K9)"],
         "fail/d1-dead-heading.md": ["D1 (K9) no heading"],
+        "fail/d1-dead-obsidian.md": ["D1 (K9) obsidian link no heading"],
         "fail/d2-validator-no-examples.md": ["D2 (K6)"],
         "fail/d3-uncited-default.md": ["D3 (K4)"],
         "fail/d4-withdrawn-number.md": ["D4 (K1)"],
@@ -608,6 +689,42 @@ def self_test() -> int:
             print("self-test ok: docs/prints/.../index.md → grounding rules skipped, D1 only")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # obsidian:// links, through a throwaway vault: every form Obsidian and
+    # review-md write must land, and each way one can miss must say why.
+    vbase = Path(tempfile.mkdtemp(prefix="docs-gate-vault-"))
+    try:
+        (vbase / "docs" / "n").mkdir(parents=True)
+        (vbase / "docs" / "n" / "note.md").write_text("# Note\n\n## minimal\n\nA passage. ^t1\n")
+        (vbase / "docs" / "n" / ".note.comments.md").write_text("thread t2\n")
+        home = str(vbase / "vault")
+        vs = [{"name": "docs", "id": "abc123", "path": home, "repo_dir": "docs"}]
+        cases = [
+            (f"obsidian://open?path={home}%2Fn%2Fnote.md%23minimal", None),
+            ("obsidian://open?vault=docs&file=n%2Fnote", None),
+            ("obsidian://open?vault=abc123&file=n%2Fnote.md%23Minimal", None),
+            ("obsidian://review-md-open?vault=docs&file=n%2Fnote.md&thread=t1", None),
+            ("obsidian://review-md-reply?vault=docs&file=n%2Fnote.md&thread=t2", None),
+            ("obsidian://review-md-export?vault=docs", None),
+            ("obsidian://open?vault=other&file=n%2Fnote.md", "not listed"),
+            ("obsidian://open?path=%2Felsewhere%2Fnote.md", "in no vault"),
+            ("obsidian://open?vault=docs&file=n%2Fgone.md", "no file"),
+            ("obsidian://open?vault=docs&file=n%2Fnote.md%23frame", "no heading"),
+            ("obsidian://review-md-open?vault=docs&file=n%2Fnote.md&thread=t9", "no review-md thread"),
+        ]
+        missed = 0
+        for url, want in cases:
+            got = check_obsidian(url, root=vbase, vaults=vs)
+            if (want is None and got is not None) or (want is not None and (got is None or want not in got)):
+                missed += 1
+                print(f"self-test FAIL: {url} expected {want or 'to land'}, got {got}")
+        if missed:
+            ok = False
+        else:
+            print(f"self-test ok: obsidian links — {len(cases)} forms land or miss as designed")
+    finally:
+        shutil.rmtree(vbase, ignore_errors=True)
+        _ANCHORS.clear()
 
     # D1 must give the same verdict from a linked worktree as from the primary
     # clone: a `../../sib/f.md` link written for the primary layout escapes a
