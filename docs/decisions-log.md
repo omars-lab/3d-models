@@ -5376,3 +5376,36 @@ If bikar's evaluated endpoints prove not geometrically faithful to the source (a
 conic-branch convention picking a different root than GeoGebra, traced from a failed O2/O3
 video-fidelity check), fall back to A for that class of construction and record why in the design
 doc. B stays rejected regardless.
+
+## D-081 — Pieces are grouped by `orbit` about the pattern's true centre, and the openwork coaster fills chosen orbits solid
+
+Omar, 2026-09-27: "can we have an alternative version where we fill in pieces in a radial
+fashion", then "do we know polygons that are equidistant from center?" and "would be on same
+polar plot?". Settles the `orbit` call left open by [`multicolor-design.md`](multicolor-design.md) §2.
+
+### What was measured
+
+- The construction files draw **edges**, not pieces: `edges from pet` rotated about G. The pieces
+  a fill can pick are the closed faces the engine finds between those edges.
+- `bikar bands` on `GimTvN9hw4U-minimal-coaster.bkr` bins those faces around (0, 0), which is
+  point A, the first circle's centre. The rosette's centre is G, 19.33 mm away at the default size.
+  The ring tile counts come out 1, 6, 5, 6, 10, 2, 3, 6, 2, 6, 2, 2, 2, 2: counts of 5, 10, 2 and 3
+  cannot occur about the centre of a six-fold pattern, so `ring` does not group equal pieces here.
+- The openwork (`outline pattern`) coaster ignores `fill void`: CS-1 minimal with
+  `fill void where ring == 0` rendered an identical STL (103,524 triangles, 14.0 cm³).
+
+### Options (asked in chat, Omar chose the first)
+
+- **`orbit` plus openwork fill** (chosen): the `orbit` word from `multicolor-design.md` §2.3, which
+  groups pieces that a rotation (or a mirror, where the pattern has one) about the centre carries
+  onto each other, then teach the openwork coaster to make a chosen orbit solid. Leaves `ring`
+  alone and unblocks the multi-colour work on CS-1 and the other files where rings split.
+- **Move `ring`'s centre**: rejected, because it changes what `ring == N` means in every file that
+  already selects by ring.
+- **A hand-picked list for CS-1 only**: rejected, because nothing would check the list and it would
+  not carry over to other patterns.
+
+### What stays open
+
+Which orbits to fill on CS-1 is a taste call, made from rendered variants. The multi-colour calls
+(flush or lowered fills, the colours) are still Omar's.
