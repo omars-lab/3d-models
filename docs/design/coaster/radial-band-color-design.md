@@ -15,10 +15,10 @@ with a gold inner ring and a copper outer one, each in its own filament[^filamen
 and it does so *without adding any new way to say "this ring is that color"*, because
 our design language already has one.
 
-*Status: designed (task #25, decision [D-078](decisions-log.md); the decision id is
+*Status: designed (task #25, decision [D-078](../../decisions-log.md); the decision id is
 re-verified against `origin/master` at merge, per the id-collision rule). The research
 this doc rests on is on file at
-[`research/radial-band-color-research.md`](research/radial-band-color-research.md).*
+[`../../research/radial-band-color-research.md`](../../research/radial-band-color-research.md).*
 
 ## The problem
 
@@ -192,7 +192,7 @@ below.
 Only the types this feature reads or changes — **not the whole engine.** Each is marked
 *reused* (we read it, unchanged), *changed* (existing code we modify), or *new*. Drawing
 just the impacted slice is deliberate: the point is to show the blast radius, not the
-model. The exact source locations stay in the [research file](research/radial-band-color-research.md);
+model. The exact source locations stay in the [research file](../../research/radial-band-color-research.md);
 here we show the shape and the reason.
 
 ```mermaid
@@ -377,7 +377,7 @@ grammar little; **R5** it carries into the on-screen render, the print, and the 
 | Option | R1 | R2 | R3 | R4 | R5 | Verdict |
 |---|---|---|---|---|---|---|
 | (a) **Reuse the ring color a designer already sets on screen** — that ring becomes a print piece, mapped to a filament exactly as coaster regions already are | 2 | 2 | 2 | 2 | 2 | **chosen** |
-| (b) A new "color band *N*" statement naming a band by number | 2 | 0 | 2 | 1 | 1 | adds a *second* way to say "the Nth ring" beside the one that ships — one idea with two spellings, the divergence our [robustness tenet](../CLAUDE.md) calls the defect itself |
+| (b) A new "color band *N*" statement naming a band by number | 2 | 0 | 2 | 1 | 1 | adds a *second* way to say "the Nth ring" beside the one that ships — one idea with two spellings, the divergence our [robustness tenet](../../../CLAUDE.md) calls the defect itself |
 | (c) A "color ring *r0*..*r1*" statement with explicit radii in mm | 1 | 0 | 1 | 1 | 1 | most control, but the designer must know the radii, and it still adds a second radial system |
 | (d) Do nothing — the color stays on screen only | 2 | 2 | — | 2 | — | does not answer the ask; kept as the honest baseline that verifies nothing |
 
@@ -452,7 +452,7 @@ from a rendered comparison of (a)/(b)/(c)).
 The exact source locations for every mechanism above (the ring-grouping function, the
 per-tile ring data retained after evaluation, the coaster region enum, and the
 `--format parts` splitter) are pinned with file-and-line anchors in the research file,
-[`research/radial-band-color-research.md`](research/radial-band-color-research.md), and
+[`../../research/radial-band-color-research.md`](../../research/radial-band-color-research.md), and
 are cited there against a bikar commit rather than repeated here — bikar internals are
 referenced by pull request, not by cross-repo path, so a moved line in the sibling repo
 does not silently rot this doc.

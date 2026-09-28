@@ -6,7 +6,7 @@ status: draft
 
 *Status: proposal, 2026-09-26. Nothing here is built or printed. The sources and what
 each one shows are in
-[`research/2026-09-26-borderless-coaster-joins.md`](research/2026-09-26-borderless-coaster-joins.md).
+[`../../research/2026-09-26-borderless-coaster-joins.md`](../../research/2026-09-26-borderless-coaster-joins.md).
 This doc extends [`coaster-interlock-design.md`](coaster-interlock-design.md) (the shipped
 dovetail, D-069) and does not change any decision in it.*
 
@@ -29,7 +29,7 @@ two patterns when two coasters are joined. That is about two frames' worth.
 | Style | Frame per coaster | Seam band when joined | Source |
 |---|---|---|---|
 | minimal-frame, just placed side by side (no joint) | 3 mm | about 6 mm | the committed files |
-| minimal-pegs today (depth 3, clearance 0.15) | 5.65 mm | about 11 mm | [sample-rules](../.claude/skills/print-coaster-samples/sample-rules.md), minis-03 |
+| minimal-pegs today (depth 3, clearance 0.15) | 5.65 mm | about 11 mm | [sample-rules](../../../.claude/skills/print-coaster-samples/sample-rules.md), minis-03 |
 | minimal-pegs, 2 mm tabs | 4.1 mm | about 8.2 mm | measured by the session that asked for this doc, 2026-09-26; passes the mesh and joint gates; not re-run here |
 | the same, with the art only 0.6 mm into the frame | 3.7 mm | about 7.4 mm | same |
 
@@ -322,7 +322,7 @@ Proposed coupon, **KEY-1** (a name for now, not yet in the prototype catalog):
 What Omar reads off it: the band, side by side with the control; the pull feel for each key
 clearance; whether a key falls out when you lift one coaster; whether a coaster on its own
 looks wrong with its notches. Before any of it goes to the printer, it passes the mesh gate
-and [review-print](../.claude/skills/review-print/SKILL.md), and the send is Omar's.
+and [review-print](../../../.claude/skills/review-print/SKILL.md), and the send is Omar's.
 
 **Two ways to get the first physical answer.** Pick one (open question 4):
 

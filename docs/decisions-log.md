@@ -4439,7 +4439,7 @@ would need the union bikar does not have.
 
 ## D-065 — The `--coaster` importer emits the whole coaster block; `size` drives, `unit` is derived
 
-**Date:** 2026-09-17 · **Status:** decided (bikar NaqshCoffee/bikar#207; product doc [`coaster-design.md`](coaster-design.md))
+**Date:** 2026-09-17 · **Status:** decided (bikar NaqshCoffee/bikar#207; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md))
 
 ### Context
 
@@ -4484,7 +4484,7 @@ richer sizing model.
 
 ## D-066 — The coaster outline is the least-area fit of seven fixed candidates; `margin` is a knob; the relief is an emboss
 
-**Date:** 2026-09-17 · **Status:** decided (Omar, AskUserQuestion: "A: pattern outline + emboss"; bikar NaqshCoffee/bikar#208; product doc [`coaster-design.md`](coaster-design.md) §5, §7 CV7; pivot record [`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md))
+**Date:** 2026-09-17 · **Status:** decided (Omar, AskUserQuestion: "A: pattern outline + emboss"; bikar NaqshCoffee/bikar#208; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md) §5, §7 CV7; pivot record [`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md))
 
 ### Context
 
@@ -4563,7 +4563,7 @@ the hub.
 
 ## D-068 — Border band and color regions are coaster-level clauses, sequenced after the interlock and the lab
 
-**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 color; product doc [`coaster-design.md`](coaster-design.md) §9)
+**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 color; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md) §9)
 
 ### Context
 
@@ -4611,7 +4611,7 @@ hand in the slicer.
 
 ## D-069 — Coaster interlock is a self-mating half-edge dovetail on every straight edge
 
-**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#209 (grammar, kernel, CV8/CV9, importer `--interlock`, CAL-CST-06 registered), 3d-models catalog CS-3 + gallery (task #34; design doc [`coaster-interlock-design.md`](coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#209 (grammar, kernel, CV8/CV9, importer `--interlock`, CAL-CST-06 registered), 3d-models catalog CS-3 + gallery (task #34; design doc [`design/coaster/coaster-interlock-design.md`](design/coaster/coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
 
 ### Context
 
@@ -4668,7 +4668,7 @@ back to (b) on the hexagon only, or to a shallower profile with a flare knob.
 
 ## D-070 — The minimal coaster is `outline pattern`: the strap silhouette is the solid
 
-**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#211 (`5152cfd`: `outline pattern`, the kernel's signed inset, CV10, `CAL-CST-07`, `--minimal`, two presets in the Coaster Lab); catalogued here as CS-4 (design doc [`coaster-minimal-design.md`](coaster-minimal-design.md)); the free-standing strap floor stays provisional until CS-4 prints (task #38)
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#211 (`5152cfd`: `outline pattern`, the kernel's signed inset, CV10, `CAL-CST-07`, `--minimal`, two presets in the Coaster Lab); catalogued here as CS-4 (design doc [`design/coaster/coaster-minimal-design.md`](design/coaster/coaster-minimal-design.md)); the free-standing strap floor stays provisional until CS-4 prints (task #38)
 
 ### Context
 
@@ -4726,7 +4726,7 @@ two goldens.
 
 ## D-071 — The border band is a strip-mapped motif cell: the kernel places it along each flat or around the ring
 
-**Date:** 2026-09-17 · **Status:** designed, not built (task #36; design doc [`coaster-border-design.md`](coaster-border-design.md)); builds D-068 (a)
+**Date:** 2026-09-17 · **Status:** designed, not built (task #36; design doc [`design/coaster/coaster-border-design.md`](design/coaster/coaster-border-design.md)); builds D-068 (a)
 
 ### Context
 
@@ -4960,7 +4960,7 @@ proves unreliable in headless X2D, the self-owned 2D packer (umbrella P2) replac
 
 ## D-073 — Coaster color is per-region symbolic labels compiled to per-body export, never painted pixels or a DSL-bound slot
 
-Design: [`coaster-color-design.md`](coaster-color-design.md). Extends the border's band/field
+Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md). Extends the border's band/field
 region split ([D-071](decisions-log.md)) to a full region vocabulary with per-region color that
 maps to X2D AMS filaments.
 
@@ -4994,7 +4994,7 @@ robustness downgrade), recorded in `docs/issues/`.
 
 ## D-074 — The coaster region split detects height-field pinches and resolves them by a `--pinch` strategy (fillet default); it is not scoped away
 
-Design: [`coaster-color-design.md`](coaster-color-design.md) §5. Amends the split mechanism of
+Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §5. Amends the split mechanism of
 [D-073](decisions-log.md); the region vocabulary and the palette-name-never-a-slot rule are
 unchanged.
 
@@ -5049,7 +5049,7 @@ it — becomes unnecessary (the D-073 reversal condition).
 
 ## D-075 — Coaster plate color maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
 
-Design: [`coaster-color-design.md`](coaster-color-design.md) §6 and
+Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §6 and
 [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). Implements the dependency
 [D-074](decisions-log.md) §6 named but left to the composer. Grounded in
 [`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the headless-CLI
@@ -5103,7 +5103,7 @@ assembling and just slices — the mapping rule (i-a) stays.
 
 ## D-076 — The Coaster Lab color knob adds a `palette` block to the splittable presets and tints the whole preview per region
 
-Design: [`coaster-color-design.md`](coaster-color-design.md) §7. Ships the knob that
+Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §7. Ships the knob that
 [D-073](decisions-log.md) named ("a Coaster Lab knob edits the `color` statements and tints the
 preview per region"), on the region split [D-074](decisions-log.md) and the palette grammar
 [D-073](decisions-log.md) provide. bikar #216 (part 5).
@@ -5226,7 +5226,7 @@ gate until one of those changes; the print itself stays owner-gated (§11).
 
 Answers task #25 (Omar 2026-09-19: "color different polygons differently in the same
 construction", with tooling for "polygons whose midpoints are equidistant from midpoint of
-construction"). Design: [`radial-band-color-design.md`](radial-band-color-design.md). Grounded in
+construction"). Design: [`design/coaster/radial-band-color-design.md`](design/coaster/radial-band-color-design.md). Grounded in
 [`research/radial-band-color-research.md`](research/radial-band-color-research.md), which found
 the radial binning and the color clause already shipped in bikar (`computeRingBins`, the `ring`
 fill selector, `data-ring` in the SVG) — 2D SVG ink that never reaches the height-field kernel, with
@@ -5260,7 +5260,7 @@ palette name any ring carries, plus the coaster's own base/straps/border bodies 
 ring color claimed. Without this rule a face is claimed by both `color <region>` and
 `fill where ring`, and the split is ambiguous; with it there is one owner per face and the body
 count is the number of colors, never the region × ring product (K7 against
-[`coaster-color-design.md`](coaster-color-design.md)). The AMS slot count that bounds useful bands
+[`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md)). The AMS slot count that bounds useful bands
 is a device fact read via `bambu filament` (warn, not cap), not a guessed constant — no new bet.
 
 ### Scope and what would reverse it
@@ -5381,7 +5381,7 @@ doc. B stays rejected regardless.
 
 Omar, 2026-09-27: "can we have an alternative version where we fill in pieces in a radial
 fashion", then "do we know polygons that are equidistant from center?" and "would be on same
-polar plot?". Settles the `orbit` call left open by [`multicolor-design.md`](multicolor-design.md) §2.
+polar plot?". Settles the `orbit` call left open by [`design/coaster/multicolor-design.md`](design/coaster/multicolor-design.md) §2.
 
 ### What was measured
 
@@ -5470,7 +5470,7 @@ and the gate refuses a comment line or a `note.` name there (D10).
 ## D-083 — American "color" everywhere, held by a gate; bikar does the same in #277
 
 Omar, 2026-09-28, in review thread e7b42d on
-[`color-preview-design-b.md`](color-preview-design-b.md), asked why the docs used the British
+[`design/coaster/color-preview-design-b.md`](design/coaster/color-preview-design-b.md), asked why the docs used the British
 spelling, then chose "American everywhere". The mix was an accident: the naqsh keyword and most
 code already said `color`, while the docs, skills, the `tools/bambu` code and 23 tracked file paths
 said British "colour".
@@ -5493,9 +5493,9 @@ Every use in this repo's docs, skills, memory, loop prompts, plans, tools, Makef
 comments and the gallery page became "color", case kept, including the bikar names #277 renamed
 (`visibleColors`, `--color-min-area`, `studsColor`, `resolveLdrawColor`, `LDRAW_COLOR_NAMES`,
 `parseOptionalPlaceColors` and the rest). Files were moved, not copied:
-[`color-preview-design.md`](color-preview-design.md) and its `-a`, `-b` and picture folder,
-[`coaster-color-design.md`](coaster-color-design.md),
-[`radial-band-color-design.md`](radial-band-color-design.md), four research files and the POC
+[`design/coaster/color-preview-design.md`](design/coaster/color-preview-design.md) and its `-a`, `-b` and picture folder,
+[`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md),
+[`design/coaster/radial-band-color-design.md`](design/coaster/radial-band-color-design.md), four research files and the POC
 folder, and `tools/bambu/src/color-preview.ts` with its test. Review sidecars moved with their notes.
 
 Kept as written, because the name is not ours to change or the text is a quote:
@@ -5526,7 +5526,7 @@ the old word) gives one finding and exit 1.
 ### Pairing with bikar
 
 bikar #277 renames bikar's side and keeps one allowed token, the old name of
-[`color-preview-design.md`](color-preview-design.md), for its comments that name this repo's
+[`design/coaster/color-preview-design.md`](design/coaster/color-preview-design.md), for its comments that name this repo's
 file. That token and those comments change in a small bikar PR right after this one merges. The
 use-case map's three UC18 anchors on renamed bikar functions can only be re-pinned once #277 is on
 bikar main.

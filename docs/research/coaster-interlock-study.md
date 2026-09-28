@@ -10,7 +10,7 @@ feeds:
 # Coaster interlock study
 
 Verbatim measurements behind the interlocking-edge design
-([`../coaster-interlock-design.md`](../coaster-interlock-design.md)): what the seven
+([`../design/coaster/coaster-interlock-design.md`](../design/coaster/coaster-interlock-design.md)): what the seven
 fitted outlines offer as an edge, which tab pairings tile on which of them, what a
 slot costs the art enclosure, and what the coaster kernel can and cannot do with a
 non-convex ring today. Nothing here has been printed; every number is geometry.

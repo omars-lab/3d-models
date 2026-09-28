@@ -1,5 +1,5 @@
 // Palette name → AMS logical slot mapping for a composed color plate (§6 of
-// docs/coaster-color-design.md; the D-074 dependency the composer owns, D-075).
+// docs/design/coaster/coaster-color-design.md; the D-074 dependency the composer owns, D-075).
 //
 // bikar's `--format parts` writes one STL per coaster region body plus a `<Coaster>.parts.json`
 // sidecar tagging each body with the palette NAME the author chose (`color <region> <name>`) and
@@ -44,7 +44,7 @@ export interface AmsSlotMap {
 
 // **Default:** one AMS unit carries 4 slots; multiple units expand this. A 3-region coaster needs
 // at most 3 tagged slots + the default, so 4 covers the single-unit case — pass the real capacity
-// when more units are installed. (docs/coaster-color-design.md §6; D-075.)
+// when more units are installed. (docs/design/coaster/coaster-color-design.md §6; D-075.)
 export const DEFAULT_AMS_SLOTS = 4;
 
 export interface SlotMapOpts {

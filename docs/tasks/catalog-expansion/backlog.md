@@ -47,7 +47,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    2026-09-27 (board #96).
    - **Color and Lab controls** (Omar, 2026-09-28): coloring the radial fills, colored
      gallery PNGs, and an Orbits panel in Coaster Lab. Act on
-     [color-preview-design.md](../../color-preview-design.md), §10 lists the bikar PRs,
+     [color-preview-design.md](../../design/coaster/color-preview-design.md), §10 lists the bikar PRs,
      smallest first. The radial coaster needs the openwork split and the top-fillet split (§4)
      before it can print in more than one color.
 

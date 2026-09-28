@@ -9,7 +9,7 @@ feeds:
 - **Date:** 2026-09-26
 - **Produced by:** multicolour research agent B (Claude Opus 5.5), working alone as one of two
   independent researchers; a later agent merges both designs.
-- **Feeds:** [`multicolor-constructions-b-design.md`](../multicolor-constructions-b-design.md)
+- **Feeds:** [`multicolor-constructions-b-design.md`](../design/coaster/multicolor-constructions-b-design.md)
 - **Question:** a version of the pattern constructions whose closed shapes (the regions the
   traces enclose) are filled and coloured, printable in several colours on the Bambu Lab X2D
   with an AMS, under Omar's rule "shapes that are translations same midpoint from center should
@@ -28,7 +28,7 @@ origin/main on 2026-09-26). Paths below are bikar paths, written plainly because
 sibling repo.
 
 1. **Colour regions on a coaster exist.** A `palette` block plus
-   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-color-design.md`](../coaster-color-design.md)).
+   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-color-design.md`](../design/coaster/coaster-color-design.md)).
    `bikar render --format parts` splits the coaster height field into one watertight body per
    colour, as stacked columns cut at `z = base`, and writes a `<Coaster>.parts.json` sidecar
    (fields `region`, `stl`, `triangles`, `paletteName`, `hex`) — bikar packages/cli/src/index.ts,
@@ -47,7 +47,7 @@ sibling repo.
    copy with the Application tag stripped; colour is a GUI check because `--load-settings` clamps
    every part to slot 1.
 5. **`fill where ring == N color X` carries into the print split** ([D-078](../decisions-log.md),
-   [`radial-band-color-design.md`](../radial-band-color-design.md)): where a face carries a ring
+   [`radial-band-color-design.md`](../design/coaster/radial-band-color-design.md)): where a face carries a ring
    colour it wins over the face's coaster region; `bikar bands` lists the rings. D-078 chose to
    **warn, not cap** on colour count and to read the slot count from the device.
 6. **`bambu filament`** (`tools/bambu/src/commands/filament.ts`) lists the loaded trays read-only

@@ -364,7 +364,7 @@ P1.2, P1.6, P1.7 are off the critical path.
 | Doc | Repo | Feeds from | Gate markers |
 |---|---|---|---|
 | `docs/constructions/geogebra-construction-import-design.md` | 3d-models | `docs/research/geogebra-construction-import-survey.md` | Default/Validator/count, pointer gate |
-| `docs/coaster-design.md` (height-field kernel, relief modes, rim profiles, the structural validators and their hard FAIL cases, print orientation, mini/standard sizing) | 3d-models | survey + `CAL-CST-01…05` | Default → CAL ids, Validator PASS/FAIL |
+| `docs/design/coaster/coaster-design.md` (height-field kernel, relief modes, rim profiles, the structural validators and their hard FAIL cases, print orientation, mini/standard sizing) | 3d-models | survey + `CAL-CST-01…05` | Default → CAL ids, Validator PASS/FAIL |
 | `docs/constructions/construction-equivalence.md` (the three oracles, what each cannot see, thresholds) | 3d-models | survey + `ggb_score.py` threshold | Validator PASS/FAIL per oracle |
 | `docs/mesh-compare.md` | qiyas | O3 metrics, threshold provenance | that repo's gates |
 | `docs/design/printing/plate-composer-design.md` | 3d-models | survey (Bambu CLI, X2D bed) | Validator for bed check |

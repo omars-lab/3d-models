@@ -9,14 +9,14 @@ status: superseded
 
 **Status:** proposal from researcher B of two independent researchers; a later agent merges both
 designs. Nothing here is built, no decision id is taken, and nothing is printed. Research and
-measurements: [`research/multicolor-constructions-b.md`](research/multicolor-constructions-b.md).
+measurements: [`../../research/multicolor-constructions-b.md`](../../research/multicolor-constructions-b.md).
 
 ## 0. Summary
 
 - **Recommendation:** the *plain* coaster style (a one-color slab with raised straps) gains
   **filled shapes set lower than the straps** ("cloisonné": the straps stand as little walls
   between colors). Each filled shape is its own color body in the `--format parts` split that
-  already ships ([D-073](decisions-log.md)–[D-078](decisions-log.md)), so colors reach the
+  already ships ([D-073](../../decisions-log.md)–[D-078](../../decisions-log.md)), so colors reach the
   printer through the existing multi-part 3MF and `bambu slice coaster` path with no new printer
   route.
 - **Color classes** are a new fill attribute, `class`: two shapes share a class when a rotation
@@ -75,7 +75,7 @@ rosette centre G, research §2).
 (the rotation that makes the rosette); when a pattern has no such rotation, or rotations about
 several centres (n3IidKfXE1I, a 12-6-4 composite), `class` is **refused** with that reason
 rather than guessed — per the measured CS-1 and n3Iid findings in
-[research §2.2](research/multicolor-constructions-b.md), against the shipped first-circle rule in
+[research §2.2](../../research/multicolor-constructions-b.md), against the shipped first-circle rule in
 bikar's [`findCenter`](https://github.com/NaqshCoffee/bikar/blob/6356bb3a7f3db2988860a86e7110e30e658a980f/packages/core/src/dsl/evaluator.ts#L10060). An explicit `centre` clause is deferred
 until a pattern needs one.
 
@@ -85,7 +85,7 @@ until a pattern needs one.
 through the centre that carries the whole face set onto itself**, and does not otherwise. Mirror
 handling changes the class count in 3 of the 7 measured constructions, and in 7apC5Q9QS-8 the
 mirror-same count reproduces the author's own ring grouping exactly
-([research §2.4](research/multicolor-constructions-b.md), measured on
+([research §2.4](../../research/multicolor-constructions-b.md), measured on
 [7apC5Q9QS-8.bkr](https://github.com/NaqshCoffee/bikar/blob/6356bb3a7f3db2988860a86e7110e30e658a980f/patterns/Constructions/7apC5Q9QS-8.bkr)).
 
 Why: in a pattern with mirror symmetry the mirror image *is* one of the pattern's copies, and
@@ -101,7 +101,7 @@ the carrying rotation, by at most **τ = 1e-3 × unit** (0.02 at unit 20). Measu
 largest spread inside a class was ≤ 7.9e-5 and the tightest gap between two congruent faces in
 different classes was 0.20 (rDux, two hexagons at r 51.06 and 51.26), so τ sits about 250× above
 the spread and 10× below the tightest gap
-([research §2.3](research/multicolor-constructions-b.md)). τ scales with the unit because the
+([research §2.3](../../research/multicolor-constructions-b.md)). τ scales with the unit because the
 measured window does; the shipped ring tolerance is an absolute `1e-2`
 ([`computeRingBins`](https://github.com/NaqshCoffee/bikar/blob/6356bb3a7f3db2988860a86e7110e30e658a980f/packages/core/src/theme/fill-resolver.ts#L414)).
 

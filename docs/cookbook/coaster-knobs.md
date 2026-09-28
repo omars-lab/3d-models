@@ -5,7 +5,7 @@ outline, with the pattern's lines standing up from it as straps. Every recipe he
 same eight-point star, so the only thing that changes between pictures is the knob.
 Back to the [cookbook index](README.md). Language reference:
 [Coaster declarations](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md#coaster-declarations-3d).
-For why the coaster is built this way, see the [coaster design](../coaster-design.md); the
+For why the coaster is built this way, see the [coaster design](../design/coaster/coaster-design.md); the
 named styles in the set are listed in [coaster styles](../../.claude/skills/import-construction/coaster-styles.md).
 
 The pictures come from bikar's own color preview (`render --format preview`). Coasters
@@ -199,7 +199,7 @@ coaster Coaster
 share the edge with a `rim`, and it can't go on a lobed or minimal coaster.
 
 Related: [color regions](#color-regions), [the outline](#the-outline),
-[border design](../coaster-border-design.md).
+[border design](../design/coaster/coaster-border-design.md).
 
 ## Openwork: cut through between the straps
 <!--covers:openwork-->
@@ -261,7 +261,7 @@ coaster Coaster
 **Watch out:** a dovetail needs a straight edge, so a round or lobed outline is refused.
 The slot also cuts into the margin, so the art has to clear the slot as well as the edge
 (check CV8). Why a dovetail, and how tight to make it, is in the
-[interlock design](../coaster-interlock-design.md). The other joins (key, tab, pegs) are in
-[joins without a wide border](../coaster-borderless-joins-design.md).
+[interlock design](../design/coaster/coaster-interlock-design.md). The other joins (key, tab, pegs) are in
+[joins without a wide border](../design/coaster/coaster-borderless-joins-design.md).
 
 Related: [the outline](#the-outline), [openwork](#openwork-cut-through-between-the-straps).

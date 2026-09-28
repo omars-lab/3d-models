@@ -8,7 +8,7 @@ feeds:
 
 - **Date:** 2026-09-28
 - **Produced by:** researcher A (one of two independent researchers; a checker consolidates later)
-- **Feeds:** [color-preview-design-a.md](../color-preview-design-a.md)
+- **Feeds:** [color-preview-design-a.md](../design/coaster/color-preview-design-a.md)
 - **Question (Omar):** "Do we have the ability to alternate colors / customize colors on the PNGs we
   are generating? If not, would we need to integrate an alternate CAD software?" — plus, later, the
   Coaster Lab controls to drive it.

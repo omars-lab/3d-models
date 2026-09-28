@@ -188,7 +188,7 @@ bikar's `CAL_BETS` with the implementation and carrying a provisional `Calibrate
 record of 1.6 mm — four 0.4 mm perimeters, two shells a side so the rib has an inner
 and an outer perimeter with no gap-fill between them — settled on coupon CS-4. This
 doc states no D3 default for it until the generated registry
-([`../.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md)) carries
+([`../../../.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md)) carries
 the bet, exactly as [`coaster-interlock-design.md`](coaster-interlock-design.md) §10
 did for CAL-CST-06; the 1.6 mm below is the bet's provisional value, not a source.
 
@@ -274,7 +274,7 @@ lattice only when the holes show.
   inscribed pattern's strap silhouette — with `relief`, `rim`, `trivet`, `interlock`
   and bottom edges refused, one inset function feeding classification and the top
   round-over, CV10 for the round-over and a new free-standing strap bet CAL-CST-07
-  for CV2. See [`decisions-log.md`](decisions-log.md).
+  for CV2. See [`../../decisions-log.md`](../../decisions-log.md).
 - D-064…D-069 as in [`coaster-design.md`](coaster-design.md) §8; unchanged. D-I (a
   coaster is a height field) is what makes this form free: a solid mask with holes
   was already a height field the kernel could wall.

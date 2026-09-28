@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """No-hole check for the coaster pictures `make coasters` draws.
 
-docs/color-preview-design.md §7, last validator: a gallery PNG has no hole
+docs/design/coaster/color-preview-design.md §7, last validator: a gallery PNG has no hole
 inside the coaster. `make coasters` draws a coaster with `bikar render --format
 preview` when bikar can split it, and falls back to the OpenSCAD picture
 (build/brick_previews.py) when bikar refuses. bikar's picture has no

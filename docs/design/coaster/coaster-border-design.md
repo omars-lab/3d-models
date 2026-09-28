@@ -319,7 +319,7 @@ shows it from above, where a band reads as a band.
   the field against the band's inner edge; CV11 checks every run holds a whole motif
   and every placed strap stays in the band; `rim` and `outline pattern` refused;
   the field records a `band` bit for #37. See
-  [`decisions-log.md`](decisions-log.md).
+  [`../../decisions-log.md`](../../decisions-log.md).
 - **D-068** is the direction this builds; **D-064…D-070** as in the three sibling
   docs, unchanged. D-I (a coaster is a height field) is again what makes the form
   cheap: a second art channel is a second set of straps for one predicate to read.

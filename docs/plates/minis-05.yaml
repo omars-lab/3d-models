@@ -8,7 +8,7 @@
 #
 # Built with the print-coaster-samples skill (.claude/skills/print-coaster-samples/).
 # Omar, 2026-09-26, after minis-04: the pegged coasters' border is still too wide; build each
-# join in docs/coaster-borderless-joins-design.md except magnets. All five now ship in bikar
+# join in docs/design/coaster/coaster-borderless-joins-design.md except magnets. All five now ship in bikar
 # and are chosen in the Coaster Lab's join selector. The two plates put one mated pair of each on
 # the same six-fold pattern (CS-1, GimTvN9hw4U), so the band between the two patterns and the
 # feel of each join can be judged in the hand, side by side.

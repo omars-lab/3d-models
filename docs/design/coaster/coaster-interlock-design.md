@@ -7,7 +7,7 @@ decisions:
 # Coaster interlock — edges that plug into each other
 
 *Status: built — NaqshCoffee/bikar#209 (task #34), catalogued as CS-3 in 3d-models. Decision D-069. Measurements in
-[`research/coaster-interlock-study.md`](research/coaster-interlock-study.md). The
+[`../../research/coaster-interlock-study.md`](../../research/coaster-interlock-study.md). The
 bikar implementation follows shape v2 (NaqshCoffee/bikar#208) and landed in the same
 `coaster` kernel this doc extends:
 [`coaster-design.md`](coaster-design.md).*
@@ -236,7 +236,7 @@ tabs does not explain itself.
   edge — tab on the first half, slot on the second — so any edge mates any edge with
   no orientation rule; the joint is part of the outline ring, walls are emitted
   exact, and the bottom chamfer, `trivet` and `round` are refused with it. See
-  [`decisions-log.md`](decisions-log.md).
+  [`../../decisions-log.md`](../../decisions-log.md).
 - D-064…D-068 as in [`coaster-design.md`](coaster-design.md) §8; this doc changes
   none of them. D-068's border band (#36) is sequenced after this, because the tab
   geometry decides what a band's outer edge is: the band follows the nominal

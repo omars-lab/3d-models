@@ -131,7 +131,7 @@ already on plates:
 | tab into the neighbour's opening | ~5.8 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
 | butterfly key | ~5.7 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
 
-The ranked options are in [`../../coaster-borderless-joins-design.md`](../../coaster-borderless-joins-design.md).
+The ranked options are in [`../coaster/coaster-borderless-joins-design.md`](../coaster/coaster-borderless-joins-design.md).
 The slim dovetail sits at the kernel's frame floor; the key needs a separate part and its
 own ladder; the tab gives no pull-apart lock. B adds one idea on neither plate: thicken
 the frame only behind each slot (a bikar kernel change). Which looks and holds best is

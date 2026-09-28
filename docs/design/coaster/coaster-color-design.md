@@ -18,7 +18,7 @@ filament, and a Coaster Lab knob to set it. It builds directly on the border ban
 region split (band vs field), and on the emboss decision of D-066. It adds no new solid; the
 region split adds one bet, **CAL-PIN-01** (the pinch floor for a two-filament interface, §5.3),
 introduced when the naïve split proved a K7 contradiction (D-074). Research on file:
-[`research/coaster-color-research.md`](research/coaster-color-research.md).*
+[`../../research/coaster-color-research.md`](../../research/coaster-color-research.md).*
 
 ## 1. The ask
 
@@ -173,7 +173,7 @@ that has at least one cell:
 
 This reuses the existing kernel: `reliefAppliesAt` already reads by region (D-071);
 `--format parts` changes only *how the sampled field is assembled into meshes*, not what is sampled. The
-split still requires an **emboss** ([D-066](decisions-log.md)): a deboss removes material and
+split still requires an **emboss** ([D-066](../../decisions-log.md)): a deboss removes material and
 leaves the slab's own color, so a debossed region has no raised body to carry a filament and
 is refused (the transfer condition on the split — meaningful only while the relief embosses).
 
@@ -277,12 +277,12 @@ defect is a kernel fault, not a grammar one — and the pinch FAIL uses a *saddl
 ## 6. Plate composer — palette name → AMS slot (a dependency, not owned here)
 
 The per-body 3MF and the AMS-slot map are the **plate composer's** job (umbrella task P4.1),
-which has its own design target, [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md) §"AMS
+which has its own design target, [`../printing/plate-composer-design.md`](../printing/plate-composer-design.md) §"AMS
 color slots". This doc hands the composer a clean contract: N named bodies, each tagged with
 its region's palette name. The composer maps *palette name → AMS slot* and writes the project
 3MF; the slicer binds a physical spool.
 
-**The mapping is now designed and half-built ([D-075](decisions-log.md)).** The rule: slot 1 is
+**The mapping is now designed and half-built ([D-075](../../decisions-log.md)).** The rule: slot 1 is
 the plate's default filament, each distinct palette name takes the next logical slot in first-seen
 order, a shared name shares a slot, and an untagged region falls to the default. The pure map lives
 in `tools/bambu/src/ams.ts` (`buildAmsSlotMap`, unit-tested) as **part 4b-i**; wiring compose to
@@ -291,7 +291,7 @@ render `--format parts`, assemble the multi-part input 3MF, and slice it with `-
 print is owner-gated, §9). A **logical** slot is not a **physical** AMS slot (see the K1 caveat below).
 
 **VERIFIED / RESOLVED (was UNVERIFIED), the composer's to implement:** the headless-CLI 3MF
-contract is now settled by [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md).
+contract is now settled by [`coaster-ams-3mf-contract.md`](../../research/coaster-ams-3mf-contract.md).
 The answer, scoped to headless CLI slicing: **per-object filament→slot assignment must be
 baked into the *input* 3MF** — the CLI has no flag that maps objects or painted regions to
 slots at slice time. The mapping lives in the 3MF as per-object/part `extruder` attributes in
@@ -330,7 +330,7 @@ spool for you, it tells you exactly how to, and gates a print script that wants 
 
 ## 7. Coaster Lab knob
 
-The Coaster Lab lives in `bikar/packages/lab` (the Orb Lab pattern, [D-067](decisions-log.md)).
+The Coaster Lab lives in `bikar/packages/lab` (the Orb Lab pattern, [D-067](../../decisions-log.md)).
 Color per region is a knob that **edits the `color` statements** — the same way every Lab
 knob edits DSL, not a hidden side-channel — with one dropdown per region (`base`, `straps`,
 and `border` when the coaster has a band), each choosing a name from the file's `palette`.
@@ -338,14 +338,14 @@ The preview **tints each region** by the palette hex, so the author sees the thr
 before export.
 
 This reuses the Lego Lab precedent that a render is classified to *the model's own palette*,
-not a global set ([`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §16.1). The transfer note (K10):
+not a global set ([`../pieces/lego-lab-design.md`](../pieces/lego-lab-design.md) §16.1). The transfer note (K10):
 the Lab borrows the **region-is-a-named-color** idea and the per-model palette, **not** the
 Lego pixel/`visibleColors` gate — a coaster's regions are checked geometrically by the §5
 per-body Validator (watertightness), because the print's correctness is that each region is a
 separate body, not that a render shows a given color. The pixel gate does not transfer; its
 reasoning (classify to the model's own palette so it ports where pixels do not) does.
 
-**Shipped (bikar #216, [D-076](decisions-log.md)).** Two build choices §7 left open were
+**Shipped (bikar #216, [D-076](../../decisions-log.md)).** Two build choices §7 left open were
 settled: (Q1) the **four splittable** presets (8-fold and 6-fold, plain + border) gained a real
 `palette` block and default `color` statements — Slab `#333333` / Gold `#d4af37` (+ Copper
 `#b87333` on the border pair) — so the knob offers real choices out of the box; the four
@@ -364,7 +364,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   kernel exports one body per non-empty region via `--format parts` (each passing `--check`,
   the split requiring emboss, D-066; the pinch handling is **D-074**); the plate composer maps
   palette name → AMS slot (P4.1, dependency, not designed here); a Coaster Lab knob edits the
-  `color` statements and tints the preview per region. See [`decisions-log.md`](decisions-log.md).
+  `color` statements and tints the preview per region. See [`../../decisions-log.md`](../../decisions-log.md).
 - **D-074**: the naïve split's two invariants — union *exactly* == the single body **and** each
   body 2-manifold — are provably incompatible for saddled patterns (a pinch at any interior
   `z = base`, §5.1), a K7 contradiction in the first draft of §5. Resolution: **detect** every
@@ -375,7 +375,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   refuses with coordinates. The border outer wall is decomposed
   into stacked base+border panels (§5.4). `--format stl` is unchanged. Chosen over scoping the
   feature to pinch-free coasters (the earlier Option A) because Option B makes every pattern
-  print. See [`decisions-log.md`](decisions-log.md).
+  print. See [`../../decisions-log.md`](../../decisions-log.md).
 - **D-076**: the Lab color knob ships (bikar #216, part 5). Two build choices: (Q1) add a
   `palette` block + default `color` statements to the **four splittable** presets only — chosen
   over a global fallback palette, which would fork from the `.bkr` palette the kernel resolves
@@ -384,7 +384,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   on the geometry and bronze/STL/gate output stays byte-identical when nothing is tinted.
   `CoasterResultProvenance.palette` carries the choices; the tint splits with the export's own
   `fillet` default so preview and exported bodies never disagree. See
-  [`decisions-log.md`](decisions-log.md).
+  [`../../decisions-log.md`](../../decisions-log.md).
 - **D-068** is the direction this builds; **D-071** gives the first region split; **D-066**
   fixes the relief as an emboss; **D-067** places the Lab — all unchanged.
 
@@ -398,7 +398,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   The one bet the split *does* add is **CAL-PIN-01** (§5.3): a *geometry* threshold — the pinch
   floor below which `fillet` thickens — not a print/adhesion bet, and settled by measuring a
   two-filament interface, not by this print.
-- **The composer's 3MF contract is now settled** (§6, [`coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md)):
+- **The composer's 3MF contract is now settled** (§6, [`coaster-ams-3mf-contract.md`](../../research/coaster-ams-3mf-contract.md)):
   the headless CLI needs per-object filament baked into the input 3MF, `--load-filaments` is
   override-only. What remains open is the composer's *implementation* of that emit recipe (and
   the logical-vs-physical AMS-slot binding at print time) — it belongs to the composer doc, not

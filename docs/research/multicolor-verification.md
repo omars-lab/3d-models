@@ -24,7 +24,7 @@ provenance:
 
 # Verification notes — multicolour constructions
 
-Raw notes behind [`../multicolor-design.md`](../multicolor-design.md). Researcher A is
+Raw notes behind [`../design/coaster/multicolor-design.md`](../design/coaster/multicolor-design.md). Researcher A is
 [`multicolor-constructions.md`](multicolor-constructions.md); researcher B is
 [`multicolor-constructions-b.md`](multicolor-constructions-b.md).
 

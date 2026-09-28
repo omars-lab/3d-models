@@ -11,7 +11,7 @@ Omar, 2026-09-26: "can we brainstorm different pegging techniques / approaches w
 don't need to even add a border for peg, can re-use frames own border. have a sub agent
 research this, consolidate links and create a design.md with approaches".
 
-This file holds the links behind [`../coaster-borderless-joins-design.md`](../coaster-borderless-joins-design.md),
+This file holds the links behind [`../design/coaster/coaster-borderless-joins-design.md`](../design/coaster/coaster-borderless-joins-design.md),
 what each one shows, and whether it was actually fetched. Many maker sites (Printables,
 MakerWorld, Thingiverse, Instructables) blocked the fetch tool or returned an empty page
 shell. For those, all we have is the search-result snippet, and anything taken from them
@@ -196,7 +196,7 @@ them joins through the coaster's own openings.
 
 ## 9. Repo-internal sources
 
-- [`../coaster-interlock-design.md`](../coaster-interlock-design.md): the shipped dovetail
+- [`../design/coaster/coaster-interlock-design.md`](../design/coaster/coaster-interlock-design.md): the shipped dovetail
   (D-069). It covers the half-edge pairing (§2), the exact outer wall and why a grid
   staircase wall carries up to ±0.2 mm of stair per face (§5.3), CV8/CV9 (§6), and the
   neck bet CAL-CST-06 (§10).

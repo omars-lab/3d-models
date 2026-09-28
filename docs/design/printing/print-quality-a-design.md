@@ -73,7 +73,7 @@ A phone photo under a raking light of top and bottom faces is enough to place mo
 
 ### 2.1 How the joint is built
 
-From [../../coaster-interlock-design.md](../../coaster-interlock-design.md) §3: a dovetail tab at L/4 of
+From [../coaster/coaster-interlock-design.md](../coaster/coaster-interlock-design.md) §3: a dovetail tab at L/4 of
 each edge and a matching slot at 3L/4, the slot offset by the clearance c **on every face**. The
 slot opens to the outside, so to the slicer it is part of the piece's **outer contour**, not a
 hole. The pieces drop together along Z, so friction acts over the 1.4 mm height.
@@ -137,7 +137,7 @@ built as plates, with their band widths:
 | Plain frame, no join | ~6.0 mm | [minis-05](../../plates/minis-05.yaml) |
 | Tab | ~5.8 mm | [minis-05](../../plates/minis-05.yaml) |
 | Butterfly key | ~5.7 mm | [minis-05](../../plates/minis-05.yaml) |
-| Butterfly key at frame 2 (approach A) | ~4 mm | [../../coaster-borderless-joins-design.md](../../coaster-borderless-joins-design.md) |
+| Butterfly key at frame 2 (approach A) | ~4 mm | [../coaster/coaster-borderless-joins-design.md](../coaster/coaster-borderless-joins-design.md) |
 
 What each costs: the slim dovetail keeps the joint style but sits at the tab-neck floor
 (`CAL-CST-06`, unsettled); the key needs a separate small part per join and its own clearance
@@ -202,7 +202,7 @@ clogs. It fixes a cosmetic top, not the holes above.
 
 **Default:** keep the dovetail `clearance` at 0.15 mm per face for any production-style plate
 until the ladder in §5.2 reports — that is the CAL-FIT-01 rung the
-[interlock design](../../coaster-interlock-design.md) already names, and the only value with a print
+[interlock design](../coaster/coaster-interlock-design.md) already names, and the only value with a print
 behind it ([minis-03](../../prints/2026-09-26-minis-03/index.md), "a bit loose").
 
 ## 5. Test plates

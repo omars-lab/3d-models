@@ -14,9 +14,9 @@ the Lab preview and the printed parts coming from one code path.
 [#271](https://github.com/NaqshCoffee/bikar/pull/271)–[#274](https://github.com/NaqshCoffee/bikar/pull/274),
 3d-models #381; pictures below); the Coaster Lab controls (§5, steps 6–8) are not. It supersedes the two
 research designs it was built from, researcher A's [color-preview-design-a.md](color-preview-design-a.md)
-(raw notes: [research/color-preview-2026-09-28-a.md](research/color-preview-2026-09-28-a.md)) and
+(raw notes: [../../research/color-preview-2026-09-28-a.md](../../research/color-preview-2026-09-28-a.md)) and
 researcher B's [color-preview-design-b.md](color-preview-design-b.md) (raw notes:
-[research/color-preview-2026-09-28-b.md](research/color-preview-2026-09-28-b.md)), which stay as
+[../../research/color-preview-2026-09-28-b.md](../../research/color-preview-2026-09-28-b.md)), which stay as
 the record. It builds on [multicolor-design.md](multicolor-design.md) (how shapes are grouped into
 orbits, flush vs lowered, how colors reach the printer) and does not redo it. The checker re-read
 the bikar code at `f8796fc` (branch `feat/orbit-radial-fill`, open bikar
@@ -48,20 +48,20 @@ The stepped edges are in the mesh, not the picture: the kernel's outlines sit on
 open kernel issue separate from color.
 
 The earlier proof-of-concept pictures, made by hand before the pipeline existed (OpenSCAD
-`color()` over bikar's per-orbit meshes, [color.scad](research/color-poc-2026-09-28/color.scad)):
-[every orbit filled, top view](research/color-poc-2026-09-28/all-orbits-top.png),
-[the snowflake (odd orbits)](research/color-poc-2026-09-28/snowflake-iso.png) and
-[lowered fills](research/color-poc-2026-09-28/lowered-strip.png).
+`color()` over bikar's per-orbit meshes, [color.scad](../../research/color-poc-2026-09-28/color.scad)):
+[every orbit filled, top view](../../research/color-poc-2026-09-28/all-orbits-top.png),
+[the snowflake (odd orbits)](../../research/color-poc-2026-09-28/snowflake-iso.png) and
+[lowered fills](../../research/color-poc-2026-09-28/lowered-strip.png).
 
 ## 1. What exists today
 
 | Picture | Made by | Colored? | Drawn from the bodies the printer gets? |
 |---|---|---|---|
-| Gallery coaster PNG | [`build/brick_previews.py`](../build/brick_previews.py): OpenSCAD `import()` of the single STL, Cornfield scheme, camera `0,0,0,60,0,25,0`; [`build/process_images.py`](../build/process_images.py) then turns every pixel within 14 of `#FFFFE5` transparent | No, one gold | The whole mesh, not the parts |
+| Gallery coaster PNG | [`build/brick_previews.py`](../../../build/brick_previews.py): OpenSCAD `import()` of the single STL, Cornfield scheme, camera `0,0,0,60,0,25,0`; [`build/process_images.py`](../../../build/process_images.py) then turns every pixel within 14 of `#FFFFE5` transparent | No, one gold | The whole mesh, not the parts |
 | Coaster Lab live view | bikar `packages/lab/src/evaluate.ts` calls `buildCoasterParts(built, { pinch: 'fillet' })`, `coasterTintMesh` tags each triangle with its body's color, `packages/lab/src/viewer.ts` paints it (canvas, painter's sort, head-light shade `0.4 + 0.6·max(0, n·l)`) | Yes | Yes, but the pinch option is fixed in the Lab, and the body-to-color rule is a second copy of the CLI's (§3) |
 | Lab picker thumbnails | bikar `scripts/render-coaster-thumbnails.ts`: Playwright copies the Lab canvas | Only if the preset sets colors | Same as the Lab view |
 | `bambu slice coaster` color plate picture (#342) | flat top-down SVG from `renderCoasterTopSVG` | Yes | **No**: drawn from the description; its check `missingRegionColors` only asks that each hex appears somewhere |
-| Bambu Studio thumbnails | the Studio window | Yes | Yes, but headless export hangs ([issue](issues/coaster-3mf-filament-shape-and-export-hang.md)) |
+| Bambu Studio thumbnails | the Studio window | Yes | Yes, but headless export hangs ([issue](../../issues/coaster-3mf-filament-shape-and-export-hang.md)) |
 | Orb gallery | `bikar render --format views` → core `renderOrbViewSVG` (shaded, per-face color) → `rsvg-convert` | Per face | Orbs, not coasters — but it is **the precedent**: a 3D view drawn to SVG in core and rasterised by a tool bikar already uses |
 
 ## 2. The options
@@ -148,7 +148,7 @@ face to its color. The bodies must reunite into the single mesh, cell for cell. 
 if kept, rounds only the outer boundary of the union (as `f8796fc` does now), so each body's
 top edge where it meets another body stays square.
 
-**Proved by hand, 2026-09-28** ([the proofs](research/color-poc-2026-09-28.md)): the snowflake's four orbit
+**Proved by hand, 2026-09-28** ([the proofs](../../research/color-poc-2026-09-28.md)): the snowflake's four orbit
 fill bodies (orbits 1, 3, 5, 7, in three colors) were cut in OpenSCAD (filled minus plain) and fed to `bambu slice coaster` in place of
 bikar's parts output. The pipeline assembled a 4-slot 3MF that sliced clean headless, with no
 change downstream. So the split above is the only missing piece for a colored radial coaster.

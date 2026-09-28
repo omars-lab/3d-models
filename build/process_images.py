@@ -34,7 +34,7 @@ def drawn_without_background(im):
 
     `bikar render --format preview` draws a coaster in its filament colors with
     no background. Keying cream out of that picture would punch holes in a cream
-    or near-cream body (docs/color-preview-design.md §7), so it is only cropped.
+    or near-cream body (docs/design/coaster/color-preview-design.md §7), so it is only cropped.
     An OpenSCAD render has an opaque cream background, so it is keyed as before."""
     w, h = im.size
     a = im.getchannel("A")

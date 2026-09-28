@@ -1,7 +1,7 @@
 // filament-sync — reconcile a sliced plate's LOGICAL AMS slots against the printer's PHYSICAL trays
 // by color match, so the operator knows which spool to load where before a coaster plate prints.
 //
-// The gap this closes is the §6 caveat of docs/coaster-color-design.md and the K1/logical≠physical
+// The gap this closes is the §6 caveat of docs/design/coaster/coaster-color-design.md and the K1/logical≠physical
 // note in tools/bambu/src/ams.ts: a sliced 3MF carries only a LOGICAL filament order (slot 1, 2, …
 // each a palette color), never a binding to a physical AMS tray. BambuStudio resolves that binding
 // interactively at print time by color. This module does the same match head-of-time and prints it,
