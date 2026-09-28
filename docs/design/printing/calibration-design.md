@@ -12,8 +12,8 @@ rung's mesh has been checked. **No rung has been printed and no calibration bet 
 settled.** Rendering a coupon proves the geometry; only a caliper proves the number
 (`.claude/skills/calibrate/SKILL.md`, Rules).
 
-Card: [`bikar/patterns/Coupons/Machine-Card.bkr`](../../bikar/patterns/Coupons/Machine-Card.bkr)
-Protocol: [`.claude/skills/calibrate/protocol.md`](../.claude/skills/calibrate/protocol.md)
+Card: [`bikar/patterns/Coupons/Machine-Card.bkr`](../../../../bikar/patterns/Coupons/Machine-Card.bkr)
+Protocol: [`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md)
 Bet registry: `bikar/packages/core/src/kernel3d/calibration.ts` (generated view in
 `.claude/skills/calibrate/bets.md`)
 
@@ -106,7 +106,7 @@ exists to explore, `CAL-FEA-01`): the operator must **not** re-orient it or enab
 which would defeat the measurement. It is whitelisted in
 `.claude/gates/expected-slicer-warnings.json` so the pre-dispatch warnings gate clears it
 rather than blocking Plate 1 — see
-[`docs/issues/slicer-warnings-cli-visibility-pivot.md`](issues/slicer-warnings-cli-visibility-pivot.md).
+[`docs/issues/slicer-warnings-cli-visibility-pivot.md`](../../issues/slicer-warnings-cli-visibility-pivot.md).
 
 No `--min-feature` override flag is added, and adding one is explicitly out of scope.
 A flag that silences the gate for a coupon is a flag that silences it for a shipped
@@ -117,7 +117,7 @@ W-C1's ~0.6 mm bayonet blade renders bare and the catalog says so in the entry.
 ### 3.2 Rung identity: engraved on the plates, positional within them
 
 bikar now emits engraved text on flat plate tops — the `text` statement, wired to the
-mesh gate with a gap-and-counter validator ([`text-emit-design.md`](text-emit-design.md),
+mesh gate with a gap-and-counter validator ([`../../text-emit-design.md`](../../text-emit-design.md),
 shipped T2). So the four flat-plate coupons carry the printed label the wild uses
 (BOSL2's tolerance ladders; Bambu's own fit test): `MC1BoreSweep` says `MC-1 BORE`,
 `MC1FitLadder` `MC-1 FIT`, `MC3BridgePlate` `MC-3`, `MC5WarpPlate` `MC-5`. The card no
@@ -574,7 +574,7 @@ section, and `calibrate`'s rules forbid it.
 ## 9. Measuring
 
 The protocol is not optional and it is not in this document — it is
-[`.claude/skills/calibrate/protocol.md`](../.claude/skills/calibrate/protocol.md),
+[`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md),
 which carries the profile header (machine, material *and colour*, spool, nozzle type,
 layer height, verbatim profile name, ambient, date, instrument), the technique rules
 (three readings, median, two orthogonal bore diameters, light jaw pressure, 30 minutes

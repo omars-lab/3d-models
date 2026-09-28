@@ -54,7 +54,7 @@ export interface SyncReport {
 
 // --- tunables. These decide auto-match vs. ask; the report ALWAYS prints the measured distance, so a
 // generous tolerance never hides a mistake — the operator sees the number and the colours either way
-// (docs/print-model-design.md §5.5: "one clear match is chosen and stated, not asked"). ---
+// (docs/design/printing/print-model-design.md §5.5: "one clear match is chosen and stated, not asked"). ---
 
 /** Max colour distance (0–441.7, the RGB-cube diagonal) still called a match. 60 ≈ a shade's worth of
  *  drift — comfortably separates distinct palette colours while tolerating RFID/screen variance. */

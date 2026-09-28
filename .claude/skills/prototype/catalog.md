@@ -258,7 +258,7 @@ earned until it records its provenance).
   clearance classes — press / snug / sliding / free — at the gaps
   `kernel3d/fit-profile.ts` declares, plus a line-to-line zero for an origin.
   `MC1FitGauge` and `MC1Pin03/04/05/06/08/10` are the mating pins. Full render
-  commands: `docs/calibration-design.md` §6 — **always pass `--piece`**, since
+  commands: `docs/design/printing/calibration-design.md` §6 — **always pass `--piece`**, since
   without it the CLI renders the `MC1Fit` assembly as one mesh (a plate and a
   loose pin fused into a single useless STL).
 - **Print target**: TBD — profile header per the series note.
@@ -292,7 +292,7 @@ earned until it records its provenance).
   2.0 mm** (wall = (outer − inner)/2), one piece per rung —
   `MC2Wall04 / 06 / 08 / 10 / 12 / 16 / 20`. The rung is in the piece name, not a
   parameter: the wall is what is being measured, so it is authored literally.
-  Full render commands: `docs/calibration-design.md` §6.
+  Full render commands: `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note.
 - **Settles**: `CAL-FEA-01` (`DEFAULT_MIN_FEATURE_MM`, currently 1.2).
 - **Sub-floor note**: the 0.4–1.0 mm rungs sit **below** the 1.2 mm mesh-gate
@@ -330,7 +330,7 @@ earned until it records its provenance).
   guidance 20–25, UltiMaker 25 in Tough PLA), so a ladder stopping at 12 could not
   fail and would cost a print to learn "higher than 12". 10 mm sits fourth from
   the bottom, bracketed on both sides. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Orientation is
   the measurement**: plate flat, +z up, **bore mouths on the bed**. Flipped, every
   bore is an ordinary pocket opening upward with nothing to bridge, and the coupon
@@ -364,7 +364,7 @@ earned until it records its provenance).
   risers. 29 mm tall, top ⌀65.6 mm. (A true cone is rejected by the C1 ring-solid
   rule; the banded form is the legal one and its risers double as rung identity in
   the hand.) `--check` PASS expected. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Supports off**,
   and say so on the sheet: an overhang number measured with supports is not an
   overhang number.
@@ -382,7 +382,7 @@ earned until it records its provenance).
     bugs hide.
 - **What we learned**: — pending.
 - **Feeds**: the overhang threshold in `bikar` `kernel3d/print-gate.ts` (value
-  **and** provenance record); `docs/print-validation-design.md` Appendix B.2 and
+  **and** provenance record); `docs/design/printing/print-validation-design.md` Appendix B.2 and
   the F5 tier split in §3.
 
 ## MC-5 — Warp plate
@@ -396,7 +396,7 @@ earned until it records its provenance).
   turn the measurement into a property of the feature. The one exception is a ⌀3
   **fiducial** near one corner, so "corner A" means the same corner on the next
   print and the next machine — A is nearest the fiducial, then B, C, D clockwise
-  from above. Full render command: `docs/calibration-design.md` §6.
+  from above. Full render command: `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** brim/raft
   and part-fan settings verbatim, since those are precisely what the conflicting
   sources disagree about.
@@ -428,7 +428,7 @@ earned until it records its provenance).
   exercises F7, the trigger under test. It already confirms the bracket lands
   where intended — 7.1 and 19.6 mm² warn F7, 50.2 and 112.9 mm² are clean, so the
   25 mm² threshold falls between rungs 2 and 3. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** whether a
   brim/raft was used. **Bare plate, no brim, no raft**: a brim is precisely the
   mitigation F7 exists to recommend, so printing with one measures the brim
@@ -438,7 +438,7 @@ earned until it records its provenance).
   on a straight rod**: a rod's first layer *is* its widest layer, so the ratio is
   100% on all four towers. It rides the same bet and gets settled by inference
   from the absolute figure, not measured. Recorded as a weakness of this coupon in
-  `docs/calibration-design.md` §8, not papered over.
+  `docs/design/printing/calibration-design.md` §8, not papered over.
 - **What we want to learn**:
   - [ ] 1. Which towers survived to full height and which detached — and, if
     observed, at what point in the print. A tower that let go at 30 mm is a
@@ -490,7 +490,7 @@ earned until it records its provenance).
     labels go onto the other 23 rungs.
 - **What we learned**: — pending.
 - **Feeds**: `docs/text-emit-design.md` §6's three defaults (value **and**
-  provenance record, once the constants exist), and `docs/calibration-design.md`
+  provenance record, once the constants exist), and `docs/design/printing/calibration-design.md`
   §8's "rung identity does not survive onto the part" — the weakness this whole
   line of work exists to close.
 

@@ -5,14 +5,14 @@ status: draft
 # print-model skill — design doc (pre-implementation)
 
 Status: **DRAFT, NOT BUILT.** This doc and its companion research
-([`research/print-model-research.md`](research/print-model-research.md)) are the
+([`../../research/print-model-research.md`](../../research/print-model-research.md)) are the
 keystone: they land first and unblock the skill's build tasks (#31–#46). Nothing
 in `.claude/skills/print-model/` exists yet; every path this doc gives under that
 directory is a *target*, recorded in
-[`.claude/gates/doc-pointer-baseline.json`](../.claude/gates/doc-pointer-baseline.json)
+[`.claude/gates/doc-pointer-baseline.json`](../../../.claude/gates/doc-pointer-baseline.json)
 until the file it names ships.
 
-Research: [`research/print-model-research.md`](research/print-model-research.md) —
+Research: [`../../research/print-model-research.md`](../../research/print-model-research.md) —
 web-grounded, provenance-headed; every load-bearing number below is attributed
 there and its hedges are carried forward (K1). Where a fact is inferred from the
 X2D's H2-family sibling rather than confirmed on X2D hardware, the research tags it
@@ -22,7 +22,7 @@ into a ruling.
 Scope decision (2026-09-16, Omar): **Option A — the skill walks a model to the edge
 of dispatch and stops.** Its deliverable is a reviewable *per-print plan + sliced
 plate + preview*; the physical send stays the existing owner-gated
-[`bambu print send`](../tools/bambu/src/commands/print.ts) (Omar's button). Porting
+[`bambu print send`](../../../tools/bambu/src/commands/print.ts) (Omar's button). Porting
 real dispatch off the defunct griches MCP is a separate, later, owner-gated PR (§9).
 
 ---
@@ -50,11 +50,11 @@ drawn so it absorbs exactly one unowned thing — *the judgement*:
   PNG pulled from the sliced `.3mf` (its Metadata/plate_1.png archive member), the
   same asset the bambu skill already extracts.
 - **Consumes (owned elsewhere, read-only):** transport + slicing + records via the
-  [`bambu` CLI](../.claude/skills/bambu/SKILL.md) (`status`, `slice plate`,
+  [`bambu` CLI](../../../.claude/skills/bambu/SKILL.md) (`status`, `slice plate`,
   `print list`, `print send`, `validate record`); geometry via bikar; the record
   schema via [`prints-tab-design.md`](prints-tab-design.md) and
-  [`.claude/gates/prints_gate.py`](../.claude/gates/prints_gate.py); the bench-sheet
-  calibration truth via [`prototype`](../.claude/skills/prototype/SKILL.md).
+  [`.claude/gates/prints_gate.py`](../../../.claude/gates/prints_gate.py); the bench-sheet
+  calibration truth via [`prototype`](../../../.claude/skills/prototype/SKILL.md).
 - **Refuses (Option A boundary):** dispatch. The skill stops at the owner gate. It
   produces the plate and the plan; it does not upload or start a print, and it never
   passes `--yes` on the operator's behalf.
@@ -82,7 +82,7 @@ The plate states below extend the record `status` enum already shipped in
 (`printing`, `paused`, `failed`) read from the device. The in-flight set maps onto
 the Bambu report frame's `gcode_state`
 (`IDLE / PREPARE / RUNNING / PAUSE / FINISH / FAILED`) — the device-side enum the `status` verb already reads
-([`research/print-model-research.md`](research/print-model-research.md) Topic 7).
+([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 7).
 
 `measured` and `propagated` are **this project's post-print additions with no prior
 art** in the surveyed job-lifecycle systems (Moonraker, OctoPrint, OctoEverywhere);
@@ -131,7 +131,7 @@ FAIL: a record `status: propagated` whose every `readings[].settles` is `~` (no 
 named) — it claims to have moved a calibration constant while pointing at nothing, so
 the gate must refuse it. (This is the *hard* case: an aggregate "the record has
 readings" cannot discharge it — one reading with a real `settles` is required, per
-the K6/D2 corollary in [`CLAUDE.md`](../CLAUDE.md).)
+the K6/D2 corollary in [`CLAUDE.md`](../../../CLAUDE.md).)
 
 ### 3.2 The record axis (publication) — draft → shipped
 
@@ -205,7 +205,7 @@ file read at run time).
 
 The X2D ships all four profiles (proven locally: the profile family is installed —
 memory *bambu-x2d-bringup*). The tradeoff axis, grounded in
-[`research/print-model-research.md`](research/print-model-research.md) Topic 8:
+[`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 8:
 smaller = finer detail / thinner minimum wall / slower; larger = more flow / faster /
 often stronger Z-bonding / coarser detail.
 
@@ -213,16 +213,16 @@ often stronger Z-bonding / coarser detail.
 ([Bambu nozzle page](https://wiki.bambulab.com/en/filament-acc/acc/nozzles) — the
 research flags this page as bot-blocked at fetch, so the figure is from the search
 index and the skill treats it as advisory; see
-[`research/print-model-research.md`](research/print-model-research.md) Topic 8). The
+[`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 8). The
 skill deviates only on a stated cause:
 
 - **0.2 mm** when the model's minimum feature is ≲ 0.4 mm or fine surface text
   matters — worth the time penalty
-  ([`research/print-model-research.md`](research/print-model-research.md) Topic 8).
+  ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 8).
 - **0.6 mm** when the part is functional/large and detail is non-critical; a
   third-party head-to-head *reports* ~30–40% faster than 0.4 with negligible detail
   loss on functional parts — carried as an **attributed, non-official** figure, not a
-  bare default ([`research/print-model-research.md`](research/print-model-research.md)
+  bare default ([`../../research/print-model-research.md`](../../research/print-model-research.md)
   Topic 8; the research flags the source as secondary and wanting a `CAL-*` bet).
 - **0.8 mm** for draft prototyping and max-flow infill.
 
@@ -231,7 +231,7 @@ nozzle diameter
 ([Bambu layer-height page](https://wiki.bambulab.com/en/software/bambu-studio/layer-height)
 — the research flags the exact endpoints as pending a live-page re-check, so the
 skill treats them as advisory, not a hard gate; see
-[`research/print-model-research.md`](research/print-model-research.md) Topic 8).
+[`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 8).
 
 The **footgun** this catches: a model whose thinnest wall is below the chosen nozzle's
 single-wall floor (a 0.5 mm wall on a 0.8 nozzle cannot print). The skill flags it
@@ -241,7 +241,7 @@ before slicing rather than letting the slicer silently drop the wall.
 > per-nozzle on the dual-tool X2D specifically* is `[X2D-UNCONFIRMED — H2-proxy]`; the
 > four-diameter lineup is the standard Bambu range across H2/X1/P1/A1. The X2D can
 > also mix two diameters at once (OrcaSlicer mixed-nozzle guidance,
-> [`research/print-model-research.md`](research/print-model-research.md) Topic 8);
+> [`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 8);
 > the skill treats mixed-nozzle as an open capability, not an assumed one.
 
 ### 5.2 Orientation
@@ -249,13 +249,13 @@ before slicing rather than letting the slicer silently drop the wall.
 **Questions:** which face goes down, and does that minimize support while staying
 printable? **Input:** the mesh's overhang area, bottom (contact) area, and contour
 length. **Heuristic:** the Tweaker-3 objective — minimize support *volume* subject to
-printability ([`research/print-model-research.md`](research/print-model-research.md)
+printability ([`../../research/print-model-research.md`](../../research/print-model-research.md)
 Topic 3); the headless CLI is the scriptable path.
 
 > **K1 — do not over-claim.** No orientation tool surveyed optimizes *layer-line
 > strength / part anisotropy* — Tweaker and slicer auto-orient minimize
 > support/overhang, not directional strength
-> ([`research/print-model-research.md`](research/print-model-research.md) Topic 3).
+> ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 3).
 > The skill therefore **reports** the layer-line direction as an advisory ("layer
 > lines run across the pin — that is the weak axis") but does not claim to have
 > optimized for strength.
@@ -264,7 +264,7 @@ Topic 3); the headless CLI is the scriptable path.
 
 - **Supports:** normal vs **tree** — tree branches from a small base to point
   contacts, less material/time than a grid; interface layers cap the support under
-  the model ([`research/print-model-research.md`](research/print-model-research.md)
+  the model ([`../../research/print-model-research.md`](../../research/print-model-research.md)
   Topic 5). Generated when overhang angle exceeds the threshold; the skill's advisory
   names the max overhang so the operator can see why (or why not).
 - **Infill:** the skill **defers to the slicer profile's default density and
@@ -272,11 +272,11 @@ Topic 3); the headless CLI is the scriptable path.
   display-only → lighter). No bare default number is asserted — the eight fill
   patterns the Bambu wiki lists (Concentric, Rectilinear, Monotonic, Monotonic Line,
   Aligned Rectilinear, Hilbert Curve, Archimedean Chords, Octagram Spiral) are named
-  from the source ([`research/print-model-research.md`](research/print-model-research.md)
+  from the source ([`../../research/print-model-research.md`](../../research/print-model-research.md)
   Topic 5), not invented.
 - **Brim vs raft:** **THIN SOURCE.** No authoritative Bambu page settles brim-vs-raft;
   the research found community guidance only
-  ([`research/print-model-research.md`](research/print-model-research.md) Topic 5). The
+  ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 5). The
   skill therefore attributes any brim/raft advice to the named community source (brim
   = adhesion for small footprints / warp-prone corners; raft = full base for very
   warpy material or an uneven bed) and never asserts it bare. If a plate ever settles
@@ -288,7 +288,7 @@ Topic 3); the headless CLI is the scriptable path.
 **Inputs:** bed dimensions, part footprint, requested copy count. **Heuristic:**
 libnest2d No-Fit-Polygon packing — the same nesting library BambuStudio/Orca use —
 trying at most the four angles 0/45/90/135°
-([`research/print-model-research.md`](research/print-model-research.md) Topic 4). The
+([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 4). The
 scriptable path is the OrcaSlicer headless CLI
 (`--arrange --orient --rotate --scale --slice --export-3mf`; the research flags the
 per-flag prose as needing a `--help` re-check, so the skill verifies flags at run
@@ -300,7 +300,7 @@ pack fits strictly more copies, the skill says so and lets the operator choose
 
 > **K2 — dual-nozzle bed zoning is an open item.** A forum report notes auto-arrange
 > not using the H2D's L/R-nozzle-only bed areas
-> ([`research/print-model-research.md`](research/print-model-research.md) Topic 4,
+> ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 4,
 > `[X2D-UNCONFIRMED]`). Dual-nozzle bed zoning on the X2D is unverified; the skill
 > does not assume the whole bed is uniformly usable until confirmed on hardware.
 
@@ -311,14 +311,14 @@ each with a `tray[]`) and a separate `print.vt_tray` for the external spool (sen
 `id":"254"`). Per-tray fields the skill reads:
 `tray_type` (e.g. "PLA"), `tray_color` (hex `RRGGBBAA`), `tray_sub_brands`,
 `tray_info_idx` (Bambu profile id), and `remain` (percent; **`-1` = no RFID / unknown**)
-([`research/print-model-research.md`](research/print-model-research.md) Topic 2). On
+([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 2). On
 newer firmware the external spool may appear under `print.vir_slot` in addition to /
 instead of `vt_tray` — the skill watches both keys.
 
 **Task #32 de-risk:** a read-only `bambu filament` verb lists the loaded trays first,
 before any selection logic is built, to confirm the *X2D* frame actually carries
 `ams`/`tray` as documented — the H2-family AMS schema had MQTT-validation churn
-([`research/print-model-research.md`](research/print-model-research.md) Topic 2,
+([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 2,
 `[X2D-UNCONFIRMED — H2-proxy]`), so the skill parses `ams` defensively and never
 assumes a tray shape it has not seen on this device.
 
@@ -337,7 +337,7 @@ named catalog.
 
 Simplify3D's Print Quality Guide is the canonical named catalog (per-defect pages
 with causes + fixes), paired with Bambu's own print-quality wiki
-([`research/print-model-research.md`](research/print-model-research.md) Topic 6). The
+([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 6). The
 defects the skill models — enumerated, not "all defects" (K2): warping / poor bed
 adhesion, stringing / oozing, layer shift, under- / over-extrusion, elephant's foot,
 support scarring, overhang droop.
@@ -371,7 +371,7 @@ is that rule-set, not a second gate file): R10 a sliced-or-later record names it
 `.3mf`; R11 a terminal-physical record carries a `feedback` block; R12 `measured`
 carries a reading; R13 `propagated` names a bet; R14 a shipped record is past planning.
 They live beside R1–R9 because they read the same parsed frontmatter — one parser, one
-hook, one self-test, the no-fork rule ([`CLAUDE.md`](../CLAUDE.md)) applied. The
+hook, one self-test, the no-fork rule ([`CLAUDE.md`](../../../CLAUDE.md)) applied. The
 per-rule by-design failure is in the gate's `--self-test`. Details:
 [`prints-tab-design.md`](prints-tab-design.md) §7.
 
@@ -398,7 +398,7 @@ A grounded reference file — `.claude/skills/print-model/best-practices.md`, re
 run time — holds the rules this doc grounds **plus our own real examples** as we
 practice them. It is **self-healing**: physical-iteration findings graduate new rules
 and examples into it, mirroring the repo's graduation rule
-([`CLAUDE.md`](../CLAUDE.md), "The graduation rule"). A defect discovered on a plate
+([`CLAUDE.md`](../../../CLAUDE.md), "The graduation rule"). A defect discovered on a plate
 becomes a best-practices example that fails-before / passes-after the next plan — the
 same fix-ships-a-test discipline, applied to printing.
 
@@ -419,13 +419,13 @@ the research found why:
 - Real submit is a two-step LAN flow: **FTPS** (implicit TLS, port 990,
   `bblp`/access-code) upload of the sliced `.gcode.3mf`, then an **MQTT**
   `project_file` command on `device/<serial>/request`
-  ([`research/print-model-research.md`](research/print-model-research.md) Topic 1).
+  ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 1).
 - **The load-bearing finding:** the X2D/H2D authorization-control firmware family
   **rejects unsigned control commands** (error `84033543`); control commands must be
   **signed RSA-SHA256** with a cert whose CN matches the serial. Status *reads* are
   unaffected — which is why reads already work here — but dispatch will require the
   signing path, not the plain publish that worked on older firmware
-  ([`research/print-model-research.md`](research/print-model-research.md) Topic 1,
+  ([`../../research/print-model-research.md`](../../research/print-model-research.md) Topic 1,
   `[X2D-UNCONFIRMED — H2-proxy]` on the exact code/CN rule for X2D specifically).
 
 So the port is its own owner-gated PR, and the skill is designed to be complete and
@@ -440,7 +440,7 @@ this design changes.
 | PM-1 | Scope | **Option A** — up to the owner gate, no dispatch port | Dispatch is the CAL-gated hardware verb we cannot use yet and needs RSA signing (§9); the judgement layer delivers value now |
 | PM-2 | Own judgement, consume verbs | Skill owns reasoning; CLI keeps atomic verbs | Orchestration is a skill's job; re-implementing slicer/transport/schema is the §2 anti-pattern |
 | PM-3 | Two lifecycle axes | Plate (physical) and record (publication) tracked separately | Conflating them is the K7 trap of §3 |
-| PM-4 | Extend the record schema, don't fork it | Add lifecycle states + `feedback` + sheet↔print mapping to the existing record ([prints-tab-design](prints-tab-design.md)) | "A migration never buys a fork" ([`CLAUDE.md`](../CLAUDE.md)); one register, gated whole-tree |
+| PM-4 | Extend the record schema, don't fork it | Add lifecycle states + `feedback` + sheet↔print mapping to the existing record ([prints-tab-design](prints-tab-design.md)) | "A migration never buys a fork" ([`CLAUDE.md`](../../../CLAUDE.md)); one register, gated whole-tree |
 | PM-5 | Infill/brim not asserted bare | Defer infill to profile; attribute brim/raft to source | The sources are thin/secondary (§5.3); D3 forbids a bare default |
 | PM-6 | Dual-nozzle representation | Rides as a single-nozzle-labelled FDM target (already **D-053**) | Recorded corpus-wide; dual nozzle lives in the profile header, not a widened schema |
 | PM-7 | Calibration exception | For any `settles: CAL-…` plate the skill gives no advice | Coupon settings are measurements, not preferences (§2, K10) |

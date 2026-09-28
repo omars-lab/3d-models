@@ -5,17 +5,17 @@ status: decided
 # Auto-pulling the print profile header from the printer
 
 **Status:** design, grounded 2026-09-17 · **Grounded in:**
-[`research/bambu-header-autopull-survey.md`](research/bambu-header-autopull-survey.md)
+[`../../research/bambu-header-autopull-survey.md`](../../research/bambu-header-autopull-survey.md)
 (field→source survey, real web fetch) · **Changes (design only, not implemented here):**
-`tools/bambu` verbs, [`.claude/skills/bambu/SKILL.md`](../.claude/skills/bambu/SKILL.md),
-[`.claude/skills/setup-bambu-x2d/SKILL.md`](../.claude/skills/setup-bambu-x2d/SKILL.md),
-[`prints/plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md).
+`tools/bambu` verbs, [`.claude/skills/bambu/SKILL.md`](../../../.claude/skills/bambu/SKILL.md),
+[`.claude/skills/setup-bambu-x2d/SKILL.md`](../../../.claude/skills/setup-bambu-x2d/SKILL.md),
+[`../../prints/plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md).
 
 ## Why this doc exists
 
 The Plate-1 bench sheet opens with a **profile header** — machine / firmware / material / spool /
 nozzle / layer height / profile / ambient / date / caliper — that the operator today **transcribes
-by hand at the printer** ([`prints/plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md), the
+by hand at the printer** ([`../../prints/plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md), the
 "Profile header" block). Hand transcription is where a calibration reading quietly loses its
 provenance: a mistyped nozzle diameter or a forgotten profile name turns a measurement into
 anecdote, which is exactly the failure the sheet's own rule 2 warns against ("a reading without a
@@ -123,17 +123,17 @@ muddies that role; the join belongs in its own verb, not bolted onto status.
 
 ## Skill and bench-sheet updates
 
-- **[`prints/plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)** — the "Profile header" block
+- **[`../../prints/plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md)** — the "Profile header" block
   changes from *fill every line by hand* to *run `bambu header --plate <plate.3mf>`, paste its
   output, then complete only the blanks it left* (ambient room temp, enclosure, caliper, and any
   settings you changed). The pre-flight table that today lists the known-good trio becomes the
   **input** to `--plate` (you slice with that trio, then `header` reads the trio back out of the
   `.3mf`, so the sheet and the file cannot silently disagree). The rule "a reading without a profile
   header is anecdote" is unchanged — the verb makes obeying it cheaper, not optional.
-- **[`.claude/skills/bambu/SKILL.md`](../.claude/skills/bambu/SKILL.md)** — add `header` to the verb
+- **[`.claude/skills/bambu/SKILL.md`](../../../.claude/skills/bambu/SKILL.md)** — add `header` to the verb
   map as **read-only, safe now** (beside `status`/`filament`/`print list`), with the one-line usage
   and the note that manual fields remain the operator's to fill.
-- **[`.claude/skills/setup-bambu-x2d/SKILL.md`](../.claude/skills/setup-bambu-x2d/SKILL.md)** — in
+- **[`.claude/skills/setup-bambu-x2d/SKILL.md`](../../../.claude/skills/setup-bambu-x2d/SKILL.md)** — in
   the read-only-before-write step, mention `header` as the second read-only proof (after
   `status show`) and the bench-sheet's filler, so a first-time setup learns it before first dispatch.
 
@@ -173,13 +173,13 @@ prints a genuinely-manual field as machine-known.
 
 ## Cross-links
 
-- Survey / provenance: [`research/bambu-header-autopull-survey.md`](research/bambu-header-autopull-survey.md)
-- The sheet this fills: [`prints/plate-1-bench-sheet.md`](prints/plate-1-bench-sheet.md)
+- Survey / provenance: [`../../research/bambu-header-autopull-survey.md`](../../research/bambu-header-autopull-survey.md)
+- The sheet this fills: [`../../prints/plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md)
 - Transport + slice design this extends: [`bambu-cli-design.md`](bambu-cli-design.md)
-- CLI reference: [`../tools/bambu/README.md`](../tools/bambu/README.md) · status
-  [`../tools/bambu/src/commands/status.ts`](../tools/bambu/src/commands/status.ts) · filament
-  [`../tools/bambu/src/commands/filament.ts`](../tools/bambu/src/commands/filament.ts) · records
-  [`../tools/bambu/src/commands/print.ts`](../tools/bambu/src/commands/print.ts)
-- Skills: [`../.claude/skills/bambu/SKILL.md`](../.claude/skills/bambu/SKILL.md) ·
-  [`../.claude/skills/setup-bambu-x2d/SKILL.md`](../.claude/skills/setup-bambu-x2d/SKILL.md)
+- CLI reference: [`../../../tools/bambu/README.md`](../../../tools/bambu/README.md) · status
+  [`../../../tools/bambu/src/commands/status.ts`](../../../tools/bambu/src/commands/status.ts) · filament
+  [`../../../tools/bambu/src/commands/filament.ts`](../../../tools/bambu/src/commands/filament.ts) · records
+  [`../../../tools/bambu/src/commands/print.ts`](../../../tools/bambu/src/commands/print.ts)
+- Skills: [`../../../.claude/skills/bambu/SKILL.md`](../../../.claude/skills/bambu/SKILL.md) ·
+  [`../../../.claude/skills/setup-bambu-x2d/SKILL.md`](../../../.claude/skills/setup-bambu-x2d/SKILL.md)
 - Live-machine facts: memory `bambu-x2d-bringup`

@@ -4,7 +4,7 @@ Grounded rules the print-model design doc establishes, **plus our own real examp
 them. This file is **self-healing**: a defect found on a real plate graduates into an example that
 fails-before / passes-after the next plan — the repo's graduation rule
 ([`CLAUDE.md`](../../../CLAUDE.md), "The graduation rule") applied to printing. Grounded rules and their
-hedges are attributed in the print-model design doc (docs/print-model-design.md, PR #191) and its
+hedges are attributed in the print-model design doc (docs/design/printing/print-model-design.md, PR #191) and its
 research file; this file adds *our* data on top.
 
 > **How to read this file.** Every rule below carries a **confidence tag** so a plan can weight it
@@ -18,7 +18,7 @@ research file; this file adds *our* data on top.
 >   #46 wires the graduation that fills this tag, and every [attributed]/[wants-CAL] rule is a candidate
 >   to be *replaced* by a [measured] one the first time a plate settles it.
 >
-> Numbers and their `**Default:**` markers live in the design doc (docs/print-model-design.md §5.x),
+> Numbers and their `**Default:**` markers live in the design doc (docs/design/printing/print-model-design.md §5.x),
 > which owns them; this file states the *rule* and its confidence and points there — it never restates a
 > default (DRY, one owner per number).
 

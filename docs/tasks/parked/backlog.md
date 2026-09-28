@@ -57,8 +57,8 @@ The survey covers twelve named tools, not all LDraw software.
 |---|---|---|
 | Lego Lab §11 Q6 — whether a rib-deflection or bending estimate is worth adding to the grid gate | a decision, then code; calibrating it needs LG-F1 and LG-D1 prints | [`lego-lab-design.md`](../../lego-lab-design.md) §11 Q6 |
 | Lego Lab §11 Q8 — widen the grammar to a general two-vector basis so a `.bkr` can make the rhombic lattice | resolved as a label by D-007; the widening is an unbuilt option | [`lego-lab-design.md`](../../lego-lab-design.md) §11 Q8 |
-| The `polygon`/`C.mpt` evaluator asymmetry MC-4 had to work around | a bikar issue | [`calibration-design.md`](../../calibration-design.md) §4 |
-| No polygon-offset primitive — MC-4's wall thickness co-varies with the angle under test | a bikar feature; MC-4 is the coupon to re-cut first if it lands | [`calibration-design.md`](../../calibration-design.md) §5.4, §8 |
+| The `polygon`/`C.mpt` evaluator asymmetry MC-4 had to work around | a bikar issue | [`calibration-design.md`](../../design/printing/calibration-design.md) §4 |
+| No polygon-offset primitive — MC-4's wall thickness co-varies with the angle under test | a bikar feature; MC-4 is the coupon to re-cut first if it lands | [`calibration-design.md`](../../design/printing/calibration-design.md) §5.4, §8 |
 
 The last two shaped the machine-card coupons and block no print; read them if the first card
 comes back hard to read. The third engine gap §6.2 listed, text emit, has since shipped.

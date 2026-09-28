@@ -1,5 +1,5 @@
 // Assemble a multi-part, multi-filament input 3MF for a coloured coaster plate (part 4b-ii; D-075,
-// docs/plate-composer-design.md §12; the contract is docs/research/coaster-ams-3mf-contract.md).
+// docs/design/printing/plate-composer-design.md §12; the contract is docs/research/coaster-ams-3mf-contract.md).
 //
 // WHY this exists: the headless BambuStudio/Orca CLI has NO flag to map objects or regions to filament
 // slots at slice time — the assignment must be baked into the INPUT 3MF (BambuStudio#9666, the settled

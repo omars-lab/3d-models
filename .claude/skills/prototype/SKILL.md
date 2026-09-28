@@ -32,7 +32,7 @@ decisive learning first). Each entry has:
   readings, photos), **not** a row in this file. The catalog carries the
   backlog; the record carries what a plate taught. One register for the
   print-lesson, not two ([D-046](../../../docs/decisions-log.md)). Format and
-  gate: `docs/prints-tab-design.md` §4, `.claude/gates/prints_gate.py`.
+  gate: `docs/design/printing/prints-tab-design.md` §4, `.claude/gates/prints_gate.py`.
 - **Settles** — the `CAL-…` bets this entry closes, if any (registry:
   `.claude/skills/calibrate/bets.md`). A coupon that measures a property of
   *(machine, material, nozzle, profile)* rather than of this design does not
@@ -51,7 +51,7 @@ print is decoration, not a prototype — say so.
 
 **Log a result** — after the user reports on a print: create the
 `docs/prints/<YYYY-MM-DD>-<slug>/` record (geometry pin, profile, readings,
-photos — format in `docs/prints-tab-design.md` §4, checked by
+photos — format in `docs/design/printing/prints-tab-design.md` §4, checked by
 `.claude/gates/prints_gate.py`), then in the catalog fill "What we learned"
 (numbered answers) and flip Status. The record holds the per-plate detail; the
 catalog holds only what was learned. Never mark a question answered from

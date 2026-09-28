@@ -141,14 +141,14 @@ Two facts bound what a pre-slicer check can honestly assert:
    hazard (K10) — porting NFP's confidence onto a bounding-box aggregate.
 
 This mirrors the plate-builder doc's advisory-vs-authoritative fit split
-([`plate-builder-design.md`](../plate-builder-design.md) §5) and the geogebra doc's own
+([`plate-builder-design.md`](../design/printing/plate-builder-design.md) §5) and the geogebra doc's own
 `**Validator:**` note ([`geogebra-construction-import-design.md`](../constructions/geogebra-construction-import-design.md)
 §9) that "the hard case is a manifest whose area fits but whose pieces do not tile …
 only the slicer's arrange result catches."
 
 ## Topic 5 — the iteration identity the manifest must NOT fork [PROVEN-IN-REPO]
 
-From [`print-metadata-and-reprint-design.md`](../print-metadata-and-reprint-design.md),
+From [`print-metadata-and-reprint-design.md`](../design/printing/print-metadata-and-reprint-design.md),
 the owner of the iteration model:
 
 - **§2.2 — the iteration id.** `iteration.id = it-<sha12>`, where `<sha12>` is the first
@@ -166,7 +166,7 @@ the owner of the iteration model:
   field `objects[].iteration` is the `it-<sha12>` that on-plate object instances, and
   `objects[].count` is its physical multiplicity on that plate. Geometry pins per object
   are `source` (`bikar:<path>`), `source_sha256`, `piece`, `params`
-  ([`prints-tab-design.md`](../prints-tab-design.md) §4.1, gate rule R1/R8).
+  ([`prints-tab-design.md`](../design/printing/prints-tab-design.md) §4.1, gate rule R1/R8).
 - **§4.2 / §4.4 — replay vs re-slice.** Byte-identical replay of a stored `.3mf` is valid
   **only** for the identical plate (same products, same arrangement, same quantity, sha
   intact); **any** quantity or product-selection change forces a re-slice through the
@@ -195,7 +195,7 @@ warning, never the sizing mechanism.
 The manifest re-renders each distinct `{bkr, params}` variant through bikar once and
 caches the STL keyed by the bkr blob hash + the canonical params — the same content-
 address discipline the geometry pin already uses (`source_sha256` over the bkr blob at a
-pinned commit, [`prints-tab-design.md`](../prints-tab-design.md) §4.1 R1). Two manifest
+pinned commit, [`prints-tab-design.md`](../design/printing/prints-tab-design.md) §4.1 R1). Two manifest
 items with the same `{bkr, params}` and different `count` render once and place N copies.
 This is a cache key, not a new identity: it coincides with the *geometry half* of the
 iteration key (Topic 5), which is why the cache and the iteration id never disagree.
@@ -218,8 +218,8 @@ iteration key (Topic 5), which is why the cache and the iteration id never disag
   https://forum.bambulab.com/t/auto-arrange-with-h2d-wont-use-l-r-nozzle-only-areas/188640
   (fetched 2026-09-16, via Topic 4).
 - **In-repo:** [`slice.ts`](../../tools/bambu/src/commands/slice.ts);
-  [`print-metadata-and-reprint-design.md`](../print-metadata-and-reprint-design.md) §§2,3,4,5;
-  [`prints-tab-design.md`](../prints-tab-design.md) §4.1;
+  [`print-metadata-and-reprint-design.md`](../design/printing/print-metadata-and-reprint-design.md) §§2,3,4,5;
+  [`prints-tab-design.md`](../design/printing/prints-tab-design.md) §4.1;
   [D-052](../decisions-log.md), [D-053](../decisions-log.md), [D-059](../decisions-log.md).
 </content>
 </invoke>

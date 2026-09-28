@@ -4,7 +4,7 @@ A **print** is the one event this repository records nowhere else: a physical
 plate came off a machine, taught something, and that lesson belongs to the exact
 geometry-and-process that produced it. This page is the reader for those records.
 It records nothing of its own — each print is a checked-in directory, and its
-format and gate are defined in [the prints-tab design doc](prints-tab-design.md)
+format and gate are defined in [the prints-tab design doc](design/printing/prints-tab-design.md)
 §4 and [`prints_gate.py`](../.claude/gates/prints_gate.py). Why one register and
 not two: [D-046](decisions-log.md).
 
@@ -25,7 +25,7 @@ prints: 0 records checked — docs/prints/ is empty (nothing printed yet)
 ```
 
 That printed count is the honest zero-state, not a false green — it is the whole
-reason the gate could ship before the first print ([the design doc](prints-tab-design.md)
+reason the gate could ship before the first print ([the design doc](design/printing/prints-tab-design.md)
 §7, [D-046](decisions-log.md)).
 
 When the first record lands, this section becomes a list — one row per run, newest
@@ -37,7 +37,7 @@ it defines the process-profile header every later plate reuses (design doc §10)
 
 The order is not decided here. It is [print register](tasks/coaster-pipeline/backlog.md) §3.8's argument,
 presented — this page stores no rank of its own, because a second scheduler is the
-one thing the design forbids ([design doc](prints-tab-design.md) §6). Read the
+one thing the design forbids ([design doc](design/printing/prints-tab-design.md) §6). Read the
 backlog for the live order and the reasoning; the plates in flight are:
 
 - **Plate 1 — Machine Card.** Defines the profile header and carries the readings
@@ -79,7 +79,7 @@ This page owns none of these; it points at them:
   reading settles.
 - [`protocol.md`](../.claude/skills/calibrate/protocol.md) — the measurement
   ceremony and the profile header a reading must carry.
-- [`calibration-design.md`](calibration-design.md) — the machine-card
+- [`design/printing/calibration-design.md`](design/printing/calibration-design.md) — the machine-card
   expectations a Plate 1 reading is checked against.
 - [the prototype catalog](../.claude/skills/prototype/catalog.md) — the backlog of
   prototypes to print, and where a learning lands when it propagates.

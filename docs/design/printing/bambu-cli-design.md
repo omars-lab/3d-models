@@ -7,10 +7,10 @@ decisions:
 # `tools/bambu` — backend & transport design
 
 **Status:** grounded 2026-09-16 · **Grounded in:**
-[`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md)
+[`../../research/bambu-control-transport-survey.md`](../../research/bambu-control-transport-survey.md)
 (16 options + an AppleScript fallback, surveyed by real web search) ·
-**Implements:** [`../tools/bambu/README.md`](../tools/bambu/README.md),
-[`../tools/bambu/src/backends/router.ts`](../tools/bambu/src/backends/router.ts)
+**Implements:** [`../../../tools/bambu/README.md`](../../../tools/bambu/README.md),
+[`../../../tools/bambu/src/backends/router.ts`](../../../tools/bambu/src/backends/router.ts)
 
 ## Why this doc exists
 
@@ -51,13 +51,13 @@ From the global and project `CLAUDE.md`:
 - **Robust over easy** — a stable local surface beats a reverse-engineered cloud one beats
   GUI-scripting; when two paths exist, the fragile one is the fallback, not the default.
 - **Owner-gated dispatch** — the transport must let dispatch stay fail-closed (confirm-before-send);
-  see [`../tools/bambu/src/commands/print.ts`](../tools/bambu/src/commands/print.ts).
+  see [`../../../tools/bambu/src/commands/print.ts`](../../../tools/bambu/src/commands/print.ts).
 
 ## Architecture — the layered router
 
 Each command asks a **router** for the cheapest capable backend rather than hard-wiring one, so the
 fallback chain lives in one place
-([`../tools/bambu/src/backends/router.ts`](../tools/bambu/src/backends/router.ts)). Slicing prefers
+([`../../../tools/bambu/src/backends/router.ts`](../../../tools/bambu/src/backends/router.ts)). Slicing prefers
 the CLI then the GUI; every drive capability rides the MCP; the GUI is the floor, never the default.
 
 ```mermaid
@@ -90,7 +90,7 @@ only when a job is genuinely GUI-only (see the decision below).
 ## Option rubric — the guiding questions
 
 Every option was scored against these questions; the full per-option scoring table is in the survey
-([`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md) §"Option
+([`../../research/bambu-control-transport-survey.md`](../../research/bambu-control-transport-survey.md) §"Option
 rubric"). Carried here verbatim because *the rubric is the reusable part* — the next time a new MCP
 or slicer appears, it is scored against these same questions rather than judged by vibe.
 
@@ -180,13 +180,13 @@ honesty carried into the design.
 
 ## Cross-links
 
-- Survey / provenance: [`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md)
-- CLI reference: [`../tools/bambu/README.md`](../tools/bambu/README.md) ·
-  router [`../tools/bambu/src/backends/router.ts`](../tools/bambu/src/backends/router.ts) ·
-  AppleScript floor [`../tools/bambu/src/backends/applescript.ts`](../tools/bambu/src/backends/applescript.ts)
-- Skills: [`../.claude/skills/setup-bambu-x2d/SKILL.md`](../.claude/skills/setup-bambu-x2d/SKILL.md)
-  (first-time setup/judgment), [`../.claude/skills/bambu/SKILL.md`](../.claude/skills/bambu/SKILL.md)
+- Survey / provenance: [`../../research/bambu-control-transport-survey.md`](../../research/bambu-control-transport-survey.md)
+- CLI reference: [`../../../tools/bambu/README.md`](../../../tools/bambu/README.md) ·
+  router [`../../../tools/bambu/src/backends/router.ts`](../../../tools/bambu/src/backends/router.ts) ·
+  AppleScript floor [`../../../tools/bambu/src/backends/applescript.ts`](../../../tools/bambu/src/backends/applescript.ts)
+- Skills: [`../../../.claude/skills/setup-bambu-x2d/SKILL.md`](../../../.claude/skills/setup-bambu-x2d/SKILL.md)
+  (first-time setup/judgment), [`../../../.claude/skills/bambu/SKILL.md`](../../../.claude/skills/bambu/SKILL.md)
   (day-to-day usage)
-- Decisions: dual-nozzle representation [D-053](decisions-log.md), transport choice
-  [D-054](decisions-log.md)
-- Campaign: [`../.claude/plans/binary-tickling-kay.md`](../.claude/plans/binary-tickling-kay.md)
+- Decisions: dual-nozzle representation [D-053](../../decisions-log.md), transport choice
+  [D-054](../../decisions-log.md)
+- Campaign: [`../../../.claude/plans/binary-tickling-kay.md`](../../../.claude/plans/binary-tickling-kay.md)

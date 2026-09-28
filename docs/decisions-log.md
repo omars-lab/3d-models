@@ -964,7 +964,7 @@ Three options were on the table:
 - **A verifier with a target as its entry point (taken).**
   [`build/verify_machine_card.py`](../build/verify_machine_card.py) reads the
   rung list and the whole expectation table out of
-  [`calibration-design.md`](calibration-design.md) §7, renders each rung, and
+  [`design/printing/calibration-design.md`](design/printing/calibration-design.md) §7, renders each rung, and
   diffs the mesh gate's actual output against the row. No number and no rung
   name is restated in the Makefile or the script.
 
@@ -1252,7 +1252,7 @@ load-bearing case.
 
 ### Context
 
-[`print-validation-design.md`](print-validation-design.md) §8 Q3 asked whether
+[`design/printing/print-validation-design.md`](design/printing/print-validation-design.md) §8 Q3 asked whether
 F3 should be a hard *error* for the presets shipped in the gallery, and recorded
 a leaning: "yes-for-gallery, warn-for-Lab-custom."
 
@@ -1616,7 +1616,7 @@ prints its waiver count so the size of the gap is legible on every run.
 
 ### Context
 
-[`calibration-design.md`](calibration-design.md) §8 names the absence of text
+[`design/printing/calibration-design.md`](design/printing/calibration-design.md) §8 names the absence of text
 emit as the machine card's biggest structural weakness: 23 coupons that cannot
 say which rung they are. The first research pass
 ([`research/text-emit-survey.md`](research/text-emit-survey.md)) took a
@@ -3674,7 +3674,7 @@ the substitution collapse into a plain byte identity again.
 
 **Date:** 2026-08-28 · **Repos:** 3d-models (design only; no build target yet)
 **Status:** design accepted; S1 + S3 shipped (gate before the first plate — see the 2026-08-30 amendment); S2/S4 pending a physical print, S5–S7 buildable now
-**Design:** [`prints-tab-design.md`](prints-tab-design.md) ·
+**Design:** [`design/printing/prints-tab-design.md`](design/printing/prints-tab-design.md) ·
 **Research:** [`research/prints-tab-survey.md`](research/prints-tab-survey.md)
 
 The repository records renders, bets, and a queue, but not the one event a printer
@@ -3743,7 +3743,7 @@ The original design (`prints-tab-design.md` §11) named cost, print time and fil
 grams as *out of scope for the display* — "the tab records what a plate taught, not what
 it cost." With a real printer now on the LAN and the print-metadata design landing
 per-iteration estimates plus MQTT-measured actuals
-([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3.1),
+([`design/printing/print-metadata-and-reprint-design.md`](design/printing/print-metadata-and-reprint-design.md) §3.3.1),
 Omar decided (2026-09-17, PMR-8) the tab **should show time and filament grams** — the
 pre-print estimate, and the post-print actual once the machine reports it. This reverses
 only the *display* half of the §11 line, and only for time and grams. It does **not**
@@ -4867,7 +4867,7 @@ X2D's real build volume differs it is read off the machine at bring-up, never in
 ## D-054 — the bambu CLI backend is a two-layer local split (BambuStudio CLI slices, MCP drives), AppleScript is the GUI floor
 
 **Date:** 2026-09-16 · **Status:** decided, and matches what phases 1–3 shipped · **Full record:**
-[`bambu-cli-design.md`](bambu-cli-design.md) · **Grounded in:**
+[`design/printing/bambu-cli-design.md`](design/printing/bambu-cli-design.md) · **Grounded in:**
 [`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md)
 
 ### Context
@@ -4878,7 +4878,7 @@ recorded decision**, the one grounding step this repo otherwise never skips. Thi
 gap retroactively. A real web survey of **16 options + an AppleScript fallback** was run
 ([the survey](research/bambu-control-transport-survey.md)) and scored against an explicit
 robustness / AI-friendliness / OSS / local / headless / maintenance / X2D-support / slice **rubric**
-(carried into [the design doc](bambu-cli-design.md)).
+(carried into [the design doc](design/printing/bambu-cli-design.md)).
 
 ### Options on the table
 
@@ -4901,7 +4901,7 @@ removing the two-layer reality. (c) and (d) fail the repo's local-only/open-sour
 AppleScript stays the last-resort floor — brittle UI-scripting, focus-stealing, macOS-only — used
 only where a step is genuinely GUI-only (Bambu Connect auth/dispatch) and never for slicing or
 status, which have deterministic alternatives. Full reasoning, the rubric, and the mermaid router
-diagram are in [`bambu-cli-design.md`](bambu-cli-design.md).
+diagram are in [`design/printing/bambu-cli-design.md`](design/printing/bambu-cli-design.md).
 
 ### What would reverse it
 
@@ -4921,7 +4921,7 @@ Bambu-Connect-gated steps get a headless path.
 
 ## D-072 — A `plate.yaml` item is an authoring surface, not an identity; `slice compose` extends the existing `slice` group
 
-Design: [`plate-composer-design.md`](plate-composer-design.md). P4.1 adds a
+Design: [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). P4.1 adds a
 `slice compose <plate.yaml>` subverb to the **existing** `slice` command group in `tools/bambu` (sibling to the
 shipped `slice plate` / `slice mesh`), composing many models onto one arranged X2D plate.
 
@@ -4933,14 +4933,14 @@ shipped `slice plate` / `slice mesh`), composing many models onto one arranged X
   `{bkr, piece, params}` is the geometry half of the iteration key; the composer resolves each item to
   `it-<sha12>` and writes it to `objects[].iteration`.
 - **(c) Frontend-only composition** — leave composition to the plate-builder UI
-  ([`plate-builder-design.md`](plate-builder-design.md)); no CLI compose verb.
+  ([`design/printing/plate-builder-design.md`](design/printing/plate-builder-design.md)); no CLI compose verb.
 - **(d) Do nothing** — keep single-model `slice plate` only.
 
 ### Decision — (b)
 
 A migration never buys a fork ([D-052](decisions-log.md), `CLAUDE.md`). The `{bkr, piece, params}`
 triple already **is** the geometry half of the print-record iteration key
-([print-metadata-and-reprint-design.md](print-metadata-and-reprint-design.md) §2.2); the plate's
+([design/printing/print-metadata-and-reprint-design.md](design/printing/print-metadata-and-reprint-design.md) §2.2); the plate's
 single `slice_profile` completes the fifth field. The composer resolves each item to `it-<sha12>`
 and writes it to the record's `objects[].iteration` (the one map); the manifest stores no parallel
 id, and the render-cache key (bkr-hash + params) coincides with the key's geometry half, so cache
@@ -5050,7 +5050,7 @@ it — becomes unnecessary (the D-073 reversal condition).
 ## D-075 — Coaster plate colour maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
 
 Design: [`coaster-colour-design.md`](coaster-colour-design.md) §6 and
-[`plate-composer-design.md`](plate-composer-design.md). Implements the dependency
+[`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). Implements the dependency
 [D-074](decisions-log.md) §6 named but left to the composer. Grounded in
 [`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the headless-CLI
 3MF/AMS contract) and bikar #215 (the `<Coaster>.parts.json` sidecar this reads).
@@ -5161,7 +5161,7 @@ same default the export does, so the preview and the exported bodies never disag
 ## D-077 — The coaster colour plate is a separate `slice coaster` verb; headless verifies GEOMETRY on a tag-stripped copy while colour is a GUI check
 
 Builds part 4b-ii of [D-075](decisions-log.md) (the palette→slot map baked into a multi-part input
-3MF). Design: [`plate-composer-design.md`](plate-composer-design.md) §12. Grounded in
+3MF). Design: [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md) §12. Grounded in
 [`docs/issues/coaster-3mf-filament-shape-and-export-hang.md`](issues/coaster-3mf-filament-shape-and-export-hang.md)
 (the bisection that isolated the headless crash) and
 [`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the #9666 contract).

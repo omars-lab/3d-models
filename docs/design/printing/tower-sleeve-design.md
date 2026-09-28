@@ -13,7 +13,7 @@ provenance until it earns a real spec — it is not that spec.
 
 Provenance: Omar, 2026-09-18, looking at the printed Plate 1 machine card. The
 **MC-6 bed-contact towers** are solid rods —
-[`bikar/patterns/Coupons/Machine-Card.bkr`](../../bikar/patterns/Coupons/Machine-Card.bkr)
+[`bikar/patterns/Coupons/Machine-Card.bkr`](../../../../bikar/patterns/Coupons/Machine-Card.bkr)
 `piece MC6Tower03` is `rod d 3 height 40`, and ⌀5 / ⌀8 / ⌀12 likewise — printed
 only to settle `CAL-BED-01` (which diameter survives on bare plate). Standing on
 the bed, they read as a **product** rather than a coupon: bore one through and it
@@ -23,7 +23,7 @@ sleeve would pick a functional length ("could have been made shorter").
 
 Companion: [`calibration-design.md`](calibration-design.md) (the machine card the
 towers come from); bet registry
-[`.claude/skills/calibrate/bets.md`](../.claude/skills/calibrate/bets.md).
+[`.claude/skills/calibrate/bets.md`](../../../.claude/skills/calibrate/bets.md).
 
 ---
 

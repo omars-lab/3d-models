@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the machine card and check every rung against its own design doc.
 
-`docs/calibration-design.md` §7 ships a full expectation table — euler,
+`docs/design/printing/calibration-design.md` §7 ships a full expectation table — euler,
 watertight, degenerate count, minFeature, `--check` verdict, triangles,
 volume — for all 23 rungs. This script renders the card per §6 and diffs the
 actual gate output against that table. The doc is the spec; nothing here
@@ -39,7 +39,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DOC = ROOT / "docs" / "calibration-design.md"
+DOC = ROOT / "docs/design/printing/calibration-design.md"  # one string, so tools/move_doc.py can find it
 CARD = "patterns/Coupons/Machine-Card.bkr"
 
 MESH_RE = re.compile(

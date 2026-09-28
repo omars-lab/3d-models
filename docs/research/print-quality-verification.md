@@ -11,7 +11,7 @@ checks: docs/research/print-quality-a.md, docs/research/print-quality-b.md
 Two researchers (A, PR #344 and B, PR #345) wrote on the same question: why minis-04
 showed "tiny holes", a peg border that is "too big" and pegs that are "too tight". This
 file records what I re-opened myself and what each source actually says, so the
-consolidated doc ([`../print-quality-design.md`](../print-quality-design.md)) rests on
+consolidated doc ([`../design/printing/print-quality-design.md`](../design/printing/print-quality-design.md)) rests on
 checked text, not on either researcher's summary.
 
 Nothing was printed or measured. The printer was not contacted. Everything below is

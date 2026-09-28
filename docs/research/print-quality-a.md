@@ -11,7 +11,7 @@ The question: how to raise the general quality of small, thin, openwork PLA coas
 a Bambu Lab X2D, and how to fix the three defects Omar saw on minis-04 (2026-09-26): "i see
 tiny holes on the print and the peg system border is too big and pegs too tight".
 
-This file holds the sources behind [`../print-quality-a-design.md`](../print-quality-a-design.md).
+This file holds the sources behind [`../design/printing/print-quality-a-design.md`](../design/printing/print-quality-a-design.md).
 Each entry says whether the page was **fetched** (the text was read) or is **snippet** (only a
 search-result summary was seen — treat anything taken from it as a lead, not a fact). It is
 not a survey of print tuning; it covers the pages listed here and nothing else.

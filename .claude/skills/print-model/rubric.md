@@ -7,7 +7,7 @@ master would do + why", never a silent change). This file is a sibling of
 
 **Where the grounded numbers live.** Every load-bearing figure below — and its hedge (secondary /
 X2D-unconfirmed / thin-source) — is attributed in the print-model design doc
-(docs/print-model-design.md §5, merged in PR #191) and its research file. This checklist carries the
+(docs/design/printing/print-model-design.md §5, merged in PR #191) and its research file. This checklist carries the
 *shape* of each decision; it does not re-assert a bare default. Tasks #33/#34/#42/#43/#44 deepen the
 rows below and add the formal cited defaults.
 
@@ -229,7 +229,7 @@ Each note below is a stub the named task fleshes out; the design doc section is 
 The last three steps of a run (SKILL §How-one-run-flows 6–8): turn the decisions above into one
 reviewable **plan artifact**, slice it, and stop at the owner gate. The plan is **composed, not stored
 twice** (design §2) — it is *presented* to the operator, not written into `docs/prints/` as a second
-copy of the record. The record schema ([`prints-tab-design.md`](../../../docs/prints-tab-design.md)
+copy of the record. The record schema ([`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md)
 §4.1) owns a print's stored identity; a print that is only *planned* has no record yet. On the record
 axis (design §3.1) the plate sits at `planned` after step 6 and `sliced` after step 7 — parked at the
 owner gate, never past it.

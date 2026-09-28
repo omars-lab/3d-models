@@ -140,7 +140,7 @@ The Phase-A slice profile + MC-4 pre-flight (A4/A5, tasks `#21`/`#22`) landed vi
 - #40 — the print-history query: what we printed AND how — `print list --how` + filters (3d-models #202)
 
 ### Design docs
-- #41 — `docs/print-model-design.md`: lifecycle, mermaid diagrams, decisions + the run-time rubric (3d-models #191)
+- #41 — `docs/design/printing/print-model-design.md`: lifecycle, mermaid diagrams, decisions + the run-time rubric (3d-models #191)
 - #47 — the plate-builder frontend-experience design doc (the served operator front end; now the seed of the private 3d-model-hub repo, Option D)
 - #48 — reconcile the print-metadata design with Omar's PMR answers + the estimation-slice primitive (3d-models #217)
 

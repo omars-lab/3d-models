@@ -1,7 +1,7 @@
 // Print-record scaffolding.
 //
 // A finished record lives at docs/prints/<date>-<slug>/index.md and must satisfy the prints gate
-// (.claude/gates/prints_gate.py — the authority; see docs/prints-tab-design.md §7). That gate is
+// (.claude/gates/prints_gate.py — the authority; see docs/design/printing/prints-tab-design.md §7). That gate is
 // WHOLE-TREE: an incomplete draft under docs/prints/ would block every commit in the repo. So a
 // `--record` scaffold is written to the gitignored .bambu/records/ staging area instead, where it
 // can be filled in (readings, photos, the real self_ref) and gate-checked with

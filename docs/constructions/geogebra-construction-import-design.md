@@ -291,9 +291,9 @@ bottom chamfer vs elephant's foot, one connected solid above the floor with
 every neck wider than the strap floor, and `trivet` connectivity. Their
 defaults are bets `CAL-CST-01…05`, registered in bikar's calibration registry
 before the coaster doc states a single number
-([`../calibration-design.md`](../calibration-design.md)). Print orientation is fixed
+([`../design/printing/calibration-design.md`](../design/printing/calibration-design.md)). Print orientation is fixed
 flat, top up, no supports; `--check` runs on every render
-([`../print-validation-design.md`](../print-validation-design.md)).
+([`../design/printing/print-validation-design.md`](../design/printing/print-validation-design.md)).
 
 ## 9. The plate composer (summary; specified in the plate doc)
 

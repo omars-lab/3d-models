@@ -17,7 +17,7 @@ measured the outline-font route the survey had talked itself out of, over eight
 faces and 296 glyphs, and found it needs no offset at all. **The survey's §4 and
 §5.3 carry marked corrections**; everything else in it stands.
 
-Scope: closing the gap [`calibration-design.md`](calibration-design.md) §3.2
+Scope: closing the gap [`design/printing/calibration-design.md`](design/printing/calibration-design.md) §3.2
 records — *"bikar has no text emit. There is no `text`, no emboss, no engrave"* —
 which §8 of the same doc calls the machine card's biggest structural weakness,
 because a card whose 23 coupons cannot say which rung they are is a card you have
@@ -27,7 +27,7 @@ Deliverable: a rung label that survives being printed and read. `MC-4 R12`,
 emitted onto the coupon it names, legible at arm's length, with the gate that
 would have caught it if it were not.
 
-Builds on: [`calibration-design.md`](calibration-design.md) (§7's 23-row
+Builds on: [`design/printing/calibration-design.md`](design/printing/calibration-design.md) (§7's 23-row
 expectation table is what the labels are *for*, and D-014's mesh gate is where a
 text failure should surface). Rides:
 [`piece-composition-design.md`](piece-composition-design.md) — text is a feature

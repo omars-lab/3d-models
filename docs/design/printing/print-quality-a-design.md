@@ -5,13 +5,13 @@ status: superseded
 # Print quality for thin openwork PLA coasters on the X2D (research A)
 
 Status: proposal, 2026-09-26. Nothing here has been printed or measured yet. Sources and fetch
-status: [`research/print-quality-a.md`](research/print-quality-a.md).
+status: [`../../research/print-quality-a.md`](../../research/print-quality-a.md).
 
 Omar on minis-04 (2026-09-26): "i see tiny holes on the print and the peg system border is too
-big and pegs too tight". The plate is [`plates/minis-04.yaml`](plates/minis-04.yaml): 80 mm hex
+big and pegs too tight". The plate is [`../../plates/minis-04.yaml`](../../plates/minis-04.yaml): 80 mm hex
 coasters, 1.4 mm frame (seven 0.2 mm layers) with 1.2 mm straps standing on it, dovetail pegs at
 clearance 0.10 mm, sliced with `0.20mm Standard @BBL X2D` and Bambu PLA Basic. The previous run,
-[minis-03](prints/2026-09-26-minis-03/index.md), had pegs at 0.15 that were "a bit loose" on a
+[minis-03](../../prints/2026-09-26-minis-03/index.md), had pegs at 0.15 that were "a bit loose" on a
 taller piece. Nothing on either run was measured with calipers.
 
 What the shipped slicer profile actually does is in the research file §0. The three facts this
@@ -73,7 +73,7 @@ A phone photo under a raking light of top and bottom faces is enough to place mo
 
 ### 2.1 How the joint is built
 
-From [coaster-interlock-design.md](coaster-interlock-design.md) §3: a dovetail tab at L/4 of
+From [../../coaster-interlock-design.md](../../coaster-interlock-design.md) §3: a dovetail tab at L/4 of
 each edge and a matching slot at 3L/4, the slot offset by the clearance c **on every face**. The
 slot opens to the outside, so to the slicer it is part of the piece's **outer contour**, not a
 hole. The pieces drop together along Z, so friction acts over the 1.4 mm height.
@@ -132,12 +132,12 @@ built as plates, with their band widths:
 
 | Option | Joint band | Plate |
 |---|---|---|
-| Dovetail today (neck 3, depth 3, wall 2.5) | ~11.1 mm | [minis-04](plates/minis-04.yaml) |
-| Slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [minis-06](plates/minis-06.yaml) |
-| Plain frame, no join | ~6.0 mm | [minis-05](plates/minis-05.yaml) |
-| Tab | ~5.8 mm | [minis-05](plates/minis-05.yaml) |
-| Butterfly key | ~5.7 mm | [minis-05](plates/minis-05.yaml) |
-| Butterfly key at frame 2 (approach A) | ~4 mm | [coaster-borderless-joins-design.md](coaster-borderless-joins-design.md) |
+| Dovetail today (neck 3, depth 3, wall 2.5) | ~11.1 mm | [minis-04](../../plates/minis-04.yaml) |
+| Slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [minis-06](../../plates/minis-06.yaml) |
+| Plain frame, no join | ~6.0 mm | [minis-05](../../plates/minis-05.yaml) |
+| Tab | ~5.8 mm | [minis-05](../../plates/minis-05.yaml) |
+| Butterfly key | ~5.7 mm | [minis-05](../../plates/minis-05.yaml) |
+| Butterfly key at frame 2 (approach A) | ~4 mm | [../../coaster-borderless-joins-design.md](../../coaster-borderless-joins-design.md) |
 
 What each costs: the slim dovetail keeps the joint style but sits at the tab-neck floor
 (`CAL-CST-06`, unsettled); the key needs a separate small part per join and its own clearance
@@ -165,7 +165,7 @@ then cause 1.1-2 is live and change A below is the fix to test first.
 
 These are process settings, so they can live in a small process JSON next to the plate and be
 passed through `bambu slice compose -s "<machine preset>;<override.json>"` (the flag accepts
-preset names or JSON paths, per [`../tools/bambu/FLAGS.md`](../tools/bambu/FLAGS.md)). Open
+preset names or JSON paths, per [`../../../tools/bambu/FLAGS.md`](../../../tools/bambu/FLAGS.md)). Open
 question: whether the slicer resolves an `inherits` line in a user JSON passed this way, or needs
 the full flattened preset — the bambu tool does not resolve inheritance itself (§6, Q6).
 
@@ -202,8 +202,8 @@ clogs. It fixes a cosmetic top, not the holes above.
 
 **Default:** keep the dovetail `clearance` at 0.15 mm per face for any production-style plate
 until the ladder in §5.2 reports — that is the CAL-FIT-01 rung the
-[interlock design](coaster-interlock-design.md) already names, and the only value with a print
-behind it ([minis-03](prints/2026-09-26-minis-03/index.md), "a bit loose").
+[interlock design](../../coaster-interlock-design.md) already names, and the only value with a print
+behind it ([minis-03](../../prints/2026-09-26-minis-03/index.md), "a bit loose").
 
 ## 5. Test plates
 
@@ -226,7 +226,7 @@ FAIL: all four look the same — the cause is not the wall generator or the top 
 ### 5.2 Clearance ladder
 
 Pairs of the minis-04 piece (two copies of each, per the mating rule in
-[sample-rules.md](../.claude/skills/print-coaster-samples/sample-rules.md)) at `clearance` 0.10,
+[sample-rules.md](../../../.claude/skills/print-coaster-samples/sample-rules.md)) at `clearance` 0.10,
 0.125, 0.15 and 0.20 mm per face, height 1.4, same art. Creative3DP's coupon steps by 0.05; the
 0.125 rung is added because 0.10 was tight and 0.15 was loose on a taller piece. If change C is
 tried, it gets its own row (0.10 with −0.05 contour compensation), never mixed into the others.

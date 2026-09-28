@@ -73,7 +73,7 @@ same day, so what it taught is tied to the exact piece and size.
    can come from the slicer settings as easily as from the design. minis-03 and minis-04 both
    printed on Studio's built-in values instead of the X2D preset, because Studio's command line
    ignores `inherits`. Find the defect in the cause tables of
-   [`print-quality-design.md`](../../../docs/print-quality-design.md), write the suspects in
+   [`print-quality-design.md`](../../../docs/design/printing/print-quality-design.md), write the suspects in
    the piece's notes, and say whether the settings actually used were the preset's. A reading
    from a slice that did not carry the preset does not move a bet. Write that in `feedback`, as
    the minis-04 record does.
