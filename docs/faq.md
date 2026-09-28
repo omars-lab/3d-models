@@ -5,7 +5,7 @@ out from scratch, again and again. An entry is added only when that repetition
 has been measured; nobody adds one on a hunch. Each answer is then held to a
 test: once it ships, do later sessions stop re-deriving the fact? The design,
 and why this is a measured FAQ and not a hand-kept register, is in
-[session-reflection-design.md](session-reflection-design.md).
+[design/process/session-reflection-design.md](design/process/session-reflection-design.md).
 
 Questions tracked: 0 <!--count:faq-questions-->
 

@@ -113,8 +113,8 @@ only BRAT and review-md.
 
 ## Keeping it current
 
-The repo's own precedent ([`dsl-extension-skill-evaluation.md`](../dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](../issue-register-evaluation.md)) is: a check does the
+The repo's own precedent ([`dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md),
+[`issue-register-evaluation.md`](../design/process/issue-register-evaluation.md)) is: a check does the
 bookkeeping, and a skill does only the part that needs judgement. So:
 
 - **A generator** (`tools/catalog.py sync`). It reads:

@@ -5,7 +5,7 @@ date: 2026-09-25
 # The FAQ tool counted sessions that used a fact, not ones that re-derived it
 
 **Date:** 2026-09-25. **Affects:** `tools/session_reflect.py`,
-[session-reflection-design.md](../session-reflection-design.md) §3, §4, §8,
+[session-reflection-design.md](../design/process/session-reflection-design.md) §3, §4, §8,
 the `session-reflect` skill.
 
 ## What was tried

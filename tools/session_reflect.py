@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """session_reflect — mine transcripts for re-derived facts; keep a measured FAQ.
 
-Design: docs/session-reflection-design.md (§4 verbs, §6 formats, §7 loop
+Design: docs/design/process/session-reflection-design.md (§4 verbs, §6 formats, §7 loop
 detector, §8 verification). Census findings behind every choice here:
 docs/research/session-reflection-census.md.
 

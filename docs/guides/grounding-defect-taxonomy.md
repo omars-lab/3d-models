@@ -2,13 +2,13 @@
 
 **Status:** derived 2026-07-30 from the seven adversarial grounding audits in
 `docs/research/*-grounding-audit.md`. This file is the definition of record for
-the `K*` kind ids used in `docs/issue-register-evaluation.md`.
+the `K*` kind ids used in `docs/design/process/issue-register-evaluation.md`.
 
 ---
 
 ## 0. Why this file exists — the defect it fixes
 
-`docs/issue-register-evaluation.md` §5 publishes a taxonomy table with nine
+`docs/design/process/issue-register-evaluation.md` §5 publishes a taxonomy table with nine
 rows: K1–K6, K8, K11, K12. Its prose then reasons about **K7 and K10**
 ("A checklist would plausibly have caught K1, K10, K7 and the framing half of
 K2"), and §6 item 1 proposes carrying "the four prompt-preventable audit kinds
@@ -146,7 +146,7 @@ document claims of it. Three sub-forms, all present:
 
 *Resolves to nothing.*
 - `hemisphere-split-grounding-audit.md:232` — the status line links
-  `research/hemisphere-split-grounding-audit.md`; the file did not exist.
+  `../research/hemisphere-split-grounding-audit.md`; the file did not exist.
 - `lego-lab-grounding-audit.md:187` — a Brick Architect URL with *"zero Wayback
   snapshots, ever… The URL very likely never existed."*
 

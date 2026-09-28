@@ -303,7 +303,7 @@ Never read `.env` in chat; shape checks return booleans only.
 
 ### #24 — `session-reflect` skill (after Omar reviews 3d-models design PR #218)
 
-Build per `docs/session-reflection-design.md` §4–§9: `tools/session_reflect.py` with verbs
+Build per `docs/design/process/session-reflection-design.md` §4–§9: `tools/session_reflect.py` with verbs
 `census` / `update-faq` / `show` (`--audit`), walking the main transcript **and**
 `<session>/subagents/agent-*.jsonl` (subagent transcripts are separate files; bikar's
 `transcript.py` misses them); `docs/faq.md` (`## Q-NNN`, answer with an anchored

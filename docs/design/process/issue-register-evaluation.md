@@ -215,7 +215,7 @@ destination did not grow.)*
 
 ### 2.3 What already covers the good case
 
-[`ground-design-doc`](../.claude/skills/ground-design-doc/SKILL.md) covers
+[`ground-design-doc`](../../../.claude/skills/ground-design-doc/SKILL.md) covers
 research-before-recommending thoroughly: adversarial verify-and-refute agents,
 research checked into `docs/research/*.md`, counter-evidence per bet, the
 `(unverified snippet)` marking rule, and a handoff of empirical residue to
@@ -258,7 +258,7 @@ Two things are worth carrying forward from how this project already writes hooks
 
 ## 4. What the outside literature says, applied to its own question
 
-Research: [`docs/research/issue-register-practice-survey.md`](research/issue-register-practice-survey.md).
+Research: [`docs/research/issue-register-practice-survey.md`](../../research/issue-register-practice-survey.md).
 Headline findings, each traceable to a primary source:
 
 - **The success condition is being re-read, not being written.** Google SRE:
@@ -319,7 +319,7 @@ The seven grounding audits in `docs/research/*-grounding-audit.md` are an
 unintentional corpus of ~104 findings across 7 independent design efforts.
 Classified into failure kinds, **five kinds appear in all seven audits**. Full
 definitions, the instances each row rests on, and the counting rule are in
-[`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md):
+[`../../guides/grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md):
 
 | Kind | Audits | Preventable by |
 |---|---|---|
@@ -342,7 +342,7 @@ definitions, the instances each row rests on, and the counting rule are in
 > and the smaller half of a **K2**. The three rows above were re-derived from
 > the corpus rather than reconstructed from memory; the derivation, with
 > `file:line` anchors for every instance, is in
-> [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md) §2. Their
+> [`../../guides/grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md) §2. Their
 > counts come from that pass; the other nine rows carry the original pass's
 > counts. Both passes share an author, and §7's limits apply to both.
 
@@ -400,7 +400,7 @@ What the measurement *does* justify, ranked by strength of evidence:
 
 | # | Change | Evidence | Cost |
 |---|---|---|---|
-| 1 | **A `CLAUDE.md` for 3d-models**, under 200 lines, carrying the four prompt-preventable audit kinds ([K1, K2-framing, K7, K10](grounding-defect-taxonomy.md)) as rules with their failure mode attached — the qiyas tenet shape | 5 kinds at 7/7 across 7 efforts; §1.3 shows a session-loaded rule is what stopped F1 | one file |
+| 1 | **A `CLAUDE.md` for 3d-models**, under 200 lines, carrying the four prompt-preventable audit kinds ([K1, K2-framing, K7, K10](../../guides/grounding-defect-taxonomy.md)) as rules with their failure mode attached — the qiyas tenet shape | 5 kinds at 7/7 across 7 efforts; §1.3 shows a session-loaded rule is what stopped F1 | one file |
 | 2 | **The K6 rule as a gate**: every validator specified in a design doc ships one asserted-PASS and one asserted-FAIL example | 7/7; every K6 instance was found by an auditor hand-constructing a counterexample — the method is directly executable | small |
 | 3 | **The K4 rule as a gate**: a number in a normative sentence carries a citation or a `CAL-*` bet id | 7/7; the machinery exists and is already gate-checked (10 bets, 5 with no record) | extend existing |
 | 4 | **Route bikar's two registers**: `CLAUDE.md` documents the unused one and never mentions the used one; union 24, intersection 1 | §1.1, §5-hygiene; Nygard: *"Large documents are never kept up to date"* | small |
@@ -480,7 +480,7 @@ defines K9, and the smaller half of a **K2** — a taxonomy asserted as complete
 over a range a third of which was never published.
 
 **Fix.** The whole taxonomy was re-derived from all seven audits read end to
-end, published as [`grounding-defect-taxonomy.md`](grounding-defect-taxonomy.md)
+end, published as [`../../guides/grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md)
 with a `file:line` anchor for every instance, and §5/§6 repointed at it. K7,
 K9 and K10 were *derived*, not reconstructed from memory — the definitions
 follow the corpus, and where two kinds abut (K3/K9, K1/K10) the boundary is

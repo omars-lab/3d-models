@@ -27,7 +27,7 @@ cases, Appendix B.7's inset caveat);
 [`research/pattern-outline-body-clutch-survey.md`](research/pattern-outline-body-clutch-survey.md)
 (non-rectangular LEGO prior art and the clutch counter-case);
 [print register](tasks/coaster-pipeline/backlog.md) note 10 (the blocker this doc resolves);
-[`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md) (the house precedent on
+[`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) (the house precedent on
 when a DSL extension deserves process, and what a wrong pointer costs).
 
 ---

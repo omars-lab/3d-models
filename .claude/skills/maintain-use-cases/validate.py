@@ -74,7 +74,7 @@ That last paragraph held only because the loop below read the map. Outside it,
 the same edit moved a claim *out of every gate*: this file only ever opened
 `DOC_RELPATH`. Measured 2026-08-17, a pointer naming line **99999** of a real
 file, anchored on a literal present nowhere in it, written into
-`docs/orb-pipeline-map.md`, passed `doc_pointers.py`, `docs_gate.py` and this
+`docs/guides/orb-pipeline-map.md`, passed `doc_pointers.py`, `docs_gate.py` and this
 validator — three gates, all exit 0.
 
 So `tree_claims` scans every markdown file in the repo for the same syntax and

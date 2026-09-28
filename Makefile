@@ -112,7 +112,7 @@ use-case-links:
 # Design-doc gate: dead relative links (D1/K9), validators shipped without
 # asserted PASS+FAIL examples (D2/K6), defaults with no citation or CAL-* bet
 # id (D3/K4). Rules and the measurement behind them:
-# docs/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
+# docs/guides/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
 validate-docs:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py
@@ -859,7 +859,7 @@ validate-bambu-flags:
 	@sh ${ROOT_DIR}/.claude/gates/bambu_flags_gate.sh --self-test
 	@cd ${ROOT_DIR} && sh .claude/gates/bambu_flags_gate.sh
 
-# Session reflection (docs/session-reflection-design.md §9). The tool's own
+# Session reflection (docs/design/process/session-reflection-design.md §9). The tool's own
 # self-test, with its by-design "answer not taking" fixture, then an audit that
 # every answered FAQ entry still shows falling recurrence. Not in `validate`
 # yet: it reads this machine's transcripts, and the FAQ has nothing answered.

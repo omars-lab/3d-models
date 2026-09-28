@@ -30,17 +30,17 @@
       "why": "Third party — SWC's published config schema, cited for what it does *not* cover."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "packages/core/src/kernel/face-extraction.ts",
       "why": "Quoted defect. The doc reproduces a wrong pointer bikar's gate caught (real file: packages/core/src/graph/face-extractor.ts). Repairing it would delete the evidence."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "packages/core/src/nope/does-not-exist.ts",
       "why": "Deliberately nonexistent — the injected path in that doc's mutation test of a pointer gate."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "scripts/never-written.sh",
       "why": "Deliberately nonexistent, same mutation test."
     },

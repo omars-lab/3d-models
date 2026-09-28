@@ -113,12 +113,12 @@ the entry against itself (K7), and state the transfer conditions when a rule por
 material/nozzle is applied to another (K10).
 
 **If a lint rule starts to recur across entries, graduate it to a gate — not a reminder.** That is the
-repo's standing idiom (`docs/issue-register-evaluation.md`): measure the rule first, then gate it.
+repo's standing idiom (`docs/design/process/issue-register-evaluation.md`): measure the rule first, then gate it.
 
 ## This is a troubleshooting reference, not an issue register
 
-The repo deliberately has **no issue catalog** (`docs/issue-register-evaluation.md`,
-`docs/dsl-extension-skill-evaluation.md`): registers of past defects decay because nobody re-reads them.
+The repo deliberately has **no issue catalog** (`docs/design/process/issue-register-evaluation.md`,
+`docs/design/process/dsl-extension-skill-evaluation.md`): registers of past defects decay because nobody re-reads them.
 The wiki is a *different animal* and must stay one:
 
 - An **issue register** catalogs defects in *our own code/docs*, read once at fix time then never again.

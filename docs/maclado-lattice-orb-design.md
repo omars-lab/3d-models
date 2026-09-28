@@ -242,8 +242,8 @@ An orb-creation skill is written **only if** the instruction column is non-empty
 when the orb ships, and it is then a checklist pointing at those entries and
 nothing else. The precedent decides the empty case: two earlier skill proposals
 were each evaluated against measured recurrence and both ended *no skill, a gate
-instead* ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](issue-register-evaluation.md)).
+instead* ([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)).
 
 **Validator (the stop list is honest):** at ship, every entry is labelled and
 every *detector* entry names the gate or test it became. PASS: the orb ships with
@@ -277,8 +277,8 @@ not orb-specific — it recurs for any compound keyword, is readable from
 `lexer.ts` or the two existing compounds, and is already written down as a
 decision. By the D-049 §5 rule an orb-creation skill is written **iff** the
 instruction column is non-empty, so **no skill is written** — the outcome the
-precedent predicts ([`dsl-extension-skill-evaluation.md`](dsl-extension-skill-evaluation.md),
-[`issue-register-evaluation.md`](issue-register-evaluation.md): *no skill, a gate
+precedent predicts ([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
+[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md): *no skill, a gate
 instead*). The eight detectors are the durable record; the next orb build inherits
 them as red tests, not as a checklist to remember.
 

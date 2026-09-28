@@ -315,7 +315,7 @@ section was written, and the third closed on 2026-08-03; see each entry.
   against the pre-fix file it reports **one** finding, not two, because
   tile-wall §2 wrote the number as a *multiple* ("10–20× beyond FDM tolerance")
   and left no literal to match. See
-  [`grounding-defect-taxonomy.md`](../../grounding-defect-taxonomy.md) §"Why D4
+  [`grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md) §"Why D4
   exists".
 
   The four adjacent items were checked in the same pass and none is live: the

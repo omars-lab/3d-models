@@ -7,7 +7,7 @@ newest first, each row citing the queue item it discharges as `(2.N)`. The
 standing rule this gate replaces read: *"every PR that moves a §2 row updates
 §2/§3 in the same PR."* It lived as a remembered task (#50) that every future
 PR had to honour by hand — precisely the "defensible argument that management
-is occurring" that docs/issue-register-evaluation.md rejects. A remembered rule
+is occurring" that docs/design/process/issue-register-evaluation.md rejects. A remembered rule
 is not a checked one.
 
 The naive gate is a wolf-crier, and it was measured before this one was written
