@@ -87,6 +87,9 @@ refuting/complicating sources total.
   in Obsidian list it ([vault rules](../vault-setup/vault-rules.md) §1). Extract
   it from the agent transcript with jq rather than retyping it:
   `jq -rs '[.[] | select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text] | last' <task output file>`
+  The docs gate (D9) reads the `##` headings of the deliverable layout above when it runs and
+  checks every saved audit carries them in that order, so change the layout here, once, and the
+  check follows ([vault rules](../vault-setup/vault-rules.md) §9).
 - **Fix misgrounded citations first** — a link that doesn't say what we claim is worse
   than no link.
 - **Appendix A — survey sources**: linked source list; points at the research file(s)

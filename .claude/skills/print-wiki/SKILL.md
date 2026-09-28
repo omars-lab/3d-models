@@ -99,6 +99,7 @@ The wiki lives under `docs/`, so **`.claude/gates/docs_gate.py` already runs on 
 - **Anchored pointers** — a backticked `path:Lnnn` is a claim; anchor it `repo:path:Lnn "literal"`
   or cite the record/PR instead (prefer records over line numbers — they don't drift).
 - **Withdrawn literals (D4)** — a number an audit has killed stays killed corpus-wide.
+- **The entry's outline (D9)** — the five properties and the `##` headings of [`template.md`](template.md), in its order. The gate reads them from the template when it runs, so changing the template changes the check; rename a heading there, not in one entry.
 
 **Write the entry so its parts can be linked.** `docs/` is an Obsidian vault, and a link can land
 on a heading (the entry's link plus #what-to-do) but not on a table cell. Give anything worth
