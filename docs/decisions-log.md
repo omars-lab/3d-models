@@ -5449,3 +5449,20 @@ Properties are data a view depends on, so the docs gate now checks that frontmat
 and that a wikilink names a file in the vault (D1). Links in note bodies stay markdown, because
 GitHub renders them and D1 checks them; wikilinks go in properties such as `feeds:`, where
 Obsidian's backlinks pick them up.
+
+### Amendment, 2026-09-28 — folders of same-shaped notes get an outline check, and views are kept in Obsidian's saved form
+
+Omar: "too many flat files", and asked for folders of same-shaped notes with a check on each
+folder's outline. The same reasoning as above carries: a folder's shape is data its view and its
+readers depend on, so the gate holds it. One table in the docs gate, `FOLDER_RULES`, not a new
+hook (D9): troubleshooting notes and grounding audits follow their templates, which the gate
+reads when it runs; research notes carry `date` and `feeds`, issues carry `date`; a `status` is
+one of the five; a decided or built coaster feature design runs The ask → Options and the rubric
+→ Grammar → Decisions → Not yet. Measured before gating: every rule passed on all the notes it
+reads except two research notes with no `feeds`, which were fixed. The table in words is
+[vault rules §9](../.claude/skills/vault-setup/vault-rules.md#9-folders-of-same-shaped-notes-have-a-checked-outline).
+
+Obsidian rewrites a `.base` file when the view is saved in the app: it dropped the comment lines
+of `design-docs.base` and wrote `note.status` as `status` in `groupBy` and `order`. Every view is
+now written in that form, what each is for moved to [vault rules §2](../.claude/skills/vault-setup/vault-rules.md#2-views-core-bases-one-file-per-area),
+and the gate refuses a comment line or a `note.` name there (D10).

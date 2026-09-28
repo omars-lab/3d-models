@@ -1,0 +1,22 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.hasProperty("status")
+properties:
+  note.status:
+    displayName: Status
+views:
+  - type: table
+    name: By status
+    filters:
+      or:
+        - note.status == "draft"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - note.status
+    sort:
+      - property: file.name
+        direction: ASC
