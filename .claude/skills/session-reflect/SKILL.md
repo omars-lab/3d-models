@@ -12,7 +12,7 @@ transcripts show it recurring. Every answer is then checked: after it ships, do
 sessions stop re-deriving that fact?
 
 The design and its reasons are in
-[session-reflection-design.md](../../../docs/session-reflection-design.md). The
+[session-reflection-design.md](../../../docs/design/process/session-reflection-design.md). The
 measurements behind it are in
 [session-reflection-census.md](../../../docs/research/session-reflection-census.md).
 The FAQ is [faq.md](../../../docs/faq.md).

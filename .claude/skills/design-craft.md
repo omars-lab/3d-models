@@ -97,7 +97,7 @@ not the labels, are what the reader compares:
    look for a version that keeps its benefit and drops its biggest cost. "Rebuild the
    geometry engine" (huge) became "self-bootstrap the engine we already have" (small)
    only because someone asked this — see
-   [`../../docs/cached-coords-producer-design.md`](../../docs/cached-coords-producer-design.md).
+   [`../../docs/constructions/cached-coords-producer-design.md`](../../docs/constructions/cached-coords-producer-design.md).
    A rejected option is only truly rejected once its dominating variant was searched
    for and not found.
 2. **Pros, cons, and downstream implications.** What it buys, what it costs, and what

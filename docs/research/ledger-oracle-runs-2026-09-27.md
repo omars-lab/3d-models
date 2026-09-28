@@ -12,7 +12,7 @@ Scope: the oracle cells that were blank in the [constructions ledger](../constru
 on 2026-09-25 (catalog-expansion backlog item 2). Each line below is what the tool
 printed, copied from its output; the ledger cells are taken from these lines and
 nothing else. What the oracles are and what their thresholds mean lives in
-[construction equivalence](../construction-equivalence.md).
+[construction equivalence](../constructions/construction-equivalence.md).
 
 ## Trees and tools
 

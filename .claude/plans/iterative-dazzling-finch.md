@@ -149,7 +149,7 @@ after (graduation rule). Tier-0 witnesses (`patterns/witness/*.bkr`) precede any
   parser toolkits and why hand-rolled + conformance wins, OpenSCAD SVG-import limits, the corpus
   census above, the youtube loop's edge-SSIM accept threshold (read from `ggb_score.py`, not
   assumed). Links in §9. deps: none.
-- **P0.2** `3d-models/docs/geogebra-construction-import-design.md` — umbrella design: the
+- **P0.2** `3d-models/docs/constructions/geogebra-construction-import-design.md` — umbrella design: the
   architecture, rubric and option tables, AST contract summary, ledger, skill. Markers: every
   `**Default:**` cites P0.1 or a `CAL-*` id; every `**Validator:**` has `PASS:`/`FAIL:`. deps: P0.1.
 - **P0.3** `docs/decisions-log.md` D-A…D-G (renumber at merge; `decision-id-collision`). deps: P0.2.
@@ -324,7 +324,7 @@ after (graduation rule). Tier-0 witnesses (`patterns/witness/*.bkr`) precede any
   Bambu Studio CLI with all inputs `--arrange 1 --export-3mf`; `--dry-run` prints argv; `--bed
   x2d` = 256 × 256 with an area/count pre-check that fails before the slicer; per-object
   provenance pins `bikar:<path>@<ref>` in the plate record; mesh `--scale` passthrough prints the
-  D-D warning. `docs/plate-composer-design.md` (Defaults cite P0.1; Validator PASS/FAIL for the
+  D-D warning. `docs/design/printing/plate-composer-design.md` (Defaults cite P0.1; Validator PASS/FAIL for the
   bed check). deps: P3.3.
 - **P4.2 Mini plate manifest `docs/plates/minis-01.yaml`**: every migrated construction at mini
   size, count 2, one relief variant each — the plate after Plate 1. `bambu validate plate`
@@ -363,11 +363,11 @@ P1.2, P1.6, P1.7 are off the critical path.
 
 | Doc | Repo | Feeds from | Gate markers |
 |---|---|---|---|
-| `docs/geogebra-construction-import-design.md` | 3d-models | `docs/research/geogebra-construction-import-survey.md` | Default/Validator/count, pointer gate |
+| `docs/constructions/geogebra-construction-import-design.md` | 3d-models | `docs/research/geogebra-construction-import-survey.md` | Default/Validator/count, pointer gate |
 | `docs/coaster-design.md` (height-field kernel, relief modes, rim profiles, the structural validators and their hard FAIL cases, print orientation, mini/standard sizing) | 3d-models | survey + `CAL-CST-01…05` | Default → CAL ids, Validator PASS/FAIL |
-| `docs/construction-equivalence.md` (the three oracles, what each cannot see, thresholds) | 3d-models | survey + `ggb_score.py` threshold | Validator PASS/FAIL per oracle |
+| `docs/constructions/construction-equivalence.md` (the three oracles, what each cannot see, thresholds) | 3d-models | survey + `ggb_score.py` threshold | Validator PASS/FAIL per oracle |
 | `docs/mesh-compare.md` | qiyas | O3 metrics, threshold provenance | that repo's gates |
-| `docs/plate-composer-design.md` | 3d-models | survey (Bambu CLI, X2D bed) | Validator for bed check |
+| `docs/design/printing/plate-composer-design.md` | 3d-models | survey (Bambu CLI, X2D bed) | Validator for bed check |
 | `docs/design/<NN>-construction-statements.md` + `docs/decisions/…naqsh-language-name.md` | bikar | §8 + `dsl-design` | G1–G3 on grammar.md |
 | `docs/cookbook/geogebra-to-naqsh.md` | bikar | P2.5 | G3 fences, conformance test, count |
 | `docs/grammar.md` (new) + `docs/design/construction-ast-export.md` | youtube | P1.1–P1.3 | conformance test, schema mirror |

@@ -1,5 +1,5 @@
 // `bambu header` — auto-pull the Plate-1 bench-sheet "Profile header" from the printer + a sliced
-// `.3mf`, so the operator stops hand-transcribing it (docs/bambu-header-autopull-design.md).
+// `.3mf`, so the operator stops hand-transcribing it (docs/design/printing/bambu-header-autopull-design.md).
 //   header [--plate <file.3mf>] [--json]
 //
 // It is READ-ONLY and safe to run now — the same first-party MQTT path `status`/`filament` use (one

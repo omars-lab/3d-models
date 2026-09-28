@@ -79,7 +79,7 @@ it.
 Three related documents already exist and this one does not replace them:
 [`.claude/skills/prototype/catalog.md`](../../../.claude/skills/prototype/catalog.md)
 is the per-coupon detail and the place results get logged;
-[`calibration-design.md`](../../calibration-design.md) is the machine card's coupon
+[`calibration-design.md`](../../design/printing/calibration-design.md) is the machine card's coupon
 design doc; [`.claude/skills/calibrate/protocol.md`](../../../.claude/skills/calibrate/protocol.md)
 is the measurement ceremony. This file is the *order*, the *cost*, and the
 *ledger of what is still missing*.
@@ -98,7 +98,7 @@ bets `CAL-ANC-01`/`CAL-INW-01` registered 2026-08-02, plus the frame-band bet
 `CAL-TXT-01`/`CAL-TXT-02` registered 2026-08-04, plus the body-clearance bet
 `CAL-CLR-01` registered 2026-08-19);
 one more, `CAL-SEA-01`, appears twice in `3d-models` only, in both cases as a bet that
-[`hemisphere-split-design.md`](../../hemisphere-split-design.md) §Appendix B and its
+[`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) §Appendix B and its
 grounding audit deliberately **declined to mint**. `qiyas` contains no `CAL-*`
 id at all. That is the whole set as it exists on disk today; it is not a claim
 about bets that could be minted.
@@ -114,11 +114,11 @@ about bets that could be minted.
 | `.bkr` coupon files that exist today | 6 <!--count:coupon-dir-bkr--> + 2 | 6 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`. The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
-every rung renders: [`calibration-design.md`](../../calibration-design.md) §7 carries a
+every rung renders: [`calibration-design.md`](../../design/printing/calibration-design.md) §7 carries a
 23-piece verification table with euler, watertightness, triangle count and volume
 per piece, and its own status line says **"AUTHORED, UNPRINTED … no calibration
 bet is settled."** The Lego engine phases M6/M7/P0/P1/P2/P3 are all marked
-complete in [`lego-lab-design.md`](../../lego-lab-design.md) §10, and that table records
+complete in [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §10, and that table records
 the reason the LG coupons stopped gating M6: a knob can ship unmeasured where a
 baked constant cannot ([`decisions-log.md`](../../decisions-log.md) D-005, superseding
 D-003). So the printer is no longer a *build* blocker anywhere in the system —
@@ -153,12 +153,12 @@ plate names what it settles and what it releases.
 28 <!--count:cal-records--> provisional records are settled by an MC-series coupon —
 seven of those bets on the six rungs above, the two text bets on `MC-7`, which
 is catalogued but cannot be authored until bikar can emit text at all
-([`text-emit-design.md`](../../text-emit-design.md) §8 T2), and the body-clearance bet
+([`text-emit-design.md`](../../design/language/text-emit-design.md) §8 T2), and the body-clearance bet
 on `MC-8`, catalogued 2026-08-19 and authorable today — it is unwritten because
 printing is user-held, not because anything blocks it. Four
 separate design coupons — W-F1, W-C1, LG-F1 and P1 — each independently planned
 to measure some of warp, wall floor and bore fit before the card existed;
-[`calibration-design.md`](../../calibration-design.md) §1 is the argument for
+[`calibration-design.md`](../../design/printing/calibration-design.md) §1 is the argument for
 collapsing them, and both W-F1 Q2 and LG-F1 Q5 have already been **re-pointed**
 at MC-5 and MC-2 respectively in the catalog. Printing a design coupon before the
 card means measuring the printer inside a clip, a brick and an orb, and then not
@@ -172,7 +172,7 @@ rather than asserting the plate.
 
 **Cost, as the repo states it:** total solid volume across all 23 pieces
 **89.7 cm³**, "roughly 111 g of PLA at 100% infill, less in practice"
-([`calibration-design.md`](../../calibration-design.md) §7). `MC3BridgePlate` alone is
+([`calibration-design.md`](../../design/printing/calibration-design.md) §7). `MC3BridgePlate` alone is
 27.5 cm³ and `MC5WarpPlate` 15.3 cm³. Print time: **not stated**.
 
 **Three things this plate will not do.** `MC-2`'s four sub-floor rungs FAIL
@@ -211,12 +211,12 @@ publishes a metrologically-obtained anti-stud tube diameter, and — per the
 grounding audit — **no public source anywhere reports caliper measurements on a
 printed LEGO-compatible stud, or a clutch durability cycle count**. LG-F2 and
 LG-D1 "would be the first public data of their kind"
-([`lego-lab-design.md`](../../lego-lab-design.md) §8). `CAL-RIB-01` is named in that
+([`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §8). `CAL-RIB-01` is named in that
 doc's Appendix B.8 as **"the largest unverified bet in the document."**
 
 **What it decides that is not a number.** LG-F2 Q1 decides whether `studs full`
 and `studs edge` ship at all, or ship disabled with a documented nozzle
-requirement while `studs none` carries the feature ([`lego-lab-design.md`](../../lego-lab-design.md)
+requirement while `studs none` carries the feature ([`lego-lab-design.md`](../../design/pieces/lego-lab-design.md)
 §11 Q1). LG-R1 Q3 decides whether 1×N footprints are supported or refused with a
 pointer (§11 Q2). Two shipped-surface decisions from one plate.
 
@@ -250,8 +250,8 @@ deliverable — `patterns/Walls/Clip-Wall.bkr`, "the first full wall once the jo
 is proven" — is a *later* build, whereas the LEGO surface is already shipped and
 running on unmeasured knobs. W-C1's headline is a **grammar default**: rebate
 versus proud, judged in raking light on a real four-corner joint
-([`w2-connector-design.md`](../../w2-connector-design.md) §10 Q1, and the same question
-as [`tile-wall-design.md`](../../tile-wall-design.md) §10 Q1 — one print closes both).
+([`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §10 Q1, and the same question
+as [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q1 — one print closes both).
 
 **Conditions.** Clips in PETG; dummy tiles in the wall's tile material, to match
 shrinkage. `--check` on the **clip** part reports FAIL by design — its bayonet
@@ -259,7 +259,7 @@ blade is ~0.6 mm — and whether that thin flexing blade survives repeated
 seat/unseat is W-C1 Q3, i.e. the mesh-gate exemption is itself under test.
 W-C1 Q2 (warp) has already been re-pointed: it **checks the clip's capture floor
 against MC-5's number** rather than deriving one
-([`w2-connector-design.md`](../../w2-connector-design.md) §9 and §11 Q3, corrected in
+([`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §9 and §11 Q3, corrected in
 commit `14e1625`).
 
 **The third W coupon is not in this sequence.** W-P1 (§3.3) settles
@@ -336,7 +336,7 @@ today. Volumes and masses are quoted only where the repo states them.
 
 | id | measures | demanded by | unblocks | `.bkr` | cost as stated |
 |---|---|---|---|---|---|
-| MC-1 | bore ⌀ drift 3–10 mm, and which gap seats as press/snug/sliding/free | [`calibration-design.md`](../../calibration-design.md) §5.1 | `CAL-FIT-01`, `CAL-HOL-01`; `c2-assembly` B.3+B.6, `piece-composition` B.2; W-F1's conversion | exists — `Machine-Card.bkr`, 9 pieces | 11.8 + 7.5 cm³ plates + 6 pins ≤1.2 cm³ each |
+| MC-1 | bore ⌀ drift 3–10 mm, and which gap seats as press/snug/sliding/free | [`calibration-design.md`](../../design/printing/calibration-design.md) §5.1 | `CAL-FIT-01`, `CAL-HOL-01`; `c2-assembly` B.3+B.6, `piece-composition` B.2; W-F1's conversion | exists — `Machine-Card.bkr`, 9 pieces | 11.8 + 7.5 cm³ plates + 6 pins ≤1.2 cm³ each |
 | MC-2 | thinnest wall that prints as a handleable feature, **and the direction of the error** | §5.2 | `CAL-FEA-01` (3 records); `lego-lab` B.5 and the §7.4 floor override; P1 Q1; LG-F1 Q5 | exists — 7 tube rungs | 0.2–1.3 cm³ per rung |
 | MC-3 | first bridge span that **sags** (not fails), ⌀4–25 mm | §5.3 | `CAL-BRG-01`; `w2-connector` B.3, `print-validation` B.4, `lego-lab` §11 Q4 / V12 | exists — 1 plate | 27.5 cm³ |
 | MC-4 | first overhang angle showing curl or droop, 20–60° from vertical | §5.4 | `CAL-OVH-01`; `print-validation` B.2 and the F5 tier split | exists — 1 revolve | 11.9 cm³ |
@@ -355,7 +355,7 @@ job; the six above them are what one job settles."
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
-| MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](../../text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
+| MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](../../design/language/text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
 | MC-8 | the smallest gap at which two surfaces printed *in place* come off the plate as two objects rather than one — six wall pairs on a shared foot at **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm** | `CAL-CLR-01`; [`decisions-log.md`](../../decisions-log.md) D-039 | `MIN_BODY_CLEARANCE_MM`, and with it every woven orb's amplitude floor (§3.4) | **model to author** — catalogued 2026-08-19; [`catalog.md`](../../../.claude/skills/prototype/catalog.md) MC-8 names the file, and the pointer baseline carries it as a forward reference until it is written. Unwritten because printing is user-held, not because anything blocks it | not stated |
 
 MC-8's sub-floor rungs are **expected to FAIL** `linkageGate` by design, the same
@@ -368,14 +368,14 @@ between the walls, which is the failure this coupon is trying to observe."
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
-| LG-F1 | which `ribMm` (0/0.05/0.10/0.15/0.20) clutches a real LEGO stud; whether rung 0 clutches at all; whether `engage 1.6` sags as §3.6 predicts | [`lego-lab-design.md`](../../lego-lab-design.md) §8, B.8 | `CAL-RIB-01`; the `engage` default; LG-D1, LG-B1, LG-B2 all gate on it | exists — `Lego-Clutch-Coupon.bkr --piece CouponAnchorPlate` | not stated |
+| LG-F1 | which `ribMm` (0/0.05/0.10/0.15/0.20) clutches a real LEGO stud; whether rung 0 clutches at all; whether `engage 1.6` sags as §3.6 predicts | [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §8, B.8 | `CAL-RIB-01`; the `engage` default; LG-D1, LG-B1, LG-B2 all gate on it | exists — `Lego-Clutch-Coupon.bkr --piece CouponAnchorPlate` | not stated |
 | LG-F2 | realised-vs-authored stud ⌀ at five rungs; **whether `studs full`/`studs edge` ship at all** | §8, §11 Q1 | the `studDia` profile entry; the Lab's nozzle requirement | exists — `--piece CouponStudPlate` | not stated |
 | LG-R1 | whether a printed ⌀3.2 solid pin clutches, and whether FDM anisotropy shears it | §8, §11 Q2, §5.2 | the `pinDia` entry; the anchor solver's 1×N branch; whether 1×N ships or errors | exists — `--piece CouponPinStrip` | not stated |
 | LG-S1 | max total radial interference two **printed** parts swallow before the joint will not push together | §10 P1, [`decisions-log.md`](../../decisions-log.md) D-006 | `CAL-STK-01`; `STUD_ENTRY_MAX_MM`; whether the fit profile grows a printed-pair entry; the warning text bikar emits on every `Brick-Stack` render | exists — `Brick-Stack.bkr --format parts` | not stated |
 | LG-D1 | does clutch survive 100 seat/unseat cycles, and where does it fail | §8 | the material recommendation; §11 Q6's compliance-proxy question; B.8's "durable or one-shot" | reuses LG-F1's winning rung | not stated |
 | LG-B1 | do relief and clutch coexist; is an 8-fold star legible at 4×4 (31.8 mm) | §8 | `relief depth` and `engage` defaults; the P1 compatibility matrix's first ✅ row | exists — `patterns/Lego/Star-Brick.bkr` | not stated |
 | LG-B2 | does rotation lock hold on an incommensurable outline; **how much clutch is lost giving up the tangent side wall** | §8, §5.3, B.2 | B.2's rotation-lock criterion; V8's WARN-not-ERROR call; the 5-fold matrix row | **authored** (bikar `bf6c602`) — `patterns/Lego/Rosette-Brick.bkr`, a ten-fold rosette (five-fold girih family) riding the `footprint outline` mode that shipped in the same commit; six tubes at the default radius, corner-swept by the Lab | not stated |
-| LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](../../lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **authored** (bikar `73514f1`) — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural, two bars crossing the seam; one bar would delete the 2×2 pieces' only anchor — see the catalog entry); Star-Mural exists but is not minimal | not stated |
+| LG-P1 | lateral jog of a relief line crossing a mural seam on a real baseplate; whether the 0.2 mm gap reads as a groove | [`lego-pattern-set-design.md`](../../design/pieces/lego-pattern-set-design.md) §3 | `CAL-REG-01`; D-013's reversal condition; the gallery's "seam 0.2 mm" chip | **authored** (bikar `73514f1`) — `patterns/Lego/Seam-Coupon.bkr` (a 2×1-piece mural, two bars crossing the seam; one bar would delete the 2×2 pieces' only anchor — see the catalog entry); Star-Mural exists but is not minimal | not stated |
 | LG-P2 | whether LG-F1's winning rib also clutches a clone plate; clone pitch error accumulated over 8 studs | `lego-pattern-set-design.md` §5, [`lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md) | `CAL-CLB-01`; the K2 hedge "LEGO-brand verified, clone unmeasured" | reuses LG-F1's winning rung; needs plates bought, not modelled | not stated |
 
 ### 3.3 W-series wall
@@ -387,17 +387,17 @@ of the other two, nor they on it.
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
-| W-F1 | the blade clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](../../w2-connector-design.md) §8 | the clip-joint half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — `Clipseat-Fit-Coupon.bkr`, 6 pieces (written 2026-08-02, D-008) | not stated |
-| W-C1 | rebate vs proud in raking light; detent past-centre feel; PETG jaw survival; front-face lippage | §8, §10 Q1; [`tile-wall-design.md`](../../tile-wall-design.md) §10 Q1 | `CAL-DET-01`, `CAL-CLP-01`; the `clipseat` grammar default; the mesh-gate sub-floor exemption for bayonet clips | exists — `Clip-Coupon.bkr`, 3 pieces | not stated |
-| W-P1 | which band width reads as a deliberate margin — a 4-rung ladder (6/12/20/30 mm) around one fixed 2×2 field, so only the margin varies; whether the answer moves with viewing distance | [`tile-wall-design.md`](../../tile-wall-design.md) §10 Q3; [`decisions-log.md`](../../decisions-log.md) D-017 | `CAL-FRM-01`, and with it the `frame` statement's 12 mm default | exists — `Frame-Band-Coupon.bkr` (written 2026-08-03): one `FrameTile`, printed ×4, read against four 1:1 SVG rungs. The band itself is not printable geometry | not stated |
+| W-F1 | the blade clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 | the clip-joint half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — `Clipseat-Fit-Coupon.bkr`, 6 pieces (written 2026-08-02, D-008) | not stated |
+| W-C1 | rebate vs proud in raking light; detent past-centre feel; PETG jaw survival; front-face lippage | §8, §10 Q1; [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q1 | `CAL-DET-01`, `CAL-CLP-01`; the `clipseat` grammar default; the mesh-gate sub-floor exemption for bayonet clips | exists — `Clip-Coupon.bkr`, 3 pieces | not stated |
+| W-P1 | which band width reads as a deliberate margin — a 4-rung ladder (6/12/20/30 mm) around one fixed 2×2 field, so only the margin varies; whether the answer moves with viewing distance | [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q3; [`decisions-log.md`](../../decisions-log.md) D-017 | `CAL-FRM-01`, and with it the `frame` statement's 12 mm default | exists — `Frame-Band-Coupon.bkr` (written 2026-08-03): one `FrameTile`, printed ×4, read against four 1:1 SVG rungs. The band itself is not printable geometry | not stated |
 
 ### 3.4 Orb ladder
 
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
 | P1 | smallest `strut_width` that prints clean; whether the floor needs to be orientation-aware; star-tip acute voids; tree-support scarring | catalog P1 | `strut_width`/`strut_depth` mins in every `patterns/Orbs/*.bkr`; the mesh-gate FDM floor. **Q1 is MC-2's question in strut form** | exists — CLI param override, STLs already on disk | 15.8 / 20.3 / 28.2 cm³; **≈80 g PLA for the trio** |
-| P2 | whole-sphere printability; print time and mass at defaults; dimensional accuracy; handling strength; bed contact | catalog P2; [`orb-lab-design.md`](../../orb-lab-design.md) §5 | the harness print-prototype task; gallery print notes | exists — `Star-Orb.bkr` at defaults | 45.7 cm³, 5,040 tris |
-| P3 | whether flat-down halves beat the whole print by enough to justify engine work; seam visibility; hand alignment; `vertex` vs `face` cut plane | [`hemisphere-split-design.md`](../../hemisphere-split-design.md) §9.2 | the split-export go/no-go — the doc **recommends not building** and hands P3 the verdict | slicer-side cut of `StarOrb.stl`; no engine work | not stated |
+| P2 | whole-sphere printability; print time and mass at defaults; dimensional accuracy; handling strength; bed contact | catalog P2; [`orb-lab-design.md`](../../design/orb/orb-lab-design.md) §5 | the harness print-prototype task; gallery print notes | exists — `Star-Orb.bkr` at defaults | 45.7 cm³, 5,040 tris |
+| P3 | whether flat-down halves beat the whole print by enough to justify engine work; seam visibility; hand alignment; `vertex` vs `face` cut plane | [`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) §9.2 | the split-export go/no-go — the doc **recommends not building** and hands P3 the verdict | slicer-side cut of `StarOrb.stl`; no engine work | not stated |
 | P4 | do petal-zigzag sliver voids resolve or fuse; does `inner` at its 16 mm floor print | catalog P4 | `inner`/`shoulder` ranges; the Lab's default-preset choice | exists — `Rosette-Orb.bkr` | 47.0 cm³ |
 | P5 | does FDM at a 0.8 mm ribbon gap print free-moving ribbons, fuse them, or fill them; the SLS/MJF result at the same gap | catalog P5 | the Lab's tier-3 weave/FDM notice; `amplitude` defaults; the ✓/fused threshold | exists — `Rosette-Weave-Orb.bkr` | 27.9 cm³ |
 | P6 | R=40 graceful shrink; R=110 warp/adhesion/time; whether strut width should scale with radius | catalog P6 | the `radius` range; the Lab ceiling-margin rule (`2R ≤ min(XYZ) − 10`) | exists — `radius` baked via the Lab | not stated |
@@ -437,24 +437,24 @@ not an estimate. §4 item 6 is closed.
 
 | item | catalog | measures | demanded by | `.bkr` |
 |---|---|---|---|---|
-| W1 2×2 tile pilot | **W1** | a real ≈100 mm relief tile's mass and print time — the doc's own figures are **"estimates until the W1 2×2 pilot measures a real tile"** | [`tile-wall-design.md`](../../tile-wall-design.md) §7.1 | exists — `patterns/Walls/Nail-Wall.bkr`, `patterns/Pieces/Nail-Tile.bkr` |
-| C1 Nail-Tile deliverable | **C1** | whether the girih tile with a countersunk nail bore prints and hangs as designed | [`piece-composition-design.md`](../../piece-composition-design.md) | exists — `patterns/Pieces/Nail-Tile.bkr` |
-| C2 Pinned-Tiles deliverable | **C2** | whether authored ⌀2.90 press / ⌀3.15 sliding sockets against ⌀3.00 printed pins behave as the fit windows claim | [`c2-assembly-design.md`](../../c2-assembly-design.md) §8 | exists — `patterns/Assemblies/Pinned-Tiles.bkr` |
-| Clip-Wall first full wall | **W2** | whether the proven joint scales to a four-tile wall — hanging on **four** screws, one keyhole per tile, not the one §8 used to claim | [`w2-connector-design.md`](../../w2-connector-design.md) §8 | exists — `patterns/Walls/Clip-Wall.bkr` |
+| W1 2×2 tile pilot | **W1** | a real ≈100 mm relief tile's mass and print time — the doc's own figures are **"estimates until the W1 2×2 pilot measures a real tile"** | [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §7.1 | exists — `patterns/Walls/Nail-Wall.bkr`, `patterns/Pieces/Nail-Tile.bkr` |
+| C1 Nail-Tile deliverable | **C1** | whether the girih tile with a countersunk nail bore prints and hangs as designed | [`piece-composition-design.md`](../../design/pieces/piece-composition-design.md) | exists — `patterns/Pieces/Nail-Tile.bkr` |
+| C2 Pinned-Tiles deliverable | **C2** | whether authored ⌀2.90 press / ⌀3.15 sliding sockets against ⌀3.00 printed pins behave as the fit windows claim | [`c2-assembly-design.md`](../../design/pieces/c2-assembly-design.md) §8 | exists — `patterns/Assemblies/Pinned-Tiles.bkr` |
+| Clip-Wall first full wall | **W2** | whether the proven joint scales to a four-tile wall — hanging on **four** screws, one keyhole per tile, not the one §8 used to claim | [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 | exists — `patterns/Walls/Clip-Wall.bkr` |
 
 The tile-wall estimates, quoted with their hedge: a ≈100 mm relief tile at
 "~40–60 g, ~2–4 h at 0.2 mm on a modern small printer", giving ~36 tiles /
 ~5 days / ~2 kg for a 0.6 × 0.6 m focal panel and ~200 tiles / ~4 weeks / ~10 kg
 for a 1.2 × 1.8 m accent wall. §7.1 labels the whole table "*estimates*", and
-[`tile-wall-design.md`](../../tile-wall-design.md) §7.1 makes computing them for real
+[`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §7.1 makes computing them for real
 a W3 deliverable of `layout report`.
 
 ### 3.6 Blocked on more than a printer
 
 | item | why a printer is not enough |
 |---|---|
-| `CAL-STR-01` — Z-layer strength ratio | The registry's own coupon field reads **"none — measuring it needs a load rig, which does not exist; registered so the gap is visible."** Consumers: [`c2-assembly-design.md`](../../c2-assembly-design.md) B.5. |
-| Adhesive seam strength per mm² on an FFF lap face (P3 Q2) | [`hemisphere-split-design.md`](../../hemisphere-split-design.md) Appendix B declines to mint `CAL-SEA-01` for a feature the same doc recommends not building. A print gives the halves; the *number* needs a tensile setup this repo does not have. Recorded, deliberately, as an open question rather than a bet. |
+| `CAL-STR-01` — Z-layer strength ratio | The registry's own coupon field reads **"none — measuring it needs a load rig, which does not exist; registered so the gap is visible."** Consumers: [`c2-assembly-design.md`](../../design/pieces/c2-assembly-design.md) B.5. |
+| Adhesive seam strength per mm² on an FFF lap face (P3 Q2) | [`hemisphere-split-design.md`](../../design/orb/hemisphere-split-design.md) Appendix B declines to mint `CAL-SEA-01` for a feature the same doc recommends not building. A print gives the halves; the *number* needs a tensile setup this repo does not have. Recorded, deliberately, as an open question rather than a bet. |
 | PLA clip creep — "creeps loose within months" | [`research/tile-wall-grounding-audit.md`](../../research/tile-wall-grounding-audit.md) records this as an extrapolation with "no cited source giv[ing] a loosening timeline at wall-tile stress levels." Settling it ourselves needs a printed clip **held under load for months**, i.e. calendar time and a fixture, not a print. |
 | P5's SLS/MJF rung | needs a **service order**, not a printer — and per §2's K10 note, no FDM constant transfers to it. |
 
@@ -559,7 +559,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
 
 1. The machine card is authored and every rung's geometry is verified —
    23 pieces, euler, watertightness and volume in
-   [`calibration-design.md`](../../calibration-design.md) §7, plus independent
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §7, plus independent
    silhouette and Pappus checks on MC-4 and z-level checks on MC-3.
 2. All 6 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
    `bikar/patterns/Coupons/`. This line said **four** until 2026-08-03, two
@@ -577,7 +577,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
 5. The build envelope check exists: the Lab's machine dropdown and
    `radiusCeilingMm` already clamp the radius knob to `min(XYZ) − 10`.
 6. The bikar CLI is built in the working checkout, so every render command in
-   [`calibration-design.md`](../../calibration-design.md) §6 runs today.
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §6 runs today.
 
 **Not done — do these first.**
 
@@ -585,7 +585,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    are in `build/stls/coupons/machine-card/`, rendered per §6 (the
    `--check`-less lines for `MC2Wall04/06/08/10`, `--check print` for the MC-6
    towers), from bikar `60383b5`. Every rung matches
-   [`calibration-design.md`](../../calibration-design.md) §7's table — euler,
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §7's table — euler,
    watertight, degenerate, minFeature, verdict, triangles, volume — and the 23
    volumes sum to the 89.7 cm³ §7 states. `build/` is not tracked on master, so
    the STLs are a local artifact; `make coupons` reproduces them.
@@ -622,13 +622,13 @@ Checked against the repo, not against memory. Done / not done is stated per item
    `# Deliverables` heading at the end of that file. Each was grounded by
    rendering the shipped model rather than by reading the design doc: that is
    how the W2 entry found the **"hanging on one screw"** claim that
-   [`w2-connector-design.md`](../../w2-connector-design.md) §2 and §8 both carried and
+   [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §2 and §8 both carried and
    the compiler had been contradicting all along — a wall mints one keyhole per
    *tile*, so the deliverable hangs on four. Corrected in that doc, in
-   [`tile-wall-design.md`](../../tile-wall-design.md) §9 and in §3.5 above, and the
+   [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §9 and in §3.5 above, and the
    design question it was silently deciding is now W2 §11 Q6.
 7. **Look at the fan in a slicer before committing filament** —
-   [`calibration-design.md`](../../calibration-design.md) §8 lists "no raster render
+   [`calibration-design.md`](../../design/printing/calibration-design.md) §8 lists "no raster render
    was eyeballed" as a known weakness, and MC-4 is the piece whose failure mode
    would be a silently wrong dimension.
 
@@ -688,14 +688,14 @@ For any reading, the full landing sequence is:
 | LG-F2 realised stud ⌀ | the `studDia` LEGO profile entry | whether `studs full` / `studs edge` are enabled at all |
 | LG-R1 pin result | the `pinDia` entry; the solver's 1×N branch | whether 1×N footprints compile or error with a pointer |
 | LG-S1 entry ceiling | `STUD_ENTRY_MAX_MM` (`kernel3d/lego.ts`) | the port-contract error on `Brick-Stack`; the warning text in `brick-ports.ts` and the K10 paragraph in bikar's `docs/language-reference.md`, both of which currently name this coupon as the thing that has not happened |
-| W-C1 detent depth | `CLIP_DETENT_MM_CAL` (`corner-clip.ts`) | the shipped detent geometry ([`w2-connector-design.md`](../../w2-connector-design.md) §12) |
+| W-C1 detent depth | `CLIP_DETENT_MM_CAL` (`corner-clip.ts`) | the shipped detent geometry ([`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §12) |
 | W-C1 seated Z bias | `CLIP_Z_BIAS_MM_CAL` | the anti-rattle preload and sub-flush setback |
 | W-C1 rebate vs proud | not a constant — a **grammar default** | the `clipseat` default in `patterns/Walls/*.bkr`; closes `tile-wall` §10 Q1 too |
 
 A reading that **refutes** the design is a success outcome of `calibrate` and
 must not be deleted: "bury it and the next person re-runs the print." A ladder
 that brackets wrong — every rung passing, or every rung failing — is also a
-result, and [`calibration-design.md`](../../calibration-design.md) §2 says so before
+result, and [`calibration-design.md`](../../design/printing/calibration-design.md) §2 says so before
 the fact precisely so it is not logged as "the coupon didn't work."
 
 ---
@@ -710,9 +710,9 @@ one.
    [`catalog.md`](../../../.claude/skills/prototype/catalog.md) asked clipseat
    questions over a `Fit-Coupon.bkr` model line, that file being a five-bore ⌀
    ladder with no clipseat, no tile and no `gap` param;
-   [`c2-assembly-design.md`](../../c2-assembly-design.md) §8 described the same file
+   [`c2-assembly-design.md`](../../design/pieces/c2-assembly-design.md) §8 described the same file
    correctly as C2's step gauge; and
-   [`w2-connector-design.md`](../../w2-connector-design.md) §8 named a **third**
+   [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 named a **third**
    filename, `Fit-Step-Gauge.bkr`, which had never existed.
    Reading the geometry settled it: the catalog's prose was describing a coupon
    nobody had written. A bore-and-pin number does not transfer to a bayonet blade
@@ -736,10 +736,10 @@ one.
    feel it first.
 4. **Print time for anything.** No document in this repo states a print-time
    estimate for any coupon. The only time figures found anywhere are
-   [`tile-wall-design.md`](../../tile-wall-design.md) §7.1's, and that section labels
+   [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §7.1's, and that section labels
    its whole table as estimates pending the W1 pilot.
 5. **Mass or volume for the LG and W series.** The catalog states volumes for the
-   P-series and [`calibration-design.md`](../../calibration-design.md) §7 states them
+   P-series and [`calibration-design.md`](../../design/printing/calibration-design.md) §7 states them
    for all 23 MC pieces. Neither states one for any LG or W coupon, and I did not
    compute any — a render would give a number, but it would be mine and not the
    repo's.
@@ -751,7 +751,7 @@ one.
    neither the catalog nor the design doc says whether all fifteen print or
    whether `engage` is sampled. I did not resolve it.
 8. **Whether the W-series "on hold" is lifted by a printer arriving.**
-   [`w2-connector-design.md`](../../w2-connector-design.md) §8 says only "printing is
+   [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 says only "printing is
    currently on hold, so both entries land as `planned`", and
    [`decisions-log.md`](../../decisions-log.md) D-003 gives the cause as a printer that
    is "owner-held and on hold". The stated cause is the absent machine, but the
@@ -769,7 +769,7 @@ one.
     but those are 2D patterns with no `brick` declaration. The authoring work is
     named, not specified — and, checked on 2026-08-02 at bikar `73514f1`, it is
     **blocked on a missing DSL surface**: the pattern-outline body is specified
-    in [`lego-lab-design.md`](../../lego-lab-design.md) §5.2/§7.2 and the kernel
+    in [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §5.2/§7.2 and the kernel
     honours `BrickSpec.bodyOutline` (tests exercise it), but no `BrickStmt` in
     the grammar reaches it — `evaluateBrickDecl` builds every DSL brick
     rectangular, and none of the seven shipped presets is pattern-outline.
@@ -781,13 +781,13 @@ one.
     **Resolved 2026-08-02**: the explicit surface shipped as `footprint outline`
     (bikar `bf6c602`, decision doc
     `bikar:docs/decisions/2026-08-02-pattern-outline-footprint.md`, designed in
-    [`pattern-outline-brick-design.md`](../../pattern-outline-brick-design.md)), and
+    [`pattern-outline-brick-design.md`](../../design/pieces/pattern-outline-brick-design.md)), and
     `Rosette-Brick.bkr` was authored against it in the same commit.
 11. ~~**Whether a `make coupons` target is wanted.**~~ **Resolved 2026-08-03**:
     yes, and the precedent question resolved itself. The repo's preference for
     a gate over new machinery
-    ([`dsl-extension-skill-evaluation.md`](../../dsl-extension-skill-evaluation.md),
-    [`issue-register-evaluation.md`](../../issue-register-evaluation.md)) does not
+    ([`dsl-extension-skill-evaluation.md`](../../design/process/dsl-extension-skill-evaluation.md),
+    [`issue-register-evaluation.md`](../../design/process/issue-register-evaluation.md)) does not
     transfer to a build target, as noted here — but what shipped is a gate that
     happens to have a target as its entry point, so the preference is satisfied
     rather than bypassed. See §4 item 2 and
@@ -798,7 +798,7 @@ one.
 ## 8. Reading this file against itself
 
 Five checks, run before shipping it, in the spirit of
-[`grounding-defect-taxonomy.md`](../../grounding-defect-taxonomy.md) K7.
+[`grounding-defect-taxonomy.md`](../../guides/grounding-defect-taxonomy.md) K7.
 
 - **The headline sequence and the register agree.** §2 puts the machine card
   first; §3.1 shows no MC coupon blocked on anything. §2 puts the LG ladder
@@ -885,7 +885,7 @@ Five checks, run before shipping it, in the spirit of
   by construction blind to, so the same day the question "does anything check
   that a claim is tagged *at all*?" was answered by measuring two candidate
   rules over all 62 documents of `docs/` and `.claude/` — the method
-  [`issue-register-evaluation.md`](../../issue-register-evaluation.md) and the
+  [`issue-register-evaluation.md`](../../design/process/issue-register-evaluation.md) and the
   rejected link checker both used. A number within 60 characters of the
   quantity's vocabulary scored **117 hits, ~5 real**; a number *immediately* in
   front of a curated noun phrase scored **9 hits, 9 real**, and six of those

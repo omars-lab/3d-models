@@ -7,7 +7,7 @@ description: Turn an LDraw model (.mpd/.ldr) into a set of camera-angle PNGs and
 
 The tool is bikar's `bikar:scripts/render-ldraw-thumbnails.ts` (D-028,
 [`docs/decisions-log.md`](../../../docs/decisions-log.md); spec in
-[`docs/lego-lab-design.md`](../../../docs/lego-lab-design.md) §15). This skill is the
+[`docs/design/pieces/lego-lab-design.md`](../../../docs/design/pieces/lego-lab-design.md) §15). This skill is the
 procedure for running it and reading its result — the CLI, the gate logic
 (`bikar:scripts/thumbnail-gate.ts`), the witness (`bikar:scripts/thumbnail-gate.test.mjs`)
 and the fixtures all live in bikar. It renders the *same* scene the studio read-back panel
@@ -118,8 +118,8 @@ the two ports across backends. When you must validate somewhere the goldens don'
 The render path has a GPU in it, so a gate that rendered on every commit would be both slow and
 backend-fragile in exactly the way K10 describes. Graduating this to a hook waits until the defect
 it would catch shows **measured recurrence** — the same *no skill/gate before the recurrence is
-measured* discipline as [`docs/issue-register-evaluation.md`](../../../docs/issue-register-evaluation.md)
-and [`docs/dsl-extension-skill-evaluation.md`](../../../docs/dsl-extension-skill-evaluation.md). If
+measured* discipline as [`docs/design/process/issue-register-evaluation.md`](../../../docs/design/process/issue-register-evaluation.md)
+and [`docs/design/process/dsl-extension-skill-evaluation.md`](../../../docs/design/process/dsl-extension-skill-evaluation.md). If
 you find yourself running `--check` by hand to catch the same regression a third time, that is the
 recurrence — record it and propose the gate then, not before.
 

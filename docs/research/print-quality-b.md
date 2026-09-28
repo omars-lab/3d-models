@@ -7,7 +7,7 @@ feeds:
 
 # Print quality research B: small openwork PLA coasters on the X2D
 
-The raw findings behind [`../print-quality-b-design.md`](../print-quality-b-design.md).
+The raw findings behind [`../design/printing/print-quality-b-design.md`](../design/printing/print-quality-b-design.md).
 The question: how to lift the print quality of small, thin, openwork PLA coasters on a
 Bambu X2D, and what caused the three things Omar saw on the minis-04 plate on
 2026-09-26: "i see tiny holes on the print and the peg system border is too big and

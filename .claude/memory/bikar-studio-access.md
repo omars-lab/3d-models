@@ -44,6 +44,6 @@ CI can read content through the gate. See [[owner-gated-and-on-hold]].
 
 **This settles the "bikar-studio public-surface keystone"** that gated the d3-integration
 Phase 1 and the qiyas data-model-API D-API-2 (see [[islamic-orb-project]],
-`docs/d3-integration-design.md` §5, `qiyas/docs/design/data-model-http-api.md`): a shared
+`docs/design/orb/d3-integration-design.md` §5, `qiyas/docs/design/data-model-http-api.md`): a shared
 d3 layer / explorer and a qiyas data API can be served from this org-gated surface — behind
 the same GitHub-org gate, internet-reachable but not open to the world.

@@ -1,7 +1,7 @@
 // `bambu filament` — read-only view of the filament the printer has loaded (AMS + external spool).
 //   list (default) : the loaded trays, one line each — material, color, brand, remaining
 //
-// This is the discovery seam the print-model skill (docs/print-model-design.md §5.5) builds on: pick
+// This is the discovery seam the print-model skill (docs/design/printing/print-model-design.md §5.5) builds on: pick
 // the filament before deciding nozzle/settings. It reaches the printer WITHOUT moving it — the same
 // `pushing.pushall` status request `status show` uses (backends/mqtt.ts), reading `print.ams.ams[]`
 // and `print.vt_tray` out of the cached report frame.

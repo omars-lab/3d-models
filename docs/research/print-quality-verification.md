@@ -11,7 +11,7 @@ checks: docs/research/print-quality-a.md, docs/research/print-quality-b.md
 Two researchers (A, PR #344 and B, PR #345) wrote on the same question: why minis-04
 showed "tiny holes", a peg border that is "too big" and pegs that are "too tight". This
 file records what I re-opened myself and what each source actually says, so the
-consolidated doc ([`../print-quality-design.md`](../print-quality-design.md)) rests on
+consolidated doc ([`../design/printing/print-quality-design.md`](../design/printing/print-quality-design.md)) rests on
 checked text, not on either researcher's summary.
 
 Nothing was printed or measured. The printer was not contacted. Everything below is
@@ -170,7 +170,7 @@ disagree about what `c` means at the head.
 - [`../../.claude/skills/calibrate/bets.md`](../../.claude/skills/calibrate/bets.md),
   CAL-FIT-01: press −0.1, snug 0.05, sliding 0.15, free 0.35, basis "Literature-shaped
   FDM clearance ladder ... no pin and socket have been printed".
-- [`../c2-assembly-design.md`](../c2-assembly-design.md) §5 calls these "**Intent gaps**
+- [`../design/pieces/c2-assembly-design.md`](../design/pieces/c2-assembly-design.md) §5 calls these "**Intent gaps**
   (diametral)", and Appendix B.3 says it "transcribes Creative3DP's calibrated-printer
   press-fit ladder verbatim, including its instruction to keep fit gap and printer
   compensation separate".

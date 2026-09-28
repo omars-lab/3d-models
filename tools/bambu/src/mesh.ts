@@ -1,7 +1,7 @@
 // STL bounding box — the footprint the bed pre-check measures.
 //
 // The plate composer needs each rendered part's XY footprint to run the bed-fit pre-check BEFORE the
-// slow slicer runs (docs/plate-composer-design.md §6). bikar emits an STL; rather than depend on an
+// slow slicer runs (docs/design/printing/plate-composer-design.md §6). bikar emits an STL; rather than depend on an
 // undocumented bikar "bounds" flag, we read the mesh's own vertices — the authoritative geometry — and
 // track min/max per axis. One reader handles both STL encodings (binary is what bikar writes; ASCII is
 // supported so a hand-authored fixture works in tests without a bikar checkout).

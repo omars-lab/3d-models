@@ -1,5 +1,5 @@
 // The profile-header BUILDER — the join of the printer frame and the sliced `.3mf` that fills the
-// Plate-1 bench sheet's "Profile header" block (docs/bambu-header-autopull-design.md).
+// Plate-1 bench sheet's "Profile header" block (docs/design/printing/bambu-header-autopull-design.md).
 //
 // This is PURE: it takes an already-read report frame and already-parsed `.3mf` metadata, and returns
 // a structured header. No MQTT, no unzip, no clock-of-record beyond an injectable `now` — so it is

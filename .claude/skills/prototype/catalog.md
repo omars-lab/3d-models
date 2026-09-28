@@ -61,7 +61,7 @@ floor) — these prints test *reality*, not the mesh.
     default brim/raft suffice or does the model want a flattened pole?
 - **What we learned**: — pending.
 - **Feeds**: harness print-prototype task; gallery print notes;
-  `docs/orb-lab-design.md` §5.
+  `docs/design/orb/orb-lab-design.md` §5.
 
 ## P3 — Hemisphere-split Star-Orb — harness task: "decide FDM-friendly hemisphere-split STL export"
 
@@ -73,7 +73,7 @@ floor) — these prints test *reality*, not the mesh.
   is an `edge-2` axis, so "cut at z = 0" gets a 491 mm² / 16-piece
   cross-section; the `vertex` plane gives one continuous 898 mm² annulus and
   the `face` plane gives 175 mm² in 12 pieces
-  ([`hemisphere-split-design.md`](../../../docs/hemisphere-split-design.md) §3.5).
+  ([`hemisphere-split-design.md`](../../../docs/design/orb/hemisphere-split-design.md) §3.5).
 - **Print target**: TBD (same machine as P2 for a fair comparison).
 - **What we want to learn**:
   - [ ] 1. Does flat-down/no-support halves beat the whole-sphere print on
@@ -184,7 +184,7 @@ floor) — these prints test *reality*, not the mesh.
   `patterns/Orbs/Maclado-9-Weave.bkr` (46 free ribbon loops over 390
   alternating crossings, ribbon 1.2 × 1.2, amplitude 0.8, 8.6 cm³ →
   `build/stls/Maclado9Weave.stl`, 7,200 tris). Design:
-  `docs/maclado-orb-design.md` §7.
+  `docs/design/orb/maclado-orb-design.md` §7.
 - **Print target**: TBD — **assumes a ~0.4 mm-class nozzle**. That is §7's
   K10 condition, not a preference: the 2.0 mm unsupported-thin-wall default
   is nozzle-relative, so a 0.2 or 0.8 mm nozzle shifts the floor and this
@@ -258,7 +258,7 @@ earned until it records its provenance).
   clearance classes — press / snug / sliding / free — at the gaps
   `kernel3d/fit-profile.ts` declares, plus a line-to-line zero for an origin.
   `MC1FitGauge` and `MC1Pin03/04/05/06/08/10` are the mating pins. Full render
-  commands: `docs/calibration-design.md` §6 — **always pass `--piece`**, since
+  commands: `docs/design/printing/calibration-design.md` §6 — **always pass `--piece`**, since
   without it the CLI renders the `MC1Fit` assembly as one mesh (a plate and a
   loose pin fused into a single useless STL).
 - **Print target**: TBD — profile header per the series note.
@@ -281,8 +281,8 @@ earned until it records its provenance).
     measured fits, or do they interact?
 - **What we learned**: — pending.
 - **Feeds**: `FIT_GAP_MM` and `holeCompMm` in `bikar` `kernel3d/fit-profile.ts`
-  (value **and** provenance record); `docs/c2-assembly-design.md` Appendix B.3 and
-  B.6; `docs/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
+  (value **and** provenance record); `docs/design/pieces/c2-assembly-design.md` Appendix B.3 and
+  B.6; `docs/design/pieces/piece-composition-design.md` Appendix B.2 — the same bet as c2 B.3,
   which is why one plate closes both; W-F1's blade-clearance conversion.
 
 ## MC-2 — Wall ladder (minimum printable feature)
@@ -292,7 +292,7 @@ earned until it records its provenance).
   2.0 mm** (wall = (outer − inner)/2), one piece per rung —
   `MC2Wall04 / 06 / 08 / 10 / 12 / 16 / 20`. The rung is in the piece name, not a
   parameter: the wall is what is being measured, so it is authored literally.
-  Full render commands: `docs/calibration-design.md` §6.
+  Full render commands: `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note.
 - **Settles**: `CAL-FEA-01` (`DEFAULT_MIN_FEATURE_MM`, currently 1.2).
 - **Sub-floor note**: the 0.4–1.0 mm rungs sit **below** the 1.2 mm mesh-gate
@@ -314,7 +314,7 @@ earned until it records its provenance).
     tall one), or is a single floor honest?
 - **What we learned**: — pending.
 - **Feeds**: `DEFAULT_MIN_FEATURE_MM` in `bikar` `kernel3d/mesh-gate.ts` (value
-  **and** provenance record); `docs/lego-lab-design.md` Appendix B.5 and the §7.4
+  **and** provenance record); `docs/design/pieces/lego-lab-design.md` Appendix B.5 and the §7.4
   `minFeatureMm: 0.8` override; P1 Q1 and LG-F1 Q5, both of which ask this
   question in design-specific form.
 
@@ -330,7 +330,7 @@ earned until it records its provenance).
   guidance 20–25, UltiMaker 25 in Tough PLA), so a ladder stopping at 12 could not
   fail and would cost a print to learn "higher than 12". 10 mm sits fourth from
   the bottom, bracketed on both sides. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Orientation is
   the measurement**: plate flat, +z up, **bore mouths on the bed**. Flipped, every
   bore is an ordinary pocket opening upward with nothing to bridge, and the coupon
@@ -351,8 +351,8 @@ earned until it records its provenance).
     mode that matters for a cavity roof, as opposed to cosmetic sag.
 - **What we learned**: — pending.
 - **Feeds**: the bridge-span constant in `bikar` `kernel3d/print-gate.ts` (value
-  **and** provenance record); `docs/w2-connector-design.md` Appendix B.3 and §4
-  Q4; `docs/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
+  **and** provenance record); `docs/design/pieces/w2-connector-design.md` Appendix B.3 and §4
+  Q4; `docs/design/pieces/lego-lab-design.md` §3.6 (`engage`, whose 3.2 mm default rests on the
   cavity ceiling bridging cleanly) and §11 Q4.
 
 ## MC-4 — Overhang fan
@@ -364,7 +364,7 @@ earned until it records its provenance).
   risers. 29 mm tall, top ⌀65.6 mm. (A true cone is rejected by the C1 ring-solid
   rule; the banded form is the legal one and its risers double as rung identity in
   the hand.) `--check` PASS expected. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note. **Supports off**,
   and say so on the sheet: an overhang number measured with supports is not an
   overhang number.
@@ -382,7 +382,7 @@ earned until it records its provenance).
     bugs hide.
 - **What we learned**: — pending.
 - **Feeds**: the overhang threshold in `bikar` `kernel3d/print-gate.ts` (value
-  **and** provenance record); `docs/print-validation-design.md` Appendix B.2 and
+  **and** provenance record); `docs/design/printing/print-validation-design.md` Appendix B.2 and
   the F5 tier split in §3.
 
 ## MC-5 — Warp plate
@@ -396,7 +396,7 @@ earned until it records its provenance).
   turn the measurement into a property of the feature. The one exception is a ⌀3
   **fiducial** near one corner, so "corner A" means the same corner on the next
   print and the next machine — A is nearest the fiducial, then B, C, D clockwise
-  from above. Full render command: `docs/calibration-design.md` §6.
+  from above. Full render command: `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** brim/raft
   and part-fan settings verbatim, since those are precisely what the conflicting
   sources disagree about.
@@ -415,7 +415,7 @@ earned until it records its provenance).
 - **What we learned**: — pending.
 - **Feeds**: `warpMm` in `bikar` `kernel3d/fit-profile.ts` — today literally
   `undefined` pending this measurement (value **and** provenance record);
-  `docs/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
+  `docs/design/pieces/w2-connector-design.md` Appendix B.5; W-F1 Q2, which is re-pointed here
   rather than re-measuring the printer.
 
 ## MC-6 — Bed-contact towers
@@ -428,7 +428,7 @@ earned until it records its provenance).
   exercises F7, the trigger under test. It already confirms the bracket lands
   where intended — 7.1 and 19.6 mm² warn F7, 50.2 and 112.9 mm² are clean, so the
   25 mm² threshold falls between rungs 2 and 3. Full render command:
-  `docs/calibration-design.md` §6.
+  `docs/design/printing/calibration-design.md` §6.
 - **Print target**: TBD — profile header per the series note, **plus** whether a
   brim/raft was used. **Bare plate, no brim, no raft**: a brim is precisely the
   mitigation F7 exists to recommend, so printing with one measures the brim
@@ -438,7 +438,7 @@ earned until it records its provenance).
   on a straight rod**: a rod's first layer *is* its widest layer, so the ratio is
   100% on all four towers. It rides the same bet and gets settled by inference
   from the absolute figure, not measured. Recorded as a weakness of this coupon in
-  `docs/calibration-design.md` §8, not papered over.
+  `docs/design/printing/calibration-design.md` §8, not papered over.
 - **What we want to learn**:
   - [ ] 1. Which towers survived to full height and which detached — and, if
     observed, at what point in the print. A tower that let go at 30 mm is a
@@ -455,7 +455,7 @@ earned until it records its provenance).
 ## MC-7 — Rung labels (engrave vs emboss)
 
 - **Status**: model to author — needs the `text` statement, which does not exist
-  yet (`docs/text-emit-design.md` §8 milestone T2). Listed here now because
+  yet (`docs/design/language/text-emit-design.md` §8 milestone T2). Listed here now because
   `CAL-TXT-01` and `CAL-TXT-02` name this coupon as what settles them, and a bet
   whose coupon is not written down anywhere is the W-F1 defect over again.
 - **Model**: `bikar/patterns/Coupons/Text-Coupon.bkr` — one plate carrying the
@@ -473,7 +473,7 @@ earned until it records its provenance).
   same shape as `CAL-OVH-01`.
 - **What we want to learn**:
   - [ ] 1. Engraved or embossed — which is actually readable at arm's length on a
-    matte PLA surface. `docs/text-emit-design.md` §6 bets engraved and says
+    matte PLA surface. `docs/design/language/text-emit-design.md` §6 bets engraved and says
     plainly that it is a coin flip; §1.2 records that the sources disagree.
   - [ ] 2. The smallest cap height that still reads. 5.0 mm is the height the §5
     measurements were taken at and the smallest at which a bold face's thinnest
@@ -489,8 +489,8 @@ earned until it records its provenance).
     obviously harmless, and this plate is where that gets decided before the
     labels go onto the other 23 rungs.
 - **What we learned**: — pending.
-- **Feeds**: `docs/text-emit-design.md` §6's three defaults (value **and**
-  provenance record, once the constants exist), and `docs/calibration-design.md`
+- **Feeds**: `docs/design/language/text-emit-design.md` §6's three defaults (value **and**
+  provenance record, once the constants exist), and `docs/design/printing/calibration-design.md`
   §8's "rung identity does not survive onto the part" — the weakness this whole
   line of work exists to close.
 
@@ -554,7 +554,7 @@ earned until it records its provenance).
 # Tile-wall connector ladder (W-series)
 
 The W-series validates the **modular tile-wall** work (design docs
-`docs/tile-wall-design.md`, `docs/w2-connector-design.md`), not the orbs.
+`docs/design/pieces/tile-wall-design.md`, `docs/design/pieces/w2-connector-design.md`), not the orbs.
 These coupons decide the connector grammar — clipseat fit and the printed
 CornerClip — in plastic before any full wall is committed. Same learning-ladder
 rule: the fit coupon (W-F1) settles the blade clearance the clip coupon (W-C1)
@@ -668,11 +668,11 @@ free-standing strut). Only the clip is exempt, and only where noted.
   - [ ] 4. Front-face lippage across the joint — do adjacent tiles sit flush,
     or does the clip pull a step between them?
 - **What we learned**: — pending.
-- **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/w2-connector-design.md`
+- **Settles**: `CAL-DET-01` (the 0.3–0.5 mm detent band, `docs/design/pieces/w2-connector-design.md`
   Appendix B.6) — design-specific, deliberately **not** on the machine card, since
   a detent depth is a property of this clip's bayonet, not of the printer.
 - **Feeds**: the clipseat grammar default (rebate vs proud) in
-  `docs/w2-connector-design.md` §10 and every `clipseat` in
+  `docs/design/pieces/w2-connector-design.md` §10 and every `clipseat` in
   `patterns/Walls/*.bkr`; the mesh-gate sub-floor exemption for bayonet clips
   (`bikar` `kernel3d/corner-clip.ts` minFeature) if Q3 disproves durability;
   `patterns/Walls/Clip-Wall.bkr` as the first full wall once the joint is
@@ -731,12 +731,12 @@ free-standing strut). Only the clip is exempt, and only where noted.
 - **Feeds**: `FRAME_BAND_MM_CAL` in `bikar`
   `packages/core/src/kernel/wall-frame.ts`, which is what a bare `frame`
   resolves to; the **Perimeter frame (W3)** section of `bikar`
-  `docs/language-reference.md`; and `docs/tile-wall-design.md` §10 Q2.
+  `docs/language-reference.md`; and `docs/design/pieces/tile-wall-design.md` §10 Q2.
 
 # LEGO-compatible brick ladder (LG-series)
 
 The LG-series validates the **Lego Lab** work (design doc
-`docs/lego-lab-design.md`, survey `docs/research/lego-brick-system-survey.md`) —
+`docs/design/pieces/lego-lab-design.md`, survey `docs/research/lego-brick-system-survey.md`) —
 turning a bikar pattern into a 3D-printed part that clutches into real LEGO at
 true 8 mm scale.
 
@@ -1201,7 +1201,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Hung on one nail, does the tile sit level and stay put, or does it
     rotate about the single fixing?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/piece-composition-design.md`](../../../docs/piece-composition-design.md)'s
+- **Feeds**: [`docs/design/pieces/piece-composition-design.md`](../../../docs/design/pieces/piece-composition-design.md)'s
   countersink geometry; the gallery's first "functional piece" entry; Q2's
   answer feeds back into whether tile `depth` 6 is enough.
 
@@ -1231,7 +1231,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Seat and unseat TileB five times: does the sliding fit stay a sliding
     fit, or does it wear open?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/c2-assembly-design.md`](../../../docs/c2-assembly-design.md) §8's
+- **Feeds**: [`docs/design/pieces/c2-assembly-design.md`](../../../docs/design/pieces/c2-assembly-design.md) §8's
   fit-window claim — Q1 and Q2 together are the only thing that earns it; the
   `press`/`sliding` offsets in bikar's fit table; whether `--fit-profile` needs a
   per-material variant beyond PLA and PETG.
@@ -1253,7 +1253,7 @@ bikar `d9b3c84`, not an estimate.
   wall-clock time per tile.
 - **What we want to learn**:
   - [ ] 1. **Mass and time for one real tile.**
-    [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1 labels its
+    [`docs/design/pieces/tile-wall-design.md`](../../../docs/design/pieces/tile-wall-design.md) §7.1 labels its
     whole production table *estimates* — "~40–60 g, ~2–4 h at 0.2 mm on a modern
     small printer" — and makes computing them for real a W3 deliverable. Weigh the
     tile and read the slicer's actual time. The mesh's 59.9 cm³ is **solid**
@@ -1268,7 +1268,7 @@ bikar `d9b3c84`, not an estimate.
   - [ ] 4. Does tile-to-tile dimensional variation accumulate across the 2×2, so
     that the outer corners no longer land on the 201.2 mm boundary?
 - **What we learned**: — pending.
-- **Feeds**: [`docs/tile-wall-design.md`](../../../docs/tile-wall-design.md) §7.1's
+- **Feeds**: [`docs/design/pieces/tile-wall-design.md`](../../../docs/design/pieces/tile-wall-design.md) §7.1's
   estimate table — Q1 replaces every hedged figure in it with a measured one, and
   is the input W3's `layout report` production metrics need; the gallery's "what
   does a wall cost" note.
@@ -1296,7 +1296,7 @@ bikar `d9b3c84`, not an estimate.
 - **Mating parts**: four #8 pan-head screws — one per tile. Not one: `mount
   keyhole` is declared on the *tile*, so each placement mints its own keyhole
   (this catalog entry is why
-  [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md) §8's
+  [`docs/design/pieces/w2-connector-design.md`](../../../docs/design/pieces/w2-connector-design.md) §8's
   "hanging on one screw" was corrected on 2026-08-03; see its §11 Q6).
 - **What we want to learn**:
   - [ ] 1. Does one interior CornerClip actually hold four 100 mm tiles in
@@ -1316,7 +1316,7 @@ bikar `d9b3c84`, not an estimate.
     it, but it is the first object that can show whether the question is worth
     pursuing.
 - **What we learned**: — pending.
-- **Feeds**: [`docs/w2-connector-design.md`](../../../docs/w2-connector-design.md)
+- **Feeds**: [`docs/design/pieces/w2-connector-design.md`](../../../docs/design/pieces/w2-connector-design.md)
   §8's deliverable claim and §11 Q6 (Q5 is its only evidence); the connector BOM's
   all-four-full clip rule, which Q1 tests at its easiest case before W3 relaxes it
   to fragments; the gallery's clipped-wall entry.

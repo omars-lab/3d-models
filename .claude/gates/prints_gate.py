@@ -3,7 +3,7 @@
 
 `docs/prints/<YYYY-MM-DD>-<slug>/` holds one `index.md` whose YAML frontmatter
 pins the geometry a plate printed, the process it printed under, what it measured,
-and the photos that prove it. The design is `docs/prints-tab-design.md`; the rules
+and the photos that prove it. The design is `docs/design/printing/prints-tab-design.md`; the rules
 this gate enforces are its §7. Four of the five ship here (R3, two-way bet
 propagation to `bets.md`, is held to S4 — there is no settled bet to propagate yet;
 R5, its per-record precondition, ships now):
@@ -586,7 +586,7 @@ def run(prints: Path) -> int:
         for f in findings:
             print(f, file=sys.stderr)
         print(f"\nprints-gate: {len(findings)} finding(s) across {n} record(s). "
-              "See docs/prints-tab-design.md §7. Override once with "
+              "See docs/design/printing/prints-tab-design.md §7. Override once with "
               "PRINTS_GATE_OK=1 git commit", file=sys.stderr)
         return 1
 

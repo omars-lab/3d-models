@@ -15,62 +15,62 @@
   ],
   "unresolved": [
     {
-      "doc": "docs/click-to-source-design.md",
+      "doc": "docs/design/language/click-to-source-design.md",
       "path": "src/lang/std/artifactGraph-README.md",
       "why": "Third party — KittyCAD Modeling App's own tree, quoted as prior art for pick-a-face-to-source."
     },
     {
-      "doc": "docs/click-to-source-design.md",
+      "doc": "docs/design/language/click-to-source-design.md",
       "path": "min/vs/editor/editor.main.js",
       "why": "Third party — Monaco's published dist layout, cited for a measured bundle size."
     },
     {
-      "doc": "docs/derivation-worksheet-design.md",
+      "doc": "docs/design/language/derivation-worksheet-design.md",
       "path": "swc.rs/schema.json",
       "why": "Third party — SWC's published config schema, cited for what it does *not* cover."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "packages/core/src/kernel/face-extraction.ts",
       "why": "Quoted defect. The doc reproduces a wrong pointer bikar's gate caught (real file: packages/core/src/graph/face-extractor.ts). Repairing it would delete the evidence."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "packages/core/src/nope/does-not-exist.ts",
       "why": "Deliberately nonexistent — the injected path in that doc's mutation test of a pointer gate."
     },
     {
-      "doc": "docs/dsl-extension-skill-evaluation.md",
+      "doc": "docs/design/process/dsl-extension-skill-evaluation.md",
       "path": "scripts/never-written.sh",
       "why": "Deliberately nonexistent, same mutation test."
     },
     {
-      "doc": "docs/dsl-grammar-formalization.md",
+      "doc": "docs/design/language/dsl-grammar-formalization.md",
       "path": "TypeScript-Compiler-Notes/GLOSSARY.md",
       "why": "Third party — a page fetched during the survey, cited for what it fails to state."
     },
     {
-      "doc": "docs/dsl-grammar-formalization.md",
+      "doc": "docs/design/language/dsl-grammar-formalization.md",
       "path": "using-parsers/1-getting-started.html",
       "why": "Third party, and a recorded negative result: the doc says the ERROR/MISSING node documentation was **not found** there."
     },
     {
-      "doc": "docs/dsl-grammar-formalization.md",
+      "doc": "docs/design/language/dsl-grammar-formalization.md",
       "path": "using-parsers/3-advanced-parsing.html",
       "why": "Third party, same recorded negative result."
     },
     {
-      "doc": "docs/hemisphere-split-design.md",
+      "doc": "docs/design/orb/hemisphere-split-design.md",
       "path": "kernel3d/split.ts",
       "why": "Proposed module. Both mentions are conditional ('a kernel3d/split.ts that reuses them...'), and §Q3 has not decided whether it is built at all. Fix by building it or by settling Q3 the other way."
     },
     {
-      "doc": "docs/lego-lab-design.md",
+      "doc": "docs/design/pieces/lego-lab-design.md",
       "path": "config/config-default.scad",
       "why": "Third party — MachineBlocks' OpenSCAD source, cited for its calibration defaults."
     },
     {
-      "doc": "docs/lego-lab-design.md",
+      "doc": "docs/design/pieces/lego-lab-design.md",
       "path": "lib/block.scad",
       "why": "Third party, same source."
     },
@@ -82,7 +82,7 @@
     {
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "bikar/patterns/Coupons/Text-Coupon.bkr",
-      "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
+      "why": "Model to author — MC-7 needs the `text` statement, which is T2 in docs/design/language/text-emit-design.md §8. The entry exists now because CAL-TXT-01/02 name MC-7 as their coupon, and a bet whose coupon is written down nowhere is the W-F1 defect. Same shape as LG-B2's grandfathered entry before its model landed. Remove this when the file is written."
     },
     {
       "doc": "docs/decisions-log.md",
@@ -90,12 +90,12 @@
       "why": "Deliberately deleted. D-042 names this file as the thing it removed — a whole test file certifying the withdrawn centreline rule — and the D-034 note above it records the same removal. The path must stay exact for the record to be checkable; repairing it to something that resolves would be inventing a file that never comes back."
     },
     {
-      "doc": "docs/geogebra-construction-import-design.md",
+      "doc": "docs/constructions/geogebra-construction-import-design.md",
       "path": "schemas/ggb-construction.schema.json",
       "why": "Proposed — the AST contract P1.3 writes in the youtube repo (no sibling root here) and mirrors into bikar. Remove this when the mirror lands and the doc can point at bikar's copy."
     },
     {
-      "doc": "docs/geogebra-construction-import-design.md",
+      "doc": "docs/constructions/geogebra-construction-import-design.md",
       "path": "docs/design/construction-ast-export.md",
       "why": "Somebody else's tree — the youtube repo's design doc for the AST export (P1.3), cited as the producer's account. youtube is not a sibling this gate resolves (no remote, pinned only by the schema-mirror gate once its schema commit lands)."
     },

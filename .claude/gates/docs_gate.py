@@ -2,7 +2,7 @@
 """Design-doc gate for 3d-models.
 
 Five grounding rules (D1–D5), each derived from a failure kind measured across the seven
-grounding audits in docs/research/. See docs/grounding-defect-taxonomy.md for
+grounding audits in docs/research/. See docs/guides/grounding-defect-taxonomy.md for
 the definitions and the instances each rule is built from. D6 and D7 are render
 rules: they catch markdown that does not render as written — D6 in Obsidian's
 editor, D7 on GitHub and in Obsidian alike, D8 in Obsidian's properties.
@@ -28,6 +28,13 @@ editor, D7 on GitHub and in Obsidian alike, D8 in Obsidian's properties.
            a cell even inside backticks, so a literal one is written \\|.
   D8 (render)  YAML frontmatter parses. Obsidian drops every property of a note
            whose frontmatter does not, and says nothing.
+  D9 (outline)  A note in a folder of same-shaped notes carries that folder's
+           properties and headings, in order (the FOLDER_RULES table; the
+           troubleshooting and grounding-audit outlines are read from their
+           templates at run time). `--outline-summary` prints what each rule
+           reads and how many pass.
+  D10 (base)  A docs/bases/*.base view is written the way Obsidian saves it:
+           no comment lines, bare property names in groupBy and order.
 
 D1 is universal: it applies to every markdown file checked, needs no network,
 and has no false positives by construction for the file part — the target
@@ -54,7 +61,7 @@ the errata note is what carries the correction.
 D5 is **discharge-scoped**, which is narrower than "every CAL id in the corpus"
 and deliberately so. D3 accepts a `**Default:**` that names a bet id *instead*
 of a citation, and it never asked whether the bet exists — so on 2026-08-03
-`docs/text-emit-design.md` shipped three gate-green defaults resting on
+`docs/design/language/text-emit-design.md` shipped three gate-green defaults resting on
 `CAL-TXT-01` and `CAL-TXT-02`, neither of which was registered anywhere. The
 doc said so itself, in a blockquote, which is exactly the "defensible argument
 that management is occurring" this repo's CLAUDE.md warns about.
@@ -90,6 +97,7 @@ Usage:
                               or deletes a file, also run D1 on every other file,
                               since their links into it are what break
   docs_gate.py --self-test    run the PASS/FAIL fixtures and verify the gate
+  docs_gate.py --outline-summary   per D9 folder rule: notes read, passing, exempt
 """
 
 from __future__ import annotations
@@ -99,6 +107,7 @@ import os
 import re
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -143,7 +152,7 @@ WITHDRAWN: list[tuple[re.Pattern, str, str]] = [
         "±0.1–0.2 mm FDM accuracy",
         "no printer vendor publishes an accuracy figure at all (Bambu X1C and A1 "
         "spec sheets: zero matches; Prusa MK4S: no number). The rebuilt argument "
-        "is docs/lego-lab-design.md §3.5",
+        "is docs/design/pieces/lego-lab-design.md §3.5",
     ),
     (
         re.compile(r"\b6 of 37\b|\b4 self-intersections\b"),
@@ -759,6 +768,268 @@ def check_d8_frontmatter(path: Path, raw: list[str]) -> list[str]:
     return []
 
 
+@dataclass(frozen=True)
+class FolderRule:
+    """One row of the folder table: which notes a folder's outline check reads,
+    and what each of them must carry.
+
+    `globs` are repo-relative (`*` stays inside one folder, `**/` crosses any
+    number). A rule reads only notes whose `status` is in `statuses`, when that
+    is set. `harvest` names a file the fields and headings are read from at run
+    time, and the text of the line where its outline starts (None: the whole
+    file, frontmatter keys included), so the check follows the template instead
+    of a second copy of it. `optional` drops harvested headings a folder's
+    verbatim records do not all have; `exempt` is a path and the reason."""
+    name: str
+    globs: tuple[str, ...]
+    fields: tuple[str, ...] = ()
+    headings: tuple[str, ...] = ()
+    statuses: tuple[str, ...] = ()
+    status_values: tuple[str, ...] = ()
+    exclude: tuple[str, ...] = ()
+    harvest: tuple[str, str | None] | None = None
+    optional: tuple[str, ...] = ()
+    exempt: tuple[tuple[str, str], ...] = ()
+
+    def matches(self, rel: str) -> bool:
+        return (any(glob_re(g).match(rel) for g in self.globs)
+                and not any(glob_re(g).match(rel) for g in self.exclude))
+
+
+DESIGN_STATUSES = ("idea", "draft", "decided", "built", "superseded")
+PRINT_WIKI_TEMPLATE = ".claude/skills/print-wiki/template.md"
+AUDIT_SKILL = ".claude/skills/ground-design-doc/SKILL.md"
+
+# The folder table. Write the rule here and D9 checks it; vault-rules.md §9
+# says the same in words. Measured 2026-09-28 before gating, every rule at 100%
+# of the notes it reads (`docs_gate.py --outline-summary` prints the counts):
+# the two research notes with no `feeds:` were fixed, not exempted.
+FOLDER_RULES: tuple[FolderRule, ...] = (
+    FolderRule(
+        "troubleshooting", ("docs/wiki/troubleshooting/*.md",),
+        harvest=(PRINT_WIKI_TEMPLATE, None)),
+    FolderRule(
+        "grounding audit", ("docs/research/*-grounding-audit.md",),
+        harvest=(AUDIT_SKILL, "# Grounding audit:"),
+        optional=("Citation spot-check results",),  # print-validation's has none
+        exempt=(("docs/research/hemisphere-split-grounding-audit.md",
+                 "the first audit, written before the skill fixed the layout: a verdict "
+                 "table, findings F1-F14, residue and a fix order, kept verbatim"),)),
+    FolderRule("research", ("docs/research/*.md",), fields=("date", "feeds")),
+    FolderRule("issue", ("docs/issues/*.md",), fields=("date",)),
+    FolderRule(
+        "status", ("docs/**/*.md",), status_values=DESIGN_STATUSES,
+        # print records and catalog notes have their own status sets and gates
+        exclude=("docs/prints/**", "docs/catalog/**")),
+    FolderRule(
+        # The root path is where these notes are today, design/coaster/ where the
+        # folder move puts them; the rule reads both so the move changes nothing.
+        # The hub, coaster-design.md, does not match the glob.
+        "coaster feature",
+        ("docs/coaster-*-design.md", "docs/design/coaster/coaster-*-design.md"),
+        statuses=("decided", "built"),
+        headings=("The ask", "Options and the rubric", "Grammar", "Decisions", "Not yet")),
+)
+
+_GLOBS: dict[str, re.Pattern] = {}
+
+
+def glob_re(glob: str) -> re.Pattern:
+    """A path glob as a regex: `*` within one folder, `**/` across any number."""
+    if glob not in _GLOBS:
+        out, i = "", 0
+        while i < len(glob):
+            if glob.startswith("**/", i):
+                out, i = out + "(?:.*/)?", i + 3
+            elif glob.startswith("**", i):
+                out, i = out + ".*", i + 2
+            elif glob[i] == "*":
+                out, i = out + "[^/]*", i + 1
+            else:
+                out, i = out + re.escape(glob[i]), i + 1
+        _GLOBS[glob] = re.compile(out + r"\Z")
+    return _GLOBS[glob]
+
+
+OUTLINE_NUMBER = re.compile(
+    r"^(?:§\s*)?(?:appendix\s+[a-z][.):]?|\d+(?:\.\d+)*[.):]?|[a-z][.)])\s+", re.IGNORECASE)
+
+
+def heading_words(text: str) -> str:
+    """A heading as the words that name it: numbering and `§` dropped, then
+    everything from the first `—` or `:` on, then case and punctuation. So
+    `## 4. Grammar — \\`color <r>\\`` and `## Grammar` are the same heading."""
+    t = BLOCK_ID.sub("", " " + text).strip()
+    t = OUTLINE_NUMBER.sub("", t)
+    t = re.split(r"[—:]", t, maxsplit=1)[0]
+    return " ".join(re.findall(r"[a-z0-9]+", t.lower()))
+
+
+def h2_outline(raw: list[str]) -> list[tuple[int, str]]:
+    """Each `## ` heading outside code, as (line number, heading text)."""
+    out, in_fence = [], False
+    for n, line in enumerate(raw, 1):
+        if FENCE.match(line):
+            in_fence = not in_fence
+        elif not in_fence and line.startswith("## "):
+            out.append((n, HEADING_TEXT.match(line).group(1)))
+    return out
+
+
+def note_properties(raw: list[str]) -> dict | None:
+    """The note's frontmatter as a dict ({} when it has none), or None when it
+    does not parse — D8 reports that, so D9 does not report it again."""
+    end = frontmatter_end(raw)
+    if end < 0:
+        return {}
+    try:
+        import yaml
+        data = yaml.safe_load("\n".join(raw[1:end]))
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else {}
+
+
+def harvest_outline(rel: str, start: str | None) -> tuple[tuple[str, ...], tuple[str, ...], str | None]:
+    """The fields and `## ` headings a template prescribes, read from the file
+    at run time: (fields, headings, None), or ((), (), why) when the read failed.
+    With `start`, the outline is the run of `## ` lines after the line that
+    begins with it (a layout shown inside a skill); a trailing
+    `   (explanation)` on a line is not part of the heading. Fails loud, not open:
+    a template that parses to fewer than three headings is a broken read."""
+    path = ROOT / rel
+    if not path.is_file():
+        return (), (), f"{rel} does not exist"
+    raw = path.read_text(encoding="utf-8").splitlines()
+    if start is None:
+        props = note_properties(raw)
+        fields = tuple(props) if props else ()
+        heads = tuple(h for _, h in h2_outline(raw))
+    else:
+        fields, heads, on = (), [], False
+        for line in raw:
+            if line.startswith(start):
+                on = True
+            elif on and line.startswith("## "):
+                heads.append(re.split(r"\s{2,}\(", line[3:], maxsplit=1)[0].strip())
+            elif on and heads and not line.startswith(" "):
+                break
+        heads = tuple(heads)
+    if len(heads) < 3:
+        return (), (), (f"{rel} parsed to {len(heads)} heading(s), below the 3 this reader "
+                        "expects — the template changed shape, fix the reader")
+    return fields, heads, None
+
+
+def outline_verdict(rule: FolderRule, rel: str, raw: list[str]) -> tuple[str, list[str]]:
+    """How one rule judges one note: ("skip", []) when the rule does not read it,
+    ("exempt", []), or ("checked", findings)."""
+    if not rule.matches(rel):
+        return "skip", []
+    if rel in dict(rule.exempt):
+        return "exempt", []
+    props = note_properties(raw)
+    if props is None:
+        return "skip", []
+    status = props.get("status")
+    if rule.statuses and str(status) not in rule.statuses:
+        return "skip", []
+    if rule.status_values and status is None:
+        return "skip", []
+    fields, heads = rule.fields, rule.headings
+    source = "the rule table in docs_gate.py"
+    if rule.harvest:
+        path, start = rule.harvest
+        fields, heads, why = harvest_outline(path, start)
+        if why:
+            return "checked", [f"{rel}:1: D9 (outline) cannot check the {rule.name} outline — {why}"]
+        heads = tuple(h for h in heads if h not in rule.optional)
+        source = path
+    findings = []
+    for f in fields:
+        if props.get(f) in (None, ""):
+            findings.append(f"{rel}:1: D9 (outline) {rule.name} note has no `{f}` property "
+                            f"(the fields come from {source})")
+    if rule.status_values and str(status) not in rule.status_values:
+        findings.append(f"{rel}:1: D9 (outline) status `{status}` is not one of "
+                        f"{', '.join(rule.status_values)}")
+    have = [(n, heading_words(h)) for n, h in h2_outline(raw)]
+    shape = " → ".join(heads)
+    pos = 0
+    for want in heads:
+        w = heading_words(want)
+        at = next((i for i in range(pos, len(have)) if have[i][1] == w), None)
+        if at is not None:
+            pos = at + 1
+            continue
+        early = next((have[i][0] for i in range(pos) if have[i][1] == w), None)
+        if early is not None:
+            findings.append(f"{rel}:{early}: D9 (outline) `## {want}` is out of order — a "
+                            f"{rule.name} note runs {shape} (from {source})")
+        else:
+            findings.append(f"{rel}:1: D9 (outline) no `## {want}` heading, renamed or missing — "
+                            f"a {rule.name} note runs {shape} (from {source})")
+    return "checked", findings
+
+
+def repo_rel(path: Path) -> str | None:
+    p = path.resolve()
+    return p.relative_to(ROOT).as_posix() if p.is_relative_to(ROOT) else None
+
+
+def check_d9_outline(path: Path, raw: list[str], rel: str | None = None) -> list[str]:
+    """D9 (outline): a note in a folder of same-shaped notes has that folder's
+    fields and headings, in order. Headings match by their words (numbering,
+    `§`, case and anything after `—` or `:` ignored), and extra headings may sit
+    between them. The rules are the FOLDER_RULES table; `rel` lets the
+    self-test judge a fixture as if it sat at a docs/ path."""
+    rel = rel or repo_rel(path)
+    if rel is None:
+        return []
+    return [f for rule in FOLDER_RULES for f in outline_verdict(rule, rel, raw)[1]]
+
+
+def outline_summary(root: Path = ROOT) -> str:
+    """Per rule: how many notes it reads, how many pass, how many are exempt."""
+    notes = [(p.relative_to(root).as_posix(), p.read_text(encoding="utf-8").splitlines())
+             for p in tree_markdown(root)]
+    rows = []
+    for rule in FOLDER_RULES:
+        checked = passed = exempt = 0
+        for rel, raw in notes:
+            kind, found = outline_verdict(rule, rel, raw)
+            checked += kind == "checked"
+            passed += kind == "checked" and not found
+            exempt += kind == "exempt"
+        rows.append(f"  {rule.name:<16} reads {checked:>3}  pass {passed:>3}  exempt {exempt}")
+    return "D9 folder outlines:\n" + "\n".join(rows)
+
+
+def check_d10_base(path: Path, raw: list[str]) -> list[str]:
+    """D10 (base): a `.base` view is written the way Obsidian saves it. Obsidian
+    rewrites a view file when it saves the view, and measured 2026-09-28 on
+    design-docs.base it dropped every `#` comment line and wrote `note.status`
+    as `status` in `groupBy` and `order` (it kept `note.` in filters and in the
+    `properties` keys). A hand-written form drifts the first time someone opens
+    the view, so the gate holds the saved form."""
+    shown = repo_rel(path) or path
+    findings = [f"{shown}:{n}: D10 (base) comment line — Obsidian drops comments when it saves "
+                "the view; put the note in .claude/skills/vault-setup/vault-rules.md"
+                for n, line in enumerate(raw, 1) if line.lstrip().startswith("#")]
+    try:
+        import yaml
+        data = yaml.safe_load("\n".join(raw)) or {}
+    except Exception as e:
+        return findings + [f"{shown}:1: D10 (base) not valid YAML ({e.__class__.__name__})"]
+    for view in data.get("views") or []:
+        props = [(view.get("groupBy") or {}).get("property")] + list(view.get("order") or [])
+        for prop in props:
+            if isinstance(prop, str) and prop.startswith("note."):
+                findings.append(f"{shown}:1: D10 (base) view `{view.get('name')}` writes "
+                                f"`{prop}` — Obsidian saves it as `{prop[5:]}` in groupBy and order")
+    return findings
+
+
 def is_print_record(path: Path) -> bool:
     """A print-run record under docs/prints/ carries a bench operator's account
     of what a plate measured — a plate can measure a number a later audit
@@ -767,7 +1038,7 @@ def is_print_record(path: Path) -> bool:
     literals, D5 bets) do not apply there; D1 (every link resolves) still does.
     Mirrors how bikar's check-doc-pointers.ts excludes docs/issues/. Keyed on
     the posix path so a tempdir fixture under .../docs/prints/ is caught too.
-    Design: docs/prints-tab-design.md §4.2."""
+    Design: docs/design/printing/prints-tab-design.md §4.2."""
     return "/docs/prints/" in path.as_posix()
 
 
@@ -792,11 +1063,14 @@ def is_claude_config(path: Path) -> bool:
 
 def check_file(path: Path) -> list[str]:
     raw = path.read_text(encoding="utf-8").splitlines()
+    if path.suffix == ".base":
+        return check_d10_base(path, raw)
     lines = strip_code(raw)
     render = check_d7_tables(path, raw)
     if is_claude_config(path):
         return check_d1_links(path, lines) + render
-    render = check_d6_code_spans(path, raw) + check_d8_frontmatter(path, raw) + render
+    render = (check_d6_code_spans(path, raw) + check_d8_frontmatter(path, raw) + render
+              + check_d9_outline(path, raw))
     if is_print_record(path):
         return check_d1_links(path, lines) + render
     return (
@@ -826,9 +1100,17 @@ def is_comment_file(p: str) -> bool:
 
 
 def staged_markdown(root: Path = ROOT) -> list[Path]:
+    """Staged markdown and staged `.base` views (D10 reads those)."""
     out = _git_lines(root, "diff", "--cached", "--name-only", "--diff-filter=ACMR")
     return [root / p for p in out
-            if p.endswith(".md") and not is_comment_file(p) and (root / p).exists()]
+            if (p.endswith(".md") and not is_comment_file(p) or p.endswith(".base"))
+            and (root / p).exists()]
+
+
+def tree_bases(root: Path = ROOT) -> list[Path]:
+    """Every Obsidian `.base` view under docs/, tracked or new."""
+    out = _git_lines(root, "ls-files", "-co", "--exclude-standard", "--", "docs")
+    return sorted(root / p for p in out if p.endswith(".base") and (root / p).exists())
 
 
 def stages_a_removal(root: Path = ROOT) -> bool:
@@ -894,9 +1176,11 @@ def self_test() -> int:
         "fail/d6-wrapped-code-span.md": ["D6 (render)"],
         "fail/d7-table-pipe.md": ["D7 (render)"],
         "fail/d8-broken-frontmatter.md": ["D8 (render)"],
+        "fail/d10-base-comment.base": ["D10 (base) comment"],
+        "fail/d10-base-note-prefix.base": ["D10 (base) view"],
     }
     ok = True
-    for name in sorted((FIXTURES / "pass").glob("*.md")):
+    for name in sorted([*(FIXTURES / "pass").glob("*.md"), *(FIXTURES / "pass").glob("*.base")]):
         findings = check_file(name)
         if findings:
             ok = False
@@ -1087,8 +1371,64 @@ def self_test() -> int:
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
+    ok = self_test_outlines() and ok
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
+
+
+def self_test_outlines() -> bool:
+    """D9: every folder rule judged on a PASS fixture and on its hard FAIL
+    cases, each fixture read as if it sat at a docs/ path. The troubleshooting
+    cases are cut from the print-wiki template itself, so they cannot go stale
+    when the template changes: the template must pass its own rule, and each
+    FAIL is one edit away from it — two headings swapped with all five still
+    there, one heading renamed, one field dropped."""
+    ok = True
+    tpl = (ROOT / PRINT_WIKI_TEMPLATE).read_text(encoding="utf-8")
+    heads = [h for _, h in h2_outline(tpl.splitlines())]
+    swapped = tpl.replace(f"## {heads[1]}\n", "\0").replace(f"## {heads[2]}\n", f"## {heads[1]}\n")
+    swapped = swapped.replace("\0", f"## {heads[2]}\n")
+    renamed = tpl.replace(f"## {heads[3]}\n", "## Evidence\n")
+    no_field = "\n".join(l for l in tpl.splitlines() if not l.startswith("first_seen:"))
+    audit = (FIXTURES / "outline" / "audit.md").read_text(encoding="utf-8")
+    coaster_bad = (FIXTURES / "outline" / "coaster-out-of-order.md").read_text(encoding="utf-8")
+    fx = lambda name: (FIXTURES / "outline" / name).read_text(encoding="utf-8")
+    ts, rs = "docs/wiki/troubleshooting/x.md", "docs/research/x-grounding-audit.md"
+    cases = [
+        ("the print-wiki template", tpl, ts, None),
+        ("template, two headings swapped", swapped, ts, "out of order"),
+        ("template, a heading renamed", renamed, ts, f"no `## {heads[3]}`"),
+        ("template, first_seen dropped", no_field, ts, "no `first_seen`"),
+        ("audit.md", audit, rs, None),
+        ("audit.md, optional spot-check dropped",
+         audit.replace("## Citation spot-check results\n", ""), rs, None),
+        ("audit-out-of-order.md", fx("audit-out-of-order.md"), rs, "out of order"),
+        ("audit-out-of-order.md, exempt path", fx("audit-out-of-order.md"),
+         "docs/research/hemisphere-split-grounding-audit.md", None),
+        ("research-no-feeds.md", fx("research-no-feeds.md"), "docs/research/x.md", "no `feeds`"),
+        ("issue.md", fx("issue.md"), "docs/issues/x.md", None),
+        ("issue-no-date.md", fx("issue-no-date.md"), "docs/issues/x.md", "no `date`"),
+        ("status-unknown.md", fx("status-unknown.md"), "docs/x-design.md", "status `shipped`"),
+        ("status-unknown.md under prints/", fx("status-unknown.md"), "docs/prints/r/index.md", None),
+        ("status-unknown.md under catalog/", fx("status-unknown.md"), "docs/catalog/patterns/x.md", None),
+        ("coaster.md at the root", fx("coaster.md"), "docs/coaster-x-design.md", None),
+        ("coaster.md in design/coaster/", fx("coaster.md"), "docs/design/coaster/coaster-x-design.md", None),
+        ("coaster-out-of-order.md at the root", coaster_bad, "docs/coaster-x-design.md", "out of order"),
+        ("coaster-out-of-order.md in design/coaster/", coaster_bad,
+         "docs/design/coaster/coaster-x-design.md", "out of order"),
+        ("coaster-out-of-order.md as a draft", coaster_bad.replace("status: built", "status: draft"),
+         "docs/coaster-x-design.md", None),
+    ]
+    for label, text, rel, want in cases:
+        got = check_d9_outline(Path(rel), text.splitlines(), rel=rel)
+        good = not got if want is None else len(got) == 1 and want in got[0]
+        if not good:
+            ok = False
+            print(f"self-test FAIL: D9 {label} at {rel} expected "
+                  f"{'no finding' if want is None else 'one finding: ' + want}, got {got}")
+    if ok:
+        print(f"self-test ok: D9 folder outlines — {len(cases)} cases pass or fail as designed")
+    return ok
 
 
 def main() -> int:
@@ -1098,10 +1438,15 @@ def main() -> int:
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--fix-code-spans", action="store_true",
                     help="rewrap the given files so no code span crosses a line (D6), then check them")
+    ap.add_argument("--outline-summary", action="store_true",
+                    help="print, per D9 folder rule, how many notes it reads and how many pass")
     args = ap.parse_args()
 
     if args.self_test:
         return self_test()
+    if args.outline_summary:
+        print(outline_summary())
+        return 0
 
     if args.fix_code_spans:
         for p in args.files:
@@ -1117,7 +1462,7 @@ def main() -> int:
         if args.files:
             targets = [p if p.is_absolute() else (ROOT / p) for p in args.files]
         else:
-            targets = tree_markdown()
+            targets = tree_markdown() + tree_bases()
         targets = [p for p in targets if FIXTURES not in p.parents]
         findings = [f for p in targets for f in check_file(p)]
         checked = len(targets)
@@ -1127,7 +1472,7 @@ def main() -> int:
     if findings:
         print(
             f"\ndocs-gate: {len(findings)} finding(s) in {checked} file(s). "
-            "See docs/grounding-defect-taxonomy.md. Override once with "
+            "See docs/guides/grounding-defect-taxonomy.md. Override once with "
             "DOCS_GATE_OK=1 git commit",
             file=sys.stderr,
         )

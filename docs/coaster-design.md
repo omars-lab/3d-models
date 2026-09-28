@@ -9,7 +9,7 @@ decisions:
 # The coaster (product design)
 
 The umbrella
-([`geogebra-construction-import-design.md`](geogebra-construction-import-design.md)
+([`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md)
 §8) owns the pipeline from a GeoGebra construction to a printable coaster; this
 doc owns the coaster itself — what it is, the two ways a construction becomes one,
 its structural validators and the numbers that back them. The geometry engine is
@@ -152,7 +152,7 @@ Fixed: **flat, top face up, no supports**. The height field has a flat bottom by
 construction, so the whole footprint is the first layer and the relief prints as
 unsupported top detail (D-064). `--check` runs the mesh gate on every render, and
 the coaster's own structural validators run inside evaluation
-([`print-validation-design.md`](print-validation-design.md)).
+([`design/printing/print-validation-design.md`](design/printing/print-validation-design.md)).
 
 ## 7. Structural validators
 

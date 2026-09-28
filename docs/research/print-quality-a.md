@@ -11,7 +11,7 @@ The question: how to raise the general quality of small, thin, openwork PLA coas
 a Bambu Lab X2D, and how to fix the three defects Omar saw on minis-04 (2026-09-26): "i see
 tiny holes on the print and the peg system border is too big and pegs too tight".
 
-This file holds the sources behind [`../print-quality-a-design.md`](../print-quality-a-design.md).
+This file holds the sources behind [`../design/printing/print-quality-a-design.md`](../design/printing/print-quality-a-design.md).
 Each entry says whether the page was **fetched** (the text was read) or is **snippet** (only a
 search-result summary was seen — treat anything taken from it as a lead, not a fact). It is
 not a survey of print tuning; it covers the pages listed here and nothing else.
@@ -153,7 +153,7 @@ keep fit allowance and printer compensation separate. Boxes: sliding +0.15 per m
 0.5 mm × 45° lead-in chamfer helps. Its test coupon changes one dimension by 0.05 at a time. It
 cites Prusa "at least 0.3mm", Hubs 0.5 mm, Markforged 0.05 interference, and MDPI IT11–IT13.
 This is the page `CAL-FIT-01`'s ladder was transcribed from (see
-[`../c2-assembly-design.md`](../c2-assembly-design.md) §B.3).
+[`../design/pieces/c2-assembly-design.md`](../design/pieces/c2-assembly-design.md) §B.3).
 
 **Prusa — Modeling with 3D printing in mind** — https://help.prusa3d.com/article/modeling-with-3d-printing-in-mind_164135 — **fetched**.
 "An initial good measurement for movable parts is at least 0.3 mm" — the page does not say

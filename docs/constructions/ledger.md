@@ -3,9 +3,9 @@
 One row per GeoGebra construction on its way from a youtube reconstruction to a
 naqsh (`.bkr`) file bikar renders to a printable coaster this repo vendors. The
 umbrella design is the
-[GeoGebra construction import design](../geogebra-construction-import-design.md)
+[GeoGebra construction import design](geogebra-construction-import-design.md)
 and the three oracles O1/O2/O3 are specified in
-[construction equivalence](../construction-equivalence.md). This file is the
+[construction equivalence](construction-equivalence.md). This file is the
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
@@ -59,7 +59,7 @@ Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
 centreline recall / precision; O3: reference coverage — or `—` when that oracle
 has not been run on the row's `.bkr`. A verdict is only ever the one the equivalence
 doc's validator printed, never a re-typed summary: `GimTvN9hw4U`'s three are in
-[construction equivalence §2–§4](../construction-equivalence.md) and its
+[construction equivalence §2–§4](construction-equivalence.md) and its
 research file; `7apC5Q9QS-8`'s O1 and O2 were run 2026-09-17 on the youtube
 `feat/ggb-coords` verdict scripts against a hero rebuilt with the loop's own
 export (the earlier `export.png` was a stale 5123×5123 square that O2 scored

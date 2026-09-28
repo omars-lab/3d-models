@@ -56,7 +56,7 @@ arrangement — and it hands you the sliced plate; come here to run it. **On a c
 settings are not a choice — they are fixed measurements** set by the bench sheet, and this is exactly
 the exception `print-model` carves out. The known-good Plate-1 trio and the full slicer-settings
 rationale live in [`docs/prints/plate-1-bench-sheet.md`](../../../docs/prints/plate-1-bench-sheet.md)
-and [`docs/calibration-design.md`](../../../docs/calibration-design.md) §4. **On the machine card
+and [`docs/design/printing/calibration-design.md`](../../../docs/design/printing/calibration-design.md) §4. **On the machine card
 these settings *are* the experiment** — getting one wrong erases a reading:
 
 - **MC-4 fan → supports OFF.** A support column would hide the overhang the coupon exists to measure.

@@ -99,6 +99,7 @@ The wiki lives under `docs/`, so **`.claude/gates/docs_gate.py` already runs on 
 - **Anchored pointers** — a backticked `path:Lnnn` is a claim; anchor it `repo:path:Lnn "literal"`
   or cite the record/PR instead (prefer records over line numbers — they don't drift).
 - **Withdrawn literals (D4)** — a number an audit has killed stays killed corpus-wide.
+- **The entry's outline (D9)** — the five properties and the `##` headings of [`template.md`](template.md), in its order. The gate reads them from the template when it runs, so changing the template changes the check; rename a heading there, not in one entry.
 
 **Write the entry so its parts can be linked.** `docs/` is an Obsidian vault, and a link can land
 on a heading (the entry's link plus #what-to-do) but not on a table cell. Give anything worth
@@ -112,12 +113,12 @@ the entry against itself (K7), and state the transfer conditions when a rule por
 material/nozzle is applied to another (K10).
 
 **If a lint rule starts to recur across entries, graduate it to a gate — not a reminder.** That is the
-repo's standing idiom (`docs/issue-register-evaluation.md`): measure the rule first, then gate it.
+repo's standing idiom (`docs/design/process/issue-register-evaluation.md`): measure the rule first, then gate it.
 
 ## This is a troubleshooting reference, not an issue register
 
-The repo deliberately has **no issue catalog** (`docs/issue-register-evaluation.md`,
-`docs/dsl-extension-skill-evaluation.md`): registers of past defects decay because nobody re-reads them.
+The repo deliberately has **no issue catalog** (`docs/design/process/issue-register-evaluation.md`,
+`docs/design/process/dsl-extension-skill-evaluation.md`): registers of past defects decay because nobody re-reads them.
 The wiki is a *different animal* and must stay one:
 
 - An **issue register** catalogs defects in *our own code/docs*, read once at fix time then never again.

@@ -259,7 +259,7 @@ description is stale on that. What remains:
   `--dry-run` prints argv; `--bed x2d` = 256 × 256 mm (D-053) with an area/count pre-check that
   fails before the slicer; per-object provenance `bikar:<path>@<ref>` in the plate record; mesh
   `--scale` passthrough prints the D-D warning (dynamic STLs come from `--param`, never mesh
-  scale). Design doc `docs/plate-composer-design.md` (`**Default:**` cites the research file;
+  scale). Design doc `docs/design/printing/plate-composer-design.md` (`**Default:**` cites the research file;
   `**Validator:**` PASS/FAIL for the bed check). Existing wrapper: `tools/bambu slice plate`
   handles one model (`slice.ts:22-44,132-149`). Bambu CLI reference:
   https://github.com/bambulab/BambuStudio/wiki/Command-Line-Usage . Own 2D packer (P2) only if
@@ -303,7 +303,7 @@ Never read `.env` in chat; shape checks return booleans only.
 
 ### #24 — `session-reflect` skill (after Omar reviews 3d-models design PR #218)
 
-Build per `docs/session-reflection-design.md` §4–§9: `tools/session_reflect.py` with verbs
+Build per `docs/design/process/session-reflection-design.md` §4–§9: `tools/session_reflect.py` with verbs
 `census` / `update-faq` / `show` (`--audit`), walking the main transcript **and**
 `<session>/subagents/agent-*.jsonl` (subagent transcripts are separate files; bikar's
 `transcript.py` misses them); `docs/faq.md` (`## Q-NNN`, answer with an anchored

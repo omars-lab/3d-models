@@ -1,9 +1,9 @@
 # 3d-models
 
-Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the DSL
-+ geometry engine and the producer of record; **qiyas** (`~/Workspace/git/qiyas`)
-validates renders. This repo holds OpenSCAD sources, design docs, the gallery and
-the gh-pages deploy — it consumes bikar, it does not reimplement it.
+Product end of a three-repo system. **bikar** (`~/Workspace/git/bikar`) is the DSL + geometry
+engine and producer of record; **qiyas** (`~/Workspace/git/qiyas`) validates renders. This repo
+holds OpenSCAD sources, design docs, the gallery and the gh-pages deploy, and consumes bikar.
+**Learning from tutorial videos is youtube's** (`~/Workspace/git/youtube`: its loop and queue).
 
 ## Mechanics
 
@@ -20,7 +20,7 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
 - **CI**: there is none — no workflows, so `make validate` (alias `make local.ci`,
   the siblings' spelling) is the only run there is and `make deploy` needs no
   runner. A billing block is not a red build (`gh run view <id> --json jobs` →
-  `"steps": []` in 2–3 s: nothing measured) and never stops a merge or deploy — [runbook](docs/local-ci-runbook.md).
+  `"steps": []` in 2–3 s: nothing measured) and never stops a merge or deploy — [runbook](docs/guides/local-ci-runbook.md).
 - **New D-/Q- ids**: `python3 tools/next_id.py next D`, never last id + 1 from your
   checkout (D-051, D-055 were taken twice); hook `46-decision-ids` blocks a clash.
 - **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
@@ -33,7 +33,7 @@ the gh-pages deploy — it consumes bikar, it does not reimplement it.
 Seven adversarial grounding audits of seven design docs here produced ~104
 findings. Four failure kinds recur, are preventable by knowing about them, and are
 *not* caught by any gate. Definitions, counts and `file:line` anchors:
-[`docs/grounding-defect-taxonomy.md`](docs/grounding-defect-taxonomy.md).
+[`docs/guides/grounding-defect-taxonomy.md`](docs/guides/grounding-defect-taxonomy.md).
 
 ### K1 — Do not strip a qualifier (7/7 audits)
 
@@ -156,7 +156,7 @@ a *tenet*, a rule that changes how the next doc gets written; then it goes in th
 file, or in the taxonomy, not in a register.
 
 There is deliberately **no issue catalog** and no automated link checker — both
-[rejected on measurement](docs/issue-register-evaluation.md): 5 of 15 defects
+[rejected on measurement](docs/design/process/issue-register-evaluation.md): 5 of 15 defects
 graduated into a guard, all 7 July-2026 fixes shipped a test and needed no entry,
 and §5.1 measured ~11% false alarms against a <1% dead-link rate. The
 checkable invariant is not *does this URL resolve* but *is every load-bearing number
@@ -192,8 +192,8 @@ price the cascade, and pay it. A migration never buys a fork — [D-041](docs/de
 ## Precedent
 
 Before proposing a new skill or hook, read
-[`docs/dsl-extension-skill-evaluation.md`](docs/dsl-extension-skill-evaluation.md)
-and [`docs/issue-register-evaluation.md`](docs/issue-register-evaluation.md): both
+[`docs/design/process/dsl-extension-skill-evaluation.md`](docs/design/process/dsl-extension-skill-evaluation.md)
+and [`docs/design/process/issue-register-evaluation.md`](docs/design/process/issue-register-evaluation.md): both
 evaluated a proposed skill against measured recurrence and both concluded *no
 skill, a gate instead*. Anthropic's own guidance on this file applies to this
 file — bloat makes it ignored, so keep it under 200 lines and prefer deleting a

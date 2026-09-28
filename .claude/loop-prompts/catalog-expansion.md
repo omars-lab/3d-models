@@ -4,7 +4,7 @@ Paste the block below into a fresh session, or run it as `/loop` with no interva
 session paces itself. Written 2026-09-25.
 
 This loop decides what to make next and turns finished reconstructions into catalog
-coasters. Rebuilding a single video is [`video-reconstruction.md`](video-reconstruction.md).
+coasters. Rebuilding a single video is the youtube repo's loop (its `.claude/loop-prompts/video-reconstruction.md`).
 Tooling for plates is [`print-infrastructure.md`](print-infrastructure.md).
 
 ---

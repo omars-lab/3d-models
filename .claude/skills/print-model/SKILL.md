@@ -12,7 +12,7 @@ sliced plate + preview at the owner gate. It **advises**; it never silently chan
 **never dispatches**.
 
 Full rationale, the two lifecycle axes, and every grounded number with its hedge live in the
-print-model design doc (docs/print-model-design.md, merged in PR #191). This file is the run-time
+print-model design doc (docs/design/printing/print-model-design.md, merged in PR #191). This file is the run-time
 front door; the decision detail is in [`rubric.md`](rubric.md), read at run time so it can sharpen
 without editing this body.
 
@@ -91,7 +91,7 @@ orchestrating the ones that already exist. So:
 - **Consumes (read-only, owned elsewhere):** transport + slicing + records via the
   [`bambu` skill / CLI](../bambu/SKILL.md) (`status`, `filament`, `slice plate`, `print list`,
   `print send`, `validate record`); geometry via bikar; the record schema via
-  [`prints-tab-design.md`](../../../docs/prints-tab-design.md) and
+  [`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md) and
   [`prints_gate.py`](../../../.claude/gates/prints_gate.py); the calibration bench-sheet truth via
   [`prototype`](../prototype/SKILL.md).
 - **Refuses:** dispatch. The skill stops at the owner gate — it produces the plate and the plan; it
@@ -140,7 +140,7 @@ catalog (Simplify3D's Print Quality Guide + Bambu's wiki) rather than inventing 
 to the documented cause, and emits the fix as a one-line advisory pointing at the decision that owns it
 — never a silent change. The seven modeled defects, the symptom→cause→revision table, and the loop steps
 are [`rubric.md`](rubric.md) §Recovery loop; the symptom lands in the record's `feedback` block
-([`prints-tab-design.md`](../../../docs/prints-tab-design.md) §4.1). A physical, new finding graduates
+([`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md) §4.1). A physical, new finding graduates
 into [`best-practices.md`](best-practices.md) (self-healing, §8).
 
 ## The calibration exception (never forget it)

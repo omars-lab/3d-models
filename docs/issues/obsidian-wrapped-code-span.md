@@ -5,7 +5,7 @@ date: 2026-09-28
 # The table was fine; a wrapped code span broke it
 
 Review thread 7rlhya (2026-09-28) on
-[`construction-equivalence.md`](../construction-equivalence.md): the tables in
+[`construction-equivalence.md`](../constructions/construction-equivalence.md): the tables in
 §5 and §6 showed as raw pipes in Obsidian, and the ask was a check that catches
 broken tables.
 

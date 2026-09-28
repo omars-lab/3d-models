@@ -3,7 +3,7 @@
 // An "iteration" is the existing (geometry, process) unit prints-tab-design.md §3 defines: a piece at
 // a specific parameter set AND slice profile. This module gives that unit a stable, content-addressed
 // id so a manifest item, a reprint, and a metrics view all name the SAME recipe by the SAME id — one
-// source of truth, not a fork (docs/print-metadata-and-reprint-design.md §2.2, CLAUDE.md D-052).
+// source of truth, not a fork (docs/design/printing/print-metadata-and-reprint-design.md §2.2, CLAUDE.md D-052).
 //
 // The id is `it-<sha12>` = the first 12 hex of sha256 over the CANONICAL JSON of the iteration key
 //   { source, source_sha256, piece, params, slice_profile }

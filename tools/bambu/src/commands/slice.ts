@@ -288,7 +288,7 @@ export function injectFilamentMapMode(
 
 /** Build the BambuStudio CLI argument vector. Kept in one place so `--dry-run` shows the real thing,
  *  and so `slice plate` (one input) and `slice compose` (N inputs onto one plate) share ONE spelling
- *  of the invocation — the reuse boundary docs/plate-composer-design.md §2 draws. `--debug 2` raises
+ *  of the invocation — the reuse boundary docs/design/printing/plate-composer-design.md §2 draws. `--debug 2` raises
  *  the log level to `warning` so slicing warnings reach stdout (they are silent at the default level);
  *  it does not change the slice, only what is reported. Multiple trailing model paths are how the
  *  Bambu Studio CLI composes several objects onto one plate (compose research Topic 1). */
@@ -566,7 +566,7 @@ export function registerSlice(program: Command): void {
     });
 
   // `slice compose <plate.yaml>` — many rendered pieces onto one plate. Lives in compose.ts but is a
-  // sibling subverb of this same `slice` group (docs/plate-composer-design.md §1), reusing the helpers
+  // sibling subverb of this same `slice` group (docs/design/printing/plate-composer-design.md §1), reusing the helpers
   // exported above (resolvePresetList, buildStudioArgs) rather than forking the invocation.
   registerCompose(slice);
 

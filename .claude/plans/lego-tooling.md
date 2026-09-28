@@ -10,7 +10,7 @@ and this file is wrong.
 
 Turn a bikar pattern into a **LEGO-compatible printed part that clutches into real LEGO** —
 and make "is this pattern LEGO-compatible?" a measurable question rather than a guess. The
-five concrete goals are `docs/lego-lab-design.md` §1; their state on 2026-09-01:
+five concrete goals are `docs/design/pieces/lego-lab-design.md` §1; their state on 2026-09-01:
 
 | # | Goal | State | Where the evidence is |
 |---|---|---|---|
@@ -27,7 +27,7 @@ shipped; each has its section in the doc named above.
 
 ## 2. What is left, by what gates it
 
-The authoritative list is `docs/rosette-pin-explorer-design.md` **§6.6** (the open ledger).
+The authoritative list is `docs/design/pieces/rosette-pin-explorer-design.md` **§6.6** (the open ledger).
 `docs/tasks/parked/done.md` records the d3 stream beside it. Summary, with the task that tracks each:
 
 | Gate | Item | Task |
@@ -90,10 +90,10 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
 
 ## 5. Links
 
-- Design docs: `docs/lego-lab-design.md` (§10 implementation status, §11 open questions),
-  `docs/rosette-pin-explorer-design.md` (§6 roadmap, §6.6 ledger),
-  `docs/lego-pattern-set-design.md` (mural), `docs/pattern-outline-brick-design.md`,
-  `docs/d3-integration-design.md` §4 (the explorer is d3 Phase 1).
+- Design docs: `docs/design/pieces/lego-lab-design.md` (§10 implementation status, §11 open questions),
+  `docs/design/pieces/rosette-pin-explorer-design.md` (§6 roadmap, §6.6 ledger),
+  `docs/design/pieces/lego-pattern-set-design.md` (mural), `docs/design/pieces/pattern-outline-brick-design.md`,
+  `docs/design/orb/d3-integration-design.md` §4 (the explorer is d3 Phase 1).
 - Backlog: `docs/tasks/coaster-pipeline/backlog.md` §3.2 (LEGO ladder); LDraw viewers in `docs/tasks/parked/backlog.md`; the d3 stream in `docs/tasks/parked/done.md`.
 - Research: `docs/research/ldraw-cli-viewers.md` §10 (what was actually run),
   `docs/research/lego-lattice-matrix-sweep.md`.

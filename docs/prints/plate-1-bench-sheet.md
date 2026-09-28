@@ -5,7 +5,7 @@ Print it, or copy the fill-in blocks onto paper. It pre-populates every rung, la
 and PASS/borderline/FAIL scale so nothing has to be recalled while a warm part is in your hand.
 
 Sources, verbatim: the ladders and the 23-row expectation table are
-[`calibration-design.md`](../calibration-design.md) §5–§7; the technique and judgement rules are
+[`calibration-design.md`](../design/printing/calibration-design.md) §5–§7; the technique and judgement rules are
 the [`calibrate` protocol](../../.claude/skills/calibrate/protocol.md). When this sheet and either
 source disagree, the source wins — tell me and I will fix the sheet.
 
@@ -66,10 +66,10 @@ Studio and copy them into the profile header verbatim; the numbers are meaningle
 | Process | **0.20mm Standard @BBL X2D** | one profile for the whole card; do not change per coupon |
 | Filament | **Bambu PLA Basic @BBL X2D 0.4 nozzle** | one material, one session |
 
-Settings that are **measurements, not preferences** (per [`calibration-design.md`](../calibration-design.md)
+Settings that are **measurements, not preferences** (per [`calibration-design.md`](../design/printing/calibration-design.md)
 §4): MC-4 fan supports **OFF**, MC-6 towers **bare plate, no brim/raft**. Set them before slicing the plate.
 
-**MC-4 fan — pre-flight eyeball done (the check [`calibration-design.md`](../calibration-design.md) §8 asks
+**MC-4 fan — pre-flight eyeball done (the check [`calibration-design.md`](../design/printing/calibration-design.md) §8 asks
 for before filament).** Sliced supports-off, the fan renders exactly as §5.4 specifies: a single 360°
 `revolve` — a funnel/frustum, base on the bed, flare opening upward, with the six overhang angles as
 concentric riser bands increasing bottom-to-top. No dropped features, correct upright orientation (any

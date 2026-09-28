@@ -92,7 +92,7 @@ setup-hooks:
 	fi
 
 # Validate the actor/use-case map's hash-pinned code pointers.
-validate-use-cases:
+validate-use-cases: validate-use-cases-self-test
 	@$(PYTHON) -c "import yaml" 2>/dev/null || { \
 		echo "PyYAML required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
 		echo "  install it there:  $(PYTHON) -m pip install pyyaml"; \
@@ -112,7 +112,7 @@ use-case-links:
 # Design-doc gate: dead relative links (D1/K9), validators shipped without
 # asserted PASS+FAIL examples (D2/K6), defaults with no citation or CAL-* bet
 # id (D3/K4). Rules and the measurement behind them:
-# docs/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
+# docs/guides/grounding-defect-taxonomy.md. `self-test` runs the gate's own fixtures.
 validate-docs:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/docs_gate.py
@@ -160,7 +160,7 @@ validate-timelapse:
 # printed (R1, re-resolved against bikar at the recorded commit), proves its
 # photos exist and are unique across every record (R2), and prints how many
 # records it checked so an empty tree reads as "0 records checked", never a
-# false green (R4). Design: docs/prints-tab-design.md §7. `--self-test` builds a
+# false green (R4). Design: docs/design/printing/prints-tab-design.md §7. `--self-test` builds a
 # clean fixture, requires it clean, then mutates it once per rule and requires
 # each to fire. Ships before the first plate on purpose: R4's visible count is
 # what makes wiring the gate at zero records honest rather than broken-looking.
@@ -386,7 +386,7 @@ bricks: bikar-stamp
 	done; \
 	cd ${ROOT_DIR} && $(PYTHON) build/brick_previews.py
 
-# Coupons — the machine card (docs/calibration-design.md), 23 rungs that
+# Coupons — the machine card (docs/design/printing/calibration-design.md), 23 rungs that
 # measure a printer rather than print a thing. Deliberately NOT shaped like
 # `orbs`/`bricks`, which loop over a directory and render each file whole:
 # this is one .bkr holding 26 pieces, and §6 is explicit that omitting
@@ -859,7 +859,7 @@ validate-bambu-flags:
 	@sh ${ROOT_DIR}/.claude/gates/bambu_flags_gate.sh --self-test
 	@cd ${ROOT_DIR} && sh .claude/gates/bambu_flags_gate.sh
 
-# Session reflection (docs/session-reflection-design.md §9). The tool's own
+# Session reflection (docs/design/process/session-reflection-design.md §9). The tool's own
 # self-test, with its by-design "answer not taking" fixture, then an audit that
 # every answered FAQ entry still shows falling recurrence. Not in `validate`
 # yet: it reads this machine's transcripts, and the FAQ has nothing answered.
@@ -881,6 +881,13 @@ validate-ids:
 # review itself is by eye — this only keeps the numbers honest.
 validate-print-review:
 	$(PYTHON) $(ROOT_DIR)/tools/print_review.py --self-test
+
+# The note mover (tools/move_doc.py): moves a docs/ note and rewrites every
+# reference to it. Its self-test moves a real note in a copy of this repo and
+# requires the docs gate and the pointer gate to stay green, then puts back one
+# link and one pointer the mover fixed and requires each gate to fire.
+validate-move-doc:
+	$(PYTHON) $(ROOT_DIR)/tools/move_doc.py --self-test
 
 # No-hole check on the coaster pictures (docs/color-preview-design.md §7): each
 # picture bikar drew has transparent corners, no see-through pixel inside the
@@ -911,3 +918,12 @@ validate-cookbook:
 validate-color-spelling:
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/color_spelling.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/color_spelling.py
+
+# The use-case validator's own fixtures, run before every `validate-use-cases`
+# (a prerequisite there, and a target here at the tail so no pinned Makefile
+# line moves). Until 2026-09-28 they ran only by hand, so nothing proved that the
+# by-design failures — a sibling repo the map cannot read, a pointer that does
+# not parse — still fire. docs/issues/use-case-sibling-pins-silently-skipped.md
+.PHONY: validate-use-cases-self-test
+validate-use-cases-self-test:
+	$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py --self-test
