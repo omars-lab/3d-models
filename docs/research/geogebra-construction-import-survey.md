@@ -284,8 +284,8 @@ profile (commit `ed41d33`, "record the confirmed X2D slice profile").
 bikar's own grammar decision (`docs/decisions/2026-07-29-dsl-grammar-spec-and-gates.md`,
 read) chose a hand-written normative EBNF in `docs/grammar.md` held to the
 parser by three gates rather than a generator: G1 sweeps the pattern corpus, G2
-snapshots the reserved words, G3 parses every ```bkr fence in the docs and
-requires every ```bkr invalid fence to fail. That is the shape this survey
+snapshots the reserved words, G3 parses every
+```bkr fence in the docs and requires every ```bkr invalid fence to fail. That is the shape this survey
 recommends copying for `.ggb-commands`.
 
 ## 11. bikar facts (read)

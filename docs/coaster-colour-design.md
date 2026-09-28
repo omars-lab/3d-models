@@ -161,8 +161,8 @@ that has at least one cell:
 3. **`border`** is the band relief — emboss prisms on the slab's top face, present only with
    a `border` clause.
 
-This reuses the existing kernel: `reliefAppliesAt` already reads by region (D-071); `--format
-parts` changes only *how the sampled field is assembled into meshes*, not what is sampled. The
+This reuses the existing kernel: `reliefAppliesAt` already reads by region (D-071);
+`--format parts` changes only *how the sampled field is assembled into meshes*, not what is sampled. The
 split still requires an **emboss** ([D-066](decisions-log.md)): a deboss removes material and
 leaves the slab's own colour, so a debossed region has no raised body to carry a filament and
 is refused (the transfer condition on the split — meaningful only while the relief embosses).

@@ -8,8 +8,8 @@ feeds: docs/coaster-design.md
 
 > **Superseded 2026-09-17 (shape v2, D-066, bikar #208 / 3d-models #239).**
 > The vendored meshes are no longer the round discs measured below: the presets
-> now emit `outline polygon 6 $size rotate 30` (GimTvN9hw4U) and `outline square
-> $size` (7apC5Q9QS-8) with `relief straps emboss 1.2` and a `margin` param. The
+> now emit `outline polygon 6 $size rotate 30` (GimTvN9hw4U) and
+> `outline square $size` (7apC5Q9QS-8) with `relief straps emboss 1.2` and a `margin` param. The
 > current render table is in
 > [`coaster-shape-study.md`](coaster-shape-study.md); this file is kept verbatim
 > as the record of what P2.7 produced.
@@ -21,8 +21,8 @@ record that they were actually produced, not estimated.
 
 ## Enclosing-diameter constant K (measured off the lowered pattern)
 
-`K` is the inscribed art's enclosing diameter in GeoGebra units — `2·maxRadial /
-unitDefault`, `maxRadial` = farthest drawn point from the pattern's bbox centre.
+`K` is the inscribed art's enclosing diameter in GeoGebra units —
+`2·maxRadial / unitDefault`, `maxRadial` = farthest drawn point from the pattern's bbox centre.
 The importer measures it at import and writes `param unit = ($size - 8) / K`.
 
 | Construction | K (units) | pattern bbox @ unit=20 | maxRadial |
@@ -46,10 +46,10 @@ Command shape:
 | 7apC5Q9QS-8 | standard (90) | 90.00 × 90.00 × 4.00 | 0..4 | 160860 | 7855 KiB | 23.7 cm³ | PASS | PASS |
 | 7apC5Q9QS-8 | mini (40) | 40.00 × 40.00 × 4.00 | 0..4 | 32240 | 1574 KiB | 4.6 cm³ | PASS | PASS |
 
-Mesh gate line at every render: `watertight=true euler=2 degenerate=0
-minFeature=0.8mm (floor 0.8mm) — PASS`. Linkage gate: `bodies=1 pointContacts=0
-errors=0 warn=0 — PASS`. The disc diameter equals the `size` knob (`outline round
-$size`); the 4 mm z-height is the `base`.
+Mesh gate line at every render:
+`watertight=true euler=2 degenerate=0 minFeature=0.8mm (floor 0.8mm) — PASS`. Linkage gate:
+`bodies=1 pointContacts=0 errors=0 warn=0 — PASS`. The disc diameter equals the `size` knob
+(`outline round $size`); the 4 mm z-height is the `base`.
 
 ## Structural validator (CV1–CV6b) findings — identical at both sizes
 

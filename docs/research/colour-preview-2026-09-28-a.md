@@ -36,8 +36,8 @@ for `png|rasteriz|openscad|playwright`; paths outside those were not searched.
   `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr:111-133`). Its own comment: "A filled face
   is closed solid at strap height, **one body with the straps**" (`:110`).
 - Ran: `bikar render GimTvN9hw4U-radial-coaster.bkr --coaster Coaster --format parts -o …` →
-  exit 1, `Error: coaster: --format parts has no regions to split on a minimal (outline pattern)
-  coaster — it is already one strap network. Render it with --format stl.` The refusal is
+  exit 1,
+  `Error: coaster: --format parts has no regions to split on a minimal (outline pattern) coaster — it is already one strap network. Render it with --format stl.` The refusal is
   `assertSplittable` (bikar `packages/core/src/kernel3d/coaster.ts:3244-3246,3298`).
 - So no renderer can show the radial fill in a second colour today: the printer would get one body.
   The Lab thumbnail agrees (all bronze). Colouring an openwork coaster first needs the split to
@@ -48,14 +48,14 @@ for `png|rasteriz|openscad|playwright`; paths outside those were not searched.
 
 All outputs in the session scratchpad; commands run with Node 22.22.3 and the built bikar CLI.
 
-**3.1 Parts of a splittable coaster.** `bikar render 7apC5Q9QS-8-fill-coaster.bkr --coaster
-Coaster --format parts --check -o fill/` → four bodies, every mesh gate PASS: `base` (Slab
+**3.1 Parts of a splittable coaster.**
+`bikar render 7apC5Q9QS-8-fill-coaster.bkr --coaster Coaster --format parts --check -o fill/` → four bodies, every mesh gate PASS: `base` (Slab
 #333333, 204,300 tris), `Slab` (#333333, 106,772), `Ruby` (#9b1b30, 14,972), `straps` (Gold
 #d4af37, 105,132). The sidecar `Coaster.parts.json` carries `region`, `stl`, `paletteName`, `hex`
 per body.
 
-**3.2 OpenSCAD `color()` over the part STLs.** A four-line `.scad`, `color("<hex>")
-import("<body>.stl");` per body (hex copied from the sidecar), run with the gallery's own flags
+**3.2 OpenSCAD `color()` over the part STLs.** A four-line `.scad`,
+`color("<hex>") import("<body>.stl");` per body (hex copied from the sidecar), run with the gallery's own flags
 (`--imgsize=1024,1024 --camera=0,0,0,60,0,25,0 --viewall --autocenter --colorscheme=Cornfield`) on
 the installed **OpenSCAD 2021.01**. Rendered in 0.35 s ("Normalized CSG tree has 4 elements").
 **Looked at the PNG:** dark slab, gold straps, ruby stars in the right places; cream background.

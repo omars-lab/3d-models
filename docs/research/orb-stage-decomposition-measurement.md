@@ -91,8 +91,8 @@ derived prose than the frame counts are.
 
 ## 2. The 14-orb enumeration, viewBox invariance, and terminal identity
 
-Run (single program; the frame rule is `1 base + elements + repeats + 1 final
-(+ strands)`, and cumulative frames are rendered and their `viewBox` collected):
+Run (single program; the frame rule is
+`1 base + elements + repeats + 1 final (+ strands)`, and cumulative frames are rendered and their `viewBox` collected):
 
     node -e "
     import('./packages/core/dist/index.js').then(async m=>{
@@ -194,8 +194,8 @@ CORRECTION 1. An earlier draft reported **303** total frames. That number came
 from mixing two different decompositions of the three Maclado orbs. The
 re-derived total under one consistent decomposition is **329**.
 
-CORRECTION 2. An earlier draft reported the Maclado orbs as `spikes=9
-wheels=10`. Both figures were wrong. The measured values are `elements=19`,
+CORRECTION 2. An earlier draft reported the Maclado orbs as
+`spikes=9 wheels=10`. Both figures were wrong. The measured values are `elements=19`,
 `repeats=13`, and section 3 shows why 19 is the right number.
 
 CAVEAT. `elements` is counted on the **first visible base face only**
@@ -355,8 +355,8 @@ varies by view. Neither is "the" strand count.
 
 ## 5. The `overlap` sweep: two disjoint feasible bands
 
-Commentary. `Maclado-9-Overlap.bkr` declares `param overlap = 1.2 range
-1.15..1.25 step 0.01`. Its header narrates the orb as a spike field "grown past
+Commentary. `Maclado-9-Overlap.bkr` declares
+`param overlap = 1.2 range 1.15..1.25 step 0.01`. Its header narrates the orb as a spike field "grown past
 tangency". To test whether that narrative is expressible as a param-sweep
 timelapse, the declared range was widened **in memory only** — the source
 string was edited in the program, no file was touched — and the kernel probed
@@ -548,8 +548,8 @@ Maclado Overlap — flagged in the brief as the cost risk for its 60 loops — i
 12 ms compile.
 
 The verbatim label `329 frames` above is the *formula's* count, not the
-program's: the loop that produced this timing generates `elements + repeats +
-strands` frames per orb, which is 302. Section 6a re-derives that and
+program's: the loop that produced this timing generates
+`elements + repeats + strands` frames per orb, which is 302. Section 6a re-derives that and
 CORRECTION 6 explains the 27-frame gap. The timing itself cross-checks cleanly
 against 6a's independent run — 126 ms there for compile-plus-generation, minus
 the 94 ms compile, leaves 32 ms against the 31 ms here.
@@ -646,8 +646,8 @@ a timelapse does by construction, buys nothing at all.
 
 CORRECTION 6 — 302 emitted frames, not 329. The generator writing real files
 emits **302**, and the reconciliation is exact rather than approximate. Section
-2's table totals 329 under the rule `1 base + elements + repeats + 1 final
-(+ strands)`; summing `elements + repeats + strands` alone over the same 14
+2's table totals 329 under the rule
+`1 base + elements + repeats + 1 final (+ strands)`; summing `elements + repeats + strands` alone over the same 14
 rows gives exactly 302. The 27-frame difference is entirely the notional `base`
 and `final` frames, and **neither is a frame the filter produces**:
 

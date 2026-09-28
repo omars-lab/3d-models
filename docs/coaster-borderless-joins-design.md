@@ -102,8 +102,8 @@ are unverified).
   in each opening. A key as tall as the straps (2.6 mm) looks like **a strap crossing the
   seam**, so the art reads as continuing from one coaster to the next. It can also be a
   contrasting colour, as Nakashima's walnut keys are (S10).
-- **Kernel work (medium):** (1) a new coaster clause, for example `interlock key $waist
-  clearance $c`, that cuts the exact bow-tie pocket at each edge midpoint and needs
+- **Kernel work (medium):** (1) a new coaster clause, for example
+  `interlock key $waist clearance $c`, that cuts the exact bow-tie pocket at each edge midpoint and needs
   `openwork`; (2) the wing-room check in §5; (3) the key itself as a solid, which may
   fit an existing `piece … extrude` (not tried).
 - **Risks:** (a) **The joint depends on the pattern.** It needs an opening at each edge

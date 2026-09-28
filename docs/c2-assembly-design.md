@@ -365,8 +365,8 @@ The parent doc's intent/compensation split (§5 there), operationalized:
   > `docs/decisions-log.md` **D-008**.
 
   Procedure (in the file header, BOSL2-`$slop`-style): probe which
-  hole yields press/snug/sliding; `holeCompMm = (⌀ that achieved the fit) − (designed ⌀
-  for that fit)`. One variable per coupon, production filament and profile, per the
+  hole yields press/snug/sliding;
+  `holeCompMm = (⌀ that achieved the fit) − (designed ⌀ for that fit)`. One variable per coupon, production filament and profile, per the
   Bambu discipline (§3). Results land in the `/prototype` catalog and update
   `PRINTER_PROFILES` — printing itself is currently on hold, so the coupon ships as a
   `planned` catalog entry.

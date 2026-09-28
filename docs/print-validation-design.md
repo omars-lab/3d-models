@@ -81,8 +81,8 @@ nothing on its shared layer. F2–F7 come from the slice simulation.
    the 45k-tri subdivide-3 mesh stays well under a second. The actual cost center to
    benchmark in the V1 spike is not slicing but the ~600 per-layer Clipper passes
    (dilate + diff + erode) in steps 2–4.
-2. **Support map**: for layer *i*, compute `unsupported_i = region_i − dilate(region_{i−1},
-   d)` with 2D boolean + offset ops. This is CuraEngine's own overhang formulation
+2. **Support map**: for layer *i*, compute
+   `unsupported_i = region_i − dilate(region_{i−1}, d)` with 2D boolean + offset ops. This is CuraEngine's own overhang formulation
    ([Generating-Areas](https://github.com/Ultimaker/CuraEngine/wiki/Generating-Areas)).
    The per-layer dilation `d` defaults to **auto = half the extrusion width** — the
    detection PrusaSlicer ships and recommends (`support_material_threshold = 0` →

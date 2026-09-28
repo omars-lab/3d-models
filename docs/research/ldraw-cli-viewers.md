@@ -413,9 +413,8 @@ platform plugin is still initialised. **Inference: on macOS that means the
 ### 4.3 three.js `LDrawLoader` — the route with no app to install
 
 `LDrawLoader.js` carries the behaviour our export needs, and says so in a
-comment on the field that implements it: `this.partsCache = new
-LDrawPartsGeometryCache(this); // This also allows to handle the embedded text
-files ("0 FILE" lines)`.
+comment on the field that implements it:
+`this.partsCache = new LDrawPartsGeometryCache(this); // This also allows to handle the embedded text files ("0 FILE" lines)`.
 
 The mechanism, source-read:
 

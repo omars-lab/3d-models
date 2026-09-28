@@ -458,8 +458,8 @@ host studs' zone, and the warning is the honest report of that. The two plausibl
 the default, or refusing `1 plate` outright — both trade a measured concern for an unmeasured one,
 so neither ships before LG-F2. M6 states the constraint instead.
 
-**Why `clutch` exists.** Per §3.8, geometry is authored *loose* and grip is a discrete rib. `clutch
-auto` emits the rib set §7.6 specifies, sized by the active fit profile. `clutch none` emits nominal
+**Why `clutch` exists.** Per §3.8, geometry is authored *loose* and grip is a discrete rib.
+`clutch auto` emits the rib set §7.6 specifies, sized by the active fit profile. `clutch none` emits nominal
 surfaces with global clearance only — useful for a decorative piece that must not resist removal,
 and for LG-F1's rung 0.
 
@@ -1042,8 +1042,8 @@ graduation rule was honoured throughout: every correction above has a test that 
 fix and passes after, and the two triangulation fixes were each verified by neutering the fix and
 confirming the test goes red.
 
-**M7 — the Lab protocol wiring — 2026-07-31.** bikar `61c371f` (PR #27, the same squash): `family:
-'brick'`, `LabBrick`, `brickResponse`, and the `kernel3d/index.ts` brick surface. 3d-models: this
+**M7 — the Lab protocol wiring — 2026-07-31.** bikar `61c371f` (PR #27, the same squash):
+`family: 'brick'`, `LabBrick`, `brickResponse`, and the `kernel3d/index.ts` brick surface. 3d-models: this
 revision. The anchor solver, `grid-gate.ts` and `sweepGridFit` had already shipped with M6 for the
 reason above, so what landed here is the boundary: the response payload, the barrel, and the two
 facts §9 had left implicit.
@@ -1333,8 +1333,8 @@ thinnest feature is the anti-stud tube wall, 0.757 mm on the shipped fit against
 `outerDia/2 − bore/2`, and both of those are fixed by §3.1's mating dimensions rather than by
 anything the reader chose, so *no* setting of the margin makes the note rare while leaving it
 useful. A note that never turns off is the decoration §14.1 itself refuses. The condition that does
-discriminate is whether the reader has moved a clutch number — `FIT_FIELDS.some((f) =>
-fitProvenance(brick.fit, f) !== 'default')` — so that is what gates it, and §14.1 now says so with
+discriminate is whether the reader has moved a clutch number —
+`FIT_FIELDS.some((f) => fitProvenance(brick.fit, f) !== 'default')` — so that is what gates it, and §14.1 now says so with
 the 0.757-inside-0.805 arithmetic written out in its own PASS example. The margin still does work;
 it decides whether a *moved* fit is worth reporting, which is a different job from making the note
 rare.
@@ -1364,8 +1364,8 @@ entry, the §10 P3 row, §14.4, and UC19 in the use-case map.
 
 **The scope was larger than D-009 wrote it.** D-009 says to wire `LDrawLoader` *"behind the LDraw
 export button"*. There was no LDraw export button: `git grep -i ldraw -- packages/lab` returned one
-cosmetic string. The emitter shipped in core + CLI only, reachable via `bikar render --format
-ldraw`, so §14.3's export was complete in the sense the spec meant and absent from the surface a
+cosmetic string. The emitter shipped in core + CLI only, reachable via
+`bikar render --format ldraw`, so §14.3's export was complete in the sense the spec meant and absent from the surface a
 person actually uses. Building the panel therefore meant building the export path first — one
 `ldraw` request type serving both the download and the preview, so the two consumers cannot drift
 onto different bytes.
@@ -1546,8 +1546,8 @@ deviations from this spec, and additions beyond it.)*
   The regression test drives `solidifySlabStack` directly with two hexagonal holes at
   `dy ∈ {0, 3e-15, 1e-9}` — `3e-15` mm being the y-noise the brick partition actually produced
   between two pocket rings the geometry says are on one row. It reports 2 flat triangles before the
-  change and none after; the n=6 preset goes from `degenerate=6 — FAIL` to `watertight=true euler=2
-  degenerate=0 — PASS`.
+  change and none after; the n=6 preset goes from `degenerate=6 — FAIL` to
+  `watertight=true euler=2 degenerate=0 — PASS`.
 - **Q8 — §5.3's rhombic row is not expressible in the `tile` grammar.** `env.repeatVectors` is
   assigned in exactly one place, `packages/core/src/dsl/evaluator.ts`, and it admits exactly two
   basis shapes: `[(dx,0), (0,dy)]` for `mode rectangular` and `[(dx,0), (dx/2,dy)]` for `mode hex`.
@@ -1719,8 +1719,8 @@ PASS: `design.html` added as a fourth page — catalogued, listed as a Rollup in
 present and referenced. Suite green, and the card appears on the index without anyone editing the
 index.
 
-FAIL: a `sweep.html` dropped into `packages/lab` with no `PAGES` entry. `catalogues every html page
-in the package, and no page that is not there` goes red — verified by construction, not by
+FAIL: a `sweep.html` dropped into `packages/lab` with no `PAGES` entry.
+`catalogues every html page in the package, and no page that is not there` goes red — verified by construction, not by
 inspection. The converse also fails: a `PAGES` entry for a page that was deleted fails the same
 assertion from the other side, which is what stops the index advertising a dead link.
 

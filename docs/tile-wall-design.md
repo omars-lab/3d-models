@@ -144,8 +144,8 @@ wall Hallway
 ```
 
 `connect none` is the default: each tile mounts independently (adhesive or per-tile
-keyhole), matching the dominant successful practice for this product class. `connect
-clips` activates the connector library, its validators, and the connector BOM — chosen
+keyhole), matching the dominant successful practice for this product class.
+`connect clips` activates the connector library, its validators, and the connector BOM — chosen
 for removable installs, raking-light focal walls, and large fields where cumulative
 alignment drift is visible. Clips are justified on *alignment* (rigid printed tiles do
 not conform to wavy drywall the way foam PVC panels do), not retention.
@@ -288,8 +288,8 @@ Levers, in order of impact:
 1. **Shrink the field, not the ambition** — a focal panel with a plain surround is how
    ceramic accent walls are installed in practice, and is ~5× fewer tiles for most of the
    visual impact.
-2. **Match `module` to the bed** — 4-up needs `2·module + inter-part clearance + edge
-   margins ≤ bed` (≈ `module 80` on a 180 mm bed, `module 100` on 220 mm). Re-moduling is
+2. **Match `module` to the bed** — 4-up needs
+   `2·module + inter-part clearance + edge margins ≤ bed` (≈ `module 80` on a 180 mm bed, `module 100` on 220 mm). Re-moduling is
    a one-line change; `layout report` recomputes the whole BOM.
 3. **Farm out the identical middle** — send the field-tile plate to a print service or
    makerspace farm and keep the local printer for edge tiles, coupons, and replacements.

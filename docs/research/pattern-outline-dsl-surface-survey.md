@@ -90,7 +90,7 @@ So "inset degenerates → hard error" is **not** what general-purpose geometry l
 | CadQuery | "profile" (2D shape being extruded), "pending wires" |
 | CGAL | "offset contour" / "offset polygon" |
 | Clipper2 | "paths" / "contours" |
-| **bikar today** (read from source) | tile: `outline square <side>` statement (`parser.ts:1850`); piece: `profile` contextual word (`parser.ts:1485`); evaluator error vocabulary `'outline' | 'profile'` (`evaluator.ts:1156`); kernel field `bodyOutline` (`kernel3d/brick.ts:120`) |
+| **bikar today** (read from source) | tile: `outline square <side>` statement (`parser.ts:1850`); piece: `profile` contextual word (`parser.ts:1485`); evaluator error vocabulary `'outline' \| 'profile'` (`evaluator.ts:1156`); kernel field `bodyOutline` (`kernel3d/brick.ts:120`) |
 
 Load-bearing local facts for the naming decision:
 

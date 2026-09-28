@@ -97,7 +97,7 @@ The body colour map must be the one `--format parts` writes into the sidecar, ta
 function (today `pieceColour` in the CLI), so the preview and the sidecar cannot give one body two
 colours.
 
-## 5. Coaster Lab controls
+## 5. Coaster Lab controls ^leu4yg
 
 Lab rules kept: a knob is a `.bkr` edit (numeric knobs are `param`s; colour, which has no param,
 is a line rewrite like today's `color <region>` knob); touched knobs are tracked; a preset turns

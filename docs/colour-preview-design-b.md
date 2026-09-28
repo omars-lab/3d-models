@@ -1,4 +1,4 @@
-# Coloured coaster previews and Coaster Lab colour controls — design (researcher B)
+# Coloured coaster previews and Coaster Lab colour controls — design (researcher B) ^e7b42d
 
 **Status:** proposal from researcher B of two; a checker consolidates both. Raw findings,
 experiments and sources: [`docs/research/colour-preview-2026-09-28-b.md`](research/colour-preview-2026-09-28-b.md).

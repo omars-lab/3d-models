@@ -115,8 +115,8 @@ and free (0.35) (verification §3.3).
 
 ## 4. Border too big
 
-By design. The band where two dovetailed pieces meet is `2 × (depth + clearance +
-wall)`, about 11 mm on minis-04's knobs. Both researchers list the same alternatives,
+By design. The band where two dovetailed pieces meet is
+`2 × (depth + clearance + wall)`, about 11 mm on minis-04's knobs. Both researchers list the same alternatives,
 already on plates:
 
 | Join | Band | Plate |

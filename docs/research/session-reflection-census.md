@@ -150,9 +150,9 @@ trustworthy column, raw occ is not.
   help live?" session 27e89d38 line 8072) or user-directed ("How do you want these
   handled?" session 332d42c3 line 33100).
 - **Unexpected, and the strongest (c) finding:** several hits are *already
-  FAQ-shaped blocks the session wrote by hand* — `**Q-HOME — Where does the shared
-  drawing code live?**` (session 792c03e6 line 10545) and `**Q-DATA — How does
-  qiyas score data reach the picture?**` (session 792c03e6 line 10545). Sessions
+  FAQ-shaped blocks the session wrote by hand* —
+  `**Q-HOME — Where does the shared drawing code live?**` (session 792c03e6 line 10545) and
+  `**Q-DATA — How does qiyas score data reach the picture?**` (session 792c03e6 line 10545). Sessions
   spontaneously mint `**Q-XXX — <question>**` blocks with answers, which is direct
   evidence the FAQ format proposed in the design is a natural shape, not an imposed
   one.

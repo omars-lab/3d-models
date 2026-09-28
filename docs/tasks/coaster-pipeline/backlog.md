@@ -846,8 +846,8 @@ Five checks, run before shipping it, in the spirit of
 
   Naming the authority in prose is still a thing a human has to re-read, so it
   graduated ([`decisions-log.md`](../../decisions-log.md)
-  D-019): `.claude/gates/counts_gate.py` (hook `37-counts`, `make
-  validate-counts`) reads each authority and compares it to the number written
+  D-019): `.claude/gates/counts_gate.py` (hook `37-counts`,
+  `make validate-counts`) reads each authority and compares it to the number written
   here. The counts carry an invisible `<!--count:NAME-->` tag, and a tagged
   number that disagrees with its authority fails the commit. The gate's
   load-bearing self-test fixture is **this exact defect**: a document whose

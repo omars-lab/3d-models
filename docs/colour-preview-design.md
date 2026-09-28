@@ -85,8 +85,8 @@ path" requirement that is broken now.
    culling, back faces darker) so the Lab looks the same after the move.
 2. **Lab viewer** draws that list on its canvas. Behaviour unchanged; thumbnails, which copy the
    canvas, follow for free.
-3. **CLI** `bikar render <file> --coaster <name> --format preview -o <file>.png [--pinch …]
-   [--mate <dx,dy>]`: evaluates, splits with the same pinch option `--format parts` takes, writes
+3. **CLI**
+   `bikar render <file> --coaster <name> --format preview -o <file>.png [--pinch …] [--mate <dx,dy>]`: evaluates, splits with the same pinch option `--format parts` takes, writes
    the polygon list as SVG with no background, and rasterises with `rasterize.ts`. It **refuses
    exactly where `--format parts` refuses**, with the same message, so a picture never promises a
    split the printer cannot get. `--mate` draws the second copy the gallery shows for mating
@@ -329,8 +329,8 @@ Each is one bikar PR unless it says otherwise; none needs the printer.
    it. Second validator as a test. No visible change.
 3. **Core preview function** moved from the Lab viewer; Lab switched to it (§3.2 items 1–2). First
    and fourth validators as tests. The Lab must look the same: compare a thumbnail before and after.
-4. **`bikar render --format preview`** with `--pinch` and `--mate`, same refusals as `--format
-   parts`. Hard-case validator as a test.
+4. **`bikar render --format preview`** with `--pinch` and `--mate`, same refusals as
+   `--format parts`. Hard-case validator as a test.
 5. **3d-models PR:** `make coasters` uses `--format preview` for coloured, splittable coasters; the
    no-hole validator on its output. Look at the PNGs before merging.
 6. **Orbit list in the evaluate reply; Orbits panel** with ticks, colours, presets and the parts

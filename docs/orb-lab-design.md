@@ -95,8 +95,8 @@ param shoulder = 60 range 48..76
   only by `for $v in a..b` loops; `param` adds the missing declaration form.
 - Orb-level statements (`radius`, `struts width/depth`, `weave amplitude`) currently parse
   bare positive numbers and must learn to accept `$name`/expressions.
-- Embedders need a **param-override entry point** (e.g. `compileToGeometry(source,
-  { params })`) so the Lab can drive sliders without textually rewriting source on every
+- Embedders need a **param-override entry point** (e.g.
+  `compileToGeometry(source, { params })`) so the Lab can drive sliders without textually rewriting source on every
   drag — exact API is an engine-milestone detail (M5, §10).
 - **Cross-param constraints stay out of the DSL** (v1 decision): `inner < shoulder − 8` and
   `amplitude ≥ (depth + 0.4)/2` live in the shared knob layer (§8) — constraint expressions
@@ -275,11 +275,11 @@ physically wrong orbs; the UI must make these unreachable:
 **Tier 2 — engine hard errors (surface, don't hide).** Some knob corners can't be cheaply
 predicted; the engine's messages are already user-actionable — show them verbatim in an error
 panel with the offending knobs highlighted:
-- Inset degeneracy: `void 0 (3 sides, area 85.7 pattern-units²) degenerates at strut
-  half-width inset 3.01 pattern units — reduce struts width or enlarge the orb radius`
+- Inset degeneracy:
+  `void 0 (3 sides, area 85.7 pattern-units²) degenerates at strut half-width inset 3.01 pattern units — reduce struts width or enlarge the orb radius`
   (measured at shoulder ≥ 82) → highlight strut-width + radius knobs.
-- Manifold-gate failure (`…pattern edges must meet the face polygon's edges at points shared
-  by adjacent faces`) → should be unreachable from templates; treat as a template bug, log it.
+- Manifold-gate failure
+  (`…pattern edges must meet the face polygon's edges at points shared by adjacent faces`) → should be unreachable from templates; treat as a template bug, log it.
 - Weave family errors (degree ≠ 2/4, odd crossing count, odd alternation cycle, collapsed
   edge at small radius) → reachable via radius/pattern-density corners; map each to the knob
   that moves it (e.g. collapsed edge → "increase radius or reduce subdivision").
@@ -323,8 +323,8 @@ lab.html?v=1&f=star-icosa&subdivide=2&projection=faceted
 
 ### 6.3 Custom orbs in the URL
 
-When the source diverges from every shipped script: `f=custom&code=<lz-string
-compressToEncodedURIComponent of the full .bkr source>`. Orb `.bkr` files are ~1–2 KB text and
+When the source diverges from every shipped script:
+`f=custom&code=<lz-string compressToEncodedURIComponent of the full .bkr source>`. Orb `.bkr` files are ~1–2 KB text and
 compress well; if the resulting URL exceeds ~1,800 chars, warn and offer a `.bkr` download
 instead of a link. Params declared *by the custom source* still work as URL keys next to
 `code=` (overrides applied after parse) — custom orbs keep working sliders and shareable

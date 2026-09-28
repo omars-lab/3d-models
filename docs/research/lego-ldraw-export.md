@@ -260,9 +260,8 @@ S2 defines `0 !LDRAW_ORG <type>` with these values, verbatim as returned:
 > Part | Subpart | Primitive | 8_Primitive | 48_Primitive | Shortcut are used in
 > Official Library Parts
 
-and, for unofficial parts, `Unofficial_Part | Unofficial_Subpart |
-Unofficial_Primitive | Unofficial_8_Primitive | Unofficial_48_Primitive |
-Unofficial_Shortcut`.
+and, for unofficial parts,
+`Unofficial_Part | Unofficial_Subpart | Unofficial_Primitive | Unofficial_8_Primitive | Unofficial_48_Primitive | Unofficial_Shortcut`.
 
 `0 Name:` — *"Filename is the file name of the part including the folder (e.g. s/, 48/)
 if it is not directly in the parts or p folders."*
@@ -472,8 +471,8 @@ Costs marked **measured** were run at bikar 9cca1ae; see §5.4.
 Every number in this table is bikar's `patterns/Lego/Classic-Brick.bkr` (2×4, 3 plates,
 `studs full`, `clutch auto`) against `3001.dat` as S13 read it. bikar values are from
 `kernel3d/lego.ts` plus the shipped `DEFAULT_BRICK_FIT`, which the compile run confirms
-is what a default `Classic-Brick` is built with (`studDiaMm -0.2, tubeDiaMm -0.2,
-pinDiaMm -0.2, wallMm 0, ribMm 0.1, ribArcMm 0.8`, all provenance `default`).
+is what a default `Classic-Brick` is built with
+(`studDiaMm -0.2, tubeDiaMm -0.2, pinDiaMm -0.2, wallMm 0, ribMm 0.1, ribArcMm 0.8`, all provenance `default`).
 
 | Feature | `3001.dat` as modelled (S13) | Generated brick | Δ |
 |---|---|---|---|

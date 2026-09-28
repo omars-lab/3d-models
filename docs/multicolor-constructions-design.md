@@ -268,8 +268,8 @@ filament choice are Omar's.
 the other six surveyed files where rings split the classes. Then the slice through
 `bambu slice coaster` and a look in the Bambu Studio window.
 
-**Open choices for Omar:** mirrored copies in one class (this doc: yes, §1); flush vs `relief
-fills` (§4, §7); which classes carry colour on the sample plate.
+**Open choices for Omar:** mirrored copies in one class (this doc: yes, §1); flush vs
+`relief fills` (§4, §7); which classes carry colour on the sample plate.
 
 ## 10. Read against itself (K7)
 

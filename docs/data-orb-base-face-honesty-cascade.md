@@ -13,8 +13,8 @@ name**: a true base-polyhedron face for inscribed orbs (the index a projected el
 was lifted through), and a *generative unit* (wheel `0..19` / filler `20..31`) for
 wheelfield orbs. bikar's contract row documents the overload honestly-by-doc but
 dishonestly-by-name — "read it as which unit, never as which base face." T9 (#49)
-uncovered it: a wheelfield breakdown labels `base face(s) 15, 16, 20, 25, 31 on a
-12-face solid` — indices past the face count, because they are units, not faces.
+uncovered it: a wheelfield breakdown labels
+`base face(s) 15, 16, 20, 25, 31 on a 12-face solid` — indices past the face count, because they are units, not faces.
 
 ## 2. The fix (the robust one, per the CLAUDE.md tenet)
 

@@ -68,10 +68,10 @@ other cell was run 2026-09-27 — see [Oracle notes](#oracle-notes) under the ta
 The exception is `bknVRSMcLj0`, added later that day: its three were run at its
 migration, on youtube `main`
 against the migrated `.bkr` and printed, verbatim:
-O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2 `O2 PASS: edge-SSIM
-0.8288 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 16 (advisory)`; O3
-(`make reference` from its `export.ggb`, then `qiyas mesh compare`) `O3 PASS:
-coverage 1.000 (min 0.99), local 0.400 mm at (35.541, -24.459) (max 1)`.
+O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
+`O2 PASS: edge-SSIM 0.8288 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 16 (advisory)`; O3
+(`make reference` from its `export.ggb`, then `qiyas mesh compare`)
+`O3 PASS: coverage 1.000 (min 0.99), local 0.400 mm at (35.541, -24.459) (max 1)`.
 
 ## Columns
 

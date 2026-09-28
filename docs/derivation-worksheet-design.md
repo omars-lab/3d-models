@@ -119,8 +119,8 @@ qualify assumptions in the brief that commissioned this work; those are marked �
   `bikar/packages/core/src/kernel3d/solidify-slabs.ts` uses a **shared cell partition** and
   states in-source that "a nesting-only interface contract cannot express them." The phrasing in
   `bikar/docs/decisions/2026-07-29-w2-wall-connectors-mounts.md` (and repeated in the brief for
-  this work) predates commit `31a82a3 W2 1/8: slab-stack solidifier over a shared cell
-  partition`.
+  this work) predates commit
+  `31a82a3 W2 1/8: slab-stack solidifier over a shared cell partition`.
 - **⚠ A vendored triangulator exists** (`kernel3d/earcut-vendored.ts`), which qualifies the
   founding decision's "no triangulation dependency" phrasing. The no-CSG commitment is intact;
   the no-dependency framing is looser than stated.
@@ -211,8 +211,8 @@ and against any scheme that inspects the finished faces.**
 Requicha 1980 §2.5.1 verbatim: *"Nonterminal nodes represent operators, which may be either rigid
 motions or regularized union, intersection, or difference; terminal nodes are either primitive
 leaves … or transformation leaves which contain the defining arguments of rigid motions."* Every
-implementation checked bakes the matrix into the leaf — OpenSCAD `new CSGLeaf(ps, state.matrix(),
-…)`, Manifold `CsgLeafNode(pImpl_, mat3x4 transform_)`, JSCAD `{polygons, transforms}`. FreeCAD's
+implementation checked bakes the matrix into the leaf — OpenSCAD
+`new CSGLeaf(ps, state.matrix(), …)`, Manifold `CsgLeafNode(pImpl_, mat3x4 transform_)`, JSCAD `{polygons, transforms}`. FreeCAD's
 edges mean containment; OSGE's mean dataflow with semantics on the *destination node's port name*.
 **Consequence: §4.4 depicts transformations as named steps, not as arrow labels. The brief's
 "named arrows" option is available but would be an invention, and is recorded as such in
@@ -763,8 +763,8 @@ led by `offsetDeg` (7,099), `className` (2,067), `opacity` (381) and `tileBlock`
 and `assert.deepStrictEqual(ast, JSON.parse(JSON.stringify(ast)))` **fails on every file in the
 corpus**.
 
-This is semantically nil under TypeScript's default optional-property model — `{ offsetDeg:
-undefined }` and `{}` both inhabit `{ offsetDeg?: number }` — and it is invisible to a JSON Schema,
+This is semantically nil under TypeScript's default optional-property model —
+`{ offsetDeg: undefined }` and `{}` both inhabit `{ offsetDeg?: number }` — and it is invisible to a JSON Schema,
 because absence and `undefined` are the same thing on the wire. But it is a live trap in exactly
 two places, and both are places this design would walk into:
 
@@ -847,8 +847,8 @@ What it actually emitted for `StyleSelector` (`ast.ts:387`) — abridged, but st
     …3 more ] }
 ```
 
-That is the correct shape: one branch per variant, `const` on the tag, `additionalProperties:
-false`, accurate `required` lists, optional properties simply omitted from `required`, and
+That is the correct shape: one branch per variant, `const` on the tag,
+`additionalProperties: false`, accurate `required` lists, optional properties simply omitted from `required`, and
 `$ref` self-reference for the recursive `and` arm. `Declaration` came out as an `anyOf` of ten
 `$ref`s to named per-kind definitions. **The feared flattening did not occur anywhere: 9 of 9
 unions are correctly tagged.**
