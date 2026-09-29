@@ -5533,3 +5533,31 @@ bikar main.
 
 **What would reverse it:** a file format or tool we must write that requires the British spelling in
 a place the allow list cannot name narrowly — then add a token with its reason, not a path.
+
+## D-084 — The eight stranded video-loop records land on master as one PR
+
+Omar, 2026-09-29, ticked "Accept all eight" on call 4a of the
+[2026-09-29 open-calls page](feedback-requests/2026-09-29-open-calls.md#4-eight-video-rebuilds-are-stuck-off-master).
+The video loop had written a catalog-backlog note for each of eight rebuilt tutorials
+(`n_ICgwOr6qs`, `Y6kS1MvnKoc`, `NtnlGMTElBk`, `gBV_JTt3Kxk`, `_U6G8QSfWnk`, `fhGHzop7ULw`,
+`jlTmt_279M4`, `A9fefFurD_s`), each as a PR stacked on the one before. #404 merged into #403's
+branch, not master, which closed #403 and #405 and left #406–#410 on a closed base.
+
+### Options
+
+- **Accept all eight** (chosen): cherry-pick the eight commits after `b6870c7` onto one branch
+  off master, then close #406–#410 with a link to it and delete the old branches.
+- **Accept some**: the ones left out stay on the list as held, with a reason. None of the
+  rebuilds gave a reason to leave it out: every one scored 0.855 or better, and all but
+  `Y6kS1MvnKoc` (17/18) matched every step.
+- **Leave them**: the notes stay off master and the next video loop redoes the bookkeeping.
+
+### How it was checked
+
+The eight commits touch only `docs/tasks/catalog-expansion/backlog.md` and applied without a
+conflict. The lines the rebuilt branch adds and removes against master are the same, line for
+line, as the ones the old stack's tip added and removed against `b6870c7`.
+
+**What would reverse it:** a closer look finds a rebuild wrong, for example a step that matches
+the score but not the construction. That note then moves back to held, with that reason, and
+this entry stays.

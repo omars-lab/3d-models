@@ -121,9 +121,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
    ([D-081](../../working-model/decisions-log.md)). The `orbit` word and openwork fill are on
    bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
-   **Waiting on Omar's pick** from the four fills below (orbits are numbered outwards; all four
-   pass the mesh gate at 90 mm as one body). The pick becomes the file's live fill lines, and the
-   CS-1 note gets a `radial` heading and picture.
+   **Omar picked none of the four fills below** (review thread kpdekz on the
+   [2026-09-29 open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md),
+   2026-09-29). He wants to pick the fill himself in the Coaster Lab: fill a piece, and the Lab
+   highlights the other pieces on the same ring (the same distance from the centre) and suggests
+   filling them too. The Lab's Orbits panel (bikar #282) already lists each ring with a tick and
+   a color. What is missing is clicking a piece in the picture, the highlight of its ring, and the
+   suggestion. Built from that, the file keeps fill A as its default until he saves a pick.
 
    ![CS-1 radial fill choices](../../catalog/media/GimTvN9hw4U/GimTvN9hw4U-radial-choices.png)
 
@@ -143,6 +147,31 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
+5. **A prioritize-design skill: which pattern becomes a coaster next.** Omar, 2026-09-29, review
+   thread 952r93 on the open-calls page, instead of picking call 4b: a skill that reviews the
+   candidate coasters and guesses which customers would like most, which is most unusual, and
+   which differs most from the ones already made, "that we can iterate on". Its rubric lives in
+   a file next to the skill so it can sharpen. What customers like comes from outside sources,
+   so the rubric starts from two independent researchers and a checker. The first run ranks the
+   eight video rebuilds ([D-084](../../working-model/decisions-log.md)) and answers 4b.
+6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
+   Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
+   - choose the fill height in the Lab at either end: fills lowered below the straps, or raised
+     above them (the `fills <mm>` slider from bikar #283 only goes down);
+   - print only the inner shapes, without the straps, as loose pieces that fit into a printed
+     frame;
+   - a guided page where someone assembles their own coaster.
+
+   The second and third need a design first: how loose pieces fit (the interlock's clearance
+   numbers are for a different joint), and what the guided steps are. Call 2 on the page stays
+   open until then.
+7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
+   `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
+   either side of the true edge, and two sides are straight. Omar asked for a plainer picture
+   (thread 7t9o0t), which is now on the page. **Waits on a look at a printed edge:** if the steps
+   can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
+   already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
+   §5.3), and re-run the tool to show every side straight.
 
 ## Handed to the video loop
 
