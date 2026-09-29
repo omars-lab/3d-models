@@ -104,6 +104,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       (it turns by quarter turns only). Tile half-width 0.975 R. The construction is in
       `reconstructions/jlTmt_279M4/`, ready for the coaster step.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
+      **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.855** (a 3:52 slide deck;
+      the dense slides hold at ~0.73 because the slides' own lines are hand-placed slightly off).
+      For the coaster: a **single ten-point star medallion**, not a tile. One eight-sided shape
+      (corners at the top and bottom points of the circle, (±0.449, ±0.382) R and (±0.172, 0) R)
+      turned 36° four times; its ten outer points sit on the circle of radius R, so it fits a
+      round coaster. All straight lines, built from one circle by compass and straightedge
+      (the pentagon by the golden cut). The construction is in `reconstructions/A9fefFurD_s/`,
+      ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
