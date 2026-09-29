@@ -10,9 +10,12 @@ should have options to configure all of these in a robust easy to use fashion in
 which orbits are filled, each orbit's color, flush or lowered, and a live colored preview, with
 the Lab preview and the printed parts coming from one code path.
 
-*Status: consolidated design, the one to act on. §10 steps 1–5 are built (bikar
-[#271](https://github.com/NaqshCoffee/bikar/pull/271)–[#274](https://github.com/NaqshCoffee/bikar/pull/274),
-3d-models #381; pictures below); the Coaster Lab controls (§5, steps 6–8) are not. It supersedes the two
+*Status: consolidated design, the one to act on. All eight §10 steps are built: steps 1–5 in bikar
+[#271](https://github.com/NaqshCoffee/bikar/pull/271)–[#274](https://github.com/NaqshCoffee/bikar/pull/274)
+and 3d-models #381 (pictures below), and the Coaster Lab controls and the openwork split (§5,
+steps 6–8) in bikar [#282](https://github.com/NaqshCoffee/bikar/pull/282),
+[#283](https://github.com/NaqshCoffee/bikar/pull/283) and [#284](https://github.com/NaqshCoffee/bikar/pull/284).
+Printing a colored openwork coaster still waits on a first-layer coupon. It supersedes the two
 research designs it was built from, researcher A's [color-preview-design-a.md](color-preview-design-a.md)
 (raw notes: [../../research/color-preview-2026-09-28-a.md](../../research/color-preview-2026-09-28-a.md)) and
 researcher B's [color-preview-design-b.md](color-preview-design-b.md) (raw notes:
@@ -176,8 +179,8 @@ A mockup, not the Lab: [lab-controls-mockup.html](color-preview-design/lab-contr
 in the Lab's own colors and classes (copied from bikar `packages/lab/src/style.css` and
 `coaster.css`), screenshotted with headless Chrome. The eight orbit rows are the CS-1 radial
 coaster's real orbits (`bikar bands`, as §9 run 1) with *odd* ticked; the view is the hand-made POC
-picture of those fills, standing in for the §3.2 function. The Parts row reads as it will once
-openwork splits (§10 step 8); today this coaster shows the refusal there.
+picture of those fills, standing in for the §3.2 function. Since the openwork split (§10 step 8,
+bikar #284) the real Lab's Parts row lists the bodies the export writes: "splits into Gold, straps".
 
 - **Orbit rows** come from `computeOrbits` in core (what `bikar bands` prints), added to the Lab's
   evaluate reply. Each ticked row is one `fill void where orbit == N color <Name>` line, written by
@@ -359,6 +362,9 @@ reading the sidecar, with the color key skipped for those files.
 - Whether a multi-color first layer on an openwork coaster prints cleanly on the X2D.
 - The painter's sort on tall or deep shapes; seen right only on one flat coaster.
 - Whether the split can keep the top fillet on openwork without breaking the bodies' reunion.
+  Partly answered by bikar #284 on the radial coaster: with the fillet kept, every body passes
+  the mesh gate and the bodies' bottom cells add up to the one-body footprint, each once. The
+  bodies' heights are not compared with the one-body mesh, and only that coaster was checked.
 - Build time of `--format parts` or `--format preview` across every coaster in `make coasters`.
 - The look of lowered fills (Omar's call, after a sample plate).
 - 3MF Consortium viewer per-object color (snippet-only); Blender (403).
