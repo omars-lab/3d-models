@@ -54,8 +54,8 @@ These come from the kernel and the printer. The approaches in §3 are scored aga
    bet), and a neck that takes the pull at CAL-CST-06 (also unsettled).
 3. **Any edge joins any edge** with no rule to remember (D-069, Omar's "like legos").
 4. **Walls that set the fit have to be exact.** The kernel samples the top on a 0.4 mm
-   grid. A wall made from that grid has up to ±0.2 mm of stair per face, which is more than
-   the clearance the joint is trying to hold. That is why the dovetail emits its outer
+   grid. A wall made from that grid strays up to ±0.27 mm from its true line on a slanted
+   face (measured on the CS-1 coaster at 90 mm, 2026-09-29), which is more than the clearance the joint is trying to hold. That is why the dovetail emits its outer
    wall exactly ([`coaster-interlock-design.md`](coaster-interlock-design.md) §5.3). Any
    new joint needs the same for every face it bears on.
 5. **Only same-size, same-outline coasters join**, as today.

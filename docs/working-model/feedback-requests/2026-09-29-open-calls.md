@@ -14,14 +14,14 @@ until you tick a box.
 |---|---|---|---|
 | 1 | Which rings of the CS-1 coaster are filled solid | **A**, the snowflake | The only fill that reads as a shape of its own |
 | 2 | Color fills: flush with the straps, or lower | **Choose from a print with both**, flush until then | It is a question of looks, and the pictures can't show that |
-| 3 | The outer edge of every coaster is a staircase of 0.4 mm steps | **Make the outer edge true** | The code exists; the outside edge is the one people see |
+| 3 | The outer edge of every coaster is a staircase of 0.4 mm steps | **Leave it, look at a printed edge** | The steps are under 0.3 mm; fix them only if a print shows them |
 | 4 | Eight video rebuilds are recorded but stuck off master | **Accept all eight as one PR**; make **NtnlGMTElBk** a coaster next | The notes are true, and that star builds with what we have |
 
 At the end: [things only you can do](#things-only-you-can-do-not-decisions), which are not decisions.
 
 ---
 
-## 1. Radial fill: which rings are solid
+## 1. Radial fill: which rings are solid ^kpdekz
 
 **In short.** On 2026-09-27 you asked for a CS-1 coaster with some rings of pieces filled solid.
 It is built (bikar #270). The rings are numbered from the centre out, 0 to 7. Here are the four
@@ -47,9 +47,13 @@ fill in bikar's `GimTvN9hw4U-radial-coaster.bkr`, and the CS-1 catalog note gets
 - [ ] D
 - Notes:
 
+**Redirected 2026-09-29** (your comment): none of the four. You pick the fill yourself in the
+Coaster Lab, which highlights and suggests the other pieces on the same ring
+([backlog item 4](../../tasks/catalog-expansion/backlog.md)).
+
 ---
 
-## 2. Color fills: flush or lowered
+## 2. Color fills: flush or lowered ^3kqnku
 
 **In short.** A colored coaster prints as two bodies: the straps (the lines) and the fills
 between them. The fills can rise to the same height as the straps (**flush**, 1.2 mm), or stop
@@ -79,26 +83,38 @@ proposes about 0.6 mm.*
 - Colors you want for the straps and the fills:
 - Notes:
 
+**Widened 2026-09-29** (your comment): fill height either way in the Lab, loose inner pieces,
+and "assemble your own coaster" ([backlog item 6](../../tasks/catalog-expansion/backlog.md)).
+This call stays open for the default height.
+
 ---
 
-## 3. Coaster edges are a staircase
+## 3. Coaster edges are a staircase ^7t9o0t
 
-**In short.** A coaster is built on a grid of 0.4 mm squares. The Lab preview looks smooth, but
-the printed file's outer edge steps along that grid: up to 0.2 mm off the true line, in stairs
-0.4 mm wide. The close-up is from the six-sided CS-1 coaster at 90 mm, on its most slanted side.
-The designs chose this on purpose for plain coasters. Only the interlocking pieces build a true
-edge, because their joint cannot take the 0.2 mm error
-([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)). No print record
-says yet whether the stairs can be seen or felt.
+**In short.** The file we send to the printer is built out of tiny 0.4 mm squares, like pixels.
+A side that runs along the squares comes out straight. A slanted side can't, so it comes out as
+a row of tiny steps. On the six-sided CS-1 coaster, two sides are straight and four are stepped.
+The steps stray up to 0.27 mm either side of the true edge, which is less than three sheets of
+paper. The Lab preview draws the true edge, so it looks smooth there; only the printed file has
+the steps.
 
-![Red: what prints. Blue dashed: the true edge. Grey grid: 0.4 mm](2026-09-29-open-calls-media/edge-stairs.png)
+![Left: which sides of the coaster are stepped. Right: one stepped side, close up](2026-09-29-open-calls-media/edge-stairs-explained.png)
+
+**Is it worth deciding?** Only if the steps show on a real coaster. Nobody has looked yet. Any
+coaster already printed has them on its slanted sides, so one look settles it: run a fingernail
+along a slanted side and a straight side, and see whether they feel different. If they don't,
+tick "Leave it" and this call is closed.
+
+*For the record:* the interlocking pieces already get a true edge, because their joint can't
+take the error ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)).
+Plain coasters were left stepped on purpose.
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
-| **True outer edge on every coaster** (my pick) | Uses the interlock's edge code, which is already built and checked; the edge you hold and see is smooth | The lines inside the coaster (straps, openings) stay stepped; the interlock design names this code as the part most likely to break a mesh, so every coaster must be re-checked | One bikar PR, then re-render the coaster files kept in this repo |
+| True outer edge on every coaster | Uses the interlock's edge code, which is already built and checked; the edge you hold and see is smooth | The lines inside the coaster (straps, openings) stay stepped; the interlock design names this code as the part most likely to break a mesh, so every coaster must be re-checked | One bikar PR, then re-render the coaster files kept in this repo |
 | True edges inside too | Everything smooth | New mesh code that traces lines instead of grid squares: the biggest and riskiest option. The color split and the openwork cut would have to follow it | A design doc before any code |
 | Finer grid (0.2 mm) | No new code | About four times the squares, so slower renders and bigger files; still stairs, just half the size | One constant changes; every check and file is re-run |
-| Leave it | No work | The stairs print as they are | Look at an edge on the next print with a loupe, then decide |
+| **Leave it** (my pick, changed 2026-09-29) | No work; the steps are smaller than three sheets of paper | The stairs print as they are | Look at an edge on a printed coaster; if the steps show, true outer edge is the next step ([backlog item 7](../../tasks/catalog-expansion/backlog.md)) |
 
 **Your answer:**
 
@@ -148,21 +164,26 @@ ours). The score is how closely the edges match, from 0 to 1.
 | Accept some | You keep only the rebuilds you trust | One more pass to pick them | The ones you leave out stay on the list as held, with your reason |
 | Leave them | No work | The notes stay stranded, and the next video loop redoes the bookkeeping | Nothing |
 
-- [ ] Accept all eight
+- [x] Accept all eight
 - [ ] Accept some (list the ones to leave out in the notes)
 - [ ] Leave them
 - Notes:
 
+**Decided 2026-09-29:** accept all eight → [D-084](../decisions-log.md#d-084--the-eight-stranded-video-loop-records-land-on-master-as-one-pr)
+
 **4b. Which becomes a coaster first?** My pick is `NtnlGMTElBk`: it is round already, all
 straight lines with every corner at an exact crossing, and it scored 0.930. `A9fefFurD_s` is the
 other round one. The tiles (`gBV`, `_U6G`, `fhG`, `jlTmt`) are for coasters that sit side by
-side. `n_ICgwOr6qs` needs arcs.
+side. `n_ICgwOr6qs` needs arcs. ^952r93
 
 - [ ] `NtnlGMTElBk`, interlaced star
 - [ ] `A9fefFurD_s`, medallion
 - [ ] A tile (name it in the notes)
 - [ ] `n_ICgwOr6qs`, arcs
 - Notes:
+
+**Redirected 2026-09-29** (your comment): a `prioritize-design` skill ranks the candidates
+first, and its first run answers this call ([backlog item 5](../../tasks/catalog-expansion/backlog.md)).
 
 ---
 

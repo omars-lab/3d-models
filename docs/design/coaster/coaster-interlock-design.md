@@ -131,8 +131,9 @@ In `bikar/packages/core/src/kernel3d/coaster.ts`:
    ring itself, not from the grid-cell staircase `boundaryLoops` produces. The top
    surface between the outermost sampled cells and the exact ring is a flat collar at
    `base` height. This is the load-bearing change: a wall quantised to 0.4 mm cells
-   carries up to ±0.2 mm of stair per face, more than the 0.15 mm clearance the joint
-   is asked to hold (study §6). A plain coaster keeps its staircase wall; nothing
+   strays up to ±0.27 mm from its true line on a slanted face (measured on the CS-1
+   coaster at 90 mm, 2026-09-29; first written here as ±0.2 mm), more than the 0.15 mm
+   clearance the joint is asked to hold (study §6). A plain coaster keeps its staircase wall; nothing
    changes for a coaster without `interlock`.
 4. **No chamfer.** `bottomRingFor` is never reached with a slotted ring (§4 refusal).
 
