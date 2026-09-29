@@ -2,6 +2,11 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-29: the stranded video-loop stack is on master. Omar accepted all eight records
+  (D-084); they landed as one PR, #406–#410 were closed with a link to it, and the six
+  `backlog-*` branches still on the remote were deleted after checking every line they added is
+  on master (3d-models #421). The shared checkout was fast-forwarded to it.
+
 - 2026-09-29: two items the fourth pass left are gone, checked 2026-09-29. hifth's remote
   now has only `main`, and youtube no longer has the `feat/any-source-video-fetch` branch.
 
