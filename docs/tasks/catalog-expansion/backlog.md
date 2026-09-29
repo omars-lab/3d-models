@@ -38,6 +38,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       suits a single continuous groove. Two octagons, the inner circle and the 16 petals are in
       `reconstructions/88q-u2eWZqg/`, ready for the coaster step.
    3. `n_ICgwOr6qs`, Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
+      **Done 2026-09-28 in youtube: 9/9 steps, mean edge-SSIM 0.886.** Drawn on paper and
+      filmed, like 1; the camera zooms out once at about 04:00, so only the petals after it are
+      scored. For the coaster: every line is an arc of **one compass size** (the chord across
+      two of ten divisions), five front petals and five smaller behind petals, with a small gap
+      at the centre where the front arcs stop short. Pure arcs, no straight lines, so it needs
+      the arc path the other patterns do not. The ten arc pairs are in
+      `reconstructions/n_ICgwOr6qs/`, ready for the coaster step.
    4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
    5. `NtnlGMTElBk`, Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
@@ -67,4 +74,4 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 GO candidates not yet reconstructed go to the youtube repo's ladder, not here. Name the id
 in this list when you hand it on, and move it to item 2's shape when it comes back done.
 
-- `n_ICgwOr6qs`: Samira Mian, 5-fold arc motif, construction section only. Handed 2026-09-27.
+Nothing is out with the loop right now (`n_ICgwOr6qs` came back 2026-09-28, item 2.3).
