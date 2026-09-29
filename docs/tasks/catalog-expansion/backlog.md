@@ -46,6 +46,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       the arc path the other patterns do not. The ten arc pairs are in
       `reconstructions/n_ICgwOr6qs/`, ready for the coaster step.
    4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
+      **Done 2026-09-28 in youtube: 17/18 slides, mean edge-SSIM 0.861.** Not paper: a deck of
+      clean vector slides, so no camera correction. The whole page was rebuilt, not just the
+      centre star. For the coaster: the red pattern is all straight lines, and every corner of it
+      sits where two edges of the seven ten-point stars cross, so it can be cut from exact
+      points. The page is a rectangle of ratio 1.376 (tan 54°), which is not a coaster shape.
+      Crop to a circle round the centre star, or take the page as a tile. Mirror-symmetric both
+      ways: a quarter drawn and reflected twice. The construction is in
+      `reconstructions/Y6kS1MvnKoc/`, ready for the coaster step.
    5. `NtnlGMTElBk`, Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
