@@ -4,7 +4,8 @@
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py --self-test
 
-The sheet is white material on black, one tile per STL, the way the piece reads from above.
+The sheet is white material on black, one tile per STL, the way the piece reads from above,
+with the STL's file name under each tile so a sheet of variants can be picked from by name.
 Beside it the tool prints, per piece, over the area inside its outline:
 
   open     the share of that area cut through. A coaster whose holes are the point and
@@ -22,9 +23,10 @@ import struct
 import sys
 from collections import deque
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 S = 400          # tile size, px
+CAPTION = 32     # caption band under each tile, px
 GRID = 8         # bare-cell grid
 BARE_CELL = 0.8  # a cell at least this open counts as bare
 
@@ -113,17 +115,27 @@ def measure(img):
     }
 
 
-def sheet(out, paths):
+def compose(tiles, names):
+    """Tiles side by side, each with its name centred in a caption band beneath it."""
     pad = 10
+    im = Image.new("L", ((S + pad) * len(tiles) - pad, S + CAPTION), 0)
+    d = ImageDraw.Draw(im)
+    font = ImageFont.load_default(size=20)
+    for k, (t, name) in enumerate(zip(tiles, names)):
+        x = k * (S + pad)
+        im.paste(t, (x, 0))
+        d.text((x + S / 2, S + CAPTION / 2), name, fill=200, font=font, anchor="mm")
+    return im
+
+
+def sheet(out, paths):
     tiles = [silhouette(load_triangles(p)) for p in paths]
-    im = Image.new("L", ((S + pad) * len(tiles) - pad, S), 0)
+    names = [p.rsplit("/", 1)[-1] for p in paths]
     print(f"{'piece':40} {'open':>6} {'biggest':>8} {'bare':>6} {'holes':>6}")
-    for k, (p, t) in enumerate(zip(paths, tiles)):
-        im.paste(t, (k * (S + pad), 0))
+    for name, t in zip(names, tiles):
         m = measure(t)
-        name = p.rsplit("/", 1)[-1]
         print(f"{name:40} {m['open']:6.2f} {m['biggest']:8.2f} {m['bare']:6.2f} {m['holes']:6d}")
-    im.save(out)
+    compose(tiles, [n.removesuffix(".stl") for n in names]).save(out)
     print("wrote", out)
 
 
@@ -150,11 +162,16 @@ def self_test():
         d.rectangle([200, 30, S - 31, S - 31], fill=0)
 
     good, slab, part = (measure(square(f)) for f in (lattice, pinholes, half))
+    tiles = [square(lattice), square(half)]
+    im = compose(tiles, ["a-lattice", "b-half"])
+    band = lambda k: im.crop((k * (S + 10), S, k * (S + 10) + S, S + CAPTION)).getextrema()[1]
     checks = [
         ("lattice reads open", good["open"] > 0.25 and good["biggest"] < 0.01 and good["bare"] == 0),
         ("pinhole slab reads near-solid", slab["open"] < 0.05),
         ("half-filled square has a huge hole", part["biggest"] > 0.3 and part["bare"] > 0.3),
         ("the lattice beats the half-fill on bare", good["bare"] < part["bare"]),
+        ("every tile has its name under it", band(0) > 0 and band(1) > 0),
+        ("the caption leaves the tile as drawn", measure(im.crop((0, 0, S, S))) == good),
     ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
