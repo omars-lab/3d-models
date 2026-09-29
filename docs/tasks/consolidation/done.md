@@ -2,6 +2,9 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-29: two items the fourth pass left are gone, checked 2026-09-29. hifth's remote
+  now has only `main`, and youtube no longer has the `feat/any-source-video-fetch` branch.
+
 - 2026-09-27: fourth pass, with 0 open PRs and 0 stashes in any repo. Every deleted branch
   was first proved dead, either by a content diff against its PR's merge commit or as an
   ancestor of it.
