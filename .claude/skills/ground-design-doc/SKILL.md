@@ -168,5 +168,8 @@ settled: that needs the physical object, and it belongs to `prototype` and
   When the mockup is narrow enough (a panel, not a full window), show its markup and its
   picture **side by side**: one raw-HTML `<table>`, the escaped markup in a `<pre><code>` on
   the left and an `<img>` on the right, with no blank line inside the table. A blank line splits
-  it, because Obsidian renders each markdown block on its own. Example:
+  it, because Obsidian renders each markdown block on its own. Give the cells widths
+  (`style="width:55%"` / `"width:45%"`), the `<pre>` a small font (`font-size:0.62em`) and the
+  image `style="width:100%"`: left alone, the code takes the row and the picture shrinks to a
+  thumbnail at Obsidian's reading width. Example:
   `docs/design/coaster/color-preview-design-b.md` §6.3 (review thread vlz2rj, 2026-09-29).
