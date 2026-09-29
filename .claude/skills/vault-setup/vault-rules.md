@@ -14,6 +14,7 @@ The vault is all of `docs/`: design docs at the top level, and `research/`, `iss
 |---|---|---|
 | Top-level design docs | `status`, and `decisions` when the decisions log names the doc | by hand when the doc's state changes |
 | Hubs (plan, backlog, decisions-log, faq, prints, site-graph, the runbooks and maps) | none | — |
+| `working-model/feedback-requests/` | `date` | the `request-feedback` skill; answers are tick boxes in the body |
 | `research/` | `date`, `produced-by`, `feeds` | the `ground-design-doc` skill when research is checked in |
 | `issues/` | `date` | whoever writes the pivot up |
 | `wiki/troubleshooting/` | `title`, `symptom`, `kind`, `proof`, `first_seen` | the `print-wiki` skill's template |
