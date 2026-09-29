@@ -25,6 +25,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    thumbnails and storyboard frames only, so each still needs its render looked at. In
    rebuild order:
    1. `0ke_GpoBa-s`, Samira Mian, 10-fold rosette: chaptered, and the scaffold items 3, 5–7 reuse.
+      **Done 2026-09-28 in youtube: 11/11 steps, mean edge-SSIM 0.869.** It is drawn on paper
+      and filmed at a slight angle, so the frames had to be straightened first (`rectify.tsv`).
+      The 10-fold grid (Ptolemy's pentagon, the {10/2} and {10/3} stars, the petal lines) is in
+      `reconstructions/0ke_GpoBa-s/`, ready for the coaster step.
    2. `88q-u2eWZqg`, Eman Zainab, 16-petal rosette: a new fold; check the crowded centre.
    3. `n_ICgwOr6qs`, Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
    4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
@@ -56,6 +60,5 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 GO candidates not yet reconstructed go to the youtube repo's ladder, not here. Name the id
 in this list when you hand it on, and move it to item 2's shape when it comes back done.
 
-- `0ke_GpoBa-s`: Samira Mian, 10-fold rosette. Handed 2026-09-27.
 - `88q-u2eWZqg`: Eman Zainab, 16-petal rosette. Handed 2026-09-27.
 - `n_ICgwOr6qs`: Samira Mian, 5-fold arc motif, construction section only. Handed 2026-09-27.
