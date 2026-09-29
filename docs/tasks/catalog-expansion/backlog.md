@@ -63,6 +63,17 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`, ready for the
       coaster step.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
+      **Swapped 2026-09-28 in youtube for its source, `gBV_JTt3Kxk`** (Samira Mian, "Itimad Ud
+      Daula", a 2-minute silent animation of the same pattern). yZN drags the ten divisions by
+      eye, so it is held behind gBV. **gBV done: 11/11 steps, mean edge-SSIM 0.906.** For the
+      coaster: a ten-fold rosette of straight segments on two line families, pink {10/3} at
+      0.588 R and black at 0.139 R, with every vertex a crossing of two named lines. It comes
+      with its **repeat cell**, a 72° rhombus with apexes at the top and bottom points and side
+      corners at (±tan 36°, 0) = (±0.7265, 0) R. The cell's sides are pink lines already in the
+      pattern, so a tile edge never cuts a line at an arbitrary point. The lattice is
+      (±0.7265, 1) R. It is either a round coaster (the rosette alone) or a rhombus coaster that
+      tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`, ready for the
+      coaster step.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
    8. `fhGHzop7ULw`, Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
    9. `jlTmt_279M4`, unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
