@@ -1290,7 +1290,7 @@ policy.
 
 ### Context
 
-`docs/backlog.md` §2 carries a count table: registered bets, `Calibrated<T>`
+`docs/working-model/backlog.md` §2 carries a count table: registered bets, `Calibrated<T>`
 records, prototype-catalog entries, `.bkr` coupon files. On 2026-08-03 every
 number in it was wrong. Bets read 14 against 17; records 16 against 17; catalog
 entries 28 against 29; coupon files 5 against 8. The table had gone three merges
@@ -1387,7 +1387,7 @@ worktree — the quantity is **skipped, and labelled
 `[skipped: bikar not readable]` in the summary**, never folded into a clean run.
 
 And the extension found the same defect again on its first pass, in exactly the
-quantity that had been left untagged: §4 item 2 of `docs/backlog.md` read *"All
+quantity that had been left untagged: §4 item 2 of `docs/working-model/backlog.md` read *"All
 **four** coupon `.bkr` files exist in `bikar/patterns/Coupons/`"* while §2's row
 six lines above said six. Two sites, one updated — the shape D-019 was written
 for, sitting in the one place D-019 had declined to cover.
@@ -1442,7 +1442,7 @@ front of the number. C3 consequently misses claims phrased a third way. That is
 the trade, taken deliberately: **a narrow rule that is always right is the only
 kind worth blocking a commit on.**
 
-**What it found immediately**, all in `docs/backlog.md`, all having survived both
+**What it found immediately**, all in `docs/working-model/backlog.md`, all having survived both
 PRs that built this gate:
 
 - the opening status paragraph quoting the registry as "12 registered bets · 16 records" — *under a claim that the registry agrees*; <!--count:quote-->
@@ -1516,7 +1516,7 @@ cheapest mechanism was the one that made the corpus worse, which is the
 robustness-over-ease trade in its usual disguise: the digit is what you see, the
 list is what you do not.
 
-**And the audit found the defect it predicted, already live.** `docs/backlog.md`
+**And the audit found the defect it predicted, already live.** `docs/working-model/backlog.md`
 §2's row *"Bets settled by design-specific coupons"* read 5. Derived from the
 registry's own Coupon column: MC-1…MC-6 settle 7 bets, `CAL-STR-01` has none, so
 design coupons settle 17 − 7 − 1 = 9. The 5 was the *record* count from the same

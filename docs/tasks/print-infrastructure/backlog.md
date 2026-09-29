@@ -20,4 +20,4 @@ Nothing open. The next plate run feeds this list.
   spool count, calendar estimate —
   [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §7.1. Not coaster work; take it only if a
   plate-count report for coasters needs the same code. Moved from
-  [`../../backlog.md`](../../backlog.md) §6.2 on 2026-09-25.
+  [`../../working-model/backlog.md`](../../working-model/backlog.md) §6.2 on 2026-09-25.

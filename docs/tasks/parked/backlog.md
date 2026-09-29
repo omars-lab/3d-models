@@ -1,6 +1,6 @@
 # Parked — open work no loop owns
 
-Moved here on 2026-09-25 from [`docs/backlog.md`](../../backlog.md) §6, which held the work that
+Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-model/backlog.md) §6, which held the work that
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 

@@ -52,7 +52,7 @@ this goal is met, the next print is taken from there.
 
 ## The print-gated register — what a printer unblocks, and in what order
 
-Moved here on 2026-09-25 from `docs/backlog.md` (git history has it), keeping its section
+Moved here on 2026-09-25 from `docs/working-model/backlog.md` (git history has it), keeping its section
 numbers so older references like "backlog §3.8" still find their section. Its §6, the work
 that needed something other than a printer, went elsewhere: the open items to the
 [parked backlog](../parked/backlog.md) and the

@@ -31,7 +31,7 @@ Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](
 - 2026-09-25 — the `manage-tasks` skill: moves a finished or open task to the right
   `docs/tasks/<loop>/` file, by the routing rules beside it (3d-models #311).
 - 2026-09-25 — one backlog and done list per loop in `docs/tasks/<loop>/`; the old
-  `docs/tasks/done.md` and `docs/backlog.md` split into them by loop (3d-models #309, #310).
+  `docs/tasks/done.md` and `docs/working-model/backlog.md` split into them by loop (3d-models #309, #310).
 - 2026-09-25 — full pass across all six repos: 3d-models is master + gh-pages, bikar main,
   youtube main; 0 open PRs, 0 stashes (3d-models #295–#298, #301; bikar #226, #244–#246).
 
@@ -143,7 +143,7 @@ PR) and `#73` (the rosette-N seam-spacing-as-a-dial plan, the next session's foc
 - #39 — Branch/worktree hygiene: delete verified-merged branches, remove stale worktrees (all three repos)
 - #40 — MEMORY.md index line held the whole shipped-record log — move it into the memory file, leave a hook
 - #41 — Stop citing dead session-scoped ids in durable text
-- #42 — Give the d3 stream a durable home in docs/backlog.md
+- #42 — Give the d3 stream a durable home in docs/working-model/backlog.md
 - #43 — qiyas local main diverged 2 ahead / 3 behind — sentinel-verify before any reset, then reconcile
 - #56 — Use-case map: re-pin bikar pointers at the drifted main, repair 9 moved anchors (+2 in orb-pipeline-map.md)
 - #57 — Use-case map: add rows for the rosette explorer and orb instrument
@@ -159,7 +159,7 @@ buildable now.
 ### Cross-repo, CI, and deploy hygiene (S2)
 - #1 — Unstale the Q5 status in qiyas-wheelfield-validation-design.md
 - #2 — Land the qiyas #20 O-7 cascade end to end
-- #3 — Closed by moving the print queue into docs/backlog.md §3.8
+- #3 — Closed by moving the print queue into docs/working-model/backlog.md §3.8
 - #6 — Retract the sh-wrapper overreach from PR #79 and PR #106
 - #7 — Regenerate the cross-repo XREPO decision ledger
 - #21 — Fix the semgrep XSS finding in bikar packages/web/src/sessions.ts

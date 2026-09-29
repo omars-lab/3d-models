@@ -11,7 +11,7 @@ How the vault is set up, and the rules it is checked against:
 ## Start here
 
 - [Plan](working-model/plan.md) — what is being built, in what order.
-- [Backlog](backlog.md) and the task loops: [coaster pipeline](tasks/coaster-pipeline/backlog.md),
+- [Backlog](working-model/backlog.md) and the task loops: [coaster pipeline](tasks/coaster-pipeline/backlog.md),
   [catalog expansion](tasks/catalog-expansion/backlog.md),
   [print infrastructure](tasks/print-infrastructure/backlog.md),
   [consolidation](tasks/consolidation/backlog.md), [parked](tasks/parked/backlog.md).

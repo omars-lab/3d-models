@@ -262,7 +262,7 @@ the pre-renumber board.
 
 ## Before the loops: non-printer residue kept in the print backlog
 
-These two sections were §6.3 and §6.4 of `docs/backlog.md` until 2026-09-25, when that
+These two sections were §6.3 and §6.4 of `docs/working-model/backlog.md` until 2026-09-25, when that
 file was split into the loop backlogs (it is in git history). Both are closed or shipped.
 Their §3 and §8 references mean the sections of the
 [print-gated register](../coaster-pipeline/backlog.md), which kept its numbering.

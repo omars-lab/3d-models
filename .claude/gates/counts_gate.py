@@ -8,7 +8,7 @@ generates `.claude/skills/calibrate/bets.md` with the bet and record counts in
 its header. Nothing re-ran the hand tally in the doc, so it decayed while
 reading as verified.
 
-That is not hypothetical. On 2026-08-03 `docs/backlog.md` §2's count table was
+That is not hypothetical. On 2026-08-03 `docs/working-model/backlog.md` §2's count table was
 stale by three merges — bets 14 (17), records 16 (17), catalog entries 28 (29),
 `.bkr` coupons 5 (8) — and §8's "Counts reconcile" bullet, whose entire job is
 to catch that, restated the same wrong figures independently. Fixing §2 and not
@@ -92,7 +92,7 @@ are load-bearing:
 Why C4, and why the bet split stopped being exempt
 --------------------------------------------------
 
-`docs/backlog.md` §8 used to name the bet split — 7 on the machine card, N on
+`docs/working-model/backlog.md` §8 used to name the bet split — 7 on the machine card, N on
 design coupons, 1 with none — as *deliberately* unmarked, reasoning that the
 registry already prints the record split and "a second derivation of the bet
 split from the same table is a number this repo would then own twice". On
@@ -245,7 +245,7 @@ C3 = {
 QUOTE = re.compile(r"<!--\s*count:quote\s*-->")
 
 #: Opts a line out of **C4 only**. For a list that names a subset on purpose:
-#: `docs/backlog.md` §1 says "17 ids are registered (twelve at the original
+#: `docs/working-model/backlog.md` §1 says "17 ids are registered (twelve at the original
 #: sweep, plus …)" and then names the five additions — the twelve are covered by
 #: a number, not by name, and rewriting that sentence to list seventeen ids would
 #: make it worse, not truer.
@@ -303,7 +303,7 @@ def authority_bets() -> tuple[dict[str, int], dict[str, list[str]]]:
     The header gives the totals. The rows give two splits by coupon series: how
     many *records* a machine-card bet settles against a design coupon, and how
     many *bets* fall in each. They are different numbers (a bet can carry three
-    records, or none), which is exactly how `docs/backlog.md` came to print the
+    records, or none), which is exactly how `docs/working-model/backlog.md` came to print the
     record count 5 in a row labelled "bets settled by design-specific coupons".
     Both are read out of the one generated file, and both sums are checked
     against the header total: if a projection of the registry disagrees with the

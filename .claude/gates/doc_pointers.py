@@ -33,7 +33,7 @@ did **not** transfer, and stating why is the point of this paragraph:
 A pointer resolves if the path exists under **any** root tried, so this gate
 answers *"could a reader find this file where they would look?"* and not
 *"does this path name the repo the sentence implies?"*. `docs/architecture.md`
-is bikar's and `docs/backlog.md` is ours, and both resolve. That ambiguity is
+is bikar's and `docs/working-model/backlog.md` is ours, and both resolve. That ambiguity is
 inherited from bikar's design and accepted for the same reason: tightening it
 would mean rewriting several hundred pointers into a repo-qualified form no
 reader asked for. `--list` prints the root each pointer resolved under, so the

@@ -34,9 +34,9 @@ comes next. A pass adds what it finds to the matching loop's backlog, and the PR
 item moves it to the done list. Work no loop owns goes in `docs/tasks/parked/backlog.md`.
 The old single lists were then split for real, the same day. Omar: "i want to split the
 content up ... its checked into git". Git history is the archive, so no frozen copy is kept.
-The print-gated register (`docs/backlog.md` §1–§5, §7, §8) is now the second half of the
+The print-gated register (`docs/working-model/backlog.md` §1–§5, §7, §8) is now the second half of the
 coaster-pipeline backlog, with its section numbers kept. §6's closed history went to
-`docs/tasks/parked/done.md`. `docs/backlog.md` is now only a page saying where each section
+`docs/tasks/parked/done.md`. `docs/working-model/backlog.md` is now only a page saying where each section
 went; a research file links to it, and research stays word for word. `docs/tasks/done.md` is
 gone: each snapshot's sections sit in the matching loop's done list. Each snapshot's note came
 with them, because task ids were renumbered. The count gate scans all of `docs/`, so the count
