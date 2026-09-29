@@ -85,6 +85,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       tiles edge to edge by reflection. The construction is in `reconstructions/_U6G8QSfWnk/`,
       ready for the coaster step.
    8. `fhGHzop7ULw`, Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
+      **Done 2026-09-29 in youtube: 9/9 steps, mean edge-SSIM 0.921** (a silent animation; the
+      scaffold is rebuilt to 06:50, and the finished unit at 11:30). For the coaster: a
+      **1 × √3 rectangle** with star centres at two opposite corners, each corner split into
+      15° steps. Every line is a tangent to one of two circles about a star centre, radius
+      sin 22.5° = 0.383 or cos 37.5° = 0.793 of the short side, touching at 7.5° + 15°·k.
+      Turned 180° about the rectangle's centre, the lines give the other star; the sides are
+      mirror lines, so a rectangular coaster tiles edge to edge by reflection. The construction
+      is in `reconstructions/fhGHzop7ULw/`, ready for the coaster step.
    9. `jlTmt_279M4`, unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
 
