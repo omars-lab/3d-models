@@ -94,6 +94,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       mirror lines, so a rectangular coaster tiles edge to edge by reflection. The construction
       is in `reconstructions/fhGHzop7ULw/`, ready for the coaster step.
    9. `jlTmt_279M4`, unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
+      **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.941** (a 2:47 animation; the
+      near-white frames were faint grey lines, which score fine). For the coaster: a **square
+      tile tilted 90/7° = 12.857°**, with four seven-point stars (radius 0.4725 R) whose centres
+      sit on the tile's sides, round an octagon (radius 0.327 R) at the centre. All straight
+      lines. Each side runs through a star centre along one of the star's mirrors, so the
+      sides are mirror lines: a square coaster tiles edge to edge by reflection, and the half
+      stars on the edges close into whole stars. The tile alone has no mirror of its own
+      (it turns by quarter turns only). Tile half-width 0.975 R. The construction is in
+      `reconstructions/jlTmt_279M4/`, ready for the coaster step.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
