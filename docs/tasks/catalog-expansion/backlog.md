@@ -55,6 +55,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       ways: a quarter drawn and reflected twice. The construction is in
       `reconstructions/Y6kS1MvnKoc/`, ready for the coaster step.
    5. `NtnlGMTElBk`, Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
+      **Done 2026-09-28 in youtube: 13/13 steps, mean edge-SSIM 0.930.** For the coaster: the
+      finished star is one closed white band, all straight lines, forty segments (a four-segment
+      unit turned ten times). Every corner sits where a line of the {10/3} star crosses a line of
+      the {10/4} star, so it can be cut from exact points. It already fits a circle (the unit
+      circle), so no cropping is needed. The band crosses itself, so it could be cut as an
+      over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`, ready for the
+      coaster step.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
    8. `fhGHzop7ULw`, Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
