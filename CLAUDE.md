@@ -14,7 +14,8 @@ holds OpenSCAD sources, design docs, the gallery and the gh-pages deploy, and co
   each sees only staged files, and `make validate` runs all of them over the
   whole tree. `00-branch` refuses a commit on master (`BRANCH_OK=1` overrides).
   `20-use-cases` **blocks** a commit staging a file the map pins (`USE_CASES_OK=1`
-  overrides): `validate.py --refresh` re-pins hashes and *reports* moved anchors.
+  overrides): `validate.py --refresh` re-pins hashes and *reports* moved anchors;
+  `--repair` then moves the ones whose anchor is on exactly one line.
 - **Build**: `make orbs` (bikar CLI → STL + views), `make cookie-cutters`, `make deploy`
   (gh-pages worktree). `gh-pages` is deliberately diverged — never merge it into `master`.
 - **CI**: there is none — no workflows, so `make validate` (alias `make local.ci`,

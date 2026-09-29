@@ -56,8 +56,10 @@ capability live?" — kept honest by `validate.py` and the pre-commit hook.
 **Add or change a use case** — when a commit ships a new user-facing
 capability (or retires one): add/edit the diagram node and the table row with
 real pointers, run `validate.py --refresh` (rewrites every reachable repo's
-`as_of` and re-validates — fix any pointer it reports broken by re-finding the
-line), and stage `use-cases.md` in the same commit as the change. A `3d-models`
+`as_of` and re-validates), then `validate.py --repair` if it reported moved
+anchors: it moves each one-line anchored pointer whose anchor is on exactly one
+line to that line, and leaves ranges and ambiguous anchors as errors to fix by
+re-finding the line. Stage `use-cases.md` in the same commit as the change. A `3d-models`
 pointer you repair for the new content is correct immediately, in the same
 commit; there is no follow-up re-pin to make it true.
 
