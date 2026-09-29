@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `6d359b11203984c87180f7b542eccda71014ce92` (2026-09-27)
+Youtube pin: `8ccacb1c6f0508d456b79c46de611cc969ec2889` (2026-09-29)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **10 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **20 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **9 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -54,6 +54,11 @@ All nine now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
 `CS-10`, `CS-11`, `CS-12`) — P3.3 of the umbrella plan, which built on the
 `coaster` declaration (P1.6/P2.7).
+
+The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
+newer rungs, none of them a naqsh file yet. Each is "done" in the column's sense (its id is in
+the pin's done.md), though two of those rungs, `88q-u2eWZqg` (6/9) and `Y6kS1MvnKoc` (17/18),
+scored short of every step and say "attempted" in their own headings.
 
 Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
 centreline recall / precision; O3: reference coverage — or `—` when that oracle
@@ -95,12 +100,22 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
+| `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
+| `88q-u2eWZqg` | A 16-petal rosette in one unbroken line | done | — | — | — | — | — | — | — |
+| `A9fefFurD_s` | Broug's ten-point star from one circle | done | — | — | — | — | — | — | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
+| `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | — | — | — | — | — | — | — |
+| `Y6kS1MvnKoc` | A Mamluk Qur'an page from seven ten-point stars | done | — | — | — | — | — | — | — |
+| `_U6G8QSfWnk` | Sutton's fivefold rectangle and its traced quarter | done | — | — | — | — | — | — | — |
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
+| `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
+| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | — | — | — | — | — | — | — |
+| `jlTmt_279M4` | Sevenfold stars in a tilted square | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
+| `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | — | — | — | — | — | — | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |

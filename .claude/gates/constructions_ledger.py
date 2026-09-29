@@ -104,8 +104,10 @@ BKR_CELL = re.compile(r"([A-Za-z0-9_./-]+\.bkr)$")
 STL_CELL = re.compile(r"([A-Za-z0-9_./-]+\.stl)$")
 
 #: An id cell: a backticked reconstruction id. Anything that is only dashes or
-#: colons (a table separator) or the literal header word is not one.
-ID_RE = re.compile(r"^`?([A-Za-z0-9][A-Za-z0-9_-]{4,})`?$")
+#: colons (a table separator) or the literal header word is not one. A YouTube id
+#: may start with `_` or `-` (`_U6G8QSfWnk`); requiring a letter first left that
+#: reconstruction's row unreadable, so the gate owed a row no edit could write.
+ID_RE = re.compile(r"^`?(?!-+$)([A-Za-z0-9_-]{5,})`?$")
 
 
 @dataclass
@@ -396,7 +398,7 @@ Youtube pin: `{pin}` (2026-09-17)
 |---|---|---|---|---|---|---|---|---|---|
 | `AAAAAAAAAAA` | first | done | — | — | — | — | — | — | — |
 | `BBBBBBBBBBB` | mechanism | done | no piece by design | — | — | — | no piece by design | — | — |
-| `CCCCCCCCCCC` | added after the old pin | done | — | — | — | — | — | — | — |
+| `_CCCCCCCCCC` | added after the old pin | done | — | — | — | — | — | — | — |
 """
 
 
@@ -404,7 +406,7 @@ def _init_youtube(yt: Path) -> tuple[str, str]:
     """A scratch youtube repo shaped like the bknVRSMcLj0 miss. Returns (old_pin, pin).
 
     `old_pin` has AAAAAAAAAAA and BBBBBBBBBBB; the next commit on `main` (`pin`)
-    adds CCCCCCCCCCC, the way bknVRSMcLj0 landed in youtube after the ledger's
+    adds _CCCCCCCCCC, the way bknVRSMcLj0 landed in youtube after the ledger's
     pin was taken. A third commit on a feature branch — left CHECKED OUT, so it
     is youtube's working tree — adds DDDDDDDDDDD, which is not on `main` and so
     owes no row yet: the gate reads refs, not whatever youtube has checked out.
@@ -439,11 +441,11 @@ def _init_youtube(yt: Path) -> tuple[str, str]:
     (yt / "reconstructions" / "_techniques" / "note.md").write_text("snippet\n", encoding="utf-8")
     (yt / "docs" / "tasks").mkdir(parents=True)
     old_pin = commit("seed", "AAAAAAAAAAA BBBBBBBBBBB")
-    recon("CCCCCCCCCCC")
-    pin = commit("add C", "AAAAAAAAAAA BBBBBBBBBBB CCCCCCCCCCC")
+    recon("_CCCCCCCCCC")
+    pin = commit("add C", "AAAAAAAAAAA BBBBBBBBBBB _CCCCCCCCCC")
     git("checkout", "-q", "-b", "feat/d")
     recon("DDDDDDDDDDD")
-    commit("add D", "AAAAAAAAAAA BBBBBBBBBBB CCCCCCCCCCC DDDDDDDDDDD")
+    commit("add D", "AAAAAAAAAAA BBBBBBBBBBB _CCCCCCCCCC DDDDDDDDDDD")
     return old_pin, pin
 
 
@@ -489,16 +491,16 @@ def self_test() -> int:
         case("by-design row needs no .bkr", clean, 0, None)
 
         def drop_c(body: str) -> str:
-            return "\n".join(l for l in body.splitlines() if "CCCCCCCCCCC" not in l) + "\n"
+            return "\n".join(l for l in body.splitlines() if "_CCCCCCCCCC" not in l) + "\n"
 
         # L3: an id at the pin with no row FAILS (was a non-blocking report).
         case("missing row at the pin FAILS", drop_c(clean), 1, None,
-             want_finding="CCCCCCCCCCC exists at the pin")
+             want_finding="_CCCCCCCCCC exists at the pin")
         # L3, the bknVRSMcLj0 miss itself: the pin predates the reconstruction and
         # the row was never written. Reading only the pin saw nothing owed; reading
         # youtube main too FAILS it.
         case("pin lags youtube main, row missing FAILS", drop_c(_CLEAN_LEDGER.format(pin=old_pin)),
-             1, None, want_finding="CCCCCCCCCCC exists at youtube main")
+             1, None, want_finding="_CCCCCCCCCC exists at youtube main")
         # L3: the row is written but the pin was not advanced — the pin cannot see it.
         case("row the pin cannot see FAILS", _CLEAN_LEDGER.format(pin=old_pin), 1, None,
              want_finding="advance the pin")

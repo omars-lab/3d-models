@@ -7,6 +7,8 @@ Modes:
   validate.py --refresh   rewrite frontmatter as_of hashes to each repo's HEAD, then validate
   validate.py --self-test run the page-catalog reader's own fixtures
   validate.py --links     print an editor link per validated pointer (never committed)
+  validate.py --repair    move each drifted one-line anchored pointer to its anchor's
+                          only line (see moved_pointer), then validate
 
 Checks (full mode):
   - frontmatter parses and every as_of hash resolves in its repo, and this
@@ -350,12 +352,38 @@ def anchor_miss(blob: str, start: int, end: int, anchor: str) -> str | None:
     lines = blob.split("\n")
     if any(anchor in line for line in lines[start - 1 : end]):
         return None
-    elsewhere = [i for i, line in enumerate(lines, 1) if anchor in line]
+    elsewhere = anchor_lines(blob, anchor)
     if not elsewhere:
         return f'anchor "{anchor}" is nowhere in the file — was it renamed?'
     shown = ", ".join(f"L{i}" for i in elsewhere[:4])
     more = f" (+{len(elsewhere) - 4} more)" if len(elsewhere) > 4 else ""
     return f'anchor "{anchor}" is at {shown}{more}, not in the range this pointer names'
+
+
+def anchor_lines(blob: str, anchor: str) -> list[int]:
+    """Every 1-based line of `blob` that contains `anchor`."""
+    return [i for i, line in enumerate(blob.split("\n"), 1) if anchor in line]
+
+
+def moved_pointer(ptr: Pointer, blob: str) -> Pointer | None:
+    """The pointer `--repair` writes in place of `ptr`, or None to leave it alone.
+
+    Only the case `anchor_miss` already answers without doubt: a one-line
+    pointer whose anchor is outside it and appears on exactly one line of the
+    file. A range is left alone because the anchor's place inside it is not
+    recorded, so a shift would be a guess; so is an anchor found twice or not
+    at all. Those stay errors, for a person to read. Measured on the two pin
+    advances before this existed: 19 and then 12 moved anchors, every one a
+    one-line pointer with a single match.
+    """
+    if not ptr.anchor or ptr.start != ptr.end:
+        return None
+    if anchor_miss(blob, ptr.start, ptr.end, ptr.anchor) is None:
+        return None
+    found = anchor_lines(blob, ptr.anchor)
+    if len(found) != 1:
+        return None
+    return ptr._replace(start=found[0], end=found[0])
 
 
 class Doc:
@@ -953,6 +981,56 @@ def mode_refresh(root: str) -> int:
     return mode_full(root)
 
 
+def mode_repair(root: str) -> int:
+    """Move each drifted one-line anchored pointer to the line its anchor is on.
+
+    Why it exists: every sibling pin advance moves anchors, and `--refresh`
+    only reports them (19, then 12). Each report already names the right line,
+    so fixing them by hand was copying the tool's answer back into the docs.
+    `moved_pointer` limits this to answers that are not in doubt. Everything
+    else is still reported by the full check that runs afterwards.
+
+    Blobs come from the same place the check reads them: siblings at their pin,
+    this repo from the working tree. A pointer's text is replaced where it is
+    written, in the map or in the doc that holds it, and a pointer whose text
+    cannot be found there is a failure, not a skip (the `--refresh` rule).
+    """
+    path = os.path.join(root, DOC_RELPATH)
+    with open(path, encoding="utf-8") as f:
+        doc = Doc(f.read())
+    claims = [(p, DOC_RELPATH) for p in doc.pointers] + [(c.ptr, c.doc) for c in tree_claims(root)]
+    edits: dict[str, dict[str, str]] = {}
+    for ptr, held_in in claims:
+        rdir = doc.repo_dir(ptr.repo, root)
+        pin = doc.as_of.get(ptr.repo)
+        if rdir is None or pin is None:
+            continue
+        if ptr.repo == SELF_REPO:
+            blob, _ = self_blob(root, ptr.path, set(), False)
+        else:
+            blob = try_git(rdir, "cat-file", "-p", f"{pin}:{ptr.path}")
+        new = moved_pointer(ptr, blob) if blob is not None else None
+        if new is not None:
+            edits.setdefault(held_in, {})[str(ptr)] = str(new)
+    for held_in, swaps in sorted(edits.items()):
+        target = os.path.join(root, held_in)
+        with open(target, encoding="utf-8") as f:
+            text = f.read()
+        for old, new in swaps.items():
+            if f"`{old}`" not in text:
+                raise ValueError(
+                    f"{held_in}: could not find `{old}` to move it to `{new}` — "
+                    "is it written differently from how it parses? Update it by hand."
+                )
+            text = text.replace(f"`{old}`", f"`{new}`")
+            print(f"use-cases repair: {held_in}: {old}  ->  {new}")
+        with open(target, "w", encoding="utf-8") as f:
+            f.write(text)
+    if not edits:
+        print("use-cases repair: nothing to move")
+    return mode_full(root)
+
+
 def mode_staged(root: str) -> int:
     staged = [f for f in run_git(root, "diff", "--cached", "--name-only").splitlines() if f]
     head = try_git(root, "rev-parse", "HEAD")
@@ -1096,6 +1174,32 @@ def self_test() -> int:
         anchor_miss(makefile, 6, 7, "rm -rf build"),
         None,
     )
+    # `--repair` moves only what the message above answers without doubt.
+    def ptr(start: int, end: int, anchor: str | None) -> Pointer:
+        return Pointer("3d-models", "Makefile", start, end, anchor)
+
+    expect(
+        "repair moves a one-line pointer to its anchor's only line",
+        moved_pointer(ptr(6, 6, "deploy:"), makefile),
+        ptr(11, 11, "deploy:"),
+    )
+    expect("repair leaves a pointer that is right", moved_pointer(ptr(6, 6, "clean:"), makefile), None)
+    expect(
+        "repair leaves a range, whose anchor's place in it is not recorded",
+        moved_pointer(ptr(1, 2, "deploy:"), makefile),
+        None,
+    )
+    expect(
+        "repair leaves an anchor found on more than one line",
+        moved_pointer(ptr(11, 11, "# header"), makefile),
+        None,
+    )
+    expect(
+        "repair leaves an anchor found nowhere",
+        moved_pointer(ptr(6, 6, "lab-vendor:"), makefile),
+        None,
+    )
+    expect("repair leaves an unanchored pointer", moved_pointer(ptr(6, 6, None), makefile), None)
     expect(
         "a drifted pointer is told where its target actually is",
         anchor_miss(makefile, 6, 6, "deploy:"),
@@ -1684,6 +1788,8 @@ def main() -> int:
             return mode_refresh(root)
         if mode == "--links":
             return mode_links(root)
+        if mode == "--repair":
+            return mode_repair(root)
         return mode_full(root)
     except ValueError as exc:
         # An unreadable document is a failure, not a skip — report it in the
