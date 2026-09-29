@@ -75,6 +75,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`, ready for the
       coaster step.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
+      **Done 2026-09-29 in youtube: 6/6 steps, mean edge-SSIM 0.895** (pencil on paper, then
+      tracing paper; 08:05–17:00 only). The worry did not hold: the pattern is lines, not
+      near-solid, and no crop was needed, because the **fivefold rectangle is itself the cell**.
+      For the coaster: a rectangle of 1.176 × 1.618 R (aspect tan 54°), with the centres of two
+      ten-point stars at opposite corners. Star radii are exact: inner 0.618 R (1/φ), outer
+      0.7265 R (tan 36°). The lines inside are a quarter of each star, turned 180° about the
+      rectangle's centre; its sides are mirror lines of the tiling, so a rectangular coaster
+      tiles edge to edge by reflection. The construction is in `reconstructions/_U6G8QSfWnk/`,
+      ready for the coaster step.
    8. `fhGHzop7ULw`, Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
    9. `jlTmt_279M4`, unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
