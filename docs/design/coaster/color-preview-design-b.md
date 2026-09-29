@@ -140,7 +140,7 @@ The Lab also needs the orbit list (id, member count, radius) from the worker —
 
 <table>
 <tr><th>The HTML (<a href="color-preview-design-b/rough-ui.html">rough-ui.html</a>; its styles are in the file)</th><th>What it draws</th></tr>
-<tr><td><pre><code class="language-html">&lt;aside class="lab-panel"&gt;
+<tr><td style="width:55%; vertical-align:top"><pre style="font-size:0.62em; white-space:pre; overflow-x:auto"><code class="language-html">&lt;aside class="lab-panel"&gt;
   &lt;section&gt;
     &lt;h2&gt;Colors&lt;/h2&gt;
     &lt;div class="color-row"&gt;&lt;span&gt;Base&lt;/span&gt;&lt;select&gt;&lt;option&gt;Slab&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
@@ -176,7 +176,7 @@ The Lab also needs the orbit list (id, member count, radius) from the worker —
     &lt;/div&gt;
   &lt;/section&gt;
 &lt;/aside&gt;</code></pre></td>
-<td><img src="color-preview-design-b/rough-ui.png" width="360" alt="Researcher B's rough UI: Colors, Orbits with six presets and four orbit rows, Depth with Lowered greyed out, and the Parts row with PASS"></td></tr>
+<td style="width:45%; vertical-align:top"><img src="color-preview-design-b/rough-ui.png" style="width:100%" alt="Researcher B's rough UI: Colors, Orbits with six presets and four orbit rows, Depth with Lowered greyed out, and the Parts row with PASS"></td></tr>
 </table>
 
 The last row is the per-part list from the same split the printer gets, so what the panel counts
