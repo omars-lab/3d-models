@@ -71,11 +71,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    Rebuilt with the four `fill void where orbit …` blocks the `.bkr` lists as alternatives,
    `bikar render … --format stl --check --param size=90`, then `python3 tools/print_review.py sheet`.
    Asked by Omar on 2026-09-27 (board #96).
-   - **Color and Lab controls** (Omar, 2026-09-28): coloring the radial fills, colored
-     gallery PNGs, and an Orbits panel in Coaster Lab. Act on
-     [color-preview-design.md](../../design/coaster/color-preview-design.md), §10 lists the bikar PRs,
-     smallest first. The radial coaster needs the openwork split and the top-fillet split (§4)
-     before it can print in more than one color.
+   - **Color and Lab controls** (Omar, 2026-09-28) are built: all eight steps of
+     [color-preview-design.md](../../design/coaster/color-preview-design.md) §10 (see
+     [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
+     fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
+     Omar's to print (write the bet with `calibrate` first).
 
 ## Handed to the video loop
 
