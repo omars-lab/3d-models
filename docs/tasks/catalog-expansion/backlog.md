@@ -30,6 +30,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       The 10-fold grid (Ptolemy's pentagon, the {10/2} and {10/3} stars, the petal lines) is in
       `reconstructions/0ke_GpoBa-s/`, ready for the coaster step.
    2. `88q-u2eWZqg`, Eman Zainab, 16-petal rosette: a new fold; check the crowded centre.
+      **Attempted 2026-09-28 in youtube: 6/9 steps, mean edge-SSIM 0.745.** The geometry is
+      right. The three busiest steps stop near 0.59 because her pencil compass marks were
+      never erased and her compass slipped a little, and no render can draw either. The
+      centre was not the problem. For the coaster: the whole rosette is **one closed line**
+      (each petal joins the petal three places round, and 3 and 16 share no factor), so it
+      suits a single continuous groove. Two octagons, the inner circle and the 16 petals are in
+      `reconstructions/88q-u2eWZqg/`, ready for the coaster step.
    3. `n_ICgwOr6qs`, Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
    4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
    5. `NtnlGMTElBk`, Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
@@ -60,5 +67,4 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 GO candidates not yet reconstructed go to the youtube repo's ladder, not here. Name the id
 in this list when you hand it on, and move it to item 2's shape when it comes back done.
 
-- `88q-u2eWZqg`: Eman Zainab, 16-petal rosette. Handed 2026-09-27.
 - `n_ICgwOr6qs`: Samira Mian, 5-fold arc motif, construction section only. Handed 2026-09-27.
