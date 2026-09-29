@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `8ccacb1c6f0508d456b79c46de611cc969ec2889` (2026-09-29)
+Youtube pin: `1f277f38dbcd730a9b5a431b37d16b91e5c482ee` (2026-09-29)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **20 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **21 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **9 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -101,6 +101,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
 | `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | — | — | — | — | — | — | — |
+| `1h7iWJaoN80` | Folio 192 heptagonal panel, Anonymous Persian Compendium (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
 | `88q-u2eWZqg` | A 16-petal rosette in one unbroken line | done | — | — | — | — | — | — | — |
 | `A9fefFurD_s` | Broug's ten-point star from one circle | done | — | — | — | — | — | — | — |
