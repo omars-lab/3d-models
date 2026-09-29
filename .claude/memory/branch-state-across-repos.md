@@ -1,11 +1,11 @@
 ---
 name: branch-state-across-repos
-description: "Remote branch state after the 2026-08-30/31 cleanup, re-verified 2026-09-22 (3d-models master + gh-pages only, 0 open PRs, two detached worktrees kept, snapshot ref; bikar main only after four dead branches deleted and rods-relief #226 merged 2026-09-23; youtube has no remote and is main only after its four local branches were hand-merged 2026-09-23; 2026-09-25 third pass: bikar is a bare repo + bikar-main work tree, sacred-patterns dependabot folded into #53, qiyas/3d-model-hub main only, 0 open PRs and 0 stashes anywhere; 2026-09-27 fourth pass: dead leftovers deleted in 3d-models/bikar/qiyas, hifth's merged remote branches and youtube's any-source-video-fetch left for Omar) — one kept prior-art branch, one superseded branch that must never merge, branch guards and protection since 2026-09-02"
+description: "Remote branch state after the 2026-08-30/31 cleanup, re-verified 2026-09-22 (3d-models master + gh-pages only, 0 open PRs, two detached worktrees kept, snapshot ref; bikar main only after four dead branches deleted and rods-relief #226 merged 2026-09-23; youtube has no remote and is main only after its four local branches were hand-merged 2026-09-23; 2026-09-25 third pass: bikar is a bare repo + bikar-main work tree, sacred-patterns dependabot folded into #53, qiyas/3d-model-hub main only, 0 open PRs and 0 stashes anywhere; 2026-09-27 fourth pass: dead leftovers deleted in 3d-models/bikar/qiyas, hifth's merged remote branches and youtube's any-source-video-fetch left for Omar; 2026-09-29 fifth pass: tools/branch_inventory.py, snapshots under refs/snapshots/2026-09-29/, youtube got a Mac Studio remote studio:git/youtube.git and any-source-video-fetch hand-merged, review-md/hifth remote leftovers and PRs #405–#410 left for Omar) — one kept prior-art branch, one superseded branch that must never merge, branch guards and protection since 2026-09-02"
 metadata: 
   node_type: memory
   type: project
   originSessionId: b317004f-c205-413f-8ef8-7b5f99a1b742
-  modified: 2026-09-25T15:01:27.621Z
+  modified: 2026-09-29T14:49:28.879Z
 ---
 
 Remote state after the cleanup (all merges sentinel-verified by content, not subject): **bikar** = `main` only; **qiyas** = `main` only; **3d-models** = `master` + `gh-pages` (deliberately diverged, never merged into master); **sacred-patterns** = `master` + `gh-pages` + `wip/react-d3-2024` (kept as cited prior art for the d3 work; `wip/weave-progress-page` was merged as PR #43 `0d3ad1e`). One bikar branch was SUPERSEDED, not merged: `fix/weave-amplitude-guard-by-depth-suffix` improved a rule main withdrew in D-042 and was deleted — if it reappears, it must not merge.
@@ -25,6 +25,15 @@ Remote state after the cleanup (all merges sentinel-verified by content, not sub
 - **hifth:** (never listed here before) uses merge commits, so an ancestor check is enough. 9 merged local branches deleted. Its ~20 merged remote branches are Omar's call: the auto-mode classifier refused to touch hifth while another session was working there.
 - **hifth branches to keep:** `experience-atlas`, `qul-integration`, `qul-page-diff` and `tafsir-seam` never had a PR ("Save the unfinished …"). `perf-budget` (main checkout) and `pitch-next-16` (`hifth-work`) are checked out.
 - **youtube:** `feat/any-source-video-fetch` has one unmerged commit from today, in the `youtube-video-fetch` worktree. Omar's to merge.
+
+**Fifth consolidation, 2026-09-29:** `python3 tools/branch_inventory.py` (3d-models #415) now prints the per-repo state; read the delete list off it. "UNIQUE" there means "look", not "keep". Check it against the PR's merge commit, and normalize the British-to-American color spelling on both sides before comparing. Every deleted tip is saved under `refs/snapshots/2026-09-29/<branch>`.
+- **3d-models:** 6 merged branches deleted. `3d-models-work` is detached at origin/master. `-pm`, `-master-ro` and `-hub-ro` untouched.
+- **bikar:** 4 merged branches plus the finished color-rename and `bikar-cookbook-rule` worktrees removed. `bikar-work` holds #270, waiting on Omar.
+- **The `-wm` worktrees** of sacred-patterns, bikar and qiyas were removed once #55, #281 and #35 merged.
+- **youtube now has a remote:** `origin = studio:git/youtube.git`, a bare repo on the Mac Studio (Omar's choice: "Mac Studio bare repo only", no GitHub). `feat/any-source-video-fetch` was merged by hand, as merge 8ccacb1. main was fast-forwarded and pushed, and the branch and its worktree were deleted. youtube = `main` only, local and on the Studio.
+- **youtube merge bug fixed:** the run-catalog hook read HEAD only during a merge, so it "found" main's 32 newest runs missing, and its sync would have deleted them. `run_catalog.py` now also reads MERGE_HEAD, with a test.
+- **youtube `.gitignore`:** needs nothing. Its own ignore files already cover `.DS_Store`, `settings.local.json`, `hub/dist`, `node_modules` and `__pycache__`.
+- **Refused by the auto-mode classifier, left for Omar:** review-md's `-beta`, `-frontmatter` and `-watch` worktrees, plus its 11 local and 10 remote merged branches; hifth's 15 merged remote branches; and the video-loop PRs #405–#410 (all touch only `docs/tasks/catalog-expansion/backlog.md`).
 
 Since 2026-09-02 a pre-commit hook refuses direct commits on main/master in both repos (`BRANCH_OK=1` overrides; bikar #136 `4ac089b`, 3d-models #131 `04f2137`), and branch protection is applied: bikar main requires ci/e2e/gitleaks (admins not enforced), 3d-models master is PR-only (D-048/D-049).
 
