@@ -1,0 +1,101 @@
+<!doctype html>
+<!--
+  Researcher B's rough UI for the Coaster Lab color controls, color-preview-design-b.md §6.3.
+  It replaces the ASCII sketch that section had, and shows the same controls with the same
+  illustrative numbers (piece counts, radii and part sizes are not measured). The look is the
+  Lab's: tokens and classes copied from ../color-preview-design/lab-controls-mockup.html, which
+  copied them from bikar packages/lab/src/style.css. Nothing here runs.
+  The consolidated design's mockup (color-preview-design.md §5) is the one to build from.
+  Re-shoot: Chrome --headless --hide-scrollbars --window-size=440,640 --screenshot=rough-ui.png rough-ui.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Coaster Lab color controls, researcher B's rough UI</title>
+    <style>
+      :root {
+        --bg: #14120d; --panel: #1d1a13; --panel-edge: #2c2718; --ink: #e8e2d0;
+        --ink-dim: #9a917a; --gold: #d6b254; --gold-dim: #8a733a; --pass: #7fbf6a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--panel); color: var(--ink);
+        font-family: 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+      }
+      .lab-panel { width: 440px; padding: 1rem 1.2rem 1.2rem; }
+      h2 {
+        font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--ink-dim); margin: 1.1rem 0 0.5rem;
+      }
+      section:first-child h2 { margin-top: 0; }
+      .color-row { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.4rem; font-size: 0.8rem; }
+      .color-row span { flex: 0 0 3.5rem; }
+      select {
+        background: var(--bg); color: var(--ink); border: 1px solid var(--panel-edge);
+        border-radius: 4px; padding: 0.1rem 0.3rem; font-size: 0.78rem; font-family: inherit;
+      }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .chip {
+        background: none; border: 1px solid var(--gold-dim); color: var(--ink);
+        border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.78rem; font-family: inherit;
+      }
+      .chip.active { background: var(--gold); border-color: var(--gold); color: #1d1a13; font-weight: 600; }
+      table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 0.6rem; }
+      th { text-align: left; font-weight: 400; color: var(--ink-dim); font-size: 0.7rem; padding: 0 0.3rem 0.25rem; }
+      td { padding: 0.18rem 0.3rem; border-top: 1px solid var(--panel-edge); }
+      td.num { font-variant-numeric: tabular-nums; text-align: right; }
+      input { accent-color: var(--gold); margin: 0; }
+      .base { color: var(--ink-dim); font-style: italic; }
+      .note { font-size: 0.72rem; color: var(--ink-dim); margin: 0.35rem 0 0; }
+      .radio { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; margin: 0 0 0.3rem; }
+      .radio input[type='number'] {
+        width: 3.5rem; background: var(--bg); color: var(--ink);
+        border: 1px solid var(--panel-edge); border-radius: 4px; font-size: 0.8rem;
+      }
+      .off { opacity: 0.4; }
+      .parts { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; }
+      .pass {
+        padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 600; letter-spacing: 0.06em;
+        background: rgba(127, 191, 106, 0.15); color: var(--pass); border: 1px solid var(--pass);
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="lab-panel">
+      <section>
+        <h2>Colors</h2>
+        <div class="color-row"><span>Base</span><select><option>Slab</option></select></div>
+        <div class="color-row"><span>Straps</span><select><option>Gold</option></select></div>
+        <div class="color-row"><span>Border</span><select><option>none</option></select></div>
+      </section>
+      <section>
+        <h2>Orbits</h2>
+        <div class="chips">
+          <button class="chip">Odd</button><button class="chip">Even</button>
+          <button class="chip">Inner</button><button class="chip">Outer</button>
+          <button class="chip">All</button><button class="chip">None</button>
+        </div>
+        <table>
+          <tr><th>#</th><th>pieces</th><th>radius</th><th>filled</th><th>color</th></tr>
+          <tr><td>0</td><td class="num">8</td><td class="num">6 mm</td><td><input type="checkbox" checked /></td><td><select><option>Teal</option></select></td></tr>
+          <tr><td>1</td><td class="num">16</td><td class="num">11 mm</td><td><input type="checkbox" checked /></td><td><select><option>Ruby</option></select></td></tr>
+          <tr><td>2</td><td class="num">8</td><td class="num">15 mm</td><td><input type="checkbox" /></td><td class="base">base</td></tr>
+          <tr><td>3</td><td class="num">16</td><td class="num">19 mm</td><td><input type="checkbox" checked /></td><td><select><option>Ruby</option></select></td></tr>
+        </table>
+        <p class="note">Hover a row and that orbit outlines in the 3D view.</p>
+      </section>
+      <section>
+        <h2>Depth</h2>
+        <label class="radio"><input type="radio" name="d" checked /> Flush with straps</label>
+        <label class="radio off"><input type="radio" name="d" disabled /> Lowered <input type="number" value="0.6" disabled /> mm</label>
+        <p class="note">Lowered is greyed out until the <code>fills</code> clause exists.</p>
+      </section>
+      <section>
+        <h2>Parts</h2>
+        <div class="parts">
+          <span>base 177k · Ruby 42k · Teal 53k · straps 77k</span><span class="pass">PASS</span>
+        </div>
+      </section>
+    </aside>
+  </body>
+</html>
