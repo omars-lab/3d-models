@@ -112,6 +112,19 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       round coaster. All straight lines, built from one circle by compass and straightedge
       (the pentagon by the golden cut). The construction is in `reconstructions/A9fefFurD_s/`,
       ready for the coaster step.
+   11. `1h7iWJaoN80`, Sarah Brewer, Folio 192 of the Anonymous Persian Compendium (Isfahan):
+      added from youtube's `make ladder` once rows 1–10 were done.
+      **Done 2026-09-29 in youtube: 27/27 steps, mean edge-SSIM 0.862** (a 24-minute narrated
+      GeoGebra screencast; the finished panel scores 0.945). For the coaster: a **rectangle of
+      1.620 × 1** (the short side is the unit) filled with tan and blue tiles laid out on a
+      **regular heptagon** of circumradius 0.2846. The two heptagon centres sit on the long
+      sides (one on the bottom, one on the top), so each edge cuts a heptagon. Every edge runs
+      along one of the heptagon's seven side directions, all straight lines, from one angle
+      (3π/14) by compass and straightedge. The panel turns 180° about its centre onto itself
+      but has no mirror of its own. The video says the pattern extends by reflecting the
+      rectangle in its sides, so a rectangular coaster tiles edge to edge by reflection. The
+      heptagon on the bottom edge is drawn whole and pokes past the rectangle; clip it at the
+      edge. The construction is in `reconstructions/1h7iWJaoN80/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
