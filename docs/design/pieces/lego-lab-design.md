@@ -609,7 +609,7 @@ which are facts about the gate; without it the table silently mixes the two.
 
 The alternative — adding a general two-vector `basis` statement so every score
 in the table becomes reachable — was argued with the geometry compiled beside
-it and was **not** taken: [`../../decisions-log.md`](../../decisions-log.md) D-007, and the
+it and was **not** taken: [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-007, and the
 `lattice-basis` design note (§12) it was decided from.
 
 **"At the right scale" is plural.** `square` scores 1.0 at every divisor of the
@@ -670,7 +670,7 @@ declaration describes geometry that was never built. A `brick` has no `hole` sta
 feature the exported mesh does not contain — the mesh is identical with and without it, while a
 `connect` against it still passes the C2 fit check. `kind axis` is exempt: it states no dimension,
 so there is nothing the kernel can have failed to cut. Found while scoping multi-piece export
-([`../../decisions-log.md`](../../decisions-log.md) D-006) and pinned by
+([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-006) and pinned by
 `bikar:packages/core/tests/kernel3d/brick-phantom-port.test.ts`.
 
 ## 7. Kernel — the brick cell partition over `solidifySlabStack`
@@ -996,7 +996,7 @@ instead would have made the banner the only thing the UI could honestly say.
 | **M6** | bikar | `brick` declaration (parser, AST, evaluator, `brick3d`), `kernel3d/brick.ts` incl. §7.6 ribs, LEGO fit entries, language-reference + ADR. ✅ **Complete.** |
 | **M7** | bikar | Anchor solver, `kernel3d/grid-gate.ts`, `sweepGridFit`, `family: 'brick'`. Kernel and gate shipped early with M6; the protocol wiring followed. ✅ **Complete.** |
 | **P0** | both | Lego Lab core: page, presets, knobs, viewer + lattice overlay, both gate panels, STL download, `make lego-lab`, gallery §03. First shippable. ✅ **Complete.** |
-| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`../../decisions-log.md`](../../decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
+| **P1** | both | Compatibility matrix filled by sweeps, sweep-strip UI, multi-piece export, more curated scripts. Sweep strip ✅ **shipped** (bikar `617bee1`, PR #34), design-notes page (§12) and studio index (§13) ✅ **shipped**; multi-piece export ✅ **shipped** as studs-as-ports ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-006) — V11, port minting, the entry contract and `patterns/Assemblies/Brick-Stack.bkr`; the compatibility matrix ✅ **measured** (bikar `3ad9158`, PR #37) and §5.3 rewritten from it ([`../../research/lego-lattice-matrix-sweep.md`](../../research/lego-lattice-matrix-sweep.md)); the curated scripts ✅ **shipped** (bikar `954b5c8`, PR #38) — `Hex-Field-Tile` at fit 0.48 and `Rational-Repeat-Tile` at 1.00 on a 3 : 2 lattice, one click each from the matrix rows they illustrate. ✅ **Complete.** |
 | **P2** | both | Custom mode: code drawer, `code=` share links, Open in Studio, localStorage draft. ✅ **Complete** (bikar PR #50) — built by *sharing* the Orb Lab's `editor.ts` / `custom-state.ts` / `url-state.ts` rather than forking them; the one change any of them needed was the draft slot, and the clutch fit rides in neither the link nor the `.bkr` (§7.5). |
 | **P3** | both | Polish. **Adjusted-parameter toasts ✅ already shipped** — both Labs have toasted `Adjusted N parameters to printable values` since P0 (`lego-main.ts:958`, `main.ts:618`); this row listed them as future work for two phases longer than it was true. What is *not* built is naming which parameter moved and to what, which is a refinement, not this phase. **Per-family print notes** are unbuilt on the brick page only: the Orb Lab has `updateProcessNote()` keyed on family × `PrintTarget.process` (`main.ts:538`), and the Lego Lab reads `printTarget` for the build envelope alone. **LDraw `.ldr` export** is unbuilt. This row long described it as *"a text emit, one line per piece"* on the survey's §6 framing; [`../../research/lego-ldraw-export.md`](../../research/lego-ldraw-export.md) refutes that. One line per piece requires naming a stock part, which is dimensionally false for 5 of the 7 shipped brick scripts and fails silently — so the honest shape is an MPD with inline geometry, i.e. **a mesh emit** at ~212 KiB per 2×4, larger than the same mesh's STL. **§14 now specifies all three**; the cost estimate above is the corrected one. ✅ **Complete** (bikar `a10f4f6`, PR #53) — all three built to §14, with the process note gated on a *moved* fit rather than on the margin alone (§14.1), the clamped knob named on the panel and in the toast (§14.2), and `--format ldraw` emitting an inline-block MPD (§14.3). The one thing §14.3 asked for that was **not** done is the check that needs no code: no LDraw viewer had opened the output. **Partly discharged 2026-08-02** (bikar `49aab9f`, PR #62) — the Lab grew the export button §14.3 specified but never got, and a fourth tab that reads the file back through three.js `LDrawLoader` and prints the signed volume of what it built (§14.4). One third-party reader, continuously; not the twelve-tool afternoon, and not an official LDraw implementation. |
 
@@ -1007,7 +1007,7 @@ a five-rung `ribMm` ladder crossed with three `engage` values — and the Lab ru
 without a new plate. So the dependency inverts. M6 and M7 ship with every disputed value adjustable
 and provenance-tagged, the coupons become the Lab's first *input*, and each print narrows a knob
 rather than unblocking a phase. Recorded as
-[`../../decisions-log.md`](../../decisions-log.md) D-005, which supersedes D-003.
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-005, which supersedes D-003.
 
 The condition that keeps this honest is already in §9: the panel must say, per value, whether the
 active number came from a coupon or is still an unmeasured default. A `CAL-*` id with no measurement
@@ -1124,7 +1124,7 @@ claims are claims about what a reader *sees*, so at least one test per claim has
 **P1 (part) — the multi-piece decision and V11 — 2026-07-31.** bikar `617bee1` (PR #34: the
 design-notes page §12, the studio index §13, and the `multi-piece-export` note as `preview`) and
 `3b31fab` (PR #35: V11, and the same note closed to `decided`). 3d-models: this revision, plus
-[`../../decisions-log.md`](../../decisions-log.md) D-006 and the
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-006 and the
 [`design-note`](../../../.claude/skills/design-note/SKILL.md) skill.
 
 Multi-piece export is **decided, not built**: `export parts` on a `brick` assembly is studs-as-ports
@@ -1566,7 +1566,7 @@ deviations from this spec, and additions beyond it.)*
   what K7 is about, so it is written down here rather than left for a reader to discover. Three ways
   out: widen the grammar with a general two-vector basis, or mark the row in §5.3 as
   kernel-reachable-only, or drop the row. **Resolved: label the row** —
-  [`../../decisions-log.md`](../../decisions-log.md) D-007. §5.3 gains an **Authorable** column and the
+  [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-007. §5.3 gains an **Authorable** column and the
   sentence saying why; the grammar is unchanged; the row stays, because it is the 5-fold case an
   Islamic-pattern reader will look for. The three options were drawn side by side, with the
   geometry compiled, in the `lattice-basis` design note (§12).
@@ -1622,7 +1622,7 @@ a hand-ordered list of documents is a list that will eventually be wrong about w
 current.
 
 **Where the decision itself lives is unchanged.** A note is the *argument*; the outcome still goes
-to [`../../decisions-log.md`](../../decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
+to [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) as a `D-NNN` entry and, when it changes the design, into
 the relevant section here. The note is not a third register — it is the worked page a `D-NNN` line
 compresses.
 
@@ -1630,8 +1630,8 @@ compresses.
 
 | Note | Argues | Status |
 |---|---|---|
-| `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`../../decisions-log.md`](../../decisions-log.md) D-006) |
-| `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`../../decisions-log.md`](../../decisions-log.md) D-007) |
+| `multi-piece-export` | How an assembly leaves the Lab as separate solids | **decided** — studs as ports ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-006) |
+| `lattice-basis` | §11 Q8: the matrix row the `tile` grammar cannot build | **decided** — label the row ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-007) |
 | `span-and-border` | §11 Q4 and Q5: what actually bounds the bridged span, and which sources V13 may judge | **decided** — by measurement, recorded in §11 above rather than as a `D-NNN`, because neither was a choice between designs |
 
 `lattice-basis` extends the page's "compiled, not drawn" rule to a second kind of figure, and the
@@ -2021,7 +2021,7 @@ of an empty model came from and where no run has yet been made.
 
 ### 14.4 The read-back panel — what a second reader can settle without the afternoon
 
-Decided in [`decisions-log.md` D-009](../../decisions-log.md); shipped bikar `49aab9f` (PR #62).
+Decided in [`decisions-log.md` D-009](../../working-model/decisions-log.md); shipped bikar `49aab9f` (PR #62).
 
 §14.3.1 costs an afternoon of *installing* viewers. One reader needs no install: three.js
 `LDrawLoader` is an npm dependency, so it can sit inside the Lego Lab and read the export back on

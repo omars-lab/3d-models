@@ -104,7 +104,7 @@ and again 2026-09-18 (this session), so the number rests on secondary corroborat
 
 ### [PROVEN-IN-REPO] how the repo already treats this
 
-- [D-053](../decisions-log.md) decided the X2D **rides as a single-nozzle-labelled FDM
+- [D-053](../working-model/decisions-log.md) decided the X2D **rides as a single-nozzle-labelled FDM
   target**; its `PrintTarget` carries a **build envelope only**, and the dual nozzle is
   a *slicer-profile* concern, not a knob. So 256 × 256 mm — the single-nozzle build area
   — is the value the repo uses for the X2D's footprint, and a `--bed x2d` default of
@@ -173,7 +173,7 @@ the owner of the iteration model:
   arrangement path. Composing a *new* multi-item plate is always such a change.
 
 The house rule these enforce: **"a migration never buys a fork"**
-([`CLAUDE.md`](../../CLAUDE.md), [D-052](../decisions-log.md)). A manifest that minted a
+([`CLAUDE.md`](../../CLAUDE.md), [D-052](../working-model/decisions-log.md)). A manifest that minted a
 second identity for a printable thing, parallel to `it-<sha12>`, would be that fork. The
 design doc's §3 reconciliation (the manifest item's `{bkr, piece, params}` triple is the
 *geometry half* of an iteration key, completed by the plate's slice profile and resolved
@@ -181,7 +181,7 @@ to `it-<sha12>`; the record's `objects[].iteration` is the single map) is ground
 
 ## Topic 6 — dynamic size is a `--param` re-render, never a mesh scale [PROVEN-IN-REPO]
 
-[D-059](../decisions-log.md): "mini and standard coasters are two values of one `param`
+[D-059](../working-model/decisions-log.md): "mini and standard coasters are two values of one `param`
 in one file, never two files and never a scaled mesh. The plate composer re-renders every
 variant through bikar; its mesh `--scale` passthrough prints a warning naming this entry."
 The reason: "scaling a mesh scales walls, straps and relief with it, and a 40 % mini of a
@@ -220,6 +220,6 @@ iteration key (Topic 5), which is why the cache and the iteration id never disag
 - **In-repo:** [`slice.ts`](../../tools/bambu/src/commands/slice.ts);
   [`print-metadata-and-reprint-design.md`](../design/printing/print-metadata-and-reprint-design.md) §§2,3,4,5;
   [`prints-tab-design.md`](../design/printing/prints-tab-design.md) §4.1;
-  [D-052](../decisions-log.md), [D-053](../decisions-log.md), [D-059](../decisions-log.md).
+  [D-052](../working-model/decisions-log.md), [D-053](../working-model/decisions-log.md), [D-059](../working-model/decisions-log.md).
 </content>
 </invoke>

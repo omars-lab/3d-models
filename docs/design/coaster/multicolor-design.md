@@ -15,7 +15,7 @@ built from, researcher A's [multicolor-constructions-design.md](multicolor-const
 and researcher B's [multicolor-constructions-b-design.md](multicolor-constructions-b-design.md),
 which stay as the record. The checker's raw notes, measurements and re-fetched sources are in
 [../../research/multicolor-verification.md](../../research/multicolor-verification.md). The grammar change
-(§2, the `orbit` word) was approved on 2026-09-27 as [D-081](../../decisions-log.md#d-081--pieces-are-grouped-by-orbit-about-the-patterns-true-centre-and-the-openwork-coaster-fills-chosen-orbits-solid),
+(§2, the `orbit` word) was approved on 2026-09-27 as [D-081](../../working-model/decisions-log.md#d-081--pieces-are-grouped-by-orbit-about-the-patterns-true-centre-and-the-openwork-coaster-fills-chosen-orbits-solid),
 together with filling chosen orbits solid on the openwork coaster. The look (§3) and the colors
 are still Omar's to approve. Nothing here has been sliced in the Bambu Studio window or printed.*
 
@@ -44,7 +44,7 @@ the pattern's centre. Each such group is a **color class**.
 
 This is close to, but not the same as, the ask D-078 answered on 2026-09-19 ("polygons whose
 midpoints are equidistant from midpoint of construction"), which chose the radius-only `ring`
-([D-078](../../decisions-log.md)). The new rule adds **same shape**, and §2 shows the difference is real.
+([D-078](../../working-model/decisions-log.md)). The new rule adds **same shape**, and §2 shows the difference is real.
 
 ## 2. Color classes: the `orbit` word
 
@@ -69,7 +69,7 @@ compared the engine's rings with the classes. The checker re-ran it on bikar mai
 |---|---|---|---|
 | **`ring` as it is** | No work; D-078 carries it to the print already | Right on 1 of 8 coasters | Every other file needs hand-picked ring lists, where mistakes creep in; the rule is not what the engine checks |
 | **Move the ring centre** to the symmetry centre | No new word | Changes what `ring == N` means in the **10** `.bkr` files on bikar main that select by ring (B counted 8); radius only, so two shapes at one radius still share a ring | One word with an old and a new meaning during the move — the defect this repo's CLAUDE.md says to delete, not hide |
-| **`class == N`** (B) | Exactly the rule | `class` already names `classify .name`, `.class` tags and `connect arc … .CLASS` in the language | Two meanings for one word, the trap [D-078](../../decisions-log.md) itself rejected option (b) for |
+| **`class == N`** (B) | Exactly the rule | `class` already names `classify .name`, `.class` tags and `connect arc … .CLASS` in the language | Two meanings for one word, the trap [D-078](../../working-model/decisions-log.md) itself rejected option (b) for |
 | **`orbit == N`** (A; recommended) | Exactly the rule; leaves `ring` alone; `orbit` already means "the rotation copies of a leaf" in bikar's GeoGebra importer (lower.ts, "kept as an orbit tree") | A grammar edit: one word in the parser's attribute list plus a resolver | `ring` stays for "bands at a radius", a real and different idea; `bikar bands` lists orbits beside rings (one listing verb, not B's second `bikar classes`) |
 
 **Recommendation: `orbit`.** A proposed it; B proposed the same idea under the name `class`. The
@@ -174,10 +174,10 @@ exists for.
 ## 4. Getting the colors to the printer
 
 Both researchers agree, and the route is shipped: `--format parts` writes one body per palette
-name plus base and straps ([D-073](../../decisions-log.md), [D-074](../../decisions-log.md)); palette name →
+name plus base and straps ([D-073](../../working-model/decisions-log.md), [D-074](../../working-model/decisions-log.md)); palette name →
 logical AMS slot by first-seen order is baked into a multi-part input 3MF
-([D-075](../../decisions-log.md)); `bambu slice coaster` slices it headless, verifying geometry, while
-color is checked in the Studio window ([D-077](../../decisions-log.md)). Since #349 the slicer flattens
+([D-075](../../working-model/decisions-log.md)); `bambu slice coaster` slices it headless, verifying geometry, while
+color is checked in the Studio window ([D-077](../../working-model/decisions-log.md)). Since #349 the slicer flattens
 each preset chain and checks the slice carries it. Separate STLs per color were considered by both
 and rejected: registration by hand every print, and D-075's contract thrown away.
 
@@ -317,7 +317,7 @@ re-read unless it says otherwise.
 | Dark-to-light shows bleed most | both | agree; fetched | Sovol, bambureviews |
 | Each change purges to the chute then a prime tower | A only | fetched, user reports on an older printer | Bambu forum, Printago |
 | 4 slots per AMS; X2D up to 25 colors | both | **snippet-only**; fetch refused again (402, 403) | verification §7 |
-| At most 4 colors per coaster, the slice step refuses beyond | A only | **contradicted by D-078** ("warn, not cap") | [D-078](../../decisions-log.md) |
+| At most 4 colors per coaster, the slice step refuses beyond | A only | **contradicted by D-078** ("warn, not cap") | [D-078](../../working-model/decisions-log.md) |
 | Second nozzle may cut purge | A (hedged); B: no source | forum users say yes for one AMS feeding both nozzles; user reports, **unverified** | verification §7 |
 | Only plain and border styles can be split | both | agree | coaster-color-design |
 | No boolean union; bodies share faces | both | agree | height-field split |

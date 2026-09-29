@@ -12,7 +12,7 @@ both costing real time before anyone noticed:
 
   * **W-F1** named a model file, `Fit-Step-Gauge.bkr`, that had never existed
     under that name, and described the wrong joint besides. Three documents
-    disagreed about what the coupon was. Resolved in `docs/decisions-log.md`
+    disagreed about what the coupon was. Resolved in `docs/working-model/decisions-log.md`
     D-008 — after a full re-derivation, not a lookup.
   * **LG-F1** prescribed `--param rib_mm=…`. The catalog still says it: "a knob
     that never existed." Rib thickness is not a `param` at all — no `brick`

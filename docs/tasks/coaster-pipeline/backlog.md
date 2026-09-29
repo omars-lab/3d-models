@@ -52,7 +52,7 @@ this goal is met, the next print is taken from there.
 
 ## The print-gated register — what a printer unblocks, and in what order
 
-Moved here on 2026-09-25 from `docs/backlog.md` (git history has it), keeping its section
+Moved here on 2026-09-25 from `docs/working-model/backlog.md` (git history has it), keeping its section
 numbers so older references like "backlog §3.8" still find their section. Its §6, the work
 that needed something other than a printer, went elsewhere: the open items to the
 [parked backlog](../parked/backlog.md) and the
@@ -120,7 +120,7 @@ per piece, and its own status line says **"AUTHORED, UNPRINTED … no calibratio
 bet is settled."** The Lego engine phases M6/M7/P0/P1/P2/P3 are all marked
 complete in [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §10, and that table records
 the reason the LG coupons stopped gating M6: a knob can ship unmeasured where a
-baked constant cannot ([`decisions-log.md`](../../decisions-log.md) D-005, superseding
+baked constant cannot ([`decisions-log.md`](../../working-model/decisions-log.md) D-005, superseding
 D-003). So the printer is no longer a *build* blocker anywhere in the system —
 it is a **truth** blocker.
 
@@ -240,7 +240,7 @@ W-F1 is the blade-clearance fit coupon; W-C1 is the CornerClip joint that
 consumes its number. The catalog blocks W-C1 on W-F1, so these are **two plates
 in sequence, not one shared plate**. Whether MC-1 might supply W-F1's number
 outright was §7 item 1's open question; it was resolved on 2026-08-02 as **no**
-([`decisions-log.md`](../../decisions-log.md) D-008) — MC-1 measures a bore-and-pin
+([`decisions-log.md`](../../working-model/decisions-log.md) D-008) — MC-1 measures a bore-and-pin
 joint, and a blade that drops down a channel and then twists under load can pass
 the drop and still bind on the twist. Two plates it is.
 
@@ -356,7 +356,7 @@ job; the six above them are what one job settles."
 | id | measures | demanded by | unblocks | `.bkr` | cost |
 |---|---|---|---|---|---|
 | MC-7 | engraved vs embossed legibility at arm's length; the smallest cap height that still reads; whether 0.6 mm of relief is enough | `CAL-TXT-01`, `CAL-TXT-02`; [`text-emit-design.md`](../../design/language/text-emit-design.md) §8 T2 | the cap-height and relief-depth defaults in that doc | **cannot be authored** — needs the `text` statement, which bikar does not have. Engine-gated first, printer-gated second | not stated |
-| MC-8 | the smallest gap at which two surfaces printed *in place* come off the plate as two objects rather than one — six wall pairs on a shared foot at **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm** | `CAL-CLR-01`; [`decisions-log.md`](../../decisions-log.md) D-039 | `MIN_BODY_CLEARANCE_MM`, and with it every woven orb's amplitude floor (§3.4) | **model to author** — catalogued 2026-08-19; [`catalog.md`](../../../.claude/skills/prototype/catalog.md) MC-8 names the file, and the pointer baseline carries it as a forward reference until it is written. Unwritten because printing is user-held, not because anything blocks it | not stated |
+| MC-8 | the smallest gap at which two surfaces printed *in place* come off the plate as two objects rather than one — six wall pairs on a shared foot at **0.1 / 0.2 / 0.3 / 0.4 / 0.6 / 0.8 mm** | `CAL-CLR-01`; [`decisions-log.md`](../../working-model/decisions-log.md) D-039 | `MIN_BODY_CLEARANCE_MM`, and with it every woven orb's amplitude floor (§3.4) | **model to author** — catalogued 2026-08-19; [`catalog.md`](../../../.claude/skills/prototype/catalog.md) MC-8 names the file, and the pointer baseline carries it as a forward reference until it is written. Unwritten because printing is user-held, not because anything blocks it | not stated |
 
 MC-8's sub-floor rungs are **expected to FAIL** `linkageGate` by design, the same
 way MC-2's four sub-floor rungs fail `--check` (§2 Plate 1): a clearance ladder
@@ -371,7 +371,7 @@ between the walls, which is the failure this coupon is trying to observe."
 | LG-F1 | which `ribMm` (0/0.05/0.10/0.15/0.20) clutches a real LEGO stud; whether rung 0 clutches at all; whether `engage 1.6` sags as §3.6 predicts | [`lego-lab-design.md`](../../design/pieces/lego-lab-design.md) §8, B.8 | `CAL-RIB-01`; the `engage` default; LG-D1, LG-B1, LG-B2 all gate on it | exists — `Lego-Clutch-Coupon.bkr --piece CouponAnchorPlate` | not stated |
 | LG-F2 | realised-vs-authored stud ⌀ at five rungs; **whether `studs full`/`studs edge` ship at all** | §8, §11 Q1 | the `studDia` profile entry; the Lab's nozzle requirement | exists — `--piece CouponStudPlate` | not stated |
 | LG-R1 | whether a printed ⌀3.2 solid pin clutches, and whether FDM anisotropy shears it | §8, §11 Q2, §5.2 | the `pinDia` entry; the anchor solver's 1×N branch; whether 1×N ships or errors | exists — `--piece CouponPinStrip` | not stated |
-| LG-S1 | max total radial interference two **printed** parts swallow before the joint will not push together | §10 P1, [`decisions-log.md`](../../decisions-log.md) D-006 | `CAL-STK-01`; `STUD_ENTRY_MAX_MM`; whether the fit profile grows a printed-pair entry; the warning text bikar emits on every `Brick-Stack` render | exists — `Brick-Stack.bkr --format parts` | not stated |
+| LG-S1 | max total radial interference two **printed** parts swallow before the joint will not push together | §10 P1, [`decisions-log.md`](../../working-model/decisions-log.md) D-006 | `CAL-STK-01`; `STUD_ENTRY_MAX_MM`; whether the fit profile grows a printed-pair entry; the warning text bikar emits on every `Brick-Stack` render | exists — `Brick-Stack.bkr --format parts` | not stated |
 | LG-D1 | does clutch survive 100 seat/unseat cycles, and where does it fail | §8 | the material recommendation; §11 Q6's compliance-proxy question; B.8's "durable or one-shot" | reuses LG-F1's winning rung | not stated |
 | LG-B1 | do relief and clutch coexist; is an 8-fold star legible at 4×4 (31.8 mm) | §8 | `relief depth` and `engage` defaults; the P1 compatibility matrix's first ✅ row | exists — `patterns/Lego/Star-Brick.bkr` | not stated |
 | LG-B2 | does rotation lock hold on an incommensurable outline; **how much clutch is lost giving up the tangent side wall** | §8, §5.3, B.2 | B.2's rotation-lock criterion; V8's WARN-not-ERROR call; the 5-fold matrix row | **authored** (bikar `bf6c602`) — `patterns/Lego/Rosette-Brick.bkr`, a ten-fold rosette (five-fold girih family) riding the `footprint outline` mode that shipped in the same commit; six tubes at the default radius, corner-swept by the Lab | not stated |
@@ -389,7 +389,7 @@ of the other two, nor they on it.
 |---|---|---|---|---|---|
 | W-F1 | the blade clearance that seats a clip firmly without forcing; whether it differs by tile material | [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 | the clip-joint half of `CAL-FIT-01`; the `--fit-profile` W-C1 and `Clip-Wall.bkr` inherit | exists — `Clipseat-Fit-Coupon.bkr`, 6 pieces (written 2026-08-02, D-008) | not stated |
 | W-C1 | rebate vs proud in raking light; detent past-centre feel; PETG jaw survival; front-face lippage | §8, §10 Q1; [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q1 | `CAL-DET-01`, `CAL-CLP-01`; the `clipseat` grammar default; the mesh-gate sub-floor exemption for bayonet clips | exists — `Clip-Coupon.bkr`, 3 pieces | not stated |
-| W-P1 | which band width reads as a deliberate margin — a 4-rung ladder (6/12/20/30 mm) around one fixed 2×2 field, so only the margin varies; whether the answer moves with viewing distance | [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q3; [`decisions-log.md`](../../decisions-log.md) D-017 | `CAL-FRM-01`, and with it the `frame` statement's 12 mm default | exists — `Frame-Band-Coupon.bkr` (written 2026-08-03): one `FrameTile`, printed ×4, read against four 1:1 SVG rungs. The band itself is not printable geometry | not stated |
+| W-P1 | which band width reads as a deliberate margin — a 4-rung ladder (6/12/20/30 mm) around one fixed 2×2 field, so only the margin varies; whether the answer moves with viewing distance | [`tile-wall-design.md`](../../design/pieces/tile-wall-design.md) §10 Q3; [`decisions-log.md`](../../working-model/decisions-log.md) D-017 | `CAL-FRM-01`, and with it the `frame` statement's 12 mm default | exists — `Frame-Band-Coupon.bkr` (written 2026-08-03): one `FrameTile`, printed ×4, read against four 1:1 SVG rungs. The band itself is not printable geometry | not stated |
 
 ### 3.4 Orb ladder
 
@@ -412,7 +412,7 @@ identical struts, so the rule prescribed the same amplitude for both; Weave-Orb
 fused **all 75** ribbon pairs into one body while Rosette-Weave-Orb held 0.049 mm.
 Four of the five were outright interpenetrating and the fifth sat at an eighth of
 the floor — every woven orb the gallery had ever shipped would have printed as one
-object ([`decisions-log.md`](../../decisions-log.md) D-039). All five amplitudes were
+object ([`decisions-log.md`](../../working-model/decisions-log.md) D-039). All five amplitudes were
 re-cut from measurement and `make orbs` now reports `fusedPairs=0` on all five.
 
 Two consequences for this ladder, neither of them settled by printing an orb:
@@ -603,7 +603,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    cannot show. `make validate-coupons` mutates a scratch copy of the doc seven
    ways and confirms the verifier fires on each.
 3. ~~**Reconcile W-F1's `.bkr` with its catalog entry**~~ — **done 2026-08-02**,
-   see §7 item 1 and [`decisions-log.md`](../../decisions-log.md) D-008. The coupon it
+   see §7 item 1 and [`decisions-log.md`](../../working-model/decisions-log.md) D-008. The coupon it
    needed did not exist and was written; nothing here waits on a printer.
 4. **Buy or locate the instruments the protocol assumes**: a caliper (make and
    resolution recorded, zeroed at session start), a flat reference — granite
@@ -706,7 +706,7 @@ Stated so the next reader does not mistake an unanswered question for a settled
 one.
 
 1. ~~**What W-F1 actually is.**~~ **Resolved 2026-08-02 —
-   [`decisions-log.md`](../../decisions-log.md) D-008.** Three descriptions disagreed:
+   [`decisions-log.md`](../../working-model/decisions-log.md) D-008.** Three descriptions disagreed:
    [`catalog.md`](../../../.claude/skills/prototype/catalog.md) asked clipseat
    questions over a `Fit-Coupon.bkr` model line, that file being a five-bore ⌀
    ladder with no clipseat, no tile and no `gap` param;
@@ -753,7 +753,7 @@ one.
 8. **Whether the W-series "on hold" is lifted by a printer arriving.**
    [`w2-connector-design.md`](../../design/pieces/w2-connector-design.md) §8 says only "printing is
    currently on hold, so both entries land as `planned`", and
-   [`decisions-log.md`](../../decisions-log.md) D-003 gives the cause as a printer that
+   [`decisions-log.md`](../../working-model/decisions-log.md) D-003 gives the cause as a printer that
    is "owner-held and on hold". The stated cause is the absent machine, but the
    doc does not say the hold is *only* that, so I have not asserted it lifts
    automatically.
@@ -791,7 +791,7 @@ one.
     transfer to a build target, as noted here — but what shipped is a gate that
     happens to have a target as its entry point, so the preference is satisfied
     rather than bypassed. See §4 item 2 and
-    [`decisions-log.md`](../../decisions-log.md) D-014.
+    [`decisions-log.md`](../../working-model/decisions-log.md) D-014.
 
 ---
 
@@ -845,7 +845,7 @@ Five checks, run before shipping it, in the spirit of
   re-checking this bullet is running those two commands, not recounting a list.
 
   Naming the authority in prose is still a thing a human has to re-read, so it
-  graduated ([`decisions-log.md`](../../decisions-log.md)
+  graduated ([`decisions-log.md`](../../working-model/decisions-log.md)
   D-019): `.claude/gates/counts_gate.py` (hook `37-counts`,
   `make validate-counts`) reads each authority and compares it to the number written
   here. The counts carry an invisible `<!--count:NAME-->` tag, and a tagged

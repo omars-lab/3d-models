@@ -244,7 +244,7 @@ data in which `M` starts a new open sub-stroke, and `o` is the advance width.
 
 Every one of those 188 polylines is **open and zero-width**. Turning one into
 printable geometry means giving it a width, which is the stroke-to-outline
-operation, which is a polygon offset. [`backlog.md`](../backlog.md) §6.2 records
+operation, which is a polygon offset. [`backlog.md`](../working-model/backlog.md) §6.2 records
 that bikar has no polygon-offset primitive — the same absence that already forces
 MC-4's wall thickness to co-vary with the angle under test
 ([`calibration-design.md`](../design/printing/calibration-design.md) §5.4, §8).

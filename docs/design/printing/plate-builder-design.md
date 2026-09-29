@@ -24,7 +24,7 @@ a transport or `.3mf`-internal fact is not verified in this repo it is hedged as
 (K1/K2). This doc is a **frontend over data the sibling docs own** — it references their
 schemas and flows and redefines none of them
 ([`CLAUDE.md`](../../../CLAUDE.md), "A migration never buys a fork",
-[D-052](../../decisions-log.md)).
+[D-052](../../working-model/decisions-log.md)).
 
 The owners this doc consumes and does not fork:
 
@@ -36,7 +36,7 @@ The owners this doc consumes and does not fork:
 - **The existing prints frontend** —
   [`prints-tab-design.md`](prints-tab-design.md) (the record schema §4.1, the manifest
   the page reads §8, and the deliberate omission of cost/time/grams from the tab §11 /
-  [D-046](../../decisions-log.md), amended 2026-09-17 to store AND show — see §1).
+  [D-046](../../working-model/decisions-log.md), amended 2026-09-17 to store AND show — see §1).
 - **Arrangement, the owner gate, and the print judgement** —
   [`print-model-design.md`](print-model-design.md) (plate arrangement / grid-pack /
   rotate-to-fit §5.4; the owner-gate handoff §9; the two lifecycle axes §3) and the
@@ -73,7 +73,7 @@ The plate builder is that composition surface — a frontend *over* the owned da
 new engine.
 
 **The K1 qualifier on estimates (carried, not stripped).**
-[`prints-tab-design.md`](prints-tab-design.md) §11 / [D-046](../../decisions-log.md)
+[`prints-tab-design.md`](prints-tab-design.md) §11 / [D-046](../../working-model/decisions-log.md)
 deliberately kept cost / print-time / filament-grams **off the prints-tab display** —
 "the tab records what a plate taught, not what it cost." That is a decision about the
 *tab's display surface*, not a ban on computing estimates. Omar's answer PMR-8
@@ -375,7 +375,7 @@ Composing a fresh multi-iteration plate *is* an arrangement change — so:
 ## 8. Decisions
 
 Local ids (`PB-*`), scoped to this doc — **not** entries in
-[`../../decisions-log.md`](../../decisions-log.md), which this doc does not touch; promote them there
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md), which this doc does not touch; promote them there
 only if the design is accepted. Each names the options, the recommendation (first), and
 what it verifies.
 

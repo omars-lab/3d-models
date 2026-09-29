@@ -357,7 +357,7 @@ compiles them):
   > that drops down a channel and then sweeps sideways under load, because a blade
   > can pass the drop and still bind on the twist. The transfer condition could not
   > be written, so the rule did not transfer (**K10**); the fix was a second file
-  > for the second joint. See `docs/decisions-log.md` **D-008**.
+  > for the second joint. See `docs/working-model/decisions-log.md` **D-008**.
 - **`Clip-Coupon.bkr`** — two 40 mm dummy tiles (`CouponTileRebate` with
   `clipseat corners rebate 0.6`, `CouponTileProud` with `clipseat corners proud`)
   plus one `CouponClip`. Print four of each dummy → two real four-corner joints in

@@ -523,7 +523,7 @@ All fetched by the 2026-09-01 audit unless marked; the fetched text is restated 
   `svg`/`svgDepth`, `text*`, `baseReliefCut*`.
 
 **House decisions and bets.**
-- [`../../decisions-log.md`](../../decisions-log.md) D-005 (knobs backed by `CAL-*` bets) and D-006
+- [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-005 (knobs backed by `CAL-*` bets) and D-006
   (studs as ports; the computed 0.00 mm).
 - [`bets.md`](../../../.claude/skills/calibrate/bets.md) — `CAL-RIB-01`, `CAL-STK-01`, `CAL-CLB-01`,
   `CAL-REG-01`; 20 provisional, 0 measured at this writing.

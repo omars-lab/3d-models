@@ -14,7 +14,7 @@ the "measure before you gate" rule ([`docs/design/process/issue-register-evaluat
 §5.1) once you read it correctly. What still waits on a physical print is the first
 real record (S2), gate R3 (S4), and — for real content to render — the tab in its
 populated form (S6/S7). (Corrected 2026-08-30 from "the gate waits on a print"; see
-[`../../decisions-log.md`](../../decisions-log.md) D-046's amendment.)
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-046's amendment.)
 
 Research: [`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) — local
 measurements; every zero-state number below is grounded there.
@@ -167,7 +167,7 @@ mirroring how bikar's `check-doc-pointers.ts` excludes `docs/issues/`.
 
 A record photo is capped at **2048 px on the long edge and 2 MB per file**,
 re-encoded before commit — a policy the user chose, recorded in
-[D-046](../../decisions-log.md) (not a measured engineering default, so no `**Default:**`
+[D-046](../../working-model/decisions-log.md) (not a measured engineering default, so no `**Default:**`
 marker: its provenance is the decision, not a source). Rationale: large enough to
 read a plate defect at 100%, small enough
 that a repository of prints does not bloat the pack. Photos are tracked on master
@@ -249,7 +249,7 @@ is *well-formed*; these check its `status` is backed by the *evidence that state
 implies* (§3.1's Validator), so the lifecycle cannot lie. They live in the same
 `prints_gate.py` as R1–R9, not a second gate file — the checks read the same parsed
 frontmatter, and one parser / one hook / one self-test is the repo's no-fork rule
-([`CLAUDE.md`](../../../CLAUDE.md), [D-052](../../decisions-log.md)) applied here.
+([`CLAUDE.md`](../../../CLAUDE.md), [D-052](../../working-model/decisions-log.md)) applied here.
 
 - **R10 — a sliced-or-later plate names its `.3mf`.** A record whose `status` is at or
   past `sliced` (`sliced printing paused printed failed measured propagated`) carries a
@@ -292,13 +292,13 @@ because there is no settled bet to propagate from until the first one flips. R5 
 share that problem: it is a per-record invariant that fires on the first reading to name a
 bet, so it ships in S3 as the compare seam R3 will later build on. (Corrected
 2026-08-30 from an earlier "ships with the first record, not before" — see
-[D-046](../../decisions-log.md)'s amendment.)
+[D-046](../../working-model/decisions-log.md)'s amendment.)
 
 ## 8. Where it lives
 
 Records live at `docs/prints/<run>/`. A rendered reader, `docs/prints.md`, is built
 into the site as a tab (S6). Because the audience includes gallery visitors, not just
-the operator ([D-046](../../decisions-log.md)), a lab page `prints.html` is vendored into
+the operator ([D-046](../../working-model/decisions-log.md)), a lab page `prints.html` is vendored into
 the site (S7); the site has no shared nav bar, so its `site-graph.json` pins shift
 when a nav entry is inserted — that is the S7 hazard, handled in that rung.
 
@@ -332,7 +332,7 @@ against.
 
 ## 10. The four decisions, resolved
 
-All four blockers were resolved 2026-08-28 ([D-046](../../decisions-log.md)):
+All four blockers were resolved 2026-08-28 ([D-046](../../working-model/decisions-log.md)):
 
 1. **Record dependency format** — YAML frontmatter, matching the `20-use-cases`
    precedent (resolved by author).
@@ -358,7 +358,7 @@ load-bearing rows:
 | See it | "What did the plate look like?" | `photos[]` (§5) |
 | Plan the run | "How long, and how much filament?" | the `estimates` block (pre-print) and, once it runs, the MQTT `actuals` — surfaced on the tab (D-046 amendment 2026-09-17, PMR-8) |
 
-**Amendment 2026-09-17 (PMR-8, [D-046](../../decisions-log.md)).** Print *time* and *filament
+**Amendment 2026-09-17 (PMR-8, [D-046](../../working-model/decisions-log.md)).** Print *time* and *filament
 grams* — estimate before the print, MQTT-measured actual after
 ([`print-metadata-and-reprint-design.md`](print-metadata-and-reprint-design.md) §3.3.1) —
 **do** now surface on the tab: Omar asked for them, and showing a number the record

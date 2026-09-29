@@ -33,7 +33,7 @@ Ten PNG paths were found (research §1). Only three matter for coasters:
    parts.
 2. **Coaster Lab viewer and its thumbnails** — splits the coaster with `buildCoasterParts` using
    the export's own pinch default and paints each body by its palette color
-   ([D-076](../../decisions-log.md)). This is already a colored preview from the printed bodies, but it
+   ([D-076](../../working-model/decisions-log.md)). This is already a colored preview from the printed bodies, but it
    lives only in a browser canvas; the PNGs of it are Playwright screenshots.
 3. **Color plate picture** from `bambu slice coaster` (#342) — a top-down 2D drawing made from the
    coaster's description, not from the split bodies. Its check only asks that each palette color

@@ -233,7 +233,7 @@ clears the cap, and a cube's best whole-face `minDot` on its vertex-3 axis is
 been blank. Base frames therefore cull per-face by centroid (`cull: 'back-face'`),
 which is exact on a convex solid and draws the silhouette for free.
 
-**Corrected 2026-08-19 ([D-037](../../decisions-log.md)): a frame is not a floor.**
+**Corrected 2026-08-19 ([D-037](../../working-model/decisions-log.md)): a frame is not a floor.**
 This section specified the base solid as *frame 0* and the build delivered
 exactly that — written once and never again, so from the second frame on the
 pattern accumulated against a blank page with nothing to be *on*. The base solid
@@ -242,7 +242,7 @@ outline (`data-orb-scaffold`) together with the sphere's limb. The reading that
 caught this is the reversal test D-036 wrote for itself, returned on the first
 day the page was live.
 
-**Amended 2026-08-20 ([D-045](../../decisions-log.md)): the two marks part company on
+**Amended 2026-08-20 ([D-045](../../working-model/decisions-log.md)): the two marks part company on
 the last frame.** This paragraph originally had the `complete` frame drop *both*
 the scaffold and the limb, because §4.1 pinned it byte for byte against a
 shipped view carrying neither. Only half of that survives. The scaffold answers
@@ -356,7 +356,7 @@ sequence therefore ends on an explicit `complete` frame — no scaffold, no limb
 no shading, no highlight — and it is that frame the gate compares against the
 shipped view.
 
-Since [D-037](../../decisions-log.md) the other stage frames are **not** bare: they
+Since [D-037](../../working-model/decisions-log.md) the other stage frames are **not** bare: they
 carry the scaffold and the limb (see §3.4), and `complete` is the one frame that
 drops them. Only that frame has an identity to protect, so only that frame has
 to. Shading is separate and is forbidden on all of them: a Lambert envelope

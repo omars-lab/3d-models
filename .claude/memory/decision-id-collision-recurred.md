@@ -8,7 +8,7 @@ metadata:
 The collision in [[decision-id-collision]] recurred: the constructions plan reserved
 D-055…D-063 while master merged the X2D session's D-055 (first-party MQTT). Rule held —
 first-merged owns the id; the open PR renumbered to D-056…D-064 across
-`docs/decisions-log.md`, `docs/constructions/construction-equivalence.md`,
+`docs/working-model/decisions-log.md`, `docs/constructions/construction-equivalence.md`,
 `docs/constructions/geogebra-construction-import-design.md` and
 `docs/research/geogebra-construction-import-survey.md` with
 `perl -pi -e 's/\bD-0(5[5-9]|6[0-3])\b/sprintf("D-%03d",$1+1)/ge'`.

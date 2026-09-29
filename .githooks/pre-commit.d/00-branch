@@ -9,7 +9,7 @@
 # run on it as a pull request. The same day bikar's `ci` workflow was found red
 # on main for four consecutive runs with three PRs merged over it, which is the
 # cheaper failure: this hook cannot stop a merge on red (only branch protection
-# with required checks does — docs/decisions-log.md D-048), but it does close
+# with required checks does — docs/working-model/decisions-log.md D-048), but it does close
 # the path where a commit reaches the default branch having been checked by
 # nobody at all.
 #

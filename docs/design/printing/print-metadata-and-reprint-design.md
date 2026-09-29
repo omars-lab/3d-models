@@ -27,7 +27,7 @@ hedged as such (§3.3, K2/K10). The schema owner is
 [`print-model-design.md`](print-model-design.md). This doc **references** both and
 proposes only *additive* fields, verbs, and gate rules — it forks neither
 ([`CLAUDE.md`](../../../CLAUDE.md), "A migration never buys a fork",
-[D-052](../../decisions-log.md)).
+[D-052](../../working-model/decisions-log.md)).
 
 ---
 
@@ -67,7 +67,7 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 does not say "never capture grams"; it says the *prints tab UX* deliberately does not
 *display* cost / print time / filament grams, because "the tab records what a plate
 taught, not what it cost." That is a decision about the **tab's display surface**
-(owned by [D-046](../../decisions-log.md)), not a ban on *storing* a slice-time estimate for
+(owned by [D-046](../../working-model/decisions-log.md)), not a ban on *storing* a slice-time estimate for
 reprint and planning. This doc proposes storing estimates as an additive per-iteration
 block (§3.3) and treats *whether they surface in the tab* as an open owner decision
 (PMR-8, §7) rather than silently overturning §11.
@@ -152,7 +152,7 @@ record realizes. Two placements were considered (PMR-2, §7); the recommended on
 **additive `iteration:` (and `estimates:`) block inside the existing record
 frontmatter**, because a separate `docs/prints/iterations/<id>.yaml` registry would
 duplicate the geometry/process pins the record already owns — two code paths that can
-disagree, the exact fork [`CLAUDE.md`](../../../CLAUDE.md) and [D-052](../../decisions-log.md)
+disagree, the exact fork [`CLAUDE.md`](../../../CLAUDE.md) and [D-052](../../working-model/decisions-log.md)
 forbid. Records that share an `iteration.id` carry identical recipe fields, and a
 proposed gate rule (R15, §3.4) checks that consistency so the id cannot lie.
 
@@ -625,19 +625,19 @@ Each names the options, the recommendation (first), and the reasoning. The repo'
 standing biases apply: **a migration over a fork**, **a gate over a new tool**, and
 **robust-and-simple over cheap-and-easy** ([`CLAUDE.md`](../../../CLAUDE.md)). These ids are
 local to this doc (`PMR-*`); they are **not** entries in
-[`../../decisions-log.md`](../../decisions-log.md), which this doc does not touch — promote them
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md), which this doc does not touch — promote them
 there if and when the design is accepted.
 
 | # | Decision | Options | Recommendation & why |
 |---|---|---|---|
 | PMR-1 | Iteration id shape | (a) content hash `it-<sha12>`; (b) monotonic `<piece>@vNN` | **(a).** No central allocator, so concurrent sessions cannot collide (the D-055 / *decision-id-collision-recurred* failure); re-derivable, matching gate R1's existing hash-at-a-commit identity discipline. |
-| PMR-2 | Where the iteration config lives | (a) additive `iteration:` block in the record frontmatter; (b) a separate `docs/prints/iterations/<id>.yaml` registry | **(a).** (b) duplicates the geometry/process pins the record already owns — two paths that can disagree, the fork [D-052](../../decisions-log.md) forbids. Extend the schema; project the registry (§6). |
+| PMR-2 | Where the iteration config lives | (a) additive `iteration:` block in the record frontmatter; (b) a separate `docs/prints/iterations/<id>.yaml` registry | **(a).** (b) duplicates the geometry/process pins the record already owns — two paths that can disagree, the fork [D-052](../../working-model/decisions-log.md) forbids. Extend the schema; project the registry (§6). |
 | PMR-3 | Reprint: replay vs re-slice | (a) replay stored `.3mf` by default, `--re-slice` opt-in; (b) always re-slice; (c) always replay | **(a), resolved & refined (Omar 2026-09-17, §4.4): quantity-aware.** Replay verifies *byte-identical*; re-slice verifies *reproducible-from-recipe*. A `.3mf` is a whole plate, so `reprint` first detects whether the target was the plate's *sole product* and asks `--qty`; replay is valid **only** on a byte-identical request (sole product, qty = stored Σcopies, `.3mf` sha intact), and any quantity/product change re-slices automatically. `--re-slice` stays the override for "re-slice even when replay is valid." |
 | PMR-4 | Grams / estimate sourcing mechanism | (a) parse the sliced `.3mf` (`slice-3mf`); (b) MQTT device report; (c) manual entry only | **Resolved (Omar 2026-09-17): (b) for the post-print ACTUAL, (a) for the pre-print ESTIMATE (§3.3.1).** MQTT reports what the machine actually consumed — measured, not attributed — and populates `estimates.confirmed_by`; but it exists only *after* a print, so the pre-print estimate the owner gate needs stays (a) the `.3mf`/estimation-slice number (still behind the §3.3 de-risk probe), (c) the honest fallback. Two fields, two sources — not a contradiction, a completion. |
 | PMR-5 | Estimate honesty when unknown | (a) `~` + `source: ~`; (b) a `0` default | **(a).** A fabricated `0` reads as "weighs nothing"; `~` reads as "not known" — never fake a measurement (the bench-sheet rule against filling a row from a preview, [`plate-1-bench-sheet.md`](../../prints/plate-1-bench-sheet.md)). |
 | PMR-6 | Metrics surface | (a) `print stats` + `list --count-by`, reading records; (b) a second counter store | **(a).** Records are the single source of truth; a second store drifts on any hand-edit. Project, don't duplicate — the C4 derivable-count hazard ([`CLAUDE.md`](../../../CLAUDE.md)). |
 | PMR-7 | `--help` | (a) fix group desc + per-verb examples + owner-gate note; (b) leave help to the SKILL doc | **(a).** The `--help` *is* the reference ([`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md)); a stale group description is a K7 self-contradiction (§7). |
-| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Resolved (Omar 2026-09-17): (b) — store AND show time/grams on the tab.** This reverses the specific §11 / [D-046](../../decisions-log.md) choice to keep cost/time/grams *off* the display. Recorded as a 2026-09-17 amendment to D-046 and a [`prints-tab-design.md`](prints-tab-design.md) §11 update — the display now surfaces the estimate (and, once a print runs, the MQTT actual, §3.3.1), while still holding the line D-046 actually cares about: no *second scheduler or bet registry*. Showing a number the record already stores is not that. |
+| PMR-8 | **Do estimates surface in the prints tab UX?** | (a) store estimates but keep the tab display as §11 (lessons, not cost); (b) add time/grams to the tab | **Resolved (Omar 2026-09-17): (b) — store AND show time/grams on the tab.** This reverses the specific §11 / [D-046](../../working-model/decisions-log.md) choice to keep cost/time/grams *off* the display. Recorded as a 2026-09-17 amendment to D-046 and a [`prints-tab-design.md`](prints-tab-design.md) §11 update — the display now surfaces the estimate (and, once a print runs, the MQTT actual, §3.3.1), while still holding the line D-046 actually cares about: no *second scheduler or bet registry*. Showing a number the record already stores is not that. |
 
 ---
 

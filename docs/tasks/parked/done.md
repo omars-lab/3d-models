@@ -68,7 +68,7 @@ again after Snapshot 2, so the ids below are a **fresh sequence** — Snapshot 3
 camera-control `#29`. Read every id under this date. These are the completed
 entries of the board that carried the d3 stream (Phases 1–3), the rosette
 explorer's open ledger, the memory decomposition, the fourth orb and the studio
-status page — the work [`plan.md`](../../plan.md) §2 rows 2.1–2.13 and §3 record in
+status page — the work [`plan.md`](../../working-model/plan.md) §2 rows 2.1–2.13 and §3 record in
 detail. Still open on the board at this prune: user-decision `#36`
 (coffee-house-sites#1); parked `#35` (publish the contract+schema under semver — the
 breakage-detection skill and version-bump hook); standing `#50` (keep `plan.md`
@@ -262,7 +262,7 @@ the pre-renumber board.
 
 ## Before the loops: non-printer residue kept in the print backlog
 
-These two sections were §6.3 and §6.4 of `docs/backlog.md` until 2026-09-25, when that
+These two sections were §6.3 and §6.4 of `docs/working-model/backlog.md` until 2026-09-25, when that
 file was split into the loop backlogs (it is in git history). Both are closed or shipped.
 Their §3 and §8 references mean the sections of the
 [print-gated register](../coaster-pipeline/backlog.md), which kept its numbering.
@@ -383,7 +383,7 @@ and a number that changes there is not re-typed here.
 | Phase 2 — the full orb-view instrument: orb `.bkr` → orb-view SVG → qiyas encode (ref + degraded recon) → `/diff` → status overlay on the bikar-rendered SVG | shipped 2026-09-01 (bikar #129, #132; qiyas #26 D-API-5) as `/orb-instrument` | d3 doc §4 Phase 2 and §5 Q-DATA |
 | Explorer coupons — physical pin and clutch checks | printer-gated, §3.2 | explorer doc §6 |
 | The Lego open ledger — the residue of the whole Lego stream sorted by what gates it: four unblocked items (widen the roster, ground the explorer doc, plates as data, the tube cap), two download-gated viewers, one decision (§11 Q6's proxy), and the printer-held coupons that §3.2 already owns | added 2026-09-01; the four unblocked items are tracked in the task system | explorer doc §6.6 |
-| The cross-repo governance stream — the tasks that had no plan anchor until the 2026-09-01 orb-tooling audit: how this repo's decisions log joins a decision hub (a user decision; [D-004](../../decisions-log.md) chose the local format and rejected mirroring bikar's generator), whether the cross-repo ledger check should block and bring this repo into the loop (gated on that decision), and a studio status page rendered from the repos the way bikar's studio index is rendered from its catalogue, never typed | added 2026-09-01; all on the task board, the hub decision gates the other two; no number re-typed here | bikar's cross-repo-dependencies doc and decision ledger; [D-004](../../decisions-log.md) |
+| The cross-repo governance stream — the tasks that had no plan anchor until the 2026-09-01 orb-tooling audit: how this repo's decisions log joins a decision hub (a user decision; [D-004](../../working-model/decisions-log.md) chose the local format and rejected mirroring bikar's generator), whether the cross-repo ledger check should block and bring this repo into the loop (gated on that decision), and a studio status page rendered from the repos the way bikar's studio index is rendered from its catalogue, never typed | added 2026-09-01; all on the task board, the hub decision gates the other two; no number re-typed here | bikar's cross-repo-dependencies doc and decision ledger; [D-004](../../working-model/decisions-log.md) |
 
 Only the explorer-coupons row needs a printer, which is exactly why the stream was invisible
 to a file organised around what a printer unblocks.

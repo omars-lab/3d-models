@@ -9,7 +9,7 @@ O3's comparator is [qiyas PR #32](https://github.com/NaqshCoffee/qiyas/pull/32),
 open.
 Feeds from
 [`docs/research/construction-equivalence-measurements.md`](../research/construction-equivalence-measurements.md);
-decided as D-063 in [`docs/decisions-log.md`](../decisions-log.md); summarised in
+decided as D-063 in [`docs/working-model/decisions-log.md`](../working-model/decisions-log.md); summarised in
 [§6 of the umbrella design](geogebra-construction-import-design.md#6-equivalence-three-oracles-d-063).
 
 ## 1. Why three

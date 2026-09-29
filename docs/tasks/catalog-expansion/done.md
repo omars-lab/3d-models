@@ -45,7 +45,7 @@ live board was rebuilt from the continuation plan's later phases, so this snapsh
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
 color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
-was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
+was carried over from. Decisions D-072…D-080 are in the [decisions log](../../working-model/decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
 a physical print), `#6` (P5.2 standard-size plate, after the CAL-CST-* bets are
 measured), `#7` (P5.3 frame block, only if a public GeoGebra fixture needs it), `#9`
@@ -78,7 +78,7 @@ snapshot's `#33` is coaster shape v2, not an id on the first-print board (Snapsh
 naqsh (bikar) → STL coasters" (session plan iterative-dazzling-finch), now carried
 by its self-contained continuation
 [coaster-border-continuation](../../../.claude/plans/coaster-border-continuation.md);
-decisions D-065…D-071 in the [decisions log](../../decisions-log.md). Still open on
+decisions D-065…D-071 in the [decisions log](../../working-model/decisions-log.md). Still open on
 the board at this prune: `#12` (the later-phases umbrella: P4.x plate composer,
 P5.x corpus), `#17` (youtube's O1/O2 verdict scripts on its local `feat/ggb-coords`
 until Omar says main), `#21` (CI secrets sync, owner-gated), `#24` (session-reflect
@@ -105,7 +105,7 @@ sequence**: Snapshot 6's `#8` is the naqsh construction statements, not Snapshot
 4/5's cross-repo ledger block, and its `#1` is the worktree setup, not Snapshot 2's
 Q5 unstale. The board is the plan "GeoGebra constructions → naqsh (bikar) → STL
 coasters, repeatably" (session plan file iterative-dazzling-finch; decisions
-D-056…D-064 in the [decisions log](../../decisions-log.md); the record of what is
+D-056…D-064 in the [decisions log](../../working-model/decisions-log.md); the record of what is
 migrated is the [constructions ledger](../../constructions/ledger.md)). Task ids
 `P<phase>.<n>` are the plan's own. Still open on the board at this prune: `#12`
 (the later-phases umbrella: P3.1 skill, P3.3 catalog + `make coasters`, P4.x plate

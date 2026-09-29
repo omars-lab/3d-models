@@ -1,6 +1,6 @@
 # Parked — open work no loop owns
 
-Moved here on 2026-09-25 from [`docs/backlog.md`](../../backlog.md) §6, which held the work that
+Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-model/backlog.md) §6, which held the work that
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
@@ -66,7 +66,7 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 ## Cross-repo governance
 
 How this repo's decisions log joins a decision hub (Omar's call;
-[D-004](../../decisions-log.md) chose the local format), then whether the cross-repo ledger check
+[D-004](../../working-model/decisions-log.md) chose the local format), then whether the cross-repo ledger check
 should block and bring this repo in, then a studio status page rendered from the repos. The
 hub decision gates the other two. Source: bikar's cross-repo-dependencies doc and decision
 ledger.

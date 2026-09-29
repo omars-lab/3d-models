@@ -13,7 +13,7 @@ sacred-patterns rendering-architecture read
 ([`../../research/sacred-patterns-render-arch.md`](../../research/sacred-patterns-render-arch.md)). No
 empirical residue — this is a naming-and-structure change decided by tests, not by a printer
 (Appendix B). Reversal condition recorded as D-050 in
-[`../../decisions-log.md`](../../decisions-log.md).
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 
 ## 1. What this settles
 

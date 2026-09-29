@@ -118,7 +118,7 @@ not the labels, are what the reader compares:
 Render the comparison — a table, or each option under these headings — so the reader
 decides from the rendered consequences, then state the recommendation and its reason
 in one line. Record the decision, and what would reverse it, in
-[`../../docs/decisions-log.md`](../../docs/decisions-log.md).
+[`../../docs/working-model/decisions-log.md`](../../docs/working-model/decisions-log.md).
 
 ---
 

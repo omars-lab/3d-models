@@ -191,7 +191,7 @@ and the prototype catalog own the rest.
    V1 spike with the degenerate cases (tangent triangles, vertices on the plane).
 2. Island tracking granularity: per-region overlap is O(layers × regions²) worst case —
    fine for orbs; revisit if girih-field tiles explode region counts.
-3. **Decided 2026-08-03 — no, F3 warns everywhere** ([`../../decisions-log.md`](../../decisions-log.md)
+3. **Decided 2026-08-03 — no, F3 warns everywhere** ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md)
    D-018). The leaning recorded here (yes-for-gallery, warn-for-Lab-custom) is overruled.
    Needing supports is a normal printable outcome, so erroring on the gallery path would
    fail `make orbs` over a condition the slicer is built for — and a per-surface severity

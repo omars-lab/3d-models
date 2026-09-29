@@ -178,7 +178,7 @@ scheduled; the ordering is the dependency order, not a promise.
   generated qiyas schema types lagged qiyas's `scores` (no `drop`/`surplus`/`max_drift`), so the
   first page derived them from the buckets. Fixed since (bikar #145 `cdc0331`): the mirror is
   re-vendored, the page reads the scores, and a 3d-models gate (`.claude/gates/schema_mirror.py`)
-  holds bikar's copy to qiyas's export at the use-case map's pins — [`../../plan.md`](../../plan.md) §2 row 2.9.
+  holds bikar's copy to qiyas's export at the use-case map's pins — [`../../working-model/plan.md`](../../working-model/plan.md) §2 row 2.9.
 - **Phase 3 — unify the vocabulary. SHIPPED 2026-09-02.** Per Q-VOCAB, all three surfaces now
   read one face-list vocabulary (`index`, `polygon`, `ring`, `faceKey`, `joinFaces`): A↔B were
   renamed and joined on a shared `faceKey` (bikar #151 `1083046`), and sacred-patterns was grown

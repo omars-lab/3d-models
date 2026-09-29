@@ -39,9 +39,9 @@ line in the right place.
 On 2026-09-25 the two single lists were split into these files; git history has the originals.
 
 - The print-gated register (plates 1 to 5, every coupon, every `CAL-*` bet and what it waits
-  on) was `docs/backlog.md`. It is now the second half of the
+  on) was `docs/working-model/backlog.md`. It is now the second half of the
   [first-print backlog](../../docs/tasks/coaster-pipeline/backlog.md), with its section
-  numbers kept, so "backlog §3.8" still names the same section. `docs/backlog.md` is left as a
+  numbers kept, so "backlog §3.8" still names the same section. `docs/working-model/backlog.md` is left as a
   short page that says where each section went.
 - The session task board's snapshots 1 to 10 were `docs/tasks/done.md`. Each snapshot's
   sections moved to the done list of the loop they belong to, and work no loop owns (orbs, Lego

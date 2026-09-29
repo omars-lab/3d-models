@@ -8,7 +8,7 @@ generates `.claude/skills/calibrate/bets.md` with the bet and record counts in
 its header. Nothing re-ran the hand tally in the doc, so it decayed while
 reading as verified.
 
-That is not hypothetical. On 2026-08-03 `docs/backlog.md` §2's count table was
+That is not hypothetical. On 2026-08-03 `docs/working-model/backlog.md` §2's count table was
 stale by three merges — bets 14 (17), records 16 (17), catalog entries 28 (29),
 `.bkr` coupons 5 (8) — and §8's "Counts reconcile" bullet, whose entire job is
 to catch that, restated the same wrong figures independently. Fixing §2 and not
@@ -92,7 +92,7 @@ are load-bearing:
 Why C4, and why the bet split stopped being exempt
 --------------------------------------------------
 
-`docs/backlog.md` §8 used to name the bet split — 7 on the machine card, N on
+`docs/working-model/backlog.md` §8 used to name the bet split — 7 on the machine card, N on
 design coupons, 1 with none — as *deliberately* unmarked, reasoning that the
 registry already prints the record split and "a second derivation of the bet
 split from the same table is a number this repo would then own twice". On
@@ -120,7 +120,7 @@ did not search"). Hence C4, and hence its shape:
     completes an enumeration that exists; it does not require prose to enumerate.
 
 `<!--count:quote-->` opts a line out. It exists for one legitimate use: prose
-that deliberately restates a number that *was* wrong — `docs/decisions-log.md`
+that deliberately restates a number that *was* wrong — `docs/working-model/decisions-log.md`
 narrating "this said four when it was six" must be allowed to say four. It is
 not a silencer for a claim you have not checked.
 
@@ -238,14 +238,14 @@ C3 = {
 #: was *known to be* wrong, which the decision log does by design.
 #:
 #: C1 as well as C3, because the first thing written under this marker was
-#: `docs/decisions-log.md` reciting a self-test fixture verbatim —
+#: `docs/working-model/decisions-log.md` reciting a self-test fixture verbatim —
 #: `99 <!--count:cal-records-->` — and a gate that reads a quoted fixture as an
 #: assertion makes its own validator section unwritable. The marker means "this
 #: line is *about* a number", and that is one fact, not two.
 QUOTE = re.compile(r"<!--\s*count:quote\s*-->")
 
 #: Opts a line out of **C4 only**. For a list that names a subset on purpose:
-#: `docs/backlog.md` §1 says "17 ids are registered (twelve at the original
+#: `docs/working-model/backlog.md` §1 says "17 ids are registered (twelve at the original
 #: sweep, plus …)" and then names the five additions — the twelve are covered by
 #: a number, not by name, and rewriting that sentence to list seventeen ids would
 #: make it worse, not truer.
@@ -270,7 +270,7 @@ SKIPPABLE = frozenset({"coupon-dir-bkr"})
 
 #: Only the *published* refs. Reading bikar's working tree, or its `HEAD`, makes
 #: this count a function of whichever branch the other session has checked out —
-#: and that checkout is routinely on a detached HEAD (`docs/decisions-log.md`
+#: and that checkout is routinely on a detached HEAD (`docs/working-model/decisions-log.md`
 #: D-001). This is the same reasoning `doc_pointers._tracked_at_ref` is built
 #: on, and the same trap it was written after walking into.
 BIKAR_REFS = ("origin/HEAD", "origin/main", "origin/master")
@@ -303,7 +303,7 @@ def authority_bets() -> tuple[dict[str, int], dict[str, list[str]]]:
     The header gives the totals. The rows give two splits by coupon series: how
     many *records* a machine-card bet settles against a design coupon, and how
     many *bets* fall in each. They are different numbers (a bet can carry three
-    records, or none), which is exactly how `docs/backlog.md` came to print the
+    records, or none), which is exactly how `docs/working-model/backlog.md` came to print the
     record count 5 in a row labelled "bets settled by design-specific coupons".
     Both are read out of the one generated file, and both sums are checked
     against the header total: if a projection of the registry disagrees with the

@@ -25,7 +25,7 @@ Builds on: [`lego-lab-design.md`](lego-lab-design.md) (the `brick` declaration, 
 gates — a mural piece **is** a brick); [`../../research/lego-baseplate-seam-survey.md`](../../research/lego-baseplate-seam-survey.md)
 (the Appendix-A survey behind every dimensional claim here);
 [`tile-wall-design.md`](tile-wall-design.md) (what does *not* transfer — §3);
-[`../../decisions-log.md`](../../decisions-log.md) (D-013 will record the cut rule and the L78 ruling — C5; D-008 through D-012 are already
+[`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) (D-013 will record the cut rule and the L78 ruling — C5; D-008 through D-012 are already
 assigned, a numbering collision the C4 audit caught).
 
 **Decisions locked by Omar, 2026-08-01, before this doc was written.** (1) Rectangular grid tiles

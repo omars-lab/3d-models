@@ -10,7 +10,7 @@ regenerate from whatever it was last handed. So the mirror can lag silently.
 
 It did. qiyas SCHEMA 1.27 added `drop`, `surplus` and `max_drift` to `Scores`;
 bikar's `Scores` still had four fields, and the orb instrument page derived the
-three from the diff buckets rather than reading them (docs/plan.md row 2.9,
+three from the diff buckets rather than reading them (docs/working-model/plan.md row 2.9,
 found building 2.1.d). The fix was one re-vendor (bikar #145); this gate is the
 half that makes the drift visible the next time, from the one repo that reads
 both producers.
@@ -19,7 +19,7 @@ WHERE IT READS. The use-case map (`.claude/skills/maintain-use-cases/use-cases.m
 already pins a `bikar` and a `qiyas` commit in its `as_of` frontmatter. Both
 schema directories are read **at those pins**, via `git show` in the sibling
 checkout — never the working tree, which is whatever another session has
-checked out (docs/decisions-log.md D-001; same rule as `doc_pointers.py`). So
+checked out (docs/working-model/decisions-log.md D-001; same rule as `doc_pointers.py`). So
 the verdict is about the pinned pair, offline, and moves only when
 `validate.py --refresh` re-pins. A stale mirror then shows up as: re-pin bikar,
 the gate fires, the repair is bikar's `release-the-schema-mirror` runbook.

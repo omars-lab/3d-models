@@ -28,7 +28,7 @@ origin/main on 2026-09-26). Paths below are bikar paths, written plainly because
 sibling repo.
 
 1. **Colour regions on a coaster exist.** A `palette` block plus
-   `color base|straps|border <Name>` ([D-073](../decisions-log.md), design [`coaster-color-design.md`](../design/coaster/coaster-color-design.md)).
+   `color base|straps|border <Name>` ([D-073](../working-model/decisions-log.md), design [`coaster-color-design.md`](../design/coaster/coaster-color-design.md)).
    `bikar render --format parts` splits the coaster height field into one watertight body per
    colour, as stacked columns cut at `z = base`, and writes a `<Coaster>.parts.json` sidecar
    (fields `region`, `stl`, `triangles`, `paletteName`, `hex`) — bikar packages/cli/src/index.ts,
@@ -36,17 +36,17 @@ sibling repo.
    `writeCoasterPartBodies`).
 2. **Pinches** where a relief meets the slab at an interior point are handled by
    `--pinch fillet|merge|error`, default `fillet`, floor **CAL-PIN-01** (registered, open)
-   ([D-074](../decisions-log.md)).
+   ([D-074](../working-model/decisions-log.md)).
 3. **Palette name → logical AMS slot** in first-seen order, slot 1 the plate default, baked into a
-   multi-part input 3MF with per-part `extruder` metadata ([D-075](../decisions-log.md);
+   multi-part input 3MF with per-part `extruder` metadata ([D-075](../working-model/decisions-log.md);
    `tools/bambu/src/ams.ts` `buildAmsSlotMap`). The headless CLI cannot assign slots at slice time;
    the assignment must be in the input 3MF, and only when its Application tag starts with
    `BambuStudio-` ([`coaster-ams-3mf-contract.md`](coaster-ams-3mf-contract.md), whose sources
    that earlier agent fetched).
-4. **`bambu slice coaster`** ([D-077](../decisions-log.md)) verifies the geometry headless on a
+4. **`bambu slice coaster`** ([D-077](../working-model/decisions-log.md)) verifies the geometry headless on a
    copy with the Application tag stripped; colour is a GUI check because `--load-settings` clamps
    every part to slot 1.
-5. **`fill where ring == N color X` carries into the print split** ([D-078](../decisions-log.md),
+5. **`fill where ring == N color X` carries into the print split** ([D-078](../working-model/decisions-log.md),
    [`radial-band-color-design.md`](../design/coaster/radial-band-color-design.md)): where a face carries a ring
    colour it wins over the face's coaster region; `bikar bands` lists the rings. D-078 chose to
    **warn, not cap** on colour count and to read the slot count from the device.

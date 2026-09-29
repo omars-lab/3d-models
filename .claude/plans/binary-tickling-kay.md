@@ -63,7 +63,7 @@ Each its own branch → PR (PR-flow for all repos; stage by name; no `git add -A
    entry — `id: 'bambu-x2d'`, label, `process: 'fdm'`, build volume `xMm/yMm/zMm` **read off the machine /
    Bambu Studio, not invented** (confirm from the device during bring-up; leave a clearly-marked TODO if
    unknown at author time rather than guessing a number — the repo forbids invented numbers). Own PR in bikar.
-2. **Decide the dual-nozzle representation** — open a `docs/decisions-log.md` entry (grab the next free
+2. **Decide the dual-nozzle representation** — open a `docs/working-model/decisions-log.md` entry (grab the next free
    D-0xx carefully, memory *decision-id-collision*): either (a) X2D rides as a single-nozzle-labelled FDM
    target for now (numbers still valid per-tuple; dual-nozzle is a slicer concern, not a knob concern), or
    (b) widen the `PrintTarget` schema. Recommend (a) — a migration never buys a fork; widen only when a
@@ -267,7 +267,7 @@ is untestable on a straight rod (reads 100% every rung) — it rides `CAL-BED-01
 ## Critical files
 
 - `bikar:packages/knobs/src/machines.ts` — add the `bambu-x2d` `PrintTarget` (Phase A1).
-- `docs/decisions-log.md` — dual-nozzle representation decision (Phase A2).
+- `docs/working-model/decisions-log.md` — dual-nozzle representation decision (Phase A2).
 - `docs/tasks/coaster-pipeline/backlog.md` — the campaign master; update Plate statuses as prints land.
 - `.claude/skills/prototype/catalog.md` — where each coupon's result is logged (Phase D5).
 - `.claude/skills/prototype/SKILL.md` — extend to script the photograph + compare-verdict seams (Phase A8).

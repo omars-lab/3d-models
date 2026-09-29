@@ -51,7 +51,7 @@ Grounded facts that shape the design (file pointers in §9):
 - The shared checkout keeps switching branches under another session. **All implementation
   happens in a dedicated worktree per repo**, one PR per slice, never on the shared checkout.
 
-## Decisions made in this session (→ `docs/decisions-log.md` D-055…, next free id at merge)
+## Decisions made in this session (→ `docs/working-model/decisions-log.md` D-055…, next free id at merge)
 
 | # | Decision | Why |
 |---|---|---|
@@ -152,7 +152,7 @@ after (graduation rule). Tier-0 witnesses (`patterns/witness/*.bkr`) precede any
 - **P0.2** `3d-models/docs/constructions/geogebra-construction-import-design.md` — umbrella design: the
   architecture, rubric and option tables, AST contract summary, ledger, skill. Markers: every
   `**Default:**` cites P0.1 or a `CAL-*` id; every `**Validator:**` has `PASS:`/`FAIL:`. deps: P0.1.
-- **P0.3** `docs/decisions-log.md` D-A…D-G (renumber at merge; `decision-id-collision`). deps: P0.2.
+- **P0.3** `docs/working-model/decisions-log.md` D-A…D-G (renumber at merge; `decision-id-collision`). deps: P0.2.
 - **P0.4 bikar** `docs/decisions/2026-09-<dd>-naqsh-language-name.md`; `grammar.md` /
   `language-reference.md` / README titles "naqsh (the language) — bikar (the engine)";
   `bikar-dsl` skill line. Memory `naqsh-is-bikar-dsl-synonym` (feedback). deps: none.

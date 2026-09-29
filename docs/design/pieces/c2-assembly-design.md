@@ -366,7 +366,7 @@ The parent doc's intent/compensation split (§5 there), operationalized:
   > ladder that had never matched the shipped `FIT_GAP_MM`, with a header calling
   > +0.10 "snug". Only one rung carried a `connect`, so four of the five were
   > holding nothing. Both file and bullet are now cut from the constant; see
-  > `docs/decisions-log.md` **D-008**.
+  > `docs/working-model/decisions-log.md` **D-008**.
 
   Procedure (in the file header, BOSL2-`$slop`-style): probe which
   hole yields press/snug/sliding;

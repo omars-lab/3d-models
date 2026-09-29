@@ -14,7 +14,7 @@ flag, or file is a **target**, not a shipped file. This is task #12 P4.1 of
 §4. It specifies the composer that
 [`../../constructions/geogebra-construction-import-design.md`](../../constructions/geogebra-construction-import-design.md) §9
 summarizes and defers to "the plate doc" — this one. Its key decision is
-[D-072](../../decisions-log.md); the decisions-log entry is written at integration, not here.
+[D-072](../../working-model/decisions-log.md); the decisions-log entry is written at integration, not here.
 Research on file: [`../../research/plate-composer-research.md`](../../research/plate-composer-research.md).*
 
 The composer is a **new `slice compose` subverb of the existing `slice` command group**
@@ -79,7 +79,7 @@ identity for "a printable thing":
 defines the **iteration id** `it-<sha12>` = the first 12 hex of sha256 over the canonical
 JSON of the **iteration key** `{source, source_sha256, piece, params, slice_profile}`,
 and §5 defines the plate↔iteration map `objects[].iteration`. The house rule is **"a
-migration never buys a fork"** ([`CLAUDE.md`](../../../CLAUDE.md), [D-052](../../decisions-log.md)):
+migration never buys a fork"** ([`CLAUDE.md`](../../../CLAUDE.md), [D-052](../../working-model/decisions-log.md)):
 a manifest that minted a *second* identity for a printable thing, parallel to
 `it-<sha12>`, would be exactly that fork, and is wrong.
 
@@ -197,7 +197,7 @@ fetcher, so the number rests on secondary corroboration —
 [goodprints3d](https://www.goodprints3d.com/blogs/3d/bambu-lab-x2d-build-plate-size-and-build-volume-what-you-actually-get)
 and [3DJake](https://www.3djake.com/bambu-lab/x2d), recorded in
 [`../../research/plate-composer-research.md`](../../research/plate-composer-research.md) Topic 3),
-consistent with [D-053](../../decisions-log.md) treating the X2D as a single-nozzle-labelled
+consistent with [D-053](../../working-model/decisions-log.md) treating the X2D as a single-nozzle-labelled
 FDM target whose `PrintTarget` is a build envelope only.
 
 > **K1 — the qualifier carried, not stripped.** 256 mm across X is the *single-nozzle*
@@ -265,7 +265,7 @@ record store, no forked schema: the composer *fills* the schema those docs own.
 
 ## 8. Dynamic size is a `--param` re-render; mesh `--scale` is a flagged escape hatch
 
-Per [D-059](../../decisions-log.md): sizing is always a bikar `--param` re-render (a mini is
+Per [D-059](../../working-model/decisions-log.md): sizing is always a bikar `--param` re-render (a mini is
 `params: { size: 40 }`, a standard `size: 90`), never a scaled mesh, because scaling a
 mesh scales walls, straps and relief below the printable-feature floor `CAL-FEA-01`
 governs ([`../../research/plate-composer-research.md`](../../research/plate-composer-research.md)
@@ -285,16 +285,16 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
   plate record's `objects[].iteration` is the single plate↔iteration map. The manifest
   mints no parallel id, and the render cache key coincides with the iteration key's
   geometry half, so nothing forks (the K10 transfer condition in §3). See
-  [D-072](../../decisions-log.md). *(The bed-fit pre-check design, the `--bed x2d`/`--arrange 1`
+  [D-072](../../working-model/decisions-log.md). *(The bed-fit pre-check design, the `--bed x2d`/`--arrange 1`
   defaults, and the `slice.ts` reuse boundary are design details of this same decision; if
   the integrator judges any needs its own id, a second decision is pending id — this doc
   does not take D-073.)*
 - Local ids scoped to this doc (`PC-*`), **not** entries in
-  [`../../decisions-log.md`](../../decisions-log.md):
+  [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md):
 
 | # | Decision | Options | Recommendation & why |
 |---|---|---|---|
-| PC-1 | Where the composer lives | (a) a new `slice compose` subverb extending `slice.ts`; (b) a new top-level command; (c) a new CLI | **(a).** Reuses `slice plate`'s render/slice path, argv builder, preset resolver and warnings sidecar (§2); a second command or CLI would fork the Studio invocation — the fork [D-052](../../decisions-log.md) forbids. |
+| PC-1 | Where the composer lives | (a) a new `slice compose` subverb extending `slice.ts`; (b) a new top-level command; (c) a new CLI | **(a).** Reuses `slice plate`'s render/slice path, argv builder, preset resolver and warnings sidecar (§2); a second command or CLI would fork the Studio invocation — the fork [D-052](../../working-model/decisions-log.md) forbids. |
 | PC-2 | Manifest ↔ iteration identity | (a) items resolve to `it-<sha12>` (the record is the one map); (b) the manifest carries its own item ids | **(a) = D-072.** (b) is a second source of truth for a printable thing — the exact fork the house rule bans. |
 | PC-3 | Composer-side packer | (a) hand every STL to `--arrange 1` (NFP, in the slicer); (b) ship a 2D packer now | **(a).** The authoritative packer is libnest2d inside the slicer (Topic 2); a self-owned packer is a P2 fallback only if `--arrange` proves unreliable, recorded in `docs/issues/` — not built now. |
 | PC-4 | Bed-fit pre-check strength | (a) a necessary condition (per-part + aggregate area) that fails fast; (b) claim it proves the plate fits | **(a).** Only `--arrange` proves tiling (§6, Topic 4); an aggregate area check cannot discharge the per-part fit claim (K6/D2). Over-claiming would be the K10 silent-porting hazard. |
@@ -331,7 +331,7 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
 
 ## 11. Not yet
 
-- **Nothing is built and nothing prints.** Printing stays owner-gated ([D-060](../../decisions-log.md); no
+- **Nothing is built and nothing prints.** Printing stays owner-gated ([D-060](../../working-model/decisions-log.md); no
   `CAL-CST-*` bet settled); the composer stops at the owner gate (§7).
 - **The mini plate manifest** `docs/plates/<name>.yaml` (plan P4.2) is the composer's
   first real input and is authored after the verb ships; `bambu validate plate` must
@@ -348,7 +348,7 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
 A coaster authored with `color <region> <PaletteName>` (bikar; `coaster-color-design.md`)
 renders under `--format parts` to one STL per region body plus a `<Coaster>.parts.json` sidecar
 tagging each body with the author's palette name + hex ([bikar #215](https://github.com/NaqshCoffee/bikar/pull/215)).
-The composer turns that into a multi-filament plate the X2D slices. Two halves ([D-075](../../decisions-log.md)):
+The composer turns that into a multi-filament plate the X2D slices. Two halves ([D-075](../../working-model/decisions-log.md)):
 
 **The slot map (part 4b-i, built).** `tools/bambu/src/ams.ts` `buildAmsSlotMap` reads the sidecars
 and assigns each palette a 1-based **logical** filament slot: slot 1 is the plate's default filament
@@ -363,7 +363,7 @@ external spool ([../../research/coaster-ams-3mf-contract.md](../../research/coas
 > **K1 — logical slot ≠ physical AMS slot.** The slice carries only the logical filament index
 > order; the physical spool is bound at print time by color match. Nothing here claims a spool.
 
-**The 3MF assembly + verify (part 4b-ii, built — `bambu slice coaster`, [D-077](../../decisions-log.md)).**
+**The 3MF assembly + verify (part 4b-ii, built — `bambu slice coaster`, [D-077](../../working-model/decisions-log.md)).**
 The headless CLI has **no flag** to assign objects to slots at slice time — the assignment must be
 baked into the *input* 3MF (BambuStudio#9666). So a **separate** verb (sibling to `slice compose`,
 not folded into it: a color plate cannot hand loose STLs to `--arrange`, K10 below) renders each

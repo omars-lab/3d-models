@@ -8,12 +8,12 @@ metadata:
   modified: 2026-09-02T17:05:03.099Z
 ---
 
-The `docs/decisions-log.md` id sequence (D-0xx) has no allocator, so two sessions
+The `docs/working-model/decisions-log.md` id sequence (D-0xx) has no allocator, so two sessions
 working at once each read the same "next free" number and both write it. On
 2026-09-02 my `data-orb-base-face` decision and another session's open-shell
 lattice orb both claimed **D-051**; the lattice PR (#155) merged first and its
 D-051 is on master, so mine was renumbered **D-052** (#157) — the tenet + decision
-landed as [D-052](../../docs/decisions-log.md).
+landed as [D-052](../../docs/working-model/decisions-log.md).
 
 **Why:** the collision surfaces as a *merge conflict in decisions-log.md* at the
 shared insertion point, not as a clean error, and GitHub reported #153 as

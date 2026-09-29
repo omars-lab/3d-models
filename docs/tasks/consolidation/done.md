@@ -31,7 +31,7 @@ Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](
 - 2026-09-25 — the `manage-tasks` skill: moves a finished or open task to the right
   `docs/tasks/<loop>/` file, by the routing rules beside it (3d-models #311).
 - 2026-09-25 — one backlog and done list per loop in `docs/tasks/<loop>/`; the old
-  `docs/tasks/done.md` and `docs/backlog.md` split into them by loop (3d-models #309, #310).
+  `docs/tasks/done.md` and `docs/working-model/backlog.md` split into them by loop (3d-models #309, #310).
 - 2026-09-25 — full pass across all six repos: 3d-models is master + gh-pages, bikar main,
   youtube main; 0 open PRs, 0 stashes (3d-models #295–#298, #301; bikar #226, #244–#246).
 
@@ -50,7 +50,7 @@ live board was rebuilt from the continuation plan's later phases, so this snapsh
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
 color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
-was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
+was carried over from. Decisions D-072…D-080 are in the [decisions log](../../working-model/decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
 a physical print), `#6` (P5.2 standard-size plate, after the CAL-CST-* bets are
 measured), `#7` (P5.3 frame block, only if a public GeoGebra fixture needs it), `#9`
@@ -70,7 +70,7 @@ sequence**: Snapshot 6's `#8` is the naqsh construction statements, not Snapshot
 4/5's cross-repo ledger block, and its `#1` is the worktree setup, not Snapshot 2's
 Q5 unstale. The board is the plan "GeoGebra constructions → naqsh (bikar) → STL
 coasters, repeatably" (session plan file iterative-dazzling-finch; decisions
-D-056…D-064 in the [decisions log](../../decisions-log.md); the record of what is
+D-056…D-064 in the [decisions log](../../working-model/decisions-log.md); the record of what is
 migrated is the [constructions ledger](../../constructions/ledger.md)). Task ids
 `P<phase>.<n>` are the plan's own. Still open on the board at this prune: `#12`
 (the later-phases umbrella: P3.1 skill, P3.3 catalog + `make coasters`, P4.x plate
@@ -129,7 +129,7 @@ again after Snapshot 2, so the ids below are a **fresh sequence** — Snapshot 3
 camera-control `#29`. Read every id under this date. These are the completed
 entries of the board that carried the d3 stream (Phases 1–3), the rosette
 explorer's open ledger, the memory decomposition, the fourth orb and the studio
-status page — the work [`plan.md`](../../plan.md) §2 rows 2.1–2.13 and §3 record in
+status page — the work [`plan.md`](../../working-model/plan.md) §2 rows 2.1–2.13 and §3 record in
 detail. Still open on the board at this prune: user-decision `#36`
 (coffee-house-sites#1); parked `#35` (publish the contract+schema under semver — the
 breakage-detection skill and version-bump hook); standing `#50` (keep `plan.md`
@@ -143,7 +143,7 @@ PR) and `#73` (the rosette-N seam-spacing-as-a-dial plan, the next session's foc
 - #39 — Branch/worktree hygiene: delete verified-merged branches, remove stale worktrees (all three repos)
 - #40 — MEMORY.md index line held the whole shipped-record log — move it into the memory file, leave a hook
 - #41 — Stop citing dead session-scoped ids in durable text
-- #42 — Give the d3 stream a durable home in docs/backlog.md
+- #42 — Give the d3 stream a durable home in docs/working-model/backlog.md
 - #43 — qiyas local main diverged 2 ahead / 3 behind — sentinel-verify before any reset, then reconcile
 - #56 — Use-case map: re-pin bikar pointers at the drifted main, repair 9 moved anchors (+2 in orb-pipeline-map.md)
 - #57 — Use-case map: add rows for the rosette explorer and orb instrument
@@ -159,7 +159,7 @@ buildable now.
 ### Cross-repo, CI, and deploy hygiene (S2)
 - #1 — Unstale the Q5 status in qiyas-wheelfield-validation-design.md
 - #2 — Land the qiyas #20 O-7 cascade end to end
-- #3 — Closed by moving the print queue into docs/backlog.md §3.8
+- #3 — Closed by moving the print queue into docs/working-model/backlog.md §3.8
 - #6 — Retract the sh-wrapper overreach from PR #79 and PR #106
 - #7 — Regenerate the cross-repo XREPO decision ledger
 - #21 — Fix the semgrep XSS finding in bikar packages/web/src/sessions.ts
