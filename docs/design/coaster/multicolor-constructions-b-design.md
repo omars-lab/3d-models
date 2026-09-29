@@ -16,7 +16,7 @@ measurements: [`../../research/multicolor-constructions-b.md`](../../research/mu
 - **Recommendation:** the *plain* coaster style (a one-color slab with raised straps) gains
   **filled shapes set lower than the straps** ("cloisonné": the straps stand as little walls
   between colors). Each filled shape is its own color body in the `--format parts` split that
-  already ships ([D-073](../../decisions-log.md)–[D-078](../../decisions-log.md)), so colors reach the
+  already ships ([D-073](../../working-model/decisions-log.md)–[D-078](../../working-model/decisions-log.md)), so colors reach the
   printer through the existing multi-part 3MF and `bambu slice coaster` path with no new printer
   route.
 - **Color classes** are a new fill attribute, `class`: two shapes share a class when a rotation

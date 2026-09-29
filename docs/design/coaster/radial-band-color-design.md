@@ -15,7 +15,7 @@ with a gold inner ring and a copper outer one, each in its own filament[^filamen
 and it does so *without adding any new way to say "this ring is that color"*, because
 our design language already has one.
 
-*Status: designed (task #25, decision [D-078](../../decisions-log.md); the decision id is
+*Status: designed (task #25, decision [D-078](../../working-model/decisions-log.md); the decision id is
 re-verified against `origin/master` at merge, per the id-collision rule). The research
 this doc rests on is on file at
 [`../../research/radial-band-color-research.md`](../../research/radial-band-color-research.md).*

@@ -11,8 +11,8 @@ opinion that has learned to sound permanent.
 
 ## 0. Why this file exists when the repo rejects registers
 
-[`CLAUDE.md`](../CLAUDE.md) says there is *deliberately no issue catalog* here,
-and [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measured why:
+[`CLAUDE.md`](../../CLAUDE.md) says there is *deliberately no issue catalog* here,
+and [`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) measured why:
 a good issue document sat unread for 76 days while the class it described
 shipped six more times. That argument is about **defects**, and it turns on a
 specific fact — a defect has a test, and the test protects the behaviour at zero
@@ -112,7 +112,7 @@ work that is not yours.
 
 ### Context
 
-[`.claude/gates/docs_gate.py`](../.claude/gates/docs_gate.py) ships three rules.
+[`.claude/gates/docs_gate.py`](../../.claude/gates/docs_gate.py) ships three rules.
 D1 (relative links resolve) checks 83 real targets across 18 files. D2 and D3
 are marker-scoped — they fire only on a doc that declares a validator or a
 default using the marked form — and the current corpus contains **zero** of
@@ -129,7 +129,7 @@ either marker. Both rules match nothing today.
 ### Decision
 
 **A — leave dormant.** The criterion already recorded in
-[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md) §3.1 stands: *if
+[`../guides/grounding-defect-taxonomy.md`](../guides/grounding-defect-taxonomy.md) §3.1 stands: *if
 the next two design docs carry no markers, D2 and D3 should be deleted, not
 extended.*
 
@@ -159,7 +159,7 @@ docs becomes worth revisiting.
 
 ### Context
 
-[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 marks R0 complete and puts
+[`../design/pieces/lego-lab-design.md`](../design/pieces/lego-lab-design.md) §10 marks R0 complete and puts
 **LG-F1/F2/R1 — physical clutch coupons — directly before M6**, with the note
 that they *"block M6's dimensions."* Those coupons need a printer, which is
 owner-held and on hold. M6 as specified therefore cannot proceed.
@@ -228,7 +228,7 @@ generated ledger and a coherence gate.
 
 | | Option | Cost |
 |---|---|---|
-| A | One dated `docs/decisions-log.md` | One file, gate-checked |
+| A | One dated `docs/working-model/decisions-log.md` | One file, gate-checked |
 | B | Append a §9 to `issue-register-evaluation.md` | Pushes that file past 500 lines |
 | C | Mirror bikar's `docs/decisions/` + generated ledger | Four files and a generator for three decisions |
 
@@ -243,8 +243,8 @@ documents are never kept up to date"* while already running past 460 lines, and
 decisions taken *after* a measurement are not part of the measurement. C is real
 scaffolding — a directory convention, a generator, a gate — proposed for three
 entries, and the repo's standing precedent on new machinery
-([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)) is that it has to
+([`../design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md),
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md)) is that it has to
 be earned by measured recurrence first. It stays available if this file outgrows
 itself.
 
@@ -274,7 +274,7 @@ the whole tree — markdown, vendored `supabase/functions/*` — while the repo'
 own gate is a narrow glob over `packages/*/src`, `packages/*/tests`, `scripts`,
 and `packages/web/functions`. The two measure different sets, and only one of
 them is the gate. That is a **K5** by
-[`guides/grounding-defect-taxonomy.md`](guides/grounding-defect-taxonomy.md): measured the
+[`../guides/grounding-defect-taxonomy.md`](../guides/grounding-defect-taxonomy.md): measured the
 wrong object, then reasoned about the number as though it were the right one.
 
 It reached a plan because a number that *looks* like a gate result was not
@@ -294,7 +294,7 @@ qiyas's half is still unmeasured; task #13 should be re-scoped to that alone.
 
 ### Context
 
-D-003 deferred M6 because [`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 says
+D-003 deferred M6 because [`../design/pieces/lego-lab-design.md`](../design/pieces/lego-lab-design.md) §10 says
 the clutch coupons *"block M6's dimensions"*, and the coupons need a printer.
 The owner's direction: build the Lab UI, with the disputed values exposed as
 adjustable parameters, *because* real prints are coming and the Lab is where
@@ -355,7 +355,7 @@ change the Lab surfaces rather than hides.
 
 ### Context
 
-[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) §10 lists **multi-piece export** in
+[`../design/pieces/lego-lab-design.md`](../design/pieces/lego-lab-design.md) §10 lists **multi-piece export** in
 P1. Scoping it surfaced a defect: a `brick` accepts a declared socket-role
 `port`, an `assembly` will `connect` a rod into it, and the C2 fit ladder checks
 the pin against the socket diameter and passes — but `buildBrick` never reads
@@ -368,7 +368,7 @@ normally would. The three options were argued with compiled sections in the desi
 `multi-piece-export` — bikar `packages/lab/src/design/notes/multi-piece-export.ts`,
 read at `design.html?n=multi-piece-export` after `make lab` (the page is
 `preview` status and is not published yet). It is the first note written under
-the [`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+the [`design-note`](../../.claude/skills/design-note/SKILL.md) skill.
 
 Shipped in bikar `617bee1` (PR #34, the note as `preview`) and `3b31fab`
 (PR #35, the note closed to `decided` and the validator below).
@@ -449,7 +449,7 @@ reversal condition is a coupon result, not a re-reading of this entry.
 ### Context
 
 §5.3's lattice matrix is now measured — five bases swept across 2–20 mm,
-[`research/lego-lattice-matrix-sweep.md`](research/lego-lattice-matrix-sweep.md).
+[`../research/lego-lattice-matrix-sweep.md`](../research/lego-lattice-matrix-sweep.md).
 Measuring it surfaced a gap between the table and the language. `gridFit` scores
 any translation basis handed to it, while `env.repeatVectors` is assigned in
 exactly one place, `packages/core/src/dsl/evaluator.ts`, and admits exactly two
@@ -464,7 +464,7 @@ by reading one against the other and needing no new research.
 The three options were argued with the geometry compiled beside them in the
 `lattice-basis` design note (bikar `packages/lab/src/design/notes/lattice-basis.ts`,
 read at `design.html?n=lattice-basis` after `make lab`), the second note written
-under the [`design-note`](../.claude/skills/design-note/SKILL.md) skill.
+under the [`design-note`](../../.claude/skills/design-note/SKILL.md) skill.
 
 ### Decision
 
@@ -523,11 +523,11 @@ this decision cleared up.
 ### Context
 
 Three documents disagreed about what catalog entry **W-F1** is, which
-[print register](tasks/coaster-pipeline/backlog.md) §7 item 1 had already flagged without resolving.
-[`catalog.md`](../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
+[print register](../tasks/coaster-pipeline/backlog.md) §7 item 1 had already flagged without resolving.
+[`catalog.md`](../../.claude/skills/prototype/catalog.md)'s W-F1 *prose* asked
 clipseat questions — which clearance seats a clip firmly, does it differ by tile
 material — while its **Model** line pointed at `Fit-Coupon.bkr`, which is a plate
-of bores and pins. [`design/pieces/w2-connector-design.md`](design/pieces/w2-connector-design.md) §8 named a
+of bores and pins. [`../design/pieces/w2-connector-design.md`](../design/pieces/w2-connector-design.md) §8 named a
 third thing, `Fit-Step-Gauge.bkr`, a file that has never existed in any repo.
 
 Reading the geometry rather than the docs settled which description was wrong.
@@ -623,7 +623,7 @@ one of them checks bikar's output against bikar's reading of the LDraw spec. A
 misreading of the spec passes all of them. Nothing outside bikar had ever parsed
 the file.
 
-[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) surveyed twelve
+[`ldraw-cli-viewers.md`](../research/ldraw-cli-viewers.md) surveyed twelve
 candidates for fixing that and recommended two: LDView for a picture (§1.2), and
 three.js `LDrawLoader` in Node for a machine-checkable parse (§1.4), which it
 called *"the route to put in CI"*. Neither had been run. LDView still has not
@@ -725,7 +725,7 @@ face-winding convention, confirmed by a consumer that actually culls. Then
 ### Context
 
 `https://library.ldraw.org/model-viewer` is candidate 12 of the twelve in
-[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §3. It is the only one
+[`ldraw-cli-viewers.md`](../research/ldraw-cli-viewers.md) §3. It is the only one
 that explicitly documents our exact case as supported — *"All parts used in the
 file submitted to the model viewer must be embedded in the MPD, be present in the
 Official Library, or listed on the Parts Tracker"* — and the only one that
@@ -778,7 +778,7 @@ own reversal condition:
 Both halves were met within the hour, and neither needed anything installed.
 
 **The stated convention** was already in the repo, read first-hand in
-[`lego-ldraw-export.md`](research/lego-ldraw-export.md) §4 — S1 verbatim,
+[`lego-ldraw-export.md`](../research/lego-ldraw-export.md) §4 — S1 verbatim,
 *"LDraw uses a right-handed co-ordinate system where -Y is 'up'."* A
 right-handed reading is therefore the correct one, and the signed volume of the
 emitted block's 3,764 type-3 lines in that reading is **+62,282 LDU³**: wound
@@ -786,7 +786,7 @@ counter-clockwise as seen from outside.
 
 **A consumer that culls** turned out to be the one §8 already had running.
 three.js honours `0 BFC`. Feeding it the same bytes three ways
-([`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.2) separates the
+([`ldraw-cli-viewers.md`](../research/ldraw-cli-viewers.md) §9.2) separates the
 right certification from the wrong one, which a face count cannot: `CERTIFY CCW`
 builds 3,764 faces at **+62,282 LDU³**, `CERTIFY CW` builds 3,764 at
 **−62,282 LDU³**. Outward versus inside-out, same count, opposite sign.
@@ -854,7 +854,7 @@ draws, so half the entries are `(0,0,0)` under a `FrontSide` material. The
 panel was counting reserved slots as geometry, and "both sides kept" was S7's
 *"may not cull"* hardened into a claim about what a consumer draws — a **K1**,
 found four days after the doc that made it. Corrected in
-[`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md) §9.4, with its own
+[`ldraw-cli-viewers.md`](../research/ldraw-cli-viewers.md) §9.4, with its own
 validator, and fixed in the same PR: `triangles` counts area, `degenerate`
 reports the slots, and the panel's `|volume| < 1` verdict — which could never
 fire on a real brick — is gone.
@@ -883,17 +883,17 @@ pitch. Two candidate rules were on the table:
   interrupted per seam. The cut lines are injected into the pattern's own
   planar-graph extraction, so both sides of every seam carry bit-identical
   vertex coordinates by construction
-  ([design §5](design/pieces/lego-pattern-set-design.md)).
+  ([design §5](../design/pieces/lego-pattern-set-design.md)).
 - **Gap-registered cut (rejected).** Pre-shrink each piece's art to the
   `8n − 0.2` body so relief runs flush to the physical edge. Rejected because
   it double-counts the inset — `PART_RELIEF_MM` transfers as a *physical-gap
   prediction*, not a pattern-registration offset, which is the repo's named
-  K10 defect ([design §3.2](design/pieces/lego-pattern-set-design.md)) — and because a
+  K10 defect ([design §3.2](../design/pieces/lego-pattern-set-design.md)) — and because a
   per-piece offset mints per-piece coordinates, demoting seam continuity from
   an identity to a tolerance claim needing its own gate.
 
 **Is this the mosaic lego-lab ruled out?**
-[`design/pieces/lego-lab-design.md`](design/pieces/lego-lab-design.md) L78 lists "stock-part mosaic
+[`../design/pieces/lego-lab-design.md`](../design/pieces/lego-lab-design.md) L78 lists "stock-part mosaic
 generation and BrickLink/Rebrickable BOMs" as an LG non-goal, and `mosaic` was
 accordingly rejected as the declaration's name (bikar decision
 `2026-08-02-mural-panelization`). The ruling: L78 excludes composing pictures
@@ -901,7 +901,7 @@ out of *purchased* LEGO parts — palette quantization, part BOMs. A mural is
 the other branch: **printed** pieces carrying continuous engraved relief that
 no purchasable part has, mounted on a stock baseplate. The non-goal stands
 untouched; the family does not enter it
-([design §1](design/pieces/lego-pattern-set-design.md)).
+([design §1](../design/pieces/lego-pattern-set-design.md)).
 
 ### Decision
 
@@ -916,7 +916,7 @@ geometry is proven in software — bikar's `mural-split` tests assert the seam
 vertex identity to 1e-12 and the area ledger to 1e-9 — so no further argument
 or render can move this entry. What can move it is the two-piece
 seam-registration coupon on a real LEGO-brand baseplate (CAL-REG-01,
-[bets.md](../.claude/skills/calibrate/bets.md)): if a relief line crossing the
+[bets.md](../../.claude/skills/calibrate/bets.md)): if a relief line crossing the
 seam visibly jogs by more than the 0.2 mm gap predicts — stud-bore slop and
 plate pitch error compounding into misregistration the nominal cut cannot see
 — then the cut rule needs an art-side correction term, and it would be a
@@ -939,11 +939,11 @@ why it lost. That is what this file is for.
 
 ### Context
 
-[print register](tasks/coaster-pipeline/backlog.md) §4 item 2 and open question 11 left this undecided,
+[print register](../tasks/coaster-pipeline/backlog.md) §4 item 2 and open question 11 left this undecided,
 and question 11 was careful about *why*: the repo's twice-measured precedent is
 to prefer a gate over new machinery
-([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)), but neither of
+([`../design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md),
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md)), but neither of
 those evaluations is about a build target, so the precedent does not transfer
 cleanly. That is the K10 sentence the backlog wrote rather than assumed, and it
 is what kept the question open.
@@ -962,9 +962,9 @@ Three options were on the table:
   call and not an obligation" and it was right — the *target* was never the
   valuable part.
 - **A verifier with a target as its entry point (taken).**
-  [`build/verify_machine_card.py`](../build/verify_machine_card.py) reads the
+  [`build/verify_machine_card.py`](../../build/verify_machine_card.py) reads the
   rung list and the whole expectation table out of
-  [`design/printing/calibration-design.md`](design/printing/calibration-design.md) §7, renders each rung, and
+  [`../design/printing/calibration-design.md`](../design/printing/calibration-design.md) §7, renders each rung, and
   diffs the mesh gate's actual output against the row. No number and no rung
   name is restated in the Makefile or the script.
 
@@ -1072,7 +1072,7 @@ to stay silent.
 
 ### Context
 
-[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q2, open since the doc was
+[`../design/pieces/tile-wall-design.md`](../design/pieces/tile-wall-design.md) §10 Q2, open since the doc was
 written: `checker` alternates two tile types across a wall, and every A–B
 adjacency is a joint. If the two types disagree about edge gap, clip type or
 clip position, the wall does not assemble. Enforce that by construction, or
@@ -1152,7 +1152,7 @@ only the `TokenType`-indexed dispatch table, and `border`'s head is an ordinary
 identifier, so the gate stayed green with no `border` row for a declaration the
 parser accepted. Fixed in the same change with a contextual-head table the
 surface also reads, plus the test that fails before and passes after. It is the
-same shape as the corollary in [`../CLAUDE.md`](../CLAUDE.md): a gate that
+same shape as the corollary in [`../../CLAUDE.md`](../../CLAUDE.md): a gate that
 asserts "everything passes" has to be wrong about a deliberate failure or skip
 it — here it skipped, silently, the newest thing it covered.
 
@@ -1164,7 +1164,7 @@ it — here it skipped, silently, the newest thing it covered.
 
 ### Context
 
-[`design/pieces/tile-wall-design.md`](design/pieces/tile-wall-design.md) §10 Q3 asked whether a cropped edge
+[`../design/pieces/tile-wall-design.md`](../design/pieces/tile-wall-design.md) §10 Q3 asked whether a cropped edge
 tile keeps its relief clipped mid-motif, or whether the border band thickens to
 absorb the cut — the tiler's trim strip, in-language. The doc leaned "offer
 both", and sketched the syntax as `crop clip | crop clip with frame`.
@@ -1241,7 +1241,7 @@ And the claim is *measured* rather than restated: the kernel solves the band, th
 the evaluator counts the grid the layout kernel actually produced and throws if a
 fragment survived. A solver that agrees with itself proves nothing. The hard FAIL
 (486 × 400, sides differing by 1.06 pitches) is a test that must throw, per
-[`../CLAUDE.md`](../CLAUDE.md)'s corollary — the by-design failure is the
+[`../../CLAUDE.md`](../../CLAUDE.md)'s corollary — the by-design failure is the
 load-bearing case.
 
 ---
@@ -1252,7 +1252,7 @@ load-bearing case.
 
 ### Context
 
-[`design/printing/print-validation-design.md`](design/printing/print-validation-design.md) §8 Q3 asked whether
+[`../design/printing/print-validation-design.md`](../design/printing/print-validation-design.md) §8 Q3 asked whether
 F3 should be a hard *error* for the presets shipped in the gallery, and recorded
 a leaning: "yes-for-gallery, warn-for-Lab-custom."
 
@@ -1415,7 +1415,7 @@ sites**. So the answer was plainly "something must", and the real decision was
 what shape it could take without becoming a prose parser.
 
 That was settled by measurement, not by argument — the method
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) used for the issue
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) used for the issue
 register and the one that killed the link checker. Two candidate detectors, run
 over all 62 documents of `docs/` and `.claude/`:
 
@@ -1616,10 +1616,10 @@ prints its waiver count so the size of the gap is legible on every run.
 
 ### Context
 
-[`design/printing/calibration-design.md`](design/printing/calibration-design.md) §8 names the absence of text
+[`../design/printing/calibration-design.md`](../design/printing/calibration-design.md) §8 names the absence of text
 emit as the machine card's biggest structural weakness: 23 coupons that cannot
 say which rung they are. The first research pass
-([`research/text-emit-survey.md`](research/text-emit-survey.md)) took a
+([`../research/text-emit-survey.md`](../research/text-emit-survey.md)) took a
 single-stroke Hershey font as the input, measured that giving a centreline width
 requires a polygon offset, measured that a naive offset breaks, and produced four
 routes — every one of them a way to acquire an offset primitive this repo does
@@ -1634,8 +1634,8 @@ letters; does anything support text natively?* — not by any gate.
 **Bake outline-font glyph contours into a build-time constant and extrude them.**
 A TrueType/CFF glyph is already closed contours with counters as holes, so there
 is no offset and therefore no union. The design is
-[`design/language/text-emit-design.md`](design/language/text-emit-design.md); the measurement is
-[`research/outline-font-emit.md`](research/outline-font-emit.md), over 8 faces
+[`../design/language/text-emit-design.md`](../design/language/text-emit-design.md); the measurement is
+[`../research/outline-font-emit.md`](../research/outline-font-emit.md), over 8 faces
 and 296 glyphs.
 
 What the measurement settled, in the order it mattered:
@@ -1678,7 +1678,7 @@ that connection until the number came out absurd.
 ### What this closes and what it does not
 
 Closed: the route question, the payload question, and which face can legally
-ship. `research/text-emit-survey.md` §4 and §5.3 carry marked corrections rather
+ship. `../research/text-emit-survey.md` §4 and §5.3 carry marked corrections rather
 than deletions, because how each went wrong is the reusable part.
 
 Not closed: nothing has been printed and no slicer was run. Every number is
@@ -1695,7 +1695,7 @@ repaired.
 
 ### Context
 
-[`research/text-emit-survey.md`](research/text-emit-survey.md) §3.3 and §6 gather
+[`../research/text-emit-survey.md`](../research/text-emit-survey.md) §3.3 and §6 gather
 three arguments about whether raised or recessed text prints more legibly at
 small sizes, and they point two ways. Engraving is more forgiving of over-extrusion
 and leaves a clean top surface; embossing survives a first layer that squashes and
@@ -1707,7 +1707,7 @@ machine card exists to fix.
 
 **Register it as a bet rather than adopt a default with a confident face.**
 CAL-TXT-01 carries emboss-vs-engrave and CAL-TXT-02 the minimum legible cap
-height; [`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 states engrave and
+height; [`../design/language/text-emit-design.md`](../design/language/text-emit-design.md) §6 states engrave and
 5.0 mm as *provisional* sides, with the reasoning that a recessed feature which
 prints badly still leaves a readable part while a raised one leaves debris on the
 surface that matters.
@@ -1731,7 +1731,7 @@ fails.
 D5 is scoped to the discharge form and not to every CAL id in the corpus, which
 is a measured choice, not a cautious one. Across 225 CAL-id sites in `docs/`
 there are 20 distinct ids, 17 registered. Gating every site fires 4 times on
-`CAL-SEA-01` — an id [`design/orb/hemisphere-split-design.md`](design/orb/hemisphere-split-design.md)
+`CAL-SEA-01` — an id [`../design/orb/hemisphere-split-design.md`](../design/orb/hemisphere-split-design.md)
 Appendix B names precisely to record that it was **deliberately not minted**.
 That is correct prose, and a rule that calls it a defect is a rule that gets
 switched off. Restricted to the paragraph D3 actually reads, the same corpus
@@ -1747,7 +1747,7 @@ Measure a rule before gating on it — the same tenet C3 was built from.
 ### Context
 
 Source Code Pro Bold was chosen as the shipping face in
-[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §6 on measurement — zero crossing
+[`../design/language/text-emit-design.md`](../design/language/text-emit-design.md) §6 on measurement — zero crossing
 contours, a thin stem that clears the nozzle by ~1.9×. But its **default** `0` is
 a *dotted* zero: shell, counter, and a dot inside the counter. At the 5 mm cap
 CAL-TXT-02 bets on, the air between the dot and the counter wall measures
@@ -1817,9 +1817,9 @@ different glyph or a different face — not back to the dotted default, which th
 
 A candidate gate — call it "D6" — would assert that every coupon id named in
 bikar's `CAL_BETS`
-([`calibration.ts`](../../bikar/packages/core/src/kernel3d/calibration.ts),
+([`calibration.ts`](../../../bikar/packages/core/src/kernel3d/calibration.ts),
 `settles: { by: 'coupon', coupon: '…' }`) has a matching `## <id>` heading in
-[`catalog.md`](../.claude/skills/prototype/catalog.md). The trigger was a real
+[`catalog.md`](../../.claude/skills/prototype/catalog.md). The trigger was a real
 near-miss: on 2026-08-04 a bare `MC-7` bet was registered whose catalog entry did
 not yet exist, and it was caught by hand, not by a gate.
 
@@ -1827,8 +1827,8 @@ not yet exist, and it was caught by hand, not by a gate.
 
 **Do not build the gate yet.** CLAUDE.md's Precedent rule — *measure a rule before
 gating on it* — and the two evaluations it cites
-([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md),
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)), which both
+([`../design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md),
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md)), which both
 concluded *no skill, and only a gate where recurrence was measured*, set the bar:
 a rule with no measured recurrence does not earn a gate.
 
@@ -1845,7 +1845,7 @@ Re-evaluate when either holds: a **second** id ships in `CAL_BETS` without a
 catalog heading (recurrence measured, not hypothesised), or the coupon-settled bet
 count grows past the point where a person re-checking the whole list by eye is
 reliable. If built then, the home is
-[`catalog_models.py`](../.claude/gates/catalog_models.py) — which already parses
+[`catalog_models.py`](../../.claude/gates/catalog_models.py) — which already parses
 the catalog and already reads bikar — as one more claim class, **not** a new hook.
 
 ### What this is not
@@ -1869,7 +1869,7 @@ bikar's `packages/cli/src/index.ts` ran only `checkLabelGap` and
 `checkLabelCounter`. So a `text` statement carrying `MC-2 PORT0`, or a plate
 carrying both `O3` and `03`, compiled and wrote an STL. What the build should do
 about such a label was left open — the same shape as
-[`design/language/text-emit-design.md`](design/language/text-emit-design.md) §7 Q2's "what to do with a label
+[`../design/language/text-emit-design.md`](../design/language/text-emit-design.md) §7 Q2's "what to do with a label
 that fails §5," which observes that *automatically fixing* a label makes the
 validator unfalsifiable by construction.
 
@@ -2006,7 +2006,7 @@ Color rides the type-1 placement line (`1 <colour> …`), not the part definitio
 so making it real meant giving `place` a way to say which color. Two sub-questions:
 what does the author write, and is the name→code mapping grounded? The mapping had
 been left **UNGROUNDED — not fetched** in
-[`research/lego-ldraw-export.md`](research/lego-ldraw-export.md) §8 item 5.
+[`../research/lego-ldraw-export.md`](../research/lego-ldraw-export.md) §8 item 5.
 
 ### Decision
 
@@ -2115,7 +2115,7 @@ in any of the three repos turned a model into a picture headlessly. The user ask
 directly — *"do we have a CLI to go from mod to png?"* — and wanted it to produce
 *different screenshots* of a model plus a validation path, all tracked as tasks
 (#106–#109). The research behind the render experiment had already found the
-constraint that shapes the answer: [`ldraw-cli-viewers.md`](research/ldraw-cli-viewers.md)
+constraint that shapes the answer: [`ldraw-cli-viewers.md`](../research/ldraw-cli-viewers.md)
 §10.5 showed a three-quarter render of `Brick-Stack` is pixel-for-pixel a single
 six-plate block — **on a file with no edge lines a render is evidence of shape, not
 of structure** — so a one-shot screenshotter would be a tool that can lie about how
@@ -2144,8 +2144,8 @@ Three sub-decisions, each settled with the user via AskUserQuestion:
   would be slow and backend-fragile. The near-term home is a `validate-render` skill
   that runs the CLI on demand; graduating it to a hook waits until the defect it would
   catch shows measured recurrence — the *no skill/gate before the recurrence is measured*
-  discipline of [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) and
-  [`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md).
+  discipline of [`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) and
+  [`../design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md).
 
 The gate logic is split out of the CLI into `bikar:scripts/thumbnail-gate.ts` so a
 `node --test` witness (`bikar:scripts/thumbnail-gate.test.mjs`) can freeze the one
@@ -3186,7 +3186,7 @@ offered for tasks #53–#58 on 2026-08-19, not the audit findings behind them.
 
 ### Context
 
-The [breakdown-page audit](research/orb-stage-decomposition-measurement.md)
+The [breakdown-page audit](../research/orb-stage-decomposition-measurement.md)
 confirmed that the 2D ribbon projection shatters: `orb-ribbons.ts:195` places every
 pass on a **constant** shell at `radiusMm ± amplitudeMm`, while the 3D mesh at
 `weave.ts:479` **interpolates** that offset to zero at the corners. A connected
@@ -3251,7 +3251,7 @@ by-design-failure corollary it rhymes with.
 ### Verification
 
 A tenet is not gate-checkable, and no gate is proposed for it — the precedent in
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) is that a rule
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) is that a rule
 earns a gate by measured recurrence, and this has one instance. What is checkable
 is each reversed ranking:
 
@@ -3674,8 +3674,8 @@ the substitution collapse into a plain byte identity again.
 
 **Date:** 2026-08-28 · **Repos:** 3d-models (design only; no build target yet)
 **Status:** design accepted; S1 + S3 shipped (gate before the first plate — see the 2026-08-30 amendment); S2/S4 pending a physical print, S5–S7 buildable now
-**Design:** [`design/printing/prints-tab-design.md`](design/printing/prints-tab-design.md) ·
-**Research:** [`research/prints-tab-survey.md`](research/prints-tab-survey.md)
+**Design:** [`../design/printing/prints-tab-design.md`](../design/printing/prints-tab-design.md) ·
+**Research:** [`../research/prints-tab-survey.md`](../research/prints-tab-survey.md)
 
 The repository records renders, bets, and a queue, but not the one event a printer
 lives by: a plate came off a machine and taught something. A "prints tab" was asked
@@ -3683,7 +3683,7 @@ for — per-model, per-version records with photos, a backlog, and feedback. The
 in building it is not the recording; it is that a second scheduler or a second bet
 registry grows inside it. The design draws the boundary so the tab **absorbs exactly
 one unowned thing** — the print-run record — while it **presents** the queue
-([print register](tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol, and
+([print register](../tasks/coaster-pipeline/backlog.md) §3.8), **consumes** the bets and protocol, and
 **deletes** the one empty register that pretends to track prints today (the catalog's
 32 Iteration-log tables, 0 rows — the D-041 rule, paid while it costs zero rows).
 
@@ -3709,7 +3709,7 @@ two were the user's to decide:
 
 The natural instinct is to ship `prints_gate.py` now. The design refuses: a gate
 whose subject set is empty reports green and is indistinguishable from a broken gate
-— the measured lesson of [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md)
+— the measured lesson of [`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md)
 §5.1. So the gate ships in S3 **with** the first real record (S2), and R4 makes it
 print the number of records it checked, so "all pass over zero records" can never
 read as coverage. What shipped in this PR is exactly what is buildable without a
@@ -3743,7 +3743,7 @@ The original design (`prints-tab-design.md` §11) named cost, print time and fil
 grams as *out of scope for the display* — "the tab records what a plate taught, not what
 it cost." With a real printer now on the LAN and the print-metadata design landing
 per-iteration estimates plus MQTT-measured actuals
-([`design/printing/print-metadata-and-reprint-design.md`](design/printing/print-metadata-and-reprint-design.md) §3.3.1),
+([`../design/printing/print-metadata-and-reprint-design.md`](../design/printing/print-metadata-and-reprint-design.md) §3.3.1),
 Omar decided (2026-09-17, PMR-8) the tab **should show time and filament grams** — the
 pre-print estimate, and the post-print actual once the machine reports it. This reverses
 only the *display* half of the §11 line, and only for time and grams. It does **not**
@@ -3758,7 +3758,7 @@ amendment; the tab answers "how long / how much filament," not "how many dollars
 
 ## D-047 — round-pattern orb placement is a new statement family, and v1 proves the mechanism before it builds the table
 
-**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`design/orb/round-orb-placement-design.md`](design/orb/round-orb-placement-design.md))
+**Date:** 2026-08-31 · **Repos:** bikar (`packages/core` engine, witnesses, e2e), 3d-models (this log + [`../design/orb/round-orb-placement-design.md`](../design/orb/round-orb-placement-design.md))
 **Status:** v1 shipped (Phase 0 + Phase 1 green in bikar); rule table + fillers are follow-on
 
 Two owner decisions (AskUserQuestion, 2026-08-31) set the shape of the feature that
@@ -3915,7 +3915,7 @@ base.
 
 ## D-049 — six owner decisions of 2026-09-02, in plain words
 
-**Date:** 2026-09-02 · **Repos:** both · **Status:** all six decided; §1 is applied and verified and §3 is shipped (sacred-patterns #44 `a89f45a`); §2 and §4–§6 are queued as `docs/plan.md` §2 rows 2.10–2.14 with the shape chosen here
+**Date:** 2026-09-02 · **Repos:** both · **Status:** all six decided; §1 is applied and verified and §3 is shipped (sacred-patterns #44 `a89f45a`); §2 and §4–§6 are queued as `docs/working-model/plan.md` §2 rows 2.10–2.14 with the shape chosen here
 
 ### Why this entry exists
 
@@ -3966,7 +3966,7 @@ enough.
 
 The morph is the beat the breakdown page exists for — the flat drawing visibly
 wrapping onto the sphere — and it was deliberately left out of v1 of
-[`design/orb/orb-construction-timelapse-design.md`](design/orb/orb-construction-timelapse-design.md) because
+[`../design/orb/orb-construction-timelapse-design.md`](../design/orb/orb-construction-timelapse-design.md) because
 nothing in bikar's core interpolates geometry; the flat and sphere endpoints were shipped
 instead. So the doc has to establish, before code, three things a build would otherwise
 guess at: how each vertex travels from the face-lift plane to the sphere as a function of
@@ -4021,8 +4021,8 @@ The skill question has a precedent in this repo, and the precedent decides it. T
 earlier proposals for a skill — one to extend the DSL, one for an issue register — were
 each evaluated against measured recurrence and both ended the same way: *no skill, a
 gate instead*, because the thing that was missing was a detector, not more instructions
-([`design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) §3,
-[`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) §6). Three orbs have been
+([`../design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md) §3,
+[`../design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) §6). Three orbs have been
 built without an orb skill, so no recurrence has been measured yet. The fourth build is
 the measurement, and this is the rule it runs under:
 
@@ -4081,7 +4081,7 @@ is why this entry cites decisions and files rather than research.
 
 ## D-050 — the three d3 surfaces converge on one face-list vocabulary; the reversal condition is a measured re-divergence cost, not a taste change
 
-**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`design/orb/vocabulary-convergence-design.md`](design/orb/vocabulary-convergence-design.md)
+**Date:** 2026-09-02 · **Repos:** bikar + sacred-patterns (recorded here) · **Status:** shipped — A↔B rename bikar #151 `1083046`; grow-C sacred-patterns #45 `76e3c17`; design [`../design/orb/vocabulary-convergence-design.md`](../design/orb/vocabulary-convergence-design.md)
 
 ### Why this entry exists
 
@@ -4176,8 +4176,8 @@ compound-keyword parse guard, the ledger's C-collation, and — new in this 3d-m
 the same exit-1 in the `make orbs` publish pipeline, handled by a sibling skip branch that
 keeps the fail-closed `else` net. The instruction column is empty, so **no orb-creation
 skill is written** — the same conclusion, on the same measured grounds, that
-[`docs/design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) and
-[`docs/design/process/dsl-extension-skill-evaluation.md`](design/process/dsl-extension-skill-evaluation.md) reached for
+[`docs/design/process/issue-register-evaluation.md`](../design/process/issue-register-evaluation.md) and
+[`docs/design/process/dsl-extension-skill-evaluation.md`](../design/process/dsl-extension-skill-evaluation.md) reached for
 their proposed skills: no skill, a gate instead.
 
 **Validator:** the mesh-only orb is skipped by the sweep and reconciled by the comparison
@@ -4320,10 +4320,10 @@ DSL" would be ambiguous and the extension would have to carry the name.
 `.ggb-commands` grammar is parsed only by the youtube repo's `ggb_build.py`; naqsh is parsed
 only by bikar's `parser.ts`; the bridge is a JSON AST whose Pydantic schema the producer owns
 and the consumer vendors byte-identically (the hook-41 pattern). Rubric and the four rejected
-paths: [`constructions/geogebra-construction-import-design.md`](constructions/geogebra-construction-import-design.md) §4.1.
+paths: [`../constructions/geogebra-construction-import-design.md`](../constructions/geogebra-construction-import-design.md) §4.1.
 
 **Why this shape:** the files are recipes, not coordinates
-([survey §2.3](research/geogebra-construction-import-survey.md)), so a coordinate import
+([survey §2.3](../research/geogebra-construction-import-survey.md)), so a coordinate import
 freezes the construction and verifies nothing; a Python emitter of `.bkr` text puts naqsh
 syntax in a repo that does not own the grammar; a TypeScript re-parser of `.ggb-commands` is
 a second parser of one grammar. A GeoGebra-saved file has the same `<command>` blocks as ours
@@ -4380,9 +4380,9 @@ G1/G2/G3 twins (identity sweep, vocabulary fixture, every `` ```ggb `` fence par
 `` ```ggb invalid `` fence dies); naqsh's grammar gains the construction productions under the
 same gates. Highlighters and the cookbook are generated from, or tested against, the same
 fixtures. Lark, Ohm, Peggy and Chevrotain are rejected
-([survey §10](research/geogebra-construction-import-survey.md)): a grammar file beside a
+([survey §10](../research/geogebra-construction-import-survey.md)): a grammar file beside a
 hand-rolled parser is a second source of truth unless it replaces the parser, and replacing
-the parser is the rewrite [`design/language/dsl-grammar-formalization.md`](design/language/dsl-grammar-formalization.md)
+the parser is the rewrite [`../design/language/dsl-grammar-formalization.md`](../design/language/dsl-grammar-formalization.md)
 already rejected for naqsh.
 
 **What would reverse this:** the `.ggb-commands` grammar growing past line-regular (nested
@@ -4439,7 +4439,7 @@ would need the union bikar does not have.
 
 ## D-065 — The `--coaster` importer emits the whole coaster block; `size` drives, `unit` is derived
 
-**Date:** 2026-09-17 · **Status:** decided (bikar NaqshCoffee/bikar#207; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md))
+**Date:** 2026-09-17 · **Status:** decided (bikar NaqshCoffee/bikar#207; product doc [`../design/coaster/coaster-design.md`](../design/coaster/coaster-design.md))
 
 ### Context
 
@@ -4484,7 +4484,7 @@ richer sizing model.
 
 ## D-066 — The coaster outline is the least-area fit of seven fixed candidates; `margin` is a knob; the relief is an emboss
 
-**Date:** 2026-09-17 · **Status:** decided (Omar, AskUserQuestion: "A: pattern outline + emboss"; bikar NaqshCoffee/bikar#208; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md) §5, §7 CV7; pivot record [`issues/coaster-outline-fit-pivot.md`](issues/coaster-outline-fit-pivot.md))
+**Date:** 2026-09-17 · **Status:** decided (Omar, AskUserQuestion: "A: pattern outline + emboss"; bikar NaqshCoffee/bikar#208; product doc [`../design/coaster/coaster-design.md`](../design/coaster/coaster-design.md) §5, §7 CV7; pivot record [`../issues/coaster-outline-fit-pivot.md`](../issues/coaster-outline-fit-pivot.md))
 
 ### Context
 
@@ -4563,7 +4563,7 @@ the hub.
 
 ## D-068 — Border band and color regions are coaster-level clauses, sequenced after the interlock and the lab
 
-**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 color; product doc [`design/coaster/coaster-design.md`](design/coaster/coaster-design.md) §9)
+**Date:** 2026-09-17 · **Status:** direction only — nothing shipped (tasks #36 border, #37 color; product doc [`../design/coaster/coaster-design.md`](../design/coaster/coaster-design.md) §9)
 
 ### Context
 
@@ -4611,7 +4611,7 @@ hand in the slicer.
 
 ## D-069 — Coaster interlock is a self-mating half-edge dovetail on every straight edge
 
-**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#209 (grammar, kernel, CV8/CV9, importer `--interlock`, CAL-CST-06 registered), 3d-models catalog CS-3 + gallery (task #34; design doc [`design/coaster/coaster-interlock-design.md`](design/coaster/coaster-interlock-design.md), measurements [`research/coaster-interlock-study.md`](research/coaster-interlock-study.md))
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#209 (grammar, kernel, CV8/CV9, importer `--interlock`, CAL-CST-06 registered), 3d-models catalog CS-3 + gallery (task #34; design doc [`../design/coaster/coaster-interlock-design.md`](../design/coaster/coaster-interlock-design.md), measurements [`../research/coaster-interlock-study.md`](../research/coaster-interlock-study.md))
 
 ### Context
 
@@ -4668,7 +4668,7 @@ back to (b) on the hexagon only, or to a shallower profile with a flare knob.
 
 ## D-070 — The minimal coaster is `outline pattern`: the strap silhouette is the solid
 
-**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#211 (`5152cfd`: `outline pattern`, the kernel's signed inset, CV10, `CAL-CST-07`, `--minimal`, two presets in the Coaster Lab); catalogued here as CS-4 (design doc [`design/coaster/coaster-minimal-design.md`](design/coaster/coaster-minimal-design.md)); the free-standing strap floor stays provisional until CS-4 prints (task #38)
+**Date:** 2026-09-17 · **Status:** built — bikar NaqshCoffee/bikar#211 (`5152cfd`: `outline pattern`, the kernel's signed inset, CV10, `CAL-CST-07`, `--minimal`, two presets in the Coaster Lab); catalogued here as CS-4 (design doc [`../design/coaster/coaster-minimal-design.md`](../design/coaster/coaster-minimal-design.md)); the free-standing strap floor stays provisional until CS-4 prints (task #38)
 
 ### Context
 
@@ -4726,7 +4726,7 @@ two goldens.
 
 ## D-071 — The border band is a strip-mapped motif cell: the kernel places it along each flat or around the ring
 
-**Date:** 2026-09-17 · **Status:** designed, not built (task #36; design doc [`design/coaster/coaster-border-design.md`](design/coaster/coaster-border-design.md)); builds D-068 (a)
+**Date:** 2026-09-17 · **Status:** designed, not built (task #36; design doc [`../design/coaster/coaster-border-design.md`](../design/coaster/coaster-border-design.md)); builds D-068 (a)
 
 ### Context
 
@@ -4793,7 +4793,7 @@ plane-clipped path (a) as a second mode.
 ### Context
 
 A physical Bambu X2D now exists on the LAN, and the first-print campaign
-([`.claude/plans/binary-tickling-kay.md`](../.claude/plans/binary-tickling-kay.md))
+([`.claude/plans/binary-tickling-kay.md`](../../.claude/plans/binary-tickling-kay.md))
 cannot record a reading against "the X2D" until the machine exists in bikar's menu.
 That menu is `bikar:packages/knobs/src/machines.ts` `MACHINES` — ten `PrintTarget`
 entries, none the X2D, all single-nozzle. The schema is
@@ -4835,7 +4835,7 @@ distinction the code cannot yet act on, and a widening done speculatively has to
 or reworked when the real requirement finally names the field's shape. The per-tuple honesty
 the calibration protocol already enforces is untouched by this: a reading is scoped to
 *(printer, material, nozzle, profile)* by the record's profile header
-([`.claude/skills/calibrate/protocol.md`](../.claude/skills/calibrate/protocol.md)), where the
+([`.claude/skills/calibrate/protocol.md`](../../.claude/skills/calibrate/protocol.md)), where the
 nozzle is named explicitly — so "which nozzle printed this" is captured at the record, exactly
 where it is measured, and never needed as a `PrintTarget` field to stay honest. Widening the
 knob schema would record the nozzle in a *second* place that could disagree with the header —
@@ -4867,8 +4867,8 @@ X2D's real build volume differs it is read off the machine at bring-up, never in
 ## D-054 — the bambu CLI backend is a two-layer local split (BambuStudio CLI slices, MCP drives), AppleScript is the GUI floor
 
 **Date:** 2026-09-16 · **Status:** decided, and matches what phases 1–3 shipped · **Full record:**
-[`design/printing/bambu-cli-design.md`](design/printing/bambu-cli-design.md) · **Grounded in:**
-[`research/bambu-control-transport-survey.md`](research/bambu-control-transport-survey.md)
+[`../design/printing/bambu-cli-design.md`](../design/printing/bambu-cli-design.md) · **Grounded in:**
+[`../research/bambu-control-transport-survey.md`](../research/bambu-control-transport-survey.md)
 
 ### Context
 
@@ -4876,9 +4876,9 @@ X2D's real build volume differs it is read off the machine at bring-up, never in
 GUI floor — was picked *inside* the phase 1–3 build (#177) with **no checked-in survey and no
 recorded decision**, the one grounding step this repo otherwise never skips. This entry closes that
 gap retroactively. A real web survey of **16 options + an AppleScript fallback** was run
-([the survey](research/bambu-control-transport-survey.md)) and scored against an explicit
+([the survey](../research/bambu-control-transport-survey.md)) and scored against an explicit
 robustness / AI-friendliness / OSS / local / headless / maintenance / X2D-support / slice **rubric**
-(carried into [the design doc](design/printing/bambu-cli-design.md)).
+(carried into [the design doc](../design/printing/bambu-cli-design.md)).
 
 ### Options on the table
 
@@ -4901,7 +4901,7 @@ removing the two-layer reality. (c) and (d) fail the repo's local-only/open-sour
 AppleScript stays the last-resort floor — brittle UI-scripting, focus-stealing, macOS-only — used
 only where a step is genuinely GUI-only (Bambu Connect auth/dispatch) and never for slicing or
 status, which have deterministic alternatives. Full reasoning, the rubric, and the mermaid router
-diagram are in [`design/printing/bambu-cli-design.md`](design/printing/bambu-cli-design.md).
+diagram are in [`../design/printing/bambu-cli-design.md`](../design/printing/bambu-cli-design.md).
 
 ### What would reverse it
 
@@ -4921,7 +4921,7 @@ Bambu-Connect-gated steps get a headless path.
 
 ## D-072 — A `plate.yaml` item is an authoring surface, not an identity; `slice compose` extends the existing `slice` group
 
-Design: [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). P4.1 adds a
+Design: [`../design/printing/plate-composer-design.md`](../design/printing/plate-composer-design.md). P4.1 adds a
 `slice compose <plate.yaml>` subverb to the **existing** `slice` command group in `tools/bambu` (sibling to the
 shipped `slice plate` / `slice mesh`), composing many models onto one arranged X2D plate.
 
@@ -4933,14 +4933,14 @@ shipped `slice plate` / `slice mesh`), composing many models onto one arranged X
   `{bkr, piece, params}` is the geometry half of the iteration key; the composer resolves each item to
   `it-<sha12>` and writes it to `objects[].iteration`.
 - **(c) Frontend-only composition** — leave composition to the plate-builder UI
-  ([`design/printing/plate-builder-design.md`](design/printing/plate-builder-design.md)); no CLI compose verb.
+  ([`../design/printing/plate-builder-design.md`](../design/printing/plate-builder-design.md)); no CLI compose verb.
 - **(d) Do nothing** — keep single-model `slice plate` only.
 
 ### Decision — (b)
 
 A migration never buys a fork ([D-052](decisions-log.md), `CLAUDE.md`). The `{bkr, piece, params}`
 triple already **is** the geometry half of the print-record iteration key
-([design/printing/print-metadata-and-reprint-design.md](design/printing/print-metadata-and-reprint-design.md) §2.2); the plate's
+([../design/printing/print-metadata-and-reprint-design.md](../design/printing/print-metadata-and-reprint-design.md) §2.2); the plate's
 single `slice_profile` completes the fifth field. The composer resolves each item to `it-<sha12>`
 and writes it to the record's `objects[].iteration` (the one map); the manifest stores no parallel
 id, and the render-cache key (bkr-hash + params) coincides with the key's geometry half, so cache
@@ -4960,7 +4960,7 @@ proves unreliable in headless X2D, the self-owned 2D packer (umbrella P2) replac
 
 ## D-073 — Coaster color is per-region symbolic labels compiled to per-body export, never painted pixels or a DSL-bound slot
 
-Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md). Extends the border's band/field
+Design: [`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md). Extends the border's band/field
 region split ([D-071](decisions-log.md)) to a full region vocabulary with per-region color that
 maps to X2D AMS filaments.
 
@@ -4994,7 +4994,7 @@ robustness downgrade), recorded in `docs/issues/`.
 
 ## D-074 — The coaster region split detects height-field pinches and resolves them by a `--pinch` strategy (fillet default); it is not scoped away
 
-Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §5. Amends the split mechanism of
+Design: [`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md) §5. Amends the split mechanism of
 [D-073](decisions-log.md); the region vocabulary and the palette-name-never-a-slot rule are
 unchanged.
 
@@ -5049,10 +5049,10 @@ it — becomes unnecessary (the D-073 reversal condition).
 
 ## D-075 — Coaster plate color maps palette name → a logical AMS slot by first-seen order (slot 1 the plate default), baked into a multi-part input 3MF the composer assembles
 
-Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §6 and
-[`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md). Implements the dependency
+Design: [`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md) §6 and
+[`../design/printing/plate-composer-design.md`](../design/printing/plate-composer-design.md). Implements the dependency
 [D-074](decisions-log.md) §6 named but left to the composer. Grounded in
-[`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the headless-CLI
+[`../research/coaster-ams-3mf-contract.md`](../research/coaster-ams-3mf-contract.md) (the headless-CLI
 3MF/AMS contract) and bikar #215 (the `<Coaster>.parts.json` sidecar this reads).
 
 ### The two questions
@@ -5103,7 +5103,7 @@ assembling and just slices — the mapping rule (i-a) stays.
 
 ## D-076 — The Coaster Lab color knob adds a `palette` block to the splittable presets and tints the whole preview per region
 
-Design: [`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md) §7. Ships the knob that
+Design: [`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md) §7. Ships the knob that
 [D-073](decisions-log.md) named ("a Coaster Lab knob edits the `color` statements and tints the
 preview per region"), on the region split [D-074](decisions-log.md) and the palette grammar
 [D-073](decisions-log.md) provide. bikar #216 (part 5).
@@ -5161,10 +5161,10 @@ same default the export does, so the preview and the exported bodies never disag
 ## D-077 — The coaster color plate is a separate `slice coaster` verb; headless verifies GEOMETRY on a tag-stripped copy while color is a GUI check
 
 Builds part 4b-ii of [D-075](decisions-log.md) (the palette→slot map baked into a multi-part input
-3MF). Design: [`design/printing/plate-composer-design.md`](design/printing/plate-composer-design.md) §12. Grounded in
-[`docs/issues/coaster-3mf-filament-shape-and-export-hang.md`](issues/coaster-3mf-filament-shape-and-export-hang.md)
+3MF). Design: [`../design/printing/plate-composer-design.md`](../design/printing/plate-composer-design.md) §12. Grounded in
+[`docs/issues/coaster-3mf-filament-shape-and-export-hang.md`](../issues/coaster-3mf-filament-shape-and-export-hang.md)
 (the bisection that isolated the headless crash) and
-[`research/coaster-ams-3mf-contract.md`](research/coaster-ams-3mf-contract.md) (the #9666 contract).
+[`../research/coaster-ams-3mf-contract.md`](../research/coaster-ams-3mf-contract.md) (the #9666 contract).
 
 ### The two questions the build forced
 
@@ -5226,8 +5226,8 @@ gate until one of those changes; the print itself stays owner-gated (§11).
 
 Answers task #25 (Omar 2026-09-19: "color different polygons differently in the same
 construction", with tooling for "polygons whose midpoints are equidistant from midpoint of
-construction"). Design: [`design/coaster/radial-band-color-design.md`](design/coaster/radial-band-color-design.md). Grounded in
-[`research/radial-band-color-research.md`](research/radial-band-color-research.md), which found
+construction"). Design: [`../design/coaster/radial-band-color-design.md`](../design/coaster/radial-band-color-design.md). Grounded in
+[`../research/radial-band-color-research.md`](../research/radial-band-color-research.md), which found
 the radial binning and the color clause already shipped in bikar (`computeRingBins`, the `ring`
 fill selector, `data-ring` in the SVG) — 2D SVG ink that never reaches the height-field kernel, with
 no verb to enumerate rings. Builds on the region→body→slot route of [D-073](decisions-log.md)/[D-074](decisions-log.md)/[D-075](decisions-log.md).
@@ -5260,7 +5260,7 @@ palette name any ring carries, plus the coaster's own base/straps/border bodies 
 ring color claimed. Without this rule a face is claimed by both `color <region>` and
 `fill where ring`, and the split is ambiguous; with it there is one owner per face and the body
 count is the number of colors, never the region × ring product (K7 against
-[`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md)). The AMS slot count that bounds useful bands
+[`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md)). The AMS slot count that bounds useful bands
 is a device fact read via `bambu filament` (warn, not cap), not a guessed constant — no new bet.
 
 ### Scope and what would reverse it
@@ -5274,7 +5274,7 @@ as a second statement — the reuse decision holds.
 ## D-079 — A construction may pin its coaster frame; the least-area fitter stays the default, and the pin is measured, not traced
 
 Builds on the least-area outline fit ([D-066](decisions-log.md)…[D-068](decisions-log.md),
-pivot [`coaster-outline-fit-pivot`](issues/coaster-outline-fit-pivot.md)) and lands with the
+pivot [`coaster-outline-fit-pivot`](../issues/coaster-outline-fit-pivot.md)) and lands with the
 seven-fold construction tA8eSdVx_EQ (the C7 orbit of one line). Mechanism in bikar
 PR&nbsp;#223 (`--coaster-outline` → `CoasterEmitSpec.outline`). Frame facts measured by the
 kernel and rendered in the *Heptagon Frame Decision* artifact.
@@ -5301,7 +5301,7 @@ built to make. Omar chose the **heptagon** — a frame whose flats sit under the
   construction (CLAUDE.md, "robust over easy").
 - **(b) Flip the fitter to "match the art's symmetry."** Rejected: it re-frames a *shipped*
   golden. 7apC5Q9QS-8 is eight-fold yet its least-area fit is the **square** (16.00 vs 25.13
-  units² round — [`coaster-outline-fit-pivot`](issues/coaster-outline-fit-pivot.md) Pivot&nbsp;2);
+  units² round — [`coaster-outline-fit-pivot`](../issues/coaster-outline-fit-pivot.md) Pivot&nbsp;2);
   a symmetry rule would make it an octagon and change CS-2. One rule cannot satisfy three goldens
   that genuinely disagree (GimTvN9hw4U → hexagon, 7apC5Q9QS-8 → square, tA8eSdVx_EQ → heptagon by
   taste), so the frame is a per-construction call, not a global rule (K10 — a convention proven on
@@ -5344,7 +5344,7 @@ import needs a `cached_coords` map so the importer can fix each arc's major/mino
 **refuses rather than guesses** without one (bikar PR&nbsp;#234; K1/K10). The plumbing to feed the
 map exists (youtube `ggb_build.py --ast-json --cached-coords`); the **producer** never did. Full
 options analysis, the live probe that proved the engine is otherwise complete, and the faithfulness
-argument are in [`constructions/cached-coords-producer-design.md`](constructions/cached-coords-producer-design.md).
+argument are in [`../constructions/cached-coords-producer-design.md`](../constructions/cached-coords-producer-design.md).
 
 ### The fork
 
@@ -5381,7 +5381,7 @@ doc. B stays rejected regardless.
 
 Omar, 2026-09-27: "can we have an alternative version where we fill in pieces in a radial
 fashion", then "do we know polygons that are equidistant from center?" and "would be on same
-polar plot?". Settles the `orbit` call left open by [`design/coaster/multicolor-design.md`](design/coaster/multicolor-design.md) §2.
+polar plot?". Settles the `orbit` call left open by [`../design/coaster/multicolor-design.md`](../design/coaster/multicolor-design.md) §2.
 
 ### What was measured
 
@@ -5414,9 +5414,9 @@ Which orbits to fill on CS-1 is a taste call, made from rendered variants. The m
 
 Omar, 2026-09-28: "In obsidian, are we making proper use of the sql mechanism, plugins, links?"
 and "do we have a good skill to analyze and revisit our obsidian setup?". Answered by the
-[`vault-setup`](../.claude/skills/vault-setup/SKILL.md) skill and its measuring tool,
+[`vault-setup`](../../.claude/skills/vault-setup/SKILL.md) skill and its measuring tool,
 `tools/vault_audit.py`; the rules it checks against are in
-[`vault-rules.md`](../.claude/skills/vault-setup/vault-rules.md).
+[`vault-rules.md`](../../.claude/skills/vault-setup/vault-rules.md).
 
 ### What was measured
 
@@ -5460,17 +5460,17 @@ reads when it runs; research notes carry `date` and `feeds`, issues carry `date`
 one of the five; a decided or built coaster feature design runs The ask → Options and the rubric
 → Grammar → Decisions → Not yet. Measured before gating: every rule passed on all the notes it
 reads except two research notes with no `feeds`, which were fixed. The table in words is
-[vault rules §9](../.claude/skills/vault-setup/vault-rules.md#9-folders-of-same-shaped-notes-have-a-checked-outline).
+[vault rules §9](../../.claude/skills/vault-setup/vault-rules.md#9-folders-of-same-shaped-notes-have-a-checked-outline).
 
 Obsidian rewrites a `.base` file when the view is saved in the app: it dropped the comment lines
 of `design-docs.base` and wrote `note.status` as `status` in `groupBy` and `order`. Every view is
-now written in that form, what each is for moved to [vault rules §2](../.claude/skills/vault-setup/vault-rules.md#2-views-core-bases-one-file-per-area),
+now written in that form, what each is for moved to [vault rules §2](../../.claude/skills/vault-setup/vault-rules.md#2-views-core-bases-one-file-per-area),
 and the gate refuses a comment line or a `note.` name there (D10).
 
 ## D-083 — American "color" everywhere, held by a gate; bikar does the same in #277
 
 Omar, 2026-09-28, in review thread e7b42d on
-[`design/coaster/color-preview-design-b.md`](design/coaster/color-preview-design-b.md), asked why the docs used the British
+[`../design/coaster/color-preview-design-b.md`](../design/coaster/color-preview-design-b.md), asked why the docs used the British
 spelling, then chose "American everywhere". The mix was an accident: the naqsh keyword and most
 code already said `color`, while the docs, skills, the `tools/bambu` code and 23 tracked file paths
 said British "colour".
@@ -5483,7 +5483,7 @@ said British "colour".
   "color" finds everything.
 - **Leave the mix**: no work, but every search needs both spellings, and the same idea keeps two
   names — the "one name, two meanings" defect the robustness tenet tells us to remove
-  ([CLAUDE.md](../CLAUDE.md#robustness-over-ease--especially-when-offering-the-choice)).
+  ([CLAUDE.md](../../CLAUDE.md#robustness-over-ease--especially-when-offering-the-choice)).
 - **British everywhere**: would mean renaming the naqsh keyword and every `color` in bikar's code
   and grammar, a far larger change for no gain.
 
@@ -5493,9 +5493,9 @@ Every use in this repo's docs, skills, memory, loop prompts, plans, tools, Makef
 comments and the gallery page became "color", case kept, including the bikar names #277 renamed
 (`visibleColors`, `--color-min-area`, `studsColor`, `resolveLdrawColor`, `LDRAW_COLOR_NAMES`,
 `parseOptionalPlaceColors` and the rest). Files were moved, not copied:
-[`design/coaster/color-preview-design.md`](design/coaster/color-preview-design.md) and its `-a`, `-b` and picture folder,
-[`design/coaster/coaster-color-design.md`](design/coaster/coaster-color-design.md),
-[`design/coaster/radial-band-color-design.md`](design/coaster/radial-band-color-design.md), four research files and the POC
+[`../design/coaster/color-preview-design.md`](../design/coaster/color-preview-design.md) and its `-a`, `-b` and picture folder,
+[`../design/coaster/coaster-color-design.md`](../design/coaster/coaster-color-design.md),
+[`../design/coaster/radial-band-color-design.md`](../design/coaster/radial-band-color-design.md), four research files and the POC
 folder, and `tools/bambu/src/color-preview.ts` with its test. Review sidecars moved with their notes.
 
 Kept as written, because the name is not ours to change or the text is a quote:
@@ -5511,7 +5511,7 @@ Kept as written, because the name is not ours to change or the text is a quote:
 
 ### The gate
 
-[`.claude/gates/color_spelling.py`](../.claude/gates/color_spelling.py) (hook `48-color-spelling`,
+[`.claude/gates/color_spelling.py`](../../.claude/gates/color_spelling.py) (hook `48-color-spelling`,
 `make validate-color-spelling`) fails on British "colour" in any case, inside any word, in a
 tracked file's text or name, unless the line holds an allowed token or the file matches an allowed
 path. Every entry carries its reason (`--list`). It mirrors the color-spelling check bikar adds in
@@ -5526,7 +5526,7 @@ the old word) gives one finding and exit 1.
 ### Pairing with bikar
 
 bikar #277 renames bikar's side and keeps one allowed token, the old name of
-[`design/coaster/color-preview-design.md`](design/coaster/color-preview-design.md), for its comments that name this repo's
+[`../design/coaster/color-preview-design.md`](../design/coaster/color-preview-design.md), for its comments that name this repo's
 file. That token and those comments change in a small bikar PR right after this one merges. The
 use-case map's three UC18 anchors on renamed bikar functions can only be re-pinned once #277 is on
 bikar main.

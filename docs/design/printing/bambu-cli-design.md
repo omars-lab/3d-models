@@ -187,6 +187,6 @@ honesty carried into the design.
 - Skills: [`../../../.claude/skills/setup-bambu-x2d/SKILL.md`](../../../.claude/skills/setup-bambu-x2d/SKILL.md)
   (first-time setup/judgment), [`../../../.claude/skills/bambu/SKILL.md`](../../../.claude/skills/bambu/SKILL.md)
   (day-to-day usage)
-- Decisions: dual-nozzle representation [D-053](../../decisions-log.md), transport choice
-  [D-054](../../decisions-log.md)
+- Decisions: dual-nozzle representation [D-053](../../working-model/decisions-log.md), transport choice
+  [D-054](../../working-model/decisions-log.md)
 - Campaign: [`../../../.claude/plans/binary-tickling-kay.md`](../../../.claude/plans/binary-tickling-kay.md)

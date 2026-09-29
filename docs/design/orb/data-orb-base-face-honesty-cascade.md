@@ -5,7 +5,7 @@ status: draft
 # Cascade: `data-orb-base-face` names one thing, a true base face (#49 follow-through)
 
 **Status:** PLANNED 2026-09-02. Decision recorded in
-[D-052](../../decisions-log.md). This doc is the actionable checklist for the four-repo
+[D-052](../../working-model/decisions-log.md). This doc is the actionable checklist for the four-repo
 change; it does **not** re-argue the decision. Deferred deliberately so it runs on
 clean, current masters (see §5) rather than across the seven in-flight bikar worktrees
 that vendor the contract today.

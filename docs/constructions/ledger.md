@@ -31,7 +31,7 @@ migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
 with bikar PR #223 (its heptagon frame pinned via `--coaster-outline`,
-[D-079](../decisions-log.md)), `lEfWSogWscs` with bikar PR #225 (its
+[D-079](../working-model/decisions-log.md)), `lEfWSogWscs` with bikar PR #225 (its
 octagon frame the least-area default fit, no pin), `rDuxHF3xMOc` with
 bikar PR #227 (the importer now lowers a `Reflect`/`Rotate` of a brace-group
 **list literal** into a conjugated orbit rather than refusing it; the video
@@ -39,7 +39,7 @@ draws three of its square's four cells, so its coaster alone adds the fourth
 through `--coaster-reflect`, bikar PR #250, while the `.bkr` stays three), and
 `nmEjCTzMbDg` with bikar PR-5 #243 (the first **open line-art** construction —
 conic loci and circle inversion drawn as `connect arc … major` straps, resolved
-by the B′ `--emit-coords` cached_coords self-bootstrap, [D-080](../decisions-log.md)),
+by the B′ `--emit-coords` cached_coords self-bootstrap, [D-080](../working-model/decisions-log.md)),
 `sDO9fpu76v8` with bikar PR #228 (the first **tessellation** rather than a
 rosette — a hexagonal cell reflected into its neighbour and the layer rotated
 six-fold, on the set's first hexagonal frame), and `n3IidKfXE1I` with bikar

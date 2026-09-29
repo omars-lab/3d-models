@@ -45,7 +45,7 @@ live board was rebuilt from the continuation plan's later phases, so this snapsh
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
 color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
-was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
+was carried over from. Decisions D-072…D-080 are in the [decisions log](../../working-model/decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
 a physical print), `#6` (P5.2 standard-size plate, after the CAL-CST-* bets are
 measured), `#7` (P5.3 frame block, only if a public GeoGebra fixture needs it), `#9`
@@ -97,7 +97,7 @@ skill, and X2D bring-up prep).** The live board was renumbered again after Snaps
 bring-up, not Snapshot 6's naqsh construction statements or Snapshot 4/5's ledger
 block. The board is the plan "First-print campaign — turning the X2D into settled
 calibration data" (session plan binary-tickling-kay; decisions D-053/D-054 in the
-[decisions log](../../decisions-log.md), D-055 amending D-054). The A-numbers
+[decisions log](../../working-model/decisions-log.md), D-055 amending D-054). The A-numbers
 (`A1…A11`) are the plan's own Phase-A ids. Still open on the board at this prune:
 **`#9`** — slice a real plate + the first owner-gated dispatch, which stays
 CAL-bet-gated and owner-physical (filament is loaded; the remaining steps are Omar's

@@ -6,7 +6,7 @@ geometry-and-process that produced it. This page is the reader for those records
 It records nothing of its own — each print is a checked-in directory, and its
 format and gate are defined in [the prints-tab design doc](design/printing/prints-tab-design.md)
 §4 and [`prints_gate.py`](../.claude/gates/prints_gate.py). Why one register and
-not two: [D-046](decisions-log.md).
+not two: [D-046](working-model/decisions-log.md).
 
 The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 `prints.html` surface — the styled version a visitor lands on — is a later rung
@@ -26,7 +26,7 @@ prints: 0 records checked — docs/prints/ is empty (nothing printed yet)
 
 That printed count is the honest zero-state, not a false green — it is the whole
 reason the gate could ship before the first print ([the design doc](design/printing/prints-tab-design.md)
-§7, [D-046](decisions-log.md)).
+§7, [D-046](working-model/decisions-log.md)).
 
 When the first record lands, this section becomes a list — one row per run, newest
 first — each naming its run, plate, status, what it measured, and which bet (if

@@ -81,7 +81,7 @@ printer, so the next code-shaped move is whichever of those the user unblocks fi
   (points 5, crossover 37, reach 0.44, alongside a `.folders.json` edit) fails 3 of the 17 explorer
   roster tests (dial defaults, `spanPU`, recentring) — verified green on a clean `origin/main`
   worktree. It is another session's working tree, not committed; if it lands as-is the roster
-  tests go red. This is the Rosette-N sweep record `docs/plan.md` row 2.14 is about.
+  tests go red. This is the Rosette-N sweep record `docs/working-model/plan.md` row 2.14 is about.
 - **A scratch worktree of bikar needs its own `dist`s.** Symlinking the primary checkout's
   `node_modules` makes `@naqshcoffee/*` resolve to the *primary's* packages, so `tsc` in the
   worktree typechecks `cli` against whatever core the other checkout has built — five phantom

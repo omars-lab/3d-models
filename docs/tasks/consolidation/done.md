@@ -50,7 +50,7 @@ live board was rebuilt from the continuation plan's later phases, so this snapsh
 `#1` is the plate composer and its `#37` is the B′ coords producer, not Snapshot 9's
 color-regions id. Where a title below cites a second number (e.g. "#37 part 2",
 "#17 — youtube verdict scripts"), that inner number is the *old* board's id the task
-was carried over from. Decisions D-072…D-080 are in the [decisions log](../../decisions-log.md).
+was carried over from. Decisions D-072…D-080 are in the [decisions log](../../working-model/decisions-log.md).
 Still open on the board at this prune: `#4` (P4.3 print record for minis-01, waits on
 a physical print), `#6` (P5.2 standard-size plate, after the CAL-CST-* bets are
 measured), `#7` (P5.3 frame block, only if a public GeoGebra fixture needs it), `#9`
@@ -70,7 +70,7 @@ sequence**: Snapshot 6's `#8` is the naqsh construction statements, not Snapshot
 4/5's cross-repo ledger block, and its `#1` is the worktree setup, not Snapshot 2's
 Q5 unstale. The board is the plan "GeoGebra constructions → naqsh (bikar) → STL
 coasters, repeatably" (session plan file iterative-dazzling-finch; decisions
-D-056…D-064 in the [decisions log](../../decisions-log.md); the record of what is
+D-056…D-064 in the [decisions log](../../working-model/decisions-log.md); the record of what is
 migrated is the [constructions ledger](../../constructions/ledger.md)). Task ids
 `P<phase>.<n>` are the plan's own. Still open on the board at this prune: `#12`
 (the later-phases umbrella: P3.1 skill, P3.3 catalog + `make coasters`, P4.x plate
@@ -129,7 +129,7 @@ again after Snapshot 2, so the ids below are a **fresh sequence** — Snapshot 3
 camera-control `#29`. Read every id under this date. These are the completed
 entries of the board that carried the d3 stream (Phases 1–3), the rosette
 explorer's open ledger, the memory decomposition, the fourth orb and the studio
-status page — the work [`plan.md`](../../plan.md) §2 rows 2.1–2.13 and §3 record in
+status page — the work [`plan.md`](../../working-model/plan.md) §2 rows 2.1–2.13 and §3 record in
 detail. Still open on the board at this prune: user-decision `#36`
 (coffee-house-sites#1); parked `#35` (publish the contract+schema under semver — the
 breakage-detection skill and version-bump hook); standing `#50` (keep `plan.md`

@@ -412,7 +412,7 @@ them supplies a number used above.
 Every Source Code Pro number above is measured from the file that was **already on
 this machine**, which is version **1.017**. That file's default `0` is a *dotted*
 zero, and §5's spacing floor kills it at the 5 mm cap: 0.289 mm between the dot and
-the counter wall, so the two beads fuse (decision [D-023](../decisions-log.md)).
+the counter wall, so the two beads fuse (decision [D-023](../working-model/decisions-log.md)).
 The fix chosen was the face's own slashed `zero.a` alternate, which 1.017 does not
 carry — its `zero` OpenType feature is empty. So on 2026-08-05, with permission,
 Source Code Pro Bold **2.042** was downloaded (SIL OFL, sha256

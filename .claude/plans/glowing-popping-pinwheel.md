@@ -76,7 +76,7 @@ verification step, across all three families:
   **SHIPPED** at the top (one line each, pointing at the merges: bikar #110/#149/#153–4/#170,
   3d-models #84/#148/#158/#159/#170), so no future session treats them as live. Keep the
   bodies as the historical spec/audit.
-- Add a `docs/plan.md` §3 shipped line: "#81 breakdown-teaching arc — shipped; the page
+- Add a `docs/working-model/plan.md` §3 shipped line: "#81 breakdown-teaching arc — shipped; the page
   tells the five beats across all three families (T9 base-face honesty, #170)."
 - Spot-check the breakdown memory `breakdown-page-instrument.md` D-052 note against the
   pivot doc — it is accurate (bikar #170 `c2fa085` = `data-orb-unit`/`baseIndexKind`), no

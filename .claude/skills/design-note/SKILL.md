@@ -29,7 +29,7 @@ design-note        — what a section drawing can settle, and what was chosen
 
 - **The decision has one option.** That is a design-doc paragraph.
 - **The argument has no geometry in it.** Process, tooling, repo-layout calls
-  go straight to [`docs/decisions-log.md`](../../../docs/decisions-log.md).
+  go straight to [`docs/working-model/decisions-log.md`](../../../docs/working-model/decisions-log.md).
 - **The unknown is a measurement.** That is `calibrate`, and a note that draws
   a number nobody measured launders a guess into a picture.
 - **It is a defect.** Per the graduation rule in
@@ -70,7 +70,7 @@ not re-render the geometry.
 
 One file: `packages/lab/src/design/notes/<id>.ts`, exporting a `DesignNote`.
 The id is a URL slug (`design.html?n=<id>`) and is **stable forever** once
-published, because `docs/decisions-log.md` cites it.
+published, because `docs/working-model/decisions-log.md` cites it.
 
 - Compile, don't draw: `compileToGeometry(script.source).brick3d`, then
   `brickSection(brick, opts, scale)` from `../draw`. Source the script through
@@ -100,7 +100,7 @@ fails the commit if the catalogue claims a use-case id the map does not carry.
 ### 5. Close it
 
 When the decision is taken: flip `status` to `decided`, fill `decision`, and add
-the entry to [`docs/decisions-log.md`](../../../docs/decisions-log.md) with its
+the entry to [`docs/working-model/decisions-log.md`](../../../docs/working-model/decisions-log.md) with its
 reversal condition, citing the note by id. Superseding a note sets
 `superseded` and points at what replaced it.
 
@@ -136,7 +136,7 @@ that no longer compiles fails there rather than on a page nobody reloaded.
   it is an overlay and it is dashed.
 - Never delete or renumber a note id.
 - A note argues; it does not decide alone. The decision lands in
-  `docs/decisions-log.md` with what would reverse it.
+  `docs/working-model/decisions-log.md` with what would reverse it.
 - `preview` status on the page means *reachable and not somewhere to send
   anyone*. Do not promote it to `live` to make an index look finished.
 - The bikar working checkout `~/Workspace/git/bikar` may belong to another

@@ -45,7 +45,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 3. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
 4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
-   ([D-081](../../decisions-log.md)). Being built in bikar: the `orbit` word (pieces
+   ([D-081](../../working-model/decisions-log.md)). Being built in bikar: the `orbit` word (pieces
    grouped about the pattern's true centre) and openwork fill. Then render 3 or 4 fill patterns;
    Omar picks one, and the CS-1 note gets a `radial` heading and picture. Asked by Omar on
    2026-09-27 (board #96).

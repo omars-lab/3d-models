@@ -121,7 +121,7 @@ def run(root: Path, staged: bool) -> int:
     for path, line, text in findings:
         print(f"{path}:{line}: {text[:160]}", file=sys.stderr)
     print(f"\ncolor-spelling: {len(findings)} use(s) of the British spelling outside the allow list.\n"
-          "3d-models spells it \"color\" (D-083 in docs/decisions-log.md). If the old spelling is\n"
+          "3d-models spells it \"color\" (D-083 in docs/working-model/decisions-log.md). If the old spelling is\n"
           "genuinely required (a file format's name, a quoted source), add an entry with its reason\n"
           "to ALLOWED_TOKENS or ALLOWED_PATHS in .claude/gates/color_spelling.py.", file=sys.stderr)
     return 1

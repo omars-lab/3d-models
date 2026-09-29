@@ -37,7 +37,7 @@ skill, and X2D bring-up prep).** The live board was renumbered again after Snaps
 bring-up, not Snapshot 6's naqsh construction statements or Snapshot 4/5's ledger
 block. The board is the plan "First-print campaign — turning the X2D into settled
 calibration data" (session plan binary-tickling-kay; decisions D-053/D-054 in the
-[decisions log](../../decisions-log.md), D-055 amending D-054). The A-numbers
+[decisions log](../../working-model/decisions-log.md), D-055 amending D-054). The A-numbers
 (`A1…A11`) are the plan's own Phase-A ids. Still open on the board at this prune:
 **`#9`** — slice a real plate + the first owner-gated dispatch, which stays
 CAL-bet-gated and owner-physical (filament is loaded; the remaining steps are Omar's

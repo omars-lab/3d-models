@@ -103,7 +103,7 @@ reviewer who also rewrites grades their own work.
 
 - **The doc's claims might be wrong**, not just hard to read → [`ground-design-doc`](../ground-design-doc/SKILL.md).
 - **The argument needs a picture** → [`design-note`](../design-note/SKILL.md).
-- **It's a decision record, not a design** — `docs/decisions-log.md` entries are
+- **It's a decision record, not a design** — `docs/working-model/decisions-log.md` entries are
   terse by design and don't owe a newcomer the full arc.
 - **It's not a design doc at all** (a runbook, a research file under `docs/research/`,
   a README). Those have their own audiences; don't force the design arc on them.

@@ -7,7 +7,7 @@ status: built
 Status: **v2 — Q0–Q6 all done, and the two follow-ons Q4 spawned with them.**
 Q1 (cell views) merged as bikar `fe6a86c`; Q2 (ribbon views) as bikar PR #96;
 Q3 (the qiyas audit fixes) as qiyas PR #11; Q6 as bikar PRs #97 and #98, with
-#99 clearing the e2e flake that blocked them ([D-034](../../decisions-log.md)). Q4's
+#99 clearing the e2e flake that blocked them ([D-034](../../working-model/decisions-log.md)). Q4's
 measurement is §7.1 and it changed the plan — it fired §7's validator and made
 the composite threshold this doc was going to record unrecordable, adding Q4a
 and Q4b in its place. **Q4a** shipped as qiyas PR #15, exposing `drop` and
@@ -544,7 +544,7 @@ the local `qiyas encode` CLI could not be run here.
 **And the reason it could not is not the one this section gave.** "Cairo is
 missing" is false: cairo is installed (`brew list` reports it; six
 `libcairo*.dylib` sit in `/opt/homebrew/lib`). What fails is the *lookup*, and
-[D-035](../../decisions-log.md) already recorded the mechanism when the sweep hit it:
+[D-035](../../working-model/decisions-log.md) already recorded the mechanism when the sweep hit it:
 SIP strips every `DYLD_*` variable when a protected binary is exec'd, `/bin/sh`
 is protected, and every route in — make, npm, a shell — crosses one, so
 `ctypes.util.find_library` never searches Homebrew's prefix. Set
@@ -623,7 +623,7 @@ disproved its own premise, which is the more useful outcome:**
   `max_drift` into the gate (`RECORDED_DROP` per preset, `MAX_DRIFT_CEILING`
   0.005, ~17× the worst observed). The 30 drops that motivated all this turned
   out to be a qiyas validator defect and are now zero —
-  [D-035](../../decisions-log.md).
+  [D-035](../../working-model/decisions-log.md).
 
 ---
 
@@ -707,7 +707,7 @@ speak for two drawings — a mean lets healthy cells hide collapsed ribbons. It 
 now `{cells, ribbons}`, each independently nullable, and the badge shows the
 **minimum** of the drawings actually scored.
 
-**Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](../../decisions-log.md).)*
+**Q6 — surface the presets.** *(Done — bikar PRs #97 and #98, [D-034](../../working-model/decisions-log.md).)*
 Record a composite per preset; add the three registry entries; add `lab:` links
 to the three gallery cards; write the badge text that carries §6's limitation
 rather than eliding it. Two potholes found during scoping and fixed here: the

@@ -10,13 +10,13 @@ are merged to bikar main; increment 3 is the 3d-models integration (this PR: the
 decision record, the `make orbs` publish-pipeline skip, and the use-case map). The
 fourth orb in the 9-fold maclado family
 ([`maclado-orb-design.md`](maclado-orb-design.md) is the family doc; this doc is
-one orb). Authorised by the owner in [D-049 §5](../../decisions-log.md) ("build a fourth
+one orb). Authorised by the owner in [D-049 §5](../../working-model/decisions-log.md) ("build a fourth
 orb, and use the build to find gaps and inconsistencies and make the approach more
 robust in the process") and, this session, resolved to the **18-wheel open shell**
 among the offered shapes. Ground truth pinned to bikar `1083046` (origin/main);
 grounded 2026-09-02 (Appendix A). Its [stop list](#6-the-stop-list-d-049-5) is
 complete — **eight detectors, no instruction** — so per D-049 §5 **no orb-creation
-skill is written**. Recorded as [D-051](../../decisions-log.md). Printing stays HELD (no
+skill is written**. Recorded as [D-051](../../working-model/decisions-log.md). Printing stays HELD (no
 printer in the loop); the mouth-span bet in Appendix B is still deferred.
 
 ---
@@ -29,7 +29,7 @@ The three shipped maclado presets — `Maclado-9`, `Maclado-9-Weave`,
 their gaps closed by twelve congruent 30-gon fillers, one filler class. This orb
 is the **quantized lattice walk** measured as M4c
 ([`maclado-orb-design.md`](maclado-orb-design.md) §8; bikar #92 `ec4518b`,
-[D-031](../../decisions-log.md)) made into a shipped object: an 18-site walk along the
+[D-031](../../working-model/decisions-log.md)) made into a shipped object: an 18-site walk along the
 field's dodecahedral adjacency, whose gaps close into **four** filler congruence
 classes on two distinct separations.
 

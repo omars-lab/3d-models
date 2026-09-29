@@ -274,7 +274,7 @@ lattice only when the holes show.
   inscribed pattern's strap silhouette — with `relief`, `rim`, `trivet`, `interlock`
   and bottom edges refused, one inset function feeding classification and the top
   round-over, CV10 for the round-over and a new free-standing strap bet CAL-CST-07
-  for CV2. See [`../../decisions-log.md`](../../decisions-log.md).
+  for CV2. See [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - D-064…D-069 as in [`coaster-design.md`](coaster-design.md) §8; unchanged. D-I (a
   coaster is a height field) is what makes this form free: a solid mask with holes
   was already a height field the kernel could wall.

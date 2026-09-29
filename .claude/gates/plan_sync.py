@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Plan-sync gate for 3d-models: §2 and §3 of docs/plan.md move together.
+"""Plan-sync gate for 3d-models: §2 and §3 of docs/working-model/plan.md move together.
 
-docs/plan.md is the index of record. §2 is the priority queue — one numbered
+docs/working-model/plan.md is the index of record. §2 is the priority queue — one numbered
 row (`2.N`) per work item, carrying a State mark. §3 is the shipped log —
 newest first, each row citing the queue item it discharges as `(2.N)`. The
 standing rule this gate replaces read: *"every PR that moves a §2 row updates
@@ -66,7 +66,7 @@ Modes:
                                tree. The wholesale form `make validate-plan-sync`
                                runs this; there is no diff over the whole tree,
                                so PS3 is a no-op there by construction.
-  plan_sync.py --pre-commit    invoked by the hook. If docs/plan.md is not
+  plan_sync.py --pre-commit    invoked by the hook. If docs/working-model/plan.md is not
                                staged the commit does not touch it and the gate
                                exits 0. Otherwise PS1/PS2 run over the *staged*
                                content and PS3 runs over HEAD→staged.
@@ -85,7 +85,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-PLAN = "docs/plan.md"
+PLAN = "docs/working-model/plan.md"
 
 GREEN = "🟢"
 STATES = ("🟢", "🔵", "⚪", "🟡", "🔴")

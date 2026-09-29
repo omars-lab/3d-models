@@ -547,7 +547,7 @@ earned until it records its provenance).
   **and** provenance record), and — through it — the `amplitude` default in all five
   woven sources under `bikar/patterns/Orbs/`. Those five are pinned at the first
   ladder step that clears this floor as measured, not at a formula, so moving the
-  floor re-cuts every one of them. See `docs/decisions-log.md` **D-039**.
+  floor re-cuts every one of them. See `docs/working-model/decisions-log.md` **D-039**.
 
 ---
 
@@ -579,7 +579,7 @@ free-standing strut). Only the clip is exempt, and only where noted.
   channel between four tiles and *then* sweeping sideways under load — it can
   pass the drop and still bind on the twist, so a number measured on a bore
   does not transfer here. That is the whole reason the new file exists; see
-  `docs/decisions-log.md` **D-008**.
+  `docs/working-model/decisions-log.md` **D-008**.
   Print **four** of the tile — they serve W-C1 afterwards, being the same dummy
   `Clip-Coupon.bkr` uses — and one of each clip:
   `cd bikar && node packages/cli/dist/index.js render
@@ -1509,7 +1509,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Model**: `bikar/patterns/Constructions/tA8eSdVx_EQ-coaster.bkr` — rendered
   as `--coaster Coaster` at `--param size=40` (mini) and `--param size=90`
   (standard) by `make coasters` (→ `src/Coasters/tA8eSdVx_EQ-coaster-mini.stl`
-  and `-standard.stl`). Frame is a **heptagon** ([D-079](../../../docs/decisions-log.md)):
+  and `-standard.stl`). Frame is a **heptagon** ([D-079](../../../docs/working-model/decisions-log.md)):
   `outline polygon 7 $size rotate 0`, pinned at import with `--coaster-outline
   polygon:7:0` so the seven flats sit under the star's lobes. The least-area
   fitter (D-066) has no heptagon candidate and would default to the octagon
@@ -1615,7 +1615,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   (minor + major), and the `H -> T` spoke segment. This is the construction
   that drove the full bikar arc engine: the arc-drawing surface (PR-4a #233),
   the arc-importer lowering (PR-4b #234), and the B′ `--emit-coords`
-  cached_coords self-bootstrap ([D-080](../../../docs/decisions-log.md), #236)
+  cached_coords self-bootstrap ([D-080](../../../docs/working-model/decisions-log.md), #236)
   that supplies the arc-endpoint coords the `CircularArc` importer refuses to
   guess. `relief straps emboss 1.2` on a 4 mm base, `margin 2`, `strap width 2`,
   `color base Slab` (`#333333`) / `color straps Gold` (`#d4af37`). Both pass the

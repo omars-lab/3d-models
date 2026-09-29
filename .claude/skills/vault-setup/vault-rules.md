@@ -6,7 +6,7 @@ here and the skill follows; the skill never needs to change with it.
 
 The vault is all of `docs/`: design docs at the top level, and `research/`, `issues/`, `wiki/`,
 `catalog/`, `constructions/`, `tasks/` and `prints/` below it. Decided in
-[D-082](../../../docs/decisions-log.md#d-082--the-docs-vault-uses-obsidians-core-bases-for-live-views-dataview-and-other-community-query-plugins-stay-out).
+[D-082](../../../docs/working-model/decisions-log.md#d-082--the-docs-vault-uses-obsidians-core-bases-for-live-views-dataview-and-other-community-query-plugins-stay-out).
 
 ## 1. Properties: a few, the same everywhere
 

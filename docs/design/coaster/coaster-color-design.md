@@ -173,7 +173,7 @@ that has at least one cell:
 
 This reuses the existing kernel: `reliefAppliesAt` already reads by region (D-071);
 `--format parts` changes only *how the sampled field is assembled into meshes*, not what is sampled. The
-split still requires an **emboss** ([D-066](../../decisions-log.md)): a deboss removes material and
+split still requires an **emboss** ([D-066](../../working-model/decisions-log.md)): a deboss removes material and
 leaves the slab's own color, so a debossed region has no raised body to carry a filament and
 is refused (the transfer condition on the split — meaningful only while the relief embosses).
 
@@ -282,7 +282,7 @@ color slots". This doc hands the composer a clean contract: N named bodies, each
 its region's palette name. The composer maps *palette name → AMS slot* and writes the project
 3MF; the slicer binds a physical spool.
 
-**The mapping is now designed and half-built ([D-075](../../decisions-log.md)).** The rule: slot 1 is
+**The mapping is now designed and half-built ([D-075](../../working-model/decisions-log.md)).** The rule: slot 1 is
 the plate's default filament, each distinct palette name takes the next logical slot in first-seen
 order, a shared name shares a slot, and an untagged region falls to the default. The pure map lives
 in `tools/bambu/src/ams.ts` (`buildAmsSlotMap`, unit-tested) as **part 4b-i**; wiring compose to
@@ -330,7 +330,7 @@ spool for you, it tells you exactly how to, and gates a print script that wants 
 
 ## 7. Coaster Lab knob
 
-The Coaster Lab lives in `bikar/packages/lab` (the Orb Lab pattern, [D-067](../../decisions-log.md)).
+The Coaster Lab lives in `bikar/packages/lab` (the Orb Lab pattern, [D-067](../../working-model/decisions-log.md)).
 Color per region is a knob that **edits the `color` statements** — the same way every Lab
 knob edits DSL, not a hidden side-channel — with one dropdown per region (`base`, `straps`,
 and `border` when the coaster has a band), each choosing a name from the file's `palette`.
@@ -345,7 +345,7 @@ per-body Validator (watertightness), because the print's correctness is that eac
 separate body, not that a render shows a given color. The pixel gate does not transfer; its
 reasoning (classify to the model's own palette so it ports where pixels do not) does.
 
-**Shipped (bikar #216, [D-076](../../decisions-log.md)).** Two build choices §7 left open were
+**Shipped (bikar #216, [D-076](../../working-model/decisions-log.md)).** Two build choices §7 left open were
 settled: (Q1) the **four splittable** presets (8-fold and 6-fold, plain + border) gained a real
 `palette` block and default `color` statements — Slab `#333333` / Gold `#d4af37` (+ Copper
 `#b87333` on the border pair) — so the knob offers real choices out of the box; the four
@@ -364,7 +364,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   kernel exports one body per non-empty region via `--format parts` (each passing `--check`,
   the split requiring emboss, D-066; the pinch handling is **D-074**); the plate composer maps
   palette name → AMS slot (P4.1, dependency, not designed here); a Coaster Lab knob edits the
-  `color` statements and tints the preview per region. See [`../../decisions-log.md`](../../decisions-log.md).
+  `color` statements and tints the preview per region. See [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - **D-074**: the naïve split's two invariants — union *exactly* == the single body **and** each
   body 2-manifold — are provably incompatible for saddled patterns (a pinch at any interior
   `z = base`, §5.1), a K7 contradiction in the first draft of §5. Resolution: **detect** every
@@ -375,7 +375,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   refuses with coordinates. The border outer wall is decomposed
   into stacked base+border panels (§5.4). `--format stl` is unchanged. Chosen over scoping the
   feature to pinch-free coasters (the earlier Option A) because Option B makes every pattern
-  print. See [`../../decisions-log.md`](../../decisions-log.md).
+  print. See [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - **D-076**: the Lab color knob ships (bikar #216, part 5). Two build choices: (Q1) add a
   `palette` block + default `color` statements to the **four splittable** presets only — chosen
   over a global fallback palette, which would fork from the `.bkr` palette the kernel resolves
@@ -384,7 +384,7 @@ pattern's full palette so the knob offers the *choices*, not just the resolved c
   on the geometry and bronze/STL/gate output stays byte-identical when nothing is tinted.
   `CoasterResultProvenance.palette` carries the choices; the tint splits with the export's own
   `fillet` default so preview and exported bodies never disagree. See
-  [`../../decisions-log.md`](../../decisions-log.md).
+  [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - **D-068** is the direction this builds; **D-071** gives the first region split; **D-066**
   fixes the relief as an emboss; **D-067** places the Lab — all unchanged.
 

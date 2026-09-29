@@ -35,7 +35,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 KINDS = {
-    "D": ("docs/decisions-log.md", re.compile(r"^## (D-\d{3}) — (.+?)\s*$", re.M)),
+    "D": ("docs/working-model/decisions-log.md", re.compile(r"^## (D-\d{3}) — (.+?)\s*$", re.M)),
     "Q": ("docs/faq.md", re.compile(r"^## (Q-\d{3}) — (.+?)\s*$", re.M)),
 }
 MASTER = "origin/master"

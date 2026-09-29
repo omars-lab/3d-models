@@ -218,7 +218,7 @@ replacing it, and its ⌀3 ladder is correct as far as it goes.
 > is the exact failure the `MC1Fit` assertion below exists to prevent, so
 > `Fit-Coupon.bkr` was re-cut to the shipped values and given the same four
 > `connect`s. And W-F1 is now `Clipseat-Fit-Coupon.bkr`, a different joint; see
-> `docs/decisions-log.md` **D-008**. The drift is why the assertion is now written
+> `docs/working-model/decisions-log.md` **D-008**. The drift is why the assertion is now written
 > once per fit class in both files rather than once per file: a rung with no
 > `connect` has nothing holding it to the constant.
 

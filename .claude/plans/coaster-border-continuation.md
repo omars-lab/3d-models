@@ -199,7 +199,7 @@ commands in its own worktree. No agent has been spawned yet.
   override (a `COASTER_MINI_EXTRA_<stem>` variable or a `case` on `$id`), not a second target.
 - Gallery `index.html` Coasters section + JS array; `DEPLOY_PATHS`; `docs/site-graph.json`.
 - Design doc status line → "built"; fix the §3 mini-hex ground to 0.2376; note the subagent's
-  degenerate-cell refusal in §4. `docs/decisions-log.md` D-071 already exists — re-read the last
+  degenerate-cell refusal in §4. `docs/working-model/decisions-log.md` D-071 already exists — re-read the last
   id on `origin/master` before adding any new one (`decision-id-collision-recurred`).
 - Use-case map row; `validate.py --refresh`; `make validate` green; PR on `omars-lab/3d-models`.
 

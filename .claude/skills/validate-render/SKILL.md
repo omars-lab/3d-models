@@ -6,7 +6,7 @@ description: Turn an LDraw model (.mpd/.ldr) into a set of camera-angle PNGs and
 # Validate a render — a `.mpd` to a *set* of PNGs, gated three ways
 
 The tool is bikar's `bikar:scripts/render-ldraw-thumbnails.ts` (D-028,
-[`docs/decisions-log.md`](../../../docs/decisions-log.md); spec in
+[`docs/working-model/decisions-log.md`](../../../docs/working-model/decisions-log.md); spec in
 [`docs/design/pieces/lego-lab-design.md`](../../../docs/design/pieces/lego-lab-design.md) §15). This skill is the
 procedure for running it and reading its result — the CLI, the gate logic
 (`bikar:scripts/thumbnail-gate.ts`), the witness (`bikar:scripts/thumbnail-gate.test.mjs`)

@@ -8,7 +8,7 @@ status: built
 shipped in bikar ([NaqshCoffee/bikar#149](https://github.com/NaqshCoffee/bikar/pull/149));
 the gate rule (T8), the `make orbs` 2D-skip robustness and this record shipped in
 [3d-models#148](https://github.com/omars-lab/3d-models/pull/148). The owner chose
-"design doc first, then build" ([D-049 §2](../../decisions-log.md)); this was the design.
+"design doc first, then build" ([D-049 §2](../../working-model/decisions-log.md)); this was the design.
 Where the build corrected the design, the correction is stated in place (§3.6, §6):
 the morph is **not** a contained kind — at `t = 1` its cells are spherical and burst
 the faceted base outline by the very overhang T7 exists to catch, so containment

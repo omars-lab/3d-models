@@ -6,11 +6,11 @@ status: built
 
 Status: **v5 — M1–M5 built and merged in bikar (PRs #85, #86, #87 `9352f76`, #88 `d20e3f5`,
 #89 `eb4f19c`); M4b closed as a documented partial for the greedy chain rule (PRs #90 `856db18`,
-#91; [D-030](../../decisions-log.md)) — the walk's separations form a continuum no cut rule can
+#91; [D-030](../../working-model/decisions-log.md)) — the walk's separations form a continuum no cut rule can
 quantize; M4c measured the quantized-lattice successor (PR #92 `ec4518b`;
-[D-031](../../decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
-[D-032](../../decisions-log.md)) — tangency touches, overlap weaves; M4e built the welded woven-overlap
-orb D-032 stopped short of (bikar PR #94; [D-033](../../decisions-log.md)) — the D-032 parity risk
+[D-031](../../working-model/decisions-log.md)); M4d measured the overlap branch M2 had narrowed away (PR #93;
+[D-032](../../working-model/decisions-log.md)) — tangency touches, overlap weaves; M4e built the welded woven-overlap
+orb D-032 stopped short of (bikar PR #94; [D-033](../../working-model/decisions-log.md)) — the D-032 parity risk
 resolved positively, 60 ribbon loops over 420 crossings, shipped as
 `bikar:patterns/Orbs/Maclado-9-Overlap.bkr`.**
 Direction (AskUserQuestion, 2026-08-08): the *faithful* 9-fold maclado — a new placement-based
@@ -381,7 +381,7 @@ the concept*, so a dead end is found cheap.
 - **M2 — two wheels, joined tangent. ✅ Done, and narrower than its own title** (bikar PR #86).
   Placement + join for a pair (§5.2). *Verified:* the join validator — contact points pair, the
   seam carries one ribbon. Proves the maclado weld before the closure solver.
-  *Narrowing recorded 2026-08-11 ([D-032](../../decisions-log.md)):* what M2 shipped is the **tangent**
+  *Narrowing recorded 2026-08-11 ([D-032](../../working-model/decisions-log.md)):* what M2 shipped is the **tangent**
   reading of §5.2 — centre separation exactly 2θ, one tip-to-tip contact point — not the
   overlapping rim *arcs* the section describes, and this bullet's original title ("overlapped and
   welded") asserted the spec, not the implementation. Every milestone through M4c built inside the
@@ -397,7 +397,7 @@ the concept*, so a dead end is found cheap.
   the 510-node/900-edge seam graph weaving watertight with 390 alternating crossings and 46 closed
   strands, and one watertight genus-379 solid (`bikar:packages/core/tests/kernel3d/maclado-field.test.ts`).
 - **M4b — the asymmetric faithful field (documented partial for the greedy chain,
-  [D-030](../../decisions-log.md)).** The maker's own regime:
+  [D-030](../../working-model/decisions-log.md)).** The maker's own regime:
   wheels placed by search rather than by symmetry, whole *small* fillers found rather than forced.
   This is where §9.1's convergence risk actually lives — M4's symmetric field never exercised it,
   because its placement is derived, not searched. *Will verify:* the same §5 validators, on a field
@@ -432,13 +432,13 @@ the concept*, so a dead end is found cheap.
     not the cut: the 51 hull edges take **32 distinct centre distances** — the greedy walk
     produces a continuum of separations, so no cutting rule could yield a small filler
     vocabulary from it. Per the gate below, the outcome is the **documented partial**
-    ([D-030](../../decisions-log.md)), and the transfer condition for any successor rule is that it
+    ([D-030](../../working-model/decisions-log.md)), and the transfer condition for any successor rule is that it
     must *quantize its separations* by construction
     (`bikar:packages/core/tests/kernel3d/maclado-gap.test.ts`).
   - *Open follow-on resolved:* the user chose to run the bounded spike (Option A, 2026-08-08,
-    [D-031](../../decisions-log.md)) — built and measured as **M4c** below.
+    [D-031](../../working-model/decisions-log.md)) — built and measured as **M4c** below.
 - **M4c — the quantized-separation spike. ✅ Done, and quantization delivers** (bikar PR #92,
-  `ec4518b`; [D-031](../../decisions-log.md)). D-030's transfer condition made concrete: a finite placement
+  `ec4518b`; [D-031](../../working-model/decisions-log.md)). D-030's transfer condition made concrete: a finite placement
   *site* set quantizes separations by construction (the trap D-030 pinned — a finite
   turn-angle menu does not, because 3D rotations do not commute — is dodged by quantizing
   positions, not steps). The rule is a documented lattice walk
@@ -466,7 +466,7 @@ the concept*, so a dead end is found cheap.
   *shipping* (mold economy vs. the full field's 1-class vocabulary) is a separate scope
   decision the measurements above now inform.
 - **M4d — the overlap spike. ✅ Done, and overlap weaves where tangency only touches** (bikar PR
-  #93; [D-032](../../decisions-log.md)). Prompted by the maker's 2026-08-11 photo and the user's verdict
+  #93; [D-032](../../working-model/decisions-log.md)). Prompted by the maker's 2026-08-11 photo and the user's verdict
   that our orb "looks nothing like" the reference: the root cause is M2's tangent narrowing of
   §5.2 (see the note on M2 above). The instrument
   (`bikar:packages/core/src/kernel3d/maclado-overlap.ts`) finds transversal great-arc crossings
@@ -491,7 +491,7 @@ the concept*, so a dead end is found cheap.
   were actually welded. That build is the next milestone-sized decision, and these are its input
   numbers.
 - **M4e — the welded woven-overlap orb. ✅ Done, and the D-032 parity risk resolves positively**
-  (bikar PR [#94](https://github.com/NaqshCoffee/bikar/pull/94); [D-033](../../decisions-log.md)).
+  (bikar PR [#94](https://github.com/NaqshCoffee/bikar/pull/94); [D-033](../../working-model/decisions-log.md)).
   The build M4d deliberately did not take, chosen by the user 2026-08-15.
   `buildWovenOverlapGraph` (`bikar:packages/core/src/kernel3d/maclado-woven.ts`) judges the
   ratio with the D-032 instrument first — refusing tangency (ρ=1.0, odd parity through a rim
@@ -550,7 +550,7 @@ distorted-filler orb that fails its own §5.3 validator.
    answered it for the greedy chain, and the answer is no:* 34 gap tiles fall into 33 congruence
    classes, tolerance-robust across three decades, because the walk's wheel separations form a
    continuum (32 distinct centre distances on 51 hull edges) that no cutting rule can quantize.
-   The documented-partial fallback fired as written — [D-030](../../decisions-log.md). The risk stays
+   The documented-partial fallback fired as written — [D-030](../../working-model/decisions-log.md). The risk stays
    open only for placement rules not yet built, and any successor must quantize its separations
    by construction.
 2. **Filler congruence tolerance.** §5.3 checks "congruent within tolerance"; the tolerance is a

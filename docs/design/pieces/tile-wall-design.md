@@ -348,7 +348,7 @@ numbers above, computed instead of estimated.
 1. **Decided 2026-07-27 — settle empirically in W2**: the clip coupon prints both corner
    variants (0.6 mm front rebate and no-rebate proud) and the in-the-flesh comparison in
    raking light picks the default. Neither variant is baked into the grammar before then.
-2. **Decided 2026-08-03 — both** ([`../../decisions-log.md`](../../decisions-log.md) D-016). A shared
+2. **Decided 2026-08-03 — both** ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md) D-016). A shared
    `border` spec is the path `checker` is documented on, so two tile types that reference
    one cannot diverge; a tile may still declare its own border, and then a **per-pair
    validator** walks every adjacency and compares. Keeping that second path open is
@@ -361,8 +361,8 @@ numbers above, computed instead of estimated.
    vertex — a field-by-field compare calls them identical and ships a wall that does not
    assemble. So the validator compares seat state *at a vertex*, not the two records; the
    full correction is the 2026-08-03 amendment under D-016 in
-   [`../../decisions-log.md`](../../decisions-log.md).
-3. **Decided 2026-08-03 — both finishes, decoupled** ([`../../decisions-log.md`](../../decisions-log.md)
+   [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
+3. **Decided 2026-08-03 — both finishes, decoupled** ([`../../working-model/decisions-log.md`](../../working-model/decisions-log.md)
    D-017). The `crop clip | crop clip with frame` sketch is **not** what ships: `frame`
    becomes its own wall-level statement, and `crop` keeps deciding only what happens to a
    tile the grid cuts. A frame is a perimeter finish; a crop is what a non-integer grid

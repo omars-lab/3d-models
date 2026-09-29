@@ -10,12 +10,12 @@ How the vault is set up, and the rules it is checked against:
 
 ## Start here
 
-- [Plan](plan.md) — what is being built, in what order.
+- [Plan](working-model/plan.md) — what is being built, in what order.
 - [Backlog](backlog.md) and the task loops: [coaster pipeline](tasks/coaster-pipeline/backlog.md),
   [catalog expansion](tasks/catalog-expansion/backlog.md),
   [print infrastructure](tasks/print-infrastructure/backlog.md),
   [consolidation](tasks/consolidation/backlog.md), [parked](tasks/parked/backlog.md).
-- [Decisions log](decisions-log.md) — every D-0xx, with the options and why.
+- [Decisions log](working-model/decisions-log.md) — every D-0xx, with the options and why.
 - [FAQ](faq.md) and the [grounding defect taxonomy](guides/grounding-defect-taxonomy.md) — how docs
   here go wrong, and how to write one that does not.
 

@@ -19,7 +19,7 @@ if [ ! -f "$TOOL" ]; then
   echo "pre-commit: no id tool in this worktree ($TOOL) — skipping" >&2
   exit 0
 fi
-if git diff --cached --name-only | grep -Eq '^(docs/decisions-log\.md|docs/faq\.md|tools/next_id\.py)$'; then
+if git diff --cached --name-only | grep -Eq '^(docs/working-model/decisions-log\.md|docs/faq\.md|tools/next_id\.py)$'; then
   exec python3 "$TOOL" check --staged
 fi
 exit 0

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Plan-sync gate (.claude/gates/plan_sync.py). docs/plan.md is the index of
+# Plan-sync gate (.claude/gates/plan_sync.py). docs/working-model/plan.md is the index of
 # record: §2 is the priority queue (one numbered row per item, with a State
 # mark), §3 is the shipped log (each row citing the queue item it discharges).
 # They must move together — the rule that was task #50, "every PR that moves a

@@ -205,7 +205,7 @@ emitter applies the even-odd rule by ring depth, or the bake rejects the face an
 says which glyph. Silence — where the dot is quietly dropped or quietly cut — is
 the option that is not available.
 
-> **The shipping face no longer contains this glyph** ([D-023](../../decisions-log.md)):
+> **The shipping face no longer contains this glyph** ([D-023](../../working-model/decisions-log.md)):
 > the dot could not print, and `0` is now baked from the face's own slashed
 > `zero.a` alternate, which nests only one deep. That removes B2's only depth-2
 > witness from the shipping face, so the witness moved rather than vanishing —
@@ -275,10 +275,10 @@ open question. Failing loudly with the number is worth shipping before the fix
 is chosen.
 
 A second, independent legibility failure rides the same gate: **confusability**.
-Two checks (added in [D-023](../../decisions-log.md)) fire alongside gap and counter —
+Two checks (added in [D-023](../../working-model/decisions-log.md)) fire alongside gap and counter —
 `checkLabelCharset`, a single label mixing the slashed `0` and the capital `O`
 (`MC-2 PORT0`), and `checkLabelSetCharset`, two labels on one part that fold to
-the same string (`O3` and `03`). As of [D-025](../../decisions-log.md) both are wired
+the same string (`O3` and `03`). As of [D-025](../../working-model/decisions-log.md) both are wired
 into the mesh gate and **block**: FAIL under `--check`, at the same tier as gap
 and counter, not a warning and not a compile-time refuse. The confusable-pair
 set is deliberately just `0`/`O` — one measured pair, near-zero false alarms —
@@ -331,7 +331,7 @@ matters. One coupon replaces this paragraph with a measurement.
    for `WWW`. Automatic tracking is tempting and would make the validator
    unfalsifiable by construction, which is an argument for refusing rather than
    fixing. (The sibling *confusability* failure is settled:
-   [D-025](../../decisions-log.md) blocks it, on that same unfalsifiability argument.
+   [D-025](../../working-model/decisions-log.md) blocks it, on that same unfalsifiability argument.
    This question is only the continuous, geometry-changing gap case, still open.)
 3. **Whether any of this survives a print.** Nothing was printed and no slicer
    was run. §5's connectivity results describe the geometry a slicer is handed;

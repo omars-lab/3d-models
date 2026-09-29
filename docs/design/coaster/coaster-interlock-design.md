@@ -236,7 +236,7 @@ tabs does not explain itself.
   edge — tab on the first half, slot on the second — so any edge mates any edge with
   no orientation rule; the joint is part of the outline ring, walls are emitted
   exact, and the bottom chamfer, `trivet` and `round` are refused with it. See
-  [`../../decisions-log.md`](../../decisions-log.md).
+  [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - D-064…D-068 as in [`coaster-design.md`](coaster-design.md) §8; this doc changes
   none of them. D-068's border band (#36) is sequenced after this, because the tab
   geometry decides what a band's outer edge is: the band follows the nominal

@@ -66,7 +66,7 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 ## Cross-repo governance
 
 How this repo's decisions log joins a decision hub (Omar's call;
-[D-004](../../decisions-log.md) chose the local format), then whether the cross-repo ledger check
+[D-004](../../working-model/decisions-log.md) chose the local format), then whether the cross-repo ledger check
 should block and bring this repo in, then a studio status page rendered from the repos. The
 hub decision gates the other two. Source: bikar's cross-repo-dependencies doc and decision
 ledger.

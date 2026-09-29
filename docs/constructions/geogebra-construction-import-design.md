@@ -9,7 +9,7 @@ decisions:
 Status: **v1 — grounded in
 [`../research/geogebra-construction-import-survey.md`](../research/geogebra-construction-import-survey.md)
 (every number below cites a survey section or a `CAL-*` bet); decisions
-recorded as D-056…D-064 in [`../decisions-log.md`](../decisions-log.md).**
+recorded as D-056…D-064 in [`../working-model/decisions-log.md`](../working-model/decisions-log.md).**
 Scope: how any GeoGebra construction — the nine youtube reconstructions first,
 any `.ggb` eventually — becomes a naqsh (`.bkr`) file that bikar renders, how
 that file is proven equivalent to its source, how the flat art becomes a

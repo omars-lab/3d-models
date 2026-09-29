@@ -8,7 +8,7 @@ code spans, which is where a reader *looks*. Those decay the same way and
 announce nothing when they do — W-F1's catalog entry pointed at
 `Fit-Coupon.bkr` for weeks while describing a different joint, and
 `w2-connector-design.md` §8 named `Fit-Step-Gauge.bkr`, a file that has never
-existed in any repo (docs/decisions-log.md D-008).
+existed in any repo (docs/working-model/decisions-log.md D-008).
 
 ## What transferred from bikar, and under what conditions
 
@@ -143,7 +143,7 @@ NOT_REPO_PREFIX = re.compile(r"^(?:iterations|input|output|tmp)/")
 #: `docs/issues/`, and the thing that would change it is a research file whose
 #: local pointers went stale in a way that mattered.
 #:
-#: `docs/decisions-log.md` is deliberately **not** excluded, though bikar
+#: `docs/working-model/decisions-log.md` is deliberately **not** excluded, though bikar
 #: excludes its `docs/decisions/` tree. bikar's reason is that a decision doc
 #: cites the throwaway script that session ran; here the log is one file, the
 #: convention is to append a dated correction rather than rewrite, and a
@@ -350,7 +350,7 @@ def _tracked_at_ref(repo: Path, ref: str) -> frozenset[str] | None:
     — one repository over.
 
     Reading the ref instead also satisfies this project's standing rule for a
-    checkout another session owns (`docs/decisions-log.md` D-001): read via
+    checkout another session owns (`docs/working-model/decisions-log.md` D-001): read via
     `git show` / `git ls-tree` against a ref, never touch the working tree.
     """
     key = (str(repo), ref)
@@ -709,7 +709,7 @@ def self_test() -> int:
     """
     cases: list[tuple[str, str | None, str]] = [
         # (path, expected — "resolve" | "miss" | "skipped" | "dropped", why)
-        ("docs/plan.md", "resolve", "a local doc, the plain case"),
+        ("docs/working-model/plan.md", "resolve", "a local doc, the plain case"),
         ("docs/no-such-file.md", "miss", "the defect this gate exists for"),
         ("kernel3d/corner-clip.ts", "resolve", "bikar src shorthand, no prefix"),
         ("bikar/patterns/Coupons/Clip-Coupon.bkr", "resolve", "sibling-prefixed"),
@@ -724,7 +724,7 @@ def self_test() -> int:
     ]
     failures = 0
     for path, expected, why in cases:
-        doc = "docs/plan.md"
+        doc = "docs/working-model/plan.md"
         if not pointers_in_line(f"see `{path}` for the shape"):
             got = "dropped"
         else:

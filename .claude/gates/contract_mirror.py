@@ -29,7 +29,7 @@ which `git clone` and `git remote set-head` point the symref at. Reading the one
 canonical ref (not the first of a guessed `main`/`master` list to carry the file)
 is what makes the verdict correct when a repo has both branches at different
 versions. It is read via `git show` in the sibling checkout — never the working
-tree, which is whatever another session has checked out (docs/decisions-log.md
+tree, which is whatever another session has checked out (docs/working-model/decisions-log.md
 D-001; same rule as `doc_pointers.py` and `schema_mirror.py`). So the verdict is
 checkout-independent and offline — but it reflects the **last-fetched** origin
 state (and last-known symref): a stale clone can read a mirror as behind when the

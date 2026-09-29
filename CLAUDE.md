@@ -136,7 +136,7 @@ rule does not transfer.
   the list beside the number:** the quantity §8 exempted to avoid "owning it twice"
   was wrong at 2 of its 3 sites while all 24 marked ones were right, and 16 of those
   24 sit next to the ids they count — so C4 checks the list, since rewriting the
-  digit alone turns a blocking failure into a silent K2. [D-020](docs/decisions-log.md)
+  digit alone turns a blocking failure into a silent K2. [D-020](docs/working-model/decisions-log.md)
 
 ### Research is checked in
 
@@ -177,7 +177,7 @@ it verifies** — one that verifies nothing should be named as such or not offer
 > *Failure mode, 2026-08-03:* both options offered for the machine card produced 23
 > STLs and **neither checked one**, while `calibration-design.md` §7 already shipped
 > a 23-row expectation table. What shipped diffs the mesh gate against that table
-> ([D-014](docs/decisions-log.md)) — a verifier with a build target as its front
+> ([D-014](docs/working-model/decisions-log.md)) — a verifier with a build target as its front
 > door, not the §6 re-typing the backlog framed it as.
 
 Corollary: **the by-design failure is the load-bearing case.** A gate that
@@ -187,7 +187,7 @@ it, and skipping is how a gate stops testing the thing it exists for.
 Corollary: **robust and simple beat cheap and easy, even at more work.** The cheap
 fix routes around the defect; the robust one deletes it. Two code paths that disagree
 — or one name with two meanings — *are* the defect: remove it rather than hide it,
-price the cascade, and pay it. A migration never buys a fork — [D-041](docs/decisions-log.md), [D-052](docs/decisions-log.md).
+price the cascade, and pay it. A migration never buys a fork — [D-041](docs/working-model/decisions-log.md), [D-052](docs/working-model/decisions-log.md).
 
 ## Precedent
 

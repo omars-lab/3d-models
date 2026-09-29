@@ -286,7 +286,7 @@ a different distance.
 - **D-068**: a border with its own pattern and per-region color are coaster-level
   clauses composing patterns, sequenced after the interlock (#34) and the lab (#35).
   The border is designed as **D-071** ([`coaster-border-design.md`](coaster-border-design.md));
-  color (#37) is still direction only. See [`../../decisions-log.md`](../../decisions-log.md).
+  color (#37) is still direction only. See [`../../working-model/decisions-log.md`](../../working-model/decisions-log.md).
 - **D-069** (interlock, #34): a self-mating half-edge dovetail on every straight
   edge, walls emitted exact, CV8/CV9 added, refused with `round`, a bottom chamfer
   and `trivet`; opt-in at import because it widens the margin. Built in

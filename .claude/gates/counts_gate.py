@@ -120,7 +120,7 @@ did not search"). Hence C4, and hence its shape:
     completes an enumeration that exists; it does not require prose to enumerate.
 
 `<!--count:quote-->` opts a line out. It exists for one legitimate use: prose
-that deliberately restates a number that *was* wrong — `docs/decisions-log.md`
+that deliberately restates a number that *was* wrong — `docs/working-model/decisions-log.md`
 narrating "this said four when it was six" must be allowed to say four. It is
 not a silencer for a claim you have not checked.
 
@@ -238,7 +238,7 @@ C3 = {
 #: was *known to be* wrong, which the decision log does by design.
 #:
 #: C1 as well as C3, because the first thing written under this marker was
-#: `docs/decisions-log.md` reciting a self-test fixture verbatim —
+#: `docs/working-model/decisions-log.md` reciting a self-test fixture verbatim —
 #: `99 <!--count:cal-records-->` — and a gate that reads a quoted fixture as an
 #: assertion makes its own validator section unwritable. The marker means "this
 #: line is *about* a number", and that is one fact, not two.
@@ -270,7 +270,7 @@ SKIPPABLE = frozenset({"coupon-dir-bkr"})
 
 #: Only the *published* refs. Reading bikar's working tree, or its `HEAD`, makes
 #: this count a function of whichever branch the other session has checked out —
-#: and that checkout is routinely on a detached HEAD (`docs/decisions-log.md`
+#: and that checkout is routinely on a detached HEAD (`docs/working-model/decisions-log.md`
 #: D-001). This is the same reasoning `doc_pointers._tracked_at_ref` is built
 #: on, and the same trap it was written after walking into.
 BIKAR_REFS = ("origin/HEAD", "origin/main", "origin/master")

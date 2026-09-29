@@ -31,7 +31,7 @@ decisive learning first). Each entry has:
   `docs/prints/<YYYY-MM-DD>-<slug>/` directory (geometry pin, process profile,
   readings, photos), **not** a row in this file. The catalog carries the
   backlog; the record carries what a plate taught. One register for the
-  print-lesson, not two ([D-046](../../../docs/decisions-log.md)). Format and
+  print-lesson, not two ([D-046](../../../docs/working-model/decisions-log.md)). Format and
   gate: `docs/design/printing/prints-tab-design.md` §4, `.claude/gates/prints_gate.py`.
 - **Settles** — the `CAL-…` bets this entry closes, if any (registry:
   `.claude/skills/calibrate/bets.md`). A coupon that measures a property of
