@@ -136,28 +136,48 @@ source is what the share URL carries, so a shared link reproduces the colors exa
 The Lab also needs the orbit list (id, member count, radius) from the worker — the same function
 `bikar bands` prints — so the panel shows real orbits, not guesses.
 
-### 6.3 Rough UI (piece counts and radii are illustrative)
+### 6.3 Rough UI (piece counts and radii are illustrative) ^vlz2rj
 
-```
-+-- Colors --------------------------------------------------+
-| Base    [ Slab  v]   Straps [ Gold v]   Border [ none v]     |
-+-- Orbits ---------------------------------------------------+
-| Preset: [ Odd ] [ Even ] [ Inner ] [ Outer ] [ All ] [ None ]|
-|                                                             |
-|  #  pieces  radius   filled  color                         |
-|  0     8     6 mm     [x]    [ Teal v]                      |
-|  1    16    11 mm     [x]    [ Ruby v]                      |
-|  2     8    15 mm     [ ]    ( base )                       |
-|  3    16    19 mm     [x]    [ Ruby v]                      |
-|  ...                                                        |
-|  (hover a row -> that orbit outlines in the 3D view)        |
-+-- Depth ----------------------------------------------------+
-|  Fills: (o) Flush with straps   ( ) Lowered  [0.6] mm       |
-|         (Lowered greyed out until `fills` exists)           |
-+-------------------------------------------------------------+
-| Parts: base 177k  Ruby 42k  Teal 53k  straps 77k   [PASS]   |
-+-------------------------------------------------------------+
-```
+<table>
+<tr><th>The HTML (<a href="color-preview-design-b/rough-ui.html">rough-ui.html</a>; its styles are in the file)</th><th>What it draws</th></tr>
+<tr><td><pre><code class="language-html">&lt;aside class="lab-panel"&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Colors&lt;/h2&gt;
+    &lt;div class="color-row"&gt;&lt;span&gt;Base&lt;/span&gt;&lt;select&gt;&lt;option&gt;Slab&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+    &lt;div class="color-row"&gt;&lt;span&gt;Straps&lt;/span&gt;&lt;select&gt;&lt;option&gt;Gold&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+    &lt;div class="color-row"&gt;&lt;span&gt;Border&lt;/span&gt;&lt;select&gt;&lt;option&gt;none&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Orbits&lt;/h2&gt;
+    &lt;div class="chips"&gt;
+      &lt;button class="chip"&gt;Odd&lt;/button&gt;&lt;button class="chip"&gt;Even&lt;/button&gt;
+      &lt;button class="chip"&gt;Inner&lt;/button&gt;&lt;button class="chip"&gt;Outer&lt;/button&gt;
+      &lt;button class="chip"&gt;All&lt;/button&gt;&lt;button class="chip"&gt;None&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;table&gt;
+      &lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;pieces&lt;/th&gt;&lt;th&gt;radius&lt;/th&gt;&lt;th&gt;filled&lt;/th&gt;&lt;th&gt;color&lt;/th&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;0&lt;/td&gt;&lt;td class="num"&gt;8&lt;/td&gt;&lt;td class="num"&gt;6 mm&lt;/td&gt;&lt;td&gt;&lt;input type="checkbox" checked /&gt;&lt;/td&gt;&lt;td&gt;&lt;select&gt;&lt;option&gt;Teal&lt;/option&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td class="num"&gt;16&lt;/td&gt;&lt;td class="num"&gt;11 mm&lt;/td&gt;&lt;td&gt;&lt;input type="checkbox" checked /&gt;&lt;/td&gt;&lt;td&gt;&lt;select&gt;&lt;option&gt;Ruby&lt;/option&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td class="num"&gt;8&lt;/td&gt;&lt;td class="num"&gt;15 mm&lt;/td&gt;&lt;td&gt;&lt;input type="checkbox" /&gt;&lt;/td&gt;&lt;td class="base"&gt;base&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td class="num"&gt;16&lt;/td&gt;&lt;td class="num"&gt;19 mm&lt;/td&gt;&lt;td&gt;&lt;input type="checkbox" checked /&gt;&lt;/td&gt;&lt;td&gt;&lt;select&gt;&lt;option&gt;Ruby&lt;/option&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+    &lt;p class="note"&gt;Hover a row and that orbit outlines in the 3D view.&lt;/p&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Depth&lt;/h2&gt;
+    &lt;label class="radio"&gt;&lt;input type="radio" name="d" checked /&gt; Flush with straps&lt;/label&gt;
+    &lt;label class="radio off"&gt;&lt;input type="radio" name="d" disabled /&gt; Lowered &lt;input type="number" value="0.6" disabled /&gt; mm&lt;/label&gt;
+    &lt;p class="note"&gt;Lowered is greyed out until the &lt;code&gt;fills&lt;/code&gt; clause exists.&lt;/p&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Parts&lt;/h2&gt;
+    &lt;div class="parts"&gt;
+      &lt;span&gt;base 177k · Ruby 42k · Teal 53k · straps 77k&lt;/span&gt;&lt;span class="pass"&gt;PASS&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/aside&gt;</code></pre></td>
+<td><img src="color-preview-design-b/rough-ui.png" width="360" alt="Researcher B's rough UI: Colors, Orbits with six presets and four orbit rows, Depth with Lowered greyed out, and the Parts row with PASS"></td></tr>
+</table>
 
 The last row is the per-part list from the same split the printer gets, so what the panel counts
 is what the 3MF holds. When the split refuses a style, the Orbits panel says why (the kernel's

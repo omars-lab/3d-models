@@ -165,3 +165,8 @@ settled: that needs the physical object, and it belongs to `prototype` and
   Say which parts of the picture are real data and which are placeholders. Example:
   `docs/design/coaster/color-preview-design/lab-controls-mockup.html` → `.png`, embedded in
   `color-preview-design.md` §5 (review thread leu4yg, 2026-09-28).
+  When the mockup is narrow enough (a panel, not a full window), show its markup and its
+  picture **side by side**: one raw-HTML `<table>`, the escaped markup in a `<pre><code>` on
+  the left and an `<img>` on the right, with no blank line inside the table. A blank line splits
+  it, because Obsidian renders each markdown block on its own. Example:
+  `docs/design/coaster/color-preview-design-b.md` §6.3 (review thread vlz2rj, 2026-09-29).
