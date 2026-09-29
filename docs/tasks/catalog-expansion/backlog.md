@@ -52,10 +52,25 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 3. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
 4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
-   ([D-081](../../working-model/decisions-log.md)). Being built in bikar: the `orbit` word (pieces
-   grouped about the pattern's true centre) and openwork fill. Then render 3 or 4 fill patterns;
-   Omar picks one, and the CS-1 note gets a `radial` heading and picture. Asked by Omar on
-   2026-09-27 (board #96).
+   ([D-081](../../working-model/decisions-log.md)). The `orbit` word and openwork fill are on
+   bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
+   **Waiting on Omar's pick** from the four fills below (orbits are numbered outwards; all four
+   pass the mesh gate at 90 mm as one body). The pick becomes the file's live fill lines, and the
+   CS-1 note gets a `radial` heading and picture.
+
+   ![CS-1 radial fill choices](../../catalog/media/GimTvN9hw4U/GimTvN9hw4U-radial-choices.png)
+
+   | Tile | Filled orbits | Open share |
+   |---|---|---|
+   | plain | none (the minimal coaster) | 0.38 |
+   | A | 1, 3, 5, 7: a six-armed snowflake round an open centre star (the file's default) | 0.21 |
+   | B | 0, 2, 4, 6: the centre and alternate rings, mostly solid | 0.17 |
+   | C | 0, 1: a solid centre in an open lattice | 0.33 |
+   | D | 6, 7: a solid rim round an open centre | 0.28 |
+
+   Rebuilt with the four `fill void where orbit …` blocks the `.bkr` lists as alternatives,
+   `bikar render … --format stl --check --param size=90`, then `python3 tools/print_review.py sheet`.
+   Asked by Omar on 2026-09-27 (board #96).
    - **Color and Lab controls** (Omar, 2026-09-28): coloring the radial fills, colored
      gallery PNGs, and an Orbits panel in Coaster Lab. Act on
      [color-preview-design.md](../../design/coaster/color-preview-design.md), §10 lists the bikar PRs,
