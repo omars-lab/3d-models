@@ -32,7 +32,8 @@ Checks (full mode):
 Pre-commit mode adds the freshness contract:
   - use-cases.md staged  -> staged content must fully validate AND its
     3d-models as_of must equal the published base (merge-base of HEAD with
-    origin's default branch — HEAD itself on a one-commit branch); self-repo
+    origin's default branch — HEAD itself on a one-commit branch, and HEAD
+    plus MERGE_HEAD while a merge is in progress); self-repo
     pointers read the index for staged files, so what is checked is what ships
   - use-cases.md not staged but a staged file is referenced by a 3d-models
     pointer -> BLOCK (override once with USE_CASES_OK=1 git commit ...)
@@ -201,6 +202,11 @@ def try_git(repo_dir: str, *args: str) -> str | None:
         return run_git(repo_dir, *args)
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
+
+
+def merge_head(repo_dir: str) -> str | None:
+    """The other parent of the commit being made, when a merge is in progress."""
+    return try_git(repo_dir, "rev-parse", "-q", "--verify", "MERGE_HEAD^{commit}") or None
 
 
 def split_frontmatter(text: str) -> tuple[str, str]:
@@ -597,14 +603,19 @@ def unreachable_pin(repo: str, rdir: str, pin: str) -> str | None:
     Only for `SELF_REPO`. A sibling is deliberately pinned at its own published
     ref and has no reason to be an ancestor of whatever its checkout has on
     HEAD — that case is `staleness_warning`'s, and it is documented there.
+
+    During a merge the commit being made has two parents, so a pin on either
+    side is an ancestor of it: master's own pin, merged into a branch, is not an
+    ancestor of the branch's HEAD but is of MERGE_HEAD.
     """
     if repo != SELF_REPO:
         return None
     head = try_git(rdir, "rev-parse", "HEAD")
     if head is None:
         return None
-    if try_git(rdir, "merge-base", "--is-ancestor", pin, head) is not None:
-        return None
+    for parent in (head, merge_head(rdir)):
+        if parent and try_git(rdir, "merge-base", "--is-ancestor", pin, parent) is not None:
+            return None
     return (
         f"as_of hash for '{repo}' ({pin[:12]}) is not an ancestor of HEAD ({head[:12]}) — "
         "it is reachable from no branch, so it exists only in this clone and a fresh "
@@ -928,8 +939,20 @@ def published_base(rdir: str) -> tuple[str | None, str]:
 
     Self-repo pointers are read live (`self_blob`), so the pin carries no
     content — only the ancestry the check above needs.
+
+    During a merge the base is taken against both parents
+    (`git merge-base <ref> HEAD MERGE_HEAD`, the merge-base with the commit
+    being made). Merging master into a branch then pins master's tip, where
+    reading HEAD alone pinned the branch's old base and forced the merge to
+    move master's newer pin backwards (3d-models #427's merge, 2026-09-30).
     """
+    other = merge_head(rdir)
     for ref in ("origin/HEAD", "origin/master", "origin/main"):
+        if other:
+            base = try_git(rdir, "merge-base", ref, "HEAD", other)
+            if base:
+                return base, f"merge-base({ref}, HEAD, MERGE_HEAD)"
+            continue
         base = try_git(rdir, "merge-base", "HEAD", ref)
         if base:
             return base, f"merge-base(HEAD, {ref})"
@@ -1384,6 +1407,49 @@ def self_test() -> int:
             "...where the branch HEAD would not have (the control)",
             unreachable_pin(SELF_REPO, tmp, two) is not None,
             True,
+        )
+
+    # Merging master into a branch, mid-merge — the hook runs before the merge
+    # commit exists. Reading HEAD alone refused master's own pin and pinned the
+    # branch's old base instead; that is what #427's merge hit on 2026-09-30.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, "-c", "user.email=t@t", "-c", "user.name=t", *args],
+                           check=True, capture_output=True, env=git_env())
+
+        def commit(msg: str) -> str:
+            git("commit", "-q", "--allow-empty", "-m", msg)
+            return run_git(tmp, "rev-parse", "HEAD")
+
+        git("init", "-q", "-b", "master")
+        base = commit("base")
+        git("checkout", "-q", "-b", "feat/long")
+        commit("branch work")
+        git("checkout", "-q", "master")
+        newer = commit("master moves on — and re-pins the map here")
+        git("update-ref", "refs/remotes/origin/master", newer)
+        git("checkout", "-q", "feat/long")
+        git("merge", "-q", "--no-commit", "--no-ff", "master")
+        expect(
+            "mid-merge, master's pin is an ancestor of the commit being made",
+            unreachable_pin(SELF_REPO, tmp, newer),
+            None,
+        )
+        expect(
+            "mid-merge, the published base is master's tip, not the branch's old base",
+            published_base(tmp),
+            (newer, "merge-base(origin/master, HEAD, MERGE_HEAD)"),
+        )
+        git("merge", "--abort")
+        expect(
+            "...and with no merge in progress, master's pin is not the branch's ancestor (the control)",
+            unreachable_pin(SELF_REPO, tmp, newer) is not None,
+            True,
+        )
+        expect(
+            "...nor its published base",
+            published_base(tmp),
+            (base, "merge-base(HEAD, origin/master)"),
         )
 
     # The one-commit blind spot, reproduced. `20-use-cases` blocks precisely

@@ -36,8 +36,8 @@ WHERE THE COVERAGE COMES FROM.
 
 The not-yet list may shrink freely — that is a recipe landing — but it grows
 only on purpose, like the doc-pointer baseline: a keyword added to it that was
-not there at HEAD needs `COOKBOOK_NOT_YET_MAY_GROW=1`. Otherwise "add it to the
-not-yet list" becomes the easy answer every time.
+not there at HEAD (nor at MERGE_HEAD, mid-merge) needs `COOKBOOK_NOT_YET_MAY_GROW=1`.
+Otherwise "add it to the not-yet list" becomes the easy answer every time.
 
 Usage:
     python3 .claude/gates/cookbook_coverage.py            # check; non-zero on a gap
@@ -57,6 +57,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -192,18 +193,37 @@ def not_yet(readme: str) -> set[str]:
     return out
 
 
+def _git_env() -> dict[str, str]:
+    """This process's env without git's repo pointers, so `cwd` picks the repo.
+
+    Under a hook `GIT_DIR` is set and outranks `cwd`; the self-test's scratch
+    repo would otherwise be read from this one.
+    """
+    return {k: v for k, v in os.environ.items() if k not in ("GIT_DIR", "GIT_WORK_TREE")}
+
+
 def not_yet_at_head(root: Path) -> set[str] | None:
-    try:
-        text = subprocess.run(
-            ["git", "show", f"HEAD:{README_REL}"],
-            cwd=root,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
-    return not_yet(text)
+    """The not-yet list the commit being made inherits: HEAD's, plus MERGE_HEAD's mid-merge.
+
+    A keyword either parent already lists is inherited, not grown. Reading HEAD
+    alone called the other side's additions growth when master was merged into a
+    branch — the same defect hooks 20 and 35 had (3d-models #427, 2026-09-30).
+    """
+    found: set[str] | None = None
+    for ref in ("HEAD", "MERGE_HEAD"):
+        try:
+            text = subprocess.run(
+                ["git", "show", f"{ref}:{README_REL}"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=True,
+                env=_git_env(),
+            ).stdout
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            continue
+        found = (found or set()) | not_yet(text)
+    return found
 
 
 def check(
@@ -276,6 +296,40 @@ def _self_test() -> int:
         ("shrinking the list passes", check(kws, {**cover, "size": "b.md", "lid": "b.md"}, set(), {"lid"}) == []),
         ("a stale keyword fails", any("`gone`" in p for p in check(kws, {**cover, "gone": "a.md"}, {"lid", "size"}, None))),
     ]
+    # Mid-merge, a keyword the merged-in side already lists is inherited; the
+    # control, after the merge is aborted, reads HEAD alone and calls it growth.
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = Path(tmp)
+        env = {**_git_env(), "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+               "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+
+        def git(*args: str) -> None:
+            subprocess.run(["git", *args], cwd=repo, check=True, env=env, capture_output=True)
+
+        def put(listed: str) -> None:
+            (repo / README_REL).parent.mkdir(parents=True, exist_ok=True)
+            (repo / README_REL).write_text(f"# Cookbook\n\n{NOT_YET_HEADING}\n\n{listed}")
+
+        git("init", "-q", "-b", "master")
+        put("- `lid` — rare\n")
+        git("add", README_REL)
+        git("commit", "-q", "-m", "base")
+        git("checkout", "-q", "-b", "feat")
+        (repo / "feat.md").write_text("branch work\n")
+        git("add", "feat.md")
+        git("commit", "-q", "-m", "branch work")
+        git("checkout", "-q", "master")
+        put("- `lid` — rare\n- `size` — new in bikar\n")
+        git("commit", "-q", "-am", "master lists a new keyword")
+        git("checkout", "-q", "feat")
+        git("merge", "-q", "--no-commit", "--no-ff", "master")
+        merged = {"lid", "size"}
+        cases.append(("mid-merge, the other side's not-yet keyword is inherited, not grown",
+                      not any("GREW" in p for p in check(kws, cover, merged, not_yet_at_head(repo)))))
+        git("merge", "--abort")
+        cases.append(("...and with no merge in progress it is growth (the control)",
+                      any("GREW" in p for p in check(kws, cover, merged, not_yet_at_head(repo)))))
+
     ok = True
     for name, passed in cases:
         print(f"self-test {'ok  ' if passed else 'FAIL'}: {name}")

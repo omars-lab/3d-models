@@ -491,8 +491,8 @@ def read_baseline(text: str, label: str) -> list[dict[str, str]]:
     return parsed["unresolved"]
 
 
-def previous_baseline(root: Path) -> list[dict[str, str]] | None:
-    """The baseline as of HEAD, or None when it is not tracked yet.
+def previous_baseline(root: Path, ref: str = "HEAD") -> list[dict[str, str]] | None:
+    """The baseline as of `ref` (HEAD by default), or None when it is not tracked yet.
 
     HEAD is the right comparison point because this gate runs from pre-commit,
     where the working tree is the change and HEAD is its parent. A committed
@@ -501,15 +501,38 @@ def previous_baseline(root: Path) -> list[dict[str, str]] | None:
     """
     try:
         text = subprocess.run(
-            ["git", "show", f"HEAD:{BASELINE_REL}"],
+            ["git", "show", f"{ref}:{BASELINE_REL}"],
             cwd=root,
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
-    return read_baseline(text, f"HEAD:{BASELINE_REL}")
+    return read_baseline(text, f"{ref}:{BASELINE_REL}")
+
+
+def parent_baselines(root: Path) -> list[dict[str, str]] | None:
+    """Every entry the commit being made inherits: HEAD's, plus MERGE_HEAD's mid-merge.
+
+    A merge commit has two parents, and an entry either one already carries is
+    inherited, not grown. Reading HEAD alone called master's own entries growth
+    when master was merged into a branch, and the merge had to be committed
+    with DOC_POINTERS_BASELINE_MAY_GROW=1 (3d-models #427, 2026-09-30).
+    """
+    head = previous_baseline(root)
+    try:
+        subprocess.run(
+            ["git", "rev-parse", "-q", "--verify", "MERGE_HEAD^{commit}"],
+            cwd=root, capture_output=True, check=True, env=_git_env(),
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return head
+    other = previous_baseline(root, "MERGE_HEAD")
+    if head is None or other is None:
+        return head if other is None else other
+    return head + other
 
 
 def added_entries(
@@ -647,7 +670,7 @@ def run(root: Path, list_all: bool) -> tuple[list[str], str]:
         )
     )
 
-    previous = previous_baseline(root)
+    previous = parent_baselines(root)
     if previous is not None and os.environ.get("DOC_POINTERS_BASELINE_MAY_GROW") != "1":
         added = added_entries(carry_renames(previous, renames_since_head(root)), baseline)
         if added:
@@ -797,6 +820,54 @@ def self_test() -> int:
         f"self-test {'ok  ' if ok else 'FAIL'}: a moved doc's baseline entry is carried, "
         f"a new one beside it is growth (got {[e['path'] for e in added]})"
     )
+
+    # Mid-merge, an entry the merged-in side already carries is inherited, not
+    # grown; one neither parent carries still is. The control, after the merge
+    # is aborted, reads HEAD alone and calls the inherited entry growth.
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = Path(tmp)
+        env = {**_git_env(), "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+
+        def git(*args: str) -> None:
+            subprocess.run(["git", *args], cwd=repo, check=True, env=env, capture_output=True)
+
+        def put(entries: list[dict[str, str]]) -> None:
+            path = repo / BASELINE_REL
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"unresolved": entries}))
+
+        old = {"doc": "a.md", "path": "old.ts"}
+        theirs = {"doc": "b.md", "path": "theirs.ts"}
+        git("init", "-q", "-b", "master")
+        put([old])
+        git("add", BASELINE_REL)
+        git("commit", "-q", "-m", "base")
+        git("checkout", "-q", "-b", "feat")
+        (repo / "feat.md").write_text("branch work\n")
+        git("add", "feat.md")
+        git("commit", "-q", "-m", "branch work")
+        git("checkout", "-q", "master")
+        put([old, theirs])
+        git("commit", "-q", "-am", "master grows the baseline")
+        git("checkout", "-q", "feat")
+        git("merge", "-q", "--no-commit", "--no-ff", "master")
+        mine = {"doc": "c.md", "path": "mine.ts"}
+        merged = [old, theirs, mine]
+        added = added_entries(parent_baselines(repo) or [], merged)
+        ok = [e["path"] for e in added] == ["mine.ts"]
+        failures += 0 if ok else 1
+        print(
+            f"self-test {'ok  ' if ok else 'FAIL'}: mid-merge, the other side's entry is inherited "
+            f"and a new one is growth (got {[e['path'] for e in added]})"
+        )
+        git("merge", "--abort")
+        added = added_entries(parent_baselines(repo) or [], merged)
+        ok = [e["path"] for e in added] == ["theirs.ts", "mine.ts"]
+        failures += 0 if ok else 1
+        print(
+            f"self-test {'ok  ' if ok else 'FAIL'}: with no merge in progress, HEAD alone is read "
+            f"(got {[e['path'] for e in added]}, the control)"
+        )
 
     # A skipped entry is unmeasured. Three entries, three verdicts, one silence.
     bl = [
