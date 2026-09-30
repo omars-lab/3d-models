@@ -1,0 +1,381 @@
+# naqsh construction — jlTmt_279M4
+# title: islamic geometry: how to draw 7, 4 fold pattern
+# url: https://www.youtube.com/watch?v=jlTmt_279M4
+# steps: 102 statements, 17 tagged steps
+# source: reconstructions/jlTmt_279M4/construction.ggb-commands sha256:8825b0efb576d5e9cabbb169c810d0ee859332e10549c8b017717492c9abf034
+# renamed: tile -> tile_ (reserved word)
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 3.8998   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint jlTmt_279M4_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # A = (1, 0)
+  point A = unit.cpt0
+  # Wp = Rotate(A, 180°, O)
+  point Wp = rotate A by 180 around O
+  # xAx = Line(O, A)
+  line xAx from O to A
+  # c0 = Circle(O, A)
+  circle c0 center(O) through A
+  # ────────────────────────────────────────────────────────
+  # t=00:06  cW = Circle(Wp, O)
+  circle cW center(Wp) through O
+  # ────────────────────────────────────────────────────────
+  # T = Rotate(A, 90°, O)
+  point T = rotate A by 90 around O
+  # Bt = Rotate(A, 270°, O)
+  point Bt = rotate A by 270 around O
+  # yAx = Line(O, T)
+  line yAx from O to T
+  # cA = Circle(A, O)
+  circle cA center(A) through O
+  # ────────────────────────────────────────────────────────
+  # t=00:18  cT0 = Circle(T, O)
+  circle cT0 center(T) through O
+  # ────────────────────────────────────────────────────────
+  # cB0 = Circle(Bt, O)
+  circle cB0 center(Bt) through O
+  # lAT = Line(A, T)
+  line lAT from A to T
+  # G1 = Reflect(O, lAT)
+  point G1 = reflect O across lAT
+  # G2 = Rotate(G1, 90°, O)
+  point G2 = rotate G1 by 90 around O
+  # G3 = Rotate(G1, 180°, O)
+  point G3 = rotate G1 by 180 around O
+  # G4 = Rotate(G1, 270°, O)
+  point G4 = rotate G1 by 270 around O
+  # ────────────────────────────────────────────────────────
+  # t=00:22  dg1 = Segment(G2, G4)
+  segment dg1 from G2 to G4
+  # ────────────────────────────────────────────────────────
+  # dg2 = Segment(G1, G3)
+  segment dg2 from G1 to G3
+  # S1 = Rotate(A, 315°, O)
+  point S1 = rotate A by 315 around O
+  # S2 = Rotate(A, 45°, O)
+  point S2 = rotate A by 45 around O
+  # S3 = Rotate(A, 135°, O)
+  point S3 = rotate A by 135 around O
+  # S4 = Rotate(A, 225°, O)
+  point S4 = rotate A by 225 around O
+  # Kc = Rotate(A, 135°, O)
+  point Kc = rotate A by 135 around O
+  # M = Midpoint(T, Wp)
+  point M = midpoint T Wp
+  # cK = Circle(Kc, M)
+  circle cK center(Kc) through M
+  # sTK = Segment(T, Kc)
+  segment sTK from T to Kc
+  # Q = Intersect(cK, sTK)
+  point Q = intersect cK sTK
+  # ────────────────────────────────────────────────────────
+  # t=00:30  cT = Circle(T, Q)
+  circle cT center(T) through Q
+  # ────────────────────────────────────────────────────────
+  # cR = Rotate(cT, 270°, O)
+  circle cR = rotate cT by 270 around O
+  # sOA = Segment(O, A)
+  segment sOA from O to A
+  # W0 = Intersect(cR, sOA)
+  point W0 = intersect cR sOA
+  # W1 = Rotate(W0, 51.428571429°, A)
+  point W1 = rotate W0 by 51.428571429 around A
+  # W2 = Rotate(W0, 102.857142857°, A)
+  point W2 = rotate W0 by 102.857142857 around A
+  # W3 = Rotate(W0, 154.285714286°, A)
+  point W3 = rotate W0 by 154.285714286 around A
+  # W4 = Rotate(W0, 205.714285714°, A)
+  point W4 = rotate W0 by 205.714285714 around A
+  # W5 = Rotate(W0, 257.142857143°, A)
+  point W5 = rotate W0 by 257.142857143 around A
+  # W6 = Rotate(W0, 308.571428571°, A)
+  point W6 = rotate W0 by 308.571428571 around A
+  # l13 = Line(W1, W3)
+  line l13 from W1 to W3
+  # l02 = Line(W0, W2)
+  line l02 from W0 to W2
+  # C1 = Intersect(l13, l02)
+  point C1 = intersect l13 l02
+  # sAC = Segment(A, C1)
+  segment sAC from A to C1
+  # ────────────────────────────────────────────────────────
+  # t=01:06  cIn = Circle(O, sAC)
+  circle cIn center(O) radius dist(A, C1)
+  # ────────────────────────────────────────────────────────
+  # rOA = Ray(O, A)
+  line rOA from O to A
+  # P0 = Intersect(cIn, rOA)
+  point P0 = intersect cIn rOA pick nearest A
+  # P45 = Rotate(P0, 45°, O)
+  point P45 = rotate P0 by 45 around O
+  # P315 = Rotate(P0, 315°, O)
+  point P315 = rotate P0 by 315 around O
+  # oe = Segment(P0, P45)
+  segment oe from P0 to P45
+  # lo45 = Line(P0, P45)
+  line lo45 from P0 to P45
+  # lo315 = Line(P0, P315)
+  line lo315 from P0 to P315
+  # l46 = Line(W4, W6)
+  line l46 from W4 to W6
+  # X1 = Intersect(l13, lo45)
+  point X1 = intersect l13 lo45
+  # X2 = Intersect(l46, lo315)
+  point X2 = intersect l46 lo315
+  # aRf = Segment(X1, W3)
+  segment aRf from X1 to W3
+  # aLf = Segment(X2, W4)
+  segment aLf from X2 to W4
+  # x1e = Segment(X1, P45)
+  segment x1e from X1 to P45
+  # x2e = Segment(X2, P315)
+  segment x2e from X2 to P315
+  # l05 = Line(W0, W5)
+  line l05 from W0 to W5
+  # sqR = Line(S1, S2)
+  line sqR from S1 to S2
+  # VL = Intersect(l05, sqR)
+  point VL = intersect l05 sqR
+  # VR = Intersect(l02, sqR)
+  point VR = intersect l02 sqR
+  # v1 = Segment(S2, VL)
+  segment v1 from S2 to VL
+  # v2 = Segment(VL, W0)
+  segment v2 from VL to W0
+  # v3 = Segment(W0, VR)
+  segment v3 from W0 to VR
+  # v4 = Segment(VR, S1)
+  segment v4 from VR to S1
+  # rS = Line(A, W2)
+  line rS from A to W2
+  # tS = Rotate(rS, 90°, O)
+  line tS = rotate rS by 90 around O
+  # lS = Rotate(rS, 180°, O)
+  line lS = rotate rS by 180 around O
+  # bS = Rotate(rS, 270°, O)
+  line bS = rotate rS by 270 around O
+  # N1 = Intersect(rS, tS)
+  point N1 = intersect rS tS
+  # N2 = Intersect(rS, bS)
+  point N2 = intersect rS bS
+  # bd = Segment(N2, N1)
+  segment bd from N2 to N1
+  # l42 = Line(W4, W2)
+  line l42 from W4 to W2
+  # F1 = Intersect(l46, rS)
+  point F1 = intersect l46 rS
+  # E1 = Intersect(l42, bS)
+  point E1 = intersect l42 bS
+  # aR = Segment(X1, C1)
+  segment aR from X1 to C1
+  # aL = Segment(X2, F1)
+  segment aL from X2 to F1
+  # t1 = Segment(C1, W2)
+  segment t1 from C1 to W2
+  # t2 = Segment(W2, E1)
+  segment t2 from W2 to E1
+  # upright = Rotate(tile, -12.857142857°, O)
+  point O_upright = rotate O by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point S2_upright = rotate S2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point VL_upright = rotate VL by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point W0_upright = rotate W0 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point VR_upright = rotate VR by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point S1_upright = rotate S1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point X1_upright = rotate X1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point C1_upright = rotate C1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point X2_upright = rotate X2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point F1_upright = rotate F1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point W2_upright = rotate W2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point E1_upright = rotate E1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point P45_upright = rotate P45 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point P315_upright = rotate P315 by -12.857142857 around O
+  # ────────────────────────────────────────────────────────
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point O_uprightBd = rotate O by -12.857142857 around O
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point N2_uprightBd = rotate N2 by -12.857142857 around O
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point N1_uprightBd = rotate N1 by -12.857142857 around O
+  # ────────────────────────────────────────────────────────
+  # mR = Rotate(rS, -12.857142857°, O)
+  line mR = rotate rS by -12.857142857 around O
+  # mB = Rotate(mR, 270°, O)
+  line mB = rotate mR by 270 around O
+  # N1u = Rotate(N1, -12.857142857°, O)
+  point N1u = rotate N1 by -12.857142857 around O
+  # TLu = Rotate(N1u, 90°, O)
+  point TLu = rotate N1u by 90 around O
+  # FR = Reflect(TLu, mR)
+  point FR = reflect TLu across mR
+  # FBR = Reflect(FR, mB)
+  point FBR = reflect FR across mB
+  # FBL = Reflect(TLu, mB)
+  point FBL = reflect TLu across mB
+  # f1 = Reflect(upright, mR)
+  point O_upright_f1 = reflect O_upright across mR
+  # f1 = Reflect(upright, mR)
+  point S2_upright_f1 = reflect S2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point VL_upright_f1 = reflect VL_upright across mR
+  # f1 = Reflect(upright, mR)
+  point W0_upright_f1 = reflect W0_upright across mR
+  # f1 = Reflect(upright, mR)
+  point VR_upright_f1 = reflect VR_upright across mR
+  # f1 = Reflect(upright, mR)
+  point S1_upright_f1 = reflect S1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point X1_upright_f1 = reflect X1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point C1_upright_f1 = reflect C1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point X2_upright_f1 = reflect X2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point F1_upright_f1 = reflect F1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point W2_upright_f1 = reflect W2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point E1_upright_f1 = reflect E1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point P45_upright_f1 = reflect P45_upright across mR
+  # f1 = Reflect(upright, mR)
+  point P315_upright_f1 = reflect P315_upright across mR
+  # f2 = Reflect({upright, f1}, mB)
+  point O_upright_f2 = reflect O_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S2_upright_f2 = reflect S2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VL_upright_f2 = reflect VL_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W0_upright_f2 = reflect W0_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VR_upright_f2 = reflect VR_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S1_upright_f2 = reflect S1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X1_upright_f2 = reflect X1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point C1_upright_f2 = reflect C1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X2_upright_f2 = reflect X2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point F1_upright_f2 = reflect F1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W2_upright_f2 = reflect W2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point E1_upright_f2 = reflect E1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P45_upright_f2 = reflect P45_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P315_upright_f2 = reflect P315_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point O_upright_f1_f2 = reflect O_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S2_upright_f1_f2 = reflect S2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VL_upright_f1_f2 = reflect VL_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W0_upright_f1_f2 = reflect W0_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VR_upright_f1_f2 = reflect VR_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S1_upright_f1_f2 = reflect S1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X1_upright_f1_f2 = reflect X1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point C1_upright_f1_f2 = reflect C1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X2_upright_f1_f2 = reflect X2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point F1_upright_f1_f2 = reflect F1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W2_upright_f1_f2 = reflect W2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point E1_upright_f1_f2 = reflect E1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P45_upright_f1_f2 = reflect P45_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P315_upright_f1_f2 = reflect P315_upright_f1 across mB
+
+pattern jlTmt_279M4 on jlTmt_279M4_scaffold
+  # upright = Rotate(tile, -12.857142857°, O)
+  rotate 4 around O_upright
+    connect S2_upright -> VL_upright
+    connect VL_upright -> W0_upright
+    connect W0_upright -> VR_upright
+    connect VR_upright -> S1_upright
+    connect X1_upright -> C1_upright
+    connect X2_upright -> F1_upright
+    connect C1_upright -> W2_upright
+    connect W2_upright -> E1_upright
+    connect X1_upright -> P45_upright
+    connect X2_upright -> P315_upright
+  # f1 = Reflect(upright, mR)
+  rotate 4 around O_upright_f1
+    connect S2_upright_f1 -> VL_upright_f1
+    connect VL_upright_f1 -> W0_upright_f1
+    connect W0_upright_f1 -> VR_upright_f1
+    connect VR_upright_f1 -> S1_upright_f1
+    connect X1_upright_f1 -> C1_upright_f1
+    connect X2_upright_f1 -> F1_upright_f1
+    connect C1_upright_f1 -> W2_upright_f1
+    connect W2_upright_f1 -> E1_upright_f1
+    connect X1_upright_f1 -> P45_upright_f1
+    connect X2_upright_f1 -> P315_upright_f1
+  # f2 = Reflect({upright, f1}, mB)
+  rotate 4 around O_upright_f2
+    connect S2_upright_f2 -> VL_upright_f2
+    connect VL_upright_f2 -> W0_upright_f2
+    connect W0_upright_f2 -> VR_upright_f2
+    connect VR_upright_f2 -> S1_upright_f2
+    connect X1_upright_f2 -> C1_upright_f2
+    connect X2_upright_f2 -> F1_upright_f2
+    connect C1_upright_f2 -> W2_upright_f2
+    connect W2_upright_f2 -> E1_upright_f2
+    connect X1_upright_f2 -> P45_upright_f2
+    connect X2_upright_f2 -> P315_upright_f2
+  # f2 = Reflect({upright, f1}, mB)
+  rotate 4 around O_upright_f1_f2
+    connect S2_upright_f1_f2 -> VL_upright_f1_f2
+    connect VL_upright_f1_f2 -> W0_upright_f1_f2
+    connect W0_upright_f1_f2 -> VR_upright_f1_f2
+    connect VR_upright_f1_f2 -> S1_upright_f1_f2
+    connect X1_upright_f1_f2 -> C1_upright_f1_f2
+    connect X2_upright_f1_f2 -> F1_upright_f1_f2
+    connect C1_upright_f1_f2 -> W2_upright_f1_f2
+    connect W2_upright_f1_f2 -> E1_upright_f1_f2
+    connect X1_upright_f1_f2 -> P45_upright_f1_f2
+    connect X2_upright_f1_f2 -> P315_upright_f1_f2
+  # ────────────────────────────────────────────────────────
+  # t=02:38  fence = Polyline(TLu, FR, FBR, FBL, TLu)
+  connect [ TLu -> FR, FR -> FBR, FBR -> FBL, FBL -> TLu ]
+
+coaster Coaster
+  outline pattern
+  inscribe jlTmt_279M4
+  base $height
+  strap width $strap
+  edge fillet $round top
