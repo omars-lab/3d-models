@@ -73,6 +73,14 @@ Finished work that a session may not merge itself. Take a line off when it lands
 The four youtube branches and 3d-models #427, #432, #433 and #434 merged on 2026-09-30 (#424
 and #425 closed, superseded by #427).
 
+## Schema package release — waiting on Omar
+
+bikar #289 (2026-09-30) copied youtube's newer construction schema into bikar and set
+`@naqshcoffee/qiyas-schema` to 0.3.2. Only bikar's own code uses the new version so far. Other
+repos get it once the `schema-v0.3.2` tag is pushed, which publishes it; the tag is Omar's. The
+last published version is 0.3.0, so the tag also ships the 0.3.1 change, the first copy of the
+construction schema.
+
 ## Cross-repo governance
 
 How this repo's decisions log joins a decision hub (Omar's call;
