@@ -67,11 +67,10 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 
 Finished work that a session may not merge itself. Take a line off when it lands.
 
-- **3d-models:** #430 is another session's ledger work (rows for the ten youtube
-  reconstructions that have none, which turns `make validate-constructions` green).
-
-The four youtube branches and 3d-models #427, #432, #433 and #434 merged on 2026-09-30 (#424
-and #425 closed, superseded by #427).
+None waiting. The four youtube branches and 3d-models #427, #432, #433 and #434 merged on
+2026-09-30 (#424 and #425 closed, superseded by #427). #430, another session's ledger rows for
+ten youtube reconstructions, was approved by Omar the same day. It had fallen behind master, so
+it landed through a fresh branch that merged it and worked the conflicts by hand.
 
 ## Schema package release — waiting on Omar
 
