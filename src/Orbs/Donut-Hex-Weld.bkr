@@ -18,7 +18,7 @@
 # So the studio reports `watertight` from the per-cap flag, and `--format stl`'s
 # aggregate mesh gate is not the gate that certifies this pair.
 #
-# See:  3d-models docs/round-orb-placement-design.md ; bikar#98 (Phase 1).
+# See:  3d-models docs/design/orb/round-orb-placement-design.md ; bikar#98 (Phase 1).
 
 blueprint donut_hex
   circle C0 center(0,0) radius 100

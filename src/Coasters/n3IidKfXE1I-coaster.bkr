@@ -1,13 +1,19 @@
 # naqsh construction — n3IidKfXE1I
 # title: Variable-angled 12-6-4 Star Rosette Pattern
 # url: https://youtu.be/n3IidKfXE1I
-# steps: 65 statements, 61 tagged steps
-# source: reconstructions/n3IidKfXE1I/construction.ggb-commands sha256:b93288707e9ffa7dcd88563208545e1b642ef2026261c2c9a1c2ad831d4d62e0
+# steps: 73 statements, 69 tagged steps
+# source: reconstructions/n3IidKfXE1I/construction.ggb-commands sha256:0cf1d28b53189b27ea7c29c28dc6685121c7bbba587ef554a73ebd307dc925ea
 # renamed: O' -> O_p (apostrophe is not an identifier character)
+# renamed: m1' -> m1_p (apostrophe is not an identifier character)
+# renamed: m3' -> m3_p (apostrophe is not an identifier character)
+# renamed: m2' -> m2_p (apostrophe is not an identifier character)
+# renamed: m4' -> m4_p (apostrophe is not an identifier character)
+# coaster only: omits l1 — drawn in the video, left off the coaster
 
-param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param size = 90 range 40..120   # mm, finished coaster diameter — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
-param unit = ($size - 2 * $margin) / 5.2321   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+param unit = ($size - 2 * $margin) / 3.7321   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
 blueprint n3IidKfXE1I_scaffold
   # ────────────────────────────────────────────────────────
@@ -184,49 +190,54 @@ blueprint n3IidKfXE1I_scaffold
   # ────────────────────────────────────────────────────────
   # t=23:48  poly6 = Polygon(Z, R_1, N_1, Q_1, T_2, S_1)
   polygon poly6 [ Z R_1 N_1 Q_1 T_2 S_1 ]
+  # ────────────────────────────────────────────────────────
+  # t=24:58  m1' = Reflect(m1, l_1)
+  point O_m1_p = reflect O across l_1
+  # t=24:58  m1' = Reflect(m1, l_1)
+  polygon q1_m1_p = reflect q1 across l_1
+  # t=24:58  m1' = Reflect(m1, l_1)
+  polygon poly4_m1_p = reflect poly4 across l_1
+  # ────────────────────────────────────────────────────────
+  # t=26:24  r_3 = Reflect(m_1, l_1)
+  line r_3 = reflect m_1 across l_1
+  # ────────────────────────────────────────────────────────
+  # t=26:32  s_3 = Reflect(k_1, r_3)
+  line s_3 = reflect k_1 across r_3
+  # ────────────────────────────────────────────────────────
+  # t=26:44  m3' = Reflect(m3, r_3)
+  point V_m3_p = reflect V across r_3
+  # t=26:44  m3' = Reflect(m3, r_3)
+  polygon poly6_m3_p = reflect poly6 across r_3
+  # ────────────────────────────────────────────────────────
+  # t=26:52  m2' = Reflect(m2, s_3)
+  point W_m2_p = reflect W across s_3
+  # t=26:52  m2' = Reflect(m2, s_3)
+  polygon poly5_m2_p = reflect poly5 across s_3
+  # ────────────────────────────────────────────────────────
+  # t=27:00  m4 = Reflect(m3, s_3)
+  point V_m4 = reflect V across s_3
+  # t=27:00  m4 = Reflect(m3, s_3)
+  polygon poly6_m4 = reflect poly6 across s_3
+  # ────────────────────────────────────────────────────────
+  # t=27:45  m4' = Reflect(m4, m_1)
+  point V_m4_m4_p = reflect V_m4 across m_1
+  # t=27:45  m4' = Reflect(m4, m_1)
+  polygon poly6_m4_m4_p = reflect poly6_m4 across m_1
 
 pattern n3IidKfXE1I on n3IidKfXE1I_scaffold
-  # ────────────────────────────────────────────────────────
-  # t=03:02  poly1 = Polygon(A, B, 12)
-  edges from poly1
-  # ────────────────────────────────────────────────────────
-  # t=03:25  poly2 = Polygon(A, Lv, 6)
-  edges from poly2
-  # t=03:25  poly3 = Polygon(Cv, B, 6)
-  edges from poly3
-  # ────────────────────────────────────────────────────────
-  # t=16:33  q1 = Polygon(P, C_1, F_1, G_1)
-  edges from q1
-  # ────────────────────────────────────────────────────────
-  # t=16:58  poly4 = Polygon(C_1, H_1, I_1, A_1, X, P)
-  edges from poly4
   # ────────────────────────────────────────────────────────
   # t=18:22  m1 = Sequence(Rotate({q1, poly4}, pi*i/6, O), i, 0, 11)
   rotate 12 around O
     edges from q1
     edges from poly4
-  # ────────────────────────────────────────────────────────
-  # t=19:55  poly5 = Polygon(J_1, A_1, L_1, M_1, K_1, D_1)
-  edges from poly5
-  # ────────────────────────────────────────────────────────
-  # t=20:34  m2 = Sequence(Rotate({poly5}, pi*i/3, W), i, 0, 5)
-  rotate 6 around W
-    edges from poly5
-  # ────────────────────────────────────────────────────────
-  # t=23:48  poly6 = Polygon(Z, R_1, N_1, Q_1, T_2, S_1)
-  edges from poly6
-  # ────────────────────────────────────────────────────────
-  # t=24:22  m3 = Sequence(Rotate({poly6}, pi*i/2, V), i, 0, 3)
-  rotate 4 around V
-    edges from poly6
   palette pal
     Slab = #333333
     Gold = #d4af37
 
 coaster Coaster
-  outline square $size
+  outline round $size
   inscribe n3IidKfXE1I
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

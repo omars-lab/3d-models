@@ -5,6 +5,7 @@
 # source: reconstructions/lEfWSogWscs/construction.ggb-commands sha256:abc8a7a2a19204979013350afba0321050f6231e917eeab7d7c0274abb7f0004
 
 param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * $margin) / 2.4143   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
@@ -169,7 +170,7 @@ pattern lEfWSogWscs on lEfWSogWscs_scaffold
 coaster Coaster
   outline polygon 8 $size rotate 0
   inscribe lEfWSogWscs
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

@@ -5,6 +5,7 @@
 # source: reconstructions/sDO9fpu76v8/construction.ggb-commands sha256:ffb1ca403e4af5c6dac560c88b1037d897b0365b34f65aaa064681426c2ff78e
 
 param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * $margin) / 6.5397   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 param G = 0.33333333333
@@ -327,7 +328,7 @@ pattern sDO9fpu76v8 on sDO9fpu76v8_scaffold
 coaster Coaster
   outline polygon 6 $size rotate 0
   inscribe sDO9fpu76v8
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

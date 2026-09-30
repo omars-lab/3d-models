@@ -10,6 +10,7 @@
 # renamed: l1' -> l1_p (apostrophe is not an identifier character)
 
 param size = 90 range 40..120   # mm, finished coaster side — the print knob
+param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
 param unit = ($size - 2 * $margin) / 4.8285   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
@@ -266,7 +267,7 @@ pattern rDuxHF3xMOc on rDuxHF3xMOc_scaffold
 coaster Coaster
   outline square $size
   inscribe rDuxHF3xMOc
-  base 4
+  base $height
   relief straps emboss 1.2
   strap width 2
   color base Slab

@@ -21,7 +21,7 @@
 # ring and lands them at the cap edge. Declared, never guessed (Tenet 23).
 #
 # Render:  bikar render Donut-Hex-Orb.bkr --format stl -o out.stl
-# See:     3d-models docs/round-orb-placement-design.md ; bikar#98.
+# See:     3d-models docs/design/orb/round-orb-placement-design.md ; bikar#98.
 
 blueprint donut_hex
   circle C0 center(0,0) radius 100
