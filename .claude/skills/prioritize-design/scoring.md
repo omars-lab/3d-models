@@ -83,7 +83,9 @@ The facts of a made coaster are the coaster **as built**. A candidate that could
 way gets a second row with the variant word after the id (`` `NtnlGMTElBk` woven ``); the tool
 ranks it as its own candidate. Facts are one reader's reading of the pictures and the
 catalog-expansion backlog's coaster notes (2026-09-29, researcher B; the three D-087 pieces and
-the four newer candidates added 2026-09-30). Change one when a render shows otherwise.
+the four newer candidates added 2026-09-30; the twelve #430 reconstructions added the same day
+from their backlog entries and final renders, not measured). Change one when a render shows
+otherwise.
 
 | id | catalog | fold family | layout | outline | lines | sell | same source as |
 |---|---|---|---|---|---|---|---|
@@ -109,6 +111,18 @@ the four newer candidates added 2026-09-30). Change one when a render shows othe
 | `0ke_GpoBa-s` | | 5/10 | centre | round | straight | credit | the methods of Aljanabi and Sarvdalir |
 | `88q-u2eWZqg` | | 4/8 | centre | round | arcs | credit | 16 petals in one unbroken line |
 | `1h7iWJaoN80` | | 7 | tile | rectangle | straight | credit | Folio 192, Anonymous Persian Compendium |
+| `kpFgs2e8YGw` | | 3/6/12 | field cut | round | straight | credit | a round patch of a 3-uniform tiling, centred on a hexagon |
+| `cKYbKQvmsbs` | | 4/8 | tile | square | straight | credit | Sultan Barsbay, Cairo; a 16-fold centre with quarter 8-folds in the corners |
+| `1TclLO9JKAA` | | 9/18 | centre | round | straight | credit | drawn in a nonagon; the list has no nonagon, so round |
+| `ZXKYNvqtFKs` | | 3/6/12 | centre | round | arcs | credit | circles only; the polygon is a slider (11, 8 and 12 shown), read at the render's 12 |
+| `tcZQLpnxGpw` | | 3/6/12 | centre | round | straight | credit | drawn in a 12-gon; 8-point stars in its squares |
+| `itZftnqJ3tI` | | 3/6/12 | tile | square | straight | credit | 12-point rosettes with 4-fold rosettes and octagons |
+| `Ln-s5FzLGms` | | 4/8 | tile | square | straight | credit | 8-fold rosettes on a lattice turned 45° |
+| `awOusq0uVzc` | | 4/8 | tile | square | straight | credit | the minbar of the Ibn Tulun mosque, Cairo; one angle bends it (22.5° to 30°) |
+| `xtox61vADMA` | | 9/18 | centre | round | straight | credit | the point count is a slider (5 to 30), read at the video's end, 18 |
+| `ZFQt67eZ9Sg` | | 4/8 | tile | square | straight | credit | the door of the Hall of the Two Sisters, Alhambra |
+| `XfY1r7QKYwA` | | 7 | centre | heptagon | straight | credit | the same kind of rosette as CS-6; the render has no outline, so heptagon follows CS-6 |
+| `yZN_wn0uvTY` | | 5/10 | tile | rhombus | straight | credit | the tomb of Itimad-ud-Daula, Agra (also CS-7, CS-13); held: print from gBV_JTt3Kxk, this one is off by up to 2°; rhombus read from its two tiling vectors, not measured |
 
 ## 4. Ready to build (a tie-break, not a score)
 
