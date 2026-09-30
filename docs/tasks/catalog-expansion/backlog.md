@@ -191,6 +191,18 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       makes the larger pattern. Filled shapes with outlines, of even density; the finest
       detail is the kite ring inside each 12-rosette (see the youtube reconstruction notes).
       The construction is in `reconstructions/itZftnqJ3tI/`, ready for the coaster step.
+   18. `Ln-s5FzLGms`, Sarah Brewer, 8-fold rosettes turned 45°, with squares: added from
+      youtube's `make ladder`.
+      **Done 2026-09-30 in youtube: 40/40 steps, mean edge-SSIM 0.8833** (a 44:16 narrated
+      GeoGebra screencast). For the coaster: a **4×4 square** of the square grid (group p4m).
+      8-point star rosettes, each ringed by eight petals, sit on every other grid point, with
+      octagons on the points between them and a small square where two bird's-foot tiles
+      cross, so the rosettes run on a lattice turned 45° to the square. One angle α sets
+      every piece; the finished piece is at α = 22.5°, "the classic version". The square is
+      centred on a rosette and is one quarter turned four times, so a square coaster falls
+      out naturally, and it tiles. Filled shapes with outlines, of even density; the finest
+      detail is the petal ring about each rosette (see the youtube reconstruction notes).
+      The construction is in `reconstructions/Ln-s5FzLGms/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
