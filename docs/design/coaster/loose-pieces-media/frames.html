@@ -1,0 +1,86 @@
+<!doctype html>
+<!-- Source of frames.png for loose-pieces-design.md. Regenerate with headless Chrome:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+       --hide-scrollbars --window-size=1000,600 --screenshot=frames.png frames.html
+     A schematic cut through one opening, not to scale: the gap c is drawn wide so it shows. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Loose piece frames</title>
+<style>
+  body { margin: 0; background: #fbfaf7; font: 14px/1.3 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #2b2b2b; }
+  h1 { font-size: 17px; margin: 14px 20px 2px; }
+  p.sub { margin: 0 20px 6px; color: #666; font-size: 12.5px; }
+  .frame { fill: #8d8a84; }
+  .piece { fill: #d9a931; }
+  .table { stroke: #555; stroke-dasharray: 5 4; stroke-width: 1.5; }
+  .lbl { font-size: 14px; font-weight: 600; }
+  .note { font-size: 12px; fill: #555; }
+  .dim { stroke: #b0302a; stroke-width: 1.2; }
+  .dimt { font-size: 12px; fill: #b0302a; }
+</style>
+</head>
+<body>
+<h1>Loose pieces: three ways to hold them, and three piece heights</h1>
+<p class="sub">A cut straight down through one opening. Grey is the printed frame, gold the loose piece, the dashed line the table. Not to scale: the gap c is drawn wide so it shows.</p>
+<svg id="s" width="1000" height="500" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+const s = document.getElementById('s');
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text) e.textContent = text;
+  s.appendChild(e); return e;
+}
+const rect = (x, y, w, h, cls) => el('rect', { x, y, width: w, height: h, class: cls });
+const text = (x, y, t, cls) => el('text', { x, y, class: cls, 'text-anchor': 'middle' }, t);
+
+// One panel: base line (table) at y0, panel left edge at x0.
+// strapW: strap stub width, gap: c, pieceW: piece width.
+const strapW = 44, gap = 9, pieceW = 170;
+const W = strapW * 2 + gap * 2 + pieceW;   // 276
+
+function panel(x0, y0, kind, pieceH, title, note1, note2) {
+  const slab = 26, strapH = 60;
+  el('line', { x1: x0 - 12, y1: y0, x2: x0 + W + 12, y2: y0, class: 'table' });
+  const L = x0, R = x0 + W - strapW, pL = x0 + strapW + gap;
+  if (kind === 'F1') {
+    rect(L, y0 - slab, W, slab, 'frame');                       // floor under everything
+    rect(L, y0 - slab - strapH, strapW, strapH, 'frame');
+    rect(R, y0 - slab - strapH, strapW, strapH, 'frame');
+    rect(pL, y0 - slab - pieceH, pieceW, pieceH, 'piece');
+  } else if (kind === 'F2') {
+    const H = slab + strapH, ledgeW = 22, ledgeH = 16;
+    rect(L, y0 - H, strapW, H, 'frame');
+    rect(R, y0 - H, strapW, H, 'frame');
+    rect(L + strapW, y0 - ledgeH, ledgeW + gap, ledgeH, 'frame');     // shelf, left
+    rect(R - ledgeW - gap, y0 - ledgeH, ledgeW + gap, ledgeH, 'frame'); // shelf, right
+    rect(pL, y0 - ledgeH - pieceH, pieceW, pieceH, 'piece');
+  } else {                                                      // F3: no floor
+    const H = slab + strapH;
+    rect(L, y0 - H, strapW, H, 'frame');
+    rect(R, y0 - H, strapW, H, 'frame');
+    rect(pL, y0 - pieceH, pieceW, pieceH, 'piece');
+  }
+  // the gap c, on the left
+  const gy = y0 - 122;
+  el('line', { x1: L + strapW, y1: gy, x2: L + strapW, y2: gy + 22, class: 'dim' });
+  el('line', { x1: pL, y1: gy, x2: pL, y2: gy + 22, class: 'dim' });
+  text(L + strapW + gap / 2, gy - 4, 'c', 'dimt');
+  text(x0 + W / 2, y0 + 22, title, 'lbl');
+  if (note1) text(x0 + W / 2, y0 + 40, note1, 'note');
+  if (note2) text(x0 + W / 2, y0 + 56, note2, 'note');
+}
+
+// Row 1: the three frames, piece level with the straps.
+panel(40, 205, 'F1', 60, 'F1  pockets in a solid slab', 'the piece sits on the slab', 'lift the coaster and it stays');
+panel(362, 205, 'F2', 70, 'F2  open frame with a ledge', 'a thin shelf holds the piece', 'push it out from below');
+panel(684, 205, 'F3', 86, 'F3  open frame, no floor', 'the table holds the piece', 'lift the coaster and it drops');
+// Row 2: F1 with three piece heights.
+panel(40, 440, 'F1', 60, 'flush', 'piece height = pocket depth', 'one flat top');
+panel(362, 440, 'F1', 84, 'proud', 'piece taller than the pocket', 'the pieces carry the mug');
+panel(684, 440, 'F1', 34, 'recessed', 'piece shorter than the pocket', 'the straps carry the mug');
+</script>
+</body>
+</html>
