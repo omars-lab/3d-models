@@ -22,6 +22,7 @@ The **file suffix is the name of record** — the gallery, the Lab and the plate
 | **minimal-tab** | `<id>-minimal-tab-coaster.bkr` | `openwork frame <mm>` + `interlock tab …` | minimal-frame with a tab grown from every other edge and a notch through the frame on the edges between, so neighbours join tab to notch with no third piece. Hexagon only | option B of [borderless joins](../../../docs/design/coaster/coaster-borderless-joins-design.md#b-tabs-that-reach-into-the-neighbours-openings-integral-no-loose-parts); bikar #258 |
 | **lobed** | `<id>-lobed-coaster.bkr` | `outline lobed <n> <size> depth <f>` | plain, on an N-lobe wave outline drawn with compass arcs instead of a polygon | bikar #266 (its coaster lobed-outline design doc) |
 | **fill** | `<id>-fill-coaster.bkr` | `relief both …` + `fill void where ring … color …` + `color base/straps …` | plain in several colors: the spaces between the straps filled level and colored by ring about the centre | [multicolor constructions](../../../docs/design/coaster/multicolor-constructions-design.md); bikar #261 |
+| **radial** | `<id>-radial-coaster.bkr` | `outline pattern` + `fill void where orbit == <n> …` | minimal, with whole rings of openings (orbits, numbered outward from the centre; `bikar bands` lists them) closed solid at strap height, so the piece keeps the pattern's symmetry whichever rings are chosen | bikar #270 (the `orbit` selector) |
 
 ## Where the names show up
 
