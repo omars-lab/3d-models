@@ -303,7 +303,7 @@ with on-device failure detection **and** a watched first layer **and** small par
 things we would have printed: about 6.5 mm across and 1.2 mm tall, smaller than minis-05's keys
 (about 8 × 4 mm, 1.4 mm tall), whose plate already names "can lift or be knocked off the bed" as a
 risk. Their mass is small; that part of the rule is met. The other two are Omar's to confirm at
-the printer: whether the X2D's failure detection is on, and that he watches the first layer. A brim
+the printer: whether the X2D's failure detection is on, and that they watch the first layer. A brim
 would help, but this repo's plate files cannot set one today: the per-plate settings override
 (print-quality change 4) is not in `tools/bambu/src/commands/compose.ts`. If the mitigation is not
 there, the pieces come off the plate, or print at a larger size, rather than the printer taking
