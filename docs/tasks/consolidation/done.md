@@ -2,6 +2,16 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-29: the gallery's old CS-10 picture is gone. Omar had read it as "a really weird
+  coaster" (thread uqjg9s). `make coasters` then `make deploy` (gh-pages 202e464) redrew all 27
+  coaster pictures from bikar e2b65c4. The CS-10 picture is now the symmetric 12-fold rosette.
+  The build had stopped on the one coaster with no gallery card, CS-1 radial (bikar #270). That
+  card is added, and "radial" is now in the style names. The deploy deleted only old Lab asset
+  files that the new build replaces. Two more checks were broken and are fixed in the same PR.
+  The coaster-pictures gate no longer applies its no-see-through-holes rule to openwork coasters,
+  because their real openings look the same as a pinhole in the picture. The constructions
+  ledger gains its cKYbKQvmsbs row (gallery-refresh PR).
+
 - 2026-09-29: the stranded video-loop stack is on master. Omar accepted all eight records
   (D-084); they landed as one PR, #406–#410 were closed with a link to it, and the six
   `backlog-*` branches still on the remote were deleted after checking every line they added is

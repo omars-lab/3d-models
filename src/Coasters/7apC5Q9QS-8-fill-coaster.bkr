@@ -7,6 +7,7 @@
 param size = 90 range 40..120   # mm, finished coaster side — the print knob
 param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
+param fill = 1.2 range 0.2..1.2   # mm, how far the filled shapes rise — 1.2 is flush with the straps, lower sits them below (3d-models multicolor-design §3)
 param unit = ($size - 2 * $margin) / 4   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 param pause1 = 1
 
@@ -501,7 +502,7 @@ coaster Coaster
   outline square $size
   inscribe c_7apC5Q9QS_8
   base $height
-  relief both emboss 1.2
+  relief both emboss 1.2 fills $fill
   strap width 2
   color base Slab
   color straps Gold
