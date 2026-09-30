@@ -156,7 +156,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    (the same distance from the centre) lights up, the ring's row in the Orbits panel (bikar #282)
    is marked, and a chip offers Fill ring or Clear ring, writing the same `fill void where orbit`
    line the tick writes. **Waiting on Omar's pick** in the Lab; the file keeps fill A as its
-   default until he saves one.
+   default until they save one.
 
    ![CS-1 radial fill choices](../../catalog/media/GimTvN9hw4U/GimTvN9hw4U-radial-choices.png)
 
@@ -184,9 +184,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      frame;
    - a guided page where someone assembles their own coaster.
 
-   The second and third need a design first: how loose pieces fit (the interlock's clearance
-   numbers are for a different joint), and what the guided steps are. Call 2 on the page stays
-   open until then.
+   The design for all three is written:
+   [loose-pieces-design.md](../../design/coaster/loose-pieces-design.md) (draft, 2026-09-30).
+   It waits on Omar's four calls in its §7: which frame holds the pieces, where the guided page
+   lives, whether raised fills go on every fill coaster, and the LP-1 sample's gaps. Nothing is
+   built until they answer. Call 2 on the page stays open for the default fill height.
 7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
    `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
    either side of the true edge, and two sides are straight. Omar asked for a plainer picture
