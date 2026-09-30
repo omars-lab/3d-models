@@ -14,7 +14,7 @@ starts the work it unblocks.
 |---|---|---|---|
 | 1 | How the three scores combine | Add the ranks | Needs no weights, and nobody can source the weights |
 | 2 | Where each pattern's four facts live | New columns in the constructions ledger | One place, and the ledger's check refuses a row that leaves them out |
-| 3 | Render the top three before choosing | Yes, render first | The two coasters that came out too open looked fine in pictures |
+| 3 | Render the top three before choosing | Yes, render first | The two patterns that came out too open looked fine in pictures |
 | 4 | Which pattern goes first | jlTmt_279M4 | Leads or ties in three of four readings, and the only one buildable today |
 
 ## 1. How the three scores combine
