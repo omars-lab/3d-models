@@ -185,6 +185,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
    already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
    §5.3), and re-run the tool to show every side straight.
+8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
+   (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
+   scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same
+   size. It passes its video checks, so either the video's quick seven-fold is itself
+   approximate or our rebuild drifts; not checked yet. Omar left it off minis-03, and no other
+   number said why. Needs: compare the petal angles with an exact 360/7 and, if the rebuild is
+   the cause, fix it in bikar and re-vendor. Hold it from plates until `sym` reaches 0.9
+   ([review-print rubric](../../../.claude/skills/review-print/rubric.md), check 6).
 
 ## Handed to the video loop
 
