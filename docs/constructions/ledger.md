@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `9126ce177375431365ac9929a0e870a0689a79e4` (2026-09-29)
+Youtube pin: `4828bfd1fe8baafce048db36b56857a875c2a57f` (2026-09-29)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **26 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **27 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **9 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -126,6 +126,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | PASS 28/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
 | `tcZQLpnxGpw` | 12-fold pattern in a 6-4-3-4 tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `itZftnqJ3tI` | Star rosettes on a 4-uniform tiling, in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
 
 ## Oracle notes
 
