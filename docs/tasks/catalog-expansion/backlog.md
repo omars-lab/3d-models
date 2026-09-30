@@ -69,7 +69,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`.
       **Coaster step done 2026-09-30**: bikar #285 (the piece and its minimal coaster, plain
       straps, no weave), ledger row filled, `CS-15`, gallery card, vendored STL. Its youtube
-      source rewrite (`ntnl-supported-vocabulary`, ec697a1) still has to land on youtube main.
+      source rewrite (`ntnl-supported-vocabulary`, ec697a1) is on youtube main since 2026-09-30,
+      re-scored 13/13, mean 0.934.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
       **Swapped 2026-09-28 in youtube for its source, `gBV_JTt3Kxk`** (Samira Mian, "Itimad Ud
       Daula", a 2-minute silent animation of the same pattern). yZN drags the ten divisions by
@@ -84,8 +85,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       **Coaster step done 2026-09-30**: bikar #287 (the piece and its minimal coaster, the
       rosette alone with the paint-over masks left off), ledger row filled, `CS-13`, gallery
       card, vendored STL. O2 FAILs on precision because of those masks (see the ledger's oracle
-      notes). Its youtube source rewrite (`gbv-supported-vocabulary`, d0732db) still has to
-      land on youtube main.
+      notes). Its youtube source rewrite (`gbv-supported-vocabulary`, d0732db) is on youtube
+      main since 2026-09-30, re-scored 11/11, mean 0.913.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
       **Done 2026-09-29 in youtube: 6/6 steps, mean edge-SSIM 0.895** (pencil on paper, then
       tracing paper; 08:05–17:00 only). The worry did not hold: the pattern is lines, not
@@ -117,7 +118,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       `reconstructions/jlTmt_279M4/`.
       **Coaster step done 2026-09-30**: bikar #286 (the piece and its minimal coaster on a
       square fit), ledger row filled, `CS-14`, gallery card, vendored STL. Its O1 PASS needs
-      youtube branch `o1-polyline-ray` (9a92134), not on youtube main yet.
+      youtube's `o1-polyline-ray` change (9a92134), on youtube main since 2026-09-30.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
       **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.855** (a 3:52 slide deck;
       the dense slides hold at ~0.73 because the slides' own lines are hand-placed slightly off).
@@ -196,9 +197,9 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
    already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
    §5.3), and re-run the tool to show every side straight. The options for smoothing the lines
-   inside the coaster too are in the smooth-lines design,
-   [3d-models #434](https://github.com/omars-lab/3d-models/pull/434) (a checker's merge of two
-   researchers' drafts, #432 and #433). **Waiting on Omar to merge #434 and close the other two.**
+   inside the coaster too are in the
+   [smooth-lines design](../../design/coaster/smooth-lines-design.md) (3d-models #434, a
+   checker's merge of two researchers' drafts, #432 and #433; all three merged 2026-09-30). Its four open calls, in §6, wait on Omar.
 8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
    (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
    scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same

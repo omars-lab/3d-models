@@ -11,8 +11,8 @@ the SKIMS font design."*
 *Status: draft, the one to act on. Nothing here is built or printed. It merges two independent
 research passes — researcher A ([PR #433](https://github.com/omars-lab/3d-models/pull/433),
 measured on the CS-2 coaster) and researcher B
-([PR #432](https://github.com/omars-lab/3d-models/pull/432), measured on CS-1) — which stay open as
-the record. A checker re-read both, re-opened the sources that decide the order, and re-read the
+([PR #432](https://github.com/omars-lab/3d-models/pull/432), measured on CS-1) — both merged
+2026-09-30 and kept as the record. A checker re-read both, re-opened the sources that decide the order, and re-read the
 bikar coaster code at `bikar-main` e2b65c4; what agreed, what did not and what nobody could confirm
 is in [smooth-lines-consolidation.md](../../research/smooth-lines-consolidation.md).*
 
@@ -404,9 +404,11 @@ before building. It differs from A's first choice (the exact outline) for the co
 ## 7. Where this came from
 
 - Researcher A: [PR #433](https://github.com/omars-lab/3d-models/pull/433) — design doc
-  `smooth-lines-design-a.md`, research `smooth-lines-research-a.md`, figures and `make_figures.py`.
+  [smooth-lines-design-a.md](smooth-lines-design-a.md), research
+  [smooth-lines-research-a.md](../../research/smooth-lines-research-a.md), figures and `make_figures.py`.
 - Researcher B: [PR #432](https://github.com/omars-lab/3d-models/pull/432) — design doc
-  `smooth-lines-design-b.md`, research `smooth-lines-research-b.md`, figures.
+  [smooth-lines-design-b.md](smooth-lines-design-b.md), research
+  [smooth-lines-research-b.md](../../research/smooth-lines-research-b.md), figures.
 - The checker's comparison and source re-checks:
   [smooth-lines-consolidation.md](../../research/smooth-lines-consolidation.md).
 - Figures here are copies of the researchers' figures, shrunk with

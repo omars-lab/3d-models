@@ -67,10 +67,11 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 
 Finished work that a session may not merge itself. Take a line off when it lands.
 
-- **youtube** (studio remote, no pull requests): `retro-doc-shape` (the retro doc layout),
-  `ntnl-supported-vocabulary`, `gbv-supported-vocabulary`, `o1-polyline-ray`.
-- **3d-models:** #427 (then close #424, #425) and #434 (then close #432, #433); both are in
-  the catalog-expansion backlog. #430 is another session's ledger work.
+- **3d-models:** #430 is another session's ledger work (rows for the ten youtube
+  reconstructions that have none, which turns `make validate-constructions` green).
+
+The four youtube branches and 3d-models #427, #432, #433 and #434 merged on 2026-09-30 (#424
+and #425 closed, superseded by #427).
 
 ## Cross-repo governance
 
