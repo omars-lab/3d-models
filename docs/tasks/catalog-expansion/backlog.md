@@ -203,6 +203,19 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       out naturally, and it tiles. Filled shapes with outlines, of even density; the finest
       detail is the petal ring about each rosette (see the youtube reconstruction notes).
       The construction is in `reconstructions/Ln-s5FzLGms/`, ready for the coaster step.
+   19. `awOusq0uVzc`, Sarah Brewer, the Ibn Tulun variable-angle pattern (from the minbar):
+      added from youtube's `make ladder`, first held because its keyframes missed the build,
+      then screened GO once frames were grabbed every 6 seconds.
+      **Done 2026-09-30 in youtube: 60/60 steps, mean edge-SSIM 0.9197** (a 35:45 narrated
+      GeoGebra screencast). For the coaster: a **2×2 square** of the square grid (group p4m),
+      centred on an 8-point star. Half stars sit on the edges and quarter octagons in the
+      corners, with hexagonal petals and octagons between them. One angle α bends the whole
+      pattern; α = 22.5° gives the classic version and the video finishes at α = 30°, so one
+      construction yields a family of coasters. The square is one quarter turned four times
+      and then mirrored, so a square coaster falls out naturally, and it tiles. Filled shapes
+      with outlines; the finest detail is the petal and octagon pair round each star (see the
+      youtube reconstruction notes). The construction is in `reconstructions/awOusq0uVzc/`,
+      ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
