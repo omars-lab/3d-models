@@ -10,12 +10,12 @@ comment on any line in Obsidian. The next session reads this page back, writes e
 the [decisions log](../decisions-log.md) and moves the backlog item. Nothing here gets built
 until you tick a box.
 
-| # | Call | My pick | Why, in one line |
-|---|---|---|---|
-| 1 | Which rings of the CS-1 coaster are filled solid | **A**, the snowflake | The only fill that reads as a shape of its own |
-| 2 | Color fills: flush with the straps, or lower | **Choose from a print with both**, flush until then | It is a question of looks, and the pictures can't show that |
-| 3 | The outer edge of every coaster is a staircase of 0.4 mm steps | **Leave it, look at a printed edge** | The steps are under 0.3 mm; fix them only if a print shows them |
-| 4 | Eight video rebuilds are recorded but stuck off master | **Accept all eight as one PR**; make **NtnlGMTElBk** a coaster next | The notes are true, and that star builds with what we have |
+| #   | Call                                                           | My pick                                                             | Why, in one line                                                |
+| --- | -------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | Which rings of the CS-1 coaster are filled solid               | **A**, the snowflake                                                | The only fill that reads as a shape of its own                  |
+| 2   | Color fills: flush with the straps, or lower                   | **Choose from a print with both**, flush until then                 | It is a question of looks, and the pictures can't show that     |
+| 3   | The outer edge of every coaster is a staircase of 0.4 mm steps | **Leave it, look at a printed edge**                                | The steps are under 0.3 mm; fix them only if a print shows them |
+| 4   | Eight video rebuilds are recorded but stuck off master         | **Accept all eight as one PR**; make **NtnlGMTElBk** a coaster next | The notes are true, and that star builds with what we have      |
 
 At the end: [things only you can do](#things-only-you-can-do-not-decisions), which are not decisions.
 
