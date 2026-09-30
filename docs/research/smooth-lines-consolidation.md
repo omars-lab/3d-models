@@ -239,6 +239,38 @@ re-fetched and read as text: "Where two thickened line segments meet, we must pe
 join." That is how the classic strap drawing treats a bend; today's bikar strap has a round outside
 bend (round ends on each segment), so today's look is already a small departure from it.
 
+### 5.5 The vertical wall
+
+Added 2026-09-29 for design-doc option 10 (layer lines up the wall), after Omar asked whether the
+sides and the optional Bambu settings were covered. Bambu's own wiki could not be fetched: all five
+pages tried (`/en/software/bambu-studio/seam`, `/precise-wall`, `/precise-z-height`,
+`/adaptive-layer-height`, `/parameter/speed`) returned HTTP 402, so the setting descriptions come
+from the OrcaSlicer wiki and from Bambu forum and GitHub threads.
+
+| Source | Fetched | What it says |
+|---|---|---|
+| [OrcaSlicer wiki, layer height](https://github.com/SoftFever/OrcaSlicer/wiki/quality_settings_layer_height) | yes | smaller layer heights: "Less noticeable layer lines", "Smoother surface finishes"; on variable layer height only "You can use a variable layer height with the Variable Layer Height feature" |
+| [OrcaSlicer wiki, variable layer height](https://github.com/OrcaSlicer/OrcaSlicer/wiki/prepare_variable_layer_height) | yes | "dynamic adjustment of layer heights throughout the print"; three modes, adaptive (a quality/speed slider), smooth (Gaussian filtering), manual. Says nothing about where it excels and nothing about vertical walls — the design doc's "nothing to adapt to on a straight wall" is the checker's reasoning |
+| [OrcaSlicer wiki, seam](https://github.com/SoftFever/OrcaSlicer/wiki/quality_settings_seam) | yes | aligned "Will attempt to align the seam to a hidden internal facet of the model"; back "places the seam on the back side (Min Y point in that layer)"; random "places the seam randomly across the object"; nearest picks "the point that is closest to where the nozzle already is". Scarf joint "Adjusts the extrusion flow rate at seam points to create a smooth overlap between the start and end of each loop"; "Reduces visible z-seams"; "Improves cosmetic quality of curved surfaces"; "Less effective on sharp corners and overhangs"; "Requires tuning of parameters like length, speed, and flow"; scarf speed "less than 100 mm/s" recommended |
+| [OrcaSlicer wiki, precision](https://github.com/SoftFever/OrcaSlicer/wiki/quality_settings_precision) | yes | Precise wall: "improving the dimensional accuracy of prints and minimizing layer inconsistencies by slightly increasing the spacing between the outer wall and the inner wall when printing in Inner Outer wall order"; only with inner-outer order. Precise Z height: "ensures the accurate Z height of the model after slicing, even if the model height is not a multiple of the layer height", adjusting the last five layers |
+| [OrcaSlicer wiki, other layers speed](https://github.com/SoftFever/OrcaSlicer/wiki/speed_settings_other_layers_speed) | yes | outer wall speed: "Speed of outer wall which is outermost and visible. It's used to be slower than inner wall speed to get better quality and good layer adhesion." |
+| [Bambu forum 29435, "Seam position?"](https://forum.bambulab.com/t/seam-position/29435) | yes | a forum user, not Bambu: aligned "puts the seam on the sharpest corner, and works best for most models"; back "still seeks out angles on the back side, so there's not just an obvious vertical seam"; nearest "also appears random (or nearly so)"; no setting makes a straight vertical seam; the seam painting brush places it by hand |
+| [BambuStudio issue #10050](https://github.com/bambulab/BambuStudio/issues/10050) | yes | "'Smart scarf seam application' causes scarfs to not be used at all if the 'Seam Position' is Random or Nearest"; Studio 2.5.0.66; works with aligned or with smart scarf off; open, no maintainer reply visible |
+| [BambuStudio issue #8030](https://github.com/bambulab/BambuStudio/issues/8030) | yes | "Precise Wall moves outer wall inward, incorrectly shrinks printed model"; Studio 2.2.1.60; reporter says "all walls move inward" and that OrcaSlicer keeps the outer wall in place; labelled bug, assigned, no reply or fix visible. Whether our 02.08.02.61 behaves the same: not known |
+| [3djake, scarf seam guide](https://www.3djake.com/info/guide/get-rid-of-z-seams-how-to-get-smooth-surfaces-with-scarf-seam) | yes | "a gradual blend" instead of "a hard transition"; can make "the Z seam almost disappear" on uniform surfaces; "does not fix fundamental printing problems". Names no version, printer or material |
+| Precise Z height "leaves the several topmost layers bulging out slightly" | snippet | a search snippet from a forum post; not opened |
+| Precise wall "keeps outer walls at exactly one nozzle width" | snippet | a search snippet (stacksheriff); not opened, and it does not match the OrcaSlicer wiki's description, so not used |
+| Bambu wiki: seam, precise wall, precise Z height, adaptive layer height, speed | **no** (402) | not read |
+
+Local facts behind the option-10 table, all in this repo: `tools/bambu/test/fixtures/minis-04/process.flat.json`
+(`layer_height 0.2`, `seam_position aligned`, `seam_slope_type none`, `seam_slope_min_length 10`,
+`adaptive_layer_height 0`, `outer_wall_speed` first entry `200`, `small_perimeter_speed 50%`,
+`enable_arc_fitting 1`, `wall_loops 2`); `tools/bambu/test/fixtures/minis-04/flattened-slice.project_settings.config`
+(`precise_outer_wall 0`, `precise_z_height 0`); every `src/Coasters/*.bkr` sets
+`param height = 4 range 1.4..16`; `docs/prints/2026-09-26-minis-04/index.md` has `layer_mm: 0.2`
+and prints at height 1.4 (twist at 4). The six-entry `outer_wall_speed` list was not decoded beyond
+its first entry.
+
 ## 6. Code facts the design doc leans on
 
 All at bikar-main e2b65c4, `packages/core/src/kernel3d/coaster.ts` unless named.

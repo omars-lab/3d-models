@@ -43,6 +43,7 @@ straps that swell a little where they meet) and the other shape options are smal
 | [7](#7-let-the-width-vary) | Let the width vary | a drawn feel | yes | a look to show, later |
 | [8](#8-skims-influenced-soft-weld) | **SKIMS-influenced soft weld** | the softest look | light: a little; strong: a lot | **light as a style knob** |
 | [9](#9-the-top-of-the-strap) | The top of the strap | the round-over softens the top | a little | full dome: try now, no code |
+| [10](#10-up-the-wall-layer-lines) | Up the wall: layer lines | a different roughness — the slicer's, not the model's | no | per plate, no code: finer layers, scarf seam; check precise wall on a coupon first |
 
 ## 1. Where the roughness comes from
 
@@ -252,6 +253,63 @@ soft shoulders) is a new shape; the lettering research proposes the same kind of
 letters ([coaster-bubble-lettering](../../research/coaster-bubble-lettering.md)). Until option 3 is
 built, the round-over follows the staircase too (visible in the renders).
 
+### 10. Up the wall: layer lines
+
+Omar asked whether this covers the *sides* — the wall a strap shows edge-on — and whether the
+optional Bambu settings count. Options 1–9 are all about the outline seen from above. The wall has
+a second texture that none of them touches: the layer lines running around it.
+
+**How tall the wall is.** Every coaster file sets `param height = 4 range 1.4..16` (mm), so a
+strap wall is 4 mm tall unless a plate says otherwise; minis-04 printed most pieces at 1.4 mm and
+the twist at 4 mm ([minis-04 index](../../prints/2026-09-26-minis-04/index.md)). Our layer height
+is 0.2 mm — `layer_height` in the flattened X2D preset
+`tools/bambu/test/fixtures/minis-04/process.flat.json` (`0.20mm Standard @BBL X2D`) and
+`layer_mm: 0.2` in that index. So a 1.4 mm wall is 7 layers and a 4 mm wall is 20, each line
+0.2 mm tall beside steps 0.4 mm wide: the wall is stepped both ways.
+
+**Two textures, two owners.** The staircase *across* the wall (options 2–4) is in the model; no
+slicer setting removes it (§1). The layer lines *up* the wall are put there by the slicer and the
+printer; none of options 2–9 changes them, because they change the outline, not how the wall is
+stacked. Fixing one leaves the other. The one place they meet is the round-over top (option 9): a
+dome is a slope, and on a slope each layer's outline shrinks, so the layer lines show most exactly
+where the top is softest.
+
+**What shows on a 3–5 mm wall.** Three things, all set per plate in Bambu Studio, none needing
+the model changed:
+
+1. **The lines themselves**, every 0.2 mm.
+2. **The seam**, where each wall loop starts and stops, once per loop per layer. On a coaster
+   every hole is its own loop, so every hole wall has a seam of its own; the outer wall has one.
+3. **Outer-wall speed marks** — width wobble and ringing on the visible wall.
+
+**The settings, against today's plate.** "Today" is the flattened minis-04 preset above and the
+slice's `project_settings.config` beside it. All sources are named in
+[smooth-lines-consolidation §5.5](../../research/smooth-lines-consolidation.md#55-the-vertical-wall);
+Bambu's own wiki pages for these settings could not be fetched (HTTP 402 on 2026-09-29), so the
+wording comes from the OrcaSlicer wiki — the slicer Bambu Studio's Precise Wall was ported from —
+and from Bambu forum and issue threads.
+
+| Setting | Today | Can it help *this* wall? | Where the claim comes from |
+|---|---|---|---|
+| Layer height | 0.2 mm | **Yes.** Finer layers mean "Less noticeable layer lines" and "Smoother surface finishes". A 20-layer wall becomes 33 at 0.12 mm; print time grows with the layer count. Bambu ships finer X2D process presets, but which ones was not checked here. | OrcaSlicer wiki, layer height (fetched) |
+| Variable (adaptive) layer height | off (`adaptive_layer_height = 0`) | **Not on the straight wall, yes on the dome.** It varies the layer height with the model's slope; the page says nothing about vertical walls, and a wall whose outline is the same at every height gives it nothing to adapt to — the checker's reasoning, not a source's. Over the round-over's last millimetre it would put finer layers exactly where the lines show most. | OrcaSlicer wiki, variable layer height (fetched) |
+| Seam position | `aligned` | **Moves the seam, does not remove it.** A forum user: aligned "puts the seam on the sharpest corner, and works best for most models"; back puts it on the min-Y side but "still seeks out angles on the back side"; random and nearest scatter it. Star holes are all sharp corners, so aligned already tucks each hole's seam into a point. A seam-painting brush exists for hand placement. | Bambu forum 29435 (fetched, a user's account); OrcaSlicer wiki, seam (fetched) |
+| Scarf seam | off (`seam_slope_type = none`; `seam_slope_min_length = 10` mm) | **Yes on the outer wall, doubtful on the holes.** It "Reduces visible z-seams" but is "Less effective on sharp corners and overhangs" and "Requires tuning". With today's minimum length, a hole loop shorter than 10 mm gets no scarf. It needs `aligned` or `back`: with Bambu's smart scarf, random or nearest gives no scarf at all (issue #10050, Studio 2.5.0.66). The keys are in the X2D preset chain, so the setting exists for it; whether the X2D filament presets turn it on was not checked. | OrcaSlicer wiki, seam (fetched); BambuStudio issue #10050 (fetched); 3djake guide (fetched) |
+| Outer wall speed | 200 mm/s, the first entry of a six-entry list whose other entries were not decoded; `small_perimeter_speed = 50%` | **Yes, a little.** The outer wall "is outermost and visible. It's used to be slower than inner wall speed to get better quality". Small loops are already halved; what counts as small was not checked. | OrcaSlicer wiki, other layers speed (fetched) |
+| Precise wall | off (`precise_outer_wall = 0`) | **Maybe, and check the size first.** Made for "improving the dimensional accuracy of prints and minimizing layer inconsistencies" by spacing the inner wall off the outer one; works only with inner-then-outer order, which is ours. But issue #8030 (Studio 2.2.1.60, open, no reply visible) reports that in Bambu Studio "all walls move inward" and the part shrinks, where OrcaSlicer keeps the outer wall in place. On a 3 mm strap with two wall loops, and on an interlock tab, a shrink is a fit change. Whether our 02.08.02.61 behaves the same is not known. | OrcaSlicer wiki, precision (fetched); BambuStudio issue #8030 (fetched) |
+| Precise Z height | off (`precise_z_height = 0`) | **No.** It makes the total height exact when the model's height is not a multiple of the layer height, by adjusting the last layers. 4 mm and 1.4 mm are multiples of 0.2 mm, so it would do nothing; it is not a wall-texture setting. Some users report the top layers bulging with it on — snippet only. | OrcaSlicer wiki, precision (fetched); search snippets (not fetched) |
+| Curve planning (X2D firmware) and arc fitting | firmware; `enable_arc_fitting = 1`, which Studio turns off when it detects curve planning | **Not until the outline has curves.** "Better surface quality in certain scenarios, especially on rounded features" — and the staircase has none. After option 3 or 4 the hole walls become real curves and this starts to matter. | Bambu forum 250867, 253630 (fetched, §1 of option 1) |
+
+**What to try, no code.** A finer layer height, the scarf seam with `aligned` kept, and the outer
+wall slowed a step, all on one plate; precise wall only on a coupon whose size gets measured, because
+of #8030. None of this changes what §4 checks — the edge check reads the STL, and the STL has no
+layers. A wall coupon is judged by eye and by a measured size.
+
+**No picture here, on purpose.** The renders in figures 14 and 15 have no layers, and the two
+minis-03 photos ([index](../../prints/2026-09-26-minis-03/index.md)) are shot from above, where
+no layer line can be told apart. The honest picture is a wall coupon photographed edge-on; that is
+open call 1's coupon, with a side view added.
+
 ## 3. Side by side
 
 | # | What it buys | What it costs or risks | What it commits us to |
@@ -265,6 +323,7 @@ built, the round-over follows the staircase too (visible in the renders).
 | 7 Width varies | a drawn feel; symmetry kept with a shared rule | a pen at one angle breaks symmetry (84% / 89%); thinning risks the strap minimum | a width rule in the language |
 | 8 SKIMS soft weld | the softest look; symmetric (100% measured); a named style | strong changes the pattern; the blend must be order-free; looks stepped until option 3 exists | a style knob with light and strong settings; the borrowed traits stated so the SKIMS letters are never copied |
 | 9 Top: full dome | softest top today, no code | slightly less volume (B: 14.0 → 13.4 cm³ on CS-1); steps still show on the round-over until option 3 | a default change only if Omar likes it; pillow top would be new code |
+| 10 Layer lines up the wall | per plate, no code: finer layers hide the lines, scarf seam hides the outer-wall seam, slower outer wall steadies it | more layers, more time; scarf does little on short hole loops and sharp corners; precise wall may shrink the part in Bambu Studio (#8030, unconfirmed on our version) | a plate preset, not a model change; the staircase stays until option 3 or 4, and the layer lines stay whatever 2–9 do |
 
 ## 4. How we check it
 
@@ -299,6 +358,10 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
 6. Later looks: option 7 (width), the pillow top, option 6 (mitred).
 7. **Option 4 only if** open call 2 says star points must stay needle-sharp and the coupon shows the
    shaved tip is visible.
+
+Alongside, on whichever plate prints next and with no code: the wall settings of
+[option 10](#10-up-the-wall-layer-lines) — finer layers, scarf seam, a slower outer wall — with
+precise wall held back for a measured coupon.
 
 This follows researcher B's order (edge between points, then rounding, then SKIMS light, full dome
 meanwhile). It keeps researcher A's per-loop check and A's point that a printed look should come
