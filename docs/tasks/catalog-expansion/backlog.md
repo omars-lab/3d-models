@@ -151,11 +151,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
    **Omar picked none of the four fills below** (review thread kpdekz on the
    [2026-09-29 open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md),
-   2026-09-29). He wants to pick the fill himself in the Coaster Lab: fill a piece, and the Lab
-   highlights the other pieces on the same ring (the same distance from the centre) and suggests
-   filling them too. The Lab's Orbits panel (bikar #282) already lists each ring with a tick and
-   a color. What is missing is clicking a piece in the picture, the highlight of its ring, and the
-   suggestion. Built from that, the file keeps fill A as its default until he saves a pick.
+   2026-09-29). He wants to pick the fill himself in the Coaster Lab, and the picker is now on
+   bikar main (bikar #288, 2026-09-30): click a piece in the picture, every piece on its ring
+   (the same distance from the centre) lights up, the ring's row in the Orbits panel (bikar #282)
+   is marked, and a chip offers Fill ring or Clear ring, writing the same `fill void where orbit`
+   line the tick writes. **Waiting on Omar's pick** in the Lab; the file keeps fill A as its
+   default until he saves one.
 
    ![CS-1 radial fill choices](../../catalog/media/GimTvN9hw4U/GimTvN9hw4U-radial-choices.png)
 
