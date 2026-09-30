@@ -228,6 +228,16 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       the dart tips, which get narrow as k grows, so check the thinnest dart against the
       printer before picking n and k. The construction is in `reconstructions/xtox61vADMA/`,
       ready for the coaster step.
+   21. `ZFQt67eZ9Sg`, Sarah Brewer, the door pattern of the Hall of the Two Sisters in the
+      Alhambra: 8-fold in a unit square, screened GO on 2026-09-17 once frames were grabbed
+      every 5 seconds over the build. **Done 2026-09-30 in youtube: 58/58 steps, mean
+      edge-SSIM 0.8814** (a narrated GeoGebra screencast). For the coaster: **a square tile**,
+      an 8-pointed star at the centre with kites and a 14-sided star round it, and three tiles
+      along each edge, so a square coaster falls out naturally and it tiles (the finished door
+      is this square repeated). Group D4 for the square, with an 8-fold star inside. It is
+      drawn as blue lines with light green fills; the finest detail is the narrow triangle
+      between the star's arms and the edge tiles, so check it against the printer. The
+      construction is in `reconstructions/ZFQt67eZ9Sg/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
