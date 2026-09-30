@@ -169,14 +169,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
-5. **A prioritize-design skill: which pattern becomes a coaster next.** Omar, 2026-09-29, review
-   thread 952r93 on the open-calls page, instead of picking call 4b: a skill that reviews the
-   candidate coasters and guesses which customers would like most, which is most unusual, and
-   which differs most from the ones already made, "that we can iterate on". Its rubric lives in
-   a file next to the skill so it can sharpen. What customers like comes from outside sources,
-   so the rubric starts from two independent researchers and a checker. The first run ranks the
-   eight video rebuilds ([D-084](../../working-model/decisions-log.md)) and answers 4b.
-6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
+5. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
    Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
    - choose the fill height in the Lab at either end: fills lowered below the straps, or raised
      above them (the `fills <mm>` slider from bikar #283 only goes down);
@@ -187,14 +180,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    The second and third need a design first: how loose pieces fit (the interlock's clearance
    numbers are for a different joint), and what the guided steps are. Call 2 on the page stays
    open until then.
-7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
+6. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
    `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
    either side of the true edge, and two sides are straight. Omar asked for a plainer picture
    (thread 7t9o0t), which is now on the page. **Waits on a look at a printed edge:** if the steps
    can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
    already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
    §5.3), and re-run the tool to show every side straight.
-8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
+7. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
    (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
    scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same
    size. It passes its video checks, so either the video's quick seven-fold is itself

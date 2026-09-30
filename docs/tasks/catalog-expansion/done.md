@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-30 — The prioritize-design skill: which pattern becomes a coaster next. Three scores kept apart (appeal and unusual judged from the picture, difference measured by `tools/design_difference.py` from four facts per design against every made coaster in the ledger), a reads-as-a-coaster check read from review-print's rubric, the D-085 total, and a request-feedback page per round; the four-facts table for the twelve made coasters and ten candidates lives in the skill's `scoring.md` (D-086), and hook 49 fails a commit that vendors a coaster without a row (3d-models #437)
 - 2026-09-29 — Coaster Lab color controls, steps 6–8 of [color-preview-design.md](../../design/coaster/color-preview-design.md) §10: the Orbits panel with ticks, colors, presets and a Parts row (bikar #282); `fills <mm>` for fills lower than the straps, with a fill-height slider (bikar #283); and the openwork split, so a minimal coaster with filled faces prints as a straps body plus one body per fill color, the top fillet kept (bikar #284)
 - 2026-09-27 — New construction candidates from creators other than Sarah Brewer, screened by two independent researchers and a checker: 29 ids, 10 GO in rebuild order, the four disagreements settled on the sources ([the consolidated screen](../../research/candidate-screen-2026-09-27.md)); the top three handed to the video loop (3d-models #363, #364, #365)
 - 2026-09-27 — Oracle FAILs worked through, in [the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md):
