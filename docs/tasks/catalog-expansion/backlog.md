@@ -238,6 +238,16 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       drawn as blue lines with light green fills; the finest detail is the narrow triangle
       between the star's arms and the edge tiles, so check it against the printer. The
       construction is in `reconstructions/ZFQt67eZ9Sg/`, ready for the coaster step.
+   22. `XfY1r7QKYwA`, Sarah Brewer, the 7-fold star rosette built slowly (27 minutes), screened
+      GO on 2026-09-30 once frames were grabbed every 5 seconds over the build. **Done
+      2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9489** (a narrated GeoGebra
+      screencast). For the coaster: the same kind of rosette as `tA8eSdVx_EQ`, seven kites and
+      seven arrow hexagons round a centre, with the star tips on the heptagon's edges at any
+      slider angle. Group D7 (each piece is mirrored in its spoke), so it wants a round or
+      heptagonal coaster and it does not tile. The slider angle α sets the look; she
+      finishes at α = 24.5, and the thinnest part is the kite's tip near the centre, so check
+      it against the printer before picking α. The construction is in
+      `reconstructions/XfY1r7QKYwA/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
