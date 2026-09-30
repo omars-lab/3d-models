@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `1fa72ad1b75fe8010eeb992213ce8dd997b98084` (2026-09-30)
+Youtube pin: `c3368fd61a699a58386987c022e557ab9ec3e1a3` (2026-09-30)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -57,9 +57,10 @@ carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
 newer rungs, none of them a naqsh file yet. Each is "done" in the column's sense (its id is in
-the pin's done.md), though two of those rungs, `88q-u2eWZqg` (6/9) and `Y6kS1MvnKoc` (17/18),
-scored short of every step and say "attempted" in their own headings. `yZN_wn0uvTY` (9/13),
-added 2026-09-30, is the same case.
+the pin's done.md), though one of those rungs, `88q-u2eWZqg` (6/9), scored short of every
+step and says "attempted" in its own heading. `yZN_wn0uvTY` (9/13), added 2026-09-30, is the
+same case. `Y6kS1MvnKoc` was the third until 2026-09-30, when its last failing step turned out
+to be that slide's own `@view` 0.5% too large; it now passes 18/18 (mean 0.872).
 
 Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
 centreline recall / precision; O3: reference coverage — or `—` when that oracle
