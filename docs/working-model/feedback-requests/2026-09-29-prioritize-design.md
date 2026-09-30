@@ -34,8 +34,10 @@ against each other. The question is how to turn three scores into one suggestion
 **Your answer:**
 
 - [ ] Add the ranks
-- [ ] Weighted total
+- [x] Weighted total
 - Notes:
+
+**Decided 2026-09-29:** Weighted total → [D-085](../decisions-log.md#d-085--prioritize-design-combines-its-three-scores-as-a-weighted-total)
 
 ## 2. Where each pattern's four facts live
 
@@ -45,16 +47,18 @@ Today those facts are one researcher's reading of titles and pictures, stored no
 a home for the difference tool to read, for the nine made coasters and every candidate.
 [Section 5](../../design/process/prioritize-design.md#5-skill-or-gate).
 
-| Option | Pros | Cons | What it leads to |
-|---|---|---|---|
-| **Columns in the [constructions ledger](../../constructions/ledger.md)** (my pick) | One place for facts about a pattern; the ledger's existing check can refuse a row without them, so a gap fails loudly | A change to that check, and a wider ledger table | Every new ledger row needs its four facts before it counts as done |
-| A table in the skill's scoring file | No change to any check | Facts kept in a scoring file can drift from the ledger | The tool has to check for itself that the table covers every pattern |
+| Option                                                                             | Pros                                                                                                                  | Cons                                                   | What it leads to                                                     |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------- |
+| **Columns in the [constructions ledger](../../constructions/ledger.md)** (my pick) | One place for facts about a pattern; the ledger's existing check can refuse a row without them, so a gap fails loudly | A change to that check, and a wider ledger table       | Every new ledger row needs its four facts before it counts as done   |
+| A table in the skill's scoring file                                                | No change to any check                                                                                                | Facts kept in a scoring file can drift from the ledger | The tool has to check for itself that the table covers every pattern |
 
 **Your answer:**
 
 - [ ] Ledger columns
-- [ ] Table in the scoring file
+- [x] Table in the scoring file
 - Notes:
+
+**Decided 2026-09-29:** table in the scoring file → [D-086](../decisions-log.md#d-086--the-four-facts-per-pattern-live-in-a-table-in-the-skills-scoring-file)
 
 ## 3. Render the top three before choosing
 
@@ -71,9 +75,11 @@ the print-review check on each, and hold any that no longer read as a coaster.
 
 **Your answer:**
 
-- [ ] Render the three first
+- [x] Render the three first
 - [ ] Build jlTmt now
 - Notes:
+
+**Decided 2026-09-29:** render the three first → [D-087](../decisions-log.md#d-087--render-the-top-three-before-choosing-which-pattern-becomes-a-coaster)
 
 ## 4. Which pattern goes first
 
@@ -116,8 +122,10 @@ rim or printed in the minimal style (no rim)? Rank sums, lowest wins:
 - [ ] jlTmt_279M4
 - [ ] NtnlGMTElBk
 - [ ] gBV_JTt3Kxk
-- [ ] Decide after the renders in call 3
+- [x] Decide after the renders in call 3
 - Notes:
+
+**Decided 2026-09-29:** decide after the renders → [D-088](../decisions-log.md#d-088--which-pattern-goes-first-is-decided-after-the-renders)
 
 ## Things only you can do (not decisions)
 

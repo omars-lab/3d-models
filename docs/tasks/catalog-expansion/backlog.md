@@ -167,6 +167,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    a file next to the skill so it can sharpen. What customers like comes from outside sources,
    so the rubric starts from two independent researchers and a checker. The first run ranks the
    eight video rebuilds ([D-084](../../working-model/decisions-log.md)) and answers 4b.
+   **Designed:** [prioritize-design](../../design/process/prioritize-design.md). Omar's answers
+   (2026-09-29, D-085 to D-088) are a weighted total, the four facts in a table in the scoring
+   file, render first, and pick after the renders. Next, in order:
+   1. Render jlTmt_279M4, NtnlGMTElBk (flat) and gBV_JTt3Kxk in the minimal style at 90 mm.
+      Each needs import-construction first, since none has a coaster file. Run
+      `print_review.py sheet` and `art` on each, and put the results with the §8.3 totals on a
+      feedback page for Omar's pick.
+   2. Build the skill, its scoring file with the four-facts table, and the difference tool
+      (design §10).
 6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
    Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
    - choose the fill height in the Lab at either end: fills lowered below the straps, or raised

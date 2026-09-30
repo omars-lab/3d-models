@@ -1,11 +1,13 @@
 ---
-status: draft
+status: decided
 ---
 
 # Prioritize-design: which pattern becomes a coaster next
 
-**Date:** 2026-09-29 · **Status:** proposed (the vault's status field says `draft`, since it
-has no "proposed"). Omar decides; nothing is built yet.
+**Date:** 2026-09-29 · **Status:** decided, not built. Omar answered the four open calls on
+2026-09-29 ([section 9](#9-open-calls-for-omar), D-085 to D-088 in the
+[decisions log](../../working-model/decisions-log.md)): a weighted total, the four facts in the
+skill's scoring file, render the top three first, and pick after the renders.
 
 This doc merges two independent proposals, [A](prioritize-design-a.md) and
 [B](prioritize-design-b.md). A checker then re-opened their sources, and the result is in
@@ -40,9 +42,9 @@ first.
 - **"Different from ours" is arithmetic, so it is a tool.** "Liked" and "unusual" are
   judgment, so the skill judges them, shows its reasons, and asks Omar on a feedback page.
 - **A thin skill plus one small tool, not a gate.** The countable parts go into the tool and
-  into the ledger. The rest has no right answer to test against.
+  its scoring file. The rest has no right answer to test against.
 - **First run: jlTmt_279M4 is the suggestion, with NtnlGMTElBk and gBV_JTt3Kxk close
-  behind.**
+  behind.** Omar picks after the renders (D-088).
   - jlTmt leads or ties in three of the four ways the open build questions can go.
   - It is also the only one of the three that can be built today with nothing left to decide.
   - Ntnl wins only if it is woven over-under *and* printed without a round rim.
@@ -84,6 +86,12 @@ rubric each time it runs and does not copy it, so a new print verdict updates bo
 - Once a candidate has a mesh, `tools/print_review.py` gives the rubric's hints: `open` at
   0.15 or below, and `biggest` at 0.05 or above. The rubric calls them "hints for the eye, not
   a gate: nine pieces is too few to set a pass line."
+- **Symmetric, by default** (Omar, 2026-09-29, review thread uqjg9s: "we should default to
+  symetric coasters"). The same tool prints `sym`: the top-face art turned by 360/n about its
+  own centre, and how well it lands on itself. The review-print rubric's check 6 holds a piece
+  below 0.9. On 2026-09-29, 25 of the 26 current meshes scored 1.00; CS-6 (tA8eSdVx_EQ) scored
+  0.73 with uneven petals. Only turns are tried, not mirrors, and 27 pieces is a thin base for
+  the line, so it is the rubric's to move.
 - Before a mesh exists, the check is made from the picture. It is marked "not measured",
   never "passed", because pictures misled the candidate screen about openness twice (bknV,
   n3Ii).
@@ -115,8 +123,9 @@ Four parts, each scored 0, 1 or 2 from the picture:
   groups that want opposite things (Güçlütürk 2016, Mather 2023, Bies 2016). In product
   design, busier looked more original and was liked less, once other factors were held
   (Althuizen 2021).
-- A separate symmetry part is dropped because the effect is small, all the candidates are
-  symmetric, and "whole and centred" already covers it.
+- A separate symmetry part is dropped because the effect is small and "whole and centred"
+  already covers it from the picture. Once a mesh exists, symmetry is measured instead, as a
+  check before scoring (4.0), not as a score.
 
 ### 4.2 Is it unusual (judged, 0 to 2)
 
@@ -212,21 +221,19 @@ Three yes/no facts, shown beside each candidate:
 
 ### 4.5 Putting the three together
 
-The skill does three things:
+The skill does three things (Omar's pick, D-085):
 
-1. It ranks the candidates on each question separately. Tied scores share the average rank.
-2. It adds the three ranks. The lowest total is the suggestion.
-3. It breaks a tie on readiness, then on the rebuild score.
+1. It works out one total per candidate: **appeal + 5 × difference + unusual ÷ 2** (B's
+   weighted total). The highest total is the suggestion.
+2. It breaks a tie on readiness, then on the rebuild score.
+3. It shows the three raw scores beside the total, so a total that hides a weak part is still
+   visible.
 
-**Why ranks (A) and not B's weighted total.** B's total is appeal + 5 × difference +
-unusual ÷ 2.
-
-- The 5 and the ½ are stated as a guess, and nothing found in either pass can set them.
-- Adding ranks needs no weight at all. It counts the three questions equally, and whether
-  they should be equal is Omar's call.
-- What ranks give up: they ignore how big a lead is. The skill shows the raw scores beside the
-  ranks so a big lead is still visible.
-- For this first round, B's total is shown beside it too.
+**The weights are guesses, and the log says so.** The 5 and the ½ are B's, stated as a guess;
+nothing found in either pass can set them. A total keeps the size of a lead, which adding ranks
+threw away, and it can lean toward "liked" on purpose. The cost is that each round's log must
+say whether the weights moved and why (section 6). Adding ranks, A's proposal, needed no
+weights and counted the three questions equally; Omar chose the total over it.
 
 ## 5. Skill or gate?
 
@@ -241,9 +248,11 @@ checked into a check.
 - **The countable parts become checks and tools, not prose.**
   - Fill is `tools/print_review.py`, which already exists.
   - Difference is one small tool (4.3).
-  - The four facts belong in the [ledger](../../constructions/ledger.md) as columns, so the
-    ledger's existing gate can refuse a row without them, and the tool never silently skips a
-    pattern. This is the gate-shaped piece of the job.
+  - The four facts live in a table in the skill's scoring file (Omar's pick, D-086), not in
+    the [ledger](../../constructions/ledger.md). No gate changes. The cost is that the table can
+    drift from the ledger, so the difference tool checks for itself that the table has a row
+    for every made coaster and every ledger row it is asked to rank, and fails naming the
+    missing ids. This is the check-shaped piece of the job.
 - **Liked and unusual cannot be a gate.**
   - There is no right answer to test against, so a gate would have no failing case.
   - This repo already holds that a gate with no failing case tests nothing.
@@ -257,9 +266,9 @@ checked into a check.
 So the proposal is:
 
 - a thin skill;
-- a rubric file next to it (sections 4.0 to 4.5 in short form, plus an empty round log);
-- the difference tool;
-- the ledger columns.
+- a scoring file next to it: sections 4.0 to 4.5 in short form, the four-facts table, and an
+  empty round log;
+- the difference tool, which reads that table.
 
 Among the skills in `.claude/skills/` on 2026-09-29, none does this job, and none would be
 repeated:
@@ -278,7 +287,8 @@ change, and small edits.
 
 1. **Log each round against a part, not a total.** The log records:
    - date, the skill's top three, Omar's pick and his "most unusual" pick;
-   - for each disagreement, which part missed and Omar's reason.
+   - for each disagreement, which part missed and Omar's reason;
+   - whether the weights in 4.5 changed, and why (D-085).
 
    A wrong total teaches nothing. A wrong part does. (A and B.)
 2. **Change a part only on evidence.** One of these two:
@@ -370,14 +380,18 @@ These are the scores after the rubric in section 4 is applied:
 
 Two open build questions move the result: is Ntnl woven, and is it framed by a round rim or
 printed in the minimal style, where the straps are the footprint and there is no rim to leave
-wedges? Rank sums, lowest first:
+wedges? In the minimal style the rim-wedge fault goes, so Ntnl, n_IC and A9fe score 2 on "fills
+its outline" (appeal 7). Weighted totals (4.5), highest first:
 
 | reading | jlTmt | gBV | Ntnl | n_IC | A9fe | suggestion |
 |---|---|---|---|---|---|---|
-| round rim, flat lines | **6** | **6** | 10.5 | 10 | 12.5 | jlTmt (ties gBV; ready) |
-| round rim, woven Ntnl | **7** | **7** | **7** | 11 | 13 | jlTmt (three-way tie; the only one ready) |
-| minimal style, flat lines | **7.5** | **7.5** | 9.5 | 9 | 11.5 | jlTmt (ties gBV; ready) |
-| minimal style, woven Ntnl | 8.5 | 8.5 | **6** | 10 | 12 | Ntnl |
+| round rim, flat lines | **11.05** | **11.05** | 9.65 | 9.60 | 9.15 | jlTmt (ties gBV; ready) |
+| round rim, woven Ntnl | **11.05** | **11.05** | 10.75 | 9.60 | 9.15 | jlTmt (ties gBV; ready) |
+| minimal style, flat lines | **11.05** | **11.05** | 10.65 | 10.60 | 10.15 | jlTmt (ties gBV; ready) |
+| minimal style, woven Ntnl | 11.05 | 11.05 | **11.75** | 10.60 | 10.15 | Ntnl |
+
+Adding ranks, the method the feedback page also showed, names the same suggestion in all four
+readings; the one change is that round-rim woven Ntnl drops from a three-way tie to third.
 
 **The consolidated top three, and why each is there:**
 
@@ -405,9 +419,10 @@ wedges? Rank sums, lowest first:
 
 **What the scores cannot settle.**
 
-- The top three sit within about one rank point of each other in every reading.
-- One judged part moving by one point reorders them. For example, Ntnl's "reads at 90 mm"
-  is 1 because the crossings may close at size.
+- The top three sit within 1.4 points of each other in every reading, out of totals near 11.
+- One judged part moving by one point can reorder them. For example, Ntnl's "reads at 90 mm"
+  is 1 because the crossings may close at size; at 2, it leads the minimal-style flat reading
+  (11.65).
 - This is the gap both researchers named, and it is why the next step is a render and not
   more scoring.
 
@@ -415,26 +430,33 @@ wedges? Rank sums, lowest first:
 
 1. Render jlTmt, Ntnl and gBV in the minimal style at 90 mm, with Ntnl flat. Weaving is its
    own build question.
-2. Run `tools/print_review.py` on each.
-3. Hold any that fail "reads as a coaster".
-4. Put the result on Omar's page with this table.
+2. Run `tools/print_review.py` on each, including `sym`.
+3. Hold any that fail "reads as a coaster" or score `sym` below 0.9.
+4. Put the result on Omar's page with this table; he picks from it (D-087, D-088).
 
 ## 9. Open calls for Omar
 
-| call | recommended | pros | cons | implications |
-|---|---|---|---|---|
-| **How to combine the three** | add the ranks (A) | no weight nobody can source; each question counts the same | ignores how big a lead is (so raw scores are shown beside it) | the first rounds of the log test whether equal is right |
-| | weighted total (B) | keeps the size of a lead; can lean toward appeal on purpose | the 5 and the ½ are guesses | each round's log must say whether the weights moved and why |
-| **Where the four facts live** | ledger columns (B) | one place for facts about a pattern; the ledger gate can require them, so a missing fact fails loudly | a gate change and a wider ledger | every new ledger row needs its four facts before it counts as migrated |
-| | a table in the rubric file | no gate change | facts stored in a scoring file can drift from the ledger | the tool must check for itself that the table covers every row |
-| **First build** | render the top three, then pick (both) | the two openness mistakes on record (bknV, n3Ii) looked fine in pictures and were caught at size | one more step before a print | if jlTmt passes, it is the suggestion; if it fails, the order in 8.3 without it stands |
+All four were answered on the
+[feedback page](../../working-model/feedback-requests/2026-09-29-prioritize-design.md) on
+2026-09-29. The options, with their pros, cons and implications, are on that page and in each
+decisions-log entry.
+
+| call | recommended here | Omar's pick | decision |
+|---|---|---|---|
+| How to combine the three | add the ranks (A) | **weighted total (B)** | D-085, section 4.5 |
+| Where the four facts live | ledger columns (B) | **a table in the scoring file** | D-086, section 5 |
+| First build | render the top three, then pick | **render the three first** | D-087, section 8.3 |
+| Which pattern goes first | jlTmt_279M4 | **decide after the renders** | D-088 |
 
 ## 10. What would need building (not built here)
 
-- **The difference tool**, reading the four facts and the made set, with the Validator in
-  4.3.
-- **The four facts for the nine made coasters and the eight candidates.** Today they are one
-  reader's reading of titles and pictures (B's), stored nowhere.
-- **The skill and its rubric file**, writing through request-feedback.
+- **The renders of jlTmt, Ntnl (flat) and gBV** in the minimal style at 90 mm, checked by
+  `tools/print_review.py` (8.3, "Next"). None has a coaster file yet, so each is an
+  import-construction job first. This comes before everything below (D-087).
+- **The difference tool**, reading the four-facts table, with the Validator in 4.3. It also
+  checks that the table has a row for every made coaster and every candidate it ranks (D-086).
+- **The four facts for the nine made coasters and the eight candidates**, as that table in the
+  scoring file. Today they are one reader's reading of titles and pictures (B's).
+- **The skill and its scoring file**, writing through request-feedback.
 - **A check of the pattern outline kind** for rhombus and rectangle tiles, and of weaving in a
   coaster. Each of these changes the ranking (8.3).
