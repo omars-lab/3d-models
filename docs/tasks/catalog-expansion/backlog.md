@@ -248,6 +248,16 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       finishes at α = 24.5, and the thinnest part is the kite's tip near the centre, so check
       it against the printer before picking α. The construction is in
       `reconstructions/XfY1r7QKYwA/`, ready for the coaster step.
+   23. `yZN_wn0uvTY`, Geogebra_Road to School, the Itimad-ud-Daula ten-fold rosette built by
+      hand in GeoGebra and then tiled (Indonesian), screened GO (costly) on 2026-09-28.
+      **Attempted 2026-09-30 in youtube: 9/13 steps, mean edge-SSIM 0.7375** (a narrated
+      GeoGebra screencast; the four short steps are faint 1-px guide lines and point labels,
+      and the finished tiling passes at 0.861). For the coaster: this is the same pattern as
+      item 6 (`gBV_JTt3Kxk`), but her points were dragged by eye, so the ten-fold symmetry is
+      off by up to 2° and the reconstruction keeps her error on purpose. **Print from item 6,
+      not this one.** What this one adds is the tiling: the rosette with a peach petal in each
+      red loop, copied by two vectors, u = (−6.12, 8.1) and v = (−5.85, −7.79). The
+      construction is in `reconstructions/yZN_wn0uvTY/`.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
