@@ -5561,3 +5561,86 @@ line, as the ones the old stack's tip added and removed against `b6870c7`.
 **What would reverse it:** a closer look finds a rebuild wrong, for example a step that matches
 the score but not the construction. That note then moves back to held, with that reason, and
 this entry stays.
+
+## D-085 — Prioritize-design combines its three scores as a weighted total
+
+Omar, 2026-09-29, ticked "Weighted total" on call 1 of the
+[prioritize-design feedback page](feedback-requests/2026-09-29-prioritize-design.md#1-how-the-three-scores-combine),
+with no note. The design is [prioritize-design](../design/process/prioritize-design.md) §4.5.
+
+### Options
+
+- **Add the ranks** (recommended by the page, A's proposal): rank each question separately and
+  add the ranks. No weights to guess and each question counts the same, but it ignores how big
+  a lead is.
+- **Weighted total** (chosen, B's proposal): appeal + 5 × difference + unusual ÷ 2, highest
+  first. It keeps the size of a lead and can lean toward "liked" on purpose. The 5 and the ½
+  are guesses; neither researcher found anything to set them.
+
+### What it commits us to
+
+Each round's log says whether the weights changed, and why. On the first round both methods name
+the same suggestion in all four readings of §8.3 (jlTmt, tied with gBV and ahead on readiness,
+or Ntnl if woven and in the minimal style).
+
+**What would reverse it:** the round log shows the total's winner and Omar's pick parting in a
+way the ranks would have got right, twice.
+
+## D-086 — The four facts per pattern live in a table in the skill's scoring file
+
+Omar, 2026-09-29, ticked "Table in the scoring file" on call 2 of the
+[feedback page](feedback-requests/2026-09-29-prioritize-design.md#2-where-each-patterns-four-facts-live),
+with no note. Design §5.
+
+### Options
+
+- **Ledger columns** (recommended by the page): one place for facts about a pattern, and the
+  ledger gate could refuse a row without them. Costs a gate change and a wider ledger.
+- **A table in the scoring file** (chosen): no gate changes. The table can drift from the
+  ledger.
+
+### What it commits us to
+
+The difference tool checks for itself that the table has a row for every made coaster and every
+candidate it is asked to rank, and fails naming the missing ids. The constructions ledger and its
+gate stay as they are.
+
+**What would reverse it:** the table drifts from the ledger in a way the tool's own check does
+not catch, or a second tool needs the same facts.
+
+## D-087 — Render the top three before choosing which pattern becomes a coaster
+
+Omar, 2026-09-29, ticked "Render the three first" on call 3 of the
+[feedback page](feedback-requests/2026-09-29-prioritize-design.md#3-render-the-top-three-before-choosing),
+with no note. Design §8.3, "Next".
+
+### Options
+
+- **Render the three first** (chosen, recommended): jlTmt, Ntnl (flat) and gBV in the minimal
+  style at 90 mm, checked by `tools/print_review.py`. The two patterns on record that came out
+  too open (bknV, n3Ii) looked fine in pictures.
+- **Build jlTmt now**: fastest to a coaster, and skips the one check that has caught real
+  mistakes.
+
+### What it commits us to
+
+None of the three has a coaster file, so each is an import-construction job before it can be
+rendered. The renders are held on `open`, `biggest` and, since #429, `sym` below 0.9, and the
+results go back to Omar on a feedback page.
+
+**What would reverse it:** nothing on this round; it is a step, and it ends when the renders are
+on a page.
+
+## D-088 — Which pattern goes first is decided after the renders
+
+Omar, 2026-09-29, ticked "Decide after the renders in call 3" on call 4 of the
+[feedback page](feedback-requests/2026-09-29-prioritize-design.md#4-which-pattern-goes-first),
+with no note. The options were jlTmt_279M4 (the page's suggestion), NtnlGMTElBk, gBV_JTt3Kxk, or
+deciding after the renders.
+
+### What it commits us to
+
+No pattern is picked yet. The renders of D-087 go on a new feedback page with the §8.3 totals,
+and Omar picks from that.
+
+**What would reverse it:** it closes itself when he picks.
