@@ -60,8 +60,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       unit turned ten times). Every corner sits where a line of the {10/3} star crosses a line of
       the {10/4} star, so it can be cut from exact points. It already fits a circle (the unit
       circle), so no cropping is needed. The band crosses itself, so it could be cut as an
-      over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`, ready for the
-      coaster step.
+      over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`.
+      **Coaster step done 2026-09-30**: bikar #285 (the piece and its minimal coaster, plain
+      straps, no weave), ledger row filled, `CS-15`, gallery card, vendored STL. Its youtube
+      source rewrite (`ntnl-supported-vocabulary`, ec697a1) still has to land on youtube main.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
       **Swapped 2026-09-28 in youtube for its source, `gBV_JTt3Kxk`** (Samira Mian, "Itimad Ud
       Daula", a 2-minute silent animation of the same pattern). yZN drags the ten divisions by
@@ -72,8 +74,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       corners at (±tan 36°, 0) = (±0.7265, 0) R. The cell's sides are pink lines already in the
       pattern, so a tile edge never cuts a line at an arbitrary point. The lattice is
       (±0.7265, 1) R. It is either a round coaster (the rosette alone) or a rhombus coaster that
-      tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`, ready for the
-      coaster step.
+      tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`.
+      **Coaster step done 2026-09-30**: bikar #287 (the piece and its minimal coaster, the
+      rosette alone with the paint-over masks left off), ledger row filled, `CS-13`, gallery
+      card, vendored STL. O2 FAILs on precision because of those masks (see the ledger's oracle
+      notes). Its youtube source rewrite (`gbv-supported-vocabulary`, d0732db) still has to
+      land on youtube main.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
       **Done 2026-09-29 in youtube: 6/6 steps, mean edge-SSIM 0.895** (pencil on paper, then
       tracing paper; 08:05–17:00 only). The worry did not hold: the pattern is lines, not
@@ -102,7 +108,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       sides are mirror lines: a square coaster tiles edge to edge by reflection, and the half
       stars on the edges close into whole stars. The tile alone has no mirror of its own
       (it turns by quarter turns only). Tile half-width 0.975 R. The construction is in
-      `reconstructions/jlTmt_279M4/`, ready for the coaster step.
+      `reconstructions/jlTmt_279M4/`.
+      **Coaster step done 2026-09-30**: bikar #286 (the piece and its minimal coaster on a
+      square fit), ledger row filled, `CS-14`, gallery card, vendored STL. Its O1 PASS needs
+      youtube branch `o1-polyline-ray` (9a92134), not on youtube main yet.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
       **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.855** (a 3:52 slide deck;
       the dense slides hold at ~0.73 because the slides' own lines are hand-placed slightly off).

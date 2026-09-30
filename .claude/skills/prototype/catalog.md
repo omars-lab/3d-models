@@ -1745,3 +1745,103 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **What we learned**: — pending.
 - **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster`
   and `catalog` cells for `bknVRSMcLj0`.
+
+## CS-13 — Itimad-ud-Daula ten-fold rosette, minimal (Samira Mian, gBV_JTt3Kxk)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/gBV_JTt3Kxk-minimal-coaster-mini.stl` and `-standard.stl`).
+  One of the three [D-087](../../../docs/working-model/decisions-log.md) patterns,
+  built in the **minimal** style (`outline pattern`, D-070: no slab, the strap
+  network is the piece, every opening a through-hole, `edge fillet $round top`)
+  so the three can be compared at 90 mm on the
+  [renders page](../../../docs/working-model/feedback-requests/2026-09-30-top-three-renders.md).
+  The art is the ten-fold rosette from the Itimad-ud-Daula tomb in Agra: eight
+  chords orbited ten-fold (`rotate 10 around O`), four of them the reflection of
+  the other four in the horizontal (`wlow`, the first drawn segment list the
+  importer carries through an isometry). The video clips the rosette to a 72°
+  rhombus tile with four white paint-over masks; a strap coaster cannot erase
+  anything, so the coaster is the rosette alone (`--coaster-omit
+  mk1,mk2,mk3,mk4,tile`) and the construction golden keeps the tile and masks.
+  The ten scaffold arcs lower through the D-080 `cached_coords` self-bootstrap.
+  Knobs `--param strap=3` (1.6..5) and `--param round=1` (0..1.5) as CS-4;
+  `unit` is `(size − strap)/2.0001`. Both sizes pass the mesh gate at the 1.6 mm
+  free-standing floor (watertight, 0 degenerate, minFeature 3 mm) and the
+  linkage gate (1 body): the mini is 24,264 triangles / 3.5 cm³ (euler −40) and
+  the standard 78,412 / 10.7 cm³ (euler −88). Migrated with bikar PR #287.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The rosette's outer edge is the strap silhouette itself, ten points
+    with nothing between them. Does a 90 mm piece with no rim survive being
+    picked up by one point, or does it need the minimal-frame style?
+  - [ ] 2. The inner `wlow` chords cross the outer ones at shallow angles. Do
+    those crossings print as one clean wall at `strap=3`, or leave slivers?
+- **What we learned**: — pending.
+- **Feeds**: the D-087 comparison; the gallery's coaster entry; the
+  constructions ledger's `coaster` and `catalog` cells for `gBV_JTt3Kxk`.
+
+## CS-14 — Seven-and-four-fold star field, minimal (jlTmt_279M4)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/jlTmt_279M4-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/jlTmt_279M4-minimal-coaster-mini.stl` and `-standard.stl`).
+  The second [D-087](../../../docs/working-model/decisions-log.md) pattern, in the
+  **minimal** style like CS-13. The art is a field of seven-point stars around
+  octagon cells, built only from straight lines: one tile (`upright`) reflected
+  into a 2×2 block (`f1`, `f2`, lowered as `rotate 4` orbits of the conjugated
+  chords) and closed by a square fence (`Polyline`, lowered as a four-chord
+  `connect [ … ]` list). The importer fitted the outline as a **square**,
+  3.8998 GeoGebra units across. This import taught bikar `Polyline`, `Ray`,
+  a partial `Sequence` orbit and the transform of a drawn chord list, and gave
+  the cookbook its `Ray` recipe. Knobs `--param strap=3` (1.6..5) and `--param
+  round=1` (0..1.5) as CS-4; `unit` is `(size − strap)/3.8998`. Both sizes pass
+  the mesh gate at the 1.6 mm free-standing floor (watertight, 0 degenerate,
+  minFeature 3 mm) and the linkage gate (1 body): the mini is 39,824 triangles
+  / 6.0 cm³ (euler −54) and the standard 142,632 / 19.5 cm³ (euler −176).
+  Migrated with bikar PR #286.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The densest strap network of the three (176 tunnels at 90 mm). Do
+    the small openings round the octagons still read at `size=40`, or does the
+    mini close up?
+  - [ ] 2. The square fence is the only straight rim among the three. Does it
+    make the piece stiff enough to skip a frame, and does it lie flat?
+- **What we learned**: — pending.
+- **Feeds**: the D-087 comparison; the gallery's coaster entry; the
+  constructions ledger's `coaster` and `catalog` cells for `jlTmt_279M4`.
+
+## CS-15 — Mustansiriya ten-fold star band, minimal (Samira Mian, NtnlGMTElBk)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/NtnlGMTElBk-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/NtnlGMTElBk-minimal-coaster-mini.stl` and `-standard.stl`).
+  The third [D-087](../../../docs/working-model/decisions-log.md) pattern, in the
+  **minimal** style like CS-13. The art is the ten-fold star band from the
+  Mustansiriya Madrasa in Baghdad: four segments orbited ten-fold (`rotate 10
+  around O`) into one closed forty-segment band whose corners sit where a line
+  of the {10/3} star crosses a line of the {10/4} star. The band crosses
+  itself; the coaster draws it as plain straps, **no weave**. The importer
+  fitted a **round** outline, 2 GeoGebra units across, and the six scaffold
+  arcs lower through the D-080 `cached_coords` self-bootstrap. Knobs `--param
+  strap=3` (1.6..5) and `--param round=1` (0..1.5) as CS-4; `unit` is
+  `(size − strap)/2`. Both sizes pass the mesh gate at the 1.6 mm free-standing
+  floor (watertight, 0 degenerate, minFeature 3 mm) and the linkage gate (1
+  body): the mini is 23,856 triangles / 3.4 cm³ and the standard 69,580 /
+  9.3 cm³ (euler −60 at both sizes). Migrated with bikar PR #285.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The lightest of the three (9.3 cm³ at 90 mm) and the sparsest: is a
+    single band with ten open points stiff enough as a coaster, or does it
+    want the minimal-frame style?
+  - [ ] 2. The band crosses itself forty times at one height. Would an
+    over-under weave (the interlace the video draws) read better than plain
+    straps, and is it worth a `weave` variant?
+- **What we learned**: — pending.
+- **Feeds**: the D-087 comparison; the gallery's coaster entry; the
+  constructions ledger's `coaster` and `catalog` cells for `NtnlGMTElBk`.
