@@ -159,6 +159,17 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       It fits a round coaster centred on the rosette, keeping the nonagon as its outline.
       Nine-fold does not tile, so this is a single-piece coaster, not a tiling one. The
       construction is in `reconstructions/1TclLO9JKAA/`, ready for the coaster step.
+   15. `ZXKYNvqtFKs`, Sarah Brewer, rings of tangent circles: added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 26/26 steps, mean edge-SSIM 0.920** (a 3:54 narrated
+      GeoGebra screencast). For the coaster: **rings of circles** inside a regular n-gon of
+      side 1, any n from 3 to 30 (she shows 11, 8 and 12). A chain of five circles runs from
+      a vertex toward the centre, each touching the last, their radii shrinking by a fixed
+      ratio (0.606 at n = 11: 0.5, 0.303, 0.183, 0.111, 0.067); each is copied n times about
+      the centre, so the rings pack into one another (group Dn). Circles only, no straight
+      lines but the polygon. The smallest ring is fine detail at coaster size: two or three
+      rings may be the printable cut. The construction is in `reconstructions/ZXKYNvqtFKs/`,
+      ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
