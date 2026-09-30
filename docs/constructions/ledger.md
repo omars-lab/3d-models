@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `1f277f38dbcd730a9b5a431b37d16b91e5c482ee` (2026-09-29)
+Youtube pin: `fefcae6e3b9fdff777510382ce57116581e06ba2` (2026-09-29)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **21 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **22 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **9 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -114,6 +114,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
 | `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | — | — | — | — | — | — | — |
 | `jlTmt_279M4` | Sevenfold stars in a tilted square | done | — | — | — | — | — | — | — |
+| `kpFgs2e8YGw` | Star rosettes on a 3-uniform tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | — | — | — | — | — | — | — |

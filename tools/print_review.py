@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Look at a print before printing it: a top-down contact sheet and three numbers per piece.
+"""Look at a print before printing it: a top-down contact sheet and four numbers per piece.
 
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
+    python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -15,20 +16,33 @@ Beside it the tool prints, per piece, over the area inside its outline:
            rest.
   bare     the share of grid cells (8x8 over the outline) that are almost all hole. Art
            that fills the shape leaves none; a half-filled square leaves many.
+  sym      how well the art matches itself turned: the share of its top faces that land on
+           art after the best turn of 360/n about the art's own centre, n from 2 to 16,
+           checked both ways. `order` is that n. A rosette scores 1; art that sits to one
+           side, stops partway, or has uneven petals scores low. Only turns are tried, not
+           mirrors. The art is the faces at the piece's top height, so a relief coaster is
+           judged by its raised lines, not by its slab, and a join tab does not count.
+
+`art` draws the same sheet from the top faces only: what `sym` measured, with the outline's
+centre marked, so a low score can be read by eye.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
 """
+import math
 import struct
 import sys
 from collections import deque
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 S = 400          # tile size, px
 CAPTION = 32     # caption band under each tile, px
 GRID = 8         # bare-cell grid
 BARE_CELL = 0.8  # a cell at least this open counts as bare
+TOP_EPS = 0.05   # mm: a face this close to the top height is part of the art
+SYM_ORDERS = (2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 16)
+SYM_SLACK = 5    # px (MaxFilter size): how far turned art may land from art and still count
 
 
 def load_triangles(path):
@@ -39,17 +53,48 @@ def load_triangles(path):
     return [struct.unpack_from("<12f", data, 84 + 50 * i)[3:] for i in range(n)]
 
 
-def silhouette(tris):
+def silhouette(tris, top=False):
+    """The piece from above. With top=True, only the faces at its top height (the art), in
+    the same frame, so the two images line up pixel for pixel."""
     xs = [t[j] for t in tris for j in (0, 3, 6)]
     ys = [t[j] for t in tris for j in (1, 4, 7)]
     x0, y0 = min(xs), min(ys)
     span = max(max(xs) - x0, max(ys) - y0)
+    zmax = max(t[j] for t in tris for j in (2, 5, 8))
     img = Image.new("L", (S, S), 0)
     d = ImageDraw.Draw(img)
     f = lambda x, y: ((x - x0) / span * (S - 3) + 1, (S - 2) - (y - y0) / span * (S - 3))
-    for t in tris:
+    kept = [t for t in tris if not top or min(t[2], t[5], t[8]) >= zmax - TOP_EPS]
+    for t in kept:
         d.polygon([f(t[0], t[1]), f(t[3], t[4]), f(t[6], t[7])], fill=255)
-    return img
+    # the centre of what was drawn: the art's own, so a join tab that widens the outline
+    # does not move it
+    kx = [t[j] for t in kept for j in (0, 3, 6)]
+    ky = [t[j] for t in kept for j in (1, 4, 7)]
+    return img, f((min(kx) + max(kx)) / 2, (min(ky) + max(ky)) / 2)
+
+
+def count(img):
+    return img.histogram()[255]
+
+
+def symmetry(art, centre):
+    """(sym, order): the best turn of the art about the centre, see the module doc."""
+    art = art.point(lambda v: 255 if v > 127 else 0)
+    fat = art.filter(ImageFilter.MaxFilter(SYM_SLACK))
+    n = count(art)
+    if not n:
+        return 0.0, 0
+    scores = []
+    for k in SYM_ORDERS:
+        turned = art.rotate(360 / k, resample=Image.NEAREST, center=centre)
+        fat_turned = turned.filter(ImageFilter.MaxFilter(SYM_SLACK))
+        there = count(ImageChops.multiply(turned, fat)) / max(count(turned), 1)
+        back = count(ImageChops.multiply(art, fat_turned)) / n
+        scores.append((min(there, back), k))
+    best = max(s for s, _ in scores)
+    # a 12-fold rosette also matches its 2-, 3-, 4- and 6-fold turns: report the highest
+    return best, max(k for s, k in scores if s >= best - 0.02)
 
 
 def components(mask, w, h):
@@ -129,13 +174,28 @@ def compose(tiles, names):
 
 
 def sheet(out, paths):
-    tiles = [silhouette(load_triangles(p)) for p in paths]
+    tiles, syms = [], []
+    for p in paths:
+        tris = load_triangles(p)
+        tiles.append(silhouette(tris)[0])
+        syms.append(symmetry(*silhouette(tris, top=True)))
     names = [p.rsplit("/", 1)[-1] for p in paths]
-    print(f"{'piece':40} {'open':>6} {'biggest':>8} {'bare':>6} {'holes':>6}")
-    for name, t in zip(names, tiles):
+    print(f"{'piece':40} {'open':>6} {'biggest':>8} {'bare':>6} {'holes':>6} {'sym':>5} {'order':>5}")
+    for name, t, (sym, order) in zip(names, tiles, syms):
         m = measure(t)
-        print(f"{name:40} {m['open']:6.2f} {m['biggest']:8.2f} {m['bare']:6.2f} {m['holes']:6d}")
+        print(f"{name:40} {m['open']:6.2f} {m['biggest']:8.2f} {m['bare']:6.2f} {m['holes']:6d}"
+              f" {sym:5.2f} {order:5d}")
     compose(tiles, [n.removesuffix(".stl") for n in names]).save(out)
+    print("wrote", out)
+
+
+def art_sheet(out, paths):
+    tiles = []
+    for p in paths:
+        img, (cx, cy) = silhouette(load_triangles(p), top=True)
+        ImageDraw.Draw(img).ellipse([cx - 4, cy - 4, cx + 4, cy + 4], outline=128, width=2)
+        tiles.append(img)
+    compose(tiles, [p.rsplit("/", 1)[-1].removesuffix(".stl") for p in paths]).save(out)
     print("wrote", out)
 
 
@@ -161,6 +221,21 @@ def self_test():
         lattice(d)
         d.rectangle([200, 30, S - 31, S - 31], fill=0)
 
+    def star(extra):  # six-fold star outline; `extra` adds a blob off to one side
+        img = Image.new("L", (S, S), 0)
+        d = ImageDraw.Draw(img)
+        c, pts = S / 2, []
+        for i in range(12):
+            r = 150 if i % 2 == 0 else 70
+            a = math.pi * i / 6
+            pts.append((c + r * math.cos(a), c + r * math.sin(a)))
+        d.line(pts + pts[:1], fill=255, width=6)
+        if extra:
+            d.ellipse([c + 60, c + 60, c + 140, c + 140], outline=255, width=6)
+        b = img.getbbox()
+        return symmetry(img, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2))
+
+    even, lopsided = star(False), star(True)
     good, slab, part = (measure(square(f)) for f in (lattice, pinholes, half))
     tiles = [square(lattice), square(half)]
     im = compose(tiles, ["a-lattice", "b-half"])
@@ -172,6 +247,8 @@ def self_test():
         ("the lattice beats the half-fill on bare", good["bare"] < part["bare"]),
         ("every tile has its name under it", band(0) > 0 and band(1) > 0),
         ("the caption leaves the tile as drawn", measure(im.crop((0, 0, S, S))) == good),
+        ("a centred six-fold star matches itself six ways", even[0] > 0.95 and even[1] == 6),
+        ("the same star with a blob to one side does not", lopsided[0] < 0.9),
     ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
@@ -182,7 +259,7 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a == ["--self-test"]:
         sys.exit(0 if self_test() else 1)
-    if len(a) >= 3 and a[0] == "sheet":
-        sheet(a[1], a[2:])
+    if len(a) >= 3 and a[0] in ("sheet", "art"):
+        (sheet if a[0] == "sheet" else art_sheet)(a[1], a[2:])
         sys.exit(0)
     sys.exit(__doc__)

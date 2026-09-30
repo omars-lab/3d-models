@@ -29,10 +29,13 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
 2. **Make the sheet and the numbers**:
    `python3 tools/print_review.py sheet <scratch>/review.png <scratch>/*.stl`.
    It draws white material on black, one tile per piece, as seen from above. Per piece it
-   prints three numbers:
+   prints four numbers:
    - `open`: the share of the outline cut through;
    - `biggest`: the share taken by the single largest hole;
    - `bare`: the share of grid cells that are almost all hole.
+   - `sym` and `order`: how well the art matches itself turned, and the turn that matched.
+     Below 0.9, run `python3 tools/print_review.py art <out.png> <pieces>` and look at the
+     art alone.
 3. **Read the PNG yourself**, every time, all of it. The numbers flag only the plain cases. On
    2026-09-25 they flagged neither tA8e's wedges nor anything that needs a sense of what the
    pattern *should* look like ([`rubric.md`](rubric.md) §What the numbers catch).
