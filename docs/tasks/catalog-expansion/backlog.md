@@ -149,10 +149,20 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       a square coaster tiles edge to edge by reflection, and the quarter rosettes in the
       corners close into whole 8-fold rosettes. The construction is in
       `reconstructions/cKYbKQvmsbs/`, ready for the coaster step.
+   14. `1TclLO9JKAA`, Sarah Brewer, a parallel 9-fold star rosette ("Avoiding Open Paths"):
+      added from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 16/16 steps, mean edge-SSIM 0.931** (a 2:39 narrated
+      GeoGebra screencast; the finished rosette scores 0.945). For the coaster: a **nine-fold
+      rosette** (group D9) of nine petals whose long sides are parallel, inside a nonagon of
+      side 1 (circumradius 1.462). One petal is built and rotated eight times about the
+      centre; its width is 0.658 of the side. All straight lines, by compass and straightedge.
+      It fits a round coaster centred on the rosette, keeping the nonagon as its outline.
+      Nine-fold does not tile, so this is a single-piece coaster, not a tiling one. The
+      construction is in `reconstructions/1TclLO9JKAA/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
-   non-Brewer 9-fold video turned up in the searched space.
+   non-Brewer 9-fold video turned up in the searched space; item 14 is Brewer's.
 3. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
 4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
