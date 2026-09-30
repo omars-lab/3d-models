@@ -170,6 +170,17 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       lines but the polygon. The smallest ring is fine detail at coaster size: two or three
       rings may be the printable cut. The construction is in `reconstructions/ZXKYNvqtFKs/`,
       ready for the coaster step.
+   16. `tcZQLpnxGpw`, Sarah Brewer, 12-fold pattern in a 6-4-3-4 tiling: added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 57/57 steps, mean edge-SSIM 0.8945** (a 19:57 narrated
+      GeoGebra screencast). For the coaster: a **12-fold rosette filling a regular 12-gon of
+      side 1** over the 3.4.6.4 tiling: a 12-point rosette in the central hexagon, an 8-point
+      star in each of the six squares, and a ring of kites at each 12-gon corner. One angle α
+      sets every piece; the finished piece is at α = 19°. The 12-gon is a natural round-ish
+      coaster outline. Filled shapes with outlines, dense at the rim: the kite ring at each
+      12-gon corner is the finest detail. One kite ring (at H) is built from a measured
+      assumption, true at α = 19° (see the youtube reconstruction notes). The
+      construction is in `reconstructions/tcZQLpnxGpw/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
