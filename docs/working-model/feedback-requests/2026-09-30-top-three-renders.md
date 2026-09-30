@@ -21,7 +21,8 @@ next session writes the answer into the decisions log and starts the coaster.
 minimal-style coaster (straps only, no rim) at 90 mm, and passed the mesh and linkage checks at
 40 and 90 mm. Then the print-review tool measured each one the way it measures every coaster
 before a print, and I looked at every picture. All three pass the checks; they differ in what the
-eye sees. The three bikar pull requests are open and not merged:
+eye sees. The three bikar pull requests were all merged on 2026-09-30, so each coaster file is on
+bikar main whichever you pick:
 [Ntnl, 285](https://github.com/NaqshCoffee/bikar/pull/285),
 [jlTmt, 286](https://github.com/NaqshCoffee/bikar/pull/286),
 [gBV, 287](https://github.com/NaqshCoffee/bikar/pull/287).
@@ -64,7 +65,7 @@ Two things the numbers cannot say:
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
-| **gBV_JTt3Kxk** (my pick) | Cleanest read at 90 mm; one strong centre; no number flagged; ten-fold, which no made coaster has | The rosette, not the video's rhombus tile; same monument as CS-7, which may read as a set or as a repeat | Its bikar pull request merges first, then a ledger row, a gallery card and a samples plate |
+| **gBV_JTt3Kxk** (my pick) | Cleanest read at 90 mm; one strong centre; no number flagged; ten-fold, which no made coaster has | The rosette, not the video's rhombus tile; same monument as CS-7, which may read as a set or as a repeat | A ledger row, a gallery card and a samples plate |
 | jlTmt_279M4 | Ranked first on the previous page; the most even fill; clearest licence (Bourgoin, 1879) | The border slivers are the kind of thin edge piece you left off the pegs coaster before; four seven-point stars, no one centre | Either print it as is, or first decide what to do with the slivers (trim the field, or widen the frame) |
 | NtnlGMTElBk | The most different from our nine if it were woven; the strongest single star | Built flat, it is a plain ten-point star with a wide open centre; weaving in a coaster is its own piece of work first; `biggest` and `bare` sit near a piece you rejected | A weaving job in bikar before it becomes what the ranking scored |
 | Print two or all three as minis | Settles it in the hand, not on a page; a 40 mm mini each costs little filament | One more plate before any full coaster; printing is still paused on your side | A minis plate with one of each, and this call comes back after the print |
@@ -81,9 +82,6 @@ Two things the numbers cannot say:
 
 - Merge the proposal itself, pull request 427 in 3d-models; an automatic check stopped me
   merging it without your OK.
-- Merge the three bikar pull requests (285, 286, 287) once you have picked; they touch the same
-  index and count files, so the second and third need their conflicts resolved by hand, keeping
-  both sides. I can do the resolving when you say which order.
 - Land three youtube branches on youtube main, whose remote has no pull-request flow. Two rewrite
   the source constructions into vocabulary the importer supports, with every label proven to
   agree with the original: `ntnl-supported-vocabulary` (commit ec697a1) and

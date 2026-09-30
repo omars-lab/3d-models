@@ -69,9 +69,6 @@ Finished work that a session may not merge itself. Take a line off when it lands
 
 - **youtube** (studio remote, no pull requests): `retro-doc-shape` (the retro doc layout),
   `ntnl-supported-vocabulary`, `gbv-supported-vocabulary`, `o1-polyline-ray`.
-- **bikar:** update the `bikar-main` checkout to origin/main so it has #288 (the session's
-  attempt was refused as a merge without review). #285–#287 wait on the pick in
-  catalog-expansion item 9.
 - **3d-models:** #427 (then close #424, #425) and #434 (then close #432, #433); both are in
   the catalog-expansion backlog. #430 is another session's ledger work.
 

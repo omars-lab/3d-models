@@ -208,12 +208,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    the cause, fix it in bikar and re-vendor. Hold it from plates until `sym` reaches 0.9
    ([review-print rubric](../../../.claude/skills/review-print/rubric.md), check 6).
 9. **Which pattern becomes the next coaster.** The top three candidates are built in bikar as
-   minimal coasters at 90 mm (bikar #285, #286, #287, not merged) and shown on the
+   minimal coasters at 90 mm (bikar #285, #286, #287, all merged 2026-09-30) and shown on the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
    **Waiting on Omar's pick** there, and on Omar merging the proposal the page's decisions come
    from ([3d-models #427](https://github.com/omars-lab/3d-models/pull/427), which replaces
-   #424 and #425). Then: record the pick in the decisions log, merge the chosen bikar PR, and
-   start the coaster. The first full run of the
+   #424 and #425). Then: record the pick in the decisions log and start the coaster (ledger
+   row, gallery card, samples plate). The first full run of the
    [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed
    after that.
 
