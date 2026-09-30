@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `e00730cd9d4e92738d89780583d7b8a8f4839bef` (2026-09-29)
+Youtube pin: `d42a8f5552ea8d5ca63ea29ba6dec4aa6223925d` (2026-09-30)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **23 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **33 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **12 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -66,8 +66,10 @@ which built on the `coaster` declaration (P1.6/P2.7).
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
 newer rungs, none of them a naqsh file yet. Each is "done" in the column's sense (its id is in
-the pin's done.md), though two of those rungs, `88q-u2eWZqg` (6/9) and `Y6kS1MvnKoc` (17/18),
-scored short of every step and say "attempted" in their own headings.
+the pin's done.md), though one of those rungs, `88q-u2eWZqg` (6/9), scored short of every
+step and says "attempted" in its own heading. `yZN_wn0uvTY` (9/13), added 2026-09-30, is the
+same case. `Y6kS1MvnKoc` was the third until 2026-09-30, when its last failing step turned out
+to be that slide's own `@view` 0.5% too large; it now passes 18/18 (mean 0.872).
 
 Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
 centreline recall / precision; O3: reference coverage — or `—` when that oracle
@@ -110,6 +112,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
 | `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | — | — | — | — | — | — | — |
+| `1TclLO9JKAA` | Parallel 9-fold Star Rosette, "Avoiding Open Paths" (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `1h7iWJaoN80` | Folio 192 heptagonal panel, Anonymous Persian Compendium (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
 | `88q-u2eWZqg` | A 16-petal rosette in one unbroken line | done | — | — | — | — | — | — | — |
@@ -118,6 +121,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
 | `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | `bikar/patterns/Constructions/NtnlGMTElBk.bkr` | FAIL 124/20 | PASS 0.9999/1.0 | — | `src/Coasters/NtnlGMTElBk-minimal-coaster-standard.stl` | CS-15 | — |
 | `Y6kS1MvnKoc` | A Mamluk Qur'an page from seven ten-point stars | done | — | — | — | — | — | — | — |
+| `ZXKYNvqtFKs` | Rings of Tangent Circles (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `_U6G8QSfWnk` | Sutton's fivefold rectangle and its traced quarter | done | — | — | — | — | — | — | — |
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `cKYbKQvmsbs` | Sultan Barsbay 16 & 8 (Sarah Brewer) | done | — | — | — | — | — | — | — |
@@ -132,6 +136,14 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | PASS 28/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
+| `tcZQLpnxGpw` | 12-fold pattern in a 6-4-3-4 tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `itZftnqJ3tI` | Star rosettes on a 4-uniform tiling, in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `Ln-s5FzLGms` | 8-fold rosettes turned 45°, with squares (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `awOusq0uVzc` | Ibn Tulun variable-angle pattern (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `xtox61vADMA` | Discrete variable star rosette, sliders n and k (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `ZFQt67eZ9Sg` | Alhambra Hall of the Two Sisters doors, 8-fold in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `XfY1r7QKYwA` | 7-fold star rosette, the 27-minute build (Sarah Brewer) | done | — | — | — | — | — | — | — |
+| `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | done | — | — | — | — | — | — | — |
 
 ## Oracle notes
 

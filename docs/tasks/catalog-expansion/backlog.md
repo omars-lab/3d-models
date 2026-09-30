@@ -141,10 +141,143 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       rectangle in its sides, so a rectangular coaster tiles edge to edge by reflection. The
       heptagon on the bottom edge is drawn whole and pokes past the rectangle; clip it at the
       edge. The construction is in `reconstructions/1h7iWJaoN80/`, ready for the coaster step.
+   12. `kpFgs2e8YGw`, Sarah Brewer, star rosettes on a 3-uniform tiling (12-gon, hexagon,
+      square, triangle): added from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 30/30 steps, mean edge-SSIM 0.911** (a narrated GeoGebra
+      screencast with one angle slider). For the coaster: a **six-fold patch** (wallpaper
+      group p6m), a ring of 12-fold rosettes round a 6-fold rosette at the hexagon centre,
+      with 4-fold rosettes and triangle petals between them. Every line passes through a
+      point where two circles touch, at ±30° from the line joining their centres; the circles
+      sit on the vertices of a unit-edge tiling (radius ½) and at each polygon's centre
+      (radius = circumradius − ½). The 12-gon circumradius is 1.932 of the edge. All straight
+      lines, one parameter; at 30° the hexagons come out regular. It fits a round coaster
+      centred on the hexagon, clipped at the rosette ring. The construction is in
+      `reconstructions/kpFgs2e8YGw/`, ready for the coaster step.
+   13. `cKYbKQvmsbs`, Sarah Brewer, Sultan Barsbay 16 & 8 (Cairo): added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 50/50 steps, mean edge-SSIM 0.837** (a 28-minute narrated
+      GeoGebra screencast; the finished field scores 0.915 and 0.921). For the coaster: a
+      **square tile of side 2** (wallpaper group p4m) with a 16-fold rosette at its centre
+      and a quarter of an 8-fold rosette in each corner. With the centre at (1, 0) and an edge
+      midpoint at (0, 0), every line is one line, from (0, 0.541) to (0.324, 0.676), reflected
+      over mirrors 11.25° apart at the centre; the 16-point star sits on a circle about the
+      centre. All straight lines, by compass and straightedge. The sides are mirror lines, so
+      a square coaster tiles edge to edge by reflection, and the quarter rosettes in the
+      corners close into whole 8-fold rosettes. The construction is in
+      `reconstructions/cKYbKQvmsbs/`, ready for the coaster step.
+   14. `1TclLO9JKAA`, Sarah Brewer, a parallel 9-fold star rosette ("Avoiding Open Paths"):
+      added from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 16/16 steps, mean edge-SSIM 0.931** (a 2:39 narrated
+      GeoGebra screencast; the finished rosette scores 0.945). For the coaster: a **nine-fold
+      rosette** (group D9) of nine petals whose long sides are parallel, inside a nonagon of
+      side 1 (circumradius 1.462). One petal is built and rotated eight times about the
+      centre; its width is 0.658 of the side. All straight lines, by compass and straightedge.
+      It fits a round coaster centred on the rosette, keeping the nonagon as its outline.
+      Nine-fold does not tile, so this is a single-piece coaster, not a tiling one. The
+      construction is in `reconstructions/1TclLO9JKAA/`, ready for the coaster step.
+   15. `ZXKYNvqtFKs`, Sarah Brewer, rings of tangent circles: added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 26/26 steps, mean edge-SSIM 0.920** (a 3:54 narrated
+      GeoGebra screencast). For the coaster: **rings of circles** inside a regular n-gon of
+      side 1, any n from 3 to 30 (she shows 11, 8 and 12). A chain of five circles runs from
+      a vertex toward the centre, each touching the last, their radii shrinking by a fixed
+      ratio (0.606 at n = 11: 0.5, 0.303, 0.183, 0.111, 0.067); each is copied n times about
+      the centre, so the rings pack into one another (group Dn). Circles only, no straight
+      lines but the polygon. The smallest ring is fine detail at coaster size: two or three
+      rings may be the printable cut. The construction is in `reconstructions/ZXKYNvqtFKs/`,
+      ready for the coaster step.
+   16. `tcZQLpnxGpw`, Sarah Brewer, 12-fold pattern in a 6-4-3-4 tiling: added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 57/57 steps, mean edge-SSIM 0.8945** (a 19:57 narrated
+      GeoGebra screencast). For the coaster: a **12-fold rosette filling a regular 12-gon of
+      side 1** over the 3.4.6.4 tiling: a 12-point rosette in the central hexagon, an 8-point
+      star in each of the six squares, and a ring of kites at each 12-gon corner. One angle α
+      sets every piece; the finished piece is at α = 19°. The 12-gon is a natural round-ish
+      coaster outline. Filled shapes with outlines, dense at the rim: the kite ring at each
+      12-gon corner is the finest detail. One kite ring (at H) is built from a measured
+      assumption, true at α = 19° (see the youtube reconstruction notes). The
+      construction is in `reconstructions/tcZQLpnxGpw/`, ready for the coaster step.
+   17. `itZftnqJ3tI`, Sarah Brewer, star rosettes on a 4-uniform tiling, in a square: added
+      from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 102/102 steps, mean edge-SSIM 0.9062** (a 44:44 narrated
+      GeoGebra screencast). For the coaster: a **square tile of the p4m cell** (side 3 + √3,
+      the red mirror lines): 12-point rosettes on its four corners, four 4-fold rosettes about
+      its centre, octagons on its edge midpoints, all set by one angle α (the finished piece
+      is at α = 30°). A square outline is the natural coaster; it tiles, so a set of coasters
+      makes the larger pattern. Filled shapes with outlines, of even density; the finest
+      detail is the kite ring inside each 12-rosette (see the youtube reconstruction notes).
+      The construction is in `reconstructions/itZftnqJ3tI/`, ready for the coaster step.
+   18. `Ln-s5FzLGms`, Sarah Brewer, 8-fold rosettes turned 45°, with squares: added from
+      youtube's `make ladder`.
+      **Done 2026-09-30 in youtube: 40/40 steps, mean edge-SSIM 0.8833** (a 44:16 narrated
+      GeoGebra screencast). For the coaster: a **4×4 square** of the square grid (group p4m).
+      8-point star rosettes, each ringed by eight petals, sit on every other grid point, with
+      octagons on the points between them and a small square where two bird's-foot tiles
+      cross, so the rosettes run on a lattice turned 45° to the square. One angle α sets
+      every piece; the finished piece is at α = 22.5°, "the classic version". The square is
+      centred on a rosette and is one quarter turned four times, so a square coaster falls
+      out naturally, and it tiles. Filled shapes with outlines, of even density; the finest
+      detail is the petal ring about each rosette (see the youtube reconstruction notes).
+      The construction is in `reconstructions/Ln-s5FzLGms/`, ready for the coaster step.
+   19. `awOusq0uVzc`, Sarah Brewer, the Ibn Tulun variable-angle pattern (from the minbar):
+      added from youtube's `make ladder`, first held because its keyframes missed the build,
+      then screened GO once frames were grabbed every 6 seconds.
+      **Done 2026-09-30 in youtube: 60/60 steps, mean edge-SSIM 0.9197** (a 35:45 narrated
+      GeoGebra screencast). For the coaster: a **2×2 square** of the square grid (group p4m),
+      centred on an 8-point star. Half stars sit on the edges and quarter octagons in the
+      corners, with hexagonal petals and octagons between them. One angle α bends the whole
+      pattern; α = 22.5° gives the classic version and the video finishes at α = 30°, so one
+      construction yields a family of coasters. The square is one quarter turned four times
+      and then mirrored, so a square coaster falls out naturally, and it tiles. Filled shapes
+      with outlines; the finest detail is the petal and octagon pair round each star (see the
+      youtube reconstruction notes). The construction is in `reconstructions/awOusq0uVzc/`,
+      ready for the coaster step.
+   20. `xtox61vADMA`, Sarah Brewer, a discrete variable star rosette on two whole-number
+      sliders: picked from youtube's ladder over `yZN_wn0uvTY` and screened GO once frames
+      were grabbed every 6 seconds over the build (the video is 65 minutes long).
+      **Done 2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9297** (a narrated
+      GeoGebra screencast). For the coaster: **one round rosette**, a ring of n stars and n
+      kites about a centre (group Dn), so a round coaster falls out naturally; it does not
+      tile. Two sliders make it a family: n sets the number of points (5 to 30) and k the
+      angle of the pattern line, so one construction yields many coasters. The video ends at
+      n = 18, k = 15, gray darts and white stars in thick black outline; the finest detail is
+      the dart tips, which get narrow as k grows, so check the thinnest dart against the
+      printer before picking n and k. The construction is in `reconstructions/xtox61vADMA/`,
+      ready for the coaster step.
+   21. `ZFQt67eZ9Sg`, Sarah Brewer, the door pattern of the Hall of the Two Sisters in the
+      Alhambra: 8-fold in a unit square, screened GO on 2026-09-17 once frames were grabbed
+      every 5 seconds over the build. **Done 2026-09-30 in youtube: 58/58 steps, mean
+      edge-SSIM 0.8814** (a narrated GeoGebra screencast). For the coaster: **a square tile**,
+      an 8-pointed star at the centre with kites and a 14-sided star round it, and three tiles
+      along each edge, so a square coaster falls out naturally and it tiles (the finished door
+      is this square repeated). Group D4 for the square, with an 8-fold star inside. It is
+      drawn as blue lines with light green fills; the finest detail is the narrow triangle
+      between the star's arms and the edge tiles, so check it against the printer. The
+      construction is in `reconstructions/ZFQt67eZ9Sg/`, ready for the coaster step.
+   22. `XfY1r7QKYwA`, Sarah Brewer, the 7-fold star rosette built slowly (27 minutes), screened
+      GO on 2026-09-30 once frames were grabbed every 5 seconds over the build. **Done
+      2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9489** (a narrated GeoGebra
+      screencast). For the coaster: the same kind of rosette as `tA8eSdVx_EQ`, seven kites and
+      seven arrow hexagons round a centre, with the star tips on the heptagon's edges at any
+      slider angle. Group D7 (each piece is mirrored in its spoke), so it wants a round or
+      heptagonal coaster and it does not tile. The slider angle α sets the look; she
+      finishes at α = 24.5, and the thinnest part is the kite's tip near the centre, so check
+      it against the printer before picking α. The construction is in
+      `reconstructions/XfY1r7QKYwA/`, ready for the coaster step.
+   23. `yZN_wn0uvTY`, Geogebra_Road to School, the Itimad-ud-Daula ten-fold rosette built by
+      hand in GeoGebra and then tiled (Indonesian), screened GO (costly) on 2026-09-28.
+      **Attempted 2026-09-30 in youtube: 9/13 steps, mean edge-SSIM 0.7375** (a narrated
+      GeoGebra screencast; the four short steps are faint 1-px guide lines and point labels,
+      and the finished tiling passes at 0.861). For the coaster: this is the same pattern as
+      item 6 (`gBV_JTt3Kxk`), but her points were dragged by eye, so the ten-fold symmetry is
+      off by up to 2° and the reconstruction keeps her error on purpose. **Print from item 6,
+      not this one.** What this one adds is the tiling: the rosette with a peach petal in each
+      red loop, copied by two vectors, u = (−6.12, 8.1) and v = (−5.85, −7.79). The
+      construction is in `reconstructions/yZN_wn0uvTY/`.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
-   non-Brewer 9-fold video turned up in the searched space.
+   non-Brewer 9-fold video turned up in the searched space; item 14 is Brewer's.
 4. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
 5. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
