@@ -19,7 +19,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    What O1 still cannot compare (parabolas, hyperbolas, arcs, the `*_host` circles) is
    youtube's to add. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
    (2) as a crash. That patch is in the same note.
-2. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
+2. **Reconstruction intake: read rung.yaml at session start, queue done reconstructions for
+   import.** Asked by Omar on 2026-09-30. The session start hook never reads youtube's rung.yaml
+   and imports nothing; 19 rungs are done in youtube with no coaster here, 9 of them with no
+   ledger row. The [intake design](../../constructions/reconstruction-intake-design.md) proposes
+   a small read-only intake list for the hook and a write mode for row stubs and the pin, with
+   three open calls for Omar.
+3. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
    [the consolidated screen](../../research/candidate-screen-2026-09-27.md) is the one to act
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from
    thumbnails and storyboard frames only, so each still needs its render looked at. In
@@ -138,9 +144,9 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
    non-Brewer 9-fold video turned up in the searched space.
-3. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
+4. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
-4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
+5. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
    ([D-081](../../working-model/decisions-log.md)). The `orbit` word and openwork fill are on
    bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
    **Omar picked none of the four fills below** (review thread kpdekz on the
@@ -169,7 +175,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
-5. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
+6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
    Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
    - choose the fill height in the Lab at either end: fills lowered below the straps, or raised
      above them (the `fills <mm>` slider from bikar #283 only goes down);
@@ -180,14 +186,14 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    The second and third need a design first: how loose pieces fit (the interlock's clearance
    numbers are for a different joint), and what the guided steps are. Call 2 on the page stays
    open until then.
-6. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
+7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
    `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
    either side of the true edge, and two sides are straight. Omar asked for a plainer picture
    (thread 7t9o0t), which is now on the page. **Waits on a look at a printed edge:** if the steps
    can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
    already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
    §5.3), and re-run the tool to show every side straight.
-7. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
+8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
    (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
    scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same
    size. It passes its video checks, so either the video's quick seven-fold is itself
