@@ -8,8 +8,7 @@ holds OpenSCAD sources, design docs, the gallery and the gh-pages deploy, and co
 ## Mechanics
 
 - **Node**: prefix every `git`/`npm`/`tsx`/`vitest` invocation with
-  `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`. The system Node
-  is too old and fails in ways that look like code bugs.
+  `export PATH="$HOME/.nvm/versions/node/v22.22.3/bin:$PATH"`; the system Node is too old and fails in ways that look like code bugs.
 - **Hooks**: `core.hooksPath = .githooks` (`make setup-hooks` once per clone);
   each sees only staged files, and `make validate` runs all of them over the
   whole tree. `00-branch` refuses a commit on master (`BRANCH_OK=1` overrides).
@@ -24,8 +23,7 @@ holds OpenSCAD sources, design docs, the gallery and the gh-pages deploy, and co
   `"steps": []` in 2–3 s: nothing measured) and never stops a merge or deploy — [runbook](docs/guides/local-ci-runbook.md).
 - **New D-/Q- ids**: `python3 tools/next_id.py next D`, never last id + 1 from your
   checkout (D-051, D-055 were taken twice); hook `46-decision-ids` blocks a clash.
-- **Skills**: `ground-design-doc` (audit a doc's sources), `calibrate`
-  (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster), `manage-tasks` (move a finished or open task to the right `docs/tasks/<loop>/` file), `print-coaster-samples` (a minis plate, mating styles as pairs), `maintain-cookbook` (a naqsh recipe with a one-knob picture; `make validate` fails when a keyword has neither a recipe nor a not-yet line), `vault-setup` (audit the docs/ Obsidian vault: properties, Bases views, links, plugins), `request-feedback` (Omar's open calls as a vault page with pictures and tick boxes, read back into the decisions log), `prioritize-design` (which pattern becomes a coaster next: three scores kept apart, the difference measured by `tools/design_difference.py`, answered on a feedback page).
+- **Skills** (each `.claude/skills/<name>/SKILL.md` description says when it fires): `ground-design-doc` (audit a doc's sources), `calibrate` (UNGROUNDED-and-empirical → a `CAL-*` bet), `prototype`, `maintain-use-cases`, `import-construction` (a GeoGebra construction → naqsh → coaster), `manage-tasks` (move a finished or open task to the right `docs/tasks/<loop>/` file), `print-coaster-samples` (a minis plate, mating styles as pairs), `maintain-cookbook` (a naqsh recipe with a one-knob picture; `make validate` fails when a keyword has neither a recipe nor a not-yet line), `vault-setup` (audit the docs/ Obsidian vault: properties, Bases views, links, plugins), `request-feedback` (Omar's open calls as a vault page with pictures and tick boxes, read back into the decisions log), `prioritize-design` (which pattern becomes a coaster next: three scores kept apart, the difference measured by `tools/design_difference.py`, answered on a feedback page).
 
 ---
 
