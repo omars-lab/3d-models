@@ -75,10 +75,12 @@ it landed through a fresh branch that merged it and worked the conflicts by hand
 ## Schema package release — waiting on Omar
 
 bikar #289 (2026-09-30) copied youtube's newer construction schema into bikar and set
-`@naqshcoffee/qiyas-schema` to 0.3.2. Only bikar's own code uses the new version so far. Other
-repos get it once the `schema-v0.3.2` tag is pushed, which publishes it; the tag is Omar's. The
-last published version is 0.3.0, so the tag also ships the 0.3.1 change, the first copy of the
-construction schema.
+`@naqshcoffee/qiyas-schema` to 0.3.2. Only bikar's own code uses the new version so far. Omar
+approved the `schema-v0.3.2` tag and it was pushed on 2026-09-30, on bikar f169537. The publish
+run it started (36792672524) stopped after 2 seconds with no steps, which is GitHub's billing
+block, so **nothing is published yet**: the last published version is still 0.3.0. When it
+does publish, it also ships the 0.3.1 change, the first copy of the construction schema. Omar's
+call: re-run that workflow once billing is fixed, or publish from a local machine.
 
 ## Cross-repo governance
 
