@@ -216,6 +216,18 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       with outlines; the finest detail is the petal and octagon pair round each star (see the
       youtube reconstruction notes). The construction is in `reconstructions/awOusq0uVzc/`,
       ready for the coaster step.
+   20. `xtox61vADMA`, Sarah Brewer, a discrete variable star rosette on two whole-number
+      sliders: picked from youtube's ladder over `yZN_wn0uvTY` and screened GO once frames
+      were grabbed every 6 seconds over the build (the video is 65 minutes long).
+      **Done 2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9297** (a narrated
+      GeoGebra screencast). For the coaster: **one round rosette**, a ring of n stars and n
+      kites about a centre (group Dn), so a round coaster falls out naturally; it does not
+      tile. Two sliders make it a family: n sets the number of points (5 to 30) and k the
+      angle of the pattern line, so one construction yields many coasters. The video ends at
+      n = 18, k = 15, gray darts and white stars in thick black outline; the finest detail is
+      the dart tips, which get narrow as k grows, so check the thinnest dart against the
+      printer before picking n and k. The construction is in `reconstructions/xtox61vADMA/`,
+      ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
