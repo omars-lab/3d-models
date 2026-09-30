@@ -181,6 +181,16 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       12-gon corner is the finest detail. One kite ring (at H) is built from a measured
       assumption, true at α = 19° (see the youtube reconstruction notes). The
       construction is in `reconstructions/tcZQLpnxGpw/`, ready for the coaster step.
+   17. `itZftnqJ3tI`, Sarah Brewer, star rosettes on a 4-uniform tiling, in a square: added
+      from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 102/102 steps, mean edge-SSIM 0.9062** (a 44:44 narrated
+      GeoGebra screencast). For the coaster: a **square tile of the p4m cell** (side 3 + √3,
+      the red mirror lines): 12-point rosettes on its four corners, four 4-fold rosettes about
+      its centre, octagons on its edge midpoints, all set by one angle α (the finished piece
+      is at α = 30°). A square outline is the natural coaster; it tiles, so a set of coasters
+      makes the larger pattern. Filled shapes with outlines, of even density; the finest
+      detail is the kite ring inside each 12-rosette (see the youtube reconstruction notes).
+      The construction is in `reconstructions/itZftnqJ3tI/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
