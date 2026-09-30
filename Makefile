@@ -156,17 +156,17 @@ validate-timelapse:
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/timelapse_gate.py
 
-# Prints gate: a print-run record under docs/prints/ pins the geometry it
-# printed (R1, re-resolved against bikar at the recorded commit), proves its
-# photos exist and are unique across every record (R2), and prints how many
-# records it checked so an empty tree reads as "0 records checked", never a
-# false green (R4). Design: docs/design/printing/prints-tab-design.md §7. `--self-test` builds a
-# clean fixture, requires it clean, then mutates it once per rule and requires
-# each to fire. Ships before the first plate on purpose: R4's visible count is
-# what makes wiring the gate at zero records honest rather than broken-looking.
+# Prints gate: a print-run record under docs/prints/ pins the geometry it printed (R1,
+# re-resolved against bikar at the recorded commit), its photos exist and are unique (R2),
+# and it prints how many records it checked, so an empty tree reads "0 records checked" (R4).
+# Design: docs/design/printing/prints-tab-design.md §7. Then the plates gate: each page in
+# docs/plates/ agrees with the records on its count and with itself on its approval, and the
+# queue in docs/plates/README.md is current (print-review-design.md §6). Each `--self-test`
+# builds a clean fixture, requires it clean, then breaks it once per rule.
 validate-prints: prints-manifest
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
+	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks

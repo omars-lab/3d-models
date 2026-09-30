@@ -5,7 +5,7 @@ The rubric the [`vault-setup`](SKILL.md) skill reads at run time. Each rule says
 here and the skill follows; the skill never needs to change with it.
 
 The vault is all of `docs/`: design docs at the top level, and `research/`, `issues/`, `wiki/`,
-`catalog/`, `constructions/`, `tasks/` and `prints/` below it. Decided in
+`catalog/`, `constructions/`, `tasks/`, `plates/` and `prints/` below it. Decided in
 [D-082](../../../docs/working-model/decisions-log.md#d-082--the-docs-vault-uses-obsidians-core-bases-for-live-views-dataview-and-other-community-query-plugins-stay-out).
 
 ## 1. Properties: a few, the same everywhere
@@ -19,6 +19,7 @@ The vault is all of `docs/`: design docs at the top level, and `research/`, `iss
 | `issues/` | `date` | whoever writes the pivot up |
 | `wiki/troubleshooting/` | `title`, `symptom`, `kind`, `proof`, `first_seen` | the `print-wiki` skill's template |
 | `prints/<run>/index.md` | `run`, `plate`, `status`, `outcome` and the rest | the prints gate requires them |
+| `plates/<plate>.md` | `plate`, `stage`, `approved`, `approved_on`, `times_printed` and the rest (`stage`, not `status`, so plates stay out of the design-docs view) | the `prioritize-prints` skill; the plates gate requires them |
 | `catalog/patterns/` | the catalog's own set | its generator |
 
 - **`status` is one of** `idea`, `draft`, `decided`, `built`, `superseded`. A doc is `built`
@@ -57,6 +58,7 @@ The audit shows: `properties` per folder, and `invalid frontmatter`, which must 
 | `issues.base` | Pivots and dead ends in `issues/`, newest first | |
 | `prints.base` | Print records, `prints/<run>/index.md`, newest first | Its properties are the ones the prints gate requires, so a record listed here passed it. |
 | `troubleshooting.base` | Print troubleshooting notes, grouped by kind | Its properties are the `print-wiki` skill's template. |
+| `plates.base` | Plate review pages, `plates/<plate>.md`, grouped by stage | Shows whether Omar approved each and how many times it printed. The ranked queue is not here: it is computed into `docs/plates/README.md`. |
 
 The audit shows: `bases`, each with the notes that embed it. A base embedded nowhere is dead.
 

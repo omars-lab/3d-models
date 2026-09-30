@@ -1,0 +1,35 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("plates")
+    - file.hasProperty("stage")
+properties:
+  note.stage:
+    displayName: Stage
+  note.approved:
+    displayName: Approved
+  note.approved_on:
+    displayName: Approved on
+  note.times_printed:
+    displayName: Times printed
+  note.risk:
+    displayName: Risk
+  note.answers:
+    displayName: What it answers
+views:
+  - type: table
+    name: By stage
+    groupBy:
+      property: stage
+      direction: ASC
+    order:
+      - file.name
+      - stage
+      - approved
+      - approved_on
+      - times_printed
+      - risk
+      - answers
+    sort:
+      - property: file.name
+        direction: ASC
