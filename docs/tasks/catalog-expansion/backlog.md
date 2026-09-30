@@ -125,6 +125,30 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       rectangle in its sides, so a rectangular coaster tiles edge to edge by reflection. The
       heptagon on the bottom edge is drawn whole and pokes past the rectangle; clip it at the
       edge. The construction is in `reconstructions/1h7iWJaoN80/`, ready for the coaster step.
+   12. `kpFgs2e8YGw`, Sarah Brewer, star rosettes on a 3-uniform tiling (12-gon, hexagon,
+      square, triangle): added from youtube's `make ladder`.
+      **Done 2026-09-29 in youtube: 30/30 steps, mean edge-SSIM 0.911** (a narrated GeoGebra
+      screencast with one angle slider). For the coaster: a **six-fold patch** (wallpaper
+      group p6m), a ring of 12-fold rosettes round a 6-fold rosette at the hexagon centre,
+      with 4-fold rosettes and triangle petals between them. Every line passes through a
+      point where two circles touch, at ±30° from the line joining their centres; the circles
+      sit on the vertices of a unit-edge tiling (radius ½) and at each polygon's centre
+      (radius = circumradius − ½). The 12-gon circumradius is 1.932 of the edge. All straight
+      lines, one parameter; at 30° the hexagons come out regular. It fits a round coaster
+      centred on the hexagon, clipped at the rosette ring. The construction is in
+      `reconstructions/kpFgs2e8YGw/`, ready for the coaster step.
+   13. `cKYbKQvmsbs`, Sarah Brewer, Sultan Barsbay 16 & 8 (Cairo): added from youtube's
+      `make ladder`.
+      **Done 2026-09-29 in youtube: 50/50 steps, mean edge-SSIM 0.837** (a 28-minute narrated
+      GeoGebra screencast; the finished field scores 0.915 and 0.921). For the coaster: a
+      **square tile of side 2** (wallpaper group p4m) with a 16-fold rosette at its centre
+      and a quarter of an 8-fold rosette in each corner. With the centre at (1, 0) and an edge
+      midpoint at (0, 0), every line is one line, from (0, 0.541) to (0.324, 0.676), reflected
+      over mirrors 11.25° apart at the centre; the 16-point star sits on a circle about the
+      centre. All straight lines, by compass and straightedge. The sides are mirror lines, so
+      a square coaster tiles edge to edge by reflection, and the quarter rosettes in the
+      corners close into whole 8-fold rosettes. The construction is in
+      `reconstructions/cKYbKQvmsbs/`, ready for the coaster step.
 
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
