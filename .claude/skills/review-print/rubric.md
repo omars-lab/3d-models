@@ -25,8 +25,13 @@ one when a print teaches something new.
    at the join is two frames plus the dovetail. If that band is wide next to the art, the pair
    reads as two patterns with a wall between them. (minis-03 CS-1 pegs at 40 mm: about 11 mm of
    solid between the patterns. "big spaces between the patterns", Omar, 2026-09-26.)
-6. **Completeness never outranks a good piece.** "Every pattern represented" is not a reason to
-   print one that fails 1–5. (The minis-03 mistake: the failing renders were already on disk.)
+6. **It is symmetric, by default.** The art matches itself turned about its own centre: a
+   rosette, a star, a repeat centred on the piece. Art to one side, a pattern that stops
+   partway, or petals of uneven shape read as a mistake. An asymmetric piece prints only when
+   Omar asks for that piece by name. ("this is a really weird coaster ... we should default to
+   symmetric coasters", Omar, 2026-09-29, on the draft CS-10 gallery picture.)
+7. **Completeness never outranks a good piece.** "Every pattern represented" is not a reason to
+   print one that fails 1–6. (The minis-03 mistake: the failing renders were already on disk.)
 
 ## What the numbers catch
 
@@ -56,3 +61,22 @@ What the table shows:
 
 These flags are hints for the eye, not a gate: nine pieces is too few to set a pass line. Re-measure
 when new verdicts come in and move the flags here.
+
+### `sym`, added 2026-09-29
+
+Measured over every standard (90 mm) coaster mesh in `src/Coasters/` on 2026-09-29, 26 pieces,
+plus the draft CS-10 mesh from before its rebuild (`git show 350d134:src/Coasters/n3IidKfXE1I-coaster-standard.stl`):
+
+| piece | sym | order | what it looks like |
+|---|---|---|---|
+| 24 of the 26 current meshes: every style of every other made coaster | 1.00 | 4, 6, 8, 12 or 16 | even rosettes and repeats |
+| CS-1 minimal-tab | 1.00 | 6 | even; scored 0.66 before the turn was centred on the art, not the outline the tab widens |
+| tA8e (CS-6) | **0.73** | 7 | seven petals of uneven shape; the same art Omar left off minis-03 as a 40 mm minimal-frame ("weird empty space"), which no other number flagged |
+| n3Ii draft (CS-10 before #361) | **0.48** | 16, no real match | a 12-fold rosette with two hexagon tiles hanging off one side |
+
+- **Hold a piece below 0.9 and show it to Omar.** Every even piece measured 1.00 and the two
+  uneven ones 0.73 and 0.48, so 0.9 sits in the empty band between. 27 pieces with two real
+  failures is thin; move the line when a new verdict lands in the band.
+- **`order` says what kind of symmetry it found.** A seven-fold rosette that reports 7 at 0.73
+  is close but uneven; read the art sheet (`print_review.py art`) to see where.
+- Only turns are tried. A piece with only mirror symmetry would score low; none has been made.
