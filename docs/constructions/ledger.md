@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `c3368fd61a699a58386987c022e557ab9ec3e1a3` (2026-09-30)
+Youtube pin: `d42a8f5552ea8d5ca63ea29ba6dec4aa6223925d` (2026-09-30)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
