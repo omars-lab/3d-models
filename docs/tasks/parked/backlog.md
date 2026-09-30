@@ -63,6 +63,15 @@ The survey covers twelve named tools, not all LDraw software.
 The last two shaped the machine-card coupons and block no print; read them if the first card
 comes back hard to read. The third engine gap §6.2 listed, text emit, has since shipped.
 
+## Merges waiting on Omar
+
+Finished work that a session may not merge itself. Take a line off when it lands.
+
+- **youtube** (studio remote, no pull requests): `retro-doc-shape` (the retro doc layout),
+  `ntnl-supported-vocabulary`, `gbv-supported-vocabulary`, `o1-polyline-ray`.
+- **3d-models:** #427 (then close #424, #425) and #434 (then close #432, #433); both are in
+  the catalog-expansion backlog. #430 is another session's ledger work.
+
 ## Cross-repo governance
 
 How this repo's decisions log joins a decision hub (Omar's call;

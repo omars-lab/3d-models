@@ -1,0 +1,24 @@
+#!/bin/sh
+# Four-facts coverage (tools/design_difference.py check). The prioritize-design
+# skill keeps one row of facts per design in its scoring file, not in the
+# constructions ledger (D-086), so nothing else notices when a new coaster is
+# vendored without a row, and the difference score would then silently skip it.
+# This runs the check when the ledger, the scoring file or the tool is staged.
+# Override once: DESIGN_FACTS_OK=1 git commit
+#
+# wholesale: make validate-design-difference
+[ -n "$DESIGN_FACTS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the four-facts check" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `tools/`.
+TOOL="$(git rev-parse --show-toplevel)/tools/design_difference.py"
+if [ ! -f "$TOOL" ]; then
+  echo "pre-commit: no design_difference tool in this worktree ($TOOL) — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^(docs/constructions/ledger\.md|\.claude/skills/prioritize-design/scoring\.md|tools/design_difference\.py)$'; then
+  exec python3 "$TOOL" check
+fi
+exit 0

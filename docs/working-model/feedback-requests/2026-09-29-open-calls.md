@@ -10,12 +10,12 @@ comment on any line in Obsidian. The next session reads this page back, writes e
 the [decisions log](../decisions-log.md) and moves the backlog item. Nothing here gets built
 until you tick a box.
 
-| # | Call | My pick | Why, in one line |
-|---|---|---|---|
-| 1 | Which rings of the CS-1 coaster are filled solid | **A**, the snowflake | The only fill that reads as a shape of its own |
-| 2 | Color fills: flush with the straps, or lower | **Choose from a print with both**, flush until then | It is a question of looks, and the pictures can't show that |
-| 3 | The outer edge of every coaster is a staircase of 0.4 mm steps | **Leave it, look at a printed edge** | The steps are under 0.3 mm; fix them only if a print shows them |
-| 4 | Eight video rebuilds are recorded but stuck off master | **Accept all eight as one PR**; make **NtnlGMTElBk** a coaster next | The notes are true, and that star builds with what we have |
+| #   | Call                                                           | My pick                                                             | Why, in one line                                                |
+| --- | -------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | Which rings of the CS-1 coaster are filled solid               | **A**, the snowflake                                                | The only fill that reads as a shape of its own                  |
+| 2   | Color fills: flush with the straps, or lower                   | **Choose from a print with both**, flush until then                 | It is a question of looks, and the pictures can't show that     |
+| 3   | The outer edge of every coaster is a staircase of 0.4 mm steps | **Leave it, look at a printed edge**                                | The steps are under 0.3 mm; fix them only if a print shows them |
+| 4   | Eight video rebuilds are recorded but stuck off master         | **Accept all eight as one PR**; make **NtnlGMTElBk** a coaster next | The notes are true, and that star builds with what we have      |
 
 At the end: [things only you can do](#things-only-you-can-do-not-decisions), which are not decisions.
 
@@ -49,7 +49,8 @@ fill in bikar's `GimTvN9hw4U-radial-coaster.bkr`, and the CS-1 catalog note gets
 
 **Redirected 2026-09-29** (your comment): none of the four. You pick the fill yourself in the
 Coaster Lab, which highlights and suggests the other pieces on the same ring
-([backlog item 4](../../tasks/catalog-expansion/backlog.md)).
+(the "Radial fill on CS-1" item in the
+[catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md)).
 
 ---
 
@@ -84,7 +85,8 @@ proposes about 0.6 mm.*
 - Notes:
 
 **Widened 2026-09-29** (your comment): fill height either way in the Lab, loose inner pieces,
-and "assemble your own coaster" ([backlog item 6](../../tasks/catalog-expansion/backlog.md)).
+and "assemble your own coaster" (the "Coaster Lab: fill height either way" item in the
+[catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md)).
 This call stays open for the default height.
 
 ---
@@ -114,7 +116,7 @@ Plain coasters were left stepped on purpose.
 | True outer edge on every coaster | Uses the interlock's edge code, which is already built and checked; the edge you hold and see is smooth | The lines inside the coaster (straps, openings) stay stepped; the interlock design names this code as the part most likely to break a mesh, so every coaster must be re-checked | One bikar PR, then re-render the coaster files kept in this repo |
 | True edges inside too | Everything smooth | New mesh code that traces lines instead of grid squares: the biggest and riskiest option. The color split and the openwork cut would have to follow it | A design doc before any code |
 | Finer grid (0.2 mm) | No new code | About four times the squares, so slower renders and bigger files; still stairs, just half the size | One constant changes; every check and file is re-run |
-| **Leave it** (my pick, changed 2026-09-29) | No work; the steps are smaller than three sheets of paper | The stairs print as they are | Look at an edge on a printed coaster; if the steps show, true outer edge is the next step ([backlog item 7](../../tasks/catalog-expansion/backlog.md)) |
+| **Leave it** (my pick, changed 2026-09-29) | No work; the steps are smaller than three sheets of paper | The stairs print as they are | Look at an edge on a printed coaster; if the steps show, true outer edge is the next step (the "Coaster edges are a 0.4 mm staircase" item in the [catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md)) |
 
 **Your answer:**
 
@@ -183,7 +185,8 @@ side. `n_ICgwOr6qs` needs arcs. ^952r93
 - Notes:
 
 **Redirected 2026-09-29** (your comment): a `prioritize-design` skill ranks the candidates
-first, and its first run answers this call ([backlog item 5](../../tasks/catalog-expansion/backlog.md)).
+first, and its first run answers this call (the skill shipped in #437 as
+[`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md); the run is still owed).
 
 ---
 

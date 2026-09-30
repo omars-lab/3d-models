@@ -19,7 +19,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    What O1 still cannot compare (parabolas, hyperbolas, arcs, the `*_host` circles) is
    youtube's to add. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
    (2) as a crash. That patch is in the same note.
-2. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
+2. **Reconstruction intake: read rung.yaml at session start, queue done reconstructions for
+   import.** Asked by Omar on 2026-09-30. The session start hook never reads youtube's rung.yaml
+   and imports nothing; 19 rungs are done in youtube with no coaster here, 9 of them with no
+   ledger row. The [intake design](../../constructions/reconstruction-intake-design.md) proposes
+   a small read-only intake list for the hook and a write mode for row stubs and the pin, with
+   three open calls for Omar.
+3. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
    [the consolidated screen](../../research/candidate-screen-2026-09-27.md) is the one to act
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from
    thumbnails and storyboard frames only, so each still needs its render looked at. In
@@ -60,8 +66,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       unit turned ten times). Every corner sits where a line of the {10/3} star crosses a line of
       the {10/4} star, so it can be cut from exact points. It already fits a circle (the unit
       circle), so no cropping is needed. The band crosses itself, so it could be cut as an
-      over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`, ready for the
-      coaster step.
+      over-under interlace. The construction is in `reconstructions/NtnlGMTElBk/`.
+      **Coaster step done 2026-09-30**: bikar #285 (the piece and its minimal coaster, plain
+      straps, no weave), ledger row filled, `CS-15`, gallery card, vendored STL. Its youtube
+      source rewrite (`ntnl-supported-vocabulary`, ec697a1) still has to land on youtube main.
    6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
       **Swapped 2026-09-28 in youtube for its source, `gBV_JTt3Kxk`** (Samira Mian, "Itimad Ud
       Daula", a 2-minute silent animation of the same pattern). yZN drags the ten divisions by
@@ -72,8 +80,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       corners at (±tan 36°, 0) = (±0.7265, 0) R. The cell's sides are pink lines already in the
       pattern, so a tile edge never cuts a line at an arbitrary point. The lattice is
       (±0.7265, 1) R. It is either a round coaster (the rosette alone) or a rhombus coaster that
-      tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`, ready for the
-      coaster step.
+      tiles edge to edge. The construction is in `reconstructions/gBV_JTt3Kxk/`.
+      **Coaster step done 2026-09-30**: bikar #287 (the piece and its minimal coaster, the
+      rosette alone with the paint-over masks left off), ledger row filled, `CS-13`, gallery
+      card, vendored STL. O2 FAILs on precision because of those masks (see the ledger's oracle
+      notes). Its youtube source rewrite (`gbv-supported-vocabulary`, d0732db) still has to
+      land on youtube main.
    7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
       **Done 2026-09-29 in youtube: 6/6 steps, mean edge-SSIM 0.895** (pencil on paper, then
       tracing paper; 08:05–17:00 only). The worry did not hold: the pattern is lines, not
@@ -102,7 +114,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       sides are mirror lines: a square coaster tiles edge to edge by reflection, and the half
       stars on the edges close into whole stars. The tile alone has no mirror of its own
       (it turns by quarter turns only). Tile half-width 0.975 R. The construction is in
-      `reconstructions/jlTmt_279M4/`, ready for the coaster step.
+      `reconstructions/jlTmt_279M4/`.
+      **Coaster step done 2026-09-30**: bikar #286 (the piece and its minimal coaster on a
+      square fit), ledger row filled, `CS-14`, gallery card, vendored STL. Its O1 PASS needs
+      youtube branch `o1-polyline-ray` (9a92134), not on youtube main yet.
    10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
       **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.855** (a 3:52 slide deck;
       the dense slides hold at ~0.73 because the slides' own lines are hand-placed slightly off).
@@ -129,18 +144,19 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
    non-Brewer 9-fold video turned up in the searched space.
-3. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
+4. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved
    from the coaster-pipeline backlog on 2026-09-25, where it sat by mistake (board #7).
-4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
+5. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
    ([D-081](../../working-model/decisions-log.md)). The `orbit` word and openwork fill are on
    bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
    **Omar picked none of the four fills below** (review thread kpdekz on the
    [2026-09-29 open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md),
-   2026-09-29). He wants to pick the fill himself in the Coaster Lab: fill a piece, and the Lab
-   highlights the other pieces on the same ring (the same distance from the centre) and suggests
-   filling them too. The Lab's Orbits panel (bikar #282) already lists each ring with a tick and
-   a color. What is missing is clicking a piece in the picture, the highlight of its ring, and the
-   suggestion. Built from that, the file keeps fill A as its default until he saves a pick.
+   2026-09-29). He wants to pick the fill himself in the Coaster Lab, and the picker is now on
+   bikar main (bikar #288, 2026-09-30): click a piece in the picture, every piece on its ring
+   (the same distance from the centre) lights up, the ring's row in the Orbits panel (bikar #282)
+   is marked, and a chip offers Fill ring or Clear ring, writing the same `fill void where orbit`
+   line the tick writes. **Waiting on Omar's pick** in the Lab; the file keeps fill A as its
+   default until they save one.
 
    ![CS-1 radial fill choices](../../catalog/media/GimTvN9hw4U/GimTvN9hw4U-radial-choices.png)
 
@@ -160,22 +176,6 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
-5. **A prioritize-design skill: which pattern becomes a coaster next.** Omar, 2026-09-29, review
-   thread 952r93 on the open-calls page, instead of picking call 4b: a skill that reviews the
-   candidate coasters and guesses which customers would like most, which is most unusual, and
-   which differs most from the ones already made, "that we can iterate on". Its rubric lives in
-   a file next to the skill so it can sharpen. What customers like comes from outside sources,
-   so the rubric starts from two independent researchers and a checker. The first run ranks the
-   eight video rebuilds ([D-084](../../working-model/decisions-log.md)) and answers 4b.
-   **Designed:** [prioritize-design](../../design/process/prioritize-design.md). Omar's answers
-   (2026-09-29, D-085 to D-088) are a weighted total, the four facts in a table in the scoring
-   file, render first, and pick after the renders. Next, in order:
-   1. Render jlTmt_279M4, NtnlGMTElBk (flat) and gBV_JTt3Kxk in the minimal style at 90 mm.
-      Each needs import-construction first, since none has a coaster file. Run
-      `print_review.py sheet` and `art` on each, and put the results with the §8.3 totals on a
-      feedback page for Omar's pick.
-   2. Build the skill, its scoring file with the four-facts table, and the difference tool
-      (design §10).
 6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
    Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
    - choose the fill height in the Lab at either end: fills lowered below the straps, or raised
@@ -184,16 +184,21 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      frame;
    - a guided page where someone assembles their own coaster.
 
-   The second and third need a design first: how loose pieces fit (the interlock's clearance
-   numbers are for a different joint), and what the guided steps are. Call 2 on the page stays
-   open until then.
+   The design for all three is written:
+   [loose-pieces-design.md](../../design/coaster/loose-pieces-design.md) (draft, 2026-09-30).
+   It waits on Omar's four calls in its §7: which frame holds the pieces, where the guided page
+   lives, whether raised fills go on every fill coaster, and the LP-1 sample's gaps. Nothing is
+   built until they answer. Call 2 on the page stays open for the default fill height.
 7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
    `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
    either side of the true edge, and two sides are straight. Omar asked for a plainer picture
    (thread 7t9o0t), which is now on the page. **Waits on a look at a printed edge:** if the steps
    can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
    already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
-   §5.3), and re-run the tool to show every side straight.
+   §5.3), and re-run the tool to show every side straight. The options for smoothing the lines
+   inside the coaster too are in the smooth-lines design,
+   [3d-models #434](https://github.com/omars-lab/3d-models/pull/434) (a checker's merge of two
+   researchers' drafts, #432 and #433). **Waiting on Omar to merge #434 and close the other two.**
 8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
    (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
    scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same
@@ -202,6 +207,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    number said why. Needs: compare the petal angles with an exact 360/7 and, if the rebuild is
    the cause, fix it in bikar and re-vendor. Hold it from plates until `sym` reaches 0.9
    ([review-print rubric](../../../.claude/skills/review-print/rubric.md), check 6).
+9. **Which pattern becomes the next coaster.** The top three candidates are built in bikar as
+   minimal coasters at 90 mm (bikar #285, #286, #287, all merged 2026-09-30) and shown on the
+   [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
+   **Waiting on Omar's pick** there. The proposal the page's decisions come from is
+   [prioritize-design](../../design/process/prioritize-design.md) (3d-models #427, D-085 to
+   D-088). Then: record the pick in the decisions log and start the coaster (ledger
+   row, gallery card, samples plate). The first full run of the
+   [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed
+   after that.
 
 ## Handed to the video loop
 

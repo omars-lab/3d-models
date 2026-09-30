@@ -927,3 +927,13 @@ validate-color-spelling:
 .PHONY: validate-use-cases-self-test
 validate-use-cases-self-test:
 	$(PYTHON) ${ROOT_DIR}/.claude/skills/maintain-use-cases/validate.py --self-test
+
+# The prioritize-design skill's measuring tool (tools/design_difference.py) —
+# the wholesale form of .githooks/pre-commit.d/49-design-facts. Self-test first
+# (the design's Validator: a made coaster scored as a candidate is nearest itself
+# at 1.00; a tool that drops its own row is not), then the live check: every
+# made coaster in the ledger has a row in the skill's four-facts table (D-086).
+.PHONY: validate-design-difference
+validate-design-difference:
+	$(PYTHON) $(ROOT_DIR)/tools/design_difference.py --self-test
+	$(PYTHON) $(ROOT_DIR)/tools/design_difference.py check

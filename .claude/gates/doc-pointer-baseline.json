@@ -143,6 +143,21 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/bknVRSMcLj0-coaster-mini.stl",
       "why": "Gitignored build output — same as the seven coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The square-framed Imamzadeh Isma'il 12-fold kite tile coaster (CS-12); introduced with the bknVRSMcLj0 migration (bikar PR #268)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/gBV_JTt3Kxk-minimal-coaster-mini.stl",
+      "why": "Gitignored build output — same as the eight coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The Itimad-ud-Daula ten-fold rosette, minimal style (CS-13); introduced with the D-087 imports (bikar PR #287)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/jlTmt_279M4-minimal-coaster-mini.stl",
+      "why": "Gitignored build output — same as the eight coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The seven-and-four-fold star field, minimal style (CS-14); introduced with the D-087 imports (bikar PR #286)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/NtnlGMTElBk-minimal-coaster-mini.stl",
+      "why": "Gitignored build output — same as the eight coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The Mustansiriya ten-fold star band, minimal style (CS-15); introduced with the D-087 imports (bikar PR #285)."
     }
   ]
 }

@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `fefcae6e3b9fdff777510382ce57116581e06ba2` (2026-09-29)
+Youtube pin: `e00730cd9d4e92738d89780583d7b8a8f4839bef` (2026-09-29)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,10 +23,10 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **22 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **23 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**9 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**12 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -50,10 +50,19 @@ cell reflected across two sides of its square and the pair orbited four-fold
 into a wall, lowered to `rotate` blocks nested three deep; the whole wall read
 as a solid slab at coaster size, so its coaster inscribes one repeat cell, see
 `CS-12`).
-All nine now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+The three [D-087](../working-model/decisions-log.md) patterns landed 2026-09-30, each
+with a **minimal** coaster (`outline pattern`, no slab) rather than a plain one, for the
+90 mm comparison on the [renders page](../working-model/feedback-requests/2026-09-30-top-three-renders.md):
+`gBV_JTt3Kxk` with bikar PR #287 (ten scaffold arcs through the D-080
+self-bootstrap; the video's paint-over masks are left off the coaster),
+`jlTmt_279M4` with bikar PR #286 (straight lines only — seven-point stars around
+octagon cells, one tile reflected into a 2×2 block; it taught the importer to carry a
+drawn segment list through an isometry and gave the cookbook its `Ray` recipe), and
+`NtnlGMTElBk` with bikar PR #285 (six scaffold arcs, plain straps, no weave).
+All twelve now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
-`CS-10`, `CS-11`, `CS-12`) — P3.3 of the umbrella plan, which built on the
-`coaster` declaration (P1.6/P2.7).
+`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`) — P3.3 of the umbrella plan,
+which built on the `coaster` declaration (P1.6/P2.7).
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
 newer rungs, none of them a naqsh file yet. Each is "done" in the column's sense (its id is in
@@ -107,13 +116,14 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `A9fefFurD_s` | Broug's ten-point star from one circle | done | — | — | — | — | — | — | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
-| `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | — | — | — | — | — | — | — |
+| `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | `bikar/patterns/Constructions/NtnlGMTElBk.bkr` | FAIL 124/20 | PASS 0.9999/1.0 | — | `src/Coasters/NtnlGMTElBk-minimal-coaster-standard.stl` | CS-15 | — |
 | `Y6kS1MvnKoc` | A Mamluk Qur'an page from seven ten-point stars | done | — | — | — | — | — | — | — |
 | `_U6G8QSfWnk` | Sutton's fivefold rectangle and its traced quarter | done | — | — | — | — | — | — | — |
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
+| `cKYbKQvmsbs` | Sultan Barsbay 16 & 8 (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
-| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | — | — | — | — | — | — | — |
-| `jlTmt_279M4` | Sevenfold stars in a tilted square | done | — | — | — | — | — | — | — |
+| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | FAIL 134/20 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
+| `jlTmt_279M4` | Sevenfold stars in a tilted square | done | `bikar/patterns/Constructions/jlTmt_279M4.bkr` | PASS 86/0 | PASS 1.0/1.0 | — | `src/Coasters/jlTmt_279M4-minimal-coaster-standard.stl` | CS-14 | — |
 | `kpFgs2e8YGw` | Star rosettes on a 3-uniform tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
@@ -149,3 +159,25 @@ The FAILs were worked through the same day, in
 - **`rDuxHF3xMOc`** O2: **by design**. The GeoGebra export keeps the tile's four
   full-width bounding lines visible, because the video shows them. The coaster
   draws the tile only. The FAIL stays. With those four lines hidden, recall is 1.0.
+
+The three D-087 rows (`gBV_JTt3Kxk`, `jlTmt_279M4`, `NtnlGMTElBk`) were scored
+at their imports on 2026-09-30, on the youtube branches named in each bikar PR
+(#287, #286, #285), and the cells copy the lines those runs printed:
+
+- **`gBV_JTt3Kxk`** O1 `FAIL: 134 compared, 20 failed, 47 skipped/extra`; O2
+  `O2 FAIL: edge-SSIM 0.9215 (min 0.7), recall 0.997 precision 0.4291 (min 0.98), phash 40 (advisory)`. The O1 twenty are the ten scaffold arcs ("no comparison
+  for GeoGebra type 'arc'") and their ten `*_host` circles, the same O1 arc gap
+  `nmEjCTzMbDg` hit; every point, line, circle, polygon and mask passes. The O2
+  precision is the video's white paint-over masks: the frame shows the clipped
+  rosette, the naqsh render draws the mask edges and the rosette under them. A
+  re-render scores the same, so it is not a stale hero.
+- **`jlTmt_279M4`** O1 `PASS: 86 compared, 0 failed, 75 skipped/extra` — on
+  youtube branch `o1-polyline-ray` (9a92134), which teaches the comparator
+  polyline and ray rows and is not on youtube main yet; O2
+  `O2 PASS: edge-SSIM 0.9458 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 16 (advisory)`.
+- **`NtnlGMTElBk`** O1 `FAIL: 124 compared, 20 failed, 12 skipped/extra` — the
+  same arc gap, ten arcs and their ten host circles; O2
+  `O2 PASS: edge-SSIM 0.9066 (min 0.7), recall 0.9999 precision 1.0 (min 0.98)`.
+- **O3 is `—` on all three**: none of the three reconstructions has a `.ggb`
+  export to build a reference from, so the oracle was not run, not skipped by
+  design.
