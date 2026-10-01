@@ -2,6 +2,38 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-09-30: the gallery redeployed from master 42ef7de (gh-pages a9cfe0c). It carries the
+  re-centred CS-6 and the three D-087 minimal coasters, Ntnl, gBV and jlTmt. The live CS-6
+  picture was checked against the build by hash.
+
+- 2026-09-30: #430, another session's ledger rows for the ten youtube reconstructions that had
+  none, landed after Omar approved it. It had fallen behind master, so a fresh branch merged it
+  and its two conflicts (the use-case pins and the catalog backlog's item numbers) were worked by
+  hand, all 25 commits kept; the constructions check passes again without `CONSTRUCTIONS_OK=1`
+  (3d-models #449). The gates now read `MERGE_HEAD` too, so a merge's inherited work is not
+  treated as new (3d-models #447).
+
+- 2026-09-29: `tools/branch_inventory.py` lists, read-only, what a branch or worktree cleanup
+  would lose across our repos: worktrees with uncommitted files, branches marked merged by
+  ancestry or by content, stashes and open PRs. It ran the fifth cleanup; every branch it
+  flagged as unique turned out to be landed, so unique means look, not keep (3d-models #415).
+
+- 2026-09-28: the docs folders restructured. `tools/move_doc.py` moves a note and fixes every
+  reference to it (3d-models #393). Guides went to `docs/guides/`, process notes to
+  `docs/design/process/`, the construction notes beside the ledger, the printing notes to
+  `docs/design/printing/`, the language, orb and pieces notes to `docs/design/`, and the coaster
+  notes to `docs/design/coaster/` (3d-models #395, #396, #397, #398, #400). On 2026-09-29 the
+  decisions log, plan and backlog moved into `docs/working-model/` (3d-models #413). bikar's
+  pointers followed each move (bikar #279, #280, #281).
+
+- 2026-09-28: the use-case map checks sibling-repo pointers again and fails when a sibling
+  can't be read, instead of skipping it (3d-models #394). bikar's doc-pointer check reads a
+  sibling at `origin/HEAD` and follows the folder moves (bikar #278).
+
+- 2026-09-28: "color" everywhere, the American spelling Omar chose (D-083): text, file names
+  and identifiers renamed in both repos, with a gate that fails on the British spelling coming
+  back (3d-models #392, bikar #277).
+
 - 2026-09-29: the gallery's old CS-10 picture is gone. Omar had read it as "a really weird
   coaster" (thread uqjg9s). `make coasters` then `make deploy` (gh-pages 202e464) redrew all 27
   coaster pictures from bikar e2b65c4. The CS-10 picture is now the symmetric 12-fold rosette.

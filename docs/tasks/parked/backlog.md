@@ -4,18 +4,18 @@ Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-mo
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
-## Pattern catalog vault — step 1 waiting on Omar's first comment
+## Pattern catalog vault — step 2, the generator, is next
 
 [`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
 pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
 through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 2026-09-27.
 
-Step 1 is in place (2026-09-27): all of `docs/` is the vault, BRAT and review-md 0.1.1 are
-installed in it, its plugin settings are committed, comment files are skipped by the docs and
-pointer gates, a post-commit hook re-anchors comment threads, and the CS-1 note
-[Simple 20-step Six-Fold Star Rosette](../../catalog/patterns/simple-20-step-six-fold-star-rosette-cs-1.md) is written by hand. Step 1 is done when
-Omar comments on that note in Obsidian and a session answers with `reviews reply`. Step 2 (the
-sync tool) comes after.
+Step 1 is done (2026-09-28, see [done.md](done.md)): Omar commented on the CS-1 note
+[Simple 20-step Six-Fold Star Rosette](../../catalog/patterns/simple-20-step-six-fold-star-rosette-cs-1.md)
+(thread wtsm68) and a session answered with `reviews reply`. That note is still the only one.
+Step 2 is not started: `tools/catalog.py sync`, a note for each construction in the ledger, the
+style notes and the index, done when `sync --check` passes and every ledger row has a note with
+its pictures.
 
 ## The FAQ — waiting on Omar
 
