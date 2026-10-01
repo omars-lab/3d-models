@@ -19,7 +19,6 @@ risk: ok
 pictures:
   - ../design/coaster/loose-pieces-media/frames.png
 needs:
-  - "the window cut, working on a square slab coaster too (sampler sheets §2)"
   - "the card with engraved labels, in a coupons file"
   - "the sheet plate in the bambu tool, with color parts at each cell"
   - "row C HIGH: raised fills in bikar (loose-pieces §6 item 1), on a branch is enough"
@@ -69,8 +68,9 @@ the card.
 
 ## What it waits on
 
-- The window cut, which must also work on this square slab coaster (untried), the card and the
-  sheet plate with color parts per sample.
+- The card and the sheet plate with color parts per sample. The window cut shipped 2026-10-01
+  (bikar #293) and works on this square slab: rows A and B cut at the centre star pass the mesh
+  check as one body, and `--format parts` splits a window into a body per color.
 - Row C: raised fills in bikar (loose-pieces §6 item 1). A bikar branch is enough to print the
   sample; it merges only if call 3 says yes.
 - Row D: a height option on loose pieces. The loose-piece output shipped 2026-10-01 (bikar #292,

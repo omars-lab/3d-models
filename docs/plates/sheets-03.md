@@ -18,7 +18,6 @@ risk: ok
 pictures: []
 needs:
   - "the soft weld in bikar (smooth-lines option 8, not built)"
-  - "the window cut on the coaster (sampler sheets §2)"
   - "the card with engraved labels, in a coupons file"
   - "the sheet plate in the bambu tool: one object, card plus samples at their cells"
 ---
@@ -50,7 +49,8 @@ No slice yet. **Risk: ok.** Flat card, samples fused to it.
 ## What it waits on
 
 - The soft weld in bikar (smooth-lines option 8), not built.
-- The window cut, the card and the sheet plate, the same as [sheets-01](sheets-01.md).
+- The card and the sheet plate, the same as [sheets-01](sheets-01.md). The window cut shipped
+  2026-10-01 (bikar #293).
 
 ## Your call
 
