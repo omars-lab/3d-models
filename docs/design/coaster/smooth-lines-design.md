@@ -370,6 +370,9 @@ before building. It differs from A's first choice (the exact outline) for the co
 
 ## 6. Open calls for Omar
 
+To decide these with samples in the hand, see the [sampler sheets](sampler-sheets-design.md):
+true-size windows of the coasters on a labeled card, one sheet per call.
+
 **Call 1 — print a small edge coupon first?** Whether to print is always yours.
 
 | | Buys | Costs | Implies |
