@@ -21,7 +21,6 @@ risk: watch
 pictures:
   - ../design/coaster/loose-pieces-media/frames.png
 needs:
-  - "true edges in bikar (smooth-lines option 3, in progress); D-090 puts them before any fit sample"
   - "the loose-piece output in bikar: exact pocket walls and the loose, Frame and piece outputs (loose-pieces §6 items 2 and 3)"
   - "your yes on failure detection on and the first layer watched (loose-pieces §3.7)"
 ---
@@ -74,8 +73,6 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
 
 ## What it waits on
 
-- True edges in bikar (smooth-lines option 3), in progress: the staircase is bigger than the gap
-  under test.
 - The loose-piece output (loose-pieces §6 items 2 and 3).
 - Your yes on the printer question in loose-pieces call 4.
 

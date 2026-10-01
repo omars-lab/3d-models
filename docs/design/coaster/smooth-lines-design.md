@@ -8,7 +8,9 @@ Omar, 2026-09-29: *"our coaster lines are rough; put together options for making
 with web research and pictures we can review in Obsidian. One option should be lines influenced by
 the SKIMS font design."*
 
-*Status: draft, the one to act on. Nothing here is built or printed. It merges two independent
+*Status: draft, the one to act on. Option 3 is built (bikar #291, 2026-10-01: every coaster wall
+now runs between grid points, and `tools/edge_stairs.py` shows all six sides of CS-1 straight);
+nothing else here is built, and nothing is printed. It merges two independent
 research passes — researcher A ([PR #433](https://github.com/omars-lab/3d-models/pull/433),
 measured on the CS-2 coaster) and researcher B
 ([PR #432](https://github.com/omars-lab/3d-models/pull/432), measured on CS-1) — both merged
@@ -80,9 +82,10 @@ from the code and the picture above (the lone empty square at the upper-left poi
 by a re-render.
 
 **Not known: whether the steps show on a print.** Nothing was printed. A round 0.4 mm bead softens
-steps, so the print may look smoother than the STL. The open backlog item on this
-([catalog-expansion backlog, item 7](../../tasks/catalog-expansion/backlog.md)) already waits on
-exactly that look at a printed edge.
+steps, so the print may look smoother than the STL. The backlog item on this waited for that look
+at a printed edge until Omar chose to make the edges true first, for the loose-piece fit
+([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first));
+it shipped as bikar #291 ([catalog-expansion done](../../tasks/catalog-expansion/done.md)).
 
 ## 2. The options
 
@@ -161,7 +164,7 @@ Why it is not first, from the bikar code:
   number. (A's own SKIMS pictures were drawn by tracing the number, option 3's way.)
 
 The outer ring alone is a different story: one loop, and the outer-edge walk already exists.
-That is the route backlog item 7 names for a slab coaster's outer sides.
+That was the route the true-edges backlog item named for a slab coaster's outer sides.
 
 ### 5. Round the hole points
 
@@ -347,11 +350,15 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
 1. **Now, no code: look at the full dome.** Figure 14 already compares round 0, 1 and 1.5. Omar
    picks whether 1.5 becomes the default.
 2. **Decide on a printed edge coupon** (open call 1). If Omar prints one and the steps cannot be
-   seen or felt, backlog item 7's own rule applies: close the edge work and treat options 5–8 as
-   pure style.
+   seen or felt, treat options 5–8 as pure style. (The edge work itself no longer waits on it:
+   step 3 is built.)
 3. **Build option 3** (edge between grid points) in bikar's coaster builder: walls, top and flat
    bottom from the traced edge, the round-over following it, the standard centre-value rule for
    corner pinches. Checked by §4 with rounding on, the mesh check and the symmetry number.
+   *Done, bikar #291 (2026-10-01):* typical wall error fell from about 0.09 mm to 0.0005 mm, all
+   30 coasters pass the mesh check, and CS-1's mirror score rose from 0.971 to 0.998. Star tips
+   narrower than one grid square are still shaved by about 0.2 mm, which option 5 addresses;
+   interlock insides and relief color boundaries still follow the grid.
 4. **Add option 5** (hole-point rounding, 0.3–0.75 mm) as a knob; it also makes option 3 exact at
    the tips.
 5. **Add option 8 light** (SKIMS soft weld) as a style knob, order-free blend; strong as a look.
@@ -377,7 +384,7 @@ true-size windows of the coasters on a labeled card, one sheet per call.
 
 | | Buys | Costs | Implies |
 |---|---|---|---|
-| **Yes, print a coupon** (recommended): a CS-2 star corner and a CS-1 crossing, today's edge, round 1 and 1.5 | settles whether the steps show, and backlog item 7 with it | one small print while printing is paused | if the steps don't show, steps 3–4 drop to nice-to-haves |
+| **Yes, print a coupon** (recommended): a CS-2 star corner and a CS-1 crossing, today's edge, round 1 and 1.5 | settles whether the steps show (the true edge is now built, so the coupon compares it against the staircase) | one small print while printing is paused | if the steps don't show, steps 3–4 drop to nice-to-haves |
 | No, build option 3 anyway | no print needed | may build something no one can see | step 3 goes ahead on the STL numbers alone |
 
 **Call 2 — star points: sharp or softened?**

@@ -19,7 +19,6 @@ risk: ok
 pictures:
   - ../design/coaster/sampler-sheets-media/sheet-1-mockup.png
 needs:
-  - "true edges in bikar (smooth-lines option 3, in progress)"
   - "the window cut on the coaster (sampler sheets §2)"
   - "the card with engraved labels, in a coupons file"
   - "the sheet plate in the bambu tool: one object, card plus samples at their cells"
@@ -68,7 +67,9 @@ footprint, not on its own thin feet.
 
 ## What it waits on
 
-- True edges in bikar (smooth-lines option 3), in progress.
+- The staircase for the today's-edge row. The true edges shipped 2026-10-01 (bikar #291), so
+  bikar main no longer draws the staircase; that row is cut from a coaster rendered at the commit
+  before it (bikar `f0108c09^`), or from the coaster STLs vendored here before the re-vendor.
 - The window cut on the coaster ([sampler sheets §2](../design/coaster/sampler-sheets-design.md#2-cutting-a-window-out-of-a-coaster)).
 - The card with its engraved labels, and the sheet plate in the bambu tool
   ([§5](../design/coaster/sampler-sheets-design.md#5-from-the-design-to-the-plate)).
