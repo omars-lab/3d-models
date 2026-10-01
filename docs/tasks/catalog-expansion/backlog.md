@@ -317,8 +317,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    pieces in another color that fit back in, as an option on any coaster. The design is
    [loose-pieces-design.md](../../design/coaster/loose-pieces-design.md) (draft, 2026-09-30).
    Call 1 there is decided (D-090): the backed frame first for the gap reading, then the openwork
-   frame, both with the same pieces, on gBV. The true edges it waited on shipped 2026-10-01
-   (bikar #291). Next is the loose-piece output, then a gBV fit plate. Calls 2, 3 and 4 there
+   frame, both with the same pieces, on gBV. The true edges shipped 2026-10-01 (bikar #291), and
+   the loose-piece output and the backed frame the same day (bikar #292): `loose where …`,
+   `--piece Frame` and one `--piece <color>`, pocket walls on the exact outline. Next is the gBV fit
+   sheet (item 8, sheet 4), then a piece-height option (sheet 5's tall piece) and the openwork
+   frame. The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
    (guided page, raised fills, the sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
    height.
 7. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
@@ -338,7 +341,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    same day for loose-pieces calls 4 and 3 (Omar, thread tfuhdk), with three pictures for call 2.
    Its three calls are Omar's. The true edge that sheets 1 and 4 waited on shipped 2026-10-01
    (bikar #291). Sheet 1 now waits on a window option for coasters in bikar; sheets 2 and 3 on
-   smooth-lines options 5 and 8; sheet 4 on item 6's loose-piece output; sheet 5's raised row on raised fills (loose-pieces §6 item 1, a
+   smooth-lines options 5 and 8; sheet 4 on its own coupon file and plate (the loose-piece output
+   it is cut from shipped, bikar #292); sheet 5's tall-piece row on a piece-height option; its raised row on raised fills (loose-pieces §6 item 1, a
    bikar branch is enough) and its other rows on the window. Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.

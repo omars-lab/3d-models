@@ -33,10 +33,10 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
-| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the new edge and the window cut | [sheets-01](../../plates/sheets-01.md) |
+| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the window cut (the new edge shipped, bikar #291) | [sheets-01](../../plates/sheets-01.md) |
 | 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding | [sheets-02](../../plates/sheets-02.md) |
 | 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld | [sheets-03](../../plates/sheets-03.md) |
-| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs true edges and the loose-piece output | [sheets-04](../../plates/sheets-04.md) |
+| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs its own file and plate (true edges and loose pieces shipped, bikar #291 and #292) | [sheets-04](../../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
 
 Loose-pieces call 2, where the guided page lives, is not something to hold in the hand. It gets
@@ -138,7 +138,8 @@ are what is judged, so the pieces cannot stand on a card.
 Before it can print, it needs: true edges in bikar
 ([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first):
 the staircase is bigger than the gap under test), then the loose-piece output (loose-pieces §6
-items 2 and 3, catalog item 6). The window cut is not needed; the frame is the whole coaster.
+items 2 and 3, catalog item 6). Both shipped 2026-10-01 (bikar #291, #292); what is left is the
+sheet's own file and its plate. The window cut is not needed; the frame is the whole coaster.
 The pieces are the smallest things we would have printed, so the printer question on call 4 stays
 with it: failure detection on and the first layer watched, or the pieces do not go on the plate
 (loose-pieces §3.7).
@@ -155,7 +156,7 @@ windows of it: the centre star, a petal, an octagon. The samples print in the co
 | A LOW | fills 0.6 mm, below the 1.2 mm straps (the multicolor design's lowered look) | yes: inside the preset's `range 0.2..1.2` |
 | B FLUSH | fills 1.2 mm, level with the straps | yes: the preset's default |
 | C HIGH | fills 1.8 mm, 0.6 mm above the straps | no: bikar's parser refuses it ("fills may be at most the relief height (equal is flush)"). Needs loose-pieces §6 item 1: lift the refusal, strap wins on height, the ramp into the fill, the feature floor counting raised fills, a wider preset range |
-| D PIECE | a loose piece 1.8 mm tall standing in a 1.2 mm pocket | only once the loose-piece output exists (sheet 4's build); left off otherwise, like sheet 1's D FINE |
+| D PIECE | a loose piece 1.8 mm tall standing in a 1.2 mm pocket | not yet: loose pieces exist (bikar #292) but come out only as tall as their pocket, so it needs a piece-height option; left off otherwise, like sheet 1's D FINE |
 
 C against D is call 3 itself: if a raised fill and a tall loose piece look the same in the hand,
 raised fills can come only through loose pieces and the kernel work is not needed. Row C can be
