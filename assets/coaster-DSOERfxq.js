@@ -1,4 +1,4 @@
-import{C as e,S as t,_ as n,b as r,c as i,d as a,f as o,g as s,h as c,i as l,l as u,m as d,n as ee,o as te,p as f,r as ne,t as re,u as ie,v as ae,x as oe,y as se}from"./style-Cck8Fk0y.js";import"./modulepreload-polyfill-EeOZK34R.js";import{a as ce}from"./dist-iRyURIEL.js";import{i as le,n as ue,r as de}from"./worker-host-BREvQUxv.js";import{n as fe}from"./dom-nvzSSa2H.js";var pe=``+new URL(`bknVRSMcLj0-BdCwmWbx.png`,import.meta.url).href,me=``+new URL(`eight-fold-rosette-border-DUgt4Ipi.png`,import.meta.url).href,he=``+new URL(`eight-fold-rosette-fill-B2xzgRTp.png`,import.meta.url).href,ge=``+new URL(`eight-fold-rosette-interlock-B4ob1Q3n.png`,import.meta.url).href,_e=``+new URL(`eight-fold-rosette-minimal-frame-zQY1eLPp.png`,import.meta.url).href,ve=``+new URL(`eight-fold-rosette-minimal-pegs-vu9luDfH.png`,import.meta.url).href,ye=``+new URL(`eight-fold-rosette-minimal-CBAJQCEy.png`,import.meta.url).href,be=``+new URL(`eight-fold-rosette-twist-D7Kn5b1M.png`,import.meta.url).href,xe=``+new URL(`eight-fold-rosette-KiB8H68R.png`,import.meta.url).href,Se=``+new URL(`lEfWSogWscs-BwSjxbcG.png`,import.meta.url).href,Ce=``+new URL(`n3IidKfXE1I-CPJGr0pD.png`,import.meta.url).href,we=``+new URL(`nmEjCTzMbDg-21ffbZas.png`,import.meta.url).href,Te=``+new URL(`rDuxHF3xMOc-minimal-frame-1Ile2nem.png`,import.meta.url).href,Ee=``+new URL(`rDuxHF3xMOc-DOIdouvw.png`,import.meta.url).href,De=``+new URL(`sDO9fpu76v8-CQv66w82.png`,import.meta.url).href,Oe=``+new URL(`six-fold-rosette-border-DMkpEXyM.png`,import.meta.url).href,ke=``+new URL(`six-fold-rosette-interlock-BwfZEuiU.png`,import.meta.url).href,Ae=``+new URL(`six-fold-rosette-lobed-D8tVI9Tx.png`,import.meta.url).href,je=``+new URL(`six-fold-rosette-minimal-frame-Cr7ozvJF.png`,import.meta.url).href,Me=``+new URL(`six-fold-rosette-minimal-key-DzpYk2pk.png`,import.meta.url).href,Ne=``+new URL(`six-fold-rosette-minimal-pegs-QUkhXGba.png`,import.meta.url).href,Pe=``+new URL(`six-fold-rosette-minimal-tab-BPUy4OSB.png`,import.meta.url).href,Fe=``+new URL(`six-fold-rosette-minimal-C_t2AgJg.png`,import.meta.url).href,Ie=``+new URL(`six-fold-rosette-radial-B29jXvkr.png`,import.meta.url).href,Le=``+new URL(`six-fold-rosette-twist-BYtouvxi.png`,import.meta.url).href,Re=``+new URL(`six-fold-rosette-DroUiSxX.png`,import.meta.url).href,ze=``+new URL(`tA8eSdVx_EQ-CjFPN8nV.png`,import.meta.url).href,Be=Object.assign({"./coaster-thumbs/bknVRSMcLj0.png":pe,"./coaster-thumbs/eight-fold-rosette-border.png":me,"./coaster-thumbs/eight-fold-rosette-fill.png":he,"./coaster-thumbs/eight-fold-rosette-interlock.png":ge,"./coaster-thumbs/eight-fold-rosette-minimal-frame.png":_e,"./coaster-thumbs/eight-fold-rosette-minimal-pegs.png":ve,"./coaster-thumbs/eight-fold-rosette-minimal.png":ye,"./coaster-thumbs/eight-fold-rosette-twist.png":be,"./coaster-thumbs/eight-fold-rosette.png":xe,"./coaster-thumbs/lEfWSogWscs.png":Se,"./coaster-thumbs/n3IidKfXE1I.png":Ce,"./coaster-thumbs/nmEjCTzMbDg.png":we,"./coaster-thumbs/rDuxHF3xMOc-minimal-frame.png":Te,"./coaster-thumbs/rDuxHF3xMOc.png":Ee,"./coaster-thumbs/sDO9fpu76v8.png":De,"./coaster-thumbs/six-fold-rosette-border.png":Oe,"./coaster-thumbs/six-fold-rosette-interlock.png":ke,"./coaster-thumbs/six-fold-rosette-lobed.png":Ae,"./coaster-thumbs/six-fold-rosette-minimal-frame.png":je,"./coaster-thumbs/six-fold-rosette-minimal-key.png":Me,"./coaster-thumbs/six-fold-rosette-minimal-pegs.png":Ne,"./coaster-thumbs/six-fold-rosette-minimal-tab.png":Pe,"./coaster-thumbs/six-fold-rosette-minimal.png":Fe,"./coaster-thumbs/six-fold-rosette-radial.png":Ie,"./coaster-thumbs/six-fold-rosette-twist.png":Le,"./coaster-thumbs/six-fold-rosette.png":Re,"./coaster-thumbs/tA8eSdVx_EQ.png":ze});function Ve(e){return Be[`./coaster-thumbs/${e}.png`]}var He=`Other patterns`;function Ue(e){let t=new Map;for(let n of e){let[e,r]=n.title.split(` · `),i=t.get(e)??[];i.push({script:n,label:r??`plain`}),t.set(e,i)}let n=[],r=[];for(let[e,i]of t)i.length>1?n.push({heading:e,tiles:i}):r.push({script:i[0].script,label:i[0].script.title});return r.length>0&&n.push({heading:He,tiles:r}),n}var p=[{id:`six-fold-rosette`,title:`Six-Fold Rosette`,blurb:`a hexagonal coaster carrying a six-fold star rosette in relief`,file:`GimTvN9hw4U-coaster.bkr`,source:`# naqsh construction — GimTvN9hw4U
+import{C as e,S as t,_ as n,b as r,c as i,d as a,f as o,g as s,h as c,i as l,l as u,m as d,n as ee,o as te,p as f,r as ne,t as re,u as ie,v as ae,x as oe,y as se}from"./style-Cll6CKon.js";import"./modulepreload-polyfill-EeOZK34R.js";import{a as ce}from"./dist-BNWJmsMB.js";import{i as le,n as ue,o as de,r as fe}from"./worker-host-C9v6Wbum.js";import{n as pe}from"./dom-nvzSSa2H.js";var me=``+new URL(`NtnlGMTElBk-minimal-CmjVS6tR.png`,import.meta.url).href,he=``+new URL(`bknVRSMcLj0-BdCwmWbx.png`,import.meta.url).href,ge=``+new URL(`eight-fold-rosette-border-DUgt4Ipi.png`,import.meta.url).href,_e=``+new URL(`eight-fold-rosette-fill-B2xzgRTp.png`,import.meta.url).href,ve=``+new URL(`eight-fold-rosette-interlock-B4ob1Q3n.png`,import.meta.url).href,ye=``+new URL(`eight-fold-rosette-minimal-frame-zQY1eLPp.png`,import.meta.url).href,be=``+new URL(`eight-fold-rosette-minimal-pegs-vu9luDfH.png`,import.meta.url).href,xe=``+new URL(`eight-fold-rosette-minimal-CBAJQCEy.png`,import.meta.url).href,Se=``+new URL(`eight-fold-rosette-twist-D7Kn5b1M.png`,import.meta.url).href,Ce=``+new URL(`eight-fold-rosette-KiB8H68R.png`,import.meta.url).href,we=``+new URL(`gBV_JTt3Kxk-minimal-BPytXC-E.png`,import.meta.url).href,Te=``+new URL(`jlTmt_279M4-minimal-EeYz-b7l.png`,import.meta.url).href,Ee=``+new URL(`lEfWSogWscs-BwSjxbcG.png`,import.meta.url).href,De=``+new URL(`n3IidKfXE1I-CPJGr0pD.png`,import.meta.url).href,Oe=``+new URL(`nmEjCTzMbDg-21ffbZas.png`,import.meta.url).href,ke=``+new URL(`rDuxHF3xMOc-minimal-frame-1Ile2nem.png`,import.meta.url).href,Ae=``+new URL(`rDuxHF3xMOc-DOIdouvw.png`,import.meta.url).href,je=``+new URL(`sDO9fpu76v8-CQv66w82.png`,import.meta.url).href,Me=``+new URL(`six-fold-rosette-border-DMkpEXyM.png`,import.meta.url).href,Ne=``+new URL(`six-fold-rosette-interlock-BwfZEuiU.png`,import.meta.url).href,Pe=``+new URL(`six-fold-rosette-lobed-D8tVI9Tx.png`,import.meta.url).href,Fe=``+new URL(`six-fold-rosette-minimal-frame-Cr7ozvJF.png`,import.meta.url).href,Ie=``+new URL(`six-fold-rosette-minimal-key-DzpYk2pk.png`,import.meta.url).href,Le=``+new URL(`six-fold-rosette-minimal-pegs-QUkhXGba.png`,import.meta.url).href,Re=``+new URL(`six-fold-rosette-minimal-tab-BPUy4OSB.png`,import.meta.url).href,ze=``+new URL(`six-fold-rosette-minimal-C_t2AgJg.png`,import.meta.url).href,Be=``+new URL(`six-fold-rosette-radial-B29jXvkr.png`,import.meta.url).href,Ve=``+new URL(`six-fold-rosette-twist-BYtouvxi.png`,import.meta.url).href,He=``+new URL(`six-fold-rosette-DroUiSxX.png`,import.meta.url).href,Ue=``+new URL(`tA8eSdVx_EQ-CjFPN8nV.png`,import.meta.url).href,We=Object.assign({"./coaster-thumbs/NtnlGMTElBk-minimal.png":me,"./coaster-thumbs/bknVRSMcLj0.png":he,"./coaster-thumbs/eight-fold-rosette-border.png":ge,"./coaster-thumbs/eight-fold-rosette-fill.png":_e,"./coaster-thumbs/eight-fold-rosette-interlock.png":ve,"./coaster-thumbs/eight-fold-rosette-minimal-frame.png":ye,"./coaster-thumbs/eight-fold-rosette-minimal-pegs.png":be,"./coaster-thumbs/eight-fold-rosette-minimal.png":xe,"./coaster-thumbs/eight-fold-rosette-twist.png":Se,"./coaster-thumbs/eight-fold-rosette.png":Ce,"./coaster-thumbs/gBV_JTt3Kxk-minimal.png":we,"./coaster-thumbs/jlTmt_279M4-minimal.png":Te,"./coaster-thumbs/lEfWSogWscs.png":Ee,"./coaster-thumbs/n3IidKfXE1I.png":De,"./coaster-thumbs/nmEjCTzMbDg.png":Oe,"./coaster-thumbs/rDuxHF3xMOc-minimal-frame.png":ke,"./coaster-thumbs/rDuxHF3xMOc.png":Ae,"./coaster-thumbs/sDO9fpu76v8.png":je,"./coaster-thumbs/six-fold-rosette-border.png":Me,"./coaster-thumbs/six-fold-rosette-interlock.png":Ne,"./coaster-thumbs/six-fold-rosette-lobed.png":Pe,"./coaster-thumbs/six-fold-rosette-minimal-frame.png":Fe,"./coaster-thumbs/six-fold-rosette-minimal-key.png":Ie,"./coaster-thumbs/six-fold-rosette-minimal-pegs.png":Le,"./coaster-thumbs/six-fold-rosette-minimal-tab.png":Re,"./coaster-thumbs/six-fold-rosette-minimal.png":ze,"./coaster-thumbs/six-fold-rosette-radial.png":Be,"./coaster-thumbs/six-fold-rosette-twist.png":Ve,"./coaster-thumbs/six-fold-rosette.png":He,"./coaster-thumbs/tA8eSdVx_EQ.png":Ue});function Ge(e){return We[`./coaster-thumbs/${e}.png`]}var Ke=`Other patterns`;function qe(e){let t=new Map;for(let n of e){let[e,r]=n.title.split(` · `),i=t.get(e)??[];i.push({script:n,label:r??`plain`}),t.set(e,i)}let n=[],r=[];for(let[e,i]of t)i.length>1?n.push({heading:e,tiles:i}):r.push({script:i[0].script,label:i[0].script.title});return r.length>0&&n.push({heading:Ke,tiles:r}),n}var p=[{id:`six-fold-rosette`,title:`Six-Fold Rosette`,blurb:`a hexagonal coaster carrying a six-fold star rosette in relief`,file:`GimTvN9hw4U-coaster.bkr`,source:`# naqsh construction — GimTvN9hw4U
 # title: Simple 20-step Six-Fold Star Rosette
 # url: https://www.youtube.com/watch?v=GimTvN9hw4U
 # steps: 26 statements, 25 tagged steps
@@ -6556,7 +6556,7 @@ coaster Coaster
 param size = 90 range 40..120   # mm, finished coaster span across flats — the print knob
 param height = 4 range 1.4..16   # mm, slab height — the relief straps stand above it
 param margin = 2 range 1..10   # mm, blank slab between the art and the edge
-param unit = ($size - 2 * $margin) / 2.7886   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
+param unit = ($size - 2 * $margin) / 2.6433   # mm per GeoGebra unit — derived from size and margin so the art clears the edge by margin
 
 blueprint tA8eSdVx_EQ_scaffold
   # ────────────────────────────────────────────────────────
@@ -7159,15 +7159,1071 @@ coaster Coaster
   strap width 2
   color base Slab
   color straps Gold
-`}],We=`six-fold-rosette`;function m(e){return p.find(t=>t.id===e)}var Ge=[{id:`none`,label:`none`,blurb:`a plain 3 mm frame — the coasters sit side by side, nothing holds them`,style:`minimal-frame`,preset:{}},{id:`dovetail`,label:`dovetail`,blurb:`a 3 mm dovetail tab and slot on every edge, cut into a frame wide enough to hold the slot`,style:`minimal-pegs`,preset:{}},{id:`slim-dovetail`,label:`slim dovetail`,blurb:`the dovetail at 2 mm with the thinnest wall behind the slot — a narrower frame, a smaller tab`,style:`minimal-pegs`,preset:{neck:2,depth:2,wall:2.1}},{id:`key`,label:`butterfly key`,blurb:`a notch mid-edge and a separate bow-tie key that locks two coasters; the frame stays thin`,style:`minimal-key`,preset:{}},{id:`tab`,label:`tab`,blurb:`a tab grown from every other edge that drops through the neighbour's notch into its pattern opening; hexagons only`,style:`minimal-tab`,preset:{}}];function Ke(e){let[t,n]=e.split(` · `);return{pattern:t,style:n}}function qe(e,t){let n=t.find(t=>t.id===e);if(!n)return[];let{pattern:r,style:i}=Ke(n.title);if(!Ge.some(e=>e.style===i))return[];let a=[];for(let e of Ge){let n=t.find(t=>{let n=Ke(t.title);return n.pattern===r&&n.style===e.style}),i=n&&Ye(n.source);i&&Object.keys(e.preset).every(e=>i.has(e))&&a.push({option:e,script:n})}return a.length>1?a:[]}function h(e,t,n){let r=[...e.filter(e=>e.script.id===t)].sort((e,t)=>Object.keys(t.option.preset).length-Object.keys(e.option.preset).length);for(let e of r)if(Object.entries(e.option.preset).every(([e,t])=>n[e]===t))return e.option.id}var Je=/^param\s+([A-Za-z_]\w*)\s*=.*\brange\b/;function Ye(e){let t=new Set;for(let n of e.split(`
-`)){let e=Je.exec(n);e&&t.add(e[1])}return t}function Xe(e,t,n){let r=Ye(n.script.source),i={};for(let[a,o]of Object.entries(e))r.has(a)&&(t&&a in t.preset&&!(a in n.option.preset)||(i[a]=o));return{...i,...n.option.preset}}var Ze=``+new URL(`dovetail-8fDx6IVW.png`,import.meta.url).href,Qe=``+new URL(`key-D6G6ojTN.png`,import.meta.url).href,$e=``+new URL(`none-DbcBIFJi.png`,import.meta.url).href,et=``+new URL(`slim-dovetail-ok7LHY8a.png`,import.meta.url).href,tt=``+new URL(`tab-CgY9nLc8.png`,import.meta.url).href,nt=`six-fold-rosette-minimal-frame`,rt=Object.assign({"./coaster-join-pairs/dovetail.png":Ze,"./coaster-join-pairs/key.png":Qe,"./coaster-join-pairs/none.png":$e,"./coaster-join-pairs/slim-dovetail.png":et,"./coaster-join-pairs/tab.png":tt});function it(e){return rt[`./coaster-join-pairs/${e}.png`]}function at(e){return qe(nt,e)}var ot=new Set([`printed`,`failed`,`measured`,`propagated`]),st=[`keep`,`adjust`,`drop`];function ct(e,t){return e===`bikar:patterns/Constructions/${t}`||e===`patterns/Constructions/${t}`}function lt(e){let t={};for(let[n,r]of Object.entries(e??{}))typeof r==`number`&&(t[n]=r);return t}function ut(e,t){let n=e.run??``;return{run:n,date:/^\d{4}-\d{2}-\d{2}/.exec(n)?.[0],plate:e.plate??n,url:e.url,piece:t.piece??``,params:lt(t.params),count:typeof t.count==`number`?t.count:1,verdict:st.includes(t.verdict??``)?t.verdict:void 0,notes:Array.isArray(t.notes)?t.notes.filter(e=>typeof e==`string`):[],sourceSha256:t.source_sha256}}function dt(e,t){let n=[];for(let r of e?.records??[])if(ot.has(r.status??``))for(let e of r.objects??[])ct(e.source,t)&&n.push(ut(r,e));return n.sort((e,t)=>e.run<t.run?1:e.run>t.run?-1:0)}function ft(e){return Object.entries(e).map(([e,t])=>`${e} ${t}`).join(` · `)}async function pt(e){let t=globalThis.crypto?.subtle;if(!t)return;let n=await t.digest(`SHA-256`,new TextEncoder().encode(e));return Array.from(new Uint8Array(n),e=>e.toString(16).padStart(2,`0`)).join(``)}var mt=[{label:`Mini · 40 mm`,value:40},{label:`Standard · 90 mm`,value:90}];function ht(e,t){let n=e.find(e=>e.name===`size`);return mt.map(({label:e,value:r})=>{if(!n)return{label:e,value:r,active:!1,disabled:!0,title:"This script declares no `size` param"};let i=r>=(n.min??-1/0)&&r<=(n.max??1/0);return{label:e,value:r,active:t.size===r,disabled:!i,title:i?`Set size to ${r} mm`:`This coaster's size runs ${n.min}–${n.max} mm`}})}var gt=[`base`,`straps`,`border`],_t=/^coaster\b/;function vt(e){let t=e.findIndex(e=>_t.test(e));if(t<0)return null;let n=t+1;for(;n<e.length&&/^\s/.test(e[n]);)n++;return{header:t,end:n}}function yt(e,t,n,r){let i=RegExp(`^\\s*color\\s+${t}\\s+\\S`);for(let t=n;t<r;t++)if(i.test(e[t]))return t;return-1}function bt(e,t){for(let n=t.header+1;n<t.end;n++){let t=/^(\s*)color\s/.exec(e[n]);if(t)return t[1]}return`  `}function xt(e,t,n){let r=gt.indexOf(n),i=t.end;for(let n=t.header+1;n<t.end;n++){let t=/^\s*color\s+(\S+)\s/.exec(e[n]);if(!t)continue;let a=gt.indexOf(t[1]);a>=0&&a<r&&(i=n+1)}return i}function St(e,t,n){let r=e.split(`
-`),i=vt(r);if(!i)return e;let a=yt(r,t,i.header+1,i.end);if(n===null)return a<0?e:(r.splice(a,1),r.join(`
-`));let o=`${bt(r,i)}color ${t} ${n}`;return a>=0?r[a]=o:r.splice(xt(r,i,t),0,o),r.join(`
-`)}var Ct=/^(\s*)fill\s+void\s+where\s+orbit\s*==\s*(\d+)\s+color\s+(\S+)\s*$/,wt=/^\s*fill\s/;function Tt(e){let t=e.map(e=>/^\s+inscribe\s+(\S+)/.exec(e)?.[1]).find(Boolean),n=t?e.findIndex(e=>RegExp(`^pattern\\s+${t}\\b`).test(e)):-1;if(n<0&&(n=e.findIndex(e=>/^pattern\b/.test(e))),n<0)return null;let r=n+1;for(;r<e.length&&/^\s/.test(e[r]);)r++;return{header:n,end:r}}function Et(e,t){let n=new Map;for(let r=t.header+1;r<t.end;r++){let t=Ct.exec(e[r]);t&&!n.has(Number(t[2]))&&n.set(Number(t[2]),{at:r,name:t[3]})}return n}function Dt(e,t){for(let n=t.header+1;n<t.end;n++){let t=/^(\s*)fill\s/.exec(e[n]);if(t)return t[1]}return`  `}function Ot(e,t,n,r){if(n.size>0){let e=-1,t=1/0;for(let[i,{at:a}]of n)i<r&&(e=Math.max(e,a+1)),t=Math.min(t,a);return e>=0?e:t}for(let n=t.header+1;n<t.end;n++)if(wt.test(e[n]))return n;return t.end}function kt(e){let t=e.split(`
-`),n=Tt(t);return n?new Map([...Et(t,n)].map(([e,{name:t}])=>[e,t])):new Map}function g(e,t,n){let r=e.split(`
-`),i=Tt(r);if(!i)return e;let a=Et(r,i),o=a.get(t);if(n===null)return o?(r.splice(o.at,1),r.join(`
-`)):e;let s=`${Dt(r,i)}fill void where orbit == ${t} color ${n}`;return o?r[o.at]=s:r.splice(Ot(r,i,a,t),0,s),r.join(`
-`)}var At=[`odd`,`even`,`inner`,`outer`,`all`,`none`];function jt(e,t){let n=Math.floor(t.length/2),r={odd:e=>e%2==1,even:e=>e%2==0,inner:(e,t)=>t<n,outer:(e,t)=>t>=n,all:()=>!0,none:()=>!1};return new Set([...t].sort((e,t)=>e-t).filter((t,n)=>r[e](t,n)))}function Mt(e,t,n,r){return t.reduce((e,t)=>g(e,t,n.has(t)?r(t):null),e)}var Nt=/^coaster\b/,_=/^\s*relief\s+(\S+)\b/,v=/\s+rods\s*$/;function Pt(e){let t=e.findIndex(e=>Nt.test(e));if(t<0)return null;let n=t+1;for(;n<e.length&&/^\s/.test(e[n]);)n++;return{header:t,end:n}}function Ft(e,t){for(let n=t.header+1;n<t.end;n++)if(_.test(e[n]))return n;return-1}function It(e){let t=e.split(`
-`),n=Pt(t);if(!n)return null;let r=Ft(t,n);if(r<0)return null;let i=_.exec(t[r])[1];return i===`faces`?null:{target:i,shape:v.test(t[r])?`rod`:`band`}}function Lt(e,t){let n=e.split(`
-`),r=Pt(n);if(!r)return e;let i=Ft(n,r);if(i<0||_.exec(n[i])[1]===`faces`)return e;let a=v.test(n[i]);return t===`rod`?a||(n[i]=`${n[i].replace(/\s*$/,``)} rods`):a&&(n[i]=n[i].replace(v,``)),n.join(`
-`)}function y(e){let t=document.querySelector(e);if(!t)throw Error(`Coaster Lab markup is missing ${e}`);return t}var b=y(`#coaster-chips`),Rt=y(`#size-chips`),zt=y(`#join-section`),Bt=y(`#join-chips`),Vt=y(`#join-note`),Ht=y(`#history-section`),x=y(`#print-history`),Ut=y(`#join-gallery`),Wt=y(`#join-gallery-cards`),S=y(`#knob-panel`),Gt=y(`#colors-section`),Kt=y(`#color-knobs`),qt=y(`#orbits-section`),Jt=y(`#orbit-presets`),C=y(`#orbit-knobs`),Yt=y(`#orbit-parts`),Xt=y(`#relief-section`),Zt=y(`#relief-shape-control`),w=y(`#machine-select`),Qt=y(`#custom-dims`),T=y(`#dim-x`),$t=y(`#dim-y`),en=y(`#dim-z`),tn=y(`#target-note`),E=y(`#stl-button`),D=y(`#copy-link`),nn=y(`#bake-button`),rn=y(`#bkr-download`),an=y(`#drawer-hide`),on=y(`#open-studio`),O=y(`#findings-panel`),k=y(`#gate-panel`),A=y(`#error-panel`),sn=y(`#spinner`),cn=y(`#spinner-label`),j=y(`#stop-button`),ln=y(`#toast`),un=new le(y(`#orb-canvas`)),dn=Number(new URLSearchParams(window.location.search).get(`budgetMs`))||0,fn=new ue({spawn:()=>new Worker(new URL(``+new URL(`worker-CR9CPYID.js`,import.meta.url).href,``+import.meta.url),{type:`module`}),onMessage:e=>ar(e),...dn>0?{budgetMs:()=>dn}:{}}),M=We,N=`preset`,P=[],F=``,I={},L=new Set,R=ae(),z=0,pn=0,mn=0,B=[],V=!1,hn=0,H=0,U=0,gn=0,_n=0;function W(e){ln.textContent=e,ln.hidden=!1,window.clearTimeout(gn),gn=window.setTimeout(()=>{ln.hidden=!0},3600)}function vn(){return N===`custom`?Y.getSource():(m(M)??p[0]).source}function G(){let e={};for(let t of L)I[t]!==void 0&&(e[t]=I[t]);return e}function K(){let e=vn();z+=1,mn=z,cn.textContent=de(e)===6e4?`computing — this design is large, may take up to a minute…`:`computing…`,fn.evaluate({type:`evaluate`,seq:z,source:e,params:G()}),window.clearTimeout(H),H=window.setTimeout(()=>{sn.hidden=!1},300),window.clearTimeout(U),j.hidden=!0,U=window.setTimeout(()=>{j.hidden=!1},2300)}function yn(){window.clearTimeout(H),window.clearTimeout(U),sn.hidden=!0,j.hidden=!0}var q=null;function J(e){if(N===`custom`){let t=Y.getSource();q=ee(`custom`,P,I,e,n(t)),a(window.localStorage,te,{source:t,overrides:G()})}else q=ee(M,P,I,e);Hn()}function bn(){oe(S,P,I,{radiusCeilingMm:r(R),onChange:Sn})}function xn(){window.clearTimeout(hn),hn=window.setTimeout(()=>{K(),J(`replace`)},200)}function Sn(t,n){B=B.filter(e=>e.name!==t),I[t]=n,L.add(t),V=!1;let r=d(I,P);for(let e of r)L.add(e.name);r.length>0&&e(S,I),yr(),ur(),xn()}function Cn(){let t=P.map(e=>[e.name,e.min,e.max,e.step,e.advanced].join(`|`)).join(`;`);if(t!==F){F=t,bn();return}e(S,I)}var wn={base:`Base`,straps:`Straps`,border:`Border`};function Tn(e,t){Y.setSource(St(Y.getSource(),e,t)),V=!1,X()}function En(e,t){let n=document.createElement(`div`);n.className=`color-row`;let r=document.createElement(`span`);r.className=`color-swatch`,r.style.background=e.hex??`transparent`;let i=document.createElement(`span`);i.className=`color-region`,i.textContent=wn[e.region];let a=document.createElement(`select`);a.setAttribute(`aria-label`,`${wn[e.region]} color`);let o=document.createElement(`option`);o.value=``,o.textContent=`default (one color)`,o.selected=e.paletteName===null,a.append(o);for(let n of t){let t=document.createElement(`option`);t.value=n.name,t.textContent=n.name,t.selected=e.paletteName===n.name,a.append(t)}return a.addEventListener(`change`,()=>Tn(e.region,a.value||null)),n.append(r,i,a),n}function Dn(e){Kt.textContent=``;let t=e.splittable&&e.palette.length>0;if(Gt.hidden=!t,t)for(let t of e.colors)Kt.append(En(t,e.palette))}var On={odd:`Odd`,even:`Even`,inner:`Inner half`,outer:`Outer half`,all:`All`,none:`None`};function kn(e){Y.setSource(e),V=!1,X()}function An(e,t){let n=new Map;for(let t of e.values())n.set(t,(n.get(t)??0)+1);return[...n].sort((e,t)=>t[1]-e[1])[0]?.[0]??t[0].name}function jn(e){return`${e.orbit} · ${e.members} × ${e.sides}-gon, r ${e.radius.toFixed(1)} mm`}function Mn(e,t){return e.find(e=>e.name===t)?.hex??`transparent`}function Nn(e,t,n){let r=document.createElement(`select`);r.setAttribute(`aria-label`,`Orbit ${e} color`);for(let e of t){let t=document.createElement(`option`);t.value=e.name,t.textContent=e.name,t.selected=e.name===n,r.append(t)}return r}function Pn(e,t,n,r){let i=document.createElement(`div`);i.className=`orbit-row`;let a=t.get(e.orbit)??null,o=a===null&&e.color!==null,s=a??(o?null:r),c=document.createElement(`input`);c.type=`checkbox`,c.checked=a!==null||o,c.disabled=o||n.length===0,c.setAttribute(`aria-label`,`Fill orbit ${e.orbit}`);let l=document.createElement(`span`);l.className=`color-swatch`,l.style.background=Mn(n,a??e.color);let u=document.createElement(`span`);if(u.className=`orbit-what`,u.textContent=jn(e),i.append(c,l,u),o)return i.classList.add(`readonly`),u.textContent+=` — ${e.color}, set by another rule`,i;if(n.length===0)return i;let d=Nn(e.orbit,n,s);return c.addEventListener(`change`,()=>kn(g(Y.getSource(),e.orbit,c.checked?d.value:null))),d.addEventListener(`change`,()=>{c.checked&&kn(g(Y.getSource(),e.orbit,d.value))}),i.append(d),i}function Fn(e){qt.hidden=!1,Jt.textContent=``,C.textContent=``,Yt.textContent=e.splitRefusal?`Parts: prints as one body — ${e.splitRefusal}`:`Parts: splits into ${e.bodies.join(`, `)}.`;let t=e.orbits;if(`refused`in t){let e=document.createElement(`p`);e.className=`target-note`,e.textContent=`No orbits — ${t.refused}`,C.append(e);return}let{palette:n}=e,r=kt(Y.getSource()),i=n.length>0?An(r,n):null,a=t.orbits.filter(e=>r.has(e.orbit)||e.color===null).map(e=>e.orbit);if(n.length===0){let e=document.createElement(`p`);e.className=`target-note`,e.textContent=`Declare a palette in the pattern to fill orbits.`,C.append(e)}else for(let e of At){let t=document.createElement(`button`);t.type=`button`,t.className=`chip`,t.textContent=On[e],t.addEventListener(`click`,()=>kn(Mt(Y.getSource(),a,jt(e,a),e=>r.get(e)??i??n[0].name))),Jt.append(t)}for(let e of t.orbits)C.append(Pn(e,r,n,i))}var In=[{shape:`band`,label:`Band`},{shape:`rod`,label:`Rods`}];function Ln(e){Y.setSource(Lt(Y.getSource(),e)),V=!1,X()}function Rn(){Zt.textContent=``;let e=It(vn());if(Xt.hidden=e===null,e!==null)for(let{shape:t,label:n}of In){let r=document.createElement(`button`);r.className=e.shape===t?`chip active`:`chip`,r.textContent=n,r.title=t===`rod`?`Each strap becomes a half-round rod; junctions round off`:`Each strap is a flat-topped band (the default)`,r.addEventListener(`click`,()=>Ln(t)),Zt.append(r)}}function zn(){window.clearTimeout(_n),_n=window.setTimeout(()=>{V=!1,X()},500)}var Y=new ne({drawer:y(`#code-drawer`),textarea:y(`#code-editor`),gutter:y(`#editor-gutter`),highlight:y(`#code-hl`),toggle:y(`#code-toggle`),resizeHandle:y(`#drawer-resize`),onInput:zn});function X(){let e=ie(Y.getSource(),p),t=N===`custom`;if(e){let n=t||M!==e;N=`preset`,M=e,i(window.localStorage,te),n&&$(),J(`replace`)}else N=`custom`,t||$(),J(t?`replace`:`push`);K()}function Bn(){let e=G();if(Object.keys(e).length===0){W(`All knob values already match the code defaults`);return}let t=o(Y.getSource(),e);if(!t.ok){er(`Could not write the knob values into the code`,t.reason);return}let n=t.result;if(n.replacedExpressions.length>0){let e=n.replacedExpressions.join(`, `);if(!window.confirm(`Writing values will replace derived defaults (${e}) with plain numbers. Continue?`))return}L.clear(),Y.setSource(n.source),V=!1,X(),W(`Knob values written into the code`)}function Vn(){let e=o(Y.getSource(),G());if(!e.ok){er(`Could not build the .bkr download`,e.reason);return}let t=new Blob([e.result.source],{type:`text/plain`}),n=URL.createObjectURL(t),r=document.createElement(`a`);r.href=n,r.download=`${N===`custom`?`custom-coaster`:M}.bkr`,r.click(),URL.revokeObjectURL(n)}function Hn(){if(on.href=`${l}#code/${n(vn())}`,N===`custom`&&q&&!q.codeIncluded){D.disabled=!0,D.title=`Too large to share as a link (${q.hrefLength} chars) — Download .bkr instead. Tip: trimming comments usually gets a script back under the line.`;return}D.disabled=!1,D.title=N===`custom`?`Anyone with this link gets your exact coaster — the code rides in the URL, the print target does not`:``}function Un(e,t){let n=document.createElement(`dl`);for(let[e,r]of t){let t=document.createElement(`dt`);t.textContent=e;let i=document.createElement(`dd`);i.textContent=r,n.append(t,i)}e.append(n)}function Wn(e,t,n){for(let r of t){let t=document.createElement(`p`);t.className=n,t.textContent=r,e.append(t)}}function Gn(e){return e===void 0||!Number.isFinite(e)?`n/a`:Number.isInteger(e)?String(e):e.toFixed(2)}function Kn(e,t){let n=document.createElement(`div`);n.className=`cv-row`;let r=document.createElement(`div`),i=document.createElement(`span`);i.className=t.pass?`cv-verdict`:`cv-verdict fail`,i.textContent=t.pass?`PASS`:`FAIL`;let a=document.createElement(`span`);a.textContent=` ${t.code} — measured ${Gn(t.measured)}, limit ${Gn(t.limit)}`,r.append(i,a);let o=document.createElement(`p`);o.className=`cv-msg`,o.textContent=t.message,n.append(r,o),e.append(n)}function qn(e){O.textContent=``,O.dataset.cv=String(e.findings.length);let t=e.findings.every(e=>e.pass),n=document.createElement(`div`);n.className=t?`gate-badge pass`:`gate-badge fail`,n.textContent=t?`PASS — all ${e.findings.length} structural checks`:`FAIL — a structural check did not hold`,O.append(n),Un(O,[[`print floor`,`${e.featureFloorMm.toFixed(2)} mm — the coaster's own strap/neck floor (CAL-CST-01)`]]);for(let t of e.findings)Kn(O,t)}function Jn(e){if(!/is not a valid part/.test(e))return null;let t=[];for(let n of e.matchAll(/\b(CV\d[ab]?):\s*(.+)/g))t.push({code:n[1],pass:!1,message:n[2].trim()});return t.length>0?t:null}function Yn(e){O.textContent=``,O.dataset.cv=`0`;let t=document.createElement(`div`);t.className=`gate-badge fail`,t.textContent=`FAIL — ${e.length} structural check${e.length===1?``:`s`} did not hold`,O.append(t);for(let t of e)Kn(O,t)}function Xn(e,t){let{gate:n,mesh:r}=e;k.textContent=``,k.dataset.tris=String(r.triangles.length);let i=document.createElement(`div`);i.className=n.passed?`gate-badge pass`:`gate-badge fail`,i.textContent=n.passed?`PASS — printable`:`FAIL`,k.append(i),Un(k,[[`watertight`,n.watertight?`yes`:`NO`],[`triangles`,String(r.triangles.length)],[`volume`,`${(r.stats.volumeMm3/1e3).toFixed(1)} cm³`],[`judged against`,`${t.featureFloorMm.toFixed(2)} mm, the coaster floor (CAL-CST-01) — not the shipped ${ce.toFixed(2)} mm FDM floor`]]),Wn(k,n.failures,`gate-failure`)}function Zn(e){for(let t of e)t.dropped?(L.delete(t.name),delete I[t.name]):I[t.name]=t.to}function Qn(){let e=d(I,P);if(e.length===0)return V=!1,[];for(let t of e)L.add(t.name);return V||(V=!0,K(),J(`replace`)),e}function $n(e){A.textContent=e,A.hidden=!1,E.disabled=!0;let t=Jn(e);t&&Yn(t)}function er(e,t){A.textContent=`${e} — ${t}`,A.hidden=!1}function tr(){for(let e of P)L.has(e.name)||(I[e.name]=e.value)}function nr(e){if(e.family!==`coaster`||!e.coaster){$n(N===`custom`?"This script does not declare a `coaster`, so the Coaster Lab has nothing to check. Add a `coaster` block, or open it in the Orb or Lego Lab.":"This script does not declare a `coaster` — the Coaster Lab previews coasters.");return}let t=e.coaster;P=e.specs,Zn(e.adjustments),tr();let n=[...e.adjustments,...Qn()];if(n.length>0){B=n;let e=s(n);e&&W(e)}A.hidden=!0,un.setMesh(e.coasterTint??e.mesh),Dn(t),Fn(t),Rn(),qn(t),Xn(e,t),E.disabled=!e.gate.passed,Cn(),se(S,B),yr(),ur(),J(`replace`)}function rr(){let e=(N===`custom`?`custom-coaster`:M)||`coaster`;for(let t of P){let n=I[t.name];n===void 0||n===t.defaultValue||(e+=`-${t.name}${String(Math.round(n*1e6)/1e6)}`)}return`${e}.stl`}function ir(e){let t=new Blob([e],{type:`model/stl`}),n=URL.createObjectURL(t),r=document.createElement(`a`);r.href=n,r.download=rr(),r.click(),URL.revokeObjectURL(n)}function ar(e){if(e.type===`stl`){ir(e.data);return}if(!(e.type===`ldraw`||e.type===`views`||e.type===`sweep`)&&(e.seq===mn&&yn(),!(e.seq<=pn))){if(pn=e.seq,e.type===`error`){$n(e.message);return}nr(e)}}function or(e){if(N===`preset`&&e===M)return;let t=m(e)??p[0];N===`custom`&&!window.confirm(`Discard your custom coaster and load ${t.title}? Your code is still at the previous link (Back button) until you edit again.`)||sr(t.id,{})}function sr(e,t){let n=m(e)??p[0];N=`preset`,M=n.id,L.clear(),I={...t};for(let e of Object.keys(t))L.add(e);P=[],F=``,B=[],V=!1,Y.setSource(n.source),$(),ee(M,[],{},`push`),K()}function cr(){return N===`preset`?qe(M,p):[]}function lr(e){let t=cr(),n=h(t,M,I),r=t.find(e=>e.option.id===n)?.option;if(r?.id===e.option.id)return;let i={};for(let e of L)I[e]!==void 0&&(i[e]=I[e]);sr(e.script.id,Xe(i,r,e))}function ur(){let e=cr();if(zt.hidden=e.length===0,Bt.textContent=``,e.length===0)return;let t=h(e,M,I);for(let n of e){let e=document.createElement(`button`),r=n.option.id===t;e.className=r?`chip active`:`chip`,e.textContent=n.option.label,e.title=n.option.blurb,e.setAttribute(`aria-pressed`,String(r)),e.addEventListener(`click`,()=>lr(n)),Bt.append(e)}let n=e.find(e=>e.option.id===t);Vt.textContent=n?`${n.option.label}: ${n.option.blurb}. Size, height and strap carry across a join change.`:``}function dr(){Wt.textContent=``;let e=cr(),t=h(e,M,I);for(let n of at(p)){let{option:r}=n,i=document.createElement(`article`);i.className=r.id===t?`join-card active`:`join-card`;let a=it(r.id);if(a){let e=document.createElement(`img`);e.src=a,e.alt=`Two coasters joined by the ${r.label} join, with the seam enlarged`,i.append(e)}let o=document.createElement(`h3`);o.textContent=r.label;let s=document.createElement(`p`);s.textContent=`${r.blurb.charAt(0).toUpperCase()}${r.blurb.slice(1)}.`;let c=document.createElement(`button`);c.type=`button`;let l=e.find(e=>e.option.id===r.id),u=r.id===t;c.className=u?`chip active`:`chip`,c.textContent=u?`In use`:`Use this join`,c.disabled=!l||u,l||(c.title=`This coaster does not ship this join`),l&&!u&&c.addEventListener(`click`,()=>{Ut.close(),lr(l)}),i.append(o,s,c),Wt.append(i)}}y(`#join-gallery-open`).addEventListener(`click`,()=>{dr(),Ut.showModal()}),y(`#join-gallery-close`).addEventListener(`click`,()=>Ut.close());function fr({script:e,label:t}){let n=document.createElement(`button`),r=N===`preset`&&e.id===M;n.className=r?`coaster-tile active`:`coaster-tile`,n.title=`${e.title} — ${e.blurb}`,n.setAttribute(`aria-pressed`,String(r));let i=Ve(e.id);if(i){let e=document.createElement(`img`);e.src=i,e.alt=``,e.loading=`lazy`,n.append(e)}let a=document.createElement(`span`);return a.textContent=t,n.append(a),n.addEventListener(`click`,()=>or(e.id)),n}var Z;function Q(e,t){let n=document.createElement(`p`);return n.className=e,n.textContent=t,n}function pr(e){let t=`${e.date??``} ${e.plate.split(` — `)[0]}`.trim();if(!e.url)return Q(`print-plate`,t);let n=document.createElement(`a`);return n.textContent=t,n.href=e.url,n.target=`_blank`,n.rel=`noopener`,n.title=`${e.plate} — the print record`,n}function mr(e){return[e.piece&&e.piece!==`Coaster`?`${e.piece} piece`:``,ft(e.params),e.count>1?`×${e.count}`:``].filter(Boolean).join(` · `)||`file defaults`}function hr(e){let t=document.createElement(`div`);t.className=`print-run`;let n=document.createElement(`div`);if(n.className=`print-run-head`,n.append(pr(e)),e.verdict){let t=document.createElement(`span`);t.className=`print-verdict ${e.verdict}`,t.textContent=e.verdict,n.append(t)}if(t.append(n,Q(`print-knobs`,mr(e))),e.notes.length>0){let n=document.createElement(`ul`);n.className=`print-notes`;for(let t of e.notes){let e=document.createElement(`li`);e.textContent=t,n.append(e)}t.append(n)}return t}function gr(){let e=N===`preset`?m(M):void 0;if(Ht.hidden=e===void 0||Z===void 0,x.textContent=``,e===void 0||Z===void 0)return;if(Z===null){x.append(Q(`print-empty`,`Print records are published with the 3d-models site, not on this page.`));return}let t=dt(Z,e.file);if(t.length===0){x.append(Q(`print-empty`,`Not printed yet.`));return}let n=t.map(e=>{let t=hr(e);return x.append(t),{piece:e,el:t}});pt(e.source).then(t=>{if(!(t===void 0||M!==e.id))for(let{piece:e,el:r}of n)e.sourceSha256&&e.sourceSha256!==t&&r.append(Q(`print-stale`,`Printed from an earlier version of this file.`))})}async function _r(){Z=await fe(`prints-manifest.json`),gr()}function $(){b.textContent=``;for(let e of Ue(p)){let t=document.createElement(`div`);t.className=`coaster-group`;let n=document.createElement(`h3`);n.textContent=e.heading;let r=document.createElement(`div`);r.className=`coaster-tiles`;for(let t of e.tiles)r.append(fr(t));t.append(n,r),b.append(t)}if(N===`custom`){let e=document.createElement(`button`);e.className=`chip active`,e.textContent=`Custom coaster`,e.title=`Your edited script — not one of the committed presets`,b.append(e)}ur(),gr(),Hn()}function vr(t){Sn(`size`,t),e(S,I)}function yr(){Rt.textContent=``;for(let e of ht(P,I)){let t=document.createElement(`button`);t.className=e.active?`chip active`:`chip`,t.textContent=e.label,t.disabled=e.disabled,t.title=e.title,t.addEventListener(`click`,()=>vr(e.value)),Rt.append(t)}}function br(){tn.textContent=`Build volume ${R.xMm}×${R.yMm}×${R.zMm} mm. A coaster is flat and small — this matters for how many fit on a plate, not whether one does.`}function xr(){let e=(e,t)=>{let n=Number(e.value);return Number.isFinite(n)&&n>=50?n:t};return{xMm:e(T,256),yMm:e($t,256),zMm:e(en,256)}}function Sr(e){let n=f.find(t=>t.id===e)??f[0];Qt.hidden=n.id!==`custom`,R=n.id===`custom`?{...n,...xr()}:n,t(R),br()}function Cr(){for(let e of f){let t=document.createElement(`option`);t.value=e.id,t.textContent=e.label,w.append(t)}w.value=R.id,Qt.hidden=R.id!==`custom`,T.value=String(R.xMm),$t.value=String(R.yMm),en.value=String(R.zMm),br(),w.addEventListener(`change`,()=>Sr(w.value));for(let e of[T,$t,en])e.addEventListener(`change`,()=>Sr(`custom`))}function wr(e){let t=0;for(let[n,r]of Object.entries(e)){let e=Number(r);if(!Number.isFinite(e)){t+=1;continue}I[n]=e,L.add(n)}t>0&&W(`Ignored ${t} non-numeric link value${t===1?``:`s`}`)}function Tr(e){if(e!==null){let t=c(e);if(t===null){W(`This share link is damaged — it may have been truncated by a chat app. Ask the sender for the .bkr file instead.`);return}N=`custom`,Y.setSource(t),Y.open();return}let t=u(window.localStorage,te);if(t){N=`custom`,Y.setSource(t.source),Y.open();for(let[e,n]of Object.entries(t.overrides))I[e]=n,L.add(e)}}function Er(e){if(e.scriptId===`custom`){Tr(e.code);return}e.scriptId&&(m(e.scriptId)?M=e.scriptId:W(`Unknown coaster "${e.scriptId}" — showing the default`),e.code&&W(`This link names a preset — ignoring its embedded code`))}function Dr(){let e=re();Er(e),wr(e.rawParams),N===`preset`&&Y.setSource((m(M)??p[0]).source),$(),yr(),Cr(),E.addEventListener(`click`,()=>{z+=1,fn.request({type:`stl`,seq:z})}),j.addEventListener(`click`,()=>fn.stop()),nn.addEventListener(`click`,Bn),rn.addEventListener(`click`,Vn),an.addEventListener(`click`,()=>Y.close()),Hn(),D.addEventListener(`click`,()=>{navigator.clipboard.writeText(window.location.href).then(()=>W(`Link copied — knobs travel, the print target does not`),()=>W(`Could not copy — use the address bar`))}),window.addEventListener(`popstate`,()=>window.location.reload()),_r(),K()}Dr();
+`},{id:`gBV_JTt3Kxk-minimal`,title:`Itimad-ud-Daula Tenfold Rosette · minimal`,blurb:`the ten-fold rosette from the tomb of Itimad-ud-Daula in Agra as a freestanding strap network — no slab, plain flat straps`,file:`gBV_JTt3Kxk-minimal-coaster.bkr`,source:`# naqsh construction — gBV_JTt3Kxk
+# title: #13 Tenfold - Itimad Ud Daula - Mughal India
+# url: https://www.youtube.com/watch?v=gBV_JTt3Kxk
+# steps: 146 statements, 11 tagged steps
+# source: reconstructions/gBV_JTt3Kxk/construction.ggb-commands sha256:5c082fc6e6e95b821f894ec99daf6035008bb710e48b9e267d335152d6eb6c68
+# renamed: ring -> ring_ (reserved word)
+# coaster only: omits mk1, mk2, mk3, mk4, tile — drawn in the video, left off the coaster
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 2.0001   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint gBV_JTt3Kxk_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # E = (1, 0)
+  point E = unit.cpt0
+  # W = (-1, 0)
+  point W = unit.cpt2
+  # h = Line(W, E)
+  line h from W to E
+  # c = Circle(O, E)
+  circle c center(O) through E
+  # ────────────────────────────────────────────────────────
+  # t=00:10  cL = Circle(W, O)
+  circle cL center(W) through O
+  # ────────────────────────────────────────────────────────
+  # cR = Circle(E, O)
+  circle cR center(E) through O
+  # bis = PerpendicularBisector(O, E)
+  bisector bis from O to E
+  # K1 = Rotate(W, -66°, E)
+  point K1 = rotate W by -66 around E
+  # K2 = Rotate(W, -54°, E)
+  point K2 = rotate W by -54 around E
+  # K3 = Rotate(E, 54°, W)
+  point K3 = rotate E by 54 around W
+  # K4 = Rotate(E, 66°, W)
+  point K4 = rotate E by 66 around W
+  # K5 = Rotate(W, 54°, E)
+  point K5 = rotate W by 54 around E
+  # K6 = Rotate(W, 66°, E)
+  point K6 = rotate W by 66 around E
+  # K7 = Rotate(E, -66°, W)
+  point K7 = rotate E by -66 around W
+  # K8 = Rotate(E, -54°, W)
+  point K8 = rotate E by -54 around W
+  # tick1 = CircularArc(E, K1, K2)
+  circle tick1_host center(E) through K1
+  # tick2 = CircularArc(W, K3, K4)
+  circle tick2_host center(W) through K3
+  # tick3 = CircularArc(E, K5, K6)
+  circle tick3_host center(E) through K5
+  # ────────────────────────────────────────────────────────
+  # t=00:15  tick4 = CircularArc(W, K7, K8)
+  circle tick4_host center(W) through K7
+  # ────────────────────────────────────────────────────────
+  # v = PerpendicularBisector(W, E)
+  bisector v from W to E
+  # M = Midpoint(O, E)
+  point M = midpoint O E
+  # V0 = Rotate(E, 90°, O)
+  point V0 = rotate E by 90 around O
+  # cm = Circle(M, V0)
+  circle cm center(M) through V0
+  # rW = Line(M, W)
+  line rW from M to W
+  # Gd = Intersect(cm, rW, W)
+  point Gd = intersect cm rW pick nearest W
+  # SM = Rotate(V0, -5°, M)
+  point SM = rotate V0 by -5 around M
+  # TM = Rotate(Gd, 3°, M)
+  point TM = rotate Gd by 3 around M
+  # ────────────────────────────────────────────────────────
+  # t=00:20  arcM = CircularArc(M, SM, TM)
+  circle arcM_host center(M) through SM
+  # ────────────────────────────────────────────────────────
+  # V2 = Rotate(V0, 72°, O)
+  point V2 = rotate V0 by 72 around O
+  # V8 = Rotate(V0, -72°, O)
+  point V8 = rotate V0 by -72 around O
+  # V4 = Rotate(V2, 72°, O)
+  point V4 = rotate V2 by 72 around O
+  # V6 = Rotate(V8, -72°, O)
+  point V6 = rotate V8 by -72 around O
+  # S0 = Rotate(V2, -5°, V0)
+  point S0 = rotate V2 by -5 around V0
+  # T0 = Rotate(V8, 7°, V0)
+  point T0 = rotate V8 by 7 around V0
+  # ────────────────────────────────────────────────────────
+  # t=00:25  arc0 = CircularArc(V0, S0, T0)
+  circle arc0_host center(V0) through S0
+  # ────────────────────────────────────────────────────────
+  # S2 = Rotate(V4, -18°, V2)
+  point S2 = rotate V4 by -18 around V2
+  # T2 = Rotate(V0, 6°, V2)
+  point T2 = rotate V0 by 6 around V2
+  # arc2 = CircularArc(V2, S2, T2)
+  circle arc2_host center(V2) through S2
+  # S8 = Rotate(V0, -16°, V8)
+  point S8 = rotate V0 by -16 around V8
+  # T8 = Rotate(V6, 6°, V8)
+  point T8 = rotate V6 by 6 around V8
+  # arc8 = CircularArc(V8, S8, T8)
+  circle arc8_host center(V8) through S8
+  # S4 = Rotate(V6, -17°, V4)
+  point S4 = rotate V6 by -17 around V4
+  # T4 = Rotate(V2, 12°, V4)
+  point T4 = rotate V2 by 12 around V4
+  # arc4 = CircularArc(V4, S4, T4)
+  circle arc4_host center(V4) through S4
+  # S6 = Rotate(V8, -12°, V6)
+  point S6 = rotate V8 by -12 around V6
+  # T6 = Rotate(V4, 17°, V6)
+  point T6 = rotate V4 by 17 around V6
+  # arc6 = CircularArc(V6, S6, T6)
+  circle arc6_host center(V6) through S6
+  # V5 = Reflect(V0, O)
+  point V5 = rotate V0 by 180 around O
+  # V7 = Reflect(V2, O)
+  point V7 = rotate V2 by 180 around O
+  # V9 = Reflect(V4, O)
+  point V9 = rotate V4 by 180 around O
+  # V1 = Reflect(V6, O)
+  point V1 = rotate V6 by 180 around O
+  # V3 = Reflect(V8, O)
+  point V3 = rotate V8 by 180 around O
+  # ln18 = Line(V3, V8)
+  line ln18 from V3 to V8
+  # ln54 = Line(V4, V9)
+  line ln54 from V4 to V9
+  # ln126 = Line(V6, V1)
+  line ln126 from V6 to V1
+  # ln162 = Line(V7, V2)
+  line ln162 from V7 to V2
+  # cD1 = Circle(O, 2.29)
+  circle cD1 center(O) radius 2.29 * $unit
+  # cD2 = Circle(O, 2.22)
+  circle cD2 center(O) radius 2.22 * $unit
+  # cD3 = Circle(O, 2.13)
+  circle cD3 center(O) radius 2.13 * $unit
+  # cD4 = Circle(O, 2.37)
+  circle cD4 center(O) radius 2.37 * $unit
+  # cD5 = Circle(O, 2.19)
+  circle cD5 center(O) radius 2.19 * $unit
+  # cD6 = Circle(O, 2.32)
+  circle cD6 center(O) radius 2.32 * $unit
+  # cD7 = Circle(O, 2.27)
+  circle cD7 center(O) radius 2.27 * $unit
+  # cD8 = Circle(O, 2.24)
+  circle cD8 center(O) radius 2.24 * $unit
+  # D1 = Intersect(cD1, ln18, V8)
+  point D1 = intersect cD1 ln18 pick nearest V8
+  # D2 = Intersect(cD2, ln18, V3)
+  point D2 = intersect cD2 ln18 pick nearest V3
+  # D3 = Intersect(cD3, ln54, V9)
+  point D3 = intersect cD3 ln54 pick nearest V9
+  # D4 = Intersect(cD4, ln54, V4)
+  point D4 = intersect cD4 ln54 pick nearest V4
+  # D5 = Intersect(cD5, ln126, V1)
+  point D5 = intersect cD5 ln126 pick nearest V1
+  # D6 = Intersect(cD6, ln126, V6)
+  point D6 = intersect cD6 ln126 pick nearest V6
+  # D7 = Intersect(cD7, ln162, V2)
+  point D7 = intersect cD7 ln162 pick nearest V2
+  # D8 = Intersect(cD8, ln162, V7)
+  point D8 = intersect cD8 ln162 pick nearest V7
+  # d18 = Segment(D2, D1)
+  segment d18 from D2 to D1
+  # d54 = Segment(D4, D3)
+  segment d54 from D4 to D3
+  # d126 = Segment(D6, D5)
+  segment d126 from D6 to D5
+  # ────────────────────────────────────────────────────────
+  # t=00:38  d162 = Segment(D8, D7)
+  segment d162 from D8 to D7
+  # ────────────────────────────────────────────────────────
+  # blue1 = Polygon(V0, V2, V4, V6, V8)
+  polygon blue1 [ V0 V2 V4 V6 V8 ]
+  # ────────────────────────────────────────────────────────
+  # t=00:45  blue2 = Polygon(V1, V3, V5, V7, V9)
+  polygon blue2 [ V1 V3 V5 V7 V9 ]
+  # ────────────────────────────────────────────────────────
+  # t=00:52  pink = Polygon(V0, V7, V4, V1, V8, V5, V2, V9, V6, V3)
+  polygon pink [ V0 V7 V4 V1 V8 V5 V2 V9 V6 V3 ]
+  # ────────────────────────────────────────────────────────
+  # eb = Line(V9, V1)
+  line eb from V9 to V1
+  # ep = Line(V0, V7)
+  line ep from V0 to V7
+  # Q = Intersect(eb, ep)
+  point Q = intersect eb ep
+  # ln0 = Line(Q, v)
+  line ln0 through Q parallel v
+  # cB = Circle(O, 1.026)
+  circle cB center(O) radius 1.026 * $unit
+  # {Q1, Q2} = Intersect(cB, ln0)
+  intersect Q1Q2_ cB ln0
+  # {Q1, Q2} = Intersect(cB, ln0)
+  point Q1 = Q1Q2_.cpt0
+  # {Q1, Q2} = Intersect(cB, ln0)
+  point Q2 = Q1Q2_.cpt1
+  # bk = Segment(Q1, Q2)
+  segment bk from Q1 to Q2
+  # ln2 = Rotate(ln0, 72°, O)
+  line ln2 = rotate ln0 by 72 around O
+  # ln3 = Rotate(ln0, 108°, O)
+  line ln3 = rotate ln0 by 108 around O
+  # ln8 = Rotate(ln0, -72°, O)
+  line ln8 = rotate ln0 by -72 around O
+  # lnP0 = Line(V6, V9)
+  line lnP0 from V6 to V9
+  # lnP2 = Line(V1, V8)
+  line lnP2 from V1 to V8
+  # lnP3 = Line(V2, V9)
+  line lnP3 from V2 to V9
+  # W1 = Intersect(ln0, ln2)
+  point W1 = intersect ln0 ln2
+  # W2 = Intersect(ln0, lnP2)
+  point W2 = intersect ln0 lnP2
+  # W3 = Intersect(ln0, lnP3)
+  point W3 = intersect ln0 lnP3
+  # W4 = Intersect(lnP0, ln8)
+  point W4 = intersect lnP0 ln8
+  # W5 = Intersect(lnP0, ln3)
+  point W5 = intersect lnP0 ln3
+  # W6 = Intersect(lnP0, lnP2)
+  point W6 = intersect lnP0 lnP2
+  # T = ClosestPoint(ln0, O)
+  point T = closest ln0 to O
+  # cd = Circle(O, T)
+  circle cd center(O) through T
+  # wb1 = Segment(W1, W2)
+  segment wb1 from W1 to W2
+  # wb2 = Segment(W3, Q)
+  segment wb2 from W3 to Q
+  # wp1 = Segment(W4, W5)
+  segment wp1 from W4 to W5
+  # wp2 = Segment(W6, V9)
+  segment wp2 from W6 to V9
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W1_wlow = reflect W1 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W2_wlow = reflect W2 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W3_wlow = reflect W3 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point Q_wlow = reflect Q across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W4_wlow = reflect W4 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W5_wlow = reflect W5 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W6_wlow = reflect W6 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point V9_wlow = reflect V9 across h
+  # ────────────────────────────────────────────────────────
+  # t=01:45  Oh = Reflect(O, O)
+  point Oh = rotate O by 180 around O
+  # ────────────────────────────────────────────────────────
+  # pl4 = Line(V0, V3)
+  line pl4 from V0 to V3
+  # pl6 = Line(V5, V2)
+  line pl6 from V5 to V2
+  # L = Intersect(pl4, pl6)
+  point L = intersect pl4 pl6
+  # R = Reflect(L, v)
+  point R = reflect L across v
+  # mhc5 = Circle(O, 5)
+  circle mhc5 center(O) radius 5 * $unit
+  # mhc6 = Circle(O, 6)
+  circle mhc6 center(O) radius 6 * $unit
+  # mhN5 = Intersect(mhc5, v, V0)
+  point mhN5 = intersect mhc5 v pick nearest V0
+  # mhS5 = Intersect(mhc5, v, V5)
+  point mhS5 = intersect mhc5 v pick nearest V5
+  # mhN6 = Intersect(mhc6, v, V0)
+  point mhN6 = intersect mhc6 v pick nearest V0
+  # mhS6 = Intersect(mhc6, v, V5)
+  point mhS6 = intersect mhc6 v pick nearest V5
+  # mhE6 = Intersect(mhc6, h, E)
+  point mhE6 = intersect mhc6 h pick nearest E
+  # mhW6 = Intersect(mhc6, h, W)
+  point mhW6 = intersect mhc6 h pick nearest W
+  # mhy5 = Line(mhN5, h)
+  line mhy5 through mhN5 parallel h
+  # mhs5 = Line(mhS5, h)
+  line mhs5 through mhS5 parallel h
+  # mhy6 = Line(mhN6, h)
+  line mhy6 through mhN6 parallel h
+  # mhs6 = Line(mhS6, h)
+  line mhs6 through mhS6 parallel h
+  # mhx6 = Line(mhE6, v)
+  line mhx6 through mhE6 parallel v
+  # mhw6 = Line(mhW6, v)
+  line mhw6 through mhW6 parallel v
+  # mhR0 = Line(V0, R)
+  line mhR0 from V0 to R
+  # mhR5 = Line(V5, R)
+  line mhR5 from V5 to R
+  # A1 = Intersect(pl4, mhs5)
+  point A1 = intersect pl4 mhs5
+  # A2 = Intersect(pl4, mhy6)
+  point A2 = intersect pl4 mhy6
+  # F1 = Intersect(mhw6, mhy6)
+  point F1 = intersect mhw6 mhy6
+  # A3 = Intersect(pl6, mhy5)
+  point A3 = intersect pl6 mhy5
+  # A4 = Intersect(pl6, mhs6)
+  point A4 = intersect pl6 mhs6
+  # F2 = Intersect(mhw6, mhs6)
+  point F2 = intersect mhw6 mhs6
+  # A5 = Intersect(mhR5, mhy5)
+  point A5 = intersect mhR5 mhy5
+  # A6 = Intersect(mhR5, mhs6)
+  point A6 = intersect mhR5 mhs6
+  # F3 = Intersect(mhx6, mhs6)
+  point F3 = intersect mhx6 mhs6
+  # A7 = Intersect(mhR0, mhs5)
+  point A7 = intersect mhR0 mhs5
+  # A8 = Intersect(mhR0, mhy6)
+  point A8 = intersect mhR0 mhy6
+  # F4 = Intersect(mhx6, mhy6)
+  point F4 = intersect mhx6 mhy6
+
+pattern gBV_JTt3Kxk on gBV_JTt3Kxk_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=01:41  ring = Sequence(Rotate({wb1, wb2, wp1, wp2, wlow}, 36°*i, O), i, 0, 9)
+  rotate 10 around O
+    connect W1 -> W2
+    connect W3 -> Q
+    connect W4 -> W5
+    connect W6 -> V9
+    connect W1_wlow -> W2_wlow
+    connect W3_wlow -> Q_wlow
+    connect W4_wlow -> W5_wlow
+    connect W6_wlow -> V9_wlow
+
+coaster Coaster
+  outline pattern
+  inscribe gBV_JTt3Kxk
+  base $height
+  strap width $strap
+  edge fillet $round top
+`},{id:`jlTmt_279M4-minimal`,title:`Seven-and-Four-Fold Field · minimal`,blurb:`the 7/4-fold field of straight lines — seven-point stars around octagons, a 2×2 of reflected tiles in a square fence — as a freestanding strap network`,file:`jlTmt_279M4-minimal-coaster.bkr`,source:`# naqsh construction — jlTmt_279M4
+# title: islamic geometry: how to draw 7, 4 fold pattern
+# url: https://www.youtube.com/watch?v=jlTmt_279M4
+# steps: 102 statements, 17 tagged steps
+# source: reconstructions/jlTmt_279M4/construction.ggb-commands sha256:8825b0efb576d5e9cabbb169c810d0ee859332e10549c8b017717492c9abf034
+# renamed: tile -> tile_ (reserved word)
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 3.8998   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint jlTmt_279M4_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # A = (1, 0)
+  point A = unit.cpt0
+  # Wp = Rotate(A, 180°, O)
+  point Wp = rotate A by 180 around O
+  # xAx = Line(O, A)
+  line xAx from O to A
+  # c0 = Circle(O, A)
+  circle c0 center(O) through A
+  # ────────────────────────────────────────────────────────
+  # t=00:06  cW = Circle(Wp, O)
+  circle cW center(Wp) through O
+  # ────────────────────────────────────────────────────────
+  # T = Rotate(A, 90°, O)
+  point T = rotate A by 90 around O
+  # Bt = Rotate(A, 270°, O)
+  point Bt = rotate A by 270 around O
+  # yAx = Line(O, T)
+  line yAx from O to T
+  # cA = Circle(A, O)
+  circle cA center(A) through O
+  # ────────────────────────────────────────────────────────
+  # t=00:18  cT0 = Circle(T, O)
+  circle cT0 center(T) through O
+  # ────────────────────────────────────────────────────────
+  # cB0 = Circle(Bt, O)
+  circle cB0 center(Bt) through O
+  # lAT = Line(A, T)
+  line lAT from A to T
+  # G1 = Reflect(O, lAT)
+  point G1 = reflect O across lAT
+  # G2 = Rotate(G1, 90°, O)
+  point G2 = rotate G1 by 90 around O
+  # G3 = Rotate(G1, 180°, O)
+  point G3 = rotate G1 by 180 around O
+  # G4 = Rotate(G1, 270°, O)
+  point G4 = rotate G1 by 270 around O
+  # ────────────────────────────────────────────────────────
+  # t=00:22  dg1 = Segment(G2, G4)
+  segment dg1 from G2 to G4
+  # ────────────────────────────────────────────────────────
+  # dg2 = Segment(G1, G3)
+  segment dg2 from G1 to G3
+  # S1 = Rotate(A, 315°, O)
+  point S1 = rotate A by 315 around O
+  # S2 = Rotate(A, 45°, O)
+  point S2 = rotate A by 45 around O
+  # S3 = Rotate(A, 135°, O)
+  point S3 = rotate A by 135 around O
+  # S4 = Rotate(A, 225°, O)
+  point S4 = rotate A by 225 around O
+  # Kc = Rotate(A, 135°, O)
+  point Kc = rotate A by 135 around O
+  # M = Midpoint(T, Wp)
+  point M = midpoint T Wp
+  # cK = Circle(Kc, M)
+  circle cK center(Kc) through M
+  # sTK = Segment(T, Kc)
+  segment sTK from T to Kc
+  # Q = Intersect(cK, sTK)
+  point Q = intersect cK sTK
+  # ────────────────────────────────────────────────────────
+  # t=00:30  cT = Circle(T, Q)
+  circle cT center(T) through Q
+  # ────────────────────────────────────────────────────────
+  # cR = Rotate(cT, 270°, O)
+  circle cR = rotate cT by 270 around O
+  # sOA = Segment(O, A)
+  segment sOA from O to A
+  # W0 = Intersect(cR, sOA)
+  point W0 = intersect cR sOA
+  # W1 = Rotate(W0, 51.428571429°, A)
+  point W1 = rotate W0 by 51.428571429 around A
+  # W2 = Rotate(W0, 102.857142857°, A)
+  point W2 = rotate W0 by 102.857142857 around A
+  # W3 = Rotate(W0, 154.285714286°, A)
+  point W3 = rotate W0 by 154.285714286 around A
+  # W4 = Rotate(W0, 205.714285714°, A)
+  point W4 = rotate W0 by 205.714285714 around A
+  # W5 = Rotate(W0, 257.142857143°, A)
+  point W5 = rotate W0 by 257.142857143 around A
+  # W6 = Rotate(W0, 308.571428571°, A)
+  point W6 = rotate W0 by 308.571428571 around A
+  # l13 = Line(W1, W3)
+  line l13 from W1 to W3
+  # l02 = Line(W0, W2)
+  line l02 from W0 to W2
+  # C1 = Intersect(l13, l02)
+  point C1 = intersect l13 l02
+  # sAC = Segment(A, C1)
+  segment sAC from A to C1
+  # ────────────────────────────────────────────────────────
+  # t=01:06  cIn = Circle(O, sAC)
+  circle cIn center(O) radius dist(A, C1)
+  # ────────────────────────────────────────────────────────
+  # rOA = Ray(O, A)
+  line rOA from O to A
+  # P0 = Intersect(cIn, rOA)
+  point P0 = intersect cIn rOA pick nearest A
+  # P45 = Rotate(P0, 45°, O)
+  point P45 = rotate P0 by 45 around O
+  # P315 = Rotate(P0, 315°, O)
+  point P315 = rotate P0 by 315 around O
+  # oe = Segment(P0, P45)
+  segment oe from P0 to P45
+  # lo45 = Line(P0, P45)
+  line lo45 from P0 to P45
+  # lo315 = Line(P0, P315)
+  line lo315 from P0 to P315
+  # l46 = Line(W4, W6)
+  line l46 from W4 to W6
+  # X1 = Intersect(l13, lo45)
+  point X1 = intersect l13 lo45
+  # X2 = Intersect(l46, lo315)
+  point X2 = intersect l46 lo315
+  # aRf = Segment(X1, W3)
+  segment aRf from X1 to W3
+  # aLf = Segment(X2, W4)
+  segment aLf from X2 to W4
+  # x1e = Segment(X1, P45)
+  segment x1e from X1 to P45
+  # x2e = Segment(X2, P315)
+  segment x2e from X2 to P315
+  # l05 = Line(W0, W5)
+  line l05 from W0 to W5
+  # sqR = Line(S1, S2)
+  line sqR from S1 to S2
+  # VL = Intersect(l05, sqR)
+  point VL = intersect l05 sqR
+  # VR = Intersect(l02, sqR)
+  point VR = intersect l02 sqR
+  # v1 = Segment(S2, VL)
+  segment v1 from S2 to VL
+  # v2 = Segment(VL, W0)
+  segment v2 from VL to W0
+  # v3 = Segment(W0, VR)
+  segment v3 from W0 to VR
+  # v4 = Segment(VR, S1)
+  segment v4 from VR to S1
+  # rS = Line(A, W2)
+  line rS from A to W2
+  # tS = Rotate(rS, 90°, O)
+  line tS = rotate rS by 90 around O
+  # lS = Rotate(rS, 180°, O)
+  line lS = rotate rS by 180 around O
+  # bS = Rotate(rS, 270°, O)
+  line bS = rotate rS by 270 around O
+  # N1 = Intersect(rS, tS)
+  point N1 = intersect rS tS
+  # N2 = Intersect(rS, bS)
+  point N2 = intersect rS bS
+  # bd = Segment(N2, N1)
+  segment bd from N2 to N1
+  # l42 = Line(W4, W2)
+  line l42 from W4 to W2
+  # F1 = Intersect(l46, rS)
+  point F1 = intersect l46 rS
+  # E1 = Intersect(l42, bS)
+  point E1 = intersect l42 bS
+  # aR = Segment(X1, C1)
+  segment aR from X1 to C1
+  # aL = Segment(X2, F1)
+  segment aL from X2 to F1
+  # t1 = Segment(C1, W2)
+  segment t1 from C1 to W2
+  # t2 = Segment(W2, E1)
+  segment t2 from W2 to E1
+  # upright = Rotate(tile, -12.857142857°, O)
+  point O_upright = rotate O by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point S2_upright = rotate S2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point VL_upright = rotate VL by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point W0_upright = rotate W0 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point VR_upright = rotate VR by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point S1_upright = rotate S1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point X1_upright = rotate X1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point C1_upright = rotate C1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point X2_upright = rotate X2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point F1_upright = rotate F1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point W2_upright = rotate W2 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point E1_upright = rotate E1 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point P45_upright = rotate P45 by -12.857142857 around O
+  # upright = Rotate(tile, -12.857142857°, O)
+  point P315_upright = rotate P315 by -12.857142857 around O
+  # ────────────────────────────────────────────────────────
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point O_uprightBd = rotate O by -12.857142857 around O
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point N2_uprightBd = rotate N2 by -12.857142857 around O
+  # t=02:30  uprightBd = Rotate(border, -12.857142857°, O)
+  point N1_uprightBd = rotate N1 by -12.857142857 around O
+  # ────────────────────────────────────────────────────────
+  # mR = Rotate(rS, -12.857142857°, O)
+  line mR = rotate rS by -12.857142857 around O
+  # mB = Rotate(mR, 270°, O)
+  line mB = rotate mR by 270 around O
+  # N1u = Rotate(N1, -12.857142857°, O)
+  point N1u = rotate N1 by -12.857142857 around O
+  # TLu = Rotate(N1u, 90°, O)
+  point TLu = rotate N1u by 90 around O
+  # FR = Reflect(TLu, mR)
+  point FR = reflect TLu across mR
+  # FBR = Reflect(FR, mB)
+  point FBR = reflect FR across mB
+  # FBL = Reflect(TLu, mB)
+  point FBL = reflect TLu across mB
+  # f1 = Reflect(upright, mR)
+  point O_upright_f1 = reflect O_upright across mR
+  # f1 = Reflect(upright, mR)
+  point S2_upright_f1 = reflect S2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point VL_upright_f1 = reflect VL_upright across mR
+  # f1 = Reflect(upright, mR)
+  point W0_upright_f1 = reflect W0_upright across mR
+  # f1 = Reflect(upright, mR)
+  point VR_upright_f1 = reflect VR_upright across mR
+  # f1 = Reflect(upright, mR)
+  point S1_upright_f1 = reflect S1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point X1_upright_f1 = reflect X1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point C1_upright_f1 = reflect C1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point X2_upright_f1 = reflect X2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point F1_upright_f1 = reflect F1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point W2_upright_f1 = reflect W2_upright across mR
+  # f1 = Reflect(upright, mR)
+  point E1_upright_f1 = reflect E1_upright across mR
+  # f1 = Reflect(upright, mR)
+  point P45_upright_f1 = reflect P45_upright across mR
+  # f1 = Reflect(upright, mR)
+  point P315_upright_f1 = reflect P315_upright across mR
+  # f2 = Reflect({upright, f1}, mB)
+  point O_upright_f2 = reflect O_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S2_upright_f2 = reflect S2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VL_upright_f2 = reflect VL_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W0_upright_f2 = reflect W0_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VR_upright_f2 = reflect VR_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S1_upright_f2 = reflect S1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X1_upright_f2 = reflect X1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point C1_upright_f2 = reflect C1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X2_upright_f2 = reflect X2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point F1_upright_f2 = reflect F1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W2_upright_f2 = reflect W2_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point E1_upright_f2 = reflect E1_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P45_upright_f2 = reflect P45_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P315_upright_f2 = reflect P315_upright across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point O_upright_f1_f2 = reflect O_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S2_upright_f1_f2 = reflect S2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VL_upright_f1_f2 = reflect VL_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W0_upright_f1_f2 = reflect W0_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point VR_upright_f1_f2 = reflect VR_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point S1_upright_f1_f2 = reflect S1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X1_upright_f1_f2 = reflect X1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point C1_upright_f1_f2 = reflect C1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point X2_upright_f1_f2 = reflect X2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point F1_upright_f1_f2 = reflect F1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point W2_upright_f1_f2 = reflect W2_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point E1_upright_f1_f2 = reflect E1_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P45_upright_f1_f2 = reflect P45_upright_f1 across mB
+  # f2 = Reflect({upright, f1}, mB)
+  point P315_upright_f1_f2 = reflect P315_upright_f1 across mB
+
+pattern jlTmt_279M4 on jlTmt_279M4_scaffold
+  # upright = Rotate(tile, -12.857142857°, O)
+  rotate 4 around O_upright
+    connect S2_upright -> VL_upright
+    connect VL_upright -> W0_upright
+    connect W0_upright -> VR_upright
+    connect VR_upright -> S1_upright
+    connect X1_upright -> C1_upright
+    connect X2_upright -> F1_upright
+    connect C1_upright -> W2_upright
+    connect W2_upright -> E1_upright
+    connect X1_upright -> P45_upright
+    connect X2_upright -> P315_upright
+  # f1 = Reflect(upright, mR)
+  rotate 4 around O_upright_f1
+    connect S2_upright_f1 -> VL_upright_f1
+    connect VL_upright_f1 -> W0_upright_f1
+    connect W0_upright_f1 -> VR_upright_f1
+    connect VR_upright_f1 -> S1_upright_f1
+    connect X1_upright_f1 -> C1_upright_f1
+    connect X2_upright_f1 -> F1_upright_f1
+    connect C1_upright_f1 -> W2_upright_f1
+    connect W2_upright_f1 -> E1_upright_f1
+    connect X1_upright_f1 -> P45_upright_f1
+    connect X2_upright_f1 -> P315_upright_f1
+  # f2 = Reflect({upright, f1}, mB)
+  rotate 4 around O_upright_f2
+    connect S2_upright_f2 -> VL_upright_f2
+    connect VL_upright_f2 -> W0_upright_f2
+    connect W0_upright_f2 -> VR_upright_f2
+    connect VR_upright_f2 -> S1_upright_f2
+    connect X1_upright_f2 -> C1_upright_f2
+    connect X2_upright_f2 -> F1_upright_f2
+    connect C1_upright_f2 -> W2_upright_f2
+    connect W2_upright_f2 -> E1_upright_f2
+    connect X1_upright_f2 -> P45_upright_f2
+    connect X2_upright_f2 -> P315_upright_f2
+  # f2 = Reflect({upright, f1}, mB)
+  rotate 4 around O_upright_f1_f2
+    connect S2_upright_f1_f2 -> VL_upright_f1_f2
+    connect VL_upright_f1_f2 -> W0_upright_f1_f2
+    connect W0_upright_f1_f2 -> VR_upright_f1_f2
+    connect VR_upright_f1_f2 -> S1_upright_f1_f2
+    connect X1_upright_f1_f2 -> C1_upright_f1_f2
+    connect X2_upright_f1_f2 -> F1_upright_f1_f2
+    connect C1_upright_f1_f2 -> W2_upright_f1_f2
+    connect W2_upright_f1_f2 -> E1_upright_f1_f2
+    connect X1_upright_f1_f2 -> P45_upright_f1_f2
+    connect X2_upright_f1_f2 -> P315_upright_f1_f2
+  # ────────────────────────────────────────────────────────
+  # t=02:38  fence = Polyline(TLu, FR, FBR, FBL, TLu)
+  connect [ TLu -> FR, FR -> FBR, FBR -> FBL, FBL -> TLu ]
+
+coaster Coaster
+  outline pattern
+  inscribe jlTmt_279M4
+  base $height
+  strap width $strap
+  edge fillet $round top
+`},{id:`NtnlGMTElBk-minimal`,title:`Mustansiriya Ten-Fold Star · minimal`,blurb:`the ten-fold star band from the Mustansiriya Madrasa as a freestanding strap network — no slab, plain flat straps`,file:`NtnlGMTElBk-minimal-coaster.bkr`,source:`# naqsh construction — NtnlGMTElBk
+# title: Mustansiriya Madrasa ten-fold star
+# url: https://www.youtube.com/watch?v=NtnlGMTElBk
+# steps: 135 statements, 13 tagged steps
+# source: reconstructions/NtnlGMTElBk/construction.ggb-commands sha256:a6cdefe5b1dd9bc0e0b72301fa31c2558c39b6137422853335be77918cb9bbca
+# renamed: ring -> ring_ (reserved word)
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 2   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint NtnlGMTElBk_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # E = (1, 0)
+  point E = unit.cpt0
+  # W = (-1, 0)
+  point W = unit.cpt2
+  # h = Line(W, E)
+  line h from W to E
+  # ────────────────────────────────────────────────────────
+  # t=00:06  c = Circle(O, E)
+  circle c center(O) through E
+  # ────────────────────────────────────────────────────────
+  # t=00:08  cL = Circle(W, O)
+  circle cL center(W) through O
+  # ────────────────────────────────────────────────────────
+  # cR = Circle(E, O)
+  circle cR center(E) through O
+  # ────────────────────────────────────────────────────────
+  # t=00:10  bis = PerpendicularBisector(O, E)
+  bisector bis from O to E
+  # ────────────────────────────────────────────────────────
+  # v = PerpendicularBisector(W, E)
+  bisector v from W to E
+  # K1 = Rotate(W, -66°, E)
+  point K1 = rotate W by -66 around E
+  # K2 = Rotate(W, -54°, E)
+  point K2 = rotate W by -54 around E
+  # K3 = Rotate(E, 54°, W)
+  point K3 = rotate E by 54 around W
+  # K4 = Rotate(E, 66°, W)
+  point K4 = rotate E by 66 around W
+  # K5 = Rotate(W, 54°, E)
+  point K5 = rotate W by 54 around E
+  # K6 = Rotate(W, 66°, E)
+  point K6 = rotate W by 66 around E
+  # K7 = Rotate(E, -66°, W)
+  point K7 = rotate E by -66 around W
+  # K8 = Rotate(E, -54°, W)
+  point K8 = rotate E by -54 around W
+  # tick1 = CircularArc(E, K1, K2)
+  circle tick1_host center(E) through K1
+  # tick2 = CircularArc(W, K3, K4)
+  circle tick2_host center(W) through K3
+  # tick3 = CircularArc(E, K5, K6)
+  circle tick3_host center(E) through K5
+  # ────────────────────────────────────────────────────────
+  # t=00:14  tick4 = CircularArc(W, K7, K8)
+  circle tick4_host center(W) through K7
+  # ────────────────────────────────────────────────────────
+  # M = Midpoint(O, E)
+  point M = midpoint O E
+  # V0 = Rotate(E, 90°, O)
+  point V0 = rotate E by 90 around O
+  # cm = Circle(M, V0)
+  circle cm center(M) through V0
+  # rW = Line(M, W)
+  line rW from M to W
+  # Gd = Intersect(cm, rW, W)
+  point Gd = intersect cm rW pick nearest W
+  # SM = Rotate(V0, -5°, M)
+  point SM = rotate V0 by -5 around M
+  # TM = Rotate(Gd, 3°, M)
+  point TM = rotate Gd by 3 around M
+  # ────────────────────────────────────────────────────────
+  # t=00:20  arcM = CircularArc(M, SM, TM)
+  circle arcM_host center(M) through SM
+  # ────────────────────────────────────────────────────────
+  # V2 = Rotate(V0, 72°, O)
+  point V2 = rotate V0 by 72 around O
+  # V8 = Rotate(V0, -72°, O)
+  point V8 = rotate V0 by -72 around O
+  # V4 = Rotate(V2, 72°, O)
+  point V4 = rotate V2 by 72 around O
+  # V6 = Rotate(V8, -72°, O)
+  point V6 = rotate V8 by -72 around O
+  # S0 = Rotate(V2, -6°, V0)
+  point S0 = rotate V2 by -6 around V0
+  # T0 = Rotate(V8, 6°, V0)
+  point T0 = rotate V8 by 6 around V0
+  # arc0 = CircularArc(V0, S0, T0)
+  circle arc0_host center(V0) through S0
+  # S2 = Rotate(V4, -18°, V2)
+  point S2 = rotate V4 by -18 around V2
+  # T2 = Rotate(V0, 6°, V2)
+  point T2 = rotate V0 by 6 around V2
+  # ────────────────────────────────────────────────────────
+  # t=00:22  arc2 = CircularArc(V2, S2, T2)
+  circle arc2_host center(V2) through S2
+  # ────────────────────────────────────────────────────────
+  # S8 = Rotate(V0, -16°, V8)
+  point S8 = rotate V0 by -16 around V8
+  # T8 = Rotate(V6, 6°, V8)
+  point T8 = rotate V6 by 6 around V8
+  # arc8 = CircularArc(V8, S8, T8)
+  circle arc8_host center(V8) through S8
+  # S4 = Rotate(V6, -17°, V4)
+  point S4 = rotate V6 by -17 around V4
+  # T4 = Rotate(V2, 12°, V4)
+  point T4 = rotate V2 by 12 around V4
+  # arc4 = CircularArc(V4, S4, T4)
+  circle arc4_host center(V4) through S4
+  # S6 = Rotate(V8, -12°, V6)
+  point S6 = rotate V8 by -12 around V6
+  # T6 = Rotate(V4, 17°, V6)
+  point T6 = rotate V4 by 17 around V6
+  # ────────────────────────────────────────────────────────
+  # t=00:27  arc6 = CircularArc(V6, S6, T6)
+  circle arc6_host center(V6) through S6
+  # ────────────────────────────────────────────────────────
+  # V5 = Reflect(V0, O)
+  point V5 = rotate V0 by 180 around O
+  # V7 = Reflect(V2, O)
+  point V7 = rotate V2 by 180 around O
+  # V9 = Reflect(V4, O)
+  point V9 = rotate V4 by 180 around O
+  # V1 = Reflect(V6, O)
+  point V1 = rotate V6 by 180 around O
+  # V3 = Reflect(V8, O)
+  point V3 = rotate V8 by 180 around O
+  # ln18 = Line(V3, V8)
+  line ln18 from V3 to V8
+  # ln54 = Line(V4, V9)
+  line ln54 from V4 to V9
+  # ln126 = Line(V6, V1)
+  line ln126 from V6 to V1
+  # ln162 = Line(V7, V2)
+  line ln162 from V7 to V2
+  # cD1 = Circle(O, 2.27)
+  circle cD1 center(O) radius 2.27 * $unit
+  # cD2 = Circle(O, 2.23)
+  circle cD2 center(O) radius 2.23 * $unit
+  # cD3 = Circle(O, 2.12)
+  circle cD3 center(O) radius 2.12 * $unit
+  # cD4 = Circle(O, 2.31)
+  circle cD4 center(O) radius 2.31 * $unit
+  # cD5 = Circle(O, 2.16)
+  circle cD5 center(O) radius 2.16 * $unit
+  # cD6 = Circle(O, 2.36)
+  circle cD6 center(O) radius 2.36 * $unit
+  # cD7 = Circle(O, 2.26)
+  circle cD7 center(O) radius 2.26 * $unit
+  # cD8 = Circle(O, 2.23)
+  circle cD8 center(O) radius 2.23 * $unit
+  # D1 = Intersect(cD1, ln18, V8)
+  point D1 = intersect cD1 ln18 pick nearest V8
+  # D2 = Intersect(cD2, ln18, V3)
+  point D2 = intersect cD2 ln18 pick nearest V3
+  # D3 = Intersect(cD3, ln54, V9)
+  point D3 = intersect cD3 ln54 pick nearest V9
+  # D4 = Intersect(cD4, ln54, V4)
+  point D4 = intersect cD4 ln54 pick nearest V4
+  # D5 = Intersect(cD5, ln126, V1)
+  point D5 = intersect cD5 ln126 pick nearest V1
+  # D6 = Intersect(cD6, ln126, V6)
+  point D6 = intersect cD6 ln126 pick nearest V6
+  # D7 = Intersect(cD7, ln162, V2)
+  point D7 = intersect cD7 ln162 pick nearest V2
+  # D8 = Intersect(cD8, ln162, V7)
+  point D8 = intersect cD8 ln162 pick nearest V7
+  # d18 = Segment(D2, D1)
+  segment d18 from D2 to D1
+  # d54 = Segment(D4, D3)
+  segment d54 from D4 to D3
+  # d126 = Segment(D6, D5)
+  segment d126 from D6 to D5
+  # ────────────────────────────────────────────────────────
+  # t=00:31  d162 = Segment(D8, D7)
+  segment d162 from D8 to D7
+  # ────────────────────────────────────────────────────────
+  # t=00:38  star = Polygon(V0, V3, V6, V9, V2, V5, V8, V1, V4, V7)
+  polygon star [ V0 V3 V6 V9 V2 V5 V8 V1 V4 V7 ]
+  # ────────────────────────────────────────────────────────
+  # a1 = Line(V0, V7)
+  line a1 from V0 to V7
+  # a3 = Line(V2, V9)
+  line a3 from V2 to V9
+  # a2 = Line(V1, V8)
+  line a2 from V1 to V8
+  # a4 = Line(V3, V0)
+  line a4 from V3 to V0
+  # Q1 = Intersect(a1, a3)
+  point Q1 = intersect a1 a3
+  # Q2 = Intersect(a2, a4)
+  point Q2 = intersect a2 a4
+  # gl = Line(Q2, Q1)
+  line gl from Q2 to Q1
+  # crL = Circle(O, 0.79)
+  circle crL center(O) radius 0.79 * $unit
+  # crR = Circle(O, 0.88)
+  circle crR center(O) radius 0.88 * $unit
+  # rL = Intersect(crL, h, W)
+  point rL = intersect crL h pick nearest W
+  # rR = Intersect(crR, h, E)
+  point rR = intersect crR h pick nearest E
+  # R1 = ClosestPoint(gl, rL)
+  point R1 = closest gl to rL
+  # R2 = ClosestPoint(gl, rR)
+  point R2 = closest gl to rR
+  # guide = Segment(R1, R2)
+  segment guide from R1 to R2
+  # d54l = Line(O, V9)
+  line d54l from O to V9
+  # Q3 = Intersect(gl, d54l)
+  point Q3 = intersect gl d54l
+  # ────────────────────────────────────────────────────────
+  # t=00:43  cg = Circle(O, Q3)
+  circle cg center(O) through Q3
+  # ────────────────────────────────────────────────────────
+  # ray0 = Line(O, V0)
+  line ray0 from O to V0
+  # ray1 = Line(O, V1)
+  line ray1 from O to V1
+  # ray2 = Line(O, V2)
+  line ray2 from O to V2
+  # ray3 = Line(O, V3)
+  line ray3 from O to V3
+  # ray5 = Line(O, V5)
+  line ray5 from O to V5
+  # ray6 = Line(O, V6)
+  line ray6 from O to V6
+  # ray7 = Line(O, V7)
+  line ray7 from O to V7
+  # ray8 = Line(O, V8)
+  line ray8 from O to V8
+  # ray9 = Line(O, V9)
+  line ray9 from O to V9
+  # G0 = Intersect(cg, ray0, V0)
+  point G0 = intersect cg ray0 pick nearest V0
+  # G1 = Intersect(cg, ray1, V1)
+  point G1 = intersect cg ray1 pick nearest V1
+  # G2 = Intersect(cg, ray2, V2)
+  point G2 = intersect cg ray2 pick nearest V2
+  # G3 = Intersect(cg, ray3, V3)
+  point G3 = intersect cg ray3 pick nearest V3
+  # G5 = Intersect(cg, ray5, V5)
+  point G5 = intersect cg ray5 pick nearest V5
+  # G6 = Intersect(cg, ray6, V6)
+  point G6 = intersect cg ray6 pick nearest V6
+  # G7 = Intersect(cg, ray7, V7)
+  point G7 = intersect cg ray7 pick nearest V7
+  # G8 = Intersect(cg, ray8, V8)
+  point G8 = intersect cg ray8 pick nearest V8
+  # G9 = Intersect(cg, ray9, V9)
+  point G9 = intersect cg ray9 pick nearest V9
+  # b0 = Line(G0, G6)
+  line b0 from G0 to G6
+  # {Y3, Y4} = Intersect(c, b0)
+  intersect Y3Y4_ c b0
+  # {Y3, Y4} = Intersect(c, b0)
+  point Y3 = Y3Y4_.cpt0
+  # {Y3, Y4} = Intersect(c, b0)
+  point Y4 = Y3Y4_.cpt1
+  # pink = Segment(Y3, Y4)
+  segment pink from Y3 to Y4
+  # a0 = Line(V9, V6)
+  line a0 from V9 to V6
+  # a8 = Line(V7, V4)
+  line a8 from V7 to V4
+  # b1 = Line(G1, G7)
+  line b1 from G1 to G7
+  # b2 = Line(G2, G8)
+  line b2 from G2 to G8
+  # b7 = Line(G3, G7)
+  line b7 from G3 to G7
+  # b9 = Line(G9, G5)
+  line b9 from G9 to G5
+  # X1 = Intersect(a0, b2)
+  point X1 = intersect a0 b2
+  # X2 = Intersect(a0, b7)
+  point X2 = intersect a0 b7
+  # Y1 = Intersect(b0, a3)
+  point Y1 = intersect b0 a3
+  # Z1 = Intersect(b0, b1)
+  point Z1 = intersect b0 b1
+  # Y2 = Intersect(b0, a8)
+  point Y2 = intersect b0 a8
+  # Z2 = Intersect(b0, b9)
+  point Z2 = intersect b0 b9
+  # wa1 = Segment(V9, X1)
+  segment wa1 from V9 to X1
+  # wa2 = Segment(V6, X2)
+  segment wa2 from V6 to X2
+  # wb1 = Segment(Y1, Z1)
+  segment wb1 from Y1 to Z1
+  # wb2 = Segment(Y2, Z2)
+  segment wb2 from Y2 to Z2
+  # ────────────────────────────────────────────────────────
+  # t=01:18  Oh = Reflect(O, O)
+  point Oh = rotate O by 180 around O
+
+pattern NtnlGMTElBk on NtnlGMTElBk_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=01:15  ring = Sequence(Rotate({wa1, wa2, wb1, wb2}, 36°*i, O), i, 0, 9)
+  rotate 10 around O
+    connect V9 -> X1
+    connect V6 -> X2
+    connect Y1 -> Z1
+    connect Y2 -> Z2
+
+coaster Coaster
+  outline pattern
+  inscribe NtnlGMTElBk
+  base $height
+  strap width $strap
+  edge fillet $round top
+`}],Je=`six-fold-rosette`;function m(e){return p.find(t=>t.id===e)}var Ye=[{id:`none`,label:`none`,blurb:`a plain 3 mm frame — the coasters sit side by side, nothing holds them`,style:`minimal-frame`,preset:{}},{id:`dovetail`,label:`dovetail`,blurb:`a 3 mm dovetail tab and slot on every edge, cut into a frame wide enough to hold the slot`,style:`minimal-pegs`,preset:{}},{id:`slim-dovetail`,label:`slim dovetail`,blurb:`the dovetail at 2 mm with the thinnest wall behind the slot — a narrower frame, a smaller tab`,style:`minimal-pegs`,preset:{neck:2,depth:2,wall:2.1}},{id:`key`,label:`butterfly key`,blurb:`a notch mid-edge and a separate bow-tie key that locks two coasters; the frame stays thin`,style:`minimal-key`,preset:{}},{id:`tab`,label:`tab`,blurb:`a tab grown from every other edge that drops through the neighbour's notch into its pattern opening; hexagons only`,style:`minimal-tab`,preset:{}}];function Xe(e){let[t,n]=e.split(` · `);return{pattern:t,style:n}}function Ze(e,t){let n=t.find(t=>t.id===e);if(!n)return[];let{pattern:r,style:i}=Xe(n.title);if(!Ye.some(e=>e.style===i))return[];let a=[];for(let e of Ye){let n=t.find(t=>{let n=Xe(t.title);return n.pattern===r&&n.style===e.style}),i=n&&$e(n.source);i&&Object.keys(e.preset).every(e=>i.has(e))&&a.push({option:e,script:n})}return a.length>1?a:[]}function h(e,t,n){let r=[...e.filter(e=>e.script.id===t)].sort((e,t)=>Object.keys(t.option.preset).length-Object.keys(e.option.preset).length);for(let e of r)if(Object.entries(e.option.preset).every(([e,t])=>n[e]===t))return e.option.id}var Qe=/^param\s+([A-Za-z_]\w*)\s*=.*\brange\b/;function $e(e){let t=new Set;for(let n of e.split(`
+`)){let e=Qe.exec(n);e&&t.add(e[1])}return t}function et(e,t,n){let r=$e(n.script.source),i={};for(let[a,o]of Object.entries(e))r.has(a)&&(t&&a in t.preset&&!(a in n.option.preset)||(i[a]=o));return{...i,...n.option.preset}}var tt=``+new URL(`dovetail-8fDx6IVW.png`,import.meta.url).href,nt=``+new URL(`key-D6G6ojTN.png`,import.meta.url).href,rt=``+new URL(`none-DbcBIFJi.png`,import.meta.url).href,it=``+new URL(`slim-dovetail-ok7LHY8a.png`,import.meta.url).href,at=``+new URL(`tab-CgY9nLc8.png`,import.meta.url).href,ot=`six-fold-rosette-minimal-frame`,st=Object.assign({"./coaster-join-pairs/dovetail.png":tt,"./coaster-join-pairs/key.png":nt,"./coaster-join-pairs/none.png":rt,"./coaster-join-pairs/slim-dovetail.png":it,"./coaster-join-pairs/tab.png":at});function ct(e){return st[`./coaster-join-pairs/${e}.png`]}function lt(e){return Ze(ot,e)}var ut=new Set([`printed`,`failed`,`measured`,`propagated`]),dt=[`keep`,`adjust`,`drop`];function ft(e,t){return e===`bikar:patterns/Constructions/${t}`||e===`patterns/Constructions/${t}`}function pt(e){let t={};for(let[n,r]of Object.entries(e??{}))typeof r==`number`&&(t[n]=r);return t}function mt(e,t){let n=e.run??``;return{run:n,date:/^\d{4}-\d{2}-\d{2}/.exec(n)?.[0],plate:e.plate??n,url:e.url,piece:t.piece??``,params:pt(t.params),count:typeof t.count==`number`?t.count:1,verdict:dt.includes(t.verdict??``)?t.verdict:void 0,notes:Array.isArray(t.notes)?t.notes.filter(e=>typeof e==`string`):[],sourceSha256:t.source_sha256}}function ht(e,t){let n=[];for(let r of e?.records??[])if(ut.has(r.status??``))for(let e of r.objects??[])ft(e.source,t)&&n.push(mt(r,e));return n.sort((e,t)=>e.run<t.run?1:e.run>t.run?-1:0)}function gt(e){return Object.entries(e).map(([e,t])=>`${e} ${t}`).join(` · `)}async function _t(e){let t=globalThis.crypto?.subtle;if(!t)return;let n=await t.digest(`SHA-256`,new TextEncoder().encode(e));return Array.from(new Uint8Array(n),e=>e.toString(16).padStart(2,`0`)).join(``)}var vt=[{label:`Mini · 40 mm`,value:40},{label:`Standard · 90 mm`,value:90}];function yt(e,t){let n=e.find(e=>e.name===`size`);return vt.map(({label:e,value:r})=>{if(!n)return{label:e,value:r,active:!1,disabled:!0,title:"This script declares no `size` param"};let i=r>=(n.min??-1/0)&&r<=(n.max??1/0);return{label:e,value:r,active:t.size===r,disabled:!i,title:i?`Set size to ${r} mm`:`This coaster's size runs ${n.min}–${n.max} mm`}})}var bt=[`base`,`straps`,`border`],xt=/^coaster\b/;function St(e){let t=e.findIndex(e=>xt.test(e));if(t<0)return null;let n=t+1;for(;n<e.length&&/^\s/.test(e[n]);)n++;return{header:t,end:n}}function Ct(e,t,n,r){let i=RegExp(`^\\s*color\\s+${t}\\s+\\S`);for(let t=n;t<r;t++)if(i.test(e[t]))return t;return-1}function wt(e,t){for(let n=t.header+1;n<t.end;n++){let t=/^(\s*)color\s/.exec(e[n]);if(t)return t[1]}return`  `}function Tt(e,t,n){let r=bt.indexOf(n),i=t.end;for(let n=t.header+1;n<t.end;n++){let t=/^\s*color\s+(\S+)\s/.exec(e[n]);if(!t)continue;let a=bt.indexOf(t[1]);a>=0&&a<r&&(i=n+1)}return i}function Et(e,t,n){let r=e.split(`
+`),i=St(r);if(!i)return e;let a=Ct(r,t,i.header+1,i.end);if(n===null)return a<0?e:(r.splice(a,1),r.join(`
+`));let o=`${wt(r,i)}color ${t} ${n}`;return a>=0?r[a]=o:r.splice(Tt(r,i,t),0,o),r.join(`
+`)}var Dt=/^(\s*)fill\s+void\s+where\s+orbit\s*==\s*(\d+)\s+color\s+(\S+)\s*$/,Ot=/^\s*fill\s/;function kt(e){let t=e.map(e=>/^\s+inscribe\s+(\S+)/.exec(e)?.[1]).find(Boolean),n=t?e.findIndex(e=>RegExp(`^pattern\\s+${t}\\b`).test(e)):-1;if(n<0&&(n=e.findIndex(e=>/^pattern\b/.test(e))),n<0)return null;let r=n+1;for(;r<e.length&&/^\s/.test(e[r]);)r++;return{header:n,end:r}}function At(e,t){let n=new Map;for(let r=t.header+1;r<t.end;r++){let t=Dt.exec(e[r]);t&&!n.has(Number(t[2]))&&n.set(Number(t[2]),{at:r,name:t[3]})}return n}function jt(e,t){for(let n=t.header+1;n<t.end;n++){let t=/^(\s*)fill\s/.exec(e[n]);if(t)return t[1]}return`  `}function Mt(e,t,n,r){if(n.size>0){let e=-1,t=1/0;for(let[i,{at:a}]of n)i<r&&(e=Math.max(e,a+1)),t=Math.min(t,a);return e>=0?e:t}for(let n=t.header+1;n<t.end;n++)if(Ot.test(e[n]))return n;return t.end}function Nt(e){let t=e.split(`
+`),n=kt(t);return n?new Map([...At(t,n)].map(([e,{name:t}])=>[e,t])):new Map}function g(e,t,n){let r=e.split(`
+`),i=kt(r);if(!i)return e;let a=At(r,i),o=a.get(t);if(n===null)return o?(r.splice(o.at,1),r.join(`
+`)):e;let s=`${jt(r,i)}fill void where orbit == ${t} color ${n}`;return o?r[o.at]=s:r.splice(Mt(r,i,a,t),0,s),r.join(`
+`)}function Pt(e,t){let n=new Map;for(let t of e.values())n.set(t,(n.get(t)??0)+1);return[...n].sort((e,t)=>t[1]-e[1])[0]?.[0]??t[0].name}var Ft=[`odd`,`even`,`inner`,`outer`,`all`,`none`];function It(e,t){let n=Math.floor(t.length/2),r={odd:e=>e%2==1,even:e=>e%2==0,inner:(e,t)=>t<n,outer:(e,t)=>t>=n,all:()=>!0,none:()=>!1};return new Set([...t].sort((e,t)=>e-t).filter((t,n)=>r[e](t,n)))}function Lt(e,t,n,r){return t.reduce((e,t)=>g(e,t,n.has(t)?r(t):null),e)}function Rt(e,t,n){let r=!1,i=e.length/2;for(let a=0,o=i-1;a<i;o=a++){let i=e[2*a],s=e[2*a+1],c=e[2*o],l=e[2*o+1];s>n!=l>n&&t<(c-i)*(n-s)/(l-s)+i&&(r=!r)}return r}function zt(e,t,n,r){let i=de(t,n,r);return i?e.find(e=>Rt(e.xy,i.x,i.y))??null:null}function Bt(e,t){return e.filter(e=>e.orbit===t).map(e=>e.xy)}function Vt(e){let t=-1/0;for(let n of e.vertices)t=Math.max(t,n.z);return Number.isFinite(t)?t:0}function Ht(e,t,n){let r=`${e.members} piece${e.members===1?``:`s`}`,i=`Ring ${e.orbit}: ${r}, r ${e.radius.toFixed(1)} mm`;return t.has(e.orbit)?{text:i,action:{label:`Clear ring`,fill:null},note:null}:e.color===null?n.length===0?{text:i,action:null,note:`declare a palette in the pattern to fill it`}:{text:i,action:{label:`Fill ring`,fill:Pt(t,n)},note:null}:{text:i,action:null,note:`filled ${e.color} by another rule in the code`}}var Ut={fill:`rgba(79, 195, 247, 0.30)`,stroke:`#4fc3f7`},Wt={fill:`rgba(255, 255, 255, 0.14)`,stroke:`rgba(255, 255, 255, 0.6)`},Gt=class{opts;coaster=null;z=0;picked=null;hovered=null;constructor(e){this.opts=e,e.viewer.onTap(e=>this.select(this.orbitAt(e))),e.viewer.onHover(e=>this.hover(e?this.orbitAt(e):null))}get pickedOrbit(){return this.picked}update(e,t){this.coaster=e,this.z=Vt(t),this.picked!==null&&!this.row(this.picked)&&(this.picked=null),this.hovered!==null&&!this.row(this.hovered)&&(this.hovered=null),this.paint(),this.renderChip()}clear(){this.picked=null,this.hovered=null,this.paint(),this.renderChip()}orbitAt(e){let t=this.opts.viewer.getViewFrame();return!t||!this.coaster?null:zt(this.coaster.pieces,t,e,this.z)?.orbit??null}row(e){let t=this.coaster?.orbits;if(!(!t||`refused`in t))return t.orbits.find(t=>t.orbit===e)}select(e){this.picked=e,this.opts.onSelect(e),this.paint(),this.renderChip()}hover(e){e===null?delete this.opts.canvas.dataset.hoverOrbit:this.opts.canvas.dataset.hoverOrbit=String(e),e!==this.hovered&&(this.hovered=e,this.paint())}paint(){let e=this.coaster?.pieces??[],t=[];this.hovered!==null&&this.hovered!==this.picked&&t.push({polygons:Bt(e,this.hovered),z:this.z,...Wt}),this.picked!==null&&t.push({polygons:Bt(e,this.picked),z:this.z,...Ut}),this.opts.viewer.setHighlights(t)}renderChip(){let{chip:e}=this.opts;e.textContent=``;let t=this.picked===null?void 0:this.row(this.picked);if(!t||!this.coaster){e.hidden=!0,delete e.dataset.orbit;return}e.hidden=!1,e.dataset.orbit=String(t.orbit);let n=Ht(t,Nt(this.opts.source()),this.coaster.palette),r=document.createElement(`span`);if(r.className=`pick-text`,r.textContent=n.text,e.append(r),n.action&&e.append(this.actionButton(t.orbit,n.action.label,n.action.fill)),n.note){let t=document.createElement(`span`);t.className=`pick-note`,t.textContent=n.note,e.append(t)}}actionButton(e,t,n){let r=document.createElement(`button`);return r.type=`button`,r.className=`chip`,r.textContent=t,r.addEventListener(`click`,()=>{r.disabled=!0,this.opts.edit(g(this.opts.source(),e,n))}),r}},Kt=/^coaster\b/,_=/^\s*relief\s+(\S+)\b/,qt=/\s+rods\s*$/;function Jt(e){let t=e.findIndex(e=>Kt.test(e));if(t<0)return null;let n=t+1;for(;n<e.length&&/^\s/.test(e[n]);)n++;return{header:t,end:n}}function Yt(e,t){for(let n=t.header+1;n<t.end;n++)if(_.test(e[n]))return n;return-1}function Xt(e){let t=e.split(`
+`),n=Jt(t);if(!n)return null;let r=Yt(t,n);if(r<0)return null;let i=_.exec(t[r])[1];return i===`faces`?null:{target:i,shape:qt.test(t[r])?`rod`:`band`}}function Zt(e,t){let n=e.split(`
+`),r=Jt(n);if(!r)return e;let i=Yt(n,r);if(i<0||_.exec(n[i])[1]===`faces`)return e;let a=qt.test(n[i]);return t===`rod`?a||(n[i]=`${n[i].replace(/\s*$/,``)} rods`):a&&(n[i]=n[i].replace(qt,``)),n.join(`
+`)}function v(e){let t=document.querySelector(e);if(!t)throw Error(`Coaster Lab markup is missing ${e}`);return t}var Qt=v(`#coaster-chips`),$t=v(`#size-chips`),en=v(`#join-section`),tn=v(`#join-chips`),nn=v(`#join-note`),rn=v(`#history-section`),y=v(`#print-history`),an=v(`#join-gallery`),on=v(`#join-gallery-cards`),b=v(`#knob-panel`),sn=v(`#colors-section`),cn=v(`#color-knobs`),ln=v(`#orbits-section`),un=v(`#orbit-presets`),x=v(`#orbit-knobs`),dn=v(`#orbit-parts`),fn=v(`#relief-section`),pn=v(`#relief-shape-control`),S=v(`#machine-select`),mn=v(`#custom-dims`),hn=v(`#dim-x`),C=v(`#dim-y`),w=v(`#dim-z`),gn=v(`#target-note`),T=v(`#stl-button`),E=v(`#copy-link`),_n=v(`#bake-button`),vn=v(`#bkr-download`),yn=v(`#drawer-hide`),bn=v(`#open-studio`),D=v(`#findings-panel`),O=v(`#gate-panel`),k=v(`#error-panel`),xn=v(`#spinner`),Sn=v(`#spinner-label`),A=v(`#stop-button`),j=v(`#toast`),Cn=v(`#orb-canvas`),wn=v(`#pick-chip`),Tn=new le(Cn),En=new Gt({viewer:Tn,canvas:Cn,chip:wn,source:()=>Y.getSource(),edit:e=>J(e),onSelect:e=>Kn(e)}),Dn=Number(new URLSearchParams(window.location.search).get(`budgetMs`))||0,M=new ue({spawn:()=>new Worker(new URL(``+new URL(`worker-8acLj7y2.js`,import.meta.url).href,``+import.meta.url),{type:`module`}),onMessage:e=>xr(e),...Dn>0?{budgetMs:()=>Dn}:{}}),N=Je,P=`preset`,F=[],I=``,L={},R=new Set,z=ae(),B=0,On=0,kn=0,V=[],H=!1,An=0,jn=0,Mn=0,Nn=0,Pn=0;function U(e){j.textContent=e,j.hidden=!1,window.clearTimeout(Nn),Nn=window.setTimeout(()=>{j.hidden=!0},3600)}function Fn(){return P===`custom`?Y.getSource():(m(N)??p[0]).source}function W(){let e={};for(let t of R)L[t]!==void 0&&(e[t]=L[t]);return e}function G(){let e=Fn();B+=1,kn=B,Sn.textContent=fe(e)===6e4?`computing — this design is large, may take up to a minute…`:`computing…`,M.evaluate({type:`evaluate`,seq:B,source:e,params:W()}),window.clearTimeout(jn),jn=window.setTimeout(()=>{xn.hidden=!1},300),window.clearTimeout(Mn),A.hidden=!0,Mn=window.setTimeout(()=>{A.hidden=!1},2300)}function In(){window.clearTimeout(jn),window.clearTimeout(Mn),xn.hidden=!0,A.hidden=!0}var K=null;function q(e){if(P===`custom`){let t=Y.getSource();K=ee(`custom`,F,L,e,n(t)),a(window.localStorage,te,{source:t,overrides:W()})}else K=ee(N,F,L,e);ir()}function Ln(){oe(b,F,L,{radiusCeilingMm:r(z),onChange:zn})}function Rn(){window.clearTimeout(An),An=window.setTimeout(()=>{G(),q(`replace`)},200)}function zn(t,n){V=V.filter(e=>e.name!==t),L[t]=n,R.add(t),H=!1;let r=d(L,F);for(let e of r)R.add(e.name);r.length>0&&e(b,L),Fr(),Er(),Rn()}function Bn(){let t=F.map(e=>[e.name,e.min,e.max,e.step,e.advanced].join(`|`)).join(`;`);if(t!==I){I=t,Ln();return}e(b,L)}var Vn={base:`Base`,straps:`Straps`,border:`Border`};function Hn(e,t){Y.setSource(Et(Y.getSource(),e,t)),H=!1,X()}function Un(e,t){let n=document.createElement(`div`);n.className=`color-row`;let r=document.createElement(`span`);r.className=`color-swatch`,r.style.background=e.hex??`transparent`;let i=document.createElement(`span`);i.className=`color-region`,i.textContent=Vn[e.region];let a=document.createElement(`select`);a.setAttribute(`aria-label`,`${Vn[e.region]} color`);let o=document.createElement(`option`);o.value=``,o.textContent=`default (one color)`,o.selected=e.paletteName===null,a.append(o);for(let n of t){let t=document.createElement(`option`);t.value=n.name,t.textContent=n.name,t.selected=e.paletteName===n.name,a.append(t)}return a.addEventListener(`change`,()=>Hn(e.region,a.value||null)),n.append(r,i,a),n}function Wn(e){cn.textContent=``;let t=e.splittable&&e.palette.length>0;if(sn.hidden=!t,t)for(let t of e.colors)cn.append(Un(t,e.palette))}var Gn={odd:`Odd`,even:`Even`,inner:`Inner half`,outer:`Outer half`,all:`All`,none:`None`};function J(e){Y.setSource(e),H=!1,X()}function Kn(e){for(let t of x.querySelectorAll(`.orbit-row`))t.classList.toggle(`picked`,e!==null&&t.dataset.orbit===String(e))}function qn(e){return`${e.orbit} · ${e.members} × ${e.sides}-gon, r ${e.radius.toFixed(1)} mm`}function Jn(e,t){return e.find(e=>e.name===t)?.hex??`transparent`}function Yn(e,t,n){let r=document.createElement(`select`);r.setAttribute(`aria-label`,`Orbit ${e} color`);for(let e of t){let t=document.createElement(`option`);t.value=e.name,t.textContent=e.name,t.selected=e.name===n,r.append(t)}return r}function Xn(e,t,n,r){let i=document.createElement(`div`);i.className=`orbit-row`,i.dataset.orbit=String(e.orbit),i.classList.toggle(`picked`,e.orbit===En.pickedOrbit);let a=t.get(e.orbit)??null,o=a===null&&e.color!==null,s=a??(o?null:r),c=document.createElement(`input`);c.type=`checkbox`,c.checked=a!==null||o,c.disabled=o||n.length===0,c.setAttribute(`aria-label`,`Fill orbit ${e.orbit}`);let l=document.createElement(`span`);l.className=`color-swatch`,l.style.background=Jn(n,a??e.color);let u=document.createElement(`span`);if(u.className=`orbit-what`,u.textContent=qn(e),i.append(c,l,u),o)return i.classList.add(`readonly`),u.textContent+=` — ${e.color}, set by another rule`,i;if(n.length===0)return i;let d=Yn(e.orbit,n,s);return c.addEventListener(`change`,()=>J(g(Y.getSource(),e.orbit,c.checked?d.value:null))),d.addEventListener(`change`,()=>{c.checked&&J(g(Y.getSource(),e.orbit,d.value))}),i.append(d),i}function Zn(e){ln.hidden=!1,un.textContent=``,x.textContent=``,dn.textContent=e.splitRefusal?`Parts: prints as one body — ${e.splitRefusal}`:`Parts: splits into ${e.bodies.join(`, `)}.`;let t=e.orbits;if(`refused`in t){let e=document.createElement(`p`);e.className=`target-note`,e.textContent=`No orbits — ${t.refused}`,x.append(e);return}let{palette:n}=e,r=Nt(Y.getSource()),i=n.length>0?Pt(r,n):null,a=t.orbits.filter(e=>r.has(e.orbit)||e.color===null).map(e=>e.orbit);if(n.length===0){let e=document.createElement(`p`);e.className=`target-note`,e.textContent=`Declare a palette in the pattern to fill orbits.`,x.append(e)}else for(let e of Ft){let t=document.createElement(`button`);t.type=`button`,t.className=`chip`,t.textContent=Gn[e],t.addEventListener(`click`,()=>J(Lt(Y.getSource(),a,It(e,a),e=>r.get(e)??i??n[0].name))),un.append(t)}for(let e of t.orbits)x.append(Xn(e,r,n,i))}var Qn=[{shape:`band`,label:`Band`},{shape:`rod`,label:`Rods`}];function $n(e){Y.setSource(Zt(Y.getSource(),e)),H=!1,X()}function er(){pn.textContent=``;let e=Xt(Fn());if(fn.hidden=e===null,e!==null)for(let{shape:t,label:n}of Qn){let r=document.createElement(`button`);r.className=e.shape===t?`chip active`:`chip`,r.textContent=n,r.title=t===`rod`?`Each strap becomes a half-round rod; junctions round off`:`Each strap is a flat-topped band (the default)`,r.addEventListener(`click`,()=>$n(t)),pn.append(r)}}function tr(){window.clearTimeout(Pn),Pn=window.setTimeout(()=>{H=!1,X()},500)}var Y=new ne({drawer:v(`#code-drawer`),textarea:v(`#code-editor`),gutter:v(`#editor-gutter`),highlight:v(`#code-hl`),toggle:v(`#code-toggle`),resizeHandle:v(`#drawer-resize`),onInput:tr});function X(){let e=ie(Y.getSource(),p),t=P===`custom`;if(e){let n=t||N!==e;P=`preset`,N=e,i(window.localStorage,te),n&&$(),q(`replace`)}else P=`custom`,t||$(),q(t?`replace`:`push`);G()}function nr(){let e=W();if(Object.keys(e).length===0){U(`All knob values already match the code defaults`);return}let t=o(Y.getSource(),e);if(!t.ok){gr(`Could not write the knob values into the code`,t.reason);return}let n=t.result;if(n.replacedExpressions.length>0){let e=n.replacedExpressions.join(`, `);if(!window.confirm(`Writing values will replace derived defaults (${e}) with plain numbers. Continue?`))return}R.clear(),Y.setSource(n.source),H=!1,X(),U(`Knob values written into the code`)}function rr(){let e=o(Y.getSource(),W());if(!e.ok){gr(`Could not build the .bkr download`,e.reason);return}let t=new Blob([e.result.source],{type:`text/plain`}),n=URL.createObjectURL(t),r=document.createElement(`a`);r.href=n,r.download=`${P===`custom`?`custom-coaster`:N}.bkr`,r.click(),URL.revokeObjectURL(n)}function ir(){if(bn.href=`${l}#code/${n(Fn())}`,P===`custom`&&K&&!K.codeIncluded){E.disabled=!0,E.title=`Too large to share as a link (${K.hrefLength} chars) — Download .bkr instead. Tip: trimming comments usually gets a script back under the line.`;return}E.disabled=!1,E.title=P===`custom`?`Anyone with this link gets your exact coaster — the code rides in the URL, the print target does not`:``}function ar(e,t){let n=document.createElement(`dl`);for(let[e,r]of t){let t=document.createElement(`dt`);t.textContent=e;let i=document.createElement(`dd`);i.textContent=r,n.append(t,i)}e.append(n)}function or(e,t,n){for(let r of t){let t=document.createElement(`p`);t.className=n,t.textContent=r,e.append(t)}}function sr(e){return e===void 0||!Number.isFinite(e)?`n/a`:Number.isInteger(e)?String(e):e.toFixed(2)}function cr(e,t){let n=document.createElement(`div`);n.className=`cv-row`;let r=document.createElement(`div`),i=document.createElement(`span`);i.className=t.pass?`cv-verdict`:`cv-verdict fail`,i.textContent=t.pass?`PASS`:`FAIL`;let a=document.createElement(`span`);a.textContent=` ${t.code} — measured ${sr(t.measured)}, limit ${sr(t.limit)}`,r.append(i,a);let o=document.createElement(`p`);o.className=`cv-msg`,o.textContent=t.message,n.append(r,o),e.append(n)}function lr(e){D.textContent=``,D.dataset.cv=String(e.findings.length);let t=e.findings.every(e=>e.pass),n=document.createElement(`div`);n.className=t?`gate-badge pass`:`gate-badge fail`,n.textContent=t?`PASS — all ${e.findings.length} structural checks`:`FAIL — a structural check did not hold`,D.append(n),ar(D,[[`print floor`,`${e.featureFloorMm.toFixed(2)} mm — the coaster's own strap/neck floor (CAL-CST-01)`]]);for(let t of e.findings)cr(D,t)}function ur(e){if(!/is not a valid part/.test(e))return null;let t=[];for(let n of e.matchAll(/\b(CV\d[ab]?):\s*(.+)/g))t.push({code:n[1],pass:!1,message:n[2].trim()});return t.length>0?t:null}function dr(e){D.textContent=``,D.dataset.cv=`0`;let t=document.createElement(`div`);t.className=`gate-badge fail`,t.textContent=`FAIL — ${e.length} structural check${e.length===1?``:`s`} did not hold`,D.append(t);for(let t of e)cr(D,t)}function fr(e,t){let{gate:n,mesh:r}=e;O.textContent=``,O.dataset.tris=String(r.triangles.length);let i=document.createElement(`div`);i.className=n.passed?`gate-badge pass`:`gate-badge fail`,i.textContent=n.passed?`PASS — printable`:`FAIL`,O.append(i),ar(O,[[`watertight`,n.watertight?`yes`:`NO`],[`triangles`,String(r.triangles.length)],[`volume`,`${(r.stats.volumeMm3/1e3).toFixed(1)} cm³`],[`judged against`,`${t.featureFloorMm.toFixed(2)} mm, the coaster floor (CAL-CST-01) — not the shipped ${ce.toFixed(2)} mm FDM floor`]]),or(O,n.failures,`gate-failure`)}function pr(e){for(let t of e)t.dropped?(R.delete(t.name),delete L[t.name]):L[t.name]=t.to}function mr(){let e=d(L,F);if(e.length===0)return H=!1,[];for(let t of e)R.add(t.name);return H||(H=!0,G(),q(`replace`)),e}function hr(e){k.textContent=e,k.hidden=!1,T.disabled=!0;let t=ur(e);t&&dr(t)}function gr(e,t){k.textContent=`${e} — ${t}`,k.hidden=!1}function _r(){for(let e of F)R.has(e.name)||(L[e.name]=e.value)}function vr(e){if(e.family!==`coaster`||!e.coaster){hr(P===`custom`?"This script does not declare a `coaster`, so the Coaster Lab has nothing to check. Add a `coaster` block, or open it in the Orb or Lego Lab.":"This script does not declare a `coaster` — the Coaster Lab previews coasters.");return}let t=e.coaster;F=e.specs,pr(e.adjustments),_r();let n=[...e.adjustments,...mr()];if(n.length>0){V=n;let e=s(n);e&&U(e)}k.hidden=!0,Tn.setMesh(e.coasterTint??e.mesh),Wn(t),Zn(t),En.update(t,e.mesh),er(),lr(t),fr(e,t),T.disabled=!e.gate.passed,Bn(),se(b,V),Fr(),Er(),q(`replace`)}function yr(){let e=(P===`custom`?`custom-coaster`:N)||`coaster`;for(let t of F){let n=L[t.name];n===void 0||n===t.defaultValue||(e+=`-${t.name}${String(Math.round(n*1e6)/1e6)}`)}return`${e}.stl`}function br(e){let t=new Blob([e],{type:`model/stl`}),n=URL.createObjectURL(t),r=document.createElement(`a`);r.href=n,r.download=yr(),r.click(),URL.revokeObjectURL(n)}function xr(e){if(e.type===`stl`){br(e.data);return}if(!(e.type===`ldraw`||e.type===`views`||e.type===`sweep`)&&(e.seq===kn&&In(),!(e.seq<=On))){if(On=e.seq,e.type===`error`){hr(e.message);return}vr(e)}}function Sr(e){if(P===`preset`&&e===N)return;let t=m(e)??p[0];P===`custom`&&!window.confirm(`Discard your custom coaster and load ${t.title}? Your code is still at the previous link (Back button) until you edit again.`)||Cr(t.id,{})}function Cr(e,t){let n=m(e)??p[0];P=`preset`,N=n.id,R.clear(),L={...t};for(let e of Object.keys(t))R.add(e);F=[],I=``,V=[],H=!1,Y.setSource(n.source),$(),ee(N,[],{},`push`),G()}function wr(){return P===`preset`?Ze(N,p):[]}function Tr(e){let t=wr(),n=h(t,N,L),r=t.find(e=>e.option.id===n)?.option;if(r?.id===e.option.id)return;let i={};for(let e of R)L[e]!==void 0&&(i[e]=L[e]);Cr(e.script.id,et(i,r,e))}function Er(){let e=wr();if(en.hidden=e.length===0,tn.textContent=``,e.length===0)return;let t=h(e,N,L);for(let n of e){let e=document.createElement(`button`),r=n.option.id===t;e.className=r?`chip active`:`chip`,e.textContent=n.option.label,e.title=n.option.blurb,e.setAttribute(`aria-pressed`,String(r)),e.addEventListener(`click`,()=>Tr(n)),tn.append(e)}let n=e.find(e=>e.option.id===t);nn.textContent=n?`${n.option.label}: ${n.option.blurb}. Size, height and strap carry across a join change.`:``}function Dr(){on.textContent=``;let e=wr(),t=h(e,N,L);for(let n of lt(p)){let{option:r}=n,i=document.createElement(`article`);i.className=r.id===t?`join-card active`:`join-card`;let a=ct(r.id);if(a){let e=document.createElement(`img`);e.src=a,e.alt=`Two coasters joined by the ${r.label} join, with the seam enlarged`,i.append(e)}let o=document.createElement(`h3`);o.textContent=r.label;let s=document.createElement(`p`);s.textContent=`${r.blurb.charAt(0).toUpperCase()}${r.blurb.slice(1)}.`;let c=document.createElement(`button`);c.type=`button`;let l=e.find(e=>e.option.id===r.id),u=r.id===t;c.className=u?`chip active`:`chip`,c.textContent=u?`In use`:`Use this join`,c.disabled=!l||u,l||(c.title=`This coaster does not ship this join`),l&&!u&&c.addEventListener(`click`,()=>{an.close(),Tr(l)}),i.append(o,s,c),on.append(i)}}v(`#join-gallery-open`).addEventListener(`click`,()=>{Dr(),an.showModal()}),v(`#join-gallery-close`).addEventListener(`click`,()=>an.close());function Or({script:e,label:t}){let n=document.createElement(`button`),r=P===`preset`&&e.id===N;n.className=r?`coaster-tile active`:`coaster-tile`,n.title=`${e.title} — ${e.blurb}`,n.setAttribute(`aria-pressed`,String(r));let i=Ge(e.id);if(i){let e=document.createElement(`img`);e.src=i,e.alt=``,e.loading=`lazy`,n.append(e)}let a=document.createElement(`span`);return a.textContent=t,n.append(a),n.addEventListener(`click`,()=>Sr(e.id)),n}var Z;function Q(e,t){let n=document.createElement(`p`);return n.className=e,n.textContent=t,n}function kr(e){let t=`${e.date??``} ${e.plate.split(` — `)[0]}`.trim();if(!e.url)return Q(`print-plate`,t);let n=document.createElement(`a`);return n.textContent=t,n.href=e.url,n.target=`_blank`,n.rel=`noopener`,n.title=`${e.plate} — the print record`,n}function Ar(e){return[e.piece&&e.piece!==`Coaster`?`${e.piece} piece`:``,gt(e.params),e.count>1?`×${e.count}`:``].filter(Boolean).join(` · `)||`file defaults`}function jr(e){let t=document.createElement(`div`);t.className=`print-run`;let n=document.createElement(`div`);if(n.className=`print-run-head`,n.append(kr(e)),e.verdict){let t=document.createElement(`span`);t.className=`print-verdict ${e.verdict}`,t.textContent=e.verdict,n.append(t)}if(t.append(n,Q(`print-knobs`,Ar(e))),e.notes.length>0){let n=document.createElement(`ul`);n.className=`print-notes`;for(let t of e.notes){let e=document.createElement(`li`);e.textContent=t,n.append(e)}t.append(n)}return t}function Mr(){let e=P===`preset`?m(N):void 0;if(rn.hidden=e===void 0||Z===void 0,y.textContent=``,e===void 0||Z===void 0)return;if(Z===null){y.append(Q(`print-empty`,`Print records are published with the 3d-models site, not on this page.`));return}let t=ht(Z,e.file);if(t.length===0){y.append(Q(`print-empty`,`Not printed yet.`));return}let n=t.map(e=>{let t=jr(e);return y.append(t),{piece:e,el:t}});_t(e.source).then(t=>{if(!(t===void 0||N!==e.id))for(let{piece:e,el:r}of n)e.sourceSha256&&e.sourceSha256!==t&&r.append(Q(`print-stale`,`Printed from an earlier version of this file.`))})}async function Nr(){Z=await pe(`prints-manifest.json`),Mr()}function $(){Qt.textContent=``;for(let e of qe(p)){let t=document.createElement(`div`);t.className=`coaster-group`;let n=document.createElement(`h3`);n.textContent=e.heading;let r=document.createElement(`div`);r.className=`coaster-tiles`;for(let t of e.tiles)r.append(Or(t));t.append(n,r),Qt.append(t)}if(P===`custom`){let e=document.createElement(`button`);e.className=`chip active`,e.textContent=`Custom coaster`,e.title=`Your edited script — not one of the committed presets`,Qt.append(e)}Er(),Mr(),ir()}function Pr(t){zn(`size`,t),e(b,L)}function Fr(){$t.textContent=``;for(let e of yt(F,L)){let t=document.createElement(`button`);t.className=e.active?`chip active`:`chip`,t.textContent=e.label,t.disabled=e.disabled,t.title=e.title,t.addEventListener(`click`,()=>Pr(e.value)),$t.append(t)}}function Ir(){gn.textContent=`Build volume ${z.xMm}×${z.yMm}×${z.zMm} mm. A coaster is flat and small — this matters for how many fit on a plate, not whether one does.`}function Lr(){let e=(e,t)=>{let n=Number(e.value);return Number.isFinite(n)&&n>=50?n:t};return{xMm:e(hn,256),yMm:e(C,256),zMm:e(w,256)}}function Rr(e){let n=f.find(t=>t.id===e)??f[0];mn.hidden=n.id!==`custom`,z=n.id===`custom`?{...n,...Lr()}:n,t(z),Ir()}function zr(){for(let e of f){let t=document.createElement(`option`);t.value=e.id,t.textContent=e.label,S.append(t)}S.value=z.id,mn.hidden=z.id!==`custom`,hn.value=String(z.xMm),C.value=String(z.yMm),w.value=String(z.zMm),Ir(),S.addEventListener(`change`,()=>Rr(S.value));for(let e of[hn,C,w])e.addEventListener(`change`,()=>Rr(`custom`))}function Br(e){let t=0;for(let[n,r]of Object.entries(e)){let e=Number(r);if(!Number.isFinite(e)){t+=1;continue}L[n]=e,R.add(n)}t>0&&U(`Ignored ${t} non-numeric link value${t===1?``:`s`}`)}function Vr(e){if(e!==null){let t=c(e);if(t===null){U(`This share link is damaged — it may have been truncated by a chat app. Ask the sender for the .bkr file instead.`);return}P=`custom`,Y.setSource(t),Y.open();return}let t=u(window.localStorage,te);if(t){P=`custom`,Y.setSource(t.source),Y.open();for(let[e,n]of Object.entries(t.overrides))L[e]=n,R.add(e)}}function Hr(e){if(e.scriptId===`custom`){Vr(e.code);return}e.scriptId&&(m(e.scriptId)?N=e.scriptId:U(`Unknown coaster "${e.scriptId}" — showing the default`),e.code&&U(`This link names a preset — ignoring its embedded code`))}function Ur(){let e=re();Hr(e),Br(e.rawParams),P===`preset`&&Y.setSource((m(N)??p[0]).source),$(),Fr(),zr(),T.addEventListener(`click`,()=>{B+=1,M.request({type:`stl`,seq:B})}),A.addEventListener(`click`,()=>M.stop()),_n.addEventListener(`click`,nr),vn.addEventListener(`click`,rr),yn.addEventListener(`click`,()=>Y.close()),ir(),E.addEventListener(`click`,()=>{navigator.clipboard.writeText(window.location.href).then(()=>U(`Link copied — knobs travel, the print target does not`),()=>U(`Could not copy — use the address bar`))}),window.addEventListener(`popstate`,()=>window.location.reload()),Nr(),G()}Ur();
