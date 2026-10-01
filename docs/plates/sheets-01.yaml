@@ -5,14 +5,16 @@
 # bikar's `Sampler-Cards.bkr` piece Sheet1Card, its codes engraved; the cells below use the
 # same numbers as its labels (column x = -20, 14, 48; row y = 24, -10, -44).
 #
+#   A TODAY  today's staircase edge, round 1 — the control
 #   B TRUE   the true edge (bikar #291), round 1 — the file default
 #   C DOME   the true edge, round 1.5 — the full dome
 #
 # Columns: CS-1 crossing (GimTvN9hw4U), CS-2 star (7apC5Q9QS-8), gBV star (gBV_JTt3Kxk).
 #
-# Row A TODAY (today's staircase edge, the control) is not here yet: bikar main draws only the
-# true edge, so it has no source to cut. The sheet answers its question only with A beside B, so
-# it is not for printing until row A is added (sheets-01.md, what it waits on).
+# Row A is three vendored STLs, not a bikar render: bikar main draws only the true edge, so the
+# staircase windows were cut once from the commit before it with the window cut backported, and
+# checked in with their hashes (src/Samplers/sheets-01-row-a/README.md says how, and how to
+# rebuild them byte for byte). The sheet refuses a row A file whose hash has changed.
 #
 # Build and look (no hardware; slicing is local):
 #   bambu slice sheet docs/plates/sheets-01.yaml --dry-run
@@ -28,6 +30,21 @@ card:
   piece: Sheet1Card
 
 cells:
+  - name: A TODAY / CS-1
+    at: [-20, 24]
+    stl: src/Samplers/sheets-01-row-a/GimTvN9hw4U-minimal-coaster-window.stl
+    sha256: da3a40df55a57b00cfa08b46edc27df7438e107b94770a940cf40ebf2d0263d9
+    window: 30@9.7,1
+  - name: A TODAY / CS-2
+    at: [14, 24]
+    stl: src/Samplers/sheets-01-row-a/7apC5Q9QS-8-minimal-coaster-window.stl
+    sha256: c0ba87472a8cf358a95f4aa9a25c208cbf3a10aed0283560a01eef8c49d34e38
+    window: 30@18.5,18.5
+  - name: A TODAY / GBV
+    at: [48, 24]
+    stl: src/Samplers/sheets-01-row-a/gBV_JTt3Kxk-minimal-coaster-window.stl
+    sha256: c1b596e59f39a41adbd124718c0ba689652e79def54228103b0efa3a1015bccb
+    window: 30@0,0
   - name: B TRUE / CS-1
     at: [-20, -10]
     bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr

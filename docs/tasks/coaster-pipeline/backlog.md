@@ -39,9 +39,10 @@ Sending a print and which filament to load.
   second bed (found 2026-09-30); its page has the three fixes. The order between them is on
   [the plates page](../../plates/README.md). The send and the filament are Omar's.
 - **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
-  [sheets-05](../../plates/sheets-05.md)** — designed, at `planned`: none can be built yet, so
-  none has a recipe, a slice or a tick box to answer. Each page lists what it waits on (the
-  builds are catalog-expansion item 8). Their order by value is computed on
+  [sheets-05](../../plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
+  on Omar's tick: one bed, about 1 h 48 m and 46 g. The other four are at `planned`, with no
+  recipe, slice or tick box yet. Each of their pages lists what it waits on (the builds are
+  catalog-expansion item 8). Their order by value is computed on
   [the plates page](../../plates/README.md), not kept here. sheets-04 (the gBV fit) also waits on
   Omar's yes to failure detection and a watched first layer. Prints are held for last.
 - **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**
