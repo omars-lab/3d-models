@@ -335,8 +335,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 8. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
    ([D-089](../../working-model/decisions-log.md#d-089--gbv_jtt3kxk-is-the-next-coaster)) from the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
-   Its minimal coaster is in bikar (#287). Still to do: a ledger row, a gallery card and a samples
-   plate (the plate prints last). The first full run of the
+   Its minimal coaster is in bikar (#287). It already has its ledger row (CS-13), a vendored STL
+   and a gallery card, which is live on gh-pages (checked 2026-10-01). Its samples plate is folded
+   into the gBV fit plate of item 6: that plate's openwork frame is this coaster's lines print, so a
+   separate plate would print the same thing twice. The first full run of the
    [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed.
 
 ## Handed to the video loop
