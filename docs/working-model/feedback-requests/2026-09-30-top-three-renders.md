@@ -72,20 +72,18 @@ Two things the numbers cannot say:
 
 **Your answer:**
 
-- [ ] gBV_JTt3Kxk
+- [x] gBV_JTt3Kxk
 - [ ] jlTmt_279M4
 - [ ] NtnlGMTElBk
 - [ ] Print minis of two or all three first
-- Notes:
+- Notes: on the gBV picture (thread nhtq79), Omar wants to print it two ways: the lines with the
+  spaces left open, and the spaces as loose pieces in a second color that fit back in. He wants that
+  as an option on any coaster. Confirmed as the pick in chat on 2026-10-01.
+
+**Decided 2026-10-01:** gBV_JTt3Kxk → [D-089](../decisions-log.md#d-089--gbv_jtt3kxk-is-the-next-coaster);
+the two-color fit it asked for → [D-090](../decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first).
 
 ## Things only you can do (not decisions)
 
-- Merge the proposal itself, pull request 427 in 3d-models; an automatic check stopped me
-  merging it without your OK.
-- Land three youtube branches on youtube main, whose remote has no pull-request flow. Two rewrite
-  the source constructions into vocabulary the importer supports, with every label proven to
-  agree with the original: `ntnl-supported-vocabulary` (commit ec697a1) and
-  `gbv-supported-vocabulary` (commit d0732db), both unpushed in their own worktrees. The third,
-  `o1-polyline-ray` (commit 9a92134, pushed), teaches the line-by-line check about polylines and
-  rays, which jlTmt needs to pass it. Until they land, the bikar files point at source hashes
-  that youtube main does not have.
+Nothing left. Pull request 427 is merged, and the three youtube commits (ec697a1, d0732db,
+9a92134) are on youtube main, checked 2026-10-01.

@@ -310,38 +310,34 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
-6. **Coaster Lab: fill height either way, loose inner pieces, and "assemble your own coaster".**
-   Omar, 2026-09-29, review thread 3kqnku, on the flush-or-lowered call. Three asks:
-   - choose the fill height in the Lab at either end: fills lowered below the straps, or raised
-     above them (the `fills <mm>` slider from bikar #283 only goes down);
-   - print only the inner shapes, without the straps, as loose pieces that fit into a printed
-     frame;
-   - a guided page where someone assembles their own coaster.
-
-   The design for all three is written:
+6. **Lines and loose pieces in two colors, on any coaster; plus fill height and "assemble your own
+   coaster".** Omar, 2026-09-29, review thread 3kqnku, asked three things: the fill height at either
+   end, loose inner pieces for a printed frame, and a guided page. On 2026-10-01 (thread nhtq79, on
+   gBV) he sharpened the second ask. Print the lines with the spaces open, and print the spaces as
+   pieces in another color that fit back in, as an option on any coaster. The design is
    [loose-pieces-design.md](../../design/coaster/loose-pieces-design.md) (draft, 2026-09-30).
-   It waits on Omar's four calls in its §7: which frame holds the pieces, where the guided page
-   lives, whether raised fills go on every fill coaster, and the LP-1 sample's gaps. Nothing is
-   built until they answer. Call 2 on the page stays open for the default fill height.
-7. **Coaster edges are a 0.4 mm staircase on slanted sides.** Measured 2026-09-29 with
-   `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to 0.27 mm
-   either side of the true edge, and two sides are straight. Omar asked for a plainer picture
-   (thread 7t9o0t), which is now on the page. **Waits on a look at a printed edge:** if the steps
-   can't be seen or felt, close it. If they can, emit the outer wall exactly, as the interlock
-   already does ([coaster-interlock-design](../../design/coaster/coaster-interlock-design.md)
-   §5.3), and re-run the tool to show every side straight. The options for smoothing the lines
-   inside the coaster too are in the
-   [smooth-lines design](../../design/coaster/smooth-lines-design.md) (3d-models #434, a
-   checker's merge of two researchers' drafts, #432 and #433; all three merged 2026-09-30). Its four open calls, in §6, wait on Omar.
-8. **Which pattern becomes the next coaster.** The top three candidates are built in bikar as
-   minimal coasters at 90 mm (bikar #285, #286, #287, all merged 2026-09-30) and shown on the
+   Call 1 there is decided (D-090): the backed frame first for the gap reading, then the openwork
+   frame, both with the same pieces, on gBV. **Waits on item 7** (true edges). After that, the
+   loose-piece output, then a gBV fit plate. Calls 2, 3 and 4 there (guided page, raised fills, the
+   sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
+   height.
+7. **Coaster edges are a 0.4 mm staircase on slanted sides: make them true.** Measured 2026-09-29
+   with `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to
+   0.27 mm either side of the true edge, and two sides are straight. **No longer waits on a printed
+   edge:** Omar decided on 2026-10-01 to make the edges true before any fit sample, because the steps
+   on a pocket wall and a piece wall are bigger than the gap being tested
+   ([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
+   The fix is bikar's: draw each wall between the grid points
+   ([smooth-lines option 3](../../design/coaster/smooth-lines-design.md#3-draw-the-edge-between-grid-points)),
+   then re-run the tool to show every side straight. The smooth-lines design (3d-models #434,
+   merging #432 and #433) still has four open calls in §6 about looks. Call 1 there, the edge
+   coupon, now only decides whether the steps matter for looks, not whether option 3 gets built.
+8. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
+   ([D-089](../../working-model/decisions-log.md#d-089--gbv_jtt3kxk-is-the-next-coaster)) from the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
-   **Waiting on Omar's pick** there. The proposal the page's decisions come from is
-   [prioritize-design](../../design/process/prioritize-design.md) (3d-models #427, D-085 to
-   D-088). Then: record the pick in the decisions log and start the coaster (ledger
-   row, gallery card, samples plate). The first full run of the
-   [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed
-   after that.
+   Its minimal coaster is in bikar (#287). Still to do: a ledger row, a gallery card and a samples
+   plate (the plate prints last). The first full run of the
+   [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed.
 
 ## Handed to the video loop
 
