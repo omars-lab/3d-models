@@ -161,10 +161,10 @@ and §5.1 measured ~11% false alarms against a <1% dead-link rate. The
 checkable invariant is not *does this URL resolve* but *is every load-bearing number
 attributed to a source the research file records as fetched*.
 
-**Self-improvement is part of finishing.** The same logic runs on friction, not only
-defects: a *recurring* workflow's manual or undocumented step gets fixed in the PR that
-hit it — a friction into tooling as a defect into a guard. The **construction migrations**
-([ledger](docs/constructions/ledger.md)) each fill the gap the last one left.
+**Self-improvement is part of finishing.** A *recurring* manual step gets fixed in the PR that hit
+it, as a defect gets a guard ([migrations](docs/constructions/ledger.md) each fill the last gap).
+**Use what we ship before calling it done:** a new keyword gets a real recipe and picture, not a
+not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose`).
 
 ## Robustness over ease — especially when offering the choice
 

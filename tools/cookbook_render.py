@@ -23,8 +23,9 @@ side by side with a label under each copy:
 
 A snippet with a `coaster` line is drawn as a 3D coaster: bikar's own color
 preview when it can split the coaster into color bodies, otherwise the same
-OpenSCAD picture `make coasters` uses (carved, open and jointed coasters). Any
-other snippet is drawn flat, with the construction circles and lines bikar
+OpenSCAD picture `make coasters` uses (carved, open and jointed coasters). A
+coaster with a `loose` line is drawn as it prints: the frame, with each color's
+pieces lifted above their pockets in that color. Any other snippet is drawn flat, with the construction circles and lines bikar
 normally hides shown in faint gray, the way the Lab's `?b=1` does.
 
 A snippet that fails to draw fails the run, naming the recipe and bikar's
@@ -121,6 +122,32 @@ def draw_flat(cli, src, extra, out, name, tmp):
     run(["rsvg-convert", "-w", str(TILE * 2), "-o", out, svg], name)
 
 
+LOOSE_LIFT = 30  # mm the loose pieces float above the frame, so pocket and piece both show
+
+
+def loose_parts(cli, src, text, extra, name, tmp):
+    """A loose coaster drawn the way it is printed: the frame (`--piece Frame`) in
+    its base color, and each loose color's pieces lifted above their pockets in that
+    color. The pieces are whichever palette colors bikar builds as a `--piece`; a
+    color it says is not a piece is not loose."""
+    palette = dict(re.findall(r"^\s+(\w+)\s*=\s*(#[0-9a-fA-F]{6})\s*$", text, re.M))
+    base = re.search(r"^\s+color\s+base\s+(\w+)", text, re.M)
+    frame = os.path.join(tmp, "frame.stl")
+    run(["node", cli, "render", src, "--piece", "Frame", "--format", "stl", "-o", frame, *extra], name)
+    parts = []
+    for color, hexcode in palette.items():
+        stl = os.path.join(tmp, f"piece-{color}.stl")
+        done = subprocess.run(["node", cli, "render", src, "--piece", color, "--format", "stl",
+                               "-o", stl, *extra], capture_output=True, text=True)
+        if done.returncode == 0:
+            parts.append((stl, (0, 0, LOOSE_LIFT), hexcode))
+        elif "is not a piece" not in done.stderr:
+            raise RuntimeError(f"recipe '{name}' did not draw: {done.stderr.strip().splitlines()[0]}")
+    if not parts:
+        raise RuntimeError(f"recipe '{name}' has a loose line but bikar built no pieces")
+    return frame, palette.get(base.group(1)) if base else None, parts
+
+
 class NeedsMesh(Exception):
     """bikar will not split this coaster into color bodies (carved, open or jointed)."""
 
@@ -136,13 +163,18 @@ def draw_coaster(cli, src, extra, out, name, tmp, mate_mm, mesh):
             raise NeedsMesh()
         raise RuntimeError(f"recipe '{name}' did not draw: {done.stderr.strip().splitlines()[0]}")
     # the picture `make coasters` draws for these in the gallery: the mesh, in OpenSCAD
-    stl = os.path.join(tmp, "coaster.stl")
-    coaster = re.search(r"^coaster\s+(\w+)", open(src).read(), re.M).group(1)
-    run(["node", cli, "render", src, "--piece", coaster, "--format", "stl", "-o", stl, *extra], name)
     binary = openscad()
     if not binary:
         raise RuntimeError(f"recipe '{name}' needs OpenSCAD for its picture")
-    openscad_render(binary, stl, out, mate_offset(stl, float(mate_mm)) if mate_mm else None)
+    text = open(src).read()
+    if re.search(r"^\s+loose\s", text, re.M):
+        frame, color, parts = loose_parts(cli, src, text, extra, name, tmp)
+        openscad_render(binary, frame, out, parts=parts, color=color)
+    else:
+        stl = os.path.join(tmp, "coaster.stl")
+        coaster = re.search(r"^coaster\s+(\w+)", text, re.M).group(1)
+        run(["node", cli, "render", src, "--piece", coaster, "--format", "stl", "-o", stl, *extra], name)
+        openscad_render(binary, stl, out, mate_offset(stl, float(mate_mm)) if mate_mm else None)
     # OpenSCAD's cream background to white, so every picture sits on white
     run(["magick", out, "-fuzz", "6%", "-fill", "white", "-opaque", "#FFFFE5", out], name)
 

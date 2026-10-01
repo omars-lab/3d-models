@@ -102,12 +102,18 @@ def mate_offset(stl, mate_mm):
     return (mate_mm, 0) if ex <= ey else (0, mate_mm)
 
 
-def render(binary, stl, out, mate=None):
+def render(binary, stl, out, mate=None, parts=(), color=None):
+    """Draw `stl` (in `color` if given), plus a mated copy, plus any `parts`:
+    (stl, (dx, dy, dz), "#rrggbb") each moved and colored — a loose coaster's
+    pieces lifted above its frame."""
     with tempfile.NamedTemporaryFile("w", suffix=".scad", delete=False) as fh:
-        fh.write(f'import("{os.path.abspath(stl)}");\n')
+        tint = f'color("{color}") ' if color else ""
+        fh.write(f'{tint}import("{os.path.abspath(stl)}");\n')
         if mate is not None:
             dx, dy = mate
             fh.write(f'translate([{dx}, {dy}, 0]) import("{os.path.abspath(stl)}");\n')
+        for part, (dx, dy, dz), color in parts:
+            fh.write(f'translate([{dx}, {dy}, {dz}]) color("{color}") import("{os.path.abspath(part)}");\n')
         scad = fh.name
     try:
         subprocess.run(
