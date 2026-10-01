@@ -90,7 +90,8 @@ rubric each time it runs and does not copy it, so a new print verdict updates bo
   symetric coasters"). The same tool prints `sym`: the top-face art turned by 360/n about its
   own centre, and how well it lands on itself. The review-print rubric's check 6 holds a piece
   below 0.9. On 2026-09-29, 25 of the 26 current meshes scored 1.00; CS-6 (tA8eSdVx_EQ) scored
-  0.73 with uneven petals. Only turns are tried, not mirrors, and 27 pieces is a thin base for
+  0.73, which on 2026-09-30 turned out to be the tool turning a seven-point star about its bbox
+  centre rather than its middle; it scores 1.00 about its centre of mass. Only turns are tried, not mirrors, and 27 pieces is a thin base for
   the line, so it is the rubric's to move.
 - Before a mesh exists, the check is made from the picture. It is marked "not measured",
   never "passed", because pictures misled the candidate screen about openness twice (bknV,
