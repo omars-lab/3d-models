@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-10-01 — The studio deploy check reads pages through the login gate again. The CI service token had not expired; the Service Auth policy that let it in was gone from both studio Access apps. Omar added it back ("allow local dev service token"), and the re-run of bikar run 36796118992 passed every check, with content read through the token on bikar-studio.pages.dev
 - 2026-10-01 — `@naqshcoffee/qiyas-schema` 0.3.2 published to GitHub Packages. It carries youtube's newer construction schema, and 0.3.1's first copy of it. The `schema-v0.3.2` tag (bikar f169537) went up on 2026-09-30. Its publish run hit the billing block, then passed on a re-run once the block lifted (bikar #289, run 36792672524)
 
 ## From the session task board, before the split
