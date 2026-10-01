@@ -20,7 +20,7 @@ import { tmpdir } from "node:os";
 import { runWithTimeout, ev } from "../log.js";
 import { locateBikarCli, bikarDir } from "../backends/bikar.js";
 import { repoRoot, recordsDir } from "../paths.js";
-import { readMember, listMembers } from "../threemf.js";
+import { readMember, listMembers, parseBeds } from "../threemf.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 const PYTHON = process.env.PYTHON ?? "python3";
@@ -141,6 +141,7 @@ interface SlicedOpts {
   machine?: string;
   nozzle?: string;
   density?: string;
+  beds?: string; // the most beds the plate may use (default 1) — more is a spill, and a send prints bed 1 only
 }
 
 /**
@@ -204,9 +205,11 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
     process.exitCode = 2;
     return;
   }
-  const plateJsonName = members.find((m) => /Metadata\/plate_\d+\.json$/.test(m));
-  const gcodeName = members.find((m) => /Metadata\/plate_\d+\.gcode$/.test(m));
-  const hasGcode = Boolean(gcodeName);
+  // Every bed's members, not the first one found: a plate that spilled onto a second bed has a
+  // plate_2.json and plate_2.gcode too, and reading only bed 1 under-counted minis-05's objects.
+  const plateJsonNames = members.filter((m) => /Metadata\/plate_\d+\.json$/.test(m));
+  const gcodeNames = members.filter((m) => /Metadata\/plate_\d+\.gcode$/.test(m));
+  const hasGcode = gcodeNames.length > 0;
 
   ev("sliced_check_start", { file: abs });
 
@@ -232,30 +235,37 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
 
   // --- object count (plate_N.json bbox_objects) + skipped check (slice_info.config) ---
   let objectCount: number | null = null;
-  if (plateJsonName) {
-    const pj = await readMember(abs, plateJsonName);
-    if (pj) {
-      try {
-        objectCount = (JSON.parse(pj).bbox_objects ?? []).length;
-      } catch {
-        /* leave null; reported below */
-      }
+  for (const name of plateJsonNames) {
+    const pj = await readMember(abs, name);
+    try {
+      objectCount = (objectCount ?? 0) + (JSON.parse(pj ?? "").bbox_objects ?? []).length;
+    } catch {
+      objectCount = null; // one unreadable bed makes the total unknown; reported below
+      break;
     }
   }
   const sliceInfoRaw = (await readMember(abs, "Metadata/slice_info.config")) ?? "";
+
+  // --- beds (slice_info.config <plate> entries; the plate_N.json count when it lists none) ---
+  const beds = parseBeds(sliceInfoRaw);
+  const bedCount = beds.length > 0 ? beds.length : plateJsonNames.length;
+  const maxBeds = opts.beds !== undefined ? Number(opts.beds) : 1;
   const skippedObjects = [...sliceInfoRaw.matchAll(/<object[^>]*\bname="([^"]*)"[^>]*\bskipped="true"/g)].map(
     (m) => m[1],
   );
 
   // --- estimates (slice_info.config) ---
-  const predMatch = sliceInfoRaw.match(/key="prediction"\s+value="(\d+(?:\.\d+)?)"/);
-  const predictionS = predMatch ? Number(predMatch[1]) : null;
+  const bedTimes = beds.map((b) => b.predictionS).filter((t): t is number => t !== null);
+  const predictionS = bedTimes.length > 0 ? bedTimes.reduce((a, t) => a + t, 0) : null;
   const usedM = [...sliceInfoRaw.matchAll(/used_m="(\d+(?:\.\d+)?)"/g)].reduce((a, m) => a + Number(m[1]), 0);
   const density = opts.density ? Number(opts.density) : DEFAULT_PLA_DENSITY;
   const grams = usedM > 0 ? deriveGrams(usedM, density) : 0;
 
   // --- realized toolpath features (gcode) ---
-  const hist = hasGcode ? await featureHistogram(abs, gcodeName!) : new Map<string, number>();
+  const hist = new Map<string, number>();
+  for (const name of gcodeNames) {
+    for (const [feature, n] of await featureHistogram(abs, name)) hist.set(feature, (hist.get(feature) ?? 0) + n);
+  }
   const brimRealized = realizedCount(hist, "Brim");
   const supportRealized = realizedCount(hist, "Support");
   const raftRealized = realizedCount(hist, "Raft");
@@ -269,6 +279,10 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   console.log(`  printer   : ${printerModel}  nozzle ${nozzles.length ? nozzles.join(",") : "?"} mm`);
   console.log(`  objects   : ${objectCount ?? "?"}`);
   console.log(
+    `  beds      : ${bedCount}` +
+      (beds.length > 1 ? ` (${beds.map((b) => `bed ${b.index}: ${b.objects.length}`).join(", ")} objects)` : ""),
+  );
+  console.log(
     `  brim/supp/raft (setting): brim_type=${brimType} enable_support=${enableSupport} raft_layers=${raftLayers}`,
   );
   if (hasGcode) {
@@ -276,7 +290,11 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   } else {
     console.log(`  brim/supp/raft (realized): (no gcode member — settings only)`);
   }
-  if (predictionS !== null) console.log(`  time      : ${fmtDuration(predictionS)} (${predictionS}s predicted)`);
+  if (predictionS !== null) {
+    console.log(
+      `  time      : ${fmtDuration(predictionS)} (${predictionS}s predicted` + (bedTimes.length > 1 ? `, all beds` : "") + ")",
+    );
+  }
   if (usedM > 0) {
     console.log(
       `  filament  : ${usedM.toFixed(2)} m → ~${grams.toFixed(0)} g PLA [derived @ ${density} g/cm³, Ø${FILAMENT_DIAMETER_MM} mm; slice ships 0 g]`,
@@ -312,6 +330,19 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
     for (const w of warnClass.unexpected) {
       failures.push(`UNEXPECTED slicer warning [${w.severity}] ${w.object ?? "(plate)"}: ${w.message}`);
     }
+  }
+
+  // Always-on: a plate that spilled onto more beds than allowed. `print send` runs one bed (plate_1 by
+  // default), so the objects on the others would silently not print.
+  if (!Number.isInteger(maxBeds) || maxBeds < 1) {
+    failures.push(`--beds must be an integer >= 1, got "${opts.beds}"`);
+  } else if (bedCount > maxBeds) {
+    const spilled = beds.filter((b) => b.index > maxBeds).flatMap((b) => b.objects.map((o) => `${o} (bed ${b.index})`));
+    failures.push(
+      `the plate spilled onto ${bedCount} beds (allowed ${maxBeds})` +
+        (spilled.length ? `: ${spilled.join(", ")}` : "") +
+        " — a send prints one bed; take items off, or pass --beds if the spill is meant",
+    );
   }
 
   if (opts.expectObjects !== undefined) {
@@ -390,7 +421,7 @@ export function registerValidate(program: Command): void {
 
   validate
     .command("sliced <3mf>")
-    .description("gate a sliced .3mf: realized brim/support/raft, object count, header; report time/length/grams")
+    .description("gate a sliced .3mf: realized brim/support/raft, object count, beds, header; report time/length/grams")
     .option("--expect-objects <n>", "fail unless the plate holds exactly N objects")
     .option("--bare-plate", "shorthand for --no-brim --no-supports --no-raft (the Plate-1 expectation)")
     .option("--no-brim", "fail if any Brim feature is in the realized gcode")
@@ -398,6 +429,7 @@ export function registerValidate(program: Command): void {
     .option("--no-raft", "fail if any Raft feature is in the realized gcode")
     .option("--machine <substr>", "fail unless printer_model contains this (e.g. X2D)")
     .option("--nozzle <d>", "fail unless every nozzle_diameter equals this (e.g. 0.4)")
+    .option("--beds <n>", "the most beds the plate may use (default 1 — a spill onto a second bed fails)")
     .option("--density <g/cm3>", `PLA density for the grams estimate (default ${DEFAULT_PLA_DENSITY})`)
     .action((threemf: string, opts: SlicedOpts) => runSliced(threemf, opts));
 }

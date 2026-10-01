@@ -284,7 +284,7 @@ run the prints gate over a records dir (default: .bambu/records/)
 
 ### `bambu validate sliced`
 
-gate a sliced .3mf: realized brim/support/raft, object count, header; report time/length/grams
+gate a sliced .3mf: realized brim/support/raft, object count, beds, header; report time/length/grams
 
 | Argument | Required | Description |
 |---|---|---|
@@ -299,4 +299,5 @@ gate a sliced .3mf: realized brim/support/raft, object count, header; report tim
 | `--no-raft` | fail if any Raft feature is in the realized gcode |
 | `--machine <substr>` | fail unless printer_model contains this (e.g. X2D) |
 | `--nozzle <d>` | fail unless every nozzle_diameter equals this (e.g. 0.4) |
+| `--beds <n>` | the most beds the plate may use (default 1 — a spill onto a second bed fails) |
 | `--density <g/cm3>` | PLA density for the grams estimate (default 1.24) |

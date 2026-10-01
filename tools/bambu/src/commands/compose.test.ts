@@ -27,6 +27,18 @@ describe("parseManifest — validate before anything renders", () => {
     expect(m.items).toHaveLength(1);
   });
 
+  it("reads `beds:` and leaves it unset when absent", () => {
+    const items = ["items:", "  - iteration: it-aaaaaaaaaaaa"];
+    expect(parseManifest(["beds: 2", ...items].join("\n")).beds).toBe(2);
+    expect(parseManifest(items.join("\n")).beds).toBeUndefined();
+  });
+
+  it("rejects a `beds:` that is not a whole number >= 1", () => {
+    for (const bad of ["0", "1.5", "two"]) {
+      expect(() => parseManifest([`beds: ${bad}`, "items:", "  - iteration: it-aaaaaaaaaaaa"].join("\n"))).toThrow(/beds/);
+    }
+  });
+
   it("accepts a bare iteration item", () => {
     const m = parseManifest(["items:", "  - iteration: it-0123456789ab"].join("\n"));
     expect(m.items[0]).toMatchObject({ iteration: "it-0123456789ab" });
