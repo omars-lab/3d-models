@@ -5653,3 +5653,72 @@ No pattern is picked yet. The renders of D-087 go on a new feedback page with th
 and Omar picks from that.
 
 **What would reverse it:** it closes itself when he picks.
+
+## D-089 — gBV_JTt3Kxk is the next coaster
+
+Omar, 2026-10-01, on the
+[top-three renders page](feedback-requests/2026-09-30-top-three-renders.md#1-which-pattern-goes-first).
+He commented on the gBV picture (thread nhtq79): "I am a big fan of this pattern". Then he confirmed
+gBV as the pick when asked in chat. This closes D-088.
+
+### Options
+
+- **gBV_JTt3Kxk** (chosen, recommended): cleanest read at 90 mm, one strong centre, no number
+  flagged, and ten-fold, which no made coaster has.
+- jlTmt_279M4: the most even fill, but border slivers.
+- NtnlGMTElBk: needs weaving in bikar before it is what the ranking scored.
+- Print minis of two or all three first.
+
+### What it commits us to
+
+gBV becomes a coaster: a ledger row, a gallery card and a samples plate. Its lines-only (minimal)
+coaster is already in bikar (#287). It is also the pattern for the two-color fit work in D-090.
+
+**What would reverse it:** a printed gBV that reads badly in the hand. In that case jlTmt is next,
+once its border slivers are dealt with.
+
+## D-090 — Lines and loose pieces in two colors, true edges first
+
+Omar, 2026-10-01, thread nhtq79 on the gBV picture. He wants to print the pattern two ways: "the
+lines and leave the white as spaces", and the opposite, "the spaces inside and not the lines ...
+ideally in a different color". He said "this should be an option on any coaster" and asked whether
+the inverse pieces would fit into the line print, given the rough vertical edges. Then he answered
+two questions in chat.
+
+### The frame: both
+
+- **Both, openwork and backed** (chosen, recommended): the lines alone with the spaces open, and
+  the lines on a thin slab with pockets. Both take the same pieces. The first fit sample uses the
+  backed frame, because pieces cannot fall out of it, so the gap reading is clean. The openwork
+  frame then shows whether friction alone holds them.
+- Openwork only: exactly what he described, but lifting it drops the pieces unless the fit is tight,
+  and tight is close to jamming. Not measured.
+- Backed only: the design's earlier pick; it loses the open look.
+
+In [loose-pieces-design](../design/coaster/loose-pieces-design.md) terms, this is F1 first and F3
+second (§7 call 1). F2, the ledge, is not taken up.
+
+### The order: true edges first
+
+- **True edges first** (chosen, recommended): remove the 0.4 mm staircase on both parts before any
+  fit sample. Otherwise the steps on both walls are bigger than the gap being tested, and the
+  sample measures the steps.
+- Pieces on today's edges, sample now: something to hold sooner, but its gap readings would likely
+  be thrown away once the edges change.
+- Round the tips too, then sample: a later step, not a replacement.
+
+### What it commits us to
+
+1. bikar draws each wall between the grid points
+   ([smooth-lines option 3](../design/coaster/smooth-lines-design.md#3-draw-the-edge-between-grid-points)),
+   for pockets and pieces alike. This comes first, whatever the edge coupon would have shown for
+   looks, because the fit needs it.
+2. Then the loose-piece output: the frame, plus one output per color holding the pieces. It works
+   on any pattern, and covers every space as well as a ring at a time.
+3. Then a gBV fit plate: a backed frame and the pieces at several gaps. gBV's small five-point
+   stars are the hardest case. The gaps themselves (loose-pieces §7 call 4) are still open.
+
+Printing stays last (Omar, 2026-09-30).
+
+**What would reverse it:** an edge coupon showing that the steps cannot be felt *and* a fit sample
+on today's edges that holds anyway. Neither has been printed.

@@ -405,10 +405,14 @@ Tick one box per call. My pick is first, with its reason.
 
 **1. Which frame for the first loose-piece sample?** (§3.1, §5 A)
 
-- [ ] **F1, pockets in a solid slab.** Pieces stay put with no fit number known.
+- [x] **F1, pockets in a solid slab.** Pieces stay put with no fit number known.
 - [ ] F2, open frame with a ledge.
-- [ ] F3, open frame, no floor.
-- Notes:
+- [x] F3, open frame, no floor.
+- Notes: Omar wants both, as a two-color option on any coaster: the lines open (F3) and the lines
+  backed (F1), with the same pieces. The pattern is gBV_JTt3Kxk, not CS-1.
+
+**Decided 2026-10-01:** F1 first for the gap reading, then F3; the edges are made true before any
+fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)
 
 **2. Where does the guided page live?** (§4, §5 B)
 
