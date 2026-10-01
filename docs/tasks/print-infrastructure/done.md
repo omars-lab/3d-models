@@ -2,7 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
-- 2026-09-30 — A plate that spills onto a second bed is caught: `bambu slice compose` refuses it, naming each item past the allowed beds, unless the recipe sets `beds: <n>`; `bambu validate sliced` reads every bed (minis-05 now reports 12 objects, not 11), prints the bed count and fails past `--beds` (3d-models #PR)
+- 2026-09-30 — A plate that spills onto a second bed is caught: `bambu slice compose` refuses it, naming each item past the allowed beds, unless the recipe sets `beds: <n>`; `bambu validate sliced` reads every bed (minis-05 now reports 12 objects, not 11), prints the bed count and fails past `--beds` (3d-models #457)
 - 2026-09-27 — Enter a piece's verdict on the 3d-model-hub page: keep/adjust/drop plus a note; the hub runs `bambu print verdict` in its own writable 3d-models worktree and opens one PR per run, adding later verdicts to it (3d-model-hub #8). Its first live run is Omar's first real verdict
 - 2026-09-27 — `bambu print verdict <run> <entry> <keep|adjust|drop>` sets one printed piece's verdict in its record and adds notes under it, editing only those lines and refusing an unknown piece, a verdict the prints gate would reject, or a note with a line break (3d-models #355)
 - 2026-09-27 — Multi-color printing design: two independent researchers and a checker, consolidated into the one doc to act on (3d-models #352)
