@@ -42,6 +42,7 @@ notice, because the fix is a read-back by whoever runs the skill, and a whole-tr
 failed on it would block every other session's commit until then.
 
   rank:        python3 .claude/gates/plates_gate.py --rank
+  as data:     python3 .claude/gates/plates_gate.py --rank --json   (3d-model-hub's plate queue)
   rewrite:     python3 .claude/gates/plates_gate.py --write
   wholesale:   make validate-prints (hook 39 runs it after the prints gate)
   override:    PRINTS_GATE_OK=1 git commit
@@ -301,6 +302,35 @@ def render_queue(pages: list[dict], w: dict) -> str:
     return "\n".join(lines)
 
 
+def title_of(body: str) -> str | None:
+    """The page's own `# minis-06 — the two dovetails` heading, or None."""
+    m = re.search(r"^# (.+)$", body, flags=re.MULTILINE)
+    return m.group(1).strip() if m else None
+
+
+def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None]) -> dict:
+    """The queue as data, for 3d-model-hub's plate queue: the same ranking `render_queue` writes,
+    with the page facts beside it so the hub never parses a plate page itself."""
+    def facts(p: dict) -> dict:
+        on = p["approved_on"]
+        return {
+            "plate": p["plate"], "title": titles.get(p["plate"]), "stage": p["stage"],
+            "approved": p["approved"], "approved_on": on.isoformat() if isinstance(on, dt.date) else None,
+            "times_printed": p["times_printed"], "runs": p["runs"], "answers": p["answers"],
+            "kind": p["kind"], "bets": p["bets"], "unblocks": p["unblocks"],
+            "minutes": p["minutes"], "grams": p["grams"], "bed_plates": p["bed_plates"],
+            "risk": p["risk"], "pictures": p["pictures"],
+        }
+    queue = [{"rank": i, "value": value, "hours": round(cost, 2), "roi": round(roi, 2), **facts(p)}
+             for i, (p, value, cost, roi) in enumerate(rank(pages, w), 1)]
+    return {
+        "queue": queue,
+        "held": [facts(p) for p in pages if p["stage"] in RANKED and p["risk"] == "hold"],
+        "sent": [facts(p) for p in pages if p["stage"] == "sent"],
+        "printed": [facts(p) for p in pages if p["stage"] in ("printed", "retired")],
+    }
+
+
 def queue_block(readme: Path) -> str | None:
     text = readme.read_text(encoding="utf-8") if readme.is_file() else ""
     a, b = text.find(Q_START), text.find(Q_END)
@@ -368,16 +398,36 @@ def run(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
     return 0
 
 
-def rewrite(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, quiet=False) -> int:
-    """--write: rewrite the queue block. Refuses while any page has a finding other than P7."""
+def sort_pages(plates: Path, prints: Path, bets: Path
+               ) -> tuple[list[dict], list[str], dict[str, str | None]]:
+    """(pages with no finding, the findings of the rest, each page's title)."""
     records = records_by_plate(prints)
     bet_ids = set(re.findall(r"CAL-[A-Z]+-\d+", bets.read_text(encoding="utf-8")))
-    good, bad = [], []
+    good, bad, titles = [], [], {}
     for path, data, body, err in read_pages(plates):
         f = [f"{path.stem}: {err}"] if err else check_page(path, data, body, records, bet_ids)
         bad += f
         if not f:
             good.append(data)
+            titles[data["plate"]] = title_of(body)
+    return good, bad, titles
+
+
+def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
+    """--rank --json: the queue as JSON on stdout. Refuses, like --write, while a page is wrong."""
+    import json
+    good, bad, titles = sort_pages(plates, prints, bets)
+    if bad:
+        print("\n".join(bad), file=sys.stderr)
+        print("plates-gate: fix the pages before ranking them", file=sys.stderr)
+        return 1
+    print(json.dumps(queue_json(good, read_weights(scoring), titles), indent=2))
+    return 0
+
+
+def rewrite(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, quiet=False) -> int:
+    """--write: rewrite the queue block. Refuses while any page has a finding other than P7."""
+    good, bad, _ = sort_pages(plates, prints, bets)
     if bad:
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before writing the queue", file=sys.stderr)
@@ -558,6 +608,27 @@ def self_test() -> int:
         text = render_queue([a, b, c], w)
         report("**Held for hardware risk:** [c](c.md)." in text, "the queue names the held plate",
                text)
+
+        # The JSON the hub reads ranks exactly as the table does, and carries the page's facts.
+        for p in (a, b, c):
+            p.update({"approved": False, "approved_on": None, "times_printed": 0, "runs": [],
+                      "bed_plates": 1, "pictures": []})
+        data = queue_json([a, b, c], w, {"a": "a — first"})
+        report([q["plate"] for q in data["queue"]] == order and data["queue"][0]["title"] == "a — first"
+               and [h["plate"] for h in data["held"]] == ["c"],
+               "the JSON queue is the table's order, titled, with the held plate apart", str(data))
+
+        # --rank --json refuses while a page is wrong, rather than ranking around it.
+        import contextlib
+        import io
+        case = tmp / "json-refuses"
+        plates, prints, scoring, bets = _build(case)
+        _edit("minis-08", "grams: 30", "grams: null")(plates)
+        with contextlib.redirect_stdout(io.StringIO()) as out, \
+                contextlib.redirect_stderr(io.StringIO()):
+            code = rank_json(plates, prints, scoring, bets)
+        report(code == 1 and out.getvalue() == "", "--rank --json refuses a page with a finding",
+               f"exit {code}, stdout {out.getvalue()!r}")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print("self-test: " + ("PASS" if failures == 0 else f"FAIL ({failures})"))
@@ -569,6 +640,8 @@ def main(argv: list[str]) -> int:
         return self_test()
     if "--write" in argv:
         return rewrite()
+    if "--rank" in argv and "--json" in argv:
+        return rank_json()
     if "--rank" in argv:
         _, _, _, rendered = check_tree(PLATES, PRINTS, SCORING, BETS)
         if rendered is None:
