@@ -214,16 +214,38 @@ def declaration_keywords(root: Path = ROOT) -> tuple[frozenset[str], str | None]
 
 
 def read_from_bikar(rel: str, root: Path = ROOT) -> str | None:
-    """A file's text from the bikar checkout, or None when it is not there.
+    """A file's text from bikar, or None when it is not there.
 
-    Working tree first, then `origin/HEAD` — the same order and the same reason
-    as `doc_pointers._exists_in_sibling`: a verdict must not depend on which
-    branch a parallel session has checked out.
+    Published main first (`origin/HEAD`, then `origin/main`), and the working
+    tree only for a file main does not have yet: a verdict must not depend on
+    which commit a parallel session has checked out. Working tree first broke
+    exactly that on 2026-10-01 — `bikar-main` sat detached a day back, before
+    `loose` landed, and the cookbook gate called a merged keyword unknown.
     """
     bikar = _sibling_root("bikar", root)
     if bikar is None:
         return None
     import subprocess
+
+    def at_ref(ref: str) -> str | None:
+        tree = _tracked_at_ref(bikar, ref)
+        if tree is None or rel not in tree:
+            return None
+        try:
+            return subprocess.run(
+                ["git", "-C", str(bikar), "show", f"{ref}:{rel}"],
+                capture_output=True,
+                text=True,
+                check=True,
+                env=_git_env(),
+            ).stdout
+        except subprocess.CalledProcessError:
+            return None
+
+    for ref in ("origin/HEAD", "origin/main", "origin/master"):
+        text = at_ref(ref)
+        if text is not None:
+            return text
 
     # A bare repo has no working tree, but files can still sit in its folder:
     # `~/Workspace/git/bikar` held a day-old `docs/grammar.md` that lacked
@@ -238,22 +260,7 @@ def read_from_bikar(rel: str, root: Path = ROOT) -> str | None:
     p = bikar / rel
     if bare != "true" and p.is_file():
         return p.read_text(encoding="utf-8")
-
-    for ref in ("origin/HEAD", "origin/main", "origin/master", "HEAD"):
-        tree = _tracked_at_ref(bikar, ref)
-        if tree is None or rel not in tree:
-            continue
-        try:
-            return subprocess.run(
-                ["git", "-C", str(bikar), "show", f"{ref}:{rel}"],
-                capture_output=True,
-                text=True,
-                check=True,
-                env=_git_env(),
-            ).stdout
-        except subprocess.CalledProcessError:
-            continue
-    return None
+    return at_ref("HEAD")
 
 
 def brickfit_fields(root: Path = ROOT) -> tuple[frozenset[str], str | None]:
@@ -490,6 +497,47 @@ def self_test() -> int:
     print(
         f"self-test {'ok  ' if ok else 'FAIL'}: a grammar yielding {len(thin)} keyword(s) is a "
         "parse failure, not a one-keyword language"
+    )
+
+    # A checkout parked behind main must not decide the verdict: main's copy wins
+    # over a stale working tree, and the working tree still answers for a file
+    # main does not have yet.
+    import os
+    import subprocess
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = Path(tmp) / "bikar"
+        repo.mkdir()
+        env = _git_env()
+
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
+                           cwd=repo, check=True, env=env, capture_output=True)
+
+        (repo / "grammar.md").write_text("old\n")
+        git("init", "-q", "-b", "main")
+        git("add", "grammar.md")
+        git("commit", "-q", "-m", "old")
+        (repo / "grammar.md").write_text("new\n")
+        git("commit", "-q", "-am", "new")
+        git("update-ref", "refs/remotes/origin/main", "HEAD")
+        git("checkout", "-q", "--detach", "HEAD~1")
+        (repo / "only-here.md").write_text("local\n")
+        saved = os.environ.get("BIKAR_DIR")
+        os.environ["BIKAR_DIR"] = str(repo)
+        try:
+            got = (read_from_bikar("grammar.md"), read_from_bikar("only-here.md"))
+        finally:
+            if saved is None:
+                os.environ.pop("BIKAR_DIR", None)
+            else:
+                os.environ["BIKAR_DIR"] = saved
+    ok = got == ("new\n", "local\n")
+    failures += 0 if ok else 1
+    print(
+        f"self-test {'ok  ' if ok else 'FAIL'}: a checkout parked behind main reads main's copy, "
+        f"and its own only for a file main lacks → {got!r}"
     )
 
     print("self-test: " + ("PASS" if failures == 0 else f"FAIL ({failures})"))

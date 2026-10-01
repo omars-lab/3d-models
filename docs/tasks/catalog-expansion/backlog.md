@@ -340,10 +340,13 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    sheets (edge and top, star points, soft weld, fit, fill height). Sheets 4 and 5 were added the
    same day for loose-pieces calls 4 and 3 (Omar, thread tfuhdk), with three pictures for call 2.
    Its three calls are Omar's. The true edge that sheets 1 and 4 waited on shipped 2026-10-01
-   (bikar #291). Sheet 1 now waits on a window option for coasters in bikar; sheets 2 and 3 on
-   smooth-lines options 5 and 8; sheet 4 on its own coupon file and plate (the loose-piece output
-   it is cut from shipped, bikar #292); sheet 5's tall-piece row on a piece-height option; its raised row on raised fills (loose-pieces §6 item 1, a
-   bikar branch is enough) and its other rows on the window. Each sheet already has a plate page
+   (bikar #291), and the window cut shipped the same day (bikar #293), tried on all three columns
+   and on sheet 5's square slab. Every sheet still needs the card with engraved labels (a coupons
+   file) and the sheet plate in the bambu tool; on top of that, sheet 1's row A needs the old
+   staircase edge cut to a window (main no longer draws it); sheets 2 and 3 need smooth-lines
+   options 5 and 8; sheet 4 its own coupon file (the loose-piece output it is cut from shipped,
+   bikar #292); sheet 5's tall-piece row a piece-height option and its raised row raised fills
+   (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
 

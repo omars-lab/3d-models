@@ -9,8 +9,8 @@ status: draft
 > each pattern / shape subset is clearly lableled?"
 > — Omar, comment on the [smooth-lines design](smooth-lines-design.md), 2026-10-01
 
-**Status:** draft, 2026-10-01. Nothing here is built. Sheet 1 is the first one worth printing, and
-it waits on two pieces of bikar work (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
+**Status:** draft, 2026-10-01. The window cut (§2) is built (bikar #293); the card, its labels and
+the sheet plate are not. Sheet 1 is the first one worth printing (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
 and the three guided-page pictures were added the same day, after Omar asked on the
 [loose-pieces design](loose-pieces-design.md) how its calls could be made "without a sheet of poc
 prints for us to inspect". Each sheet has a plate page in [`docs/plates/`](../../plates/README.md)
@@ -33,9 +33,9 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
-| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the window cut (the new edge shipped, bikar #291) | [sheets-01](../../plates/sheets-01.md) |
-| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding | [sheets-02](../../plates/sheets-02.md) |
-| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld | [sheets-03](../../plates/sheets-03.md) |
+| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the old edge for row A, the card and the plate (the new edge and the window cut shipped, bikar #291 and #293) | [sheets-01](../../plates/sheets-01.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding, the card and the plate | [sheets-02](../../plates/sheets-02.md) |
+| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld, the card and the plate | [sheets-03](../../plates/sheets-03.md) |
 | 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs its own file and plate (true edges and loose pieces shipped, bikar #291 and #292) | [sheets-04](../../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
 
@@ -69,22 +69,21 @@ sheet 4 is laid out differently (§3).
 
 ## 2. Cutting a window out of a coaster
 
-**What exists.** bikar can already cut a pattern down to a region: inside a pattern,
-`clip pattern to <boundary>` keeps the faces inside a named boundary and drops the rest, with tests
-behind it. A coaster with `outline pattern` uses the pattern's straps as the solid, so a clipped
-pattern should give a clipped coaster.
+**What was built (bikar #293, 2026-10-01).** A window option on the coaster:
+`--window <side>[@<x>,<y>]` on the command line, a square of `side` mm centred on a point of the 90 mm
+coaster. The sample is the coaster's own file plus that one option, so it cannot drift from the
+coaster the next time the coaster changes (the reason behind
+[D-041](../../working-model/decisions-log.md)); copying each coaster into a sample file with
+`clip pattern to` added was the route not taken. The cut is made on the finished coaster, after
+its size is set, so the window keeps the coaster's grid, its mm per unit and its place, and a
+window holding the whole coaster gives the same mesh vertex for vertex. A strap the square
+detaches from the rest is dropped and named. The option refuses what it cannot cut honestly:
+joins, twist, a bottom edge, loose pieces, and a square edge running along a strap that would
+leave a fin thinner than the floor.
 
-**What is untried.** Nobody has run a clipped pattern through the coaster builder. The clip may
-leave loose ends where a strap is cut, and the coaster's size is set from the art's span, which a
-window changes. The window has to keep the 90 mm coaster's mm per unit rather than re-fit the
-window to 90 mm; holding the derived `unit` param at its 90 mm value looks like the way, but that
-too is untried.
-
-**What I would build.** A small window option on the coaster (a centre and a size), so a sample is
-the coaster's own file plus a few params. The other route, copying each coaster into a sample file
-with a clip added, gives a second copy that drifts from the first the next time the coaster
-changes (the reason behind [D-041](../../working-model/decisions-log.md)). This is bikar work and
-goes through bikar's own review.
+**Tried on 2026-10-01**, each with the mesh check passing: a CS-1 crossing, a CS-2 star and a gBV
+star on their minimal coasters; gBV at `round` 1.5 (sheet 1, row C); and the CS-2 fill coaster,
+a square slab with the pattern inscribed (sheet 5), where it also splits into color parts.
 
 **Picking the windows.** Once per coaster, by eye from its render: the busiest crossing for CS-1,
 one star with its ring of straps for CS-2 and for the ten-fold gBV coaster. The centres go in the
@@ -165,9 +164,8 @@ change. A against B is also the multicolor design's open taste call,
 [flush or lowered](multicolor-design.md#3-the-look-flush-or-lowered-fills), which wanted the same
 two values side by side. Every row also needs what sheets 1 to 3 need: the window cut (§2), the card with its labels and
 the sheet plate (§5 steps 3 and 4), here with color parts at each cell, which the bambu tool does
-for a whole colored coaster but not yet per sample. One more thing is untried: the window cut was
-written for an `outline pattern` coaster, and this one is a square slab with the pattern
-inscribed.
+for a whole colored coaster but not yet per sample. The window cut works on this square slab too
+(tried 2026-10-01: one body, mesh check passing, and `--format parts` gives a body per color).
 
 **Not on any sheet.** The slicer wall settings (option 10) are a per-plate setting, not a shape,
 so they ride along on whichever plate prints next. The mitred joins, varying width and the pillow
@@ -299,7 +297,8 @@ Tick one box per call. My pick is first, with its reason.
   order) and §6 (the open calls).
 - The fit sheet: [loose-pieces design](loose-pieces-design.md) and D-090 in the
   [decisions log](../../working-model/decisions-log.md).
-- Read in bikar's `origin/main` on 2026-10-01: the coaster block's statements (no text, no window),
+- Read in bikar's `origin/main` on 2026-10-01: the coaster block's statements (no text, no window; the window
+  option came later that day, bikar #293),
   `clip pattern to` in the pattern block, `text … engrave` on flat-topped pieces and its 37-glyph
   font and O/0 check; for sheet 5, the parser's refusal of fills above the relief height
   (`packages/core/src/dsl/parser.ts`) and the fill preset

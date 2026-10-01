@@ -19,7 +19,7 @@ risk: ok
 pictures:
   - ../design/coaster/sampler-sheets-media/sheet-1-mockup.png
 needs:
-  - "the window cut on the coaster (sampler sheets §2)"
+  - "row A TODAY: the old staircase edge cut to a window (bikar main draws only the true edge, and the commit before it has no window)"
   - "the card with engraved labels, in a coupons file"
   - "the sheet plate in the bambu tool: one object, card plus samples at their cells"
 ---
@@ -29,8 +29,8 @@ needs:
 **In short.** One card, three 30 mm windows cut from real 90 mm coasters (a CS-1 crossing, a CS-2
 star, a gBV star), each in four versions: today's edge, the true edge, the true edge with the full
 dome, and a finer grid if the language can set it by then. It answers whether the steps on today's
-edges show at all, and which top to keep. It is the first sampler sheet worth printing. Nothing
-of it is built yet.
+edges show at all, and which top to keep. It is the first sampler sheet worth printing. The window
+cut is built (bikar #293); the card, its labels and the plate are not.
 
 ## What it is
 
@@ -68,9 +68,13 @@ footprint, not on its own thin feet.
 ## What it waits on
 
 - The staircase for the today's-edge row. The true edges shipped 2026-10-01 (bikar #291), so
-  bikar main no longer draws the staircase; that row is cut from a coaster rendered at the commit
-  before it (bikar `f0108c09^`), or from the coaster STLs vendored here before the re-vendor.
-- The window cut on the coaster ([sampler sheets §2](../design/coaster/sampler-sheets-design.md#2-cutting-a-window-out-of-a-coaster)).
+  bikar main no longer draws the staircase, and the window cut
+  ([sampler sheets §2](../design/coaster/sampler-sheets-design.md#2-cutting-a-window-out-of-a-coaster))
+  shipped the same day after it (bikar #293), so the commit that still draws the staircase cannot
+  cut a window. Row A needs one of the two brought to the other: the old edge as an option on
+  main, or the coaster STLs vendored here before the re-vendor cut to the same 30 mm squares.
+- Rows B and C can be cut today: `--window 30@<x>,<y>` on each coaster's own file, at its 90 mm
+  scale, with the mesh check passing.
 - The card with its engraved labels, and the sheet plate in the bambu tool
   ([§5](../design/coaster/sampler-sheets-design.md#5-from-the-design-to-the-plate)).
 
