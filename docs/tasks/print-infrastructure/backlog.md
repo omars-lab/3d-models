@@ -21,6 +21,11 @@ Nothing open right now.
   plate (call 1), the scoring weights (call 4), and whether an approval lapses when its recipe
   changes (call 6). Calls 2, 3 and 5 are tick boxes on the plate pages and sit in the
   [coaster-pipeline backlog](../coaster-pipeline/backlog.md)'s owner-gated list.
+- **A send button on the hub's plate queue.** The queue is on the page and read-only (3d-model-hub
+  #9). The send still happens by hand with `bambu print send`, which asks before it sends. A send
+  button needs its own confirmation step, and it waits for two things: prints resuming (on hold,
+  Omar 2026-09-30) and Omar saying how that confirmation should work. Found by hub step 3,
+  2026-09-30.
 
 ## Found elsewhere, maybe this loop's
 
