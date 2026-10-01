@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- Sheet 1 layout mockup for sampler-sheets-design.md §4. Schematic: the shapes stand in for
+     30 mm windows of the real 90 mm coasters. Re-render the PNG with:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+       --window-size=880,580 --screenshot=sheet-1-mockup.png sheet-1-mockup.html -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Sampler sheet 1 mockup</title>
+<style>
+  :root { --bg: #ffffff; --ink: #1f2328; --muted: #57606a; --card: #e3ded3; --engrave: #9a917f;
+          --sample: #3b5b7a; --line: #d0d7de; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.4 -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .wrap { display: flex; gap: 36px; padding: 28px 32px; align-items: flex-start; }
+  .legend { width: 360px; }
+  .legend h2 { font-size: 17px; margin: 0 0 10px; }
+  .legend table { border-collapse: collapse; width: 100%; }
+  .legend td { border-top: 1px solid var(--line); padding: 7px 6px; vertical-align: top; }
+  .legend td:first-child { font-weight: 600; width: 64px; font-family: Menlo, monospace; }
+  .legend p { color: var(--muted); font-size: 13px; margin: 14px 0 0; }
+  .mono { font-family: Menlo, monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="sheet" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="legend">
+    <h2>Sheet 1 — edge and top</h2>
+    <table>
+      <tr><td>A TODAY</td><td>today's edge (0.4 mm squares), round 1 — the control</td></tr>
+      <tr><td>B TRUE</td><td>edge drawn between grid points (option 3), round 1</td></tr>
+      <tr><td>C DOME</td><td>edge between grid points, round 1.5 (full dome)</td></tr>
+      <tr><td>D FINE</td><td>0.2 mm grid, round 1 — only if bikar exposes the grid size by then</td></tr>
+    </table>
+    <p>Columns are 30 mm windows of the 90 mm coasters, true scale, 3 mm strap, 4 mm tall:
+       <span class="mono">CS-1</span> a strap crossing, <span class="mono">CS-2</span> an eight-point
+       star, <span class="mono">GBV</span> a ten-point star.</p>
+    <p>Engraved on the card only: the title, the column heads and the row codes. Nothing is
+       engraved on a sample. Values live on the plate's review page, because the font has no
+       decimal point.</p>
+    <p>Card 128 × 156 mm, 1.4 mm thick; the X2D bed is 256 × 256 mm.</p>
+  </div>
+</div>
+<script>
+const S = 3.2;                       // px per mm
+const ROWLAB = 26, HEAD = 8, TITLE = 12, CELL = 34, ROWS = 4, COLS = 3, WIN = 30;
+const W = ROWLAB + COLS * CELL, H = TITLE + HEAD + ROWS * CELL;
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('sheet');
+svg.setAttribute('width', W * S + 2); svg.setAttribute('height', H * S + 2);
+svg.setAttribute('viewBox', `-0.3 -0.3 ${W + 0.6} ${H + 0.6}`);
+function el(tag, attrs, parent = svg) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e); return e;
+}
+const css = getComputedStyle(document.documentElement);
+const C = (n) => css.getPropertyValue(n).trim();
+el('rect', { x: 0, y: 0, width: W, height: H, rx: 3, fill: C('--card'), stroke: C('--engrave'), 'stroke-width': 0.3 });
+function label(text, x, y, size, anchor = 'middle') {
+  const t = el('text', { x, y, 'font-size': size, 'text-anchor': anchor, fill: C('--engrave'),
+    'font-family': 'Menlo, "Source Code Pro", monospace', 'font-weight': 700 });
+  t.textContent = text;
+}
+label('EDGE AND TOP', W / 2, 8.5, 5.5);
+const cols = ['CS-1', 'CS-2', 'GBV'], rows = ['A TODAY', 'B TRUE', 'C DOME', 'D FINE'];
+cols.forEach((c, i) => label(c, ROWLAB + i * CELL + CELL / 2, TITLE + 5.5, 4));
+rows.forEach((r, j) => label(r, 2.5, TITLE + HEAD + j * CELL + CELL / 2 + 1.4, 3.6, 'start'));
+
+// Schematic strap networks inside a 30 mm window, centred on (0, 0).
+function star(n, k, r, rot = 0) {
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const a = rot + (2 * Math.PI * ((i * k) % n)) / n;
+    pts.push([r * Math.cos(a), r * Math.sin(a)]);
+  }
+  return 'M' + pts.map((p) => p.join(',')).join('L') + 'Z';
+}
+// A star drawn as its outline (tips at rOut, valleys at rIn), with a strap leaving each valley.
+function starStraps(n, rOut, rIn, rot) {
+  const pts = [], spokes = [];
+  for (let i = 0; i < 2 * n; i++) {
+    const a = rot + (Math.PI * i) / n, r = i % 2 ? rIn : rOut;
+    pts.push([r * Math.cos(a), r * Math.sin(a)]);
+    if (i % 2) spokes.push(`M${rIn * Math.cos(a)},${rIn * Math.sin(a)}L${30 * Math.cos(a)},${30 * Math.sin(a)}`);
+  }
+  return ['M' + pts.map((p) => p.join(',')).join('L') + 'Z', ...spokes];
+}
+const shapes = {
+  'CS-1': () => [
+    'M-20,-11.5L20,11.5', 'M-20,11.5L20,-11.5',
+    star(6, 1, 9, Math.PI / 6),
+  ],
+  'CS-2': () => starStraps(8, 11, 6, -Math.PI / 2),
+  'GBV':  () => starStraps(10, 11, 7, -Math.PI / 2),
+};
+let clipId = 0;
+rows.forEach((r, j) => cols.forEach((c, i) => {
+  const cx = ROWLAB + i * CELL + CELL / 2, cy = TITLE + HEAD + j * CELL + CELL / 2;
+  const id = 'w' + clipId++;
+  const cp = el('clipPath', { id });
+  el('rect', { x: -WIN / 2, y: -WIN / 2, width: WIN, height: WIN, rx: 1.5 }, cp);
+  const g = el('g', { transform: `translate(${cx},${cy})`, 'clip-path': `url(#${id})` });
+  el('rect', { x: -WIN / 2, y: -WIN / 2, width: WIN, height: WIN, fill: '#d6d0c3' }, g);
+  const join = r.startsWith('C') ? 'round' : 'miter';
+  for (const d of shapes[c]()) {
+    el('path', { d, fill: 'none', stroke: C('--sample'), 'stroke-width': 3,
+      'stroke-linejoin': join, 'stroke-linecap': 'butt' }, g);
+    if (r.startsWith('C')) // the dome's highlight
+      el('path', { d, fill: 'none', stroke: '#8fb0cf', 'stroke-width': 0.9,
+        'stroke-linejoin': 'round' }, g);
+  }
+  el('rect', { x: cx - WIN / 2, y: cy - WIN / 2, width: WIN, height: WIN, rx: 1.5, fill: 'none',
+    stroke: '#7d7565', 'stroke-width': 0.25, 'stroke-dasharray': '1 0.8' });
+}));
+</script>
+</body>
+</html>

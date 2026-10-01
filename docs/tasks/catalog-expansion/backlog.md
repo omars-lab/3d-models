@@ -340,6 +340,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    into the gBV fit plate of item 6: that plate's openwork frame is this coaster's lines print, so a
    separate plate would print the same thing twice. The first full run of the
    [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed.
+9. **Sampler sheets: decide the smooth-lines calls with samples in the hand.** Omar, 2026-10-01,
+   thread iykpc9 on the smooth-lines design, asked for printed sheets of labeled shape subsets
+   before making the §6 calls. The design is
+   [sampler-sheets-design.md](../../design/coaster/sampler-sheets-design.md) (draft): true-size
+   30 mm windows of CS-1, CS-2 and gBV standing on a card with engraved row and column codes, four
+   sheets (edge and top, star points, soft weld, fit). Its three calls are Omar's. Sheet 1 waits on
+   item 7 (the true edge) and on a window option for coasters in bikar; sheets 2 and 3 wait on
+   smooth-lines options 5 and 8; sheet 4 on item 6's loose-piece output. Once a sheet plate exists,
+   its print goes on the coaster-pipeline loop's owner-gated list.
 
 ## Handed to the video loop
 
