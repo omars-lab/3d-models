@@ -103,4 +103,23 @@ describe("scaffoldRecord — capture writes an actuals block + raw frame", () =>
     expect(md.match(/ {4}verdict: "TODO"/g)).toHaveLength(2); // one per piece, not one per plate
     expect(md.match(/ {4}notes: \[\]/g)).toHaveLength(2);
   });
+
+  it("records a vendored sample as its file and hash, never as a bikar path", async () => {
+    const sha = "c0ba87472a8cf358a95f4aa9a25c208cbf3a10aed0283560a01eef8c49d34e38";
+    const dir = await scaffoldRecord({
+      slug: "sheet",
+      plateName: "sheet",
+      plateFile: "sheet.plate.3mf",
+      objects: [
+        { entry: "card", source: "bikar:patterns/Coupons/Sampler-Cards.bkr" },
+        { entry: "A TODAY / CS-2", source: "3d-models:src/Samplers/x/cs2.stl", sourceSha256: sha, window: "30@18.5,18.5" },
+      ],
+      date: "2026-10-01",
+      baseDir: base,
+    });
+    const md = readFileSync(join(dir, "index.md"), "utf8");
+    expect(md).toContain('source: "3d-models:src/Samplers/x/cs2.stl"');
+    expect(md).toContain(`source_sha256: "${sha}"`);
+    expect(md).not.toContain("bikar:3d-models");
+  });
 });

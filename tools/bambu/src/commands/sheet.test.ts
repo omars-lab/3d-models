@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { assembleSheet, checkCells, meshBounds, parseSheetManifest, placeSample, sheetStl } from "./sheet.js";
+import { assembleSheet, checkCells, fileSha256, meshBounds, parseSheetManifest, placeSample, sheetStl } from "./sheet.js";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { stlToIndexedMeshFromBuffer } from "../mesh.js";
 import { parseWindow, itemRenderFlags } from "./compose.js";
 import { iterationId, type IterationKey } from "../iteration.js";
@@ -45,9 +48,9 @@ describe("parseSheetManifest", () => {
     expect(s.card.piece).toBe("Sheet1Card");
     expect(s.cells.map((c) => c.name)).toEqual(["B TRUE / CS-1", "C DOME / GBV"]);
     expect(s.cells[0]!.at).toEqual([-20, -10]);
-    expect(s.cells[0]!.item.window).toBe("30@9.7,1");
-    expect(s.cells[1]!.item.window).toBe("30");
-    expect(s.cells[1]!.item.params).toEqual({ round: 1.5 });
+    expect(s.cells[0]!.item!.window).toBe("30@9.7,1");
+    expect(s.cells[1]!.item!.window).toBe("30");
+    expect(s.cells[1]!.item!.params).toEqual({ round: 1.5 });
   });
 
   it("refuses a cell with no window: a whole or shrunk coaster is not a true-size sample", () => {
@@ -60,11 +63,64 @@ describe("parseSheetManifest", () => {
     expect(() => parseSheetManifest(bad)).toThrow(/^cells\[0\]: `window:`/);
   });
 
+  const VENDORED = `
+  - name: A TODAY / CS-2
+    at: [14, 24]
+    stl: src/Samplers/sheets-01-row-a/7apC5Q9QS-8-minimal-coaster-window.stl
+    sha256: c0ba87472a8cf358a95f4aa9a25c208cbf3a10aed0283560a01eef8c49d34e38
+    window: 30@18.5,18.5
+`;
+  // The vendored cell first, so a later cell's error must still be named by its own index.
+  const MIXED = SHEET.replace("cells:\n", `cells:${VENDORED}`);
+
+  it("reads a vendored STL cell beside rendered ones, keeping the cells in order", () => {
+    const s = parseSheetManifest(MIXED);
+    expect(s.cells.map((c) => c.name)).toEqual(["A TODAY / CS-2", "B TRUE / CS-1", "C DOME / GBV"]);
+    expect(s.cells[0]!.vendored).toEqual({
+      stl: "src/Samplers/sheets-01-row-a/7apC5Q9QS-8-minimal-coaster-window.stl",
+      sha256: "c0ba87472a8cf358a95f4aa9a25c208cbf3a10aed0283560a01eef8c49d34e38",
+      window: "30@18.5,18.5",
+    });
+    expect(s.cells[0]!.item).toBeUndefined();
+    expect(s.cells[1]!.item!.window).toBe("30@9.7,1");
+    expect(s.cells[2]!.item!.params).toEqual({ round: 1.5 });
+  });
+
+  it("names a rendered cell by its own index when a vendored cell comes before it", () => {
+    expect(() => parseSheetManifest(MIXED.replace("window: 30@9.7,1", "window: 30@9.7"))).toThrow(/^cells\[1\]: `window:`/);
+  });
+
+  it("refuses a vendored cell without its hash, outside the repo, or carrying a recipe", () => {
+    const noSha = MIXED.replace(/ {4}sha256: .*\n/, "");
+    expect(() => parseSheetManifest(noSha)).toThrow(/A TODAY \/ CS-2.*needs `sha256:`/);
+    const out = MIXED.replace("stl: src/Samplers", "stl: ../elsewhere");
+    expect(() => parseSheetManifest(out)).toThrow(/`stl:` must be a path inside this repo/);
+    const both = MIXED.replace("    stl: src/", "    piece: Coaster\n    stl: src/");
+    expect(() => parseSheetManifest(both)).toThrow(/cannot also carry `piece:`/);
+    const noWindow = MIXED.replace("    window: 30@18.5,18.5\n", "");
+    expect(() => parseSheetManifest(noWindow)).toThrow(/A TODAY \/ CS-2.*needs `window:`/);
+  });
+
   it("refuses a cell with no position, and a card with a window", () => {
     expect(() => parseSheetManifest(SHEET.replace("    at: [-20, -10]\n", ""))).toThrow(/`at:` must be \[x, y\]/);
     expect(() => parseSheetManifest(SHEET.replace("  piece: Sheet1Card\n", "  piece: Sheet1Card\n  window: 30\n"))).toThrow(
       /card.*cannot carry a window/,
     );
+  });
+});
+
+describe("fileSha256", () => {
+  it("is the sha256 of the file's bytes, so one changed byte is a different hash", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sheet-sha-"));
+    try {
+      const f = join(dir, "a.stl");
+      writeFileSync(f, "abc");
+      expect(fileSha256(f)).toBe("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+      writeFileSync(f, "abd");
+      expect(fileSha256(f)).not.toBe("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
 

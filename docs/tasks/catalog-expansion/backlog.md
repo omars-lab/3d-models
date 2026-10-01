@@ -342,10 +342,9 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    Its three calls are Omar's. The true edge that sheets 1 and 4 waited on shipped 2026-10-01
    (bikar #291), and the window cut shipped the same day (bikar #293), tried on all three columns
    and on sheet 5's square slab. The labeled cards for sheets 1 and 5 (bikar #294) and the
-   sheet plate (`bambu slice sheet`, one color) shipped the same day too; sheet 1's rows B and C
-   are in [`sheets-01.yaml`](../../plates/sheets-01.yaml) and assemble and slice clean headless.
-   What is left: sheet 1's row A needs the old staircase edge cut to a window (main no longer
-   draws it); sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
+   sheet plate (`bambu slice sheet`, one color) shipped the same day too, and sheet 1 is built in
+   full ([`sheets-01.yaml`](../../plates/sheets-01.yaml), waiting on Omar's tick).
+   What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
    sheet plate's color parts per sample; sheet 4 its own coupon file (the loose-piece output it is cut from shipped,
    bikar #292); sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page

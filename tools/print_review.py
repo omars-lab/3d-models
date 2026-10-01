@@ -3,6 +3,7 @@
 
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
+    python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -25,6 +26,12 @@ Beside it the tool prints, per piece, over the area inside its outline:
 
 `art` draws the same sheet from the top faces only: what `sym` measured, with the centre it
 turned about marked, so a low score can be read by eye.
+
+`edge` draws each piece's footprint (the faces at its lowest height, where every wall stands)
+inside one square of the STL's own frame, centred at x,y and `side` mm across, filling the
+tile. It is for comparing edges: a 4 mm square puts 100 px on a millimetre, so a 0.4 mm step
+is 40 px. The top faces would not do: on a rounded top their outline is the round, not the
+wall.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -211,6 +218,38 @@ def art_sheet(out, paths):
     print("wrote", out)
 
 
+def footprint(tris, region):
+    """The faces at the piece's lowest height, inside `region` = (x, y, side) mm in the STL's
+    own frame, the square filling an S-px tile."""
+    cx, cy, side = region
+    x0, y0 = cx - side / 2, cy - side / 2
+    zmin = min(t[j] for t in tris for j in (2, 5, 8))
+    img = Image.new("L", (S, S), 0)
+    d = ImageDraw.Draw(img)
+    f = lambda x, y: ((x - x0) / side * S, S - (y - y0) / side * S)
+    for t in tris:
+        if max(t[2], t[5], t[8]) <= zmin + TOP_EPS:
+            d.polygon([f(t[0], t[1]), f(t[3], t[4]), f(t[6], t[7])], fill=255)
+    return img
+
+
+def parse_region(text):
+    """`x,y,side` in mm, side > 0."""
+    try:
+        x, y, side = (float(v) for v in text.split(","))
+    except ValueError:
+        raise SystemExit(f"edge: region must be <x>,<y>,<side> in mm, got {text!r}")
+    if side <= 0:
+        raise SystemExit(f"edge: side must be > 0, got {side}")
+    return x, y, side
+
+
+def edge_sheet(out, region, paths):
+    tiles = [footprint(load_triangles(p), region) for p in paths]
+    compose(tiles, [p.rsplit("/", 1)[-1].removesuffix(".stl") for p in paths]).save(out)
+    print("wrote", out)
+
+
 def self_test():
     def square(draw_holes):
         img = Image.new("L", (S, S), 0)
@@ -248,6 +287,13 @@ def self_test():
             d.ellipse([c + 60, c + 60, c + 140, c + 140], outline=255, width=6)
         return symmetry(img, centre(img))
 
+    # A 2 mm square slab at z 0..1 with a stray face at z 1 off to one side: the footprint is the
+    # bottom square only, a quarter of a 4 mm region, and the top face is not drawn.
+    sq = lambda x0, y0, x1, y1, z: [(x0, y0, z, x1, y0, z, x1, y1, z), (x0, y0, z, x1, y1, z, x0, y1, z)]
+    foot = footprint(sq(0, 0, 2, 2, 0) + sq(2.2, 2.2, 2.8, 2.8, 1), (1, 1, 4))
+    foot_share = sum(foot.histogram()[128:]) / (S * S)
+    stray_px = foot.getpixel((int(3.5 / 4 * S), int(S - 3.5 / 4 * S)))
+
     even, lopsided, seven = star(False), star(True), star(False, points=7)
     good, slab, part = (measure(square(f)) for f in (lattice, pinholes, half))
     tiles = [square(lattice), square(half)]
@@ -263,6 +309,8 @@ def self_test():
         ("a centred six-fold star matches itself six ways", even[0] > 0.95 and even[1] == 6),
         ("the same star with a blob to one side does not", lopsided[0] < 0.9),
         ("a seven-point star, a point up, matches itself seven ways", seven[0] > 0.95 and seven[1] == 7),
+        ("edge draws the footprint at the region's scale", abs(foot_share - 0.25) < 0.01),
+        ("edge leaves out a face above the bottom", stray_px == 0),
     ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
@@ -275,5 +323,8 @@ if __name__ == "__main__":
         sys.exit(0 if self_test() else 1)
     if len(a) >= 3 and a[0] in ("sheet", "art"):
         (sheet if a[0] == "sheet" else art_sheet)(a[1], a[2:])
+        sys.exit(0)
+    if len(a) >= 4 and a[0] == "edge":
+        edge_sheet(a[1], parse_region(a[2]), a[3:])
         sys.exit(0)
     sys.exit(__doc__)

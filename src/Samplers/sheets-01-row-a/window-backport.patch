@@ -1,0 +1,750 @@
+diff --git a/packages/cli/src/index.ts b/packages/cli/src/index.ts
+index aa3e81e..976e3f2 100644
+--- a/packages/cli/src/index.ts
++++ b/packages/cli/src/index.ts
+@@ -80,6 +80,7 @@ import type {
+   CoasterPieceKey,
+   CoasterPinchStrategy,
+   CoasterTopInput,
++  CoasterWindow,
+   EvaluateOptions,
+   FitField,
+   EvaluationResult,
+@@ -326,6 +327,13 @@ function usage(): void {
+                              differ dimensionally from stock elements)
+                             [--fit-profile none|pla_calibrated|petg_calibrated]
+                             (printer hole-⌀ compensation for the 3D formats)
++                            [--window <side>[@<x>,<y>]]
++                            (coaster only: cut a <side> mm square centred at
++                             (x, y) mm out of the full coaster, at the coaster's
++                             own size and scale — a sampler-sheet sample. The
++                             art is not re-fitted; pieces the cut detaches are
++                             dropped and listed; refused beside a join, a twist
++                             or a bottom edge)
+                             [--brick-fit <field>=<value>[,<field>=<value>] ...]
+                             (a brick's mating offsets — ribMm, studDiaMm,
+                              tubeDiaMm, tubeDiaXMm, tubeDiaYMm, pinDiaMm,
+@@ -606,8 +614,47 @@ function compileOptions(): EvaluateOptions | undefined {
+   const params = collectParamOverrides();
+   const fitProfile = getFlag('--fit-profile');
+   const brickFit = collectBrickFit();
+-  if (!params && !fitProfile && !brickFit) return undefined;
+-  return { ...params, ...(fitProfile ? { fitProfile } : {}), ...(brickFit ? { brickFit } : {}) };
++  const coasterWindow = parseWindowFlag(getFlag('--window'));
++  if (!params && !fitProfile && !brickFit && !coasterWindow) return undefined;
++  return {
++    ...params,
++    ...(fitProfile ? { fitProfile } : {}),
++    ...(brickFit ? { brickFit } : {}),
++    ...(coasterWindow ? { coasterWindow } : {}),
++  };
++}
++
++/**
++ * Parse `--window <side>[@<x>,<y>]` (all mm) into a coaster window: a square of
++ * that side centred at `(x, y)` in the full coaster's frame, the art centre at
++ * the origin. The coaster keeps its own size and scale — the window only cuts.
++ */
++function parseWindowFlag(value: string | undefined): CoasterWindow | undefined {
++  if (value === undefined) return undefined;
++  const m = /^([^@]+)(?:@([^,]+),(.+))?$/.exec(value);
++  const nums = m ? [m[1], m[2] ?? '0', m[3] ?? '0'].map(Number) : [];
++  if (nums.length !== 3 || !nums.every(Number.isFinite) || nums[0] <= 0) {
++    console.error(
++      `Error: --window expects <side>[@<x>,<y>] in mm (side > 0), got '${value}' — ` +
++        'e.g. --window 30@-12.5,8',
++    );
++    process.exit(1);
++  }
++  return { sideMm: nums[0], centre: { x: nums[1], y: nums[2] } };
++}
++
++/** Say what a coaster window cut off and dropped, so a sample never loses a piece silently. */
++function printWindowReport(result: EvaluationResult): void {
++  const dropped = result.coasterMesh?.field.windowDropped;
++  if (dropped === undefined) return;
++  const w = result.coasterMesh?.spec.window;
++  const where = w ? ` ${w.sideMm} mm at (${w.centre.x}, ${w.centre.y})` : '';
++  console.error(`window${where}: kept one piece, dropped ${dropped.length}`);
++  for (const d of dropped) {
++    console.error(
++      `  dropped ~${d.areaMm2.toFixed(1)} mm² near (${d.at.x.toFixed(1)}, ${d.at.y.toFixed(1)})`,
++    );
++  }
+ }
+ 
+ /**
+@@ -3270,6 +3317,7 @@ switch (command) {
+ 
+     if (format === 'preview') {
+       const result = orDie(() => compileToGeometry(source, compileOptions()));
++      printWindowReport(result);
+       renderCoasterPreview(result);
+       break;
+     }
+@@ -3303,6 +3351,7 @@ switch (command) {
+       if (!pieceName && result.wall3d) printWallReport(result.wall3d);
+       if (!pieceName && result.mural3d) printMuralReport(result.mural3d);
+       if (result.brick3d) printBrickReport(result.brick3d);
++      printWindowReport(result);
+       if (!pieceName && result.assembly3d) {
+         // The single STL is the assembled world preview — remind that
+         // the printable artifacts are the piece-local parts.
+diff --git a/packages/core/src/dsl/evaluator.ts b/packages/core/src/dsl/evaluator.ts
+index c6db76b..83aba82 100644
+--- a/packages/core/src/dsl/evaluator.ts
++++ b/packages/core/src/dsl/evaluator.ts
+@@ -189,6 +189,7 @@ import { buildWovenOverlapGraph } from '../kernel3d/maclado-woven.js';
+ import type { BrickProvenance, BrickSpec } from '../kernel3d/brick.js';
+ import { BRICK_MIN_FEATURE_MM, buildBrick } from '../kernel3d/brick.js';
+ import type { CoasterMesh, CoasterOutline, CoasterSpec } from '../kernel3d/coaster.js';
++import type { CoasterWindow } from '../kernel3d/coaster-window.js';
+ import {
+   buildCoaster,
+   COASTER_GRID_PITCH_MM,
+@@ -1224,6 +1225,14 @@ export interface EvaluateOptions extends ParseOptions {
+    * still reading as unmeasured. This is the knob the Lab exposes.
+    */
+   readonly brickFit?: BrickFitOverride;
++  /**
++   * Cut every coaster in the file down to this square window
++   * (`kernel3d/coaster-window.ts`), in the full coaster's own frame and scale —
++   * the sampler-sheet sample. A render option, not a clause, so the sample is
++   * the coaster's own file plus a flag and the art is sized exactly as the full
++   * coaster's. Absent = the whole coaster.
++   */
++  readonly coasterWindow?: CoasterWindow;
+ }
+ 
+ /** Resolve a fit-profile name against the built-in table, failing loudly on typos. */
+@@ -1296,6 +1305,7 @@ export function evaluateFile(file: FileNode, options?: EvaluateOptions): Evaluat
+         borderRegistry,
+         fitProfile,
+         brickFit,
++        options?.coasterWindow,
+       );
+     } else {
+       const { env, result } = evaluatePattern(
+@@ -1419,6 +1429,7 @@ function evaluateSolidDecl(
+   borderRegistry: ReadonlyMap<string, BorderDeclarationNode>,
+   fitProfile: PrinterProfile,
+   brickFit: BrickFit,
++  coasterWindow: CoasterWindow | undefined,
+ ): EvaluationResult {
+   // The three orb kinds share one dispatch so the main switch below stays
+   // small and stays exhaustive over the remaining registry-touching solids;
+@@ -1467,7 +1478,7 @@ function evaluateSolidDecl(
+       // Registered like a piece so `--piece <Name>` renders it and the mesh +
+       // linkage gates run. It carries no `connect`able port, so — like a clip —
+       // an assembly cannot place it; `--piece` is its only render path.
+-      const result = evaluateCoasterDecl(decl, patternRegistry);
++      const result = evaluateCoasterDecl(decl, patternRegistry, coasterWindow);
+       pieceRegistry.set(decl.name, result);
+       registerCoasterKey(decl, result, pieceRegistry);
+       return result;
+@@ -3858,13 +3869,19 @@ function registerCoasterKey(
+ function evaluateCoasterDecl(
+   decl: CoasterDeclarationNode,
+   patternRegistry: ReadonlyMap<string, { env: Environment; result: EvaluationResult }>,
++  window?: CoasterWindow,
+ ): EvaluationResult {
+   const art = resolveCoasterArt(decl, patternRegistry);
+   const colors = resolveCoasterColors(decl, art.palette);
+   const isPattern = decl.outline.kind === 'pattern';
+   const strapWidthMm = resolveCoasterStrapWidth(decl);
+   const borderCell = decl.border ? resolveBorderCell(decl, patternRegistry) : undefined;
+-  const spec = coasterSpecFromDecl(decl, art, isPattern, strapWidthMm, borderCell);
++  // The window joins the spec after the art is placed and sized, so the art
++  // keeps the full coaster's mm-per-unit; nothing upstream sees it.
++  const spec: CoasterSpec = {
++    ...coasterSpecFromDecl(decl, art, isPattern, strapWidthMm, borderCell),
++    ...(window ? { window } : {}),
++  };
+ 
+   let built: ReturnType<typeof buildCoaster>;
+   try {
+diff --git a/packages/core/src/kernel3d/coaster-window.ts b/packages/core/src/kernel3d/coaster-window.ts
+new file mode 100644
+index 0000000..dc1a97a
+--- /dev/null
++++ b/packages/core/src/kernel3d/coaster-window.ts
+@@ -0,0 +1,479 @@
++/**
++ * The coaster window: a square sample cut out of a full coaster at that
++ * coaster's own scale, for the sampler sheets (3d-models
++ * `docs/design/coaster/sampler-sheets-design.md`).
++ *
++ * WHY a cut in the kernel's frame rather than a smaller coaster: the art is
++ * placed and sized for the full coaster before the window applies, so the
++ * window keeps the coaster's mm-per-unit. Shrinking the coaster (`size=30`)
++ * re-fits the whole pattern into 30 mm and every strap shrinks with it — the
++ * one thing a sample must not do.
++ *
++ * The window is one more term in the coaster's signed solid value
++ * ({@link windowValueAt}): positive inside the square, negative outside, and a
++ * straight line across every grid edge it crosses, so the marching-squares
++ * walls land exactly on the window's edge — a flat cut, not a staircase. Top
++ * heights are not touched, so a cut strap ends flat at its full height.
++ *
++ * This module imports nothing from `coaster.ts` (which imports it): the types
++ * below are the few fields it reads, kept structural so no import cycle forms.
++ */
++
++import type { Point } from '../primitives/types.js';
++
++/** A square window: side `sideMm`, centred at `centre` in the full coaster's frame (mm, art centre at the origin). */
++export interface CoasterWindow {
++  readonly centre: Point;
++  readonly sideMm: number;
++}
++
++/** A piece the window cut off from the main body and the kernel dropped. */
++export interface DroppedWindowPiece {
++  /** Approximate footprint area in mm² (solid grid points × pitch²). */
++  readonly areaMm2: number;
++  /** One grid point of the piece, in mm, so a report can say where it was. */
++  readonly at: Point;
++}
++
++/**
++ * The window's signed value at `p`, in mm: half the side minus the Chebyshev
++ * distance to the centre — positive inside, zero on the edge, negative outside.
++ * `+Infinity` without a window, so the coaster's `min` of terms is unchanged and
++ * a coaster without a window is byte-identical to one built before windows.
++ *
++ * @example
++ * windowValueAt({ x: 0, y: 0 }, { centre: { x: 0, y: 0 }, sideMm: 30 }) // 15
++ */
++export function windowValueAt(p: Point, window: CoasterWindow | undefined): number {
++  if (window === undefined) return Infinity;
++  const dx = Math.abs(p.x - window.centre.x);
++  const dy = Math.abs(p.y - window.centre.y);
++  return window.sideMm / 2 - Math.max(dx, dy);
++}
++
++/**
++ * The point of the window nearest `p` (`p` itself inside it, or without a
++ * window). WHY: a cut wall's top takes the height of the grid point just
++ * outside the window, so that point is sampled where the cut stands — on the
++ * window's edge — and the cut face shows the coaster's own section there
++ * instead of whatever lies a cell beyond it (a hole would notch the face).
++ *
++ * @example
++ * clampToWindow({ x: 20, y: 0 }, { centre: { x: 0, y: 0 }, sideMm: 30 }) // { x: 15, y: 0 }
++ */
++export function clampToWindow(p: Point, window: CoasterWindow | undefined): Point {
++  if (window === undefined) return p;
++  const h = window.sideMm / 2;
++  const { x: cx, y: cy } = window.centre;
++  const x = Math.min(cx + h, Math.max(cx - h, p.x));
++  const y = Math.min(cy + h, Math.max(cy - h, p.y));
++  return x === p.x && y === p.y ? p : { x, y };
++}
++
++/** The spec fields a window can clash with — structural, so this module need not import `CoasterSpec`. */
++export interface WindowConflictSpec {
++  readonly window?: CoasterWindow;
++  readonly interlock?: unknown;
++  readonly key?: unknown;
++  readonly tab?: unknown;
++  readonly twistDeg?: number;
++  readonly loose?: unknown;
++  readonly edges?: readonly { readonly side: 'top' | 'bottom' }[];
++}
++
++/**
++ * Refuse a window the kernel cannot cut honestly, by name. A join (interlock,
++ * key, tab) exists to mate with a neighbouring coaster, which a sample has none
++ * of; a twist lofts the footprint into a helix the flat cut does not follow;
++ * a bottom edge insets the traced outline, which would chamfer the cut faces
++ * too, so the sample's sides would not be the coaster's; and loose pieces mesh
++ * their pockets and pieces apart from the traced top, which the cut does not
++ * reach, so a window would slice the frame and leave the pieces whole.
++ */
++export function refuseWindowConflicts(spec: WindowConflictSpec): void {
++  const w = spec.window;
++  if (w === undefined) return;
++  if (!(Number.isFinite(w.sideMm) && w.sideMm > 0)) {
++    throw new Error(`coaster: window side must be a positive number of mm, got ${w.sideMm}.`);
++  }
++  if (!(Number.isFinite(w.centre.x) && Number.isFinite(w.centre.y))) {
++    throw new Error('coaster: window centre must be two finite numbers (mm).');
++  }
++  const clash = windowClash(spec);
++  if (clash !== undefined) {
++    throw new Error(
++      `coaster: a window cannot be cut from a coaster with ${clash} — ` +
++        'render the full coaster, or sample one without it.',
++    );
++  }
++}
++
++/** The first clause that cannot stand beside a window, named as the author wrote it. */
++function windowClash(spec: WindowConflictSpec): string | undefined {
++  if (spec.interlock !== undefined) return "an 'interlock' join";
++  if (spec.key !== undefined) return "a 'key' join";
++  if (spec.tab !== undefined) return "a 'tab' join";
++  if (spec.twistDeg !== undefined && spec.twistDeg > 0) return "a 'twist'";
++  if (spec.edges?.some((e) => e.side === 'bottom')) return 'a bottom edge';
++  if (spec.loose !== undefined) return "a 'loose' clause";
++  return undefined;
++}
++
++/**
++ * Cut the sampled field down to its window's one printable body: drop the
++ * pieces the cut detached ({@link dropWindowIslands}), then refuse, by edge,
++ * any cut that shaves a strap lengthwise into a fin thinner than `floorMm`
++ * ({@link windowSlivers}). A fin is a thin stretch longer than two floors: on
++ * the three sampler coasters a strap cut across, or a hole's corner touching
++ * the edge, leaves thin stretches of at most 2.8 mm, and a strap the edge runs
++ * along leaves 5.6 mm or more (a 0.25 mm sweep of the CS-2 centre), so the line
++ * sits in the gap between them. Returns what was dropped.
++ */
++export function cutWindow(
++  field: WindowField,
++  window: CoasterWindow,
++  floorMm: number,
++): DroppedWindowPiece[] {
++  const dropped = dropWindowIslands(field);
++  const fins = windowSlivers(field, window, floorMm, 2 * floorMm);
++  if (fins.length > 0) {
++    const f = fins[0];
++    const along = f.edge === 'left' || f.edge === 'right' ? 'y' : 'x';
++    throw new Error(
++      `coaster: the window's ${f.edge} edge runs along a strap and leaves a fin ` +
++        `${f.depthMm.toFixed(2)} mm thin for ${f.lengthMm.toFixed(1)} mm from ${along} = ` +
++        `${f.fromMm.toFixed(1)}, under the ${floorMm} mm free-standing floor` +
++        `${fins.length > 1 ? ` (and ${fins.length - 1} more)` : ''}. Move the window so that ` +
++        'edge crosses the strap or clears it — a strap width either way is enough.',
++    );
++  }
++  return dropped;
++}
++
++/** The field arrays the island pass reads and clears — the subset of `CoasterField` it touches. */
++export interface WindowField {
++  readonly pitchMm: number;
++  readonly nx: number;
++  readonly ny: number;
++  readonly x0: number;
++  readonly y0: number;
++  readonly solidV: Float64Array;
++  readonly inside: Uint8Array;
++  readonly solid: Uint8Array;
++  readonly relief: Uint8Array;
++  readonly deboss: Uint8Array;
++  readonly cut: Uint8Array;
++  readonly colorIndex: Int16Array;
++}
++
++/**
++ * Keep the window's largest piece and drop every other one, returning what was
++ * dropped. A window cuts straps wherever it crosses them, and a strap end near
++ * a corner can come away from the rest — a loose island that would print as a
++ * separate crumb. Dropping it (rather than refusing, or adding a frame that is
++ * not part of the coaster) keeps the sample exactly the coaster's art inside
++ * the square, minus what could not stay attached.
++ *
++ * Pieces are found the way the mesh joins them: grid points whose solid value
++ * is positive, linked along a grid edge, and across a cell's diagonal only when
++ * that cell is a saddle with a solid centre (the one case the trace joins two
++ * diagonal corners). A dropped point's value is negated, so the trace emits
++ * nothing there; a cell with no kept corner is cleared, so the validators
++ * (CV6b's one-body check above all) read the same single body the mesh has.
++ *
++ * Throws, by name, when the window holds none of the coaster.
++ */
++export function dropWindowIslands(field: WindowField): DroppedWindowPiece[] {
++  const label = labelSolidPoints(field);
++  const sizes = componentSizes(label);
++  if (sizes.length === 0) {
++    throw new Error('coaster: the window holds none of the coaster — move it onto the art.');
++  }
++  let keep = 0;
++  for (let c = 1; c < sizes.length; c++) if (sizes[c] > sizes[keep]) keep = c;
++  const dropped = describeDropped(field, label, sizes, keep);
++  for (let v = 0; v < label.length; v++) {
++    if (label[v] >= 0 && label[v] !== keep) field.solidV[v] = -field.solidV[v];
++  }
++  clearCellsWithoutKeptCorner(field, label, keep);
++  return dropped;
++}
++
++/** Each grid point's piece number (`-1` where open), pieces numbered from 0 in scan order. */
++function labelSolidPoints(field: WindowField): Int32Array {
++  const stride = field.nx + 1;
++  const label = new Int32Array(stride * (field.ny + 1)).fill(-1);
++  let next = 0;
++  for (let v = 0; v < label.length; v++) {
++    if (label[v] !== -1 || !(field.solidV[v] > 0)) continue;
++    floodFrom(field, label, v, next++);
++  }
++  return label;
++}
++
++/** Flood piece `id` out from grid point `start` over the mesh's links ({@link dropWindowIslands}). */
++function floodFrom(field: WindowField, label: Int32Array, start: number, id: number): void {
++  const stack = [start];
++  label[start] = id;
++  while (stack.length > 0) {
++    const v = stack.pop() as number;
++    for (const n of linkedPoints(field, v)) {
++      if (label[n] !== -1 || !(field.solidV[n] > 0)) continue;
++      label[n] = id;
++      stack.push(n);
++    }
++  }
++}
++
++/** The grid points the mesh can join to point `v`: its four edge neighbours and any solid-centre saddle diagonal. */
++function linkedPoints(field: WindowField, v: number): number[] {
++  const stride = field.nx + 1;
++  const i = v % stride;
++  const j = Math.floor(v / stride);
++  const out: number[] = [];
++  if (i > 0) out.push(v - 1);
++  if (i < field.nx) out.push(v + 1);
++  if (j > 0) out.push(v - stride);
++  if (j < field.ny) out.push(v + stride);
++  for (const [di, dj] of DIAGONALS) {
++    const d = saddleDiagonal(field, i, j, di, dj);
++    if (d >= 0) out.push(d);
++  }
++  return out;
++}
++
++const DIAGONALS: readonly (readonly [number, number])[] = [
++  [1, 1],
++  [1, -1],
++  [-1, 1],
++  [-1, -1],
++];
++
++/**
++ * The diagonal neighbour of point `(i, j)` in direction `(di, dj)` when the cell
++ * between them is a solid-centre saddle (both other corners open), else `-1`.
++ */
++function saddleDiagonal(field: WindowField, i: number, j: number, di: number, dj: number): number {
++  const ci = di > 0 ? i : i - 1;
++  const cj = dj > 0 ? j : j - 1;
++  if (ci < 0 || cj < 0 || ci >= field.nx || cj >= field.ny) return -1;
++  if (field.solid[cj * field.nx + ci] !== 1) return -1;
++  const stride = field.nx + 1;
++  const sideA = j * stride + (i + di);
++  const sideB = (j + dj) * stride + i;
++  if (field.solidV[sideA] > 0 || field.solidV[sideB] > 0) return -1;
++  return (j + dj) * stride + (i + di);
++}
++
++/** How many grid points each piece holds. */
++function componentSizes(label: Int32Array): number[] {
++  const sizes: number[] = [];
++  for (const id of label) {
++    if (id < 0) continue;
++    while (sizes.length <= id) sizes.push(0);
++    sizes[id]++;
++  }
++  return sizes;
++}
++
++/** The dropped pieces, largest first, each with its area and one point of it. */
++function describeDropped(
++  field: WindowField,
++  label: Int32Array,
++  sizes: readonly number[],
++  keep: number,
++): DroppedWindowPiece[] {
++  const stride = field.nx + 1;
++  const at = new Map<number, Point>();
++  for (let v = 0; v < label.length; v++) {
++    const id = label[v];
++    if (id < 0 || id === keep || at.has(id)) continue;
++    const i = v % stride;
++    const j = Math.floor(v / stride);
++    at.set(id, { x: field.x0 + i * field.pitchMm, y: field.y0 + j * field.pitchMm });
++  }
++  const area = field.pitchMm * field.pitchMm;
++  return [...at.entries()]
++    .map(([id, p]) => ({ areaMm2: sizes[id] * area, at: p }))
++    .sort((a, b) => b.areaMm2 - a.areaMm2);
++}
++
++/**
++ * Clear the flags of every cell that held only dropped solid: no corner in the
++ * kept piece, and either a dropped corner or a solid centre with no solid
++ * corner at all (a sliver the trace emits nothing for). A cell that was open
++ * throughout — a trivet hole, the space between straps — is left as sampled.
++ */
++function clearCellsWithoutKeptCorner(field: WindowField, label: Int32Array, keep: number): void {
++  const stride = field.nx + 1;
++  for (let j = 0; j < field.ny; j++) {
++    for (let i = 0; i < field.nx; i++) {
++      const v0 = j * stride + i;
++      const corners = [v0, v0 + 1, v0 + stride, v0 + stride + 1];
++      if (corners.some((v) => label[v] === keep)) continue;
++      const idx = j * field.nx + i;
++      if (field.solid[idx] !== 1 && !corners.some((v) => label[v] >= 0)) continue;
++      field.inside[idx] = 0;
++      field.solid[idx] = 0;
++      field.relief[idx] = 0;
++      field.deboss[idx] = 0;
++      field.cut[idx] = 0;
++      field.colorIndex[idx] = -1;
++    }
++  }
++}
++
++/** A stretch along one window edge where the cut leaves solid thinner than the floor. */
++export interface WindowSliver {
++  /** Which edge of the window, as seen from above with `+y` up. */
++  readonly edge: 'left' | 'right' | 'bottom' | 'top';
++  /** How far the stretch runs along the edge, in mm. */
++  readonly lengthMm: number;
++  /** The thinnest solid behind the edge along the stretch, in mm. */
++  readonly depthMm: number;
++  /** Where the stretch starts along the edge (its `y` for left/right, `x` for bottom/top), in mm. */
++  readonly fromMm: number;
++}
++
++/** One window edge as a walk: the axis the walk runs along, its sign, and where the edge stands. */
++interface EdgeWalk {
++  readonly edge: WindowSliver['edge'];
++  /** 0 = walk along x (left/right edges), 1 = walk along y (bottom/top edges). */
++  readonly axis: 0 | 1;
++  /** +1 walks toward +axis from the edge, -1 toward -axis. */
++  readonly sign: 1 | -1;
++  /** The edge's coordinate on the walk axis. */
++  readonly at: number;
++}
++
++/** The four edges of `window`, each with the inward direction a walk takes. */
++function edgeWalks(window: CoasterWindow): EdgeWalk[] {
++  const h = window.sideMm / 2;
++  const { x, y } = window.centre;
++  return [
++    { edge: 'left', axis: 0, sign: 1, at: x - h },
++    { edge: 'right', axis: 0, sign: -1, at: x + h },
++    { edge: 'bottom', axis: 1, sign: 1, at: y - h },
++    { edge: 'top', axis: 1, sign: -1, at: y + h },
++  ];
++}
++
++/** Grid geometry the sliver walk reads — a subset of `CoasterField`. */
++type SliverField = Pick<WindowField, 'pitchMm' | 'nx' | 'ny' | 'x0' | 'y0' | 'solidV'>;
++
++/**
++ * Every stretch along a window edge where the cut leaves solid thinner than
++ * `floorMm` for longer than `maxRunMm` — the thin fin a cut makes when it runs
++ * along a strap instead of across it. WHY: a strap that ends at the window is
++ * fine at any angle, but one the edge shaves lengthwise leaves a wall thinner
++ * than the printer can hold up (a 0.45 mm fin, 4 mm tall), and nothing else
++ * catches it: the declared strap width is still the full strap's. A short thin
++ * stretch — the tip of a strap cut at a slant, a hole's corner touching the
++ * edge — is left alone; `maxRunMm` is how long a stretch may be before it is a
++ * fin rather than a tip.
++ */
++export function windowSlivers(
++  field: SliverField,
++  window: CoasterWindow,
++  floorMm: number,
++  maxRunMm: number,
++): WindowSliver[] {
++  const out: WindowSliver[] = [];
++  for (const walk of edgeWalks(window)) {
++    for (const run of thinRuns(field, window, walk, floorMm)) {
++      if (run.lengthMm > maxRunMm) out.push(run);
++    }
++  }
++  return out;
++}
++
++/** The runs of consecutive grid lines along one edge whose solid depth is under `floorMm`. */
++function thinRuns(
++  field: SliverField,
++  window: CoasterWindow,
++  walk: EdgeWalk,
++  floorMm: number,
++): WindowSliver[] {
++  const runs: WindowSliver[] = [];
++  let start: number | undefined;
++  let depth = Infinity;
++  let last = 0;
++  const flush = (): void => {
++    if (start === undefined) return;
++    runs.push({
++      edge: walk.edge,
++      lengthMm: last - start + field.pitchMm,
++      depthMm: depth,
++      fromMm: start,
++    });
++    start = undefined;
++    depth = Infinity;
++  };
++  for (const line of linesAlong(field, window, walk)) {
++    const d = depthAt(field, walk, line, floorMm);
++    if (d === undefined) {
++      flush();
++      continue;
++    }
++    start ??= line;
++    depth = Math.min(depth, d);
++    last = line;
++  }
++  flush();
++  return runs;
++}
++
++/** The grid-line coordinates that cross one edge strictly inside the window, in order. */
++function linesAlong(field: SliverField, window: CoasterWindow, walk: EdgeWalk): number[] {
++  const across = walk.axis === 0 ? 1 : 0;
++  const origin = across === 0 ? field.x0 : field.y0;
++  const centre = across === 0 ? window.centre.x : window.centre.y;
++  const h = window.sideMm / 2;
++  const first = Math.floor((centre - h - origin) / field.pitchMm) + 1;
++  const out: number[] = [];
++  for (let k = first; origin + k * field.pitchMm < centre + h; k++)
++    out.push(origin + k * field.pitchMm);
++  return out;
++}
++
++/**
++ * How deep the solid behind the edge runs along one grid line, in mm, when it
++ * is thinner than `floorMm`; `undefined` when that line is open at the edge or
++ * at least the floor deep. The depth ends where the solid value crosses zero,
++ * placed by the same straight line the mesh's walls use.
++ */
++function depthAt(
++  field: SliverField,
++  walk: EdgeWalk,
++  line: number,
++  floorMm: number,
++): number | undefined {
++  const pitch = field.pitchMm;
++  const origin = walk.axis === 0 ? field.x0 : field.y0;
++  const k0 =
++    walk.sign > 0
++      ? Math.floor((walk.at - origin) / pitch) + 1
++      : Math.ceil((walk.at - origin) / pitch) - 1;
++  let prev = solidAt(field, walk, line, k0);
++  if (prev === undefined || !(prev > 0)) return undefined;
++  for (let k = k0 + walk.sign; ; k += walk.sign) {
++    const near = Math.abs(origin + (k - walk.sign) * pitch - walk.at);
++    if (near >= floorMm) return undefined;
++    const s = solidAt(field, walk, line, k);
++    if (s === undefined) return undefined;
++    if (!(s > 0)) {
++      const depth = near + (pitch * prev) / (prev - s);
++      return depth < floorMm ? depth : undefined;
++    }
++    prev = s;
++  }
++}
++
++/** The solid value at step `k` along the walk axis on grid line `line`, or `undefined` off the grid. */
++function solidAt(field: SliverField, walk: EdgeWalk, line: number, k: number): number | undefined {
++  const pitch = field.pitchMm;
++  const i = walk.axis === 0 ? k : Math.round((line - field.x0) / pitch);
++  const j = walk.axis === 0 ? Math.round((line - field.y0) / pitch) : k;
++  if (i < 0 || j < 0 || i > field.nx || j > field.ny) return undefined;
++  return field.solidV[j * (field.nx + 1) + i];
++}
+diff --git a/packages/core/src/kernel3d/coaster.ts b/packages/core/src/kernel3d/coaster.ts
+index a68fc0a..c6659cc 100644
+--- a/packages/core/src/kernel3d/coaster.ts
++++ b/packages/core/src/kernel3d/coaster.ts
+@@ -78,6 +78,14 @@ import {
+   type KeySpec,
+ } from './coaster-key.js';
+ import { TAB_JOIN_SIDES, tabReachMm, tabbedRing, type TabSpec } from './coaster-tab.js';
++import {
++  clampToWindow,
++
++  refuseWindowConflicts,
++  windowValueAt,
++  type CoasterWindow,
++  type DroppedWindowPiece,
++} from './coaster-window.js';
+ export type { KeySpec, TabSpec };
+ 
+ // ---------------------------------------------------------------------------
+@@ -339,6 +347,13 @@ export interface CoasterSpec {
+    * (`refuseOpenworkConflicts`).
+    */
+   readonly openwork?: { readonly frameMm: number };
++  /**
++   * A square sample cut from the full coaster at its own scale
++   * (`coaster-window.ts`): everything outside the square is removed, the cut
++   * walls stand exactly on its edge, and pieces the cut detaches are dropped.
++   * Absent = the whole coaster, byte-identical to before windows existed.
++   */
++  readonly window?: CoasterWindow;
+   /** A self-mating dovetail joint on every edge (Decision D-069). Absent = a plain coaster. */
+   readonly interlock?: InterlockSpec;
+   /**
+@@ -435,6 +450,8 @@ export interface CoasterField {
+    */
+   readonly solidRing: readonly Point[];
+   readonly spec: CoasterSpec;
++  /** The pieces a window cut off and dropped, largest first; absent without a window. */
++  readonly windowDropped?: readonly DroppedWindowPiece[];
+ }
+ 
+ /** The centre point of cell `(i, j)`. */
+@@ -988,7 +1005,7 @@ function classifyCell(
+   // `signedInset` is `signedDistToRing` for a ring outline and the strap-network
+   // predicate for a pattern outline, so a minimal coaster's solid cells are the
+   // thickened straps and its open cells become through-holes.
+-  const inside = signedInset(c, spec, solidRing) > 0;
++  const inside = signedInset(c, spec, solidRing) > 0 && windowValueAt(c, spec.window) > 0;
+   const insideNominal = solidRing === nominalRing ? inside : signedDistToRing(c, nominalRing) > 0;
+   const relief = insideNominal && reliefAppliesAt(c, spec);
+   const cut = (trivet && relief) || (inside && openworkCutAt(c, spec));
+@@ -1063,7 +1080,7 @@ function lowerFillVertices(
+   for (let j = 0; j <= field.ny; j++) {
+     for (let i = 0; i <= field.nx; i++) {
+       if (!touchesCell(owned, field.nx, field.ny, i, j)) continue;
+-      const p = vertexPoint(field, i, j);
++      const p = clampToWindow(vertexPoint(field, i, j), spec.window);
+       field.topZ[j * stride + i] = topHeightAt(p, lowered, nominalRing, topEdge, reliefClip);
+     }
+   }
+@@ -1133,7 +1150,7 @@ function fillVertexHeights(
+   for (let j = 0; j <= field.ny; j++) {
+     for (let i = 0; i <= field.nx; i++) {
+       field.topZ[j * stride + i] = topHeightAt(
+-        vertexPoint(field, i, j),
++        clampToWindow(vertexPoint(field, i, j), spec.window),
+         spec,
+         nominalRing,
+         topEdge,
+@@ -1255,6 +1272,9 @@ export function sampleField(spec: CoasterSpec): CoasterField {
+   fillVertexHeights(field, spec, nominalRing, reliefClip);
+   lowerFillVertices(field, spec, nominalRing, reliefClip);
+   const colors = fillCellColors(field, spec);
++  // Row A backport (never merged): the staircase has no solid values, so the
++  // window is the cell-centre mask in classifyCell alone and the island pass is
++  // skipped; a detached piece fails the mesh gate's one-body check instead.
+   return { ...field, colors };
+ }
+ 
+@@ -2955,6 +2975,7 @@ export function buildCoaster(spec: CoasterSpec): CoasterMesh {
+   refusePatternConflicts(spec);
+   refuseTwistConflicts(spec);
+   refuseBorderConflicts(spec);
++  refuseWindowConflicts(spec);
+   const placedSpec = placeBorderOnSpec(spec);
+   const field = sampleField(placedSpec);
+   // A twist reads the same footprint field the untwisted minimal coaster does,
+diff --git a/packages/core/src/kernel3d/index.ts b/packages/core/src/kernel3d/index.ts
+index 00bdec7..1fbe10b 100644
+--- a/packages/core/src/kernel3d/index.ts
++++ b/packages/core/src/kernel3d/index.ts
+@@ -426,6 +426,8 @@ export {
+   type DovetailSlot,
+   strapWidthOf,
+ } from './coaster.js';
++export type { CoasterWindow, DroppedWindowPiece, WindowSliver } from './coaster-window.js';
++export { windowSlivers, windowValueAt } from './coaster-window.js';
+ export type { CoasterFinding, CoasterFindingCode } from './coaster-validate.js';
+ export { roundOverFitsStrap, validateCoaster } from './coaster-validate.js';
+ export type {

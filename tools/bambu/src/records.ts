@@ -26,6 +26,7 @@ const TODO_SHA = "0".repeat(64);
 export interface ScaffoldObject {
   entry: string; // e.g. "MC-2" — the machine-card rung / plate-object id
   source: string; // "bikar:<path>" — bikar source path (any @ref is stripped; the ref lives in pins)
+  sourceSha256?: string; // for a source that is not bikar's (a sheet's vendored STL): its file hash, recorded as given
   piece?: string; // the bikar piece rendered (optional; the plate composer always sets it)
   params?: Record<string, unknown>; // the --param overrides this object was rendered at
   window?: string; // the `--window` cut this object is (absent for a whole piece)
@@ -118,6 +119,22 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
   const bikarRef = (await bikarHead()) ?? TODO;
   const objectBlocks: Array<Record<string, unknown>> = [];
   for (const o of opts.objects) {
+    if (o.sourceSha256 !== undefined) {
+      // Not a bikar source (a sheet's vendored STL): no blob to look up, so record it with the hash it came with.
+      objectBlocks.push({
+        entry: o.entry,
+        source: o.source,
+        source_sha256: o.sourceSha256,
+        piece: o.piece,
+        params: o.params,
+        window: o.window,
+        count: o.count,
+        iteration: o.iteration,
+        verdict: TODO,
+        notes: [],
+      });
+      continue;
+    }
     // A source may arrive as `bikar:<path>` or `bikar:<path>@<ref>` — the ref lives in pins.bikar_ref,
     // so strip it before both the blob lookup and the recorded source (R1 resolves path @ that pin).
     const raw = o.source.startsWith("bikar:") ? o.source.slice("bikar:".length) : o.source;

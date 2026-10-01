@@ -20,9 +20,10 @@
 // window and a sample reprinted from a sheet or a compose plate is the same recipe.
 
 import { Command } from "commander";
+import { createHash } from "node:crypto";
 import { existsSync, mkdtempSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { runWithTimeout, ev } from "../log.js";
 import { locateStudio, probeStudio } from "../backends/studio-cli.js";
@@ -44,7 +45,7 @@ import { buildAmsSlotMap } from "../ams.js";
 import { buildThreeMfMembers, writeThreeMf, type AssemblyCoaster } from "../threemf-assemble.js";
 import { stlToIndexedMesh, footprint, type Bounds, type IndexedMesh } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
-import { platesDir } from "../paths.js";
+import { platesDir, repoRoot } from "../paths.js";
 
 // **Default:** slot 1 is Bambu PLA Basic / white, the same plate default `slice coaster` uses (D-075).
 const DEFAULT_FILAMENT = { type: "PLA", id: "GFA00", hex: "#ffffff" };
@@ -52,11 +53,46 @@ const DEFAULT_FILAMENT = { type: "PLA", id: "GFA00", hex: "#ffffff" };
 // ── The sheet file ────────────────────────────────────────────────────────────────────────────────
 // A card and its cells. A cell is a plate item that MUST be a window (a sample shrunk with `size` is
 // the design's §5 FAIL case; a window is cut at the coaster's own scale) plus where it stands.
+//
+// A cell can instead name a window this repo VENDORS as an STL, for a sample bikar main can no longer
+// draw: sheet 1's row A is the staircase edge #291 replaced, cut by a backport of #293's window that was
+// never merged (src/Samplers/sheets-01-row-a/README.md has how it was made). Its sha256 is in the sheet
+// file, so a changed file is refused rather than printed under the old label.
 
-export interface SheetCell {
+export interface VendoredSample {
+  stl: string; // repo-relative path of the STL, cut at `window` in its coaster's own frame
+  sha256: string; // the file's sha256 when the sheet was written
+  window: string; // the window it was cut at — the placement anchor, as for a rendered sample
+}
+export type SheetCell = {
   name: string; // what the cell is, e.g. "B TRUE / CS-1" — the part name in the slicer
   at: [number, number]; // the cell centre in the card's frame (mm), the same numbers the card's labels use
-  item: ManifestItemBkr; // bkr + piece + params + window
+} & ({ item: ManifestItemBkr; vendored?: undefined } | { vendored: VendoredSample; item?: undefined }); // bkr + piece + params + window, or a vendored STL
+
+/** Check a vendored cell's own fields; the plate parser never sees it (it renders nothing). */
+function parseVendored(c: Record<string, unknown>, where: string): VendoredSample {
+  if (typeof c.stl !== "string" || !c.stl.trim() || c.stl.startsWith("/") || c.stl.split("/").includes("..")) {
+    throw new Error(`${where}: \`stl:\` must be a path inside this repo, e.g. src/Samplers/<sheet>/<file>.stl`);
+  }
+  for (const k of ["bkr", "piece", "params", "iteration"]) {
+    if (c[k] !== undefined) throw new Error(`${where}: a vendored \`stl:\` cell cannot also carry \`${k}:\` — it renders nothing`);
+  }
+  if (typeof c.sha256 !== "string" || !/^[0-9a-f]{64}$/.test(c.sha256)) {
+    throw new Error(`${where}: a vendored \`stl:\` cell needs \`sha256:\` (64 lowercase hex) so a changed file is refused`);
+  }
+  const window = String(c.window);
+  if (!parseWindow(window)) {
+    throw new Error(`${where}: \`window:\` must be bikar's "<side>[@<x>,<y>]" (e.g. 30@9.7,1), got ${JSON.stringify(c.window)}`);
+  }
+  for (const k of Object.keys(c)) {
+    if (!["stl", "sha256", "window"].includes(k)) throw new Error(`${where}: unknown field \`${k}:\` on a vendored cell`);
+  }
+  return { stl: c.stl.trim(), sha256: c.sha256, window };
+}
+
+/** The sha256 of a file's bytes. */
+export function fileSha256(path: string): string {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 export interface SheetManifest {
   bed?: string;
@@ -87,7 +123,8 @@ export function parseSheetManifest(text: string): SheetManifest {
     throw new Error("sheet file has no `cells:` — a card with nothing standing on it");
   }
   const items: Record<string, unknown>[] = [m.card as Record<string, unknown>];
-  const sheetFields: Array<{ name: string; at: [number, number] }> = [];
+  const itemCell: number[] = [-1]; // items[k] is cells[itemCell[k]] (the card is -1): vendored cells are not items
+  const sheetFields: Array<{ name: string; at: [number, number]; vendored?: VendoredSample }> = [];
   cells.forEach((raw, i) => {
     const where = `cells[${i}]`;
     if (!raw || typeof raw !== "object") throw new Error(`${where} is not a mapping`);
@@ -106,9 +143,15 @@ export function parseSheetManifest(text: string): SheetManifest {
       );
     }
     if (c.count !== undefined) throw new Error(`${where} (${c.name}): a cell is one sample; \`count:\` does not apply`);
-    sheetFields.push({ name: c.name.trim(), at: [at[0] as number, at[1] as number] });
+    const name = c.name.trim();
     delete c.name;
     delete c.at;
+    if (c.stl !== undefined) {
+      sheetFields.push({ name, at: [at[0] as number, at[1] as number], vendored: parseVendored(c, `${where} (${name})`) });
+      return;
+    }
+    sheetFields.push({ name, at: [at[0] as number, at[1] as number] });
+    itemCell.push(i);
     items.push(c);
   });
   // One validator for the item fields: the plate parser's (window spelling, params as numbers, bkr form).
@@ -116,19 +159,28 @@ export function parseSheetManifest(text: string): SheetManifest {
   try {
     parsed = parseManifest(JSON.stringify({ items }));
   } catch (err) {
-    // parseManifest names items[0] for the card and items[i+1] for cells[i]; say it in the sheet's terms.
-    throw new Error(
-      (err as Error).message.replace(/^items\[(\d+)\]/, (_, n: string) => (n === "0" ? "card" : `cells[${Number(n) - 1}]`)),
-    );
+    // parseManifest names items[k]; say it in the sheet's terms.
+    throw new Error(sheetTerms((err as Error).message, itemCell));
   }
   const [card, ...cellItems] = parsed.items as ManifestItemBkr[];
   if (typeof m.bed !== "undefined" && typeof m.bed !== "string") throw new Error("`bed:` must be a bed name");
+  let k = 0;
   return {
     bed: m.bed as string | undefined,
     profile: (m.profile as PlateProfile) ?? undefined,
     card: card!,
-    cells: cellItems.map((item, i) => ({ ...sheetFields[i]!, item })),
+    cells: sheetFields.map((f): SheetCell =>
+      f.vendored ? { name: f.name, at: f.at, vendored: f.vendored } : { name: f.name, at: f.at, item: cellItems[k++]! },
+    ),
   };
+}
+
+/** Rename a plate-parser `items[k]` to the sheet's `card` or `cells[i]`. */
+function sheetTerms(message: string, itemCell: number[]): string {
+  return message.replace(/^items\[(\d+)\]/, (_, n: string) => {
+    const cell = itemCell[Number(n)];
+    return cell === undefined || cell < 0 ? "card" : `cells[${cell}]`;
+  });
 }
 
 // ── Placement ─────────────────────────────────────────────────────────────────────────────────────
@@ -321,21 +373,47 @@ async function runSheet(sheetPath: string, opts: SheetOpts): Promise<void> {
     return;
   }
 
-  // 1. Resolve the card and every sample to geometry pins + iteration ids (the window is in the key).
+  // 1. Resolve the card and every rendered sample to geometry pins + iteration ids (the window is in the
+  //    key); check every vendored sample's file against the sha256 the sheet was written with.
+  const rendered = sheet.cells.flatMap((c, i) => (c.item ? [{ cell: i, item: c.item }] : []));
+  const itemCell = [-1, ...rendered.map((r) => r.cell)];
   let resolved: ResolvedItem[];
   try {
-    resolved = await resolveManifestItems([sheet.card, ...sheet.cells.map((c) => c.item)], bikarRef, {
+    resolved = await resolveManifestItems([sheet.card, ...rendered.map((r) => r.item)], bikarRef, {
       settings: settingsName,
       filament: filamentName,
     });
   } catch (err) {
-    console.error((err as Error).message.replace(/^items\[(\d+)\]/, (_, n: string) => (n === "0" ? "card" : `cells[${Number(n) - 1}]`)));
+    console.error(sheetTerms((err as Error).message, itemCell));
     process.exitCode = 2;
     return;
   }
-  const [cardItem, ...cellItems] = resolved;
+  const [cardItem, ...renderedItems] = resolved;
+  const root = repoRoot(dirname(abs)); // the sheet file's own repo, wherever the verb runs from
+  const vendoredProblems = sheet.cells.flatMap((c, i) => {
+    if (!c.vendored) return [];
+    const path = root ? join(root, c.vendored.stl) : c.vendored.stl;
+    if (!existsSync(path)) return [`cells[${i}] (${c.name}): no such file ${c.vendored.stl}`];
+    const sha = fileSha256(path);
+    return sha === c.vendored.sha256
+      ? []
+      : [`cells[${i}] (${c.name}): ${c.vendored.stl} has sha256 ${sha}, not the ${c.vendored.sha256} the sheet was written with`];
+  });
+  if (vendoredProblems.length > 0) {
+    for (const p of vendoredProblems) console.error(p);
+    process.exitCode = 2;
+    return;
+  }
+  // Per cell: where its STL is, its window, and its recipe for the record.
+  const cellSource = (i: number): { stl: string; window: string; iteration?: string } => {
+    const c = sheet.cells[i]!;
+    if (c.vendored) return { stl: root ? join(root, c.vendored.stl) : c.vendored.stl, window: c.vendored.window };
+    const r = renderedItems[rendered.findIndex((x) => x.cell === i)]!;
+    return { stl: stlOf(r), window: r.window, iteration: r.iteration };
+  };
 
-  // 2. Render the card and each sample with the mesh check on.
+  // 2. Render the card and each rendered sample with the mesh check on. A vendored sample passed the same
+  //    check when it was made (its README); the assembled plate's headless slice covers it here.
   const scratch = mkdtempSync(join(tmpdir(), "bambu-sheet-"));
   const stlOf = (r: ResolvedItem): string => join(scratch, `${r.iteration}.stl`);
   try {
@@ -355,8 +433,9 @@ async function runSheet(sheetPath: string, opts: SheetOpts): Promise<void> {
   const cardMesh = stlToIndexedMesh(stlOf(cardItem!));
   const cardBounds = meshBounds(cardMesh);
   const cardTop = cardBounds.max[2];
+  const sources = sheet.cells.map((_, i) => cellSource(i));
   const samples = sheet.cells.map((c, i) => {
-    const mesh = placeSample(stlToIndexedMesh(stlOf(cellItems[i]!)), cellItems[i]!.window, c.at, cardTop);
+    const mesh = placeSample(stlToIndexedMesh(sources[i]!.stl), sources[i]!.window, c.at, cardTop);
     return { name: c.name, mesh, bounds: meshBounds(mesh) };
   });
   const problems = checkCells(cardBounds, samples);
@@ -371,9 +450,11 @@ async function runSheet(sheetPath: string, opts: SheetOpts): Promise<void> {
   console.log(`sheet ${sheetName}: card ${fmt(fx)} × ${fmt(fy)} mm, top at z ${fmt(cardTop)}, ${samples.length} sample(s), bed ${bed.label}`);
   for (const [i, s] of samples.entries()) {
     const b = s.bounds;
+    const src = sources[i]!;
     console.log(
-      `  ${s.name}: window ${cellItems[i]!.window} → x ${fmt(b.min[0])}..${fmt(b.max[0])}, ` +
-        `y ${fmt(b.min[1])}..${fmt(b.max[1])}, z ${fmt(b.min[2])}..${fmt(b.max[2])} (${cellItems[i]!.iteration})`,
+      `  ${s.name}: window ${src.window} → x ${fmt(b.min[0])}..${fmt(b.max[0])}, ` +
+        `y ${fmt(b.min[1])}..${fmt(b.max[1])}, z ${fmt(b.min[2])}..${fmt(b.max[2])} ` +
+        `(${src.iteration ?? `vendored ${sheet.cells[i]!.vendored!.stl}`})`,
     );
   }
   console.log(`layout check: ${problems.length === 0 ? "PASS — every sample on the card, none touching another" : "FAIL"}`);
@@ -429,14 +510,22 @@ async function runSheet(sheetPath: string, opts: SheetOpts): Promise<void> {
 
   // 6. A draft record (gitignored) with every part's recipe id; never dispatches.
   if (opts.record !== false) {
-    const objects: ScaffoldObject[] = resolved.map((r, i) => ({
-      entry: i === 0 ? "card" : sheet.cells[i - 1]!.name,
+    const fromItem = (entry: string, r: ResolvedItem): ScaffoldObject => ({
+      entry,
       source: r.sourceAtRef,
       piece: r.piece || undefined,
       params: r.params,
       window: r.window || undefined,
       iteration: r.iteration,
-    }));
+    });
+    const objects: ScaffoldObject[] = [
+      fromItem("card", cardItem!),
+      ...sheet.cells.map((c, i): ScaffoldObject => {
+        if (!c.vendored) return fromItem(c.name, renderedItems[rendered.findIndex((x) => x.cell === i)]!);
+        // A vendored sample has no bikar source or recipe id: its source is the file, pinned by its hash.
+        return { entry: c.name, source: `3d-models:${c.vendored.stl}`, sourceSha256: c.vendored.sha256, window: c.vendored.window };
+      }),
+    ];
     try {
       const dir = await scaffoldRecord({ slug: sheetName, plateName: outFile, plateFile: outPath, objects, via: "bambu slice sheet" });
       console.log(`draft record → ${dir}`);
