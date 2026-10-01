@@ -265,3 +265,50 @@ The slot also cuts into the margin, so the art has to clear the slot as well as 
 [joins without a wide border](../design/coaster/coaster-borderless-joins-design.md).
 
 Related: [the outline](#the-outline), [openwork](#openwork-cut-through-between-the-straps).
+
+## Loose pieces in pockets
+<!--covers:loose-->
+
+`loose where <condition>` takes the colored faces the condition picks out of the coaster and
+makes them separate pieces, which drop into pockets in a solid frame. It uses the same picker
+as `fill`, and each face it picks must already be filled with a palette color: that color is
+the piece's filament. The frame prints as `--piece Frame`, and each color's pieces print as
+`--piece <color>`. The pockets are the cells the straps wall in, so the frame looks just like
+the plain coaster. The picture lifts the pieces 30 mm above it, for the centre octagon, the
+eight triangles and the eight four-sided faces. `clearance` is the gap between a piece and
+its pocket wall. All of it comes off the piece, so the pocket keeps the drawn shape.
+
+<!-- recipe: coaster-loose; swap: loose where orbit == 0 | loose where orbit == 1 | loose where orbit == 2 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 1 color Gold
+    fill void where orbit == 2 color Gold
+
+coaster Coaster
+  outline round 90
+  inscribe star
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  loose where orbit == 1 clearance 0.15
+```
+![A frame with gold pieces lifted above their pockets: the centre octagon, the triangles, the four-sided faces](img/coaster-loose.png)
+
+**Watch out:** a piece is only as thick as the straps stand (`emboss 1.2` gives 1.2 mm
+pieces), because its pocket is the cell between them. A piece taller than its pocket needs
+an option bikar does not have yet. A loose face with no fill color is refused, because a
+piece needs a filament. A face within two grid cells of the coaster's edge stays part of the frame. Only the solid
+frame is built so far: openwork, joins, a border, a twist and the color preview are all
+refused alongside `loose`. The 0.15 mm gap is a starting guess until the
+[gBV fit sheet](../plates/sheets-04.md) prints.
+
+Related: [color regions](#color-regions), [stars and colored faces](stars-and-fills.md),
+[the loose-pieces design](../design/coaster/loose-pieces-design.md).

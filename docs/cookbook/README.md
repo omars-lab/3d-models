@@ -57,7 +57,6 @@ so "add it to the list" isn't the easy way out.
 
 - `brick` `mural` `footprint` `height` `studs` `anchors` `engage` `clutch` `origin` `pieces` `blanks` `slivers` — the LEGO-compatible brick and mural blocks; they have their own lab and page in bikar, and a picture needs the LDraw viewer, not the flat render
 - `orb` `piece` `tile` `wall` `assembly` `clip` — the 3D bodies beyond the coaster; each has its own gallery pipeline, and a side-by-side needs the orb or piece renderer
-- `loose` — loose pieces in a frame (bikar #292); the frame looks the same as the plain coaster whichever ring is loose (the walls only move onto the exact outline), and the pieces are a separate `--piece <color>` output the recipe renderer does not draw yet; next up once it can draw a named piece
 - `rim` `edge` `trivet` — coaster knobs whose change is a millimeter at the rim, too small to see in a 360-pixel picture; next up once the coaster picture can zoom to the edge
 - `girih` `phyllotaxis` `spiral` `parabola` `hyperbola` — pattern families and curves that draw well flat; not written yet
 - `tangent` `offset` `fillet` `face` `segment` `boundary` `extend` `nest` — construction helpers that show well flat; not written yet
