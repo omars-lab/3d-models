@@ -421,12 +421,18 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 - [ ] A written how-to, no new UI.
 - Notes:
 
+**Decide it on:** three pictures, one per option, in the
+[sampler sheets design](sampler-sheets-design.md#where-the-guided-page-lives-three-pictures-not-a-sheet).
+
 **3. Raised fills: on every fill coaster, or only through loose pieces?** (§2)
 
 - [ ] **On every fill coaster, the same slider going up.** It is one refusal and one kernel rule,
   and it answers "either end" on the coaster that has the slider today.
 - [ ] Only through loose pieces, where a taller piece is a raised fill with no kernel change.
 - Notes:
+
+**Decide it on:** sampler sheet 5, fill height (lowered, flush and raised on the same windows) —
+[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../../plates/sheets-05.md).
 
 **4. LP-1's gaps, and printing it.** (§3.6, §3.7)
 
@@ -436,6 +442,9 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 - [ ] Wait for KEY-1 and T1 to print first, then choose the gaps.
 - Can failure detection be on and the first layer watched for this plate? yes / no
 - Notes:
+
+**Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
+[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../../plates/sheets-04.md).
 
 ## 8. Checks
 

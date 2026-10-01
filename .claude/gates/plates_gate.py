@@ -10,7 +10,10 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
   P1  **Shape.** The frontmatter parses and carries every key in REQUIRED; `plate` is the
       file name; `recipe` is the `.yaml` beside it; `stage`, `kind` and `risk` are in their
       vocabularies; every `bets` id is a real bet in `bets.md`; a plate the queue ranks
-      carries its cost (`minutes`, `grams`, `bed_plates`) as positive numbers.
+      carries its cost (`minutes`, `grams`, `bed_plates`) as positive numbers. A `planned`
+      plate is designed but cannot be built yet: it may have no recipe and no cost, and it
+      names what it waits on in `needs:`. Only a planned plate has `needs:` — a plate that
+      still waits on a build is not ready to rank, so it cannot sit at a later stage.
 
   P2  **Approval.** `approved` is true, false, or empty (the plate went out before pages
       existed, and nobody asked). True if and only if `approved_on` is a date. A plate at
@@ -70,10 +73,11 @@ REQUIRED = (
     "plate", "recipe", "stage", "approved", "approved_on", "times_printed", "runs",
     "answers", "kind", "bets", "unblocks", "minutes", "grams", "bed_plates", "risk", "pictures",
 )
+# planned: designed, waiting on a build before it can have a recipe or a slice.
 # proposed: page written, not yet looked over. waiting: looked over, waiting on Omar's tick.
 # approved: Omar ticked it. sent: it went to the printer. printed: a record exists.
 # retired: not printing it again.
-STAGES = ("proposed", "waiting", "approved", "sent", "printed", "retired")
+STAGES = ("planned", "proposed", "waiting", "approved", "sent", "printed", "retired")
 RANKED = frozenset({"proposed", "waiting", "approved"})
 SHOWN = frozenset({"waiting", "approved"})
 KINDS = ("new", "taste", "repeat")
@@ -154,9 +158,11 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     # P1 — shape
     if data["plate"] != name:
         out.append(f"{name}: P1 plate '{data['plate']}' is not the file name")
-    if data["recipe"] != f"{name}.yaml" or not (path.parent / f"{name}.yaml").is_file():
-        out.append(f"{name}: P1 recipe '{data['recipe']}' is not the {name}.yaml beside the page")
     stage = data["stage"]
+    no_recipe_yet = stage == "planned" and data["recipe"] is None
+    if not no_recipe_yet and (data["recipe"] != f"{name}.yaml"
+                              or not (path.parent / f"{name}.yaml").is_file()):
+        out.append(f"{name}: P1 recipe '{data['recipe']}' is not the {name}.yaml beside the page")
     for key, vocab in (("stage", STAGES), ("kind", KINDS), ("risk", RISKS)):
         if data[key] not in vocab:
             out.append(f"{name}: P1 {key} '{data[key]}' is not one of {list(vocab)}")
@@ -172,6 +178,14 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
         out.append(f"{name}: P1 unblocks is not a list of non-empty strings")
     if not isinstance(data["answers"], str) or not data["answers"].strip():
         out.append(f"{name}: P1 answers is empty — say the question the plate answers")
+    needs = data.get("needs")
+    if stage == "planned":
+        if not isinstance(needs, list) or not needs or not all(
+                isinstance(n, str) and n.strip() for n in needs):
+            out.append(f"{name}: P1 stage 'planned' but needs is not a list of what it waits on")
+    elif needs:
+        out.append(f"{name}: P1 needs lists unbuilt work but stage is '{stage}' — a plate that "
+                   "waits on a build is 'planned'")
     if stage in RANKED:
         for key in ("minutes", "grams", "bed_plates"):
             if not _pos(data[key]):
@@ -189,7 +203,7 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
         out.append(f"{name}: P2 stage 'approved' but approved is {approved!r}")
     if stage in ("sent", "printed") and approved is False:
         out.append(f"{name}: P2 stage '{stage}' but approved is false — it went out unapproved")
-    if stage in ("proposed", "waiting") and approved is True:
+    if stage in ("planned", "proposed", "waiting") and approved is True:
         out.append(f"{name}: P2 approved is true but stage is still '{stage}'")
 
     # P3 — the count is the records, not what the page says about itself
@@ -243,12 +257,24 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
 # the queue: computed, never stored on a page
 # ---------------------------------------------------------------------------
 
+def value_of(data: dict, w: dict) -> float:
+    """The value half of the score; a planned plate has it before it has a cost."""
+    return (w["per_bet"] * len(data["bets"]) + w["per_unblock"] * len(data["unblocks"])
+            + w["kind"][data["kind"]])
+
+
 def score(data: dict, w: dict) -> tuple[float, float, float]:
     """(value, cost in hours, roi). scoring.md says what each weight means and why."""
-    value = (w["per_bet"] * len(data["bets"]) + w["per_unblock"] * len(data["unblocks"])
-             + w["kind"][data["kind"]])
+    value = value_of(data, w)
     cost = data["minutes"] / 60 + data["grams"] / w["grams_per_hour"]
     return value, cost, value / cost
+
+
+def planned(pages: list[dict], w: dict) -> list[dict]:
+    """Plates waiting on a build, highest value first. Not ranked against the queue: with no
+    slice there is no cost, and value alone would put an untimed plate above a timed one."""
+    return sorted((p for p in pages if p["stage"] == "planned"),
+                  key=lambda p: (-value_of(p, w), p["plate"]))
 
 
 def rank(pages: list[dict], w: dict) -> list[tuple[dict, float, float, float]]:
@@ -290,7 +316,11 @@ def render_queue(pages: list[dict], w: dict) -> str:
     sent = [p for p in pages if p["stage"] == "sent"]
     done = [p for p in pages if p["stage"] in ("printed", "retired")]
     times = lambda p: f" ×{p['times_printed']}"  # noqa: E731
+    worth = lambda p: f" (value {value_of(p, w):g})"  # noqa: E731
     lines += [
+        "",
+        "**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): "
+        f"{_links(planned(pages, w), worth)}.",
         "",
         f"**Held for hardware risk:** {_links(held, lambda p: '')}.",
         "",
@@ -319,12 +349,13 @@ def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None]) -> dic
             "times_printed": p["times_printed"], "runs": p["runs"], "answers": p["answers"],
             "kind": p["kind"], "bets": p["bets"], "unblocks": p["unblocks"],
             "minutes": p["minutes"], "grams": p["grams"], "bed_plates": p["bed_plates"],
-            "risk": p["risk"], "pictures": p["pictures"],
+            "risk": p["risk"], "pictures": p["pictures"], "needs": p.get("needs") or [],
         }
     queue = [{"rank": i, "value": value, "hours": round(cost, 2), "roi": round(roi, 2), **facts(p)}
              for i, (p, value, cost, roi) in enumerate(rank(pages, w), 1)]
     return {
         "queue": queue,
+        "planned": [{"value": value_of(p, w), **facts(p)} for p in planned(pages, w)],
         "held": [facts(p) for p in pages if p["stage"] in RANKED and p["risk"] == "hold"],
         "sent": [facts(p) for p in pages if p["stage"] == "sent"],
         "printed": [facts(p) for p in pages if p["stage"] in ("printed", "retired")],
@@ -489,6 +520,11 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
         (plates / f"{n}.yaml").write_text("bed: x2d\n", encoding="utf-8")
         fm = {"plate": n, "recipe": f"{n}.yaml", "stage": extra["stage"], **base, **extra}
         (plates / f"{n}.md").write_text(_page(n, fm, rows), encoding="utf-8")
+    # A designed plate that waits on a build: no recipe, no slice, no picture yet.
+    fm = {"plate": "sheets-09", "recipe": None, "stage": "planned", **base, "minutes": None,
+          "grams": None, "bed_plates": None, "pictures": [], "needs": ["the window cut"]}
+    (plates / "sheets-09.md").write_text(
+        _page("sheets-09", fm, ["| 2026-10-01 | proposed | the design |"]), encoding="utf-8")
     scoring = tmp / "scoring.md"
     scoring.write_text(_WEIGHTS_MD, encoding="utf-8")
     bets = tmp / "bets.md"
@@ -550,6 +586,20 @@ CASES = [
      _edit("minis-08", "pictures:\n- minis-08-media/sheet.png", "pictures: []"),
      "asks Omar to look, but there is no picture"),
     ("P5 a recipe with no page", _orphan_yaml, "P5 plate recipe has no page"),
+    ("P1 planned with nothing named to wait on",
+     _edit("sheets-09", "needs:\n- the window cut", "needs: []"),
+     "P1 stage 'planned' but needs is not a list"),
+    ("P1 a needs list on a plate past planned (it would rank before it can be built)",
+     _edit("minis-08", "pictures:\n- minis-08-media/sheet.png",
+           "pictures:\n- minis-08-media/sheet.png\nneeds:\n- a bikar change"),
+     "P1 needs lists unbuilt work but stage is 'waiting'"),
+    ("P2 planned and approved before it exists",
+     _edit("sheets-09", "approved: false\napproved_on: null",
+           "approved: true\napproved_on: 2026-10-01"),
+     "P2 approved is true but stage is still 'planned'"),
+    ("P1 a recipe named that is not there",
+     _edit("sheets-09", "recipe: null", "recipe: sheets-09.yaml"),
+     "P1 recipe 'sheets-09.yaml' is not the sheets-09.yaml"),
     ("P6 approved with no approved row",
      _edit("minis-08", "stage: waiting\napproved: false\napproved_on: null",
            "stage: approved\napproved: true\napproved_on: 2026-09-30"),
@@ -608,14 +658,22 @@ def self_test() -> int:
         text = render_queue([a, b, c], w)
         report("**Held for hardware risk:** [c](c.md)." in text, "the queue names the held plate",
                text)
+        d = {**a, "plate": "d", "stage": "planned", "minutes": None, "grams": None,
+             "unblocks": ["x", "y", "z", "w", "v"], "needs": ["a build"]}
+        e = {**d, "plate": "e", "unblocks": ["x"]}
+        order = [t[0]["plate"] for t in rank([a, b, d, e], w)]
+        text = render_queue([a, b, d, e], w)
+        report(order == ["a", "b"] and "[d](d.md) (value 12), [e](e.md) (value 4)." in text,
+               "a planned plate is listed by value apart from the ranked queue", f"{order} {text}")
 
         # The JSON the hub reads ranks exactly as the table does, and carries the page's facts.
         for p in (a, b, c):
             p.update({"approved": False, "approved_on": None, "times_printed": 0, "runs": [],
                       "bed_plates": 1, "pictures": []})
         data = queue_json([a, b, c], w, {"a": "a — first"})
-        report([q["plate"] for q in data["queue"]] == order and data["queue"][0]["title"] == "a — first"
-               and [h["plate"] for h in data["held"]] == ["c"],
+        report([q["plate"] for q in data["queue"]] == ["a", "b"]
+               and data["queue"][0]["title"] == "a — first"
+               and [h["plate"] for h in data["held"]] == ["c"] and data["planned"] == [],
                "the JSON queue is the table's order, titled, with the held plate apart", str(data))
 
         # --rank --json refuses while a page is wrong, rather than ranking around it.

@@ -42,8 +42,8 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 
 | Property | Holds |
 |---|---|
-| `plate`, `recipe` | the page's own name, and `<plate>.yaml` beside it |
-| `stage` | `proposed`, `waiting`, `approved`, `sent`, `printed` or `retired` (§4) |
+| `plate`, `recipe` | the page's own name, and `<plate>.yaml` beside it; the recipe may be empty only at `planned` |
+| `stage` | `planned`, `proposed`, `waiting`, `approved`, `sent`, `printed` or `retired` (§4) |
 | `approved` | `true` when Omar ticked Approve, `false` when not yet or held, empty when nobody asked |
 | `approved_on` | the date of the tick; set only when `approved` is true |
 | `times_printed`, `runs` | how many records name this plate, and which |
@@ -51,10 +51,11 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 | `kind` | `new` question, `taste` (a look at something known), or `repeat` |
 | `bets` | the calibration bets a reading from this plate can move |
 | `unblocks` | the open decisions the print lets Omar make, in words |
-| `minutes`, `grams`, `bed_plates` | from a local slice |
+| `minutes`, `grams`, `bed_plates` | from a local slice; empty at `planned` |
 | `risk` | `ok`, `watch` or `hold` — risk to the machine, not to the print |
 | `pictures` | the files the page shows |
 | `after` | optional: a plate this one waits behind |
+| `needs` | at `planned` only, and required there: the builds the plate waits on, in words |
 
 It is `stage`, not `status`, because in this vault `status` means a design doc's state and every
 note with one is listed in the design-docs view.
@@ -72,6 +73,7 @@ the page and the reason in the ranking cannot say different things.
 
 | Stage | Means |
 |---|---|
+| `planned` | designed, but a build it needs does not exist yet, so there is no recipe or slice |
 | `proposed` | the recipe exists, the page is not complete |
 | `waiting` | pictures and cost are on the page; waiting for Omar |
 | `approved` | Omar ticked Approve |
@@ -104,8 +106,10 @@ existed were never asked about, and writing `false` on them would claim a no tha
 `.claude/gates/plates_gate.py`, run by hook 39 after the prints gate and by
 `make validate-prints`:
 
-- **P1, shape.** The page is named for its recipe, which exists. Stage, kind and risk use the
-  words above. Each bet is in `bets.md`. A plate in the queue has a positive cost.
+- **P1, shape.** The page is named for its recipe, which exists; only a `planned` page may have
+  no recipe yet, and a `planned` page lists what it waits on in `needs`, which no other stage
+  may carry. Stage, kind and risk use the words above. Each bet is in `bets.md`. A plate in the
+  queue has a positive cost.
 - **P2, approval.** `approved_on` is a date exactly when `approved` is true. A plate at
   `approved` is approved. A plate at `sent` or `printed` is not `approved: false`: that would
   say it went out after a no.
@@ -121,8 +125,8 @@ existed were never asked about, and writing `false` on them would claim a no tha
 pages and records, requires it clean, then breaks it once per rule and requires that rule to
 fire.
 
-PASS: the real tree today — six pages, two records, minis-03 and minis-04 at one run each, and
-the queue current.
+PASS: the real tree today — eleven pages (five of them sampler sheets at `planned`), two records,
+minis-03 and minis-04 at one run each, and the queue current.
 
 FAIL: a second record for minis-09 while its page still says `times_printed: 1` with one run
 listed. The page agrees with itself; only a count taken from `docs/prints/` catches it. Also a
@@ -134,7 +138,9 @@ The skill's [scoring.md](../../../.claude/skills/prioritize-prints/scoring.md) h
 its weights. In short: **value** is each bet the plate can move plus each decision it unblocks,
 plus a bonus for a new question; **cost** is hours on the machine, with filament counted as time.
 The queue lists plates highest value per hour first, drops any plate at `risk: hold` into a
-"held" line, and keeps a plate with `after:` below the one it waits for.
+"held" line, and keeps a plate with `after:` below the one it waits for. A `planned` plate has no
+hours to divide by, so it is not ranked; it is listed on a "waiting on a build" line by value
+alone, so a design that is worth building shows up before its recipe exists.
 
 The weights are a first guess, not measured. That is why the scoring lives in a file the skill
 reads at run time, with a round log: a ranking Omar disagrees with becomes a change of weight

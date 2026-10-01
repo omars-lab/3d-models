@@ -20,6 +20,8 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 1 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
 | 2 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
 
+**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-04](sheets-04.md) (value 10), [sheets-01](sheets-01.md) (value 6), [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
+
 **Held for hardware risk:** none.
 
 **Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md).
@@ -31,6 +33,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | Stage | Means | Who moves it |
 |---|---|---|
+| `planned` | Designed, but it waits on a build before it can have a recipe or a slice; `needs:` lists what | whoever wrote the design |
 | `proposed` | The recipe exists; nobody has reviewed the page yet | whoever wrote the recipe |
 | `waiting` | Pictures and costs are on the page; waiting for Omar's tick | the skill, once the page is complete |
 | `approved` | Omar ticked Approve; `approved_on` is the date they ticked it | the skill, reading the tick back |
@@ -61,3 +64,11 @@ its own record, and `times_printed` is the number of records.
 - [minis-04](minis-04.md) — the same at 80 mm and half the height, printed once
 - [minis-05](minis-05.md) — the thin joins, waiting
 - [minis-06](minis-06.md) — the two dovetails, waiting
+- [sheets-01](sheets-01.md) — sampler sheet: edge and top, planned
+- [sheets-02](sheets-02.md) — sampler sheet: star points, planned
+- [sheets-03](sheets-03.md) — sampler sheet: soft weld, planned
+- [sheets-04](sheets-04.md) — sampler sheet: the gBV fit, planned
+- [sheets-05](sheets-05.md) — sampler sheet: fill height, planned
+
+The five sampler sheets are designed in the
+[sampler sheets design](../design/coaster/sampler-sheets-design.md).
