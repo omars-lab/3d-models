@@ -13,8 +13,9 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master c2e37c
 > have options to select this too in the ui ... and do so at either ends ... and even print
 > without the borders and only the inner shapes and 'fit them'", "or even for folks to
 > 'assemble their own coaster'", "see if we can make a guided ui for this". Tracked as item 6
-> of the [catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md). Nothing here
-> has been built or printed.
+> of the [catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md). Built so far:
+> §6 items 2 and 3, the exact pocket walls and the loose pieces with the backed frame F1
+> (bikar #292, 2026-10-01). Nothing has been printed.
 
 Three asks, in order of how much is unknown:
 
@@ -380,6 +381,10 @@ In order; each item names the test that shows it works. Nothing here is started.
    loose color, the inset with its null refusal, the edge-face rule. *Test:* `--piece Gold` on the
    snowflake gives 24 separate watertight bodies (18 six-sided, 6 twelve-sided); every inset at gaps
    0.05 to 0.35 is non-null on CS-1; a sliver-face fixture is refused by name.
+   *Done for items 2 and 3, bikar #292 (2026-10-01):* on CS-1 every piece keeps its full 0.150 mm
+   gap at 80 and 90 mm (the staircase wall touched all 24, and that case stays in the tests as one
+   that must fail); 24 pieces, 18 six-sided and 6 twelve-sided; gBV gives 41, the smallest 2.4 mm
+   across. A face within two grid squares of the coaster's edge stays part of the frame.
 4. **The Lab.** A Loose button on each ring row and on the picker chip; the parts list; the guided
    mode's step bar. *Test:* a Playwright run through the seven steps of §4, and a look in a real
    browser before it ships.

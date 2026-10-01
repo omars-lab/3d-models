@@ -19,9 +19,11 @@ grams:
 bed_plates:
 risk: watch
 pictures:
+  - sheets-04-media/gbv-frame-and-pieces.png
   - ../design/coaster/loose-pieces-media/frames.png
 needs:
-  - "the loose-piece output in bikar: exact pocket walls and the loose, Frame and piece outputs (loose-pieces §6 items 2 and 3)"
+  - "the sheet's file in bikar: the gBV frame plus one ring of pieces at each of the four gaps and the small stars at 0.15, as a coupon (not a catalog coaster, so it needs no style name)"
+  - "the sheet plate in the bambu tool: the frame and each gap set as separate items"
   - "your yes on failure detection on and the first layer watched (loose-pieces §3.7)"
 ---
 
@@ -30,8 +32,8 @@ needs:
 **In short.** The gBV coaster as a backed frame (a solid slab with pockets, F1), printed once, and
 loose pieces for one ring of it at four gaps per face: 0.05, 0.10, 0.15 and 0.20 mm. The small
 five-point stars come at 0.15 only, to see whether their tips catch. It answers
-[loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes. Nothing of it
-is built yet.
+[loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes. The frame and
+the pieces can be made now (bikar #292, 2026-10-01); the sheet itself is not put together yet.
 
 ## What it is
 
@@ -59,6 +61,14 @@ its code, because the sets look alike.
 
 ## Pictures
 
+gBV as bikar now makes it, at 80 mm with all five rings loose at 0.15 mm: the frame alone on the
+left, and the 41 pieces lifted above their pockets on the right. A quick render of the checked
+STLs. The odd sliver in it is the drawing, not the mesh: both files pass the mesh check, closed
+and with no zero-area triangles. The smallest piece is 2.4 mm across at its narrowest, and still
+2.3 mm at the loosest gap, 0.20.
+
+![gBV frame and its loose pieces, from bikar #292](sheets-04-media/gbv-frame-and-pieces.png)
+
 The frame kinds in cross-section, from the loose-pieces design; this plate is F1, the first one.
 
 ![The three frames, and flush, proud and recessed pieces in the first](../design/coaster/loose-pieces-media/frames.png)
@@ -73,7 +83,11 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
 
 ## What it waits on
 
-- The loose-piece output (loose-pieces §6 items 2 and 3).
+- The sheet's file: the gBV frame, one ring of pieces at each gap, and the small stars at 0.15.
+  The loose-piece output it is made from shipped 2026-10-01 (bikar #292): the pocket walls follow
+  the outline exactly, so the gap measured on every CS-1 piece is 0.150 mm all round (the old
+  staircase wall touched the piece on all 24).
+- The sheet plate in the bambu tool.
 - Your yes on the printer question in loose-pieces call 4.
 
 ## Your call
