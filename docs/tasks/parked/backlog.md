@@ -72,15 +72,18 @@ None waiting. The four youtube branches and 3d-models #427, #432, #433 and #434 
 ten youtube reconstructions, was approved by Omar the same day. It had fallen behind master, so
 it landed through a fresh branch that merged it and worked the conflicts by hand.
 
-## Schema package release — waiting on Omar
+## Studio deploy check can't get past the login gate — waiting on Omar
 
-bikar #289 (2026-09-30) copied youtube's newer construction schema into bikar and set
-`@naqshcoffee/qiyas-schema` to 0.3.2. Only bikar's own code uses the new version so far. Omar
-approved the `schema-v0.3.2` tag and it was pushed on 2026-09-30, on bikar f169537. The publish
-run it started (36792672524) stopped after 2 seconds with no steps, which is GitHub's billing
-block, so **nothing is published yet**: the last published version is still 0.3.0. When it
-does publish, it also ships the 0.3.1 change, the first copy of the construction schema. Omar's
-call: re-run that workflow once billing is fixed, or publish from a local machine.
+Found on 2026-10-01, when the studio was deployed by hand (bikar `deploy.yml`, run
+36796118992). The deploy itself went through, and every page still sends visitors who are not
+logged in to the Cloudflare login. But the check that reads each page through the CI service
+token failed on all of them. The token is sent back to the login page as well, which also
+happens when the copy in bikar's local `.env` is used, so the problem is not a stale GitHub
+copy. Either the token has expired or its Service Auth policy on the *Bikar Studio* Access app
+is gone. Until it is fixed, every studio deploy fails at that check, and nobody can confirm the
+new build is the one being served. Omar's fix, in the Cloudflare dashboard: renew the token, or
+add the policy back. If the token is renewed, `make setup-secrets` carries the new pair to
+GitHub.
 
 ## Cross-repo governance
 

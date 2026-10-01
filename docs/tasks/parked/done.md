@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-10-01 — `@naqshcoffee/qiyas-schema` 0.3.2 published to GitHub Packages. It carries youtube's newer construction schema, and 0.3.1's first copy of it. The `schema-v0.3.2` tag (bikar f169537) went up on 2026-09-30. Its publish run hit the billing block, then passed on a re-run once the block lifted (bikar #289, run 36792672524)
+
 ## From the session task board, before the split
 
 Finished work up to 2026-09-25 was kept on one list, `docs/tasks/done.md`, as ten snapshots
