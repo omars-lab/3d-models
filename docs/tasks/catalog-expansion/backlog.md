@@ -333,15 +333,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    inside the coaster too are in the
    [smooth-lines design](../../design/coaster/smooth-lines-design.md) (3d-models #434, a
    checker's merge of two researchers' drafts, #432 and #433; all three merged 2026-09-30). Its four open calls, in §6, wait on Omar.
-8. **CS-6 (`tA8eSdVx_EQ`) has uneven petals.** Found 2026-09-29 by the new symmetry number
-   (`print_review.py sheet`, column `sym`): 0.73 at order 7, where every other current coaster
-   scores 1.00. The art sheet (`print_review.py art`) shows the seven petals are not the same
-   size. It passes its video checks, so either the video's quick seven-fold is itself
-   approximate or our rebuild drifts; not checked yet. Omar left it off minis-03, and no other
-   number said why. Needs: compare the petal angles with an exact 360/7 and, if the rebuild is
-   the cause, fix it in bikar and re-vendor. Hold it from plates until `sym` reaches 0.9
-   ([review-print rubric](../../../.claude/skills/review-print/rubric.md), check 6).
-9. **Which pattern becomes the next coaster.** The top three candidates are built in bikar as
+8. **Which pattern becomes the next coaster.** The top three candidates are built in bikar as
    minimal coasters at 90 mm (bikar #285, #286, #287, all merged 2026-09-30) and shown on the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
    **Waiting on Omar's pick** there. The proposal the page's decisions come from is

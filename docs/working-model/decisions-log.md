@@ -5337,6 +5337,15 @@ drops — the decision is pinned to Omar's taste call for a seven-fold art, not 
 constraint. Nothing about the pin mechanism reverses: it is the general way a construction overrides
 its frame, exercised here for the first time.
 
+**2026-09-30 note: the numbers above were measured with the star off-centre.** The coaster centred
+its art on the art's bounding box. On a seven-point star, that point sits above the star's
+middle. bikar #290 now centres art that turns onto itself on its real middle, and the frame
+sizes change with that. The heptagon's `K` is now 2.6433 and it is the tightest of all the
+frames: 5.89 units² of area against the round frame's 6.76. Unpinned, the fitter would now pick
+round (`K` 2.9339), not the octagon. The pin stands, and the case for it is now stronger:
+the chosen frame is also the most economical one. See
+[cs6-symmetry-centre](../issues/cs6-symmetry-centre.md).
+
 ## D-080 — The `cached_coords` producer for arc-bearing imports is bikar self-bootstrap (B′), not a GeoGebra dump (A) or a new engine (B)
 
 The eighth construction (nmEjCTzMbDg, task&nbsp;#34) is the first with `CircularArc`s. Its base

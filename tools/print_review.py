@@ -17,14 +17,14 @@ Beside it the tool prints, per piece, over the area inside its outline:
   bare     the share of grid cells (8x8 over the outline) that are almost all hole. Art
            that fills the shape leaves none; a half-filled square leaves many.
   sym      how well the art matches itself turned: the share of its top faces that land on
-           art after the best turn of 360/n about the art's own centre, n from 2 to 16,
+           art after the best turn of 360/n about the art's centre of mass, n from 2 to 16,
            checked both ways. `order` is that n. A rosette scores 1; art that sits to one
            side, stops partway, or has uneven petals scores low. Only turns are tried, not
            mirrors. The art is the faces at the piece's top height, so a relief coaster is
            judged by its raised lines, not by its slab, and a join tab does not count.
 
-`art` draws the same sheet from the top faces only: what `sym` measured, with the outline's
-centre marked, so a low score can be read by eye.
+`art` draws the same sheet from the top faces only: what `sym` measured, with the centre it
+turned about marked, so a low score can be read by eye.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -67,11 +67,23 @@ def silhouette(tris, top=False):
     kept = [t for t in tris if not top or min(t[2], t[5], t[8]) >= zmax - TOP_EPS]
     for t in kept:
         d.polygon([f(t[0], t[1]), f(t[3], t[4]), f(t[6], t[7])], fill=255)
-    # the centre of what was drawn: the art's own, so a join tab that widens the outline
-    # does not move it
-    kx = [t[j] for t in kept for j in (0, 3, 6)]
-    ky = [t[j] for t in kept for j in (1, 4, 7)]
-    return img, f((min(kx) + max(kx)) / 2, (min(ky) + max(ky)) / 2)
+    return img, centre(img)
+
+
+def centre(img):
+    """The centre of mass of what was drawn: the art's own, so a join tab that widens the
+    outline does not move it. A turn that maps the art onto itself leaves this point where it
+    is, so it is the middle of every rosette. The bbox centre is not, for an odd order: a
+    seven-point star with a point up reaches farther up than down, and turning about its bbox
+    centre scored the seven-fold CS-6 0.72 with seven equal petals."""
+    w = img.size[0]
+    n = sx = sy = 0
+    for i, v in enumerate(img.tobytes()):
+        if v > 127:
+            n += 1
+            sx += i % w
+            sy += i // w
+    return (sx / n, sy / n) if n else (w / 2, img.size[1] / 2)
 
 
 def count(img):
@@ -221,21 +233,22 @@ def self_test():
         lattice(d)
         d.rectangle([200, 30, S - 31, S - 31], fill=0)
 
-    def star(extra):  # six-fold star outline; `extra` adds a blob off to one side
+    def star(extra, points=6):  # a star band, a point straight up; `extra` adds a blob
+        # filled, not a wide line: PIL widens a line unevenly with its angle, which moves a
+        # seven-point star's centre of mass 4.5 px
         img = Image.new("L", (S, S), 0)
         d = ImageDraw.Draw(img)
-        c, pts = S / 2, []
-        for i in range(12):
-            r = 150 if i % 2 == 0 else 70
-            a = math.pi * i / 6
-            pts.append((c + r * math.cos(a), c + r * math.sin(a)))
-        d.line(pts + pts[:1], fill=255, width=6)
+        c = S / 2
+        ring = lambda k: [(c + k * (150 if i % 2 == 0 else 70) * math.cos(math.pi * i / points - math.pi / 2),
+                           c + k * (150 if i % 2 == 0 else 70) * math.sin(math.pi * i / points - math.pi / 2))
+                          for i in range(2 * points)]
+        d.polygon(ring(1), fill=255)
+        d.polygon(ring(0.9), fill=0)
         if extra:
             d.ellipse([c + 60, c + 60, c + 140, c + 140], outline=255, width=6)
-        b = img.getbbox()
-        return symmetry(img, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2))
+        return symmetry(img, centre(img))
 
-    even, lopsided = star(False), star(True)
+    even, lopsided, seven = star(False), star(True), star(False, points=7)
     good, slab, part = (measure(square(f)) for f in (lattice, pinholes, half))
     tiles = [square(lattice), square(half)]
     im = compose(tiles, ["a-lattice", "b-half"])
@@ -249,6 +262,7 @@ def self_test():
         ("the caption leaves the tile as drawn", measure(im.crop((0, 0, S, S))) == good),
         ("a centred six-fold star matches itself six ways", even[0] > 0.95 and even[1] == 6),
         ("the same star with a blob to one side does not", lopsided[0] < 0.9),
+        ("a seven-point star, a point up, matches itself seven ways", seven[0] > 0.95 and seven[1] == 7),
     ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
