@@ -5,7 +5,7 @@ date: 2026-09-30
 # CS-6 scored 0.73 on symmetry because the turn was about the wrong point
 
 Was catalog-expansion backlog item 8, now in its [done list](../tasks/catalog-expansion/done.md).
-Fixed by bikar #290 and 3d-models #PR.
+Fixed by bikar #290 and 3d-models #453.
 
 ## What was suspected
 
