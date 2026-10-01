@@ -36,7 +36,7 @@ import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir } from "../paths.js";
-import { writePlatePreview } from "../threemf.js";
+import { writePlatePreview, readBeds, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
@@ -60,6 +60,7 @@ export interface ManifestItemIteration {
 export type ManifestItem = ManifestItemBkr | ManifestItemIteration;
 export interface PlateManifest {
   bed?: string; // bed footprint name (default x2d)
+  beds?: number; // the most beds the arrange may use (default 1); a spill past it is refused
   profile?: PlateProfile; // the ONE slice profile the plate is sliced under
   items: ManifestItem[];
 }
@@ -113,8 +114,12 @@ export function parseManifest(text: string): PlateManifest {
       }
     }
   });
+  if (m.beds !== undefined && (typeof m.beds !== "number" || !Number.isInteger(m.beds) || m.beds < 1)) {
+    throw new Error(`\`beds:\` must be an integer >= 1 (the most beds the plate may use), got ${JSON.stringify(m.beds)}`);
+  }
   return {
     bed: typeof m.bed === "string" ? m.bed : undefined,
+    beds: typeof m.beds === "number" ? m.beds : undefined,
     profile: (m.profile as PlateProfile) ?? undefined,
     items: items as ManifestItem[],
   };
@@ -178,6 +183,18 @@ export function bedFitPrecheck(parts: PartFootprint[], bed: Bed): PrecheckResult
 }
 
 // ── The verb ─────────────────────────────────────────────────────────────────────────────────────
+
+/**
+ * The items `--arrange` put past the allowed beds. Studio opens a second bed when the first is full
+ * and `print send` runs one bed, so a spill is items that silently never print (minis-05: 12 objects
+ * sliced as 11 + 1). PURE: beds from the slice, the STL basename each entry was handed in under
+ * (`<iteration>.stl`), and the limit. [] when the plate fits.
+ */
+export function spilledItems(beds: SlicedBed[], entryByStl: Map<string, string[]>, maxBeds: number): string[] {
+  return beds
+    .filter((b) => b.index > maxBeds)
+    .flatMap((b) => b.objects.map((o) => `${(entryByStl.get(o) ?? [o]).join(" / ")} (bed ${b.index})`));
+}
 
 interface ComposeOpts {
   out?: string;
@@ -333,6 +350,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const settingsName = opts.settings ?? manifest.profile?.settings;
   const filamentName = opts.filament ?? manifest.profile?.filament;
   const bedName = opts.bed ?? manifest.bed ?? "x2d";
+  const maxBeds = manifest.beds ?? 1;
   let bed: Bed;
   try {
     bed = resolveBed(bedName);
@@ -485,6 +503,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     for (const r of resolved) console.log(`  ${r.entry}: ${r.iteration} ×${r.count} (${pieceLabel(r)})`);
     console.log(`bed-fit pre-check: ${check.ok ? "PASS (necessary only — --arrange decides tiling)" : "FAIL"}`);
     for (const f of check.failures) console.log(`  ✗ ${f}`);
+    console.log(`beds allowed: ${maxBeds} (the slice decides; a spill past it is refused after slicing)`);
     if (!studioBin) console.log("(BambuStudio not found — preset names shown unresolved)");
     console.log("dry run — would execute:");
     console.log([studioBin ?? "<BambuStudio>", ...studioArgs].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" "));
@@ -524,6 +543,26 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   }
   const kb = Math.round(statSync(outPath).size / 1024);
   if (!(await enforceSliceCarriesPresets(outPath, presets))) {
+    process.exitCode = 1;
+    return;
+  }
+
+  // A plate that spilled onto more beds than the manifest allows is refused: no sidecar, no record,
+  // so `print send` has nothing fresh to gate on. The .3mf stays for a look at what overflowed.
+  const beds = (await readBeds(outPath)) ?? [];
+  const entryByStl = new Map<string, string[]>();
+  for (const r of resolved) {
+    const key = `${r.iteration}.stl`;
+    const label = `${r.entry} ${basename(r.sourcePath)}${r.piece ? ` piece ${r.piece}` : ""}`;
+    entryByStl.set(key, [...(entryByStl.get(key) ?? []), label]);
+  }
+  const spilled = spilledItems(beds, entryByStl, maxBeds);
+  if (spilled.length > 0) {
+    console.error(
+      `the plate spilled onto ${beds.length} beds (allowed ${maxBeds}) — ${spilled.length} object(s) would not print:`,
+    );
+    for (const s of spilled) console.error(`  ✗ ${s}`);
+    console.error(`take items off, or set \`beds: ${beds.length}\` in the manifest if the spill is meant. (${outPath})`);
     process.exitCode = 1;
     return;
   }

@@ -37,8 +37,9 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
      fill, anything near-solid).
    - The bed: slice locally, **from a scratch directory**, because `bambu slice compose` writes
      `build/plates/` and `.bambu/records/` into whatever directory it runs in. The bed picture
-     is plate_1.png in the Metadata folder inside the `.3mf`; a plate_2.png there means the plate spilled onto a
-     second bed. `bambu validate sliced` does not flag that yet, so look for it.
+     is plate_1.png in the Metadata folder inside the `.3mf`. A plate that spills onto a second
+     bed is refused by `bambu slice compose`, naming what spilled, unless the recipe sets
+     `beds: <n>`; `bambu validate sliced` prints the bed count and fails past `--beds`.
    - `minutes`, `grams` and `bed_plates` come from that slice. Shrink every picture
      (`magick in.png -resize 1400x -strip -colors 64 PNG8:out.png`) into `<plate>-media/`.
    - Set `risk:` by the machine, not the print: `watch` for small loose parts or anything a

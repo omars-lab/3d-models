@@ -98,14 +98,17 @@ machine.
 ## Fix before approval: the second bed
 
 `bambu slice compose` packed ten objects on bed 1 and put the eleventh coaster on a bed 2.
-`bambu validate sliced` reports "objects: 11" and does not mention the second bed. So a send
-of bed 1 alone would pass every check and print a key coaster with no partner.
+`bambu validate sliced` reported "objects: 11" and did not mention the second bed. So a send
+of bed 1 alone would have passed every check and printed a key coaster with no partner. Since
+2026-09-30 the tools catch it: `slice compose` refuses this recipe and names the key coaster
+on bed 2, and `validate sliced` reports "objects: 12" and "beds: 2" and fails. To keep two
+beds, the recipe needs `beds: 2`.
 
 | | As it stands, two beds | Drop the plain pair (my pick) | Move the plain pair to minis-06 |
 |---|---|---|---|
 | **Pros** | No recipe change; every pair on the plates | One bed, 3 h 31 m, 29 g; both key coasters print together; keeps minis-06's dovetail pair | One bed each; the plain pair still prints |
-| **Cons** | Both beds must be sent, and nothing checks that; the key pair prints on two runs | The plain reference is the one CS-1 frame from [minis-04](minis-04.md), sliced on the fallback presets; the band is geometry, so the slice barely matters | minis-06 loses its dovetail control pair, the retest of the new slot against minis-04's "pegs too tight" |
-| **What it leads to** | A tooling fix first: `validate sliced` must count beds | ROI goes from 1.72 to about 2.6, so minis-05 moves to the top of the queue | minis-06's header already allows it; the slot retest waits for another plate |
+| **Cons** | Both beds must be sent, one run each; the key pair prints on two runs | The plain reference is the one CS-1 frame from [minis-04](minis-04.md), sliced on the fallback presets; the band is geometry, so the slice barely matters | minis-06 loses its dovetail control pair, the retest of the new slot against minis-04's "pegs too tight" |
+| **What it leads to** | The recipe gets `beds: 2`, which the tools now check | ROI goes from 1.72 to about 2.6, so minis-05 moves to the top of the queue | minis-06's header already allows it; the slot retest waits for another plate |
 
 ![minis-05 without the plain pair, one bed](minis-05-media/bed-without-plain-pair.png)
 

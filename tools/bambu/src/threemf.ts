@@ -145,3 +145,38 @@ export async function readUsedFilaments(threemf: string, plate = 1): Promise<num
   if (!raw) return null;
   return parseUsedFilaments(raw, plate);
 }
+
+/** One bed of a sliced `.3mf`: Bambu Studio's `--arrange` opens a second bed (plate) when the first
+ *  is full, and each gets its own `<plate>` in slice_info.config and its own `plate_<n>.gcode`. */
+export interface SlicedBed {
+  index: number; // 1-based plate index
+  objects: string[]; // object names on this bed (the input STL basenames, e.g. "it-<sha12>.stl")
+  predictionS: number | null; // the slicer's time estimate for this bed alone
+}
+
+/**
+ * Every bed in `Metadata/slice_info.config`, in index order. PURE. A plate that spilled onto a
+ * second bed prints only bed 1 on a send (the default `--plate 1`), so the bed count is the thing to
+ * check — minis-05 sliced 12 objects as 11 + 1 and nothing said so. [] when no `<plate>` is listed.
+ */
+export function parseBeds(xml: string): SlicedBed[] {
+  const beds: SlicedBed[] = [];
+  for (const block of xml.match(/<plate>[\s\S]*?<\/plate>/g) ?? []) {
+    const index = block.match(/<metadata\s+key="index"\s+value="(\d+)"/);
+    if (!index) continue;
+    const pred = block.match(/<metadata\s+key="prediction"\s+value="(\d+(?:\.\d+)?)"/);
+    beds.push({
+      index: Number(index[1]),
+      objects: [...block.matchAll(/<object\b[^>]*\bname="([^"]*)"/g)].map((m) => m[1] ?? ""),
+      predictionS: pred ? Number(pred[1]) : null,
+    });
+  }
+  return beds.sort((a, b) => a.index - b.index);
+}
+
+/** Read the beds of a sliced `.3mf`. null when the .3mf has no slice_info (not sliced). */
+export async function readBeds(threemf: string): Promise<SlicedBed[] | null> {
+  const raw = await readMember(threemf, "Metadata/slice_info.config");
+  if (!raw) return null;
+  return parseBeds(raw);
+}
