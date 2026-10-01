@@ -4,6 +4,9 @@ Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
 - 2026-10-01 — The studio deploy check reads pages through the login gate again. The CI service token had not expired; the Service Auth policy that let it in was gone from both studio Access apps. Omar added it back ("allow local dev service token"), and the re-run of bikar run 36796118992 passed every check, with content read through the token on bikar-studio.pages.dev
 - 2026-10-01 — `@naqshcoffee/qiyas-schema` 0.3.2 published to GitHub Packages. It carries youtube's newer construction schema, and 0.3.1's first copy of it. The `schema-v0.3.2` tag (bikar f169537) went up on 2026-09-30. Its publish run hit the billing block, then passed on a re-run once the block lifted (bikar #289, run 36792672524)
+- 2026-09-29 — Vault threads xh9k3r, vlz2rj and 4wf3zp answered: the review threads carried to their moved notes and the `-b` rough UI kept as HTML beside its picture (3d-models #411), side-by-side tables sized so the picture reads in Obsidian (3d-models #412), and the decisions log, plan and backlog moved into `docs/working-model/` with the resolved reply carried (3d-models #413, #414)
+- 2026-09-28 — Pattern catalog vault, step 1 done: Omar's first comment on the CS-1 note (thread wtsm68) was answered with `reviews reply`. Pattern notes are now named by title plus catalog id, with the YouTube id kept as a property and an alias (3d-models #386); the review-md bug that put the comment anchor on the frontmatter's closing `---` is omars-lab/review-md #19. Step 2, the sync tool, stays in the backlog
+- 2026-09-28 — The Obsidian vault set up: the vault-setup skill and `tools/vault_audit.py`, note properties, Bases views and a home page (3d-models #388, D-082); the audit then checks each folder's outline (D9) and keeps `.base` views in Obsidian's saved form (D10) (3d-models #391)
 
 ## From the session task board, before the split
 

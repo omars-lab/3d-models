@@ -14,6 +14,14 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 Nothing open right now.
 
+## Waiting on Omar
+
+- **Three of the print review's six calls**, in
+  [print-review-design.md](../../design/printing/print-review-design.md) §9: one queue for every
+  plate (call 1), the scoring weights (call 4), and whether an approval lapses when its recipe
+  changes (call 6). Calls 2, 3 and 5 are tick boxes on the plate pages and sit in the
+  [coaster-pipeline backlog](../coaster-pipeline/backlog.md)'s owner-gated list.
+
 ## Found elsewhere, maybe this loop's
 
 - `layout report` production metrics for the tile wall (W3): plates at the declared bed size,
