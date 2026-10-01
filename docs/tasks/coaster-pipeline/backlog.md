@@ -38,6 +38,12 @@ Sending a print and which filament to load.
   sheets, the bed pictures and the cost. minis-05 as written spills one key coaster onto a
   second bed (found 2026-09-30); its page has the three fixes. The order between them is on
   [the plates page](../../plates/README.md). The send and the filament are Omar's.
+- **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
+  [sheets-05](../../plates/sheets-05.md)** — designed, at `planned`: none can be built yet, so
+  none has a recipe, a slice or a tick box to answer. Each page lists what it waits on (the
+  builds are catalog-expansion item 9). Their order by value is computed on
+  [the plates page](../../plates/README.md), not kept here. sheets-04 (the gBV fit) also waits on
+  Omar's yes to failure detection and a watched first layer. Prints are held for last.
 - **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.

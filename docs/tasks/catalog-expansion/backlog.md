@@ -344,11 +344,15 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    thread iykpc9 on the smooth-lines design, asked for printed sheets of labeled shape subsets
    before making the §6 calls. The design is
    [sampler-sheets-design.md](../../design/coaster/sampler-sheets-design.md) (draft): true-size
-   30 mm windows of CS-1, CS-2 and gBV standing on a card with engraved row and column codes, four
-   sheets (edge and top, star points, soft weld, fit). Its three calls are Omar's. Sheet 1 waits on
-   item 7 (the true edge) and on a window option for coasters in bikar; sheets 2 and 3 wait on
-   smooth-lines options 5 and 8; sheet 4 on item 6's loose-piece output. Once a sheet plate exists,
-   its print goes on the coaster-pipeline loop's owner-gated list.
+   30 mm windows of CS-1, CS-2 and gBV standing on a card with engraved row and column codes, five
+   sheets (edge and top, star points, soft weld, fit, fill height). Sheets 4 and 5 were added the
+   same day for loose-pieces calls 4 and 3 (Omar, thread tfuhdk), with three pictures for call 2.
+   Its three calls are Omar's. Sheet 1 waits on item 7 (the true edge) and on a window option for
+   coasters in bikar; sheets 2 and 3 wait on smooth-lines options 5 and 8; sheet 4 on item 7 and
+   item 6's loose-piece output; sheet 5's raised row on raised fills (loose-pieces §6 item 1, a
+   bikar branch is enough) and its other rows on the window. Each sheet already has a plate page
+   at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
+   is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
 
 ## Handed to the video loop
 

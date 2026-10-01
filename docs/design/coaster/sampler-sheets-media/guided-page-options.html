@@ -1,0 +1,203 @@
+<!doctype html>
+<!-- The three places the "assemble your own coaster" page could live (loose-pieces §7 call 2),
+     drawn in the Coaster Lab's own colors (bikar packages/lab/src/style.css at origin/main) and,
+     for the written how-to, the studio's document colors (packages/lab/src/design/tokens.css).
+     Layout mockups, not the product: the coaster is a stand-in drawing. Pick the view with the
+     hash. Re-render the three PNGs with:
+     for v in lab page howto; do "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+       --headless --hide-scrollbars --window-size=1000,600 \
+       --screenshot=guided-$v.png "file://$PWD/guided-page-options.html#$v"; done
+     then shrink each: magick guided-$v.png -strip -colors 64 PNG8:guided-$v.png -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Guided page options</title>
+<style>
+  /* Coaster Lab tokens, copied from packages/lab/src/style.css */
+  :root { --bg: #14120d; --panel: #1d1a13; --panel-edge: #2c2718; --ink: #e8e2d0;
+          --ink-dim: #9a917a; --gold: #d6b254; --gold-dim: #8a733a; --pass: #7fbf6a;
+          /* studio document tokens, copied from packages/lab/src/design/tokens.css (light) */
+          --paper: #e9ebed; --dpanel: #f5f6f7; --dpanel-2: #dfe3e5; --dink: #16191c;
+          --dink-soft: #5c6469; --rule: #c6ccd0; --accent: #1f6a65; --accent-soft: #d2e2e0;
+          --mono: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 1000px; height: 600px; overflow: hidden; }
+  .view { display: none; height: 600px; }
+  .view.on { display: flex; flex-direction: column; }
+  .lab { background: var(--bg); color: var(--ink);
+         font-family: 'Avenir Next', 'Segoe UI', system-ui, sans-serif; }
+  .lab-header { display: flex; align-items: baseline; gap: 1rem; padding: 0.8rem 1.4rem;
+                border-bottom: 1px solid var(--panel-edge); }
+  .lab-header h1 { margin: 0; font-size: 1.15rem; letter-spacing: 0.08em; color: var(--gold);
+                   text-transform: uppercase; }
+  .tagline { margin: 0; font-size: 0.82rem; color: var(--ink-dim); flex: 1; }
+  .gallery-link { color: var(--gold); font-size: 0.82rem; text-decoration: none; }
+  .steps { display: flex; gap: 0.35rem; padding: 0.6rem 1.4rem; border-bottom: 1px solid var(--panel-edge);
+           background: var(--panel); }
+  .step { font-size: 0.74rem; padding: 0.25rem 0.6rem; border-radius: 999px;
+          border: 1px solid var(--gold-dim); color: var(--ink-dim); }
+  .step.done { color: var(--ink); }
+  .step.now { background: var(--gold); border-color: var(--gold); color: #1d1a13; font-weight: 600; }
+  .main { display: flex; flex: 1; min-height: 0; }
+  .panel { width: 300px; padding: 1rem 1.2rem; background: var(--panel);
+           border-right: 1px solid var(--panel-edge); }
+  .panel h2 { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+              color: var(--ink-dim); margin: 0 0 0.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+  .chip { border: 1px solid var(--gold-dim); border-radius: 999px; padding: 0.25rem 0.7rem;
+          font-size: 0.78rem; color: var(--ink); }
+  .chip.active { background: var(--gold); border-color: var(--gold); color: #1d1a13; font-weight: 600; }
+  .row { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 0.35rem 0;
+         border-bottom: 1px solid var(--panel-edge); }
+  .row b { color: var(--gold); font-weight: 600; }
+  .note { font-size: 0.74rem; color: var(--ink-dim); margin: 0.7rem 0 0; line-height: 1.45; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .nav { position: absolute; bottom: 14px; right: 18px; display: flex; gap: 0.5rem; }
+  .btn { font-size: 0.8rem; padding: 0.35rem 0.9rem; border: 1px solid var(--gold-dim);
+         border-radius: 4px; color: var(--ink); background: none; }
+  .btn.go { background: var(--gold); color: #1d1a13; border-color: var(--gold); font-weight: 600; }
+  .toggle { font-size: 0.74rem; color: var(--ink-dim); border: 1px solid var(--panel-edge);
+            border-radius: 999px; padding: 0.15rem 0.6rem; }
+  .toggle b { color: var(--gold); }
+  .tag { position: absolute; top: 12px; left: 14px; font-size: 0.7rem; color: var(--ink-dim);
+         font-family: var(--mono); }
+  .side { width: 300px; padding: 1rem 1.2rem; background: var(--panel);
+          border-left: 1px solid var(--panel-edge); }
+  .vstep { display: flex; gap: 0.6rem; font-size: 0.8rem; padding: 0.4rem 0; color: var(--ink-dim); }
+  .vstep i { font-style: normal; width: 1.3rem; height: 1.3rem; border-radius: 50%;
+             border: 1px solid var(--gold-dim); display: inline-flex; align-items: center;
+             justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+  .vstep.now { color: var(--ink); font-weight: 600; }
+  .vstep.now i { background: var(--gold); color: #1d1a13; border-color: var(--gold); }
+  .vstep.done { color: var(--ink); }
+  /* the written how-to, in the studio's document style */
+  .doc { background: var(--paper); color: var(--dink); font-family: system-ui, -apple-system, sans-serif; }
+  .sheet { padding: 1.6rem 2.2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em;
+             text-transform: uppercase; color: var(--dink-soft); }
+  .doc h1 { font-family: var(--mono); font-size: 1.5rem; margin: 0; }
+  .standfirst { color: var(--dink-soft); margin: 0; font-size: 0.95rem; max-width: 70ch; }
+  .howto { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
+  .card { background: var(--dpanel); border: 1px solid var(--rule); padding: 0.7rem;
+          display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.8rem; }
+  .card h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em;
+             text-transform: uppercase; color: var(--accent); margin: 0; }
+  .shot { height: 84px; background: var(--dpanel-2); border: 1px solid var(--rule);
+          display: flex; align-items: center; justify-content: center; color: var(--dink-soft);
+          font-family: var(--mono); font-size: 0.66rem; }
+  .open { align-self: flex-start; font-family: var(--mono); font-size: 0.8rem; padding: 0.4rem 0.8rem;
+          border: 1px solid var(--accent); color: var(--accent); border-radius: 2px; }
+  .foot { font-size: 0.78rem; color: var(--dink-soft); border-top: 1px solid var(--rule); padding-top: 0.7rem; }
+</style>
+</head>
+<body>
+
+<!-- 1. A guided mode inside the Coaster Lab -->
+<section class="view lab" id="lab">
+  <header class="lab-header">
+    <h1>Coaster Lab</h1>
+    <p class="tagline">coaster.html, the same page, the same link</p>
+    <span class="toggle"><b>Guided</b> · All knobs</span>
+    <a class="gallery-link">&larr; Studio</a>
+  </header>
+  <nav class="steps">
+    <span class="step done">1 Pattern</span><span class="step now">2 Loose rings</span>
+    <span class="step">3 Colors</span><span class="step">4 Height</span>
+    <span class="step">5 Parts</span><span class="step">6 Print</span><span class="step">7 Put together</span>
+  </nav>
+  <div class="main">
+    <aside class="panel">
+      <h2>Orbits</h2>
+      <div class="chips"><span class="chip active">Snowflake</span><span class="chip">Stars</span><span class="chip">None</span></div>
+      <div class="row"><span>Ring 1</span><b>loose · 6 pieces</b></div>
+      <div class="row"><span>Ring 3</span><b>loose · 6 pieces</b></div>
+      <div class="row"><span>Ring 5</span><b>loose · 6 pieces</b></div>
+      <div class="row"><span>Ring 7</span><b>loose · 6 pieces</b></div>
+      <div class="row"><span>Rings 2, 4, 6</span><span>frame</span></div>
+      <p class="note">Only this step's panel shows. "All knobs" puts every panel back, as today.</p>
+    </aside>
+    <div class="stage" data-coaster></div>
+  </div>
+</section>
+
+<!-- 2. A separate page beside the Lab -->
+<section class="view lab" id="page">
+  <header class="lab-header">
+    <h1>Assemble a coaster</h1>
+    <p class="tagline">assemble.html, a new page next to coaster.html</p>
+    <a class="gallery-link">Open in Coaster Lab &rarr;</a>
+  </header>
+  <div class="main">
+    <div class="stage" data-coaster></div>
+    <aside class="side">
+      <div class="vstep done"><i>1</i>Pick a pattern</div>
+      <div class="vstep now"><i>2</i>Pick the loose rings</div>
+      <div class="vstep"><i>3</i>Pick colors</div>
+      <div class="vstep"><i>4</i>Pick the height</div>
+      <div class="vstep"><i>5</i>Parts list</div>
+      <div class="vstep"><i>6</i>Download the files</div>
+      <div class="vstep"><i>7</i>Put it together</div>
+      <p class="note">No knob panel, no code drawer. The same panels as the Lab, wired a second
+        time unless both pages import the same modules.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- 3. A written how-to, no new UI -->
+<section class="view doc" id="howto">
+  <div class="sheet">
+    <span class="eyebrow">3d-models · gallery · how-to</span>
+    <h1>Assemble your own coaster</h1>
+    <p class="standfirst">Seven steps in the Coaster Lab as it is today, each with a picture of the
+      panel to use. Nothing new is built; you find each panel yourself.</p>
+    <div class="howto">
+      <div class="card"><h3>1 · Pattern</h3><div class="shot">Coaster panel</div>Pick a tile.</div>
+      <div class="card"><h3>2 · Loose rings</h3><div class="shot">Orbits panel</div>Tick the rings that come out.</div>
+      <div class="card"><h3>3 · Colors</h3><div class="shot">Colors panel</div>One per loose ring, one for the frame.</div>
+      <div class="card"><h3>4 · Height</h3><div class="shot">Knobs panel</div>Flush, raised or lowered.</div>
+      <div class="card"><h3>5 · Parts</h3><div class="shot">parts list</div>Frame ×1, pieces per color.</div>
+      <div class="card"><h3>6 · Print</h3><div class="shot">Download STL</div>One file per color.</div>
+      <div class="card"><h3>7 · Put together</h3><div class="shot">photo</div>Which ring goes where.</div>
+      <div class="card"><h3>&nbsp;</h3><span class="open">Open the Coaster Lab &rarr;</span></div>
+    </div>
+    <p class="foot">Pictures go stale when a panel changes, and nothing checks them.</p>
+  </div>
+</section>
+
+<script>
+  // A stand-in coaster: a square slab, an eight-point star, a ring of petals. Gold is the loose
+  // ring the step has picked; the rest is frame.
+  const NS = 'http://www.w3.org/2000/svg';
+  function coaster() {
+    const s = document.createElementNS(NS, 'svg');
+    s.setAttribute('viewBox', '-110 -110 220 220');
+    s.setAttribute('width', '380'); s.setAttribute('height', '380');
+    const add = (tag, attrs) => { const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]); s.appendChild(e); return e; };
+    add('rect', { x: -100, y: -100, width: 200, height: 200, rx: 4, fill: '#333333', stroke: '#2c2718' });
+    const star = [];
+    for (let i = 0; i < 16; i++) { const r = i % 2 ? 22 : 42, a = Math.PI * i / 8;
+      star.push(`${(r * Math.cos(a)).toFixed(1)},${(r * Math.sin(a)).toFixed(1)}`); }
+    add('polygon', { points: star.join(' '), fill: '#d6b254', stroke: '#14120d', 'stroke-width': 3 });
+    for (let i = 0; i < 8; i++) { const a = Math.PI * (i + 0.5) / 4;
+      add('ellipse', { cx: (64 * Math.cos(a)).toFixed(1), cy: (64 * Math.sin(a)).toFixed(1), rx: 13, ry: 22,
+        transform: `rotate(${(a * 180 / Math.PI + 90).toFixed(1)} ${(64 * Math.cos(a)).toFixed(1)} ${(64 * Math.sin(a)).toFixed(1)})`,
+        fill: '#9b1b30', stroke: '#14120d', 'stroke-width': 3 }); }
+    for (const [x, y] of [[-88, -88], [88, -88], [-88, 88], [88, 88]])
+      add('circle', { cx: x, cy: y, r: 8, fill: '#d6b254', stroke: '#14120d', 'stroke-width': 3 });
+    return s;
+  }
+  document.querySelectorAll('[data-coaster]').forEach(el => {
+    el.appendChild(coaster());
+    const t = document.createElement('span'); t.className = 'tag';
+    t.textContent = 'stand-in drawing, not a render'; el.appendChild(t);
+  });
+  document.querySelector('#lab .stage').insertAdjacentHTML('beforeend',
+    '<div class="nav"><span class="btn">Back</span><span class="btn go">Next: colors</span></div>');
+  document.querySelector('#page .stage').insertAdjacentHTML('beforeend',
+    '<div class="nav"><span class="btn">Back</span><span class="btn go">Next</span></div>');
+  const v = (location.hash || '#lab').slice(1);
+  document.getElementById(v).classList.add('on');
+</script>
+</body>
+</html>

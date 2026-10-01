@@ -31,6 +31,11 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/plates/minis-06.md): In short, What it is, Why
    print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`.
+   A plate that is designed but waits on a build before it can have a recipe (the sampler
+   sheets, [sheets-01](../../../docs/plates/sheets-01.md)) gets its page now, at `planned`,
+   with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue
+   shows it by value on its "waiting on a build" line. When its recipe lands, drop `needs:` and
+   move it to `proposed`.
 3. **Pictures and cost, before `waiting`.** A page moves to `waiting` only with pictures.
    - The review sheet: `python3 tools/print_review.py sheet <out.png> <pieces.stl>`, from the
      review-print skill. Read it yourself and write what you saw on the page (openness, art

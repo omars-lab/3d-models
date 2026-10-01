@@ -10,7 +10,11 @@ status: draft
 > — Omar, comment on the [smooth-lines design](smooth-lines-design.md), 2026-10-01
 
 **Status:** draft, 2026-10-01. Nothing here is built. Sheet 1 is the first one worth printing, and
-it waits on two pieces of bikar work (§3). Printing stays Omar's call and stays last.
+it waits on two pieces of bikar work (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
+and the three guided-page pictures were added the same day, after Omar asked on the
+[loose-pieces design](loose-pieces-design.md) how its calls could be made "without a sheet of poc
+prints for us to inspect". Each sheet has a plate page in [`docs/plates/`](../../plates/README.md)
+that waits on the build it needs.
 
 ## 0. The answer in one screen
 
@@ -24,15 +28,19 @@ A sampler sheet is one flat card with small samples standing on it in a grid.
   row. Nothing is engraved on a sample, so a label can never change the thing being judged. The
   values behind each code sit on the plate's review page.
 
-Four sheets cover the [smooth-lines open calls](smooth-lines-design.md#6-open-calls-for-omar)
-and the loose-pieces fit:
+Five sheets cover the [smooth-lines open calls](smooth-lines-design.md#6-open-calls-for-omar)
+and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and 4:
 
-| Sheet | Answers | Can it be made today? |
-|---|---|---|
-| 1. Edge and top | call 1 (do the steps show?) and call 4 (the top) | no: needs the new edge and the window cut |
-| 2. Star points | call 2 (sharp or softened) | no: needs hole-point rounding |
-| 3. Soft weld | call 3 (how much SKIMS) | no: needs the soft weld |
-| 4. Fit | the loose-pieces gaps (D-090) | no: needs the loose-piece output |
+| Sheet | Answers | Can it be made today? | Plate page |
+|---|---|---|---|
+| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the new edge and the window cut | [sheets-01](../../plates/sheets-01.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding | [sheets-02](../../plates/sheets-02.md) |
+| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld | [sheets-03](../../plates/sheets-03.md) |
+| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs true edges and the loose-piece output | [sheets-04](../../plates/sheets-04.md) |
+| 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
+
+Loose-pieces call 2, where the guided page lives, is not something to hold in the hand. It gets
+three pictures instead ([§3](#where-the-guided-page-lives-three-pictures-not-a-sheet)).
 
 ![Sheet 1 mockup: a 128 × 156 mm card, three columns (CS-1, CS-2, GBV) by four rows (A TODAY,
 B TRUE, C DOME, D FINE), labels engraved on the card](sampler-sheets-media/sheet-1-mockup.png)
@@ -109,15 +117,85 @@ light, strong. The two smooth-lines researchers chose different amounts (one use
 CS-2, the other 1.2 and 2.4 mm on CS-1), so if those stay unsettled the sheet carries both lights.
 Waits on the soft weld (option 8), which is not built.
 
-**Sheet 4 — fit.** Different on purpose. The card is the loose-pieces solid slab with gBV pockets
-cut into it, and the pieces sit loose in them; rows are the four test gaps from the
-[loose-pieces design](loose-pieces-design.md) (0.05 to 0.20 mm). Here the bed side and the snug
-of a piece in a pocket are the thing being judged, so the samples cannot stand on the card. Waits
-on the loose-piece output (catalog item 6).
+**Sheet 4 — fit.** This sheet is the answer to
+[loose-pieces call 4](loose-pieces-design.md#7-open-calls-for-omar), and it keeps the gaps that
+page proposes. Different on purpose: the card is the loose-pieces backed frame (a solid slab with
+pockets, F1) for the gBV coaster, and the pieces sit loose in it. The frame prints once; only the
+pieces change.
+
+| Code | What it is |
+|---|---|
+| GAP 05, GAP 10, GAP 15, GAP 20 | one ring of pieces at 0.05, 0.10, 0.15 and 0.20 mm per face, the same shape at each gap |
+| STAR 15 | gBV's small five-point stars at 0.15 only, to see whether the tips catch at the default |
+
+The loose-pieces page put the four gaps on CS-1's ring 1 and the tip check on ring 5. D-090 moved
+the fit sample to gBV, whose small stars it names as the hardest case, so the stars take the tip
+check; which gBV ring carries the four gaps is read off `bikar bands` when the sheet is built. The
+codes go on the plate page and on the bags, not on the pieces or the frame: each gap set is its own plate item and goes in its own bag straight
+off the plate, because the sets look alike. Here the bed side and the snug of a piece in a pocket
+are what is judged, so the pieces cannot stand on a card.
+
+Before it can print, it needs: true edges in bikar
+([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first):
+the staircase is bigger than the gap under test), then the loose-piece output (loose-pieces §6
+items 2 and 3, catalog item 6). The window cut is not needed; the frame is the whole coaster.
+The pieces are the smallest things we would have printed, so the printer question on call 4 stays
+with it: failure detection on and the first layer watched, or the pieces do not go on the plate
+(loose-pieces §3.7).
+
+**Sheet 5 — fill height.** The answer to
+[loose-pieces call 3](loose-pieces-design.md#7-open-calls-for-omar): lowered, flush and raised fills
+side by side on the same 30 mm windows. Only the CS-2 fill coaster has a fill height today
+(`7apC5Q9QS-8-fill-coaster.bkr`, `relief both emboss 1.2 fills $fill`), so all three columns are
+windows of it: the centre star, a petal, an octagon. The samples print in the coaster's own colors
+(gold straps, ruby and slab fills), so each sample is several color parts, not one.
+
+| Code | What it is | Can it be made today? |
+|---|---|---|
+| A LOW | fills 0.6 mm, below the 1.2 mm straps (the multicolor design's lowered look) | yes: inside the preset's `range 0.2..1.2` |
+| B FLUSH | fills 1.2 mm, level with the straps | yes: the preset's default |
+| C HIGH | fills 1.8 mm, 0.6 mm above the straps | no: bikar's parser refuses it ("fills may be at most the relief height (equal is flush)"). Needs loose-pieces §6 item 1: lift the refusal, strap wins on height, the ramp into the fill, the feature floor counting raised fills, a wider preset range |
+| D PIECE | a loose piece 1.8 mm tall standing in a 1.2 mm pocket | only once the loose-piece output exists (sheet 4's build); left off otherwise, like sheet 1's D FINE |
+
+C against D is call 3 itself: if a raised fill and a tall loose piece look the same in the hand,
+raised fills can come only through loose pieces and the kernel work is not needed. Row C can be
+printed from a bikar branch, so the look is judged before anyone decides to merge the kernel
+change. A against B is also the multicolor design's open taste call,
+[flush or lowered](multicolor-design.md#3-the-look-flush-or-lowered-fills), which wanted the same
+two values side by side. Every row also needs what sheets 1 to 3 need: the window cut (§2), the card with its labels and
+the sheet plate (§5 steps 3 and 4), here with color parts at each cell, which the bambu tool does
+for a whole colored coaster but not yet per sample. One more thing is untried: the window cut was
+written for an `outline pattern` coaster, and this one is a square slab with the pattern
+inscribed.
 
 **Not on any sheet.** The slicer wall settings (option 10) are a per-plate setting, not a shape,
 so they ride along on whichever plate prints next. The mitred joins, varying width and the pillow
 top come later, as looks.
+
+### Where the guided page lives: three pictures, not a sheet
+
+[Loose-pieces call 2](loose-pieces-design.md#7-open-calls-for-omar) is about software, so it is
+decided on pictures. Each is HTML in the Coaster Lab's own colors, screenshotted headless; the
+coaster in them is a stand-in drawing. Source:
+`docs/design/coaster/sampler-sheets-media/guided-page-options.html`.
+
+![Option 1: the Coaster Lab with a step bar under its header, step 2 "Loose rings" lit, only the
+Orbits panel showing, and a Guided / All knobs switch](sampler-sheets-media/guided-lab.png)
+
+*Option 1, a guided mode in the Coaster Lab.* The same page and the same share link, with a step
+bar and one panel at a time; "All knobs" puts every panel back. Nothing is wired twice.
+
+![Option 2: a separate "Assemble a coaster" page with a large preview and a numbered list of
+seven steps on the right](sampler-sheets-media/guided-page.png)
+
+*Option 2, a separate page next to the Lab.* Cleaner, with no knobs, and easier to open to people
+outside later. The same panels are wired a second time unless both pages import the same modules.
+
+![Option 3: a light document page in this repo with eight cards, one per step, each a picture of
+a Lab panel](sampler-sheets-media/guided-howto.png)
+
+*Option 3, a written how-to.* No code. You find each panel in the Lab yourself, and the pictures go
+stale when a panel changes, with nothing to catch it.
 
 ## 4. Labels
 
@@ -155,8 +233,8 @@ The path, in order:
    substitute for them.
 3. Put the card in a bikar coupons file, with its engraved labels.
 4. Teach the bambu tool a sheet plate: one object, card plus samples at their cells.
-5. Write the sheet's plate file (a new sheets-01 in docs/plates) and its review page, with the row and column legend and every
-   value.
+5. Write the sheet's plate file (a `.yaml` named for the sheet) beside its review page, which
+   already waits at `planned`, and add the row and column legend with every value to the page.
 6. Compose with `--dry-run`, then the usual look (review-print) and queue (prioritize-prints).
 7. Stop at the owner gate. Sending, filament and timing are Omar's.
 
@@ -222,7 +300,11 @@ Tick one box per call. My pick is first, with its reason.
   [decisions log](../../working-model/decisions-log.md).
 - Read in bikar's `origin/main` on 2026-10-01: the coaster block's statements (no text, no window),
   `clip pattern to` in the pattern block, `text … engrave` on flat-topped pieces and its 37-glyph
-  font and O/0 check.
+  font and O/0 check; for sheet 5, the parser's refusal of fills above the relief height
+  (`packages/core/src/dsl/parser.ts`) and the fill preset
+  (`patterns/Constructions/7apC5Q9QS-8-fill-coaster.bkr`, `param fill = 1.2 range 0.2..1.2`).
+- Sheets 4 and 5 and the guided-page pictures: the [loose-pieces design](loose-pieces-design.md)
+  §2, §3.6, §3.7, §4, §5 B and §7, and the [multicolor design](multicolor-design.md) §3.
 - Read in this repo: the bambu tool's packing and its one-object-many-parts builder for colored
   coasters, and the X2D bed size.
 - The mockup is HTML screenshotted headless; re-render it with the command in its header.
