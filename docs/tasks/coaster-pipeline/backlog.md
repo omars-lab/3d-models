@@ -31,12 +31,16 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 
 Sending a print and which filament to load.
 
-- **The joins plates, [minis-05](../../plates/minis-05.yaml) and
-  [minis-06](../../plates/minis-06.yaml)** — waiting on Omar. One mated pair per join on
-  CS-1 at 80 mm: plain frame, butterfly key (with keys at clearance 0.05 / 0.10 / 0.15) and
-  tab on minis-05, dovetail and slim dovetail on minis-06 (ten coasters do not fit one bed).
-  Mesh gate, review sheet and compose dry run all pass (2026-09-26). The review sheet goes to
-  Omar first; the send and the filament are his.
+- **The joins plates, [minis-05](../../plates/minis-05.md) and
+  [minis-06](../../plates/minis-06.md)** — waiting on Omar's tick on each page. One mated pair
+  per join on CS-1 at 80 mm: plain frame, butterfly key (with keys at clearance 0.05 / 0.10 /
+  0.15) and tab on minis-05, dovetail and slim dovetail on minis-06. The pages carry the review
+  sheets, the bed pictures and the cost. minis-05 as written spills one key coaster onto a
+  second bed (found 2026-09-30); its page has the three fixes. The order between them is on
+  [the plates page](../../plates/README.md). The send and the filament are Omar's.
+- **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**
+  Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
+  tick boxes; a yes means writing the record, which is item 1 above for minis-01.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review

@@ -5,6 +5,10 @@
 # and are unique across every record (R2), and the gate prints how many records
 # it checked so an empty run reads as "0 records checked", not a false green (R4).
 # The design is docs/design/printing/prints-tab-design.md §7.
+# Then the plates gate (.claude/gates/plates_gate.py): each plate page in
+# docs/plates/ agrees with the records on its count, and with itself on its
+# approval, and the queue on docs/plates/README.md is current
+# (docs/design/printing/print-review-design.md §6).
 #
 # wholesale: make validate-prints
 # Override once: PRINTS_GATE_OK=1 git commit
@@ -23,4 +27,6 @@ fi
 # Whole-tree, not --staged: R2's cross-record photo uniqueness and R1's read of
 # a sibling repo are both facts across files that a staged-only scope cannot see.
 # Cheap at zero records — it prints the count and exits.
-exec python3 "$GATE"
+python3 "$GATE" || exit 1
+# A record changes a plate's count, so the plates gate runs whenever this hook does.
+exec python3 "$(dirname "$GATE")/plates_gate.py"

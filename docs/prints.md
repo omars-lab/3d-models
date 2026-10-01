@@ -10,49 +10,35 @@ not two: [D-046](working-model/decisions-log.md).
 
 The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 `prints.html` surface — the styled version a visitor lands on — is a later rung
-(S7); see the design doc §8–§9. Nothing here waits on that: this page renders the
-true empty state today and the same shape, populated, the day the first plate
-lands.
+(S7); see the design doc §8–§9. Nothing here waits on that.
 
 ## Records — what has actually printed
 
-Nothing yet. No plate has come off a machine, so there is no record to read. The
-gate agrees, and says so out loud rather than passing silently over an empty set:
+Newest first. Each record names its run, its plate and a verdict per piece; the prints gate
+checks every one.
 
-```
-$ make validate-prints
-prints: 0 records checked — docs/prints/ is empty (nothing printed yet)
-```
+- [2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md) — minis-03 at 80 mm and half the
+  height, plus the twist. Every piece `adjust`; the slice had fallen back to Bambu Studio's
+  built-in settings.
+- [2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md) — minimal-frames at 40 mm and a
+  dovetail pair. Every piece `adjust`: much too small, the pair loose.
 
-That printed count is the honest zero-state, not a false green — it is the whole
-reason the gate could ship before the first print ([the design doc](design/printing/prints-tab-design.md)
-§7, [D-046](working-model/decisions-log.md)).
-
-When the first record lands, this section becomes a list — one row per run, newest
-first — each naming its run, plate, status, what it measured, and which bet (if
-any) the reading moved. The first run will be Plate 1, the machine card, because
-it defines the process-profile header every later plate reuses (design doc §10).
+Nothing was measured with a tool on either, so no bet has moved yet. `make validate-prints`
+prints how many records it checked.
 
 ## Queue — what to print next
 
-The order is not decided here. It is [print register](tasks/coaster-pipeline/backlog.md) §3.8's argument,
-presented — this page stores no rank of its own, because a second scheduler is the
-one thing the design forbids ([design doc](design/printing/prints-tab-design.md) §6). Read the
-backlog for the live order and the reasoning; the plates in flight are:
+The order lives on [the plates page](plates/README.md), computed from each plate's review page
+and the weights in the
+[prioritize-prints skill](../.claude/skills/prioritize-prints/scoring.md). This page stores no
+rank of its own, because a second scheduler is the one thing the design forbids
+([design doc](design/printing/prints-tab-design.md) §6). A plate page also records whether
+Omar approved it and how many times it printed, counted from the records above.
 
-- **Plate 1 — Machine Card.** Defines the profile header and carries the readings
-  the most bets depend on; it is first for that reason, not because it is cheap.
-  → [print register](tasks/coaster-pipeline/backlog.md) §3.8, [`bets.md`](../.claude/skills/calibrate/bets.md)
-- **Plate 4 — the star orb.** The flagship confidence print. It settles no
-  calibration bet at all — which is exactly why the queue order and the
-  "bets it would settle" figure are shown as two different things, never one. A
-  plate can rank high and settle nothing.
-  → [print register](tasks/coaster-pipeline/backlog.md) §3.8
-
-Beside each plate, the populated tab shows how many bets a run would settle. That
-figure is **not** the rank, and the number itself is owned by
-[`bets.md`](../.claude/skills/calibrate/bets.md) and the backlog, not restated
-here — this reader points at the owner rather than keeping a copy that could drift.
+The calibration plates the [print register](tasks/coaster-pipeline/backlog.md) §2 sequences —
+Plate 1, the machine card, then Plate 4, the star orb — have no plate page yet, so they are not
+in that queue. Plate 4 settles no calibration bet at all, which is why the queue's value and
+"bets it would settle" are never the same number.
 
 ## What a record holds
 
