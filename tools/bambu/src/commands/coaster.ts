@@ -30,6 +30,7 @@ import {
   resolveBed,
   bedFitPrecheck,
   resolveManifestItems,
+  itemRenderFlags,
   type Bed,
   type PartFootprint,
   type PlateManifest,
@@ -111,8 +112,7 @@ async function renderParts(
   const outDir = join(scratch, r.iteration);
   mkdirSync(outDir, { recursive: true });
   const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "parts", "--pinch", pinch, "-o", outDir];
-  if (r.piece) args.push("--piece", r.piece);
-  for (const [k, v] of Object.entries(r.params)) args.push("--param", `${k}=${v}`);
+  args.push(...itemRenderFlags(r));
   const res = await runWithTimeout("node", args, { timeoutMs: 180_000, label: "bikar_render_parts" });
   if (res.code !== 0 || res.timedOut) {
     const tail = (res.stderr || res.stdout || "").trim().split("\n").slice(-6).join("\n");
@@ -367,7 +367,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
     if (!studioBin) {
       console.log("geometry verify: skipped — no headless BambuStudio found (install it or --no-verify-geometry).");
     } else {
-      const ok = await verifyGeometry(studioBin, members, coasters, settingsName, filamentName, opts, scratch);
+      const ok = await verifyGeometry(studioBin, members, coasters, settingsName, filamentName, opts.timeout, scratch);
       if (!ok) {
         console.error("geometry verify FAILED — the assembled plate did not slice clean headless (tag-stripped).");
         process.exitCode = 1;
@@ -384,6 +384,7 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
       source: r.sourceAtRef,
       piece: r.piece || undefined,
       params: r.params,
+      window: r.window || undefined,
       count: r.count,
       iteration: r.iteration,
     }));
@@ -433,13 +434,13 @@ async function writeColorPreview(
 /** Slice a TAG-STRIPPED copy of the assembled members headless and assert exit 0 + the expected object
  *  count. The versioned Application tag is rewritten to bare `BambuStudio` (headless-safe); no
  *  `--export-3mf` (it hangs the headless build). Returns true on a clean geometry slice. */
-async function verifyGeometry(
+export async function verifyGeometry(
   studioBin: string,
   members: ReturnType<typeof buildThreeMfMembers>,
   coasters: AssemblyCoaster[],
   settingsName: string,
   filamentName: string,
-  opts: CoasterOpts,
+  timeout: string,
   scratch: string,
 ): Promise<boolean> {
   const strippedPath = join(scratch, "verify.3mf");
@@ -460,11 +461,11 @@ async function verifyGeometry(
   }
   // The pivot doc's honest headless command: --load-settings <paths>, --slice 0, NO --export-3mf.
   const args = ["--debug", "2", "--load-settings", loadSettings, "--slice", "0", strippedPath, "--outputdir", outDir];
-  const timeoutMs = Math.max(30, Number(opts.timeout) || 300) * 1000;
+  const timeoutMs = Math.max(30, Number(timeout) || 300) * 1000;
   ev("coaster_verify_start", { objects: coasters.length });
   const res = await runWithTimeout(studioBin, args, { timeoutMs, label: "studio_verify" });
   if (res.timedOut) {
-    console.error(`geometry verify timed out after ${opts.timeout}s.`);
+    console.error(`geometry verify timed out after ${timeout}s.`);
     return false;
   }
   if (res.code !== 0) {

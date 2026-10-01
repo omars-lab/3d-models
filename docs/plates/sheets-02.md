@@ -18,8 +18,7 @@ risk: ok
 pictures: []
 needs:
   - "hole-point rounding in bikar (smooth-lines option 5, not built)"
-  - "the card with engraved labels, in a coupons file"
-  - "the sheet plate in the bambu tool: one object, card plus samples at their cells"
+  - "its card piece in bikar's Sampler-Cards.bkr, a few label lines like Sheet1Card"
 ---
 
 # sheets-02 — star points
@@ -50,8 +49,9 @@ No slice yet. **Risk: ok.** Flat card, samples fused to it.
 ## What it waits on
 
 - Hole-point rounding in bikar (smooth-lines option 5), not built.
-- The card and the sheet plate, the same as [sheets-01](sheets-01.md). The window cut shipped
-  2026-10-01 (bikar #293).
+- Its card piece: a few label lines in bikar's `Sampler-Cards.bkr`, like sheet 1's. The window cut
+  (bikar #293), the card's frame and the sheet plate (`bambu slice sheet`) are built, as
+  [sheets-01](sheets-01.md) uses them.
 
 ## Your call
 

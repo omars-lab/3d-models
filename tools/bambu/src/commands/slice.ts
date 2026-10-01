@@ -41,6 +41,7 @@ import {
 } from "../preset-chain.js";
 import { registerCompose } from "./compose.js";
 import { registerCoaster } from "./coaster.js";
+import { registerSheet } from "./sheet.js";
 
 const SLICEABLE = new Set([".stl", ".3mf", ".step", ".stp", ".obj"]);
 
@@ -574,4 +575,8 @@ export function registerSlice(program: Command): void {
   // assembled into a per-region AMS 3MF (coaster.ts, plate-composer-design.md §12). A distinct pipeline
   // from compose (parts render + direct 3MF assembly + tag-stripped geometry verify), not a mode of it.
   registerCoaster(slice);
+
+  // `slice sheet <sheet.yaml>` — a sampler sheet: a labeled card with coaster windows standing on their
+  // cells, one object (sheet.ts, sampler-sheets-design.md §5). Placed by position, so never arranged.
+  registerSheet(slice);
 }
