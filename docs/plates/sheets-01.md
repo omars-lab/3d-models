@@ -17,11 +17,11 @@ grams:
 bed_plates:
 risk: ok
 pictures:
+  - ../design/coaster/sampler-sheets-media/sheet-1-card.png
+  - ../design/coaster/sampler-sheets-media/sheet-1-samples.png
   - ../design/coaster/sampler-sheets-media/sheet-1-mockup.png
 needs:
   - "row A TODAY: the old staircase edge cut to a window (bikar main draws only the true edge, and the commit before it has no window)"
-  - "the card with engraved labels, in a coupons file"
-  - "the sheet plate in the bambu tool: one object, card plus samples at their cells"
 ---
 
 # sheets-01 — edge and top
@@ -29,21 +29,26 @@ needs:
 **In short.** One card, three 30 mm windows cut from real 90 mm coasters (a CS-1 crossing, a CS-2
 star, a gBV star), each in four versions: today's edge, the true edge, the true edge with the full
 dome, and a finer grid if the language can set it by then. It answers whether the steps on today's
-edges show at all, and which top to keep. It is the first sampler sheet worth printing. The window
-cut is built (bikar #293); the card, its labels and the plate are not.
+edges show at all, and which top to keep. It is the first sampler sheet worth printing. Rows B and C
+build today: the window cut (bikar #293), the labeled card (`Sampler-Cards.bkr`, piece Sheet1Card)
+and the plate ([`sheets-01.yaml`](sheets-01.yaml), assembled by `bambu slice sheet`). Row A does not
+yet, so the sheet is not for printing.
 
 ## What it is
 
 The layout is in the [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 1. Rows:
 
-| Code | What it is |
-|---|---|
-| A TODAY | today's edge in 0.4 mm squares, round 1 (the control) |
-| B TRUE | the edge drawn between grid points, round 1 |
-| C DOME | the same edge, round 1.5 |
-| D FINE | a 0.2 mm grid, round 1, only if the grid size can be set by then |
+| Code | What it is | Value |
+|---|---|---|
+| A TODAY | today's edge in 0.4 mm squares, round 1 (the control) | not built yet |
+| B TRUE | the edge drawn between grid points, round 1 (the file's default) | `round` 1 |
+| C DOME | the same edge, round 1.5 | `round` 1.5 |
 
-Columns: CS-1, CS-2, GBV. Card about 128 × 156 mm, one per plate.
+Columns: CS-1 crossing (window `30@9.7,1`), CS-2 star (`30@18.5,18.5`), GBV star (`30@0,0`), each
+cut from the coaster's own minimal file at 90 mm. The card is 138 × 122 × 1.4 mm with the codes
+engraved 0.6 mm deep, one per plate. D FINE, a 0.2 mm grid, is left off the card: no option sets
+the grid size, and a labeled empty row would read as a sample that failed. When one lands the card
+grows a row.
 
 ## Why print it
 
@@ -54,14 +59,23 @@ Columns: CS-1, CS-2, GBV. Card about 128 × 156 mm, one per plate.
 
 ## Pictures
 
-A layout mockup, not a render: the samples are stand-ins.
+What the plate builds today, drawn from the assembled mesh (`bambu slice sheet … --stl`, then
+`tools/print_review.py`). On the left are the card's top faces, with its engraved codes. On the
+right are the samples' top faces where they stand on the card: row B on top, row C below it with the
+narrower flat tops the dome leaves, and the top band empty for row A.
+
+![sheets-01 card: title, column heads CS-1, CS-2, GBV and row codes A TODAY, B TRUE, C DOME engraved](../design/coaster/sampler-sheets-media/sheet-1-card.png)
+![sheets-01 samples: six 30 mm windows in rows B and C, row A's band empty](../design/coaster/sampler-sheets-media/sheet-1-samples.png)
+
+The layout mockup the design started from:
 
 ![sheets-01 layout mockup](../design/coaster/sampler-sheets-media/sheet-1-mockup.png)
 
 ## Cost and risk
 
-No slice yet, so no time or filament. The card is the safety: every window stands on the card's
-footprint, not on its own thin feet.
+No time or filament yet: the plate is assembled and slices clean headless, but the print plan
+waits for row A. The card is the safety: every window stands on the card's footprint, not on its
+own thin feet.
 
 **Risk: ok.** Flat card, samples fused to it, nothing loose.
 
@@ -73,16 +87,16 @@ footprint, not on its own thin feet.
   shipped the same day after it (bikar #293), so the commit that still draws the staircase cannot
   cut a window. Row A needs one of the two brought to the other: the old edge as an option on
   main, or the coaster STLs vendored here before the re-vendor cut to the same 30 mm squares.
-- Rows B and C can be cut today: `--window 30@<x>,<y>` on each coaster's own file, at its 90 mm
-  scale, with the mesh check passing.
-- The card with its engraved labels, and the sheet plate in the bambu tool
-  ([§5](../design/coaster/sampler-sheets-design.md#5-from-the-design-to-the-plate)).
+- Everything else is built: rows B and C, the card and the plate
+  ([§5](../design/coaster/sampler-sheets-design.md#5-from-the-design-to-the-plate)). Built and
+  checked 2026-10-01: every window passes the mesh check, the layout check passes (each sample on
+  the card, none touching another), and the assembled plate slices clean headless.
 
 ## Your call
 
-Nothing to tick yet: the sheet cannot be built, so there is no slice, no time and no picture of
-the real thing. When its recipe lands this page moves to `proposed`, then to `waiting` with the
-review sheet and the slice, and the boxes below are the ones you will answer.
+Nothing to tick yet: without row A the sheet cannot answer its first question. When row A lands
+this page moves to `waiting` with the slice, its time and filament, and the boxes below are the ones
+you will answer.
 
 - [ ] **Approve as it stands**
 - [ ] **Hold** — say why in the notes

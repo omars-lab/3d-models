@@ -28,6 +28,7 @@ export interface ScaffoldObject {
   source: string; // "bikar:<path>" — bikar source path (any @ref is stripped; the ref lives in pins)
   piece?: string; // the bikar piece rendered (optional; the plate composer always sets it)
   params?: Record<string, unknown>; // the --param overrides this object was rendered at
+  window?: string; // the `--window` cut this object is (absent for a whole piece)
   count?: number; // R8 multiplicity — copies of this object on the plate (omitted ⇒ 1)
   iteration?: string; // it-<sha12> — the iteration identity (src/iteration.ts); the plate↔iteration map
 }
@@ -63,7 +64,7 @@ function today(): string {
  *  prints gate rejects (R8 needs a real int) — so objects get their own emitter. Keys are emitted in a
  *  fixed, stable order; optional keys are skipped when absent. */
 function yamlObjects(objs: Array<Record<string, unknown>>): string {
-  const ORDER = ["entry", "source", "source_sha256", "piece", "params", "count", "iteration", "verdict", "notes"];
+  const ORDER = ["entry", "source", "source_sha256", "piece", "params", "window", "count", "iteration", "verdict", "notes"];
   const emit = (v: unknown): string => {
     if (typeof v === "number") return String(v);
     if (v && typeof v === "object") return JSON.stringify(v); // params → inline flow mapping (valid YAML)
@@ -128,6 +129,7 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
       source_sha256: sha ?? TODO_SHA,
       piece: o.piece,
       params: o.params,
+      window: o.window,
       count: o.count,
       iteration: o.iteration,
       // R15: once printed, each piece says what it taught at these params — keep | adjust | drop.

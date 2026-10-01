@@ -26,6 +26,9 @@ export interface IterationKey {
   source_sha256: string; // the bkr blob sha at the pinned ref
   piece: string; // the bikar piece rendered
   params: Record<string, unknown>; // canonicalized --param overrides
+  // The `--window <side>[@x,y]` cut (bikar #293), present ONLY when the item is a window: an absent key
+  // hashes exactly as before, so every id minted before windows existed is unchanged.
+  window?: string;
   slice_profile: {
     settings: string; // "<machine>;<process>" display names
     filament: string; // filament display name(s)

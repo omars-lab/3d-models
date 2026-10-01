@@ -51,6 +51,7 @@ export interface ManifestItemBkr {
   bkr: string; // "bikar:<path>" source
   piece?: string; // a NAMED piece/tile/clip to render; omit to render the file's default last solid
   params?: Record<string, number>; // --param overrides (bikar --param takes numbers)
+  window?: string; // `--window <side>[@x,y]`: a square sample cut at the coaster's own scale (bikar #293)
   count?: number; // copies on the plate (default 1)
 }
 export interface ManifestItemIteration {
@@ -67,6 +68,34 @@ export interface PlateManifest {
 
 function isIterationItem(it: ManifestItem): it is ManifestItemIteration {
   return typeof (it as ManifestItemIteration).iteration === "string";
+}
+
+/** A parsed `--window` value: the square's side and its centre in the coaster's own frame. */
+export interface WindowSpec {
+  side: number;
+  x: number;
+  y: number;
+}
+
+/** Parse bikar's `<side>[@<x>,<y>]` window spelling (the centre defaults to the coaster's origin), or
+ *  return null when the text is not one. A YAML `window: 30` arrives as a number; the caller passes
+ *  `String(v)`. */
+export function parseWindow(text: string): WindowSpec | null {
+  const m = /^(\d+(?:\.\d+)?)(?:@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?))?$/.exec(text.trim());
+  if (!m) return null;
+  const side = Number(m[1]);
+  if (!(side > 0)) return null;
+  return { side, x: m[2] === undefined ? 0 : Number(m[2]), y: m[3] === undefined ? 0 : Number(m[3]) };
+}
+
+/** The bikar flags that pick WHAT an item renders — its piece, params and window — shared by every
+ *  verb that renders a resolved item, so a window can never reach one verb's render and miss another's. */
+export function itemRenderFlags(r: { piece: string; params: Record<string, number>; window: string }): string[] {
+  const out: string[] = [];
+  if (r.piece) out.push("--piece", r.piece);
+  for (const [k, v] of Object.entries(r.params)) out.push("--param", `${k}=${v}`);
+  if (r.window) out.push("--window", r.window);
+  return out;
 }
 
 /** Parse + validate a plate manifest. Throws a clear, actionable error (naming the offending item)
@@ -96,6 +125,12 @@ export function parseManifest(text: string): PlateManifest {
       }
       if (it.piece !== undefined && (typeof it.piece !== "string" || !it.piece)) {
         throw new Error(`${where}: \`piece:\` must be a non-empty string (a named piece/tile/clip); omit it to render the file's default solid`);
+      }
+      if (it.window !== undefined) {
+        if ((typeof it.window !== "string" && typeof it.window !== "number") || !parseWindow(String(it.window))) {
+          throw new Error(`${where}: \`window:\` must be bikar's "<side>[@<x>,<y>]" (e.g. 30@9.7,1), got ${JSON.stringify(it.window)}`);
+        }
+        it.window = String(it.window); // a YAML `window: 30` is a number; the key and the flag want text
       }
       if (it.params !== undefined) {
         if (typeof it.params !== "object" || it.params === null || Array.isArray(it.params)) {
@@ -217,6 +252,7 @@ export interface ResolvedItem {
   sourceAtRef: string; // "bikar:<path>@<ref>" for the iteration key
   piece: string;
   params: Record<string, number>;
+  window: string; // the `--window` cut, "" for the whole piece
   count: number;
   sourceSha256: string;
   iteration: string; // it-<sha12>
@@ -242,8 +278,11 @@ export function findIterationGeometry(
   id: string,
   recordDirs: string[],
   readIndex: (dir: string) => string | null,
-): { sourcePath: string; piece: string; params: Record<string, number> } | null {
-  const hits: Array<{ run: string; geom: { sourcePath: string; piece: string; params: Record<string, number> } }> = [];
+): { sourcePath: string; piece: string; params: Record<string, number>; window: string } | null {
+  const hits: Array<{
+    run: string;
+    geom: { sourcePath: string; piece: string; params: Record<string, number>; window: string };
+  }> = [];
   for (const dir of recordDirs) {
     const text = readIndex(dir);
     if (!text) continue;
@@ -262,7 +301,12 @@ export function findIterationGeometry(
         const sourcePath = o.source.replace(/^bikar:/, "").split("@")[0] ?? "";
         hits.push({
           run: basename(dir),
-          geom: { sourcePath, piece: String(o.piece ?? ""), params: (o.params as Record<string, number>) ?? {} },
+          geom: {
+            sourcePath,
+            piece: String(o.piece ?? ""),
+            params: (o.params as Record<string, number>) ?? {},
+            window: typeof o.window === "string" ? o.window : "",
+          },
         });
       }
     }
@@ -288,6 +332,7 @@ export async function resolveManifestItems(
     let sourcePath: string;
     let piece: string;
     let params: Record<string, number>;
+    let window: string;
     if (isIterationItem(item)) {
       const geom = findIterationGeometry(
         item.iteration,
@@ -303,10 +348,12 @@ export async function resolveManifestItems(
       sourcePath = geom.sourcePath;
       piece = geom.piece;
       params = geom.params;
+      window = geom.window;
     } else {
       sourcePath = item.bkr.replace(/^bikar:/, "");
       piece = item.piece ?? ""; // "" ⇒ the file's default last solid (bikar renders it without --piece)
       params = item.params ?? {};
+      window = item.window ?? "";
     }
     const sourceSha256 = await blobSha(bikarRef, sourcePath);
     const key: IterationKey = {
@@ -314,6 +361,7 @@ export async function resolveManifestItems(
       source_sha256: sourceSha256,
       piece,
       params,
+      ...(window ? { window } : {}), // absent unless cut: pre-window ids stay byte-identical
       slice_profile: sliceProfile,
     };
     resolved.push({
@@ -322,6 +370,7 @@ export async function resolveManifestItems(
       sourceAtRef: `bikar:${sourcePath}@${bikarRef}`,
       piece,
       params,
+      window,
       count: item.count ?? 1,
       sourceSha256,
       iteration: iterationId(key),
@@ -412,7 +461,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const footprints = new Map<string, [number, number]>(); // cacheKey → [x, y]
   const renderPlan: string[] = [];
   const cacheKeyOf = (r: ResolvedItem): string =>
-    `${r.sourceSha256}:${r.piece}:${JSON.stringify(r.params)}`;
+    `${r.sourceSha256}:${r.piece}:${JSON.stringify(r.params)}:${r.window}`;
   const pieceLabel = (r: ResolvedItem): string => (r.piece ? r.piece : "default solid");
   for (const r of resolved) {
     const ck = cacheKeyOf(r);
@@ -424,8 +473,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     // `--piece` renders a NAMED piece/tile/clip; a plain orb has none, so omit the flag and bikar
     // renders the file's default last solid (its own model — the only way to render a clip is --piece).
     const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "-o", stl];
-    if (r.piece) args.push("--piece", r.piece);
-    for (const [k, v] of Object.entries(r.params)) args.push("--param", `${k}=${v}`);
+    args.push(...itemRenderFlags(r));
     renderPlan.push(`  ${r.entry}: render ${pieceLabel(r)} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
     const res = await runWithTimeout("node", args, { timeoutMs: 120_000, label: "bikar_render" });
     if (res.code !== 0 || res.timedOut || !existsSync(stl)) {
@@ -599,6 +647,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       piece: r.piece || undefined, // "" (default solid) is recorded as an absent key, not an empty string
 
       params: r.params,
+      window: r.window || undefined,
       count: r.count,
       iteration: r.iteration,
     }));

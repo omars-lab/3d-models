@@ -341,10 +341,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    same day for loose-pieces calls 4 and 3 (Omar, thread tfuhdk), with three pictures for call 2.
    Its three calls are Omar's. The true edge that sheets 1 and 4 waited on shipped 2026-10-01
    (bikar #291), and the window cut shipped the same day (bikar #293), tried on all three columns
-   and on sheet 5's square slab. Every sheet still needs the card with engraved labels (a coupons
-   file) and the sheet plate in the bambu tool; on top of that, sheet 1's row A needs the old
-   staircase edge cut to a window (main no longer draws it); sheets 2 and 3 need smooth-lines
-   options 5 and 8; sheet 4 its own coupon file (the loose-piece output it is cut from shipped,
+   and on sheet 5's square slab. The labeled cards for sheets 1 and 5 (bikar #294) and the
+   sheet plate (`bambu slice sheet`, one color) shipped the same day too; sheet 1's rows B and C
+   are in [`sheets-01.yaml`](../../plates/sheets-01.yaml) and assemble and slice clean headless.
+   What is left: sheet 1's row A needs the old staircase edge cut to a window (main no longer
+   draws it); sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
+   sheet plate's color parts per sample; sheet 4 its own coupon file (the loose-piece output it is cut from shipped,
    bikar #292); sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`

@@ -9,8 +9,9 @@ status: draft
 > each pattern / shape subset is clearly lableled?"
 > — Omar, comment on the [smooth-lines design](smooth-lines-design.md), 2026-10-01
 
-**Status:** draft, 2026-10-01. The window cut (§2) is built (bikar #293); the card, its labels and
-the sheet plate are not. Sheet 1 is the first one worth printing (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
+**Status:** draft, 2026-10-01. The window cut (§2), the labeled cards for sheets 1 and 5 (§4) and
+the sheet plate (§5, `bambu slice sheet`) are built (bikar #293 and #294); sheet 1's rows B and
+C assemble and slice clean headless, and it waits only on row A. Sheet 1 is the first one worth printing (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
 and the three guided-page pictures were added the same day, after Omar asked on the
 [loose-pieces design](loose-pieces-design.md) how its calls could be made "without a sheet of poc
 prints for us to inspect". Each sheet has a plate page in [`docs/plates/`](../../plates/README.md)
@@ -33,9 +34,9 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
-| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the old edge for row A, the card and the plate (the new edge and the window cut shipped, bikar #291 and #293) | [sheets-01](../../plates/sheets-01.md) |
-| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding, the card and the plate | [sheets-02](../../plates/sheets-02.md) |
-| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld, the card and the plate | [sheets-03](../../plates/sheets-03.md) |
+| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | no: needs the old edge for row A; rows B and C, the card and the plate are built (bikar #291, #293, #294) | [sheets-01](../../plates/sheets-01.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding and its card piece | [sheets-02](../../plates/sheets-02.md) |
+| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../../plates/sheets-03.md) |
 | 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs its own file and plate (true edges and loose pieces shipped, bikar #291 and #292) | [sheets-04](../../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
 
@@ -91,9 +92,18 @@ sheet's plate file, so a sheet can be reprinted exactly.
 
 ## 3. The sheets
 
-Each sheet is one card, three columns by three or four rows. Sheet 1 measures 128 × 156 mm, which
-fits the X2D's 256 × 256 mm bed with room to spare; two sheets side by side would need exactly
-256 mm and leave no margin, so it is one sheet per plate.
+Each sheet is one card, three columns by three or four rows of 34 mm cells. As built, sheet 1's
+card measures 138 × 122 × 1.4 mm with three rows; each further row adds 34 mm. It fits the X2D's
+256 × 256 mm bed with room to spare; two cards side by side would need 276 mm, so it is one sheet
+per plate. (The first sketch, Figure 1, drew four rows on 128 × 156 mm; the built card added a
+32 mm row-code column on the left so the codes clear the samples, and left row D off.)
+
+![Sheet 1 as built: the six samples of rows B and C standing on their cells, row B on top, row C's
+domed straps narrower below it, and row A's band empty](sampler-sheets-media/sheet-1-samples.png)
+
+*Figure 2. Sheet 1 as the plate assembles it, drawn from the mesh (`bambu slice sheet --stl`, then
+`tools/print_review.py art`): the samples' top faces where they stand. The card's own picture is on
+the [sheets-01 page](../../plates/sheets-01.md#pictures).*
 
 **Sheet 1 — edge and top.** Columns: CS-1 crossing, CS-2 star, gBV star. Rows:
 
@@ -162,10 +172,11 @@ raised fills can come only through loose pieces and the kernel work is not neede
 printed from a bikar branch, so the look is judged before anyone decides to merge the kernel
 change. A against B is also the multicolor design's open taste call,
 [flush or lowered](multicolor-design.md#3-the-look-flush-or-lowered-fills), which wanted the same
-two values side by side. Every row also needs what sheets 1 to 3 need: the window cut (§2), the card with its labels and
-the sheet plate (§5 steps 3 and 4), here with color parts at each cell, which the bambu tool does
-for a whole colored coaster but not yet per sample. The window cut works on this square slab too
-(tried 2026-10-01: one body, mesh check passing, and `--format parts` gives a body per color).
+two values side by side. The window cut (§2) and the card (piece Sheet5Card, labeled STAR, PETAL,
+OCTAGON and A LOW, B FLUSH, C HIGH) are built. The sheet plate (§5) is built for one color, which is
+not enough here: each cell needs its color parts, which the bambu tool does for a whole colored
+coaster but not yet per sample. The window cut works on this square slab too (tried 2026-10-01:
+one body, mesh check passing, and `--format parts` gives a body per color).
 
 **Not on any sheet.** The slicer wall settings (option 10) are a per-plate setting, not a shape,
 so they ride along on whichever plate prints next. The mitred joins, varying width and the pillow
@@ -230,11 +241,18 @@ The path, in order:
 2. Check the full coaster at the same settings with the smooth-lines checks: the worst gap per
    loop, `tools/edge_stairs.py` and the symmetry number. The window inherits these; it is not a
    substitute for them.
-3. Put the card in a bikar coupons file, with its engraved labels.
-4. Teach the bambu tool a sheet plate: one object, card plus samples at their cells.
+3. Put the card in a bikar coupons file, with its engraved labels. *Built:*
+   `patterns/Coupons/Sampler-Cards.bkr`, pieces Sheet1Card and Sheet5Card (bikar #294).
+4. Teach the bambu tool a sheet plate: one object, card plus samples at their cells. *Built:*
+   `bambu slice sheet <sheet>.yaml`. It cuts each window, stands it on its cell with the window's
+   centre (not its art's) on the cell's point and its base on the card's top, checks that every
+   sample is on the card and none overlaps another, writes one object with the card and each sample
+   as parts, and slices it headless to check the geometry. `--dry-run` stops before assembling, and
+   `--stl <file>` writes the whole sheet as one mesh to look at.
 5. Write the sheet's plate file (a `.yaml` named for the sheet) beside its review page, which
    already waits at `planned`, and add the row and column legend with every value to the page.
-6. Compose with `--dry-run`, then the usual look (review-print) and queue (prioritize-prints).
+   *Done for sheet 1:* [`sheets-01.yaml`](../../plates/sheets-01.yaml), rows B and C.
+6. Run `bambu slice sheet` with `--dry-run`, then the usual look (review-print) and queue (prioritize-prints).
 7. Stop at the owner gate. Sending, filament and timing are Omar's.
 
 **Validator:** the sample is true size. Compare the sample's strap width and the span of its art

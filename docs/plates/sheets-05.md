@@ -19,8 +19,7 @@ risk: ok
 pictures:
   - ../design/coaster/loose-pieces-media/frames.png
 needs:
-  - "the card with engraved labels, in a coupons file"
-  - "the sheet plate in the bambu tool, with color parts at each cell"
+  - "color parts at each cell in the sheet plate (`bambu slice sheet` is built for one color)"
   - "row C HIGH: raised fills in bikar (loose-pieces §6 item 1), on a branch is enough"
   - "row D PIECE: a piece-height option on loose pieces (bikar #292 makes them only as tall as the pocket); the row is left off without it"
 ---
@@ -68,7 +67,8 @@ the card.
 
 ## What it waits on
 
-- The card and the sheet plate with color parts per sample. The window cut shipped 2026-10-01
+- Color parts per sample in the sheet plate. The card (piece Sheet5Card, bikar #294) and the
+  one-color sheet plate (`bambu slice sheet`) are built. The window cut shipped 2026-10-01
   (bikar #293) and works on this square slab: rows A and B cut at the centre star pass the mesh
   check as one body, and `--format parts` splits a window into a body per color.
 - Row C: raised fills in bikar (loose-pieces §6 item 1). A bikar branch is enough to print the

@@ -173,6 +173,27 @@ assemble a multi-filament COLOR plate (bikar --format parts → per-region AMS 3
 | `-t, --timeout <seconds>` | geometry-verify slice timeout in seconds |
 | `--dry-run` | render + map + pre-check + print the plan, but do not assemble or verify |
 
+### `bambu slice sheet`
+
+assemble a sampler sheet: a labeled card with coaster windows standing on their cells, one object
+
+| Argument | Required | Description |
+|---|---|---|
+| `sheet.yaml` | yes |  |
+
+| Flag | Description |
+|---|---|
+| `-o, --out <file>` | output filename (default: <sheet>.plate.3mf) |
+| `-d, --outputdir <dir>` | output directory (default: build/plates at the repo root) |
+| `--stl <file>` | also write the card + placed samples as one STL to look at (works with --dry-run) |
+| `-s, --settings <names\|paths>` | machine + process, semicolon-joined — overrides the sheet's profile |
+| `-f, --filament <name\|path>` | the filament — overrides the sheet's profile |
+| `--bed <name>` | bed footprint for the fit pre-check (x2d = 256×256 mm) |
+| `--no-verify-geometry` | skip the headless tag-stripped geometry slice |
+| `--no-record` | skip scaffolding the draft plate record |
+| `-t, --timeout <seconds>` | geometry-verify slice timeout in seconds |
+| `--dry-run` | render + place + check + print the plan, but do not assemble or verify |
+
 ### `bambu print`
 
 catalog, capture, dispatch and control prints — `list`/`capture` are local & read-only; `send`/`pause`/`stop` move real hardware and are owner-gated

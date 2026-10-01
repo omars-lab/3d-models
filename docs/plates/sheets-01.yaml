@@ -1,0 +1,63 @@
+# sheets-01 — edge and top (sampler sheet 1)
+#
+# One card with 30 mm windows of the three minimal coasters standing on it, cut at their own
+# 90 mm scale, so a sample is the real coaster's edge and top, not a shrunk copy. The card is
+# bikar's `Sampler-Cards.bkr` piece Sheet1Card, its codes engraved; the cells below use the
+# same numbers as its labels (column x = -20, 14, 48; row y = 24, -10, -44).
+#
+#   B TRUE   the true edge (bikar #291), round 1 — the file default
+#   C DOME   the true edge, round 1.5 — the full dome
+#
+# Columns: CS-1 crossing (GimTvN9hw4U), CS-2 star (7apC5Q9QS-8), gBV star (gBV_JTt3Kxk).
+#
+# Row A TODAY (today's staircase edge, the control) is not here yet: bikar main draws only the
+# true edge, so it has no source to cut. The sheet answers its question only with A beside B, so
+# it is not for printing until row A is added (sheets-01.md, what it waits on).
+#
+# Build and look (no hardware; slicing is local):
+#   bambu slice sheet docs/plates/sheets-01.yaml --dry-run
+#   bambu slice sheet docs/plates/sheets-01.yaml
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+card:
+  bkr: bikar:patterns/Coupons/Sampler-Cards.bkr
+  piece: Sheet1Card
+
+cells:
+  - name: B TRUE / CS-1
+    at: [-20, -10]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    window: 30@9.7,1
+  - name: B TRUE / CS-2
+    at: [14, -10]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    window: 30@18.5,18.5
+  - name: B TRUE / GBV
+    at: [48, -10]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    window: 30@0,0
+  - name: C DOME / CS-1
+    at: [-20, -44]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { round: 1.5 }
+    window: 30@9.7,1
+  - name: C DOME / CS-2
+    at: [14, -44]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { round: 1.5 }
+    window: 30@18.5,18.5
+  - name: C DOME / GBV
+    at: [48, -44]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { round: 1.5 }
+    window: 30@0,0
