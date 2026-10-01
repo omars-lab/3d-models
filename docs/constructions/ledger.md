@@ -9,7 +9,7 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `d42a8f5552ea8d5ca63ea29ba6dec4aa6223925d` (2026-09-30)
+Youtube pin: `e55a57797befcba7040447b38c7fc9a1475e7bdf` (2026-10-01)
 
 The pin is a commit in the youtube repo (branch `main`, no remote). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
@@ -23,7 +23,7 @@ reconstruction there has no row here, or when a row's id is not at the pin — s
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
 
-Scope of the set (K2): **33 <!--count:constructions-total--> constructions**,
+Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
 **12 <!--count:constructions-migrated--> migrated** so far: a row counts as
@@ -68,7 +68,8 @@ The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the 
 newer rungs, none of them a naqsh file yet. Each is "done" in the column's sense (its id is in
 the pin's done.md), though one of those rungs, `88q-u2eWZqg` (6/9), scored short of every
 step and says "attempted" in its own heading. `yZN_wn0uvTY` (9/13), added 2026-09-30, is the
-same case. `Y6kS1MvnKoc` was the third until 2026-09-30, when its last failing step turned out
+same case, and so is `LoCRh3SOhls` (0/2 best-effort, mean 0.691), added 2026-10-01 with the pin
+moved to youtube `e55a577`. `Y6kS1MvnKoc` was the third until 2026-09-30, when its last failing step turned out
 to be that slide's own `@view` 0.5% too large; it now passes 18/18 (mean 0.872).
 
 Oracle cells read `PASS a/b` or `FAIL a/b` — O1: labels compared / failed; O2:
@@ -144,6 +145,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `ZFQt67eZ9Sg` | Alhambra Hall of the Two Sisters doors, 8-fold in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `XfY1r7QKYwA` | 7-fold star rosette, the 27-minute build (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | done | — | — | — | — | — | — | — |
+| `LoCRh3SOhls` | A tenfold rosette in a pentagon, ink on filmed paper (Samira Mian) | done | — | — | — | — | — | — | — |
 
 ## Oracle notes
 
