@@ -41,7 +41,7 @@ Sending a print and which filament to load.
 - **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
   [sheets-05](../../plates/sheets-05.md)** — designed, at `planned`: none can be built yet, so
   none has a recipe, a slice or a tick box to answer. Each page lists what it waits on (the
-  builds are catalog-expansion item 9). Their order by value is computed on
+  builds are catalog-expansion item 8). Their order by value is computed on
   [the plates page](../../plates/README.md), not kept here. sheets-04 (the gBV fit) also waits on
   Omar's yes to failure detection and a watched first layer. Prints are held for last.
 - **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**

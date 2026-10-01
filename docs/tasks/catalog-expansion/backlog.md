@@ -317,22 +317,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    pieces in another color that fit back in, as an option on any coaster. The design is
    [loose-pieces-design.md](../../design/coaster/loose-pieces-design.md) (draft, 2026-09-30).
    Call 1 there is decided (D-090): the backed frame first for the gap reading, then the openwork
-   frame, both with the same pieces, on gBV. **Waits on item 7** (true edges). After that, the
-   loose-piece output, then a gBV fit plate. Calls 2, 3 and 4 there (guided page, raised fills, the
-   sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
+   frame, both with the same pieces, on gBV. The true edges it waited on shipped 2026-10-01
+   (bikar #291). Next is the loose-piece output, then a gBV fit plate. Calls 2, 3 and 4 there
+   (guided page, raised fills, the sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
    height.
-7. **Coaster edges are a 0.4 mm staircase on slanted sides: make them true.** Measured 2026-09-29
-   with `tools/edge_stairs.py`: on the CS-1 coaster at 90 mm, four sides step, straying up to
-   0.27 mm either side of the true edge, and two sides are straight. **No longer waits on a printed
-   edge:** Omar decided on 2026-10-01 to make the edges true before any fit sample, because the steps
-   on a pocket wall and a piece wall are bigger than the gap being tested
-   ([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
-   The fix is bikar's: draw each wall between the grid points
-   ([smooth-lines option 3](../../design/coaster/smooth-lines-design.md#3-draw-the-edge-between-grid-points)),
-   then re-run the tool to show every side straight. The smooth-lines design (3d-models #434,
-   merging #432 and #433) still has four open calls in §6 about looks. Call 1 there, the edge
-   coupon, now only decides whether the steps matter for looks, not whether option 3 gets built.
-8. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
+7. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
    ([D-089](../../working-model/decisions-log.md#d-089--gbv_jtt3kxk-is-the-next-coaster)) from the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
    Its minimal coaster is in bikar (#287). It already has its ledger row (CS-13), a vendored STL
@@ -340,16 +329,16 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    into the gBV fit plate of item 6: that plate's openwork frame is this coaster's lines print, so a
    separate plate would print the same thing twice. The first full run of the
    [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed.
-9. **Sampler sheets: decide the smooth-lines calls with samples in the hand.** Omar, 2026-10-01,
+8. **Sampler sheets: decide the smooth-lines calls with samples in the hand.** Omar, 2026-10-01,
    thread iykpc9 on the smooth-lines design, asked for printed sheets of labeled shape subsets
    before making the §6 calls. The design is
    [sampler-sheets-design.md](../../design/coaster/sampler-sheets-design.md) (draft): true-size
    30 mm windows of CS-1, CS-2 and gBV standing on a card with engraved row and column codes, five
    sheets (edge and top, star points, soft weld, fit, fill height). Sheets 4 and 5 were added the
    same day for loose-pieces calls 4 and 3 (Omar, thread tfuhdk), with three pictures for call 2.
-   Its three calls are Omar's. Sheet 1 waits on item 7 (the true edge) and on a window option for
-   coasters in bikar; sheets 2 and 3 wait on smooth-lines options 5 and 8; sheet 4 on item 7 and
-   item 6's loose-piece output; sheet 5's raised row on raised fills (loose-pieces §6 item 1, a
+   Its three calls are Omar's. The true edge that sheets 1 and 4 waited on shipped 2026-10-01
+   (bikar #291). Sheet 1 now waits on a window option for coasters in bikar; sheets 2 and 3 on
+   smooth-lines options 5 and 8; sheet 4 on item 6's loose-piece output; sheet 5's raised row on raised fills (loose-pieces §6 item 1, a
    bikar branch is enough) and its other rows on the window. Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
