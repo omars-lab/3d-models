@@ -321,7 +321,8 @@ were, then lifts its top that many millimetres to a point over the piece's middl
 leaves the wall going straight up and curves in to the point, like a pointed dome, so the
 pieces look soft and rounded rather than cut flat. The picture lifts the eight four-sided
 pieces above their pockets with the top rising 2, 4 and 6 mm: the higher the peak, the
-taller and more pointed each dome. Leave `peak` off, or write `peak 0`, for a flat top.
+taller and more pointed each dome. Every one meets in the middle at its full height; none is
+cut flat on top. Leave `peak` off, or write `peak 0`, for a flat top.
 
 <!-- recipe: coaster-loose-peak; swap: peak 2 | peak 4 | peak 6 -->
 ```bkr
@@ -347,9 +348,10 @@ coaster Coaster
 ```
 ![Gold pieces lifted above their pockets with tops rising 2, 4 and 6 mm to a point](img/coaster-loose-peak.png)
 
-**Watch out:** the same peak looks different on different sizes of piece. It is a tall
-point on a narrow piece and only a low dome on a wide one: 6 mm on this star's wide
-centre octagon barely rises. A cup no longer sits flat on peaked pieces, so a peaked
+**Watch out:** the same peak looks different on different sizes of piece. A peak at least
+as tall as the distance from the piece's edge to its middle comes to a point; a lower one is a round
+dome, flatter the wider the piece, that still reaches its full height in the middle. In the
+picture the 2 mm peaks are low domes and the 6 mm ones come to a point. A cup no longer sits flat on peaked pieces, so a peaked
 coaster is mostly for looking at. A piece whose middle cannot
 see all of its own edge (a U or a crescent) would fold its top over itself, so bikar refuses
 a peak on it by name; the same piece is fine flat. Nothing has printed with a peak yet.

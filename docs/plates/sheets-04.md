@@ -21,6 +21,7 @@ risk: watch
 pictures:
   - sheets-04-media/bed-map.png
   - sheets-04-media/fit-in-coaster.png
+  - sheets-04-media/flat-and-peaked.png
   - sheets-04-media/gbv-frame-and-pieces.png
 ---
 
@@ -48,10 +49,10 @@ the coaster is the whole test, and the pieces sit loose in its holes.
 | COASTER | the gBV minimal coaster, once: 90 mm, 3 mm straps, 4 mm tall, no base |
 | GAP 05, GAP 10, GAP 15, GAP 20 | the middle ring (orbit 2): ten six-sided pieces at radius 19.9 mm, at that gap per face |
 | STAR 15 | the next ring out (orbit 3): ten small five-point stars at radius 28.3 mm, at 0.15 |
-| PEAK 2 | the middle ring again at 0.15, each piece with a 2 mm peak: the same wall, then a soft curve up to a point |
+| PEAK 2 | the middle ring again at 0.15, each piece with a 2 mm peak: the same wall, then a low round dome up to the middle |
 
 The pieces are 1.2 mm thick, so in the 4 mm coaster they sit below the top and the fit is read on
-the walls. The peaked set is 3.2 mm at its point, still under the top. The rings were read off `bikar bands`. The gap is taken off the piece, so one coaster
+the walls. The peaked set is 3.2 mm in the middle, still under the top. The rings were read off `bikar bands`. The gap is taken off the piece, so one coaster
 takes every set. Each set is its own plate item and goes in its own bag straight off the plate,
 labelled with its code, because the sets look alike. The bed map below says which set is where.
 
@@ -70,7 +71,7 @@ coaster is the better test, and it takes less filament (15 g against 22, in the 
 - **What to read off it:** for each bag, drops in / pressed in / will not go; tips catch or not.
   For PEAK 2, also whether 2 mm reads as the look you wanted in the hand
   ([the peaked-pieces page](../working-model/feedback-requests/2026-10-02-peaked-pieces.md)),
-  and whether the point prints clean.
+  and whether the dome prints clean.
 
 ## The fit in the coaster
 
@@ -86,6 +87,7 @@ corner is inside the wall.
 | GAP 15 | +0.150 mm | none of 120 |
 | GAP 20 | +0.200 mm | none of 120 |
 | STAR 15 | +0.150 mm | none of 200 |
+| PEAK 2 | +0.150 mm | none of 120 |
 
 ![A hexagon at 0.15 and a star at 0.15 in the coaster's holes, every corner at its full gap](sheets-04-media/fit-in-coaster.png)
 
@@ -105,6 +107,14 @@ rings and the peaked ring look much the same from above, so bag them by this map
 `print_review.py bed`, from the bed map compose writes beside the plate.
 
 ![The sheets-04 bed: the coaster, four hexagon rings at four gaps, the star ring and the peaked ring, each labelled](sheets-04-media/bed-map.png)
+
+The two kinds of piece side by side, cut through the middle of one hexagon in its hole, true
+scale: a flat GAP 15 piece on top, a PEAK 2 piece below. Grey is the coaster's straps, gold the
+piece. The peaked piece keeps the same 1.2 mm wall and the same gap, then rises in a low round dome
+to 3.2 mm in the middle, still under the coaster's 4 mm top. A cut across the piece the other way
+looks the same.
+
+![Side cut through a flat GAP 15 piece and a PEAK 2 piece in their holes: the flat one 1.2 mm tall, the peaked one a low dome to 3.2 mm](sheets-04-media/flat-and-peaked.png)
 
 The coupon's frame and its 41 loose pieces at 80 mm, all five rings at 0.15 mm, from the first
 version of this plate: the frame alone on the left, the pieces lifted above their pockets on the
@@ -135,6 +145,10 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
   narrowest at 0.05 and 8.67 mm at 0.20; the stars are ten bodies, 2.10 mm.
 - The peaked set: the same file with `peak 2` (bikar #298). It passes the mesh check: ten bodies,
   3.2 mm tall, 8.77 mm across at its narrowest. Nothing has printed with a peak yet.
+- The first peaked slice had a flat top. A 2 mm peak is lower than these hexes are from edge to
+  middle, and the curve stopped part way in, leaving a flat lid over about 80% of each piece's top.
+  bikar #299 makes a low peak a round dome that closes in the middle; the side cut above is drawn
+  from the fixed pieces, and the plate is sliced on them.
 - The plate gives each set a `label:`, and `bambu slice compose` writes the bed map from it.
 
 ## Your call
@@ -161,3 +175,4 @@ Notes:
 | 2026-10-02 | sliced — re-sliced on the coaster with exact holes (bikar #297); every set keeps its full gap; 56 minutes, 15 g | this page |
 | 2026-10-02 | approved — as it stands, by Omar on this page (ticked before the peaked set was added) | this page |
 | 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
+| 2026-10-02 | sliced — re-sliced after bikar #299, which fixed the peaked pieces' flat top; both kinds of piece shown side by side, PEAK 2 keeps its full gap; 62 minutes, 17 g | this page |
