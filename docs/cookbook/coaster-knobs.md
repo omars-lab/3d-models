@@ -311,4 +311,47 @@ refused alongside `loose`. The 0.15 mm gap is a starting guess until the
 [gBV fit sheet](../plates/sheets-04.md) prints.
 
 Related: [color regions](#color-regions), [stars and colored faces](stars-and-fills.md),
-[the loose-pieces design](../design/coaster/loose-pieces-design.md).
+[the loose-pieces design](../design/coaster/loose-pieces-design.md),
+[peaked pieces](#peaked-pieces-a-soft-point-on-top).
+
+## Peaked pieces: a soft point on top
+
+`peak <mm>` at the end of a `loose` line keeps each piece's outline and wall just as they
+were, then lifts its top that many millimetres to a point over the piece's middle. The top
+leaves the wall going straight up and curves in to the point, like a pointed dome, so the
+pieces look soft and rounded rather than cut flat. The picture lifts the eight four-sided
+pieces above their pockets with the top rising 2, 4 and 6 mm: the higher the peak, the
+taller and more pointed each dome. Leave `peak` off, or write `peak 0`, for a flat top.
+
+<!-- recipe: coaster-loose-peak; swap: peak 2 | peak 4 | peak 6 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 1 color Gold
+    fill void where orbit == 2 color Gold
+
+coaster Coaster
+  outline round 90
+  inscribe star
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  loose where orbit == 2 clearance 0.15 peak 4
+```
+![Gold pieces lifted above their pockets with tops rising 2, 4 and 6 mm to a point](img/coaster-loose-peak.png)
+
+**Watch out:** the same peak looks different on different sizes of piece. It is a tall
+point on a narrow piece and only a low dome on a wide one: 6 mm on this star's wide
+centre octagon barely rises. A cup no longer sits flat on peaked pieces, so a peaked
+coaster is mostly for looking at. A piece whose middle cannot
+see all of its own edge (a U or a crescent) would fold its top over itself, so bikar refuses
+a peak on it by name; the same piece is fine flat. Nothing has printed with a peak yet.
+
+Related: [loose pieces in pockets](#loose-pieces-in-pockets), [the smooth-lines design](../design/coaster/smooth-lines-design.md).

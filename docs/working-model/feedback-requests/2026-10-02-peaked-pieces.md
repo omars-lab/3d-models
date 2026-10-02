@@ -43,9 +43,11 @@ their default gap.
 
 - [ ] 6 mm
 - [ ] 4 mm
-- [ ] 2 mm
+- [x] 2 mm
 - [ ] Two heights (say which)
 - Notes:
+
+**Decided 2026-10-02:** 2 mm → [D-091](../decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)
 
 ## 2. Where to try it in plastic
 
@@ -62,10 +64,12 @@ both the fit and the look. Prints stay last either way, as you asked.
 
 **Your answer:**
 
-- [ ] Add one peaked set to the fit sheet
+- [x] Add one peaked set to the fit sheet
 - [ ] Its own small plate
 - [ ] Not yet
 - Notes:
+
+**Decided 2026-10-02:** add one peaked set to the fit sheet → [D-091](../decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet). It is on [sheets-04](../../plates/sheets-04.md) as `PEAK 2`.
 
 ## Things only you can do (not decisions)
 
