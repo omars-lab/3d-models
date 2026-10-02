@@ -14,7 +14,7 @@ bets:
 unblocks:
   - "loose-pieces call 4: the gap a loose piece gets per face"
   - "the F3 openwork frame (D-090), which follows F1 and reuses the gap this plate settles"
-minutes: 55
+minutes: 56
 grams: 15
 bed_plates: 1
 risk: watch
@@ -31,10 +31,10 @@ and loose pieces for one ring of it at four gaps per face: 0.05, 0.10, 0.15 and 
 five-point stars come at 0.15 only, to see whether their tips catch. It answers
 [loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes, read in
 the real coaster rather than a test frame. The pieces come from bikar's `Loose-Fit-Coupon.bkr`
-(bikar #296) and the plate is [`sheets-04.yaml`](sheets-04.yaml). One bed, about 55 minutes and 15 g.
+(bikar #296) and the plate is [`sheets-04.yaml`](sheets-04.yaml). One bed, about 56 minutes and 15 g.
 
-**Measured before printing:** the coaster's holes are smaller than the pockets the pieces were cut
-for, so today only the 0.20 set clears and the star tips catch. See [the fit](#the-fit-in-todays-coaster).
+**Measured before printing:** every piece keeps exactly its gap in the coaster's holes, star tips
+included. See [the fit](#the-fit-in-the-coaster).
 
 ## What it is
 
@@ -54,7 +54,7 @@ labelled with its code, because the sets look alike. The bed map below says whic
 
 Changed 2026-10-02 at Omar's ask: the first version printed the coupon's frame, a 2 mm round slab
 with the straps on it and a pocket in every cell. From above it reads as a plain disk; the real
-coaster is the better test, and it costs less (55 minutes and 15 g, against 56 and 22).
+coaster is the better test, and it takes less filament (15 g against 22, in the same 56 minutes).
 
 ## Why print it
 
@@ -66,30 +66,31 @@ coaster is the better test, and it costs less (55 minutes and 15 g, against 56 a
   ([D-090](../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
 - **What to read off it:** for each bag, drops in / pressed in / will not go; tips catch or not.
 
-## The fit in today's coaster
+## The fit in the coaster
 
-The coaster's holes are not cut on the exact outline the pieces were made for. The coupon's own
-frame leaves every piece its full gap all round. The minimal coaster's hole comes 0.15 to 0.25 mm
-further in at a hexagon's points, and its star holes have blunted tips. So a printed piece meets
-the wall at its corners before the gap it was given.
-
-Measured on the two meshes at mid height, 2026-10-02. Room is the distance from a piece corner to
-the nearest coaster wall; below zero means the corner is inside the wall.
+Every piece keeps exactly the gap it was given, at every corner, so the sheet measures the gap and
+nothing else. Measured on the coaster from bikar main and the pieces at mid height, 2026-10-02.
+Room is the distance from a piece corner to the nearest coaster wall; below zero would mean the
+corner is inside the wall.
 
 | Set | Least room | Corners inside the wall |
 |---|---|---|
-| GAP 05 | −0.20 mm | 48 of 120 |
-| GAP 10 | −0.12 mm | 22 of 120 |
-| GAP 15 | −0.03 mm | 6 of 120 |
-| GAP 20 | +0.05 mm | none |
-| STAR 15 | −0.13 mm | 34 of 200, all at the tips |
+| GAP 05 | +0.050 mm | none of 120 |
+| GAP 10 | +0.100 mm | none of 120 |
+| GAP 15 | +0.150 mm | none of 120 |
+| GAP 20 | +0.200 mm | none of 120 |
+| STAR 15 | +0.150 mm | none of 200 |
 
-![A hexagon at 0.15 and a star at 0.15 in the coaster's holes, corners marked by room](sheets-04-media/fit-in-coaster.png)
+![A hexagon at 0.15 and a star at 0.15 in the coaster's holes, every corner at its full gap](sheets-04-media/fit-in-coaster.png)
 
-Printed as it is, the sheet would mostly measure this mismatch, not the gap. The fix is in bikar:
-cut the coaster's holes on the same outline as the pockets, so a piece fits the real coaster by
-construction. After it, the plate gets re-sliced and re-measured, and every corner should keep its
-full gap. That fix is the next piece of work, before this prints.
+It did not start that way. The first slice of this plate traced the coaster's holes on a grid,
+and a wall drawn between two grid points cuts straight across a sharp corner. The holes came up
+to 0.25 mm further in at a hexagon's points and blunted the star tips, so only GAP 20 cleared:
+GAP 05 had 48 of its 120 corners inside the wall, GAP 10 had 22, GAP 15 had 6, and the stars 34
+of 200, all at the tips. Printed that way, the sheet would have measured the mismatch, not the
+gap. bikar #297 now cuts each hole on its exact outline, the face moved in by half a strap, the
+same outline the pieces are cut from. A piece fits the real coaster by construction, and a test
+in bikar reads every corner so the holes cannot drift back.
 
 ## Pictures
 
@@ -109,7 +110,7 @@ the loosest gap, 0.20.
 
 ## Cost and risk
 
-One bed, 55 minutes, about 15 g (local slice of the plate, 2026-10-02, X2D preset and PLA Basic, no
+One bed, 56 minutes, about 15 g (local slice of the plate, 2026-10-02, X2D preset and PLA Basic, no
 slicer warnings, nothing sent).
 
 **Risk: watch.** The pieces are the smallest things we would have printed, and a small piece that
@@ -118,8 +119,8 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
 
 ## How it was built
 
-- The coaster: bikar's `gBV_JTt3Kxk-minimal-coaster.bkr` (CS-13), unchanged. It passes the mesh
-  check: one closed body, 10.8 cm³.
+- The coaster: bikar's `gBV_JTt3Kxk-minimal-coaster.bkr` (CS-13), unchanged; since bikar #297 its
+  holes are cut on their exact outline. It passes the mesh check: one closed body, 10.7 cm³.
 - The pieces: bikar's `Loose-Fit-Coupon.bkr` (bikar #296) copies the gBV construction unchanged and
   keeps its size and strap, so the gap is read on the pieces the gBV coaster will have. It stands
   on the loose-piece output of bikar #292, whose pocket walls follow the outline exactly: the gap
@@ -149,3 +150,4 @@ Notes:
 | 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
 | 2026-10-01 | sliced — the file landed (bikar #296); local slice fits one bed, 56 minutes, 22 g, with a bed map | this page |
 | 2026-10-02 | sliced — reworked at Omar's ask, the minimal coaster in place of the frame; 55 minutes, 15 g; the holes measured smaller than the pockets, only GAP 20 clears | this page |
+| 2026-10-02 | sliced — re-sliced on the coaster with exact holes (bikar #297); every set keeps its full gap; 56 minutes, 15 g | this page |

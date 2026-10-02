@@ -345,15 +345,11 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    sheet plate (`bambu slice sheet`, one color) shipped the same day too, and sheet 1 is built in
    full ([`sheets-01.yaml`](../../plates/sheets-01.yaml), waiting on Omar's tick). Sheet 4 is built
    in full too: its file is bikar's `Loose-Fit-Coupon.bkr` (#296) and its plate
-   [`sheets-04.yaml`](../../plates/sheets-04.yaml) slices to one bed, 55 minutes, 15 g, with a bed
+   [`sheets-04.yaml`](../../plates/sheets-04.yaml) slices to one bed, 56 minutes, 15 g, with a bed
    map naming each look-alike set. Since 2026-10-02 it prints the pieces in the real minimal
-   coaster (Omar's ask) rather than the coupon's frame, and that showed the coaster's holes are
-   0.15 to 0.25 mm tighter at the corners than the pockets the pieces were cut for (only GAP 20
-   clears). It waits on Omar's tick and his yes to failure detection, and should not print before
-   the next item fixes the holes.
-   **Next: cut a coaster's strap holes on the pocket outline** in the bikar kernel, so loose
-   pieces fit the real coaster by construction; then re-slice sheets-04 and re-measure (every
-   corner should keep its full gap). Found 2026-10-02 reworking sheets-04.
+   coaster (Omar's ask) rather than the coupon's frame. The coaster's holes are now cut on the
+   pieces' exact outline (bikar #297), so every set keeps its full gap. It waits on Omar's tick and his
+   yes to failure detection.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
    sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page

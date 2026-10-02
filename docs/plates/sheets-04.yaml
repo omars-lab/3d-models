@@ -7,14 +7,11 @@
 # coaster's size 90 and strap 3, so they are the pieces the gBV coaster will have. They are
 # 1.2 mm thick, so in the 4 mm coaster they sit below the top: the fit is read on the walls.
 #
-# The coaster's holes are not cut on the exact outline the coupon's pockets use. Measured on the
-# meshes at mid height (2026-10-02): the coupon's own frame pocket leaves every piece its full
-# gap, but the coaster's hole comes 0.15 to 0.25 mm further in at a hexagon's points and
-# blunts the star tips. Least room per set, negative meaning the corner is inside the wall:
-#   GAP 05 -0.20 mm (48 of 120 corners inside), GAP 10 -0.12 (22), GAP 15 -0.03 (6),
-#   GAP 20 +0.05 (none), STAR 15 -0.13 (34 of 200, all at the tips).
-# So today only GAP 20 goes in, and the stars catch at their tips. The sheet reads the real
-# coaster as it is; the exact-outline fix in bikar would change it.
+# The coaster's holes are cut on the exact outline the pieces were made for (bikar #297), so
+# each piece keeps its full gap all round. Measured on the meshes at mid height (2026-10-02),
+# least room per set, every corner read: GAP 05 +0.050 mm, GAP 10 +0.100, GAP 15 +0.150,
+# GAP 20 +0.200, STAR 15 +0.150; no corner inside a wall. Before #297 the holes came up to
+# 0.25 mm further in at the points and blunted the star tips, and only GAP 20 cleared.
 #
 #   COASTER  the gBV minimal coaster, one
 #   GAP 05   orbit 2, the ten six-sided pieces of the middle ring, 0.05 mm per face
