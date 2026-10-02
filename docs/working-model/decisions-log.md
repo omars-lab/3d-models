@@ -5761,8 +5761,8 @@ to a taller peak, or its point printing badly, which would point to a lower one 
 Omar, 2026-10-02, answering the box on [sheets-04](../plates/sheets-04.md) that asked for their
 yes to "failure detection on and the first layer watched": "no failure detection, bambu does this".
 The X2D runs its own failure detection, so it is not a question to put to them and not something a
-plate waits on. The same answer is taken to cover the first-layer watch, which the box bundled
-with it.
+plate waits on. Told that the answer was being taken to cover the first-layer watch the box
+bundled with it, Omar confirmed the same day: "bambu x2d automatically does this, no need for us to worry about this".
 
 ### The options the plate page gave
 
@@ -5780,6 +5780,9 @@ with it.
   its call 4 no longer ask for the yes, and nor does the
   [sampler sheets design](../design/coaster/sampler-sheets-design.md).
 - sheets-04 loses the box and is no longer waiting on anything but the send.
+- Guide-print no longer asks the owner to watch the first layer on any plate, and minis-05's risk
+  note leans on the printer's detection instead of a watch. A first layer that is itself the
+  reading (MC-6 on bare plate) is still read; that is a measurement, not a safety watch.
 
 **What would reverse it:** a loose piece dragged by the nozzle that the printer did not stop for,
 which would bring back a watched first layer, or a brim, for plates of small loose pieces.

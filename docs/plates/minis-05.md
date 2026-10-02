@@ -90,8 +90,8 @@ Both columns are local slices from 2026-09-30 on the X2D preset, with nothing se
 
 **Risk: watch.** The keys are about 8 × 4 mm and 1.4 mm tall: seven layers on a small
 footprint. A key that lifts can be dragged by the nozzle, which is the kind of failure that
-can hurt the machine, not only the print. Watch the first layer, and keep spaghetti detection
-on. A key knocked loose is a failed key, not a reason to stop; one being dragged is. The 1.4 mm
+can hurt the machine, not only the print. The X2D's own first-layer and failure detection
+covers this (D-092). A key knocked loose is a failed key, not a reason to stop; one being dragged is. The 1.4 mm
 frame and tab are thin too, but if they snap that is the answer we want, not a risk to the
 machine.
 
