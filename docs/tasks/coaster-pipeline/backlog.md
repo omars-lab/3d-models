@@ -41,9 +41,9 @@ Sending a print and which filament to load.
 - **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
   [sheets-05](../../plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
   on Omar's tick: one bed, about 1 h 48 m and 46 g. sheets-04 (the gBV fit) is built too and waits
-  on his tick and his yes to failure detection and a watched first layer: one bed, 55 minutes,
-  15 g, the pieces in the real minimal coaster; it holds for a bikar fix to the coaster's holes
-  (catalog-expansion item 8). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
+  on his tick and his yes to failure detection and a watched first layer: one bed, 56 minutes,
+  15 g, the pieces in the real minimal coaster, every set at its full gap since bikar #297 cut
+  the coaster's holes on their exact outline. The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../plates/README.md), not kept here. Prints are held for last.
 - **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**
