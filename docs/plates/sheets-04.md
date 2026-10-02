@@ -1,7 +1,7 @@
 ---
 plate: sheets-04
 recipe: sheets-04.yaml
-stage: approved
+stage: sent
 approved: true
 approved_on: 2026-10-02
 times_printed: 0
@@ -180,3 +180,4 @@ Notes:
 | 2026-10-02 | sliced — re-sliced after bikar #299, which fixed the peaked pieces' flat top; both kinds of piece shown side by side, PEAK 2 keeps its full gap; 62 minutes, 17 g | this page |
 | 2026-10-02 | approved — again, by Omar on this page, as it stands with both prints and the fixed peak; the failure-detection yes is still open | this page |
 | 2026-10-02 | reviewed — Omar answered the failure-detection box: it is the X2D's own, not a per-plate yes; nothing is left blocking the print but the send | [D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes) |
+| 2026-10-02 | sent — by Omar, from Bambu Studio over LAN, the local slice of 62 minutes and 17 g; the draft record waits locally until the pieces are judged | this page |
