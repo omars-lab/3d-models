@@ -60,17 +60,20 @@ its own record, and `times_printed` is the number of records.
 
 ## The pages
 
-- [minis-01](minis-01.md) — the first coaster plate, sent, not recorded
-- [minis-02](minis-02.md) — one mini of each style, sent, not recorded
-- [minis-03](minis-03.md) — minimal-frames at 40 mm, printed once
-- [minis-04](minis-04.md) — the same at 80 mm and half the height, printed once
-- [minis-05](minis-05.md) — the thin joins, waiting
-- [minis-06](minis-06.md) — the two dovetails, waiting
-- [sheets-01](sheets-01.md) — sampler sheet: edge and top, planned
-- [sheets-02](sheets-02.md) — sampler sheet: star points, planned
-- [sheets-03](sheets-03.md) — sampler sheet: soft weld, planned
-- [sheets-04](sheets-04.md) — sampler sheet: the gBV fit, planned
-- [sheets-05](sheets-05.md) — sampler sheet: fill height, planned
+Where each one stands is in [the queue](#the-queue), which is worked out from the pages; this
+list only says what each plate is, so it cannot fall behind.
+
+- [minis-01](minis-01.md) — the first coaster plate
+- [minis-02](minis-02.md) — one mini of each style
+- [minis-03](minis-03.md) — minimal-frames at 40 mm
+- [minis-04](minis-04.md) — the same at 80 mm and half the height
+- [minis-05](minis-05.md) — the thin joins
+- [minis-06](minis-06.md) — the two dovetails
+- [sheets-01](sheets-01.md) — sampler sheet: edge and top
+- [sheets-02](sheets-02.md) — sampler sheet: star points
+- [sheets-03](sheets-03.md) — sampler sheet: soft weld
+- [sheets-04](sheets-04.md) — sampler sheet: the gBV fit
+- [sheets-05](sheets-05.md) — sampler sheet: fill height
 
 The five sampler sheets are designed in the
 [sampler sheets design](../design/coaster/sampler-sheets-design.md).
