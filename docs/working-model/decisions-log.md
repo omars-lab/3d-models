@@ -5722,3 +5722,36 @@ Printing stays last (Omar, 2026-09-30).
 
 **What would reverse it:** an edge coupon showing that the steps cannot be felt *and* a fit sample
 on today's edges that holds anyway. Neither has been printed.
+
+## D-091 — Peaked loose pieces: 2 mm, tried on the gBV fit sheet
+
+Omar, 2026-10-02, on the
+[peaked-pieces page](feedback-requests/2026-10-02-peaked-pieces.md). He had asked for a
+SKIMS-style version of the gBV loose pieces: each piece keeps its shape, then curves up to a
+point. bikar #298 built it as `peak <mm>` on the `loose` line. He ticked one box on each of the
+page's two calls and left no notes.
+
+### How high: 2 mm
+
+- **2 mm** (chosen): barely raised, so a cup rocks only slightly; from above it reads as nearly
+  flat, so less of the new look shows.
+- 6 mm (my pick on the page): the hexes read as pointed domes and the stars as tall cones, but a
+  cup sits furthest from flat and the sharper tip may print rougher.
+- 4 mm: softer, rounded domes, less tip.
+- Print two heights: judge it in the hand, at twice the pieces.
+
+### Where to try it: on the fit sheet
+
+- **Add one peaked set to the fit sheet** (chosen, my pick): flat and peaked side by side on one
+  bed, no extra print; a longer print and a busier sheet.
+- Its own small plate: keeps the fit sheet as it was, one more print to run.
+- Not yet: no print time, the look judged from renders only.
+
+### What it commits us to
+
+[sheets-04](../plates/sheets-04.md) gets a seventh set, `PEAK 2`: the middle ring of hexes at
+0.15 mm, each with a 2 mm peak, beside the flat set at the same gap. Re-sliced locally: one bed,
+62 minutes and 17 g, up from 56 minutes and 15 g. Printing stays last (Omar, 2026-09-30).
+
+**What would reverse it:** the printed PEAK 2 set reading as flat in the hand, which would point
+to a taller peak, or its point printing badly, which would point to a lower one or a rounded tip.

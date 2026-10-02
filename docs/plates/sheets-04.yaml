@@ -19,6 +19,9 @@
 #   GAP 15   the same ring at 0.15 (CAL-FIT-01's sliding step, the file default)
 #   GAP 20   the same ring at 0.20
 #   STAR 15  orbit 3, the ten small five-point stars, at 0.15 only, to see whether the tips catch
+#   PEAK 2   orbit 2 at 0.15 again, each piece with a 2 mm peak on top (D-091): the same wall
+#            and gap as GAP 15, then a soft curve up to a point, so flat and peaked sit side by
+#            side. 1.2 + 2 = 3.2 mm tall, still under the coaster's 4 mm top
 #
 # The rings come from `bikar bands` on the gBV coaster: orbit 2 is ten hexagons at radius
 # 19.9 mm, orbit 3 ten 10-sided stars at 28.3 mm. The gap is taken off the piece, so the pocket
@@ -65,3 +68,7 @@ items:
     label:  STAR 15
     piece:  Star
     params: { star_gap: 0.15 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  PEAK 2
+    piece:  Hex
+    params: { gap: 0.15, peak: 2 }

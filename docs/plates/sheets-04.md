@@ -1,12 +1,12 @@
 ---
 plate: sheets-04
 recipe: sheets-04.yaml
-stage: waiting
-approved: false
-approved_on:
+stage: approved
+approved: true
+approved_on: 2026-10-02
 times_printed: 0
 runs: []
-answers: "Which gap per face lets a loose gBV piece drop into its pocket and stay, and do the small five-point stars catch at 0.15?"
+answers: "Which gap per face lets a loose gBV piece drop into its pocket and stay, do the small five-point stars catch at 0.15, and does a 2 mm peak read as the look in the hand?"
 kind: new
 bets:
   - CAL-FIT-01
@@ -14,8 +14,8 @@ bets:
 unblocks:
   - "loose-pieces call 4: the gap a loose piece gets per face"
   - "the F3 openwork frame (D-090), which follows F1 and reuses the gap this plate settles"
-minutes: 56
-grams: 15
+minutes: 62
+grams: 17
 bed_plates: 1
 risk: watch
 pictures:
@@ -28,10 +28,12 @@ pictures:
 
 **In short.** The gBV minimal coaster itself (the straps only, 4 mm tall, no base), printed once,
 and loose pieces for one ring of it at four gaps per face: 0.05, 0.10, 0.15 and 0.20 mm. The small
-five-point stars come at 0.15 only, to see whether their tips catch. It answers
+five-point stars come at 0.15 only, to see whether their tips catch. One more set of the middle
+ring at 0.15 has a 2 mm peak on top, so the flat and peaked pieces can be compared side by side
+([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)). It answers
 [loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes, read in
 the real coaster rather than a test frame. The pieces come from bikar's `Loose-Fit-Coupon.bkr`
-(bikar #296) and the plate is [`sheets-04.yaml`](sheets-04.yaml). One bed, about 56 minutes and 15 g.
+(bikar #296) and the plate is [`sheets-04.yaml`](sheets-04.yaml). One bed, about 62 minutes and 17 g.
 
 **Measured before printing:** every piece keeps exactly its gap in the coaster's holes, star tips
 included. See [the fit](#the-fit-in-the-coaster).
@@ -46,9 +48,10 @@ the coaster is the whole test, and the pieces sit loose in its holes.
 | COASTER | the gBV minimal coaster, once: 90 mm, 3 mm straps, 4 mm tall, no base |
 | GAP 05, GAP 10, GAP 15, GAP 20 | the middle ring (orbit 2): ten six-sided pieces at radius 19.9 mm, at that gap per face |
 | STAR 15 | the next ring out (orbit 3): ten small five-point stars at radius 28.3 mm, at 0.15 |
+| PEAK 2 | the middle ring again at 0.15, each piece with a 2 mm peak: the same wall, then a soft curve up to a point |
 
 The pieces are 1.2 mm thick, so in the 4 mm coaster they sit below the top and the fit is read on
-the walls. The rings were read off `bikar bands`. The gap is taken off the piece, so one coaster
+the walls. The peaked set is 3.2 mm at its point, still under the top. The rings were read off `bikar bands`. The gap is taken off the piece, so one coaster
 takes every set. Each set is its own plate item and goes in its own bag straight off the plate,
 labelled with its code, because the sets look alike. The bed map below says which set is where.
 
@@ -65,6 +68,9 @@ coaster is the better test, and it takes less filament (15 g against 22, in the 
 - **What it lets us decide:** loose-pieces call 4, and the gap the F3 openwork frame reuses
   ([D-090](../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
 - **What to read off it:** for each bag, drops in / pressed in / will not go; tips catch or not.
+  For PEAK 2, also whether 2 mm reads as the look you wanted in the hand
+  ([the peaked-pieces page](../working-model/feedback-requests/2026-10-02-peaked-pieces.md)),
+  and whether the point prints clean.
 
 ## The fit in the coaster
 
@@ -95,10 +101,10 @@ in bikar reads every corner so the holes cannot drift back.
 ## Pictures
 
 The bed as it will print, front edge at the bottom, each set named where it landed. The four hexagon
-rings look the same in the hand, so bag them by this map. It is drawn from the sliced plate by
+rings and the peaked ring look much the same from above, so bag them by this map. It is drawn from the sliced plate by
 `print_review.py bed`, from the bed map compose writes beside the plate.
 
-![The sheets-04 bed: the coaster, four hexagon rings at four gaps and the star ring, each labelled](sheets-04-media/bed-map.png)
+![The sheets-04 bed: the coaster, four hexagon rings at four gaps, the star ring and the peaked ring, each labelled](sheets-04-media/bed-map.png)
 
 The coupon's frame and its 41 loose pieces at 80 mm, all five rings at 0.15 mm, from the first
 version of this plate: the frame alone on the left, the pieces lifted above their pockets on the
@@ -110,7 +116,7 @@ the loosest gap, 0.20.
 
 ## Cost and risk
 
-One bed, 56 minutes, about 15 g (local slice of the plate, 2026-10-02, X2D preset and PLA Basic, no
+One bed, 62 minutes, about 17 g (local slice of the plate, 2026-10-02, X2D preset and PLA Basic, no
 slicer warnings, nothing sent).
 
 **Risk: watch.** The pieces are the smallest things we would have printed, and a small piece that
@@ -127,6 +133,8 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
   measured on every CS-1 piece is 0.150 mm all round.
 - Every piece passes the mesh check: each hexagon set is ten bodies, 8.97 mm across at its
   narrowest at 0.05 and 8.67 mm at 0.20; the stars are ten bodies, 2.10 mm.
+- The peaked set: the same file with `peak 2` (bikar #298). It passes the mesh check: ten bodies,
+  3.2 mm tall, 8.77 mm across at its narrowest. Nothing has printed with a peak yet.
 - The plate gives each set a `label:`, and `bambu slice compose` writes the bed map from it.
 
 ## Your call
@@ -151,3 +159,5 @@ Notes:
 | 2026-10-01 | sliced — the file landed (bikar #296); local slice fits one bed, 56 minutes, 22 g, with a bed map | this page |
 | 2026-10-02 | sliced — reworked at Omar's ask, the minimal coaster in place of the frame; 55 minutes, 15 g; the holes measured smaller than the pockets, only GAP 20 clears | this page |
 | 2026-10-02 | sliced — re-sliced on the coaster with exact holes (bikar #297); every set keeps its full gap; 56 minutes, 15 g | this page |
+| 2026-10-02 | approved — as it stands, by Omar on this page (ticked before the peaked set was added) | this page |
+| 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
