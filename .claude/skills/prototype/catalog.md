@@ -1849,7 +1849,13 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
 - **Status**: planned — the plate [sheets-04](../../../docs/plates/sheets-04.md) is sliced (one bed,
-  56 min, 22 g) and waits on Omar's tick and his yes to failure detection on (loose-pieces design §3.7)
+  55 min, 15 g) and waits on Omar's tick and his yes to failure detection on (loose-pieces design §3.7).
+  Since 2026-10-02 (Omar's ask) it prints the pieces in the real gBV minimal coaster (CS-13,
+  `gBV_JTt3Kxk-minimal-coaster.bkr`, 4 mm, no base) rather than this file's `Frame`. Measured on the
+  meshes, that coaster's holes come 0.15 to 0.25 mm further in at the piece corners than the
+  `Frame` pockets do: least room −0.20 mm at GAP 05, −0.12 at 10, −0.03 at 15, +0.05 at 20, and
+  −0.13 at the star tips. Until bikar cuts the coaster's holes on the pocket outline, only GAP 20
+  clears there.
 - **Model**: `bikar/patterns/Coupons/Loose-Fit-Coupon.bkr` — the gBV coaster (CS-13) as the
   backed frame of the [loose-pieces design](../../../docs/design/coaster/loose-pieces-design.md)
   (F1: a solid slab, the straps standing on it, a pocket in every cell), with two rings as loose
