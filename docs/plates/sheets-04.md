@@ -155,7 +155,7 @@ layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.
 
 Two things, kept apart: whether to print it, and the printer question that comes with it.
 
-- [ ] **Approve as it stands**
+- [x] **Approve as it stands**
 - [ ] **Hold** — say why in the notes
 
 Separately, loose-pieces call 4 asks one yes or no of you before this prints:
@@ -176,3 +176,4 @@ Notes:
 | 2026-10-02 | approved — as it stands, by Omar on this page (ticked before the peaked set was added) | this page |
 | 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
 | 2026-10-02 | sliced — re-sliced after bikar #299, which fixed the peaked pieces' flat top; both kinds of piece shown side by side, PEAK 2 keeps its full gap; 62 minutes, 17 g | this page |
+| 2026-10-02 | approved — again, by Omar on this page, as it stands with both prints and the fixed peak; the failure-detection yes is still open | this page |
