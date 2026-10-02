@@ -49,6 +49,18 @@ their default gap.
 
 **Decided 2026-10-02:** 2 mm → [D-091](../decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)
 
+**Corrected 2026-10-02, after the decision.** The pictures above had a fault at 2 and 4 mm.
+When a peak was lower than the piece is from its edge to its middle, the curve stopped part way
+in and the top was cut flat. At 2 mm the gold hexes had a flat lid over most of their top, and
+at 4 mm a smaller one. bikar #299 fixed it: a low peak is now a round dome that still
+reaches its full height in the middle. These are the same four views drawn with the fix. 6 mm and
+the blue stars did not change. The 2 mm hexes are now low domes rather than flat-topped pieces,
+so it is worth a second look before the sheet prints. The decision stands until you change it.
+
+![The same four options drawn with the fix: flat, then peaked 2, 4 and 6 mm](2026-10-02-peaked-pieces-media/whole-coaster-fixed.png)
+
+![The same four, seen from low across the coaster, with the fix](2026-10-02-peaked-pieces-media/side-view-fixed.png)
+
 ## 2. Where to try it in plastic
 
 **In short.** The [gBV fit sheet](../../plates/sheets-04.md) already prints the gBV pieces flat
