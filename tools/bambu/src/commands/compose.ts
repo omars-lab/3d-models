@@ -36,7 +36,7 @@ import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir } from "../paths.js";
-import { writePlatePreview, readBeds, type SlicedBed } from "../threemf.js";
+import { writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
@@ -53,10 +53,12 @@ export interface ManifestItemBkr {
   params?: Record<string, number>; // --param overrides (bikar --param takes numbers)
   window?: string; // `--window <side>[@x,y]`: a square sample cut at the coaster's own scale (bikar #293)
   count?: number; // copies on the plate (default 1)
+  label?: string; // what the person at the printer calls it ("GAP 05"); names it in the bed map, never in the id
 }
 export interface ManifestItemIteration {
   iteration: string; // an already-known it-<sha12>
   count?: number;
+  label?: string;
 }
 export type ManifestItem = ManifestItemBkr | ManifestItemIteration;
 export interface PlateManifest {
@@ -113,6 +115,7 @@ export function parseManifest(text: string): PlateManifest {
   if (!Array.isArray(items) || items.length === 0) {
     throw new Error("plate manifest has no `items:` — a plate with nothing to compose");
   }
+  const labels = new Set<string>();
   items.forEach((raw, i) => {
     if (!raw || typeof raw !== "object") throw new Error(`items[${i}] is not a mapping`);
     const it = raw as Record<string, unknown>;
@@ -147,6 +150,15 @@ export function parseManifest(text: string): PlateManifest {
       if (typeof it.count !== "number" || !Number.isInteger(it.count) || it.count < 1) {
         throw new Error(`${where}: \`count:\` must be an integer >= 1, got ${JSON.stringify(it.count)}`);
       }
+    }
+    if (it.label !== undefined) {
+      if (typeof it.label !== "string" || !it.label.trim()) {
+        throw new Error(`${where}: \`label:\` must be a non-empty string (what the bag and the bed map call it)`);
+      }
+      if (labels.has(it.label)) {
+        throw new Error(`${where}: \`label: ${it.label}\` is already used by another item — two sets with one name cannot be told apart`);
+      }
+      labels.add(it.label);
     }
   });
   if (m.beds !== undefined && (typeof m.beds !== "number" || !Number.isInteger(m.beds) || m.beds < 1)) {
@@ -231,6 +243,59 @@ export function spilledItems(beds: SlicedBed[], entryByStl: Map<string, string[]
     .flatMap((b) => b.objects.map((o) => `${(entryByStl.get(o) ?? [o]).join(" / ")} (bed ${b.index})`));
 }
 
+/** One row of the bed map: which plate item an arranged object is, and where it sits. */
+export interface BedMapRow {
+  object: string; // the 3MF object id
+  entry: string; // c1, c2, … ("" when the object matched no item)
+  label: string; // the manifest `label:`, else the entry
+  piece: string;
+  params: Record<string, number>;
+  iteration: string;
+  x: number; // centre, bed millimetres from the front-left corner
+  y: number;
+  turn_deg: number;
+}
+
+/**
+ * Join the arranged objects back to the plate items, so sets that look alike (sheets-04: four rings of
+ * the same hexagons at four gaps) can be told apart on the bed. PURE. An object carries its input
+ * file's name, `<iteration>.stl`; an item handed in `count` times, or two items with one recipe, give
+ * several objects one name, and those take the items in manifest order — they are the same geometry,
+ * so which copy is which does not change what prints. An object no item claims keeps entry "".
+ */
+export function bedMap(placements: Placement[], resolved: ResolvedItem[]): BedMapRow[] {
+  const waiting = new Map<string, ResolvedItem[]>();
+  for (const r of resolved) {
+    const key = `${r.iteration}.stl`;
+    const list = waiting.get(key) ?? [];
+    for (let c = 0; c < r.count; c++) list.push(r);
+    waiting.set(key, list);
+  }
+  const entryOrder = (e: string) => Number(e.replace(/^c/, "")) || Number.MAX_SAFE_INTEGER;
+  return placements
+    .map((p) => {
+      const r = waiting.get(p.name)?.shift();
+      const round = (v: number) => Math.round(v * 10) / 10;
+      return {
+        object: p.objectId,
+        entry: r?.entry ?? "",
+        label: r ? r.label || r.entry : p.name,
+        piece: r?.piece ?? "",
+        params: r?.params ?? {},
+        iteration: r?.iteration ?? p.name.replace(/\.stl$/i, ""),
+        x: round(p.x),
+        y: round(p.y),
+        turn_deg: round(p.turnDeg),
+      };
+    })
+    .sort((a, b) => entryOrder(a.entry) - entryOrder(b.entry));
+}
+
+/** Where the bed map goes: next to the plate, as `<name>.bedmap.json`. */
+export function bedMapPathFor(threemf: string): string {
+  return threemf.replace(/\.3mf$/i, "") + ".bedmap.json";
+}
+
 interface ComposeOpts {
   out?: string;
   outputdir?: string;
@@ -256,6 +321,7 @@ export interface ResolvedItem {
   count: number;
   sourceSha256: string;
   iteration: string; // it-<sha12>
+  label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
 }
 
 /** Resolve a bikar-tracked blob's source_sha256 at a ref, or throw a clear error. */
@@ -374,6 +440,7 @@ export async function resolveManifestItems(
       count: item.count ?? 1,
       sourceSha256,
       iteration: iterationId(key),
+      label: item.label ?? "",
     });
   }
   return resolved;
@@ -548,7 +615,9 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     console.log("render plan:");
     for (const line of renderPlan) console.log(line);
     console.log("resolved iterations:");
-    for (const r of resolved) console.log(`  ${r.entry}: ${r.iteration} ×${r.count} (${pieceLabel(r)})`);
+    for (const r of resolved) {
+      console.log(`  ${r.entry}: ${r.iteration} ×${r.count} (${pieceLabel(r)})${r.label ? ` "${r.label}"` : ""}`);
+    }
     console.log(`bed-fit pre-check: ${check.ok ? "PASS (necessary only — --arrange decides tiling)" : "FAIL"}`);
     for (const f of check.failures) console.log(`  ✗ ${f}`);
     console.log(`beds allowed: ${maxBeds} (the slice decides; a spill past it is refused after slicing)`);
@@ -636,6 +705,24 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   console.log(`composed → ${outPath} (${kb} KB, ${inputs.length} objects from ${resolved.length} variant(s))`);
   const preview = await writePlatePreview(outPath);
   console.log(preview ? `plate picture → ${preview} (look before sending)` : "plate picture: none in the 3MF.");
+
+  // The bed map: which item each arranged object is, so sets that look alike are bagged right.
+  const placements = await readPlacements(outPath);
+  if (placements) {
+    const rows = bedMap(placements, resolved);
+    const mapPath = bedMapPathFor(outPath);
+    writeFileSync(mapPath, JSON.stringify({ plate: basename(outPath), bed: bed.name, objects: rows }, null, 2) + "\n");
+    console.log(`bed map → ${mapPath} (x, y from the front-left corner, mm):`);
+    for (const row of rows) {
+      const params = Object.entries(row.params).map(([k, v]) => `${k}=${v}`).join(" ");
+      const what = [row.piece || "(default solid)", params].filter(Boolean).join(" ");
+      console.log(`  ${row.label.padEnd(10)} ${row.entry.padEnd(4)} ${what.padEnd(24)} at ${row.x}, ${row.y}`);
+    }
+    const unmatched = rows.filter((r) => !r.entry);
+    if (unmatched.length > 0) console.error(`warning: ${unmatched.length} object(s) on the bed matched no plate item.`);
+  } else {
+    console.error("warning: no bed map — the 3MF has no build items or object names to read.");
+  }
 
   // 9. Scaffold the plate record with resolved objects[].iteration provenance (§7). Stops at a draft
   //    under .bambu/records/ and the OWNER GATE — compose never dispatches (that is `print send`).

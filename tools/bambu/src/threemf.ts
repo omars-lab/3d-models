@@ -180,3 +180,53 @@ export async function readBeds(threemf: string): Promise<SlicedBed[] | null> {
   if (!raw) return null;
   return parseBeds(raw);
 }
+
+/** Where `--arrange` put one object: its 3MF object id, its name (the input STL basename) and the
+ *  centre and turn of its build transform, in bed millimetres. */
+export interface Placement {
+  objectId: string;
+  name: string;
+  x: number;
+  y: number;
+  turnDeg: number; // rotation about z, counter-clockwise, 0 when arrange left it as rendered
+}
+
+/**
+ * Every placed object of a sliced `.3mf`, in build order. PURE. The position is the `<item>`
+ * transform in `3D/3dmodel.model` (12 numbers, row-vector form, the last three the move); the name
+ * is the object's `name` in `Metadata/model_settings.config`, which Studio sets to the input file's
+ * basename. An item whose object has no name keeps "" (the caller says it cannot be matched).
+ */
+export function parsePlacements(modelXml: string, settingsXml: string): Placement[] {
+  const names = new Map<string, string>();
+  for (const block of settingsXml.match(/<object\s+id="[^"]*">[\s\S]*?<\/object>/g) ?? []) {
+    const id = block.match(/<object\s+id="([^"]*)"/)?.[1];
+    const name = block.match(/<metadata\s+key="name"\s+value="([^"]*)"/)?.[1];
+    if (id !== undefined && name !== undefined) names.set(id, name);
+  }
+  const build = modelXml.match(/<build\b[\s\S]*?<\/build>/)?.[0] ?? "";
+  const out: Placement[] = [];
+  for (const m of build.matchAll(/<item\b[^>]*>/g)) {
+    const tag = m[0];
+    const objectId = tag.match(/\bobjectid="([^"]*)"/)?.[1];
+    if (objectId === undefined) continue;
+    const t = (tag.match(/\btransform="([^"]*)"/)?.[1] ?? "1 0 0 0 1 0 0 0 1 0 0 0").trim().split(/\s+/).map(Number);
+    const turn = (Math.atan2(t[1] ?? 0, t[0] ?? 1) * 180) / Math.PI;
+    out.push({
+      objectId,
+      name: names.get(objectId) ?? "",
+      x: t[9] ?? 0,
+      y: t[10] ?? 0,
+      turnDeg: Math.abs(turn) < 1e-6 ? 0 : turn,
+    });
+  }
+  return out;
+}
+
+/** Read where each object sits on a sliced or arranged `.3mf`. null when either member is missing. */
+export async function readPlacements(threemf: string): Promise<Placement[] | null> {
+  const model = await readMember(threemf, "3D/3dmodel.model");
+  const settings = await readMember(threemf, "Metadata/model_settings.config");
+  if (!model || !settings) return null;
+  return parsePlacements(model, settings);
+}

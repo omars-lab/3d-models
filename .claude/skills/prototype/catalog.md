@@ -1845,3 +1845,42 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **What we learned**: — pending.
 - **Feeds**: the D-087 comparison; the gallery's coaster entry; the
   constructions ledger's `coaster` and `catalog` cells for `NtnlGMTElBk`.
+
+## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
+
+- **Status**: planned — the plate [sheets-04](../../../docs/plates/sheets-04.md) is sliced (one bed,
+  56 min, 22 g) and waits on Omar's tick and his yes to failure detection on (loose-pieces design §3.7)
+- **Model**: `bikar/patterns/Coupons/Loose-Fit-Coupon.bkr` — the gBV coaster (CS-13) as the
+  backed frame of the [loose-pieces design](../../../docs/design/coaster/loose-pieces-design.md)
+  (F1: a solid slab, the straps standing on it, a pocket in every cell), with two rings as loose
+  pieces. Three pieces, each its own render:
+  `cd bikar && node packages/cli/dist/index.js render patterns/Coupons/Loose-Fit-Coupon.bkr
+  --format stl --check --piece Frame -o <out>.stl`, then `--piece Hex --param gap=0.05` (and
+  0.1, 0.15, 0.2), then `--piece Star --param star_gap=0.15`. The plate
+  [`sheets-04.yaml`](../../../docs/plates/sheets-04.yaml) does all six. `Hex` is orbit 2, ten
+  six-sided pieces at radius 19.9 mm; `Star` is orbit 3, ten small five-point stars at 28.3 mm
+  (`bikar bands`). The real coaster's `size=90` and `strap=3` are kept, so a gap is read on the
+  pieces gBV will have; only `slab=2` is thinner. The gap is taken off the piece, so the pocket
+  keeps the drawn shape and one frame fits every set (its STL is byte for byte the same at gap
+  0.05 and 0.15). All pass the mesh gate: Frame 1 body, euler 2; Hex 10 bodies, minFeature
+  8.97 mm at 0.05 to 8.67 mm at 0.20; Star 10 bodies, minFeature 2.10 mm. Added with bikar
+  PR #296.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. For each Hex bag (GAP 05, 10, 15, 20): does a piece drop in by hand, press in, or
+    not go? Does it stay when the coaster is turned over? The answer is the gap per face for
+    loose pieces (loose-pieces call 4).
+    **The ladder can fail at both ends.** If GAP 05 drops in freely, the printer oversizes the
+    pocket or undersizes the piece, and the reading measures that error (`CAL-HOL-01`), not a
+    gap to use. If GAP 20 falls out upside down, 0.20 is past the loose end, and the default
+    0.15 is the edge.
+  - [ ] 2. STAR 15: do the small stars' tips catch going in at 0.15, where the hexagons do not?
+    If they catch, a pointed piece needs its own gap.
+- **What we learned**: — pending.
+- **Settles**: the loose-piece use of `CAL-FIT-01` (whether its sliding step 0.15 transfers to a
+  piece dropped into a pocket printed in place, loose-pieces §3.4). The `calibrate` skill confirms
+  or splits the bet once it prints (loose-pieces §6 item 8).
+- **Does not settle**: the openwork frame (F3, no floor), which follows and reuses this gap; and
+  a piece that is taller than the straps (sheet 5).
+- **Feeds**: the gap the loose-pieces design's F3 frame and the gBV loose coaster use; the
+  `loose … clearance` default in coaster files.

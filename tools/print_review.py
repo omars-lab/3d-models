@@ -4,6 +4,7 @@
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
+    python3 tools/print_review.py bed <out.png> <plate.3mf>
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -33,13 +34,23 @@ tile. It is for comparing edges: a 4 mm square puts 100 px on a millimetre, so a
 is 40 px. The top faces would not do: on a rounded top their outline is the round, not the
 wall.
 
+`bed` draws a composed plate from above as it will print: every object where `--arrange` put
+it, turned as it was turned, on the bed square with the front edge at the bottom, and each one
+named by the label in the bed map `bambu slice compose` wrote beside the plate
+(`<plate>.bedmap.json`; without it, by the object's file name). It is for plates whose sets look
+alike, so the person at the printer bags each one under the right name.
+
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
 """
+import json
 import math
+import re
 import struct
 import sys
+import zipfile
 from collections import deque
+from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
@@ -250,6 +261,94 @@ def edge_sheet(out, region, paths):
     print("wrote", out)
 
 
+BED_MM = 256     # the X2D bed, mm (D-053)
+BED_PX = 4       # px per mm on the bed picture
+NUM = r"(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)"
+
+
+def transform(text):
+    """A 3MF transform (12 numbers, row-vector form) as a function of (x, y) -> (x, y)."""
+    m = [float(v) for v in text.split()] if text else [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+    return lambda x, y: (x * m[0] + y * m[3] + m[9], x * m[1] + y * m[4] + m[10])
+
+
+def plate_objects(zf):
+    """[(object id, [triangle as three (x, y) bed points])] for every build item of a 3MF."""
+    model = zf.read("3D/3dmodel.model").decode()
+    comps = {}
+    for oid, body in re.findall(r'<object id="([^"]+)"[^>]*>(.*?)</object>', model, re.S):
+        comps[oid] = re.findall(r'<component[^>]*?path="([^"]+)"[^>]*?objectid="([^"]+)"[^>]*?(?:transform="([^"]*)")?[^>]*/>', body)
+    meshes = {}
+
+    def mesh(path, oid):
+        if (path, oid) not in meshes:
+            text = zf.read(path.lstrip("/")).decode()
+            body = re.search(rf'<object id="{oid}"[^>]*>(.*?)</object>', text, re.S).group(1)
+            vs = [(float(x), float(y)) for x, y in re.findall(rf'<vertex x="{NUM}" y="{NUM}"', body)]
+            ts = [(int(a), int(b), int(c)) for a, b, c in re.findall(r'<triangle v1="(\d+)" v2="(\d+)" v3="(\d+)"', body)]
+            meshes[(path, oid)] = (vs, ts)
+        return meshes[(path, oid)]
+
+    build = re.search(r"<build\b.*?</build>", model, re.S).group(0)
+    out = []
+    for tag in re.findall(r"<item\b[^>]*>", build):
+        oid = re.search(r'objectid="([^"]+)"', tag).group(1)
+        place = transform((re.search(r'transform="([^"]*)"', tag) or [None, ""])[1])
+        tris = []
+        for path, sub, t in comps.get(oid, []):
+            local = transform(t)
+            vs, ts = mesh(path, sub)
+            pts = [place(*local(x, y)) for x, y in vs]
+            tris += [(pts[a], pts[b], pts[c]) for a, b, c in ts]
+        out.append((oid, tris))
+    return out
+
+
+def bed_picture(plate, labels, names=True):
+    """The bed from above, front edge at the bottom: each object in its own shade, its label on a
+    white box at its centre. `labels` maps object id -> label; names=False leaves the boxes off."""
+    size = BED_MM * BED_PX
+    img = Image.new("RGB", (size, size + CAPTION), (24, 24, 24))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, size - 1, size - 1], outline=(90, 90, 90), width=2)
+    for k in range(32, BED_MM, 32):  # a 32 mm grid, to read distances by eye
+        d.line([(k * BED_PX, 0), (k * BED_PX, size)], fill=(40, 40, 40))
+        d.line([(0, k * BED_PX), (size, k * BED_PX)], fill=(40, 40, 40))
+    f = lambda p: (p[0] * BED_PX, size - p[1] * BED_PX)
+    shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240), (240, 230, 120)]
+    font = ImageFont.load_default(size=26)
+    named = []
+    with zipfile.ZipFile(plate) as zf:
+        objects = plate_objects(zf)
+    for k, (oid, tris) in enumerate(objects):
+        for t in tris:
+            d.polygon([f(p) for p in t], fill=shades[k % len(shades)])
+        xs = [p[0] for t in tris for p in t] or [0]
+        ys = [p[1] for t in tris for p in t] or [0]
+        named.append((labels.get(oid, oid), ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)))
+    for name, centre in named if names else []:
+        x, y = f(centre)
+        box = d.textbbox((x, y), name, font=font, anchor="mm")
+        d.rectangle([box[0] - 6, box[1] - 4, box[2] + 6, box[3] + 4], fill=(255, 255, 255))
+        d.text((x, y), name, fill=(0, 0, 0), font=font, anchor="mm")
+    d.text((size / 2, size + CAPTION / 2), "front of the bed", fill=(200, 200, 200), font=font, anchor="mm")
+    return img, named
+
+
+def bed_sheet(out, plate):
+    side = Path(re.sub(r"\.3mf$", "", plate, flags=re.I) + ".bedmap.json")
+    labels = {}
+    if side.exists():
+        labels = {r["object"]: r["label"] for r in json.loads(side.read_text())["objects"]}
+    else:
+        print(f"no bed map at {side}: naming objects by their 3MF id")
+    img, named = bed_picture(plate, labels)
+    for name, (x, y) in named:
+        print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
+    img.save(out)
+    print("wrote", out)
+
+
 def self_test():
     def square(draw_holes):
         img = Image.new("L", (S, S), 0)
@@ -312,9 +411,42 @@ def self_test():
         ("edge draws the footprint at the region's scale", abs(foot_share - 0.25) < 0.01),
         ("edge leaves out a face above the bottom", stray_px == 0),
     ]
+    checks += bed_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
+
+
+def bed_self_test():
+    """A 3MF in memory: one 20 x 4 mm bar, placed twice — once as drawn at (50, 50), once turned a
+    quarter at (150, 150). The picture must fill the bar where each was placed, turned, and leave
+    the bed around it empty; the label must come from the map."""
+    import io
+    bar = ('<model><resources><object id="1"><mesh><vertices>'
+           '<vertex x="-10" y="-2" z="0"/><vertex x="10" y="-2" z="0"/>'
+           '<vertex x="10" y="2" z="0"/><vertex x="-10" y="2" z="0"/></vertices><triangles>'
+           '<triangle v1="0" v2="1" v3="2"/><triangle v1="0" v2="2" v3="3"/></triangles></mesh></object>'
+           '</resources></model>')
+    model = ('<model><resources>'
+             '<object id="2"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+             '<object id="4"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+             '</resources><build>'
+             '<item objectid="2" transform="1 0 0 0 1 0 0 0 1 50 50 0"/>'
+             '<item objectid="4" transform="0 1 0 -1 0 0 0 0 1 150 150 0"/>'
+             '</build></model>')
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("3D/3dmodel.model", model)
+        zf.writestr("3D/Objects/o.model", bar)
+    named = bed_picture(buf, {"2": "FLAT", "4": "TURNED"})[1]
+    img = bed_picture(buf, {}, names=False)[0]  # the label boxes are white: test under them
+    lit = lambda x, y: sum(img.getpixel((int(x * BED_PX), int((BED_MM - y) * BED_PX)))) > 300
+    return [
+        ("bed fills a placed bar along its length", lit(58, 50) and lit(42, 50)),
+        ("bed leaves the bed beside the bar empty", not lit(50, 56)),
+        ("bed turns a bar a quarter turn", lit(150, 158) and not lit(158, 150)),
+        ("bed names each object from the map", [n for n, _ in named] == ["FLAT", "TURNED"]),
+    ]
 
 
 if __name__ == "__main__":
@@ -323,6 +455,9 @@ if __name__ == "__main__":
         sys.exit(0 if self_test() else 1)
     if len(a) >= 3 and a[0] in ("sheet", "art"):
         (sheet if a[0] == "sheet" else art_sheet)(a[1], a[2:])
+        sys.exit(0)
+    if len(a) == 3 and a[0] == "bed":
+        bed_sheet(a[1], a[2])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])
