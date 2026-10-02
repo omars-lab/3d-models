@@ -41,8 +41,11 @@ Two things must be true, or stop and say so:
    built to fail (K10). What crosses the line is a **hardware-risk** failure: a part that detaches and
    is dragged into a blob the nozzle plows through, a toolpath into the bed/gantry, anything that could
    crash the nozzle or scar the plate. Such a coupon is only acceptable with **active mitigation** —
-   on-device failure/spaghetti detection **and** a watched first layer **and** small part mass — and
-   absent that mitigation, **drop or redesign the coupon; never risk the printer to close a bet.**
+   on-device failure/spaghetti detection **and** small part mass — and absent that mitigation, **drop
+   or redesign the coupon; never risk the printer to close a bet.** The X2D runs its own failure
+   detection, so that half is taken as given: never ask Omar to turn it on or watch for it, and never
+   hold a plate on that yes ([D-092](../../../docs/working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
+   Small part mass is still ours to check.
    (The firmware owns collision/thermal/runout; this tenet owns the geometry we *choose* to send.)
 
 ## The seven steps
@@ -217,7 +220,8 @@ the measured value; flip the catalog Status and date the iteration row. `validat
 - **No measurement is worth the machine.** A coupon that could physically damage the printer is never
   sent (gate 3). Cosmetic/geometry failures are the data and stay fair game; a hardware-risk failure
   (a detached part dragged into a blob, a crash into bed/gantry) needs active mitigation or the coupon
-  is dropped/redesigned. Never risk the printer to close a bet.
+  is dropped/redesigned. Never risk the printer to close a bet. The X2D's own failure detection is
+  that mitigation for small loose parts; it is never asked of Omar per plate (D-092).
 - **Dispatch is owner-gated.** The skill walks to the send and stops. The physical send — and any
   `--yes` — is the owner's, every time.
 - **The pre-send gate is a checklist, not a vibe.** Before any dispatch, walk step 4's five lines —

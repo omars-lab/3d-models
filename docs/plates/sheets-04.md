@@ -130,8 +130,9 @@ One bed, 62 minutes, about 17 g (local slice of the plate, 2026-10-02, X2D prese
 slicer warnings, nothing sent).
 
 **Risk: watch.** The pieces are the smallest things we would have printed, and a small piece that
-comes loose can be dragged across the bed. It prints only with failure detection on and the first
-layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.7).
+comes loose can be dragged across the bed. The X2D's own failure detection covers that, so it is
+not a separate yes before the print
+([D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
 
 ## How it was built
 
@@ -158,10 +159,11 @@ Two things, kept apart: whether to print it, and the printer question that comes
 - [x] **Approve as it stands**
 - [ ] **Hold** — say why in the notes
 
-Separately, loose-pieces call 4 asks one yes or no of you before this prints:
+Separately, loose-pieces call 4 asked for a yes to failure detection on and the first layer
+watched for this plate.
 
-- [ ] **Yes: failure detection on and the first layer watched** for this plate (loose-pieces §3.7).
-  A no keeps the pieces off the plate.
+**Decided 2026-10-02:** not a per-plate question, the X2D does its own failure detection →
+[D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)
 
 Notes:
 
@@ -177,3 +179,4 @@ Notes:
 | 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
 | 2026-10-02 | sliced — re-sliced after bikar #299, which fixed the peaked pieces' flat top; both kinds of piece shown side by side, PEAK 2 keeps its full gap; 62 minutes, 17 g | this page |
 | 2026-10-02 | approved — again, by Omar on this page, as it stands with both prints and the fixed peak; the failure-detection yes is still open | this page |
+| 2026-10-02 | reviewed — Omar answered the failure-detection box: it is the X2D's own, not a per-plate yes; nothing is left blocking the print but the send | [D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes) |
