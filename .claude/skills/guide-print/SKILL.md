@@ -141,9 +141,9 @@ skippable.
    fine to *start* (the slice reports the grams; Plate 1 ≈ 70 g by filament length, the dispatch-relevant
    figure, not the 111 g solid-volume equivalent). The runout backstop means only a *clearly* insufficient
    spool is worth stopping for; stay reachable to feed it when it nudges.
-5. **Owner is at the machine.** Dispatch is owner-gated: watching the first layer is a non-damaging
-   risk only a present human catches (step 5), and the physical send — and any `--yes` — is the
-   operator's, never the skill's.
+5. **Owner is at the machine.** Dispatch is owner-gated: the physical send — and any `--yes` — is
+   the operator's, never the skill's. Watching the first layer is not on this list: the X2D does
+   its own first-layer and failure detection (D-092).
 
 Then, and only then:
 
@@ -170,10 +170,10 @@ the record and the bench sheet agree.
 ### 5 — Attend the print, and print the whole card in one session
 
 The residual first-print risks are operator-side and **non-damaging** (poor first-layer adhesion, no
-filament, a profile mismatch) — the firmware owns collision/thermal/runout. So the two controls that
-matter are **watch the first layer** and **confirm-before-send** (step 4). On Plate 1 this is doubly
-load-bearing: MC-6 prints on bare plate *by design*, so watching the first layer **is** the adhesion
-measurement. Print the card in **one material, one profile, one session** — "a card printed across
+filament, a profile mismatch) — the firmware owns collision/thermal/runout, and on the X2D the
+first layer and print failures too (D-092). So the control that matters is **confirm-before-send**
+(step 4). One exception is a reading, not a watch: MC-6 on Plate 1 prints on bare plate *by
+design*, so how its first layer sticks **is** the adhesion measurement. Print the card in **one material, one profile, one session** — "a card printed across
 two sessions is two half-cards."
 
 **Runout is a pause, not a failure.** If the spool runs out, the X2D's runout sensor pauses the job,
@@ -232,8 +232,8 @@ the measured value; flip the catalog Status and date the iteration row. `validat
 - **Slicer settings on a calibration plate are measurements.** Supports/brim/`--check` choices are
   part of the experiment, not taste — verify them in the preview (step 2) before dispatch.
 - **One material, one profile, one session** for a card that must be read as a set.
-- **Attend the first layer.** It is the one non-damaging risk that a human catches and the firmware
-  doesn't.
+- **The first layer is the printer's to watch.** The X2D detects first-layer and print failures
+  itself; never ask the owner to watch it, and never hold a print for it (D-092).
 - **A refuting reading is a result.** Never delete a reading that contradicts the design.
 - Full campaign sequencing and the per-coupon expectation tables:
   [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
