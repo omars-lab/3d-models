@@ -319,9 +319,9 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    Call 1 there is decided (D-090): the backed frame first for the gap reading, then the openwork
    frame, both with the same pieces, on gBV. The true edges shipped 2026-10-01 (bikar #291), and
    the loose-piece output and the backed frame the same day (bikar #292): `loose where …`,
-   `--piece Frame` and one `--piece <color>`, pocket walls on the exact outline. Next is the gBV fit
-   sheet (item 8, sheet 4), then a piece-height option (sheet 5's tall piece) and the openwork
-   frame. The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
+   `--piece Frame` and one `--piece <color>`, pocket walls on the exact outline. The gBV fit sheet
+   (item 8, sheet 4) is built and waits on Omar; next is a piece-height option (sheet 5's tall
+   piece) and the openwork frame. The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
    (guided page, raised fills, the sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
    height.
 7. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
@@ -343,10 +343,12 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    (bikar #291), and the window cut shipped the same day (bikar #293), tried on all three columns
    and on sheet 5's square slab. The labeled cards for sheets 1 and 5 (bikar #294) and the
    sheet plate (`bambu slice sheet`, one color) shipped the same day too, and sheet 1 is built in
-   full ([`sheets-01.yaml`](../../plates/sheets-01.yaml), waiting on Omar's tick).
+   full ([`sheets-01.yaml`](../../plates/sheets-01.yaml), waiting on Omar's tick). Sheet 4 is built
+   in full too: its file is bikar's `Loose-Fit-Coupon.bkr` (#296) and its plate
+   [`sheets-04.yaml`](../../plates/sheets-04.yaml) slices to one bed, 56 minutes, 22 g, with a bed
+   map naming each look-alike set. It waits on Omar's tick and his yes to failure detection.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
-   sheet plate's color parts per sample; sheet 4 its own coupon file (the loose-piece output it is cut from shipped,
-   bikar #292); sheet 5's tall-piece row a piece-height option and its raised row raised fills
+   sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.

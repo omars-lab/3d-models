@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021" xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">
+ <metadata name="Application">BambuStudio-02.08.02.61</metadata>
+ <metadata name="BambuStudio:3mfVersion">1</metadata>
+ <metadata name="Copyright"></metadata>
+ <metadata name="CreationDate">2026-10-02</metadata>
+ <metadata name="Description"></metadata>
+ <metadata name="Designer"></metadata>
+ <metadata name="DesignerCover"></metadata>
+ <metadata name="DesignerUserId"></metadata>
+ <metadata name="License"></metadata>
+ <metadata name="ModificationDate">2026-10-02</metadata>
+ <metadata name="Origin"></metadata>
+ <metadata name="ProfileCover"></metadata>
+ <metadata name="ProfileDescription"></metadata>
+ <metadata name="ProfileTitle"></metadata>
+ <metadata name="Title"></metadata>
+ <resources>
+  <object id="2" p:UUID="00000001-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_1.model" objectid="1" p:UUID="00010000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 1.60000002"/>
+   </components>
+  </object>
+  <object id="4" p:UUID="00000002-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_2.model" objectid="3" p:UUID="00020000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 0.600000024"/>
+   </components>
+  </object>
+  <object id="6" p:UUID="00000003-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_3.model" objectid="5" p:UUID="00030000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 0.600000024"/>
+   </components>
+  </object>
+  <object id="8" p:UUID="00000004-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_4.model" objectid="7" p:UUID="00040000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 0.600000024"/>
+   </components>
+  </object>
+  <object id="10" p:UUID="00000005-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_5.model" objectid="9" p:UUID="00050000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 0.600000024"/>
+   </components>
+  </object>
+  <object id="12" p:UUID="00000006-61cb-4c03-9d28-80fed5dfa1dc" type="model">
+   <components>
+    <component p:path="/3D/Objects/object_6.model" objectid="11" p:UUID="00060000-b206-40ff-9872-83e8017abed1" transform="1 0 0 0 1 0 0 0 1 0 0 0.600000024"/>
+   </components>
+  </object>
+ </resources>
+ <build p:UUID="2c7c17d8-22b5-4d84-8835-1976022ea369">
+  <item objectid="2" p:UUID="00000002-b1ec-4553-aec9-835e5b724bb4" transform="1 0 0 0 1 0 0 0 1 188.23471 184.02966 0" printable="1"/>
+  <item objectid="4" p:UUID="00000004-b1ec-4553-aec9-835e5b724bb4" transform="1 0 0 0 1 0 0 0 1 202.21721 106.92138 0" printable="1"/>
+  <item objectid="6" p:UUID="00000006-b1ec-4553-aec9-835e5b724bb4" transform="-0.809017243 -0.58778491 0 0.58778491 -0.809017243 0 0 0 1 117.22137 203.77229 0" printable="1"/>
+  <item objectid="8" p:UUID="00000008-b1ec-4553-aec9-835e5b724bb4" transform="-0.809016703 -0.587785654 0 0.587785654 -0.809016703 0 0 0 1 67.23665 203.82486 0" printable="1"/>
+  <item objectid="10" p:UUID="0000000a-b1ec-4553-aec9-835e5b724bb4" transform="-0.587785743 0.809016638 0 -0.809016638 -0.587785743 0 0 0 1 208.08249 50.89172 0" printable="1"/>
+  <item objectid="12" p:UUID="0000000c-b1ec-4553-aec9-835e5b724bb4" transform="0.987688431 -0.156433892 0 0.156433892 0.987688431 0 0 0 1 140.22006 130.31727 0" printable="1"/>
+ </build>
+</model>

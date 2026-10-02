@@ -1,7 +1,7 @@
 ---
 plate: sheets-04
-recipe:
-stage: planned
+recipe: sheets-04.yaml
+stage: waiting
 approved: false
 approved_on:
 times_printed: 0
@@ -14,17 +14,14 @@ bets:
 unblocks:
   - "loose-pieces call 4: the gap a loose piece gets per face"
   - "the F3 openwork frame (D-090), which follows F1 and reuses the gap this plate settles"
-minutes:
-grams:
-bed_plates:
+minutes: 56
+grams: 22
+bed_plates: 1
 risk: watch
 pictures:
+  - sheets-04-media/bed-map.png
   - sheets-04-media/gbv-frame-and-pieces.png
   - ../design/coaster/loose-pieces-media/frames.png
-needs:
-  - "the sheet's file in bikar: the gBV frame plus one ring of pieces at each of the four gaps and the small stars at 0.15, as a coupon (not a catalog coaster, so it needs no style name)"
-  - "the sheet plate in the bambu tool: the frame and each gap set as separate items"
-  - "your yes on failure detection on and the first layer watched (loose-pieces §3.7)"
 ---
 
 # sheets-04 — the gBV fit
@@ -32,8 +29,9 @@ needs:
 **In short.** The gBV coaster as a backed frame (a solid slab with pockets, F1), printed once, and
 loose pieces for one ring of it at four gaps per face: 0.05, 0.10, 0.15 and 0.20 mm. The small
 five-point stars come at 0.15 only, to see whether their tips catch. It answers
-[loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes. The frame and
-the pieces can be made now (bikar #292, 2026-10-01); the sheet itself is not put together yet.
+[loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes. All of it
+builds: the file is bikar's `Loose-Fit-Coupon.bkr` (bikar #296) and the plate is
+[`sheets-04.yaml`](sheets-04.yaml). One bed, about 56 minutes and 22 g.
 
 ## What it is
 
@@ -42,11 +40,13 @@ the frame is the whole coaster, and the pieces sit loose in it.
 
 | Code | What it is |
 |---|---|
-| GAP 05, GAP 10, GAP 15, GAP 20 | one ring of pieces at that gap per face; which ring is read off `bikar bands` when built |
-| STAR 15 | the small five-point stars at 0.15 |
+| FRAME | the frame, once: the gBV coaster at its real size (90 mm, 3 mm straps) on a 2 mm slab, a pocket in every cell |
+| GAP 05, GAP 10, GAP 15, GAP 20 | the middle ring (orbit 2): ten six-sided pieces at radius 19.9 mm, at that gap per face |
+| STAR 15 | the next ring out (orbit 3): ten small five-point stars at radius 28.3 mm, at 0.15 |
 
-Each gap set is its own plate item and goes in its own bag straight off the plate, labelled with
-its code, because the sets look alike.
+The rings were read off `bikar bands`. The gap is taken off the piece, so one frame fits every set.
+Each set is its own plate item and goes in its own bag straight off the plate, labelled with its
+code, because the sets look alike. The bed map below says which set is where.
 
 ## Why print it
 
@@ -60,6 +60,12 @@ its code, because the sets look alike.
   upside down; tips catch or not.
 
 ## Pictures
+
+The bed as it will print, front edge at the bottom, each set named where it landed. The four hexagon
+rings look the same in the hand, so bag them by this map. It is drawn from the sliced plate by
+`print_review.py bed`, from the bed map compose writes beside the plate.
+
+![The sheets-04 bed: the frame, four hexagon rings at four gaps and the star ring, each labelled](sheets-04-media/bed-map.png)
 
 gBV as bikar now makes it, at 80 mm with all five rings loose at 0.15 mm: the frame alone on the
 left, and the 41 pieces lifted above their pockets on the right. A quick render of the checked
@@ -75,29 +81,34 @@ The frame kinds in cross-section, from the loose-pieces design; this plate is F1
 
 ## Cost and risk
 
-No slice yet.
+One bed, 56 minutes, about 22 g (local slice of the plate, 2026-10-01, X2D preset and PLA Basic, no
+slicer warnings, nothing sent).
 
 **Risk: watch.** The pieces are the smallest things we would have printed, and a small piece that
 comes loose can be dragged across the bed. It prints only with failure detection on and the first
 layer watched; if that is a no, the pieces stay off the plate (loose-pieces §3.7).
 
-## What it waits on
+## How it was built
 
-- The sheet's file: the gBV frame, one ring of pieces at each gap, and the small stars at 0.15.
-  The loose-piece output it is made from shipped 2026-10-01 (bikar #292): the pocket walls follow
-  the outline exactly, so the gap measured on every CS-1 piece is 0.150 mm all round (the old
-  staircase wall touched the piece on all 24).
-- The sheet plate in the bambu tool.
-- Your yes on the printer question in loose-pieces call 4.
+- The file: bikar's `Loose-Fit-Coupon.bkr` (bikar #296) copies the gBV construction unchanged and
+  keeps its size and strap, so the gap is read on the pieces the gBV coaster will have. It stands
+  on the loose-piece output of bikar #292, whose pocket walls follow the outline exactly: the gap
+  measured on every CS-1 piece is 0.150 mm all round.
+- Every piece passes the mesh check: the frame is one closed body; each hexagon set is ten bodies,
+  8.97 mm across at its narrowest at 0.05 and 8.67 mm at 0.20; the stars are ten bodies, 2.10 mm.
+- The plate gives each set a `label:`, and `bambu slice compose` writes the bed map from it.
 
 ## Your call
 
-Nothing to tick yet: the sheet cannot be built, so there is no slice, no time and no picture of
-the real thing. When its recipe lands this page moves to `proposed`, then to `waiting` with the
-review sheet and the slice, and the boxes below are the ones you will answer.
+Two things, kept apart: whether to print it, and the printer question that comes with it.
 
 - [ ] **Approve as it stands**
 - [ ] **Hold** — say why in the notes
+
+Separately, loose-pieces call 4 asks one yes or no of you before this prints:
+
+- [ ] **Yes: failure detection on and the first layer watched** for this plate (loose-pieces §3.7).
+  A no keeps the pieces off the plate.
 
 Notes:
 
@@ -106,3 +117,4 @@ Notes:
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | sliced — the file landed (bikar #296); local slice fits one bed, 56 minutes, 22 g, with a bed map | this page |

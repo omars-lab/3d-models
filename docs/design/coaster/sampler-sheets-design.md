@@ -37,7 +37,7 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 | 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../../plates/sheets-01.md) |
 | 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding and its card piece | [sheets-02](../../plates/sheets-02.md) |
 | 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../../plates/sheets-03.md) |
-| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | no: needs its own file and plate (true edges and loose pieces shipped, bikar #291 and #292) | [sheets-04](../../plates/sheets-04.md) |
+| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
 
 Loose-pieces call 2, where the guided page lives, is not something to hold in the hand. It gets

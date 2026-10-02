@@ -1,0 +1,61 @@
+# sheets-04 — the gBV fit (sampler sheet 4)
+#
+# The gBV coaster (gBV_JTt3Kxk, CS-13) as the backed frame of the loose-pieces design (F1: a
+# solid slab, the straps standing on it, a pocket in every cell), and loose pieces for two of
+# its rings. The frame prints once; the pieces change. The file is bikar's
+# `Loose-Fit-Coupon.bkr`, which keeps the real coaster's size 90 and strap 3, so a gap read here
+# is read on the pieces the gBV coaster will have; only its slab is thinner (2 mm).
+#
+#   FRAME    the backed frame, one
+#   GAP 05   orbit 2, the ten six-sided pieces of the middle ring, 0.05 mm per face
+#   GAP 10   the same ring at 0.10
+#   GAP 15   the same ring at 0.15 (CAL-FIT-01's sliding step, the file default)
+#   GAP 20   the same ring at 0.20
+#   STAR 15  orbit 3, the ten small five-point stars, at 0.15 only, to see whether the tips catch
+#
+# The rings come from `bikar bands` on the gBV coaster: orbit 2 is ten hexagons at radius
+# 19.9 mm, orbit 3 ten 10-sided stars at 28.3 mm. The gap is taken off the piece, so the pocket
+# keeps the drawn shape and the one frame fits every set. Each set is one plate item (its ten
+# pieces keep their ring) and goes into its own bag straight off the plate, labelled with its
+# code, because the sets look alike. The codes are not on the pieces; each item's `label:` is
+# its code, and compose writes where each one landed to the bed map beside the plate
+# (`print_review.py bed` draws it).
+#
+# Printing waits on Omar's yes to failure detection on and the first layer watched
+# (loose-pieces §3.7): the pieces are the smallest things we would have printed.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/plates/sheets-04.yaml --dry-run
+# Slice, then draw the bed with its labels:
+#   bambu slice compose docs/plates/sheets-04.yaml
+#   python3 tools/print_review.py bed <out.png> build/plates/sheets-04.plate.3mf
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  FRAME
+    piece:  Frame
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  GAP 05
+    piece:  Hex
+    params: { gap: 0.05 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  GAP 10
+    piece:  Hex
+    params: { gap: 0.1 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  GAP 15
+    piece:  Hex
+    params: { gap: 0.15 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  GAP 20
+    piece:  Hex
+    params: { gap: 0.2 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  STAR 15
+    piece:  Star
+    params: { star_gap: 0.15 }

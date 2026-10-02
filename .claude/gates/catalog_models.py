@@ -115,6 +115,18 @@ GRAMMAR_MD_REL = "docs/grammar.md"
 DECL_HEAD = re.compile(r'^[A-Za-z]+Decl\s*=\s*"([a-z]+)"', re.M)
 #: `param` is the other category — a knob, not a thing `--piece` can render.
 DECL_NOT_A_PIECE = frozenset({"param"})
+#: A coaster with a `loose where …` clause declares no piece by name, yet bikar
+#: registers several: the frame as `Frame` (a constant in its evaluator, read
+#: from there, not listed here) and one piece per loose color, named after it.
+#: A loose face's color is its `fill … color <Name>`, so the fill colors are the
+#: names a loose coaster can print. That over-accepts a fill color no loose
+#: clause picks — bikar refuses it at render, which is the check that owns it;
+#: this gate only asks whether the name can exist. LP-1's `--piece Frame`,
+#: `Hex` and `Star` are why (sampler sheet 4, 2026-10-01).
+EVALUATOR_TS_REL = "packages/core/src/dsl/evaluator.ts"
+FRAME_CONST = re.compile(r"export const COASTER_FRAME_PIECE = '([A-Za-z_][A-Za-z0-9_]*)'")
+LOOSE_CLAUSE = re.compile(r"^\s+loose\s+where\b", re.M)
+FILL_COLOR = re.compile(r"^\s+fill\b[^\n]*\bcolor\s+([A-Za-z_][A-Za-z0-9_]*)", re.M)
 #: A flat `readonly name: number;` line inside `interface BrickFit { … }`.
 BRICKFIT_BLOCK = re.compile(r"export interface BrickFit \{(.*?)\n\}", re.S)
 BRICKFIT_FIELD = re.compile(r"^\s*readonly\s+([A-Za-z_][A-Za-z0-9_]*)\s*:", re.M)
@@ -285,8 +297,22 @@ def brickfit_fields(root: Path = ROOT) -> tuple[frozenset[str], str | None]:
     return fields, None
 
 
+def loose_frame_piece(root: Path = ROOT) -> str | None:
+    """The name bikar registers a loose coaster's frame under, or None if unreadable."""
+    src = read_from_bikar(EVALUATOR_TS_REL, root)
+    m = FRAME_CONST.search(src) if src else None
+    return m.group(1) if m else None
+
+
+def loose_pieces(src: str, frame: str | None) -> set[str]:
+    """The pieces a model's loose coaster registers without declaring them."""
+    if not LOOSE_CLAUSE.search(src):
+        return set()
+    return set(FILL_COLOR.findall(src)) | ({frame} if frame else set())
+
+
 def declared_in(
-    models: list[str], decl_kws: frozenset[str], root: Path = ROOT
+    models: list[str], decl_kws: frozenset[str], root: Path = ROOT, frame: str | None = None
 ) -> tuple[set[str], set[str], list[str]]:
     """(params, pieces, models that could not be read) across an entry's models."""
     params: set[str] = set()
@@ -304,6 +330,7 @@ def declared_in(
         params.update(DECL_PARAM.findall(src))
         if decl is not None:
             pieces.update(decl.findall(src))
+        pieces.update(loose_pieces(src, frame))
     return params, pieces, missing
 
 
@@ -335,6 +362,7 @@ def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
     entries = parse_catalog(catalog.read_text(encoding="utf-8"))
     fit_fields, fit_reason = brickfit_fields(root)
     decl_kws, decl_reason = declaration_keywords(root)
+    frame = loose_frame_piece(root)
 
     baseline_path = root / BASELINE_REL
     baseline = (
@@ -351,7 +379,7 @@ def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
     for entry in entries:
         if not entry.claims:
             continue
-        params, pieces, missing = declared_in(entry.models, decl_kws, root)
+        params, pieces, missing = declared_in(entry.models, decl_kws, root, frame)
         if not entry.models or missing:
             # The model is to-author or unreadable. `doc_pointers.py` owns that
             # claim; reporting it again here would mean two gates for one fix.
@@ -489,6 +517,16 @@ def self_test() -> int:
         f"self-test {'ok  ' if ok else 'FAIL'}: declaration keywords read {sorted(kws)}"
         + (f" — unavailable: {kw_reason}" if kw_reason else "")
     )
+
+    # A loose coaster's pieces are registered, not declared: the frame by bikar's
+    # constant, each loose color by its fill name. A coaster with no loose clause
+    # registers none of them.
+    frame = loose_frame_piece(ROOT)
+    loose_src = "palette p\n  Hex = #d4af37\n  fill void where orbit == 2 color Hex\ncoaster C\n  loose where orbit == 2\n"
+    got = (frame, loose_pieces(loose_src, frame), loose_pieces(loose_src.replace("  loose where orbit == 2\n", ""), frame))
+    ok = got == ("Frame", {"Frame", "Hex"}, set())
+    failures += 0 if ok else 1
+    print(f"self-test {'ok  ' if ok else 'FAIL'}: loose coaster pieces read {got!r}")
 
     # The same fail-loud floor, on a grammar that has changed shape.
     thin = frozenset(DECL_HEAD.findall('OrbDecl = "orb" IDENT ;\n')) - DECL_NOT_A_PIECE
