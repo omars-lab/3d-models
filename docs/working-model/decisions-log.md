@@ -5755,3 +5755,31 @@ page's two calls and left no notes.
 
 **What would reverse it:** the printed PEAK 2 set reading as flat in the hand, which would point
 to a taller peak, or its point printing badly, which would point to a lower one or a rounded tip.
+
+## D-092 — Failure detection is the printer's job, not a per-plate yes
+
+Omar, 2026-10-02, answering the box on [sheets-04](../plates/sheets-04.md) that asked for their
+yes to "failure detection on and the first layer watched": "no failure detection, bambu does this".
+The X2D runs its own failure detection, so it is not a question to put to them and not something a
+plate waits on. The same answer is taken to cover the first-layer watch, which the box bundled
+with it.
+
+### The options the plate page gave
+
+- **Yes** — failure detection on and the first layer watched; the small loose pieces print.
+- **No** — the pieces come off the plate, or print at a larger size (loose-pieces §3.7).
+- **Neither, chosen:** the question does not belong to them. The printer's own detection is the
+  mitigation guide-print gate 3 asks for, so the pieces print without a separate yes.
+
+### What it changes
+
+- Guide-print gate 3 still drops a coupon that could damage the printer. Of its three mitigations
+  for parts that could come loose, on-device detection is now taken as given on the X2D; small
+  part mass is still ours to check.
+- [Loose-pieces §3.7](../design/coaster/loose-pieces-design.md#37-the-printer-comes-first) and
+  its call 4 no longer ask for the yes, and nor does the
+  [sampler sheets design](../design/coaster/sampler-sheets-design.md).
+- sheets-04 loses the box and is no longer waiting on anything but the send.
+
+**What would reverse it:** a loose piece dragged by the nozzle that the printer did not stop for,
+which would bring back a watched first layer, or a brim, for plates of small loose pieces.

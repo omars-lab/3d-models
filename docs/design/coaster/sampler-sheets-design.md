@@ -150,9 +150,11 @@ Before it can print, it needs: true edges in bikar
 the staircase is bigger than the gap under test), then the loose-piece output (loose-pieces §6
 items 2 and 3, catalog item 6). Both shipped 2026-10-01 (bikar #291, #292); what is left is the
 sheet's own file and its plate. The window cut is not needed; the frame is the whole coaster.
-The pieces are the smallest things we would have printed, so the printer question on call 4 stays
-with it: failure detection on and the first layer watched, or the pieces do not go on the plate
-(loose-pieces §3.7).
+The pieces are the smallest things we would have printed. Call 4's printer question (failure
+detection on and the first layer watched) is settled: the X2D does its own failure detection, so
+it is not asked per plate
+([D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes),
+loose-pieces §3.7).
 
 **Sheet 5 — fill height.** The answer to
 [loose-pieces call 3](loose-pieces-design.md#7-open-calls-for-omar): lowered, flush and raised fills

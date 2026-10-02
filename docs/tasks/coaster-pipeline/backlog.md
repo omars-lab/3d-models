@@ -41,7 +41,7 @@ Sending a print and which filament to load.
 - **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
   [sheets-05](../../plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
   on Omar's tick: one bed, about 1 h 48 m and 46 g. sheets-04 (the gBV fit) is built and approved
-  (2026-10-02), and waits on his yes to failure detection and a watched first layer: one bed,
+  (2026-10-02), and waits only on the send, failure detection being the X2D's own (D-092): one bed,
   62 minutes, 17 g, the pieces in the real minimal coaster, every set at its full gap since
   bikar #297 cut the coaster's holes on their exact outline, plus one 2 mm peaked set (D-091). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is

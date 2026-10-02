@@ -1849,7 +1849,8 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
 - **Status**: planned — the plate [sheets-04](../../../docs/plates/sheets-04.md) is sliced (one bed,
-  56 min, 15 g) and waits on Omar's tick and his yes to failure detection on (loose-pieces design §3.7).
+  62 min, 17 g), approved by Omar 2026-10-02, and waits only on the send; failure detection is the
+  X2D's own, not a per-plate yes (D-092, loose-pieces design §3.7).
   Since 2026-10-02 (Omar's ask) it prints the pieces in the real gBV minimal coaster (CS-13,
   `gBV_JTt3Kxk-minimal-coaster.bkr`, 4 mm, no base) rather than this file's `Frame`. Since bikar
   #297 that coaster's holes are cut on the same exact outline as the `Frame` pockets, so every

@@ -349,8 +349,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    map naming each look-alike set. Since 2026-10-02 it prints the pieces in the real minimal
    coaster (Omar's ask) rather than the coupon's frame. The coaster's holes are now cut on the
    pieces' exact outline (bikar #297), so every set keeps its full gap. A seventh set, `PEAK 2`, tries
-   the 2 mm peaked pieces beside the flat ones (D-091). Omar approved the sheet 2026-10-02; it waits
-   on his yes to failure detection.
+   the 2 mm peaked pieces beside the flat ones (D-091). Omar approved the sheet 2026-10-02, and
+   the failure-detection question is settled as the X2D's own (D-092); it waits only on the send.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
    sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page

@@ -299,16 +299,18 @@ tip, or rattles. Report the window per rung and per shape; "most pieces fitted" 
 
 Guide-print gate 3: "a coupon that could physically damage the printer is never sliced-for-dispatch
 or sent", and a coupon whose parts could come loose and be dragged by the nozzle is acceptable only
-with on-device failure detection **and** a watched first layer **and** small part mass
+with on-device failure detection **and** small part mass
 ([guide-print](../../../.claude/skills/guide-print/SKILL.md)). LP-1's pieces are the smallest
 things we would have printed: about 6.5 mm across and 1.2 mm tall, smaller than minis-05's keys
 (about 8 × 4 mm, 1.4 mm tall), whose plate already names "can lift or be knocked off the bed" as a
-risk. Their mass is small; that part of the rule is met. The other two are Omar's to confirm at
-the printer: whether the X2D's failure detection is on, and that they watch the first layer. A brim
-would help, but this repo's plate files cannot set one today: the per-plate settings override
-(print-quality change 4) is not in `tools/bambu/src/commands/compose.ts`. If the mitigation is not
-there, the pieces come off the plate, or print at a larger size, rather than the printer taking
-the risk.
+risk. Their mass is small; that part of the rule is met. The failure detection is the X2D's own:
+this doc used to ask Omar to confirm it was on and that they would watch the first layer, and their
+answer was that the printer does this itself, so it is not asked per plate
+([D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
+A brim would still help, but this repo's plate files cannot set one today: the per-plate settings
+override (print-quality change 4) is not in `tools/bambu/src/commands/compose.ts`. If a piece is
+ever dragged by the nozzle without the printer stopping, that answer is reversed, and the pieces
+come off the plate, or print at a larger size, until a brim can be set.
 
 ## 4. The "assemble your own coaster" guided page
 
@@ -445,7 +447,9 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
   way the key ladder does, with one looser step.
 - [ ] Other gaps (write them in the notes).
 - [ ] Wait for KEY-1 and T1 to print first, then choose the gaps.
-- Can failure detection be on and the first layer watched for this plate? yes / no
+- Can failure detection be on and the first layer watched for this plate? **Decided 2026-10-02:**
+  not a per-plate question, the X2D does its own failure detection →
+  [D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)
 - Notes:
 
 **Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
@@ -482,5 +486,5 @@ replaces it.
 
 **Not sourced.** No source gives a gap for a loose polygon piece in a closed pocket on this
 printer (§3.4). Whether a raised pad's groove prints clean at any ratio (§2). How much tip rounding
-a piece needs (§3.2). Whether the X2D's failure detection is on (§3.7). Each is left to a print or
-to Omar, not guessed.
+a piece needs (§3.2). Whether the X2D's own failure detection stops for a dragged piece this small
+(§3.7, D-092). Each is left to a print or to Omar, not guessed.

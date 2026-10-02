@@ -31,8 +31,8 @@
 # its code, and compose writes where each one landed to the bed map beside the plate
 # (`print_review.py bed` draws it).
 #
-# Printing waits on Omar's yes to failure detection on and the first layer watched
-# (loose-pieces §3.7): the pieces are the smallest things we would have printed.
+# The pieces are the smallest things we would have printed; the X2D's own failure detection
+# covers a piece coming loose, so printing does not wait on a separate yes (D-092).
 #
 # Validate (no hardware; slicing is local):
 #   bambu slice compose docs/plates/sheets-04.yaml --dry-run
