@@ -1,12 +1,22 @@
 # sheets-04 — the gBV fit (sampler sheet 4)
 #
-# The gBV coaster (gBV_JTt3Kxk, CS-13) as the backed frame of the loose-pieces design (F1: a
-# solid slab, the straps standing on it, a pocket in every cell), and loose pieces for two of
-# its rings. The frame prints once; the pieces change. The file is bikar's
-# `Loose-Fit-Coupon.bkr`, which keeps the real coaster's size 90 and strap 3, so a gap read here
-# is read on the pieces the gBV coaster will have; only its slab is thinner (2 mm).
+# The gBV minimal coaster itself (gBV_JTt3Kxk, CS-13: the straps only, 4 mm tall, no base),
+# and loose pieces for two of its rings, to see whether they fit the real coaster. Omar,
+# 2026-10-02: print the minimal construction, not a separate frame. The coaster prints once;
+# the pieces change. The pieces come from bikar's `Loose-Fit-Coupon.bkr`, which keeps the
+# coaster's size 90 and strap 3, so they are the pieces the gBV coaster will have. They are
+# 1.2 mm thick, so in the 4 mm coaster they sit below the top: the fit is read on the walls.
 #
-#   FRAME    the backed frame, one
+# The coaster's holes are not cut on the exact outline the coupon's pockets use. Measured on the
+# meshes at mid height (2026-10-02): the coupon's own frame pocket leaves every piece its full
+# gap, but the coaster's hole comes 0.15 to 0.25 mm further in at a hexagon's points and
+# blunts the star tips. Least room per set, negative meaning the corner is inside the wall:
+#   GAP 05 -0.20 mm (48 of 120 corners inside), GAP 10 -0.12 (22), GAP 15 -0.03 (6),
+#   GAP 20 +0.05 (none), STAR 15 -0.13 (34 of 200, all at the tips).
+# So today only GAP 20 goes in, and the stars catch at their tips. The sheet reads the real
+# coaster as it is; the exact-outline fix in bikar would change it.
+#
+#   COASTER  the gBV minimal coaster, one
 #   GAP 05   orbit 2, the ten six-sided pieces of the middle ring, 0.05 mm per face
 #   GAP 10   the same ring at 0.10
 #   GAP 15   the same ring at 0.15 (CAL-FIT-01's sliding step, the file default)
@@ -15,7 +25,7 @@
 #
 # The rings come from `bikar bands` on the gBV coaster: orbit 2 is ten hexagons at radius
 # 19.9 mm, orbit 3 ten 10-sided stars at 28.3 mm. The gap is taken off the piece, so the pocket
-# keeps the drawn shape and the one frame fits every set. Each set is one plate item (its ten
+# keeps the drawn shape and the one coaster takes every set. Each set is one plate item (its ten
 # pieces keep their ring) and goes into its own bag straight off the plate, labelled with its
 # code, because the sets look alike. The codes are not on the pieces; each item's `label:` is
 # its code, and compose writes where each one landed to the bed map beside the plate
@@ -36,9 +46,8 @@ profile:
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
 items:
-  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
-    label:  FRAME
-    piece:  Frame
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    label:  COASTER
   - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
     label:  GAP 05
     piece:  Hex
