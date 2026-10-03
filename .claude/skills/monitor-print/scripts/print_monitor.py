@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Watch one plate print on the X2D and write what the printer says onto the plate's page.
+"""Watch one plate print on the X2D: write what the printer says onto the plate's page, check the
+print is still moving, take a chamber picture every few minutes and make a timelapse at the end.
 
-    python3 .claude/skills/send-plate/scripts/print_monitor.py <plate> [--every 30] [--lost-after 10]
-    python3 .claude/skills/send-plate/scripts/print_monitor.py --self-test
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> [--every 30] [--lost-after 10]
+        [--stall-after 15] [--snapshot-every 10]
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --gif
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test
 
 `<plate>` is a plate name (`sheets-04b`) or the path of its page. Run it from the main checkout
 (the vault), like every `bambu` call, so the rows land on the page Omar reads in Obsidian.
@@ -20,13 +23,25 @@ what it means), `resumed`, `progress` (25, 50, 75%), `error` (a new error with n
 reply for `--lost-after` minutes). The last four end the watch; a pause does not, because a
 paused print is waiting on Omar and may resume.
 
+**Is it moving?** While the printer says RUNNING, the layer or the percent should change. When
+neither has for `--stall-after` minutes, the monitor writes a `stalled` row; when they move
+again it writes `printing` ("moving again"). A stall does not end the watch either: the printer
+has not given up, so the call is Omar's.
+
+**Pictures.** Every `--snapshot-every` minutes (0 turns it off), and at every row it writes, it
+saves one chamber frame with `bambu status camera` to `.bambu/monitor/<plate>/frames/<UTC>.jpg`.
+When the watch ends it joins the frames into `.bambu/monitor/<plate>/timelapse.gif`; `--gif`
+rebuilds that from the frames already there. A camera that does not answer is logged and
+skipped: a missing picture never stops the watch.
+
 A `finished` row is not a print record. The record (`docs/prints/`, the Timeline's `printed`
 row) is written when the pieces are judged, as before.
 
 The run log is `.bambu/monitor/<plate>.log` (gitignored): one line per step, a UTC time, the
 pid and `ev=<event> key=value`, with a line before and after each poll so a stall shows where
 it froze (`grep "ev=poll" <log> | tail -1`). Each new row is also printed to stdout as
-`ev=row …`, and the exit as `ev=exit …`, so a background run can be followed by grepping them.
+`ev=row …`, each picture as `ev=snapshot path=…`, and the exit as `ev=exit …`, so a background
+run can be followed by grepping them.
 """
 from __future__ import annotations
 
@@ -48,6 +63,9 @@ import plates_gate as pg  # noqa: E402
 BAMBU = ROOT / "tools" / "bambu" / "bin" / "bambu"
 LOGS = ROOT / ".bambu" / "monitor"
 POLL_TIMEOUT_S = 60
+# One frame: the camera's own ffmpeg pull gives up at 20 s, plus the TLS relay and node start-up.
+SNAPSHOT_TIMEOUT_S = 45
+GIF_TIMEOUT_S = 120
 TERMINAL = ("finished", "failed", "stopped", "lost")
 MILESTONES = (25, 50, 75)
 
@@ -62,7 +80,7 @@ KNOWN = {
 }
 
 INTRO = ("What the printer said while this plate printed, one row per change, written by the "
-         "send-plate skill's `print_monitor.py`. A `finished` row is not a print record; that is "
+         "monitor-print skill's `print_monitor.py`. A `finished` row is not a print record; that is "
          "written when the pieces are judged.")
 
 
@@ -88,8 +106,8 @@ def is_ours(frame: dict, plate: str) -> bool:
     return str(frame.get("subtask_name") or "") in (f"{plate}.plate", plate)
 
 
-def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: float
-         ) -> tuple[dict, list[tuple[str, str]]]:
+def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: float,
+         stall_after_s: float = 900) -> tuple[dict, list[tuple[str, str]]]:
     """One poll's worth of change. `st` is the watch so far; returns it updated and the new
     (event, what-the-printer-said) pairs, in order. `frame` None means the poll got no reply."""
     st = dict(st)
@@ -145,6 +163,19 @@ def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: flo
                 done.append(m)
                 if m == max(x for x in MILESTONES if pct >= x):
                     rows.append(("progress", f"{m}%"))
+
+    # Is it moving? RUNNING with the same layer and percent for the whole window is a stall. The
+    # clock starts again on every move and on every return to RUNNING (a resume, the first layer).
+    if state == "RUNNING" and not any(e in TERMINAL for e, _ in rows):
+        mark = (frame.get("layer_num"), frame.get("mc_percent"))
+        if mark != st.get("mark") or prev != "RUNNING":
+            if st.get("stalled") and prev == "RUNNING":
+                rows.append(("printing", f"moving again: layer {mark[0]}, {mark[1]}%"))
+            st["stalled"], st["mark"], st["moved_at"] = False, mark, now
+        elif not st.get("stalled") and now - st["moved_at"] >= stall_after_s:
+            st["stalled"] = True
+            rows.append(("stalled", f"no new layer or percent for {int((now - st['moved_at']) // 60)} min "
+                                    f"(layer {mark[0]}, {mark[1]}%)"))
     st["state"] = state
     return st, rows
 
@@ -229,27 +260,98 @@ def poll(log: Log) -> dict | None:
     return frame
 
 
-def watch(plate: str, every: float, lost_after_s: float) -> int:
+def snapshot_due(last: float | None, now: float, every_s: float) -> bool:
+    return every_s > 0 and (last is None or now - last >= every_s)
+
+
+def frames_dir(name: str) -> Path:
+    return LOGS / name / "frames"
+
+
+def snapshot(name: str, log: Log) -> Path | None:
+    """One chamber frame into the plate's frames folder, or None (logged) when the camera fails."""
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out = frames_dir(name) / f"{stamp}.jpg"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    log("snapshot_start", path=out.name)
+    try:
+        r = subprocess.run([str(BAMBU), "status", "camera", "-o", str(out)], capture_output=True,
+                           text=True, timeout=SNAPSHOT_TIMEOUT_S, cwd=ROOT)
+    except subprocess.TimeoutExpired:
+        log("snapshot_timeout", timeout_s=SNAPSHOT_TIMEOUT_S)
+        return None
+    if r.returncode != 0 or not out.is_file():
+        log("snapshot_failed", rc=r.returncode, msg=cell(r.stderr)[:200])
+        return None
+    log("snapshot_done", path=out.name, bytes=out.stat().st_size)
+    print(f"ev=snapshot plate={name} path={out}", flush=True)
+    return out
+
+
+def gif_cmd(frames: list[Path], out: Path) -> list[str]:
+    """Half a second a frame, the last held two seconds so the finished plate reads."""
+    return ["magick", "-loop", "0", "-delay", "50", *map(str, frames[:-1]),
+            "-delay", "200", str(frames[-1]), "-resize", "640x", "-layers", "Optimize", str(out)]
+
+
+def make_gif(name: str, log: Log) -> Path | None:
+    frames = sorted(frames_dir(name).glob("*.jpg"))
+    if len(frames) < 2:
+        log("gif_skipped", frames=len(frames))
+        return None
+    out = LOGS / name / "timelapse.gif"
+    log("gif_start", frames=len(frames))
+    try:
+        r = subprocess.run(gif_cmd(frames, out), capture_output=True, text=True, timeout=GIF_TIMEOUT_S)
+    except subprocess.TimeoutExpired:
+        log("gif_timeout", timeout_s=GIF_TIMEOUT_S)
+        return None
+    except FileNotFoundError:
+        log("gif_failed", msg="magick is not on PATH (brew install imagemagick)")
+        return None
+    if r.returncode != 0:
+        log("gif_failed", rc=r.returncode, msg=cell(r.stderr)[:200])
+        return None
+    log("gif_done", path=out, frames=len(frames), bytes=out.stat().st_size)
+    print(f"ev=gif plate={name} frames={len(frames)} path={out}", flush=True)
+    return out
+
+
+def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, snap_s: float) -> int:
     page = page_of(plate)
     name = page.stem
     if not page.is_file():
         print(f"print-monitor: no plate page {page}", file=sys.stderr)
         return 2
     log = Log(LOGS / f"{name}.log")
-    log("start", plate=name, every_s=int(every), lost_after_s=int(lost_after_s))
+    log("start", plate=name, every_s=int(every), lost_after_s=int(lost_after_s),
+        stall_after_s=int(stall_after_s), snapshot_every_s=int(snap_s))
     st: dict = {}
+    last_shot: float | None = None
     while True:
         frame = poll(log)
-        st, rows = step(st, frame, time.time(), name, lost_after_s)
+        now = time.time()
+        st, rows = step(st, frame, now, name, lost_after_s, stall_after_s)
+        ours = bool(frame and is_ours(frame, name))
         when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
+        end = None
         for event, text in rows:
-            append_to_page(page, row_line(when, event, frame if frame and is_ours(frame, name) else None, text))
+            append_to_page(page, row_line(when, event, frame if ours else None, text))
             log("row", event=event, msg=cell(text))
             print(f"ev=row plate={name} event={event} msg=\"{cell(text)}\"", flush=True)
             if event in TERMINAL:
-                log("exit", reason=event)
-                print(f"ev=exit plate={name} reason={event}", flush=True)
-                return 0 if event == "finished" else 1
+                end = event
+                break
+        # A picture at every row (the moment worth seeing) and on the clock while it is ours.
+        if snap_s > 0 and (rows or (ours and snapshot_due(last_shot, now, snap_s))):
+            snapshot(name, log)
+            last_shot = now
+        if end:
+            if snap_s > 0:
+                make_gif(name, log)
+            log("exit", reason=end)
+            print(f"ev=exit plate={name} reason={end}", flush=True)
+            return 0 if end == "finished" else 1
         time.sleep(every)
 
 
@@ -326,8 +428,41 @@ def self_test() -> int:
     st, rows = step(st, None, 330, "sheets-04b", 300)
     check([e for e, _ in rows] == ["lost"], "no reply for the whole window is lost", rows)
 
+    # Is it moving: a stall after the window, once; moving again says so; a pause resets the clock.
+    st, rows = step({}, _f("RUNNING", 5, 20), 0, "sheets-04b", 600, 900)
+    st, rows = step(st, _f("RUNNING", 5, 20), 600, "sheets-04b", 600, 900)
+    check(rows == [], "the same layer and percent inside the window writes nothing", rows)
+    st, rows = step(st, _f("RUNNING", 5, 20), 900, "sheets-04b", 600, 900)
+    check([e for e, _ in rows] == ["stalled"] and "15 min" in rows[0][1],
+          "the same layer and percent for the whole window is a stall", rows)
+    st, rows = step(st, _f("RUNNING", 5, 20), 1800, "sheets-04b", 600, 900)
+    check(rows == [], "a stall is written once, not every poll", rows)
+    st, rows = step(st, _f("RUNNING", 6, 21), 1830, "sheets-04b", 600, 900)
+    check([e for e, _ in rows] == ["printing"] and "moving again" in rows[0][1],
+          "a stalled print that moves again says so", rows)
+    got = []
+    st = {}
+    for t, fr in [(0, _f("RUNNING", 5, 20)), (600, _f("PAUSE", 5, 20)), (1200, _f("RUNNING", 5, 20)),
+                  (1800, _f("RUNNING", 5, 20))]:
+        st, rows = step(st, fr, t, "sheets-04b", 600, 900)
+        got += [e for e, _ in rows]
+    check(got == ["watching", "paused", "resumed"],
+          "time paused is not a stall: the clock starts again on the resume", got)
+    st, rows = step({}, _f("PREPARE"), 0, "sheets-04b", 600, 900)
+    st, rows = step(st, _f("PREPARE"), 1800, "sheets-04b", 600, 900)
+    check(rows == [], "heating up is not a stall: only RUNNING is watched for movement", rows)
+
+    # Pictures on the clock, and the timelapse command.
+    check(snapshot_due(None, 0, 600) and not snapshot_due(0, 599, 600) and snapshot_due(0, 600, 600),
+          "the first picture is at once, then one every window")
+    check(not snapshot_due(None, 0, 0), "--snapshot-every 0 takes no pictures")
+    cmd = gif_cmd([Path("a.jpg"), Path("b.jpg"), Path("c.jpg")], Path("t.gif"))
+    check(cmd[:5] == ["magick", "-loop", "0", "-delay", "50"]
+          and cmd[cmd.index("c.jpg") - 2:cmd.index("c.jpg")] == ["-delay", "200"] and cmd[-1] == "t.gif",
+          "the GIF loops, half a second a frame, the last frame held", cmd)
+
     every = {e for e, _ in [("watching", 0)]} | set(TERMINAL) | {
-        "preparing", "printing", "paused", "resumed", "progress", "error"}
+        "preparing", "printing", "paused", "resumed", "progress", "error", "stalled"}
     check(every <= set(pg.PRINT_EVENTS), "every event the monitor writes is one the gate knows",
           sorted(every - set(pg.PRINT_EVENTS)))
 
@@ -360,13 +495,22 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--every", type=float, default=30, help="seconds between polls (default 30)")
     ap.add_argument("--lost-after", type=float, default=10,
                     help="minutes with no reply (or no sign of the plate) before giving up (default 10)")
+    ap.add_argument("--stall-after", type=float, default=15,
+                    help="minutes RUNNING with no new layer or percent before a stalled row (default 15)")
+    ap.add_argument("--snapshot-every", type=float, default=10,
+                    help="minutes between chamber pictures, 0 for none (default 10)")
+    ap.add_argument("--gif", action="store_true",
+                    help="only rebuild the plate's timelapse.gif from the frames already taken")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
         return self_test()
     if not a.plate:
         ap.error("name a plate")
-    return watch(a.plate, a.every, a.lost_after * 60)
+    if a.gif:
+        name = page_of(a.plate).stem
+        return 0 if make_gif(name, Log(LOGS / f"{name}.log")) else 1
+    return watch(a.plate, a.every, a.lost_after * 60, a.stall_after * 60, a.snapshot_every * 60)
 
 
 if __name__ == "__main__":
