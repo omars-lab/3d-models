@@ -6,7 +6,7 @@ description: Rank the plates that have not printed yet by return on printer time
 # prioritize-prints — which plate next, and why
 
 Omar asked for this on 2026-09-30: "a skill to help us prioritize the highest roi prints and
-why", with "a file per print where prints are plates", approval in the frontmatter, pictures,
+why", with "a file per print where prints are plates", approval on the page, pictures,
 a timeline and a count of times printed. The design, and the calls still open on it:
 [print-review-design](../../../docs/design/printing/print-review-design.md).
 
@@ -17,20 +17,23 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
 
 ## Every run
 
-1. **Read the ticks back.** For each page with a ticked box under `## Your call`, move what it
-   says into the frontmatter and add a timeline row with today's date:
-   - **Approve** ticked → `stage: approved`, `approved: true`, `approved_on:` the date, a row
-     `approved — <which option>`. If the option changes the recipe, make that change in the same
-     PR and re-slice.
-   - **Hold** → `approved: false`, a row `held — <their note>`; stay at `waiting`.
+1. **Read the ticks back.** For each page with a ticked box under `## Your call`, write it into
+   the page's `## Approvals` table with `tools/plate_approve.py` (D-096). The tool writes the dated
+   row, the recipe it covers and the stage, and unticks the box, so the next tick is a new answer:
+   - **Approve** ticked →
+     `python3 tools/plate_approve.py <plate> --approved --by "Omar, tick on this page"`. If the
+     option he picked changes the recipe, make that change first, then record the yes, so the row
+     covers the recipe he approved.
+   - **Hold** → `python3 tools/plate_approve.py <plate> --held --by "Omar, tick: <his note>"`.
    - **It printed** (on a sent plate) → write the print record first (the review-print skill's
      record steps); the page follows it (step 4).
-   - Then clear the ticks and the notes, since the timeline now holds them.
-   Never tick a box, except to write down Omar's yes in chat (D-093: the `approved` row quotes his
-   words), and never set `approved: true` without a ticked box or his words in chat. One approval
-   covers one send: a plate that went out needs a new `approved` row before it goes out again.
-   A production plate has a standing approval instead (D-095); leave its box alone.
-   `approved:` left empty means nobody asked, which is different from `false`.
+   - Then clear the notes, since the table now holds them.
+   Never tick a box, and never record a yes with no ticked box or his words in chat; for a yes in
+   chat, `--by "Omar, in chat: \"<his words>\""`. One approval covers one send: the send fills the
+   row's `Spent by`, so a plate that went out needs a new row before it goes out again, and a
+   design approved many times keeps every row. A production plate has a standing approval instead
+   (D-095); leave its box alone. The plates gate (P2) checks the table; there is no approval in
+   the frontmatter.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/design/plates/minis-06.md): In short, What it is, Why
    print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`, with

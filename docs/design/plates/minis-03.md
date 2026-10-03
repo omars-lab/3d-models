@@ -2,8 +2,6 @@
 plate: minis-03
 recipe: minis-03.yaml
 stage: printed
-approved:
-approved_on:
 times_printed: 1
 runs:
   - 2026-09-26-minis-03
@@ -42,6 +40,13 @@ Recipe: [minis-03.yaml](minis-03.yaml). The record, with each piece's verdict an
 ## Your call
 
 Nothing open. The lessons went into the next plate and the sample rules.
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

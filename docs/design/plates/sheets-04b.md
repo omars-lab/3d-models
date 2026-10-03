@@ -2,8 +2,6 @@
 plate: sheets-04b
 recipe: sheets-04b.yaml
 stage: waiting
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press?"
@@ -122,6 +120,13 @@ At 4 mm tall they stand on the bed more firmly than the 1.2 mm pieces did.
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

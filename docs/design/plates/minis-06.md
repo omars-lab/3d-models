@@ -2,8 +2,6 @@
 plate: minis-06
 recipe: minis-06.yaml
 stage: waiting
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs?"
@@ -82,6 +80,13 @@ take its place (see minis-05's second-bed options).
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

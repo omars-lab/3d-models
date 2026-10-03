@@ -2,8 +2,6 @@
 plate: minis-01
 recipe: minis-01.yaml
 stage: sent
-approved:
-approved_on:
 times_printed: 0
 runs: []
 answers: "Do the first two patterns read as coasters at 40 mm, with the straps at their floor?"
@@ -56,6 +54,13 @@ says what came off the bed.
 - [ ] **I don't remember** — the page stays at sent
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

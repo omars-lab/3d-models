@@ -2,8 +2,6 @@
 plate: sheets-02
 recipe:
 stage: planned
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "Should star points stay sharp or be softened, and by how much?"
@@ -64,6 +62,13 @@ review sheet and the slice, and the boxes below are the ones you will answer.
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

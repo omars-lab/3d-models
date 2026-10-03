@@ -44,8 +44,6 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 |---|---|
 | `plate`, `recipe` | the page's own name, and `<plate>.yaml` beside it; the recipe may be empty only at `planned` |
 | `stage` | `planned`, `proposed`, `waiting`, `approved`, `sent`, `printed` or `retired` (§4) |
-| `approved` | `true` when Omar ticked Approve, `false` when not yet or held, empty when nobody asked |
-| `approved_on` | the date of the tick; set only when `approved` is true |
 | `times_printed`, `runs` | how many records name this plate, and which |
 | `answers` | the question the plate answers, in one sentence |
 | `kind` | `new` question, `taste` (a look at something known), or `repeat` |
@@ -62,9 +60,25 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 It is `stage`, not `status`, because in this vault `status` means a design doc's state and every
 note with one is listed in the design-docs view.
 
+Approval is not in the frontmatter. One design is approved many times: once per send, again after
+a fix, held between. A pair of properties holds only the last of those, so each yes is a row in the
+page's **Approvals** table instead ([D-096](../../working-model/decisions-log.md)):
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
+| 2026-10-02 | approved | Omar, tick on this page | recipe 1a2b3c4d5e6f | sent 2026-10-02 |
+
+`Decision` is `approved`, `held`, or `standing` (a production plate's, D-095). `By` is who said it
+and how: a tick, or his words in chat. `Covers` is the recipe the yes was given on, as the gate's
+`recipe_hash`; rows moved in from before the table say `—`. `Spent by` is empty while a yes is
+open, then `sent <date>` or `replaced <date>`; a hold or a standing row has `—`. Only
+`tools/plate_approve.py` writes rows, and `bambu print send` reads them through the same tool, so
+the gate and the CLI cannot read a page two ways.
+
 The body, in order: **In short**; **What it is** (the pieces, linked to the recipe); **Why print
 it** (the question, the bet, the decision it unblocks, what to read off the print); **Pictures**
-(the review sheet and the bed); **Cost and risk**; **Your call** (tick boxes); **Timeline**.
+(the review sheet and the bed); **Cost and risk**; **Your call** (tick boxes); **Approvals**;
+**Timeline**.
 [minis-05](../plates/minis-05.md) is the full example, with a fix to choose before approval.
 
 **Why print it** is the part a backlog line never held: which question it answers and what Omar
@@ -78,30 +92,34 @@ the page and the reason in the ranking cannot say different things.
 | `planned` | designed, but a build it needs does not exist yet, so there is no recipe or slice |
 | `proposed` | the recipe exists, the page is not complete |
 | `waiting` | pictures and cost are on the page; waiting for Omar |
-| `approved` | Omar ticked Approve |
+| `approved` | Omar said yes, and it is an open row in the Approvals table |
 | `sent` | it went to the printer; no record yet |
 | `printed` | at least one record exists |
 | `retired` | not printing it again |
 
 The **Timeline** is a table at the foot of the page, one row per event, oldest first. Each row
-starts with an event word — `proposed`, `reviewed`, `approved`, `held`, `sliced`, `sent`,
-`printed`, `judged`, `retired` — then says what happened and where it is written (a PR, the
+starts with an event word — `proposed`, `reviewed`, `sliced`, `sent`, `printed`, `judged`,
+`retired`, and the grade's `promoted` and `demoted` — then says what happened and where it is written (a PR, the
 record, the page). A plate can print more than once: each run is its own record, with its own
 `printed` row, and `times_printed` counts them. The count is never typed from memory; it is the
-number of records whose `plate:` starts with the plate's name.
+number of records whose `plate:` starts with the plate's name. A yes or a hold is not a timeline
+event: it is a row in the Approvals table, and the `sent` row that spends it names its date.
 
 ## 5. Approval, the request-feedback way
 
 Omar answers on the page, not in chat. **Your call** is a short list of tick boxes, each an
 option with what it leads to, and a Notes line, the shape the
 [request-feedback skill](../../../.claude/skills/request-feedback/SKILL.md) uses. The
-prioritize-prints skill reads the ticks back into the frontmatter and adds a dated timeline row,
-then clears the boxes.
+prioritize-prints skill reads the ticks back with
+`python3 tools/plate_approve.py <page> --approved --by "Omar, tick on this page"` (or `--held`),
+which adds the dated row and clears the box, so the next tick is a new answer.
 
-Nothing but a tick or Omar's words sets `approved: true`. The gate prints a notice for a ticked
-Approve box on a page still at `approved: false`, so an unread answer shows up on the next
-commit. `approved` left empty is its own state: the four plates that went out before this system
-existed were never asked about, and writing `false` on them would claim a no that nobody said.
+Nothing but a tick or Omar's words writes an `approved` row. The gate prints a notice for a ticked
+Approve box with no open row behind it, so an unread answer shows up on the next commit. And a
+ticked box is never an approval by itself: a box left ticked after a send from Bambu Studio looks
+exactly like a fresh one, which is how sheets-04 looked approved again after it printed. An empty
+table is its own state: the plates that went out before this system existed were never asked
+about, and a row on them would claim an answer nobody gave.
 
 ## 6. The rules the gate holds
 
@@ -112,15 +130,17 @@ existed were never asked about, and writing `false` on them would claim a no tha
   no recipe yet, and a `planned` page lists what it waits on in `needs`, which no other stage
   may carry. Stage, kind and risk use the words above. Each bet is in `bets.md`. A plate in the
   queue has a positive cost.
-- **P2, approval.** `approved_on` is a date exactly when `approved` is true. A plate at
-  `approved` is approved. A plate at `sent` or `printed` is not `approved: false`: that would
-  say it went out after a no.
+- **P2, approval.** Every page has the Approvals table, each row in its shape and in date order,
+  and no `approved` or `approved_on` left in the frontmatter. At most one yes is open, and none
+  with a hold after it. A plate at `approved` has an open yes, and a plate with an open yes is at
+  `approved`. Each `sent` row since the table began spends a yes, and each `sent <date>` names a
+  `sent` row. A yes given since the table began names the recipe it covers.
 - **P3, count.** `runs` and `times_printed` match the records in `docs/prints/`.
 - **P4, pictures.** Each picture exists; a plate waiting on Omar has at least one.
 - **P5, coverage.** Every recipe has a page.
-- **P6, timeline.** Rows are dated, in order, and use the event words. An approved page has an
-  `approved` row on its date; each run has a `printed` row naming it, and there are as many
-  `printed` rows as runs.
+- **P6, timeline.** Rows are dated, in order, and use the event words; an `approved` or `held`
+  row is refused there, because it belongs in the table. Each run has a `printed` row naming it,
+  and there are as many `printed` rows as runs.
 - **P7, the queue.** The block on `docs/design/plates/README.md` is the one the pages compute.
 - **P8, maturity.** The page's `maturity` is no higher than its prints show, with a dated
   `promoted` row behind any level above experiment. Its rules, and its own validator, are in
@@ -134,8 +154,11 @@ PASS: the real tree today — eleven pages (five of them sampler sheets at `plan
 minis-03 and minis-04 at one run each, and the queue current.
 
 FAIL: a second record for minis-09 while its page still says `times_printed: 1` with one run
-listed. The page agrees with itself; only a count taken from `docs/prints/` catches it. Also a
-page moved to `stage: approved` with no date, and a queue block edited by hand.
+listed. The page agrees with itself; only a count taken from `docs/prints/` catches it. For
+approval, the hard case is a `sent` row with no yes spent on it: the page is otherwise clean, the
+box unticked, the stage right, and only reading the table against the timeline catches the send
+nobody approved. Also a page moved to `stage: approved` with no open row, and a queue block edited
+by hand.
 
 ## 7. The queue, and why it is computed
 
@@ -232,5 +255,10 @@ edited afterwards stays approved.
 
 - [ ] Lapse by hand
 - [ ] Gate it
+
+Since the Approvals table (D-096, 2026-10-03), each yes records the recipe it covers, so "Gate it"
+needs no new field and no second tick: it is one switch, `LAPSE_ON_RECIPE_CHANGE` in the plates
+gate. Until this is answered the switch is off: a recipe changed after a yes is a notice on the
+next commit and a warning on the send, and the yes stands, as before.
 
 Notes:

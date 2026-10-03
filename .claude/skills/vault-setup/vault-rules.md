@@ -19,7 +19,7 @@ The vault is all of `docs/`: design docs at the top level, and `research/`, `iss
 | `issues/` | `date` | whoever writes the pivot up |
 | `wiki/troubleshooting/` | `title`, `symptom`, `kind`, `proof`, `first_seen` | the `print-wiki` skill's template |
 | `prints/<run>/index.md` | `run`, `plate`, `status`, `outcome` and the rest | the prints gate requires them |
-| `plates/<plate>.md` | `plate`, `stage`, `approved`, `approved_on`, `times_printed` and the rest (`stage`, not `status`, so plates stay out of the design-docs view) | the `prioritize-prints` skill; the plates gate requires them |
+| `plates/<plate>.md` | `plate`, `stage`, `times_printed` and the rest (`stage`, not `status`, so plates stay out of the design-docs view); approvals are a table in the page, not properties (D-096) | the `prioritize-prints` skill; the plates gate requires them |
 | `catalog/patterns/` | the catalog's own set | its generator |
 
 - **`status` is one of** `idea`, `draft`, `decided`, `built`, `superseded`. A doc is `built`

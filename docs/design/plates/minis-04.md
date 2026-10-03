@@ -2,8 +2,6 @@
 plate: minis-04
 recipe: minis-04.yaml
 stage: printed
-approved:
-approved_on:
 times_printed: 1
 runs:
   - 2026-09-26-minis-04
@@ -44,6 +42,13 @@ Why the holes and the tight fit, ranked:
 ## Your call
 
 Nothing open.
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

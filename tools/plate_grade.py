@@ -29,9 +29,11 @@ The grade reads three things:
             no-reading), and piece verdicts given, kept or not.
 
 Each grade also says whether the plate has a standing approval (D-095): a production page whose
-prints still show production, on the recipe it was promoted on. `bambu print send` reads that
-field through `--plate <name> --json`, so a production plate goes out with no new yes and a plate
-that slipped, or whose recipe was edited in place, does not.
+prints still show production, on the recipe it was promoted on, with the `standing` row that
+promotion writes in its Approvals table (`tools/plate_approve.py <name> --standing`, D-096).
+`bambu print send` asks `plate_approve.py --status`, which reads the same check, so a production
+plate goes out with no new yes and a plate that slipped, or whose recipe was edited in place,
+does not.
 
 A production recipe does not change in place. `--derive` copies it to a new plate, an experiment
 whose page names its parent in `derived_from`; the change is made and printed there, and the new
@@ -55,6 +57,7 @@ sys.path.insert(0, str(ROOT / ".claude" / "gates"))
 sys.path.insert(0, str(ROOT / "tools"))
 
 import plates_gate as pg  # noqa: E402
+import plate_approve  # noqa: E402
 
 BED_MM = 256.0  # the X2D bed (D-053), as print_review.py and compose use
 
@@ -129,7 +132,7 @@ def grade(names: list[str] | None = None) -> list[dict]:
             out.append({"plate": path.stem, "error": err or "no frontmatter"})
             continue
         ev = pg.maturity_evidence(path, data, history, runs, rubric)
-        standing, standing_why = pg.standing_approval(path, data, ev)
+        standing, standing_why = pg.standing_approval(path, data, ev, body)
         own = runs.get(path.stem, [])
         sliced = slice_of(path.stem)
         fill = None
@@ -219,14 +222,14 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
     # cannot be ranked yet, so it starts planned, waiting on its slice.
     costed = all(pg._pos(v) for v in cost.values())
     fm = {"plate": new, "recipe": f"{new}.yaml", "stage": "proposed" if costed else "planned",
-          "approved": False, "approved_on": None, "times_printed": 0, "runs": [],
+          "times_printed": 0, "runs": [],
           "answers": answers, "kind": "new", "maturity": "experiment", "derived_from": parent,
           "bets": data.get("bets") or [], "unblocks": data.get("unblocks") or [], **cost,
           "risk": data.get("risk"), "pictures": [],
           **({} if costed else {"needs": [f"a slice of {new}.yaml"]})}
     page.write_text(
         "---\n" + pg.yaml.safe_dump(fm, sort_keys=False, allow_unicode=True, width=1000)
-        + "---\n\n"
+        + "---\n" + plate_approve.with_table("\n"
         f"# {new} — a change to [{parent}]({parent}.md)\n\n"
         f"**In short.** {parent} is a production plate, so its recipe does not change in place "
         f"(D-095). This plate is its recipe with one change, printed as an experiment. If the "
@@ -243,7 +246,7 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
         "## Timeline\n\n"
         "| Date | What happened | Where it is written |\n|---|---|---|\n"
         f"| {today} | proposed — derived from [{parent}]({parent}.md), a production plate, by "
-        "`plate_grade.py --derive` | this page |\n",
+        "`plate_grade.py --derive` | this page |\n"),
         encoding="utf-8")
     return str(page)
 
@@ -287,7 +290,9 @@ def self_test() -> int:
               "it takes the parent's cost to rank, and waits on a slice when there is none")
         data, _ = pg.parse_frontmatter((plates / "minis-10.md").read_text(encoding="utf-8"))
         check(data["derived_from"] == "minis-09" and data["maturity"] == "experiment"
-              and data["approved"] is False, "it is an unapproved experiment naming its parent")
+              and "approved" not in data and pg.approvals(plate_approve.split(
+                  (plates / "minis-10.md").read_text(encoding="utf-8"))[1])
+              == ([], None), "it is an experiment naming its parent, with an empty Approvals table")
         check(pg.recipe_hash(plates / "minis-10.md") == pg.recipe_hash(plates / "minis-09.md"),
               "its recipe starts as the parent's (the header comment is not a change)")
         try:
