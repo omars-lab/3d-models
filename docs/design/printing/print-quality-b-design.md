@@ -11,7 +11,7 @@ page or a search snippet. No decision id is taken here.
 
 **The question.** How do we make small, thin, openwork PLA coasters print better on the
 Bambu X2D? And what caused what Omar saw on the minis-04 plate
-([`../../plates/minis-04.yaml`](../../plates/minis-04.yaml)) on 2026-09-26: "i see tiny holes on the
+([`../plates/minis-04.yaml`](../plates/minis-04.yaml)) on 2026-09-26: "i see tiny holes on the
 print and the peg system border is too big and pegs too tight"?
 
 ## 1. The short answer
@@ -183,11 +183,11 @@ knobs of GimTvN9hw4U-minimal-pegs-coaster.bkr in bikar (depth 3, clearance 0.1, 
 
 | Join | Band | Plate |
 |---|---|---|
-| dovetail, default knobs | 11.1 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
-| slim dovetail (neck 2, depth 2, wall 2.1, c 0.1) | 8.4 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
-| tab into the neighbour's opening (c 0.1) | 5.8 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
-| butterfly key | 5.7 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
-| no join (plain pair) | 6.0 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| dovetail, default knobs | 11.1 mm | [`../plates/minis-06.yaml`](../plates/minis-06.yaml) |
+| slim dovetail (neck 2, depth 2, wall 2.1, c 0.1) | 8.4 mm | [`../plates/minis-06.yaml`](../plates/minis-06.yaml) |
+| tab into the neighbour's opening (c 0.1) | 5.8 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
+| butterfly key | 5.7 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
+| no join (plain pair) | 6.0 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
 
 The floors on the dovetail:
 - `wall` is at least 2.1, because the art sits 1 mm into the frame and the enclosure

@@ -17,8 +17,8 @@
 # rebuild them byte for byte). The sheet refuses a row A file whose hash has changed.
 #
 # Build and look (no hardware; slicing is local):
-#   bambu slice sheet docs/plates/sheets-01.yaml --dry-run
-#   bambu slice sheet docs/plates/sheets-01.yaml
+#   bambu slice sheet docs/design/plates/sheets-01.yaml --dry-run
+#   bambu slice sheet docs/design/plates/sheets-01.yaml
 
 bed: x2d
 profile:

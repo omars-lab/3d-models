@@ -160,8 +160,8 @@ validate-timelapse:
 # re-resolved against bikar at the recorded commit), its photos exist and are unique (R2),
 # and it prints how many records it checked, so an empty tree reads "0 records checked" (R4).
 # Design: docs/design/printing/prints-tab-design.md §7. Then the plates gate: each page in
-# docs/plates/ agrees with the records on its count and with itself on its approval, and the
-# queue in docs/plates/README.md is current (print-review-design.md §6). Each `--self-test`
+# docs/design/plates/ agrees with the records on its count and with itself on its approval, and the
+# queue in docs/design/plates/README.md is current (print-review-design.md §6). Each `--self-test`
 # builds a clean fixture, requires it clean, then breaks it once per rule. The grader's self-test
 # checks that a plate `plate_grade.py --derive` writes passes that gate (D-095).
 validate-prints: prints-manifest

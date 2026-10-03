@@ -1,6 +1,6 @@
 ---
 name: prioritize-prints
-description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/plates/ current — pictures, cost, what it answers, whether Omar approved it, how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue; ticks a box for Omar only to write down his yes in chat (D-093) and never sends to the printer.
+description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/design/plates/ current — pictures, cost, what it answers, whether Omar approved it, how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue; ticks a box for Omar only to write down his yes in chat (D-093) and never sends to the printer.
 ---
 
 # prioritize-prints — which plate next, and why
@@ -10,8 +10,8 @@ why", with "a file per print where prints are plates", approval in the frontmatt
 a timeline and a count of times printed. The design, and the calls still open on it:
 [print-review-design](../../../docs/design/printing/print-review-design.md).
 
-Each plate has a page `docs/plates/<plate>.md` beside its recipe `<plate>.yaml`. The page's
-frontmatter holds the facts; the queue in [`docs/plates/README.md`](../../../docs/plates/README.md)
+Each plate has a page `docs/design/plates/<plate>.md` beside its recipe `<plate>.yaml`. The page's
+frontmatter holds the facts; the queue in [`docs/design/plates/README.md`](../../../docs/design/plates/README.md)
 is computed from them by `plates_gate.py`, never typed. The scoring rule and its weights are
 in [`scoring.md`](scoring.md) — read it every run, since the weights may have changed.
 
@@ -32,11 +32,11 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    A production plate has a standing approval instead (D-095); leave its box alone.
    `approved:` left empty means nobody asked, which is different from `false`.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
-   Copy the shape of [minis-06](../../../docs/plates/minis-06.md): In short, What it is, Why
+   Copy the shape of [minis-06](../../../docs/design/plates/minis-06.md): In short, What it is, Why
    print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`, with
    `maturity: experiment`; only the [grade-plate](../grade-plate/SKILL.md) skill raises it.
    A plate that is designed but waits on a build before it can have a recipe (the sampler
-   sheets, [sheets-01](../../../docs/plates/sheets-01.md)) gets its page now, at `planned`,
+   sheets, [sheets-01](../../../docs/design/plates/sheets-01.md)) gets its page now, at `planned`,
    with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue
    shows it by value on its "waiting on a build" line. When its recipe lands, drop `needs:` and
    move it to `proposed`.

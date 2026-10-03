@@ -13,7 +13,7 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3, board #4.)
-2. **Keep [minis-01](../../plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
 3. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
@@ -31,24 +31,24 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 
 Sending a print and which filament to load.
 
-- **The joins plates, [minis-05](../../plates/minis-05.md) and
-  [minis-06](../../plates/minis-06.md)** — waiting on Omar's tick on each page. One mated pair
+- **The joins plates, [minis-05](../../design/plates/minis-05.md) and
+  [minis-06](../../design/plates/minis-06.md)** — waiting on Omar's tick on each page. One mated pair
   per join on CS-1 at 80 mm: plain frame, butterfly key (with keys at clearance 0.05 / 0.10 /
   0.15) and tab on minis-05, dovetail and slim dovetail on minis-06. The pages carry the review
   sheets, the bed pictures and the cost. minis-05 as written spills one key coaster onto a
   second bed (found 2026-09-30); its page has the three fixes. The order between them is on
-  [the plates page](../../plates/README.md). The send and the filament are Omar's.
-- **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
-  [sheets-05](../../plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
+  [the plates page](../../design/plates/README.md). The send and the filament are Omar's.
+- **The sampler sheets, [sheets-01](../../design/plates/sheets-01.md) to
+  [sheets-05](../../design/plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
   on Omar's tick: one bed, about 1 h 48 m and 46 g. sheets-04 (the gBV fit) printed 2026-10-02,
   and all the small pieces fell right through the floorless minimal coaster's holes
   ([record](../../prints/2026-10-02-sheets-04/index.md)). Its follow-up
-  [sheets-04b](../../plates/sheets-04b.md) is pieces only for the coaster Omar already has, 4 mm
+  [sheets-04b](../../design/plates/sheets-04b.md) is pieces only for the coaster Omar already has, 4 mm
   tall and flat, at gaps 0.05, 0, −0.05 and −0.10 (bikar #300): one bed, 41 minutes, 12 g,
   waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
-  computed on [the plates page](../../plates/README.md), not kept here. Prints are held for last.
-- **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**
+  computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
+- **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.
 

@@ -15,7 +15,7 @@
 # its pair answers the same question and this plate can carry the slim pair alone.
 #
 # Validate (no hardware, no slicer):
-#   bambu slice compose docs/plates/minis-06.yaml --dry-run
+#   bambu slice compose docs/design/plates/minis-06.yaml --dry-run
 
 bed: x2d
 profile:

@@ -87,7 +87,7 @@ provisional; nothing has been measured
 0.15 "a bit loose" and minis-04 at 0.10 "too tight", do not count: both were sliced on Studio's
 built-in values, not the X2D preset, and the dovetail slot was not yet a true offset of the tab
 ([sample rules](../../../.claude/skills/print-coaster-samples/sample-rules.md#mini-params)). The
-key ladder (0.05, 0.10, 0.15 on `docs/plates/minis-05.yaml`) and the dovetail ladder T1 have not
+key ladder (0.05, 0.10, 0.15 on `docs/design/plates/minis-05.yaml`) and the dovetail ladder T1 have not
 been printed.
 
 **The pieces on CS-1.** From `bikar bands` on `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`
@@ -214,7 +214,7 @@ there (minis-04 at 0.10, "too tight") does not count (§1).
 **Printed 2026-10-02, sheets-04:** the F3 row held. Pieces 1.2 mm tall at every gap from 0.05 to
 0.20, set into the floorless gBV minimal coaster, all fell right through, judged by hand
 ([the record](../../prints/2026-10-02-sheets-04/index.md)). So in F3 a positive gap holds
-nothing. [sheets-04b](../../plates/sheets-04b.md) tries pieces 4 mm tall, flush with that
+nothing. [sheets-04b](../plates/sheets-04b.md) tries pieces 4 mm tall, flush with that
 coaster, at 0.05, 0 and two press fits, where the piece is larger than its hole (bikar #300).
 
 ### 3.4 Which fit numbers transfer, and on what condition
@@ -403,7 +403,7 @@ In order; each item names the test that shows it works. Nothing here is started.
 
 6. **The style name** in `.claude/skills/import-construction/coaster-styles.md`, once Omar names it
    (for example `<id>-loose-coaster.bkr`). *Test:* `make validate` passes with the new row.
-7. **The LP-1 plate** under `docs/plates/`, with its header, risks and validator (§3.6), and an
+7. **The LP-1 plate** under `docs/design/plates/`, with its header, risks and validator (§3.6), and an
    LP-1 entry in the prototype catalog. *Test:* `bambu slice compose <plate> --dry-run` places
    every item; the catalog hook (36) confirms each `--piece` and `--param` exists in the `.bkr`;
    mesh gate and review-print as the sample rules require.
@@ -445,7 +445,7 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 - Notes:
 
 **Decide it on:** sampler sheet 5, fill height (lowered, flush and raised on the same windows) —
-[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../../plates/sheets-05.md).
+[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-05.md).
 
 **4. LP-1's gaps, and printing it.** (§3.6, §3.7)
 
@@ -459,11 +459,11 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 - Notes:
 
 **Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
-[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../../plates/sheets-04.md).
+[the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-04.md).
 
 **Printed 2026-10-02:** sheets-04 put these gaps in the floorless minimal coaster, not an F1
 frame, and every piece fell through (§3.3). The F1 reading is still to come; the floorless
-reading moves to [sheets-04b](../../plates/sheets-04b.md), gaps 0.05 down to −0.10.
+reading moves to [sheets-04b](../plates/sheets-04b.md), gaps 0.05 down to −0.10.
 
 ## 8. Checks
 

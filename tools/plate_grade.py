@@ -318,7 +318,7 @@ def main(argv: list[str]) -> int:
     if a.recipe_hash:
         h = pg.recipe_hash(pg.PLATES / f"{a.recipe_hash}.md")
         if h is None:
-            print(f"{a.recipe_hash}: no readable recipe docs/plates/{a.recipe_hash}.yaml",
+            print(f"{a.recipe_hash}: no readable recipe docs/design/plates/{a.recipe_hash}.yaml",
                   file=sys.stderr)
             return 1
         print(h)

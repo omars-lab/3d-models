@@ -24,14 +24,14 @@ function page(name: string, opts: { approved?: string; box?: "x" | " "; rows?: s
   const box = opts.box ? `\n## Your call\n\n- [${opts.box}] **Approve as it stands**\n- [ ] **Hold**\n` : "";
   const rows = (opts.rows ?? ["2026-10-01 | proposed — drawn"]).map((r) => `| ${r} | this page |`);
   const body = `${box}\n## Timeline\n\n| Date | What happened | Where it is written |\n|---|---|---|\n${rows.join("\n")}\n\n## After\n\ntext\n`;
-  const path = join(root, "docs", "plates", `${name}.md`);
+  const path = join(root, "docs", "design", "plates", `${name}.md`);
   writeFileSync(path, `${fm}\n${body}`);
   return path;
 }
 
 beforeAll(() => {
   root = mkdtempSync(join(tmpdir(), "send-gate-"));
-  mkdirSync(join(root, "docs", "plates"), { recursive: true });
+  mkdirSync(join(root, "docs", "design", "plates"), { recursive: true });
 });
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 

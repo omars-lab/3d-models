@@ -28,7 +28,7 @@ not a repo link. I read two places inside it: `Metadata/project_settings.config`
 settings block at the end of the G-code. The slice warnings file was empty. Studio
 version: 02.08.02.61.
 
-**What the plate asked for** ([`../plates/minis-04.yaml`](../plates/minis-04.yaml)):
+**What the plate asked for** ([`../design/plates/minis-04.yaml`](../design/plates/minis-04.yaml)):
 process "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D", filament "Bambu PLA Basic
 @BBL X2D 0.4 nozzle".
 

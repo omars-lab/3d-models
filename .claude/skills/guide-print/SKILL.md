@@ -149,7 +149,7 @@ skippable.
    X2D's own job (D-092); this photo is for the person sending.
 6. **Omar approved this send, and the printer is idle.** *Verify:* the `✓ approval:` and
    `✓ printer:` lines of `print send --dry-run`. The approval lives on the plate's page in
-   `docs/plates/` (D-093): his tick, or his yes in chat written onto the page with the date and his
+   `docs/design/plates/` (D-093): his tick, or his yes in chat written onto the page with the date and his
    words. One approval covers one send: once the plate has been sent or printed, a reprint needs a
    new one, so a plate whose print showed the setup was wrong never goes out again on the old yes.
    A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).

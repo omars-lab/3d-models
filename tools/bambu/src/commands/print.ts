@@ -9,7 +9,7 @@
 // (@griches/bambu-mcp is unpublished, ships no build), so both halves of dispatch now ride code we
 // own — FtpsBackend for the upload, MqttBackend.startProjectFile for the start. Dispatch is the one
 // verb that moves real hardware, so `send` is fail-closed. Before anything is sent it checks two
-// things no flag skips (send-gate.ts): the plate's page in docs/plates/ carries a live approval from
+// things no flag skips (send-gate.ts): the plate's page in docs/design/plates/ carries a live approval from
 // Omar (D-093: his tick, or his yes in chat written onto the page; one approval per send, spent by
 // it), and the printer is idle. Then it asks at a TTY unless --yes, which may be passed only on a
 // page approval that is live. --dry-run reports both checks and prints the EXACT FTPS target + MQTT

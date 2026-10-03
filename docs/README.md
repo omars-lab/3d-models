@@ -56,7 +56,7 @@ September 2026), [bubble lettering on coasters](research/coaster-bubble-letterin
 
 ## Printing
 
-- [Plates](plates/README.md) — what to print next and why: one review page per plate, with
+- [Plates](design/plates/README.md) — what to print next and why: one review page per plate, with
   pictures, Omar's approval and how many times it printed.
 - [Prints](prints.md) — what has printed; the records are in `prints/<run>/`.
 - [3D-printing wiki](wiki/index.md) — what a slicer warning or print defect means, and what to do.

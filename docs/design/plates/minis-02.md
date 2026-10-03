@@ -39,7 +39,7 @@ each pattern, plus the CS-1 twist at height 6, twist 15. One bed, about 2 h 36 m
 
 To see every style side by side before choosing one. It also touches the strap floors
 (CAL-CST-01, CAL-CST-07) and the twist lean ceiling (CAL-CST-08)
-([bets.md](../../.claude/skills/calibrate/bets.md)).
+([bets.md](../../../.claude/skills/calibrate/bets.md)).
 
 ## Pictures
 
@@ -64,4 +64,4 @@ Notes:
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-09-25 | proposed — one mini of each style, at Omar's request | 3d-models #314, #315 |
-| 2026-09-25 | sent — from Bambu Studio | [dispatch notes](../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray) |
+| 2026-09-25 | sent — from Bambu Studio | [dispatch notes](../../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray) |

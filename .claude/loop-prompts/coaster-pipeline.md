@@ -23,7 +23,7 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
   [ledger](../../docs/constructions/ledger.md) reads 8 migrated, 1 no-piece by design,
   0 remaining. The catalog, gallery and `make coasters` are live. Border, color regions →
   AMS slots, twist, radial bands and rods relief are all in. `bambu slice compose` builds a
-  plate. [`minis-01`](../../docs/plates/minis-01.yaml) is the first mini plate (P4.2).
+  plate. [`minis-01`](../../docs/design/plates/minis-01.yaml) is the first mini plate (P4.2).
 - **Missing: the print.** Nothing is printed. The CAL-CST bets are unmeasured
   ([`bets.md`](../skills/calibrate/bets.md)). The standard-size plate (P5.2) waits on those
   numbers.

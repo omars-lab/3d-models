@@ -19,7 +19,7 @@ grams:
 bed_plates:
 risk: ok
 pictures:
-  - ../prints/2026-09-26-minis-03/photos/plate-overview.jpg
+  - ../../prints/2026-09-26-minis-03/photos/plate-overview.jpg
 ---
 
 # minis-03 — minimal-frames at 40 mm, and a dovetail pair
@@ -35,9 +35,9 @@ left empty: not a no, just never asked.
 ## What it is
 
 Recipe: [minis-03.yaml](minis-03.yaml). The record, with each piece's verdict and notes:
-[2026-09-26-minis-03](../prints/2026-09-26-minis-03/index.md).
+[2026-09-26-minis-03](../../prints/2026-09-26-minis-03/index.md).
 
-![minis-03 as printed](../prints/2026-09-26-minis-03/photos/plate-overview.jpg)
+![minis-03 as printed](../../prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
 ## Your call
 
@@ -49,5 +49,5 @@ Nothing open. The lessons went into the next plate and the sample rules.
 |---|---|---|
 | 2026-09-25 | proposed — the recipe, built with the print-coaster-samples skill | 3d-models #319, #324 |
 | 2026-09-26 | sent — from Bambu Studio | the record |
-| 2026-09-26 | printed — [2026-09-26-minis-03](../prints/2026-09-26-minis-03/index.md) | 3d-models #327 |
+| 2026-09-26 | printed — [2026-09-26-minis-03](../../prints/2026-09-26-minis-03/index.md) | 3d-models #327 |
 | 2026-09-26 | judged — four pieces, all `adjust` | the record |

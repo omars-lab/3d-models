@@ -1,7 +1,7 @@
 // The two checks `print send` makes before anything reaches the printer, kept apart so they can be
 // tested without a printer:
 //
-//   - Approval (D-093). Omar's yes to a send is the Approve box on the plate's page in docs/plates/,
+//   - Approval (D-093). Omar's yes to a send is the Approve box on the plate's page in docs/design/plates/,
 //     ticked by him in Obsidian, or ticked for him when he says yes in chat (the session then writes
 //     the tick, the date and his words onto the page). A plate with no page has no box to tick, so it
 //     cannot be approved and does not go out.
@@ -33,13 +33,13 @@ import { basename, join } from "node:path";
 import { parse } from "yaml";
 import type { PrinterStatus } from "./backends/mqtt.js";
 
-/** `build/plates/sheets-04b.plate.3mf` → `sheets-04b`: the name its page in docs/plates/ carries. */
+/** `build/plates/sheets-04b.plate.3mf` → `sheets-04b`: the name its page in docs/design/plates/ carries. */
 export function plateNameOf(plateFile: string): string {
   return basename(plateFile).replace(/\.3mf$/i, "").replace(/\.plate$/i, "");
 }
 
 export function platePagePath(name: string, root: string): string {
-  return join(root, "docs", "plates", `${name}.md`);
+  return join(root, "docs", "design", "plates", `${name}.md`);
 }
 
 export interface Approval {

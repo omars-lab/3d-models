@@ -41,7 +41,7 @@
 #   border                    needs a color plate (`bambu slice coaster`).
 #
 # Validate (no hardware, no slicer):
-#   bambu slice compose docs/plates/minis-04.yaml --dry-run
+#   bambu slice compose docs/design/plates/minis-04.yaml --dry-run
 
 bed: x2d
 profile:

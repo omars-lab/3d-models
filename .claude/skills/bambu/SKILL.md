@@ -67,7 +67,7 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
 ## The rails (do not route around them)
 
 - **A send needs Omar's live approval, and an idle printer.** `print send` moves real hardware. It
-  reads the plate's page in `docs/plates/` and refuses unless the approval there is live (D-093): his
+  reads the plate's page in `docs/design/plates/` and refuses unless the approval there is live (D-093): his
   tick, or his yes in chat written onto the page with the date and his words. One approval covers one
   send. A send spends it (the box is unticked and a dated `sent` row joins the timeline), so a reprint
   needs a new yes, and a plate whose print showed the setup was wrong never goes out on the old one.

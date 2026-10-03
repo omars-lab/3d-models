@@ -86,6 +86,8 @@ FENCE = re.compile(r"^\s*(```|~~~)")
 LINK = re.compile(r"(\[[^\]]*\]\()([^)\s]+)((?:\s+\"[^\"]*\")?\))")
 WIKILINK = re.compile(r"(!?\[\[)([^\[\]|#^]*)([^\[\]]*\]\])")
 BACKTICKED = re.compile(r"`([A-Za-z0-9_.@/-]+)`")
+# One frontmatter value, alone on its line: `  - ../x/pic.png` or `cover: "x/pic.png"`.
+FRONT_PATH = re.compile(r"^(\s*(?:-\s+|[\w-]+:\s+))([\"']?)([^\s\"'#]+)\2(\s*)$")
 PATHISH = re.compile(r"[A-Za-z0-9_.@-]*(?:/[A-Za-z0-9_.@-]+)+/?")
 # `qiyas:` just before a path: the path is that repo's, not this one's.
 OTHER_REPO = re.compile(r"(?<![\w.-])(?!3d-models:)[\w-]+:\Z")
@@ -379,11 +381,25 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
         changes.append(Change("relative", n, tok, out))
         return out
 
+    def fix_front(n: int, m: re.Match) -> str:
+        """A frontmatter value that names a file (a plate page's `pictures:`) is a link too."""
+        tok = m.group(3)
+        if "/" not in tok or not mapper.exists_before(resolve_from(old_dir, unquote(tok))):
+            return m.group(0)
+        return m.group(1) + m.group(2) + fix_link(n, tok) + m.group(2) + m.group(4)
+
     lines = text.split("\n")
     in_fence = False
+    in_front = is_md and bool(lines) and lines[0] == "---"
     span_open = False  # a code span wrapped onto this line from the one above
     for i, line in enumerate(lines):
         n = i + 1
+        if in_front and i > 0:
+            if line in ("---", "..."):
+                in_front = False
+            else:
+                lines[i] = FRONT_PATH.sub(lambda m: fix_front(n, m), line)
+            continue
         if is_md:
             if FENCE.match(line):
                 in_fence = not in_fence
@@ -713,6 +729,13 @@ def unit_cases(failures: list[str]) -> None:
             (".claude/x.md", "`docs/a-design.md.bak` docs/a-design-b.md", "`docs/a-design.md.bak` docs/a-design-b.md",
              "a longer name that starts the same"),
             ("docs/plan.md", "`a-design/pic.png`", "`design/c/a-design/pic.png`", "a doc-relative backticked path"),
+            ("docs/a-design.md", "---\npictures:\n  - ../src/x.bkr\nplate: a-design\n---\n[p](plan.md)",
+             "---\npictures:\n  - ../../../src/x.bkr\nplate: a-design\n---\n[p](../../plan.md)",
+             "a moved note's frontmatter path (a plate page's pictures), the body after it too"),
+            ("docs/plan.md", "---\ncover: \"a-design/pic.png\"\nrun: 2026/10\n---\n",
+             "---\ncover: \"design/c/a-design/pic.png\"\nrun: 2026/10\n---\n",
+             "a frontmatter path into the moved folder; a value naming no file stays"),
+            ("docs/plan.md", "- a-design/pic.png", "- a-design/pic.png", "a list line in the body is prose"),
             ("docs/plan.md", "![[a-design/pic.png]] [[a-design]]", "![[design/c/a-design/pic.png]] [[a-design]]",
              "a path wikilink moves, a bare one stays"),
             (".claude/s/x.md", "run `validate\nrecord` then [a](../../docs/a-design.md) and `y`",

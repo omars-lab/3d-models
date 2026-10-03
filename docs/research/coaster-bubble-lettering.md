@@ -254,7 +254,7 @@ the design doc; the print target stays out of share URLs by existing convention.
   split extended.
 - **Compose drops colour.** `bambu slice compose` hands loose STLs to the arranger, so a plate
   built that way is single-colour; a coloured coaster has to go through `bambu slice coaster`
-  (see the notes in [minis-01.yaml](../plates/minis-01.yaml)). Coloured lettering inherits that.
+  (see the notes in [minis-01.yaml](../design/plates/minis-01.yaml)). Coloured lettering inherits that.
 - **Single-colour fallback.** The layer-pause colour swap at the letter height gives two colours
   without the split, but it colours everything above that height — straps included — so it only
   suits designs where letters are the only thing that tall.

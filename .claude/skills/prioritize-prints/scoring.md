@@ -2,7 +2,7 @@
 
 Read at run time by [`plates_gate.py`](../../gates/plates_gate.py) and by the skill. Change the
 weights here, run `python3 .claude/gates/plates_gate.py --write`, and the queue on
-[`docs/plates/README.md`](../../../docs/plates/README.md) follows. Add a line to the round log
+[`docs/design/plates/README.md`](../../../docs/design/plates/README.md) follows. Add a line to the round log
 when you do, saying what changed and why.
 
 ## The sum

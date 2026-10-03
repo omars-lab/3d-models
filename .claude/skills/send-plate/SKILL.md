@@ -27,7 +27,7 @@ pages Omar ticks in Obsidian: `tools/bambu/bin/bambu …`.
 
 ## 1. Find the plate
 
-The plate is `docs/plates/<name>.yaml`, its page is `docs/plates/<name>.md`, and the sliced file is
+The plate is `docs/design/plates/<name>.yaml`, its page is `docs/design/plates/<name>.md`, and the sliced file is
 `build/plates/<name>.plate.3mf`. No page means no send: the page is where the yes lives.
 
 ## 2. The approval
@@ -56,7 +56,7 @@ fix first and a new yes after.
 ## 3. Slice, if needed
 
 If the `.3mf` is missing, or older than the `.yaml` or the bikar files it uses, slice it again
-with the verb the recipe names in its header (`bambu slice compose docs/plates/<name>.yaml`, or
+with the verb the recipe names in its header (`bambu slice compose docs/design/plates/<name>.yaml`, or
 `slice sheet` for a sampler sheet), then
 `bambu validate sliced build/plates/<name>.plate.3mf`. A slice that changes the plate's minutes,
 grams or picture goes on the page as a `sliced` row. Whether a recipe change voids the approval is
@@ -82,7 +82,7 @@ still Omar's open call (print-review design call 6): say it changed and ask.
 When it goes through, the CLI rewrites the page in the vault: the box unticked, `stage: sent`, a
 dated `sent` row naming the approval it spent. Ship that change: copy the page into a work branch
 off `origin/master`, PR, merge, then put the vault's copy back to the merged one
-(`git -C <vault> checkout -- docs/plates/<name>.md` only after `git diff` shows it matches) and
+(`git -C <vault> checkout -- docs/design/plates/<name>.md` only after `git diff` shows it matches) and
 fast-forward. The `--record` draft stays in `.bambu/records/` until the pieces are judged.
 
 If the send is refused, or a permission check denies the call, report it as it came. Never retry

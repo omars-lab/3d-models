@@ -17,7 +17,7 @@ It merges two independent write-ups and a check of both:
 
 No decision id is taken here.
 
-**The question.** Omar on minis-04 ([`../../plates/minis-04.yaml`](../../plates/minis-04.yaml)),
+**The question.** Omar on minis-04 ([`../plates/minis-04.yaml`](../plates/minis-04.yaml)),
 2026-09-26: "i see tiny holes on the print and the peg system border is too big and
 pegs too tight". What caused each, and what do we change?
 
@@ -125,11 +125,11 @@ already on plates:
 
 | Join | Band | Plate |
 |---|---|---|
-| dovetail, minis-04 knobs (neck 3, depth 3, wall 2.5) | ~11.1 mm | [`../../plates/minis-04.yaml`](../../plates/minis-04.yaml) |
-| slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [`../../plates/minis-06.yaml`](../../plates/minis-06.yaml) |
-| no join (plain pair) | ~6.0 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
-| tab into the neighbour's opening | ~5.8 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
-| butterfly key | ~5.7 mm | [`../../plates/minis-05.yaml`](../../plates/minis-05.yaml) |
+| dovetail, minis-04 knobs (neck 3, depth 3, wall 2.5) | ~11.1 mm | [`../plates/minis-04.yaml`](../plates/minis-04.yaml) |
+| slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [`../plates/minis-06.yaml`](../plates/minis-06.yaml) |
+| no join (plain pair) | ~6.0 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
+| tab into the neighbour's opening | ~5.8 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
+| butterfly key | ~5.7 mm | [`../plates/minis-05.yaml`](../plates/minis-05.yaml) |
 
 The ranked options are in [`../coaster/coaster-borderless-joins-design.md`](../coaster/coaster-borderless-joins-design.md).
 The slim dovetail sits at the kernel's frame floor; the key needs a separate part and its

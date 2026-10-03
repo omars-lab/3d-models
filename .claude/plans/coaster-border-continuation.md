@@ -264,7 +264,7 @@ description is stale on that. What remains:
   handles one model (`slice.ts:22-44,132-149`). Bambu CLI reference:
   https://github.com/bambulab/BambuStudio/wiki/Command-Line-Usage . Own 2D packer (P2) only if
   `--arrange` proves unreliable, recorded in `docs/issues/`.
-- **P4.2 Mini plate manifest** `docs/plates/minis-01.yaml`: every migrated construction at mini
+- **P4.2 Mini plate manifest** `docs/design/plates/minis-01.yaml`: every migrated construction at mini
   size (`size=40`, bordered ones `border=4`), count 2, one relief variant each — the plate after
   Plate 1. `bambu validate plate` must accept the composed 3MF. deps P4.1, and the ledger (#20,
   done).

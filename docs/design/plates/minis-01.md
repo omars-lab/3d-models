@@ -37,7 +37,7 @@ pattern raised on a slab), size 40. One bed, about 1 h 13 m and 22 g.
 ## Why it was printed
 
 It checks how narrow a raised strap can be (CAL-CST-01) and the smallest feature that stays
-readable at mini size (CAL-CST-02) ([bets.md](../../.claude/skills/calibrate/bets.md)).
+readable at mini size (CAL-CST-02) ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 
 ## Pictures
 
@@ -48,7 +48,7 @@ readable at mini size (CAL-CST-02) ([bets.md](../../.claude/skills/calibrate/bet
 ## Your call
 
 The send is written down in the
-[dispatch notes](../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray); nothing
+[dispatch notes](../../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray); nothing
 says what came off the bed.
 
 - [ ] **It printed** — I write the record, with your verdict per piece if you give one
@@ -62,4 +62,4 @@ Notes:
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-09-19 | proposed — the first compose plate, plan step P4.2 | 3d-models #280 |
-| 2026-09-25 | sent — from Bambu Studio, after `print send` could not pick the tray | [dispatch notes](../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray) |
+| 2026-09-25 | sent — from Bambu Studio, after `print send` could not pick the tray | [dispatch notes](../../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray) |

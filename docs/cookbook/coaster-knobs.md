@@ -308,7 +308,7 @@ an option bikar does not have yet. A loose face with no fill color is refused, b
 piece needs a filament. A face within two grid cells of the coaster's edge stays part of the frame. Only the solid
 frame is built so far: openwork, joins, a border, a twist and the color preview are all
 refused alongside `loose`. The 0.15 mm gap is a starting guess until the
-[gBV fit sheet](../plates/sheets-04.md) prints.
+[gBV fit sheet](../design/plates/sheets-04.md) prints.
 
 Related: [color regions](#color-regions), [stars and colored faces](stars-and-fills.md),
 [the loose-pieces design](../design/coaster/loose-pieces-design.md),

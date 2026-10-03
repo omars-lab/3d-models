@@ -363,7 +363,7 @@ passes after. Tier-0 witnesses precede any composite golden.
 | 1 Languages made robust | P1.1 youtube EBNF + conformance + vocabulary fixture · P1.2 `ggb_from_xml.py` · P1.2b `ggb_coords.py` (O1 dump + O3 reference) · P1.3 `--ast-json` + Pydantic schema + bikar mirror · P1.4 naqsh construction statements (a)–(d) · P1.5 bikar printer + round-trip gate · P1.6 `coaster` declaration + height-field kernel + validators + `CAL-CST-*` · P1.7 highlighting generated from the fixtures (bikar + youtube) | P0.4, P0.5 |
 | 2 Transpiler, first construction, cookbook | P2.1 `bikar import geogebra` · P2.2 `GimTvN9hw4U` golden + O1/O2 · P2.3 slice-1 coaster · P2.3b `qiyas mesh compare` (O3) · P2.4 readability rules + header · P2.5 cookbook with conformance test · P2.6 `7apC5Q9QS-8` · P2.7 disc coaster | P1.3, P1.4, P1.5, P1.2b |
 | 3 Repeatable process | P3.1 skill · P3.2 ledger + gate + hook · P3.3 catalog `CS-*`, `make coasters`, gallery section | P2.5, P2.7, P2.2 |
-| 4 Many on one plate | P4.1 `bambu slice compose` + plate doc · P4.2 `docs/plates/minis-01.yaml` · P4.3 print record (owner-gated) | P3.3, P3.2, Plate 1 |
+| 4 Many on one plate | P4.1 `bambu slice compose` + plate doc · P4.2 `docs/design/plates/minis-01.yaml` · P4.3 print record (owner-gated) | P3.3, P3.2, Plate 1 |
 | 5 Scale the corpus | P5.1 remaining rungs in ladder order · P5.2 standard-size plate · P5.3 `frame` decision if a public fixture needs it | P3.1, P4.3, P1.2 |
 
 Critical path to the first mini STL: P0.5 → P1.1 → P1.3 → P2.1 → P2.2 → P2.3,
@@ -384,7 +384,7 @@ O3 gates the catalog entry). P1.2, P1.6 and P1.7 are off the critical path.
 4. `bikar render … --format stl --check` for mini and standard, both coaster
    forms; every structural validator's PASS and hard FAIL fixture exercised;
    `make coasters`; `make validate` green.
-5. `bambu slice compose docs/plates/minis-01.yaml --dry-run` prints a valid
+5. `bambu slice compose docs/design/plates/minis-01.yaml --dry-run` prints a valid
    multi-input argv; the real run produces a `.3mf` that `bambu validate plate`
    accepts. No print is sent.
 6. The gallery's Coasters section renders in a real browser.

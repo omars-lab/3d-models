@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plates gate for 3d-models: a plate page tells the truth about its plate.
 
-`docs/plates/<plate>.yaml` is what gets sliced; `docs/plates/<plate>.md` is the page Omar
+`docs/design/plates/<plate>.yaml` is what gets sliced; `docs/design/plates/<plate>.md` is the page Omar
 reviews it on: what it is, why print it, pictures, cost and risk, their approval tick box, and
 a timeline of what happened to it. Its frontmatter holds the few facts the queue ranks on and
 the facts that must never drift — whether Omar approved it, and how many times it printed.
@@ -36,7 +36,7 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       `printed` row naming it, and there are as many `printed` rows as `times_printed`.
 
   P7  **The queue is current.** The block between the queue markers in
-      `docs/plates/README.md` is exactly what `--write` would write from the pages and the
+      `docs/design/plates/README.md` is exactly what `--write` would write from the pages and the
       weights in the `prioritize-prints` skill's scoring.md. Priority is presented, never
       stored (prints-tab-design §6): no page holds a rank, the queue is recomputed.
 
@@ -73,6 +73,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -83,11 +84,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prints_gate import CAL_ID, parse_frontmatter, record_dirs  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
-PLATES = ROOT / "docs" / "plates"
+PLATES = ROOT / "docs" / "design" / "plates"
 PRINTS = ROOT / "docs" / "prints"
 SCORING = ROOT / ".claude" / "skills" / "prioritize-prints" / "scoring.md"
 RUBRIC = ROOT / ".claude" / "skills" / "grade-plate" / "rubric.md"
 BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
+# The queue links the weights from the page it is written on, so the link follows the folder.
+SCORING_LINK = Path(os.path.relpath(SCORING, PLATES)).as_posix()
 
 REQUIRED = (
     "plate", "recipe", "stage", "approved", "approved_on", "times_printed", "runs",
@@ -435,7 +438,7 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     parent = data.get("derived_from")
     if parent is not None and (not isinstance(parent, str) or parent == name
                                or not (path.parent / f"{parent}.md").is_file()):
-        out.append(f"{name}: P1 derived_from {parent!r} is not another plate page in docs/plates/")
+        out.append(f"{name}: P1 derived_from {parent!r} is not another plate page in docs/design/plates/")
     needs = data.get("needs")
     if stage == "planned":
         if not isinstance(needs, list) or not needs or not all(
@@ -561,7 +564,7 @@ def render_queue(pages: list[dict], w: dict) -> str:
     lines = [
         Q_START,
         "Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages and the "
-        "weights in [scoring.md](../../.claude/skills/prioritize-prints/scoring.md). Do not edit "
+        f"weights in [scoring.md]({SCORING_LINK}). Do not edit "
         "by hand; the prints hook fails when this block and the pages disagree.",
         "",
         "| # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |",
@@ -596,13 +599,15 @@ def title_of(body: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None]) -> dict:
+def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None], plates: Path = PLATES) -> dict:
     """The queue as data, for 3d-model-hub's plate queue: the same ranking `render_queue` writes,
-    with the page facts beside it so the hub never parses a plate page itself."""
+    with the page facts beside it so the hub never parses a plate page itself. `page` is the page's
+    path in this repo; the hub resolves `pictures` beside it, so moving the folder moves nothing there."""
     def facts(p: dict) -> dict:
         on = p["approved_on"]
         return {
-            "plate": p["plate"], "title": titles.get(p["plate"]), "stage": p["stage"],
+            "plate": p["plate"], "page": Path(os.path.relpath(plates / f"{p['plate']}.md", ROOT)).as_posix(),
+            "title": titles.get(p["plate"]), "stage": p["stage"],
             "approved": p["approved"], "approved_on": on.isoformat() if isinstance(on, dt.date) else None,
             "times_printed": p["times_printed"], "runs": p["runs"], "answers": p["answers"],
             "kind": p["kind"], "bets": p["bets"], "unblocks": p["unblocks"],
@@ -726,7 +731,7 @@ def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=R
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before ranking them", file=sys.stderr)
         return 1
-    print(json.dumps(queue_json(good, read_weights(scoring), titles), indent=2))
+    print(json.dumps(queue_json(good, read_weights(scoring), titles, plates), indent=2))
     return 0
 
 
@@ -1158,6 +1163,8 @@ def self_test() -> int:
                and data["queue"][0]["title"] == "a — first"
                and [h["plate"] for h in data["held"]] == ["c"] and data["planned"] == [],
                "the JSON queue is the table's order, titled, with the held plate apart", str(data))
+        report(data["queue"][0]["page"] == "docs/design/plates/a.md",
+               "the JSON names each page by its path in the repo, for the hub's pictures", str(data["queue"][0]))
 
         # --rank --json refuses while a page is wrong, rather than ranking around it.
         import contextlib

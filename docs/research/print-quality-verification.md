@@ -160,7 +160,7 @@ disagree about what `c` means at the head.
 
 ### 1.5 The plates, the print record and the clearance ladder
 
-- [`../plates/minis-04.yaml`](../plates/minis-04.yaml): 80 mm pieces, base 1.4 mm,
+- [`../design/plates/minis-04.yaml`](../design/plates/minis-04.yaml): 80 mm pieces, base 1.4 mm,
   straps 1.2 mm proud (2.6 mm in all), pegs pair clearance 0.1, twist piece height 4.
   Its own risk notes say "7 layers; tabs may snap/flex; may be floppy".
 - [`../prints/2026-09-26-minis-03/index.md`](../prints/2026-09-26-minis-03/index.md):

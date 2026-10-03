@@ -1848,11 +1848,11 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
-- **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/plates/sheets-04.md)
+- **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/design/plates/sheets-04.md)
   (one bed, 62 min, 17 g) printed, and all the small pieces fell right through the minimal
   coaster's holes at every gap ([record](../../../docs/prints/2026-10-02-sheets-04/index.md)):
   that coaster has no floor, so a piece smaller than its hole is held by nothing. Next is
-  [sheets-04b](../../../docs/plates/sheets-04b.md), pieces only (Omar has the coaster), 4 mm tall
+  [sheets-04b](../../../docs/design/plates/sheets-04b.md), pieces only (Omar has the coaster), 4 mm tall
   and flat via the new `height` knob, at gaps 0.05, 0, −0.05 and −0.10 (a gap below zero is a
   press fit, bikar #300); one bed, 41 min, 12 g, waiting on Omar's tick. Failure detection is the
   X2D's own, not a per-plate yes (D-092, loose-pieces design §3.7).
@@ -1869,7 +1869,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   `cd bikar && node packages/cli/dist/index.js render patterns/Coupons/Loose-Fit-Coupon.bkr
   --format stl --check --piece Frame -o <out>.stl`, then `--piece Hex --param gap=0.05` (and
   0.1, 0.15, 0.2), then `--piece Star --param star_gap=0.15`. The plate
-  [`sheets-04.yaml`](../../../docs/plates/sheets-04.yaml) does all six. `Hex` is orbit 2, ten
+  [`sheets-04.yaml`](../../../docs/design/plates/sheets-04.yaml) does all six. `Hex` is orbit 2, ten
   six-sided pieces at radius 19.9 mm; `Star` is orbit 3, ten small five-point stars at 28.3 mm
   (`bikar bands`). The real coaster's `size=90` and `strap=3` are kept, so a gap is read on the
   pieces gBV will have; only `slab=2` is thinner. The gap is taken off the piece, so the pocket

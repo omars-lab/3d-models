@@ -258,7 +258,7 @@ the whole coaster passes `--format stl --check`. Checked at the file's default 9
 `size=80`: all four bodies pass at both, with the same body shapes (same euler numbers). Not
 sliced, not printed.
 
-**First sample plate (a proposal; not added under `docs/plates/`):** two coasters of 7apC5Q9QS-8
+**First sample plate (a proposal; not added under `docs/design/plates/`):** two coasters of 7apC5Q9QS-8
 at 80 mm, both plain, both three colors.
 
 1. The prototype as built (dark slab, gold straps, ruby classes 0 and 3).

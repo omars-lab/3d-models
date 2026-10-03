@@ -1,7 +1,7 @@
 // Tests for the bed map: which plate item each arranged object is, and where it sits.
 //
 // The fixture is real: test/fixtures/sheets-04/ holds `3D/3dmodel.model` and
-// `Metadata/model_settings.config` of docs/plates/sheets-04.yaml as `bambu slice compose` sliced it
+// `Metadata/model_settings.config` of docs/design/plates/sheets-04.yaml as `bambu slice compose` sliced it
 // on 2026-10-01 (Bambu Studio 02.08.02.61). Four of its six objects are the same ring of hexagons
 // at four gaps, which is why the map exists: on the bed they cannot be told apart by eye.
 

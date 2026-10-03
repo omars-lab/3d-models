@@ -37,9 +37,9 @@ left empty: not a no, just never asked.
 ## What it is
 
 Recipe: [minis-04.yaml](minis-04.yaml). The record, with each piece's verdict, the slicer
-diagnosis and what came next: [2026-09-26-minis-04](../prints/2026-09-26-minis-04/index.md).
+diagnosis and what came next: [2026-09-26-minis-04](../../prints/2026-09-26-minis-04/index.md).
 Why the holes and the tight fit, ranked:
-[print-quality design](../design/printing/print-quality-design.md).
+[print-quality design](../printing/print-quality-design.md).
 
 ## Your call
 
@@ -50,5 +50,5 @@ Nothing open.
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-09-26 | proposed — the recipe, after minis-03 came back too small | 3d-models #329 |
-| 2026-09-26 | printed — [2026-09-26-minis-04](../prints/2026-09-26-minis-04/index.md) | 3d-models #348 |
+| 2026-09-26 | printed — [2026-09-26-minis-04](../../prints/2026-09-26-minis-04/index.md) | 3d-models #348 |
 | 2026-09-26 | judged — five pieces, all `adjust` | the record |
