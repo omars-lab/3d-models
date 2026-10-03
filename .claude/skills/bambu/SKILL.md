@@ -71,6 +71,10 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   owner-gate notice and refuses unless you pass `--yes` or confirm at a TTY. Use `--dry-run` to show
   exactly what it *would* do without connecting. Never pass `--yes` on the user's behalf — the first
   filament is Omar's call.
+- **Look at the bed before a send.** Both `print send` and its `--dry-run` save a camera frame under
+  `.bambu/bed/` and print the path. Open it and say what is on the plate before anyone confirms.
+  If the camera refuses its certificate (after a printer reset), run `setup camera-pin` again;
+  never route around the check.
 - **`slice` and `print send` share one honesty contract.** `slice plate` captures Studio's own
   warnings and writes a `<plate>.warnings.json` sidecar stamped with the sliced `.3mf`'s
   `source_sha256`; `print send` refuses to dispatch unless that sidecar is **present, fresh (hash
