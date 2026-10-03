@@ -5943,7 +5943,7 @@ written; neither rule changes.
   `—` for rows moved in from before the table. `Spent by` is empty while a yes is open, then
   `sent <date>` or `replaced <date>`; a hold or a standing row has `—`. `approved` and
   `approved_on` are gone from the frontmatter, and `approved`/`held` are no longer timeline events.
-- **One tool writes it:** `tools/plate_approve.py` — `--approved --by "<who, how>"` from a tick or
+- **One tool writes it:** `.claude/skills/manage-approvals/scripts/plate_approve.py` — `--approved --by "<who, how>"` from a tick or
   a chat yes, `--held`, `--standing` on promotion to production, `--sent` when a plate goes out
   (the CLI calls it; a Bambu Studio send is recorded with `--via "Bambu Studio"`), and `--status`.
   A tick that has not been read in is not an approval: a box left ticked after a send outside the
@@ -5956,8 +5956,59 @@ written; neither rule changes.
   closes it, a reprint is another yes.
 - **Call 6 stays Omar's.** The table now records what each yes covers, so "gate it" is one switch,
   `LAPSE_ON_RECIPE_CHANGE` in the plates gate, left off: a recipe changed after a yes is a notice
-  and a warning on the send, and the yes stands, as before.
+  and a warning on the send, and the yes stands, as before. (Settled the same day by D-097: a
+  change resets the yes, and the switch is gone.)
 
 **What would reverse it:** a yes Omar gave that the tool failed to record, or a send the table
 said was approved that he had not approved — either would mean the read-back step costs more
 than the frontmatter it replaced.
+
+## D-097 — A recipe changes in place as a numbered iteration, and the change resets the yes
+
+Omar, 2026-10-03, answering the print-review design's call 6: "a recipe changes after a yes
+should be in s new design? can we have hooks that attempt to enforce that / monitor chnages on
+deaign files other than repreints as is?", then "or auto reset approval on change?", then "how can
+we use git - changes to a file should reaet yes - but indont want a file for every iteration... i
+want to track iteration count in frontmatter, and when there is a diff in git, hook to reset yes,
+we should track approved xommits ... and maybe we should track iterations/versions ins a seperate
+approval.yaml that we track ... maybe its a subfile in skill dir for managing-aprovals - with any
+screipts hook needs in that subdir too". It settles call 6 for experiments and amends D-096, which
+had left it as a switch turned off. D-095 stands for production plates.
+
+### The options as offered
+
+- **A new plate per change:** every edit after a yes becomes `<plate>-v2`, so a yes can never
+  cover a changed recipe. Rejected by Omar: "indont want a file for every iteration".
+- **The hook resets the yes itself:** the commit hook edits the page and stages it. In a shared
+  checkout a hook that edits and stages sweeps up another session's work, so the hook refuses
+  instead and names the command.
+- **Iterations, recorded by one command** (chosen): the recipe changes in place; the hook refuses
+  an unrecorded change; `plate_approve.py <plate> --iterate` records it and resets the yes.
+
+### What it means
+
+- **Each version of a recipe that differs from the last is an iteration**, numbered from 1 per
+  plate, in `.claude/skills/manage-approvals/approvals.yaml` (plate → `{iteration, recipe, date}`,
+  where `recipe` is the hash of the parsed yaml). The page's frontmatter says `iteration: N`.
+- **A yes covers an iteration and the master commit that holds it**: the Covers cell reads
+  `iteration 2 @ 1a2b3c4d5e`, so `git show <commit>:<recipe>` is what Omar said yes to. The commit
+  must be on origin/master, because a squash merge drops branch commits; a yes on a change that
+  has not merged yet is refused.
+- **The plates gate's P9** (hook 39) refuses a recipe whose hash is not the page's iteration, a
+  frontmatter iteration that disagrees with the file, an open yes on an older iteration, a
+  `reset <date>` with no iteration that day, and a yes naming a commit that is not on master or
+  does not hold that iteration.
+- **`--iterate`** adds the iteration, sets the frontmatter, marks the open yes `reset <date>`, and
+  puts an approved plate back to `waiting`. It refuses an unchanged recipe (a reprint as-is keeps
+  its yes) and a production plate that already has an iteration (D-095: derive a new plate).
+- **Not a change:** a comment, or the same keys in another order.
+- **The switch `LAPSE_ON_RECIPE_CHANGE` is gone**; there is one rule, not a rule and a toggle.
+- **The tool moved** out of `tools/` into the new manage-approvals skill's `scripts/`, beside
+  `iterations.py`, which the gate imports.
+- **The limit:** only the recipe file is hashed. A change to a bikar `.bkr` the recipe names
+  makes no iteration and does not reset a yes; the render on the page is the check for that.
+
+**What would reverse it:** a print that went out on a yes Omar gave for a different geometry, from
+a bikar change this does not see — that would mean the iteration must hash what the recipe builds,
+not the recipe file. Or iterations piling up from edits nobody meant as a change, which would mean
+the hash is too strict.

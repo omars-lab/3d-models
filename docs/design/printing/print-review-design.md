@@ -72,7 +72,7 @@ page's **Approvals** table instead ([D-096](../../working-model/decisions-log.md
 and how: a tick, or his words in chat. `Covers` is the recipe the yes was given on, as the gate's
 `recipe_hash`; rows moved in from before the table say `—`. `Spent by` is empty while a yes is
 open, then `sent <date>` or `replaced <date>`; a hold or a standing row has `—`. Only
-`tools/plate_approve.py` writes rows, and `bambu print send` reads them through the same tool, so
+`.claude/skills/manage-approvals/scripts/plate_approve.py` writes rows, and `bambu print send` reads them through the same tool, so
 the gate and the CLI cannot read a page two ways.
 
 The body, in order: **In short**; **What it is** (the pieces, linked to the recipe); **Why print
@@ -111,7 +111,7 @@ Omar answers on the page, not in chat. **Your call** is a short list of tick box
 option with what it leads to, and a Notes line, the shape the
 [request-feedback skill](../../../.claude/skills/request-feedback/SKILL.md) uses. The
 prioritize-prints skill reads the ticks back with
-`python3 tools/plate_approve.py <page> --approved --by "Omar, tick on this page"` (or `--held`),
+`python3 .claude/skills/manage-approvals/scripts/plate_approve.py <page> --approved --by "Omar, tick on this page"` (or `--held`),
 which adds the dated row and clears the box, so the next tick is a new answer.
 
 Nothing but a tick or Omar's words writes an `approved` row. The gate prints a notice for a ticked
@@ -256,9 +256,12 @@ edited afterwards stays approved.
 - [ ] Lapse by hand
 - [ ] Gate it
 
-Since the Approvals table (D-096, 2026-10-03), each yes records the recipe it covers, so "Gate it"
-needs no new field and no second tick: it is one switch, `LAPSE_ON_RECIPE_CHANGE` in the plates
-gate. Until this is answered the switch is off: a recipe changed after a yes is a notice on the
-next commit and a warning on the send, and the yes stands, as before.
+**Decided 2026-10-03:** gate it, with the recipe changing in place → [D-097](../../working-model/decisions-log.md).
+Omar, in chat: "changes to a file should reaet yes - but indont want a file for every iteration...
+i want to track iteration count in frontmatter ... we should track approved xommits". Each
+recipe change is a numbered iteration in the manage-approvals skill's `approvals.yaml`; the page
+says `iteration: N`; a yes covers `iteration N @ <master commit>`; and the commit hook refuses an
+unrecorded change until `plate_approve.py <plate> --iterate` records it and resets the open yes.
+The `LAPSE_ON_RECIPE_CHANGE` switch is gone.
 
 Notes:

@@ -3,14 +3,16 @@
 //
 //   - Approval (D-093, D-096). Omar's yes to a send is a row in the `## Approvals` table on the
 //     plate's page in docs/design/plates/. He ticks the Approve box in Obsidian, or says yes in chat,
-//     and `tools/plate_approve.py` turns that into a dated row naming who said yes and the recipe it
-//     covers. A plate with no page has nowhere to say yes, so it does not go out.
+//     and the manage-approvals skill's `plate_approve.py` turns that into a dated row naming who said
+//     yes and what it covers: an iteration of the recipe and the master commit holding it (D-097). A
+//     plate with no page has nowhere to say yes, so it does not go out.
 //
 //     One approval is good for one send: the send fills the open row's `Spent by`, so a reprint
 //     needs a new row, and the table holds every yes the design was ever given. A recipe changed
-//     after the yes is not approved until Omar says yes again, and a ticked box nobody has recorded
-//     yet does not count: a box ticked before a send made outside this CLI looks just like a fresh
-//     one, so the tick is read back into a row first.
+//     after the yes is not approved: recording the change (`--iterate`) resets the yes, and Omar is
+//     asked again; a comment-only edit is not a change, so a reprint as-is keeps its yes. A ticked
+//     box nobody has recorded yet does not count: a box ticked before a send made outside this CLI
+//     looks just like a fresh one, so the tick is read back into a row first.
 //
 //     A production plate has a standing approval (D-095): its promotion wrote a `standing` row, its
 //     prints still show production and its recipe is the one it was promoted on. It goes out with no
@@ -47,10 +49,13 @@ export interface Approval {
   standing: boolean; // a production plate's standing approval (D-095), not spent by a send
 }
 
-/** Runs `tools/plate_approve.py` with these arguments and returns its stdout; throws on a refusal. */
+/** Runs the manage-approvals skill's `plate_approve.py` with these arguments and returns its stdout;
+ * throws on a refusal. */
 export type ApproveTool = (args: string[]) => string;
 
-const TOOL = fileURLToPath(new URL("../../plate_approve.py", import.meta.url));
+const TOOL = fileURLToPath(
+  new URL("../../../.claude/skills/manage-approvals/scripts/plate_approve.py", import.meta.url),
+);
 
 export const plateApproveTool: ApproveTool = (args) =>
   execFileSync("python3", [TOOL, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });

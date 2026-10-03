@@ -13,14 +13,15 @@ and does the part only eyes can do: looking at the bed. The rules come from
 
 **One approval covers one send.** The approval is a row in the page's `## Approvals` table
 ([D-096](../../../docs/working-model/decisions-log.md)): Omar's tick on the page, or his yes in
-chat, written there by `tools/plate_approve.py` with the date, his words and the recipe it covers.
+chat, written there by `.claude/skills/manage-approvals/scripts/plate_approve.py` with the date, his words and the recipe
+iteration it covers (D-097).
 Sending spends it: the row's `Spent by` gets the send's date. The table keeps every yes and the
 timeline every send, so together they are the record of each approved reprint. A plate that
 already went out needs a new yes, even when the last one was yesterday.
 
 **Except a production plate** ([D-095](../../../docs/working-model/decisions-log.md)): it has a
 standing approval, so it goes out again with no new yes. The CLI checks it live, through
-`tools/plate_approve.py --status`: the prints must still show production and the recipe must match the page's
+`.claude/skills/manage-approvals/scripts/plate_approve.py --status`: the prints must still show production and the recipe must match the page's
 `recipe_hash`. If either fails, the plate is back to one yes per send. Every plate today is an
 experiment.
 
@@ -35,7 +36,7 @@ The plate is `docs/design/plates/<name>.yaml`, its page is `docs/design/plates/<
 ## 2. The approval
 
 Ask the tool, which reads the table the way the CLI will:
-`python3 tools/plate_approve.py docs/design/plates/<name>.md --status`.
+`python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<name>.md --status`.
 
 - **Live:** `approved on <date> (…), for its first send` or `for send N`: an `approved` row with
   `Spent by` empty. Go on.
@@ -50,7 +51,7 @@ Ask the tool, which reads the table the way the CLI will:
   which, and ask Omar for a yes for this send, or grade it (grade-plate).
 - **Omar said yes in chat for this plate, this send:** write it down before anything else. On a
   branch off `origin/master`:
-  `python3 tools/plate_approve.py docs/design/plates/<name>.md --approved --by 'Omar, in chat: "<his words>"'`.
+  `python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<name>.md --approved --by 'Omar, in chat: "<his words>"'`.
   It adds the row, sets `stage: approved` and leaves the box unticked. Ship it (PR, merge), then fast-forward the vault (`git -C <vault> merge --ff-only origin/master`)
   so the CLI reads it. His yes must name this plate. A general "go ahead" from earlier in the
   session does not cover a plate he has not seen.
@@ -66,8 +67,10 @@ If the `.3mf` is missing, or older than the `.yaml` or the bikar files it uses, 
 with the verb the recipe names in its header (`bambu slice compose docs/design/plates/<name>.yaml`, or
 `slice sheet` for a sampler sheet), then
 `bambu validate sliced build/plates/<name>.plate.3mf`. A slice that changes the plate's minutes,
-grams or picture goes on the page as a `sliced` row. Whether a recipe change voids the approval is
-still Omar's open call (print-review design call 6): say it changed and ask.
+grams or picture goes on the page as a `sliced` row. A recipe change resets the approval
+([D-097](../../../docs/working-model/decisions-log.md)): record it with
+`plate_approve.py <name> --iterate` (manage-approvals skill), ship it, and ask Omar again. A
+comment-only edit is not a change, so a reprint as-is keeps its yes.
 
 ## 4. The printer, the filament, the bed
 

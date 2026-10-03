@@ -20,10 +20,12 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       `| Date | Decision | By | Covers | Spent by |`, one row per decision, as many as the plate
       gets: `approved`, `held`, or `standing` (a production plate's standing approval). Not
       frontmatter: one `approved:` field cannot hold the second yes on the same design. The tick
-      box (or a yes in chat) is the input; `tools/plate_approve.py` writes the row and unticks
-      the box. Covers is `recipe <hash>`, the recipe the decision was made on. An approval's
-      Spent by is empty while it is open, `sent <date>` once a send used it, or `replaced <date>`
-      when a later decision took its place; held and standing rows say `—`. Checked: the table
+      box (or a yes in chat) is the input; the manage-approvals skill's `plate_approve.py`
+      writes the row and unticks the box. Covers is `iteration N @ <commit>`: the iteration of
+      the recipe the decision was made on, and the master commit that holds it (P9). An
+      approval's Spent by is empty while it is open, `sent <date>` once a send used it,
+      `replaced <date>` when a later decision took its place, or `reset <date>` when the recipe
+      changed under it (P9); held and standing rows say `—`. Checked: the table
       and its header are there; rows are dated, in order, with words from the vocabularies; a
       `sent` date has a timeline `sent` row, and every timeline `sent` row from TABLE_FROM on
       was spent by exactly one approval or went out on a standing one; a `replaced` date has a
@@ -68,12 +70,23 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       `standing_approval` says whether a production plate may go out with no new yes; the
       send check (`tools/bambu/src/send-gate.ts`) reads it through `plate_approve.py --status`.
 
-Not a finding: a ticked Approve or Hold box that the table does not record yet, or an open
-approval whose recipe has changed since. Each prints a notice, because the fix is a read-back
-by whoever runs the skill, and a whole-tree gate that failed on it would block every other
-session's commit until then. The send refuses an unrecorded tick; a changed recipe it names and
-lets through while LAPSE_ON_RECIPE_CHANGE is off (Omar's call 6, print-review-design §9). Nor is a page that
-claims less maturity than its prints show: experiment asks nothing, and promoting is a choice.
+  P9  **A yes covers one iteration** (D-097, Omar's answer to print-review call 6). A plate's
+      recipe changes in place, and each change is the next iteration, numbered per plate in
+      the manage-approvals skill's `approvals.yaml`; the page says `iteration: N`. Checked: the
+      page and the file agree on N; the recipe now is iteration N (its content, so a comment
+      or key order is not a change and a reprint as-is passes); each approved or standing row
+      covers an iteration the file has, through a commit on master that holds it; an open yes
+      covers the latest iteration, and a `reset` date has a later iteration that day. The
+      load-bearing case: a recipe edited after a yes with nothing recorded. That edit resets
+      the yes, so the commit cannot go in until `plate_approve.py --iterate` writes the next
+      iteration and marks the yes `reset`. A production recipe is P8's: it does not iterate,
+      it is derived.
+
+Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
+notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
+failed on it would block every other session's commit until then; the send refuses it. Nor is
+a page that claims less maturity than its prints show: experiment asks nothing, and promoting
+is a choice.
 
   rank:        python3 .claude/gates/plates_gate.py --rank
   as data:     python3 .claude/gates/plates_gate.py --rank --json   (3d-model-hub's plate queue)
@@ -85,7 +98,6 @@ claims less maturity than its prints show: experiment asks nothing, and promotin
 from __future__ import annotations
 
 import datetime as dt
-import hashlib
 import json
 import os
 import re
@@ -95,6 +107,9 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills" / "manage-approvals" / "scripts"))
+import iterations as it  # noqa: E402
+from iterations import recipe_hash  # noqa: E402,F401 — plate_grade and plate_approve read it here
 from prints_gate import CAL_ID, parse_frontmatter, record_dirs  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -131,12 +146,10 @@ EVENTS = ("proposed", "reviewed", "sliced", "sent", "printed", "judged", "promot
 APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
 DECISIONS = ("approved", "held", "standing")
 TABLE_FROM = "2026-10-03"
-# Does a yes lapse when the recipe changes after it? Omar's open call 6 in print-review-design
-# §9; until he answers, a change is named on the send and in a notice, and the yes stands, as
-# before the table. "Gate it" is this one switch: the table already records what each yes covers.
-LAPSE_ON_RECIPE_CHANGE = False
-COVERS = re.compile(r"^recipe [0-9a-f]{12}$")
-SPENT = re.compile(r"^(sent|replaced) (\d{4}-\d{2}-\d{2})$")
+# A yes covers one iteration of the recipe (D-097, Omar's answer to print-review call 6): a
+# change makes the next iteration, which resets the open yes (`reset <date>`).
+SPENT = re.compile(r"^(sent|replaced|reset) (\d{4}-\d{2}-\d{2})$")
+APPROVE_TOOL = ".claude/skills/manage-approvals/scripts/plate_approve.py"
 
 Q_START, Q_END = "<!-- queue:start -->", "<!-- queue:end -->"
 ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*([a-z]+)\b(.*)$")
@@ -233,10 +246,26 @@ def open_approval(rows: list[dict]) -> dict | None:
     return live[-1] if live else None
 
 
-def covers(path: Path) -> str | None:
-    """What an approval made now covers: `recipe <hash>`, or None with no readable recipe."""
-    h = recipe_hash(path)
-    return f"recipe {h}" if h else None
+def iterations_of(path: Path) -> list[dict]:
+    """The plate's recipe iterations, oldest first, from the manage-approvals store."""
+    return it.read_store(it.store_for(path.parent))[0].get(path.stem, [])
+
+
+def covers_now(path: Path) -> tuple[str | None, str]:
+    """(what a yes given now covers, `iteration N @ <commit>`; or None and why it cannot be
+    given). The recipe here must be its latest iteration, and that iteration must be on master:
+    the commit is how anyone later reads exactly what was approved."""
+    h, its = recipe_hash(path), iterations_of(path)
+    if h is None:
+        return None, f"no readable recipe beside the page ({path.stem}.yaml)"
+    if not its or its[-1]["recipe"] != h:
+        return None, (f"the recipe is not a recorded iteration yet — record it first: "
+                      f"`python3 {APPROVE_TOOL} {path.stem} --iterate`")
+    commit = it.master_commit(path)
+    if commit is None or it.hash_at(path, commit) != h:
+        return None, (f"iteration {its[-1]['iteration']} of the recipe is not on {it.MASTER} yet: "
+                      "merge it first, since a yes names the master commit it approved")
+    return f"iteration {its[-1]['iteration']} @ {commit}", ""
 
 
 def approval_status(path: Path, data: dict, body: str) -> dict:
@@ -248,7 +277,7 @@ def approval_status(path: Path, data: dict, body: str) -> dict:
     if bad:
         return {"approved": False, "how": bad, "row": None, "sends": sends}
     row = open_approval(rows)
-    record = (f"record it with `python3 tools/plate_approve.py {path.stem} --approved "
+    record = (f"record it with `python3 {APPROVE_TOOL} {path.stem} --approved "
               "--by \"Omar, tick\"`")
     if row is None:
         last = [r for r in rows if r["decision"] in ("approved", "held")]
@@ -261,19 +290,38 @@ def approval_status(path: Path, data: dict, body: str) -> dict:
         if TICKED_APPROVE.search(body):
             how += f"; the Approve box is ticked but not recorded — {record}"
         return {"approved": False, "how": how, "row": None, "sends": sends}
-    now = covers(path)
-    changed = row["covers"] != now
-    if changed and LAPSE_ON_RECIPE_CHANGE:
+    lapsed = yes_lapsed(path, row)
+    if lapsed:
         return {"approved": False, "row": row, "sends": sends,
-                "how": (f"the approval of {row['date']} covers {row['covers']}, but the recipe is "
-                        f"now {now}: the recipe changed after the yes, so it needs a new one")}
+                "how": f"the approval of {row['date']} no longer holds: {lapsed}"}
     nth = "its first send" if sends == 0 else f"send {sends + 1}"
-    how = f"approved on {row['date']} ({row['by']}), for {nth}"
-    if changed:
-        how += (f"; but the recipe changed since (the yes covers {row['covers']}, the recipe is "
-                f"now {now}) — whether that voids the yes is Omar's open call 6 in "
-                "print-review-design §9, so tell him and ask before sending")
+    how = f"approved on {row['date']} ({row['by']}), {row['covers']}, for {nth}"
     return {"approved": True, "row": row, "sends": sends, "how": how}
+
+
+def yes_lapsed(path: Path, row: dict) -> str | None:
+    """Why an open yes does not cover the recipe as it is now, or None when it does (D-097): it
+    names the latest iteration, its commit on master holds that iteration, and the recipe here
+    is still it. A comment-only edit is the same recipe, so a reprint as-is keeps its yes."""
+    got = it.parse_covers(row["covers"])
+    if got is None:
+        return f"it covers {row['covers']!r}, not `iteration N @ <commit>`"
+    n, commit = got
+    its, h = iterations_of(path), recipe_hash(path)
+    if not its or n != its[-1]["iteration"]:
+        return (f"it covers iteration {n}, but the recipe is at iteration "
+                f"{its[-1]['iteration'] if its else 0} — record it as `reset` "
+                f"(`python3 {APPROVE_TOOL} {path.stem} --iterate` does) and ask Omar again")
+    if its[-1]["recipe"] != h:
+        return (f"the recipe changed after the yes (iteration {n} is {its[-1]['recipe']}, the "
+                f"recipe is now {h}) — record the change with `python3 {APPROVE_TOOL} "
+                f"{path.stem} --iterate`, which resets the yes, and ask Omar again")
+    if it.hash_at(path, commit) != its[-1]["recipe"]:
+        return (f"its commit {commit} does not hold iteration {n} of the recipe — a yes names the "
+                "master commit it approved")
+    if not it.on_master(path, commit):
+        return f"its commit {commit} is not on {it.MASTER}"
+    return None
 
 
 def check_approvals(name: str, data: dict, body: str) -> list[str]:
@@ -282,7 +330,7 @@ def check_approvals(name: str, data: dict, body: str) -> list[str]:
            "## Approvals table (D-096)" for k in ("approved", "approved_on") if k in data]
     rows, bad = approvals(body)
     if bad:
-        return out + [f"{name}: P2 {bad} — `python3 tools/plate_approve.py {name} --table` "
+        return out + [f"{name}: P2 {bad} — `python3 {APPROVE_TOOL} {name} --table` "
                       "writes an empty one"]
     for i, r in enumerate(rows):
         d, dec, spent = r["date"], r["decision"], r["spent"]
@@ -297,14 +345,15 @@ def check_approvals(name: str, data: dict, body: str) -> list[str]:
             continue
         if not r["by"]:
             out.append(f"{where}: By is empty — say who decided, and how")
-        if dec in ("approved", "standing") and not COVERS.match(r["covers"]) and not (
+        if dec in ("approved", "standing") and not it.COVERS.match(r["covers"]) and not (
                 d < TABLE_FROM and r["covers"] == "—"):
-            out.append(f"{where}: an {dec} row covers {r['covers']!r}, not `recipe <hash>`")
+            out.append(f"{where}: an {dec} row covers {r['covers']!r}, not "
+                       "`iteration N @ <commit>`")
         if dec == "approved":
             m = SPENT.match(spent)
             if spent and not m:
-                out.append(f"{where}: Spent by {spent!r} is not empty, `sent <date>` or "
-                           "`replaced <date>`")
+                out.append(f"{where}: Spent by {spent!r} is not empty, `sent <date>`, "
+                           "`replaced <date>` or `reset <date>`")
             elif m and m.group(2) < d:
                 out.append(f"{where}: spent on {m.group(2)}, before it was given")
             elif m and m.group(1) == "replaced" and not any(
@@ -508,16 +557,6 @@ def maturity_evidence(path: Path, data: dict, history: dict, runs: dict, rubric:
             "why": why + [f"bed_fill {fill} and its latest run {own[-1]['run']} kept every piece"]}
 
 
-def recipe_hash(path: Path) -> str | None:
-    """The recipe's content, not its text: comments and key order do not change it."""
-    try:
-        recipe = yaml.safe_load((path.parent / f"{path.stem}.yaml").read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError):
-        return None
-    canon = json.dumps(recipe, sort_keys=True, default=str, separators=(",", ":"))
-    return hashlib.sha256(canon.encode("utf-8")).hexdigest()[:12]
-
-
 def recipe_unchanged(path: Path, data: dict) -> str | None:
     """Why a production page's recipe is not the one it was promoted on, or None when it is."""
     pinned, now = data.get("recipe_hash"), recipe_hash(path)
@@ -539,13 +578,15 @@ def standing_row(path: Path, data: dict, body: str) -> str | None:
     if bad:
         return bad
     last = [r for r in rows if r["decision"] == "standing"]
-    want = f"recipe {data.get('recipe_hash')}"
     if not last:
         return ("no standing row in the Approvals table — promotion writes it "
-                f"(`python3 tools/plate_approve.py {path.stem} --standing`)")
-    if last[-1]["covers"] != want:
+                f"(`python3 {APPROVE_TOOL} {path.stem} --standing`)")
+    got = it.parse_covers(last[-1]["covers"])
+    its = iterations_of(path)
+    held = its[got[0] - 1]["recipe"] if got and 0 < got[0] <= len(its) else None
+    if held != data.get("recipe_hash"):
         return (f"the last standing row ({last[-1]['date']}) covers {last[-1]['covers']}, not the "
-                f"promoted {want}")
+                f"iteration promoted (recipe_hash {data.get('recipe_hash')})")
     return None
 
 
@@ -827,22 +868,63 @@ def write_queue(readme: Path, block: str) -> None:
 # ---------------------------------------------------------------------------
 
 def approval_notices(path: Path, data: dict, body: str) -> list[str]:
-    """A tick the table does not hold yet, or an open approval on a recipe since changed. A
-    notice, not a finding: the read-back is the next session's, and the send refuses either."""
+    """A tick the table does not hold yet. A notice, not a finding: the read-back is the next
+    session's, and the send refuses it. (A recipe changed after a yes is P9's finding.)"""
     name, out = path.stem, []
-    rows, _ = approvals(body)
-    row = open_approval(rows)
     if TICKED_APPROVE.search(body):
         out.append(f"{name}: an Approve box is ticked but not in the Approvals table — record it: "
-                   f"`python3 tools/plate_approve.py {name} --approved --by \"Omar, tick\"`")
+                   f"`python3 {APPROVE_TOOL} {name} --approved --by \"Omar, tick\"`")
     if TICKED_HOLD.search(body):
         out.append(f"{name}: the Hold box is ticked but not in the Approvals table — record it: "
-                   f"`python3 tools/plate_approve.py {name} --held --by \"Omar, tick\"`")
-    if row and row["covers"] != covers(path):
-        out.append(f"{name}: the open approval of {row['date']} covers {row['covers']}, but the "
-                   f"recipe is now {covers(path)} — "
-                   + ("the send will refuse it until Omar approves again" if LAPSE_ON_RECIPE_CHANGE
-                      else "ask Omar before it goes out (print-review call 6 is open)"))
+                   f"`python3 {APPROVE_TOOL} {name} --held --by \"Omar, tick\"`")
+    return out
+
+
+def check_iterations(path: Path, data: dict, body: str, store: dict[str, list[dict]]
+                     ) -> list[str]:
+    """P9 (D-097): the page, the store and the recipe agree on which iteration this is, and
+    every yes covers an iteration whose master commit holds it. The load-bearing case: a recipe
+    edited after the yes with nothing recorded — that edit is what resets the yes, so the commit
+    that makes it cannot go in until the iteration is written."""
+    name, out = path.stem, []
+    its, h = store.get(name, []), recipe_hash(path)
+    k = its[-1]["iteration"] if its else 0
+    at = data.get("iteration", 0 if h is None else None)
+    if not isinstance(at, int) or isinstance(at, bool) or at != k:
+        out.append(f"{name}: P9 the page says iteration {at!r}, the iterations file "
+                   f"({it.STORE_REL}) has {k}")
+    iterate = f"`python3 {APPROVE_TOOL} {name} --iterate`"
+    if h is not None and data.get("maturity") != "production":
+        if not its:
+            out.append(f"{name}: P9 no iteration of the recipe is recorded — {iterate} records "
+                       "iteration 1")
+        elif its[-1]["recipe"] != h:
+            out.append(f"{name}: P9 the recipe changed since iteration {k} (it was "
+                       f"{its[-1]['recipe']}, it is now {h}) — {iterate} records iteration "
+                       f"{k + 1}, which resets an open yes (D-097). A comment-only edit is not a "
+                       "change, so a reprint as-is needs nothing")
+    rows, _ = approvals(body)
+    for i, r in enumerate(rows):
+        got = it.parse_covers(r["covers"])
+        if r["decision"] not in ("approved", "standing") or got is None:
+            continue
+        n, commit = got
+        where = f"{name}: P9 Approvals row {i + 1} ({r['date']})"
+        if not 0 < n <= k:
+            out.append(f"{where}: covers iteration {n}, which the iterations file does not have")
+        elif it.hash_at(path, commit) != its[n - 1]["recipe"]:
+            out.append(f"{where}: commit {commit} does not hold iteration {n} of the recipe "
+                       f"({its[n - 1]['recipe']})")
+        elif not it.on_master(path, commit):
+            out.append(f"{where}: commit {commit} is not on {it.MASTER}; a yes covers a merged "
+                       "recipe")
+        m = SPENT.match(r["spent"])
+        if r["decision"] == "approved" and not r["spent"] and n != k:
+            out.append(f"{where}: the yes is open on iteration {n}, but the recipe is at {k} — "
+                       f"it is `reset` ({iterate} writes it)")
+        if m and m.group(1) == "reset" and not any(
+                e["iteration"] > n and e["date"] == m.group(2) for e in its):
+            out.append(f"{where}: reset on {m.group(2)}, but no later iteration is dated that day")
     return out
 
 
@@ -851,14 +933,17 @@ def page_findings(path: Path, data: dict, body: str, ctx: dict) -> tuple[list[st
     f = check_page(path, data, body, ctx["records"], ctx["bet_ids"])
     if f:
         return f, []
-    return check_maturity(path, data, body, ctx["history"], ctx["runs"], ctx["rubric"])
+    f = check_iterations(path, data, body, ctx["store"])
+    m, n = check_maturity(path, data, body, ctx["history"], ctx["runs"], ctx["rubric"])
+    return f + m, n
 
 
-def context(prints: Path, bets: Path, rubric: Path) -> dict:
+def context(prints: Path, bets: Path, rubric: Path, plates: Path = PLATES) -> dict:
+    store, bad = it.read_store(it.store_for(plates))
     return {"records": records_by_plate(prints),
             "bet_ids": set(re.findall(r"CAL-[A-Z]+-\d+", bets.read_text(encoding="utf-8"))),
             "history": piece_history(prints), "runs": plate_runs(prints),
-            "rubric": read_rubric(rubric)}
+            "rubric": read_rubric(rubric), "store": store, "store_bad": bad}
 
 
 def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Path = RUBRIC
@@ -867,10 +952,14 @@ def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Pa
     findings: list[str] = []
     notices: list[str] = []
     try:
-        ctx = context(prints, bets, rubric)
+        ctx = context(prints, bets, rubric, plates)
     except (OSError, ValueError) as e:
         return [f"rubric: P8 {e}"], [], 0, None
     pages = read_pages(plates)
+    # P9 — the iterations file reads, and names only plates that have a page
+    findings += [f"iterations: P9 {b}" for b in ctx["store_bad"]]
+    findings += [f"{n}: P9 the iterations file has this plate, but it has no page"
+                 for n in sorted(set(ctx["store"]) - {p.stem for p, *_ in pages})]
     good: list[dict] = []
     for path, data, body, err in pages:
         if err:
@@ -919,7 +1008,7 @@ def sort_pages(plates: Path, prints: Path, bets: Path, rubric: Path = RUBRIC
                ) -> tuple[list[dict], list[str], dict[str, str | None], dict[str, str | None]]:
     """(pages with no finding, the findings of the rest, each page's title, the date of each
     page's open approval)."""
-    ctx = context(prints, bets, rubric)
+    ctx = context(prints, bets, rubric, plates)
     good, bad, titles, opened = [], [], {}, {}
     for path, data, body, err in read_pages(plates):
         f = [f"{path.stem}: {err}"] if err else page_findings(path, data, body, ctx)[0]
@@ -1010,13 +1099,49 @@ def _page(plate: str, fm: dict, timeline_rows: list[str], tick: str = " ") -> st
             + "\n".join(timeline_rows) + "\n")
 
 
+def _head(plates: Path) -> str:
+    return it._git(plates / "x.md", "rev-parse", "HEAD").strip()[:10]
+
+
 def _approve(page: str, *rows: str):
-    """Add Approvals rows to a fixture page; `{hash}` is the page's recipe hash now."""
+    """Add Approvals rows to a fixture page; `{covers}` is iteration 1 at the fixture's master
+    commit, which is what a yes given on the fixture as built covers."""
     def f(plates: Path) -> None:
-        h = recipe_hash(plates / f"{page}.md")
-        _edit(page, f"{_SEP}\n", f"{_SEP}\n" + "".join(r.replace("{hash}", str(h)) + "\n"
-                                                     for r in rows))(plates)
+        cov = f"iteration 1 @ {_head(plates)}"
+        p = plates / f"{page}.md"
+        lines = p.read_text(encoding="utf-8").split("\n")
+        end = lines.index(_SEP) + 1
+        while end < len(lines) and lines[end].startswith("|"):
+            end += 1  # after the rows already there, so the table stays in date order
+        lines[end:end] = [r.replace("{covers}", cov) for r in rows]
+        p.write_text("\n".join(lines), encoding="utf-8")
     return f
+
+
+def _store_edit(fn):
+    """Change the fixture's iterations file: `fn` takes and returns {plate: [entries]}."""
+    def f(plates: Path) -> None:
+        store = it.store_for(plates)
+        it.write_store(store, fn(it.read_store(store)[0]))
+    return f
+
+
+def _git_init(tmp: Path) -> None:
+    """Make the fixture a repo whose master holds it as built, as the real tree's does."""
+    import subprocess
+    for args in (["add", "-A"],
+                 ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "fixture"],
+                 ["update-ref", "refs/remotes/origin/master", "HEAD"]):
+        subprocess.run(["git", "-C", str(tmp), *args], check=True, capture_output=True)
+
+
+def _branch_yes(plates: Path) -> None:
+    """A yes naming a commit made on a branch: it holds iteration 1, but master never had it."""
+    import subprocess
+    subprocess.run(["git", "-C", str(plates), "-c", "user.name=t", "-c", "user.email=t@t",
+                    "commit", "-q", "--allow-empty", "-m", "branch"], check=True)
+    head = _head(plates)
+    _approve("minis-08", f"| 2026-10-03 | approved | Omar | iteration 1 @ {head} | |")(plates)
 
 
 def _timeline_add(page: str, after: str, row: str):
@@ -1026,12 +1151,14 @@ def _timeline_add(page: str, after: str, row: str):
 def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     plates, prints = tmp / "docs" / "plates", tmp / "docs" / "prints"
     (plates / "minis-08-media").mkdir(parents=True)
+    import subprocess
+    subprocess.run(["git", "init", "-q", str(tmp)], check=True)  # the store is found by its repo
     (plates / "minis-08-media" / "sheet.png").write_bytes(b"png")
     rec = prints / "2026-09-26-minis-09"
     rec.mkdir(parents=True)
     (rec / "index.md").write_text('---\nrun: 2026-09-26-minis-09\nplate: "minis-09 — a test"\n---\n',
                                   encoding="utf-8")
-    base = {"times_printed": 0, "runs": [],
+    base = {"iteration": 1, "times_printed": 0, "runs": [],
             "answers": "does it hold", "kind": "new", "maturity": "experiment",
             "bets": ["CAL-CST-06"],
             "unblocks": ["a decision"], "minutes": 120, "grams": 30, "bed_plates": 1,
@@ -1052,6 +1179,7 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     # A designed plate that waits on a build: no recipe, no slice, no picture yet.
     fm = {"plate": "sheets-09", "recipe": None, "stage": "planned", **base, "minutes": None,
           "grams": None, "bed_plates": None, "pictures": [], "needs": ["the window cut"]}
+    del fm["iteration"]  # no recipe yet, so no iteration of it
     (plates / "sheets-09.md").write_text(
         _page("sheets-09", fm, ["| 2026-10-01 | proposed | the design |"]), encoding="utf-8")
     scoring = tmp / "scoring.md"
@@ -1060,7 +1188,11 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     bets.write_text("CAL-CST-06 dovetail neck\n", encoding="utf-8")
     (plates / "README.md").write_text(f"# Plates\n\n{Q_START}\n{Q_END}\n", encoding="utf-8")
     (tmp / "rubric.md").write_text(_RUBRIC_MD, encoding="utf-8")
+    it.write_store(tmp / it.STORE_REL, {
+        n: [{"iteration": 1, "recipe": recipe_hash(plates / f"{n}.md"), "date": "2026-09-25"}]
+        for n in ("minis-08", "minis-09")})
     rewrite(plates, prints, scoring, bets, quiet=True, rubric=_rubric(plates))
+    _git_init(tmp)
     return plates, prints, scoring, bets
 
 
@@ -1102,7 +1234,7 @@ def _mature(level: str, history: list[tuple[str, str, str]], own: list | None = 
                   + (row or f"| 2026-09-28 | promoted | to {level}: the grade |"))(plates)
         if level == "production" and pin and standing:
             _approve("minis-09", "| 2026-09-28 | standing | plate_grade.py, promoted | "
-                     "recipe {hash} | — |")(plates)
+                     "{covers} | — |")(plates)
     return f
 
 
@@ -1178,7 +1310,7 @@ CASES = [
      _edit("minis-08", "stage: waiting", "stage: approved"),
      "P2 stage 'approved' but no approval is open"),
     ("P2 an open approval on a page still waiting",
-     _approve("minis-08", "| 2026-10-04 | approved | Omar, tick | recipe {hash} | |"),
+     _approve("minis-08", "| 2026-10-04 | approved | Omar, tick | {covers} | |"),
      "P2 stage 'waiting' but an approval is open"),
     ("P2 sent with no approval spent on it (the load-bearing case)",
      _then(_edit("minis-08", "stage: waiting", "stage: sent"),
@@ -1190,39 +1322,39 @@ CASES = [
                    "| 2026-09-25 | sent | before plate pages |"), None),
     ("P2 many decisions on one design: approved, replaced, held, approved again, sent",
      _then(_approve("minis-09",
-                    "| 2026-10-03 | approved | Omar, tick | recipe {hash} | replaced 2026-10-04 |",
-                    "| 2026-10-04 | held | Omar, in chat | recipe {hash} | — |",
-                    "| 2026-10-05 | approved | Omar, in chat | recipe {hash} | sent 2026-10-05 |"),
+                    "| 2026-10-03 | approved | Omar, tick | {covers} | replaced 2026-10-04 |",
+                    "| 2026-10-04 | held | Omar, in chat | {covers} | — |",
+                    "| 2026-10-05 | approved | Omar, in chat | {covers} | sent 2026-10-05 |"),
            _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
                          "| 2026-10-05 | sent | by bambu print send |")), None),
     ("P2 two approvals open at once",
      _then(_edit("minis-08", "stage: waiting", "stage: approved"),
-           _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |",
-                    "| 2026-10-04 | approved | Omar, tick | recipe {hash} | |")),
+           _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | {covers} | |",
+                    "| 2026-10-04 | approved | Omar, tick | {covers} | |")),
      "P2 2 approvals are open"),
     ("P2 an open approval with a hold after it",
-     _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |",
-              "| 2026-10-04 | held | Omar | recipe {hash} | — |"),
+     _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | {covers} | |",
+              "| 2026-10-04 | held | Omar | {covers} | — |"),
      "is open but a later decision came after it"),
     ("P2 an approval spent by a send the timeline does not have",
-     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | sent 2026-10-05 |"),
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | {covers} | sent 2026-10-05 |"),
      "P2 1 approval(s) spent by a send on 2026-10-05, but the timeline has 0"),
     ("P2 replaced with nothing decided that day",
-     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | replaced 2026-10-04 |"),
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | {covers} | replaced 2026-10-04 |"),
      "replaced on 2026-10-04, but no later decision that day"),
     ("P2 a decision outside the vocabulary",
-     _approve("minis-09", "| 2026-10-03 | maybe | Omar | recipe {hash} | — |"),
+     _approve("minis-09", "| 2026-10-03 | maybe | Omar | {covers} | — |"),
      "decision 'maybe' is not one of"),
     ("P2 an approval since the table began that covers no recipe",
      _approve("minis-09", "| 2026-10-03 | approved | Omar | — | replaced 2026-10-03 |",
               "| 2026-10-03 | held | Omar | — | — |"),
-     "an approved row covers '—', not `recipe <hash>`"),
+     "an approved row covers '—', not `iteration N @ <commit>`"),
     ("P2 an approval moved in from before the table may cover no recipe",
      _then(_approve("minis-09", "| 2026-10-02 | approved | Omar | — | sent 2026-10-02 |"),
            _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
                          "| 2026-10-02 | sent | from Bambu Studio |")), None),
     ("P2 a row with a cell missing",
-     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} |"),
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | {covers} |"),
      "does not have five cells"),
     ("P3 a record the page does not count, count self-consistent (the hard case)",
      _second_record, "P3 runs [] are not the records for this plate ['2026-09-29-minis-08']"),
@@ -1301,8 +1433,8 @@ CASES = [
      "P8 production plate: no standing row in the Approvals table"),
     ("P8 production whose standing row covers another recipe",
      _then(_mature("production", _KEPT[:1], own=_CLEAN_OWN, standing=False),
-           _approve("minis-09", "| 2026-09-28 | standing | promoted | recipe 000000000000 | — |")),
-     "covers recipe 000000000000, not the promoted"),
+           _approve("minis-09", "| 2026-09-28 | standing | promoted | iteration 9 @ 0000000000 | — |")),
+     "covers iteration 9 @ 0000000000, not the iteration promoted"),
     ("P8 production with no recipe_hash pinned",
      _mature("production", _KEPT[:1], own=_CLEAN_OWN, pin=False), "no recipe_hash pinned"),
     ("P8 production whose recipe was edited in place, same pieces (a repack the counts miss)",
@@ -1317,6 +1449,41 @@ CASES = [
     ("P1 derived_from a plate that has a page",
      _edit("minis-08", "maturity: experiment", "maturity: experiment\nderived_from: minis-09"),
      None),
+    ("P9 a recipe edited with nothing recorded (the load-bearing case: it would reset a yes)",
+     _edit_recipe("bed: x2d", "bed: x2d\nspacing: 4"),
+     "P9 the recipe changed since iteration 1"),
+    ("P9 a recipe that only gained a comment is the same iteration",
+     _edit_recipe("bed: x2d", "# packed\nbed: x2d"), None),
+    ("P9 the page names another iteration than the file",
+     _edit("minis-08", "iteration: 1", "iteration: 2"),
+     "P9 the page says iteration 2, the iterations file"),
+    ("P9 a recipe with no iteration recorded",
+     _store_edit(lambda d: {k: v for k, v in d.items() if k != "minis-08"}),
+     "P9 no iteration of the recipe is recorded"),
+    ("P9 a yes still open on an older iteration",
+     _then(_store_edit(lambda d: {**d, "minis-08": d["minis-08"] + [
+         {"iteration": 2, "recipe": d["minis-08"][0]["recipe"], "date": "2026-10-04"}]}),
+           _edit("minis-08", "iteration: 1", "iteration: 2"),
+           _edit("minis-08", "stage: waiting", "stage: approved"),
+           _approve("minis-08", "| 2026-10-03 | approved | Omar | {covers} | |")),
+     "the yes is open on iteration 1, but the recipe is at 2"),
+    ("P9 a reset with no later iteration that day",
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | {covers} | reset 2026-10-04 |"),
+     "reset on 2026-10-04, but no later iteration is dated that day"),
+    ("P9 a yes naming a commit that does not exist",
+     _then(_edit("minis-08", "stage: waiting", "stage: approved"),
+           _approve("minis-08", "| 2026-10-03 | approved | Omar | iteration 1 @ ffffffffff | |")),
+     "commit ffffffffff does not hold iteration 1"),
+    ("P9 a yes naming a branch commit, not one on master (a squash merge drops it)",
+     _then(_edit("minis-08", "stage: waiting", "stage: approved"), _branch_yes),
+     "is not on origin/master"),
+    ("P9 the iterations file names a plate with no page",
+     _store_edit(lambda d: {**d, "minis-07": [
+         {"iteration": 1, "recipe": "0" * 12, "date": "2026-10-01"}]}),
+     "minis-07"),
+    ("P9 the iterations file numbered out of order",
+     _store_edit(lambda d: {**d, "minis-09": [{**d["minis-09"][0], "iteration": 2}]}),
+     "entry 1 is numbered 2"),
 ]
 
 
@@ -1352,14 +1519,14 @@ def self_test() -> int:
         report(not found and len(notices) == 1, "a ticked box not read back is a notice only",
                f"findings={found} notices={notices}")
 
-        # An open approval: the plate stands approved on the recipe it covers. When the recipe
-        # changes after the yes it is a notice and a warning on the send; only with the call-6
-        # switch on does the status refuse it.
+        # An open approval: the plate stands approved on the iteration it covers (D-097). A
+        # comment-only edit is the same recipe, so the yes holds; a real change, once recorded
+        # with --iterate, resets it and the plate needs a new yes.
         def opened(*steps):
-            case = tmp / f"open-{len(steps)}"
+            case = tmp / f"open-{next(opens)}"
             plates, prints, scoring, bets = _build(case)
             _then(_edit("minis-08", "stage: waiting", "stage: approved"),
-                  _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |"),
+                  _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | {covers} | |"),
                   *steps)(plates)
             rewrite(plates, prints, scoring, bets, quiet=True, rubric=_rubric(plates))
             found, notices, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
@@ -1368,26 +1535,52 @@ def self_test() -> int:
             data, _ = parse_frontmatter(text)
             return found, notices, approval_status(page, data, text) | {"page": page}
 
+        def changed(pl: Path) -> None:
+            (pl / "minis-08.yaml").write_text("bed: x2d\nspacing: 4\n", encoding="utf-8")
+
+        def iterated(pl: Path) -> None:
+            """What `plate_approve.py --iterate` writes for that change on 2026-10-04."""
+            _store_edit(lambda d: {**d, "minis-08": d["minis-08"] + [
+                {"iteration": 2, "recipe": recipe_hash(pl / "minis-08.md"),
+                 "date": "2026-10-04"}]})(pl)
+            _edit("minis-08", "iteration: 1", "iteration: 2")(pl)
+            _edit("minis-08", "stage: approved", "stage: waiting")(pl)
+            page = pl / "minis-08.md"
+            text = page.read_text(encoding="utf-8")
+            row = re.search(r"^\| 2026-10-03 \| approved \|.*\| \|$", text, re.M).group(0)
+            page.write_text(text.replace(row, row[:-2] + " reset 2026-10-04 |"), encoding="utf-8")
+
+        opens = iter(range(100))
         found, notices, st = opened()
         report(not found and not notices and st["approved"] and "for its first send" in st["how"],
                "an open approval on the recipe as it is lets the plate go out",
                f"{found} {notices} {st}")
         found, notices, st = opened(lambda pl: (pl / "minis-08.yaml").write_text(
-            "bed: x2d\nspacing: 4\n", encoding="utf-8"))
-        report(not found and any("call 6 is open" in n for n in notices)
-               and st["approved"] and "open call 6" in st["how"],
-               "a recipe changed after the yes is a notice and a named warning on the send, while "
-               "call 6 is Omar's", f"{found} {notices} {st}")
-        globals()["LAPSE_ON_RECIPE_CHANGE"] = True
-        try:
-            st = approval_status(st["page"], {}, st["page"].read_text(encoding="utf-8"))
-        finally:
-            globals()["LAPSE_ON_RECIPE_CHANGE"] = False
-        report(not st["approved"] and "recipe changed after the yes" in st["how"],
-               "with the call-6 switch on, the same approval is refused", str(st))
+            "# packed tighter next time\nbed: x2d\n", encoding="utf-8"))
+        report(not found and st["approved"],
+               "a comment-only edit keeps the iteration and the yes (a reprint as-is)",
+               f"{found} {st}")
+        found, notices, st = opened(changed)
+        report(any("P9 the recipe changed since iteration 1" in f and "--iterate" in f
+                   for f in found) and not st["approved"] and "--iterate" in st["how"],
+               "a recipe changed after the yes with nothing recorded is a finding, and the send "
+               "refuses it (the load-bearing case)", f"{found} {st}")
+        found, notices, st = opened(changed, iterated)
+        report(not found and not st["approved"] and "reset 2026-10-04" in st["how"],
+               "once --iterate records iteration 2, the yes reads reset and the page is clean",
+               f"{found} {st}")
+        found, notices, st = opened(changed, iterated,
+                                    _approve("minis-08", "| 2026-10-04 | approved | Omar | "
+                                             "iteration 2 @ 0123456789 | |"),
+                                    _edit("minis-08", "stage: waiting", "stage: approved"))
+        report(any("commit 0123456789 does not hold iteration 2" in f for f in found)
+               and not st["approved"],
+               "a yes on iteration 2 naming a commit that does not hold it is refused",
+               f"{found} {st}")
+
         case = tmp / "spent-then-ticked"
         plates, prints, scoring, bets = _build(case)
-        _then(_approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | sent 2026-10-03 |"),
+        _then(_approve("minis-09", "| 2026-10-03 | approved | Omar | {covers} | sent 2026-10-03 |"),
               _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
                             "| 2026-10-03 | sent | from Bambu Studio |"),
               _edit("minis-09", "- [ ] **Approve**", "- [x] **Approve**"))(plates)
@@ -1426,7 +1619,7 @@ def self_test() -> int:
             plates, prints, _, bets = _build(case)
             for s in steps:
                 s(plates)
-            ctx = context(prints, bets, _rubric(plates))
+            ctx = context(prints, bets, _rubric(plates), plates)
             page = plates / "minis-09.md"
             text = page.read_text(encoding="utf-8")
             data, _ = parse_frontmatter(text)

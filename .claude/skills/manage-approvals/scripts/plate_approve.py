@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 """Write Omar's decisions on a plate into its page's `## Approvals` table, and read them back.
 
-    python3 tools/plate_approve.py <plate> --approved --by "Omar, tick"   a yes (tick or chat)
-    python3 tools/plate_approve.py <plate> --held --by "Omar, in chat"    a hold
-    python3 tools/plate_approve.py <plate> --standing                     a production plate's
-                                                    standing approval, written on promotion
-    python3 tools/plate_approve.py <plate> --sent [--via "Bambu Studio"] [--standing]
-                                                    a send: spends the open approval
-    python3 tools/plate_approve.py <plate> --status [--json]   may it go out now, and why
-    python3 tools/plate_approve.py <plate> --table             add an empty table to a page
-    python3 tools/plate_approve.py --self-test
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --approved --by "Omar, tick"
+                                    a yes (tick or chat), on the recipe's latest iteration
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --held --by "Omar, in chat"    a hold
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate
+                                    the recipe changed: record the next iteration, reset the yes
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --standing
+                                    a production plate's standing approval, written on promotion
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --sent [--via "Bambu Studio"] [--standing]
+                                    a send: spends the open approval
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --status [--json]   may it go out now, and why
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --table             add an empty table to a page
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py --self-test
 
 `<plate>` is a plate name (`sheets-04b`) or the path of its page. `--date` defaults to today.
 
 Why a table and not frontmatter (D-096): one `approved:` field holds one yes, and a design gets
 many — approved, held, approved again after a change, sent, approved for a reprint. The tick box
 on the page (or a yes in chat) stays the way Omar answers; this tool turns it into a dated row
-naming who decided and the recipe the decision covers (`recipe <hash>`, the plates gate's
-`recipe_hash`), then unticks the box so the next tick is a new answer. A send fills the open
-approval's `Spent by`, so one yes is good for one send (D-093). A recipe changed after the yes is
-named on the send; whether it voids the yes is Omar's open call 6 (print-review-design §9), one
-switch in the plates gate. The plates gate (P2) reads the same table with the
-same parser, so what this writes and what the gate checks cannot disagree; `bambu print send`
-asks `--status` before it sends and calls `--sent` after.
+naming who decided and what the decision covers, then unticks the box so the next tick is a new
+answer. A send fills the open approval's `Spent by`, so one yes is good for one send (D-093).
+
+What a yes covers (D-097): an iteration of the recipe and the master commit that holds it,
+`iteration 2 @ 1a2b3c4d5e`. The recipe changes in place, with no new plate per version; each
+change is the next iteration in `approvals.yaml` beside this skill, and `--iterate` is what
+records it. Recording it resets the open yes (`reset <date>`), so a changed plate goes back to
+Omar. A comment-only edit is not a change: a reprint as-is keeps its iteration and its yes. The
+plates gate (P2, P9; hook 39) reads the same table and file with the same code, so what this
+writes and what the gate checks cannot disagree; `bambu print send` asks `--status` before it
+sends and calls `--sent` after.
 """
 from __future__ import annotations
 
@@ -33,14 +40,15 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT / ".claude" / "gates"))
 
+import iterations as it  # noqa: E402 — beside this file, already on sys.path
 import plates_gate as pg  # noqa: E402
 
 INTRO = ("Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick "
-         "under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; "
-         "a send spends the open approval.")
+         "under Your call, or a yes in chat, becomes a row here through the manage-approvals skill's "
+         "`plate_approve.py`; a send spends the open approval, and a recipe change resets it.")
 TABLE = f"{pg.APPROVALS_HEAD}\n|---|---|---|---|---|"
 UNTICK = {"Approve": re.compile(r"^(\s*-\s*)\[[xX]\](\s*\*{0,2}Approve)", re.MULTILINE),
           "Hold": re.compile(r"^(\s*-\s*)\[[xX]\](\s*\*{0,2}Hold)", re.MULTILINE)}
@@ -146,7 +154,7 @@ def decide(page: Path, decision: str, by: str, date: str) -> str:
     rows = _rows(body)
     if rows and rows[-1]["date"] > date:
         raise Refused(f"the table's last row is dated {rows[-1]['date']}, after {date}")
-    now = pg.covers(page)
+    now, why = pg.covers_now(page)
     if not by.strip():
         raise Refused("--by is empty: say who decided, and how (\"Omar, tick\", \"Omar, in chat\")")
     if decision == "approved":
@@ -154,7 +162,7 @@ def decide(page: Path, decision: str, by: str, date: str) -> str:
             raise Refused(f"stage is {data.get('stage')!r}: a plate with no recipe to print, or one "
                           "retired, cannot be approved")
         if now is None:
-            raise Refused(f"no readable recipe beside the page ({page.stem}.yaml)")
+            raise Refused(why)
         _replace_open(rows, date)
         row = {"date": date, "decision": "approved", "by": by, "covers": now, "spent": ""}
         head = set_stage(head, "approved")
@@ -170,13 +178,62 @@ def decide(page: Path, decision: str, by: str, date: str) -> str:
         if data.get("maturity") != "production":
             raise Refused(f"maturity is {data.get('maturity')!r}: only a production plate stands "
                           "approved (D-095)")
-        if not pinned or f"recipe {pinned}" != now:
-            raise Refused(f"the pinned recipe_hash {pinned!r} is not the recipe now ({now}); "
-                          "promotion pins it first")
+        if now is None:
+            raise Refused(why)
+        if not pinned or pinned != pg.recipe_hash(page):
+            raise Refused(f"the pinned recipe_hash {pinned!r} is not the recipe now "
+                          f"({pg.recipe_hash(page)}); promotion pins it first")
         row = {"date": date, "decision": "standing", "by": by, "covers": now, "spent": "—"}
     rows.append(row)
     page.write_text(head + write_rows(body, rows), encoding="utf-8")
     return render([row]).split("\n")[-1]
+
+
+def set_iteration(head: str, n: int) -> str:
+    """The frontmatter with `iteration: n`, after the `recipe:` line when it had none."""
+    if re.search(r"^iteration:", head, flags=re.MULTILINE):
+        return re.sub(r"^iteration:.*$", f"iteration: {n}", head, count=1, flags=re.MULTILINE)
+    return re.sub(r"^(recipe:.*)$", rf"\1\niteration: {n}", head, count=1, flags=re.MULTILINE)
+
+
+def iterate(page: Path, date: str) -> str:
+    """The recipe changed: record its next iteration, and reset the open yes (D-097). Refuses
+    when nothing changed, since a reprint as-is keeps its iteration and its yes; and a production
+    recipe, which does not change in place (D-095). Returns what it did, in one line."""
+    text, data, body = read(page)
+    h = pg.recipe_hash(page)
+    if h is None:
+        raise Refused(f"no readable recipe beside the page ({page.stem}.yaml)")
+    store = it.store_for(page.parent)
+    every, bad = it.read_store(store) if store.is_file() else ({}, [])
+    if bad:
+        raise Refused(f"{it.STORE_REL} has problems, fix them first: " + "; ".join(bad))
+    its = every.get(page.stem, [])
+    if its and its[-1]["recipe"] == h:
+        raise Refused(f"the recipe is iteration {its[-1]['iteration']} as it is (a comment-only "
+                      "edit is not a change); a reprint as-is keeps its iteration and its yes")
+    if its and data.get("maturity") == "production":
+        raise Refused("a production recipe does not change in place (D-095): put the change on a "
+                      f"new experiment plate (`python3 tools/plate_grade.py --derive {page.stem} "
+                      f"<new>`) and put {page.stem}.yaml back")
+    if its and its[-1]["date"] > date:
+        raise Refused(f"iteration {its[-1]['iteration']} is dated {its[-1]['date']}, after {date}")
+    n = len(its) + 1
+    every[page.stem] = its + [{"iteration": n, "recipe": h, "date": date}]
+    head = set_iteration(split(text)[0], n)
+    did = f"{page.stem}: iteration {n} of the recipe ({h})"
+    if pg.APPROVALS.search(body):
+        rows = _rows(body)
+        yes = pg.open_approval(rows)
+        if yes:
+            yes["spent"] = f"reset {date}"
+            body = write_rows(body, rows)
+            did += f"; the yes of {yes['date']} is reset, so it goes back to Omar"
+            if data.get("stage") == "approved":
+                head = set_stage(head, "waiting")
+    it.write_store(store, every)
+    page.write_text(head + body, encoding="utf-8")
+    return did
 
 
 def status(page: Path, paths: tuple[Path, Path, Path] | None = None) -> dict:
@@ -192,7 +249,7 @@ def status(page: Path, paths: tuple[Path, Path, Path] | None = None) -> dict:
         prints, bets, rubric = paths or (root / p.relative_to(pg.ROOT)
                                          for p in (pg.PRINTS, pg.BETS, pg.RUBRIC))
         try:
-            ctx = pg.context(prints, bets, rubric)
+            ctx = pg.context(prints, bets, rubric, page.parent)
             ev = pg.maturity_evidence(page, data, ctx["history"], ctx["runs"], ctx["rubric"])
             ok, why = pg.standing_approval(page, data, ev, body)
         except (OSError, ValueError) as e:
@@ -228,7 +285,8 @@ def sent(page: Path, date: str, via: str, standing: bool,
         yes = pg.open_approval(rows)
         yes["spent"] = f"sent {date}"
         body = write_rows(UNTICK["Approve"].sub(r"\1[ ]\2", body), rows)
-        row = f"| {date} | sent — by {via}; spends the approval of {yes['date']} | this page |"
+        row = (f"| {date} | sent — by {via}; spends the approval of {yes['date']}, "
+               f"{yes['covers']} | this page |")
     page.write_text(head + add_timeline(body, row), encoding="utf-8")
     return row
 
@@ -255,6 +313,14 @@ def self_test() -> int:
         def gate() -> list[str]:
             pg.rewrite(plates, prints, scoring, bets, quiet=True, rubric=rubric)
             return pg.check_tree(plates, prints, scoring, bets, rubric)[0]
+
+        def merge(root: Path) -> None:
+            """What a merge to master does for the fixture: commit, and move origin/master."""
+            import subprocess
+            for args in (["add", "-A"], ["-c", "user.name=t", "-c", "user.email=t@t", "commit",
+                                         "-q", "-m", "merged"],
+                         ["update-ref", "refs/remotes/origin/master", "HEAD"]):
+                subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
 
         def stage(p: Path) -> str:
             return pg.parse_frontmatter(p.read_text(encoding="utf-8"))[0]["stage"]
@@ -298,10 +364,36 @@ def self_test() -> int:
         rows = pg.approvals(m8.read_text(encoding="utf-8"))[0]
         check(len(rows) == 5 and status(m8)["approved"] and gate() == [],
               "a reprint is one more yes on the same design", str(rows))
+        try:
+            iterate(m8, "2026-10-06")
+            check(False, "--iterate on a recipe that did not change is refused")
+        except Refused as e:
+            check("reprint as-is" in str(e), "--iterate on a recipe that did not change is refused",
+                  str(e))
         (plates / "minis-08.yaml").write_text("bed: x2d\nspacing: 4\n", encoding="utf-8")
         st = status(m8)
-        check(st["approved"] and "open call 6" in st["how"],
-              "a recipe changed after the yes is named on the send (call 6 is Omar's)", str(st))
+        check(not st["approved"] and "--iterate" in st["how"] and any("P9" in f for f in gate()),
+              "a recipe changed after the yes is refused on the send and found by the gate",
+              f"{st} {gate()}")
+        did = iterate(m8, "2026-10-07")
+        rows = pg.approvals(m8.read_text(encoding="utf-8"))[0]
+        fm = pg.parse_frontmatter(m8.read_text(encoding="utf-8"))[0]
+        check("reset" in did and rows[-1]["spent"] == "reset 2026-10-07" and fm["iteration"] == 2
+              and stage(m8) == "waiting" and not status(m8)["approved"] and gate() == [],
+              "--iterate records iteration 2, resets the yes, and the gate is clean",
+              f"{did} {rows[-1]} {fm.get('iteration')} {gate()}")
+        try:
+            decide(m8, "approved", "Omar, tick", "2026-10-07")
+            check(False, "a yes on an iteration not yet on master is refused")
+        except Refused as e:
+            check("not on origin/master yet" in str(e),
+                  "a yes on an iteration not yet on master is refused", str(e))
+        merge(tmp)
+        decide(m8, "approved", "Omar, tick", "2026-10-07")
+        rows = pg.approvals(m8.read_text(encoding="utf-8"))[0]
+        check(rows[-1]["covers"].startswith("iteration 2 @ ") and status(m8)["approved"]
+              and gate() == [], "once merged, a new yes covers iteration 2 at its master commit",
+              f"{rows[-1]} {gate()}")
 
         for plate, decision, want in (
                 ("sheets-09", "approved", "stage is 'planned'"),
@@ -346,7 +438,7 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("plate", nargs="?", help="a plate name, or the path of its page")
     act = ap.add_mutually_exclusive_group()
-    for flag in ("approved", "held", "sent", "status", "table", "self-test"):
+    for flag in ("approved", "held", "iterate", "sent", "status", "table", "self-test"):
         act.add_argument(f"--{flag}", action="store_true")
     ap.add_argument("--standing", action="store_true",
                     help="alone: write the standing row; with --sent: a standing send")
@@ -371,6 +463,9 @@ def main(argv: list[str]) -> int:
             page.write_text(split(text)[0] + with_table(body), encoding="utf-8")
             print(f"{page.stem}: Approvals table present")
             return 0
+        if a.iterate:
+            print(iterate(page, a.date))
+            return 0
         if a.sent:
             print(sent(page, a.date, a.via, a.standing))
             return 0
@@ -382,7 +477,8 @@ def main(argv: list[str]) -> int:
     except Refused as e:
         print(f"plate_approve: {page.stem}: {e}", file=sys.stderr)
         return 1
-    ap.error("say what to record: --approved, --held, --standing, --sent, --status or --table")
+    ap.error("say what to record: --approved, --held, --iterate, --standing, --sent, --status "
+             "or --table")
     return 2
 
 

@@ -58,7 +58,7 @@ no key, the printer keys stay unset rather than being passed on encrypted.
 
 `print send` moves real hardware, so it is fail-closed. It refuses unless the plate's page in
 `docs/design/plates/` carries a live approval from Omar (D-093: an open row in the page's
-`## Approvals` table, D-096, written from his tick or his yes in chat by `tools/plate_approve.py`;
+`## Approvals` table, D-096, written from his tick or his yes in chat by `.claude/skills/manage-approvals/scripts/plate_approve.py`;
 one approval per send, spent by the send; a production plate has a standing approval while its
 prints and recipe still hold, D-095) and the printer is idle; no flag skips either check
 (`src/send-gate.ts`, which asks `plate_approve.py --status`, so the gate and the CLI read the table

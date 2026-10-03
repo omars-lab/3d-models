@@ -149,7 +149,7 @@ it goes out again with no new yes. Omar, 2026-10-03: "yes prod plates get standi
 It still goes through `plateApproval` and nowhere else, so there stays one place that says whether
 a plate may go out. Two things end it, both checked at send time rather than trusted from the page:
 
-- **The prints slip.** `plateApproval` asks `tools/plate_approve.py <page> --status --json`, which
+- **The prints slip.** `plateApproval` asks `.claude/skills/manage-approvals/scripts/plate_approve.py <page> --status --json`, which
   reads the same `maturity_evidence` as the gate. A page that still says production after a run
   came back `adjust` has no standing approval, even before anyone lowers it.
 - **The recipe changes.** Promotion pins `recipe_hash` on the page: the first 12 hex digits of
@@ -238,7 +238,7 @@ is decided; the rest is open.
 | | Keep one yes per send (my pick) | A production plate carries a standing yes |
 |---|---|---|
 | **Pros** | Nothing to change; every send is looked at; D-093 stays as built | Reprinting a proven plate is one command |
-| **Cons** | A plate printed for use asks every time | A recipe edit or a bad run between sends would go out on the old yes unless the yes lapses on both; that is call 6 of the print-review design again |
+| **Cons** | A plate printed for use asks every time | A recipe edit or a bad run between sends would go out on the old yes unless the yes lapses on both; that is call 6 of the print-review design again (decided by D-097: a change resets the yes) |
 | **What it leads to** | Revisit once a plate actually reaches production | A change to `plateApproval` that reads `maturity`, and a lapse rule the gate holds |
 
 - [ ] One yes per send
@@ -259,5 +259,8 @@ costs nothing now. The rubric's round log is where a change goes.
 open there, for experiments.** D-095 answers it for production: the recipe does not change in
 place, and an edited one loses the standing approval. For an experiment the yes is one per send
 already, so call 6 asks only whether an edit between the yes and the send voids it.
+**Decided 2026-10-03:** it does → [D-097](../../working-model/decisions-log.md). An experiment's
+recipe changes in place as a new iteration, and the change resets the open yes; production keeps
+D-095 and derives a new plate.
 
 Notes:

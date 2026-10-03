@@ -1,6 +1,6 @@
 ---
 name: prioritize-prints
-description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/design/plates/ current — pictures, cost, what it answers, its Approvals table (every yes or hold Omar gave it), how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue, and reads a tick or a yes in chat into the Approvals table with tools/plate_approve.py (D-093, D-096); never writes a yes he did not give and never sends to the printer.
+description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/design/plates/ current — pictures, cost, what it answers, its Approvals table (every yes or hold Omar gave it), how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue, and reads a tick or a yes in chat into the Approvals table with .claude/skills/manage-approvals/scripts/plate_approve.py (D-093, D-096); never writes a yes he did not give and never sends to the printer.
 ---
 
 # prioritize-prints — which plate next, and why
@@ -18,13 +18,14 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
 ## Every run
 
 1. **Read the ticks back.** For each page with a ticked box under `## Your call`, write it into
-   the page's `## Approvals` table with `tools/plate_approve.py` (D-096). The tool writes the dated
-   row, the recipe it covers and the stage, and unticks the box, so the next tick is a new answer:
+   the page's `## Approvals` table with `.claude/skills/manage-approvals/scripts/plate_approve.py` (D-096). The tool writes the dated
+   row, the recipe iteration it covers (D-097) and the stage, and unticks the box, so the next tick is a new answer:
    - **Approve** ticked →
-     `python3 tools/plate_approve.py <plate> --approved --by "Omar, tick on this page"`. If the
-     option he picked changes the recipe, make that change first, then record the yes, so the row
-     covers the recipe he approved.
-   - **Hold** → `python3 tools/plate_approve.py <plate> --held --by "Omar, tick: <his note>"`.
+     `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --approved --by "Omar, tick on this page"`. If the
+     option he picked changes the recipe, make that change first, record it with `--iterate`,
+     merge it, then record the yes, so the row covers the iteration he approved (manage-approvals
+     skill).
+   - **Hold** → `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --held --by "Omar, tick: <his note>"`.
    - **It printed** (on a sent plate) → write the print record first (the review-print skill's
      record steps); the page follows it (step 4).
    - Then clear the notes, since the table now holds them.

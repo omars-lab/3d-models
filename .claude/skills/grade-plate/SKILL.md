@@ -33,7 +33,7 @@ tool prints and a check the hook runs cannot disagree.
      `| <today> | promoted | to <level>: <the evidence in a line> | this page |`. To production,
      also pin the recipe: `recipe_hash: '<python3 tools/plate_grade.py --recipe-hash <plate>>'`.
      Then write the standing row in its Approvals table:
-     `python3 tools/plate_approve.py docs/design/plates/<plate>.md --standing` (D-096). From then on
+     `python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<plate>.md --standing` (D-096). From then on
      the plate goes out on its standing approval (D-095), and its recipe is frozen.
    - **Down:** when the grade shows less than the page says (the gate will already be failing).
      Lower `maturity:` and add `| <today> | demoted | to <level>: <what changed> | this page |` —

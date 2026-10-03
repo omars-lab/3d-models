@@ -1,0 +1,24 @@
+# Each plate's recipe iterations (D-097), written by
+# `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate`.
+# An iteration is a version of docs/design/plates/<plate>.yaml whose content (not its comments)
+# differs from the one before; `recipe` is its hash. A yes on the plate's page names the
+# iteration it covers and the master commit it approved. The plates gate (P9) checks this file
+# against the pages and the recipes; do not edit it by hand.
+minis-01:
+  - {iteration: 1, recipe: '36ae647592c8', date: '2026-10-03'}
+minis-02:
+  - {iteration: 1, recipe: 'dfcfd4ccff38', date: '2026-10-03'}
+minis-03:
+  - {iteration: 1, recipe: '42a521effa63', date: '2026-10-03'}
+minis-04:
+  - {iteration: 1, recipe: 'dc8bb4818c5a', date: '2026-10-03'}
+minis-05:
+  - {iteration: 1, recipe: '6e4337fbc10e', date: '2026-10-03'}
+minis-06:
+  - {iteration: 1, recipe: '57590db028cf', date: '2026-10-03'}
+sheets-01:
+  - {iteration: 1, recipe: '89d1abcb4071', date: '2026-10-03'}
+sheets-04:
+  - {iteration: 1, recipe: '9f4e788357bb', date: '2026-10-03'}
+sheets-04b:
+  - {iteration: 1, recipe: '076b671d0cd9', date: '2026-10-03'}
