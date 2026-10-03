@@ -82,6 +82,15 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       iteration and marks the yes `reset`. A production recipe is P8's: it does not iterate,
       it is derived.
 
+  P10 **Print log.** What the printer said while a plate printed, appended by the send-plate
+      skill's `print_monitor.py`: `| Time (UTC) | Event | Layer | Done | What the printer said |`
+      under `## Print log`, one row per change. A page with no print yet has no table. Checked:
+      the header, each row's time (`YYYY-MM-DD HH:MM`) in order, and its event in
+      PRINT_EVENTS. A `finished` row is the printer's word, not a print record: it does not
+      count toward `times_printed`, and the timeline's `printed` row still waits for a record
+      (P3, P6). The load-bearing case: a row with an event the monitor never writes, which
+      means the table was typed by hand or by a different tool.
+
 Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
 failed on it would block every other session's commit until then; the send refuses it. Nor is
@@ -144,6 +153,13 @@ EVENTS = ("proposed", "reviewed", "sliced", "sent", "printed", "judged", "promot
 # the table began: they may cover `—` (the recipe they approved was not hashed), and a send
 # before it needs no row (minis-01 to -03 went out before plate pages existed).
 APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
+# The print log (P10): the printer's own report while a plate prints, one row per change,
+# written by the send-plate skill's print_monitor.py. `watching` is the monitor's first look;
+# `lost` is the monitor giving up when the printer stops answering.
+PRINT_LOG_HEAD = "| Time (UTC) | Event | Layer | Done | What the printer said |"
+PRINT_EVENTS = ("watching", "preparing", "printing", "paused", "resumed", "progress", "error",
+                "finished", "failed", "stopped", "lost")
+LOG_ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*\|\s*([a-z]+)\s*\|(.*)$")
 DECISIONS = ("approved", "held", "standing")
 TABLE_FROM = "2026-10-03"
 # A yes covers one iteration of the recipe (D-097, Omar's answer to print-review call 6): a
@@ -213,6 +229,25 @@ def timeline(body: str) -> list[tuple[str, str, str]]:
         if r:
             rows.append((r.group(1), r.group(2), r.group(3)))
     return rows
+
+
+def print_log(body: str) -> tuple[list[tuple[str, str]], str | None] | None:
+    """The `## Print log` table as ([(time, event)], problem), or None when the page has none.
+    A row that starts with `|` and is neither the header, the rule, nor a timed row is a
+    problem, so a hand-typed row cannot hide by failing to match."""
+    m = re.search(r"^## Print log\b.*?$(.*?)(?=^## |\Z)", body, flags=re.MULTILINE | re.DOTALL)
+    if not m:
+        return None
+    lines = [ln.strip() for ln in m.group(1).splitlines() if ln.strip().startswith("|")]
+    if not lines or lines[0] != PRINT_LOG_HEAD:
+        return [], f"the table header is not {PRINT_LOG_HEAD}"
+    rows = []
+    for ln in lines[2:]:
+        r = LOG_ROW.match(ln)
+        if not r:
+            return rows, f"row '{ln[:60]}' has no `YYYY-MM-DD HH:MM` time"
+        rows.append((r.group(1), r.group(2)))
+    return rows, None
 
 
 # ---------------------------------------------------------------------------
@@ -735,6 +770,20 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
             out.append(f"{name}: P6 run {run_id} has no 'printed' row naming it")
     if isinstance(times, int) and len(printed_rows) != times:
         out.append(f"{name}: P6 {len(printed_rows)} 'printed' row(s) but times_printed {times}")
+
+    # P10 — the print log, when the page has one
+    log = print_log(body)
+    if log is not None:
+        log_rows, problem = log
+        if problem:
+            out.append(f"{name}: P10 print log: {problem}")
+        for t, ev in log_rows:
+            if ev not in PRINT_EVENTS:
+                out.append(f"{name}: P10 print log event '{ev}' at {t} is not one of "
+                           f"{list(PRINT_EVENTS)}")
+        times_seen = [t for t, _ in log_rows]
+        if times_seen != sorted(times_seen):
+            out.append(f"{name}: P10 print log rows are not in time order")
     return out
 
 
@@ -1148,6 +1197,15 @@ def _timeline_add(page: str, after: str, row: str):
     return _edit(page, after, f"{after}\n{row}")
 
 
+def _print_log(page: str, *rows: str, head: str = PRINT_LOG_HEAD):
+    """Give a fixture page a `## Print log` after its timeline, as the monitor writes it."""
+    def f(plates: Path) -> None:
+        p = plates / f"{page}.md"
+        table = "\n".join([head, "|---|---|---|---|---|", *rows])
+        p.write_text(p.read_text(encoding="utf-8") + f"\n## Print log\n\n{table}\n", encoding="utf-8")
+    return f
+
+
 def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     plates, prints = tmp / "docs" / "plates", tmp / "docs" / "prints"
     (plates / "minis-08-media").mkdir(parents=True)
@@ -1484,6 +1542,23 @@ CASES = [
     ("P9 the iterations file numbered out of order",
      _store_edit(lambda d: {**d, "minis-09": [{**d["minis-09"][0], "iteration": 2}]}),
      "entry 1 is numbered 2"),
+    ("P10 a print log as the monitor writes it, through a pause",
+     _print_log("minis-09", "| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |",
+                "| 2026-09-26 14:09 | paused | 0/20 | 0% | 0500-8051: the plate on the bed is not "
+                "the one the file was sliced for |",
+                "| 2026-09-26 14:30 | resumed | 1/20 | 2% | RUNNING |"), None),
+    ("P10 an event the monitor never writes (the load-bearing case: a typed row)",
+     _print_log("minis-09", "| 2026-09-26 14:02 | jammed | 3/20 | 9% | |"),
+     "P10 print log event 'jammed'"),
+    ("P10 rows out of time order",
+     _print_log("minis-09", "| 2026-09-26 14:30 | printing | 1/20 | 2% | RUNNING |",
+                "| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |"),
+     "P10 print log rows are not in time order"),
+    ("P10 a row with no time",
+     _print_log("minis-09", "| today | printing | 1/20 | 2% | RUNNING |"), "has no `YYYY-MM-DD HH:MM`"),
+    ("P10 a table with another header",
+     _print_log("minis-09", "| 2026-09-26 14:02 | watching | | | |",
+                head="| Time | Event | Note |"), "P10 print log: the table header"),
 ]
 
 
