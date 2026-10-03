@@ -5786,3 +5786,49 @@ bundled with it, Omar confirmed the same day: "bambu x2d automatically does this
 
 **What would reverse it:** a loose piece dragged by the nozzle that the printer did not stop for,
 which would bring back a watched first layer, or a brim, for plates of small loose pieces.
+
+## D-093 — Omar's yes to a send lives on the plate page, one per send
+
+Omar, 2026-10-03, asked for our own print flow: look at the bed, check nothing is printing, match
+the filament, slice and send. The send had been his alone (`print send` refused without `--yes`
+or a TTY yes, and no session passed `--yes`). Asked what should count as his yes, he answered:
+"i should either be able to tick the doc - that should mean yes - or my explicit approval over our
+conversation should backfill the tick and also be interpreted as yes". Then: "also approvals
+should be time bound ... i may have approved printing an experimental plate. but if after the
+experiment... we realized things were off and we want to readjust i dont want to blindly print the
+experiment that showed us the plate was setup wrong", and "we should have timelog of all the
+approved re-prints against a plate".
+
+### The options as offered
+
+- **Chat yes on an approved plate** (offered as the pick): he ticks the box, sees the photo and
+  the dry run, then says send in chat. Two yeses per send.
+- **The tick is the yes:** ticking the box authorizes the send once the idle check, the filament
+  match and the photo pass. One step, but the tick may be days older than the bed it lands on.
+- **His own answer, chosen:** the tick is a yes, and so is his yes in chat, which the session
+  writes onto the page (the box ticked, an `approved` row with the date and his words).
+
+### What it means
+
+- **One approval covers one send.** The page's `## Timeline` is the log: an approval counts only
+  when its `approved` row comes after the last `sent` or `printed` row. A ticked box with no
+  `approved` row counts only on a plate that has never gone out, because a box ticked before a
+  send made from Bambu Studio (which does not untick it) looks just like a fresh one; sheets-04
+  was exactly that.
+- **A send spends it.** `bambu print send` unticks the boxes, sets the stage to `sent` and adds a
+  dated `sent` row, so the timeline holds every approved reprint against the plate. A reprint
+  needs a new `approved` row, so a plate whose print showed the setup was wrong never goes out
+  again on the old yes.
+- **The checks are code, not a list to remember.** `print send` refuses a plate with no page, an
+  approval that is spent or missing, and a printer that is busy or will not say its state
+  (`tools/bambu/src/send-gate.ts`). No flag skips them. `--yes` now skips only the TTY question,
+  and a session passes it only on a live page approval. The
+  [send-plate](../../.claude/skills/send-plate/SKILL.md) skill runs the sequence: approval, slice,
+  idle, filament, dry run and bed photo, send, then ship the page change.
+- **Still open:** whether a change to the recipe voids an approval is the print-review design's
+  call 6, and stays Omar's. Whether a production plate keeps a standing approval instead of one
+  per send waits on the plate-maturity design.
+
+**What would reverse it:** a send that went out on an approval Omar did not mean to cover it,
+which would bring back the TTY yes for every send; or a plate proven enough that one approval
+per send is only friction, which the plate-maturity design would answer for that kind of plate.
