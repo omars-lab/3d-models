@@ -1,6 +1,6 @@
 ---
 name: prioritize-prints
-description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/design/plates/ current — pictures, cost, what it answers, whether Omar approved it, how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue; ticks a box for Omar only to write down his yes in chat (D-093) and never sends to the printer.
+description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/design/plates/ current — pictures, cost, what it answers, its Approvals table (every yes or hold Omar gave it), how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue, and reads a tick or a yes in chat into the Approvals table with tools/plate_approve.py (D-093, D-096); never writes a yes he did not give and never sends to the printer.
 ---
 
 # prioritize-prints — which plate next, and why
