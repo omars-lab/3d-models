@@ -17,9 +17,8 @@
 // loaded trays) — the review surface for the two X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
-import { existsSync, mkdirSync, statSync } from "node:fs";
-import { basename, dirname, extname, join, resolve } from "node:path";
-import { CameraBackend } from "../backends/camera.js";
+import { existsSync, statSync } from "node:fs";
+import { basename, extname, resolve } from "node:path";
 import { FtpsBackend, remoteUploadName } from "../backends/ftps.js";
 import {
   MqttBackend,
@@ -44,6 +43,9 @@ import { readPlateMeta, readUsedFilaments } from "../threemf.js";
 import { checkPlate, printerPlateId, readSlicePlateType, type SlicePlateType } from "../plate-type.js";
 import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
 import { cardRefusal, cardSummary, readStorage } from "../storage.js";
+import { bedCheck, newestBedPhoto, readVerdict } from "../bed-check.js";
+import { checkNozzles, printerNozzles } from "../nozzle-check.js";
+import { bedPhoto } from "./bed.js";
 import {
   feedsFromAms,
   logicalSlotsFromPlate,
@@ -240,19 +242,6 @@ async function readPrinter(cfg: PrinterConfig): Promise<PrinterStatus | string> 
   }
 }
 
-/** Save one camera frame of the bed under .bambu/bed/ and say where; warn and carry on if it fails. */
-async function bedPhoto(plateAbs: string, cfg: PrinterConfig): Promise<void> {
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const out = join(repoRoot() ?? process.cwd(), ".bambu", "bed", `${basename(plateAbs, ".3mf")}-${stamp}.jpg`);
-  mkdirSync(dirname(out), { recursive: true });
-  try {
-    await new CameraBackend(cfg).snapshot(out);
-    console.error(`bed photo: ${out} — look at it before sending.`);
-  } catch (err) {
-    console.error(`bed photo: none (${(err as Error).message}) — look at the bed yourself.`);
-  }
-}
-
 async function runSend(plate: string, opts: SendOpts): Promise<void> {
   const abs = resolve(plate);
   if (!existsSync(abs)) {
@@ -342,6 +331,18 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.error("  (dry run — a real send stops here.)");
   }
 
+  // The nozzles the slice was made for, against the ones fitted (nozzle-check.ts).
+  const meta = await readPlateMeta(abs);
+  const nozzles = checkNozzles(meta?.nozzleDiameters ?? [], printerNozzles(frame));
+  console.error(`${nozzles.mark} ${nozzles.line}.`);
+  if (!nozzles.ok) {
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  }
+
   // Somewhere to put the file: the upload writes to the storage card, and with none in it fails
   // after every other check has passed (the sheets-04b send, 2026-10-03).
   const noRoom = frame ? cardRefusal(frame, kb) : null;
@@ -377,14 +378,27 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
   console.error(`filament: ams_mapping ${JSON.stringify(projectOpts.amsMapping)}, use_ams ${projectOpts.useAms}.`);
 
+  // The bed, as someone saw it (bed-check.ts). The dry run takes the photo; someone opens it and
+  // writes down what it shows with `bambu bed verdict`; the real send refuses without a recent photo
+  // whose verdict says clear, seated, and the plate this slice is for. The X2D runs its own checks
+  // once it starts (D-092); this one is for the plate it cannot know we meant.
+  const name = plateNameOf(abs);
+  if (opts.dryRun && opts.bedPhoto !== false) await bedPhoto(name, cfg);
+  const root = repoRoot() ?? process.cwd();
+  const photo = newestBedPhoto(root, name);
+  const bed = bedCheck(name, photo, photo ? readVerdict(photo.path) : null, slicePlate.type.token, Date.now());
+  console.error(`${bed.ok ? "✓" : "✗"} ${bed.line}.`);
+  if (!bed.ok) {
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  }
+
   // Owner gate, stated out loud before anything reaches the printer.
   console.error("⚠ Dispatch is owner-gated: this sends a plate to the physical X2D.");
   console.error(`  plate: ${basename(abs)} (${kb} KB) → ${cfg.host ?? "(host unset)"}`);
-
-  // A photo of the bed, to look at before saying yes: is the last print off, is the plate in? The
-  // X2D runs its own checks once it starts (D-092); this is for the person sending. Read-only, and a
-  // failed photo warns rather than blocks.
-  if (opts.bedPhoto !== false) await bedPhoto(abs, cfg);
 
   const command = buildProjectFileCommand(projectOpts);
 
@@ -636,7 +650,7 @@ export function registerPrint(program: Command): void {
     .option("--no-flow-cali", "skip flow calibration before this print (default: auto)")
     .option("--no-nozzle-offset-cali", "skip the two-nozzle offset calibration before this print (default: auto)")
     .option("--vibration-cali", "run vibration calibration before this print (default off, as Studio sends it)", false)
-    .option("--no-bed-photo", "skip the camera photo of the bed taken before the confirm (and on --dry-run)")
+    .option("--no-bed-photo", "on --dry-run, skip taking a new bed photo (the send checks the newest one and its verdict)")
     .option("-y, --yes", "skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check", false)
     .option(
       "--allow-unverified",
