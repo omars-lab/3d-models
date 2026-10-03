@@ -14,8 +14,9 @@
 // uploading or publishing (it only reads the loaded trays to fill ams_mapping) — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
-import { existsSync, statSync } from "node:fs";
-import { basename, extname, resolve } from "node:path";
+import { existsSync, mkdirSync, statSync } from "node:fs";
+import { basename, dirname, extname, join, resolve } from "node:path";
+import { CameraBackend } from "../backends/camera.js";
 import { FtpsBackend, remoteUploadName } from "../backends/ftps.js";
 import {
   MqttBackend,
@@ -68,6 +69,7 @@ interface SendOpts {
   bedLeveling?: boolean; // --no-bed-leveling → false
   flowCali?: boolean; // --no-flow-cali → false
   vibrationCali?: boolean; // --no-vibration-cali → false
+  bedPhoto?: boolean; // --no-bed-photo → false
 }
 
 /**
@@ -217,6 +219,19 @@ async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConf
   return planAmsMapping(report, meta.filamentColors.length, used);
 }
 
+/** Save one camera frame of the bed under .bambu/bed/ and say where; warn and carry on if it fails. */
+async function bedPhoto(plateAbs: string, cfg: PrinterConfig): Promise<void> {
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const out = join(repoRoot() ?? process.cwd(), ".bambu", "bed", `${basename(plateAbs, ".3mf")}-${stamp}.jpg`);
+  mkdirSync(dirname(out), { recursive: true });
+  try {
+    await new CameraBackend(cfg).snapshot(out);
+    console.error(`bed photo: ${out} — look at it before sending.`);
+  } catch (err) {
+    console.error(`bed photo: none (${(err as Error).message}) — look at the bed yourself.`);
+  }
+}
+
 async function runSend(plate: string, opts: SendOpts): Promise<void> {
   const abs = resolve(plate);
   if (!existsSync(abs)) {
@@ -278,6 +293,11 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   console.error("⚠ Dispatch is owner-gated: this sends a plate to the physical X2D.");
   console.error(`  plate: ${basename(abs)} (${kb} KB) → ${cfg.host ?? "(host unset)"}`);
   console.error("  Printing is on hold until a CAL bet justifies a plate (see the setup skill).");
+
+  // A photo of the bed, to look at before saying yes: is the last print off, is the plate in? The
+  // X2D runs its own checks once it starts (D-092); this is for the person sending. Read-only, and a
+  // failed photo warns rather than blocks.
+  if (opts.bedPhoto !== false) await bedPhoto(abs, cfg);
 
   const command = buildProjectFileCommand(projectOpts);
 
@@ -513,6 +533,7 @@ export function registerPrint(program: Command): void {
     .option("--no-bed-leveling", "skip auto bed-leveling before this print")
     .option("--no-flow-cali", "skip flow calibration before this print")
     .option("--no-vibration-cali", "skip vibration calibration before this print")
+    .option("--no-bed-photo", "skip the camera photo of the bed taken before the confirm (and on --dry-run)")
     .option("-y, --yes", "skip the confirmation prompt (still logs the owner-gate notice)", false)
     .option(
       "--allow-unverified",

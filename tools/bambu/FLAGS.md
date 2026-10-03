@@ -37,6 +37,10 @@ preflight every dependency and connection; names what's missing
 
 show the .mcp.json griches entry to add (real file is gitignored — carries the token)
 
+### `bambu setup camera-pin`
+
+save this printer's camera certificate as its pin (once; again after a reset)
+
 ### `bambu setup studio`
 
 detect installed Bambu Studio (stable/beta) and where to get it
@@ -64,7 +68,7 @@ poll status on an interval (Ctrl+C to stop)
 
 ### `bambu status camera`
 
-capture a chamber snapshot (needs ffmpeg) — via the MCP transport
+save one chamber camera frame as a JPEG (needs ffmpeg) — read-only
 
 | Flag | Description |
 |---|---|
@@ -218,6 +222,7 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-se
 | `--no-bed-leveling` | skip auto bed-leveling before this print |
 | `--no-flow-cali` | skip flow calibration before this print |
 | `--no-vibration-cali` | skip vibration calibration before this print |
+| `--no-bed-photo` | skip the camera photo of the bed taken before the confirm (and on --dry-run) |
 | `-y, --yes` | skip the confirmation prompt (still logs the owner-gate notice) |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |
 | `--dry-run` | print the exact FTPS target + MQTT payload without uploading or dispatching (reads the loaded trays) |
