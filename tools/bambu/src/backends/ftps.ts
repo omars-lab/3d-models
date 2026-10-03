@@ -18,9 +18,14 @@
 //     TLS session on the data socket by default, so we must NOT force a fresh session. The single
 //     most common cause of a hung Bambu FTPS transfer is breaking that reuse; we simply don't touch
 //     it. Passive mode (basic-ftp default); active mode does not traverse the printer.
+//   - The FTP root is the storage card. With no card in, the upload is refused with `553 Could not
+//     create file` (the sheets-04b send, 2026-10-03, while the status report said `sdcard: false`).
+//
+// `bambu storage list` / `rm` (2026-10-03) reuse the same login for LIST and DELE at the card's top;
+// which names `rm` may delete is decided in storage.ts, not here.
 
 import { basename } from "node:path";
-import { Client as FtpClient } from "basic-ftp";
+import { Client as FtpClient, type FileInfo } from "basic-ftp";
 import { ev } from "../log.js";
 import { loadConfig, type PrinterConfig } from "../config.js";
 
@@ -53,16 +58,15 @@ export class FtpsBackend {
    * name. Best-effort and self-closing: a wrong code / unreachable host / another-client conflict
    * throws an actionable Error, and the client is always closed. Never logs the token.
    */
-  async uploadFile(localPath: string, timeoutMs = 120_000): Promise<string> {
+  /** Log in over implicit FTPS. The caller closes the client. Never logs the token. */
+  private async open(timeoutMs: number): Promise<FtpClient> {
     if (!this.configured()) {
       throw new Error("printer config missing (need PRINTER_HOST / BAMBU_TOKEN)");
     }
-    const remote = remoteUploadName(localPath);
     const client = new FtpClient(timeoutMs);
     // basic-ftp's verbose logger would print the FTP dialogue (control commands) — keep it off so
     // credentials/paths never reach stdout. We emit our own structured, secret-free events instead.
     client.ftp.verbose = false;
-    ev("ftps_upload_start", { host: this.config.host ?? "", port: FTPS_PORT, remote });
     try {
       await client.access({
         host: this.config.host,
@@ -72,14 +76,58 @@ export class FtpsBackend {
         secure: "implicit",
         secureOptions: { rejectUnauthorized: false }, // self-signed device cert; LAN trust boundary
       });
-      await client.uploadFrom(localPath, remote);
-      ev("ftps_upload_done", { remote });
-      return remote;
+    } catch (err) {
+      client.close();
+      throw err;
+    }
+    return client;
+  }
+
+  /** Log in, run one step, always close; FTPS failures come back as the actions that fix them. */
+  private async session<T>(timeoutMs: number, step: (client: FtpClient) => Promise<T>): Promise<T> {
+    let client: FtpClient | undefined;
+    try {
+      client = await this.open(timeoutMs);
+      return await step(client);
     } catch (err) {
       throw this.enhance(err as Error);
     } finally {
-      client.close();
+      client?.close();
     }
+  }
+
+  /**
+   * Upload a local file to the printer's FTP root under its bare basename and return that remote
+   * name. Best-effort and self-closing: a wrong code / unreachable host / another-client conflict
+   * throws an actionable Error, and the client is always closed. Never logs the token.
+   */
+  async uploadFile(localPath: string, timeoutMs = 120_000): Promise<string> {
+    const remote = remoteUploadName(localPath);
+    ev("ftps_upload_start", { host: this.config.host ?? "", port: FTPS_PORT, remote });
+    return this.session(timeoutMs, async (client) => {
+      await client.uploadFrom(localPath, remote);
+      ev("ftps_upload_done", { remote });
+      return remote;
+    });
+  }
+
+  /** What is in one folder on the card (the top by default). Read-only. */
+  async list(dir = "/", timeoutMs = 30_000): Promise<FileInfo[]> {
+    ev("ftps_list_start", { dir });
+    return this.session(timeoutMs, async (client) => {
+      const entries = await client.list(dir);
+      ev("ftps_list_done", { dir, entries: entries.length });
+      return entries;
+    });
+  }
+
+  /** Delete one file at the card's top. The caller decides which names are allowed (storage.ts). */
+  async remove(name: string, timeoutMs = 30_000): Promise<void> {
+    ev("ftps_remove_start", { name });
+    await this.session(timeoutMs, async (client) => {
+      await client.remove(name);
+      ev("ftps_remove_done", { name });
+    });
   }
 
   /** Turn the opaque FTPS failures into the actions that fix them (no secret in the message). */
@@ -87,7 +135,7 @@ export class FtpsBackend {
     const msg = err.message || String(err);
     if (/ECONNREFUSED|ETIMEDOUT|EHOSTUNREACH|timeout/i.test(msg)) {
       return new Error(
-        `FTPS upload to ${this.config.host}:${FTPS_PORT} failed: ${msg}. Check the printer is on the ` +
+        `FTPS to ${this.config.host}:${FTPS_PORT} failed: ${msg}. Check the printer is on the ` +
           `LAN and Developer Mode / LAN-only is ON (surfaces FTP). Verify host with \`bambu setup doctor\`.`,
       );
     }
@@ -95,6 +143,12 @@ export class FtpsBackend {
       return new Error(
         `FTPS login refused: ${msg}. The access code (BAMBU_TOKEN) is likely wrong or was rotated — ` +
           `re-read it from the printer screen and re-run \`bambu setup mcp\`.`,
+      );
+    }
+    if (/^553\b|could not create file/i.test(msg)) {
+      return new Error(
+        `the printer would not save the file: ${msg}. It writes to the storage card; check one is in ` +
+          `and has room with \`bambu storage show\` (found by the sheets-04b send, 2026-10-03).`,
       );
     }
     return err;
