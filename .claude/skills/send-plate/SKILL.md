@@ -91,19 +91,32 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
 2. `bambu filament-sync --plate build/plates/<name>.plate.3mf`: the plate's colors match loaded
    trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool.
 3. `bambu print send build/plates/<name>.plate.3mf --dry-run`. Every line must be green:
-   `✓ approval`, `✓ printer`, `✓ plate`, `✓ storage`, the warnings sidecar, the filament plan. It
-   saves a bed photo under `.bambu/bed/` and prints its path. The `plate:` line compares the plate
-   the slice is for with the one the printer reports. `⚠ plate` means the printer named a plate id
-   we have not matched yet, or none: the photo settles it in the next step.
-4. **Open the photo and look.** Say what is on the bed: empty or not, the build plate seated or
-   not, and which plate it is (the Textured PEI Plate is gold and grainy) and that it is the one
-   the `plate:` line names. Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to
-   clear or check the bed in person. Never send on a photo you did not open.
+   `✓ approval`, `✓ printer`, `✓ plate`, `✓ nozzle`, `✓ storage`, the warnings sidecar, the
+   filament plan. It saves a bed photo under `.bambu/bed/` and prints its path (or take one with
+   `bambu bed photo <name>`). The `plate:` line compares the plate the slice is for with the one
+   the printer reports. `⚠ plate` means the printer named a plate id we have not matched yet, or
+   none: the photo settles it in the next step. The `nozzle:` line compares the nozzle sizes the
+   slice was made for with the ones fitted; `✗ nozzle` means slice again. The `bed:` line is `✗`
+   on this first dry run, because nobody has looked at the photo yet.
+4. **Open the photo and look, then write down what it shows.** Say what is on the bed: empty or
+   not, the build plate seated or not, and which plate it is (the Textured PEI Plate is gold and
+   grainy). Then record it, since the send refuses without it:
+   `bambu bed verdict <name> --plate-type <the plate you saw> --by "Claude, opened the photo" --clear --seated`,
+   or `--no-clear` / `--no-seated` with a `--note` saying what is wrong. Run the dry run again
+   with `--no-bed-photo` (a new photo would need a new look); the `bed:` line must now be `✓`.
+   Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to clear
+   or check the bed in person. Never send on a photo you did not open, and never write a verdict
+   for one.
+
+What the send checks on its own, and why there is no git hook for it:
+[the issue](../../../docs/issues/sliced-for-wrong-plate.md#checked-before-every-send).
 
 ## 5. Send
 
 `bambu print send build/plates/<name>.plate.3mf --record --yes`. Pass `--yes` only after steps
-2 to 4 are all green in this run. The CLI checks the approval and the printer again on its own.
+2 to 4 are all green in this run. The CLI checks the approval, the printer, the plate, the nozzles
+and the bed verdict again on its own. It takes no new photo: it reads the newest one, which must
+be under 30 minutes old and carry a verdict for those exact bytes.
 
 When it goes through, the CLI rewrites the page in the vault through `plate_approve.py --sent`:
 the open row's `Spent by` becomes `sent <today>`, the box unticked, `stage: sent`, and a dated

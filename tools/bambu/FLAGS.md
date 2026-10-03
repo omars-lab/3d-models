@@ -224,7 +224,7 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the p
 | `--no-flow-cali` | skip flow calibration before this print (default: auto) |
 | `--no-nozzle-offset-cali` | skip the two-nozzle offset calibration before this print (default: auto) |
 | `--vibration-cali` | run vibration calibration before this print (default off, as Studio sends it) |
-| `--no-bed-photo` | skip the camera photo of the bed taken before the confirm (and on --dry-run) |
+| `--no-bed-photo` | on --dry-run, skip taking a new bed photo (the send checks the newest one and its verdict) |
 | `-y, --yes` | skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |
 | `--dry-run` | print the exact FTPS target + MQTT payload without uploading or dispatching (reads the loaded trays) |
@@ -313,6 +313,44 @@ delete plate files (.3mf) from the top of the storage card; asks first
 | Flag | Description |
 |---|---|
 | `-y, --yes` | delete without asking |
+
+### `bambu bed`
+
+the bed photo a send rests on, and the written verdict on it
+
+### `bambu bed photo`
+
+take one photo of the bed for a plate (read-only camera); look at it, then `bed verdict`
+
+| Argument | Required | Description |
+|---|---|---|
+| `plate` | yes | plate name or its .3mf, e.g. sheets-04b |
+
+### `bambu bed show`
+
+the newest bed photo of a plate, how old it is, and its verdict
+
+| Argument | Required | Description |
+|---|---|---|
+| `plate` | yes | plate name or its .3mf |
+
+### `bambu bed verdict`
+
+write down what the newest bed photo of a plate shows, after opening it
+
+| Argument | Required | Description |
+|---|---|---|
+| `plate` | yes | plate name or its .3mf |
+
+| Flag | Description |
+|---|---|
+| `--plate-type <token>` | the plate in the photo: cool_plate, eng_plate, hot_plate, textured_plate, supertack_plate |
+| `--by <who>` | who looked, e.g. "Claude, opened the photo" |
+| `--clear` | nothing is on the bed |
+| `--no-clear` | something is on the bed |
+| `--seated` | the build plate is in and flat |
+| `--no-seated` | the build plate is missing or not flat |
+| `--note <text>` | what else the photo shows |
 
 ### `bambu validate`
 

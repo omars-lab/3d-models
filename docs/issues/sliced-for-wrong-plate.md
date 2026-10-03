@@ -73,6 +73,31 @@ listed `"auto"` as an unconfirmed default; this send settled it the wrong way ro
 
 The code is `tools/bambu/src/plate-type.ts`, with its tests beside it.
 
+## Checked before every send
+
+After the re-slice, Omar asked whether a hook should make sure a plate was sliced right, and
+whether the send should look at the printer first. A git hook does not fit: the `.3mf` is build
+output and never committed, and slicing is not a commit, so a hook would never see the file it is
+meant to check. The checks went into `print send` itself, which every send runs, dry run or not,
+and which no flag skips. Each refuses a real send and only reports on a dry run:
+
+- **The plate** (above): the slice's plate type against the plate id the printer reports.
+- **The nozzles:** the nozzle sizes in the slice's project settings against the ones the printer
+  reports (`device.nozzle.info`, 0.4 and 0.4 on the X2D). They are compared as sizes, not per
+  nozzle, because no source we hold says which slice entry belongs to which nozzle. A printer that
+  reports none warns. The code is `tools/bambu/src/nozzle-check.ts`.
+- **The bed, as someone saw it:** Omar asked for "recently pulled screenshots, screenshot
+  verdicts". The send now needs the plate's newest bed photo to be under 30 minutes old and to
+  carry a written verdict, made with `bambu bed verdict`, that says the bed is clear, the plate is
+  seated, and which plate it is. The verdict holds the photo's checksum, so a retaken photo needs a
+  new look, and the plate it names must be the one the slice is for, which is the sheets-04b case
+  caught by eye. The real send takes no new photo; it uses the one that was looked at. The code is
+  `tools/bambu/src/bed-check.ts`, with `bambu bed photo`, `bed show` and `bed verdict` in
+  `tools/bambu/src/commands/bed.ts`.
+
+Still to come: a check that the slice is newer than its recipe, so an edited plate cannot go out
+on an old slice.
+
 ## What it means for sheets-04b
 
 The file on disk was made for the Cool Plate and cannot go out again. It needs a re-slice (the one
