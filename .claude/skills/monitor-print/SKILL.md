@@ -1,6 +1,6 @@
 ---
 name: monitor-print
-description: Watch a print running on the X2D until it ends — the printer's state onto the plate page, a check that the print is still moving (a stall when the layer and percent stop), a chamber picture every 10 minutes that you open and look at, and a timelapse GIF at the end. Use right after a plate is sent (send-plate hands off here), when Omar asks how a print is going, whether it is proceeding, for camera screenshots or a timelapse of a print, or to pick up watching a print already running.
+description: Watch a print running on the X2D until it ends — the printer's state into the plate's print log (its own file, linked from the page), a check that the print is still moving (a stall when the layer and percent stop), a chamber picture every 10 minutes that you open and look at, and a timelapse GIF at the end. Use right after a plate is sent (send-plate hands off here), when Omar asks how a print is going, whether it is proceeding, for camera screenshots or a timelapse of a print, or to pick up watching a print already running.
 ---
 
 # monitor-print — is the print going, and what does it look like
@@ -17,7 +17,7 @@ The X2D runs its own first-layer and spaghetti detection
 pictures here are our look on top of that, not a substitute for it.
 
 Run everything from the main checkout (the vault), with the node 22 PATH, like every `bambu`
-call, so the rows land on the page Omar reads in Obsidian.
+call, so the rows land in the log Omar opens from the page in Obsidian.
 
 ## 1. Start the watch
 
@@ -27,8 +27,10 @@ watch on it (`pgrep -fl print_monitor` prints nothing), start it in the backgrou
 
 `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name>`
 
-It asks the printer every 30 seconds and writes a row in the plate page's `## Print log` for
-each change. The rows are watching, preparing, printing, paused (with the error code and what it
+It asks the printer every 30 seconds and adds a row to the plate's print log,
+`docs/design/plates/print-logs/<name>.md`, for each change. The first row makes the file and
+links it from the page's frontmatter (`print_log: '[[print-logs/<name>|print log]]'`), so the
+page keeps the design and the approvals and the log keeps the printer's words. The rows are watching, preparing, printing, paused (with the error code and what it
 means), resumed, the 25/50/75% marks, stalled, error, finished, failed, stopped, and lost when
 the printer stops answering. It keeps going through a pause and a stall, and stops on the last
 four. Every 10 minutes, and at every row, it saves a chamber picture to
@@ -61,10 +63,13 @@ chat. Never send one of those commands yourself, and never the "ignore and resum
   `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif`.
 - **Finished** means the print is done, not judged. The record and the Timeline's `printed` row
   come when the pieces are judged, as before.
-- **Ship the log:** the rows are on the vault's page. Copy the page into a work branch off
-  `origin/master`, run `plates_gate.py --write`, then PR and merge. Then put the vault's copy back
-  to the merged one: run `git -C <vault> checkout -- docs/design/plates/<name>.md` only after
-  `git diff` shows it matches, then fast-forward. The pictures and the GIF stay in `.bambu/`, which
+- **Ship the log:** the rows are in the vault's `print-logs/<name>.md` (and, on a plate's first
+  watch, the page's new `print_log:` line). Copy both into a work branch off `origin/master`,
+  run `plates_gate.py --write`, then PR and merge. The log is append-only: the plates gate (P10,
+  hook 39) refuses a commit that changes or drops a row master already has, or deletes a log, so
+  a wrong row is answered by a new row, never by an edit. Then put the vault's copies back to the
+  merged ones: `git -C <vault> checkout --` each file only after `git diff` shows it matches,
+  then fast-forward. The pictures and the GIF stay in `.bambu/`, which
   is gitignored.
 
 ## 4. Report
@@ -76,6 +81,6 @@ all), and the GIF.
 
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
-| `scripts/print_monitor.py` | Polls the printer, writes each change and any stall onto the plate page's `## Print log`, saves a chamber picture on the clock and at every row, makes the GIF at the end, logs to `.bambu/monitor/<name>.log` | Right after a send, or to pick up watching a print already running | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> [--snapshot-every 10] [--stall-after 15]` |
+| `scripts/print_monitor.py` | Polls the printer, adds each change and any stall to the plate's `print-logs/<name>.md` (linking it from the page the first time), saves a chamber picture on the clock and at every row, makes the GIF at the end, logs to `.bambu/monitor/<name>.log` | Right after a send, or to pick up watching a print already running | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> [--snapshot-every 10] [--stall-after 15]` |
 | same, `--gif` | Rebuilds `timelapse.gif` from the frames already taken | The watch died before the end, or frames were added by hand | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif` |
-| same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |
+| same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page, and reads the log back through the plates gate | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |
