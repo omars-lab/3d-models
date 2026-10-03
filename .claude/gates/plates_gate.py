@@ -73,6 +73,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -596,13 +597,15 @@ def title_of(body: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None]) -> dict:
+def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None], plates: Path = PLATES) -> dict:
     """The queue as data, for 3d-model-hub's plate queue: the same ranking `render_queue` writes,
-    with the page facts beside it so the hub never parses a plate page itself."""
+    with the page facts beside it so the hub never parses a plate page itself. `page` is the page's
+    path in this repo; the hub resolves `pictures` beside it, so moving the folder moves nothing there."""
     def facts(p: dict) -> dict:
         on = p["approved_on"]
         return {
-            "plate": p["plate"], "title": titles.get(p["plate"]), "stage": p["stage"],
+            "plate": p["plate"], "page": Path(os.path.relpath(plates / f"{p['plate']}.md", ROOT)).as_posix(),
+            "title": titles.get(p["plate"]), "stage": p["stage"],
             "approved": p["approved"], "approved_on": on.isoformat() if isinstance(on, dt.date) else None,
             "times_printed": p["times_printed"], "runs": p["runs"], "answers": p["answers"],
             "kind": p["kind"], "bets": p["bets"], "unblocks": p["unblocks"],
@@ -726,7 +729,7 @@ def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=R
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before ranking them", file=sys.stderr)
         return 1
-    print(json.dumps(queue_json(good, read_weights(scoring), titles), indent=2))
+    print(json.dumps(queue_json(good, read_weights(scoring), titles, plates), indent=2))
     return 0
 
 
@@ -1158,6 +1161,8 @@ def self_test() -> int:
                and data["queue"][0]["title"] == "a — first"
                and [h["plate"] for h in data["held"]] == ["c"] and data["planned"] == [],
                "the JSON queue is the table's order, titled, with the held plate apart", str(data))
+        report(data["queue"][0]["page"] == "docs/plates/a.md",
+               "the JSON names each page by its path in the repo, for the hub's pictures", str(data["queue"][0]))
 
         # --rank --json refuses while a page is wrong, rather than ranking around it.
         import contextlib
