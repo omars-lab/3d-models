@@ -8,6 +8,7 @@ times_printed: 1
 runs: [2026-10-02-sheets-04]
 answers: "Which gap per face lets a loose gBV piece drop into its pocket and stay, do the small five-point stars catch at 0.15, and does a 2 mm peak read as the look in the hand?"
 kind: new
+maturity: experiment
 bets:
   - CAL-FIT-01
   - CAL-HOL-01

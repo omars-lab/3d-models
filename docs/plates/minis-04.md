@@ -9,6 +9,7 @@ runs:
   - 2026-09-26-minis-04
 answers: "Do the minimal-frames hold up at 80 mm and half the height, and does the twist print?"
 kind: new
+maturity: experiment
 bets:
   - CAL-CST-06
   - CAL-CST-08

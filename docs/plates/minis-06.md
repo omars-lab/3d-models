@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs?"
 kind: new
+maturity: experiment
 bets:
   - CAL-CST-06
 unblocks:

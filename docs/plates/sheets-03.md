@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "How much soft weld at the crossings looks right: none, light or strong?"
 kind: taste
+maturity: experiment
 bets: []
 unblocks:
   - "smooth-lines call 3: how much soft weld at the crossings"

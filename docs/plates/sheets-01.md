@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right?"
 kind: new
+maturity: experiment
 bets: []
 unblocks:
   - "smooth-lines call 1: whether the true-edge work is worth finishing"

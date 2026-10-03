@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press?"
 kind: new
+maturity: experiment
 bets:
   - CAL-FIT-01
   - CAL-HOL-01

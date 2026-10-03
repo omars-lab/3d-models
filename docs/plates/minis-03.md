@@ -9,6 +9,7 @@ runs:
   - 2026-09-26-minis-03
 answers: "Do the minimal-frame coasters read at 40 mm, and does a dovetail pair fit?"
 kind: new
+maturity: experiment
 bets:
   - CAL-CST-07
   - CAL-FIT-01

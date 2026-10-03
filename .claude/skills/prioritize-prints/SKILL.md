@@ -32,7 +32,8 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    `approved:` left empty means nobody asked, which is different from `false`.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/plates/minis-06.md): In short, What it is, Why
-   print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`.
+   print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`, with
+   `maturity: experiment`; only the [grade-plate](../grade-plate/SKILL.md) skill raises it.
    A plate that is designed but waits on a build before it can have a recipe (the sampler
    sheets, [sheets-01](../../../docs/plates/sheets-01.md)) gets its page now, at `planned`,
    with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue
@@ -54,7 +55,9 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
      damage the printer, until it is dealt with. A piece that snaps is data, not risk.
 4. **Match the count to the records.** For each record in `docs/prints/` whose `plate:` starts
    with the plate's name, the page lists its run under `runs:`, `times_printed` is how many
-   there are, and the timeline has a `printed` row naming it. The gate checks all three.
+   there are, and the timeline has a `printed` row naming it. The gate checks all three. A new
+   record's verdicts can move the plate's maturity (and the maturity of every plate sharing a
+   piece with it): run the grade-plate skill after it.
 5. **Write the queue.** `python3 .claude/gates/plates_gate.py --write`. It refuses while any
    page has a finding; fix the page, not the gate.
 6. **Say why.** Report the top three in plain words: what each answers, what it costs, what
