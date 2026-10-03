@@ -36,6 +36,10 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
    - `sym` and `order`: how well the art matches itself turned, and the turn that matched.
      Below 0.9, run `python3 tools/print_review.py art <out.png> <pieces>` and look at the
      art alone.
+   - When a piece sits in a frame (loose pieces in a coaster's holes), the view from above
+     hides how tall each stands. `python3 tools/print_review.py side <out.png> <frame.stl>
+     <label> <x0>,<y0>,<x1>,<y1> <piece.stl> …` cuts both straight down along that line and
+     prints both heights. Render the pieces where their holes are, so the meshes line up.
 3. **Read the PNG yourself**, every time, all of it. The numbers flag only the plain cases. On
    2026-09-25 they flagged neither tA8e's wedges nor anything that needs a sense of what the
    pattern *should* look like ([`rubric.md`](rubric.md) §What the numbers catch).

@@ -20,6 +20,7 @@ grams: 12
 bed_plates: 1
 risk: watch
 pictures:
+  - sheets-04b-media/side-cut.png
   - sheets-04b-media/bed-map.png
 ---
 
@@ -56,6 +57,18 @@ the record is [2026-10-02-sheets-04](../prints/2026-10-02-sheets-04/index.md).
 Every piece is 4 mm tall and flat. Each set is its own plate item and goes in its own bag
 straight off the plate, labelled with its code, because the sets look alike. The bed map below
 says which set is where.
+
+How tall a piece stands in the coaster, cut straight down through the hole: the coaster grey,
+the piece gold, all three at one scale. The coaster is 4.0 mm. The sheets-04 piece was 1.2 mm, a
+thin tile at the bottom of a 4 mm hole; the new pieces are 4.0 mm, flush with the top. The heights
+are measured off the two meshes, not typed. The gap on the star's outer side is real: the cut
+leaves the star between two of its points, where the hole's corner is rounded and the piece's is
+sharp.
+
+![Side cut through the coaster and a piece in its hole: the 4.0 mm coaster, the 1.2 mm sheets-04 piece low in the hole, and the 4.0 mm hexagon and star flush with the top](sheets-04b-media/side-cut.png)
+
+It is drawn by `print_review.py side` from the gBV minimal coaster and the `Loose-Fit-Coupon.bkr`
+pieces at this plate's knobs (bikar 4e06255), which put each piece where its hole is.
 
 **What I assumed, for you to change:**
 
@@ -116,3 +129,4 @@ Notes:
 |---|---|---|
 | 2026-10-02 | proposed — at Omar's ask after sheets-04's pieces all fell through: pieces only, 4 mm tall and flat, the gap through zero into a press fit (bikar #300) | this page |
 | 2026-10-02 | sliced — local slice fits one bed, 41 minutes, 12 g, no slicer warnings, with a bed map | this page |
+| 2026-10-03 | reviewed — side cut added at Omar's ask, the piece heights against the coaster's, measured off the meshes | this page |
