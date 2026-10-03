@@ -151,6 +151,21 @@ filament stays Omar's.
 per-nozzle field beside `ams_mapping`, are settled only by the Studio capture above. The numbers
 come from OpenBambuAPI, not from this machine.
 
+## 2026-10-03: the first CLI send stopped at the upload
+
+**What happened.** sheets-04b was the first plate sent through `print send` rather than Bambu
+Studio. Every check before the upload passed: the approval, the printer idle (FINISH), the tray
+match (`ams_mapping [3]`) and the bed photo. The FTPS login worked, then `STOR sheets-04b.plate.3mf`
+at the FTP root came back `553 Could not create file`. Nothing was published over MQTT, nothing
+printed, and the page's yes was left unspent, because the send only rewrites the page after it
+succeeds.
+
+**What it does and does not tell us.** A 553 is the server refusing to write that file. That
+fits several causes, and this run cannot tell them apart: no storage card in the printer, a full
+or read-only card, or the X2D wanting the file somewhere other than the root that the reference
+clients use (the comment at the top of `ftps.ts`). The upload path is unchanged until one of those
+is checked on the machine. Never work around it by sending from Bambu Studio for Omar.
+
 ## Files
 
 - `tools/bambu/src/backends/ftps.ts` — the FTPS upload backend (new).
