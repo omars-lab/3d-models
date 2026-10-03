@@ -64,7 +64,7 @@ bet** — a value we believe but have not yet confirmed on *this* machine:
 
 | field | default | why unconfirmed |
 |---|---|---|
-| `bed_type` | `"auto"` | firmware auto-detects on most models; some builds want an explicit plate name |
+| `bed_type` | settled 2026-10-03: the slice's own plate type, never `"auto"` | `"auto"` paused sheets-04b at layer 0; see [the plate type](sliced-for-wrong-plate.md) |
 | `ams_mapping` | matched from the loaded trays (the builder default `[0]` is no longer sent) | dual-nozzle firmware may need a nozzle index, or the empty-string form (`--ams-mapping none`) |
 | `md5` | `""` (empty) | accepted on P1/A1-class; X1-class historically validated the checksum |
 
@@ -205,6 +205,11 @@ plate it sees as `device.plate.cur_id` `P0101`, an id with no name we can look u
 itself worked, and what stopped the print is the slice's plate type against the plate on the
 bed. Nothing in `print send` compares the two yet; it would need the name behind `P0101`, which
 only the plate on the bed can tell us.
+
+**What it was.** The bed photo showed a Textured PEI Plate, and Bambu Studio is set to one; the
+slice was made for a Cool Plate because Studio's command line defaults to it and our slices never
+named a plate. The print was cancelled at 20:12 UTC (`0300-400C`). The fix, and the evidence, are
+in [sliced-for-wrong-plate.md](sliced-for-wrong-plate.md).
 
 ## Files
 

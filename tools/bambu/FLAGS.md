@@ -119,6 +119,7 @@ slice a .stl/.3mf/.step/.obj into a sliced .3mf
 | `-s, --settings <names\|paths>` | machine + process, semicolon-joined — preset display names (resolved to the bundled JSON) or JSON paths; each inherits chain is flattened before slicing |
 | `-f, --filament <names\|paths>` | filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path; its inherits chain is flattened before slicing |
 | `-p, --plate <n>` | plate index to slice, 0 = all |
+| `--plate-type <type>` | the build plate to slice for: cool_plate \| eng_plate \| hot_plate \| textured_plate \| supertack_plate (default: the one Bambu Studio is set to) |
 | `--filament-map-mode <mode>` | X2D dual-nozzle filament grouping: saving (Filament-Saving, default) \| quality \| manual — only affects a plate with ≥2 filaments |
 | `--arrange` | arrange objects before slicing |
 | `-t, --timeout <seconds>` | slice timeout in seconds |
@@ -148,6 +149,7 @@ compose many bikar-rendered pieces onto one X2D plate (a manifest → one sliced
 | `-s, --settings <names\|paths>` | machine + process, semicolon-joined — overrides the manifest profile (preset display names or JSON paths; each inherits chain is flattened before slicing) |
 | `-f, --filament <names\|paths>` | filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path; its inherits chain is flattened before slicing) |
 | `--bed <name>` | bed footprint for the fit pre-check (x2d = 256×256 mm) |
+| `--plate-type <type>` | the build plate to slice for: cool_plate \| eng_plate \| hot_plate \| textured_plate \| supertack_plate (default: the one Bambu Studio is set to) |
 | `--arrange` | auto-arrange the objects on the plate (libnest2d in the slicer) |
 | `--no-arrange` | do not auto-arrange (objects keep authored positions) |
 | `--no-record` | skip scaffolding the draft plate record |
@@ -216,7 +218,6 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the p
 | `--slug <slug>` | slug for the record run name (default: derived from the plate) |
 | `-O, --object <spec>` | printed object as bikar:<path>[=ENTRY] (repeatable) — pins R1 provenance in the record |
 | `--plate <n>` | plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode) |
-| `--bed-type <type>` | [X2D-UNCONFIRMED] plate profile: auto\|cool_plate\|eng_plate\|hot_plate\|textured_plate (default auto) |
 | `--ams-mapping <spec>` | [X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays) |
 | `--md5 <hex>` | [X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty) |
 | `--no-bed-leveling` | skip auto bed-leveling before this print |

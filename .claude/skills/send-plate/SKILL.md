@@ -72,6 +72,15 @@ grams or picture goes on the page as a `sliced` row. A recipe change resets the 
 `plate_approve.py <name> --iterate` (manage-approvals skill), ship it, and ask Omar again. A
 comment-only edit is not a change, so a reprint as-is keeps its yes.
 
+A slice is made for one build plate, and the plate type changes the G-code itself: the bed
+temperature, and on the X2D a first-layer offset only the Textured PEI Plate gets. The slice verbs
+take the plate Bambu Studio is set to, or `--plate-type textured_plate` (and the like) when you
+name it; the log says which (`plate type: Textured PEI Plate (…)`). When the plate on the bed
+changes, slice again: a slice made for another plate is refused at the send, and a slice made
+without a plate type is refused too. sheets-04b went out sliced for a Cool Plate with a Textured
+PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
+([the issue](../../../docs/issues/sliced-for-wrong-plate.md)).
+
 ## 4. The printer, the filament, the bed
 
 1. `bambu status show`: the printer is idle (IDLE, FINISH or FAILED) and nothing is mid-job.
@@ -82,10 +91,13 @@ comment-only edit is not a change, so a reprint as-is keeps its yes.
 2. `bambu filament-sync --plate build/plates/<name>.plate.3mf`: the plate's colors match loaded
    trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool.
 3. `bambu print send build/plates/<name>.plate.3mf --dry-run`. Every line must be green:
-   `✓ approval`, `✓ printer`, `✓ storage`, the warnings sidecar, the filament plan. It saves a bed photo under
-   `.bambu/bed/` and prints its path.
+   `✓ approval`, `✓ printer`, `✓ plate`, `✓ storage`, the warnings sidecar, the filament plan. It
+   saves a bed photo under `.bambu/bed/` and prints its path. The `plate:` line compares the plate
+   the slice is for with the one the printer reports. `⚠ plate` means the printer named a plate id
+   we have not matched yet, or none: the photo settles it in the next step.
 4. **Open the photo and look.** Say what is on the bed: empty or not, the build plate seated or
-   not. Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to
+   not, and which plate it is (the Textured PEI Plate is gold and grainy) and that it is the one
+   the `plate:` line names. Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to
    clear or check the bed in person. Never send on a photo you did not open.
 
 ## 5. Send

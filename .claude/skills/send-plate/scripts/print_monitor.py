@@ -53,9 +53,12 @@ MILESTONES = (25, 50, 75)
 
 # What an error code means, in plain words. Only codes we have met and looked up: an unknown code
 # is shown as its number, never guessed at. Source: Bambu's HMS list as mirrored in
-# jmassardo/bambuddy-mobile hmsErrorCatalog.ts and hiwebsun0914 hms_errors.py (2026-10-03).
+# jmassardo/bambuddy-mobile hmsErrorCatalog.ts and hiwebsun0914 hms_errors.py (2026-10-03);
+# 0300-400C from bambulab/BambuStudio issue #527 ("print cancelled from front panel").
+CANCELLED = "0300-400C"
 KNOWN = {
     "0500-8051": "the plate on the bed is not the one the file was sliced for",
+    CANCELLED: "the print was cancelled, from the printer's screen or an app",
 }
 
 INTRO = ("What the printer said while this plate printed, one row per change, written by the "
@@ -123,10 +126,11 @@ def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: flo
         elif state == "FINISH":
             rows.append(("finished", state))
         elif state == "FAILED":
-            rows.append(("failed", said(code, state)))
+            # A cancel reports FAILED too (sheets-04b, 2026-10-03); it is a stop, not a failure.
+            rows.append(("stopped" if code == CANCELLED else "failed", said(code, state)))
         elif state == "IDLE":
             rows.append(("stopped", "the printer went idle"))
-    if code and code != st.get("code") and not any(e in ("paused", "failed", "watching") for e, _ in rows):
+    if code and code != st.get("code") and not any(e in ("paused", "failed", "stopped", "watching") for e, _ in rows):
         rows.append(("error", said(code, state)))
     st["code"] = code
 
@@ -297,9 +301,14 @@ def self_test() -> int:
     check(rows == [("paused", "0500-8051: " + KNOWN["0500-8051"])],
           "a paused row says the code and what it means", rows)
 
-    st, rows = step({}, _f("PAUSE", err=0x0300400C), 0, "sheets-04b", 600)
-    check(rows == [("watching", "0300-400C (not looked up yet)")],
+    st, rows = step({}, _f("PAUSE", err=0x0300_4FFF), 0, "sheets-04b", 600)
+    check(rows == [("watching", "0300-4FFF (not looked up yet)")],
           "an unknown code is shown as its number, never guessed at", rows)
+
+    st, rows = step({}, _f("PAUSE", err=83918929), 0, "sheets-04b", 600)
+    st, rows = step(st, _f("FAILED", err=0x0300400C), 30, "sheets-04b", 600)
+    check(rows == [("stopped", "0300-400C: " + KNOWN[CANCELLED])],
+          "a cancel reports FAILED but is a stop (the sheets-04b end, 2026-10-03)", rows)
 
     got = _run([_f("RUNNING", 3, 10), _f("RUNNING", 4, 12, err=0x0700_2000)])
     check(got == ["watching", "error"], "a new error with no pause is its own row", got)

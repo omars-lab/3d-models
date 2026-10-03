@@ -33,8 +33,8 @@ export type PrinterStatus = Record<string, unknown> & {
 
 /**
  * Options for the `print.project_file` command that starts a print from an ALREADY-UPLOADED file
- * (#50). The three fields the RE corpus disagrees on for a dual-nozzle X2D — `bedType`, `amsMapping`,
- * `md5` — are exposed so they can be settled against a ground-truth capture without a code change
+ * (#50). The two fields the RE corpus disagrees on for a dual-nozzle X2D — `amsMapping`, `md5` — are
+ * exposed so they can be settled against a ground-truth capture without a code change
  * (see docs/issues/first-party-dispatch.md; treat as a CAL-shaped bet). The rest carry grounded
  * defaults that two independent working clients (pybambu, bambulabs_api) send.
  */
@@ -45,8 +45,12 @@ export interface ProjectFileOptions {
   plate?: number;
   /** Job display name. Default: remoteName without its .3mf extension. */
   subtaskName?: string;
-  /** [X2D-UNCONFIRMED] plate profile. Default "auto" (firmware detects). */
-  bedType?: string;
+  /**
+   * The plate type the slice was made for, as Studio's token ("textured_plate", …), read off the
+   * .3mf (plate-type.ts). Required: Studio never sends "auto", and the X2D pauses with 0500-8051 when
+   * this does not match the plate on the bed (sheets-04b, 2026-10-03).
+   */
+  bedType: string;
   /** [X2D-UNCONFIRMED] filament→slot map. Default [0]; dual-nozzle firmware may need a nozzle field. */
   amsMapping?: number[] | string;
   /** [X2D-UNCONFIRMED] file checksum. Default "" (accepted on P1/A1; X1-class historically validated it). */
@@ -84,7 +88,7 @@ export function buildProjectFileCommand(opts: ProjectFileOptions): PrintRequest 
       task_id: "0",
       subtask_id: "0",
       md5: opts.md5 ?? "",
-      bed_type: opts.bedType ?? "auto",
+      bed_type: opts.bedType,
       bed_leveling: opts.bedLeveling ?? true,
       flow_cali: opts.flowCali ?? true,
       vibration_cali: opts.vibrationCali ?? true,
