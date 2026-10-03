@@ -9,7 +9,8 @@
 
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
-import { McpBackend } from "../backends/mcp.js";
+import { resolve } from "node:path";
+import { CameraBackend } from "../backends/camera.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
@@ -117,32 +118,22 @@ export function registerStatus(program: Command): void {
       }
     });
 
-  // Camera stays on the MCP transport for now: a chamber snapshot is an RTSP/ffmpeg pull, a separate
-  // capability from the MQTT status/control channel. It rides the first-party path in a later PR.
+  // The chamber snapshot is one ffmpeg pull off the printer's RTSPS stream (backends/camera.ts), a
+  // separate channel from MQTT. Read-only: it opens the video stream and nothing else.
   status
     .command("camera")
-    .description("capture a chamber snapshot (needs ffmpeg) — via the MCP transport")
+    .description("save one chamber camera frame as a JPEG (needs ffmpeg) — read-only")
     .option("-o, --out <path>", "output JPEG path", "chamber.jpg")
     .action(async (opts: { out: string }) => {
-      const mcp = new McpBackend();
-      requireConfigured(mcp);
+      const cam = new CameraBackend();
+      requireConfigured(cam);
+      const out = resolve(opts.out);
       try {
-        await mcp.connect();
-        const tool = (await mcp.findTool("camera")) ?? (await mcp.findTool("snapshot"));
-        if (!tool) throw new Error("no camera tool exposed by the MCP");
-        const res = (await mcp.call(tool, { path: opts.out })) as {
-          content?: Array<{ type?: string; text?: string }>;
-        };
-        console.log(
-          res?.content?.length
-            ? res.content.map((c) => (c.type === "text" && c.text ? c.text : JSON.stringify(c))).join("\n")
-            : JSON.stringify(res, null, 2),
-        );
+        const bytes = await cam.snapshot(out);
+        console.log(`camera frame → ${out} (${Math.round(bytes / 1024)} KB)`);
       } catch (err) {
         console.error(`camera failed: ${(err as Error).message}`);
         process.exitCode = 1;
-      } finally {
-        await mcp.close();
       }
     });
 }

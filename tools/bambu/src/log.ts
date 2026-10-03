@@ -46,13 +46,15 @@ export interface RunResult {
 export function runWithTimeout(
   cmd: string,
   args: string[],
-  opts: { timeoutMs?: number; cwd?: string; env?: NodeJS.ProcessEnv; label?: string } = {},
+  opts: { timeoutMs?: number; cwd?: string; env?: NodeJS.ProcessEnv; label?: string; input?: string } = {},
 ): Promise<RunResult> {
   const timeoutMs = opts.timeoutMs ?? 30_000;
   const label = opts.label ?? cmd;
   return new Promise((resolve) => {
     ev("proc_start", { label, timeout_ms: timeoutMs });
     const child = spawn(cmd, args, { cwd: opts.cwd, env: opts.env ?? process.env });
+    // `input` is written and stdin closed, for a tool that otherwise waits on it (openssl s_client).
+    if (opts.input !== undefined) child.stdin?.end(opts.input);
     let stdout = "";
     let stderr = "";
     let timedOut = false;

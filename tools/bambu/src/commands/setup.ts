@@ -16,6 +16,7 @@ import { loadConfig, mask } from "../config.js";
 import { probeStudio } from "../backends/studio-cli.js";
 import { appInstalled } from "../backends/applescript.js";
 import { McpBackend } from "../backends/mcp.js";
+import { CameraBackend, pinPath } from "../backends/camera.js";
 import { discoverPrinters, isCloudBound, DISCOVERY_PORT, type DiscoveredPrinter } from "../backends/discover.js";
 import { runWithTimeout } from "../log.js";
 
@@ -124,6 +125,16 @@ async function runDoctor(opts: { probeMcp?: boolean }): Promise<Check[]> {
     status: ff ? "PASS" : "WARN",
     detail: ff ? "present" : "absent — needed only for `bambu status camera` snapshots",
   });
+
+  // 5b. The camera's pinned certificate (`bambu setup camera-pin`)
+  if (cfg.serial) {
+    const pinned = existsSync(pinPath(cfg.serial));
+    checks.push({
+      name: "camera pin",
+      status: pinned ? "PASS" : "WARN",
+      detail: pinned ? pinPath(cfg.serial) : "absent — run `bambu setup camera-pin` once for `status camera` and the bed photo",
+    });
+  }
 
   // 6. Bambu Connect (GUI fallback)
   const bc = appInstalled("Bambu Connect.app") || appInstalled("BambuConnect.app");
@@ -278,6 +289,30 @@ export function registerSetup(program: Command): void {
       };
       console.log("Add this to .mcp.json at the repo root (keep the real file gitignored):\n");
       console.log(JSON.stringify(example, null, 2));
+    });
+
+  // The camera's certificate comes from a Bambu device CA no file ships, so it is pinned instead:
+  // saved once here, then required on every `status camera` (backends/camera.ts). Sends no secret.
+  setup
+    .command("camera-pin")
+    .description("save this printer's camera certificate as its pin (once; again after a reset)")
+    .action(async () => {
+      const cam = new CameraBackend();
+      if (!cam.configured()) {
+        console.error("Not configured: need PRINTER_HOST, BAMBU_SERIAL and BAMBU_TOKEN. Run `bambu setup doctor`.");
+        process.exitCode = 1;
+        return;
+      }
+      try {
+        const p = await cam.pin();
+        console.log(`pinned ${cam.config.serial}'s camera certificate → ${p.path}`);
+        console.log(`  issuer:      ${p.issuer}`);
+        console.log(`  valid until: ${p.validTo}`);
+        console.log(`  sha256:      ${p.fingerprint}`);
+      } catch (err) {
+        console.error(`camera-pin failed: ${(err as Error).message}`);
+        process.exitCode = 1;
+      }
     });
 
   setup

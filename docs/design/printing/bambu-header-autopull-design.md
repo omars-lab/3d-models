@@ -69,7 +69,7 @@ the three caliper sub-fields). So the verb below **fills nine-to-twelve of sixte
 operator a short, honest set of blanks — not a whole block to copy.
 
 **Read against itself (K7).** Chamber temp appears twice above — as a machine-read frame field
-(`3d-models:tools/bambu/src/commands/status.ts:L47 "chamber_temper"`, already surfaced) and as a
+(`3d-models:tools/bambu/src/commands/status.ts:L48 "chamber_temper"`, already surfaced) and as a
 field the header must **not** auto-fill into "ambient room temp." Both are true and they do not
 conflict: the frame gives chamber; the header wants room; the verb prints chamber on its own labelled
 line and leaves the room blank. The table's `nozzle_diameter` row is likewise consistent with the
@@ -107,7 +107,7 @@ single allow-listable command that emits the operator's artifact directly.
 
 **One code path, reused — not forked (the repo's D-052 tenet).** `header --json` is the builder;
 `print send --record`
-(`3d-models:tools/bambu/src/commands/print.ts:L501 "--record"`) calls **the same builder** to
+(`3d-models:tools/bambu/src/commands/print.ts:L521 "--record"`) calls **the same builder** to
 pre-fill the record's profile header instead of scaffolding it as TODO. The header logic lives in
 one place; the two entry points differ only in destination (stdout vs the record file), never in
 what a field means.
@@ -151,7 +151,7 @@ inspected:
    cross-check, not a blocker);
 3. **`tray_uuid`** (spool id) on the X2D AMS tray, and **which chamber field** the X2D reports
    (flat `chamber_temper`
-   `3d-models:tools/bambu/src/commands/status.ts:L47 "chamber_temper"` vs a nested `device.ctc`).
+   `3d-models:tools/bambu/src/commands/status.ts:L48 "chamber_temper"` vs a nested `device.ctc`).
 
 The transfer sentence, stated (K10): the X2D shares the H2D's `01.02.00.00` firmware track and the
 AMS report shape confirmed here on 2026-09-17, so these fields are plausible — but the frame has
