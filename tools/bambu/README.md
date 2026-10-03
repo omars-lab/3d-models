@@ -31,7 +31,7 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 | `status` | `show`, `monitor`, `camera` | griches MCP |
 | `header` | `header` (`--plate <plate.3mf>`, `--json`) — auto-pull the bench-sheet profile header | first-party MQTT + `.3mf` |
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`), `open`, `compose` (`<plate.yaml>` → one sliced `.3mf`: renders each bikar item, bed-fit pre-check, writes `objects[].iteration`) | BambuStudio CLI + bikar |
-| `print` | `send` (`--record`, `--dry-run`, `--yes`, owner-gated), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
+| `print` | `send` (`--record`, `--dry-run`, `--yes`; needs a live page approval), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
 | `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |
 
 `bambu <group> <verb> --help` everywhere — the help *is* the documentation.
@@ -54,11 +54,14 @@ the block to add. The `.env` is checked in with dotenvx-encrypted values; bambu 
 the `DOTENV_PRIVATE_KEY` from the gitignored `.env.keys` beside it (or from the environment). With
 no key, the printer keys stay unset rather than being passed on encrypted.
 
-## Dispatch is owner-gated
+## Dispatch needs Omar's approval
 
-`print send` moves real hardware, and printing is on hold until a `CAL-*` bet justifies a plate. So
-it is fail-closed: it prints the owner-gate notice, then refuses unless you pass `--yes` or confirm
-at a TTY. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
+`print send` moves real hardware, so it is fail-closed. It refuses unless the plate's page in
+`docs/plates/` carries a live approval from Omar (D-093: his tick, or his yes in chat written onto
+the page; one approval per send, spent by the send) and the printer is idle; no flag skips either
+check (`src/send-gate.ts`). Then it asks at a TTY; `--yes` skips only that question. A send that
+goes through unticks the box, sets the page's stage to `sent` and adds a dated `sent` row to its
+timeline. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
 `pause`/`resume` are reversible and immediate.
 
 ## Records & validation

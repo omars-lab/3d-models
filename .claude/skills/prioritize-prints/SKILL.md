@@ -1,6 +1,6 @@
 ---
 name: prioritize-prints
-description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/plates/ current — pictures, cost, what it answers, whether Omar approved it, how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue; never ticks a box for Omar and never sends to the printer.
+description: Rank the plates that have not printed yet by return on printer time and say why each is where it is, keeping each plate's review page in docs/plates/ current — pictures, cost, what it answers, whether Omar approved it, how many times it printed, and a dated timeline. Use for "which print next", "what should I print", "rank the prints", "prioritize prints", "what's in the print queue", "is this plate worth printing", after a new plate recipe lands, after Omar ticks a box on a plate page, and after a print record is written. Writes the pages and the queue; ticks a box for Omar only to write down his yes in chat (D-093) and never sends to the printer.
 ---
 
 # prioritize-prints — which plate next, and why
@@ -26,7 +26,9 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    - **It printed** (on a sent plate) → write the print record first (the review-print skill's
      record steps); the page follows it (step 4).
    - Then clear the ticks and the notes, since the timeline now holds them.
-   Never tick a box, and never set `approved: true` without a ticked box or Omar's words in chat.
+   Never tick a box, except to write down Omar's yes in chat (D-093: the `approved` row quotes his
+   words), and never set `approved: true` without a ticked box or his words in chat. One approval
+   covers one send: a plate that went out needs a new `approved` row before it goes out again.
    `approved:` left empty means nobody asked, which is different from `false`.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/plates/minis-06.md): In short, What it is, Why
@@ -62,7 +64,8 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
 
 ## Never
 
-- Send, or pass `--yes` to anything that talks to the printer. Sending is Omar's.
+- Send, or pass `--yes` to anything that talks to the printer. Sending is the
+  [`send-plate`](../send-plate/SKILL.md) skill's, on Omar's live approval (D-093).
 - Store a rank or an ROI on a page. The queue is computed each time (D-046: priority is
   presented, never stored).
 - Put a plate page under `docs/prints/`; that folder is for records of what printed.

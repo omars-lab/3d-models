@@ -38,7 +38,8 @@ comments and replies.
    item on the bed; if not, split into two plates rather than dropping a sample silently.
 6. **Stop at the owner gate.** Hand over the plate file and the dry-run result. Slicing and the
    plan are the [print-model](../print-model/SKILL.md) skill's job; the physical send is Omar's
-   (`bambu print send`, never with `--yes`). Filament choice is Omar's too.
+   (the [`send-plate`](../send-plate/SKILL.md) skill, on his approval on the plate page, D-093).
+   Filament choice is Omar's too.
 7. **Ship the plate file** branch → PR → merge like any other doc, and add the print as waiting on
    Omar in the coaster-pipeline backlog (`docs/tasks/coaster-pipeline/backlog.md`).
 

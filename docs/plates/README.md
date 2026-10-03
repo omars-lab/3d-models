@@ -38,14 +38,17 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | `planned` | Designed, but it waits on a build before it can have a recipe or a slice; `needs:` lists what | whoever wrote the design |
 | `proposed` | The recipe exists; nobody has reviewed the page yet | whoever wrote the recipe |
 | `waiting` | Pictures and costs are on the page; waiting for Omar's tick | the skill, once the page is complete |
-| `approved` | Omar ticked Approve; `approved_on` is the date they ticked it | the skill, reading the tick back |
-| `sent` | It went to the printer; no record yet | whoever sent it, after Omar said send |
+| `approved` | Omar ticked Approve, or said yes in chat; `approved_on` is the date | the skill, reading the tick or his words back |
+| `sent` | It went to the printer; no record yet | `bambu print send`, which spends the approval |
 | `printed` | A record exists in [`docs/prints/`](../prints.md) | the record; `times_printed` counts them |
 | `retired` | Not printing it again | Omar |
 
-Only Omar approves and only Omar sends. The skill writes the queue and the pages; it never
-ticks a box and never talks to the printer. A plate that printed can print again: each run is
-its own record, and `times_printed` is the number of records.
+Only Omar approves ([D-093](../working-model/decisions-log.md)): he ticks the box, or says yes in
+chat and the session writes it onto the page with the date and his words. One approval covers one
+send. `bambu print send` refuses a plate without a live approval, and a send spends it: the box is
+unticked and a dated `sent` row joins the timeline. A plate that printed can print again, but only
+on a new approval, so the timeline logs every approved reprint. Each run is its own record, and
+`times_printed` is the number of records.
 
 ## What we can print
 

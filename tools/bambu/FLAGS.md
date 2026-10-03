@@ -204,7 +204,7 @@ catalog, capture, dispatch and control prints — `list`/`capture` are local & r
 
 ### `bambu print send`
 
-upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-send
+upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the plate page (D-093) and an idle printer, confirm-before-send
 
 | Argument | Required | Description |
 |---|---|---|
@@ -223,7 +223,7 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-se
 | `--no-flow-cali` | skip flow calibration before this print |
 | `--no-vibration-cali` | skip vibration calibration before this print |
 | `--no-bed-photo` | skip the camera photo of the bed taken before the confirm (and on --dry-run) |
-| `-y, --yes` | skip the confirmation prompt (still logs the owner-gate notice) |
+| `-y, --yes` | skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |
 | `--dry-run` | print the exact FTPS target + MQTT payload without uploading or dispatching (reads the loaded trays) |
 

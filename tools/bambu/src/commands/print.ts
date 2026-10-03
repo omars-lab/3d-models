@@ -8,10 +8,13 @@
 // Why first-party (extends D-055): the griches MCP that once backed this was never installable
 // (@griches/bambu-mcp is unpublished, ships no build), so both halves of dispatch now ride code we
 // own — FtpsBackend for the upload, MqttBackend.startProjectFile for the start. Dispatch is the one
-// verb that moves real hardware and printing is on hold until a CAL bet justifies a plate (memory:
-// owner-gated-and-on-hold), so `send` is fail-closed: it refuses unless the operator passes --yes or
-// confirms at a TTY, and --dry-run prints the EXACT FTPS target + MQTT payload it WOULD send without
-// uploading or publishing (it only reads the loaded trays to fill ams_mapping) — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
+// verb that moves real hardware, so `send` is fail-closed. Before anything is sent it checks two
+// things no flag skips (send-gate.ts): the plate's page in docs/plates/ carries a live approval from
+// Omar (D-093: his tick, or his yes in chat written onto the page; one approval per send, spent by
+// it), and the printer is idle. Then it asks at a TTY unless --yes, which may be passed only on a
+// page approval that is live. --dry-run reports both checks and prints the EXACT FTPS target + MQTT
+// payload it WOULD send without uploading or publishing (it only reads the printer's state and
+// loaded trays) — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
 import { existsSync, mkdirSync, statSync } from "node:fs";
@@ -36,6 +39,7 @@ import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 import { collectSlots } from "../frame.js";
 import { readPlateMeta, readUsedFilaments } from "../threemf.js";
+import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
 import {
   feedsFromAms,
   logicalSlotsFromPlate,
@@ -190,23 +194,13 @@ async function buildRecordProfile(plateFile: string): Promise<RecordProfile | un
 /**
  * Which trays this plate feeds from, read off the printer: the plate's used filaments matched by
  * color to the loaded trays (the `filament-sync` match), turned into `ams_mapping` + `use_ams`.
- * A read-only status request — nothing moves. Prints the match and every loaded tray's number, so a
+ * Reads the status frame `readPrinter` took. Prints the match and every loaded tray's number, so a
  * refusal already shows the operator what to pass to --ams-mapping.
  */
-async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConfig): Promise<AmsPlan> {
+async function planFromPrinter(plateAbs: string, plate: number, frame: PrinterStatus): Promise<AmsPlan> {
   const meta = await readPlateMeta(plateAbs);
   const used = await readUsedFilaments(plateAbs, plate);
   if (!meta || used === null) return { ok: false, reason: "the .3mf carries no slice metadata (is it sliced?)" };
-  const mqtt = new MqttBackend(cfg);
-  let frame: PrinterStatus;
-  try {
-    await mqtt.connect();
-    frame = await mqtt.requestStatus();
-  } catch (err) {
-    return { ok: false, reason: `could not read the loaded trays: ${(err as Error).message}` };
-  } finally {
-    await mqtt.close();
-  }
   const slots = collectSlots(frame);
   const logical = logicalSlotsFromPlate(meta.filamentColors, meta.filamentTypes).filter((l) => used.includes(l.slot));
   const report = reconcile(logical, physicalTraysFromSlots(slots));
@@ -217,6 +211,19 @@ async function planFromPrinter(plateAbs: string, plate: number, cfg: PrinterConf
     if (type) console.error(`  ${sl.index ?? "?"}  ${sl.where}: ${type} ${sl.tray.tray_color?.slice(0, 6) ?? ""}`);
   }
   return planAmsMapping(report, meta.filamentColors.length, used);
+}
+
+/** One read-only status request: the state the idle check reads and the trays the filament match reads. */
+async function readPrinter(cfg: PrinterConfig): Promise<PrinterStatus | string> {
+  const mqtt = new MqttBackend(cfg);
+  try {
+    await mqtt.connect();
+    return await mqtt.requestStatus();
+  } catch (err) {
+    return `could not read the printer: ${(err as Error).message}`;
+  } finally {
+    await mqtt.close();
+  }
 }
 
 /** Save one camera frame of the bed under .bambu/bed/ and say where; warn and carry on if it fails. */
@@ -270,11 +277,43 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   const cfg = loadConfig();
   requireConfigured(cfg);
 
+  // Omar's yes (D-093): a live approval on the plate's page, one per send. No flag skips it; a dry
+  // run reports it so the plan and the bed photo can be looked at before he approves.
+  const approval = plateApproval(plateNameOf(abs), repoRoot() ?? process.cwd());
+  if (approval.approved) {
+    console.error(`✓ approval: ${approval.how}.`);
+  } else {
+    console.error(`✗ approval: ${approval.how} (${approval.page}).`);
+    console.error("  Omar ticks the Approve box on that page, or says yes in chat and the session writes it there.");
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  }
+
+  // One status read serves both the idle check and the filament match.
+  const read = await readPrinter(cfg);
+  const frame = typeof read === "string" ? null : read;
+  const busy = frame ? printerBusy(frame) : read as string;
+  if (busy) {
+    console.error(`✗ printer: ${busy}.`);
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  } else {
+    console.error(`✓ printer: idle (${String(frame?.gcode_state)}).`);
+  }
+
   // Which spool feeds the print. Without --ams-mapping the send matches the plate to the loaded
   // trays and refuses when the match is not clean; the old default fed the external spool, which is
   // empty here, on every send (found by the minis-01 run, 2026-09-25).
   if (projectOpts.amsMapping === undefined) {
-    const plan = await planFromPrinter(abs, projectOpts.plate ?? 1, cfg);
+    const plan: AmsPlan = frame
+      ? await planFromPrinter(abs, projectOpts.plate ?? 1, frame)
+      : { ok: false, reason: `could not read the loaded trays (${busy})` };
     if (!plan.ok) {
       console.error(`✗ filament: ${plan.reason}.`);
       console.error("  Pick the trays with --ams-mapping: one number per filament in the plate, -1 for unused.");
@@ -292,7 +331,6 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   // Owner gate, stated out loud before anything reaches the printer.
   console.error("⚠ Dispatch is owner-gated: this sends a plate to the physical X2D.");
   console.error(`  plate: ${basename(abs)} (${kb} KB) → ${cfg.host ?? "(host unset)"}`);
-  console.error("  Printing is on hold until a CAL bet justifies a plate (see the setup skill).");
 
   // A photo of the bed, to look at before saying yes: is the last print off, is the plate in? The
   // X2D runs its own checks once it starts (D-092); this is for the person sending. Read-only, and a
@@ -320,6 +358,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
 
   const ftps = new FtpsBackend(cfg);
   const mqtt = new MqttBackend(cfg);
+  let dispatched = false;
   try {
     ev("dispatch_start", { plate: basename(abs), kb });
     // 1. Upload the .3mf to the FTP root over implicit FTPS.
@@ -329,6 +368,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     // 2. Start the print from the uploaded file over MQTT.
     await mqtt.connect();
     const sent = await mqtt.startProjectFile({ ...projectOpts, remoteName: remote });
+    dispatched = true;
     // Best-effort confirmation: give the printer a beat, then read back its state so the operator
     // sees it took. The publish already happened; a failed read never un-dispatches it.
     let state = "(unconfirmed)";
@@ -346,6 +386,20 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     process.exitCode = 1;
   } finally {
     await mqtt.close();
+  }
+
+  // The send spends the approval (D-093): the box is unticked and a dated `sent` row joins the
+  // page's timeline, the log of every approved reprint. The page change ships like any doc.
+  if (dispatched) {
+    try {
+      const row = spendApproval(approval.page, new Date().toLocaleDateString("en-CA"), approval);
+      console.log(`approval spent — ${approval.page}: stage sent, box unticked, timeline row:`);
+      console.log(`  ${row}`);
+      console.log("Ship that page change (branch → PR); a reprint needs a new approval.");
+    } catch (err) {
+      console.error(`could not spend the approval on the page: ${(err as Error).message} — edit it by hand.`);
+      process.exitCode = 1;
+    }
   }
 
   if (opts.record) {
@@ -517,7 +571,7 @@ export function registerPrint(program: Command): void {
 
   print
     .command("send <plate>")
-    .description("upload a sliced .3mf (FTPS) + start it (MQTT) — OWNER-GATED, confirm-before-send")
+    .description("upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the plate page (D-093) and an idle printer, confirm-before-send")
     .option("--record", "scaffold a draft print record under .bambu/records/", false)
     .option("--slug <slug>", "slug for the record run name (default: derived from the plate)")
     .option(
@@ -534,7 +588,7 @@ export function registerPrint(program: Command): void {
     .option("--no-flow-cali", "skip flow calibration before this print")
     .option("--no-vibration-cali", "skip vibration calibration before this print")
     .option("--no-bed-photo", "skip the camera photo of the bed taken before the confirm (and on --dry-run)")
-    .option("-y, --yes", "skip the confirmation prompt (still logs the owner-gate notice)", false)
+    .option("-y, --yes", "skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check", false)
     .option(
       "--allow-unverified",
       "dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate)",

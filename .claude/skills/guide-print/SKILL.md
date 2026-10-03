@@ -1,6 +1,6 @@
 ---
 name: guide-print
-description: Walk the operator through executing one physical print end-to-end — prep the plate, record the profile header, dispatch (owner-gated), attend the print, then measure and propagate. Use for "walk me through a print", "how do I print this", "what do I do to print", "I'm at the printer, now what", "ready this for the machine", "run the print". Not first-time hardware setup (setup-bambu-x2d) and not the CLI verb reference (bambu) — this is the human session runbook that stitches those together.
+description: Walk the operator through executing one physical print end-to-end — prep the plate, record the profile header, dispatch (on Omar's approval on the plate page), attend the print, then measure and propagate. Use for "walk me through a print", "how do I print this", "what do I do to print", "I'm at the printer, now what", "ready this for the machine", "run the print". Not first-time hardware setup (setup-bambu-x2d) and not the CLI verb reference (bambu) — this is the human session runbook that stitches those together.
 ---
 
 # Guide a print session, end to end
@@ -31,8 +31,8 @@ Two things must be true, or stop and say so:
 2. **A reason to print exists.** A plate is a *prototype* only if it answers a question
    ([`prototype`](../prototype/SKILL.md) restates them first); a coupon is worth filament only if it
    settles a `CAL-*` bet ([`calibrate`](../calibrate/SKILL.md)). If neither, it's decoration — say
-   so before spending plastic. **Dispatch stays owner-gated** until a bet justifies it: the operator
-   sends, never the skill.
+   so before spending plastic. **A send needs Omar's approval on the plate's page** (D-093): his
+   tick, or his yes in chat written onto the page. One approval covers one send.
 3. **No measurement is worth the machine.** A coupon that could **physically damage** the printer is
    never sliced-for-dispatch or sent, no matter what bet it would settle — the value of any reading is
    capped by the cost of the hardware. Draw the line where FDM does: **cosmetic / geometry failures are
@@ -108,7 +108,7 @@ one — read that from `bambu setup discover`'s SSDP line); it never invents a n
 It also cross-checks the loaded nozzle against the sliced-for nozzle and flags a mismatch loudly:
 **do not dispatch through a `⚠ NOZZLE MISMATCH`.**
 
-### 4 — Dispatch (owner-gated — the operator's call, never the skill's)
+### 4 — Dispatch (Omar's approval on the plate page, one per send)
 
 **Before you dispatch — the pre-send gate.** This is the checklist that answers *"are we ready to
 print?"* — the symmetric bookend to the two gates at the top. Every line must be green, or stop and
@@ -147,15 +147,22 @@ skippable.
    the build plate seated. Say what you saw. A frame that failed to save is a warning, not a pass —
    then the operator looks at the bed in person. Spotting objects once the print starts is the
    X2D's own job (D-092); this photo is for the person sending.
-6. **Owner is at the machine.** Dispatch is owner-gated: the physical send — and any `--yes` — is
-   the operator's, never the skill's. Watching the first layer is not on this list: the X2D does
-   its own first-layer and failure detection (D-092).
+6. **Omar approved this send, and the printer is idle.** *Verify:* the `✓ approval:` and
+   `✓ printer:` lines of `print send --dry-run`. The approval lives on the plate's page in
+   `docs/plates/` (D-093): his tick, or his yes in chat written onto the page with the date and his
+   words. One approval covers one send: once the plate has been sent or printed, a reprint needs a
+   new one, so a plate whose print showed the setup was wrong never goes out again on the old yes.
+   Watching the first layer is not on this list: the X2D does its own first-layer and failure
+   detection (D-092).
 
 Then, and only then:
 
-`bambu print send <plate.3mf> --record`. It is fail-closed: it prints the owner-gate notice and
-refuses unless the operator passes `--yes` or confirms at a TTY (`--dry-run` shows exactly what it
-would send without connecting). **Never pass `--yes` on the owner's behalf.** `--record` scaffolds a
+`bambu print send <plate.3mf> --record`. It is fail-closed: with no live approval on the page, or a
+printer that is busy or will not say, it refuses, and no flag skips either check. Then it asks at a
+TTY; `--yes` skips only that question, and only on a live page approval. The
+[`send-plate`](../send-plate/SKILL.md) skill runs this whole step in order. A send that goes through
+spends the approval: the box is unticked, the stage becomes `sent`, and a dated `sent` row joins the
+page's timeline, which is the log of every approved reprint. `--record` scaffolds a
 draft under the gitignored `.bambu/records/` — pre-filled with the same header builder as step 3, so
 the record and the bench sheet agree.
 
@@ -169,9 +176,9 @@ the record and the bench sheet agree.
 > BambuStudio ground-truth capture ([`docs/issues/first-party-dispatch.md`](../../../docs/issues/first-party-dispatch.md)).
 > The **Bambu Studio GUI** remains a fine alternative — with the plate already open from step 2
 > (`bambu slice open <plate.3mf>`) it is **one click**: confirm the plate, **Print** → send over LAN
-> — but the GUI path does **not** fire `--record`, so scaffold the record by hand if you use it. The
-> owner-gate rule is unchanged on either path: the physical send — and any `--yes` — is the
-> operator's, never the skill's.
+> — but the GUI path does **not** fire `--record`, so scaffold the record by hand if you use it. On
+> either path the send needs Omar's live approval on the page (D-093); the GUI path does not spend
+> it, so untick the box and add the dated `sent` row by hand.
 
 ### 5 — Attend the print, and print the whole card in one session
 
@@ -228,11 +235,11 @@ the measured value; flip the catalog Status and date the iteration row. `validat
   (a detached part dragged into a blob, a crash into bed/gantry) needs active mitigation or the coupon
   is dropped/redesigned. Never risk the printer to close a bet. The X2D's own failure detection is
   that mitigation for small loose parts; it is never asked of Omar per plate (D-092).
-- **Dispatch is owner-gated.** The skill walks to the send and stops. The physical send — and any
-  `--yes` — is the owner's, every time.
-- **The pre-send gate is a checklist, not a vibe.** Before any dispatch, walk step 4's five lines —
-  sidecar clean · ground-truth diff done (first send) · nozzle matches · filament right · owner
-  present — and stop at the first red one. "Are we ready to print?" is answered by that list, never
+- **A send needs Omar's live approval.** His tick on the plate's page, or his yes in chat written
+  onto it (D-093). One approval, one send; `print send` refuses without it, and no flag skips it.
+- **The pre-send gate is a checklist, not a vibe.** Before any dispatch, walk step 4's six lines —
+  sidecar clean · ground-truth diff done (first send) · nozzle matches · filament right · bed empty
+  · approval live and printer idle — and stop at the first red one. "Are we ready to print?" is answered by that list, never
   by feel.
 - **The header is the deliverable.** Record it before measuring; numbers without it are anecdote.
 - **Slicer settings on a calibration plate are measurements.** Supports/brim/`--check` choices are

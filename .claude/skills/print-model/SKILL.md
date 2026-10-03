@@ -95,7 +95,8 @@ orchestrating the ones that already exist. So:
   [`prints_gate.py`](../../../.claude/gates/prints_gate.py); the calibration bench-sheet truth via
   [`prototype`](../prototype/SKILL.md).
 - **Refuses:** dispatch. The skill stops at the owner gate — it produces the plate and the plan; it
-  does not upload or start a print, and never passes `--yes` on the operator's behalf. Why dispatch is
+  does not upload or start a print. The send is the [`send-plate`](../send-plate/SKILL.md) skill's, on
+  Omar's live approval on the plate page (D-093). Why dispatch is
   materially harder (FTPS + RSA-signed control commands) is the design doc §9.
 
 ## How one run flows
