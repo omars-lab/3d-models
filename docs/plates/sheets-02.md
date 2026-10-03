@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "Should star points stay sharp or be softened, and by how much?"
 kind: taste
+maturity: experiment
 bets: []
 unblocks:
   - "smooth-lines call 2: star points sharp or softened"

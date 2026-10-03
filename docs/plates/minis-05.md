@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "Which thin join holds a pair together best, the butterfly key or the built-in tab?"
 kind: new
+maturity: experiment
 bets:
   - CAL-CST-06
 unblocks:

@@ -40,9 +40,20 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       weights in the `prioritize-prints` skill's scoring.md. Priority is presented, never
       stored (prints-tab-design §6): no page holds a rank, the queue is recomputed.
 
+  P8  **Maturity is earned.** `maturity` is `experiment`, `repeatable` or `production`
+      (`docs/design/printing/plate-maturity-design.md`), and no higher than the print records
+      show. Repeatable: every piece in the recipe — same model file, piece, params, on any
+      plate — has its latest K verdicts all `keep`. Production: repeatable, `bed_fill` at least
+      the rubric's, `kind: repeat`, and this plate's own latest run kept every piece and printed
+      what the recipe holds now. K and the fill are read from the grade-plate skill's
+      rubric.md. A level above experiment has a `promoted` row, and the last promoted or
+      demoted row names the level the page says. Hard case: three pieces kept twice each and
+      one never kept is not repeatable — every piece, not a total.
+
 Not a finding: a ticked approval box that the frontmatter does not know yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
-failed on it would block every other session's commit until then.
+failed on it would block every other session's commit until then. Nor is a page that claims
+less maturity than its prints show: experiment asks nothing, and promoting is a choice.
 
   rank:        python3 .claude/gates/plates_gate.py --rank
   as data:     python3 .claude/gates/plates_gate.py --rank --json   (3d-model-hub's plate queue)
@@ -54,6 +65,7 @@ failed on it would block every other session's commit until then.
 from __future__ import annotations
 
 import datetime as dt
+import json
 import re
 import sys
 from pathlib import Path
@@ -67,11 +79,13 @@ ROOT = Path(__file__).resolve().parents[2]
 PLATES = ROOT / "docs" / "plates"
 PRINTS = ROOT / "docs" / "prints"
 SCORING = ROOT / ".claude" / "skills" / "prioritize-prints" / "scoring.md"
+RUBRIC = ROOT / ".claude" / "skills" / "grade-plate" / "rubric.md"
 BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
 
 REQUIRED = (
     "plate", "recipe", "stage", "approved", "approved_on", "times_printed", "runs",
-    "answers", "kind", "bets", "unblocks", "minutes", "grams", "bed_plates", "risk", "pictures",
+    "answers", "kind", "maturity", "bets", "unblocks", "minutes", "grams", "bed_plates", "risk",
+    "pictures",
 )
 # planned: designed, waiting on a build before it can have a recipe or a slice.
 # proposed: page written, not yet looked over. waiting: looked over, waiting on Omar's tick.
@@ -82,7 +96,11 @@ RANKED = frozenset({"proposed", "waiting", "approved"})
 SHOWN = frozenset({"waiting", "approved"})
 KINDS = ("new", "taste", "repeat")
 RISKS = ("ok", "watch", "hold")
-EVENTS = ("proposed", "reviewed", "approved", "held", "sliced", "sent", "printed", "judged", "retired")
+# What past prints showed, lowest first (plate-maturity-design §2). Not `kind`: kind is why the
+# next print happens, maturity is what the last ones proved.
+MATURITY = ("experiment", "repeatable", "production")
+EVENTS = ("proposed", "reviewed", "approved", "held", "sliced", "sent", "printed", "judged",
+          "promoted", "demoted", "retired")
 
 Q_START, Q_END = "<!-- queue:start -->", "<!-- queue:end -->"
 ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*([a-z]+)\b(.*)$")
@@ -145,6 +163,193 @@ def timeline(body: str) -> list[tuple[str, str, str]]:
         if r:
             rows.append((r.group(1), r.group(2), r.group(3)))
     return rows
+
+
+# ---------------------------------------------------------------------------
+# P8 — maturity: what the page claims against what the prints showed
+# ---------------------------------------------------------------------------
+
+def read_rubric(rubric: Path) -> dict:
+    """The `maturity:` yaml block in the grade-plate skill's rubric.md, read like the weights."""
+    text = rubric.read_text(encoding="utf-8")
+    for block in re.findall(r"```yaml\n(.*?)```", text, flags=re.DOTALL):
+        data = yaml.safe_load(block)
+        if isinstance(data, dict) and isinstance(data.get("maturity"), dict):
+            m = data["maturity"]
+            if not (isinstance(m.get("keeps_for_repeatable"), int) and m["keeps_for_repeatable"] > 0
+                    and _pos(m.get("production_fill")) and m["production_fill"] <= 1):
+                raise ValueError(f"{rubric}: maturity needs keeps_for_repeatable (a positive "
+                                 "whole number) and production_fill (in (0, 1])")
+            return m
+    raise ValueError(f"{rubric}: no ```yaml block with a `maturity:` mapping")
+
+
+def _norm(v):
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        return v
+    return round(float(v), 6)
+
+
+def piece_key(source, piece, params, window=None) -> str:
+    """One piece, the same on any plate: model file, piece, params, and the window a sampler
+    cell is cut to. A recipe's `{ gap: 0.1 }` and a record's `{"gap": 0.1}` give the same key;
+    a number is a number, 2 and 2.0 alike."""
+    params = params or {}
+    p = {str(k): _norm(v) for k, v in params.items()} if isinstance(params, dict) else params
+    return json.dumps([source, piece or "", p] + ([str(window)] if window else []), sort_keys=True)
+
+
+def _obj_key(o: dict) -> str:
+    """A record object's key; `bambu slice sheet` writes a vendored cell as `3d-models:<stl>`."""
+    return piece_key(o.get("source"), o.get("piece"), o.get("params"), o.get("window"))
+
+
+def _label(key: str) -> str:
+    source, piece, params, *window = json.loads(key)
+    name = str(source).rsplit("/", 1)[-1].removesuffix(".bkr")
+    knobs = ", ".join(f"{k} {v:g}" if isinstance(v, float) else f"{k} {v}"
+                      for k, v in (params or {}).items())
+    return (name + (f" {piece}" if piece else "") + (f" ({knobs})" if knobs else "")
+            + (f" window {window[0]}" if window else ""))
+
+
+def _records(prints: Path) -> list[tuple[str, dict]]:
+    out = []
+    for rec in record_dirs(prints):
+        data, _ = parse_frontmatter((rec / "index.md").read_text(encoding="utf-8"))
+        out.append((rec.name, data or {}))
+    return out  # record_dirs sorts by name, and a run's name starts with its date
+
+
+def piece_history(prints: Path) -> dict[str, list[tuple[str, str]]]:
+    """piece key -> [(run, verdict)], oldest first, across every record on every plate."""
+    out: dict[str, list[tuple[str, str]]] = {}
+    for run_id, data in _records(prints):
+        for o in data.get("objects") or []:
+            if isinstance(o, dict) and o.get("verdict"):
+                out.setdefault(_obj_key(o), []).append((run_id, o["verdict"]))
+    return out
+
+
+def plate_runs(prints: Path) -> dict[str, list[dict]]:
+    """plate -> its runs, oldest first: what each printed, whether every piece was kept, and
+    how many of its bet readings landed (any verdict but no-reading)."""
+    out: dict[str, list[dict]] = {}
+    for run_id, data in _records(prints):
+        name = plate_of(data.get("plate"))
+        if not name:
+            continue
+        objs = [o for o in data.get("objects") or [] if isinstance(o, dict)]
+        counts: dict[str, int] = {}
+        verdicts: dict[str, int] = {}
+        for o in objs:
+            key = _obj_key(o)
+            counts[key] = counts.get(key, 0) + (o.get("count") or 1)
+            verdicts[o.get("verdict")] = verdicts.get(o.get("verdict"), 0) + 1
+        readings = [r for r in data.get("readings") or [] if isinstance(r, dict)]
+        out.setdefault(name, []).append({
+            "run": run_id, "counts": counts, "verdicts": verdicts,
+            "clean": bool(objs) and all(o.get("verdict") == "keep" for o in objs),
+            "readings": len(readings),
+            "landed": sum(1 for r in readings if r.get("verdict") not in (None, "no-reading")),
+        })
+    return out
+
+
+def recipe_pieces(path: Path, data: dict) -> dict[str, int] | str:
+    """piece key -> how many the recipe prints, or why there is nothing to read."""
+    if data.get("recipe") is None:
+        return "no recipe yet"
+    try:
+        recipe = yaml.safe_load((path.parent / f"{path.stem}.yaml").read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as e:
+        return f"the recipe does not read ({e})"
+    recipe = recipe if isinstance(recipe, dict) else {}
+    # A plate lists `items`; a sampler sheet a `card` with `cells` on it, printed as one object
+    # but recorded, and judged, part by part (`bambu slice sheet`).
+    items = recipe.get("items") or ([recipe["card"]] + list(recipe.get("cells") or [])
+                                    if isinstance(recipe.get("card"), dict) else [])
+    if not items:
+        return "the recipe has no items"
+    out: dict[str, int] = {}
+    for it in items:
+        if isinstance(it, dict):
+            src = it.get("bkr") or (f"3d-models:{it['stl']}" if it.get("stl") else None)
+            key = piece_key(src, it.get("piece"), it.get("params"), it.get("window"))
+            out[key] = out.get(key, 0) + (it.get("count") or 1)
+    return out
+
+
+def maturity_evidence(path: Path, data: dict, history: dict, runs: dict, rubric: dict) -> dict:
+    """The highest level the prints support: {level, why: [lines], pieces: [per-piece facts]}.
+
+    repeatable  every piece in the recipe has its latest K verdicts all `keep`, on any plate.
+                The latest K, not any K: a keep, keep, adjust piece was judged wrong last.
+    production  repeatable, the page's `bed_fill` is at least the rubric's, and this plate's
+                own latest run kept every piece and printed what the recipe prints now. Pieces
+                kept on other plates do not show that this layout prints clean.
+    """
+    k, need = rubric["keeps_for_repeatable"], rubric["production_fill"]
+    pieces = recipe_pieces(path, data)
+    if isinstance(pieces, str):
+        return {"level": "experiment", "why": [pieces], "pieces": []}
+    facts, short = [], []
+    for key in pieces:
+        seen = [v for _, v in history.get(key, [])]
+        ok = len(seen) >= k and all(v == "keep" for v in seen[-k:])
+        facts.append({"piece": _label(key), "verdicts": seen, "repeatable": ok})
+        if not ok:
+            short.append(f"{_label(key)}: {', '.join(seen) or 'never printed'}")
+    if short:
+        return {"level": "experiment", "pieces": facts,
+                "why": [f"not every piece has its last {k} verdicts keep:"] + short}
+    why = [f"every piece's last {k} verdicts are keep"]
+    own = runs.get(path.stem, [])
+    fill = data.get("bed_fill")
+    gaps = []
+    if not (_pos(fill) and fill >= need):
+        gaps.append(f"bed_fill {fill!r} is under {need}")
+    if not own:
+        gaps.append("this plate has never printed")
+    elif not own[-1]["clean"]:
+        gaps.append(f"its latest run {own[-1]['run']} did not keep every piece")
+    elif own[-1]["counts"] != pieces:
+        gaps.append(f"its latest run {own[-1]['run']} printed a different set than the recipe "
+                    "holds now")
+    if gaps:
+        return {"level": "repeatable", "pieces": facts, "why": why + ["not production: " + "; ".join(gaps)]}
+    return {"level": "production", "pieces": facts,
+            "why": why + [f"bed_fill {fill} and its latest run {own[-1]['run']} kept every piece"]}
+
+
+def check_maturity(path: Path, data: dict, body: str, history: dict, runs: dict,
+                   rubric: dict) -> tuple[list[str], list[str]]:
+    """(findings, notices). Claiming more than the prints show is a finding; claiming less is a
+    notice, since an experiment needs nothing and a promotion is Omar's to want."""
+    name, out, notes = path.stem, [], []
+    level = data.get("maturity")
+    if level not in MATURITY:
+        return [f"{name}: P8 maturity {level!r} is not one of {list(MATURITY)}"], []
+    fill = data.get("bed_fill")
+    if fill is not None and not (_pos(fill) and fill <= 1):
+        out.append(f"{name}: P8 bed_fill {fill!r} is not a share of the bed in (0, 1]")
+    ev = maturity_evidence(path, data, history, runs, rubric)
+    if MATURITY.index(level) > MATURITY.index(ev["level"]):
+        out.append(f"{name}: P8 maturity '{level}' but the prints show {ev['level']} — "
+                   + " ".join(ev["why"]))
+    elif MATURITY.index(level) < MATURITY.index(ev["level"]):
+        notes.append(f"{name}: the prints would carry {ev['level']}, the page says {level} — "
+                     "grade it (grade-plate skill)")
+    if level == "production" and data.get("kind") != "repeat":
+        out.append(f"{name}: P8 a production plate prints again what is known, so its kind is "
+                   f"'repeat', not {data.get('kind')!r}")
+    moves = [(d, ev_, rest) for d, ev_, rest in timeline(body) if ev_ in ("promoted", "demoted")]
+    if moves and level not in moves[-1][2]:
+        out.append(f"{name}: P8 maturity '{level}' but the last promoted/demoted row "
+                   f"({moves[-1][0]}) does not name it")
+    if not moves and level != "experiment":
+        out.append(f"{name}: P8 maturity '{level}' with no 'promoted' row saying when and why")
+    return out, notes
 
 
 def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
@@ -376,21 +581,39 @@ def write_queue(readme: Path, block: str) -> None:
 
 # ---------------------------------------------------------------------------
 
-def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path
+def page_findings(path: Path, data: dict, body: str, ctx: dict) -> tuple[list[str], list[str]]:
+    """(findings, notices) for one page: P1-P4 and P6, then P8 once the shape holds."""
+    f = check_page(path, data, body, ctx["records"], ctx["bet_ids"])
+    if f:
+        return f, []
+    return check_maturity(path, data, body, ctx["history"], ctx["runs"], ctx["rubric"])
+
+
+def context(prints: Path, bets: Path, rubric: Path) -> dict:
+    return {"records": records_by_plate(prints),
+            "bet_ids": set(re.findall(r"CAL-[A-Z]+-\d+", bets.read_text(encoding="utf-8"))),
+            "history": piece_history(prints), "runs": plate_runs(prints),
+            "rubric": read_rubric(rubric)}
+
+
+def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Path = RUBRIC
                ) -> tuple[list[str], list[str], int, str | None]:
     """(findings, notices, pages checked, rendered queue or None)."""
     findings: list[str] = []
     notices: list[str] = []
-    records = records_by_plate(prints)
-    bet_ids = set(re.findall(r"CAL-[A-Z]+-\d+", bets.read_text(encoding="utf-8")))
+    try:
+        ctx = context(prints, bets, rubric)
+    except (OSError, ValueError) as e:
+        return [f"rubric: P8 {e}"], [], 0, None
     pages = read_pages(plates)
     good: list[dict] = []
     for path, data, body, err in pages:
         if err:
             findings.append(f"{path.stem}: P1 {err}")
             continue
-        f = check_page(path, data, body, records, bet_ids)
+        f, n = page_findings(path, data, body, ctx)
         findings += f
+        notices += n
         if not f:
             good.append(data)
         if TICKED_APPROVE.search(body) and data.get("approved") is not True:
@@ -413,8 +636,8 @@ def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path
     return findings, notices, len(pages), rendered
 
 
-def run(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
-    findings, notices, n, _ = check_tree(plates, prints, scoring, bets)
+def run(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=RUBRIC) -> int:
+    findings, notices, n, _ = check_tree(plates, prints, scoring, bets, rubric)
     for x in notices:
         print(f"notice: {x}")
     if findings:
@@ -429,14 +652,13 @@ def run(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
     return 0
 
 
-def sort_pages(plates: Path, prints: Path, bets: Path
+def sort_pages(plates: Path, prints: Path, bets: Path, rubric: Path = RUBRIC
                ) -> tuple[list[dict], list[str], dict[str, str | None]]:
     """(pages with no finding, the findings of the rest, each page's title)."""
-    records = records_by_plate(prints)
-    bet_ids = set(re.findall(r"CAL-[A-Z]+-\d+", bets.read_text(encoding="utf-8")))
+    ctx = context(prints, bets, rubric)
     good, bad, titles = [], [], {}
     for path, data, body, err in read_pages(plates):
-        f = [f"{path.stem}: {err}"] if err else check_page(path, data, body, records, bet_ids)
+        f = [f"{path.stem}: {err}"] if err else page_findings(path, data, body, ctx)[0]
         bad += f
         if not f:
             good.append(data)
@@ -444,10 +666,9 @@ def sort_pages(plates: Path, prints: Path, bets: Path
     return good, bad, titles
 
 
-def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
+def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=RUBRIC) -> int:
     """--rank --json: the queue as JSON on stdout. Refuses, like --write, while a page is wrong."""
-    import json
-    good, bad, titles = sort_pages(plates, prints, bets)
+    good, bad, titles = sort_pages(plates, prints, bets, rubric)
     if bad:
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before ranking them", file=sys.stderr)
@@ -456,9 +677,10 @@ def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS) -> int:
     return 0
 
 
-def rewrite(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, quiet=False) -> int:
+def rewrite(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, quiet=False,
+            rubric=RUBRIC) -> int:
     """--write: rewrite the queue block. Refuses while any page has a finding other than P7."""
-    good, bad, _ = sort_pages(plates, prints, bets)
+    good, bad, _ = sort_pages(plates, prints, bets, rubric)
     if bad:
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before writing the queue", file=sys.stderr)
@@ -488,6 +710,27 @@ weights:
 ```
 """
 
+_RUBRIC_MD = """# rubric
+
+```yaml
+maturity:
+  keeps_for_repeatable: 2
+  production_fill: 0.5
+```
+"""
+
+# minis-09 prints two pieces: one A, two B. The maturity cases judge them on records.
+_A = ("bikar:a.bkr", "Hex", {"gap": 0.1})
+_B = ("bikar:b.bkr", None, {})
+_RECIPE_09 = """bed: x2d
+items:
+  - bkr: bikar:a.bkr
+    piece: Hex
+    params: { gap: 0.1 }
+  - bkr: bikar:b.bkr
+    count: 2
+"""
+
 
 def _page(plate: str, fm: dict, timeline_rows: list[str], tick: str = " ") -> str:
     return ("---\n" + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True) + "---\n\n"
@@ -505,7 +748,8 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     (rec / "index.md").write_text('---\nrun: 2026-09-26-minis-09\nplate: "minis-09 — a test"\n---\n',
                                   encoding="utf-8")
     base = {"approved": False, "approved_on": None, "times_printed": 0, "runs": [],
-            "answers": "does it hold", "kind": "new", "bets": ["CAL-CST-06"],
+            "answers": "does it hold", "kind": "new", "maturity": "experiment",
+            "bets": ["CAL-CST-06"],
             "unblocks": ["a decision"], "minutes": 120, "grams": 30, "bed_plates": 1,
             "risk": "watch", "pictures": ["minis-08-media/sheet.png"]}
     for n, extra, rows in (
@@ -517,7 +761,8 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
          ["| 2026-09-25 | proposed | yaml |",
           "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |"]),
     ):
-        (plates / f"{n}.yaml").write_text("bed: x2d\n", encoding="utf-8")
+        (plates / f"{n}.yaml").write_text(_RECIPE_09 if n == "minis-09" else "bed: x2d\n",
+                                          encoding="utf-8")
         fm = {"plate": n, "recipe": f"{n}.yaml", "stage": extra["stage"], **base, **extra}
         (plates / f"{n}.md").write_text(_page(n, fm, rows), encoding="utf-8")
     # A designed plate that waits on a build: no recipe, no slice, no picture yet.
@@ -530,8 +775,47 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     bets = tmp / "bets.md"
     bets.write_text("CAL-CST-06 dovetail neck\n", encoding="utf-8")
     (plates / "README.md").write_text(f"# Plates\n\n{Q_START}\n{Q_END}\n", encoding="utf-8")
-    rewrite(plates, prints, scoring, bets, quiet=True)
+    (tmp / "rubric.md").write_text(_RUBRIC_MD, encoding="utf-8")
+    rewrite(plates, prints, scoring, bets, quiet=True, rubric=_rubric(plates))
     return plates, prints, scoring, bets
+
+
+def _rubric(plates: Path) -> Path:
+    return plates.parents[1] / "rubric.md"
+
+
+def _record(plates: Path, run: str, objects: list[tuple[tuple, int, str]]) -> None:
+    """A record under the fixture's prints/: each object is (piece, count, verdict)."""
+    rec = plates.parent / "prints" / run
+    rec.mkdir(parents=True, exist_ok=True)
+    objs = [{"entry": f"c{i}", "source": src, **({"piece": piece} if piece else {}),
+             "params": params, "count": count, "verdict": verdict}
+            for i, ((src, piece, params), count, verdict) in enumerate(objects, 1)]
+    plate = run.split("-", 3)[3]
+    (rec / "index.md").write_text("---\n" + yaml.safe_dump(
+        {"run": run, "plate": plate, "objects": objs}, sort_keys=False) + "---\n", encoding="utf-8")
+
+
+def _mature(level: str, history: list[tuple[str, str, str]], own: list | None = None,
+            kind: str = "repeat", fill: float | None = 0.6, row: str | None = None):
+    """minis-09 claims `level`; `history` is (run on another plate, A's verdict, B's verdict);
+    `own` replaces minis-09's own record's objects."""
+    def f(plates: Path) -> None:
+        for run, va, vb in history:
+            _record(plates, run, [(_A, 1, va), (_B, 2, vb)])
+        if own is not None:
+            _record(plates, "2026-09-26-minis-09", own)
+        _edit("minis-09", "kind: new\nmaturity: experiment",
+              f"kind: {kind}\nmaturity: {level}" + (f"\nbed_fill: {fill}" if fill else ""))(plates)
+        if level != "experiment" or row:
+            _edit("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
+                  "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |\n"
+                  + (row or f"| 2026-09-28 | promoted | to {level}: the grade |"))(plates)
+    return f
+
+
+_KEPT = [("2026-09-20-minis-07", "keep", "keep"), ("2026-09-21-minis-07", "keep", "keep")]
+_CLEAN_OWN = [(_A, 1, "keep"), (_B, 2, "keep")]
 
 
 def _edit(page: str, old: str, new: str):
@@ -611,6 +895,45 @@ CASES = [
      _edit("minis-08", "| 2026-09-30 | reviewed", "| 2026-09-01 | reviewed"),
      "P6 timeline rows are not in date order"),
     ("P7 a page edited, queue not rewritten", _stale_queue, "P7 the queue block is not"),
+    ("P8 a word outside the maturity levels",
+     _edit("minis-09", "maturity: experiment", "maturity: prototype"), "P8 maturity 'prototype'"),
+    ("P8 repeatable when every piece's last two verdicts are keep", _mature("repeatable", _KEPT),
+     None),
+    ("P8 repeatable on a high keep count while one piece was never kept (an aggregate is not "
+     "every part)",
+     _mature("repeatable", [("2026-09-19-minis-07", "keep", "adjust"),
+                            ("2026-09-20-minis-07", "keep", "adjust"),
+                            ("2026-09-21-minis-07", "keep", "drop")]),
+     "b: adjust, adjust, drop"),
+    ("P8 repeatable with two keeps but judged wrong last (the latest two, not any two)",
+     _mature("repeatable", _KEPT + [("2026-09-22-minis-07", "adjust", "keep")]),
+     "P8 maturity 'repeatable' but the prints show experiment"),
+    ("P8 repeatable with no promoted row", _mature("repeatable", _KEPT,
+     row="| 2026-09-28 | judged | nothing |"), "no 'promoted' row"),
+    ("P8 the last maturity row names another level",
+     _mature("repeatable", _KEPT, row="| 2026-09-28 | promoted | to repeatable |\n"
+             "| 2026-09-29 | demoted | to experiment: a new piece |"),
+     "the last promoted/demoted row (2026-09-29) does not name it"),
+    ("P8 production: kept pieces, full bed, its own latest run kept everything",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN), None),
+    ("P8 production on pieces kept elsewhere while this plate never printed clean",
+     _mature("production", _KEPT), "its latest run 2026-09-26-minis-09 did not keep every piece"),
+    ("P8 production whose own run printed a different set than the recipe now holds",
+     _mature("production", _KEPT[:1], own=[(_A, 1, "keep"), (_B, 1, "keep")]),
+     "printed a different set than the recipe holds now"),
+    ("P8 production with the bed under the rubric's fill",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN, fill=0.3), "bed_fill 0.3 is under 0.5"),
+    ("P8 production with no bed_fill at all",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN, fill=None), "bed_fill None is under 0.5"),
+    ("P8 production that is not kind repeat",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN, kind="taste"),
+     "its kind is 'repeat', not 'taste'"),
+    ("P8 a bed_fill that is not a share of the bed",
+     _mature("experiment", [], fill=1.4, row="| 2026-09-28 | judged | x |"),
+     "P8 bed_fill 1.4 is not a share"),
+    ("P8 a planned page with no recipe claims repeatable",
+     _edit("sheets-09", "maturity: experiment", "maturity: repeatable"),
+     "P8 maturity 'repeatable' but the prints show experiment — no recipe yet"),
 ]
 
 
@@ -632,7 +955,7 @@ def self_test() -> int:
             plates, prints, scoring, bets = _build(case)
             if mutate:
                 mutate(plates)
-            found, _, _, _ = check_tree(plates, prints, scoring, bets)
+            found, _, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
             if want is None:
                 report(not found, label, f"clean fixture reported {found}")
             else:
@@ -642,9 +965,49 @@ def self_test() -> int:
         case = tmp / "tick-is-a-notice"
         plates, prints, scoring, bets = _build(case)
         _edit("minis-08", "- [ ] **Approve**", "- [x] **Approve**")(plates)
-        found, notices, _, _ = check_tree(plates, prints, scoring, bets)
+        found, notices, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
         report(not found and len(notices) == 1, "a ticked box not read back is a notice only",
                f"findings={found} notices={notices}")
+
+        # Claiming less than the prints show is a notice, never a finding.
+        case = tmp / "under-claim-is-a-notice"
+        plates, prints, scoring, bets = _build(case)
+        _mature("experiment", _KEPT, fill=None, row="| 2026-09-28 | judged | x |")(plates)
+        found, notices, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
+        report(not found and any("would carry repeatable" in n for n in notices),
+               "a page under what its prints show is a notice only",
+               f"findings={found} notices={notices}")
+
+        # The rubric is read at run time, so raising K turns a repeatable plate back.
+        case = tmp / "rubric-raised"
+        plates, prints, scoring, bets = _build(case)
+        _mature("repeatable", _KEPT)(plates)
+        _rubric(plates).write_text(_RUBRIC_MD.replace("keeps_for_repeatable: 2",
+                                                      "keeps_for_repeatable: 3"), encoding="utf-8")
+        found, _, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
+        report(any("last 3 verdicts" in f for f in found), "the rubric's K is the one applied",
+               str(found))
+
+        # A recipe's yaml params and a record's JSON params name the same piece.
+        report(piece_key("x.bkr", "Hex", {"gap": 0.1, "h": 4}) == piece_key("x.bkr", "Hex", {"h": 4.0, "gap": 0.1})
+               and piece_key("x.bkr", None, {}) == piece_key("x.bkr", "", None)
+               and piece_key("x.bkr", "Hex", {"gap": 0.1}) != piece_key("x.bkr", "Hex", {"gap": 0.15}),
+               "a piece is its file, piece and params, however they are written", "")
+
+        # A sampler sheet's pieces are its card and every cell, as `bambu slice sheet` records
+        # them; two cells of one model cut to different windows are two pieces.
+        case = tmp / "sheet-pieces"
+        case.mkdir()
+        (case / "s.yaml").write_text(
+            "card: { bkr: 'bikar:cards.bkr', piece: Card }\ncells:\n"
+            "  - { name: A, bkr: 'bikar:c.bkr', piece: Coaster, window: '30@0,0' }\n"
+            "  - { name: B, bkr: 'bikar:c.bkr', piece: Coaster, window: '30@9,1' }\n"
+            "  - { name: C, stl: src/x.stl, window: '30@0,0' }\n", encoding="utf-8")
+        got = recipe_pieces(case / "s.md", {"recipe": "s.yaml"})
+        report(isinstance(got, dict) and len(got) == 4
+               and piece_key("3d-models:src/x.stl", None, {}, "30@0,0") in got
+               and piece_key("bikar:c.bkr", "Coaster", {}, "30@9,1") in got,
+               "a sheet's card and cells are its pieces, a window part of each", str(got))
 
         # The ranking: held plates are listed apart, and `after` beats ROI.
         w = yaml.safe_load(_WEIGHTS_MD.split("```yaml\n")[1].split("```")[0])["weights"]
@@ -684,7 +1047,7 @@ def self_test() -> int:
         _edit("minis-08", "grams: 30", "grams: null")(plates)
         with contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.redirect_stderr(io.StringIO()):
-            code = rank_json(plates, prints, scoring, bets)
+            code = rank_json(plates, prints, scoring, bets, _rubric(plates))
         report(code == 1 and out.getvalue() == "", "--rank --json refuses a page with a finding",
                f"exit {code}, stdout {out.getvalue()!r}")
     finally:

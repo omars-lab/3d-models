@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "Do the first two patterns read as coasters at 40 mm, with the straps at their floor?"
 kind: new
+maturity: experiment
 bets:
   - CAL-CST-01
   - CAL-CST-02

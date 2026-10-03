@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "What does each coaster style look like in the hand, for both patterns?"
 kind: taste
+maturity: experiment
 bets:
   - CAL-CST-01
   - CAL-CST-07

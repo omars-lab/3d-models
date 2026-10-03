@@ -8,6 +8,7 @@ times_printed: 0
 runs: []
 answers: "Lowered, flush or raised fills: which looks right, and does a raised fill look any different from a tall loose piece?"
 kind: taste
+maturity: experiment
 bets: []
 unblocks:
   - "loose-pieces call 3: raised fills on every fill coaster, or only through loose pieces"
