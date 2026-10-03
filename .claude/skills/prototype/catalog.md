@@ -1848,10 +1848,14 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
-- **Status**: printing (2026-10-02) — the plate [sheets-04](../../../docs/plates/sheets-04.md)
-  (one bed, 62 min, 17 g) was approved by Omar and sent by them from Bambu Studio the same day; it
-  waits on the pieces being judged. Failure detection is the X2D's own, not a per-plate yes (D-092,
-  loose-pieces design §3.7).
+- **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/plates/sheets-04.md)
+  (one bed, 62 min, 17 g) printed, and all the small pieces fell right through the minimal
+  coaster's holes at every gap ([record](../../../docs/prints/2026-10-02-sheets-04/index.md)):
+  that coaster has no floor, so a piece smaller than its hole is held by nothing. Next is
+  [sheets-04b](../../../docs/plates/sheets-04b.md), pieces only (Omar has the coaster), 4 mm tall
+  and flat via the new `height` knob, at gaps 0.05, 0, −0.05 and −0.10 (a gap below zero is a
+  press fit, bikar #300); one bed, 41 min, 12 g, waiting on Omar's tick. Failure detection is the
+  X2D's own, not a per-plate yes (D-092, loose-pieces design §3.7).
   Since 2026-10-02 (Omar's ask) it prints the pieces in the real gBV minimal coaster (CS-13,
   `gBV_JTt3Kxk-minimal-coaster.bkr`, 4 mm, no base) rather than this file's `Frame`. Since bikar
   #297 that coaster's holes are cut on the same exact outline as the `Frame` pockets, so every
