@@ -220,9 +220,10 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the p
 | `--plate <n>` | plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode) |
 | `--ams-mapping <spec>` | [X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays) |
 | `--md5 <hex>` | [X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty) |
-| `--no-bed-leveling` | skip auto bed-leveling before this print |
-| `--no-flow-cali` | skip flow calibration before this print |
-| `--no-vibration-cali` | skip vibration calibration before this print |
+| `--no-bed-leveling` | skip bed leveling before this print (default: auto, the printer decides, as Studio sends it) |
+| `--no-flow-cali` | skip flow calibration before this print (default: auto) |
+| `--no-nozzle-offset-cali` | skip the two-nozzle offset calibration before this print (default: auto) |
+| `--vibration-cali` | run vibration calibration before this print (default off, as Studio sends it) |
 | `--no-bed-photo` | skip the camera photo of the bed taken before the confirm (and on --dry-run) |
 | `-y, --yes` | skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check |
 | `--allow-unverified` | dispatch a plate with no warnings-capture sidecar (high-bar override of the fail-closed gate) |

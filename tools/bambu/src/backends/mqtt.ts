@@ -32,11 +32,18 @@ export type PrinterStatus = Record<string, unknown> & {
 };
 
 /**
+ * A calibration step's mode in a start command, as Studio sends it to an X2D: 0 off, 1 on, 2 auto
+ * (the printer decides). The start G-code reads these through `M1002 judge_flag`, so the job, not a
+ * boolean, decides whether the step runs (docs/research/2026-10-03-studio-start-payload.md, row 3).
+ */
+export type CaliMode = 0 | 1 | 2;
+
+/**
  * Options for the `print.project_file` command that starts a print from an ALREADY-UPLOADED file
- * (#50). The two fields the RE corpus disagrees on for a dual-nozzle X2D — `amsMapping`, `md5` — are
- * exposed so they can be settled against a ground-truth capture without a code change
- * (see docs/issues/first-party-dispatch.md; treat as a CAL-shaped bet). The rest carry grounded
- * defaults that two independent working clients (pybambu, bambulabs_api) send.
+ * (#50). The defaults are what Bambu Studio sends an X2D, from the one wire capture we have
+ * (bambuddy #1192, X2D firmware 01.01, two Studio sends) and Studio's own send code; the checked
+ * research is docs/research/2026-10-03-studio-start-payload.md. `md5` is still disputed between
+ * captures, and the external spool's `ams_mapping2` entry has not been seen on an X2D.
  */
 export interface ProjectFileOptions {
   /** Bare remote filename at the FTP root, from FtpsBackend.uploadFile (e.g. "plate_1.3mf"). */
@@ -51,17 +58,58 @@ export interface ProjectFileOptions {
    * this does not match the plate on the bed (sheets-04b, 2026-10-03).
    */
   bedType: string;
-  /** [X2D-UNCONFIRMED] filament→slot map. Default [0]; dual-nozzle firmware may need a nozzle field. */
+  /**
+   * Filament→tray map, one entry per project filament: `unit*4 + tray` for an AMS tray, 254/255 for
+   * the external spool, -1 unused (frame.ts trayIndex). Default [0]. `ams_mapping2` is built from it.
+   */
   amsMapping?: number[] | string;
-  /** [X2D-UNCONFIRMED] file checksum. Default "" (accepted on P1/A1; X1-class historically validated it). */
+  /** [X2D-UNCONFIRMED] file checksum. Default "". Studio sends a real MD5 or "from_sd_card"; the X2D took "". */
   md5?: string;
   useAms?: boolean; // default false (single filament / external spool)
-  bedLeveling?: boolean; // default true
-  flowCali?: boolean; // default true
-  vibrationCali?: boolean; // default true
-  layerInspect?: boolean; // default false
+  bedLeveling?: CaliMode; // auto_bed_leveling, default 2 (auto)
+  flowCali?: CaliMode; // extrude_cali_flag, default 2 (auto)
+  nozzleOffsetCali?: CaliMode; // nozzle_offset_cali, default 2 (auto)
+  vibrationCali?: boolean; // default false: Studio hard-codes it off (SelectMachine.cpp L3371-3383)
+  layerInspect?: boolean; // default true, as Studio sends it
   timelapse?: boolean; // default false
-  sequenceId?: string; // echo-back id; default "0"
+  sequenceId?: string; // echo-back id; default startSequenceId() — in the 20000s, never reused
+}
+
+/**
+ * A `sequence_id` for a start command: in the 20000s, as Studio's X2D sends are (20001, 20002), and
+ * different from one run of the CLI to the next, since the printer refuses an id reused across
+ * restarts (err_code 84033544, open-bamboo print ABI L164). The seconds clock gives a new id per
+ * second and comes round again only after 10,000 s.
+ */
+export function startSequenceId(nowMs: number = Date.now()): string {
+  return String(20000 + (Math.floor(nowMs / 1000) % 10000));
+}
+
+/** The external spool's tray numbers (frame.ts trayIndex): 254, and 255 for a second spool. */
+const isExternal = (i: number): boolean => i === 254 || i === 255;
+
+/**
+ * Studio's `ams_mapping2` from our flat map: `{ams_id, slot_id}` per filament, `{255, 255}` for an
+ * unused one (the P2S capture: `[3,-1,-1]` → `[{0,3},{255,255},{255,255}]`; the X2D capture:
+ * `[1,0]` → `[{0,1},{0,0}]`). [X2D-UNCONFIRMED] the external spool: bambuddy's notes say ams_id 254
+ * is the X2D's left nozzle spool and 255 the right one, so its own number with slot 0; no capture of
+ * an X2D external-spool send has been seen.
+ */
+export function amsMapping2(mapping: number[]): { ams_id: number; slot_id: number }[] {
+  return mapping.map((i) => {
+    if (isExternal(i)) return { ams_id: i, slot_id: 0 };
+    if (i < 0) return { ams_id: 255, slot_id: 255 };
+    return { ams_id: Math.floor(i / 4), slot_id: i % 4 };
+  });
+}
+
+/**
+ * The flat `ams_mapping` as sent: the external spool becomes -1 there and lives only in
+ * `ams_mapping2`, because a 254/255 in the flat list makes the printer raise 0700_8012 (bambuddy's
+ * notes, carried by the research, single-source).
+ */
+function flatMappingForSend(mapping: number[]): number[] {
+  return mapping.map((i) => (isExternal(i) ? -1 : i));
 }
 
 /** A `print.*` request payload as the firmware expects it: `{ print: { ... } }`. */
@@ -71,17 +119,23 @@ export type PrintRequest = { print: Record<string, unknown> };
  * Build the `print.project_file` payload for a LAN-mode, local-file print (pure; unit-tested). The
  * command references the file uploaded to the FTP root as `ftp:///<name>` (three slashes: empty host
  * + /<name>), and runs the plate's gcode inside the .3mf via `param`. All four *_id fields are the
- * string "0" — the RE spec annotates each "Always 0 for local prints".
+ * string "0" — the RE spec annotates each "Always 0 for local prints". The field set is the X2D
+ * capture's (bambuddy #1192) less `nozzle_mapping`, which that capture does not carry; the url stays
+ * `ftp:///`, which the X2D took, where Studio's eMMC send says `brtc://emmc/`.
  */
 export function buildProjectFileCommand(opts: ProjectFileOptions): PrintRequest {
   const plate = opts.plate ?? 1;
   const name = opts.remoteName;
+  const mapping = opts.amsMapping ?? [0];
+  const bedLeveling = opts.bedLeveling ?? 2;
+  const flowCali = opts.flowCali ?? 2;
   return {
     print: {
-      sequence_id: opts.sequenceId ?? "0",
+      sequence_id: opts.sequenceId ?? startSequenceId(),
       command: "project_file",
       param: `Metadata/plate_${plate}.gcode`,
       url: `ftp:///${name}`,
+      file: name,
       subtask_name: opts.subtaskName ?? name.replace(/\.3mf$/i, ""),
       project_id: "0",
       profile_id: "0",
@@ -89,13 +143,21 @@ export function buildProjectFileCommand(opts: ProjectFileOptions): PrintRequest 
       subtask_id: "0",
       md5: opts.md5 ?? "",
       bed_type: opts.bedType,
-      bed_leveling: opts.bedLeveling ?? true,
-      flow_cali: opts.flowCali ?? true,
-      vibration_cali: opts.vibrationCali ?? true,
-      layer_inspect: opts.layerInspect ?? false,
+      // The mode rides in the numbers; the old booleans are true only when a step is forced on, as
+      // Studio's X2D sends show (false beside the 2s).
+      auto_bed_leveling: bedLeveling,
+      extrude_cali_flag: flowCali,
+      nozzle_offset_cali: opts.nozzleOffsetCali ?? 2,
+      extrude_cali_manual_mode: 0,
+      bed_leveling: bedLeveling === 1,
+      flow_cali: flowCali === 1,
+      vibration_cali: opts.vibrationCali ?? false,
+      layer_inspect: opts.layerInspect ?? true,
       timelapse: opts.timelapse ?? false,
+      cfg: "0",
       use_ams: opts.useAms ?? false,
-      ams_mapping: opts.amsMapping ?? [0],
+      ams_mapping: Array.isArray(mapping) ? flatMappingForSend(mapping) : mapping,
+      ams_mapping2: Array.isArray(mapping) ? amsMapping2(mapping) : [],
     },
   };
 }

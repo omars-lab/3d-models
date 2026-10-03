@@ -24,6 +24,8 @@ import { FtpsBackend, remoteUploadName } from "../backends/ftps.js";
 import {
   MqttBackend,
   buildProjectFileCommand,
+  startSequenceId,
+  type CaliMode,
   type PrinterStatus,
   type ProjectFileOptions,
 } from "../backends/mqtt.js";
@@ -71,9 +73,10 @@ interface SendOpts {
   plate?: string; // --plate N (commander passes a string)
   amsMapping?: string; // [X2D-UNCONFIRMED] comma-ints ("0" / "-1,0") or "none"
   md5?: string; // [X2D-UNCONFIRMED] override the default ""
-  bedLeveling?: boolean; // --no-bed-leveling → false
-  flowCali?: boolean; // --no-flow-cali → false
-  vibrationCali?: boolean; // --no-vibration-cali → false
+  bedLeveling?: boolean; // --no-bed-leveling → false → mode 0 (default mode 2, auto)
+  flowCali?: boolean; // --no-flow-cali → false → mode 0
+  nozzleOffsetCali?: boolean; // --no-nozzle-offset-cali → false → mode 0
+  vibrationCali?: boolean; // --vibration-cali → true (default off, as Studio sends it)
   bedPhoto?: boolean; // --no-bed-photo → false
 }
 
@@ -157,7 +160,13 @@ function parsePlateIndex(spec: string | undefined): number | undefined {
   return plate;
 }
 
-/** Assemble the ProjectFileOptions from the flags and the slice's plate type — throws on a bad flag. */
+/** A `--no-<step>` flag as a calibration mode: off is 0, otherwise 2, auto, as Studio sends it. */
+const caliMode = (on: boolean | undefined): CaliMode => (on === false ? 0 : 2);
+
+/**
+ * Assemble the ProjectFileOptions from the flags and the slice's plate type — throws on a bad flag.
+ * The sequence id is fixed here, once, so the dry run prints the id the real send would publish.
+ */
 function buildProjectOptions(remoteName: string, opts: SendOpts, plate: number | undefined, bedType: string): ProjectFileOptions {
   return {
     remoteName,
@@ -165,9 +174,11 @@ function buildProjectOptions(remoteName: string, opts: SendOpts, plate: number |
     bedType,
     amsMapping: parseAmsMapping(opts.amsMapping),
     md5: opts.md5,
-    bedLeveling: opts.bedLeveling,
-    flowCali: opts.flowCali,
-    vibrationCali: opts.vibrationCali,
+    bedLeveling: caliMode(opts.bedLeveling),
+    flowCali: caliMode(opts.flowCali),
+    nozzleOffsetCali: caliMode(opts.nozzleOffsetCali),
+    vibrationCali: Boolean(opts.vibrationCali),
+    sequenceId: startSequenceId(),
   };
 }
 
@@ -382,8 +393,8 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.log(`  1. FTPS implicit-TLS upload → ${cfg.host}:990 (user bblp) STOR /${projectOpts.remoteName}`);
     console.log(`  2. MQTT publish → device/${cfg.serial}/request:`);
     console.log(JSON.stringify(command, null, 2));
-    console.log("  [X2D-UNCONFIRMED] ams_mapping / md5 — diff this payload against a BambuStudio");
-    console.log("  ground-truth capture before the first real send (docs/issues/first-party-dispatch.md).");
+    console.log("  The fields follow Studio's X2D send (docs/research/2026-10-03-studio-start-payload.md).");
+    console.log("  [X2D-UNCONFIRMED] md5, and an external-spool ams_mapping2 entry (docs/issues/first-party-dispatch.md).");
     if (opts.record) console.log("would also scaffold a draft record under .bambu/records/.");
     return;
   }
@@ -621,9 +632,10 @@ export function registerPrint(program: Command): void {
     .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
     .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays)')
     .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
-    .option("--no-bed-leveling", "skip auto bed-leveling before this print")
-    .option("--no-flow-cali", "skip flow calibration before this print")
-    .option("--no-vibration-cali", "skip vibration calibration before this print")
+    .option("--no-bed-leveling", "skip bed leveling before this print (default: auto, the printer decides, as Studio sends it)")
+    .option("--no-flow-cali", "skip flow calibration before this print (default: auto)")
+    .option("--no-nozzle-offset-cali", "skip the two-nozzle offset calibration before this print (default: auto)")
+    .option("--vibration-cali", "run vibration calibration before this print (default off, as Studio sends it)", false)
     .option("--no-bed-photo", "skip the camera photo of the bed taken before the confirm (and on --dry-run)")
     .option("-y, --yes", "skip the confirmation prompt — only on a live page approval (D-093); never skips the approval or idle check", false)
     .option(

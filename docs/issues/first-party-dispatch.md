@@ -58,9 +58,13 @@ default two clients actually send:
   `print send` sets it from the loaded trays, see below), `bed_leveling: true`, `flow_cali: true`,
   `vibration_cali: true`, `layer_inspect: false`, `timelapse: false`.
 
-Three fields the sources **disagree on for a dual-nozzle X2D** are exposed as overridable options
-(`--bed-type`, `--ams-mapping`, `--md5`) and carry documented defaults, treated as a **CAL-shaped
-bet** — a value we believe but have not yet confirmed on *this* machine:
+Those were the community clients' values. Since 2026-10-03 the calibration fields, the booleans and
+`sequence_id` follow Bambu Studio's own X2D send instead; see
+[the last section](#2026-10-03-the-start-command-matches-studios).
+
+Three fields the sources **disagree on for a dual-nozzle X2D** were exposed as overridable options
+(`--bed-type`, since removed, `--ams-mapping`, `--md5`) and carry documented defaults, treated as a
+**CAL-shaped bet** — a value we believe but have not yet confirmed on *this* machine:
 
 | field | default | why unconfirmed |
 |---|---|---|
@@ -210,6 +214,38 @@ only the plate on the bed can tell us.
 slice was made for a Cool Plate because Studio's command line defaults to it and our slices never
 named a plate. The print was cancelled at 20:12 UTC (`0300-400C`). The fix, and the evidence, are
 in [sliced-for-wrong-plate.md](sliced-for-wrong-plate.md).
+
+## 2026-10-03: the start command matches Studio's
+
+**Why.** The plate type was the cause of the pause, but it was not the only field where our start
+command and Bambu Studio's differ. The consolidated research,
+[2026-10-03-studio-start-payload.md](../research/2026-10-03-studio-start-payload.md), ranked the
+rest against the one wire capture of Studio starting an X2D print (bambuddy issue #1192, firmware
+01.01, two sends) and Studio's own send code. None of these is known to have caused a failure;
+they are the remaining differences, closed so the next odd error has fewer suspects.
+
+**What changed.** `buildProjectFileCommand` now sends:
+
+- the calibration steps as numbers, 0 off, 1 on, 2 auto (the printer decides):
+  `auto_bed_leveling`, `extrude_cali_flag` and `nozzle_offset_cali` default to 2, and
+  `extrude_cali_manual_mode` is 0, as in the capture. `--no-bed-leveling`, `--no-flow-cali` and
+  the new `--no-nozzle-offset-cali` set a step to 0;
+- the booleans as Studio sends them: `bed_leveling` and `flow_cali` false beside the modes (true
+  only when a mode is 1), `vibration_cali` false (Studio hard-codes it; `--vibration-cali` turns it
+  on, replacing `--no-vibration-cali`), `layer_inspect` true;
+- `file`, the uploaded name; `cfg` `"0"`, as in the X2D capture;
+- `ams_mapping2`, one `{ams_id, slot_id}` per filament built from the flat map (tray 3 is
+  `{0, 3}`, an unused filament `{255, 255}`), matching both captures the research holds;
+- a `sequence_id` in the 20000s, from the clock, so it differs between runs: the printer refuses an
+  id reused across restarts.
+
+**Still a bet.** Two parts rest on single sources and are marked `[X2D-UNCONFIRMED]` in
+`mqtt.ts`. The external spool, which we never feed from today, goes into `ams_mapping2` as its own
+number (254 or 255) with slot 0, and becomes -1 in the flat list, because bambuddy's notes say a
+254 there raises `0700_8012`; no X2D capture shows an external-spool send. And `md5` stays `""`,
+which the X2D accepted. Left out on purpose: `nozzle_mapping`, which the X2D capture does not
+carry, and the `brtc://emmc/` url of Studio's built-in-storage send, since the X2D took our
+`ftp:///` one. The field set is pinned in `dispatch.test.ts` against the capture's.
 
 ## Files
 

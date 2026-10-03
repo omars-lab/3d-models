@@ -79,9 +79,10 @@ The file on disk was made for the Cool Plate and cannot go out again. It needs a
 above passed the preset check and names `textured_plate`) and a new yes from Omar before any
 resend. Its approval was spent by the cancelled send.
 
-## Still open
+## The other start fields
 
-Studio's start command carries more fields than ours (the integer calibration modes, a second
+Studio's start command carried more fields than ours (the integer calibration modes, a second
 tray map, the file name and others). The checked research,
 [what Studio sends to start an X2D print](../research/2026-10-03-studio-start-payload.md), ranks
-them; none is known to feed the plate check, and they follow as their own change.
+them; none is known to feed the plate check. They followed as their own change, described in
+[first-party dispatch](first-party-dispatch.md#2026-10-03-the-start-command-matches-studios).
