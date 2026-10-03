@@ -5871,3 +5871,50 @@ and set the rule: "prod plates should be optimized, experimental plates arent".
 **What would reverse it:** a plate the grade calls production that Omar would not print again
 as it stands, which would mean the evidence the levels read is the wrong evidence; or levels that
 never move because no plate repeats, which would make the field noise.
+
+## D-095 — Production plates have a standing approval; their recipe is frozen, and a change is a new experiment plate
+
+Omar, 2026-10-03, answering call 1 of the plate-maturity design: "yes prod plates get standing
+approval, treat all current plates as experimental". Then: "recipe change should be in a new
+experimental plate derived from a prod plate", and "do we need to capture this process as running
+experiment skill".
+
+### The options as offered
+
+- **One yes per send at every level** (offered as the pick): nothing changes; a plate printed for
+  use asks every time.
+- **Omar's answer, chosen:** a production plate carries a standing yes. The design's warning was that
+  a recipe edit or a bad run between sends would go out on the old yes unless the yes lapses on
+  both, so it lapses on both.
+
+### What it means
+
+- **A production plate goes out with no new yes**, through `plateApproval` in
+  `tools/bambu/src/send-gate.ts` and nowhere else. The page's word is not enough: the send check
+  asks `tools/plate_grade.py --plate <name> --json`, the plates gate's own reading, and the yes
+  stands only while the prints still show production and the recipe matches the `recipe_hash`
+  pinned when it was promoted. Otherwise, or when the grader cannot run, the plate is back to one
+  yes per send (D-093). A standing send leaves the box alone and writes a `sent` row naming the
+  standing approval, so the timeline still logs every send.
+- **The recipe is frozen.** The hash is of the parsed recipe, so a comment does not change it and
+  a repack with the same pieces does. A production recipe that no longer matches is a P8 finding.
+- **A change is a new plate.** `plate_grade.py --derive <parent> <new> --answers "…"` writes an unapproved experiment with `derived_from: <parent>`; it refuses a parent that is
+  not production. The new plate earns production on its own prints; then the parent is retired.
+  The steps are in the [grade-plate skill](../../.claude/skills/grade-plate/SKILL.md), "Changing a
+  production plate".
+- **Every plate today is an experiment**, on its page and by its prints, so nothing has a standing
+  approval yet.
+- **No new skill for running an experiment.** A derived plate is an experiment plate like any
+  other, and every step already has an owner: the derive is a tool command, the page and queue
+  are prioritize-prints', the send is send-plate's, the promotion and retirement are
+  grade-plate's, and the rules are in the plates gate and the send check. A separate skill would
+  restate those rules in prose that drifts from the code; the two evaluations this repo has made
+  of a proposed skill ([dsl-extension](../design/process/dsl-extension-skill-evaluation.md),
+  [issue register](../design/process/issue-register-evaluation.md)) came to the same answer.
+- **Still open:** the print-review design's call 6 (does an edit between a yes and the send void
+  it) now asks only about experiments; and the rubric's numbers (plate-maturity call 2).
+
+**What would reverse it:** a production plate that went out on its standing approval and printed
+something Omar did not expect, which would mean the grade or the hash misses a change that
+matters; or derived plates piling up unprinted because the copy-and-promote round trip costs more
+than the change, which would argue for re-pinning a small change in place under its own yes.

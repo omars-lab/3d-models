@@ -47,7 +47,8 @@ Only Omar approves ([D-093](../working-model/decisions-log.md)): he ticks the bo
 chat and the session writes it onto the page with the date and his words. One approval covers one
 send. `bambu print send` refuses a plate without a live approval, and a send spends it: the box is
 unticked and a dated `sent` row joins the timeline. A plate that printed can print again, but only
-on a new approval, so the timeline logs every approved reprint. Each run is its own record, and
+on a new approval, so the timeline logs every approved reprint. A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on ([D-095](../working-model/decisions-log.md)). Its recipe
+is frozen: a change goes on a new experiment plate with `derived_from` (grade-plate skill). Each run is its own record, and
 `times_printed` is the number of records.
 
 ## How proven a plate is

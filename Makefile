@@ -162,11 +162,13 @@ validate-timelapse:
 # Design: docs/design/printing/prints-tab-design.md §7. Then the plates gate: each page in
 # docs/plates/ agrees with the records on its count and with itself on its approval, and the
 # queue in docs/plates/README.md is current (print-review-design.md §6). Each `--self-test`
-# builds a clean fixture, requires it clean, then breaks it once per rule.
+# builds a clean fixture, requires it clean, then breaks it once per rule. The grader's self-test
+# checks that a plate `plate_grade.py --derive` writes passes that gate (D-095).
 validate-prints: prints-manifest
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
+	$(PYTHON) ${ROOT_DIR}/tools/plate_grade.py --self-test
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks

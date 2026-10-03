@@ -5,8 +5,10 @@ status: draft
 # Plate maturity: experiment, repeatable, production
 
 **Status:** draft, 2026-10-03. The level on each page, the gate rule (P8) and the grade tool are
-built; every plate today is an experiment, by its prints and on its page. Omar has not reviewed
-the design. §8 lists the calls that are theirs.
+built; every plate today is an experiment, by its prints and on its page. Omar decided call 1 the
+same day: production plates get a standing approval, and a change to a production recipe goes on
+a new experiment plate ([D-095](../../working-model/decisions-log.md), §6). §8 lists the calls
+still theirs.
 
 Produced by: a worker session for the plate-maturity side quest, 2026-10-03. Feeds:
 [print-review-design.md](print-review-design.md) (the plate pages this adds a field to) and
@@ -134,16 +136,40 @@ They meet in one place. A production plate prints what is known, for use, so it 
 `kind: repeat`, and the gate holds that. Folding the two into one field would lose the first
 case: a repeatable plate printed for a reason other than use.
 
-## 6. Approval stays per send
+## 6. Approval: one per send, standing for production
 
-Maturity does not change who says yes. The send check D-093 built (`plateApproval` in
-`tools/bambu/src/send-gate.ts`) refuses a send unless an `approved` row comes after the last
-`sent` or `printed` row; a ticked box counts on its own only for a plate that has never gone out.
-That holds at every level.
+The send check D-093 built (`plateApproval` in `tools/bambu/src/send-gate.ts`) refuses a send
+unless an `approved` row comes after the last `sent` or `printed` row; a ticked box counts on its
+own only for a plate that has never gone out. That holds for experiments and repeatable plates.
 
-Whether a production plate could carry a **standing** approval — print it again without a new
-yes each time — is an open call (call 1, §8), not decided here. If Omar wants it, it goes through
-`plateApproval` and nowhere else, so there stays one place that says whether a plate may go out.
+A production plate has a **standing** approval ([D-095](../../working-model/decisions-log.md)):
+it goes out again with no new yes. Omar, 2026-10-03: "yes prod plates get standing approval".
+It still goes through `plateApproval` and nowhere else, so there stays one place that says whether
+a plate may go out. Two things end it, both checked at send time rather than trusted from the page:
+
+- **The prints slip.** `plateApproval` asks `tools/plate_grade.py --plate <name> --json`, which
+  reads the same `maturity_evidence` as the gate. A page that still says production after a run
+  came back `adjust` has no standing approval, even before anyone lowers it.
+- **The recipe changes.** Promotion pins `recipe_hash` on the page: the first 12 hex digits of
+  the SHA-256 of the parsed recipe, so a comment does not count and a repack with the same pieces
+  does. A recipe that no longer matches is a P8 finding and has no standing approval.
+
+A plate without its standing approval falls back to one yes per send; so does a plate the grader
+cannot grade. A standing send leaves the box alone and writes a `sent` row that says it went out
+on the standing approval, so the timeline still holds every send.
+
+**A production recipe does not change in place.** Omar: "recipe change should be in a new
+experimental plate derived from a prod plate".
+`python3 tools/plate_grade.py --derive <parent> <new> --answers "…"` copies the recipe to a new plate whose page is an unapproved experiment with
+`derived_from: <parent>`, and refuses a parent that is not production (an experiment's recipe is
+edited in place). The new plate is printed, judged and promoted on its own records; then the
+parent is retired. The grade-plate skill has the steps.
+
+The tests: the plates gate's self-test (a production page with no pin, a recipe edited in place,
+a comment-only edit, a `derived_from` with no page; standing approval held, lost on an `adjust`,
+lost on a recipe edit), the grader's (a derived plate passes the gate as written), and
+`send-gate.test.ts` (a grader that stands, one that does not, one that cannot run, a fresh yes on
+a plate that lost its standing, and the real grader's JSON on this repo).
 
 ## 7. The gate, and why a skill as well
 
@@ -188,8 +214,9 @@ the first plate it can promote is one whose pieces print well twice.
 
 - **A model edited in bikar.** A `.bkr` changed upstream with the same file name and params is
   the same piece to the gate. A record's `source_sha256` could tell them apart later.
-- **A layout change that keeps the counts.** Moving pieces without adding any keeps the plate's
-  own run valid. Packing changes counts in practice, which the gate does see.
+- **A layout change that keeps the counts, below production.** Moving pieces without adding any
+  keeps the plate's own run valid. Packing changes counts in practice, which the gate does see.
+  On a production plate the pinned `recipe_hash` sees any change (§6).
 - **`bed_fill` itself.** It is copied from a slice, which is gitignored, so the gate checks that
   it is a share and above the bar, not that the slice says so. The grade prints both and flags a
   difference.
@@ -199,8 +226,8 @@ the first plate it can promote is one whose pieces print well twice.
 
 ## 8. Omar's calls
 
-Decided by Omar: production plates are optimized and experiments are not (2026-10-03). The rest
-is open.
+Decided by Omar: production plates are optimized and experiments are not (2026-10-03). Call 1
+is decided; the rest is open.
 
 **1. A standing approval for production plates?**
 
@@ -211,7 +238,11 @@ is open.
 | **What it leads to** | Revisit once a plate actually reaches production | A change to `plateApproval` that reads `maturity`, and a lapse rule the gate holds |
 
 - [ ] One yes per send
-- [ ] A standing yes for production (say what should end it in the notes)
+- [x] A standing yes for production (say what should end it in the notes)
+
+**Decided 2026-10-03:** a standing yes for production → D-095. It ends when the prints slip or the
+recipe changes, and a recipe change goes on a derived experiment plate (§6). Every plate today
+stays an experiment.
 
 **2. The numbers: K = 2 keeps, fill 0.45.** Both are first guesses (§3, §4); no plate has
 printed twice or been packed. Keeping them and moving one when a grade looks wrong (my pick)
@@ -221,7 +252,8 @@ costs nothing now. The rubric's round log is where a change goes.
 - [ ] Change them (say to what in the notes)
 
 **3. Call 6 of the print-review design (does an approval lapse when the recipe changes?) stays
-open there.** Maturity answers part of it — a recipe change can drop a plate's level — but not
-whether the yes lapses, so it is not decided here.
+open there, for experiments.** D-095 answers it for production: the recipe does not change in
+place, and an edited one loses the standing approval. For an experiment the yes is one per send
+already, so call 6 asks only whether an edit between the yes and the send voids it.
 
 Notes:

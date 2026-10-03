@@ -49,6 +49,12 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       rubric.md. A level above experiment has a `promoted` row, and the last promoted or
       demoted row names the level the page says. Hard case: three pieces kept twice each and
       one never kept is not repeatable — every piece, not a total.
+      A production plate's recipe does not change in place (D-095): its page pins
+      `recipe_hash` when it is promoted, and a recipe that no longer matches it is a finding.
+      A change goes on a new experiment plate whose `derived_from` names it
+      (`tools/plate_grade.py --derive`). A `derived_from` must name a plate page that exists.
+      `standing_approval` says whether a production plate may go out with no new yes; the
+      send check (`tools/bambu/src/send-gate.ts`) reads it through `plate_grade.py --json`.
 
 Not a finding: a ticked approval box that the frontmatter does not know yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
@@ -65,6 +71,7 @@ less maturity than its prints show: experiment asks nothing, and promoting is a 
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import re
 import sys
@@ -322,6 +329,44 @@ def maturity_evidence(path: Path, data: dict, history: dict, runs: dict, rubric:
             "why": why + [f"bed_fill {fill} and its latest run {own[-1]['run']} kept every piece"]}
 
 
+def recipe_hash(path: Path) -> str | None:
+    """The recipe's content, not its text: comments and key order do not change it."""
+    try:
+        recipe = yaml.safe_load((path.parent / f"{path.stem}.yaml").read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        return None
+    canon = json.dumps(recipe, sort_keys=True, default=str, separators=(",", ":"))
+    return hashlib.sha256(canon.encode("utf-8")).hexdigest()[:12]
+
+
+def recipe_unchanged(path: Path, data: dict) -> str | None:
+    """Why a production page's recipe is not the one it was promoted on, or None when it is."""
+    pinned, now = data.get("recipe_hash"), recipe_hash(path)
+    if not pinned:
+        return ("no recipe_hash pinned — promotion writes it "
+                f"(`python3 tools/plate_grade.py --recipe-hash {path.stem}`)")
+    if pinned != now:
+        return (f"its recipe changed since it was promoted (recipe_hash {pinned}, now {now}). A "
+                "production recipe does not change in place: put the change on a new experiment "
+                f"plate (`python3 tools/plate_grade.py --derive {path.stem} <new>`) and put "
+                f"{path.stem}.yaml back")
+    return None
+
+
+def standing_approval(path: Path, data: dict, ev: dict) -> tuple[bool, str]:
+    """(may it go out with no new yes, why). Only a production page whose prints still show
+    production and whose recipe is the one it was promoted on (D-095)."""
+    if data.get("maturity") != "production":
+        return False, f"maturity is {data.get('maturity')!r}, not production"
+    if ev["level"] != "production":
+        return False, (f"the page says production but the prints now show {ev['level']} — "
+                       + " ".join(ev["why"]) + "; demote it (grade-plate skill)")
+    changed = recipe_unchanged(path, data)
+    if changed:
+        return False, changed
+    return True, "a production plate whose prints still show production, on its promoted recipe"
+
+
 def check_maturity(path: Path, data: dict, body: str, history: dict, runs: dict,
                    rubric: dict) -> tuple[list[str], list[str]]:
     """(findings, notices). Claiming more than the prints show is a finding; claiming less is a
@@ -343,6 +388,10 @@ def check_maturity(path: Path, data: dict, body: str, history: dict, runs: dict,
     if level == "production" and data.get("kind") != "repeat":
         out.append(f"{name}: P8 a production plate prints again what is known, so its kind is "
                    f"'repeat', not {data.get('kind')!r}")
+    if level == "production":
+        changed = recipe_unchanged(path, data)
+        if changed:
+            out.append(f"{name}: P8 production plate: {changed}")
     moves = [(d, ev_, rest) for d, ev_, rest in timeline(body) if ev_ in ("promoted", "demoted")]
     if moves and level not in moves[-1][2]:
         out.append(f"{name}: P8 maturity '{level}' but the last promoted/demoted row "
@@ -383,6 +432,10 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
         out.append(f"{name}: P1 unblocks is not a list of non-empty strings")
     if not isinstance(data["answers"], str) or not data["answers"].strip():
         out.append(f"{name}: P1 answers is empty — say the question the plate answers")
+    parent = data.get("derived_from")
+    if parent is not None and (not isinstance(parent, str) or parent == name
+                               or not (path.parent / f"{parent}.md").is_file()):
+        out.append(f"{name}: P1 derived_from {parent!r} is not another plate page in docs/plates/")
     needs = data.get("needs")
     if stage == "planned":
         if not isinstance(needs, list) or not needs or not all(
@@ -797,16 +850,21 @@ def _record(plates: Path, run: str, objects: list[tuple[tuple, int, str]]) -> No
 
 
 def _mature(level: str, history: list[tuple[str, str, str]], own: list | None = None,
-            kind: str = "repeat", fill: float | None = 0.6, row: str | None = None):
+            kind: str = "repeat", fill: float | None = 0.6, row: str | None = None,
+            pin: bool = True):
     """minis-09 claims `level`; `history` is (run on another plate, A's verdict, B's verdict);
-    `own` replaces minis-09's own record's objects."""
+    `own` replaces minis-09's own record's objects. A production claim pins its recipe's hash
+    unless `pin` is false."""
     def f(plates: Path) -> None:
         for run, va, vb in history:
             _record(plates, run, [(_A, 1, va), (_B, 2, vb)])
         if own is not None:
             _record(plates, "2026-09-26-minis-09", own)
+        pinned = (f"\nrecipe_hash: '{recipe_hash(plates / 'minis-09.md')}'"
+                  if level == "production" and pin else "")
         _edit("minis-09", "kind: new\nmaturity: experiment",
-              f"kind: {kind}\nmaturity: {level}" + (f"\nbed_fill: {fill}" if fill else ""))(plates)
+              f"kind: {kind}\nmaturity: {level}" + (f"\nbed_fill: {fill}" if fill else "")
+              + pinned)(plates)
         if level != "experiment" or row:
             _edit("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
                   "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |\n"
@@ -818,6 +876,22 @@ _KEPT = [("2026-09-20-minis-07", "keep", "keep"), ("2026-09-21-minis-07", "keep"
 _CLEAN_OWN = [(_A, 1, "keep"), (_B, 2, "keep")]
 
 
+def _then(*steps):
+    def f(plates: Path) -> None:
+        for s in steps:
+            s(plates)
+    return f
+
+
+def _edit_recipe(old: str, new: str):
+    def f(plates: Path) -> None:
+        p = plates / "minis-09.yaml"
+        text = p.read_text(encoding="utf-8")
+        assert old in text, old
+        p.write_text(text.replace(old, new, 1), encoding="utf-8")
+    return f
+
+
 def _edit(page: str, old: str, new: str):
     def f(plates: Path) -> None:
         p = plates / f"{page}.md"
@@ -825,6 +899,11 @@ def _edit(page: str, old: str, new: str):
         assert old in text, (page, old)
         p.write_text(text.replace(old, new, 1), encoding="utf-8")
     return f
+
+
+def _record_adjust(plates: Path) -> None:
+    """minis-09 printed again, and B came back adjust."""
+    _record(plates, "2026-09-30-minis-09", [(_A, 1, "keep"), (_B, 2, "adjust")])
 
 
 def _second_record(plates: Path) -> None:
@@ -934,6 +1013,20 @@ CASES = [
     ("P8 a planned page with no recipe claims repeatable",
      _edit("sheets-09", "maturity: experiment", "maturity: repeatable"),
      "P8 maturity 'repeatable' but the prints show experiment — no recipe yet"),
+    ("P8 production with no recipe_hash pinned",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN, pin=False), "no recipe_hash pinned"),
+    ("P8 production whose recipe was edited in place, same pieces (a repack the counts miss)",
+     _then(_mature("production", _KEPT[:1], own=_CLEAN_OWN), _edit_recipe("bed: x2d", "bed: x2d\nspacing: 4")),
+     "its recipe changed since it was promoted"),
+    ("P8 production whose recipe only gained a comment is the same recipe",
+     _then(_mature("production", _KEPT[:1], own=_CLEAN_OWN), _edit_recipe("bed: x2d", "# packed\nbed: x2d")),
+     None),
+    ("P1 derived_from a plate that has no page",
+     _edit("minis-08", "maturity: experiment", "maturity: experiment\nderived_from: minis-07"),
+     "P1 derived_from 'minis-07' is not another plate page"),
+    ("P1 derived_from a plate that has a page",
+     _edit("minis-08", "maturity: experiment", "maturity: experiment\nderived_from: minis-09"),
+     None),
 ]
 
 
@@ -987,6 +1080,33 @@ def self_test() -> int:
         found, _, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
         report(any("last 3 verdicts" in f for f in found), "the rubric's K is the one applied",
                str(found))
+
+        # A standing approval (D-095): only production, still earned, on its promoted recipe.
+        cases = iter(range(100))
+
+        def standing(*steps) -> tuple[bool, str]:
+            case = tmp / f"standing-{next(cases)}"
+            plates, prints, _, bets = _build(case)
+            for s in steps:
+                s(plates)
+            ctx = context(prints, bets, _rubric(plates))
+            page = plates / "minis-09.md"
+            data, _ = parse_frontmatter(page.read_text(encoding="utf-8"))
+            ev = maturity_evidence(page, data, ctx["history"], ctx["runs"], ctx["rubric"])
+            return standing_approval(page, data, ev)
+
+        prod = _mature("production", _KEPT[:1], own=_CLEAN_OWN)
+        ok, why = standing(prod)
+        report(ok, "a production plate, still earned, on its promoted recipe stands approved", why)
+        ok, why = standing()
+        report(not ok and "not production" in why, "an experiment has no standing approval", why)
+        ok, why = standing(prod, _record_adjust)
+        report(not ok and "prints now show" in why,
+               "a production page whose latest run came back adjust loses it before it is demoted",
+               why)
+        ok, why = standing(prod, _edit_recipe("bed: x2d", "bed: x2d\nspacing: 4"))
+        report(not ok and "--derive minis-09" in why,
+               "a production recipe edited in place loses it, and says to derive a new plate", why)
 
         # A recipe's yaml params and a record's JSON params name the same piece.
         report(piece_key("x.bkr", "Hex", {"gap": 0.1, "h": 4}) == piece_key("x.bkr", "Hex", {"h": 4.0, "gap": 0.1})

@@ -102,7 +102,7 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
    BambuStudio flags go after `--`). A `.bkr` must be rendered to STL first — slicing is not bikar's job.
 10. **A dispatch needs Omar's approval on the plate's page.** `bambu print send <plate.3mf> --record`
     refuses unless the page in `docs/plates/` carries a live approval (D-093: his tick, or his yes in
-    chat written onto the page; one approval per send) and the printer is idle. Then it asks at a TTY;
+    chat written onto the page; one approval per send, or a production plate's standing approval, D-095) and the printer is idle. Then it asks at a TTY;
     `--yes` skips only that question (`--dry-run` shows what it would send without sending).
     `--record` scaffolds a draft under the gitignored `.bambu/records/`.
 

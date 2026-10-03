@@ -5,6 +5,10 @@
     python3 tools/plate_grade.py --plate sheets-04    grade one (repeat --plate for more)
     python3 tools/plate_grade.py --json               the same, as data
     python3 tools/plate_grade.py --fill <plate.3mf>   how much of the first bed the pieces cover
+    python3 tools/plate_grade.py --recipe-hash <plate>
+                                     the hash a production page pins as `recipe_hash`
+    python3 tools/plate_grade.py --derive <prod-plate> <new> --answers "<question>"
+                                     a new experiment plate for a change to a production recipe
     python3 tools/plate_grade.py --self-test
 
 The levels and what each must show are in docs/design/printing/plate-maturity-design.md; the
@@ -24,6 +28,15 @@ The grade reads three things:
   value     what the plate's own prints taught: bet readings that landed (any verdict but
             no-reading), and piece verdicts given, kept or not.
 
+Each grade also says whether the plate has a standing approval (D-095): a production page whose
+prints still show production, on the recipe it was promoted on. `bambu print send` reads that
+field through `--plate <name> --json`, so a production plate goes out with no new yes and a plate
+that slipped, or whose recipe was edited in place, does not.
+
+A production recipe does not change in place. `--derive` copies it to a new plate, an experiment
+whose page names its parent in `derived_from`; the change is made and printed there, and the new
+plate earns production on its own prints (grade-plate skill, "Changing a production plate").
+
 `--fill` needs a slice (`bambu slice compose`), which lives in the gitignored build/plates/, so
 the grade looks for one there and says when there is none; the skill copies the number onto the
 page as `bed_fill`, the way it copies minutes and grams.
@@ -31,6 +44,7 @@ page as `bed_fill`, the way it copies minutes and grams.
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import sys
 import zipfile
@@ -115,6 +129,7 @@ def grade(names: list[str] | None = None) -> list[dict]:
             out.append({"plate": path.stem, "error": err or "no frontmatter"})
             continue
         ev = pg.maturity_evidence(path, data, history, runs, rubric)
+        standing, standing_why = pg.standing_approval(path, data, ev)
         own = runs.get(path.stem, [])
         sliced = slice_of(path.stem)
         fill = None
@@ -129,6 +144,11 @@ def grade(names: list[str] | None = None) -> list[dict]:
             "evidence": ev["level"],
             "why": ev["why"],
             "pieces": ev["pieces"],
+            "standing": standing,
+            "standing_why": standing_why,
+            "derived_from": data.get("derived_from"),
+            "recipe_hash_page": data.get("recipe_hash"),
+            "recipe_hash_now": pg.recipe_hash(path),
             "runs": [r["run"] for r in own],
             "clean_runs": [r["run"] for r in own if r["clean"]],
             "readings_landed": sum(r["landed"] for r in own),
@@ -150,6 +170,10 @@ def show(rows: list[dict], rubric: dict) -> None:
         print(f"{r['plate']}: page says {r['declared']}, prints show {r['evidence']}{flag}")
         for line in r["why"]:
             print(f"    {line}")
+        if r["declared"] == "production":
+            print(f"    standing approval: {'yes' if r['standing'] else 'no'} — {r['standing_why']}")
+        if r["derived_from"]:
+            print(f"    derived from {r['derived_from']}")
         v = r["verdicts"]
         print(f"    its own prints: {len(r['runs'])} run(s), {len(r['clean_runs'])} with every piece kept; "
               f"pieces judged keep {v['keep']}, adjust {v['adjust']}, drop {v['drop']}; "
@@ -166,6 +190,64 @@ def show(rows: list[dict], rubric: dict) -> None:
                   + f" (production asks {need:.0%})")
 
 
+def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
+           today: str | None = None) -> str:
+    """Write <new>.yaml and <new>.md: an experiment plate for a change to production plate
+    `parent`. Returns the new page's path; raises ValueError when it must not be made."""
+    src = plates / f"{parent}.md"
+    if not src.is_file():
+        raise ValueError(f"no plate page {src}")
+    data, err = pg.parse_frontmatter(src.read_text(encoding="utf-8"))
+    if err or not data:
+        raise ValueError(f"{parent}: the page does not parse — {err}")
+    if data.get("maturity") != "production":
+        raise ValueError(f"{parent} is {data.get('maturity')!r}, not production: an experiment's "
+                         f"recipe is edited in place, so there is nothing to derive from")
+    if not new or "/" in new or new == parent:
+        raise ValueError(f"{new!r} is not a new plate name")
+    page, recipe = plates / f"{new}.md", plates / f"{new}.yaml"
+    for p in (page, recipe):
+        if p.exists():
+            raise ValueError(f"{p} exists already")
+    today = today or datetime.date.today().isoformat()
+    recipe.write_text(f"# Derived from {parent} ({parent}.yaml) on {today}: a change to a "
+                      f"production plate, as an experiment.\n"
+                      f"# Make the change below and say what it is on {new}.md.\n"
+                      + (plates / f"{parent}.yaml").read_text(encoding="utf-8"), encoding="utf-8")
+    cost = {k: data.get(k) for k in ("minutes", "grams", "bed_plates")}
+    # The parent's cost stands in until the new recipe is sliced. With none to copy the plate
+    # cannot be ranked yet, so it starts planned, waiting on its slice.
+    costed = all(pg._pos(v) for v in cost.values())
+    fm = {"plate": new, "recipe": f"{new}.yaml", "stage": "proposed" if costed else "planned",
+          "approved": False, "approved_on": None, "times_printed": 0, "runs": [],
+          "answers": answers, "kind": "new", "maturity": "experiment", "derived_from": parent,
+          "bets": data.get("bets") or [], "unblocks": data.get("unblocks") or [], **cost,
+          "risk": data.get("risk"), "pictures": [],
+          **({} if costed else {"needs": [f"a slice of {new}.yaml"]})}
+    page.write_text(
+        "---\n" + pg.yaml.safe_dump(fm, sort_keys=False, allow_unicode=True, width=1000)
+        + "---\n\n"
+        f"# {new} — a change to [{parent}]({parent}.md)\n\n"
+        f"**In short.** {parent} is a production plate, so its recipe does not change in place "
+        f"(D-095). This plate is its recipe with one change, printed as an experiment. If the "
+        f"change holds up, this plate earns production on its own prints and {parent} is "
+        f"retired.\n\n"
+        f"## What changes from [{parent}]({parent}.md)\n\n"
+        f"Say the change, and why. "
+        + (f"The cost is {parent}'s until this plate is sliced." if costed else
+           "It has no cost until it is sliced, so it waits as planned.") + "\n\n"
+        "## Your call\n\n"
+        "- [ ] **Approve as it stands**\n"
+        "- [ ] **Hold** — say why in the notes\n\n"
+        "Notes:\n\n"
+        "## Timeline\n\n"
+        "| Date | What happened | Where it is written |\n|---|---|---|\n"
+        f"| {today} | proposed — derived from [{parent}]({parent}.md), a production plate, by "
+        "`plate_grade.py --derive` | this page |\n",
+        encoding="utf-8")
+    return str(page)
+
+
 def self_test() -> int:
     fails = 0
 
@@ -179,6 +261,40 @@ def self_test() -> int:
     ring = [(x, y) for x, y in sq[:4]] + [(4, 4), (6, 4), (6, 6), (4, 6)]
     check(abs(area(hull(ring)) - 100) < 1e-9, "a ring counts the space inside it as used")
     check(area(hull([(0, 0), (1, 1)])) == 0, "a degenerate object covers nothing")
+
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        tmp = Path(t)
+        plates, prints, scoring, bets = pg._build(tmp)
+        rubric = pg._rubric(plates)
+        try:
+            derive("minis-09", "minis-10", "q", plates, "2026-10-03")
+            check(False, "an experiment is not derived from")
+        except ValueError as e:
+            check("not production" in str(e), "an experiment is not derived from")
+        pg._mature("production", pg._KEPT, own=pg._CLEAN_OWN)(plates)
+        derive("minis-09", "minis-11", "does the change hold", plates, "2026-10-03")
+        pg._edit("minis-09", "minutes: null\ngrams: null\nbed_plates: null",
+                 "minutes: 50\ngrams: 9\nbed_plates: 1")(plates)
+        derive("minis-09", "minis-10", "does the change hold", plates, "2026-10-03")
+        pg.rewrite(plates, prints, scoring, bets, quiet=True, rubric=rubric)
+        findings, _, _, _ = pg.check_tree(plates, prints, scoring, bets, rubric)
+        check(findings == [], "derived plates pass the plates gate as written"
+              + (f" — {findings}" if findings else ""))
+        stage = {n: pg.parse_frontmatter((plates / f"{n}.md").read_text(encoding="utf-8"))[0]
+                 ["stage"] for n in ("minis-10", "minis-11")}
+        check(stage == {"minis-10": "proposed", "minis-11": "planned"},
+              "it takes the parent's cost to rank, and waits on a slice when there is none")
+        data, _ = pg.parse_frontmatter((plates / "minis-10.md").read_text(encoding="utf-8"))
+        check(data["derived_from"] == "minis-09" and data["maturity"] == "experiment"
+              and data["approved"] is False, "it is an unapproved experiment naming its parent")
+        check(pg.recipe_hash(plates / "minis-10.md") == pg.recipe_hash(plates / "minis-09.md"),
+              "its recipe starts as the parent's (the header comment is not a change)")
+        try:
+            derive("minis-09", "minis-10", "q", plates, "2026-10-03")
+            check(False, "a name already taken is refused")
+        except ValueError as e:
+            check("exists already" in str(e), "a name already taken is refused")
     print("self-test: " + ("PASS" if not fails else f"FAIL ({fails})"))
     return 1 if fails else 0
 
@@ -188,12 +304,36 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--plate", action="append", help="grade only this plate (repeatable)")
     ap.add_argument("--json", action="store_true", help="print the grade as JSON")
     ap.add_argument("--fill", metavar="PLATE_3MF", help="measure one sliced plate's bed fill")
+    ap.add_argument("--recipe-hash", metavar="PLATE", help="print the hash of a plate's recipe")
+    ap.add_argument("--derive", nargs=2, metavar=("PARENT", "NEW"),
+                    help="a new experiment plate for a change to production plate PARENT")
+    ap.add_argument("--answers", help="with --derive: the question the new plate answers")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
         return self_test()
     if a.fill:
         print(json.dumps(bed_fill(Path(a.fill))))
+        return 0
+    if a.recipe_hash:
+        h = pg.recipe_hash(pg.PLATES / f"{a.recipe_hash}.md")
+        if h is None:
+            print(f"{a.recipe_hash}: no readable recipe docs/plates/{a.recipe_hash}.yaml",
+                  file=sys.stderr)
+            return 1
+        print(h)
+        return 0
+    if a.derive:
+        if not a.answers:
+            print("--derive needs --answers: the question the new plate answers", file=sys.stderr)
+            return 2
+        try:
+            page = derive(a.derive[0], a.derive[1], a.answers)
+        except ValueError as e:
+            print(f"plate_grade: {e}", file=sys.stderr)
+            return 1
+        print(f"wrote {page} and its recipe. Make the change in the recipe, say it on the page, "
+              "then `python3 .claude/gates/plates_gate.py --write`.")
         return 0
     rows = grade(a.plate)
     if a.json:

@@ -71,6 +71,7 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   tick, or his yes in chat written onto the page with the date and his words. One approval covers one
   send. A send spends it (the box is unticked and a dated `sent` row joins the timeline), so a reprint
   needs a new yes, and a plate whose print showed the setup was wrong never goes out on the old one.
+  A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).
   It also refuses while the printer is busy or will not report its state. No flag skips either check.
   `--yes` skips only the TTY question, and only on a live page approval. `--dry-run` reports both
   checks and shows exactly what it *would* send.
