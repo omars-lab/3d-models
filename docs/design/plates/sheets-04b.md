@@ -2,7 +2,7 @@
 plate: sheets-04b
 recipe: sheets-04b.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press?"
@@ -129,7 +129,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-03 | approved | Omar, in chat: "yes to 4b" | iteration 1 @ a6bbca029c | sent 2026-10-03 |
-| 2026-10-03 | approved | Omar, in chat: "yes" (to a new yes for sheets-04b, re-sliced for Textured PEI) | iteration 1 @ a6bbca029c | |
+| 2026-10-03 | approved | Omar, in chat: "yes" (to a new yes for sheets-04b, re-sliced for Textured PEI) | iteration 1 @ a6bbca029c | sent 2026-10-03 |
 
 ## Timeline
 
@@ -139,6 +139,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-02 | sliced — local slice fits one bed, 41 minutes, 12 g, no slicer warnings, with a bed map | this page |
 | 2026-10-03 | reviewed — side cut added at Omar's ask, the piece heights against the coaster's, measured off the meshes | this page |
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c. Cancelled at layer 0: the slice was made for a Cool Plate and a Textured PEI Plate was on the bed (0500-8051); slice it again for that plate, and it needs a new yes | [the issue](../../issues/sliced-for-wrong-plate.md) |
+| 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c | this page |
 
 ## Print log
 
