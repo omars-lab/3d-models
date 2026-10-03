@@ -148,9 +148,9 @@ skippable.
    then the operator looks at the bed in person. Spotting objects once the print starts is the
    X2D's own job (D-092); this photo is for the person sending.
 6. **Omar approved this send, and the printer is idle.** *Verify:* the `✓ approval:` and
-   `✓ printer:` lines of `print send --dry-run`. The approval lives on the plate's page in
-   `docs/design/plates/` (D-093): his tick, or his yes in chat written onto the page with the date and his
-   words. One approval covers one send: once the plate has been sent or printed, a reprint needs a
+   `✓ printer:` lines of `print send --dry-run`. The approval is an open row in the `## Approvals` table on the plate's
+   page in `docs/design/plates/` (D-093, D-096), written from his tick or his yes in chat by
+   `tools/plate_approve.py`. One approval covers one send: once the plate has been sent or printed, a reprint needs a
    new one, so a plate whose print showed the setup was wrong never goes out again on the old yes.
    A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).
    Watching the first layer is not on this list: the X2D does its own first-layer and failure
@@ -162,8 +162,9 @@ Then, and only then:
 printer that is busy or will not say, it refuses, and no flag skips either check. Then it asks at a
 TTY; `--yes` skips only that question, and only on a live page approval. The
 [`send-plate`](../send-plate/SKILL.md) skill runs this whole step in order. A send that goes through
-spends the approval: the box is unticked, the stage becomes `sent`, and a dated `sent` row joins the
-page's timeline, which is the log of every approved reprint. `--record` scaffolds a
+spends the approval: its row in the page's `## Approvals` table gets `Spent by: sent <date>`
+(D-096), the box is unticked, the stage becomes `sent`, and a dated `sent` row joins the page's
+timeline, so the table and timeline together log every approved reprint. `--record` scaffolds a
 draft under the gitignored `.bambu/records/` — pre-filled with the same header builder as step 3, so
 the record and the bench sheet agree.
 
@@ -179,7 +180,9 @@ the record and the bench sheet agree.
 > (`bambu slice open <plate.3mf>`) it is **one click**: confirm the plate, **Print** → send over LAN
 > — but the GUI path does **not** fire `--record`, so scaffold the record by hand if you use it. On
 > either path the send needs Omar's live approval on the page (D-093); the GUI path does not spend
-> it, so untick the box and add the dated `sent` row by hand.
+> it, so spend it with the tool the CLI uses:
+> `python3 tools/plate_approve.py docs/design/plates/<name>.md --sent --via "Bambu Studio"`. A tick
+> left after a GUI send that nobody recorded is how sheets-04 looked approved again (D-096).
 
 ### 5 — Attend the print, and print the whole card in one session
 

@@ -32,7 +32,9 @@ tool prints and a check the hook runs cannot disagree.
    - **Up:** only when the grade shows the higher level. Set `maturity:` and add a timeline row
      `| <today> | promoted | to <level>: <the evidence in a line> | this page |`. To production,
      also pin the recipe: `recipe_hash: '<python3 tools/plate_grade.py --recipe-hash <plate>>'`.
-     From then on the plate goes out on its standing approval (D-095), and its recipe is frozen.
+     Then write the standing row in its Approvals table:
+     `python3 tools/plate_approve.py docs/design/plates/<plate>.md --standing` (D-096). From then on
+     the plate goes out on its standing approval (D-095), and its recipe is frozen.
    - **Down:** when the grade shows less than the page says (the gate will already be failing).
      Lower `maturity:` and add `| <today> | demoted | to <level>: <what changed> | this page |` —
      a new verdict, a recipe change, a repack, or a stricter rubric.
@@ -71,9 +73,10 @@ hash; re-pinning would put an untried recipe on the standing approval.
 
 ## Never
 
-- Never tick an Approve box, set `approved: true`, or send. Below production every send needs an
-  `approved` row after the last send (D-093); a production plate's standing approval (D-095) is
-  read at send time from this grade, never written by this skill.
+- Never tick an Approve box, write an `approved` row, or send. Below production every send needs an
+  open `approved` row in the Approvals table, one per send (D-093, D-096); the only row this skill
+  writes is the `standing` one on promotion, and the standing approval (D-095) is still read at
+  send time from this grade.
 - Never re-pin `recipe_hash` on a production page to make the gate pass. Derive instead.
 - Never promote on a total. Three keeps on one piece and none on another is an experiment.
 - Never type a `bed_fill` that did not come from `--fill` on a slice of the current recipe.

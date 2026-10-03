@@ -3,30 +3,32 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Grader, gradeWithPython, plateApproval, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
+import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
 
-// The send checks (send-gate.ts, D-093). The load-bearing case is the spent approval: a page that was
-// approved, then sent and printed, is not approved for the next send, even with its box still ticked
-// (sheets-04 on 2026-10-02 was sent from Bambu Studio, which does not untick the box).
+// The send checks (send-gate.ts, D-093, D-096), run against the real `tools/plate_approve.py` on
+// pages under a temporary repo. The load-bearing case is the spent approval: a page whose yes was
+// spent by a send is not approved for the next one, even with its box still ticked (sheets-04 on
+// 2026-10-02 was sent from Bambu Studio, which does not untick the box).
 
 let root: string;
+const TABLE = "| Date | Decision | By | Covers | Spent by |\n|---|---|---|---|---|";
 
-function page(name: string, opts: { approved?: string; box?: "x" | " "; rows?: string[]; maturity?: string }): string {
-  const fm = [
-    "---",
-    `plate: ${name}`,
-    "stage: waiting",
-    `approved: ${opts.approved ? "true" : "false"}`,
-    `approved_on: ${opts.approved ?? ""}`,
-    `maturity: ${opts.maturity ?? "experiment"}`,
-    "---",
-  ].join("\n");
-  const box = opts.box ? `\n## Your call\n\n- [${opts.box}] **Approve as it stands**\n- [ ] **Hold**\n` : "";
+function page(name: string, opts: { box?: "x" | " "; approvals?: string[]; rows?: string[]; maturity?: string; stage?: string }): string {
+  const dir = join(root, "docs", "design", "plates");
+  const fm = ["---", `plate: ${name}`, `recipe: ${name}.yaml`, `stage: ${opts.stage ?? "waiting"}`, `maturity: ${opts.maturity ?? "experiment"}`, "---"].join("\n");
+  const box = `\n## Your call\n\n- [${opts.box ?? " "}] **Approve as it stands**\n- [ ] **Hold**\n`;
+  const approvals = `\n## Approvals\n\n${[TABLE, ...(opts.approvals ?? [])].join("\n")}\n`;
   const rows = (opts.rows ?? ["2026-10-01 | proposed — drawn"]).map((r) => `| ${r} | this page |`);
-  const body = `${box}\n## Timeline\n\n| Date | What happened | Where it is written |\n|---|---|---|\n${rows.join("\n")}\n\n## After\n\ntext\n`;
-  const path = join(root, "docs", "design", "plates", `${name}.md`);
+  const body = `${box}${approvals}\n## Timeline\n\n| Date | What happened | Where it is written |\n|---|---|---|\n${rows.join("\n")}\n\n## After\n\ntext\n`;
+  const path = join(dir, `${name}.md`);
+  writeFileSync(join(dir, `${name}.yaml`), `bed: x2d\n# ${name}\n`);
   writeFileSync(path, `${fm}\n${body}`);
   return path;
+}
+
+/** A yes, written the way a session writes one: through the tool. */
+function approve(path: string, date: string): void {
+  plateApproveTool([path, "--approved", "--by", "Omar, tick", "--date", date]);
 }
 
 beforeAll(() => {
@@ -49,139 +51,129 @@ describe("plateApproval", () => {
     expect(a.approved).toBe(false);
   });
 
-  it("refuses an unticked box", () => {
-    page("p-unticked", { box: " " });
-    expect(plateApproval("p-unticked", root).approved).toBe(false);
+  it("refuses a page with nothing in its Approvals table", () => {
+    page("p-empty", {});
+    const a = plateApproval("p-empty", root);
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("no approval in the Approvals table");
   });
 
-  it("takes a first-time tick before it is read back", () => {
+  it("refuses a tick nobody has recorded, and says how to record it", () => {
     page("p-tick", { box: "x" });
     const a = plateApproval("p-tick", root);
-    expect(a.approved).toBe(true);
-    expect(a.how).toContain("ticked");
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("not recorded");
   });
 
-  it("takes a dated approval", () => {
-    page("p-fm", { approved: "2026-10-02", box: "x", rows: ["2026-10-01 | proposed", "2026-10-02 | approved — by Omar"] });
-    const a = plateApproval("p-fm", root);
+  it("takes an open approval on the recipe as it is", () => {
+    const path = page("p-yes", { box: "x" });
+    approve(path, "2026-10-03");
+    expect(readFileSync(path, "utf8")).not.toMatch(/\[x\] \*\*Approve/);
+    const a = plateApproval("p-yes", root);
     expect(a.approved).toBe(true);
-    expect(a.how).toContain("2026-10-02");
+    expect(a.how).toContain("2026-10-03");
+    expect(a.how).toContain("first send");
   });
 
-  it("refuses an approval spent by a send and a print (the sheets-04 shape, box still ticked)", () => {
+  it("refuses an approval spent by a send (the sheets-04 shape, box still ticked)", () => {
     page("p-spent", {
-      approved: "2026-10-02",
       box: "x",
-      rows: [
-        "2026-10-01 | proposed",
-        "2026-10-02 | approved — as it stands",
-        "2026-10-02 | approved — again",
-        "2026-10-02 | sent — by Omar, from Bambu Studio",
-        "2026-10-02 | printed — on the X2D",
-        "2026-10-02 | judged — pieces fell through",
+      stage: "printed",
+      approvals: [
+        "| 2026-10-02 | approved | Omar, tick (before the peaked set) | — | replaced 2026-10-02 |",
+        "| 2026-10-02 | approved | Omar, tick, with the fixed peak | — | sent 2026-10-02 |",
       ],
+      rows: ["2026-10-01 | proposed", "2026-10-02 | sent — by Omar, from Bambu Studio", "2026-10-02 | printed — on the X2D"],
     });
     const a = plateApproval("p-spent", root);
     expect(a.approved).toBe(false);
-    expect(a.how).toContain("spent");
-    expect(a.how).toContain("tick after a send");
+    expect(a.how).toContain("was sent 2026-10-02");
+    expect(a.how).toContain("not recorded");
     expect(a.sends).toBe(1);
   });
 
-  it("takes a fresh approval after a print, for the reprint", () => {
-    page("p-reprint", {
-      approved: "2026-10-03",
-      rows: ["2026-10-01 | approved", "2026-10-01 | sent", "2026-10-02 | printed", "2026-10-03 | approved — reprint"],
-    });
-    const a = plateApproval("p-reprint", root);
+  it("names a recipe that changed after the yes, since whether it voids the yes is Omar's call 6", () => {
+    const path = page("p-changed", {});
+    approve(path, "2026-10-03");
+    writeFileSync(path.replace(/\.md$/, ".yaml"), "bed: x2d\nspacing: 4\n");
+    const a = plateApproval("p-changed", root);
     expect(a.approved).toBe(true);
-    expect(a.how).toContain("send 2");
+    expect(a.how).toContain("the recipe changed since");
+    expect(a.how).toContain("ask before sending");
   });
 
-  it("refuses a plate that went out with no approval at all", () => {
-    page("p-legacy", { rows: ["2026-09-25 | sent — before pages existed"] });
-    expect(plateApproval("p-legacy", root).approved).toBe(false);
+  it("refuses when the tool does not run: a status it cannot read is not a yes", () => {
+    page("p-broken", {});
+    const broken: ApproveTool = () => {
+      throw Object.assign(new Error("spawn python3 ENOENT"), { stderr: "" });
+    };
+    const a = plateApproval("p-broken", root, broken);
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("did not read the page");
+  });
+
+  it("reads a real page in this repo: sheets-04's yes was spent by its send", () => {
+    const repo = fileURLToPath(new URL("../../../", import.meta.url));
+    const a = plateApproval("sheets-04", repo);
+    expect(a.exists).toBe(true);
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("was sent 2026-10-02");
   });
 });
 
-// D-095: a production plate goes out on a standing approval, but only when the grader agrees.
-// The grader is injected; the real one is plate_grade.py, tested in its own self-test.
-const stands: Grader = () => ({ standing: true, why: "its prints still show production" });
-const slipped: Grader = () => ({ standing: false, why: "the prints now show repeatable" });
-const broken: Grader = () => {
-  throw new Error("python3: not found");
-};
-const sentTwice = ["2026-09-01 | approved", "2026-09-02 | sent", "2026-09-03 | printed", "2026-09-10 | promoted — to production", "2026-09-20 | sent"];
-
 describe("plateApproval on a production plate (D-095)", () => {
-  it("sends a production plate the grader still stands behind, with no new yes", () => {
-    page("p-prod", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
+  it("passes on the tool's standing answer", () => {
+    page("p-prod", { maturity: "production" });
+    const stands: ApproveTool = () => JSON.stringify({ approved: true, how: "standing approval: its prints still show production (D-095)", sends: 2, standing: true });
     const a = plateApproval("p-prod", root, stands);
     expect(a.approved).toBe(true);
     expect(a.standing).toBe(true);
     expect(a.how).toContain("D-095");
   });
 
-  it("refuses a page that says production when the prints no longer do, and says why", () => {
-    page("p-slipped", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
-    const a = plateApproval("p-slipped", root, slipped);
+  it("refuses a page that says production when its grade cannot be read, and says why", () => {
+    // The temporary repo has no print records or bets file, so the grade does not run.
+    page("p-nograde", { maturity: "production" });
+    const a = plateApproval("p-nograde", root);
     expect(a.approved).toBe(false);
     expect(a.standing).toBe(false);
-    expect(a.how).toContain("no standing approval: the prints now show repeatable");
-  });
-
-  it("refuses when the grader cannot run: a grade it cannot read is not a yes", () => {
-    page("p-nograde", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
-    const a = plateApproval("p-nograde", root, broken);
-    expect(a.approved).toBe(false);
-    expect(a.how).toContain("the grade did not run");
-  });
-
-  it("still takes a fresh yes on a production plate that lost its standing", () => {
-    page("p-slipped-yes", { approved: "2026-09-21", maturity: "production", rows: [...sentTwice, "2026-09-21 | approved — by Omar"] });
-    const a = plateApproval("p-slipped-yes", root, slipped);
-    expect(a.approved).toBe(true);
-    expect(a.standing).toBe(false);
-  });
-
-  it("reads the real grader's JSON: a plate in this repo, every one an experiment today", () => {
-    const repo = fileURLToPath(new URL("../../../", import.meta.url));
-    const s = gradeWithPython("sheets-04b", repo);
-    expect(s.standing).toBe(false);
-    expect(s.why).toContain("not production");
-  });
-
-  it("never asks the grader about an experiment", () => {
-    page("p-exp", { box: " " });
-    expect(plateApproval("p-exp", root, stands).approved).toBe(false);
+    expect(a.how).toContain("no standing approval");
   });
 });
 
 describe("spendApproval", () => {
-  it("leaves a standing approval in place and logs the send as standing", () => {
-    const path = page("p-prod-send", { approved: "2026-09-01", box: "x", maturity: "production", rows: sentTwice });
-    const before = plateApproval("p-prod-send", root, stands);
-    const row = spendApproval(path, "2026-10-03", before);
-    const text = readFileSync(path, "utf8");
-    expect(row).toContain("standing approval of a production plate");
-    expect(text).toMatch(/\[x\] \*\*Approve/);
-    expect(plateApproval("p-prod-send", root, stands).approved).toBe(true);
-  });
-
-  it("unticks, marks the plate sent, logs the send, and the next send is refused", () => {
-    const path = page("p-spend", { approved: "2026-10-03", box: "x", rows: ["2026-10-01 | proposed", "2026-10-03 | approved — by Omar"] });
+  it("spends the yes: Spent by filled, box unticked, stage sent, the send logged, the next send refused", () => {
+    const path = page("p-spend", {});
+    approve(path, "2026-10-03");
+    writeFileSync(path, readFileSync(path, "utf8").replace("- [ ] **Approve", "- [x] **Approve"));
     const before = plateApproval("p-spend", root);
     expect(before.approved).toBe(true);
     const row = spendApproval(path, "2026-10-03", before);
     const text = readFileSync(path, "utf8");
+    expect(row).toContain("spends the approval of 2026-10-03");
     expect(text).toContain("stage: sent");
+    expect(text).toContain("| sent 2026-10-03 |");
     expect(text).not.toMatch(/\[x\] \*\*Approve/);
-    expect(text).toContain(row);
-    // the row lands inside the table, before the next section
     expect(text.indexOf(row)).toBeLessThan(text.indexOf("## After"));
     const after = plateApproval("p-spend", root);
     expect(after.approved).toBe(false);
     expect(after.sends).toBe(1);
+  });
+
+  it("passes --standing for a standing send, so it spends nothing", () => {
+    const seen: string[][] = [];
+    const tool: ApproveTool = (args) => {
+      seen.push(args);
+      return "| 2026-10-03 | sent — by `bambu print send`, on the standing approval of a production plate (D-095) | this page |\n";
+    };
+    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true }, tool);
+    expect(seen[0]).toContain("--standing");
+    expect(row).toContain("standing approval");
+  });
+
+  it("refuses to spend on a page that is not approved, with the tool's reason", () => {
+    const path = page("p-nospend", {});
+    expect(() => spendApproval(path, "2026-10-03", plateApproval("p-nospend", root))).toThrow(/not approved for a send/);
   });
 });
 

@@ -3,8 +3,9 @@
 **In short.** A plate is one bed of pieces sent to the printer together. Each plate has a
 recipe (`minis-NN.yaml`, which `bambu slice compose` turns into a slice) and, beside it, a page
 (`minis-NN.md`) for Omar to review. The page says what the plate is, why to print it, what it
-costs, and shows pictures of it. Its frontmatter records whether Omar approved it and how many
-times it has printed, and its timeline lists each step with a date. The queue below ranks the
+costs, and shows pictures of it. Its frontmatter records its stage and how many times it has
+printed, its Approvals table holds every yes Omar gave it, and its timeline lists each step with a
+date. The queue below ranks the
 plates that have not printed yet, highest return first. The
 [prioritize-prints skill](../../../.claude/skills/prioritize-prints/SKILL.md) keeps all of this
 current; the [print review design](../printing/print-review-design.md) explains why it
@@ -38,16 +39,27 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | `planned` | Designed, but it waits on a build before it can have a recipe or a slice; `needs:` lists what | whoever wrote the design |
 | `proposed` | The recipe exists; nobody has reviewed the page yet | whoever wrote the recipe |
 | `waiting` | Pictures and costs are on the page; waiting for Omar's tick | the skill, once the page is complete |
-| `approved` | Omar ticked Approve, or said yes in chat; `approved_on` is the date | the skill, reading the tick or his words back |
+| `approved` | Omar ticked Approve, or said yes in chat, and it is a row in the Approvals table | `tools/plate_approve.py`, reading the tick or his words back |
 | `sent` | It went to the printer; no record yet | `bambu print send`, which spends the approval |
 | `printed` | A record exists in [`docs/prints/`](../../prints.md) | the record; `times_printed` counts them |
 | `retired` | Not printing it again | Omar |
 
 Only Omar approves ([D-093](../../working-model/decisions-log.md)): he ticks the box, or says yes in
-chat and the session writes it onto the page with the date and his words. One approval covers one
-send. `bambu print send` refuses a plate without a live approval, and a send spends it: the box is
-unticked and a dated `sent` row joins the timeline. A plate that printed can print again, but only
-on a new approval, so the timeline logs every approved reprint. A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on ([D-095](../../working-model/decisions-log.md)). Its recipe
+chat. Either way `python3 tools/plate_approve.py <page> --approved --by "<who, and how>"` writes it
+as a row in the page's `## Approvals` table and unticks the box, so the next tick is a new answer
+([D-096](../../working-model/decisions-log.md)):
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
+| 2026-10-02 | approved | Omar, tick on this page | recipe 1a2b3c4d5e6f | sent 2026-10-02 |
+
+`Decision` is `approved`, `held` or `standing`; `Covers` is the recipe the yes was given on; and
+`Spent by` is empty while the yes is open, then `sent <date>` or `replaced <date>`. One approval
+covers one send: `bambu print send` refuses a plate with no open row, and a send fills its
+`Spent by` and adds a dated `sent` row to the timeline. A recipe that changed after the yes is
+named on the send; whether that voids the yes is the print-review design's open call 6. The plates
+gate (P2) checks the table against the stage and the timeline. A plate that printed can print again, but only
+on a new approval, so the table keeps every approved reprint. A production plate is the exception: it has a standing approval, a `standing` row written on promotion, while its prints still show production and its recipe is the one it was promoted on ([D-095](../../working-model/decisions-log.md)). Its recipe
 is frozen: a change goes on a new experiment plate with `derived_from` (grade-plate skill). Each run is its own record, and
 `times_printed` is the number of records.
 

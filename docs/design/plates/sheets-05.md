@@ -2,8 +2,6 @@
 plate: sheets-05
 recipe:
 stage: planned
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "Lowered, flush or raised fills: which looks right, and does a raised fill look any different from a tall loose piece?"
@@ -88,6 +86,13 @@ review sheet and the slice, and the boxes below are the ones you will answer.
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

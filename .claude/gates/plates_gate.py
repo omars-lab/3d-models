@@ -2,9 +2,10 @@
 """Plates gate for 3d-models: a plate page tells the truth about its plate.
 
 `docs/design/plates/<plate>.yaml` is what gets sliced; `docs/design/plates/<plate>.md` is the page Omar
-reviews it on: what it is, why print it, pictures, cost and risk, their approval tick box, and
-a timeline of what happened to it. Its frontmatter holds the few facts the queue ranks on and
-the facts that must never drift — whether Omar approved it, and how many times it printed.
+reviews it on: what it is, why print it, pictures, cost and risk, their approval tick box, a
+table of every approval they gave it, and a timeline of what happened to it. Its frontmatter
+holds the few facts the queue ranks on and how many times it printed; whether Omar approved it
+is the Approvals table, which can hold the second yes on the same design (D-096).
 The design is `docs/design/printing/print-review-design.md`; these are its §6 rules.
 
   P1  **Shape.** The frontmatter parses and carries every key in REQUIRED; `plate` is the
@@ -15,10 +16,20 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       names what it waits on in `needs:`. Only a planned plate has `needs:` — a plate that
       still waits on a build is not ready to rank, so it cannot sit at a later stage.
 
-  P2  **Approval.** `approved` is true, false, or empty (the plate went out before pages
-      existed, and nobody asked). True if and only if `approved_on` is a date. A plate at
-      `approved` is approved. A plate at `sent` or `printed` is not `approved: false` — the
-      load-bearing case: nothing goes out that the page says Omar did not approve.
+  P2  **Approvals** (D-096). Omar's decisions are rows in the page's `## Approvals` table,
+      `| Date | Decision | By | Covers | Spent by |`, one row per decision, as many as the plate
+      gets: `approved`, `held`, or `standing` (a production plate's standing approval). Not
+      frontmatter: one `approved:` field cannot hold the second yes on the same design. The tick
+      box (or a yes in chat) is the input; `tools/plate_approve.py` writes the row and unticks
+      the box. Covers is `recipe <hash>`, the recipe the decision was made on. An approval's
+      Spent by is empty while it is open, `sent <date>` once a send used it, or `replaced <date>`
+      when a later decision took its place; held and standing rows say `—`. Checked: the table
+      and its header are there; rows are dated, in order, with words from the vocabularies; a
+      `sent` date has a timeline `sent` row, and every timeline `sent` row from TABLE_FROM on
+      was spent by exactly one approval or went out on a standing one; a `replaced` date has a
+      later decision that day; at most one approval is open and nothing is decided after it;
+      stage `approved` holds exactly while an approval is open. The load-bearing case: a send
+      with no approval spent on it — nothing goes out that the page says Omar did not approve.
 
   P3  **Count.** `runs` is exactly the print records under `docs/prints/` whose `plate:`
       starts with this plate's name, and `times_printed` is how many there are. Hard case:
@@ -32,8 +43,8 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
   P5  **Coverage.** Every plate `.yaml` has a page and every page has a `.yaml`.
 
   P6  **Timeline.** The `## Timeline` table's rows are dated, in order, and name an event in
-      EVENTS. An approved page has an `approved` row on `approved_on`; every run has a
-      `printed` row naming it, and there are as many `printed` rows as `times_printed`.
+      EVENTS. Every run has a `printed` row naming it, and there are as many `printed` rows as
+      `times_printed`. Approvals are not timeline events; they are P2's table.
 
   P7  **The queue is current.** The block between the queue markers in
       `docs/design/plates/README.md` is exactly what `--write` would write from the pages and the
@@ -53,13 +64,16 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       `recipe_hash` when it is promoted, and a recipe that no longer matches it is a finding.
       A change goes on a new experiment plate whose `derived_from` names it
       (`tools/plate_grade.py --derive`). A `derived_from` must name a plate page that exists.
+      A production page's last `standing` row covers its pinned `recipe_hash`.
       `standing_approval` says whether a production plate may go out with no new yes; the
-      send check (`tools/bambu/src/send-gate.ts`) reads it through `plate_grade.py --json`.
+      send check (`tools/bambu/src/send-gate.ts`) reads it through `plate_approve.py --status`.
 
-Not a finding: a ticked approval box that the frontmatter does not know yet. It prints a
-notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
-failed on it would block every other session's commit until then. Nor is a page that claims
-less maturity than its prints show: experiment asks nothing, and promoting is a choice.
+Not a finding: a ticked Approve or Hold box that the table does not record yet, or an open
+approval whose recipe has changed since. Each prints a notice, because the fix is a read-back
+by whoever runs the skill, and a whole-tree gate that failed on it would block every other
+session's commit until then. The send refuses an unrecorded tick; a changed recipe it names and
+lets through while LAPSE_ON_RECIPE_CHANGE is off (Omar's call 6, print-review-design §9). Nor is a page that
+claims less maturity than its prints show: experiment asks nothing, and promoting is a choice.
 
   rank:        python3 .claude/gates/plates_gate.py --rank
   as data:     python3 .claude/gates/plates_gate.py --rank --json   (3d-model-hub's plate queue)
@@ -93,7 +107,7 @@ BETS = ROOT / ".claude" / "skills" / "calibrate" / "bets.md"
 SCORING_LINK = Path(os.path.relpath(SCORING, PLATES)).as_posix()
 
 REQUIRED = (
-    "plate", "recipe", "stage", "approved", "approved_on", "times_printed", "runs",
+    "plate", "recipe", "stage", "times_printed", "runs",
     "answers", "kind", "maturity", "bets", "unblocks", "minutes", "grams", "bed_plates", "risk",
     "pictures",
 )
@@ -109,12 +123,25 @@ RISKS = ("ok", "watch", "hold")
 # What past prints showed, lowest first (plate-maturity-design §2). Not `kind`: kind is why the
 # next print happens, maturity is what the last ones proved.
 MATURITY = ("experiment", "repeatable", "production")
-EVENTS = ("proposed", "reviewed", "approved", "held", "sliced", "sent", "printed", "judged",
-          "promoted", "demoted", "retired")
+EVENTS = ("proposed", "reviewed", "sliced", "sent", "printed", "judged", "promoted", "demoted",
+          "retired")
+# The approvals table (P2, D-096). Rows before TABLE_FROM were moved in from the timeline when
+# the table began: they may cover `—` (the recipe they approved was not hashed), and a send
+# before it needs no row (minis-01 to -03 went out before plate pages existed).
+APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
+DECISIONS = ("approved", "held", "standing")
+TABLE_FROM = "2026-10-03"
+# Does a yes lapse when the recipe changes after it? Omar's open call 6 in print-review-design
+# §9; until he answers, a change is named on the send and in a notice, and the yes stands, as
+# before the table. "Gate it" is this one switch: the table already records what each yes covers.
+LAPSE_ON_RECIPE_CHANGE = False
+COVERS = re.compile(r"^recipe [0-9a-f]{12}$")
+SPENT = re.compile(r"^(sent|replaced) (\d{4}-\d{2}-\d{2})$")
 
 Q_START, Q_END = "<!-- queue:start -->", "<!-- queue:end -->"
 ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*([a-z]+)\b(.*)$")
 TICKED_APPROVE = re.compile(r"^\s*-\s*\[[xX]\]\s*\*{0,2}Approve", re.MULTILINE)
+TICKED_HOLD = re.compile(r"^\s*-\s*\[[xX]\]\s*\*{0,2}Hold", re.MULTILINE)
 
 
 def plate_of(record_plate) -> str | None:
@@ -173,6 +200,155 @@ def timeline(body: str) -> list[tuple[str, str, str]]:
         if r:
             rows.append((r.group(1), r.group(2), r.group(3)))
     return rows
+
+
+# ---------------------------------------------------------------------------
+# P2 — the approvals table (D-096)
+# ---------------------------------------------------------------------------
+
+APPROVALS = re.compile(r"^## Approvals\b.*?$(.*?)(?=^## |\Z)", re.MULTILINE | re.DOTALL)
+
+
+def approvals(body: str) -> tuple[list[dict], str | None]:
+    """(rows, why the table does not read) for `## Approvals`. Each row is
+    {date, decision, by, covers, spent}, in the order the table holds them."""
+    m = APPROVALS.search(body)
+    if not m:
+        return [], "no '## Approvals' table"
+    lines = [ln.strip() for ln in m.group(1).splitlines() if ln.strip().startswith("|")]
+    if not lines or lines[0] != APPROVALS_HEAD:
+        return [], f"the Approvals table's header is not `{APPROVALS_HEAD}`"
+    rows = []
+    for ln in lines[2:]:  # the header, then its |---| line
+        cells = [c.strip() for c in ln.strip("|").split("|")]
+        if len(cells) != 5:
+            return [], f"an Approvals row does not have five cells: {ln}"
+        rows.append(dict(zip(("date", "decision", "by", "covers", "spent"), cells)))
+    return rows, None
+
+
+def open_approval(rows: list[dict]) -> dict | None:
+    """The approval not yet spent or replaced, if there is one (P2 allows at most one)."""
+    live = [r for r in rows if r["decision"] == "approved" and not r["spent"]]
+    return live[-1] if live else None
+
+
+def covers(path: Path) -> str | None:
+    """What an approval made now covers: `recipe <hash>`, or None with no readable recipe."""
+    h = recipe_hash(path)
+    return f"recipe {h}" if h else None
+
+
+def approval_status(path: Path, data: dict, body: str) -> dict:
+    """{approved, how, row, sends}: may this plate go out on a yes, one per send (D-093)?
+    Only an open approval on the recipe as it is now. A ticked box is not one until it is a row:
+    a box ticked before a send made outside the CLI looks exactly like a fresh one."""
+    sends = sum(1 for _, ev, _ in timeline(body) if ev == "sent")
+    rows, bad = approvals(body)
+    if bad:
+        return {"approved": False, "how": bad, "row": None, "sends": sends}
+    row = open_approval(rows)
+    record = (f"record it with `python3 tools/plate_approve.py {path.stem} --approved "
+              "--by \"Omar, tick\"`")
+    if row is None:
+        last = [r for r in rows if r["decision"] in ("approved", "held")]
+        if not last:
+            how = "no approval in the Approvals table"
+        elif last[-1]["decision"] == "held":
+            how = f"held on {last[-1]['date']} ({last[-1]['by']})"
+        else:
+            how = f"the approval of {last[-1]['date']} was {last[-1]['spent']}"
+        if TICKED_APPROVE.search(body):
+            how += f"; the Approve box is ticked but not recorded — {record}"
+        return {"approved": False, "how": how, "row": None, "sends": sends}
+    now = covers(path)
+    changed = row["covers"] != now
+    if changed and LAPSE_ON_RECIPE_CHANGE:
+        return {"approved": False, "row": row, "sends": sends,
+                "how": (f"the approval of {row['date']} covers {row['covers']}, but the recipe is "
+                        f"now {now}: the recipe changed after the yes, so it needs a new one")}
+    nth = "its first send" if sends == 0 else f"send {sends + 1}"
+    how = f"approved on {row['date']} ({row['by']}), for {nth}"
+    if changed:
+        how += (f"; but the recipe changed since (the yes covers {row['covers']}, the recipe is "
+                f"now {now}) — whether that voids the yes is Omar's open call 6 in "
+                "print-review-design §9, so tell him and ask before sending")
+    return {"approved": True, "row": row, "sends": sends, "how": how}
+
+
+def check_approvals(name: str, data: dict, body: str) -> list[str]:
+    """P2: the table reads, its rows agree with each other and with the timeline's sends."""
+    out = [f"{name}: P2 `{k}` is in the frontmatter — approvals moved to the page's "
+           "## Approvals table (D-096)" for k in ("approved", "approved_on") if k in data]
+    rows, bad = approvals(body)
+    if bad:
+        return out + [f"{name}: P2 {bad} — `python3 tools/plate_approve.py {name} --table` "
+                      "writes an empty one"]
+    for i, r in enumerate(rows):
+        d, dec, spent = r["date"], r["decision"], r["spent"]
+        where = f"{name}: P2 Approvals row {i + 1} ({d})"
+        try:
+            dt.date.fromisoformat(d)
+        except ValueError:
+            out.append(f"{where}: the date is not YYYY-MM-DD")
+            continue
+        if dec not in DECISIONS:
+            out.append(f"{where}: decision {dec!r} is not one of {list(DECISIONS)}")
+            continue
+        if not r["by"]:
+            out.append(f"{where}: By is empty — say who decided, and how")
+        if dec in ("approved", "standing") and not COVERS.match(r["covers"]) and not (
+                d < TABLE_FROM and r["covers"] == "—"):
+            out.append(f"{where}: an {dec} row covers {r['covers']!r}, not `recipe <hash>`")
+        if dec == "approved":
+            m = SPENT.match(spent)
+            if spent and not m:
+                out.append(f"{where}: Spent by {spent!r} is not empty, `sent <date>` or "
+                           "`replaced <date>`")
+            elif m and m.group(2) < d:
+                out.append(f"{where}: spent on {m.group(2)}, before it was given")
+            elif m and m.group(1) == "replaced" and not any(
+                    x["date"] == m.group(2) and x["decision"] in DECISIONS for x in rows[i + 1:]):
+                out.append(f"{where}: replaced on {m.group(2)}, but no later decision that day")
+        elif spent != "—":
+            out.append(f"{where}: a {dec} row is not spent, so Spent by is `—`, not {spent!r}")
+    if [r["date"] for r in rows] != sorted(r["date"] for r in rows):
+        out.append(f"{name}: P2 Approvals rows are not in date order")
+    live = [i for i, r in enumerate(rows) if r["decision"] == "approved" and not r["spent"]]
+    if len(live) > 1:
+        out.append(f"{name}: P2 {len(live)} approvals are open; a new decision replaces the "
+                   "last one")
+    elif live and any(r["decision"] in ("approved", "held") for r in rows[live[0] + 1:]):
+        out.append(f"{name}: P2 the approval of {rows[live[0]]['date']} is open but a later "
+                   "decision came after it — mark it `replaced <date>`")
+    stage = data.get("stage")
+    if (stage == "approved") != bool(live):
+        out.append(f"{name}: P2 stage '{stage}' but "
+                   + ("an approval is open — record the stage as approved"
+                      if live else "no approval is open in the Approvals table"))
+    # Sends: each spent approval names a send, and each send since the table began spent one.
+    sent = [(d, rest) for d, ev, rest in timeline(body) if ev == "sent"]
+    standing_from = min((r["date"] for r in rows if r["decision"] == "standing"), default=None)
+    spent_on: dict[str, int] = {}
+    for r in rows:
+        m = SPENT.match(r["spent"]) if r["decision"] == "approved" else None
+        if m and m.group(1) == "sent":
+            spent_on[m.group(2)] = spent_on.get(m.group(2), 0) + 1
+    for d, n in sorted(spent_on.items()):
+        on_day = [rest for sd, rest in sent if sd == d and "standing approval" not in rest]
+        if len(on_day) < n:
+            out.append(f"{name}: P2 {n} approval(s) spent by a send on {d}, but the timeline has "
+                       f"{len(on_day)} 'sent' row(s) that day")
+    for d in sorted({sd for sd, _ in sent if sd >= TABLE_FROM}):
+        rests = [rest for sd, rest in sent if sd == d]
+        standing = [x for x in rests if "standing approval" in x]
+        if standing and not (standing_from and standing_from <= d):
+            out.append(f"{name}: P2 a send on {d} says it went out on a standing approval, but "
+                       "no standing row comes before it")
+        if len(rests) - len(standing) > spent_on.get(d, 0):
+            out.append(f"{name}: P2 it went out on {d} with no approval spent on it — nothing "
+                       "goes out unapproved (record the yes, then `plate_approve.py --sent`)")
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -356,15 +532,33 @@ def recipe_unchanged(path: Path, data: dict) -> str | None:
     return None
 
 
-def standing_approval(path: Path, data: dict, ev: dict) -> tuple[bool, str]:
+def standing_row(path: Path, data: dict, body: str) -> str | None:
+    """Why a production page's Approvals table does not hold its standing approval, or None.
+    The last `standing` row covers the recipe the page was promoted on (D-095, D-096)."""
+    rows, bad = approvals(body)
+    if bad:
+        return bad
+    last = [r for r in rows if r["decision"] == "standing"]
+    want = f"recipe {data.get('recipe_hash')}"
+    if not last:
+        return ("no standing row in the Approvals table — promotion writes it "
+                f"(`python3 tools/plate_approve.py {path.stem} --standing`)")
+    if last[-1]["covers"] != want:
+        return (f"the last standing row ({last[-1]['date']}) covers {last[-1]['covers']}, not the "
+                f"promoted {want}")
+    return None
+
+
+def standing_approval(path: Path, data: dict, ev: dict, body: str) -> tuple[bool, str]:
     """(may it go out with no new yes, why). Only a production page whose prints still show
-    production and whose recipe is the one it was promoted on (D-095)."""
+    production, whose recipe is the one it was promoted on (D-095), and whose Approvals table
+    holds the standing row for that recipe (D-096)."""
     if data.get("maturity") != "production":
         return False, f"maturity is {data.get('maturity')!r}, not production"
     if ev["level"] != "production":
         return False, (f"the page says production but the prints now show {ev['level']} — "
                        + " ".join(ev["why"]) + "; demote it (grade-plate skill)")
-    changed = recipe_unchanged(path, data)
+    changed = recipe_unchanged(path, data) or standing_row(path, data, body)
     if changed:
         return False, changed
     return True, "a production plate whose prints still show production, on its promoted recipe"
@@ -395,6 +589,9 @@ def check_maturity(path: Path, data: dict, body: str, history: dict, runs: dict,
         changed = recipe_unchanged(path, data)
         if changed:
             out.append(f"{name}: P8 production plate: {changed}")
+        missing = standing_row(path, data, body)
+        if missing:
+            out.append(f"{name}: P8 production plate: {missing}")
     moves = [(d, ev_, rest) for d, ev_, rest in timeline(body) if ev_ in ("promoted", "demoted")]
     if moves and level not in moves[-1][2]:
         out.append(f"{name}: P8 maturity '{level}' but the last promoted/demoted row "
@@ -453,19 +650,8 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
                 out.append(f"{name}: P1 stage '{stage}' is ranked, so {key} must be a positive "
                            f"number, not {data[key]!r}")
 
-    # P2 — approval
-    approved, on = data["approved"], data["approved_on"]
-    if approved not in (True, False, None):
-        out.append(f"{name}: P2 approved {approved!r} is not true, false or empty")
-    if (approved is True) != isinstance(on, dt.date):
-        out.append(f"{name}: P2 approved is {approved!r} but approved_on is {on!r} — a date "
-                   "goes with true, and only with true")
-    if stage == "approved" and approved is not True:
-        out.append(f"{name}: P2 stage 'approved' but approved is {approved!r}")
-    if stage in ("sent", "printed") and approved is False:
-        out.append(f"{name}: P2 stage '{stage}' but approved is false — it went out unapproved")
-    if stage in ("planned", "proposed", "waiting") and approved is True:
-        out.append(f"{name}: P2 approved is true but stage is still '{stage}'")
+    # P2 — approvals: the table, not the frontmatter
+    out += check_approvals(name, data, body)
 
     # P3 — the count is the records, not what the page says about itself
     runs = data["runs"] if isinstance(data["runs"], list) else None
@@ -502,9 +688,6 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     dates = [d for d, _, _ in rows]
     if dates != sorted(dates):
         out.append(f"{name}: P6 timeline rows are not in date order")
-    if approved is True and isinstance(on, dt.date) and not any(
-            ev == "approved" and d == on.isoformat() for d, ev, _ in rows):
-        out.append(f"{name}: P6 approved on {on} but no 'approved' row on that date")
     printed_rows = [rest for _, ev, rest in rows if ev == "printed"]
     for run_id in actual:
         if not any(run_id in rest for rest in printed_rows):
@@ -599,16 +782,20 @@ def title_of(body: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None], plates: Path = PLATES) -> dict:
+def queue_json(pages: list[dict], w: dict, titles: dict[str, str | None], plates: Path = PLATES,
+               approved_on: dict[str, str | None] | None = None) -> dict:
     """The queue as data, for 3d-model-hub's plate queue: the same ranking `render_queue` writes,
     with the page facts beside it so the hub never parses a plate page itself. `page` is the page's
-    path in this repo; the hub resolves `pictures` beside it, so moving the folder moves nothing there."""
+    path in this repo; the hub resolves `pictures` beside it, so moving the folder moves nothing there.
+    `approved` and `approved_on` are the open approval in the page's table (D-096), if any."""
+    approved_on = approved_on or {}
+
     def facts(p: dict) -> dict:
-        on = p["approved_on"]
+        on = approved_on.get(p["plate"])
         return {
             "plate": p["plate"], "page": Path(os.path.relpath(plates / f"{p['plate']}.md", ROOT)).as_posix(),
             "title": titles.get(p["plate"]), "stage": p["stage"],
-            "approved": p["approved"], "approved_on": on.isoformat() if isinstance(on, dt.date) else None,
+            "approved": on is not None, "approved_on": on,
             "times_printed": p["times_printed"], "runs": p["runs"], "answers": p["answers"],
             "kind": p["kind"], "bets": p["bets"], "unblocks": p["unblocks"],
             "minutes": p["minutes"], "grams": p["grams"], "bed_plates": p["bed_plates"],
@@ -638,6 +825,26 @@ def write_queue(readme: Path, block: str) -> None:
 
 
 # ---------------------------------------------------------------------------
+
+def approval_notices(path: Path, data: dict, body: str) -> list[str]:
+    """A tick the table does not hold yet, or an open approval on a recipe since changed. A
+    notice, not a finding: the read-back is the next session's, and the send refuses either."""
+    name, out = path.stem, []
+    rows, _ = approvals(body)
+    row = open_approval(rows)
+    if TICKED_APPROVE.search(body):
+        out.append(f"{name}: an Approve box is ticked but not in the Approvals table — record it: "
+                   f"`python3 tools/plate_approve.py {name} --approved --by \"Omar, tick\"`")
+    if TICKED_HOLD.search(body):
+        out.append(f"{name}: the Hold box is ticked but not in the Approvals table — record it: "
+                   f"`python3 tools/plate_approve.py {name} --held --by \"Omar, tick\"`")
+    if row and row["covers"] != covers(path):
+        out.append(f"{name}: the open approval of {row['date']} covers {row['covers']}, but the "
+                   f"recipe is now {covers(path)} — "
+                   + ("the send will refuse it until Omar approves again" if LAPSE_ON_RECIPE_CHANGE
+                      else "ask Omar before it goes out (print-review call 6 is open)"))
+    return out
+
 
 def page_findings(path: Path, data: dict, body: str, ctx: dict) -> tuple[list[str], list[str]]:
     """(findings, notices) for one page: P1-P4 and P6, then P8 once the shape holds."""
@@ -674,9 +881,7 @@ def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Pa
         notices += n
         if not f:
             good.append(data)
-        if TICKED_APPROVE.search(body) and data.get("approved") is not True:
-            notices.append(f"{path.stem}: an Approve box is ticked but approved is not true yet "
-                           "— read it back (prioritize-prints skill, step 1)")
+            notices += approval_notices(path, data, body)
     # P5 — coverage, both ways
     stems = {p.stem for p, *_ in pages}
     for y in sorted(plates.glob("*.yaml")):
@@ -711,34 +916,37 @@ def run(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=RUBRIC)
 
 
 def sort_pages(plates: Path, prints: Path, bets: Path, rubric: Path = RUBRIC
-               ) -> tuple[list[dict], list[str], dict[str, str | None]]:
-    """(pages with no finding, the findings of the rest, each page's title)."""
+               ) -> tuple[list[dict], list[str], dict[str, str | None], dict[str, str | None]]:
+    """(pages with no finding, the findings of the rest, each page's title, the date of each
+    page's open approval)."""
     ctx = context(prints, bets, rubric)
-    good, bad, titles = [], [], {}
+    good, bad, titles, opened = [], [], {}, {}
     for path, data, body, err in read_pages(plates):
         f = [f"{path.stem}: {err}"] if err else page_findings(path, data, body, ctx)[0]
         bad += f
         if not f:
             good.append(data)
             titles[data["plate"]] = title_of(body)
-    return good, bad, titles
+            row = open_approval(approvals(body)[0])
+            opened[data["plate"]] = row["date"] if row else None
+    return good, bad, titles, opened
 
 
 def rank_json(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, rubric=RUBRIC) -> int:
     """--rank --json: the queue as JSON on stdout. Refuses, like --write, while a page is wrong."""
-    good, bad, titles = sort_pages(plates, prints, bets, rubric)
+    good, bad, titles, opened = sort_pages(plates, prints, bets, rubric)
     if bad:
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before ranking them", file=sys.stderr)
         return 1
-    print(json.dumps(queue_json(good, read_weights(scoring), titles, plates), indent=2))
+    print(json.dumps(queue_json(good, read_weights(scoring), titles, plates, opened), indent=2))
     return 0
 
 
 def rewrite(plates=PLATES, prints=PRINTS, scoring=SCORING, bets=BETS, quiet=False,
             rubric=RUBRIC) -> int:
     """--write: rewrite the queue block. Refuses while any page has a finding other than P7."""
-    good, bad, _ = sort_pages(plates, prints, bets, rubric)
+    good, bad, _, _ = sort_pages(plates, prints, bets, rubric)
     if bad:
         print("\n".join(bad), file=sys.stderr)
         print("plates-gate: fix the pages before writing the queue", file=sys.stderr)
@@ -790,11 +998,29 @@ items:
 """
 
 
+_SEP = "|---|---|---|---|---|"
+
+
 def _page(plate: str, fm: dict, timeline_rows: list[str], tick: str = " ") -> str:
     return ("---\n" + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True) + "---\n\n"
-            f"# {plate}\n\n## Your call\n\n- [{tick}] **Approve** — print it as it is\n\n"
+            f"# {plate}\n\n## Your call\n\n- [{tick}] **Approve** — print it as it is\n"
+            "- [ ] **Hold** — say why\n\n"
+            f"## Approvals\n\n{APPROVALS_HEAD}\n{_SEP}\n\n"
             "## Timeline\n\n| Date | What happened | Where |\n|---|---|---|\n"
             + "\n".join(timeline_rows) + "\n")
+
+
+def _approve(page: str, *rows: str):
+    """Add Approvals rows to a fixture page; `{hash}` is the page's recipe hash now."""
+    def f(plates: Path) -> None:
+        h = recipe_hash(plates / f"{page}.md")
+        _edit(page, f"{_SEP}\n", f"{_SEP}\n" + "".join(r.replace("{hash}", str(h)) + "\n"
+                                                     for r in rows))(plates)
+    return f
+
+
+def _timeline_add(page: str, after: str, row: str):
+    return _edit(page, after, f"{after}\n{row}")
 
 
 def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
@@ -805,7 +1031,7 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     rec.mkdir(parents=True)
     (rec / "index.md").write_text('---\nrun: 2026-09-26-minis-09\nplate: "minis-09 — a test"\n---\n',
                                   encoding="utf-8")
-    base = {"approved": False, "approved_on": None, "times_printed": 0, "runs": [],
+    base = {"times_printed": 0, "runs": [],
             "answers": "does it hold", "kind": "new", "maturity": "experiment",
             "bets": ["CAL-CST-06"],
             "unblocks": ["a decision"], "minutes": 120, "grams": 30, "bed_plates": 1,
@@ -813,7 +1039,7 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
     for n, extra, rows in (
         ("minis-08", {"stage": "waiting"},
          ["| 2026-09-30 | proposed | page written |", "| 2026-09-30 | reviewed | sheet |"]),
-        ("minis-09", {"stage": "printed", "approved": None, "times_printed": 1,
+        ("minis-09", {"stage": "printed", "times_printed": 1,
                       "runs": ["2026-09-26-minis-09"], "minutes": None, "grams": None,
                       "bed_plates": None, "pictures": []},
          ["| 2026-09-25 | proposed | yaml |",
@@ -856,10 +1082,10 @@ def _record(plates: Path, run: str, objects: list[tuple[tuple, int, str]]) -> No
 
 def _mature(level: str, history: list[tuple[str, str, str]], own: list | None = None,
             kind: str = "repeat", fill: float | None = 0.6, row: str | None = None,
-            pin: bool = True):
+            pin: bool = True, standing: bool = True):
     """minis-09 claims `level`; `history` is (run on another plate, A's verdict, B's verdict);
     `own` replaces minis-09's own record's objects. A production claim pins its recipe's hash
-    unless `pin` is false."""
+    unless `pin` is false, and records its standing approval unless `standing` is false."""
     def f(plates: Path) -> None:
         for run, va, vb in history:
             _record(plates, run, [(_A, 1, va), (_B, 2, vb)])
@@ -874,6 +1100,9 @@ def _mature(level: str, history: list[tuple[str, str, str]], own: list | None = 
             _edit("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
                   "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |\n"
                   + (row or f"| 2026-09-28 | promoted | to {level}: the grade |"))(plates)
+        if level == "production" and pin and standing:
+            _approve("minis-09", "| 2026-09-28 | standing | plate_grade.py, promoted | "
+                     "recipe {hash} | — |")(plates)
     return f
 
 
@@ -939,12 +1168,62 @@ CASES = [
      "P1 bet 'CAL-CST-99'"),
     ("P1 a ranked plate with no cost", _edit("minis-08", "grams: 30", "grams: null"),
      "so grams must be a positive number"),
-    ("P2 approved with no date", _edit("minis-08", "approved: false", "approved: true"),
-     "P2 approved is True but approved_on is None"),
-    ("P2 stage approved while approved is false",
-     _edit("minis-08", "stage: waiting", "stage: approved"), "P2 stage 'approved' but approved"),
-    ("P2 sent while the page says not approved (the load-bearing case)",
-     _edit("minis-08", "stage: waiting", "stage: sent"), "it went out unapproved"),
+    ("P2 approval facts left in the frontmatter",
+     _edit("minis-08", "stage: waiting", "stage: waiting\napproved: true"),
+     "P2 `approved` is in the frontmatter — approvals moved"),
+    ("P2 a page with no Approvals table",
+     _edit("minis-08", f"## Approvals\n\n{APPROVALS_HEAD}\n{_SEP}\n\n", ""),
+     "P2 no '## Approvals' table"),
+    ("P2 stage approved with no open approval",
+     _edit("minis-08", "stage: waiting", "stage: approved"),
+     "P2 stage 'approved' but no approval is open"),
+    ("P2 an open approval on a page still waiting",
+     _approve("minis-08", "| 2026-10-04 | approved | Omar, tick | recipe {hash} | |"),
+     "P2 stage 'waiting' but an approval is open"),
+    ("P2 sent with no approval spent on it (the load-bearing case)",
+     _then(_edit("minis-08", "stage: waiting", "stage: sent"),
+           _timeline_add("minis-08", "| 2026-09-30 | reviewed | sheet |",
+                         "| 2026-10-04 | sent | by bambu print send |")),
+     "P2 it went out on 2026-10-04 with no approval spent on it"),
+    ("P2 a send before the table began needs no row",
+     _timeline_add("minis-09", "| 2026-09-25 | proposed | yaml |",
+                   "| 2026-09-25 | sent | before plate pages |"), None),
+    ("P2 many decisions on one design: approved, replaced, held, approved again, sent",
+     _then(_approve("minis-09",
+                    "| 2026-10-03 | approved | Omar, tick | recipe {hash} | replaced 2026-10-04 |",
+                    "| 2026-10-04 | held | Omar, in chat | recipe {hash} | — |",
+                    "| 2026-10-05 | approved | Omar, in chat | recipe {hash} | sent 2026-10-05 |"),
+           _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
+                         "| 2026-10-05 | sent | by bambu print send |")), None),
+    ("P2 two approvals open at once",
+     _then(_edit("minis-08", "stage: waiting", "stage: approved"),
+           _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |",
+                    "| 2026-10-04 | approved | Omar, tick | recipe {hash} | |")),
+     "P2 2 approvals are open"),
+    ("P2 an open approval with a hold after it",
+     _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |",
+              "| 2026-10-04 | held | Omar | recipe {hash} | — |"),
+     "is open but a later decision came after it"),
+    ("P2 an approval spent by a send the timeline does not have",
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | sent 2026-10-05 |"),
+     "P2 1 approval(s) spent by a send on 2026-10-05, but the timeline has 0"),
+    ("P2 replaced with nothing decided that day",
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | replaced 2026-10-04 |"),
+     "replaced on 2026-10-04, but no later decision that day"),
+    ("P2 a decision outside the vocabulary",
+     _approve("minis-09", "| 2026-10-03 | maybe | Omar | recipe {hash} | — |"),
+     "decision 'maybe' is not one of"),
+    ("P2 an approval since the table began that covers no recipe",
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | — | replaced 2026-10-03 |",
+              "| 2026-10-03 | held | Omar | — | — |"),
+     "an approved row covers '—', not `recipe <hash>`"),
+    ("P2 an approval moved in from before the table may cover no recipe",
+     _then(_approve("minis-09", "| 2026-10-02 | approved | Omar | — | sent 2026-10-02 |"),
+           _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
+                         "| 2026-10-02 | sent | from Bambu Studio |")), None),
+    ("P2 a row with a cell missing",
+     _approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} |"),
+     "does not have five cells"),
     ("P3 a record the page does not count, count self-consistent (the hard case)",
      _second_record, "P3 runs [] are not the records for this plate ['2026-09-29-minis-08']"),
     ("P3 printed with a count that disagrees",
@@ -962,16 +1241,15 @@ CASES = [
            "pictures:\n- minis-08-media/sheet.png\nneeds:\n- a bikar change"),
      "P1 needs lists unbuilt work but stage is 'waiting'"),
     ("P2 planned and approved before it exists",
-     _edit("sheets-09", "approved: false\napproved_on: null",
-           "approved: true\napproved_on: 2026-10-01"),
-     "P2 approved is true but stage is still 'planned'"),
+     _approve("sheets-09", "| 2026-10-01 | approved | Omar | — | |"),
+     "P2 stage 'planned' but an approval is open"),
     ("P1 a recipe named that is not there",
      _edit("sheets-09", "recipe: null", "recipe: sheets-09.yaml"),
      "P1 recipe 'sheets-09.yaml' is not the sheets-09.yaml"),
-    ("P6 approved with no approved row",
-     _edit("minis-08", "stage: waiting\napproved: false\napproved_on: null",
-           "stage: approved\napproved: true\napproved_on: 2026-09-30"),
-     "P6 approved on 2026-09-30 but no 'approved' row"),
+    ("P6 an approval written as a timeline event (it belongs in the table)",
+     _timeline_add("minis-08", "| 2026-09-30 | reviewed | sheet |",
+                   "| 2026-09-30 | approved | by Omar |"),
+     "P6 timeline event 'approved' on 2026-09-30 is not one of"),
     ("P6 a run with no printed row",
      _edit("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
            "| 2026-09-26 | judged | verdicts |"), "P6 run 2026-09-26-minis-09 has no 'printed' row"),
@@ -1018,6 +1296,13 @@ CASES = [
     ("P8 a planned page with no recipe claims repeatable",
      _edit("sheets-09", "maturity: experiment", "maturity: repeatable"),
      "P8 maturity 'repeatable' but the prints show experiment — no recipe yet"),
+    ("P8 production with no standing row in the Approvals table",
+     _mature("production", _KEPT[:1], own=_CLEAN_OWN, standing=False),
+     "P8 production plate: no standing row in the Approvals table"),
+    ("P8 production whose standing row covers another recipe",
+     _then(_mature("production", _KEPT[:1], own=_CLEAN_OWN, standing=False),
+           _approve("minis-09", "| 2026-09-28 | standing | promoted | recipe 000000000000 | — |")),
+     "covers recipe 000000000000, not the promoted"),
     ("P8 production with no recipe_hash pinned",
      _mature("production", _KEPT[:1], own=_CLEAN_OWN, pin=False), "no recipe_hash pinned"),
     ("P8 production whose recipe was edited in place, same pieces (a repack the counts miss)",
@@ -1067,6 +1352,53 @@ def self_test() -> int:
         report(not found and len(notices) == 1, "a ticked box not read back is a notice only",
                f"findings={found} notices={notices}")
 
+        # An open approval: the plate stands approved on the recipe it covers. When the recipe
+        # changes after the yes it is a notice and a warning on the send; only with the call-6
+        # switch on does the status refuse it.
+        def opened(*steps):
+            case = tmp / f"open-{len(steps)}"
+            plates, prints, scoring, bets = _build(case)
+            _then(_edit("minis-08", "stage: waiting", "stage: approved"),
+                  _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | recipe {hash} | |"),
+                  *steps)(plates)
+            rewrite(plates, prints, scoring, bets, quiet=True, rubric=_rubric(plates))
+            found, notices, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
+            page = plates / "minis-08.md"
+            text = page.read_text(encoding="utf-8")
+            data, _ = parse_frontmatter(text)
+            return found, notices, approval_status(page, data, text) | {"page": page}
+
+        found, notices, st = opened()
+        report(not found and not notices and st["approved"] and "for its first send" in st["how"],
+               "an open approval on the recipe as it is lets the plate go out",
+               f"{found} {notices} {st}")
+        found, notices, st = opened(lambda pl: (pl / "minis-08.yaml").write_text(
+            "bed: x2d\nspacing: 4\n", encoding="utf-8"))
+        report(not found and any("call 6 is open" in n for n in notices)
+               and st["approved"] and "open call 6" in st["how"],
+               "a recipe changed after the yes is a notice and a named warning on the send, while "
+               "call 6 is Omar's", f"{found} {notices} {st}")
+        globals()["LAPSE_ON_RECIPE_CHANGE"] = True
+        try:
+            st = approval_status(st["page"], {}, st["page"].read_text(encoding="utf-8"))
+        finally:
+            globals()["LAPSE_ON_RECIPE_CHANGE"] = False
+        report(not st["approved"] and "recipe changed after the yes" in st["how"],
+               "with the call-6 switch on, the same approval is refused", str(st))
+        case = tmp / "spent-then-ticked"
+        plates, prints, scoring, bets = _build(case)
+        _then(_approve("minis-09", "| 2026-10-03 | approved | Omar | recipe {hash} | sent 2026-10-03 |"),
+              _timeline_add("minis-09", "| 2026-09-26 | printed | [2026-09-26-minis-09](x) |",
+                            "| 2026-10-03 | sent | from Bambu Studio |"),
+              _edit("minis-09", "- [ ] **Approve**", "- [x] **Approve**"))(plates)
+        page = plates / "minis-09.md"
+        text = page.read_text(encoding="utf-8")
+        st = approval_status(page, parse_frontmatter(text)[0], text)
+        report(not st["approved"] and "was sent 2026-10-03" in st["how"] and "not recorded" in st["how"]
+               and st["sends"] == 1,
+               "a box still ticked after its approval was spent is not a new yes (the sheets-04 shape)",
+               str(st))
+
         # Claiming less than the prints show is a notice, never a finding.
         case = tmp / "under-claim-is-a-notice"
         plates, prints, scoring, bets = _build(case)
@@ -1096,9 +1428,10 @@ def self_test() -> int:
                 s(plates)
             ctx = context(prints, bets, _rubric(plates))
             page = plates / "minis-09.md"
-            data, _ = parse_frontmatter(page.read_text(encoding="utf-8"))
+            text = page.read_text(encoding="utf-8")
+            data, _ = parse_frontmatter(text)
             ev = maturity_evidence(page, data, ctx["history"], ctx["runs"], ctx["rubric"])
-            return standing_approval(page, data, ev)
+            return standing_approval(page, data, ev, text)
 
         prod = _mature("production", _KEPT[:1], own=_CLEAN_OWN)
         ok, why = standing(prod)
@@ -1109,6 +1442,9 @@ def self_test() -> int:
         report(not ok and "prints now show" in why,
                "a production page whose latest run came back adjust loses it before it is demoted",
                why)
+        ok, why = standing(_mature("production", _KEPT[:1], own=_CLEAN_OWN, standing=False))
+        report(not ok and "no standing row" in why,
+               "a production plate with no standing row in its table does not stand approved", why)
         ok, why = standing(prod, _edit_recipe("bed: x2d", "bed: x2d\nspacing: 4"))
         report(not ok and "--derive minis-09" in why,
                "a production recipe edited in place loses it, and says to derive a new plate", why)
@@ -1156,13 +1492,15 @@ def self_test() -> int:
 
         # The JSON the hub reads ranks exactly as the table does, and carries the page's facts.
         for p in (a, b, c):
-            p.update({"approved": False, "approved_on": None, "times_printed": 0, "runs": [],
-                      "bed_plates": 1, "pictures": []})
-        data = queue_json([a, b, c], w, {"a": "a — first"})
+            p.update({"times_printed": 0, "runs": [], "bed_plates": 1, "pictures": []})
+        data = queue_json([a, b, c], w, {"a": "a — first"}, approved_on={"b": "2026-10-03"})
         report([q["plate"] for q in data["queue"]] == ["a", "b"]
                and data["queue"][0]["title"] == "a — first"
                and [h["plate"] for h in data["held"]] == ["c"] and data["planned"] == [],
                "the JSON queue is the table's order, titled, with the held plate apart", str(data))
+        report([(q["approved"], q["approved_on"]) for q in data["queue"]]
+               == [(False, None), (True, "2026-10-03")],
+               "the JSON's approved facts are each page's open approval", str(data["queue"]))
         report(data["queue"][0]["page"] == "docs/design/plates/a.md",
                "the JSON names each page by its path in the repo, for the hub's pictures", str(data["queue"][0]))
 

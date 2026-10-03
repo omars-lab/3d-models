@@ -2,8 +2,6 @@
 plate: sheets-01
 recipe: sheets-01.yaml
 stage: waiting
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right?"
@@ -117,6 +115,13 @@ locally.
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

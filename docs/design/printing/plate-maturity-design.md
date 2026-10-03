@@ -139,20 +139,24 @@ case: a repeatable plate printed for a reason other than use.
 ## 6. Approval: one per send, standing for production
 
 The send check D-093 built (`plateApproval` in `tools/bambu/src/send-gate.ts`) refuses a send
-unless an `approved` row comes after the last `sent` or `printed` row; a ticked box counts on its
-own only for a plate that has never gone out. That holds for experiments and repeatable plates.
+unless the page's Approvals table has an open `approved` row, one a send has not spent yet
+([D-096](../../working-model/decisions-log.md); before the table it read timeline rows, and a
+ticked box counted on its own for a plate that had never gone out). That holds for experiments and
+repeatable plates.
 
 A production plate has a **standing** approval ([D-095](../../working-model/decisions-log.md)):
 it goes out again with no new yes. Omar, 2026-10-03: "yes prod plates get standing approval".
 It still goes through `plateApproval` and nowhere else, so there stays one place that says whether
 a plate may go out. Two things end it, both checked at send time rather than trusted from the page:
 
-- **The prints slip.** `plateApproval` asks `tools/plate_grade.py --plate <name> --json`, which
+- **The prints slip.** `plateApproval` asks `tools/plate_approve.py <page> --status --json`, which
   reads the same `maturity_evidence` as the gate. A page that still says production after a run
   came back `adjust` has no standing approval, even before anyone lowers it.
 - **The recipe changes.** Promotion pins `recipe_hash` on the page: the first 12 hex digits of
   the SHA-256 of the parsed recipe, so a comment does not count and a repack with the same pieces
-  does. A recipe that no longer matches is a P8 finding and has no standing approval.
+  does. A recipe that no longer matches is a P8 finding and has no standing approval. Promotion
+  also writes a `standing` row in the Approvals table (`plate_approve.py <page> --standing`),
+  covering that same recipe, so the table shows when the standing approval began.
 
 A plate without its standing approval falls back to one yes per send; so does a plate the grader
 cannot grade. A standing send leaves the box alone and writes a `sent` row that says it went out

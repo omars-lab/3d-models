@@ -57,12 +57,14 @@ no key, the printer keys stay unset rather than being passed on encrypted.
 ## Dispatch needs Omar's approval
 
 `print send` moves real hardware, so it is fail-closed. It refuses unless the plate's page in
-`docs/design/plates/` carries a live approval from Omar (D-093: his tick, or his yes in chat written onto
-the page; one approval per send, spent by the send; a production plate has a standing approval
-while its prints and recipe still hold, D-095) and the printer is idle; no flag skips either
-check (`src/send-gate.ts`). Then it asks at a TTY; `--yes` skips only that question. A send that
-goes through unticks the box, sets the page's stage to `sent` and adds a dated `sent` row to its
-timeline. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
+`docs/design/plates/` carries a live approval from Omar (D-093: an open row in the page's
+`## Approvals` table, D-096, written from his tick or his yes in chat by `tools/plate_approve.py`;
+one approval per send, spent by the send; a production plate has a standing approval while its
+prints and recipe still hold, D-095) and the printer is idle; no flag skips either check
+(`src/send-gate.ts`, which asks `plate_approve.py --status`, so the gate and the CLI read the table
+one way). Then it asks at a TTY; `--yes` skips only that question. A send that goes through runs
+`plate_approve.py --sent`: the row's `Spent by` gets the date, the box is unticked, the page's
+stage becomes `sent` and a dated `sent` row joins its timeline. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
 `pause`/`resume` are reversible and immediate.
 
 ## Records & validation

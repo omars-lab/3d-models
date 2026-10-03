@@ -11,14 +11,16 @@ approval, and a printer that is busy or will not say its state. This skill puts 
 and does the part only eyes can do: looking at the bed. The rules come from
 [D-093](../../../docs/working-model/decisions-log.md).
 
-**One approval covers one send.** The approval is Omar's tick on the plate's page, or his yes in
-chat that this skill writes onto the page. Sending spends it. The page's timeline logs every
-approval and every send, so it is the record of each approved reprint. A plate that already went
-out needs a new yes, even when the last one was yesterday.
+**One approval covers one send.** The approval is a row in the page's `## Approvals` table
+([D-096](../../../docs/working-model/decisions-log.md)): Omar's tick on the page, or his yes in
+chat, written there by `tools/plate_approve.py` with the date, his words and the recipe it covers.
+Sending spends it: the row's `Spent by` gets the send's date. The table keeps every yes and the
+timeline every send, so together they are the record of each approved reprint. A plate that
+already went out needs a new yes, even when the last one was yesterday.
 
 **Except a production plate** ([D-095](../../../docs/working-model/decisions-log.md)): it has a
 standing approval, so it goes out again with no new yes. The CLI checks it live, through
-`tools/plate_grade.py`: the prints must still show production and the recipe must match the page's
+`tools/plate_approve.py --status`: the prints must still show production and the recipe must match the page's
 `recipe_hash`. If either fails, the plate is back to one yes per send. Every plate today is an
 experiment.
 
@@ -32,19 +34,24 @@ The plate is `docs/design/plates/<name>.yaml`, its page is `docs/design/plates/<
 
 ## 2. The approval
 
-Read the page's `## Your call` boxes and its `## Timeline`.
+Ask the tool, which reads the table the way the CLI will:
+`python3 tools/plate_approve.py docs/design/plates/<name>.md --status`.
 
-- **Live:** an `approved` row after the last `sent` or `printed` row, or a ticked Approve box on a
-  plate that has never gone out. Go on.
+- **Live:** `approved on <date> (…), for its first send` or `for send N`: an `approved` row with
+  `Spent by` empty. Go on.
+- **Ticked, not recorded:** the Approve box is ticked but no open row backs it. Read the tick back
+  first (`plate_approve.py <page> --approved --by "Omar, tick on this page"`), ship it as below,
+  then go on. A tick left over from a send made outside the CLI is the case this catches: if the
+  timeline shows a send after the last row, ask him whether the tick is a new yes before you
+  record it.
 - **Standing (production only):** the dry run's `✓ approval: standing approval: …` line. Go on;
   the send leaves the box alone and logs a `sent` row that names the standing approval. A
   `no standing approval:` reason on a refusal means the plate slipped or its recipe changed: say
   which, and ask Omar for a yes for this send, or grade it (grade-plate).
 - **Omar said yes in chat for this plate, this send:** write it down before anything else. On a
-  branch off `origin/master`: frontmatter `approved: true`, `approved_on: <today>`,
-  `stage: approved`; tick the Approve box; add
-  `| <today> | approved — by Omar in chat: "<his words>" | this page |` as the last timeline row.
-  Ship it (PR, merge), then fast-forward the vault (`git -C <vault> merge --ff-only origin/master`)
+  branch off `origin/master`:
+  `python3 tools/plate_approve.py docs/design/plates/<name>.md --approved --by 'Omar, in chat: "<his words>"'`.
+  It adds the row, sets `stage: approved` and leaves the box unticked. Ship it (PR, merge), then fast-forward the vault (`git -C <vault> merge --ff-only origin/master`)
   so the CLI reads it. His yes must name this plate. A general "go ahead" from earlier in the
   session does not cover a plate he has not seen.
 - **Spent or missing:** stop. Say which, quoting the CLI's `✗ approval:` line, and ask him to tick
@@ -79,8 +86,9 @@ still Omar's open call (print-review design call 6): say it changed and ask.
 `bambu print send build/plates/<name>.plate.3mf --record --yes`. Pass `--yes` only after steps
 2 to 4 are all green in this run. The CLI checks the approval and the printer again on its own.
 
-When it goes through, the CLI rewrites the page in the vault: the box unticked, `stage: sent`, a
-dated `sent` row naming the approval it spent. Ship that change: copy the page into a work branch
+When it goes through, the CLI rewrites the page in the vault through `plate_approve.py --sent`:
+the open row's `Spent by` becomes `sent <today>`, the box unticked, `stage: sent`, and a dated
+`sent` row on the timeline naming the approval it spent. Ship that change: copy the page into a work branch
 off `origin/master`, PR, merge, then put the vault's copy back to the merged one
 (`git -C <vault> checkout -- docs/design/plates/<name>.md` only after `git diff` shows it matches) and
 fast-forward. The `--record` draft stays in `.bambu/records/` until the pieces are judged.

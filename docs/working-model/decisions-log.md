@@ -5918,3 +5918,46 @@ experiment skill".
 something Omar did not expect, which would mean the grade or the hash misses a change that
 matters; or derived plates piling up unprinted because the copy-and-promote round trip costs more
 than the change, which would argue for re-pinning a small change in place under its own yes.
+
+## D-096 — Approvals are a table on the plate page, not frontmatter; a tick is read into it by one tool
+
+Omar, 2026-10-03: "approval shouldnt be in frontmatter, we should have astandardized apprval
+table", "with hooks to valdiate these", "since we might do multiple approvals on same design". It
+amends D-093 (one yes per send) and D-095 (standing approval for production) in where the yes is
+written; neither rule changes.
+
+### The options as offered
+
+- **Tick, table records** (offered as the pick, chosen): the tick boxes and a yes in chat stay the
+  way Omar answers; a tool writes each answer as a dated row in the table and unticks the box.
+- **Table only:** Omar types a row himself. One less step, but a row typed by hand is easy to get
+  wrong and gives the gate a shape to fight.
+- **Frontmatter plus a history list:** keeps `approved`/`approved_on` and adds a list. Two places
+  that can disagree, which is the defect the table removes.
+
+### What it means
+
+- **Every plate page has an `## Approvals` table**, before the timeline:
+  `| Date | Decision | By | Covers | Spent by |`. `Decision` is `approved`, `held` or `standing`.
+  `Covers` is the recipe the yes was given on (`recipe <hash>`, the plates gate's `recipe_hash`),
+  `—` for rows moved in from before the table. `Spent by` is empty while a yes is open, then
+  `sent <date>` or `replaced <date>`; a hold or a standing row has `—`. `approved` and
+  `approved_on` are gone from the frontmatter, and `approved`/`held` are no longer timeline events.
+- **One tool writes it:** `tools/plate_approve.py` — `--approved --by "<who, how>"` from a tick or
+  a chat yes, `--held`, `--standing` on promotion to production, `--sent` when a plate goes out
+  (the CLI calls it; a Bambu Studio send is recorded with `--via "Bambu Studio"`), and `--status`.
+  A tick that has not been read in is not an approval: a box left ticked after a send outside the
+  CLI looks like a fresh one, which is how sheets-04 looked approved again after it printed.
+- **The gate and the send read it one way.** The plates gate's P2 checks the table against the
+  stage and the timeline (at most one open yes, each `sent` row since the table spends one, each
+  `sent <date>` names a send, a yes since the table names its recipe), and `bambu print send`
+  asks `plate_approve.py --status`, which uses the gate's own reader.
+- **Several decisions on one design** are just rows: a second yes replaces an open one, a hold
+  closes it, a reprint is another yes.
+- **Call 6 stays Omar's.** The table now records what each yes covers, so "gate it" is one switch,
+  `LAPSE_ON_RECIPE_CHANGE` in the plates gate, left off: a recipe changed after a yes is a notice
+  and a warning on the send, and the yes stands, as before.
+
+**What would reverse it:** a yes Omar gave that the tool failed to record, or a send the table
+said was approved that he had not approved — either would mean the read-back step costs more
+than the frontmatter it replaced.

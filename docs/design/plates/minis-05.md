@@ -2,8 +2,6 @@
 plate: minis-05
 recipe: minis-05.yaml
 stage: waiting
-approved: false
-approved_on:
 times_printed: 0
 runs: []
 answers: "Which thin join holds a pair together best, the butterfly key or the built-in tab?"
@@ -122,6 +120,13 @@ beds, the recipe needs `beds: 2`.
 - [ ] **Hold** — say why in the notes
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

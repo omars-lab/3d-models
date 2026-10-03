@@ -2,8 +2,6 @@
 plate: minis-02
 recipe: minis-02.yaml
 stage: sent
-approved:
-approved_on:
 times_printed: 0
 runs: []
 answers: "What does each coaster style look like in the hand, for both patterns?"
@@ -58,6 +56,13 @@ and 0.07 for the two minimals and 0.03 for the twist. The review-print rubric fl
 - [ ] **I don't remember** — the page stays at sent
 
 Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
 
 ## Timeline
 

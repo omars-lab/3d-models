@@ -6,10 +6,6 @@ filters:
 properties:
   note.stage:
     displayName: Stage
-  note.approved:
-    displayName: Approved
-  note.approved_on:
-    displayName: Approved on
   note.times_printed:
     displayName: Times printed
   note.maturity:
@@ -27,8 +23,6 @@ views:
     order:
       - file.name
       - stage
-      - approved
-      - approved_on
       - times_printed
       - maturity
       - risk
