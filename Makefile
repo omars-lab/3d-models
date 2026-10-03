@@ -169,6 +169,7 @@ validate-prints: prints-manifest
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
 	$(PYTHON) ${ROOT_DIR}/tools/plate_grade.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/skills/send-plate/scripts/print_monitor.py --self-test
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks

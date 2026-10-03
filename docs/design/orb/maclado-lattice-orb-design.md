@@ -225,7 +225,7 @@ will stop on. Named here so §6's stops are recognised when they arrive.
 - **DSL surface.** `place rule lattice-walk length N start K` in the grammar
   (`parser.ts`, `evaluator.ts`, `ast.ts`), validated on `base wheelfield`.
 - **The preset.** `bikar:patterns/Orbs/Maclado-9-Lattice.bkr` — the only new file
-  3d-models' `make orbs` will glob (`3d-models:Makefile:L292 "patterns/Orbs"`).
+  3d-models' `make orbs` will glob (`3d-models:Makefile:L293 "patterns/Orbs"`).
 
 ---
 
