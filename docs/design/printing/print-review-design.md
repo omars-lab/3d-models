@@ -17,18 +17,18 @@ updated timeline of event snapshots on when i approved, when i printed", and "ho
 printed".
 
 Before this there was no single place to see a plate before it printed. A plate was a recipe
-(such as `docs/plates/minis-05.yaml`) whose header comment explained it, a review sheet in a scratch
+(such as `docs/design/plates/minis-05.yaml`) whose header comment explained it, a review sheet in a scratch
 folder, and a line in a backlog saying it was waiting. Whether Omar had said yes lived in chat.
 After it printed, a record appeared in `docs/prints/`, but nothing linked the record back to a
 plate or counted runs.
 
 ## 2. The layout
 
-- `docs/plates/<plate>.yaml` — the recipe, unchanged. `bambu slice compose` reads it.
-- `docs/plates/<plate>.md` — the review page, new, one per recipe. The gate fails on a recipe
+- `docs/design/plates/<plate>.yaml` — the recipe, unchanged. `bambu slice compose` reads it.
+- `docs/design/plates/<plate>.md` — the review page, new, one per recipe. The gate fails on a recipe
   with no page.
-- `docs/plates/<plate>-media/` — the page's pictures.
-- `docs/plates/README.md` — what a plate is, how it moves, what we can print, and **the queue**.
+- `docs/design/plates/<plate>-media/` — the page's pictures.
+- `docs/design/plates/README.md` — what a plate is, how it moves, what we can print, and **the queue**.
 - `docs/prints/<run>/index.md` — the print records, unchanged. One per time a plate came off the
   bed.
 
@@ -65,7 +65,7 @@ note with one is listed in the design-docs view.
 The body, in order: **In short**; **What it is** (the pieces, linked to the recipe); **Why print
 it** (the question, the bet, the decision it unblocks, what to read off the print); **Pictures**
 (the review sheet and the bed); **Cost and risk**; **Your call** (tick boxes); **Timeline**.
-[minis-05](../../plates/minis-05.md) is the full example, with a fix to choose before approval.
+[minis-05](../plates/minis-05.md) is the full example, with a fix to choose before approval.
 
 **Why print it** is the part a backlog line never held: which question it answers and what Omar
 can decide once it has printed. The queue's "why" comes from the same fields, so the reason on
@@ -121,7 +121,7 @@ existed were never asked about, and writing `false` on them would claim a no tha
 - **P6, timeline.** Rows are dated, in order, and use the event words. An approved page has an
   `approved` row on its date; each run has a `printed` row naming it, and there are as many
   `printed` rows as runs.
-- **P7, the queue.** The block on `docs/plates/README.md` is the one the pages compute.
+- **P7, the queue.** The block on `docs/design/plates/README.md` is the one the pages compute.
 - **P8, maturity.** The page's `maturity` is no higher than its prints show, with a dated
   `promoted` row behind any level above experiment. Its rules, and its own validator, are in
   [plate maturity §7](plate-maturity-design.md#7-the-gate-and-why-a-skill-as-well).
@@ -157,8 +157,8 @@ a stored rank goes stale the moment a weight or a cost changes. The pages hold t
 `plates_gate.py --write` computes the table; the gate fails when the table and the pages
 disagree.
 
-The first run put [minis-06](../../plates/minis-06.md) first (value 8 over 3.8 hours) and
-[minis-05](../../plates/minis-05.md) second (10 over 5.8). minis-05 is slower because as written
+The first run put [minis-06](../plates/minis-06.md) first (value 8 over 3.8 hours) and
+[minis-05](../plates/minis-05.md) second (10 over 5.8). minis-05 is slower because as written
 it spills onto a second bed. Its page offers dropping the plain pair, which would make it one bed
 in about 3.8 hours and put it first.
 
@@ -198,11 +198,11 @@ answer them there.
 **2. minis-05's second bed.** As written, one key coaster spills onto a second bed. Drop the
 plain pair (my pick: one bed, about 3.8 hours, and it moves to first), move the plain pair to
 minis-06, or print both beds. The pictures and the trade-offs are on
-[minis-05's page](../../plates/minis-05.md#fix-before-approval-the-second-bed).
+[minis-05's page](../plates/minis-05.md#fix-before-approval-the-second-bed).
 
 **3. Did minis-01 and minis-02 print?** Both went out from Bambu Studio on 2026-09-25 and
 neither has a record, so both pages sit at `sent`. A yes on either means writing its record.
-Tick boxes on [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md).
+Tick boxes on [minis-01](../plates/minis-01.md) and [minis-02](../plates/minis-02.md).
 
 **4. The weights.** A bet and an unblocked decision are worth the same (2 each), a new question
 adds 2, and 100 g of filament counts as an hour.
@@ -219,7 +219,7 @@ adds 2, and 100 g of filament counts as an hour.
 **5. minis-06's control pair.** minis-06 repeats minis-04's dovetail pair to test bikar's slot
 fix. Keeping it (my pick) checks the fix against the "pegs too tight" minis-04 found; dropping
 it saves about half the plate and leaves room for minis-05's plain pair. On
-[minis-06's page](../../plates/minis-06.md#your-call).
+[minis-06's page](../plates/minis-06.md#your-call).
 
 **6. Should an approval lapse when the recipe changes?** Today an approved plate whose recipe is
 edited afterwards stays approved.

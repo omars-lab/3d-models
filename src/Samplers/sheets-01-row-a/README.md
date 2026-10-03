@@ -1,6 +1,6 @@
 # Sheet 1, row A: today's staircase edge, cut to 30 mm windows
 
-These three STLs are the control row of [sampler sheet 1](../../../docs/plates/sheets-01.md): the
+These three STLs are the control row of [sampler sheet 1](../../../docs/design/plates/sheets-01.md): the
 coaster edge as it was before the true edges shipped, every wall made of 0.4 mm squares. bikar main
 can no longer draw that edge, and the commit that still draws it has no window cut. So the windows
 were cut once, from that commit with the window cut copied onto it, and are kept here. The window

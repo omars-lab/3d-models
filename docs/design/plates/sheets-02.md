@@ -31,13 +31,13 @@ is built yet.
 
 ## What it is
 
-The [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 2. Rows are the four tip rounds; the codes
+The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), sheet 2. Rows are the four tip rounds; the codes
 name the row and this page will carry the numbers, because the font has no full stop.
 
 ## Why print it
 
 - **The question:** sharp or softened, and where does softened stop looking like a star?
-- **What it lets us decide:** [smooth-lines call 2](../design/coaster/smooth-lines-design.md#6-open-calls-for-omar).
+- **What it lets us decide:** [smooth-lines call 2](../coaster/smooth-lines-design.md#6-open-calls-for-omar).
 
 ## Pictures
 
@@ -69,4 +69,4 @@ Notes:
 
 | Date | What happened | Where it is written |
 |---|---|---|
-| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../coaster/sampler-sheets-design.md) |

@@ -80,12 +80,12 @@ video's GeoGebra construction pass:
 
 | Plate | Styles of this pattern on it |
 |---|---|
-| [minis-01](../../plates/minis-01.yaml) | the plain coaster |
-| [minis-02](../../plates/minis-02.yaml) | plain, minimal, interlock, twist |
-| [minis-03](../../plates/minis-03.yaml) | minimal frame, minimal pegs |
-| [minis-04](../../plates/minis-04.yaml) | minimal frame, minimal pegs, twist |
-| [minis-05](../../plates/minis-05.yaml) | frame pair, key pair, key at three clearances, tab pair |
-| [minis-06](../../plates/minis-06.yaml) | dovetail and slim dovetail pairs |
+| [minis-01](../../design/plates/minis-01.yaml) | the plain coaster |
+| [minis-02](../../design/plates/minis-02.yaml) | plain, minimal, interlock, twist |
+| [minis-03](../../design/plates/minis-03.yaml) | minimal frame, minimal pegs |
+| [minis-04](../../design/plates/minis-04.yaml) | minimal frame, minimal pegs, twist |
+| [minis-05](../../design/plates/minis-05.yaml) | frame pair, key pair, key at three clearances, tab pair |
+| [minis-06](../../design/plates/minis-06.yaml) | dovetail and slim dovetail pairs |
 
 ## Prints
 

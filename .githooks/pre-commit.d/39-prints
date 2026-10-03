@@ -6,8 +6,8 @@
 # it checked so an empty run reads as "0 records checked", not a false green (R4).
 # The design is docs/design/printing/prints-tab-design.md §7.
 # Then the plates gate (.claude/gates/plates_gate.py): each plate page in
-# docs/plates/ agrees with the records on its count, and with itself on its
-# approval, and the queue on docs/plates/README.md is current
+# docs/design/plates/ agrees with the records on its count, and with itself on its
+# approval, and the queue on docs/design/plates/README.md is current
 # (docs/design/printing/print-review-design.md §6).
 #
 # wholesale: make validate-prints

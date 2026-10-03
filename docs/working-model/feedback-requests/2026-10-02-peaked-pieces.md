@@ -63,7 +63,7 @@ so it is worth a second look before the sheet prints. The decision stands until 
 
 ## 2. Where to try it in plastic
 
-**In short.** The [gBV fit sheet](../../plates/sheets-04.md) already prints the gBV pieces flat
+**In short.** The [gBV fit sheet](../../design/plates/sheets-04.md) already prints the gBV pieces flat
 at four gaps to find the fit. A peaked set fits in the same pocket the same way, because the wall
 and the gap do not change. Only the top is new. Putting a peaked set there means one print shows
 both the fit and the look. Prints stay last either way, as you asked.
@@ -81,7 +81,7 @@ both the fit and the look. Prints stay last either way, as you asked.
 - [ ] Not yet
 - Notes:
 
-**Decided 2026-10-02:** add one peaked set to the fit sheet → [D-091](../decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet). It is on [sheets-04](../../plates/sheets-04.md) as `PEAK 2`.
+**Decided 2026-10-02:** add one peaked set to the fit sheet → [D-091](../decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet). It is on [sheets-04](../../design/plates/sheets-04.md) as `PEAK 2`.
 
 ## Things only you can do (not decisions)
 

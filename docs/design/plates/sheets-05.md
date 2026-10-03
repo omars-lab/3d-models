@@ -18,7 +18,7 @@ grams:
 bed_plates:
 risk: ok
 pictures:
-  - ../design/coaster/loose-pieces-media/frames.png
+  - ../coaster/loose-pieces-media/frames.png
 needs:
   - "color parts at each cell in the sheet plate (`bambu slice sheet` is built for one color)"
   - "row C HIGH: raised fills in bikar (loose-pieces §6 item 1), on a branch is enough"
@@ -29,13 +29,13 @@ needs:
 
 **In short.** One card, three 30 mm windows of the CS-2 fill coaster (the centre star, a petal, an
 octagon), each with its fills lowered, flush and raised, and a tall loose piece if that exists by
-then. It answers [loose-pieces call 3](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar): if a raised fill and a tall
+then. It answers [loose-pieces call 3](../coaster/loose-pieces-design.md#7-open-calls-for-omar): if a raised fill and a tall
 loose piece look the same in the hand, raised fills can come only through loose pieces and the
 kernel change is not needed. Lowered against flush is also the multicolor design's open look call.
 
 ## What it is
 
-The [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 5. Straps 1.2 mm above the base.
+The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), sheet 5. Straps 1.2 mm above the base.
 
 | Code | Fill height | Can it be made today? |
 |---|---|---|
@@ -51,7 +51,7 @@ The samples print in the coaster's colors (gold straps, ruby and slab fills).
 - **The question:** which height looks right, and is a raised fill worth a kernel change when a
   tall loose piece gives the same look?
 - **What it lets us decide:** loose-pieces call 3, and the
-  [multicolor design's flush-or-lowered call](../design/coaster/multicolor-design.md#3-the-look-flush-or-lowered-fills).
+  [multicolor design's flush-or-lowered call](../coaster/multicolor-design.md#3-the-look-flush-or-lowered-fills).
 - **What to read off it:** A, B and C side by side for the look; C against D for call 3.
 
 ## Pictures
@@ -59,7 +59,7 @@ The samples print in the coaster's colors (gold straps, ruby and slab fills).
 Flush, proud and recessed pieces in cross-section, from the loose-pieces design; this sheet makes
 the same three heights as fills.
 
-![The three frames, and flush, proud and recessed pieces in the first](../design/coaster/loose-pieces-media/frames.png)
+![The three frames, and flush, proud and recessed pieces in the first](../coaster/loose-pieces-media/frames.png)
 
 ## Cost and risk
 
@@ -93,4 +93,4 @@ Notes:
 
 | Date | What happened | Where it is written |
 |---|---|---|
-| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../coaster/sampler-sheets-design.md) |

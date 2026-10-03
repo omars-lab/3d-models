@@ -21,7 +21,7 @@
 #
 # Validate (no hardware, no slicer): renders both items + runs the bed-fit
 # pre-check, stops before the slicer —
-#   bambu slice compose docs/plates/minis-01.yaml --dry-run
+#   bambu slice compose docs/design/plates/minis-01.yaml --dry-run
 
 bed: x2d                        # 256 × 256 mm (D-053); the fit pre-check runs against it
 profile:                        # the ONE slice profile the plate is sliced under — the

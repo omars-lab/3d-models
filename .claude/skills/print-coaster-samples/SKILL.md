@@ -1,6 +1,6 @@
 ---
 name: print-coaster-samples
-description: Build a plate of coaster samples (minis) to print — one mini of each coaster style for one or more patterns, with TWO of every style that mates (interlock, minimal-pegs) so the pair can be pushed together to test the fit. Use for "print a mini of each style", "make a samples plate", "minis plate for the new styles", "test the pegs fit", "add <style> to the minis". Writes or updates a `minis-NN.yaml` in `docs/plates/`, checks every item, dry-runs the compose, and stops at the owner gate. NOT general print planning (print-model) and NOT the send itself (bambu `print send` is Omar's).
+description: Build a plate of coaster samples (minis) to print — one mini of each coaster style for one or more patterns, with TWO of every style that mates (interlock, minimal-pegs) so the pair can be pushed together to test the fit. Use for "print a mini of each style", "make a samples plate", "minis plate for the new styles", "test the pegs fit", "add <style> to the minis". Writes or updates a `minis-NN.yaml` in `docs/design/plates/`, checks every item, dry-runs the compose, and stops at the owner gate. NOT general print planning (print-model) and NOT the send itself (bambu `print send` is Omar's).
 ---
 
 # print-coaster-samples — a plate of coaster minis that tests what it should
@@ -30,11 +30,11 @@ comments and replies.
    the top-down sheet, the rubric, a verdict for each piece, and the sheet shown to Omar. Passing
    the mesh gate does not make a sample worth printing. A near-solid disc or half-empty art is
    left off, even if that leaves a pattern out.
-4. **Write the plate** as a `minis-NN.yaml` in `docs/plates/` (next free number; update the latest
+4. **Write the plate** as a `minis-NN.yaml` in `docs/design/plates/` (next free number; update the latest
    unprinted one instead if the user is adding to it). The header says what the plate is for,
    one line per style using the style names, and what was left off and why — the minis-02 header
    is the model.
-5. **Dry-run it**: `bambu slice compose docs/plates/minis-NN.yaml --dry-run`. It must place every
+5. **Dry-run it**: `bambu slice compose docs/design/plates/minis-NN.yaml --dry-run`. It must place every
    item on the bed; if not, split into two plates rather than dropping a sample silently.
 6. **Stop at the owner gate.** Hand over the plate file and the dry-run result. Slicing and the
    plan are the [print-model](../print-model/SKILL.md) skill's job; the physical send is Omar's

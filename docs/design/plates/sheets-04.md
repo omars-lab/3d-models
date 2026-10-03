@@ -32,8 +32,8 @@ pictures:
 and loose pieces for one ring of it at four gaps per face: 0.05, 0.10, 0.15 and 0.20 mm. The small
 five-point stars come at 0.15 only, to see whether their tips catch. One more set of the middle
 ring at 0.15 has a 2 mm peak on top, so the flat and peaked pieces can be compared side by side
-([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)). It answers
-[loose-pieces call 4](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes, read in
+([D-091](../../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)). It answers
+[loose-pieces call 4](../coaster/loose-pieces-design.md#7-open-calls-for-omar) with the gaps that page proposes, read in
 the real coaster rather than a test frame. The pieces come from bikar's `Loose-Fit-Coupon.bkr`
 (bikar #296) and the plate is [`sheets-04.yaml`](sheets-04.yaml). One bed, about 62 minutes and 17 g.
 
@@ -44,11 +44,11 @@ included. See [the fit](#the-fit-in-the-coaster).
 gap. The coaster has no floor, so only the grip of the walls could hold a piece, and every gap
 here leaves the piece smaller than its hole. The next try is [sheets-04b](sheets-04b.md): pieces
 only, 4 mm tall and flat, from 0.05 down into a press fit. The record is
-[2026-10-02-sheets-04](../prints/2026-10-02-sheets-04/index.md).
+[2026-10-02-sheets-04](../../prints/2026-10-02-sheets-04/index.md).
 
 ## What it is
 
-The [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 4. Unlike sheets 1 to 3 there is no card:
+The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), sheet 4. Unlike sheets 1 to 3 there is no card:
 the coaster is the whole test, and the pieces sit loose in its holes.
 
 | Code | What it is |
@@ -72,12 +72,12 @@ coaster is the better test, and it takes less filament (15 g against 22, in the 
 - **The question:** at which gap does a piece drop in by hand and stay put, and do the star tips
   catch at the default?
 - **The bets it moves:** CAL-FIT-01 (the gap ladder) and CAL-HOL-01 (how much a printed hole
-  shrinks) ([bets.md](../../.claude/skills/calibrate/bets.md)).
+  shrinks) ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 - **What it lets us decide:** loose-pieces call 4, and the gap the F3 openwork frame reuses
-  ([D-090](../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
+  ([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
 - **What to read off it:** for each bag, drops in / pressed in / will not go; tips catch or not.
   For PEAK 2, also whether 2 mm reads as the look you wanted in the hand
-  ([the peaked-pieces page](../working-model/feedback-requests/2026-10-02-peaked-pieces.md)),
+  ([the peaked-pieces page](../../working-model/feedback-requests/2026-10-02-peaked-pieces.md)),
   and whether the dome prints clean.
 
 ## The fit in the coaster
@@ -139,7 +139,7 @@ slicer warnings, nothing sent).
 **Risk: watch.** The pieces are the smallest things we would have printed, and a small piece that
 comes loose can be dragged across the bed. The X2D's own failure detection covers that, so it is
 not a separate yes before the print
-([D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
+([D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
 
 ## How it was built
 
@@ -170,7 +170,7 @@ Separately, loose-pieces call 4 asked for a yes to failure detection on and the 
 watched for this plate.
 
 **Decided 2026-10-02:** not a per-plate question, the X2D does its own failure detection →
-[D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)
+[D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)
 
 Notes:
 
@@ -178,15 +178,15 @@ Notes:
 
 | Date | What happened | Where it is written |
 |---|---|---|
-| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../coaster/sampler-sheets-design.md) |
 | 2026-10-01 | sliced — the file landed (bikar #296); local slice fits one bed, 56 minutes, 22 g, with a bed map | this page |
 | 2026-10-02 | sliced — reworked at Omar's ask, the minimal coaster in place of the frame; 55 minutes, 15 g; the holes measured smaller than the pockets, only GAP 20 clears | this page |
 | 2026-10-02 | sliced — re-sliced on the coaster with exact holes (bikar #297); every set keeps its full gap; 56 minutes, 15 g | this page |
 | 2026-10-02 | approved — as it stands, by Omar on this page (ticked before the peaked set was added) | this page |
-| 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
+| 2026-10-02 | sliced — PEAK 2 added at Omar's call ([D-091](../../working-model/decisions-log.md#d-091--peaked-loose-pieces-2-mm-tried-on-the-gbv-fit-sheet)), the middle ring at 0.15 with a 2 mm peak; 62 minutes, 17 g | this page |
 | 2026-10-02 | sliced — re-sliced after bikar #299, which fixed the peaked pieces' flat top; both kinds of piece shown side by side, PEAK 2 keeps its full gap; 62 minutes, 17 g | this page |
 | 2026-10-02 | approved — again, by Omar on this page, as it stands with both prints and the fixed peak; the failure-detection yes is still open | this page |
-| 2026-10-02 | reviewed — Omar answered the failure-detection box: it is the X2D's own, not a per-plate yes; nothing is left blocking the print but the send | [D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes) |
+| 2026-10-02 | reviewed — Omar answered the failure-detection box: it is the X2D's own, not a per-plate yes; nothing is left blocking the print but the send | [D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes) |
 | 2026-10-02 | sent — by Omar, from Bambu Studio over LAN, the local slice of 62 minutes and 17 g; the draft record waits locally until the pieces are judged | this page |
-| 2026-10-02 | printed — on the X2D, one bed | [the record](../prints/2026-10-02-sheets-04/index.md) |
+| 2026-10-02 | printed — on the X2D, one bed | [the record](../../prints/2026-10-02-sheets-04/index.md) |
 | 2026-10-02 | judged — by Omar, by hand: "all the small pieces fell right through" the coaster's holes, at every gap; the next try is pieces only, 4 mm tall and flat, into a press fit | [sheets-04b](sheets-04b.md) |

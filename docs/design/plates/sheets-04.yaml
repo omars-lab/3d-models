@@ -35,9 +35,9 @@
 # covers a piece coming loose, so printing does not wait on a separate yes (D-092).
 #
 # Validate (no hardware; slicing is local):
-#   bambu slice compose docs/plates/sheets-04.yaml --dry-run
+#   bambu slice compose docs/design/plates/sheets-04.yaml --dry-run
 # Slice, then draw the bed with its labels:
-#   bambu slice compose docs/plates/sheets-04.yaml
+#   bambu slice compose docs/design/plates/sheets-04.yaml
 #   python3 tools/print_review.py bed <out.png> build/plates/sheets-04.plate.3mf
 
 bed: x2d

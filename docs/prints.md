@@ -28,7 +28,7 @@ prints how many records it checked.
 
 ## Queue — what to print next
 
-The order lives on [the plates page](plates/README.md), computed from each plate's review page
+The order lives on [the plates page](design/plates/README.md), computed from each plate's review page
 and the weights in the
 [prioritize-prints skill](../.claude/skills/prioritize-prints/scoring.md). This page stores no
 rank of its own, because a second scheduler is the one thing the design forbids

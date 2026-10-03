@@ -88,7 +88,7 @@ STL written to …/src/Coasters/n3IidKfXE1I-coaster-standard.stl (160860 triangl
 
 This is a taste call for Omar: the coaster drops the 6-fold and 4-fold units that
 `l1` adds. It also changes the n3Iid piece on the
-[minis-03](../plates/minis-03.yaml) and [minis-04](../plates/minis-04.yaml) plates.
+[minis-03](../design/plates/minis-03.yaml) and [minis-04](../design/plates/minis-04.yaml) plates.
 
 ## nmEjCTzMbDg — two causes behind one FAIL
 

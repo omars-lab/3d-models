@@ -18,11 +18,11 @@ grams: 46
 bed_plates: 1
 risk: ok
 pictures:
-  - ../design/coaster/sampler-sheets-media/sheet-1-card.png
-  - ../design/coaster/sampler-sheets-media/sheet-1-samples.png
-  - ../design/coaster/sampler-sheets-media/sheet-1-edge-cs2.png
-  - ../design/coaster/sampler-sheets-media/sheet-1-bed.png
-  - ../design/coaster/sampler-sheets-media/sheet-1-mockup.png
+  - ../coaster/sampler-sheets-media/sheet-1-card.png
+  - ../coaster/sampler-sheets-media/sheet-1-samples.png
+  - ../coaster/sampler-sheets-media/sheet-1-edge-cs2.png
+  - ../coaster/sampler-sheets-media/sheet-1-bed.png
+  - ../coaster/sampler-sheets-media/sheet-1-mockup.png
 ---
 
 # sheets-01 — edge and top
@@ -32,14 +32,14 @@ star, a gBV star), each in four versions: today's edge, the true edge, the true 
 dome, and a finer grid if the language can set it by then. It answers whether the steps on today's
 edges show at all, and which top to keep. It is the first sampler sheet worth printing, and all of
 it builds: rows B and C from bikar main (the window cut, bikar #293), row A from three windows of the
-old edge kept in this repo with their hashes ([how they were made](../../src/Samplers/sheets-01-row-a/README.md)),
+old edge kept in this repo with their hashes ([how they were made](../../../src/Samplers/sheets-01-row-a/README.md)),
 the labeled card (`Sampler-Cards.bkr`, piece Sheet1Card) and the plate
 ([`sheets-01.yaml`](sheets-01.yaml), assembled by `bambu slice sheet`). One bed, about 1 h 48 m and
 46 g.
 
 ## What it is
 
-The layout is in the [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 1. Rows:
+The layout is in the [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), sheet 1. Rows:
 
 | Code | What it is | Value |
 |---|---|---|
@@ -57,7 +57,7 @@ grows a row.
 
 - **The question:** can you see or feel the difference between A and B? If not, the edge work
   closes.
-- **What it lets us decide:** the [smooth-lines calls](../design/coaster/smooth-lines-design.md#6-open-calls-for-omar) 1 and 4.
+- **What it lets us decide:** the [smooth-lines calls](../coaster/smooth-lines-design.md#6-open-calls-for-omar) 1 and 4.
 - **What to read off it:** A against B for the steps; B against C for the top.
 
 ## Pictures
@@ -68,8 +68,8 @@ right are the samples' top faces where they stand on the card: row A on top, row
 the narrower flat tops the dome leaves. From above, rows A and B look alike: the top faces are
 rounded, so their outline is the round, not the wall.
 
-![sheets-01 card: title, column heads CS-1, CS-2, GBV and row codes A TODAY, B TRUE, C DOME engraved](../design/coaster/sampler-sheets-media/sheet-1-card.png)
-![sheets-01 samples: nine 30 mm windows in rows A, B and C](../design/coaster/sampler-sheets-media/sheet-1-samples.png)
+![sheets-01 card: title, column heads CS-1, CS-2, GBV and row codes A TODAY, B TRUE, C DOME engraved](../coaster/sampler-sheets-media/sheet-1-card.png)
+![sheets-01 samples: nine 30 mm windows in rows A, B and C](../coaster/sampler-sheets-media/sheet-1-samples.png)
 
 The wall is where the two edges differ, so here is the bottom of CS-2 close up, 6 mm across, A on the
 left and B on the right (`print_review.py edge`). A's walls step in 0.4 mm squares, and one square
@@ -77,15 +77,15 @@ is left open as a pinhole where B's walls run straight. The old edge leaves thre
 this window, eight across the whole CS-2 coaster. The new edge leaves none. Telling the two apart in
 the hand is the question this sheet asks.
 
-![CS-2 bottom close up: row A's stepped walls and a pinhole beside row B's straight walls](../design/coaster/sampler-sheets-media/sheet-1-edge-cs2.png)
+![CS-2 bottom close up: row A's stepped walls and a pinhole beside row B's straight walls](../coaster/sampler-sheets-media/sheet-1-edge-cs2.png)
 
 The plate as the slicer sees it, from the local slice:
 
-![sheets-01 on the bed: the card with nine samples in three rows](../design/coaster/sampler-sheets-media/sheet-1-bed.png)
+![sheets-01 on the bed: the card with nine samples in three rows](../coaster/sampler-sheets-media/sheet-1-bed.png)
 
 The layout mockup the design started from:
 
-![sheets-01 layout mockup](../design/coaster/sampler-sheets-media/sheet-1-mockup.png)
+![sheets-01 layout mockup](../coaster/sampler-sheets-media/sheet-1-mockup.png)
 
 ## Cost and risk
 
@@ -99,7 +99,7 @@ footprint, not on its own thin feet.
 
 The true edges shipped 2026-10-01 (bikar #291), so bikar main no longer draws the staircase, and
 the window cut
-([sampler sheets §2](../design/coaster/sampler-sheets-design.md#2-cutting-a-window-out-of-a-coaster))
+([sampler sheets §2](../coaster/sampler-sheets-design.md#2-cutting-a-window-out-of-a-coaster))
 shipped after it (bikar #293), so the commit that still draws the staircase had no window. The
 window cut was copied onto that commit, the three windows rendered there once, and the STLs kept in
 `src/Samplers/sheets-01-row-a/` with the patch and the steps to make them again (a rebuild came out
@@ -122,5 +122,5 @@ Notes:
 
 | Date | What happened | Where it is written |
 |---|---|---|
-| 2026-10-01 | proposed — designed as a sampler sheet; waited on row A | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | proposed — designed as a sampler sheet; waited on row A | the [sampler sheets design](../coaster/sampler-sheets-design.md) |
 | 2026-10-01 | sliced — row A built from the old edge; local slice fits one bed, 1 h 48 m, 46 g | this page |

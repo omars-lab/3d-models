@@ -33,7 +33,7 @@ the file suffix spells it, and the bare pattern name for plain:
 - **Gallery** (`index.html` `COASTERS`): the same titles, one card per coaster file.
   `make coasters` fails when it builds a coaster the gallery has no card for
   (`build/brick_previews.py`), so a new style cannot ship without its card.
-- **Plates** (`docs/plates/*.yaml`): the header lists each sample by its style name.
+- **Plates** (`docs/design/plates/*.yaml`): the header lists each sample by its style name.
 - **"solid"** is not an official name. The plain style has no suffix. Say "plain" or the
   bare pattern name, and use "solid" only as a description ("the slab is solid").
 

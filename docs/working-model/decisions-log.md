@@ -5749,7 +5749,7 @@ page's two calls and left no notes.
 
 ### What it commits us to
 
-[sheets-04](../plates/sheets-04.md) gets a seventh set, `PEAK 2`: the middle ring of hexes at
+[sheets-04](../design/plates/sheets-04.md) gets a seventh set, `PEAK 2`: the middle ring of hexes at
 0.15 mm, each with a 2 mm peak, beside the flat set at the same gap. Re-sliced locally: one bed,
 62 minutes and 17 g, up from 56 minutes and 15 g. Printing stays last (Omar, 2026-09-30).
 
@@ -5758,7 +5758,7 @@ to a taller peak, or its point printing badly, which would point to a lower one 
 
 ## D-092 — Failure detection is the printer's job, not a per-plate yes
 
-Omar, 2026-10-02, answering the box on [sheets-04](../plates/sheets-04.md) that asked for their
+Omar, 2026-10-02, answering the box on [sheets-04](../design/plates/sheets-04.md) that asked for their
 yes to "failure detection on and the first layer watched": "no failure detection, bambu does this".
 The X2D runs its own failure detection, so it is not a question to put to them and not something a
 plate waits on. Told that the answer was being taken to cover the first-layer watch the box

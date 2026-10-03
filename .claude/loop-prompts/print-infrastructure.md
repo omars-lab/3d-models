@@ -31,7 +31,7 @@ The send itself stays Omar's.
   from a manifest), `slice coaster` (color regions become a multi-part AMS 3MF),
   filament-sync (maps the plate's slots to the live trays by color), `print capture`, and
   `validate`. Hook 45 keeps its flag reference in sync.
-- **Plate manifests**: [`minis-01.yaml`](../../docs/plates/minis-01.yaml), the first one.
+- **Plate manifests**: [`minis-01.yaml`](../../docs/design/plates/minis-01.yaml), the first one.
 - **Designs of record**: [`plate-composer-design.md`](../../docs/design/printing/plate-composer-design.md)
   and [`coaster-color-design.md`](../../docs/design/coaster/coaster-color-design.md).
 - **Skills**: `print-model` (plan a print), `guide-print` (run one at the bench), `bambu`

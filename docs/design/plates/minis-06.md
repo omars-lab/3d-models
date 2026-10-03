@@ -45,9 +45,9 @@ Its other half is [minis-05](minis-05.md), the thinner joins.
 
 - **The question:** how thin can the outer band go and still hold a pair together by hand?
 - **The bet it moves:** CAL-CST-06, the narrowest loaded neck that survives mating by hand. The
-  slim neck is 2 mm ([bets.md](../../.claude/skills/calibrate/bets.md)).
+  slim neck is 2 mm ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 - **What it lets us decide:** the joins design's
-  [open question](../design/coaster/coaster-borderless-joins-design.md#8-open-questions-for-omar)
+  [open question](../coaster/coaster-borderless-joins-design.md#8-open-questions-for-omar)
   3, the band width. It also checks the fix to minis-04's slot, which minis-04's pegs were too
   tight to test.
 - **What to read off it:** does each pair slide together by hand; does the slim neck survive a

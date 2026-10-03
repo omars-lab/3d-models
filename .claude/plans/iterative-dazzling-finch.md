@@ -326,7 +326,7 @@ after (graduation rule). Tier-0 witnesses (`patterns/witness/*.bkr`) precede any
   provenance pins `bikar:<path>@<ref>` in the plate record; mesh `--scale` passthrough prints the
   D-D warning. `docs/design/printing/plate-composer-design.md` (Defaults cite P0.1; Validator PASS/FAIL for the
   bed check). deps: P3.3.
-- **P4.2 Mini plate manifest `docs/plates/minis-01.yaml`**: every migrated construction at mini
+- **P4.2 Mini plate manifest `docs/design/plates/minis-01.yaml`**: every migrated construction at mini
   size, count 2, one relief variant each — the plate after Plate 1. `bambu validate plate`
   accepts a composed 3MF. deps: P4.1, P3.2.
 - **P4.3 Print record** when Omar dispatches: `docs/prints/<date>-minis-01/` through the
@@ -386,7 +386,7 @@ P1.2, P1.6, P1.7 are off the critical path.
    structural validator's PASS and hard FAIL fixture exercised (thin floor, thin neck, 45.1°
    bottom chamfer, strap island); `make coasters`; `make validate` green (docs, pointers,
    catalog, counts, constructions ledger, use-cases).
-5. `bambu slice compose docs/plates/minis-01.yaml --dry-run` prints a valid multi-input argv;
+5. `bambu slice compose docs/design/plates/minis-01.yaml --dry-run` prints a valid multi-input argv;
    the real run produces a `.3mf` that `bambu validate plate` accepts. No print is sent.
 6. Gallery: local `index.html` opened in a real browser; the Coasters section renders previews.
 7. Ledger hook in a fresh worktree: every youtube id has a row or a reminder; the SessionStart

@@ -8,7 +8,7 @@ Status: proposal, 2026-09-26. Nothing here has been printed or measured yet. Sou
 status: [`../../research/print-quality-a.md`](../../research/print-quality-a.md).
 
 Omar on minis-04 (2026-09-26): "i see tiny holes on the print and the peg system border is too
-big and pegs too tight". The plate is [`../../plates/minis-04.yaml`](../../plates/minis-04.yaml): 80 mm hex
+big and pegs too tight". The plate is [`../plates/minis-04.yaml`](../plates/minis-04.yaml): 80 mm hex
 coasters, 1.4 mm frame (seven 0.2 mm layers) with 1.2 mm straps standing on it, dovetail pegs at
 clearance 0.10 mm, sliced with `0.20mm Standard @BBL X2D` and Bambu PLA Basic. The previous run,
 [minis-03](../../prints/2026-09-26-minis-03/index.md), had pegs at 0.15 that were "a bit loose" on a
@@ -132,11 +132,11 @@ built as plates, with their band widths:
 
 | Option | Joint band | Plate |
 |---|---|---|
-| Dovetail today (neck 3, depth 3, wall 2.5) | ~11.1 mm | [minis-04](../../plates/minis-04.yaml) |
-| Slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [minis-06](../../plates/minis-06.yaml) |
-| Plain frame, no join | ~6.0 mm | [minis-05](../../plates/minis-05.yaml) |
-| Tab | ~5.8 mm | [minis-05](../../plates/minis-05.yaml) |
-| Butterfly key | ~5.7 mm | [minis-05](../../plates/minis-05.yaml) |
+| Dovetail today (neck 3, depth 3, wall 2.5) | ~11.1 mm | [minis-04](../plates/minis-04.yaml) |
+| Slim dovetail (neck 2, depth 2, wall 2.1) | ~8.4 mm | [minis-06](../plates/minis-06.yaml) |
+| Plain frame, no join | ~6.0 mm | [minis-05](../plates/minis-05.yaml) |
+| Tab | ~5.8 mm | [minis-05](../plates/minis-05.yaml) |
+| Butterfly key | ~5.7 mm | [minis-05](../plates/minis-05.yaml) |
 | Butterfly key at frame 2 (approach A) | ~4 mm | [../coaster/coaster-borderless-joins-design.md](../coaster/coaster-borderless-joins-design.md) |
 
 What each costs: the slim dovetail keeps the joint style but sits at the tab-neck floor

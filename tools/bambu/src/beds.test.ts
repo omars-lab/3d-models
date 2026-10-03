@@ -1,7 +1,7 @@
 // Tests for counting the beds of a sliced plate and naming what spilled past the allowed number.
 //
 // The fixture is real: test/fixtures/minis-05/spilled.slice_info.config is the slice summary of
-// docs/plates/minis-05.yaml as `bambu slice compose` sliced it on 2026-09-30 (Bambu Studio
+// docs/design/plates/minis-05.yaml as `bambu slice compose` sliced it on 2026-09-30 (Bambu Studio
 // 02.08.02.61). Its 12 objects arranged as 11 on bed 1 and 1 on bed 2, and nothing said so.
 
 import { describe, it, expect } from "vitest";

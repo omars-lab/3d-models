@@ -31,12 +31,12 @@ Nothing of it is built yet.
 
 ## What it is
 
-The [sampler sheets design](../design/coaster/sampler-sheets-design.md#3-the-sheets), sheet 3.
+The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), sheet 3.
 
 ## Why print it
 
 - **The question:** how much softening at the crossings, if any.
-- **What it lets us decide:** [smooth-lines call 3](../design/coaster/smooth-lines-design.md#6-open-calls-for-omar).
+- **What it lets us decide:** [smooth-lines call 3](../coaster/smooth-lines-design.md#6-open-calls-for-omar).
 
 ## Pictures
 
@@ -68,4 +68,4 @@ Notes:
 
 | Date | What happened | Where it is written |
 |---|---|---|
-| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../design/coaster/sampler-sheets-design.md) |
+| 2026-10-01 | proposed — designed as a sampler sheet; waits on the build listed above | the [sampler sheets design](../coaster/sampler-sheets-design.md) |

@@ -343,21 +343,21 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    (bikar #291), and the window cut shipped the same day (bikar #293), tried on all three columns
    and on sheet 5's square slab. The labeled cards for sheets 1 and 5 (bikar #294) and the
    sheet plate (`bambu slice sheet`, one color) shipped the same day too, and sheet 1 is built in
-   full ([`sheets-01.yaml`](../../plates/sheets-01.yaml), waiting on Omar's tick). Sheet 4 is built
+   full ([`sheets-01.yaml`](../../design/plates/sheets-01.yaml), waiting on Omar's tick). Sheet 4 is built
    in full too: its file is bikar's `Loose-Fit-Coupon.bkr` (#296) and its plate
-   [`sheets-04.yaml`](../../plates/sheets-04.yaml) slices to one bed, 62 minutes, 17 g, with a bed
+   [`sheets-04.yaml`](../../design/plates/sheets-04.yaml) slices to one bed, 62 minutes, 17 g, with a bed
    map naming each look-alike set. Since 2026-10-02 it prints the pieces in the real minimal
    coaster (Omar's ask) rather than the coupon's frame. The coaster's holes are now cut on the
    pieces' exact outline (bikar #297), so every set keeps its full gap. A seventh set, `PEAK 2`, tries
    the 2 mm peaked pieces beside the flat ones (D-091). Omar approved the sheet 2026-10-02, and
    the failure-detection question is settled as the X2D's own (D-092). Omar printed it the same
    day, and all the small pieces fell right through the floorless coaster's holes at every gap.
-   The next try, [sheets-04b](../../plates/sheets-04b.md), is pieces only, 4 mm tall and flat, at
+   The next try, [sheets-04b](../../design/plates/sheets-04b.md), is pieces only, 4 mm tall and flat, at
    0.05 down to a −0.10 press fit (bikar #300), and waits on Omar's tick.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
    sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
-   at `planned` (sheets-01 to sheets-05 in [docs/plates](../../plates/README.md)), whose `needs:`
+   at `planned` (sheets-01 to sheets-05 in [docs/design/plates](../../design/plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
 
 ## Handed to the video loop

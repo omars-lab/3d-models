@@ -58,7 +58,7 @@ The audit shows: `properties` per folder, and `invalid frontmatter`, which must 
 | `issues.base` | Pivots and dead ends in `issues/`, newest first | |
 | `prints.base` | Print records, `prints/<run>/index.md`, newest first | Its properties are the ones the prints gate requires, so a record listed here passed it. |
 | `troubleshooting.base` | Print troubleshooting notes, grouped by kind | Its properties are the `print-wiki` skill's template. |
-| `plates.base` | Plate review pages, `plates/<plate>.md`, grouped by stage | Shows whether Omar approved each and how many times it printed. The ranked queue is not here: it is computed into `docs/plates/README.md`. |
+| `plates.base` | Plate review pages, `design/plates/<plate>.md`, grouped by stage | Shows whether Omar approved each and how many times it printed. The ranked queue is not here: it is computed into `docs/design/plates/README.md`. |
 
 The audit shows: `bases`, each with the notes that embed it. A base embedded nowhere is dead.
 

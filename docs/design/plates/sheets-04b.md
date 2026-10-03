@@ -37,11 +37,11 @@ a little larger than its hole. The plate is [`sheets-04b.yaml`](sheets-04b.yaml)
 
 The minimal coaster has no floor: it is only the straps. So nothing under a piece holds it up,
 only the grip of the walls. On sheets-04 every gap was above zero, so every piece was smaller
-than its hole, and nothing gripped. The [loose-pieces design](../design/coaster/loose-pieces-design.md#33-how-the-piece-is-held)
+than its hole, and nothing gripped. The [loose-pieces design](../coaster/loose-pieces-design.md#33-how-the-piece-is-held)
 said as much for a frame with no floor: the pieces drop unless the fit is tight. The pieces were
 also 1.2 mm thin, so most of each wall was the first few layers, which the printer squeezes in on
 purpose so the bottom edge does not spread. That made them smaller again. Nothing was measured;
-the record is [2026-10-02-sheets-04](../prints/2026-10-02-sheets-04/index.md).
+the record is [2026-10-02-sheets-04](../../prints/2026-10-02-sheets-04/index.md).
 
 ## What is on the plate
 
@@ -81,9 +81,9 @@ pieces at this plate's knobs (bikar 4e06255), which put each piece where its hol
 
 - **The question:** at which gap does a piece go in by hand and stay when the coaster is lifted?
 - **The bets it moves:** CAL-FIT-01 (the gap ladder) and CAL-HOL-01 (how much a printed hole
-  shrinks) ([bets.md](../../.claude/skills/calibrate/bets.md)).
+  shrinks) ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 - **What it lets us decide:** loose-pieces call 4, and the gap the openwork frame reuses
-  ([D-090](../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
+  ([D-090](../../working-model/decisions-log.md#d-090--lines-and-loose-pieces-in-two-colors-true-edges-first)).
 - **What to read off it:** for each bag, push a piece into a hole and lift the coaster: falls
   out / stays / will not go in. For the stars, also whether a tip breaks.
 
@@ -101,7 +101,7 @@ no slicer warnings, nothing sent).
 
 **Risk: watch.** The pieces are small, and a small piece that comes loose can be dragged across
 the bed. The X2D's own failure detection covers that
-([D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
+([D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)).
 At 4 mm tall they stand on the bed more firmly than the 1.2 mm pieces did.
 
 ## How it was built

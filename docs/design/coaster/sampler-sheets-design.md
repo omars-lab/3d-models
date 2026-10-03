@@ -14,7 +14,7 @@ the sheet plate (§5, `bambu slice sheet`) are built (bikar #293 and #294). Shee
 full, row A included, and waits on Omar's tick: one bed, about 1 h 48 m and 46 g. It is the first one worth printing (§3). Printing stays Omar's call and stays last. Sheets 4 and 5
 and the three guided-page pictures were added the same day, after Omar asked on the
 [loose-pieces design](loose-pieces-design.md) how its calls could be made "without a sheet of poc
-prints for us to inspect". Each sheet has a plate page in [`docs/plates/`](../../plates/README.md)
+prints for us to inspect". Each sheet has a plate page in [`docs/design/plates/`](../plates/README.md)
 that waits on the build it needs.
 
 ## 0. The answer in one screen
@@ -34,11 +34,11 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
-| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../../plates/sheets-01.md) |
-| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding and its card piece | [sheets-02](../../plates/sheets-02.md) |
-| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../../plates/sheets-03.md) |
-| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../../plates/sheets-04.md) |
-| 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../../plates/sheets-05.md) |
+| 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../plates/sheets-01.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding and its card piece | [sheets-02](../plates/sheets-02.md) |
+| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../plates/sheets-03.md) |
+| 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../plates/sheets-04.md) |
+| 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../plates/sheets-05.md) |
 
 Loose-pieces call 2, where the guided page lives, is not something to hold in the hand. It gets
 three pictures instead ([§3](#where-the-guided-page-lives-three-pictures-not-a-sheet)).
@@ -103,7 +103,7 @@ domed straps narrower below them](sampler-sheets-media/sheet-1-samples.png)
 
 *Figure 2. Sheet 1 as the plate assembles it, drawn from the mesh (`bambu slice sheet --stl`, then
 `tools/print_review.py art`): the samples' top faces where they stand. Rows A and B differ at the
-wall, not the top, so the [sheets-01 page](../../plates/sheets-01.md#pictures) adds a close-up of
+wall, not the top, so the [sheets-01 page](../plates/sheets-01.md#pictures) adds a close-up of
 the bottom faces (`print_review.py edge`), and the card's own picture.*
 
 **Sheet 1 — edge and top.** Columns: CS-1 crossing, CS-2 star, gBV star. Rows:
@@ -254,7 +254,7 @@ The path, in order:
    `--stl <file>` writes the whole sheet as one mesh to look at.
 5. Write the sheet's plate file (a `.yaml` named for the sheet) beside its review page, which
    already waits at `planned`, and add the row and column legend with every value to the page.
-   *Done for sheet 1:* [`sheets-01.yaml`](../../plates/sheets-01.yaml), all three rows. Row A is
+   *Done for sheet 1:* [`sheets-01.yaml`](../plates/sheets-01.yaml), all three rows. Row A is
    three STLs kept in this repo with their hashes, since bikar main no longer draws the old edge.
 6. Run `bambu slice sheet` with `--dry-run`, then the usual look (review-print) and queue (prioritize-prints).
 7. Stop at the owner gate. Sending, filament and timing are Omar's.

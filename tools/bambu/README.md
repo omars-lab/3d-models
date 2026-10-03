@@ -57,7 +57,7 @@ no key, the printer keys stay unset rather than being passed on encrypted.
 ## Dispatch needs Omar's approval
 
 `print send` moves real hardware, so it is fail-closed. It refuses unless the plate's page in
-`docs/plates/` carries a live approval from Omar (D-093: his tick, or his yes in chat written onto
+`docs/design/plates/` carries a live approval from Omar (D-093: his tick, or his yes in chat written onto
 the page; one approval per send, spent by the send; a production plate has a standing approval
 while its prints and recipe still hold, D-095) and the printer is idle; no flag skips either
 check (`src/send-gate.ts`). Then it asks at a TTY; `--yes` skips only that question. A send that

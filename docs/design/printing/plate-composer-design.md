@@ -35,7 +35,7 @@ params); collect STLs; call the Bambu Studio CLI with all inputs
 area/count pre-check that fails *before* the slicer; per-object provenance
 `bikar:<path>@<ref>` in the plate record; a mesh `--scale` passthrough that prints the
 dynamic-STL warning. The first consumer is the mini plate
-`docs/plates/<name>.yaml` (plan §4 P4.2); the plate-builder frontend
+`docs/design/plates/<name>.yaml` (plan §4 P4.2); the plate-builder frontend
 ([`plate-builder-design.md`](plate-builder-design.md)) sits on top of this verb and
 does not reimplement it.
 
@@ -326,14 +326,14 @@ dual-nozzle no-op. `--scale` is never the sizing mechanism.
   a passing aggregate can smuggle through.
 - **Every relative link resolves on disk or is a placeholder.** Sibling docs, the research
   file, `slice.ts` and `CLAUDE.md` exist; new artifacts appear only as placeholders
-  (`plate.yaml`, `docs/plates/<name>.yaml`, `bikar:<path>@<ref>`, `it-<sha12>`,
+  (`plate.yaml`, `docs/design/plates/<name>.yaml`, `bikar:<path>@<ref>`, `it-<sha12>`,
   `.bambu/records/<date>-<slug>/`), so no pointer is stale.
 
 ## 11. Not yet
 
 - **Nothing is built and nothing prints.** Printing stays owner-gated ([D-060](../../working-model/decisions-log.md); no
   `CAL-CST-*` bet settled); the composer stops at the owner gate (§7).
-- **The mini plate manifest** `docs/plates/<name>.yaml` (plan P4.2) is the composer's
+- **The mini plate manifest** `docs/design/plates/<name>.yaml` (plan P4.2) is the composer's
   first real input and is authored after the verb ships; `bambu validate plate` must
   accept the composed `.3mf`.
 - **A self-owned 2D packer** (plan P2) is a fallback only if `--arrange` proves

@@ -54,7 +54,7 @@
 #                              comparison fair.
 #
 # Validate (no hardware, no slicer):
-#   bambu slice compose docs/plates/minis-05.yaml --dry-run
+#   bambu slice compose docs/design/plates/minis-05.yaml --dry-run
 
 bed: x2d
 profile:

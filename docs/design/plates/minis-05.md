@@ -49,7 +49,7 @@ Recipe: [minis-05.yaml](minis-05.yaml). Everything is at size 80, height 1.4, th
   opening; band 5.8 mm.
 
 Its other half is [minis-06](minis-06.md), the two dovetails. The joins and what each one is
-for are in the [joins design](../design/coaster/coaster-borderless-joins-design.md).
+for are in the [joins design](../coaster/coaster-borderless-joins-design.md).
 
 ## Why print it
 
@@ -57,9 +57,9 @@ for are in the [joins design](../design/coaster/coaster-borderless-joins-design.
   band?
 - **The bet it moves:** CAL-CST-06, the narrowest loaded neck that survives mating by hand. The
   key's waist and the tab's 2 mm neck both ride on it
-  ([bets.md](../../.claude/skills/calibrate/bets.md)).
+  ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 - **What it lets us decide:** the joins design's
-  [open questions](../design/coaster/coaster-borderless-joins-design.md#8-open-questions-for-omar)
+  [open questions](../coaster/coaster-borderless-joins-design.md#8-open-questions-for-omar)
   1 (loose keys or built-in tabs) and 2 (do notches look wrong on a coaster used alone). The
   key ladder also gives the key file its clearance.
 - **What to read off it:** the band of each pair; the pull feel of each key clearance, and

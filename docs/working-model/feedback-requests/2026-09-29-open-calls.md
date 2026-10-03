@@ -196,6 +196,6 @@ These are waiting on your hands, not your judgement:
 
 - **Hub step 1:** run the live printer read on the hub page.
 - **Hub step 3:** the plate queue, where every send waits for your confirmation. It comes after step 1.
-- **Sample prints:** the minis plates, including [minis-06](../../plates/minis-06.yaml), with one mated pair per join.
+- **Sample prints:** the minis plates, including [minis-06](../../design/plates/minis-06.yaml), with one mated pair per join.
 - **The first-layer coupon**, before any color print (call 2).
 - **The FAQ proposal** in the docs folder: mark each question keep or drop, and write the answers.

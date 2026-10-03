@@ -6,14 +6,14 @@ recipe (`minis-NN.yaml`, which `bambu slice compose` turns into a slice) and, be
 costs, and shows pictures of it. Its frontmatter records whether Omar approved it and how many
 times it has printed, and its timeline lists each step with a date. The queue below ranks the
 plates that have not printed yet, highest return first. The
-[prioritize-prints skill](../../.claude/skills/prioritize-prints/SKILL.md) keeps all of this
-current; the [print review design](../design/printing/print-review-design.md) explains why it
+[prioritize-prints skill](../../../.claude/skills/prioritize-prints/SKILL.md) keeps all of this
+current; the [print review design](../printing/print-review-design.md) explains why it
 is built this way.
 
 ## The queue
 
 <!-- queue:start -->
-Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages and the weights in [scoring.md](../../.claude/skills/prioritize-prints/scoring.md). Do not edit by hand; the prints hook fails when this block and the pages disagree.
+Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages and the weights in [scoring.md](../../../.claude/skills/prioritize-prints/scoring.md). Do not edit by hand; the prints hook fails when this block and the pages disagree.
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
@@ -40,14 +40,14 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | `waiting` | Pictures and costs are on the page; waiting for Omar's tick | the skill, once the page is complete |
 | `approved` | Omar ticked Approve, or said yes in chat; `approved_on` is the date | the skill, reading the tick or his words back |
 | `sent` | It went to the printer; no record yet | `bambu print send`, which spends the approval |
-| `printed` | A record exists in [`docs/prints/`](../prints.md) | the record; `times_printed` counts them |
+| `printed` | A record exists in [`docs/prints/`](../../prints.md) | the record; `times_printed` counts them |
 | `retired` | Not printing it again | Omar |
 
-Only Omar approves ([D-093](../working-model/decisions-log.md)): he ticks the box, or says yes in
+Only Omar approves ([D-093](../../working-model/decisions-log.md)): he ticks the box, or says yes in
 chat and the session writes it onto the page with the date and his words. One approval covers one
 send. `bambu print send` refuses a plate without a live approval, and a send spends it: the box is
 unticked and a dated `sent` row joins the timeline. A plate that printed can print again, but only
-on a new approval, so the timeline logs every approved reprint. A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on ([D-095](../working-model/decisions-log.md)). Its recipe
+on a new approval, so the timeline logs every approved reprint. A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on ([D-095](../../working-model/decisions-log.md)). Its recipe
 is frozen: a change goes on a new experiment plate with `derived_from` (grade-plate skill). Each run is its own record, and
 `times_printed` is the number of records.
 
@@ -56,22 +56,22 @@ is frozen: a change goes on a new experiment plate with `derived_from` (grade-pl
 Each page also says how far its prints have taken it, as `maturity`: an `experiment` (the start
 for every plate: a question is still open), `repeatable` (every piece on it has printed well,
 twice, on any plate), or `production` (repeatable, printed clean as laid out, and packed: as
-much of the bed covered as the [rubric](../../.claude/skills/grade-plate/rubric.md) asks). Experiments are laid out to answer a question and are not asked to
+much of the bed covered as the [rubric](../../../.claude/skills/grade-plate/rubric.md) asks). Experiments are laid out to answer a question and are not asked to
 be packed; production plates must be. The prints set the level, not a feeling: the plates gate
 fails a page that claims more than its records show. The
-[grade-plate skill](../../.claude/skills/grade-plate/SKILL.md) grades a plate and writes the
-level; the [plate maturity design](../design/printing/plate-maturity-design.md) explains the
+[grade-plate skill](../../../.claude/skills/grade-plate/SKILL.md) grades a plate and writes the
+level; the [plate maturity design](../printing/plate-maturity-design.md) explains the
 rules. Every plate is an experiment today.
 
 ## What we can print
 
 - **Coaster sample plates** like the ones here come from the
-  [print-coaster-samples skill](../../.claude/skills/print-coaster-samples/SKILL.md), which
+  [print-coaster-samples skill](../../../.claude/skills/print-coaster-samples/SKILL.md), which
   keeps mating styles in pairs and has every piece looked at before it goes on.
 - **Coupons and prototypes** (fit ladders, clips, test pieces) are in the
-  [prototype catalog](../../.claude/skills/prototype/catalog.md).
+  [prototype catalog](../../../.claude/skills/prototype/catalog.md).
 - **The calibration plates** — the machine card, the LEGO ladder, the wall joint, the first orb —
-  are planned in the [print register](../tasks/coaster-pipeline/backlog.md) §2. They have no
+  are planned in the [print register](../../tasks/coaster-pipeline/backlog.md) §2. They have no
   recipe or page here yet, so they are not in the queue.
 
 ## The pages
@@ -93,4 +93,4 @@ list only says what each plate is, so it cannot fall behind.
 - [sheets-05](sheets-05.md) — sampler sheet: fill height
 
 The five sampler sheets are designed in the
-[sampler sheets design](../design/coaster/sampler-sheets-design.md).
+[sampler sheets design](../coaster/sampler-sheets-design.md).
