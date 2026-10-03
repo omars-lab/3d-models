@@ -237,8 +237,14 @@ def iterate(page: Path, date: str) -> str:
 
 
 def status(page: Path, paths: tuple[Path, Path, Path] | None = None) -> dict:
-    """{approved, how, sends, standing}: what `bambu print send` asks before it sends. `paths`
-    is (prints, bets, rubric), by default the ones in the page's own repo."""
+    """{approved, how, sends, standing, recipe}: what `bambu print send` asks before it sends.
+    `recipe` is the plate's recipe hash now (iterations.py), which the send compares with the one
+    its slice recorded. `paths` is (prints, bets, rubric), by default the ones in the page's own
+    repo."""
+    return {**_approval(page, paths), "recipe": pg.recipe_hash(page)}
+
+
+def _approval(page: Path, paths: tuple[Path, Path, Path] | None) -> dict:
     try:
         text, data, body = read(page)
     except Refused as e:

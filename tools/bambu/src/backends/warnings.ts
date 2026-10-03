@@ -158,6 +158,10 @@ export interface WarningsSidecar {
    *  a STALE sidecar (one sitting beside a .3mf it was not sliced from) — not only a missing one.
    *  Optional for backward-compat: a legacy sidecar without it cannot be proven fresh ⇒ unverifiable. */
   source_sha256?: string;
+  /** The plate recipe's hash when this slice was made (iterations.py, read through plate_approve.py),
+   *  for a plate with a page and a recipe. `print send` refuses a slice whose recipe has changed
+   *  since (slice-fresh.ts). Absent on a slice made before slices recorded it, or with no recipe. */
+  recipe?: string;
   warnings: SlicerWarning[];
 }
 

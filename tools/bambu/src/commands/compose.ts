@@ -36,7 +36,8 @@ import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
-import { platesDir, recordsDir } from "../paths.js";
+import { platesDir, recordsDir, repoRoot } from "../paths.js";
+import { recipeHashOf } from "../send-gate.js";
 import { writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
@@ -700,6 +701,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     sliced_at: new Date().toISOString(),
     studio_version: studioVersionFrom(combined),
     source_sha256: hashFile(outPath) ?? undefined,
+    recipe: recipeHashOf(outPath, repoRoot() ?? process.cwd()) ?? undefined, // slice-fresh.ts
     warnings,
   };
   try {

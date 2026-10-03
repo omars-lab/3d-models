@@ -45,6 +45,7 @@ import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-
 import { cardRefusal, cardSummary, readStorage } from "../storage.js";
 import { bedCheck, newestBedPhoto, readVerdict } from "../bed-check.js";
 import { checkNozzles, printerNozzles } from "../nozzle-check.js";
+import { checkSliceFresh } from "../slice-fresh.js";
 import { bedPhoto } from "./bed.js";
 import {
   feedsFromAms,
@@ -336,6 +337,17 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   const nozzles = checkNozzles(meta?.nozzleDiameters ?? [], printerNozzles(frame));
   console.error(`${nozzles.mark} ${nozzles.line}.`);
   if (!nozzles.ok) {
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  }
+
+  // The slice was made from the recipe as it is now, not an older one (slice-fresh.ts).
+  const fresh = checkSliceFresh(sidecarFreshness(abs).sidecar?.recipe, approval.recipe);
+  console.error(`${fresh.mark} ${fresh.line}.`);
+  if (!fresh.ok) {
     if (!opts.dryRun) {
       process.exitCode = 2;
       return;

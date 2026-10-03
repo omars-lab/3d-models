@@ -4,7 +4,8 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
+import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, recipeHashOf, spendApproval } from "./send-gate.js";
+import { checkSliceFresh } from "./slice-fresh.js";
 
 // The send checks (send-gate.ts, D-093, D-096, D-097), run against the real `plate_approve.py` (the
 // manage-approvals skill's) on pages under a temporary git repo whose origin/master holds them, since
@@ -121,6 +122,24 @@ describe("plateApproval", () => {
     expect(plateApproval("p-comment", root).approved).toBe(true);
   });
 
+  it("reports the recipe hash a slice records, the same for a comment edit and new for a real one (slice-fresh.ts)", () => {
+    const path = page("p-fresh", {});
+    const recipe = path.replace(/\.md$/, ".yaml");
+    const sliced = recipeHashOf(join(root, "build", "plates", "p-fresh.plate.3mf"), root);
+    expect(sliced).toMatch(/^[0-9a-f]{12}$/);
+    expect(plateApproval("p-fresh", root).recipe).toBe(sliced);
+    writeFileSync(recipe, `# a note\n${readFileSync(recipe, "utf8")}`);
+    expect(checkSliceFresh(sliced, plateApproval("p-fresh", root).recipe).ok).toBe(true);
+    writeFileSync(recipe, "bed: x2d\nspacing: 4\n");
+    const fresh = checkSliceFresh(sliced, plateApproval("p-fresh", root).recipe);
+    expect(fresh.ok).toBe(false);
+    expect(fresh.line).toContain("the recipe changed since this slice");
+  });
+
+  it("has no recipe hash for a plate with no page", () => {
+    expect(recipeHashOf("nowhere.plate.3mf", root)).toBeNull();
+  });
+
   it("refuses when the tool does not run: a status it cannot read is not a yes", () => {
     page("p-broken", {});
     const broken: ApproveTool = () => {
@@ -185,7 +204,7 @@ describe("spendApproval", () => {
       seen.push(args);
       return "| 2026-10-03 | sent — by `bambu print send`, on the standing approval of a production plate (D-095) | this page |\n";
     };
-    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true }, tool);
+    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true, recipe: null }, tool);
     expect(seen[0]).toContain("--standing");
     expect(row).toContain("standing approval");
   });
