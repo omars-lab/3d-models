@@ -188,6 +188,24 @@ the card's top, where `print send` puts them, refuses the file the printer is pr
 asks first unless given `--yes`. `list` and `rm` use basic-ftp's `list` and `remove` on the same
 login as the upload; the advisories noted above were against the 5.0.x line and the pin is 5.3.1.
 
+**Settled (the same evening).** Omar put a USB drive in; the X2D's external storage is a USB port,
+though the status report still names it `sdcard`. `bambu storage show` then read 22.7 GB free of
+28.7 GB from the `tl_external_*` fields, so those fields do track the external drive. The same
+sheets-04b send went through unchanged: the upload to the FTP root and the `ftp:///` start both
+worked, the printer went to PREPARE and then RUNNING, and the X2D took `bed_type: "auto"`,
+`ams_mapping: [3]` and an empty `md5` without complaint. So the missing drive was the cause of the
+553. Bambu Studio prints without a drive because it uploads to the built-in storage another way;
+two research passes and a consolidation of them were still open as PRs when this was written.
+
+**Then it paused at layer 0.** A few minutes later the printer stood in PAUSE at 0%, layer 0 of
+20, heaters off, with `print_error` 83918929, which is `0500-8051` in Bambu's error list:
+"Detected build plate is not the same as the Gcode file". Our slices are made for the Cool Plate
+(`curr_bed_type` in the `.3mf`), and the send said `bed_type: "auto"`. The printer reports the
+plate it sees as `device.plate.cur_id` `P0101`, an id with no name we can look up. So the send
+itself worked, and what stopped the print is the slice's plate type against the plate on the
+bed. Nothing in `print send` compares the two yet; it would need the name behind `P0101`, which
+only the plate on the bed can tell us.
+
 ## Files
 
 - `tools/bambu/src/backends/ftps.ts` — the FTPS upload backend (new).
