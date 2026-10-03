@@ -100,10 +100,11 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
 9. **Slice a test plate:** `bambu slice plate <model.stl>` (headless via the BambuStudio CLI;
    `--dry-run` prints the exact invocation, `--settings`/`--filament` pass profiles, and raw
    BambuStudio flags go after `--`). A `.bkr` must be rendered to STL first — slicing is not bikar's job.
-10. **First dispatch is owner-gated.** `bambu print send <plate.3mf> --record` stays a deliberate
-    call — no CAL bet is settled and printing is on hold. It is fail-closed: it prints the owner-gate
-    notice, then refuses unless you pass `--yes` or confirm at a TTY (`--dry-run` shows what it would
-    send without connecting). `--record` scaffolds a draft under the gitignored `.bambu/records/`.
+10. **A dispatch needs Omar's approval on the plate's page.** `bambu print send <plate.3mf> --record`
+    refuses unless the page in `docs/plates/` carries a live approval (D-093: his tick, or his yes in
+    chat written onto the page; one approval per send) and the printer is idle. Then it asks at a TTY;
+    `--yes` skips only that question (`--dry-run` shows what it would send without sending).
+    `--record` scaffolds a draft under the gitignored `.bambu/records/`.
 
 ## After setup — how we actually print
 
@@ -147,7 +148,8 @@ is in [`rubric.md`](rubric.md).
 - **The token is a secret.** It lives only in the gitignored `.mcp.json`; never commit it, never
   print it in full (the CLI masks it).
 - **Read-only before write.** `status show` must succeed before any `print send`.
-- **A dispatch is owner-gated** until a CAL bet justifies the print. The CLI confirms before sending.
+- **A dispatch needs Omar's live approval on the plate page** (D-093), one per send. The CLI checks it,
+  checks the printer is idle, and confirms before sending.
 - **The safety boundary — our layer guards dispatch and secrets; the firmware guards the hardware.**
   We never emit raw motion G-code — we hand a slicer-produced `.3mf` to the MCP, so nothing here can
   drive the toolhead into the bed. Thermal cutoffs, stall / collision detection, homing,

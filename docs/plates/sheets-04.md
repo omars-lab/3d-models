@@ -162,7 +162,7 @@ not a separate yes before the print
 
 Two things, kept apart: whether to print it, and the printer question that comes with it.
 
-- [x] **Approve as it stands**
+- [ ] **Approve as it stands**
 - [ ] **Hold** — say why in the notes
 
 Separately, loose-pieces call 4 asked for a yes to failure detection on and the first layer

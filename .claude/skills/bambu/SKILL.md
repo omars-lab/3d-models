@@ -32,7 +32,7 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 | **Auto-pull the bench-sheet profile header** | `header` (`--plate <plate.3mf>` fills machine/layer/profile/slicer; `--json`) | **read-only** — fills the header off the machine + `.3mf`; the manual fields (ambient/enclosure/caliper) stay yours |
 | Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
 | **List what was printed — and how** | `print list` (`--how` for machine/material/nozzle/profile; `--settles`/`--material`/`--machine`/`--status` filter; `--shipped`/`--drafts`/`--json`) | **always** — reads records, touches no hardware |
-| Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`) | **OWNER-GATED** — see below |
+| Send a plate to the machine | `print send <plate.3mf>` (`--record`, `--dry-run`, `--yes`); the whole sequence is the [`send-plate`](../send-plate/SKILL.md) skill | **needs Omar's live approval on the plate page** (D-093) — see below |
 | Pause / resume / stop a running job | `print pause` · `print resume` · `print stop` | acts on live hardware |
 | Gate a mesh / plate / record | `validate mesh <bkr>` · `validate plate` · `validate record [dir]` | local, no hardware |
 
@@ -66,11 +66,14 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
 
 ## The rails (do not route around them)
 
-- **Dispatch is owner-gated and fail-closed.** `print send` moves real hardware, and **printing is on
-  hold until a `CAL-*` bet justifies a plate** (memory *owner-gated-and-on-hold*). It prints the
-  owner-gate notice and refuses unless you pass `--yes` or confirm at a TTY. Use `--dry-run` to show
-  exactly what it *would* do without connecting. Never pass `--yes` on the user's behalf — the first
-  filament is Omar's call.
+- **A send needs Omar's live approval, and an idle printer.** `print send` moves real hardware. It
+  reads the plate's page in `docs/plates/` and refuses unless the approval there is live (D-093): his
+  tick, or his yes in chat written onto the page with the date and his words. One approval covers one
+  send. A send spends it (the box is unticked and a dated `sent` row joins the timeline), so a reprint
+  needs a new yes, and a plate whose print showed the setup was wrong never goes out on the old one.
+  It also refuses while the printer is busy or will not report its state. No flag skips either check.
+  `--yes` skips only the TTY question, and only on a live page approval. `--dry-run` reports both
+  checks and shows exactly what it *would* send.
 - **Look at the bed before a send.** Both `print send` and its `--dry-run` save a camera frame under
   `.bambu/bed/` and print the path. Open it and say what is on the plate before anyone confirms.
   If the camera refuses its certificate (after a printer reset), run `setup camera-pin` again;
