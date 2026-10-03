@@ -150,7 +150,7 @@ skippable.
 6. **Omar approved this send, and the printer is idle.** *Verify:* the `✓ approval:` and
    `✓ printer:` lines of `print send --dry-run`. The approval is an open row in the `## Approvals` table on the plate's
    page in `docs/design/plates/` (D-093, D-096), written from his tick or his yes in chat by
-   `tools/plate_approve.py`. One approval covers one send: once the plate has been sent or printed, a reprint needs a
+   `.claude/skills/manage-approvals/scripts/plate_approve.py`. One approval covers one send: once the plate has been sent or printed, a reprint needs a
    new one, so a plate whose print showed the setup was wrong never goes out again on the old yes.
    A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).
    Watching the first layer is not on this list: the X2D does its own first-layer and failure
@@ -181,7 +181,7 @@ the record and the bench sheet agree.
 > — but the GUI path does **not** fire `--record`, so scaffold the record by hand if you use it. On
 > either path the send needs Omar's live approval on the page (D-093); the GUI path does not spend
 > it, so spend it with the tool the CLI uses:
-> `python3 tools/plate_approve.py docs/design/plates/<name>.md --sent --via "Bambu Studio"`. A tick
+> `python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<name>.md --sent --via "Bambu Studio"`. A tick
 > left after a GUI send that nobody recorded is how sheets-04 looked approved again (D-096).
 
 ### 5 — Attend the print, and print the whole card in one session

@@ -30,8 +30,9 @@ The grade reads three things:
 
 Each grade also says whether the plate has a standing approval (D-095): a production page whose
 prints still show production, on the recipe it was promoted on, with the `standing` row that
-promotion writes in its Approvals table (`tools/plate_approve.py <name> --standing`, D-096).
-`bambu print send` asks `plate_approve.py --status`, which reads the same check, so a production
+promotion writes in its Approvals table (the manage-approvals skill's
+`plate_approve.py <name> --standing`, D-096). `bambu print send` asks
+`plate_approve.py --status`, which reads the same check, so a production
 plate goes out with no new yes and a plate that slipped, or whose recipe was edited in place,
 does not.
 
@@ -55,6 +56,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / ".claude" / "gates"))
 sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(ROOT / ".claude" / "skills" / "manage-approvals" / "scripts"))
 
 import plates_gate as pg  # noqa: E402
 import plate_approve  # noqa: E402
@@ -248,6 +250,7 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
         f"| {today} | proposed — derived from [{parent}]({parent}.md), a production plate, by "
         "`plate_grade.py --derive` | this page |\n"),
         encoding="utf-8")
+    plate_approve.iterate(page, today)  # iteration 1 of the new plate's recipe (D-097)
     return str(page)
 
 
@@ -293,6 +296,9 @@ def self_test() -> int:
               and "approved" not in data and pg.approvals(plate_approve.split(
                   (plates / "minis-10.md").read_text(encoding="utf-8"))[1])
               == ([], None), "it is an experiment naming its parent, with an empty Approvals table")
+        check(data.get("iteration") == 1
+              and [e["iteration"] for e in pg.iterations_of(plates / "minis-10.md")] == [1],
+              "its recipe is iteration 1 of the new plate, in the iterations file")
         check(pg.recipe_hash(plates / "minis-10.md") == pg.recipe_hash(plates / "minis-09.md"),
               "its recipe starts as the parent's (the header comment is not a change)")
         try:

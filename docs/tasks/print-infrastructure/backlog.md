@@ -27,10 +27,10 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 ## Waiting on Omar
 
-- **Three of the print review's six calls**, in
+- **Two of the print review's six calls**, in
   [print-review-design.md](../../design/printing/print-review-design.md) §9: one queue for every
-  plate (call 1), the scoring weights (call 4), and whether an approval lapses when its recipe
-  changes (call 6). Calls 2, 3 and 5 are tick boxes on the plate pages and sit in the
+  plate (call 1) and the scoring weights (call 4). Call 6 (does a recipe change void a yes) was
+  decided 2026-10-03 as D-097. Calls 2, 3 and 5 are tick boxes on the plate pages and sit in the
   [coaster-pipeline backlog](../coaster-pipeline/backlog.md)'s owner-gated list.
 - **A send button on the hub's plate queue.** The queue is on the page and read-only (3d-model-hub
   #9). The send still happens by hand with `bambu print send`, which asks before it sends. A send

@@ -1,12 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
 
-// The send checks (send-gate.ts, D-093, D-096), run against the real `tools/plate_approve.py` on
-// pages under a temporary repo. The load-bearing case is the spent approval: a page whose yes was
+// The send checks (send-gate.ts, D-093, D-096, D-097), run against the real `plate_approve.py` (the
+// manage-approvals skill's) on pages under a temporary git repo whose origin/master holds them, since
+// a yes names the master commit of the recipe iteration it covers. The load-bearing case is the spent approval: a page whose yes was
 // spent by a send is not approved for the next one, even with its box still ticked (sheets-04 on
 // 2026-10-02 was sent from Bambu Studio, which does not untick the box).
 
@@ -23,7 +25,17 @@ function page(name: string, opts: { box?: "x" | " "; approvals?: string[]; rows?
   const path = join(dir, `${name}.md`);
   writeFileSync(join(dir, `${name}.yaml`), `bed: x2d\n# ${name}\n`);
   writeFileSync(path, `${fm}\n${body}`);
+  plateApproveTool([path, "--iterate", "--date", "2026-10-01"]);
+  merged();
   return path;
+}
+
+/** What a merge to master does for the temporary repo: commit everything, move origin/master. */
+function merged(): void {
+  const git = (...args: string[]) => execFileSync("git", ["-C", root, ...args], { stdio: "ignore" });
+  git("add", "-A");
+  git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "--allow-empty", "-m", "merged");
+  git("update-ref", "refs/remotes/origin/master", "HEAD");
 }
 
 /** A yes, written the way a session writes one: through the tool. */
@@ -34,6 +46,7 @@ function approve(path: string, date: string): void {
 beforeAll(() => {
   root = mkdtempSync(join(tmpdir(), "send-gate-"));
   mkdirSync(join(root, "docs", "design", "plates"), { recursive: true });
+  execFileSync("git", ["init", "-q", root]);
 });
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
@@ -92,14 +105,20 @@ describe("plateApproval", () => {
     expect(a.sends).toBe(1);
   });
 
-  it("names a recipe that changed after the yes, since whether it voids the yes is Omar's call 6", () => {
+  it("refuses a recipe changed after the yes, and says to record the change, which resets the yes (D-097)", () => {
     const path = page("p-changed", {});
     approve(path, "2026-10-03");
     writeFileSync(path.replace(/\.md$/, ".yaml"), "bed: x2d\nspacing: 4\n");
     const a = plateApproval("p-changed", root);
-    expect(a.approved).toBe(true);
-    expect(a.how).toContain("the recipe changed since");
-    expect(a.how).toContain("ask before sending");
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("--iterate");
+  });
+
+  it("keeps the yes when the recipe only gained a comment: a reprint as-is", () => {
+    const path = page("p-comment", {});
+    approve(path, "2026-10-03");
+    writeFileSync(path.replace(/\.md$/, ".yaml"), "# packed the same\nbed: x2d\n");
+    expect(plateApproval("p-comment", root).approved).toBe(true);
   });
 
   it("refuses when the tool does not run: a status it cannot read is not a yes", () => {

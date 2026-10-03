@@ -69,7 +69,7 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
 - **A send needs Omar's live approval, and an idle printer.** `print send` moves real hardware. It
   reads the plate's page in `docs/design/plates/` and refuses unless the approval there is live (D-093): an
   open row in its `## Approvals` table (D-096), written from his tick or his yes in chat by
-  `tools/plate_approve.py`. One approval covers one send. A send spends it (the row's `Spent by` gets
+  `.claude/skills/manage-approvals/scripts/plate_approve.py`. One approval covers one send. A send spends it (the row's `Spent by` gets
   the date, the box is unticked and a dated `sent` row joins the timeline), so a reprint
   needs a new yes, and a plate whose print showed the setup was wrong never goes out on the old one.
   A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).

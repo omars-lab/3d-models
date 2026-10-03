@@ -1,6 +1,7 @@
 ---
 plate: minis-03
 recipe: minis-03.yaml
+iteration: 1
 stage: printed
 times_printed: 1
 runs:
@@ -43,7 +44,7 @@ Nothing open. The lessons went into the next plate and the sample rules.
 
 ## Approvals
 
-Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through `tools/plate_approve.py`; a send spends the open approval.
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through the manage-approvals skill's `plate_approve.py`; a send spends the open approval, and a recipe change resets it.
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|

@@ -39,27 +39,35 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | `planned` | Designed, but it waits on a build before it can have a recipe or a slice; `needs:` lists what | whoever wrote the design |
 | `proposed` | The recipe exists; nobody has reviewed the page yet | whoever wrote the recipe |
 | `waiting` | Pictures and costs are on the page; waiting for Omar's tick | the skill, once the page is complete |
-| `approved` | Omar ticked Approve, or said yes in chat, and it is a row in the Approvals table | `tools/plate_approve.py`, reading the tick or his words back |
+| `approved` | Omar ticked Approve, or said yes in chat, and it is a row in the Approvals table | `.claude/skills/manage-approvals/scripts/plate_approve.py`, reading the tick or his words back |
 | `sent` | It went to the printer; no record yet | `bambu print send`, which spends the approval |
 | `printed` | A record exists in [`docs/prints/`](../../prints.md) | the record; `times_printed` counts them |
 | `retired` | Not printing it again | Omar |
 
 Only Omar approves ([D-093](../../working-model/decisions-log.md)): he ticks the box, or says yes in
-chat. Either way `python3 tools/plate_approve.py <page> --approved --by "<who, and how>"` writes it
+chat. Either way `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <page> --approved --by "<who, and how>"` writes it
 as a row in the page's `## Approvals` table and unticks the box, so the next tick is a new answer
 ([D-096](../../working-model/decisions-log.md)):
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-02 | approved | Omar, tick on this page | recipe 1a2b3c4d5e6f | sent 2026-10-02 |
+| 2026-10-04 | approved | Omar, tick on this page | iteration 2 @ 1a2b3c4d5e | sent 2026-10-04 |
 
-`Decision` is `approved`, `held` or `standing`; `Covers` is the recipe the yes was given on; and
-`Spent by` is empty while the yes is open, then `sent <date>` or `replaced <date>`. One approval
-covers one send: `bambu print send` refuses a plate with no open row, and a send fills its
-`Spent by` and adds a dated `sent` row to the timeline. A recipe that changed after the yes is
-named on the send; whether that voids the yes is the print-review design's open call 6. The plates
-gate (P2) checks the table against the stage and the timeline. A plate that printed can print again, but only
-on a new approval, so the table keeps every approved reprint. A production plate is the exception: it has a standing approval, a `standing` row written on promotion, while its prints still show production and its recipe is the one it was promoted on ([D-095](../../working-model/decisions-log.md)). Its recipe
+`Decision` is `approved`, `held` or `standing`; `Covers` is the recipe iteration the yes was given
+on and the master commit that holds it; and `Spent by` is empty while the yes is open, then
+`sent <date>`, `replaced <date>` or `reset <date>`. One approval covers one send:
+`bambu print send` refuses a plate with no open row, and a send fills its `Spent by` and adds a dated `sent`
+row to the timeline. The plates gate (P2) checks the table against the stage and the timeline.
+
+**A recipe change resets the yes** ([D-097](../../working-model/decisions-log.md)). The recipe is
+edited in place, and each version that differs from the last is the next iteration, kept in the
+manage-approvals skill's `approvals.yaml` and named on the page as `iteration: N`. After an edit,
+`python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate` records it and
+marks an open yes `reset <date>`; the commit hook (P9) refuses the edit until it is recorded. A
+comment-only edit is not a change, so a reprint as-is keeps its iteration and its yes. A change to
+a bikar file the recipe names is not caught: only the recipe file is hashed.
+
+A plate that printed can print again, but only on a new approval, so the table keeps every approved reprint. A production plate is the exception: it has a standing approval, a `standing` row written on promotion, while its prints still show production and its recipe is the one it was promoted on ([D-095](../../working-model/decisions-log.md)). Its recipe
 is frozen: a change goes on a new experiment plate with `derived_from` (grade-plate skill). Each run is its own record, and
 `times_printed` is the number of records.
 
