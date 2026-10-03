@@ -40,11 +40,12 @@ Sending a print and which filament to load.
   [the plates page](../../plates/README.md). The send and the filament are Omar's.
 - **The sampler sheets, [sheets-01](../../plates/sheets-01.md) to
   [sheets-05](../../plates/sheets-05.md)** — sheets-01 (edge and top) is built in full and waits
-  on Omar's tick: one bed, about 1 h 48 m and 46 g. sheets-04 (the gBV fit) is built and approved
-  (2026-10-02) and sent by Omar the same day from Bambu Studio; it waits on the pieces being
-  judged, failure detection being the X2D's own (D-092): one bed,
-  62 minutes, 17 g, the pieces in the real minimal coaster, every set at its full gap since
-  bikar #297 cut the coaster's holes on their exact outline, plus one 2 mm peaked set (D-091). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
+  on Omar's tick: one bed, about 1 h 48 m and 46 g. sheets-04 (the gBV fit) printed 2026-10-02,
+  and all the small pieces fell right through the floorless minimal coaster's holes
+  ([record](../../prints/2026-10-02-sheets-04/index.md)). Its follow-up
+  [sheets-04b](../../plates/sheets-04b.md) is pieces only for the coaster Omar already has, 4 mm
+  tall and flat, at gaps 0.05, 0, −0.05 and −0.10 (bikar #300): one bed, 41 minutes, 12 g,
+  waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../plates/README.md), not kept here. Prints are held for last.
 - **Did [minis-01](../../plates/minis-01.md) and [minis-02](../../plates/minis-02.md) print?**

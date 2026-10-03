@@ -1,0 +1,67 @@
+# sheets-04b — the gBV fit again: pieces only, tall and flat, into a press fit
+#
+# On sheets-04 every small piece fell right through the gBV minimal coaster's holes (Omar,
+# 2026-10-02; record docs/prints/2026-10-02-sheets-04). That coaster has no floor, so only
+# friction holds a piece, and every gap on that plate was positive: each piece was smaller
+# than its hole. Omar asked for the next pieces "as tall as the minmal construction piece and
+# flat", and for "a new plate of just small pieces": he has the coaster already, so it is not
+# on this plate.
+#
+# So the pieces are 4 mm tall, the coaster's own height, with flat tops flush with its top, and
+# the gap ladder goes from the tightest positive gap on sheets-04 down through zero into a
+# press fit, where the piece is larger than its hole (bikar #300 lets the gap go below zero).
+# A taller piece also has more of its wall above the first layers, which the preset's
+# elephant-foot compensation narrows.
+#
+#   HEX +05   orbit 2, the ten six-sided pieces of the middle ring, 0.05 mm per face: the
+#             sheets-04 gap that fell, again at full height, so height alone is read
+#   HEX 00    the same ring at 0: the piece the size of its hole
+#   HEX -05   0.05 mm larger than its hole on every face
+#   HEX -10   0.10 mm larger, CAL-FIT-01's press step
+#   STAR 00   orbit 3, the ten small five-point stars, at 0
+#   STAR -05  the stars 0.05 mm larger than their holes
+#
+# The peaked piece is left off: Omar wants these flat. The rings come from `bikar bands` on the
+# gBV coaster (orbit 2: ten hexagons at radius 19.9 mm; orbit 3: ten 10-sided stars at
+# 28.3 mm). Each set is one plate item and goes into its own bag straight off the plate,
+# labelled with its code, because the sets look alike; compose writes where each landed to the
+# bed map (`print_review.py bed` draws it).
+#
+# The X2D's own failure detection covers a piece coming loose (D-092).
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/plates/sheets-04b.yaml --dry-run
+# Slice, then draw the bed with its labels:
+#   bambu slice compose docs/plates/sheets-04b.yaml
+#   python3 tools/print_review.py bed <out.png> build/plates/sheets-04b.plate.3mf
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  HEX +05
+    piece:  Hex
+    params: { height: 4, gap: 0.05 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  HEX 00
+    piece:  Hex
+    params: { height: 4, gap: 0 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  HEX -05
+    piece:  Hex
+    params: { height: 4, gap: -0.05 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  HEX -10
+    piece:  Hex
+    params: { height: 4, gap: -0.1 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  STAR 00
+    piece:  Star
+    params: { height: 4, star_gap: 0 }
+  - bkr:    bikar:patterns/Coupons/Loose-Fit-Coupon.bkr
+    label:  STAR -05
+    piece:  Star
+    params: { height: 4, star_gap: -0.05 }

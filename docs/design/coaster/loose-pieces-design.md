@@ -211,6 +211,12 @@ None of the three glues or clips anything. A tighter gap holds a piece by fricti
 but a gap tight enough to hold in F3 is also tight enough to jam, and the only reading we have near
 there (minis-04 at 0.10, "too tight") does not count (§1).
 
+**Printed 2026-10-02, sheets-04:** the F3 row held. Pieces 1.2 mm tall at every gap from 0.05 to
+0.20, set into the floorless gBV minimal coaster, all fell right through, judged by hand
+([the record](../../prints/2026-10-02-sheets-04/index.md)). So in F3 a positive gap holds
+nothing. [sheets-04b](../../plates/sheets-04b.md) tries pieces 4 mm tall, flush with that
+coaster, at 0.05, 0 and two press fits, where the piece is larger than its hole (bikar #300).
+
 ### 3.4 Which fit numbers transfer, and on what condition
 
 - **CAL-FIT-01, as a starting point.** It transfers because a loose piece in a pocket is what the
@@ -454,6 +460,10 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 
 **Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
 [the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../../plates/sheets-04.md).
+
+**Printed 2026-10-02:** sheets-04 put these gaps in the floorless minimal coaster, not an F1
+frame, and every piece fell through (§3.3). The F1 reading is still to come; the floorless
+reading moves to [sheets-04b](../../plates/sheets-04b.md), gaps 0.05 down to −0.10.
 
 ## 8. Checks
 

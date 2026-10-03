@@ -350,8 +350,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    coaster (Omar's ask) rather than the coupon's frame. The coaster's holes are now cut on the
    pieces' exact outline (bikar #297), so every set keeps its full gap. A seventh set, `PEAK 2`, tries
    the 2 mm peaked pieces beside the flat ones (D-091). Omar approved the sheet 2026-10-02, and
-   the failure-detection question is settled as the X2D's own (D-092). Omar sent it the same day
-   from Bambu Studio; it waits on the pieces being judged.
+   the failure-detection question is settled as the X2D's own (D-092). Omar printed it the same
+   day, and all the small pieces fell right through the floorless coaster's holes at every gap.
+   The next try, [sheets-04b](../../plates/sheets-04b.md), is pieces only, 4 mm tall and flat, at
+   0.05 down to a −0.10 press fit (bikar #300), and waits on Omar's tick.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
    sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page

@@ -1,11 +1,11 @@
 ---
 plate: sheets-04
 recipe: sheets-04.yaml
-stage: sent
+stage: printed
 approved: true
 approved_on: 2026-10-02
-times_printed: 0
-runs: []
+times_printed: 1
+runs: [2026-10-02-sheets-04]
 answers: "Which gap per face lets a loose gBV piece drop into its pocket and stay, do the small five-point stars catch at 0.15, and does a 2 mm peak read as the look in the hand?"
 kind: new
 bets:
@@ -38,6 +38,12 @@ the real coaster rather than a test frame. The pieces come from bikar's `Loose-F
 
 **Measured before printing:** every piece keeps exactly its gap in the coaster's holes, star tips
 included. See [the fit](#the-fit-in-the-coaster).
+
+**Printed 2026-10-02:** all the small pieces fell right through the coaster's holes, at every
+gap. The coaster has no floor, so only the grip of the walls could hold a piece, and every gap
+here leaves the piece smaller than its hole. The next try is [sheets-04b](sheets-04b.md): pieces
+only, 4 mm tall and flat, from 0.05 down into a press fit. The record is
+[2026-10-02-sheets-04](../prints/2026-10-02-sheets-04/index.md).
 
 ## What it is
 
@@ -181,3 +187,5 @@ Notes:
 | 2026-10-02 | approved — again, by Omar on this page, as it stands with both prints and the fixed peak; the failure-detection yes is still open | this page |
 | 2026-10-02 | reviewed — Omar answered the failure-detection box: it is the X2D's own, not a per-plate yes; nothing is left blocking the print but the send | [D-092](../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes) |
 | 2026-10-02 | sent — by Omar, from Bambu Studio over LAN, the local slice of 62 minutes and 17 g; the draft record waits locally until the pieces are judged | this page |
+| 2026-10-02 | printed — on the X2D, one bed | [the record](../prints/2026-10-02-sheets-04/index.md) |
+| 2026-10-02 | judged — by Omar, by hand: "all the small pieces fell right through" the coaster's holes, at every gap; the next try is pieces only, 4 mm tall and flat, into a press fit | [sheets-04b](sheets-04b.md) |
