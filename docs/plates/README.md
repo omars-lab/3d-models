@@ -50,6 +50,18 @@ unticked and a dated `sent` row joins the timeline. A plate that printed can pri
 on a new approval, so the timeline logs every approved reprint. Each run is its own record, and
 `times_printed` is the number of records.
 
+## How proven a plate is
+
+Each page also says how far its prints have taken it, as `maturity`: an `experiment` (the start
+for every plate: a question is still open), `repeatable` (every piece on it has printed well,
+twice, on any plate), or `production` (repeatable, printed clean as laid out, and packed: as
+much of the bed covered as the [rubric](../../.claude/skills/grade-plate/rubric.md) asks). Experiments are laid out to answer a question and are not asked to
+be packed; production plates must be. The prints set the level, not a feeling: the plates gate
+fails a page that claims more than its records show. The
+[grade-plate skill](../../.claude/skills/grade-plate/SKILL.md) grades a plate and writes the
+level; the [plate maturity design](../design/printing/plate-maturity-design.md) explains the
+rules. Every plate is an experiment today.
+
 ## What we can print
 
 - **Coaster sample plates** like the ones here come from the

@@ -5832,3 +5832,42 @@ approved re-prints against a plate".
 **What would reverse it:** a send that went out on an approval Omar did not mean to cover it,
 which would bring back the TTY yes for every send; or a plate proven enough that one approval
 per send is only friction, which the plate-maturity design would answer for that kind of plate.
+
+## D-094 — Plates carry a maturity; production plates are packed, experiments are not
+
+Omar, 2026-10-03, asked whether plates need a maturity — "experimental vs not? … vs repeatable …
+production ready … prototype" — for "a hook to validate proper maturity and a grading skill to
+grade maturity of plate from historic prints, space efficiency of plate, proven value of prints",
+and set the rule: "prod plates should be optimized, experimental plates arent".
+
+### The options considered
+
+- **No field; judge each plate by eye.** Nothing to build, but one page cannot be held to both
+  standards (packed and not) without saying which it is under.
+- **Fold it into `kind`.** One field fewer, but `kind` says why the next print happens and
+  maturity what past prints showed; a proven plate printed once more as a color `taste` needs
+  both.
+- **Chosen: a `maturity` field set by the prints.** Three levels — `experiment`, `repeatable`,
+  `production` — read from the print records per piece, across plates, and held by the plates
+  gate (P8) so a page can never claim more than its records show.
+
+### What it changes
+
+- Every plate page carries `maturity`; all 12 are `experiment` today, by their prints as well as
+  their pages.
+- **Repeatable:** every piece in the recipe has its latest two verdicts `keep`, on any plate.
+  **Production:** repeatable, `kind: repeat`, this plate's own latest run kept every piece as
+  laid out, and `bed_fill` (the share of the first bed covered, from a slice) at least 0.45.
+  Both numbers live in the grade-plate skill's rubric with a round log.
+- A level above experiment needs a dated `promoted` row; when the evidence drops, the gate fails
+  until the page is lowered with a `demoted` row. Under-claiming is a notice, never a finding.
+- The [grade-plate skill](../../.claude/skills/grade-plate/SKILL.md) and `tools/plate_grade.py`
+  grade a plate and measure its bed; the
+  [plate maturity design](../design/printing/plate-maturity-design.md) holds the rules.
+- **Still open (Omar's):** a standing approval for production plates (design call 1; if yes, it
+  goes through `plateApproval` in the send check, nowhere else); the numbers 2 keeps and 0.45 fill
+  (call 2); and the print-review design's call 6 on recipe changes, which stays there.
+
+**What would reverse it:** a plate the grade calls production that Omar would not print again
+as it stands, which would mean the evidence the levels read is the wrong evidence; or levels that
+never move because no plate repeats, which would make the field noise.

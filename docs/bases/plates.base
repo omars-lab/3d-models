@@ -12,6 +12,8 @@ properties:
     displayName: Approved on
   note.times_printed:
     displayName: Times printed
+  note.maturity:
+    displayName: Maturity
   note.risk:
     displayName: Risk
   note.answers:
@@ -28,6 +30,7 @@ views:
       - approved
       - approved_on
       - times_printed
+      - maturity
       - risk
       - answers
     sort:

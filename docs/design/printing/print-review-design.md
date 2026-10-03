@@ -49,6 +49,8 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 | `times_printed`, `runs` | how many records name this plate, and which |
 | `answers` | the question the plate answers, in one sentence |
 | `kind` | `new` question, `taste` (a look at something known), or `repeat` |
+| `maturity` | `experiment`, `repeatable` or `production`: what the prints have shown, set by the grade-plate skill ([plate maturity](plate-maturity-design.md)) |
+| `bed_fill` | the share of the first bed the pieces cover, from a slice; required only at `production` |
 | `bets` | the calibration bets a reading from this plate can move |
 | `unblocks` | the open decisions the print lets Omar make, in words |
 | `minutes`, `grams`, `bed_plates` | from a local slice; empty at `planned` |
@@ -120,6 +122,9 @@ existed were never asked about, and writing `false` on them would claim a no tha
   `approved` row on its date; each run has a `printed` row naming it, and there are as many
   `printed` rows as runs.
 - **P7, the queue.** The block on `docs/plates/README.md` is the one the pages compute.
+- **P8, maturity.** The page's `maturity` is no higher than its prints show, with a dated
+  `promoted` row behind any level above experiment. Its rules, and its own validator, are in
+  [plate maturity §7](plate-maturity-design.md#7-the-gate-and-why-a-skill-as-well).
 
 **Validator:** `python3 .claude/gates/plates_gate.py --self-test` builds a clean set of plate
 pages and records, requires it clean, then breaks it once per rule and requires that rule to
