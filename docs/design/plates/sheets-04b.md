@@ -1,5 +1,6 @@
 ---
 plate: sheets-04b
+print_log: '[[print-logs/sheets-04b|print log]]'
 recipe: sheets-04b.yaml
 iteration: 1
 stage: sent
@@ -141,16 +142,3 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c. Cancelled at layer 0: the slice was made for a Cool Plate and a Textured PEI Plate was on the bed (0500-8051); slice it again for that plate, and it needs a new yes | [the issue](../../issues/sliced-for-wrong-plate.md) |
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c | this page |
 
-## Print log
-
-What the printer said while this plate printed, one row per change, written by the monitor-print skill's `print_monitor.py`. A `finished` row is not a print record; that is written when the pieces are judged.
-
-| Time (UTC) | Event | Layer | Done | What the printer said |
-|---|---|---|---|---|
-| 2026-10-03 20:08 | watching | 0/20 | 0% | 0500-8051: the plate on the bed is not the one the file was sliced for |
-| 2026-10-03 20:12 | stopped | 0/20 | 0% | 0300-400C: the print was cancelled, from the printer's screen or an app |
-| 2026-10-03 22:34 | watching | 5/20 | 38% | RUNNING |
-| 2026-10-03 22:34 | progress | 5/20 | 38% | 25% |
-| 2026-10-03 22:40 | progress | 9/20 | 50% | 50% |
-| 2026-10-03 22:52 | progress | 16/20 | 75% | 75% |
-| 2026-10-03 23:05 | finished | 20/20 | 100% | FINISH |

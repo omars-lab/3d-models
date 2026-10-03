@@ -5,8 +5,10 @@ recipe (`minis-NN.yaml`, which `bambu slice compose` turns into a slice) and, be
 (`minis-NN.md`) for Omar to review. The page says what the plate is, why to print it, what it
 costs, and shows pictures of it. Its frontmatter records its stage and how many times it has
 printed, its Approvals table holds every yes Omar gave it, and its timeline lists each step with a
-date. The queue below ranks the
-plates that have not printed yet, highest return first. The
+date. What the printer said while a plate printed is in its own file, `print-logs/<plate>.md`
+([sheets-04b's](print-logs/sheets-04b.md) is the first), linked from the page's `print_log`
+property and only ever added to. The queue below ranks the plates that have not printed yet,
+highest return first. The
 [prioritize-prints skill](../../../.claude/skills/prioritize-prints/SKILL.md) keeps all of this
 current; the [print review design](../printing/print-review-design.md) explains why it
 is built this way.

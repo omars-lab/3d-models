@@ -28,6 +28,9 @@ plate or counted runs.
 - `docs/design/plates/<plate>.md` — the review page, new, one per recipe. The gate fails on a recipe
   with no page.
 - `docs/design/plates/<plate>-media/` — the page's pictures.
+- `docs/design/plates/print-logs/<plate>.md` — what the printer said while the plate printed,
+  one file per plate, added to and never rewritten (§4). Its own folder, so the gate never takes
+  a log for a page.
 - `docs/design/plates/README.md` — what a plate is, how it moves, what we can print, and **the queue**.
 - `docs/prints/<run>/index.md` — the print records, unchanged. One per time a plate came off the
   bed.
@@ -56,6 +59,7 @@ The frontmatter holds the facts the queue and the gate need. It is flat, as the 
 | `pictures` | the files the page shows |
 | `after` | optional: a plate this one waits behind |
 | `needs` | at `planned` only, and required there: the builds the plate waits on, in words |
+| `print_log` | once the plate has printed under the monitor: `'[[print-logs/<plate>\|print log]]'`, the link to its log (§4) |
 
 It is `stage`, not `status`, because in this vault `status` means a design doc's state and every
 note with one is listed in the design-docs view.
@@ -105,6 +109,19 @@ record, the page). A plate can print more than once: each run is its own record,
 number of records whose `plate:` starts with the plate's name. A yes or a hold is not a timeline
 event: it is a row in the Approvals table, and the `sent` row that spends it names its date.
 
+What the printer said during a print is not on the page either. The
+[monitor-print skill](../../../.claude/skills/monitor-print/SKILL.md) writes it, one row per change
+(watching, paused with its error code, the 25/50/75% marks, stalled, finished, and so on), into
+the plate's own **print log**, `docs/design/plates/print-logs/<plate>.md`. The page links it
+from its frontmatter as `print_log`, so it opens from the page's properties in Obsidian, and the
+log links back to the page. Omar asked for it on 2026-10-03: "should the print data be in a
+sepereate file?", "the print append log?", "link in front matter?". It is a separate file
+because the rows come every few minutes from a script while the page is written by hand and
+reviewed: one file each keeps a print's rows out of the page's diffs and approvals. It is
+append-only because it is a record of what the machine said: a wrong row is answered by a later
+row, never by an edit. A `finished` row is the printer's word, not a print record; the record
+and the `printed` row come when the pieces are judged.
+
 ## 5. Approval, the request-feedback way
 
 Omar answers on the page, not in chat. **Your call** is a short list of tick boxes, each an
@@ -145,20 +162,28 @@ about, and a row on them would claim an answer nobody gave.
 - **P8, maturity.** The page's `maturity` is no higher than its prints show, with a dated
   `promoted` row behind any level above experiment. Its rules, and its own validator, are in
   [plate maturity §7](plate-maturity-design.md#7-the-gate-and-why-a-skill-as-well).
+- **P10, print log.** A page's `print_log` names a log that exists, every log is linked from its
+  plate's page and names that plate, and no page keeps a `## Print log` in its body. The log's
+  table has the monitor's header, times in order and only the events the monitor writes. Rows
+  are only added at the end: every row `origin/master` has is still there, unchanged and in its
+  place, and a log `origin/master` has is not deleted.
 
 **Validator:** `python3 .claude/gates/plates_gate.py --self-test` builds a clean set of plate
 pages and records, requires it clean, then breaks it once per rule and requires that rule to
 fire.
 
-PASS: the real tree today — eleven pages (five of them sampler sheets at `planned`), two records,
-minis-03 and minis-04 at one run each, and the queue current.
+PASS: the real tree on 2026-10-03 — twelve pages (three of them sampler sheets at `planned`),
+three records (minis-03, minis-04 and sheets-04, one run each), one print log (sheets-04b, two
+sends), and the queue current.
 
 FAIL: a second record for minis-09 while its page still says `times_printed: 1` with one run
 listed. The page agrees with itself; only a count taken from `docs/prints/` catches it. For
 approval, the hard case is a `sent` row with no yes spent on it: the page is otherwise clean, the
 box unticked, the stage right, and only reading the table against the timeline catches the send
 nobody approved. Also a page moved to `stage: approved` with no open row, and a queue block edited
-by hand.
+by hand. For the print log, the hard case is a row `origin/master` has, edited in place: the log
+still has the right header, its times in order and only known events, so only reading it
+against master catches the rewrite.
 
 ## 7. The queue, and why it is computed
 

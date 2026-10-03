@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Watch one plate print on the X2D: write what the printer says onto the plate's page, check the
-print is still moving, take a chamber picture every few minutes and make a timelapse at the end.
+"""Watch one plate print on the X2D: write what the printer says into the plate's print log, check
+the print is still moving, take a chamber picture every few minutes and make a timelapse at the end.
 
     python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> [--every 30] [--lost-after 10]
         [--stall-after 15] [--snapshot-every 10]
@@ -8,11 +8,15 @@ print is still moving, take a chamber picture every few minutes and make a timel
     python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test
 
 `<plate>` is a plate name (`sheets-04b`) or the path of its page. Run it from the main checkout
-(the vault), like every `bambu` call, so the rows land on the page Omar reads in Obsidian.
+(the vault), like every `bambu` call, so the rows land in the log Omar opens from the page in
+Obsidian.
 
 Every `--every` seconds it asks `tools/bambu/bin/bambu status show --json` for the printer's
 report (each call under a timeout) and compares it with the last one. A change worth knowing
-becomes one row in the page's `## Print log`, made after the Timeline when the page has none:
+becomes one row in the plate's print log, its own file beside the pages,
+`docs/design/plates/print-logs/<plate>.md`. The first row makes the file and links it from the
+page's frontmatter (`print_log: '[[print-logs/<plate>|print log]]'`). Rows are only ever added
+at the end, and the plates gate (P10) refuses a change to one already on master:
 
     | Time (UTC) | Event | Layer | Done | What the printer said |
 
@@ -79,9 +83,10 @@ KNOWN = {
     CANCELLED: "the print was cancelled, from the printer's screen or an app",
 }
 
-INTRO = ("What the printer said while this plate printed, one row per change, written by the "
-         "monitor-print skill's `print_monitor.py`. A `finished` row is not a print record; that is "
-         "written when the pieces are judged.")
+INTRO = ("What the printer said while {page} printed, one row per change, written by the "
+         "monitor-print skill's `print_monitor.py`. Rows are only ever added at the end: the "
+         "plates gate refuses a change to a row already on master. A `finished` row is not a "
+         "print record; that is written when the pieces are judged.")
 
 
 def error_code(n) -> str | None:
@@ -195,19 +200,26 @@ def row_line(when: str, event: str, frame: dict | None, text: str) -> str:
     return f"| {when} | {event} | {layer} | {done} | {cell(text)} |"
 
 
-def add_log_row(body: str, line: str) -> str:
-    """The body with `line` at the end of its Print log, made after the Timeline if missing."""
-    m = re.search(r"^## Print log\b.*?$(.*?)(?=^## |\Z)", body, flags=re.MULTILINE | re.DOTALL)
-    if not m:
-        section = (f"## Print log\n\n{INTRO}\n\n{pg.PRINT_LOG_HEAD}\n|---|---|---|---|---|\n{line}\n")
-        t = re.search(r"^## Timeline\b.*?$(.*?)(?=^## |\Z)", body, flags=re.MULTILINE | re.DOTALL)
-        if not t or t.end() == len(body):
-            return body.rstrip("\n") + "\n\n" + section
-        return body[:t.end()] + section + "\n" + body[t.end():]
-    lines = m.group(1).split("\n")
-    last = max((i for i, ln in enumerate(lines) if ln.strip().startswith("|")), default=0)
-    lines.insert(last + 1, line)
-    return body[:m.start(1)] + "\n".join(lines) + body[m.end(1):]
+def new_log(plate: str) -> str:
+    """A print log with no rows yet: its plate, a link back to the page, the table header."""
+    return (f"---\nplate: {plate}\n---\n\n# {plate} — print log\n\n"
+            f"{INTRO.format(page=f'[{plate}](../{plate}.md)')}\n\n"
+            f"{pg.PRINT_LOG_HEAD}\n|---|---|---|---|---|\n")
+
+
+def add_log_row(text: str, line: str) -> str:
+    """The log with `line` added at the end. The table is the last thing in the file, and rows
+    are only ever added there (P10 checks the log is append-only)."""
+    return text.rstrip("\n") + "\n" + line + "\n"
+
+
+def link_page(text: str, plate: str) -> str:
+    """The page with `print_log:` in its frontmatter, after `plate:`, when it has none."""
+    end = text.find("\n---", 4)
+    if re.search(r"^print_log:", text[:end], flags=re.MULTILINE):
+        return text
+    return re.sub(r"^(plate: .*)$", rf"\1\nprint_log: '{pg.log_link(plate)}'", text, count=1,
+                  flags=re.MULTILINE)
 
 
 def page_of(plate: str) -> Path:
@@ -215,11 +227,21 @@ def page_of(plate: str) -> Path:
     return p.resolve() if p.suffix == ".md" else pg.PLATES / f"{plate}.md"
 
 
-def append_to_page(page: Path, line: str) -> None:
+def log_of(page: Path) -> Path:
+    return page.parent / pg.LOGS / f"{page.stem}.md"
+
+
+def append_to_log(page: Path, line: str) -> None:
+    """One row onto the plate's log; the first row makes the log and links it from the page."""
+    log = log_of(page)
+    if not log.is_file():
+        log.parent.mkdir(exist_ok=True)
+        log.write_text(new_log(page.stem), encoding="utf-8")
+    log.write_text(add_log_row(log.read_text(encoding="utf-8"), line), encoding="utf-8")
     text = page.read_text(encoding="utf-8")
-    end = text.find("\n---", 4)
-    head, body = text[:end + 4], text[end + 4:]
-    page.write_text(head + add_log_row(body, line), encoding="utf-8")
+    linked = link_page(text, page.stem)
+    if linked != text:
+        page.write_text(linked, encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -336,7 +358,7 @@ def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, s
         when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
         end = None
         for event, text in rows:
-            append_to_page(page, row_line(when, event, frame if ours else None, text))
+            append_to_log(page, row_line(when, event, frame if ours else None, text))
             log("row", event=event, msg=cell(text))
             print(f"ev=row plate={name} event={event} msg=\"{cell(text)}\"", flush=True)
             if event in TERMINAL:
@@ -466,24 +488,29 @@ def self_test() -> int:
     check(every <= set(pg.PRINT_EVENTS), "every event the monitor writes is one the gate knows",
           sorted(every - set(pg.PRINT_EVENTS)))
 
-    # The page: the log is made after the Timeline, rows append in order, and the gate reads it.
-    body = ("\n# p\n\n## Approvals\n\n| a |\n\n## Timeline\n\n| Date | What happened | Where |\n"
-            "|---|---|---|\n| 2026-10-03 | sent | x |\n\n## Notes\n\nkeep me\n")
-    b = add_log_row(body, row_line("2026-10-03 21:02", "watching", _f("PREPARE"), "PREPARE"))
-    b = add_log_row(b, row_line("2026-10-03 21:09", "paused", _f("PAUSE"), "0500-8051: a | b"))
-    rows, problem = pg.print_log(b)
-    check(problem is None and [e for _, e in rows] == ["watching", "paused"],
-          "the page's print log reads back through the gate", f"{problem} {rows}")
-    check(b.index("## Timeline") < b.index("## Print log") < b.index("## Notes")
-          and "keep me" in b, "the log sits after the Timeline and the rest of the page stays")
-    check("a / b" in b, "a | in the printer's words cannot break the table")
-
+    # The log: its own file beside the pages, made on the first row and linked from the page's
+    # frontmatter; rows append in order, and the gate reads it back clean.
+    page_text = ("---\nplate: x\nstage: sent\n---\n\n# x\n\n## Timeline\n\n"
+                 "| Date | What happened | Where |\n|---|---|---|\n| 2026-10-03 | sent | x |\n")
     with tempfile.TemporaryDirectory() as tmp:
         p = Path(tmp) / "x.md"
-        p.write_text("---\nplate: x\n---\n" + body, encoding="utf-8")
-        append_to_page(p, row_line("2026-10-03 21:02", "watching", None, "PREPARE"))
-        check(p.read_text(encoding="utf-8").startswith("---\nplate: x\n---\n"),
-              "the frontmatter is left as it was")
+        p.write_text(page_text, encoding="utf-8")
+        append_to_log(p, row_line("2026-10-03 21:02", "watching", _f("PREPARE"), "PREPARE"))
+        append_to_log(p, row_line("2026-10-03 21:09", "paused", _f("PAUSE"), "0500-8051: a | b"))
+        log = log_of(p).read_text(encoding="utf-8")
+        rows, problem = pg.print_log(log)
+        check(problem is None and [e for _, e in rows] == ["watching", "paused"],
+              "the print log reads back through the gate", f"{problem} {rows}")
+        check("a / b" in log, "a | in the printer's words cannot break the table")
+        check("[x](../x.md)" in log, "the log links back to its page")
+        linked = p.read_text(encoding="utf-8")
+        check(linked == page_text.replace("plate: x\n", f"plate: x\nprint_log: '{pg.log_link('x')}'\n"),
+              "the page gains its print_log link once, and nothing else changes", linked[:80])
+        found = pg.check_print_logs(Path(tmp), pg.read_pages(Path(tmp)))
+        check(not found, "the gate finds nothing wrong with the log and the link", found)
+        log_of(p).write_text(log.replace("| watching |", "| jammed |"), encoding="utf-8")
+        found = pg.check_print_logs(Path(tmp), pg.read_pages(Path(tmp)))
+        check(any("event 'jammed'" in f for f in found), "and the gate does read the log", found)
 
     print(f"self-test: {'PASS' if not fails else f'FAIL ({fails})'}")
     return 1 if fails else 0

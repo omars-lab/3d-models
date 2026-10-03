@@ -82,14 +82,19 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       iteration and marks the yes `reset`. A production recipe is P8's: it does not iterate,
       it is derived.
 
-  P10 **Print log.** What the printer said while a plate printed, appended by the send-plate
-      skill's `print_monitor.py`: `| Time (UTC) | Event | Layer | Done | What the printer said |`
-      under `## Print log`, one row per change. A page with no print yet has no table. Checked:
-      the header, each row's time (`YYYY-MM-DD HH:MM`) in order, and its event in
-      PRINT_EVENTS. A `finished` row is the printer's word, not a print record: it does not
-      count toward `times_printed`, and the timeline's `printed` row still waits for a record
-      (P3, P6). The load-bearing case: a row with an event the monitor never writes, which
-      means the table was typed by hand or by a different tool.
+  P10 **Print log.** What the printer said while a plate printed, appended by the
+      monitor-print skill's `print_monitor.py` to its own file, `print-logs/<plate>.md` beside
+      the pages: `| Time (UTC) | Event | Layer | Done | What the printer said |`, one row per
+      change. The page links it from its frontmatter, `print_log: '[[print-logs/<plate>|print
+      log]]'`, and keeps no log in its body. A plate with no print yet has no log. Checked: the
+      link names a log that exists, every log is linked from its plate's page and names that
+      plate, the header, each row's time (`YYYY-MM-DD HH:MM`) in order, its event in
+      PRINT_EVENTS, and that rows are only ever added at the end: every row master has is
+      still there, unchanged, in its place, and a log master has is not deleted. A `finished`
+      row is the printer's word, not a print record: it does not count toward
+      `times_printed`, and the timeline's `printed` row still waits for a record (P3, P6). The
+      load-bearing cases: a row with an event the monitor never writes, which means the table
+      was typed by hand or by a different tool, and a row master has that was edited.
 
 Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
@@ -158,6 +163,8 @@ APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
 # `stalled` is RUNNING with no new layer or percent for a while; `lost` is the monitor giving up
 # when the printer stops answering.
 PRINT_LOG_HEAD = "| Time (UTC) | Event | Layer | Done | What the printer said |"
+# Each plate's log is its own file in this folder beside the pages, outside the page glob.
+LOGS = "print-logs"
 PRINT_EVENTS = ("watching", "preparing", "printing", "paused", "resumed", "progress", "stalled",
                 "error", "finished", "failed", "stopped", "lost")
 LOG_ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*\|\s*([a-z]+)\s*\|(.*)$")
@@ -232,14 +239,21 @@ def timeline(body: str) -> list[tuple[str, str, str]]:
     return rows
 
 
-def print_log(body: str) -> tuple[list[tuple[str, str]], str | None] | None:
-    """The `## Print log` table as ([(time, event)], problem), or None when the page has none.
-    A row that starts with `|` and is neither the header, the rule, nor a timed row is a
-    problem, so a hand-typed row cannot hide by failing to match."""
-    m = re.search(r"^## Print log\b.*?$(.*?)(?=^## |\Z)", body, flags=re.MULTILINE | re.DOTALL)
-    if not m:
-        return None
-    lines = [ln.strip() for ln in m.group(1).splitlines() if ln.strip().startswith("|")]
+def log_link(plate: str) -> str:
+    """The page's `print_log:` property: a wikilink, so Obsidian opens the log from the page."""
+    return f"[[{LOGS}/{plate}|print log]]"
+
+
+def table_lines(text: str) -> list[str]:
+    """Every table line of a print log, header first."""
+    return [ln.strip() for ln in text.splitlines() if ln.strip().startswith("|")]
+
+
+def print_log(text: str) -> tuple[list[tuple[str, str]], str | None]:
+    """A print log's table as ([(time, event)], problem). A line that starts with `|` and is
+    neither the header, the rule, nor a timed row is a problem, so a hand-typed row cannot
+    hide by failing to match."""
+    lines = table_lines(text)
     if not lines or lines[0] != PRINT_LOG_HEAD:
         return [], f"the table header is not {PRINT_LOG_HEAD}"
     rows = []
@@ -249,6 +263,68 @@ def print_log(body: str) -> tuple[list[tuple[str, str]], str | None] | None:
             return rows, f"row '{ln[:60]}' has no `YYYY-MM-DD HH:MM` time"
         rows.append((r.group(1), r.group(2)))
     return rows, None
+
+
+def appended_only(before: str, now: str) -> str | None:
+    """Why `now` is not `before` with rows added at the end, or None when it is. Only the
+    table counts: the intro can be reworded, a row the printer reported cannot."""
+    old, new = table_lines(before), table_lines(now)
+    for i, ln in enumerate(old):
+        if i >= len(new):
+            return f"row {i - 1} ('{ln[:60]}') is gone"
+        if new[i] != ln:
+            return f"row {i - 1} was '{ln[:60]}' and is now '{new[i][:60]}'"
+    return None
+
+
+def check_print_logs(plates: Path, pages: list) -> list[str]:
+    """P10: the logs in `print-logs/`, the pages' links to them, and no log left in a page."""
+    out: list[str] = []
+    linked: set[str] = set()
+    for path, data, body, err in pages:
+        if err:
+            continue
+        name = path.stem
+        if re.search(r"^## Print log\b", body, flags=re.MULTILINE):
+            out.append(f"{name}: P10 the page has a '## Print log'; the log lives in "
+                       f"{LOGS}/{name}.md, linked from the page's print_log property")
+        link = data.get("print_log")
+        if link is None:
+            continue
+        if link != log_link(name):
+            out.append(f"{name}: P10 print_log is {link!r}, not {log_link(name)!r}")
+        elif not (plates / LOGS / f"{name}.md").is_file():
+            out.append(f"{name}: P10 print_log names {LOGS}/{name}.md, which does not exist")
+        else:
+            linked.add(name)
+    logs = plates / LOGS
+    for log in sorted(logs.glob("*.md")):
+        name, shown = log.stem, f"{LOGS}/{log.name}"
+        text = log.read_text(encoding="utf-8")
+        data, err = parse_frontmatter(text)
+        if err or (data or {}).get("plate") != name:
+            out.append(f"{shown}: P10 its frontmatter's plate is not '{name}'")
+        if name not in linked:
+            out.append(f"{shown}: P10 no plate page links it — {name}.md needs "
+                       f"print_log: '{log_link(name)}'")
+        rows, problem = print_log(text)
+        if problem:
+            out.append(f"{shown}: P10 {problem}")
+        for t, ev in rows:
+            if ev not in PRINT_EVENTS:
+                out.append(f"{shown}: P10 event '{ev}' at {t} is not one of {list(PRINT_EVENTS)}")
+        times_seen = [t for t, _ in rows]
+        if times_seen != sorted(times_seen):
+            out.append(f"{shown}: P10 rows are not in time order")
+        before = it._git(log, "show", f"{it.MASTER}:./{log.name}")
+        why = appended_only(before, text) if before is not None else None
+        if why:
+            out.append(f"{shown}: P10 the log is append-only and {why} against {it.MASTER}")
+    on_master = it._git(plates / "README.md", "ls-tree", "--name-only", it.MASTER, f"{LOGS}/")
+    for rel in (on_master or "").split():
+        if rel.endswith(".md") and not (plates / rel).is_file():
+            out.append(f"{rel}: P10 the log is append-only and {it.MASTER} has it, but it is gone")
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -771,20 +847,6 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
             out.append(f"{name}: P6 run {run_id} has no 'printed' row naming it")
     if isinstance(times, int) and len(printed_rows) != times:
         out.append(f"{name}: P6 {len(printed_rows)} 'printed' row(s) but times_printed {times}")
-
-    # P10 — the print log, when the page has one
-    log = print_log(body)
-    if log is not None:
-        log_rows, problem = log
-        if problem:
-            out.append(f"{name}: P10 print log: {problem}")
-        for t, ev in log_rows:
-            if ev not in PRINT_EVENTS:
-                out.append(f"{name}: P10 print log event '{ev}' at {t} is not one of "
-                           f"{list(PRINT_EVENTS)}")
-        times_seen = [t for t, _ in log_rows]
-        if times_seen != sorted(times_seen):
-            out.append(f"{name}: P10 print log rows are not in time order")
     return out
 
 
@@ -1021,6 +1083,7 @@ def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Pa
         if not f:
             good.append(data)
             notices += approval_notices(path, data, body)
+    findings += check_print_logs(plates, pages)
     # P5 — coverage, both ways
     stems = {p.stem for p, *_ in pages}
     for y in sorted(plates.glob("*.yaml")):
@@ -1198,13 +1261,58 @@ def _timeline_add(page: str, after: str, row: str):
     return _edit(page, after, f"{after}\n{row}")
 
 
-def _print_log(page: str, *rows: str, head: str = PRINT_LOG_HEAD):
-    """Give a fixture page a `## Print log` after its timeline, as the monitor writes it."""
+def _log_text(plate: str, rows: tuple[str, ...], head: str = PRINT_LOG_HEAD) -> str:
+    table = "\n".join([head, "|---|---|---|---|---|", *rows])
+    return f"---\nplate: {plate}\n---\n\n# {plate} — print log\n\nWhat the printer said.\n\n{table}\n"
+
+
+def _print_log(page: str, *rows: str, head: str = PRINT_LOG_HEAD, link: str | None = None,
+               log_plate: str | None = None):
+    """Give a fixture plate a print log and link it from the page, as the monitor writes them.
+    `link` replaces the page's print_log value; `log_plate` the log's own plate."""
     def f(plates: Path) -> None:
-        p = plates / f"{page}.md"
-        table = "\n".join([head, "|---|---|---|---|---|", *rows])
-        p.write_text(p.read_text(encoding="utf-8") + f"\n## Print log\n\n{table}\n", encoding="utf-8")
+        (plates / LOGS).mkdir(exist_ok=True)
+        (plates / LOGS / f"{page}.md").write_text(
+            _log_text(log_plate or page, rows, head), encoding="utf-8")
+        _edit(page, f"plate: {page}\n",
+              f"plate: {page}\nprint_log: '{link or log_link(page)}'\n")(plates)
     return f
+
+
+def _on_master(plates: Path) -> None:
+    """Commit the fixture as it stands and make it master, as a merged PR would."""
+    import subprocess
+    root = plates.parents[1]
+    for args in (["add", "-A"],
+                 ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "merged"],
+                 ["update-ref", "refs/remotes/origin/master", "HEAD"]):
+        subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+
+
+_LOGGED = ("| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |",
+           "| 2026-09-26 14:30 | printing | 1/20 | 2% | RUNNING |")
+
+
+def _log_rewrite(*rows: str):
+    """The log on master, then rewritten to `rows` on the branch."""
+    def f(plates: Path) -> None:
+        _print_log("minis-09", *_LOGGED)(plates)
+        _on_master(plates)
+        (plates / LOGS / "minis-09.md").write_text(_log_text("minis-09", rows), encoding="utf-8")
+    return f
+
+
+def _log_deleted(plates: Path) -> None:
+    _print_log("minis-09", *_LOGGED)(plates)
+    _on_master(plates)
+    (plates / LOGS / "minis-09.md").unlink()
+    _edit("minis-09", f"print_log: '{log_link('minis-09')}'\n", "")(plates)
+
+
+def _log_in_page(plates: Path) -> None:
+    p = plates / "minis-09.md"
+    table = "\n".join([PRINT_LOG_HEAD, "|---|---|---|---|---|", *_LOGGED])
+    p.write_text(p.read_text(encoding="utf-8") + f"\n## Print log\n\n{table}\n", encoding="utf-8")
 
 
 def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
@@ -1550,16 +1658,40 @@ CASES = [
                 "| 2026-09-26 14:30 | resumed | 1/20 | 2% | RUNNING |"), None),
     ("P10 an event the monitor never writes (the load-bearing case: a typed row)",
      _print_log("minis-09", "| 2026-09-26 14:02 | jammed | 3/20 | 9% | |"),
-     "P10 print log event 'jammed'"),
+     "P10 event 'jammed'"),
     ("P10 rows out of time order",
      _print_log("minis-09", "| 2026-09-26 14:30 | printing | 1/20 | 2% | RUNNING |",
                 "| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |"),
-     "P10 print log rows are not in time order"),
+     "P10 rows are not in time order"),
     ("P10 a row with no time",
      _print_log("minis-09", "| today | printing | 1/20 | 2% | RUNNING |"), "has no `YYYY-MM-DD HH:MM`"),
     ("P10 a table with another header",
      _print_log("minis-09", "| 2026-09-26 14:02 | watching | | | |",
-                head="| Time | Event | Note |"), "P10 print log: the table header"),
+                head="| Time | Event | Note |"), "P10 the table header"),
+    ("P10 rows added at the end of a log master has",
+     _log_rewrite(*_LOGGED, "| 2026-09-26 15:10 | finished | 20/20 | 100% | FINISH |"), None),
+    ("P10 a row master has, edited (the load-bearing case: the log is append-only)",
+     _log_rewrite(_LOGGED[0], "| 2026-09-26 14:30 | printing | 2/20 | 5% | RUNNING |"),
+     "P10 the log is append-only and row 2 was"),
+    ("P10 a row master has, dropped",
+     _log_rewrite(_LOGGED[1]), "P10 the log is append-only and row 1 was"),
+    ("P10 a log master has, deleted with its link",
+     _log_deleted, "print-logs/minis-09.md: P10 the log is append-only and origin/master has it"),
+    ("P10 a log left in the page's body",
+     _log_in_page, "minis-09: P10 the page has a '## Print log'"),
+    ("P10 a log no page links",
+     _then(_print_log("minis-09", *_LOGGED),
+           _edit("minis-09", f"print_log: '{log_link('minis-09')}'\n", "")),
+     "print-logs/minis-09.md: P10 no plate page links it"),
+    ("P10 a link to another plate's log",
+     _print_log("minis-09", *_LOGGED, link=log_link("minis-08")),
+     "minis-09: P10 print_log is"),
+    ("P10 a link to a log that is not there",
+     _edit("minis-09", "plate: minis-09\n", f"plate: minis-09\nprint_log: '{log_link('minis-09')}'\n"),
+     "which does not exist"),
+    ("P10 a log that names another plate",
+     _print_log("minis-09", *_LOGGED, log_plate="minis-08"),
+     "P10 its frontmatter's plate is not 'minis-09'"),
 ]
 
 
