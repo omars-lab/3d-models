@@ -141,7 +141,13 @@ skippable.
    fine to *start* (the slice reports the grams; Plate 1 ≈ 70 g by filament length, the dispatch-relevant
    figure, not the 111 g solid-volume equivalent). The runout backstop means only a *clearly* insufficient
    spool is worth stopping for; stay reachable to feed it when it nudges.
-5. **Owner is at the machine.** Dispatch is owner-gated: the physical send — and any `--yes` — is
+5. **The bed is empty and the plate is in.** *Verify:* `bambu print send <plate.3mf> --dry-run`
+   saves one camera frame under `.bambu/bed/` and prints its path (`bambu status camera -o
+   <file.jpg>` takes one on its own). Open the JPEG and look: no pieces left from the last print,
+   the build plate seated. Say what you saw. A frame that failed to save is a warning, not a pass —
+   then the operator looks at the bed in person. Spotting objects once the print starts is the
+   X2D's own job (D-092); this photo is for the person sending.
+6. **Owner is at the machine.** Dispatch is owner-gated: the physical send — and any `--yes` — is
    the operator's, never the skill's. Watching the first layer is not on this list: the X2D does
    its own first-layer and failure detection (D-092).
 
