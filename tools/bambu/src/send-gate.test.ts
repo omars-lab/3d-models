@@ -2,7 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { plateApproval, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
+import { fileURLToPath } from "node:url";
+import { type Grader, gradeWithPython, plateApproval, plateNameOf, printerBusy, spendApproval } from "./send-gate.js";
 
 // The send checks (send-gate.ts, D-093). The load-bearing case is the spent approval: a page that was
 // approved, then sent and printed, is not approved for the next send, even with its box still ticked
@@ -10,13 +11,14 @@ import { plateApproval, plateNameOf, printerBusy, spendApproval } from "./send-g
 
 let root: string;
 
-function page(name: string, opts: { approved?: string; box?: "x" | " "; rows?: string[] }): string {
+function page(name: string, opts: { approved?: string; box?: "x" | " "; rows?: string[]; maturity?: string }): string {
   const fm = [
     "---",
     `plate: ${name}`,
     "stage: waiting",
     `approved: ${opts.approved ? "true" : "false"}`,
     `approved_on: ${opts.approved ?? ""}`,
+    `maturity: ${opts.maturity ?? "experiment"}`,
     "---",
   ].join("\n");
   const box = opts.box ? `\n## Your call\n\n- [${opts.box}] **Approve as it stands**\n- [ ] **Hold**\n` : "";
@@ -102,7 +104,70 @@ describe("plateApproval", () => {
   });
 });
 
+// D-095: a production plate goes out on a standing approval, but only when the grader agrees.
+// The grader is injected; the real one is plate_grade.py, tested in its own self-test.
+const stands: Grader = () => ({ standing: true, why: "its prints still show production" });
+const slipped: Grader = () => ({ standing: false, why: "the prints now show repeatable" });
+const broken: Grader = () => {
+  throw new Error("python3: not found");
+};
+const sentTwice = ["2026-09-01 | approved", "2026-09-02 | sent", "2026-09-03 | printed", "2026-09-10 | promoted — to production", "2026-09-20 | sent"];
+
+describe("plateApproval on a production plate (D-095)", () => {
+  it("sends a production plate the grader still stands behind, with no new yes", () => {
+    page("p-prod", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
+    const a = plateApproval("p-prod", root, stands);
+    expect(a.approved).toBe(true);
+    expect(a.standing).toBe(true);
+    expect(a.how).toContain("D-095");
+  });
+
+  it("refuses a page that says production when the prints no longer do, and says why", () => {
+    page("p-slipped", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
+    const a = plateApproval("p-slipped", root, slipped);
+    expect(a.approved).toBe(false);
+    expect(a.standing).toBe(false);
+    expect(a.how).toContain("no standing approval: the prints now show repeatable");
+  });
+
+  it("refuses when the grader cannot run: a grade it cannot read is not a yes", () => {
+    page("p-nograde", { approved: "2026-09-01", maturity: "production", rows: sentTwice });
+    const a = plateApproval("p-nograde", root, broken);
+    expect(a.approved).toBe(false);
+    expect(a.how).toContain("the grade did not run");
+  });
+
+  it("still takes a fresh yes on a production plate that lost its standing", () => {
+    page("p-slipped-yes", { approved: "2026-09-21", maturity: "production", rows: [...sentTwice, "2026-09-21 | approved — by Omar"] });
+    const a = plateApproval("p-slipped-yes", root, slipped);
+    expect(a.approved).toBe(true);
+    expect(a.standing).toBe(false);
+  });
+
+  it("reads the real grader's JSON: a plate in this repo, every one an experiment today", () => {
+    const repo = fileURLToPath(new URL("../../../", import.meta.url));
+    const s = gradeWithPython("sheets-04b", repo);
+    expect(s.standing).toBe(false);
+    expect(s.why).toContain("not production");
+  });
+
+  it("never asks the grader about an experiment", () => {
+    page("p-exp", { box: " " });
+    expect(plateApproval("p-exp", root, stands).approved).toBe(false);
+  });
+});
+
 describe("spendApproval", () => {
+  it("leaves a standing approval in place and logs the send as standing", () => {
+    const path = page("p-prod-send", { approved: "2026-09-01", box: "x", maturity: "production", rows: sentTwice });
+    const before = plateApproval("p-prod-send", root, stands);
+    const row = spendApproval(path, "2026-10-03", before);
+    const text = readFileSync(path, "utf8");
+    expect(row).toContain("standing approval of a production plate");
+    expect(text).toMatch(/\[x\] \*\*Approve/);
+    expect(plateApproval("p-prod-send", root, stands).approved).toBe(true);
+  });
+
   it("unticks, marks the plate sent, logs the send, and the next send is refused", () => {
     const path = page("p-spend", { approved: "2026-10-03", box: "x", rows: ["2026-10-01 | proposed", "2026-10-03 | approved — by Omar"] });
     const before = plateApproval("p-spend", root);

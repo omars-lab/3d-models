@@ -16,10 +16,18 @@
 //     A ticked box with no `approved` row yet counts only on a page that has never gone out. After a
 //     send, a tick has to be read back into a dated `approved` row first: a box ticked before a send
 //     made outside this CLI (Bambu Studio does not untick it) looks exactly like a fresh one.
+//
+//     A production plate has a standing approval (D-095): it goes out with no new yes, and a send
+//     leaves the box alone and logs a `sent` row that says so. Standing is not the page's word for
+//     it. The grader (`tools/plate_grade.py --plate <name> --json`) must say the prints still show
+//     production and the recipe is the one it was promoted on (`recipe_hash`). A plate that slipped,
+//     or whose recipe was edited in place, falls back to the one-per-send rule above, and so does
+//     one the grader cannot grade. Every plate today is an experiment.
 //   - Idle. A send while another print runs would queue over it or fail on the printer; the state
 //     comes off the same status read the filament match already makes. A state we cannot read is a
 //     refusal, not a pass.
 
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import { parse } from "yaml";
@@ -40,7 +48,28 @@ export interface Approval {
   approved: boolean;
   how: string; // what said yes, or why not
   sends: number; // how many times the timeline says it went out
+  standing: boolean; // a production plate's standing approval (D-095), not spent by a send
 }
+
+/** What the grader says about a plate's standing approval. */
+export interface Standing {
+  standing: boolean;
+  why: string;
+}
+export type Grader = (name: string, root: string) => Standing;
+
+/** The real grader: `plate_grade.py`, the plates gate's own reading, so the send and the gate agree. */
+export const gradeWithPython: Grader = (name, root) => {
+  const out = execFileSync("python3", ["tools/plate_grade.py", "--plate", name, "--json"], {
+    cwd: root,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const row = (JSON.parse(out) as Array<Record<string, unknown>>)[0];
+  if (!row) throw new Error(`plate_grade.py did not grade ${name}`);
+  if (row.error) throw new Error(String(row.error));
+  return { standing: row.standing === true, why: String(row.standing_why ?? "") };
+};
 
 // The same readings as the plates gate (`.claude/gates/plates_gate.py`: TICKED_APPROVE, ROW, timeline).
 const TICKED_APPROVE = /^\s*-\s*\[[xX]\]\s*\*{0,2}Approve/m;
@@ -71,11 +100,14 @@ function lastOf(rows: Row[], events: string[]): { at: number; row: Row | undefin
   return { at, row: rows[at] };
 }
 
-/** Is this plate approved for its next send? An approval after the last send, or a first-time tick. */
-export function plateApproval(name: string, root: string): Approval {
+/**
+ * Is this plate approved for its next send? A production plate's standing approval, else an approval
+ * after the last send, or a first-time tick.
+ */
+export function plateApproval(name: string, root: string, grade: Grader = gradeWithPython): Approval {
   const page = platePagePath(name, root);
   if (!existsSync(page)) {
-    return { page, exists: false, approved: false, how: "no plate page, so nothing to approve", sends: 0 };
+    return { page, exists: false, approved: false, how: "no plate page, so nothing to approve", sends: 0, standing: false };
   }
   const text = readFileSync(page, "utf8");
   const fm = FRONTMATTER.exec(text);
@@ -83,7 +115,7 @@ export function plateApproval(name: string, root: string): Approval {
   try {
     data = (fm?.[1] ? parse(fm[1]) : {}) ?? {};
   } catch {
-    return { page, exists: true, approved: false, how: "the page's frontmatter does not parse", sends: 0 };
+    return { page, exists: true, approved: false, how: "the page's frontmatter does not parse", sends: 0, standing: false };
   }
   const body = fm ? text.slice(fm[0].length) : text;
   const rows = timeline(body);
@@ -93,38 +125,57 @@ export function plateApproval(name: string, root: string): Approval {
   const ticked = TICKED_APPROVE.test(body);
   const nth = sends === 0 ? "its first send" : `send ${sends + 1}`;
 
+  // Not standing: the reason rides along on a refusal, so the page that says production is not
+  // mistaken for a plate that may go out.
+  let lost = "";
+  if (data.maturity === "production") {
+    let s: Standing;
+    try {
+      s = grade(name, root);
+    } catch (err) {
+      s = { standing: false, why: `the grade did not run: ${(err as Error).message.split("\n")[0]}` };
+    }
+    if (s.standing) {
+      return { page, exists: true, approved: true, how: `standing approval: ${s.why} (D-095)`, sends, standing: true };
+    }
+    lost = `; no standing approval: ${s.why}`;
+  }
+  const one = (approved: boolean, how: string): Approval =>
+    ({ page, exists: true, approved, how: approved ? how : how + lost, sends, standing: false });
+
   if (yes.row && yes.at > out.at) {
-    return { page, exists: true, approved: true, how: `approved on ${yes.row.date}, for ${nth}`, sends };
+    return one(true, `approved on ${yes.row.date}, for ${nth}`);
   }
   if (!out.row && (ticked || data.approved === true)) {
     const how = ticked ? "the Approve box is ticked" : `approved on ${String(data.approved_on ?? "(no date)")}`;
-    return { page, exists: true, approved: true, how: `${how}, for ${nth}`, sends };
+    return one(true, `${how}, for ${nth}`);
   }
   if (out.row && yes.row) {
     const tail = ticked ? "; the box is ticked, but a tick after a send needs a dated approved row first" : "";
-    return {
-      page, exists: true, approved: false, sends,
-      how: `the approval of ${yes.row.date} was spent when it was ${out.row.event} on ${out.row.date}${tail}`,
-    };
+    return one(false, `the approval of ${yes.row.date} was spent when it was ${out.row.event} on ${out.row.date}${tail}`);
   }
   if (out.row) {
-    return { page, exists: true, approved: false, how: `it went out on ${out.row.date} and has no approval since`, sends };
+    return one(false, `it went out on ${out.row.date} and has no approval since`);
   }
-  return { page, exists: true, approved: false, how: "the Approve box is not ticked", sends };
+  return one(false, "the Approve box is not ticked");
 }
 
 /**
  * Spend the approval on a successful send: untick every Approve box, set the stage to `sent`, and add a
  * dated `sent` row to the timeline. Returns the row it wrote. The page is rewritten in place; the
- * caller ships it like any doc change.
+ * caller ships it like any doc change. A standing approval (D-095) is not spent: the box is left as it
+ * is and the row says the plate went out on its standing approval.
  */
 export function spendApproval(page: string, date: string, approval: Approval): string {
   const text = readFileSync(page, "utf8");
   const fm = FRONTMATTER.exec(text);
   if (!fm) throw new Error(`${page} has no frontmatter`);
   const head = fm[0].replace(/^stage:.*$/m, "stage: sent");
-  let body = text.slice(fm[0].length).replace(TICKED_APPROVE_ALL, "$1[ ]$2");
-  const row = `| ${date} | sent — by \`bambu print send\`; spends the approval (${approval.how}) | this page |`;
+  let body = text.slice(fm[0].length);
+  if (!approval.standing) body = body.replace(TICKED_APPROVE_ALL, "$1[ ]$2");
+  const row = approval.standing
+    ? `| ${date} | sent — by \`bambu print send\` on the standing approval of a production plate (D-095) | this page |`
+    : `| ${date} | sent — by \`bambu print send\`; spends the approval (${approval.how}) | this page |`;
   const m = TIMELINE.exec(body);
   const section = m?.[1];
   if (!m || section === undefined) {

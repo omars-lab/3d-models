@@ -1,6 +1,6 @@
 ---
 name: grade-plate
-description: Grade a plate's maturity — experiment, repeatable or production — from its print history, how full its bed is, and what its prints taught, then write the level onto its page in docs/plates/ with a dated promoted or demoted row. Use for "grade this plate", "plate maturity", "is this plate production ready", "is this plate repeatable", "promote a plate", "demote a plate", "can we pack this plate", "is this bed optimized", after a print record's verdicts are judged, after a plate's recipe or layout changes, and when the plates gate reports a P8 finding. Writes `maturity`, `bed_fill` and the timeline row; never ticks an approval and never sends to the printer.
+description: Grade a plate's maturity — experiment, repeatable or production — from its print history, how full its bed is, and what its prints taught, then write the level onto its page in docs/plates/ with a dated promoted or demoted row. Use for "grade this plate", "plate maturity", "is this plate production ready", "is this plate repeatable", "promote a plate", "demote a plate", "can we pack this plate", "is this bed optimized", after a print record's verdicts are judged, after a plate's recipe or layout changes, "change a production plate", "derive a plate", "tweak a production recipe", and when the plates gate reports a P8 finding. Writes `maturity`, `bed_fill`, `recipe_hash` and the timeline row, and derives a new experiment plate for a change to a production one; never ticks an approval and never sends to the printer.
 ---
 
 # grade-plate — how proven is this plate
@@ -30,7 +30,9 @@ tool prints and a check the hook runs cannot disagree.
    experiment does not need one, and is not asked to be packed.
 4. **Write the level.**
    - **Up:** only when the grade shows the higher level. Set `maturity:` and add a timeline row
-     `| <today> | promoted | to <level>: <the evidence in a line> | this page |`.
+     `| <today> | promoted | to <level>: <the evidence in a line> | this page |`. To production,
+     also pin the recipe: `recipe_hash: '<python3 tools/plate_grade.py --recipe-hash <plate>>'`.
+     From then on the plate goes out on its standing approval (D-095), and its recipe is frozen.
    - **Down:** when the grade shows less than the page says (the gate will already be failing).
      Lower `maturity:` and add `| <today> | demoted | to <level>: <what changed> | this page |` —
      a new verdict, a recipe change, a repack, or a stricter rubric.
@@ -44,11 +46,35 @@ tool prints and a check the hook runs cannot disagree.
 6. **Check.** `python3 .claude/gates/plates_gate.py` must be clean; `--write` rewrites the queue
    if a page edit moved it.
 
+## Changing a production plate
+
+A production plate's recipe does not change in place (D-095, Omar: "recipe change should be in a
+new experimental plate derived from a prod plate"). Editing it would send an untried layout on a
+standing approval, so the gate fails on a recipe that no longer matches the page's `recipe_hash`
+and the send check refuses it. Instead:
+
+1. **Derive.** `python3 tools/plate_grade.py --derive <parent> <new> --answers "<what the change
+   tests>"`. It copies the recipe to `<new>.yaml` and writes `<new>.md`: an unapproved experiment
+   with `derived_from: <parent>` and the parent's bets, cost and risk. It refuses a parent that
+   is not production.
+2. **Change and say it.** Make the change in `<new>.yaml`, and fill the page's "What changes"
+   section: what changed and why. Slice it and replace the copied cost; add a picture before it
+   goes to Omar, as for any plate (prioritize-prints).
+3. **Print it as an experiment.** It needs Omar's yes per send like any experiment, and its
+   pieces earn their keeps on their own records.
+4. **Promote, then retire.** When the grade shows the derived plate at production, promote it
+   (with its `recipe_hash`) and set the parent's `stage: retired` with a `retired` row naming the
+   plate that replaced it. Until then the parent keeps printing as it was.
+
+A mistaken edit to a production recipe is undone by putting the file back, not by re-pinning the
+hash; re-pinning would put an untried recipe on the standing approval.
+
 ## Never
 
-- Never tick an Approve box, set `approved: true`, or send. Maturity does not change who says
-  yes: every send still needs an `approved` row after the last send (D-093). A standing approval
-  for production plates is Omar's open call 1 in the design.
+- Never tick an Approve box, set `approved: true`, or send. Below production every send needs an
+  `approved` row after the last send (D-093); a production plate's standing approval (D-095) is
+  read at send time from this grade, never written by this skill.
+- Never re-pin `recipe_hash` on a production page to make the gate pass. Derive instead.
 - Never promote on a total. Three keeps on one piece and none on another is an experiment.
 - Never type a `bed_fill` that did not come from `--fill` on a slice of the current recipe.
 

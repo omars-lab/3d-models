@@ -152,6 +152,7 @@ skippable.
    `docs/plates/` (D-093): his tick, or his yes in chat written onto the page with the date and his
    words. One approval covers one send: once the plate has been sent or printed, a reprint needs a
    new one, so a plate whose print showed the setup was wrong never goes out again on the old yes.
+   A production plate is the exception: it has a standing approval while its prints still show production and its recipe is the one it was promoted on (D-095).
    Watching the first layer is not on this list: the X2D does its own first-layer and failure
    detection (D-092).
 

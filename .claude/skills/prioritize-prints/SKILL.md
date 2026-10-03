@@ -29,6 +29,7 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    Never tick a box, except to write down Omar's yes in chat (D-093: the `approved` row quotes his
    words), and never set `approved: true` without a ticked box or his words in chat. One approval
    covers one send: a plate that went out needs a new `approved` row before it goes out again.
+   A production plate has a standing approval instead (D-095); leave its box alone.
    `approved:` left empty means nobody asked, which is different from `false`.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/plates/minis-06.md): In short, What it is, Why

@@ -16,6 +16,12 @@ chat that this skill writes onto the page. Sending spends it. The page's timelin
 approval and every send, so it is the record of each approved reprint. A plate that already went
 out needs a new yes, even when the last one was yesterday.
 
+**Except a production plate** ([D-095](../../../docs/working-model/decisions-log.md)): it has a
+standing approval, so it goes out again with no new yes. The CLI checks it live, through
+`tools/plate_grade.py`: the prints must still show production and the recipe must match the page's
+`recipe_hash`. If either fails, the plate is back to one yes per send. Every plate today is an
+experiment.
+
 Run every `bambu` call from the main checkout (the vault), with the node 22 PATH, so it reads the
 pages Omar ticks in Obsidian: `tools/bambu/bin/bambu …`.
 
@@ -30,6 +36,10 @@ Read the page's `## Your call` boxes and its `## Timeline`.
 
 - **Live:** an `approved` row after the last `sent` or `printed` row, or a ticked Approve box on a
   plate that has never gone out. Go on.
+- **Standing (production only):** the dry run's `✓ approval: standing approval: …` line. Go on;
+  the send leaves the box alone and logs a `sent` row that names the standing approval. A
+  `no standing approval:` reason on a refusal means the plate slipped or its recipe changed: say
+  which, and ask Omar for a yes for this send, or grade it (grade-plate).
 - **Omar said yes in chat for this plate, this send:** write it down before anything else. On a
   branch off `origin/master`: frontmatter `approved: true`, `approved_on: <today>`,
   `stage: approved`; tick the Approve box; add
