@@ -32,6 +32,7 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 | `header` | `header` (`--plate <plate.3mf>`, `--json`) — auto-pull the bench-sheet profile header | first-party MQTT + `.3mf` |
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`), `open`, `compose` (`<plate.yaml>` → one sliced `.3mf`: renders each bikar item, bed-fit pre-check, writes `objects[].iteration`) | BambuStudio CLI + bikar |
 | `print` | `send` (`--record`, `--dry-run`, `--yes`; needs a live page approval), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
+| `storage` | `show` (card in, free space), `list [dir]` (files on the card), `rm <names…>` (`--yes`; only `.3mf` plates at the card's top, never the file printing) | first-party MQTT (show) + FTPS (list, rm) |
 | `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |
 
 `bambu <group> <verb> --help` everywhere — the help *is* the documentation.
@@ -62,7 +63,9 @@ no key, the printer keys stay unset rather than being passed on encrypted.
 one approval per send, spent by the send; a production plate has a standing approval while its
 prints and recipe still hold, D-095) and the printer is idle; no flag skips either check
 (`src/send-gate.ts`, which asks `plate_approve.py --status`, so the gate and the CLI read the table
-one way). Then it asks at a TTY; `--yes` skips only that question. A send that goes through runs
+one way). It also refuses when the printer reports no storage card, or less room on it than the
+plate, because the upload writes to the card (`src/storage.ts`; `bambu storage show` says what the
+printer reports). Then it asks at a TTY; `--yes` skips only that question. A send that goes through runs
 `plate_approve.py --sent`: the row's `Spent by` gets the date, the box is unticked, the page's
 stage becomes `sent` and a dated `sent` row joins its timeline. `--dry-run` shows what it would upload/start without connecting. `stop` confirms too;
 `pause`/`resume` are reversible and immediate.

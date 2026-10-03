@@ -284,6 +284,34 @@ stop the running print (confirms first)
 |---|---|
 | `-y, --yes` | skip the confirmation prompt |
 
+### `bambu storage`
+
+the printer's storage card: space, files, clearing old plates
+
+### `bambu storage show`
+
+is a storage card in, and how much room it has (read-only, from the status report)
+
+### `bambu storage list`
+
+the files in one folder on the storage card (read-only)
+
+| Argument | Required | Description |
+|---|---|---|
+| `dir` | no | folder on the card |
+
+### `bambu storage rm`
+
+delete plate files (.3mf) from the top of the storage card; asks first
+
+| Argument | Required | Description |
+|---|---|---|
+| `names…` | yes | file names at the card's top, as `storage list` shows them |
+
+| Flag | Description |
+|---|---|
+| `-y, --yes` | delete without asking |
+
 ### `bambu validate`
 
 gate a mesh / plate / record before it ships

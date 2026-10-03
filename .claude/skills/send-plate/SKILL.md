@@ -75,10 +75,14 @@ comment-only edit is not a change, so a reprint as-is keeps its yes.
 ## 4. The printer, the filament, the bed
 
 1. `bambu status show`: the printer is idle (IDLE, FINISH or FAILED) and nothing is mid-job.
+   `bambu storage show`: a storage card is in and has room, since the upload writes to the card.
+   No card is Omar's to fix at the printer (the sheets-04b send, 2026-10-03). Old plates can come
+   off with `bambu storage list` and `bambu storage rm <name>`, which deletes from his printer, so
+   ask him first.
 2. `bambu filament-sync --plate build/plates/<name>.plate.3mf`: the plate's colors match loaded
    trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool.
 3. `bambu print send build/plates/<name>.plate.3mf --dry-run`. Every line must be green:
-   `✓ approval`, `✓ printer`, the warnings sidecar, the filament plan. It saves a bed photo under
+   `✓ approval`, `✓ printer`, `✓ storage`, the warnings sidecar, the filament plan. It saves a bed photo under
    `.bambu/bed/` and prints its path.
 4. **Open the photo and look.** Say what is on the bed: empty or not, the build plate seated or
    not. Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to

@@ -32,7 +32,8 @@ Dispatch is two independent halves, each now first-party:
    **session reuse is required** by the firmware — `basic-ftp` reuses the control session on the
    data socket by default, so we simply don't break it. `basic-ftp` is pinned exact at **5.3.1**
    (the 5.0.x line carried a path-traversal + a CRLF advisory; 5.3.1 clears them, and we use only
-   `uploadFrom` — never `downloadToDir`/`list` — against Omar's own LAN printer).
+   `uploadFrom`, plus `list` and `remove` for `bambu storage` since 2026-10-03 — never
+   `downloadToDir` — against Omar's own LAN printer).
 
 2. **Start — MQTT `print.project_file`** (`tools/bambu/src/backends/mqtt.ts`,
    `MqttBackend.startProjectFile`, built by the pure `buildProjectFileCommand`). Publishes
@@ -165,6 +166,27 @@ fits several causes, and this run cannot tell them apart: no storage card in the
 or read-only card, or the X2D wanting the file somewhere other than the root that the reference
 clients use (the comment at the top of `ftps.ts`). The upload path is unchanged until one of those
 is checked on the machine. Never work around it by sending from Bambu Studio for Omar.
+
+**What the status report showed (later the same day).** The printer's status report carries
+`sdcard`, and it read `false`, with the card's free and total space both 0. The printer had no card
+in, and the FTP root the upload writes to is the card, so this is the likeliest cause. It is not
+proven until a send with a card in goes through. Bambu Studio's earlier sends still printed because
+they land in the printer's built-in storage, which the report shows with about 864 MB free and the
+FTP upload cannot reach.
+
+**What changed.** `print send` reads `sdcard` from the status read it already makes, and refuses
+before the upload when there is no card, or when the card's free space is reported and smaller
+than the plate (`tools/bambu/src/storage.ts`). A frame that does not mention the card is let
+through, since other models may leave the field out and the upload's own error still stops the
+send. A 553 now comes back as "the printer would not save the file", pointing at
+`bambu storage show`. Reading the card's free space from the `tl_external_*` fields is our reading
+of names the printer reports for timelapses; it is unconfirmed until a card is in.
+
+New verbs, `bambu storage`: `show` (card in or not, free space, from the status report), `list`
+(the files in a folder on the card) and `rm` (deletes plate files). `rm` takes only `.3mf` names at
+the card's top, where `print send` puts them, refuses the file the printer is printing from, and
+asks first unless given `--yes`. `list` and `rm` use basic-ftp's `list` and `remove` on the same
+login as the upload; the advisories noted above were against the 5.0.x line and the pin is 5.3.1.
 
 ## Files
 

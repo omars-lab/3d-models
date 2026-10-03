@@ -15,6 +15,7 @@ import { registerFilament } from "./commands/filament.js";
 import { registerHeader } from "./commands/header.js";
 import { registerSlice } from "./commands/slice.js";
 import { registerPrint } from "./commands/print.js";
+import { registerStorage } from "./commands/storage.js";
 import { registerValidate } from "./commands/validate.js";
 import { dumpFlags } from "./flags.js";
 
@@ -45,6 +46,7 @@ export function buildProgram(): Command {
   registerHeader(program);
   registerSlice(program);
   registerPrint(program);
+  registerStorage(program);
   registerValidate(program);
 
   // The CLI describes its own flag surface (see src/flags.ts). Hidden: it is a maintenance verb for the

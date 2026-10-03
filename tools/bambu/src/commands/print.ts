@@ -40,6 +40,7 @@ import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from ".
 import { collectSlots } from "../frame.js";
 import { readPlateMeta, readUsedFilaments } from "../threemf.js";
 import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
+import { cardRefusal, cardSummary, readStorage } from "../storage.js";
 import {
   feedsFromAms,
   logicalSlotsFromPlate,
@@ -305,6 +306,20 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.error("  (dry run — a real send stops here.)");
   } else {
     console.error(`✓ printer: idle (${String(frame?.gcode_state)}).`);
+  }
+
+  // Somewhere to put the file: the upload writes to the storage card, and with none in it fails
+  // after every other check has passed (the sheets-04b send, 2026-10-03).
+  const noRoom = frame ? cardRefusal(frame, kb) : null;
+  if (noRoom) {
+    console.error(`✗ storage: ${noRoom}.`);
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
+  } else if (frame) {
+    console.error(`✓ storage: card ${cardSummary(readStorage(frame))}.`);
   }
 
   // Which spool feeds the print. Without --ams-mapping the send matches the plate to the loaded
