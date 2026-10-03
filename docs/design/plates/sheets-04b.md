@@ -2,7 +2,7 @@
 plate: sheets-04b
 recipe: sheets-04b.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press?"
@@ -128,6 +128,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-03 | approved | Omar, in chat: "yes to 4b" | iteration 1 @ a6bbca029c | |
 
 ## Timeline
 

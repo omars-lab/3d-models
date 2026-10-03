@@ -16,6 +16,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -119,10 +120,17 @@ def parse_covers(covers: str) -> tuple[int, str] | None:
     return (int(m.group(1)), m.group(2)) if m else None
 
 
+# A git hook runs with these set, and then `git -C <dir>` no longer finds the repo from <dir>:
+# `./<stem>.yaml` resolves from the repo root and every lookup misses (hook 39, 2026-10-03).
+_HOOK_ENV = ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_PREFIX", "GIT_COMMON_DIR",
+             "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES")
+
+
 def _git(page: Path, *args: str) -> str | None:
+    env = {k: v for k, v in os.environ.items() if k not in _HOOK_ENV}
     try:
         r = subprocess.run(["git", "-C", str(page.parent), *args], capture_output=True,
-                           text=True, timeout=20)
+                           text=True, timeout=20, env=env)
     except (OSError, subprocess.TimeoutExpired):
         return None
     return r.stdout if r.returncode == 0 else None

@@ -18,7 +18,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [sheets-04b](sheets-04b.md) | waiting | 10 | 0.8 | 12.45 | watch | At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press? |
+| 1 | [sheets-04b](sheets-04b.md) | approved | 10 | 0.8 | 12.45 | watch | At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press? |
 | 2 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
 | 3 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
 | 4 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |

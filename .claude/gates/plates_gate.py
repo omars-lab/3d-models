@@ -1555,6 +1555,21 @@ def self_test() -> int:
         report(not found and not notices and st["approved"] and "for its first send" in st["how"],
                "an open approval on the recipe as it is lets the plate go out",
                f"{found} {notices} {st}")
+        # Inside a git hook GIT_DIR is set, and the commit lookups must still find the recipe:
+        # sheets-04b's yes was refused at commit time while the gate passed by hand (2026-10-03).
+        case = tmp / "inside-a-hook"
+        plates, prints, scoring, bets = _build(case)
+        _then(_edit("minis-08", "stage: waiting", "stage: approved"),
+              _approve("minis-08", "| 2026-10-03 | approved | Omar, tick | {covers} | |"))(plates)
+        rewrite(plates, prints, scoring, bets, quiet=True, rubric=_rubric(plates))
+        saved = {k: os.environ.get(k) for k in ("GIT_DIR", "GIT_INDEX_FILE")}
+        os.environ.update(GIT_DIR=str(case / ".git"), GIT_INDEX_FILE=str(case / ".git" / "index"))
+        try:
+            found, _, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
+        finally:
+            for k, v in saved.items():
+                os.environ.pop(k, None) if v is None else os.environ.update({k: v})
+        report(not found, "an open approval checks clean inside a git hook (GIT_DIR set)", str(found))
         found, notices, st = opened(lambda pl: (pl / "minis-08.yaml").write_text(
             "# packed tighter next time\nbed: x2d\n", encoding="utf-8"))
         report(not found and st["approved"],
