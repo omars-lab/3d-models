@@ -41,6 +41,8 @@ import {
   writeFlattened,
 } from "../preset-chain.js";
 import { resolveSlicePlateType, studioSavedPlateType, type PlateType } from "../plate-type.js";
+import { repoRoot } from "../paths.js";
+import { recipeHashOf } from "../send-gate.js";
 import { registerCompose } from "./compose.js";
 import { registerCoaster } from "./coaster.js";
 import { registerSheet } from "./sheet.js";
@@ -456,6 +458,7 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
       sliced_at: new Date().toISOString(),
       studio_version: studioVersionFrom(combined),
       source_sha256: hashFile(outPath) ?? undefined, // binds this capture to THESE .3mf bytes
+      recipe: recipeHashOf(outPath, repoRoot() ?? process.cwd()) ?? undefined, // slice-fresh.ts
       warnings,
     };
     try {

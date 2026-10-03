@@ -95,8 +95,12 @@ and which no flag skips. Each refuses a real send and only reports on a dry run:
   `tools/bambu/src/bed-check.ts`, with `bambu bed photo`, `bed show` and `bed verdict` in
   `tools/bambu/src/commands/bed.ts`.
 
-Still to come: a check that the slice is newer than its recipe, so an edited plate cannot go out
-on an old slice.
+- **The slice is fresh:** the slice verbs write the recipe's hash into the warnings sidecar beside
+  the `.3mf`, and the send compares it with the recipe's hash now. Both come from the one
+  implementation that resets an approval (`iterations.py`, D-097), so a comment edit is not a
+  change and an item swapped is. A slice that recorded no hash, made before this check, is refused
+  as well: nothing says which recipe it came from. A `.bkr` edited in bikar under an unchanged
+  recipe is not seen. The code is `tools/bambu/src/slice-fresh.ts`.
 
 ## What it means for sheets-04b
 

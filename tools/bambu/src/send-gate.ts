@@ -47,6 +47,7 @@ export interface Approval {
   how: string; // what said yes, or why not
   sends: number; // how many times the timeline says it went out
   standing: boolean; // a production plate's standing approval (D-095), not spent by a send
+  recipe: string | null; // the plate's recipe hash now (iterations.py), or null with no recipe
 }
 
 /** Runs the manage-approvals skill's `plate_approve.py` with these arguments and returns its stdout;
@@ -68,7 +69,15 @@ function lastLine(err: unknown): string {
 /** Is this plate approved for its next send? What its page's Approvals table says, read by the tool. */
 export function plateApproval(name: string, root: string, tool: ApproveTool = plateApproveTool): Approval {
   const page = platePagePath(name, root);
-  const no = (how: string): Approval => ({ page, exists: existsSync(page), approved: false, how, sends: 0, standing: false });
+  const no = (how: string): Approval => ({
+    page,
+    exists: existsSync(page),
+    approved: false,
+    how,
+    sends: 0,
+    standing: false,
+    recipe: null,
+  });
   if (!existsSync(page)) return no("no plate page, so nothing to approve");
   try {
     const st = JSON.parse(tool([page, "--status", "--json"])) as Record<string, unknown>;
@@ -79,10 +88,18 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
       how: String(st.how ?? ""),
       sends: Number(st.sends ?? 0),
       standing: st.standing === true,
+      recipe: typeof st.recipe === "string" ? st.recipe : null,
     };
   } catch (err) {
     return no(`plate_approve.py did not read the page: ${lastLine(err)}`);
   }
+}
+
+/** The recipe hash a slice verb records beside the plate it wrote (slice-fresh.ts): the same
+ * `plate_approve.py --status` read the send makes, so the two sides cannot hash differently. Null for
+ * a plate with no page or no recipe. */
+export function recipeHashOf(plate: string, root: string, tool: ApproveTool = plateApproveTool): string | null {
+  return plateApproval(plateNameOf(plate), root, tool).recipe;
 }
 
 /**

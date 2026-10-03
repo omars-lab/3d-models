@@ -63,14 +63,18 @@ fix first and a new yes after.
 
 ## 3. Slice, if needed
 
-If the `.3mf` is missing, or older than the `.yaml` or the bikar files it uses, slice it again
-with the verb the recipe names in its header (`bambu slice compose docs/design/plates/<name>.yaml`, or
+If the `.3mf` is missing, or made from an older recipe, slice it again with the verb the recipe names in its header (`bambu slice compose docs/design/plates/<name>.yaml`, or
 `slice sheet` for a sampler sheet), then
 `bambu validate sliced build/plates/<name>.plate.3mf`. A slice that changes the plate's minutes,
 grams or picture goes on the page as a `sliced` row. A recipe change resets the approval
 ([D-097](../../../docs/working-model/decisions-log.md)): record it with
 `plate_approve.py <name> --iterate` (manage-approvals skill), ship it, and ask Omar again. A
 comment-only edit is not a change, so a reprint as-is keeps its yes.
+
+The slice verbs write the recipe's hash beside the `.3mf` (in its `.warnings.json`), and the send
+compares it with the recipe now: `✗ slice` means the recipe changed since, or the slice predates
+the check, and either way it gets sliced again. A `.bkr` edited in bikar under the same recipe is
+not caught, so after a bikar change, slice again by hand.
 
 A slice is made for one build plate, and the plate type changes the G-code itself: the bed
 temperature, and on the X2D a first-layer offset only the Textured PEI Plate gets. The slice verbs
@@ -91,7 +95,7 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
 2. `bambu filament-sync --plate build/plates/<name>.plate.3mf`: the plate's colors match loaded
    trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool.
 3. `bambu print send build/plates/<name>.plate.3mf --dry-run`. Every line must be green:
-   `✓ approval`, `✓ printer`, `✓ plate`, `✓ nozzle`, `✓ storage`, the warnings sidecar, the
+   `✓ approval`, `✓ printer`, `✓ plate`, `✓ nozzle`, `✓ slice`, `✓ storage`, the warnings sidecar, the
    filament plan. It saves a bed photo under `.bambu/bed/` and prints its path (or take one with
    `bambu bed photo <name>`). The `plate:` line compares the plate the slice is for with the one
    the printer reports. `⚠ plate` means the printer named a plate id we have not matched yet, or
