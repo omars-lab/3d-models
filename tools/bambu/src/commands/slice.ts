@@ -38,7 +38,9 @@ import {
   type PresetConfig,
   type PresetLookup,
   type SliceComparison,
+  writeFlattened,
 } from "../preset-chain.js";
+import { resolveSlicePlateType, studioSavedPlateType, type PlateType } from "../plate-type.js";
 import { registerCompose } from "./compose.js";
 import { registerCoaster } from "./coaster.js";
 import { registerSheet } from "./sheet.js";
@@ -112,20 +114,26 @@ export interface PreparedPresets {
 }
 
 /** Resolve names → files (`resolvePresetList`), then flatten each file's chain into `scratchDir`.
- *  Throws on an unknown name or a missing parent, naming it. */
+ *  With `plateType`, the flattened process preset also names the plate to slice for
+ *  (`curr_bed_type`, plate-type.ts), so the preset check after the slice proves the file carries it.
+ *  Throws on an unknown name, a missing parent, or a plate type with no process preset to hold it. */
 export function prepareSlicePresets(
   settings: string | undefined,
   filament: string | undefined,
   studioBin: string,
   scratchDir: string,
+  plateType?: PlateType,
 ): PreparedPresets {
   const root = profilesRoot(studioBin);
   const lookup: PresetLookup = root ? studioPresetLookup(root) : () => null;
   const out: PreparedPresets = { presets: [] };
   if (settings) {
     const flat = flattenPresetList(resolvePresetList(settings, "settings", studioBin), lookup, scratchDir);
+    if (plateType) setPlateType(flat.presets, plateType, scratchDir);
     out.settings = flat.list;
     out.presets.push(...flat.presets);
+  } else if (plateType) {
+    throw new Error("a plate type needs a process preset in -s/--settings to hold it.");
   }
   if (filament) {
     const flat = flattenPresetList(resolvePresetList(filament, "filament", studioBin), lookup, scratchDir);
@@ -133,6 +141,16 @@ export function prepareSlicePresets(
     out.presets.push(...flat.presets);
   }
   return out;
+}
+
+/** Name the plate in the one flattened process preset and rewrite its file in place (same path, so
+ *  the `--load-settings` list is unchanged). The key lives in the process config, like
+ *  `filament_map_mode`: Studio errors on a second process file. */
+export function setPlateType(presets: FlattenedPreset[], plateType: PlateType, scratchDir: string): void {
+  const proc = presets.find((p) => p.type === "process");
+  if (!proc) throw new Error("a plate type needs a process preset in -s/--settings to hold it.");
+  proc.config.curr_bed_type = plateType.name;
+  writeFlattened(proc, scratchDir);
 }
 
 /** Read the sliced 3MF's project settings and compare every key the flattened chain sets. Returns
@@ -188,6 +206,7 @@ interface SliceOpts {
   dryRun?: boolean;
   strict?: boolean;
   filamentMapMode?: string;
+  plateType?: string;
 }
 
 // ── X2D dual-nozzle filament grouping ────────────────────────────────────────────────────────────
@@ -347,11 +366,15 @@ async function runSlice(input: string, opts: SliceOpts, raw: string[]): Promise<
     // --dry-run shows the real command and a bad name or missing parent fails here, not in the slicer.
     let presets: FlattenedPreset[] = [];
     try {
+      // The plate to slice for goes in with the presets; a .3mf sliced with its own settings keeps its own.
+      const plate = opts.settings ? resolveSlicePlateType(opts.plateType, studioSavedPlateType()) : null;
+      if (plate) console.log(`plate type: ${plate.type.name} (${plate.from})`);
       const prepared = prepareSlicePresets(
         opts.settings,
         opts.filament,
         studioBin,
         mkdtempSync(join(tmpdir(), "bambu-presets-")),
+        plate?.type,
       );
       opts.settings = prepared.settings;
       opts.filament = prepared.filament;
@@ -544,6 +567,10 @@ export function registerSlice(program: Command): void {
       "filament, semicolon-joined — preset display name (resolved to the bundled JSON) or JSON path; its inherits chain is flattened before slicing",
     )
     .option("-p, --plate <n>", "plate index to slice, 0 = all", "0")
+    .option(
+      "--plate-type <type>",
+      "the build plate to slice for: cool_plate | eng_plate | hot_plate | textured_plate | supertack_plate (default: the one Bambu Studio is set to)",
+    )
     .option(
       "--filament-map-mode <mode>",
       "X2D dual-nozzle filament grouping: saving (Filament-Saving, default) | quality | manual — only affects a plate with ≥2 filaments",

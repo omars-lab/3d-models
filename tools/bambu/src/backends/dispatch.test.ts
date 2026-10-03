@@ -6,8 +6,8 @@ import { remoteUploadName } from "./ftps.js";
 // `print.project_file` payload the firmware sees, the pause/resume/stop control payload, and the
 // remote name an upload lands under. They must be pure and deterministic so `--dry-run` can print
 // exactly what a real send would publish without a printer. The values asserted here are the grounded
-// defaults from pybambu / bambulabs_api / OpenBambuAPI; the three X2D-UNCONFIRMED fields
-// (bed_type / ams_mapping / md5) are asserted at their documented defaults and as overrides.
+// defaults from pybambu / bambulabs_api / OpenBambuAPI; the two X2D-UNCONFIRMED fields
+// (ams_mapping / md5) are asserted at their documented defaults and as overrides.
 
 describe("remoteUploadName", () => {
   it("is the bare basename (the printer only accepts root uploads)", () => {
@@ -18,7 +18,7 @@ describe("remoteUploadName", () => {
 });
 
 describe("buildProjectFileCommand — grounded defaults", () => {
-  const cmd = buildProjectFileCommand({ remoteName: "plate_1.3mf" });
+  const cmd = buildProjectFileCommand({ remoteName: "plate_1.3mf", bedType: "textured_plate" });
   const p = cmd.print;
 
   it("wraps the payload as { print: {...} }", () => {
@@ -58,8 +58,13 @@ describe("buildProjectFileCommand — grounded defaults", () => {
     expect(p.timelapse).toBe(false);
   });
 
-  it("defaults the three X2D-UNCONFIRMED fields to their documented values", () => {
-    expect(p.bed_type).toBe("auto");
+  // Studio never sends "auto": the plate type is the slice's own, so the builder has no default
+  // and carries it as given (sheets-04b paused on "auto" with 0500-8051, 2026-10-03).
+  it("carries the slice's plate type as given", () => {
+    expect(p.bed_type).toBe("textured_plate");
+  });
+
+  it("defaults the two X2D-UNCONFIRMED fields to their documented values", () => {
     expect(p.ams_mapping).toEqual([0]);
     expect(p.md5).toBe("");
   });
@@ -67,7 +72,7 @@ describe("buildProjectFileCommand — grounded defaults", () => {
 
 describe("buildProjectFileCommand — overrides", () => {
   it("selects a different plate for both param and default subtask name is unaffected by plate", () => {
-    const p = buildProjectFileCommand({ remoteName: "card.3mf", plate: 3 }).print;
+    const p = buildProjectFileCommand({ remoteName: "card.3mf", bedType: "cool_plate", plate: 3 }).print;
     expect(p.param).toBe("Metadata/plate_3.gcode");
     expect(p.url).toBe("ftp:///card.3mf");
     expect(p.subtask_name).toBe("card");
@@ -86,13 +91,14 @@ describe("buildProjectFileCommand — overrides", () => {
   });
 
   it("accepts the empty-string ams_mapping form some firmware wants", () => {
-    const p = buildProjectFileCommand({ remoteName: "card.3mf", amsMapping: "" }).print;
+    const p = buildProjectFileCommand({ remoteName: "card.3mf", bedType: "cool_plate", amsMapping: "" }).print;
     expect(p.ams_mapping).toBe("");
   });
 
   it("lets calibration steps be turned off individually", () => {
     const p = buildProjectFileCommand({
       remoteName: "card.3mf",
+      bedType: "cool_plate",
       bedLeveling: false,
       flowCali: false,
       vibrationCali: false,
@@ -105,6 +111,7 @@ describe("buildProjectFileCommand — overrides", () => {
   it("honours an explicit subtask name and sequence id", () => {
     const p = buildProjectFileCommand({
       remoteName: "card.3mf",
+      bedType: "cool_plate",
       subtaskName: "Plate 1 — machine card",
       sequenceId: "42",
     }).print;
@@ -115,7 +122,7 @@ describe("buildProjectFileCommand — overrides", () => {
   // false is a real value the builder must not clobber with its default (?? guards against exactly
   // this — a plain || would have flipped these back to true/on).
   it("preserves an explicitly-false flag rather than defaulting it back on", () => {
-    const opts: ProjectFileOptions = { remoteName: "card.3mf", timelapse: false, useAms: false };
+    const opts: ProjectFileOptions = { remoteName: "card.3mf", bedType: "cool_plate", timelapse: false, useAms: false };
     const p = buildProjectFileCommand(opts).print;
     expect(p.timelapse).toBe(false);
     expect(p.use_ams).toBe(false);

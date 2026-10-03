@@ -30,6 +30,7 @@ import {
   type WarningsSidecar,
 } from "../backends/warnings.js";
 import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs } from "./slice.js";
+import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
 import type { FlattenedPreset } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint } from "../mesh.js";
@@ -307,6 +308,7 @@ interface ComposeOpts {
   dryRun?: boolean;
   strict?: boolean;
   record?: boolean;
+  plateType?: string;
 }
 
 /** One resolved on-plate item: its geometry pins, the count, and (filled after render) its footprint
@@ -584,12 +586,16 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   let presets: FlattenedPreset[] = [];
   if (studioBin) {
     try {
-      // Names → files → one flattened file per preset (the CLI does not follow `inherits`).
+      // Names → files → one flattened file per preset (the CLI does not follow `inherits`), and the
+      // plate to slice for, which Studio would otherwise default to a Cool Plate (plate-type.ts).
+      const plate = resolveSlicePlateType(opts.plateType, studioSavedPlateType());
+      console.log(`plate type: ${plate.type.name} (${plate.from})`);
       const prepared = prepareSlicePresets(
         settingsName,
         filamentName,
         studioBin,
         mkdtempSync(join(tmpdir(), "bambu-presets-")),
+        plate.type,
       );
       settingsResolved = prepared.settings ?? settingsName;
       filamentResolved = prepared.filament ?? filamentName;
@@ -801,6 +807,10 @@ export function registerCompose(slice: Command): void {
       "filament, semicolon-joined — overrides the manifest profile (preset display name or JSON path; its inherits chain is flattened before slicing)",
     )
     .option("--bed <name>", "bed footprint for the fit pre-check (x2d = 256×256 mm)", "x2d")
+    .option(
+      "--plate-type <type>",
+      "the build plate to slice for: cool_plate | eng_plate | hot_plate | textured_plate | supertack_plate (default: the one Bambu Studio is set to)",
+    )
     .option("--arrange", "auto-arrange the objects on the plate (libnest2d in the slicer)", true)
     .option("--no-arrange", "do not auto-arrange (objects keep authored positions)")
     .option("--no-record", "skip scaffolding the draft plate record")

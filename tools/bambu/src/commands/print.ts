@@ -14,7 +14,7 @@
 // it), and the printer is idle. Then it asks at a TTY unless --yes, which may be passed only on a
 // page approval that is live. --dry-run reports both checks and prints the EXACT FTPS target + MQTT
 // payload it WOULD send without uploading or publishing (it only reads the printer's state and
-// loaded trays) — the review surface for the three X2D-UNCONFIRMED fields before the first real send.
+// loaded trays) — the review surface for the two X2D-UNCONFIRMED fields before the first real send.
 
 import { Command } from "commander";
 import { existsSync, mkdirSync, statSync } from "node:fs";
@@ -39,6 +39,7 @@ import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 import { collectSlots } from "../frame.js";
 import { readPlateMeta, readUsedFilaments } from "../threemf.js";
+import { checkPlate, printerPlateId, readSlicePlateType, type SlicePlateType } from "../plate-type.js";
 import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
 import { cardRefusal, cardSummary, readStorage } from "../storage.js";
 import {
@@ -68,7 +69,6 @@ interface SendOpts {
   object?: string[]; // --object bikar:<path>[=entry], repeatable
   allowUnverified?: boolean;
   plate?: string; // --plate N (commander passes a string)
-  bedType?: string; // [X2D-UNCONFIRMED] override the default "auto"
   amsMapping?: string; // [X2D-UNCONFIRMED] comma-ints ("0" / "-1,0") or "none"
   md5?: string; // [X2D-UNCONFIRMED] override the default ""
   bedLeveling?: boolean; // --no-bed-leveling → false
@@ -148,19 +148,21 @@ function parseAmsMapping(spec: string | undefined): number[] | string | undefine
   return nums;
 }
 
-/** Assemble the ProjectFileOptions from the flags — throws (caught by the caller) on a bad flag. */
-function buildProjectOptions(remoteName: string, opts: SendOpts): ProjectFileOptions {
-  let plate: number | undefined;
-  if (opts.plate !== undefined) {
-    plate = Number(opts.plate);
-    if (!Number.isInteger(plate) || plate < 1) {
-      throw new Error(`--plate must be a positive integer (the plate index inside the .3mf), got "${opts.plate}"`);
-    }
+function parsePlateIndex(spec: string | undefined): number | undefined {
+  if (spec === undefined) return undefined;
+  const plate = Number(spec);
+  if (!Number.isInteger(plate) || plate < 1) {
+    throw new Error(`--plate must be a positive integer (the plate index inside the .3mf), got "${spec}"`);
   }
+  return plate;
+}
+
+/** Assemble the ProjectFileOptions from the flags and the slice's plate type — throws on a bad flag. */
+function buildProjectOptions(remoteName: string, opts: SendOpts, plate: number | undefined, bedType: string): ProjectFileOptions {
   return {
     remoteName,
     plate,
-    bedType: opts.bedType,
+    bedType,
     amsMapping: parseAmsMapping(opts.amsMapping),
     md5: opts.md5,
     bedLeveling: opts.bedLeveling,
@@ -265,10 +267,19 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
 
   // Build (and validate) the dispatch options before any network — a bad --plate/--ams-mapping fails
-  // fast, not after an upload.
+  // fast, not after an upload. The start command names the plate type the slice was made for, read
+  // off the file as Studio's own send does; a file that names none cannot be sent, dry run or not.
   let projectOpts: ProjectFileOptions;
+  let slicePlate: SlicePlateType;
   try {
-    projectOpts = buildProjectOptions(remoteUploadName(abs), opts);
+    const plateNo = parsePlateIndex(opts.plate);
+    slicePlate = await readSlicePlateType(abs, plateNo ?? 1);
+    if (!slicePlate.type) {
+      console.error(`✗ ${checkPlate(slicePlate, null).line}`);
+      process.exitCode = 2;
+      return;
+    }
+    projectOpts = buildProjectOptions(remoteUploadName(abs), opts, plateNo, slicePlate.type.token);
   } catch (err) {
     console.error((err as Error).message);
     process.exitCode = 2;
@@ -306,6 +317,18 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.error("  (dry run — a real send stops here.)");
   } else {
     console.error(`✓ printer: idle (${String(frame?.gcode_state)}).`);
+  }
+
+  // The plate on the bed against the plate the slice is for. A known mismatch refuses; an id we have
+  // not matched yet warns, and the bed photo below settles it.
+  const plateCheck = checkPlate(slicePlate, printerPlateId(frame));
+  console.error(`${plateCheck.mark} ${plateCheck.line}`);
+  if (!plateCheck.ok) {
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
   }
 
   // Somewhere to put the file: the upload writes to the storage card, and with none in it fails
@@ -359,7 +382,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.log(`  1. FTPS implicit-TLS upload → ${cfg.host}:990 (user bblp) STOR /${projectOpts.remoteName}`);
     console.log(`  2. MQTT publish → device/${cfg.serial}/request:`);
     console.log(JSON.stringify(command, null, 2));
-    console.log("  [X2D-UNCONFIRMED] bed_type / ams_mapping / md5 — diff this payload against a BambuStudio");
+    console.log("  [X2D-UNCONFIRMED] ams_mapping / md5 — diff this payload against a BambuStudio");
     console.log("  ground-truth capture before the first real send (docs/issues/first-party-dispatch.md).");
     if (opts.record) console.log("would also scaffold a draft record under .bambu/records/.");
     return;
@@ -596,7 +619,6 @@ export function registerPrint(program: Command): void {
       [] as string[],
     )
     .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
-    .option("--bed-type <type>", "[X2D-UNCONFIRMED] plate profile: auto|cool_plate|eng_plate|hot_plate|textured_plate (default auto)")
     .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays)')
     .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
     .option("--no-bed-leveling", "skip auto bed-leveling before this print")

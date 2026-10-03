@@ -137,4 +137,13 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-02 | proposed — at Omar's ask after sheets-04's pieces all fell through: pieces only, 4 mm tall and flat, the gap through zero into a press fit (bikar #300) | this page |
 | 2026-10-02 | sliced — local slice fits one bed, 41 minutes, 12 g, no slicer warnings, with a bed map | this page |
 | 2026-10-03 | reviewed — side cut added at Omar's ask, the piece heights against the coaster's, measured off the meshes | this page |
-| 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c | this page |
+| 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c. Cancelled at layer 0: the slice was made for a Cool Plate and a Textured PEI Plate was on the bed (0500-8051); slice it again for that plate, and it needs a new yes | [the issue](../../issues/sliced-for-wrong-plate.md) |
+
+## Print log
+
+What the printer said while this plate printed, one row per change, written by the send-plate skill's `print_monitor.py`. A `finished` row is not a print record; that is written when the pieces are judged.
+
+| Time (UTC) | Event | Layer | Done | What the printer said |
+|---|---|---|---|---|
+| 2026-10-03 20:08 | watching | 0/20 | 0% | 0500-8051: the plate on the bed is not the one the file was sliced for |
+| 2026-10-03 20:12 | stopped | 0/20 | 0% | 0300-400C: the print was cancelled, from the printer's screen or an app |
