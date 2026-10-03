@@ -134,33 +134,13 @@ another way and never send from Bambu Studio for him.
 
 ## 6. Watch it
 
-Right after the send goes through, start the monitor from the vault, in the background (Bash
-`run_in_background`, which tells you when it exits):
-
-`python3 .claude/skills/send-plate/scripts/print_monitor.py <name>`
-
-It asks the printer for its state every 30 seconds and adds a row to the page's `## Print log`
-for each change: preparing, printing, paused (with the error code and what it means), resumed,
-25/50/75%, finished, failed, stopped, or lost when the printer stops answering. It keeps going
-through a pause and stops on the last four. To hear about a pause while it runs, follow the rows
-with the Monitor tool: `tail -f .bambu/monitor/<name>.log | grep --line-buffered "ev=row\|ev=exit"`.
-
-- **Paused:** tell Omar at once, with the code and its meaning. Resuming, stopping or swapping
-  the plate are his, at the printer or on his word in chat; never resume or stop it yourself.
-- **Finished:** the print is done, not judged. The record and the Timeline's `printed` row come
-  when the pieces are judged, as before.
-- **Ship the log:** the rows are on the vault's page. When the watch ends, ship the page the
-  same way as the send's change in step 5.
+Right after the send goes through, hand the print to the
+[monitor-print](../monitor-print/SKILL.md) skill. It writes the printer's state onto the page,
+checks the print is still moving, takes a chamber picture every 10 minutes for you to look at,
+and makes a timelapse GIF when the print ends. A send with no watch after it is not finished.
 
 ## 7. Report
 
 In plain words: what was sent, the bed as the photo showed it, the printer state after the send,
 the minutes and grams, that the monitor is watching it, and that the approval is spent, so a
 reprint needs a new yes.
-
-## Scripts — when to use each
-
-| Script | What it does | When to reach for it | Command |
-|---|---|---|---|
-| `scripts/print_monitor.py` | Polls the printer, writes each change onto the plate page's `## Print log`, logs to `.bambu/monitor/<name>.log` | Right after a send (step 6), or to pick up watching a print already running | `python3 .claude/skills/send-plate/scripts/print_monitor.py <name>` |
-| same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page | After editing it; `make validate-prints` runs it | `python3 .claude/skills/send-plate/scripts/print_monitor.py --self-test` |

@@ -154,11 +154,12 @@ EVENTS = ("proposed", "reviewed", "sliced", "sent", "printed", "judged", "promot
 # before it needs no row (minis-01 to -03 went out before plate pages existed).
 APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
 # The print log (P10): the printer's own report while a plate prints, one row per change,
-# written by the send-plate skill's print_monitor.py. `watching` is the monitor's first look;
-# `lost` is the monitor giving up when the printer stops answering.
+# written by the monitor-print skill's print_monitor.py. `watching` is the monitor's first look;
+# `stalled` is RUNNING with no new layer or percent for a while; `lost` is the monitor giving up
+# when the printer stops answering.
 PRINT_LOG_HEAD = "| Time (UTC) | Event | Layer | Done | What the printer said |"
-PRINT_EVENTS = ("watching", "preparing", "printing", "paused", "resumed", "progress", "error",
-                "finished", "failed", "stopped", "lost")
+PRINT_EVENTS = ("watching", "preparing", "printing", "paused", "resumed", "progress", "stalled",
+                "error", "finished", "failed", "stopped", "lost")
 LOG_ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*\|\s*([a-z]+)\s*\|(.*)$")
 DECISIONS = ("approved", "held", "standing")
 TABLE_FROM = "2026-10-03"
