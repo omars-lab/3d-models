@@ -5,6 +5,7 @@
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf>
+    python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -39,6 +40,13 @@ it, turned as it was turned, on the bed square with the front edge at the bottom
 named by the label in the bed map `bambu slice compose` wrote beside the plate
 (`<plate>.bedmap.json`; without it, by the object's file name). It is for plates whose sets look
 alike, so the person at the printer bags each one under the right name.
+
+`side` cuts the frame and a piece straight down along a line, x0,y0 to x1,y1 mm in their shared
+frame, and draws the cut from the side: the frame grey, the piece gold, one row per label, every
+row at the same scale and with the tallest point of each written under it. It is for seeing how
+tall a piece stands against the walls it sits in. Both meshes must be in the same frame: a
+piece at the place of its hole, as bikar's coupons put them. The label, line and piece repeat,
+one row each.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -349,6 +357,108 @@ def bed_sheet(out, plate):
     print("wrote", out)
 
 
+SIDE_PX = 60     # px per mm on a side cut: a 0.05 mm gap is 3 px
+
+
+def parse_line(text):
+    """`x0,y0,x1,y1` in mm, two different points."""
+    try:
+        x0, y0, x1, y1 = (float(v) for v in text.split(","))
+    except ValueError:
+        raise SystemExit(f"side: the cut must be <x0>,<y0>,<x1>,<y1> in mm, got {text!r}")
+    if (x0, y0) == (x1, y1):
+        raise SystemExit(f"side: the cut's two ends are the same point, {text!r}")
+    return x0, y0, x1, y1
+
+
+def cut(tris, line):
+    """Where a closed mesh meets the upright plane through `line`: segments ((s, z), (s, z)), s
+    the distance along the line from its start in mm."""
+    x0, y0, x1, y1 = line
+    length = math.hypot(x1 - x0, y1 - y0)
+    ux, uy = (x1 - x0) / length, (y1 - y0) / length
+    segs = []
+    for t in tris:
+        ps = [(t[j], t[j + 1], t[j + 2]) for j in (0, 3, 6)]
+        d = [(x - x0) * -uy + (y - y0) * ux for x, y, _ in ps]  # signed distance off the plane
+        hits = []
+        for a, b in ((0, 1), (1, 2), (2, 0)):
+            if (d[a] < 0) != (d[b] < 0):
+                k = d[a] / (d[a] - d[b])
+                x, y, z = (ps[a][i] + k * (ps[b][i] - ps[a][i]) for i in range(3))
+                hits.append(((x - x0) * ux + (y - y0) * uy, z))
+        if len(hits) == 2:
+            segs.append(tuple(hits))
+    return segs, length
+
+
+def fill_cut(d, segs, length, zmax, color, top):
+    """Fill the inside of a cut, column by column, even-odd: each pixel column crosses the
+    outline an even number of times, and the material is between the 1st and 2nd, 3rd and 4th."""
+    for px in range(int(length * SIDE_PX)):
+        s = (px + 0.5) / SIDE_PX
+        zs = sorted(za + (s - sa) / (sb - sa) * (zb - za)
+                    for (sa, za), (sb, zb) in segs if min(sa, sb) <= s < max(sa, sb))
+        for lo, hi in zip(zs[::2], zs[1::2]):
+            d.line([(px, top + (zmax - hi) * SIDE_PX), (px, top + (zmax - lo) * SIDE_PX)], fill=color)
+
+
+def side_picture(frame, rows):
+    """One row per (label, line, piece triangles): the frame's cut grey, the piece's gold, at one
+    scale. Returns the image and, per row, the frame's and the piece's tallest point in mm."""
+    font = ImageFont.load_default(size=28)
+    cuts = [(label, cut(frame, line), cut(piece, line)) for label, line, piece in rows]
+    zmax = max([z for _, c, p in cuts for segs in (c[0], p[0]) for seg in segs for _, z in seg] + [1])
+    width = int(max(c[1] for _, c, _ in cuts) * SIDE_PX)
+    band, gap = int(zmax * SIDE_PX), 44
+    img = Image.new("RGB", (width, len(cuts) * (band + 2 * gap)), (248, 248, 248))
+    d = ImageDraw.Draw(img)
+    tall = []
+    for k, (label, (fsegs, flen), (psegs, plen)) in enumerate(cuts):
+        top = k * (band + 2 * gap) + gap
+        fill_cut(d, fsegs, flen, zmax, (128, 128, 128), top)
+        fill_cut(d, psegs, plen, zmax, (168, 136, 48), top)
+        h = lambda segs: max([z for seg in segs for _, z in seg] or [0])
+        tall.append((h(fsegs), h(psegs)))
+        d.text((6, top - gap / 2), label, fill=(40, 40, 40), font=font, anchor="lm")
+        d.text((6, top + band + gap / 2), f"coaster {tall[-1][0]:.1f} mm · piece {tall[-1][1]:.1f} mm",
+               fill=(90, 90, 90), font=font, anchor="lm")
+    return img, tall
+
+
+def side_sheet(out, frame, args):
+    if not args or len(args) % 3:
+        raise SystemExit("side: give each row as <label> <x0>,<y0>,<x1>,<y1> <piece.stl>")
+    rows = [(args[i], parse_line(args[i + 1]), load_triangles(args[i + 2])) for i in range(0, len(args), 3)]
+    img, tall = side_picture(load_triangles(frame), rows)
+    for (label, _, _), (f, p) in zip(rows, tall):
+        print(f"{label:30} frame {f:.2f} mm  piece {p:.2f} mm")
+    img.save(out)
+    print("wrote", out)
+
+
+def side_self_test():
+    """A 4 x 4 x 4 mm frame with a 2 mm square hole through it, and a 1 mm tall piece in the hole,
+    cut through the middle: the frame stands either side of the hole and not in it, the piece sits
+    in the hole up to 1 mm and no higher, and the heights read 4 and 1."""
+    def box(x0, y0, x1, y1, z1):
+        v = [(x, y, z) for z in (0, z1) for y in (y0, y1) for x in (x0, x1)]
+        faces = [(0, 2, 1), (1, 2, 3), (4, 5, 6), (5, 7, 6), (0, 1, 4), (1, 5, 4),
+                 (2, 6, 3), (3, 6, 7), (0, 4, 2), (2, 4, 6), (1, 3, 5), (3, 7, 5)]
+        return [v[a] + v[b] + v[c] for a, b, c in faces]
+    frame = box(0, 0, 1, 4, 4) + box(3, 0, 4, 4, 4) + box(1, 0, 3, 1, 4) + box(1, 3, 3, 4, 4)
+    img, tall = side_picture(frame, [("T", (-1, 2, 5, 2), box(1.2, 1.2, 2.8, 2.8, 1))])
+    at = lambda s, z: img.getpixel((int((s + 0) * SIDE_PX), int(44 + (4 - z) * SIDE_PX)))
+    grey, gold = (128, 128, 128), (168, 136, 48)
+    return [
+        ("side fills the frame either side of the hole", at(1.5, 2) == grey and at(4.5, 2) == grey),
+        ("side leaves the hole empty above the piece", at(3, 2) == (248, 248, 248)),
+        ("side draws the piece in the hole, to its height only", at(3, 0.5) == gold and at(3, 1.5) != gold),
+        ("side leaves the gap between piece and wall open", at(2.1, 0.5) == (248, 248, 248)),
+        ("side reads the heights", [round(v, 2) for v in tall[0]] == [4.0, 1.0]),
+    ]
+
+
 def self_test():
     def square(draw_holes):
         img = Image.new("L", (S, S), 0)
@@ -412,6 +522,7 @@ def self_test():
         ("edge leaves out a face above the bottom", stray_px == 0),
     ]
     checks += bed_self_test()
+    checks += side_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -458,6 +569,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) == 3 and a[0] == "bed":
         bed_sheet(a[1], a[2])
+        sys.exit(0)
+    if len(a) >= 6 and a[0] == "side":
+        side_sheet(a[1], a[2], a[3:])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])
