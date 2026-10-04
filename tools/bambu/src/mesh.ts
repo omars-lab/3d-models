@@ -96,37 +96,60 @@ export function stlBoundsFromBuffer(buf: Buffer): Bounds | null {
 /** A binary STL of `buf` scaled by `s`, moved so its footprint is centered on the origin and it rests
  *  on z = 0. The bed map reads each object's place from the plate's transform, which is where the
  *  mesh's origin lands, so a mesh modeled off-center would be mapped by its offset, not where it
- *  prints (an iPhone model at x 64–102 mapped 83 mm off, sheets-04d). Normals stay as they are: a
- *  uniform scale and a move do not turn a face. An ASCII input comes out binary, since the slicer
+ *  prints (an iPhone model at x 64–102 mapped 83 mm off, sheets-04d). `s` is one number, or one per
+ *  axis [x, y, z]. A uniform scale and a move do not turn a face, so its normals stay as they are; a
+ *  scale per axis tilts the faces, so each normal is worked out again from its triangle (phones-02's
+ *  small phones, 2× thicker than they are wide). An ASCII input comes out binary, since the slicer
  *  reads either. */
-export function scaledCenteredStl(buf: Buffer, s: number): Buffer {
-  if (!(s > 0) || !Number.isFinite(s)) throw new Error(`scale must be a number > 0, got ${s}`);
+export function scaledCenteredStl(buf: Buffer, s: number | readonly [number, number, number]): Buffer {
+  const k3 = typeof s === "number" ? [s, s, s] : [...s];
+  if (k3.length !== 3 || !k3.every((k) => k > 0 && Number.isFinite(k))) {
+    throw new Error(`scale must be a number > 0, or three of them, got ${JSON.stringify(s)}`);
+  }
+  const uniform = k3[0] === k3[1] && k3[1] === k3[2];
   const b = stlBoundsFromBuffer(buf);
   if (!b) throw new Error("not a valid STL, or it has no vertices");
   const c = [(b.min[0] + b.max[0]) / 2, (b.min[1] + b.max[1]) / 2, b.min[2]];
+  let out: Buffer;
   if (!looksAscii(buf)) {
     if (buf.length < 84 || buf.length < 84 + buf.readUInt32LE(80) * 50) throw new Error("not a valid binary STL");
-    const out = Buffer.from(buf);
+    out = Buffer.from(buf);
     const tris = out.readUInt32LE(80);
     for (let t = 0; t < tris; t++) {
       const base = 84 + t * 50 + 12; // skip the 12-byte normal
-      for (let k = 0; k < 9; k++) out.writeFloatLE((out.readFloatLE(base + k * 4) - c[k % 3]!) * s, base + k * 4);
+      for (let k = 0; k < 9; k++) out.writeFloatLE((out.readFloatLE(base + k * 4) - c[k % 3]!) * k3[k % 3]!, base + k * 4);
     }
-    return out;
+  } else {
+    const re = /vertex\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)/g;
+    const v: number[] = [];
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(buf.toString("latin1"))) !== null) {
+      for (let k = 0; k < 3; k++) v.push((Number(m[k + 1]) - c[k]!) * k3[k]!);
+    }
+    const tris = Math.floor(v.length / 9);
+    out = Buffer.alloc(84 + tris * 50);
+    out.writeUInt32LE(tris, 80);
+    for (let t = 0; t < tris; t++) {
+      for (let k = 0; k < 9; k++) out.writeFloatLE(v[t * 9 + k]!, 84 + t * 50 + 12 + k * 4);
+    }
   }
-  const re = /vertex\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)/g;
-  const v: number[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(buf.toString("latin1"))) !== null) {
-    v.push((Number(m[1]) - c[0]!) * s, (Number(m[2]) - c[1]!) * s, (Number(m[3]) - c[2]!) * s);
-  }
-  const tris = Math.floor(v.length / 9);
-  const out = Buffer.alloc(84 + tris * 50);
-  out.writeUInt32LE(tris, 80);
-  for (let t = 0; t < tris; t++) {
-    for (let k = 0; k < 9; k++) out.writeFloatLE(v[t * 9 + k]!, 84 + t * 50 + 12 + k * 4);
-  }
+  if (!uniform) writeFaceNormals(out);
   return out;
+}
+
+/** Set every triangle's normal in a binary STL to the unit normal of its own corners (right-hand
+ *  rule, so it points the way the corners wind). A degenerate triangle gets 0 0 0. */
+function writeFaceNormals(out: Buffer): void {
+  const tris = out.readUInt32LE(80);
+  for (let t = 0; t < tris; t++) {
+    const o = 84 + t * 50;
+    const p = Array.from({ length: 9 }, (_, k) => out.readFloatLE(o + 12 + k * 4));
+    const [ux, uy, uz] = [p[3]! - p[0]!, p[4]! - p[1]!, p[5]! - p[2]!];
+    const [vx, vy, vz] = [p[6]! - p[0]!, p[7]! - p[1]!, p[8]! - p[2]!];
+    const n = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx];
+    const len = Math.hypot(n[0]!, n[1]!, n[2]!);
+    for (let k = 0; k < 3; k++) out.writeFloatLE(len > 0 ? n[k]! / len : 0, o + k * 4);
+  }
 }
 
 /** Read an STL file and return its bounding box, or throw a clear error if it cannot be parsed. */

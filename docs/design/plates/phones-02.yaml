@@ -1,0 +1,38 @@
+# phones-02 — phones-01 in pink only, with the small phones made bigger and thicker
+#
+# Omar, 2026-10-04, after phones-01 printed: "i also want to make a pink only version of our print
+# ... and I want to make the itiny phone a bit bigger - 1.25x their lenght and width and 2x their
+# thickness". phones-01 swapped color on every one of its 22 layers and ran about 62 minutes against
+# the slicer's 22; one color means no swaps and no prime tower.
+#
+#   PINK PHONE x2     scale 1                    about 16.6 x 40 x 4.6 mm
+#   PINK SMALL x2     scale [0.3125, 0.3125, 0.5] about 5.2 x 12.5 x 2.3 mm
+#
+# The small phones are phones-01's quarter phones (0.25 on every side) at 1.25x the width and length
+# and 2x the thickness: 0.25 x 1.25 = 0.3125 across, 0.25 x 2 = 0.5 up. That is about 11 layers at
+# 0.2 mm, against the quarter phone's six.
+#
+# The phone is the one on sheets-04d and phones-01: cut from the iPhone 16 Pro model by
+# sheets-04d-phone.scad, screen down and lenses up, with the case left off. The file stays out of
+# git: this repo is public and the model's license likely forbids sharing it. The recipe holds it to
+# its sha256.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/phones-02.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  color:    "#F5547C"
+
+items:
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl # cut from iphone-16-pro.stl, sha256 4a15ef0b…
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    count:    2
+    label:    PINK PHONE
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    scale:    [0.3125, 0.3125, 0.5]
+    count:    2
+    label:    PINK SMALL

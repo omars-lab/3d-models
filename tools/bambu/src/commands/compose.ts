@@ -74,7 +74,7 @@ export interface ManifestItemIteration {
 export interface ManifestItemStl {
   stl: string; // repo-relative path of a mesh file (may be gitignored, e.g. .bambu/imports/<name>.stl)
   sha256: string; // the file's sha256: a different file under the same path is refused
-  scale?: number; // uniform scale about the origin (default 1)
+  scale?: number | [number, number, number]; // one scale, or one per axis [x, y, z] (default 1)
   count?: number;
   label?: string;
   filament?: number;
@@ -107,9 +107,25 @@ function checkStlItem(it: Record<string, unknown>, where: string): void {
   if (typeof it.sha256 !== "string" || !/^[0-9a-f]{64}$/.test(it.sha256)) {
     throw new Error(`${where}: an \`stl:\` item needs \`sha256:\` (64 lowercase hex) so a changed file is refused`);
   }
-  if (it.scale !== undefined && (typeof it.scale !== "number" || !Number.isFinite(it.scale) || !(it.scale > 0))) {
-    throw new Error(`${where}: \`scale:\` must be a number > 0, got ${JSON.stringify(it.scale)}`);
+  const s = it.scale;
+  const ok = (k: unknown) => typeof k === "number" && Number.isFinite(k) && k > 0;
+  if (s !== undefined && !ok(s) && !(Array.isArray(s) && s.length === 3 && s.every(ok))) {
+    throw new Error(`${where}: \`scale:\` must be a number > 0, or [x, y, z] of them, got ${JSON.stringify(s)}`);
   }
+}
+
+/** An `stl:` item's scale as iteration params: none at 1, `scale` when every axis is the same (so a
+ *  uniform scale keeps the id it had before scales per axis existed), else `scale_x/_y/_z`. */
+export function stlScaleParams(scale: ManifestItemStl["scale"]): Record<string, number> {
+  const [x, y, z] = typeof scale === "number" ? [scale, scale, scale] : (scale ?? [1, 1, 1]);
+  if (x === y && y === z) return x === 1 ? {} : { scale: x };
+  return { scale_x: x, scale_y: y, scale_z: z };
+}
+
+/** The scale a resolved `stl:` item's copy is made at, read back from its params. */
+function stlScaleOf(params: Record<string, number>): number | [number, number, number] {
+  if (params.scale_x === undefined) return params.scale ?? 1;
+  return [params.scale_x, params.scale_y ?? 1, params.scale_z ?? 1];
 }
 
 /** A parsed `--window` value: the square's side and its centre in the coaster's own frame. */
@@ -402,7 +418,7 @@ export interface ResolvedItem {
   iteration: string; // it-<sha12>
   label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
   filament: number; // the 1-based filament slot (1 when the item names none)
-  file?: string; // an `stl:` item's absolute path: copied (scaled by params.scale) instead of rendered
+  file?: string; // an `stl:` item's absolute path: copied (scaled by its scale params) instead of rendered
 }
 
 /** Resolve a bikar-tracked blob's source_sha256 at a ref, or throw a clear error. */
@@ -483,7 +499,7 @@ function resolveStlItem(
   if (sha !== item.sha256) {
     throw new Error(`${where}: ${item.stl} has sha256 ${sha}, not the ${item.sha256} the recipe was written with`);
   }
-  const params: Record<string, number> = item.scale !== undefined && item.scale !== 1 ? { scale: item.scale } : {};
+  const params = stlScaleParams(item.scale);
   const source = `3d-models:${item.stl}`;
   const key: IterationKey = {
     source,
@@ -695,7 +711,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       // A local mesh renders nothing: copy it, scaled, under its iteration name so the bed map finds it.
       renderPlan.push(`  ${r.entry}: copy ${pieceLabel(r)} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
       try {
-        writeFileSync(stl, scaledCenteredStl(readFileSync(r.file), r.params.scale ?? 1));
+        writeFileSync(stl, scaledCenteredStl(readFileSync(r.file), stlScaleOf(r.params)));
         cache.set(ck, stl);
         footprints.set(ck, footprint(stlBounds(stl)));
       } catch (err) {
