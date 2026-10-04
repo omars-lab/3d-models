@@ -9,3 +9,7 @@ What the printer said while [phones-02](../phones-02.md) printed, one row per ch
 | Time (UTC) | Event | Layer | Done | What the printer said |
 |---|---|---|---|---|
 | 2026-10-04 14:40 | watching | 0/22 | 0% | RUNNING |
+| 2026-10-04 14:45 | progress | 0/22 | 41% | 25% |
+| 2026-10-04 14:46 | progress | 1/22 | 50% | 50% |
+| 2026-10-04 14:50 | progress | 11/22 | 77% | 75% |
+| 2026-10-04 14:53 | finished | 22/22 | 100% | FINISH |
