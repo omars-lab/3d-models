@@ -36,7 +36,8 @@ you something.
    | `ancestor`, `no-changes` | Its commits are all on origin's default, or it changed nothing | `delete` |
    | `content-on-default` | Every file it touched matches origin's default (British and American spellings of color folded) | `delete` |
    | `content-in-pr` | Every file it touched matches its merged PR's merge commit | `delete` |
-   | `lines-on-default` | Every line it added is on the default, but its deletions are unchecked | `look` |
+   | `changes-on-default` | Every line it added is on the default, and every line it removed is gone from it (main took the change, then moved on) | `delete` |
+   | `lines-on-default` | Every line it added is on the default, but a line it removed is still there | `look` |
    | `ahead-only` | Unmerged commits; the default has not moved past its fork | `look` |
    | `diverged` | Unmerged commits, and the default has moved on | `look`, snapshot first |
    | local default `ancestor` and behind | The local default lags origin | `ff` |
