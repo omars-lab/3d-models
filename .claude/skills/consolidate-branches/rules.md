@@ -74,16 +74,21 @@ A branch is **dead**, meaning safe to delete after a snapshot, only when one of 
 2. It changed no files since it forked from the default.
 3. Every file it touched has the same content on the origin default.
 4. Every file it touched has the same content in the merge commit of its merged PR.
+5. In every file it touched, each line it added since the fork is on the origin default, and
+   each line it removed is not. This is the case where main took the change and then kept
+   editing those files, so neither 3 nor 4 can match: review-md's two fix branches came back as
+   looks in two passes running, and were proven by hand each time (2026-10-04).
 
-For checks 3 and 4, the British and American spellings of "color" count as the same word. The color rename
+For checks 3, 4 and 5, the British and American spellings of "color" count as the same word. The color rename
 (D-083, 2026-09-28) changed those files on main after many branches had already forked.
 
 Never use `git cherry` or a matching commit subject as proof. Squash merges rewrite every commit,
 so neither one tells you whether the work landed.
 
-**Not proof:** "every line the branch adds is on the default". The inventory reports this as
-`lines-on-default` and plans a look, not a delete. It shows that the additions landed, but it says
-nothing about lines the branch deleted.
+**Not proof:** "every line the branch adds is on the default" while a line it removed is still
+there. The inventory reports this as `lines-on-default` and plans a look, not a delete. Main may
+have kept the old line on purpose, or the line may only repeat elsewhere in the file (a closing
+brace), so someone has to read it.
 
 ## Before anything destructive
 
