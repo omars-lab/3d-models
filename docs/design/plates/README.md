@@ -20,7 +20,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [phones-01](phones-01.md) | waiting | 2 | 0.4 | 4.80 | ok | Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone? |
+| 1 | [phones-01](phones-01.md) | approved | 2 | 0.4 | 4.80 | ok | Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone? |
 | 2 | [sheets-04e](sheets-04e.md) | waiting | 2 | 0.7 | 2.88 | watch | Do the 41 pieces cut for the bigger gBV coaster fill it, and does packing each ring in two interlaced rows print cleanly? |
 | 3 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
 | 4 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
