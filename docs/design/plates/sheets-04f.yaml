@@ -1,0 +1,52 @@
+# sheets-04f — every piece of the bigger gBV coaster, in black, packed in rows
+#
+# Omar, 2026-10-03: "also want to include fill pieces 2x of differrnt colors", for the bigger
+# coaster on sheets-04d. This plate is the second set, black; sheets-04e is the first, pink. One
+# color per plate, because a headless slice with two filaments crashes Bambu Studio 02.08.02.61.
+#
+# All 41 pieces, from gBV_JTt3Kxk-minimal-pieces.bkr at the sheets-04d coaster's size, strap and
+# height (112.5, 3.75, 4.4), gap 0: each piece is its hole's own shape. Gap 0 is from sheets-04b,
+# where the bottom row (HEX 00) fit best in the minimal construction ("in the experiment the
+# bottom row fir bitter in minimal construction"); that this row is HEX 00 is an assumption.
+#
+# Each ring prints packed, not in its circle: "two roes of kites facing eqch other olaces in a
+# zipper like fashhion" with the "tips interlacing". bikar's `pack zipper` turns every piece the
+# same way, puts half in a row, turns the other row round and slides it half a step. Spacing 2 mm
+# between pieces is the file's default, not measured.
+#
+#   MIDDLE  the twenty-sided piece in the middle (1)
+#   KITE    the small four-sided kites (10)
+#   HEX     the inner ring of six-sided pieces (10)
+#   STAR    the ten-pointed stars (10)
+#   OUTER   the outer ring of six-sided pieces (10)
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sheets-04f.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  color:    "#000000"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  MIDDLE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  KITE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Hex
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  HEX
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Star
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  STAR
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Outer
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  OUTER

@@ -132,7 +132,7 @@ degrades a score cannot merge. Its own docstring calls the re-run *"a tripwire"*
 
 | stage | pointer |
 |---|---|
-| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1540 "function evaluateOrbDecl("` |
+| declaration dispatch | `bikar:packages/core/src/dsl/evaluator.ts:L1542 "function evaluateOrbDecl("` |
 | base solid, subdivision, duals | `bikar:packages/core/src/kernel3d/polyhedra.ts:L210 "export function subdivideGeodesic("` |
 | face-local 2D ↔ 3D frame (`B8`) | `bikar:packages/core/src/kernel3d/face-frame.ts:L93 "export function makeFaceLift("` |
 | vertex weld (`B8`) | `bikar:packages/core/src/kernel3d/weld.ts:L43 "export class VertexPool"` |

@@ -11,7 +11,7 @@ import {
   resolveManifestItems,
   type PartFootprint,
 } from "./compose.js";
-import { scaledStl, stlBoundsFromBuffer } from "../mesh.js";
+import { scaledCenteredStl, stlBoundsFromBuffer } from "../mesh.js";
 
 describe("parseManifest — validate before anything renders", () => {
   it("accepts a bkr item with numeric params and a count", () => {
@@ -140,27 +140,33 @@ describe("resolveManifestItems — an `stl:` item checks its file", () => {
   });
 });
 
-describe("scaledStl — the copy a local item puts on the plate", () => {
-  it("scales an ASCII or binary mesh about the origin and writes binary", () => {
+describe("scaledCenteredStl — the copy a local item puts on the plate", () => {
+  it("scales an ASCII or binary mesh, centers its footprint on the origin and writes binary", () => {
     const ascii = Buffer.from(asciiTriangle());
-    const big = scaledStl(ascii, 5);
+    const big = scaledCenteredStl(ascii, 5);
     expect(big.readUInt32LE(80)).toBe(1);
-    expect(stlBoundsFromBuffer(big)).toEqual({ min: [0, 0, 0], max: [10, 15, 20] });
-    const again = scaledStl(big, 0.5); // binary in, binary out
-    expect(stlBoundsFromBuffer(again)).toEqual({ min: [0, 0, 0], max: [5, 7.5, 10] });
-    expect(() => scaledStl(ascii, 0)).toThrow(/scale/);
+    expect(stlBoundsFromBuffer(big)).toEqual({ min: [-5, -7.5, 0], max: [5, 7.5, 20] });
+    const again = scaledCenteredStl(big, 0.5); // binary in, binary out
+    expect(stlBoundsFromBuffer(again)).toEqual({ min: [-2.5, -3.75, 0], max: [2.5, 3.75, 10] });
+    expect(() => scaledCenteredStl(ascii, 0)).toThrow(/scale/);
+  });
+
+  it("moves a mesh modeled off-center so the bed map's place is where it prints", () => {
+    // The sheets-04d iPhone sat at x 64-102, y 70-110: the bed map put it 83 mm from where it printed.
+    const off = scaledCenteredStl(Buffer.from(asciiTriangle([64, 70, 3])), 1);
+    expect(stlBoundsFromBuffer(off)).toEqual({ min: [-1, -1.5, 0], max: [1, 1.5, 4] });
   });
 });
 
-/** One triangle spanning 2 × 3 × 4 mm from the origin. */
-function asciiTriangle(): string {
+/** One triangle spanning 2 x 3 x 4 mm from the corner given (the origin by default). */
+function asciiTriangle([x, y, z]: [number, number, number] = [0, 0, 0]): string {
   return [
     "solid t",
     "facet normal 0 0 1",
     "outer loop",
-    "vertex 0 0 0",
-    "vertex 2 0 4",
-    "vertex 0 3 0",
+    `vertex ${x} ${y} ${z}`,
+    `vertex ${x + 2} ${y} ${z + 4}`,
+    `vertex ${x} ${y + 3} ${z}`,
     "endloop",
     "endfacet",
     "endsolid t",

@@ -356,4 +356,51 @@ coaster is mostly for looking at. A piece whose middle cannot
 see all of its own edge (a U or a crescent) would fold its top over itself, so bikar refuses
 a peak on it by name; the same piece is fine flat. Nothing has printed with a peak yet.
 
-Related: [loose pieces in pockets](#loose-pieces-in-pockets), [the smooth-lines design](../design/coaster/smooth-lines-design.md).
+Related: [loose pieces in pockets](#loose-pieces-in-pockets), [the smooth-lines design](../design/coaster/smooth-lines-design.md),
+[packing pieces in two rows](#packing-pieces-in-two-rows).
+
+## Packing pieces in two rows
+
+Without it, a color's pieces print where they sit in the coaster: a ring, with an empty
+middle the printer never uses. `pack zipper` at the end of a `loose` line turns every piece
+of that color to face the same way and splits them into two rows facing each other, then
+slides the rows together until the points of one row sit between the points of the other,
+like the teeth of a zipper. `spacing` is the smallest gap between any two pieces (2 mm when
+left off). The picture shows the eight triangles lifted above the frame three ways: in their
+ring (`peak 0`, a flat top and no packing); packed at the default 2 mm, where the two rows of
+four close up into a single line with points alternating up and down; and packed 8 mm apart,
+the same line spread out.
+
+<!-- recipe: coaster-loose-pack; swap: clearance 0.15 peak 0 | clearance 0.15 pack zipper | clearance 0.15 pack zipper spacing 8 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 1 color Gold
+    fill void where orbit == 2 color Gold
+
+coaster Coaster
+  outline round 90
+  inscribe star
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  loose where orbit == 1 clearance 0.15 pack zipper
+```
+![Gold triangles above the frame: in their ring, packed tip between tip 2 mm apart, and packed 8 mm apart](img/coaster-loose-pack.png)
+
+**Watch out:** packing changes only where a piece prints, never its shape, so a piece still
+drops into any pocket of its kind. The search keeps the smallest rectangle, which for some
+pieces means both rows the same way up rather than tip between tip. The 2 mm default has
+not been measured on a print yet. Each color packs on its own, so a color given two
+different layouts is refused, and so is a spacing of 0 or less.
+
+Related: [loose pieces in pockets](#loose-pieces-in-pockets),
+[peaked pieces](#peaked-pieces-a-soft-point-on-top), the
+[sheets-04e plate](../design/plates/sheets-04e.md) that packs the gBV pieces this way.

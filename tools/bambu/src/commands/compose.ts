@@ -33,7 +33,7 @@ import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs } from
 import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
 import type { FlattenedPreset } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
-import { stlBounds, footprint, scaledStl } from "../mesh.js";
+import { stlBounds, footprint, scaledCenteredStl } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
@@ -628,7 +628,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       // A local mesh renders nothing: copy it, scaled, under its iteration name so the bed map finds it.
       renderPlan.push(`  ${r.entry}: copy ${pieceLabel(r)} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
       try {
-        writeFileSync(stl, scaledStl(readFileSync(r.file), r.params.scale ?? 1));
+        writeFileSync(stl, scaledCenteredStl(readFileSync(r.file), r.params.scale ?? 1));
         cache.set(ck, stl);
         footprints.set(ck, footprint(stlBounds(stl)));
       } catch (err) {

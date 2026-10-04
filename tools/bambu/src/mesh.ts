@@ -93,24 +93,33 @@ export function stlBoundsFromBuffer(buf: Buffer): Bounds | null {
   return looksAscii(buf) ? boundsFromAscii(buf.toString("latin1")) : boundsFromBinary(buf);
 }
 
-/** A binary STL of `buf` scaled by `s` about the origin. Normals stay as they are: a uniform scale
- *  does not turn a face. An ASCII input comes out binary, since the slicer reads either. */
-export function scaledStl(buf: Buffer, s: number): Buffer {
+/** A binary STL of `buf` scaled by `s`, moved so its footprint is centered on the origin and it rests
+ *  on z = 0. The bed map reads each object's place from the plate's transform, which is where the
+ *  mesh's origin lands, so a mesh modeled off-center would be mapped by its offset, not where it
+ *  prints (an iPhone model at x 64–102 mapped 83 mm off, sheets-04d). Normals stay as they are: a
+ *  uniform scale and a move do not turn a face. An ASCII input comes out binary, since the slicer
+ *  reads either. */
+export function scaledCenteredStl(buf: Buffer, s: number): Buffer {
   if (!(s > 0) || !Number.isFinite(s)) throw new Error(`scale must be a number > 0, got ${s}`);
+  const b = stlBoundsFromBuffer(buf);
+  if (!b) throw new Error("not a valid STL, or it has no vertices");
+  const c = [(b.min[0] + b.max[0]) / 2, (b.min[1] + b.max[1]) / 2, b.min[2]];
   if (!looksAscii(buf)) {
     if (buf.length < 84 || buf.length < 84 + buf.readUInt32LE(80) * 50) throw new Error("not a valid binary STL");
     const out = Buffer.from(buf);
     const tris = out.readUInt32LE(80);
     for (let t = 0; t < tris; t++) {
       const base = 84 + t * 50 + 12; // skip the 12-byte normal
-      for (let k = 0; k < 9; k++) out.writeFloatLE(out.readFloatLE(base + k * 4) * s, base + k * 4);
+      for (let k = 0; k < 9; k++) out.writeFloatLE((out.readFloatLE(base + k * 4) - c[k % 3]!) * s, base + k * 4);
     }
     return out;
   }
   const re = /vertex\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)/g;
   const v: number[] = [];
   let m: RegExpExecArray | null;
-  while ((m = re.exec(buf.toString("latin1"))) !== null) v.push(Number(m[1]) * s, Number(m[2]) * s, Number(m[3]) * s);
+  while ((m = re.exec(buf.toString("latin1"))) !== null) {
+    v.push((Number(m[1]) - c[0]!) * s, (Number(m[2]) - c[1]!) * s, (Number(m[3]) - c[2]!) * s);
+  }
   const tris = Math.floor(v.length / 9);
   const out = Buffer.alloc(84 + tris * 50);
   out.writeUInt32LE(tris, 80);
