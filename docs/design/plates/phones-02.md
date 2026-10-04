@@ -1,8 +1,9 @@
 ---
 plate: phones-02
+print_log: '[[print-logs/phones-02|print log]]'
 recipe: phones-02.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "How much time and filament does one color save over phones-01, and do the small phones keep their lens bumps at twice the thickness?"
@@ -97,7 +98,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-04 | approved | Omar, in chat: "yes approved print" | iteration 1 @ dd2e8eed92 | |
+| 2026-10-04 | approved | Omar, in chat: "yes approved print" | iteration 1 @ dd2e8eed92 | sent 2026-10-04 |
 
 ## Timeline
 
@@ -105,3 +106,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-04 | proposed — at Omar's ask: phones-01 in pink only, the small phones 1.25 times wider and longer and twice as thick | this page |
 | 2026-10-04 | sliced — local one-color slice fits one bed, 12 minutes, 3.46 g, no slicer warnings | this page |
+| 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ dd2e8eed92 | this page |
