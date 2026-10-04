@@ -2,7 +2,7 @@
 plate: phones-02
 recipe: phones-02.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "How much time and filament does one color save over phones-01, and do the small phones keep their lens bumps at twice the thickness?"
@@ -97,6 +97,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-04 | approved | Omar, in chat: "yes approved print" | iteration 1 @ dd2e8eed92 | |
 
 ## Timeline
 
