@@ -43,5 +43,10 @@ How to score:
    useful part, so do not round everyone toward 3.
 4. The overall line is one sentence: who it is for, and the main thing holding it back. It is
    not an average, and the gallery shows the mean of the six scores beside it.
-5. A color that is to buy is judged by its hex, the maker's label for it. The finish (matte or
-   basic) and how close the screen is to the spool are unknown, and a reason may say so.
+5. A color that is to buy is judged by its hex, the maker's label for it; how close the screen is
+   to the spool is unknown, and a reason may say so. The pictures draw finishes roughly: a light
+   band for silk and Silk+, dots for sparkle, half see-through for translucent. Score the finish
+   as a promise of that look, not as a measured shine. A two-color or gradient spool is drawn as
+   its colors in stripes, but which piece comes out which color cannot be predicted, so judge the
+   theme on its range of colors, and a persona who wants every coaster in a set to match should
+   count that against it.

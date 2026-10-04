@@ -16,11 +16,15 @@ fi
 TOP="$(git rev-parse --show-toplevel)"
 THEMES="$TOP/.claude/skills/color-themes/scripts/themes.py"
 REVIEWS="$TOP/.claude/skills/review-theme/scripts/reviews.py"
-if [ ! -f "$THEMES" ] || [ ! -f "$REVIEWS" ]; then
+CATALOG="$TOP/.claude/skills/color-themes/scripts/catalog.py"
+if [ ! -f "$THEMES" ] || [ ! -f "$REVIEWS" ] || [ ! -f "$CATALOG" ]; then
   echo "pre-commit: no color-themes scripts in this worktree — skipping" >&2
   exit 0
 fi
-if git diff --cached --name-only | grep -Eq '^(docs/design/coaster/themes/|\.claude/skills/(color-themes|review-theme)/|docs/research/2026-10-04-bambu-pla-color-hexes\.md$)'; then
+# The catalog and its sheets live under docs/design/coaster/themes/ too.
+if git diff --cached --name-only | grep -Eq '^(docs/design/coaster/themes/|\.claude/skills/(color-themes|review-theme)/|docs/research/2026-10-04-bambu-(pla-color-hexes|filament-color-catalog)\.md$)'; then
+  python3 "$CATALOG" --self-test || exit 1
+  python3 "$CATALOG" check --quiet || exit 1
   python3 "$THEMES" --self-test || exit 1
   python3 "$REVIEWS" --self-test || exit 1
   python3 "$THEMES" check --all --quiet || exit 1

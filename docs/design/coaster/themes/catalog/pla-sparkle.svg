@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 198" width="866" height="198" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Sparkle: 6 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+    <pattern id="c13101-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#FFFFFF" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#FFFFFF" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#FFFFFF" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#FFFFFF" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#FFFFFF" fill-opacity="0.7" /></pattern>
+    <pattern id="c13102-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#FFFFFF" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#FFFFFF" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#FFFFFF" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#FFFFFF" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#FFFFFF" fill-opacity="0.7" /></pattern>
+    <pattern id="c13200-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#FFFFFF" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#FFFFFF" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#FFFFFF" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#FFFFFF" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#FFFFFF" fill-opacity="0.7" /></pattern>
+    <pattern id="c13402-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#5A5A5A" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#5A5A5A" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#5A5A5A" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#5A5A5A" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#5A5A5A" fill-opacity="0.7" /></pattern>
+    <pattern id="c13501-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#FFFFFF" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#FFFFFF" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#FFFFFF" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#FFFFFF" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#FFFFFF" fill-opacity="0.7" /></pattern>
+    <pattern id="c13700-flecks" patternUnits="userSpaceOnUse" width="14.0" height="14.0"><circle cx="2.10" cy="2.80" r="1.10" fill="#FFFFFF" fill-opacity="0.9" /><circle cx="8.40" cy="4.90" r="0.77" fill="#FFFFFF" fill-opacity="0.7" /><circle cx="4.90" cy="10.50" r="0.88" fill="#FFFFFF" fill-opacity="0.8" /><circle cx="11.90" cy="11.20" r="0.66" fill="#FFFFFF" fill-opacity="0.6" /><circle cx="11.20" cy="1.40" r="0.55" fill="#FFFFFF" fill-opacity="0.7" /></pattern>
+  </defs>
+  <rect width="866" height="198" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Sparkle</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">6 colors · finish: sparkle</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#2D2B28" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="url(#c13101-flecks)" />
+  <circle cx="129" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Onyx Black Sparkle</text>
+  <text x="14" y="147" font-size="11">13101 · K2</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#2D2B28</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#8E9089" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="url(#c13102-flecks)" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Slate Gray Sparkle</text>
+  <text x="156" y="147" font-size="11">13102 · D5</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#8E9089</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#792B36" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="url(#c13200-flecks)" />
+  <text x="298" y="132" font-size="10.5" font-weight="bold">Crimson Red Sparkle</text>
+  <text x="298" y="147" font-size="11">13200 · R2</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#792B36</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#CEA629" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="url(#c13402-flecks)" />
+  <circle cx="555" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="440" y="132" font-size="10.5" font-weight="bold">Classic Gold Sparkle</text>
+  <text x="440" y="147" font-size="11">13402 · Y1</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#CEA629</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#3F5443" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="url(#c13501-flecks)" />
+  <text x="582" y="132" font-size="10.5" font-weight="bold">Alpine Green Sparkle</text>
+  <text x="582" y="147" font-size="11">13501 · G3</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#3F5443</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#483D8B" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="url(#c13700-flecks)" />
+  <text x="724" y="132" font-size="10.5" font-weight="bold">Royal Purple Sparkle</text>
+  <text x="724" y="147" font-size="11">13700 · B7</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#483D8B</text>
+</svg>

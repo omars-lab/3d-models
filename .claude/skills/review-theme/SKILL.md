@@ -1,6 +1,6 @@
 ---
 name: review-theme
-description: Score a coaster's color themes through six made-up coffee-drinker personas (espresso purist, latte-and-pastry café regular, cold-brew minimalist, third-wave specialty fan, gift buyer, café owner buying sets) — a 1 to 5 score with a one-line reason from each, and an overall line — after looking at each theme's picture, and store the scores beside the themes in `docs/design/coaster/themes/<id>/reviews.yaml`. Use for "review the themes", "rate these color combinations", "what would customers think of these colors", "score the palettes as personas", or after the color-themes skill adds or recolors a theme (its gate fails until the review is redone). Simulated opinions, never customer research. Not for judging a print off the bed (review-print) or a pattern choice (prioritize-design).
+description: Score a coaster's color themes through six made-up coffee-drinker personas (espresso purist, latte-and-pastry café regular, cold-brew minimalist, third-wave specialty fan, gift buyer, café owner buying sets) — a 1 to 5 score with a one-line reason from each, and an overall line — after looking at each theme's picture (gradients, silk, sparkle, translucent and two-color spools included), and store the scores beside the themes in `docs/design/coaster/themes/<id>/reviews.yaml`. Use for "review the themes", "rate these color combinations", "what would customers think of these colors", "score the palettes as personas", or after the color-themes skill adds or recolors a theme (its gate fails until the review is redone). Simulated opinions, never customer research. Not for judging a print off the bed (review-print) or a pattern choice (prioritize-design).
 ---
 
 # review-theme — six coffee drinkers look at a color theme
@@ -22,7 +22,9 @@ customer feedback. Every gallery page and every reviews file says so.
 2. **Look at every picture you score.** Render the PNGs with
    `themes.py render <id> --png <scratch dir>` and open each one. Score what the picture shows, not
    the color names: a group can vanish under the straps, two named colors can blur together, and
-   one color can swamp the rest.
+   one color can swamp the rest. Silk sheen, sparkle flecks and see-through translucent are drawn
+   roughly, and a two-color spool as stripes whose place on each piece is luck; rubric point 5 in
+   `personas.md` says how to score them.
 3. **Read `themes.py check <id>`** for each theme's heads-up lines, plate count and cost. The café
    owner weighs plates and colors to buy; the others mostly do not.
 4. **Write the review.** `reviews.py stub <id> [<theme>]` prints the block with the theme's

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 198" width="866" height="198" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Pure: 5 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="198" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Pure</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">5 colors · finish: plain</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Pure White</text>
+  <text x="14" y="147" font-size="11">17100 · W00</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#000000" stroke="#00000033" stroke-width="1" />
+  <circle cx="271" cy="57" r="8" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="2" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Absolute Black</text>
+  <text x="156" y="147" font-size="11">17101 · K00</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#000000</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#F7CED7" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Milky Pink</text>
+  <text x="298" y="147" font-size="11">17200 · P00</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#F7CED7</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#FFB673" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Apricot</text>
+  <text x="440" y="147" font-size="11">17300 · A00</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#FFB673</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#A4DBE8" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Baby Blue</text>
+  <text x="582" y="147" font-size="11">17600 · B00</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#A4DBE8</text>
+</svg>

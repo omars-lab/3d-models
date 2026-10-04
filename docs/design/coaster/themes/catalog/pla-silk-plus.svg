@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 478" width="866" height="478" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Silk+: 13 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+    <linearGradient id="c13108-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13109-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13110-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13205-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13206-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13207-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13404-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13405-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13506-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13507-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13603-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13604-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13702-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+  </defs>
+  <rect width="866" height="478" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Silk+</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">13 colors · finish: silk+</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#5F6367" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="url(#c13108-sheen)" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Titan Gray</text>
+  <text x="14" y="147" font-size="11">13108 · D0</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#5F6367</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#C8C8C8" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="url(#c13109-sheen)" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Silver</text>
+  <text x="156" y="147" font-size="11">13109 · D1</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#C8C8C8</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="url(#c13110-sheen)" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">White</text>
+  <text x="298" y="147" font-size="11">13110 · W0</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#D02727" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="url(#c13205-sheen)" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Candy Red</text>
+  <text x="440" y="147" font-size="11">13205 · R0</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#D02727</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#BA9594" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="url(#c13206-sheen)" />
+  <circle cx="697" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Rose Gold</text>
+  <text x="582" y="147" font-size="11">13206 · R1</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#BA9594</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#F7ADA6" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="url(#c13207-sheen)" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Pink</text>
+  <text x="724" y="147" font-size="11">13207 · R2</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#F7ADA6</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#F3CFB2" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="url(#c13404-sheen)" />
+  <circle cx="129" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="272" font-size="12.5" font-weight="bold">Champagne</text>
+  <text x="14" y="287" font-size="11">13404 · Y0</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#F3CFB2</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#F4A925" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="url(#c13405-sheen)" />
+  <circle cx="271" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Gold</text>
+  <text x="156" y="287" font-size="11">13405 · Y1</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#F4A925</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="#018814" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="url(#c13506-sheen)" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Candy Green</text>
+  <text x="298" y="287" font-size="11">13506 · G0</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#018814</text>
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="#96DCB9" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="url(#c13507-sheen)" />
+  <text x="440" y="272" font-size="12.5" font-weight="bold">Mint</text>
+  <text x="440" y="287" font-size="11">13507 · G1</text>
+  <text x="440" y="301" font-size="10.5" fill="#555555">#96DCB9</text>
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="#A8C6EE" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="url(#c13603-sheen)" />
+  <text x="582" y="272" font-size="12.5" font-weight="bold">Baby Blue</text>
+  <text x="582" y="287" font-size="11">13603 · B0</text>
+  <text x="582" y="301" font-size="10.5" fill="#555555">#A8C6EE</text>
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="#008BDA" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="url(#c13604-sheen)" />
+  <text x="724" y="272" font-size="12.5" font-weight="bold">Blue</text>
+  <text x="724" y="287" font-size="11">13604 · B1</text>
+  <text x="724" y="301" font-size="10.5" fill="#555555">#008BDA</text>
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="#8671CB" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="url(#c13702-sheen)" />
+  <text x="14" y="412" font-size="12.5" font-weight="bold">Purple</text>
+  <text x="14" y="427" font-size="11">13702 · P0</text>
+  <text x="14" y="441" font-size="10.5" fill="#555555">#8671CB</text>
+</svg>

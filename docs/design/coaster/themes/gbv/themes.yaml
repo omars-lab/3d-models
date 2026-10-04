@@ -84,3 +84,51 @@ themes:
     name: Black and gold
     mood: Every piece gold in a black frame; the gift-box look, and only one color to buy.
     colors: { frame: black, middle: gold, kite: gold, hex: gold, star: gold, outer: gold }
+
+  # Gradients: one color in the middle stepping to another on the outer ring, each step the
+  # nearest real color (`suggest --helper gradient`). Four Matte blues make five rings, so one
+  # repeats.
+  - id: ice-to-navy
+    name: Ice to navy
+    mood: Pale ice in the middle deepening to navy at the rim, in a white frame; like looking down into cold water.
+    made_by: suggest --helper gradient --from ice-blue --to dark-blue
+    colors: { frame: ivory-white, middle: ice-blue, kite: sky-blue, hex: marine-blue, star: dark-blue, outer: dark-blue }
+
+  - id: navy-to-ice
+    name: Navy to ice
+    mood: The same blues turned inside out, a dark heart glowing out to a pale rim, held in black.
+    made_by: suggest --helper gradient --from ice-blue --to dark-blue --reverse
+    colors: { frame: black, middle: dark-blue, kite: dark-blue, hex: marine-blue, star: sky-blue, outer: ice-blue }
+
+  - id: latte-to-espresso
+    name: Latte to espresso
+    mood: Milky latte in the middle darkening to espresso at the edge, framed in white like the cup.
+    made_by: suggest --helper gradient --from latte-brown --to dark-chocolate
+    colors: { frame: ivory-white, middle: latte-brown, kite: caramel, hex: dark-brown, star: dark-brown, outer: dark-chocolate }
+
+  - id: sakura-to-plum
+    name: Sakura to plum
+    mood: Blossom pink at the heart, through lilac and a bright pink ring, to deep plum at the rim.
+    made_by: suggest --helper gradient --from 11201 --to 11204
+    colors: { frame: ivory-white, middle: sakura-pink, kite: lilac-purple, hex: pink, star: plum, outer: plum }
+
+  # Finishes: silk shines, sparkle has flecks, and a two-color spool changes along its length.
+  - id: silk-black-and-gold
+    name: Silk black and gold
+    mood: Black and gold again, in Silk Gold this time, so the pieces shine like brass against the frame.
+    colors: { frame: black, middle: silk-gold, kite: silk-gold, hex: silk-gold, star: silk-gold, outer: silk-gold }
+
+  - id: champagne-rose
+    name: Champagne and rose gold
+    mood: Champagne and rose gold Silk+ round a gold heart in a black frame; the jewelry box.
+    colors: { frame: black, middle: silk-plus-gold, kite: silk-plus-champagne, hex: silk-plus-rose-gold, star: silk-plus-champagne, outer: silk-plus-rose-gold }
+
+  - id: night-sky
+    name: Night sky
+    mood: Sparkling gold stars in deep blue, in a black frame with a fleck of glitter of its own.
+    colors: { frame: onyx-black-sparkle, middle: gold-sparkle, kite: marine-blue, hex: dark-blue, star: gold-sparkle, outer: dark-blue }
+
+  - id: gilded-rose
+    name: Gilded rose
+    mood: One Silk spool that turns from orange to rose as it runs, so every coaster comes out a little different.
+    colors: { frame: black, middle: silk-gilded-rose, kite: silk-gilded-rose, hex: silk-gilded-rose, star: silk-gilded-rose, outer: silk-gilded-rose }
