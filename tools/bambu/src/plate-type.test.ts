@@ -161,8 +161,24 @@ describe("setFilamentColor", () => {
     expect(JSON.parse(readFileSync(join(dir, "filament.json"), "utf8")).filament_colour).toEqual(["#F5547C"]);
   });
 
-  it("refuses to guess which of two filaments it colors", () => {
+  it("refuses to guess which of two filaments one color is for", () => {
     const dir = mkdtempSync(join(tmpdir(), "filament-color-"));
-    expect(() => setFilamentColor([preset("filament"), preset("filament")], "#000000", dir)).toThrow(/colors one filament/);
+    expect(() => setFilamentColor([preset("filament"), preset("filament")], "#000000", dir)).toThrow(
+      /1 filament color\(s\) for 2 filament preset\(s\)/,
+    );
+  });
+
+  it("colors two slots of one filament each in its own color and its own file", () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-color-"));
+    const pink = { ...preset("filament"), out: join(dir, "pla.json") };
+    const black = { ...preset("filament"), out: join(dir, "pla #2.json") };
+    setFilamentColor([preset("process"), pink, black], ["#f5547c", "#000000"], dir);
+    expect(JSON.parse(readFileSync(join(dir, "pla.json"), "utf8")).filament_colour).toEqual(["#F5547C"]);
+    expect(JSON.parse(readFileSync(join(dir, "pla #2.json"), "utf8")).filament_colour).toEqual(["#000000"]);
+  });
+
+  it("refuses a color list that does not match the filaments", () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-color-"));
+    expect(() => setFilamentColor([preset("filament")], ["#F5547C", "#000000"], dir)).toThrow(/one color per filament/);
   });
 });

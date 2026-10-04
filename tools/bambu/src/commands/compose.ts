@@ -12,7 +12,7 @@
 // mints no parallel id, so nothing forks (CLAUDE.md "a migration never buys a fork", D-052).
 
 import { Command } from "commander";
-import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync, copyFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
@@ -29,7 +29,7 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
-import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs } from "./slice.js";
+import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs, filamentCount } from "./slice.js";
 import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
 import type { FlattenedPreset } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
@@ -51,8 +51,10 @@ import { writePlatePreview, readBeds, readPlacements, type Placement, type Slice
 
 export interface PlateProfile {
   settings?: string; // "<machine>;<process>" preset display names (-s)
-  filament?: string; // filament preset display name(s) (-f)
-  color?: string; // "#RRGGBB": the filament color the slice carries, so the send matches that tray (default: the preset's)
+  filament?: string; // filament preset display name(s) (-f), ';'-joined: one per filament slot
+  // "#RRGGBB", or a list with one per filament slot: the color(s) the slice carries, so the send
+  // matches each slot to its tray (default: each preset's own)
+  color?: string | string[];
 }
 export interface ManifestItemBkr {
   bkr: string; // "bikar:<path>" source
@@ -61,11 +63,13 @@ export interface ManifestItemBkr {
   window?: string; // `--window <side>[@x,y]`: a square sample cut at the coaster's own scale (bikar #293)
   count?: number; // copies on the plate (default 1)
   label?: string; // what the person at the printer calls it ("GAP 05"); names it in the bed map, never in the id
+  filament?: number; // the 1-based filament slot it prints in; needed on every item when the plate has two or more
 }
 export interface ManifestItemIteration {
   iteration: string; // an already-known it-<sha12>
   count?: number;
   label?: string;
+  filament?: number;
 }
 export interface ManifestItemStl {
   stl: string; // repo-relative path of a mesh file (may be gitignored, e.g. .bambu/imports/<name>.stl)
@@ -73,6 +77,7 @@ export interface ManifestItemStl {
   scale?: number; // uniform scale about the origin (default 1)
   count?: number;
   label?: string;
+  filament?: number;
 }
 export type ManifestItem = ManifestItemBkr | ManifestItemIteration | ManifestItemStl;
 export interface PlateManifest {
@@ -202,15 +207,45 @@ export function parseManifest(text: string): PlateManifest {
     throw new Error(`\`beds:\` must be an integer >= 1 (the most beds the plate may use), got ${JSON.stringify(m.beds)}`);
   }
   const color = (m.profile as PlateProfile | undefined)?.color;
-  if (color !== undefined && (typeof color !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(color))) {
-    throw new Error(`\`profile.color:\` must be "#RRGGBB" (the loaded tray's color), got ${JSON.stringify(color)}`);
+  const isHex = (c: unknown) => typeof c === "string" && /^#[0-9A-Fa-f]{6}$/.test(c);
+  if (color !== undefined && !(Array.isArray(color) ? color.length > 0 && color.every(isHex) : isHex(color))) {
+    throw new Error(
+      `\`profile.color:\` must be "#RRGGBB" (the loaded tray's color), or a list of them with one per filament, got ${JSON.stringify(color)}`,
+    );
   }
+  const filament = (m.profile as PlateProfile | undefined)?.filament;
+  if (typeof filament === "string") checkItemFilaments(items as ManifestItem[], filamentCount(filament));
   return {
     bed: typeof m.bed === "string" ? m.bed : undefined,
     beds: typeof m.beds === "number" ? m.beds : undefined,
     profile: (m.profile as PlateProfile) ?? undefined,
     items: items as ManifestItem[],
   };
+}
+
+/** Each item's `filament:` slot against the plate's filament count. One filament: the field may be
+ *  left out (slot 1). Two or more: every item names its slot, since a plate where an item silently
+ *  takes slot 1 prints it in the wrong color. Throws naming the item. */
+export function checkItemFilaments(items: ManifestItem[], count: number): void {
+  items.forEach((it, i) => {
+    const f = it.filament;
+    if (f === undefined) {
+      if (count > 1) {
+        throw new Error(`items[${i}]: the plate has ${count} filaments, so every item needs \`filament:\` (its slot, 1 to ${count})`);
+      }
+      return;
+    }
+    if (typeof f !== "number" || !Number.isInteger(f) || f < 1 || f > Math.max(count, 1)) {
+      throw new Error(`items[${i}]: \`filament:\` must be a slot from 1 to ${Math.max(count, 1)}, got ${JSON.stringify(f)}`);
+    }
+  });
+}
+
+/** The name an item's mesh is handed to the slicer under, which the arranged object keeps: the bed
+ *  map joins objects back to items by it. Slot 1 keeps `<iteration>.stl`, so one-color plates are
+ *  unchanged; another slot adds `-f<slot>`, since two colors of one piece share an iteration id. */
+export function stagedName(r: { iteration: string; filament: number }): string {
+  return r.filament > 1 ? `${r.iteration}-f${r.filament}.stl` : `${r.iteration}.stl`;
 }
 
 // ── The bed and the fit pre-check (§6) ──────────────────────────────────────────────────────────
@@ -292,6 +327,7 @@ export interface BedMapRow {
   piece: string;
   params: Record<string, number>;
   iteration: string;
+  filament: number; // the 1-based filament slot it prints in
   x: number; // centre, bed millimetres from the front-left corner
   y: number;
   turn_deg: number;
@@ -300,14 +336,14 @@ export interface BedMapRow {
 /**
  * Join the arranged objects back to the plate items, so sets that look alike (sheets-04: four rings of
  * the same hexagons at four gaps) can be told apart on the bed. PURE. An object carries its input
- * file's name, `<iteration>.stl`; an item handed in `count` times, or two items with one recipe, give
+ * file's name (`stagedName`: `<iteration>.stl`, `-f<slot>` past slot 1); an item handed in `count` times, or two items with one recipe, give
  * several objects one name, and those take the items in manifest order — they are the same geometry,
  * so which copy is which does not change what prints. An object no item claims keeps entry "".
  */
 export function bedMap(placements: Placement[], resolved: ResolvedItem[]): BedMapRow[] {
   const waiting = new Map<string, ResolvedItem[]>();
   for (const r of resolved) {
-    const key = `${r.iteration}.stl`;
+    const key = stagedName(r);
     const list = waiting.get(key) ?? [];
     for (let c = 0; c < r.count; c++) list.push(r);
     waiting.set(key, list);
@@ -324,6 +360,7 @@ export function bedMap(placements: Placement[], resolved: ResolvedItem[]): BedMa
         piece: r?.piece ?? "",
         params: r?.params ?? {},
         iteration: r?.iteration ?? p.name.replace(/\.stl$/i, ""),
+        filament: r?.filament ?? 1,
         x: round(p.x),
         y: round(p.y),
         turn_deg: round(p.turnDeg),
@@ -364,6 +401,7 @@ export interface ResolvedItem {
   sourceSha256: string;
   iteration: string; // it-<sha12>
   label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
+  filament: number; // the 1-based filament slot (1 when the item names none)
   file?: string; // an `stl:` item's absolute path: copied (scaled by params.scale) instead of rendered
 }
 
@@ -447,7 +485,13 @@ function resolveStlItem(
   }
   const params: Record<string, number> = item.scale !== undefined && item.scale !== 1 ? { scale: item.scale } : {};
   const source = `3d-models:${item.stl}`;
-  const key: IterationKey = { source, source_sha256: item.sha256, piece: "", params, slice_profile: sliceProfile };
+  const key: IterationKey = {
+    source,
+    source_sha256: item.sha256,
+    piece: "",
+    params,
+    slice_profile: itemSliceProfile(item, sliceProfile),
+  };
   return {
     entry: `c${n}`,
     sourcePath: item.stl,
@@ -459,8 +503,28 @@ function resolveStlItem(
     sourceSha256: item.sha256,
     iteration: iterationId(key),
     label: item.label ?? "",
+    filament: item.filament ?? 1,
     file,
   };
+}
+
+/** The slice profile that completes one item's iteration key. An item with a `filament:` slot is
+ *  printed in that slot's preset, so its key names that preset alone; an item without one keeps the
+ *  plate's whole filament string, so every id minted before slots existed stays the same. */
+export function itemSliceProfile(
+  item: { filament?: number },
+  sliceProfile: { settings: string; filament: string },
+): { settings: string; filament: string } {
+  if (item.filament === undefined) return sliceProfile;
+  const slots = sliceProfile.filament
+    .split(";")
+    .map((t) => t.trim())
+    .filter(Boolean);
+  const preset = slots[item.filament - 1];
+  if (!preset) {
+    throw new Error(`filament slot ${item.filament} is past the plate's ${slots.length} filament(s)`);
+  }
+  return { settings: sliceProfile.settings, filament: preset };
 }
 
 /** Resolve every manifest item to its geometry pins + iteration id. D-072: an item is the GEOMETRY
@@ -515,7 +579,7 @@ export async function resolveManifestItems(
       piece,
       params,
       ...(window ? { window } : {}), // absent unless cut: pre-window ids stay byte-identical
-      slice_profile: sliceProfile,
+      slice_profile: itemSliceProfile(item, sliceProfile),
     };
     resolved.push({
       entry: `c${n}`,
@@ -528,6 +592,7 @@ export async function resolveManifestItems(
       sourceSha256,
       iteration: iterationId(key),
       label: item.label ?? "",
+      filament: item.filament ?? 1,
     });
   }
   return resolved;
@@ -598,8 +663,10 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
 
   // 3. Resolve each manifest item to its geometry pins + iteration id (shared with `slice coaster`).
   const sliceProfile = { settings: settingsName, filament: filamentName };
+  const filaments = filamentCount(filamentName);
   let resolved: ResolvedItem[];
   try {
+    checkItemFilaments(manifest.items, filaments); // again: -f may have changed the count
     resolved = await resolveManifestItems(manifest.items, bikarRef, sliceProfile);
   } catch (err) {
     console.error((err as Error).message);
@@ -668,11 +735,19 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   });
   const check = bedFitPrecheck(parts, bed);
 
-  // 6. Build the Studio argv: all STL paths as trailing inputs (count copies each), --arrange 1.
+  // 6. Build the Studio argv: all STL paths as trailing inputs (count copies each), --arrange 1. Each
+  //    mesh goes in under its staged name, which the bed map reads back; one render serves every slot.
+  //    With two or more filaments, each input also names its slot (--load-filament-ids).
   const inputs: string[] = [];
+  const filamentIds: number[] = [];
   for (const r of resolved) {
-    const stl = cache.get(cacheKeyOf(r))!;
-    for (let c = 0; c < r.count; c++) inputs.push(stl);
+    const rendered = cache.get(cacheKeyOf(r))!;
+    const stl = join(scratch, stagedName(r));
+    if (stl !== rendered && !existsSync(stl)) copyFileSync(rendered, stl);
+    for (let c = 0; c < r.count; c++) {
+      inputs.push(stl);
+      filamentIds.push(r.filament);
+    }
   }
   const outDir = opts.outputdir ? resolve(opts.outputdir) : platesDir();
   mkdirSync(outDir, { recursive: true });
@@ -710,7 +785,13 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     inputs,
     outDir,
     outFile,
-    { settings: settingsResolved, filament: filamentResolved, arrange: opts.arrange, plate: "0" },
+    {
+      settings: settingsResolved,
+      filament: filamentResolved,
+      arrange: opts.arrange,
+      plate: "0",
+      ...(filaments > 1 ? { filamentIds } : {}), // one filament: the argv stays as it always was
+    },
     raw,
   );
 
@@ -722,7 +803,8 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     for (const line of renderPlan) console.log(line);
     console.log("resolved iterations:");
     for (const r of resolved) {
-      console.log(`  ${r.entry}: ${r.iteration} ×${r.count} (${pieceLabel(r)})${r.label ? ` "${r.label}"` : ""}`);
+      const slot = filaments > 1 ? ` filament ${r.filament}` : "";
+      console.log(`  ${r.entry}: ${r.iteration} ×${r.count} (${pieceLabel(r)})${r.label ? ` "${r.label}"` : ""}${slot}`);
     }
     console.log(`bed-fit pre-check: ${check.ok ? "PASS (necessary only — --arrange decides tiling)" : "FAIL"}`);
     for (const f of check.failures) console.log(`  ✗ ${f}`);
@@ -775,7 +857,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const beds = (await readBeds(outPath)) ?? [];
   const entryByStl = new Map<string, string[]>();
   for (const r of resolved) {
-    const key = `${r.iteration}.stl`;
+    const key = stagedName(r);
     const label = `${r.entry} ${basename(r.sourcePath)}${r.piece ? ` piece ${r.piece}` : ""}`;
     entryByStl.set(key, [...(entryByStl.get(key) ?? []), label]);
   }
@@ -823,7 +905,8 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     for (const row of rows) {
       const params = Object.entries(row.params).map(([k, v]) => `${k}=${v}`).join(" ");
       const what = [row.piece || "(default solid)", params].filter(Boolean).join(" ");
-      console.log(`  ${row.label.padEnd(10)} ${row.entry.padEnd(4)} ${what.padEnd(24)} at ${row.x}, ${row.y}`);
+      const slot = filaments > 1 ? ` filament ${row.filament}` : "";
+      console.log(`  ${row.label.padEnd(10)} ${row.entry.padEnd(4)} ${what.padEnd(24)} at ${row.x}, ${row.y}${slot}`);
     }
     const unmatched = rows.filter((r) => !r.entry);
     if (unmatched.length > 0) console.error(`warning: ${unmatched.length} object(s) on the bed matched no plate item.`);

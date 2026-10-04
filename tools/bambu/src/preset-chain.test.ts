@@ -148,6 +148,15 @@ describe("flattenPreset", () => {
     expect(written.wall_generator).toBe("classic");
     expect(written.inherits).toBeUndefined();
   });
+
+  it("gives one filament listed in two slots two files, so each slot keeps its own color", () => {
+    const dir = mkdtempSync(join(tmpdir(), "chain-"));
+    const pla = preset(dir, "pla.json", { type: "filament", name: "pla" });
+    const out = mkdtempSync(join(tmpdir(), "flat-"));
+    const r = flattenPresetList(`${pla};${pla}`, mapLookup({}), out);
+    expect(r.list).toBe(`${join(out, "pla.json")};${join(out, "pla #2.json")}`);
+    expect(r.presets.map((p) => p.out)).toEqual([join(out, "pla.json"), join(out, "pla #2.json")]);
+  });
 });
 
 describe("studioPresetLookup", () => {

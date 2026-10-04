@@ -32,6 +32,9 @@ export interface FlattenedPreset {
   chain: string[];
   /** The merged settings, `inherits` removed. */
   config: PresetConfig;
+  /** The file it was written to, once written: a preset listed twice (one filament in two slots) gets
+   *  two files, so coloring one slot cannot rewrite the other. */
+  out?: string;
 }
 
 function readPreset(path: string): PresetConfig {
@@ -123,10 +126,12 @@ export function flattenPreset(leafPath: string, lookup: PresetLookup, depth = 0)
   return { leaf: leafPath, type, chain: names, config };
 }
 
-/** Write the flattened preset to `outDir/<leaf basename>` and return that path. */
+/** Write the flattened preset to the file it was written to before, else `outDir/<leaf basename>`,
+ *  and return that path. */
 export function writeFlattened(flat: FlattenedPreset, outDir: string): string {
-  const out = join(outDir, basename(flat.leaf));
+  const out = flat.out ?? join(outDir, basename(flat.leaf));
   writeFileSync(out, JSON.stringify(flat.config, null, 2) + "\n");
+  flat.out = out;
   return out;
 }
 
@@ -142,12 +147,19 @@ export function flattenPresetList(
   outDir: string,
 ): { list: string; presets: FlattenedPreset[] } {
   const presets: FlattenedPreset[] = [];
+  const used = new Set<string>();
   const paths = list
     .split(";")
     .map((t) => t.trim())
     .filter(Boolean)
     .map((p) => {
       const flat = flattenPreset(p, lookup);
+      // The second slot of one filament: "<name> #2.json", so each slot keeps its own color.
+      const name = basename(p, ".json");
+      let file = `${name}.json`;
+      for (let n = 2; used.has(file); n++) file = `${name} #${n}.json`;
+      used.add(file);
+      flat.out = join(outDir, file);
       presets.push(flat);
       return writeFlattened(flat, outDir);
     });
