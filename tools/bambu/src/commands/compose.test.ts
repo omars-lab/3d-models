@@ -1,11 +1,17 @@
 import { describe, expect, it } from "vitest";
+import { createHash } from "node:crypto";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import {
   parseManifest,
   bedFitPrecheck,
   resolveBed,
   findIterationGeometry,
+  resolveManifestItems,
   type PartFootprint,
 } from "./compose.js";
+import { scaledStl, stlBoundsFromBuffer } from "../mesh.js";
 
 describe("parseManifest — validate before anything renders", () => {
   it("accepts a bkr item with numeric params and a count", () => {
@@ -86,6 +92,80 @@ describe("parseManifest — validate before anything renders", () => {
     expect(() => parseManifest(text)).toThrow(/cannot also carry bkr/);
   });
 });
+
+describe("an `stl:` item — a local mesh, pinned by its hash", () => {
+  const SHA = "a".repeat(64);
+  const stlItem = (...extra: string[]) =>
+    ["items:", "  - stl: .bambu/imports/bear.stl", `    sha256: ${SHA}`, ...extra].join("\n");
+
+  it("accepts a path inside the repo with a hash, a scale and a count", () => {
+    const m = parseManifest(stlItem("    scale: 5", "    count: 2", "    label: BEAR"));
+    expect(m.items[0]).toMatchObject({ stl: ".bambu/imports/bear.stl", sha256: SHA, scale: 5, count: 2 });
+  });
+
+  it("refuses a path outside the repo, a missing hash, a bad scale, and bikar fields", () => {
+    const bad = (text: string, why: RegExp) => expect(() => parseManifest(text)).toThrow(why);
+    bad(["items:", "  - stl: /Users/x/bear.stl", `    sha256: ${SHA}`].join("\n"), /inside this repo/);
+    bad(["items:", "  - stl: ../bear.stl", `    sha256: ${SHA}`].join("\n"), /inside this repo/);
+    bad(["items:", "  - stl: bear.stl"].join("\n"), /sha256/);
+    for (const s of ["0", "-1", "big"]) bad(stlItem(`    scale: ${s}`), /scale/);
+    bad(stlItem("    piece: Orb"), /cannot also carry `piece:`/);
+    bad(stlItem("    bkr: bikar:foo.bkr"), /cannot also carry `bkr:`/);
+  });
+});
+
+describe("resolveManifestItems — an `stl:` item checks its file", () => {
+  const profile = { settings: "X2D;0.20 Std", filament: "PLA Basic" };
+  const root = mkdtempSync(join(tmpdir(), "compose-stl-"));
+  mkdirSync(join(root, ".bambu", "imports"), { recursive: true });
+  const body = asciiTriangle();
+  writeFileSync(join(root, ".bambu", "imports", "bear.stl"), body);
+  const sha = createHash("sha256").update(body).digest("hex");
+  const item = (extra: Record<string, unknown> = {}) => ({ stl: ".bambu/imports/bear.stl", sha256: sha, ...extra });
+
+  it("pins the file as 3d-models:<path> with its hash, and a scale makes another recipe", async () => {
+    const [plain, big, one] = await resolveManifestItems([item(), item({ scale: 5 }), item({ scale: 1 })], "ref", profile, root);
+    expect(plain).toMatchObject({ sourceAtRef: "3d-models:.bambu/imports/bear.stl", sourceSha256: sha, params: {} });
+    expect(plain!.file).toBe(join(root, ".bambu", "imports", "bear.stl"));
+    expect(big!.params).toEqual({ scale: 5 });
+    expect(big!.iteration).not.toBe(plain!.iteration);
+    expect(one!.iteration).toBe(plain!.iteration); // scale 1 is no scale
+  });
+
+  it("refuses a file whose hash is not the recipe's, and a file that is not there", async () => {
+    await expect(resolveManifestItems([item({ sha256: "b".repeat(64) })], "ref", profile, root)).rejects.toThrow(/not the b{64}/);
+    await expect(
+      resolveManifestItems([{ stl: ".bambu/imports/none.stl", sha256: sha }], "ref", profile, root),
+    ).rejects.toThrow(/no such file/);
+  });
+});
+
+describe("scaledStl — the copy a local item puts on the plate", () => {
+  it("scales an ASCII or binary mesh about the origin and writes binary", () => {
+    const ascii = Buffer.from(asciiTriangle());
+    const big = scaledStl(ascii, 5);
+    expect(big.readUInt32LE(80)).toBe(1);
+    expect(stlBoundsFromBuffer(big)).toEqual({ min: [0, 0, 0], max: [10, 15, 20] });
+    const again = scaledStl(big, 0.5); // binary in, binary out
+    expect(stlBoundsFromBuffer(again)).toEqual({ min: [0, 0, 0], max: [5, 7.5, 10] });
+    expect(() => scaledStl(ascii, 0)).toThrow(/scale/);
+  });
+});
+
+/** One triangle spanning 2 × 3 × 4 mm from the origin. */
+function asciiTriangle(): string {
+  return [
+    "solid t",
+    "facet normal 0 0 1",
+    "outer loop",
+    "vertex 0 0 0",
+    "vertex 2 0 4",
+    "vertex 0 3 0",
+    "endloop",
+    "endfacet",
+    "endsolid t",
+  ].join("\n");
+}
 
 describe("bedFitPrecheck — the per-part check is the load-bearing one (K6/D2)", () => {
   const bed = resolveBed("x2d"); // 256×256

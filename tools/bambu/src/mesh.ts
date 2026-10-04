@@ -93,6 +93,33 @@ export function stlBoundsFromBuffer(buf: Buffer): Bounds | null {
   return looksAscii(buf) ? boundsFromAscii(buf.toString("latin1")) : boundsFromBinary(buf);
 }
 
+/** A binary STL of `buf` scaled by `s` about the origin. Normals stay as they are: a uniform scale
+ *  does not turn a face. An ASCII input comes out binary, since the slicer reads either. */
+export function scaledStl(buf: Buffer, s: number): Buffer {
+  if (!(s > 0) || !Number.isFinite(s)) throw new Error(`scale must be a number > 0, got ${s}`);
+  if (!looksAscii(buf)) {
+    if (buf.length < 84 || buf.length < 84 + buf.readUInt32LE(80) * 50) throw new Error("not a valid binary STL");
+    const out = Buffer.from(buf);
+    const tris = out.readUInt32LE(80);
+    for (let t = 0; t < tris; t++) {
+      const base = 84 + t * 50 + 12; // skip the 12-byte normal
+      for (let k = 0; k < 9; k++) out.writeFloatLE(out.readFloatLE(base + k * 4) * s, base + k * 4);
+    }
+    return out;
+  }
+  const re = /vertex\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)\s+(-?[\d.eE+]+)/g;
+  const v: number[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(buf.toString("latin1"))) !== null) v.push(Number(m[1]) * s, Number(m[2]) * s, Number(m[3]) * s);
+  const tris = Math.floor(v.length / 9);
+  const out = Buffer.alloc(84 + tris * 50);
+  out.writeUInt32LE(tris, 80);
+  for (let t = 0; t < tris; t++) {
+    for (let k = 0; k < 9; k++) out.writeFloatLE(v[t * 9 + k]!, 84 + t * 50 + 12 + k * 4);
+  }
+  return out;
+}
+
 /** Read an STL file and return its bounding box, or throw a clear error if it cannot be parsed. */
 export function stlBounds(path: string): Bounds {
   const buf = readFileSync(path);

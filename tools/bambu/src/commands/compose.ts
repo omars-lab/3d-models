@@ -33,7 +33,7 @@ import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs } from
 import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
 import type { FlattenedPreset } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
-import { stlBounds, footprint } from "../mesh.js";
+import { stlBounds, footprint, scaledStl } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
@@ -44,6 +44,10 @@ import { writePlatePreview, readBeds, readPlacements, type Placement, type Slice
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
 //   - {bkr, piece, params, count} — the geometry half, completed by the plate profile.
 //   - {iteration, count}          — an already-known it-<sha12> (reprint-by-id; see resolveItem).
+// A third renders nothing: {stl, sha256, scale, count} — a mesh file inside this repo, pinned by its
+// hash like a sampler sheet's vendored cell, so a model bikar did not make can share a plate. Its file
+// may be gitignored (`.bambu/imports/`): a third-party model whose license does not allow sharing it
+// stays out of this public repo, and the hash still refuses a different file under the same name.
 
 export interface PlateProfile {
   settings?: string; // "<machine>;<process>" preset display names (-s)
@@ -63,7 +67,14 @@ export interface ManifestItemIteration {
   count?: number;
   label?: string;
 }
-export type ManifestItem = ManifestItemBkr | ManifestItemIteration;
+export interface ManifestItemStl {
+  stl: string; // repo-relative path of a mesh file (may be gitignored, e.g. .bambu/imports/<name>.stl)
+  sha256: string; // the file's sha256: a different file under the same path is refused
+  scale?: number; // uniform scale about the origin (default 1)
+  count?: number;
+  label?: string;
+}
+export type ManifestItem = ManifestItemBkr | ManifestItemIteration | ManifestItemStl;
 export interface PlateManifest {
   bed?: string; // bed footprint name (default x2d)
   beds?: number; // the most beds the arrange may use (default 1); a spill past it is refused
@@ -73,6 +84,27 @@ export interface PlateManifest {
 
 function isIterationItem(it: ManifestItem): it is ManifestItemIteration {
   return typeof (it as ManifestItemIteration).iteration === "string";
+}
+
+function isStlItem(it: ManifestItem): it is ManifestItemStl {
+  return typeof (it as ManifestItemStl).stl === "string";
+}
+
+/** Check a local-file item's own fields. Same path and hash rules as a sheet's vendored cell. */
+function checkStlItem(it: Record<string, unknown>, where: string): void {
+  const p = it.stl;
+  if (typeof p !== "string" || !p.trim() || p.startsWith("/") || p.split("/").includes("..")) {
+    throw new Error(`${where}: \`stl:\` must be a path inside this repo, e.g. .bambu/imports/<name>.stl`);
+  }
+  for (const k of ["bkr", "piece", "params", "window", "iteration"]) {
+    if (it[k] !== undefined) throw new Error(`${where}: an \`stl:\` item cannot also carry \`${k}:\` — it renders nothing`);
+  }
+  if (typeof it.sha256 !== "string" || !/^[0-9a-f]{64}$/.test(it.sha256)) {
+    throw new Error(`${where}: an \`stl:\` item needs \`sha256:\` (64 lowercase hex) so a changed file is refused`);
+  }
+  if (it.scale !== undefined && (typeof it.scale !== "number" || !Number.isFinite(it.scale) || !(it.scale > 0))) {
+    throw new Error(`${where}: \`scale:\` must be a number > 0, got ${JSON.stringify(it.scale)}`);
+  }
 }
 
 /** A parsed `--window` value: the square's side and its centre in the coaster's own frame. */
@@ -123,11 +155,13 @@ export function parseManifest(text: string): PlateManifest {
     if (!raw || typeof raw !== "object") throw new Error(`items[${i}] is not a mapping`);
     const it = raw as Record<string, unknown>;
     const where = `items[${i}]`;
-    if (typeof it.iteration === "string") {
+    if (it.stl !== undefined) {
+      checkStlItem(it, where);
+    } else if (typeof it.iteration === "string") {
       if (it.bkr || it.piece) throw new Error(`${where}: an \`iteration:\` item cannot also carry bkr/piece`);
     } else {
       if (typeof it.bkr !== "string" || !it.bkr.startsWith("bikar:")) {
-        throw new Error(`${where}: \`bkr:\` must be a "bikar:<path>" string (or use \`iteration:\`)`);
+        throw new Error(`${where}: \`bkr:\` must be a "bikar:<path>" string (or use \`iteration:\` or \`stl:\`)`);
       }
       if (it.piece !== undefined && (typeof it.piece !== "string" || !it.piece)) {
         throw new Error(`${where}: \`piece:\` must be a non-empty string (a named piece/tile/clip); omit it to render the file's default solid`);
@@ -330,6 +364,7 @@ export interface ResolvedItem {
   sourceSha256: string;
   iteration: string; // it-<sha12>
   label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
+  file?: string; // an `stl:` item's absolute path: copied (scaled by params.scale) instead of rendered
 }
 
 /** Resolve a bikar-tracked blob's source_sha256 at a ref, or throw a clear error. */
@@ -389,6 +424,45 @@ export function findIterationGeometry(
   return hits[0]?.geom ?? null;
 }
 
+/** An `stl:` item's pins: the file must be there and must hash to the recipe's sha256. Its iteration
+ *  key names the file (`3d-models:<path>`, as a sheet's vendored cell is recorded) and its scale, so
+ *  the same file at another size is another recipe. */
+function resolveStlItem(
+  item: ManifestItemStl,
+  n: number,
+  root: string,
+  sliceProfile: { settings: string; filament: string },
+): ResolvedItem {
+  const where = `items[${n - 1}]`;
+  const file = join(root, item.stl);
+  if (!existsSync(file)) {
+    throw new Error(
+      `${where}: no such file ${item.stl} under ${root}. A gitignored import lives in one checkout only: ` +
+        `copy it there (its sha256 is in the recipe), or compose from the checkout that has it.`,
+    );
+  }
+  const sha = hashFile(file);
+  if (sha !== item.sha256) {
+    throw new Error(`${where}: ${item.stl} has sha256 ${sha}, not the ${item.sha256} the recipe was written with`);
+  }
+  const params: Record<string, number> = item.scale !== undefined && item.scale !== 1 ? { scale: item.scale } : {};
+  const source = `3d-models:${item.stl}`;
+  const key: IterationKey = { source, source_sha256: item.sha256, piece: "", params, slice_profile: sliceProfile };
+  return {
+    entry: `c${n}`,
+    sourcePath: item.stl,
+    sourceAtRef: source,
+    piece: "",
+    params,
+    window: "",
+    count: item.count ?? 1,
+    sourceSha256: item.sha256,
+    iteration: iterationId(key),
+    label: item.label ?? "",
+    file,
+  };
+}
+
 /** Resolve every manifest item to its geometry pins + iteration id. D-072: an item is the GEOMETRY
  *  HALF of the key, completed by the plate's one slice profile — the manifest mints no parallel id, so
  *  nothing forks (CLAUDE.md "a migration never buys a fork"). Shared by `slice compose` (loose-STL
@@ -398,11 +472,16 @@ export async function resolveManifestItems(
   items: ManifestItem[],
   bikarRef: string,
   sliceProfile: { settings: string; filament: string },
+  root: string = repoRoot() ?? process.cwd(),
 ): Promise<ResolvedItem[]> {
   const resolved: ResolvedItem[] = [];
   let n = 0;
   for (const item of items) {
     n += 1;
+    if (isStlItem(item)) {
+      resolved.push(resolveStlItem(item, n, root, sliceProfile));
+      continue;
+    }
     let sourcePath: string;
     let piece: string;
     let params: Record<string, number>;
@@ -537,7 +616,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const renderPlan: string[] = [];
   const cacheKeyOf = (r: ResolvedItem): string =>
     `${r.sourceSha256}:${r.piece}:${JSON.stringify(r.params)}:${r.window}`;
-  const pieceLabel = (r: ResolvedItem): string => (r.piece ? r.piece : "default solid");
+  const pieceLabel = (r: ResolvedItem): string => (r.file ? `file ${basename(r.sourcePath)}` : r.piece ? r.piece : "default solid");
   for (const r of resolved) {
     const ck = cacheKeyOf(r);
     if (cache.has(ck)) {
@@ -545,6 +624,20 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       continue;
     }
     const stl = join(scratch, `${r.iteration}.stl`);
+    if (r.file) {
+      // A local mesh renders nothing: copy it, scaled, under its iteration name so the bed map finds it.
+      renderPlan.push(`  ${r.entry}: copy ${pieceLabel(r)} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
+      try {
+        writeFileSync(stl, scaledStl(readFileSync(r.file), r.params.scale ?? 1));
+        cache.set(ck, stl);
+        footprints.set(ck, footprint(stlBounds(stl)));
+      } catch (err) {
+        console.error(`${r.entry} (${r.sourcePath}): ${(err as Error).message}`);
+        process.exitCode = 1;
+        return;
+      }
+      continue;
+    }
     // `--piece` renders a NAMED piece/tile/clip; a plain orb has none, so omit the flag and bikar
     // renders the file's default last solid (its own model — the only way to render a clip is --piece).
     const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "-o", stl];
@@ -746,7 +839,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       entry: r.entry,
       source: r.sourceAtRef, // @ref stripped by the scaffolder; the ref is pinned in pins.bikar_ref
       piece: r.piece || undefined, // "" (default solid) is recorded as an absent key, not an empty string
-
+      sourceSha256: r.file ? r.sourceSha256 : undefined, // a local file has no bikar blob: record its own hash
       params: r.params,
       window: r.window || undefined,
       count: r.count,
