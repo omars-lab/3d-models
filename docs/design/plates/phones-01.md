@@ -2,7 +2,7 @@
 plate: phones-01
 recipe: phones-01.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone?"
@@ -94,6 +94,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-04 | approved | Omar, in chat: "approve phones 1 and start print" | iteration 1 @ cd19dfe7e6 | |
 
 ## Timeline
 
