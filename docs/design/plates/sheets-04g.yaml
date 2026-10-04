@@ -1,0 +1,56 @@
+# sheets-04g — the bigger gBV coaster and all its pieces on one plate, the color picked at the send
+#
+# Omar, 2026-10-04: "i dont want to do multi color plate anymore, instead i want to go back to
+# single plate with all the pieces ... then have the option to choose color at print time". The
+# bigger coaster and its pieces had been split over three plates, one color each (sheets-04d, the
+# coaster in green; sheets-04e and 04f, the pieces in pink and black), and on sheets-04d he wrote
+# "i want ot remove this plate all together". This plate puts them back on one bed, the way
+# sheets-04 printed the first coaster with its pieces, and the three plates are gone.
+#
+# The coaster and the pieces are the ones sheets-04d/e/f held, unchanged: the gBV minimal coaster
+# at size 112.5, strap 3.75, height 4.4, round 1.25, and its 41 pieces at the same size, strap and
+# height, gap 0, each ring packed in two interlaced rows by bikar's `pack zipper`. The phone and
+# the gummy bear are left off: they were sheets-04d's extras, not part of the construction.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"` matches
+# that color to a loaded tray, and feeds the whole plate from it.
+#
+#   COASTER  the gBV minimal coaster at size 112.5, strap 3.75, height 4.4, round 1.25 (1)
+#   MIDDLE   the twenty-sided piece in the middle (1)
+#   KITE     the small four-sided kites (10)
+#   HEX      the inner ring of six-sided pieces (10)
+#   STAR     the ten-pointed stars (10)
+#   OUTER    the outer ring of six-sided pieces (10)
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sheets-04g.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  MIDDLE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  KITE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Hex
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  HEX
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Star
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  STAR
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Outer
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  OUTER

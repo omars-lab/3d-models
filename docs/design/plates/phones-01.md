@@ -22,7 +22,7 @@ pictures:
 # phones-01 — four mini iPhones, two sizes, pink and black
 
 **In short.** You asked "can we actually just do a plate with 2 phones", then "do current size for
-2 and 1/4 size for another 2". This plate is the phone from [sheets-04d](sheets-04d.md) four
+2 and 1/4 size for another 2". This plate is the phone from sheets-04d (a plate removed since) four
 times: a pink one and a black one at the size it is on sheets-04d, and a pink one and a black one
 at a quarter of that. The plate is [`phones-01.yaml`](phones-01.yaml). One bed, 22 minutes, about
 5 g, in two colors.

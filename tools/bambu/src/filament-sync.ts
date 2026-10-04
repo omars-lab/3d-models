@@ -116,6 +116,21 @@ export function logicalSlotsFromPlate(colors: string[], types: string[]): Logica
   return out;
 }
 
+/**
+ * The color picked at the send (`print send --color`) in place of the one the slice carries, so a
+ * plate whose recipe names no color is fed from the loaded tray of the color asked for (Omar,
+ * 2026-10-04: "have the option to choose color at print time"). One color per plate only: with two,
+ * which filament takes the color asked for is not ours to guess. Throws saying why.
+ */
+export function chooseColor(logical: LogicalSlot[], color: string): LogicalSlot[] {
+  const m = /^#?([0-9a-f]{6})$/i.exec(color.trim());
+  if (!m) throw new Error(`--color must be "#RRGGBB" (a loaded tray's color), got "${color}"`);
+  if (logical.length !== 1) {
+    throw new Error(`--color picks the color of a one-color plate; this one prints with ${logical.length} filaments`);
+  }
+  return [{ ...logical[0]!, hex: `#${m[1]!.toUpperCase()}` }];
+}
+
 interface ReconcileOpts {
   tolerance?: number;
   ambiguityMargin?: number;

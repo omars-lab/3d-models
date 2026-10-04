@@ -403,4 +403,4 @@ different layouts is refused, and so is a spacing of 0 or less.
 
 Related: [loose pieces in pockets](#loose-pieces-in-pockets),
 [peaked pieces](#peaked-pieces-a-soft-point-on-top), the
-[sheets-04e plate](../design/plates/sheets-04e.md) that packs the gBV pieces this way.
+[sheets-04g plate](../design/plates/sheets-04g.md) that packs the gBV pieces this way.

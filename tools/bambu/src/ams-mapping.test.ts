@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { collectSlots, trayIndex } from "./frame.js";
 import { parseUsedFilaments } from "./threemf.js";
 import {
+  chooseColor,
   feedsFromAms,
   logicalSlotsFromPlate,
   physicalTraysFromSlots,
@@ -111,6 +112,32 @@ describe("planAmsMapping", () => {
 
   it("refuses a plate that lists no used filament", () => {
     expect(plan(["#FFFFFF"], [], frame([])).ok).toBe(false);
+  });
+});
+
+// A plate with no fixed color takes Studio's default green into the slice; `--color` names the
+// spool at the send instead (sheets-04g, 2026-10-04).
+describe("chooseColor", () => {
+  const trays = frame([{ id: "0", type: "PLA", color: "000000FF" }, { id: "1", type: "PLA", color: "F5547CFF" }]);
+  const plan = (logical: ReturnType<typeof logicalSlotsFromPlate>) =>
+    planAmsMapping(reconcile(logical, physicalTraysFromSlots(collectSlots(trays))), 1, [1]);
+
+  it("feeds a one-color plate from the tray of the color asked for, not the slice's", () => {
+    const green = logicalSlotsFromPlate(["#00AE42"], ["PLA"]);
+    expect(plan(green).ok).toBe(false);
+    expect(plan(chooseColor(green, "#f5547c"))).toEqual({ ok: true, amsMapping: [1], useAms: true });
+    expect(plan(chooseColor(green, "000000"))).toEqual({ ok: true, amsMapping: [0], useAms: true });
+  });
+
+  it("still refuses a color no tray holds", () => {
+    const p = plan(chooseColor(logicalSlotsFromPlate(["#00AE42"], ["PLA"]), "#FFFFFF"));
+    expect(p.ok).toBe(false);
+    if (!p.ok) expect(p.reason).toMatch(/filament 1 is missing/);
+  });
+
+  it("refuses a plate that prints with two filaments, and a color that is not #RRGGBB", () => {
+    expect(() => chooseColor(logicalSlotsFromPlate(["#00AE42", "#000000"], ["PLA", "PLA"]), "#F5547C")).toThrow(/2 filaments/);
+    expect(() => chooseColor(logicalSlotsFromPlate(["#00AE42"], ["PLA"]), "pink")).toThrow(/#RRGGBB/);
   });
 });
 
