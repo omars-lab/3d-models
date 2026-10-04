@@ -1,8 +1,9 @@
 ---
 plate: sheets-04g
+print_log: '[[print-logs/sheets-04g|print log]]'
 recipe: sheets-04g.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the bigger gBV minimal coaster read and hold together at 1.25 times across and 1.1 times up, and do its 41 pieces, packed in interlaced rows beside it, fill it at no gap?"
@@ -106,7 +107,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-04 | approved | Omar, in chat: "yes" (reply to the sheets-04g question, 2026-10-04) | iteration 1 @ 4bb715e2c6 | |
+| 2026-10-04 | approved | Omar, in chat: "yes" (reply to the sheets-04g question, 2026-10-04) | iteration 1 @ 4bb715e2c6 | sent 2026-10-04 |
 
 ## Timeline
 
@@ -114,3 +115,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-04 | proposed — at Omar's ask: the coaster and its pieces back on one plate, color picked at the send; replaces sheets-04d, 04e and 04f, which are removed | this page |
 | 2026-10-04 | sliced — local slice fits one bed, 86 minutes, 27 g, no slicer warnings | this page |
+| 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ 4bb715e2c6 | this page |
