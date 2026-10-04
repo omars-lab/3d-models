@@ -24,6 +24,13 @@ plate, then anything you can't see before sending, then config ergonomics.
    `cur_id "P0101"`. Read Studio's request itself: try subscribing to `device/<serial>/request`
    while Omar sends from Studio (untested; the printer may not let a client read that topic). Then fix any field that differs before the first CLI send
    ([first-party-dispatch](../../issues/first-party-dispatch.md)). Found 2026-10-02.
+3. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+   pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
+   the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
+   so packing no longer decides whether a plate is production; it now saves time and filament
+   per print, and nothing more. Packing by hand has come up once (sheets-04d, rows), so per
+   the [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate
+   that wants packing comes before the skill. Session task board, 2026-10-03.
 
 ## Waiting on Omar
 
