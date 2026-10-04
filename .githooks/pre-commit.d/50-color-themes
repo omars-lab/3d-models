@@ -1,0 +1,29 @@
+#!/bin/sh
+# Color themes and their reviews (the color-themes and review-theme skills). A
+# gallery page is generated from themes.yaml, the theme pictures and the persona
+# reviews; when one of them changes and the others are not redone, the page
+# shows a picture or a score for colors the theme no longer has. This runs both
+# skills' self-tests and checks when anything they own is staged.
+# Override once: COLOR_THEMES_OK=1 git commit
+#
+# wholesale: make validate-color-themes
+[ -n "$COLOR_THEMES_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the color-themes check" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `.claude/skills/`.
+TOP="$(git rev-parse --show-toplevel)"
+THEMES="$TOP/.claude/skills/color-themes/scripts/themes.py"
+REVIEWS="$TOP/.claude/skills/review-theme/scripts/reviews.py"
+if [ ! -f "$THEMES" ] || [ ! -f "$REVIEWS" ]; then
+  echo "pre-commit: no color-themes scripts in this worktree — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^(docs/design/coaster/themes/|\.claude/skills/(color-themes|review-theme)/|docs/research/2026-10-04-bambu-pla-color-hexes\.md$)'; then
+  python3 "$THEMES" --self-test || exit 1
+  python3 "$REVIEWS" --self-test || exit 1
+  python3 "$THEMES" check --all --quiet || exit 1
+  exec python3 "$REVIEWS" check --all
+fi
+exit 0

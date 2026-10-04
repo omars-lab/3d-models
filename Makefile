@@ -940,3 +940,15 @@ validate-use-cases-self-test:
 validate-design-difference:
 	$(PYTHON) $(ROOT_DIR)/tools/design_difference.py --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/design_difference.py check
+
+# The color-themes and review-theme skills — the wholesale form of
+# .githooks/pre-commit.d/50-color-themes. Self-tests first (a buy hex one digit
+# off the research file, a piece in the frame's color, a stale review hash and a
+# score of 6 must all fail), then every construction's theme pictures, gallery
+# page and reviews against its themes.yaml. Offline: no bikar call.
+.PHONY: validate-color-themes
+validate-color-themes:
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py check --all --quiet
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py check --all

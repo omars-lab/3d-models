@@ -1,0 +1,116 @@
+# Persona reviews of the gBV themes, written with the review-theme skill on 2026-10-04 after
+# looking at each theme's picture. Simulated opinions, not customer research: each score is
+# Claude imagining one persona from .claude/skills/review-theme/personas.md looking at a flat
+# picture. `coloring` is the hash of the colors reviewed; when a theme's colors change,
+# `reviews.py check` fails until it is reviewed again.
+
+reviews:
+  - theme: all-green
+    coloring: 3486f565e9
+    scores:
+      espresso-purist: { score: 2, why: "One color is the right instinct, but a bright stock green under a small cup looks like a toy." }
+      latte-regular: { score: 2, why: "Cheerful enough, but flat; the star shape is there and the pattern inside it is gone." }
+      cold-brew-minimalist: { score: 3, why: "As few colors as it gets, but with no contrast the pattern only shows as seams." }
+      third-wave-fan: { score: 1, why: "The color that happened to be loaded; nothing about it feels chosen." }
+      gift-buyer: { score: 2, why: "Reads as a test print of the shape rather than a finished coaster." }
+      cafe-owner: { score: 3, why: "One plate and nothing to buy is ideal to remake, but bright green suits few cafés." }
+    overall: "The cheapest to make and the honest baseline; one color hides the pattern that is the whole point."
+
+  - theme: pink-heart
+    coloring: e385b9aae1
+    scores:
+      espresso-purist: { score: 1, why: "Hot pink and bright green together is exactly the novelty look they avoid." }
+      latte-regular: { score: 4, why: "A pink flower in the middle is cheerful and photographs well next to a pastry." }
+      cold-brew-minimalist: { score: 2, why: "The black frame gives clean edges, but pink on green is warm and busy." }
+      third-wave-fan: { score: 2, why: "Three stock colors; the flower idea is sweet but generic." }
+      gift-buyer: { score: 3, why: "Fun for the right friend, but a loud pair of colors a recipient might not want." }
+      cafe-owner: { score: 3, why: "All owned and three plates, but pink and green fits only a playful café." }
+    overall: "The best of the owned-color themes for a sweet, playful café; too loud for anyone after a calm coaster."
+
+  - theme: loaded-trays
+    coloring: 48972fb1af
+    scores:
+      espresso-purist: { score: 1, why: "Four bright colors at once; the opposite of restraint." }
+      latte-regular: { score: 2, why: "Bright and happy, but so busy the star turns into confetti." }
+      cold-brew-minimalist: { score: 1, why: "Four colors and no single one leads; it reads as noise from across the table." }
+      third-wave-fan: { score: 1, why: "Literally whatever was on the printer, and it looks it." }
+      gift-buyer: { score: 2, why: "Could pass for a child's toy; hard to give to an adult's kitchen." }
+      cafe-owner: { score: 2, why: "Nothing to buy, but four plates per coaster and a look that suits almost no room." }
+    overall: "Useful as a test of what the trays can do, not as a theme anyone would pick."
+
+  - theme: midnight-blue
+    coloring: 8625c88c6f
+    scores:
+      espresso-purist: { score: 3, why: "Two dark colors and real restraint, though blue is not a roasted tone." }
+      latte-regular: { score: 2, why: "Cool and a bit stark next to a warm drink and a pastry." }
+      cold-brew-minimalist: { score: 5, why: "Two colors, cool, and the black straps make the star read cleanly at a glance." }
+      third-wave-fan: { score: 2, why: "Handsome but it is the stock blue tray; the night window story is thin." }
+      gift-buyer: { score: 4, why: "Looks finished and safe; blue and black suits most kitchens." }
+      cafe-owner: { score: 4, why: "Two plates, nothing to buy, and dark colors hide coffee rings." }
+    overall: "The best calm theme we can print today; it pleases the cool, clean crowd and leaves the warm ones cold."
+
+  - theme: pink-green-rings
+    coloring: 0eb49fdbc4
+    scores:
+      espresso-purist: { score: 1, why: "Mostly hot pink with green flecks; nothing quiet about it." }
+      latte-regular: { score: 3, why: "The pink is fun, but the rings blur into one pink mass with green dots." }
+      cold-brew-minimalist: { score: 1, why: "Loud, warm, and the alternating rings do not read as rings in the picture." }
+      third-wave-fan: { score: 1, why: "Stock colors in a rule-based pattern; it feels made by a helper, which it was." }
+      gift-buyer: { score: 2, why: "Too loud to give without knowing the person loves pink." }
+      cafe-owner: { score: 2, why: "Owned and three plates, but it suits one kind of café at most." }
+    overall: "The alternate helper works, but the small green rings vanish and it reads as a pink star."
+
+  - theme: espresso-crema
+    coloring: 90e10354ed
+    scores:
+      espresso-purist: { score: 5, why: "Dark chocolate around crema tones; it looks like the drink they care about." }
+      latte-regular: { score: 4, why: "Warm milk and caramel feel cozy, though the dark frame is heavier than they would choose." }
+      cold-brew-minimalist: { score: 2, why: "Warm, and the pale pieces sit close to each other, so the inner rings soften." }
+      third-wave-fan: { score: 4, why: "A palette with a reason, if a little on the nose for a coffee coaster." }
+      gift-buyer: { score: 4, why: "An easy gift for any coffee drinker; it explains itself." }
+      cafe-owner: { score: 3, why: "Fits a coffee bar and the dark frame hides rings, but four colors to buy and four plates." }
+    overall: "The coffee people's favorite; it costs four colors to buy and four plates, and the pale rings blur a little."
+
+  - theme: flat-white
+    coloring: 65eaf474bd
+    scores:
+      espresso-purist: { score: 2, why: "Restrained, but pale all over; nothing roasted about it." }
+      latte-regular: { score: 5, why: "Milk and foam with a caramel heart; soft, warm and lovely in a photo." }
+      cold-brew-minimalist: { score: 3, why: "Few, neutral tones, but the low contrast makes the pattern faint." }
+      third-wave-fan: { score: 3, why: "A gentle story, though pale beige pieces could be any home-goods coaster." }
+      gift-buyer: { score: 4, why: "Soft and safe for almost any kitchen." }
+      cafe-owner: { score: 1, why: "A white frame and pale pieces will show every coffee ring, and four colors to buy." }
+    overall: "The softest theme and the latte crowd's pick; pale enough that coffee stains and a faint pattern are the risk."
+
+  - theme: iznik-tile
+    coloring: c7aa09195a
+    scores:
+      espresso-purist: { score: 2, why: "Beautiful, but four bright colors is more than they want under a cup." }
+      latte-regular: { score: 3, why: "Fresh and pretty, though cool blues feel less cozy than they like." }
+      cold-brew-minimalist: { score: 2, why: "The contrast is crisp, but four colors is too many." }
+      third-wave-fan: { score: 5, why: "Real craft behind the palette, and the pattern suits it; it feels chosen." }
+      gift-buyer: { score: 5, why: "Reads as tile art at first glance; special without needing an explanation." }
+      cafe-owner: { score: 2, why: "Lovely, but four colors to buy, four plates, and a white frame that shows stains." }
+    overall: "The most striking theme and the gift pick; it is the most to buy and print, and white shows coffee."
+
+  - theme: terracotta-souk
+    coloring: 61e43d0b0d
+    scores:
+      espresso-purist: { score: 3, why: "Earthy, warm tones they like, but four colors is busier than they would pick." }
+      latte-regular: { score: 4, why: "Warm clay and sand feel welcoming and cozy." }
+      cold-brew-minimalist: { score: 1, why: "Warm, four colors, and the black lines make it busier still." }
+      third-wave-fan: { score: 5, why: "Clay and brass have an origin story, and none of it is a stock color." }
+      gift-buyer: { score: 4, why: "Looks handmade and special; the black frame keeps it smart." }
+      cafe-owner: { score: 3, why: "Suits wood and plant-filled cafés and the black hides rings, but three to buy, four plates." }
+    overall: "A warm, storied theme the specialty and gift crowds like; four plates and three colors to buy."
+
+  - theme: black-and-gold
+    coloring: af6849a346
+    scores:
+      espresso-purist: { score: 4, why: "Two colors and dark; the gold is a little showy for them." }
+      latte-regular: { score: 3, why: "Smart, but the black is harsher than the soft look they like." }
+      cold-brew-minimalist: { score: 4, why: "Two colors with clean contrast; they would swap the warm gold for gray." }
+      third-wave-fan: { score: 2, why: "Handsome but the gift-box look is the generic one." }
+      gift-buyer: { score: 5, why: "Looks like it came in a box; safe for any kitchen and still special." }
+      cafe-owner: { score: 5, why: "Two plates, one color to buy, black hides rings, and it suits most rooms." }
+    overall: "The strongest all-rounder and the cheapest to add to the range; only the specialty fan finds it generic."
