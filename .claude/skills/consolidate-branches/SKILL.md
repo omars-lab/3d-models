@@ -18,6 +18,11 @@ you something.
 
 ## The flow
 
+0. **Commit your own work first.** A dirty worktree is always `keep`, so whatever this session
+   has not committed sits out of the pass, and a branch that only exists locally is one deleted
+   folder from gone. On your own branch, run the gates, commit the files you changed by name, and
+   push it. It then shows up as a branch with a state, like everyone else's. Another session's
+   uncommitted files are not yours to commit: list them in the report.
 1. **Inventory (read-only, always run it).**
    `python3 .claude/skills/consolidate-branches/scripts/branch_inventory.py inventory --commands`
    It covers the repos in `DEFAULT_REPOS`, or the paths you pass. You get one table per repo:
@@ -31,7 +36,8 @@ you something.
    | `ancestor`, `no-changes` | Its commits are all on origin's default, or it changed nothing | `delete` |
    | `content-on-default` | Every file it touched matches origin's default (British and American spellings of color folded) | `delete` |
    | `content-in-pr` | Every file it touched matches its merged PR's merge commit | `delete` |
-   | `lines-on-default` | Every line it added is on the default, but its deletions are unchecked | `look` |
+   | `changes-on-default` | Every line it added is on the default, and every line it removed is gone from it (main took the change, then moved on) | `delete` |
+   | `lines-on-default` | Every line it added is on the default, but a line it removed is still there | `look` |
    | `ahead-only` | Unmerged commits; the default has not moved past its fork | `look` |
    | `diverged` | Unmerged commits, and the default has moved on | `look`, snapshot first |
    | local default `ancestor` and behind | The local default lags origin | `ff` |
@@ -56,7 +62,10 @@ you something.
      them, and never put two branches in one push. The permission check refuses both.
    - If a delete is refused, list it for Omar. Don't retry it another way.
 5. **Bring unmerged work back (only after Omar's yes).**
-   - Snapshot the branch.
+   - Snapshot both sides before a hard merge: the branch, and the default it is going into, under
+     a name that says which merge it guards:
+     `branch_inventory.py snapshot <repo> <branch> <default>-before-<branch>=origin/<default>`.
+     Either side can then be read back exactly as it was, whatever the merge did.
    - Start a fresh branch off `origin/<default>`, merge or cherry-pick the work in by name, and
      resolve every conflict by hand, keeping both sides.
    - Prove nothing was lost: `branch_inventory.py survives <repo> <file> <merge-base> <ours> <theirs>`

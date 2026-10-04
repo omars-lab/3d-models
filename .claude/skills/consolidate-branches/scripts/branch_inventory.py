@@ -32,7 +32,7 @@ from pathlib import Path
 GIT = Path.home() / "Workspace/git"
 DEFAULT_REPOS = ["3d-models", "bikar-main", "qiyas", "sacred-patterns", "3d-model-hub", "youtube", "hifth", "review-md"]
 RULES = Path(__file__).resolve().parent.parent / "rules.md"
-DEAD = {"ancestor", "no-changes", "content-on-default", "content-in-pr"}
+DEAD = {"ancestor", "no-changes", "content-on-default", "content-in-pr", "changes-on-default"}
 
 
 def run(repo, *args):
@@ -103,42 +103,63 @@ def same_content(repo, a, b, files):
     return True
 
 
-def added_lines(repo, base, side, path=None):
-    """Non-blank lines `side` adds over `base`, per file: {path: [line, …]}."""
+def changed_lines(repo, base, side, path=None):
+    """Non-blank lines `side` adds and removes over `base`, per file: {path: ([added], [removed])}."""
     args = ["diff", "--no-color", "--unified=0", base, side]
     if path:
         args += ["--", path]
-    out, cur = {}, None
+    out, cur, header = {}, None, False
     for line in git(repo, *args).splitlines():
-        if line.startswith("+++ "):
-            cur = line[6:] if line.startswith("+++ b/") else None
-        elif cur and line.startswith("+") and line[1:].strip():
-            out.setdefault(cur, []).append(line[1:])
+        if line.startswith("diff --git "):                     # a removed "-- x" reads "--- x":
+            cur, header = None, True                           # file names only before the first @@
+        elif line.startswith("@@"):
+            header = False
+        elif header and line.startswith("--- a/"):
+            cur = line[6:]
+        elif header and line.startswith("+++ b/"):
+            cur = line[6:]
+        elif not header and cur and line[:1] in "+-" and line[1:].strip():
+            out.setdefault(cur, ([], []))[0 if line[0] == "+" else 1].append(line[1:])
     return out
 
 
-def lines_on(repo, ref, base, fork, files):
-    """True when ref added lines since fork and every one is present in that file on base.
+def added_lines(repo, base, side, path=None):
+    """Non-blank lines `side` adds over `base`, per file: {path: [line, …]}."""
+    return {f: added for f, (added, _) in changed_lines(repo, base, side, path).items() if added}
 
-    A branch that only deletes adds nothing, and "all of nothing landed" proves nothing."""
-    added = {f: lines for f, lines in added_lines(repo, fork, ref).items() if f in files}
-    if not added:
-        return False
-    for f, lines in added.items():
+
+def lines_on(repo, ref, base, fork, files):
+    """How much of what ref changed since fork the base holds, file by file:
+
+    - "changes": every line ref added is in that file on base, and every line it removed is not;
+    - "lines": every added line is there, but a line it removed is still on base;
+    - None: an added line is missing, or ref added nothing and removed lines base still holds.
+
+    A removed line base still holds may only repeat elsewhere in the file (a closing brace), so
+    "lines" stays a look, never a delete: a false "still there" costs a look, never work."""
+    changed = {f: c for f, c in changed_lines(repo, fork, ref).items() if f in files}
+    if not changed:
+        return None
+    removals_gone = True
+    for f, (added, removed) in changed.items():
         have = show(repo, base, f)
-        if have is None:
-            return False
-        held = set(normalize(have.decode(errors="replace")).splitlines())
-        if any(normalize(x) not in held for x in lines):
-            return False
-    return True
+        held = set(normalize(have.decode(errors="replace")).splitlines()) if have is not None else set()
+        if any(normalize(x) not in held for x in added):
+            return None
+        if any(normalize(x) in held for x in removed):
+            removals_gone = False
+    if removals_gone:
+        return "changes"
+    return "lines" if any(added for added, _ in changed.values()) else None
 
 
 def prove(repo, ref, base, merge_commits=()):
     """(state, ahead, behind) for one ref against the origin default.
 
-    State is one of: ancestor, no-changes, content-on-default, content-in-pr (all dead),
-    lines-on-default (every addition landed, deletions unchecked: look), ahead-only, diverged."""
+    State is one of: ancestor, no-changes, content-on-default, content-in-pr,
+    changes-on-default (every line it added is on the default and every line it removed is gone;
+    all five dead), lines-on-default (the additions landed but a removed line is still there:
+    look), ahead-only, diverged."""
     ahead = int(git(repo, "rev-list", "--count", f"{base}..{ref}") or 0)
     behind = int(git(repo, "rev-list", "--count", f"{ref}..{base}") or 0)
     if ahead == 0:
@@ -152,8 +173,9 @@ def prove(repo, ref, base, merge_commits=()):
     for mc in merge_commits:
         if mc and same_content(repo, ref, mc, files):
             return "content-in-pr", ahead, behind
-    if lines_on(repo, ref, base, fork, files):
-        return "lines-on-default", ahead, behind
+    landed = lines_on(repo, ref, base, fork, files)
+    if landed:
+        return f"{landed}-on-default", ahead, behind
     return ("diverged" if behind else "ahead-only"), ahead, behind
 
 
@@ -233,7 +255,7 @@ def plan_branch(item, rules, repo_name, default_name, wts, open_by_branch):
     if state in DEAD:
         return "delete", f"proven dead: {state}"
     if state == "lines-on-default":
-        return "look", "every added line is on the default, but deletions are unchecked"
+        return "look", "every added line is on the default, but a line it removed is still there"
     return "look", "unmerged work: Omar's call"
 
 
@@ -450,7 +472,20 @@ def self_test():
 
         g("checkout", "-q", "-b", "main")
         commit("a.txt", "one\n", "init")
+        commit("g.txt", "old\n", "g")
+        commit("h.txt", "keep\nold2\n", "h")
+        commit("i.txt", "-- x\n", "i")
         g("push", "-q", "origin", "main")
+        g("checkout", "-q", "-b", "halfway")                     # main took the new line, kept the old
+        commit("g.txt", "new\n", "replace old")
+        g("checkout", "-q", "-b", "rewritten", "main")           # main took the change, then moved on
+        commit("h.txt", "keep\nnew2\n", "replace old2")
+        g("checkout", "-q", "-b", "dashes", "main")              # a removed "-- x" diffs as "--- x"
+        commit("i.txt", "-- y\n", "replace a dashed line")
+        g("checkout", "-q", "main")
+        commit("g.txt", "old\nnew\n", "take new, keep old")
+        commit("h.txt", "keep\nnew2\nlater\n", "squash of rewritten, then more")
+        commit("i.txt", "-- y\nmore\n", "squash of dashes, then more")
         g("checkout", "-q", "-b", "squashed")                    # landed by squash: content-on-default
         commit("b.txt", f"the {OLD_SPELLING}\n", "b")
         g("checkout", "-q", "-b", "renamed", "main")             # landed, then main renamed to color
@@ -476,7 +511,9 @@ def self_test():
 
         base = "origin/main"
         want = {"squashed": "content-on-default", "renamed": "content-on-default", "unique": "diverged",
-                "ancestor": "ancestor", "deleter": "diverged", "inpr": "lines-on-default"}
+                "ancestor": "ancestor", "deleter": "diverged", "inpr": "changes-on-default",
+                "halfway": "lines-on-default", "rewritten": "changes-on-default",
+                "dashes": "changes-on-default"}
         for b, w in want.items():
             got = prove(repo, b, base)[0]
             if got != w:
