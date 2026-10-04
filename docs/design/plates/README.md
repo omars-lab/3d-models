@@ -23,7 +23,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 1 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
 | 2 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
 | 3 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
-| 4 | [sheets-04g](sheets-04g.md) | waiting | 2 | 1.7 | 1.17 | watch | Does the bigger gBV minimal coaster read and hold together at 1.25 times across and 1.1 times up, and do its 41 pieces, packed in interlaced rows beside it, fill it at no gap? |
+| 4 | [sheets-04g](sheets-04g.md) | approved | 2 | 1.7 | 1.17 | watch | Does the bigger gBV minimal coaster read and hold together at 1.25 times across and 1.1 times up, and do its 41 pieces, packed in interlaced rows beside it, fill it at no gap? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
 
