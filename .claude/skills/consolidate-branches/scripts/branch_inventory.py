@@ -402,6 +402,8 @@ def snapshot(repo, refs, date, push=True):
             code, _, err = run(repo, "git", "update-ref", target, sha)
             if code:
                 raise SystemExit(f"snapshot: {err}")
+        if target in written:                                   # a branch and its remote twin at one tip
+            continue
         written.append(target)
         print(f"{target} {sha}")
     if push and written:
@@ -494,6 +496,11 @@ def self_test():
             bad.append("snapshot moved an existing snapshot ref")
         except SystemExit:
             pass
+        g("push", "-q", "origin", "unique")                      # a local branch and its remote twin,
+        g("fetch", "-q", "origin")                               # same tip: one snapshot, one push
+        if snapshot(repo, ["unique", "origin/unique"], "2000-01-02") != 0 \
+                or not git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-02/unique"):
+            bad.append("a branch and its remote twin at one tip did not snapshot and push as one ref")
 
         g("checkout", "-q", "unique")
         if survives(repo, repo / "d.txt", "main~0", ["unique"]) != 0:

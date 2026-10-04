@@ -92,6 +92,11 @@ nothing about lines the branch deleted.
   delete, not only for the complicated ones.
 - In bikar, a snapshot push runs the full pre-push suite (about 5 minutes). Only a push that
   deletes refs and nothing else skips it. Run that push in the background.
+- In hifth, every push runs the full pre-push checks (about 5 minutes), deletions included, so
+  each `push origin --delete` costs one full run. A deletion skip like bikar's was refused by the
+  permission check as a CI bypass (2026-10-04), so hifth's remote deletes are Omar's to run or to
+  unblock. If the checks fail on typecheck with `Cannot find module 'preact'`, the main
+  checkout's `node_modules` is stale: `pnpm install --frozen-lockfile` there, not `--no-verify`.
 - Run the delete commands one at a time: `git branch -D <b>`, then `git push origin --delete <b>`
   as a separate command, and `git worktree remove <path>`. If you chain them, or delete several
   branches in one push, the auto-mode permission check refuses the command.
@@ -123,3 +128,6 @@ nothing about lines the branch deleted.
   `-pm` and lags behind origin.
 - youtube's remote is the Mac Studio bare repo, `studio:git/youtube.git`, so it has no GitHub PRs.
   Its branches have to be proven dead by content.
+- A local branch and its `origin/` twin at the same tip map to one snapshot name. Pushing both
+  refspecs fails with "receives from more than one src", so `snapshot` writes and pushes the name
+  once (review-md, 2026-10-04).
