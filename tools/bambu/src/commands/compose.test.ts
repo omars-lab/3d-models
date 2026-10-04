@@ -103,12 +103,18 @@ describe("an `stl:` item — a local mesh, pinned by its hash", () => {
     expect(m.items[0]).toMatchObject({ stl: ".bambu/imports/bear.stl", sha256: SHA, scale: 5, count: 2 });
   });
 
+  it("accepts a scale per axis, [x, y, z]", () => {
+    // phones-02: the small phones 1.25× wider and longer and 2× thicker than a quarter.
+    const m = parseManifest(stlItem("    scale: [0.3125, 0.3125, 0.5]"));
+    expect(m.items[0]).toMatchObject({ scale: [0.3125, 0.3125, 0.5] });
+  });
+
   it("refuses a path outside the repo, a missing hash, a bad scale, and bikar fields", () => {
     const bad = (text: string, why: RegExp) => expect(() => parseManifest(text)).toThrow(why);
     bad(["items:", "  - stl: /Users/x/bear.stl", `    sha256: ${SHA}`].join("\n"), /inside this repo/);
     bad(["items:", "  - stl: ../bear.stl", `    sha256: ${SHA}`].join("\n"), /inside this repo/);
     bad(["items:", "  - stl: bear.stl"].join("\n"), /sha256/);
-    for (const s of ["0", "-1", "big"]) bad(stlItem(`    scale: ${s}`), /scale/);
+    for (const s of ["0", "-1", "big", "[1, 2]", "[1, 0, 2]", "[1, big, 2]"]) bad(stlItem(`    scale: ${s}`), /scale/);
     bad(stlItem("    piece: Orb"), /cannot also carry `piece:`/);
     bad(stlItem("    bkr: bikar:foo.bkr"), /cannot also carry `bkr:`/);
   });
@@ -132,6 +138,19 @@ describe("resolveManifestItems — an `stl:` item checks its file", () => {
     expect(one!.iteration).toBe(plain!.iteration); // scale 1 is no scale
   });
 
+  it("keys a scale per axis by each axis, and the same number on all three is the plain scale", async () => {
+    const [axes, same, five, ones] = await resolveManifestItems(
+      [item({ scale: [0.3125, 0.3125, 0.5] }), item({ scale: [5, 5, 5] }), item({ scale: 5 }), item({ scale: [1, 1, 1] })],
+      "ref",
+      profile,
+      root,
+    );
+    expect(axes!.params).toEqual({ scale_x: 0.3125, scale_y: 0.3125, scale_z: 0.5 });
+    expect(same!.params).toEqual({ scale: 5 });
+    expect(same!.iteration).toBe(five!.iteration);
+    expect(ones!.params).toEqual({});
+  });
+
   it("refuses a file whose hash is not the recipe's, and a file that is not there", async () => {
     await expect(resolveManifestItems([item({ sha256: "b".repeat(64) })], "ref", profile, root)).rejects.toThrow(/not the b{64}/);
     await expect(
@@ -149,6 +168,20 @@ describe("scaledCenteredStl — the copy a local item puts on the plate", () => 
     const again = scaledCenteredStl(big, 0.5); // binary in, binary out
     expect(stlBoundsFromBuffer(again)).toEqual({ min: [-2.5, -3.75, 0], max: [2.5, 3.75, 10] });
     expect(() => scaledCenteredStl(ascii, 0)).toThrow(/scale/);
+  });
+
+  it("scales each axis by its own number and turns the face normal to match", () => {
+    const ascii = Buffer.from(asciiTriangle());
+    for (const input of [ascii, scaledCenteredStl(ascii, 1)]) {
+      const out = scaledCenteredStl(input, [2, 1, 0.5]);
+      expect(stlBoundsFromBuffer(out)).toEqual({ min: [-2, -1.5, 0], max: [2, 1.5, 2] });
+      // Edges (4,0,2) and (0,3,0) after the scale: the face points along (-1, 0, 2)/√5.
+      const n = [0, 4, 8].map((o) => out.readFloatLE(84 + o));
+      expect(n[0]).toBeCloseTo(-1 / Math.sqrt(5), 5);
+      expect(n[1]).toBeCloseTo(0, 5);
+      expect(n[2]).toBeCloseTo(2 / Math.sqrt(5), 5);
+    }
+    expect(() => scaledCenteredStl(ascii, [1, 0, 1])).toThrow(/scale/);
   });
 
   it("moves a mesh modeled off-center so the bed map's place is where it prints", () => {

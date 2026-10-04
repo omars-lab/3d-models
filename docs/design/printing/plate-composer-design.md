@@ -169,7 +169,7 @@ iPhone mini and a gummy bear beside its coaster).
 ```yaml
   - stl:    .bambu/imports/gummy-bear-cc0-1351519.stl   # a path inside this repo
     sha256: 3d383c58…                                   # the file's hash: another file is refused
-    scale:  5                                           # optional, about the origin (§8)
+    scale:  5                                           # optional: one number, or [x, y, z] (§8)
     count:  1
 ```
 
@@ -306,6 +306,12 @@ param that re-renders walls and straps at a printable width, while an imported m
 params, so scaling is the only lever. The hazard still holds. Scaling a mesh down can thin a
 feature below the floor, so look at the sliced preview of any `scale` under 1. Scaling up, as
 the gummy bear's 5 does, only thickens.
+
+`scale` may also be one number per side, `[x, y, z]`: phones-02's small phones are
+`[0.3125, 0.3125, 0.5]`, thicker for their size than the full phone. The key then
+holds `scale_x`, `scale_y` and `scale_z`; the same number on all three sides is keyed as the
+single `scale`, so a plate id made before this stays the same. A scale per side tilts sloped
+faces, so the copy's face normals are worked out again from each triangle.
 
 ## 9. Decisions
 
