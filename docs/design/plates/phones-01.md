@@ -1,8 +1,9 @@
 ---
 plate: phones-01
+print_log: '[[print-logs/phones-01|print log]]'
 recipe: phones-01.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone?"
@@ -94,7 +95,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-04 | approved | Omar, in chat: "approve phones 1 and start print" | iteration 1 @ cd19dfe7e6 | |
+| 2026-10-04 | approved | Omar, in chat: "approve phones 1 and start print" | iteration 1 @ cd19dfe7e6 | sent 2026-10-04 |
 
 ## Timeline
 
@@ -102,3 +103,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-04 | proposed — at Omar's ask: two phones at the sheets-04d size and two at a quarter, pink and black | this page |
 | 2026-10-04 | sliced — local two-color slice fits one bed, 22 minutes, 5 g, no slicer warnings | this page |
+| 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ cd19dfe7e6 | this page |

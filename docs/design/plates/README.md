@@ -20,19 +20,18 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [phones-01](phones-01.md) | approved | 2 | 0.4 | 4.80 | ok | Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone? |
-| 2 | [sheets-04e](sheets-04e.md) | waiting | 2 | 0.7 | 2.88 | watch | Do the 41 pieces cut for the bigger gBV coaster fill it, and does packing each ring in two interlaced rows print cleanly? |
-| 3 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
-| 4 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
-| 5 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
-| 6 | [sheets-04d](sheets-04d.md) | waiting | 2 | 1.3 | 1.53 | ok | Does the gBV minimal coaster still read and hold together at 1.25 times across and 1.1 times up, and do a mini iPhone and a gummy bear print cleanly beside it? |
-| 7 | [sheets-04f](sheets-04f.md) | waiting | 0 | 0.7 | 0.00 | watch | The second set of pieces for the bigger gBV coaster, in black: the same plate as sheets-04e in another color. |
+| 1 | [sheets-04e](sheets-04e.md) | waiting | 2 | 0.7 | 2.88 | watch | Do the 41 pieces cut for the bigger gBV coaster fill it, and does packing each ring in two interlaced rows print cleanly? |
+| 2 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
+| 3 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
+| 4 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
+| 5 | [sheets-04d](sheets-04d.md) | waiting | 2 | 1.3 | 1.53 | ok | Does the gBV minimal coaster still read and hold together at 1.25 times across and 1.1 times up, and do a mini iPhone and a gummy bear print cleanly beside it? |
+| 6 | [sheets-04f](sheets-04f.md) | waiting | 0 | 0.7 | 0.00 | watch | The second set of pieces for the bigger gBV coaster, in black: the same plate as sheets-04e in another color. |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md).
+**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md).
 
 **Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [sheets-04](sheets-04.md) ×1.
 <!-- queue:end -->
