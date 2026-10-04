@@ -1,0 +1,44 @@
+# The colors a theme may use. Real filament only.
+#
+# owned: the four trays the printer reported on 2026-10-04 (`bambu filament --json`). A tray is a
+#   fact about the printer on that day. When the trays change, re-read them and edit this list.
+#   The color is what prints; the name is only a label.
+# buy:   Bambu filaments that are not loaded. Each hex is copied from
+#   docs/research/2026-10-04-bambu-pla-color-hexes.md (Bambu Studio's own color list), and
+#   `themes.py --self-test` fails when a hex here differs from that file's row for the same code.
+#   A color with no row there may not go on this list.
+#
+# Each color has an id, which is what a theme names. A theme never writes a hex of its own.
+
+owned_read: "2026-10-04, `bambu filament --json`"
+
+owned:
+  - { id: pink,  hex: "#F5547C", name: "Hot Pink",     note: "same hex as PLA Basic Hot Pink" }
+  - { id: blue,  hex: "#0047BB", name: "Blue",         note: "no PLA Basic or Matte row has this hex" }
+  - { id: black, hex: "#000000", name: "Black",        note: "same hex as PLA Basic Black and PLA Matte Charcoal" }
+  - { id: green, hex: "#00AE42", name: "Bambu Green",  note: "same hex as PLA Basic Bambu Green" }
+
+buy:
+  - { id: jade-white,      hex: "#FFFFFF", name: "Jade White",      line: "PLA Basic", code: "10100" }
+  - { id: beige,           hex: "#F7E6DE", name: "Beige",           line: "PLA Basic", code: "10201" }
+  - { id: gold,            hex: "#E4BD68", name: "Gold",            line: "PLA Basic", code: "10401" }
+  - { id: bronze,          hex: "#847D48", name: "Bronze",          line: "PLA Basic", code: "10801" }
+  - { id: cocoa-brown,     hex: "#6F5034", name: "Cocoa Brown",     line: "PLA Basic", code: "10802" }
+  - { id: cobalt-blue,     hex: "#0056B8", name: "Cobalt Blue",     line: "PLA Basic", code: "10604" }
+  - { id: turquoise,       hex: "#00B1B7", name: "Turquoise",       line: "PLA Basic", code: "10605" }
+  - { id: mistletoe-green, hex: "#3F8E43", name: "Mistletoe Green", line: "PLA Basic", code: "10502" }
+  - { id: maroon-red,      hex: "#9D2235", name: "Maroon Red",      line: "PLA Basic", code: "10205" }
+  - { id: light-gray,      hex: "#D1D3D5", name: "Light Gray",      line: "PLA Basic", code: "10104" }
+  - { id: ivory-white,     hex: "#FFFFFF", name: "Ivory White",     line: "PLA Matte", code: "11100" }
+  - { id: bone-white,      hex: "#CBC6B8", name: "Bone White",      line: "PLA Matte", code: "11103" }
+  - { id: desert-tan,      hex: "#E8DBB7", name: "Desert Tan",      line: "PLA Matte", code: "11401" }
+  - { id: latte-brown,     hex: "#D3B7A7", name: "Latte Brown",     line: "PLA Matte", code: "11800" }
+  - { id: caramel,         hex: "#AE835B", name: "Caramel",         line: "PLA Matte", code: "11803" }
+  - { id: dark-brown,      hex: "#7D6556", name: "Dark Brown",      line: "PLA Matte", code: "11801" }
+  - { id: dark-chocolate,  hex: "#4D3324", name: "Dark Chocolate",  line: "PLA Matte", code: "11802" }
+  - { id: terracotta,      hex: "#B15533", name: "Terracotta",      line: "PLA Matte", code: "11203" }
+  - { id: dark-green,      hex: "#68724D", name: "Dark Green",      line: "PLA Matte", code: "11501" }
+  - { id: dark-blue,       hex: "#042F56", name: "Dark Blue",       line: "PLA Matte", code: "11602" }
+  - { id: ice-blue,        hex: "#A3D8E1", name: "Ice Blue",        line: "PLA Matte", code: "11601" }
+  - { id: sakura-pink,     hex: "#E8AFCF", name: "Sakura Pink",     line: "PLA Matte", code: "11201" }
+  - { id: charcoal,        hex: "#000000", name: "Charcoal",        line: "PLA Matte", code: "11101" }

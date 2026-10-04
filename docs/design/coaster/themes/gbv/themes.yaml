@@ -1,0 +1,86 @@
+# Color themes for the gBV minimal coaster with its loose pieces (the coaster sheets-04g prints).
+#
+# A theme gives every group a color from .claude/skills/color-themes/palette.yaml, the frame
+# included. A theme never writes a hex: the palette holds the real filaments, owned or to buy.
+# After an edit: `themes.py render gbv`, look at the pictures, re-review what changed
+# (review-theme), then `themes.py gallery gbv`. `themes.py check --all` fails until all three
+# are done.
+
+construction: gBV_JTt3Kxk
+short: gBV
+about: >
+  The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 loose pieces
+  that sit in its holes. It is the coaster [sheets-04g](../../plates/sheets-04g.md) prints, at size
+  112.5. The pieces come in five groups, one per ring out from the middle, and each group can take
+  its own color. These are ideas to mix and match, drawn flat from above.
+
+source:
+  frame:  bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+  pieces: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+
+# sheets-04g's sizes, so the picture and the cost match what prints.
+params:       { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+piece_params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+slice:        { plate: sheets-04g, minutes: 86, grams: 27 }
+
+# A group is the pieces of one ring; `piece` is its name in the pieces file (`--piece`).
+groups:
+  - { id: middle, piece: Middle, orbits: [0], label: "the middle (one 20-sided piece)" }
+  - { id: kite,   piece: Kite,   orbits: [1], label: "the kites (10)" }
+  - { id: hex,    piece: Hex,    orbits: [2], label: "the inner six-sided ring (10)" }
+  - { id: star,   piece: Star,   orbits: [3], label: "the stars (10)" }
+  - { id: outer,  piece: Outer,  orbits: [4], label: "the outer six-sided ring (10)" }
+
+themes:
+  - id: all-green
+    name: All Bambu Green
+    mood: The plate as it went out on 2026-10-04, one color for everything.
+    made_by: suggest --helper one-color
+    colors: { frame: green, middle: green, kite: green, hex: green, star: green, outer: green }
+
+  - id: pink-heart
+    name: Pink heart
+    mood: A pink flower in a green garden, outlined in black; the colors the Piece colors mockup used.
+    colors: { frame: black, middle: pink, kite: pink, hex: green, star: pink, outer: green }
+
+  - id: loaded-trays
+    name: All four trays
+    mood: Every color on the printer today, the darkest one on the frame, the rest taking turns round the rings.
+    made_by: suggest --helper match-trays
+    colors: { frame: black, middle: blue, kite: pink, hex: green, star: blue, outer: pink }
+
+  - id: midnight-blue
+    name: Midnight blue
+    mood: Black straps and blue glass, like a night window; quiet, two plates.
+    colors: { frame: black, middle: blue, kite: blue, hex: blue, star: blue, outer: blue }
+
+  - id: pink-green-rings
+    name: Pink and green rings
+    mood: Rings that take turns in pink and green out from the middle, held in a black frame; loud and cheerful.
+    made_by: suggest --helper alternate --colors pink,green,black
+    colors: { frame: black, middle: pink, kite: green, hex: pink, star: green, outer: pink }
+
+  - id: espresso-crema
+    name: Espresso and crema
+    mood: A dark chocolate frame around caramel and latte pieces, the colors of a shot with its crema.
+    colors: { frame: dark-chocolate, middle: caramel, kite: desert-tan, hex: latte-brown, star: caramel, outer: latte-brown }
+
+  - id: flat-white
+    name: Flat white
+    mood: Milk and foam; an ivory frame with pale latte and bone pieces, soft and low in contrast.
+    colors: { frame: ivory-white, middle: caramel, kite: latte-brown, hex: bone-white, star: latte-brown, outer: bone-white }
+
+  - id: iznik-tile
+    name: Iznik tile
+    mood: White ground, cobalt and turquoise with a red accent, after the glazed tiles of Ottoman Iznik.
+    colors: { frame: jade-white, middle: maroon-red, kite: turquoise, hex: cobalt-blue, star: maroon-red, outer: turquoise }
+
+  - id: terracotta-souk
+    name: Terracotta souk
+    mood: Fired clay, brass and sand in a black frame, like a market stall of pots and lamps.
+    colors: { frame: black, middle: gold, kite: terracotta, hex: terracotta, star: gold, outer: desert-tan }
+
+  - id: black-and-gold
+    name: Black and gold
+    mood: Every piece gold in a black frame; the gift-box look, and only one color to buy.
+    colors: { frame: black, middle: gold, kite: gold, hex: gold, star: gold, outer: gold }
