@@ -224,6 +224,42 @@ def resolve_blob_sha(ref: str, path: str) -> tuple[str, str | None]:
     return ("ok", _sha256_bytes(proc.stdout))
 
 
+def resolve_local_source(root: Path, path: str, decl: str) -> tuple[str, str | None]:
+    """(status, why) for a `3d-models:` source, a mesh this repo slices itself: a plate
+    recipe's `stl:` item, or a sampler cell `bambu slice sheet` vendored. status: ok | bad | skip.
+
+    A third-party mesh stays out of git (`.bambu/imports/`: this repo is public), so there is
+    no commit to read it at. What pins it is the recipe that sliced it: its `sha256:` for that
+    `stl:` path, which the slicer refused to slice past. So the record's digest must be a pin a
+    recipe holds for the path, or the file's own digest when the file is in the repo. The file
+    on disk, when present, must match too; when it is absent the bytes cannot be re-read, and
+    the claim is counted unverified (`skip`), as a missing bikar checkout is.
+    """
+    f = root / path
+    pins = set()
+    for pattern in ("docs/design/plates/*.yaml", "docs/plates/*.yaml"):
+        for recipe in root.glob(pattern):
+            text = recipe.read_text(encoding="utf-8", errors="replace")
+            if path not in text:
+                continue
+            try:
+                data = yaml.safe_load(text)
+            except yaml.YAMLError:
+                continue
+            for it in (data or {}).get("items") or [] if isinstance(data, dict) else []:
+                if isinstance(it, dict) and it.get("stl") == path and it.get("sha256"):
+                    pins.add(it["sha256"])
+    if f.is_file():
+        real = _sha256_file(f)
+        if real != decl:
+            return "bad", f"source_sha256 {decl[:12]} does not equal the file {path} ({real[:12]})"
+        return "ok", None
+    if decl in pins:
+        return "skip", None
+    return "bad", (f"source {path} is not in the repo and no plate recipe pins it at "
+                   f"{decl[:12]} — a record of a mesh nothing can re-resolve")
+
+
 def pin_on_main(ref: str) -> str:
     """R16: `ok` when `ref` is reachable from bikar's origin/main, `off-main` when it is
     not (or is not a commit bikar has), `skip` when there is no bikar or no origin/main
@@ -368,11 +404,18 @@ def check_record(
         src = obj.get("source", "")
         decl = obj.get("source_sha256", "")
         entry = obj.get("entry", f"#{i}")
-        if not isinstance(src, str) or not src.startswith("bikar:"):
-            out.append(f"{name}: {entry} source '{src}' is not a bikar: path")
+        if not isinstance(src, str) or not src.startswith(("bikar:", "3d-models:")):
+            out.append(f"{name}: {entry} source '{src}' is not a bikar: or 3d-models: path")
             continue
         if not (isinstance(decl, str) and SHA256_HEX.match(decl)):
             out.append(f"{name}: {entry} source_sha256 is not a 64-hex digest")
+            continue
+        if src.startswith("3d-models:"):
+            status, why = resolve_local_source(rec.parents[2], src[len("3d-models:"):], decl)
+            if status == "skip":
+                out.append(f"__skip__{name}:{entry}")
+            elif status == "bad":
+                out.append(f"{name}: R1 {entry} {why}")
             continue
         if not bikar_ref:
             continue
