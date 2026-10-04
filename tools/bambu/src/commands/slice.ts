@@ -125,6 +125,7 @@ export function prepareSlicePresets(
   studioBin: string,
   scratchDir: string,
   plateType?: PlateType,
+  filamentColor?: string,
 ): PreparedPresets {
   const root = profilesRoot(studioBin);
   const lookup: PresetLookup = root ? studioPresetLookup(root) : () => null;
@@ -139,10 +140,27 @@ export function prepareSlicePresets(
   }
   if (filament) {
     const flat = flattenPresetList(resolvePresetList(filament, "filament", studioBin), lookup, scratchDir);
+    if (filamentColor) setFilamentColor(flat.presets, filamentColor, scratchDir);
     out.filament = flat.list;
     out.presets.push(...flat.presets);
+  } else if (filamentColor) {
+    throw new Error("a filament color needs a filament preset in -f/--filament to hold it.");
   }
   return out;
+}
+
+/** Color the one flattened filament preset and rewrite its file in place. The slice carries the
+ *  color, so the send's tray match (filament-sync.ts) feeds the loaded spool of that color instead of
+ *  the preset's own (Bambu PLA Basic is #00AE42, the green tray, whatever the plate is meant to be).
+ *  The preset check after the slice proves the file carries it. */
+export function setFilamentColor(presets: FlattenedPreset[], color: string, scratchDir: string): void {
+  const fil = presets.filter((p) => p.type === "filament");
+  const only = fil.length === 1 ? fil[0] : undefined;
+  if (!only) {
+    throw new Error(`a filament color colors one filament; the plate names ${fil.length} filament preset(s).`);
+  }
+  only.config.filament_colour = [color.toUpperCase()];
+  writeFlattened(only, scratchDir);
 }
 
 /** Name the plate in the one flattened process preset and rewrite its file in place (same path, so

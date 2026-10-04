@@ -14,7 +14,7 @@ import {
   resolveSlicePlateType,
   studioSavedPlateType,
 } from "./plate-type.js";
-import { setPlateType } from "./commands/slice.js";
+import { setFilamentColor, setPlateType } from "./commands/slice.js";
 import type { FlattenedPreset } from "./preset-chain.js";
 
 // The plate type is what sheets-04b got wrong (2026-10-03): sliced for Studio's CLI default, a Cool
@@ -144,5 +144,25 @@ describe("setPlateType", () => {
     expect(() => setPlateType([preset("machine")], textured, mkdtempSync(join(tmpdir(), "plate-type-")))).toThrow(
       /needs a process preset/,
     );
+  });
+});
+
+// The plate's color rides the same way: a pink plate sliced with the stock preset carried #00AE42 and
+// the send would have fed the green tray.
+describe("setFilamentColor", () => {
+  const preset = (type: string): FlattenedPreset => ({ leaf: `/p/${type}.json`, type, chain: [type], config: { name: type } });
+
+  it("colors the one filament preset, and its file", () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-color-"));
+    const presets = [preset("machine"), preset("process"), preset("filament")];
+    setFilamentColor(presets, "#f5547c", dir);
+    expect(presets[2]!.config.filament_colour).toEqual(["#F5547C"]);
+    expect(presets[1]!.config.filament_colour).toBeUndefined();
+    expect(JSON.parse(readFileSync(join(dir, "filament.json"), "utf8")).filament_colour).toEqual(["#F5547C"]);
+  });
+
+  it("refuses to guess which of two filaments it colors", () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-color-"));
+    expect(() => setFilamentColor([preset("filament"), preset("filament")], "#000000", dir)).toThrow(/colors one filament/);
   });
 });

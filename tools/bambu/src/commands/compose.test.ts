@@ -27,6 +27,15 @@ describe("parseManifest — validate before anything renders", () => {
     expect(m.items).toHaveLength(1);
   });
 
+  it("reads `profile.color:` as #RRGGBB and refuses anything else", () => {
+    const plate = (color: string) =>
+      ["profile:", "  filament: PLA Basic", `  color: "${color}"`, "items:", "  - iteration: it-aaaaaaaaaaaa"].join("\n");
+    expect(parseManifest(plate("#F5547C")).profile?.color).toBe("#F5547C");
+    for (const bad of ["pink", "#F5547", "F5547C", "#F5547CFF"]) {
+      expect(() => parseManifest(plate(bad))).toThrow(/profile\.color/);
+    }
+  });
+
   it("reads `beds:` and leaves it unset when absent", () => {
     const items = ["items:", "  - iteration: it-aaaaaaaaaaaa"];
     expect(parseManifest(["beds: 2", ...items].join("\n")).beds).toBe(2);
