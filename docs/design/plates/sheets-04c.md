@@ -1,8 +1,9 @@
 ---
 plate: sheets-04c
+print_log: '[[print-logs/sheets-04c|print log]]'
 recipe: sheets-04c.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "A second gBV minimal coaster, the minimal construction from sheets-04, on its own: no new question, the same coaster again."
@@ -76,7 +77,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-03 | approved | Omar, in chat: "print approved, send it" (one coaster) | iteration 1 @ b7641b3143 | |
+| 2026-10-03 | approved | Omar, in chat: "print approved, send it" (one coaster) | iteration 1 @ b7641b3143 | sent 2026-10-03 |
 
 ## Timeline
 
@@ -84,3 +85,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-03 | proposed — at Omar's ask: sheets-04's minimal construction, the gBV minimal coaster, alone | this page |
 | 2026-10-03 | sliced — local slice fits one bed, 42 minutes, 10 g, no slicer warnings | this page |
+| 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ b7641b3143 | this page |
