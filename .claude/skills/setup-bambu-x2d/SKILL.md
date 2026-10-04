@@ -86,17 +86,18 @@ install Bambu Connect: it's the GUI/AppleScript fallback for actions with no hea
 6. **Build the CLI.** `cd tools/bambu && npm install` (repo-pinned Node — see the README).
 7. **Preflight:** `bambu setup doctor` (add `--probe-mcp` for a live handshake). Fix every `✗`
    before going further; a `!` is a warning you can proceed past.
-8. **Prove transport, read-only:** `bambu status show` returns live temps/AMS. This reaches the
+8. **Pin the printer's certificate, then prove transport, read-only.** `bambu setup printer-pin`
+   saves the printer's certificate once (it sends no credentials, and prints the issuer, expiry
+   and fingerprint). Every connection checks it: MQTT, FTPS and the camera
+   ([why](../../../docs/issues/camera-tls-pin.md)). Then `bambu status show` returns live temps/AMS. This reaches the
    printer *without sending anything* — trust the pipe before any dispatch. The **second read-only
    proof** is `bambu header --plate <plate.3mf>`: it joins the live frame with a sliced `.3mf` to
    fill the Plate-1 bench sheet's profile header, so a first-time setup learns the read path *and*
    the bench-sheet filler before first dispatch. It, too, moves nothing (one `pushall` + an `unzip`
    of the plate), and leaves the genuinely-manual fields (ambient/enclosure/caliper) as blanks.
-   The **third read-only proof** is the camera: `bambu setup camera-pin` saves the printer's camera
-   certificate once (it sends no credentials, and prints the issuer, expiry and fingerprint), then
-   `bambu status camera -o bed.jpg` saves one frame. Open it. Every later `print send` takes one
-   of these before it asks, so a send can show the bed is empty
-   ([why the certificate is pinned](../../../docs/issues/camera-tls-pin.md)).
+   The **third read-only proof** is the camera: `bambu status camera -o bed.jpg` saves one frame.
+   Open it. Every later `print send` takes one of these before it asks, so a send can show the bed
+   is empty.
 9. **Slice a test plate:** `bambu slice plate <model.stl>` (headless via the BambuStudio CLI;
    `--dry-run` prints the exact invocation, `--settings`/`--filament` pass profiles, and raw
    BambuStudio flags go after `--`). A `.bkr` must be rendered to STL first — slicing is not bikar's job.
@@ -135,9 +136,9 @@ is in [`rubric.md`](rubric.md).
 | `no status-like tool found` | griches renamed/omitted a tool | run `--probe-mcp` to list tools; update the CLI's hints |
 | `Bambu Studio not found` | not installed, or non-standard path | install it, or set `SLICER_PATH` |
 | `ffmpeg is not on PATH` | ffmpeg absent | `brew install ffmpeg` (only for snapshots) |
-| `no pinned camera certificate for <serial>` | the camera certificate was never saved | `bambu setup camera-pin` once |
-| `the camera's TLS check failed` | a factory reset or a renewed certificate — or not the pinned printer | after a reset, `bambu setup camera-pin` again; otherwise check the IP is the X2D. Never turn the check off |
-| `no certificate from <host>:322` | LAN Mode Liveview off, or wrong IP | turn Liveview on at the touchscreen; recheck the IP |
+| `no pinned printer certificate for <serial>` | the printer's certificate was never saved | `bambu setup printer-pin` once |
+| `the printer's TLS check failed` / `the camera's TLS check failed` | a factory reset or a renewed certificate — or not the pinned printer | after a reset, `bambu setup printer-pin` again; otherwise check the IP is the X2D. Never turn the check off |
+| `no certificate from <host>:8883` | LAN mode off, or wrong IP | turn LAN mode on at the touchscreen; recheck the IP |
 | osascript timed out | a GUI dialog is blocking | dismiss the dialog in the app; GUI fallback can't proceed past a modal |
 | no `bambu-x2d` machine target in bikar | `machines.ts` ships no X2D entry (Bambu side is x1c/p1s/a1/a1-mini) | add the `PrintTarget` in bikar (`packages/knobs/src/machines.ts`); it rides single-nozzle-labelled FDM per **D-053** — the dual nozzle lives in the label + profile header, not a widened schema. Build volume is read off the device, not invented |
 

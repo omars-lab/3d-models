@@ -16,7 +16,7 @@ import { loadConfig, mask } from "../config.js";
 import { probeStudio } from "../backends/studio-cli.js";
 import { appInstalled } from "../backends/applescript.js";
 import { McpBackend } from "../backends/mcp.js";
-import { CameraBackend, pinPath } from "../backends/camera.js";
+import { pinPath, savePin } from "../backends/tls-pin.js";
 import { discoverPrinters, isCloudBound, DISCOVERY_PORT, type DiscoveredPrinter } from "../backends/discover.js";
 import { runWithTimeout } from "../log.js";
 
@@ -126,13 +126,13 @@ async function runDoctor(opts: { probeMcp?: boolean }): Promise<Check[]> {
     detail: ff ? "present" : "absent — needed only for `bambu status camera` snapshots",
   });
 
-  // 5b. The camera's pinned certificate (`bambu setup camera-pin`)
+  // 5b. The printer's pinned certificate (`bambu setup printer-pin`): every connection needs it
   if (cfg.serial) {
     const pinned = existsSync(pinPath(cfg.serial));
     checks.push({
-      name: "camera pin",
-      status: pinned ? "PASS" : "WARN",
-      detail: pinned ? pinPath(cfg.serial) : "absent — run `bambu setup camera-pin` once for `status camera` and the bed photo",
+      name: "printer pin",
+      status: pinned ? "PASS" : "FAIL",
+      detail: pinned ? pinPath(cfg.serial) : "absent — run `bambu setup printer-pin` once; status, storage, send and the camera all need it",
     });
   }
 
@@ -291,26 +291,28 @@ export function registerSetup(program: Command): void {
       console.log(JSON.stringify(example, null, 2));
     });
 
-  // The camera's certificate comes from a Bambu device CA no file ships, so it is pinned instead:
-  // saved once here, then required on every `status camera` (backends/camera.ts). Sends no secret.
+  // The printer's certificate comes from a Bambu device CA no file ships, so it is pinned instead:
+  // saved once here, then required on every MQTT, FTPS and camera connection (backends/tls-pin.ts).
+  // Sends no secret. `camera-pin` was its name while only the camera checked it.
   setup
-    .command("camera-pin")
-    .description("save this printer's camera certificate as its pin (once; again after a reset)")
+    .command("printer-pin")
+    .alias("camera-pin")
+    .description("save this printer's certificate as its pin (once; again after a reset)")
     .action(async () => {
-      const cam = new CameraBackend();
-      if (!cam.configured()) {
-        console.error("Not configured: need PRINTER_HOST, BAMBU_SERIAL and BAMBU_TOKEN. Run `bambu setup doctor`.");
+      const cfg = loadConfig();
+      if (!cfg.host || !cfg.serial) {
+        console.error("Not configured: need PRINTER_HOST and BAMBU_SERIAL. Run `bambu setup doctor`.");
         process.exitCode = 1;
         return;
       }
       try {
-        const p = await cam.pin();
-        console.log(`pinned ${cam.config.serial}'s camera certificate → ${p.path}`);
+        const p = await savePin(cfg.host, cfg.serial);
+        console.log(`pinned ${cfg.serial}'s certificate → ${p.path}`);
         console.log(`  issuer:      ${p.issuer}`);
         console.log(`  valid until: ${p.validTo}`);
         console.log(`  sha256:      ${p.fingerprint}`);
       } catch (err) {
-        console.error(`camera-pin failed: ${(err as Error).message}`);
+        console.error(`printer-pin failed: ${(err as Error).message}`);
         process.exitCode = 1;
       }
     });

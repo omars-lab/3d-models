@@ -1,15 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { execFileSync } from "node:child_process";
-import { createHash, X509Certificate } from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { connect, createServer, type Server } from "node:tls";
+import { describe, expect, it } from "vitest";
+import { createHash } from "node:crypto";
 import {
   cameraUrl,
-  firstPem,
-  pinnedTlsOptions,
-  pinRefusal,
   RtspRewriter,
   scrub,
   signDigest,
@@ -17,94 +9,7 @@ import {
   urlSwaps,
 } from "./camera.js";
 
-// The camera reaches the printer through a pinned TLS hop (backends/camera.ts). The load-bearing
-// case is the refusal: a server showing any certificate but the pinned one, even one naming the same
-// serial, must not get a connection. The certificates are made here with openssl, shaped like the
-// X2D's: a leaf naming the serial, signed by a CA the server never sends.
-
-const SERIAL = "TESTSERIAL0001";
-let dir: string;
-const pem: Record<string, string> = {};
-const key: Record<string, string> = {};
-
-function ssl(...args: string[]): void {
-  execFileSync("openssl", args, { cwd: dir, stdio: "ignore" });
-}
-
-/** A CA, and a leaf it signs naming `cn`; returns the leaf's PEM and key. */
-function leaf(name: string, cn: string): void {
-  ssl("req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", `${name}-ca.key`, "-out", `${name}-ca.pem`,
-    "-days", "2", "-subj", `/CN=Test Device CA ${name}`);
-  ssl("req", "-newkey", "rsa:2048", "-nodes", "-keyout", `${name}.key`, "-out", `${name}.csr`, "-subj", `/CN=${cn}`);
-  ssl("x509", "-req", "-in", `${name}.csr`, "-CA", `${name}-ca.pem`, "-CAkey", `${name}-ca.key`,
-    "-CAcreateserial", "-out", `${name}.pem`, "-days", "2");
-  pem[name] = readFileSync(join(dir, `${name}.pem`), "utf8");
-  key[name] = readFileSync(join(dir, `${name}.key`), "utf8");
-}
-
-beforeAll(() => {
-  dir = mkdtempSync(join(tmpdir(), "camera-pin-"));
-  leaf("printer", SERIAL);
-  leaf("impostor", SERIAL); // same serial, different key and CA
-  leaf("other", "SOMEOTHERSERIAL");
-});
-
-afterAll(() => rmSync(dir, { recursive: true, force: true }));
-
-/** Serve `name`'s leaf (no chain) and try a pinned connection; resolve to "ok" or the error. */
-async function handshake(served: string, pinned: string): Promise<string> {
-  const server: Server = createServer({ cert: pem[served], key: key[served] }, (s) => s.end());
-  await new Promise<void>((ok) => server.listen(0, "127.0.0.1", ok));
-  const port = (server.address() as { port: number }).port;
-  try {
-    return await new Promise<string>((resolve) => {
-      const opts = { ...pinnedTlsOptions("127.0.0.1", SERIAL, pem[pinned]!), port };
-      const sock = connect(opts, () => {
-        sock.destroy();
-        resolve("ok");
-      });
-      sock.on("error", (err) => resolve(err.message));
-    });
-  } finally {
-    server.close();
-  }
-}
-
-describe("pinnedTlsOptions", () => {
-  it("connects to the pinned certificate although its CA is never sent", async () => {
-    expect(await handshake("printer", "printer")).toBe("ok");
-  });
-
-  it("refuses a certificate naming the same serial that is not the pinned one", async () => {
-    expect(await handshake("impostor", "printer")).not.toBe("ok");
-  });
-
-  it("refuses the pinned certificate's twin naming another serial", async () => {
-    expect(await handshake("other", "other")).toMatch(/names SOMEOTHERSERIAL, not TESTSERIAL0001/);
-  });
-});
-
-describe("pinRefusal", () => {
-  it("accepts a certificate naming the serial, in date", () => {
-    expect(pinRefusal(new X509Certificate(pem.printer!), SERIAL)).toBeNull();
-  });
-  it("refuses one naming another serial", () => {
-    expect(pinRefusal(new X509Certificate(pem.other!), SERIAL)).toMatch(/names SOMEOTHERSERIAL/);
-  });
-  it("refuses one out of date", () => {
-    expect(pinRefusal(new X509Certificate(pem.printer!), SERIAL, new Date("2001-01-01"))).toMatch(/out of date/);
-  });
-});
-
-describe("firstPem", () => {
-  it("takes the first certificate out of s_client output", () => {
-    const out = `CONNECTED\n${pem.printer}${pem.other}---\n`;
-    expect(firstPem(out)).toBe(`${pem.printer!.trim()}\n`);
-  });
-  it("is null when there is none", () => {
-    expect(firstPem("connect:errno=61")).toBeNull();
-  });
-});
+// The pinned TLS hop the camera rides is tested with the other connections in tls-pin.test.ts.
 
 describe("cameraUrl and snapshotArgs", () => {
   it("opens the loopback relay with the stand-in password, never the access code", () => {

@@ -11,8 +11,10 @@
 //
 // Bambu LAN facts this encodes (grounded against griches src/mqtt-client.ts, verified 2026-09-16):
 //   - mqtts://<host>:8883, username `bblp`, password = the 8-char LAN access code (BAMBU_TOKEN).
-//   - The device cert is self-signed → `rejectUnauthorized: false` (standard for Bambu LAN; the
-//     trust boundary is the LAN, not the cert). No cert pinning is possible against stock firmware.
+//   - The certificate comes from a Bambu device CA no file ships, so it is checked against this
+//     printer's pin (backends/tls-pin.ts, `bambu setup printer-pin`). The access code rides in the
+//     connection, so a printer that does not show the pinned certificate never gets it. Until
+//     2026-10-04 this skipped the check (`rejectUnauthorized: false`): docs/issues/camera-tls-pin.md.
 //   - Status arrives asynchronously on `device/<serial>/report`; we cache `print`/`mc_print` and
 //     nudge a full push with `device/<serial>/request` `{ pushing: { command: "pushall" } }`.
 //   - Bambu firmware permits only ONE MQTT client at a time — BambuStudio/OrcaSlicer/Home Assistant
@@ -21,6 +23,7 @@
 import mqtt from "mqtt";
 import { ev } from "../log.js";
 import { loadConfig, type PrinterConfig } from "../config.js";
+import { pinFailureHint, pinnedTlsOptions, readPin } from "./tls-pin.js";
 
 const MQTT_PORT = 8883;
 const MQTT_USER = "bblp";
@@ -204,6 +207,7 @@ export class MqttBackend {
     if (!this.configured()) {
       throw new Error("printer config missing (need PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN)");
     }
+    const pin = pinnedTlsOptions(this.config.serial!, readPin(this.config.serial!));
     ev("mqtt_connect_start", { host: this.config.host ?? "", port: MQTT_PORT });
 
     await new Promise<void>((resolve, reject) => {
@@ -229,7 +233,7 @@ export class MqttBackend {
         protocol: "mqtts",
         username: MQTT_USER,
         password: this.config.token,
-        rejectUnauthorized: false, // self-signed device cert; trust boundary is the LAN
+        ...pin, // only the pinned certificate; the password is sent after it is checked
         reconnectPeriod: 0, // one shot — a CLI command is not a long-lived subscriber
         connectTimeout: Math.min(timeoutMs, 10_000),
       });
@@ -283,6 +287,9 @@ export class MqttBackend {
   /** Turn the two opaque LAN failures into the actions that fix them. */
   private enhance(err: Error): Error {
     const msg = err.message || "";
+    if (/certificate|pinned/i.test(msg)) {
+      return new Error(`the printer's TLS check failed: ${msg}. ${pinFailureHint()}`);
+    }
     if (/ECONNRESET|connack timeout|closed before/i.test(msg)) {
       return new Error(
         `${msg}. Two usual causes: (1) Bambu allows only ONE MQTT client — close BambuStudio / ` +

@@ -28,7 +28,7 @@ From anywhere in the repo: `tools/bambu/bin/bambu <group> <verb>` (or in `tools/
 | Want to… | Verb | Safe to run now? |
 |---|---|---|
 | See temps / AMS / job progress | `status show` · `status monitor` | **read-only** — needs transport (bring-up done) |
-| **See the bed** (is it empty, is the plate in) | `status camera -o <file.jpg>` — one frame; `print send` takes one itself before the confirm (`--no-bed-photo` skips) | **read-only** — `setup camera-pin` once first (the camera's certificate is pinned, [why](../../../docs/issues/camera-tls-pin.md)); then open the JPEG and look |
+| **See the bed** (is it empty, is the plate in) | `status camera -o <file.jpg>` — one frame; `print send` takes one itself before the confirm (`--no-bed-photo` skips) | **read-only** — `setup printer-pin` once first (the printer's certificate is pinned for every connection, [why](../../../docs/issues/camera-tls-pin.md)); then open the JPEG and look |
 | **Auto-pull the bench-sheet profile header** | `header` (`--plate <plate.3mf>` fills machine/layer/profile/slicer; `--json`) | **read-only** — fills the header off the machine + `.3mf`; the manual fields (ambient/enclosure/caliper) stay yours |
 | Turn a `.bkr`/STL into a plate | `slice plate <model>` (`--dry-run`, `--settings`/`--filament`) | local — needs Bambu Studio installed |
 | **List what was printed — and how** | `print list` (`--how` for machine/material/nozzle/profile; `--settles`/`--material`/`--machine`/`--status` filter; `--shipped`/`--drafts`/`--json`) | **always** — reads records, touches no hardware |
@@ -78,8 +78,8 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   checks and shows exactly what it *would* send.
 - **Look at the bed before a send.** Both `print send` and its `--dry-run` save a camera frame under
   `.bambu/bed/` and print the path. Open it and say what is on the plate before anyone confirms.
-  If the camera refuses its certificate (after a printer reset), run `setup camera-pin` again;
-  never route around the check.
+  If the printer's certificate is refused (after a printer reset), run `setup printer-pin` again;
+  never route around the check. It covers MQTT, FTPS and the camera alike.
 - **`slice` and `print send` share one honesty contract.** `slice plate` captures Studio's own
   warnings and writes a `<plate>.warnings.json` sidecar stamped with the sliced `.3mf`'s
   `source_sha256`; `print send` refuses to dispatch unless that sidecar is **present, fresh (hash

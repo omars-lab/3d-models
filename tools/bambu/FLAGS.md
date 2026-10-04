@@ -37,9 +37,9 @@ preflight every dependency and connection; names what's missing
 
 show the .mcp.json griches entry to add (real file is gitignored — carries the token)
 
-### `bambu setup camera-pin`
+### `bambu setup printer-pin`
 
-save this printer's camera certificate as its pin (once; again after a reset)
+save this printer's certificate as its pin (once; again after a reset)
 
 ### `bambu setup studio`
 
