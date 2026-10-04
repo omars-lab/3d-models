@@ -106,6 +106,9 @@ nothing about lines the branch deleted.
 
 ## Bringing unmerged work back
 
+- Before a `diverged` branch is merged, snapshot the default too, as
+  `<default>-before-<branch>=origin/<default>`, so both sides as they stood are on origin (Omar,
+  2026-10-04: "backup main and branch for hard to merge branches").
 - Start a fresh branch off `origin/<default>`, open a PR, and merge it. Never force-push. Never
   base a PR on another open PR's branch.
 - Resolve every conflict by hand and keep both sides. Never use `-X ours`, `-X theirs`,
