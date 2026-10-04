@@ -12,14 +12,7 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **Confirm `md5` and `bed_type` against a Studio send.** The `print send` dry run for
-   sheets-04b matched the printer's report of Studio's sheets-04 send on `ams_mapping` (both
-   `[3]`), on the project, profile and subtask ids (all `"0"`) and on `print_type` local. The
-   report shows neither Studio's `md5` nor its `bed_type`; it gives the plate as
-   `cur_id "P0101"`. Read Studio's request itself: try subscribing to `device/<serial>/request`
-   while Omar sends from Studio (untested; the printer may not let a client read that topic). Then fix any field that differs before the first CLI send
-   ([first-party-dispatch](../../issues/first-party-dispatch.md)). Found 2026-10-02.
-2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+1. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
    so packing no longer decides whether a plate is production; it now saves time and filament
