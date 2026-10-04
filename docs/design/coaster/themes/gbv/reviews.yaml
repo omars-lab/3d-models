@@ -114,3 +114,93 @@ reviews:
       gift-buyer: { score: 5, why: "Looks like it came in a box; safe for any kitchen and still special." }
       cafe-owner: { score: 5, why: "Two plates, one color to buy, black hides rings, and it suits most rooms." }
     overall: "The strongest all-rounder and the cheapest to add to the range; only the specialty fan finds it generic."
+
+  # Gradients and finishes, reviewed 2026-10-04 after looking at each picture. Silk sheen and
+  # sparkle flecks are drawn roughly, so a reason that leans on the finish leans on a guess.
+  - theme: ice-to-navy
+    coloring: d98115ed1b
+    scores:
+      espresso-purist: { score: 2, why: "Four blues and a white frame; calm, but cool and bright where they want dark and roasted." }
+      latte-regular: { score: 3, why: "Fresh and pretty, though icy blue next to a warm drink feels a little cold." }
+      cold-brew-minimalist: { score: 5, why: "One hue stepping from pale to deep, with white straps; the rings read clearly from across the table." }
+      third-wave-fan: { score: 4, why: "Looking down into cold water is a real idea, and the steps feel chosen, not stock." }
+      gift-buyer: { score: 4, why: "Looks finished and calm; blue suits most kitchens, though the white frame feels delicate." }
+      cafe-owner: { score: 2, why: "Five colors to buy, five plates, and a white frame that will show every coffee ring." }
+    overall: "The light-middle, dark-edge gradient reads well and pleases the cool crowd; five plates and a white frame are its cost."
+
+  - theme: navy-to-ice
+    coloring: ea608d8858
+    scores:
+      espresso-purist: { score: 3, why: "The dark heart in a black frame is quieter than the white one, but it is still four blues." }
+      latte-regular: { score: 2, why: "Black straps and a pale icy rim feel stark next to a latte." }
+      cold-brew-minimalist: { score: 4, why: "Clean and cool, but the dark middle sinks into the black straps, so the heart is lost." }
+      third-wave-fan: { score: 3, why: "The glow outward is nice, though it reads as the other one turned over rather than its own idea." }
+      gift-buyer: { score: 3, why: "Handsome, but the pale outer ring looks unfinished against the heavy black frame." }
+      cafe-owner: { score: 3, why: "Black hides rings, but still four colors to buy and five plates per coaster." }
+    overall: "Stain-proof where Ice to navy is not, but the dark middle melts into the black straps and the pale rim looks thin."
+
+  - theme: latte-to-espresso
+    coloring: 22b3901461
+    scores:
+      espresso-purist: { score: 4, why: "Roasted browns to the edge they love; they would drop the white frame for dark chocolate." }
+      latte-regular: { score: 5, why: "A milky heart darkening to espresso in a white frame; it looks like their cup from above." }
+      cold-brew-minimalist: { score: 2, why: "Warm browns, and the hex and star rings are the same brown, so the steps flatten out." }
+      third-wave-fan: { score: 4, why: "A coffee gradient on a coffee coaster has a clear story, if an obvious one." }
+      gift-buyer: { score: 5, why: "Any coffee drinker gets it at a glance; warm, safe and special." }
+      cafe-owner: { score: 2, why: "Four browns and a white to buy, five plates, and the white frame shows stains." }
+    overall: "The warmest gradient and a gift and latte favorite; the white frame and five plates hold it back for a café."
+
+  - theme: sakura-to-plum
+    coloring: 153871143d
+    scores:
+      espresso-purist: { score: 1, why: "Pink, lilac, hot pink and plum; sweet and loud, nothing roasted." }
+      latte-regular: { score: 4, why: "Blossom pink to plum is soft and cheerful, though the bright pink ring is louder than the rest." }
+      cold-brew-minimalist: { score: 2, why: "Warm and four colors; the hot pink ring breaks the step from light to dark." }
+      third-wave-fan: { score: 3, why: "Cherry blossom season is a story, but the stock hot pink in the middle of it feels unchosen." }
+      gift-buyer: { score: 3, why: "Lovely for someone who likes pink, a risk for anyone else." }
+      cafe-owner: { score: 2, why: "Four to buy, five plates, and a white frame; suits one kind of café." }
+    overall: "A pretty pink gradient for the latte crowd; the catalog has no Matte pink between sakura and plum, so the hot pink tray fills the gap."
+
+  - theme: silk-black-and-gold
+    coloring: 92417c30b7
+    scores:
+      espresso-purist: { score: 4, why: "Two colors and dark, and the silk gold reads as brass; a touch flashier than plain gold." }
+      latte-regular: { score: 3, why: "Smart and shiny, but black is harsher than the soft look they like." }
+      cold-brew-minimalist: { score: 4, why: "Two colors, crisp contrast; the shine adds interest without adding a color." }
+      third-wave-fan: { score: 3, why: "The sheen makes it feel more crafted than plain gold, still the familiar gift-box look." }
+      gift-buyer: { score: 5, why: "Black and shining gold looks like it came in a box; the safest special gift here." }
+      cafe-owner: { score: 4, why: "Two plates and one color to buy, but silk shows scratches more than matte in daily use." }
+    overall: "Black and gold made shinier; the gift pick, if silk wears as well as the drawing hopes."
+
+  - theme: champagne-rose
+    coloring: 0c6bcd2300
+    scores:
+      espresso-purist: { score: 2, why: "Black frame is right, but three shiny pastels is jewelry, not coffee." }
+      latte-regular: { score: 5, why: "Champagne and rose gold round a gold heart; soft, warm and glowing in a photo." }
+      cold-brew-minimalist: { score: 2, why: "Warm, three colors, and rose gold and champagne sit close enough to soften." }
+      third-wave-fan: { score: 3, why: "The jewelry box is a mood more than a story; nicely chosen, not much behind it." }
+      gift-buyer: { score: 5, why: "Looks like a present at first sight; rose gold suits almost anyone's kitchen." }
+      cafe-owner: { score: 2, why: "Three silk colors to buy, four plates, and shiny pastels suit only a smart tea room." }
+    overall: "The prettiest gift in the set and a latte favorite; three silk colors to buy and four plates."
+
+  - theme: night-sky
+    coloring: e4c9d165f6
+    scores:
+      espresso-purist: { score: 3, why: "Dark and deep, but sparkle and gold stars are more fun than they want under a cup." }
+      latte-regular: { score: 3, why: "Pretty like a night sky, though dark and cool next to a warm drink." }
+      cold-brew-minimalist: { score: 3, why: "Strong contrast, but four colors and glitter is busier than they like." }
+      third-wave-fan: { score: 4, why: "Gold stars on deep blue is a real picture, and the glitter frame feels made on purpose." }
+      gift-buyer: { score: 4, why: "Special and magical; a kid's room or a stargazer will love it, others may find it a little much." }
+      cafe-owner: { score: 3, why: "Dark hides rings, but all four colors to buy and four plates." }
+    overall: "The most playful dark theme and a good story; the glitter and four colors are too much for the quiet crowd."
+
+  - theme: gilded-rose
+    coloring: d9c0cf3d22
+    scores:
+      espresso-purist: { score: 2, why: "One spool and a black frame is restrained, but orange to rose shine is not their tone." }
+      latte-regular: { score: 4, why: "Warm sunset colors that glow; they like that each coaster comes out a little different." }
+      cold-brew-minimalist: { score: 2, why: "Two plates is clean, but the color will wander from piece to piece, so the pattern loses its order." }
+      third-wave-fan: { score: 4, why: "Every coaster one of a kind has a handmade appeal, even if the spool is doing the choosing." }
+      gift-buyer: { score: 3, why: "Lovely if it comes out like the picture, but nobody can say in advance which pieces get which color." }
+      cafe-owner: { score: 3, why: "Two plates and one spool is cheap, but a set of twelve will not match, which some cafés want." }
+    overall: "Cheap to print and one of a kind each time; the colors land by luck, so the picture is a hope, not a promise."

@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 758" width="866" height="758" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Matte: 25 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="758" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Matte</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">25 colors · finish: matte</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Ivory White</text>
+  <text x="14" y="147" font-size="11">11100 · W2</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#000000" stroke="#00000033" stroke-width="1" />
+  <circle cx="271" cy="57" r="8" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="2" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Charcoal</text>
+  <text x="156" y="147" font-size="11">11101 · K1</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#000000</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#9B9EA0" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Ash Gray</text>
+  <text x="298" y="147" font-size="11">11102 · D3</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#9B9EA0</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#CBC6B8" stroke="#00000033" stroke-width="1" />
+  <circle cx="555" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Bone White</text>
+  <text x="440" y="147" font-size="11">11103 · W3</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#CBC6B8</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#757575" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Nardo Gray</text>
+  <text x="582" y="147" font-size="11">11104 · D0</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#757575</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#DE4343" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Scarlet Red</text>
+  <text x="724" y="147" font-size="11">11200 · R1</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#DE4343</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#E8AFCF" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="272" font-size="12.5" font-weight="bold">Sakura Pink</text>
+  <text x="14" y="287" font-size="11">11201 · P3</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#E8AFCF</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#BB3D43" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Dark Red</text>
+  <text x="156" y="287" font-size="11">11202 · R4</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#BB3D43</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="#B15533" stroke="#00000033" stroke-width="1" />
+  <circle cx="413" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Terracotta</text>
+  <text x="298" y="287" font-size="11">11203 · R2</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#B15533</text>
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="#950051" stroke="#00000033" stroke-width="1" />
+  <circle cx="555" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="440" y="272" font-size="12.5" font-weight="bold">Plum</text>
+  <text x="440" y="287" font-size="11">11204 · R3</text>
+  <text x="440" y="301" font-size="10.5" fill="#555555">#950051</text>
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="#F99963" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="272" font-size="12.5" font-weight="bold">Mandarin Orange</text>
+  <text x="582" y="287" font-size="11">11300 · A2</text>
+  <text x="582" y="301" font-size="10.5" fill="#555555">#F99963</text>
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="#F7D959" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="272" font-size="12.5" font-weight="bold">Lemon Yellow</text>
+  <text x="724" y="287" font-size="11">11400 · Y2</text>
+  <text x="724" y="301" font-size="10.5" fill="#555555">#F7D959</text>
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="#E8DBB7" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="337" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="412" font-size="12.5" font-weight="bold">Desert Tan</text>
+  <text x="14" y="427" font-size="11">11401 · Y3</text>
+  <text x="14" y="441" font-size="10.5" fill="#555555">#E8DBB7</text>
+  <rect x="156" y="324" width="128" height="72" rx="8" fill="#61C680" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="412" font-size="12.5" font-weight="bold">Grass Green</text>
+  <text x="156" y="427" font-size="11">11500 · G1</text>
+  <text x="156" y="441" font-size="10.5" fill="#555555">#61C680</text>
+  <rect x="298" y="324" width="128" height="72" rx="8" fill="#68724D" stroke="#00000033" stroke-width="1" />
+  <circle cx="413" cy="337" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="298" y="412" font-size="12.5" font-weight="bold">Dark Green</text>
+  <text x="298" y="427" font-size="11">11501 · G7</text>
+  <text x="298" y="441" font-size="10.5" fill="#555555">#68724D</text>
+  <rect x="440" y="324" width="128" height="72" rx="8" fill="#C2E189" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="412" font-size="12.5" font-weight="bold">Apple Green</text>
+  <text x="440" y="427" font-size="11">11502 · G0</text>
+  <text x="440" y="441" font-size="10.5" fill="#555555">#C2E189</text>
+  <rect x="582" y="324" width="128" height="72" rx="8" fill="#0078BF" stroke="#00000033" stroke-width="1" />
+  <circle cx="697" cy="337" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="582" y="412" font-size="12.5" font-weight="bold">Marine Blue</text>
+  <text x="582" y="427" font-size="11">11600 · B3</text>
+  <text x="582" y="441" font-size="10.5" fill="#555555">#0078BF</text>
+  <rect x="724" y="324" width="128" height="72" rx="8" fill="#A3D8E1" stroke="#00000033" stroke-width="1" />
+  <circle cx="839" cy="337" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="724" y="412" font-size="12.5" font-weight="bold">Ice Blue</text>
+  <text x="724" y="427" font-size="11">11601 · B4</text>
+  <text x="724" y="441" font-size="10.5" fill="#555555">#A3D8E1</text>
+  <rect x="14" y="464" width="128" height="72" rx="8" fill="#042F56" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="552" font-size="12.5" font-weight="bold">Dark Blue</text>
+  <text x="14" y="567" font-size="11">11602 · B6</text>
+  <text x="14" y="581" font-size="10.5" fill="#555555">#042F56</text>
+  <rect x="156" y="464" width="128" height="72" rx="8" fill="#56B7E6" stroke="#00000033" stroke-width="1" />
+  <circle cx="271" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="156" y="552" font-size="12.5" font-weight="bold">Sky Blue</text>
+  <text x="156" y="567" font-size="11">11603 · B0</text>
+  <text x="156" y="581" font-size="10.5" fill="#555555">#56B7E6</text>
+  <rect x="298" y="464" width="128" height="72" rx="8" fill="#AE96D4" stroke="#00000033" stroke-width="1" />
+  <circle cx="413" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="298" y="552" font-size="12.5" font-weight="bold">Lilac Purple</text>
+  <text x="298" y="567" font-size="11">11700 · P4</text>
+  <text x="298" y="581" font-size="10.5" fill="#555555">#AE96D4</text>
+  <rect x="440" y="464" width="128" height="72" rx="8" fill="#D3B7A7" stroke="#00000033" stroke-width="1" />
+  <circle cx="555" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="440" y="552" font-size="12.5" font-weight="bold">Latte Brown</text>
+  <text x="440" y="567" font-size="11">11800 · N1</text>
+  <text x="440" y="581" font-size="10.5" fill="#555555">#D3B7A7</text>
+  <rect x="582" y="464" width="128" height="72" rx="8" fill="#7D6556" stroke="#00000033" stroke-width="1" />
+  <circle cx="697" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="582" y="552" font-size="12.5" font-weight="bold">Dark Brown</text>
+  <text x="582" y="567" font-size="11">11801 · N2</text>
+  <text x="582" y="581" font-size="10.5" fill="#555555">#7D6556</text>
+  <rect x="724" y="464" width="128" height="72" rx="8" fill="#4D3324" stroke="#00000033" stroke-width="1" />
+  <circle cx="839" cy="477" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="724" y="552" font-size="12.5" font-weight="bold">Dark Chocolate</text>
+  <text x="724" y="567" font-size="11">11802 · N0</text>
+  <text x="724" y="581" font-size="10.5" fill="#555555">#4D3324</text>
+  <rect x="14" y="604" width="128" height="72" rx="8" fill="#AE835B" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="617" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="14" y="692" font-size="12.5" font-weight="bold">Caramel</text>
+  <text x="14" y="707" font-size="11">11803 · N3</text>
+  <text x="14" y="721" font-size="10.5" fill="#555555">#AE835B</text>
+</svg>

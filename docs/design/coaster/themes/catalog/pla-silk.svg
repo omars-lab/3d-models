@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 478" width="866" height="478" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Silk: 18 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+    <linearGradient id="c13104-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13105-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13202-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13300-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13401-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13502-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13601-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13701-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13901-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#FF9425" /><stop offset="1.00" stop-color="#C16784" /></linearGradient>
+    <linearGradient id="c13901-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13902-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#0047BB" /><stop offset="1.00" stop-color="#7D1B49" /></linearGradient>
+    <linearGradient id="c13902-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13903-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#0047BB" /><stop offset="1.00" stop-color="#BB22A3" /></linearGradient>
+    <linearGradient id="c13903-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13904-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#418FDE" /><stop offset="1.00" stop-color="#70C884" /></linearGradient>
+    <linearGradient id="c13904-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13905-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#000000" /><stop offset="1.00" stop-color="#A34342" /></linearGradient>
+    <linearGradient id="c13905-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13906-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#F772A4" /><stop offset="1.00" stop-color="#00918B" /></linearGradient>
+    <linearGradient id="c13906-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13909-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#7F3696" /><stop offset="1.00" stop-color="#006EC9" /></linearGradient>
+    <linearGradient id="c13909-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13912-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#EC984C" /><stop offset="0.33" stop-color="#6CD4BC" /><stop offset="0.67" stop-color="#A66EB9" /><stop offset="1.00" stop-color="#D87694" /></linearGradient>
+    <linearGradient id="c13912-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13913-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#720062" /><stop offset="1.00" stop-color="#3A913F" /></linearGradient>
+    <linearGradient id="c13913-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+    <linearGradient id="c13916-spool" x1="0" y1="0" x2="1" y2="1"><stop offset="0.00" stop-color="#00629B" /><stop offset="1.00" stop-color="#000000" /></linearGradient>
+    <linearGradient id="c13916-sheen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0" /><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.55" /><stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.1" /><stop offset="1" stop-color="#FFFFFF" stop-opacity="0" /></linearGradient>
+  </defs>
+  <rect width="866" height="478" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Silk</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">18 colors · finish: silk</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#EAECEB" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="url(#c13104-sheen)" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Silver</text>
+  <text x="14" y="147" font-size="11">13104 · D1</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#EAECEB</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="url(#c13105-sheen)" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">White</text>
+  <text x="156" y="147" font-size="11">13105 · W0</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#EEB1C1" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="url(#c13202-sheen)" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Pink</text>
+  <text x="298" y="147" font-size="11">13202 · P3</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#EEB1C1</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#5E4B3C" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="url(#c13300-sheen)" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Copper</text>
+  <text x="440" y="147" font-size="11">13300 · N4</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#5E4B3C</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#E5B03D" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="url(#c13401-sheen)" />
+  <circle cx="697" cy="57" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Gold</text>
+  <text x="582" y="147" font-size="11">13401 · Y4</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#E5B03D</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#4CE4A0" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="url(#c13502-sheen)" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Green</text>
+  <text x="724" y="147" font-size="11">13502 · G1</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#4CE4A0</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#147BD1" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="url(#c13601-sheen)" />
+  <text x="14" y="272" font-size="12.5" font-weight="bold">Blue</text>
+  <text x="14" y="287" font-size="11">13601 · B0</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#147BD1</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#854CE4" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="url(#c13701-sheen)" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Purple</text>
+  <text x="156" y="287" font-size="11">13701 · P5</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#854CE4</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="url(#c13901-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="url(#c13901-sheen)" />
+  <circle cx="413" cy="197" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Gilded Rose</text>
+  <text x="298" y="287" font-size="11">13901 · T1 · multi</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#FF9425 #C16784</text>
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="url(#c13902-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="url(#c13902-sheen)" />
+  <text x="440" y="272" font-size="12.5" font-weight="bold">Midnight Blaze</text>
+  <text x="440" y="287" font-size="11">13902 · T2 · multi</text>
+  <text x="440" y="301" font-size="10.5" fill="#555555">#0047BB #7D1B49</text>
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="url(#c13903-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="url(#c13903-sheen)" />
+  <text x="582" y="272" font-size="12.5" font-weight="bold">Neon City</text>
+  <text x="582" y="287" font-size="11">13903 · T3 · multi</text>
+  <text x="582" y="301" font-size="10.5" fill="#555555">#0047BB #BB22A3</text>
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="url(#c13904-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="url(#c13904-sheen)" />
+  <text x="724" y="272" font-size="12.5" font-weight="bold">Blue Hawaii</text>
+  <text x="724" y="287" font-size="11">13904 · T4 · multi</text>
+  <text x="724" y="301" font-size="10.5" fill="#555555">#418FDE #70C884</text>
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="url(#c13905-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="url(#c13905-sheen)" />
+  <text x="14" y="412" font-size="10.5" font-weight="bold">Velvet Eclipse (Black-R…</text>
+  <text x="14" y="427" font-size="11">13905 · T5 · multi</text>
+  <text x="14" y="441" font-size="10.5" fill="#555555">#000000 #A34342</text>
+  <rect x="156" y="324" width="128" height="72" rx="8" fill="url(#c13906-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="156" y="324" width="128" height="72" rx="8" fill="url(#c13906-sheen)" />
+  <text x="156" y="412" font-size="12.5" font-weight="bold">South Beach</text>
+  <text x="156" y="427" font-size="11">13906 · M1 · gradient</text>
+  <text x="156" y="441" font-size="10.5" fill="#555555">#F772A4 #00918B</text>
+  <rect x="298" y="324" width="128" height="72" rx="8" fill="url(#c13909-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="298" y="324" width="128" height="72" rx="8" fill="url(#c13909-sheen)" />
+  <text x="298" y="412" font-size="12.5" font-weight="bold">Aurora Purple</text>
+  <text x="298" y="427" font-size="11">13909 · M4 · gradient</text>
+  <text x="298" y="441" font-size="10.5" fill="#555555">#7F3696 #006EC9</text>
+  <rect x="440" y="324" width="128" height="72" rx="8" fill="url(#c13912-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="440" y="324" width="128" height="72" rx="8" fill="url(#c13912-sheen)" />
+  <text x="440" y="412" font-size="12.5" font-weight="bold">Dawn Radiance</text>
+  <text x="440" y="427" font-size="11">13912 · M8 · gradient</text>
+  <text x="440" y="441" font-size="10.5" fill="#555555">#EC984C #6CD4BC</text>
+  <text x="440" y="453" font-size="10.5" fill="#555555">#A66EB9 #D87694</text>
+  <rect x="582" y="324" width="128" height="72" rx="8" fill="url(#c13913-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="582" y="324" width="128" height="72" rx="8" fill="url(#c13913-sheen)" />
+  <text x="582" y="412" font-size="12.5" font-weight="bold">Mystic Magenta</text>
+  <text x="582" y="427" font-size="11">13913 · T7 · multi</text>
+  <text x="582" y="441" font-size="10.5" fill="#555555">#720062 #3A913F</text>
+  <rect x="724" y="324" width="128" height="72" rx="8" fill="url(#c13916-spool)" stroke="#00000033" stroke-width="1" />
+  <rect x="724" y="324" width="128" height="72" rx="8" fill="url(#c13916-sheen)" />
+  <text x="724" y="412" font-size="12.5" font-weight="bold">Phantom Blue</text>
+  <text x="724" y="427" font-size="11">13916 · T9 · multi</text>
+  <text x="724" y="441" font-size="10.5" fill="#555555">#00629B #000000</text>
+</svg>

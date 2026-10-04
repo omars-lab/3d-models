@@ -20,8 +20,13 @@ Usage:
     themes.py render   <id> [--png DIR]      every theme's picture; --png also writes PNGs to look at
     themes.py check    <id> | --all          colors, neighbors, contrast, plates; stale files fail
     themes.py suggest  <id> --helper match-trays|alternate|one-color [--colors a,b,...]
+    themes.py suggest  <id> --helper gradient --from <color> --to <color> [--reverse] [--lines L1,L2]
     themes.py gallery  <id>                  write the gallery page
     themes.py --self-test
+
+A color is a palette.yaml id. Every buy color is checked against the Bambu catalog that
+`catalog.py` builds, which also says each color's finish (silk, sparkle, translucent, ...) and
+whether its spool carries more than one hex; the pictures draw both.
 """
 from __future__ import annotations
 
@@ -39,11 +44,13 @@ from pathlib import Path
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import catalog as bambu  # noqa: E402  (the catalog script beside this one)
+
 SKILL = Path(__file__).resolve().parent.parent
 ROOT = SKILL.parent.parent.parent
 THEMES_DIR = ROOT / "docs" / "design" / "coaster" / "themes"
 PALETTE = SKILL / "palette.yaml"
-RESEARCH = ROOT / "docs" / "research" / "2026-10-04-bambu-pla-color-hexes.md"
 PERSONAS = ROOT / ".claude" / "skills" / "review-theme" / "personas.md"
 
 FRAME = "frame"
@@ -53,6 +60,9 @@ BACKDROP = "#EFEAE3"  # a light table color behind every picture, so white and b
 # on these renders; nothing we have measured says what a person sees across a strap, so it is a
 # starting number to tune on the first prints (infill-color-ux-design §4.3 says the same).
 CLOSE_DELTA_E = 20.0
+# Below this colorfulness (C* in L*a*b*) a color counts as a gray, black or white: what the
+# gradient helper picks a frame from, and never a step between two colorful ends.
+NEUTRAL_CHROMA = 12.0
 
 
 # ---------------------------------------------------------------- data
@@ -63,27 +73,48 @@ def load_yaml(path: Path):
         return yaml.safe_load(f)
 
 
-def palette(path: Path = PALETTE) -> dict:
-    """Color id -> {hex, name, owned, ...}."""
+def palette(path: Path = PALETTE, cat: dict | None = None) -> dict:
+    """Color id -> {hex, hexes, name, owned, finish, alpha, kind, ...}.
+
+    `hex` is the one color the checks and the color math use: the spool's own hex, or for a
+    spool with several, their average. `hexes` is every hex the spool carries (without alpha).
+    A buy color's finish, alpha and kind come from the catalog by its product code. An owned
+    tray is only a hex the printer reported, so it has no finish and is drawn flat.
+    """
     data = load_yaml(path)
+    by_code = (cat or bambu.load_catalog())["by_code"]
     out = {}
     for c in data["owned"]:
-        out[c["id"]] = {**c, "hex": c["hex"].upper(), "owned": True}
+        h = c["hex"].upper()
+        out[c["id"]] = {**c, "hex": h, "hexes": [h], "owned": True, "finish": None, "alpha": 1.0, "kind": "single"}
     for c in data["buy"]:
         if c["id"] in out:
             raise SystemExit(f"palette: color id {c['id']} listed twice")
-        out[c["id"]] = {**c, "hex": c["hex"].upper(), "owned": False}
+        hexes = [h.upper() for h in (c["hexes"] if "hexes" in c else [c["hex"]])]
+        e = by_code.get(str(c["code"]))
+        out[c["id"]] = {**c, "hex": spool_mean(hexes), "hexes": hexes, "owned": False,
+                        "finish": e["finish"] if e else None,
+                        "alpha": bambu.alpha(e["hexes"][0]) if e else 1.0,
+                        "kind": e["kind"] if e else "single"}
     return out
 
 
-def research_rows(path: Path = RESEARCH) -> dict:
-    """Product code -> (name, hex) from the research file's tables."""
-    rows = {}
-    for line in path.read_text().splitlines():
-        m = re.match(r"\|\s*(\d{5})\s*\|\s*\w+\s*\|\s*([^|]+?)\s*\|\s*`(#[0-9A-Fa-f]{6})`\s*\|", line)
-        if m:
-            rows[m.group(1)] = (m.group(2), m.group(3).upper())
-    return rows
+def buy_problems(c: dict, cat: dict) -> list[str]:
+    """A buy color must be a catalog color in a coaster line, with the catalog's name and hexes."""
+    e = cat["by_code"].get(str(c.get("code")))
+    if e is None:
+        return [f"code {c.get('code')} is not in the Bambu catalog"]
+    out = []
+    want = [bambu.opaque(h) for h in e["hexes"]]
+    if c["hexes"] != want:
+        out.append(f"{' '.join(c['hexes'])} differs from the catalog's {' '.join(want)} for {e['code']}")
+    if c["name"] != e["name"]:
+        out.append(f"name {c['name']!r} differs from the catalog's {e['name']!r}")
+    if c.get("line") != e["line"]:
+        out.append(f"line {c.get('line')!r} differs from the catalog's {e['line']!r}")
+    if e["line"] not in cat["coaster_lines"]:
+        out.append(f"{e['line']} is not a line a coaster prints in (catalog.yaml coaster_lines)")
+    return out
 
 
 def construction(cid: str, root: Path = THEMES_DIR) -> dict:
@@ -140,6 +171,14 @@ def delta_e(a: str, b: str) -> float:
 def mix(hexstr: str, other: str, t: float) -> str:
     a, b = rgb(hexstr), rgb(other)
     return to_hex(tuple(x + (y - x) * t for x, y in zip(a, b)))
+
+
+def spool_mean(hexes: list[str]) -> str:
+    """The average of a spool's hexes, for the checks; one hex is itself."""
+    if len(hexes) == 1:
+        return hexes[0][:7].upper()
+    cs = [rgb(h) for h in hexes]
+    return to_hex(tuple(sum(c[i] for c in cs) / len(cs) for i in range(3)))
 
 
 def edge_shade(hexstr: str) -> str:
@@ -293,31 +332,83 @@ def face_groups(con: dict, faces: list[dict]) -> list[str]:
     return [by_marker[f["fill"]] for f in faces]
 
 
+def needs_finish(c: dict) -> bool:
+    """Whether a color draws as more than a flat fill: a finish, a see-through, or several hexes."""
+    return (len(c["hexes"]) > 1 or c["alpha"] < 1
+            or c["finish"] in bambu.SHEEN or c["finish"] in bambu.FLECKS)
+
+
 def draw(con: dict, theme: dict, base_svg: str, pal: dict) -> str:
+    """The theme's picture. A flat color is a plain fill; a finish adds to it (catalog.py draws
+    the same finishes on the swatch sheets): silk and metal a white sheen across each piece,
+    sparkle and galaxy flecks, translucent a see-through fill, and a spool with several hexes a
+    gradient through them. A color with none of these draws exactly as it did before finishes.
+    """
     faces, straps = parse_base(base_svg)
     groups = face_groups(con, faces)
-    hexes = {k: pal[v]["hex"] for k, v in theme["colors"].items()}
+    colors = {k: pal[v] for k, v in theme["colors"].items()}
+    hexes = {k: c["hex"] for k, c in colors.items()}
+    keys = {k: f"f-{theme['colors'][k]}" for k in colors}
     vb = view_box(base_svg)
     out = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" width="480" height="480">',
         f"  <title>{con['short']}: {theme['name']}</title>",
-        f'  <rect x="-1000" y="-1000" width="2000" height="2000" fill="{BACKDROP}" />',
-        '  <g class="pieces">',
     ]
+    defs, seen = [], set()
+    for k, c in colors.items():
+        if needs_finish(c) and keys[k] not in seen:
+            seen.add(keys[k])
+            defs += bambu.finish_defs(keys[k], c["finish"], [h + "FF" for h in c["hexes"]])
+    if defs:
+        out += ["  <defs>", *("    " + d for d in defs), "  </defs>"]
+    out += [f'  <rect x="-1000" y="-1000" width="2000" height="2000" fill="{BACKDROP}" />',
+            '  <g class="pieces">']
+    overlays = []
     for f, g in zip(faces, groups):
         pts = " ".join(f"{x:.3f},{y:.3f}" for x, y in f["points"])
         c = hexes[g]
-        out.append(f'    <polygon points="{pts}" fill="{c}" stroke="{edge_shade(c)}" '
+        fill = f'fill="{c}"'
+        if needs_finish(colors[g]):
+            fill = bambu.fill_attrs(keys[g], [h + bambu_alpha(colors[g]) for h in colors[g]["hexes"]])
+            for ov in bambu.overlay_fills(keys[g], colors[g]["finish"]):
+                overlays.append(f'    <polygon points="{pts}" fill="{ov}" />')
+        out.append(f'    <polygon points="{pts}" {fill} stroke="{edge_shade(c)}" '
                    f'stroke-width="0.35" stroke-linejoin="round" data-group="{g}" />')
     out.append("  </g>")
+    if overlays:
+        out += ['  <g class="finish">', *overlays, "  </g>"]
     frame = hexes[FRAME]
-    for cls, color, extra in (("frame-edge", edge_shade(frame), 0.7), ("frame", frame, 0.0)):
-        out.append(f'  <g class="{cls}" stroke="{color}" stroke-linecap="round">')
+    fc = colors[FRAME]
+    see = f' stroke-opacity="{bambu.draw_opacity(fc["alpha"])}"' if fc["alpha"] < 1 else ""
+    # Each layer: class, stroke color, the line width from the strap's width, extra attributes.
+    layers = [("frame-edge", edge_shade(frame), lambda w: w + 0.7, ' stroke-linecap="round"'),
+              ("frame", fc["hexes"][0][:7], lambda w: w, ' stroke-linecap="round"' + see)]
+    n = len(fc["hexes"])
+    for i, h in enumerate(fc["hexes"][1:], 1):  # a spool's other hexes as dashes along the strap
+        layers.append((f"frame-spool-{i}", h[:7], lambda w: w,
+                       f' stroke-linecap="butt" stroke-dasharray="4 {4 * (n - 1):g}" '
+                       f'stroke-dashoffset="{-4 * i:g}"{see}'))
+    if fc["finish"] in bambu.SHEEN:
+        layers.append(("frame-sheen", mix(frame, "#FFFFFF", 0.6), lambda w: w * 0.3,
+                       ' stroke-linecap="round" stroke-opacity="0.7"'))
+    if fc["finish"] in bambu.FLECKS:
+        fleck = "#FFFFFF" if lab(frame)[0] < 60 else "#5A5A5A"
+        # Small dots at uneven spacing: even spacing reads as stitching, not glitter.
+        layers.append(("frame-flecks", fleck, lambda w: w * 0.16,
+                       ' stroke-linecap="round" stroke-opacity="0.75" '
+                       'stroke-dasharray="0 2.9 0 1.3 0 4.1 0 2.2"'))
+    for cls, color, width, attrs in layers:
+        out.append(f'  <g class="{cls}" stroke="{color}"{attrs}>')
         for x1, y1, x2, y2, w in straps:
-            out.append(f'    <line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke-width="{w + extra:.3f}" />')
+            out.append(f'    <line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke-width="{width(w):.3f}" />')
         out.append("  </g>")
     out.append("</svg>")
     return "\n".join(out) + "\n"
+
+
+def bambu_alpha(c: dict) -> str:
+    """The alpha byte a palette color is drawn with: the catalog's, or opaque."""
+    return f"{round(c['alpha'] * 255):02X}"
 
 
 def cmd_render(cid: str, png_dir: str | None) -> None:
@@ -405,7 +496,15 @@ def warnings(con: dict, theme: dict, pal: dict, pairs: set[frozenset]) -> list[s
             if d < CLOSE_DELTA_E:
                 out.append(f"{a} and {b} are close ({pal[ca]['name']} / {pal[cb]['name']}, "
                            f"delta E {d:.0f}), and may blur together")
+    for c in used_colors(con, theme):
+        if len(pal[c]["hexes"]) > 1:
+            out.append(f"{pal[c]['name']} is a {SPOOL_WORD[pal[c]['kind']]} spool "
+                       f"({' to '.join(pal[c]['hexes'])}); where along the spool its color shifts cannot be "
+                       "predicted for a given piece, so the pieces will not come out as drawn")
     return out
+
+
+SPOOL_WORD = {"gradient": "gradient", "multi": "multi-color", "single": "one-color"}
 
 
 def plates(con: dict, theme: dict, vols: dict | None) -> list[dict]:
@@ -483,8 +582,13 @@ def used_colors(con: dict, theme: dict) -> list[str]:
     return seen
 
 
-def color_word(pal: dict, cid: str) -> str:
+def color_word(pal: dict, cid: str, owned: bool = True) -> str:
+    """'Caramel (buy)', or with owned=False the name with its finish when it has one worth saying:
+    'Gold (silk)'. Basic and matte are the plain lines, so they go unsaid."""
     c = pal[cid]
+    if not owned:
+        f = c.get("finish")
+        return c["name"] + (f" ({f})" if f and f not in ("basic", "matte") else "")
     return f"{c['name']} ({'owned' if c['owned'] else 'buy'})"
 
 
@@ -521,6 +625,160 @@ def suggest(con: dict, helper: str, colors: list[str], pal: dict) -> dict:
         raise SystemExit(f"unknown helper {helper}")
     return {"id": re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-"), "name": name,
             "mood": "(write one line)", "made_by": f"suggest --helper {helper}", "colors": mapping}
+
+
+def palette_id_for(e: dict) -> str:
+    """The id a catalog color gets on the buy list: its name, with the line's finish in front
+    for every line but Basic and Matte (Silk Blue is not Basic Blue)."""
+    name = bambu.slug(e["name"])
+    if e["line"] in ("PLA Basic", "PLA Matte"):
+        return name
+    return bambu.slug(e["line"].removeprefix("PLA ")) + "-" + name
+
+
+def gradient_candidates(pal: dict, cat: dict, lines: list[str]) -> list[dict]:
+    """Every one-color, opaque catalog color in these lines, under its palette id when the buy
+    list has it, plus the owned trays. A tray whose hex a candidate shares replaces it."""
+    by_code = {str(c["code"]): k for k, c in pal.items() if not c["owned"]}
+    trays = {c["hex"]: k for k, c in pal.items() if c["owned"]}
+    out = [{"id": k, "hex": c["hex"], "name": c["name"], "owned": True, "entry": None}
+           for k, c in pal.items() if c["owned"]]
+    for e in cat["colors"]:
+        if e["line"] not in lines or e["kind"] != "single" or bambu.alpha(e["hexes"][0]) < 1:
+            continue
+        h = bambu.opaque(e["hexes"][0])
+        if h in trays:
+            continue
+        cid = by_code.get(e["code"], palette_id_for(e))
+        out.append({"id": cid, "hex": h, "name": e["name"], "owned": False, "entry": e,
+                    "listed": e["code"] in by_code})
+    return out
+
+
+def chroma(hexstr: str) -> float:
+    return math.hypot(*lab(hexstr)[1:])
+
+
+def lch_lerp(a: str, b: str, t: float) -> tuple:
+    """The point a fraction t of the way from a to b, stepping lightness, colorfulness and hue
+    each on its own (the short way round the hue circle), returned as L*a*b*. A straight line in
+    L*a*b* between two blues dips toward gray in the middle; this keeps the steps blue."""
+    (la, aa, ba), (lb, ab, bb) = lab(a), lab(b)
+    ca, cb = math.hypot(aa, ba), math.hypot(ab, bb)
+    ha, hb = math.atan2(ba, aa), math.atan2(bb, ab)
+    if ca < 1e-6:
+        ha = hb
+    if cb < 1e-6:
+        hb = ha
+    dh = (hb - ha + math.pi) % (2 * math.pi) - math.pi
+    L, C, H = la + (lb - la) * t, ca + (cb - ca) * t, ha + dh * t
+    return (L, C * math.cos(H), C * math.sin(H))
+
+
+# What a ring costs for taking the same color as the ring inside it, in delta E: a repeat is
+# allowed, but a different real color up to this much farther from the step wins over it.
+REPEAT_COST = 12.0
+# A gradient runs one way in lightness; a ring may be this much (L*) the wrong way and no more.
+LIGHTNESS_SLACK = 3.0
+
+
+def best_path(pool: list[dict], targets: list[tuple], ends: list[dict]) -> list[dict]:
+    """The colors for the rings between the ends: each near its target step, and no ring the
+    same as the one inside it unless nothing else is close. Every sequence is weighed (summed
+    distance to the targets, plus REPEAT_COST per repeat), by dynamic programming over the
+    rings, so a repeat lands where it costs least."""
+    if not targets:
+        return []
+    labs = [lab(c["hex"]) for c in pool]
+    way = 1 if lab(ends[1]["hex"])[0] >= lab(ends[0]["hex"])[0] else -1
+
+    def rep(a: dict, b: dict) -> float:
+        """The cost of ring b following ring a: a repeat costs REPEAT_COST, and a step back
+        the wrong way in lightness (lighter in a light-to-dark run) is ruled out."""
+        if (lab(b["hex"])[0] - lab(a["hex"])[0]) * way < -LIGHTNESS_SLACK:
+            return math.inf
+        return REPEAT_COST if a["hex"] == b["hex"] else 0.0
+
+    cost = [math.dist(labs[j], targets[0]) + rep(ends[0], c) for j, c in enumerate(pool)]
+    back = []
+    for t in targets[1:]:
+        row, prev = [], []
+        for j, c in enumerate(pool):
+            k = min(range(len(pool)), key=lambda k: cost[k] + rep(pool[k], c))
+            row.append(cost[k] + rep(pool[k], c) + math.dist(labs[j], t))
+            prev.append(k)
+        cost, back = row, back + [prev]
+    j = min(range(len(pool)), key=lambda j: cost[j] + rep(pool[j], ends[1]))
+    path = [j]
+    for prev in reversed(back):
+        j = prev[j]
+        path.append(j)
+    return [pool[j] for j in reversed(path)]
+
+
+def gradient(con: dict, frm: str, to: str, pal: dict, cat: dict, lines: list[str] | None = None,
+             reverse: bool = False) -> tuple[dict, list[dict]]:
+    """A theme that runs from one color in the middle to another on the outer ring.
+
+    The rings take evenly spaced steps between the two colors (lightness, colorfulness and hue
+    each stepped on its own), and each step takes a real color among the candidates (catalog
+    colors in `lines`, by default the ends' own lines so the finish stays even, and the trays):
+    near its step, running one way in lightness, and repeating the ring inside it only when no
+    other color is close (best_path). Between two colorful ends no step is a gray. The frame
+    takes the neutral (gray, black or white) farthest from the outer ring, so the edge never
+    melts into the frame.
+    `--reverse` swaps the ends. Returns the theme and the catalog colors it needs added to the
+    buy list.
+    """
+    asked = f"--from {frm} --to {to}" + (" --reverse" if reverse else "") + \
+        (f" --lines \"{','.join(lines)}\"" if lines else "")
+    if reverse:
+        frm, to = to, frm
+    gids = [g["id"] for g in con["groups"]]
+    ends = [resolve_color(x, pal, cat) for x in (frm, to)]
+    if lines is None:
+        lines = sorted({e["entry"]["line"] for e in ends if e["entry"]}) or ["PLA Basic", "PLA Matte"]
+    cands = gradient_candidates(pal, cat, lines)
+    for e in ends:
+        if all(c["id"] != e["id"] for c in cands):
+            cands.append(e)
+    neutrals = [c for c in cands if chroma(c["hex"]) < NEUTRAL_CHROMA]
+    # Between two colorful ends the steps stay colorful: a gray ring in a blue gradient reads
+    # as a gap, not a step.
+    colorful = all(chroma(e["hex"]) >= NEUTRAL_CHROMA for e in ends)
+    pool = [c for c in cands if c not in neutrals] if colorful else cands
+    n = len(gids)
+    targets = [lch_lerp(ends[0]["hex"], ends[1]["hex"], i / (n - 1)) for i in range(n)]
+    steps = [ends[0]] + best_path(pool, targets[1:-1], ends) + [ends[1]]
+    outer = steps[-1]["hex"]
+    frame = max(neutrals, key=lambda c: (round(delta_e(c["hex"], outer)), c["owned"]))
+    mapping = {g: s["id"] for g, s in zip(gids, steps)} | {FRAME: frame["id"]}
+    name = f"{ends[0]['name']} to {ends[1]['name']}"
+    add, seen = [], set(pal)
+    for c in steps + [frame]:
+        if c["id"] not in seen:
+            seen.add(c["id"])
+            e = c["entry"]
+            add.append({"id": c["id"], "hex": bambu.opaque(e["hexes"][0]), "name": e["name"],
+                        "line": e["line"], "code": e["code"]})
+    theme = {"id": bambu.slug(name), "name": name, "mood": "(write one line)",
+             "made_by": f"suggest --helper gradient {asked}", "colors": mapping}
+    return theme, add
+
+
+def resolve_color(x: str, pal: dict, cat: dict) -> dict:
+    """A palette id, or a catalog product code, as a gradient candidate."""
+    if x in pal:
+        c = pal[x]
+        e = None if c["owned"] else cat["by_code"].get(str(c["code"]))
+        return {"id": x, "hex": c["hex"], "name": c["name"], "owned": c["owned"], "entry": e}
+    e = cat["by_code"].get(x)
+    if e is None:
+        raise SystemExit(f"{x} is neither a palette color id nor a catalog product code")
+    if len(e["hexes"]) > 1:
+        raise SystemExit(f"{x} ({e['name']}) is a spool with several hexes; a gradient end needs one color")
+    return {"id": palette_id_for(e), "hex": bambu.opaque(e["hexes"][0]), "name": e["name"],
+            "owned": False, "entry": e}
 
 
 # ---------------------------------------------------------------- gallery
@@ -580,9 +838,13 @@ def gallery_text(con: dict, pal: dict, pairs: set[frozenset]) -> str:
         "**How to read a theme.**",
         "",
         "- **Colors.** *Owned* means it is on a tray today; *buy* means a Bambu filament we do not have. "
-        "Every buy hex is Bambu Studio's own "
-        "([research](../../../research/2026-10-04-bambu-pla-color-hexes.md)). It is the maker's label "
-        "for the color, not a measurement, and a flat picture shows no matte or glossy finish.",
+        "Every buy color is checked against Bambu Studio's own color list, the "
+        "[catalog](bambu-color-catalog.md). A hex is the maker's label for the color, not a measurement.",
+        "- **Finishes are drawn, roughly.** Silk and metal get a white sheen, sparkle flecks, and a "
+        "translucent color is half see-through. Matte and basic are flat, and a tray on the printer "
+        "is drawn flat because the printer reports only its hex. A spool with two or more hexes (a "
+        "gradient or multi-color spool) is drawn as its hexes, but where along the spool its color "
+        "shifts cannot be predicted for a given piece.",
         f"- **Plates.** Each color prints as its own one-color plate, and the frame rides on the plate "
         f"of its color. Minutes and grams split [{s['plate']}](../../plates/{s['plate']}.md)'s one-bed slice "
         f"({s['minutes']} min, {s['grams']} g, everything on one bed) by each group's share of the plastic. "
@@ -600,7 +862,7 @@ def gallery_text(con: dict, pal: dict, pairs: set[frozenset]) -> str:
         r = revs.get(t["id"])
         fresh = r and r.get("coloring") == theme_hash(t)
         score = f"{overall(r):.1f}" if fresh else "not reviewed"
-        buys = [pal[c]["name"] for c in used_colors(con, t) if not pal[c]["owned"]]
+        buys = [color_word(pal, c, owned=False) for c in used_colors(con, t) if not pal[c]["owned"]]
         anchor = re.sub(r"[^a-z0-9 -]", "", t["name"].lower()).replace(" ", "-")
         out.append(f"| [{t['name']}](#{anchor}) | {score} | {len(plates(con, t, vols))} | "
                    f"{', '.join(buys) or 'nothing'} |")
@@ -614,7 +876,9 @@ def gallery_text(con: dict, pal: dict, pairs: set[frozenset]) -> str:
         labels = {g["id"]: g["label"] for g in con["groups"]} | {FRAME: "the frame (the straps)"}
         for g in group_ids(con):
             c = pal[t["colors"][g]]
-            out.append(f"| {labels[g]} | {c['name']} `{c['hex']}` | {'owned' if c['owned'] else 'buy'} |")
+            hexes = " ".join(f"`{h}`" for h in c["hexes"])
+            where = "owned" if c["owned"] else f"buy, {c['line']}"
+            out.append(f"| {labels[g]} | {c['name']} {hexes} | {where} |")
         out.append("")
         ws = warnings(con, t, pal, pairs)
         if ws:
@@ -678,18 +942,25 @@ def self_test() -> int:
         if not cond:
             fails.append(what)
 
-    # 1. Every buy hex is Bambu's own; one wrong digit must fail.
-    pal = palette()
-    rows = research_rows()
-    expect(len(rows) == 55, f"research table: expected 55 rows, read {len(rows)}")
+    # 1. Every buy hex is Bambu's own, from the catalog; one wrong digit must fail.
+    cat = bambu.load_catalog()
+    pal = palette(cat=cat)
+    expect(len(cat["colors"]) == 314, f"catalog: expected 314 colors, read {len(cat['colors'])}")
     for k, c in pal.items():
         if not c["owned"]:
-            row = rows.get(c["code"])
-            expect(row is not None, f"buy {k}: code {c['code']} is not in the research file")
-            expect(row and row[1] == c["hex"] and row[0] == c["name"],
-                   f"buy {k}: {c['name']} {c['hex']} differs from the research row {row}")
-    bad = {**pal["caramel"], "hex": "#AE835C"}
-    expect(rows[bad["code"]][1] != bad["hex"], "a one-digit-off buy hex was not caught")
+            for p in buy_problems(c, cat):
+                fails.append(f"buy {k}: {p}")
+    bad = {**pal["caramel"], "hexes": ["#AE835C"]}
+    expect(any("differs" in p for p in buy_problems(bad, cat)), "a one-digit-off buy hex was not caught")
+    expect(buy_problems({**pal["caramel"], "name": "Caramell"}, cat), "a misspelled buy name was not caught")
+    expect(buy_problems({**pal["caramel"], "code": "99999"}, cat), "a code not in the catalog was not caught")
+    abs_entry = next(e for e in cat["colors"] if e["line"] == "ABS")
+    expect(any("not a line a coaster" in p for p in buy_problems(
+        {"code": abs_entry["code"], "name": abs_entry["name"], "line": "ABS",
+         "hexes": [bambu.opaque(h) for h in abs_entry["hexes"]]}, cat)), "an ABS color was let onto the buy list")
+    multi = [c for c in pal.values() if len(c["hexes"]) > 1]
+    for c in multi:
+        expect(c["hex"] == spool_mean(c["hexes"]), f"{c['id']}: a multi-hex color's check hex is not its mean")
 
     # 2. Color math: black/white is far, a color with itself is zero, close shades warn.
     expect(delta_e("#000000", "#FFFFFF") > 99, "delta E black/white should be about 100")
@@ -772,6 +1043,52 @@ def self_test() -> int:
         t = suggest(gcon, helper, colors, pal)
         expect(set(t["colors"]) == set("abcde") | {FRAME}, f"{helper} left a group uncolored")
 
+    # 6. The gradient: its ends are the colors asked for, it gets darker step by step from a light
+    #    middle, every step is a real catalog color, --reverse swaps it, and the frame stands
+    #    apart from the outer ring.
+    t, add = gradient(gcon, "ice-blue", "dark-blue", pal, cat)
+    ring = [t["colors"][g] for g in "abcde"]
+    full = pal | {c["id"]: {"hex": c["hex"]} for c in add}
+    ls = [lab(full[c]["hex"])[0] for c in ring]
+    expect(ring[0] == "ice-blue" and ring[-1] == "dark-blue", f"gradient ends: {ring}")
+    expect(all(x >= y for x, y in zip(ls, ls[1:])), f"ice to dark blue should darken ring by ring: {ring}")
+    expect(all(c["code"] in cat["by_code"] for c in add), "a gradient step is not a catalog color")
+    expect(delta_e(full[t["colors"][FRAME]]["hex"], full["dark-blue"]["hex"]) > 50,
+           f"the frame ({t['colors'][FRAME]}) melts into the dark outer ring")
+    r, _ = gradient(gcon, "ice-blue", "dark-blue", pal, cat, reverse=True)
+    expect([r["colors"][g] for g in "abcde"][::-1] == ring, "--reverse is not the same rings outside in")
+    expect(delta_e(full[r["colors"][FRAME]]["hex"], full["ice-blue"]["hex"]) > 50,
+           f"the reversed frame ({r['colors'][FRAME]}) melts into the light outer ring")
+
+    # 7. Finishes: a flat color draws as before; silk adds a sheen, sparkle flecks, translucent
+    #    a see-through fill, and a two-hex spool its own gradient and a heads-up.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "fx").mkdir()
+        (root / "fx" / "themes.yaml").write_text(yaml.safe_dump({**con_data, "themes": []}))
+        (root / "fx" / "base.svg").write_text(FIXTURE_BASE.format(a=marker_hex(0), b=marker_hex(1)))
+        fcon = construction("fx", root)
+        base = (root / "fx" / "base.svg").read_text()
+        fpal = pal | {
+            "silk-x": {**pal["caramel"], "id": "silk-x", "finish": "silk", "line": "PLA Silk"},
+            "spark-x": {**pal["caramel"], "id": "spark-x", "finish": "sparkle"},
+            "clear-x": {**pal["caramel"], "id": "clear-x", "finish": "translucent", "alpha": 128 / 255},
+            "duo-x": {**pal["caramel"], "id": "duo-x", "hexes": ["#FF9425", "#C16784"], "kind": "multi",
+                      "hex": spool_mean(["#FF9425", "#C16784"]), "finish": "silk"},
+        }
+        flat = draw(fcon, {"name": "F", "colors": {"a": "pink", "b": "black", "frame": "green"}}, base, fpal)
+        expect("<defs>" not in flat and 'class="finish"' not in flat, "a flat theme grew finish markup")
+        silk = draw(fcon, {"name": "S", "colors": {"a": "silk-x", "b": "spark-x", "frame": "silk-x"}}, base, fpal)
+        expect("f-silk-x-sheen" in silk and "frame-sheen" in silk, "silk drew no sheen")
+        expect("f-spark-x-flecks" in silk, "sparkle drew no flecks")
+        clear = draw(fcon, {"name": "C", "colors": {"a": "clear-x", "b": "black", "frame": "green"}}, base, fpal)
+        expect('fill-opacity="0.5"' in clear, "translucent drew opaque")
+        duo_t = {"name": "D", "colors": {"a": "duo-x", "b": "black", "frame": "duo-x"}}
+        duo = draw(fcon, duo_t, base, fpal)
+        expect("f-duo-x-spool" in duo and "frame-spool-1" in duo, "a two-hex spool drew as one color")
+        expect(any("cannot be predicted" in w for w in warnings(fcon, duo_t, fpal, set())),
+               "a two-hex spool gave no heads-up")
+
     for f in fails:
         print(f"self-test FAIL: {f}")
     print("self-test: " + ("ok" if not fails else f"{len(fails)} failed"))
@@ -796,8 +1113,13 @@ def main() -> int:
     c.add_argument("--quiet", action="store_true")
     s = sub.add_parser("suggest")
     s.add_argument("id")
-    s.add_argument("--helper", required=True, choices=["match-trays", "alternate", "one-color"])
+    s.add_argument("--helper", required=True, choices=["match-trays", "alternate", "one-color", "gradient"])
     s.add_argument("--colors", default="", help="palette color ids, comma-separated")
+    s.add_argument("--from", dest="frm", help="gradient: the middle's color (a palette id or a catalog code)")
+    s.add_argument("--to", help="gradient: the outer ring's color")
+    s.add_argument("--reverse", action="store_true", help="gradient: swap the ends")
+    s.add_argument("--lines", help="gradient: catalog lines to pick from, comma-separated "
+                                   "(default: the ends' own lines)")
     a = ap.parse_args()
 
     if a.self_test:
@@ -824,10 +1146,23 @@ def main() -> int:
                 raise SystemExit(f"{x} is not a palette color id")
         if a.helper in ("one-color", "alternate") and not colors:
             ap.error(f"--helper {a.helper} needs --colors")
-        t = suggest(con, a.helper, colors, pal)
+        add = []
+        if a.helper == "gradient":
+            if not (a.frm and a.to):
+                ap.error("--helper gradient needs --from and --to")
+            lines = [x.strip() for x in a.lines.split(",")] if a.lines else None
+            t, add = gradient(con, a.frm, a.to, pal, bambu.load_catalog(), lines, a.reverse)
+        else:
+            t = suggest(con, a.helper, colors, pal)
         faces, _ = parse_base((con["_folder"] / "base.svg").read_text())
         print(yaml.safe_dump([t], sort_keys=False).rstrip())
-        for w in warnings(con, t, pal, neighbors(con, faces)):
+        if add:
+            print("# add to palette.yaml buy: first (from the catalog)")
+            for c in add:
+                print("#   - " + yaml.safe_dump(c, default_flow_style=True, sort_keys=False, width=300).strip())
+        full = pal | {c["id"]: {**c, "hexes": [c["hex"]], "owned": False, "kind": "single",
+                                "finish": bambu.finish_of(c["line"]), "alpha": 1.0} for c in add}
+        for w in warnings(con, t, full, neighbors(con, faces)):
             print(f"# warn: {w}")
     else:
         ap.print_help()

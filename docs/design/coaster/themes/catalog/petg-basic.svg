@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 478" width="866" height="478" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PETG Basic: 13 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="478" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PETG Basic</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">13 colors · finish: basic</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#000000" stroke="#00000033" stroke-width="1" />
+  <circle cx="129" cy="57" r="8" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="2" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Black</text>
+  <text x="14" y="147" font-size="11">30105 · K00</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#000000</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">White</text>
+  <text x="156" y="147" font-size="11">30106 · W00</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#7F7E83" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Gray</text>
+  <text x="298" y="147" font-size="11">30107 · D00</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#7F7E83</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#688197" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Misty Blue</text>
+  <text x="440" y="147" font-size="11">30108 · D01</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#688197</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#D6001C" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Red</text>
+  <text x="582" y="147" font-size="11">30201 · R00</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#D6001C</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#FF671F" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Orange</text>
+  <text x="724" y="147" font-size="11">30301 · A00</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#FF671F</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#FCE300" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="272" font-size="12.5" font-weight="bold">Yellow</text>
+  <text x="14" y="287" font-size="11">30402 · Y00</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#FCE300</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#DBC8B6" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Dark Beige</text>
+  <text x="156" y="287" font-size="11">30403 · Y01</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#DBC8B6</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="#009639" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Green</text>
+  <text x="298" y="287" font-size="11">30502 · G00</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#009639</text>
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="#034638" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="272" font-size="12.5" font-weight="bold">Pine Green</text>
+  <text x="440" y="287" font-size="11">30503 · G01</text>
+  <text x="440" y="301" font-size="10.5" fill="#555555">#034638</text>
+  <rect x="582" y="184" width="128" height="72" rx="8" fill="#001489" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="272" font-size="12.5" font-weight="bold">Reflex Blue</text>
+  <text x="582" y="287" font-size="11">30603 · B00</text>
+  <text x="582" y="301" font-size="10.5" fill="#555555">#001489</text>
+  <rect x="724" y="184" width="128" height="72" rx="8" fill="#0086D6" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="272" font-size="12.5" font-weight="bold">Navy Blue</text>
+  <text x="724" y="287" font-size="11">30604 · B01</text>
+  <text x="724" y="301" font-size="10.5" fill="#555555">#0086D6</text>
+  <rect x="14" y="324" width="128" height="72" rx="8" fill="#4F2C1D" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="412" font-size="12.5" font-weight="bold">Dark Brown</text>
+  <text x="14" y="427" font-size="11">30800 · N00</text>
+  <text x="14" y="441" font-size="10.5" fill="#555555">#4F2C1D</text>
+</svg>

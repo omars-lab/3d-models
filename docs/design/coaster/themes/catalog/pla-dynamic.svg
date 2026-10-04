@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 198" width="866" height="198" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Dynamic: 1 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="198" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Dynamic</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">1 colors · finish: uv color change</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#FFFFFF" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="132" font-size="10.5" font-weight="bold">UV Color Changing - Whi…</text>
+  <text x="14" y="147" font-size="11">15100 · W0</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#FFFFFF</text>
+</svg>

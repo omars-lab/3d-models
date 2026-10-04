@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 198" width="866" height="198" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Wood: 6 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="198" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Wood</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">6 colors · finish: wood</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#D6CCA3" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">White Oak</text>
+  <text x="14" y="147" font-size="11">13106 · W0</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#D6CCA3</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#4F3F24" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Black Walnut</text>
+  <text x="156" y="147" font-size="11">13107 · K0</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#4F3F24</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#4C241C" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Rosewood</text>
+  <text x="298" y="147" font-size="11">13204 · R0</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#4C241C</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#C98935" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Ochre Yellow</text>
+  <text x="440" y="147" font-size="11">13403 · Y0</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#C98935</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#918669" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Classic Birch</text>
+  <text x="582" y="147" font-size="11">13505 · G0</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#918669</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#995F11" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Clay Brown</text>
+  <text x="724" y="147" font-size="11">13801 · N0</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#995F11</text>
+</svg>

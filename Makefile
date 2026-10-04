@@ -948,6 +948,8 @@ validate-design-difference:
 # page and reviews against its themes.yaml. Offline: no bikar call.
 .PHONY: validate-color-themes
 validate-color-themes:
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/catalog.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/catalog.py check --quiet
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py check --all --quiet

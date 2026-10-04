@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 338" width="866" height="338" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PETG Translucent: 9 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="338" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PETG Translucent</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">9 colors · finish: translucent</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#8E8E8E" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">Translucent Gray</text>
+  <text x="14" y="147" font-size="11">32100 · D0</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#8E8E8E a80</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#000000" fill-opacity="0.15" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Clear</text>
+  <text x="156" y="147" font-size="11">32101 · C0</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#000000 a00</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#F9C1BD" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Translucent Pink</text>
+  <text x="298" y="147" font-size="11">32200 · P1</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#F9C1BD a80</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#FF911A" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Translucent Orange</text>
+  <text x="440" y="147" font-size="11">32300 · A0</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#FF911A a80</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#748C45" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Translucent Olive</text>
+  <text x="582" y="147" font-size="11">32500 · G0</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#748C45 a80</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#77EDD7" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Translucent Teal</text>
+  <text x="724" y="147" font-size="11">32501 · G1</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#77EDD7 a80</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#61B0FF" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="272" font-size="10.5" font-weight="bold">Translucent Light Blue</text>
+  <text x="14" y="287" font-size="11">32600 · B0</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#61B0FF a80</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#D6ABFF" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Translucent Purple</text>
+  <text x="156" y="287" font-size="11">32700 · P0</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#D6ABFF a80</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="url(#checks)" />
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="#C9A381" fill-opacity="0.5" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Translucent Brown</text>
+  <text x="298" y="287" font-size="11">32800 · N0</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#C9A381 a80</text>
+</svg>

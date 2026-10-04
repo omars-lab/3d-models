@@ -3,12 +3,15 @@
 # owned: the four trays the printer reported on 2026-10-04 (`bambu filament --json`). A tray is a
 #   fact about the printer on that day. When the trays change, re-read them and edit this list.
 #   The color is what prints; the name is only a label.
-# buy:   Bambu filaments that are not loaded. Each hex is copied from
-#   docs/research/2026-10-04-bambu-pla-color-hexes.md (Bambu Studio's own color list), and
-#   `themes.py --self-test` fails when a hex here differs from that file's row for the same code.
-#   A color with no row there may not go on this list.
+# buy:   Bambu filaments that are not loaded. Each one is copied from the color catalog,
+#   docs/design/coaster/themes/catalog/catalog.yaml (Bambu Studio's own color list, built by
+#   `catalog.py build`), and `themes.py --self-test` fails when a code is not in it, or the
+#   name, line or hex differs from the catalog's, or the line is not one a coaster prints in.
+#   A spool with more than one color (a gradient or multi-color spool) lists them all under
+#   `hexes:`. The finish (silk, sparkle, translucent, ...) is read from the catalog by code.
 #
 # Each color has an id, which is what a theme names. A theme never writes a hex of its own.
+# `themes.py suggest --helper gradient` prints the lines to add here for the colors it picks.
 
 owned_read: "2026-10-04, `bambu filament --json`"
 
@@ -42,3 +45,16 @@ buy:
   - { id: ice-blue,        hex: "#A3D8E1", name: "Ice Blue",        line: "PLA Matte", code: "11601" }
   - { id: sakura-pink,     hex: "#E8AFCF", name: "Sakura Pink",     line: "PLA Matte", code: "11201" }
   - { id: charcoal,        hex: "#000000", name: "Charcoal",        line: "PLA Matte", code: "11101" }
+  - { id: sky-blue,        hex: "#56B7E6", name: "Sky Blue",        line: "PLA Matte", code: "11603" }
+  - { id: marine-blue,     hex: "#0078BF", name: "Marine Blue",     line: "PLA Matte", code: "11600" }
+  - { id: lilac-purple,    hex: "#AE96D4", name: "Lilac Purple",    line: "PLA Matte", code: "11700" }
+  - { id: plum,            hex: "#950051", name: "Plum",            line: "PLA Matte", code: "11204" }
+  # Silk, Silk+ and Sparkle: the pictures draw their sheen and flecks, roughly.
+  - { id: silk-gold,           hex: "#E5B03D", name: "Gold",                 line: "PLA Silk",    code: "13401" }
+  - { id: silk-plus-champagne, hex: "#F3CFB2", name: "Champagne",            line: "PLA Silk+",   code: "13404" }
+  - { id: silk-plus-rose-gold, hex: "#BA9594", name: "Rose Gold",            line: "PLA Silk+",   code: "13206" }
+  - { id: silk-plus-gold,      hex: "#F4A925", name: "Gold",                 line: "PLA Silk+",   code: "13405" }
+  - { id: onyx-black-sparkle,  hex: "#2D2B28", name: "Onyx Black Sparkle",   line: "PLA Sparkle", code: "13101" }
+  - { id: gold-sparkle,        hex: "#CEA629", name: "Classic Gold Sparkle", line: "PLA Sparkle", code: "13402" }
+  # A two-color spool: the color changes along the filament, so which piece gets which is luck.
+  - { id: silk-gilded-rose, hexes: ["#FF9425", "#C16784"], name: "Gilded Rose", line: "PLA Silk", code: "13901" }

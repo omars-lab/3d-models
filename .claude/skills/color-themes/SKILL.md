@@ -1,6 +1,6 @@
 ---
 name: color-themes
-description: Make color themes for a loose-piece coaster — which filament color goes on the frame and on each ring of pieces — draw each theme as a picture, check it (pieces that melt into the frame, colors too close to tell apart, colors we would have to buy), say how many one-color plates it takes and roughly how long and how much plastic, and write the construction's inspiration gallery page in `docs/design/coaster/themes/`. Use for "color themes", "color combinations", "what colors should the pieces be", "mix and match colors", "a palette for this coaster", "an inspiration gallery", "theme ideas for gBV", or adding a theme or a construction to the gallery. Scoring the themes is the review-theme skill; choosing a theme to print is prioritize-prints and send-plate.
+description: Make color themes for a loose-piece coaster — which filament color goes on the frame and on each ring of pieces — draw each theme as a picture (silk sheen, sparkle flecks, translucent and two-color spools drawn roughly), check it (pieces that melt into the frame, colors too close to tell apart, colors we would have to buy), say how many one-color plates it takes and roughly how long and how much plastic, and write the construction's inspiration gallery page in `docs/design/coaster/themes/`. Its colors come from a catalog of every Bambu filament color (`catalog.py`: built from Bambu Studio's own list, drawn as swatch sheets, `refresh` reports what Bambu added on GitHub), and `suggest --helper gradient` steps from one color in the middle to another at the rim through the nearest real colors. Use for "color themes", "color combinations", "what colors should the pieces be", "mix and match colors", "a palette for this coaster", "an inspiration gallery", "theme ideas for gBV", "a gradient from light blue to dark blue", "silk or sparkle colors", "all the Bambu colors", "pull the latest Bambu colors", or adding a theme or a construction to the gallery. Scoring the themes is the review-theme skill; choosing a theme to print is prioritize-prints and send-plate.
 ---
 
 # color-themes — color ideas for a coaster, drawn, checked and costed
@@ -32,13 +32,21 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
 
 - **Owned** are the trays the printer reported, with the date they were read. When a spool changes,
   re-read the trays (`bambu filament --json`, which needs the dotenvx key) and edit the list.
-- **Buy** are Bambu PLA Basic and PLA Matte colors, each copied from
-  [the research file](../../../docs/research/2026-10-04-bambu-pla-color-hexes.md), which records the
-  hex Bambu Studio itself ships for each product code. `themes.py --self-test` fails when a buy
-  color's hex or name differs from that file's row for its code. To add a color, add its row to the
-  research file first (from the same Bambu Studio list), then to `palette.yaml`.
-- A theme never writes a hex. A hex is the maker's label, not a measured print, and a flat
-  picture shows no finish; the gallery says so on every page.
+- **Buy** are Bambu colors not loaded, each copied from the color catalog,
+  [`catalog.yaml`](../../../docs/design/coaster/themes/catalog/catalog.yaml): every color Bambu
+  Studio ships (314 in 02.08.02.61), with its code, line, name, hexes and finish, written by
+  `catalog.py build` from the app's own list ([where it comes from](../../../docs/research/2026-10-04-bambu-filament-color-catalog.md)).
+  `themes.py --self-test` fails when a buy color's code is not in the catalog, its name, line or
+  hex differs, or its line is not in the catalog's `coaster_lines` (the PLA lines and four PETG
+  lines). To add a color, find it on [the catalog page](../../../docs/design/coaster/themes/bambu-color-catalog.md)
+  and copy its row into `palette.yaml`; `suggest --helper gradient` prints the rows for the colors it picks.
+- **New colors from Bambu.** `catalog.py refresh` fetches the same list from Bambu's GitHub repo
+  and reports colors added, removed or changed since the installed app. It writes nothing: the
+  catalog follows the slicer on this machine, so rebuild with `build` after the app updates.
+- A theme never writes a hex. A hex is the maker's label, not a measured print. The pictures draw
+  finishes roughly (a light band for silk, dots for sparkle, half see-through for translucent), and
+  a two-color or gradient spool as its colors in stripes: where along the spool the color changes
+  cannot be predicted per piece, and `check` says so.
 
 ## The workflow
 
@@ -52,7 +60,10 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
    color for every group, frame included. The helpers give a starting point to edit:
    `suggest --helper match-trays` (the trays only, darkest on the frame),
    `--helper alternate --colors a,b[,frame]` (rings take turns),
-   `--helper one-color --colors a`. Paste what it prints and give it a real mood line.
+   `--helper one-color --colors a`,
+   `--helper gradient --from <id|code> --to <id|code> [--reverse]` (the middle at one color, the
+   rim at the other, each ring the nearest catalog color on the way, no ring going back; the frame
+   is the neutral furthest from the outer ring). Paste what it prints and give it a real mood line.
 3. **Render and look.** `themes.py render <id> --png <scratch dir>` writes every picture, plus PNGs
    to look at. Open every one (the Read tool shows a PNG). A theme that looks wrong is wrong
    whatever its numbers say: small groups hide under thick straps (gBV's kites), and two colors
@@ -72,11 +83,17 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
 |---|---|---|---|
 | `scripts/themes.py base` | bikar draws the coaster flat, each group's faces in its marker color, to `base.svg` | A new construction, or its source or sizes changed | `python3 .claude/skills/color-themes/scripts/themes.py base gbv` |
 | `scripts/themes.py measure` | bikar makes each group's STL; their volumes go to `volumes.yaml` for the cost split | Same as `base` | `python3 .claude/skills/color-themes/scripts/themes.py measure gbv` |
+| `scripts/catalog.py build` | Reads Bambu Studio's color list and writes `catalog.yaml` | After Bambu Studio updates | `python3 .claude/skills/color-themes/scripts/catalog.py build` |
+| `scripts/catalog.py refresh` | Fetches the list from Bambu's GitHub and reports added, removed and changed colors; writes nothing | "Are there new Bambu colors?" | `python3 .claude/skills/color-themes/scripts/catalog.py refresh` |
+| `scripts/catalog.py sheets` | Draws a swatch sheet per coaster line (owned and buy marked) and the catalog page; `--png` also writes PNGs | After `build` or a `palette.yaml` edit | `python3 .claude/skills/color-themes/scripts/catalog.py sheets --png <scratch>/png` |
+| `scripts/catalog.py check` | Fails when the catalog, its sheets or its page are out of date | `--quiet` is what the gate runs | `python3 .claude/skills/color-themes/scripts/catalog.py check` |
+| `scripts/catalog.py --self-test` | Finish labels, the multi-hex reading and the refresh diff on fixtures | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/catalog.py --self-test` |
 | `scripts/themes.py suggest` | Prints a starting theme from a helper | Starting a theme from the trays, alternating rings, or one color | `python3 .claude/skills/color-themes/scripts/themes.py suggest gbv --helper alternate --colors pink,green,black` |
+| `scripts/themes.py suggest --helper gradient` | Steps from one color in the middle to another at the rim through the nearest catalog colors, and prints the palette rows to add | A light-to-dark or one-hue-to-another theme | `python3 .claude/skills/color-themes/scripts/themes.py suggest gbv --helper gradient --from ice-blue --to dark-blue` (`--reverse`, `--lines "PLA Matte,PLA Basic"`) |
 | `scripts/themes.py render` | Draws every theme's picture (SVG, and PNGs with `--png`) | After any edit to `themes.yaml` or `palette.yaml` | `python3 .claude/skills/color-themes/scripts/themes.py render gbv --png <scratch>/png` |
 | `scripts/themes.py check` | Colors, heads-ups, plates and cost per theme; fails on stale pictures or gallery | After rendering; `--all --quiet` is what the gate runs | `python3 .claude/skills/color-themes/scripts/themes.py check gbv` |
 | `scripts/themes.py gallery` | Writes the construction's gallery page | After the reviews are in | `python3 .claude/skills/color-themes/scripts/themes.py gallery gbv` |
-| `scripts/themes.py --self-test` | Buy hexes against the research file, the color math, and the checks on a three-piece fixture | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/themes.py --self-test` |
+| `scripts/themes.py --self-test` | Buy colors against the catalog, the color math, the gradient helper, the finish drawing, and the checks on a three-piece fixture | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/themes.py --self-test` |
 
 ## How the numbers are made, and where they are weak
 

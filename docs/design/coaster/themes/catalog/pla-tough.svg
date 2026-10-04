@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 866 338" width="866" height="338" font-family="Helvetica, Arial, sans-serif">
+  <title>Bambu PLA Tough: 10 colors</title>
+  <defs>
+    <pattern id="checks" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#FFFFFF" /><rect width="8" height="8" fill="#D8D8D8" /><rect x="8" y="8" width="8" height="8" fill="#D8D8D8" /></pattern>
+  </defs>
+  <rect width="866" height="338" fill="#F7F5F2" />
+  <text x="14" y="28" font-size="18" font-weight="bold">PLA Tough</text>
+  <text x="852" y="28" font-size="12" text-anchor="end" fill="#555555">10 colors · finish: plain</text>
+  <rect x="14" y="44" width="128" height="72" rx="8" fill="#F9F7F4" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="132" font-size="12.5" font-weight="bold">White</text>
+  <text x="14" y="147" font-size="11">12100 · W3</text>
+  <text x="14" y="161" font-size="10.5" fill="#555555">#F9F7F4</text>
+  <rect x="156" y="44" width="128" height="72" rx="8" fill="#25282A" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="132" font-size="12.5" font-weight="bold">Black</text>
+  <text x="156" y="147" font-size="11">12101 · K0</text>
+  <text x="156" y="161" font-size="10.5" fill="#555555">#25282A</text>
+  <rect x="298" y="44" width="128" height="72" rx="8" fill="#515A6C" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="132" font-size="12.5" font-weight="bold">Gray</text>
+  <text x="298" y="147" font-size="11">12102 · D0</text>
+  <text x="298" y="161" font-size="10.5" fill="#555555">#515A6C</text>
+  <rect x="440" y="44" width="128" height="72" rx="8" fill="#898D8D" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="132" font-size="12.5" font-weight="bold">Silver</text>
+  <text x="440" y="147" font-size="11">12103 · D1</text>
+  <text x="440" y="161" font-size="10.5" fill="#555555">#898D8D</text>
+  <rect x="582" y="44" width="128" height="72" rx="8" fill="#DD3C22" stroke="#00000033" stroke-width="1" />
+  <text x="582" y="132" font-size="12.5" font-weight="bold">Vermilion Red</text>
+  <text x="582" y="147" font-size="11">12200 · R3</text>
+  <text x="582" y="161" font-size="10.5" fill="#555555">#DD3C22</text>
+  <rect x="724" y="44" width="128" height="72" rx="8" fill="#FF7F41" stroke="#00000033" stroke-width="1" />
+  <text x="724" y="132" font-size="12.5" font-weight="bold">Orange</text>
+  <text x="724" y="147" font-size="11">12300 · A0</text>
+  <text x="724" y="161" font-size="10.5" fill="#555555">#FF7F41</text>
+  <rect x="14" y="184" width="128" height="72" rx="8" fill="#FEDB00" stroke="#00000033" stroke-width="1" />
+  <text x="14" y="272" font-size="12.5" font-weight="bold">Yellow</text>
+  <text x="14" y="287" font-size="11">12400 · Y0</text>
+  <text x="14" y="301" font-size="10.5" fill="#555555">#FEDB00</text>
+  <rect x="156" y="184" width="128" height="72" rx="8" fill="#00482B" stroke="#00000033" stroke-width="1" />
+  <text x="156" y="272" font-size="12.5" font-weight="bold">Pine Green</text>
+  <text x="156" y="287" font-size="11">12500 · G4</text>
+  <text x="156" y="301" font-size="10.5" fill="#555555">#00482B</text>
+  <rect x="298" y="184" width="128" height="72" rx="8" fill="#0085AD" stroke="#00000033" stroke-width="1" />
+  <text x="298" y="272" font-size="12.5" font-weight="bold">Light Blue</text>
+  <text x="298" y="287" font-size="11">12600 · B4</text>
+  <text x="298" y="301" font-size="10.5" fill="#555555">#0085AD</text>
+  <rect x="440" y="184" width="128" height="72" rx="8" fill="#6667AB" stroke="#00000033" stroke-width="1" />
+  <text x="440" y="272" font-size="12.5" font-weight="bold">Lavender Blue</text>
+  <text x="440" y="287" font-size="11">12700 · B5</text>
+  <text x="440" y="301" font-size="10.5" fill="#555555">#6667AB</text>
+</svg>
