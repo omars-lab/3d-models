@@ -48,6 +48,7 @@ import { writePlatePreview, readBeds, readPlacements, type Placement, type Slice
 export interface PlateProfile {
   settings?: string; // "<machine>;<process>" preset display names (-s)
   filament?: string; // filament preset display name(s) (-f)
+  color?: string; // "#RRGGBB": the filament color the slice carries, so the send matches that tray (default: the preset's)
 }
 export interface ManifestItemBkr {
   bkr: string; // "bikar:<path>" source
@@ -165,6 +166,10 @@ export function parseManifest(text: string): PlateManifest {
   });
   if (m.beds !== undefined && (typeof m.beds !== "number" || !Number.isInteger(m.beds) || m.beds < 1)) {
     throw new Error(`\`beds:\` must be an integer >= 1 (the most beds the plate may use), got ${JSON.stringify(m.beds)}`);
+  }
+  const color = (m.profile as PlateProfile | undefined)?.color;
+  if (color !== undefined && (typeof color !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(color))) {
+    throw new Error(`\`profile.color:\` must be "#RRGGBB" (the loaded tray's color), got ${JSON.stringify(color)}`);
   }
   return {
     bed: typeof m.bed === "string" ? m.bed : undefined,
@@ -597,6 +602,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
         studioBin,
         mkdtempSync(join(tmpdir(), "bambu-presets-")),
         plate.type,
+        manifest.profile?.color,
       );
       settingsResolved = prepared.settings ?? settingsName;
       filamentResolved = prepared.filament ?? filamentName;
