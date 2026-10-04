@@ -27,8 +27,9 @@ Dispatch is two independent halves, each now first-party:
 1. **Upload — implicit FTPS on :990** (`tools/bambu/src/backends/ftps.ts`, `FtpsBackend`). The
    `.3mf` is STOR'd to the **FTP root under its bare basename** (not `/sdcard`, not `/model` — the
    reference clients upload to the login working directory and subdir uploads are rejected). User
-   `bblp`, password = the LAN access code (`BAMBU_TOKEN`), self-signed cert →
-   `rejectUnauthorized: false` (the trust boundary is the LAN, same as MQTT). Data-connection TLS
+   `bblp`, password = the LAN access code (`BAMBU_TOKEN`). The certificate was not checked at
+   first (`rejectUnauthorized: false`); since 2026-10-04 it must be this printer's pinned one, as
+   on MQTT and the camera ([camera-tls-pin](camera-tls-pin.md)). Data-connection TLS
    **session reuse is required** by the firmware — `basic-ftp` reuses the control session on the
    data socket by default, so we simply don't break it. `basic-ftp` is pinned exact at **5.3.1**
    (the 5.0.x line carried a path-traversal + a CRLF advisory; 5.3.1 clears them, and we use only

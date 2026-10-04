@@ -2,7 +2,7 @@
 date: 2026-10-02
 ---
 
-# The camera's certificate is pinned, and a small relay carries the stream
+# The printer's certificate is pinned, and a small relay carries the camera stream
 
 *Issue slug: `camera-tls-pin`. Written 2026-10-02, while making `bambu status camera` work so a
 send can show the bed first ("can we also pull screenshot from bambu camera to confirm its
@@ -34,8 +34,9 @@ needs that CA from somewhere else, and nowhere here has it:
 Omar picked pinning (2026-10-02): save this printer's own certificate once, then accept exactly
 that certificate and no other.
 
-1. **`bambu setup camera-pin`** fetches the certificate with `openssl s_client` (this sends no
-   credentials). It checks that the certificate names the configured serial and is in date, then
+1. **`bambu setup printer-pin`** (first called `camera-pin`, which still works) fetches the
+   certificate with `openssl s_client` (this sends no credentials). Since 2026-10-04 it fetches
+   from port 8883, which answers whenever LAN mode is on; 322 also needs Liveview. It checks that the certificate names the configured serial and is in date, then
    saves it to `.bambu/printer-<serial>.pem`, which is gitignored and local to this machine. It
    prints the issuer, the expiry and the SHA-256 fingerprint.
 2. **Node does the TLS hop, pinned.** Node can trust a single certificate:
@@ -44,7 +45,7 @@ that certificate and no other.
    must equal the serial and the fingerprint must match the pin. The tests make a stand-in printer
    with the same shape (a leaf naming the serial, its CA never sent). They show that the pinned
    certificate connects, that a different certificate naming the same serial is refused, and that
-   a certificate naming another serial is refused (`tools/bambu/src/backends/camera.test.ts`).
+   a certificate naming another serial is refused (`tools/bambu/src/backends/tls-pin.test.ts`).
 3. **A relay on 127.0.0.1 carries ffmpeg's plain RTSP to the pinned TLS connection.** Two things
    the printer does shaped it:
    - It answers any URL that is not its own `rtsps://<host>:322/…` with
@@ -66,11 +67,27 @@ person sending can still look at the bed. Spotting objects is the X2D's own job 
 
 ## What it commits us to
 
-- **Re-pin after a factory reset or a new certificate.** The camera then refuses with a message
-  that says to run `bambu setup camera-pin` again. The current certificate expires 2036-04-13.
+- **Re-pin after a factory reset or a new certificate.** Every connection then refuses with a
+  message that says to run `bambu setup printer-pin` again. The current certificate expires 2036-04-13.
 - **The first fetch is trusted as it comes.** The pin is only as good as the network was the
-  moment it was taken. That is the usual price of pinning, and it is the same trust MQTT and FTPS
-  give on every connection today.
-- **MQTT (8883) and FTPS (990) still skip the certificate check** (`rejectUnauthorized: false`).
-  If they present the same certificate, the same pin can check them too. That is open in the
-  print-infrastructure backlog.
+  moment it was taken. That is the usual price of pinning.
+- **No connection without a pin.** `status`, `storage`, `print send` and the camera all refuse
+  until `bambu setup printer-pin` has run once; `bambu setup doctor` marks a missing pin `✗`.
+
+## MQTT and FTPS check the same pin (2026-10-04)
+
+Until then MQTT (8883) and FTPS (990) skipped the certificate check (`rejectUnauthorized: false`),
+and both carry the access code: MQTT as its password, FTPS as its login. Fetching what each port
+presents showed the same certificate as the camera's: the same SHA-256 fingerprint
+(`7A:61:0F:AE:…:EB:A8:5D:FF`), `CN=20P6AJ641401412`, valid to 2036-04-13. The one difference is
+that 8883 and 990 also send the intermediate "BBL Device CA N6-V2" (issued by "BBL CA2 RSA"),
+where 322 sends the certificate alone. The pinned options do not depend on that: the pinned
+certificate is the trust anchor whatever the server sends after it.
+
+So the helpers moved to `tools/bambu/src/backends/tls-pin.ts`, and MQTT and FTPS use them.
+`mqtt` and `basic-ftp` both hand their TLS options to Node unchanged, and `basic-ftp` reuses them on
+every data connection, so a file listing or an upload is pinned too. The tests serve both shapes
+(certificate alone, certificate with its CA), and run the pinned options through `mqtt.connect` and
+`basic-ftp`'s implicit-TLS connect: the printer's certificate connects, and one naming the same
+serial under another CA is refused before any password is sent. Checked against the X2D the same
+day: `bambu status show`, `bambu storage list` and `bambu status camera` all connected with the pin.

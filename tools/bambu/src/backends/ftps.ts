@@ -8,8 +8,9 @@
 // Bambu LAN FTPS facts this encodes (grounded 2026-09-17 against pybambu `bambu_client.py`
 // `ImplicitFTP_TLS`, bambulabs_api `ftp_client.py`, and the basic-ftp AccessOptions docs):
 //   - IMPLICIT TLS on port 990 (not explicit/AUTH-TLS on 21). basic-ftp: `secure: "implicit"`.
-//   - username `bblp`, password = the 8-char LAN access code (BAMBU_TOKEN). Self-signed device cert
-//     → `rejectUnauthorized: false` (trust boundary is the LAN, same as the MQTT path).
+//   - username `bblp`, password = the 8-char LAN access code (BAMBU_TOKEN). The certificate is
+//     checked against this printer's pin (backends/tls-pin.ts), as on MQTT; basic-ftp reuses the
+//     same options for each data connection, so those are pinned too.
 //   - Upload to the FTP ROOT as a BARE filename (`STOR <name>.3mf`); NOT /sdcard, NOT /model — the
 //     reference clients STOR against the login working directory and subdir uploads are rejected.
 //     The `print.project_file` command then references it as `ftp:///<name>.3mf` (three slashes:
@@ -28,6 +29,7 @@ import { basename } from "node:path";
 import { Client as FtpClient, type FileInfo } from "basic-ftp";
 import { ev } from "../log.js";
 import { loadConfig, type PrinterConfig } from "../config.js";
+import { pinFailureHint, pinnedTlsOptions, readPin } from "./tls-pin.js";
 
 const FTPS_PORT = 990;
 const FTPS_USER = "bblp";
@@ -50,7 +52,7 @@ export class FtpsBackend {
 
   /** True when we have enough config to even attempt a connection. */
   configured(): boolean {
-    return Boolean(this.config.host && this.config.token);
+    return Boolean(this.config.host && this.config.token && this.config.serial);
   }
 
   /**
@@ -61,8 +63,9 @@ export class FtpsBackend {
   /** Log in over implicit FTPS. The caller closes the client. Never logs the token. */
   private async open(timeoutMs: number): Promise<FtpClient> {
     if (!this.configured()) {
-      throw new Error("printer config missing (need PRINTER_HOST / BAMBU_TOKEN)");
+      throw new Error("printer config missing (need PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN)");
     }
+    const secureOptions = pinnedTlsOptions(this.config.serial!, readPin(this.config.serial!));
     const client = new FtpClient(timeoutMs);
     // basic-ftp's verbose logger would print the FTP dialogue (control commands) — keep it off so
     // credentials/paths never reach stdout. We emit our own structured, secret-free events instead.
@@ -74,7 +77,7 @@ export class FtpsBackend {
         user: FTPS_USER,
         password: this.config.token,
         secure: "implicit",
-        secureOptions: { rejectUnauthorized: false }, // self-signed device cert; LAN trust boundary
+        secureOptions, // only the pinned certificate; the password is sent after it is checked
       });
     } catch (err) {
       client.close();
@@ -133,6 +136,9 @@ export class FtpsBackend {
   /** Turn the opaque FTPS failures into the actions that fix them (no secret in the message). */
   private enhance(err: Error): Error {
     const msg = err.message || String(err);
+    if (/certificate|pinned/i.test(msg)) {
+      return new Error(`the printer's TLS check failed: ${msg}. ${pinFailureHint()}`);
+    }
     if (/ECONNREFUSED|ETIMEDOUT|EHOSTUNREACH|timeout/i.test(msg)) {
       return new Error(
         `FTPS to ${this.config.host}:${FTPS_PORT} failed: ${msg}. Check the printer is on the ` +

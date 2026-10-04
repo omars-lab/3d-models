@@ -8,27 +8,24 @@
 // survey.md: "raw TCP on port 6000 for A1/P1, RTSP (X1/H2 series)"):
 //   - X1/H2-class printers serve RTSP over TLS on port 322, path /streaming/live/1, user `bblp`,
 //     password = the LAN access code (BAMBU_TOKEN). The X2D answered on 322 on 2026-10-02.
-//   - The printer's certificate names its serial (CN=<serial>) and is issued by a Bambu device CA
-//     ("BBL Device CA N6-V2" on the X2D) that the printer does not send and Bambu Studio does not
-//     ship, so no CA file can verify it. ffmpeg 8 verifies TLS by default and refuses it.
-//   - So we pin: `bambu setup camera-pin` saves this printer's own certificate once, and every
-//     connection must present exactly that certificate, naming the configured serial. Node does the
-//     TLS hop (it can trust a single pinned certificate; ffmpeg cannot) and relays it to ffmpeg over
-//     loopback. Why, and what was ruled out: docs/issues/camera-tls-pin.md.
+//   - The printer's certificate is issued by a Bambu device CA no file ships, and port 322 sends it
+//     alone. ffmpeg 8 verifies TLS by default and refuses it, and cannot trust one pinned
+//     certificate, so Node does the TLS hop against the printer's pin (backends/tls-pin.ts, saved
+//     once by `bambu setup printer-pin`) and relays it to ffmpeg over loopback. Why, and what was
+//     ruled out: docs/issues/camera-tls-pin.md.
 //   - TCP interleaving (`-rtsp_transport tcp`), since the relay carries one TCP stream.
 //
 // The access code rides in the URL because ffmpeg takes RTSP credentials no other way. It only
 // crosses loopback in the clear; the URL is never logged, and every line ffmpeg prints is scrubbed
 // of the code before it reaches the operator.
 
-import { createHash, X509Certificate } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, statSync } from "node:fs";
 import { createServer, type AddressInfo, type Socket } from "node:net";
-import { join } from "node:path";
-import { connect as tlsConnect, type ConnectionOptions, type PeerCertificate } from "node:tls";
+import { connect as tlsConnect, type ConnectionOptions } from "node:tls";
 import { ev, runWithTimeout } from "../log.js";
 import { loadConfig, type PrinterConfig } from "../config.js";
-import { repoRoot } from "../paths.js";
+import { pinFailureHint, pinnedTlsOptions, readPin } from "./tls-pin.js";
 
 export const RTSPS_PORT = 322;
 const CAMERA_USER = "bblp";
@@ -85,51 +82,6 @@ export function scrub(text: string, token: string | undefined): string {
   const enc = encodeURIComponent(token);
   if (enc !== token) out = out.split(enc).join("****");
   return out;
-}
-
-/** Where this printer's pinned certificate lives: repo-root/.bambu (gitignored), else cwd. */
-export function pinPath(serial: string, start = process.cwd()): string {
-  return join(repoRoot(start) ?? start, ".bambu", `printer-${serial}.pem`);
-}
-
-/** The first PEM certificate block in `text` (openssl s_client output), or null. */
-export function firstPem(text: string): string | null {
-  const m = /-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/.exec(text);
-  return m ? `${m[0]}\n` : null;
-}
-
-/** Why `cert` may not be pinned for `serial`, or null when it may. The certificate must name the
- *  serial and be in date; anything else is a different device or a stale capture. */
-export function pinRefusal(cert: X509Certificate, serial: string, now = new Date()): string | null {
-  const cn = /(?:^|\n)CN=([^\n]+)/.exec(cert.subject)?.[1];
-  if (cn !== serial) return `the certificate names ${cn ?? "no CN"}, not the configured serial ${serial}`;
-  if (now < new Date(cert.validFrom) || now > new Date(cert.validTo)) {
-    return `the certificate is out of date (valid ${cert.validFrom} to ${cert.validTo})`;
-  }
-  return null;
-}
-
-/** TLS options that accept only the pinned certificate for this serial. `ca` holds the leaf itself
- *  and `allowPartialTrustChain` lets it stand as the trust anchor, so OpenSSL still checks the
- *  signature, dates and key; the identity check then requires the same serial and fingerprint. */
-export function pinnedTlsOptions(host: string, serial: string, pem: string): ConnectionOptions {
-  const pinned = new X509Certificate(pem).fingerprint256;
-  return {
-    host,
-    port: RTSPS_PORT,
-    ca: pem,
-    allowPartialTrustChain: true,
-    rejectUnauthorized: true,
-    checkServerIdentity: (_host: string, cert: PeerCertificate) => {
-      if (cert.subject?.CN !== serial) {
-        return new Error(`the camera's certificate names ${cert.subject?.CN ?? "no CN"}, not ${serial}`);
-      }
-      if (cert.fingerprint256 !== pinned) {
-        return new Error("the camera's certificate is not the pinned one");
-      }
-      return undefined;
-    },
-  };
 }
 
 /**
@@ -242,42 +194,13 @@ export class CameraBackend {
   }
 
   /**
-   * Save the printer's camera certificate as this printer's pin. Fetching a certificate sends no
-   * credentials. Returns the path and the certificate's facts for the operator to see.
-   */
-  async pin(timeoutMs = 10_000): Promise<{ path: string; fingerprint: string; issuer: string; validTo: string }> {
-    const { host, serial } = this.config as { host: string; serial: string };
-    const res = await runWithTimeout(
-      "openssl",
-      ["s_client", "-connect", `${host}:${RTSPS_PORT}`, "-showcerts"],
-      { timeoutMs, label: "openssl_camera_cert", input: "" },
-    );
-    const pem = firstPem(res.stdout);
-    if (!pem) {
-      throw new Error(`no certificate from ${host}:${RTSPS_PORT}${res.timedOut ? " (timed out)" : ""}. Check LAN Mode Liveview is on.`);
-    }
-    const cert = new X509Certificate(pem);
-    const refusal = pinRefusal(cert, serial);
-    if (refusal) throw new Error(`not pinned: ${refusal}`);
-    const path = pinPath(serial);
-    mkdirSync(join(path, ".."), { recursive: true });
-    writeFileSync(path, pem);
-    ev("camera_pin_saved", { serial, fingerprint: cert.fingerprint256 });
-    return { path, fingerprint: cert.fingerprint256, issuer: cert.issuer.replace(/\n/g, ", "), validTo: cert.validTo };
-  }
-
-  /**
    * Pull one frame to `out` (JPEG) and return its size in bytes. Read-only: it opens the video
    * stream and nothing else. Throws an actionable, code-free Error on failure.
    */
   async snapshot(out: string, timeoutMs = 20_000): Promise<number> {
     if (!this.configured()) throw new Error("printer config missing (need PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN)");
     const { host, token, serial } = this.config as { host: string; token: string; serial: string };
-    const pinFile = pinPath(serial);
-    if (!existsSync(pinFile)) {
-      throw new Error(`no pinned camera certificate for ${serial} (${pinFile}). Run \`bambu setup camera-pin\` once.`);
-    }
-    const relay = await openRelay(host, token, pinnedTlsOptions(host, serial, readFileSync(pinFile, "utf8")));
+    const relay = await openRelay(host, token, { host, port: RTSPS_PORT, ...pinnedTlsOptions(serial, readPin(serial)) });
     ev("camera_snapshot_start", { host, port: RTSPS_PORT });
     let res;
     try {
@@ -291,8 +214,7 @@ export class CameraBackend {
     const tlsError = relay.tlsError();
     if (tlsError) {
       throw new Error(
-        `the camera's TLS check failed: ${tlsError.message}. If the printer was reset or its certificate ` +
-          "renewed, run `bambu setup camera-pin` again; otherwise this is not the pinned printer.",
+        `the camera's TLS check failed: ${tlsError.message}. ${pinFailureHint()}`,
       );
     }
     const detail = scrub(res.stderr.trim(), token);
