@@ -918,6 +918,29 @@ def self_test() -> int:
               + ("" if ok else f" — got findings={found}, skipped={skipped}"))
         failures += 0 if ok else 1
 
+        # R1 for a `3d-models:` mesh kept out of git (phones-02, 2026-10-04): the file's own
+        # digest when it is on disk, else the pin a plate recipe holds for that path.
+        local = tmp / "r1-local-source"
+        (local / "docs/design/plates").mkdir(parents=True)
+        (local / ".bambu/imports").mkdir(parents=True)
+        mesh = local / ".bambu/imports/thing.stl"
+        mesh.write_bytes(b"solid thing\nendsolid thing\n")
+        real = _sha256_file(mesh)
+        (local / "docs/design/plates/p.yaml").write_text(
+            f"bed: x2d\nitems:\n  - stl: .bambu/imports/thing.stl\n    sha256: {real}\n",
+            encoding="utf-8")
+        rel, other = ".bambu/imports/thing.stl", "f" * 64
+        checks = [("the file on disk matches", resolve_local_source(local, rel, real)[0], "ok"),
+                  ("the file on disk differs", resolve_local_source(local, rel, other)[0], "bad")]
+        mesh.unlink()
+        checks += [("absent, a recipe pins it", resolve_local_source(local, rel, real)[0], "skip"),
+                   ("absent, nothing pins it", resolve_local_source(local, rel, other)[0], "bad")]
+        for label, got, want in checks:
+            ok = got == want
+            print(f"self-test {'ok  ' if ok else 'FAIL'}: R1 local source — {label}"
+                  + ("" if ok else f" — wanted {want}, got {got}"))
+            failures += 0 if ok else 1
+
         # R14 is a shipped-tree rule. A fresh `--record` draft is always pre-slice and
         # lives in the staging area (.bambu/records/, what `bambu validate record` scans
         # by default) — R14 must NOT fire there, or the gate would refuse the very draft

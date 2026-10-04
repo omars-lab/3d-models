@@ -524,9 +524,11 @@ def read_rubric(rubric: Path) -> dict:
         if isinstance(data, dict) and isinstance(data.get("maturity"), dict):
             m = data["maturity"]
             if not (isinstance(m.get("keeps_for_repeatable"), int) and m["keeps_for_repeatable"] > 0
-                    and _pos(m.get("production_fill")) and m["production_fill"] <= 1):
+                    and isinstance(m.get("production_fill"), (int, float))
+                    and not isinstance(m["production_fill"], bool)
+                    and 0 <= m["production_fill"] <= 1):
                 raise ValueError(f"{rubric}: maturity needs keeps_for_repeatable (a positive "
-                                 "whole number) and production_fill (in (0, 1])")
+                                 "whole number) and production_fill (in [0, 1], 0 for no bar)")
             return m
     raise ValueError(f"{rubric}: no ```yaml block with a `maturity:` mapping")
 
@@ -1844,6 +1846,22 @@ def self_test() -> int:
         found, _, _, _ = check_tree(plates, prints, scoring, bets, _rubric(plates))
         report(any("last 3 verdicts" in f for f in found), "the rubric's K is the one applied",
                str(found))
+
+        # A fill of 0 is no bar (round log 2026-10-04); below 0 or above 1 is a typo.
+        _rubric(plates).write_text(_RUBRIC_MD.replace("production_fill: 0.5",
+                                                      "production_fill: 0"), encoding="utf-8")
+        report(read_rubric(_rubric(plates))["production_fill"] == 0,
+               "a production_fill of 0 reads as no fill bar", "")
+        for bad_fill in ("-0.1", "1.5", "true"):
+            _rubric(plates).write_text(_RUBRIC_MD.replace("production_fill: 0.5",
+                                                          f"production_fill: {bad_fill}"),
+                                       encoding="utf-8")
+            try:
+                read_rubric(_rubric(plates))
+                refused = False
+            except ValueError:
+                refused = True
+            report(refused, f"a production_fill of {bad_fill} is refused", "")
 
         # A standing approval (D-095): only production, still earned, on its promoted recipe.
         cases = iter(range(100))

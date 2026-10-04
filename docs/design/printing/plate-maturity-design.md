@@ -34,8 +34,8 @@ cannot be judged by both standards unless it says which one it is under.
 | Level | Means | Bed packed? |
 |---|---|---|
 | `experiment` | a question is still open about at least one piece | no, and not asked to be |
-| `repeatable` | every piece on the plate has printed well, more than once, somewhere | not yet asked |
-| `production` | repeatable, this plate printed clean as laid out, and the bed is packed | yes: `bed_fill` at least the rubric's number |
+| `repeatable` | every piece on the plate has printed well, its latest K times, somewhere | not yet asked |
+| `production` | repeatable, this plate printed clean as laid out, and its bed fill is measured | `bed_fill` at least the rubric's number, which is 0 (no bar) since D-098 |
 
 Three levels, not four. "Prototype" and "experiment" differ by intent — trying a new idea versus
 checking a known one — and the page already carries intent in `kind` (`new` or `taste`). A fourth
@@ -52,11 +52,12 @@ minis-04 already printed, and what minis-04 showed about them counts for both.
 
 - **Repeatable:** every distinct piece in the plate's current recipe has its **latest K
   verdicts all `keep`**, across every record on any plate. K is `keeps_for_repeatable` in the
-  rubric (2 today). The latest K, not any K: a piece kept twice and then judged `adjust` was
+  rubric (2 at first, 1 since 2026-10-04, D-098). The latest K, not any K: a piece kept twice and then judged `adjust` was
   judged wrong last. And every piece, not a total: three pieces kept twice each and one never
   printed is not repeatable, however many keeps there are in all.
 - **Production:** repeatable, and
-  - the page's `bed_fill` is at least `production_fill` in the rubric (0.45 today, §4);
+  - the page's `bed_fill` is at least `production_fill` in the rubric (0.45 at first, 0 since
+    2026-10-04, D-098, §4);
   - the page is `kind: repeat` (§5);
   - this plate's own latest run kept every piece, and printed the same pieces in the same
     counts the recipe holds now. Pieces proven on other plates are not enough: packing a bed
@@ -119,7 +120,13 @@ pass; four 90 mm coasters cover about 0.39 and fail; five 90 mm coasters in rows
 2 mm between them fit in 251 mm and cover about 0.49, which passes. So at 0.45 a bed of 90 mm
 coasters is production only when it holds the fifth coaster a square grid leaves room for, which
 is the kind of packing "optimized" should mean. The number lives in the
-[rubric](../../../.claude/skills/grade-plate/rubric.md) with a round log, and it is Omar's call 2.
+[rubric](../../../.claude/skills/grade-plate/rubric.md) with a round log, and it was Omar's call 2.
+
+**Since 2026-10-04 the bar is 0** ([D-098](../../working-model/decisions-log.md), call 2 below).
+Omar wanted phones-02, four phones covering 2% of the bed, saved as production after one good
+print, and chose to change the rule rather than pack the plate first. A production page still
+carries a measured `bed_fill`, so an empty bed stays visible, but the fill no longer decides the
+level. Packing is still worth doing for hours and filament; it is the plate-packing skill's job.
 
 Fill is the measure because it is the one a slice settles and a page can carry. Hours per piece
 would be closer to the cost, but it changes with the piece, so a single bar could not hold
@@ -253,7 +260,12 @@ printed twice or been packed. Keeping them and moving one when a grade looks wro
 costs nothing now. The rubric's round log is where a change goes.
 
 - [ ] Keep them
-- [ ] Change them (say to what in the notes)
+- [x] Change them (say to what in the notes)
+
+**Decided 2026-10-04, in chat:** change them, to one keep and no fill bar → D-098. After phones-02
+printed, Omar said "print good, lets save it as prod ready" and picked "Change the production
+rule" over reprinting it once or packing it first. The exact numbers (1 and 0) are my reading of
+the option's "one clean print, or no fill bar"; phones-02 needed both to qualify.
 
 **3. Call 6 of the print-review design (does an approval lapse when the recipe changes?) stays
 open there, for experiments.** D-095 answers it for production: the recipe does not change in

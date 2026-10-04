@@ -3,12 +3,14 @@ plate: phones-02
 print_log: '[[print-logs/phones-02|print log]]'
 recipe: phones-02.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-04-phones-02]
 answers: "How much time and filament does one color save over phones-01, and do the small phones keep their lens bumps at twice the thickness?"
-kind: taste
-maturity: experiment
+kind: repeat
+maturity: production
+bed_fill: 0.021
+recipe_hash: '3387cb03d1b7'
 derived_from: phones-01
 bets: []
 unblocks: []
@@ -99,6 +101,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-04 | approved | Omar, in chat: "yes approved print" | iteration 1 @ dd2e8eed92 | sent 2026-10-04 |
+| 2026-10-04 | standing | plate_grade.py, promoted to production (D-095) | iteration 1 @ dd2e8eed92 | — |
 
 ## Timeline
 
@@ -107,3 +110,6 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-04 | proposed — at Omar's ask: phones-01 in pink only, the small phones 1.25 times wider and longer and twice as thick | this page |
 | 2026-10-04 | sliced — local one-color slice fits one bed, 12 minutes, 3.46 g, no slicer warnings | this page |
 | 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ dd2e8eed92 | this page |
+| 2026-10-04 | printed — on the X2D, one bed, all 22 layers, about 13 to 14 minutes against the slicer's 12 | [the record](../../prints/2026-10-04-phones-02/index.md) |
+| 2026-10-04 | judged — by Omar, in chat: "print good, lets save it as prod ready"; every phone kept | [the record](../../prints/2026-10-04-phones-02/index.md) |
+| 2026-10-04 | promoted to production: every phone kept on this plate's own run, under the rubric of 2026-10-04 (one keep, no fill bar; it covers 2% of the bed) | this page |
