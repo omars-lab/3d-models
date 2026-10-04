@@ -2,7 +2,7 @@
 plate: sheets-04c
 recipe: sheets-04c.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "A second gBV minimal coaster, the minimal construction from sheets-04, on its own: no new question, the same coaster again."
@@ -76,6 +76,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-03 | approved | Omar, in chat: "print approved, send it" (one coaster) | iteration 1 @ b7641b3143 | |
 
 ## Timeline
 
