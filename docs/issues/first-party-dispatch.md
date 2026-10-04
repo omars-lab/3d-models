@@ -71,7 +71,7 @@ Three fields the sources **disagree on for a dual-nozzle X2D** were exposed as o
 |---|---|---|
 | `bed_type` | settled 2026-10-03: the slice's own plate type, never `"auto"` | `"auto"` paused sheets-04b at layer 0; see [the plate type](sliced-for-wrong-plate.md) |
 | `ams_mapping` | matched from the loaded trays (the builder default `[0]` is no longer sent) | dual-nozzle firmware may need a nozzle index, or the empty-string form (`--ams-mapping none`) |
-| `md5` | `""` (empty) | accepted on P1/A1-class; X1-class historically validated the checksum |
+| `md5` | `""` (empty) | accepted on P1/A1-class; X1-class historically validated the checksum. The X2D took it on four sends that printed to the end (2026-10-03 and 04, below) |
 
 **How the bet gets settled (deferred to the physical send, owner-gated):** before the first real
 dispatch, diff this payload against a **BambuStudio ground-truth capture** — send one plate from the
@@ -80,6 +80,17 @@ ours, field for field. `bambu print send --dry-run` prints the exact payload we 
 that diff **without uploading or publishing** (it reads the loaded trays to fill `ams_mapping`) — it is
 the review surface. Any field Studio sets differently gets
 corrected here (or wired to its flag) and the bet closes with a one-line note.
+
+**How it closed (2026-10-04), without the sniffer.** The send was checked field by field against
+Studio's own X2D start command from the research capture instead
+([the last section](#2026-10-03-the-start-command-matches-studios)), and the X2D settled the rest
+by printing. `bed_type` was wrong as `"auto"` and is now the slice's plate type
+([the plate type](sliced-for-wrong-plate.md)). `ams_mapping` is matched from the loaded trays.
+`md5` stays `""`. Four `bambu print send`s then ran to the end with these fields: sheets-04b
+(the second send) and sheets-04c on 2026-10-03, phones-01 and phones-02 on 2026-10-04 (each
+plate's print log in `docs/design/plates/print-logs/` ends in a `finished` row). Reading Studio's request off `device/<serial>/request`
+was never tried and is no longer needed. If a firmware update starts refusing an empty `md5`,
+the send will be refused with a code, and that is the moment to compute the real checksum.
 
 ## Why verification stops at the gate
 
