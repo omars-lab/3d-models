@@ -163,6 +163,31 @@ items:
 The composer renders each **distinct** `{bkr, params}` once (cache), then places `count`
 copies of the resulting STL, letting `--arrange 1` position them (§6).
 
+A third spelling renders nothing: a mesh file that bikar did not make (sheets-04d carries an
+iPhone mini and a gummy bear beside its coaster).
+
+```yaml
+  - stl:    .bambu/imports/gummy-bear-cc0-1351519.stl   # a path inside this repo
+    sha256: 3d383c58…                                   # the file's hash: another file is refused
+    scale:  5                                           # optional, about the origin (§8)
+    count:  1
+```
+
+- **`stl`** may be gitignored. `.bambu/imports/` holds third-party models, because this repo
+  is public and a model's license may not allow sharing it. The file then exists in one
+  checkout only, and the composer says so when it is missing.
+- **`sha256`** is checked before anything is placed, the same rule a sampler sheet's vendored
+  cell follows. The iteration key names the file as `3d-models:<path>`, with this hash and the
+  scale as its params, so the same file at another size is another recipe. The draft record
+  keeps that source and hash as given, since there is no bikar blob to look up.
+
+## 4.1 Known gap
+
+The prints gate (R1) accepts only `bikar:` sources. A record holding a `3d-models:` object
+(an `stl:` item, or a sheet's vendored cell) fails it when promoted to `docs/prints/`. Teach R1
+to check a `3d-models:` hash against the file, or skip it when the file is a gitignored import
+that is not there, before the first such record is promoted.
+
 ## 5. The verb and its argv
 
 ```
@@ -274,6 +299,13 @@ Studio `--scale` flag is exposed only as a flagged passthrough (after `--`, like
 `slice plate`'s raw-arg escape hatch), and **using it prints the D-059 warning** naming
 this entry — the same "say the hazard out loud" discipline `slice plate` uses for its
 dual-nozzle no-op. `--scale` is never the sizing mechanism.
+
+The one exception is an `stl:` item's `scale` (§4). D-059 does not cover it, because its
+reason does not hold there: D-059 rejects a scaled mesh because a bikar part has a `size`
+param that re-renders walls and straps at a printable width, while an imported mesh has no
+params, so scaling is the only lever. The hazard still holds. Scaling a mesh down can thin a
+feature below the floor, so look at the sliced preview of any `scale` under 1. Scaling up, as
+the gummy bear's 5 does, only thickens.
 
 ## 9. Decisions
 

@@ -180,6 +180,10 @@ async function runCoaster(manifestPath: string, opts: CoasterOpts): Promise<void
   let manifest: PlateManifest;
   try {
     manifest = parseManifest(readFileSync(absManifest, "utf8"));
+    const local = manifest.items.findIndex((it) => "stl" in it);
+    if (local >= 0) {
+      throw new Error(`items[${local}]: an \`stl:\` item has no color regions to split — put it on a \`slice compose\` plate`);
+    }
   } catch (err) {
     console.error((err as Error).message);
     process.exitCode = 2;
