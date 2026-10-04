@@ -24,3 +24,9 @@ sheets-04b:
   - {iteration: 1, recipe: '076b671d0cd9', date: '2026-10-03'}
 sheets-04c:
   - {iteration: 1, recipe: '6c1c025db9b7', date: '2026-10-03'}
+sheets-04d:
+  - {iteration: 1, recipe: '3c916edde7c1', date: '2026-10-03'}
+sheets-04e:
+  - {iteration: 1, recipe: 'cc064ad300e7', date: '2026-10-03'}
+sheets-04f:
+  - {iteration: 1, recipe: '72bd8a4b422a', date: '2026-10-03'}
