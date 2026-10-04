@@ -13,7 +13,15 @@ Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](
   (3d-models #449). The gates now read `MERGE_HEAD` too, so a merge's inherited work is not
   treated as new (3d-models #447).
 
-- 2026-09-29: `tools/branch_inventory.py` lists, read-only, what a branch or worktree cleanup
+- 2026-10-04: the `consolidate-branches` skill turns the cleanup into one flow: inventory, prove
+  what is merged by content (now also against each PR's merge commit, with British and American spellings of color folded),
+  snapshot every tip under `refs/snapshots/<date>/` and push it, delete only what is proven dead,
+  and land unmerged work through a fresh branch with every conflict worked by hand. The inventory
+  script moved into the skill, and its keep lists and leave-alone worktrees moved into the
+  skill's `rules.md`, read at run time.
+
+- 2026-09-29: the branch inventory script (since 2026-10-04 in the `consolidate-branches` skill)
+  lists, read-only, what a branch or worktree cleanup
   would lose across our repos: worktrees with uncommitted files, branches marked merged by
   ancestry or by content, stashes and open PRs. It ran the fifth cleanup; every branch it
   flagged as unique turned out to be landed, so unique means look, not keep (3d-models #415).
