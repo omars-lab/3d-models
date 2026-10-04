@@ -1,0 +1,27 @@
+# sheets-04c — the gBV minimal coaster alone (sheets-04's minimal construction)
+#
+# Omar, 2026-10-03: "prpare a plate with just minimal construvtion from plate 4" … "inmeant
+# 4b" … "the plate before the last". The plate before the last is sheets-04, and its minimal
+# construction is the gBV minimal coaster (gBV_JTt3Kxk, CS-13: the straps only, 4 mm tall, no
+# base). So this plate is that coaster and nothing else: no pieces.
+#
+#   COASTER  the gBV minimal coaster, one, at the file's own knobs (size 90, strap 3, 4 mm)
+#
+# The file has not changed in bikar since sheets-04 printed it (bikar 093d4af to origin/main),
+# so this is the same coaster: its holes are cut on the exact outline the loose pieces are made
+# from (bikar #297), and the sheets-04b pieces fit it as they fit the first one.
+#
+# Left off, on purpose: the loose pieces. sheets-04's all fell through and sheets-04b is the
+# set that answers the gap, so none go on this plate.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sheets-04c.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    label:  COASTER
