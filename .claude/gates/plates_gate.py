@@ -524,9 +524,11 @@ def read_rubric(rubric: Path) -> dict:
         if isinstance(data, dict) and isinstance(data.get("maturity"), dict):
             m = data["maturity"]
             if not (isinstance(m.get("keeps_for_repeatable"), int) and m["keeps_for_repeatable"] > 0
-                    and _pos(m.get("production_fill")) and m["production_fill"] <= 1):
+                    and isinstance(m.get("production_fill"), (int, float))
+                    and not isinstance(m["production_fill"], bool)
+                    and 0 <= m["production_fill"] <= 1):
                 raise ValueError(f"{rubric}: maturity needs keeps_for_repeatable (a positive "
-                                 "whole number) and production_fill (in (0, 1])")
+                                 "whole number) and production_fill (in [0, 1], 0 for no bar)")
             return m
     raise ValueError(f"{rubric}: no ```yaml block with a `maturity:` mapping")
 
@@ -622,9 +624,20 @@ def recipe_pieces(path: Path, data: dict) -> dict[str, int] | str:
     for it in items:
         if isinstance(it, dict):
             src = it.get("bkr") or (f"3d-models:{it['stl']}" if it.get("stl") else None)
-            key = piece_key(src, it.get("piece"), it.get("params"), it.get("window"))
+            params = stl_scale_params(it.get("scale")) if it.get("stl") else it.get("params")
+            key = piece_key(src, it.get("piece"), params, it.get("window"))
             out[key] = out.get(key, 0) + (it.get("count") or 1)
     return out
+
+
+def stl_scale_params(scale) -> dict:
+    """An `stl:` item's scale as the params its record carries, as `bambu slice compose` writes
+    them (`stlScaleParams` in compose.ts): none at 1, `scale` when every axis is the same, else
+    `scale_x/_y/_z`. Without this a phone at full size and one at a third are one piece."""
+    x, y, z = (scale, scale, scale) if isinstance(scale, (int, float)) else (scale or [1, 1, 1])
+    if x == y == z:
+        return {} if x == 1 else {"scale": x}
+    return {"scale_x": x, "scale_y": y, "scale_z": z}
 
 
 def maturity_evidence(path: Path, data: dict, history: dict, runs: dict, rubric: dict) -> dict:
@@ -1834,6 +1847,22 @@ def self_test() -> int:
         report(any("last 3 verdicts" in f for f in found), "the rubric's K is the one applied",
                str(found))
 
+        # A fill of 0 is no bar (round log 2026-10-04); below 0 or above 1 is a typo.
+        _rubric(plates).write_text(_RUBRIC_MD.replace("production_fill: 0.5",
+                                                      "production_fill: 0"), encoding="utf-8")
+        report(read_rubric(_rubric(plates))["production_fill"] == 0,
+               "a production_fill of 0 reads as no fill bar", "")
+        for bad_fill in ("-0.1", "1.5", "true"):
+            _rubric(plates).write_text(_RUBRIC_MD.replace("production_fill: 0.5",
+                                                          f"production_fill: {bad_fill}"),
+                                       encoding="utf-8")
+            try:
+                read_rubric(_rubric(plates))
+                refused = False
+            except ValueError:
+                refused = True
+            report(refused, f"a production_fill of {bad_fill} is refused", "")
+
         # A standing approval (D-095): only production, still earned, on its promoted recipe.
         cases = iter(range(100))
 
@@ -1885,6 +1914,20 @@ def self_test() -> int:
                and piece_key("3d-models:src/x.stl", None, {}, "30@0,0") in got
                and piece_key("bikar:c.bkr", "Coaster", {}, "30@9,1") in got,
                "a sheet's card and cells are its pieces, a window part of each", str(got))
+
+        # A local STL at two scales is two pieces, keyed as `bambu slice compose` records them
+        # (phones-02: the full phone and the small one were one piece of count 4).
+        case = tmp / "stl-scales"
+        case.mkdir()
+        (case / "p.yaml").write_text(
+            "items:\n  - { stl: i/p.stl, count: 2 }\n  - { stl: i/p.stl, scale: 0.5 }\n"
+            "  - { stl: i/p.stl, scale: [0.3125, 0.3125, 0.5], count: 2 }\n", encoding="utf-8")
+        got = recipe_pieces(case / "p.md", {"recipe": "p.yaml"})
+        src = "3d-models:i/p.stl"
+        report(got == {piece_key(src, None, {}): 2, piece_key(src, None, {"scale": 0.5}): 1,
+                       piece_key(src, None, {"scale_x": 0.3125, "scale_y": 0.3125,
+                                             "scale_z": 0.5}): 2},
+               "a local STL at each scale is its own piece, keyed like its record", str(got))
 
         # The ranking: held plates are listed apart, and `after` beats ROI.
         w = yaml.safe_load(_WEIGHTS_MD.split("```yaml\n")[1].split("```")[0])["weights"]

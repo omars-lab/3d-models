@@ -6012,3 +6012,45 @@ had left it as a switch turned off. D-095 stands for production plates.
 a bikar change this does not see — that would mean the iteration must hash what the recipe builds,
 not the recipe file. Or iterations piling up from edits nobody meant as a change, which would mean
 the hash is too strict.
+
+## D-098 — Production is one good run as laid out, with no fill bar
+
+Omar, 2026-10-04, after phones-02 (four pink phones, one bed, 12 minutes) printed: "print good,
+lets save it as prod ready". The grade said experiment. Each phone had one keep and the rubric
+asked for two, and the plate covers 2% of the bed against a bar of 0.45. Asked how to get there,
+he picked "Change the production rule". This settles call 2 of the
+[plate maturity design](../design/printing/plate-maturity-design.md), the numbers D-094 left open.
+
+### The options as offered
+
+- **Log it, reprint once:** keep the rule. The second good print makes the phones repeatable, but
+  the bed would still fail the fill. Verifies the most; production still means "packed and proven
+  twice".
+- **Log it, build a packed plate:** a phones plate that fills the bed, printed clean once. The
+  most work, and the only option that keeps D-094's "prod plates should be optimized".
+- **Chosen, change the rule:** loosen it so phones-02 qualifies now. The option's own cons were
+  that it applies to every plate, and production then means less: a weaker plate can go out on a
+  standing approval.
+
+### What it changes
+
+- **The rubric** ([`rubric.md`](../../.claude/skills/grade-plate/rubric.md)) is
+  `keeps_for_repeatable: 1` and `production_fill: 0`, with a round-log line. The option said "one
+  clean print, or no fill bar for small plates". phones-02 needed both, so both moved. The exact
+  numbers are my reading, not Omar's words.
+- **A fill of 0 means no bar.** The plates gate's `read_rubric` used to refuse it, and now takes
+  0 to 1. A production page still carries a measured `bed_fill` from `--fill`, so how empty the
+  bed is stays on the page. A self-test reads 0 and refuses -0.1, 1.5 and `true`.
+- **What still holds:** the latest K verdicts, so a piece judged `adjust` last is not repeatable.
+  This plate's own latest run must keep every piece, as laid out. `kind: repeat`. The pinned
+  `recipe_hash` and the standing approval of D-095, which lapses when either fails.
+- **phones-02 is the first production plate,** with its print record
+  `docs/prints/2026-10-04-phones-02/` and a standing row in its Approvals table.
+- **One notice moved:** sheets-04c's prints now carry repeatable (its coaster was kept once on
+  sheets-04). Under-claiming stays Omar's call, so the page is unchanged.
+- **Packing is still worth doing,** for hours and filament. It is the plate-packing skill on the
+  backlog, no longer the bar for production.
+
+**What would reverse it:** a production plate whose second run fails after one good one. That
+would mean one keep is luck, and K goes back to 2. Or Omar printing a production plate and minding
+the empty bed, which would mean the fill bar comes back, perhaps only for plates of large pieces.

@@ -27,24 +27,27 @@ tool prints and a check the hook runs cannot disagree.
 3. **Measure the bed** when the page is, or is about to be, production: slice the plate
    (`bambu slice compose`), then `python3 tools/plate_grade.py --fill build/plates/<plate>.plate.3mf`,
    and copy `fill` onto the page as `bed_fill`, the way minutes and grams are copied. An
-   experiment does not need one, and is not asked to be packed.
+   experiment does not need one, and is not asked to be packed. A production page always
+   carries one, even while the rubric's bar is 0 (D-098), so an empty bed stays in view.
 4. **Write the level.**
    - **Up:** only when the grade shows the higher level. Set `maturity:` and add a timeline row
-     `| <today> | promoted | to <level>: <the evidence in a line> | this page |`. To production,
+     `| <today> | promoted to <level>: <the evidence in a line> | this page |`. To production,
      also pin the recipe: `recipe_hash: '<python3 tools/plate_grade.py --recipe-hash <plate>>'`.
      Then write the standing row in its Approvals table:
      `python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<plate>.md --standing` (D-096). From then on
      the plate goes out on its standing approval (D-095), and its recipe is frozen.
    - **Down:** when the grade shows less than the page says (the gate will already be failing).
-     Lower `maturity:` and add `| <today> | demoted | to <level>: <what changed> | this page |` —
+     Lower `maturity:` and add `| <today> | demoted to <level>: <what changed> | this page |` —
      a new verdict, a recipe change, a repack, or a stricter rubric.
    - **Under-claim:** when the prints would carry more than the page says, the gate prints a
      notice. Leave it unless Omar wants it promoted: keeping an experiment an experiment is
      their call, and never wrong.
-5. **Production means packed.** A plate going to production is `kind: repeat`, and its latest
-   run printed the counts its recipe holds now. Repacking to reach the fill changes the counts,
-   so the plate stays repeatable until the packed layout prints clean once — say so on the page
-   and queue that print through prioritize-prints.
+5. **Production means proven as laid out.** A plate going to production is `kind: repeat`, and
+   its latest run printed the counts its recipe holds now. The rubric's fill bar decides whether
+   it must also be packed; it is 0 since D-098 (phones-02, 2026-10-04), so today it need not be.
+   When the bar is above 0, repacking to reach it changes the counts, so the plate stays
+   repeatable until the packed layout prints clean once — say so on the page and queue that
+   print through prioritize-prints.
 6. **Check.** `python3 .claude/gates/plates_gate.py` must be clean; `--write` rewrites the queue
    if a page edit moved it.
 

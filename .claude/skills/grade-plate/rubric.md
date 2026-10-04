@@ -7,25 +7,26 @@ log saying why, and both pick it up. The levels and what each must show are in
 
 ```yaml
 maturity:
-  keeps_for_repeatable: 2
-  production_fill: 0.45
+  keeps_for_repeatable: 1
+  production_fill: 0
 ```
 
 ## What each number means
 
 - **`keeps_for_repeatable`** — how many of a piece's latest verdicts, across every print record
   on any plate, must all be `keep` before the piece counts as repeatable. A plate is repeatable
-  when every piece in its recipe is. Two because one keep can be luck, and a keep followed by
-  an adjust is a piece judged wrong last. A first guess: nothing has been printed twice yet.
+  when every piece in its recipe is. One since 2026-10-04: one clean print, judged good by
+  Omar, is enough. It was two, because one keep can be luck. The latest K still counts, so a
+  piece whose last verdict is `adjust` or `drop` is not repeatable, whatever came before.
 - **`production_fill`** — the share of the first bed the pieces must cover, outline from above,
   for a plate to be production. Measured by `python3 tools/plate_grade.py --fill <plate.3mf>`.
-  0.45 is a first guess, not measured against a packed plate (there is none yet). Worked by
-  hand: four 100 mm round coasters in a 2 × 2 on the 256 mm bed cover about 0.48 and pass.
-  Four 90 mm coasters (the gBV coaster's size) cover about 0.39 and do not; with 2 mm between
-  them, rows of 2, 1, 2 fit five in 251 mm of bed, about 0.49, which passes. So at 0.45 a bed
-  of 90 mm coasters passes only when it holds the fifth one a square grid leaves room for. A
-  plate of small pieces reaches the number by printing more of them; a plate of one large piece
-  by being large. Whether 0.45 is right is Omar's call 2 in the design.
+  `0` means no bar, which is the setting since 2026-10-04: a plate must still carry a measured
+  `bed_fill` on its page, so how empty a production bed is stays in view, but no number stops
+  it. It was 0.45, a first guess never measured against a packed plate. Worked by hand at
+  0.45: four 100 mm round coasters in a 2 × 2 on the 256 mm bed cover about 0.48 and pass;
+  four 90 mm coasters cover about 0.39 and do not, and five in rows of 2, 1, 2 cover about
+  0.49. Packing a bed is still worth doing for time and filament (the plate-packing skill on
+  the backlog); it is no longer what makes a plate production.
 
 ## What the plates sliced so far cover
 
@@ -46,3 +47,4 @@ plates was packed: each was laid out to answer a question, as an experiment shou
 | Date | Change | Why |
 |---|---|---|
 | 2026-10-03 | first numbers: 2 keeps, 0.45 fill | no plate has printed twice and none was packed, so neither can be measured yet; see above |
+| 2026-10-04 | 1 keep, no fill bar (0) | Omar after phones-02 printed: "print good, lets save it as prod ready", then picked "Change the production rule" over reprinting it once or packing it first. phones-02 had one print and covers about 2% of the bed, so both numbers had to move. Production now means "printed once, judged good, recipe frozen", not "packed and proven twice" (D-098) |
