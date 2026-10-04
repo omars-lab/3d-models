@@ -31,7 +31,7 @@ minutes, about 3.5 g, one color.
 ## What it is
 
 - **The two big phones.** The same iPhone 16 Pro as on phones-01 and
-  [sheets-04d](sheets-04d.md), cut out of its case by
+  sheets-04d (a plate removed since), cut out of its case by
   [`sheets-04d-phone.scad`](sheets-04d-phone.scad), at its own size: about 16.6 x 40 x 4.6 mm.
 - **The two small phones.** phones-01's quarter phones were 0.25 of the big one on every side,
   about 4.2 x 10 x 1.2 mm. These are 1.25 times that across and twice that up: 0.3125 across and

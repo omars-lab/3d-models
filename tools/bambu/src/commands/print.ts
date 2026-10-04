@@ -48,6 +48,7 @@ import { checkNozzles, printerNozzles } from "../nozzle-check.js";
 import { checkSliceFresh } from "../slice-fresh.js";
 import { bedPhoto } from "./bed.js";
 import {
+  chooseColor,
   feedsFromAms,
   logicalSlotsFromPlate,
   physicalTraysFromSlots,
@@ -75,6 +76,7 @@ interface SendOpts {
   allowUnverified?: boolean;
   plate?: string; // --plate N (commander passes a string)
   amsMapping?: string; // [X2D-UNCONFIRMED] comma-ints ("0" / "-1,0") or "none"
+  color?: string; // "#RRGGBB": the loaded tray a one-color plate prints from, in place of the slice's color
   md5?: string; // [X2D-UNCONFIRMED] override the default ""
   bedLeveling?: boolean; // --no-bed-leveling → false → mode 0 (default mode 2, auto)
   flowCali?: boolean; // --no-flow-cali → false → mode 0
@@ -214,12 +216,20 @@ async function buildRecordProfile(plateFile: string): Promise<RecordProfile | un
  * Reads the status frame `readPrinter` took. Prints the match and every loaded tray's number, so a
  * refusal already shows the operator what to pass to --ams-mapping.
  */
-async function planFromPrinter(plateAbs: string, plate: number, frame: PrinterStatus): Promise<AmsPlan> {
+async function planFromPrinter(plateAbs: string, plate: number, frame: PrinterStatus, color?: string): Promise<AmsPlan> {
   const meta = await readPlateMeta(plateAbs);
   const used = await readUsedFilaments(plateAbs, plate);
   if (!meta || used === null) return { ok: false, reason: "the .3mf carries no slice metadata (is it sliced?)" };
   const slots = collectSlots(frame);
-  const logical = logicalSlotsFromPlate(meta.filamentColors, meta.filamentTypes).filter((l) => used.includes(l.slot));
+  let logical = logicalSlotsFromPlate(meta.filamentColors, meta.filamentTypes).filter((l) => used.includes(l.slot));
+  if (color !== undefined) {
+    try {
+      logical = chooseColor(logical, color);
+    } catch (err) {
+      return { ok: false, reason: (err as Error).message };
+    }
+    console.error(`color: ${logical[0]!.hex}, picked at the send (--color), in place of the slice's own.`);
+  }
   const report = reconcile(logical, physicalTraysFromSlots(slots));
   console.error(renderReport(report));
   console.error("loaded trays (the number --ams-mapping takes):");
@@ -273,6 +283,9 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   let projectOpts: ProjectFileOptions;
   let slicePlate: SlicePlateType;
   try {
+    if (opts.color !== undefined && opts.amsMapping !== undefined) {
+      throw new Error("--color and --ams-mapping both pick the spool; pass one");
+    }
     const plateNo = parsePlateIndex(opts.plate);
     slicePlate = await readSlicePlateType(abs, plateNo ?? 1);
     if (!slicePlate.type) {
@@ -374,7 +387,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   // empty here, on every send (found by the minis-01 run, 2026-09-25).
   if (projectOpts.amsMapping === undefined) {
     const plan: AmsPlan = frame
-      ? await planFromPrinter(abs, projectOpts.plate ?? 1, frame)
+      ? await planFromPrinter(abs, projectOpts.plate ?? 1, frame, opts.color)
       : { ok: false, reason: `could not read the loaded trays (${busy})` };
     if (!plan.ok) {
       console.error(`✗ filament: ${plan.reason}.`);
@@ -657,6 +670,7 @@ export function registerPrint(program: Command): void {
     )
     .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
     .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays)')
+    .option("--color <hex>", 'the color a one-color plate prints in, "#RRGGBB": feeds it from the loaded tray of that color, in place of the color the slice carries (default: the slice\'s color)')
     .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
     .option("--no-bed-leveling", "skip bed leveling before this print (default: auto, the printer decides, as Studio sends it)")
     .option("--no-flow-cali", "skip flow calibration before this print (default: auto)")
