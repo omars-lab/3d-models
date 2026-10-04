@@ -2,7 +2,7 @@
 plate: sheets-04g
 recipe: sheets-04g.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the bigger gBV minimal coaster read and hold together at 1.25 times across and 1.1 times up, and do its 41 pieces, packed in interlaced rows beside it, fill it at no gap?"
@@ -106,6 +106,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-04 | approved | Omar, in chat: "yes" (reply to the sheets-04g question, 2026-10-04) | iteration 1 @ 4bb715e2c6 | |
 
 ## Timeline
 
