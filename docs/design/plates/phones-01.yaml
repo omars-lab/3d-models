@@ -1,0 +1,51 @@
+# phones-01 — four mini iPhone 16 Pros: two at the sheets-04d size, two at a quarter of it
+#
+# Omar, 2026-10-04: "can we actually just do a plate with 2 phones", right after "also switch the
+# phone color" while sheets-04d, 04e and 04f were being put on one plate, then "do current size
+# for 2 and 1/4 size for another 2". That plate is set aside; this one is the phone from
+# sheets-04d four times. One pink and one black at each size is an assumption: the two colors the
+# piece sets were going to use, named in the report. A quarter is read as scale 0.25 on every
+# side, about 4.2 x 10 x 1.2 mm: six layers at 0.2 mm, so the lens bumps may come out as a blur.
+#
+# It is also the first two-color plate sliced without the Studio window. Each item names its
+# filament slot, and `bambu slice compose` tells Studio which slot each mesh prints in
+# (docs/issues/headless-two-color-slice.md).
+#
+#   PINK PHONE / BLACK PHONE          scale 1
+#   PINK QUARTER / BLACK QUARTER      scale 0.25
+#
+# Slot 1 is pink (#F5547C), slot 2 black (#000000).
+#
+# The phone is the one on sheets-04d: cut from the iPhone 16 Pro model by sheets-04d-phone.scad,
+# about 16.6 x 40 x 4.6 mm at scale 1, screen down and lenses up, with the case left off. The file
+# stays out of git, as there: this repo is public and the model's license likely forbids sharing
+# it. The recipe holds it to its sha256.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/phones-01.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle;Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  color:    ["#F5547C", "#000000"]
+
+items:
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl # cut from iphone-16-pro.stl, sha256 4a15ef0b…
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    label:    PINK PHONE
+    filament: 1
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    label:    BLACK PHONE
+    filament: 2
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    scale:    0.25
+    label:    PINK QUARTER
+    filament: 1
+  - stl:      .bambu/imports/iphone-16-pro-phone.stl
+    sha256:   6c0155fcb3d2639796d493b903b4ac6dfbc7aea8467558c1644dd2e63a9dd09b
+    scale:    0.25
+    label:    BLACK QUARTER
+    filament: 2

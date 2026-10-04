@@ -19,7 +19,7 @@ const settings = fixture("model_settings.config");
 
 function item(entry: string, iteration: string, label: string, piece: string, params: Record<string, number>, count = 1): ResolvedItem {
   const sourcePath = "patterns/Coupons/Loose-Fit-Coupon.bkr";
-  return { entry, sourcePath, sourceAtRef: `bikar:${sourcePath}@x`, piece, params, window: "", count, sourceSha256: "s", iteration, label };
+  return { entry, sourcePath, sourceAtRef: `bikar:${sourcePath}@x`, piece, params, window: "", count, sourceSha256: "s", iteration, label, filament: 1 };
 }
 
 const sheets04: ResolvedItem[] = [

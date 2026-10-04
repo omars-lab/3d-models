@@ -125,7 +125,7 @@ export function prepareSlicePresets(
   studioBin: string,
   scratchDir: string,
   plateType?: PlateType,
-  filamentColor?: string,
+  filamentColor?: string | string[],
 ): PreparedPresets {
   const root = profilesRoot(studioBin);
   const lookup: PresetLookup = root ? studioPresetLookup(root) : () => null;
@@ -149,18 +149,22 @@ export function prepareSlicePresets(
   return out;
 }
 
-/** Color the one flattened filament preset and rewrite its file in place. The slice carries the
- *  color, so the send's tray match (filament-sync.ts) feeds the loaded spool of that color instead of
- *  the preset's own (Bambu PLA Basic is #00AE42, the green tray, whatever the plate is meant to be).
- *  The preset check after the slice proves the file carries it. */
-export function setFilamentColor(presets: FlattenedPreset[], color: string, scratchDir: string): void {
+/** Color each flattened filament preset, in slot order, and rewrite its file in place. The slice
+ *  carries the colors, so the send's tray match (filament-sync.ts) feeds the loaded spool of each color
+ *  instead of the preset's own (Bambu PLA Basic is #00AE42, the green tray, whatever the plate is meant
+ *  to be). One color per filament slot; the preset check after the slice proves each file carries it. */
+export function setFilamentColor(presets: FlattenedPreset[], color: string | string[], scratchDir: string): void {
+  const colors = typeof color === "string" ? [color] : color;
   const fil = presets.filter((p) => p.type === "filament");
-  const only = fil.length === 1 ? fil[0] : undefined;
-  if (!only) {
-    throw new Error(`a filament color colors one filament; the plate names ${fil.length} filament preset(s).`);
+  if (fil.length !== colors.length) {
+    throw new Error(
+      `the plate names ${colors.length} filament color(s) for ${fil.length} filament preset(s); give one color per filament.`,
+    );
   }
-  only.config.filament_colour = [color.toUpperCase()];
-  writeFlattened(only, scratchDir);
+  fil.forEach((p, i) => {
+    p.config.filament_colour = [colors[i]!.toUpperCase()];
+    writeFlattened(p, scratchDir);
+  });
 }
 
 /** Name the plate in the one flattened process preset and rewrite its file in place (same path, so
@@ -331,18 +335,27 @@ export function injectFilamentMapMode(
  *  of the invocation — the reuse boundary docs/design/printing/plate-composer-design.md §2 draws. `--debug 2` raises
  *  the log level to `warning` so slicing warnings reach stdout (they are silent at the default level);
  *  it does not change the slice, only what is reported. Multiple trailing model paths are how the
- *  Bambu Studio CLI composes several objects onto one plate (compose research Topic 1). */
+ *  Bambu Studio CLI composes several objects onto one plate (compose research Topic 1).
+ *  `filamentIds` names the 1-based filament slot of each input, in input order; Studio wants exactly
+ *  one id per input and refuses (exit 254) a count that differs or an id past the filament list
+ *  (docs/issues/headless-two-color-slice.md). */
 export function buildStudioArgs(
   inputs: string[],
   outDir: string,
   outFile: string,
-  opts: { settings?: string; filament?: string; arrange: boolean; plate: string },
+  opts: { settings?: string; filament?: string; arrange: boolean; plate: string; filamentIds?: number[] },
   raw: string[],
 ): string[] {
   const args: string[] = [];
   args.push("--debug", "2"); // surface slicing warnings (see note above)
   if (opts.settings) args.push("--load-settings", opts.settings);
   if (opts.filament) args.push("--load-filaments", opts.filament);
+  if (opts.filamentIds) {
+    if (opts.filamentIds.length !== inputs.length) {
+      throw new Error(`${opts.filamentIds.length} filament id(s) for ${inputs.length} input(s); give one per input.`);
+    }
+    args.push("--load-filament-ids", opts.filamentIds.join(","));
+  }
   if (opts.arrange) args.push("--arrange", "1");
   args.push("--slice", opts.plate); // "0" = every plate
   args.push("--outputdir", outDir);
