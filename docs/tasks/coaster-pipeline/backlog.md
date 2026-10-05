@@ -58,7 +58,9 @@ Sending a print and which filament to load.
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
   coaster's cut, both halves printed face down, held by the lips). After a yes on a: one bikar
   knob on `hold lip` and a coupon of whole and cut pieces in one split-01 (found 2026-10-05, at
-  Omar's ask).
+  Omar's ask). Omar leans towards c (printed in place): then the first build is a pocket printed
+  in place in bikar, and a coupon at one and two layers of air
+  ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)).
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.

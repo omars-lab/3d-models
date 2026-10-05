@@ -40,7 +40,7 @@ different. Cut the piece at the same height as the coaster and that difference g
 |---|---|---|---|---|
 | **a. Lip + cut piece** (picture 2) | Each piece half drops into its own coaster half. When the halves close, the two lips trap both halves, as they trap a whole piece today. | The smallest change to split-01: the piece is cut at the coaster's cut, nothing else moves. Plain blocks, so no overhang. No glue. Each face can be its own color, which gives a coaster that is two coasters, one on each side. | Twice as many parts to place, and a kite half is small (1.6 mm thick). The stars still have no lip (bikar refuses one that closes up their arms), so they stay open holes, as on split-01. The piece face still sits 0.6 mm in from the coaster face, under the lip. | One new bikar knob on `hold lip` to cut the pieces. The plates get twice the piece count, so packing and time change. |
 | **b. Flange + cut piece** (picture 3) | Each half is a face block plus half the band. The halves close on the bands in the undercut, as with split-02. | Pieces sit flush with the coaster face, and the stars are held too. No glue. | Printed face down, the band hangs 0.8 mm past its face block: a short overhang with nothing under it. It is hidden inside the coaster, but a drooped band may not close cleanly. | The same knob on `hold flange`. Whether the overhang closes is a coupon question. |
-| **c. Flange, printed in place** (picture 4) | Each coaster half prints with its piece halves already inside it, the band caught under the face. Turn one half over onto the other and the coaster is done. | No pieces to place at all, and they cannot be lost. Every face is a first layer. Fastest to put together. | The band must not touch the coaster where it is printed, so it needs a layer of air under it, and the band's underside droops into that air. Whether one 0.2 mm layer keeps them apart is unknown. One color per coaster half, unless the plate swaps filament, which costs time and waste (phones-01 took about 62 minutes against 22 sliced, [phones-02](../plates/phones-02.md)). | A print-in-place mode in bikar: the piece halves placed in their holes with a set gap, not packed beside the coaster. The color of each piece is then fixed by the plate, not by hand. |
+| **c. Flange, printed in place** (picture 4) | Each coaster half prints with its piece halves already inside it, the band caught under the face. Turn one half over onto the other and the coaster is done, once each band is caught on both sides (§1.4). | No pieces to place at all, and they cannot be lost. Every face is a first layer. Fastest to put together. | As first drawn, the band is caught only on the face side, so the half you turn over drops its pieces out of the cut side; §1.4 fixes that with a pocket. The band must not touch the coaster where it is printed, so it needs a layer of air under it, and the band's underside droops into that air. Whether one 0.2 mm layer keeps them apart is unknown. One color per coaster half, unless the plate swaps filament, which costs time and waste (phones-01 took about 62 minutes against 22 sliced, [phones-02](../plates/phones-02.md)). | A print-in-place mode in bikar: the piece halves placed in their holes with a set gap, not packed beside the coaster. The color of each piece is then fixed by the plate, not by hand. |
 | **d. Pegged halves** | The two halves of each piece are joined by a small peg and socket, with no help from the coaster. | Works in a one-piece coaster too (sheets-04g's loose frame), not only a split one. | A peg needs room. The split design's studs are 2 mm across ([split §4.1](../pieces/split-with-studs-design.md#41-the-stud-and-socket)), and a kite's half is narrow near its tips. A press fit is the kind of fit that went wrong on sheets-04g (kites too tight, middle too loose). | A peg fit to calibrate, one per piece shape, as today's press fit needed. |
 | **e. Glued halves** | Two halves glued face to face into one solid piece. | Any frame, any piece, nothing to design. | Glue on every piece, a seam on the side of every piece, and pieces fixed for good. Whether to glue at all is still the split design's call 3. | It hangs on call 3. |
 
@@ -71,6 +71,49 @@ A coupon, not a coaster: three pieces of each shape (kite, hex, middle), whole a
 split-01 coaster's halves. It answers three things: do the cut halves sit level under the lip, does
 the coaster still close, and do the cut faces look like the straps around them. Nothing is built
 for it yet; it needs the bikar knob in **a** first.
+
+### 1.4 Way c: making the two piece halves feel like one
+
+Omar, 2026-10-05: "i'm leaning towards c, but how do connect the infill pieces ao they feel like
+one post print".
+
+![Three cut-through side views of one piece. 1: the upper coaster half turned over, its piece half dropping out of the open cut side. 2: a coaster half with a narrow neck at the cut as well as the face, the piece half's band caught between them with air above and below it. 3: the two halves closed, the piece halves meeting at the cut with a small peg between them.](finish-techniques-media/one-piece.png)
+
+Drawn from [one-piece.html](finish-techniques-media/one-piece.html), not to scale.
+
+**First, a flaw in way c as written above.** The band is caught only on the face side. The cut side
+of each hole is open, so when you turn the upper half over to close the coaster, its piece halves
+fall straight out (picture 1). The fix is a **pocket**: a narrow neck at the cut as well as at the
+face, so each band sits in a closed room inside its own coaster half (picture 2). Then each half is
+finished on its own, nothing can fall out, and closing the coaster brings each piece half onto its
+partner.
+
+**What a pocket costs is height.** A half is 2.2 mm. With 0.6 mm necks and one 0.2 mm layer of air
+on each side of the band, the band is 0.6 mm (0.6 + 0.2 + 0.6 + 0.2 + 0.6). Two layers of air on each
+side would leave a one-layer band unless the necks shrink to two layers each (0.4 + 0.4 + 0.6 + 0.4 +
+0.4). How much air keeps a printed band from fusing has not been measured here, so this is the
+first thing a coupon has to answer.
+
+**Then, how the halves feel like one.** Closed, the two halves of each piece press face to face at
+the cut, and the coaster's own studs line the coaster halves up, so each pair lines up to within the
+gap around it. The seam between them is inside, where no one sees it. What can still be felt is
+movement: lifted off the table, a pair can slide toward one face by the air gap.
+
+| How | What it gives | Pros | Cons | What it commits us to |
+|---|---|---|---|---|
+| **Nothing extra** | The coaster holds each pair pressed together | No step, no glue, every piece comes apart again | Lifted, a pair can move by the air gap (0.2 mm at one layer) and may click. On a table or under a mug both faces sit flush | Only the pocket. Whether the movement is felt is a judgment in the hand |
+| **A drop of glue** between the halves as you close | One solid piece | Truly one piece; the simplest thing that works | A step per piece (31 on gBV), fixed for good, and glue that spreads to the coaster fixes the piece too. It touches the split design's call 3 (glue) | A glue to pick and a way to place a drop quickly |
+| **A peg and socket** on the cut faces | The halves line up and move together | No glue; can come apart | The pocket already lines them up, so a loose peg buys little, and a tight one is a press fit, the kind that went wrong on sheets-04g. Small pieces such as the kites have little room | A peg fit to calibrate per shape |
+| **Pieces a little taller**, so closing presses each band hard against its face-side neck | No movement at all | No glue, no peg | Each piece face then stands out past the coaster face by the air gap, so the coaster no longer sits on its straps | A look call; probably not |
+
+**My pick: the pocket with nothing extra, then a drop of glue if the movement is felt.** The pocket
+is needed whatever else is chosen, and it is what lets way c work at all. Printing it first shows
+whether the small movement matters in the hand before anyone glues 31 pieces.
+
+**How it would be tried.** A small coupon, not a coaster: a short strip of frame with a few holes,
+each hole holding a pocketed piece half printed in place, at one and at two layers of air. It
+answers whether the bands come free of the coaster, whether the halves close, and whether a closed
+pair can be felt moving. It needs a print-in-place pocket in bikar, which nothing has yet.
 
 ## 2. The glacier plate
 
@@ -172,9 +215,12 @@ By what each tells us per unit of work:
 2. **Way a as a coupon** (§1.3): one bikar knob, three pieces per shape, on one split-01.
 3. **A top-pattern and ironing coupon** on a solid piece. It costs nothing in design and covers
    every face that has to be a top surface.
-4. **Way c**, once **a** shows that cut pieces are worth it.
+4. **Way c**, once **a** shows that cut pieces are worth it. If Omar picks c first, the pocket
+   coupon in §1.4 takes the place of item 2.
 
 ## 5. Open for Omar
 
 - **Which plate is the glacier plate?** (§2)
-- **Start with way a?** Or go straight to c, or only keep this as a list for now.
+- **Start with way a?** Or go straight to c, or only keep this as a list for now. Omar leans
+  towards c (2026-10-05); not yet decided.
+- **If c: start with the pocket and nothing extra, and add glue only if the movement is felt?** (§1.4)
