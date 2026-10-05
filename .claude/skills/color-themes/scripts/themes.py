@@ -22,6 +22,8 @@ Usage:
     themes.py suggest  <id> --helper match-trays|alternate|one-color [--colors a,b,...]
     themes.py suggest  <id> --helper gradient --from <color> --to <color> [--reverse] [--lines L1,L2]
     themes.py gallery  <id>                  write the gallery page
+    themes.py listing  <id> --out DIR [--size N] [--theme T ...]
+                                             a store listing's pictures per theme + manifest.json
     themes.py --self-test
 
 A color is a palette.yaml id. Every buy color is checked against the Bambu catalog that
@@ -31,7 +33,9 @@ whether its spool carries more than one hex; the pictures draw both.
 from __future__ import annotations
 
 import argparse
+import datetime
 import hashlib
+import json
 import math
 import os
 import re
@@ -1089,10 +1093,190 @@ def self_test() -> int:
         expect(any("cannot be predicted" in w for w in warnings(fcon, duo_t, fpal, set())),
                "a two-hex spool gave no heads-up")
 
+    # 8. Listing: the hero repaints the frame and each group's piece in the theme's colors, the
+    #    colors card names each color once with where it goes, and the alt text says drawing (and,
+    #    for a multi-color spool, that each coaster comes out different).
+    lt = {"id": "lt", "name": "L", "colors": {"a": "pink", "b": "duo-x", "frame": "pink"}}
+    args = hero_args(fcon, lt, fpal, 512, Path("x.png"))
+    expect("--no-slab" in args and args[args.index("--width") + 1] == "512", "hero: no --no-slab, or not 512 px")
+    painted = [args[i + 1] for i, x in enumerate(args) if x == "--color"]
+    pink = fpal["pink"]["hex"].lower()
+    expect(painted == [f"base={pink}", f"A={pink}", f"B={fpal['duo-x']['hex'].lower()}"],
+           f"hero: painted {painted}")
+    card = colors_card(fcon, lt, fpal)
+    expect(card.count("<text") == 2 * 2 + 2, f"colors card: {card.count('<text')} texts for two colors")
+    expect("the a and the frame" in card and "the b</tspan>" in card, "colors card: a color's places are wrong")
+    # SVG text does not wrap: a long "where" line must break, or it runs off the card (the
+    # first gbv run cut Iznik tile's "the middle (one 20-sided piece) and the stars (10)").
+    long_text = "PLA Basic: the middle (one 20-sided piece) and the stars (10) and the outer ring (10)"
+    lines = wrap_words(long_text, 40)
+    expect(len(lines) > 1 and all(len(s) <= 40 for s in lines) and " ".join(lines) == long_text,
+           f"wrap: {lines}")
+    wide = {**fcon, "groups": [{**g, "label": g["label"] + " (one 20-sided piece in the very middle)"}
+                               for g in fcon["groups"]]}
+    wide_card = colors_card(wide, lt, fpal)
+    expect(wide_card.count("<tspan") > card.count("<tspan"), "colors card: a long line did not wrap")
+    expect("f-duo" not in card and "c-duo-x-spool" in card and "c-duo-x-sheen" in card,
+           "colors card: the two-hex silk spool drew flat")
+    alt = listing_alt(fcon, lt, fpal, "hero")
+    expect(alt.startswith("A drawing of") and "comes out different" in alt, f"alt: {alt}")
+    plain = listing_alt(fcon, {**lt, "colors": {"a": "pink", "b": "black", "frame": "green"}}, fpal, "colors")
+    expect("comes out different" not in plain and "Hot Pink" in plain, f"alt for one-color spools: {plain}")
+
     for f in fails:
         print(f"self-test FAIL: {f}")
     print("self-test: " + ("ok" if not fails else f"{len(fails)} failed"))
     return 1 if fails else 0
+
+
+# ---------------------------------------------------------------- listing pictures
+
+# Shopify's help page on product media: "For square product images, a size of 2048 x 2048 px
+# usually displays best", and PNG is "the best file type for most product images" (read
+# 2026-10-05, https://help.shopify.com/en/manual/products/product-media/product-media-types).
+# How a 2048 drawing looks on the real product page is still the storefront design's §16.3 test.
+LISTING_SIZE = 2048
+LISTING_SIZE_SOURCE = "https://help.shopify.com/en/manual/products/product-media/product-media-types"
+LISTING_KINDS = ("hero", "flat", "colors")
+
+
+def hero_args(con: dict, theme: dict, pal: dict, size: int, out: Path) -> list[str]:
+    """The bikar call that draws a theme's coaster finished, at the gallery's angle.
+
+    It draws the pieces file, not the frame file: the pieces file holds the pieces, and its own
+    frame is a host for them on a slab that is never printed, so `--no-slab` drops the slab and
+    stands the strap network and the pieces on the table, as the minimal coaster prints. The
+    frame is the `base` region and each group's pieces are its `piece` palette name, all
+    repainted with `--color` in the theme's colors.
+    """
+    args = ["render", str(bikar_path(con["source"]["pieces"])), "--format", "preview", "--no-slab",
+            "--width", str(size), "-o", str(out), *param_args(con["piece_params"]),
+            "--color", f"base={pal[theme['colors'][FRAME]]['hex'].lower()}"]
+    for g in con["groups"]:
+        args += ["--color", f"{g['piece']}={pal[theme['colors'][g['id']]]['hex'].lower()}"]
+    return args
+
+
+def wrap_words(text: str, max_chars: float) -> list[str]:
+    """Break text into lines of at most `max_chars` characters, at spaces. SVG text does not
+    wrap, so the colors card measures by characters (Helvetica runs about half an em wide)."""
+    lines: list[str] = []
+    for word in text.split():
+        if lines and len(lines[-1]) + 1 + len(word) <= max_chars:
+            lines[-1] += " " + word
+        else:
+            lines.append(word)
+    return lines
+
+
+def colors_card(con: dict, theme: dict, pal: dict) -> str:
+    """The theme's colors by name, one row each: a swatch drawn with its finish, the filament's
+    name and line, and where it goes on the coaster. Square, on the gallery's backdrop."""
+    used = used_colors(con, theme)
+    labels = {g["id"]: g["label"] for g in con["groups"]} | {FRAME: "the frame"}
+    row = min(130.0, 760.0 / len(used))
+    out = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">',
+           f"  <title>{bambu.esc(con['short'])}: the colors in {bambu.esc(theme['name'])}</title>",
+           f'  <rect width="1000" height="1000" fill="{BACKDROP}" />']
+    defs, body = [], []
+    for i, cid in enumerate(used):
+        c = pal[cid]
+        y = 190 + i * row
+        key = f"c-{cid}"
+        defs += bambu.finish_defs(key, c["finish"], [h + "FF" for h in c["hexes"]], (24.0, 1.4))
+        fill = bambu.fill_attrs(key, [h + bambu_alpha(c) for h in c["hexes"]])
+        sw = f'x="80" y="{y:.1f}" width="{row * 0.8:.1f}" height="{row * 0.8:.1f}" rx="14"'
+        body.append(f'  <rect {sw} {fill} stroke="{edge_shade(c["hex"])}" stroke-width="3" />')
+        for ov in bambu.overlay_fills(key, c["finish"]):
+            body.append(f'  <rect {sw} fill="{ov}" />')
+        where = join_words([labels[g] for g in group_ids(con) if theme["colors"][g] == cid])
+        line = c.get("line") or "a color on our printer"
+        tx = 80 + row * 0.8 + 40
+        body.append(f'  <text x="{tx:.1f}" y="{y + row * 0.33:.1f}" font-family="Helvetica, Arial, sans-serif" '
+                    f'font-size="{min(44, row * 0.34):.0f}" fill="#2B2B2B">{bambu.esc(color_word(pal, cid, owned=False))}'
+                    f"</text>")
+        fs = min(30, row * 0.24)
+        spans = "".join(f'<tspan x="{tx:.1f}" dy="{0 if k == 0 else fs * 1.15:.1f}">{bambu.esc(part)}</tspan>'
+                        for k, part in enumerate(wrap_words(f"{line}: {where}", (940 - tx) / (fs * 0.52))))
+        body.append(f'  <text x="{tx:.1f}" y="{y + row * 0.66:.1f}" font-family="Helvetica, Arial, sans-serif" '
+                    f'font-size="{fs:.0f}" fill="#5A5A5A">{spans}</text>')
+    if defs:
+        out += ["  <defs>", *("    " + d for d in defs), "  </defs>"]
+    out.append(f'  <text x="80" y="120" font-family="Helvetica, Arial, sans-serif" font-size="56" '
+               f'fill="#2B2B2B">The colors in {bambu.esc(theme["name"])}</text>')
+    out += body
+    out.append('  <text x="80" y="960" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#5A5A5A">'
+               "A drawing, from each filament's published color, not a photo.</text>")
+    out.append("</svg>")
+    return "\n".join(out) + "\n"
+
+
+def listing_alt(con: dict, theme: dict, pal: dict, kind: str) -> str:
+    """Alt text for one picture. It starts by saying it is a drawing (storefront design SF-16),
+    and a theme with a multi-color spool says each coaster comes out different (SF-9)."""
+    names = join_words([color_word(pal, c, owned=False) for c in used_colors(con, theme)])
+    what = {
+        "hero": f"the {con['short']} coaster in the {theme['name']} theme, seen at an angle",
+        "flat": f"the {theme['name']} theme from above, showing which color goes where",
+        "colors": f"the filament colors in {theme['name']}: {names}",
+    }[kind]
+    alt = f"A drawing of {what}."
+    if any(pal[c]["kind"] != "single" for c in used_colors(con, theme)):
+        alt += " A spool in it carries more than one color, so each coaster comes out different."
+    return alt
+
+
+def flatten_png(png: Path, size: int) -> None:
+    """Put a transparent PNG on the gallery's backdrop, square at `size`."""
+    subprocess.run(["magick", str(png), "-background", BACKDROP, "-gravity", "center", "-extent",
+                    f"{size}x{size}", "-flatten", str(png)], check=True, timeout=120)
+
+
+def cmd_listing(cid: str, out_dir: str, size: int, only: list[str] | None = None) -> None:
+    """Every theme's listing pictures, `<design>-<theme>-<kind>.png`, and a manifest naqshop reads."""
+    con = construction(cid)
+    if check_one(cid, quiet=True):
+        raise SystemExit(f"{cid}: `themes.py check {cid}` fails; render and re-gallery before drawing a listing")
+    pal = palette()
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    themes = [t for t in con["themes"] if not only or t["id"] in only]
+    if only and len(themes) != len(only):
+        raise SystemExit(f"no such theme: {sorted(set(only) - {t['id'] for t in themes})}")
+    commit = bikar_commit()
+    pictures = []
+    for t in themes:
+        files = {k: out / f"{cid}-{t['id']}-{k}.png" for k in LISTING_KINDS}
+        args = hero_args(con, t, pal, size, files["hero"])
+        run_bikar(args)
+        flatten_png(files["hero"], size)
+        svg = con["_folder"] / f"{t['id']}.svg"
+        subprocess.run(["rsvg-convert", "-w", str(size), "-h", str(size), str(svg), "-o", str(files["flat"])],
+                       check=True, timeout=120)
+        with tempfile.TemporaryDirectory() as tmp:
+            card = Path(tmp) / "colors.svg"
+            card.write_text(colors_card(con, t, pal))
+            subprocess.run(["rsvg-convert", "-w", str(size), "-h", str(size), str(card), "-o", str(files["colors"])],
+                           check=True, timeout=120)
+        made = {
+            "hero": "bikar " + " ".join(a if a != str(files["hero"]) else files["hero"].name for a in args)
+                    .replace(str(bikar_dir()) + "/", "bikar:"),
+            "flat": f"rsvg-convert -w {size} -h {size} {svg.relative_to(ROOT)}",
+            "colors": f"themes.py listing {cid} (the colors card)",
+        }
+        for k in LISTING_KINDS:
+            pictures.append({"file": files[k].name, "theme": t["id"], "theme_name": t["name"],
+                             "theme_hash": theme_hash(t), "kind": k, "label": "drawing",
+                             "alt": listing_alt(con, t, pal, k), "made_by": made[k]})
+        print(f"{t['id']}: " + ", ".join(files[k].name for k in LISTING_KINDS))
+    manifest = {
+        "design": cid, "construction": con["construction"],
+        "made": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
+        "bikar_commit": commit, "size_px": size, "size_source": LISTING_SIZE_SOURCE,
+        "background": BACKDROP, "pictures": pictures,
+    }
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    print(f"{len(pictures)} pictures and manifest.json in {out}")
 
 
 # ---------------------------------------------------------------- main
@@ -1107,6 +1291,11 @@ def main() -> int:
     r = sub.add_parser("render")
     r.add_argument("id")
     r.add_argument("--png", help="also write a PNG of each picture here, to look at")
+    li = sub.add_parser("listing")
+    li.add_argument("id")
+    li.add_argument("--out", required=True, help="the folder the pictures and manifest.json go in")
+    li.add_argument("--size", type=int, default=LISTING_SIZE, help=f"square side in px (default {LISTING_SIZE})")
+    li.add_argument("--theme", action="append", help="only this theme (repeatable); default every theme")
     c = sub.add_parser("check")
     c.add_argument("id", nargs="?")
     c.add_argument("--all", action="store_true")
@@ -1132,6 +1321,8 @@ def main() -> int:
         cmd_render(a.id, a.png)
     elif a.cmd == "gallery":
         cmd_gallery(a.id)
+    elif a.cmd == "listing":
+        cmd_listing(a.id, a.out, a.size, a.theme)
     elif a.cmd == "check":
         ids = all_constructions() if a.all else [a.id]
         if not ids or ids == [None]:
