@@ -95,8 +95,12 @@ plate's physical progression:
   R15 **A printed piece carries its verdict.** In a `printed`, `failed`, `measured` or
       `propagated` record, every `objects[]` entry carries a `verdict` in
       PIECE_VERDICTS (`keep` — print it again as is; `adjust` — the idea is right, change
-      its params; `drop` — do not print it again), and the optional `notes` is a list of
-      non-empty strings. The plate-level `feedback` cannot answer "was *this* piece good
+      its params; `drop` — do not print it again; `not-judged` — it printed and the owner
+      has not said how it came out yet), and the optional `notes` is a list of non-empty
+      strings. `not-judged` lets a record ship the day part of a plate is judged without
+      making up a verdict for the rest: sheets-04g (2026-10-04) came back with a word on
+      the kites and the middle and none on the hex, star or outer rings. It never counts as
+      a keep, so the plate stays an experiment until every piece is judged. The plate-level `feedback` cannot answer "was *this* piece good
       at *these* params": minis-03 (2026-09-26) mixed a good minimal-frame and a loose
       pegs pair at one size, and one plate note could not tell them apart. Hard case
       (K6/D2): one verdict on the plate does not discharge the rule; every object needs
@@ -169,7 +173,7 @@ POST_SLICE_STATES = frozenset({
 FEEDBACK_STATES = frozenset({"printed", "failed", "measured", "propagated"})
 PRE_SHIP_STATES = frozenset({"draft", "planned"})
 # R15 — what the owner decided about one printed piece at the params it printed at.
-PIECE_VERDICTS = ("keep", "adjust", "drop")
+PIECE_VERDICTS = ("keep", "adjust", "drop", "not-judged")
 
 REQUIRED_TOP = ("run", "plate", "status", "outcome", "profile", "pins", "objects")
 PROFILE_FIELDS = (
@@ -796,6 +800,13 @@ def _drop_piece_verdict(prints: Path) -> None:
     idx.write_text(re.sub(r"\n *verdict: keep", "", idx.read_text(), count=1), encoding="utf-8")
 
 
+def _not_judged_piece(prints: Path) -> None:
+    # R15: a piece the owner has not judged yet says so instead of carrying a made-up verdict.
+    idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
+    idx.write_text(idx.read_text().replace("verdict: keep", "verdict: not-judged", 1),
+                   encoding="utf-8")
+
+
 def _bad_piece_notes(prints: Path) -> None:
     # R15: notes written as one string, not a list.
     idx = prints / "2026-09-14-plate1-machine-card" / "index.md"
@@ -861,6 +872,7 @@ CASES = [
      "R14 status 'planned' is pre-slice"),
     ("R15 a printed piece with no verdict", _drop_piece_verdict,
      "R15 objects MC-2 verdict None is not one of"),
+    ("R15 a piece marked not-judged is clean, not a gap", _not_judged_piece, None),
     ("R15 notes that are not a list", _bad_piece_notes,
      "R15 objects MC-2 notes is not a list"),
     ("R16 a pin that is not on bikar main", _pin_off_main,

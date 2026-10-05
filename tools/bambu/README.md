@@ -98,7 +98,7 @@ can never disagree about a record, and a record that does not parse is shown as 
 hidden — even under a filter, since hiding a broken record is the one failure this verb exists to
 avoid.
 
-`print verdict <run> <entry> <keep|adjust|drop> [-n <note>]…` sets one printed piece's verdict in
+`print verdict <run> <entry> <keep|adjust|drop|not-judged> [-n <note>]…` sets one printed piece's verdict in
 `docs/prints/<run>/index.md` and adds notes under it. It edits the lines in place, so the diff is the
 verdict line and the new notes, nothing else. It then reads the YAML back to check the edit landed.
 It refuses an unknown piece (and names the ones there are), a verdict the prints gate would reject,

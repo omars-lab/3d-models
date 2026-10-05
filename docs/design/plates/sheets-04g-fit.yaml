@@ -1,0 +1,65 @@
+# sheets-04g-fit — the kites and the middle piece at a ladder of gaps, for the coaster already printed
+#
+# Omar, 2026-10-04, on sheets-04g: "the small kits were too tight ti fit" and "adn the middle
+# piece was too lose". Every piece there printed at gap 0. The write-up is
+# docs/issues/sheets-04g-fit.md: the middle piece had sharp corners where the strap is round
+# (0.45 mm of play at each of its ten inward corners), and the kites had no play anywhere.
+#
+# bikar now cuts every piece along the strap's real edge, so the gap here is the gap all round.
+# This plate tries the two pieces Omar named at several gaps each, to be pressed into the
+# sheets-04g coaster he already has: the whole gap comes off the piece, so that coaster's holes
+# are the ones these pieces were cut for. It answers the open bet CAL-LSE-01.
+#
+# One render of a ring gives all ten of its pieces, packed in two interlaced rows, so each kite
+# rung is ten kites, and each middle rung is one middle piece.
+#
+#   KITE 0.05 … KITE 0.25   ten kites at each of five gaps (50)
+#   MIDDLE 0 … MIDDLE 0.15  one middle piece at each of four gaps (4)
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sheets-04g-fit.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05 }
+    label:  KITE 0.05
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.1 }
+    label:  KITE 0.10
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.15 }
+    label:  KITE 0.15
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.2 }
+    label:  KITE 0.20
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.25 }
+    label:  KITE 0.25
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  MIDDLE 0
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05 }
+    label:  MIDDLE 0.05
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.1 }
+    label:  MIDDLE 0.10
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.15 }
+    label:  MIDDLE 0.15

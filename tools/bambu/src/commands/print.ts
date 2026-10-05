@@ -732,7 +732,7 @@ export function registerPrint(program: Command): void {
 
   print
     .command("verdict <run> <entry> <verdict>")
-    .description("set one printed piece's verdict (keep | adjust | drop) in docs/prints/<run>/index.md — local file edit only")
+    .description("set one printed piece's verdict (keep | adjust | drop | not-judged) in docs/prints/<run>/index.md — local file edit only")
     .option(
       "-n, --note <text>",
       "a note on what the piece showed (repeatable; a note already there is not added twice)",

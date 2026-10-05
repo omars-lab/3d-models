@@ -258,7 +258,7 @@ list every print record — what came off the plate and (--how) how it was print
 
 ### `bambu print verdict`
 
-set one printed piece's verdict (keep \| adjust \| drop) in docs/prints/<run>/index.md — local file edit only
+set one printed piece's verdict (keep \| adjust \| drop \| not-judged) in docs/prints/<run>/index.md — local file edit only
 
 | Argument | Required | Description |
 |---|---|---|
