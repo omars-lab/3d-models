@@ -25,15 +25,22 @@ A snippet with a `coaster` line is drawn as a 3D coaster: bikar's own color
 preview when it can split the coaster into color bodies, otherwise the same
 OpenSCAD picture `make coasters` uses (carved, open and jointed coasters). A
 coaster with a `loose` line is drawn as it prints: the frame, with each color's
-pieces lifted above their pockets in that color. Any other snippet is drawn flat, with the construction circles and lines bikar
+pieces lifted above their pockets in that color; one with a `split` line is
+drawn opened up, the lower half, then the pieces, then the upper half turned
+face up over them. Any other snippet is drawn flat, with the construction circles and lines bikar
 normally hides shown in faint gray, the way the Lab's `?b=1` does.
 
 A snippet that fails to draw fails the run, naming the recipe and bikar's
 message: a cookbook entry that no longer compiles is a broken page.
 
+A whole coaster file can be drawn the same way with `--file`, for a plate page's
+picture: its `pack` clauses are dropped first, since packing only moves where
+the pieces print, so each piece is drawn over its own pocket.
+
 Usage:  python3 tools/cookbook_render.py --all
         python3 tools/cookbook_render.py --recipe star-steps
         python3 tools/cookbook_render.py --list
+        python3 tools/cookbook_render.py --file <coaster.bkr> --out <png> [--param k=v ...]
 Deps:   bikar CLI (BIKAR_DIR, built), rsvg-convert, ImageMagick, OpenSCAD
 """
 import argparse
@@ -125,7 +132,10 @@ def draw_flat(cli, src, extra, out, name, tmp):
 LOOSE_LIFT = 30  # mm the loose pieces float above the frame, so pocket and piece both show
 
 
-def loose_parts(cli, src, text, extra, name, tmp):
+STRAP_COLOR = "#a8a8a8"  # a split coaster's halves when it names no base color: one neutral gray for both
+
+
+def loose_parts(cli, src, text, extra, name, tmp, frame_piece="Frame"):
     """A loose coaster drawn the way it is printed: the frame (`--piece Frame`) in
     its base color, and each loose color's pieces lifted above their pockets in that
     color. The pieces are whichever palette colors bikar builds as a `--piece`; a
@@ -133,7 +143,7 @@ def loose_parts(cli, src, text, extra, name, tmp):
     palette = dict(re.findall(r"^\s+(\w+)\s*=\s*(#[0-9a-fA-F]{6})\s*$", text, re.M))
     base = re.search(r"^\s+color\s+base\s+(\w+)", text, re.M)
     frame = os.path.join(tmp, "frame.stl")
-    run(["node", cli, "render", src, "--piece", "Frame", "--format", "stl", "-o", frame, *extra], name)
+    run(["node", cli, "render", src, "--piece", frame_piece, "--format", "stl", "-o", frame, *extra], name)
     parts = []
     for color, hexcode in palette.items():
         stl = os.path.join(tmp, f"piece-{color}.stl")
@@ -148,13 +158,28 @@ def loose_parts(cli, src, text, extra, name, tmp):
     return frame, palette.get(base.group(1)) if base else None, parts
 
 
+def split_parts(cli, src, text, extra, name, tmp):
+    """A split coaster drawn opened up: the lower half (`--piece Lower`), each
+    loose color's pieces lifted over their pockets, and the upper half
+    (`--piece Upper`, printed face down) turned back over and lifted above them,
+    so both holds and the pieces between them show."""
+    lower, color, parts = loose_parts(cli, src, text, extra, name, tmp, frame_piece="Lower")
+    color = color or STRAP_COLOR
+    upper = os.path.join(tmp, "upper.stl")
+    run(["node", cli, "render", src, "--piece", "Upper", "--format", "stl", "-o", upper, *extra], name)
+    parts.append((upper, (0, 0, 2 * LOOSE_LIFT), color, True))
+    return lower, color, parts
+
+
 class NeedsMesh(Exception):
     """bikar will not split this coaster into color bodies (carved, open or jointed)."""
 
 
 def draw_coaster(cli, src, extra, out, name, tmp, mate_mm, mesh):
     mate = ["--mate", f"{mate_mm},0"] if mate_mm else []
-    if not mesh:
+    text = open(src).read()
+    split = re.search(r"^\s+split\s", text, re.M)
+    if not mesh and not split:
         done = subprocess.run(["node", cli, "render", src, "--format", "preview", "-o", out, *extra, *mate],
                               capture_output=True, text=True)
         if done.returncode == 0:
@@ -166,8 +191,10 @@ def draw_coaster(cli, src, extra, out, name, tmp, mate_mm, mesh):
     binary = openscad()
     if not binary:
         raise RuntimeError(f"recipe '{name}' needs OpenSCAD for its picture")
-    text = open(src).read()
-    if re.search(r"^\s+loose\s", text, re.M):
+    if split:
+        frame, color, parts = split_parts(cli, src, text, extra, name, tmp)
+        openscad_render(binary, frame, out, parts=parts, color=color)
+    elif re.search(r"^\s+loose\s", text, re.M):
         frame, color, parts = loose_parts(cli, src, text, extra, name, tmp)
         openscad_render(binary, frame, out, parts=parts, color=color)
     else:
@@ -220,13 +247,42 @@ def draw(cli, name, options, snippet):
     return os.path.relpath(out, ROOT), len(copies)
 
 
+def draw_file(cli, path, out, params):
+    """One coaster file drawn as the cookbook draws a coaster recipe, to `out`."""
+    name = os.path.basename(path)
+    text = re.sub(r"[ \t]+pack\s+zipper(?:\s+spacing\s+\S+)?", "", open(path).read())
+    if not re.search(r"^coaster\s", text, re.M):
+        sys.exit(f"{path} has no coaster block — `--file` draws coasters only")
+    extra = [arg for p in params for arg in ("--param", p)]
+    with tempfile.TemporaryDirectory() as tmp:
+        src = os.path.join(tmp, name)
+        with open(src, "w") as fh:
+            fh.write(text)
+        try:
+            draw_coaster(cli, src, extra, out, name, tmp, None, False)
+        except NeedsMesh:
+            draw_coaster(cli, src, extra, out, name, tmp, None, True)
+    run(["magick", out, "-background", "white", "-flatten", "-trim", "+repage",
+         "-bordercolor", "white", "-border", "24", out], name)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--recipe", help="draw one recipe by name")
     group.add_argument("--all", action="store_true", help="draw every recipe")
     group.add_argument("--list", action="store_true", help="list recipes and their pages")
+    group.add_argument("--file", help="draw one coaster .bkr file opened up (needs --out)")
+    ap.add_argument("--out", help="the picture --file writes")
+    ap.add_argument("--param", action="append", default=[], help="k=v for --file, repeatable")
     args = ap.parse_args()
+
+    if args.file:
+        if not args.out:
+            sys.exit("--file needs --out <png>")
+        draw_file(bikar_cli(), args.file, args.out, args.param)
+        print(args.out)
+        return
 
     book = recipes()
     if args.list:
