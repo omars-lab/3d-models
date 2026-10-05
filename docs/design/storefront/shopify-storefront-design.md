@@ -975,6 +975,8 @@ offered. One con in it was wrong as offered: bikar is a private repo, not a publ
 
 #### Call 2. Basic or Grow
 
+**Decided 2026-10-05:** Basic, settled by the test order, billed monthly until it is done → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later).
+
 | | Basic, settled by the install test **(recommended)** | Grow from day one |
 |---|---|---|
 | Pros | $29 a month yearly, $39 monthly; a test on the real store settles the open question | No test needed; certain access to names and addresses |
@@ -988,6 +990,8 @@ offered. One con in it was wrong as offered: bikar is a private repo, not a publ
 Bill monthly until the test is done; both plans are easy to change.
 
 #### Call 3. How custom orders get approved to print
+
+**Decided 2026-10-05:** one plate per color, as the planner plans now, which was not the recommended option, so each new coloring gets its own yes → [D-103](../../working-model/decisions-log.md#d-103--a-custom-order-prints-one-plate-per-color-so-each-new-coloring-gets-its-own-yes).
 
 | | One plate per group, color picked at the send **(recommended)** | One plate per color, as the planner plans now | Each custom order is a new experiment plate |
 |---|---|---|---|
@@ -1024,6 +1028,8 @@ printer picker and the print history. The domain is still open (§16.4).
 
 #### Call 5. Which options carry the price
 
+**Decided 2026-10-05:** finish, set size and how many colors → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later).
+
 | | Finish, Set, Colors band **(recommended)** | Size, Set (coffee-house-storefront's design) | Finish, Set, Theme or Custom | One price, custom by quote only |
 |---|---|---|---|---|
 | Pros | Follows cost: each color is a plate | Simplest for the buyer: adding a color never moves the price | Lets a custom coloring cost more for the review | Simplest store |
@@ -1039,6 +1045,8 @@ Colors band and Size cannot all be options; if a second size is designed, one of
 
 #### Call 6. Etsy, now or later
 
+**Decided 2026-10-05:** later, after the store sells → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later).
+
 | | Later, after the store sells **(recommended)** | Now, through a sync app |
 |---|---|---|
 | Pros | One channel to get right first | Etsy's buyers from day one |
@@ -1049,6 +1057,8 @@ Colors band and Size cannot all be options; if a second size is designed, one of
 | What it checks | | Nothing until a test Etsy order is read |
 
 #### Call 7. Lead time and returns
+
+**Decided 2026-10-05:** a stated range per order, custom colorings final sale except damage → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later). The range itself and the wording are still Omar's (§16.4).
 
 | | A stated range per order, made to order, final sale on custom colorings except damage **(recommended)** | A fixed promise for everything, returns on everything |
 |---|---|---|
@@ -1061,6 +1071,8 @@ Colors band and Size cannot all be options; if a second size is designed, one of
 No number is written here: the range and the policy are Omar's, and neither was researched.
 
 #### Call 8. How a design reaches the cart, and which attributes it carries
+
+**Decided 2026-10-05:** the Lab in a frame adds the design to Shopify's cart, and the hub checks every line → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later).
 
 This doc and coffee-house-storefront's design drew two different hand-offs. Both end at Shopify's
 checkout, and both need the hub's check of §11.3, because a line can be edited by anyone either
@@ -1084,6 +1096,8 @@ and a secret to get the same result.
 
 #### Call 9. Which designs may be sold
 
+**Decided 2026-10-05:** a record per design, nothing listed without one → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later).
+
 No design's right to sell is recorded today, so no product can be listed until this is decided.
 This doc does not say whether any design may be sold; it says only who decides and where the
 answer is kept.
@@ -1098,6 +1112,8 @@ answer is kept.
 | What it checks | That every listed product's design has a record | The same, with a reviewer's name | Nothing |
 
 #### Call 10. Which pictures the store opens with
+
+**Decided 2026-10-05:** drawings now, and a photo of a real print of each design before opening → [D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later). Everything still left before opening is on the [pre-launch checklist](../../../.claude/skills/launch-store/checklist.md).
 
 Every listing can start on drawn pictures today (§11.8). The call is whether the store may open
 to buyers on drawings alone, and whether a scene made by an image generator may stand in for a
@@ -1162,18 +1178,24 @@ changes a setting or buys something is Omar's.
 
 ### 16.5 Your calls
 
-- [x] Call 1: which repo builds the store. Decided: coffee-house-storefront, D-099
-- [ ] Call 2: Basic or Grow (settled by the install test)
-- [ ] Call 3: how custom orders get approved to print
-- [x] Call 4: a public Coaster Lab. Decided: its own build and host, in coffee-house-storefront's design
-- [ ] Call 5: which options carry the price
-- [ ] Call 6: Etsy, now or later
-- [ ] Call 7: lead time and returns
-- [ ] Call 8: how a design reaches the cart, and one attribute list
-- [ ] Call 9: which designs may be sold
-- [ ] Call 10: which pictures the store opens with
+- [x] [Call 1](#call-1-which-repo-builds-the-store): which repo builds the store. Decided: coffee-house-storefront, D-099
+- [x] [Call 2](#call-2-basic-or-grow): Basic or Grow. Decided: Basic, settled by the test order, D-102
+- [x] [Call 3](#call-3-how-custom-orders-get-approved-to-print): how custom orders get approved to print. Decided: one plate per color, D-103
+- [x] [Call 4](#call-4-a-public-coaster-lab): a public Coaster Lab. Decided: its own build and host, in coffee-house-storefront's design
+- [x] [Call 5](#call-5-which-options-carry-the-price): which options carry the price. Decided: finish, set size, colors, D-102
+- [x] [Call 6](#call-6-etsy-now-or-later): Etsy, now or later. Decided: later, D-102
+- [x] [Call 7](#call-7-lead-time-and-returns): lead time and returns. Decided: a range per order, D-102; the range and the wording are in §16.4
+- [x] [Call 8](#call-8-how-a-design-reaches-the-cart-and-which-attributes-it-carries): how a design reaches the cart, and one attribute list. Decided: the Lab in a frame, the hub checks, D-102
+- [x] [Call 9](#call-9-which-designs-may-be-sold): which designs may be sold. Decided: a record per design, D-102
+- [x] [Call 10](#call-10-which-pictures-the-store-opens-with): which pictures the store opens with. Decided: drawings now, a photo per design before opening, D-102
 - [ ] The order-driven design's calls 1 to 5, ticked on [their own page](../coaster/order-driven-lab-design.md#10-open-calls-for-omar)
 - [ ] The values in §16.4
+
+A call is ticked here only when its heading in §16.1 has a **Decided** line. The launch-store
+skill's check holds the two together (`launch_check.py --ticks`, run by `make validate-orders`),
+because this list said eight decided calls were open for a day. Everything still left before the
+store opens, from every design, is on the
+[pre-launch checklist](../../../.claude/skills/launch-store/checklist.md).
 
 ## 17. Handoff: starting a fresh session in coffee-house-storefront
 

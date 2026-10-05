@@ -962,7 +962,9 @@ validate-color-themes:
 # with its wrong plan refused for the reason the fixture names. It asks bikar for each pieces
 # file's groups, so it needs BIKAR_DIR; it never slices (`bambu order fixtures --slice` does).
 # Then the simulate-buyers skill (§9.7): its scripts' self-tests, and every buyers.yaml sweep
-# whole, for its theme's current colors, with each buyer in one window.
+# whole, for its theme's current colors, with each buyer in one window. Then the launch-store
+# skill: its self-test, the pre-launch checklist (owners, tracking links, D-ids, each call's tick
+# against its Decided line), and the storefront design's own call ticks (§16.5).
 .PHONY: validate-orders
 validate-orders:
 	@[ -d ${ROOT_DIR}/tools/bambu/node_modules ] || npm ci --silent --prefix ${ROOT_DIR}/tools/bambu
@@ -971,3 +973,6 @@ validate-orders:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/buyers.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/price_page.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/buyers.py check --all
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py --ticks $(ROOT_DIR)/docs/design/storefront/shopify-storefront-design.md
