@@ -949,6 +949,7 @@ validate-design-difference:
 .PHONY: validate-color-themes
 validate-color-themes:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/catalog.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/prices.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/catalog.py check --quiet
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py --self-test

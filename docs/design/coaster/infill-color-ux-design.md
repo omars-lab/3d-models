@@ -290,8 +290,9 @@ names; only the third column's swaps are an estimate.
   1.5 g, about 0.07 g a swap. That gives
   86.8 + 44 × 1.6 ≈ 157 minutes and 27.3 + 44 × 0.07 ≈ 30.4 g.
 - **Dollars** are grams times the store's price per kilogram in
-  [prices.yaml](themes/catalog/prices.yaml) (read 2026-10-04 from the
-  [pricing research](../../research/2026-10-04-coaster-pricing.md)), at the price of one refill
+  [prices.yaml](themes/catalog/prices.yaml) (first read 2026-10-04 for the
+  [pricing research](../../research/2026-10-04-coaster-pricing.md), now written from the store's
+  own product pages by the color-themes skill's `prices.py refresh --write`), at the price of one refill
   bought on its own unless `--price-tier` says otherwise. A line with no price shows grams and no
   dollars. Filament only: no power, wear or failed prints.
 - **Watched minutes**, a column on the page, are the sliced minutes times the watched-over-sliced
