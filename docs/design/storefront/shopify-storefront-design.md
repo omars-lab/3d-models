@@ -16,8 +16,10 @@ is the handoff: where everything is, what to read first, and what a session ther
 
 > Status: draft, 2026-10-04. Nothing here is built, and no price is set: every price setting is
 > still empty on purpose. The Shopify store itself exists, on the Basic plan, created 2026-10-05
-> (UTC) and closed to buyers. Two calls are decided (1 and 4) and eight are open. Omar, who
-> designs, prints and sells the coasters, makes them in
+> (UTC) and closed to buyers. All ten calls are decided: 1 and 4 first, the other eight on
+> 2026-10-05 ([D-102](../../working-model/decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later),
+> [D-103](../../working-model/decisions-log.md#d-103--a-custom-order-prints-one-plate-per-color-so-each-new-coloring-gets-its-own-yes)). Omar, who
+> designs, prints and sells the coasters, made them in
 > [§16](#16-decisions-to-make-for-the-store), along with the questions a test settles and the
 > values only he sets. Each requirement below says whether it is decided, recommended here, open
 > on a call, or only assumed.
@@ -418,7 +420,7 @@ The source column links to where the assumption was found. The source anchors be
 | Id | The store must | Source | Status |
 |---|---|---|---|
 | SF-1 | let a buyer buy a color theme from the product page without opening the Lab | [gBV themes](../coaster/themes/gbv-themes.md) | recommended |
-| SF-2 | let a buyer design a custom coloring in a public Lab build and add it to the cart from there | [order-driven §8](../coaster/order-driven-lab-design.md) | decided (call 4); how it reaches the cart is open (call 8) |
+| SF-2 | let a buyer design a custom coloring in a public Lab build and add it to the cart from there | [order-driven §8](../coaster/order-driven-lab-design.md) | decided (calls 4 and 8: the Lab in the product page, the hub checks) |
 | SF-3 | link from each product page into the Lab with the shown theme loaded | this doc | recommended |
 | SF-4 | show each group's color by name on the cart, checkout and order; keep machine fields hidden from the buyer with a leading underscore | [storefront research](../../research/2026-10-04-shopify-storefront.md) | recommended |
 | SF-5 | put a link on every line that reopens the bought design in the Lab | [piece colors design](../coaster/infill-color-ux-design.md) | recommended |
@@ -431,7 +433,7 @@ The source column links to where the assumption was found. The source anchors be
 
 | Id | The store must | Source | Status |
 |---|---|---|---|
-| SF-10 | list one product per coaster design whose right to sell is recorded; the first is the gBV coaster at 112.5 mm, once its rights are | [gBV themes](../coaster/themes/gbv-themes.md), coffee-house-storefront's design | assumed; rights open (call 9) |
+| SF-10 | list one product per coaster design whose right to sell is recorded; the first is the gBV coaster at 112.5 mm, once its rights are | [gBV themes](../coaster/themes/gbv-themes.md), coffee-house-storefront's design | decided (call 9: a record per design) |
 | SF-11 | carry each group's color as a line attribute, never as a variant (Shopify allows 2,048 variants and 3 options a product) | [storefront research](../../research/2026-10-04-shopify-storefront.md) | decided |
 | SF-12 | use variants only for what moves the price, three options at most | [storefront research](../../research/2026-10-04-shopify-storefront.md) | recommended (call 5) |
 | SF-13 | offer a color the US store does not sell only while a spool is on hand, and retire it when it runs out (Silk Gold 13401 today) | color palette store notes | recommended |
@@ -490,7 +492,7 @@ The source column links to where the assumption was found. The source anchors be
 |---|---|---|---|
 | SF-41 | use Shopify's checkout; no page of ours ever takes card details | [storefront research](../../research/2026-10-04-shopify-storefront.md) | decided |
 | SF-42 | keep the hub reachable only on the team's private network; it pulls, nothing calls into it | hub README | decided |
-| SF-43 | never put a cart secret in a browser: a cart built from outside Shopify's pages is built on the Lab's server | [storefront research](../../research/2026-10-04-shopify-storefront.md) | decided (the rule); whether there is such a cart is open (call 8) |
+| SF-43 | never put a cart secret in a browser: a cart built from outside Shopify's pages is built on the Lab's server | [storefront research](../../research/2026-10-04-shopify-storefront.md) | decided (the rule; call 8 picked Shopify's own cart, so no cart is built from outside) |
 | SF-44 | run a public, coasters-only Lab build on its own host, while the team's studio stays behind its login | team access memory, coffee-house-storefront's design | decided (call 4); the domain is open (§16.4) |
 | SF-45 | answer each webhook within 5 seconds, after the signature check | [storefront research](../../research/2026-10-04-shopify-storefront.md) | decided |
 
@@ -938,8 +940,8 @@ section to.
 
 Every decision the store still needs is in this section, in four kinds:
 
-- **§16.1, the calls:** a choice between options, Omar's to make. Calls 1 and 4 are decided;
-  2, 3 and 5 to 10 are open. Each lays the options side by side on what they buy, cost, commit
+- **§16.1, the calls:** a choice between options, Omar's to make. All ten are decided: 1 and 4
+  first, 3 as D-103 and the rest as D-102 (2026-10-05). Each lays the options side by side on what they buy, cost, commit
   you to, risk this quarter, own long-term and check. The recommendation is the first option.
 - **§16.2, the order-driven design's calls:** five calls in another doc that the store waits on.
 - **§16.3, questions a test settles:** facts nobody has checked, each settled by one test on the
@@ -1236,7 +1238,8 @@ None of these waits on a call:
 
 ### 17.5 What it must not do
 
-- **Decide a call.** Calls 2, 3 and 5 to 10 are Omar's. A call with no tick stays open.
+- **Decide a call.** All ten store calls are decided (D-102, D-103); the order-driven design's
+  calls that are still open are Omar's. A call with no tick stays open.
 - **Use a Bambu product photo, or present a drawing as a photo** (SF-16, SF-53).
 - **Set a price, a lead time or a returns policy,** publish the template, open the store, or
   change Cloudflare settings (§16.4).

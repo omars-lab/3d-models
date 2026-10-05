@@ -6133,3 +6133,190 @@ decide between them.
 **What would reverse it:** the prints. If one way closes cleanly and the other does not, the other
 is dropped from the Lab. If the lip's wider straps look wrong in the hand, A goes; if the flange's
 step prints badly as an overhang, or the halves will not line up with no studs, C goes.
+
+## D-101 — Orders never go in this repo; they live in an iCloud folder
+
+Omar, 2026-10-05, on the [open-calls page](feedback-requests/2026-10-05-open-calls.md#14-orders-as-files-in-git)
+(call 14, from call 3 of the
+[order-driven Lab design](../design/coaster/order-driven-lab-design.md#10-open-calls-for-omar)):
+he ticked "Never in this repo" and added "they can live in icloud dir".
+
+### The options as offered
+
+- **Never in this repo** (recommended): nothing private can leak by a commit, but the history
+  needs its own backup.
+- **In this repo, with a code in place of the customer's name:** order counts, dates and prices are
+  still public for good.
+- **In a private repo:** a fourth repo to keep in step, before there is one order.
+- **Chosen, never in this repo,** with the files in an iCloud folder.
+
+### What it changes
+
+- **The order planner reads order files from a folder outside the repo.** iCloud gives that folder
+  its backup and puts it on his other devices. Which folder, and its name, is not set yet.
+- **Customer names, prices and quotes stay out of git,** in the repo and in the tests: the test
+  orders stay made-up.
+- **Where the order pages live is still open** (the page's call 12). The iCloud folder answers
+  where the files sit, not which app shows them.
+
+**What would reverse it:** a second person needing the orders who has no access to his iCloud, or
+order history that needs review the way code does.
+
+## D-102 — The store's first setup: Basic plan, priced by finish, set and colors, Etsy later
+
+Omar, 2026-10-05, ticking seven calls of the
+[storefront design](../design/storefront/shopify-storefront-design.md#161-the-calls) on the
+[open-calls page](feedback-requests/2026-10-05-open-calls.md#the-store-calls-17-to-24) (its calls
+17, 19 to 24; the design's calls 2, 5 to 10). Each pick was the recommended one.
+
+### The options as offered, and what was chosen
+
+- **Plan (design call 2):** **Basic, settled by one test order** ($29 a month on yearly billing,
+  $39 monthly; move to Grow if the test order's address comes back hidden), or Grow from day one
+  ($50 a month more, paid back by fees only above about $25,000 a month in card sales). Chosen:
+  Basic, billed monthly until the test is done.
+- **Which options carry the price (5):** **finish, set size, how many colors**; size and set size
+  (the storefront repo's design); finish, set size, theme or custom; or one price with custom by
+  quote only. Chosen: finish, set size, colors.
+- **Etsy (6):** **later, after the store sells**, or now through a sync app (fees about 11% on a
+  $25 order, about 26% with an Offsite Ad, and an app at $9 to $59 a month). Chosen: later.
+- **Lead time and returns (7):** **a stated range per order, made to order, custom colorings final
+  sale except damage**, or a fixed promise with returns on everything. Chosen: the range. The range
+  itself and the wording are still his to write; none was given.
+- **How a design reaches the cart (8):** **the Lab inside the product page adds it to Shopify's
+  cart and the hub checks every order**; our server builds a signed cart; or the page plus a small
+  signing server. Chosen: the Lab in the page, the hub checks.
+- **Which designs may be sold (9):** **a record per design (its source, the source's terms, who
+  cleared it, when), nothing listed without one**; the same after a lawyer's review; or only designs
+  drawn from scratch at launch. Chosen: a record per design.
+- **Pictures at opening (10):** **drawings now, one photo of a real print per design before
+  opening, every picture labeled**; drawings only; or drawings plus generated scenes. Chosen:
+  drawings now and a photo before opening. He added: "make sure we are creating a proper backlog to
+  consolidate all the things we have to do to launch our store - add this to the pre-launch
+  checklist under a launchign store skill".
+
+### What it changes
+
+- **Up to 27 variants per product** (Shopify's three options), and a buyer who adds a color sees
+  the price move. Every price is still blank until the pricing settings are filled.
+- **No server and no signing key in the store.** A tampered cart line is caught by the hub after
+  payment and held.
+- **bikar gains a rights record per design, and the first product waits for gBV's.**
+- **Opening waits on a photo of a printed gBV in one theme.** The photo setup is his.
+- **A store-launch skill holds one pre-launch checklist** that gathers every item the store still
+  needs before it opens, from all the designs.
+
+**What would reverse it:** the test order (a hidden address moves the plan to Grow); a buyer
+confused by the price changing with colors; a cart line that the hub check misses; legal advice
+that a record per design is not enough.
+
+## D-103 — A custom order prints one plate per color, so each new coloring gets its own yes
+
+Omar, 2026-10-05, call 18 on the
+[open-calls page](feedback-requests/2026-10-05-open-calls.md#18-how-a-custom-order-gets-its-yes-to-print)
+(call 3 of the [storefront design](../design/storefront/shopify-storefront-design.md#161-the-calls)):
+he ticked "One plate per color". It was not the recommended option.
+
+### The options as offered
+
+- **One plate per group, color picked at the send** (recommended): any coloring reuses the same
+  few plates, and once they are proven a custom coloring prints on their standing yes. A one-color
+  coaster becomes six plates, not one.
+- **One plate per color, as the planner plans now:** fewest plates per order, but a new coloring
+  is a new mix of pieces, so a new recipe and a new yes for each send.
+- **Each custom order is a new experiment plate:** a yes per send, for good.
+- **Chosen, one plate per color.**
+
+### What it changes
+
+- **The planner stays as it is**: no "by group" mode is built.
+- **Every custom coloring waits for his review before it prints,** so the lead-time range of D-102
+  has to include that wait.
+- **The question of reading D-095 as "a proven plate may go out in a new color" is not needed** for
+  custom orders, and stays unanswered.
+
+**What would reverse it:** custom orders arriving faster than he can review them, which is what
+the per-group option was for.
+
+## D-104 — Pricing is tried on simulated buyers and on a charted view, built for real orders later
+
+Omar, 2026-10-05, commenting on call 15 of the
+[open-calls page](feedback-requests/2026-10-05-open-calls.md#^rzw30d)
+(call 4 of the [order-driven Lab design](../design/coaster/order-driven-lab-design.md#10-open-calls-for-omar)),
+with no box ticked: "i want to back test pricing on simulated buyers - price concisuosu, etc - who
+would buy this at this price - who would turn it of - i want to extract raw thoughts that customers
+might have ... and how the thoughts changes as pricing changes. at the same time - I want a useful
+ux with charts, etc that shows opmitmal pricing that takes economics, etc into acconuts. pricing ux
+should accoutn for later actually having order data, etc". On call 13 he added: "we should have
+different simulatons, how much it costs us to do 1 peice, 5 pieces, 10, 100, etc".
+
+### The options as offered
+
+- **The Scenarios view and its check, no skill** (recommended).
+- **The view plus simulated buyers:** a second opinion before a first sale, simulated and not
+  customer research.
+- **A pricing skill instead of a view,** or **no view.**
+- **Chosen, the view plus simulated buyers,** and more than either offered: buyers who each say
+  what they think at a price, a sweep over prices showing how those thoughts change, charts, and a
+  cost per coaster at 1, 5, 10 and 100.
+
+### What it changes
+
+- **A buyer-persona skill is built**, with personas that differ on price (the careful buyer, the
+  gift buyer, and so on). Every output is labeled simulated, never presented as what anyone pays.
+- **The price view gains charts:** cost per coaster by quantity, margin by price, and the
+  simulated buyers' yes or no at each price.
+- **Real orders replace the simulation as they come in.** The view takes order history as a second
+  source, and the simulated curve is shown beside the real one, not in place of it.
+- **How the price is set (the page's call 13) is still open;** this decides how ideas are tried,
+  not the method.
+
+**What would reverse it:** the simulated buyers disagreeing with the first real sales in a way
+that misleads more than it helps.
+
+## D-105 — Swatches are our own printed card, from Bambu filament first
+
+Omar, 2026-10-05, call 25 on the
+[open-calls page](feedback-requests/2026-10-05-open-calls.md#25-seeing-real-colors-before-buying-spools):
+he ticked "Our own card only" and added "our swatch/samples will be erived form bambu ... but we
+might buy other faimelnt too eventually". It was not the recommended option.
+
+### The options as offered
+
+- **Bambu's samples first, if they sell them, then our own card** (recommended); our own card only;
+  Bambu's samples only; or neither, trusting the catalog's hexes.
+- **Chosen, our own card only,** printed from Bambu filament.
+
+### What it changes
+
+- **A swatch card becomes a small plate,** one per color we own or buy, so it shows the real
+  surface and sheen as our printer lays it down.
+- **Nobody checks whether Bambu sells sample packs.**
+- **The card is not tied to Bambu.** It takes any brand's filament, for when other brands are
+  bought.
+
+**What would reverse it:** a spool bought only to make its swatch, which is the cost the sample
+packs would have avoided.
+
+## D-106 — The first themes to print are the bottom row: Midnight blue, Night sky, Terracotta souk, Iznik tile
+
+Omar, 2026-10-05, commenting on call 26 of the
+[open-calls page](feedback-requests/2026-10-05-open-calls.md#^ha5dwm),
+with no box ticked: "all the bottom row". The page's picture of eight themes put Midnight blue,
+Night sky, Terracotta souk and Iznik tile on its bottom row.
+
+### The options as offered
+
+- **Midnight blue now, Black and gold next** (recommended); Black and gold first; Espresso and
+  crema; or another theme.
+- **Chosen, all four of the bottom row,** none of the top row.
+
+### What it changes
+
+- **Four themes get plate recipes**, one plate per color each, from the
+  [themes gallery](../design/coaster/themes/gbv-themes.md).
+- **Midnight blue can print today** with the blue and black we own. The other three need colors
+  bought; the gallery lists which. Buying them is his.
+- **Each send still needs his yes** (D-093). These are experiment plates.
+
+**What would reverse it:** the first of the four in the hand.

@@ -61,6 +61,18 @@ Sending a print and which filament to load.
   Omar's ask). Omar leans towards c (printed in place): then the first build is a pocket printed
   in place in bikar, and a coupon at one and two layers of air
   ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)).
+  On 2026-10-05 Omar said of way a "Only one of the faces will be glossay here, and I want the
+  coaster to be flat ... leaning towards c", and asked "can two pieces sldie into each other /
+  clip or be screwed onto each other?" That asks for a short design note on joining the two
+  piece halves by sliding, clipping or screwing, with a coupon for each, before calls 10 and 11
+  are ticked.
+- **A swatch card from Bambu filament (D-105, 2026-10-05).** Our own printed card, one chip per
+  color we own or plan to buy, built so other brands can join later. A plate recipe and page to
+  write; the print is Omar's.
+- **The first themes: the bottom row (D-106, 2026-10-05)** — Midnight blue, Night sky,
+  Terracotta souk and Iznik tile. Each needs a plate recipe (one plate per color, D-103) and the
+  list of colors to buy, priced from the filament catalog (print-infrastructure item 2). Buying
+  and printing are Omar's.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.
