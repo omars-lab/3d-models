@@ -1,5 +1,8 @@
 # FIXTURE
 phase: 2
 about: "fixture 2's plate, closed by monitor rows that end in a failure partway: the spool loses the plate's full slice grams, and the order's grams stay held for the reprint"
-# The order is fixture 2's; the monitor rows, the shelf and the expected shelf land with the shelf
-# (order-driven-lab-design §9.6, phase 2).
+# The logs are sheets-04g's real rows (green, finished) and fixture 2's plate failing at 40%, each
+# after a `sent` row. sheets-04g went out before the send wrote one, so its sent row and tray are
+# made up here; its 27 g is the page's. The wrong shelf skips the failed row, so the white spool
+# reads 27.28 g too full (order-driven-lab-design §9.6).
+wrong_shelf_must_say: "PLA Basic 10100: on hand"

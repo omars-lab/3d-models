@@ -62,6 +62,10 @@ Each is a real way to write a path that names no single file:
     function of working-tree state rather than of the documents. bikar learned
     this the hard way when its gate passed in a built checkout and failed in a
     fresh worktree.
+  - **The bambu CLI's local state** — `.bambu/bed/`, `.bambu/shelf/shelf.yaml`.
+    The folder is gitignored and holds what the CLI wrote on this machine
+    (photos, records, the shelf), so a path in it resolved only where the CLI
+    had run: the same working-tree verdict as a build output.
 
 Usage:
   doc_pointers.py                  check the tree
@@ -123,8 +127,9 @@ NOT_A_REPO_PATH = re.compile(r"^(?:[a-z][a-z0-9+.-]*://|/|~)")
 #: broken, they are absent until someone runs a build.
 GENERATED = re.compile(r"(?:^|/)(?:build|dist|coverage|node_modules|\.gh-pages)/")
 
-#: Session/working artifacts that are not repo files.
-NOT_REPO_PREFIX = re.compile(r"^(?:iterations|input|output|tmp)/")
+#: Session/working artifacts that are not repo files, and the bambu CLI's
+#: gitignored local state (`.bambu/`, at the repo root).
+NOT_REPO_PREFIX = re.compile(r"^(?:iterations|input|output|tmp|\.bambu)/")
 
 #: Documents excluded from the scan, with the reason each is excluded.
 #:
@@ -741,6 +746,7 @@ def self_test() -> int:
         ("https://example.com/spec.md", "dropped", "a URL is not a repo path"),
         ("/tmp/probe.mjs", "dropped", "machine-local absolute"),
         ("build/stls/coupons/W-F1.stl", "dropped", "build output, absent until made"),
+        (".bambu/shelf/shelf.yaml", "dropped", "the bambu CLI's gitignored local state"),
         ("patterns/**/*.bkr", "dropped", "a glob names a family"),
         ("sessions/<id>/log.json", "dropped", "a placeholder names a family"),
         ("Makefile.md", "dropped", "no separator — a bare filename is ambiguous"),

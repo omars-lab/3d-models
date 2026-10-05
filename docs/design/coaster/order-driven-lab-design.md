@@ -503,7 +503,7 @@ spool that fed it.
 ```mermaid
 flowchart LR
   bought["spool bought or opened"] -->|"start grams"| onhand["on hand"]
-  finished["print finished, or failed"] -->|"minus the slice's grams"| onhand
+  finished["print finished, failed or stopped (its sent row names the tray)"] -->|"minus the slice's grams"| onhand
   trays["tray tags: percent left"] -.->|"shown beside, owner corrects"| onhand
   orders["open orders' plans"] -->|"planned grams by color"| held["held"]
   onhand --> avail["available = on hand − held"]
@@ -521,11 +521,55 @@ flowchart LR
   minus held.
 - **Buy list**: every color where available is below zero, rounded up to whole spools, with the
   line and code from the catalog. Whether to buy before a level is reached (a reorder level) is
-  the owner's choice and is shown as such.
+  the owner's choice, so phase 2 lists only what is short and sets no level. A color only a
+  closed order needs is not listed. The note beside a buy comes from the palette's store notes
+  (Silk Gold's "not on the US store").
 - **Closing a print** happens on the print monitor's[^monitor] `finished` row. The grams are the slice's,
   because the X2D has not been seen to report what it used (the field is marked unconfirmed in the code). A
-  failed print still used its plastic and counts, as its full slice grams: an overcount for a print stopped early, until the owner corrects the book. The tray comes from the send record: the color
+  failed print still used its plastic and counts, as its full slice grams: an overcount for a print stopped early, until the owner corrects the book. A
+  `stopped` row counts the same way, for the same reason. A `lost` row closes nothing: the
+  printer stopped answering, and the print may still be going. The tray comes from the send record: the color
   `bambu print send --color` used to pick the tray, written beside the print log at the send.
+- **The send record is a row in the print log.** Phase 2 adds a `sent` row, the first row of a
+  send, written by `print_monitor.py <plate> --sent <hex> <tray> <grams>` (one triple per
+  filament). Its last column reads `fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice`, with
+  `; ` between trays. The log stays append-only (the plates gate's P10), so the record cannot be
+  edited after the print. The next `finished`, `failed` or `stopped` row closes it. A second
+  `sent` row before a close leaves the first send listed as not closed. A finished, failed or
+  stopped row with no `sent` row before it is listed as not counted, since it names no tray and
+  no grams. Every print before phase 2 is one of these, so the book starts from the spools'
+  start grams, not from a guess. Making `print send` write the row itself is the next piece of
+  work.
+- **The tray's color names the spool.** A spool's color is its line and code; the tray reports a
+  hex. A send's hex is matched to the spools whose catalog color has that hex. When two colors
+  share a hex (Jade White and Ivory White are both `#ffffff`), the spool's `tray:` must say which
+  one was loaded there. Without it the grams are listed as unmatched and nothing is taken off, so
+  a guess never moves the book. Among spools of one color, the one in that tray is used, else the
+  first listed.
+- **A finished print stops holding.** When a plate an open order holds prints to the end, its
+  grams come off the spool and stop being held, so they are not counted twice. A failed print
+  keeps its hold, because the reprint still needs the plastic.
+
+**The shelf file** lists the spools and the orders. It points at each order's plan rather than
+copying it:
+
+```yaml
+spool_grams: 1000              # a whole spool, for the buy list
+spool_grams_by_line: {}        # e.g. { "PLA Silk": 500 } where a line sells another size
+spools:
+  - { id: navy-end, line: PLA Matte, code: "11602", start_grams: 40, tag_percent: 4,
+      tray: "AMS 1 slot 2", corrections: [{ date: 2026-10-05, grams: -4, why: weighed }] }
+orders:
+  - { plan: orders/FIXTURE-1.plan.json, status: open }   # bambu order plan --json, saved
+logs: ../../docs/design/plates/print-logs                 # optional; the repo's print logs by default
+```
+
+`bambu shelf show [shelf.yaml]` prints each spool's grams left, each color's on hand, held and
+available with the plates holding it, the buy list, and how each print in the logs was counted
+(`--json` gives the same as data). Where the shelf lives is call 1, still open. **Assumed until
+then:** a gitignored local file, `.bambu/shelf/shelf.yaml`, the command's default. It keeps
+orders out of this public repo (§9.4). Moving the shelf into the hub later changes where the file
+is read from, not what it holds.
 
 ### 9.3 The price
 
@@ -635,7 +679,8 @@ out right, and the pages are checked against the same numbers in a real browser.
 | `order.yaml` | The order, in the format of §9.1 | 1 |
 | `expected-plan.json` | The golden file[^golden] for the plan: each plate by color, the pieces on it by construction and group, its beds, minutes and grams, and the ratio used or "floor" | 1 |
 | `wrong-plan.json` | The fixture's hard case, written out as a plan that is wrong in exactly that way. The check must reject it | 1 |
-| `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf and the monitor rows that close prints; then on hand, held, available and the buy list | 2 |
+| `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf (§9.2's format), pointing at other fixtures' plans and, for fixture 5, at its own `print-logs/` whose rows close prints; then on hand, held, available and the buy list | 2 |
+| `wrong-shelf.json` | The shelf as the hard case gets it wrong; `fixture.yaml`'s `wrong_shelf_must_say` holds the words the check must give when it refuses it | 2 |
 | `settings.fixture.yaml`, `expected-price.json` | The twelve settings of §9.3 with made-up values, and the cost lines, break-even and suggested price they give, or "no price" with the empty setting named | 3 |
 | `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings | 3 |
 
@@ -687,7 +732,7 @@ browser[^headless]; hub[^hub].
 | 4 | Two orders, one color | Two open orders that both need the same color; a shelf with one part spool that covers either order alone, not both | Held is the sum of both orders, available goes below zero, and the buy list asks for one spool | Checking each order against what is on hand says both fit. Only held, summed across orders, shows the shortfall |
 | 5 | A failed print | Fixture 2's plate, closed by monitor rows that end in a failure partway | The spool loses the plate's full slice grams (§9.2); the order is still open, so its grams stay held for the reprint | Counting only finished prints leaves the spool 27 g too full |
 | 6 | One setting empty | Fixture 1's order; every made-up setting filled except packaging | No cost total, no break-even, no price; the page names packaging as the empty one; the lines that do not need it still show | Treating empty as zero gives a price a little lower than fixture 1's. It looks right, so only "no price" in the golden catches it |
-| 7 | Silk Gold | 1 × gBV with one group in Silk Gold (13401) | The plan works; the buy list says "not on the US store, stock on hand only", from the store note in `.claude/skills/color-themes/palette.yaml`; the material line and the price say no store price for 13401 | Using Silk+ Gold's (13405) price because it is the nearest color. A price appears, and it is wrong: the research calls that swap a color change to look at, not a rename |
+| 7 | Silk Gold | 1 × gBV with one group in Silk Gold (13401) | The plan works; the buy list carries the store note "not on the US store, 2026-10-04" from in `.claude/skills/color-themes/palette.yaml`; the material line and the price say no store price for 13401 | Using Silk+ Gold's (13405) price because it is the nearest color. A price appears, and it is wrong: the research calls that swap a color change to look at, not a rename |
 | 8 | Two constructions | 2 × gBV and 2 × the GimTvN9hw4U minimal coaster (another pattern in the catalog, a frame with no loose pieces), all frames in one color | That color's plates hold 4 frames, counted 2 and 2 by construction; an order line with no pieces is valid | A planner keyed on the group name or on "frame" alone counts 4 gBV frames. The totals can still match |
 
 **Validator:** the plan comes out right plate by plate (fixtures 1, 2, 3, 7, 8).
@@ -738,10 +783,13 @@ page leaves out.
 **The make target.** `make validate-orders` runs in this repo, and `make validate` calls it. It
 runs the planner's unit tests, then the plan checks on the frozen slices, with no slicer, printer
 or network; it does ask the local bikar checkout for each pieces file's groups, so it needs
-`BIKAR_DIR`. The shelf, price and page checks run where that code lives. If call 1 picks the hub,
+`BIKAR_DIR`. Since phase 2 it also runs the shelf's unit tests and, on fixtures 4, 5 and 7, the
+shelf checks: the fixture's `shelf.fixture.yaml` against `expected-shelf.json`, and its
+`wrong-shelf.json` refused with the words in `wrong_shelf_must_say`. The shelf code lives in this
+repo until call 1 says otherwise (§9.2). The price and page checks run where that code lives. If call 1 picks the hub,
 that is a hub target of the same name, reading the fixture folders from this repo at a pinned
 commit. Before a phase lands, the runner lists its fixtures as "waiting on phase N". The runner
-holds one number, the last phase shipped (`3d-models:tools/bambu/src/commands/order.ts:L138 "const SHIPPED_PHASE = 1;"`),
+holds one number, the last phase shipped (`3d-models:tools/bambu/src/commands/order.ts:L141 "const SHIPPED_PHASE = 2;"`),
 and raising it when a phase lands runs that phase's fixtures. So a fixture cannot stay waiting by
 being forgotten.
 
@@ -751,7 +799,7 @@ being forgotten.
 |---|---|
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
 | 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
-| 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7 |
+| 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row; `print send` writing that row is still to come |
 | 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7 |
 | 4, the pages | The browser run, with its screenshots, over all eight |
 
@@ -974,7 +1022,7 @@ once its inputs exist. The pages come last, since they only show what the first 
 |---|---|---|---|---|
 | 0 | **The simulated orders** (§9.6): eight fixture folders, goldens worked by hand, a wrong plan per fixture, the runner and `make validate-orders` | 3d-models `tools/bambu` test fixtures; the hub's checks read them at a pinned commit | Each later phase has its finish line written down before it starts | The runner lists all eight fixtures as waiting, and rejects every wrong plan it can already read |
 | 1 | **`bambu order plan`**, built with piece colors phase 1 (`plates by-color`): read an order file, count pieces by color, write or print one recipe per color, slice each, print minutes, grams, beds and the ratio used, as text and JSON | 3d-models `tools/bambu` | Answers material, time and plates for any order, today, with no pages | The 4 × gBV order gives 5 recipes holding exactly the §9.5 counts; each recipe's numbers equal `bambu validate sliced` on it; a color forced onto two beds shows two; no matching print shows "floor" |
-| 2 | **The shelf**: a spool file, reservations from open orders, the buy list, closing a print on the monitor's finished row | the hub's store; the planner prints what the shelf is short of | Answers "is it on the shelf" and "what to buy"; stops double counting spools | A send with a send record (sheets-04g, green, the tray it picked) followed by its finished row subtracts 27 g from the green spool; a failed print subtracts too; two orders in dark blue reserve the sum; a color short by 1 g lists one spool |
+| 2 | **The shelf**: a spool file, reservations from open orders, the buy list, closing a print on the monitor's finished row | shipped as `bambu shelf show` in 3d-models `tools/bambu`, on a gitignored shelf file until call 1 places it | Answers "is it on the shelf" and "what to buy"; stops double counting spools | A send with a send record (sheets-04g, green, the tray it picked) followed by its finished row subtracts 27 g from the green spool; a failed print subtracts too; two orders in dark blue reserve the sum; a color short by 1 g lists one spool |
 | 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7) | the hub's pricer runs the formula on phase 1's JSON; public settings' references in this repo from the consolidated research, private ones in the hub | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
 | 4 | **The pages**: Plan, Price (with its Scenarios view), Inventory in a hub Orders tab, and the Lab's Add to order button | the hub web; bikar `packages/lab` | The same answers without a terminal, and from a design straight to an order | A real-browser run: Add to order in the Lab opens the hub's Plan page with the design filled in; its numbers equal phase 1's JSON |
 
@@ -1017,7 +1065,7 @@ can be reused for another print.
   its hedges, and none of them is a setting.
 - **The flagship can be built by what this doc ships**: phase 1 alone produces every row of §4
   down to the corrected minutes, with Matte slices in place of the Basic stand-ins; the filament
-  check and buy list need phase 2's shelf.
+  check and buy list come from phase 2's shelf, run on the saved plan.
 
 ## Glossary
 

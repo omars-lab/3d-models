@@ -1,0 +1,74 @@
+{
+  "spools": [
+    {
+      "id": "jade-1",
+      "line": "PLA Basic",
+      "code": "10100",
+      "name": "Jade White",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    },
+    {
+      "id": "green-1",
+      "line": "PLA Basic",
+      "code": "10501",
+      "name": "Bambu Green",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 27,
+      "on_hand": 973,
+      "tag_percent": null
+    }
+  ],
+  "colors": [
+    {
+      "line": "PLA Basic",
+      "code": "10100",
+      "name": "Jade White",
+      "on_hand": 1000,
+      "held": 27.28,
+      "available": 972.72,
+      "held_by": [
+        {
+          "order": "FIXTURE-02",
+          "plate": "fixture-02-10100",
+          "grams": 27.28
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Basic",
+      "code": "10501",
+      "name": "Bambu Green",
+      "on_hand": 973,
+      "held": 0,
+      "available": 973,
+      "held_by": [],
+      "note": null
+    }
+  ],
+  "buy": [],
+  "closed": [
+    {
+      "plate": "sheets-04g",
+      "sent": "2026-10-04 18:35",
+      "ended": "2026-10-04 20:14",
+      "event": "finished",
+      "spool": "green-1",
+      "grams": 27
+    }
+  ],
+  "not_closed": [
+    {
+      "plate": "fixture-02-10100",
+      "time": "2026-10-05 09:00",
+      "why": "no finished, failed or stopped row yet"
+    }
+  ],
+  "unmatched": [],
+  "uncounted": []
+}

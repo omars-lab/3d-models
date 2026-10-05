@@ -5,6 +5,7 @@ the print is still moving, take a chamber picture every few minutes and make a t
     python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> [--every 30] [--lost-after 10]
         [--stall-after 15] [--snapshot-every 10]
     python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --gif
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --sent <hex> <tray> <grams> [--sent …]
     python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test
 
 `<plate>` is a plate name (`sheets-04b`) or the path of its page. Run it from the main checkout
@@ -37,6 +38,12 @@ saves one chamber frame with `bambu status camera` to `.bambu/monitor/<plate>/fr
 When the watch ends it joins the frames into `.bambu/monitor/<plate>/timelapse.gif`; `--gif`
 rebuilds that from the frames already there. A camera that does not answer is logged and
 skipped: a missing picture never stops the watch.
+
+**The send's row.** `--sent` writes one `sent` row and exits: the trays the send fed, each with
+its color and the slice's grams for it (`fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice`;
+a two-tray plate separates them with `; `). The send writes it, before the watch starts. The
+shelf (`bambu shelf show`) takes those grams off the matching spool when the next `finished`,
+`failed` or `stopped` row closes the print (order-driven-lab-design §9.2).
 
 A `finished` row is not a print record. The record (`docs/prints/`, the Timeline's `printed`
 row) is written when the pieces are judged, as before.
@@ -198,6 +205,22 @@ def row_line(when: str, event: str, frame: dict | None, text: str) -> str:
     layer = f"{f.get('layer_num', '?')}/{f.get('total_layer_num', '?')}" if frame else ""
     done = f"{f.get('mc_percent', '?')}%" if frame else ""
     return f"| {when} | {event} | {layer} | {done} | {cell(text)} |"
+
+
+def sent_line(when: str, trays: list[tuple[str, str, float]]) -> str:
+    """The send's row: each tray it fed, its color and the slice's grams for it."""
+    fed = []
+    for hex_, tray, grams in trays:
+        if not re.fullmatch(r"#[0-9a-fA-F]{6}", hex_):
+            raise ValueError(f"{hex_!r} is not a #rrggbb color")
+        if not tray.strip() or "," in tray or ";" in tray:
+            raise ValueError(f"tray {tray!r} must be a name with no comma or semicolon")
+        if not grams >= 0:
+            raise ValueError(f"grams for {tray} must be zero or more, not {grams}")
+        fed.append(f"{hex_.lower()} from {tray.strip()}, {grams:g} g by the slice")
+    if not fed:
+        raise ValueError("a send feeds at least one tray")
+    return row_line(when, "sent", None, "fed " + "; ".join(fed))
 
 
 def new_log(plate: str) -> str:
@@ -483,7 +506,7 @@ def self_test() -> int:
           and cmd[cmd.index("c.jpg") - 2:cmd.index("c.jpg")] == ["-delay", "200"] and cmd[-1] == "t.gif",
           "the GIF loops, half a second a frame, the last frame held", cmd)
 
-    every = {e for e, _ in [("watching", 0)]} | set(TERMINAL) | {
+    every = {e for e, _ in [("watching", 0), ("sent", 0)]} | set(TERMINAL) | {
         "preparing", "printing", "paused", "resumed", "progress", "error", "stalled"}
     check(every <= set(pg.PRINT_EVENTS), "every event the monitor writes is one the gate knows",
           sorted(every - set(pg.PRINT_EVENTS)))
@@ -512,6 +535,25 @@ def self_test() -> int:
         found = pg.check_print_logs(Path(tmp), pg.read_pages(Path(tmp)))
         check(any("event 'jammed'" in f for f in found), "and the gate does read the log", found)
 
+    # The send's row: the trays and grams in the words the shelf reads, before the monitor's rows.
+    line = sent_line("2026-10-04 18:35", [("#00AE42", "AMS 1 slot 4", 27.28), ("#000000", "AMS 1 slot 1", 3.0)])
+    check(line == "| 2026-10-04 18:35 | sent |  |  | fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice; "
+                  "#000000 from AMS 1 slot 1, 3 g by the slice |",
+          "a sent row names each tray, its color and its grams", line)
+    for bad in ([("green", "AMS 1 slot 4", 27.0)], [("#00ae42", "AMS 1, slot 4", 27.0)], []):
+        try:
+            sent_line("2026-10-04 18:35", bad)
+            check(False, f"a sent row refuses {bad}", "it wrote one")
+        except ValueError:
+            check(True, f"a sent row refuses {bad}")
+    with tempfile.TemporaryDirectory() as tmp:
+        p = Path(tmp) / "x.md"
+        p.write_text(page_text, encoding="utf-8")
+        append_to_log(p, line)
+        append_to_log(p, row_line("2026-10-04 18:37", "watching", _f("RUNNING"), "RUNNING"))
+        found = pg.check_print_logs(Path(tmp), pg.read_pages(Path(tmp)))
+        check(not found, "a log that starts with the send's row reads back clean through the gate", found)
+
     print(f"self-test: {'PASS' if not fails else f'FAIL ({fails})'}")
     return 1 if fails else 0
 
@@ -528,12 +570,27 @@ def main(argv: list[str]) -> int:
                     help="minutes between chamber pictures, 0 for none (default 10)")
     ap.add_argument("--gif", action="store_true",
                     help="only rebuild the plate's timelapse.gif from the frames already taken")
+    ap.add_argument("--sent", nargs=3, action="append", metavar=("HEX", "TRAY", "GRAMS"),
+                    help="only write the send's row: a tray it fed, its color and the slice's grams "
+                         "(repeat for each tray), then exit")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
         return self_test()
     if not a.plate:
         ap.error("name a plate")
+    if a.sent:
+        when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
+        try:
+            line = sent_line(when, [(h, t, float(g)) for h, t, g in a.sent])
+        except ValueError as e:
+            ap.error(str(e))
+        page = page_of(a.plate)
+        if not page.is_file():
+            ap.error(f"no plate page at {page}")
+        append_to_log(page, line)
+        print(f"ev=row {line}")
+        return 0
     if a.gif:
         name = page_of(a.plate).stem
         return 0 if make_gif(name, Log(LOGS / f"{name}.log")) else 1

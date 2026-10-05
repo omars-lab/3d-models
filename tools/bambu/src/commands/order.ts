@@ -3,7 +3,8 @@
 //                        the minutes corrected by past prints, and the order's total
 //   timed              : the prints the correction rests on (watched against sliced minutes)
 //   fixtures           : the regression suite (§9.6): each fixture order planned and checked against
-//                        its expected plan, and its wrong plan refused for the reason it names
+//                        its expected plan, and its wrong plan refused for the reason it names; each
+//                        fixture shelf added up against its expected shelf, and its wrong shelf refused
 //
 // An order file names no person and stays out of this repo (it is public). The planner never sends:
 // a plate it writes is a recipe with no page and no approval.
@@ -26,7 +27,9 @@ import {
 } from "../order.js";
 import { fetchGroups, loadCatalog, loadNotes, sliceRecipe, writeRecipeFiles } from "../order-io.js";
 import { repoRoot } from "../paths.js";
+import { type ShelfReport, shelfDiff, shelfReport } from "../shelf.js";
 import { type TimedRun, readTimedRuns } from "../timed-prints.js";
+import { readShelf } from "./shelf.js";
 
 const FIXTURES = "tools/bambu/test/fixtures/orders";
 
@@ -135,12 +138,13 @@ function runTimed(opts: { json?: boolean }): void {
 // The last phase whose command exists (design §9.6 "Which phase builds which part"). A fixture of a
 // later phase waits; raising this when a phase lands runs its fixtures, so none stays waiting by
 // being forgotten.
-const SHIPPED_PHASE = 1;
+const SHIPPED_PHASE = 2;
 
 interface FixtureMeta {
   phase: number;
   about: string;
   wrong_must_say?: string;
+  wrong_shelf_must_say?: string;
 }
 
 interface FixturesOpts {
@@ -165,6 +169,14 @@ async function runFixtures(opts: FixturesOpts): Promise<void> {
     }
     const problems: string[] = [];
     try {
+      if (existsSync(join(fx, "order.yaml"))) problems.push(...(await planChecks()));
+      if (existsSync(join(fx, "shelf.fixture.yaml"))) problems.push(...shelfChecks(fx, meta, opts));
+      if (!existsSync(join(fx, "order.yaml")) && !existsSync(join(fx, "shelf.fixture.yaml"))) problems.push("no order.yaml and no shelf.fixture.yaml");
+    } catch (e) {
+      problems.push(String((e as Error).message));
+    }
+    async function planChecks(): Promise<string[]> {
+      const problems: string[] = [];
       const order = parseOrder(readFileSync(join(fx, "order.yaml"), "utf8"));
       const wrong: Plan | null = existsSync(join(fx, "wrong-plan.json")) ? readJson(join(fx, "wrong-plan.json")) : null;
       const deps = await depsFor(order, slices, runs, wrong ? [wrong] : []);
@@ -195,8 +207,7 @@ async function runFixtures(opts: FixturesOpts): Promise<void> {
           problems.push(`the wrong plan was not refused for "${meta.wrong_must_say}"; the check said: ${said.join("; ") || "nothing"}`);
         }
       }
-    } catch (e) {
-      problems.push(String((e as Error).message));
+      return problems;
     }
     if (problems.length) {
       failed++;
@@ -212,6 +223,28 @@ async function runFixtures(opts: FixturesOpts): Promise<void> {
     console.log(`slices.json: ${Object.keys(kept).length} slice(s) kept`);
   }
   if (failed) process.exitCode = 1;
+}
+
+/** A fixture shelf (§9.6 "the shelf adds up"): added up against expected-shelf.json, color by color,
+ *  and wrong-shelf.json refused for the line fixture.yaml names. Its plans are other fixtures'
+ *  expected plans, which the plan checks hold to today's planner. */
+function shelfChecks(fx: string, meta: FixtureMeta, opts: FixturesOpts): string[] {
+  const problems: string[] = [];
+  const got = shelfReport(readShelf(join(fx, "shelf.fixture.yaml"), { defaultLogs: null }));
+  if (opts.writeExpected) writeFileSync(join(fx, "expected-shelf.json"), JSON.stringify(got, null, 2) + "\n");
+  if (!existsSync(join(fx, "expected-shelf.json"))) problems.push("no expected-shelf.json");
+  else {
+    const diff = shelfDiff(readJson<ShelfReport>(join(fx, "expected-shelf.json")), got);
+    problems.push(...diff.map((d) => `the shelf differs from expected-shelf.json: ${d}`));
+  }
+  if (!existsSync(join(fx, "wrong-shelf.json")) || !meta.wrong_shelf_must_say) problems.push("no wrong-shelf.json, or no wrong_shelf_must_say in fixture.yaml");
+  else {
+    const said = shelfDiff(readJson<ShelfReport>(join(fx, "wrong-shelf.json")), got);
+    if (!said.some((d) => d.includes(meta.wrong_shelf_must_say!))) {
+      problems.push(`the wrong shelf was not refused for "${meta.wrong_shelf_must_say}"; the diff said: ${said.join("; ") || "nothing"}`);
+    }
+  }
+  return problems;
 }
 
 export function registerOrder(program: Command): void {

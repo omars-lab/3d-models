@@ -1,0 +1,63 @@
+{
+  "spools": [
+    {
+      "id": "black-1",
+      "line": "PLA Basic",
+      "code": "10101",
+      "name": "Black",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    }
+  ],
+  "colors": [
+    {
+      "line": "PLA Basic",
+      "code": "10101",
+      "name": "Black",
+      "on_hand": 1000,
+      "held": 25.81,
+      "available": 974.19,
+      "held_by": [
+        {
+          "order": "FIXTURE-07",
+          "plate": "fixture-07-10101",
+          "grams": 25.81
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Silk",
+      "code": "13401",
+      "name": "Gold",
+      "on_hand": 0,
+      "held": 1.54,
+      "available": -1.54,
+      "held_by": [
+        {
+          "order": "FIXTURE-07",
+          "plate": "fixture-07-13401",
+          "grams": 1.54
+        }
+      ],
+      "note": "not on the US store, 2026-10-04"
+    }
+  ],
+  "buy": [
+    {
+      "line": "PLA Silk+",
+      "code": "13405",
+      "name": "Gold",
+      "short_grams": 1.54,
+      "spools": 1,
+      "note": null
+    }
+  ],
+  "closed": [],
+  "not_closed": [],
+  "unmatched": [],
+  "uncounted": []
+}

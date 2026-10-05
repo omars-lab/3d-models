@@ -1,0 +1,7 @@
+# FIXTURE: one white spool and one green, fixture 2's order open, and two print logs.
+spools:
+  - { id: jade-1, line: PLA Basic, code: "10100", start_grams: 1000, tray: AMS 1 slot 1 }
+  - { id: green-1, line: PLA Basic, code: "10501", start_grams: 1000, tray: AMS 1 slot 4 }
+orders:
+  - { plan: ../02-one-color/expected-plan.json, status: open }
+logs: print-logs
