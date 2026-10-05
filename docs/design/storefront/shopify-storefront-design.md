@@ -619,7 +619,8 @@ order rang; the hub, which nobody can reach, comes and asks.
   order releases its filament and stops its unsent plates.
 
 **Not checked:** whether the hub can read an order at all (Shopify's Level 1 customer data[^pii])
-on Basic. The research checked Level 2 (names and addresses) only.
+on Basic. The research checked Level 2 (names and addresses) only. A first test on the empty
+store points to yes for both; see [§16.3](#163-questions-a-test-settles)'s answers.
 
 ### 11.6 Writing back to Shopify
 
@@ -1131,6 +1132,24 @@ changes a setting or buys something is Omar's.
 | How far are a drawing's colors from the printed coaster's? | Photograph a printed coaster beside its drawing on a screen, in daylight | S5, under call 10's second option |
 | What do packaging and shipping cost per order? | Weigh and price a packed set | S5 |
 | How long does pressing the pieces in take? (gap G14) | Time one assembly | S5 (the pricer's labor) |
+
+**Answers so far (2026-10-04).** A coffee-house-storefront session ran the tests that only read the
+closed store, with its `make store-probe-access` and `make store-probe-attributes`
+(coffee-house-storefront PR #6). The attribute test wrote draft orders marked FIXTURE, read them
+back and deleted them in the same run; no order was created and nothing was bought. The full
+record is in that repo's `DESIGN.md`, "Store facts a test settled".
+
+| Question | Answer | How sure |
+|---|---|---|
+| Client-credentials token on the live store | **Yes**: the store's own app mints a 24-hour token | Tested |
+| Level 1 on Basic | **Probably yes**: queries for every §12.4 field run with no "not approved" error | The store has no orders, so no real order was read |
+| Level 2 on Basic | **Probably yes**: a FIXTURE draft order's shipping address and email read back in full | Draft orders, not a real order |
+| Longest line attribute | **At least 65,536 characters**, kept whole (tried 255 up to 64k) | The admin's draft-order path; the cart path waits for a product on the dev store |
+| Product media | Images under 20 MB, up to 5000 × 5000 px, 2048 × 2048 square shows best; GIF (animated too) and WebP accepted; video mp4/mov/webm up to 10 min and 1 GB; 3D **GLB or USDZ only**, so an STL is converted first | Shopify's help page; the uploads wait for the dev store |
+| Shipping labels on Basic | **Yes**, "up to 87% off", with a US fulfillment location | Shopify's pricing page, not the admin |
+| Installments fee | Not on Shopify's public pages | Omar reads it in the admin |
+
+The first test-mode checkout before opening settles Level 1 and Level 2 on a real order.
 
 ### 16.4 Values only Omar sets
 
