@@ -464,3 +464,20 @@ run the order regression suite: every fixture planned, checked, and its wrong pl
 | `--dir <dir>` | the fixtures folder (default: tools/bambu/test/fixtures/orders) |
 | `--write-expected` | overwrite each expected-plan.json with today's plan (then check every one by hand) |
 | `--slice` | slice each fixture recipe slices.json lacks, and rewrite slices.json with only the slices in use |
+
+### `bambu shelf`
+
+spools on hand, what open orders hold, and what to buy (order-driven-lab-design §9.2)
+
+### `bambu shelf show`
+
+each spool's grams left, each color's on hand, held and available, and the buy list (default: .bambu/shelf/shelf.yaml)
+
+| Argument | Required | Description |
+|---|---|---|
+| `shelf.yaml` | no |  |
+
+| Flag | Description |
+|---|---|
+| `--logs <dir>` | the print logs to close prints from (default: the shelf file's logs:, else docs/design/plates/print-logs) |
+| `--json` | print the shelf as JSON |

@@ -20,6 +20,7 @@ import { registerBed } from "./commands/bed.js";
 import { registerValidate } from "./commands/validate.js";
 import { registerPlates } from "./commands/plates.js";
 import { registerOrder } from "./commands/order.js";
+import { registerShelf } from "./commands/shelf.js";
 import { dumpFlags } from "./flags.js";
 
 export function buildProgram(): Command {
@@ -54,6 +55,7 @@ export function buildProgram(): Command {
   registerValidate(program);
   registerPlates(program);
   registerOrder(program);
+  registerShelf(program);
 
   // The CLI describes its own flag surface (see src/flags.ts). Hidden: it is a maintenance verb for the
   // gate/make target, not a user-facing one, so it stays out of --help. `--write` regenerates the

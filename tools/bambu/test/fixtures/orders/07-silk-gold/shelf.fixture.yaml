@@ -1,0 +1,5 @@
+# FIXTURE: black on hand, no Silk Gold, and the order open.
+spools:
+  - { id: black-1, line: PLA Basic, code: "10101", start_grams: 1000 }
+orders:
+  - { plan: expected-plan.json, status: open }

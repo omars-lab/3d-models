@@ -1,0 +1,180 @@
+{
+  "spools": [
+    {
+      "id": "ivory-1",
+      "line": "PLA Matte",
+      "code": "11100",
+      "name": "Ivory White",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    },
+    {
+      "id": "ice-1",
+      "line": "PLA Matte",
+      "code": "11601",
+      "name": "Ice Blue",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    },
+    {
+      "id": "sky-1",
+      "line": "PLA Matte",
+      "code": "11603",
+      "name": "Sky Blue",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    },
+    {
+      "id": "marine-1",
+      "line": "PLA Matte",
+      "code": "11600",
+      "name": "Marine Blue",
+      "start_grams": 1000,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 1000,
+      "tag_percent": null
+    },
+    {
+      "id": "navy-end",
+      "line": "PLA Matte",
+      "code": "11602",
+      "name": "Dark Blue",
+      "start_grams": 40,
+      "corrections_grams": 0,
+      "used_grams": 0,
+      "on_hand": 40,
+      "tag_percent": 4
+    }
+  ],
+  "colors": [
+    {
+      "line": "PLA Matte",
+      "code": "11100",
+      "name": "Ivory White",
+      "on_hand": 1000,
+      "held": 155.09,
+      "available": 844.91,
+      "held_by": [
+        {
+          "order": "FIXTURE-01",
+          "plate": "fixture-01-11100",
+          "grams": 68.88
+        },
+        {
+          "order": "FIXTURE-03",
+          "plate": "fixture-03-11100",
+          "grams": 86.21
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Matte",
+      "code": "11600",
+      "name": "Marine Blue",
+      "on_hand": 1000,
+      "held": 40.85,
+      "available": 959.15,
+      "held_by": [
+        {
+          "order": "FIXTURE-01",
+          "plate": "fixture-01-11600",
+          "grams": 18.16
+        },
+        {
+          "order": "FIXTURE-03",
+          "plate": "fixture-03-11600",
+          "grams": 22.69
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Matte",
+      "code": "11601",
+      "name": "Ice Blue",
+      "on_hand": 1000,
+      "held": 7.07,
+      "available": 992.93,
+      "held_by": [
+        {
+          "order": "FIXTURE-01",
+          "plate": "fixture-01-11601",
+          "grams": 3.14
+        },
+        {
+          "order": "FIXTURE-03",
+          "plate": "fixture-03-11601",
+          "grams": 3.93
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Matte",
+      "code": "11602",
+      "name": "Dark Blue",
+      "on_hand": 40,
+      "held": 55.06,
+      "available": -15.06,
+      "held_by": [
+        {
+          "order": "FIXTURE-01",
+          "plate": "fixture-01-11602",
+          "grams": 24.47
+        },
+        {
+          "order": "FIXTURE-03",
+          "plate": "fixture-03-11602",
+          "grams": 30.59
+        }
+      ],
+      "note": null
+    },
+    {
+      "line": "PLA Matte",
+      "code": "11603",
+      "name": "Sky Blue",
+      "on_hand": 1000,
+      "held": 5.87,
+      "available": 994.13,
+      "held_by": [
+        {
+          "order": "FIXTURE-01",
+          "plate": "fixture-01-11603",
+          "grams": 2.61
+        },
+        {
+          "order": "FIXTURE-03",
+          "plate": "fixture-03-11603",
+          "grams": 3.26
+        }
+      ],
+      "note": null
+    }
+  ],
+  "buy": [
+    {
+      "line": "PLA Matte",
+      "code": "11602",
+      "name": "Dark Blue",
+      "short_grams": 15.06,
+      "spools": 1,
+      "note": null
+    }
+  ],
+  "closed": [],
+  "not_closed": [],
+  "unmatched": [],
+  "uncounted": []
+}

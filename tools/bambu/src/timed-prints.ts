@@ -30,6 +30,7 @@ export interface LogRow {
   event: string;
   layer: string;
   done: string;
+  said: string; // the last column, "What the printer said" (a `sent` row's trays)
 }
 
 const BREAKS = new Set(["paused", "stalled", "stopped", "failed", "error", "lost", "resumed"]);
@@ -38,8 +39,8 @@ const BREAKS = new Set(["paused", "stalled", "stopped", "failed", "error", "lost
 export function logRows(text: string): LogRow[] {
   const rows: LogRow[] = [];
   for (const line of text.split("\n")) {
-    const m = /^\|\s*(\d{4}-\d\d-\d\d \d\d:\d\d)\s*\|\s*([a-z]+)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|/.exec(line);
-    if (m) rows.push({ time: m[1]!, event: m[2]!, layer: m[3]!, done: m[4]! });
+    const m = /^\|\s*(\d{4}-\d\d-\d\d \d\d:\d\d)\s*\|\s*([a-z]+)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|(?:\s*([^|]*?)\s*\|)?/.exec(line);
+    if (m) rows.push({ time: m[1]!, event: m[2]!, layer: m[3]!, done: m[4]!, said: m[5] ?? "" });
   }
   return rows;
 }

@@ -161,12 +161,13 @@ APPROVALS_HEAD = "| Date | Decision | By | Covers | Spent by |"
 # The print log (P10): the printer's own report while a plate prints, one row per change,
 # written by the monitor-print skill's print_monitor.py. `watching` is the monitor's first look;
 # `stalled` is RUNNING with no new layer or percent for a while; `lost` is the monitor giving up
-# when the printer stops answering.
+# when the printer stops answering. `sent` is the send itself: the trays it fed and the slice's
+# grams for each, which the shelf (`bambu shelf`) takes off the spools when the print closes.
 PRINT_LOG_HEAD = "| Time (UTC) | Event | Layer | Done | What the printer said |"
 # Each plate's log is its own file in this folder beside the pages, outside the page glob.
 LOGS = "print-logs"
-PRINT_EVENTS = ("watching", "preparing", "printing", "paused", "resumed", "progress", "stalled",
-                "error", "finished", "failed", "stopped", "lost")
+PRINT_EVENTS = ("sent", "watching", "preparing", "printing", "paused", "resumed", "progress",
+                "stalled", "error", "finished", "failed", "stopped", "lost")
 LOG_ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*\|\s*([a-z]+)\s*\|(.*)$")
 DECISIONS = ("approved", "held", "standing")
 TABLE_FROM = "2026-10-03"
@@ -1669,6 +1670,10 @@ CASES = [
                 "| 2026-09-26 14:09 | paused | 0/20 | 0% | 0500-8051: the plate on the bed is not "
                 "the one the file was sliced for |",
                 "| 2026-09-26 14:30 | resumed | 1/20 | 2% | RUNNING |"), None),
+    ("P10 a send's row before the monitor's, naming its tray and grams",
+     _print_log("minis-09", "| 2026-09-26 14:00 | sent | | | fed #00ae42 from AMS 1 slot 4, "
+                "27.28 g by the slice |",
+                "| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |"), None),
     ("P10 an event the monitor never writes (the load-bearing case: a typed row)",
      _print_log("minis-09", "| 2026-09-26 14:02 | jammed | 3/20 | 9% | |"),
      "P10 event 'jammed'"),

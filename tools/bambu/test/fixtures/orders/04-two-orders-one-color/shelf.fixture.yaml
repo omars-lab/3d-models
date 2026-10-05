@@ -1,0 +1,10 @@
+# FIXTURE: a shelf with every color fixture 1 and fixture 3 plan, full spools but one.
+spools:
+  - { id: ivory-1, line: PLA Matte, code: "11100", start_grams: 1000 }
+  - { id: ice-1, line: PLA Matte, code: "11601", start_grams: 1000 }
+  - { id: sky-1, line: PLA Matte, code: "11603", start_grams: 1000 }
+  - { id: marine-1, line: PLA Matte, code: "11600", start_grams: 1000 }
+  - { id: navy-end, line: PLA Matte, code: "11602", start_grams: 40, tag_percent: 4 }
+orders:
+  - { plan: ../01-ice-to-navy/expected-plan.json, status: open }
+  - { plan: ../03-two-beds/expected-plan.json, status: open }
