@@ -108,7 +108,20 @@ export async function sliceRecipe(recipePath: string, name: string, dir: string)
   if (!info) {
     throw new Error(`${name}: the slice made no plate (exit ${res.code ?? "timeout"}): ${res.stderr.trim().split("\n").slice(-3).join(" | ")}`);
   }
+  return sliceFacts(name, info);
+}
+
+/** A slice's facts from its slice_info, read by `sliceNumbers` as `bambu validate sliced` reads them,
+ *  so the minutes a plan or the cost view shows are the ones that command prints. */
+export function sliceFacts(name: string, info: string): SliceFacts {
   const n = sliceNumbers(info);
   if (n.predictionS === null) throw new Error(`${name}: the slice carries no time`);
-  return { recipe: name, beds: Math.max(1, n.beds.length), minutes: minutesOf(n.predictionS), grams: n.grams };
+  return {
+    recipe: name,
+    beds: Math.max(1, n.beds.length),
+    minutes: minutesOf(n.predictionS),
+    grams: n.grams,
+    layers: n.layers,
+    bed_minutes: n.beds.map((b) => (b.predictionS === null ? 0 : minutesOf(b.predictionS))),
+  };
 }

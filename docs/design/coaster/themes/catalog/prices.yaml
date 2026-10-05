@@ -1,0 +1,28 @@
+# What a kilogram of each Bambu filament line costs, in US dollars, as the Bambu US store showed it
+# on 2026-10-04. Copied from the recommended inputs of the consolidated pricing research
+# (docs/research/2026-10-04-coaster-pricing.md, "Recommended inputs"), where both passes and the
+# checker read each price on the store's own pages.
+#
+# `bambu plates by-color --costs` turns a plate's grams into dollars with these. A line not listed
+# here has no price, and its plates show grams with no dollars rather than a guessed price.
+#
+# Each line has up to four prices. A price left out was not read, so it is not filled in by
+# arithmetic: the cost view falls back to the spool price and says so.
+#   refill:     one refill bought on its own (no spool)
+#   spool:      one roll with its spool
+#   ten_refill: a refill when 10 or more rolls are bought at once (the 30% bulk tier)
+#   ten_spool:  a roll with spool at the 10-roll tier
+# The bulk tiers are 2 items 5%, 4 items 10%, 6 items 15%, 10 items 30%; the store calls the 30% tier a
+# sale with no end date, so these go stale. A refresh command is the next backlog item.
+
+read: 2026-10-04
+source: docs/research/2026-10-04-coaster-pricing.md
+
+lines:
+  PLA Basic:          { refill: 15.99, spool: 18.99, ten_refill: 11.19 }
+  PLA Matte:          { refill: 15.99, spool: 18.99, ten_refill: 11.19 }
+  # The refill is sold in four colors only: Gold 13405, Silver, Titan Gray, White.
+  PLA Silk+:          { refill: 15.99, spool: 18.99, ten_spool: 13.29 }
+  PLA Sparkle:        { spool: 24.99 }
+  PLA Silk Multi-Color: { spool: 24.99 }
+  PETG Basic:         { refill: 13.99, spool: 16.99, ten_refill: 9.79 }

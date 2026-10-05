@@ -28,6 +28,15 @@ export interface SliceNumbers {
   /** "slice": the slice's own used_g; "derived": from usedM and `density`. */
   gramsFrom: "slice" | "derived";
   density: number | null;
+  /** Layers on the tallest bed, from `layer_ranges` (the last range's end + 1); null when absent. */
+  layers: number | null;
+}
+
+/** How many layers the slice prints: its `layer_filament_list` ranges run from layer 0 to the last
+ *  layer, so the count is the largest end + 1 (sheets-04g: "0 21", 22 layers). */
+export function layersOf(sliceInfoRaw: string): number | null {
+  const ends = [...sliceInfoRaw.matchAll(/layer_ranges="([\d\s]+)"/g)].flatMap((m) => m[1]!.trim().split(/\s+/).map(Number));
+  return ends.length > 0 ? Math.max(...ends) + 1 : null;
 }
 
 /** Read the numbers out of a slice's Metadata/slice_info.config. `density` forces derived grams. */
@@ -38,11 +47,12 @@ export function sliceNumbers(sliceInfoRaw: string, density?: number): SliceNumbe
   const sum = (re: RegExp) => [...sliceInfoRaw.matchAll(re)].reduce((a, m) => a + Number(m[1]), 0);
   const usedM = sum(/used_m="(\d+(?:\.\d+)?)"/g);
   const usedG = sum(/used_g="(\d+(?:\.\d+)?)"/g);
+  const layers = layersOf(sliceInfoRaw);
   if (density === undefined && usedG > 0) {
-    return { beds, predictionS, usedM, grams: round2(usedG), gramsFrom: "slice", density: null };
+    return { beds, predictionS, usedM, grams: round2(usedG), gramsFrom: "slice", density: null, layers };
   }
   const d = density ?? DEFAULT_PLA_DENSITY;
-  return { beds, predictionS, usedM, grams: usedM > 0 ? round2(deriveGrams(usedM, d)) : 0, gramsFrom: "derived", density: d };
+  return { beds, predictionS, usedM, grams: usedM > 0 ? round2(deriveGrams(usedM, d)) : 0, gramsFrom: "derived", density: d, layers };
 }
 
 /** Sliced minutes, to one decimal: the unit the plan and its goldens use. */

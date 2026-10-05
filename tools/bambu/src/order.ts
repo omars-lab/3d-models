@@ -169,6 +169,9 @@ export interface SliceFacts {
   beds: number;
   minutes: number;
   grams: number;
+  /** Written since piece colors phase 2; older slices.json files lack them. */
+  layers?: number | null; // on the tallest bed, from the slice's layer ranges
+  bed_minutes?: number[]; // one per bed, so a spill shows its second bed apart
 }
 
 export interface PlanPlate {

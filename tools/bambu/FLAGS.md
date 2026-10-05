@@ -420,6 +420,12 @@ one plate recipe per color for a loose coaster's pieces (and its frame), each gr
 | `-o, --out-dir <dir>` | where the recipes go (default: build/plates/by-color/<name>) |
 | `--name <name>` | the recipes' name prefix (default: <construction>-by-color) |
 | `--json` | print the plates as JSON |
+| `--costs` | price each way of printing it (per color, whole set per color, one plate swapping) into costs.json and costs.html |
+| `--slice` | with --costs: slice every recipe that has no slice yet (minutes and grams from the slicer) |
+| `--slices <file>` | with --costs: a frozen slices.json to read instead of the one in the out dir |
+| `--prints <file>` | with --costs: timed prints (JSON) instead of the plate print logs |
+| `--prices <file>` | with --costs: the price file (default: docs/design/coaster/themes/catalog/prices.yaml) |
+| `--price-tier <tier>` | with --costs: refill, spool, ten_refill, ten_spool |
 
 ### `bambu order`
 
