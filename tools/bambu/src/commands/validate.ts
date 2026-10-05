@@ -3,7 +3,7 @@
 //   plate             : the 23-rung calibration expectation table (build/verify_machine_card.py)
 //   record [dir]      : the prints gate over a records dir (.claude/gates/prints_gate.py)
 //   sliced <3mf>      : gate the SLICED plate itself — realized brim/support/raft, object count,
-//                       header (printer/nozzle) — and report time / length / derived grams.
+//                       header (printer/nozzle) — and report time / length / grams.
 //
 // Every verb shells to the EXISTING authority rather than reimplementing it (robustness-over-ease:
 // one code path, never two that can disagree). bikar is the geometry engine and producer of record;
@@ -20,17 +20,13 @@ import { tmpdir } from "node:os";
 import { runWithTimeout, ev } from "../log.js";
 import { locateBikarCli, bikarDir } from "../backends/bikar.js";
 import { repoRoot, recordsDir } from "../paths.js";
-import { readMember, listMembers, parseBeds } from "../threemf.js";
+import { readMember, listMembers } from "../threemf.js";
+import { sliceNumbers, DEFAULT_PLA_DENSITY, FILAMENT_DIAMETER_MM } from "../slice-numbers.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 
 const PYTHON = process.env.PYTHON ?? "python3";
 
-// Filament geometry for the grams derivation. The X2D PLA profile ships filament_density=['0'], so
-// the headless slice leaves used_g=0.00 — grams must be DERIVED from a real density, and reported as
-// derived/attributed, never as a slice output. 1.75 mm is the X2D filament; 1.24 g/cm³ is a common
-// PLA density (attributed — a real spool's TDS is the grounded number; --density overrides).
-const FILAMENT_DIAMETER_MM = 1.75;
-const DEFAULT_PLA_DENSITY = 1.24;
+// Minutes, grams and beds come from slice-numbers.ts, the one reader `bambu order plan` uses too.
 
 async function runMesh(model: string): Promise<void> {
   const abs = resolve(model);
@@ -179,13 +175,6 @@ function fmtDuration(seconds: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m ${s % 60}s`;
 }
 
-/** Grams from filament length via a real density (the slice ships 0 — see the header constants). */
-function deriveGrams(usedM: number, density: number): number {
-  const area = Math.PI * (FILAMENT_DIAMETER_MM / 2) ** 2; // mm²
-  const volMm3 = usedM * 1000 * area;
-  return (volMm3 / 1000) * density; // cm³ × g/cm³
-}
-
 async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   const abs = resolve(threemf);
   if (!existsSync(abs)) {
@@ -247,7 +236,8 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   const sliceInfoRaw = (await readMember(abs, "Metadata/slice_info.config")) ?? "";
 
   // --- beds (slice_info.config <plate> entries; the plate_N.json count when it lists none) ---
-  const beds = parseBeds(sliceInfoRaw);
+  const nums = sliceNumbers(sliceInfoRaw, opts.density ? Number(opts.density) : undefined);
+  const { beds, predictionS, usedM, grams } = nums;
   const bedCount = beds.length > 0 ? beds.length : plateJsonNames.length;
   const maxBeds = opts.beds !== undefined ? Number(opts.beds) : 1;
   const skippedObjects = [...sliceInfoRaw.matchAll(/<object[^>]*\bname="([^"]*)"[^>]*\bskipped="true"/g)].map(
@@ -255,11 +245,7 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   );
 
   // --- estimates (slice_info.config) ---
-  const bedTimes = beds.map((b) => b.predictionS).filter((t): t is number => t !== null);
-  const predictionS = bedTimes.length > 0 ? bedTimes.reduce((a, t) => a + t, 0) : null;
-  const usedM = [...sliceInfoRaw.matchAll(/used_m="(\d+(?:\.\d+)?)"/g)].reduce((a, m) => a + Number(m[1]), 0);
-  const density = opts.density ? Number(opts.density) : DEFAULT_PLA_DENSITY;
-  const grams = usedM > 0 ? deriveGrams(usedM, density) : 0;
+  const timedBeds = beds.filter((b) => b.predictionS !== null).length;
 
   // --- realized toolpath features (gcode) ---
   const hist = new Map<string, number>();
@@ -292,12 +278,15 @@ async function runSliced(threemf: string, opts: SlicedOpts): Promise<void> {
   }
   if (predictionS !== null) {
     console.log(
-      `  time      : ${fmtDuration(predictionS)} (${predictionS}s predicted` + (bedTimes.length > 1 ? `, all beds` : "") + ")",
+      `  time      : ${fmtDuration(predictionS)} (${predictionS}s predicted` + (timedBeds > 1 ? `, all beds` : "") + ")",
     );
   }
   if (usedM > 0) {
     console.log(
-      `  filament  : ${usedM.toFixed(2)} m → ~${grams.toFixed(0)} g PLA [derived @ ${density} g/cm³, Ø${FILAMENT_DIAMETER_MM} mm; slice ships 0 g]`,
+      `  filament  : ${usedM.toFixed(2)} m → ${grams.toFixed(2)} g ` +
+        (nums.gramsFrom === "slice"
+          ? "[the slice's own, from its filament preset's density]"
+          : `[derived @ ${nums.density} g/cm³, Ø${FILAMENT_DIAMETER_MM} mm; the slice carries no grams or --density was given]`),
     );
   }
   if (warnClass) {
@@ -430,6 +419,6 @@ export function registerValidate(program: Command): void {
     .option("--machine <substr>", "fail unless printer_model contains this (e.g. X2D)")
     .option("--nozzle <d>", "fail unless every nozzle_diameter equals this (e.g. 0.4)")
     .option("--beds <n>", "the most beds the plate may use (default 1 — a spill onto a second bed fails)")
-    .option("--density <g/cm3>", `PLA density for the grams estimate (default ${DEFAULT_PLA_DENSITY})`)
+    .option("--density <g/cm3>", `derive grams at this density instead of reading the slice's own (default when the slice has none: ${DEFAULT_PLA_DENSITY})`)
     .action((threemf: string, opts: SlicedOpts) => runSliced(threemf, opts));
 }

@@ -1,0 +1,5 @@
+# FIXTURE
+phase: 1
+about: "5 × gBV in Ice to navy: five 112.5 mm frames fit a 256 × 256 mm bed by area but not by packing (two by two do), so the ivory plate takes two beds and is not sendable as one plate; six are refused before slicing, their area alone is bigger than the bed"
+# The wrong plan says one bed for the ivory plate and keeps every total.
+wrong_must_say: ": 1 beds, its slice has 2"

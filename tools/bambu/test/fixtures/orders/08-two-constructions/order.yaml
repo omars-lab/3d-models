@@ -1,0 +1,22 @@
+# FIXTURE: a made-up order, no customer (order-driven-lab-design §9.6, fixture 8)
+id: "FIXTURE-08"
+lines:
+  - count: 2
+    frame:
+      construction: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+      params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+      color: { line: PLA Basic, code: "10100" }
+    pieces:
+      construction: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+      params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+      colors:
+        Middle: { line: PLA Basic, code: "10101" }
+        Kite: { line: PLA Basic, code: "10101" }
+        Hex: { line: PLA Basic, code: "10101" }
+        Star: { line: PLA Basic, code: "10101" }
+        Outer: { line: PLA Basic, code: "10101" }
+  - count: 2                    # a frame with no loose pieces: a line with no `pieces:` is valid
+    frame:
+      construction: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+      params: { size: 90, strap: 3, height: 4, round: 1 }
+      color: { line: PLA Basic, code: "10100" }

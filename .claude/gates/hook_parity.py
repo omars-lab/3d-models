@@ -97,6 +97,13 @@ EXTRA = [
         "wired to a hook: the pictures are untracked build/ output, so no commit "
         "stages them, and the check skips itself before the first render.",
     ),
+    (
+        "make validate-orders",
+        "The order planner's tests and its fixture orders against their expected "
+        "plans. Not wired to a hook: the fixtures ask bikar for each pieces file's "
+        "groups, a sibling checkout a commit here cannot assume is present, and "
+        "the planner changes rarely.",
+    ),
 ]
 
 

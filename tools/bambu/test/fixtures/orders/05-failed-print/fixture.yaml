@@ -1,0 +1,5 @@
+# FIXTURE
+phase: 2
+about: "fixture 2's plate, closed by monitor rows that end in a failure partway: the spool loses the plate's full slice grams, and the order's grams stay held for the reprint"
+# The order is fixture 2's; the monitor rows, the shelf and the expected shelf land with the shelf
+# (order-driven-lab-design §9.6, phase 2).

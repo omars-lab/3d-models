@@ -485,11 +485,14 @@ lines:
    The price's warm-up setting (§9.3) is only the part a slice leaves out, so it is zero if a
    timed print shows the slice already includes it, and nothing is counted twice.
 
-**Grams depend on the filament.** The slicer reports filament length; `validate sliced` turns it
-into grams with a density it attributes to PLA (1.24 g/cm³), overridable with `--density`. sheets-04g
-was sliced with the PLA Basic profile. A Matte order is re-sliced with the Matte profile and
-weighed with Matte's density; the 108 g in §4 is a Basic number standing in for it. Minutes
-depend on the filament too: the Matte re-slice replaces both numbers.
+**Grams depend on the filament.** The slice writes its own grams, from its filament profile's
+density (PLA Basic 1.26 g/cm³, Matte 1.32), and `validate sliced` and the planner both read them
+from one place (`3d-models:tools/bambu/src/slice-numbers.ts:L5 "Grams: the slice writes its own"`).
+An older headless slice wrote 0 g because the X2D profile then carried no density; for those, and
+when `--density` is given, grams are worked out from the filament length and labeled derived, never
+passed off as the slice's. Each plate is sliced with its own color's profile, so a Matte order's
+minutes and grams are Matte numbers: phase 1's real slices of §4's order give 5 plates, 351 sliced
+minutes and 117 g, where §4's Basic stand-ins said 344 and 108.
 
 ### 9.2 The shelf: reserving, buying, closing a print
 
@@ -628,13 +631,18 @@ out right, and the pages are checked against the same numbers in a real browser.
 
 | File | What it holds | Checked from phase |
 |---|---|---|
+| `fixture.yaml` | The fixture's phase, its one-line about, and `wrong_must_say`: the words the check must give when it refuses the wrong plan | 1 |
 | `order.yaml` | The order, in the format of §9.1 | 1 |
-| `slices.json` | One frozen slice[^frozen] per plate the order should make: its recipe's hash, minutes, grams and beds | 1 |
 | `expected-plan.json` | The golden file[^golden] for the plan: each plate by color, the pieces on it by construction and group, its beds, minutes and grams, and the ratio used or "floor" | 1 |
 | `wrong-plan.json` | The fixture's hard case, written out as a plan that is wrong in exactly that way. The check must reject it | 1 |
 | `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf and the monitor rows that close prints; then on hand, held, available and the buy list | 2 |
 | `settings.fixture.yaml`, `expected-price.json` | The twelve settings of §9.3 with made-up values, and the cost lines, break-even and suggested price they give, or "no price" with the empty setting named | 3 |
 | `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings | 3 |
+
+Two files sit beside the folders, shared by all of them, because two fixtures can print the same
+plate: `slices.json`, one frozen slice[^frozen] per recipe some fixture plans (its hash, minutes,
+grams and beds), and `prints.json`, the timed prints the time correction rests on, frozen as
+`bambu order timed --json` printed them on 2026-10-04, so a new print does not move a golden.
 
 **Made-up settings stay made up.** Each `settings.fixture.yaml` says FIXTURE in its first line and
 beside every value. The values are picked so the sums can be checked by hand (whole numbers,
@@ -645,9 +653,10 @@ real price can never slip into a public test.
 `slices.json` instead of running the slicer. So they need no Bambu Studio, no printer and no
 network. Each frozen slice carries the hash[^hash] of the recipe it came from. If the planner writes a
 different recipe, the hash no longer matches and the fixture fails with "re-freeze", so a stale
-slice cannot pass. In phase 0, fixture 1's frozen slices are §4's per-color estimates, marked
-"stand-in". Phase 1 replaces each with the real slice of the recipe it writes. That is the one
-golden change phase 1 may make without a reason line in its pull request. The live check, that a recipe's
+slice cannot pass. Phase 1 shipped the planner and the real slices together, so no stand-in was
+ever frozen. `bambu order fixtures --slice` slices each recipe `slices.json` lacks and rewrites it
+with only the slices some fixture still plans, so an edited fixture is re-frozen by the tool, not by
+hand. The live check, that a recipe's
 numbers equal `bambu validate sliced` on it (§9.5), stays separate. It runs on the flagship
 order only, on a machine with the slicer, because it is slow and needs Bambu Studio.
 
@@ -672,9 +681,9 @@ browser[^headless]; hub[^hub].
 
 | # | Fixture | The order | The claim it checks | The hard case it covers |
 |---|---|---|---|---|
-| 1 | Ice to navy, 4 | §4's order: 4 × gBV in Ice to navy | §4 plate by plate: 5 plates, the piece counts of §9.5, 344 minutes, 108 g (Basic stand-ins), 5 spools to buy | Star and Outer share one color, so two groups share one plate. A plan can get every total right while one kite sits on the wrong plate |
+| 1 | Ice to navy, 4 | §4's order: 4 × gBV in Ice to navy | §4 plate by plate: 5 plates, the piece counts of §9.5, 351 sliced minutes and 117 g from the Matte slices, every plate "floor" (no Matte print is timed), 5 spools to buy | Star and Outer share one color, so two groups share one plate. A plan can get every total right while one kite sits on the wrong plate |
 | 2 | One color | 1 × gBV, the frame and every group in one color | One plate, the frame riding with its pieces, as [sheets-04g](../plates/sheets-04g.yaml) printed it: 86 sliced minutes, 27 g | One plate per group would make six plates with the same total grams. Only the plate count, and so the warm-ups, shows it |
-| 3 | A color over two beds | 6 × gBV in Ice to navy | The frame color takes two beds, and the plan says two beds and two warm-ups for it | The totals stay right while the plan says one bed. The golden's bed count is worked by hand from the frame's footprint on a 256 × 256 mm bed, before the packer runs |
+| 3 | A color over two beds | 5 × gBV in Ice to navy | The frame color takes two beds, and the plan says two beds, two warm-ups and not sendable for it | The totals stay right while the plan says one bed. Five 112.5 mm frames fit a 256 × 256 mm bed by area (about 60,270 of 65,536 mm²) but not by packing, so the packer spills them. Six are refused before slicing, because their area alone (72,321 mm²) is bigger than the bed: splitting such a color across plates is later work, and phase 1 says so rather than guess |
 | 4 | Two orders, one color | Two open orders that both need the same color; a shelf with one part spool that covers either order alone, not both | Held is the sum of both orders, available goes below zero, and the buy list asks for one spool | Checking each order against what is on hand says both fit. Only held, summed across orders, shows the shortfall |
 | 5 | A failed print | Fixture 2's plate, closed by monitor rows that end in a failure partway | The spool loses the plate's full slice grams (§9.2); the order is still open, so its grams stay held for the reprint | Counting only finished prints leaves the spool 27 g too full |
 | 6 | One setting empty | Fixture 1's order; every made-up setting filled except packaging | No cost total, no break-even, no price; the page names packaging as the empty one; the lines that do not need it still show | Treating empty as zero gives a price a little lower than fixture 1's. It looks right, so only "no price" in the golden catches it |
@@ -727,19 +736,21 @@ missing from the page also fails. A check that reads only what the page shows ca
 page leaves out.
 
 **The make target.** `make validate-orders` runs in this repo, and `make validate` calls it. It
-runs the plan checks on the frozen slices, with no slicer, printer or network. The shelf, price
-and page checks run where that code lives. If call 1 picks the hub, that is a hub target of the
-same name, reading the fixture folders from this repo at a pinned commit. Before a phase lands,
-the runner lists its fixtures as "waiting on phase N", with a count. Once that phase's command
-exists, a fixture still marked waiting fails. So a fixture cannot stay waiting by being
-forgotten.
+runs the planner's unit tests, then the plan checks on the frozen slices, with no slicer, printer
+or network; it does ask the local bikar checkout for each pieces file's groups, so it needs
+`BIKAR_DIR`. The shelf, price and page checks run where that code lives. If call 1 picks the hub,
+that is a hub target of the same name, reading the fixture folders from this repo at a pinned
+commit. Before a phase lands, the runner lists its fixtures as "waiting on phase N". The runner
+holds one number, the last phase shipped (`3d-models:tools/bambu/src/commands/order.ts:L138 "const SHIPPED_PHASE = 1;"`),
+and raising it when a phase lands runs that phase's fixtures. So a fixture cannot stay waiting by
+being forgotten.
 
 **Which phase builds which part.** The suite comes first, as the test each phase must pass:
 
 | Phase | What it adds to the suite |
 |---|---|
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
-| 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8; the stand-in slices become real ones |
+| 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
 | 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7 |
 | 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7 |
 | 4, the pages | The browser run, with its screenshots, over all eight |
@@ -1100,6 +1111,6 @@ The facts above, pinned to the lines that hold them.
 - The Coaster Lab keeps one design draft in browser storage: `bikar:packages/lab/src/custom-state.ts:L106 "COASTER_DRAFT_SLOT"`.
 - The X2D has not been seen to report grams used (unconfirmed): `3d-models:tools/bambu/src/actuals.ts:L46 "[X2D-UNCONFIRMED] consumed grams"`.
 - A spool with no tag reports no percent: `3d-models:tools/bambu/src/commands/filament.ts:L48 "remain unknown (no RFID)"`.
-- Grams are worked out with an attributed PLA density: `3d-models:tools/bambu/src/commands/validate.ts:L33 "DEFAULT_PLA_DENSITY = 1.24"`.
+- A slice that wrote no grams has them worked out with an attributed PLA density: `3d-models:tools/bambu/src/slice-numbers.ts:L14 "DEFAULT_PLA_DENSITY = 1.24"`.
 - The X2D bed is 256 × 256 mm: `3d-models:tools/bambu/src/commands/compose.ts:L279 "X2D single-nozzle build area 256×256 mm"`.
 - The hub's next step is estimates (private repo, read 2026-10-04): its README, "Next: estimates (P1's third surface)".

@@ -1,0 +1,34 @@
+[
+  {
+    "plate": "phones-01",
+    "started": "2026-10-04 12:53",
+    "watched": 62,
+    "sliced": 22,
+    "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+    "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle;Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  },
+  {
+    "plate": "phones-02",
+    "started": "2026-10-04 14:40",
+    "watched": 13,
+    "sliced": 12,
+    "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+    "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  },
+  {
+    "plate": "sheets-04c",
+    "started": "2026-10-04 00:32",
+    "watched": 48,
+    "sliced": 42,
+    "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+    "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  },
+  {
+    "plate": "sheets-04g",
+    "started": "2026-10-04 18:37",
+    "watched": 97,
+    "sliced": 86,
+    "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+    "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  }
+]

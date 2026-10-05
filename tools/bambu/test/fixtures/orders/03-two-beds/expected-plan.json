@@ -1,0 +1,234 @@
+{
+  "order": "FIXTURE-03",
+  "plates": [
+    {
+      "name": "fixture-03-11100",
+      "color": {
+        "line": "PLA Matte",
+        "code": "11100",
+        "hex": "#ffffff",
+        "name": "Ivory White",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+      "recipe_hash": "a74b601a4857",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "round": 1.25
+          },
+          "piece": null,
+          "count": 5
+        }
+      ],
+      "source": "frozen",
+      "beds": 2,
+      "sliced_minutes": 268.9,
+      "grams": 86.21,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Matte @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": false,
+      "why_not": "spills onto 2 beds: a send prints bed 1 only, so split it before sending"
+    },
+    {
+      "name": "fixture-03-11601",
+      "color": {
+        "line": "PLA Matte",
+        "code": "11601",
+        "hex": "#a3d8e1",
+        "name": "Ice Blue",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+      "recipe_hash": "5078405e3e51",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Middle",
+          "count": 5
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 13.2,
+      "grams": 3.93,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Matte @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": true,
+      "why_not": null
+    },
+    {
+      "name": "fixture-03-11603",
+      "color": {
+        "line": "PLA Matte",
+        "code": "11603",
+        "hex": "#56b7e6",
+        "name": "Sky Blue",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+      "recipe_hash": "863b2eacddd2",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Kite",
+          "count": 5
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 20.8,
+      "grams": 3.26,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Matte @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": true,
+      "why_not": null
+    },
+    {
+      "name": "fixture-03-11600",
+      "color": {
+        "line": "PLA Matte",
+        "code": "11600",
+        "hex": "#0078bf",
+        "name": "Marine Blue",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+      "recipe_hash": "ec484a406d77",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Hex",
+          "count": 5
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 51.9,
+      "grams": 22.69,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Matte @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": true,
+      "why_not": null
+    },
+    {
+      "name": "fixture-03-11602",
+      "color": {
+        "line": "PLA Matte",
+        "code": "11602",
+        "hex": "#042f56",
+        "name": "Dark Blue",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+      "recipe_hash": "1ec4b03d6dd1",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Star",
+          "count": 5
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Outer",
+          "count": 5
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 84.6,
+      "grams": 30.59,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Matte @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": true,
+      "why_not": null
+    }
+  ],
+  "total": {
+    "plates": 5,
+    "beds": 6,
+    "warm_ups": 6,
+    "sliced_minutes": 439.4,
+    "minutes": null,
+    "floor": true,
+    "grams": 146.68
+  },
+  "notes": [
+    "6 warm-ups, not timed: whether a slice's minutes include its warm-up is not known",
+    "floor: a plate printed with a profile no timed print used shows its sliced minutes only"
+  ]
+}
