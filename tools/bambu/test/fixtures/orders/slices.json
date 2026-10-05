@@ -1,0 +1,92 @@
+{
+  "0f5521749a10": {
+    "recipe": "fixture-01-11600",
+    "beds": 1,
+    "minutes": 42.6,
+    "grams": 18.16
+  },
+  "1398714abba0": {
+    "recipe": "fixture-02-10100",
+    "beds": 1,
+    "minutes": 86.8,
+    "grams": 27.28
+  },
+  "1ec4b03d6dd1": {
+    "recipe": "fixture-03-11602",
+    "beds": 1,
+    "minutes": 84.6,
+    "grams": 30.59
+  },
+  "423e2591cc74": {
+    "recipe": "fixture-08-10100",
+    "beds": 1,
+    "minutes": 204.9,
+    "grams": 59.25
+  },
+  "5078405e3e51": {
+    "recipe": "fixture-03-11601",
+    "beds": 1,
+    "minutes": 13.2,
+    "grams": 3.93
+  },
+  "53d684ba7eb1": {
+    "recipe": "fixture-07-10101",
+    "beds": 1,
+    "minutes": 80.3,
+    "grams": 25.81
+  },
+  "640d04cc803b": {
+    "recipe": "fixture-01-11601",
+    "beds": 1,
+    "minutes": 11.6,
+    "grams": 3.14
+  },
+  "863b2eacddd2": {
+    "recipe": "fixture-03-11603",
+    "beds": 1,
+    "minutes": 20.8,
+    "grams": 3.26
+  },
+  "913b359b3139": {
+    "recipe": "fixture-01-11603",
+    "beds": 1,
+    "minutes": 17.7,
+    "grams": 2.61
+  },
+  "9779f68d96f6": {
+    "recipe": "fixture-08-10101",
+    "beds": 1,
+    "minutes": 64.9,
+    "grams": 22.49
+  },
+  "a74b601a4857": {
+    "recipe": "fixture-03-11100",
+    "beds": 2,
+    "minutes": 268.9,
+    "grams": 86.21
+  },
+  "b89b906be8a2": {
+    "recipe": "fixture-01-11602",
+    "beds": 1,
+    "minutes": 68.8,
+    "grams": 24.47
+  },
+  "c371495377ce": {
+    "recipe": "fixture-01-11100",
+    "beds": 1,
+    "minutes": 210.4,
+    "grams": 68.88
+  },
+  "da72cb4ec711": {
+    "recipe": "fixture-07-13401",
+    "beds": 1,
+    "minutes": 11.9,
+    "grams": 1.54
+  },
+  "ec484a406d77": {
+    "recipe": "fixture-03-11600",
+    "beds": 1,
+    "minutes": 51.9,
+    "grams": 22.69
+  }
+}

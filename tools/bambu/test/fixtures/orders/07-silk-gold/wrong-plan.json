@@ -1,0 +1,142 @@
+{
+  "order": "FIXTURE-07",
+  "plates": [
+    {
+      "name": "fixture-07-10101",
+      "color": {
+        "line": "PLA Basic",
+        "code": "10101",
+        "hex": "#000000",
+        "name": "Black",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+      "recipe_hash": "53d684ba7eb1",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "round": 1.25
+          },
+          "piece": null,
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Middle",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Kite",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Hex",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Outer",
+          "count": 1
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 80.3,
+      "grams": 25.81,
+      "ratio": {
+        "value": 1.13,
+        "prints": 3
+      },
+      "minutes": 91,
+      "floor": false,
+      "nearest_unused": null,
+      "sendable": true,
+      "why_not": null
+    },
+    {
+      "name": "fixture-07-13401",
+      "color": {
+        "line": "PLA Silk",
+        "code": "13405",
+        "hex": "#f4a925",
+        "name": "Gold",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Silk @BBL X2D 0.4 nozzle",
+      "recipe_hash": "da72cb4ec711",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Star",
+          "count": 1
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 11.9,
+      "grams": 1.54,
+      "ratio": null,
+      "minutes": null,
+      "floor": true,
+      "nearest_unused": {
+        "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "value": 1.13,
+        "prints": 3,
+        "why": "printed with Bambu PLA Basic @BBL X2D 0.4 nozzle, not Bambu PLA Silk @BBL X2D 0.4 nozzle: another filament prints at its own speeds"
+      },
+      "sendable": true,
+      "why_not": null
+    }
+  ],
+  "total": {
+    "plates": 2,
+    "beds": 2,
+    "warm_ups": 2,
+    "sliced_minutes": 92.2,
+    "minutes": null,
+    "floor": true,
+    "grams": 27.35
+  },
+  "notes": [
+    "2 warm-ups, not timed: whether a slice's minutes include its warm-up is not known",
+    "floor: a plate printed with a profile no timed print used shows its sliced minutes only"
+  ]
+}

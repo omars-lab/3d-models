@@ -1,6 +1,6 @@
 // The `bambu` command tree, built apart from the entrypoint so a test can walk the real CLI.
 //
-// Command groups (the help IS the docs): setup, status, slice, print, validate. Status rides our
+// Command groups (the help IS the docs): setup, status, slice, print, validate, plates, order. Status rides our
 // own first-party MQTT backend (D-055); slicing shells to the BambuStudio CLI; the remaining
 // control/camera verbs still route through the griches MCP until they are ported. See
 // .claude/skills/setup-bambu-x2d/SKILL.md for when/why and .claude/plans/binary-tickling-kay.md
@@ -18,6 +18,8 @@ import { registerPrint } from "./commands/print.js";
 import { registerStorage } from "./commands/storage.js";
 import { registerBed } from "./commands/bed.js";
 import { registerValidate } from "./commands/validate.js";
+import { registerPlates } from "./commands/plates.js";
+import { registerOrder } from "./commands/order.js";
 import { dumpFlags } from "./flags.js";
 
 export function buildProgram(): Command {
@@ -50,6 +52,8 @@ export function buildProgram(): Command {
   registerStorage(program);
   registerBed(program);
   registerValidate(program);
+  registerPlates(program);
+  registerOrder(program);
 
   // The CLI describes its own flag surface (see src/flags.ts). Hidden: it is a maintenance verb for the
   // gate/make target, not a user-facing one, so it stays out of --help. `--write` regenerates the

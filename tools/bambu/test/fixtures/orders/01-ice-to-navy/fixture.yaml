@@ -1,0 +1,6 @@
+# FIXTURE
+phase: 1
+about: "§4's order, 4 × gBV in Ice to navy: 5 plates, Star and Outer on one; Matte has no timed print, so floor"
+# The wrong plan moves one coaster's kite ring (10 kites) from the sky blue plate onto the marine
+# blue plate and keeps every total. Only a check of the pieces on each plate refuses it.
+wrong_must_say: "Kite: the order wants"

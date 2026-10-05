@@ -1,0 +1,17 @@
+# FIXTURE: a made-up order, no customer (order-driven-lab-design §9.6, fixture 1, §4's order)
+id: "FIXTURE-01"
+lines:
+  - count: 4
+    frame:
+      construction: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+      params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+      color: { line: PLA Matte, code: "11100" }
+    pieces:
+      construction: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+      params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+      colors:
+        Middle: { line: PLA Matte, code: "11601" }
+        Kite: { line: PLA Matte, code: "11603" }
+        Hex: { line: PLA Matte, code: "11600" }
+        Star: { line: PLA Matte, code: "11602" }
+        Outer: { line: PLA Matte, code: "11602" }

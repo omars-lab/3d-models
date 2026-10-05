@@ -33,7 +33,9 @@ The router (`src/backends/router.ts`) picks the cheapest capable backend, GUI la
 | `slice` | `plate` (`--dry-run`, `--settings`/`--filament`, raw args after `--`), `open`, `compose` (`<plate.yaml>` → one sliced `.3mf`: renders each bikar item, bed-fit pre-check, writes `objects[].iteration`) | BambuStudio CLI + bikar |
 | `print` | `send` (`--record`, `--dry-run`, `--yes`; needs a live page approval), `list` (`--shipped`/`--drafts`/`--json`), `pause`, `resume`, `stop` | griches MCP + prints gate |
 | `storage` | `show` (card in, free space), `list [dir]` (files on the card), `rm <names…>` (`--yes`; only `.3mf` plates at the card's top, never the file printing) | first-party MQTT (show) + FTPS (list, rm) |
-| `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate) | bikar / prints gate |
+| `validate` | `mesh` (bikar `--check`), `plate` (calibration §7), `record` (prints gate), `sliced` (a slice's beds, minutes, grams) | bikar / prints gate |
+| `plates` | `by-color <pieces.bkr>` — one plate recipe per color from a loose-pieces file and, with `--frame`, its coaster (infill-color-ux §4.5) | bikar `bands` |
+| `order` | `plan <order.yaml>` (one recipe per color, beds, minutes corrected by timed prints, grams; `--slice` to slice them), `timed` (the prints the correction rests on), `fixtures` (the regression suite; `--slice` re-freezes its slices, `--write-expected` rewrites its goldens) — never sends | bikar + BambuStudio CLI + print logs |
 
 `bambu <group> <verb> --help` everywhere — the help *is* the documentation.
 

@@ -1,0 +1,5 @@
+# FIXTURE
+phase: 3
+about: "fixture 1's order with every made-up setting filled but packaging: no cost total, no break-even, no price, and packaging named as the empty one"
+# The order is fixture 1's; the made-up settings and the expected price land with pricing
+# (order-driven-lab-design §9.6, phase 3).

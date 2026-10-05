@@ -1,0 +1,5 @@
+# FIXTURE
+phase: 1
+about: "2 × gBV and 2 × the GimTvN9hw4U minimal coaster, every frame in Jade White: that plate holds 4 frames, 2 and 2 by construction"
+# The wrong plan counts 4 gBV frames and no Gim ones, which a planner keyed on "frame" alone would.
+wrong_must_say: "GimTvN9hw4U-minimal-coaster.bkr"

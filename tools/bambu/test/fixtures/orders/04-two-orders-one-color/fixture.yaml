@@ -1,0 +1,5 @@
+# FIXTURE
+phase: 2
+about: "two open orders that both need dark blue, and one part spool that covers either alone but not both: held is their sum, available goes below zero, the buy list asks for one spool"
+# Its orders are fixture 1's and fixture 2's shapes; the shelf, its orders and the expected shelf
+# land with the shelf (order-driven-lab-design §9.6, phase 2).

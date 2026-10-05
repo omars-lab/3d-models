@@ -954,3 +954,14 @@ validate-color-themes:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py check --all --quiet
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py check --all
+
+# The order planner (docs/design/coaster/order-driven-lab-design.md §9.6): its unit tests, one
+# of which runs iterations.py's hash_text beside the TypeScript one (so PYTHON must have PyYAML),
+# then every fixture order planned from its frozen slices and checked against its expected plan,
+# with its wrong plan refused for the reason the fixture names. It asks bikar for each pieces
+# file's groups, so it needs BIKAR_DIR; it never slices (`bambu order fixtures --slice` does).
+.PHONY: validate-orders
+validate-orders:
+	@[ -d ${ROOT_DIR}/tools/bambu/node_modules ] || npm ci --silent --prefix ${ROOT_DIR}/tools/bambu
+	PYTHON=$(PYTHON) npm --prefix $(BAMBU_DIR) run --silent test -- src/order.test.ts src/by-color.test.ts src/timed-prints.test.ts src/recipe-hash.test.ts
+	cd ${ROOT_DIR} && BIKAR_DIR=$(BIKAR_DIR) tools/bambu/bin/bambu order fixtures

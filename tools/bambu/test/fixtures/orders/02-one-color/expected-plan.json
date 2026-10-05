@@ -1,0 +1,111 @@
+{
+  "order": "FIXTURE-02",
+  "plates": [
+    {
+      "name": "fixture-02-10100",
+      "color": {
+        "line": "PLA Basic",
+        "code": "10100",
+        "hex": "#ffffff",
+        "name": "Jade White",
+        "note": null
+      },
+      "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
+      "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+      "recipe_hash": "1398714abba0",
+      "items": [
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "round": 1.25
+          },
+          "piece": null,
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Middle",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Kite",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Hex",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Star",
+          "count": 1
+        },
+        {
+          "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
+          "params": {
+            "size": 112.5,
+            "strap": 3.75,
+            "height": 4.4,
+            "gap": 0
+          },
+          "piece": "Outer",
+          "count": 1
+        }
+      ],
+      "source": "frozen",
+      "beds": 1,
+      "sliced_minutes": 86.8,
+      "grams": 27.28,
+      "ratio": {
+        "value": 1.13,
+        "prints": 3
+      },
+      "minutes": 98,
+      "floor": false,
+      "nearest_unused": null,
+      "sendable": true,
+      "why_not": null
+    }
+  ],
+  "total": {
+    "plates": 1,
+    "beds": 1,
+    "warm_ups": 1,
+    "sliced_minutes": 86.8,
+    "minutes": 98,
+    "floor": false,
+    "grams": 27.28
+  },
+  "notes": [
+    "1 warm-ups, not timed: whether a slice's minutes include its warm-up is not known"
+  ]
+}

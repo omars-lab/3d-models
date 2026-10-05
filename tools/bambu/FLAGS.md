@@ -395,4 +395,66 @@ gate a sliced .3mf: realized brim/support/raft, object count, beds, header; repo
 | `--machine <substr>` | fail unless printer_model contains this (e.g. X2D) |
 | `--nozzle <d>` | fail unless every nozzle_diameter equals this (e.g. 0.4) |
 | `--beds <n>` | the most beds the plate may use (default 1 — a spill onto a second bed fails) |
-| `--density <g/cm3>` | PLA density for the grams estimate (default 1.24) |
+| `--density <g/cm3>` | derive grams at this density instead of reading the slice's own (default when the slice has none: 1.24) |
+
+### `bambu plates`
+
+write plate recipes from a construction (piece colors, infill-color-ux-design §4.5)
+
+### `bambu plates by-color`
+
+one plate recipe per color for a loose coaster's pieces (and its frame), each group in its palette color or --color's
+
+| Argument | Required | Description |
+|---|---|---|
+| `pieces.bkr` | yes |  |
+
+| Flag | Description |
+|---|---|
+| `--param <name=value>` | a param of the pieces construction (repeatable) |
+| `--color <Name=#rrggbb>` | print this group in this color instead of its palette's (repeatable) |
+| `--frame <coaster.bkr>` | the coaster the pieces drop into, printed too |
+| `--frame-param <name=value>` | a param of the frame construction (repeatable) |
+| `--frame-color <#rrggbb>` | the frame's color (required with --frame) |
+| `--count <n>` | how many coasters' worth |
+| `-o, --out-dir <dir>` | where the recipes go (default: build/plates/by-color/<name>) |
+| `--name <name>` | the recipes' name prefix (default: <construction>-by-color) |
+| `--json` | print the plates as JSON |
+
+### `bambu order`
+
+plan an order: plates by color, beds, minutes, grams (order-driven-lab-design §9)
+
+### `bambu order plan`
+
+write one plate recipe per color for an order, with each plate's beds, minutes and grams and the order total
+
+| Argument | Required | Description |
+|---|---|---|
+| `order.yaml` | yes |  |
+
+| Flag | Description |
+|---|---|
+| `-o, --out-dir <dir>` | where the recipes and plan.json go (default: build/orders/<order id>) |
+| `--slice` | slice each recipe now (bambu slice compose) and write slices.json beside the plan |
+| `--slices <file>` | read slices frozen earlier (a slices.json, keyed by recipe hash) |
+| `--prints <file>` | read timed prints frozen earlier (`bambu order timed --json`) instead of the print logs |
+| `--json` | print the plan as JSON |
+
+### `bambu order timed`
+
+the prints watched from start to finish, against their sliced minutes: what a plan's correction rests on
+
+| Flag | Description |
+|---|---|
+| `--json` | print the runs as JSON (the shape --prints reads) |
+
+### `bambu order fixtures`
+
+run the order regression suite: every fixture planned, checked, and its wrong plan refused
+
+| Flag | Description |
+|---|---|
+| `--dir <dir>` | the fixtures folder (default: tools/bambu/test/fixtures/orders) |
+| `--write-expected` | overwrite each expected-plan.json with today's plan (then check every one by hand) |
+| `--slice` | slice each fixture recipe slices.json lacks, and rewrite slices.json with only the slices in use |

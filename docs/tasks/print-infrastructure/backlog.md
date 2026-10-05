@@ -12,16 +12,16 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **`bambu order plan <order.yaml>`: an order in, plates, minutes, grams and a shortfall out.**
-   Phase 1 of [the order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work):
-   count an order's pieces by color, write one recipe per color through the `plates by-color`
-   writer (piece colors phase 1, built together so recipes keep one writer), slice each, and
-   correct the minutes by the measured ratio of real to sliced time. Today every one of those
-   numbers is worked out by hand for each order. Phases 2–4 (the shelf, the price, the hub
-   pages) follow it; pricing writes its formula with named settings, looked-up ones referenced to
-   the [consolidated pricing research](../../research/2026-10-04-coaster-pricing.md), and waits on all
-   twelve settings: four looked up to confirm, five from Omar's own records and three his to
-   choose. Session task board, 2026-10-04.
+1. **Orders phase 2: the shelf — spools, what an order holds, the buy list, closing a print.**
+   Phase 2 of [the order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work):
+   `bambu order plan` (phase 1) now gives an order's plates, minutes and grams, but not what is
+   short on the shelf. Phase 2 adds the spools on hand, holds grams for an open order, writes the
+   buy list, and takes a print's grams off the shelf when it is closed; fixtures 04 and 05 wait
+   for it in `make validate-orders` (raise `SHIPPED_PHASE` when it lands). Phases 3–4 (the price,
+   the hub pages) follow; pricing writes its formula with named settings, looked-up ones
+   referenced to the [consolidated pricing research](../../research/2026-10-04-coaster-pricing.md), and
+   waits on all twelve settings: four looked up to confirm, five from Omar's own records and three
+   his to choose. Session task board, 2026-10-04.
 2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
