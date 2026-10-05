@@ -60,13 +60,13 @@ plates.*
 *The five groups of the gBV coaster, each in a stand-in color so you can tell them apart. This is
 what "per group" means: all ten kites take one color.*
 
-### 1. How the Lab prints a colored coaster
+### 1. How the Lab prints a colored coaster ^qe93p4
 
-| Option | Pros | Cons | What it leads to |
-|---|---|---|---|
-| **One plate per color** (my pick) | No swaps, no leftovers, about the time of one plate; fits the 2026-10-04 rule | Three plates, three yeses and three sends for one coaster; the start-up time per plate is not measured | Already built this way: one recipe per color, each with its own plate page |
-| The whole set, once per color | No new recipe: sheets-04g plus a color at the send; the spares make more coasters in any mix | Three times the time and plastic for one coaster; two frames and 82 pieces left over | The by-color command shrinks to a cost table |
-| One plate, many colors, with its cost shown | One send; nothing to sort by hand | The route you dropped: about 70 extra minutes and a prime tower on this coaster | Reopens the 2026-10-04 decision; a hint for colors bleeding into each other has to be built |
+| Option                                      | Pros                                                                                         | Cons                                                                                                   | What it leads to                                                                            |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| **One plate per color** (my pick)           | No swaps, no leftovers, about the time of one plate; fits the 2026-10-04 rule                | Three plates, three yeses and three sends for one coaster; the start-up time per plate is not measured | Already built this way: one recipe per color, each with its own plate page                  |
+| The whole set, once per color               | No new recipe: sheets-04g plus a color at the send; the spares make more coasters in any mix | Three times the time and plastic for one coaster; two frames and 82 pieces left over                   | The by-color command shrinks to a cost table                                                |
+| One plate, many colors, with its cost shown | One send; nothing to sort by hand                                                            | The route you dropped: about 70 extra minutes and a prime tower on this coaster                        | Reopens the 2026-10-04 decision; a hint for colors bleeding into each other has to be built |
 
 **Your answer:**
 
@@ -105,7 +105,7 @@ what "per group" means: all ten kites take one color.*
 - [ ] Always in the recipe
 - Notes:
 
-### 4. How the Lab learns which colors are loaded
+### 4. How the Lab learns which colors are loaded ^t64jgy
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
@@ -266,7 +266,7 @@ drop out of the half you turn over.*
 - [ ] Taller pieces
 - Notes:
 
-## Orders and pricing (calls 12 to 16)
+## Orders and pricing (calls 12 to 16) ^haqcb2
 
 **In short.** You type in an order (which coaster, how many, which colors), and the tools work out
 the plates, the time, the filament to buy and a price. Planning an order is built
@@ -296,7 +296,7 @@ standing in until a Matte plate is sliced.*
 - [ ] A spreadsheet
 - Notes:
 
-### 13. How the price is set
+### 13. How the price is set ^a35dir
 
 ![The Price tab: twelve settings, all empty, the cost built up line by line, and what similar coasters are listed at](2026-10-05-open-calls-media/pricing.png)
 
@@ -326,12 +326,14 @@ prices, not sales.*
 
 **Your answer:**
 
-- [ ] Never in this repo
+- [x] Never in this repo
 - [ ] In this repo, with a code
 - [ ] In a private repo
-- Notes:
+- Notes: ^see2sq
 
-### 15. How to try out pricing ideas
+**Decided 2026-10-05:** never in this repo; the order files live in an iCloud folder → [D-101](../decisions-log.md#d-101--orders-never-go-in-this-repo-they-live-in-an-icloud-folder)
+
+### 15. How to try out pricing ideas ^rzw30d
 
 ![The Scenarios view: seven ways to set the price side by side, each waiting on its inputs](2026-10-05-open-calls-media/price-scenarios.png)
 
@@ -354,6 +356,8 @@ opinion.
 - [ ] A pricing skill instead
 - [ ] No view
 - Notes:
+
+**Decided 2026-10-05:** from your comment, the view plus simulated buyers, with charts and costs at 1, 5, 10 and 100 → [D-104](../decisions-log.md#d-104--pricing-is-tried-on-simulated-buyers-and-on-a-charted-view-built-for-real-orders-later)
 
 ### 16. A price below break-even
 
@@ -393,9 +397,11 @@ These are the design's numbers from Shopify's pages.
 
 **Your answer:**
 
-- [ ] Basic, settled by the test
+- [x] Basic, settled by the test
 - [ ] Grow
 - Notes:
+
+**Decided 2026-10-05:** Basic, settled by the test → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 18. How a custom order gets its yes to print
 
@@ -412,9 +418,11 @@ of this call. It also sits beside call 1, which is about the Lab's own default.
 **Your answer:**
 
 - [ ] One plate per group, color at the send
-- [ ] One plate per color
+- [x] One plate per color
 - [ ] Each custom order a new experiment
 - Notes:
+
+**Decided 2026-10-05:** one plate per color → [D-103](../decisions-log.md#d-103--a-custom-order-prints-one-plate-per-color-so-each-new-coloring-gets-its-own-yes)
 
 ### 19. Which options carry the price
 
@@ -429,11 +437,13 @@ Shopify allows three options per product.
 
 **Your answer:**
 
-- [ ] Finish, set size, colors
+- [x] Finish, set size, colors
 - [ ] Size and set size
 - [ ] Finish, set size, theme or custom
 - [ ] One price, custom by quote
 - Notes:
+
+**Decided 2026-10-05:** finish, set size, colors → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 20. Etsy, now or later
 
@@ -444,9 +454,11 @@ Shopify allows three options per product.
 
 **Your answer:**
 
-- [ ] Later
+- [x] Later
 - [ ] Now
 - Notes:
+
+**Decided 2026-10-05:** later → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 21. Lead time and returns
 
@@ -457,9 +469,11 @@ Shopify allows three options per product.
 
 **Your answer:**
 
-- [ ] A range, custom final sale except damage
+- [x] A range, custom final sale except damage
 - [ ] A fixed promise, returns on everything
 - Notes (the range, if you have one in mind):
+
+**Decided 2026-10-05:** a range, custom colorings final sale except damage; the range itself is still yours to write → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 22. How a design gets into the cart
 
@@ -474,10 +488,12 @@ storefront repo builds against it.
 
 **Your answer:**
 
-- [ ] The Lab in the page, the hub checks
+- [x] The Lab in the page, the hub checks
 - [ ] A signed cart from our server
 - [ ] The page plus a signing server
 - Notes:
+
+**Decided 2026-10-05:** the Lab in the page, the hub checks → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 23. Which designs may be sold
 
@@ -492,10 +508,12 @@ call is about who decides and where the answer is kept, not whether any design m
 
 **Your answer:**
 
-- [ ] A record per design
+- [x] A record per design
 - [ ] A record, after a lawyer
 - [ ] Only our own designs at launch
 - Notes:
+
+**Decided 2026-10-05:** a record per design → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ### 24. Which pictures the store opens with
 
@@ -510,10 +528,12 @@ a colors card per theme.
 
 **Your answer:**
 
-- [ ] Drawings now, a photo per design before opening
+- [x] Drawings now, a photo per design before opening
 - [ ] Drawings only
 - [ ] Drawings plus generated scenes
-- Notes:
+- Notes: ^i3hgse
+
+**Decided 2026-10-05:** drawings now, a photo per design before opening, and a store-launch skill with a pre-launch checklist → [D-102](../decisions-log.md#d-102--the-stores-first-setup-basic-plan-priced-by-finish-set-and-colors-etsy-later)
 
 ## Swatches (call 25)
 
@@ -534,14 +554,16 @@ swatch pack for each filament line has not been checked here.
 **Your answer:**
 
 - [ ] Bambu's samples first, then our own card
-- [ ] Our own card only
+- [x] Our own card only
 - [ ] Bambu's samples only
 - [ ] Neither
-- Notes:
+- Notes: ^stbnoy
+
+**Decided 2026-10-05:** our own card only, from Bambu filament first → [D-105](../decisions-log.md#d-105--swatches-are-our-own-printed-card-from-bambu-filament-first)
 
 ## The first theme to print (call 26)
 
-### 26. Which theme to print first, and which colors to buy
+### 26. Which theme to print first, and which colors to buy ^ha5dwm
 
 **In short.** The [themes gallery](../../design/coaster/themes/gbv-themes.md) has eighteen color
 themes for the gBV coaster. Each one prints as one plate per color. The scores are simulated
@@ -569,6 +591,8 @@ tile.*
 - [ ] Espresso and crema
 - [ ] Another theme
 - Notes:
+
+**Decided 2026-10-05:** from your comment, all the bottom row: Midnight blue, Night sky, Terracotta souk, Iznik tile → [D-106](../decisions-log.md#d-106--the-first-themes-to-print-are-the-bottom-row-midnight-blue-night-sky-terracotta-souk-iznik-tile)
 
 ## Things only you can do (not decisions)
 

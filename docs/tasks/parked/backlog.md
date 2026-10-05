@@ -17,6 +17,31 @@ Step 2 is not started: `tools/catalog.py sync`, a note for each construction in 
 style notes and the index, done when `sync --check` passes and every ledger row has a note with
 its pictures.
 
+## Launching the store — a skill with the pre-launch checklist
+
+Omar on 2026-10-05 (call 24 of the
+[open-calls page](../../working-model/feedback-requests/2026-10-05-open-calls.md#^i3hgse)): "make
+sure we are creating a proper backlog to consolidate all the things we have to do to launch our
+store - add this to the pre-launch checklist under a launchign store skill". Write a
+`launch-store` skill whose checklist file gathers everything the store needs before it opens,
+each line with where it is tracked:
+
+- the setup decided in D-102: the Basic plan, prices by finish, set size and colors, Etsy later,
+  a record per design, the Lab in the product page with the hub checking each order;
+- a photo of each design before opening (drawings until then);
+- the price range for custom colorings, which is still Omar's to write (custom colorings are
+  final sale except damage);
+- order files in an iCloud folder (D-101), the swatch card (D-105), the first themes (D-106);
+- a custom order prints one plate per color, each new coloring with its own yes (D-103);
+- the pricing calls still open on that page: where the orders and stock live (12), how the
+  price is set (13), and a price below break-even (16).
+
+All eight store calls in the
+[storefront design](../../design/storefront/shopify-storefront-design.md#16-decisions-to-make-for-the-store)
+were decided on 2026-10-05.
+
+The store itself is built in coffee-house-storefront; the skill lives here, where the design is.
+
 ## The FAQ — waiting on Omar
 
 The `session-reflect` skill proposed six FAQ candidates in the untracked proposal file in

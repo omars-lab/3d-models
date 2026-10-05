@@ -913,6 +913,9 @@ when) the hub's store records itself.
 - [ ] In this repo, a code instead of the customer's name
 - [ ] In a private repo
 
+**Decided 2026-10-05:** never in this repo; the order files live in an iCloud folder →
+[D-101](../../working-model/decisions-log.md#d-101--orders-never-go-in-this-repo-they-live-in-an-icloud-folder).
+
 ### Call 4: how to try out pricing ideas
 
 | | **A. The Scenarios view and its check, no skill (recommended)** | B. The view, plus a price-persona skill | C. A pricing skill instead of a view | D. No view: call 2's one price only |
@@ -934,6 +937,11 @@ opinion beyond the scenarios.
 - [ ] B. The view, plus a price-persona skill
 - [ ] C. A pricing skill instead of a view
 - [ ] D. No view: call 2's one price only
+
+**Decided 2026-10-05:** more than B, from Omar's comment: the view with charts, simulated buyers
+who say in their own words why they buy or walk away and how that changes with the price, costs at
+1, 5, 10 and 100, all built so real orders replace the simulation later →
+[D-104](../../working-model/decisions-log.md#d-104--pricing-is-tried-on-simulated-buyers-and-on-a-charted-view-built-for-real-orders-later).
 
 ### Call 5: a scenario priced below break-even
 
