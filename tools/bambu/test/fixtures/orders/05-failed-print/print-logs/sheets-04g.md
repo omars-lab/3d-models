@@ -8,7 +8,7 @@ The real log's rows, after a made-up `sent` row: sheets-04g went out before the 
 
 | Time (UTC) | Event | Layer | Done | What the printer said |
 |---|---|---|---|---|
-| 2026-10-04 18:35 | sent | | | fed #00ae42 from AMS 1 slot 4, 27 g by the slice |
+| 2026-10-04 18:35 | sent | | | fed #00ae42 from AMS 0 · slot 3, 27 g by the slice |
 | 2026-10-04 18:37 | watching | 0/22 | 0% | RUNNING |
 | 2026-10-04 19:01 | progress | 3/22 | 25% | 25% |
 | 2026-10-04 19:26 | progress | 13/22 | 50% | 50% |

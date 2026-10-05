@@ -56,17 +56,17 @@ spools:
 
 describe("sent rows", () => {
   it("reads every tray a send names, with its grams", () => {
-    expect(sentTrays("fed #00AE42 from AMS 1 slot 4, 27.28 g by the slice; #042f56 from AMS 1 slot 1, 3 g by the slice")).toEqual([
-      { hex: "#00ae42", tray: "AMS 1 slot 4", grams: 27.28 },
-      { hex: "#042f56", tray: "AMS 1 slot 1", grams: 3 },
+    expect(sentTrays("fed #00AE42 from AMS 0 · slot 3, 27.28 g by the slice; #042f56 from AMS 0 · slot 0, 3 g by the slice")).toEqual([
+      { hex: "#00ae42", tray: "AMS 0 · slot 3", grams: 27.28 },
+      { hex: "#042f56", tray: "AMS 0 · slot 0", grams: 3 },
     ]);
   });
 
   it("closes a send on finished, failed or stopped, waits through lost, and lists an end with no send", () => {
     const got = closes([
-      { plate: "a", rows: log([SENT("#00ae42", "AMS 1 slot 4", 27), "| 2026-10-04 19:00 | lost | | | |", END("failed")]) },
+      { plate: "a", rows: log([SENT("#00ae42", "AMS 0 · slot 3", 27), "| 2026-10-04 19:00 | lost | | | |", END("failed")]) },
       { plate: "b", rows: log([END("finished")]) },
-      { plate: "c", rows: log([SENT("#00ae42", "AMS 1 slot 4", 5)]) },
+      { plate: "c", rows: log([SENT("#00ae42", "AMS 0 · slot 3", 5)]) },
     ]);
     expect(got.closed.map((c) => [c.plate, c.event])).toEqual([["a", "failed"]]);
     expect(got.uncounted.map((u) => u.plate)).toEqual(["b"]);
@@ -79,7 +79,7 @@ describe("the shelf", () => {
 
   it("a print takes its slice grams off the spool, finished or failed", () => {
     for (const end of ["finished", "failed"]) {
-      const r = shelfReport({ ...base, shelf: shelf(SPOOLS), orders: [], logs: [{ plate: "a", rows: log([SENT("#00ae42", "AMS 1 slot 4", 27), END(end)]) }] });
+      const r = shelfReport({ ...base, shelf: shelf(SPOOLS), orders: [], logs: [{ plate: "a", rows: log([SENT("#00ae42", "AMS 0 · slot 3", 27), END(end)]) }] });
       expect(r.spools.find((s) => s.id === "green-1")!.on_hand).toBe(973);
     }
   });
@@ -103,7 +103,7 @@ describe("the shelf", () => {
   it("a plate that printed to the end stops holding; a failed one keeps holding", () => {
     const orders = [{ status: "open" as const, plan: plan("O-1", [plate("o-1-10501", "PLA Basic", "10501", 27)]) }];
     const held = (end: string) =>
-      shelfReport({ ...base, shelf: shelf(SPOOLS), orders, logs: [{ plate: "o-1-10501", rows: log([SENT("#00ae42", "AMS 1 slot 4", 27), END(end)]) }] }).colors.find(
+      shelfReport({ ...base, shelf: shelf(SPOOLS), orders, logs: [{ plate: "o-1-10501", rows: log([SENT("#00ae42", "AMS 0 · slot 3", 27), END(end)]) }] }).colors.find(
         (c) => c.code === "10501",
       )!.held;
     expect(held("finished")).toBe(0);
@@ -116,11 +116,11 @@ spools:
   - { id: jade-1, line: PLA Basic, code: "10100", start_grams: 1000 }
   - { id: ivory-1, line: PLA Matte, code: "11100", start_grams: 1000 TRAY }
 `;
-    const logs = [{ plate: "a", rows: log([SENT("#ffffff", "AMS 1 slot 2", 10), END("finished")]) }];
+    const logs = [{ plate: "a", rows: log([SENT("#ffffff", "AMS 0 · slot 1", 10), END("finished")]) }];
     const r = shelfReport({ ...base, shelf: shelf(two.replace(" TRAY", "")), orders: [], logs });
-    expect(r.unmatched.map((u) => u.why)).toEqual(['#ffffff is PLA Basic 10100 and PLA Matte 11100; set tray: "AMS 1 slot 2" on the spool it was']);
+    expect(r.unmatched.map((u) => u.why)).toEqual(['#ffffff is PLA Basic 10100 and PLA Matte 11100; set tray: "AMS 0 · slot 1" on the spool it was']);
     expect(r.spools.every((s) => s.used_grams === 0)).toBe(true);
-    const t = shelfReport({ ...base, shelf: shelf(two.replace(" TRAY", ', tray: "AMS 1 slot 2"')), orders: [], logs });
+    const t = shelfReport({ ...base, shelf: shelf(two.replace(" TRAY", ', tray: "AMS 0 · slot 1"')), orders: [], logs });
     expect(t.spools.find((s) => s.id === "ivory-1")!.on_hand).toBe(990);
   });
 

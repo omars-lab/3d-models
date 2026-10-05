@@ -39,7 +39,8 @@ import { setVerdict, VerdictError } from "../verdict.js";
 import { ev } from "../log.js";
 import { sidecarFreshness, classifyWarnings, loadManifest, sidecarPath } from "../backends/warnings.js";
 import { collectSlots } from "../frame.js";
-import { readPlateMeta, readUsedFilaments } from "../threemf.js";
+import { readMember, readPlateMeta, readUsedFilaments } from "../threemf.js";
+import { parseFilamentGrams, sentFeeds, writeSentRow, type Feeds } from "../sent-row.js";
 import { checkPlate, printerPlateId, readSlicePlateType, type SlicePlateType } from "../plate-type.js";
 import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
 import { cardRefusal, cardSummary, readStorage } from "../storage.js";
@@ -403,6 +404,22 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
   console.error(`filament: ams_mapping ${JSON.stringify(projectOpts.amsMapping)}, use_ams ${projectOpts.useAms}.`);
 
+  // The row the send writes into the plate's print log: each tray it feeds, the tray's color and the
+  // slice's grams (sent-row.ts), so the shelf can take them off the spool when the print ends. A
+  // feed it cannot name is a warning, not a refusal: the print is just not counted on the shelf.
+  const feeds: Feeds = frame && Array.isArray(projectOpts.amsMapping)
+    ? sentFeeds(
+        projectOpts.amsMapping,
+        collectSlots(frame),
+        parseFilamentGrams((await readMember(abs, "Metadata/slice_info.config")) ?? "", projectOpts.plate ?? 1),
+      )
+    : { ok: false, reason: "no tray mapping and status read to name the trays from" };
+  if (feeds.ok) {
+    console.error(`✓ sent row: fed ${feeds.feeds.map((f) => `${f.hex} from ${f.tray}, ${f.grams} g`).join("; ")}.`);
+  } else {
+    console.error(`⚠ sent row: ${feeds.reason}; the shelf will list this print as not counted.`);
+  }
+
   // The bed, as someone saw it (bed-check.ts). The dry run takes the photo; someone opens it and
   // writes down what it shows with `bambu bed verdict`; the real send refuses without a recent photo
   // whose verdict says clear, seated, and the plate this slice is for. The X2D runs its own checks
@@ -434,6 +451,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.log(JSON.stringify(command, null, 2));
     console.log("  The fields follow Studio's X2D send (docs/research/2026-10-03-studio-start-payload.md).");
     console.log("  [X2D-UNCONFIRMED] md5, and an external-spool ams_mapping2 entry (docs/issues/first-party-dispatch.md).");
+    if (feeds.ok) console.log(`would also write the sent row into docs/design/plates/print-logs/${name}.md.`);
     if (opts.record) console.log("would also scaffold a draft record under .bambu/records/.");
     return;
   }
@@ -486,6 +504,18 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
       console.log("Ship that page change (branch → PR); a reprint needs a new approval.");
     } catch (err) {
       console.error(`could not spend the approval on the page: ${(err as Error).message} — edit it by hand.`);
+      process.exitCode = 1;
+    }
+  }
+
+  // The sent row, after the approval: the shelf reads it to know which spool this print used.
+  if (dispatched && feeds.ok) {
+    try {
+      const row = writeSentRow(name, feeds.feeds);
+      console.log(`sent row → docs/design/plates/print-logs/${name}.md:`);
+      console.log(`  ${row}`);
+    } catch (err) {
+      console.error(`could not write the sent row: ${(err as Error).message} — write it with print_monitor.py ${name} --sent <hex> <tray> <grams>.`);
       process.exitCode = 1;
     }
   }

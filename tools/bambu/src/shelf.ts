@@ -33,7 +33,7 @@ export interface Spool {
   line: string;
   code: string;
   start_grams: number;
-  tray?: string; // where it sits now ("AMS 1 slot 4"), which breaks a tie between two spools of one hex
+  tray?: string; // where it sits now ("AMS 0 · slot 3"), which breaks a tie between two spools of one hex
   tag_percent?: number;
   corrections: Correction[];
 }
@@ -102,7 +102,7 @@ export interface SentTray {
   grams: number;
 }
 
-/** The trays a `sent` row names: "fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice; …". */
+/** The trays a `sent` row names: "fed #00ae42 from AMS 0 · slot 3, 27.28 g by the slice; …". */
 export function sentTrays(said: string): SentTray[] {
   const out: SentTray[] = [];
   for (const m of said.matchAll(/(#[0-9a-fA-F]{6}) from (.+?), (\d+(?:\.\d+)?) g/g)) {

@@ -40,7 +40,7 @@ rebuilds that from the frames already there. A camera that does not answer is lo
 skipped: a missing picture never stops the watch.
 
 **The send's row.** `--sent` writes one `sent` row and exits: the trays the send fed, each with
-its color and the slice's grams for it (`fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice`;
+its color and the slice's grams for it (`fed #00ae42 from AMS 0 · slot 3, 27.28 g by the slice`;
 a two-tray plate separates them with `; `). The send writes it, before the watch starts. The
 shelf (`bambu shelf show`) takes those grams off the matching spool when the next `finished`,
 `failed` or `stopped` row closes the print (order-driven-lab-design §9.2).
@@ -536,11 +536,11 @@ def self_test() -> int:
         check(any("event 'jammed'" in f for f in found), "and the gate does read the log", found)
 
     # The send's row: the trays and grams in the words the shelf reads, before the monitor's rows.
-    line = sent_line("2026-10-04 18:35", [("#00AE42", "AMS 1 slot 4", 27.28), ("#000000", "AMS 1 slot 1", 3.0)])
-    check(line == "| 2026-10-04 18:35 | sent |  |  | fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice; "
-                  "#000000 from AMS 1 slot 1, 3 g by the slice |",
+    line = sent_line("2026-10-04 18:35", [("#00AE42", "AMS 0 · slot 3", 27.28), ("#000000", "AMS 0 · slot 0", 3.0)])
+    check(line == "| 2026-10-04 18:35 | sent |  |  | fed #00ae42 from AMS 0 · slot 3, 27.28 g by the slice; "
+                  "#000000 from AMS 0 · slot 0, 3 g by the slice |",
           "a sent row names each tray, its color and its grams", line)
-    for bad in ([("green", "AMS 1 slot 4", 27.0)], [("#00ae42", "AMS 1, slot 4", 27.0)], []):
+    for bad in ([("green", "AMS 0 · slot 3", 27.0)], [("#00ae42", "AMS 1, slot 4", 27.0)], []):
         try:
             sent_line("2026-10-04 18:35", bad)
             check(False, f"a sent row refuses {bad}", "it wrote one")
