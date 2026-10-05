@@ -241,7 +241,7 @@ stands in:
 | None of the five colors on hand | **Real**: the four loaded trays are pink, blue, black and green |
 | The split of minutes and grams by color | Estimates, labeled so: the 344 minutes and 108 g shared out by the [gBV themes](themes/gbv-themes.md#ice-to-navy) split, until each color's plate is sliced |
 | The bed count per color | Stand-in. It comes from packing each color's plate, which nothing does yet |
-| The order number, the due date, the `theme=` end of the link | Stand-ins. The share link carries no colors today |
+| The order number, the due date, the `theme=` end of the link | Stand-ins. The share link carries the colors, one `color.<Name>=<code or hex>` key per group, but has no `theme=` key, so that end stands in for those keys ([storefront design §12.1](../storefront/shopify-storefront-design.md#121-the-share-link)) |
 
 Then the Price page and the Inventory page:
 
