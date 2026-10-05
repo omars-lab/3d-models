@@ -1,0 +1,132 @@
+<!doctype html>
+<!-- Source of split-pieces.png for finish-techniques-brainstorm.md §1. Regenerate with headless Chrome:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+       --hide-scrollbars --window-size=1000,700 --screenshot=split-pieces.png split-pieces.html
+     A schematic, not to scale: the gap, the lip, the band and the air under it are drawn wide so they show.
+     Same look as ../../pieces/split-with-studs-media/capture.html. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Split pieces, both faces on the bed</title>
+<style>
+  body { margin: 0; background: #fbfaf7; font: 14px/1.3 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #2b2b2b; }
+  h1 { font-size: 17px; margin: 14px 20px 2px; }
+  p.sub { margin: 0 20px 6px; color: #666; font-size: 12.5px; }
+  .lower { fill: #8d8a84; }
+  .upper { fill: #aaa59c; }
+  .piece { fill: #d9a931; }
+  .piece2 { fill: #3f8f8a; }
+  .bed { stroke: #2a6fdb; stroke-width: 4; }
+  .top { stroke: #d2691e; stroke-width: 3; stroke-dasharray: 6 4; }
+  .seam { stroke: #fbfaf7; stroke-width: 1.6; stroke-dasharray: 3 3; }
+  .arrow { stroke: #555; stroke-width: 1.6; fill: none; }
+  .head { font-size: 15px; font-weight: 700; }
+  .note { font-size: 12px; fill: #555; }
+  .warn { font-size: 12px; fill: #b0302a; }
+  .air { stroke: #b0302a; stroke-width: 1.2; }
+</style>
+</head>
+<body>
+<h1>Split the pieces too, so every face you see is a first layer</h1>
+<p class="sub">Cut through, side view. Dark grey: lower half of the coaster. Light grey: upper half. Gold and teal: the piece. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</p>
+<svg id="s" width="1000" height="600" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+const s = document.getElementById('s');
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text) e.textContent = text;
+  s.appendChild(e); return e;
+}
+const rect = (x, y, w, h, cls) => el('rect', { x, y, width: w, height: h, class: cls });
+const text = (x, y, t, cls, anchor) => el('text', { x, y, class: cls, 'text-anchor': anchor || 'start' }, t);
+const line = (x1, y1, x2, y2, cls) => el('line', { x1, y1, x2, y2, class: cls });
+
+// The hole runs from x+80 to x+400; straps are 60 wide either side. Each coaster half is 80 tall.
+// Lip and band: 28 wide in x, 22 tall in y. Piece gap: 8.
+function frameA(x, y) {            // split-01: a lip on each outer face
+  rect(x + 20, y, 60, 80, 'upper'); rect(x + 400, y, 60, 80, 'upper');
+  rect(x + 80, y, 28, 22, 'upper'); rect(x + 372, y, 28, 22, 'upper');
+  const y1 = y + 80;
+  rect(x + 20, y1, 60, 80, 'lower'); rect(x + 400, y1, 60, 80, 'lower');
+  rect(x + 80, y1 + 58, 28, 22, 'lower'); rect(x + 372, y1 + 58, 28, 22, 'lower');
+  bedFrame(x, y, y1 + 80);
+}
+function frameCUpper(x, y) {       // split-02: the hole widens at the cut for the band
+  rect(x + 20, y, 60, 22, 'upper'); rect(x + 400, y, 60, 22, 'upper');
+  rect(x + 20, y + 22, 34, 58, 'upper'); rect(x + 426, y + 22, 34, 58, 'upper');
+  line(x + 20, y, x + 80, y, 'bed'); line(x + 400, y, x + 460, y, 'bed');
+}
+function frameCLower(x, y1) {
+  rect(x + 20, y1, 34, 58, 'lower'); rect(x + 426, y1, 34, 58, 'lower');
+  rect(x + 20, y1 + 58, 60, 22, 'lower'); rect(x + 400, y1 + 58, 60, 22, 'lower');
+  line(x + 20, y1 + 80, x + 80, y1 + 80, 'bed'); line(x + 400, y1 + 80, x + 460, y1 + 80, 'bed');
+}
+function bedFrame(x, yTop, yBot) {
+  line(x + 20, yTop, x + 108, yTop, 'bed'); line(x + 372, yTop, x + 460, yTop, 'bed');
+  line(x + 20, yBot, x + 108, yBot, 'bed'); line(x + 372, yBot, x + 460, yBot, 'bed');
+}
+// A flanged half-piece: a face block 304 wide, 22 tall, and half the band, 356 wide.
+function halfC(x, yFace, up, cls, air) {
+  const a = air || 4;
+  if (up) {                        // face on top, band below it, cut at the bottom
+    rect(x + 88, yFace, 304, 22, cls); rect(x + 62, yFace + 22 + a, 356, 58 - a, cls);
+    rect(x + 88, yFace + 22, 304, a, cls);
+    line(x + 88, yFace, x + 392, yFace, 'bed');
+  } else {                         // cut on top, band, face block at the bottom
+    rect(x + 62, yFace - 80, 356, 58 - a, cls); rect(x + 88, yFace - 22, 304, 22, cls);
+    rect(x + 88, yFace - 22 - a, 304, a, cls);
+    line(x + 88, yFace, x + 392, yFace, 'bed');
+  }
+}
+
+function panel(px, py, title, notes) {
+  text(px + 20, py + 22, title, 'head');
+  notes.forEach((n, i) => text(px + 20, py + 250 + i * 16, n[0], n[1] || 'note'));
+}
+
+// 1. Today: split-01 with one whole piece.
+{ const x = 0, y = 50;
+  panel(x, 0, '1. Today (split-01): one whole piece', [
+    ['The piece prints face down, so its lower face is a first layer'],
+    ['and its upper face is the last layer: two different finishes.'] ]);
+  frameA(x, y);
+  rect(x + 88, y + 22, 304, 116, 'piece');
+  line(x + 88, y + 138, x + 392, y + 138, 'bed'); line(x + 88, y + 22, x + 392, y + 22, 'top');
+}
+// 2. Lip + split piece.
+{ const x = 500, y = 50;
+  panel(x, 0, '2. Lip (A) + a piece cut in two', [
+    ['Each piece half prints face down; the upper one is turned over.'],
+    ['The lips hold both halves, so no glue. Each face can be its own color.'] ]);
+  frameA(x, y);
+  rect(x + 88, y + 22, 304, 58, 'piece'); rect(x + 88, y + 80, 304, 58, 'piece2');
+  line(x + 88, y + 80, x + 392, y + 80, 'seam');
+  line(x + 88, y + 22, x + 392, y + 22, 'bed'); line(x + 88, y + 138, x + 392, y + 138, 'bed');
+}
+// 3. Flange + split piece.
+{ const x = 0, y = 350;
+  panel(x, 300, '3. Flange (C) + a piece cut in two', [
+    ['Each half is a face block with half the band on it. Face down, the band'],
+    ['hangs 0.8 mm past the block: a short overhang, hidden inside.', 'warn'] ]);
+  frameCUpper(x, y); frameCLower(x, y + 80);
+  halfC(x, y, true, 'piece'); halfC(x, y + 160, false, 'piece2');
+  line(x + 62, y + 80, x + 418, y + 80, 'seam');
+}
+// 4. Flange, printed in place: each coaster half prints with its piece halves already caught in it.
+{ const x = 500, y = 330;
+  panel(x, 300, '4. Flange (C), printed in place', [
+    ['Each coaster half prints with its piece halves already inside it,'],
+    ['all on the bed. Close the halves: no pieces to place at all.'],
+    ['Needs a layer of air under each band, or it fuses to the coaster.', 'warn'] ]);
+  frameCUpper(x, y); halfC(x, y, true, 'piece', 6);
+  const yl = y + 112;              // the lower half, drawn apart
+  frameCLower(x, yl); halfC(x, yl + 80, false, 'piece2', 6);
+  line(x + 240, y + 84, x + 240, yl - 4, 'arrow');
+  line(x + 233, yl - 11, x + 240, yl - 4, 'arrow'); line(x + 247, yl - 11, x + 240, yl - 4, 'arrow');
+  text(x + 252, y + 102, 'close', 'note');
+}
+</script>
+</body>
+</html>

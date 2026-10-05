@@ -53,6 +53,12 @@ Sending a print and which filament to load.
   the color in the yes. The gBV coaster at 112.5 mm cut in two halves that close over its loose
   pieces: one bed each, 89 minutes and 30 g, 107 minutes and 31 g (D-100, 2026-10-05). Whether
   the halves are glued is still the split design's call 3.
+- **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
+  [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
+  which plate the glacier plate is, and whether to start with way a (each piece cut at the
+  coaster's cut, both halves printed face down, held by the lips). After a yes on a: one bikar
+  knob on `hold lip` and a coupon of whole and cut pieces in one split-01 (found 2026-10-05, at
+  Omar's ask).
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.
