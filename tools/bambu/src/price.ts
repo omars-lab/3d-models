@@ -468,3 +468,11 @@ export function scenarios(b: Basis, s: Settings): ScenarioRow[] {
   return rows;
 }
 
+/** The margin at each price tried (D-104's margin by price), worked by the same row as a scenario,
+ *  so a swept price and the scenario at that price can never disagree. */
+export function sweep(b: Basis, s: Settings, pricesEach: number[]): ScenarioRow[] {
+  const monthly = setting(NAME.monthly_fixed_costs!, s.scenarios?.monthly_fixed_costs);
+  const own = work(b, s);
+  return pricesEach.map((p) => row(`at $${p}`, "a price each tried, on §9.3's cost", b, s, own.cost, known(p), monthly));
+}
+

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Prices } from "./by-color-costs.js";
-import { type Basis, type Settings, checkSettings, priceOf, resolveStorePrices, scaleBasis, scenarios } from "./price.js";
+import { type Basis, type Settings, checkSettings, priceOf, resolveStorePrices, scaleBasis, scenarios, sweep } from "./price.js";
 
 // The price (order-driven-lab-design §9.3, §9.7) one rule at a time. The fixtures under
 // test/fixtures/orders run the same code on real plans (`bambu order fixtures`), and fixture 1's
@@ -125,6 +125,31 @@ describe("the scenarios", () => {
     expect(market.price_each).toBeNull();
     expect(market.missing).toEqual(["market price each", "monthly fixed costs"]);
     expect(rows.find((r) => r.strategy === "cost-plus")!.price_each).toBe(28);
+  });
+});
+
+describe("the price sweep", () => {
+  it("gives the margin the scenario row gives at the same price", () => {
+    const s = { ...FULL, fee_percent: 0.1, fixed_fee: 1, scenarios: { monthly_fixed_costs: 100 } };
+    const own = scenarios(basis(), s).find((r) => r.strategy === "cost-plus")!;
+    const [at] = sweep(basis(), s, [own.price_each!]);
+    expect(at!.margin_each).toBe(own.margin_each);
+    expect(at!.to_cover).toBe(own.to_cover);
+  });
+
+  it("tags a price below the cost, and none at or above it", () => {
+    // cost 14 each, no fees: 10 loses 4, 14 makes nothing, 20 makes 6
+    const rows = sweep(basis(), { ...FULL, scenarios: { monthly_fixed_costs: 60 } }, [10, 14, 20]);
+    expect(rows.map((r) => r.margin_each)).toEqual([-4, 0, 6]);
+    expect(rows.map((r) => r.below_break_even)).toEqual([true, true, false]);
+    expect(rows.map((r) => r.to_cover)).toEqual(["never", "never", 10]);
+  });
+
+  it("names what the margin needs when a setting is empty, and still shows the price tried", () => {
+    const [at] = sweep(basis(), { ...FULL, packaging: null }, [20]);
+    expect(at!.price_each).toBe(20);
+    expect(at!.margin_each).toBeNull();
+    expect(at!.missing).toContain("packaging");
   });
 });
 

@@ -12,21 +12,7 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **Pricing, tried before it is set: simulated buyers, costs by quantity, a charted view.**
-   Phase 3 of the order-driven Lab, reshaped by D-104 (2026-10-05). Three parts:
-   - costs at 1, 5, 10 and 100 coasters, so what one piece costs us is set beside a batch;
-   - simulated buyers (price-conscious and others) who say in their own words why they would
-     buy at a price or walk away, and how those thoughts change as the price moves; labeled
-     simulated, as review-theme's personas are;
-   - a page with charts that shows where the price does best once costs are counted, built so
-     real order data can replace the simulated buyers later.
-   The formula names its settings, and each looked-up one points at the
-   [consolidated pricing research](../../research/2026-10-04-coaster-pricing.md). Of the twelve
-   settings, four are looked up and need confirming, five come from Omar's own records and three
-   are his to choose. Phases 1 and 2 (the plan and the shelf) have shipped, so the costs can come
-   from real slices and real spools.
-   Omar on calls 13 and 15 of the 2026-10-05 page. Call 13 (the pricing method) is still his.
-2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+1. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
    so packing no longer decides whether a plate is production; it now saves time and filament

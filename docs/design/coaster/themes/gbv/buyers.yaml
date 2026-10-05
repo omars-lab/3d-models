@@ -1,0 +1,70 @@
+# SIMULATED BUYERS, NOT CUSTOMER RESEARCH. Made-up people imagined by Claude looking at the theme's
+# picture at each price (simulate-buyers skill, .claude/skills/simulate-buyers/buyers.md). Nobody
+# was asked. The prices are prices tried, not prices we charge.
+sweeps:
+  - theme: ice-to-navy
+    coloring: d98115ed1b
+    shown: "one 112.5 mm coaster in matte PLA: an ivory-white frame, a ten-pointed star pattern, loose pieces in four blues pressed in, pale ice in the middle to navy at the rim"
+    prices: [4, 6, 8, 10, 12, 15, 20, 25, 35]
+    buyers:
+      bargain-hunter:
+        4: { verdict: buy, thought: "Four dollars and it's way nicer than the plain printed ones at five. Easy, I'd grab four." }
+        6: { verdict: buy, thought: "Six is a bit over the Etsy ones, but those are one flat color and this has the whole blue star thing. Fine." }
+        8: { verdict: maybe, thought: "Eight each is thirty-two for a set. It's pretty, but it's still printed plastic; I'd wait for a sale." }
+        10: { verdict: walk, thought: "Ten bucks for one coaster? Twice what I'd pay for the plain kind. I like it, but no." }
+        12: { verdict: walk, thought: "Twelve each is a set for nearly fifty. That's a nice dinner. Pass." }
+        15: { verdict: walk, thought: "Fifteen for a coaster. Who is this for?" }
+        20: { verdict: walk, thought: "Twenty dollars to put a mug on. I'm closing the tab." }
+        25: { verdict: walk, thought: "Twenty-five? Is it hand-painted? It says printed. No." }
+        35: { verdict: walk, thought: "Thirty-five for one. That's a joke price." }
+      gift-buyer:
+        4: { verdict: too-cheap, thought: "Sixteen for four looks like a stocking stuffer. For a real present I'd want it to feel like more than that." }
+        6: { verdict: maybe, thought: "Twenty-four for a set of four is on the light side for a gift, but the blues look calm and grown-up. Maybe with a box." }
+        8: { verdict: buy, thought: "Thirty-two for four in those blues, wrapped up for my sister's new flat. That's a nice present." }
+        10: { verdict: buy, thought: "Forty for a set feels like a proper gift. The white frame looks clean when you open it." }
+        12: { verdict: buy, thought: "Forty-eight for four is my top for a housewarming, but it looks special enough. I'd do it if it comes boxed." }
+        15: { verdict: maybe, thought: "Sixty for four coasters is more than I planned. I'd buy two, which looks a bit stingy." }
+        20: { verdict: walk, thought: "Eighty for a set outgrows a casual gift. I'd rather get a nice candle and a card." }
+        25: { verdict: walk, thought: "A hundred for coasters. Lovely, but that's a wedding-present budget." }
+        35: { verdict: walk, thought: "At thirty-five each I'd be embarrassed to say what I spent on coasters." }
+      design-lover:
+        4: { verdict: too-cheap, thought: "Four dollars makes me think it's knocked off from a pattern sheet by the thousand. The star deserves better than that." }
+        6: { verdict: too-cheap, thought: "Six reads like a gift-shop trinket. Does it fall apart? The pattern looks too good for that price." }
+        8: { verdict: maybe, thought: "Eight is where I start believing someone chose those blues on purpose. I want a close-up of how the pieces sit." }
+        10: { verdict: buy, thought: "Ten for a real girih-style star with the pieces set in like tile. Pale to navy, like water. I'm in." }
+        12: { verdict: buy, thought: "Twelve feels right for a small made object. The white strap reads like grout lines. I'd buy two." }
+        15: { verdict: buy, thought: "Fifteen is museum-shop money and it looks like a museum-shop piece. I'd buy it, maybe one, not four." }
+        20: { verdict: maybe, thought: "Twenty for one. A ceramic tile coaster costs that. Plastic has to be really crisp to stand next to it." }
+        25: { verdict: maybe, thought: "Twenty-five, and I'd want to know who designed the pattern and whether it's numbered. Without that, I hesitate." }
+        35: { verdict: walk, thought: "Thirty-five is art-print money. It's lovely, but it's printed PLA, and I'd rather buy the tile." }
+      cafe-owner:
+        4: { verdict: buy, thought: "Four each is ninety-six for two dozen. If they survive a wet rag and keep their pieces, the blues would look sharp on our tables." }
+        6: { verdict: maybe, thought: "Six times twenty-four is a hundred and forty-four. Customers walk off with coasters. I'd test a dozen first." }
+        8: { verdict: walk, thought: "Eight each, close to two hundred for the tables, and a loose piece popping out under a wet cup is a mess for my staff. No." }
+        10: { verdict: walk, thought: "Ten a coaster is a coffee's whole margin, per coaster, and they'll get stolen. Can't." }
+        12: { verdict: walk, thought: "Twelve each for two dozen is near three hundred. I'd get cork with our logo for a fraction." }
+        15: { verdict: walk, thought: "Fifteen per coaster for a café is not happening." }
+        20: { verdict: walk, thought: "Twenty each. These are retail, not for my tables." }
+        25: { verdict: walk, thought: "Twenty-five. I might sell these on the counter, but I'm not putting them under lattes." }
+        35: { verdict: walk, thought: "Thirty-five each is a gift item, not café stock." }
+      coffee-enthusiast:
+        4: { verdict: buy, thought: "Four bucks for something that matches my blue mugs and isn't cork. Done, though I hope the pieces don't wobble." }
+        6: { verdict: buy, thought: "Six is nothing next to a bag of beans. The navy edge would look good by the grinder." }
+        8: { verdict: buy, thought: "Eight is fine for a coffee-bar accessory, as long as a cup sits flat and the pieces stay put." }
+        10: { verdict: buy, thought: "Ten. My scale cost twenty times that. It's a nice touch, I'd get one for the bar." }
+        12: { verdict: maybe, thought: "Twelve starts to feel like paying for the look. Does it take a hot, wet cup every morning? Reviews first." }
+        15: { verdict: maybe, thought: "Fifteen for a coaster. I'd do it for the bar if someone I follow had one and it held up." }
+        20: { verdict: walk, thought: "Twenty and it's printed plastic. That's a bag of good beans. I'll stick with the cork." }
+        25: { verdict: walk, thought: "Twenty-five on a coaster is a gimmick price. No." }
+        35: { verdict: walk, thought: "Thirty-five. I'd rather put that toward a better kettle." }
+      impulse-browser:
+        4: { verdict: buy, thought: "Oh, that's pretty. Four dollars? Taking one." }
+        6: { verdict: buy, thought: "Cute blue star thing for six. Sure, why not." }
+        8: { verdict: buy, thought: "Eight, still under my don't-think line. Grabbing it." }
+        10: { verdict: maybe, thought: "Ten. Hmm, right on the line. If I'm already buying something else, maybe." }
+        12: { verdict: walk, thought: "Twelve? I'd have to think about it, and I'm not going to." }
+        15: { verdict: walk, thought: "Fifteen for a coaster, I'll keep scrolling." }
+        20: { verdict: walk, thought: "Twenty, nope, pretty though." }
+        25: { verdict: walk, thought: "Twenty-five. Scroll." }
+        35: { verdict: walk, thought: "Thirty-five? Didn't even stop." }
+    overall: "Under $8 the bargain, café and impulse buyers say yes and the design lover doubts it; past $12 only the gift buyer and design lover stay, and the design lover holds on longest, to $25."

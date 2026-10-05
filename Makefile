@@ -961,8 +961,13 @@ validate-color-themes:
 # then every fixture order planned from its frozen slices and checked against its expected plan,
 # with its wrong plan refused for the reason the fixture names. It asks bikar for each pieces
 # file's groups, so it needs BIKAR_DIR; it never slices (`bambu order fixtures --slice` does).
+# Then the simulate-buyers skill (§9.7): its scripts' self-tests, and every buyers.yaml sweep
+# whole, for its theme's current colors, with each buyer in one window.
 .PHONY: validate-orders
 validate-orders:
 	@[ -d ${ROOT_DIR}/tools/bambu/node_modules ] || npm ci --silent --prefix ${ROOT_DIR}/tools/bambu
 	PYTHON=$(PYTHON) npm --prefix $(BAMBU_DIR) run --silent test -- src/order.test.ts src/by-color.test.ts src/timed-prints.test.ts src/recipe-hash.test.ts src/shelf.test.ts src/sent-row.test.ts src/price.test.ts
 	cd ${ROOT_DIR} && BIKAR_DIR=$(BIKAR_DIR) tools/bambu/bin/bambu order fixtures
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/buyers.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/price_page.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-buyers/scripts/buyers.py check --all

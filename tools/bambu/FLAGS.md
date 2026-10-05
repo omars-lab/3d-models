@@ -460,7 +460,8 @@ what an order costs to make, its break-even and suggested price, the cost at oth
 | `--settings <file>` | the pricing settings (default: .bambu/pricing/settings.yaml, gitignored; none means every setting empty) |
 | `--init-settings` | write the settings file with every setting empty, then price |
 | `--quantities <list>` | the sizes to cost, comma-separated (default: 1,5,10,100; the plan's own size is added) |
-| `--json` | print the price, sizes, scenarios and market band as JSON |
+| `--sweep <list>` | prices each to try, comma-separated: the margin and coasters to cover at each (the simulate-buyers page passes the prices its buyers saw) |
+| `--json` | print the price, sizes, scenarios, sweep and market band as JSON |
 
 ### `bambu order timed`
 

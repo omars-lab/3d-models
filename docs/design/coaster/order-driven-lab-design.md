@@ -927,17 +927,50 @@ row that shows a number while one of its inputs is empty.
 often its job actually came back:
 [the DSL-extension skill evaluation](../process/dsl-extension-skill-evaluation.md) and
 [the issue-register evaluation](../process/issue-register-evaluation.md). Both concluded: no
-skill, a gate instead. The count here is zero, because no coaster has been priced yet, by hand or
-otherwise. So this is **a page and a gate, not a skill**: the Scenarios view, with phase 3
-working out its numbers and phase 4 showing them, and the validator above inside the fixture
-suite.
+skill, a gate instead. This doc first picked a page and a gate here, with a persona skill left for
+later. Omar chose more (call 4,
+[D-104](../../working-model/decisions-log.md#d-104--pricing-is-tried-on-simulated-buyers-and-on-a-charted-view-built-for-real-orders-later)):
+"i want to back test pricing on simulated buyers", with "a useful ux with charts". So there is a
+skill as well, on review-theme's pattern[^reviewtheme], and its checkable parts are gated like the
+rest.
 
-**A possible later skill.** A thin persona skill could follow the pattern of review-theme[^reviewtheme]:
-simulated buyers each react to a coaster's picture and a candidate price, saying whether it feels
-fair, cheap or too much. It would be **simulated, not customer research**. It cannot say what
-anyone pays. A price is a money decision, so a made-up reaction can mislead more there than a
-theme score does. Whether to build it is call 4. The suggested trigger for building it is measured
-recurrence: three priced orders where Omar wanted a second opinion beyond the scenarios.
+**Simulated buyers, not customer research.** The
+[simulate-buyers skill](../../../.claude/skills/simulate-buyers/SKILL.md) shows six made-up buyers
+the theme's picture at a ladder of prices. A bargain hunter, a gift buyer, a design lover, a café
+owner buying two dozen, a home-coffee enthusiast and an impulse browser each say buy, maybe, walk
+or too cheap at each price, with the thought behind it in their own words. The sweep is stored
+beside the theme in `docs/design/coaster/themes/<id>/buyers.yaml`, tied to the colors the buyers
+saw. Nobody was asked: it shows which kinds of buyer a price loses and how they might put it, not
+what anyone pays.
+
+The price page puts four charts side by side: what one coaster costs at 1, 5, 10 and 100 (Omar on
+call 13: "how much it costs us to do 1 peice, 5 pieces, 10, 100, etc"), with the market band
+behind; the margin at each price tried, from the pricer's `--sweep`; who would buy at each price;
+and what one shopper is worth there, buy share times margin, with the best price marked. A maybe
+counts as half a buyer, a made-up weight the page states. The thoughts follow in a grid, one row
+per buyer. Real offers, once there are any, go in a gitignored sales file, and the page draws the
+share that sold at each price on top of the simulated bars, so real orders replace the simulation
+price by price.
+
+![The price page for 4 × gBV in Ice to navy, drawn from made-up example settings and six made-up
+example offers: cost each falls from $5.34 for one coaster to $3.14 at a hundred; the margin rises
+with the price; the buyers thin out past $12; one shopper is worth most at $15, where a third of
+them buy.](order-driven-lab-media/simulated-buyers-page.png)
+
+*Drawn by `price_page.py` from `example-settings.yaml` and `example-sales.yaml`, both made up and
+labeled EXAMPLE; real settings and orders stay out of this repo (§9.4,
+[D-101](../../working-model/decisions-log.md#d-101--orders-never-go-in-this-repo-they-live-in-an-icloud-folder)).*
+
+**Validator:** the page's best price is the price where buy share times margin is highest, and no
+price is marked when nothing makes money.
+
+PASS: two buyers, one buying at $5 and $10 and hesitating at $20, the other buying at $5 only,
+with margins $1, $6 and $12: the buy shares are 1, ½ and ¼, so one shopper is worth $1, $3 and $3, and the best price is $10, the lower of the tie.
+
+FAIL: every price tried loses money, or the margin is empty because a setting is. A page that
+marks the highest of those as "best" puts a loss forward as the pick. `price_page.py --self-test`
+holds both, and `buyers.py --self-test` refuses a buyer who walks at one price and buys at a
+higher one.
 
 ## 10. Open calls for Omar
 

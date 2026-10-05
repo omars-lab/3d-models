@@ -1,0 +1,19 @@
+# EXAMPLE settings for the simulate-buyers page: made up so the page has numbers to draw. Not our
+# costs, not a labor rate anyone charges, not a price. The real settings stay in the gitignored
+# .bambu/pricing/settings.yaml (order-driven-lab-design §9.4). Only the filament price is real: the
+# store's refill price, read from prices.yaml.
+price_per_gram: store refill   # the store's refill price, from prices.yaml
+printer_watts: 150             # EXAMPLE
+electricity_rate: 0.2          # EXAMPLE
+printer_price: 1000            # EXAMPLE
+payback_hours: 2000            # EXAMPLE
+warm_up_minutes: 6             # EXAMPLE
+good_plate_share: 0.9          # EXAMPLE
+hands_on_minutes: 5            # EXAMPLE
+labor_rate: 20                 # EXAMPLE
+packaging: 2                   # EXAMPLE
+fee_percent: 0.1               # EXAMPLE
+fixed_fee: 0.3                 # EXAMPLE
+markup: 1                      # EXAMPLE
+scenarios:
+  monthly_fixed_costs: 50      # EXAMPLE
