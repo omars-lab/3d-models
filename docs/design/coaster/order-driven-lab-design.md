@@ -818,8 +818,8 @@ or network; it does ask the local bikar checkout for each pieces file's groups, 
 shelf checks: the fixture's `shelf.fixture.yaml` against `expected-shelf.json`, and its
 `wrong-shelf.json` refused with the words in `wrong_shelf_must_say`. Since phase 3 it runs the
 price's unit tests and, on fixtures 1, 6 and 7, the price checks: `settings.fixture.yaml` against
-`expected-price.json` and `expected-scenarios.json`. Fixtures 6 and 7 have no plan of their own to
-price, so `fixture.yaml`'s `plan_of` names the fixture whose `expected-plan.json` they borrow. The
+`expected-price.json` and `expected-scenarios.json`. Fixture 6 has no plan of its own to price, so
+its `fixture.yaml`'s `plan_of` names fixture 1, whose `expected-plan.json` it borrows. The
 shelf and price code live in this repo until call 1 says otherwise (§9.2). The page checks run where that code lives. If call 1 picks the hub,
 that is a hub target of the same name, reading the fixture folders from this repo at a pinned
 commit. Before a phase lands, the runner lists its fixtures as "waiting on phase N". The runner
