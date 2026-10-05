@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  Mockup of the Pricing page, order-driven-lab-design.md §7 and §9.3. Static HTML in the Lab's
+  look (mockup.css). Nothing here runs; it exists to be screenshotted into pricing-mockup.png.
+
+  Real: 5 plates and 5 spools bought (§4); the shape of the formula (§9.3); the settings' names.
+  Stand-ins, with a dotted underline: 108 g and about 5¾ h, both from the PLA Basic slice (the hours are PLA Basic sliced minutes, a stand-in until the Matte re-slice; whether a slice includes its warm-up is not known), until
+  the Matte re-slice; the order number.
+  Empty, on purpose: every setting. The looked-up ones show the consolidated pricing research's
+  value as a reference (docs/research/2026-10-04-coaster-pricing.md); five come only from Omar's
+  own records and three are his to choose. Nothing on this page is a price.
+
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1280,790
+            --screenshot=pricing-mockup.png file://.../pricing-mockup.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pricing mockup</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Orders</h1>
+      <p class="tagline">order <span class="stand">0007</span> · 4 × gBV minimal coaster · Ice to navy</p>
+      <div class="steps"><span>Plan</span><span class="on">Price</span><span>Inventory</span></div>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>Settings</h2>
+          <table class="grid">
+            <tr><th>Setting</th><th>Value</th><th>Reference</th></tr>
+            <tr><td>Filament, PLA Matte</td><td><span class="chip pending">looked up</span></td><td class="src">$15.99 refill, $18.99 spool</td></tr>
+            <tr><td>Printer watts</td><td><span class="chip pending">looked up</span></td><td class="src">262 W steady state</td></tr>
+            <tr><td>Electricity rate</td><td><span class="chip pending">your bill</span></td><td class="src">US average 18.31¢</td></tr>
+            <tr><td>Printer price</td><td><span class="chip pending">looked up</span></td><td class="src">$899 listed; your receipt</td></tr>
+            <tr><td>Payback hours</td><td><span class="chip pending">your choice</span></td><td class="src">2,000–4,380 h assumed</td></tr>
+            <tr><td>Warm-up minutes</td><td><span class="chip pending">your records</span></td><td class="src">a timed print</td></tr>
+            <tr><td>Good-plate share</td><td><span class="chip pending">your records</span></td><td class="src">kept vs failed, print logs</td></tr>
+            <tr><td>Hands-on minutes</td><td><span class="chip pending">your records</span></td><td class="src">a timed order</td></tr>
+            <tr><td>Labor rate</td><td><span class="chip pending">your choice</span></td><td class="src">private, in the hub</td></tr>
+            <tr><td>Packaging</td><td><span class="chip pending">your records</span></td><td class="src">box, insert, label</td></tr>
+            <tr><td>Selling fee</td><td><span class="chip pending">looked up</span></td><td class="src">Etsy ≈ 11%, 26% via an ad</td></tr>
+            <tr><td>Markup</td><td><span class="chip pending">your choice</span></td><td class="src">private, in the hub</td></tr>
+          </table>
+          <p class="note">References are the pricing research's, not values. Public facts can sit in the public repo; labor rate and markup stay in the hub.</p>
+        </section>
+      </aside>
+      <section class="lab-stage">
+        <section class="card">
+          <h2>Cost, built up</h2>
+          <table class="grid">
+            <tr><th>Line</th><th>Quantity</th><th>× setting</th><th class="num">Amount</th></tr>
+            <tr><td>Material</td><td><span class="stand">108 g</span> <span class="src">(Basic slice)</span></td><td>× price per gram</td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr><td>Power</td><td>about <span class="stand">5¾ h</span> (Basic stand-in) + warm-up not in the slices</td><td>× watts × electricity rate</td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr><td>Wear</td><td>the same hours</td><td>× printer price ÷ payback hours</td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr><td>Redone plates</td><td>the three lines above</td><td>÷ good-plate share</td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr><td>Labor</td><td>hands-on minutes</td><td>× labor rate</td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr><td>Packaging</td><td>1 order</td><td></td><td class="num"><span class="tag warn">empty</span></td></tr>
+            <tr class="total"><td>Cost</td><td colspan="2"></td><td class="num">—</td></tr>
+          </table>
+          <div class="formula" style="margin-top:0.6rem">
+            break-even = (cost + fixed fee) ÷ (1 − fee %)<br />
+            suggested &nbsp;= break-even × (1 + markup)
+          </div>
+        </section>
+        <div class="row">
+          <section class="card">
+            <h2>Price</h2>
+            <div class="kv"><span class="k">Lowest that breaks even</span><span>—</span></div>
+            <div class="kv"><span class="k">Suggested</span><span>—</span></div>
+            <div class="kv"><span class="k">Per coaster</span><span>—</span></div>
+            <p class="note">Every amount waits on the settings at left. The page never fills a blank with a guess.</p>
+          </section>
+          <section class="card">
+            <h2>What similar coasters are listed at</h2>
+            <div class="band"><span>printed: about $5 a coaster · Islamic sets of 4–6: $25–45</span></div>
+            <p class="note">Asking prices on one day, not sales; the Islamic sets are 4 listings, three from one shop. The band informs; it does not set the price.</p>
+          </section>
+        </div>
+        <section class="card">
+          <h2>Charged against spent</h2>
+          <div class="kv"><span class="k">This order charges for</span><span class="stand">108 g</span></div>
+          <div class="kv"><span class="k">Buying its colors costs</span><span>5 whole spools</span></div>
+          <div class="kv"><span class="k">Left on the shelf after</span><span>5 part spools, counted in Inventory</span></div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

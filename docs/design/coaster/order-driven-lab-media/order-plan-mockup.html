@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+  Mockup of the Order plan page, order-driven-lab-design.md §7. Static HTML in the Lab's look
+  (mockup.css, copied from the Piece colors mockup). Nothing here runs; it exists to be looked
+  at and screenshotted into order-plan-mockup.png.
+
+  Real: the theme (Ice to navy, docs/design/coaster/themes/gbv/themes.yaml) and its five Matte
+  colors with their hexes and codes (palette.yaml); the five groups and their counts per coaster
+  (1, 10, 10, 10, 10, the pieces file sheets-04g prints); the size 112.5; that none of the five
+  colors is on the printer (the four owned trays are pink, blue, black and green); the ratio 1.13,
+  pooled from the three one-color PLA Basic prints that finished (sheets-04g 97/86, sheets-04c
+  48/42, phones-02 13/12), named only as the ratio not used for this Matte order.
+  Stand-ins, with a dotted underline: the totals 344 sliced minutes and 108 g, four times
+  sheets-04g's local PLA Basic slice (86 min, 27 g), until the Matte re-slice, so the total is
+  tagged "Basic stand-in", not "floor"; the split by color, an estimate (the gBV themes page's
+  Ice to navy split times four: Ivory 200/62.4, Ice 8/3.2, Sky 4/1.6, Marine 60/18.4, Dark Blue
+  72/22.4); the bed count per color (the packer decides that); the order number, the due date and
+  the "theme=" end of the configuration link (the link carries no colors today; how it will is
+  piece colors phase 3).
+
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1280,790
+            --screenshot=order-plan-mockup.png file://.../order-plan-mockup.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Order plan mockup</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Orders</h1>
+      <p class="tagline">order <span class="stand">0007</span> · draft · from a Coaster Lab link</p>
+      <div class="steps"><span class="on">Plan</span><span>Price</span><span>Inventory</span></div>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>The order</h2>
+          <div class="kv"><span class="k">What</span><span>gBV minimal coaster, loose pieces</span></div>
+          <div class="kv"><span class="k">How many</span><span>4</span></div>
+          <div class="kv"><span class="k">Size</span><span>112.5 mm, strap 3.75, height 4.4, round 1.25</span></div>
+          <div class="kv"><span class="k">Theme</span><span>Ice to navy</span></div>
+          <div class="kv"><span class="k">Due</span><span class="stand">2026-10-18</span></div>
+          <div class="kv"><span class="k">Customer</span><span class="src">kept in the hub, never in git</span></div>
+          <p class="note">Configuration: <code>…/coaster.html?v=1&amp;f=gBV_JTt3Kxk…&amp;theme=ice-to-navy</code></p>
+        </section>
+        <section>
+          <h2>Pieces</h2>
+          <table class="grid">
+            <tr><th>Group</th><th>Color</th><th class="num">Each</th><th class="num">× 4</th></tr>
+            <tr><td>Frame</td><td><span class="color-swatch" style="background:#FFFFFF"></span> Ivory White</td><td class="num">1</td><td class="num">4</td></tr>
+            <tr><td>Middle</td><td><span class="color-swatch" style="background:#A3D8E1"></span> Ice Blue</td><td class="num">1</td><td class="num">4</td></tr>
+            <tr><td>Kite</td><td><span class="color-swatch" style="background:#56B7E6"></span> Sky Blue</td><td class="num">10</td><td class="num">40</td></tr>
+            <tr><td>Hex</td><td><span class="color-swatch" style="background:#0078BF"></span> Marine Blue</td><td class="num">10</td><td class="num">40</td></tr>
+            <tr><td>Star</td><td><span class="color-swatch" style="background:#042F56"></span> Dark Blue</td><td class="num">10</td><td class="num">40</td></tr>
+            <tr><td>Outer</td><td><span class="color-swatch" style="background:#042F56"></span> Dark Blue</td><td class="num">10</td><td class="num">40</td></tr>
+            <tr class="total"><td>All</td><td>5 colors</td><td class="num">1 + 41</td><td class="num">4 + 164</td></tr>
+          </table>
+        </section>
+        <section>
+          <h2>Filament check</h2>
+          <div class="chips">
+            <span class="chip short"><span class="color-swatch" style="background:#FFFFFF"></span>none on hand</span>
+            <span class="chip short"><span class="color-swatch" style="background:#A3D8E1"></span>none</span>
+            <span class="chip short"><span class="color-swatch" style="background:#56B7E6"></span>none</span>
+            <span class="chip short"><span class="color-swatch" style="background:#0078BF"></span>none</span>
+            <span class="chip short"><span class="color-swatch" style="background:#042F56"></span>none</span>
+          </div>
+          <p class="note">None of the five is loaded; the trays hold pink, blue, black and green. Five spools go on the buy list.</p>
+        </section>
+      </aside>
+      <section class="lab-stage">
+        <section class="card">
+          <h2>Plates — one color each, the color picked at the send</h2>
+          <table class="grid">
+            <tr><th>Plate</th><th>On it</th><th class="num">Beds</th><th class="num">Sliced min (estimate)</th><th class="num">Corrected</th><th class="num">Grams (estimate)</th><th>Slice</th></tr>
+            <tr><td><span class="color-swatch" style="background:#FFFFFF"></span> Ivory White</td><td>4 frames</td><td class="num stand">1</td><td class="num stand">200</td><td class="num src">—</td><td class="num stand">62.4</td><td><span class="tag warn">to slice</span></td></tr>
+            <tr><td><span class="color-swatch" style="background:#A3D8E1"></span> Ice Blue</td><td>4 middles</td><td class="num stand">1</td><td class="num stand">8</td><td class="num src">—</td><td class="num stand">3.2</td><td><span class="tag warn">to slice</span></td></tr>
+            <tr><td><span class="color-swatch" style="background:#56B7E6"></span> Sky Blue</td><td>40 kites</td><td class="num stand">1</td><td class="num stand">4</td><td class="num src">—</td><td class="num stand">1.6</td><td><span class="tag warn">to slice</span></td></tr>
+            <tr><td><span class="color-swatch" style="background:#0078BF"></span> Marine Blue</td><td>40 hexes</td><td class="num stand">1</td><td class="num stand">60</td><td class="num src">—</td><td class="num stand">18.4</td><td><span class="tag warn">to slice</span></td></tr>
+            <tr><td><span class="color-swatch" style="background:#042F56"></span> Dark Blue</td><td>40 stars, 40 outers</td><td class="num stand">1</td><td class="num stand">72</td><td class="num src">—</td><td class="num stand">22.4</td><td><span class="tag warn">to slice</span></td></tr>
+            <tr class="total"><td>Order</td><td>4 frames, 164 pieces</td><td class="num stand">5</td><td class="num stand">344</td><td class="num"><span class="tag warn">Basic stand-in</span></td><td class="num stand">108</td><td></td></tr>
+            <tr class="dim"><td colspan="7">5 plates, warm-ups not timed · totals are 4 × sheets-04g's PLA Basic slice (86 min, 27 g), standing in until the Matte re-slice · the split by color is an estimate from the gBV themes page until each plate is sliced</td></tr>
+          </table>
+        </section>
+        <div class="row">
+          <section class="card">
+            <h2>Time</h2>
+            <div class="kv"><span class="k">On the printer</span><span>about <span class="stand">344 min (5¾ h)</span> · 5 plates, warm-ups not timed</span></div>
+            <div class="kv"><span class="k">Ratio used</span><span>none <span class="src">no Matte plate timed yet</span></span></div>
+            <p class="note">Not used: PLA Basic's 1.13 (3 prints: 1.08, 1.13, 1.14) would give about 388 min. Basic's ratio never applies to Matte; a Matte ratio replaces it once a Matte plate is timed.</p>
+            <div class="kv"><span class="k">Hands-on</span><span class="src">not measured</span></div>
+            <p class="note">Batched with other open orders, plates of the same color merge and the warm-ups shrink.</p>
+          </section>
+          <section class="card">
+            <h2>Material</h2>
+            <div class="kv"><span class="k">Used by this order</span><span class="stand">108 g</span> <span class="src">from a PLA Basic slice</span></div>
+            <div class="kv"><span class="k">Spools to buy</span><span>5</span></div>
+            <div class="hint"><b>Cash out is whole spools.</b> The order uses 108 g; buying its colors means five spools. The price charges the grams; Inventory keeps what is left.</div>
+          </section>
+        </div>
+        <div class="actions">
+          <button class="btn">Write the plate recipes</button>
+          <button class="btn ghost">Reserve filament</button>
+          <button class="btn ghost">Price this order →</button>
+          <span class="src">same as <code>bambu order plan &lt;order file&gt; --write</code>, the file kept in the hub</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
