@@ -305,7 +305,8 @@ export function registerOrder(program: Command): void {
     .option("--settings <file>", "the pricing settings (default: .bambu/pricing/settings.yaml, gitignored; none means every setting empty)")
     .option("--init-settings", "write the settings file with every setting empty, then price", false)
     .option("--quantities <list>", `the sizes to cost, comma-separated (default: ${DEFAULT_QUANTITIES.join(",")}; the plan's own size is added)`)
-    .option("--json", "print the price, sizes, scenarios and market band as JSON", false)
+    .option("--sweep <list>", "prices each to try, comma-separated: the margin and coasters to cover at each (the simulate-buyers page passes the prices its buyers saw)")
+    .option("--json", "print the price, sizes, scenarios, sweep and market band as JSON", false)
     .action((file: string, opts: PriceOpts) => {
       try {
         runPrice(file, opts);

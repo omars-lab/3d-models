@@ -24,6 +24,7 @@ import {
   priceOf,
   resolveStorePrices,
   scenarios,
+  sweep,
 } from "../price.js";
 
 export const DEFAULT_SETTINGS = ".bambu/pricing/settings.yaml";
@@ -91,6 +92,7 @@ export interface PriceReport {
   price: Price;
   by_quantity: Price[];
   scenarios: ScenarioRow[];
+  sweep: ScenarioRow[]; // one row per price tried (`--sweep`), empty when none was asked
   market_band: MarketBand;
 }
 
@@ -121,7 +123,7 @@ export function sizesFor(b: Basis, asked: number[]): number[] {
   return [...new Set([...asked, b.coasters])].sort((x, y) => x - y);
 }
 
-export function priceReport(plan: Plan, file: string | null, settingsNote: string, quantities: number[]): PriceReport {
+export function priceReport(plan: Plan, file: string | null, settingsNote: string, quantities: number[], pricesEach: number[] = []): PriceReport {
   const b = basisOf(plan);
   const { settings, notes } = settingsFor(file, b);
   return {
@@ -131,6 +133,7 @@ export function priceReport(plan: Plan, file: string | null, settingsNote: strin
     price: priceOf(b, settings),
     by_quantity: byQuantity(b, settings, sizesFor(b, quantities)),
     scenarios: scenarios(b, settings),
+    sweep: sweep(b, settings, pricesEach),
     market_band: marketBand(),
   };
 }
@@ -138,6 +141,7 @@ export function priceReport(plan: Plan, file: string | null, settingsNote: strin
 export interface PriceOpts {
   settings?: string;
   quantities?: string;
+  sweep?: string;
   json?: boolean;
   initSettings?: boolean;
 }
@@ -151,9 +155,10 @@ export function runPrice(planFile: string, opts: PriceOpts): void {
     console.error(`wrote ${file}, every setting empty`);
   }
   const quantities = opts.quantities ? opts.quantities.split(",").map((q) => parseQuantity(q)) : DEFAULT_QUANTITIES;
+  const pricesEach = opts.sweep ? opts.sweep.split(",").map((p) => parsePrice(p)) : [];
   const plan = JSON.parse(readFileSync(resolve(planFile), "utf8")) as Plan;
   const there = existsSync(file);
-  const report = priceReport(plan, there ? file : null, there ? file : `no settings file at ${file}, so every setting is empty (--init-settings writes one)`, quantities);
+  const report = priceReport(plan, there ? file : null, there ? file : `no settings file at ${file}, so every setting is empty (--init-settings writes one)`, quantities, pricesEach);
   if (opts.json) console.log(JSON.stringify(report, null, 2));
   else printReport(report);
 }
@@ -161,6 +166,12 @@ export function runPrice(planFile: string, opts: PriceOpts): void {
 function parseQuantity(q: string): number {
   const n = Number(q.trim());
   if (!Number.isInteger(n) || n < 1) throw new Error(`--quantities: "${q}" is not a whole number of coasters`);
+  return n;
+}
+
+function parsePrice(p: string): number {
+  const n = Number(p.trim());
+  if (!Number.isFinite(n) || n <= 0 || p.trim() === "") throw new Error(`--sweep: "${p}" is not a price in US dollars`);
   return n;
 }
 
@@ -227,6 +238,17 @@ function printReport(r: PriceReport): void {
     const tag = s.below_break_even ? "  below break-even" : "";
     console.log(`    ${s.strategy.padEnd(16)} ${String(s.coasters).padStart(3)}  ${money(s.price_each).padEnd(9)} ${money(s.cost_each).padEnd(9)} ${money(s.margin_each).padEnd(9)} ${cover.padStart(6)}${tag}${s.floor ? "  floor" : ""}`);
     if (s.missing.length) console.log(`      needs ${needs(s.missing, listed)}`);
+  }
+
+  if (r.sweep.length) {
+    console.log(`\n  sweep (price each tried, margin each; coasters a month to cover the fixed costs)`);
+    for (const s of r.sweep) {
+      const cover = s.to_cover === null ? "—" : String(s.to_cover);
+      const tag = s.below_break_even ? "  below break-even" : "";
+      console.log(`    ${money(s.price_each).padEnd(9)} ${money(s.margin_each).padEnd(9)} ${cover.padStart(6)}${tag}${s.floor ? "  floor" : ""}`);
+    }
+    const missing = [...new Set(r.sweep.flatMap((s) => s.missing))];
+    if (missing.length) console.log(`    needs ${needs(missing, listed)}`);
   }
 
   const band = r.market_band;
