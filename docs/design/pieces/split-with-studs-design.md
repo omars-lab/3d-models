@@ -6,8 +6,9 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master ec01d9
 
 # Split with studs: cut a model flat, print both halves face-down, pin them back together
 
-> Status: draft 2026-10-04, for Omar to decide the five calls in
-> [Open calls for Omar](#10-open-calls-for-omar). Asked by Omar on 2026-10-04 (typos fixed):
+> Status: draft 2026-10-04, for Omar to decide the six calls in
+> [Open calls for Omar](#10-open-calls-for-omar). Call 6 and §11, how loose pieces are trapped
+> between the halves, were added the same day. Asked by Omar on 2026-10-04 (typos fixed):
 > "how can we have a minimal construction where we slice it in half across the xy plane and have
 > it so we can reconstruct with lego-like connectors ... so that we have two glossy sides of the
 > construction that print against the plate — this should be a general technique". Nothing has
@@ -40,6 +41,11 @@ until [hemisphere-split](../orb/hemisphere-split-design.md)'s own print says oth
 
 Before any code, print the coupon in §9. It settles the stud fit and checks the floor under a
 socket, the only two numbers this design has no measurement for.
+
+**Loose pieces get easier too (§11).** Give each half a thin lip round every opening, on its
+visible face. Drop the pieces into the lower half, where the lip stops them falling through, then
+press the upper half on: its lip closes over them. A piece is trapped, not squeezed, so it can be
+cut loose enough to drop in, and no fit has to be tuned for each piece shape.
 
 ---
 
@@ -368,24 +374,33 @@ sliced for the plate Omar picks in call 1.
 - **One real crossing.** A 30 mm `--window` of the gBV halves, the tool bikar #293 shipped for
   sampler cards, holding three crossing sites. This checks the fit where the straps really meet.
   It needs Phase 1 (below), so it prints second.
+- **Trapped pieces (§11).** Three pairs of 25 × 25 mm tiles, each half 2.2 mm thick with one
+  hexagonal opening, a lip 0.6 mm thick and 0.8 mm wide round it on the face side, and two studs
+  at opposite corners. One piece per pair, cut at gap 0.25: 3.2 mm tall (no room, z = 0), 3.0 mm
+  (z = 0.2), and a third pair with a kite opening copied from gBV, to see how blunt its 36° tip
+  looks behind the lip. If call 6 picks corner tabs, a fourth pair with tabs and a long-edged
+  piece, to check the piece cannot tip out between them.
 
 Judged by hand, like sheets-04b: for each gap, does it press in, hold when shaken, and come apart
 without breaking. The gap that presses in and holds becomes the default. If the floors show at
-0.6, the floor goes up and the stud gets shorter to match.
+0.6, the floor goes up and the stud gets shorter to match. For the trapped pieces: does the piece
+drop in without a push, does the pair close flat over it, does it rattle when shaken, and does
+the lip hold when the piece is pushed against it hard with a thumb.
 
 Until bikar can split, the fit pairs and the show-through tiles can be a throwaway OpenSCAD file
 (§6, C): they are simple cylinders on squares.
 
 ## Plan, in order of what it buys per unit of work
 
-1. **SPL-1 fit pairs and show-through tiles** (OpenSCAD, minutes to print). They settle the two
-   numbers everything else rests on. If no gap holds, the design changes before any code is
-   written.
+1. **SPL-1 fit pairs, show-through tiles and trapped-piece pairs** (OpenSCAD, minutes to
+   print). They settle the two numbers everything else rests on, and show whether a lip traps a
+   piece cleanly. If no gap holds, the design changes before any code is written.
 2. **bikar `split` clause, coasters only.** The clause, the site picker, the refusals in §8 and
    `--piece lower|upper`, plus a cookbook recipe with a picture. This is the main build.
 3. **The window coupon** (the real crossing), from Phase 2's output.
 4. **The full gBV split** on one bed, on the plate from call 1. It answers the actual ask: do the
-   two faces match and read as one coaster.
+   two faces match and read as one coaster. If call 6 picks a lip, the split clause takes a `lip`
+   option for the `loose` openings, and this print carries a set of trapped pieces.
 5. **The Lab.** A split toggle on the Coaster Lab, showing the sites as in §3's picture.
 6. **General 3D models**, only if hemisphere-split's P3 says building the cut is worth it.
    Otherwise the slicer's cut, with our stud and gap numbers written into the recipe's notes.
@@ -428,6 +443,86 @@ Until bikar can split, the fit pairs and the show-through tiles can be a throwaw
    slicer's cut by hand for every job. B costs nothing now but repeats every click each send.
    Choosing A commits a new grammar clause, its cookbook recipe and its picture. Choosing B means
    no plate recipe can say "split".
+
+6. **How a split coaster holds its loose pieces** (§11, with a picture).
+
+   | Option | Pros | Cons | Implications | What it checks |
+   |---|---|---|---|---|
+   | **A. A full lip on both halves** (recommended) | the simplest new geometry, one more outline per opening; holds along every edge, so any piece shape; stud sites unchanged; the piece is today's piece, only thinner | straps look wider by 2w from both faces (3.75 → 5.35 mm at w = 0.8 on gBV at 1.25×); sharp tips look blunter; pieces sit t below each face, an inset look; the piece's upper face is a top surface, not a bed face | the coaster reads as a frame of inset panels. If the wider straps look wrong, the pattern can be drawn with straps 2w narrower, which costs stud sites as C does | the coupon's trapped-piece pairs: drop in, close, rattle, lip strength |
+   | **B. Corner tabs** | straps keep their width along their length; a corner fill reads as a rounded inside corner | holds only at the corners, so a long-edged piece may bow or tip there; needs a new corner-rounding outline per opening | suits pieces with short edges (hexagons) better than long kites | a fourth coupon pair with a long-edged piece |
+   | **C. A flanged piece in an undercut** | looks like today from both faces, with the piece flush | the strap is thinner at the cut face, and gBV's 56 sites have only just the 1.98 mm of room a 2.0 mm stud needs (§8), so any flange removes some; the piece's step is an overhang when printed | fewer or smaller studs (the coupon's 1.5 mm row); a stepped piece, a second outline on the piece too | the site picker's count at the flange width, then a coupon pair |
+   | **D. Press fit, as now** | nothing new to build; pieces flush; sheets-04g-fit is already queued | the gap must suit each piece shape; tight pieces go in one push at a time and loose ones fall out | the split stays only about the faces; sheets-04g-fit decides the gaps | sheets-04g-fit, already planned |
+
+   A, because it is the only one that holds every piece shape without a tuned fit and leaves the
+   studs alone; what it costs is the look, and the coupon shows that before anything is built.
+
+## 11. Loose pieces in a split coaster: trapped between two lips
+
+Asked by Omar on 2026-10-04 (typos fixed): "how can we have it that it's easier to place infill
+pieces and lock them into place when we join the two halves?"
+
+![Top row: the lower half face down with a lip round its opening; a piece dropped in, resting on the lip; the upper half pressed on, its lip over the piece. Bottom row: four ways to hold a piece, from the top and cut through: a full lip, corner tabs, a flanged piece, and today's press fit.](split-with-studs-media/capture.png)
+
+The picture is drawn from [capture.html](split-with-studs-media/capture.html), rendered headless,
+and is not to scale.
+
+### 11.1 Why this is easier than a press fit
+
+- **Placing.** Today's frame for loose pieces has no floor (F3 in
+  [loose-pieces §3.1](../coaster/loose-pieces-design.md#31-what-the-frame-is)). A piece cut loose
+  falls through: on sheets-04 every piece at gaps 0.05 to 0.20 did
+  ([the record](../../prints/2026-10-02-sheets-04/index.md)). A piece cut tight has to be pushed
+  in, and on [sheets-04g](../plates/sheets-04g.md) the kites and the middle wanted different gaps.
+  With a lip under it, a piece cannot fall through at any gap, so it can be cut loose and placing
+  it is dropping it in.
+- **Locking.** The upper half's lip closes over the piece as the studs go home. Nothing depends on
+  friction round the piece, so the gap no longer has to suit each piece shape.
+- **One fit, not one per shape.** The studs hold the halves, and the halves hold the pieces. The
+  only fit left to settle is the stud's (§4.1).
+- **Why it needs the split.** A one-piece coaster can have a ledge under each opening (F2 in
+  loose-pieces), which gives the easy placing but nothing over the piece. The second lip only
+  exists because the coaster comes apart at the middle.
+- **What it costs.** A piece comes out only when the halves come apart. With glue (call 3) the
+  pieces are there for good.
+
+### 11.2 How it is built
+
+- **It is loose-pieces' F2 frame on both halves**, the two ledges facing each other. F2 is
+  designed there and not yet built in bikar.
+- **Each half is still a height field with three levels**: the strap at the half's height, the
+  lip at t, and the opening at 0. The lip is the band between the opening's outline and that
+  outline moved in by w, the same second outline per opening that F2 needs. No union.
+- **No overhang.** Each half prints face down, so its lip is its first layers, on the bed, and is
+  part of the visible face.
+- **The piece is today's piece, only thinner**: the opening moved in by the gap, and as tall as
+  the space between the lips less a little room z. On gBV at 1.25×, 4.4 − 2 × 0.6 = 3.2 mm
+  between the lips. Layers are 0.2 mm, so the piece is 3.2 mm (no room) or 3.0 mm (0.2 mm of
+  rattle). Which one closes cleanly is the coupon's to say (§9), so z has no default here.
+- **The studs are untouched**, because at the cut face each strap keeps its width. That is why A
+  is recommended over C.
+- **Sharp tips look blunter.** Moving an outline in by w pulls a corner's tip back by
+  w ÷ sin(θ/2) ([loose-pieces §3.2](../coaster/loose-pieces-design.md#32-the-fit-and-whether-the-piece-sits-flush-proud-or-recessed)):
+  about 2.6 mm at gBV's 36° kite tips with w = 0.8. The lip covers the piece's tip there by more
+  than anywhere else, so it holds; it is the look that changes, and the coupon's kite pair shows it.
+
+**Default:** lip thickness t = 0.6 mm, three 0.2 mm layers, CAL-CST-03, the coaster's deboss
+floor. It transfers for printing, because it is the same build as the socket floor in §4.1: three
+layers laid straight on the bed. It does not transfer as a strength: CAL-CST-03 was set for a floor
+joined to a slab on its whole underside, and a lip hangs off the side of a strap, as
+loose-pieces §3.1 said of F2. The load is small, since a piece weighs a gram or two and a mug
+stands on the straps rather than on the inset piece, but a piece pushed in hard could snap a lip.
+The coupon pushes on it (§9).
+
+**Default:** lip width w = 0.8 mm, two 0.4 mm lines, the strap floor CAL-CST-01. It transfers as
+the narrowest band the printer lays as one solid line rather than two touching walls, which is
+what that bet is about. It does not transfer as a holding width. What holds the piece is the
+overlap, w − c on every edge: 0.55 mm at the gap below.
+
+**Default:** piece gap c = 0.25 mm per face, under CAL-LSE-01, the loose-piece gap. That bet asks
+for the gap at which a piece "drops in by hand and stays". Here the lips do the staying, so only
+"drops in" is asked of the gap, and sheets-04 showed every piece at 0.20 and below dropping
+straight through its opening. So 0.25 drops in; whether the halves then close over it is the
+coupon's to say.
 
 ## Appendix: sources
 
