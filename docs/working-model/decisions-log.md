@@ -6090,3 +6090,46 @@ page). None of the three options offered named it.
 **What would reverse it:** the store's code needing something only the hub can give at build time,
 such as the private network, which would pull intake and the store together; or the two designs
 drifting apart faster than calls can settle them, which would mean one doc should own both.
+
+## D-100 — A split coaster holds its pieces by a lip or a flange; both are built and both get printed
+
+Omar, 2026-10-04, answering call 6 of the
+[split design](../design/pieces/split-with-studs-design.md#10-open-calls-for-omar), how a split
+coaster holds its loose pieces: "i want a olate hat tries a and c ... these shoukd be different
+options in coaster lab". So both A and C are built, not one picked over the other, and the prints
+decide between them.
+
+### The options as offered
+
+- **A. A full lip on both halves** (recommended): holds any piece shape and leaves the studs alone.
+  Its cost is the look: wider straps from both faces and pieces set in.
+- **B. Corner tabs:** straps keep their width, but a long-edged piece may bow between the corners.
+- **C. A flanged piece in an undercut:** looks like today from both faces, with the piece flush. Its
+  cost is the strap at the cut face, which leaves no room for studs, and a piece with a step.
+- **D. Press fit, as now:** nothing new to build, but the gap must suit each piece shape.
+- **Chosen, A and C both,** as two Coaster Lab options and two plates.
+
+### What it changes
+
+- **naqsh takes `split at <mm> ... hold lip|flange [<w>] [thick <t>] [room <z>]`** (bikar
+  `coaster-split.ts`). The width defaults to 0.8 mm and the thickness to 0.6 mm, the two lip
+  defaults of §11.2; the room defaults to 0.
+- **Two Coaster Lab entries**, `gBV_JTt3Kxk-split-lip-coaster.bkr` and
+  `gBV_JTt3Kxk-split-flange-coaster.bkr`, at 112.5 mm, the size sheets-04g printed. The strap
+  follows the size (size ÷ 30), so `size` alone scales either one.
+- **A keeps the studs; C has none.** On C the undercuts leave no strap wide enough beside them for a
+  2 mm stud, as call 6's cons said, so its halves line up by their outlines and the pieces.
+- **A leaves the stars as holes.** A star's window moved in by half a strap and a 0.8 mm lip closes
+  up its arms, and bikar refuses a lip that closes a ring, naming it. C holds every ring, stars
+  included.
+- **C refuses a rib under 0.8 mm.** Each undercut takes w from the strap, so the strap left between
+  two of them is the strap less 2w; under 0.8 mm (CAL-CST-01) bikar refuses the file by name.
+- **Two plates, not one.** Each coaster's two halves are about 113 mm across, so four halves fill a
+  256 mm bed. [split-01](../design/plates/split-01.md) is A, [split-02](../design/plates/split-02.md)
+  is C, each with its coaster's pieces packed beside the halves. Both are experiments waiting on
+  his yes.
+- **The cookbook** has a `split` recipe drawn both ways (`coaster-knobs.md`).
+
+**What would reverse it:** the prints. If one way closes cleanly and the other does not, the other
+is dropped from the Lab. If the lip's wider straps look wrong in the hand, A goes; if the flange's
+step prints badly as an overhang, or the halves will not line up with no studs, C goes.

@@ -404,3 +404,54 @@ different layouts is refused, and so is a spacing of 0 or less.
 Related: [loose pieces in pockets](#loose-pieces-in-pockets),
 [peaked pieces](#peaked-pieces-a-soft-point-on-top), the
 [sheets-04g plate](../design/plates/sheets-04g.md) that packs the gBV pieces this way.
+
+## Split coasters: two halves that trap the pieces
+<!--covers:split-->
+
+A loose piece in a straps-only coaster can fall out through the bottom. `split at <mm>` cuts
+the coaster into a lower and an upper half at that height, each printed flat on its cut
+face, and `hold` is what keeps each piece in once the two halves are glued together. The halves print as `--piece Lower` and
+`--piece Upper`, and the pieces as `--piece <color>`, as for any loose coaster. The picture
+opens the coaster up: the lower half, the pieces lifted above their pockets, and the upper
+half turned face up above them.
+
+- `hold lip <w>` narrows every pocket by `w` mm at the coaster's top and bottom faces, so a
+  plain flat piece sits between two lips. The faces show a lip around each piece.
+- `hold flange <w>` keeps both faces the pocket's own shape and cuts an undercut `w` mm
+  into the straps at the cut; each piece grows a matching flange that sits in it. From
+  outside, the coaster looks like the plain one.
+
+<!-- recipe: coaster-split; swap: hold lip 0.8 | hold flange 0.8 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 45
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    Teal = #2f8f8f
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 2 color Teal
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4.4
+  strap width 3
+  loose where orbit == 0 clearance 0.25
+  loose where orbit == 2 clearance 0.25
+  split at 2.2 hold lip 0.8
+```
+![The star coaster opened up: lower half, gold and teal pieces, upper half above, with a lip and with a flange](img/coaster-split.png)
+
+**Watch out:** `split` needs `outline pattern` and at least one `loose` line. Each half must
+be thicker than the hold (`thick`, 0.6 mm by default). A flange cuts into the strap from
+both sides, so the strap left between two undercuts must stay at least 0.8 mm wide; bikar
+refuses a wider flange and names the rib. A lip that closes up a narrow piece (a star's
+arms) is refused by the ring's name. `studs <⌀>` adds pegs that line the two halves up for
+gluing. The flange piece prints with its flange as a short overhang. Neither hold has been
+printed yet.
+
+Related: [loose pieces in pockets](#loose-pieces-in-pockets),
+[the split design, §11](../design/pieces/split-with-studs-design.md).

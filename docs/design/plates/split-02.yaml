@@ -1,0 +1,62 @@
+# split-02 — option C: a split gBV coaster whose pieces carry a flange the two halves close on
+#
+# Omar, 2026-10-04, on the split design's call 6 (split-with-studs §11): "i want a olate hat tries
+# a and c ... these shoukd be different options in coaster lab". Option C is the flange: both faces
+# of the coaster stay flush. Each piece is a 0.6 mm boss the shape of its hole, then a band 0.8 mm
+# wider all round for the middle 3.2 mm, then another 0.6 mm boss, and each half has an undercut
+# at the cut for its side of the band. Closed, the band is held between the two halves and only
+# the bosses show. Option A, the lip, is split-01: two plates, because four 112.5 mm halves fill
+# an X2D bed and leave no room for pieces.
+#
+# The coaster is bikar's gBV_JTt3Kxk-split-flange-coaster.bkr at its defaults: size 112.5 (the
+# 1.25x coaster sheets-04g printed), strap 3.75, closed height 4.4, cut at half, flange 0.8,
+# gap 0.25 per face. No studs: the undercuts leave no strap wide enough to stand a 2 mm stud on,
+# so the halves line up by their outlines and the pieces.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
+#
+#   LOWER    the lower half, cut face up (1)
+#   UPPER    the upper half, printed face down (1)
+#   MIDDLE   the twenty-sided piece in the middle (1)
+#   KITE     the small four-sided kites (10)
+#   HEX      the inner ring of six-sided pieces (10)
+#   STAR     the ten-pointed stars (10)
+#   OUTER    the outer ring of six-sided pieces (10)
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/split-02.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5 }
+    label:  LOWER
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5 }
+    label:  UPPER
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5 }
+    label:  MIDDLE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5 }
+    label:  KITE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5 }
+    label:  HEX
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5 }
+    label:  STAR
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5 }
+    label:  OUTER

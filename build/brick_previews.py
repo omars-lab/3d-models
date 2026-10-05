@@ -105,15 +105,18 @@ def mate_offset(stl, mate_mm):
 def render(binary, stl, out, mate=None, parts=(), color=None):
     """Draw `stl` (in `color` if given), plus a mated copy, plus any `parts`:
     (stl, (dx, dy, dz), "#rrggbb") each moved and colored — a loose coaster's
-    pieces lifted above its frame."""
+    pieces lifted above its frame. A fourth item, True, turns the part over
+    about x before moving it: a split coaster's upper half, printed face down,
+    shown face up again over its lower half."""
     with tempfile.NamedTemporaryFile("w", suffix=".scad", delete=False) as fh:
         tint = f'color("{color}") ' if color else ""
         fh.write(f'{tint}import("{os.path.abspath(stl)}");\n')
         if mate is not None:
             dx, dy = mate
             fh.write(f'translate([{dx}, {dy}, 0]) import("{os.path.abspath(stl)}");\n')
-        for part, (dx, dy, dz), color in parts:
-            fh.write(f'translate([{dx}, {dy}, {dz}]) color("{color}") import("{os.path.abspath(part)}");\n')
+        for part, (dx, dy, dz), color, *flip in parts:
+            turn = "rotate([180, 0, 0]) " if flip and flip[0] else ""
+            fh.write(f'translate([{dx}, {dy}, {dz}]) {turn}color("{color}") import("{os.path.abspath(part)}");\n')
         scad = fh.name
     try:
         subprocess.run(

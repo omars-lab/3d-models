@@ -6,13 +6,14 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master ec01d9
 
 # Split with studs: cut a model flat, print both halves face-down, pin them back together
 
-> Status: draft 2026-10-04, for Omar to decide the six calls in
+> Status: draft 2026-10-04, for Omar to decide calls 1 to 5 in
 > [Open calls for Omar](#10-open-calls-for-omar). Call 6 and §11, how loose pieces are trapped
 > between the halves, were added the same day. Asked by Omar on 2026-10-04 (typos fixed):
 > "how can we have a minimal construction where we slice it in half across the xy plane and have
 > it so we can reconstruct with lego-like connectors ... so that we have two glossy sides of the
-> construction that print against the plate — this should be a general technique". Nothing has
-> been built or printed. The research behind it is
+> construction that print against the plate — this should be a general technique". Call 6 is
+> decided (D-100): the lip and the flange are both built in bikar, as two Coaster Lab options, and
+> wait to print as split-01 and split-02; nothing has printed. The research behind it is
 > [split-with-studs-research.md](../../research/split-with-studs-research.md).
 
 **In short.** Cut the coaster in half through its height. Print both halves with their outside
@@ -455,6 +456,9 @@ Until bikar can split, the fit pairs and the show-through tiles can be a throwaw
 
    A, because it is the only one that holds every piece shape without a tuned fit and leaves the
    studs alone; what it costs is the look, and the coupon shows that before anything is built.
+
+   **Decided 2026-10-04:** A and C both, as two Coaster Lab options and two plates,
+   [split-01](../plates/split-01.md) and [split-02](../plates/split-02.md) → [D-100](../../working-model/decisions-log.md#d-100--a-split-coaster-holds-its-pieces-by-a-lip-or-a-flange-both-are-built-and-both-get-printed).
 
 ## 11. Loose pieces in a split coaster: trapped between two lips
 

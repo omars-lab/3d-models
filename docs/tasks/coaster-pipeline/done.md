@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-05 — The split coaster's two holds, at Omar's ask on call 6 (D-100): the lip (A) and the flange (C) as two Coaster Lab entries on gBV (bikar #305), each on its own plate, [split-01](../../design/plates/split-01.md) and [split-02](../../design/plates/split-02.md), sliced and pictured up to the owner gate; the prints wait on Omar in the backlog (3d-models #558)
+
 - 2026-09-27 — The dovetail slot is a true outward offset of the tab, so the fit plays the same all round the neck instead of pinching at the corners; the docs say so (bikar #262, 3d-models #351)
 - 2026-09-27 — Slicing flattens each preset chain before it runs and checks the slice took the settings asked for, so a plate no longer slices on an inherited default without saying (3d-models #349)
 - 2026-09-27 — minis-04 print record, with a verdict for each piece, and its lessons written into the sample and review-print skills (3d-models #348)

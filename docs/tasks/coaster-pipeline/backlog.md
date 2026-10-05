@@ -48,6 +48,11 @@ Sending a print and which filament to load.
   waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
+- **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
+  [split-02](../../design/plates/split-02.md) (flange)** — waiting on Omar's tick on each page, with
+  the color in the yes. The gBV coaster at 112.5 mm cut in two halves that close over its loose
+  pieces: one bed each, 89 minutes and 30 g, 107 minutes and 31 g (D-100, 2026-10-05). Whether
+  the halves are glued is still the split design's call 3.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.
