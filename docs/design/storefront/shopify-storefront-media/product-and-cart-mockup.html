@@ -1,0 +1,144 @@
+<!doctype html>
+<!--
+  Mockup of the storefront's product page and its cart, shopify-storefront-design.md §8. Static
+  HTML in a plain storefront look. Nothing here runs; it exists to be screenshotted into
+  product-and-cart-mockup.png.
+
+  Real: the gBV coaster at 112.5 mm, its five piece groups and the frame; the Ice to navy theme and
+  its five PLA Matte colors with their codes (docs/design/coaster/themes/gbv/themes.yaml,
+  .claude/skills/color-themes/palette.yaml); the picture (themes/gbv/ice-to-navy.svg); the share
+  link's shape, `?v=1&f=<preset>&color.<Name>=<code>` (bikar packages/lab/src/url-state.ts).
+  Stand-ins, with a dotted underline: the shop name, the preset id in the link, the lead time, the
+  option values for finish and set size.
+  Empty, on purpose: every price. All twelve price settings are still empty
+  (order-driven-lab-design.md §9.3), so nothing on this page is a price.
+
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1280,760
+            --screenshot=product-and-cart-mockup.png file://.../product-and-cart-mockup.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Product and cart mockup</title>
+    <style>
+      :root {
+        --ink: #1d1d1b;
+        --muted: #6b6b66;
+        --line: #e4e1da;
+        --paper: #fbfaf7;
+        --accent: #1f3a5f;
+        --note: #8a5a00;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 15px/1.45 -apple-system, "Helvetica Neue", Arial, sans-serif;
+        color: var(--ink);
+        background: var(--paper);
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 28px;
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      header .shop { font-weight: 700; letter-spacing: 0.04em; }
+      header nav { color: var(--muted); font-size: 14px; }
+      header nav span { margin-left: 20px; }
+      .stand { border-bottom: 1px dotted var(--muted); }
+      main { display: grid; grid-template-columns: 1fr 380px; gap: 0; }
+      .product { display: grid; grid-template-columns: 420px 1fr; gap: 32px; padding: 28px; }
+      .product img { width: 420px; height: 420px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+      h1 { font-size: 24px; margin: 0 0 4px; }
+      .sub { color: var(--muted); margin: 0 0 14px; }
+      .price { font-size: 20px; margin: 0 0 4px; }
+      .price .empty { color: var(--muted); font-style: italic; font-size: 15px; }
+      .lead { color: var(--note); font-size: 13px; margin: 0 0 16px; }
+      .opt { margin: 0 0 12px; }
+      .opt label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 4px; }
+      .chips span { display: inline-block; border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; margin: 0 6px 6px 0; background: #fff; font-size: 14px; }
+      .chips span.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+      .btn { display: block; text-align: center; padding: 11px; border-radius: 5px; font-weight: 600; margin-top: 10px; }
+      .btn.primary { background: var(--accent); color: #fff; }
+      .btn.ghost { border: 1px solid var(--accent); color: var(--accent); background: #fff; }
+      .small { font-size: 12px; color: var(--muted); }
+      .made { margin-top: 16px; padding: 10px 12px; border-left: 3px solid var(--note); background: #fff8ea; font-size: 13px; }
+      aside { border-left: 1px solid var(--line); background: #fff; padding: 22px 22px; }
+      aside h2 { font-size: 16px; margin: 0 0 14px; }
+      .line { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+      .line img { width: 64px; height: 64px; border: 1px solid var(--line); border-radius: 4px; }
+      .line .t { font-weight: 600; }
+      .props { margin: 6px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+      .props li { margin: 1px 0; }
+      .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1px solid #999; vertical-align: -1px; margin-right: 4px; }
+      .hidden { margin-top: 10px; padding: 8px 10px; background: #f3f1ec; border-radius: 4px; font: 12px/1.4 Menlo, monospace; color: var(--muted); }
+      .hidden b { font-family: -apple-system, Arial, sans-serif; color: var(--ink); font-weight: 600; }
+      .tot { display: flex; justify-content: space-between; margin: 14px 0 4px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="shop"><span class="stand">NAQSH COFFEE</span></div>
+      <nav><span>Coasters</span><span>Themes</span><span>Sets</span><span>Cart (1)</span></nav>
+    </header>
+    <main>
+      <section class="product">
+        <img src="../../coaster/themes/gbv/ice-to-navy.svg" alt="gBV coaster in Ice to navy" />
+        <div>
+          <h1>Ten-fold star coaster</h1>
+          <p class="sub">A frame with 41 loose pieces, 112.5 mm across. Printed to order.</p>
+          <p class="price"><span class="empty">Price not set: every price setting is still empty</span></p>
+          <p class="lead">Made to order: ships in <span class="stand">— days</span> (lead time not set)</p>
+          <div class="opt">
+            <label>Theme</label>
+            <div class="chips"><span class="on">Ice to navy</span><span>Espresso and crema</span><span>Iznik tile</span><span>Custom (design it)</span></div>
+          </div>
+          <div class="opt">
+            <label>Finish</label>
+            <div class="chips"><span class="on stand">Matte</span><span class="stand">Silk+</span><span class="stand">Sparkle</span></div>
+          </div>
+          <div class="opt">
+            <label>Set</label>
+            <div class="chips"><span class="on stand">Single</span><span class="stand">Set of 4</span><span class="stand">Set of 6</span></div>
+          </div>
+          <a class="btn primary">Add Ice to navy to cart</a>
+          <a class="btn ghost">Design yours in the Lab →</a>
+          <p class="small">The Lab opens with this theme loaded. Pick a color for each ring, then Add to cart there.</p>
+          <div class="made">Each one is printed for you and pressed together by hand. A custom coloring is checked by a person before it prints.</div>
+        </div>
+      </section>
+      <aside>
+        <h2>Your cart</h2>
+        <div class="line">
+          <img src="../../coaster/themes/gbv/ice-to-navy.svg" alt="" />
+          <div>
+            <div class="t">Ten-fold star coaster</div>
+            <div class="small">Matte · Single · Qty 4</div>
+            <ul class="props">
+              <li>Theme: Ice to navy</li>
+              <li><span class="sw" style="background:#FFFFFF"></span>Frame: Ivory White</li>
+              <li><span class="sw" style="background:#A3D8E1"></span>Middle: Ice Blue</li>
+              <li><span class="sw" style="background:#56B7E6"></span>Kite: Sky Blue</li>
+              <li><span class="sw" style="background:#0078BF"></span>Hex: Marine Blue</li>
+              <li><span class="sw" style="background:#042F56"></span>Star: Dark Blue</li>
+              <li><span class="sw" style="background:#042F56"></span>Outer: Dark Blue</li>
+              <li>Design: <u>open in the Lab</u></li>
+            </ul>
+            <div class="hidden">
+              <b>Hidden from the buyer at checkout</b> (names start with _; the shop's admin still shows them)<br />
+              _link ?v=1&amp;f=<span class="stand">gbv-minimal</span>&amp;color.Middle=11601&amp;…<br />
+              _config <span class="stand">cfg_…</span><br />
+              _colors Frame=11100;Middle=11601;…<br />
+              _sig <span class="stand">ed25519:…</span>
+            </div>
+          </div>
+        </div>
+        <div class="tot"><span>Subtotal</span><span class="small">not set</span></div>
+        <p class="small">Shipping and tax at checkout (Shopify).</p>
+        <a class="btn primary">Check out</a>
+      </aside>
+    </main>
+  </body>
+</html>
