@@ -11,10 +11,11 @@ into everything needed to make and sell it: the plates[^plate] to print, the tim
 the filament[^filament] by color, what to buy, and a price. Today all of that is worked out by hand, and
 the price and the stock of filament are not worked out anywhere. It proposes one command that
 does the working out, and three pages over one private store that show it: a plan, a price and
-the shelf of filament.
+the shelf of filament. It also writes down a set of made-up orders that every part must get right
+before it ships (§9.6), and a view that lays the ways of setting a price side by side (§9.7).
 
 > Status: draft, 2026-10-04. Nothing here is built. Omar, who designs, prints and sells the
-> coasters, has three calls to make, in
+> coasters, has five calls to make, in
 > [§10](#10-open-calls-for-omar). No price is worked out here on purpose: every price setting is
 > still empty. Four have looked-up references to confirm (§9.3), five come only from Omar's own
 > records, and three are his to choose.
@@ -183,6 +184,10 @@ step changes.
 7. **The print operator closes a print against the shelf** (new): the plate's grams come off the
    spool that fed it.
 8. **The owner records a spool bought or opened** (new).
+9. **The owner compares ways of setting a price** (new): cost-plus, the market, a premium, by
+   finish, sets, a custom theme, a launch price, each with its margin per coaster (§9.7).
+10. **A developer runs the simulated orders** (new): every made-up order's plan, shelf, price and
+    pages checked against what they must show, before a change merges (§9.6).
 
 ```mermaid
 flowchart LR
@@ -194,6 +199,8 @@ flowchart LR
   o --> uc4["price an order (new)"]
   o --> uc5["batch orders by color (new)"]
   o --> uc8["record a spool (new)"]
+  o --> uc9["compare ways to set a price (new)"]
+  d(["developer"]) --> uc10["run the simulated orders (new)"]
   op(["print operator"]) --> uc6["send an order's plates (impacted)"]
   op --> uc7["close a print against the shelf (new)"]
 ```
@@ -209,8 +216,9 @@ the pictures assume the recommended answer, the hub.
 |---|---|---|
 | `bambu order plan <order.yaml>` | the command line, this repo | A new command. Prints the plan; with `--write`, writes the plate recipes |
 | **Plan** page | the hub, a new Orders tab | A new page: the order, its pieces, its plates, time, material, filament check. Buttons: Write the plate recipes, Reserve filament, Price this order |
-| **Price** page | the hub, Orders tab | A new page: every price input with where it comes from, the cost built up, the price, the market band |
+| **Price** page | the hub, Orders tab | A new page: every price input with where it comes from, the cost built up, the price, the market band. A second view, Scenarios, lays out seven ways of setting the price (§9.7) |
 | **Inventory** page | the hub, Orders tab | A new page: spools on hand, what prints used, what open orders hold, the buy list. Buttons: Read the trays, Mark the buy list ordered, Add a spool by hand |
+| `make validate-orders` | the command line, this repo; a target of the same name in the hub | A new check over the simulated orders (§9.6), called by `make validate` |
 | **Add to order** | the Coaster Lab, beside the share button | One new button. On a device that can reach the private hub, it opens the hub with the share link filled in. Anywhere else it shows "Send this link to the shop to order" and the link to copy |
 
 The three pages are drawn below as mockups, not built pages, in the Coaster Lab's own colors and
@@ -608,6 +616,224 @@ FAIL: one color's pieces spill onto a second bed and the plan still says one bed
 with the right order total. The total cannot vouch for each plate, so the check compares beds and
 items plate by plate, not the sum. Also FAIL: any price shown while one of its inputs is pending.
 
+### 9.6 Simulated orders: the regression suite
+
+In plain words: a set of made-up orders, each with the plan, the shelf and the price it must
+produce, written down before the planner exists. Each phase is done when its part of the set comes
+out right, and the pages are checked against the same numbers in a real browser.
+
+**Where the files live.** Each fixture[^fixture] is one folder in this repo, under
+`tools/bambu/test/fixtures/orders/<name>/`. Nothing in it is private: the order id reads
+"FIXTURE", no customer is named, and no setting is a real price.
+
+| File | What it holds | Checked from phase |
+|---|---|---|
+| `order.yaml` | The order, in the format of §9.1 | 1 |
+| `slices.json` | One frozen slice[^frozen] per plate the order should make: its recipe's hash, minutes, grams and beds | 1 |
+| `expected-plan.json` | The golden file[^golden] for the plan: each plate by color, the pieces on it by construction and group, its beds, minutes and grams, and the ratio used or "floor" | 1 |
+| `wrong-plan.json` | The fixture's hard case, written out as a plan that is wrong in exactly that way. The check must reject it | 1 |
+| `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf and the monitor rows that close prints; then on hand, held, available and the buy list | 2 |
+| `settings.fixture.yaml`, `expected-price.json` | The twelve settings of §9.3 with made-up values, and the cost lines, break-even and suggested price they give, or "no price" with the empty setting named | 3 |
+| `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings | 3 |
+
+**Made-up settings stay made up.** Each `settings.fixture.yaml` says FIXTURE in its first line and
+beside every value. The values are picked so the sums can be checked by hand (whole numbers,
+rates of 1), never a looked-up or real value. So a fixture can never be read as a price, and a
+real price can never slip into a public test.
+
+**Frozen slices keep the suite fast.** The checks read each plate's minutes and grams from
+`slices.json` instead of running the slicer. So they need no Bambu Studio, no printer and no
+network. Each frozen slice carries the hash[^hash] of the recipe it came from. If the planner writes a
+different recipe, the hash no longer matches and the fixture fails with "re-freeze", so a stale
+slice cannot pass. In phase 0, fixture 1's frozen slices are §4's per-color estimates, marked
+"stand-in". Phase 1 replaces each with the real slice of the recipe it writes. That is the one
+golden change phase 1 may make without a reason line in its pull request. The live check, that a recipe's
+numbers equal `bambu validate sliced` on it (§9.5), stays separate. It runs on the flagship
+order only, on a machine with the slicer, because it is slow and needs Bambu Studio.
+
+```mermaid
+flowchart LR
+  fx["fixture folder: order, frozen slices, made-up settings"] --> plan["bambu order plan"]
+  plan -->|"plan JSON"| cmp1{"equal, plate by plate?"}
+  gold["golden files"] --> cmp1
+  wrong["wrong plan"] -->|"must be rejected"| cmp1
+  plan -->|"plan JSON"| hub["hub: shelf and price"]
+  hub -->|"shelf and price JSON"| cmp2{"equal?"}
+  gold --> cmp2
+  hub --> pages["Plan, Price, Inventory pages"]
+  pages -->|"numbers read by a headless browser, and screenshots"| cmp3{"equal?"}
+  gold --> cmp3
+```
+
+**In the diagram:** fixture[^fixture]; frozen slice[^frozen]; golden file[^golden]; headless
+browser[^headless]; hub[^hub].
+
+**The eight fixtures.**
+
+| # | Fixture | The order | The claim it checks | The hard case it covers |
+|---|---|---|---|---|
+| 1 | Ice to navy, 4 | §4's order: 4 × gBV in Ice to navy | §4 plate by plate: 5 plates, the piece counts of §9.5, 344 minutes, 108 g (Basic stand-ins), 5 spools to buy | Star and Outer share one color, so two groups share one plate. A plan can get every total right while one kite sits on the wrong plate |
+| 2 | One color | 1 × gBV, the frame and every group in one color | One plate, the frame riding with its pieces, as [sheets-04g](../plates/sheets-04g.yaml) printed it: 86 sliced minutes, 27 g | One plate per group would make six plates with the same total grams. Only the plate count, and so the warm-ups, shows it |
+| 3 | A color over two beds | 6 × gBV in Ice to navy | The frame color takes two beds, and the plan says two beds and two warm-ups for it | The totals stay right while the plan says one bed. The golden's bed count is worked by hand from the frame's footprint on a 256 × 256 mm bed, before the packer runs |
+| 4 | Two orders, one color | Two open orders that both need the same color; a shelf with one part spool that covers either order alone, not both | Held is the sum of both orders, available goes below zero, and the buy list asks for one spool | Checking each order against what is on hand says both fit. Only held, summed across orders, shows the shortfall |
+| 5 | A failed print | Fixture 2's plate, closed by monitor rows that end in a failure partway | The spool loses the plate's full slice grams (§9.2); the order is still open, so its grams stay held for the reprint | Counting only finished prints leaves the spool 27 g too full |
+| 6 | One setting empty | Fixture 1's order; every made-up setting filled except packaging | No cost total, no break-even, no price; the page names packaging as the empty one; the lines that do not need it still show | Treating empty as zero gives a price a little lower than fixture 1's. It looks right, so only "no price" in the golden catches it |
+| 7 | Silk Gold | 1 × gBV with one group in Silk Gold (13401) | The plan works; the buy list says "not on the US store, stock on hand only", from the store note in `.claude/skills/color-themes/palette.yaml`; the material line and the price say no store price for 13401 | Using Silk+ Gold's (13405) price because it is the nearest color. A price appears, and it is wrong: the research calls that swap a color change to look at, not a rename |
+| 8 | Two constructions | 2 × gBV and 2 × the GimTvN9hw4U minimal coaster (another pattern in the catalog, a frame with no loose pieces), all frames in one color | That color's plates hold 4 frames, counted 2 and 2 by construction; an order line with no pieces is valid | A planner keyed on the group name or on "frame" alone counts 4 gBV frames. The totals can still match |
+
+**Validator:** the plan comes out right plate by plate (fixtures 1, 2, 3, 7, 8).
+
+PASS: for each fixture, every plate in the planner's JSON matches one plate in
+`expected-plan.json` by color. It has the same pieces by construction and group, the same bed
+count, minutes and grams equal to its frozen slice, and "floor" where no ratio matches. No plate
+is extra or missing, and the order total equals the sum of its plates. Each fixture's
+`wrong-plan.json` is rejected.
+
+FAIL: fixture 1's wrong plan moves one kite from its own plate onto another color's plate and keeps every
+total. A check that compares totals passes it. This one fails it, because it compares the pieces
+on each plate. If any `wrong-plan.json` passes, the suite fails: a check that cannot reject its
+own hard case is not checking it.
+
+**Validator:** the shelf adds up (fixtures 4, 5 and 7's buy list).
+
+PASS: on hand, held, available and the buy list, color by color, equal `expected-shelf.json`. A
+failed print takes its full slice grams off its spool, and its order's grams stay held.
+
+FAIL: fixture 4 checked one order at a time. Each order fits on its own, so no buy list appears;
+the golden asks for one spool. Also FAIL: fixture 5 with the failed row skipped, so the spool
+reads 27 g too full.
+
+**Validator:** a price shows only when every input is filled (fixtures 1, 6, 7).
+
+PASS: with every made-up setting filled (fixture 1), each cost line, the break-even and the
+suggested price equal `expected-price.json` to the cent. They also equal a hand working of §9.3,
+written out in the fixture's README. With packaging empty (fixture 6), or a color with no store
+price (fixture 7), no total, break-even or price appears, and the missing input is named.
+
+FAIL: fixture 6 with the empty setting read as zero. It shows a break-even a little below
+fixture 1's, which looks reasonable. The golden for fixture 6 is "no price", so any number fails.
+
+**Validator:** the pages show the same numbers as the JSON (all eight, from phase 4).
+
+PASS: a headless browser[^headless] opens Plan, Price and Inventory for each fixture, on a fresh
+store holding only that fixture. Every number a page shows is read from an element tagged with the
+JSON field it shows. Each equals the golden, formatted by the one rounding rule the pages share.
+Every golden field the page is meant to show is found on it. A screenshot of each page is kept
+with the run's report.
+
+FAIL: the Plan page shows the previous fixture's plan (a stale store), or rounds 62.4 g to 62
+when the golden says 62.4, or drops a plate row and still shows the right total. A golden field
+missing from the page also fails. A check that reads only what the page shows cannot see what the
+page leaves out.
+
+**The make target.** `make validate-orders` runs in this repo, and `make validate` calls it. It
+runs the plan checks on the frozen slices, with no slicer, printer or network. The shelf, price
+and page checks run where that code lives. If call 1 picks the hub, that is a hub target of the
+same name, reading the fixture folders from this repo at a pinned commit. Before a phase lands,
+the runner lists its fixtures as "waiting on phase N", with a count. Once that phase's command
+exists, a fixture still marked waiting fails. So a fixture cannot stay waiting by being
+forgotten.
+
+**Which phase builds which part.** The suite comes first, as the test each phase must pass:
+
+| Phase | What it adds to the suite |
+|---|---|
+| 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
+| 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8; the stand-in slices become real ones |
+| 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7 |
+| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7 |
+| 4, the pages | The browser run, with its screenshots, over all eight |
+
+### 9.7 Pricing ideas: the ways to set a price, side by side
+
+In plain words: before settling on one price, lay out the ways of setting it next to each other.
+For each, see what it earns per coaster and how many coasters a month it takes to cover the
+shop's fixed costs. Call 2 picks the method a quote uses. This view is where that choice is tried
+out, and later where a quote is checked against the other ways.
+
+Every market number below is from the
+[consolidated pricing research](../../research/2026-10-04-coaster-pricing.md), with its hedges.
+That research found no sales volumes, only asking prices on one day, so nothing below says what
+buyers pay. The first three rows are call 2's three methods. The other four are ways to shape a
+price, and work on top of whichever method call 2 picks.
+
+| Strategy | How the price is set | Pros | Cons | Implications | What the research gives it |
+|---|---|---|---|---|---|
+| Cost-plus | Break-even × (1 + markup), §9.3 | Never below cost; every number explained | Needs all twelve settings; the markup is a judgment | Call 2's pick; the other rows are compared to it | One coaster's plastic, power, wear and failures cost about $0.98–1.37, before labor, packaging and fees. Labor is likely the largest cost |
+| Market range | A pick inside what similar coasters are listed at | Easy to sell at; no settings needed to pick it | Can sell below cost: a five-color order has five plates and five warm-ups that a one-color listing does not | The band moves without us, so repeat the search before using it | Printed coasters about $5 each (median of 39 listings, one pass, not re-checked); sets of 4 median $20 (23 listings), sets of 6 $25.50 (12). First page only, asking prices, not sales |
+| Story, premium | A pick above the band, for the Islamic geometry and the handmade, loose-piece build | Earns the most per coaster, if it sells | Nothing to check it against: no sales, and the research found no evidence of a premium for the loose-piece build. It calls the build a difference in the product, not proof of a premium | An untested bet until a few real sales; the page labels it as one | Printed Islamic sets $6.25–7.50 a coaster, from 4 listings, three of them from one shop, all smaller than ours (112.5 mm), none a frame with loose pieces. Medium-low evidence |
+| By finish | One price per line: Matte or Basic, Silk+, and Sparkle or Silk Multi-Color | A menu buyers can see; a visible reason for a higher price | The filament cost barely differs, so a finish step is a price choice, not a cost passed on | A "Silk" tier means Silk+: plain PLA Silk is not on the US store. Silk+ refills come in four colors only | Silk+ costs the same as Basic and Matte ($15.99 refill, $18.99 spool). Sparkle and Silk Multi-Color cost $24.99, spool only, no bulk discount: $0.67 a full plate against $0.43–0.51 |
+| Sets and bundles | 4 or 6 coasters, with a holder, priced as one | Warm-ups, packaging and the fixed fee spread over more coasters; listings already sell this way | The holder is not designed: no construction, no slice, no cost | Each set size is planned as its own order, so its cost per coaster is its own. A holder design joins the backlog | Sets of 4 median $20 (23 listings), sets of 6 $25.50 (12); one Islamic set of 4 with a holder listed at $25 |
+| Custom theme | The custom order's own plan, priced as usual, plus a surcharge for the design time | Pays for the back-and-forth a custom order takes | Nothing to set the surcharge from. More colors already cost more through the formula (one plate and one warm-up per color), so the surcharge must not charge for them again | The surcharge covers design minutes only. A color the store does not sell (Silk Gold) cannot be priced at all | Nothing: the research did not look at custom work |
+| Launch price | A lower price for the first orders, for a set count or a set time | First sales and first reviews come sooner | Can sell below cost, and a first price sets what buyers expect | Selling below break-even is a choice to lose money on purpose. Call 5 decides whether the view allows it | Nothing: the research found no sales volumes and nothing on launch prices |
+
+**The view.** A Scenarios view in the Price tab, beside the Breakdown, with one row per strategy.
+Each row shows the price per coaster, the margin per coaster, and how many coasters a month it
+takes to cover the shop's fixed costs (its break-even volume[^scenario]):
+
+```text
+cost each   = order cost ÷ coasters in the order                     (§9.3's cost)
+margin each = price each × (1 − fee percent) − fixed fee ÷ coasters − cost each
+to cover    = monthly fixed costs ÷ margin each, rounded up; "never" when margin each ≤ 0
+```
+
+Labor is already inside the cost, so the margin is what is left after paying for Omar's time.
+"To cover" is how many coasters a month pay the fixed costs at that margin. It is not a forecast
+of what will sell.
+
+The view needs one input that §9.3 does not: **monthly fixed costs**, what the shop pays each month
+whatever it sells. The research's reference is the plan of Shopify (a service for running an
+online shop) at $39 a month, or $29 a month paid
+yearly, if the shop sells there. It starts empty, like every setting, and it is not one of §9.3's
+twelve, because a quote does not use it. The rows that are not formulas (a market pick, a story
+price, finish steps, set prices, a surcharge, a launch discount) each take a candidate price from
+Omar, and start empty too.
+
+![The Scenarios view in the Price tab for the 4 × gBV order. Seven strategies, one row each:
+cost-plus, market range, story or premium, by finish, sets of 4 and 6 with a holder, custom theme
+and launch price. Every price, margin and coasters-to-cover cell is a dash, because every input
+at left is empty, each with the research's reference beside it. Below: the three formulas, and
+what a scenario is not.](order-driven-lab-media/price-scenarios-mockup.png)
+
+*The [mockup](order-driven-lab-media/price-scenarios-mockup.html), drawn in the Lab's look.
+Every number is a dash on purpose.*
+
+**The rules the view keeps.**
+
+- A row shows no number while any of its inputs is empty, the same rule as §9.3.
+- Every row uses the cost from §9.3, never a cost of its own.
+- A set row plans its own order, of 4 or 6 coasters, through the planner.
+- A row below break-even carries a tag saying so.
+
+**Validator:** every scenario runs through the one formula and shows only what it can work out.
+
+PASS: on fixture 1, with every made-up setting and candidate price filled, each row's price,
+margin and coasters to cover equal `expected-scenarios.json`. The cost-plus row's price equals
+the Breakdown's suggested price. The set-of-6 row's cost each comes from a plan of 6 coasters, not
+from fixture 1's plan of 4. A row whose margin is at or below zero shows "never" and a "below
+break-even" tag.
+
+FAIL: the set-of-6 row reuses the cost each of fixture 1's 4 coasters. The warm-ups and packaging
+are then spread over 4 coasters, not 6, and the margin reads lower than it is. That is a
+believable number, and only the golden worked from a 6-coaster plan catches it. Also FAIL: any
+row that shows a number while one of its inputs is empty.
+
+**A skill, a page or a gate.** Two earlier evaluations each weighed a proposed skill against how
+often its job actually came back:
+[the DSL-extension skill evaluation](../process/dsl-extension-skill-evaluation.md) and
+[the issue-register evaluation](../process/issue-register-evaluation.md). Both concluded: no
+skill, a gate instead. The count here is zero, because no coaster has been priced yet, by hand or
+otherwise. So this is **a page and a gate, not a skill**: the Scenarios view, with phase 3
+working out its numbers and phase 4 showing them, and the validator above inside the fixture
+suite.
+
+**A possible later skill.** A thin persona skill could follow the pattern of review-theme[^reviewtheme]:
+simulated buyers each react to a coaster's picture and a candidate price, saying whether it feels
+fair, cheap or too much. It would be **simulated, not customer research**. It cannot say what
+anyone pays. A price is a money decision, so a made-up reaction can mislead more there than a
+theme score does. Whether to build it is call 4. The suggested trigger for building it is measured
+recurrence: three priced orders where Omar wanted a second opinion beyond the scenarios.
+
 ## 10. Open calls for Omar
 
 Tick one box per call. My pick is first, with its reason. A call with no tick stays open.
@@ -676,18 +902,62 @@ when) the hub's store records itself.
 - [ ] In this repo, a code instead of the customer's name
 - [ ] In a private repo
 
+### Call 4: how to try out pricing ideas
+
+| | **A. The Scenarios view and its check, no skill (recommended)** | B. The view, plus a price-persona skill | C. A pricing skill instead of a view | D. No view: call 2's one price only |
+|---|---|---|---|---|
+| What it is | §9.7's seven rows in the Price tab, worked by the §9.3 formula and checked by the fixture suite | A, plus simulated buyers who react to a picture and a candidate price, on review-theme's pattern | A conversation in Claude that walks through the strategies for one coaster and writes up a pick | The Breakdown's suggested price, nothing beside it |
+| Pros | Every number comes from the formula and is tested; nothing new to keep up besides one view | A second opinion before a first sale; cheap to run | No page work; flexible | Nothing to build |
+| Cons | Shows what each way earns, not whether it sells | **Simulated, not customer research**: it cannot say what anyone pays, and a made-up reaction can steer a money decision | Numbers typed in chat drift from the plan and the settings; nothing checks them | No way to compare a set or a launch price before choosing one |
+| Implications | Phase 3 works out the rows and phase 4 shows them; a persona skill stays possible later | A persona file to write and keep; its scores must be labeled simulated wherever they appear | A third place prices are worked out, beside the hub and the formula | Strategies are weighed in Omar's head, unrecorded |
+| Better version searched for | "A, with the persona skill built once there is recurrence": the same pick plus a stated trigger | "Personas checked against real buyers": needs sales we do not have | "A skill that reads the hub's JSON": that is A with a chat front end | "One price plus the market band": already in the Breakdown |
+| Short-term challenge | Empty until the settings are filled, like the rest of the Price tab | Persona prompts written with no sales to check them against | A skill with no measured recurrence, against both precedent evaluations | None |
+| Long term, build or reuse | Builds on the formula and fixtures we already plan | Reuses review-theme's pattern; adds a scored opinion nobody can verify | Builds a second pricing path | Nothing built; nothing learned |
+| What it verifies | Every row against the golden file, and the set rows against their own plans | The rows, as A; the personas verify nothing | Nothing | The one price, as in §9.5 |
+
+**Pick A**, because the precedents say measure recurrence before a skill, and no coaster has
+been priced yet. The trigger to look at B again: three priced orders where Omar wanted a second
+opinion beyond the scenarios.
+
+- [ ] A. The Scenarios view and its check, no skill (recommended)
+- [ ] B. The view, plus a price-persona skill
+- [ ] C. A pricing skill instead of a view
+- [ ] D. No view: call 2's one price only
+
+### Call 5: a scenario priced below break-even
+
+A launch price, or a market pick for a five-color order, can come out below break-even.
+
+| | **Shown and tagged; quoting it takes a reason (recommended)** | Never shown | Shown, no tag |
+|---|---|---|---|
+| Pros | The trade is visible; a deliberate loss is allowed and recorded with its reason | No loss can be quoted by accident | Simplest view |
+| Cons | One more field on a quote | Hides the very thing a launch price is about; a market pick below cost just disappears | A loss looks like any other price |
+| Implications | The quote stores its reason; the fixture suite checks the tag (§9.7) | Launch prices floor at break-even; the launch row becomes a smaller markup | The Breakdown's break-even is the only warning |
+| Better version searched for | It is the better version of the other two: it shows the loss and asks for the reason | "Hidden, with a count of hidden rows": still hides the price | "Colored red, no reason asked": the tag without the record |
+| Short-term challenge | None beyond the view | None | None |
+| Long term, build or reuse | Builds on the view and the quote record | Builds a filter | Builds nothing |
+| What it verifies | The tag, against the golden file; the reason, by being required | That no row below break-even shows | Nothing |
+
+**Pick "shown and tagged"**, because a launch price below cost is a choice Omar may want to make
+on purpose, and the tag plus the reason keep it from happening by accident.
+
+- [ ] Shown and tagged; quoting it takes a reason (recommended)
+- [ ] Never shown
+- [ ] Shown, no tag
+
 ## 11. The build, in order of value for the work
 
-Build the command first, because it answers material, time and plates with no pages. Then the
-shelf, then pricing once its inputs exist. The pages come last, since they only show what the
-first three work out.
+Write the simulated orders first, as the test every later phase must pass. Then build the
+command, because it answers material, time and plates with no pages. Then the shelf, then pricing
+once its inputs exist. The pages come last, since they only show what the first three work out.
 
 | Phase | What | Where | Value | Test |
 |---|---|---|---|---|
+| 0 | **The simulated orders** (§9.6): eight fixture folders, goldens worked by hand, a wrong plan per fixture, the runner and `make validate-orders` | 3d-models `tools/bambu` test fixtures; the hub's checks read them at a pinned commit | Each later phase has its finish line written down before it starts | The runner lists all eight fixtures as waiting, and rejects every wrong plan it can already read |
 | 1 | **`bambu order plan`**, built with piece colors phase 1 (`plates by-color`): read an order file, count pieces by color, write or print one recipe per color, slice each, print minutes, grams, beds and the ratio used, as text and JSON | 3d-models `tools/bambu` | Answers material, time and plates for any order, today, with no pages | The 4 × gBV order gives 5 recipes holding exactly the §9.5 counts; each recipe's numbers equal `bambu validate sliced` on it; a color forced onto two beds shows two; no matching print shows "floor" |
 | 2 | **The shelf**: a spool file, reservations from open orders, the buy list, closing a print on the monitor's finished row | the hub's store; the planner prints what the shelf is short of | Answers "is it on the shelf" and "what to buy"; stops double counting spools | A send with a send record (sheets-04g, green, the tray it picked) followed by its finished row subtracts 27 g from the green spool; a failed print subtracts too; two orders in dark blue reserve the sum; a color short by 1 g lists one spool |
-| 3 | **Price**: the inputs, the formula, the breakdown, the market band | the hub's pricer runs the formula on phase 1's JSON; public settings' references in this repo from the consolidated research, private ones in the hub | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
-| 4 | **The pages**: Plan, Price, Inventory in a hub Orders tab, and the Lab's Add to order button | the hub web; bikar `packages/lab` | The same answers without a terminal, and from a design straight to an order | A real-browser run: Add to order in the Lab opens the hub's Plan page with the design filled in; its numbers equal phase 1's JSON |
+| 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7) | the hub's pricer runs the formula on phase 1's JSON; public settings' references in this repo from the consolidated research, private ones in the hub | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
+| 4 | **The pages**: Plan, Price (with its Scenarios view), Inventory in a hub Orders tab, and the Lab's Add to order button | the hub web; bikar `packages/lab` | The same answers without a terminal, and from a design straight to an order | A real-browser run: Add to order in the Lab opens the hub's Plan page with the design filled in; its numbers equal phase 1's JSON |
 
 Pricing is third, not first, because its inputs are not settled and phases 1 and 2 are useful
 without it. The pages are last because each one only shows what phases 1–3 already work out.
@@ -721,6 +991,11 @@ can be reused for another print.
   floor and says so. The
   research values in §9.3 are references, not a price. Its cost of about $0.98 to $1.37 for one
   full coaster leaves out labor, packaging and fees, and is not an input here.
+- **The fixtures hold no price either.** Their settings are made up, say FIXTURE beside every
+  value, and are picked so the sums can be checked by hand. Fixture 2's 86 minutes and 27 g are
+  sheets-04g's slice, the same figures as the time ratio above, and fixture 1's are §4's
+  stand-ins until phase 1 slices its recipes. The market numbers in §9.7 are the research's, with
+  its hedges, and none of them is a setting.
 - **The flagship can be built by what this doc ships**: phase 1 alone produces every row of §4
   down to the corrected minutes, with Matte slices in place of the Basic stand-ins; the filament
   check and buy list need phase 2's shelf.
@@ -798,6 +1073,22 @@ can be reused for another print.
     X2D. A plate whose pieces do not fit one bed needs a second print.
 [^monitor]: **print monitor** — this repo's script that watches a running print and writes a row
     to the print log whenever the printer's state changes, ending with a `finished` row.
+[^fixture]: **fixture** — a made-up order kept as test files, with the plan, shelf and price it
+    must produce. It names no customer and uses no real price.
+[^golden]: **golden file** — the expected output, written down and checked in, that a run's output
+    is compared with. A run that differs from it fails.
+[^frozen]: **frozen slice** — a slice's minutes, grams and beds saved to a file with the hash of
+    the recipe they came from, so a check can use them without running the slicer.
+[^headless]: **headless browser** — a real browser (Chrome) run by a script with no window, which
+    opens a page, reads it and takes its screenshot.
+[^scenario]: **scenario, margin, break-even volume** — a scenario is one way of setting the price,
+    worked out for the order on the page. The margin is what one coaster leaves after the selling
+    fee and its cost, labor included. The break-even volume is how many coasters a month that
+    margin needs to cover the shop's fixed costs.
+[^hash]: **hash** — a short fingerprint computed from a file's contents; any change to the file
+    changes it.
+[^reviewtheme]: **review-theme** — this repo's skill in which six simulated coffee drinkers score
+    each color theme from its picture. It says so itself: simulated, not customer research.
 [^bikar]: **bikar** — the sibling repo with the pattern language and geometry engine, and the web
     Labs built on it.
 
