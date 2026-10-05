@@ -32,26 +32,33 @@ export function previewPathFor(threemf: string): string {
 }
 
 /**
- * Copy the picture Bambu Studio draws of a sliced plate (`Metadata/plate_<n>.png`) out of the `.3mf`
- * to `previewPathFor(threemf)`, so the plate can be looked at before sending without unzipping it.
- * `unzip -p` would pass the PNG through a utf8 string, so this extracts to a temp dir and copies.
- * Returns the picture's path, or null when the plate has no picture (an unsliced export).
+ * Copy one binary member (a picture) out of a `.3mf` to `out`. `unzip -p` would pass it through a
+ * utf8 string and corrupt it, so this extracts to a temp dir and copies. Returns `out`, or null when
+ * the archive has no such member.
  */
-export async function writePlatePreview(threemf: string, plate = 1): Promise<string | null> {
-  const tmp = mkdtempSync(join(tmpdir(), "bambu-preview-"));
+export async function copyMember(threemf: string, member: string, out: string): Promise<string | null> {
+  const tmp = mkdtempSync(join(tmpdir(), "bambu-member-"));
   try {
-    const res = await runWithTimeout("unzip", ["-o", "-j", threemf, `Metadata/plate_${plate}.png`, "-d", tmp], {
+    const res = await runWithTimeout("unzip", ["-o", "-j", threemf, member, "-d", tmp], {
       timeoutMs: 30_000,
-      label: "unzip_preview",
+      label: "unzip_member_file",
     });
-    const png = join(tmp, `plate_${plate}.png`);
-    if (res.code !== 0 || res.timedOut || !existsSync(png)) return null;
-    const out = previewPathFor(threemf);
-    copyFileSync(png, out);
+    const file = join(tmp, member.split("/").pop()!);
+    if (res.code !== 0 || res.timedOut || !existsSync(file)) return null;
+    copyFileSync(file, out);
     return out;
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+}
+
+/**
+ * Copy the picture Bambu Studio draws of a sliced plate (`Metadata/plate_<n>.png`) out of the `.3mf`
+ * to `previewPathFor(threemf)`, so the plate can be looked at before sending without unzipping it.
+ * Returns the picture's path, or null when the plate has no picture (an unsliced export).
+ */
+export async function writePlatePreview(threemf: string, plate = 1): Promise<string | null> {
+  return copyMember(threemf, `Metadata/plate_${plate}.png`, previewPathFor(threemf));
 }
 
 /** The slice-side header fields the `.3mf` stamps — every value comes from a key the file carried. */

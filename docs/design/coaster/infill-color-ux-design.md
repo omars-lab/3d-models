@@ -8,8 +8,9 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master ec01d9
 
 > Status: draft 2026-10-04, for Omar to decide the four calls in
 > [Open calls for Omar](#8-open-calls-for-omar). Asked by Omar on 2026-10-04: "i also want to
-> build a customization ux where one can confifure the infill colors with tooling helpers". Nothing
-> here is built. It adds no grammar and changes no decision; it is the detailed design of steps 3,
+> build a customization ux where one can confifure the infill colors with tooling helpers". Built
+> since: phase 1 (`plates by-color`), phase 2 (its `--costs` view, 2026-10-05) and phase 3 (the
+> Piece colors screen); phases 4 and 5 are not. It adds no grammar and changes no decision; it is the detailed design of steps 3,
 > 5 and 6 of the guided page in
 > [loose-pieces §4](loose-pieces-design.md#4-the-assemble-your-own-coaster-guided-page), plus
 > the helpers around them.
@@ -253,43 +254,59 @@ so the send finds the tray with no `--color`, is call 3.
 ## 6. What a color choice costs
 
 Three ways to print the same choice. The numbers are for the mockup's choice on the sheets-04g
-coaster: the frame in black, Middle, Kite and Star in pink, Hex and Outer in green.
+coaster: the frame in black, Middle, Kite and Star in pink, Hex and Outer in green. They are from
+`bambu plates by-color --costs --slice` (phase 2, built 2026-10-05), which sliced every plate it
+names; only the third column's swaps are an estimate.
 
 | | One plate per color | The whole set, once per color | One plate, three colors |
 |---|---|---|---|
 | What it is | Pieces sorted onto plates by color | sheets-04g as it is, printed once in each color | One plate; the printer swaps colors |
 | Plates to send (each its own yes) | 3 | 3 | 1 |
 | Color swaps | 0 | 0 | about 44 |
-| Minutes | about 86, plus two start-ups | 258 | about 156 |
-| Grams | about 27 | 81 | about 30 |
+| Minutes, as sliced | 97.5 (57 + 16.5 + 24) | 260.4 (3 × 86.8) | about 157 (86.8 + 44 × 1.6) |
+| Grams | 27.3 | 81.8 | about 30.4 |
+| Filament cost, refill price | $0.43 | $1.32 | about $0.49 |
 | Left over | nothing | 2 frames and 82 pieces | nothing |
 | Status | fits Omar's 2026-10-04 rule | what sheets-04g does today, one color per run | dropped by Omar on 2026-10-04 |
 
 **Where each number comes from.**
 
-- **86 minutes, 27 g:** sheets-04g's local slice, one bed, everything on it
-  ([sheets-04g](../plates/sheets-04g.md)).
-- **One plate per color** prints the same plastic as sheets-04g, split three ways, so about 86
-  minutes and 27 g in total, plus what each extra plate costs to start (heating, the first-layer
-  routine). That start-up time is **not measured**; phones-02 took 13 minutes against 12 sliced,
-  which bounds how far a short one-color plate overshoots, not how long a start-up is. The real
-  per-plate numbers come from slicing each recipe.
-- **The whole set, once per color** is three runs of a plate that slices at 86 minutes and 27 g:
-  258 and 81. It is the costliest for one coaster, and the only one with no new recipe. Its spares
-  are not waste if the goal is three coasters: three frames and three full sets in three colors
-  make three coasters in any mix.
-- **One plate, three colors:** the coaster is 4.4 mm tall, 22 layers at 0.2 mm. If all three
-  colors print on every layer, each layer needs two swaps, so about 44. phones-01 lost about 1.6
-  minutes a swap (40 minutes over 22 swaps) and about 1.5 g in all, about 0.07 g a swap
-  ([phones-02](../plates/phones-02.md#cost-and-risk)). That gives 86 + 44 × 1.6 ≈ 156 minutes and
-  27 + 44 × 0.07 ≈ 30 g.
+- **Minutes and grams** are each plate's own slice (Bambu Studio 02.08.02.61, X2D, PLA Basic), read
+  from its `slice_info.config` the way `bambu validate sliced` reads it. The slicer's time
+  includes each plate's warm-up: the three one-color plates add up to about 11 minutes more than
+  the one whole-set plate (97.5 against 86.8) while their grams add up to the same 27.28 g, so
+  the difference is the two extra warm-ups. Before phase 2 this column said "about 86, plus two
+  start-ups"; the slices measured the start-ups.
+- **The whole set, once per color** is three runs of one plate: 260 minutes and 82 g. It is the
+  costliest for one coaster, and the only one with no new recipe. Its spares are not waste if the
+  goal is three coasters: three frames and three full sets in three colors make three coasters in
+  any mix.
+- **One plate, three colors:** the coaster is 4.4 mm tall, 22 layers at 0.2 mm (the slice's own
+  layer count). If all three colors print on every layer, each layer needs two swaps, so about 44.
+  phones-01 took about 62 minutes against the slicer's 22 with a swap on each of its 22 layers;
+  the [phones-02 page](../plates/phones-02.md#why-print-it) puts that at about 1.6 minutes a swap
+  (40 extra minutes over 22 swaps would be 1.8, if nothing else were slower), and its
+  [cost section](../plates/phones-02.md#cost-and-risk) puts the swaps and prime tower at about
+  1.5 g, about 0.07 g a swap. That gives
+  86.8 + 44 × 1.6 ≈ 157 minutes and 27.3 + 44 × 0.07 ≈ 30.4 g.
+- **Dollars** are grams times the store's price per kilogram in
+  [prices.yaml](themes/catalog/prices.yaml) (read 2026-10-04 from the
+  [pricing research](../../research/2026-10-04-coaster-pricing.md)), at the price of one refill
+  bought on its own unless `--price-tier` says otherwise. A line with no price shows grams and no
+  dollars. Filament only: no power, wear or failed prints.
+- **Watched minutes**, a column on the page, are the sliced minutes times the watched-over-sliced
+  ratio of past timed prints of the same filament, from the plate print logs. The swaps are added
+  on top, since phones-01's ratio already holds its own.
 
 **This transfers only so far.** The per-swap figures come from one plate in one pair of colors,
 pink and black. Watching that print, swaps into pink looked about twice as slow as swaps into black
 (roughly 2.2 against 1.0 minutes); that split is a session note, not yet in the
 [print log](../plates/print-logs/phones-01.md), so treat it as a lead. They transfer to
 another plate on the same printer, filament and purge settings, and only as an average: a choice
-with more light colors will swap slower than 1.6, a choice with more dark ones faster. They do not
+with more light colors will swap slower than 1.6, a choice with more dark ones faster. For three
+colors or more they are low: phones-01's two colors sat on the X2D's two nozzles, so a swap was a
+nozzle change with no flush, while a third color shares a nozzle and flushes the old color out on
+every change, which nobody has timed. The cost view says so on that route. They do not
 transfer to another printer, or to the second nozzle, which might purge less (unverified,
 [multicolor-design §4.2](multicolor-design.md#42-purge-bleed-and-the-second-nozzle)). The screen
 says "about" and names the plate it came from, as the mockup does.
@@ -306,7 +323,7 @@ Each phase names the test that shows it works. Ordered by what it gives Omar for
 | Phase | What | Where | Value | Test |
 |---|---|---|---|---|
 | 1 | **Export by color.** The `plates by-color` command: read a `.bkr`, group palette names by color, write one recipe per color, the frame riding along when it shares a color; print each recipe's slice minutes, grams and bed count | 3d-models `tools/bambu` | Makes a multi-color coaster printable today, by editing palette lines by hand, with no Lab work. Everything after builds on it | On the gBV pieces file with the mockup's colors: three recipes; `bambu slice compose <each> --dry-run` places every item; the per-piece check in §9 passes; a recolor of one group moves only that group's items |
-| 2 | **The cost table in the command.** All three routes of §6 for the chosen colors, slice numbers where sliced, estimates labeled where not | 3d-models | Omar sees the cost before any plate page exists | The one-color route's minutes equal `bambu validate sliced`'s for the same recipe; a choice that spills one recipe onto a second bed shows that bed, not a total |
+| 2 | **The cost table in the command.** All three routes of §6 for the chosen colors, slice numbers where sliced, estimates labeled where not. **Built 2026-10-05:** `plates by-color --costs [--slice]` writes `costs.json` and `costs.html`, a page with each plate's picture, time, watched time, grams and dollars, and the time and cost per coaster | 3d-models | Omar sees the cost before any plate page exists | The one-color route's minutes equal `bambu validate sliced`'s for the same recipe; a choice that spills one recipe onto a second bed shows that bed, not a total |
 | 3 | **The Piece colors screen.** Group rows with a color each (a palette-line rewriter, tested apart from the page like `setOrbitFill`), the tray chips, the flat colored picture, the filled-in command | bikar `packages/lab` | The screen Omar asked for, on top of a tool that already works | A real-browser run: pick pink for Kite, the `.bkr` has `Kite = #F5547C`, the picture's kites turn pink, the command matches; the share link carries the colors and no printer detail |
 | 4 | **The helpers in the screen.** Contrast hints, "match the loaded trays", the estimate half of the cost table | bikar `packages/lab` | Speeds up choosing; nothing new reaches the printer | The mockup's choice raises the Middle/Kite hint; Kite in blue clears it; a color with no tray shows "load before the send" and still exports |
 | 5 | **One piece at a time.** Prove `index` with `loose` first, then the "pick" switch | bikar core test, then the Lab | The finest choice, and the one that adds most plates; last because it is the least certain and the least asked for | A gBV fixture with one kite named apart: `--piece KiteBlue` gives exactly one body, `--piece Kite` gives nine, and the Lab's piece numbering picks the same face |
