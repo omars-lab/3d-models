@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+  Mockup of the Inventory page, order-driven-lab-design.md §7 and §9.2. Static HTML in the Lab's
+  look (mockup.css). Nothing here runs; it exists to be screenshotted into inventory-mockup.png.
+
+  Real: the four owned colors and their hexes (palette.yaml, read off the printer 2026-10-04);
+  the five Ice to navy colors with their line and code (palette.yaml); that order 0007 needs all
+  five and none is owned; the two "used" rows, sheets-04g in green (27 g from its slice, finished
+  2026-10-04 20:14 UTC in its print log) and phones-02 in pink (3.46 g from its slice).
+  Stand-ins (dotted underline): the tray slots, the percent left on each spool, the grams that
+  follow from it, and the order number. Estimates: the needed grams by color, the gBV themes
+  page's Ice to navy split times four (Ivory 62.4, Ice 3.2, Sky 1.6, Marine 18.4, Dark Blue 22.4),
+  until slicing each plate replaces them. The reorder line has no number: that is the owner's choice.
+
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1280,790
+            --screenshot=inventory-mockup.png file://.../inventory-mockup.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Inventory mockup</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <header class="lab-header">
+      <h1>Orders</h1>
+      <p class="tagline">filament on hand, what open orders hold, what to buy</p>
+      <div class="steps"><span>Plan</span><span>Price</span><span class="on">Inventory</span></div>
+    </header>
+    <main class="lab-main">
+      <aside class="lab-panel">
+        <section>
+          <h2>Spools on hand</h2>
+          <table class="grid">
+            <tr><th>Color</th><th>Where</th><th class="num">Left</th><th class="num">Grams</th><th class="num">Held</th></tr>
+            <tr><td><span class="color-swatch" style="background:#F5547C"></span> Hot Pink</td><td class="stand">tray 1</td><td class="num stand">62%</td><td class="num stand">620</td><td class="num">0</td></tr>
+            <tr><td><span class="color-swatch" style="background:#0047BB"></span> Blue</td><td class="stand">tray 2</td><td class="num stand">90%</td><td class="num stand">900</td><td class="num">0</td></tr>
+            <tr><td><span class="color-swatch" style="background:#000000"></span> Black</td><td class="stand">tray 3</td><td class="num stand">71%</td><td class="num stand">710</td><td class="num">0</td></tr>
+            <tr><td><span class="color-swatch" style="background:#00AE42"></span> Bambu Green</td><td class="stand">tray 4</td><td class="num stand">48%</td><td class="num stand">480</td><td class="num">0</td></tr>
+          </table>
+          <p class="note">"Left" is the percent the spool's tag reports (<code>bambu filament</code>); a spool with no tag shows "unknown" and is counted by hand.</p>
+        </section>
+        <section>
+          <h2>Used by prints</h2>
+          <table class="grid">
+            <tr><th>When (UTC)</th><th>Plate</th><th>Color</th><th class="num">Grams</th></tr>
+            <tr><td>2026-10-04 20:14</td><td>sheets-04g</td><td><span class="color-swatch" style="background:#00AE42"></span> green</td><td class="num">−27</td></tr>
+            <tr><td>2026-10-04</td><td>phones-02</td><td><span class="color-swatch" style="background:#F5547C"></span> pink</td><td class="num">−3.5</td></tr>
+          </table>
+          <p class="note">Grams come from each plate's slice: the printer does not report what it used. A failed print still counts.</p>
+        </section>
+        <section>
+          <h2>Reorder when below</h2>
+          <div class="chips"><span class="chip pending">your choice</span></div>
+        </section>
+      </aside>
+      <section class="lab-stage">
+        <section class="card">
+          <h2>Held for open orders</h2>
+          <table class="grid">
+            <tr><th>Order</th><th>Color</th><th class="num">Needs</th><th class="num">On hand</th><th class="num">Short</th></tr>
+            <tr><td class="stand">0007</td><td><span class="color-swatch" style="background:#FFFFFF"></span> Ivory White</td><td class="num stand">62.4 g</td><td class="num">0</td><td class="num"><span class="tag fail">62.4 g</span></td></tr>
+            <tr><td class="stand">0007</td><td><span class="color-swatch" style="background:#A3D8E1"></span> Ice Blue</td><td class="num stand">3.2 g</td><td class="num">0</td><td class="num"><span class="tag fail">3.2 g</span></td></tr>
+            <tr><td class="stand">0007</td><td><span class="color-swatch" style="background:#56B7E6"></span> Sky Blue</td><td class="num stand">1.6 g</td><td class="num">0</td><td class="num"><span class="tag fail">1.6 g</span></td></tr>
+            <tr><td class="stand">0007</td><td><span class="color-swatch" style="background:#0078BF"></span> Marine Blue</td><td class="num stand">18.4 g</td><td class="num">0</td><td class="num"><span class="tag fail">18.4 g</span></td></tr>
+            <tr><td class="stand">0007</td><td><span class="color-swatch" style="background:#042F56"></span> Dark Blue</td><td class="num stand">22.4 g</td><td class="num">0</td><td class="num"><span class="tag fail">22.4 g</span></td></tr>
+          </table>
+          <p class="note">Needs by color is an estimate, the gBV themes split, until each plate is sliced.</p>
+        </section>
+        <section class="card">
+          <h2>Buy list</h2>
+          <table class="grid">
+            <tr><th>Color</th><th>Line</th><th>Code</th><th class="num">Spools</th><th>For</th></tr>
+            <tr><td><span class="color-swatch" style="background:#FFFFFF"></span> Ivory White</td><td>PLA Matte</td><td class="mono">11100</td><td class="num">1</td><td class="src">0007</td></tr>
+            <tr><td><span class="color-swatch" style="background:#A3D8E1"></span> Ice Blue</td><td>PLA Matte</td><td class="mono">11601</td><td class="num">1</td><td class="src">0007</td></tr>
+            <tr><td><span class="color-swatch" style="background:#56B7E6"></span> Sky Blue</td><td>PLA Matte</td><td class="mono">11603</td><td class="num">1</td><td class="src">0007</td></tr>
+            <tr><td><span class="color-swatch" style="background:#0078BF"></span> Marine Blue</td><td>PLA Matte</td><td class="mono">11600</td><td class="num">1</td><td class="src">0007</td></tr>
+            <tr><td><span class="color-swatch" style="background:#042F56"></span> Dark Blue</td><td>PLA Matte</td><td class="mono">11602</td><td class="num">1</td><td class="src">0007</td></tr>
+          </table>
+          <p class="note">One spool covers each shortfall many times over; what is left after the order stays on the shelf for the next one.</p>
+        </section>
+        <div class="actions">
+          <button class="btn">Read the trays</button>
+          <button class="btn ghost">Mark the buy list ordered</button>
+          <button class="btn ghost">Add a spool by hand</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
