@@ -3,9 +3,9 @@ plate: sheets-04g
 print_log: '[[print-logs/sheets-04g|print log]]'
 recipe: sheets-04g.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-04-sheets-04g]
 answers: "Does the bigger gBV minimal coaster read and hold together at 1.25 times across and 1.1 times up, and do its 41 pieces, packed in interlaced rows beside it, fill it at no gap?"
 kind: new
 maturity: experiment
@@ -116,3 +116,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-04 | proposed — at Omar's ask: the coaster and its pieces back on one plate, color picked at the send; replaces sheets-04d, 04e and 04f, which are removed | this page |
 | 2026-10-04 | sliced — local slice fits one bed, 86 minutes, 27 g, no slicer warnings | this page |
 | 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ 4bb715e2c6 | this page |
+| 2026-10-04 | printed — on the X2D, one bed, all 22 layers, about 97 minutes from the first watch to the finish, against 86 sliced; Omar: "the small kits were too tight ti fit" and "adn the middle piece was too lose", the other pieces not judged yet | [the record](../../prints/2026-10-04-sheets-04g/index.md) |

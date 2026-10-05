@@ -66,13 +66,14 @@ same day, so what it taught is tied to the exact piece and size.
    `docs/prints/<date>-<plate>/`, set `status: printed`, and fill what the machine could not
    know: the filament actually loaded, and `~` for anything nobody recorded. Never guess.
 2. **Give every piece its own `verdict` and `notes`.** `keep` (print it again as is),
-   `adjust` (right idea, change its params) or `drop` (do not print it again). The notes use
-   Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
+   `adjust` (right idea, change its params), `drop` (do not print it again) or `not-judged`
+   (Omar has not said yet; never fill his silence with a verdict, as sheets-04g's hexes, stars
+   and outer pieces show). The notes use Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
    from the file's formula, says so. One note for the whole plate goes in `feedback`, and it
    does not replace the per-piece verdicts.
    Once the record is in `docs/prints/`, set each one with
-   `bambu print verdict <run> <entry> keep|adjust|drop -n "<note>"`. It changes only that
-   piece's lines and refuses an unknown piece or verdict. The hub page calls the same command.
+   `bambu print verdict <run> <entry> keep|adjust|drop|not-judged -n "<note>"`. It changes only
+   that piece's lines and refuses an unknown piece or verdict. The hub page calls the same command.
    If no draft exists, run `bambu slice compose <plate>` again to make one. It writes to
    `build/plates/`, never over `.bambu/plates/`. Then check that its meshes match the printed
    `.3mf` before you trust the hashes, as minis-04 did.
@@ -84,6 +85,13 @@ same day, so what it taught is tied to the exact piece and size.
    the piece's notes, and say whether the settings actually used were the preset's. A reading
    from a slice that did not carry the preset does not move a bet. Write that in `feedback`, as
    the minis-04 record does.
+   For a loose piece that is too tight or too loose, measure the fit before you guess at it.
+   Render the frame and each piece group in place (the pieces file without `pack zipper`) and
+   run `python3 tools/fit_gap.py <frame.stl> <piece.stl>...`: the gap per face round every piece,
+   its sharpest tip, its outline per area, and where along the outline the play sits.
+   `python3 tools/fit_gap.py walls <plate.3mf> <frame.stl> <piece.stl>...` reads the same off the
+   slice's own wall paths, layer by layer, which shows what the slicer did to each group.
+   sheets-04g found its loose middle piece this way ([the issue](../../../docs/issues/sheets-04g-fit.md)).
 4. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
    and check there is no location data in them first.
 5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one

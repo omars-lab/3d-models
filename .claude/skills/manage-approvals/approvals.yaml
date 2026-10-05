@@ -30,3 +30,5 @@ sheets-04c:
   - {iteration: 1, recipe: '6c1c025db9b7', date: '2026-10-03'}
 sheets-04g:
   - {iteration: 1, recipe: 'ba78d06e3b33', date: '2026-10-04'}
+sheets-04g-fit:
+  - {iteration: 1, recipe: 'f4a44e2d7ac1', date: '2026-10-04'}

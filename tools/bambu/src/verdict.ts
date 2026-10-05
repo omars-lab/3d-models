@@ -11,8 +11,9 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 
-/** R15 in .claude/gates/prints_gate.py: keep (print it again as is), adjust, drop. */
-export const PIECE_VERDICTS = ["keep", "adjust", "drop"] as const;
+/** R15 in .claude/gates/prints_gate.py: keep (print it again as is), adjust, drop, and
+ *  not-judged (it printed and the owner has not said how it came out yet). */
+export const PIECE_VERDICTS = ["keep", "adjust", "drop", "not-judged"] as const;
 export type PieceVerdict = (typeof PIECE_VERDICTS)[number];
 
 export interface VerdictChange {

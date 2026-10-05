@@ -20,17 +20,18 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
-| 2 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
-| 3 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
+| 1 | [sheets-04g-fit](sheets-04g-fit.md) | waiting | 8 | 0.5 | 17.14 | watch | At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling? |
+| 2 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
+| 3 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
+| 4 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md), [sheets-04g](sheets-04g.md).
+**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md).
 
-**Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-02](phones-02.md) ×1, [sheets-04](sheets-04.md) ×1.
+**Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-02](phones-02.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04g](sheets-04g.md) ×1.
 <!-- queue:end -->
 
 ## How a plate moves

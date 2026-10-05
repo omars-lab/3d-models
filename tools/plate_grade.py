@@ -158,7 +158,7 @@ def grade(names: list[str] | None = None) -> list[dict]:
             "clean_runs": [r["run"] for r in own if r["clean"]],
             "readings_landed": sum(r["landed"] for r in own),
             "readings": sum(r["readings"] for r in own),
-            "verdicts": {v: sum(r["verdicts"].get(v, 0) for r in own) for v in ("keep", "adjust", "drop")},
+            "verdicts": {v: sum(r["verdicts"].get(v, 0) for r in own) for v in ("keep", "adjust", "drop", "not-judged")},
             "bed_fill_page": data.get("bed_fill"),
             "bed_fill_slice": fill,
             "slice": str(sliced) if sliced else None,
@@ -181,7 +181,8 @@ def show(rows: list[dict], rubric: dict) -> None:
             print(f"    derived from {r['derived_from']}")
         v = r["verdicts"]
         print(f"    its own prints: {len(r['runs'])} run(s), {len(r['clean_runs'])} with every piece kept; "
-              f"pieces judged keep {v['keep']}, adjust {v['adjust']}, drop {v['drop']}; "
+              f"pieces judged keep {v['keep']}, adjust {v['adjust']}, drop {v['drop']}, "
+              f"not judged yet {v['not-judged']}; "
               f"bet readings that landed {r['readings_landed']} of {r['readings']}")
         f = r["bed_fill_slice"]
         if f is None:

@@ -74,6 +74,14 @@ describe("applyVerdict", () => {
     expect(lines[lines.indexOf("    verdict: adjust") + 1]).toBe("    notes: []");
   });
 
+  it("marks a piece not judged yet, and later sets the verdict the owner gives", () => {
+    const pending = applyVerdict(DRAFT, "c1", "not-judged", ["no word on it yet"]);
+    expect(pending.text).toContain("    verdict: not-judged");
+    const judged = applyVerdict(pending.text, "c1", "keep", ["fits"]);
+    expect(judged.from).toBe("not-judged");
+    expect(judged.text).toContain("    verdict: keep");
+  });
+
   it("leaves the body alone even when it has --- lines", () => {
     const r = applyVerdict(DRAFT, "c1", "keep");
     expect(r.text.split("\n---\n").slice(1)).toEqual(DRAFT.split("\n---\n").slice(1));
@@ -82,7 +90,8 @@ describe("applyVerdict", () => {
   // The by-design refusals: each must throw, never write something the prints gate would reject.
   it.each([
     ["an unknown piece, naming the ones there are", "c9", "keep", [], /no piece "c9".*c1, c2/],
-    ["a verdict outside keep|adjust|drop", "c1", "looks-good", [], /must be one of keep, adjust, drop/],
+    ["a verdict outside keep|adjust|drop|not-judged", "c1", "looks-good", [],
+      /must be one of keep, adjust, drop, not-judged/],
     ["a note with a line break", "c1", "keep", ["a\nb"], /one non-empty line/],
     ["an empty note", "c1", "keep", ["  "], /one non-empty line/],
   ] as const)("refuses %s", (_what, entry, verdict, notes, msg) => {

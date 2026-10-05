@@ -12,7 +12,7 @@ it governs. Never hand-edit it — an edit is lost on the next run and, worse,
 reads as a fact while it is only a stale opinion. See `SKILL.md` for how a bet
 is opened, clustered, and closed.
 
-**32 registered bets · 28 `Calibrated` records — 28 provisional, 0 measured · 10 bets with no record in bikar.**
+**33 registered bets · 28 `Calibrated` records — 28 provisional, 0 measured · 11 bets with no record in bikar.**
 
 ## Bets
 
@@ -50,6 +50,7 @@ is opened, clustered, and closed.
 | `CAL-CST-07` | `FREESTANDING_STRAP_MIN_MM` minimal-coaster strap floor: the narrowest free-standing strap (`outline pattern`, no slab behind it) that prints as a solid wall with a perimeter on each face rather than as two unbonded shells — the floor CV2 enforces for a pattern outline | `CS-4` | provisional | `FREESTANDING_STRAP_MIN_MM_CAL` |
 | `CAL-CST-08` | `TWIST_MAX_LEAN_DEG` coaster twist ceiling: the largest wall-lean angle (from vertical, `atan(rim_radius · twist/base)`) a helical strap on a twist coaster (`outline pattern` + `twist`) prints without support — deliberately not ported from CAL-OVH-01 because a free-standing strap can peel from its own lower course, a different support problem than a static slab face; the ceiling CV12 enforces | `CS-5` | provisional | `TWIST_MAX_LEAN_DEG_CAL` |
 | `CAL-PIN-01` | coaster color-split pinch floor: the minimum thickness to which `--format parts --pinch fillet` raises a relief pinch (where a region body meets the slab at z = base at an interior point) so a two-filament interface prints as a solid sliver rather than a zero-width seam — whether the single-filament `STRAP_WIDTH_MIN_MM` (CAL-CST-01) transfers to a two-filament boundary | none — needs a two-filament interface coupon laddering the raised-sliver thickness across a color boundary — not yet designed; the plate composer first print (P4.3) is the earliest surface that would expose it. Registered OPEN so the pinch floor does not age into an earned number | open — no record in bikar | — |
+| `CAL-LSE-01` | loose-piece gap per face (`loose … clearance`) in a straps-only frame, by piece shape: the gap at which a printed piece drops in by hand and stays. Not ported from CAL-FIT-01's sliding rung, which was set across the diameter of round parts; sheets-04g at gap 0 bound the 36° kites (3d-models, Omar 2026-10-04; the Middle's play there was the sharp-corner piece, fixed with strapEdgeInset) | `sheets-04g-fit` | open — no record in bikar | — |
 
 The **Coupon** column is the bet → coupon mapping as it exists in
 `CAL_BETS`, not a restatement of it: the row is generated from the same
@@ -79,6 +80,7 @@ named next print rather than an absence:
 - `CAL-EQV-02` — oracle O3 solid-coverage gate: the fraction of the OpenSCAD reference footprint the naqsh extrusion covers (0.99) and the largest disc of reference region the extrusion leaves unfilled (1.0 mm) beyond which a construction's flat solid is refused · coupon none — not a print quantity — chosen against one construction (GimTvN9hw4U: faithful 1.000/0.00 mm, dropped ring 0.143/10 mm, a 0.5 mm translation 0.975/0.4 mm) and settled by the corpus ladder, the same instrument as CAL-EQV-01
 - `CAL-CST-06` — coaster dovetail neck floor: the narrowest dovetail neck (`interlock dovetail <neck>`) that survives repeated hand mating without shearing at the tab root — the loaded floor CV9 will enforce once it settles; until then CV9 floors the residual land at CAL-CST-01 · coupon `CS-1`
 - `CAL-PIN-01` — coaster color-split pinch floor: the minimum thickness to which `--format parts --pinch fillet` raises a relief pinch (where a region body meets the slab at z = base at an interior point) so a two-filament interface prints as a solid sliver rather than a zero-width seam — whether the single-filament `STRAP_WIDTH_MIN_MM` (CAL-CST-01) transfers to a two-filament boundary · coupon none — needs a two-filament interface coupon laddering the raised-sliver thickness across a color boundary — not yet designed; the plate composer first print (P4.3) is the earliest surface that would expose it. Registered OPEN so the pinch floor does not age into an earned number
+- `CAL-LSE-01` — loose-piece gap per face (`loose … clearance`) in a straps-only frame, by piece shape: the gap at which a printed piece drops in by hand and stays. Not ported from CAL-FIT-01's sliding rung, which was set across the diameter of round parts; sheets-04g at gap 0 bound the 36° kites (3d-models, Omar 2026-10-04; the Middle's play there was the sharp-corner piece, fixed with strapEdgeInset) · coupon `sheets-04g-fit`
 
 ## Records
 

@@ -312,18 +312,53 @@ def plate_objects(zf):
     return out
 
 
+def crosses(line, box):
+    """Does a leader line pass through a label box? Sampled every 2 px: the boxes are 30 px tall."""
+    (x0, y0), (x1, y1) = line
+    n = max(1, int(math.hypot(x1 - x0, y1 - y0) / 2))
+    return any(box[0] <= x0 + (x1 - x0) * i / n <= box[2] and box[1] <= y0 + (y1 - y0) * i / n <= box[3]
+               for i in range(n + 1))
+
+
+def label_spot(d, font, name, at, taken, mask, size, lines=()):
+    """Where a label's box goes: at the object's centre if that covers no object and no other
+    label, else the nearest such place on rings round it whose leader line crosses no other label
+    and whose box sits on no other leader. A box on top of small look-alike pieces hides the very
+    thing the picture is for, and a leader running through a neighbour's box points at the wrong
+    row (sheets-04g-fit: kite rungs under their labels, then KITE 0.10's line through KITE 0.05)."""
+    for r in range(0, size, 12):
+        for k in range(1 if r == 0 else 16):
+            a = 2 * math.pi * k / 16
+            x, y = at[0] + r * math.cos(a), at[1] - r * math.sin(a)
+            b = d.textbbox((x, y), name, font=font, anchor="mm")
+            box = (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
+            if box[0] < 0 or box[1] < 0 or box[2] >= size or box[3] >= size:
+                continue
+            if any(box[0] < t[2] and t[0] < box[2] and box[1] < t[3] and t[1] < box[3] for t in taken):
+                continue
+            if r and (any(crosses((at, (x, y)), t) for t in taken) or any(crosses(ln, box) for ln in lines)):
+                continue
+            if mask.crop(box).getbbox() is None:
+                return (x, y), box
+    b = d.textbbox(at, name, font=font, anchor="mm")
+    return at, (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
+
+
 def bed_picture(plate, labels, names=True):
     """The bed from above, front edge at the bottom: each object in its own shade, its label on a
-    white box at its centre. `labels` maps object id -> label; names=False leaves the boxes off."""
+    white box clear of every object and every other label, a line from the box to its object when
+    the box had to move. `labels` maps object id -> label; names=False leaves the boxes off."""
     size = BED_MM * BED_PX
     img = Image.new("RGB", (size, size + CAPTION), (24, 24, 24))
-    d = ImageDraw.Draw(img)
+    mask = Image.new("L", (size, size), 0)
+    d, m = ImageDraw.Draw(img), ImageDraw.Draw(mask)
     d.rectangle([0, 0, size - 1, size - 1], outline=(90, 90, 90), width=2)
     for k in range(32, BED_MM, 32):  # a 32 mm grid, to read distances by eye
         d.line([(k * BED_PX, 0), (k * BED_PX, size)], fill=(40, 40, 40))
         d.line([(0, k * BED_PX), (size, k * BED_PX)], fill=(40, 40, 40))
     f = lambda p: (p[0] * BED_PX, size - p[1] * BED_PX)
-    shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240), (240, 230, 120)]
+    shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
+              (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
     font = ImageFont.load_default(size=26)
     named = []
     with zipfile.ZipFile(plate) as zf:
@@ -331,16 +366,24 @@ def bed_picture(plate, labels, names=True):
     for k, (oid, tris) in enumerate(objects):
         for t in tris:
             d.polygon([f(p) for p in t], fill=shades[k % len(shades)])
+            m.polygon([f(p) for p in t], fill=255)
         xs = [p[0] for t in tris for p in t] or [0]
         ys = [p[1] for t in tris for p in t] or [0]
         named.append((labels.get(oid, oid), ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)))
+    taken, lines = [], []
     for name, centre in named if names else []:
-        x, y = f(centre)
-        box = d.textbbox((x, y), name, font=font, anchor="mm")
-        d.rectangle([box[0] - 6, box[1] - 4, box[2] + 6, box[3] + 4], fill=(255, 255, 255))
-        d.text((x, y), name, fill=(0, 0, 0), font=font, anchor="mm")
+        at = f(centre)
+        (x, y), box = label_spot(d, font, name, at, taken, mask, size, lines)
+        taken.append(box)
+        if (x, y) != at:
+            lines.append((at, (x, y)))
+            d.line([at, (x, y)], fill=(255, 255, 255), width=2)
+            d.ellipse([at[0] - 4, at[1] - 4, at[0] + 4, at[1] + 4], fill=(255, 255, 255))
+    for (name, centre), box in zip(named if names else [], taken):
+        d.rectangle(box, fill=(255, 255, 255))
+        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), name, fill=(0, 0, 0), font=font, anchor="mm")
     d.text((size / 2, size + CAPTION / 2), "front of the bed", fill=(200, 200, 200), font=font, anchor="mm")
-    return img, named
+    return img, named, taken, lines
 
 
 def bed_sheet(out, plate):
@@ -350,7 +393,7 @@ def bed_sheet(out, plate):
         labels = {r["object"]: r["label"] for r in json.loads(side.read_text())["objects"]}
     else:
         print(f"no bed map at {side}: naming objects by their 3MF id")
-    img, named = bed_picture(plate, labels)
+    img, named, _, _ = bed_picture(plate, labels)
     for name, (x, y) in named:
         print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
     img.save(out)
@@ -541,22 +584,36 @@ def bed_self_test():
     model = ('<model><resources>'
              '<object id="2"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
              '<object id="4"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+             '<object id="6"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+             '<object id="8"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+             '<object id="10"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
              '</resources><build>'
              '<item objectid="2" transform="1 0 0 0 1 0 0 0 1 50 50 0"/>'
              '<item objectid="4" transform="0 1 0 -1 0 0 0 0 1 150 150 0"/>'
+             '<item objectid="6" transform="1 0 0 0 1 0 0 0 1 50 60 0"/>'
+             '<item objectid="8" transform="1 0 0 0 1 0 0 0 1 50 68 0"/>'
+             '<item objectid="10" transform="1 0 0 0 1 0 0 0 1 50 76 0"/>'
              '</build></model>')
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("3D/3dmodel.model", model)
         zf.writestr("3D/Objects/o.model", bar)
-    named = bed_picture(buf, {"2": "FLAT", "4": "TURNED"})[1]
+    _, named, boxes, lines = bed_picture(buf, {"2": "FLAT", "4": "TURNED", "6": "NEAR", "8": "ROW 3", "10": "ROW 4"})
     img = bed_picture(buf, {}, names=False)[0]  # the label boxes are white: test under them
     lit = lambda x, y: sum(img.getpixel((int(x * BED_PX), int((BED_MM - y) * BED_PX)))) > 300
+    covers = lambda b: any(sum(img.getpixel((x, y))) > 300 for x in range(int(b[0]), int(b[2])) for y in range(int(b[1]), int(b[3])))
+    apart = lambda a, b: a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]
     return [
         ("bed fills a placed bar along its length", lit(58, 50) and lit(42, 50)),
         ("bed leaves the bed beside the bar empty", not lit(50, 56)),
         ("bed turns a bar a quarter turn", lit(150, 158) and not lit(158, 150)),
-        ("bed names each object from the map", [n for n, _ in named] == ["FLAT", "TURNED"]),
+        ("bed names each object from the map", [n for n, _ in named] == ["FLAT", "TURNED", "NEAR", "ROW 3", "ROW 4"]),
+        ("bed puts no label over a piece", not any(covers(b) for b in boxes)),
+        ("bed puts no label over another (bars 6 to 8 mm apart)",
+         all(apart(a, b) for i, a in enumerate(boxes) for b in boxes[i + 1:])),
+        ("bed runs no leader line through another label (four bars in a stack)",
+         len(lines) >= 3 and not any(crosses(ln, b) for ln in lines for b in boxes
+                                     if not (b[0] <= ln[1][0] <= b[2] and b[1] <= ln[1][1] <= b[3]))),
     ]
 
 
