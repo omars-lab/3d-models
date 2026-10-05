@@ -6054,3 +6054,39 @@ he picked "Change the production rule". This settles call 2 of the
 **What would reverse it:** a production plate whose second run fails after one good one. That
 would mean one keep is luck, and K goes back to 2. Or Omar printing a production plate and minding
 the empty bed, which would mean the fill bar comes back, perhaps only for plates of large pieces.
+
+## D-099 — The Shopify store is built in coffee-house-storefront
+
+Omar, 2026-10-04, answering call 1 of the
+[storefront design](../design/storefront/shopify-storefront-design.md#call-1-which-repo-builds-the-store),
+which repo builds the store: "it will be in coffee-house-storefront", then "under git coffeehouse".
+The repo already existed, private, under the NaqshCoffee organisation, with its own `DESIGN.md` of
+his earlier calls (its tool `naqshop`, the Horizon theme, the Coaster Lab in a frame on a product
+page). None of the three options offered named it.
+
+### The options as offered
+
+- **A new private store repo** (recommended): the template, the server and the app setup together,
+  with the hub's order intake left in the hub. Its con was a fourth repo to keep.
+- **Inside the hub:** one fewer repo, but the hub is on the team's private network only and would
+  need a public deploy.
+- **Split, the server in bikar and the template in a new repo:** two repos for one feature. Its con
+  as offered, that bikar is public, was wrong: bikar is private.
+- **Chosen, coffee-house-storefront:** closest to the first option, with no new repo, since one
+  was already set up for the store.
+
+### What it changes
+
+- **The storefront design hands off to that repo.** Its §17 says where everything is, what to read,
+  which doc wins where, what a fresh session there can start, and what it must leave to Omar.
+- **Two designs now cover the store.** coffee-house-storefront's `DESIGN.md` wins on the store's
+  tooling, theme and hosting; the storefront design wins on the coaster and its contract with the
+  hub. Where they disagree it is an open call in the storefront design (calls 5, 8 and 9), not a
+  pick by either side.
+- **Its `DESIGN.md` added a blocker this repo missed:** the right to sell each design (call 9).
+- **Nothing moves out of 3d-models.** The design, the research and the order-driven design stay
+  here; the store repo links to them.
+
+**What would reverse it:** the store's code needing something only the hub can give at build time,
+such as the private network, which would pull intake and the store together; or the two designs
+drifting apart faster than calls can settle them, which would mean one doc should own both.
