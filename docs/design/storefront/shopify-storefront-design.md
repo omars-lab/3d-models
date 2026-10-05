@@ -684,9 +684,13 @@ open with is call 10.
   and writes a PNG with no background. `make coasters` in 3d-models already runs it for every
   coaster bikar can split, into `build/images/<id>.png`. A coaster the split refuses (openwork, some
   joins) gets no picture from it. `--mate dx,dy` adds a second copy beside the first.
-  **The gap:** it draws the colors the `.bkr` itself declares and takes no theme. A hero per
-  theme needs the theme's colors written into a copy of the `.bkr`, the way the Lab applies a
-  theme, or a flag for it. Neither is tried yet.
+  It draws the colors the `.bkr` declares unless told otherwise: `--color <name>=<#rrggbb>`
+  (repeatable) repaints a palette color, or one region (`base`, `straps`, `border`), and refuses a
+  name the coaster does not know or a hex that is not `#rrggbb`. A loose coaster's pieces file is
+  drawn finished, every piece in its pocket in its color; `--no-slab` drops the slab that file
+  carries for printing, which leaves the frame and pieces the minimal coaster prints. One
+  difference remains: the pieces file's frame has no rounded top edge, so the hero draws it
+  square. `--width <px>` sets the picture's size (1024 by default).
 - **The theme pictures.** From 3d-models:
   `python3 .claude/skills/color-themes/scripts/themes.py render gbv --png <dir>` draws every gBV
   theme with its finishes, and `themes.py base gbv` the uncolored pattern. Today's drawings are
@@ -708,17 +712,28 @@ Playwright. That gives a picture for the cart line, the order confirmation and t
 page. It is not built, and it runs on the Lab's server or in the hub, never in the buyer's
 browser on our behalf.
 
-**Proposed, not built: one command that draws a listing's set.** Running the commands above by
-hand per theme does not scale past one design. The proposal is a `listing` subcommand of the
-color-themes skill's `themes.py`, `themes.py listing <design> --out <dir>`, which for every theme
-of a design writes the hero, the flat theme picture and the colors-by-name strip at one size and
-one background, named `<design>-<theme>-<kind>.png`, plus a manifest listing each file with its
-theme, its kind, "drawing" or "photo", and the command and recipe it came from. naqshop, in
+**One command draws a listing's set.** Running the commands above by hand per theme does not
+scale past one design, so the color-themes skill's `themes.py` has a `listing` subcommand:
+`python3 .claude/skills/color-themes/scripts/themes.py listing gbv --out build/listing/gbv`. For
+every theme of a design (or the ones named with `--theme`) it writes three pictures at one size
+and on one background, named `<design>-<theme>-<kind>.png`:
+
+- `hero`: bikar's preview of the finished coaster, with the theme's colors passed as `--color`
+  and the slab dropped;
+- `flat`: the theme picture, with its finishes;
+- `colors`: a card naming each filament color, its line and where it goes, footed "A drawing,
+  from each filament's published color, not a photo."
+
+Beside them, `manifest.json` lists each file with its theme, its kind, the label "drawing", its
+alt text and the command it came from, plus the bikar commit and the size. The alt text of a
+theme with a multi-color spool says each coaster comes out different (SF-9). naqshop, in
 coffee-house-storefront, reads the manifest to upload the pictures and to write each one's alt
 text and its drawing or photo label. The drawing stays in 3d-models, because it uses only public
-files; the upload stays in the store repo. It needs two things first: the hero to take a theme
-(the gap above, a bikar change), and Shopify's image size (§16.3). A picture of a set of 4 or 6
-also needs more than `--mate`, which places one extra copy.
+files; the upload stays in the store repo. The size is 2048 px square, because Shopify's help
+page on product media says "For square product images, a size of 2048 x 2048 px usually displays
+best" ([read 2026-10-05](https://help.shopify.com/en/manual/products/product-media/product-media-types));
+whether an upload looks right is still §16.3's test. A picture of a set of 4 or 6 needs more than
+`--mate`, which places one extra copy, and is not built.
 
 **Rules for every picture:**
 
@@ -1127,7 +1142,7 @@ changes a setting or buys something is Omar's.
 | Are Shopify's own shipping labels on Basic? (§11.6) | Look in the admin | S4 |
 | Which call marks a line in progress for our own location? (§11.6) | Try it on a test order | S4 |
 | Does an Etsy buyer's personalization reach the Shopify order? | One test Etsy order | only if call 6 goes "now" |
-| What image size, shape and formats does a product page take, and are GIF, video and 3D models among them? | Read Shopify's help page on product media, then upload one drawing, the timelapse GIF and one STL-made 3D file to a closed product | S1 (the `listing` command's size, §11.8) |
+| How does an uploaded drawing look on a product page, and do GIF, video and 3D models work there? | The help page is read (2048 px square, §11.8); upload one listing set, the timelapse GIF and one STL-made 3D file to a closed product | S1 |
 | How far are a drawing's colors from the printed coaster's? | Photograph a printed coaster beside its drawing on a screen, in daylight | S5, under call 10's second option |
 | What do packaging and shipping cost per order? | Weigh and price a packed set | S5 |
 | How long does pressing the pieces in take? (gap G14) | Time one assembly | S5 (the pricer's labor) |

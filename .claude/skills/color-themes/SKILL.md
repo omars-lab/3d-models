@@ -74,7 +74,12 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
 5. **Review.** Run [review-theme](../review-theme/SKILL.md) on every new or recolored theme.
 6. **Gallery.** `themes.py gallery <id>` writes `docs/design/coaster/themes/<id>-themes.md`, themes
    ordered by score. Never edit that page by hand; edit the data and run this again.
-7. **Gate.** `make validate-color-themes` (also run by `make validate` and the pre-commit hook
+7. **Listing pictures.** `themes.py listing <id> --out <dir>` writes three square PNGs per theme
+   for a shop listing (storefront design §11.8): the coaster drawn finished by bikar, every piece in
+   its pocket in the theme's colors (`hero`); the flat picture (`flat`); and a card naming each
+   color and where it goes (`colors`). Its `manifest.json` labels each one a drawing, gives the alt
+   text and the command that made it. Look at every one before it goes anywhere.
+8. **Gate.** `make validate-color-themes` (also run by `make validate` and the pre-commit hook
    `50-color-themes`) fails when a picture, a review or a gallery page is out of date with the data.
 
 ## Scripts — when to use each
@@ -93,6 +98,7 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
 | `scripts/themes.py render` | Draws every theme's picture (SVG, and PNGs with `--png`) | After any edit to `themes.yaml` or `palette.yaml` | `python3 .claude/skills/color-themes/scripts/themes.py render gbv --png <scratch>/png` |
 | `scripts/themes.py check` | Colors, heads-ups, plates and cost per theme; fails on stale pictures or gallery | After rendering; `--all --quiet` is what the gate runs | `python3 .claude/skills/color-themes/scripts/themes.py check gbv` |
 | `scripts/themes.py gallery` | Writes the construction's gallery page | After the reviews are in | `python3 .claude/skills/color-themes/scripts/themes.py gallery gbv` |
+| `scripts/themes.py listing` | Draws each theme for a shop listing: the finished coaster (bikar `--format preview --no-slab --color`), the flat picture and a colors card, 2048 px square, with a manifest of labels and alt text | A theme is going on the storefront | `python3 .claude/skills/color-themes/scripts/themes.py listing gbv --out build/listing/gbv` (`--theme <id>` for one, `--size N`) |
 | `scripts/themes.py --self-test` | Buy colors against the catalog, the color math, the gradient helper, the finish drawing, and the checks on a three-piece fixture | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/themes.py --self-test` |
 
 ## How the numbers are made, and where they are weak
