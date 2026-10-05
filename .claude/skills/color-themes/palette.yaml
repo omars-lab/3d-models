@@ -50,11 +50,17 @@ buy:
   - { id: lilac-purple,    hex: "#AE96D4", name: "Lilac Purple",    line: "PLA Matte", code: "11700" }
   - { id: plum,            hex: "#950051", name: "Plum",            line: "PLA Matte", code: "11204" }
   # Silk, Silk+ and Sparkle: the pictures draw their sheen and flecks, roughly.
-  - { id: silk-gold,           hex: "#E5B03D", name: "Gold",                 line: "PLA Silk",    code: "13401" }
+  # Plain PLA Silk is not on the US store (its page returned 404 on 2026-10-04, and 13401 was on
+  # none of the 19 store pages checked), so Silk Gold prints only from a spool already on hand.
+  # The nearest one on sale is Silk+ Gold (13405), a different hex: swapping it in needs a look.
+  # Source: docs/research/2026-10-04-coaster-pricing.md.
+  - { id: silk-gold,           hex: "#E5B03D", name: "Gold",                 line: "PLA Silk",    code: "13401", note: "not on the US store, 2026-10-04" }
   - { id: silk-plus-champagne, hex: "#F3CFB2", name: "Champagne",            line: "PLA Silk+",   code: "13404" }
   - { id: silk-plus-rose-gold, hex: "#BA9594", name: "Rose Gold",            line: "PLA Silk+",   code: "13206" }
   - { id: silk-plus-gold,      hex: "#F4A925", name: "Gold",                 line: "PLA Silk+",   code: "13405" }
   - { id: onyx-black-sparkle,  hex: "#2D2B28", name: "Onyx Black Sparkle",   line: "PLA Sparkle", code: "13101" }
   - { id: gold-sparkle,        hex: "#CEA629", name: "Classic Gold Sparkle", line: "PLA Sparkle", code: "13402" }
   # A two-color spool: the color changes along the filament, so which piece gets which is luck.
-  - { id: silk-gilded-rose, hexes: ["#FF9425", "#C16784"], name: "Gilded Rose", line: "PLA Silk", code: "13901" }
+  # Bambu Studio files it under PLA Silk; the US store sells it as PLA Silk Multi-Color, $24.99,
+  # spool only, no bulk discount (2026-10-04, docs/research/2026-10-04-coaster-pricing.md).
+  - { id: silk-gilded-rose, hexes: ["#FF9425", "#C16784"], name: "Gilded Rose", line: "PLA Silk", code: "13901", note: "sold as PLA Silk Multi-Color, spool only" }
