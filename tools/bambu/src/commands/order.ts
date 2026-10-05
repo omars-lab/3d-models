@@ -1,10 +1,13 @@
 // `bambu order` — an order file in, its plates out (order-driven-lab-design §9, phase 1).
 //   plan <order.yaml>  : one recipe per color, each plate's beds, minutes and grams from its slice,
 //                        the minutes corrected by past prints, and the order's total
+//   price <plan.json>  : what the order costs to make, its break-even and suggested price, the cost at
+//                        other sizes, the pricing scenarios and the market band (§9.3, §9.7, phase 3)
 //   timed              : the prints the correction rests on (watched against sliced minutes)
 //   fixtures           : the regression suite (§9.6): each fixture order planned and checked against
 //                        its expected plan, and its wrong plan refused for the reason it names; each
-//                        fixture shelf added up against its expected shelf, and its wrong shelf refused
+//                        fixture shelf added up against its expected shelf, and its wrong shelf refused;
+//                        each fixture's made-up settings priced against its expected price
 //
 // An order file names no person and stays out of this repo (it is public). The planner never sends:
 // a plate it writes is a recipe with no page and no approval.
@@ -29,6 +32,7 @@ import { fetchGroups, loadCatalog, loadNotes, sliceRecipe, writeRecipeFiles } fr
 import { repoRoot } from "../paths.js";
 import { type ShelfReport, shelfDiff, shelfReport } from "../shelf.js";
 import { type TimedRun, readTimedRuns } from "../timed-prints.js";
+import { DEFAULT_QUANTITIES, type PriceOpts, priceReport, runPrice } from "./order-price.js";
 import { readShelf } from "./shelf.js";
 
 const FIXTURES = "tools/bambu/test/fixtures/orders";
@@ -138,13 +142,14 @@ function runTimed(opts: { json?: boolean }): void {
 // The last phase whose command exists (design §9.6 "Which phase builds which part"). A fixture of a
 // later phase waits; raising this when a phase lands runs its fixtures, so none stays waiting by
 // being forgotten.
-const SHIPPED_PHASE = 2;
+const SHIPPED_PHASE = 3;
 
 interface FixtureMeta {
   phase: number;
   about: string;
   wrong_must_say?: string;
   wrong_shelf_must_say?: string;
+  plan_of?: string; // the fixture whose expected plan this one prices, when it has none of its own
 }
 
 interface FixturesOpts {
@@ -171,7 +176,10 @@ async function runFixtures(opts: FixturesOpts): Promise<void> {
     try {
       if (existsSync(join(fx, "order.yaml"))) problems.push(...(await planChecks()));
       if (existsSync(join(fx, "shelf.fixture.yaml"))) problems.push(...shelfChecks(fx, meta, opts));
-      if (!existsSync(join(fx, "order.yaml")) && !existsSync(join(fx, "shelf.fixture.yaml"))) problems.push("no order.yaml and no shelf.fixture.yaml");
+      if (existsSync(join(fx, "settings.fixture.yaml"))) problems.push(...priceChecks(dir, fx, meta, opts));
+      if (!["order.yaml", "shelf.fixture.yaml", "settings.fixture.yaml"].some((f) => existsSync(join(fx, f)))) {
+        problems.push("no order.yaml, no shelf.fixture.yaml and no settings.fixture.yaml");
+      }
     } catch (e) {
       problems.push(String((e as Error).message));
     }
@@ -247,6 +255,30 @@ function shelfChecks(fx: string, meta: FixtureMeta, opts: FixturesOpts): string[
   return problems;
 }
 
+/** A fixture's made-up settings priced (§9.6 "a price shows only when every input is filled"): the
+ *  price and the sizes against expected-price.json, the scenarios against expected-scenarios.json.
+ *  The plan priced is this fixture's expected plan, or the one `plan_of` names; the plan checks hold
+ *  either to today's planner. */
+function priceChecks(dir: string, fx: string, meta: FixtureMeta, opts: FixturesOpts): string[] {
+  const problems: string[] = [];
+  const planFile = join(meta.plan_of ? join(dir, meta.plan_of) : fx, "expected-plan.json");
+  if (!existsSync(planFile)) return [`no plan to price: ${planFile} does not exist`];
+  const report = priceReport(readJson<Plan>(planFile), join(fx, "settings.fixture.yaml"), "settings.fixture.yaml", DEFAULT_QUANTITIES);
+  const got = { price: report.price, by_quantity: report.by_quantity };
+  if (opts.writeExpected) {
+    writeFileSync(join(fx, "expected-price.json"), JSON.stringify(got, null, 2) + "\n");
+    if (existsSync(join(fx, "expected-scenarios.json"))) writeFileSync(join(fx, "expected-scenarios.json"), JSON.stringify(report.scenarios, null, 2) + "\n");
+  }
+  if (!existsSync(join(fx, "expected-price.json"))) problems.push("no expected-price.json");
+  else if (canonicalJson(got) !== canonicalJson(readJson(join(fx, "expected-price.json")))) {
+    problems.push("the price differs from expected-price.json (run `bambu order price` on its plan with --settings and diff)");
+  }
+  if (existsSync(join(fx, "expected-scenarios.json")) && canonicalJson(report.scenarios) !== canonicalJson(readJson(join(fx, "expected-scenarios.json")))) {
+    problems.push("the scenarios differ from expected-scenarios.json");
+  }
+  return problems;
+}
+
 export function registerOrder(program: Command): void {
   const order = program.command("order").description("plan an order: plates by color, beds, minutes, grams (order-driven-lab-design §9)");
 
@@ -268,6 +300,22 @@ export function registerOrder(program: Command): void {
     });
 
   order
+    .command("price <plan.json>")
+    .description("what an order costs to make, its break-even and suggested price, the cost at other sizes, the pricing scenarios and the market band")
+    .option("--settings <file>", "the pricing settings (default: .bambu/pricing/settings.yaml, gitignored; none means every setting empty)")
+    .option("--init-settings", "write the settings file with every setting empty, then price", false)
+    .option("--quantities <list>", `the sizes to cost, comma-separated (default: ${DEFAULT_QUANTITIES.join(",")}; the plan's own size is added)`)
+    .option("--json", "print the price, sizes, scenarios and market band as JSON", false)
+    .action((file: string, opts: PriceOpts) => {
+      try {
+        runPrice(file, opts);
+      } catch (e) {
+        console.error(String((e as Error).message));
+        process.exitCode = 1;
+      }
+    });
+
+  order
     .command("timed")
     .description("the prints watched from start to finish, against their sliced minutes: what a plan's correction rests on")
     .option("--json", "print the runs as JSON (the shape --prints reads)", false)
@@ -275,9 +323,9 @@ export function registerOrder(program: Command): void {
 
   order
     .command("fixtures")
-    .description("run the order regression suite: every fixture planned, checked, and its wrong plan refused")
+    .description("run the order regression suite: every fixture planned and checked, its wrong plan and shelf refused, its price worked")
     .option("--dir <dir>", `the fixtures folder (default: ${FIXTURES})`)
-    .option("--write-expected", "overwrite each expected-plan.json with today's plan (then check every one by hand)", false)
+    .option("--write-expected", "overwrite each expected plan, shelf and price with today's (then check every one by hand)", false)
     .option("--slice", "slice each fixture recipe slices.json lacks, and rewrite slices.json with only the slices in use", false)
     .action(async (opts: FixturesOpts) => runFixtures(opts));
 }

@@ -1,0 +1,729 @@
+{
+  "price": {
+    "order": "FIXTURE-07",
+    "coasters": 1,
+    "scaled": null,
+    "empty": [
+      "price per gram of PLA Silk"
+    ],
+    "floor": true,
+    "print_minutes": {
+      "value": 102.9,
+      "floor": true,
+      "missing": []
+    },
+    "warm_ups": {
+      "value": 2,
+      "floor": false,
+      "missing": []
+    },
+    "printer_hours": {
+      "value": 1.915,
+      "floor": true,
+      "missing": []
+    },
+    "materials": [
+      {
+        "plate": "fixture-07-10101",
+        "line": "PLA Basic",
+        "code": "10101",
+        "name": "Black",
+        "grams": 25.81,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 25.81,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      },
+      {
+        "plate": "fixture-07-13401",
+        "line": "PLA Silk",
+        "code": "13401",
+        "name": "Gold",
+        "grams": 1.54,
+        "price_per_gram": null,
+        "usd": {
+          "value": null,
+          "floor": false,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "note": "not on the US store, 2026-10-04"
+      }
+    ],
+    "material": {
+      "value": null,
+      "floor": false,
+      "missing": [
+        "price per gram of PLA Silk"
+      ]
+    },
+    "power": {
+      "value": 1.92,
+      "floor": true,
+      "missing": []
+    },
+    "wear": {
+      "value": 1.92,
+      "floor": true,
+      "missing": []
+    },
+    "made": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "price per gram of PLA Silk"
+      ]
+    },
+    "labor": {
+      "value": 2.5,
+      "floor": false,
+      "missing": []
+    },
+    "packaging": {
+      "value": 4,
+      "floor": false,
+      "missing": []
+    },
+    "cost": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "price per gram of PLA Silk"
+      ]
+    },
+    "break_even": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "price per gram of PLA Silk"
+      ]
+    },
+    "suggested": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "price per gram of PLA Silk"
+      ]
+    },
+    "each": {
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      }
+    },
+    "spools": {
+      "count": 2,
+      "usd": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+    }
+  },
+  "by_quantity": [
+    {
+      "order": "FIXTURE-07",
+      "coasters": 1,
+      "scaled": null,
+      "empty": [
+        "price per gram of PLA Silk"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 102.9,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 2,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 1.915,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-07-10101",
+          "line": "PLA Basic",
+          "code": "10101",
+          "name": "Black",
+          "grams": 25.81,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 25.81,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-07-13401",
+          "line": "PLA Silk",
+          "code": "13401",
+          "name": "Gold",
+          "grams": 1.54,
+          "price_per_gram": null,
+          "usd": {
+            "value": null,
+            "floor": false,
+            "missing": [
+              "price per gram of PLA Silk"
+            ]
+          },
+          "note": "not on the US store, 2026-10-04"
+        }
+      ],
+      "material": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "power": {
+        "value": 1.92,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 1.92,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "labor": {
+        "value": 2.5,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": 4,
+        "floor": false,
+        "missing": []
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        }
+      },
+      "spools": {
+        "count": 2,
+        "usd": {
+          "value": null,
+          "floor": false,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-07",
+      "coasters": 5,
+      "scaled": "scaled from FIXTURE-07's 1 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "price per gram of PLA Silk"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 514.5,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 10,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 9.575,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-07-10101",
+          "line": "PLA Basic",
+          "code": "10101",
+          "name": "Black",
+          "grams": 129.05,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 129.05,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-07-13401",
+          "line": "PLA Silk",
+          "code": "13401",
+          "name": "Gold",
+          "grams": 7.7,
+          "price_per_gram": null,
+          "usd": {
+            "value": null,
+            "floor": false,
+            "missing": [
+              "price per gram of PLA Silk"
+            ]
+          },
+          "note": "not on the US store, 2026-10-04"
+        }
+      ],
+      "material": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "power": {
+        "value": 9.57,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 9.57,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "labor": {
+        "value": 12.5,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": 4,
+        "floor": false,
+        "missing": []
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        }
+      },
+      "spools": {
+        "count": 2,
+        "usd": {
+          "value": null,
+          "floor": false,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-07",
+      "coasters": 10,
+      "scaled": "scaled from FIXTURE-07's 1 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "price per gram of PLA Silk"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 1029,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 20,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 19.15,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-07-10101",
+          "line": "PLA Basic",
+          "code": "10101",
+          "name": "Black",
+          "grams": 258.1,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 258.1,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-07-13401",
+          "line": "PLA Silk",
+          "code": "13401",
+          "name": "Gold",
+          "grams": 15.4,
+          "price_per_gram": null,
+          "usd": {
+            "value": null,
+            "floor": false,
+            "missing": [
+              "price per gram of PLA Silk"
+            ]
+          },
+          "note": "not on the US store, 2026-10-04"
+        }
+      ],
+      "material": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "power": {
+        "value": 19.15,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 19.15,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "labor": {
+        "value": 25,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": 4,
+        "floor": false,
+        "missing": []
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        }
+      },
+      "spools": {
+        "count": 2,
+        "usd": {
+          "value": null,
+          "floor": false,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-07",
+      "coasters": 100,
+      "scaled": "scaled from FIXTURE-07's 1 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "price per gram of PLA Silk"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 10290,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 200,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 191.5,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-07-10101",
+          "line": "PLA Basic",
+          "code": "10101",
+          "name": "Black",
+          "grams": 2581,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 2581,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-07-13401",
+          "line": "PLA Silk",
+          "code": "13401",
+          "name": "Gold",
+          "grams": 154,
+          "price_per_gram": null,
+          "usd": {
+            "value": null,
+            "floor": false,
+            "missing": [
+              "price per gram of PLA Silk"
+            ]
+          },
+          "note": "not on the US store, 2026-10-04"
+        }
+      ],
+      "material": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "power": {
+        "value": 191.5,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 191.5,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "labor": {
+        "value": 250,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": 4,
+        "floor": false,
+        "missing": []
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "price per gram of PLA Silk"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        }
+      },
+      "spools": {
+        "count": 4,
+        "usd": {
+          "value": null,
+          "floor": false,
+          "missing": [
+            "price per gram of PLA Silk"
+          ]
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    }
+  ]
+}

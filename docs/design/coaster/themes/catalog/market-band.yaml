@@ -1,0 +1,28 @@
+# What similar coasters are listed at: the market band `bambu order price` shows beside a price.
+# It is not a setting and never enters the formula (order-driven-lab-design §9.3).
+#
+# Every row is from docs/research/2026-10-04-coaster-pricing.md, with its hedges: asking prices on
+# one day's first page of Etsy results, which Etsy ranks by relevance and personalizes, not sales.
+# Repeat the search before setting a price, and change `read` when you do.
+
+read: '2026-10-04'
+source: docs/research/2026-10-04-coaster-pricing.md
+
+each:
+  - what: printed coasters, one
+    median: 5.00
+    listings: 39
+    hedge: one research pass only, not re-checked
+  - what: printed coasters, sets of 4
+    median: 5.00 # $20 a set
+    listings: 23
+    hedge: first page only, asking prices
+  - what: printed coasters, sets of 6
+    median: 4.25 # $25.50 a set
+    listings: 12
+    hedge: first page only, asking prices
+  - what: printed Islamic-pattern sets of 4 to 6
+    low: 6.25
+    high: 7.50
+    listings: 4
+    hedge: three of the four from one shop, all smaller than ours (112.5 mm), none a frame with loose pieces

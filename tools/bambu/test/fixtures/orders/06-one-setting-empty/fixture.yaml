@@ -1,5 +1,6 @@
 # FIXTURE
 phase: 3
 about: "fixture 1's order with every made-up setting filled but packaging: no cost total, no break-even, no price, and packaging named as the empty one"
-# The order is fixture 1's; the made-up settings and the expected price land with pricing
-# (order-driven-lab-design §9.6, phase 3).
+# The order is fixture 1's, so its plan is fixture 1's expected plan. Read as zero, the empty
+# packaging would give a break-even $5.00 below fixture 1's, which looks right; the golden is "no price".
+plan_of: 01-ice-to-navy
