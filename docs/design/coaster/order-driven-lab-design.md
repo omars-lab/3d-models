@@ -528,18 +528,25 @@ flowchart LR
   because the X2D has not been seen to report what it used (the field is marked unconfirmed in the code). A
   failed print still used its plastic and counts, as its full slice grams: an overcount for a print stopped early, until the owner corrects the book. A
   `stopped` row counts the same way, for the same reason. A `lost` row closes nothing: the
-  printer stopped answering, and the print may still be going. The tray comes from the send record: the color
-  `bambu print send --color` used to pick the tray, written beside the print log at the send.
+  printer stopped answering, and the print may still be going. The tray comes from the send record, the
+  `sent` row below.
 - **The send record is a row in the print log.** Phase 2 adds a `sent` row, the first row of a
   send, written by `print_monitor.py <plate> --sent <hex> <tray> <grams>` (one triple per
-  filament). Its last column reads `fed #00ae42 from AMS 1 slot 4, 27.28 g by the slice`, with
+  filament). Its last column reads `fed #00ae42 from AMS 0 · slot 3, 27.28 g by the slice`, with
   `; ` between trays. The log stays append-only (the plates gate's P10), so the record cannot be
   edited after the print. The next `finished`, `failed` or `stopped` row closes it. A second
   `sent` row before a close leaves the first send listed as not closed. A finished, failed or
   stopped row with no `sent` row before it is listed as not counted, since it names no tray and
   no grams. Every print before phase 2 is one of these, so the book starts from the spools'
-  start grams, not from a guess. Making `print send` write the row itself is the next piece of
-  work.
+  start grams, not from a guess.
+- **`print send` writes the row.** After the print starts, the send writes its `sent` row from
+  what it already decided: the `ams_mapping` it published, the trays on the status read it made,
+  and the slice's `used_g` for each filament. The color in the row is the tray's, not the slice's,
+  because with `--color` the slice's color was never the one printed. The tray's name is the one
+  `bambu filament-sync` prints (`AMS 0 · slot 3`), so a spool's `tray:` is written that way. When
+  one feed cannot be named (a tray missing from the status read, a tray with no color, a slice
+  with no grams), the send writes no row and says why, so the print shows as not counted rather
+  than half counted. The dry run prints the row it would write.
 - **The tray's color names the spool.** A spool's color is its line and code; the tray reports a
   hex. A send's hex is matched to the spools whose catalog color has that hex. When two colors
   share a hex (Jade White and Ivory White are both `#ffffff`), the spool's `tray:` must say which
@@ -558,7 +565,7 @@ spool_grams: 1000              # a whole spool, for the buy list
 spool_grams_by_line: {}        # e.g. { "PLA Silk": 500 } where a line sells another size
 spools:
   - { id: navy-end, line: PLA Matte, code: "11602", start_grams: 40, tag_percent: 4,
-      tray: "AMS 1 slot 2", corrections: [{ date: 2026-10-05, grams: -4, why: weighed }] }
+      tray: "AMS 0 · slot 1", corrections: [{ date: 2026-10-05, grams: -4, why: weighed }] }
 orders:
   - { plan: orders/FIXTURE-1.plan.json, status: open }   # bambu order plan --json, saved
 logs: ../../docs/design/plates/print-logs                 # optional; the repo's print logs by default
@@ -799,7 +806,7 @@ being forgotten.
 |---|---|
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
 | 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
-| 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row; `print send` writing that row is still to come |
+| 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row, which `print send` writes |
 | 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7 |
 | 4, the pages | The browser run, with its screenshots, over all eight |
 

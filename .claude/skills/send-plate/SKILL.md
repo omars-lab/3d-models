@@ -133,6 +133,15 @@ off `origin/master`, PR, merge, then put the vault's copy back to the merged one
 (`git -C <vault> checkout -- docs/design/plates/<name>.md` only after `git diff` shows it matches) and
 fast-forward. The `--record` draft stays in `.bambu/records/` until the pieces are judged.
 
+It also writes the send's `sent` row into the plate's print log
+(`docs/design/plates/print-logs/<name>.md`), through the monitor-print skill's
+`print_monitor.py --sent`: each tray it fed, the tray's color and the slice's grams for it. The
+shelf (`bambu shelf show`) takes those grams off the spool when the print ends, so ship the log
+with the page. The dry run's `sent row:` line shows the row first. A `⚠ sent row:` line means
+one tray could not be named and no row is written: the print will show on the shelf as not
+counted. Say so in the report, and write the row by hand with
+`print_monitor.py <name> --sent <hex> <tray> <grams>` if Omar wants it counted.
+
 If the send is refused, or a permission check denies the call, report it as it came. Never retry
 another way and never send from Bambu Studio for him.
 

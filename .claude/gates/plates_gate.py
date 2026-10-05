@@ -1671,7 +1671,7 @@ CASES = [
                 "the one the file was sliced for |",
                 "| 2026-09-26 14:30 | resumed | 1/20 | 2% | RUNNING |"), None),
     ("P10 a send's row before the monitor's, naming its tray and grams",
-     _print_log("minis-09", "| 2026-09-26 14:00 | sent | | | fed #00ae42 from AMS 1 slot 4, "
+     _print_log("minis-09", "| 2026-09-26 14:00 | sent | | | fed #00ae42 from AMS 0 · slot 3, "
                 "27.28 g by the slice |",
                 "| 2026-09-26 14:02 | watching | 0/20 | 0% | PREPARE |"), None),
     ("P10 an event the monitor never writes (the load-bearing case: a typed row)",
