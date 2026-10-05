@@ -113,6 +113,8 @@ themes:
     colors: { frame: ivory-white, middle: sakura-pink, kite: lilac-purple, hex: pink, star: plum, outer: plum }
 
   # Finishes: silk shines, sparkle has flecks, and a two-color spool changes along its length.
+  # Silk black and gold uses plain PLA Silk Gold, which the US store does not sell (2026-10-04):
+  # buildable only from a spool on hand until a Silk+ Gold version is drawn and looked at.
   - id: silk-black-and-gold
     name: Silk black and gold
     mood: Black and gold again, in Silk Gold this time, so the pieces shine like brass against the frame.
