@@ -405,6 +405,16 @@ def headline(inv):
 
 # ---- snapshot, survives -------------------------------------------------------------------------
 
+def push_dir(repo):
+    """Where to push from: a bare repo's pre-push hook needs a work tree (bikar), so use one of its worktrees."""
+    if git(repo, "rev-parse", "--is-bare-repository") != "true":
+        return repo
+    for wt in worktrees(repo):
+        if not wt.get("bare") and Path(wt["worktree"]).is_dir():
+            return Path(wt["worktree"])
+    raise SystemExit(f"snapshot: {repo} is bare and has no worktree to push from; add one, or pass --no-push")
+
+
 def snapshot(repo, refs, date, push=True):
     """Write refs/snapshots/<date>/<branch> for each ref; refuse to move an existing one."""
     repo, written = Path(repo).resolve(), []
@@ -429,7 +439,7 @@ def snapshot(repo, refs, date, push=True):
         written.append(target)
         print(f"{target} {sha}")
     if push and written:
-        code, _, err = run(repo, "git", "push", "-q", "origin", *[f"{t}:{t}" for t in written])
+        code, _, err = run(push_dir(repo), "git", "push", "-q", "origin", *[f"{t}:{t}" for t in written])
         print(f"pushed {len(written)} snapshot refs to origin" if code == 0 else f"push failed: {err}")
         return code
     return 0
@@ -538,6 +548,16 @@ def self_test():
         if snapshot(repo, ["unique", "origin/unique"], "2000-01-02") != 0 \
                 or not git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-02/unique"):
             bad.append("a branch and its remote twin at one tip did not snapshot and push as one ref")
+
+        bare, tree = Path(tmp) / "bare.git", Path(tmp) / "bare-main"   # bikar's shape: a bare repo whose
+        run(tmp, "git", "clone", "-q", "--bare", str(origin), str(bare))  # pre-push needs a work tree
+        run(bare, "git", "worktree", "add", "-q", "--detach", str(tree), "main")
+        (bare / "hooks" / "pre-push").write_text("#!/bin/sh\ngit rev-parse --show-toplevel >/dev/null\n")
+        (bare / "hooks" / "pre-push").chmod(0o755)
+        run(bare, "git", "config", "core.hooksPath", str(bare / "hooks"))
+        if snapshot(bare, ["main"], "2000-01-03") != 0 \
+                or not git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-03/main"):
+            bad.append("a bare repo's snapshot did not push through its worktree")
 
         g("checkout", "-q", "unique")
         if survives(repo, repo / "d.txt", "main~0", ["unique"]) != 0:

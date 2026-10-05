@@ -107,7 +107,9 @@ brace), so someone has to read it.
   branches in one push, the auto-mode permission check refuses the command.
 - If the permission check refuses a delete, list it for Omar. Do not retry it another way.
 - In bikar, push and delete from a worktree such as `bikar-main`. The bare repo has no work tree,
-  and the pre-push hook needs one.
+  and the pre-push hook needs one. `snapshot` does this itself: given a bare repo, it pushes from
+  the repo's first worktree (it used to push from the bare repo and fail with "this operation must
+  be run in a work tree", 2026-10-05).
 
 ## Bringing unmerged work back
 
