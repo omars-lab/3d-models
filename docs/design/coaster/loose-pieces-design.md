@@ -217,6 +217,10 @@ there (minis-04 at 0.10, "too tight") does not count (§1).
 nothing. [sheets-04b](../plates/sheets-04b.md) tries pieces 4 mm tall, flush with that
 coaster, at 0.05, 0 and two press fits, where the piece is larger than its hole (bikar #300).
 
+A coaster split through its height can hold pieces a fourth way: a lip round each opening on both
+halves, so a piece is dropped into the lower half and trapped when the upper half is pressed on,
+with no fit to tune ([split-with-studs §11](../pieces/split-with-studs-design.md#11-loose-pieces-in-a-split-coaster-trapped-between-two-lips)).
+
 ### 3.4 Which fit numbers transfer, and on what condition
 
 - **CAL-FIT-01, as a starting point.** It transfers because a loose piece in a pocket is what the

@@ -1,0 +1,189 @@
+<!doctype html>
+<!-- Source of capture.png for split-with-studs-design.md §11. Regenerate with headless Chrome:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+       --hide-scrollbars --window-size=1000,700 --screenshot=capture.png capture.html
+     A schematic, not to scale: the gap, the lip and the clearance are drawn wide so they show.
+     Same look as ../../coaster/loose-pieces-media/frames.html. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pieces trapped in a split coaster</title>
+<style>
+  body { margin: 0; background: #fbfaf7; font: 14px/1.3 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #2b2b2b; }
+  h1 { font-size: 17px; margin: 14px 20px 2px; }
+  p.sub { margin: 0 20px 6px; color: #666; font-size: 12.5px; }
+  .lower { fill: #8d8a84; }
+  .upper { fill: #aaa59c; }
+  .piece { fill: #d9a931; }
+  .hole { fill: #fbfaf7; }
+  .hidden { fill: none; stroke: #7a5c10; stroke-width: 1.3; stroke-dasharray: 4 3; }
+  .seam { stroke: #fbfaf7; stroke-width: 1.4; stroke-dasharray: 3 3; }
+  .table { stroke: #555; stroke-dasharray: 5 4; stroke-width: 1.5; }
+  .arrow { stroke: #555; stroke-width: 1.6; fill: none; }
+  .head { font-size: 15px; font-weight: 700; }
+  .lbl { font-size: 14px; font-weight: 600; }
+  .note { font-size: 12px; fill: #555; }
+  .dim { stroke: #b0302a; stroke-width: 1.2; }
+  .dimt { font-size: 12px; fill: #b0302a; }
+</style>
+</head>
+<body>
+<h1>Loose pieces in a split coaster: trapped between two lips, not held by friction</h1>
+<p class="sub">Dark grey is the lower half, light grey the upper half, gold the loose piece, the dashed line the table. Each half prints face down, so each lip is that half's first layers on the bed. Not to scale.</p>
+<svg id="s" width="1000" height="610" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+const s = document.getElementById('s');
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text) e.textContent = text;
+  s.appendChild(e); return e;
+}
+const rect = (x, y, w, h, cls) => el('rect', { x, y, width: w, height: h, class: cls });
+const text = (x, y, t, cls, anchor) => el('text', { x, y, class: cls, 'text-anchor': anchor || 'middle' }, t);
+const poly = (pts, cls) => el('polygon', { points: pts.map(p => p.join(',')).join(' '), class: cls });
+const line = (x1, y1, x2, y2, cls) => el('line', { x1, y1, x2, y2, class: cls });
+function vdim(x, ya, yb, label) {            // a vertical dimension with a label to its right
+  line(x, ya, x, yb, 'dim'); line(x - 4, ya, x + 4, ya, 'dim'); line(x - 4, yb, x + 4, yb, 'dim');
+  text(x + 7, (ya + yb) / 2 + 4, label, 'dimt', 'start');
+}
+function hdim(xa, xb, y, label) {            // a horizontal dimension with a label above it
+  line(xa, y, xb, y, 'dim'); line(xa, y - 4, xa, y + 4, 'dim'); line(xb, y - 4, xb, y + 4, 'dim');
+  text((xa + xb) / 2, y - 6, label, 'dimt');
+}
+
+// ---------- Row 1: the three assembly steps, a cut straight down through one opening ----------
+// Coaster 4.4 mm tall drawn 88 px; cut at the middle; lip 0.6 mm thick (t), lip width w.
+const H = 88, CUT = 44, t = 12, w = 18, stub = 62, open = 176, c = 9;
+const studW = 24, studH = 28, sockW = 30, sockD = 32;
+const W1 = stub * 2 + open;                  // 300
+const pieceW = open - 2 * c, pieceH = H - 2 * t - 4;
+
+function lowerHalf(x0, y0) {
+  const R = x0 + W1 - stub;
+  rect(x0, y0 - CUT, stub, CUT, 'lower');
+  rect(R, y0 - CUT, stub, CUT, 'lower');
+  rect(x0 + stub, y0 - t, w, t, 'lower');              // lip, left
+  rect(R - w, y0 - t, w, t, 'lower');                  // lip, right
+  for (const sx of [x0 + stub / 2, R + stub / 2])      // studs on the cut face
+    rect(sx - studW / 2, y0 - CUT - studH, studW, studH, 'lower');
+}
+function upperHalf(x0, y0) {
+  const R = x0 + W1 - stub, top = y0 - H;
+  rect(x0, top, stub, CUT, 'upper');
+  rect(R, top, stub, CUT, 'upper');
+  rect(x0 + stub, top, w, t, 'upper');
+  rect(R - w, top, w, t, 'upper');
+  for (const sx of [x0 + stub / 2, R + stub / 2]) {    // sockets, with the stud inside
+    rect(sx - sockW / 2, y0 - CUT - sockD, sockW, sockD, 'hole');
+    rect(sx - studW / 2, y0 - CUT - studH, studW, studH, 'lower');
+  }
+  line(x0, y0 - CUT, x0 + stub, y0 - CUT, 'seam');
+  line(R, y0 - CUT, R + stub, y0 - CUT, 'seam');
+}
+function stepPanel(x0, y0, step, title, note1, note2) {
+  line(x0 - 12, y0, x0 + W1 + 12, y0, 'table');
+  lowerHalf(x0, y0);
+  const pL = x0 + stub + c;
+  if (step >= 2) rect(pL, y0 - t - pieceH, pieceW, pieceH, 'piece');
+  if (step === 2) {
+    const ax = x0 + W1 / 2, ay = y0 - t - pieceH - 8;
+    line(ax, ay - 46, ax, ay, 'arrow');
+    el('polyline', { points: `${ax - 6},${ay - 8} ${ax},${ay} ${ax + 6},${ay - 8}`, class: 'arrow' });
+    // the gap and the lip, on the right
+    const R = x0 + W1 - stub;
+    hdim(pL + pieceW, R, y0 - t - pieceH - 14, 'c');
+    hdim(R - w, R, y0 + 12, 'w');
+    vdim(R + stub + 10, y0 - t, y0, 't');
+  }
+  if (step === 3) {
+    upperHalf(x0, y0);
+    const ax = x0 + W1 / 2, ay = y0 - H - 8;
+    line(ax, ay - 30, ax, ay, 'arrow');
+    el('polyline', { points: `${ax - 6},${ay - 8} ${ax},${ay} ${ax + 6},${ay - 8}`, class: 'arrow' });
+    vdim(x0 + W1 + 10, y0 - H + t, y0 - t - pieceH, 'z');
+  }
+  text(x0 + W1 / 2, y0 + 34, title, 'lbl');
+  if (note1) text(x0 + W1 / 2, y0 + 52, note1, 'note');
+  if (note2) text(x0 + W1 / 2, y0 + 68, note2, 'note');
+}
+
+text(20, 26, 'Putting it together', 'head', 'start');
+stepPanel(20, 180, 1, '1  lower half, face down on the table', 'cut face and studs up', 'the lip is its first layers');
+stepPanel(340, 180, 2, '2  drop each piece in', 'it rests on the lip and cannot fall through,', 'so the gap c can be loose');
+stepPanel(660, 180, 3, '3  press the upper half on', 'studs find their sockets; its lip traps the', 'piece from above, with a little room z');
+
+// ---------- Row 2: four ways to hold the piece, seen from the top face and in section ----------
+text(20, 296, 'Four ways to hold it, seen from the top and cut through', 'head', 'start');
+
+function hexPts(cx, cy, r) {
+  const p = [];
+  for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i; p.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+  return p;
+}
+const Rh = 58;
+function topView(cx, cy, kind) {
+  rect(cx - 100, cy - 66, 200, 132, 'upper');
+  if (kind === 'lip') {
+    poly(hexPts(cx, cy, Rh - 13), 'piece');
+    poly(hexPts(cx, cy, Rh - 5), 'hidden');            // the piece's edge, under the lip
+  } else if (kind === 'tabs') {
+    poly(hexPts(cx, cy, Rh), 'hole');
+    poly(hexPts(cx, cy, Rh - 5), 'piece');
+    const v = hexPts(cx, cy, Rh);
+    for (let i = 0; i < 6; i++) {                       // a small fill in each corner
+      const V = v[i], A = v[(i + 5) % 6], B = v[(i + 1) % 6], d = 17 / Rh;
+      poly([V, [V[0] + (A[0] - V[0]) * d, V[1] + (A[1] - V[1]) * d], [V[0] + (B[0] - V[0]) * d, V[1] + (B[1] - V[1]) * d]], 'upper');
+    }
+  } else if (kind === 'flange') {
+    poly(hexPts(cx, cy, Rh), 'hole');
+    poly(hexPts(cx, cy, Rh - 2), 'piece');
+    poly(hexPts(cx, cy, Rh + 9), 'hidden');            // the flange, under the strap
+  } else {
+    poly(hexPts(cx, cy, Rh), 'hole');
+    poly(hexPts(cx, cy, Rh - 1), 'piece');
+  }
+}
+// A small assembled section, 44 px tall.
+function miniSection(x0, y0, kind) {
+  const h = 44, cut = 22, st = 34, op = 152, tt = 6, ww = 9, cc = 4, uu = 8;
+  const R = x0 + st + op;
+  line(x0 - 8, y0, R + st + 8, y0, 'table');
+  // frame: lower half then upper half
+  if (kind === 'flange') {
+    rect(x0, y0 - cut, st - uu, cut, 'lower'); rect(R + uu, y0 - cut, st - uu, cut, 'lower');
+    rect(x0, y0 - tt, st, tt, 'lower');        rect(R, y0 - tt, st, tt, 'lower');
+    rect(x0, y0 - h, st - uu, cut, 'upper');   rect(R + uu, y0 - h, st - uu, cut, 'upper');
+    rect(x0, y0 - h, st, tt, 'upper');         rect(R, y0 - h, st, tt, 'upper');
+    const L = x0 + st + 1, Rp = R - 1;
+    poly([[L, y0 - 1], [Rp, y0 - 1], [Rp, y0 - tt - 1], [Rp + uu - 1, y0 - tt - 1], [Rp + uu - 1, y0 - h + tt + 1],
+          [Rp, y0 - h + tt + 1], [Rp, y0 - h + 1], [L, y0 - h + 1], [L, y0 - h + tt + 1], [L - uu + 1, y0 - h + tt + 1],
+          [L - uu + 1, y0 - tt - 1], [L, y0 - tt - 1]], 'piece');
+  } else {
+    rect(x0, y0 - cut, st, cut, 'lower'); rect(R, y0 - cut, st, cut, 'lower');
+    rect(x0, y0 - h, st, cut, 'upper');   rect(R, y0 - h, st, cut, 'upper');
+    if (kind === 'lip' || kind === 'tabs') {
+      rect(x0 + st, y0 - tt, ww, tt, 'lower'); rect(R - ww, y0 - tt, ww, tt, 'lower');
+      rect(x0 + st, y0 - h, ww, tt, 'upper');  rect(R - ww, y0 - h, ww, tt, 'upper');
+      rect(x0 + st + cc, y0 - tt - (h - 2 * tt - 2), op - 2 * cc, h - 2 * tt - 2, 'piece');
+    } else {
+      rect(x0 + st + 0.5, y0 - h, op - 1, h, 'piece');
+    }
+  }
+  line(x0, y0 - cut, x0 + st, y0 - cut, 'seam'); line(R, y0 - cut, R + st, y0 - cut, 'seam');
+}
+function optionPanel(x0, kind, title, n1, n2, n3) {
+  const cx = x0 + 110;
+  topView(cx, 382, kind);
+  miniSection(x0 + 1, 514, kind);
+  text(cx, 542, title, 'lbl');
+  text(cx, 560, n1, 'note'); text(cx, 576, n2, 'note'); if (n3) text(cx, 592, n3, 'note');
+}
+optionPanel(20,  'lip',    'A  a full lip (recommended)', 'straps look wider by 2w;', 'the piece sits t below each face', 'today’s piece, only thinner');
+optionPanel(265, 'tabs',   'B  corner tabs', 'straps keep their width;', 'a small fill in each corner', '(the section is cut at a corner)');
+optionPanel(510, 'flange', 'C  a flanged piece', 'looks like today, flush;', 'the strap is thinner at the seam,', 'so fewer stud sites fit');
+optionPanel(755, 'press',  'D  press fit, as now', 'friction holds it; the gap', 'must suit each piece shape', '(sheets-04g: kites tight, middle loose)');
+</script>
+</body>
+</html>
