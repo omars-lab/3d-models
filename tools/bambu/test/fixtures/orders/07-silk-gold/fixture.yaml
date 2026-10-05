@@ -1,6 +1,6 @@
 # FIXTURE
 phase: 1
-about: "1 × gBV in Basic Black with the stars in Silk Gold 13401: two plates, the gold plate carries the palette's store note, and the shelf (no gold on it) buys one gold spool with that note (the price is phase 3)"
+about: "1 × gBV in Basic Black with the stars in Silk Gold 13401: two plates, the gold plate carries the palette's store note, and the shelf (no gold on it) buys one gold spool with that note, and the price names the empty price per gram of PLA Silk rather than borrow Silk+ Gold 13405's"
 # The wrong plan prints the stars in Silk+ Gold 13405, the nearest color, which the research calls
 # a color change to look at, not a rename.
 wrong_must_say: "Star: the order wants"

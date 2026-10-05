@@ -1,0 +1,1090 @@
+{
+  "price": {
+    "order": "FIXTURE-01",
+    "coasters": 4,
+    "scaled": null,
+    "empty": [
+      "packaging"
+    ],
+    "floor": true,
+    "print_minutes": {
+      "value": 351.1,
+      "floor": true,
+      "missing": []
+    },
+    "warm_ups": {
+      "value": 5,
+      "floor": false,
+      "missing": []
+    },
+    "printer_hours": {
+      "value": 6.3517,
+      "floor": true,
+      "missing": []
+    },
+    "materials": [
+      {
+        "plate": "fixture-01-11100",
+        "line": "PLA Matte",
+        "code": "11100",
+        "name": "Ivory White",
+        "grams": 68.88,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 68.88,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      },
+      {
+        "plate": "fixture-01-11601",
+        "line": "PLA Matte",
+        "code": "11601",
+        "name": "Ice Blue",
+        "grams": 3.14,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 3.14,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      },
+      {
+        "plate": "fixture-01-11603",
+        "line": "PLA Matte",
+        "code": "11603",
+        "name": "Sky Blue",
+        "grams": 2.61,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 2.61,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      },
+      {
+        "plate": "fixture-01-11600",
+        "line": "PLA Matte",
+        "code": "11600",
+        "name": "Marine Blue",
+        "grams": 18.16,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 18.16,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      },
+      {
+        "plate": "fixture-01-11602",
+        "line": "PLA Matte",
+        "code": "11602",
+        "name": "Dark Blue",
+        "grams": 24.47,
+        "price_per_gram": 1,
+        "usd": {
+          "value": 24.47,
+          "floor": false,
+          "missing": []
+        },
+        "note": null
+      }
+    ],
+    "material": {
+      "value": 117.26,
+      "floor": false,
+      "missing": []
+    },
+    "power": {
+      "value": 6.35,
+      "floor": true,
+      "missing": []
+    },
+    "wear": {
+      "value": 6.35,
+      "floor": true,
+      "missing": []
+    },
+    "made": {
+      "value": 259.93,
+      "floor": true,
+      "missing": []
+    },
+    "labor": {
+      "value": 10,
+      "floor": false,
+      "missing": []
+    },
+    "packaging": {
+      "value": null,
+      "floor": false,
+      "missing": [
+        "packaging"
+      ]
+    },
+    "cost": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "packaging"
+      ]
+    },
+    "break_even": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "packaging"
+      ]
+    },
+    "suggested": {
+      "value": null,
+      "floor": true,
+      "missing": [
+        "packaging"
+      ]
+    },
+    "each": {
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      }
+    },
+    "spools": {
+      "count": 5,
+      "usd": {
+        "value": 5000,
+        "floor": false,
+        "missing": []
+      },
+      "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+    }
+  },
+  "by_quantity": [
+    {
+      "order": "FIXTURE-01",
+      "coasters": 1,
+      "scaled": "scaled from FIXTURE-01's 4 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "packaging"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 87.8,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 5,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 1.9629,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-01-11100",
+          "line": "PLA Matte",
+          "code": "11100",
+          "name": "Ivory White",
+          "grams": 17.22,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 17.22,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11601",
+          "line": "PLA Matte",
+          "code": "11601",
+          "name": "Ice Blue",
+          "grams": 0.79,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 0.79,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11603",
+          "line": "PLA Matte",
+          "code": "11603",
+          "name": "Sky Blue",
+          "grams": 0.65,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 0.65,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11600",
+          "line": "PLA Matte",
+          "code": "11600",
+          "name": "Marine Blue",
+          "grams": 4.54,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 4.54,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11602",
+          "line": "PLA Matte",
+          "code": "11602",
+          "name": "Dark Blue",
+          "grams": 6.12,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 6.12,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        }
+      ],
+      "material": {
+        "value": 29.32,
+        "floor": false,
+        "missing": []
+      },
+      "power": {
+        "value": 1.96,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 1.96,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": 66.48,
+        "floor": true,
+        "missing": []
+      },
+      "labor": {
+        "value": 2.5,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        }
+      },
+      "spools": {
+        "count": 5,
+        "usd": {
+          "value": 5000,
+          "floor": false,
+          "missing": []
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-01",
+      "coasters": 4,
+      "scaled": null,
+      "empty": [
+        "packaging"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 351.1,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 5,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 6.3517,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-01-11100",
+          "line": "PLA Matte",
+          "code": "11100",
+          "name": "Ivory White",
+          "grams": 68.88,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 68.88,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11601",
+          "line": "PLA Matte",
+          "code": "11601",
+          "name": "Ice Blue",
+          "grams": 3.14,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 3.14,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11603",
+          "line": "PLA Matte",
+          "code": "11603",
+          "name": "Sky Blue",
+          "grams": 2.61,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 2.61,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11600",
+          "line": "PLA Matte",
+          "code": "11600",
+          "name": "Marine Blue",
+          "grams": 18.16,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 18.16,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11602",
+          "line": "PLA Matte",
+          "code": "11602",
+          "name": "Dark Blue",
+          "grams": 24.47,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 24.47,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        }
+      ],
+      "material": {
+        "value": 117.26,
+        "floor": false,
+        "missing": []
+      },
+      "power": {
+        "value": 6.35,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 6.35,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": 259.93,
+        "floor": true,
+        "missing": []
+      },
+      "labor": {
+        "value": 10,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        }
+      },
+      "spools": {
+        "count": 5,
+        "usd": {
+          "value": 5000,
+          "floor": false,
+          "missing": []
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-01",
+      "coasters": 5,
+      "scaled": "scaled from FIXTURE-01's 4 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "packaging"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 438.9,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 10,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 8.3146,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-01-11100",
+          "line": "PLA Matte",
+          "code": "11100",
+          "name": "Ivory White",
+          "grams": 86.1,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 86.1,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11601",
+          "line": "PLA Matte",
+          "code": "11601",
+          "name": "Ice Blue",
+          "grams": 3.93,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 3.93,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11603",
+          "line": "PLA Matte",
+          "code": "11603",
+          "name": "Sky Blue",
+          "grams": 3.26,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 3.26,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11600",
+          "line": "PLA Matte",
+          "code": "11600",
+          "name": "Marine Blue",
+          "grams": 22.7,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 22.7,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11602",
+          "line": "PLA Matte",
+          "code": "11602",
+          "name": "Dark Blue",
+          "grams": 30.59,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 30.59,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        }
+      ],
+      "material": {
+        "value": 146.57,
+        "floor": false,
+        "missing": []
+      },
+      "power": {
+        "value": 8.31,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 8.31,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": 326.41,
+        "floor": true,
+        "missing": []
+      },
+      "labor": {
+        "value": 12.5,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        }
+      },
+      "spools": {
+        "count": 5,
+        "usd": {
+          "value": 5000,
+          "floor": false,
+          "missing": []
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-01",
+      "coasters": 10,
+      "scaled": "scaled from FIXTURE-01's 4 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "packaging"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 877.8,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 15,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 16.1292,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-01-11100",
+          "line": "PLA Matte",
+          "code": "11100",
+          "name": "Ivory White",
+          "grams": 172.2,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 172.2,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11601",
+          "line": "PLA Matte",
+          "code": "11601",
+          "name": "Ice Blue",
+          "grams": 7.85,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 7.85,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11603",
+          "line": "PLA Matte",
+          "code": "11603",
+          "name": "Sky Blue",
+          "grams": 6.53,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 6.53,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11600",
+          "line": "PLA Matte",
+          "code": "11600",
+          "name": "Marine Blue",
+          "grams": 45.4,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 45.4,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11602",
+          "line": "PLA Matte",
+          "code": "11602",
+          "name": "Dark Blue",
+          "grams": 61.18,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 61.18,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        }
+      ],
+      "material": {
+        "value": 293.15,
+        "floor": false,
+        "missing": []
+      },
+      "power": {
+        "value": 16.13,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 16.13,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": 650.82,
+        "floor": true,
+        "missing": []
+      },
+      "labor": {
+        "value": 25,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        }
+      },
+      "spools": {
+        "count": 5,
+        "usd": {
+          "value": 5000,
+          "floor": false,
+          "missing": []
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    },
+    {
+      "order": "FIXTURE-01",
+      "coasters": 100,
+      "scaled": "scaled from FIXTURE-01's 4 coaster(s): grams and minutes in proportion, beds at its fill",
+      "empty": [
+        "packaging"
+      ],
+      "floor": true,
+      "print_minutes": {
+        "value": 8777.5,
+        "floor": true,
+        "missing": []
+      },
+      "warm_ups": {
+        "value": 125,
+        "floor": false,
+        "missing": []
+      },
+      "printer_hours": {
+        "value": 158.7917,
+        "floor": true,
+        "missing": []
+      },
+      "materials": [
+        {
+          "plate": "fixture-01-11100",
+          "line": "PLA Matte",
+          "code": "11100",
+          "name": "Ivory White",
+          "grams": 1722,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 1722,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11601",
+          "line": "PLA Matte",
+          "code": "11601",
+          "name": "Ice Blue",
+          "grams": 78.5,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 78.5,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11603",
+          "line": "PLA Matte",
+          "code": "11603",
+          "name": "Sky Blue",
+          "grams": 65.25,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 65.25,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11600",
+          "line": "PLA Matte",
+          "code": "11600",
+          "name": "Marine Blue",
+          "grams": 454,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 454,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        },
+        {
+          "plate": "fixture-01-11602",
+          "line": "PLA Matte",
+          "code": "11602",
+          "name": "Dark Blue",
+          "grams": 611.75,
+          "price_per_gram": 1,
+          "usd": {
+            "value": 611.75,
+            "floor": false,
+            "missing": []
+          },
+          "note": null
+        }
+      ],
+      "material": {
+        "value": 2931.5,
+        "floor": false,
+        "missing": []
+      },
+      "power": {
+        "value": 158.79,
+        "floor": true,
+        "missing": []
+      },
+      "wear": {
+        "value": 158.79,
+        "floor": true,
+        "missing": []
+      },
+      "made": {
+        "value": 6498.17,
+        "floor": true,
+        "missing": []
+      },
+      "labor": {
+        "value": 250,
+        "floor": false,
+        "missing": []
+      },
+      "packaging": {
+        "value": null,
+        "floor": false,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "cost": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "break_even": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "suggested": {
+        "value": null,
+        "floor": true,
+        "missing": [
+          "packaging"
+        ]
+      },
+      "each": {
+        "cost": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "break_even": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        },
+        "suggested": {
+          "value": null,
+          "floor": true,
+          "missing": [
+            "packaging"
+          ]
+        }
+      },
+      "spools": {
+        "count": 6,
+        "usd": {
+          "value": 6000,
+          "floor": false,
+          "missing": []
+        },
+        "note": "one 1 kg spool per color per started kilogram, as if none were on hand; the rest of each stays on the shelf"
+      }
+    }
+  ]
+}

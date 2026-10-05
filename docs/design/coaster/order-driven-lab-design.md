@@ -644,6 +644,30 @@ The formula is cost-plus with a market check. Whether that is the method at all 
 out, and what is left on them is shelf stock for the next order. The Price page shows both lines
 so a big first purchase does not read as a loss on one order.
 
+**How the command reads the settings.** `bambu order price <plan.json>` works the formula on a
+saved plan (phase 3). The settings live in a gitignored file, `.bambu/pricing/settings.yaml`, which
+`--init-settings` writes with every setting empty and its source beside it, so a real labor rate
+or markup never reaches this public repo (§9.4). The units the formula assumes, written down
+because each one changes the sum:
+
+- **Hands-on minutes are per coaster**; packaging and the fixed fee are per order.
+- **Fee percent and markup are fractions**: 0.11 for 11%, 1 to double the break-even price.
+- **Price per gram is by line** (PLA Matte, PLA Silk+), so five Matte colors need one Matte price.
+  `store refill` (or `spool`, `ten_refill`, `ten_spool`) takes the store's price from
+  [`prices.yaml`](themes/catalog/prices.yaml) for every line or for one. A line the file lacks
+  stays empty and is named: PLA Silk never borrows PLA Silk+'s price.
+- **Spools to buy** are counted one per color per started kilogram, as if none were on hand. The
+  shelf (§9.2) is what says how many are really needed.
+- Amounts are kept at full precision and rounded only when shown.
+
+**By quantity.** Omar on call 13: "we should have different simulatons, how much it costs us to
+do 1 peice, 5 pieces, 10, 100, etc". The command prices 1, 5, 10 and 100 coasters beside the plan's
+own size (`--quantities` changes the list). A size other than the plan's is the plan scaled: each
+plate's grams and minutes by the ratio, and its beds by one set per plan's worth of coasters
+started. So 5 coasters can cost more each than 4: every color spills onto a second bed and the
+warm-ups double. That is a real cost, not an error, and the line says "scaled" until the planner
+plans each size as its own order.
+
 ### 9.4 What may go in the public repo
 
 This repo is public, so the line is drawn by what would hurt if read by anyone:
@@ -792,11 +816,14 @@ runs the planner's unit tests, then the plan checks on the frozen slices, with n
 or network; it does ask the local bikar checkout for each pieces file's groups, so it needs
 `BIKAR_DIR`. Since phase 2 it also runs the shelf's unit tests and, on fixtures 4, 5 and 7, the
 shelf checks: the fixture's `shelf.fixture.yaml` against `expected-shelf.json`, and its
-`wrong-shelf.json` refused with the words in `wrong_shelf_must_say`. The shelf code lives in this
-repo until call 1 says otherwise (§9.2). The price and page checks run where that code lives. If call 1 picks the hub,
+`wrong-shelf.json` refused with the words in `wrong_shelf_must_say`. Since phase 3 it runs the
+price's unit tests and, on fixtures 1, 6 and 7, the price checks: `settings.fixture.yaml` against
+`expected-price.json` and `expected-scenarios.json`. Fixture 6 has no plan of its own to price, so
+its `fixture.yaml`'s `plan_of` names fixture 1, whose `expected-plan.json` it borrows. The
+shelf and price code live in this repo until call 1 says otherwise (§9.2). The page checks run where that code lives. If call 1 picks the hub,
 that is a hub target of the same name, reading the fixture folders from this repo at a pinned
 commit. Before a phase lands, the runner lists its fixtures as "waiting on phase N". The runner
-holds one number, the last phase shipped (`3d-models:tools/bambu/src/commands/order.ts:L141 "const SHIPPED_PHASE = 2;"`),
+holds one number, the last phase shipped (`3d-models:tools/bambu/src/commands/order.ts:L145 "const SHIPPED_PHASE = 3;"`),
 and raising it when a phase lands runs that phase's fixtures. So a fixture cannot stay waiting by
 being forgotten.
 
@@ -807,7 +834,7 @@ being forgotten.
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
 | 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
 | 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row, which `print send` writes |
-| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7 |
+| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7. Shipped with `bambu order price`; fixture 1's README holds the hand working |
 | 4, the pages | The browser run, with its screenshots, over all eight |
 
 ### 9.7 Pricing ideas: the ways to set a price, side by side
@@ -868,20 +895,32 @@ Every number is a dash on purpose.*
 
 - A row shows no number while any of its inputs is empty, the same rule as §9.3.
 - Every row uses the cost from §9.3, never a cost of its own.
-- A set row plans its own order, of 4 or 6 coasters, through the planner.
+- A set row works out its own order of 4 or 6 coasters. Until the planner plans each size as its
+  own order, that is the plan scaled as in §9.3's "By quantity": grams and minutes by the ratio,
+  beds by one set per plan's worth of coasters started. The row says "scaled".
 - A row below break-even carries a tag saying so.
+
+**How the rows that are not formulas are read**, as phase 3 works them:
+
+- **By finish** takes the candidate price of the dearest line in the order, since one coaster
+  can mix lines.
+- **Custom theme** adds the design minutes × the labor rate to the order's cost, then prices it
+  as cost-plus. More colors are already in the cost, so they are not charged again.
+- **Launch price** is the cost-plus price × (1 − the launch discount).
 
 **Validator:** every scenario runs through the one formula and shows only what it can work out.
 
 PASS: on fixture 1, with every made-up setting and candidate price filled, each row's price,
 margin and coasters to cover equal `expected-scenarios.json`. The cost-plus row's price equals
-the Breakdown's suggested price. The set-of-6 row's cost each comes from a plan of 6 coasters, not
-from fixture 1's plan of 4. A row whose margin is at or below zero shows "never" and a "below
+the Breakdown's suggested price. The set-of-6 row's cost each comes from an order of 6 coasters,
+not from fixture 1's plan of 4. A row whose margin is at or below zero shows "never" and a "below
 break-even" tag.
 
 FAIL: the set-of-6 row reuses the cost each of fixture 1's 4 coasters. The warm-ups and packaging
-are then spread over 4 coasters, not 6, and the margin reads lower than it is. That is a
-believable number, and only the golden worked from a 6-coaster plan catches it. Also FAIL: any
+are then spread over 4 coasters, not 6, and the margin reads wrong. That is a believable
+number, and only the golden worked from a 6-coaster order catches it. Fixture 1's packaging is $4
+for this reason: at $2 the two costs each happen to be equal to the cent, and the check could not
+tell them apart. Also FAIL: any
 row that shows a number while one of its inputs is empty.
 
 **A skill, a page or a gate.** Two earlier evaluations each weighed a proposed skill against how
@@ -1030,7 +1069,7 @@ once its inputs exist. The pages come last, since they only show what the first 
 | 0 | **The simulated orders** (§9.6): eight fixture folders, goldens worked by hand, a wrong plan per fixture, the runner and `make validate-orders` | 3d-models `tools/bambu` test fixtures; the hub's checks read them at a pinned commit | Each later phase has its finish line written down before it starts | The runner lists all eight fixtures as waiting, and rejects every wrong plan it can already read |
 | 1 | **`bambu order plan`**, built with piece colors phase 1 (`plates by-color`): read an order file, count pieces by color, write or print one recipe per color, slice each, print minutes, grams, beds and the ratio used, as text and JSON | 3d-models `tools/bambu` | Answers material, time and plates for any order, today, with no pages | The 4 × gBV order gives 5 recipes holding exactly the §9.5 counts; each recipe's numbers equal `bambu validate sliced` on it; a color forced onto two beds shows two; no matching print shows "floor" |
 | 2 | **The shelf**: a spool file, reservations from open orders, the buy list, closing a print on the monitor's finished row | shipped as `bambu shelf show` in 3d-models `tools/bambu`, on a gitignored shelf file until call 1 places it | Answers "is it on the shelf" and "what to buy"; stops double counting spools | A send with a send record (sheets-04g, green, the tray it picked) followed by its finished row subtracts 27 g from the green spool; a failed print subtracts too; two orders in dark blue reserve the sum; a color short by 1 g lists one spool |
-| 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7) | the hub's pricer runs the formula on phase 1's JSON; public settings' references in this repo from the consolidated research, private ones in the hub | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
+| 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7). Shipped as `bambu order price` | 3d-models `tools/bambu`, on phase 1's JSON and a gitignored settings file, until call 1 places it; the settings' references in this repo from the consolidated research | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
 | 4 | **The pages**: Plan, Price (with its Scenarios view), Inventory in a hub Orders tab, and the Lab's Add to order button | the hub web; bikar `packages/lab` | The same answers without a terminal, and from a design straight to an order | A real-browser run: Add to order in the Lab opens the hub's Plan page with the design filled in; its numbers equal phase 1's JSON |
 
 Pricing is third, not first, because its inputs are not settled and phases 1 and 2 are useful

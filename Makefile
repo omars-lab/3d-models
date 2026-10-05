@@ -964,5 +964,5 @@ validate-color-themes:
 .PHONY: validate-orders
 validate-orders:
 	@[ -d ${ROOT_DIR}/tools/bambu/node_modules ] || npm ci --silent --prefix ${ROOT_DIR}/tools/bambu
-	PYTHON=$(PYTHON) npm --prefix $(BAMBU_DIR) run --silent test -- src/order.test.ts src/by-color.test.ts src/timed-prints.test.ts src/recipe-hash.test.ts src/shelf.test.ts src/sent-row.test.ts
+	PYTHON=$(PYTHON) npm --prefix $(BAMBU_DIR) run --silent test -- src/order.test.ts src/by-color.test.ts src/timed-prints.test.ts src/recipe-hash.test.ts src/shelf.test.ts src/sent-row.test.ts src/price.test.ts
 	cd ${ROOT_DIR} && BIKAR_DIR=$(BIKAR_DIR) tools/bambu/bin/bambu order fixtures

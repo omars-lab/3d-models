@@ -1,0 +1,14 @@
+# FIXTURE settings: fixture 1's made-up values with packaging left empty. Not a price, not a real cost.
+price_per_gram: { "PLA Matte": 1 } # FIXTURE
+printer_watts: 1000                # FIXTURE
+electricity_rate: 1                # FIXTURE
+printer_price: 100                 # FIXTURE
+payback_hours: 100                 # FIXTURE
+warm_up_minutes: 6                 # FIXTURE
+good_plate_share: 0.5              # FIXTURE
+hands_on_minutes: 15               # FIXTURE
+labor_rate: 10                     # FIXTURE
+packaging:                         # FIXTURE: empty on purpose, the setting this fixture leaves out
+fee_percent: 0.2                   # FIXTURE
+fixed_fee: 1                       # FIXTURE
+markup: 1                          # FIXTURE

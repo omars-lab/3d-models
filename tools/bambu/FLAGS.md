@@ -447,6 +447,21 @@ write one plate recipe per color for an order, with each plate's beds, minutes a
 | `--prints <file>` | read timed prints frozen earlier (`bambu order timed --json`) instead of the print logs |
 | `--json` | print the plan as JSON |
 
+### `bambu order price`
+
+what an order costs to make, its break-even and suggested price, the cost at other sizes, the pricing scenarios and the market band
+
+| Argument | Required | Description |
+|---|---|---|
+| `plan.json` | yes |  |
+
+| Flag | Description |
+|---|---|
+| `--settings <file>` | the pricing settings (default: .bambu/pricing/settings.yaml, gitignored; none means every setting empty) |
+| `--init-settings` | write the settings file with every setting empty, then price |
+| `--quantities <list>` | the sizes to cost, comma-separated (default: 1,5,10,100; the plan's own size is added) |
+| `--json` | print the price, sizes, scenarios and market band as JSON |
+
 ### `bambu order timed`
 
 the prints watched from start to finish, against their sliced minutes: what a plan's correction rests on
@@ -457,12 +472,12 @@ the prints watched from start to finish, against their sliced minutes: what a pl
 
 ### `bambu order fixtures`
 
-run the order regression suite: every fixture planned, checked, and its wrong plan refused
+run the order regression suite: every fixture planned and checked, its wrong plan and shelf refused, its price worked
 
 | Flag | Description |
 |---|---|
 | `--dir <dir>` | the fixtures folder (default: tools/bambu/test/fixtures/orders) |
-| `--write-expected` | overwrite each expected-plan.json with today's plan (then check every one by hand) |
+| `--write-expected` | overwrite each expected plan, shelf and price with today's (then check every one by hand) |
 | `--slice` | slice each fixture recipe slices.json lacks, and rewrite slices.json with only the slices in use |
 
 ### `bambu shelf`
