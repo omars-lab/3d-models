@@ -71,9 +71,11 @@ Sending a print and which filament to load.
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
   coaster's cut, both halves printed face down, held by the lips). After a yes on a: one bikar
   knob on `hold lip` and a coupon of whole and cut pieces in one split-01 (found 2026-10-05, at
-  Omar's ask). Omar leans towards c (printed in place): then the first build is a pocket printed
-  in place in bikar, and a coupon at one and two layers of air
-  ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)).
+  Omar's ask). Omar leans towards c (printed in place): its first build, a pocket printed in
+  place in bikar and a coupon at one and two layers of air
+  ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)),
+  is built, and its plate [pkt-1](../../design/plates/pkt-1.md) waits on a tick above (bikar #320,
+  3d-models #590).
   On 2026-10-05 Omar said of way a "Only one of the faces will be glossay here, and I want the
   coaster to be flat ... leaning towards c", and asked "can two pieces sldie into each other /
   clip or be screwed onto each other?" The
