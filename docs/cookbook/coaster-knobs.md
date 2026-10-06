@@ -510,12 +510,15 @@ half turned face up above them.
 - `hold flange <w>` keeps both faces the pocket's own shape and cuts an undercut `w` mm
   into the straps at the cut; each piece grows a matching flange that sits in it. From
   outside, the coaster looks like the plain one.
-- `studs <⌀> [gap <mm>] [spacing <mm>]` stands pegs `⌀` mm across on the lower half's cut
-  face and cuts a matching socket into the upper half, so the two halves line up when they
-  are glued. The socket is wider than the peg by `gap` (0.05 mm across by default, the snug
-  rung of CAL-FIT-01) and the pegs stand at least `spacing` apart (25 mm by default), both
-  from bikar's `coaster-split.ts`. In the picture the pegs are the small dots at the star's
-  points on the lower half, where the strap has the most room.
+- `studs <⌀> [gap <mm>] [spacing <mm>] [floor <mm>]` stands pegs `⌀` mm across on the lower
+  half's cut face and cuts a matching socket into the upper half, so the two halves line up
+  when they are glued. The socket is wider than the peg by `gap` (0.05 mm across by default,
+  the snug rung of CAL-FIT-01; below zero it is narrower, a press fit) and the pegs stand at
+  least `spacing` apart (25 mm by default), both from bikar's `coaster-split.ts`. `floor` is
+  what each socket leaves under it at the top face (0.6 mm by default, the coaster's own
+  floor): a thicker one hides the socket from the top and makes the peg that much shorter.
+  In the picture the pegs are the small dots at the star's points on the lower half, where
+  the strap has the most room.
 
 <!-- recipe: coaster-split; swap: hold lip 0.8 | hold flange 0.8 -->
 ```bkr
@@ -550,7 +553,8 @@ both sides, so the strap left between two undercuts must stay at least 0.8 mm wi
 refuses a wider flange and names the rib. A lip that closes up a narrow piece (a star's
 arms) is refused by the ring's name. A peg under 0.6 mm tall is refused too: the socket
 goes through the upper half down to a floor, and the peg is 0.2 mm shorter than the socket,
-so a thin upper half leaves no room for one. A peg also needs room on the strap: half its socket plus a
+so a thin upper half leaves no room for one. A `floor` under 0.6 mm is refused, and so is a
+press fit that leaves the socket no width. A peg also needs room on the strap: half its socket plus a
 0.9 mm wall to the nearest edge, so a 2 mm peg needs a strap about 4 mm wide, and on this
 recipe's star with a 3 mm strap bikar refuses it ("no stud site on the cut face has room"). The flange piece prints with its flange as a short overhang. Neither hold has been
 printed yet.
