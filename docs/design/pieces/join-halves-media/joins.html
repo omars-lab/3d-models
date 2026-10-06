@@ -1,0 +1,125 @@
+<!doctype html>
+<!-- Source of joins.png for join-halves-design.md. Regenerate with headless Chrome:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+       --hide-scrollbars --window-size=1240,500 --screenshot=joins.png joins.html
+     A schematic, not to scale: gaps and air are drawn wide so they show. Same look as
+     ../../printing/finish-techniques-media/one-piece.html. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Slide, clip or screw</title>
+<style>
+  body { margin: 0; background: #fbfaf7; font: 14px/1.3 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #2b2b2b; }
+  h1 { font-size: 17px; margin: 14px 20px 2px; }
+  p.sub { margin: 0 20px 6px; color: #666; font-size: 12.5px; }
+  .lower { fill: #8d8a84; }
+  .upper { fill: #aaa59c; }
+  .piece { fill: #d9a931; }
+  .piece2 { fill: #3f8f8a; }
+  .stud { fill: #2c7a3f; }
+  .hole { fill: #fbfaf7; stroke: #8d8a84; stroke-width: 10; }
+  .kite { fill: #d9a931; }
+  .screw { fill: none; stroke: #5a3d8a; stroke-width: 2; }
+  .bed { stroke: #2a6fdb; stroke-width: 4; }
+  .seam { stroke: #fbfaf7; stroke-width: 1.6; stroke-dasharray: 3 3; }
+  .arrow { stroke: #b0302a; stroke-width: 1.8; fill: none; }
+  .garrow { stroke: #2c7a3f; stroke-width: 1.8; fill: none; }
+  .cross { stroke: #b0302a; stroke-width: 4; }
+  .head { font-size: 15px; font-weight: 700; }
+  .note { font-size: 12px; fill: #555; }
+  .warn { font-size: 12px; fill: #b0302a; }
+  .good { font-size: 12px; fill: #2c7a3f; }
+  .lbl { font-size: 11px; fill: #555; }
+</style>
+</head>
+<body>
+<h1>Can the two halves of a piece slide, clip or screw together?</h1>
+<p class="sub">Pictures 1, 2 and 4 are cut through, side views. Picture 3 is from above. Gold and teal: the two piece halves. Greys: the coaster halves. Solid blue: printed on the bed. Not to scale.</p>
+<svg id="s" width="1240" height="400" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+const s = document.getElementById('s');
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, t) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (t) e.textContent = t;
+  s.appendChild(e); return e;
+}
+const T = (x, y, t, cls) => el('text', { x, y, class: cls }, t);
+const L = (x1, y1, x2, y2, cls) => el('line', { x1, y1, x2, y2, class: cls });
+const R = (x, y, w, h, cls) => el('rect', { x, y, width: w, height: h, class: cls });
+const P = (pts, cls) => el('polygon', { points: pts.map(p => p.join(',')).join(' '), class: cls });
+const notes = (x, ls) => ls.forEach((n, i) => T(x, 312 + i * 16, n[0], n[1] || 'note'));
+const arrowH = (x1, x2, y, cls) => { L(x1, y, x2, y, cls); const d = x2 > x1 ? -7 : 7;
+  L(x2 + d, y - 6, x2, y, cls); L(x2 + d, y + 6, x2, y, cls); };
+const arrowV = (x, y1, y2, cls) => { L(x, y1, x, y2, cls); const d = y2 > y1 ? -7 : 7;
+  L(x - 6, y2 + d, x, y2, cls); L(x + 6, y2 + d, x, y2, cls); };
+
+// 1. Slide: a dovetail rail on one loose half's cut face, a slot in the other, pushed in sideways.
+{ const x = 20, w = 240, yb = 250, h = 60;
+  T(x, 22, '1. Slide: a dovetail across the cut', 'head');
+  // lower half, face on the bed, cut face up, rail on top (wider at its top)
+  R(x, yb - h, w, h, 'piece'); L(x, yb, x + w, yb, 'bed');
+  P([[x + 95, yb - h], [x + 145, yb - h], [x + 155, yb - h - 26], [x + 85, yb - h - 26]], 'piece');
+  // upper half, turned over, slot in its cut face, offset to the right: slides in from the side
+  const ox = 70, yt = 90;
+  R(x + ox, yt, w - ox - 10, h, 'piece2');
+  el('polygon', { points: [[x + ox + 25, yt + h], [x + ox + 75, yt + h], [x + ox + 85, yt + h - 26], [x + ox + 15, yt + h - 26]].map(p => p.join(',')).join(' '), fill: '#fbfaf7' });
+  L(x + ox, yt, x + w - 10, yt, 'bed');
+  arrowH(x + w - 4, x + w - 60, yt + h + 18, 'arrow');
+  T(x + w - 60, yt + h + 36, 'slides in sideways', 'lbl');
+  notes(x, [['Works for loose halves, joined before placing'], ['(ways a, b and d).'],
+            ['In way c each half is held in its own pocket,', 'warn'],
+            ['so the halves can only meet straight down.', 'warn']]);
+}
+// 2. Clip: a snap stud with a bulge, pushed into a socket.
+{ const x = 330, w = 240, yb = 250, h = 60;
+  T(x, 22, '2. Clip: a stud with a bulge', 'head');
+  R(x, yb - h, w, h, 'piece'); L(x, yb, x + w, yb, 'bed');
+  // stud with a bulge near its top
+  P([[x + 108, yb - h], [x + 132, yb - h], [x + 132, yb - h - 22], [x + 138, yb - h - 30], [x + 132, yb - h - 40],
+     [x + 108, yb - h - 40], [x + 102, yb - h - 30], [x + 108, yb - h - 22]], 'piece');
+  const yt = 70;
+  R(x, yt, w, h, 'piece2'); L(x, yt, x + w, yt, 'bed');
+  el('rect', { x: x + 106, y: yt + h - 42, width: 28, height: 42, fill: '#fbfaf7' });
+  arrowV(x + w + 14, yt + 20, yt + h + 40, 'arrow');
+  T(x + 146, yb - h - 18, '← under 1 mm tall', 'lbl');
+  notes(x, [['A 1.6 mm piece half leaves a stud under a millimetre'], ['tall: too short to bend and click back.', 'warn'],
+            ['On the coaster halves (2.2 mm each) the same snap'], ['fits on the 2 mm studs, so it is tried there.', 'good']]);
+}
+// 3. Screw: from above, a kite in its kite-shaped hole cannot turn.
+{ const x = 640, cx = x + 120, cy = 160;
+  T(x, 22, '3. Screw: the piece has to turn', 'head');
+  const kite = [[0, -95], [42, -10], [0, 70], [-42, -10]];
+  el('polygon', { points: kite.map(p => [cx + p[0] * 1.12, cy + p[1] * 1.12].join(',')).join(' '), class: 'hole' });
+  el('polygon', { points: kite.map(p => [cx + p[0], cy + p[1]].join(',')).join(' '), class: 'kite' });
+  el('path', { d: `M ${cx + 64} ${cy - 60} A 84 84 0 0 1 ${cx + 76} ${cy + 36}`, class: 'arrow' });
+  L(cx + 76, cy + 36, cx + 68, cy + 28, 'arrow'); L(cx + 76, cy + 36, cx + 82, cy + 26, 'arrow');
+  L(cx + 58, cy - 20, cx + 94, cy + 16, 'cross'); L(cx + 94, cy - 20, cx + 58, cy + 16, 'cross');
+  notes(x, [['A thread closes by turning. A kite, a hexagon or a star'], ['cannot turn in a hole of its own shape.', 'warn'],
+            ['A bought screw through the coaster is wider than a'], ['strap and its head shows on a face.', 'warn']]);
+}
+// 4. What holds them in way c: the pockets hold each pair, the coaster's own studs hold the coaster.
+{ const x = 960, yF = 274, dir = -1;
+  T(x, 22, '4. Way c: one join a coaster', 'head');
+  // A short strip: strap, hole with a pocketed piece pair, strap. Lower half (bottom) and upper half (top).
+  const half = (yFace, d, cc, pc) => {
+    const Rr = (x1, x2, u1, u2, cls) => { const ya = yFace + d * u1, yb = yFace + d * u2;
+      R(x + x1, Math.min(ya, yb), x2 - x1, Math.abs(yb - ya), cls); };
+    Rr(0, 60, 0, 88, cc); Rr(200, 260, 0, 88, cc);
+    Rr(60, 80, 0, 24, cc); Rr(180, 200, 0, 24, cc); Rr(60, 80, 64, 88, cc); Rr(180, 200, 64, 88, cc);
+    Rr(88, 172, 0, 88, pc); Rr(68, 192, 32, 56, pc);
+    L(x, yFace, x + 80, yFace, 'bed'); L(x + 180, yFace, x + 260, yFace, 'bed'); L(x + 88, yFace, x + 172, yFace, 'bed');
+  };
+  half(yF, -1, 'lower', 'piece2');
+  half(yF - 176, 1, 'upper', 'piece');
+  L(x + 88, yF - 88, x + 172, yF - 88, 'seam');
+  // the coaster's own studs, in the straps, across the cut
+  R(x + 22, yF - 104, 16, 32, 'stud'); R(x + 222, yF - 104, 16, 32, 'stud');
+  T(x + 2, yF + 18, 'stud', 'good'); T(x + 214, yF + 18, 'stud', 'good');
+  notes(x, [['Each pair is held by its pockets; nothing'], ['joins the two piece halves.'],
+            ['The coaster halves join once, at their studs:', 'good'], ['press fit, a snap, or glue (call 7).', 'good']]);
+}
+</script>
+</body>
+</html>
