@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PieceGroup } from "./by-color.js";
-import { type CatalogColor, type Plan, type SliceFacts, checkPlan, lookupColor, parseOrder, planOrder } from "./order.js";
+import { type CatalogColor, type Plan, type SliceFacts, checkPlan, lookupCode, lookupColor, parseOrder, planOrder } from "./order.js";
 import type { TimedRun } from "./timed-prints.js";
 
 // The planner and its check (order-driven-lab-design §9.1, §9.5) on a made-up construction, with no
@@ -26,7 +26,8 @@ const CATALOG: CatalogColor[] = [
   { code: "11602", line: "PLA Matte", name: "Dark Blue", hexes: ["#042F56FF"] },
   { code: "10101", line: "PLA Basic", name: "Black", hexes: ["#000000FF"] },
   { code: "13401", line: "PLA Silk", name: "Gold", hexes: ["#E5B03DFF"] },
-  { code: "13901", line: "PLA Silk", name: "Gilded Rose", hexes: ["#FF9425FF", "#C16784FF"] },
+  { code: "13901", line: "PLA Silk", name: "Gilded Rose", hexes: ["#FF9425FF", "#C16784FF"], kind: "multi" },
+  { code: "13906", line: "PLA Silk", name: "South Beach", hexes: ["#F772A4FF", "#00918BFF"], kind: "gradient" },
 ];
 const NOTES = new Map([["PLA Silk|13401", "not on the US store, 2026-10-04"]]);
 
@@ -109,9 +110,26 @@ describe("lookupColor — a color is a catalog spool", () => {
     expect(c).toMatchObject({ key: "PLA Silk|13401", hex: "#e5b03d", name: "Gold", note: "not on the US store, 2026-10-04" });
   });
 
-  it("refuses a color the catalog does not have, and a two-color spool", () => {
+  it("refuses a color the catalog does not have", () => {
     expect(() => lookupColor(CATALOG, NOTES, { line: "PLA Silk+", code: "13401" })).toThrow("not in the color catalog");
-    expect(() => lookupColor(CATALOG, NOTES, { line: "PLA Silk", code: "13901" })).toThrow("not a one-color spool");
+  });
+
+  it("gives a two-color spool its first hex, the tray's, and says so", () => {
+    const c = lookupColor(CATALOG, NOTES, { line: "PLA Silk", code: "13901" });
+    expect(c.hex).toBe("#ff9425");
+    expect(c.note).toContain("a 2-color spool (#ff9425, #c16784)");
+  });
+
+  it("says what a two-color spool does by the catalog's kind: side by side, or along the spool", () => {
+    expect(lookupColor(CATALOG, NOTES, { line: "PLA Silk", code: "13901" }).note).toMatch(/side by side in the strand/);
+    expect(lookupColor(CATALOG, NOTES, { line: "PLA Silk", code: "13906" }).note).toMatch(/shifts along the spool/);
+  });
+
+  it("finds a spool by its code alone, with its own line", () => {
+    expect(lookupCode(CATALOG, NOTES, "11602")).toMatchObject({ line: "PLA Matte", name: "Dark Blue", hex: "#042f56" });
+    expect(() => lookupCode(CATALOG, NOTES, "99999")).toThrow("no spool with this code");
+    const twice = [...CATALOG, { code: "11602", line: "PLA Basic", name: "Clash", hexes: ["#111111FF"] }];
+    expect(() => lookupCode(twice, NOTES, "11602")).toThrow("PLA Matte and PLA Basic both use this code");
   });
 });
 

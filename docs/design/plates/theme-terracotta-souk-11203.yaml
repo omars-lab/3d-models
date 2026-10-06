@@ -1,0 +1,23 @@
+# theme-terracotta-souk-11203 — every piece in PLA Matte Terracotta (11203) #b15533
+#
+# Written by `bambu plates by-color` from patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr: every group of one color on one plate,
+# so each plate prints from one spool (piece colors phase 1). Slice it with `bambu slice compose`.
+#
+#   KITE  Kite pieces of gBV (10)
+#   HEX   Hex pieces of gBV (10)
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Matte @BBL X2D 0.4 nozzle"
+  color:    "#B15533"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  KITE
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Hex
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  HEX

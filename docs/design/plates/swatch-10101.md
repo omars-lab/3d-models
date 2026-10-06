@@ -51,7 +51,7 @@ The chip, drawn from bikar's `Swatch-Chip.bkr` (every swatch's chip, with its ow
 
 ![A swatch chip: a 50 by 30 mm card with a five-digit code engraved in the middle](swatch-media/chip.png)
 
-The slice: the chip and the coaster window on the bed.
+The slice: the chip and the coaster window on the bed, in the slicer's green, since the recipe names no color and the send picks it.
 
 ![swatch-10101 on the bed: the chip and a 30 mm window of the gBV coaster](swatch-10101-media/bed.png)
 

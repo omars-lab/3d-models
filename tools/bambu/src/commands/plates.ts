@@ -27,7 +27,8 @@ import { type Costs, type Prices, type Tier, TIERS, costRoutes } from "../by-col
 import { costsPage } from "../by-color-page.js";
 import { bikarDir } from "../backends/bikar.js";
 import type { SliceFacts } from "../order.js";
-import { asBikarSource, fetchGroups, sliceRecipe, writeRecipeFiles } from "../order-io.js";
+import { asBikarSource, fetchGroups, loadCatalog, loadNotes, sliceRecipe, writeRecipeFiles } from "../order-io.js";
+import { lookupCode } from "../order.js";
 import { repoRoot } from "../paths.js";
 import { copyMember } from "../threemf.js";
 import { type TimedRun, ratioFor, readTimedRuns } from "../timed-prints.js";
@@ -64,8 +65,33 @@ function parseParams(list: string[], flag: string): Record<string, number> {
   return out;
 }
 
+/** A bare hex names no spool, so its plate slices as PLA Basic. A spool code
+ *  is the way to slice with another line's preset (a Silk spool as PLA Silk). */
 function hexColor(hex: string): PlateColor {
   return { key: hex, hex, line: "PLA Basic", code: null, name: null, note: null };
+}
+
+/** The catalog lookup, read once and only when a code is given. */
+function spoolLookup(): (code: string) => PlateColor {
+  let find: ((code: string) => PlateColor) | null = null;
+  return (code) => {
+    if (!find) {
+      const root = repoRoot();
+      if (!root) throw new Error(`${code}: a spool code needs the repo's color catalog, and this is not inside the repo`);
+      const catalog = loadCatalog(root);
+      const notes = loadNotes(root);
+      find = (c) => lookupCode(catalog, notes, c);
+    }
+    return find(code);
+  };
+}
+
+/** `#rrggbb` (a hex, PLA Basic) or a catalog code such as `13903` (that spool, its own line). */
+export function plateColor(value: string, where: string, spool: (code: string) => PlateColor): PlateColor {
+  if (/^\d{5}$/.test(value)) return spool(value);
+  const hex = /^#?[0-9A-Fa-f]{6}$/.test(value) ? normalHex(value) : null;
+  if (!hex) throw new Error(`${where}: expected #rrggbb or a five-digit spool code`);
+  return hexColor(hex);
 }
 
 async function runByColor(piecesArg: string, opts: ByColorOpts): Promise<void> {
@@ -75,25 +101,25 @@ async function runByColor(piecesArg: string, opts: ByColorOpts): Promise<void> {
   if (!Number.isInteger(count) || count < 1) throw new Error(`--count ${opts.count}: a whole number, 1 or more`);
   const groups = (await fetchGroups([{ construction: pieces, params }]))(pieces, params);
 
-  const overrides = new Map<string, string>();
+  const spool = spoolLookup();
+  const overrides = new Map<string, PlateColor>();
   for (const c of opts.color) {
-    const m = /^([A-Za-z_]\w*)=(#?[0-9A-Fa-f]{6})$/.exec(c);
-    const hex = m ? normalHex(m[2]!) : null;
-    if (!m || !hex) throw new Error(`--color ${c}: expected Name=#rrggbb`);
+    const m = /^([A-Za-z_]\w*)=(.+)$/.exec(c);
+    if (!m) throw new Error(`--color ${c}: expected Name=#rrggbb or Name=<spool code>`);
     if (!groups.some((g) => g.piece === m[1])) throw new Error(`--color ${c}: no group named ${m[1]} (its groups: ${groups.map((g) => g.piece).join(", ")})`);
-    overrides.set(m[1]!, hex);
+    overrides.set(m[1]!, plateColor(m[2]!, `--color ${c}`, spool));
   }
 
   const demands: Demand[] = [];
   if (opts.frame) {
-    const hex = opts.frameColor ? normalHex(opts.frameColor) : null;
-    if (!hex) throw new Error("--frame needs --frame-color #rrggbb: the coaster has no palette color of its own");
-    demands.push({ construction: asBikarSource(opts.frame), params: parseParams(opts.frameParam, "--frame-param"), piece: null, count, rank: -1, color: hexColor(hex) });
+    if (!opts.frameColor) throw new Error("--frame needs --frame-color (#rrggbb or a spool code): the coaster has no palette color of its own");
+    const color = plateColor(opts.frameColor, `--frame-color ${opts.frameColor}`, spool);
+    demands.push({ construction: asBikarSource(opts.frame), params: parseParams(opts.frameParam, "--frame-param"), piece: null, count, rank: -1, color });
   }
   for (const g of groups) {
-    const hex = overrides.get(g.piece) ?? g.hex;
-    if (!hex) throw new Error(`${g.piece}: the .bkr palette gives it no color; pass --color ${g.piece}=#rrggbb`);
-    demands.push({ construction: pieces, params, piece: g.piece, count, rank: Math.min(...g.orbits), color: hexColor(hex) });
+    const color = overrides.get(g.piece) ?? (g.hex ? hexColor(g.hex) : null);
+    if (!color) throw new Error(`${g.piece}: the .bkr palette gives it no color; pass --color ${g.piece}=#rrggbb or a spool code`);
+    demands.push({ construction: pieces, params, piece: g.piece, count, rank: Math.min(...g.orbits), color });
   }
 
   const name = opts.name ?? slug(`${constructionStem(pieces)}-by-color`);
@@ -247,10 +273,10 @@ export function registerPlates(program: Command): void {
     .command("by-color <pieces.bkr>")
     .description("one plate recipe per color for a loose coaster's pieces (and its frame), each group in its palette color or --color's")
     .option("--param <name=value>", "a param of the pieces construction (repeatable)", collect, [])
-    .option("--color <Name=#rrggbb>", "print this group in this color instead of its palette's (repeatable)", collect, [])
+    .option("--color <Name=color>", "print this group in this color instead of its palette's: #rrggbb, or a spool code (13903) to slice with that spool's own line (repeatable)", collect, [])
     .option("--frame <coaster.bkr>", "the coaster the pieces drop into, printed too")
     .option("--frame-param <name=value>", "a param of the frame construction (repeatable)", collect, [])
-    .option("--frame-color <#rrggbb>", "the frame's color (required with --frame)")
+    .option("--frame-color <color>", "the frame's color, #rrggbb or a spool code (required with --frame)")
     .option("--count <n>", "how many coasters' worth", "1")
     .option("-o, --out-dir <dir>", "where the recipes go (default: build/plates/by-color/<name>)")
     .option("--name <name>", "the recipes' name prefix (default: <construction>-by-color)")

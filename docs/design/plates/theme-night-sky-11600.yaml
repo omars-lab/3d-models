@@ -1,0 +1,18 @@
+# theme-night-sky-11600 — every piece in PLA Matte Marine Blue (11600) #0078bf
+#
+# Written by `bambu plates by-color` from patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr: every group of one color on one plate,
+# so each plate prints from one spool (piece colors phase 1). Slice it with `bambu slice compose`.
+#
+#   KITE  Kite pieces of gBV (10)
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Matte @BBL X2D 0.4 nozzle"
+  color:    "#0078BF"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0 }
+    label:  KITE

@@ -33,22 +33,32 @@ export interface Prices {
   read: string;
   source: string;
   lines: Record<string, Partial<Record<Tier, number>>>;
+  /** Each spool's own price, by its code. The store files some spools under a line of its own:
+   *  Neon City (13903) is PLA Silk in the catalog and PLA Silk Multi-Color at the store, at its price. */
+  colors?: Record<string, Partial<Record<Tier, number>> & { line?: string; name?: string; out_of_stock?: Tier[] }>;
 }
 
 export interface PriceUsed {
   usd_per_kg: number;
   tier: Tier;
-  note: string | null; // set when the tier asked for was not read for this line
+  note: string | null; // set when the tier asked for was not read, or the store had it out of stock
 }
 
-/** A line's price per kg at a tier. A tier not read for the line falls back to the spool price, then
- *  the refill, and says so; a line with no price at all is null, never a guess. */
-export function pricePerKg(prices: Prices, line: string, tier: Tier): PriceUsed | null {
-  const p = prices.lines[line];
+/** A spool's price per kg at a tier: its own, by code, when the price file has it, else its line's.
+ *  A tier not read falls back to the spool price, then the refill, and says so; no price at all is
+ *  null, never a guess. */
+export function pricePerKg(prices: Prices, line: string, tier: Tier, code: string | null = null): PriceUsed | null {
+  const own = code ? prices.colors?.[code] : undefined;
+  const p = own ?? prices.lines[line];
   if (!p) return null;
+  const what = own ? `${line} ${code}` : line;
   for (const t of [tier, "spool", "refill"] as Tier[]) {
     const v = p[t];
-    if (v !== undefined) return { usd_per_kg: v, tier: t, note: t === tier ? null : `${line} has no ${tier} price read; used its ${t} price` };
+    if (v === undefined) continue;
+    const notes = [];
+    if (t !== tier) notes.push(`${what} has no ${tier} price read; used its ${t} price`);
+    if (own?.out_of_stock?.includes(t)) notes.push(`${what} was out of stock as a ${t} when the prices were read`);
+    return { usd_per_kg: v, tier: t, note: notes.length ? notes.join("; ") : null };
   }
   return null;
 }
@@ -56,7 +66,13 @@ export function pricePerKg(prices: Prices, line: string, tier: Tier): PriceUsed 
 export interface RouteColor {
   hex: string;
   line: string;
+  code: string | null;
   name: string | null;
+}
+
+/** What a color is priced as: its line, and its code when it has one. */
+function priceKey(c: RouteColor): string {
+  return c.code ? `${c.line} ${c.code}` : c.line;
 }
 
 export interface RoutePlate {
@@ -135,16 +151,16 @@ function describe(items: PlateItem[], pieceCount: CostInputs["pieceCount"]): str
 
 function colorOf(w: WrittenRecipe): RouteColor {
   const c = w.plate.color;
-  return { hex: c.hex, line: c.line, name: c.name };
+  return { hex: c.hex, line: c.line, code: c.code, name: c.name };
 }
 
 /** The three routes for one coloring, plate by plate. */
 export function costRoutes(inputs: CostInputs): Costs {
   const colors = inputs.perColor.map(({ recipe }) => colorOf(recipe));
   const used: Record<string, PriceUsed | null> = {};
-  for (const c of colors) used[c.line] ??= pricePerKg(inputs.prices, c.line, inputs.tier);
-  const usdFor = (grams: number | null, line: string) => {
-    const p = used[line] ?? pricePerKg(inputs.prices, line, inputs.tier);
+  for (const c of colors) used[priceKey(c)] ??= pricePerKg(inputs.prices, c.line, inputs.tier, c.code);
+  const usdFor = (grams: number | null, c: RouteColor) => {
+    const p = used[priceKey(c)] ?? pricePerKg(inputs.prices, c.line, inputs.tier, c.code);
     return grams === null || !p ? null : r2((grams / 1000) * p.usd_per_kg);
   };
   const watched = (sliced: number | null, line: string, swapMinutes: number) => {
@@ -206,7 +222,7 @@ export function costRoutes(inputs: CostInputs): Costs {
     const splitTotal = sumOrNull(split);
     let usd: number | null = null;
     if (grams !== null && splitTotal) {
-      usd = sumOrNull(perColor.map((p, i) => usdFor((grams * split[i]!) / splitTotal, p.colors[0]!.line)));
+      usd = sumOrNull(perColor.map((p, i) => usdFor((grams * split[i]!) / splitTotal, p.colors[0]!)));
       if (usd !== null) usd = r2(usd);
     }
     const ratio = inputs.ratio(filamentPreset(colors[0]?.line ?? "PLA Basic"));
@@ -272,7 +288,7 @@ function onePlate(
   colors: RouteColor[],
   what: string[],
   s: SliceFacts | null,
-  usdFor: (g: number | null, line: string) => number | null,
+  usdFor: (g: number | null, c: RouteColor) => number | null,
   watched: (sliced: number | null, line: string, swapMinutes: number) => number | null,
 ): RoutePlate {
   const line = colors[0]!.line;
@@ -290,7 +306,7 @@ function onePlate(
     minutes: s ? s.minutes : null,
     watched_minutes: watched(s ? s.minutes : null, line, 0),
     grams: s ? s.grams : null,
-    usd: usdFor(s ? s.grams : null, line),
+    usd: usdFor(s ? s.grams : null, colors[0]!),
     sendable: s !== null && !spilled,
     notes: spilled ? [`spills onto ${s.beds} beds: a send prints bed 1 only, so split it before sending`] : [],
   };

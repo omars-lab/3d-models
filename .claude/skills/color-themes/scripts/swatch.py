@@ -55,6 +55,7 @@ SLICES = ROOT / "build" / "plates"
 COASTER = "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr"
 COASTER_PARAMS = "{ size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }"
 WINDOW = "30@0,0"
+BACKDROP = "#d4d4d4"  # behind a shrunk slice picture, light enough for black, dark enough for white
 
 
 def load_catalog(path: Path = CATALOG) -> dict[str, dict]:
@@ -191,7 +192,7 @@ The chip, drawn from bikar's `Swatch-Chip.bkr` (every swatch's chip, with its ow
 
 ![A swatch chip: a 50 by 30 mm card with a five-digit code engraved in the middle](swatch-media/chip.png)
 
-The slice: the chip and the coaster window on the bed.
+The slice: the chip and the coaster window on the bed, in the slicer's green, since the recipe names no color and the send picks it.
 
 ![{name} on the bed: the chip and a 30 mm window of the gBV coaster]({name}-media/bed.png)
 
@@ -273,9 +274,14 @@ def write_chip_picture(bikar: Path, code: str = "10204", plates: Path = PLATES) 
 
 
 def shrink(src: Path, dst: Path) -> None:
-    """The request-feedback skill's picture size, so a page stays small."""
+    """The request-feedback skill's picture size, so a page stays small.
+
+    The slicer's preview is transparent around the pieces, and PNG8 keys its transparency on
+    black, so a black plate came out blank (the theme plates, 2026-10-05). Flattening onto a
+    light grey first keeps a black piece and a white one both visible."""
     if shutil.which("magick"):
-        subprocess.run(["magick", str(src), "-resize", "1400x>", "-strip", "-colors", "64",
+        subprocess.run(["magick", str(src), "-background", BACKDROP, "-alpha", "remove",
+                        "-alpha", "off", "-resize", "1400x>", "-strip", "-colors", "64",
                         f"PNG8:{dst}"], check=True, timeout=60)
     else:
         shutil.copyfile(src, dst)

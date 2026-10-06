@@ -79,7 +79,13 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
    its pocket in the theme's colors (`hero`); the flat picture (`flat`); and a card naming each
    color and where it goes (`colors`). Its `manifest.json` labels each one a drawing, gives the alt
    text and the command that made it. Look at every one before it goes anywhere.
-8. **Gate.** `make validate-color-themes` (also run by `make validate` and the pre-commit hook
+8. **Plates to print.** When Omar picks themes to print, `theme_plates.py <id> <theme>…` slices
+   each theme as one plate per color (`bambu plates by-color --costs --slice`, D-103), copies each
+   recipe to `docs/design/plates/theme-<theme>-<code>.yaml` with a review page and its bed picture,
+   and writes `docs/design/coaster/themes/<id>-theme-plates.md`: the plates, their minutes, grams and
+   filament cost, and what to buy, priced from `docs/design/coaster/themes/catalog/prices.yaml`. Look at every bed picture. A
+   page never carries a yes: each send still needs Omar's (D-093).
+9. **Gate.** `make validate-color-themes` (also run by `make validate` and the pre-commit hook
    `50-color-themes`) fails when a picture, a review or a gallery page is out of date with the data.
 
 ## Scripts — when to use each
@@ -106,6 +112,9 @@ Every color a theme names comes from [`palette.yaml`](palette.yaml). Nothing els
 | `scripts/swatch.py page` | Writes the swatch's review page from the slice: its minutes and grams, and the slice's bed picture | After the slice | `python3 .claude/skills/color-themes/scripts/swatch.py page 10204 --minutes 18 --grams 5.4 --slices <checkout>/build/plates`, then `plate_approve.py docs/design/plates/swatch-10204.md --iterate` |
 | `scripts/swatch.py chip-picture` | Draws `docs/design/plates/swatch-media/chip.png`, the chip picture every swatch page shows, from bikar's file through OpenSCAD | Once, or when `Swatch-Chip.bkr` changes | `python3 .claude/skills/color-themes/scripts/swatch.py chip-picture --bikar <bikar checkout>` |
 | `scripts/swatch.py --self-test` | Codes, two-color spools, the recipe's items and the page's frontmatter, on made-up rows | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/swatch.py --self-test` |
+| `scripts/theme_plates.py` | Slices each picked theme as one plate per color, writes each plate's recipe, review page and bed picture to `docs/design/plates/theme-<theme>-<code>.*`, and the theme plates page with the priced buy list | Omar picked themes to print (D-106) | `BIKAR_DIR=<bikar checkout> python3 .claude/skills/color-themes/scripts/theme_plates.py gbv midnight-blue night-sky` |
+| `scripts/theme_plates.py --reuse` | The same from the slices already in `build/themes/`, no slicing | Only the page wording, a price or a picture changed | `python3 .claude/skills/color-themes/scripts/theme_plates.py gbv midnight-blue night-sky --reuse` |
+| `scripts/theme_plates.py --self-test` | The by-color call, pricing a buy, the page's frontmatter and flags (two-color spool, `gap: 0`), a frame plate's wording and the shared-color grams, on made-up rows | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/theme_plates.py --self-test` |
 | `scripts/themes.py --self-test` | Buy colors against the catalog, the color math, the gradient helper, the finish drawing, and the checks on a three-piece fixture | Before changing the script; the gate runs it | `python3 .claude/skills/color-themes/scripts/themes.py --self-test` |
 
 ## How the numbers are made, and where they are weak
