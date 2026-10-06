@@ -1,0 +1,64 @@
+# Where the gBV pattern comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-naqsh-history-consolidated.md, §3 "What we may print". Add a fact only
+# from that list, with a source someone opened (never a search snippet). Fix wording here, never in
+# the storefront's generated file. The store shows a history name only when this record has at
+# least one source.
+
+construction: gBV_JTt3Kxk
+short: gBV
+fold: 10
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.2 drafts the names, Omar picks).
+history_name: ""
+
+found_at: Tomb of Itimad-ud-Daula, Agra, India
+era: Mughal, 1622–1628
+
+# One line under the pattern's picture.
+caption: Ten-pointed stars in inlaid marble, from the tomb of Itimad-ud-Daula, Agra (finished 1628).
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  In Agra, between 1622 and 1628, the empress Nur Jahan built a tomb for her parents: her father
+  Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her mother Asmat Begum. It
+  was the first Mughal tomb faced in white marble to carry so much inlaid stone on its outside.
+  Ten-pointed stars like these are recorded in its inlay.
+
+# Facts scholars disagree on. The story above avoids each one.
+contested:
+  - Building start. Most sources say 1622; Archnet's Hijri dates work out to about 1625. All agree it
+    was finished in 1628.
+  - Where on the building the ten-pointed field is. No text places it; say "on the tomb", not "on the
+    plinth" or "in the screens".
+  - Its size, any Italian influence on the inlay, the architect's name and "first all-marble
+    building". Do not print these.
+
+sources:
+  - title: Mehreen Chida-Razvi, "The Mausoleum of Itimad-ud-Daula", Sahapedia
+    url: https://www.sahapedia.org/the-mausoleum-of-itimad-ud-daula
+    supports: [story, era]
+  - title: E. B. Havell, A Handbook to Agra and the Taj (1904), "Itmâd-ud-daulah's Tomb"
+    url: https://www.gutenberg.org/ebooks/12006
+    supports: [story, era]
+  - title: Archaeological Survey of India, "Itimad-ud-Daula's Tomb" (archived page)
+    url: https://web.archive.org/web/2017id_/http://asi.nic.in/asi_monu_tktd_up_itimaduddaula.asp
+    supports: [story]
+  - title: Brian Wichmann, Tiling Search P48 (10-fold, Itimad-ud-Daula's Tomb)
+    url: https://tilingsearch.mit.edu/HTML/data185/P48.html
+    supports: [caption, fold]
+  - title: Brian Wichmann, Tiling Search F6 (10-fold)
+    url: https://tilingsearch.mit.edu/HTML/data169/F6.html
+    supports: [caption, fold]
+  - title: David Wade, Pattern in Islamic Art, IND 0415
+    url: https://patterninislamicart.com/single-id/460
+    supports: [caption]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Samira Mian
+  title: "#13 Tenfold - Itimad Ud Daula - Mughal India - How to draw Islamic Geometry"
+  url: https://www.youtube.com/watch?v=gBV_JTt3Kxk
