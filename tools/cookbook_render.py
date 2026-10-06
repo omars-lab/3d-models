@@ -20,6 +20,9 @@ side by side with a label under each copy:
                         each item in turn (every occurrence of it)
   param: NAME = 1 | 2   pass each value as `--param NAME=<value>`
   mate: MM              a coaster with a join: draw two copies MM apart
+  lifted                a loose coaster: always draw the frame with its pieces lifted
+                        above their holes, even where bikar's preview would draw
+                        them in place (an open frame's holes only show this way)
 
 A snippet with a `coaster` line is drawn as a 3D coaster: bikar's own color
 preview when it can split the coaster into color bodies, otherwise the same
@@ -137,11 +140,11 @@ STRAP_COLOR = "#a8a8a8"  # a split coaster's halves when it names no base color:
 
 def loose_parts(cli, src, text, extra, name, tmp, frame_piece="Frame"):
     """A loose coaster drawn the way it is printed: the frame (`--piece Frame`) in
-    its base color, and each loose color's pieces lifted above their pockets in that
+    its base (or straps) color, and each loose color's pieces lifted above their pockets in that
     color. The pieces are whichever palette colors bikar builds as a `--piece`; a
     color it says is not a piece is not loose."""
     palette = dict(re.findall(r"^\s+(\w+)\s*=\s*(#[0-9a-fA-F]{6})\s*$", text, re.M))
-    base = re.search(r"^\s+color\s+base\s+(\w+)", text, re.M)
+    base = re.search(r"^\s+color\s+(?:base|straps)\s+(\w+)", text, re.M)  # a slab, or an open frame's straps
     frame = os.path.join(tmp, "frame.stl")
     run(["node", cli, "render", src, "--piece", frame_piece, "--format", "stl", "-o", frame, *extra], name)
     parts = []
@@ -229,7 +232,7 @@ def draw(cli, name, options, snippet):
         # one picture style per strip: if bikar refuses to color-split any copy,
         # every copy is drawn as a mesh so the side-by-side compares like with like
         try:
-            pngs = [(label, draw_copy(cli, name, options, i, text, extra, tmp, False))
+            pngs = [(label, draw_copy(cli, name, options, i, text, extra, tmp, "lifted" in options))
                     for i, (label, text, extra) in enumerate(copies)]
         except NeedsMesh:
             pngs = [(label, draw_copy(cli, name, options, i, text, extra, tmp, True))

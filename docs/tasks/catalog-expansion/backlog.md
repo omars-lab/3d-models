@@ -321,7 +321,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    the loose-piece output and the backed frame the same day (bikar #292): `loose where …`,
    `--piece Frame` and one `--piece <color>`, pocket walls on the exact outline. The gBV fit sheet
    (item 8, sheet 4) is built and waits on Omar; the piece height (sheet 5's tall piece) shipped
-   2026-10-06 (bikar #313); next is the openwork frame. The Lab's Loose button shipped 2026-10-05 (bikar #308). The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
+   2026-10-06 (bikar #313), and so did the openwork frame (bikar #314): `loose` on a minimal coaster gives its frame and pieces from one file. The Lab's Loose button shipped 2026-10-05 (bikar #308). The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
    (guided page, raised fills, the sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
    height.
 7. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
