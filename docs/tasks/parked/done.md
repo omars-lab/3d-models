@@ -3,7 +3,8 @@
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
 - 2026-10-06 — A note on joining the two halves of a split piece: can they slide, clip or screw together, with a coupon for each way (3d-models #576)
-- 2026-10-05 — The launch-store skill: one pre-launch checklist for the store, each line saying who does it and where it is tracked, and a check that keeps each call's tick in step with its Decided line. The check found the storefront design's own list showing eight decided calls as open; those ticks are fixed, and `make validate-orders` now runs the check (3d-models #573)- 2026-10-05 — Omar's answers on the 2026-10-05 open-calls page read back into the decisions log as D-101 to D-106, among them the swatch question (D-105: print our own swatch card) and the storefront calls (3d-models #564)
+- 2026-10-05 — The launch-store skill: one pre-launch checklist for the store, each line saying who does it and where it is tracked, and a check that keeps each call's tick in step with its Decided line. The check found the storefront design's own list showing eight decided calls as open; those ticks are fixed, and `make validate-orders` now runs the check (3d-models #573)
+- 2026-10-05 — Omar's answers on the 2026-10-05 open-calls page read back into the decisions log as D-101 to D-106, among them the swatch question (D-105: print our own swatch card) and the storefront calls (3d-models #564)
 - 2026-10-05 — `themes.py listing` (color-themes skill) draws a theme's storefront pictures, with a preview theme flag in bikar (3d-models #562, bikar #306)
 - 2026-10-05 — Two design notes on a better finish: a brainstorm of finish techniques, cutting the pieces too (3d-models #559), and way c, a pocket that keeps the pieces put and makes the two halves feel like one (3d-models #560)
 - 2026-10-05 — coffee-house-storefront's DESIGN.md points at the coaster side of the storefront design in this repo (coffee-house-storefront #2)
