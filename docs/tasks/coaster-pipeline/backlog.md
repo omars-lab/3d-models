@@ -8,21 +8,37 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 
 ## Open, in ROI order
 
-1. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
+consturciotn and move back to split coasters and split inflills"), so they come first.
+
+1. **Build SPL-1, the split coupon, in bikar.** The
+   [split design](../../design/pieces/split-with-studs-design.md#9-the-coupon-spl-1)'s plan item 1:
+   the stud fit pairs at six gaps, the small and large stud rows, the show-through floors, and the
+   trapped-piece pairs. The design says OpenSCAD until bikar can split; bikar's `split` clause has
+   shipped since, so the coupon can be a `.bkr` cut by the same code the split coasters use. The
+   show-through floors need a floor knob on `split`, which today uses the fixed 0.6 mm floor. Then a
+   plate page waiting on Omar's tick. Found 2026-10-06.
+2. **A cookbook recipe for `split`, with a picture.** The split design's plan item 2 asks for one,
+   and bikar's cookbook has none: the clause shipped without its recipe. Found 2026-10-06.
+3. **Way c: a piece printed in place in its pocket.** Omar leans towards c (the owner-gated split
+   item below). The first build is a pocket coupon at one and two layers of air
+   ([finish techniques §1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)),
+   which a bikar branch can try before call 10 is made. Found 2026-10-05.
+4. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3, board #4.)
-2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+5. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-3. **Re-vendor the eight coaster meshes that bikar main now draws differently.** A full
+6. **Re-vendor the eight coaster meshes that bikar main now draws differently.** A full
    `make coasters` against bikar main re-renders these unlike the copies in `src/Coasters/`:
    the 7apC5Q9QS-8 border, plain, fill, minimal, minimal-frame and twist coasters,
    bknVRSMcLj0, and gBV_JTt3Kxk minimal. Re-render them, check each with `--check`, look at
    the pictures, and say in the PR what bikar change moved each one. Found by the 0ke_GpoBa-s
    coaster step, 2026-10-06, the first `make coasters` to run past the split coasters.
-4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+7. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -31,7 +47,7 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
+8. **Standard-size plate (P5.2)** — only after item 4 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
@@ -94,7 +110,7 @@ Sending a print and which filament to load.
   its pieces will not all match the picture.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
-  tick boxes; a yes means writing the record, which is item 1 above for minis-01.
+  tick boxes; a yes means writing the record, which is item 4 above for minis-01.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
