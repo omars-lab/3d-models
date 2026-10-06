@@ -952,6 +952,7 @@ validate-color-themes:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/prices.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/catalog.py check --quiet
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/swatch.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/color-themes/scripts/themes.py check --all --quiet
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-theme/scripts/reviews.py check --all

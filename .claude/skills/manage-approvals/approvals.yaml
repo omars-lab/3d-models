@@ -36,3 +36,11 @@ split-01:
   - {iteration: 1, recipe: 'e38ffecaeced', date: '2026-10-05'}
 split-02:
   - {iteration: 1, recipe: 'b244b2df2fe5', date: '2026-10-05'}
+swatch-10101:
+  - {iteration: 1, recipe: 'e35368796eee', date: '2026-10-05'}
+swatch-10204:
+  - {iteration: 1, recipe: 'eb722b189924', date: '2026-10-05'}
+swatch-10501:
+  - {iteration: 1, recipe: 'bf79a33a3fd2', date: '2026-10-05'}
+swatch-13903:
+  - {iteration: 1, recipe: 'ea516ce9bf0d', date: '2026-10-05'}

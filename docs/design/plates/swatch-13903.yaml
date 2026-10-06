@@ -1,0 +1,30 @@
+# swatch-13903 — a swatch of PLA Silk Neon City (13903), printed in that color
+#
+# Omar, 2026-10-05 (D-105): our own swatch card, one per color we own or buy, so it shows the real
+# surface, the sheen and the bed face. Written by the color-themes skill's swatch.py; every swatch
+# plate is the same two pieces with a different code on the chip.
+#
+#   CHIP    a 50 x 30 mm card, 2 mm thick, the code 13903 engraved 0.6 mm deep (1)
+#   WINDOW  a 30 mm window of the gBV coaster sheets-04g printed, at its star (1)
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#0047BB"` (the
+# spool is #0047BB and #BB22A3).
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/swatch-13903.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Silk @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Coupons/Swatch-Chip.bkr
+    piece:  Chip
+    params: { code: 13903 }
+    label:  CHIP
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece:  Coaster
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 30@0,0
+    label:  WINDOW

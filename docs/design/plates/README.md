@@ -21,11 +21,15 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
 | 1 | [sheets-04g-fit](sheets-04g-fit.md) | waiting | 8 | 0.5 | 17.14 | watch | At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling? |
-| 2 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
-| 3 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
-| 4 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
-| 5 | [split-01](split-01.md) | waiting | 2 | 1.8 | 1.12 | watch | Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs? |
-| 6 | [split-02](split-02.md) | waiting | 2 | 2.1 | 0.96 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
+| 2 | [swatch-10204](swatch-10204.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Hot Pink (10204) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 3 | [swatch-10501](swatch-10501.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Bambu Green (10501) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 4 | [swatch-10101](swatch-10101.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Black (10101) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 5 | [swatch-13903](swatch-13903.md) | waiting | 1 | 0.4 | 2.68 | ok | What does PLA Silk Neon City (13903) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 6 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
+| 7 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
+| 8 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
+| 9 | [split-01](split-01.md) | waiting | 2 | 1.8 | 1.12 | watch | Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs? |
+| 10 | [split-02](split-02.md) | waiting | 2 | 2.1 | 0.96 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
 
