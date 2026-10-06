@@ -1,0 +1,127 @@
+# naqsh construction — 0ke_GpoBa-s
+# title: Dividing a circle into 5 and then 10 — Jon Allen method 2 aka Ptolemy
+# url: https://www.youtube.com/watch?v=0ke_GpoBa-s
+# steps: 41 statements, 11 tagged steps
+# source: reconstructions/0ke_GpoBa-s/construction.ggb-commands sha256:df6885d951d49377504ede7b4a5fa8727d4e6d6239537acf5088a68fdf55560e
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 2   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint c_0ke_GpoBa_s_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # E = (1, 0)
+  point E = unit.cpt0
+  # W = (-1, 0)
+  point W = unit.cpt2
+  # ────────────────────────────────────────────────────────
+  # t=04:18  h = Line(W, E)
+  line h from W to E
+  # t=04:18  c = Circle(O, E)
+  circle c center(O) through E
+  # ────────────────────────────────────────────────────────
+  # t=06:56  v = PerpendicularBisector(W, E)
+  bisector v from W to E
+  # ────────────────────────────────────────────────────────
+  # M = Midpoint(O, E)
+  point M = midpoint O E
+  # P10 = Rotate(E, 90°, O)
+  point P10 = rotate E by 90 around O
+  # cm = Circle(M, P10)
+  circle cm center(M) through P10
+  # rW = Ray(M, W)
+  line rW from M to W
+  # G = Intersect(cm, rW)
+  point G = intersect cm rW pick nearest W
+  # cs = Circle(P10, G)
+  circle cs center(P10) through G
+  # P2 = Rotate(P10, -72°, O)
+  point P2 = rotate P10 by -72 around O
+  # P8 = Rotate(P10, 72°, O)
+  point P8 = rotate P10 by 72 around O
+  # P4 = Rotate(P2, -72°, O)
+  point P4 = rotate P2 by -72 around O
+  # P6 = Rotate(P8, 72°, O)
+  point P6 = rotate P8 by 72 around O
+  # P5 = Reflect(P10, O)
+  point P5 = rotate P10 by 180 around O
+  # P7 = Reflect(P2, O)
+  point P7 = rotate P2 by 180 around O
+  # P9 = Reflect(P4, O)
+  point P9 = rotate P4 by 180 around O
+  # P1 = Reflect(P6, O)
+  point P1 = rotate P6 by 180 around O
+  # P3 = Reflect(P8, O)
+  point P3 = rotate P8 by 180 around O
+  # ────────────────────────────────────────────────────────
+  # t=08:55  d94 = Segment(P9, P4)
+  segment d94 from P9 to P4
+  # t=08:55  d16 = Segment(P1, P6)
+  segment d16 from P1 to P6
+  # t=08:55  d27 = Segment(P2, P7)
+  segment d27 from P2 to P7
+  # ────────────────────────────────────────────────────────
+  # t=09:13  d83 = Segment(P8, P3)
+  segment d83 from P8 to P3
+  # ────────────────────────────────────────────────────────
+  # t=09:45  odd = Polygon(P1, P3, P5, P7, P9)
+  polygon odd [ P1 P3 P5 P7 P9 ]
+  # t=09:45  even = Polygon(P2, P4, P6, P8, P10)
+  polygon even [ P2 P4 P6 P8 P10 ]
+  # ────────────────────────────────────────────────────────
+  # t=13:03  star = Polygon(P1, P4, P7, P10, P3, P6, P9, P2, P5, P8)
+  polygon star [ P1 P4 P7 P10 P3 P6 P9 P2 P5 P8 ]
+  # ────────────────────────────────────────────────────────
+  # l103 = Line(P10, P3)
+  line l103 from P10 to P3
+  # l107 = Line(P10, P7)
+  line l107 from P10 to P7
+  # l91 = Line(P9, P1)
+  line l91 from P9 to P1
+  # l52 = Line(P5, P2)
+  line l52 from P5 to P2
+  # l58 = Line(P5, P8)
+  line l58 from P5 to P8
+  # l64 = Line(P6, P4)
+  line l64 from P6 to P4
+  # Qa = Intersect(l103, l91)
+  point Qa = intersect l103 l91
+  # Qb = Intersect(l107, l91)
+  point Qb = intersect l107 l91
+  # Ra = Intersect(l52, l64)
+  point Ra = intersect l52 l64
+  # Rb = Intersect(l58, l64)
+  point Rb = intersect l58 l64
+  # pa = Segment(Qa, Ra)
+  segment pa from Qa to Ra
+  # pb = Segment(Qb, Rb)
+  segment pb from Qb to Rb
+
+pattern c_0ke_GpoBa_s on c_0ke_GpoBa_s_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=09:45  odd = Polygon(P1, P3, P5, P7, P9)
+  edges from odd
+  # t=09:45  even = Polygon(P2, P4, P6, P8, P10)
+  edges from even
+  # ────────────────────────────────────────────────────────
+  # t=13:03  star = Polygon(P1, P4, P7, P10, P3, P6, P9, P2, P5, P8)
+  edges from star
+  # ────────────────────────────────────────────────────────
+  # t=14:43  petals = Sequence(Rotate(pa, 36°*i, O), i, 0, 9)
+  rotate 10 around O
+    connect Qa -> Ra
+
+coaster Coaster
+  outline pattern
+  inscribe c_0ke_GpoBa_s
+  base $height
+  strap width $strap
+  edge fillet $round top

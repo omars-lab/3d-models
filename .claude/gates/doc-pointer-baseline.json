@@ -158,6 +158,11 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/NtnlGMTElBk-minimal-coaster-mini.stl",
       "why": "Gitignored build output — same as the eight coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. The Mustansiriya ten-fold star band, minimal style (CS-15); introduced with the D-087 imports (bikar PR #285)."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/0ke_GpoBa-s-minimal-coaster-mini.stl",
+      "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Samira Mian's ten-fold rosette grid, minimal style (CS-16); introduced with bikar PR #315."
     }
   ]
 }

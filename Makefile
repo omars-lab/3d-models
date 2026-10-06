@@ -785,6 +785,11 @@ COASTER_MINI_BORDER_MM := 4
 # A coaster whose `size` range starts above the mini (the key and tab joins
 # need 60 and 55 mm) has no mini: bikar refuses the override, and the loop logs
 # `coaster-mini skip: <id> — <reason>` instead of stopping every coaster after it.
+# A split coaster (a `split at` line, bikar #305) is skipped whole: its own name
+# renders the closed coaster with its halves and pieces in place, a picture whose
+# parts touch, so the linkage gate fails it by design (the file says so). Its halves
+# and pieces print one `--piece` at a time through their plates (split-01, split-02),
+# and before this skip the first split file stopped every coaster after it.
 #
 # The gallery picture (docs/design/coaster/color-preview-design.md step 5): every coaster
 # bikar can split is drawn by `bikar render --format preview` straight into
@@ -809,6 +814,10 @@ coasters: bikar-stamp
 	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
 		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
 		echo "== $$id"; \
+		if grep -q '^  split at ' "$$bkr"; then \
+			echo "coaster skip: $$id — a split coaster; its whole render fails the linkage gate by design, its halves and pieces print as --piece"; \
+			continue; \
+		fi; \
 		mini_extra=""; \
 		case "$$id" in *-border) mini_extra="--param border=$(COASTER_MINI_BORDER_MM)" ;; esac; \
 		if ! err=$$($(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) $$mini_extra --format stl --check \
