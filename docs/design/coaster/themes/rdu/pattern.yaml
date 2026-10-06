@@ -31,7 +31,7 @@ story: >
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
 contested:
   - No building is known for this tile. Do not give it one, and do not say it is the same as any
-    one plate in a pattern book: it is close to one, but nobody has shown the proportions match.
+    one plate in a pattern book. It is close to one, but nobody has shown the proportions match.
   - The family's first dated example. A 12th-century Iranian date rests on a book nobody here has
     opened; print the Ibn Tulun line instead.
 
