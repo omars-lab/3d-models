@@ -1,0 +1,59 @@
+# Where the bkn pattern (CS-12) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-coaster-monuments-consolidated.md, §4 "What we may print", CS-12
+# (lines 1, 2, 3 and 5). Add a fact only from that list, with a source someone opened (never a
+# search snippet). Fix wording here, never in the storefront's generated file. The store shows a
+# history name only when this record has at least one source.
+#
+# The pattern is known only from a catalogue: Wichmann's Tiling Search records it for the shrine
+# from a 1977 drawing, with no photo, craft or place. So the record says "recorded for", and gives
+# no era: nothing says whether it belongs to the Safavid tomb, the older Seljuk mosque or a repair.
+# Its stars are six-pointed; the old ledger title "12-fold from a Square" was wrong.
+
+construction: bknVRSMcLj0
+short: bkn
+fold: 6
+form: Kite Rosette
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+found_at: Imamzadeh Isma'il, Isfahan, Iran
+
+# One line under the pattern's picture.
+caption: Six-pointed stars of kites, each set in a twelve-sided frame, recorded for the Imamzadeh Isma'il shrine in Isfahan.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  This pattern is recorded for the Imamzadeh Isma'il shrine in Isfahan, in a drawing published by
+  Javad Shafai in his 1977 book on Persian decoration and wood carving. Every piece is a kite, and
+  the kites gather into stars of three, four and six points. The shrine's tomb building was begun
+  under Shah Abbas I and finished in 1632 under Shah Safi.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Whether it is on the building today. One catalogue entry, from one 1977 drawing (Shafai, not
+    opened by us), and no photo anywhere. Say "recorded for", never "on the walls" or "seen at".
+  - Its fold. The stars are six-pointed, in twelve-sided frames on a fifteen-degree grid. Never
+    "twelve-pointed", "twelve-fold rosette" or "12-fold".
+  - Its craft (tile, wood, stucco, brick), its place on the shrine (dome, door, screen) and its date.
+    None is known; do not print one.
+  - Do not print the architect's name, "grandson" or which Imam (at most "a descendant of Imam
+    Hasan"), or a repeat type.
+
+sources:
+  - title: Brian Wichmann, Tiling Search SHAF18 (Imamzadeh Isma'il shrine, Isfahan, after Shafai 1977)
+    url: https://tilingsearch.mit.edu/HTML/data200/SHAF18.html
+    supports: [caption, fold, story]
+  - title: Wikipedia, "Imamzadeh Ismail and Shayah Mosque"
+    url: https://en.wikipedia.org/wiki/Imamzadeh_Ismail_and_Shayah_Mosque
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: "Geometric pattern from Imamzadeh Isma'il shrine in Isfahan, GeoGebra Classic 5"
+  url: https://www.youtube.com/watch?v=bknVRSMcLj0

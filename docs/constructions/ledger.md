@@ -131,7 +131,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `Y6kS1MvnKoc` | A Mamluk Qur'an page from seven ten-point stars | done | — | — | — | — | — | — | — |
 | `ZXKYNvqtFKs` | Rings of Tangent Circles (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `_U6G8QSfWnk` | Sutton's fivefold rectangle and its traced quarter | done | — | — | — | — | — | — | — |
-| `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — 12-fold from a Square (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
+| `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `cKYbKQvmsbs` | Sultan Barsbay 16 & 8 (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
 | `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | FAIL 134/20 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
