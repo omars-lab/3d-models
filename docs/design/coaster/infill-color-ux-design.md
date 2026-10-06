@@ -136,6 +136,16 @@ Every flow is a `.bkr` edit, as every Lab knob is: the source is the whole truth
 carries it, and the print target never enters the link
 ([color-preview-design §5](color-preview-design.md#5-coaster-lab-controls)).
 
+**Saved coasters.** Built 2026-10-06 (bikar #312): the Lab's "Saved coasters" section keeps the
+coaster on screen under a name, in this browser. A save holds what the share link holds: the
+coaster it started from, the knobs set away from their defaults and, once it is no longer its
+preset (a color, an orbit, the Loose button, a join), its whole `.bkr`. Never the print target.
+Open goes through the same way in as a link or a draft, Export writes every save to
+`coaster-saves.json` and Import reads one back, refusing a bad save with its reason. The saves stay
+in one browser; a saved design a buyer's order can point at is the storefront's config record
+([shopify-storefront-design §12.2](../storefront/shopify-storefront-design.md#122-the-config-record-and-the-signature)),
+which is not built.
+
 ## 4. The helpers
 
 Six helpers, each grounded in what exists. "New" means nothing does this today.
