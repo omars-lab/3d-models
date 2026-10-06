@@ -63,9 +63,10 @@ Sending a print and which filament to load.
   ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)).
   On 2026-10-05 Omar said of way a "Only one of the faces will be glossay here, and I want the
   coaster to be flat ... leaning towards c", and asked "can two pieces sldie into each other /
-  clip or be screwed onto each other?" That asks for a short design note on joining the two
-  piece halves by sliding, clipping or screwing, with a coupon for each, before calls 10 and 11
-  are ticked.
+  clip or be screwed onto each other?" The
+  [joining note](../../design/pieces/join-halves-design.md) answers it (2026-10-05): a slide
+  coupon (SLD-1) if a, b or d; in c no join between the piece halves, the coaster halves join
+  once at their studs; snap rows to add to SPL-1; the screw is out.
 - **Print the four swatches of the colors on the printer (D-105)** —
   [swatch-10204](../../design/plates/swatch-10204.md) Hot Pink,
   [swatch-13903](../../design/plates/swatch-13903.md) Neon City,

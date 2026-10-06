@@ -115,6 +115,13 @@ each hole holding a pocketed piece half printed in place, at one and at two laye
 answers whether the bands come free of the coaster, whether the halves close, and whether a closed
 pair can be felt moving. It needs a print-in-place pocket in bikar, which nothing has yet.
 
+**Slide, clip or screw?** Omar asked on 2026-10-05 whether the two halves could "sldie into each
+other / clip or be screwed onto each other". The
+[joining note](../pieces/join-halves-design.md) answers it: a slide-in dovetail works for loose
+halves (ways a, b and d) but not in way c, a clip is too short to bend on a 1.6 mm half, and a
+screw cannot turn a kite in its hole. In way c a join between the halves would not stop the pair
+moving by the air gap, so it backs the pick above.
+
 ## 2. The glacier plate
 
 Omar named a glacier plate. It is not in our notes yet: the plate table in
@@ -223,4 +230,5 @@ By what each tells us per unit of work:
 - **Which plate is the glacier plate?** (§2)
 - **Start with way a?** Or go straight to c, or only keep this as a list for now. Omar leans
   towards c (2026-10-05); not yet decided.
-- **If c: start with the pocket and nothing extra, and add glue only if the movement is felt?** (§1.4)
+- **If c: start with the pocket and nothing extra, and add glue only if the movement is felt?** (§1.4,
+  and the [joining note](../pieces/join-halves-design.md) on sliding, clipping or screwing the halves)
