@@ -1,0 +1,401 @@
+# gBV_JTt3Kxk-split-lip-coaster — the gBV minimal coaster in two halves, its pieces trapped by a lip on each face.
+#
+# Split option A (3d-models split-with-studs design §11, call 6): the coaster is
+# cut flat through its thickness at `half`, into a lower and an upper half. Each
+# half's hole is narrower at its outer face than at the cut, so a lip `lip` wide
+# runs round every hole on both faces. A loose piece sits in the wide part between
+# the two lips: it cannot fall out of either face, and it is dropped in before the
+# upper half goes on. The pieces are plain prisms, so any ring prints in any color.
+# Pegs on the lower half and sockets in the upper half line the halves up.
+#
+#   --piece Lower   the lower half, face down, pegs up
+#   --piece Upper   the upper half, turned over to print face down, sockets up
+#   --piece Middle | Kite | Hex | Outer   one ring of pieces, packed to print
+#
+# The stars stay open holes, as in the minimal coaster. Moved in by half a strap
+# and a lip wider than 0.7 mm, a star's arms close up, so its window would show
+# no star; 0.8 is the narrowest lip the strap floor allows. The flange version
+# (gBV_JTt3Kxk-split-flange-coaster.bkr) traps every ring, stars included.
+#
+# The coaster's own name renders the closed coaster with every piece in place.
+# What shows on each face is the hole's own shape less the lip: the piece's
+# color, framed by a lip-wide border of the halves' color.
+# That render is a picture, not a print: its halves and pieces touch. So
+# `--check` on the whole file gates each half and each piece color on its own,
+# the way `--piece` does. Print each --piece on its own.
+#
+# The defaults are 1.25 times the minimal coaster (sheets-04d, 3d-models): size
+# 112.5, strap 3.75, height 4.4. The strap follows the size, so `size` alone
+# scales the coaster the way sheets-04d did:
+#
+#   bikar render patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr --format stl --check \
+#     --piece Lower -o out/lower.stl
+#
+# The construction below is patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+# from its blueprint to the end of its pattern, copied unchanged but for the
+# stars' color: a colored face stays solid in a split coaster, so the stars
+# have none and stay holes.
+
+param size = 112.5 range 80..125   # mm, the coaster's span across the strap network; 112.5 is the 1.25x coaster we print
+param strap = $size / 30   # mm, strap width, scaled with size as the minimal coaster is: 3 at 90, 3.75 at 112.5
+param height = 4.4 range 3.2..6   # mm, the closed coaster's height; each half is half of it
+param half = $height / 2   # mm, where the coaster is cut: half its height
+param lip = 0.8 range 0.8..1.3   # mm, how far the lip reaches over a piece on each face; 0.8 is the strap floor (CAL-CST-01), and at 1.5 the Kite face closes up
+param gap = 0.25 range 0..0.5   # mm per face between a piece and its pocket; loose enough to drop in (CAL-LSE-01)
+param spacing = 2 range 1..10   # mm, the least gap between two pieces of a ring on the bed (`pack zipper spacing`)
+param stud = 2 range 1.6..3   # mm, the alignment peg's diameter
+param unit = ($size - $strap) / 2.0001   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint gBV_JTt3Kxk_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # E = (1, 0)
+  point E = unit.cpt0
+  # W = (-1, 0)
+  point W = unit.cpt2
+  # h = Line(W, E)
+  line h from W to E
+  # c = Circle(O, E)
+  circle c center(O) through E
+  # ────────────────────────────────────────────────────────
+  # t=00:10  cL = Circle(W, O)
+  circle cL center(W) through O
+  # ────────────────────────────────────────────────────────
+  # cR = Circle(E, O)
+  circle cR center(E) through O
+  # bis = PerpendicularBisector(O, E)
+  bisector bis from O to E
+  # K1 = Rotate(W, -66°, E)
+  point K1 = rotate W by -66 around E
+  # K2 = Rotate(W, -54°, E)
+  point K2 = rotate W by -54 around E
+  # K3 = Rotate(E, 54°, W)
+  point K3 = rotate E by 54 around W
+  # K4 = Rotate(E, 66°, W)
+  point K4 = rotate E by 66 around W
+  # K5 = Rotate(W, 54°, E)
+  point K5 = rotate W by 54 around E
+  # K6 = Rotate(W, 66°, E)
+  point K6 = rotate W by 66 around E
+  # K7 = Rotate(E, -66°, W)
+  point K7 = rotate E by -66 around W
+  # K8 = Rotate(E, -54°, W)
+  point K8 = rotate E by -54 around W
+  # tick1 = CircularArc(E, K1, K2)
+  circle tick1_host center(E) through K1
+  # tick2 = CircularArc(W, K3, K4)
+  circle tick2_host center(W) through K3
+  # tick3 = CircularArc(E, K5, K6)
+  circle tick3_host center(E) through K5
+  # ────────────────────────────────────────────────────────
+  # t=00:15  tick4 = CircularArc(W, K7, K8)
+  circle tick4_host center(W) through K7
+  # ────────────────────────────────────────────────────────
+  # v = PerpendicularBisector(W, E)
+  bisector v from W to E
+  # M = Midpoint(O, E)
+  point M = midpoint O E
+  # V0 = Rotate(E, 90°, O)
+  point V0 = rotate E by 90 around O
+  # cm = Circle(M, V0)
+  circle cm center(M) through V0
+  # rW = Line(M, W)
+  line rW from M to W
+  # Gd = Intersect(cm, rW, W)
+  point Gd = intersect cm rW pick nearest W
+  # SM = Rotate(V0, -5°, M)
+  point SM = rotate V0 by -5 around M
+  # TM = Rotate(Gd, 3°, M)
+  point TM = rotate Gd by 3 around M
+  # ────────────────────────────────────────────────────────
+  # t=00:20  arcM = CircularArc(M, SM, TM)
+  circle arcM_host center(M) through SM
+  # ────────────────────────────────────────────────────────
+  # V2 = Rotate(V0, 72°, O)
+  point V2 = rotate V0 by 72 around O
+  # V8 = Rotate(V0, -72°, O)
+  point V8 = rotate V0 by -72 around O
+  # V4 = Rotate(V2, 72°, O)
+  point V4 = rotate V2 by 72 around O
+  # V6 = Rotate(V8, -72°, O)
+  point V6 = rotate V8 by -72 around O
+  # S0 = Rotate(V2, -5°, V0)
+  point S0 = rotate V2 by -5 around V0
+  # T0 = Rotate(V8, 7°, V0)
+  point T0 = rotate V8 by 7 around V0
+  # ────────────────────────────────────────────────────────
+  # t=00:25  arc0 = CircularArc(V0, S0, T0)
+  circle arc0_host center(V0) through S0
+  # ────────────────────────────────────────────────────────
+  # S2 = Rotate(V4, -18°, V2)
+  point S2 = rotate V4 by -18 around V2
+  # T2 = Rotate(V0, 6°, V2)
+  point T2 = rotate V0 by 6 around V2
+  # arc2 = CircularArc(V2, S2, T2)
+  circle arc2_host center(V2) through S2
+  # S8 = Rotate(V0, -16°, V8)
+  point S8 = rotate V0 by -16 around V8
+  # T8 = Rotate(V6, 6°, V8)
+  point T8 = rotate V6 by 6 around V8
+  # arc8 = CircularArc(V8, S8, T8)
+  circle arc8_host center(V8) through S8
+  # S4 = Rotate(V6, -17°, V4)
+  point S4 = rotate V6 by -17 around V4
+  # T4 = Rotate(V2, 12°, V4)
+  point T4 = rotate V2 by 12 around V4
+  # arc4 = CircularArc(V4, S4, T4)
+  circle arc4_host center(V4) through S4
+  # S6 = Rotate(V8, -12°, V6)
+  point S6 = rotate V8 by -12 around V6
+  # T6 = Rotate(V4, 17°, V6)
+  point T6 = rotate V4 by 17 around V6
+  # arc6 = CircularArc(V6, S6, T6)
+  circle arc6_host center(V6) through S6
+  # V5 = Reflect(V0, O)
+  point V5 = rotate V0 by 180 around O
+  # V7 = Reflect(V2, O)
+  point V7 = rotate V2 by 180 around O
+  # V9 = Reflect(V4, O)
+  point V9 = rotate V4 by 180 around O
+  # V1 = Reflect(V6, O)
+  point V1 = rotate V6 by 180 around O
+  # V3 = Reflect(V8, O)
+  point V3 = rotate V8 by 180 around O
+  # ln18 = Line(V3, V8)
+  line ln18 from V3 to V8
+  # ln54 = Line(V4, V9)
+  line ln54 from V4 to V9
+  # ln126 = Line(V6, V1)
+  line ln126 from V6 to V1
+  # ln162 = Line(V7, V2)
+  line ln162 from V7 to V2
+  # cD1 = Circle(O, 2.29)
+  circle cD1 center(O) radius 2.29 * $unit
+  # cD2 = Circle(O, 2.22)
+  circle cD2 center(O) radius 2.22 * $unit
+  # cD3 = Circle(O, 2.13)
+  circle cD3 center(O) radius 2.13 * $unit
+  # cD4 = Circle(O, 2.37)
+  circle cD4 center(O) radius 2.37 * $unit
+  # cD5 = Circle(O, 2.19)
+  circle cD5 center(O) radius 2.19 * $unit
+  # cD6 = Circle(O, 2.32)
+  circle cD6 center(O) radius 2.32 * $unit
+  # cD7 = Circle(O, 2.27)
+  circle cD7 center(O) radius 2.27 * $unit
+  # cD8 = Circle(O, 2.24)
+  circle cD8 center(O) radius 2.24 * $unit
+  # D1 = Intersect(cD1, ln18, V8)
+  point D1 = intersect cD1 ln18 pick nearest V8
+  # D2 = Intersect(cD2, ln18, V3)
+  point D2 = intersect cD2 ln18 pick nearest V3
+  # D3 = Intersect(cD3, ln54, V9)
+  point D3 = intersect cD3 ln54 pick nearest V9
+  # D4 = Intersect(cD4, ln54, V4)
+  point D4 = intersect cD4 ln54 pick nearest V4
+  # D5 = Intersect(cD5, ln126, V1)
+  point D5 = intersect cD5 ln126 pick nearest V1
+  # D6 = Intersect(cD6, ln126, V6)
+  point D6 = intersect cD6 ln126 pick nearest V6
+  # D7 = Intersect(cD7, ln162, V2)
+  point D7 = intersect cD7 ln162 pick nearest V2
+  # D8 = Intersect(cD8, ln162, V7)
+  point D8 = intersect cD8 ln162 pick nearest V7
+  # d18 = Segment(D2, D1)
+  segment d18 from D2 to D1
+  # d54 = Segment(D4, D3)
+  segment d54 from D4 to D3
+  # d126 = Segment(D6, D5)
+  segment d126 from D6 to D5
+  # ────────────────────────────────────────────────────────
+  # t=00:38  d162 = Segment(D8, D7)
+  segment d162 from D8 to D7
+  # ────────────────────────────────────────────────────────
+  # blue1 = Polygon(V0, V2, V4, V6, V8)
+  polygon blue1 [ V0 V2 V4 V6 V8 ]
+  # ────────────────────────────────────────────────────────
+  # t=00:45  blue2 = Polygon(V1, V3, V5, V7, V9)
+  polygon blue2 [ V1 V3 V5 V7 V9 ]
+  # ────────────────────────────────────────────────────────
+  # t=00:52  pink = Polygon(V0, V7, V4, V1, V8, V5, V2, V9, V6, V3)
+  polygon pink [ V0 V7 V4 V1 V8 V5 V2 V9 V6 V3 ]
+  # ────────────────────────────────────────────────────────
+  # eb = Line(V9, V1)
+  line eb from V9 to V1
+  # ep = Line(V0, V7)
+  line ep from V0 to V7
+  # Q = Intersect(eb, ep)
+  point Q = intersect eb ep
+  # ln0 = Line(Q, v)
+  line ln0 through Q parallel v
+  # cB = Circle(O, 1.026)
+  circle cB center(O) radius 1.026 * $unit
+  # {Q1, Q2} = Intersect(cB, ln0)
+  intersect Q1Q2_ cB ln0
+  # {Q1, Q2} = Intersect(cB, ln0)
+  point Q1 = Q1Q2_.cpt0
+  # {Q1, Q2} = Intersect(cB, ln0)
+  point Q2 = Q1Q2_.cpt1
+  # bk = Segment(Q1, Q2)
+  segment bk from Q1 to Q2
+  # ln2 = Rotate(ln0, 72°, O)
+  line ln2 = rotate ln0 by 72 around O
+  # ln3 = Rotate(ln0, 108°, O)
+  line ln3 = rotate ln0 by 108 around O
+  # ln8 = Rotate(ln0, -72°, O)
+  line ln8 = rotate ln0 by -72 around O
+  # lnP0 = Line(V6, V9)
+  line lnP0 from V6 to V9
+  # lnP2 = Line(V1, V8)
+  line lnP2 from V1 to V8
+  # lnP3 = Line(V2, V9)
+  line lnP3 from V2 to V9
+  # W1 = Intersect(ln0, ln2)
+  point W1 = intersect ln0 ln2
+  # W2 = Intersect(ln0, lnP2)
+  point W2 = intersect ln0 lnP2
+  # W3 = Intersect(ln0, lnP3)
+  point W3 = intersect ln0 lnP3
+  # W4 = Intersect(lnP0, ln8)
+  point W4 = intersect lnP0 ln8
+  # W5 = Intersect(lnP0, ln3)
+  point W5 = intersect lnP0 ln3
+  # W6 = Intersect(lnP0, lnP2)
+  point W6 = intersect lnP0 lnP2
+  # T = ClosestPoint(ln0, O)
+  point T = closest ln0 to O
+  # cd = Circle(O, T)
+  circle cd center(O) through T
+  # wb1 = Segment(W1, W2)
+  segment wb1 from W1 to W2
+  # wb2 = Segment(W3, Q)
+  segment wb2 from W3 to Q
+  # wp1 = Segment(W4, W5)
+  segment wp1 from W4 to W5
+  # wp2 = Segment(W6, V9)
+  segment wp2 from W6 to V9
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W1_wlow = reflect W1 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W2_wlow = reflect W2 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W3_wlow = reflect W3 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point Q_wlow = reflect Q across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W4_wlow = reflect W4 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W5_wlow = reflect W5 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point W6_wlow = reflect W6 across h
+  # wlow = Reflect({wb1, wb2, wp1, wp2}, h)
+  point V9_wlow = reflect V9 across h
+  # ────────────────────────────────────────────────────────
+  # t=01:45  Oh = Reflect(O, O)
+  point Oh = rotate O by 180 around O
+  # ────────────────────────────────────────────────────────
+  # pl4 = Line(V0, V3)
+  line pl4 from V0 to V3
+  # pl6 = Line(V5, V2)
+  line pl6 from V5 to V2
+  # L = Intersect(pl4, pl6)
+  point L = intersect pl4 pl6
+  # R = Reflect(L, v)
+  point R = reflect L across v
+  # mhc5 = Circle(O, 5)
+  circle mhc5 center(O) radius 5 * $unit
+  # mhc6 = Circle(O, 6)
+  circle mhc6 center(O) radius 6 * $unit
+  # mhN5 = Intersect(mhc5, v, V0)
+  point mhN5 = intersect mhc5 v pick nearest V0
+  # mhS5 = Intersect(mhc5, v, V5)
+  point mhS5 = intersect mhc5 v pick nearest V5
+  # mhN6 = Intersect(mhc6, v, V0)
+  point mhN6 = intersect mhc6 v pick nearest V0
+  # mhS6 = Intersect(mhc6, v, V5)
+  point mhS6 = intersect mhc6 v pick nearest V5
+  # mhE6 = Intersect(mhc6, h, E)
+  point mhE6 = intersect mhc6 h pick nearest E
+  # mhW6 = Intersect(mhc6, h, W)
+  point mhW6 = intersect mhc6 h pick nearest W
+  # mhy5 = Line(mhN5, h)
+  line mhy5 through mhN5 parallel h
+  # mhs5 = Line(mhS5, h)
+  line mhs5 through mhS5 parallel h
+  # mhy6 = Line(mhN6, h)
+  line mhy6 through mhN6 parallel h
+  # mhs6 = Line(mhS6, h)
+  line mhs6 through mhS6 parallel h
+  # mhx6 = Line(mhE6, v)
+  line mhx6 through mhE6 parallel v
+  # mhw6 = Line(mhW6, v)
+  line mhw6 through mhW6 parallel v
+  # mhR0 = Line(V0, R)
+  line mhR0 from V0 to R
+  # mhR5 = Line(V5, R)
+  line mhR5 from V5 to R
+  # A1 = Intersect(pl4, mhs5)
+  point A1 = intersect pl4 mhs5
+  # A2 = Intersect(pl4, mhy6)
+  point A2 = intersect pl4 mhy6
+  # F1 = Intersect(mhw6, mhy6)
+  point F1 = intersect mhw6 mhy6
+  # A3 = Intersect(pl6, mhy5)
+  point A3 = intersect pl6 mhy5
+  # A4 = Intersect(pl6, mhs6)
+  point A4 = intersect pl6 mhs6
+  # F2 = Intersect(mhw6, mhs6)
+  point F2 = intersect mhw6 mhs6
+  # A5 = Intersect(mhR5, mhy5)
+  point A5 = intersect mhR5 mhy5
+  # A6 = Intersect(mhR5, mhs6)
+  point A6 = intersect mhR5 mhs6
+  # F3 = Intersect(mhx6, mhs6)
+  point F3 = intersect mhx6 mhs6
+  # A7 = Intersect(mhR0, mhs5)
+  point A7 = intersect mhR0 mhs5
+  # A8 = Intersect(mhR0, mhy6)
+  point A8 = intersect mhR0 mhy6
+  # F4 = Intersect(mhx6, mhy6)
+  point F4 = intersect mhx6 mhy6
+
+pattern gBV_JTt3Kxk on gBV_JTt3Kxk_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=01:41  ring = Sequence(Rotate({wb1, wb2, wp1, wp2, wlow}, 36°*i, O), i, 0, 9)
+  rotate 10 around O
+    connect W1 -> W2
+    connect W3 -> Q
+    connect W4 -> W5
+    connect W6 -> V9
+    connect W1_wlow -> W2_wlow
+    connect W3_wlow -> Q_wlow
+    connect W4_wlow -> W5_wlow
+    connect W6_wlow -> V9_wlow
+
+
+  palette pal
+    Slab = #9a9a9a
+    Middle = #6b4e9b
+    Kite = #e05a47
+    Hex = #d4af37
+    Outer = #3a9a5b
+    fill void where orbit == 0 color Middle
+    fill void where orbit == 1 color Kite
+    fill void where orbit == 2 color Hex
+    fill void where orbit == 4 color Outer
+
+coaster Coaster
+  outline pattern
+  inscribe gBV_JTt3Kxk
+  base $height
+  strap width $strap
+  loose where orbit == 0 clearance $gap pack zipper spacing $spacing
+  loose where orbit == 1 clearance $gap pack zipper spacing $spacing
+  loose where orbit == 2 clearance $gap pack zipper spacing $spacing
+  loose where orbit == 4 clearance $gap pack zipper spacing $spacing
+  split at $half studs $stud spacing 25 hold lip $lip

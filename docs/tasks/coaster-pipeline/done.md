@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-06 — The gBV split coasters pass the mesh gate at every size from 80 to 125 mm: a half's caps mend the zero-area triangles laid over vertices in a line, which failed 100 mm on both files, 115 on the lip and 109 on the flange (bikar #322)
+- 2026-10-06 — A whole-file `render --check` of a split coaster gates each half and each piece color on its own instead of failing the closed view on the linkage gate, and the coaster mesh-hash test no longer fails on a comment edit (bikar #321); `make coasters` no longer skips split coasters (3d-models #SELF)
 - 2026-10-06 — Way c, the pocket: `hold pocket` on a split coaster prints each piece half in place in its half, in a closed pocket with a neck at the face and at the cut, and the `Split-Pocket-Coupon` tries it at one and two layers of air (bikar #320); its plate [pkt-1](../../design/plates/pkt-1.md) with two pairs per rung, sliced and pictured up to the owner gate (34 minutes, 11.6 g); the print waits on Omar in the backlog (3d-models #590)
 - 2026-10-06 — SPL-1, the split coupon: a `floor` knob and a press-fit gap on split studs, and two coupons in bikar, a stud fit tile and a trapped-piece tile (bikar #319); its plate [spl-1](../../design/plates/spl-1.md) with twelve fit pairs and two trap pairs, sliced and pictured up to the owner gate (43 minutes, 18.3 g); the bed picture's new `--zoom` puts each label on its own tile; the print waits on Omar in the backlog (3d-models #587)
 - 2026-10-06 — the split recipe shows studs and its Watch out no longer says a loose line is needed (3d-models #587)
