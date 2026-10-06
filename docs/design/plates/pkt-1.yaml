@@ -1,0 +1,42 @@
+# pkt-1 — the pocket coupon: does a piece printed in place in its pocket come out loose?
+#
+# Way c of the finish-techniques brainstorm (docs/design/printing/finish-techniques-brainstorm.md
+# §1.4), the split design's other way to keep a loose piece in. Each loose piece is cut at the
+# split too, and each half prints its own piece half inside it, in a closed pocket: the pocket
+# necks in at the face and again at the cut, and between them is a room at the full opening. The
+# piece half is a plug through each neck and a band in the room, with air above and below the
+# band. Nothing is placed by hand. Closing the coaster presses each piece half onto its partner at
+# the cut, with nothing extra between them (the brainstorm's pick; glue comes only if the movement
+# is felt).
+#
+# Three things are not known, and this plate asks each in the hand:
+#   - whether the band comes free of the necks, or the air closes up and fuses it;
+#   - whether the closed piece moves or clicks in its pocket when the coaster is lifted;
+#   - whether the band's underside, printed over air on the plug, comes out flat.
+#
+# Pairs: bikar's patterns/Coupons/Split-Pocket-Coupon.bkr, the spl-1 trap tile (25 mm square,
+# 4.4 mm tall, cut at 2.2, two studs) with its hexagon in a pocket. Each half's band is 0.6 mm.
+#   P2: one layer of air (0.2 mm), necks 0.6 mm (the deboss floor)
+#   P4: two layers of air (0.4 mm), necks 0.4 mm, under the deboss floor on purpose
+# Two pairs of each, since a fused band may come from one bad layer, not the air: a and b.
+# Lower is the stud half, Upper the socket half, each printed face down with its piece half in it.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/pkt-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6 }, label: P2aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6 }, label: P2aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6 }, label: P2bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6 }, label: P2bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4 }, label: P4aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4 }, label: P4aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4 }, label: P4bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4 }, label: P4bU }
