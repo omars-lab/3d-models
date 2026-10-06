@@ -32,6 +32,8 @@ sheets-04g:
   - {iteration: 1, recipe: 'ba78d06e3b33', date: '2026-10-04'}
 sheets-04g-fit:
   - {iteration: 1, recipe: 'f4a44e2d7ac1', date: '2026-10-04'}
+sld-1:
+  - {iteration: 1, recipe: '715916738916', date: '2026-10-05'}
 split-01:
   - {iteration: 1, recipe: 'e38ffecaeced', date: '2026-10-05'}
 split-02:

@@ -1,0 +1,53 @@
+# sld-1 — the dovetail coupon: can a small dovetail join two piece halves by hand?
+#
+# Omar, 2026-10-05: "for joints i want to try the dovetail" (D-107). A split coaster's loose piece
+# is two 1.6 mm halves, each printed face down so both faces come out glossy. This coupon asks
+# whether a dovetail across the cut faces joins the two halves into one piece with no glue and no
+# tool: slide the rail into the slot from one end, and the pair can then only slide back out
+# (docs/design/pieces/join-halves-design.md §2).
+#
+# The coupon is bikar's patterns/Coupons/Dovetail-Coupon.bkr: a regular hexagon 18.3 mm point to
+# point, about the area of gBV's hexagon at 1.25x (a stand-in by area, not by shape). The rail is
+# 4 mm wide at its root and 0.8 mm tall in four 0.2 mm layers, slope 2. The slot is 1.0 mm deep,
+# `gap` hundredths of a mm wider each side, leaving a 0.6 mm floor. Each half is engraved with its
+# gap so the pairs can be matched.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
+#
+#   R10 S10   rail and slot at 0.10 mm a side (1 each)
+#   R15 S15   rail and slot at 0.15 mm a side (1 each)
+#   R20 S20   rail and slot at 0.20 mm a side (1 each)
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sld-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Rail
+    params: { gap: 10 }
+    label:  R10
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Slot
+    params: { gap: 10 }
+    label:  S10
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Rail
+    params: { gap: 15 }
+    label:  R15
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Slot
+    params: { gap: 15 }
+    label:  S15
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Rail
+    params: { gap: 20 }
+    label:  R20
+  - bkr:    bikar:patterns/Coupons/Dovetail-Coupon.bkr
+    piece:  Slot
+    params: { gap: 20 }
+    label:  S20

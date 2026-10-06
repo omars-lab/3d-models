@@ -66,7 +66,10 @@ Sending a print and which filament to load.
   clip or be screwed onto each other?" The
   [joining note](../../design/pieces/join-halves-design.md) answers it (2026-10-05): a slide
   coupon (SLD-1) if a, b or d; in c no join between the piece halves, the coaster halves join
-  once at their studs; snap rows to add to SPL-1; the screw is out.
+  once at their studs; snap rows to add to SPL-1; the screw is out. Omar then said "for joints i
+  want to try the dovetail" (D-107): the dovetail coupon is built and its plate,
+  [sld-1](../../design/plates/sld-1.md), 12 minutes and 2.4 g, waits on a tick on its page.
+  After the print, a kite pair at the gap that reads best.
 - **Print the four swatches of the colors on the printer (D-105)** —
   [swatch-10204](../../design/plates/swatch-10204.md) Hot Pink,
   [swatch-13903](../../design/plates/swatch-13903.md) Neon City,
@@ -160,7 +163,7 @@ about bets that could be minted.
 | Bets settled by design-specific coupons | 18 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1), `CAL-GRP-01` (LG-D1), `CAL-CST-01` + `CAL-CST-02` + `CAL-CST-03` + `CAL-CST-04` + `CAL-CST-05` + `CAL-CST-06` (CS-1), `CAL-CST-07` (CS-4), `CAL-CST-08` (CS-5) — but only 13 <!--count:cal-design-records--> records, because five of the eighteen have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 5 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist"; `CAL-EQV-01` and `CAL-EQV-02`, the O2 and O3 coverage floors — not print quantities, settled by the corpus ladder; `CAL-PIN-01`, the coaster color-split pinch floor — needs a two-filament interface coupon, not yet designed; `CAL-LSE-01`, the loose-piece gap per face — settled by the plate `sheets-04g-fit`, not a catalog coupon |
 | Entries in the prototype catalog | 48 <!--count:catalog-entries--> | 29 coupons (P1–P8, MC-1…MC-8, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2, LP-1) + the 6 deliverables C1, C2, W1, W2 (catalogued 2026-08-03, §3.5) and the coasters CS-1…CS-15 (P3.3, D-069, D-070, D-071, D-087; CS-7 the octagon-framed lEfWSogWscs, CS-8 the square-framed eight-fold rDuxHF3xMOc, CS-9 the round-framed n-fold flower nmEjCTzMbDg, CS-10 the square-framed 12-6-4 star n3IidKfXE1I, CS-11 the hexagon-framed Royal Alcazar tessellation sDO9fpu76v8, CS-12 the round-framed one cell of the Imamzadeh Isma'il kite tile bknVRSMcLj0, CS-13 the Itimad-ud-Daula ten-fold rosette gBV_JTt3Kxk, CS-14 the seven-and-four-fold star field jlTmt_279M4, CS-15 the Mustansiriya ten-fold star band NtnlGMTElBk, the last three minimal-style). Count is the one `make validate-catalog` prints, not a hand tally |
-| `.bkr` coupon files that exist today | 9 <!--count:coupon-dir-bkr--> + 2 | 9 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`, and `Sampler-Cards` (the labeled card the sampler sheets stand on, bikar #294 — not a calibration coupon, but a print coupon in the same directory), `Loose-Fit-Coupon` (LP-1, sampler sheet 4, bikar #296), and `Swatch-Chip` (the filament swatch card, D-105, bikar #307 — a print coupon too, not a calibration one). The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
+| `.bkr` coupon files that exist today | 10 <!--count:coupon-dir-bkr--> + 2 | 10 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`, and `Sampler-Cards` (the labeled card the sampler sheets stand on, bikar #294 — not a calibration coupon, but a print coupon in the same directory), `Loose-Fit-Coupon` (LP-1, sampler sheet 4, bikar #296), `Swatch-Chip` (the filament swatch card, D-105, bikar #307 — a print coupon too, not a calibration one), and `Dovetail-Coupon` (SLD-1, the dovetail join for split piece halves, D-107, bikar #309). The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
 every rung renders: [`calibration-design.md`](../../design/printing/calibration-design.md) §7 carries a
@@ -610,7 +613,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    23 pieces, euler, watertightness and volume in
    [`calibration-design.md`](../../design/printing/calibration-design.md) §7, plus independent
    silhouette and Pappus checks on MC-4 and z-level checks on MC-3.
-2. All 9 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
+2. All 10 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
    `bikar/patterns/Coupons/`. This line said **four** until 2026-08-03, two
    coupons after it stopped being true — §2's row above and this one are the
    two sites, and only one of them was ever updated.

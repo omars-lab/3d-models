@@ -400,6 +400,10 @@ In order; each item names the test that shows it works. Nothing here is started.
 4. **The Lab.** A Loose button on each ring row and on the picker chip; the parts list; the guided
    mode's step bar. *Test:* a Playwright run through the seven steps of §4, and a look in a real
    browser before it ships.
+   *The Loose button is done, bikar #308 (2026-10-05):* each filled ring's chip in Coaster Lab has
+   one, and it writes the same `loose` line a hand-written file would; the Lab's browser tests
+   pass and the page was looked at with it on and off. The parts list and the step bar wait on
+   call 2.
 5. **Fill height on the minimal coaster** (flagged, not designed here). A relief clause or a word on
    the fill line for `outline pattern` coasters. *Test:* to be written with its design.
 

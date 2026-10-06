@@ -60,11 +60,22 @@ other half has a slot of the same shape. Push the rail into the slot from one si
 halves can no longer pull apart, only slide back out the way they went in. Both halves still print
 with their outside face on the bed, so both faces are first layers.
 
-**Sizes.** A half is 1.6 mm, so a rail about 0.8 mm tall in a slot 0.8 mm deep leaves 0.8 mm of
-floor under the slot, four layers. These are starting sizes for a coupon, not measured ones. BOSL2's
-`dovetail()` uses woodworking slopes of 4, 6 or 8, default 6, and says "Adding a chamfer helps
-printed parts fit together without problems at the corners"
+**Sizes.** A half is 1.6 mm. The rail is 0.8 mm tall, four layers, and 4 mm wide at its root.
+The slot is one layer deeper than the rail, 1.0 mm, so the rail's top never touches its floor and
+the two cut faces close flat. That leaves 0.6 mm of floor under the slot, three layers, the floor
+the kernel already keeps under a debossed pocket (CAL-CST-03). The floor rule transfers because it
+is the same kind of thing printed the same way: a thin slab, face down, under a cut that opens at
+the top. These are starting sizes for a coupon, not measured ones.
+
+**Slope.** BOSL2's `dovetail()` uses woodworking slopes of 4, 6 or 8, default 6, and says "Adding a
+chamfer helps printed parts fit together without problems at the corners"
 ([research S38](../../research/split-with-studs-research.md#q11-alternatives-dovetails-rails-jigsaws-snap-pins)).
+That default does not transfer to a rail this short. A dovetail holds only if the rail's top is
+wider than the slot's mouth. Built in 0.2 mm layers, a rail of height h at slope s is wider at its
+top than at its root by (h − 0.2) / s a side. At slope 6 and 0.8 mm that is 0.1 mm, which is no
+more than any clearance SLD-1 tries, so the rail would lift straight out. At slope 2 it is 0.3 mm,
+which beats the widest gap, 0.20, by 0.1 mm a side. The coupon uses slope 2, so each layer is
+0.1 mm a side wider than the one under it; the kernel refuses a dovetail that does not lock.
 
 **The fit.** The only dovetail clearance with a print behind it here is bikar's 0.15 mm per face.
 minis-03 printed it, and it came out "a bit loose"
@@ -85,8 +96,12 @@ line that both halves of the shape share when the upper half is turned over, not
 ([brainstorm §1.2](../printing/finish-techniques-brainstorm.md#12-true-of-every-way)).
 
 **The coupon, SLD-1.** Three pairs of 1.6 mm hexagon halves, printed face down, with a
-0.8 mm rail and slot at 0.10, 0.15 and 0.20 mm per face, and the clearance debossed on the cut
-face. Add one kite pair at the clearance that reads best, to see if a short rail holds at all.
+0.8 mm rail and a 1.0 mm slot at 0.10, 0.15 and 0.20 mm per face, and the clearance debossed on the
+cut face. Add one kite pair at the clearance that reads best, to see if a short rail holds at all.
+Omar picked the dovetail to try first (D-107). The coupon is bikar's
+`patterns/Coupons/Dovetail-Coupon.bkr`; its plate is [sld-1](../plates/sld-1.md). The hexagon is
+regular, about the area of gBV's hexagon at 1.25×; it stands in for gBV's elongated hexagon by
+area, not by shape.
 
 **Validator:** for each pair, slide it together by hand, hold it cut face down by one half and
 shake it.
