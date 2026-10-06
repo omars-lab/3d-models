@@ -27,6 +27,7 @@ export function loadCatalog(root: string): CatalogColor[] {
     line: String(c.line),
     name: String(c.name),
     hexes: Array.isArray(c.hexes) ? c.hexes.map(String) : [],
+    ...(typeof c.kind === "string" ? { kind: c.kind } : {}),
   }));
 }
 

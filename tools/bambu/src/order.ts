@@ -114,15 +114,39 @@ export interface CatalogColor {
   line: string;
   name: string;
   hexes: string[];
+  /** single, gradient (the color shifts along the spool) or multi (the colors side by side in the
+   *  strand), as catalog.yaml files it. */
+  kind?: string;
 }
 
-/** Look a pick up in the catalog, with the palette's store note when it has one. */
+/** What a spool of more than one color does to a print, by the catalog's kind for it. */
+const SHIFT: Record<string, string> = {
+  gradient: "the color shifts along the spool, so where it shifts cannot be predicted for a given piece",
+  multi: "the colors run side by side in the strand, so a piece can show either, or both",
+};
+
+/** Look a pick up in the catalog, with the palette's store note when it has one. A two-color spool
+ *  takes its first hex, the one the AMS reports as the tray's color (the Neon City tray reads
+ *  `tray_color: 0047BBFF`, `cols: [0047BBFF, BB22A3FF]`, 2026-10-05), so the send finds its tray. */
 export function lookupColor(catalog: CatalogColor[], notes: Map<string, string>, c: ColorPick): PlateColor {
   const hit = catalog.find((e) => e.line === c.line && e.code === c.code);
   if (!hit) throw new Error(`${c.line} ${c.code}: not in the color catalog (docs/design/coaster/themes/catalog/catalog.yaml)`);
-  const hex = normalHex(hit.hexes[0] ?? "");
-  if (!hex || hit.hexes.length !== 1) throw new Error(`${c.line} ${c.code} (${hit.name}): not a one-color spool, so no plate color`);
-  return { key: `${c.line}|${c.code}`, hex, line: c.line, code: c.code, name: hit.name, note: notes.get(`${c.line}|${c.code}`) ?? null };
+  const hexes = hit.hexes.map((h) => normalHex(h));
+  if (hexes.length === 0 || hexes.some((h) => !h)) throw new Error(`${c.line} ${c.code} (${hit.name}): no hex in the catalog, so no plate color`);
+  const many =
+    hexes.length > 1
+      ? `a ${hexes.length}-color spool (${hexes.join(", ")}): the plate's color is the first, which the AMS reports for the tray; ${SHIFT[hit.kind ?? ""] ?? "how its colors fall on a given piece cannot be predicted"}`
+      : null;
+  const note = [notes.get(`${c.line}|${c.code}`), many].filter(Boolean).join("; ") || null;
+  return { key: `${c.line}|${c.code}`, hex: hexes[0]!, line: c.line, code: c.code, name: hit.name, note };
+}
+
+/** A pick by code alone (codes are unique across the catalog's lines), as `plates by-color` takes it. */
+export function lookupCode(catalog: CatalogColor[], notes: Map<string, string>, code: string): PlateColor {
+  const hits = catalog.filter((e) => e.code === code);
+  if (hits.length === 0) throw new Error(`${code}: no spool with this code in the color catalog (docs/design/coaster/themes/catalog/catalog.yaml)`);
+  if (hits.length > 1) throw new Error(`${code}: ${hits.map((h) => h.line).join(" and ")} both use this code; name the line too`);
+  return lookupColor(catalog, notes, { line: hits[0]!.line, code });
 }
 
 /** The groups of a pieces construction at its params: `bikar bands` on the .bkr. */

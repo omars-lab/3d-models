@@ -155,4 +155,30 @@ describe("pricePerKg", () => {
     expect(costs.routes[0]!.plates[0]!.grams).toBe(10);
     expect(costs.notes).toContain("PLA Galaxy: no price in the price file, so its plates show no dollars");
   });
+
+  // Neon City is PLA Silk in the catalog and "PLA Silk Multi-Color" at the store, so its line has no
+  // price; its code does (prices.yaml, read 2026-10-05).
+  const BY_CODE: Prices = {
+    ...PRICES,
+    colors: {
+      "13903": { line: "PLA Silk Multi-Color", name: "Neon City", spool: 24.99 },
+      "13902": { line: "PLA Silk Multi-Color", name: "Midnight Blaze", spool: 24.99, out_of_stock: ["spool"] },
+    },
+  };
+
+  it("prices a spool by its code when the file has it, over its line", () => {
+    expect(pricePerKg(BY_CODE, "PLA Silk", "refill")).toBeNull();
+    const p = pricePerKg(BY_CODE, "PLA Silk", "refill", "13903");
+    expect(p?.usd_per_kg).toBe(24.99);
+    expect(p?.note).toBe("PLA Silk 13903 has no refill price read; used its spool price");
+    const neon: PlateColor = { key: "PLA Silk|13903", hex: "#0047bb", line: "PLA Silk", code: "13903", name: "Neon City", note: null };
+    const costs = costRoutes(inputs({ prices: BY_CODE, perColor: [{ recipe: recipe("a", neon, [item("Kite")]), slice: slice({ grams: 10 }) }] }));
+    expect(costs.routes[0]!.plates[0]!.usd).toBe(0.25); // 10 g at $24.99 a kg
+    expect(Object.keys(costs.prices.used)).toEqual(["PLA Silk 13903"]);
+  });
+
+  it("says when a spool was out of stock, and falls back to the line for a code it does not list", () => {
+    expect(pricePerKg(BY_CODE, "PLA Silk", "spool", "13902")?.note).toBe("PLA Silk 13902 was out of stock as a spool when the prices were read");
+    expect(pricePerKg(BY_CODE, "PLA Basic", "refill", "10101")).toEqual({ usd_per_kg: 15.99, tier: "refill", note: null });
+  });
 });

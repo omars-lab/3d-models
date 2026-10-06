@@ -412,10 +412,10 @@ one plate recipe per color for a loose coaster's pieces (and its frame), each gr
 | Flag | Description |
 |---|---|
 | `--param <name=value>` | a param of the pieces construction (repeatable) |
-| `--color <Name=#rrggbb>` | print this group in this color instead of its palette's (repeatable) |
+| `--color <Name=color>` | print this group in this color instead of its palette's: #rrggbb, or a spool code (13903) to slice with that spool's own line (repeatable) |
 | `--frame <coaster.bkr>` | the coaster the pieces drop into, printed too |
 | `--frame-param <name=value>` | a param of the frame construction (repeatable) |
-| `--frame-color <#rrggbb>` | the frame's color (required with --frame) |
+| `--frame-color <color>` | the frame's color, #rrggbb or a spool code (required with --frame) |
 | `--count <n>` | how many coasters' worth |
 | `-o, --out-dir <dir>` | where the recipes go (default: build/plates/by-color/<name>) |
 | `--name <name>` | the recipes' name prefix (default: <construction>-by-color) |

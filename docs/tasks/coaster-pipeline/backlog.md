@@ -73,10 +73,15 @@ Sending a print and which filament to load.
   [swatch-10501](../../design/plates/swatch-10501.md) Bambu Green, each about 18 minutes and 5 g,
   waiting on a tick on its page. A color bought for a theme gets its swatch with
   `swatch.py recipe <code>` (the color-themes skill).
-- **The first themes: the bottom row (D-106, 2026-10-05)** — Midnight blue, Night sky,
-  Terracotta souk and Iznik tile. Each needs a plate recipe (one plate per color, D-103) and the
-  list of colors to buy, priced from the filament catalog (print-infrastructure item 2). Buying
-  and printing are Omar's.
+- **Print the first themes: the bottom row (D-106, 2026-10-05)** — Midnight blue, Night sky,
+  Terracotta souk and Iznik tile, 14 plates in all, one per color (D-103), each sliced with its
+  color's own line preset and waiting on a tick on its page. The
+  [theme plates page](../../design/coaster/themes/gbv-theme-plates.md) lists them and the 11
+  colors to buy, $193.89 for one of each; Midnight blue needs none. Buying and printing are
+  Omar's. Two things to know first: every plate cuts its pieces at `gap: 0`, the fit sheets-04g
+  showed off, so printing [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) first lets
+  these plates take its gaps as a new iteration; and Neon City (13903) is a two-color spool, so
+  its pieces will not all match the picture.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
   tick boxes; a yes means writing the record, which is item 1 above for minis-01.

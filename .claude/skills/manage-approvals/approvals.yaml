@@ -44,3 +44,31 @@ swatch-10501:
   - {iteration: 1, recipe: 'bf79a33a3fd2', date: '2026-10-05'}
 swatch-13903:
   - {iteration: 1, recipe: 'ea516ce9bf0d', date: '2026-10-05'}
+theme-iznik-tile-10100:
+  - {iteration: 1, recipe: '67b1e2cf6cf8', date: '2026-10-05'}
+theme-iznik-tile-10205:
+  - {iteration: 1, recipe: '62b1e0571ae5', date: '2026-10-05'}
+theme-iznik-tile-10604:
+  - {iteration: 1, recipe: '7ab1ac48c474', date: '2026-10-05'}
+theme-iznik-tile-10605:
+  - {iteration: 1, recipe: 'e7c0d561d4c0', date: '2026-10-05'}
+theme-midnight-blue-10101:
+  - {iteration: 1, recipe: '32fa650ee966', date: '2026-10-05'}
+theme-midnight-blue-13903:
+  - {iteration: 1, recipe: 'c9b6c5a56df2', date: '2026-10-05'}
+theme-night-sky-11600:
+  - {iteration: 1, recipe: '85e4af73bb62', date: '2026-10-05'}
+theme-night-sky-11602:
+  - {iteration: 1, recipe: 'fbb00fa49fec', date: '2026-10-05'}
+theme-night-sky-13101:
+  - {iteration: 1, recipe: 'd31ef6767567', date: '2026-10-05'}
+theme-night-sky-13402:
+  - {iteration: 1, recipe: '2b6426cb1a0c', date: '2026-10-05'}
+theme-terracotta-souk-10101:
+  - {iteration: 1, recipe: '32fa650ee966', date: '2026-10-05'}
+theme-terracotta-souk-10401:
+  - {iteration: 1, recipe: '4c0dd98920f0', date: '2026-10-05'}
+theme-terracotta-souk-11203:
+  - {iteration: 1, recipe: 'fde9d8b742b2', date: '2026-10-05'}
+theme-terracotta-souk-11401:
+  - {iteration: 1, recipe: '4f29d09fa7cf', date: '2026-10-05'}

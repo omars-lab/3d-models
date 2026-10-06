@@ -1,0 +1,17 @@
+# theme-midnight-blue-10101 — every piece in PLA Basic Black (10101) #000000
+#
+# Written by `bambu plates by-color` from patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr: every group of one color on one plate,
+# so each plate prints from one spool (piece colors phase 1). Slice it with `bambu slice compose`.
+#
+#   COASTER  the gBV coaster (1)
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+  color:    "#000000"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER
