@@ -6,8 +6,8 @@ date: 2026-10-06
 
 Everything waiting on you, on one page: six plates waiting on a yes, three questions about prints
 that already ran, and fourteen design calls carried over from the
-[2026-10-05 page](2026-10-05-open-calls.md). That page's other twelve calls are decided; they are
-listed at the end. Tick one box per call, or comment on a line. The next session records each answer
+[2026-10-05 page](2026-10-05-open-calls.md), plus one added the same day (15b, a way-c coaster's
+face colors). That page's other twelve calls are decided; they are listed at the end. Tick one box per call, or comment on a line. The next session records each answer
 (a plate yes goes into that plate's Approvals table, a call into the decisions log) and starts the
 work it unblocks. A call with no tick stays open, and nobody picks for you from the "my pick" column.
 
@@ -33,6 +33,7 @@ color, picked at the send.
 | 13 | Where splitting lives | A bikar coaster clause | Already built this way; a plate recipe can say "split" |
 | 14 | Split pieces: start with way a or way c | a first, then c | a changes one thing on a plate we have; c needs an unmeasured air gap |
 | 15 | If c: how the two piece halves become one | The pocket and nothing extra | The pocket is needed whatever else is chosen |
+| 15b | If c: the color of each face | Both faces one color, one plate | One send; a way-c face is one color whatever is picked |
 | 16 | How the Lab prints a colored coaster | One plate per color | No color swaps and nothing left over |
 | 17 | A color per group, or per piece too | Per group now, per piece later | Uses only what is built and tested |
 | 18 | Where a plate's color is written | In the recipe for per-color plates, at the send for whole-set plates | The pink plate says pink on its page and in its yes |
@@ -369,6 +370,14 @@ and I want the coaster to be flat ... leaning towards c". The coupons for both a
 *Not to scale. Picture 2 is way a, picture 4 is way c. Solid blue is a first layer, orange dashed a
 last layer.*
 
+What way c looks like on the whole coaster, drawn 2026-10-06 from bikar main (`hold pocket`, one
+layer of air; both halves pass the mesh check). It is the lower half's face, cut 0.3 mm up, as it
+prints. The pieces print inside the half, so they are the half's color. The pattern shows only as
+the thin gap round each piece and the open stars. Way a keeps a color per group of pieces, as in
+the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-wide border.
+
+![The whole gBV coaster face in one blue: the frame and every piece the same color, each piece outlined by a thin white gap, the ten stars open](2026-10-06-open-calls-media/way-c-face.png)
+
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
 | **a first, then c** (my pick) | a changes one thing on split-01, so one print answers one question; each face can be its own color | Twice the parts to place, unless sld-1's dovetail holds; a kite half is small (1.6 mm) | One new bikar setting on the lip hold; c comes after |
@@ -401,6 +410,26 @@ last layer.*
 - [ ] Glue
 - [ ] Peg and socket
 - [ ] Taller pieces
+- Notes:
+
+### 15b. If way c: the color of each face
+
+Each face of a way-c coaster is one color, its half's. The halves print one at a time, so the two
+faces can differ without a color change during a print. Added 2026-10-06. This is the last call
+before a full way-c coaster can print; the air gap is not a call, because pkt-1 decides it (the
+thinnest air whose band comes free; if both fuse, way c is out and way a is next).
+
+| Option | Pros | Cons | What it leads to |
+|---|---|---|---|
+| **Both faces one color, both halves on one plate** (my pick) | One send, no color changes; either face can go up | The pattern shows only as gap lines and open stars, on both faces | One plate, about the size of split-01 (89 minutes, 30 g there; not sliced yet) |
+| A different color on each face | A coaster that flips between two looks; still no color change during a print | Two sends, one per half; still one color per face | Two plates, one color each |
+| Two colors on one plate | One send | A color change every layer of the two halves; phones-01 took about 62 minutes against 22 sliced for the same reason | Not worth it; listed so it is ruled out on purpose |
+
+**Your answer:**
+
+- [ ] Both faces one color: pink / silk blue / black / green
+- [ ] A different color on each face (name the two in Notes)
+- [ ] Two colors on one plate
 - Notes:
 
 ## Piece colors (calls 16 to 19)
