@@ -26,7 +26,7 @@ did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)
 Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**12 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**13 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -59,9 +59,13 @@ self-bootstrap; the video's paint-over masks are left off the coaster),
 octagon cells, one tile reflected into a 2×2 block; it taught the importer to carry a
 drawn segment list through an isometry and gave the cookbook its `Ray` recipe), and
 `NtnlGMTElBk` with bikar PR #285 (six scaffold arcs, plain straps, no weave).
-All twelve now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+`0ke_GpoBa-s` landed 2026-10-06 with bikar PR #315, also as a minimal coaster: the first
+construction drawn on paper with a compass and filmed, and the first whose youtube source had
+to be rewritten for the importer (its petal ring, a half turn of a pair of segments, is written
+as the whole ten-fold turn of one; youtube branch `coaster-0ke`).
+All thirteen now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
-`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`) — P3.3 of the umbrella plan,
+`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`, `CS-16`) — P3.3 of the umbrella plan,
 which built on the `coaster` declaration (P1.6/P2.7).
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
@@ -112,7 +116,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
-| `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | — | — | — | — | — | — | — |
+| `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | `bikar/patterns/Constructions/0ke_GpoBa-s.bkr` | PASS 40/0 | PASS 1.0/1.0 | — | `src/Coasters/0ke_GpoBa-s-minimal-coaster-standard.stl` | CS-16 | — |
 | `1TclLO9JKAA` | Parallel 9-fold Star Rosette, "Avoiding Open Paths" (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `1h7iWJaoN80` | Folio 192 heptagonal panel, Anonymous Persian Compendium (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
@@ -195,3 +199,11 @@ at their imports on 2026-09-30, on the youtube branches named in each bikar PR
 - **O3 is `—` on all three**: none of the three reconstructions has a `.ggb`
   export to build a reference from, so the oracle was not run, not skipped by
   design.
+
+`0ke_GpoBa-s` was scored at its import on 2026-10-06, on youtube branch `coaster-0ke`
+(c8d2b48), which holds the source rewrite and the hero export and is not on youtube main yet:
+O1 `PASS: 40 compared, 0 failed, 21 skipped/extra`; O2
+`O2 PASS: edge-SSIM 0.9146 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 20 (advisory)`.
+Before the branch's `@export` line the youtube hero drew the axes, the circle and the four
+diameters too, which naqsh keeps as scaffold, and recall was 0.71 against the same import. O3 is
+`—`: there is no `.ggb` export to build a reference from.

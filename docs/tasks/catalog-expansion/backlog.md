@@ -35,6 +35,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       and filmed at a slight angle, so the frames had to be straightened first (`rectify.tsv`).
       The 10-fold grid (Ptolemy's pentagon, the {10/2} and {10/3} stars, the petal lines) is in
       `reconstructions/0ke_GpoBa-s/`, ready for the coaster step.
+      **Coaster step done 2026-10-06**: bikar #315 (the grid and its minimal coaster; the
+      diameters and circle stay scaffold), ledger row filled, `CS-16`, gallery card, vendored
+      STL. Its youtube source rewrite (the petal ring as one whole ten-fold turn, and the hero
+      export) is on youtube branch `coaster-0ke`, waiting on Omar's merge into main.
    2. `88q-u2eWZqg`, Eman Zainab, 16-petal rosette: a new fold; check the crowded centre.
       **Attempted 2026-09-28 in youtube: 6/9 steps, mean edge-SSIM 0.745.** The geometry is
       right. The three busiest steps stop near 0.59 because her pencil compass marks were

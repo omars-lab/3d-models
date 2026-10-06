@@ -1846,6 +1846,33 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the D-087 comparison; the gallery's coaster entry; the
   constructions ledger's `coaster` and `catalog` cells for `NtnlGMTElBk`.
 
+## CS-16 — Ten-fold rosette grid, minimal (Samira Mian, 0ke_GpoBa-s)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/0ke_GpoBa-s-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/0ke_GpoBa-s-minimal-coaster-mini.stl` and `-standard.stl`).
+  The first construction drawn on paper with a compass and ruler and filmed, in the
+  **minimal** style like CS-13. The art is the grid a ten-fold rosette is traced from:
+  the circle divided into ten by Ptolemy's pentagon, the two pentagons (odd and even
+  points), the {10/3} star through all ten, and the ring of ten petal lines, one segment
+  turned ten-fold (`rotate 10 around O`). The diameters and the circle only locate the
+  points, so the coaster leaves them out. Straight lines only, no arcs. Knobs `--param
+  strap=3` (1.6..5) and `--param round=1` (0..1.5) as CS-4; `unit` is `(size − strap)/2`.
+  Both sizes pass the mesh gate at the 1.6 mm free-standing floor (watertight, 0
+  degenerate) and the linkage gate (1 body): the mini is 29,240 triangles / 4.1 cm³
+  and the standard 112,796 / 15.0 cm³ (euler −40 and −160). Migrated with bikar PR #315.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. The grid is the drawing before the rosette, not the rosette: does it read
+    as a finished design in the hand, or does it want the rosette traced over it?
+  - [ ] 2. The {10/3} star and the two pentagons cross in many small triangles near the
+    middle. Do those small openings print clean at 90 mm with 3 mm straps?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster` and
+  `catalog` cells for `0ke_GpoBa-s`.
+
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
 - **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/design/plates/sheets-04.md)
