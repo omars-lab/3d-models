@@ -47,6 +47,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       (each petal joins the petal three places round, and 3 and 16 share no factor), so it
       suits a single continuous groove. Two octagons, the inner circle and the 16 petals are in
       `reconstructions/88q-u2eWZqg/`, ready for the coaster step.
+      **Coaster step done 2026-10-06**: bikar #317 (the rosette and its minimal coaster,
+      imported from youtube main as it is; the circles and octagon turns stay scaffold), ledger
+      row filled, `CS-17`, gallery card, vendored STL. At 40 mm the straps nearly close the
+      middle windows, so its mini wants about 60 mm.
    3. `n_ICgwOr6qs`, Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
       **Done 2026-09-28 in youtube: 9/9 steps, mean edge-SSIM 0.886.** Drawn on paper and
       filmed, like 1; the camera zooms out once at about 04:00, so only the petals after it are

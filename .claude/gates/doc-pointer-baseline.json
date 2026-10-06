@@ -163,6 +163,11 @@
       "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/0ke_GpoBa-s-minimal-coaster-mini.stl",
       "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Samira Mian's ten-fold rosette grid, minimal style (CS-16); introduced with bikar PR #315."
+    },
+    {
+      "doc": ".claude/skills/prototype/catalog.md",
+      "path": "src/Coasters/88q-u2eWZqg-minimal-coaster-mini.stl",
+      "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Eman Zainab's sixteen-petal rosette, minimal style (CS-17); introduced with bikar PR #317."
     }
   ]
 }

@@ -1,0 +1,117 @@
+# naqsh construction — 88q-u2eWZqg
+# title: 4 Fold Rosette with 16 Petals | Step by Step construction
+# url: https://www.youtube.com/watch?v=88q-u2eWZqg
+# steps: 39 statements, 9 tagged steps
+# source: reconstructions/88q-u2eWZqg/construction.ggb-commands sha256:2ffac6f8fec0a6c87ed734938c9712b93ce8f2ed34c7725df7b449025ac690a1
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param unit = ($size - $strap) / 2.0001   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint c_88q_u2eWZqg_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # N = (0, 1)
+  point N = unit.cpt1
+  # S = (0, -1)
+  point S = unit.cpt3
+  # ────────────────────────────────────────────────────────
+  # t=00:30  c = Circle(O, N)
+  circle c center(O) through N
+  # t=00:30  v = Line(N, S)
+  line v from N to S
+  # ────────────────────────────────────────────────────────
+  # Q1 = Rotate(N, 45°, O)
+  point Q1 = rotate N by 45 around O
+  # eN = Segment(N, Q1)
+  segment eN from N to Q1
+  # ────────────────────────────────────────────────────────
+  # t=02:06  oct2 = Rotate(oct1, 22.5°, O)
+  point O_oct2 = rotate O by 22.5 around O
+  # t=02:06  oct2 = Rotate(oct1, 22.5°, O)
+  point N_oct2 = rotate N by 22.5 around O
+  # t=02:06  oct2 = Rotate(oct1, 22.5°, O)
+  point Q1_oct2 = rotate Q1 by 22.5 around O
+  # ────────────────────────────────────────────────────────
+  # T1 = Rotate(N, 22.5°, O)
+  point T1 = rotate N by 22.5 around O
+  # T2 = Rotate(N, -22.5°, O)
+  point T2 = rotate N by -22.5 around O
+  # eN2 = Segment(T1, T2)
+  segment eN2 from T1 to T2
+  # X = Intersect(eN, eN2)
+  point X = intersect eN eN2
+  # dX = Line(O, X)
+  line dX from O to X
+  # {D1, D2} = Intersect(c, dX)
+  intersect D1D2_ c dX
+  # {D1, D2} = Intersect(c, dX)
+  point D1 = D1D2_.cpt0
+  # {D1, D2} = Intersect(c, dX)
+  point D2 = D1D2_.cpt1
+  # dS = Segment(D1, D2)
+  segment dS from D1 to D2
+  # cq = Circle(N, X)
+  circle cq center(N) through X
+  # sON = Segment(O, N)
+  segment sON from O to N
+  # Qi = Intersect(cq, sON)
+  point Qi = intersect cq sON
+  # ────────────────────────────────────────────────────────
+  # t=02:55  ci = Circle(O, Qi)
+  circle ci center(O) through Qi
+  # ────────────────────────────────────────────────────────
+  # sOX = Segment(O, X)
+  segment sOX from O to X
+  # I1 = Intersect(ci, sOX)
+  point I1 = intersect ci sOX
+  # I2 = Rotate(I1, 157.5°, O)
+  point I2 = rotate I1 by 157.5 around O
+  # gL = Line(I1, I2)
+  line gL from I1 to I2
+  # cG = Circle(O, 1.065)
+  circle cG center(O) radius 1.065 * $unit
+  # {G1, G2} = Intersect(cG, gL)
+  intersect G1G2_ cG gL
+  # {G1, G2} = Intersect(cG, gL)
+  point G1 = G1G2_.cpt0
+  # {G1, G2} = Intersect(cG, gL)
+  point G2 = G1G2_.cpt1
+  # g = Segment(G1, G2)
+  segment g from G1 to G2
+  # Sl = Intersect(gL, eN)
+  point Sl = intersect gL eN
+  # Sr = Reflect(Sl, v)
+  point Sr = reflect Sl across v
+  # gR = Reflect(gL, v)
+  line gR = reflect gL across v
+  # gC = Rotate(gR, 67.5°, O)
+  line gC = rotate gR by 67.5 around O
+  # Cl = Intersect(gL, gC)
+  point Cl = intersect gL gC
+  # Sr3 = Rotate(Sr, 67.5°, O)
+  point Sr3 = rotate Sr by 67.5 around O
+
+pattern c_88q_u2eWZqg on c_88q_u2eWZqg_scaffold
+  # ────────────────────────────────────────────────────────
+  # t=05:10  vees = Sequence(Rotate({vee}, 22.5°*i, O), i, 0, 15)
+  rotate 16 around O
+    connect [ Sl -> Cl, Cl -> Sr3 ]
+  # ────────────────────────────────────────────────────────
+  # t=05:40  roofs = Sequence(Rotate({roof}, 22.5°*i, O), i, 0, 15)
+  rotate 16 around O
+    connect [ Sr -> N, N -> Sl ]
+
+coaster Coaster
+  outline pattern
+  inscribe c_88q_u2eWZqg
+  base $height
+  strap width $strap
+  edge fillet $round top

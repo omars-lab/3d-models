@@ -1873,6 +1873,31 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster` and
   `catalog` cells for `0ke_GpoBa-s`.
 
+## CS-17 — Sixteen-petal rosette, minimal (Eman Zainab, 88q-u2eWZqg)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/88q-u2eWZqg-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/88q-u2eWZqg-minimal-coaster-mini.stl` and `-standard.stl`).
+  The **minimal** style like CS-13. The art is the finished rosette, one unbroken line:
+  sixteen Vs pointing in and sixteen roofs over them, each written once and turned
+  sixteen-fold (`rotate 16 around O`). The circles, the octagon turns and the guide lines
+  only locate the points, so the coaster leaves them out. Straight lines only, no arcs.
+  Knobs `--param strap=3` (1.6..5) and `--param round=1` (0..1.5) as CS-4; `unit` is
+  `(size − strap)/2`. Both sizes pass the mesh gate at the 1.6 mm free-standing floor
+  (watertight, 0 degenerate) and the linkage gate (1 body): the mini is 28,996 triangles
+  / 3.9 cm³ and the standard 93,272 / 11.6 cm³ (euler −32 and −64). Migrated with bikar
+  PR #317.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. At 40 mm the straps close most of the small windows near the middle and the
+    mini reads nearly solid. Is 60 mm the right mini size for this one, or a thinner strap?
+  - [ ] 2. Do the sixteen narrow petal tips print clean at 90 mm with 3 mm straps?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster` and
+  `catalog` cells for `88q-u2eWZqg`.
+
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
 - **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/design/plates/sheets-04.md)
