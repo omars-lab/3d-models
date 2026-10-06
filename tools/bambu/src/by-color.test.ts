@@ -48,6 +48,7 @@ describe("readPiecesBkr — what a pieces file says about its colors", () => {
       hexes: { Middle: "#6b4e9b", Kite: "#e05a47", Star: "#2f6db5" },
       fills: { 0: "Middle", 1: "Kite", 3: "Star", 4: "Star" },
       looseOrbits: [0, 1, 3, 4],
+      pieces: {},
     });
   });
 
@@ -74,6 +75,49 @@ describe("pieceGroups — one group per palette name", () => {
       "loose orbit 1: the .bkr fills it as Kite, bands says Hex",
     );
     expect(() => pieceGroups(readPiecesBkr("loose faces where orbit == 2"), BANDS)).toThrow("no palette name fills it");
+  });
+});
+
+// One piece at a time (piece colors phase 5): the Lab's line for a kite taken out of its ring, in its
+// own name, ahead of the orbit lines. Face 13 is one of orbit 1's ten.
+const ORBIT_1_FACES = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const ONE_KITE = BKR.replace("Star = #2f6db5", "Star = #2f6db5\nKite_13 = #2f6db5").replace(
+  "fill faces where orbit == 0",
+  "fill faces where index == 13 color Kite_13\nfill faces where orbit == 0",
+);
+const BANDS_FACES = BANDS.map((b) => ({ ...b, faces: b.orbit === 1 ? ORBIT_1_FACES : [100 + b.orbit] }));
+
+describe("pieceGroups — one piece taken out of its ring", () => {
+  it("prints the piece under its own name and one fewer in its ring", () => {
+    expect(readPiecesBkr(ONE_KITE).pieces).toEqual({ 13: "Kite_13" });
+    const bands = BANDS_FACES.map((b) => (b.orbit === 1 ? { ...b, color: "Kite, Kite_13" } : b));
+    expect(pieceGroups(readPiecesBkr(ONE_KITE), bands)).toEqual([
+      { piece: "Middle", orbits: [0], members: 1, hex: "#6b4e9b" },
+      { piece: "Kite", orbits: [1], members: 9, hex: "#e05a47" },
+      { piece: "Kite_13", orbits: [1], members: 1, hex: "#2f6db5" },
+      { piece: "Star", orbits: [3, 4], members: 20, hex: "#2f6db5" },
+    ]);
+  });
+
+  it("joins a piece taken out under another group's name to that group", () => {
+    const toStar = ONE_KITE.replace("color Kite_13", "color Star");
+    const groups = pieceGroups(readPiecesBkr(toStar), BANDS_FACES);
+    expect(groups.find((g) => g.piece === "Kite")?.members).toBe(9);
+    expect(groups.find((g) => g.piece === "Star")).toEqual({ piece: "Star", orbits: [1, 3, 4], members: 21, hex: "#2f6db5" });
+  });
+
+  it("refuses a one-piece line after an orbit line, which never wins", () => {
+    const late = BKR + "\nfill faces where index == 13 color Kite";
+    expect(() => readPiecesBkr(late)).toThrow("line 13: a one-piece `fill` after the orbit line on line 5 never wins");
+  });
+
+  it("refuses when bands lists no faces, names the orbit differently, or the face is in no loose orbit", () => {
+    expect(() => pieceGroups(readPiecesBkr(ONE_KITE), BANDS)).toThrow("orbit 0: bands lists no faces");
+    expect(() => pieceGroups(readPiecesBkr(ONE_KITE), BANDS_FACES.map((b) => (b.orbit === 1 ? { ...b, color: "Kite" } : b)))).toThrow(
+      "loose orbit 1: the .bkr fills it as Kite, Kite_13, bands says Kite",
+    );
+    const stray = ONE_KITE.replace("index == 13", "index == 99");
+    expect(() => pieceGroups(readPiecesBkr(stray), BANDS_FACES)).toThrow("face 99: taken out by `index` but in no loose orbit");
   });
 });
 

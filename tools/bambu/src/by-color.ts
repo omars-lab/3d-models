@@ -7,9 +7,13 @@
 // writer, and nothing in it reads a file or runs a program: the commands pass in the .bkr text and
 // what `bikar bands` says about it.
 //
-// What it refuses, until piece colors phase 5 (#188) proves picking one piece at a time: a `fill` or
-// `loose` rule chosen by anything but `orbit == <n>`, and any `index` in one. Per group is what the
-// piece-color design's call 2 leans to and what `--piece` can render today.
+// One piece at a time (piece colors phase 5): the Lab takes a piece out of its ring with
+// `fill … where index == N color <Name>`, its own palette name, written ahead of the orbit lines so it
+// wins first-match. That piece prints as `--piece <Name>`, and its ring's group has one fewer. Which
+// ring face N is in comes from `bikar bands`, which lists each orbit's faces.
+//
+// What it refuses: a `fill` or `loose` rule chosen by anything but `orbit == <n>` or that one-piece
+// form, a `loose` by `index`, and a one-piece line after an orbit line (it would never win).
 
 import { canonicalJson } from "./iteration.js";
 import { recipeHash } from "./recipe-hash.js";
@@ -19,13 +23,15 @@ export interface PiecesBkr {
   hexes: Record<string, string>; // palette name → #rrggbb (lowercase)
   fills: Record<number, string>; // orbit → palette name, from `fill … where orbit == n color Name`
   looseOrbits: number[];
+  pieces: Record<number, string>; // face index → palette name, from `fill … where index == N color Name`
 }
 
 /** One orbit as `bikar bands --json` reports it. */
 export interface BandsOrbit {
   orbit: number;
   members: number;
-  color?: string | null; // the palette name its faces fill with
+  color?: string | null; // the palette names its faces fill with, sorted and joined by ", "
+  faces?: number[]; // its face indices (bikar #311 on); needed only when a piece is taken out
 }
 
 /** A group of pieces: what one `--piece <name>` item renders, and how many pieces that is. */
@@ -37,12 +43,15 @@ export interface PieceGroup {
 }
 
 const ORBIT_RULE = /\bwhere\s+orbit\s*==\s*(\d+)(?=\s|$)/;
+const PIECE_RULE = /^fill\s+\w+\s+where\s+index\s*==\s*(\d+)\s+color\s+([A-Za-z_]\w*)$/;
 
 /** Read a pieces .bkr's palette and loose rules. Throws on a rule this phase cannot plan. */
 export function readPiecesBkr(text: string): PiecesBkr {
   const hexes: Record<string, string> = {};
   const fills: Record<number, string> = {};
   const looseOrbits: number[] = [];
+  const pieces: Record<number, string> = {};
+  let orbitLine: number | null = null;
   text.split("\n").forEach((raw, i) => {
     const line = raw.replace(/#(?![0-9a-fA-F]{6}\b).*$/, "").trim(); // drop a comment, keep a #hex
     const where = `line ${i + 1}`;
@@ -53,14 +62,23 @@ export function readPiecesBkr(text: string): PiecesBkr {
     }
     const verb = /^(fill|loose)\b/.exec(line)?.[1];
     if (!verb) return;
+    const piece = PIECE_RULE.exec(line);
+    if (piece) {
+      if (orbitLine !== null) {
+        throw new Error(`${where}: a one-piece \`fill\` after the orbit line on line ${orbitLine} never wins (first match colors a face); move it above: ${line}`);
+      }
+      pieces[Number(piece[1])] = piece[2]!;
+      return;
+    }
     if (/\bindex\b/.test(line)) {
-      throw new Error(`${where}: \`${verb}\` picks by \`index\`; one piece at a time is piece colors phase 5, not yet planned: ${line}`);
+      throw new Error(`${where}: \`${verb}\` picks by \`index\`; only \`fill … where index == N color <Name>\` is planned: ${line}`);
     }
     const m = ORBIT_RULE.exec(line);
     if (!m) {
       throw new Error(`${where}: \`${verb}\` is chosen by something other than \`orbit == <n>\`; only whole orbits are planned: ${line}`);
     }
     const orbit = Number(m[1]);
+    if (verb === "fill") orbitLine ??= i + 1;
     if (verb === "loose") {
       looseOrbits.push(orbit);
     } else {
@@ -68,26 +86,52 @@ export function readPiecesBkr(text: string): PiecesBkr {
       if (color) fills[orbit] = color[1]!;
     }
   });
-  return { hexes, fills, looseOrbits };
+  return { hexes, fills, looseOrbits, pieces };
+}
+
+/** The pieces taken out of one orbit: face index → name, read against the faces bands lists. */
+function takenOut(bkr: PiecesBkr, band: BandsOrbit): Map<number, string> {
+  const out = new Map<number, string>();
+  const indices = Object.keys(bkr.pieces).map(Number);
+  if (indices.length === 0) return out;
+  if (!band.faces) throw new Error(`orbit ${band.orbit}: bands lists no faces (bikar before #311), so a piece taken out by \`index\` cannot be placed`);
+  for (const i of indices) if (band.faces.includes(i)) out.set(i, bkr.pieces[i]!);
+  return out;
 }
 
 /** The groups of loose pieces, in orbit order: palette name, orbits and piece count, from the .bkr and
- *  what bands reports. Throws when the two disagree about an orbit's name, or bands lacks a loose orbit. */
+ *  what bands reports. A piece taken out by `index` is its own group (or joins the group of its name),
+ *  and its ring's group has one fewer. Throws when the two disagree about an orbit's names, or bands
+ *  lacks a loose orbit, or a taken-out piece is in no loose orbit. */
 export function pieceGroups(bkr: PiecesBkr, bands: BandsOrbit[]): PieceGroup[] {
   const byName = new Map<string, PieceGroup>();
+  const add = (name: string, orbit: number, members: number) => {
+    const g = byName.get(name) ?? { piece: name, orbits: [], members: 0, hex: bkr.hexes[name] ?? null };
+    if (!g.orbits.includes(orbit)) g.orbits.push(orbit);
+    g.members += members;
+    byName.set(name, g);
+  };
+  const placed = new Set<number>();
   for (const orbit of [...bkr.looseOrbits].sort((a, b) => a - b)) {
     const band = bands.find((b) => b.orbit === orbit);
     if (!band) throw new Error(`loose orbit ${orbit}: bands reports no such orbit`);
-    const name = band.color ?? bkr.fills[orbit];
-    if (!name) throw new Error(`loose orbit ${orbit}: no palette name fills it, so no \`--piece\` renders it`);
-    if (bkr.fills[orbit] && bkr.fills[orbit] !== name) {
-      throw new Error(`loose orbit ${orbit}: the .bkr fills it as ${bkr.fills[orbit]}, bands says ${name}`);
+    const taken = takenOut(bkr, band);
+    const rest = band.members - taken.size;
+    const own = bkr.fills[orbit];
+    const ringName = own ?? (taken.size === 0 ? band.color : undefined);
+    if (rest > 0 && !ringName) throw new Error(`loose orbit ${orbit}: no palette name fills it, so no \`--piece\` renders it`);
+    const expected = [...new Set([...(rest > 0 && ringName ? [ringName] : []), ...taken.values()])].sort().join(", ");
+    if (band.color && band.color !== expected) {
+      throw new Error(`loose orbit ${orbit}: the .bkr fills it as ${expected}, bands says ${band.color}`);
     }
-    const g = byName.get(name) ?? { piece: name, orbits: [], members: 0, hex: bkr.hexes[name] ?? null };
-    g.orbits.push(orbit);
-    g.members += band.members;
-    byName.set(name, g);
+    if (rest > 0) add(ringName!, orbit, rest);
+    for (const [face, name] of taken) {
+      add(name, orbit, 1);
+      placed.add(face);
+    }
   }
+  const stray = Object.keys(bkr.pieces).map(Number).filter((i) => !placed.has(i));
+  if (stray.length > 0) throw new Error(`face ${stray.join(", ")}: taken out by \`index\` but in no loose orbit bands lists`);
   return [...byName.values()];
 }
 

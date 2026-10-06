@@ -1386,7 +1386,7 @@ Gathered from a sweep of the three repos on 2026-10-04. Each gap names where thi
 - The link budget: `bikar:packages/lab/src/url-state.ts:L12 "URL_BUDGET_CHARS = 1800"`
 - Colors in the link: the `COLOR_KEY_PREFIX = 'color.'` constant in the same bikar file, added by
   bikar PR #304, which is newer than this repo's bikar pin, so it is cited by PR, not anchored.
-- No printer detail in the link: `3d-models:docs/design/coaster/infill-color-ux-design.md:L135 "carries it, and the print target never enters the link"`
+- No printer detail in the link: `3d-models:docs/design/coaster/infill-color-ux-design.md:L136 "carries it, and the print target never enters the link"`
 - Persona scores are simulated: `3d-models:.claude/skills/review-theme/SKILL.md:L12 "**These are simulated opinions.**"`
 - Silk Gold not on the US store: `3d-models:.claude/skills/color-themes/palette.yaml:L62 "not on the US store, 2026-10-04"`
 - A two-color spool differs per coaster: `3d-models:docs/design/coaster/themes/gbv/themes.yaml:L135 "every coaster comes out a little different"`
