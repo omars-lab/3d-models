@@ -11,34 +11,31 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
 consturciotn and move back to split coasters and split inflills"), so they come first.
 
-1. **Build SPL-1, the split coupon, in bikar.** The
-   [split design](../../design/pieces/split-with-studs-design.md#9-the-coupon-spl-1)'s plan item 1:
-   the stud fit pairs at six gaps, the small and large stud rows, the show-through floors, and the
-   trapped-piece pairs. The design says OpenSCAD until bikar can split; bikar's `split` clause has
-   shipped since, so the coupon can be a `.bkr` cut by the same code the split coasters use. The
-   show-through floors need a floor knob on `split`, which today uses the fixed 0.6 mm floor. Then a
-   plate page waiting on Omar's tick. Found 2026-10-06.
-2. **A cookbook recipe for `split`, with a picture.** The split design's plan item 2 asks for one,
-   and bikar's cookbook has none: the clause shipped without its recipe. Found 2026-10-06.
-3. **Way c: a piece printed in place in its pocket.** Omar leans towards c (the owner-gated split
+1. **Way c: a piece printed in place in its pocket.** Omar leans towards c (the owner-gated split
    item below). The first build is a pocket coupon at one and two layers of air
    ([finish techniques §1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)),
    which a bikar branch can try before call 10 is made. Found 2026-10-05.
-4. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+2. **A whole-file `render --check` of a split file fails the linkage gate (L3), in bikar.** The two
+   halves are drawn stacked, so they touch at the cut and read as fused: the merged
+   `gBV_JTt3Kxk-split-lip-coaster.bkr` fails with 63 pairs, and both split coupons fail the same
+   way. Prints are safe, since each half is rendered with `--piece` and passes. Either the gate
+   learns that halves meeting at the cut are not fused, or the default render lays the halves
+   apart. Found while building SPL-1 (bikar #319), 2026-10-06.
+3. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3, board #4.)
-5. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+4. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-6. **Re-vendor the eight coaster meshes that bikar main now draws differently.** A full
+5. **Re-vendor the eight coaster meshes that bikar main now draws differently.** A full
    `make coasters` against bikar main re-renders these unlike the copies in `src/Coasters/`:
    the 7apC5Q9QS-8 border, plain, fill, minimal, minimal-frame and twist coasters,
    bknVRSMcLj0, and gBV_JTt3Kxk minimal. Re-render them, check each with `--check`, look at
    the pictures, and say in the PR what bikar change moved each one. Found by the 0ke_GpoBa-s
    coaster step, 2026-10-06, the first `make coasters` to run past the split coasters.
-7. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+6. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -47,7 +44,7 @@ consturciotn and move back to split coasters and split inflills"), so they come 
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-8. **Standard-size plate (P5.2)** — only after item 4 settles the CAL-CST numbers (board #6).
+7. **Standard-size plate (P5.2)** — only after item 3 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
@@ -70,6 +67,10 @@ Sending a print and which filament to load.
   waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
+- **The split coupon, [spl-1](../../design/plates/spl-1.md)** — waiting on Omar's tick, with the
+  color in the yes (the lightest loaded, for the show-through check). Twelve stud fit pairs (gaps
+  −0.10 to 0.15, a 1.5 and a 3 mm stud, floors 0.8 and 1.0) and two trapped-piece pairs: one bed,
+  43 minutes, 18.3 g. Its answers set the split coasters' stud gap and socket floor.
 - **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
   [split-02](../../design/plates/split-02.md) (flange)** — waiting on Omar's tick on each page, with
   the color in the yes. The gBV coaster at 112.5 mm cut in two halves that close over its loose
@@ -110,7 +111,7 @@ Sending a print and which filament to load.
   its pieces will not all match the picture.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
-  tick boxes; a yes means writing the record, which is item 4 above for minis-01.
+  tick boxes; a yes means writing the record, which is item 3 above for minis-01.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
@@ -185,7 +186,7 @@ about bets that could be minted.
 | Bets settled by design-specific coupons | 18 <!--count:cal-bets-design--> | `CAL-RIB-01` (LG-F1), `CAL-STK-01` (LG-S1), `CAL-DET-01` + `CAL-CLP-01` (W-C1), `CAL-REG-01` (LG-P1), `CAL-CLB-01` (LG-P2), `CAL-ANC-01` + `CAL-INW-01` (LG-B2), `CAL-FRM-01` (W-P1), `CAL-GRP-01` (LG-D1), `CAL-CST-01` + `CAL-CST-02` + `CAL-CST-03` + `CAL-CST-04` + `CAL-CST-05` + `CAL-CST-06` (CS-1), `CAL-CST-07` (CS-4), `CAL-CST-08` (CS-5) — but only 13 <!--count:cal-design-records--> records, because five of the eighteen have a coupon and no `Calibrated` record yet |
 | Bets with no coupon anywhere | 5 <!--count:cal-bets-no-coupon--> | `CAL-STR-01`, Z-layer strength ratio — registry says it "needs a load rig, which does not exist"; `CAL-EQV-01` and `CAL-EQV-02`, the O2 and O3 coverage floors — not print quantities, settled by the corpus ladder; `CAL-PIN-01`, the coaster color-split pinch floor — needs a two-filament interface coupon, not yet designed; `CAL-LSE-01`, the loose-piece gap per face — settled by the plate `sheets-04g-fit`, not a catalog coupon |
 | Entries in the prototype catalog | 50 <!--count:catalog-entries--> | 29 coupons (P1–P8, MC-1…MC-8, W-F1, W-C1, W-P1, LG-F1/F2/S1/R1/D1/B1/B2/P1/P2, LP-1) + the 6 deliverables C1, C2, W1, W2 (catalogued 2026-08-03, §3.5) and the coasters CS-1…CS-17 (P3.3, D-069, D-070, D-071, D-087; CS-7 the octagon-framed lEfWSogWscs, CS-8 the square-framed eight-fold rDuxHF3xMOc, CS-9 the round-framed n-fold flower nmEjCTzMbDg, CS-10 the square-framed 12-6-4 star n3IidKfXE1I, CS-11 the hexagon-framed Royal Alcazar tessellation sDO9fpu76v8, CS-12 the round-framed one cell of the Imamzadeh Isma'il kite tile bknVRSMcLj0, CS-13 the Itimad-ud-Daula ten-fold rosette gBV_JTt3Kxk, CS-14 the seven-and-four-fold star field jlTmt_279M4, CS-15 the Mustansiriya ten-fold star band NtnlGMTElBk, CS-16 Samira Mian's ten-fold rosette grid 0ke_GpoBa-s, CS-17 Eman Zainab's sixteen-petal rosette 88q-u2eWZqg, the last five minimal-style). Count is the one `make validate-catalog` prints, not a hand tally |
-| `.bkr` coupon files that exist today | 10 <!--count:coupon-dir-bkr--> + 2 | 10 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`, and `Sampler-Cards` (the labeled card the sampler sheets stand on, bikar #294 — not a calibration coupon, but a print coupon in the same directory), `Loose-Fit-Coupon` (LP-1, sampler sheet 4, bikar #296), `Swatch-Chip` (the filament swatch card, D-105, bikar #307 — a print coupon too, not a calibration one), and `Dovetail-Coupon` (SLD-1, the dovetail join for split piece halves, D-107, bikar #309). The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
+| `.bkr` coupon files that exist today | 12 <!--count:coupon-dir-bkr--> + 2 | 12 is the file count of `bikar/patterns/Coupons/` at `origin/main`, not a tally: `Machine-Card`, `Fit-Coupon`, `Clipseat-Fit-Coupon`, `Clip-Coupon`, `Lego-Clutch-Coupon`, `Frame-Band-Coupon`, and `Sampler-Cards` (the labeled card the sampler sheets stand on, bikar #294 — not a calibration coupon, but a print coupon in the same directory), `Loose-Fit-Coupon` (LP-1, sampler sheet 4, bikar #296), `Swatch-Chip` (the filament swatch card, D-105, bikar #307 — a print coupon too, not a calibration one), and `Dovetail-Coupon` (SLD-1, the dovetail join for split piece halves, D-107, bikar #309), and `Split-Fit-Coupon` and `Split-Trap-Coupon` (SPL-1, the split coaster's stud fit and trapped piece, bikar #319). The other 2 live with the bricks and no directory listing separates them from ordinary models, so they are **enumerated instead of counted** — `patterns/Lego/Seam-Coupon.bkr` (LG-P1), `patterns/Lego/Rosette-Brick.bkr` (LG-B2) |
 
 **What is already built, so no one re-does it.** The machine card is authored and
 every rung renders: [`calibration-design.md`](../../design/printing/calibration-design.md) §7 carries a
@@ -635,7 +636,7 @@ Checked against the repo, not against memory. Done / not done is stated per item
    23 pieces, euler, watertightness and volume in
    [`calibration-design.md`](../../design/printing/calibration-design.md) §7, plus independent
    silhouette and Pappus checks on MC-4 and z-level checks on MC-3.
-2. All 10 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
+2. All 12 <!--count:coupon-dir-bkr--> coupon `.bkr` files exist in
    `bikar/patterns/Coupons/`. This line said **four** until 2026-08-03, two
    coupons after it stopped being true — §2's row above and this one are the
    two sites, and only one of them was ever updated.

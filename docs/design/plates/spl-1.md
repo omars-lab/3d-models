@@ -1,0 +1,110 @@
+---
+plate: spl-1
+recipe: spl-1.yaml
+iteration: 1
+stage: waiting
+times_printed: 0
+runs: []
+answers: "For a split coaster: which gap between a 2 mm stud and its socket presses in and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves?"
+kind: new
+maturity: experiment
+bets: []
+unblocks: []
+minutes: 43
+grams: 18.3
+bed_plates: 1
+risk: watch
+pictures:
+  - spl-1-media/bed.png
+  - spl-1-media/slice.png
+---
+
+# spl-1 — the split coupon: how tight a stud, how thick a floor, does a lip hold a piece
+
+**In short.** A split coaster is printed as two halves and glued at the cut. Studs on the lower
+half sit in sockets in the upper half and line the two up. Before a full split coaster prints,
+this plate asks three things in the hand: which stud fit holds, whether a socket shows through
+the top face, and whether a lip keeps a loose piece trapped between the halves. It is the first
+plan item of [the split design §9](../pieces/split-with-studs-design.md). The plate is
+[`spl-1.yaml`](spl-1.yaml). One bed, 43 minutes, about 18.3 g, in the color you pick when you say
+yes.
+
+## What it is
+
+- **Fit pairs**, twelve of them: bikar's `Split-Fit-Coupon`, a 15 mm square tile 4.4 mm tall, cut
+  at 2.2 mm, with one stud in the middle (bikar #319). Each pair is an L tile (the stud half) and
+  a U tile (the socket half) with the same label. The gap is the socket's width less the stud's;
+  below zero the socket is narrower than the stud, a press fit.
+  - G-10, G-05, G00, G05, G10, G15: a 2 mm stud at gaps −0.10 to 0.15 mm, floor 0.6
+  - S00, S05: a 1.5 mm stud at gaps 0 and 0.05
+  - B00, B05: a 3 mm stud at gaps 0 and 0.05
+  - F08, F10: floors of 0.8 and 1.0 mm over the socket, gap 0.05 (the 0.6 floor is G05). A
+    thicker floor makes the stud that much shorter.
+- **Trap pairs**, two: bikar's `Split-Trap-Coupon`, a 25 mm tile whose halves each have a
+  hexagonal opening with a 0.8 mm lip, and a loose hexagon (P) that sits between them. At room 0
+  (T0) the piece is as tall as its cavity; at room 0.2 (T2) it is 0.2 mm shorter and can rattle.
+- **The tiles carry no labels.** The coaster block has no way to engrave text yet, so the bed
+  picture below is the map: take each tile off and bag it under the name drawn on it.
+
+**The color is picked at the send**, as on sld-1: say it with the yes. The show-through check
+wants the lightest color you have loaded.
+
+**What I assumed, for you to change:**
+
+- **The ladder values** are the split design's §9 values. None of them is a measured fit yet;
+  that is what this print is for.
+- **One stud per tile**, in the middle. A real split coaster has several, and two studs can bind
+  where one would not. That waits for a real coaster.
+- **No kite trap pair yet.** The design asks for one; it comes after this print shows whether the
+  lip holds at all.
+- **No side cut picture.** bikar hands both halves over as printed, each 2.2 mm tall from the
+  bed, so the side-cut tool would draw them on top of each other instead of stacked.
+
+## Why print it
+
+It is the cheapest print that settles the split coaster's open numbers. A full split coaster
+costs far more filament and time, and if its studs bind or its sockets show through, the whole
+print is lost. Here each wrong answer costs one 15 mm tile.
+
+## Pictures
+
+Where each tile sits on the bed, with its name on it. Only the part of the bed the pieces take is
+drawn; the trap tiles are the four big squares, their loose pieces the two small hexagons.
+
+![spl-1 on the bed: 24 small squares named G-10L to F10U, four larger squares with hexagonal openings named T0L, T0U, T2L, T2U, and two hexagons T0P and T2P](spl-1-media/bed.png)
+
+The slice as Bambu Studio draws it: the stud or socket shows as a dot in the middle of each small
+tile.
+
+![spl-1 in the slicer: green square tiles each with a dot in the middle, and four larger tiles with hexagonal openings](spl-1-media/slice.png)
+
+## Cost and risk
+
+One bed, 43 minutes, about 18.3 g (local slice, 2026-10-06, from bikar main after bikar #319, X2D
+preset and PLA Basic, sliced for the Textured PEI plate Bambu Studio has saved, no slicer
+warnings, nothing sent). One color, so no swaps.
+
+**Risk: watch.** The studs are 2 mm wide and 1.4 mm tall at the 0.6 floor; a small stud can be
+knocked off by the nozzle, which is the fit coupon failing, not the printer. The tiles are small
+and could lift at a corner.
+
+## Your call
+
+- [ ] **Approve as it stands** — say the color with the yes
+- [ ] **Hold** — say why in the notes
+
+Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through the manage-approvals skill's `plate_approve.py`; a send spends the open approval, and a recipe change resets it.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
+
+## Timeline
+
+| Date | What happened | Where it is written |
+|---|---|---|
+| 2026-10-06 | proposed — the split design's first plan item (§9) | this page |
+| 2026-10-06 | sliced — local slice from bikar main after bikar #319, fits one bed, 43 minutes, 18.3 g, no slicer warnings | this page |

@@ -4,7 +4,7 @@
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
-    python3 tools/print_review.py bed <out.png> <plate.3mf>
+    python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py --self-test
 
@@ -39,7 +39,10 @@ wall.
 it, turned as it was turned, on the bed square with the front edge at the bottom, and each one
 named by the label in the bed map `bambu slice compose` wrote beside the plate
 (`<plate>.bedmap.json`; without it, by the object's file name). It is for plates whose sets look
-alike, so the person at the printer bags each one under the right name.
+alike, so the person at the printer bags each one under the right name. A label sits on its own
+piece when it fits there whole, and otherwise beside it, clear of every piece, with a line to it.
+`--zoom` draws only the part of the bed the pieces take, larger, so a plate of many small pieces
+(SPL-1: 30 squares 15 mm across) gets each label on its own piece instead of a web of lines.
 
 `side` cuts the frame and a piece straight down along a line, x0,y0 to x1,y1 mm in their shared
 frame, and draws the cut from the side: the frame grey, the piece gold, one row per label, every
@@ -271,6 +274,8 @@ def edge_sheet(out, region, paths):
 
 BED_MM = 256     # the X2D bed, mm (D-053)
 BED_PX = 4       # px per mm on the bed picture
+ZOOM_PX = 1400   # the long side of a --zoom bed picture, px (the size the plate pages shrink to)
+ZOOM_MARGIN = 8  # mm of bed kept round the pieces on a --zoom picture
 NUM = r"(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)"
 
 
@@ -320,22 +325,27 @@ def crosses(line, box):
                for i in range(n + 1))
 
 
-def label_spot(d, font, name, at, taken, mask, size, lines=()):
-    """Where a label's box goes: at the object's centre if that covers no object and no other
-    label, else the nearest such place on rings round it whose leader line crosses no other label
-    and whose box sits on no other leader. A box on top of small look-alike pieces hides the very
-    thing the picture is for, and a leader running through a neighbour's box points at the wrong
-    row (sheets-04g-fit: kite rungs under their labels, then KITE 0.10's line through KITE 0.05)."""
-    for r in range(0, size, 12):
+def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None):
+    """Where a label's box goes: at the object's centre if the box lies wholly on that object
+    (`own`, its footprint alone) or covers no object, and no other label; else the nearest place
+    on rings round it that covers no object, whose leader line crosses no other label and whose
+    box sits on no other leader. A box on top of small look-alike pieces hides the very thing the
+    picture is for, and a leader running through a neighbour's box points at the wrong row
+    (sheets-04g-fit: kite rungs under their labels, then KITE 0.10's line through KITE 0.05). A box
+    on its own piece points at nothing else. `size` is the picture's (width, height)."""
+    w, h = size
+    for r in range(0, max(w, h), 12):
         for k in range(1 if r == 0 else 16):
             a = 2 * math.pi * k / 16
             x, y = at[0] + r * math.cos(a), at[1] - r * math.sin(a)
             b = d.textbbox((x, y), name, font=font, anchor="mm")
             box = (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
-            if box[0] < 0 or box[1] < 0 or box[2] >= size or box[3] >= size:
+            if box[0] < 0 or box[1] < 0 or box[2] >= w or box[3] >= h:
                 continue
             if any(box[0] < t[2] and t[0] < box[2] and box[1] < t[3] and t[1] < box[3] for t in taken):
                 continue
+            if r == 0 and own is not None and own.crop(box).getextrema() == (255, 255):
+                return (x, y), box
             if r and (any(crosses((at, (x, y)), t) for t in taken) or any(crosses(ln, box) for ln in lines)):
                 continue
             if mask.crop(box).getbbox() is None:
@@ -344,36 +354,52 @@ def label_spot(d, font, name, at, taken, mask, size, lines=()):
     return at, (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
 
 
-def bed_picture(plate, labels, names=True):
+def bed_picture(plate, labels, names=True, zoom=False):
     """The bed from above, front edge at the bottom: each object in its own shade, its label on a
-    white box clear of every object and every other label, a line from the box to its object when
-    the box had to move. `labels` maps object id -> label; names=False leaves the boxes off."""
-    size = BED_MM * BED_PX
-    img = Image.new("RGB", (size, size + CAPTION), (24, 24, 24))
-    mask = Image.new("L", (size, size), 0)
+    white box on its own object when it fits there whole, else clear of every object and every
+    other label with a line from the box to its object. `labels` maps object id -> label;
+    names=False leaves the boxes off. zoom=True draws only the pieces' part of the bed, ZOOM_MARGIN
+    mm round them, at the scale that puts its long side at ZOOM_PX."""
+    with zipfile.ZipFile(plate) as zf:
+        objects = plate_objects(zf)
+    x0, y0, x1, y1, px = 0, 0, BED_MM, BED_MM, BED_PX
+    pts = [p for _, tris in objects for t in tris for p in t]
+    if zoom and pts:
+        x0 = max(0, min(p[0] for p in pts) - ZOOM_MARGIN)
+        y0 = max(0, min(p[1] for p in pts) - ZOOM_MARGIN)
+        x1 = min(BED_MM, max(p[0] for p in pts) + ZOOM_MARGIN)
+        y1 = min(BED_MM, max(p[1] for p in pts) + ZOOM_MARGIN)
+        px = ZOOM_PX / max(x1 - x0, y1 - y0)
+    w, h = round((x1 - x0) * px), round((y1 - y0) * px)
+    img = Image.new("RGB", (w, h + CAPTION), (24, 24, 24))
+    mask = Image.new("L", (w, h), 0)
     d, m = ImageDraw.Draw(img), ImageDraw.Draw(mask)
-    d.rectangle([0, 0, size - 1, size - 1], outline=(90, 90, 90), width=2)
+    d.rectangle([0, 0, w - 1, h - 1], outline=(90, 90, 90), width=2)
     for k in range(32, BED_MM, 32):  # a 32 mm grid, to read distances by eye
-        d.line([(k * BED_PX, 0), (k * BED_PX, size)], fill=(40, 40, 40))
-        d.line([(0, k * BED_PX), (size, k * BED_PX)], fill=(40, 40, 40))
-    f = lambda p: (p[0] * BED_PX, size - p[1] * BED_PX)
+        if x0 < k < x1:
+            d.line([((k - x0) * px, 0), ((k - x0) * px, h)], fill=(40, 40, 40))
+        if y0 < k < y1:
+            d.line([(0, h - (k - y0) * px), (w, h - (k - y0) * px)], fill=(40, 40, 40))
+    f = lambda p: ((p[0] - x0) * px, h - (p[1] - y0) * px)
     shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
               (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
     font = ImageFont.load_default(size=26)
-    named = []
-    with zipfile.ZipFile(plate) as zf:
-        objects = plate_objects(zf)
+    named, owns = [], []
     for k, (oid, tris) in enumerate(objects):
+        own = Image.new("L", (w, h), 0)
+        o = ImageDraw.Draw(own)
         for t in tris:
             d.polygon([f(p) for p in t], fill=shades[k % len(shades)])
             m.polygon([f(p) for p in t], fill=255)
+            o.polygon([f(p) for p in t], fill=255)
+        owns.append(own)
         xs = [p[0] for t in tris for p in t] or [0]
         ys = [p[1] for t in tris for p in t] or [0]
         named.append((labels.get(oid, oid), ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)))
     taken, lines = [], []
-    for name, centre in named if names else []:
+    for (name, centre), own in zip(named, owns) if names else []:
         at = f(centre)
-        (x, y), box = label_spot(d, font, name, at, taken, mask, size, lines)
+        (x, y), box = label_spot(d, font, name, at, taken, mask, (w, h), lines, own)
         taken.append(box)
         if (x, y) != at:
             lines.append((at, (x, y)))
@@ -382,18 +408,20 @@ def bed_picture(plate, labels, names=True):
     for (name, centre), box in zip(named if names else [], taken):
         d.rectangle(box, fill=(255, 255, 255))
         d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), name, fill=(0, 0, 0), font=font, anchor="mm")
-    d.text((size / 2, size + CAPTION / 2), "front of the bed", fill=(200, 200, 200), font=font, anchor="mm")
+    caption = "front of the bed" if not zoom else \
+        f"front of the bed (this is {x0:.0f} to {x1:.0f} mm across, {y0:.0f} to {y1:.0f} mm back)"
+    d.text((w / 2, h + CAPTION / 2), caption, fill=(200, 200, 200), font=font, anchor="mm")
     return img, named, taken, lines
 
 
-def bed_sheet(out, plate):
+def bed_sheet(out, plate, zoom=False):
     side = Path(re.sub(r"\.3mf$", "", plate, flags=re.I) + ".bedmap.json")
     labels = {}
     if side.exists():
         labels = {r["object"]: r["label"] for r in json.loads(side.read_text())["objects"]}
     else:
         print(f"no bed map at {side}: naming objects by their 3MF id")
-    img, named, _, _ = bed_picture(plate, labels)
+    img, named, _, _ = bed_picture(plate, labels, zoom=zoom)
     for name, (x, y) in named:
         print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
     img.save(out)
@@ -603,7 +631,36 @@ def bed_self_test():
     lit = lambda x, y: sum(img.getpixel((int(x * BED_PX), int((BED_MM - y) * BED_PX)))) > 300
     covers = lambda b: any(sum(img.getpixel((x, y))) > 300 for x in range(int(b[0]), int(b[2])) for y in range(int(b[1]), int(b[3])))
     apart = lambda a, b: a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]
+    # Two 15 mm squares 17 mm apart, as SPL-1's fit tiles sit: zoomed, each label fits on its own
+    # square and needs no line; at the whole-bed scale it does not fit and moves off with one.
+    square = ('<model><resources><object id="1"><mesh><vertices>'
+              '<vertex x="-7.5" y="-7.5" z="0"/><vertex x="7.5" y="-7.5" z="0"/>'
+              '<vertex x="7.5" y="7.5" z="0"/><vertex x="-7.5" y="7.5" z="0"/></vertices><triangles>'
+              '<triangle v1="0" v2="1" v3="2"/><triangle v1="0" v2="2" v3="3"/></triangles></mesh></object>'
+              '</resources></model>')
+    pair = ('<model><resources>'
+            '<object id="2"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+            '<object id="4"><components><component p:path="/3D/Objects/o.model" objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>'
+            '</resources><build>'
+            '<item objectid="2" transform="1 0 0 0 1 0 0 0 1 120 100 0"/>'
+            '<item objectid="4" transform="1 0 0 0 1 0 0 0 1 137 100 0"/>'
+            '</build></model>')
+    sq = io.BytesIO()
+    with zipfile.ZipFile(sq, "w") as zf:
+        zf.writestr("3D/3dmodel.model", pair)
+        zf.writestr("3D/Objects/o.model", square)
+    zimg, znamed, zboxes, zlines = bed_picture(sq, {"2": "G-10L", "4": "G-10U"}, zoom=True)
+    _, _, _, flines = bed_picture(sq, {"2": "G-10L", "4": "G-10U"})
+    bare = bed_picture(sq, {}, names=False, zoom=True)[0]
+    on_own = lambda b, cx: all(sum(bare.getpixel((x, y))) > 300 for x in (int(b[0]), int(b[2]) - 1)
+                               for y in (int(b[1]), int(b[3]) - 1)) and b[0] < cx < b[2]
+    zf_ = lambda mm: (mm - (120 - 7.5 - ZOOM_MARGIN)) * ZOOM_PX / (17 + 15 + 2 * ZOOM_MARGIN)
     return [
+        ("bed --zoom draws only the pieces' part of the bed, long side at ZOOM_PX",
+         zimg.size[0] == ZOOM_PX and zimg.size[1] < ZOOM_PX + CAPTION),
+        ("bed --zoom puts each label on its own piece, with no lines",
+         not zlines and on_own(zboxes[0], zf_(120)) and on_own(zboxes[1], zf_(137))),
+        ("bed at the whole-bed scale moves a label that does not fit its piece", len(flines) >= 1),
         ("bed fills a placed bar along its length", lit(58, 50) and lit(42, 50)),
         ("bed leaves the bed beside the bar empty", not lit(50, 56)),
         ("bed turns a bar a quarter turn", lit(150, 158) and not lit(158, 150)),
@@ -624,8 +681,8 @@ if __name__ == "__main__":
     if len(a) >= 3 and a[0] in ("sheet", "art"):
         (sheet if a[0] == "sheet" else art_sheet)(a[1], a[2:])
         sys.exit(0)
-    if len(a) == 3 and a[0] == "bed":
-        bed_sheet(a[1], a[2])
+    if len(a) in (3, 4) and a[0] == "bed" and a[3:] in ([], ["--zoom"]):
+        bed_sheet(a[1], a[2], zoom=a[3:] == ["--zoom"])
         sys.exit(0)
     if len(a) >= 6 and a[0] == "side":
         side_sheet(a[1], a[2], a[3:])

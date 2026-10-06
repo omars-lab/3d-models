@@ -1,0 +1,67 @@
+# spl-1 — the split coupon: how tight a stud, how thick a socket floor, does a lip trap a piece
+#
+# The split design's first plan item (docs/design/pieces/split-with-studs-design.md §9). A split
+# coaster is two halves glued at a cut, lined up by studs on the lower half that sit in sockets in
+# the upper half. Three things are not known yet, and this plate asks each in the hand before a
+# full coaster prints:
+#   - which gap between a stud and its socket presses in and holds (the default is 0.05 mm across,
+#     the snug rung of CAL-FIT-01, ported from round fit pins and never printed in a split);
+#   - whether a socket shows through the 0.6 mm floor over it on the top face;
+#   - whether a lip keeps a loose piece in between the two halves (option A, call 6).
+#
+# Fit pairs: bikar's patterns/Coupons/Split-Fit-Coupon.bkr, a 15 mm square tile 4.4 mm tall cut at
+# 2.2, one stud. Lower is the stud half, Upper the socket half, printed face down. The gap is the
+# socket's diameter less the stud's; below zero it is a press fit.
+#   gap ladder, 2 mm stud, floor 0.6:  -0.10 -0.05 0 0.05 0.10 0.15   (labels G-10 … G15)
+#   small stud, 1.5 mm:                0 and 0.05                     (S00, S05)
+#   large stud, 3 mm:                  0 and 0.05                     (B00, B05)
+#   floor ladder, gap 0.05:            0.8 and 1.0 (0.6 is G05)       (F08, F10)
+# Each pair is an L and a U tile with the same label. The coaster block has no text clause yet,
+# so the tiles are not engraved: the bed picture is the map, and the pairs come off in its order.
+#
+# Trap pairs: bikar's patterns/Coupons/Split-Trap-Coupon.bkr, a 25 mm square tile with one hexagon
+# trapped under a 0.8 mm lip, at room 0 (a 3.2 mm piece, as tall as its cavity) and room 0.2
+# (3.0 mm, which can rattle). The kite pair the design also asks for comes later.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`. The
+# show-through check wants the lightest color loaded.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/spl-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.1 }, label: G-10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.1 }, label: G-10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.05 }, label: G-05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.05 }, label: G-05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0 }, label: G00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0 }, label: G00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.05 }, label: G05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.05 }, label: G05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.1 }, label: G10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.1 }, label: G10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.15 }, label: G15L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.15 }, label: G15U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0 }, label: S00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0 }, label: S00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0.05 }, label: S05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0.05 }, label: S05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0 }, label: B00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0 }, label: B00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0.05 }, label: B05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0.05 }, label: B05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 0.8 }, label: F08L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 0.8 }, label: F08U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 1 }, label: F10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 1 }, label: F10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0 }, label: T0L }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0 }, label: T0U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0 }, label: T0P }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0.2 }, label: T2L }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0.2 }, label: T2U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0.2 }, label: T2P }
