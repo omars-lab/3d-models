@@ -18,6 +18,7 @@ THEMES="$TOP/.claude/skills/color-themes/scripts/themes.py"
 REVIEWS="$TOP/.claude/skills/review-theme/scripts/reviews.py"
 CATALOG="$TOP/.claude/skills/color-themes/scripts/catalog.py"
 PRICES="$TOP/.claude/skills/color-themes/scripts/prices.py"
+SWATCH="$TOP/.claude/skills/color-themes/scripts/swatch.py"
 if [ ! -f "$THEMES" ] || [ ! -f "$REVIEWS" ] || [ ! -f "$CATALOG" ] || [ ! -f "$PRICES" ]; then
   echo "pre-commit: no color-themes scripts in this worktree — skipping" >&2
   exit 0
@@ -28,6 +29,7 @@ if git diff --cached --name-only | grep -Eq '^(docs/design/coaster/themes/|\.cla
   python3 "$CATALOG" check --quiet || exit 1
   python3 "$PRICES" --self-test || exit 1
   python3 "$THEMES" --self-test || exit 1
+  [ -f "$SWATCH" ] && { python3 "$SWATCH" --self-test || exit 1; }
   python3 "$REVIEWS" --self-test || exit 1
   python3 "$THEMES" check --all --quiet || exit 1
   exec python3 "$REVIEWS" check --all

@@ -54,7 +54,7 @@ A call line's tick must match its call on the open-calls page: ticked when the p
 ## Prints and supplies
 
 - [x] A custom order prints one plate per color, so each new coloring gets its own yes: the planner already plans this way, nothing to build (D-103; `bambu order plan`, 3d-models #561). *Who:* 3d-models. *Tracked:* [D-103](../../../docs/working-model/decisions-log.md#d-103--a-custom-order-prints-one-plate-per-color-so-each-new-coloring-gets-its-own-yes).
-- [ ] The swatch card: a plate recipe and page, one chip per color we own or plan to buy (D-105). *Who:* 3d-models. *Tracked:* [coaster-pipeline backlog](../../../docs/tasks/coaster-pipeline/backlog.md#owner-gated).
+- [x] The swatch card: a plate recipe and page, one chip per color we own or plan to buy (D-105; `swatch.py`, 3d-models #574). *Who:* 3d-models. *Tracked:* [coaster-pipeline backlog](../../../docs/tasks/coaster-pipeline/backlog.md#owner-gated).
 - [ ] The swatch card printed. *Who:* Omar. *Tracked:* [D-105](../../../docs/working-model/decisions-log.md#d-105--swatches-are-our-own-printed-card-from-bambu-filament-first).
 - [ ] The four first themes (Midnight blue, Night sky, Terracotta souk, Iznik tile): a plate recipe per color for each, and the list of colors to buy, priced (D-106). *Who:* 3d-models. *Tracked:* [coaster-pipeline backlog](../../../docs/tasks/coaster-pipeline/backlog.md#owner-gated).
 - [ ] The colors for three of those themes bought, and the themes printed. *Who:* Omar. *Tracked:* [D-106](../../../docs/working-model/decisions-log.md#d-106--the-first-themes-to-print-are-the-bottom-row-midnight-blue-night-sky-terracotta-souk-iznik-tile).

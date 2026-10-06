@@ -15,11 +15,16 @@
 
 owned_read: "2026-10-04, `bambu filament --json`"
 
+#
+# code: the spool's own product code, read off its tag on 2026-10-05 (`bambu filament --json`:
+#   `tray_sub_brands` names the line, the letter-digit end of `tray_id_name` is the catalog's
+#   `slot` in that line, and `cols` matched the catalog's hexes for all four). The swatch plates
+#   (scripts/swatch.py) are named by it.
 owned:
-  - { id: pink,  hex: "#F5547C", name: "Hot Pink",     note: "same hex as PLA Basic Hot Pink" }
-  - { id: blue,  hex: "#0047BB", name: "Blue",         note: "no PLA Basic or Matte row has this hex" }
-  - { id: black, hex: "#000000", name: "Black",        note: "same hex as PLA Basic Black and PLA Matte Charcoal" }
-  - { id: green, hex: "#00AE42", name: "Bambu Green",  note: "same hex as PLA Basic Bambu Green" }
+  - { id: pink,  hex: "#F5547C", name: "Hot Pink",     code: "10204", note: "PLA Basic Hot Pink, by its tag" }
+  - { id: blue,  hex: "#0047BB", name: "Blue",         code: "13903", note: "PLA Silk Neon City by its tag: a two-color spool, #0047BB and #BB22A3; themes draw it as its blue only" }
+  - { id: black, hex: "#000000", name: "Black",        code: "10101", note: "PLA Basic Black, by its tag" }
+  - { id: green, hex: "#00AE42", name: "Bambu Green",  code: "10501", note: "PLA Basic Bambu Green, by its tag" }
 
 buy:
   - { id: jade-white,      hex: "#FFFFFF", name: "Jade White",      line: "PLA Basic", code: "10100" }
