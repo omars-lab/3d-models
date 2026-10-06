@@ -20,14 +20,7 @@ open here today: the split coupons and plates wait on Omar's tick, under "Owner-
 2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-3. **Re-vendor the 26 coaster meshes that bikar main now draws differently.** A full
-   `make coasters` against bikar main (e0da883, 2026-10-06) re-renders 26 of the standard
-   meshes in `src/Coasters/` unlike the checked-in copies (every standard mesh but the
-   GimTvN9hw4U and 7apC5Q9QS-8 interlock and pegs ones, 0ke_GpoBa-s and 88q-u2eWZqg). The
-   split coasters are new files, not among them. Re-render, check each with `--check`, look at the pictures,
-   and say in the PR what bikar change moved each one. First found as eight by the 0ke_GpoBa-s
-   coaster step, 2026-10-06; the first full run past the split coasters found 26.
-4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+3. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -36,7 +29,7 @@ open here today: the split coupons and plates wait on Omar's tick, under "Owner-
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
+4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 

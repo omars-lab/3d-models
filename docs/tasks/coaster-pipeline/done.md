@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-06 — The 26 coaster meshes bikar main draws differently are re-vendored: bikar #291 (walls traced between grid points) moved all 26, and bikar #297 (strap holes cut on their exact outline) moved the nine minimal, frame and radial ones again; each traced by rendering at the commits on either side (3d-models #592)
 - 2026-10-06 — The gBV split coasters pass the mesh gate at every size from 80 to 125 mm: a half's caps mend the zero-area triangles laid over vertices in a line, which failed 100 mm on both files, 115 on the lip and 109 on the flange (bikar #322)
 - 2026-10-06 — A whole-file `render --check` of a split coaster gates each half and each piece color on its own instead of failing the closed view on the linkage gate, and the coaster mesh-hash test no longer fails on a comment edit (bikar #321); `make coasters` no longer skips split coasters (3d-models #591)
 - 2026-10-06 — Way c, the pocket: `hold pocket` on a split coaster prints each piece half in place in its half, in a closed pocket with a neck at the face and at the cut, and the `Split-Pocket-Coupon` tries it at one and two layers of air (bikar #320); its plate [pkt-1](../../design/plates/pkt-1.md) with two pairs per rung, sliced and pictured up to the owner gate (34 minutes, 11.6 g); the print waits on Omar in the backlog (3d-models #590)
