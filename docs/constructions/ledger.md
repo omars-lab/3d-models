@@ -26,7 +26,7 @@ did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)
 Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**13 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**14 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -63,9 +63,12 @@ drawn segment list through an isometry and gave the cookbook its `Ray` recipe), 
 construction drawn on paper with a compass and filmed, and the first whose youtube source had
 to be rewritten for the importer (its petal ring, a half turn of a pair of segments, is written
 as the whole ten-fold turn of one; youtube branch `coaster-0ke`).
-All thirteen now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+`88q-u2eWZqg` landed 2026-10-06 with bikar PR #317, a minimal coaster too: Eman Zainab's
+sixteen-petal rosette, one unbroken line of sixteen Vs and sixteen roofs, imported from youtube
+main as it is, nothing refused.
+All fourteen now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
-`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`, `CS-16`) — P3.3 of the umbrella plan,
+`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`, `CS-16`, `CS-17`) — P3.3 of the umbrella plan,
 which built on the `coaster` declaration (P1.6/P2.7).
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
@@ -120,7 +123,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `1TclLO9JKAA` | Parallel 9-fold Star Rosette, "Avoiding Open Paths" (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `1h7iWJaoN80` | Folio 192 heptagonal panel, Anonymous Persian Compendium (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
-| `88q-u2eWZqg` | A 16-petal rosette in one unbroken line | done | — | — | — | — | — | — | — |
+| `88q-u2eWZqg` | A 16-petal rosette in one unbroken line | done | `bikar/patterns/Constructions/88q-u2eWZqg.bkr` | PASS 33/0 | PASS 1.0/1.0 | — | `src/Coasters/88q-u2eWZqg-minimal-coaster-standard.stl` | CS-17 | — |
 | `A9fefFurD_s` | Broug's ten-point star from one circle | done | — | — | — | — | — | — | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
@@ -207,3 +210,8 @@ O1 `PASS: 40 compared, 0 failed, 21 skipped/extra`; O2
 Before the branch's `@export` line the youtube hero drew the axes, the circle and the four
 diameters too, which naqsh keeps as scaffold, and recall was 0.71 against the same import. O3 is
 `—`: there is no `.ggb` export to build a reference from.
+
+`88q-u2eWZqg` was scored at its import on 2026-10-06, on youtube main (beb19b3), with no source
+rewrite: O1 `PASS: 33 compared, 0 failed, 11 skipped/extra`; O2
+`O2 PASS: edge-SSIM 0.9633 (min 0.7), recall 1.0 precision 1.0 (min 0.98)`. The hero export is
+newer than the source's last commit, so it is not stale. O3 is `—`: there is no `.ggb` export.
