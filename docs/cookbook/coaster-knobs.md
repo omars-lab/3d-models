@@ -305,9 +305,9 @@ coaster Coaster
 **Watch out:** a piece is as thick as the straps stand (`emboss 1.2` gives 1.2 mm
 pieces), because its pocket is the cell between them; [`height`](#taller-or-shorter-pieces)
 makes it taller or shorter. A loose face with no fill color is refused, because a
-piece needs a filament. A face within two grid cells of the coaster's edge stays part of the frame. Only the solid
-frame is built so far: openwork, joins, a border, a twist and the color preview are all
-refused alongside `loose`. The 0.15 mm gap is a starting guess until the
+piece needs a filament. A face within two grid cells of the coaster's edge stays part of the frame. On a
+[straps-only coaster](#loose-pieces-in-an-open-frame) the pieces drop into holes instead of
+pockets. Openwork, joins, a border and a twist are all refused alongside `loose`. The 0.15 mm gap is a starting guess until the
 [gBV fit sheet](../design/plates/sheets-04.md) prints.
 
 Related: [color regions](#color-regions), [stars and colored faces](stars-and-fills.md),
@@ -406,6 +406,48 @@ limit beyond "more than 0": nothing has printed a tall or short piece yet, and
 Related: [loose pieces in pockets](#loose-pieces-in-pockets),
 [peaked pieces](#peaked-pieces-a-soft-point-on-top),
 [the loose-pieces design](../design/coaster/loose-pieces-design.md#32-the-fit-and-whether-the-piece-sits-flush-proud-or-recessed).
+
+## Loose pieces in an open frame
+
+A straps-only coaster (`outline pattern`, the minimal style) has no slab, so its faces are
+holes that go right through. `loose` on it leaves each picked hole open and makes a piece
+that drops into it: the frame is exactly the plain coaster, and each piece is as tall as the
+straps, so it sits level with them on the table. One file gives both, `--piece Frame` and
+`--piece <color>`. The picture lifts the pieces 30 mm above the frame, for the centre
+octagon and for the eight four-sided faces. The eight triangles between them are left out: with
+3 mm straps they come out 0.74 mm across, under the 1.2 mm floor, and bikar refuses them by name.
+
+<!-- recipe: coaster-loose-open; swap: orbit == 0 | orbit == 2; lifted -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Body = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 2 color Gold
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4
+  strap width 3
+  color straps Body
+  loose where orbit == 2 clearance 0.1
+```
+![A gray open star frame with gold pieces lifted above its holes: the centre octagon, and the eight four-sided faces](img/coaster-loose-open.png)
+
+**Watch out:** the piece is cut to the strap's own edge, the rounded corners included, so it
+fits the hole the frame really prints, not the drawn face. Each hole must be one the frame
+walls all round; a face the frame's outside edge cuts is refused by name rather than given a
+piece that would fall through. `height` still makes the pieces taller or shorter than the
+straps. With nothing under them, the pieces are held only by the gap; the [gBV fit sheet](../design/plates/sheets-04g-fit.md) is
+where that gap gets tried.
+
+Related: [loose pieces in pockets](#loose-pieces-in-pockets),
+[taller or shorter pieces](#taller-or-shorter-pieces),
+[the loose-pieces design](../design/coaster/loose-pieces-design.md).
 
 ## Packing pieces in two rows
 

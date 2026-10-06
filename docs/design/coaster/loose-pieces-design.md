@@ -167,6 +167,9 @@ in cross-section below ([picture source](loose-pieces-media/frames.html), render
   The table holds the pieces, like the key. Least new geometry, but lift the coaster and every
   piece drops unless the fit holds it by friction, and whether a friction fit holds on this printer
   is exactly what is not known.
+  *Built, bikar #314 (2026-10-06):* `loose` on an `outline pattern` coaster gives this frame.
+  `--piece Frame` is the plain minimal coaster, the same vertex for vertex, and the pieces are as
+  tall as the straps unless `height` says otherwise. Whether the gap holds them is still unmeasured.
 
 ### 3.2 The fit, and whether the piece sits flush, proud or recessed
 
@@ -379,7 +382,7 @@ and a separate page stays possible later if the audience moves outside the org.
 
 ## 6. What would need building
 
-In order; each item names the test that shows it works. Nothing here is started.
+In order; each item names the test that shows it works. What has shipped is marked under its item.
 
 **bikar**
 
@@ -400,6 +403,10 @@ In order; each item names the test that shows it works. Nothing here is started.
    gap at 80 and 90 mm (the staircase wall touched all 24, and that case stays in the tests as one
    that must fail); 24 pieces, 18 six-sided and 6 twelve-sided; gBV gives 41, the smallest 2.4 mm
    across. A face within two grid squares of the coaster's edge stays part of the frame.
+   *The open frame (F3) too, bikar #314 (2026-10-06):* on the gBV minimal coaster all 41
+   openings come out with a piece each, 0.1 mm gap all round, and the frame matches the plain
+   coaster exactly. The edge rule is for a slab only: on an open frame it dropped two outer pieces
+   without a word, so there a face the frame cannot wall is refused by name instead.
 4. **The Lab.** A Loose button on each ring row and on the picker chip; the parts list; the guided
    mode's step bar. *Test:* a Playwright run through the seven steps of §4, and a look in a real
    browser before it ships.
