@@ -6320,3 +6320,29 @@ Night sky, Terracotta souk and Iznik tile on its bottom row.
 - **Each send still needs his yes** (D-093). These are experiment plates.
 
 **What would reverse it:** the first of the four in the hand.
+
+## D-107 — The first join to try between two piece halves is the dovetail (SLD-1)
+
+Omar, 2026-10-05, in chat, after the
+[joining note](../design/pieces/join-halves-design.md) shipped: "for joints i want to try the
+dovetail".
+
+### The options as offered
+
+- The note's §6 laid out four joins: **nothing between the halves in way c** (the note's pick if
+  way c), **a slide (SLD-1)** (the note's pick if way a or b), **snap rows on SPL-1** for the
+  coaster halves, and **a screw (SCR-1)**, not recommended.
+- **Chosen, the slide:** the dovetail coupon SLD-1 is built and goes on a plate for his yes.
+
+### What it changes
+
+- **bikar gets a `dovetail` statement** on an extruded piece: a rail or a slot across the cut
+  face, its sides stepped one layer at a time.
+- **The coupon is three pairs of hexagon halves** at 0.10, 0.15 and 0.20 mm per side, each half
+  engraved with its gap. Its plate page waits for his yes, like any experiment.
+- **Calls 10 and 11 stay open.** The dovetail suits ways a, b and d, where the halves are loose,
+  and not way c, where each half sits in its own pocket. If SLD-1 holds, it removes one of way
+  a's costs (twice the parts to place); it says nothing about way c.
+
+**What would reverse it:** SLD-1 pairs that will not slide together by hand, or come apart when
+shaken, at every gap.
