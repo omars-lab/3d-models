@@ -9,29 +9,25 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 ## Open, in ROI order
 
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
-consturciotn and move back to split coasters and split inflills"), so they come first.
+consturciotn and move back to split coasters and split inflills"), so they come first. None is
+open here today: the split coupons and plates wait on Omar's tick, under "Owner-gated" below.
 
-1. **A whole-file `render --check` of a split file fails the linkage gate (L3), in bikar.** The two
-   halves are drawn stacked, so they touch at the cut and read as fused: the merged
-   `gBV_JTt3Kxk-split-lip-coaster.bkr` fails with 63 pairs, and both split coupons fail the same
-   way. Prints are safe, since each half is rendered with `--piece` and passes. Either the gate
-   learns that halves meeting at the cut are not fused, or the default render lays the halves
-   apart. Found while building SPL-1 (bikar #319), 2026-10-06.
-2. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+1. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3, board #4.)
-3. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-4. **Re-vendor the eight coaster meshes that bikar main now draws differently.** A full
-   `make coasters` against bikar main re-renders these unlike the copies in `src/Coasters/`:
-   the 7apC5Q9QS-8 border, plain, fill, minimal, minimal-frame and twist coasters,
-   bknVRSMcLj0, and gBV_JTt3Kxk minimal. Re-render them, check each with `--check`, look at
-   the pictures, and say in the PR what bikar change moved each one. Found by the 0ke_GpoBa-s
-   coaster step, 2026-10-06, the first `make coasters` to run past the split coasters.
-5. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+3. **Re-vendor the 26 coaster meshes that bikar main now draws differently.** A full
+   `make coasters` against bikar main (e0da883, 2026-10-06) re-renders 26 of the standard
+   meshes in `src/Coasters/` unlike the checked-in copies (every standard mesh but the
+   GimTvN9hw4U and 7apC5Q9QS-8 interlock and pegs ones, 0ke_GpoBa-s and 88q-u2eWZqg). The
+   split coasters are new files, not among them. Re-render, check each with `--check`, look at the pictures,
+   and say in the PR what bikar change moved each one. First found as eight by the 0ke_GpoBa-s
+   coaster step, 2026-10-06; the first full run past the split coasters found 26.
+4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -40,7 +36,7 @@ consturciotn and move back to split coasters and split inflills"), so they come 
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-6. **Standard-size plate (P5.2)** — only after item 2 settles the CAL-CST numbers (board #6).
+5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
@@ -112,7 +108,7 @@ Sending a print and which filament to load.
   its pieces will not all match the picture.
 - **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
   Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
-  tick boxes; a yes means writing the record, which is item 2 above for minis-01.
+  tick boxes; a yes means writing the record, which is item 1 above for minis-01.
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
