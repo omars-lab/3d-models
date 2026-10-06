@@ -1,0 +1,48 @@
+# Where the Gim pattern (CS-1) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-1
+# (lines 1 to 3). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A teaching rosette: its maker names no building, so there is no found_at and no era. The story
+# gives the family one dated line, with the scholars who give it.
+
+construction: GimTvN9hw4U
+short: Gim
+fold: 6
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: A six-pointed star rosette, built step by step from a hexagon, drawn after a GeoGebra lesson by Sarah Brewer (mathémartiste).
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  A six-pointed star rosette, built step by step from a hexagon. Simple six- and eight-pointed star
+  patterns are among the earliest woven patterns in Islamic art, at the mosque of Ibn Tulun in
+  Cairo, built 876–879.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - No building is known for this rosette. Do not give it one.
+  - The Ibn Tulun design is a field of stars and hexagons, not this rosette. Never call the rosette
+    itself "one of the oldest Islamic patterns".
+
+sources:
+  - title: Sarah Brewer (mathémartiste), "GeoGebra for Absolute Beginners - Simple 6-fold Star Rosette PART 1" (YouTube, 2025)
+    url: https://www.youtube.com/watch?v=GimTvN9hw4U
+    supports: [caption, fold, story]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: GeoGebra for Absolute Beginners - Simple 6-fold Star Rosette PART 1
+  url: https://www.youtube.com/watch?v=GimTvN9hw4U

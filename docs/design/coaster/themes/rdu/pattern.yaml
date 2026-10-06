@@ -1,0 +1,53 @@
+# Where the rDu pattern (CS-8) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-8
+# (lines 1 to 4). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A teaching tile: its maker names no building, so there is no found_at and no era. The story
+# gives the family's history, each line with the scholar who gives it.
+
+construction: rDuxHF3xMOc
+short: rDu
+fold: 8
+form: Star
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: An eight-pointed star in a square tile, framed by octagons, drawn after a GeoGebra lesson by Sarah Brewer.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Simple six- and eight-pointed star patterns are among the earliest woven patterns in Islamic
+  art, at the mosque of Ibn Tulun in Cairo, built 876–879. Brian Wichmann calls eight-pointed
+  stars with octagons one of the commonest Islamic patterns, found from Spain and Morocco to India.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - No building is known for this tile. Do not give it one, and do not say it is the same as any
+    one plate in a pattern book: it is close to one, but nobody has shown the proportions match.
+  - The family's first dated example. A 12th-century Iranian date rests on a book nobody here has
+    opened; print the Ibn Tulun line instead.
+
+sources:
+  - title: Sarah Brewer (mathémartiste), "8-fold star rosette with sequences in GeoGebra" (YouTube, 2026)
+    url: https://www.youtube.com/watch?v=rDuxHF3xMOc
+    supports: [caption, fold]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+  - title: Brian Wichmann, Tiling Search P222, "Bourgoin, Plate 48"
+    url: https://tilingsearch.mit.edu/HTML/data161/P222.html
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: 8-fold star rosette with sequences in GeoGebra
+  url: https://www.youtube.com/watch?v=rDuxHF3xMOc

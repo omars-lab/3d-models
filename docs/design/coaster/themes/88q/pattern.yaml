@@ -1,0 +1,55 @@
+# Where the 88q pattern (CS-17) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-17
+# (lines 1 to 4). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A teaching rosette: its maker names no building, so there is no found_at and no era. The Qijmas
+# minbar is a relative with an open-licence photo, not where this rosette comes from. The video
+# title says "4 Fold"; the rosette has sixteen petals, so the fold is 16.
+
+construction: 88q-u2eWZqg
+short: 88q
+fold: 16
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: Sixteen petals from two octagons, drawn as one unbroken line, after a lesson by Eman Zainab.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Sixteen-pointed stars adorn the dome of the Hasan Sadaqah mausoleum in Cairo by 1321, according
+  to Abdullahi and Embi. On the inlaid wooden minbar of the Qijmas al-Ishaqi mosque in Cairo,
+  finished 1480–1481, sixteen-pointed stars grow from round bosses.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Its fold. The video title says "4 Fold"; the rosette has sixteen petals. Never "four-fold
+    rosette".
+  - No building is known for this rosette. The Cairo lines are its family; never "from" the Qijmas
+    minbar or any other building.
+  - The family's first dated example. An earlier Cairo date rests on a book nobody here has opened;
+    print "by 1321".
+
+sources:
+  - title: Eman Zainab, "4 Fold Rosette with 16 Petals | Step by Step construction | Islamic Geometric Patterns" (YouTube, 2022)
+    url: https://www.youtube.com/watch?v=88q-u2eWZqg
+    supports: [caption, fold]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+  - title: Wikipedia, "Amir Qijmas al-Ishaqi Mosque"
+    url: https://en.wikipedia.org/wiki/Amir_Qijmas_al-Ishaqi_Mosque
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Eman Zainab
+  title: "4 Fold Rosette with 16 Petals | Step by Step construction | Islamic Geometric Patterns"
+  url: https://www.youtube.com/watch?v=88q-u2eWZqg

@@ -1,0 +1,50 @@
+# Where the 7ap pattern (CS-2) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-2
+# (lines 1 to 3). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A teaching rosette: its maker names no building, so there is no found_at and no era. The story
+# gives the family one dated line, with the scholars who give it.
+
+construction: 7apC5Q9QS-8
+short: 7ap
+fold: 8
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: Eight-fold rosettes on a square grid, with an octagon at each corner and a sixteen-pointed star at each heart.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Sarah Brewer, whose lesson we followed, calls it a classic eight-fold star rosette pattern.
+  Rosette petals round eight- and twelve-pointed stars appear in Baghdad by 1230, at the Abbasid
+  Palace, according to Abdullahi and Embi.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - No building is known for this rosette. Never "from Kairouan" or "from Baghdad"; the Baghdad
+    line is about rosette petals as a family, not this drawing.
+  - The family's first dated example. One catalogue puts it in Iran in the 12th century and an
+    encyclopedia puts eight-pointed stars in Tunisia in the 9th; neither rests on a source anyone
+    here has opened. Print neither, and no craft such as "carved brick".
+
+sources:
+  - title: Sarah Brewer (mathémartiste), "Geogebra for Beginners 8-Fold Rosette Walkthrough" (YouTube, 2021)
+    url: https://www.youtube.com/watch?v=7apC5Q9QS-8
+    supports: [caption, fold, story]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: Geogebra for Beginners 8-Fold Rosette Walkthrough
+  url: https://www.youtube.com/watch?v=7apC5Q9QS-8

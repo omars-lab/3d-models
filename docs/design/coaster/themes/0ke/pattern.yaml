@@ -1,0 +1,54 @@
+# Where the 0ke pattern (CS-16) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-16
+# (lines 1, 2 and 4). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A circle-division lesson: its maker names no building, so there is no found_at and no era.
+# "Ptolemy" in the ledger's title is our own label, not the maker's, and no source ties this
+# construction to him (the research's follow-up 3), so the record leaves him out.
+
+construction: 0ke_GpoBa-s
+short: 0ke
+fold: 10
+form: Star
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: A circle divided into five, then ten, giving a ten-pointed star, drawn after a lesson by the artist Samira Mian.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  A circle divided into five, then ten, giving a ten-pointed star. Ten-fold patterns appear at the
+  Friday Mosque of Isfahan in the 1080s, among the earliest known, according to Abdullahi and Embi.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Ptolemy. In his Almagest he worked out the chords of the pentagon and the decagon, from Euclid;
+    nothing ties this drawing step to him. Never "Ptolemy's method", "Ptolemy's pentagon" or "goes
+    back to Ptolemy".
+  - No building is known for this star. Do not give it one, and do not credit the method to any
+    other named teacher.
+
+sources:
+  - title: Samira Mian, "#13 - Tenfold Rosette 3 Ways Tutorial - Drawing & Painting Islamic Geometric Pattern" (YouTube, 2020)
+    url: https://www.youtube.com/watch?v=0ke_GpoBa-s
+    supports: [caption, fold, story]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+  - title: Wikipedia, "Islamic geometric patterns"
+    url: https://en.wikipedia.org/wiki/Islamic_geometric_patterns
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Samira Mian
+  title: "#13 - Tenfold Rosette 3 Ways Tutorial - Drawing & Painting Islamic Geometric Pattern"
+  url: https://www.youtube.com/watch?v=0ke_GpoBa-s

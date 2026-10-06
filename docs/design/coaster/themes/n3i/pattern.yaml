@@ -1,0 +1,50 @@
+# Where the n3I pattern (CS-10) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-10
+# (lines 1 to 4). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A modern method, published by its maker in 2022: no building, so there is no found_at and no era.
+# The Maragha line is the family's history, as Wichmann's record, not this drawing's.
+
+construction: n3IidKfXE1I
+short: n3I
+fold: 12
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: A twelve-pointed star rosette, drawn from a grid of squares, hexagons and twelve-sided polygons.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  One angle sets every line. Sarah Brewer published the method with Marlan Zha and Sophia Neno at
+  the Bridges conference in 2022. The method lets the angle vary "while still following traditional
+  rules", and the authors point to construction lines in old pattern scrolls such as the Topkapı
+  Scroll.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Where the method comes from. It is the authors' own, published in 2022; do not tie it to any
+    earlier writer's named method or angle, which the paper does not do.
+  - No building or era is known for this drawing. Wichmann's record of twelve-pointed stars at
+    Maragha (1148) is about the family, and is printed only as his record.
+
+sources:
+  - title: Sarah Brewer (mathémartiste), "Variable-angled 12-6-4 Star Rosette Pattern in GeoGebra" (YouTube, 2024)
+    url: https://www.youtube.com/watch?v=n3IidKfXE1I
+    supports: [caption, fold]
+  - title: Sarah Gelsinger Brewer, Marlan Zha and Sophia Neno, "Generating Families of Islamic Star Rosette Patterns Based on k-Uniform Tilings", Bridges 2022, pp. 391–394
+    url: https://archive.bridgesmathart.org/2022/bridges2022-391.pdf
+    supports: [caption, story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: Variable-angled 12-6-4 Star Rosette Pattern in GeoGebra
+  url: https://www.youtube.com/watch?v=n3IidKfXE1I
