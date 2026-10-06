@@ -2,7 +2,22 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-10-06 — A note on joining the two halves of a split piece: can they slide, clip or screw together, with a coupon for each way (3d-models #576)
 - 2026-10-05 — The launch-store skill: one pre-launch checklist for the store, each line saying who does it and where it is tracked, and a check that keeps each call's tick in step with its Decided line. The check found the storefront design's own list showing eight decided calls as open; those ticks are fixed, and `make validate-orders` now runs the check (3d-models #573)
+- 2026-10-05 — Omar's answers on the 2026-10-05 open-calls page read back into the decisions log as D-101 to D-106, among them the swatch question (D-105: print our own swatch card) and the storefront calls (3d-models #564)
+- 2026-10-05 — `themes.py listing` (color-themes skill) draws a theme's storefront pictures, with a preview theme flag in bikar (3d-models #562, bikar #306)
+- 2026-10-05 — Two design notes on a better finish: a brainstorm of finish techniques, cutting the pieces too (3d-models #559), and way c, a pocket that keeps the pieces put and makes the two halves feel like one (3d-models #560)
+- 2026-10-05 — coffee-house-storefront's DESIGN.md points at the coaster side of the storefront design in this repo (coffee-house-storefront #2)
+- 2026-10-05 — The split coaster traps its loose pieces between two lips: §11 of the split-with-studs design, with call 6 setting out four ways to hold a piece (3d-models #556)
+- 2026-10-05 — The storefront design: two independent research passes and a checked consolidation (3d-models #551, #552, #553), then the handoff spec for a Shopify store selling made-to-order coasters (3d-models #554), with every open decision, the coffee-house-storefront handoff and the product pictures (D-099; 3d-models #555)
+- 2026-10-05 — The orders design: one typed order in, and plates, time, filament, a buy list and a price out (3d-models #549); then a simulated-order regression suite and pricing ideas side by side (3d-models #550)
+
+- 2026-10-04 — The color catalog: every Bambu filament color as a catalog, with gradient themes, finishes drawn in the pictures and the new themes scored (3d-models #543)
+- 2026-10-04 — The color-themes and review-theme skills, with a theme gallery for gBV (3d-models #541)
+- 2026-10-04 — The split-with-studs design: cut a model flat, print both faces on the bed, pin the halves back together (3d-models #539)
+- 2026-10-04 — The piece-colors design: a Coaster Lab screen for coloring the pieces, with cost helpers (3d-models #538)
+
+- 2026-10-01 — bikar re-vendors youtube's construction schema, which adds `View.sliders` (bikar #295)
 - 2026-10-01 — The studio deploy check reads pages through the login gate again. The CI service token had not expired; the Service Auth policy that let it in was gone from both studio Access apps. Omar added it back ("allow local dev service token"), and the re-run of bikar run 36796118992 passed every check, with content read through the token on bikar-studio.pages.dev
 - 2026-10-01 — `@naqshcoffee/qiyas-schema` 0.3.2 published to GitHub Packages. It carries youtube's newer construction schema, and 0.3.1's first copy of it. The `schema-v0.3.2` tag (bikar f169537) went up on 2026-09-30. Its publish run hit the billing block, then passed on a re-run once the block lifted (bikar #289, run 36792672524)
 - 2026-09-29 — Vault threads xh9k3r, vlz2rj and 4wf3zp answered: the review threads carried to their moved notes and the `-b` rough UI kept as HTML beside its picture (3d-models #411), side-by-side tables sized so the picture reads in Obsidian (3d-models #412), and the decisions log, plan and backlog moved into `docs/working-model/` with the resolved reply carried (3d-models #413, #414)
