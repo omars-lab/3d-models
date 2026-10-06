@@ -189,6 +189,9 @@ in cross-section below ([picture source](loose-pieces-media/frames.html), render
   fill). In F1 at the sample size, the pocket is 1.2 mm deep, since the straps stand 1.2 mm above
   a 1.4 mm slab ([sample rules](../../../.claude/skills/print-coaster-samples/sample-rules.md#mini-params)).
   So a flush piece is six 0.2 mm layers.
+  *Built, bikar #313 (2026-10-06):* `loose … height <mm>` sets the piece's wall; left off, it is
+  the pocket's depth and the piece sits flush. So call 3's proud and recessed looks can be
+  drawn and printed through loose pieces; raised fills (§6 item 1) stay unbuilt.
 - **The first layer.** Bambu's own page on elephant foot says that on "assemblies, snaps ... the
   flared base directly affects fit" (verification §2). The X2D preset sets compensation 0.15, and
   plates are now sliced with the whole preset chain

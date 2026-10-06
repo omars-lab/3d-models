@@ -168,7 +168,7 @@ windows of it: the centre star, a petal, an octagon. The samples print in the co
 | A LOW | fills 0.6 mm, below the 1.2 mm straps (the multicolor design's lowered look) | yes: inside the preset's `range 0.2..1.2` |
 | B FLUSH | fills 1.2 mm, level with the straps | yes: the preset's default |
 | C HIGH | fills 1.8 mm, 0.6 mm above the straps | no: bikar's parser refuses it ("fills may be at most the relief height (equal is flush)"). Needs loose-pieces §6 item 1: lift the refusal, strap wins on height, the ramp into the fill, the feature floor counting raised fills, a wider preset range |
-| D PIECE | a loose piece 1.8 mm tall standing in a 1.2 mm pocket | not yet: loose pieces exist (bikar #292) but come out only as tall as their pocket, so it needs a piece-height option; left off otherwise, like sheet 1's D FINE |
+| D PIECE | a loose piece 1.8 mm tall standing in a 1.2 mm pocket | the piece can be made: `loose … height 1.8` (bikar #313, 2026-10-06) stands it 0.6 mm proud of a 1.2 mm pocket. The sample still waits on the sheet plate's color parts, like the rest of the sheet |
 
 C against D is call 3 itself: if a raised fill and a tall loose piece look the same in the hand,
 raised fills can come only through loose pieces and the kernel work is not needed. Row C can be

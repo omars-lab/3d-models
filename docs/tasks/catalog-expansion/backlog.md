@@ -320,8 +320,8 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    frame, both with the same pieces, on gBV. The true edges shipped 2026-10-01 (bikar #291), and
    the loose-piece output and the backed frame the same day (bikar #292): `loose where …`,
    `--piece Frame` and one `--piece <color>`, pocket walls on the exact outline. The gBV fit sheet
-   (item 8, sheet 4) is built and waits on Omar; next is a piece-height option (sheet 5's tall
-   piece) and the openwork frame. The Lab's Loose button shipped 2026-10-05 (bikar #308). The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
+   (item 8, sheet 4) is built and waits on Omar; the piece height (sheet 5's tall piece) shipped
+   2026-10-06 (bikar #313); next is the openwork frame. The Lab's Loose button shipped 2026-10-05 (bikar #308). The catalog style name for a loose coaster file stays Omar's (design §6 item 6). Calls 2, 3 and 4 there
    (guided page, raised fills, the sample's gaps) are still Omar's. Call 2 on the open-calls page stays open for the default fill
    height.
 7. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
@@ -355,7 +355,7 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    The next try, [sheets-04b](../../design/plates/sheets-04b.md), is pieces only, 4 mm tall and flat, at
    0.05 down to a −0.10 press fit (bikar #300), and waits on Omar's tick.
    What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
-   sheet plate's color parts per sample; sheet 5's tall-piece row a piece-height option and its raised row raised fills
+   sheet plate's color parts per sample (its tall-piece row's height shipped, bikar #313) and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/design/plates](../../design/plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
