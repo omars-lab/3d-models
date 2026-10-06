@@ -20,7 +20,6 @@ pictures:
 needs:
   - "color parts at each cell in the sheet plate (`bambu slice sheet` is built for one color)"
   - "row C HIGH: raised fills in bikar (loose-pieces §6 item 1), on a branch is enough"
-  - "row D PIECE: a piece-height option on loose pieces (bikar #292 makes them only as tall as the pocket); the row is left off without it"
 ---
 
 # sheets-05 — fill height
@@ -40,7 +39,7 @@ The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), s
 | A LOW | 0.6 mm, below the straps | yes |
 | B FLUSH | 1.2 mm, level with the straps | yes |
 | C HIGH | 1.8 mm, above the straps | no: bikar refuses fills above the straps |
-| D PIECE | a 1.8 mm loose piece in a 1.2 mm pocket | not yet: loose pieces exist (bikar #292) but only as tall as the pocket |
+| D PIECE | a 1.8 mm loose piece in a 1.2 mm pocket | yes: `loose … height 1.8` (bikar #313) |
 
 The samples print in the coaster's colors (gold straps, ruby and slab fills).
 
@@ -72,9 +71,8 @@ the card.
   check as one body, and `--format parts` splits a window into a body per color.
 - Row C: raised fills in bikar (loose-pieces §6 item 1). A bikar branch is enough to print the
   sample; it merges only if call 3 says yes.
-- Row D: a height option on loose pieces. The loose-piece output shipped 2026-10-01 (bikar #292,
-  shared with [sheets-04](sheets-04.md)), but every piece comes out exactly as tall as its pocket,
-  so a 1.8 mm piece in a 1.2 mm pocket needs one more knob.
+- Row D no longer waits on bikar: `loose … height <mm>` shipped 2026-10-06 (bikar #313), so a
+  1.8 mm piece stands 0.6 mm proud of a 1.2 mm pocket. It waits only on the color parts above.
 
 ## Your call
 

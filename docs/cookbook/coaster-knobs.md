@@ -302,9 +302,9 @@ coaster Coaster
 ```
 ![A frame with gold pieces lifted above their pockets: the centre octagon, the triangles, the four-sided faces](img/coaster-loose.png)
 
-**Watch out:** a piece is only as thick as the straps stand (`emboss 1.2` gives 1.2 mm
-pieces), because its pocket is the cell between them. A piece taller than its pocket needs
-an option bikar does not have yet. A loose face with no fill color is refused, because a
+**Watch out:** a piece is as thick as the straps stand (`emboss 1.2` gives 1.2 mm
+pieces), because its pocket is the cell between them; [`height`](#taller-or-shorter-pieces)
+makes it taller or shorter. A loose face with no fill color is refused, because a
 piece needs a filament. A face within two grid cells of the coaster's edge stays part of the frame. Only the solid
 frame is built so far: openwork, joins, a border, a twist and the color preview are all
 refused alongside `loose`. The 0.15 mm gap is a starting guess until the
@@ -357,7 +357,55 @@ see all of its own edge (a U or a crescent) would fold its top over itself, so b
 a peak on it by name; the same piece is fine flat. Nothing has printed with a peak yet.
 
 Related: [loose pieces in pockets](#loose-pieces-in-pockets), [the smooth-lines design](../design/coaster/smooth-lines-design.md),
-[packing pieces in two rows](#packing-pieces-in-two-rows).
+[packing pieces in two rows](#packing-pieces-in-two-rows), [taller or shorter pieces](#taller-or-shorter-pieces).
+
+## Taller or shorter pieces
+
+A loose piece is normally exactly as tall as its pocket is deep, so it sits level with the
+straps. `height <mm>` on the `loose` line gives the pieces their own height instead: taller,
+and they stand up above the straps like a raised fill; shorter, and they sit down in their
+pockets like a lowered one. The pocket stays the same; only the piece changes, so one frame
+can try all three. The picture shows the eight outer pieces sitting in their pockets, which
+are 1.2 mm deep, at three heights: 0.4 mm, sunk so far that the straps' walls show around
+them; 1.2 mm, level with the straps; and 3 mm, standing 1.8 mm above them like little
+blocks. A sample would use a smaller step (sheet 5 tries 1.8 mm); the picture uses big
+ones so the difference shows at this size.
+
+<!-- recipe: coaster-loose-height; swap: height 0.4 | height 1.2 | height 3 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 1 color Gold
+    fill void where orbit == 2 color Gold
+
+coaster Coaster
+  outline round 90
+  inscribe star
+  base 4
+  relief straps emboss 1.2
+  strap width 2
+  color base Slab
+  loose where orbit == 2 clearance 0.15 height 3
+```
+![Gold pieces in their pockets at 0.4, 1.2 and 3 mm: sunk below the straps, level with them, and standing up above them](img/coaster-loose-height.png)
+
+**Watch out:** the height counts from the floor of the pocket, not from the top of the straps,
+so `height 1.8` on 1.2 mm straps stands 0.6 mm proud. With a `peak` the point goes on top of
+that height. A piece shorter than its pocket is harder to pick out with a fingernail, and a
+proud piece is what a cup stands on, so it carries the weight the straps would. bikar sets no
+limit beyond "more than 0": nothing has printed a tall or short piece yet, and
+[sheet 5](../design/plates/sheets-05.md) is where that gets tried. A split coaster refuses
+`height`, because its two halves already decide how tall the pieces are.
+
+Related: [loose pieces in pockets](#loose-pieces-in-pockets),
+[peaked pieces](#peaked-pieces-a-soft-point-on-top),
+[the loose-pieces design](../design/coaster/loose-pieces-design.md#32-the-fit-and-whether-the-piece-sits-flush-proud-or-recessed).
 
 ## Packing pieces in two rows
 
