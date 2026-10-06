@@ -8,6 +8,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 
 ## Open, in ROI order
 
+Parked since 2026-10-06: Omar moved the work back to split coasters and split pieces ("i want
+to wrap up consturciotn and move back to split coasters and split inflills"). Finish what is
+half done (n_ICgwOr6qs, item 3) before starting a new construction.
+
 1. **`nmEjCTzMbDg` still FAILs O1 and O2, and waits on youtube.** Causes found on
    2026-09-27 ([the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md)). The
    youtube source's `R = Intersect(t, m, 2)` picks the other root in bikar. The patch,
@@ -16,8 +20,10 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
    - re-vendor the coaster and look at it (it is near-solid now: **do not print it**);
    - re-run O1 and O2.
 
-   What O1 still cannot compare (parabolas, hyperbolas, arcs, the `*_host` circles) is
-   youtube's to add. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
+   What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. Arcs and their
+   `*_host` circles are compared on youtube branch `coaster-n_I` (2026-10-06); once it merges,
+   re-run O1 on this one and on `gBV_JTt3Kxk`, which has ten scaffold arcs; its last O1 skipped or
+   counted as extra 47 objects. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
    (2) as a crash. That patch is in the same note.
 2. **Reconstruction intake: read rung.yaml at session start, queue done reconstructions for
    import.** Asked by Omar on 2026-09-30. The session start hook never reads youtube's rung.yaml
@@ -59,6 +65,17 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
       at the centre where the front arcs stop short. Pure arcs, no straight lines, so it needs
       the arc path the other patterns do not. The ten arc pairs are in
       `reconstructions/n_ICgwOr6qs/`, ready for the coaster step.
+      **Coaster step half done 2026-10-06, then parked** (Omar: "i want to wrap up consturciotn
+      and move back to split coasters and split inflills"). Done: the source rewrite (whole lines
+      through the unit points, and the 180° ray as a segment to a derived far point, so no free
+      point sits off the frame) is on youtube branch `coaster-n_I` (6e7fc45), still 9/9 at mean
+      0.886, waiting on Omar's merge into main. The O1 check for arcs is on the same branch.
+      The importer change that rotates a list of arcs is its own bikar PR
+      (`import-conjugate-arcs`). With both, the import lowers in full (nothing refused), and both
+      checks pass: O1 34 compared, 0 failed, and O2 edge 0.982 with recall and precision 1.0.
+      Left: in bikar, the golden, fixture, minimal coaster, `--check` at 40/60/90 mm and the Lab
+      entry, following the 88q PR (#317). Then in this repo, the ledger row, `CS-18`, the gallery
+      card and the vendored STL.
    4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
       **Done 2026-09-28 in youtube: 17/18 slides, mean edge-SSIM 0.861.** Not paper: a deck of
       clean vector slides, so no camera correction. The whole page was rebuilt, not just the

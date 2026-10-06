@@ -67,7 +67,12 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 
 Finished work that a session may not merge itself. Take a line off when it lands.
 
-None waiting. The four youtube branches and 3d-models #427, #432, #433 and #434 merged on
+- **youtube `coaster-0ke` (c8d2b48) and `coaster-n_I` (6e7fc45) into youtube main.** The first
+  is the 0ke_GpoBa-s source the ten-fold rosette coaster was imported from (3d-models #583); the
+  second is the n_ICgwOr6qs source rewrite and the O1 check for arcs (2026-10-06). A session's
+  push to youtube main was refused as a merge without review, so both are Omar's.
+
+Before these: the four youtube branches and 3d-models #427, #432, #433 and #434 merged on
 2026-09-30 (#424 and #425 closed, superseded by #427). #430, another session's ledger rows for
 ten youtube reconstructions, was approved by Omar the same day. It had fallen behind master, so
 it landed through a fresh branch that merged it and worked the conflicts by hand.
@@ -79,3 +84,11 @@ How this repo's decisions log joins a decision hub (Omar's call;
 should block and bring this repo in, then a studio status page rendered from the repos. The
 hub decision gates the other two. Source: bikar's cross-repo-dependencies doc and decision
 ledger.
+
+## The use-case map's bikar pin is 21 anchors behind
+
+Moving the map's bikar pin to bikar main turns up 21 bikar anchors whose lines moved. The coaster
+PRs since have left the pin where it was, so the map still checks against an older bikar. Advance
+the pin with `validate.py --refresh`, let `--repair` move the anchors that match one line, and fix
+the rest by hand, in a PR of its own. Found by the 88q-u2eWZqg coaster step (3d-models #585),
+2026-10-06.
