@@ -8,8 +8,9 @@
 # name only when this record has at least one source.
 #
 # A circle-division lesson: its maker names no building, so there is no found_at and no era.
-# "Ptolemy" in the ledger's title is our own label, not the maker's, and no source ties this
-# construction to him (the research's follow-up 3), so the record leaves him out.
+# Ptolemy: the follow-up research (docs/research/2026-10-07-ptolemy-pentagon-consolidated.md)
+# found that Book I of his Almagest gives the same first steps, up to the pentagon's side. The
+# story below doesn't use it yet; if it does, take the wording from that doc's "What we may print".
 
 construction: 0ke_GpoBa-s
 short: 0ke
@@ -30,9 +31,11 @@ story: >
 
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
 contested:
-  - Ptolemy. In his Almagest he worked out the chords of the pentagon and the decagon, from Euclid;
-    nothing ties this drawing step to him. Never "Ptolemy's method", "Ptolemy's pentagon" or "goes
-    back to Ptolemy".
+  - Ptolemy. Book I of his Almagest gives the same first steps, up to the pentagon's side (Heiberg
+    1898 p. 32; Toomer 1984 pp. 48-49), but historians think the geometry is older, and he did not
+    step the pentagon round, double it or draw the star. Print "the construction Ptolemy gives in
+    Book I of the Almagest" and "the earliest writer we found". Never "Ptolemy's construction",
+    "Ptolemy's method", "Ptolemy's pentagon", "first" or "goes back to Ptolemy".
   - No building is known for this star. Do not give it one, and do not credit the method to any
     other named teacher.
 
