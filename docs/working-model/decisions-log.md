@@ -6346,3 +6346,31 @@ dovetail".
 
 **What would reverse it:** SLD-1 pairs that will not slide together by hand, or come apart when
 shaken, at every gap.
+
+## D-108 — The two plate switches follow the bed photo, set by Claude at the send's bed look
+
+Omar, 2026-10-07, in chat, after `bambu options set` shipped (#608) with each switch on his go:
+"can you do this automatically per our skill? when you look at plates pre print".
+
+### The options as given
+
+- **Each switch on Omar's go, one change at a time** (what #608 shipped): safe, but a glacier
+  print waits on a chat round, and forgetting to switch back leaves the gold plate unchecked.
+- **Automatic at the bed look** (asked for): the photo already says which plate is on the bed, so
+  the two switches can follow it.
+- **Chosen, automatic at the bed look,** for these two switches only.
+
+### What it changes
+
+- **The bed verdict says whether the plate is Bambu's.** `bambu bed verdict … --non-bambu` when
+  the photo shows the glacier (or any plate not Bambu's own).
+- **`bambu options for-bed <plate> --yes`** reads that verdict and sets Foreign Object Detection
+  and Type Detection: off for a non-Bambu plate, on for a Bambu one. It sends nothing when they
+  already fit, refuses mid-print, and reads each switch back. The send-plate skill runs it at
+  step 4, right after the verdict, with no new ask.
+- **The send checks it.** The dry run's `options:` line is ✗ when a switch is wrong for the plate
+  the verdict saw, and a real send refuses until `for-bed` has run.
+- **Nothing else is standing.** Any other `bambu options set` still needs his go for that change.
+
+**What would reverse it:** a switch set wrong for the plate on the bed, from a verdict that named
+the wrong plate, or a print stopped by a switch `for-bed` should have changed.

@@ -1,19 +1,35 @@
 // `bambu options` — the printer's print options (the checks it runs before and during a print).
 //   show                       : each switch on or off, from the status report (read-only, MQTT)
 //   set <option> <on|off> [-y] : switch one, the way Bambu Studio does; asks first, then reads it back
+//   for-bed <plate> [-y]       : set the two plate switches to fit the plate the bed verdict saw (D-108)
 //
 // Added 2026-10-07 so the glacier plate's two switches (Foreign Object Detection, Type Detection)
 // can be turned off and back on from the CLI. Omar: "yes command that changes settings". The bits,
 // the command and why each switch matters: print-options.ts and
 // docs/research/2026-10-07-third-party-plates.md. A switch is printer-wide and stays as set for every
 // print after it, so `set` changes the printer only on the owner's go, like `print send --yes`.
+// `for-bed` is the exception Omar made standing on 2026-10-07 ("can you do this automatically per our
+// skill? when you look at plates pre print", D-108): the two plate switches follow the bed verdict.
 
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
+import { newestBedPhoto, readVerdict } from "../bed-check.js";
 import { loadConfig, type PrinterConfig } from "../config.js";
 import { ev } from "../log.js";
+import { repoRoot } from "../paths.js";
 import { confirm } from "../prompt.js";
-import { buildOptionCommand, optionByKey, parseOnOff, PRINT_OPTIONS, readBack, renderOptions, setRefusal } from "../print-options.js";
+import { plateNameOf } from "../send-gate.js";
+import {
+  buildOptionCommand,
+  optionByKey,
+  parseOnOff,
+  plateSwitchChanges,
+  PRINT_OPTIONS,
+  readBack,
+  renderOptions,
+  setRefusal,
+  type PlateSwitchChange,
+} from "../print-options.js";
 
 /** Only these switch from the CLI; the AI checks are shown, not set (they carry a level). */
 export const SETTABLE = ["foreign-object", "plate-type", "plate-alignment", "displacement"] as const;
@@ -26,6 +42,22 @@ function requireConfigured(cfg: PrinterConfig): void {
     console.error("Not configured. Set PRINTER_HOST / BAMBU_SERIAL / BAMBU_TOKEN (env, .mcp.json, or the repo .env with its .env.keys).");
     console.error("Run `bambu setup doctor` to see what's missing.");
     process.exit(1);
+  }
+}
+
+/** Send each switch, wait out Studio's hold, then read them all back. Exit 1 on any ✗. */
+async function applySwitches(mqtt: MqttBackend, changes: PlateSwitchChange[]): Promise<void> {
+  for (const { option, on } of changes) {
+    ev("options_set", { option: option.key, on: String(on) });
+    await mqtt.setPrintOption(buildOptionCommand(option, on));
+  }
+  await new Promise((r) => setTimeout(r, READ_BACK_AFTER_MS));
+  const after = await mqtt.requestStatus();
+  for (const { option, on } of changes) {
+    const result = readBack(option, on, after);
+    ev("options_read_back", { option: option.key, mark: result.mark });
+    console.log(`${result.mark} ${result.line}`);
+    if (result.mark === "✗") process.exitCode = 1;
   }
 }
 
@@ -100,17 +132,57 @@ export function registerOptions(program: Command): void {
           process.exitCode = 2;
           return;
         }
-        const cmd = buildOptionCommand(option, on);
-        ev("options_set", { option: option.key, on: String(on) });
-        await mqtt.setPrintOption(cmd);
-        await new Promise((r) => setTimeout(r, READ_BACK_AFTER_MS));
-        const after = await mqtt.requestStatus();
-        const result = readBack(option, on, after);
-        ev("options_read_back", { option: option.key, mark: result.mark });
-        console.log(`${result.mark} ${result.line}`);
-        if (result.mark === "✗") process.exitCode = 1;
+        await applySwitches(mqtt, [{ option, on }]);
       } catch (err) {
         console.error(`options set failed: ${(err as Error).message}`);
+        process.exitCode = 1;
+      } finally {
+        await mqtt.close();
+      }
+    });
+
+  options
+    .command("for-bed")
+    .description("set Foreign Object and Type Detection to fit the plate the newest bed verdict saw: off for a non-Bambu plate, on for Bambu's")
+    .argument("<plate>", "plate name or its .3mf, as for `bed verdict`")
+    .option("-y, --yes", "switch without asking (the send-plate skill's standing go, D-108)", false)
+    .action(async (plate: string, opts: { yes?: boolean }) => {
+      const name = plateNameOf(plate);
+      const photo = newestBedPhoto(repoRoot() ?? process.cwd(), name);
+      const verdict = photo ? readVerdict(photo.path) : null;
+      if (!photo || !verdict || verdict.sha256 !== photo.sha256) {
+        console.error(`✗ no verdict on the newest bed photo of ${name}. Look at the photo and write one first: bambu bed verdict ${name} …`);
+        process.exitCode = 2;
+        return;
+      }
+      const nonBambu = verdict.non_bambu === true;
+      const which = nonBambu ? "a non-Bambu plate" : "a Bambu plate";
+      const cfg = loadConfig();
+      requireConfigured(cfg);
+      const mqtt = new MqttBackend(cfg);
+      try {
+        await mqtt.connect();
+        const before = await mqtt.requestStatus();
+        const changes = plateSwitchChanges(before, nonBambu);
+        if (changes.length === 0) {
+          console.log(`✓ the bed verdict saw ${which}; Foreign Object and Type Detection already fit it. Nothing sent.`);
+          return;
+        }
+        const refused = changes.map((c) => setRefusal(c.option, c.on, before)).find((r) => r !== null);
+        if (refused) {
+          console.error(`✗ ${refused}.`);
+          process.exitCode = 2;
+          return;
+        }
+        const list = changes.map((c) => `${c.option.label} ${c.on ? "on" : "off"}`).join(", ");
+        if (!(await confirm(`The bed verdict saw ${which}. Switch ${list}?`, Boolean(opts.yes)))) {
+          console.error("not switched. Pass --yes (or confirm at a TTY).");
+          process.exitCode = 2;
+          return;
+        }
+        await applySwitches(mqtt, changes);
+      } catch (err) {
+        console.error(`options for-bed failed: ${(err as Error).message}`);
         process.exitCode = 1;
       } finally {
         await mqtt.close();

@@ -162,6 +162,43 @@ export function buildOptionCommand(option: PrintOption, on: boolean, level: stri
   return { xcam: cmd };
 }
 
+/**
+ * The two switches that follow the plate on the bed (D-108): on for Bambu's own plates, off for a
+ * non-Bambu one, whose surface sets off Foreign Object Detection (806E) and whose marker the X2D cannot
+ * read (8062). The bed verdict says which plate the photo shows; nothing else decides it.
+ */
+export const PLATE_SWITCHES = ["foreign-object", "plate-type"] as const;
+
+export interface PlateSwitchChange {
+  option: PrintOption;
+  on: boolean;
+}
+
+/** The switches to flip so they fit the plate, in PLATE_SWITCHES order; empty when they already fit. */
+export function plateSwitchChanges(frame: Frame, nonBambu: boolean): PlateSwitchChange[] {
+  return PLATE_SWITCHES.map((k) => optionByKey(k))
+    .filter((o) => o.supported(frame) !== false && o.read(frame) !== !nonBambu)
+    .map((option) => ({ option, on: !nonBambu }));
+}
+
+/**
+ * The send's `options:` line. ✗ when a switch is wrong for the plate the verdict saw: on with a
+ * non-Bambu plate the print stops before layer 0 (sld-1, 2026-10-07); off with a Bambu plate nothing
+ * checks for a print left on the bed. ⚠ when the printer does not report a switch.
+ */
+export function plateSwitchCheck(frame: Frame, nonBambu: boolean, plate: string): { ok: boolean; mark: "✓" | "✗" | "⚠"; line: string } {
+  const which = nonBambu ? "a non-Bambu plate" : "a Bambu plate";
+  const want = nonBambu ? "off" : "on";
+  const options = PLATE_SWITCHES.map((k) => optionByKey(k)).filter((o) => o.supported(frame) !== false);
+  const unknown = options.filter((o) => o.read(frame) === null);
+  const wrong = plateSwitchChanges(frame, nonBambu).filter((c) => c.option.read(frame) !== null);
+  if (wrong.length) {
+    return { ok: false, mark: "✗", line: `options: ${wrong.map((c) => c.option.key).join(" and ")} ${wrong.length > 1 ? "are" : "is"} ${nonBambu ? "on" : "off"}; the bed verdict saw ${which}, which needs ${want}. Run: bambu options for-bed ${plate} --yes` };
+  }
+  if (unknown.length) return { ok: true, mark: "⚠", line: `options: the printer does not report ${unknown.map((o) => o.key).join(" or ")}; ${which} needs ${want}, so check the screen` };
+  return { ok: true, mark: "✓", line: `options: ${options.map((o) => o.key).join(" and ")} ${want}, as ${which} needs` };
+}
+
 /** States a switch may be changed in: not mid-job. A paused print counts as stopped, so an alarm can be answered. */
 const BUSY = new Set(["RUNNING", "PREPARE", "SLICING"]);
 

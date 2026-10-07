@@ -35,6 +35,7 @@ interface VerdictOpts {
   clear?: boolean;
   seated?: boolean;
   plateType: string;
+  nonBambu?: boolean;
   by: string;
   note?: string;
 }
@@ -70,7 +71,7 @@ export function registerBed(program: Command): void {
       else {
         console.log(
           `verdict: ${v.bed_clear ? "clear" : "NOT clear"}, ${v.plate_seated ? "plate seated" : "plate NOT seated"}, ` +
-            `${v.plate_type}, by ${v.by} at ${v.at}${v.note ? ` — ${v.note}` : ""}`,
+            `${v.plate_type}${v.non_bambu ? " (not a Bambu plate)" : ""}, by ${v.by} at ${v.at}${v.note ? ` — ${v.note}` : ""}`,
         );
       }
     });
@@ -86,6 +87,7 @@ export function registerBed(program: Command): void {
     .option("--seated", "the build plate is in and flat")
     .option("--no-seated", "the build plate is missing or not flat")
     .option("--note <text>", "what else the photo shows")
+    .option("--non-bambu", "the plate is not Bambu's own (the glacier): `options for-bed` then switches its two checks off", false)
     .action((plate: string, opts: VerdictOpts) => {
       const name = plateNameOf(plate);
       if (opts.clear === undefined || opts.seated === undefined) {
@@ -112,10 +114,11 @@ export function registerBed(program: Command): void {
         bed_clear: opts.clear,
         plate_seated: opts.seated,
         plate_type: token,
+        ...(opts.nonBambu ? { non_bambu: true } : {}),
         by: opts.by,
         ...(opts.note ? { note: opts.note } : {}),
         at: new Date().toISOString(),
       });
-      console.log(`verdict written for ${basename(photo.path)}: ${opts.clear ? "clear" : "NOT clear"}, ${opts.seated ? "seated" : "NOT seated"}, ${token}`);
+      console.log(`verdict written for ${basename(photo.path)}: ${opts.clear ? "clear" : "NOT clear"}, ${opts.seated ? "seated" : "NOT seated"}, ${token}${opts.nonBambu ? ", not a Bambu plate" : ""}`);
     });
 }

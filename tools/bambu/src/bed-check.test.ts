@@ -130,6 +130,17 @@ describe("newestBedPhoto, writeVerdict, readVerdict", () => {
     expect(bedCheck("sheets-04b", again, readVerdict(newer), "textured_plate", NOW).ok).toBe(false);
   });
 
+  it("keeps non_bambu on the verdict, so `options for-bed` knows the plate (D-108)", () => {
+    const glacier = join(bedDir(root), "sld-1-2026-10-07T18-00-00-000Z.jpg");
+    writeFileSync(glacier, "glacier bytes");
+    const p = newestBedPhoto(root, "sld-1");
+    const { photo: _p, sha256: _s, ...rest } = good;
+    writeVerdict(p!, { ...rest, non_bambu: true });
+    expect(readVerdict(glacier)?.non_bambu).toBe(true);
+    writeVerdict(p!, rest);
+    expect(readVerdict(glacier)?.non_bambu).toBeUndefined();
+  });
+
   it("finds nothing for a plate with no photos", () => {
     expect(newestBedPhoto(root, "minis-01")).toBeNull();
   });
