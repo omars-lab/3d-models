@@ -103,6 +103,10 @@ Omar picked the dovetail to try first (D-107). The coupon is bikar's
 regular, about the area of gBV's hexagon at 1.25×; it stands in for gBV's elongated hexagon by
 area, not by shape.
 
+**Printed 2026-10-07.** Omar: "alos 10, 15, and 20 all worked ..." ([the record](../../prints/2026-10-07-sld-1/index.md)).
+He did not say which one felt best, or whether each held when shaken,
+so the kite pair still waits on that.
+
 **Validator:** for each pair, slide it together by hand, hold it cut face down by one half and
 shake it.
 PASS: it slides together without a tool, the other half stays on when shaken, and both faces

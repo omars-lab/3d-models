@@ -1,7 +1,7 @@
 ---
 plate: sheets-04g-fit
 recipe: sheets-04g-fit.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -13,8 +13,8 @@ bets:
 unblocks:
   - "the gap per group for the next sheets-04g iteration: kites and middle piece now, the hexes, stars and outer pieces once judged"
   - "CAL-LSE-01, the loose-piece gap per face by shape in a straps-only frame"
-minutes: 25
-grams: 5
+minutes: 78
+grams: 21
 bed_plates: 1
 risk: watch
 pictures:
@@ -29,19 +29,26 @@ pictures:
 found two different causes. The middle piece had sharp inward corners where the strap's edge
 is round, which left 0.45 mm of play at each of its ten notches. The kites had no play anywhere
 and the least room for error of any piece. bikar now cuts every piece along the strap's real
-edge (bikar #303), so the gap is the gap all the way round. This plate prints only the two pieces you
-named, at several gaps each, to press into the coaster you already have. One bed, 25 minutes,
-about 5 g.
+edge (bikar #303), so the gap is the gap all the way round. This plate prints the two pieces you
+named, at several gaps each, and a fresh coaster to press them into, beside the one you already
+have. One bed, 78 minutes, about 21 g.
 
 ## What it is
 
 Recipe: [sheets-04g-fit.yaml](sheets-04g-fit.yaml). The same size as sheets-04g (112.5 mm across,
 3.75 mm straps, 4.4 mm tall), so the pieces fit that coaster's holes. The gap comes entirely off
-the piece, so no new coaster is needed.
+the piece, so the coaster you have would do. You asked for a fresh one anyway (2026-10-06: "we
+should re-print minimal consturciton with this to fit in again"), so the plate prints one too.
 
+- **The coaster:** the gBV minimal coaster, as sheets-04g printed it.
 - **Kites, ten at each of five gaps:** 0.05, 0.10, 0.15, 0.20 and 0.25 mm per face (50 kites).
 - **The middle piece, one at each of four gaps:** 0, 0.05, 0.10 and 0.15 mm per face. Its gap 0
   is not the old gap 0: it is cut along the round strap edge now, so it should no longer rattle.
+- **Dots on each middle piece**, as you asked ("3 dots for biggest, 1 dot for smallest"): four at
+  gap 0, three at 0.05, two at 0.10, one at 0.15. Each dot is 1 mm across, cut into the top, with
+  at least 0.8 mm of top left to the piece's edge (CAL-CST-01). The kites carry none: one dot on
+  the biggest kite leaves 0.71 mm, under that floor. How to keep the kite rungs apart is call 6b
+  on the [2026-10-06 calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md).
 
 ## Why print it
 
@@ -57,37 +64,38 @@ the piece, so no new coaster is needed.
 
 ## Pictures
 
-The slice from above, front of the bed at the bottom. Each rung has its own color, and a label
-with a line to it. The kite rungs look alike off the bed, so take one rung off at a time and bag
-or mark it.
+The slice from above (2026-10-07, with the coaster), front of the bed at the bottom, drawn only
+over the part of the bed the pieces take. Each rung has its own color, and a label on it or with a
+line to it. The kite rungs look alike off the bed, so take one rung off at a time and bag or mark
+it.
 
-From the back of the bed to the front (the colors are the picture's, not the print's):
+Going round the coaster (the colors are the picture's, not the print's):
 
 | Where | What | In the picture |
 |---|---|---|
-| the two middle pieces on the left, side by side | MIDDLE 0.15 (left), MIDDLE 0.10 (right) | orange, purple |
-| the back row of kites, to their right | KITE 0.05 | amber |
-| the kite row just in front of it | KITE 0.10 | blue |
-| the middle piece on the right, behind the diagonal | MIDDLE 0 | green |
-| the diagonal line of kites | KITE 0.25 | grey |
-| the middle piece on the right, in front of the diagonal | MIDDLE 0.05 | pink |
-| the second kite row from the front | KITE 0.15 | yellow |
-| the front row of kites | KITE 0.20 | teal |
+| the middle | COASTER | amber |
+| back left, two interlaced rows of kites | KITE 0.20 (the back row), KITE 0.05 (the front row) | grey, blue |
+| left, two middle pieces one above the other | MIDDLE 0.05 (back), MIDDLE 0.15 (front) | purple, teal |
+| front left, a row of kites | KITE 0.15 | orange |
+| front, below the coaster | MIDDLE 0.10 | yellow |
+| front right | MIDDLE 0 | pink |
+| right front, two interlaced rows of kites | KITE 0.10 (the back row), KITE 0.25 (the front row) | green, brown |
 
-![sheets-04g-fit on the bed: five rows of ten kites and four middle pieces, each labeled with its gap](sheets-04g-fit-media/bed.png)
+![sheets-04g-fit on the bed: the coaster in the middle, five rows of ten kites and four middle pieces round it, each labeled with its gap](sheets-04g-fit-media/bed.png)
 
 ## Cost and risk
 
-One bed, 25 minutes, about 5.3 g (local slice, 2026-10-04, X2D preset and PLA Basic, Textured PEI
-plate, no slicer warnings, no brim, support or raft, nothing sent). One color, so no swaps.
+One bed, 78 minutes, about 21.4 g (local slice, 2026-10-07, X2D preset and PLA Basic, Textured
+PEI plate, no slicer warnings, no brim, support or raft, nothing sent). One color, so no swaps.
+Before the coaster was added it was 25 minutes and 5.3 g (2026-10-04).
 
 **Risk: watch.** Fifty kites of about 0.05 cm³ each are small loose pieces, the kind that can
 lift or get knocked by the nozzle. sheets-04g printed the same kites at this size without trouble.
 
 ## Your call
 
-- [ ] **Approve as it stands**: the five kite rungs and four middle pieces. Say the color with
-  the yes.
+- [ ] **Approve as it stands**: the coaster, the five kite rungs and the four dotted middle
+  pieces. Say the color with the yes.
 - [ ] **Hold**: say why in the notes.
 
 Notes:
@@ -105,3 +113,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-04 | proposed: the fit coupon for Omar's verdict on sheets-04g, kites at five gaps and the middle piece at four, cut along the strap's real edge (bikar #303) | [the write-up](../../issues/sheets-04g-fit.md) |
 | 2026-10-04 | sliced: local slice fits one bed, 25 minutes, 5.3 g, no slicer warnings | this page |
+| 2026-10-07 | changed (iteration 2): a fresh gBV minimal coaster added, and dots on each middle piece, four at gap 0 to one at 0.15, on Omar's comment on the 2026-10-06 calls page | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
+| 2026-10-07 | sliced: local slice fits one bed, 78 minutes, 21.4 g, no slicer warnings | this page |

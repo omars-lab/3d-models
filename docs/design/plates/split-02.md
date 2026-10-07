@@ -1,7 +1,7 @@
 ---
 plate: split-02
 recipe: split-02.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -49,6 +49,14 @@ about 31 g, in the color you pick when you say yes.
 - **No studs.** The undercuts take 0.8 mm from each side of every strap at the cut, leaving no
   strap wide enough beside them for a 2 mm stud. The halves line up by their outlines and by the
   pieces sitting in both.
+- **Its id, 2** (iteration 2, on your comment of 2026-10-06: "every proptoty should have an id"),
+  so it can be told from split-01 and every later prototype. The cut faces are mostly undercut, so
+  the id is cut into the lower half's bottom face, the face the coaster stands on, mirrored so it
+  reads the right way round when you turn the coaster over. It is 2 mm tall, not split-01's
+  2.5: the undercut starts 0.6 mm up, level with the letters' floor, so the id has to sit under
+  the narrow strip of strap the undercuts leave, and at 2.5 mm no spot has room. At 112.5 mm the
+  flange coaster takes ids 1 to 9 except 4, whose closed loop shuts at that size; at 80, 90 and
+  100 mm there is no room for an id at all.
 
 **The color is picked at the send**, as on sheets-04g: say it with the yes ("yes, in pink").
 
@@ -106,6 +114,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
 
 ## Timeline
 
@@ -113,3 +122,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-05 | proposed — at Omar's ask, option C of the split design's call 6, beside split-01 (A) | this page |
 | 2026-10-05 | sliced — local slice against bikar #305, fits one bed, 107 minutes, 31 g, no slicer warnings | this page |
+| 2026-10-07 | changed (iteration 2): its id, 2, cut 2 mm tall into the lower half's bottom face, on Omar's comment on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
+| 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 107 minutes, 31.5 g, no slicer warnings; the id did not change the time | this page |
