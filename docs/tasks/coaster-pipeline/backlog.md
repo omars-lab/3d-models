@@ -83,8 +83,10 @@ Sending a print and which filament to load.
   coupon (SLD-1) if a, b or d; in c no join between the piece halves, the coaster halves join
   once at their studs; snap rows to add to SPL-1; the screw is out. Omar then said "for joints i
   want to try the dovetail" (D-107): the dovetail coupon is built and its plate,
-  [sld-1](../../design/plates/sld-1.md), 12 minutes and 2.4 g, waits on a tick on its page.
-  After the print, a kite pair at the gap that reads best.
+  [sld-1](../../design/plates/sld-1.md), 12 minutes and 2.4 g, printed on 2026-10-07 and Omar
+  judged it: "alos 10, 15, and 20 all worked ..." ([the record](../../prints/2026-10-07-sld-1/index.md)).
+  Next, a kite pair at the gap that reads best, which waits on Omar saying which of the three
+  felt best and whether each pair stays together when shaken (the note's validator).
 - **Print the four swatches of the colors on the printer (D-105)** —
   [swatch-10204](../../design/plates/swatch-10204.md) Hot Pink,
   [swatch-13903](../../design/plates/swatch-13903.md) Neon City,
