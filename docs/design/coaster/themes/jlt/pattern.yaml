@@ -1,0 +1,78 @@
+# Where the jlT pattern (CS-14) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-14
+# (lines 1, 2, 3 and 6). Add a fact only from that list, with a source someone opened (never a
+# search snippet). Fix wording here, never in the storefront's generated file. The store shows a
+# history name only when this record has at least one source.
+#
+# The building rests on a catalogue: Wichmann's Tiling Search records Bourgoin's plate 170 on a
+# carved stone panel in the Qijmas mosque, after a Creswell photo too small to count the stars. No
+# open photo of the panel exists. So the record says "recorded", and gives no era: 1479–1481 is the
+# building's date, not proof the panel is the same design.
+#
+# "Plate 170" is the 1879 numbering (storefront seven-eras check, design question 15). In the Getty
+# Research Institute's scan of the 1879 Firmin-Didot portfolio on archive.org (gri_33125012261786,
+# scan leaf n388), the number 170 is printed on the plate itself. The plate shows seven-pointed
+# stars round octagons on a square plan, and Bourgoin's text for "Pl. 170" (VIIe série, famille
+# heptagonale) describes the same construction: a square plan whose central line is turned a
+# seventh of a right angle, ending in a seven-pointed star. Checked by eye against our drawing and
+# Wichmann's P170, not line for line. The Dover reprint (1973) was not opened, so do not cite its
+# plate number.
+
+construction: jlTmt_279M4
+short: jlT
+fold: 7
+form: Star
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+found_at: Amir Qijmas al-Ishaqi Mosque, Cairo, Egypt
+
+# One line under the pattern's picture.
+caption: Seven-pointed stars round an octagon, on a square tile set out from a line tilted a seventh of a right angle, after plate 170 of Jules Bourgoin's 1879 book.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Our drawing follows plate 170 of Jules Bourgoin's Les éléments de l'art arabe (1879), as analysed
+  by the channel unravelling pattern. Brian Wichmann's Tiling Search records the same design on a
+  carved stone panel at the springing of an iwan arch in the mosque of Amir Qijmas al-Ishaqi in
+  Cairo, built 1479–1481. Seven does not divide a circle by ruler and compass, so this pattern can
+  only be drawn by approximation.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Whether the panel is the same design, and whether it is still there. It is known from
+    Wichmann's record and one archive photo too small to count the stars. Say "recorded at", never
+    "on the mosque" or "seen at" as our own fact.
+  - Baghdad. Wichmann also records the design at the Mirjaniyya madrasa (1357), after Jay Bonner,
+    whose book nobody here has opened. Print it only as his record. Never say it survives there,
+    and give no craft or place on that building.
+  - The archive photo of the Cairo panel (Creswell Archive), the Tiling Search drawing
+    (non-commercial licence) and David Wade's scan of the plate are not ours to show.
+
+sources:
+  - title: Jules Bourgoin, Les éléments de l'art arabe. Le trait des entrelacs (Paris, Firmin-Didot, 1879), plate 170 and its text, Getty Research Institute scan
+    url: https://archive.org/details/gri_33125012261786/page/n388
+    supports: [caption, fold, story]
+  - title: Brian Wichmann, Tiling Search P170, "Bourgoin, Plate 170"
+    url: https://tilingsearch.mit.edu/HTML/data12/P170.html
+    supports: [caption, fold, found_at, story]
+  - title: Archnet, "Masjid Amir Qijmas al-Ishaqi" (site 1536)
+    url: https://www.archnet.org/sites/1536
+    supports: [found_at, story]
+  - title: Wikipedia, "Amir Qijmas al-Ishaqi Mosque"
+    url: https://en.wikipedia.org/wiki/Amir_Qijmas_al-Ishaqi_Mosque
+    supports: [found_at]
+  - title: 'unravelling pattern, "islamic geometry: how to draw 7, 4 fold pattern" (YouTube, 2021)'
+    url: https://www.youtube.com/watch?v=jlTmt_279M4
+    supports: [caption, story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: unravelling pattern
+  title: "islamic geometry: how to draw 7, 4 fold pattern"
+  url: https://www.youtube.com/watch?v=jlTmt_279M4

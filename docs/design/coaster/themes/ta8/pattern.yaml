@@ -1,0 +1,56 @@
+# Where the tA8 pattern (CS-6) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-nine-coasters-consolidated.md, §10 "What we may print", CS-6
+# (lines 1 to 5). Add a fact only from that list, with a source someone opened (never a search
+# snippet). Fix wording here, never in the storefront's generated file. The store shows a history
+# name only when this record has at least one source.
+#
+# A teaching rosette: its maker names no building, so there is no found_at and no era. The story
+# is the history of seven-fold stars as a family, each date with the scholars who give it.
+
+construction: tA8eSdVx_EQ
+short: tA8
+fold: 7
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+# One line under the pattern's picture.
+caption: A seven-pointed star rosette, drawn after a GeoGebra lesson by Sarah Brewer (mathémartiste).
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Seven does not divide a circle by ruler and compass, so makers drew seven-fold stars by close
+  approximation. Seven-fold stars are rare; the scholars Jay Bonner and Marc Pelletier write of
+  "the paucity of historical examples". The earliest seven-fold work dates from the late 11th and
+  early 12th centuries, in Iran and Afghanistan: heptagons at the Friday Mosque of Isfahan (1086,
+  after Abdullahi and Embi) and seven-pointed stars on the minaret of Mas'ud III at Ghazni
+  (1099–1115, after Bonner and Pelletier).
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Which is the earliest. Abdullahi and Embi give heptagons at the Friday Mosque of Isfahan (1086);
+    Bonner and Pelletier give seven-pointed stars at Ghazni (1099–1115). Print both, each with its
+    authors; never "the first seven-fold star was at" one place, and never 1089 for Ghazni.
+  - No building is known for this rosette. Do not give it one.
+  - Do not print "found only in Persia" or "the seventh heaven".
+
+sources:
+  - title: Sarah Brewer (mathémartiste), "5 minute 7-fold Star Rosette" (YouTube, 2024)
+    url: https://www.youtube.com/watch?v=tA8eSdVx_EQ
+    supports: [caption, fold]
+  - title: Jay Bonner and Marc Pelletier, "A 7-Fold System for Creating Islamic Geometric Patterns Part 1, Historical Antecedents", Bridges 2012
+    url: https://archive.bridgesmathart.org/2012/bridges2012-141.pdf
+    supports: [story]
+  - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
+    url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: 5 minute 7-fold Star Rosette
+  url: https://www.youtube.com/watch?v=tA8eSdVx_EQ
