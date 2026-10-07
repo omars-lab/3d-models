@@ -384,6 +384,22 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/design/plates](../../design/plates/README.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
+9. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put
+   an id on every prototype, at Omar's ask on the 2026-10-06 calls page ("every proptoty should
+   have an id"). Using them on the 2026-10-07 plates (3d-models #600) showed three limits, all in
+   bikar's `coaster-mark.ts` and `coaster-loose.ts`:
+   - **Turns.** A found mark tries turns in 15° steps (`MARK_TURNS_DEG`), which match the straps
+     of four-, six- and twelve-fold patterns. A five- or ten-fold strap runs at 18° or 36° steps,
+     so it gets the nearest 15° turn and needs more room than it should. Add those turns, or
+     take the turn from the strap under the mark.
+   - **One digit.** split-01 takes ids 1 to 9. split-02 takes 1 to 9 except 4, at 2 mm, and only
+     at its 112.5 mm size. A tenth prototype of either coaster has no id that fits. Two digits
+     need a smaller cap, which the 0.4 mm hole floor refuses, or a wider spot to put them.
+   - **Dots at the middle.** A piece's dots sit in a row through its centre. A kite of the
+     sheets-04g-fit plate is too thin there for even one 1 mm dot (0.71 mm of wall left, under the
+     0.8 mm floor, CAL-CST-01). Putting the row at the piece's widest spot may fit kites. Until
+     then, how to tell the kite rungs apart is call 6b on the
+     [2026-10-06 calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md).
 
 ## Handed to the video loop
 

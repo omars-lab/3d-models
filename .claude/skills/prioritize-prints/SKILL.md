@@ -44,6 +44,11 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue
    shows it by value on its "waiting on a build" line. When its recipe lands, drop `needs:` and
    move it to `proposed`.
+   Before the page goes to Omar, check every prototype on it carries its id (an `id`, a `pair`
+   letter or dots, whichever its `.bkr` declares), set by the plate, since the file's default is
+   no mark. Omar, 2026-10-06: "every proptoty should have an id". The rule, and what to do with a
+   piece too small to mark, is in print-coaster-samples'
+   [sample-rules](../print-coaster-samples/sample-rules.md#checks-every-plate-passes-before-the-owner-gate).
 3. **Pictures and cost, before `waiting`.** A page moves to `waiting` only with pictures.
    - The review sheet: `python3 tools/print_review.py sheet <out.png> <pieces.stl>`, from the
      review-print skill. Read it yourself and write what you saw on the page (openness, art

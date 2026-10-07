@@ -1,10 +1,11 @@
 ---
 plate: sld-1
+print_log: '[[print-logs/sld-1|print log]]'
 recipe: sld-1.yaml
 iteration: 1
-stage: waiting
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-07-sld-1]
 answers: "Does a small dovetail, a 0.8 mm rail in a 1.0 mm slot, join two 1.6 mm piece halves by hand with no glue, and at which gap, 0.10, 0.15 or 0.20 mm a side, does it slide in and stay?"
 kind: new
 maturity: experiment
@@ -108,6 +109,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ eac8f0f4f2 | sent 2026-10-07 |
 
 ## Timeline
 
@@ -115,3 +117,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-05 | proposed — Omar picked the dovetail to try first (D-107) | this page |
 | 2026-10-05 | sliced — local slice from bikar main after bikar #309, fits one bed, 12 minutes, 2.4 g, no slicer warnings | this page |
+| 2026-10-07 | sent — by `bambu print send`; spends the approval of 2026-10-07, iteration 1 @ eac8f0f4f2 | this page |
+| 2026-10-07 | printed — on the X2D, one bed, all 12 layers, about 13 minutes against the slicer's 12, after two stops on the glacier plate and a swap to the gold one; Omar: "alos 10, 15, and 20 all worked ..." | [the record](../../prints/2026-10-07-sld-1/index.md) |
