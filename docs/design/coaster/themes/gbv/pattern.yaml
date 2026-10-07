@@ -13,6 +13,11 @@
 # photo on Wikimedia Commons (Royroydeb, own work, 2014-10-13, CC BY-SA 4.0) shows the same layout
 # on the tomb wall. Both photos were matched to our drawing by eye: the same family, not compared
 # line for line.
+#
+# The dates follow the storefront Agra and Isfahan dates check
+# (docs/research/2026-10-07-agra-isfahan-dates-consolidated.md, table R). 1622 is the year
+# Itimad-ud-Daula died, not a record of building starting, and the finish is not agreed (Wade gives
+# 1626, one thesis 1629–30). So the era says "the 1620s" and the caption "finished about 1628".
 
 construction: gBV_JTt3Kxk
 short: gBV
@@ -23,23 +28,27 @@ fold: 10
 history_name: ""
 
 found_at: Tomb of Itimad-ud-Daula, Agra, India
-era: Mughal, 1622–1628
+era: Mughal, 1620s
 
 # One line under the pattern's picture.
-caption: Ten-pointed stars in inlaid marble, from the tomb of Itimad-ud-Daula, Agra (finished 1628).
+caption: Ten-pointed stars in inlaid marble, from the tomb of Itimad-ud-Daula, Agra (finished about 1628).
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
-  In Agra, between 1622 and 1628, the empress Nur Jahan built a tomb for her parents: her father
-  Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her mother Asmat Begum. It
-  was the first Mughal tomb faced in white marble to carry so much inlaid stone on its outside.
-  Ten-pointed stars like these appear in its inlaid marble, photographed by David Wade and
-  catalogued by Brian Wichmann.
+  In Agra in the 1620s, after her father died in 1622, the empress Nur Jahan built a tomb for her
+  parents: her father Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her
+  mother Asmat Begum. It was the first Mughal tomb faced in white marble to carry so much inlaid
+  stone on its outside. Ten-pointed stars like these appear in its inlaid marble, photographed by
+  David Wade and catalogued by Brian Wichmann.
 
 # Facts scholars disagree on. The story above avoids each one.
 contested:
-  - Building start. Most sources say 1622; Archnet's Hijri dates work out to about 1625. All agree it
-    was finished in 1628.
+  - Building dates. 1622 is the year Itimad-ud-Daula died; the sources that start the building then
+    cite no record of work beginning. Ebba Koch dates the tomb AH 1036–37 (1626–28), and Archnet's
+    own Hijri dates begin in late 1625. Most sources give 1628 for the finish; David Wade's catalogue
+    gives 1626, and one thesis argues 1629–30. Say "the 1620s" or "finished about 1628"; never "all
+    agree". Do not print a dated inscription until a page of Asher (1992) p. 130 or Okada (2003) has
+    been seen.
   - Where on the building the ten-pointed field is. No text places it; say "on the tomb", not "on the
     plinth" or "in the screens".
   - How close the match is. The photos show the same family as our drawing, matched by eye, not
@@ -56,6 +65,12 @@ sources:
     supports: [story, era]
   - title: Archaeological Survey of India, "Itimad-ud-Daula's Tomb" (archived page)
     url: https://web.archive.org/web/2017id_/http://asi.nic.in/asi_monu_tktd_up_itimaduddaula.asp
+    supports: [story]
+  - title: Ebba Koch, Mughal Architecture (Prestel, 1991), pp. 74–75
+    url: https://archive.org/details/in.gov.ignca.79132
+    supports: [era, story]
+  - title: Jahangir, Tuzuk-i-Jahangiri, tr. Rogers, ed. Beveridge, vol. 2 (1914)
+    url: https://www.gutenberg.org/ebooks/53716
     supports: [story]
   - title: Brian Wichmann, Tiling Search P48 (10-fold, Itimad-ud-Daula's Tomb)
     url: https://tilingsearch.mit.edu/HTML/data185/P48.html
