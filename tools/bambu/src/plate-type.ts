@@ -155,12 +155,14 @@ export function resolveSlicePlateType(flag: string | undefined, saved: PlateType
  * An id can cover more than one plate. On 2026-10-07 the X2D reported P0101 (with `base: 4`) while the
  * bed photo showed Omar's smooth light-blue glacier plate, not the gold Textured PEI one. So a ✓ on
  * P0101 says the printer treats the plate as Textured PEI, not which plate is on the bed: the bed
- * photo is still the only check of that, and the verdict's note names the plate seen.
+ * photo is still the only check of that. `alsoSeenWith` marks such an id: a slice for another plate
+ * goes through only when the bed verdict on the newest photo names the plate the slice is for.
  */
-export const PRINTER_PLATE_IDS: Readonly<Record<string, { token: string; seen: string }>> = {
+export const PRINTER_PLATE_IDS: Readonly<Record<string, { token: string; seen: string; alsoSeenWith?: string }>> = {
   P0101: {
     token: "textured_plate",
     seen: "2026-10-03: the X2D reported P0101 while the bed photo showed a Textured PEI Plate and Bambu Studio was set to one",
+    alsoSeenWith: "the non-Bambu glacier plate (2026-10-07)",
   },
 };
 
@@ -178,8 +180,12 @@ export interface PlateCheck {
   mark: "✓" | "⚠" | "✗";
 }
 
-/** Compare the slice's plate type with what the printer says is on the bed. PURE. */
-export function checkPlate(slice: SlicePlateType, printerPlateId: string | null | undefined): PlateCheck {
+/**
+ * Compare the slice's plate type with what the printer says is on the bed. PURE. `seen` is the plate
+ * type the bed verdict on the newest photo names, if any; it only matters for an id the printer has
+ * also reported with another plate on the bed. The bed check still holds the verdict to a fresh photo.
+ */
+export function checkPlate(slice: SlicePlateType, printerPlateId: string | null | undefined, seen: string | null = null): PlateCheck {
   if (!slice.type) {
     return { ok: false, mark: "✗", line: `plate: ${slice.from}. Slice it again with --plate-type for the plate on the bed.` };
   }
@@ -192,10 +198,20 @@ export function checkPlate(slice: SlicePlateType, printerPlateId: string | null 
   }
   const onBed = plateTypeFromToken(known.token);
   if (known.token !== slice.type.token) {
+    if (known.alsoSeenWith && seen === slice.type.token) {
+      return {
+        ok: true,
+        mark: "⚠",
+        line: `plate: ${want}; the printer reports ${id}, which it has also reported with ${known.alsoSeenWith} on the bed, so the bed verdict decides: it saw a ${slice.type.name}`,
+      };
+    }
+    const nonBambu = known.alsoSeenWith
+      ? ` If the plate is not a Bambu one, record the bed verdict with --plate-type ${slice.type.token} after looking at the photo.`
+      : "";
     return {
       ok: false,
       mark: "✗",
-      line: `plate: ${want}, but the printer reports ${id}, a ${onBed?.name ?? known.token}. Slice it again for that plate, or change the plate.`,
+      line: `plate: ${want}, but the printer reports ${id}, a ${onBed?.name ?? known.token}. Slice it again for that plate, or change the plate.${nonBambu}`,
     };
   }
   return { ok: true, mark: "✓", line: `plate: ${want}; the printer reports ${id}, a ${onBed?.name ?? known.token}.` };
