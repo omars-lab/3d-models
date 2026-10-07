@@ -151,6 +151,11 @@ export function resolveSlicePlateType(flag: string | undefined, saved: PlateType
  * The printer's own plate report, `print.device.plate.cur_id`, decoded only where we have seen an id
  * next to a plate we could name. No source decodes these ids (both research passes, 2026-10-03), so
  * this list grows one sighting at a time; an id not on it is shown, never guessed at.
+ *
+ * An id can cover more than one plate. On 2026-10-07 the X2D reported P0101 (with `base: 4`) while the
+ * bed photo showed Omar's smooth light-blue glacier plate, not the gold Textured PEI one. So a ✓ on
+ * P0101 says the printer treats the plate as Textured PEI, not which plate is on the bed: the bed
+ * photo is still the only check of that, and the verdict's note names the plate seen.
  */
 export const PRINTER_PLATE_IDS: Readonly<Record<string, { token: string; seen: string }>> = {
   P0101: {
