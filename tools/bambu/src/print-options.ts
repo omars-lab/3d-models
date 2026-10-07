@@ -169,6 +169,10 @@ export function buildOptionCommand(option: PrintOption, on: boolean, level: stri
  */
 export const PLATE_SWITCHES = ["foreign-object", "plate-type"] as const;
 
+/** Said when a verdict predates `--bambu-plate`/`--non-bambu`; the plate name follows it. */
+export const PLATE_KIND_UNSAID =
+  "the bed verdict does not say whether the plate is Bambu's own, so the two checks cannot be set from it. Look at a new photo and write the verdict with --bambu-plate or --non-bambu: bambu bed verdict";
+
 export interface PlateSwitchChange {
   option: PrintOption;
   on: boolean;
@@ -184,9 +188,12 @@ export function plateSwitchChanges(frame: Frame, nonBambu: boolean): PlateSwitch
 /**
  * The send's `options:` line. ✗ when a switch is wrong for the plate the verdict saw: on with a
  * non-Bambu plate the print stops before layer 0 (sld-1, 2026-10-07); off with a Bambu plate nothing
- * checks for a print left on the bed. ⚠ when the printer does not report a switch.
+ * checks for a print left on the bed. ✗ too when the verdict does not say which kind of plate it saw
+ * (`nonBambu` undefined): both plates read P0101, so the look is the only source. ⚠ when the printer
+ * does not report a switch.
  */
-export function plateSwitchCheck(frame: Frame, nonBambu: boolean, plate: string): { ok: boolean; mark: "✓" | "✗" | "⚠"; line: string } {
+export function plateSwitchCheck(frame: Frame, nonBambu: boolean | undefined, plate: string): { ok: boolean; mark: "✓" | "✗" | "⚠"; line: string } {
+  if (nonBambu === undefined) return { ok: false, mark: "✗", line: `options: ${PLATE_KIND_UNSAID} ${plate}` };
   const which = nonBambu ? "a non-Bambu plate" : "a Bambu plate";
   const want = nonBambu ? "off" : "on";
   const options = PLATE_SWITCHES.map((k) => optionByKey(k)).filter((o) => o.supported(frame) !== false);
