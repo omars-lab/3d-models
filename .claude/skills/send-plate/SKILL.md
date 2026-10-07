@@ -135,10 +135,13 @@ gold plate in. What to do instead, from
    dry run's `plate:` line then shows `⚠ … the bed verdict decides: it saw a High Temp Plate`
    instead of refusing. With no verdict, or one that saw Textured, it still refuses.
 3. **The printer's two checks are Omar's to switch.** Foreign Object Detection and Type
-   Detection must be off on the printer (Settings > Print Options, or Studio's Device > Print
-   Options), or he presses "Ignore this and Resume" on 8062 each print. Ask him; we never send a
-   printer setting. Both are printer-wide, so they stay off for the gold plate until he switches
-   them back on. The rest of the checks stay on; the walk-through is in the
+   Detection must be off on the printer, or he presses "Ignore this and Resume" on 8062 each
+   print. `bambu options show` says where they stand. To switch them, ask him: he does it at the
+   printer (Settings > Print Options), or says go in chat for this change and you run
+   `bambu options set foreign-object off --yes` and `bambu options set plate-type off --yes`
+   (Studio closed), each of which must read back `✓`. His go for one change does not cover the
+   next. Both are printer-wide, so they stay off for the gold plate until switched back on the
+   same way. The rest of the checks stay on; the walk-through is in the
    [printer setup skill](../setup-bambu-x2d/SKILL.md#build-plates-and-print-options).
 
 What the send checks on its own, and why there is no git hook for it:

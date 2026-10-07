@@ -16,6 +16,7 @@ import { registerHeader } from "./commands/header.js";
 import { registerSlice } from "./commands/slice.js";
 import { registerPrint } from "./commands/print.js";
 import { registerStorage } from "./commands/storage.js";
+import { registerOptions } from "./commands/options.js";
 import { registerBed } from "./commands/bed.js";
 import { registerValidate } from "./commands/validate.js";
 import { registerPlates } from "./commands/plates.js";
@@ -51,6 +52,7 @@ export function buildProgram(): Command {
   registerSlice(program);
   registerPrint(program);
   registerStorage(program);
+  registerOptions(program);
   registerBed(program);
   registerValidate(program);
   registerPlates(program);
