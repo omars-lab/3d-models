@@ -18,8 +18,9 @@ fold: 8
 # backlog S3.3, Omar picks).
 history_name: ""
 
-# One line under the pattern's picture.
-caption: Eight-fold rosettes on a square grid, with an octagon at each corner and a sixteen-pointed star at each heart.
+# One line under the pattern's picture. Checked against a top-down drawing of the construction
+# (bikar-main 144c075, 2026-10-07): each rosette's heart is a plain octagon, with no star points.
+caption: Eight-fold rosettes on a square grid, each with an octagon at its heart.
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
