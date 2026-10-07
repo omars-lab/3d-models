@@ -23,6 +23,9 @@ since. The commit is on master because a squash merge drops branch commits.
 2. Run `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate`. It
    adds the next iteration to `approvals.yaml`, sets `iteration:` on the page, marks an open yes
    `reset <date>`, and puts an approved plate back to `waiting`.
+   Add a timeline row saying what changed and why:
+   `| <date> | changed (iteration N): <what, and whose ask> | <where it is written> |`, then a
+   `sliced` row once it is sliced again.
 3. Stage the recipe, the page and `approvals.yaml` by name, and ship the PR.
 4. The plate needs a new yes from Omar. It cannot be given until the change is on master, since the
    yes names the master commit.
