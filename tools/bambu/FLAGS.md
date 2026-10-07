@@ -315,6 +315,31 @@ delete plate files (.3mf) from the top of the storage card; asks first
 |---|---|
 | `-y, --yes` | delete without asking |
 
+### `bambu options`
+
+the printer's print options: foreign objects, plate type and alignment, displacement, AI checks
+
+### `bambu options show`
+
+each print option on or off, and what a non-Bambu plate wants (read-only)
+
+| Flag | Description |
+|---|---|
+| `--json` | print the switches as JSON |
+
+### `bambu options set`
+
+switch one print option on or off (foreign-object, plate-type, plate-alignment, displacement); asks first, then reads it back
+
+| Argument | Required | Description |
+|---|---|---|
+| `option` | yes | foreign-object \| plate-type \| plate-alignment \| displacement |
+| `state` | yes | on \| off |
+
+| Flag | Description |
+|---|---|
+| `-y, --yes` | switch without asking |
+
 ### `bambu bed`
 
 the bed photo a send rests on, and the written verdict on it

@@ -326,7 +326,7 @@ export class MqttBackend {
   }
 
   /** Publish a request payload on device/<serial>/request. Fire-and-forget; the printer acks on report. */
-  private async publishRequest(payload: PrintRequest): Promise<void> {
+  private async publishRequest(payload: PrintRequest | { xcam: Record<string, unknown> }): Promise<void> {
     if (!this.client) throw new Error("MQTT not connected");
     await new Promise<void>((resolve, reject) => {
       this.client!.publish(this.requestTopic, JSON.stringify(payload), (err) => (err ? reject(err) : resolve()));
@@ -349,6 +349,16 @@ export class MqttBackend {
   async sendPrintControl(command: "pause" | "resume" | "stop"): Promise<void> {
     ev("mqtt_print_control", { command });
     await this.publishRequest(buildPrintControlCommand(command));
+  }
+
+  /**
+   * Switch one of the printer's print options (`xcam_control_set`, built by `print-options.ts`).
+   * OWNER-GATED like the send: the caller owns the confirm, and it changes the printer for every
+   * print after it.
+   */
+  async setPrintOption(cmd: { xcam: Record<string, unknown> }): Promise<void> {
+    ev("mqtt_print_option", { module: String(cmd.xcam.module_name), control: String(cmd.xcam.control) });
+    await this.publishRequest(cmd);
   }
 
   getCachedStatus(): PrinterStatus {

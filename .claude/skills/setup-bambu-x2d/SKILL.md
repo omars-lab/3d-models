@@ -131,9 +131,20 @@ in the slice. They live on the printer screen under **Settings > Print Options**
 Studio under **Device > Print Options** (Idle Heating Protection is in Studio's separate Safety
 Options). The setting lives on the printer, so the screen and Studio show the same value. Whether
 it survives a restart or a firmware update is not written anywhere found, so look at the screen
-after either. Our CLI does not read or change these today. Changing one is Omar's, at the printer;
-we never send it. Sources and confidence for every row:
+after either. Sources and confidence for every row:
 [the plate research](../../../docs/research/2026-10-07-third-party-plates.md#recommendation).
+
+**From the CLI** (Studio must be closed: the printer takes one connection at a time):
+
+- `bambu options show` reads every switch and is safe to run any time. Its `non-Bambu plate`
+  column is this table's right-hand side.
+- `bambu options set <option> on|off` switches one: `foreign-object`, `plate-type`,
+  `plate-alignment` or `displacement`. It refuses mid-print, sends the command the way Studio
+  does, waits, then reads the switch back (`✓`, `✗`, or `?` when the printer does not report it).
+  It changes the printer for every print after it, so run it only on Omar's go in chat for that
+  change, and pass `--yes` only then. The AI checks are shown, not set; switch those at the
+  printer. The command is untested on this printer until its first run: after the first `set`,
+  look at the screen and confirm it agrees.
 
 | Option | Bambu's own plates (gold Textured PEI) | A non-Bambu plate (the glacier) |
 |---|---|---|
@@ -146,7 +157,7 @@ we never send it. Sources and confidence for every row:
 | First Layer Inspection | not offered on the X2D | not offered on the X2D |
 
 Both switches are printer-wide, so after a glacier print they stay off for the gold plate until
-they are switched back on. With them off, nothing checks for a print left on the bed or for a
+they are switched back on (`bambu options set foreign-object on`, `… plate-type on`, on Omar's go). With them off, nothing checks for a print left on the bed or for a
 slice made for the wrong plate, so the bed photo and the slice's plate type carry it alone.
 
 **Slice for the plate on the bed.** The gold plate is `--plate-type textured_plate`. The glacier is
