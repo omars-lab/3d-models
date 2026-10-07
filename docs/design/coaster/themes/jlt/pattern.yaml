@@ -11,6 +11,15 @@
 # carved stone panel in the Qijmas mosque, after a Creswell photo too small to count the stars. No
 # open photo of the panel exists. So the record says "recorded", and gives no era: 1479–1481 is the
 # building's date, not proof the panel is the same design.
+#
+# "Plate 170" is the 1879 numbering (storefront seven-eras check, design question 15). In the Getty
+# Research Institute's scan of the 1879 Firmin-Didot portfolio on archive.org (gri_33125012261786,
+# scan leaf n388), the number 170 is printed on the plate itself. The plate shows seven-pointed
+# stars round octagons on a square plan, and Bourgoin's text for "Pl. 170" (VIIe série, famille
+# heptagonale) describes the same construction: a square plan whose central line is turned a
+# seventh of a right angle, ending in a seven-pointed star. Checked by eye against our drawing and
+# Wichmann's P170, not line for line. The Dover reprint (1973) was not opened, so do not cite its
+# plate number.
 
 construction: jlTmt_279M4
 short: jlT
@@ -46,6 +55,9 @@ contested:
     (non-commercial licence) and David Wade's scan of the plate are not ours to show.
 
 sources:
+  - title: Jules Bourgoin, Les éléments de l'art arabe. Le trait des entrelacs (Paris, Firmin-Didot, 1879), plate 170 and its text, Getty Research Institute scan
+    url: https://archive.org/details/gri_33125012261786/page/n388
+    supports: [caption, fold, story]
   - title: Brian Wichmann, Tiling Search P170, "Bourgoin, Plate 170"
     url: https://tilingsearch.mit.edu/HTML/data12/P170.html
     supports: [caption, fold, found_at, story]

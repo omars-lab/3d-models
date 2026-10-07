@@ -9,6 +9,14 @@
 #
 # A teaching tile: its maker names no building, so there is no found_at and no era. The story
 # gives the family's history, each line with the scholar who gives it.
+#
+# Which Ibn Tulun feature carries the "woven patterns" line could not be settled (storefront
+# seven-eras check, design question 4). Abdullahi and Embi date the mosque (876–879), not a
+# feature: their Fig. 4 shows two Ibn Tulun panels, one carved stucco with an eight-pointed star and
+# one a pierced field of six-pointed stars and hexagons, with no place on the building and no
+# date. Museum With No Frontiers (Tarek Torky) says only four of the 128 pierced-stucco windows
+# keep Ibn Tulun's own designs, which are intersecting circles; the rest are Fatimid and Mamluk. So
+# the story keeps 876–879 as the mosque's date and never as the star patterns' date.
 
 construction: rDuxHF3xMOc
 short: rDu
@@ -24,9 +32,11 @@ caption: An eight-pointed star in a square tile, framed by octagons, drawn after
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
-  Simple six- and eight-pointed star patterns are among the earliest woven patterns in Islamic
-  art, at the mosque of Ibn Tulun in Cairo, built 876–879. Brian Wichmann calls eight-pointed
-  stars with octagons one of the commonest Islamic patterns, found from Spain and Morocco to India.
+  The scholars Abdullahi and Embi count simple six- and eight-pointed star patterns at the mosque of
+  Ibn Tulun in Cairo among the earliest woven patterns in Islamic art; the mosque was built in
+  876–879, though most of its pierced-stucco windows are later work. Brian Wichmann calls
+  eight-pointed stars with octagons one of the commonest Islamic patterns, found from Spain and
+  Morocco to India.
 
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
 contested:
@@ -34,6 +44,10 @@ contested:
     one plate in a pattern book. It is close to one, but nobody has shown the proportions match.
   - The family's first dated example. A 12th-century Iranian date rests on a book nobody here has
     opened; print the Ibn Tulun line instead.
+  - The date of the star patterns at Ibn Tulun. 876–879 is when the mosque was built, not when its
+    star panels were made; only four of its 128 windows keep their 9th-century designs. Never print
+    "star patterns from 876–879", "the first eight-pointed stars" or "9th-century star patterns at
+    Ibn Tulun".
 
 sources:
   - title: Sarah Brewer (mathémartiste), "8-fold star rosette with sequences in GeoGebra" (YouTube, 2026)
@@ -41,6 +55,9 @@ sources:
     supports: [caption, fold]
   - title: Y. Abdullahi and M. R. Embi, "Evolution of Islamic geometric patterns", Frontiers of Architectural Research 2 (2013)
     url: https://www.scipedia.com/public/Abdullahi_Bin-Embi_2013a
+    supports: [story]
+  - title: Tarek Torky, "Mosque of Ahmad Ibn Tulun", Discover Islamic Art, Museum With No Frontiers
+    url: https://islamicart.museumwnf.org/database_item.php?id=monument;ISL;eg;Mon01;2;en
     supports: [story]
   - title: Brian Wichmann, Tiling Search P222, "Bourgoin, Plate 48"
     url: https://tilingsearch.mit.edu/HTML/data161/P222.html
