@@ -1,7 +1,7 @@
 ---
 plate: split-01
 recipe: split-01.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -49,6 +49,11 @@ when you say yes.
   round closes up its arms, so there would be no star to see; bikar refuses a lip that does that.
   The flange version holds the stars too.
 - **Studs** 2 mm across, at least 25 mm apart, on the lower half, so the halves line up.
+- **Its id, 1** (iteration 2, on your comment of 2026-10-06: "every proptoty should have an id"),
+  so it can be told from split-02 and every later prototype. The cut faces are mostly pocket, so
+  the id is cut 2.5 mm tall into the lower half's bottom face, the face the coaster stands on,
+  mirrored so it reads the right way round when you turn the coaster over. At 112.5 mm the lip
+  coaster has room for any id from 1 to 9.
 
 **The color is picked at the send**, as on sheets-04g: say it with the yes ("yes, in pink").
 
@@ -106,6 +111,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, after spl-1, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
 
 ## Timeline
 
@@ -113,3 +119,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-05 | proposed — at Omar's ask, option A of the split design's call 6, beside split-02 (C) | this page |
 | 2026-10-05 | sliced — local slice against bikar #305, fits one bed, 89 minutes, 30 g, no slicer warnings | this page |
+| 2026-10-07 | changed (iteration 2): its id, 1, cut into the lower half's bottom face, on Omar's comment on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
+| 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 89 minutes, 30 g, no slicer warnings; the id did not change the time | this page |

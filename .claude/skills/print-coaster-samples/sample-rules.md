@@ -66,6 +66,21 @@ When a print teaches something new, add or correct a rule here, with the date an
   at its print size and its art fills the shape. minis-03 dropped five minimal-frames on sight
   (2026-09-25). Two were near-solid discs (sDO9, nmEj); three had half-empty or wedge-gapped
   art (n3Ii, lEfW, tA8e). **Omar would rather have fewer patterns than a bad sample.**
+- **Every prototype carries its id.** Omar, 2026-10-06, on split-01 and split-02: "mnake sure we
+  are adding a label to atleast one main peice so we can distinguish. this proptoty ... every
+  proptoty should have an id .. this should be aprt of our skills". Off the bed, two coupons or
+  two coasters that differ by a tenth of a millimetre look the same, and the plate's labels stay
+  in the slicer. So the plate sets the mark its `.bkr` declares, because the file's own default is
+  0, no mark:
+  - a split coaster: `id` (1 to 9), on the lower half's bottom face, mirrored to read from below
+    (the gBV lip and flange coasters: their cut faces are mostly pocket or undercut);
+  - a split coupon: `pair` (1 to 26, a letter), the lower half reading `AB`, the upper `AT`;
+  - loose pieces at a ladder of gaps: `<ring>_dots`, the most dots on the biggest piece (the
+    tightest gap), one dot on the smallest.
+  Ids and letters run on from the last plate's, so no two prototypes on the shelf share one
+  (spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2). A piece too small to take a mark (a
+  gBV kite: one dot leaves 0.71 mm of top under the 0.8 mm floor) says so in the plate header,
+  with how its rungs are kept apart instead.
 - `bambu slice compose <plate> --dry-run` places every item.
 - **The slice carries the whole preset chain.** minis-03 and minis-04 printed on Studio's
   built-in values for about 54 process and 50 filament settings, because Studio's command line
