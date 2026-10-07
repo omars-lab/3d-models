@@ -109,9 +109,11 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
 4. **Open the photo and look, then write down what it shows.** Say what is on the bed: empty or
    not, the build plate seated or not, and which plate it is (the Textured PEI Plate is gold and
    grainy; Omar's glacier plate, from 2026-10-07, is smooth light blue with a honeycomb strip on
-   its right edge). The printer reports both as P0101, so only the photo tells them apart. Omar
-   prints on either ("will print on teither", 2026-10-07): a glacier plate goes down as
-   `--plate-type textured_plate`, with the `--note` naming the glacier plate. Then record it,
+   its right edge). The printer reports both as P0101, so only the photo tells them apart. A
+   glacier plate on the bed is a stop: ask Omar to put the gold plate in. sld-1 went out on the
+   glacier plate (2026-10-07) and the X2D stopped before the first layer twice, first "foreign
+   objects detected on heatbed" (0500-806E) on an empty plate, then "the print plate marker was
+   not detected" (0500-8062). It ran as soon as Omar put the gold plate in. Then record it,
    since the send refuses without it:
    `bambu bed verdict <name> --plate-type <the plate you saw> --by "Claude, opened the photo" --clear --seated`,
    or `--no-clear` / `--no-seated` with a `--note` saying what is wrong. Run the dry run again

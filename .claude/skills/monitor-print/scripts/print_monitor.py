@@ -84,11 +84,12 @@ MILESTONES = (25, 50, 75)
 # is shown as its number, never guessed at. Source: Bambu's HMS list as mirrored in
 # jmassardo/bambuddy-mobile hmsErrorCatalog.ts and hiwebsun0914 hms_errors.py (2026-10-03);
 # 0300-400C from bambulab/BambuStudio issue #527 ("print cancelled from front panel");
-# 0500-806E from Bambu Studio's own X2D list, Resources/hms/hms_en_20P.json (2026-10-07).
+# 0500-806E and 0500-8062 from Bambu Studio's own X2D list, Resources/hms/hms_en_20P.json (2026-10-07).
 CANCELLED = "0300-400C"
 KNOWN = {
     "0500-8051": "the plate on the bed is not the one the file was sliced for",
     "0500-806E": "the printer saw something on the bed and wants it checked and cleared",
+    "0500-8062": "the printer could not see the plate's marker: check all four corners sit square, and keep strong light off the plate",
     CANCELLED: "the print was cancelled, from the printer's screen or an app",
 }
 
