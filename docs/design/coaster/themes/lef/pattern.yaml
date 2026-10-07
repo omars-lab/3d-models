@@ -16,6 +16,11 @@
 # and Wade's photo were matched to our drawing by eye: eight-pointed stars inside large octagons on
 # a square repeat, the same family, not compared line for line. Hankin was a bacteriologist in
 # India, not a botanist. Wade IND 0422 and 0423 may show it too; they stay a lead, not a source.
+#
+# The dates follow the storefront Agra and Isfahan dates check
+# (docs/research/2026-10-07-agra-isfahan-dates-consolidated.md, table R). 1622 is the year
+# Itimad-ud-Daula died, not a record of building starting, and the finish is not agreed (Wade gives
+# 1626, one thesis 1629–30). So the era says "the 1620s".
 
 construction: lEfWSogWscs
 short: lEf
@@ -26,17 +31,18 @@ fold: 8
 history_name: ""
 
 found_at: Tomb of Itimad-ud-Daula, Agra, India
-era: Mughal, 1622–1628
+era: Mughal, 1620s
 
 # One line under the pattern's picture.
 caption: Eight-pointed stars, inlaid in colored stone, from a pillar at the tomb of Itimad-ud-Daula, Agra.
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
-  In Agra, between 1622 and 1628, the empress Nur Jahan built a tomb for her parents: her father
-  Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her mother Asmat Begum. It
-  was the first Mughal tomb faced in white marble to carry so much inlaid stone on its outside.
-  Eight-pointed stars like these, inlaid in colored stone, decorate a pillar there.
+  In Agra in the 1620s, after her father died in 1622, the empress Nur Jahan built a tomb for her
+  parents: her father Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her
+  mother Asmat Begum. It was the first Mughal tomb faced in white marble to carry so much inlaid
+  stone on its outside. Eight-pointed stars like these, inlaid in colored stone, decorate a pillar
+  there.
 
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
 contested:
@@ -45,8 +51,12 @@ contested:
   - Where on the building. Clévenot's caption says "a pillar"; two photos show it at the foot of the
     corner towers. "At the foot of its corner towers" rests on the photos alone, so say "seen at",
     not "recorded at".
-  - Building start. Most sources say 1622; Archnet's Hijri dates work out to about 1625. All agree it
-    was finished in 1628.
+  - Building dates. 1622 is the year Itimad-ud-Daula died; the sources that start the building then
+    cite no record of work beginning. Ebba Koch dates the tomb AH 1036–37 (1626–28), and Archnet's
+    own Hijri dates begin in late 1625. Most sources give 1628 for the finish; David Wade's catalogue
+    gives 1626, and one thesis argues 1629–30. Say "the 1620s" or "finished about 1628"; never "all
+    agree". Do not print a dated inscription until a page of Asher (1992) p. 130 or Okada (2003) has
+    been seen.
   - Its size, any Italian influence on the inlay, the architect's name and "first all-marble
     building". Do not print these.
 
@@ -59,6 +69,12 @@ sources:
     supports: [story, era]
   - title: Archaeological Survey of India, "Itimad-ud-Daula's Tomb" (archived page)
     url: https://web.archive.org/web/2017id_/http://asi.nic.in/asi_monu_tktd_up_itimaduddaula.asp
+    supports: [story]
+  - title: Ebba Koch, Mughal Architecture (Prestel, 1991), pp. 74–75
+    url: https://archive.org/details/in.gov.ignca.79132
+    supports: [era, story]
+  - title: Jahangir, Tuzuk-i-Jahangiri, tr. Rogers, ed. Beveridge, vol. 2 (1914)
+    url: https://www.gutenberg.org/ebooks/53716
     supports: [story]
   - title: Brian Wichmann, Tiling Search F78 (8-fold, Mausoleum of I'timad al-Daula, after Clévenot)
     url: https://tilingsearch.mit.edu/HTML/data153/F78.html
