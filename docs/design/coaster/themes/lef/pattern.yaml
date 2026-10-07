@@ -1,0 +1,93 @@
+# Where the lEf pattern comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-naqsh-history-consolidated.md, §3 "What we may print" (lines 1, 2 and 4).
+# Add a fact only from that list, with a source someone opened (never a search snippet). Fix
+# wording here, never in the storefront's generated file. The store shows a history name only when
+# this record has at least one source.
+#
+# lEf has no color themes yet, so no product reads this record; it is here so the storefront's
+# name table can draft its name next to gBV's (both come from the same tomb; the fold tells them
+# apart).
+#
+# The tie to the tomb is a photo (Wade IND 0414), a catalogue entry (Wichmann F78) and Hankin's 1925
+# drawing, Plate III, Fig. 21 (storefront seven-eras check, design question 13). Hankin's figure
+# and Wade's photo were matched to our drawing by eye: eight-pointed stars inside large octagons on
+# a square repeat, the same family, not compared line for line. Hankin was a bacteriologist in
+# India, not a botanist. Wade IND 0422 and 0423 may show it too; they stay a lead, not a source.
+#
+# The dates follow the storefront Agra and Isfahan dates check
+# (docs/research/2026-10-07-agra-isfahan-dates-consolidated.md, table R). 1622 is the year
+# Itimad-ud-Daula died, not a record of building starting, and the finish is not agreed (Wade gives
+# 1626, one thesis 1629–30). So the era says "the 1620s".
+
+construction: lEfWSogWscs
+short: lEf
+fold: 8
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.2 drafts the names, Omar picks).
+history_name: ""
+
+found_at: Tomb of Itimad-ud-Daula, Agra, India
+era: Mughal, 1620s
+
+# One line under the pattern's picture.
+caption: Eight-pointed stars, inlaid in colored stone, from a pillar at the tomb of Itimad-ud-Daula, Agra.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  In Agra in the 1620s, after her father died in 1622, the empress Nur Jahan built a tomb for her
+  parents: her father Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her
+  mother Asmat Begum. It was the first Mughal tomb faced in white marble to carry so much inlaid
+  stone on its outside. Eight-pointed stars like these, inlaid in colored stone, decorate a pillar
+  there.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - The same eight-fold pattern is also recorded at the Hakim mosque in Isfahan and the Tillya-Kari
+    madrasa in Samarkand (Tiling Search F78). Never say it is found only in Agra.
+  - Where on the building. Clévenot's caption says "a pillar"; two photos show it at the foot of the
+    corner towers. "At the foot of its corner towers" rests on the photos alone, so say "seen at",
+    not "recorded at".
+  - Building dates. 1622 is the year Itimad-ud-Daula died; the sources that start the building then
+    cite no record of work beginning. Ebba Koch dates the tomb AH 1036–37 (1626–28), and Archnet's
+    own Hijri dates begin in late 1625. Most sources give 1628 for the finish; David Wade's catalogue
+    gives 1626, and one thesis argues 1629–30. Say "the 1620s" or "finished about 1628"; never "all
+    agree". Do not print a dated inscription until a page of Asher (1992) p. 130 or Okada (2003) has
+    been seen.
+  - Its size, any Italian influence on the inlay, the architect's name and "first all-marble
+    building". Do not print these.
+
+sources:
+  - title: Mehreen Chida-Razvi, "The Mausoleum of Itimad-ud-Daula", Sahapedia
+    url: https://www.sahapedia.org/the-mausoleum-of-itimad-ud-daula
+    supports: [story, era]
+  - title: E. B. Havell, A Handbook to Agra and the Taj (1904), "Itmâd-ud-daulah's Tomb"
+    url: https://www.gutenberg.org/ebooks/12006
+    supports: [story, era]
+  - title: Archaeological Survey of India, "Itimad-ud-Daula's Tomb" (archived page)
+    url: https://web.archive.org/web/2017id_/http://asi.nic.in/asi_monu_tktd_up_itimaduddaula.asp
+    supports: [story]
+  - title: Ebba Koch, Mughal Architecture (Prestel, 1991), pp. 74–75
+    url: https://archive.org/details/in.gov.ignca.79132
+    supports: [era, story]
+  - title: Jahangir, Tuzuk-i-Jahangiri, tr. Rogers, ed. Beveridge, vol. 2 (1914)
+    url: https://www.gutenberg.org/ebooks/53716
+    supports: [story]
+  - title: Brian Wichmann, Tiling Search F78 (8-fold, Mausoleum of I'timad al-Daula, after Clévenot)
+    url: https://tilingsearch.mit.edu/HTML/data153/F78.html
+    supports: [caption, fold, story]
+  - title: David Wade, Pattern in Islamic Art, IND 0414
+    url: https://patterninislamicart.com/single-id/459
+    supports: [caption]
+  - title: E. H. Hankin, The Drawing of Geometric Patterns in Saracenic Art (Memoirs of the Archaeological Survey of India 15, 1925), Plate III, Fig. 21, "Octagonal pattern used in inlaid marble in the tomb of Itimadu-d Daula, Agra"
+    url: https://archive.org/details/HankinSaracenicArt
+    supports: [caption, fold, story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: "Pattern from the tomb of Itimud ad-Daula in Agra India with GeoGebra"
+  url: https://www.youtube.com/watch?v=lEfWSogWscs
