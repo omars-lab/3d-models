@@ -119,7 +119,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
-| `0ke_GpoBa-s` | Ptolemy's pentagon doubled to ten | done | `bikar/patterns/Constructions/0ke_GpoBa-s.bkr` | PASS 40/0 | PASS 1.0/1.0 | — | `src/Coasters/0ke_GpoBa-s-minimal-coaster-standard.stl` | CS-16 | — |
+| `0ke_GpoBa-s` | A pentagon after Ptolemy's *Almagest*, doubled to ten | done | `bikar/patterns/Constructions/0ke_GpoBa-s.bkr` | PASS 40/0 | PASS 1.0/1.0 | — | `src/Coasters/0ke_GpoBa-s-minimal-coaster-standard.stl` | CS-16 | — |
 | `1TclLO9JKAA` | Parallel 9-fold Star Rosette, "Avoiding Open Paths" (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `1h7iWJaoN80` | Folio 192 heptagonal panel, Anonymous Persian Compendium (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `7apC5Q9QS-8` | Geogebra for Beginners — 8-Fold Rosette Walkthrough (Sarah Brewer) | done | `bikar/patterns/Constructions/7apC5Q9QS-8.bkr` | PASS 144/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/7apC5Q9QS-8-coaster-standard.stl` | CS-2 | — |
