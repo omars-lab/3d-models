@@ -8,7 +8,9 @@
 # history name only when this record has at least one source.
 #
 # The panel is photographed at the Alcazar (Wade SPA 2517) and catalogued there (Wichmann SEV2),
-# but no source names its room or its builder, so the record gives no era.
+# but no source names its room or its builder, so the record gives no era. Pedro I's palace dates
+# from the 1360s, but that is the palace's date, not the panel's (storefront seven-eras check,
+# design question 20): the story gives no date for the panel and keeps Pedro I out of it.
 
 construction: sDO9fpu76v8
 short: sDO
@@ -22,14 +24,14 @@ history_name: ""
 found_at: Royal Alcazar, Seville, Spain
 
 # One line under the pattern's picture.
-caption: Twelve-pointed stars on a six-fold grid, with six- and eight-pointed stars between them, from a cut-tile mosaic panel in the Royal Alcazar of Seville.
+caption: Twelve-pointed stars on a six-fold grid, with six- and eight-pointed stars between them, recorded on a cut-tile mosaic panel in the Royal Alcazar of Seville.
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
-  The pattern comes from a cut-tile mosaic panel in the Royal Alcazar of Seville, photographed by
-  David Wade. The Alcazar began as an Islamic citadel in the 10th century and was enlarged by the
-  Almohads; after Castile took Seville in 1248, Pedro I built a Mudéjar palace there in the 1360s,
-  likely with craftsmen sent from Granada. The same design is recorded at the Alcazaba of Málaga,
+  The pattern is recorded at the Royal Alcazar of Seville, on a cut-tile mosaic panel photographed
+  by David Wade and catalogued by Brian Wichmann. The Alcazar began as an Islamic citadel in the
+  10th century and was rebuilt by the Almohads and later by the kings of Castile; no source says
+  when this panel was made. The same design is recorded at the Alcazaba of Málaga,
   the Bou Inania madrasa in Meknes and the old synagogue of Córdoba.
 
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
@@ -40,6 +42,8 @@ contested:
     made this panel is open. Never "Almohad tilework" or "Pedro I's tilework" for it, and never
     "Moorish" as a single label.
   - The tiles' age. Nothing says whether they are medieval or replaced; do not date them.
+  - The 1360s. That is when Pedro I built his Mudéjar palace, not a date for this panel. Never
+    print the 1360s, or Pedro I, as the pattern's date or maker; the era stays undecided (IV or V).
   - The Granada craftsmen are "likely", not certain. Do not print "913–914" or "Abd al-Rahman III,
     first emir".
   - The same design elsewhere is the same design, not the same tiles.
