@@ -102,8 +102,9 @@ the page and the reason in the ranking cannot say different things.
 | `retired` | not printing it again |
 
 The **Timeline** is a table at the foot of the page, one row per event, oldest first. Each row
-starts with an event word — `proposed`, `reviewed`, `sliced`, `sent`, `printed`, `judged`,
-`retired`, and the grade's `promoted` and `demoted` — then says what happened and where it is written (a PR, the
+starts with an event word — `proposed`, `reviewed`, `changed` (the recipe changed: a new
+iteration, D-097), `sliced`, `sent`, `printed`, `judged`, `retired`, and the grade's `promoted`
+and `demoted` — then says what happened and where it is written (a PR, the
 record, the page). A plate can print more than once: each run is its own record, with its own
 `printed` row, and `times_printed` counts them. The count is never typed from memory; it is the
 number of records whose `plate:` starts with the plate's name. A yes or a hold is not a timeline

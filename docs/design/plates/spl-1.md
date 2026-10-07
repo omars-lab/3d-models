@@ -1,7 +1,7 @@
 ---
 plate: spl-1
 recipe: spl-1.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -10,8 +10,8 @@ kind: new
 maturity: experiment
 bets: []
 unblocks: []
-minutes: 43
-grams: 18.3
+minutes: 49
+grams: 18.5
 bed_plates: 1
 risk: watch
 pictures:
@@ -26,7 +26,7 @@ half sit in sockets in the upper half and line the two up. Before a full split c
 this plate asks three things in the hand: which stud fit holds, whether a socket shows through
 the top face, and whether a lip keeps a loose piece trapped between the halves. It is the first
 plan item of [the split design §9](../pieces/split-with-studs-design.md). The plate is
-[`spl-1.yaml`](spl-1.yaml). One bed, 43 minutes, about 18.3 g, in the color you pick when you say
+[`spl-1.yaml`](spl-1.yaml). One bed, 49 minutes, about 18.5 g, in the color you pick when you say
 yes.
 
 ## What it is
@@ -43,8 +43,21 @@ yes.
 - **Trap pairs**, two: bikar's `Split-Trap-Coupon`, a 25 mm tile whose halves each have a
   hexagonal opening with a 0.8 mm lip, and a loose hexagon (P) that sits between them. At room 0
   (T0) the piece is as tall as its cavity; at room 0.2 (T2) it is 0.2 mm shorter and can rattle.
-- **The tiles carry no labels.** The coaster block has no way to engrave text yet, so the bed
-  picture below is the map: take each tile off and bag it under the name drawn on it.
+- **Each pair carries its letter** (iteration 2, on your comment of 2026-10-06: "can we have
+  minimal letters printiend on each AT AB (a top, a bottom), BT, BB, ETC"). The letter is cut
+  2.5 mm tall into both cut faces: the lower tile reads `AB`, the upper `AT`. The cut faces meet
+  when a pair closes, so the letters show only when it is open. A trap's loose hexagon has no
+  letter; it stays with its tiles. The letters, and the names on the bed picture below:
+
+  | Letter | Bed name | What the pair is |
+  |---|---|---|
+  | A to F | G-10, G-05, G00, G05, G10, G15 | 2 mm stud, gaps −0.10 to 0.15 mm, in that order |
+  | G, H | S00, S05 | 1.5 mm stud, gaps 0 and 0.05 |
+  | I, J | B00, B05 | 3 mm stud, gaps 0 and 0.05 |
+  | K, L | F08, F10 | floors 0.8 and 1.0 mm, gap 0.05 |
+  | M, N | T0, T2 | trap pairs, room 0 and 0.2 |
+
+  pkt-1 goes on from O, so no two coupons share a letter.
 
 **The color is picked at the send**, as on sld-1: say it with the yes. The show-through check
 wants the lightest color you have loaded.
@@ -80,9 +93,10 @@ tile.
 
 ## Cost and risk
 
-One bed, 43 minutes, about 18.3 g (local slice, 2026-10-06, from bikar main after bikar #319, X2D
-preset and PLA Basic, sliced for the Textured PEI plate Bambu Studio has saved, no slicer
-warnings, nothing sent). One color, so no swaps.
+One bed, 49 minutes, about 18.5 g (local slice, 2026-10-07, from bikar main after bikar #323,
+X2D preset and PLA Basic, sliced for the Textured PEI plate, no slicer warnings, nothing sent).
+One color, so no swaps. Without the letters it was 43 minutes and 18.3 g (2026-10-06); the letters
+are the only change, so the six minutes are theirs.
 
 **Risk: watch.** The studs are 2 mm wide and 1.4 mm tall at the 0.6 floor; a small stud can be
 knocked off by the nozzle, which is the fit coupon failing, not the printer. The tiles are small
@@ -108,3 +122,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-06 | proposed — the split design's first plan item (§9) | this page |
 | 2026-10-06 | sliced — local slice from bikar main after bikar #319, fits one bed, 43 minutes, 18.3 g, no slicer warnings | this page |
+| 2026-10-07 | changed (iteration 2): a letter on each pair's cut faces, A to N, on Omar's comment on the 2026-10-06 calls page (bikar #323) | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
+| 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 49 minutes, 18.5 g, no slicer warnings | this page |

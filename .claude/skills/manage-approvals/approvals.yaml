@@ -22,6 +22,7 @@ phones-02:
   - {iteration: 1, recipe: '3387cb03d1b7', date: '2026-10-04'}
 pkt-1:
   - {iteration: 1, recipe: '2cc08ad87f18', date: '2026-10-06'}
+  - {iteration: 2, recipe: 'e3004df33f89', date: '2026-10-07'}
 sheets-01:
   - {iteration: 1, recipe: '89d1abcb4071', date: '2026-10-03'}
 sheets-04:
@@ -34,14 +35,18 @@ sheets-04g:
   - {iteration: 1, recipe: 'ba78d06e3b33', date: '2026-10-04'}
 sheets-04g-fit:
   - {iteration: 1, recipe: 'f4a44e2d7ac1', date: '2026-10-04'}
+  - {iteration: 2, recipe: '4c5b3b5332d2', date: '2026-10-07'}
 sld-1:
   - {iteration: 1, recipe: '715916738916', date: '2026-10-05'}
 spl-1:
   - {iteration: 1, recipe: 'f45f87d11088', date: '2026-10-06'}
+  - {iteration: 2, recipe: '09090078b0ab', date: '2026-10-07'}
 split-01:
   - {iteration: 1, recipe: 'e38ffecaeced', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'b9579380525b', date: '2026-10-07'}
 split-02:
   - {iteration: 1, recipe: 'b244b2df2fe5', date: '2026-10-05'}
+  - {iteration: 2, recipe: '61108820f7c4', date: '2026-10-07'}
 swatch-10101:
   - {iteration: 1, recipe: 'e35368796eee', date: '2026-10-05'}
 swatch-10204:

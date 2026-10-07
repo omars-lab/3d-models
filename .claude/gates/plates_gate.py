@@ -152,7 +152,7 @@ RISKS = ("ok", "watch", "hold")
 # What past prints showed, lowest first (plate-maturity-design §2). Not `kind`: kind is why the
 # next print happens, maturity is what the last ones proved.
 MATURITY = ("experiment", "repeatable", "production")
-EVENTS = ("proposed", "reviewed", "sliced", "sent", "printed", "judged", "promoted", "demoted",
+EVENTS = ("proposed", "reviewed", "changed", "sliced", "sent", "printed", "judged", "promoted", "demoted",
           "retired")
 # The approvals table (P2, D-096). Rows before TABLE_FROM were moved in from the timeline when
 # the table began: they may cover `—` (the recipe they approved was not hashed), and a send

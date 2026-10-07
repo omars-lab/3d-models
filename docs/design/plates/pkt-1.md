@@ -1,7 +1,7 @@
 ---
 plate: pkt-1
 recipe: pkt-1.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -10,7 +10,7 @@ kind: new
 maturity: experiment
 bets: []
 unblocks: []
-minutes: 34
+minutes: 35
 grams: 11.6
 bed_plates: 1
 risk: watch
@@ -29,7 +29,7 @@ the other way a split coaster can keep its loose pieces in. Each piece is cut at
 and each half prints its own piece half inside it, in a closed pocket. Nothing is placed by hand.
 Closing the coaster presses each piece half onto its partner, with nothing extra between them.
 Before a full coaster prints this way, this plate asks whether the piece half comes out loose
-at all, and how much air it needs. The plate is [`pkt-1.yaml`](pkt-1.yaml). One bed, 34 minutes,
+at all, and how much air it needs. The plate is [`pkt-1.yaml`](pkt-1.yaml). One bed, 35 minutes,
 about 11.6 g, in the color you pick when you say yes.
 
 ## What it is
@@ -45,8 +45,18 @@ about 11.6 g, in the color you pick when you say yes.
   - P4a, P4b: two layers of air (0.4 mm), necks 0.4 mm, thinner than the deboss floor on purpose
 - **Two pairs of each.** One fused band could come from one bad layer rather than too little
   air, so a second pair tells the two apart.
-- **The tiles carry no labels.** The bed picture below is the map: take each tile off and bag it
-  under the name drawn on it.
+- **Each pair carries its letter** (iteration 2, on your comment of 2026-10-06 on spl-1: "can we
+  have minimal letters printiend on each AT AB (a top, a bottom), BT, BB, ETC"). The letter is cut
+  2.5 mm tall into both cut faces: the lower tile reads `OB`, the upper `OT`. The cut faces meet
+  when a pair closes, so the letters show only when it is open. The letters go on from spl-1's A
+  to N, so no two coupons on the shelf share one:
+
+  | Letter | Bed name | What the pair is |
+  |---|---|---|
+  | O | P2aL, P2aU | one layer of air, 0.6 mm necks, first pair |
+  | P | P2bL, P2bU | one layer of air, 0.6 mm necks, second pair |
+  | Q | P4aL, P4aU | two layers of air, 0.4 mm necks, first pair |
+  | R | P4bL, P4bU | two layers of air, 0.4 mm necks, second pair |
 
 **What to try in the hand.** Push each piece half from the face: does it move in its pocket, or
 did it print fused? Close each pair: does it close flat, and does the hexagon move or click when
@@ -98,9 +108,10 @@ gap round it, and the two studs or sockets on either side.
 
 ## Cost and risk
 
-One bed, 34 minutes, about 11.6 g (local slice, 2026-10-06, from bikar main after bikar #320,
+One bed, 35 minutes, about 11.6 g (local slice, 2026-10-07, from bikar main after bikar #323,
 X2D preset and PLA Basic, sliced for the Textured PEI plate, no slicer warnings, nothing sent).
-One color, so no swaps.
+One color, so no swaps. Without the letters it was 34 minutes and 11.6 g (2026-10-06); the letters
+are the only change.
 
 **Risk: watch.** Every failure here is cosmetic, or it is the answer. A 0.4 mm neck is two layers
 and may tear when the piece half is pushed. A band printed over air may sag. A band that fuses is
@@ -119,6 +130,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ 741ced0d16 | reset 2026-10-07 |
 
 ## Timeline
 
@@ -126,3 +138,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-06 | proposed — way c of the finish-techniques brainstorm (§1.4), the coaster-pipeline backlog's first item | this page |
 | 2026-10-06 | sliced — local slice from bikar main after bikar #320, fits one bed, 34 minutes, 11.6 g, no slicer warnings | this page |
+| 2026-10-07 | changed (iteration 2): a letter on each pair's cut faces, O to R, on Omar's comment on spl-1 on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
+| 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 35 minutes, 11.6 g, no slicer warnings | this page |

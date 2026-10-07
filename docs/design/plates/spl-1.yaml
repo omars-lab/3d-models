@@ -16,8 +16,11 @@
 #   small stud, 1.5 mm:                0 and 0.05                     (S00, S05)
 #   large stud, 3 mm:                  0 and 0.05                     (B00, B05)
 #   floor ladder, gap 0.05:            0.8 and 1.0 (0.6 is G05)       (F08, F10)
-# Each pair is an L and a U tile with the same label. The coaster block has no text clause yet,
-# so the tiles are not engraved: the bed picture is the map, and the pairs come off in its order.
+# Each pair is an L and a U tile with the same label, and the same letter cut into its cut faces
+# (Omar, 2026-10-06: "can we have minimal letters printiend on each AT AB (a top, a bottom), BT,
+# BB"): the lower tile reads AB, the upper AT, and so on. Fit pairs are A to L in the order below,
+# the trap pairs M (room 0) and N (room 0.2). A trap's loose hexagon carries no letter; it stays
+# with the tiles it came off the bed beside.
 #
 # Trap pairs: bikar's patterns/Coupons/Split-Trap-Coupon.bkr, a 25 mm square tile with one hexagon
 # trapped under a 0.8 mm lip, at room 0 (a 3.2 mm piece, as tall as its cavity) and room 0.2
@@ -35,33 +38,33 @@ profile:
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
 items:
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.1 }, label: G-10L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.1 }, label: G-10U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.05 }, label: G-05L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.05 }, label: G-05U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0 }, label: G00L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0 }, label: G00U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.05 }, label: G05L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.05 }, label: G05U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.1 }, label: G10L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.1 }, label: G10U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.15 }, label: G15L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.15 }, label: G15U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0 }, label: S00L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0 }, label: S00U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0.05 }, label: S05L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0.05 }, label: S05U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0 }, label: B00L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0 }, label: B00U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0.05 }, label: B05L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0.05 }, label: B05U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 0.8 }, label: F08L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 0.8 }, label: F08U }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 1 }, label: F10L }
-  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 1 }, label: F10U }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0 }, label: T0L }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0 }, label: T0U }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0 }, label: T0P }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0.2 }, label: T2L }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0.2 }, label: T2U }
-  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0.2 }, label: T2P }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.1, pair: 1 }, label: G-10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.1, pair: 1 }, label: G-10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: -0.05, pair: 2 }, label: G-05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: -0.05, pair: 2 }, label: G-05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0, pair: 3 }, label: G00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0, pair: 3 }, label: G00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.05, pair: 4 }, label: G05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.05, pair: 4 }, label: G05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.1, pair: 5 }, label: G10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.1, pair: 5 }, label: G10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.15, pair: 6 }, label: G15L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.15, pair: 6 }, label: G15U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0, pair: 7 }, label: S00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0, pair: 7 }, label: S00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 1.5, gap: 0.05, pair: 8 }, label: S05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 1.5, gap: 0.05, pair: 8 }, label: S05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0, pair: 9 }, label: B00L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0, pair: 9 }, label: B00U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { stud: 3, gap: 0.05, pair: 10 }, label: B05L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { stud: 3, gap: 0.05, pair: 10 }, label: B05U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 0.8, pair: 11 }, label: F08L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 0.8, pair: 11 }, label: F08U }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { floor: 1, pair: 12 }, label: F10L }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { floor: 1, pair: 12 }, label: F10U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0, pair: 13 }, label: T0L }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0, pair: 13 }, label: T0U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0, pair: 13 }, label: T0P }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Lower, params: { room: 0.2, pair: 14 }, label: T2L }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Upper, params: { room: 0.2, pair: 14 }, label: T2U }
+  - { bkr: "bikar:patterns/Coupons/Split-Trap-Coupon.bkr", piece: Piece, params: { room: 0.2, pair: 14 }, label: T2P }

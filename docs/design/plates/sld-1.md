@@ -2,7 +2,7 @@
 plate: sld-1
 recipe: sld-1.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a small dovetail, a 0.8 mm rail in a 1.0 mm slot, join two 1.6 mm piece halves by hand with no glue, and at which gap, 0.10, 0.15 or 0.20 mm a side, does it slide in and stay?"
@@ -108,6 +108,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ eac8f0f4f2 | |
 
 ## Timeline
 

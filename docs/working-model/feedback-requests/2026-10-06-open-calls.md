@@ -11,18 +11,27 @@ face colors). That page's other twelve calls are decided; they are listed at the
 (a plate yes goes into that plate's Approvals table, a call into the decisions log) and starts the
 work it unblocks. A call with no tick stays open, and nobody picks for you from the "my pick" column.
 
+**Updated 2026-10-07, after your comments and ticks.** Every prototype now carries an id, as you
+asked: a letter pair on each coupon half (`AB` and `AT`, `BB` and `BT`, …), a number on each
+split coaster, and dots on each sheets-04g-fit middle piece. Your four yeses are recorded on the
+plate pages. Three of those plates (pkt-1, split-01, split-02) changed to carry their ids, and a
+changed plate needs a new yes, so each has a fresh box below its old tick. sld-1 did not change
+and is ready to send. The answers to your comments are under calls 1, 4, 5, 6 and 15, and the
+kites raise one new call, 6b.
+
 The colors in the plate calls are the four loaded in the printer when this page was written
 (2026-10-06): pink PLA Basic, blue PLA Silk, black PLA Basic and green PLA Basic. A plate is one
 color, picked at the send.
 
 | # | Call | My pick | Why, in one line |
 |---|---|---|---|
-| 1 | Print spl-1, the stud and lip coupon? | Yes, first | 43 minutes answers the stud fit every split coaster needs |
-| 2 | Print pkt-1, the pocket coupon? | Yes, second | The one unknown way c rests on, in 34 minutes |
+| 1 | Print spl-1, the stud and lip coupon? | Yes, first | 49 minutes answers the stud fit every split coaster needs |
+| 2 | Print pkt-1, the pocket coupon? | Yes, second | The one unknown way c rests on, in 35 minutes |
 | 3 | Print sld-1, the dovetail coupon? | Yes | 12 minutes; the join you asked to try |
 | 4 | Print split-01, the lip coaster? | After spl-1 | Its studs use the gap spl-1 is about to measure |
 | 5 | Print split-02, the flange coaster? | Yes, any time | No studs, so nothing waits on spl-1 |
-| 6 | Print sheets-04g-fit, the kite and middle-piece gaps? | Yes | 25 minutes; the next sheets-04g needs its gaps |
+| 6 | Print sheets-04g-fit, the kite and middle-piece gaps? | Yes | The next sheets-04g needs its gaps |
+| 6b | How to tell the kite rungs apart | Keep each rung in its own pile | A kite is too small for a dot; the other ways change the fit being tested |
 | 7 | Did minis-01 print? | — | Only you know |
 | 8a | How did the sheets-04c coaster come out? | — | It finished on 2026-10-04 and nobody has judged it |
 | 8b | Call sheets-04c repeatable, or keep it an experiment | Repeatable, if 8a is a keep | Its pieces have been kept every time |
@@ -52,10 +61,10 @@ its own Approve box; ticking either one is enough. All six are experiments: each
 in the hand.
 
 The order I would print them: spl-1 first, because its stud gap feeds split-01; then pkt-1, sld-1,
-split-02 and sheets-04g-fit in any order; split-01 last. About 5 hours 10 minutes of printing
-in all, and about 98 g.
+split-02 and sheets-04g-fit in any order; split-01 last. About 6 hours 10 minutes of printing
+in all, and about 115 g.
 
-### 1. Print spl-1, the stud and lip coupon?
+### 1. Print spl-1, the stud and lip coupon? ^86hk9f
 
 ![The spl-1 bed: twelve stud-and-socket tile pairs labeled by gap and stud size, and two larger tiles with a hexagon held between their halves](2026-10-06-open-calls-media/spl-1-bed.png)
 
@@ -65,12 +74,12 @@ plate prints in the one color you pick.*
 [spl-1](../../design/plates/spl-1.md) asks which gap between a 2 mm stud and its socket presses in
 and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or
 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves.
-One bed, 43 minutes, about 18.3 g.
+One bed, 49 minutes, about 18.5 g (43 minutes and 18.3 g before the letters).
 
-| Option | Pros | Cons | What it leads to |
-|---|---|---|---|
-| **Print it** (my pick, first) | Settles the stud gap for split-01 and every later split coaster | 43 minutes and 18 g | The gap that holds goes into the split recipe |
-| Hold it | Nothing spent | split-01's studs stay at a guessed gap | split-01 waits, or prints on the guess |
+| Option                        | Pros                                                            | Cons                                   | What it leads to                              |
+| ----------------------------- | --------------------------------------------------------------- | -------------------------------------- | --------------------------------------------- |
+| **Print it** (my pick, first) | Settles the stud gap for split-01 and every later split coaster | 49 minutes and 18.5 g                  | The gap that holds goes into the split recipe |
+| Hold it                       | Nothing spent                                                   | split-01's studs stay at a guessed gap | split-01 waits, or prints on the guess        |
 
 **Your answer:**
 
@@ -80,6 +89,26 @@ One bed, 43 minutes, about 18.3 g.
 - [ ] Yes, in green
 - [ ] Not yet
 - Notes:
+
+**Your comment, answered (2026-10-07).** You asked: "Can these all be printeind in smae color? can
+we have minimal letters printiend on each AT AB (a top, a bottom), BT, BB, ETC".
+
+- **One color: yes.** Every plate on this page prints in one color, the one you pick at the send.
+  The colors in the bed drawing above only tell the parts apart on screen.
+- **Letters: done.** Each of the fourteen pairs now has its letter cut into both cut faces, 2.5 mm
+  tall: the lower half reads `AB`, the upper `AT`, then `BB` and `BT`, on to `N`. The cut faces
+  meet when a pair closes, so the letters are hidden in a closed pair and read when it is opened.
+  The same letters went onto pkt-1 (call 2), going on from `O` to `R`, so no two coupons on the
+  shelf share one.
+
+![Four coupon halves seen face on, each with its letters: MB on a trap tile, RT on a pocket tile, IB and IT on a stud tile pair](2026-10-06-open-calls-media/marks-coupons.png)
+
+*Cut faces seen straight on, drawn from the meshes bikar makes for these plates. Left to right: a
+spl-1 trap tile's lower half (`MB`), a pkt-1 tile's upper half (`RT`), and both halves of a spl-1
+stud pair (`IB`, `IT`). Nothing with a letter has printed yet, so how crisp a 2.5 mm letter comes
+out is still to see.*
+
+spl-1 had no yes, so adding the letters reset nothing. A tick above now means the lettered plate.
 
 ### 2. Print pkt-1, the pocket coupon?
 
@@ -91,19 +120,28 @@ scale on your screen. The plate also has a pair at two layers (0.4 mm).*
 [pkt-1](../../design/plates/pkt-1.md) is way c's one unknown: does a piece half printed in its
 closed pocket come out loose at one layer of air, or only at two; does the closed piece move or
 click when the coaster is lifted; and is the band's underside, printed over air, flat? You said on
-2026-10-05 you lean towards c. One bed, 34 minutes, about 11.6 g.
+2026-10-05 you lean towards c. One bed, 35 minutes, about 11.6 g.
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
-| **Print it** (my pick, second) | Answers whether way c can work at all, before any full coaster is built for it | 34 minutes and 12 g | A yes on the gap lets call 14 pick c with a measured number |
+| **Print it** (my pick, second) | Answers whether way c can work at all, before any full coaster is built for it | 35 minutes and 12 g | A yes on the gap lets call 14 pick c with a measured number |
 | Hold it | Nothing spent | Way c stays a drawing | Call 14 is decided without the one number it needs |
 
 **Your answer:**
 
-- [ ] Yes, in pink
+- [x] Yes, in pink
 - [ ] Yes, in silk blue
 - [ ] Yes, in black
 - [ ] Yes, in green
+- [ ] Not yet
+- Notes:
+
+**Recorded 2026-10-07:** your yes in pink is on [pkt-1's page](../../design/plates/pkt-1.md). Then
+each of its four pairs got its letter (`O` to `R`, as under call 1), which changes the plate, so
+that yes no longer covers it (D-097). A tick here is the yes for the lettered plate:
+
+- [ ] Yes, with the letters, in pink
+- [ ] Yes, with the letters, in another color (name it in Notes)
 - [ ] Not yet
 - Notes:
 
@@ -126,14 +164,18 @@ not way c. One bed, 12 minutes, about 2.4 g.
 
 **Your answer:**
 
-- [ ] Yes, in pink
+- [x] Yes, in pink
 - [ ] Yes, in silk blue
 - [ ] Yes, in black
 - [ ] Yes, in green
 - [ ] Not yet
 - Notes:
 
-### 4. Print split-01, the split coaster that holds its pieces under a lip?
+**Recorded 2026-10-07:** your yes in pink is on [sld-1's page](../../design/plates/sld-1.md), and
+it still covers the plate. sld-1 did not change: each half already has its gap cut into it, so its
+three pairs are told apart without a new mark. It is ready to send on your go.
+
+### 4. Print split-01, the split coaster that holds its pieces under a lip? ^h84hb3
 
 ![The split coaster opened up: the upper half above, the loose pieces in the middle, the lower half below; label "hold lip 0.8"](2026-10-06-open-calls-media/split-01-lip.png)
 
@@ -153,7 +195,7 @@ that wide closes up their arms. Studs line the halves up. One bed, 89 minutes, a
 
 **Your answer:**
 
-- [ ] Yes, after spl-1, in pink
+- [x] Yes, after spl-1, in pink
 - [ ] Yes, after spl-1, in silk blue
 - [ ] Yes, after spl-1, in black
 - [ ] Yes, after spl-1, in green
@@ -161,7 +203,35 @@ that wide closes up their arms. Studs line the halves up. One bed, 89 minutes, a
 - [ ] Not yet
 - Notes:
 
-### 5. Print split-02, the split coaster whose pieces carry a flange?
+**Your comment, answered (2026-10-07).** You asked, here and on call 5: "mnake sure we are adding a
+label to atleast one main peice so we can distinguish. this proptoty ... every proptoty should
+have an id .. this should be aprt of our skills".
+
+- **The id: done.** split-01's lower half now has a "1" cut into its bottom face, 2.5 mm tall,
+  mirrored so it reads the right way round from below. split-02's has a "2" (call 5). The bottom
+  is the one face that is solid enough: the cut faces of these two coasters are mostly pocket or
+  undercut.
+- **Part of our skills: done.** The rule "every prototype carries its id" is now in the
+  [sample rules](../../../.claude/skills/print-coaster-samples/sample-rules.md) the
+  print-coaster-samples skill reads every run, and the prioritize-prints skill checks for it before
+  a plate goes on a page. Ids run on from plate to plate, so no two prototypes on the shelf share
+  one: spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2.
+
+![The bottom of each split coaster's lower half, with its id: a 1 on the lip coaster, a 2 on the flange coaster](2026-10-06-open-calls-media/marks-split-ids.png)
+
+*The lower halves seen from below, drawn from the meshes bikar makes for these plates. Each id sits
+on solid strap. Nothing with an id has printed yet.*
+
+**Recorded 2026-10-07:** your yes (after spl-1, in pink) is on
+[split-01's page](../../design/plates/split-01.md). Adding the id changed the plate, so that yes no
+longer covers it (D-097). A tick here is the yes for the plate with its id:
+
+- [ ] Yes, with the id, after spl-1, in pink
+- [ ] Yes, with the id, in another color or another order (say which in Notes)
+- [ ] Not yet
+- Notes:
+
+### 5. Print split-02, the split coaster whose pieces carry a flange? ^mtorlk
 
 ![The split coaster opened up with flanged pieces between the halves; label "hold flange 0.8"](2026-10-06-open-calls-media/split-02-flange.png)
 
@@ -180,27 +250,46 @@ no strap wide enough for one), so the halves line up by their outlines. One bed,
 
 **Your answer:**
 
-- [ ] Yes, in pink
+- [x] Yes, in pink
 - [ ] Yes, in silk blue
 - [ ] Yes, in black
 - [ ] Yes, in green
 - [ ] Not yet
 - Notes:
 
-### 6. Print sheets-04g-fit, the kites and middle piece at a ladder of gaps?
+**Your comment, answered (2026-10-07).** The same comment as call 4, and the same answer: split-02's
+lower half now has a "2" on its bottom (the picture under call 4). One limit is new: on this
+coaster the id is cut only 2 mm tall. The undercuts leave only a narrow rib of solid strap under
+the bottom face, and a 2.5 mm digit finds no spot on it with room. At 2 mm the hole in a 4 closes
+up, so this coaster takes the ids 1 to 9 except 4. It also has room only at its 112.5 mm size: at
+80, 90 and 100 mm no id fits. bikar refuses an id that does not fit and says why, so a wrong one
+cannot slip through.
 
-![The sheets-04g-fit bed: rows of ten kites at five gaps, and four middle pieces at four gaps, each labeled](2026-10-06-open-calls-media/sheets-04g-fit-bed.png)
+**Recorded 2026-10-07:** your yes in pink is on [split-02's page](../../design/plates/split-02.md).
+Adding the id changed the plate, so that yes no longer covers it (D-097). A tick here is the yes
+for the plate with its id:
 
-*A flat drawing of the bed from above, in stand-in colors.*
+- [ ] Yes, with the id, in pink
+- [ ] Yes, with the id, in another color (name it in Notes)
+- [ ] Not yet
+- Notes:
+
+### 6. Print sheets-04g-fit, the kites and middle piece at a ladder of gaps? ^8wfkhe
+
+![The sheets-04g-fit bed: the coaster in the middle, rows of ten kites at five gaps and four middle pieces at four gaps round it, each labeled](2026-10-06-open-calls-media/sheets-04g-fit-bed.png)
+
+*A flat drawing of the bed from above, in stand-in colors, redrawn 2026-10-07 with the coaster your
+comment added.*
 
 On sheets-04g you said the kites were too tight and the middle piece too loose.
 [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) prints ten kites at each gap from 0.05 to
 0.25 mm, and the middle piece, now cut along the strap's real edge, at 0 to 0.15 mm, to press into
-the sheets-04g coaster you already have. One bed, 25 minutes, about 5 g.
+the sheets-04g coaster you already have. One bed, 25 minutes, about 5 g, before the changes below
+(now 78 minutes and about 21 g).
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
-| **Print it** (my pick) | Gives the next sheets-04g its gaps from your fingers, not a guess | 25 minutes, and trying 54 pieces by hand | The gap per group for the next sheets-04g |
+| **Print it** (my pick) | Gives the next sheets-04g its gaps from your fingers, not a guess | 78 minutes with the coaster, and trying 54 pieces by hand | The gap per group for the next sheets-04g |
 | Hold it | Nothing spent | The next sheets-04g repeats the guess | Kites stay tight, the middle loose |
 
 **Your answer:**
@@ -210,6 +299,48 @@ the sheets-04g coaster you already have. One bed, 25 minutes, about 5 g.
 - [ ] Yes, in black
 - [ ] Yes, in green
 - [ ] Not yet
+- Notes:
+
+**Your comment, answered (2026-10-07).** You asked: "we should re-print minimal consturciton with
+this to fit in again. can we use small dots to distingush (on top of peices (3 dots for biggest, 1
+dot for smallest, etc?".
+
+- **The coaster: added.** The plate now prints a fresh gBV minimal coaster, as sheets-04g printed
+  it, beside the pieces. That makes it 78 minutes and about 21 g, not 25 minutes and 5 g (a new
+  local slice, 2026-10-07; all on one bed).
+- **Dots: done on the middle pieces.** Four dots on the biggest (gap 0), then three, two, and one
+  on the smallest (gap 0.15). Each dot is 1 mm across, cut into the top.
+- **Not on the kites.** A dot needs at least 0.8 mm of top left to the piece's edge, or the edge
+  prints too thin to hold (CAL-CST-01). The biggest kite leaves 0.71 mm round one dot, so no kite
+  can take one. How to keep the kite rungs apart is a new call, 6b, just below.
+
+![Four middle pieces seen from above, with four, three, two and one dots](2026-10-06-open-calls-media/marks-middle-dots.png)
+
+*The four middle pieces from above, drawn from the meshes bikar makes for this plate, biggest
+(gap 0, four dots) on the left. At this size the gaps are too small to see; only the dots tell them
+apart.*
+
+sheets-04g-fit had no yes, so these changes reset nothing. A tick above now means this plate, with
+the coaster and the dots.
+
+### 6b. How to tell the kite rungs apart
+
+**In short.** sheets-04g-fit prints ten kites at each of five gaps, 0.05 to 0.25 mm. Off the bed
+the rungs look the same, and a kite is too small for a dot (call 6). So the question is how you
+know which rung a kite came from once it is in your hand. What you are testing is which gap fits,
+so a way that changes the kite's shape or size changes the answer.
+
+| Option | Pros | Cons | What it leads to |
+|---|---|---|---|
+| **Keep each rung in its own pile** (my pick) | Nothing to build; the kites stay exactly the shape being tested | Once two rungs mix, they cannot be sorted again; take one rung off the bed at a time, by the labeled bed picture under call 6 | The plate prints as it is now |
+| Step each rung's height: 4.4, 4.2, 4.0, 3.8, 3.6 mm | Each rung can be told by eye or by feel against the coaster's top; a recipe change only, no new bikar work | A shorter kite touches its hole over less height, so it may feel looser than its gap alone would make it, which blurs the very fit being tested; it also sits below the coaster's top | A recipe change and a new slice; the fit read gets a caveat |
+| Smaller dots, or a lower edge floor, for kites only | A mark on every piece, like the middles | The 0.8 mm floor is a bet nobody has measured below, and a 0.6 mm dot is about the width of one line from the 0.4 mm nozzle, so it may not form at all | A new calibration bet and a coupon to measure it, before this plate can use it |
+
+**Your answer:**
+
+- [ ] Keep each rung in its own pile
+- [ ] Step each rung's height
+- [ ] Smaller dots (a calibration coupon first)
 - Notes:
 
 ## Prints that already ran (calls 7 and 8)
@@ -391,7 +522,7 @@ the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-
 - [ ] Only a list for now
 - Notes:
 
-### 15. If way c: how the two piece halves become one
+### 15. If way c: how the two piece halves become one ^mdy7df
 
 ![Three side views of one piece: as first drawn, the upper half falls out; with a pocket, each half is caught; closed, the halves meet at the cut](2026-10-05-open-calls-media/way-c-one-piece.png)
 
@@ -411,6 +542,19 @@ the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-
 - [ ] Peg and socket
 - [ ] Taller pieces
 - Notes:
+
+**Your comment, answered (2026-10-07).** You asked: "waht happened to the dove tail slider".
+
+- **It is still on, as sld-1** (call 3). Your yes in pink is recorded on its page, the plate has
+  not changed, and it is ready to send on your go.
+- **Why it is not one of the options here.** A dovetail joins by sliding one half in from the
+  side. In way c each piece half is printed inside its pocket, in its coaster half, and the two
+  coaster halves close straight down onto each other, lined up by the studs. A piece half held in
+  its pocket has no room to slide, so a rail on it would never reach its slot.
+- **Where it does fit.** Ways a, b and d, where the piece halves are loose and you put them
+  together by hand before they go in. There it would turn each pair of halves into one piece, so
+  way a would no longer mean twice the parts to place (call 14, way a's con). sld-1 says which gap
+  slides in and stays.
 
 ### 15b. If way c: the color of each face
 
@@ -612,6 +756,8 @@ Not repeated here, so each keeps its own pictures and threads:
 
 ## Things only you can do (not decisions)
 
+- **Say go for sld-1.** It has your yes in pink and has not changed. It goes out when you say so
+  in chat; prints stay last until you do.
 - **Judge the sheets-04g pieces** off the bed: how each ring fits, and whether the finish is good
   enough ([sheets-04g](../../design/plates/sheets-04g.md)).
 - **Buy a SuperTack or Smooth plate** if call 9 says so.
@@ -626,7 +772,8 @@ Not repeated here, so each keeps its own pictures and threads:
 
 ### Yours to do, by id
 
-Plates: spl-1, pkt-1, sld-1, split-01, split-02, sheets-04g-fit, minis-01, sheets-04c. Decisions:
+Plates: spl-1, pkt-1, sld-1, split-01, split-02, sheets-04g-fit, minis-01, sheets-04c. New boxes
+since your ticks: calls 2, 4 and 5 (the plates with ids), and call 6b. Decisions:
 D-100 to D-107. Task board: #4 (minis-01 record), #131 (bikar tag push), #171 (calls 16 to 19),
 #172 (calls 9 to 12 and the SuperTack buy), #173 (judge sheets-04g), #174 (theme colors), #196
 (calls 20 to 22), #198 (sheets-04g-fit).

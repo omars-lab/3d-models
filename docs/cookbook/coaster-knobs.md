@@ -560,4 +560,95 @@ recipe's star with a 3 mm strap bikar refuses it ("no stud site on the cut face 
 printed yet.
 
 Related: [loose pieces in pockets](#loose-pieces-in-pockets),
-[the split design, §11](../design/pieces/split-with-studs-design.md).
+[the split design, §11](../design/pieces/split-with-studs-design.md),
+[an id on each half](#an-id-on-each-half-of-a-split-coaster).
+
+## An id on each half of a split coaster
+<!--covers:mark-->
+
+Two split prototypes that differ by a tenth of a millimetre look the same once they are off the
+bed, and their halves are easy to mix up. `mark <id>` cuts an id into both halves' cut faces, on
+the same strap, so they face each other when the coaster closes: the lower half reads `<id>B`
+(bottom) and the upper `<id>T` (top). The id is a number, `letter <n>` (1 is A, 26 is Z) or a
+quoted string. The picture draws the star coaster below opened up, with ids 1, 2 and 3: `1B`,
+`2B` and `3B` are the small engravings on the lower half's strap just left of the middle. The
+upper half's `1T` sits on the same strap, on its cut face, which faces down in this view.
+
+<!-- recipe: coaster-mark; swap: mark 1 | mark 2 | mark 3 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 45
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    Teal = #2f8f8f
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 2 color Teal
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4.4
+  strap width 5
+  loose where orbit == 0 clearance 0.25
+  loose where orbit == 2 clearance 0.25
+  split at 2.2 studs 2 hold lip 0.8
+  mark 1
+```
+![The star coaster opened up three times, its halves cut with ids 1, 2 and 3](img/coaster-mark.png)
+
+**Watch out:** the id belongs to the plate, not the file. Write `mark $id` with
+`param id = 0`, and `mark 0` is no mark, so each plate sets its own id and no two prototypes
+share one (Omar, 2026-10-06: "every proptoty should have an id"). The letters are 2.5 mm tall by
+default (`cap`), the smallest size at which the hole in an `A`, a `0` or a `4` stays open. They
+need that much solid face with 0.8 mm to every edge, so this recipe's strap is 5 mm, not the
+split recipe's 4: on a 4 mm strap `1B` and `2B` fit but `3B`, a little wider, does not, and
+bikar refuses it and gives its size. The gBV split coasters take an id only at size 112.5, and
+their cut faces are mostly pocket (the lip) or undercut (the flange), so both mark the lower
+half's bottom instead (`mark $id on bottom`, the flange at `cap 2`): the
+[split-01](../design/plates/split-01.md) and [split-02](../design/plates/split-02.md) plates.
+Nothing marked has printed yet.
+
+Related: [split coasters](#split-coasters-two-halves-that-trap-the-pieces),
+[dots on loose pieces](#dots-on-loose-pieces),
+[the language reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
+
+## Dots on loose pieces
+
+`mark dots <n>`, last on a `loose` line, sinks `n` dots into each piece's top, in one row along
+the piece's long side. Pieces cut at a ladder of gaps all look alike in the hand, so a fit plate
+gives the tightest, biggest piece the most dots and the loosest, smallest one a single dot
+(Omar, 2026-10-06: "3 dots for biggest, 1 dot for smallest"). The picture lifts the centre
+octagon above the open frame with one, two and three dots.
+
+<!-- recipe: coaster-loose-dots; swap: mark dots 1 | mark dots 2 | mark dots 3; lifted -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+  palette pal
+    Body = #9a9a9a
+    Gold = #d4af37
+    fill void where orbit == 0 color Gold
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4
+  strap width 3
+  color straps Body
+  loose where orbit == 0 clearance 0.1 mark dots 1
+```
+![The open star frame with its gold centre piece lifted above it, carrying one, two and three dots](img/coaster-loose-dots.png)
+
+**Watch out:** a dot is 1 mm across and keeps 0.8 mm of top between it and the piece's edge, so
+small pieces take few dots or none: on the gBV coaster a kite has no room for even one, and a
+star takes one. bikar refuses a row with no room and says how much it left. `mark dots 0` is
+none. A peaked piece, and the pieces of a split coaster, take no dots yet.
+
+Related: [loose pieces in an open frame](#loose-pieces-in-an-open-frame),
+[an id on each half](#an-id-on-each-half-of-a-split-coaster), the
+[sheets-04g-fit plate](../design/plates/sheets-04g-fit.md) that dots its middle pieces 4 to 1.
