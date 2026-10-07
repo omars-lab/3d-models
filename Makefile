@@ -814,10 +814,6 @@ coasters: bikar-stamp
 	for bkr in $(BIKAR_DIR)/patterns/Constructions/*-coaster.bkr; do \
 		stem=$$(basename "$$bkr" .bkr); id=$${stem%-coaster}; \
 		echo "== $$id"; \
-		if grep -q '^  split at ' "$$bkr"; then \
-			echo "coaster skip: $$id — a split coaster; its whole render fails the linkage gate by design, its halves and pieces print as --piece"; \
-			continue; \
-		fi; \
 		mini_extra=""; \
 		case "$$id" in *-border) mini_extra="--param border=$(COASTER_MINI_BORDER_MM)" ;; esac; \
 		if ! err=$$($(BIKAR) render "$$bkr" --coaster Coaster --param size=$(COASTER_MINI_MM) $$mini_extra --format stl --check \

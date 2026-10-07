@@ -168,25 +168,25 @@ not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose
 
 ## Robustness over ease — especially when offering the choice
 
-Ease is visible at the moment of choosing and robustness is not, so the trade is
-systematically mis-priced unless written down. When you present options, the
-cheapest is not the default, "do nothing" is not neutral, and each must say **what
-it verifies** — one that verifies nothing should be named as such or not offered.
+Ease is visible at the moment of choosing and robustness is not, so the trade is systematically
+mis-priced unless written down. When you present options, the cheapest is not the default, "do
+nothing" is not neutral, and each must say **what it verifies** — or be named as verifying nothing.
 
-> *Failure mode, 2026-08-03:* both options offered for the machine card produced 23
-> STLs and **neither checked one**, while `calibration-design.md` §7 already shipped
-> a 23-row expectation table. What shipped diffs the mesh gate against that table
-> ([D-014](docs/working-model/decisions-log.md)) — a verifier with a build target as its front
-> door, not the §6 re-typing the backlog framed it as.
+> *Failure mode, 2026-08-03:* both machine-card options made 23 STLs, **neither checked one**, though a
+> 23-row expectation table existed; what shipped diffs the mesh gate against it ([D-014](docs/working-model/decisions-log.md)).
 
-Corollary: **the by-design failure is the load-bearing case.** A gate that
-asserts "everything passes" must be wrong about a deliberate failure or skip
-it, and skipping is how a gate stops testing the thing it exists for.
+Corollary: **quality over efficiency.** The product is the coaster in the hand. A way that is
+faster to build or print but looks or feels worse is never the default or the pick, and its option
+says what it gives up beside what it saves (Omar, 2026-10-06: "we are sacrificing quality" — after
+way c was picked as the quickest split print, though its face comes out one color).
 
-Corollary: **robust and simple beat cheap and easy, even at more work.** The cheap
-fix routes around the defect; the robust one deletes it. Two code paths that disagree
-— or one name with two meanings — *are* the defect: remove it rather than hide it,
-price the cascade, and pay it. A migration never buys a fork — [D-041](docs/working-model/decisions-log.md), [D-052](docs/working-model/decisions-log.md).
+Corollary: **the by-design failure is the load-bearing case.** A gate that asserts "everything passes"
+must be wrong about a deliberate failure or skip it — and skipping stops it testing its reason to exist.
+
+Corollary: **robust and simple beat cheap and easy, even at more work.** The cheap fix routes
+around the defect; the robust one deletes it. Two code paths that disagree — or one name with two
+meanings — *are* the defect: remove it rather than hide it, price the cascade, and pay it. A
+migration never buys a fork — [D-041](docs/working-model/decisions-log.md), [D-052](docs/working-model/decisions-log.md).
 
 ## Precedent
 
