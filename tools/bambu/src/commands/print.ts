@@ -335,8 +335,13 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   }
 
   // The plate on the bed against the plate the slice is for. A known mismatch refuses; an id we have
-  // not matched yet warns, and the bed photo below settles it.
-  const plateCheck = checkPlate(slicePlate, printerPlateId(frame));
+  // not matched yet warns, and the bed photo below settles it. For an id the printer also reports with
+  // a non-Bambu plate (P0101), the plate the newest photo's verdict names decides; the bed check below
+  // still holds that verdict to a fresh photo.
+  const lastPhoto = newestBedPhoto(repoRoot() ?? process.cwd(), plateNameOf(abs));
+  const lastVerdict = lastPhoto ? readVerdict(lastPhoto.path) : null;
+  const seenPlate = lastVerdict && lastVerdict.sha256 === lastPhoto?.sha256 ? lastVerdict.plate_type : null;
+  const plateCheck = checkPlate(slicePlate, printerPlateId(frame), seenPlate);
   console.error(`${plateCheck.mark} ${plateCheck.line}`);
   if (!plateCheck.ok) {
     if (!opts.dryRun) {

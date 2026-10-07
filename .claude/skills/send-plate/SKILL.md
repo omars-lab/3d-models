@@ -109,18 +109,37 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
 4. **Open the photo and look, then write down what it shows.** Say what is on the bed: empty or
    not, the build plate seated or not, and which plate it is (the Textured PEI Plate is gold and
    grainy; Omar's glacier plate, from 2026-10-07, is smooth light blue with a honeycomb strip on
-   its right edge). The printer reports both as P0101, so only the photo tells them apart. A
-   glacier plate on the bed is a stop: ask Omar to put the gold plate in. sld-1 went out on the
-   glacier plate (2026-10-07) and the X2D stopped before the first layer twice, first "foreign
-   objects detected on heatbed" (0500-806E) on an empty plate, then "the print plate marker was
-   not detected" (0500-8062). It ran as soon as Omar put the gold plate in. Then record it,
-   since the send refuses without it:
+   its right edge). The printer reports both as P0101, so only the photo tells them apart. For
+   the glacier plate, see [a non-Bambu plate](#a-non-bambu-plate-the-glacier) below before going
+   on. Then record it, since the send refuses without it:
    `bambu bed verdict <name> --plate-type <the plate you saw> --by "Claude, opened the photo" --clear --seated`,
    or `--no-clear` / `--no-seated` with a `--note` saying what is wrong. Run the dry run again
    with `--no-bed-photo` (a new photo would need a new look); the `bed:` line must now be `✓`.
    Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to clear
    or check the bed in person. Never send on a photo you did not open, and never write a verdict
    for one.
+
+### A non-Bambu plate (the glacier)
+
+sld-1 went out on the glacier plate (2026-10-07), sliced for Textured PEI, and the X2D stopped
+before the first layer twice: first "foreign objects detected on heatbed" (0500-806E) on an empty
+plate, then "the print plate marker was not detected" (0500-8062). It ran as soon as Omar put the
+gold plate in. What to do instead, from
+[the plate research](../../../docs/research/2026-10-07-third-party-plates.md#recommendation):
+
+1. **Slice it as Smooth PEI:** `--plate-type hot_plate` ("Smooth PEI Plate / High Temp Plate").
+   Not Textured PEI: the X2D's start G-code lowers the nozzle 0.02 mm for Textured only, which
+   squashes the first layer on a smooth plate. Bambu's PLA profile keeps the bed at 55 °C.
+2. **Record the bed verdict for that plate:** `--plate-type hot_plate`, with a `--note` that names
+   the glacier plate. The printer still reports P0101, which we also read as Textured PEI; the
+   dry run's `plate:` line then shows `⚠ … the bed verdict decides: it saw a High Temp Plate`
+   instead of refusing. With no verdict, or one that saw Textured, it still refuses.
+3. **The printer's two checks are Omar's to switch.** Foreign Object Detection and Type
+   Detection must be off on the printer (Settings > Print Options, or Studio's Device > Print
+   Options), or he presses "Ignore this and Resume" on 8062 each print. Ask him; we never send a
+   printer setting. Both are printer-wide, so they stay off for the gold plate until he switches
+   them back on. The rest of the checks stay on; the walk-through is in the
+   [printer setup skill](../setup-bambu-x2d/SKILL.md#build-plates-and-print-options).
 
 What the send checks on its own, and why there is no git hook for it:
 [the issue](../../../docs/issues/sliced-for-wrong-plate.md#checked-before-every-send).

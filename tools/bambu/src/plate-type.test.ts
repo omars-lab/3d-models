@@ -117,6 +117,28 @@ describe("checkPlate", () => {
   it("passes a match", () => {
     expect(checkPlate(slice, "P0101")).toMatchObject({ ok: true, mark: "✓" });
   });
+
+  // The glacier plate, 2026-10-07: the X2D reported P0101 with a non-Bambu smooth plate on the bed.
+  const smooth = { type: plateTypeFromToken("hot_plate")!, from: "Metadata/plate_1.json" };
+
+  it("lets a P0101 printer take a smooth-plate slice when the bed verdict saw that plate", () => {
+    const c = checkPlate(smooth, "P0101", "hot_plate");
+    expect([c.ok, c.mark]).toEqual([true, "⚠"]);
+    expect(c.line).toMatch(/glacier.*bed verdict decides: it saw a High Temp Plate/);
+  });
+
+  it("still refuses it with no verdict, or one that saw another plate, and says how to record one", () => {
+    for (const seen of [null, "textured_plate"]) {
+      const c = checkPlate(smooth, "P0101", seen);
+      expect([c.ok, c.mark]).toEqual([false, "✗"]);
+      expect(c.line).toMatch(/--plate-type hot_plate/);
+    }
+  });
+
+  it("still refuses the sheets-04b case when the verdict saw the Textured plate the printer reports", () => {
+    const c = checkPlate({ type: cool, from: "Metadata/plate_1.json" }, "P0101", "textured_plate");
+    expect([c.ok, c.mark]).toEqual([false, "✗"]);
+  });
 });
 
 describe("printerPlateId", () => {

@@ -124,6 +124,38 @@ Coupons that measure the *(machine, material, nozzle, profile)* settle a `CAL-*`
 [`validate-render`](../validate-render/SKILL.md)'s job. The per-print rubric the CLI reads at runtime
 is in [`rubric.md`](rubric.md).
 
+## Build plates and print options
+
+The X2D runs its own checks before and during a print, and they are switched on the printer, not
+in the slice. They live on the printer screen under **Settings > Print Options**, and in Bambu
+Studio under **Device > Print Options** (Idle Heating Protection is in Studio's separate Safety
+Options). The setting lives on the printer, so the screen and Studio show the same value. Whether
+it survives a restart or a firmware update is not written anywhere found, so look at the screen
+after either. Our CLI does not read or change these today. Changing one is Omar's, at the printer;
+we never send it. Sources and confidence for every row:
+[the plate research](../../../docs/research/2026-10-07-third-party-plates.md#recommendation).
+
+| Option | Bambu's own plates (gold Textured PEI) | A non-Bambu plate (the glacier) |
+|---|---|---|
+| Foreign Object Detection | on | **off**: Bambu's X2D page says third-party plates give false alarms (0500-806E) |
+| Build Plate Detection > Type Detection | on | **off**, or press "Ignore this and Resume" on 0500-8062 each print |
+| Build Plate Detection > Alignment Detection | on | on; off only if 0500-808C fires on a plate that is plainly seated |
+| Printed Part Displacement | on | on |
+| AI checks (spaghetti, pile-up, clumping, air printing) | on | on |
+| Filament Tangle, Idle Heating Protection | on | on |
+| First Layer Inspection | not offered on the X2D | not offered on the X2D |
+
+Both switches are printer-wide, so after a glacier print they stay off for the gold plate until
+they are switched back on. With them off, nothing checks for a print left on the bed or for a
+slice made for the wrong plate, so the bed photo and the slice's plate type carry it alone.
+
+**Slice for the plate on the bed.** The gold plate is `--plate-type textured_plate`. The glacier is
+`--plate-type hot_plate` ("Smooth PEI Plate / High Temp Plate"): the X2D's start G-code lowers the
+nozzle 0.02 mm for Textured PEI only, so a smooth plate sliced as Textured gets a squashed first
+layer. PLA stays at 55 °C either way. The printer reports both plates as P0101, so the send takes a
+smooth slice on P0101 only when the bed verdict names the plate it saw
+([send-plate step 4](../send-plate/SKILL.md#a-non-bambu-plate-the-glacier)).
+
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
@@ -139,6 +171,11 @@ is in [`rubric.md`](rubric.md).
 | `no pinned printer certificate for <serial>` | the printer's certificate was never saved | `bambu setup printer-pin` once |
 | `the printer's TLS check failed` / `the camera's TLS check failed` | a factory reset or a renewed certificate — or not the pinned printer | after a reset, `bambu setup printer-pin` again; otherwise check the IP is the X2D. Never turn the check off |
 | `no certificate from <host>:8883` | LAN mode off, or wrong IP | turn LAN mode on at the touchscreen; recheck the IP |
+| 0500-806E "foreign objects detected on heatbed" on an empty bed | a non-Bambu plate (sld-1 on the glacier, 2026-10-07) | Omar switches Foreign Object Detection off for that plate ([build plates](#build-plates-and-print-options)); on a Bambu plate, clear the bed |
+| 0500-8062 "print plate marker was not detected" | a plate whose marker the X2D cannot read, the glacier included | Type Detection off, or "Ignore this and Resume"; Bambu also suggests cleaning the marker strip |
+| 0500-8051 plate type does not match | the slice was made for another plate (sheets-04b) | slice again with `--plate-type` for the plate on the bed |
+| 0500-808C alignment | the plate is not seated, or the toolhead camera misread it | reseat the plate; turn Alignment Detection off only if it fires on a plate that is plainly seated |
+| `✗ plate: … the printer reports P0101` on a glacier slice | no bed verdict, or one that named Textured | look at the photo, then `bambu bed verdict <name> --plate-type hot_plate …` with a note naming the glacier |
 | osascript timed out | a GUI dialog is blocking | dismiss the dialog in the app; GUI fallback can't proceed past a modal |
 | no `bambu-x2d` machine target in bikar | `machines.ts` ships no X2D entry (Bambu side is x1c/p1s/a1/a1-mini) | add the `PrintTarget` in bikar (`packages/knobs/src/machines.ts`); it rides single-nozzle-labelled FDM per **D-053** — the dual nozzle lives in the label + profile header, not a widened schema. Build volume is read off the device, not invented |
 
