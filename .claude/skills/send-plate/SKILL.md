@@ -113,11 +113,22 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
    the glacier plate, see [a non-Bambu plate](#a-non-bambu-plate-the-glacier) below before going
    on. Then record it, since the send refuses without it:
    `bambu bed verdict <name> --plate-type <the plate you saw> --by "Claude, opened the photo" --clear --seated`,
-   or `--no-clear` / `--no-seated` with a `--note` saying what is wrong. Run the dry run again
-   with `--no-bed-photo` (a new photo would need a new look); the `bed:` line must now be `✓`.
+   adding `--non-bambu` when the plate is not Bambu's own (the glacier),
+   or `--no-clear` / `--no-seated` with a `--note` saying what is wrong.
    Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to clear
    or check the bed in person. Never send on a photo you did not open, and never write a verdict
    for one.
+5. **Set the plate switches to fit that plate:** `bambu options for-bed <name> --yes`. It reads
+   the verdict you just wrote and switches Foreign Object Detection and Type Detection off for a
+   non-Bambu plate, on for a Bambu one, then reads each back (`✓`). It sends nothing when they
+   already fit. Omar made this standing on 2026-10-07 ([D-108](../../../docs/working-model/decisions-log.md):
+   "can you do this automatically per our skill? when you look at plates pre print"), so it needs
+   no ask; it covers these two switches only. The printer takes one connection at a time, so if
+   Bambu Studio is open, quit it first (`osascript -e 'tell application "BambuStudio" to quit'`),
+   then take a screenshot to catch a save prompt. A `✗` read-back: stop and tell Omar.
+6. **Run the dry run again** with `--no-bed-photo` (a new photo would need a new look). The `bed:`
+   line must now be `✓`, and so must the `options:` line, which holds the two switches against the
+   plate the verdict saw.
 
 ### A non-Bambu plate (the glacier)
 
@@ -130,18 +141,16 @@ gold plate in. What to do instead, from
 1. **Slice it as Smooth PEI:** `--plate-type hot_plate` ("Smooth PEI Plate / High Temp Plate").
    Not Textured PEI: the X2D's start G-code lowers the nozzle 0.02 mm for Textured only, which
    squashes the first layer on a smooth plate. Bambu's PLA profile keeps the bed at 55 °C.
-2. **Record the bed verdict for that plate:** `--plate-type hot_plate`, with a `--note` that names
-   the glacier plate. The printer still reports P0101, which we also read as Textured PEI; the
-   dry run's `plate:` line then shows `⚠ … the bed verdict decides: it saw a High Temp Plate`
-   instead of refusing. With no verdict, or one that saw Textured, it still refuses.
-3. **The printer's two checks are Omar's to switch.** Foreign Object Detection and Type
-   Detection must be off on the printer, or he presses "Ignore this and Resume" on 8062 each
-   print. `bambu options show` says where they stand. To switch them, ask him: he does it at the
-   printer (Settings > Print Options), or says go in chat for this change and you run
-   `bambu options set foreign-object off --yes` and `bambu options set plate-type off --yes`
-   (Studio closed), each of which must read back `✓`. His go for one change does not cover the
-   next. Both are printer-wide, so they stay off for the gold plate until switched back on the
-   same way. The rest of the checks stay on; the walk-through is in the
+2. **Record the bed verdict for that plate:** `--plate-type hot_plate --non-bambu`, with a
+   `--note` that names the glacier plate. The printer still reports P0101, which we also read as
+   Textured PEI; the dry run's `plate:` line then shows `⚠ … the bed verdict decides: it saw a
+   High Temp Plate` instead of refusing. With no verdict, or one that saw Textured, it still
+   refuses.
+3. **Switch the printer's two checks off with `options for-bed` (item 5 above).** Foreign Object
+   Detection and Type Detection must be off for this plate, or the X2D stops before layer 0.
+   `for-bed` reads `--non-bambu` off the verdict and switches both off (D-108). Both are
+   printer-wide, so they stay off until the next send's `for-bed` sees a Bambu plate and switches
+   them back on. The rest of the checks stay on; the walk-through is in the
    [printer setup skill](../setup-bambu-x2d/SKILL.md#build-plates-and-print-options).
 
 What the send checks on its own, and why there is no git hook for it:

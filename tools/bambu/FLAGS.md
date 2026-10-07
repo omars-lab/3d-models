@@ -340,6 +340,18 @@ switch one print option on or off (foreign-object, plate-type, plate-alignment, 
 |---|---|
 | `-y, --yes` | switch without asking |
 
+### `bambu options for-bed`
+
+set Foreign Object and Type Detection to fit the plate the newest bed verdict saw: off for a non-Bambu plate, on for Bambu's
+
+| Argument | Required | Description |
+|---|---|---|
+| `plate` | yes | plate name or its .3mf, as for `bed verdict` |
+
+| Flag | Description |
+|---|---|
+| `-y, --yes` | switch without asking (the send-plate skill's standing go, D-108) |
+
 ### `bambu bed`
 
 the bed photo a send rests on, and the written verdict on it
@@ -377,6 +389,7 @@ write down what the newest bed photo of a plate shows, after opening it
 | `--seated` | the build plate is in and flat |
 | `--no-seated` | the build plate is missing or not flat |
 | `--note <text>` | what else the photo shows |
+| `--non-bambu` | the plate is not Bambu's own (the glacier): `options for-bed` then switches its two checks off |
 
 ### `bambu validate`
 

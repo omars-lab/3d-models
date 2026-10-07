@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { buildOptionCommand, fun2Bit, optionByKey, parseOnOff, PRINT_OPTIONS, readBack, renderOptions, setRefusal, xcamCfg } from "./print-options.js";
+import {
+  buildOptionCommand,
+  fun2Bit,
+  optionByKey,
+  parseOnOff,
+  plateSwitchChanges,
+  plateSwitchCheck,
+  PRINT_OPTIONS,
+  readBack,
+  renderOptions,
+  setRefusal,
+  xcamCfg,
+} from "./print-options.js";
 
 // An X2D's report as the community sample in the research shows it (cfg 8089015, fun2 "B7B77"): every
 // AI check on at medium, alignment, foreign objects and displacement on, and the printer saying it has
@@ -88,5 +100,43 @@ describe("the switch command", () => {
     expect(() => optionByKey("fod")).toThrow(/unknown option/);
     expect(parseOnOff("OFF")).toBe(false);
     expect(() => parseOnOff("disable")).toThrow(/not on or off/);
+  });
+});
+
+describe("the plate switches follow the bed verdict (D-108)", () => {
+  const bothOff = { ...X2D, xcam: { cfg: 8089015 - 2 ** 21, buildplate_marker_detector: false } };
+  const keys = (frame: unknown, nonBambu: boolean) => plateSwitchChanges(frame as never, nonBambu).map((c) => `${c.option.key} ${c.on ? "on" : "off"}`);
+
+  it("a Bambu plate with both on: nothing to change, the send check passes", () => {
+    expect(keys(X2D, false)).toEqual([]);
+    expect(plateSwitchCheck(X2D, false, "sld-1")).toMatchObject({ ok: true, mark: "✓" });
+  });
+
+  it("a non-Bambu plate with both on: switch both off, and the send refuses until they are", () => {
+    expect(keys(X2D, true)).toEqual(["foreign-object off", "plate-type off"]);
+    const check = plateSwitchCheck(X2D, true, "sld-1");
+    expect(check).toMatchObject({ ok: false, mark: "✗" });
+    expect(check.line).toContain("foreign-object and plate-type are on");
+    expect(check.line).toContain("bambu options for-bed sld-1 --yes");
+  });
+
+  it("after both are off: the glacier passes, and the gold plate asks for them back on", () => {
+    expect(keys(bothOff, true)).toEqual([]);
+    expect(plateSwitchCheck(bothOff, true, "sld-1").mark).toBe("✓");
+    expect(keys(bothOff, false)).toEqual(["foreign-object on", "plate-type on"]);
+    expect(plateSwitchCheck(bothOff, false, "sld-1").mark).toBe("✗");
+  });
+
+  it("one switch wrong names only that one", () => {
+    const typeOnly = { ...X2D, xcam: { ...X2D.xcam, buildplate_marker_detector: false } };
+    expect(keys(typeOnly, true)).toEqual(["foreign-object off"]);
+    expect(plateSwitchCheck(typeOnly, true, "sld-1").line).toContain("foreign-object is on");
+  });
+
+  it("not reported warns rather than passing or refusing; a printer without the check is left out", () => {
+    expect(plateSwitchCheck({ gcode_state: "IDLE" }, true, "sld-1")).toMatchObject({ ok: true, mark: "⚠" });
+    const noFod = { ...bothOff, fun2: "B5B77" };
+    expect(keys(noFod, true)).toEqual([]);
+    expect(plateSwitchCheck(noFod, true, "sld-1").line).toBe("options: plate-type off, as a non-Bambu plate needs");
   });
 });

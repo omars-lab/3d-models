@@ -45,6 +45,7 @@ import { checkPlate, printerPlateId, readSlicePlateType, type SlicePlateType } f
 import { plateApproval, plateNameOf, printerBusy, spendApproval } from "../send-gate.js";
 import { cardRefusal, cardSummary, readStorage } from "../storage.js";
 import { bedCheck, newestBedPhoto, readVerdict } from "../bed-check.js";
+import { plateSwitchCheck } from "../print-options.js";
 import { checkNozzles, printerNozzles } from "../nozzle-check.js";
 import { checkSliceFresh } from "../slice-fresh.js";
 import { bedPhoto } from "./bed.js";
@@ -433,7 +434,8 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   if (opts.dryRun && opts.bedPhoto !== false) await bedPhoto(name, cfg);
   const root = repoRoot() ?? process.cwd();
   const photo = newestBedPhoto(root, name);
-  const bed = bedCheck(name, photo, photo ? readVerdict(photo.path) : null, slicePlate.type.token, Date.now());
+  const bedVerdict = photo ? readVerdict(photo.path) : null;
+  const bed = bedCheck(name, photo, bedVerdict, slicePlate.type.token, Date.now());
   console.error(`${bed.ok ? "✓" : "✗"} ${bed.line}.`);
   if (!bed.ok) {
     if (!opts.dryRun) {
@@ -441,6 +443,21 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
       return;
     }
     console.error("  (dry run — a real send stops here.)");
+  }
+
+  // The two plate switches against the plate the verdict saw (D-108): a non-Bambu plate with Foreign
+  // Object Detection on stops before layer 0 (sld-1 on the glacier, 2026-10-07), and a Bambu plate
+  // with it off loses the check for a print left on the bed. `options for-bed` sets them.
+  if (frame && bedVerdict && bedVerdict.sha256 === photo?.sha256) {
+    const sw = plateSwitchCheck(frame, bedVerdict.non_bambu === true, name);
+    console.error(`${sw.mark} ${sw.line}.`);
+    if (!sw.ok) {
+      if (!opts.dryRun) {
+        process.exitCode = 2;
+        return;
+      }
+      console.error("  (dry run — a real send stops here.)");
+    }
   }
 
   // Owner gate, stated out loud before anything reaches the printer.

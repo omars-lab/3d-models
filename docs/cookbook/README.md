@@ -57,7 +57,6 @@ so "add it to the list" isn't the easy way out.
 
 - `brick` `mural` `footprint` `height` `studs` `anchors` `engage` `clutch` `origin` `pieces` `blanks` `slivers` — the LEGO-compatible brick and mural blocks; they have their own lab and page in bikar, and a picture needs the LDraw viewer, not the flat render
 - `orb` `piece` `tile` `wall` `assembly` `clip` — the 3D bodies beyond the coaster; each has its own gallery pipeline, and a side-by-side needs the orb or piece renderer
-- `mark` — a letter, number or dots stamped on a coaster's cut face or bottom; new in bikar's grammar, and not written yet
 - `rim` `edge` `trivet` — coaster knobs whose change is a millimeter at the rim, too small to see in a 360-pixel picture; next up once the coaster picture can zoom to the edge
 - `girih` `phyllotaxis` `spiral` `parabola` `hyperbola` — pattern families and curves that draw well flat; not written yet
 - `tangent` `offset` `fillet` `face` `segment` `boundary` `extend` `nest` — construction helpers that show well flat; not written yet
