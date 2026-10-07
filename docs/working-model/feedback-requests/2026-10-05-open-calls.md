@@ -4,6 +4,10 @@ date: 2026-10-05
 
 # Open calls — 2026-10-05
 
+> **Moved on 2026-10-06.** The calls still open here are carried, unchanged, onto the
+> [2026-10-06 page](2026-10-06-open-calls.md), with the plates waiting on a yes. Answer them there;
+> this page stays as the record of the twelve decided here.
+
 Twenty-six calls are waiting on you. They come in six groups: piece colors, the split coaster,
 orders and pricing, the store, swatches, and which theme to print first. Tick one box per call, or
 comment on a line. The next session writes each answer into the decisions log and starts the work

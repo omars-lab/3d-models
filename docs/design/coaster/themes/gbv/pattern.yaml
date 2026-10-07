@@ -6,6 +6,13 @@
 # from that list, with a source someone opened (never a search snippet). Fix wording here, never in
 # the storefront's generated file. The store shows a history name only when this record has at
 # least one source.
+#
+# The tie to the tomb is a photo plus a catalogue entry (storefront seven-eras check, design
+# question 13): Brian Wichmann's Tiling Search P48 catalogues the pattern from David Wade's photo IND
+# 0415, which shows ten-pointed rosettes ringed by gold five-pointed stars. A second, openly licensed
+# photo on Wikimedia Commons (Royroydeb, own work, 2014-10-13, CC BY-SA 4.0) shows the same layout
+# on the tomb wall. Both photos were matched to our drawing by eye: the same family, not compared
+# line for line.
 
 construction: gBV_JTt3Kxk
 short: gBV
@@ -26,7 +33,8 @@ story: >
   In Agra, between 1622 and 1628, the empress Nur Jahan built a tomb for her parents: her father
   Mirza Ghiyas Beg, called Itimad-ud-Daula, 'Pillar of the Empire', and her mother Asmat Begum. It
   was the first Mughal tomb faced in white marble to carry so much inlaid stone on its outside.
-  Ten-pointed stars like these are recorded in its inlay.
+  Ten-pointed stars like these appear in its inlaid marble, photographed by David Wade and
+  catalogued by Brian Wichmann.
 
 # Facts scholars disagree on. The story above avoids each one.
 contested:
@@ -34,6 +42,8 @@ contested:
     was finished in 1628.
   - Where on the building the ten-pointed field is. No text places it; say "on the tomb", not "on the
     plinth" or "in the screens".
+  - How close the match is. The photos show the same family as our drawing, matched by eye, not
+    line for line. Say "stars like these", never "this exact pattern".
   - Its size, any Italian influence on the inlay, the architect's name and "first all-marble
     building". Do not print these.
 
@@ -49,13 +59,17 @@ sources:
     supports: [story]
   - title: Brian Wichmann, Tiling Search P48 (10-fold, Itimad-ud-Daula's Tomb)
     url: https://tilingsearch.mit.edu/HTML/data185/P48.html
-    supports: [caption, fold]
+    supports: [caption, fold, story]
   - title: Brian Wichmann, Tiling Search F6 (10-fold)
     url: https://tilingsearch.mit.edu/HTML/data169/F6.html
     supports: [caption, fold]
   - title: David Wade, Pattern in Islamic Art, IND 0415
     url: https://patterninislamicart.com/single-id/460
-    supports: [caption]
+    supports: [caption, story]
+  - title: Royroydeb, "Irregular patterns Itmad-ud-Daulah", Wikimedia Commons (own work, 2014-10-13)
+    url: https://commons.wikimedia.org/wiki/File:Irregular_patterns_Itmad-ud-Daulah.jpg
+    supports: [caption, story]
+    licence: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0); credit "Royroydeb, CC BY-SA 4.0, via Wikimedia Commons" wherever it is shown
 
 # Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
 credit:
