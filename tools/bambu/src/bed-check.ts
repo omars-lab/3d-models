@@ -36,7 +36,7 @@ export interface BedVerdict {
   bed_clear: boolean; // nothing left on the bed
   plate_seated: boolean; // the build plate is in and flat
   plate_type: string; // the start command's token for the plate seen, e.g. "textured_plate"
-  non_bambu?: boolean; // true: not Bambu's own plate (the glacier); absent: a Bambu plate. Sets the print options (D-108)
+  non_bambu?: boolean; // true: not Bambu's own plate (the glacier); false: Bambu's own; absent: written before the CLI asked, so unknown. Sets the print options (D-108)
   by: string; // who looked
   note?: string;
   at: string; // ISO time the verdict was written
@@ -45,6 +45,12 @@ export interface BedVerdict {
 export interface BedCheck {
   ok: boolean; // false: refuse the send
   line: string; // the send's ✓ / ✗ line, without the mark
+}
+
+/** Which plate the verdict saw, in words; "plate kind not recorded" for a verdict that predates the question. */
+export function plateKind(v: Pick<BedVerdict, "non_bambu">): string {
+  if (v.non_bambu === undefined) return "plate kind not recorded";
+  return v.non_bambu ? "not a Bambu plate" : "a Bambu plate";
 }
 
 export function bedDir(root: string): string {

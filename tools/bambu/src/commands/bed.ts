@@ -13,7 +13,7 @@ import { loadConfig, type PrinterConfig } from "../config.js";
 import { repoRoot } from "../paths.js";
 import { parsePlateTypeFlag } from "../plate-type.js";
 import { plateNameOf } from "../send-gate.js";
-import { bedDir, bedPhotoName, newestBedPhoto, readVerdict, writeVerdict } from "../bed-check.js";
+import { bedDir, bedPhotoName, newestBedPhoto, plateKind, readVerdict, writeVerdict } from "../bed-check.js";
 
 const root = (): string => repoRoot() ?? process.cwd();
 
@@ -36,6 +36,7 @@ interface VerdictOpts {
   seated?: boolean;
   plateType: string;
   nonBambu?: boolean;
+  bambuPlate?: boolean;
   by: string;
   note?: string;
 }
@@ -71,7 +72,7 @@ export function registerBed(program: Command): void {
       else {
         console.log(
           `verdict: ${v.bed_clear ? "clear" : "NOT clear"}, ${v.plate_seated ? "plate seated" : "plate NOT seated"}, ` +
-            `${v.plate_type}${v.non_bambu ? " (not a Bambu plate)" : ""}, by ${v.by} at ${v.at}${v.note ? ` — ${v.note}` : ""}`,
+            `${v.plate_type} (${plateKind(v)}), by ${v.by} at ${v.at}${v.note ? ` — ${v.note}` : ""}`,
         );
       }
     });
@@ -87,11 +88,19 @@ export function registerBed(program: Command): void {
     .option("--seated", "the build plate is in and flat")
     .option("--no-seated", "the build plate is missing or not flat")
     .option("--note <text>", "what else the photo shows")
-    .option("--non-bambu", "the plate is not Bambu's own (the glacier): `options for-bed` then switches its two checks off", false)
+    .option("--bambu-plate", "the plate is Bambu's own (the gold Textured PEI): `options for-bed` keeps its two checks on")
+    .option("--non-bambu", "the plate is not Bambu's own (the glacier): `options for-bed` then switches its two checks off")
     .action((plate: string, opts: VerdictOpts) => {
       const name = plateNameOf(plate);
       if (opts.clear === undefined || opts.seated === undefined) {
         console.error("say both: --clear or --no-clear, and --seated or --no-seated.");
+        process.exitCode = 2;
+        return;
+      }
+      // Both plates read P0101, so only the look can say which it is; a verdict that is silent on it
+      // once set the glacier's checks for a Bambu plate.
+      if (opts.bambuPlate === opts.nonBambu) {
+        console.error("say which plate it is: --bambu-plate (Bambu's own) or --non-bambu (the glacier).");
         process.exitCode = 2;
         return;
       }
@@ -114,11 +123,11 @@ export function registerBed(program: Command): void {
         bed_clear: opts.clear,
         plate_seated: opts.seated,
         plate_type: token,
-        ...(opts.nonBambu ? { non_bambu: true } : {}),
+        non_bambu: opts.nonBambu === true,
         by: opts.by,
         ...(opts.note ? { note: opts.note } : {}),
         at: new Date().toISOString(),
       });
-      console.log(`verdict written for ${basename(photo.path)}: ${opts.clear ? "clear" : "NOT clear"}, ${opts.seated ? "seated" : "NOT seated"}, ${token}${opts.nonBambu ? ", not a Bambu plate" : ""}`);
+      console.log(`verdict written for ${basename(photo.path)}: ${opts.clear ? "clear" : "NOT clear"}, ${opts.seated ? "seated" : "NOT seated"}, ${token}, ${opts.nonBambu ? "not a Bambu plate" : "a Bambu plate"}`);
     });
 }

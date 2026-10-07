@@ -139,4 +139,12 @@ describe("the plate switches follow the bed verdict (D-108)", () => {
     expect(keys(noFod, true)).toEqual([]);
     expect(plateSwitchCheck(noFod, true, "sld-1").line).toBe("options: plate-type off, as a non-Bambu plate needs");
   });
+
+  it("a verdict silent on the plate kind refuses, even when the switches would pass for a Bambu plate", () => {
+    // sld-1, 2026-10-07: a glacier verdict written before the flag read as Bambu's own and left both on.
+    const check = plateSwitchCheck(X2D, undefined, "sld-1");
+    expect(check).toMatchObject({ ok: false, mark: "✗" });
+    expect(check.line).toContain("--bambu-plate or --non-bambu");
+    expect(check.line).toContain("bambu bed verdict sld-1");
+  });
 });

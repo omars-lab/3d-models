@@ -112,9 +112,11 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
    its right edge). The printer reports both as P0101, so only the photo tells them apart. For
    the glacier plate, see [a non-Bambu plate](#a-non-bambu-plate-the-glacier) below before going
    on. Then record it, since the send refuses without it:
-   `bambu bed verdict <name> --plate-type <the plate you saw> --by "Claude, opened the photo" --clear --seated`,
-   adding `--non-bambu` when the plate is not Bambu's own (the glacier),
-   or `--no-clear` / `--no-seated` with a `--note` saying what is wrong.
+   `bambu bed verdict <name> --plate-type <the plate you saw> --bambu-plate --by "Claude, opened the photo" --clear --seated`,
+   with `--non-bambu` in place of `--bambu-plate` when the plate is not Bambu's own (the glacier),
+   or `--no-clear` / `--no-seated` with a `--note` saying what is wrong. The verdict must say one
+   of the two: a verdict that was silent on it once read as a Bambu plate and left the glacier's
+   checks on (sld-1, 2026-10-07), so `for-bed` and the send now refuse one.
    Anything left from the last print, or no plate, or no photo at all: stop and ask Omar to clear
    or check the bed in person. Never send on a photo you did not open, and never write a verdict
    for one.

@@ -389,6 +389,7 @@ write down what the newest bed photo of a plate shows, after opening it
 | `--seated` | the build plate is in and flat |
 | `--no-seated` | the build plate is missing or not flat |
 | `--note <text>` | what else the photo shows |
+| `--bambu-plate` | the plate is Bambu's own (the gold Textured PEI): `options for-bed` keeps its two checks on |
 | `--non-bambu` | the plate is not Bambu's own (the glacier): `options for-bed` then switches its two checks off |
 
 ### `bambu validate`

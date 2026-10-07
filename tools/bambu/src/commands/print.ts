@@ -449,7 +449,7 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
   // Object Detection on stops before layer 0 (sld-1 on the glacier, 2026-10-07), and a Bambu plate
   // with it off loses the check for a print left on the bed. `options for-bed` sets them.
   if (frame && bedVerdict && bedVerdict.sha256 === photo?.sha256) {
-    const sw = plateSwitchCheck(frame, bedVerdict.non_bambu === true, name);
+    const sw = plateSwitchCheck(frame, bedVerdict.non_bambu, name);
     console.error(`${sw.mark} ${sw.line}.`);
     if (!sw.ok) {
       if (!opts.dryRun) {

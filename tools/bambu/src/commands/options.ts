@@ -23,6 +23,7 @@ import {
   buildOptionCommand,
   optionByKey,
   parseOnOff,
+  PLATE_KIND_UNSAID,
   plateSwitchChanges,
   PRINT_OPTIONS,
   readBack,
@@ -155,7 +156,13 @@ export function registerOptions(program: Command): void {
         process.exitCode = 2;
         return;
       }
-      const nonBambu = verdict.non_bambu === true;
+      // A verdict silent on the plate kind once read as Bambu's own and left the glacier's checks on.
+      if (verdict.non_bambu === undefined) {
+        console.error(`✗ ${PLATE_KIND_UNSAID} ${name} …`);
+        process.exitCode = 2;
+        return;
+      }
+      const nonBambu = verdict.non_bambu;
       const which = nonBambu ? "a non-Bambu plate" : "a Bambu plate";
       const cfg = loadConfig();
       requireConfigured(cfg);

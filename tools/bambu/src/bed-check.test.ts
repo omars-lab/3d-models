@@ -10,6 +10,7 @@ import {
   bedPhotoName,
   isPhotoOf,
   newestBedPhoto,
+  plateKind,
   readVerdict,
   writeVerdict,
 } from "./bed-check.js";
@@ -137,8 +138,14 @@ describe("newestBedPhoto, writeVerdict, readVerdict", () => {
     const { photo: _p, sha256: _s, ...rest } = good;
     writeVerdict(p!, { ...rest, non_bambu: true });
     expect(readVerdict(glacier)?.non_bambu).toBe(true);
+    expect(plateKind(readVerdict(glacier)!)).toBe("not a Bambu plate");
+    writeVerdict(p!, { ...rest, non_bambu: false });
+    expect(readVerdict(glacier)?.non_bambu).toBe(false);
+    expect(plateKind(readVerdict(glacier)!)).toBe("a Bambu plate");
+    // A verdict written before the CLI asked: unknown, never read as Bambu's own.
     writeVerdict(p!, rest);
     expect(readVerdict(glacier)?.non_bambu).toBeUndefined();
+    expect(plateKind(readVerdict(glacier)!)).toBe("plate kind not recorded");
   });
 
   it("finds nothing for a plate with no photos", () => {

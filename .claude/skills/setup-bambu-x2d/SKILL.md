@@ -145,7 +145,8 @@ after either. Sources and confidence for every row:
   change, and pass `--yes` only then. The AI checks are shown, not set; switch those at the
   printer. After the first `set` on this printer, look at the screen and confirm it agrees.
 - `bambu options for-bed <plate> --yes` sets Foreign Object Detection and Type Detection to fit
-  the plate the newest bed verdict saw: off when the verdict says `non_bambu`, on otherwise. The
+  the plate the newest bed verdict saw: off for `--non-bambu`, on for `--bambu-plate`, and it
+  refuses a verdict that says neither (one written before the flags existed). The
   send-plate skill runs it at every bed look, with no ask: Omar made these two switches standing
   on 2026-10-07 ([D-108](../../../docs/working-model/decisions-log.md)). The send's `options:`
   line refuses a switch that does not fit the plate.
