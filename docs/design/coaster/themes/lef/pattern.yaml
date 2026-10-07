@@ -10,6 +10,12 @@
 # lEf has no color themes yet, so no product reads this record; it is here so the storefront's
 # name table can draft its name next to gBV's (both come from the same tomb; the fold tells them
 # apart).
+#
+# The tie to the tomb is a photo (Wade IND 0414), a catalogue entry (Wichmann F78) and Hankin's 1925
+# drawing, Plate III, Fig. 21 (storefront seven-eras check, design question 13). Hankin's figure
+# and Wade's photo were matched to our drawing by eye: eight-pointed stars inside large octagons on
+# a square repeat, the same family, not compared line for line. Hankin was a bacteriologist in
+# India, not a botanist. Wade IND 0422 and 0423 may show it too; they stay a lead, not a source.
 
 construction: lEfWSogWscs
 short: lEf
@@ -60,6 +66,9 @@ sources:
   - title: David Wade, Pattern in Islamic Art, IND 0414
     url: https://patterninislamicart.com/single-id/459
     supports: [caption]
+  - title: E. H. Hankin, The Drawing of Geometric Patterns in Saracenic Art (Memoirs of the Archaeological Survey of India 15, 1925), Plate III, Fig. 21, "Octagonal pattern used in inlaid marble in the tomb of Itimadu-d Daula, Agra"
+    url: https://archive.org/details/HankinSaracenicArt
+    supports: [caption, fold, story]
 
 # Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
 credit:
