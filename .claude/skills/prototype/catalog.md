@@ -1711,7 +1711,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   tessellation is the natural candidate for the band, since it has no centre to
   protect).
 
-## CS-12 — Imamzadeh Isma'il 12-fold kite tile coaster (Sarah Brewer, bknVRSMcLj0)
+## CS-12 — Imamzadeh Isma'il six-fold kite rosette coaster (Sarah Brewer, bknVRSMcLj0)
 
 - **Status**: planned
 - **Model**: `bikar/patterns/Constructions/bknVRSMcLj0-coaster.bkr` — rendered
@@ -1719,7 +1719,7 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
   (standard) by `make coasters` (→ `src/Coasters/bknVRSMcLj0-coaster-mini.stl`
   and `-standard.stl`). Frame is **round** (`outline round $size`), the
   least-area fit of 7 candidates at 1.5591 GeoGebra units. The art is one
-  repeat cell of the tile on the Imamzadeh Isma'il shrine in Isfahan: a
+  repeat cell of the tile recorded for the Imamzadeh Isma'il shrine in Isfahan: a
   six-fold rosette of three kites (`rotate 6 around E1`) and a four-fold orbit
   of six more kites and a reflected rosette (`rotate 4 around E1`) — four
   rosettes around a fifth. The video goes on to reflect that cell across two

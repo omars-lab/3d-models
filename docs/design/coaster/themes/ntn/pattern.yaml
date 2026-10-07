@@ -1,0 +1,72 @@
+# Where the Ntn pattern (CS-15) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-coaster-monuments-consolidated.md, §4 "What we may print", CS-15
+# (lines 2, 3, 4 and 6). Add a fact only from that list, with a source someone opened (never a
+# search snippet). Fix wording here, never in the storefront's generated file. The store shows a
+# history name only when this record has at least one source.
+#
+# The star rests on its maker's word alone: Samira Mian attributes it to the Mustansiriya, and no
+# photo or catalogue shows this star on the building. So the record says "after", and gives no era:
+# the building's dates are in the story, as the building's, not the pattern's.
+#
+# Rechecked 2026-10-07 (storefront seven-eras check, design question 13): all four sources were
+# opened, looking for a photo or catalogue entry. None shows this star. Khalil's gate photo shows a
+# carved-brick tympanum with a different, irregular field of interlaced stars and polygons; his
+# other photo is the information sign, text only; the Wikipedia article's door photos are too small
+# to make out any star; the video's description could not be read (YouTube's bot check). So the
+# tie stays the maker's word only.
+
+construction: NtnlGMTElBk
+short: Ntn
+fold: 10
+form: Star
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+found_at: Mustansiriya Madrasa, Baghdad, Iraq
+
+# One line under the pattern's picture.
+caption: A single ten-pointed star, drawn as one interlaced band, after a drawing Samira Mian attributes to the Mustansiriya in Baghdad.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  Our ten-fold star follows a drawing by the artist Samira Mian, who attributes it to the
+  Mustansiriya in Baghdad. The Abbasid caliph al-Mustansir founded the madrasa in 1227, and it
+  opened in 1233; it is one of the few surviving landmarks of Abbasid Baghdad. Its façade is
+  decorated in carved brick, and its main entrance carries star and polygon figures.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Whether this exact star is on the building. Only the tutorial's maker says so; no photo or
+    catalogue shows it. Say "after a drawing … attributed to", never "on the walls" or "from the
+    Mustansiriya walls", and never a place on the building (gate, façade, courtyard).
+  - Stone or brick. The video says "stone walls"; the building's decoration is carved brick. Never
+    "carved in stone".
+  - Girih tiles. Lu and Steinhardt (2007) redraw one of its spandrels with girih tiles; whether the
+    craftsmen worked that way is argued. Say "can be redrawn with girih tiles", never "made with".
+  - Do not print "the oldest university", "survived the Mongol sack" without saying parts were
+    devastated and later restored, or any day-level date.
+
+sources:
+  - title: Samira Mian, "#24 Mustansiriya Madrasa, Baghdad - How to draw Islamic Geometry" (YouTube, 2017)
+    url: https://www.youtube.com/watch?v=NtnlGMTElBk
+    supports: [caption, fold, story]
+  - title: Wikipedia, "Mustansiriyya Madrasa"
+    url: https://en.wikipedia.org/wiki/Mustansiriyya_Madrasa
+    supports: [story]
+  - title: Mohammed Harith Khalil, the Mustansiriya's information sign (photo, Wikimedia Commons)
+    url: https://commons.wikimedia.org/wiki/File:%D9%85%D8%B9%D9%84%D9%88%D9%85%D8%A7%D8%AA_%D8%B9%D9%86_%D8%A7%D9%84%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%86%D8%B5%D8%B1%D9%8A%D8%A9.jpg
+    supports: [story]
+  - title: Mohammed Harith Khalil, carved-brick decoration of the Mustansiriya's gate (photo, Wikimedia Commons)
+    url: https://commons.wikimedia.org/wiki/File:%D8%B2%D8%AE%D8%A7%D8%B1%D9%81_%D8%A7%D9%84%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%86%D8%B5%D8%B1%D9%8A%D8%A9.jpg
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Samira Mian
+  title: "#24 Mustansiriya Madrasa, Baghdad - How to draw Islamic Geometry - زخارف اسلامية هندسية"
+  url: https://www.youtube.com/watch?v=NtnlGMTElBk

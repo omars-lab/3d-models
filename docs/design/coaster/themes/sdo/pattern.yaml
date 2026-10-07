@@ -1,0 +1,66 @@
+# Where the sDO pattern (CS-11) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-coaster-monuments-consolidated.md, §4 "What we may print", CS-11
+# (lines 1, 2, 4 and 5). Add a fact only from that list, with a source someone opened (never a
+# search snippet). Fix wording here, never in the storefront's generated file. The store shows a
+# history name only when this record has at least one source.
+#
+# The panel is photographed at the Alcazar (Wade SPA 2517) and catalogued there (Wichmann SEV2),
+# but no source names its room or its builder, so the record gives no era. Pedro I's palace dates
+# from the 1360s, but that is the palace's date, not the panel's (storefront seven-eras check,
+# design question 20): the story gives no date for the panel and keeps Pedro I out of it.
+
+construction: sDO9fpu76v8
+short: sDO
+fold: 12
+form: Star
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+found_at: Royal Alcazar, Seville, Spain
+
+# One line under the pattern's picture.
+caption: Twelve-pointed stars on a six-fold grid, with six- and eight-pointed stars between them, recorded on a cut-tile mosaic panel in the Royal Alcazar of Seville.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  The pattern is recorded at the Royal Alcazar of Seville, on a cut-tile mosaic panel photographed
+  by David Wade and catalogued by Brian Wichmann. The Alcazar began as an Islamic citadel in the
+  10th century and was rebuilt by the Almohads and later by the kings of Castile; no source says
+  when this panel was made. The same design is recorded at the Alcazaba of Málaga,
+  the Bou Inania madrasa in Meknes and the old synagogue of Córdoba.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Which room. No source names it; the Patio de las Doncellas is a lead from photo titles only.
+    Do not print a room.
+  - Almohad or Mudéjar. Wade labels every Alcazar photo "Almohad / Peter the Cruel"; which builder
+    made this panel is open. Never "Almohad tilework" or "Pedro I's tilework" for it, and never
+    "Moorish" as a single label.
+  - The tiles' age. Nothing says whether they are medieval or replaced; do not date them.
+  - The 1360s. That is when Pedro I built his Mudéjar palace, not a date for this panel. Never
+    print the 1360s, or Pedro I, as the pattern's date or maker; the era stays undecided (IV or V).
+  - The Granada craftsmen are "likely", not certain. Do not print "913–914" or "Abd al-Rahman III,
+    first emir".
+  - The same design elsewhere is the same design, not the same tiles.
+
+sources:
+  - title: David Wade, Pattern in Islamic Art, SPA 2517 (Seville, Alcazar)
+    url: https://patterninislamicart.com/single/spa2517
+    supports: [caption, fold, story]
+  - title: Brian Wichmann, Tiling Search SEV2 (Reales Alcazares, Seville)
+    url: https://tilingsearch.mit.edu/HTML/data18/SEV2.html
+    supports: [caption, fold, story]
+  - title: Wikipedia, "Alcázar of Seville"
+    url: https://en.wikipedia.org/wiki/Alc%C3%A1zar_of_Seville
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: "Constructing a pattern from the Royal Alcazar using GeoGebra Classic 5"
+  url: https://www.youtube.com/watch?v=sDO9fpu76v8

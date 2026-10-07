@@ -1,0 +1,71 @@
+# Where the bkn pattern (CS-12) comes from, for the storefront's pattern record (Naqsh's `pattern`
+# metaobject, written by coffee-house-storefront's sync-theme-designs skill).
+#
+# Every line here is one the history research cleared for print: coffee-house-storefront
+# docs/research/2026-10-06-coaster-monuments-consolidated.md, §4 "What we may print", CS-12
+# (lines 1, 2, 3 and 5). Add a fact only from that list, with a source someone opened (never a
+# search snippet). Fix wording here, never in the storefront's generated file. The store shows a
+# history name only when this record has at least one source.
+#
+# The pattern is known only from a catalogue: Wichmann's Tiling Search records it for the shrine
+# from a 1977 drawing, with no photo, craft or place. So the record says "recorded for", and gives
+# no era: nothing says whether it belongs to the Safavid tomb, the older Seljuk mosque or a repair.
+# Its stars are six-pointed; the old ledger title "12-fold from a Square" was wrong.
+#
+# The shrine's dates follow the storefront Agra and Isfahan dates check
+# (docs/research/2026-10-07-agra-isfahan-dates-consolidated.md, table R). "Begun under Shah Abbas I
+# and finished in 1632" came from English Wikipedia, which leans on a news story's inference and
+# halves one inscription's year (AH 1041 = 1631–32). The story no longer gives the building a date;
+# the dated parts are listed under contested. English Wikipedia stays a lead, not a source.
+
+construction: bknVRSMcLj0
+short: bkn
+fold: 6
+form: Kite Rosette
+
+# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
+# backlog S3.3, Omar picks).
+history_name: ""
+
+found_at: Imamzadeh Isma'il, Isfahan, Iran
+
+# One line under the pattern's picture.
+caption: Six-pointed stars of kites, each set in a twelve-sided frame, recorded for the Imamzadeh Isma'il shrine in Isfahan.
+
+# Two or three sentences for the product page and the pattern's article.
+story: >
+  This pattern is recorded for the Imamzadeh Isma'il shrine in Isfahan, in a drawing published by
+  Javad Shafai in his 1977 book on Persian decoration and wood carving. Every piece is a kite, and
+  the kites gather into stars of three, four and six points.
+
+# Facts scholars disagree on, and lines not to print. The story above avoids each one.
+contested:
+  - Whether it is on the building today. One catalogue entry, from one 1977 drawing (Shafai, not
+    opened by us), and no photo anywhere. Say "recorded for", never "on the walls" or "seen at".
+  - Its fold. The stars are six-pointed, in twelve-sided frames on a fifteen-degree grid. Never
+    "twelve-pointed", "twelve-fold rosette" or "12-fold".
+  - Its craft (tile, wood, stucco, brick), its place on the shrine (dome, door, screen) and its date.
+    None is known; do not print one.
+  - The shrine's dates. A tile inscription over the portico is dated AH 1041 (1631–32) and names
+    Shah Safi; the south portal is dated AH 1043 (1633–34), and later work AH 1049, 1111 and 1114.
+    "Begun under Shah Abbas I" is a news story's inference, and "finished in 1632" halves one
+    inscription's year. The pattern is tied to no dated part.
+  - Do not print the architect's name, "grandson" or which Imam (at most "a descendant of Imam
+    Hasan"), or a repeat type.
+
+sources:
+  - title: Brian Wichmann, Tiling Search SHAF18 (Imamzadeh Isma'il shrine, Isfahan, after Shafai 1977)
+    url: https://tilingsearch.mit.edu/HTML/data200/SHAF18.html
+    supports: [caption, fold, story]
+  - title: Isfahan Municipality, monuments page, "Imamzadeh Isma'il" (archived 30 March 2016)
+    url: https://web.archive.org/web/20160330192942id_/http://www.isfahan.ir/ShowPage.aspx?page_=form&order=show&lang=1&sub=10&PageId=125&codeV=1&tempname=AsarTarikhy
+    supports: [story]
+  - title: Persian Wikipedia, "Masjid-i Sha'ya va Imamzadeh Isma'il"
+    url: https://fa.wikipedia.org/wiki/%D9%85%D8%B3%D8%AC%D8%AF_%D8%B4%D8%B9%DB%8C%D8%A7_%D9%88_%D8%A7%D9%85%D8%A7%D9%85%D8%B2%D8%A7%D8%AF%D9%87_%D8%A7%D8%B3%D9%85%D8%A7%D8%B9%DB%8C%D9%84
+    supports: [story]
+
+# Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
+credit:
+  creator: Sarah Brewer (mathémartiste)
+  title: "Geometric pattern from Imamzadeh Isma'il shrine in Isfahan, GeoGebra Classic 5"
+  url: https://www.youtube.com/watch?v=bknVRSMcLj0
