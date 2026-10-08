@@ -1,7 +1,7 @@
 ---
 plate: sheets-04g-fit
 recipe: sheets-04g-fit.yaml
-iteration: 3
+iteration: 4
 stage: waiting
 times_printed: 0
 runs: []
@@ -20,6 +20,7 @@ risk: watch
 pictures:
   - sheets-04g-fit-media/bed.png
   - sheets-04g-fit-media/ids.png
+  - sheets-04g-fit-media/ids-coaster.png
 ---
 
 # sheets-04g-fit — the kites and the middle piece at a ladder of gaps
@@ -97,11 +98,15 @@ Going round the coaster (the colors are the picture's, not the print's):
 ![sheets-04g-fit on the bed: the coaster in the middle, five rows of ten kites and four middle pieces round it, each labeled with its gap](sheets-04g-fit-media/bed.png)
 
 The ids cut into the four middle pieces' bed faces, seen from below (D-109): A is the 0 gap, B
-0.05, C 0.10 and D 0.15, so a middle piece tells its gap off the bed. The coaster and the kites
-have no room for one; [the recipe](sheets-04g-fit.yaml) says how they are told apart, and
-[the carved-id fit note](../../issues/carved-id-fit.md) says why.
+0.05, C 0.10 and D 0.15, so a middle piece tells its gap off the bed.
 
-![The bottoms of the four middle pieces: ten-pointed pieces reading 4GF over 3 and A, B, C or D, turned on their sides](sheets-04g-fit-media/ids.png)
+![The bottoms of the four middle pieces: ten-pointed pieces reading 4GF over 4 and A, B, C or D, turned on their sides](sheets-04g-fit-media/ids.png)
+
+The coaster has room only for one letter, Z, on a strap left of the middle (D-114); it is small,
+but it is the coaster's only mark. The kites have room for none; [the recipe](sheets-04g-fit.yaml)
+says how they are told apart, and [the carved-id fit note](../../issues/carved-id-fit.md) says why.
+
+![The bottom of the coaster: a ten-pointed star of straps with a small Z on a strap left of the middle](sheets-04g-fit-media/ids-coaster.png)
 
 ## Cost and risk
 

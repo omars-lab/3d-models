@@ -69,8 +69,37 @@ neither, so a new piece cannot slip through without one. pkt-1 has no piece that
 Changing the recipes moved each of the five plates to iteration 3, which resets their yeses: each
 needs Omar's yes again before it prints.
 
-Whether to go further, with the shorter forms, by making room in the designs, or by leaving it
-here, is Omar's call and is not decided by this note.
+## The shorter id where the full one does not fit (D-114)
+
+Omar's pick, 2026-10-08, of three ways on from here: "Shorter id where full won't fit". A piece
+with no room for the full id carries a shorter one, set by `id_form:` on its recipe item: `short`
+cuts the iteration and the piece, "4M", and `piece` cuts the piece alone, "Z". The plates gate
+refuses `id_form:` without an `id:`, a form it does not know, and `short` on a piece whose id is a
+digit, which would run into the iteration ("41" reads as iteration 41).
+
+The pick came with a rule: an id is cut only on a face hidden in use. An upper half prints face
+down, so its bed face is the top of the coaster, and it carries no id even where one fits; its
+pair letter on its cut face tells it apart. No gate can check which face is hidden, so each upper
+half's reason in its recipe says it.
+
+Letters are kept apart within a plate and, where they can be, across the coupons on the shelf:
+spl-1's trap lowers take their pair letters, M and N, and the trapped hexagons T and U; pkt-1's
+lowers take P, Q and R, their pair letters, and S for P2a, because O is never cut as an id (it
+reads as a zero).
+
+Two pieces the table above shows taking a shorter id carry none, each for its own reason:
+
+- **The split coasters' Hex and Outer rings.** bikar renders each ring as one model of ten
+  pieces and cuts one id per render, so "4X" landed on one hexagon of ten (the picture made for
+  this showed it). An id on one piece in ten tells nine pieces nothing, and the recipe would claim
+  all ten carry it. They stay without one until bikar cuts an id into each piece of a ring; that is
+  the next step, and when it lands they take `short`.
+- **split-01's Lower.** It takes "L", but its bottom already carries the coaster's own id mark,
+  1, and a letter beside it says nothing the 1 does not.
+
+So, at iteration 4: spl-1 cuts 16 ids (12 full, 4 short), pkt-1 4 (short), split-01 and split-02
+1 each (full, the middle piece), and sheets-04g-fit 5 (4 full, and Z on the coaster). Changing the
+recipes again moved each plate to iteration 4, which resets their yeses once more.
 
 ## Three gaps found on the way
 

@@ -1,7 +1,7 @@
 ---
 plate: split-01
 recipe: split-01.yaml
-iteration: 3
+iteration: 4
 stage: waiting
 times_printed: 0
 runs: []
@@ -105,10 +105,13 @@ The slice: both halves on the right, the HEX and OUTER rows at the left with the
 ![split-01 on the bed](split-01-media/bed.png)
 
 The id cut into the middle piece's bed face, seen from below: the plate, the iteration and M
-(D-109). It is the only piece with room for one; [the recipe](split-01.yaml) says how the others
-are told apart, and [the carved-id fit note](../../issues/carved-id-fit.md) says why.
+(D-109). It is the only piece that carries one. The upper half prints face down, so its bed face
+is the top you see. The hex and outer rings come out of bikar as one render of ten pieces and
+bikar cuts one id per render, so only one piece in ten would carry it; they carry none until it
+cuts one into each piece. [The recipe](split-01.yaml) says how each piece is told apart, and
+[the carved-id fit note](../../issues/carved-id-fit.md) says why.
 
-![The bottom of the middle piece: a twenty-sided piece reading SP1 over 3 M, turned on its side](split-01-media/ids.png)
+![The bottom of the middle piece: a twenty-sided piece reading SP1 over 4 M, turned on its side](split-01-media/ids.png)
 
 ## Cost and risk
 

@@ -121,7 +121,10 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       `cells:`), names its `id_code:` (1 to 3 characters from compose.ts's `ID_CHAR`, read from
       that file, never retyped), and every item says `id:` (one character, on a `bkr:` item
       only, not shared with another item) or `no_id:` (why it has none: bikar's refusal word
-      for word, or how it is told apart instead). No two recipes share an `id_code`, whatever
+      for word, or how it is told apart instead). Where the full id has no room, an `id:` item
+      may say `id_form: short` (the iteration and the piece) or `id_form: piece` (the piece
+      alone), the forms read from compose.ts's `ID_FORMS` (D-114); a short form needs a letter
+      id, since 3 then 7 reads 37. No two recipes share an `id_code`, whatever
       their stage: a printed piece still carries its code. A plate not converted yet sits in
       ID_BASELINE with its reason; the baseline only shrinks, and an entry for a plate that
       no longer needs it (converted, printed, retired or gone) is a finding until it is
@@ -215,6 +218,8 @@ ASKED = frozenset({"proposed", "waiting", "approved", "sent"})
 # P13: the characters a carved id may use are compose.ts's, read from it (one place says them).
 COMPOSE_TS = ROOT / "tools" / "bambu" / "src" / "commands" / "compose.ts"
 ID_CHAR_LINE = re.compile(r'^const ID_CHAR = "(\[[^"\]]+\])";$', re.MULTILINE)
+# ...and so are the id forms, how much of the id a piece with less room carries (D-114).
+ID_FORMS_LINE = re.compile(r'^const ID_FORMS: readonly IdForm\[\] = \[([^\]]+)\];$', re.MULTILINE)
 # Plates P13 would ask for ids that are not converted yet, each with why. It only shrinks: a plate
 # converted, printed, retired or gone takes its line out (P13 says so). Step 3 of D-109.
 ID_BASELINE = {
@@ -1183,14 +1188,24 @@ def id_char(compose: Path = COMPOSE_TS) -> str:
     return m.group(1)
 
 
+def id_forms(compose: Path = COMPOSE_TS) -> tuple[str, ...]:
+    """P13: the `id_form:` values compose.ts cuts, read from its `ID_FORMS` line (D-114)."""
+    m = ID_FORMS_LINE.search(compose.read_text(encoding="utf-8")) if compose.exists() else None
+    if not m:
+        raise ValueError(f"{compose.name} has no `const ID_FORMS: readonly IdForm[] = [...];` line to "
+                         "read the id forms from")
+    return tuple(re.findall(r'"([a-z]+)"', m.group(1)))
+
+
 def id_asked(recipe: object, stage: object, maturity: object) -> bool:
     """P13 asks a plate for ids: an experiment in an asked stage whose recipe lists pieces."""
     return (stage in ASKED and maturity != "production" and isinstance(recipe, dict)
             and any(isinstance(recipe.get(k), list) for k in ("items", "cells")))
 
 
-def id_findings(name: str, recipe: object, chars: str) -> list[str]:
-    """P13 on one recipe the gate asks for ids: the code, and an id or a reason on every item. PURE."""
+def id_findings(name: str, recipe: object, chars: str, forms: tuple[str, ...]) -> list[str]:
+    """P13 on one recipe the gate asks for ids: the code, and an id or a reason on every item, and
+    each `id_form:` one compose cuts, on an item with an id. PURE."""
     code = recipe.get("id_code")
     one = re.compile(f"^{chars}$")
     how = f"`id_code:` is 1 to 3 of {chars}, the first line cut into every piece (D-109)"
@@ -1207,6 +1222,16 @@ def id_findings(name: str, recipe: object, chars: str) -> list[str]:
         if not isinstance(item, dict):
             continue
         has_id, has_no = "id" in item, "no_id" in item
+        if "id_form" in item:
+            if not has_id:
+                out.append(f"{where}: `id_form:` says how much of an `id:` to cut, and the item "
+                           "has no `id:`")
+            elif item["id_form"] not in forms:
+                out.append(f"{where}: `id_form: {item['id_form']!r}` is one of {', '.join(forms)} "
+                           "(D-114)")
+            elif item["id_form"] == "short" and re.fullmatch("[0-9]", str(item["id"])):
+                out.append(f"{where}: `id_form: short` cuts the iteration then the id, so a digit "
+                           f"id reads as one number with it (3 then {item['id']}); give it a letter")
         if has_id == has_no:
             out.append(f"{where} needs `id:` (one character) or `no_id:` (why it has none), "
                        + ("not both" if has_id else "and has neither"))
@@ -1237,7 +1262,7 @@ def check_ids(pages: list, plates: Path, compose: Path = COMPOSE_TS,
     if baseline is None:
         baseline = ID_BASELINE if plates.resolve() == PLATES.resolve() else {}
     try:
-        chars = id_char(compose)
+        chars, forms = id_char(compose), id_forms(compose)
     except (OSError, ValueError) as e:
         return [f"compose: P13 {e}"]
     out: list[str] = []
@@ -1269,7 +1294,7 @@ def check_ids(pages: list, plates: Path, compose: Path = COMPOSE_TS,
         if code is None and path.stem in baseline:
             needs.add(path.stem)
             continue
-        out += id_findings(path.stem, recipe, chars)
+        out += id_findings(path.stem, recipe, chars, forms)
     for plate in sorted(set(baseline) - needs):
         out.append(f"{plate}: P13 ID_BASELINE still lists it, but it no longer needs to be there "
                    "(converted, printed, retired or gone) — delete its line")
@@ -2011,8 +2036,13 @@ def self_test() -> int:
         chars = id_char()
         report(chars == "[0-9A-NP-Z]", "P13 reads the id characters from compose.ts",
                f"read {chars!r}")
+        forms = id_forms()
+        report(forms == ("full", "short", "piece"), "P13 reads the id forms from compose.ts",
+               f"read {forms!r}")
         b = "bikar:a.bkr"
         good = {"id_code": "SL1", "items": [{"bkr": b, "id": "A"}, {"bkr": b, "id": 7},
+                                            {"bkr": b, "id": "H", "id_form": "short"},
+                                            {"bkr": b, "id": 4, "id_form": "piece"},
                                             {"bkr": b, "no_id": "bikar: fits nowhere on the bed face"},
                                             {"stl": "x.stl", "no_id": "a file bikar did not make"}]}
         for label, recipe, want in [
@@ -2034,8 +2064,14 @@ def self_test() -> int:
                                                                                   "id": "O"}]},
              "is one of"),
             ("P13 FAIL: a four-character code", {"id_code": "SPL1", "items": []}, "`id_code: 'SPL1'`"),
+            ("P13 FAIL: an id form compose does not cut", {"id_code": "A", "items": [
+                {"bkr": b, "id": "A", "id_form": "tiny"}]}, "is one of full, short, piece"),
+            ("P13 FAIL: an id form on a piece with no id", {"id_code": "A", "items": [
+                {"bkr": b, "no_id": "face down", "id_form": "short"}]}, "has no `id:`"),
+            ("P13 FAIL: a short form on a digit id (3 then 7 reads 37)", {"id_code": "A", "items": [
+                {"bkr": b, "id": 7, "id_form": "short"}]}, "give it a letter"),
         ]:
-            got = id_findings("x", recipe, chars)
+            got = id_findings("x", recipe, chars, forms)
             report(not got if want is None else any(want in g for g in got), label, f"got {got}")
         tree = tmp / "p13"
         tree.mkdir()

@@ -57,6 +57,21 @@ describe("parseManifest — the carved id fields", () => {
     expect(() => parseManifest(recipe("id_code: SP1", "items:", BKR, '    no_id: " "'))).toThrow(/must say why/);
   });
 
+  it("keeps an id_form of short or piece, and refuses any other", () => {
+    const m = parseManifest(recipe("id_code: SP1", "items:", BKR, "    id: H", "    id_form: short", BKR, "    id: L", "    id_form: piece"));
+    expect(m.items[0]).toMatchObject({ id: "H", id_form: "short" });
+    expect(m.items[1]).toMatchObject({ id: "L", id_form: "piece" });
+    expect(() => parseManifest(recipe("id_code: SP1", "items:", BKR, "    id: H", "    id_form: tiny"))).toThrow(/full, short or piece/);
+  });
+
+  it("refuses an id_form without an id, and a short form on a digit id (3 then 7 reads 37)", () => {
+    expect(() => parseManifest(recipe("id_code: SP1", "items:", BKR, '    no_id: "face down"', "    id_form: short"))).toThrow(
+      /has no `id:`/,
+    );
+    expect(() => parseManifest(recipe("id_code: SP1", "items:", BKR, "    id: 7", "    id_form: short"))).toThrow(/give the piece a letter/);
+    expect(parseManifest(recipe("id_code: SP1", "items:", BKR, "    id: 7", "    id_form: piece")).items[0]).toMatchObject({ id: "7" });
+  });
+
   it("refuses an id on an iteration item and on an stl item: neither renders from source", () => {
     expect(() => parseManifest(recipe("id_code: SP1", "items:", "  - iteration: it-aaaaaaaaaaaa", "    id: A"))).toThrow(
       /only a `bkr:` item can be cut/,
@@ -70,6 +85,12 @@ describe("parseManifest — the carved id fields", () => {
 describe("bottomIdText — what bikar cuts", () => {
   it("is the code, then the iteration and the piece id", () => {
     expect(bottomIdText("SP1", 2, "D")).toBe("SP1/2 D");
+    expect(bottomIdText("SP1", 2, "D", "full")).toBe("SP1/2 D");
+  });
+
+  it("cuts less where the full id has no room: the iteration and the piece, or the piece alone (D-114)", () => {
+    expect(bottomIdText("SP1", 3, "H", "short")).toBe("3H");
+    expect(bottomIdText("SP1", 3, "L", "piece")).toBe("L");
   });
 
   it("refuses an iteration past one digit, and one that is not a count", () => {
@@ -101,6 +122,20 @@ describe("resolveManifestItems — the id is part of the recipe", () => {
     });
     expect(d!.bottomId).toBe("SP1/2 D");
     expect(bare!.bottomId).toBe("");
+  });
+
+  it("cuts each piece's own form, and gives each form its own iteration", async () => {
+    const at = { code: "SP1", iteration: 3 };
+    const [full, short, piece] = await resolveManifestItems(
+      [item({ id: "M" }), item({ id: "H", id_form: "short" }), item({ id: "L", id_form: "piece" })],
+      "ref",
+      profile,
+      undefined,
+      at,
+    );
+    expect([full!.bottomId, short!.bottomId, piece!.bottomId]).toEqual(["SP1/3 M", "3H", "L"]);
+    const [shortM] = await resolveManifestItems([item({ id: "M", id_form: "short" })], "ref", profile, undefined, at);
+    expect(shortM!.iteration).not.toBe(full!.iteration);
   });
 
   it("keeps a piece without an id on the iteration it had before ids existed", async () => {
