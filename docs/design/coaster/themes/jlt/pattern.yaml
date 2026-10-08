@@ -30,9 +30,9 @@ short: jlT
 fold: 7
 form: Star
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: the monument, then the fold (Omar, 2026-10-08; storefront
+# DESIGN.md "Pattern names"). It leads the product title.
+history_name: "Amir Qijmas al-Ishaqi Mosque Seven-Fold Star"
 
 found_at: Amir Qijmas al-Ishaqi Mosque, Cairo, Egypt
 

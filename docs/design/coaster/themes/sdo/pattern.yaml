@@ -17,9 +17,9 @@ short: sDO
 fold: 12
 form: Star
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: the monument, then the fold (Omar, 2026-10-08; storefront
+# DESIGN.md "Pattern names"). It leads the product title.
+history_name: "Royal Alcazar Twelve-Fold Star"
 
 found_at: Royal Alcazar, Seville, Spain
 
