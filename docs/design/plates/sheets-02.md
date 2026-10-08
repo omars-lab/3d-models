@@ -16,7 +16,7 @@ bed_plates:
 risk: ok
 pictures: []
 needs:
-  - "hole-point rounding in bikar (smooth-lines option 5, not built)"
+  - "a tip knob on the three minimal coasters feeding `holes round` (shipped, bikar #325)"
   - "its card piece in bikar's Sampler-Cards.bkr, a few label lines like Sheet1Card"
 ---
 
@@ -24,8 +24,8 @@ needs:
 
 **In short.** One card, three 30 mm windows (a CS-2 star, a gBV star, CS-1's inside corners), each
 with its points rounded by 0, 0.3, 0.75 and 1.5 mm. It answers whether the stars keep their sharp
-points. The 1.5 row is where a star turns into a flower, and seeing it is the point. Nothing of it
-is built yet.
+points. The 1.5 row is where a star turns into a flower, and seeing it is the point. The rounding
+itself is built (`holes round <mm>`, bikar #325); the card and the knob that feeds it are not yet.
 
 ## What it is
 
