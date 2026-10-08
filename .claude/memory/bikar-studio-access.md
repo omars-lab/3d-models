@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: reference
   originSessionId: 792c03e6-3f91-4133-a2ea-35c8bfde5227
-  modified: 2026-09-02T19:04:01.663Z
+  modified: 2026-10-01T03:06:18.964Z
 ---
 
 **bikar studio is reachable over the open internet but gated to the org.** The only
@@ -29,6 +29,8 @@ classifies pages.dev as `"exposure": "access"`, `check-deploy.sh` presents a
 `CF-Access-Client-Id/Secret` service-token pair when set (and reports content NOT VERIFIED
 when absent), and `setup-secrets.sh` step 2 pipes `CF_ACCESS_CLIENT_ID/SECRET` from the
 dotenvx `.env` to GitHub Actions.
+
+**Update 2026-10-01: the service token stopped getting through.** Deploy run 36796118992 published, and Access was still shut on all 12 pages. But every check with the token failed ("no page marker", and `/api/patterns` answered with HTML). A leak-free local curl with `.env`'s token also got a 302, so the GitHub copy is not the stale one. The token itself expired, or its Service Auth policy is gone. Fixing it is Omar's job in the Cloudflare dashboard. **Settled the same day by a read-only API lookup** (GETs with `CLOUDFLARE_ZT_API_TOKEN` from **bikar-main's** `.env`; the read token can see apps but lists 0 service tokens): the policy is gone. Both Access apps, "bikar-studio - Cloudflare Pages" (the pages.dev one `deploy.yml` checks with the token) and "Bikar Studio" (the custom domain), hold only the org-member allow policy. The token in bikar-main's `.env` is "coffee-house-local-dev", valid until 2027-09-02, last seen 2026-09-03. The shared `bikar/.env` is stale: it has a different account ID (API answers 7003) and a client ID that isn't in the account. **Fixed later on 2026-10-01:** Omar added a policy "allow local dev service token" (decision `non_identity`, i.e. Service Auth) on both apps. The leak-free probe with bikar-main's pair then gave 200 with the token and 302 without it, on pages.dev `/` and `/editor` and on bikar.naqshcoffee.com. To look this up again, read the apps' policies and the service tokens with GET requests through the Cloudflare API, using bikar-main's `CLOUDFLARE_ZT_API_TOKEN`.
 
 **Update 2026-09-02 — the CI service token is minted, admitted, and verified working.**
 The one step no script performs is *admitting* the token: `cf-setup.sh` writes only the

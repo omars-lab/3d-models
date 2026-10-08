@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: b317004f-c205-413f-8ef8-7b5f99a1b742
-  modified: 2026-09-29T16:23:29.434Z
+  modified: 2026-09-30T23:07:43.337Z
 ---
 
 `.claude/skills/maintain-use-cases/validate.py --refresh` re-pins the sibling `as_of` to
@@ -23,6 +23,15 @@ validate.py). All 12 on 2026-09-29 were one-line, single-match cases.
 Hook `41-schema-mirror`: once bikar vendors `packages/qiyas-schema/schemas/ggb_construction.json`,
 use-cases.md frontmatter must pin `youtube:` in `as_of` and list `youtube: ../youtube` in
 `repos`, or the commit is blocked with "pins no youtube commit".
+
+**A youtube pin advance can turn hook 41 red** when youtube's construction schema changed
+and bikar has not copied it in yet. On 2026-09-30 the missing fields were `@restyle` and
+`gridstep`. Do not work around it. Follow bikar's `release-the-schema-mirror` skill: copy the
+schema from youtube `origin/HEAD` with `git show`, run codegen, then `npm version patch -w
+packages/qiyas-schema`, because bikar's hook refuses a contract change with no bump. Open the
+PR, then move the pins (bikar #289, then 3d-models #448). The `schema-v*` tag is Omar's.
+Mid-merge, hook 20 now also reads MERGE_HEAD (#447), so a master merge no longer drags the
+pin backwards.
 
 **Why:** 2026-09-17, 3d-models #207: the refresh was needed for the bets.md regen and
 surfaced the drift as a blocking side quest. It recurred on every pin advance, so the fix
