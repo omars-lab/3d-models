@@ -19,9 +19,10 @@
 # smallest, etc?". So the coaster prints again with them, as sheets-04g printed it, and each middle
 # piece carries dots in its top, the most on the biggest: four at gap 0, three at 0.05, two at
 # 0.1, one at 0.15. A dot is 1 mm across and keeps 0.8 mm of top to the piece's edge (CAL-CST-01).
-# The kites carry none: one dot leaves 0.71 mm of top on the biggest kite, under that floor. Until
-# the page settles how kites are told apart, each rung's ten come off the bed together and stay
-# in their own pile.
+# The kites carry none: a kite holds one dot at most, at gaps 0.05 to 0.15 and none at 0.20 or
+# 0.25 (the row at the widest spot, bikar #324), so dots cannot count five rungs. Until the
+# page settles how kites are told apart, each rung's ten come off the bed together and stay in
+# their own pile.
 #
 #   COASTER                 the gBV minimal coaster, as sheets-04g printed it (1)
 #   KITE 0.05 … KITE 0.25   ten kites at each of five gaps (50)

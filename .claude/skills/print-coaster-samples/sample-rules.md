@@ -78,9 +78,10 @@ When a print teaches something new, add or correct a rule here, with the date an
   - loose pieces at a ladder of gaps: `<ring>_dots`, the most dots on the biggest piece (the
     tightest gap), one dot on the smallest.
   Ids and letters run on from the last plate's, so no two prototypes on the shelf share one
-  (spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2). A piece too small to take a mark (a
-  gBV kite: one dot leaves 0.71 mm of top under the 0.8 mm floor) says so in the plate header,
-  with how its rungs are kept apart instead.
+  (spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2). A piece too small to take a mark, or
+  to take enough dots to count its rungs, says so in the plate header, with how its rungs are
+  kept apart instead. The row sits at the piece's widest spot (bikar #324), and a gBV kite at
+  size 112.5 still holds only one dot, at gaps 0.05 to 0.15, and none at 0.20 or 0.25.
 - `bambu slice compose <plate> --dry-run` places every item.
 - **The slice carries the whole preset chain.** minis-03 and minis-04 printed on Studio's
   built-in values for about 54 process and 50 filament settings, because Studio's command line

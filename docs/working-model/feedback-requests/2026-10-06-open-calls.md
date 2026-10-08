@@ -313,6 +313,9 @@ dot for smallest, etc?".
 - **Not on the kites.** A dot needs at least 0.8 mm of top left to the piece's edge, or the edge
   prints too thin to hold (CAL-CST-01). The biggest kite leaves 0.71 mm round one dot, so no kite
   can take one. How to keep the kite rungs apart is a new call, 6b, just below.
+- **Since then (2026-10-07):** a dot row now sits at the piece's widest spot, not its centre
+  (bikar #324). A kite at this size holds one dot at gaps 0.05, 0.10 and 0.15, and none at 0.20
+  (0.80 mm left) or 0.25 (0.75 mm). The plate is unchanged.
 
 ![Four middle pieces seen from above, with four, three, two and one dots](2026-10-06-open-calls-media/marks-middle-dots.png)
 
@@ -329,6 +332,11 @@ the coaster and the dots.
 the rungs look the same, and a kite is too small for a dot (call 6). So the question is how you
 know which rung a kite came from once it is in your hand. What you are testing is which gap fits,
 so a way that changes the kite's shape or size changes the answer.
+
+**A fact for this call, found 2026-10-07 (not a pick).** With the dot row at the widest spot
+(bikar #324), a kite holds one dot at gaps 0.05, 0.10 and 0.15, and none at 0.20 or 0.25. One
+is the most any kite holds, so dots can sort the kites into two groups, with a dot and without,
+not into five rungs. The plate prints no kite dots until you pick.
 
 | Option | Pros | Cons | What it leads to |
 |---|---|---|---|
