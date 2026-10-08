@@ -2,14 +2,17 @@
 plate: spl-1
 recipe: spl-1.yaml
 iteration: 2
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "For a split coaster: which gap between a 2 mm stud and its socket presses in and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves?"
 kind: new
 maturity: experiment
 bets: []
-unblocks: []
+unblocks:
+  - "split-01: the stud gap and the floor its studs are cut at"
+  - "the stud-layout plate: which stud size its gBV wedge pairs use"
+  - "split design call 6: whether a 0.8 mm lip holds a loose piece between the halves"
 minutes: 49
 grams: 18.5
 bed_plates: 1
@@ -47,17 +50,20 @@ yes.
   minimal letters printiend on each AT AB (a top, a bottom), BT, BB, ETC"). The letter is cut
   2.5 mm tall into both cut faces: the lower tile reads `AB`, the upper `AT`. The cut faces meet
   when a pair closes, so the letters show only when it is open. A trap's loose hexagon has no
-  letter; it stays with its tiles. The letters, and the names on the bed picture below:
+  letter; it stays with its tiles. The letters, and the names on the bed picture below, are in
+  the table that follows.
 
-  | Letter | Bed name | What the pair is |
-  |---|---|---|
-  | A to F | G-10, G-05, G00, G05, G10, G15 | 2 mm stud, gaps −0.10 to 0.15 mm, in that order |
-  | G, H | S00, S05 | 1.5 mm stud, gaps 0 and 0.05 |
-  | I, J | B00, B05 | 3 mm stud, gaps 0 and 0.05 |
-  | K, L | F08, F10 | floors 0.8 and 1.0 mm, gap 0.05 |
-  | M, N | T0, T2 | trap pairs, room 0 and 0.2 |
+| Letter | Bed name | What the pair is |
+|---|---|---|
+| A to F | G-10, G-05, G00, G05, G10, G15 | 2 mm stud, gaps −0.10 to 0.15 mm, in that order |
+| G, H | S00, S05 | 1.5 mm stud, gaps 0 and 0.05 |
+| I, J | B00, B05 | 3 mm stud, gaps 0 and 0.05 |
+| K, L | F08, F10 | floors 0.8 and 1.0 mm, gap 0.05 |
+| M, N | T0, T2 | trap pairs, room 0 and 0.2 |
 
-  pkt-1 goes on from O, so no two coupons share a letter.
+^ge14rb
+
+pkt-1 goes on from O, so no two coupons share a letter.
 
 **The color is picked at the send**, as on sld-1: say it with the yes. The show-through check
 wants the lightest color you have loaded.
@@ -78,6 +84,24 @@ wants the lightest color you have loaded.
 It is the cheapest print that settles the split coaster's open numbers. A full split coaster
 costs far more filament and time, and if its studs bind or its sockets show through, the whole
 print is lost. Here each wrong answer costs one 15 mm tile.
+
+The stud split coaster waits on it: [split-01](split-01.md) is cut at whatever stud gap and floor
+this plate picks, and so is the stud-layout plate that comes after it. The trap pairs also bear
+on [split-02](split-02.md), which holds its pieces by a flange instead of a lip and has no studs.
+
+### What each pair tells us, and what it changes
+
+Judged by hand, as [the split design §9](../pieces/split-with-studs-design.md#9-the-coupon-spl-1)
+says: press each pair together, shake it, pull it apart. These are the questions asked after the
+print, one at a time.
+
+| Pairs | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| A to F (2 mm stud, gaps −0.10 to 0.15) | Which gap presses in by hand, holds when shaken, and comes apart without breaking? | Nobody knows yet. The sources disagree on which way to size a printed stud, and none measured an X2D; our polygon pieces fit best at 0 and below ([§4.1](../pieces/split-with-studs-design.md#41-the-stud-and-socket)). | The tightest gap that holds becomes the stud gap on split-01 and the stud-layout plate (split-02 has no studs). If every gap is loose, the ladder moves tighter; if every gap binds, looser, and the plate is printed again. |
+| G, H (1.5 mm stud) | Does a socket under 2 mm print open, and does the stud hold? | Doubtful: 2 mm is the smallest hole the printing rules we follow call printable. | Holds: smaller studs are allowed where gBV's straps are narrow, so more places for a stud. Fails: 2 mm is the smallest stud. |
+| I, J (3 mm stud) | Does the 3 mm stud hold where a 2 mm one snaps? | Only matters if A to F snap when pulled apart. | 2 mm snaps and 3 mm holds: split coasters use 3 mm studs, with room for fewer of them (8 at 25 mm apart on gBV, §3). |
+| K, L and D (floors 0.8, 1.0 and 0.6 mm) | Held to a window, face down, does the socket show through the top face? | The 0.6 mm floor is our usual deboss floor, but there it is never the face you look at. | None show: the floor stays 0.6 mm. 0.6 shows: the floor goes up to the thinnest that does not show, and the stud gets that much shorter. |
+| M, N (trap pairs, room 0 and 0.2) | Does the piece drop in, does the pair close flat over it, does it rattle, and does the 0.8 mm lip hold it against a hard thumb push? | Room 0 closes tight and room 0.2 rattles a little; whether the lip holds is the open part. | Lip holds: loose pieces in a split coaster are held by a lip (split-01). Lip gives way: the flange (split-02) is the way, or the lip gets wider. A rattle at 0.2 sets how much room a piece gets. |
 
 ## Pictures
 
@@ -115,6 +139,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
 
 ## Timeline
 

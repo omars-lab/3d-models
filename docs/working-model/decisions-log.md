@@ -6374,3 +6374,146 @@ Omar, 2026-10-07, in chat, after `bambu options set` shipped (#608) with each sw
 
 **What would reverse it:** a switch set wrong for the plate on the bed, from a verdict that named
 the wrong plate, or a print stopped by a switch `for-bed` should have changed.
+
+## D-109 — Every experimental piece carries a carved id: plate, iteration, piece
+
+Omar, 2026-10-08, in chat, while saying yes to five plates: "not as text thats a layer abover",
+"but carved into", "this hsould be starnadrd", "for threse experiemental prints", "with
+iteration number", "should pply to all", then "plate id + piece id" and "+iteration id", and "we
+should have hook to validate each experimental piece is identified". And: "we should reprint
+everthing with ids".
+
+### The options as offered
+
+- **Ids on some coupons only**, as built so far: spl-1's letters, the split halves' `AT`/`AB`,
+  the dots on the sheets-04g-fit middle pieces. Each plate invents its own marks, and a loose
+  piece off an unmarked plate can only be told apart by where it lay on the bed.
+- **An id printed on top as a second layer of text.** Rejected in his first words: it is raised,
+  and on a one-color plate a raised label is part of the face.
+- **Chosen, an id cut into every piece's bottom face**, on every experimental plate.
+
+### What it changes
+
+- **The id is the plate, the iteration and the piece**, cut into the face that sits on the bed,
+  so it never shows on the face you look at. bikar cuts it for any piece and refuses, with the
+  reason, when a piece is too small for it at a size that prints.
+- **A piece too small for an id is listed on its page**, with how its rungs are kept apart
+  instead (a pile per rung, as call 6b chose for the kites).
+- **A check fails an experimental plate with a piece that has neither**, and its self-test
+  includes the plate that should fail. Production plates carry no id.
+- **The yeses of 2026-10-08 are asked again.** spl-1, pkt-1, split-01, split-02 and sheets-04g-fit
+  were each a yes in chat that day; adding the ids is a new iteration of each, which resets the
+  yes (D-097), so each goes back to him once with the ids on its picture.
+- **The experiments still being judged are printed again with ids:** sheets-04c, sheets-04b,
+  minis-01, minis-02 and sheets-04g, each as a new iteration. The 2026-10-06 calls 8a and 8b are
+  dropped in favor of judging those prints; minis-01's first print stays unknown ("I don't
+  remember").
+
+**What would reverse it:** ids that show through the face, weaken a small piece, or cost so much
+print time that the plates stop being cheap to try.
+
+## D-110 — A plate prints one color, named at the send
+
+Omar, 2026-10-08, in chat, calls 16 to 18 and the sheet 5 color question on the
+[2026-10-06 calls page](feedback-requests/2026-10-06-open-calls.md#16-how-the-lab-prints-a-colored-coaster).
+
+### The options as offered
+
+- **Call 16, how the Lab prints a colored coaster:** one plate per color (my pick), the whole set
+  once per color, or one plate with many colors and its swap cost shown. **Chosen, one plate per
+  color.**
+- **Call 17:** a color per group now and per piece later (my pick), per piece from the start, or
+  per group only. **Chosen, per group now, per piece later.**
+- **Call 18, where a plate's color is written:** in the recipe for a per-color plate and at the
+  send for a whole-set plate (my pick, and what was built), always at the send, or always in the
+  recipe. **Chosen, always at the send.**
+- **Sheet 5's colors:** a color part per sample on one plate, or one color per plate with the
+  fills as loose pieces. **Chosen, one color per plate, fills as loose pieces.**
+
+### What it changes
+
+- **No recipe names a color.** The color is said with the yes and given to the send with
+  `--color`, for every plate. The built split, where a per-color plate carried its color in its
+  recipe, changes as the
+  [print-time color map design §8](../design/coaster/print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code)
+  lists. One habit, one meaning for the field, so the field goes rather than staying unused.
+- **A colored coaster is several one-color plates,** a yes and a send each, as D-103 already
+  said for custom orders.
+- **sheets-05 is redone** as a one-color card with pockets and a plate of fills in a second
+  color. It gives up comparing a raised fill fused to the card with a tall loose piece; its page
+  says so.
+
+**What would reverse it:** a coaster whose colors cannot be split into whole plates without a
+piece that will not stay in, or color swaps that cost less than the extra plates.
+
+## D-111 — Colors are matched to the loaded trays at print time; the hub reads the printer, never sends
+
+Omar, 2026-10-08, in chat, call 19: "can there be a color mapping process that runs when our
+claude skill takes lab stuff and tries to print it?", "lab won't be sending prints directly
+right?", "or should we host an api that wraps our printer on our tailscale network?"
+
+### The options as offered
+
+- Paste or drop the printer's tray list into the Lab (my pick), the hub runs the tray command and
+  the Lab asks it, or no tray list at all. **Chosen, none of the three as written.**
+
+### What it changes
+
+- **The match happens when a design is printed, on this machine.** The print skill reads the
+  trays, matches each design color to a loaded tray, and asks one question per color that does
+  not match: load it, use the nearest, or stop. The
+  [print-time color map design](../design/coaster/print-time-color-map-design.md) has the
+  details and four calls of its own.
+- **The Lab never sends a print.**
+- **The hub gets a read-only printer API** on the private network: trays and status, no send, no
+  settings. The Lab may show what is loaded as a hint.
+
+**What would reverse it:** a need to start prints from somewhere other than this machine, which
+would be a new decision about sends, not a change to this one.
+
+## D-112 — The order pages live in the hub
+
+Omar, 2026-10-08, in chat, call 20.
+
+### The options as offered
+
+- The hub (my pick), the Coaster Lab in the browser, or a spreadsheet. **Chosen, the hub.**
+
+### What it changes
+
+- **Plan, Price and Stock are hub pages,** private, on the private network, reading the iCloud
+  order folder (D-101). The Lab, which is public, gets one "Add to order" button and holds no
+  prices.
+- **Who uses which surface** is written up in the
+  [users and surfaces design](../design/process/users-and-surfaces-design.md).
+
+**What would reverse it:** a need to see orders away from the private network.
+
+## D-113 — Price is cost plus a markup, checked against researched market prices, with a "make and sell X a month" view
+
+Omar, 2026-10-08, in chat, calls 21 and 22: "cost + markup but also market research", "pricing
+expeirence should also simulate quantity", "if we make and sell x".
+
+### The options as offered
+
+- **Call 21:** cost plus a markup with the market drawn beside it (my pick), market price, or value
+  price. **Chosen, cost plus a markup, with deeper market research.**
+- **Call 22, a price below break-even:** shown and tagged, quoting it needs a reason (my pick),
+  never shown, or shown with no tag. **Chosen, shown and tagged, with a reason.**
+
+### What it changes
+
+- **The markup is checked against a market band** built from research, not one day's asking
+  prices: what similar coasters sell for, the closest competitors in any material, the usual set
+  sizes, and the price per coaster. Two researchers work apart and a third checks them; a quote
+  outside the band is flagged.
+- **The price page simulates quantity.** For X coasters a month it shows revenue, cost, profit,
+  printer hours against one printer's month, Omar's hours and the spools to buy, and price breaks
+  by order size as a row of the scenarios in
+  [the order-driven Lab design §9.7](../design/coaster/order-driven-lab-design.md#97-pricing-ideas-the-ways-to-set-a-price-side-by-side).
+- **A quote below break-even is allowed, tagged, and stored with its reason.**
+- **No price setting gets a number from this decision.** The settings stay empty until he fills
+  them, and none of them goes in this public repo.
+
+**What would reverse it:** real sales that sit far from the researched band, which would move
+the band, not the method.

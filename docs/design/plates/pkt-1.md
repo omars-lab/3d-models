@@ -2,14 +2,16 @@
 plate: pkt-1
 recipe: pkt-1.yaml
 iteration: 2
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "For a split coaster's way c: does a piece half printed in place in its closed pocket come out loose at one layer of air (0.2 mm) or only at two (0.4 mm), does the closed piece move or click when the coaster is lifted, and is the band's underside, printed over air, flat?"
 kind: new
 maturity: experiment
 bets: []
-unblocks: []
+unblocks:
+  - "pkt-2: the air gap its way-c join try-outs are built at"
+  - "the 2026-10-06 calls page, call 15b: whether way c is worth building"
 minutes: 35
 grams: 11.6
 bed_plates: 1
@@ -131,6 +133,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ 741ced0d16 | reset 2026-10-07 |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
 
 ## Timeline
 

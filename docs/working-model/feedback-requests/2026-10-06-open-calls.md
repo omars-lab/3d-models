@@ -615,7 +615,7 @@ color.*
 - [x] One plate per color, with the other two shown as costs beside it
 - [ ] The whole set, once per color
 - [ ] Allow a many-color plate
-- Notes:
+- Notes: Logged as [D-110](../decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 ### 17. A color per group, or per piece too
 
@@ -630,7 +630,7 @@ color.*
 - [x] Per group now, per piece later
 - [ ] Per piece from the start
 - [ ] Per group only
-- Notes:
+- Notes: Logged as [D-110](../decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 ### 18. Where a plate's color is written
 
@@ -645,7 +645,7 @@ color.*
 - [ ] In the recipe for per-color plates, at the send for whole-set plates
 - [x] Always at the send
 - [ ] Always in the recipe
-- Notes: Not what is built today; the change is listed in the [print-time color map design](../../design/coaster/print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code). (2026-10-08, asked in chat.)
+- Notes: Not what is built today; the change is listed in the [print-time color map design](../../design/coaster/print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code). (2026-10-08, asked in chat.) Logged as [D-110](../decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 ### 19. How the Lab learns which colors are loaded
 
@@ -664,7 +664,7 @@ The hub can, which is the second option.
 - [ ] Paste or drop the tray list
 - [ ] The hub runs the command
 - [ ] No tray list
-- Notes: None of the three: map colors at print time. When the print skill takes a Lab design, it reads the trays on this machine, matches each design color to a loaded tray, and asks one question per color that does not match (load it, use the nearest, or stop). The Lab never sends. The hub gets a read-only printer API on the private network (trays and status, no send), so the Lab can show what is loaded as a hint. The [print-time color map design](../../design/coaster/print-time-color-map-design.md) has the details and four calls of its own. (2026-10-08, asked in chat.)
+- Notes: None of the three: map colors at print time. When the print skill takes a Lab design, it reads the trays on this machine, matches each design color to a loaded tray, and asks one question per color that does not match (load it, use the nearest, or stop). The Lab never sends. The hub gets a read-only printer API on the private network (trays and status, no send), so the Lab can show what is loaded as a hint. The [print-time color map design](../../design/coaster/print-time-color-map-design.md) has the details and four calls of its own. (2026-10-08, asked in chat.) Logged as [D-111](../decisions-log.md#d-111--colors-are-matched-to-the-loaded-trays-at-print-time-the-hub-reads-the-printer-never-sends).
 
 ## Orders and pricing (calls 20 to 22)
 
@@ -694,7 +694,7 @@ The iCloud folder answers where the order files sit, not which app shows them.
 - [x] The hub
 - [ ] The Coaster Lab in the browser
 - [ ] A spreadsheet
-- Notes: Who uses which is written up in the [users and surfaces design](../../design/process/users-and-surfaces-design.md). (2026-10-08, asked in chat.)
+- Notes: Who uses which is written up in the [users and surfaces design](../../design/process/users-and-surfaces-design.md). (2026-10-08, asked in chat.) Logged as [D-112](../decisions-log.md#d-112--the-order-pages-live-in-the-hub).
 
 ### 21. How the price is set
 
@@ -714,7 +714,7 @@ prices, not sales.*
 - [x] Cost plus a markup, with the market beside it
 - [ ] Market price
 - [ ] Value price
-- Notes: "cost + markup but also market research": a deeper market pass than one day's asking prices (what similar coasters sell for, the closest competitors in any material, set sizes, price per coaster) sets the band the markup is checked against. Also "pricing experience should also simulate quantity" / "if we make and sell x": the scenarios show, for X coasters a month, the revenue, cost, profit, printer hours against one printer's month, your hours and spools to buy, and price breaks by order size. (2026-10-08, asked in chat.)
+- Notes: "cost + markup but also market research": a deeper market pass than one day's asking prices (what similar coasters sell for, the closest competitors in any material, set sizes, price per coaster) sets the band the markup is checked against. Also "pricing experience should also simulate quantity" / "if we make and sell x": the scenarios show, for X coasters a month, the revenue, cost, profit, printer hours against one printer's month, your hours and spools to buy, and price breaks by order size. (2026-10-08, asked in chat.) Logged as [D-113](../decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view).
 
 ### 22. A price below break-even
 
@@ -729,7 +729,7 @@ prices, not sales.*
 - [x] Shown and tagged, with a reason
 - [ ] Never shown
 - [ ] Shown, no tag
-- Notes:
+- Notes: Logged as [D-113](../decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view).
 
 ## Already decided, from the 2026-10-05 page
 
