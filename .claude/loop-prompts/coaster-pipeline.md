@@ -47,7 +47,9 @@ Where it stands (verified against `origin/master` and bikar `origin/main` on 202
    [done list](../../docs/tasks/coaster-pipeline/done.md) with the date and PR number. Add
    anything the pass found but didn't do to the backlog, or to another loop's backlog if it is
    that loop's job (see the [README](README.md)). If the approach changed, add a
-   `docs/issues/<slug>.md`.
+   `docs/issues/<slug>.md`. When the pass added a print record or a plate, run the
+   `pattern-catalog` sync in the same PR, so each pattern's note shows it; hook
+   `51-pattern-catalog` refuses the commit otherwise.
 5. **Wait when blocked.** If every remaining item needs Omar, send one short message naming
    exactly what he has to do. Then schedule the next wakeup 20 to 30 minutes out; don't poll.
 

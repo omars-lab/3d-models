@@ -3,6 +3,7 @@
 
     python3 .claude/skills/pattern-catalog/scripts/catalog.py sync           # write
     python3 .claude/skills/pattern-catalog/scripts/catalog.py sync --check   # exit 1 if out of date
+    python3 .claude/skills/pattern-catalog/scripts/catalog.py note <piece>   # the note link for a piece
 
 One note per construction in the ledger (docs/constructions/ledger.md), one note
 per coaster style, and the catalog page (docs/catalog/index.md). Each note's top
@@ -104,16 +105,17 @@ class Bikar:
     def read(self, path: str) -> bytes:
         return self._git("show", f"{self.ref}:{path}")
 
-    def construction_files(self, cid: str) -> list[str]:
-        """The `.bkr` files for one construction: the drawing first, then plain, then the rest."""
-        names = sorted(
+    def pattern_files(self) -> list[str]:
+        """Every `.bkr` file directly in bikar's patterns/Constructions/, by name."""
+        return sorted(
             p[len(CONSTRUCTIONS):]
             for p in self.tree
-            if p.startswith(CONSTRUCTIONS)
-            and "/" not in p[len(CONSTRUCTIONS):]
-            and p.endswith(".bkr")
-            and (p[len(CONSTRUCTIONS):] == f"{cid}.bkr" or p[len(CONSTRUCTIONS):].startswith(f"{cid}-"))
+            if p.startswith(CONSTRUCTIONS) and "/" not in p[len(CONSTRUCTIONS):] and p.endswith(".bkr")
         )
+
+    def construction_files(self, cid: str) -> list[str]:
+        """The `.bkr` files for one construction: the drawing first, then plain, then the rest."""
+        names = [n for n in self.pattern_files() if belongs_to(n, cid)]
         first = [n for n in (f"{cid}.bkr", f"{cid}-coaster.bkr") if n in names]
         return first + [n for n in names if n not in first]
 
@@ -129,6 +131,16 @@ class Bikar:
                 b = (blurb.group(1) or blurb.group(2) or "") if blurb else ""
                 out[fname.group(1)] = {"id": rid.group(1), "blurb": " ".join(b.split())}
         return out
+
+
+def belongs_to(fname: str, cid: str) -> bool:
+    """A construction's files are `<id>.bkr` and `<id>-<anything>.bkr`."""
+    return fname == f"{cid}.bkr" or fname.startswith(f"{cid}-")
+
+
+def unclaimed(files: list[str], ids: set[str]) -> list[str]:
+    """The pattern files no ledger row or planned entry claims, so no catalog note shows them."""
+    return [f for f in files if not any(belongs_to(f, cid) for cid in ids)]
 
 
 # ---------------------------------------------------------------- inputs in this repo
@@ -609,7 +621,8 @@ def assemble(path: Path, top: str, new_hand: str) -> str:
 # ---------------------------------------------------------------- the run
 
 
-def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str]]:
+def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
+    """The files the catalog should hold, notes for the reader, and bikar pattern files no note claims."""
     rows = read_ledger()
     styles = read_styles()
     style_what = {s.name: s.what for s in styles}
@@ -689,7 +702,7 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str]]:
         out[path] = assemble(path, style_top(s, style_what, by_style.get(s, []), roster), NEW_STYLE_HAND_PART).encode()
 
     out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style).encode()
-    return out, warnings
+    return out, warnings, unclaimed(bikar.pattern_files(), known)
 
 
 def style_top(s: str, style_what: dict[str, str], members: list[Built], roster: dict) -> str:
@@ -799,26 +812,131 @@ def index_page(
     return "\n".join(out)
 
 
+def self_test(real: Bikar) -> int:
+    """The by-design failure: a bikar pattern file with no ledger row and no planned entry.
+
+    Checked on a throwaway commit that is bikar's real tree plus one such file, run through the
+    real build, so the check is proven where it runs and not on a toy tree. Nothing is written.
+    """
+    import tempfile
+
+    failures: list[str] = []
+
+    def expect(what: str, got: object, want: object) -> None:
+        if got != want:
+            failures.append(f"{what}: got {got!r}, want {want!r}")
+
+    # The naming rule on its own, with ids that carry a hyphen as YouTube ids can.
+    files = ["abc.bkr", "abc-coaster.bkr", "abcd.bkr", "Ln-s5FzLGms-coaster.bkr", "Ln-other.bkr"]
+    expect("naming rule", unclaimed(files, {"abc", "Ln-s5FzLGms"}), ["abcd.bkr", "Ln-other.bkr"])
+
+    orphan = "zzSelfTest000-coaster.bkr"
+    with tempfile.TemporaryDirectory() as tmp:
+        env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+
+        def git(*args: str, data: bytes | None = None, index: str | None = None) -> str:
+            e = dict(env, GIT_INDEX_FILE=index) if index else env
+            r = subprocess.run(["git", "-C", tmp, *args], input=data, capture_output=True, check=True, env=e)
+            return r.stdout.decode().strip()
+
+        git("init", "-q", "--bare")
+        common = Path(real._git("rev-parse", "--git-common-dir").decode().strip())
+        objects = (common if common.is_absolute() else real.repo / common) / "objects"
+        (Path(tmp) / "objects" / "info" / "alternates").write_text(f"{objects.resolve()}\n")
+        idx = str(Path(tmp) / "self-test-index")
+        git("read-tree", real._git("rev-parse", f"{real.ref}^{{tree}}").decode().strip(), index=idx)
+        blob = git("hash-object", "-w", "--stdin", data=b"// a pattern no ledger row claims\n")
+        git("update-index", "--add", "--cacheinfo", f"100644,{blob},{CONSTRUCTIONS}{orphan}", index=idx)
+        tree = git("write-tree", index=idx)
+        commit = git(
+            "-c", "user.name=self-test", "-c", "user.email=self-test@localhost",
+            "commit-tree", tree, "-m", "self-test",
+        )
+        git("update-ref", "refs/heads/main", commit)
+
+        _, _, real_orphans = build(real)
+        expect(f"bikar {real.ref} as it is", real_orphans, [])
+        _, _, orphans = build(Bikar(Path(tmp), "main"))
+        expect("bikar plus a file with no note", orphans, [orphan])
+
+    for f in failures:
+        print(f"catalog self-test: FAIL — {f}")
+    if failures:
+        return 1
+    print("catalog self-test: ok — a bikar pattern file with no ledger row or planned entry is named")
+    return 0
+
+
+def note_links(names: list[str], base: Path) -> int:
+    """One line per piece: the `.bkr` file (or pattern id) and a link to its catalog note, relative to `base`.
+
+    A name ending in `.yaml` is a plate recipe and stands for every pattern file it uses."""
+    by_id = existing_notes(PATTERNS, "id")
+    wanted: list[str] = []
+    for n in names:
+        if n.endswith(".yaml"):
+            text = Path(n).read_text(encoding="utf-8")
+            wanted += sorted(set(re.findall(r"Constructions/([A-Za-z0-9_-]+\.bkr)", text)))
+        else:
+            wanted.append(Path(n).name)
+    missing = 0
+    for w in dict.fromkeys(wanted):
+        if w.endswith(".bkr"):
+            # The longest id wins, so a file never lands on a pattern whose id is a prefix of its own.
+            cid = max((i for i in by_id if belongs_to(w, i)), key=len, default=None)
+            style = style_of(cid, w) if cid else None
+        else:
+            cid, style = (w if w in by_id else None), None
+        if cid is None:
+            print(f"{w}: no catalog note — give its pattern a ledger row or a planned.yaml entry, then sync")
+            missing += 1
+            continue
+        rel = os.path.relpath(by_id[cid], base)
+        print(f"{w}: [{cid}{' ' + style if style else ''}]({rel}{'#' + style if style else ''})")
+    return 1 if missing else 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    sub = ap.add_subparsers(dest="cmd", required=True)
+    ap.add_argument("--self-test", action="store_true", help="prove a bikar pattern file with no note is caught")
+    ap.add_argument("--bikar-dir", help="bikar's git repository (default: $BIKAR_DIR, then ~/Workspace/git/bikar-work)")
+    ap.add_argument("--bikar-ref", help="the bikar ref to read (default: origin/main)")
+    sub = ap.add_subparsers(dest="cmd")
     sp = sub.add_parser("sync", help="write the catalog notes, pictures and index")
     sp.add_argument("--check", action="store_true", help="write nothing; exit 1 when anything is out of date")
-    sp.add_argument("--bikar-dir", help="bikar's git repository (default: $BIKAR_DIR, then ~/Workspace/git/bikar-work)")
-    sp.add_argument("--bikar-ref", help="the bikar ref to read (default: origin/main)")
+    sp.add_argument("--bikar-dir", default=argparse.SUPPRESS, help="as above, given after `sync`")
+    sp.add_argument("--bikar-ref", default=argparse.SUPPRESS, help="as above, given after `sync`")
+    np_ = sub.add_parser("note", help="print the catalog note link for each piece, pattern id or plate recipe")
+    np_.add_argument("names", nargs="+", help="a .bkr file name or path, a pattern id, or a plate .yaml")
+    np_.add_argument("--from", dest="base", default=".", help="write links relative to this folder (default: here)")
     args = ap.parse_args()
 
+    if args.cmd == "note":
+        return note_links(args.names, Path(args.base).resolve())
     bikar = Bikar(bikar_dir(args.bikar_dir), args.bikar_ref)
-    out, warnings = build(bikar)
+    if args.self_test:
+        return self_test(bikar)
+    if args.cmd != "sync":
+        ap.error("say `sync` or `--self-test`")
+    out, warnings, orphans = build(bikar)
     for w in warnings:
         print(f"catalog: note: {w}")
+    # A sync cannot fix these: the pattern needs a ledger row or a planned.yaml entry first.
+    for f in orphans:
+        print(
+            f"catalog: no note for bikar {bikar.ref}:{CONSTRUCTIONS}{f} — give its pattern a ledger row,"
+            f" or an entry in {PLANNED.relative_to(ROOT)}, then sync"
+        )
 
     stale = [p for p, data in out.items() if not p.exists() or p.read_bytes() != data]
     if args.check:
         for p in stale:
             print(f"catalog: out of date: {p.relative_to(ROOT)}")
-        if stale:
-            print(f"catalog: FAIL — {len(stale)} file(s) out of date; run the sync without --check")
+        if stale or orphans:
+            print(
+                f"catalog: FAIL — {len(stale)} file(s) out of date, {len(orphans)} bikar pattern file(s) with no note;"
+                " run the sync without --check for the first, add the pattern for the second"
+            )
             return 1
         print(f"catalog: OK — {len(out)} files in step with the ledger and bikar {bikar.ref}")
         return 0

@@ -51,8 +51,10 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
    fails, leave it off and say so. Coverage of patterns never outranks a good piece: a plate of
    three patterns that read beats one of eight where five don't.
 6. **Show Omar the sheet with the verdicts** before composing (`SendUserFile` the PNG), as a
-   short table: piece → verdict → reason. Omar makes the final call, and a picture is what he
-   judges from.
+   short table: piece → note → verdict → reason. The note column links each piece to its
+   catalog note and style (`python3 .claude/skills/pattern-catalog/scripts/catalog.py note
+   <pieces or plate.yaml> --from <the page's folder>`), so the history of that pattern is one
+   click away. Omar makes the final call, and a picture is what he judges from.
 7. **Write the leave-offs into the plate header** under "Left off", with the reason and Omar's
    words if he gave any, so the next session does not put them back.
 
@@ -68,7 +70,8 @@ same day, so what it taught is tied to the exact piece and size.
 2. **Give every piece its own `verdict` and `notes`.** `keep` (print it again as is),
    `adjust` (right idea, change its params), `drop` (do not print it again) or `not-judged`
    (Omar has not said yet; never fill his silence with a verdict, as sheets-04g's hexes, stars
-   and outer pieces show). The notes use Omar's words about *that* piece. Anything you worked out rather than saw, like a band width
+   and outer pieces show). The notes use Omar's words about *that* piece. Then run the
+   `pattern-catalog` sync, so each pattern's note lists the print and its verdict. Anything you worked out rather than saw, like a band width
    from the file's formula, says so. One note for the whole plate goes in `feedback`, and it
    does not replace the per-piece verdicts.
    Once the record is in `docs/prints/`, set each one with

@@ -20,7 +20,9 @@ hand: what makes the pattern work, what went wrong, what to try next. The tool n
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `scripts/catalog.py sync` | Writes every note's top, the style notes, the catalog page and the pictures; leaves files that are already right alone | after the ledger, a bikar construction, a plate or a print record changes | `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync` |
-| `scripts/catalog.py sync --check` | Writes nothing; names each file that is out of date and exits 1 | before a commit that touches the ledger, plates or prints | `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync --check` |
+| `scripts/catalog.py sync --check` | Writes nothing; names each file that is out of date, and each bikar pattern file no ledger row or `planned.yaml` entry claims, and exits 1 | run for you by hook `51-pattern-catalog` when a commit stages the ledger, the catalog, a plate, a print record or the styles table, and by `make validate`; run it by hand to see why it failed | `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync --check` |
+| `scripts/catalog.py note` | Prints a link to the catalog note (and style heading) for each `.bkr` piece, pattern id, or every piece in a plate `.yaml`; exits 1 and names any piece with no note | writing a plate page, a review sheet's verdict table or a print record, so each piece links to its note | `python3 .claude/skills/pattern-catalog/scripts/catalog.py note docs/design/plates/<plate>.yaml --from docs/design/plates` |
+| `scripts/catalog.py --self-test` | Checks the file-to-pattern naming rule, that today's bikar has no unclaimed pattern file, and that one added to a throwaway copy of bikar is caught | after any edit to the script; `make validate-pattern-catalog` runs it first | `python3 .claude/skills/pattern-catalog/scripts/catalog.py --self-test` |
 
 bikar is read at a git ref (`origin/main` unless `--bikar-ref` says otherwise), never from its
 working tree, so another session's checkout cannot change the result. It is found through
@@ -48,6 +50,10 @@ working tree, so another session's checkout cannot change the result. It is foun
   fields: id, title, source, creator, the screen that queued it, what to watch for, and why it is
   held if it is) and sync. The note says `planned`. When the pattern gets a ledger row, the same
   note becomes a ledger note, and the sync says to take the entry out of the list.
+- **A pattern file in bikar with no note fails `make validate`.** A file belongs to a pattern
+  when it is `<id>.bkr` or starts with `<id>-`. When bikar gains one that no ledger row or
+  `planned.yaml` entry claims, give the pattern its entry and sync; never add the file to a
+  skip list.
 - **Status comes from the facts:** a `planned.yaml` entry with no ledger row is `planned`, no naqsh file yet is `rebuilding`, a print record naming one
   of its files is `printed`, anything else is `built`. A ledger row marked "no piece by design"
   is `built` with the `no-piece-by-design` tag.

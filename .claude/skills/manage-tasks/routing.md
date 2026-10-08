@@ -8,7 +8,7 @@ When a routing call turns out wrong, fix the rule here, not only the item.
 | 1 | Is it merging PRs, deleting branches, worktrees or stashes, repo hygiene, memory tidying, hooks or gates across repos, CI or deploy plumbing? | `consolidation` |
 | 2 | Does it need the physical printer, or a measurement from a printed plate — a `CAL-*` bet, a coupon, plate 1 to 5, a print record? | `coaster-pipeline` |
 | 3 | Is it about getting a plate from config to send-ready — `bambu` CLI, compose, slice, preflight, AMS or filament mapping, plate YAML, the prints tab? | `print-infrastructure` |
-| 4 | Is it a new pattern, a construction migration, the constructions ledger, oracle cells, coaster forms or kernel features for a catalog coaster? | `catalog-expansion` |
+| 4 | Is it a new pattern, a construction migration, the constructions ledger, the pattern catalog notes in `docs/catalog/`, oracle cells, coaster forms or kernel features for a catalog coaster? | `catalog-expansion` |
 | 5 | Is it rebuilding a tutorial video as a GeoGebra construction? | youtube repo (video-reconstruction loop) |
 | 6 | None of the above — orbs, Lego Lab, LDraw, d3, the rosette explorer, Maclado, the DSL itself? | `parked` |
 

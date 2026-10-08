@@ -983,3 +983,13 @@ validate-orders:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/launch-store/scripts/launch_check.py --ticks $(ROOT_DIR)/docs/design/storefront/shopify-storefront-design.md
+
+# The pattern-catalog skill — the wholesale form of .githooks/pre-commit.d/51-pattern-catalog.
+# Self-test first (bikar's real tree plus one pattern file no ledger row or planned entry
+# claims must be named), then the live check: every note, picture and the catalog page in step
+# with the ledger, the plates, the prints and bikar at origin/main, and every pattern file in
+# bikar's patterns/Constructions/ claimed by a note. Reads bikar at a git ref, so needs BIKAR_DIR.
+.PHONY: validate-pattern-catalog
+validate-pattern-catalog:
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/skills/pattern-catalog/scripts/catalog.py --self-test
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/skills/pattern-catalog/scripts/catalog.py sync --check

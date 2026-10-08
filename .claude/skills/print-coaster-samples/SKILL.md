@@ -33,7 +33,9 @@ comments and replies.
 4. **Write the plate** as a `minis-NN.yaml` in `docs/design/plates/` (next free number; update the latest
    unprinted one instead if the user is adding to it). The header says what the plate is for,
    one line per style using the style names, and what was left off and why — the minis-02 header
-   is the model.
+   is the model. The plate's page (`<plate>.md`) links each piece to its catalog note:
+   `python3 .claude/skills/pattern-catalog/scripts/catalog.py note docs/design/plates/minis-NN.yaml --from docs/design/plates`
+   prints the links, and names any piece whose pattern has no note yet.
 5. **Dry-run it**: `bambu slice compose docs/design/plates/minis-NN.yaml --dry-run`. It must place every
    item on the bed; if not, split into two plates rather than dropping a sample silently.
 6. **Stop at the owner gate.** Hand over the plate file and the dry-run result. Slicing and the
