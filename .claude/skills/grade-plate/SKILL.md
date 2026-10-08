@@ -64,7 +64,10 @@ and the send check refuses it. Instead:
    is not production.
 2. **Change and say it.** Make the change in `<new>.yaml`, and fill the page's "What changes"
    section: what changed and why. Slice it and replace the copied cost; add a picture before it
-   goes to Omar, as for any plate (prioritize-prints).
+   goes to Omar, as for any plate (prioritize-prints). It starts `planned`, its `needs:` naming
+   the carved ids (D-109): give the recipe an `id_code:` and each item an `id:` or a `no_id:`
+   reason (the dry-run says which pieces bikar has no room for), then drop that need and set it
+   `proposed`. A production recipe has no ids, because the plates gate does not ask it for any.
 3. **Print it as an experiment.** It needs Omar's yes per send like any experiment, and its
    pieces earn their keeps on their own records.
 4. **Promote, then retire.** When the grade shows the derived plate at production, promote it

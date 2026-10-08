@@ -115,6 +115,20 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       The load-bearing case: a row whose last cell is empty or a dash — a question whose answer
       changes nothing is not worth the print time it is asked of.
 
+  P13 **Every experimental piece is identified** (D-109, Omar 2026-10-08: every experimental
+      piece carries a carved id, plate + iteration + piece). An experiment plate that is
+      proposed, waiting, approved or sent, whose recipe lists pieces (`items:`, or a sheet's
+      `cells:`), names its `id_code:` (1 to 3 characters from compose.ts's `ID_CHAR`, read from
+      that file, never retyped), and every item says `id:` (one character, on a `bkr:` item
+      only, not shared with another item) or `no_id:` (why it has none: bikar's refusal word
+      for word, or how it is told apart instead). No two recipes share an `id_code`, whatever
+      their stage: a printed piece still carries its code. A plate not converted yet sits in
+      ID_BASELINE with its reason; the baseline only shrinks, and an entry for a plate that
+      no longer needs it (converted, printed, retired or gone) is a finding until it is
+      deleted. A production plate repeats a kept print (D-095) and is not asked. The
+      load-bearing case: an approved plate whose recipe has no `id_code:` — its pieces come off
+      the bed with nothing saying which plate, iteration or rung each is.
+
 Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
 failed on it would block every other session's commit until then; the send refuses it. Nor is
@@ -198,6 +212,30 @@ APPROVE_TOOL = ".claude/skills/manage-approvals/scripts/plate_approve.py"
 AFTER_HEAD = "| Pieces | The question | What we expect, and why | What each answer changes |"
 AFTER = re.compile(r"^## After the print\b.*?$(.*?)(?=^## |\Z)", re.MULTILINE | re.DOTALL)
 ASKED = frozenset({"proposed", "waiting", "approved", "sent"})
+# P13: the characters a carved id may use are compose.ts's, read from it (one place says them).
+COMPOSE_TS = ROOT / "tools" / "bambu" / "src" / "commands" / "compose.ts"
+ID_CHAR_LINE = re.compile(r'^const ID_CHAR = "(\[[^"\]]+\])";$', re.MULTILINE)
+# Plates P13 would ask for ids that are not converted yet, each with why. It only shrinks: a plate
+# converted, printed, retired or gone takes its line out (P13 says so). Step 3 of D-109.
+ID_BASELINE = {
+    "minis-01": "sent before D-109; its reprint with ids is a new iteration (step 3)",
+    "minis-02": "sent before D-109; its reprint with ids is a new iteration (step 3)",
+    "phones-01": "sent before D-109; its reprint with ids is a new iteration (step 3)",
+    "sheets-04b": "sent before D-109; its reprint with ids is a new iteration (step 3)",
+    "sheets-04c": "sent before D-109; its reprint with ids is a new iteration (step 3)",
+    "minis-05": "waiting; its pieces are probed and converted with minis-01 and -02 (step 3)",
+    "minis-06": "waiting; its pieces are probed and converted with minis-01 and -02 (step 3)",
+    "sheets-01": "sheet format: `slice sheet` does not cut ids yet (step 3)",
+    "sheets-02": "sheet format: `slice sheet` does not cut ids yet (step 3)",
+    "sheets-03": "sheet format: `slice sheet` does not cut ids yet (step 3)",
+    **{p: "written by color-themes' theme_plates.py, which writes no ids yet (step 3)" for p in (
+        "swatch-10101", "swatch-10204", "swatch-10501", "swatch-13903",
+        "theme-iznik-tile-10100", "theme-iznik-tile-10205", "theme-iznik-tile-10604",
+        "theme-iznik-tile-10605", "theme-midnight-blue-10101", "theme-midnight-blue-13903",
+        "theme-night-sky-11600", "theme-night-sky-11602", "theme-night-sky-13101",
+        "theme-night-sky-13402", "theme-terracotta-souk-10101", "theme-terracotta-souk-10401",
+        "theme-terracotta-souk-11203", "theme-terracotta-souk-11401")},
+}
 
 Q_START, Q_END = "<!-- queue:start -->", "<!-- queue:end -->"
 ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*([a-z]+)\b(.*)$")
@@ -1136,6 +1174,108 @@ def check_color(path: Path, data: dict) -> list[str]:
     return color_findings(path.stem, doc, data.get("maturity"))
 
 
+def id_char(compose: Path = COMPOSE_TS) -> str:
+    """P13: the one-character class compose.ts cuts, read from its `ID_CHAR` line."""
+    m = ID_CHAR_LINE.search(compose.read_text(encoding="utf-8")) if compose.exists() else None
+    if not m:
+        raise ValueError(f"{compose.name} has no `const ID_CHAR = \"[...]\";` line to read the id "
+                         "characters from")
+    return m.group(1)
+
+
+def id_asked(recipe: object, stage: object, maturity: object) -> bool:
+    """P13 asks a plate for ids: an experiment in an asked stage whose recipe lists pieces."""
+    return (stage in ASKED and maturity != "production" and isinstance(recipe, dict)
+            and any(isinstance(recipe.get(k), list) for k in ("items", "cells")))
+
+
+def id_findings(name: str, recipe: object, chars: str) -> list[str]:
+    """P13 on one recipe the gate asks for ids: the code, and an id or a reason on every item. PURE."""
+    code = recipe.get("id_code")
+    one = re.compile(f"^{chars}$")
+    how = f"`id_code:` is 1 to 3 of {chars}, the first line cut into every piece (D-109)"
+    if code is None:
+        return [f"{name}: P13 the recipe has no `id_code:`; {how}, and each item says `id:` or "
+                f"`no_id:` — then `python3 {APPROVE_TOOL} {name} --iterate`"]
+    out = []
+    if not (isinstance(code, str) and re.fullmatch(f"{chars}{{1,3}}", code)):
+        out.append(f"{name}: P13 `id_code: {code!r}` — {how}")
+    seen: dict[str, int] = {}
+    items = recipe.get("items") if isinstance(recipe.get("items"), list) else recipe.get("cells")
+    for i, item in enumerate(items or []):
+        where = f"{name}: P13 item {i + 1}"
+        if not isinstance(item, dict):
+            continue
+        has_id, has_no = "id" in item, "no_id" in item
+        if has_id == has_no:
+            out.append(f"{where} needs `id:` (one character) or `no_id:` (why it has none), "
+                       + ("not both" if has_id else "and has neither"))
+            continue
+        if has_no:
+            if not (isinstance(item["no_id"], str) and item["no_id"].strip()):
+                out.append(f"{where}: `no_id:` says why the piece has no id and how it is told "
+                           "apart instead")
+            continue
+        pid = str(item["id"])
+        if "bkr" not in item:
+            out.append(f"{where}: only a `bkr:` item is rendered, so only it can be cut; give it "
+                       "`no_id:` instead")
+        if not one.match(pid):
+            out.append(f"{where}: `id: {item['id']!r}` is one of {chars}")
+        elif pid in seen:
+            out.append(f"{where}: `id: {pid}` is item {seen[pid]}'s too — two pieces with one id "
+                       "cannot be told apart")
+        else:
+            seen[pid] = i + 1
+    return out
+
+
+def check_ids(pages: list, plates: Path, compose: Path = COMPOSE_TS,
+              baseline: dict[str, str] | None = None) -> list[str]:
+    """P13 over the tree: each asked plate's ids, codes unique, and the baseline only shrinking.
+    The baseline is the real tree's; a fixture's tree passes its own (or none)."""
+    if baseline is None:
+        baseline = ID_BASELINE if plates.resolve() == PLATES.resolve() else {}
+    try:
+        chars = id_char(compose)
+    except (OSError, ValueError) as e:
+        return [f"compose: P13 {e}"]
+    out: list[str] = []
+    owner: dict[str, str] = {}
+    needs = set()
+    for path, data, _body, err in pages:
+        recipe_file = path.with_suffix(".yaml")
+        if err or not recipe_file.exists():
+            continue
+        try:
+            recipe = yaml.safe_load(recipe_file.read_text(encoding="utf-8"))
+        except yaml.YAMLError as e:
+            # No other rule reports this: each skips a recipe it cannot read, and compose would
+            # be the first to say so, at the send.
+            out.append(f"{path.stem}: P13 the recipe does not parse, so nothing can check its ids "
+                       f"or print it ({str(e).splitlines()[0]})")
+            continue
+        if not isinstance(recipe, dict):
+            continue
+        code = recipe.get("id_code")
+        if isinstance(code, str):
+            if code in owner:
+                out.append(f"{path.stem}: P13 `id_code: {code}` is {owner[code]}'s too; a printed "
+                           "piece's code must name one plate")
+            else:
+                owner[code] = path.stem
+        if not id_asked(recipe, data.get("stage"), data.get("maturity")):
+            continue
+        if code is None and path.stem in baseline:
+            needs.add(path.stem)
+            continue
+        out += id_findings(path.stem, recipe, chars)
+    for plate in sorted(set(baseline) - needs):
+        out.append(f"{plate}: P13 ID_BASELINE still lists it, but it no longer needs to be there "
+                   "(converted, printed, retired or gone) — delete its line")
+    return out
+
+
 def page_findings(path: Path, data: dict, body: str, ctx: dict) -> tuple[list[str], list[str]]:
     """(findings, notices) for one page: P1-P4 and P6, then P8, P9 and P11 once the shape holds."""
     f = check_page(path, data, body, ctx["records"], ctx["bet_ids"])
@@ -1180,6 +1320,7 @@ def check_tree(plates: Path, prints: Path, scoring: Path, bets: Path, rubric: Pa
             good.append(data)
             notices += approval_notices(path, data, body)
     findings += check_print_logs(plates, pages)
+    findings += check_ids(pages, plates)
     # P5 — coverage, both ways
     stems = {p.stem for p, *_ in pages}
     for y in sorted(plates.glob("*.yaml")):
@@ -1865,6 +2006,71 @@ def self_test() -> int:
         # P12 exempts a production plate: it repeats a kept print and asks nothing new.
         report(check_after_print("p", {"stage": "approved", "maturity": "production"}, "") == [],
                "P12 a production plate needs no after-print table", "it was asked for one")
+
+        # P13 on its own: an id or a reason on every piece (D-109).
+        chars = id_char()
+        report(chars == "[0-9A-NP-Z]", "P13 reads the id characters from compose.ts",
+               f"read {chars!r}")
+        b = "bikar:a.bkr"
+        good = {"id_code": "SL1", "items": [{"bkr": b, "id": "A"}, {"bkr": b, "id": 7},
+                                            {"bkr": b, "no_id": "bikar: fits nowhere on the bed face"},
+                                            {"stl": "x.stl", "no_id": "a file bikar did not make"}]}
+        for label, recipe, want in [
+            ("P13 PASS: an id or a reason on every item, a YAML number as an id", good, None),
+            ("P13 FAIL: an approved plate with no id_code (the load-bearing case)",
+             {"items": [{"bkr": b}]}, "has no `id_code:`"),
+            ("P13 FAIL: an item with neither", {"id_code": "A", "items": [{"bkr": b}]},
+             "and has neither"),
+            ("P13 FAIL: an item with both", {"id_code": "A", "items": [{"bkr": b, "id": "A",
+                                                                       "no_id": "x"}]}, "not both"),
+            ("P13 FAIL: a blank reason", {"id_code": "A", "items": [{"bkr": b, "no_id": " "}]},
+             "says why"),
+            ("P13 FAIL: an id on an stl item", {"id_code": "A", "items": [{"stl": "x", "id": "A"}]},
+             "only a `bkr:` item"),
+            ("P13 FAIL: two items with one id", {"id_code": "A", "items": [{"bkr": b, "id": "A"},
+                                                                           {"bkr": b, "id": "A"}]},
+             "item 1's too"),
+            ("P13 FAIL: the letter O, read as a zero", {"id_code": "A", "items": [{"bkr": b,
+                                                                                  "id": "O"}]},
+             "is one of"),
+            ("P13 FAIL: a four-character code", {"id_code": "SPL1", "items": []}, "`id_code: 'SPL1'`"),
+        ]:
+            got = id_findings("x", recipe, chars)
+            report(not got if want is None else any(want in g for g in got), label, f"got {got}")
+        tree = tmp / "p13"
+        tree.mkdir()
+
+        def p13_page(n: str, recipe: dict, stage: str = "approved", maturity: str = "experiment"):
+            (tree / f"{n}.yaml").write_text(yaml.safe_dump(recipe), encoding="utf-8")
+            return (tree / f"{n}.md", {"stage": stage, "maturity": maturity}, "", None)
+        for label, pages, base, want in [
+            ("P13 PASS: production and printed plates are not asked",
+             lambda: [p13_page("a", {"items": [{"bkr": b}]}, maturity="production"),
+                      p13_page("b", {"items": [{"bkr": b}]}, stage="printed")], {}, None),
+            ("P13 PASS: a baselined plate waits for its step",
+             lambda: [p13_page("a", {"items": [{"bkr": b}]})], {"a": "step 3"}, None),
+            ("P13 FAIL: two plates with one id_code, whatever their stage",
+             lambda: [p13_page("a", good), p13_page("b", {"id_code": "SL1"}, stage="printed")], {},
+             "is a's too"),
+            ("P13 FAIL: a baseline line for a plate already converted (it only shrinks)",
+             lambda: [p13_page("a", good)], {"a": "step 3"}, "ID_BASELINE still lists it"),
+            ("P13 FAIL: a baseline line for a plate that is gone", lambda: [], {"z": "step 3"},
+             "ID_BASELINE still lists it"),
+        ]:
+            for f in tree.glob("*.yaml"):
+                f.unlink()  # each case is its own tree
+            got = check_ids(pages(), tree, baseline=base)
+            report(not got if want is None else any(want in g for g in got), label, f"got {got}")
+        # split-02, 2026-10-08: an alias to an anchor never written; every rule skipped it.
+        (tree / "a.yaml").write_text("id_code: A\nitems:\n  - { bkr: x, no_id: *star }\n",
+                                     encoding="utf-8")
+        got = check_ids([(tree / "a.md", {"stage": "approved"}, "", None)], tree, baseline={})
+        report(any("does not parse" in g for g in got),
+               "P13 FAIL: a recipe that does not parse (no other rule reports it)", f"got {got}")
+        (tree / "compose.ts").write_text('const ID_CHAR = "[A-Z]" + x;\n', encoding="utf-8")
+        got = check_ids([], tree, compose=tree / "compose.ts", baseline={})
+        report(any("no `const ID_CHAR" in g for g in got),
+               "P13 FAIL: compose.ts's character line cannot be read", f"got {got}")
 
         # A ticked box not read back is a notice, never a finding.
         case = tmp / "tick-is-a-notice"

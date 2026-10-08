@@ -37,32 +37,48 @@ profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
+id_code: SP2
+no_id_reasons:
+  - &lower "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. The plate's number, cut into its bottom by the coaster file's own id mark, tells it apart."
+  - &upper "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. It is the only upper half on the plate, and it closes onto the lower half beside it."
+  - &kite "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the coaster they came off the bed beside, from the plate's bed map."
+  - &hex "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the coaster they came off the bed beside, from the plate's bed map."
+  - &outer "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the coaster they came off the bed beside, from the plate's bed map."
+  - &star "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the coaster they came off the bed beside, from the plate's bed map."
+
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Lower
     params: { size: 112.5, id: 2 }
     label:  LOWER
+    no_id:  *lower
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Upper
     params: { size: 112.5, id: 2 }
     label:  UPPER
+    no_id:  *upper
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Middle
     params: { size: 112.5, id: 2 }
     label:  MIDDLE
+    id:     M
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Kite
     params: { size: 112.5, id: 2 }
     label:  KITE
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Hex
     params: { size: 112.5, id: 2 }
     label:  HEX
+    no_id:  *hex
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Star
     params: { size: 112.5, id: 2 }
     label:  STAR
+    no_id:  *star
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Outer
     params: { size: 112.5, id: 2 }
     label:  OUTER
+    no_id:  *outer

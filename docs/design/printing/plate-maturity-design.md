@@ -173,7 +173,8 @@ on the standing approval, so the timeline still holds every send.
 experimental plate derived from a prod plate".
 `python3 tools/plate_grade.py --derive <parent> <new> --answers "…"` copies the recipe to a new plate whose page is an unapproved experiment with
 `derived_from: <parent>`, and refuses a parent that is not production (an experiment's recipe is
-edited in place). The new plate is printed, judged and promoted on its own records; then the
+edited in place). It starts planned, waiting on the carved ids its pieces need as an experiment
+(D-109). The new plate is printed, judged and promoted on its own records; then the
 parent is retired. The grade-plate skill has the steps.
 
 The tests: the plates gate's self-test (a production page with no pin, a recipe edited in place,
