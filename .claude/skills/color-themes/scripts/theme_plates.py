@@ -44,6 +44,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import themes  # noqa: E402  the palette and the construction files
 from swatch import shrink  # noqa: E402  the same picture size as every plate page
+import after_print  # noqa: E402  the questions asked when it comes off the bed (P12)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "manage-approvals" / "scripts"))
 import plate_approve as pa  # noqa: E402  the iteration and the approvals, as the plates gate reads them
@@ -164,6 +165,8 @@ def page_text(theme: dict, con: dict, plate: dict, spool: dict, line: str, owned
     one = len(plate["what"]) == 1 and plate["what"][0].endswith("×1")
     ask = f"does its {what} come out as the theme draws it" if one else f"do its {what} come out as the theme draws them"
     every = "in" if one else "every one in"
+    after = after_print.section(after_print.theme_rows(
+        what, spool["name"], con["piece_params"].get("gap"), bool(framed) and len(framed) == len(plate["what"])))
     return f"""---
 plate: {name}
 recipe: {name}.yaml
@@ -212,7 +215,7 @@ A theme on a screen is a guess at how the colors sit together. Printing its plat
 pieces in the frame settles it for this theme. The persona scores beside each theme are simulated,
 not customer research; these prints are the first thing to hold them against.
 
-## Pictures
+{after}## Pictures
 
 The theme as the gallery draws it.
 
@@ -479,6 +482,12 @@ def self_test() -> int:
                       "../t.svg", "2026-10-05")
     if "One frame, flat on one bed" not in fpage or "does its frame ×1 come out as the theme draws it," not in fpage:
         fails.append("a frame plate is described as loose pieces")
+    # P12: the questions asked when it comes off the bed, between Why print it and Pictures.
+    at = page.find("## After the print")
+    if not page.find("## Why print it") < at < page.find("## Pictures") or "too tight" not in page:
+        fails.append("a piece page has no after-print table in place, or it does not expect the gap-0 fit")
+    if "lie flat" not in fpage or "drop into the frame and stay" in fpage:
+        fails.append("a frame-only page is not asked whether the frame lies flat")
     if "Loose small pieces on one bed" not in page or "simulated,\nnot customer research" not in page:
         fails.append("a piece plate lost its risk line, or the persona scores are not called simulated")
     # A page with a yes on it is kept: rewriting it would drop the row.

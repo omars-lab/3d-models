@@ -59,6 +59,15 @@ grows a row.
 - **What it lets us decide:** the [smooth-lines calls](../coaster/smooth-lines-design.md#6-open-calls-for-omar) 1 and 4.
 - **What to read off it:** A against B for the steps; B against C for the top.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| rows A and B, each column | Can you see or feel the steps on A's edges that B does not have? | Maybe only by touch: the steps are 0.4 mm, as wide as the line the nozzle draws. | Seen or felt: the true-edge work is finished (smooth-lines call 1). Not: the edge work closes. |
+| rows B and C, each column | Which top looks right, round 1 or the full dome at 1.5? | No guess: a taste call. | Sets the round the minimal coasters are drawn with (smooth-lines call 4). |
+
 ## Pictures
 
 What the plate builds, drawn from the assembled mesh (`bambu slice sheet … --stl`, then

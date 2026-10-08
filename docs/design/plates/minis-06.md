@@ -52,6 +52,16 @@ Its other half is [minis-05](minis-05.md), the thinner joins.
 - **What to read off it:** does each pair slide together by hand; does the slim neck survive a
   few matings; do the pegs feel tight, right or loose at 0.10.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| Dovetail ×2 | Do the pegs slide in by hand at 0.10 now, with bikar's new slot? | Yes: the true-offset slot (bikar #262) took out what made minis-04's pegs too tight. | Slide: the slot fix is proven and 0.10 stays. Still tight: the clearance goes up and the slot is looked at again. |
+| Slim dovetail ×2 | Does the 2 mm neck survive a few matings? | Probably: 2 mm is the neck CAL-CST-06 bets on, though it is the thinnest dovetail tried. | Survives: 8.4 mm is the thinnest band (joins Q3) and CAL-CST-06 moves. Snaps: the band stays nearer 11.1 mm, or the neck gets wider. |
+| both pairs side by side | Is the slim band's look worth its weaker neck? | No guess: a taste call against a strength one. | Answers joins Q3, the band width the joined coasters are drawn at. |
+
 ## Pictures
 
 The review sheet: both read as the pattern. Openness is 0.38 for the dovetail and 0.43 for the

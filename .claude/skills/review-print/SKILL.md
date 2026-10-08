@@ -63,6 +63,16 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
 Photos, or a line like "too small" or "a bit loose", mean the plate has printed. Record it the
 same day, so what it taught is tied to the exact piece and size.
 
+**Ask the page's questions first, one at a time.** Every experiment plate page has an
+`## After the print` table, written before it printed (plates gate P12): the pieces, the
+question, what we expected and why, and what each answer changes. Ask each row as its own
+AskUserQuestion, in table order, naming the pieces to pick up. Build the options from the row's
+last cell, one option per answer it names, each saying what that answer changes, plus "not
+judged yet". Ask the next row only once this one is answered. Each answer goes into the record
+below as those pieces' `verdict` and `notes`, in Omar's words; a row he leaves unanswered stays
+`not-judged`. An answer that differs from "what we expect" is the lesson to carry forward in
+step 6.
+
 1. **Start from the draft.** `slice compose` wrote one at `.bambu/records/<date>-<plate>/`
    with every piece, its `params`, and the printer settings read off the `.3mf`. Copy it to
    `docs/prints/<date>-<plate>/`, set `status: printed`, and fill what the machine could not

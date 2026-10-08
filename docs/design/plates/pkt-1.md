@@ -85,6 +85,17 @@ air, every pocket coaster needs two layers and thinner necks. If it fuses at two
 and the lip and flange coasters (split-01 and split-02) are the ways left. Each wrong answer here
 costs one 25 mm tile, not a coaster.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| O and P (P2a, P2b): one layer of air | Does each piece half move in its pocket when pushed from the face, or did it print fused? | Unknown: 0.2 mm is one layer, the least air a printed gap can have, and it may fuse. | Loose in both pairs: way c is built at one layer, and pkt-2 takes 0.2 mm. Fused in one pair only: one bad layer, so one layer still counts. Fused in both: two layers is the least. |
+| Q and R (P4a, P4b): two layers of air | Does each piece half move in its pocket, and did the 0.4 mm necks hold? | Loose, at twice the air; the necks are thinner than the deboss floor, so one may tear. | Loose and whole: pkt-2 uses two layers if one fused. Fused at two layers too: way c is out, and split-01 and split-02 are the ways left (call 15b). Torn necks: necks go back to 0.6 mm with two layers of air. |
+| all four pairs, closed | Does each pair close flat, and does the hexagon move or click when the closed tile is lifted and tipped? | A click is likely: the band has air above and below it. | Silent: pressing the halves together is enough. A click: way c needs glue or a tighter room, which pkt-2 tries. |
+| all four pairs, open | Is the band's underside, printed over air, flat where it shows through the gap? | A small sag: the band is printed over nothing. | Flat: the 0.6 mm band is kept. Sagged onto the neck below: the band fused there, so pkt-2 gets more air under the band or a thicker band. |
+
 ## Pictures
 
 A side cut through the middle of one tile, as the lower half prints (one layer of air, 0.6 mm

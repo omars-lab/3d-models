@@ -242,6 +242,16 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
         f"Say the change, and why. "
         + (f"The cost is {parent}'s until this plate is sliced." if costed else
            "It has no cost until it is sliced, so it waits as planned.") + "\n\n"
+        # P12: an experiment says up front what it asks when it comes off the bed. Sharpen the
+        # row once the change is written above.
+        "## After the print\n\n"
+        "| Pieces | The question | What we expect, and why | What each answer changes |\n"
+        "|---|---|---|---|\n"
+        f"| Every piece | Did the change do what it was made for, with the rest as good as on "
+        f"{parent}? | As good as {parent}'s kept run, with the change showing: the rest of the "
+        f"recipe is {parent}'s. | Holds up: this plate prints again toward production and "
+        f"{parent} is retired. Worse: the change is undone or tried another way, as a new "
+        "iteration of this recipe. |\n\n"
         "## Your call\n\n"
         "- [ ] **Approve as it stands**\n"
         "- [ ] **Hold** — say why in the notes\n\n"

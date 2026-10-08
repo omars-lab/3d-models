@@ -45,6 +45,15 @@ for PLA Basic Bambu Green, code 10501, one color, #00AE42. On the printer now, s
 A picture on a screen is not the color a coaster comes out in. The chip settles it for this spool,
 and sits beside the others when picking a theme.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| CHIP | Does the chip's top match the color catalog's hex for 10501, and how does its bed face differ? | Near the catalog's hex on top; the bed face flatter in sheen, since it printed against the plate. | Matches: the catalog's hex stands for PLA Basic Bambu Green. Off: the catalog entry for 10501 is corrected to the printed color, and the theme pictures that use it are drawn again. |
+| WINDOW | Does PLA Basic Bambu Green read well on our own straps and edges, at coaster size? | As the chip reads; a very dark or very light color may lose the strap lines. | Reads well: the color stays a candidate for themes. Lines lost or too loud: the color-themes skill stops offering it for a coaster's straps. |
+
 ## Pictures
 
 The chip, drawn from bikar's `Swatch-Chip.bkr` (every swatch's chip, with its own code).

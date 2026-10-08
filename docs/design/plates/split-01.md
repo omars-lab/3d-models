@@ -75,6 +75,18 @@ It is the first print of a split coaster. It answers whether the pieces drop in,
 half closes over them, whether the studs line the halves up, and how the lip looks: the straps read
 0.8 mm wider from each face, and the pieces sit in a little.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| MIDDLE, KITE, HEX, OUTER in LOWER | Do the 31 pieces drop into the lower half's holes without pressing, and stop on the lip without falling through? | They drop in and stop: each is 0.25 mm smaller than its hole on every side, and the lip is 0.8 mm narrower than the hole. | Drop in and stop: 0.25 mm and 0.8 mm stay the split coaster's defaults. Too tight: the gap goes up. One falls through: the lip goes wider, as a new iteration. |
+| LOWER, UPPER | Does the upper half close flat over the pieces, lined up by the studs, and stay closed when the coaster is lifted? | Flat and lined up, if the 2 mm studs fit: spl-1 is the print that says which stud gap holds. | Closes and holds: a whole gBV split closes (split design plan item 4). Rocks or will not close: the pieces get room above them, or the stud gap changes. |
+| the closed coaster | Do the pieces rattle when the closed coaster is shaken? | A faint rattle: 0.25 mm all round lets a piece slide, and nothing above or below lets it tip. | Silent or faint: kept as it is. Loud: a smaller gap, or glue (split design call 3). |
+| the closed coaster, both faces | How does the lip look: the straps 0.8 mm wider from each face and the pieces set 0.6 mm in. A frame, or a flaw? | Plainly visible: the straps read heavier than on sheets-04g. | A frame: the lip stays in the running against split-02's flange (D-100). A flaw: the flange is the way, unless split-02 fails. |
+| LOWER, bottom face | Is the id 1 readable, the right way round when the coaster is turned over? | Readable: it is 2.5 mm tall and cut into a bed face. | Readable: that size and place are kept for split coasters. Not: bikar's id size or mirroring is fixed before the next split plate. |
+
 ## Pictures
 
 Opened up: the lower half with its studs, the pieces lifted over their holes, and the upper half

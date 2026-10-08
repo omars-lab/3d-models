@@ -105,6 +105,16 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       otherwise). The load-bearing case: a one-color recipe that fixes its color, which would
       make the recipe and the send two places that name it.
 
+  P12 **After the print** (Omar, 2026-10-08: "anticipated table of printing this and each one
+      and why we are printing it"). An experiment plate that is proposed, waiting, approved or
+      sent says, before it prints, what will be asked when it comes off the bed: a
+      `## After the print` table, `| Pieces | The question | What we expect, and why | What each
+      answer changes |`, a row per question, every cell written. The review-print skill asks the
+      rows one at a time when the print comes back. A production plate repeats a kept print, so
+      it asks nothing new and needs no table; a planned one may have one, checked the same way.
+      The load-bearing case: a row whose last cell is empty or a dash — a question whose answer
+      changes nothing is not worth the print time it is asked of.
+
 Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
 failed on it would block every other session's commit until then; the send refuses it. Nor is
@@ -184,6 +194,10 @@ TABLE_FROM = "2026-10-03"
 # change makes the next iteration, which resets the open yes (`reset <date>`).
 SPENT = re.compile(r"^(sent|replaced|reset) (\d{4}-\d{2}-\d{2})$")
 APPROVE_TOOL = ".claude/skills/manage-approvals/scripts/plate_approve.py"
+# What gets asked when a plate comes off the bed (P12), and the stages that must say it first.
+AFTER_HEAD = "| Pieces | The question | What we expect, and why | What each answer changes |"
+AFTER = re.compile(r"^## After the print\b.*?$(.*?)(?=^## |\Z)", re.MULTILINE | re.DOTALL)
+ASKED = frozenset({"proposed", "waiting", "approved", "sent"})
 
 Q_START, Q_END = "<!-- queue:start -->", "<!-- queue:end -->"
 ROW = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*([a-z]+)\b(.*)$")
@@ -870,6 +884,41 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
             out.append(f"{name}: P6 run {run_id} has no 'printed' row naming it")
     if isinstance(times, int) and len(printed_rows) != times:
         out.append(f"{name}: P6 {len(printed_rows)} 'printed' row(s) but times_printed {times}")
+
+    # P12 — what gets asked after the print, written before it
+    out += check_after_print(name, data, body)
+    return out
+
+
+def after_print(body: str) -> tuple[list[list[str]], str | None]:
+    """(rows of cells, why the section does not read) for `## After the print`."""
+    m = AFTER.search(body)
+    if not m:
+        return [], "no '## After the print' table"
+    lines = table_lines(m.group(1))
+    if not lines or lines[0].strip() != AFTER_HEAD:
+        return [], f"the '## After the print' table's header is not {AFTER_HEAD!r}"
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in lines[2:]]
+    return rows, None
+
+
+def check_after_print(name: str, data: dict, body: str) -> list[str]:
+    asked = data["stage"] in ASKED and data.get("maturity") != "production"
+    if not asked and not AFTER.search(body):
+        return []
+    rows, why = after_print(body)
+    if why:
+        return [f"{name}: P12 {why} — say what gets asked when it comes off the bed"]
+    if not rows:
+        return [f"{name}: P12 the '## After the print' table has no rows"]
+    out = []
+    for i, cells in enumerate(rows, 1):
+        if len(cells) != 4:
+            out.append(f"{name}: P12 row {i} of '## After the print' has {len(cells)} cells, not 4")
+        elif any(c in ("", "—", "-") for c in cells):
+            col = ("Pieces", "The question", "What we expect, and why",
+                   "What each answer changes")[[c in ("", "—", "-") for c in cells].index(True)]
+            out.append(f"{name}: P12 row {i} of '## After the print' leaves '{col}' empty")
     return out
 
 
@@ -1250,9 +1299,15 @@ items:
 _SEP = "|---|---|---|---|---|"
 
 
-def _page(plate: str, fm: dict, timeline_rows: list[str], tick: str = " ") -> str:
+_AFTER_ROW = "| A and B | Does it hold? | It holds: the neck is wide | If not, a wider neck |"
+_AFTER_MD = f"## After the print\n\n{AFTER_HEAD}\n|---|---|---|---|\n{_AFTER_ROW}\n\n"
+
+
+def _page(plate: str, fm: dict, timeline_rows: list[str], tick: str = " ",
+          after: bool = False) -> str:
     return ("---\n" + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True) + "---\n\n"
-            f"# {plate}\n\n## Your call\n\n- [{tick}] **Approve** — print it as it is\n"
+            f"# {plate}\n\n" + (_AFTER_MD if after else "") +
+            f"## Your call\n\n- [{tick}] **Approve** — print it as it is\n"
             "- [ ] **Hold** — say why\n\n"
             f"## Approvals\n\n{APPROVALS_HEAD}\n{_SEP}\n\n"
             "## Timeline\n\n| Date | What happened | Where |\n|---|---|---|\n"
@@ -1389,7 +1444,8 @@ def _build(tmp: Path) -> tuple[Path, Path, Path, Path]:
         (plates / f"{n}.yaml").write_text(_RECIPE_09 if n == "minis-09" else "bed: x2d\n",
                                           encoding="utf-8")
         fm = {"plate": n, "recipe": f"{n}.yaml", "stage": extra["stage"], **base, **extra}
-        (plates / f"{n}.md").write_text(_page(n, fm, rows), encoding="utf-8")
+        (plates / f"{n}.md").write_text(_page(n, fm, rows, after=n == "minis-08"),
+                                        encoding="utf-8")
     # A designed plate that waits on a build: no recipe, no slice, no picture yet.
     fm = {"plate": "sheets-09", "recipe": None, "stage": "planned", **base, "minutes": None,
           "grams": None, "bed_plates": None, "pictures": [], "needs": ["the window cut"]}
@@ -1746,6 +1802,25 @@ CASES = [
     ("P11 a one-color recipe that fixes its color (the load-bearing case: call 18)",
      _edit_recipe("bed: x2d\n", 'bed: x2d\nprofile:\n  color: "#FFFFFF"\n'),
      "minis-09: P11 the recipe fixes profile.color '#FFFFFF'"),
+    ("P12 a waiting plate that does not say what gets asked after the print",
+     _edit("minis-08", _AFTER_MD, ""), "minis-08: P12 no '## After the print' table"),
+    ("P12 a row whose answer changes nothing (the load-bearing case)",
+     _edit("minis-08", _AFTER_ROW, "| A and B | Does it hold? | It holds: the neck is wide | — |"),
+     "P12 row 1 of '## After the print' leaves 'What each answer changes' empty"),
+    ("P12 an empty question",
+     _edit("minis-08", _AFTER_ROW, "| A and B |  | It holds | If not, a wider neck |"),
+     "leaves 'The question' empty"),
+    ("P12 a table with another header",
+     _edit("minis-08", AFTER_HEAD, "| Pieces | Question | Expect | Changes |"),
+     "P12 the '## After the print' table's header"),
+    ("P12 a table with no rows", _edit("minis-08", f"\n{_AFTER_ROW}", ""),
+     "P12 the '## After the print' table has no rows"),
+    ("P12 a sent plate is still asked",
+     _then(_edit("minis-08", _AFTER_MD, ""), _edit("minis-08", "stage: waiting", "stage: sent")),
+     "minis-08: P12 no '## After the print' table"),
+    ("P12 a printed plate with a table is checked the same way",
+     _edit("minis-09", "## Your call", _AFTER_MD.replace(_AFTER_ROW, "| A |  | x | y |")
+           + "## Your call"), "minis-09: P12 row 1"),
 ]
 
 
@@ -1787,6 +1862,9 @@ def self_test() -> int:
         ]:
             got = color_findings("x", recipe, maturity)
             report(bool(got) == want, label, f"got {got}")
+        # P12 exempts a production plate: it repeats a kept print and asks nothing new.
+        report(check_after_print("p", {"stage": "approved", "maturity": "production"}, "") == [],
+               "P12 a production plate needs no after-print table", "it was asked for one")
 
         # A ticked box not read back is a notice, never a finding.
         case = tmp / "tick-is-a-notice"

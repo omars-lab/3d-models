@@ -87,6 +87,16 @@ pieces at this plate's knobs (bikar 4e06255), which put each piece where its hol
 - **What to read off it:** for each bag, push a piece into a hole and lift the coaster: falls
   out / stays / will not go in. For the stars, also whether a tip breaks.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| HEX +05 | Does a piece 0.05 mm smaller than its hole stay when the coaster is lifted, now that it is full height? | It falls out: nothing grips a smaller piece, and height adds wall, not grip. | Stays: height alone holds a loose piece in a floorless coaster. Falls: a floorless coaster needs gap 0 or a press (loose-pieces call 4). |
+| HEX 00, HEX -05, HEX -10 | Which goes in by hand and stays when the coaster is lifted, and which will not go in? | 00 or -05: a printed hole comes out a little small (CAL-HOL-01), so 00 may already grip. | The tightest that goes in by hand is the hexagons' gap (loose-pieces call 4, and the openwork frame, D-090), and CAL-FIT-01 moves. |
+| STAR 00, STAR -05 | Do the stars press in and stay, and does a tip break? | 00 goes in; -05 may snap a tip, since a star is 2.5 mm across. | In whole: stars take that gap. Tips break: stars get a looser gap than hexagons, one gap per shape. |
+
 ## Pictures
 
 The bed as it will print, front edge at the bottom, each set named where it landed. It is drawn
