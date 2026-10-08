@@ -45,6 +45,7 @@ PATTERNS = CATALOG / "patterns"
 STYLES = CATALOG / "styles"
 MEDIA = CATALOG / "media"
 LEDGER = DOCS / "constructions" / "ledger.md"
+PLANNED = CATALOG / "planned.yaml"
 PLATES = DOCS / "design" / "plates"
 PRINTS = DOCS / "prints"
 STYLE_TABLE = ROOT / ".claude" / "skills" / "import-construction" / "coaster-styles.md"
@@ -273,6 +274,33 @@ def read_prints() -> list[PrintObject]:
     return out
 
 
+@dataclass
+class Planned:
+    id: str
+    title: str
+    source: str
+    creator: str
+    screen: str  # the research file that queued it, from the repo root
+    watch: str
+    held: str  # why it is held, or "" when it is queued
+
+
+def read_planned() -> list[Planned]:
+    """Queued and held patterns not yet rebuilt, written by hand in docs/catalog/planned.yaml."""
+    if not PLANNED.exists():
+        return []
+    out: list[Planned] = []
+    for e in yaml.safe_load(PLANNED.read_text(encoding="utf-8")) or []:
+        missing = [k for k in ("id", "title", "source", "screen", "watch") if not e.get(k)]
+        if missing:
+            sys.exit(f"catalog: {PLANNED.relative_to(ROOT)}: entry {e.get('id', '?')} has no {', '.join(missing)}")
+        out.append(Planned(
+            str(e["id"]), " ".join(str(e["title"]).split()), str(e["source"]), str(e.get("creator") or ""),
+            str(e["screen"]), " ".join(str(e["watch"]).split()), " ".join(str(e.get("held") or "").split()),
+        ))
+    return out
+
+
 def existing_notes(folder: Path, key: str) -> dict[str, Path]:
     """Notes in `folder` keyed by their frontmatter `key` property."""
     out: dict[str, Path] = {}
@@ -320,8 +348,17 @@ FOLD_WORDS = {
 
 
 def tags_for(row: Row, has_coaster: bool) -> list[str]:
+    tags = title_tags(row.title)
+    if has_coaster:
+        tags.append("coaster")
+    if row.no_piece:
+        tags.append("no-piece-by-design")
+    return tags
+
+
+def title_tags(title: str) -> list[str]:
     tags: list[str] = []
-    for word in re.findall(r"\b([a-z0-9]+)-?fold\b", row.title.lower()):
+    for word in re.findall(r"\b([a-z0-9]+)-?fold\b", title.lower()):
         word = FOLD_WORDS.get(word, FOLD_WORDS.get(word + "fold", word))
         if word in ("m,n", "n", "m"):
             continue
@@ -329,12 +366,8 @@ def tags_for(row: Row, has_coaster: bool) -> list[str]:
         if tag not in tags:
             tags.append(tag)
     for word in ("star", "rosette"):
-        if re.search(rf"\b{word}s?\b", row.title.lower()):
+        if re.search(rf"\b{word}s?\b", title.lower()):
             tags.append(word)
-    if has_coaster:
-        tags.append("coaster")
-    if row.no_piece:
-        tags.append("no-piece-by-design")
     return tags
 
 
@@ -501,6 +534,35 @@ def note_top(b: Built, style_what: dict[str, str], roster: dict, plates: dict, p
     return "\n".join(out)
 
 
+def planned_top(p: Planned, path: Path) -> str:
+    tags = title_tags(p.title) + ["planned"] + (["held"] if p.held else [])
+    props: list[tuple[str, object]] = [
+        ("id", p.id),
+        ("aliases", [p.id]),
+        ("title", p.title),
+        ("family", "constructions"),
+        ("status", "planned"),
+        ("source", p.source),
+        ("creator", p.creator),
+        ("catalog id", ""),
+        ("bikar files", []),
+        ("tags", tags),
+    ]
+    screen = os.path.relpath(ROOT / p.screen, path.parent)
+    kind = "GeoGebra file" if "geogebra.org" in p.source else "video"
+    who = f"[{p.creator}'s {kind}]({p.source})" if p.creator else f"[the {kind}]({p.source})"
+    out = [frontmatter(props).rstrip("\n"), "", f"# {p.title}", ""]
+    if p.held:
+        out.append(f"Queued from {who} by [the candidate screen]({screen}), then held. It is not rebuilt yet,")
+    else:
+        out.append(f"Queued from {who} by [the candidate screen]({screen}). It is not rebuilt yet,")
+    out += ["so it has no ledger row, no bikar file and no pictures.", ""]
+    if p.held:
+        out += ["## Why it is held", "", p.held, ""]
+    out += ["## What to watch for", "", p.watch, ""]
+    return "\n".join(out)
+
+
 BLOCK_ID = re.compile(r"^(.*\S) (\^[A-Za-z0-9-]+)$")
 
 
@@ -598,9 +660,22 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str]]:
         out[path] = assemble(path, note_top(b, style_what, roster, plates, prints), NEW_NOTE_HAND_PART).encode()
 
     ledger_ids = {r.id for r in rows}
-    for nid, p in by_id.items():
-        if nid not in ledger_ids:
-            warnings.append(f"{p.relative_to(ROOT)}: id {nid} is not in the ledger (left as it is)")
+    planned: list[tuple[Planned, Path]] = []
+    for p in read_planned():
+        if p.id in ledger_ids:
+            warnings.append(f"{p.id} is in the ledger now; take it out of {PLANNED.relative_to(ROOT)}")
+            continue
+        path = by_id.get(p.id, PATTERNS / f"{slug(p.title)}.md")
+        if path in seen_paths:
+            sys.exit(f"catalog: {p.id} in {PLANNED.relative_to(ROOT)} maps to {path.relative_to(ROOT)}, which is taken")
+        seen_paths.add(path)
+        planned.append((p, path))
+        out[path] = assemble(path, planned_top(p, path), NEW_NOTE_HAND_PART).encode()
+
+    known = ledger_ids | {p.id for p, _ in planned}
+    for nid, path in by_id.items():
+        if nid not in known:
+            warnings.append(f"{path.relative_to(ROOT)}: id {nid} is not in the ledger or the planned list (left as it is)")
 
     # style notes
     by_style: dict[str, list[Built]] = {}
@@ -613,7 +688,7 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str]]:
         path = style_paths.get(s, STYLES / f"{s}.md")
         out[path] = assemble(path, style_top(s, style_what, by_style.get(s, []), roster), NEW_STYLE_HAND_PART).encode()
 
-    out[CATALOG / "index.md"] = index_page(built, all_styles, by_style).encode()
+    out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style).encode()
     return out, warnings
 
 
@@ -655,7 +730,9 @@ def style_top(s: str, style_what: dict[str, str], members: list[Built], roster: 
     return "\n".join(out)
 
 
-def index_page(built: list[Built], all_styles: list[str], by_style: dict[str, list[Built]]) -> str:
+def index_page(
+    built: list[Built], planned: list[tuple[Planned, Path]], all_styles: list[str], by_style: dict[str, list[Built]]
+) -> str:
     def cs_key(b: Built) -> tuple[int, str]:
         m = re.match(r"CS-(\d+)$", b.row.catalog_id)
         return (int(m.group(1)) if m else 10**6, b.row.title.lower())
@@ -699,6 +776,18 @@ def index_page(built: list[Built], all_styles: list[str], by_style: dict[str, li
     ]
     for b in waiting:
         out.append(f"| [{md_cell(b.row.title_md)}](patterns/{b.path.name}) | {b.row.creator or 'not recorded'} |")
+    if planned:
+        out += [
+            "",
+            f"## Queued, not yet rebuilt ({len(planned)})",
+            "",
+            "Screened and queued, or held. Add one to [the planned list](planned.yaml) and sync.",
+            "",
+            "| Pattern | Creator | Held |",
+            "|---|---|---|",
+        ]
+        for p, path in sorted(planned, key=lambda x: x[0].title.lower()):
+            out.append(f"| [{md_cell(p.title)}](patterns/{path.name}) | {p.creator or 'not recorded'} | {'held' if p.held else ''} |")
     if none:
         out += ["", "## Nothing to make, by design", ""]
         for b in none:

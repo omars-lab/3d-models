@@ -4,18 +4,26 @@ Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-mo
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
-## Pattern catalog vault — step 3, the planned patterns, is next
+## Pattern catalog vault — step 4, the check and the loops, is next
 
 [`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
 pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
 through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 2026-09-27.
 
-Steps 1 and 2 are done (see [done.md](done.md)). The catalog page is
-[`docs/catalog/index.md`](../../catalog/index.md); the `pattern-catalog` skill writes it. Step 3
-is next: a note with status planned for each queued candidate in the
-[consolidated screen](../../research/candidate-screen-2026-09-27.md), and the catalog-expansion
-backlog linking each queue entry to its note. Step 4 then makes `make validate` fail when a
-construction has no note (a hook, since `hook_parity` wants one for every validate target).
+Steps 1 to 3 are done (see [done.md](done.md)). The catalog page is
+[`docs/catalog/index.md`](../../catalog/index.md); the `pattern-catalog` skill writes it, and a
+queued pattern gets its note from [`docs/catalog/planned.yaml`](../../catalog/planned.yaml).
+Step 4 is next:
+
+- a pre-commit hook and a `make validate` target that run `sync --check` (`hook_parity` wants
+  a hook for every validate target, and `validate-catalog` is already the prototype catalog's
+  name, so it needs another);
+- the catalog-expansion loop adding a `planned.yaml` entry when it queues a pattern, and syncing
+  when it migrates one; the coaster-pipeline loop syncing when a print record lands;
+  `manage-tasks` routing that knows about it;
+- `review-print` and `print-coaster-samples` sheets carrying a note link per piece.
+
+Done when adding a pattern file to bikar without a note fails `make validate` here.
 
 Step 5's size question now has a number: the 36 pictures step 2 committed average 39 kB, 1.4 MB
 in all.

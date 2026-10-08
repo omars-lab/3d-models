@@ -1,6 +1,6 @@
 ---
 name: pattern-catalog
-description: Keep the pattern catalog in docs/catalog/ in step — one Obsidian note per construction in the ledger, one per coaster style, and the catalog page. Use when a construction is added to the ledger or migrated to naqsh, a coaster style or plate or print record changes, when asked to "sync the catalog", for "the catalog note" or "where is the note for" a pattern, or to "link to" a pattern's picture or style; also when `sync --check` reports a file out of date.
+description: Keep the pattern catalog in docs/catalog/ in step — one Obsidian note per construction in the ledger or queued pattern, one per coaster style, and the catalog page. Use when a candidate pattern is queued or held, a construction is added to the ledger or migrated to naqsh, a coaster style or plate or print record changes, when asked to "sync the catalog", for "the catalog note" or "where is the note for" a pattern, or to "link to" a pattern's picture or style; also when `sync --check` reports a file out of date.
 ---
 
 # Pattern catalog — one note per pattern, kept in step
@@ -43,6 +43,11 @@ working tree, so another session's checkout cannot change the result. It is foun
 - **Link to a picture by note and style heading**, e.g.
   `patterns/simple-20-step-six-fold-star-rosette-cs-1.md#minimal`. Never write an
   `obsidian://` link into anything the public gallery shows.
-- **Status comes from the facts:** no naqsh file yet is `rebuilding`, a print record naming one
+- **A pattern gets its note the day it is queued.** Add an entry to
+  [`docs/catalog/planned.yaml`](../../../docs/catalog/planned.yaml) (its header lists the
+  fields: id, title, source, creator, the screen that queued it, what to watch for, and why it is
+  held if it is) and sync. The note says `planned`. When the pattern gets a ledger row, the same
+  note becomes a ledger note, and the sync says to take the entry out of the list.
+- **Status comes from the facts:** a `planned.yaml` entry with no ledger row is `planned`, no naqsh file yet is `rebuilding`, a print record naming one
   of its files is `printed`, anything else is `built`. A ledger row marked "no piece by design"
   is `built` with the `no-piece-by-design` tag.
