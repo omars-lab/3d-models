@@ -1,0 +1,105 @@
+# sheets-02 — star points (sampler sheet 2)
+#
+# One card with 30 mm windows of the three minimal coasters standing on it, cut at their own
+# 90 mm scale, each with the sharp points of its strap holes rounded by its `tip` knob
+# (`holes round $tip`, bikar #325). The card is bikar's `Sampler-Cards.bkr` piece Sheet2Card,
+# its codes engraved; the cells below use the same numbers as its labels (column x = -20, 14,
+# 48; row y = 41, 7, -27, -61).
+#
+#   A SHARP   tip 0    — today's sharp points, the control
+#   B LIGHT   tip 0.3  — the points just softened
+#   C MEDIUM  tip 0.75
+#   D STRONG  tip 1.5  — the points turned to curves
+#
+# Columns: CS-1 crossing (GimTvN9hw4U), CS-2 star (7apC5Q9QS-8), gBV star (gBV_JTt3Kxk), in
+# sheet 1's order so the two sheets read across.
+#
+# CS-1's window sits at 12,2, not sheet 1's 9.7,1: at tip 1.5 the rounding leaves a fin 0.07 mm
+# thin along that window's edge, and the window cut refuses it. 12,2 passes at every tip here.
+#
+# Build and look (no hardware; slicing is local):
+#   bambu slice sheet docs/design/plates/sheets-02.yaml --dry-run
+#   bambu slice sheet docs/design/plates/sheets-02.yaml
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+card:
+  bkr: bikar:patterns/Coupons/Sampler-Cards.bkr
+  piece: Sheet2Card
+
+cells:
+  - name: A SHARP / CS-1
+    at: [-20, 41]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0 }
+    window: 30@12,2
+  - name: A SHARP / CS-2
+    at: [14, 41]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0 }
+    window: 30@18.5,18.5
+  - name: A SHARP / GBV
+    at: [48, 41]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0 }
+    window: 30@0,0
+  - name: B LIGHT / CS-1
+    at: [-20, 7]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.3 }
+    window: 30@12,2
+  - name: B LIGHT / CS-2
+    at: [14, 7]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.3 }
+    window: 30@18.5,18.5
+  - name: B LIGHT / GBV
+    at: [48, 7]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.3 }
+    window: 30@0,0
+  - name: C MEDIUM / CS-1
+    at: [-20, -27]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.75 }
+    window: 30@12,2
+  - name: C MEDIUM / CS-2
+    at: [14, -27]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.75 }
+    window: 30@18.5,18.5
+  - name: C MEDIUM / GBV
+    at: [48, -27]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 0.75 }
+    window: 30@0,0
+  - name: D STRONG / CS-1
+    at: [-20, -61]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 1.5 }
+    window: 30@12,2
+  - name: D STRONG / CS-2
+    at: [14, -61]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 1.5 }
+    window: 30@18.5,18.5
+  - name: D STRONG / GBV
+    at: [48, -61]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { tip: 1.5 }
+    window: 30@0,0

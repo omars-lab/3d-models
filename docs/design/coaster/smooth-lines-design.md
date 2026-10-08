@@ -362,7 +362,9 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
 4. **Add option 5** (hole-point rounding, 0.3–0.75 mm) as a knob; it also makes option 3 exact at
    the tips. *Done, bikar #325 (2026-10-07):* `holes round <mm>` on a straps-only or openwork
    coaster, refused beside loose pieces and split; the mesh check passes on all ten minimal and
-   minimal-frame coasters at 0.3, 0.75 and 1.5 mm. Whether it is on by default is still call 2.
+   minimal-frame coasters at 0.3, 0.75 and 1.5 mm. Every minimal coaster now carries it as a
+   `tip` knob, 0 by default (bikar #328), and [sampler sheet 2](../plates/sheets-02.md) is
+   built to compare the values in the hand. Whether it is on by default is still call 2.
 5. **Add option 8 light** (SKIMS soft weld) as a style knob, order-free blend; strong as a look.
 6. Later looks: option 7 (width), the pillow top, option 6 (mitred).
 7. **Option 4 only if** open call 2 says star points must stay needle-sharp and the coupon shows the
