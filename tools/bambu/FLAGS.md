@@ -82,6 +82,15 @@ read-only view of loaded filament (AMS trays + external spool)
 |---|---|
 | `--json` | print the raw ams/vt_tray frame instead of a summary |
 
+### `bambu filament map`
+
+map each design color of a `plates by-color --json` file to a loaded tray, by the send's own color match (read-only)
+
+| Flag | Description |
+|---|---|
+| `--colors <file>` | the JSON `bambu plates by-color --json` printed (one row per design color) |
+| `--json` | print the map as JSON (the send-plate skill's shape) instead of one line per color |
+
 ### `bambu filament-sync`
 
 reconcile a sliced plate's logical AMS slots against loaded trays, by color match
