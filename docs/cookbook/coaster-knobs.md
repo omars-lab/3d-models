@@ -272,6 +272,45 @@ about 1.5 mm a star's points turn into petals; that is a different look, and
 
 Related: [strap width](#strap-width), [openwork](#openwork-cut-through-between-the-straps),
 [smoother lines, option 5](../design/coaster/smooth-lines-design.md#5-round-the-hole-points),
+[soft weld](#soft-weld-where-straps-meet),
+[the reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
+
+## Soft weld where straps meet
+<!--covers:holes-->
+
+Where two straps cross, today's hole has a sharp inside corner, so the straps read as two lines
+laid over each other. `holes weld <mm>` fills those corners in a smooth curve over a blend that
+many mm wide, so the crossing reads as one welded line. The weld only adds strap: no strap gets
+thinner, and the holes get smaller and rounder. The picture is a straps-only star welded 0, 2
+and 4 mm: at 2 the small triangles between the points shrink to dots, and at 4 they close
+altogether while the big holes turn to soft teardrops. `holes weld 0` is today's sharp join.
+
+<!-- recipe: coaster-holes-weld; swap: holes weld 0 | holes weld 2 | holes weld 4 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4
+  strap width 2
+  holes weld 2
+```
+![A straps-only star welded 0, 2 and 4 mm where its straps meet](img/coaster-holes-weld.png)
+
+**Watch out:** `holes weld` and `holes round` above 0 together are refused: pick one. Like
+`round`, it needs holes the straps wall (`outline pattern` or
+[`openwork`](#openwork-cut-through-between-the-straps)) and is refused beside
+[`loose`](#loose-pieces-in-an-open-frame) and
+[`split`](#split-coasters-two-halves-that-trap-the-pieces). A strong weld can close a small hole
+altogether, so a coaster with tiny holes loses them first.
+[Sampler sheet 3](../design/plates/sheets-03.md) compares 0.6, 1.2 and 2.4 mm in the hand.
+
+Related: [rounded hole points](#rounded-hole-points), [strap width](#strap-width),
+[smoother lines, option 8](../design/coaster/smooth-lines-design.md#8-skims-influenced-soft-weld),
 [the reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
 
 ## Twisted straps

@@ -36,7 +36,7 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 |---|---|---|---|
 | 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../plates/sheets-01.md) |
 | 2. Star points | smooth-lines call 2 (sharp or softened) | yes: hole-point rounding (`holes round`, bikar #325), fed by a `tip` knob on every minimal coaster, and its card, Sheet2Card (bikar #328) | [sheets-02](../plates/sheets-02.md) |
-| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../plates/sheets-03.md) |
+| 3. Soft weld | smooth-lines call 3 (how much SKIMS) | yes: the soft weld (`holes weld`), fed by a `weld` knob on every minimal coaster, and its card, Sheet3Card (bikar #329) | [sheets-03](../plates/sheets-03.md) |
 | 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../plates/sheets-05.md) |
 
@@ -136,7 +136,18 @@ As built on 2026-10-07:
 **Sheet 3 — soft weld.** Columns: CS-1 crossing, CS-2 star with its octagons, gBV star. Rows: none,
 light, strong. The two smooth-lines researchers chose different amounts (one used 0.6 and 1.2 mm on
 CS-2, the other 1.2 and 2.4 mm on CS-1), so if those stay unsettled the sheet carries both lights.
-Waits on the soft weld (option 8), which is not built.
+
+As built on 2026-10-07:
+- **The weld** is `holes weld <mm>` (bikar #329, option 8). Inside each hole, the edge sits
+  where a smooth blend of the distances to the two nearest sides reaches half the strap, so the
+  weld only adds strap. Every minimal coaster feeds it from a `weld` knob. At 0, the knob's
+  default, each coaster's mesh is the same as before. Weld and `round` are refused together.
+- **The rows** are four, not three, so both researchers' lights fit: A NONE 0, B LIGHT 0.6,
+  C MEDIUM 1.2 and D STRONG 2.4 mm. The card is Sheet3Card, 138 × 156 mm.
+- **The columns** and their windows are sheet 2's (CS-1 at 12,2, CS-2, gBV), so sheets 1, 2 and
+  3 read across. `tip` stays at 0, so the weld is the only change down a column.
+- **The plate** is [`sheets-03.yaml`](../plates/sheets-03.yaml). It slices to one bed, 2 h 8 m
+  and 58 g.
 
 **Sheet 4 — fit.** This sheet is the answer to
 [loose-pieces call 4](loose-pieces-design.md#7-open-calls-for-omar), and it keeps the gaps that

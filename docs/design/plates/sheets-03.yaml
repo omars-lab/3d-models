@@ -1,0 +1,104 @@
+# sheets-03 — soft weld (sampler sheet 3)
+#
+# One card with 30 mm windows of the three minimal coasters standing on it, cut at their own
+# 90 mm scale, each with its straps welded where they meet by its `weld` knob (`holes round $tip
+# weld $weld`, bikar #329): the corners of the strap holes fill in a smooth curve, so the straps
+# read as one welded line. The card is bikar's `Sampler-Cards.bkr` piece Sheet3Card, its codes
+# engraved; the cells below use the same numbers as its labels (column x = -20, 14, 48; row
+# y = 41, 7, -27, -61).
+#
+#   A NONE    weld 0    — today's sharp joins, the control
+#   B LIGHT   weld 0.6  — one researcher's light
+#   C MEDIUM  weld 1.2  — the other researcher's light, and the first one's strong
+#   D STRONG  weld 2.4  — the second researcher's strong
+#
+# Columns: CS-1 crossing (GimTvN9hw4U), CS-2 star (7apC5Q9QS-8), gBV star (gBV_JTt3Kxk), in
+# sheets 1 and 2's order and windows, so the three sheets read across. `tip` stays at 0, so the
+# weld is the only thing that changes down a column.
+#
+# Build and look (no hardware; slicing is local):
+#   bambu slice sheet docs/design/plates/sheets-03.yaml --dry-run
+#   bambu slice sheet docs/design/plates/sheets-03.yaml
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+card:
+  bkr: bikar:patterns/Coupons/Sampler-Cards.bkr
+  piece: Sheet3Card
+
+cells:
+  - name: A NONE / CS-1
+    at: [-20, 41]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0 }
+    window: 30@12,2
+  - name: A NONE / CS-2
+    at: [14, 41]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0 }
+    window: 30@18.5,18.5
+  - name: A NONE / GBV
+    at: [48, 41]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0 }
+    window: 30@0,0
+  - name: B LIGHT / CS-1
+    at: [-20, 7]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0.6 }
+    window: 30@12,2
+  - name: B LIGHT / CS-2
+    at: [14, 7]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0.6 }
+    window: 30@18.5,18.5
+  - name: B LIGHT / GBV
+    at: [48, 7]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 0.6 }
+    window: 30@0,0
+  - name: C MEDIUM / CS-1
+    at: [-20, -27]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 1.2 }
+    window: 30@12,2
+  - name: C MEDIUM / CS-2
+    at: [14, -27]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 1.2 }
+    window: 30@18.5,18.5
+  - name: C MEDIUM / GBV
+    at: [48, -27]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 1.2 }
+    window: 30@0,0
+  - name: D STRONG / CS-1
+    at: [-20, -61]
+    bkr: bikar:patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 2.4 }
+    window: 30@12,2
+  - name: D STRONG / CS-2
+    at: [14, -61]
+    bkr: bikar:patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 2.4 }
+    window: 30@18.5,18.5
+  - name: D STRONG / GBV
+    at: [48, -61]
+    bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    piece: Coaster
+    params: { weld: 2.4 }
+    window: 30@0,0

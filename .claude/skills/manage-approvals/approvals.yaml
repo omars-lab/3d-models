@@ -27,6 +27,8 @@ sheets-01:
   - {iteration: 1, recipe: '89d1abcb4071', date: '2026-10-03'}
 sheets-02:
   - {iteration: 1, recipe: '9f78eb90b896', date: '2026-10-07'}
+sheets-03:
+  - {iteration: 1, recipe: 'dd540194e5fc', date: '2026-10-07'}
 sheets-04:
   - {iteration: 1, recipe: '9f4e788357bb', date: '2026-10-03'}
 sheets-04b:
