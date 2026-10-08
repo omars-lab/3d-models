@@ -10,7 +10,8 @@
 import { type Prices, type Tier, TIERS, pricePerKg } from "./by-color-costs.js";
 import type { Plan } from "./order.js";
 
-/** The twelve settings of §9.3 (the selling fee is two numbers), and the scenario inputs of §9.7.
+/** The twelve settings of §9.3 (the selling fee is two numbers), and the scenario, what-if and
+ *  price-break inputs of §9.7.
  *  A key left out, or set to null, is empty. */
 export interface Settings {
   price_per_gram?: Record<string, number | null> | null; // US dollars a gram, by filament line
@@ -39,6 +40,19 @@ export interface ScenarioInputs {
   set_of_6?: number | null;
   custom_design_minutes?: number | null; // the design time a custom theme takes, per order
   launch_discount?: number | null; // a share off the cost-plus price: 0.2 is 20% off
+  // Make and sell X a month (D-113): a whole number to try, not a forecast.
+  coasters_a_month?: number | null;
+  // The price breaks (D-113): one single price, each break applied once to the price its line names.
+  single_each?: number | null; // what one coaster bought alone sells for
+  set_of_4_break?: number | null; // a share off the single price, per coaster: 0.2 is 20% off
+  set_of_6_break?: number | null; // a share off the set-of-4 price
+  gift_break?: number | null; // a share off the set-of-4 price, for a small gift order
+  gift_coasters?: number | null; // the gift order's size
+  cafe_break?: number | null; // a share off the set-of-4 price, for a café or event order
+  cafe_coasters?: number | null;
+  wholesale_share?: number | null; // what a reselling shop pays, as a share of the set-of-4 price
+  wholesale_fee_percent?: number | null; // what the wholesale channel takes, in place of the fee percent
+  wholesale_coasters?: number | null;
 }
 
 export const SETTING_KEYS = [
@@ -67,7 +81,23 @@ const SCENARIO_KEYS = [
   "set_of_6",
   "custom_design_minutes",
   "launch_discount",
+  "coasters_a_month",
+  "single_each",
+  "set_of_4_break",
+  "set_of_6_break",
+  "gift_break",
+  "gift_coasters",
+  "cafe_break",
+  "cafe_coasters",
+  "wholesale_share",
+  "wholesale_fee_percent",
+  "wholesale_coasters",
 ] as const;
+
+/** Inputs that count coasters, so a whole number: coasters a month may be 0, an order size at least 1. */
+const WHOLE: Record<string, number> = { coasters_a_month: 0, gift_coasters: 1, cafe_coasters: 1, wholesale_coasters: 1 };
+/** Inputs that are a share, so between 0 and 1: 20 typed for 20% would price a set below nothing. */
+const SHARES = ["launch_discount", "set_of_4_break", "set_of_6_break", "gift_break", "cafe_break", "wholesale_share", "wholesale_fee_percent"];
 
 /** The plain name of each setting, the one a page or a refusal shows. */
 const NAME: Record<string, string> = {
@@ -90,6 +120,17 @@ const NAME: Record<string, string> = {
   set_of_6: "set of 6 price",
   custom_design_minutes: "custom design minutes",
   launch_discount: "launch discount",
+  coasters_a_month: "coasters a month",
+  single_each: "single price each",
+  set_of_4_break: "set-of-4 break",
+  set_of_6_break: "set-of-6 break",
+  gift_break: "gift-order break",
+  gift_coasters: "gift-order coasters",
+  cafe_break: "café-order break",
+  cafe_coasters: "café-order coasters",
+  wholesale_share: "wholesale share",
+  wholesale_fee_percent: "wholesale fee percent",
+  wholesale_coasters: "wholesale coasters",
 };
 
 /** A settings file as written: price per gram may say `store <tier>`, for the whole setting or one
@@ -133,6 +174,14 @@ export function checkSettings(raw: unknown): SettingsFile {
       if (!(SCENARIO_KEYS as readonly string[]).includes(k)) throw new Error(`settings: unknown scenario input "${k}" (known: ${SCENARIO_KEYS.join(", ")})`);
     }
     checkNumbers("scenarios.", sc, ["finish_each"]);
+    for (const [k, least] of Object.entries(WHOLE)) {
+      const v = sc[k];
+      if (typeof v === "number" && (!Number.isInteger(v) || v < least)) throw new Error(`settings: scenarios.${k} must be a whole number of coasters, ${least} or more, not ${v}`);
+    }
+    for (const k of SHARES) {
+      const v = sc[k];
+      if (typeof v === "number" && (v < 0 || v > 1)) throw new Error(`settings: scenarios.${k} is a share between 0 and 1 (0.2 for 20%), not ${v}`);
+    }
     const fe = sc.finish_each;
     if (fe !== null && fe !== undefined) {
       if (!isMapping(fe)) throw new Error("settings: scenarios.finish_each must be a mapping of line to a price each");
@@ -396,42 +445,68 @@ export function byQuantity(b: Basis, s: Settings, sizes: number[]): Price[] {
 export interface ScenarioRow {
   strategy: string;
   how: string;
-  coasters: number;
+  coasters: number | null; // the size of the order the row is worked on; null while that size is empty
   scaled: string | null;
   price_each: number | null;
   cost_each: number | null;
   margin_each: number | null;
   to_cover: number | "never" | null; // coasters a month that pay the fixed costs at this margin
   below_break_even: boolean | null;
+  // Make and sell X a month (D-113): all X sold at this row's price, in orders shaped like its own.
+  revenue_month: number | null; // price each × X: what buyers pay, before the fee
+  margin_month: number | null; // margin each × X, at full precision, so after the fee and Omar's time
+  profit_month: number | null; // margin a month − monthly fixed costs
   floor: boolean;
   missing: string[];
 }
 
+/** What every row of the view shares: the shop's fixed costs a month and the X to try. */
+interface Month {
+  monthly: Amount;
+  x: Amount;
+}
+
+function monthOf(s: Settings): Month {
+  const sc = s.scenarios ?? {};
+  return { monthly: setting(NAME.monthly_fixed_costs!, sc.monthly_fixed_costs), x: setting(NAME.coasters_a_month!, sc.coasters_a_month) };
+}
+
+/** The order a row is worked on: its size, which a price-break setting may leave empty. */
+interface RowOrder {
+  coasters: Amount;
+  scaled: string | null;
+}
+
+function orderOf(b: Basis): RowOrder {
+  return { coasters: known(b.coasters), scaled: b.scaled };
+}
+
 /** margin each = price each × (1 − fee percent) − fixed fee ÷ coasters − cost each;
- *  to cover = monthly fixed costs ÷ margin each, rounded up, or "never" at a margin of zero or less. */
-function row(strategy: string, how: string, b: Basis, s: Settings, cost: Amount, priceEach: Amount, monthly: Amount): ScenarioRow {
-  const costEach = combine((c) => c / b.coasters, cost);
-  const margin = combine(
-    (p, pct, fixed, c) => p * (1 - pct) - fixed / b.coasters - c,
-    priceEach,
-    setting(NAME.fee_percent!, s.fee_percent),
-    setting(NAME.fixed_fee!, s.fixed_fee),
-    costEach,
-  );
-  const m = round(margin).value;
-  const cover = combine((f) => f, monthly, margin);
+ *  to cover = monthly fixed costs ÷ margin each, rounded up, or "never" at a margin of zero or less;
+ *  revenue, margin and profit a month from X, every one at full precision and rounded only here. */
+function row(strategy: string, how: string, o: RowOrder, s: Settings, cost: Amount, priceEach: Amount, m: Month, fee: Amount = setting(NAME.fee_percent!, s.fee_percent)): ScenarioRow {
+  const costEach = combine((c, n) => c / n, cost, o.coasters);
+  const margin = combine((p, pct, fixed, n, c) => p * (1 - pct) - fixed / n - c, priceEach, fee, setting(NAME.fixed_fee!, s.fixed_fee), o.coasters, costEach);
+  const shown = round(margin).value;
+  const cover = combine((f) => f, m.monthly, margin);
+  const revenue = combine((p, x) => p * x, priceEach, m.x);
+  const marginMonth = combine((mg, x) => mg * x, margin, m.x);
+  const profit = combine((mm, f) => mm - f, marginMonth, m.monthly);
   return {
     strategy,
     how,
-    coasters: b.coasters,
-    scaled: b.scaled,
+    coasters: o.coasters.value,
+    scaled: o.scaled,
     price_each: round(priceEach).value,
     cost_each: round(costEach).value,
-    margin_each: m,
-    to_cover: cover.value === null ? null : m! <= 0 ? "never" : Math.ceil(monthly.value! / margin.value!),
-    below_break_even: m === null ? null : m <= 0,
+    margin_each: shown,
+    to_cover: cover.value === null ? null : shown! <= 0 ? "never" : Math.ceil(m.monthly.value! / margin.value!),
+    below_break_even: shown === null ? null : shown <= 0,
+    revenue_month: round(revenue).value,
+    margin_month: round(marginMonth).value,
+    profit_month: round(profit).value,
     floor: priceEach.floor || margin.floor,
-    missing: [...new Set([...priceEach.missing, ...margin.missing, ...monthly.missing])],
+    missing: [...new Set([...priceEach.missing, ...margin.missing, ...m.monthly.missing, ...m.x.missing])],
   };
 }
 
@@ -439,40 +514,77 @@ function row(strategy: string, how: string, b: Basis, s: Settings, cost: Amount,
  *  works out its own size, so its warm-ups and packaging spread over its own coasters. */
 export function scenarios(b: Basis, s: Settings): ScenarioRow[] {
   const sc = s.scenarios ?? {};
-  const monthly = setting(NAME.monthly_fixed_costs!, sc.monthly_fixed_costs);
+  const m = monthOf(s);
   const own = work(b, s);
+  const plan = orderOf(b);
   const perCoaster = (a: Amount, n = b.coasters) => combine((x) => x / n, a);
   const rows: ScenarioRow[] = [];
 
-  rows.push(row("cost-plus", "break-even × (1 + markup), §9.3", b, s, own.cost, perCoaster(own.suggested), monthly));
-  rows.push(row("market range", "a pick inside what similar coasters are listed at", b, s, own.cost, setting(NAME.market_each!, sc.market_each), monthly));
-  rows.push(row("story, premium", "a pick above the market band, for the geometry and the loose-piece build", b, s, own.cost, setting(NAME.story_each!, sc.story_each), monthly));
+  rows.push(row("cost-plus", "break-even × (1 + markup), §9.3", plan, s, own.cost, perCoaster(own.suggested), m));
+  rows.push(row("market range", "a pick inside what similar coasters are listed at", plan, s, own.cost, setting(NAME.market_each!, sc.market_each), m));
+  rows.push(row("story, premium", "a pick above the market band, for the geometry and the loose-piece build", plan, s, own.cost, setting(NAME.story_each!, sc.story_each), m));
 
   // A coaster with any piece in a dearer finish sells at that finish's price.
   const finish = sc.finish_each ?? {};
   const lines = [...new Set(b.plates.map((p) => p.line))];
   const finishPrice = lines.reduce<Amount>((acc, l) => combine((a, x) => Math.max(a, x), acc, setting(`finish price each for ${l}`, finish[l])), known(0));
-  rows.push(row("by finish", `one price per line, the dearest of this order's: ${lines.join(", ")}`, b, s, own.cost, finishPrice, monthly));
+  rows.push(row("by finish", `one price per line, the dearest of this order's: ${lines.join(", ")}`, plan, s, own.cost, finishPrice, m));
 
+  // A set price typed in already holds whatever break Omar chose, so no break applies to it.
   for (const [n, key] of [[4, "set_of_4"], [6, "set_of_6"]] as const) {
     const sb = scaleBasis(b, n);
-    rows.push(row(`set of ${n}`, `${n} coasters sold as one, at their own cost`, sb, s, work(sb, s).cost, perCoaster(setting(NAME[key]!, sc[key]), n), monthly));
+    rows.push(row(`set of ${n}`, `${n} coasters sold as one, at their own cost`, orderOf(sb), s, work(sb, s).cost, perCoaster(setting(NAME[key]!, sc[key]), n), m));
   }
 
   const design = combine((min, rate) => (min / 60) * rate, setting(NAME.custom_design_minutes!, sc.custom_design_minutes), setting(NAME.labor_rate!, s.labor_rate));
   const custom = work(b, s, design);
-  rows.push(row("custom theme", "cost-plus with the design time added to the cost", b, s, custom.cost, perCoaster(custom.suggested), monthly));
+  rows.push(row("custom theme", "cost-plus with the design time added to the cost", plan, s, custom.cost, perCoaster(custom.suggested), m));
 
   const launch = combine((x, d) => x * (1 - d), perCoaster(own.suggested), setting(NAME.launch_discount!, sc.launch_discount));
-  rows.push(row("launch price", "the cost-plus price less a launch discount", b, s, own.cost, launch, monthly));
+  rows.push(row("launch price", "the cost-plus price less a launch discount", plan, s, own.cost, launch, m));
   return rows;
+}
+
+/** §9.7's six price-break rows: one single price, and each break applied once, to the price its line
+ *  names (the set-of-6 break to the set-of-4 price, never again to the single). Each row's cost each
+ *  is an order of its own size, the plan scaled as §9.3's "By quantity" scales it. The wholesale row
+ *  takes the wholesale fee percent in place of the fee percent, and the same fixed fee per order. */
+export function priceBreaks(b: Basis, s: Settings): ScenarioRow[] {
+  const sc = s.scenarios ?? {};
+  const m = monthOf(s);
+  const off = (price: Amount, key: keyof ScenarioInputs) => combine((p, k) => p * (1 - k), price, setting(NAME[key]!, sc[key] as number | null | undefined));
+  const single = setting(NAME.single_each!, sc.single_each);
+  const set4 = off(single, "set_of_4_break");
+
+  /** A row on an order of `size` coasters: the plan itself at its own size, else the plan scaled. An
+   *  empty size leaves the cost, and so every cell but the price, empty and named. */
+  const sized = (strategy: string, how: string, size: Amount, price: Amount, fee?: Amount): ScenarioRow => {
+    if (size.value === null) return row(strategy, how, { coasters: size, scaled: null }, s, size, price, m, fee);
+    const sb = scaleBasis(b, size.value);
+    return row(strategy, how, orderOf(sb), s, work(sb, s).cost, price, m, fee);
+  };
+
+  return [
+    sized("single", "the single price, an order of 1", known(1), single),
+    sized("set of 4", "single × (1 − set-of-4 break), an order of 4", known(4), set4),
+    sized("set of 6", "set of 4 × (1 − set-of-6 break), an order of 6", known(6), off(set4, "set_of_6_break")),
+    sized("gift order", "set of 4 × (1 − gift-order break), an order of the gift-order size", setting(NAME.gift_coasters!, sc.gift_coasters), off(set4, "gift_break")),
+    sized("café order", "set of 4 × (1 − café-order break), an order of the café-order size", setting(NAME.cafe_coasters!, sc.cafe_coasters), off(set4, "cafe_break")),
+    sized(
+      "wholesale",
+      "set of 4 × wholesale share, an order of the wholesale size, at the wholesale fee",
+      setting(NAME.wholesale_coasters!, sc.wholesale_coasters),
+      combine((p, k) => p * k, set4, setting(NAME.wholesale_share!, sc.wholesale_share)),
+      setting(NAME.wholesale_fee_percent!, sc.wholesale_fee_percent),
+    ),
+  ];
 }
 
 /** The margin at each price tried (D-104's margin by price), worked by the same row as a scenario,
  *  so a swept price and the scenario at that price can never disagree. */
 export function sweep(b: Basis, s: Settings, pricesEach: number[]): ScenarioRow[] {
-  const monthly = setting(NAME.monthly_fixed_costs!, s.scenarios?.monthly_fixed_costs);
+  const m = monthOf(s);
   const own = work(b, s);
-  return pricesEach.map((p) => row(`at $${p}`, "a price each tried, on §9.3's cost", b, s, own.cost, known(p), monthly));
+  return pricesEach.map((p) => row(`at $${p}`, "a price each tried, on §9.3's cost", orderOf(b), s, own.cost, known(p), m));
 }
 

@@ -21,3 +21,15 @@ scenarios:
   set_of_6: 540                    # FIXTURE
   custom_design_minutes: 60        # FIXTURE
   launch_discount: 0.5             # FIXTURE
+  # §9.7's worked example: the what-if and the price breaks. FIXTURE, made up like the rest.
+  coasters_a_month: 40             # FIXTURE
+  single_each: 150                 # FIXTURE
+  set_of_4_break: 0.2              # FIXTURE
+  set_of_6_break: 0.15             # FIXTURE
+  gift_break: 0.1                  # FIXTURE
+  gift_coasters: 8                 # FIXTURE
+  cafe_break: 0.2                  # FIXTURE
+  cafe_coasters: 24                # FIXTURE
+  wholesale_share: 0.5             # FIXTURE
+  wholesale_fee_percent: 0.2       # FIXTURE
+  wholesale_coasters: 24           # FIXTURE

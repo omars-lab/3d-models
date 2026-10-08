@@ -509,7 +509,8 @@ what an order costs to make, its break-even and suggested price, the cost at oth
 | `--init-settings` | write the settings file with every setting empty, then price |
 | `--quantities <list>` | the sizes to cost, comma-separated (default: 1,5,10,100; the plan's own size is added) |
 | `--sweep <list>` | prices each to try, comma-separated: the margin and coasters to cover at each (the simulate-buyers page passes the prices its buyers saw) |
-| `--json` | print the price, sizes, scenarios, sweep and market band as JSON |
+| `--coasters-a-month <n>` | make and sell X a month: the revenue, margin and profit a month each scenario and price break gives at X (a number to try, not a forecast; overrides the settings file's coasters_a_month) |
+| `--json` | print the price, sizes, scenarios, price breaks, sweep and market band as JSON |
 
 ### `bambu order timed`
 

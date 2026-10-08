@@ -265,16 +265,18 @@ function priceChecks(dir: string, fx: string, meta: FixtureMeta, opts: FixturesO
   if (!existsSync(planFile)) return [`no plan to price: ${planFile} does not exist`];
   const report = priceReport(readJson<Plan>(planFile), join(fx, "settings.fixture.yaml"), "settings.fixture.yaml", DEFAULT_QUANTITIES);
   const got = { price: report.price, by_quantity: report.by_quantity };
+  // §9.7's view: the seven strategies and the six price breaks, at the X the settings try.
+  const view = { coasters_a_month: report.coasters_a_month, scenarios: report.scenarios, price_breaks: report.price_breaks };
   if (opts.writeExpected) {
     writeFileSync(join(fx, "expected-price.json"), JSON.stringify(got, null, 2) + "\n");
-    if (existsSync(join(fx, "expected-scenarios.json"))) writeFileSync(join(fx, "expected-scenarios.json"), JSON.stringify(report.scenarios, null, 2) + "\n");
+    if (existsSync(join(fx, "expected-scenarios.json"))) writeFileSync(join(fx, "expected-scenarios.json"), JSON.stringify(view, null, 2) + "\n");
   }
   if (!existsSync(join(fx, "expected-price.json"))) problems.push("no expected-price.json");
   else if (canonicalJson(got) !== canonicalJson(readJson(join(fx, "expected-price.json")))) {
     problems.push("the price differs from expected-price.json (run `bambu order price` on its plan with --settings and diff)");
   }
-  if (existsSync(join(fx, "expected-scenarios.json")) && canonicalJson(report.scenarios) !== canonicalJson(readJson(join(fx, "expected-scenarios.json")))) {
-    problems.push("the scenarios differ from expected-scenarios.json");
+  if (existsSync(join(fx, "expected-scenarios.json")) && canonicalJson(view) !== canonicalJson(readJson(join(fx, "expected-scenarios.json")))) {
+    problems.push("the scenarios or price breaks differ from expected-scenarios.json");
   }
   return problems;
 }
@@ -306,7 +308,8 @@ export function registerOrder(program: Command): void {
     .option("--init-settings", "write the settings file with every setting empty, then price", false)
     .option("--quantities <list>", `the sizes to cost, comma-separated (default: ${DEFAULT_QUANTITIES.join(",")}; the plan's own size is added)`)
     .option("--sweep <list>", "prices each to try, comma-separated: the margin and coasters to cover at each (the simulate-buyers page passes the prices its buyers saw)")
-    .option("--json", "print the price, sizes, scenarios, sweep and market band as JSON", false)
+    .option("--coasters-a-month <n>", "make and sell X a month: the revenue, margin and profit a month each scenario and price break gives at X (a number to try, not a forecast; overrides the settings file's coasters_a_month)")
+    .option("--json", "print the price, sizes, scenarios, price breaks, sweep and market band as JSON", false)
     .action((file: string, opts: PriceOpts) => {
       try {
         runPrice(file, opts);

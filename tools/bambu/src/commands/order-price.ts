@@ -21,6 +21,7 @@ import {
   basisOf,
   byQuantity,
   checkSettings,
+  priceBreaks,
   priceOf,
   resolveStorePrices,
   scenarios,
@@ -68,6 +69,20 @@ scenarios:
   set_of_6:               # the price of a set of 6
   custom_design_minutes:  # the design time a custom theme takes, per order
   launch_discount:        # a share off the cost-plus price, 0.2 for 20% off
+  # Make and sell X a month: a whole number to try, not a forecast (--coasters-a-month overrides it).
+  coasters_a_month:
+  # The price breaks: one single price, each break applied once to the price its line names.
+  # Starting points from docs/research/coaster-market-pricing.md §3, other sellers' asking prices.
+  single_each:            # what one coaster bought alone sells for
+  set_of_4_break:         # a share off the single price, per coaster; research: 0.15 to 0.25
+  set_of_6_break:         # a share off the set-of-4 price; research: another 0.15 to 0.20
+  gift_break:             # a share off the set-of-4 price for a gift order; research: about 0.1
+  gift_coasters:          # the gift order's size, in coasters
+  cafe_break:             # a share off the set-of-4 price for a café order; research: up to about 0.2
+  cafe_coasters:          # the café order's size, in coasters
+  wholesale_share:        # what a reselling shop pays, a share of the set-of-4 price; research: 0.5
+  wholesale_fee_percent:  # what the wholesale channel takes; research: 0.10 to 0.25, not settled
+  wholesale_coasters:     # the wholesale order's size, in coasters
 `;
 
 interface BandRow {
@@ -91,7 +106,9 @@ export interface PriceReport {
   notes: string[];
   price: Price;
   by_quantity: Price[];
+  coasters_a_month: number | null; // the X the a-month columns are worked at, or empty
   scenarios: ScenarioRow[];
+  price_breaks: ScenarioRow[];
   sweep: ScenarioRow[]; // one row per price tried (`--sweep`), empty when none was asked
   market_band: MarketBand;
 }
@@ -123,16 +140,20 @@ export function sizesFor(b: Basis, asked: number[]): number[] {
   return [...new Set([...asked, b.coasters])].sort((x, y) => x - y);
 }
 
-export function priceReport(plan: Plan, file: string | null, settingsNote: string, quantities: number[], pricesEach: number[] = []): PriceReport {
+/** `aMonth`, when given, is the X to try in place of the settings file's `coasters_a_month`. */
+export function priceReport(plan: Plan, file: string | null, settingsNote: string, quantities: number[], pricesEach: number[] = [], aMonth?: number): PriceReport {
   const b = basisOf(plan);
-  const { settings, notes } = settingsFor(file, b);
+  const read = settingsFor(file, b);
+  const settings: Settings = aMonth === undefined ? read.settings : { ...read.settings, scenarios: { ...read.settings.scenarios, coasters_a_month: aMonth } };
   return {
     order: plan.order,
     settings: settingsNote,
-    notes,
+    notes: read.notes,
     price: priceOf(b, settings),
     by_quantity: byQuantity(b, settings, sizesFor(b, quantities)),
+    coasters_a_month: settings.scenarios?.coasters_a_month ?? null,
     scenarios: scenarios(b, settings),
+    price_breaks: priceBreaks(b, settings),
     sweep: sweep(b, settings, pricesEach),
     market_band: marketBand(),
   };
@@ -142,6 +163,7 @@ export interface PriceOpts {
   settings?: string;
   quantities?: string;
   sweep?: string;
+  coastersAMonth?: string;
   json?: boolean;
   initSettings?: boolean;
 }
@@ -156,11 +178,18 @@ export function runPrice(planFile: string, opts: PriceOpts): void {
   }
   const quantities = opts.quantities ? opts.quantities.split(",").map((q) => parseQuantity(q)) : DEFAULT_QUANTITIES;
   const pricesEach = opts.sweep ? opts.sweep.split(",").map((p) => parsePrice(p)) : [];
+  const aMonth = opts.coastersAMonth === undefined ? undefined : parseAMonth(opts.coastersAMonth);
   const plan = JSON.parse(readFileSync(resolve(planFile), "utf8")) as Plan;
   const there = existsSync(file);
-  const report = priceReport(plan, there ? file : null, there ? file : `no settings file at ${file}, so every setting is empty (--init-settings writes one)`, quantities, pricesEach);
+  const report = priceReport(plan, there ? file : null, there ? file : `no settings file at ${file}, so every setting is empty (--init-settings writes one)`, quantities, pricesEach, aMonth);
   if (opts.json) console.log(JSON.stringify(report, null, 2));
   else printReport(report);
+}
+
+function parseAMonth(x: string): number {
+  const n = Number(x.trim());
+  if (x.trim() === "" || !Number.isInteger(n) || n < 0) throw new Error(`--coasters-a-month: "${x}" is not a whole number of coasters`);
+  return n;
 }
 
 function parseQuantity(q: string): number {
@@ -232,13 +261,28 @@ function printReport(r: PriceReport): void {
   const scaled = r.by_quantity.find((q) => q.scaled);
   if (scaled) console.log(`    scaled: ${scaled.scaled}`);
 
-  console.log(`\n  scenarios (price, cost, margin each; coasters a month to cover the fixed costs)`);
-  for (const s of r.scenarios) {
+  // The what-if's X is named once, above both tables, not under every row.
+  const x = r.coasters_a_month;
+  const xName = "coasters a month";
+  console.log(`\n  make and sell ${x === null ? "X (empty, so every a-month column is a dash; --coasters-a-month tries one)" : x} coasters a month: a number to try, not a forecast`);
+  const head = `${"".padEnd(16)} ${"n".padStart(3)}  ${"price".padEnd(9)} ${"cost".padEnd(9)} ${"margin".padEnd(9)} ${"cover".padStart(6)}  ${"revenue/mo".padStart(11)} ${"margin/mo".padStart(11)} ${"profit/mo".padStart(11)}`;
+  const line = (s: ScenarioRow): void => {
     const cover = s.to_cover === null ? "—" : String(s.to_cover);
     const tag = s.below_break_even ? "  below break-even" : "";
-    console.log(`    ${s.strategy.padEnd(16)} ${String(s.coasters).padStart(3)}  ${money(s.price_each).padEnd(9)} ${money(s.cost_each).padEnd(9)} ${money(s.margin_each).padEnd(9)} ${cover.padStart(6)}${tag}${s.floor ? "  floor" : ""}`);
-    if (s.missing.length) console.log(`      needs ${needs(s.missing, listed)}`);
-  }
+    const scaled = s.scaled ? "  scaled" : "";
+    const month = `${money(s.revenue_month).padStart(11)} ${money(s.margin_month).padStart(11)} ${money(s.profit_month).padStart(11)}`;
+    console.log(`    ${s.strategy.padEnd(16)} ${String(s.coasters ?? "—").padStart(3)}  ${money(s.price_each).padEnd(9)} ${money(s.cost_each).padEnd(9)} ${money(s.margin_each).padEnd(9)} ${cover.padStart(6)}  ${month}${tag}${scaled}${s.floor ? "  floor" : ""}`);
+    const missing = s.missing.filter((m) => m !== xName);
+    if (missing.length) console.log(`      needs ${needs(missing, listed)}`);
+  };
+  console.log(`\n  scenarios (coasters in the order; price, cost, margin each; coasters a month to cover the fixed costs; a month at X)`);
+  console.log(`    ${head}`);
+  for (const s of r.scenarios) line(s);
+  console.log(`\n  price breaks (one single price, each break applied once; each row's cost from an order of its own size)`);
+  console.log(`    ${head}`);
+  for (const s of r.price_breaks) line(s);
+  const scaledRow = r.price_breaks.find((s) => s.scaled) ?? r.scenarios.find((s) => s.scaled);
+  if (scaledRow) console.log(`    scaled: ${scaledRow.scaled}`);
 
   if (r.sweep.length) {
     console.log(`\n  sweep (price each tried, margin each; coasters a month to cover the fixed costs)`);
