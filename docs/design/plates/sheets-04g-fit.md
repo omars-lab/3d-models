@@ -1,8 +1,8 @@
 ---
 plate: sheets-04g-fit
 recipe: sheets-04g-fit.yaml
-iteration: 2
-stage: approved
+iteration: 3
+stage: waiting
 times_printed: 0
 runs: []
 answers: "At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling?"
@@ -19,6 +19,7 @@ bed_plates: 1
 risk: watch
 pictures:
   - sheets-04g-fit-media/bed.png
+  - sheets-04g-fit-media/ids.png
 ---
 
 # sheets-04g-fit — the kites and the middle piece at a ladder of gaps
@@ -95,6 +96,13 @@ Going round the coaster (the colors are the picture's, not the print's):
 
 ![sheets-04g-fit on the bed: the coaster in the middle, five rows of ten kites and four middle pieces round it, each labeled with its gap](sheets-04g-fit-media/bed.png)
 
+The ids cut into the four middle pieces' bed faces, seen from below (D-109): A is the 0 gap, B
+0.05, C 0.10 and D 0.15, so a middle piece tells its gap off the bed. The coaster and the kites
+have no room for one; [the recipe](sheets-04g-fit.yaml) says how they are told apart, and
+[the carved-id fit note](../../issues/carved-id-fit.md) says why.
+
+![The bottoms of the four middle pieces: ten-pointed pieces reading 4GF over 3 and A, B, C or D, turned on their sides](sheets-04g-fit-media/ids.png)
+
 ## Cost and risk
 
 One bed, 78 minutes, about 21.4 g (local slice, 2026-10-07, X2D preset and PLA Basic, Textured
@@ -118,7 +126,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ 9872c01d7d | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ 9872c01d7d | reset 2026-10-08 |
 
 ## Timeline
 

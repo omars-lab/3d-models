@@ -1,8 +1,8 @@
 ---
 plate: spl-1
 recipe: spl-1.yaml
-iteration: 2
-stage: approved
+iteration: 3
+stage: waiting
 times_printed: 0
 runs: []
 answers: "For a split coaster: which gap between a 2 mm stud and its socket presses in and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves?"
@@ -20,6 +20,8 @@ risk: watch
 pictures:
   - spl-1-media/bed.png
   - spl-1-media/slice.png
+  - spl-1-media/ids-a-f.png
+  - spl-1-media/ids-g-l.png
 ---
 
 # spl-1 — the split coupon: how tight a stud, how thick a floor, does a lip hold a piece
@@ -115,6 +117,15 @@ tile.
 
 ![spl-1 in the slicer: green square tiles each with a dot in the middle, and four larger tiles with hexagonal openings](spl-1-media/slice.png)
 
+The ids cut into the bed face of the twelve Fit Lowers, seen from below as you pick them off the
+bed: the plate, then the iteration and the pair's letter (D-109). The Uppers and the trap tiles
+have no room for one; [the recipe](spl-1.yaml) says how each of those is told apart, and
+[the carved-id fit note](../../issues/carved-id-fit.md) says why.
+
+![The bottoms of the Fit Lowers A to F: each square reads SL1 over 3 and its letter](spl-1-media/ids-a-f.png)
+
+![The bottoms of the Fit Lowers G to L: each square reads SL1 over 3 and its letter](spl-1-media/ids-g-l.png)
+
 ## Cost and risk
 
 One bed, 49 minutes, about 18.5 g (local slice, 2026-10-07, from bikar main after bikar #323,
@@ -139,7 +150,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
 
 ## Timeline
 

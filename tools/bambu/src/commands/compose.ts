@@ -12,9 +12,9 @@
 // mints no parallel id, so nothing forks (CLAUDE.md "a migration never buys a fork", D-052).
 
 import { Command } from "commander";
-import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync, copyFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync, copyFileSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
@@ -191,6 +191,23 @@ export function bottomIdText(code: string, iteration: number, id: string): strin
     );
   }
   return `${code}/${iteration} ${id}`;
+}
+
+/** The repo whose approvals store numbers an id_code recipe: the one the recipe file sits in, as the
+ *  recipe beside its page. The store is read by plate name, so a recipe run from another checkout, or a
+ *  copy kept elsewhere, would otherwise be cut with an iteration that is not its own — compose did that
+ *  on 2026-10-08, cutting `SL1/2` into spl-1's iteration 3 from the shell's other checkout. */
+export function idRecipeRoot(absManifest: string): string {
+  const root = repoRoot(dirname(absManifest));
+  const name = basename(absManifest).replace(/\.ya?ml$/i, "");
+  const beside = root ? join(root, "docs", "design", "plates", `${name}.yaml`) : null;
+  if (!root || !beside || !existsSync(beside) || realpathSync(beside) !== realpathSync(absManifest)) {
+    throw new Error(
+      `${absManifest} has an \`id_code:\`, so it must be a plate's recipe in docs/design/plates, beside its ` +
+        "page: the iteration cut into each piece is that recipe's (D-109). Move it there, or drop `id_code:`",
+    );
+  }
+  return root;
 }
 
 /** Check the recipe's `id_code:` and each item's `id:` / `no_id:`. A recipe with an id_code gives every
@@ -779,7 +796,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     let ids: { code: string; iteration: number } | null = null;
     if (manifest.id_code) {
       const name = basename(absManifest).replace(/\.ya?ml$/i, "");
-      ids = { code: manifest.id_code, iteration: recipeIterationOf(name, repoRoot() ?? process.cwd()) };
+      ids = { code: manifest.id_code, iteration: recipeIterationOf(name, idRecipeRoot(absManifest)) };
     }
     resolved = await resolveManifestItems(manifest.items, bikarRef, sliceProfile, undefined, ids);
   } catch (err) {

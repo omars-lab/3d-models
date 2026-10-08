@@ -1,8 +1,8 @@
 ---
 plate: split-02
 recipe: split-02.yaml
-iteration: 2
-stage: approved
+iteration: 3
+stage: waiting
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
@@ -20,6 +20,7 @@ pictures:
   - split-02-media/opened.png
   - split-02-media/how-it-holds.png
   - split-02-media/bed.png
+  - split-02-media/ids.png
 ---
 
 # split-02 — the split gBV coaster whose pieces carry a flange (option C)
@@ -105,6 +106,12 @@ The slice: both halves on the right, the HEX and OUTER rows at the left with the
 
 ![split-02 on the bed](split-02-media/bed.png)
 
+The id cut into the middle piece's bed face, seen from below: the plate, the iteration and M
+(D-109). It is the only piece with room for one; [the recipe](split-02.yaml) says how the others
+are told apart, and [the carved-id fit note](../../issues/carved-id-fit.md) says why.
+
+![The bottom of the middle piece: a twenty-sided piece reading SP2 over 3 M, turned on its side](split-02-media/ids.png)
+
 ## Cost and risk
 
 One bed, 107 minutes, about 31 g (local slice, 2026-10-05, X2D preset and PLA Basic, sliced
@@ -128,7 +135,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
 
 ## Timeline
 

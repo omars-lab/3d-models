@@ -38,43 +38,58 @@ profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
+id_code: 4GF
+no_id_reasons:
+  - &coaster "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. It is the only coaster on the plate."
+  - &kite "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Each rung's ten kites come off the bed together and stay in their own pile, as the page says."
+
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
     params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
     label:  COASTER
+    no_id:  *coaster
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05 }
     label:  KITE 0.05
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.1 }
     label:  KITE 0.10
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.15 }
     label:  KITE 0.15
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.2 }
     label:  KITE 0.20
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.25 }
     label:  KITE 0.25
+    no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Middle
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0, middle_dots: 4 }
     label:  MIDDLE 0
+    id:     A
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Middle
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05, middle_dots: 3 }
     label:  MIDDLE 0.05
+    id:     B
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Middle
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.1, middle_dots: 2 }
     label:  MIDDLE 0.10
+    id:     C
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Middle
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.15, middle_dots: 1 }
     label:  MIDDLE 0.15
+    id:     D

@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { bottomIdText, itemRenderFlags, parseManifest, resolveManifestItems } from "./compose.js";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { bottomIdText, idRecipeRoot, itemRenderFlags, parseManifest, resolveManifestItems } from "./compose.js";
 
 // The carved id (D-109): a recipe with an `id_code:` gives every item an `id:` or a `no_id:`, and each
 // `id:` item renders with `--bottom-id <code>/<iteration> <id>`. The bikar blob read is stubbed so the
@@ -116,5 +119,35 @@ describe("resolveManifestItems — the id is part of the recipe", () => {
 
   it("refuses an id when the caller has no plate code and iteration to cut with it", async () => {
     await expect(resolveManifestItems([item({ id: "D" })], "ref", profile)).rejects.toThrow(/needs the plate's id_code and iteration/);
+  });
+});
+
+describe("idRecipeRoot — whose iteration the id carries", () => {
+  // A repo as repoRoot() finds it, with one plate recipe beside its page.
+  const tree = () => {
+    const root = mkdtempSync(join(tmpdir(), "compose-ids-root-"));
+    mkdirSync(join(root, ".claude", "gates"), { recursive: true });
+    writeFileSync(join(root, ".claude", "gates", "prints_gate.py"), "");
+    mkdirSync(join(root, "docs", "design", "plates"), { recursive: true });
+    writeFileSync(join(root, "docs", "design", "plates", "p.yaml"), "id_code: P\n");
+    return root;
+  };
+
+  it("is the repo the recipe sits in, whatever the shell's directory", () => {
+    const root = tree();
+    expect(idRecipeRoot(join(root, "docs", "design", "plates", "p.yaml"))).toBe(root);
+  });
+
+  it("refuses a copy of a plate's recipe kept outside docs/design/plates (it would take the plate's number)", () => {
+    const root = tree();
+    mkdirSync(join(root, "scratch"));
+    writeFileSync(join(root, "scratch", "p.yaml"), "id_code: P\n");
+    expect(() => idRecipeRoot(join(root, "scratch", "p.yaml"))).toThrow(/beside its page/);
+  });
+
+  it("refuses a recipe in no repo at all", () => {
+    const dir = mkdtempSync(join(tmpdir(), "compose-ids-loose-"));
+    writeFileSync(join(dir, "p.yaml"), "id_code: P\n");
+    expect(() => idRecipeRoot(join(dir, "p.yaml"))).toThrow(/beside its page/);
   });
 });

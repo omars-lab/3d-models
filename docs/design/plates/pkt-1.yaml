@@ -35,12 +35,17 @@ profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
+id_code: PK1
+no_id_reasons:
+  - &lower "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Its pair letter, cut into its cut face as <letter>B (O to R), tells it apart."
+  - &upper "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Its pair letter, cut into its cut face as <letter>T (O to R), tells it apart."
+
 items:
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 15 }, label: P2aL }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 15 }, label: P2aU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 16 }, label: P2bL }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 16 }, label: P2bU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 17 }, label: P4aL }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 17 }, label: P4aU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 18 }, label: P4bL }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 18 }, label: P4bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 15 }, no_id: *lower, label: P2aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 15 }, no_id: *upper, label: P2aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 16 }, no_id: *lower, label: P2bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 16 }, no_id: *upper, label: P2bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 17 }, no_id: *lower, label: P4aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 17 }, no_id: *upper, label: P4aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 18 }, no_id: *lower, label: P4bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 18 }, no_id: *upper, label: P4bU }

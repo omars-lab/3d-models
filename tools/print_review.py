@@ -4,6 +4,7 @@
     python3 tools/print_review.py sheet <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
+    python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py --self-test
@@ -34,6 +35,10 @@ inside one square of the STL's own frame, centred at x,y and `side` mm across, f
 tile. It is for comparing edges: a 4 mm square puts 100 px on a millimetre, so a 0.4 mm step
 is 40 px. The top faces would not do: on a rounded top their outline is the round, not the
 wall.
+
+`bottom` draws each piece's bed face as seen from below, left and right swapped the way a person
+turning the piece over sees it, the piece filling its tile. It is for reading the carved id
+(D-109) cut into that face before the plate prints: the id shows as dark letters on the face.
 
 `bed` draws a composed plate from above as it will print: every object where `--arrange` put
 it, turned as it was turned, on the bed square with the front edge at the bottom, and each one
@@ -268,6 +273,30 @@ def parse_region(text):
 
 def edge_sheet(out, region, paths):
     tiles = [footprint(load_triangles(p), region) for p in paths]
+    compose(tiles, [p.rsplit("/", 1)[-1].removesuffix(".stl") for p in paths]).save(out)
+    print("wrote", out)
+
+
+def bottom(tris):
+    """The face that sits on the bed, seen from below as a person turning the piece over sees it:
+    left and right swapped, the faces at the lowest height, the piece's outline filling the tile.
+    A carved id (D-109) is cut into that face, so it reads as dark letters on it."""
+    xs = [t[j] for t in tris for j in (0, 3, 6)]
+    ys = [t[j] for t in tris for j in (1, 4, 7)]
+    x1, y0 = max(xs), min(ys)
+    span = max(x1 - min(xs), max(ys) - y0)
+    zmin = min(t[j] for t in tris for j in (2, 5, 8))
+    img = Image.new("L", (S, S), 0)
+    d = ImageDraw.Draw(img)
+    f = lambda x, y: ((x1 - x) / span * (S - 3) + 1, (S - 2) - (y - y0) / span * (S - 3))
+    for t in tris:
+        if max(t[2], t[5], t[8]) <= zmin + TOP_EPS:
+            d.polygon([f(t[0], t[1]), f(t[3], t[4]), f(t[6], t[7])], fill=255)
+    return img
+
+
+def bottom_sheet(out, paths):
+    tiles = [bottom(load_triangles(p)) for p in paths]
     compose(tiles, [p.rsplit("/", 1)[-1].removesuffix(".stl") for p in paths]).save(out)
     print("wrote", out)
 
@@ -573,6 +602,9 @@ def self_test():
     foot = footprint(sq(0, 0, 2, 2, 0) + sq(2.2, 2.2, 2.8, 2.8, 1), (1, 1, 4))
     foot_share = sum(foot.histogram()[128:]) / (S * S)
     stray_px = foot.getpixel((int(3.5 / 4 * S), int(S - 3.5 / 4 * S)))
+    # A 10 mm slab whose bed face is only its left half (x < 5): from below, that half is on the right.
+    under = bottom(sq(0, 0, 5, 10, 0) + sq(5, 0, 10, 10, 1) + sq(0, 0, 10, 10, 2))
+    under_right, under_left = under.getpixel((3 * S // 4, S // 2)), under.getpixel((S // 4, S // 2))
 
     even, lopsided, seven = star(False), star(True), star(False, points=7)
     good, slab, part = (measure(square(f)) for f in (lattice, pinholes, half))
@@ -591,6 +623,7 @@ def self_test():
         ("a seven-point star, a point up, matches itself seven ways", seven[0] > 0.95 and seven[1] == 7),
         ("edge draws the footprint at the region's scale", abs(foot_share - 0.25) < 0.01),
         ("edge leaves out a face above the bottom", stray_px == 0),
+        ("bottom draws the bed face mirrored, as seen from below", under_right == 255 and under_left == 0),
     ]
     checks += bed_self_test()
     checks += side_self_test()
@@ -686,6 +719,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) >= 6 and a[0] == "side":
         side_sheet(a[1], a[2], a[3:])
+        sys.exit(0)
+    if len(a) >= 3 and a[0] == "bottom":
+        bottom_sheet(a[1], a[2:])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])

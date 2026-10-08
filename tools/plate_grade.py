@@ -39,6 +39,8 @@ does not.
 A production recipe does not change in place. `--derive` copies it to a new plate, an experiment
 whose page names its parent in `derived_from`; the change is made and printed there, and the new
 plate earns production on its own prints (grade-plate skill, "Changing a production plate").
+The new plate starts planned, its `needs:` naming the carved ids its pieces must get before it is
+proposed (D-109): a production recipe has none, and which pieces have room is only known by trying.
 
 `--fill` needs a slice (`bambu slice compose`), which lives in the gitignored build/plates/, so
 the grade looks for one there and says when there is none; the skill copies the number onto the
@@ -222,14 +224,19 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
                       + (plates / f"{parent}.yaml").read_text(encoding="utf-8"), encoding="utf-8")
     cost = {k: data.get(k) for k in ("minutes", "grams", "bed_plates")}
     # The parent's cost stands in until the new recipe is sliced. With none to copy the plate
-    # cannot be ranked yet, so it starts planned, waiting on its slice.
+    # cannot be ranked yet, so it waits on its slice too.
     costed = all(pg._pos(v) for v in cost.values())
-    fm = {"plate": new, "recipe": f"{new}.yaml", "stage": "proposed" if costed else "planned",
+    # A production recipe carries no ids (P13 does not ask it), and an experiment's pieces each
+    # need one or a reason (D-109). Which pieces bikar has room for is only known by trying, so
+    # the plate starts planned, waiting on its ids, and is proposed once its recipe has them.
+    needs = ([] if costed else [f"a slice of {new}.yaml"]) + [
+        f"ids on its pieces: an `id_code:` in {new}.yaml and an `id:` or a `no_id:` reason on "
+        "each item (D-109)"]
+    fm = {"plate": new, "recipe": f"{new}.yaml", "stage": "planned",
           "times_printed": 0, "runs": [],
           "answers": answers, "kind": "new", "maturity": "experiment", "derived_from": parent,
           "bets": data.get("bets") or [], "unblocks": data.get("unblocks") or [], **cost,
-          "risk": data.get("risk"), "pictures": [],
-          **({} if costed else {"needs": [f"a slice of {new}.yaml"]})}
+          "risk": data.get("risk"), "pictures": [], "needs": needs}
     page.write_text(
         "---\n" + pg.yaml.safe_dump(fm, sort_keys=False, allow_unicode=True, width=1000)
         + "---\n" + plate_approve.with_table("\n"
@@ -241,7 +248,10 @@ def derive(parent: str, new: str, answers: str, plates: Path = pg.PLATES,
         f"## What changes from [{parent}]({parent}.md)\n\n"
         f"Say the change, and why. "
         + (f"The cost is {parent}'s until this plate is sliced." if costed else
-           "It has no cost until it is sliced, so it waits as planned.") + "\n\n"
+           "It has no cost until it is sliced.") + " It waits as planned until its pieces have "
+        f"their carved ids (D-109): an `id_code:` in [{new}.yaml]({new}.yaml), and an `id:` or a "
+        f"`no_id:` reason on each item. `bambu slice compose {new}.yaml --dry-run` says which "
+        "pieces bikar has no room for.\n\n"
         # P12: an experiment says up front what it asks when it comes off the bed. Sharpen the
         # row once the change is written above.
         "## After the print\n\n"
@@ -298,10 +308,13 @@ def self_test() -> int:
         findings, _, _, _ = pg.check_tree(plates, prints, scoring, bets, rubric)
         check(findings == [], "derived plates pass the plates gate as written"
               + (f" — {findings}" if findings else ""))
-        stage = {n: pg.parse_frontmatter((plates / f"{n}.md").read_text(encoding="utf-8"))[0]
-                 ["stage"] for n in ("minis-10", "minis-11")}
-        check(stage == {"minis-10": "proposed", "minis-11": "planned"},
-              "it takes the parent's cost to rank, and waits on a slice when there is none")
+        fm = {n: pg.parse_frontmatter((plates / f"{n}.md").read_text(encoding="utf-8"))[0]
+              for n in ("minis-10", "minis-11")}
+        check({n: d["stage"] for n, d in fm.items()} == {"minis-10": "planned", "minis-11": "planned"}
+              and [len(fm[n]["needs"]) for n in ("minis-10", "minis-11")] == [1, 2]
+              and all("D-109" in d["needs"][-1] for d in fm.values()),
+              "it waits on its carved ids, and on a slice too when the parent has no cost (D-109)")
+        check(fm["minis-10"]["minutes"] == 50, "it takes the parent's cost")
         data, _ = pg.parse_frontmatter((plates / "minis-10.md").read_text(encoding="utf-8"))
         check(data["derived_from"] == "minis-09" and data["maturity"] == "experiment"
               and "approved" not in data and pg.approvals(plate_approve.split(

@@ -1,8 +1,8 @@
 ---
 plate: pkt-1
 recipe: pkt-1.yaml
-iteration: 2
-stage: approved
+iteration: 3
+stage: waiting
 times_printed: 0
 runs: []
 answers: "For a split coaster's way c: does a piece half printed in place in its closed pocket come out loose at one layer of air (0.2 mm) or only at two (0.4 mm), does the closed piece move or click when the coaster is lifted, and is the band's underside, printed over air, flat?"
@@ -119,6 +119,11 @@ gap round it, and the two studs or sockets on either side.
 
 ![pkt-1 in the slicer: eight green square tiles, each with a hexagon outline in the middle and two dots](pkt-1-media/slice.png)
 
+No tile here carries a carved id (D-109): the plug and its pocket leave no flat patch big enough
+on any bed face. Each tile is told apart by the pair letter and B or T the coupon already cuts, as
+[the recipe](pkt-1.yaml) says; [the carved-id fit note](../../issues/carved-id-fit.md) has the
+measurements.
+
 ## Cost and risk
 
 One bed, 35 minutes, about 11.6 g (local slice, 2026-10-07, from bikar main after bikar #323,
@@ -144,7 +149,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ 741ced0d16 | reset 2026-10-07 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
 
 ## Timeline
 
