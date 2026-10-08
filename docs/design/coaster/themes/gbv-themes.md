@@ -49,15 +49,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Gold `#E4BD68` | buy, PLA Basic |
 | the kites (10) | Gold `#E4BD68` | buy, PLA Basic |
-| the inner six-sided ring (10) | Gold `#E4BD68` | buy, PLA Basic |
+| the inner ring of six-sided pieces (10) | Gold `#E4BD68` | buy, PLA Basic |
 | the stars (10) | Gold `#E4BD68` | buy, PLA Basic |
-| the outer six-sided ring (10) | Gold `#E4BD68` | buy, PLA Basic |
+| the outer ring of six-sided pieces (10) | Gold `#E4BD68` | buy, PLA Basic |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 2, about 86 min and 27 g in all, plus 1 start-up not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Gold: middle, kites, inner six-sided ring, stars and outer six-sided ring (about 36 min, 11.4 g)
+- Gold: middle, kites, inner ring of six-sided pieces, stars and outer ring of six-sided pieces (about 36 min, 11.4 g)
 
 **Scores:** 3.8 of 5. The strongest all-rounder and the cheapest to add to the range; only the specialty fan finds it generic.
 
@@ -80,15 +80,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Gold `#E5B03D` | buy, PLA Silk |
 | the kites (10) | Gold `#E5B03D` | buy, PLA Silk |
-| the inner six-sided ring (10) | Gold `#E5B03D` | buy, PLA Silk |
+| the inner ring of six-sided pieces (10) | Gold `#E5B03D` | buy, PLA Silk |
 | the stars (10) | Gold `#E5B03D` | buy, PLA Silk |
-| the outer six-sided ring (10) | Gold `#E5B03D` | buy, PLA Silk |
+| the outer ring of six-sided pieces (10) | Gold `#E5B03D` | buy, PLA Silk |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 2, about 86 min and 27 g in all, plus 1 start-up not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Gold: middle, kites, inner six-sided ring, stars and outer six-sided ring (about 36 min, 11.4 g)
+- Gold: middle, kites, inner ring of six-sided pieces, stars and outer ring of six-sided pieces (about 36 min, 11.4 g)
 
 **Scores:** 3.8 of 5. Black and gold made shinier; the gift pick, if silk wears as well as the drawing hopes.
 
@@ -111,9 +111,9 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Caramel `#AE835B` | buy, PLA Matte |
 | the kites (10) | Desert Tan `#E8DBB7` | buy, PLA Matte |
-| the inner six-sided ring (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
 | the stars (10) | Caramel `#AE835B` | buy, PLA Matte |
-| the outer six-sided ring (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
 | the frame (the straps) | Dark Chocolate `#4D3324` | buy, PLA Matte |
 
 **Heads-up:** hex and kite are close (Latte Brown / Desert Tan, delta E 16), and may blur together.
@@ -121,7 +121,7 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Dark Chocolate: frame (about 50 min, 15.6 g)
-- Latte Brown: inner six-sided ring and outer six-sided ring (about 29 min, 9.1 g)
+- Latte Brown: inner ring of six-sided pieces and outer ring of six-sided pieces (about 29 min, 9.1 g)
 - Caramel: middle and stars (about 6 min, 1.8 g)
 - Desert Tan: kites (about 1 min, 0.4 g)
 
@@ -146,16 +146,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Latte Brown `#D3B7A7` | buy, PLA Matte |
 | the kites (10) | Caramel `#AE835B` | buy, PLA Matte |
-| the inner six-sided ring (10) | Dark Brown `#7D6556` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Dark Brown `#7D6556` | buy, PLA Matte |
 | the stars (10) | Dark Brown `#7D6556` | buy, PLA Matte |
-| the outer six-sided ring (10) | Dark Chocolate `#4D3324` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Dark Chocolate `#4D3324` | buy, PLA Matte |
 | the frame (the straps) | Ivory White `#FFFFFF` | buy, PLA Matte |
 
 **Plates:** 5, about 86 min and 27 g in all, plus 4 start-ups not measured.
 
 - Ivory White: frame (about 50 min, 15.6 g)
-- Dark Brown: inner six-sided ring and stars (about 18 min, 5.6 g)
-- Dark Chocolate: outer six-sided ring (about 15 min, 4.6 g)
+- Dark Brown: inner ring of six-sided pieces and stars (about 18 min, 5.6 g)
+- Dark Chocolate: outer ring of six-sided pieces (about 15 min, 4.6 g)
 - Latte Brown: middle (about 2 min, 0.8 g)
 - Caramel: kites (about 1 min, 0.4 g)
 
@@ -180,16 +180,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Ice Blue `#A3D8E1` | buy, PLA Matte |
 | the kites (10) | Sky Blue `#56B7E6` | buy, PLA Matte |
-| the inner six-sided ring (10) | Marine Blue `#0078BF` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Marine Blue `#0078BF` | buy, PLA Matte |
 | the stars (10) | Dark Blue `#042F56` | buy, PLA Matte |
-| the outer six-sided ring (10) | Dark Blue `#042F56` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Dark Blue `#042F56` | buy, PLA Matte |
 | the frame (the straps) | Ivory White `#FFFFFF` | buy, PLA Matte |
 
 **Plates:** 5, about 86 min and 27 g in all, plus 4 start-ups not measured.
 
 - Ivory White: frame (about 50 min, 15.6 g)
-- Dark Blue: stars and outer six-sided ring (about 18 min, 5.6 g)
-- Marine Blue: inner six-sided ring (about 15 min, 4.6 g)
+- Dark Blue: stars and outer ring of six-sided pieces (about 18 min, 5.6 g)
+- Marine Blue: inner ring of six-sided pieces (about 15 min, 4.6 g)
 - Ice Blue: middle (about 2 min, 0.8 g)
 - Sky Blue: kites (about 1 min, 0.4 g)
 
@@ -214,15 +214,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Blue `#0047BB` | owned |
 | the kites (10) | Blue `#0047BB` | owned |
-| the inner six-sided ring (10) | Blue `#0047BB` | owned |
+| the inner ring of six-sided pieces (10) | Blue `#0047BB` | owned |
 | the stars (10) | Blue `#0047BB` | owned |
-| the outer six-sided ring (10) | Blue `#0047BB` | owned |
+| the outer ring of six-sided pieces (10) | Blue `#0047BB` | owned |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 2, about 86 min and 27 g in all, plus 1 start-up not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Blue: middle, kites, inner six-sided ring, stars and outer six-sided ring (about 36 min, 11.4 g)
+- Blue: middle, kites, inner ring of six-sided pieces, stars and outer ring of six-sided pieces (about 36 min, 11.4 g)
 
 **Scores:** 3.3 of 5. The best calm theme we can print today; it pleases the cool, clean crowd and leaves the warm ones cold.
 
@@ -245,15 +245,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Classic Gold Sparkle `#CEA629` | buy, PLA Sparkle |
 | the kites (10) | Marine Blue `#0078BF` | buy, PLA Matte |
-| the inner six-sided ring (10) | Dark Blue `#042F56` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Dark Blue `#042F56` | buy, PLA Matte |
 | the stars (10) | Classic Gold Sparkle `#CEA629` | buy, PLA Sparkle |
-| the outer six-sided ring (10) | Dark Blue `#042F56` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Dark Blue `#042F56` | buy, PLA Matte |
 | the frame (the straps) | Onyx Black Sparkle `#2D2B28` | buy, PLA Sparkle |
 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Onyx Black Sparkle: frame (about 50 min, 15.6 g)
-- Dark Blue: inner six-sided ring and outer six-sided ring (about 29 min, 9.1 g)
+- Dark Blue: inner ring of six-sided pieces and outer ring of six-sided pieces (about 29 min, 9.1 g)
 - Classic Gold Sparkle: middle and stars (about 6 min, 1.8 g)
 - Marine Blue: kites (about 1 min, 0.4 g)
 
@@ -278,16 +278,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Gold `#E4BD68` | buy, PLA Basic |
 | the kites (10) | Terracotta `#B15533` | buy, PLA Matte |
-| the inner six-sided ring (10) | Terracotta `#B15533` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Terracotta `#B15533` | buy, PLA Matte |
 | the stars (10) | Gold `#E4BD68` | buy, PLA Basic |
-| the outer six-sided ring (10) | Desert Tan `#E8DBB7` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Desert Tan `#E8DBB7` | buy, PLA Matte |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Terracotta: kites and inner six-sided ring (about 16 min, 5.0 g)
-- Desert Tan: outer six-sided ring (about 15 min, 4.6 g)
+- Terracotta: kites and inner ring of six-sided pieces (about 16 min, 5.0 g)
+- Desert Tan: outer ring of six-sided pieces (about 15 min, 4.6 g)
 - Gold: middle and stars (about 6 min, 1.8 g)
 
 **Scores:** 3.3 of 5. A warm, storied theme the specialty and gift crowds like; four plates and three colors to buy.
@@ -311,15 +311,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Gold `#F4A925` | buy, PLA Silk+ |
 | the kites (10) | Champagne `#F3CFB2` | buy, PLA Silk+ |
-| the inner six-sided ring (10) | Rose Gold `#BA9594` | buy, PLA Silk+ |
+| the inner ring of six-sided pieces (10) | Rose Gold `#BA9594` | buy, PLA Silk+ |
 | the stars (10) | Champagne `#F3CFB2` | buy, PLA Silk+ |
-| the outer six-sided ring (10) | Rose Gold `#BA9594` | buy, PLA Silk+ |
+| the outer ring of six-sided pieces (10) | Rose Gold `#BA9594` | buy, PLA Silk+ |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Rose Gold: inner six-sided ring and outer six-sided ring (about 29 min, 9.1 g)
+- Rose Gold: inner ring of six-sided pieces and outer ring of six-sided pieces (about 29 min, 9.1 g)
 - Champagne: kites and stars (about 5 min, 1.4 g)
 - Gold: middle (about 2 min, 0.8 g)
 
@@ -344,16 +344,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Maroon Red `#9D2235` | buy, PLA Basic |
 | the kites (10) | Turquoise `#00B1B7` | buy, PLA Basic |
-| the inner six-sided ring (10) | Cobalt Blue `#0056B8` | buy, PLA Basic |
+| the inner ring of six-sided pieces (10) | Cobalt Blue `#0056B8` | buy, PLA Basic |
 | the stars (10) | Maroon Red `#9D2235` | buy, PLA Basic |
-| the outer six-sided ring (10) | Turquoise `#00B1B7` | buy, PLA Basic |
+| the outer ring of six-sided pieces (10) | Turquoise `#00B1B7` | buy, PLA Basic |
 | the frame (the straps) | Jade White `#FFFFFF` | buy, PLA Basic |
 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Jade White: frame (about 50 min, 15.6 g)
-- Turquoise: kites and outer six-sided ring (about 16 min, 5.0 g)
-- Cobalt Blue: inner six-sided ring (about 15 min, 4.6 g)
+- Turquoise: kites and outer ring of six-sided pieces (about 16 min, 5.0 g)
+- Cobalt Blue: inner ring of six-sided pieces (about 15 min, 4.6 g)
 - Maroon Red: middle and stars (about 6 min, 1.8 g)
 
 **Scores:** 3.2 of 5. The most striking theme and the gift pick; it is the most to buy and print, and white shows coffee.
@@ -377,9 +377,9 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Caramel `#AE835B` | buy, PLA Matte |
 | the kites (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
-| the inner six-sided ring (10) | Bone White `#CBC6B8` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Bone White `#CBC6B8` | buy, PLA Matte |
 | the stars (10) | Latte Brown `#D3B7A7` | buy, PLA Matte |
-| the outer six-sided ring (10) | Bone White `#CBC6B8` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Bone White `#CBC6B8` | buy, PLA Matte |
 | the frame (the straps) | Ivory White `#FFFFFF` | buy, PLA Matte |
 
 **Heads-up:** hex and kite are close (Bone White / Latte Brown, delta E 10), and may blur together; hex and star are close (Bone White / Latte Brown, delta E 10), and may blur together; outer and star are close (Bone White / Latte Brown, delta E 10), and may blur together.
@@ -387,7 +387,7 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Ivory White: frame (about 50 min, 15.6 g)
-- Bone White: inner six-sided ring and outer six-sided ring (about 29 min, 9.1 g)
+- Bone White: inner ring of six-sided pieces and outer ring of six-sided pieces (about 29 min, 9.1 g)
 - Latte Brown: kites and stars (about 5 min, 1.4 g)
 - Caramel: middle (about 2 min, 0.8 g)
 
@@ -412,9 +412,9 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
 | the kites (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
-| the inner six-sided ring (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
+| the inner ring of six-sided pieces (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
 | the stars (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
-| the outer six-sided ring (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
+| the outer ring of six-sided pieces (10) | Gilded Rose `#FF9425` `#C16784` | buy, PLA Silk |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Heads-up:** Gilded Rose is a multi-color spool (#FF9425 to #C16784); where along the spool its color shifts cannot be predicted for a given piece, so the pieces will not come out as drawn.
@@ -422,7 +422,7 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 **Plates:** 2, about 86 min and 27 g in all, plus 1 start-up not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Gilded Rose: middle, kites, inner six-sided ring, stars and outer six-sided ring (about 36 min, 11.4 g)
+- Gilded Rose: middle, kites, inner ring of six-sided pieces, stars and outer ring of six-sided pieces (about 36 min, 11.4 g)
 
 **Scores:** 3.0 of 5. Cheap to print and one of a kind each time; the colors land by luck, so the picture is a hope, not a promise.
 
@@ -445,16 +445,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Dark Blue `#042F56` | buy, PLA Matte |
 | the kites (10) | Dark Blue `#042F56` | buy, PLA Matte |
-| the inner six-sided ring (10) | Marine Blue `#0078BF` | buy, PLA Matte |
+| the inner ring of six-sided pieces (10) | Marine Blue `#0078BF` | buy, PLA Matte |
 | the stars (10) | Sky Blue `#56B7E6` | buy, PLA Matte |
-| the outer six-sided ring (10) | Ice Blue `#A3D8E1` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Ice Blue `#A3D8E1` | buy, PLA Matte |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 5, about 86 min and 27 g in all, plus 4 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Marine Blue: inner six-sided ring (about 15 min, 4.6 g)
-- Ice Blue: outer six-sided ring (about 15 min, 4.6 g)
+- Marine Blue: inner ring of six-sided pieces (about 15 min, 4.6 g)
+- Ice Blue: outer ring of six-sided pieces (about 15 min, 4.6 g)
 - Dark Blue: middle and kites (about 4 min, 1.2 g)
 - Sky Blue: stars (about 3 min, 1.0 g)
 
@@ -479,15 +479,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Hot Pink `#F5547C` | owned |
 | the kites (10) | Hot Pink `#F5547C` | owned |
-| the inner six-sided ring (10) | Bambu Green `#00AE42` | owned |
+| the inner ring of six-sided pieces (10) | Bambu Green `#00AE42` | owned |
 | the stars (10) | Hot Pink `#F5547C` | owned |
-| the outer six-sided ring (10) | Bambu Green `#00AE42` | owned |
+| the outer ring of six-sided pieces (10) | Bambu Green `#00AE42` | owned |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 3, about 86 min and 27 g in all, plus 2 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Bambu Green: inner six-sided ring and outer six-sided ring (about 29 min, 9.1 g)
+- Bambu Green: inner ring of six-sided pieces and outer ring of six-sided pieces (about 29 min, 9.1 g)
 - Hot Pink: middle, kites and stars (about 7 min, 2.2 g)
 
 **Scores:** 2.5 of 5. The best of the owned-color themes for a sweet, playful café; too loud for anyone after a calm coaster.
@@ -511,16 +511,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Sakura Pink `#E8AFCF` | buy, PLA Matte |
 | the kites (10) | Lilac Purple `#AE96D4` | buy, PLA Matte |
-| the inner six-sided ring (10) | Hot Pink `#F5547C` | owned |
+| the inner ring of six-sided pieces (10) | Hot Pink `#F5547C` | owned |
 | the stars (10) | Plum `#950051` | buy, PLA Matte |
-| the outer six-sided ring (10) | Plum `#950051` | buy, PLA Matte |
+| the outer ring of six-sided pieces (10) | Plum `#950051` | buy, PLA Matte |
 | the frame (the straps) | Ivory White `#FFFFFF` | buy, PLA Matte |
 
 **Plates:** 5, about 86 min and 27 g in all, plus 4 start-ups not measured.
 
 - Ivory White: frame (about 50 min, 15.6 g)
-- Plum: stars and outer six-sided ring (about 18 min, 5.6 g)
-- Hot Pink: inner six-sided ring (about 15 min, 4.6 g)
+- Plum: stars and outer ring of six-sided pieces (about 18 min, 5.6 g)
+- Hot Pink: inner ring of six-sided pieces (about 15 min, 4.6 g)
 - Sakura Pink: middle (about 2 min, 0.8 g)
 - Lilac Purple: kites (about 1 min, 0.4 g)
 
@@ -545,16 +545,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Bambu Green `#00AE42` | owned |
 | the kites (10) | Bambu Green `#00AE42` | owned |
-| the inner six-sided ring (10) | Bambu Green `#00AE42` | owned |
+| the inner ring of six-sided pieces (10) | Bambu Green `#00AE42` | owned |
 | the stars (10) | Bambu Green `#00AE42` | owned |
-| the outer six-sided ring (10) | Bambu Green `#00AE42` | owned |
+| the outer ring of six-sided pieces (10) | Bambu Green `#00AE42` | owned |
 | the frame (the straps) | Bambu Green `#00AE42` | owned |
 
 **Heads-up:** every piece is the frame's color (Bambu Green), so they melt into the straps and only the seams show the pattern there.
 
 **Plates:** 1, about 86 min and 27 g in all.
 
-- Bambu Green: middle, kites, inner six-sided ring, stars, outer six-sided ring and frame (about 86 min, 27.0 g)
+- Bambu Green: middle, kites, inner ring of six-sided pieces, stars, outer ring of six-sided pieces and frame (about 86 min, 27.0 g)
 
 **Scores:** 2.2 of 5. The cheapest to make and the honest baseline; one color hides the pattern that is the whole point.
 
@@ -577,15 +577,15 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Hot Pink `#F5547C` | owned |
 | the kites (10) | Bambu Green `#00AE42` | owned |
-| the inner six-sided ring (10) | Hot Pink `#F5547C` | owned |
+| the inner ring of six-sided pieces (10) | Hot Pink `#F5547C` | owned |
 | the stars (10) | Bambu Green `#00AE42` | owned |
-| the outer six-sided ring (10) | Hot Pink `#F5547C` | owned |
+| the outer ring of six-sided pieces (10) | Hot Pink `#F5547C` | owned |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 3, about 86 min and 27 g in all, plus 2 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Hot Pink: middle, inner six-sided ring and outer six-sided ring (about 32 min, 9.9 g)
+- Hot Pink: middle, inner ring of six-sided pieces and outer ring of six-sided pieces (about 32 min, 9.9 g)
 - Bambu Green: kites and stars (about 5 min, 1.4 g)
 
 **Scores:** 1.7 of 5. The alternate helper works, but the small green rings vanish and it reads as a pink star.
@@ -609,16 +609,16 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 |---|---|---|
 | the middle (one 20-sided piece) | Blue `#0047BB` | owned |
 | the kites (10) | Hot Pink `#F5547C` | owned |
-| the inner six-sided ring (10) | Bambu Green `#00AE42` | owned |
+| the inner ring of six-sided pieces (10) | Bambu Green `#00AE42` | owned |
 | the stars (10) | Blue `#0047BB` | owned |
-| the outer six-sided ring (10) | Hot Pink `#F5547C` | owned |
+| the outer ring of six-sided pieces (10) | Hot Pink `#F5547C` | owned |
 | the frame (the straps) | Black `#000000` | owned |
 
 **Plates:** 4, about 86 min and 27 g in all, plus 3 start-ups not measured.
 
 - Black: frame (about 50 min, 15.6 g)
-- Hot Pink: kites and outer six-sided ring (about 16 min, 5.0 g)
-- Bambu Green: inner six-sided ring (about 15 min, 4.6 g)
+- Hot Pink: kites and outer ring of six-sided pieces (about 16 min, 5.0 g)
+- Bambu Green: inner ring of six-sided pieces (about 15 min, 4.6 g)
 - Blue: middle and stars (about 6 min, 1.8 g)
 
 **Scores:** 1.5 of 5. Useful as a test of what the trays can do, not as a theme anyone would pick.
