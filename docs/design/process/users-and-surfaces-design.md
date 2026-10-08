@@ -399,7 +399,7 @@ It names who uses what. How each part works is in its own doc:
 - **The store:** [store design](../storefront/shopify-storefront-design.md), and coffee-house-storefront's own design, which hosts the public Lab.
 - **Piece colors and plates by color:** [piece colors design](../coaster/infill-color-ux-design.md).
   Matching design colors to loaded spools at print time, and the hub's read-only printer service,
-  are in their own design, open for review as pull request #626 on 2026-10-08.
+  are in the [print-time color map design](../coaster/print-time-color-map-design.md).
 - **The print loop:** the skills linked in [§7.4](#74-the-claude-session), and the plate pages in
   [docs/design/plates](../plates/).
 - **Where the Coaster Lab lives and why:** decided 2026-09-17, recorded in the order design's

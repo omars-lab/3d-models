@@ -41,7 +41,14 @@ The [sampler sheets design](../coaster/sampler-sheets-design.md#3-the-sheets), s
 | C HIGH | 1.8 mm, above the straps | no: bikar refuses fills above the straps |
 | D PIECE | a 1.8 mm loose piece in a 1.2 mm pocket | yes: `loose … height 1.8` (bikar #313) |
 
-The samples print in the coaster's colors (gold straps, ruby and slab fills).
+**Colors, decided 2026-10-08 (Omar, in chat): one color per plate, fills as loose pieces.** The card
+prints in one color with a pocket per sample, and the fills print on a second plate in a second
+color and are pressed in. This keeps plates one color (call 16 of the
+[2026-10-06 calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md#16-how-the-lab-prints-a-colored-coaster)).
+What it gives up: with every fill a loose piece, row C (a raised fill fused to the card) and row D
+(a tall loose piece) are no longer two different things, so this sheet answers the loose-piece
+look but not C against D. The rows below are the plan as first written; the recipe is redone
+to this pick before the page moves to `proposed`.
 
 ## Why print it
 
@@ -65,7 +72,9 @@ the card.
 
 ## What it waits on
 
-- Color parts per sample in the sheet plate. The card (piece Sheet5Card, bikar #294) and the
+- The recipe redone to the 2026-10-08 color pick: a one-color card with pockets, and a plate of
+  fills in a second color. That replaces the color parts per sample that the first plan needed.
+  What was built for that plan: the card (piece Sheet5Card, bikar #294) and the
   one-color sheet plate (`bambu slice sheet`) are built. The window cut shipped 2026-10-01
   (bikar #293) and works on this square slab: rows A and B cut at the centre star pass the mesh
   check as one body, and `--format parts` splits a window into a body per color.
