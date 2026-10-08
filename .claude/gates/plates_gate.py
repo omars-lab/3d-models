@@ -96,6 +96,15 @@ The design is `docs/design/printing/print-review-design.md`; these are its §6 r
       load-bearing cases: a row with an event the monitor never writes, which means the table
       was typed by hand or by a different tool, and a row master has that was edited.
 
+  P11 **The color is named at the send** (call 18, Omar 2026-10-08: "Always at the send";
+      `docs/design/coaster/print-time-color-map-design.md` §8). A one-color plate's recipe
+      carries no `profile.color`: `bambu print send --color` names it, and the send refuses a
+      one-color plate that names none. Allowed: a list of two or more colors (a multi-color
+      plate, phones-01, matched tray by tray), and a frozen production recipe that still fixes
+      one (phones-02, D-095; it does not iterate, so it keeps its color until open call 3 says
+      otherwise). The load-bearing case: a one-color recipe that fixes its color, which would
+      make the recipe and the send two places that name it.
+
 Not a finding: a ticked Approve or Hold box that the table does not record yet. It prints a
 notice, because the fix is a read-back by whoever runs the skill, and a whole-tree gate that
 failed on it would block every other session's commit until then; the send refuses it. Nor is
@@ -1054,12 +1063,36 @@ def check_iterations(path: Path, data: dict, body: str, store: dict[str, list[di
     return out
 
 
+def color_findings(name: str, recipe: object, maturity: object) -> list[str]:
+    """P11 (call 18): a one-color recipe fixes no `profile.color`; the send names it. PURE."""
+    profile = recipe.get("profile") if isinstance(recipe, dict) else None
+    color = profile.get("color") if isinstance(profile, dict) else None
+    if color is None or (isinstance(color, list) and len(color) >= 2) or maturity == "production":
+        return []
+    return [f"{name}: P11 the recipe fixes profile.color {color!r}; a one-color plate's color is "
+            "named at the send (`bambu print send --color`), never in the recipe (call 18) — "
+            "delete the line, then record the change with "
+            f"`python3 {APPROVE_TOOL} {name} --iterate`"]
+
+
+def check_color(path: Path, data: dict) -> list[str]:
+    """P11 on the page's recipe as it is on disk. A recipe that does not parse is another rule's."""
+    recipe = path.with_suffix(".yaml")
+    if not recipe.exists():
+        return []
+    try:
+        doc = yaml.safe_load(recipe.read_text(encoding="utf-8"))
+    except yaml.YAMLError:
+        return []
+    return color_findings(path.stem, doc, data.get("maturity"))
+
+
 def page_findings(path: Path, data: dict, body: str, ctx: dict) -> tuple[list[str], list[str]]:
-    """(findings, notices) for one page: P1-P4 and P6, then P8 once the shape holds."""
+    """(findings, notices) for one page: P1-P4 and P6, then P8, P9 and P11 once the shape holds."""
     f = check_page(path, data, body, ctx["records"], ctx["bet_ids"])
     if f:
         return f, []
-    f = check_iterations(path, data, body, ctx["store"])
+    f = check_iterations(path, data, body, ctx["store"]) + check_color(path, data)
     m, n = check_maturity(path, data, body, ctx["history"], ctx["runs"], ctx["rubric"])
     return f + m, n
 
@@ -1710,6 +1743,9 @@ CASES = [
     ("P10 a log that names another plate",
      _print_log("minis-09", *_LOGGED, log_plate="minis-08"),
      "P10 its frontmatter's plate is not 'minis-09'"),
+    ("P11 a one-color recipe that fixes its color (the load-bearing case: call 18)",
+     _edit_recipe("bed: x2d\n", 'bed: x2d\nprofile:\n  color: "#FFFFFF"\n'),
+     "minis-09: P11 the recipe fixes profile.color '#FFFFFF'"),
 ]
 
 
@@ -1736,6 +1772,21 @@ def self_test() -> int:
                 report(not found, label, f"clean fixture reported {found}")
             else:
                 report(any(want in f for f in found), label, f"wanted {want!r}, got {found or 'nothing'}")
+
+        # P11 on its own: what a recipe may and may not say about its color (call 18).
+        one = {"profile": {"color": "#FFFFFF"}}
+        for label, recipe, maturity, want in [
+            ("P11 PASS: a one-color recipe with no color", {"profile": {"filament": "f"}}, "experiment", False),
+            ("P11 PASS: a two-color list (phones-01)", {"profile": {"color": ["#F5547C", "#000000"]}},
+             "experiment", False),
+            ("P11 PASS: a frozen production recipe keeps its one color (phones-02, D-095)", one,
+             "production", False),
+            ("P11 FAIL: an experiment recipe that fixes one color", one, "experiment", True),
+            ("P11 FAIL: a list of one color is one color", {"profile": {"color": ["#FFFFFF"]}},
+             "repeatable", True),
+        ]:
+            got = color_findings("x", recipe, maturity)
+            report(bool(got) == want, label, f"got {got}")
 
         # A ticked box not read back is a notice, never a finding.
         case = tmp / "tick-is-a-notice"

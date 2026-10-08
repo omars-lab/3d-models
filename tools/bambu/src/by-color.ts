@@ -138,7 +138,7 @@ export function pieceGroups(bkr: PiecesBkr, bands: BandsOrbit[]): PieceGroup[] {
 /** A color as a plate is keyed by: a catalog spool (line and code) for an order, a hex for by-color. */
 export interface PlateColor {
   key: string; // what makes two plates one: `<line>|<code>`, or the lowercase hex
-  hex: string; // #RRGGBB, the recipe's profile.color
+  hex: string; // #RRGGBB, the design color: in the recipe's title, never its profile (named at the send, call 18)
   line: string; // the filament line, which picks the filament preset
   code: string | null;
   name: string | null;
@@ -224,13 +224,19 @@ export function filamentPreset(line: string): string {
   return `Bambu ${line} @BBL X2D 0.4 nozzle`;
 }
 
+/** The header line every color plate's recipe carries in place of a `profile.color`. */
+export const COLOR_AT_SEND = "The color is named at the send (`bambu print send --color`), not here (call 18).";
+
 export interface RecipeOpts {
   name: string;
   about: string[]; // header lines under the title, each without the leading "# "
   pieceCount: (it: PlateItem) => number | null; // how many pieces one item renders, for the header
 }
 
-/** The recipe YAML for one color plate, in the format compose.ts reads (sheets-04g's shape). */
+/** The recipe YAML for one color plate, in the format compose.ts reads (sheets-04g's shape). The
+ *  design color is in the title only: the profile carries no `color`, because the color a plate
+ *  prints in is named at the send (`print send --color`) and in the yes, never fixed in a recipe
+ *  (print-time-color-map-design §8, call 18). */
 export function recipeText(plate: ColorPlate, opts: RecipeOpts): string {
   const c = plate.color;
   const what = [c.line, c.name, c.code ? `(${c.code})` : null, c.hex].filter(Boolean).join(" ");
@@ -245,12 +251,13 @@ export function recipeText(plate: ColorPlate, opts: RecipeOpts): string {
   });
   if (c.note) lines.push("#", `# ${c.code ?? c.hex}: ${c.note}`);
   lines.push(
+    "#",
+    `# ${COLOR_AT_SEND}`,
     "",
     "bed: x2d",
     "profile:",
     `  settings: ${JSON.stringify(PLATE_SETTINGS)}`,
     `  filament: ${JSON.stringify(filamentPreset(c.line))}`,
-    `  color:    ${JSON.stringify(c.hex.toUpperCase())}`,
     "",
     "items:",
   );

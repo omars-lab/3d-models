@@ -4,12 +4,13 @@
 # so each plate prints from one spool (piece colors phase 1). Slice it with `bambu slice compose`.
 #
 #   COASTER  the gBV coaster (1)
+#
+# The color is named at the send (`bambu print send --color`), not here (call 18).
 
 bed: x2d
 profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
-  color:    "#FFFFFF"
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr

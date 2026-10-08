@@ -61,29 +61,43 @@ swatch-13903:
   - {iteration: 1, recipe: 'ea516ce9bf0d', date: '2026-10-05'}
 theme-iznik-tile-10100:
   - {iteration: 1, recipe: '67b1e2cf6cf8', date: '2026-10-05'}
+  - {iteration: 2, recipe: '47dfbbd3a6ac', date: '2026-10-08'}
 theme-iznik-tile-10205:
   - {iteration: 1, recipe: '62b1e0571ae5', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'dcf2a4f82e4b', date: '2026-10-08'}
 theme-iznik-tile-10604:
   - {iteration: 1, recipe: '7ab1ac48c474', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'fcfffe73c3a3', date: '2026-10-08'}
 theme-iznik-tile-10605:
   - {iteration: 1, recipe: 'e7c0d561d4c0', date: '2026-10-05'}
+  - {iteration: 2, recipe: '454f416bb398', date: '2026-10-08'}
 theme-midnight-blue-10101:
   - {iteration: 1, recipe: '32fa650ee966', date: '2026-10-05'}
+  - {iteration: 2, recipe: '47dfbbd3a6ac', date: '2026-10-08'}
 theme-midnight-blue-13903:
   - {iteration: 1, recipe: 'c9b6c5a56df2', date: '2026-10-05'}
+  - {iteration: 2, recipe: '485b17331ab4', date: '2026-10-08'}
 theme-night-sky-11600:
   - {iteration: 1, recipe: '85e4af73bb62', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'ff16bf24b0a6', date: '2026-10-08'}
 theme-night-sky-11602:
   - {iteration: 1, recipe: 'fbb00fa49fec', date: '2026-10-05'}
+  - {iteration: 2, recipe: '17cfa302161c', date: '2026-10-08'}
 theme-night-sky-13101:
   - {iteration: 1, recipe: 'd31ef6767567', date: '2026-10-05'}
+  - {iteration: 2, recipe: '61a59d857cf9', date: '2026-10-08'}
 theme-night-sky-13402:
   - {iteration: 1, recipe: '2b6426cb1a0c', date: '2026-10-05'}
+  - {iteration: 2, recipe: '0f3590dcc128', date: '2026-10-08'}
 theme-terracotta-souk-10101:
   - {iteration: 1, recipe: '32fa650ee966', date: '2026-10-05'}
+  - {iteration: 2, recipe: '47dfbbd3a6ac', date: '2026-10-08'}
 theme-terracotta-souk-10401:
   - {iteration: 1, recipe: '4c0dd98920f0', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'dcf2a4f82e4b', date: '2026-10-08'}
 theme-terracotta-souk-11203:
   - {iteration: 1, recipe: 'fde9d8b742b2', date: '2026-10-05'}
+  - {iteration: 2, recipe: 'a0f8eb34685a', date: '2026-10-08'}
 theme-terracotta-souk-11401:
   - {iteration: 1, recipe: '4f29d09fa7cf', date: '2026-10-05'}
+  - {iteration: 2, recipe: '3acf6b4749ab', date: '2026-10-08'}

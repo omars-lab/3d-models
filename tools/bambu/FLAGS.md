@@ -219,7 +219,7 @@ upload a sliced .3mf (FTPS) + start it (MQTT) — needs a live approval on the p
 | `-O, --object <spec>` | printed object as bikar:<path>[=ENTRY] (repeatable) — pins R1 provenance in the record |
 | `--plate <n>` | plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode) |
 | `--ams-mapping <spec>` | [X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays) |
-| `--color <hex>` | the color a one-color plate prints in, "#RRGGBB": feeds it from the loaded tray of that color, in place of the color the slice carries (default: the slice's color) |
+| `--color <hex>` | the color a one-color plate prints in, "#RRGGBB": feeds it from the loaded tray of that color, in place of the color the slice carries. Required for a one-color plate (call 18: the color is named at the send, never in the recipe) unless --ams-mapping picks the tray |
 | `--md5 <hex>` | [X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty) |
 | `--no-bed-leveling` | skip bed leveling before this print (default: auto, the printer decides, as Studio sends it) |
 | `--no-flow-cali` | skip flow calibration before this print (default: auto) |

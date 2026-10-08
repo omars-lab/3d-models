@@ -1,7 +1,7 @@
 ---
 plate: theme-midnight-blue-13903
 recipe: theme-midnight-blue-13903.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -33,10 +33,13 @@ Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10. On the printer now, so i
   (112.5 mm).
 - Black straps and blue glass, like a night window; quiet, two plates.
 
+**The color is picked at the send:** `bambu print send … --color "#0047BB"`.
+The recipe names no color (call 18), so say the color with the yes.
+
 **Before you say yes:**
 
 - **The pieces are cut at `gap: 0`, as sheets-04g printed them, and that fit was off:** the kites were too tight and the middle too loose. [sheets-04g-fit](sheets-04g-fit.md) tries kites from 0.05 to 0.25 mm and the middle from 0 to 0.15 mm, and has not printed (CAL-LSE-01). Printing this plate first repeats the old fit; printing the fit plate first lets these plates take its gaps, as a new iteration of each recipe.
-- **A 2-color spool (#0047BB, #BB22A3).** The color catalog files Neon City as multi: its colors run side by side in the strand, so a piece can show either color, or both. The theme picture draws it as its first color only, and the plate is sliced as that color, the one the AMS reports for the tray.
+- **A 2-color spool (#0047BB, #BB22A3).** The color catalog files Neon City as multi: its colors run side by side in the strand, so a piece can show either color, or both. The theme picture draws it as its first color only, and that is the color the send names, the one the AMS reports for the tray.
 
 ## Why print it
 

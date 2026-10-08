@@ -1,7 +1,7 @@
 ---
 plate: theme-night-sky-13101
 recipe: theme-night-sky-13101.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -32,6 +32,9 @@ frame ×1. Not on the printer: it prints once the spool is bought and loaded (se
 - **frame ×1**, in PLA Sparkle Onyx Black Sparkle (13101), the gBV coaster at sheets-04g's size
   (112.5 mm).
 - Sparkling gold stars in deep blue, in a black frame with a fleck of glitter of its own.
+
+**The color is picked at the send:** `bambu print send … --color "#2D2B28"`.
+The recipe names no color (call 18), so say the color with the yes.
 
 **Before you say yes:**
 

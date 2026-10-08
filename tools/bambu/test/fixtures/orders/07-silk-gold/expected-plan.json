@@ -12,7 +12,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
-      "recipe_hash": "53d684ba7eb1",
+      "recipe_hash": "9f4e4e1e0072",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
@@ -95,7 +95,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Silk @BBL X2D 0.4 nozzle",
-      "recipe_hash": "da72cb4ec711",
+      "recipe_hash": "3d7858628ec0",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
