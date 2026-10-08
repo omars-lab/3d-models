@@ -387,14 +387,14 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
 9. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put
    an id on every prototype, at Omar's ask on the 2026-10-06 calls page ("every proptoty should
    have an id"). Using them on the 2026-10-07 plates (3d-models #600) showed three limits, all in
-   bikar's `coaster-mark.ts` and `coaster-loose.ts` (the third, dots at the middle, is done):
-   - **Turns.** A found mark tries turns in 15° steps (`MARK_TURNS_DEG`), which match the straps
-     of four-, six- and twelve-fold patterns. A five- or ten-fold strap runs at 18° or 36° steps,
-     so it gets the nearest 15° turn and needs more room than it should. Add those turns, or
-     take the turn from the strap under the mark.
+   bikar's `coaster-mark.ts` and `coaster-loose.ts`. Dots at the middle is done, and turns at 18°
+   steps were measured and gained nothing, so they were not added
+   ([the write-up](../../issues/mark-turns-18-no-gain.md)). One is left:
    - **One digit.** split-01 takes ids 1 to 9. split-02 takes 1 to 9 except 4, at 2 mm, and only
      at its 112.5 mm size. A tenth prototype of either coaster has no id that fits. Two digits
-     need a smaller cap, which the 0.4 mm hole floor refuses, or a wider spot to put them.
+     need a smaller cap, which the 0.4 mm hole floor refuses, or a wider spot to put them. Of
+     the two-digit ids, split-01 has room for 11, 12, 14, 15, 17, 71 and 77, though its `id`
+     range stops at 9; split-02 has room for none of 10 to 19.
 
 ## Handed to the video loop
 
