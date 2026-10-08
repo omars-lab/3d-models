@@ -6,9 +6,10 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 90ab01
 
 # Print-time color map: matching a Lab design's colors to the loaded trays
 
-> **Status: draft, written from Omar's picks of 2026-10-08.** Build steps 1 (call 18, §8) and 2
-> (`bambu filament map`, §3) are built, and so is step 3's `plate_approve.py --color` (§5); the
-> rest is not. The parts
+> **Status: draft, written from Omar's picks of 2026-10-08.** Build steps 1 (call 18, §8), 2
+> (`bambu filament map`, §3) and 3 (send-plate's `color_map.py` with color-map.json, the
+> questions and the page block, §3 and §5, and `plate_approve.py --color`, §5) are built. Steps 4
+> and 5, the hub's tray route and the Lab's tray marks (§6, §7), are not. The parts
 > already built that it leans on are named in §2. Its open calls are in §12, and they are only
 > the ones Omar has not answered.
 
@@ -75,7 +76,8 @@ are stand-ins.*
    Omar with AskUserQuestion: load it, use the nearest, or stop (§5).
 6. **A page per plate, and Omar's yes.** Each plate gets its review page, and the page names the
    color it will print in, which is the mapped tray's color. His yes covers that plate in that
-   color.
+   color. The page is made as any plate's is, slice first, since it carries the slice's minutes
+   and grams; the map writes its color block onto the page once the page exists (§3).
 7. **The send, color named.** send-plate runs `print send … --color "#RRGGBB"` with the mapped
    tray's color. The send reads the trays again and refuses if that color is no longer loaded
    (`3d-models:tools/bambu/src/commands/print.ts:L423 "✗ filament:"`).
@@ -98,24 +100,41 @@ a plate in pink and the send could refuse it. So the map is a new verb on the sa
 
 - **New in the `bambu` command:** `bambu filament map --colors <by-color JSON> --json`. It reads
   the trays the way `bambu filament` does (it prints `{ams, vt_tray, vir_slot}`,
-  `3d-models:tools/bambu/src/commands/filament.ts:L86 "vir_slot: r.vir_slot"`). It runs
+  `3d-models:tools/bambu/src/commands/filament.ts:L87 "vir_slot: r.vir_slot"`). It runs
   `reconcile` with each design color as a one-color plate and prints one row per design color:
   status, tray, tray hex, distance, and the nearest tray when there is no match. It is read-only,
   like `bambu filament`. Built (step 2): the rows come from one `reconcile` call over every design
-  color (`3d-models:tools/bambu/src/filament-map.ts:L108 "export function mapColors("`), and the
+  color (`3d-models:tools/bambu/src/filament-map.ts:L130 "export function mapColors("`), and the
   tests include §10's PASS and FAIL cases (`tools/bambu/src/filament-map.test.ts`). The by-color
   rows carry a hex but no material, so the map never gives material-mismatch; the send still
-  checks the material against the slice's own.
+  checks the material against the slice's own. Built with step 3: `--trays <file>` reads the
+  trays from a saved `bambu filament --json` instead of the printer, so the map can be made and
+  tested with no printer reached
+  (`3d-models:tools/bambu/src/commands/filament.ts:L107 "read the trays from a saved"`, parsed by
+  `3d-models:tools/bambu/src/filament-map.ts:L102 "export function traysFromFilamentJson("`).
+  The JSON then says where its trays came from (`trays_from`) and when they were read
+  (`read_at`).
 - **New in the send-plate skill:** a script, color_map.py, in the skill's own scripts folder. It
   runs `plates by-color --json` on the design, calls `bambu filament map`, and turns each row that
-  is not `matched` into one question. It writes the answers to a color-map.json beside the
-  recipes in `build/`, writes or updates each plate's page with its color, and lists each send's
-  `--color`. SKILL.md gets a "From a Lab design" section and a "Scripts, when to use each" table
-  with the exact command.
+  needs a question (missing, ambiguous or material-mismatch; a low-remain row is mapped and
+  noted, as §4's table says) into one question. It writes the answers to a color-map.json beside
+  the recipes in `build/`, writes or updates each plate's page with its color, and lists each
+  send's `--color`. SKILL.md gets a "From a Lab design" section and a "Scripts, when to use each"
+  table with the exact command. Built (step 3): the script works in steps, since a script cannot
+  ask a question and the skill asks them one at a time: `plan`, `answer`, `pages` and `check`
+  (`3d-models:.claude/skills/send-plate/scripts/color_map.py:L99 "def question("`
+  builds each question from its row,
+  `3d-models:.claude/skills/send-plate/scripts/color_map.py:L220 "def answer("`
+  records an answer, and the skill's
+  [From a Lab design](../../../.claude/skills/send-plate/SKILL.md#from-a-lab-design) section
+  runs them). It writes the page only where a plate page already exists and its recipe is the one
+  mapped (same recipe hash); a plate with no page is listed, not given one, because a page needs
+  a slice's minutes and grams first (the plates gate's P1). `--self-test` runs §10's PASS and
+  FAIL cases on made-up trays, and `make validate-prints` runs it.
 
 **Why send-plate, not a new skill or print-model.** send-plate already owns the filament check
 (step 4.2, `bambu filament-sync`) and already passes `--color` for a recipe with no color
-(`3d-models:.claude/skills/send-plate/SKILL.md:L99 "picked at the send"`). Putting the map in the
+(`3d-models:.claude/skills/send-plate/SKILL.md:L143 "picked at the send"`). Putting the map in the
 same skill means one skill reads the trays at the plan and again at the send. A new skill would
 split that reading across two skills. print-model plans a print up to the owner's gate and never
 sends; it does not own the trays. This choice is easy to undo, since the script can move later.
@@ -182,8 +201,19 @@ a tag. The options, with what each leads to:
 | Use the nearest | The plate is mapped to the nearest tray's color | The plate page says "designed gold, prints in the nearest tray's yellow"; the yes covers the tray color |
 | Stop | Nothing more is mapped; no page is written | The recipes stay in `build/`; nothing was sent |
 
+As built, "load it" is two options, since §4 says it can mean now or before that plate's send:
+"load it now" reads the trays again and maps every color again, and "load it before this plate's
+send" leaves that plate with no color, to be mapped again before its send. "Use the nearest" is
+offered only when a tray is loaded, and when that tray already went to another design color the
+option says both plates would come out the same color. An ambiguous row asks which of the two
+close trays, plus stop. An answer given before a re-read is kept only for a row offered exactly
+what it was offered before; any other row is asked again.
+
 The answers go in color-map.json: one row per design color with the design hex, the tray, the tray
-hex, the status, the answer, and the time the trays were read. The plate page shows the same row.
+hex, the status, the answer, and the time the trays were read. The plate page shows the same row,
+in a block the script owns between `<!-- color-map:start -->` and `<!-- color-map:end -->`, put
+before the page's "Your call" section and rewritten in place on the next run
+(`3d-models:.claude/skills/send-plate/scripts/color_map.py:L317 "def block_for("`).
 Omar's yes on that page covers that plate in that tray color. The skill records the color with the
 yes: `plate_approve.py --approved --color "#RRGGBB"` puts the color into the yes row's "Covers"
 cell (`iteration 2 @ 1a2b3c4d5e in #0047BB`). Without it, a yes on a recipe with no color would not
@@ -328,8 +358,12 @@ Highest value for the work first. Each step is usable alone.
 **Validator:** every design color comes out as exactly one plate, sent in its mapped tray color.
 This is checked plate by plate: for each design color in the `plates by-color --json` output,
 color-map.json has one row, that plate's page names that row's tray hex, and the send's `--color`
-equals it. No two design colors share a tray hex unless Omar answered "use the nearest" for both.
-A count of plates against a count of colors does not discharge this.
+equals it. No two design colors share a tray hex unless every one of them but the color that
+holds the tray came there by Omar's "use the nearest". (Not "for both": the color that holds the
+tray matched it and was never asked, so "for both" would fail the very case §5 offers.) A count
+of plates against a count of colors does not discharge this. Built as `color_map.py check`
+(`3d-models:.claude/skills/send-plate/scripts/color_map.py:L255 "def check("`),
+with both cases below in its `--self-test`.
 
 PASS: a three-color gBV design with pink and black loaded and gold missing. The map gives pink →
 tray 1 and black → tray 3, and asks about gold. Omar answers "load it", the skill maps again, and

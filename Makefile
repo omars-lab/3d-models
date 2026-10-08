@@ -164,7 +164,7 @@ validate-timelapse:
 # queue in docs/design/plates/README.md is current (print-review-design.md §6). Each `--self-test`
 # builds a clean fixture, requires it clean, then breaks it once per rule. The grader's self-test
 # checks that a plate `plate_grade.py --derive` writes passes that gate (D-095).
-validate-prints: prints-manifest
+validate-prints: prints-manifest validate-color-map
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
@@ -1002,3 +1002,12 @@ validate-pattern-catalog:
 validate-side-views:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/draw-side-view/scripts/side_view.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/draw-side-view/scripts/side_view.py check
+
+# The send-plate skill's color map (print-time-color-map-design.md §10), run by validate-prints:
+# the PASS case (pink and black loaded, gold loaded on the ask) and the FAIL case (gold and tan,
+# one gold tray), through `bambu filament map --trays` on made-up trays, so it needs the CLI's
+# node_modules and never reaches the printer.
+.PHONY: validate-color-map
+validate-color-map:
+	@[ -d $(ROOT_DIR)/tools/bambu/node_modules ] || npm ci --silent --prefix $(ROOT_DIR)/tools/bambu
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/send-plate/scripts/color_map.py --self-test

@@ -5,8 +5,8 @@ import { join } from "node:path";
 import type { Command } from "commander";
 import { collectSlots } from "./frame.js";
 import { physicalTraysFromSlots, type PhysicalTray } from "./filament-sync.js";
-import { designColorsFromByColor, mapColors, renderColorMap, type MapRow } from "./filament-map.js";
-import type { PrinterStatus } from "./backends/mqtt.js";
+import { designColorsFromByColor, mapColors, renderColorMap, traysFromFilamentJson, type MapRow } from "./filament-map.js";
+import { MqttBackend, type PrinterStatus } from "./backends/mqtt.js";
 import { buildProgram } from "./program.js";
 
 // `bambu filament map` (print-time-color-map-design §3, §4, §10): each design color of a
@@ -187,5 +187,78 @@ describe("bambu filament map, the command", () => {
     expect(map.optsWithGlobals()).toMatchObject({ colors: bad, json: true });
     expect(process.exitCode).toBe(2);
     expect(errors.join("\n")).toMatch(/#RRGGBB/);
+  });
+});
+
+describe("bambu filament map --trays, a saved tray list in place of the printer", () => {
+  // The shape `bambu filament --json` prints: {ams, vt_tray, vir_slot}. Made-up trays.
+  const saved = {
+    ams: {
+      ams: [
+        {
+          id: "0",
+          tray: [
+            { id: "0", tray_type: "PLA", tray_color: "F5547CFF", remain: 80 },
+            { id: "1", state: 0 },
+            { id: "2", tray_type: "PLA", tray_color: "000000FF", remain: -1 },
+          ],
+        },
+      ],
+    },
+    vir_slot: [{ id: "254", tray_type: "", tray_color: "00000000" }],
+  };
+
+  afterEach(() => {
+    process.exitCode = undefined;
+    vi.restoreAllMocks();
+  });
+
+  it("reads the trays through the same frame parser as a live read", () => {
+    expect(traysFromFilamentJson(saved).map((x) => [x.index, x.hex, x.remain])).toEqual([
+      [0, PINK, 80],
+      [2, BLACK, -1],
+    ]);
+  });
+
+  it("refuses a file that is not `bambu filament --json`, rather than map against no trays", () => {
+    expect(() => traysFromFilamentJson([])).toThrow(/JSON object/);
+    expect(() => traysFromFilamentJson({ rows: [] })).toThrow(/no ams, vt_tray or vir_slot/);
+  });
+
+  it("maps from the file, says where the trays came from, and never reaches the printer", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-map-trays-"));
+    const colorsFile = join(dir, "by-color.json");
+    const traysFile = join(dir, "trays.json");
+    writeFileSync(colorsFile, JSON.stringify(byColor([[PINK, "Kite"], [GOLD, null]])));
+    writeFileSync(traysFile, JSON.stringify(saved));
+    const connect = vi.spyOn(MqttBackend.prototype, "connect").mockRejectedValue(new Error("reached the printer"));
+    const configured = vi.spyOn(MqttBackend.prototype, "configured");
+    const out: string[] = [];
+    vi.spyOn(console, "log").mockImplementation((...a: unknown[]) => void out.push(a.join(" ")));
+    await buildProgram().parseAsync(["filament", "map", "--colors", colorsFile, "--trays", traysFile, "--json"], { from: "user" });
+    expect(connect).not.toHaveBeenCalled();
+    expect(configured).not.toHaveBeenCalled();
+    expect(process.exitCode).toBeUndefined();
+    const map = JSON.parse(out.join("\n"));
+    expect(map.trays_from).toBe(traysFile);
+    expect(typeof map.read_at).toBe("string");
+    expect(map.rows.map((r: MapRow) => [r.design_hex, r.status, r.tray?.index ?? null])).toEqual([
+      [PINK, "matched", 0],
+      [GOLD, "missing", null],
+    ]);
+  });
+
+  it("a bad --trays file fails with exit 2, naming the file", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "filament-map-trays-"));
+    const colorsFile = join(dir, "by-color.json");
+    const traysFile = join(dir, "trays.json");
+    writeFileSync(colorsFile, JSON.stringify(byColor([[PINK, "Kite"]])));
+    writeFileSync(traysFile, JSON.stringify({ nothing: true }));
+    const errors: string[] = [];
+    vi.spyOn(console, "error").mockImplementation((...a: unknown[]) => void errors.push(a.join(" ")));
+    vi.spyOn(console, "log").mockImplementation(() => undefined);
+    await buildProgram().parseAsync(["filament", "map", "--colors", colorsFile, "--trays", traysFile], { from: "user" });
+    expect(process.exitCode).toBe(2);
+    expect(errors.join("\n")).toContain(`--trays ${traysFile}`);
   });
 });

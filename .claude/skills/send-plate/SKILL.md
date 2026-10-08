@@ -1,6 +1,6 @@
 ---
 name: send-plate
-description: Send one approved plate to the Bambu X2D end to end — check Omar's approval on the plate page, slice if needed, check the printer is idle, match the filament, look at the bed photo, send, and log the send on the page. Use for "send it", "print this plate", "send sheets-04b", "start the print", "reprint minis-03", and right after Omar approves a plate in chat. Not for deciding which plate to print (prioritize-prints), planning a new model's print (print-model), or a person walking a print at the machine (guide-print).
+description: Send one approved plate to the Bambu X2D end to end — check Omar's approval on the plate page, slice if needed, check the printer is idle, match the filament, look at the bed photo, send, and log the send on the page. Use for "send it", "print this plate", "send sheets-04b", "start the print", "reprint minis-03", right after Omar approves a plate in chat, and for "print this Lab design", where each design color is mapped to a loaded tray (and a missing one asked about) before any plate goes out. Not for deciding which plate to print (prioritize-prints), planning a new model's print (print-model), or a person walking a print at the machine (guide-print).
 ---
 
 # send-plate — one approved plate, from page to printer
@@ -27,6 +27,50 @@ experiment.
 
 Run every `bambu` call from the main checkout (the vault), with the node 22 PATH, so it reads the
 pages Omar ticks in Obsidian: `tools/bambu/bin/bambu …`.
+
+## From a Lab design
+
+A design from the Lab comes in colors, not plates. Each color becomes its own one-color plate
+(call 16), and each send names the color it prints in (call 18). Before any of them goes out, map
+the colors to the loaded trays, so a missing spool is a question now and not a plate printed in
+the wrong color later ([the design](../../../docs/design/coaster/print-time-color-map-design.md#3-who-owns-the-mapping-and-where-the-code-lives),
+Omar's call 19). The script never sends and never changes a printer setting; the only printer call
+it makes is the tray read, and with `--trays <file>` it makes none.
+
+1. **Map.** `python3 .claude/skills/send-plate/scripts/color_map.py plan <pieces.bkr> --name <prefix>`
+   (any other `bambu plates by-color` option goes through as well, and BIKAR_DIR is set as for
+   any by-color run). It writes one recipe per color and `color-map.json` beside them in `build/`.
+   A color that matched a tray, or matched one running low, needs no question; the low one is
+   noted on its page.
+2. **Ask, one color at a time.** For each `ASK` row, ask Omar with AskUserQuestion: the question
+   text, and the options the row lists (load it now, load it before that plate's send, use the
+   nearest tray, a pick between two close trays, or stop), each with what it means. Never pick
+   for him. Record each answer before asking the next:
+   `python3 .claude/skills/send-plate/scripts/color_map.py answer <color-map.json> <plate> <answer>`.
+   "Load it now" reads the trays again and maps every color again, since loading one spool can
+   unload another, so look at the new questions before going on. "Stop" ends it: nothing more is
+   mapped and no page is written.
+3. **Pages.** `python3 .claude/skills/send-plate/scripts/color_map.py pages <color-map.json>`
+   writes a color block on each plate page whose recipe is the one mapped: the designed color, the
+   tray it prints from and that tray's hex, why, and the `--color` its send takes. Then it checks
+   the map plate by plate (`check`, below) and lists each send's `--color`. A plate with no page
+   yet is listed, not made: a page needs a slice first (steps 1 and 3 below).
+4. **Each plate, one send.** From here each plate is an ordinary send. Its yes names the color
+   (`plate_approve.py … --approved --color "<the tray's hex>"`, step 2), and the dry run and the
+   send pass the same `--color` (step 4). The send reads the trays again; the map is a plan.
+
+### Scripts — when to use each
+
+| Script | What it does | When to use it | Command |
+|---|---|---|---|
+| `scripts/color_map.py plan` | Runs `bambu plates by-color` and `bambu filament map`, writes `color-map.json` beside the recipes, lists one question per color with no tray | A Lab design is to print, before any of its plates is approved or sent | `python3 .claude/skills/send-plate/scripts/color_map.py plan <pieces.bkr> --name <prefix> [--trays <file>]`, or `plan --by-color <by-color.json>` for a by-color run already made |
+| `scripts/color_map.py answer` | Records Omar's answer to one color's question; `load` reads the trays and maps every color again | After each AskUserQuestion answer, one at a time | `python3 .claude/skills/send-plate/scripts/color_map.py answer <color-map.json> <plate> <tray\|runner-up\|nearest\|load\|later\|stop>` |
+| `scripts/color_map.py pages` | Writes the color block on each mapped plate page, checks, and lists each send's `--color` | Every question is answered | `python3 .claude/skills/send-plate/scripts/color_map.py pages <color-map.json>` |
+| `scripts/color_map.py check` | The design's §10 check, plate by plate: one row per color, each `--color` the hex of its tray, no tray shared unless Omar chose "use the nearest" | Before the sends, or after anything changed the map or the pages | `python3 .claude/skills/send-plate/scripts/color_map.py check <color-map.json>` |
+| `scripts/color_map.py --self-test` | The §10 pass case (pink and black loaded, gold loaded on the ask) and fail case (gold and tan, one gold tray), on made-up trays, no printer | After changing the script; `make validate-prints` runs it | `python3 .claude/skills/send-plate/scripts/color_map.py --self-test` |
+
+`--trays <file>` takes a saved `bambu filament --json` in place of the printer, for testing or
+for planning against trays read earlier; the map then says where its trays came from.
 
 ## 1. Find the plate
 
