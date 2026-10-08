@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Write Omar's decisions on a plate into its page's `## Approvals` table, and read them back.
 
-    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --approved --by "Omar, tick"
-                                    a yes (tick or chat), on the recipe's latest iteration
+    python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --approved --by "Omar, tick" [--color "#0047BB"]
+                                    a yes (tick or chat), on the recipe's latest iteration;
+                                    --color names the one color the yes covers
     python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --held --by "Omar, in chat"    a hold
     python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate
                                     the recipe changed: record the next iteration, reset the yes
@@ -30,6 +31,12 @@ Omar. A comment-only edit is not a change: a reprint as-is keeps its iteration a
 plates gate (P2, P9; hook 39) reads the same table and file with the same code, so what this
 writes and what the gate checks cannot disagree; `bambu print send` asks `--status` before it
 sends and calls `--sent` after.
+
+What color a yes covers (print-time-color-map §5): a one-color recipe fixes no color (call 18),
+so the color is named at the send. A yes may name it too, `iteration 2 @ 1a2b3c4d5e in #0047BB`,
+and then the send must name the same one; a new color is a new yes (D-103). A yes that names
+none covers whatever color the send names. A recipe that fixes its own colors (a multi-color
+plate, or a frozen production one) refuses `--color`: the recipe already says.
 """
 from __future__ import annotations
 
@@ -53,6 +60,31 @@ TABLE = f"{pg.APPROVALS_HEAD}\n|---|---|---|---|---|"
 UNTICK = {"Approve": re.compile(r"^(\s*-\s*)\[[xX]\](\s*\*{0,2}Approve)", re.MULTILINE),
           "Hold": re.compile(r"^(\s*-\s*)\[[xX]\](\s*\*{0,2}Hold)", re.MULTILINE)}
 STANDING_BY = "plate_grade.py, promoted to production (D-095)"
+HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
+
+
+def recipe_colors(page: Path):
+    """What the recipe beside the page fixes in `profile.color` (a color, a list, or None)."""
+    try:
+        doc = pg.yaml.safe_load(page.with_suffix(".yaml").read_text(encoding="utf-8"))
+    except (OSError, pg.yaml.YAMLError):
+        return None
+    prof = doc.get("profile") if isinstance(doc, dict) else None
+    return prof.get("color") if isinstance(prof, dict) else None
+
+
+def yes_color(page: Path, color: str | None) -> str | None:
+    """The color a yes will name, uppercased; refuses one that is not `#RRGGBB`, and any on a
+    recipe that fixes its own colors."""
+    if color is None:
+        return None
+    if not HEX.match(color):
+        raise Refused(f"--color {color!r} is not #RRGGBB")
+    fixed = recipe_colors(page)
+    if fixed:
+        raise Refused(f"the recipe fixes its colors ({fixed}), so a yes names none: --color is for "
+                      "a one-color plate whose color is named at the send (call 18)")
+    return color.upper()
 
 
 class Refused(Exception):
@@ -146,8 +178,9 @@ def _replace_open(rows: list[dict], date: str) -> None:
         row["spent"] = f"replaced {date}"
 
 
-def decide(page: Path, decision: str, by: str, date: str) -> str:
-    """Write an approved, held or standing row; returns the row as written."""
+def decide(page: Path, decision: str, by: str, date: str, color: str | None = None) -> str:
+    """Write an approved, held or standing row; returns the row as written. `color` (approved
+    only) is the one color the yes covers, written into its Covers cell."""
     text, data, body = read(page)
     head = split(text)[0]
     body = with_table(body)
@@ -157,14 +190,18 @@ def decide(page: Path, decision: str, by: str, date: str) -> str:
     now, why = pg.covers_now(page)
     if not by.strip():
         raise Refused("--by is empty: say who decided, and how (\"Omar, tick\", \"Omar, in chat\")")
+    if color is not None and decision != "approved":
+        raise Refused("--color goes with --approved: only a yes names the color it covers")
     if decision == "approved":
         if data.get("stage") in ("planned", "retired"):
             raise Refused(f"stage is {data.get('stage')!r}: a plate with no recipe to print, or one "
                           "retired, cannot be approved")
         if now is None:
             raise Refused(why)
+        hexc = yes_color(page, color)
         _replace_open(rows, date)
-        row = {"date": date, "decision": "approved", "by": by, "covers": now, "spent": ""}
+        row = {"date": date, "decision": "approved", "by": by,
+               "covers": f"{now} in {hexc}" if hexc else now, "spent": ""}
         head = set_stage(head, "approved")
         body = UNTICK["Approve"].sub(r"\1[ ]\2", body)
     elif decision == "held":
@@ -237,9 +274,10 @@ def iterate(page: Path, date: str) -> str:
 
 
 def status(page: Path, paths: tuple[Path, Path, Path] | None = None) -> dict:
-    """{approved, how, sends, standing, recipe}: what `bambu print send` asks before it sends.
-    `recipe` is the plate's recipe hash now (iterations.py), which the send compares with the one
-    its slice recorded. `paths` is (prints, bets, rubric), by default the ones in the page's own
+    """{approved, how, sends, standing, color, recipe}: what `bambu print send` asks before it
+    sends. `recipe` is the plate's recipe hash now (iterations.py), which the send compares with
+    the one its slice recorded; `color` is the one color the open yes covers, or None when it
+    names none (then the send's --color is the send's to name). `paths` is (prints, bets, rubric), by default the ones in the page's own
     repo."""
     return {**_approval(page, paths), "recipe": pg.recipe_hash(page)}
 
@@ -248,7 +286,7 @@ def _approval(page: Path, paths: tuple[Path, Path, Path] | None) -> dict:
     try:
         text, data, body = read(page)
     except Refused as e:
-        return {"approved": False, "how": str(e), "sends": 0, "standing": False}
+        return {"approved": False, "how": str(e), "sends": 0, "standing": False, "color": None}
     lost = ""
     if data.get("maturity") == "production":
         root = root_of(page)
@@ -263,11 +301,13 @@ def _approval(page: Path, paths: tuple[Path, Path, Path] | None) -> dict:
         sends = sum(1 for _, ev_, _ in pg.timeline(body) if ev_ == "sent")
         if ok:
             return {"approved": True, "how": f"standing approval: {why} (D-095)", "sends": sends,
-                    "standing": True}
+                    "standing": True, "color": None}
         lost = f"; no standing approval: {why}"
     st = pg.approval_status(page, data, body)
+    row = st["row"] if st["approved"] else None
     return {"approved": st["approved"], "how": st["how"] + ("" if st["approved"] else lost),
-            "sends": st["sends"], "standing": False}
+            "sends": st["sends"], "standing": False,
+            "color": it.covers_color(row["covers"]) if row else None}
 
 
 def sent(page: Path, date: str, via: str, standing: bool,
@@ -401,6 +441,34 @@ def self_test() -> int:
               and gate() == [], "once merged, a new yes covers iteration 2 at its master commit",
               f"{rows[-1]} {gate()}")
 
+        decide(m8, "approved", "Omar, in chat", "2026-10-07", color="#0047bb")
+        rows = pg.approvals(m8.read_text(encoding="utf-8"))[0]
+        st = status(m8)
+        check(rows[-1]["covers"].endswith(" in #0047BB") and st["approved"]
+              and st["color"] == "#0047BB" and gate() == [],
+              "--color goes into the yes's Covers, uppercased; status reports it; the gate passes",
+              f"{rows[-1]} {st} {gate()}")
+        decide(m8, "approved", "Omar, in chat", "2026-10-07")
+        check(status(m8)["color"] is None, "a yes that names no color reports none",
+              str(status(m8)))
+        for color, decision, want in (("blue", "approved", "not #RRGGBB"),
+                                      ("#0047BB", "held", "goes with --approved")):
+            try:
+                decide(m8, decision, "Omar", "2026-10-07", color=color)
+                check(False, f"--color {color} with {decision} is refused ({want})")
+            except Refused as e:
+                check(want in str(e), f"--color {color} with {decision} is refused ({want})", str(e))
+        recipe = plates / "minis-08.yaml"
+        before = recipe.read_text(encoding="utf-8")
+        recipe.write_text(before + "profile:\n  color: \"#FFFFFF\"\n", encoding="utf-8")
+        try:
+            yes_color(m8, "#0047BB")
+            check(False, "--color on a recipe that fixes its color is refused")
+        except Refused as e:
+            check("fixes its colors" in str(e), "--color on a recipe that fixes its color is refused",
+                  str(e))
+        recipe.write_text(before, encoding="utf-8")
+
         for plate, decision, want in (
                 ("sheets-09", "approved", "stage is 'planned'"),
                 ("minis-09", "standing", "only a production plate"),
@@ -452,6 +520,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--date", default=datetime.date.today().isoformat())
     ap.add_argument("--via", default="`bambu print send`", help="with --sent: what sent it")
     ap.add_argument("--json", action="store_true", help="with --status: as JSON")
+    ap.add_argument("--color", help="with --approved: the one color (#RRGGBB) the yes covers")
     a = ap.parse_args(argv)
     if a.self_test:
         return self_test()
@@ -478,7 +547,7 @@ def main(argv: list[str]) -> int:
         if a.approved or a.held or a.standing:
             decision = "approved" if a.approved else "held" if a.held else "standing"
             by = a.by if a.by is not None else (STANDING_BY if decision == "standing" else "")
-            print(decide(page, decision, by, a.date))
+            print(decide(page, decision, by, a.date, a.color))
             return 0
     except Refused as e:
         print(f"plate_approve: {page.stem}: {e}", file=sys.stderr)

@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { colorAtSend, plateRecipePath, recipeColor } from "./color-at-send.js";
+import { colorAtSend, colorMatchesYes, plateRecipePath, recipeColor } from "./color-at-send.js";
 
 describe("colorAtSend — the color is named at the send (call 18)", () => {
   // The by-design failure: a one-color plate, a recipe with no color, and no flag naming one.
@@ -53,5 +53,24 @@ describe("recipeColor", () => {
     expect(recipeColor(write("two", `${profile}  color: ["#000000", "#F5B6CD"]\n`))).toEqual(["#000000", "#F5B6CD"]);
     expect(recipeColor(write("none", profile))).toBeNull();
     expect(recipeColor(plateRecipePath("missing", root))).toBeNull();
+  });
+});
+
+describe("colorMatchesYes — a yes that names a color covers that color only (§5, D-103)", () => {
+  it("a yes that names no color has nothing to check", () => {
+    expect(colorMatchesYes(null, "#0047BB")).toBeNull();
+    expect(colorMatchesYes(null, undefined)).toBeNull();
+  });
+  it("the same color passes, whatever its case", () => {
+    expect(colorMatchesYes("#0047BB", "#0047bb")?.ok).toBe(true);
+  });
+  it("another color is refused, and the line says a new color needs a new yes", () => {
+    const r = colorMatchesYes("#0047BB", "#FFFFFF");
+    expect(r?.ok).toBe(false);
+    expect(r?.line).toContain("pass --color #0047BB");
+    expect(r?.line).toContain("D-103");
+  });
+  it("no --color (a tray picked with --ams-mapping alone) is refused", () => {
+    expect(colorMatchesYes("#0047BB", undefined)?.ok).toBe(false);
   });
 });

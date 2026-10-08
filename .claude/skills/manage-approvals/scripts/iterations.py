@@ -26,7 +26,9 @@ import yaml
 STORE_REL = Path(".claude") / "skills" / "manage-approvals" / "approvals.yaml"
 # A yes covers a recipe as it is on master. A branch commit would not do: a squash merge drops it.
 MASTER = "origin/master"
-COVERS = re.compile(r"^iteration (\d+) @ ([0-9a-f]{10})$")
+# A yes may also name the color it covers (print-time-color-map §5): `iteration 2 @ 1a2b3c4d5e in
+# #0047BB`. A one-color recipe fixes no color (call 18), so the send's --color must then equal it.
+COVERS = re.compile(r"^iteration (\d+) @ ([0-9a-f]{10})(?: in (#[0-9A-F]{6}))?$")
 HASH = re.compile(r"^[0-9a-f]{12}$")
 HEADER = """\
 # Each plate's recipe iterations (D-097), written by
@@ -118,6 +120,12 @@ def write_store(store: Path, data: dict[str, list[dict]]) -> None:
 def parse_covers(covers: str) -> tuple[int, str] | None:
     m = COVERS.match(covers)
     return (int(m.group(1)), m.group(2)) if m else None
+
+
+def covers_color(covers: str) -> str | None:
+    """The color a yes names (`… in #RRGGBB`), or None when it names none."""
+    m = COVERS.match(covers)
+    return m.group(3) if m else None
 
 
 # A git hook runs with these set, and then `git -C <dir>` no longer finds the repo from <dir>:

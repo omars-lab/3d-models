@@ -89,6 +89,13 @@ describe("plateApproval", () => {
     expect(a.how).toContain("first send");
   });
 
+  it("reads back the color a yes covers, and none from a yes that names none", () => {
+    const path = page("p-color", { box: "x" });
+    plateApproveTool([path, "--approved", "--by", "Omar, in chat", "--date", "2026-10-03", "--color", "#0047bb"]);
+    expect(plateApproval("p-color", root).color).toBe("#0047BB");
+    expect(plateApproval("p-yes", root).color).toBeNull();
+  });
+
   it("refuses an approval spent by a send (the sheets-04 shape, box still ticked)", () => {
     page("p-spent", {
       box: "x",
@@ -204,7 +211,7 @@ describe("spendApproval", () => {
       seen.push(args);
       return "| 2026-10-03 | sent — by `bambu print send`, on the standing approval of a production plate (D-095) | this page |\n";
     };
-    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true, recipe: null }, tool);
+    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true, recipe: null, color: null }, tool);
     expect(seen[0]).toContain("--standing");
     expect(row).toContain("standing approval");
   });
