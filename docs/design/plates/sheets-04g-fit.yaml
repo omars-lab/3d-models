@@ -24,6 +24,10 @@
 # page settles how kites are told apart, each rung's ten come off the bed together and stay in
 # their own pile.
 #
+# The carved id (D-109, D-114) goes on each piece's bed face, its bottom. A middle piece carries the
+# whole id, 4GF/<iteration> <letter>, A to D. The coaster has room only for a letter, Z, and the
+# kites for none.
+#
 #   COASTER                 the gBV minimal coaster, as sheets-04g printed it (1)
 #   KITE 0.05 … KITE 0.25   ten kites at each of five gaps (50)
 #   MIDDLE 0 … MIDDLE 0.15  one middle piece at each of four gaps, four dots to one (4)
@@ -40,14 +44,14 @@ profile:
 
 id_code: 4GF
 no_id_reasons:
-  - &coaster "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. It is the only coaster on the plate."
-  - &kite "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Each rung's ten kites come off the bed together and stay in their own pile, as the page says."
+  - &kite "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Each rung's ten kites come off the bed together and stay in their own pile, as the page says."
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
     params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
     label:  COASTER
-    no_id:  *coaster
+    id:     Z
+    id_form: piece
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite
     params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05 }

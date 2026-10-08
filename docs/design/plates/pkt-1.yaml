@@ -25,6 +25,12 @@
 # go on from spl-1's A to N, so no two prototypes on the shelf share one: P2a is O, P2b P, P4a Q,
 # P4b R.
 #
+# The carved id (D-109, D-114): the whole id, PK1/<iteration> <letter>, has no room on these
+# halves, so each lower half carries the short one, <iteration><letter>, on its bed face, the
+# coaster's bottom. Its letter is its pair letter, P, Q and R, except P2a: O is never cut as an id
+# (it reads as a zero), so P2a's lower is S. No upper half carries one: it prints face down, so
+# its bed face is the top that shows in use.
+#
 # No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
 #
 # Validate (no hardware; slicing is local):
@@ -37,15 +43,14 @@ profile:
 
 id_code: PK1
 no_id_reasons:
-  - &lower "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Its pair letter, cut into its cut face as <letter>B (O to R), tells it apart."
-  - &upper "bikar refuses the full id here: it needs a flat bed-face patch of about 10 x 8 mm with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Its pair letter, cut into its cut face as <letter>T (O to R), tells it apart."
+  - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). Its pair letter, cut into its cut face as <letter>T (O to R), tells it apart."
 
 items:
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 15 }, no_id: *lower, label: P2aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 15 }, id: S, id_form: short, label: P2aL }
   - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 15 }, no_id: *upper, label: P2aU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 16 }, no_id: *lower, label: P2bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.2, thick: 0.6, pair: 16 }, id: P, id_form: short, label: P2bL }
   - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.2, thick: 0.6, pair: 16 }, no_id: *upper, label: P2bU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 17 }, no_id: *lower, label: P4aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 17 }, id: Q, id_form: short, label: P4aL }
   - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 17 }, no_id: *upper, label: P4aU }
-  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 18 }, no_id: *lower, label: P4bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Lower, params: { air: 0.4, thick: 0.4, pair: 18 }, id: R, id_form: short, label: P4bL }
   - { bkr: "bikar:patterns/Coupons/Split-Pocket-Coupon.bkr", piece: Upper, params: { air: 0.4, thick: 0.4, pair: 18 }, no_id: *upper, label: P4bU }

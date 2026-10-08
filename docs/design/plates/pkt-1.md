@@ -1,7 +1,7 @@
 ---
 plate: pkt-1
 recipe: pkt-1.yaml
-iteration: 3
+iteration: 4
 stage: waiting
 times_printed: 0
 runs: []
@@ -22,6 +22,7 @@ pictures:
   - pkt-1-media/cut-closed-0.4.png
   - pkt-1-media/bed.png
   - pkt-1-media/slice.png
+  - pkt-1-media/ids.png
 ---
 
 # pkt-1 — the pocket coupon: does a piece printed in its pocket come out loose
@@ -119,10 +120,13 @@ gap round it, and the two studs or sockets on either side.
 
 ![pkt-1 in the slicer: eight green square tiles, each with a hexagon outline in the middle and two dots](pkt-1-media/slice.png)
 
-No tile here carries a carved id (D-109): the plug and its pocket leave no flat patch big enough
-on any bed face. Each tile is told apart by the pair letter and B or T the coupon already cuts, as
-[the recipe](pkt-1.yaml) says; [the carved-id fit note](../../issues/carved-id-fit.md) has the
-measurements.
+The ids cut into the lower halves' bed faces, seen from below (D-109, D-114). The whole id has no
+room beside the plug, so each lower carries the short one: the iteration and a letter. The letter
+is the pair's, P, Q and R, except P2a, whose O is never cut as an id because it reads as a zero:
+its lower reads 4S. No upper half carries an id: it prints face down, so its bed face is the top
+you see. Its pair letter on the cut face tells it apart, as [the recipe](pkt-1.yaml) says.
+
+![The bottoms of the four lower halves: squares reading 4S, 4P, 4Q and 4R above the hexagon plug](pkt-1-media/ids.png)
 
 ## Cost and risk
 

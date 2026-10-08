@@ -65,6 +65,7 @@ export interface ManifestItemBkr {
   label?: string; // what the person at the printer calls it ("GAP 05"); names it in the bed map, never in the id
   filament?: number; // the 1-based filament slot it prints in; needed on every item when the plate has two or more
   id?: string; // the piece's one-character id, cut into its bed face after the plate's id_code and iteration (D-109)
+  id_form?: IdForm; // how much of the id to cut where the full one has no room (D-114); default full
   no_id?: string; // why it carries no id, and how it is kept apart instead (a piece too small, one printed face down)
 }
 export interface ManifestItemIteration {
@@ -175,21 +176,35 @@ export function itemRenderFlags(r: {
 // store records for the recipe as it is (`recipeIterationOf`), so an edit can never print last
 // iteration's number. bikar cuts 0-9, A-Z, `-` and space and refuses an id holding both 0 and O; the
 // letter O is left out here altogether, so a code and a piece id never have to be read apart from a zero.
+//
+// Most pieces have no room for the full id: it needs a flat bed-face patch of about 10 × 8 mm (see
+// docs/issues/carved-id-fit.md). Where it does not fit, the recipe cuts less (D-114): `id_form: short`
+// cuts the iteration and the piece (`3C`), `id_form: piece` the piece alone (`C`). And an id is cut only
+// into a face that is hidden in use. A piece printed face down — every upper half — has the coaster's
+// top on the bed, and a split coupon reads show-through on exactly that face, so it carries no id at
+// all, whatever would fit. No gate can see which face is the top; each such piece's `no_id:` says so.
 
 /** One character of an id code or piece id: a digit or a capital letter other than O. */
 const ID_CHAR = "[0-9A-NP-Z]";
 const ID_CODE = new RegExp(`^${ID_CHAR}{1,3}$`);
 const PIECE_ID = new RegExp(`^${ID_CHAR}$`);
 
-/** The text bikar cuts: `<code>/<iteration> <id>`. Throws when the iteration does not fit its one
- *  digit, since a line of four characters is past what bikar cuts at a size that prints. */
-export function bottomIdText(code: string, iteration: number, id: string): string {
+/** How much of the id a piece carries: all of it, the iteration and the piece, or the piece alone. */
+export type IdForm = "full" | "short" | "piece";
+const ID_FORMS: readonly IdForm[] = ["full", "short", "piece"];
+
+/** The text bikar cuts: `<code>/<iteration> <id>`, or for a piece with less room `<iteration><id>`
+ *  (`short`) or `<id>` (`piece`). Throws when the iteration does not fit its one digit, since a line of
+ *  four characters is past what bikar cuts at a size that prints. */
+export function bottomIdText(code: string, iteration: number, id: string, form: IdForm = "full"): string {
   if (!Number.isInteger(iteration) || iteration < 1 || iteration > 9) {
     throw new Error(
       `iteration ${iteration} does not fit the carved id's one digit (1 to 9): ` +
         "start a new plate with its own id_code for the next round of this experiment",
     );
   }
+  if (form === "piece") return id;
+  if (form === "short") return `${iteration}${id}`;
   return `${code}/${iteration} ${id}`;
 }
 
@@ -241,6 +256,18 @@ function checkIds(m: Record<string, unknown>, items: Record<string, unknown>[]):
       if (ids.has(id)) throw new Error(`${where}: \`id: ${id}\` is already another item's — two pieces with one id cannot be told apart`);
       ids.add(id);
       it.id = id;
+      const form = it.id_form;
+      if (form !== undefined && !ID_FORMS.includes(form as IdForm)) {
+        throw new Error(`${where}: \`id_form:\` must be full, short or piece (D-114), got ${JSON.stringify(form)}`);
+      }
+      if (form === "short" && /^[0-9]$/.test(id)) {
+        throw new Error(
+          `${where}: \`id_form: short\` cuts the iteration then the id, so a digit id would read as one number ` +
+            `(3 then ${id} reads "3${id}"); give the piece a letter`,
+        );
+      }
+    } else if (it.id_form !== undefined) {
+      throw new Error(`${where}: \`id_form:\` says how much of an \`id:\` to cut, and this item has no \`id:\``);
     } else if (code !== undefined && it.no_id === undefined) {
       throw new Error(
         `${where}: the recipe has an id_code, so every item needs \`id:\` (its one character) or \`no_id:\` ` +
@@ -693,7 +720,8 @@ export async function resolveManifestItems(
         `items[${n - 1}]: \`id: ${id}\` needs the plate's id_code and iteration, which only \`slice compose\` reads so far (D-109)`,
       );
     }
-    const bottomId = id !== undefined && ids ? bottomIdText(ids.code, ids.iteration, id) : "";
+    const form = isIterationItem(item) ? undefined : item.id_form;
+    const bottomId = id !== undefined && ids ? bottomIdText(ids.code, ids.iteration, id, form) : "";
     const sourceSha256 = await blobSha(bikarRef, sourcePath);
     const key: IterationKey = {
       source: `bikar:${sourcePath}@${bikarRef}`,
@@ -848,8 +876,9 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       console.error((res.stderr || res.stdout || "").trim().split("\n").slice(-6).join("\n"));
       if (r.bottomId) {
         console.error(
-          `  If the id is what bikar refused, leave this piece without one: mark its item ` +
-            `\`no_id: "<bikar's reason>"\` in the recipe (D-109).`,
+          `  If the id is what bikar refused, cut less of it: \`id_form: short\` cuts the iteration and the ` +
+            `piece, \`id_form: piece\` the piece alone (D-114). Where even one character has no room, mark ` +
+            `the item \`no_id: "<bikar's reason>"\` (D-109).`,
         );
       }
       process.exitCode = 1;

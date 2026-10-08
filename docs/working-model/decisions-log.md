@@ -6517,3 +6517,38 @@ expeirence should also simulate quantity", "if we make and sell x".
 
 **What would reverse it:** real sales that sit far from the researched band, which would move
 the band, not the method.
+
+## D-114 — Where the full carved id will not fit, a shorter one, and only on a face hidden in use
+
+Omar, 2026-10-08, in chat, picking from four ways to mark the pieces D-109's full id does not fit:
+"B. Shorter id where full won't fit". The measurements behind the question are in
+[the carved-id fit note](../issues/carved-id-fit.md).
+
+### The options as offered
+
+- **A. The full id only, as merged.** One format, nothing more to build, and most pieces carry
+  no carved mark.
+- **Chosen, B. A shorter id where the full one will not fit:** the iteration and the piece
+  ("4M"), or the piece alone ("Z"), with a rule that an id is cut only on a face hidden in use.
+  It marks the most pieces without changing what each piece tests.
+- **C. Make room in the designs** with a flat pad on each piece. Every piece traceable, but a pad
+  changes the piece, so a fit or look experiment measures something else.
+- **D. B, plus a dot code on the kites** from the existing dot knob. Nearly every piece marked,
+  at the cost of a code to learn, and dots that may show.
+
+### What it changes
+
+- **A recipe item may say `id_form: short` or `id_form: piece`**; the full id stays the default.
+  The plates gate refuses a form without an id, a form it does not know, and `short` on a digit
+  id, which would run into the iteration.
+- **An id is cut only on a face hidden in use.** An upper half prints face down, so its bed face
+  is the coaster's top and it carries none; its reason in the recipe says so, because no gate can
+  tell which face is hidden.
+- **A piece rendered as a ring of several carries no id yet.** bikar cuts one id per render, so a
+  ring of ten would carry it on one piece; the split coasters' hex and outer rings wait for bikar
+  to cut one into each piece.
+- **The five waiting plates move to iteration 4**, which resets their yeses (D-097): spl-1, pkt-1,
+  split-01, split-02 and sheets-04g-fit each go back to him once more with their ids pictured.
+
+**What would reverse it:** short ids that get mixed up across plates on the shelf, which would
+argue for C on the pieces that matter most.

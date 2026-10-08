@@ -1,7 +1,7 @@
 ---
 plate: spl-1
 recipe: spl-1.yaml
-iteration: 3
+iteration: 4
 stage: waiting
 times_printed: 0
 runs: []
@@ -22,6 +22,7 @@ pictures:
   - spl-1-media/slice.png
   - spl-1-media/ids-a-f.png
   - spl-1-media/ids-g-l.png
+  - spl-1-media/ids-trap.png
 ---
 
 # spl-1 — the split coupon: how tight a stud, how thick a floor, does a lip hold a piece
@@ -117,14 +118,20 @@ tile.
 
 ![spl-1 in the slicer: green square tiles each with a dot in the middle, and four larger tiles with hexagonal openings](spl-1-media/slice.png)
 
-The ids cut into the bed face of the twelve Fit Lowers, seen from below as you pick them off the
-bed: the plate, then the iteration and the pair's letter (D-109). The Uppers and the trap tiles
-have no room for one; [the recipe](spl-1.yaml) says how each of those is told apart, and
-[the carved-id fit note](../../issues/carved-id-fit.md) says why.
+The ids cut into the bed faces, seen from below as you pick them off the bed (D-109). A Fit
+Lower carries the whole id: the plate, then the iteration and its pair letter.
 
-![The bottoms of the Fit Lowers A to F: each square reads SL1 over 3 and its letter](spl-1-media/ids-a-f.png)
+![The bottoms of the Fit Lowers A to F: each square reads SL1 over 4 and its letter](spl-1-media/ids-a-f.png)
 
-![The bottoms of the Fit Lowers G to L: each square reads SL1 over 3 and its letter](spl-1-media/ids-g-l.png)
+![The bottoms of the Fit Lowers G to L: each square reads SL1 over 4 and its letter](spl-1-media/ids-g-l.png)
+
+The trap tiles and their loose hexagons have room only for the short id, the iteration and a
+letter (D-114): the lowers read 4M and 4N, their pair letters, and the hexagons 4T and 4U. No
+upper half carries an id: it prints face down, so its bed face is the top you see, and an id is
+cut only on a face hidden in use. Its pair letter on the cut face tells it apart.
+[the carved-id fit note](../../issues/carved-id-fit.md) says how the short form came about.
+
+![The bottoms of the trap tiles and their hexagons: two squares with a hexagonal hole reading 4M and 4N, and two hexagons reading 4T and 4U](spl-1-media/ids-trap.png)
 
 ## Cost and risk
 
