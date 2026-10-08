@@ -90,6 +90,7 @@ map each design color of a `plates by-color --json` file to a loaded tray, by th
 |---|---|
 | `--colors <file>` | the JSON `bambu plates by-color --json` printed (one row per design color) |
 | `--json` | print the map as JSON (the send-plate skill's shape) instead of one line per color |
+| `--trays <file>` | read the trays from a saved `bambu filament --json` instead of the printer (no printer is reached) |
 
 ### `bambu filament-sync`
 

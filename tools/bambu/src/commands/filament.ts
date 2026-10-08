@@ -1,6 +1,7 @@
 // `bambu filament` — read-only view of the filament the printer has loaded (AMS + external spool).
 //   list (default) : the loaded trays, one line each — material, color, brand, remaining
 //   map --colors   : each design color of a `plates by-color --json` file → the loaded tray it prints from
+//                    (--trays <file>: from a saved `bambu filament --json`, with no printer reached)
 //
 // This is the discovery seam the print-model skill (docs/design/printing/print-model-design.md §5.5) builds on: pick
 // the filament before deciding nozzle/settings. It reaches the printer WITHOUT moving it — the same
@@ -19,14 +20,14 @@
 // `print.vt_tray` object (absent here). Parsing the array defensively is what surfaced the loaded
 // external slot — see isRecord() below, where the array-vs-object trap actually bit.
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
 import { collectSlots, colorHex, type Slot } from "../frame.js";
 import { readPlateMeta } from "../threemf.js";
 import { logicalSlotsFromPlate, physicalTraysFromSlots, reconcile, renderReport } from "../filament-sync.js";
-import { designColorsFromByColor, mapColors, renderColorMap, type DesignColor } from "../filament-map.js";
+import { designColorsFromByColor, mapColors, renderColorMap, traysFromFilamentJson, type DesignColor } from "../filament-map.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
@@ -103,10 +104,11 @@ export function registerFilament(program: Command): void {
     .description("map each design color of a `plates by-color --json` file to a loaded tray, by the send's own color match (read-only)")
     .requiredOption("--colors <file>", "the JSON `bambu plates by-color --json` printed (one row per design color)")
     .option("--json", "print the map as JSON (the send-plate skill's shape) instead of one line per color")
+    .option("--trays <file>", "read the trays from a saved `bambu filament --json` instead of the printer (no printer is reached)")
     .action(async (_opts: unknown, cmd: Command) => {
       // Both `filament` and `map` take --json, and Commander hands a --json written after `map` to
       // `filament`, so `map` reads its options merged with its parent's (filament-map.test.ts).
-      const opts = cmd.optsWithGlobals<{ colors: string; json?: boolean }>();
+      const opts = cmd.optsWithGlobals<{ colors: string; json?: boolean; trays?: string }>();
       // Read the colors first (no printer needed) so a bad file fails before we connect.
       let colors: DesignColor[];
       try {
@@ -117,15 +119,32 @@ export function registerFilament(program: Command): void {
         return;
       }
 
+      const print = (map: ReturnType<typeof mapColors>, readAt: string, from: string): void => {
+        if (opts.json) console.log(JSON.stringify({ read_at: readAt, trays_from: from, ...map }, null, 2));
+        else console.log(`${renderColorMap(map)}\n(trays ${from === "printer" ? "read" : `from ${from}, saved`} ${readAt})`);
+      };
+
+      // --trays: a saved tray list, so no printer and no printer settings are touched. `trays_from`
+      // names the file, so a map made this way never reads as a live one; `read_at` is when the
+      // file was saved.
+      if (opts.trays) {
+        try {
+          const abs = resolve(opts.trays);
+          const trays = traysFromFilamentJson(JSON.parse(readFileSync(abs, "utf8")));
+          print(mapColors(colors, trays), statSync(abs).mtime.toISOString(), opts.trays);
+        } catch (err) {
+          console.error(`--trays ${opts.trays}: ${(err as Error).message}`);
+          process.exitCode = 2;
+        }
+        return;
+      }
+
       const mqtt = new MqttBackend();
       requireConfigured(mqtt);
       try {
         await mqtt.connect();
         const s = await mqtt.requestStatus();
-        const readAt = new Date().toISOString();
-        const map = mapColors(colors, physicalTraysFromSlots(collectSlots(s)));
-        if (opts.json) console.log(JSON.stringify({ read_at: readAt, ...map }, null, 2));
-        else console.log(`${renderColorMap(map)}\n(trays read ${readAt})`);
+        print(mapColors(colors, physicalTraysFromSlots(collectSlots(s))), new Date().toISOString(), "printer");
       } catch (err) {
         console.error(`filament map failed: ${(err as Error).message}`);
         process.exitCode = 1;

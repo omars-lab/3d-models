@@ -1387,7 +1387,7 @@ The facts above, pinned to the lines that hold them.
 - The share link's budget, 1800 characters: `bikar:packages/lab/src/url-state.ts:L12 "URL_BUDGET_CHARS = 1800"`.
 - The Coaster Lab keeps one design draft in browser storage: `bikar:packages/lab/src/custom-state.ts:L106 "COASTER_DRAFT_SLOT"`.
 - The X2D has not been seen to report grams used (unconfirmed): `3d-models:tools/bambu/src/actuals.ts:L46 "[X2D-UNCONFIRMED] consumed grams"`.
-- A spool with no tag reports no percent: `3d-models:tools/bambu/src/commands/filament.ts:L50 "remain unknown (no RFID)"`.
+- A spool with no tag reports no percent: `3d-models:tools/bambu/src/commands/filament.ts:L51 "remain unknown (no RFID)"`.
 - A slice that wrote no grams has them worked out with an attributed PLA density: `3d-models:tools/bambu/src/slice-numbers.ts:L14 "DEFAULT_PLA_DENSITY = 1.24"`.
 - The X2D bed is 256 × 256 mm: `3d-models:tools/bambu/src/commands/compose.ts:L279 "X2D single-nozzle build area 256×256 mm"`.
 - The hub's next step is estimates (private repo, read 2026-10-04): its README, "Next: estimates (P1's third surface)".

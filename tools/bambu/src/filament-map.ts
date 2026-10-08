@@ -8,11 +8,15 @@
 // the send's check. There is no second matcher: two would be two code paths that could disagree.
 //
 // PURE: no printer, no files. The command (commands/filament.ts, `filament map`) reads the trays
-// and the by-color file and hands them here, so every row is testable without a printer.
+// (from the printer, or with --trays from a saved `bambu filament --json`) and the by-color file and
+// hands them here, so every row is testable without a printer.
 
+import type { PrinterStatus } from "./backends/mqtt.js";
+import { collectSlots } from "./frame.js";
 import {
   MATCH_TOLERANCE,
   colorDistance,
+  physicalTraysFromSlots,
   reconcile,
   rgb,
   type LogicalSlot,
@@ -86,6 +90,24 @@ export function designColorsFromByColor(json: unknown): DesignColor[] {
     });
     return { name: r.name, path: typeof r.path === "string" ? r.path : null, hex, groups: [...new Set(groups)] };
   });
+}
+
+/**
+ * The loaded trays from a saved copy of what `bambu filament --json` prints (`{ams, vt_tray,
+ * vir_slot}`), read by the same frame parser as a live read. This is `filament map --trays`: a map
+ * made without the printer, for the send-plate skill's self-test and for planning against trays saved
+ * earlier. Throws when the object carries none of the three keys, since a map against "no trays" read
+ * from the wrong file would ask to load every color.
+ */
+export function traysFromFilamentJson(json: unknown): PhysicalTray[] {
+  if (typeof json !== "object" || json === null || Array.isArray(json)) {
+    throw new Error("expected the JSON object `bambu filament --json` prints ({ams, vt_tray, vir_slot})");
+  }
+  const r = json as Record<string, unknown>;
+  if (r.ams === undefined && r.vt_tray === undefined && r.vir_slot === undefined) {
+    throw new Error("no ams, vt_tray or vir_slot key: not what `bambu filament --json` prints");
+  }
+  return physicalTraysFromSlots(collectSlots(r as PrinterStatus));
 }
 
 function trayRef(t: PhysicalTray): TrayRef {
