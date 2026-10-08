@@ -36,7 +36,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from
    thumbnails and storyboard frames only, so each still needs its render looked at. In
    rebuild order:
-   1. `0ke_GpoBa-s`, Samira Mian, 10-fold rosette: chaptered, and the scaffold items 3, 5–7 reuse.
+   1. [`0ke_GpoBa-s`](../../catalog/patterns/a-pentagon-after-ptolemys-almagest-doubled-to-ten-cs-16.md), Samira Mian, 10-fold rosette: chaptered, and the scaffold items 3, 5–7 reuse.
       **Done 2026-09-28 in youtube: 11/11 steps, mean edge-SSIM 0.869.** It is drawn on paper
       and filmed at a slight angle, so the frames had to be straightened first (`rectify.tsv`).
       The 10-fold grid (Ptolemy's pentagon, the {10/2} and {10/3} stars, the petal lines) is in
@@ -45,7 +45,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       diameters and circle stay scaffold), ledger row filled, `CS-16`, gallery card, vendored
       STL. Its youtube source rewrite (the petal ring as one whole ten-fold turn, and the hero
       export) is on youtube branch `coaster-0ke`, waiting on Omar's merge into main.
-   2. `88q-u2eWZqg`, Eman Zainab, 16-petal rosette: a new fold; check the crowded centre.
+   2. [`88q-u2eWZqg`](../../catalog/patterns/a-16-petal-rosette-in-one-unbroken-line-cs-17.md), Eman Zainab, 16-petal rosette: a new fold; check the crowded centre.
       **Attempted 2026-09-28 in youtube: 6/9 steps, mean edge-SSIM 0.745.** The geometry is
       right. The three busiest steps stop near 0.59 because her pencil compass marks were
       never erased and her compass slipped a little, and no render can draw either. The
@@ -57,7 +57,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       imported from youtube main as it is; the circles and octagon turns stay scaffold), ledger
       row filled, `CS-17`, gallery card, vendored STL. At 40 mm the straps nearly close the
       middle windows, so its mini wants about 60 mm.
-   3. `n_ICgwOr6qs`, Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
+   3. [`n_ICgwOr6qs`](../../catalog/patterns/a-ten-petal-blossom-from-one-compass-setting.md), Samira Mian, 5-fold arc motif: rebuild the 1:20–8:06 construction only; needs the arc path.
       **Done 2026-09-28 in youtube: 9/9 steps, mean edge-SSIM 0.886.** Drawn on paper and
       filmed, like 1; the camera zooms out once at about 04:00, so only the petals after it are
       scored. For the coaster: every line is an arc of **one compass size** (the chord across
@@ -76,7 +76,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       Left: in bikar, the golden, fixture, minimal coaster, `--check` at 40/60/90 mm and the Lab
       entry, following the 88q PR (#317). Then in this repo, the ledger row, `CS-18`, the gallery
       card and the vendored STL.
-   4. `Y6kS1MvnKoc`, Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
+   4. [`Y6kS1MvnKoc`](../../catalog/patterns/a-mamluk-quran-page-from-seven-ten-point-stars.md), Eric Broug, 10-fold star field (Mamluk Qur'an page): crop to the centre star.
       **Done 2026-09-28 in youtube: 17/18 slides, mean edge-SSIM 0.861.** Not paper: a deck of
       clean vector slides, so no camera correction. The whole page was rebuilt, not just the
       centre star. For the coaster: the red pattern is all straight lines, and every corner of it
@@ -85,7 +85,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       Crop to a circle round the centre star, or take the page as a tile. Mirror-symmetric both
       ways: a quarter drawn and reflected twice. The construction is in
       `reconstructions/Y6kS1MvnKoc/`, ready for the coaster step.
-   5. `NtnlGMTElBk`, Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
+   5. [`NtnlGMTElBk`](../../catalog/patterns/the-mustansiriya-ten-fold-interlaced-star-cs-15.md), Samira Mian, 10-fold interlaced star: clean digital frames, 82 s, no narration.
       **Done 2026-09-28 in youtube: 13/13 steps, mean edge-SSIM 0.930.** For the coaster: the
       finished star is one closed white band, all straight lines, forty segments (a four-segment
       unit turned ten times). Every corner sits where a line of the {10/3} star crosses a line of
@@ -96,7 +96,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       straps, no weave), ledger row filled, `CS-15`, gallery card, vendored STL. Its youtube
       source rewrite (`ntnl-supported-vocabulary`, ec697a1) is on youtube main since 2026-09-30,
       re-scored 13/13, mean 0.934.
-   6. `yZN_wn0uvTY`, Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
+   6. [`yZN_wn0uvTY`](../../catalog/patterns/the-itimad-ud-daula-ten-fold-rosette-built-by-hand-in-geogebra-then-tiled.md), Geogebra_Road to School, 10-fold rosette built in GeoGebra with the algebra list on screen.
       **Swapped 2026-09-28 in youtube for its source, `gBV_JTt3Kxk`** (Samira Mian, "Itimad Ud
       Daula", a 2-minute silent animation of the same pattern). yZN drags the ten divisions by
       eye, so it is held behind gBV. **gBV done: 11/11 steps, mean edge-SSIM 0.906.** For the
@@ -112,7 +112,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       card, vendored STL. O2 FAILs on precision because of those masks (see the ledger's oracle
       notes). Its youtube source rewrite (`gbv-supported-vocabulary`, d0732db) is on youtube
       main since 2026-09-30, re-scored 11/11, mean 0.913.
-   7. `_U6G8QSfWnk`, Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
+   7. [`_U6G8QSfWnk`](../../catalog/patterns/suttons-fivefold-rectangle-and-its-traced-quarter.md), Samira Mian, 5/10-fold girih tiling: conditional; faint tracing steps, may need a one-cell crop.
       **Done 2026-09-29 in youtube: 6/6 steps, mean edge-SSIM 0.895** (pencil on paper, then
       tracing paper; 08:05–17:00 only). The worry did not hold: the pattern is lines, not
       near-solid, and no crop was needed, because the **fivefold rectangle is itself the cell**.
@@ -122,7 +122,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       rectangle's centre; its sides are mirror lines of the tiling, so a rectangular coaster
       tiles edge to edge by reflection. The construction is in `reconstructions/_U6G8QSfWnk/`,
       ready for the coaster step.
-   8. `fhGHzop7ULw`, Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
+   8. [`fhGHzop7ULw`](../../catalog/patterns/the-sixfold-root-3-rectangle-from-baghdad.md), Mohamad Aljanabi, 6-fold rectangle repeat unit: new creator, no new fold.
       **Done 2026-09-29 in youtube: 9/9 steps, mean edge-SSIM 0.921** (a silent animation; the
       scaffold is rebuilt to 06:50, and the finished unit at 11:30). For the coaster: a
       **1 × √3 rectangle** with star centres at two opposite corners, each corner split into
@@ -131,7 +131,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       Turned 180° about the rectangle's centre, the lines give the other star; the sides are
       mirror lines, so a rectangular coaster tiles edge to edge by reflection. The construction
       is in `reconstructions/fhGHzop7ULw/`, ready for the coaster step.
-   9. `jlTmt_279M4`, unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
+   9. [`jlTmt_279M4`](../../catalog/patterns/sevenfold-stars-in-a-tilted-square-cs-14.md), unravelling pattern, 7-point stars in a square (Bourgoin pl. 170): conditional; frames near-white.
       **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.941** (a 2:47 animation; the
       near-white frames were faint grey lines, which score fine). For the coaster: a **square
       tile tilted 90/7° = 12.857°**, with four seven-point stars (radius 0.4725 R) whose centres
@@ -144,7 +144,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       **Coaster step done 2026-09-30**: bikar #286 (the piece and its minimal coaster on a
       square fit), ledger row filled, `CS-14`, gallery card, vendored STL. Its O1 PASS needs
       youtube's `o1-polyline-ray` change (9a92134), on youtube main since 2026-09-30.
-   10. `A9fefFurD_s`, Lex Wilson, 10-point star from Broug's book: low priority.
+   10. [`A9fefFurD_s`](../../catalog/patterns/brougs-ten-point-star-from-one-circle.md), Lex Wilson, 10-point star from Broug's book: low priority.
       **Done 2026-09-29 in youtube: 17/17 steps, mean edge-SSIM 0.855** (a 3:52 slide deck;
       the dense slides hold at ~0.73 because the slides' own lines are hand-placed slightly off).
       For the coaster: a **single ten-point star medallion**, not a tile. One eight-sided shape
@@ -153,7 +153,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       round coaster. All straight lines, built from one circle by compass and straightedge
       (the pentagon by the golden cut). The construction is in `reconstructions/A9fefFurD_s/`,
       ready for the coaster step.
-   11. `1h7iWJaoN80`, Sarah Brewer, Folio 192 of the Anonymous Persian Compendium (Isfahan):
+   11. [`1h7iWJaoN80`](../../catalog/patterns/folio-192-heptagonal-panel-anonymous-persian-compendium.md), Sarah Brewer, Folio 192 of the Anonymous Persian Compendium (Isfahan):
       added from youtube's `make ladder` once rows 1–10 were done.
       **Done 2026-09-29 in youtube: 27/27 steps, mean edge-SSIM 0.862** (a 24-minute narrated
       GeoGebra screencast; the finished panel scores 0.945). For the coaster: a **rectangle of
@@ -166,7 +166,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       rectangle in its sides, so a rectangular coaster tiles edge to edge by reflection. The
       heptagon on the bottom edge is drawn whole and pokes past the rectangle; clip it at the
       edge. The construction is in `reconstructions/1h7iWJaoN80/`, ready for the coaster step.
-   12. `kpFgs2e8YGw`, Sarah Brewer, star rosettes on a 3-uniform tiling (12-gon, hexagon,
+   12. [`kpFgs2e8YGw`](../../catalog/patterns/star-rosettes-on-a-3-uniform-tiling.md), Sarah Brewer, star rosettes on a 3-uniform tiling (12-gon, hexagon,
       square, triangle): added from youtube's `make ladder`.
       **Done 2026-09-29 in youtube: 30/30 steps, mean edge-SSIM 0.911** (a narrated GeoGebra
       screencast with one angle slider). For the coaster: a **six-fold patch** (wallpaper
@@ -178,7 +178,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       lines, one parameter; at 30° the hexagons come out regular. It fits a round coaster
       centred on the hexagon, clipped at the rosette ring. The construction is in
       `reconstructions/kpFgs2e8YGw/`, ready for the coaster step.
-   13. `cKYbKQvmsbs`, Sarah Brewer, Sultan Barsbay 16 & 8 (Cairo): added from youtube's
+   13. [`cKYbKQvmsbs`](../../catalog/patterns/sultan-barsbay-16-8.md), Sarah Brewer, Sultan Barsbay 16 & 8 (Cairo): added from youtube's
       `make ladder`.
       **Done 2026-09-29 in youtube: 50/50 steps, mean edge-SSIM 0.837** (a 28-minute narrated
       GeoGebra screencast; the finished field scores 0.915 and 0.921). For the coaster: a
@@ -190,7 +190,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       a square coaster tiles edge to edge by reflection, and the quarter rosettes in the
       corners close into whole 8-fold rosettes. The construction is in
       `reconstructions/cKYbKQvmsbs/`, ready for the coaster step.
-   14. `1TclLO9JKAA`, Sarah Brewer, a parallel 9-fold star rosette ("Avoiding Open Paths"):
+   14. [`1TclLO9JKAA`](../../catalog/patterns/parallel-9-fold-star-rosette-avoiding-open-paths.md), Sarah Brewer, a parallel 9-fold star rosette ("Avoiding Open Paths"):
       added from youtube's `make ladder`.
       **Done 2026-09-29 in youtube: 16/16 steps, mean edge-SSIM 0.931** (a 2:39 narrated
       GeoGebra screencast; the finished rosette scores 0.945). For the coaster: a **nine-fold
@@ -200,7 +200,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       It fits a round coaster centred on the rosette, keeping the nonagon as its outline.
       Nine-fold does not tile, so this is a single-piece coaster, not a tiling one. The
       construction is in `reconstructions/1TclLO9JKAA/`, ready for the coaster step.
-   15. `ZXKYNvqtFKs`, Sarah Brewer, rings of tangent circles: added from youtube's
+   15. [`ZXKYNvqtFKs`](../../catalog/patterns/rings-of-tangent-circles.md), Sarah Brewer, rings of tangent circles: added from youtube's
       `make ladder`.
       **Done 2026-09-29 in youtube: 26/26 steps, mean edge-SSIM 0.920** (a 3:54 narrated
       GeoGebra screencast). For the coaster: **rings of circles** inside a regular n-gon of
@@ -211,7 +211,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       lines but the polygon. The smallest ring is fine detail at coaster size: two or three
       rings may be the printable cut. The construction is in `reconstructions/ZXKYNvqtFKs/`,
       ready for the coaster step.
-   16. `tcZQLpnxGpw`, Sarah Brewer, 12-fold pattern in a 6-4-3-4 tiling: added from youtube's
+   16. [`tcZQLpnxGpw`](../../catalog/patterns/12-fold-pattern-in-a-6-4-3-4-tiling.md), Sarah Brewer, 12-fold pattern in a 6-4-3-4 tiling: added from youtube's
       `make ladder`.
       **Done 2026-09-29 in youtube: 57/57 steps, mean edge-SSIM 0.8945** (a 19:57 narrated
       GeoGebra screencast). For the coaster: a **12-fold rosette filling a regular 12-gon of
@@ -222,7 +222,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       12-gon corner is the finest detail. One kite ring (at H) is built from a measured
       assumption, true at α = 19° (see the youtube reconstruction notes). The
       construction is in `reconstructions/tcZQLpnxGpw/`, ready for the coaster step.
-   17. `itZftnqJ3tI`, Sarah Brewer, star rosettes on a 4-uniform tiling, in a square: added
+   17. [`itZftnqJ3tI`](../../catalog/patterns/star-rosettes-on-a-4-uniform-tiling-in-a-square.md), Sarah Brewer, star rosettes on a 4-uniform tiling, in a square: added
       from youtube's `make ladder`.
       **Done 2026-09-29 in youtube: 102/102 steps, mean edge-SSIM 0.9062** (a 44:44 narrated
       GeoGebra screencast). For the coaster: a **square tile of the p4m cell** (side 3 + √3,
@@ -232,7 +232,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       makes the larger pattern. Filled shapes with outlines, of even density; the finest
       detail is the kite ring inside each 12-rosette (see the youtube reconstruction notes).
       The construction is in `reconstructions/itZftnqJ3tI/`, ready for the coaster step.
-   18. `Ln-s5FzLGms`, Sarah Brewer, 8-fold rosettes turned 45°, with squares: added from
+   18. [`Ln-s5FzLGms`](../../catalog/patterns/8-fold-rosettes-turned-45-with-squares.md), Sarah Brewer, 8-fold rosettes turned 45°, with squares: added from
       youtube's `make ladder`.
       **Done 2026-09-30 in youtube: 40/40 steps, mean edge-SSIM 0.8833** (a 44:16 narrated
       GeoGebra screencast). For the coaster: a **4×4 square** of the square grid (group p4m).
@@ -244,7 +244,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       out naturally, and it tiles. Filled shapes with outlines, of even density; the finest
       detail is the petal ring about each rosette (see the youtube reconstruction notes).
       The construction is in `reconstructions/Ln-s5FzLGms/`, ready for the coaster step.
-   19. `awOusq0uVzc`, Sarah Brewer, the Ibn Tulun variable-angle pattern (from the minbar):
+   19. [`awOusq0uVzc`](../../catalog/patterns/ibn-tulun-variable-angle-pattern.md), Sarah Brewer, the Ibn Tulun variable-angle pattern (from the minbar):
       added from youtube's `make ladder`, first held because its keyframes missed the build,
       then screened GO once frames were grabbed every 6 seconds.
       **Done 2026-09-30 in youtube: 60/60 steps, mean edge-SSIM 0.9197** (a 35:45 narrated
@@ -257,7 +257,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       with outlines; the finest detail is the petal and octagon pair round each star (see the
       youtube reconstruction notes). The construction is in `reconstructions/awOusq0uVzc/`,
       ready for the coaster step.
-   20. `xtox61vADMA`, Sarah Brewer, a discrete variable star rosette on two whole-number
+   20. [`xtox61vADMA`](../../catalog/patterns/discrete-variable-star-rosette-sliders-n-and-k.md), Sarah Brewer, a discrete variable star rosette on two whole-number
       sliders: picked from youtube's ladder over `yZN_wn0uvTY` and screened GO once frames
       were grabbed every 6 seconds over the build (the video is 65 minutes long).
       **Done 2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9297** (a narrated
@@ -269,7 +269,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       the dart tips, which get narrow as k grows, so check the thinnest dart against the
       printer before picking n and k. The construction is in `reconstructions/xtox61vADMA/`,
       ready for the coaster step.
-   21. `ZFQt67eZ9Sg`, Sarah Brewer, the door pattern of the Hall of the Two Sisters in the
+   21. [`ZFQt67eZ9Sg`](../../catalog/patterns/alhambra-hall-of-the-two-sisters-doors-8-fold-in-a-square.md), Sarah Brewer, the door pattern of the Hall of the Two Sisters in the
       Alhambra: 8-fold in a unit square, screened GO on 2026-09-17 once frames were grabbed
       every 5 seconds over the build. **Done 2026-09-30 in youtube: 58/58 steps, mean
       edge-SSIM 0.8814** (a narrated GeoGebra screencast). For the coaster: **a square tile**,
@@ -279,7 +279,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       drawn as blue lines with light green fills; the finest detail is the narrow triangle
       between the star's arms and the edge tiles, so check it against the printer. The
       construction is in `reconstructions/ZFQt67eZ9Sg/`, ready for the coaster step.
-   22. `XfY1r7QKYwA`, Sarah Brewer, the 7-fold star rosette built slowly (27 minutes), screened
+   22. [`XfY1r7QKYwA`](../../catalog/patterns/7-fold-star-rosette-the-27-minute-build.md), Sarah Brewer, the 7-fold star rosette built slowly (27 minutes), screened
       GO on 2026-09-30 once frames were grabbed every 5 seconds over the build. **Done
       2026-09-30 in youtube: 30/30 steps, mean edge-SSIM 0.9489** (a narrated GeoGebra
       screencast). For the coaster: the same kind of rosette as `tA8eSdVx_EQ`, seven kites and
@@ -289,7 +289,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       finishes at α = 24.5, and the thinnest part is the kite's tip near the centre, so check
       it against the printer before picking α. The construction is in
       `reconstructions/XfY1r7QKYwA/`, ready for the coaster step.
-   23. `yZN_wn0uvTY`, Geogebra_Road to School, the Itimad-ud-Daula ten-fold rosette built by
+   23. [`yZN_wn0uvTY`](../../catalog/patterns/the-itimad-ud-daula-ten-fold-rosette-built-by-hand-in-geogebra-then-tiled.md), Geogebra_Road to School, the Itimad-ud-Daula ten-fold rosette built by
       hand in GeoGebra and then tiled (Indonesian), screened GO (costly) on 2026-09-28.
       **Attempted 2026-09-30 in youtube: 9/13 steps, mean edge-SSIM 0.7375** (a narrated
       GeoGebra screencast; the four short steps are faint 1-px guide lines and point labels,
@@ -300,7 +300,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       red loop, copied by two vectors, u = (−6.12, 8.1) and v = (−5.85, −7.79). The
       construction is in `reconstructions/yZN_wn0uvTY/`.
 
-   Held: `LoCRh3SOhls` (a variant of 1) and GeoGebra `hzyhmg9p` (9+12 on the page, 8/9/5 in
+   Held: [`LoCRh3SOhls`](../../catalog/patterns/a-tenfold-rosette-in-a-pentagon-ink-on-filmed-paper.md) (a variant of 1) and GeoGebra [`hzyhmg9p`](../../catalog/patterns/12-and-9-pointed-stars-after-bodner.md) (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
    non-Brewer 9-fold video turned up in the searched space; item 14 is Brewer's.
 4. **frame block (P5.3)** — only if a public GeoGebra file needs one; nothing does yet. Moved

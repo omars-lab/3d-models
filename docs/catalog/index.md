@@ -55,6 +55,14 @@ Rebuilt in the youtube repo. No bikar file yet, so no coaster and no picture.
 | [The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled](patterns/the-itimad-ud-daula-ten-fold-rosette-built-by-hand-in-geogebra-then-tiled.md) | Geogebra_Road to School |
 | [The sixfold √3 rectangle from Baghdad](patterns/the-sixfold-root-3-rectangle-from-baghdad.md) | not recorded |
 
+## Queued, not yet rebuilt (1)
+
+Screened and queued, or held. Add one to [the planned list](planned.yaml) and sync.
+
+| Pattern | Creator | Held |
+|---|---|---|
+| [12- and 9-pointed stars, after Bodner](patterns/12-and-9-pointed-stars-after-bodner.md) | Chris Cambré | held |
+
 ## Nothing to make, by design
 
 - [Dual Slider m,n-fold Division of the Circle](patterns/dual-slider-m-n-fold-division-of-the-circle.md): the video shows a way of drawing, not a piece.

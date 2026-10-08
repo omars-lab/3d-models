@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-10-08 — Pattern catalog step 3: queued patterns get their note from `docs/catalog/planned.yaml`, the held GeoGebra file `hzyhmg9p` has one, and every entry in the catalog-expansion queue links to its note (3d-models #621)
 - 2026-10-08 — Pattern catalog step 2: the `pattern-catalog` skill and its sync tool, a note for every construction in the ledger (34: 14 made into coasters, 19 not yet in naqsh, one with nothing to make), 15 style notes, the catalog page and the pictures (3d-models #620)
 - 2026-10-07 — The use-case map's bikar pin moved to bikar main (643178a): all 21 bikar anchors whose lines had moved sat on exactly one line, so `validate.py --repair` moved them, 18 in the map and 3 in two docs that cite the same lines
 - 2026-10-06 — A note on joining the two halves of a split piece: can they slide, clip or screw together, with a coupon for each way (3d-models #576)

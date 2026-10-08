@@ -1,0 +1,32 @@
+# Patterns queued or held but not rebuilt yet, one entry each. Written by hand; the
+# pattern-catalog skill's sync tool makes a note with status "planned" for each, on the day it
+# is queued, so its link never changes. Once the pattern has a row in the constructions ledger,
+# the ledger takes over the same note (found by id) and the entry comes out of this list.
+#
+#   id       the YouTube video id, or the GeoGebra material id
+#   title    the pattern's name; it sets the note's file name once
+#   source   the link to the video or the GeoGebra page
+#   creator  who made it
+#   screen   the research file that queued it, from the repo root
+#   watch    what to look out for when rebuilding it
+#   held     why it is held; leave it out for a queued pattern
+#
+# Every id in the 2026-09-27 screen's queue (ten, and LoCRh3SOhls held) is rebuilt and has a
+# ledger row, so only the held GeoGebra file is left here.
+
+- id: hzyhmg9p
+  title: 12- and 9-pointed stars, after Bodner
+  source: https://www.geogebra.org/m/hzyhmg9p
+  creator: Chris Cambré
+  screen: docs/research/candidate-screen-2026-09-27.md
+  held: >-
+    The page's title says 12- and 9-pointed stars, but the last step of its applet's preview
+    shows "three types of stars: regular 8-pointed, almost regular 9-pointed and irregular
+    5-pointed". The preview may be a stale saved state, or the applet may show a
+    different pattern from the title. Open the applet and settle which before it becomes a GO.
+  watch: >-
+    It is a GeoGebra file, not a video, so it goes through the import-construction skill rather
+    than the video loop. The applet has a 26-step player, so it is step by step. The page cites
+    Bodner's Bridges 2011 paper and says the small distortions were accepted in the original.
+    GeoGebra's terms probably put the file under CC BY-NC-SA 4.0, so a coaster copied from it
+    likely could not be sold without a license; record the author and material id either way.
