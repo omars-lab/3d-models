@@ -632,7 +632,7 @@ a setting; it is shown beside the price.
 | Packaging | Box, insert, label, per order | not found in the sources read; one forum example lumps it with other costs | measured: the boxes Omar picks |
 | Fee percent and fixed fee | What the selling channel takes | Etsy (an online marketplace for handmade goods): $0.20 a listing, 6.5% of item and shipping, 3% + $0.25 for payment on the whole order; about 11% of a $25 set with no shipping or tax. When an Offsite Ad (Etsy advertising the listing on other sites) brought the sale, 15% more under $10,000 a year of sales (12% at or above it), about 26% in all | looked up, Etsy only; per order |
 | Markup | What is added on top of the break-even price | not a number: retail margins of 30 to 57% (as a markup, about 43% to 133%) are whole sectors and only a rough guide for a one-person shop | Omar's to choose, checked against the market band |
-| Market band | What similar coasters are listed at | printed coasters about $5 each (median of 39 listings, one pass, not re-checked); printed Islamic sets $25 to $45 for 4 to 6 coasters, about $6.25 to $7.50 each, from 4 listings, three from one shop and all smaller than ours. Asking prices on one day's first page, not sales | looked up; repeat the search when setting a price |
+| Market band | What similar coasters are listed at | From the [consolidated market research](../../research/coaster-market-pricing.md) (2026-10-08, two passes and a checker): a plain printed set of 4 lists at a median of about $17 (middle half about $13–$28) over 21 US-dollar sets, 19 of them snippets, and $20 over 23 Etsy listings read in a browser on Oct 4; printed Islamic sets at about $25–$30 a set of 4, $6.25 to $7.50 a coaster, from few listings, three from one shop and all smaller than ours. Asking prices only, not sales, and mostly search-result snippets; the two Canadian-dollar prices are kept out of the bands | looked up; repeat the search when setting a price |
 
 The research puts one full coaster's plastic, power, wear and a failure allowance at about $0.98
 to $1.37, before labor, packaging and fees; most of the spread is the payback hours. That is not
@@ -713,7 +713,7 @@ out right, and the pages are checked against the same numbers in a real browser.
 | `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf (§9.2's format), pointing at other fixtures' plans and, for fixture 5, at its own `print-logs/` whose rows close prints; then on hand, held, available and the buy list | 2 |
 | `wrong-shelf.json` | The shelf as the hard case gets it wrong; `fixture.yaml`'s `wrong_shelf_must_say` holds the words the check must give when it refuses it | 2 |
 | `settings.fixture.yaml`, `expected-price.json` | The twelve settings of §9.3 with made-up values, and the cost lines, break-even and suggested price they give, or "no price" with the empty setting named | 3 |
-| `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings; once the what-if and the price breaks are built, also their rows and columns at a made-up number of coasters a month | 3 |
+| `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings, and (fixture 1) the six price-break rows, with every row's three a-month columns at a made-up 40 coasters a month | 3 |
 
 Two files sit beside the folders, shared by all of them, because two fixtures can print the same
 plate: `slices.json`, one frozen slice[^frozen] per recipe some fixture plans (its hash, minutes,
@@ -834,7 +834,7 @@ being forgotten.
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
 | 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
 | 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row, which `print send` writes |
-| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7. Shipped with `bambu order price`; fixture 1's README holds the hand working. Not yet: §9.7's what-if and price breaks (D-113), checked by the last PASS and FAIL lines of its validator |
+| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7. Shipped with `bambu order price`; fixture 1's README holds the hand working. §9.7's what-if and price breaks (D-113) are built too: `bambu order price` prints both tables, `--coasters-a-month` tries an X, and fixture 1's golden holds the worked example at X = 40, checked by the last PASS and FAIL lines of its validator. Not yet: the what-if's printer hours, Omar's hours and spools |
 | 4, the pages | The browser run, with its screenshots, over all eight |
 
 ### 9.7 Pricing ideas: the ways to set a price, side by side
@@ -923,11 +923,18 @@ Every number is a dash on purpose.*
   as cost-plus. More colors are already in the cost, so they are not charged again.
 - **Launch price** is the cost-plus price × (1 − the launch discount).
 
-**Not built yet.** Phase 3 shipped the seven rows and their three columns. The what-if and the
-price breaks below are the next addition to it, asked for in
+**What is built.** Phase 3 shipped the seven rows and their three columns. The what-if and the
+price breaks below, asked for in
 [D-113](../../working-model/decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view)
-(Omar: "pricing expeirence should also simulate quantity", "if we make and sell x"), and the last
-PASS and FAIL lines of the validator below are their check.
+(Omar: "pricing expeirence should also simulate quantity", "if we make and sell x"), are built on
+top of them in `tools/bambu/src/price.ts`. `bambu order price` prints the seven rows and the six
+price breaks, each with the three a-month columns; X comes from the settings file's
+`scenarios.coasters_a_month`, and `--coasters-a-month` tries another. The break settings sit beside
+it in the same `scenarios:` block, each starting empty. Fixture 1's `expected-scenarios.json` holds
+the worked example below at X = 40, and the code's rows matched the doc's hand-worked table to the
+cent. Unit tests in `tools/bambu/src/price.test.ts` cover the last PASS and FAIL lines of the
+validator below. **Not built yet:** the what-if's printer hours, Omar's hours and spools (below),
+and a Lab page that draws the view; the mockup is still the only picture of it.
 
 **Make and sell X a month.** One more input, **coasters a month** (X): a whole number the owner
 types to try, empty to start like every other input. When it is filled, every row adds three
@@ -1044,7 +1051,7 @@ for this reason: at $2 the two costs each happen to be equal to the cent, and th
 tell them apart. Also FAIL: any
 row that shows a number while one of its inputs is empty.
 
-PASS, the what-if and the price breaks (once built): on fixture 1 with X = 40 and the made-up
+PASS, the what-if and the price breaks: on fixture 1 with X = 40 and the made-up
 break settings of the worked example above, every row of the worked table, its price, cost each,
 margin each, "to cover" and the three a-month columns, equals the golden to the cent. The other
 five strategy rows get the same three columns, worked by hand in fixture 1's README beside the
@@ -1243,7 +1250,7 @@ once its inputs exist. The pages come last, since they only show what the first 
 | 0 | **The simulated orders** (§9.6): eight fixture folders, goldens worked by hand, a wrong plan per fixture, the runner and `make validate-orders` | 3d-models `tools/bambu` test fixtures; the hub's checks read them at a pinned commit | Each later phase has its finish line written down before it starts | The runner lists all eight fixtures as waiting, and rejects every wrong plan it can already read |
 | 1 | **`bambu order plan`**, built with piece colors phase 1 (`plates by-color`): read an order file, count pieces by color, write or print one recipe per color, slice each, print minutes, grams, beds and the ratio used, as text and JSON | 3d-models `tools/bambu` | Answers material, time and plates for any order, today, with no pages | The 4 × gBV order gives 5 recipes holding exactly the §9.5 counts; each recipe's numbers equal `bambu validate sliced` on it; a color forced onto two beds shows two; no matching print shows "floor" |
 | 2 | **The shelf**: a spool file, reservations from open orders, the buy list, closing a print on the monitor's finished row | shipped as `bambu shelf show` in 3d-models `tools/bambu`, on a gitignored shelf file until call 1 places it | Answers "is it on the shelf" and "what to buy"; stops double counting spools | A send with a send record (sheets-04g, green, the tray it picked) followed by its finished row subtracts 27 g from the green spool; a failed print subtracts too; two orders in dark blue reserve the sum; a color short by 1 g lists one spool |
-| 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7). Shipped as `bambu order price` | 3d-models `tools/bambu`, on phase 1's JSON and a gitignored settings file, until call 1 places it; the settings' references in this repo from the consolidated research | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
+| 3 | **Price**: the inputs, the formula, the breakdown, the market band, and the scenarios' numbers (§9.7), with the make-and-sell-X what-if and the price breaks. Shipped as `bambu order price` | 3d-models `tools/bambu`, on phase 1's JSON and a gitignored settings file, until call 1 places it; the settings' references in this repo from the consolidated research | Answers "what to charge", explained line by line | With every setting filled, break-even and suggested match the formula by hand; with any setting empty, no price shows |
 | 4 | **The pages**: Plan, Price (with its Scenarios view), Inventory in a hub Orders tab, and the Lab's Add to order button | the hub web; bikar `packages/lab` | The same answers without a terminal, and from a design straight to an order | A real-browser run: Add to order in the Lab opens the hub's Plan page with the design filled in; its numbers equal phase 1's JSON |
 
 Pricing is third, not first, because its inputs are not settled and phases 1 and 2 are useful
