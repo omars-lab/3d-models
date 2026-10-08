@@ -525,7 +525,7 @@ the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-
 
 **Your answer:**
 
-- [ ] a first, then c
+- [x] a first, then c
 - [ ] Straight to c
 - [ ] Only a list for now
 - Notes:
@@ -549,7 +549,7 @@ the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-
 - [ ] Glue
 - [ ] Peg and socket
 - [ ] Taller pieces
-- Notes:
+- Notes: None picked on paper: try them in print. A second pocket plate, pkt-2, prints the four side by side (pocket only, pocket and glue, peg and socket, pieces 0.2 mm taller) at the air gap pkt-1 shows comes free, and the pick is made from the pieces in hand. (2026-10-08, asked in chat.)
 
 **Your comment, answered (2026-10-07).** You asked: "waht happened to the dove tail slider".
 
@@ -582,7 +582,7 @@ thinnest air whose band comes free; if both fuse, way c is out and way a is next
 - [ ] Both faces one color: pink / silk blue / black / green
 - [ ] A different color on each face (name the two in Notes)
 - [ ] Two colors on one plate
-- Notes:
+- Notes: Left open: decided once a way-c coaster is built and can be seen. (2026-10-08, asked in chat.)
 
 ## Piece colors (calls 16 to 19)
 
@@ -612,7 +612,7 @@ color.*
 
 **Your answer:**
 
-- [ ] One plate per color, with the other two shown as costs beside it
+- [x] One plate per color, with the other two shown as costs beside it
 - [ ] The whole set, once per color
 - [ ] Allow a many-color plate
 - Notes:
@@ -627,7 +627,7 @@ color.*
 
 **Your answer:**
 
-- [ ] Per group now, per piece later
+- [x] Per group now, per piece later
 - [ ] Per piece from the start
 - [ ] Per group only
 - Notes:
@@ -643,9 +643,9 @@ color.*
 **Your answer:**
 
 - [ ] In the recipe for per-color plates, at the send for whole-set plates
-- [ ] Always at the send
+- [x] Always at the send
 - [ ] Always in the recipe
-- Notes:
+- Notes: Not what is built today; the change is listed in the [print-time color map design](../../design/coaster/print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code). (2026-10-08, asked in chat.)
 
 ### 19. How the Lab learns which colors are loaded
 
@@ -664,7 +664,7 @@ The hub can, which is the second option.
 - [ ] Paste or drop the tray list
 - [ ] The hub runs the command
 - [ ] No tray list
-- Notes:
+- Notes: None of the three: map colors at print time. When the print skill takes a Lab design, it reads the trays on this machine, matches each design color to a loaded tray, and asks one question per color that does not match (load it, use the nearest, or stop). The Lab never sends. The hub gets a read-only printer API on the private network (trays and status, no send), so the Lab can show what is loaded as a hint. The [print-time color map design](../../design/coaster/print-time-color-map-design.md) has the details and four calls of its own. (2026-10-08, asked in chat.)
 
 ## Orders and pricing (calls 20 to 22)
 
@@ -691,10 +691,10 @@ The iCloud folder answers where the order files sit, not which app shows them.
 
 **Your answer:**
 
-- [ ] The hub
+- [x] The hub
 - [ ] The Coaster Lab in the browser
 - [ ] A spreadsheet
-- Notes:
+- Notes: Who uses which is written up in the [users and surfaces design](../../design/process/users-and-surfaces-design.md). (2026-10-08, asked in chat.)
 
 ### 21. How the price is set
 
@@ -711,10 +711,10 @@ prices, not sales.*
 
 **Your answer:**
 
-- [ ] Cost plus a markup, with the market beside it
+- [x] Cost plus a markup, with the market beside it
 - [ ] Market price
 - [ ] Value price
-- Notes:
+- Notes: "cost + markup but also market research": a deeper market pass than one day's asking prices (what similar coasters sell for, the closest competitors in any material, set sizes, price per coaster) sets the band the markup is checked against. Also "pricing experience should also simulate quantity" / "if we make and sell x": the scenarios show, for X coasters a month, the revenue, cost, profit, printer hours against one printer's month, your hours and spools to buy, and price breaks by order size. (2026-10-08, asked in chat.)
 
 ### 22. A price below break-even
 
@@ -726,7 +726,7 @@ prices, not sales.*
 
 **Your answer:**
 
-- [ ] Shown and tagged, with a reason
+- [x] Shown and tagged, with a reason
 - [ ] Never shown
 - [ ] Shown, no tag
 - Notes:
