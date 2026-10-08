@@ -46,8 +46,10 @@ should re-print minimal consturciton with this to fit in again"), so the plate p
   is not the old gap 0: it is cut along the round strap edge now, so it should no longer rattle.
 - **Dots on each middle piece**, as you asked ("3 dots for biggest, 1 dot for smallest"): four at
   gap 0, three at 0.05, two at 0.10, one at 0.15. Each dot is 1 mm across, cut into the top, with
-  at least 0.8 mm of top left to the piece's edge (CAL-CST-01). The kites carry none: one dot on
-  the biggest kite leaves 0.71 mm, under that floor. How to keep the kite rungs apart is call 6b
+  at least 0.8 mm of top left to the piece's edge (CAL-CST-01). The kites carry none. Since
+  bikar #324 a dot row sits at the piece's widest spot, and a kite holds one dot at gaps 0.05
+  to 0.15 but none at 0.20 or 0.25, so dots can split the rungs into two groups at most, not
+  five. How to keep the kite rungs apart is call 6b
   on the [2026-10-06 calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md).
 
 ## Why print it
