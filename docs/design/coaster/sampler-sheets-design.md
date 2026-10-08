@@ -35,7 +35,7 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
 | 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../plates/sheets-01.md) |
-| 2. Star points | smooth-lines call 2 (sharp or softened) | not yet: hole-point rounding shipped (`holes round`, bikar #325); it needs a `tip` knob on the three coasters and its card piece | [sheets-02](../plates/sheets-02.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | yes: hole-point rounding (`holes round`, bikar #325), fed by a `tip` knob on every minimal coaster, and its card, Sheet2Card (bikar #328) | [sheets-02](../plates/sheets-02.md) |
 | 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../plates/sheets-03.md) |
 | 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../plates/sheets-05.md) |
@@ -119,9 +119,19 @@ A against B answers call 1: if Omar cannot see or feel the difference, the edge 
 the smooth-lines design already says. B against C answers call 4.
 
 **Sheet 2 — star points.** Columns: CS-2 star, gBV star, CS-1 inside corners. Rows: tip round 0,
-0.3, 0.75 and 1.5 mm. Hole-point rounding (option 5) shipped 2026-10-07 as `holes round <mm>`
-(bikar #325); the sheet waits on a `tip` knob on the three coasters that feeds it, and its card. The 1.5 row is
-there on purpose: it is where stars turn into flowers, and seeing it is the point.
+0.3, 0.75 and 1.5 mm. The 1.5 row is there on purpose: it is where stars turn into flowers, and
+seeing it is the point.
+
+As built on 2026-10-07:
+- **The rounding** is `holes round <mm>` (bikar #325, option 5). Every minimal coaster feeds it
+  from a `tip` knob (bikar #328). At 0, the knob's default, each coaster's mesh is the same as
+  before.
+- **The card** is Sheet2Card, 138 × 156 mm, with rows A SHARP, B LIGHT, C MEDIUM and D STRONG.
+- **The columns** follow sheet 1's order (CS-1, CS-2, gBV), so the two sheets read across.
+- **CS-1's window** moved to 12,2. At 1.5 mm, sheet 1's 9.7,1 leaves a 0.07 mm sliver along the
+  window's edge, and the cut refuses it.
+- **The plate** is [`sheets-02.yaml`](../plates/sheets-02.yaml). It slices to one bed, 2 h 8 m
+  and 58 g.
 
 **Sheet 3 — soft weld.** Columns: CS-1 crossing, CS-2 star with its octagons, gBV star. Rows: none,
 light, strong. The two smooth-lines researchers chose different amounts (one used 0.6 and 1.2 mm on

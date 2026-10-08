@@ -41,13 +41,14 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 19 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
 | 20 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
 | 21 | [split-01](split-01.md) | waiting | 2 | 1.8 | 1.12 | watch | Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs? |
-| 22 | [split-02](split-02.md) | waiting | 2 | 2.1 | 0.96 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
-| 23 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
-| 24 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 25 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 26 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
+| 22 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
+| 23 | [split-02](split-02.md) | waiting | 2 | 2.1 | 0.96 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
+| 24 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
+| 25 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 26 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 27 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
 
-**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-02](sheets-02.md) (value 3), [sheets-03](sheets-03.md) (value 3).
+**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [sheets-05](sheets-05.md) (value 5), [sheets-03](sheets-03.md) (value 3).
 
 **Held for hardware risk:** none.
 
