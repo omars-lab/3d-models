@@ -1,28 +1,26 @@
 # What similar coasters are listed at: the market band `bambu order price` shows beside a price.
 # It is not a setting and never enters the formula (order-driven-lab-design §9.3).
 #
-# Every row is from docs/research/2026-10-04-coaster-pricing.md, with its hedges: asking prices on
-# one day's first page of Etsy results, which Etsy ranks by relevance and personalizes, not sales.
-# Repeat the search before setting a price, and change `read` when you do.
+# Every row is from docs/research/coaster-market-pricing.md (§1.1, two research passes and a
+# checker, 2026-10-08), with its hedges: asking prices, not sales, and mostly search-result
+# snippets, because Etsy, eBay and Amazon refused automated reads. The two Canadian-dollar prices
+# are kept out of these US-dollar bands. Repeat the search before setting a price, and change
+# `read` when you do.
 
-read: '2026-10-04'
-source: docs/research/2026-10-04-coaster-pricing.md
+read: '2026-10-08'
+source: docs/research/coaster-market-pricing.md
 
 each:
-  - what: printed coasters, one
-    median: 5.00
-    listings: 39
-    hedge: one research pass only, not re-checked
   - what: printed coasters, sets of 4
-    median: 5.00 # $20 a set
-    listings: 23
-    hedge: first page only, asking prices
+    median: 4.24 # $16.95 a set; middle half $12.75 to $28.19 a set
+    listings: 21
+    hedge: US-dollar sets from both passes, 19 of the 21 snippets; the Oct 4 browser round had $20 a set over 23 Etsy listings
   - what: printed coasters, sets of 6
-    median: 4.25 # $25.50 a set
-    listings: 12
-    hedge: first page only, asking prices
+    median: 3.33 # $20 a set
+    listings: 5
+    hedge: low confidence, few listings; the Oct 4 browser round had $25.50 a set over 12
   - what: printed Islamic-pattern sets of 4 to 6
     low: 6.25
     high: 7.50
     listings: 4
-    hedge: three of the four from one shop, all smaller than ours (112.5 mm), none a frame with loose pieces
+    hedge: low to medium confidence, read in a browser on Oct 4; three of the four from one shop, all smaller than ours (112.5 mm), none a frame with loose pieces
