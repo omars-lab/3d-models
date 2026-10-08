@@ -1,0 +1,67 @@
+# Way a with the dovetail (thread dunuoe, 2026-10-08). Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sizes from the joining note §2 and sld-1: 1.6 mm piece halves, a 0.8 mm rail 4 mm wide at its
+# root in 0.2 mm layers, 0.3 mm a side wider at its top, a 1.0 mm slot, 0.15 mm a side of gap.
+title: "Way a with a dovetail: the piece halves slide together before they go in"
+panels:
+  - title: "1. Way a today: lip + a piece cut in two"
+    width: 24
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true, first: bottom}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true, first: top}
+      - {kind: lip, side: lower, box: [4, 0, 1, 0.6], both: true, first: bottom}
+      - {kind: lip, side: upper, box: [4, 3.8, 1, 0.6], both: true, first: top}
+      - {kind: piece, color: teal, box: [4.2, 0.6, 15.6, 1.6], first: bottom}
+      - {kind: piece, box: [4.2, 2.2, 15.6, 1.6], first: top}
+      - {kind: seam, line: [4.2, 2.2, 15.6]}
+    notes:
+      - "Each piece half prints face down; the upper one is turned over. The lips hold both halves,
+        so no glue, but the two halves go in one at a time and nothing holds them to each other."
+
+  - title: "2. Way a with a dovetail across the cut"
+    width: 24
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true, first: bottom, label: lower half}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true, first: top, label: upper half}
+      - {kind: lip, side: lower, box: [4, 0, 1, 0.6], both: true, first: bottom, label: lip}
+      - {kind: lip, side: upper, box: [4, 3.8, 1, 0.6], both: true, first: top}
+      - {kind: piece, color: teal, box: [4.2, 0.6, 15.6, 1.6], first: bottom, label: piece half with the rail, label_at: [16, 1.2]}
+      - {kind: piece, box: [4.2, 2.2, 15.6, 1.6], first: top, label: piece half with the slot, label_at: [16, 3.3]}
+      - {kind: seam, line: [4.2, 2.2, 15.6]}
+      - {kind: dovetail, at: [12, 2.2], width: 4, height: 0.8, flare: 0.3, gap: 0.15, depth: 1.0, steps: 0.2, color: teal, label: rail in its slot, label_at: [13.6, 2.6]}
+    notes:
+      - "The rail slides into the slot from one end, along the rail, into the page. The pair can then
+        only slide back out, not lift apart, so the two halves go in as one piece and the lips hold it
+        as they hold a whole piece today. Each face is still a first layer."
+
+  - title: "3. The pair out of the coaster, to scale"
+    width: 12
+    scale: [32, 32]
+    parts:
+      - {kind: piece, color: teal, box: [0, 0, 12, 1.6], first: bottom}
+      - {kind: piece, box: [0, 1.6, 12, 1.6], first: top}
+      - {kind: dovetail, at: [6, 1.6], width: 4, height: 0.8, flare: 0.3, gap: 0.15, depth: 1.0, steps: 0.2, color: teal}
+      - {kind: dim, from: [9.3, 1.6], to: [9.3, 2.4], text: rail 0.8 mm}
+      - {kind: dim, from: [2.7, 1.6], to: [2.7, 2.6], text: slot 1.0 mm, place: left}
+      - {kind: dim, from: [2.7, 2.6], to: [2.7, 3.2], text: floor 0.6 mm, place: left}
+      - {kind: dim, from: [4, 1.25], to: [8, 1.25], text: 4 mm at its root, place: below}
+      - {kind: dim, from: [11.5, 0], to: [11.5, 1.6], text: 1.6 mm, place: left}
+    notes:
+      - "Four 0.2 mm layers, each 0.1 mm a side wider than the one under it, so the rail's top is
+        0.3 mm a side wider than its root. The slot is one layer deeper than the rail and 0.15 mm a
+        side wider, so the cut faces close flat."
+      - "sld-1 printed this at 0.10, 0.15 and 0.20 mm a side, and you said all three worked."
+
+  - title: "4. How the two piece halves print"
+    width: 22
+    scale: [24, 24]
+    parts:
+      - {kind: piece, box: [0, 0, 9, 1.6], first: bottom, last: top, label: "upper piece half, turned over", label_at: [1.5, 0.8], label_side: left}
+      - {kind: dovetail, at: [4.5, 1.6], width: 4, height: 0.8, flare: 0.3, gap: 0.15, depth: 1.0, steps: 0.2, toward: down, show: slot}
+      - {kind: piece, color: teal, box: [13, 0, 9, 1.6], first: bottom, last: top, label: lower piece half, label_at: [20.5, 0.8]}
+      - {kind: dovetail, at: [17.5, 1.6], width: 4, height: 0.8, flare: 0.3, steps: 0.2, color: teal, last: top}
+      - {kind: bed, line: [0, 0, 22]}
+    notes:
+      - "Both print face down, so both outer faces are first layers. The slot prints open at the top,
+        each layer 0.1 mm a side narrower than the one under it; the rail prints standing up, each
+        layer 0.1 mm a side wider. Both are short overhangs, one layer at a time."

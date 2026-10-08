@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1483.44" height="683.8" viewBox="0 0 1483.44 683.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Way a with a dovetail: the piece halves slide together before they go in</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Way a with a dovetail: the piece halves slide together before they go in</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. Gold and teal: the piece. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not</text>
+<text x="20" y="70" font-size="12.5" fill="#555555">to scale.</text>
+<g data-panel="1. Way a today: lip + a piece cut in two">
+<text x="20" y="106" font-size="14" font-weight="bold" fill="#222222">1. Way a today: lip + a piece cut in two</text>
+<g transform="translate(20,126)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="158.4" x2="72" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,158.4 432,158.4 432,79.2 360,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="360" y1="158.4" x2="432" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="72" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,79.2 432,79.2 432,0 360,0" fill="#aba69f"/>
+<line data-mark="first" x1="360" y1="0" x2="432" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,158.4 90,158.4 90,136.8 72,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="72" y1="158.4" x2="90" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="342,158.4 360,158.4 360,136.8 342,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="342" y1="158.4" x2="360" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,21.6 90,21.6 90,0 72,0" fill="#aba69f"/>
+<line data-mark="first" x1="72" y1="0" x2="90" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="342,21.6 360,21.6 360,0 342,0" fill="#aba69f"/>
+<line data-mark="first" x1="342" y1="0" x2="360" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="75.6,136.8 356.4,136.8 356.4,79.2 75.6,79.2" fill="#3f9189"/>
+<line data-mark="first" x1="75.6" y1="136.8" x2="356.4" y2="136.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="75.6,79.2 356.4,79.2 356.4,21.6 75.6,21.6" fill="#dcaa33"/>
+<line data-mark="first" x1="75.6" y1="21.6" x2="356.4" y2="21.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="seam" x1="75.6" y1="79.2" x2="356.4" y2="79.2" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+</g>
+<text x="20" y="312.4" font-size="12" fill="#444444">Each piece half prints face down; the upper one is turned over. The</text>
+<text x="20" y="329.4" font-size="12" fill="#444444">lips hold both halves, so no glue, but the two halves go in one at</text>
+<text x="20" y="346.4" font-size="12" fill="#444444">a time and nothing holds them to each other.</text>
+</g>
+<g data-panel="2. Way a with a dovetail across the cut">
+<text x="508" y="106" font-size="14" font-weight="bold" fill="#222222">2. Way a with a dovetail across the cut</text>
+<g transform="translate(508,126)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="158.4" x2="72" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,158.4 432,158.4 432,79.2 360,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="360" y1="158.4" x2="432" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="72" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,79.2 432,79.2 432,0 360,0" fill="#aba69f"/>
+<line data-mark="first" x1="360" y1="0" x2="432" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,158.4 90,158.4 90,136.8 72,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="72" y1="158.4" x2="90" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="342,158.4 360,158.4 360,136.8 342,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="342" y1="158.4" x2="360" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,21.6 90,21.6 90,0 72,0" fill="#aba69f"/>
+<line data-mark="first" x1="72" y1="0" x2="90" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="342,21.6 360,21.6 360,0 342,0" fill="#aba69f"/>
+<line data-mark="first" x1="342" y1="0" x2="360" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="75.6,136.8 356.4,136.8 356.4,79.2 75.6,79.2" fill="#3f9189"/>
+<line data-mark="first" x1="75.6" y1="136.8" x2="356.4" y2="136.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="75.6,79.2 356.4,79.2 356.4,21.6 75.6,21.6" fill="#dcaa33"/>
+<line data-mark="first" x1="75.6" y1="21.6" x2="356.4" y2="21.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="seam" x1="75.6" y1="79.2" x2="356.4" y2="79.2" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<polygon data-kind="slot" points="254.7,79.2 254.7,72 256.5,72 256.5,64.8 258.3,64.8 258.3,57.6 260.1,57.6 260.1,50.4 260.1,50.4 260.1,43.2 171.9,43.2 171.9,50.4 171.9,50.4 171.9,57.6 173.7,57.6 173.7,64.8 175.5,64.8 175.5,72 177.3,72 177.3,79.2" fill="#ffffff"/>
+<polygon data-kind="rail" points="252,79.2 252,72 253.8,72 253.8,64.8 255.6,64.8 255.6,57.6 257.4,57.6 257.4,50.4 174.6,50.4 174.6,57.6 176.4,57.6 176.4,64.8 178.2,64.8 178.2,72 180,72 180,79.2" fill="#3f9189"/>
+</g>
+<circle data-label-dot="1" cx="904" cy="165.6" r="2.6" fill="#222222"/>
+<polyline points="904,165.6 954,165.6 964,165.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="169.6" font-size="12" fill="#222222" text-anchor="start">upper half</text>
+<circle data-label-dot="1" cx="796" cy="165.6" r="2.6" fill="#222222"/>
+<polyline points="796,165.6 954,181.6 964,181.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="185.6" font-size="12" fill="#222222" text-anchor="start">piece half with the slot</text>
+<circle data-label-dot="1" cx="752.8" cy="190.8" r="2.6" fill="#222222"/>
+<polyline points="752.8,190.8 954,197.6 964,197.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="201.6" font-size="12" fill="#222222" text-anchor="start">rail in its slot</text>
+<circle data-label-dot="1" cx="796" cy="241.2" r="2.6" fill="#222222"/>
+<polyline points="796,241.2 954,241.2 964,241.2" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="245.2" font-size="12" fill="#222222" text-anchor="start">piece half with the rail</text>
+<circle data-label-dot="1" cx="904" cy="244.8" r="2.6" fill="#222222"/>
+<polyline points="904,244.8 954,257.2 964,257.2" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="261.2" font-size="12" fill="#222222" text-anchor="start">lower half</text>
+<circle data-label-dot="1" cx="859" cy="273.6" r="2.6" fill="#222222"/>
+<polyline points="859,273.6 954,273.6 964,273.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="968" y="277.6" font-size="12" fill="#222222" text-anchor="start">lip</text>
+<text x="508" y="312.4" font-size="12" fill="#444444">The rail slides into the slot from one end, along the rail, into the page. The pair can then only slide back out, not lift apart, so the two halves go</text>
+<text x="508" y="329.4" font-size="12" fill="#444444">in as one piece and the lips hold it as they hold a whole piece today. Each face is still a first layer.</text>
+</g>
+<g data-panel="3. The pair out of the coaster, to scale">
+<text x="20" y="411.4" font-size="14" font-weight="bold" fill="#222222">3. The pair out of the coaster, to scale</text>
+<g transform="translate(20,431.4)">
+<polygon data-kind="piece" points="0,102.4 384,102.4 384,51.2 0,51.2" fill="#3f9189"/>
+<line data-mark="first" x1="0" y1="102.4" x2="384" y2="102.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="0,51.2 384,51.2 384,0 0,0" fill="#dcaa33"/>
+<line data-mark="first" x1="0" y1="0" x2="384" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="slot" points="260.8,51.2 260.8,44.8 264,44.8 264,38.4 267.2,38.4 267.2,32 270.4,32 270.4,25.6 270.4,25.6 270.4,19.2 113.6,19.2 113.6,25.6 113.6,25.6 113.6,32 116.8,32 116.8,38.4 120,38.4 120,44.8 123.2,44.8 123.2,51.2" fill="#ffffff"/>
+<polygon data-kind="rail" points="256,51.2 256,44.8 259.2,44.8 259.2,38.4 262.4,38.4 262.4,32 265.6,32 265.6,25.6 118.4,25.6 118.4,32 121.6,32 121.6,38.4 124.8,38.4 124.8,44.8 128,44.8 128,51.2" fill="#3f9189"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="297.6" y1="51.2" x2="297.6" y2="25.6"/>
+<line x1="293.6" y1="51.2" x2="301.6" y2="51.2"/>
+<line x1="293.6" y1="25.6" x2="301.6" y2="25.6"/>
+</g>
+<text x="304.6" y="42.4" font-size="11" fill="#444444" text-anchor="start">rail 0.8 mm</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="86.4" y1="51.2" x2="86.4" y2="19.2"/>
+<line x1="82.4" y1="51.2" x2="90.4" y2="51.2"/>
+<line x1="82.4" y1="19.2" x2="90.4" y2="19.2"/>
+</g>
+<text x="79.4" y="39.2" font-size="11" fill="#444444" text-anchor="end">slot 1.0 mm</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="86.4" y1="19.2" x2="86.4" y2="0"/>
+<line x1="82.4" y1="19.2" x2="90.4" y2="19.2"/>
+<line x1="82.4" y1="0" x2="90.4" y2="0"/>
+</g>
+<text x="79.4" y="13.6" font-size="11" fill="#444444" text-anchor="end">floor 0.6 mm</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="128" y1="62.4" x2="256" y2="62.4"/>
+<line x1="128" y1="58.4" x2="128" y2="66.4"/>
+<line x1="256" y1="58.4" x2="256" y2="66.4"/>
+</g>
+<text x="192" y="77.4" font-size="11" fill="#444444" text-anchor="middle">4 mm at its root</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="368" y1="102.4" x2="368" y2="51.2"/>
+<line x1="364" y1="102.4" x2="372" y2="102.4"/>
+<line x1="364" y1="51.2" x2="372" y2="51.2"/>
+</g>
+<text x="361" y="80.8" font-size="11" fill="#444444" text-anchor="end">1.6 mm</text>
+</g>
+<text x="20" y="561.8" font-size="12" fill="#444444">Four 0.2 mm layers, each 0.1 mm a side wider than the one under it,</text>
+<text x="20" y="578.8" font-size="12" fill="#444444">so the rail's top is 0.3 mm a side wider than its root. The slot is</text>
+<text x="20" y="595.8" font-size="12" fill="#444444">one layer deeper than the rail and 0.15 mm a side wider, so the cut</text>
+<text x="20" y="612.8" font-size="12" fill="#444444">faces close flat.</text>
+<text x="20" y="629.8" font-size="12" fill="#444444">sld-1 printed this at 0.10, 0.15 and 0.20 mm a side, and you said</text>
+<text x="20" y="646.8" font-size="12" fill="#444444">all three worked.</text>
+</g>
+<g data-panel="4. How the two piece halves print">
+<text x="508" y="411.4" font-size="14" font-weight="bold" fill="#222222">4. How the two piece halves print</text>
+<g transform="translate(732.44,431.4)">
+<polygon data-kind="piece" points="0,57.6 216,57.6 216,19.2 0,19.2" fill="#dcaa33"/>
+<line data-mark="first" x1="0" y1="57.6" x2="216" y2="57.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="0" y1="19.2" x2="216" y2="19.2" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="slot" points="159.6,19.2 159.6,24 162,24 162,28.8 164.4,28.8 164.4,33.6 166.8,33.6 166.8,38.4 166.8,38.4 166.8,43.2 49.2,43.2 49.2,38.4 49.2,38.4 49.2,33.6 51.6,33.6 51.6,28.8 54,28.8 54,24 56.4,24 56.4,19.2" fill="#ffffff"/>
+<polygon data-kind="piece" points="312,57.6 528,57.6 528,19.2 312,19.2" fill="#3f9189"/>
+<line data-mark="first" x1="312" y1="57.6" x2="528" y2="57.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="312" y1="19.2" x2="528" y2="19.2" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="slot" points="468,19.2 468,14.4 470.4,14.4 470.4,9.6 472.8,9.6 472.8,4.8 475.2,4.8 475.2,0 364.8,0 364.8,4.8 367.2,4.8 367.2,9.6 369.6,9.6 369.6,14.4 372,14.4 372,19.2" fill="#ffffff"/>
+<polygon data-kind="rail" points="468,19.2 468,14.4 470.4,14.4 470.4,9.6 472.8,9.6 472.8,4.8 475.2,4.8 475.2,0 364.8,0 364.8,4.8 367.2,4.8 367.2,9.6 369.6,9.6 369.6,14.4 372,14.4 372,19.2" fill="#3f9189"/>
+<line data-mark="last" x1="364.8" y1="0" x2="475.2" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<rect data-kind="bed" x="-6" y="61.6" width="540" height="5" fill="#cfcbc3"/>
+<text x="538" y="67.6" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="768.44" cy="469.8" r="2.6" fill="#222222"/>
+<polyline points="768.44,469.8 712.44,469.8 702.44,469.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="698.44" y="473.8" font-size="12" fill="#222222" text-anchor="end">upper piece half, turned over</text>
+<circle data-label-dot="1" cx="1224.44" cy="469.8" r="2.6" fill="#222222"/>
+<polyline points="1224.44,469.8 1341.68,469.8 1351.68,469.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1355.68" y="473.8" font-size="12" fill="#222222" text-anchor="start">lower piece half</text>
+<text x="508" y="528.6" font-size="12" fill="#444444">Both print face down, so both outer faces are first layers. The slot prints open at the top, each layer 0.1 mm a side narrower than the one under it;</text>
+<text x="508" y="545.6" font-size="12" fill="#444444">the rail prints standing up, each layer 0.1 mm a side wider. Both are short overhangs, one layer at a time.</text>
+</g>
+</svg>

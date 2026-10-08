@@ -1,0 +1,26 @@
+#!/bin/sh
+# Side views (.claude/skills/draw-side-view/scripts/side_view.py check).
+# A side view is drawn from a short description, <name>.side.yaml, with the
+# picture written beside it as <name>.svg and <name>.png. Nothing else notices
+# when the description is edited and the picture is not re-drawn, so a page
+# would show the old drawing. This runs the check when a description, a picture
+# beside one, or the tool is staged.
+# Override once: SIDE_VIEWS_OK=1 git commit
+#
+# wholesale: make validate-side-views
+[ -n "$SIDE_VIEWS_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the side view check" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `.claude`.
+TOOL="$(git rev-parse --show-toplevel)/.claude/skills/draw-side-view/scripts/side_view.py"
+if [ ! -f "$TOOL" ]; then
+  echo "pre-commit: no side view tool in this worktree ($TOOL) — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '(\.side\.yaml$|-media/[^/]+\.(svg|png)$|^\.claude/skills/draw-side-view/)'; then
+  python3 "$TOOL" --self-test || exit 1
+  exec python3 "$TOOL" check
+fi
+exit 0
