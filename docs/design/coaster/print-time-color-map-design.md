@@ -6,8 +6,9 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 90ab01
 
 # Print-time color map: matching a Lab design's colors to the loaded trays
 
-> **Status: draft, written from Omar's picks of 2026-10-08.** Build step 1 (call 18, §8) is
-> built, and so is step 3's `plate_approve.py --color` (§5); the rest is not. The parts
+> **Status: draft, written from Omar's picks of 2026-10-08.** Build steps 1 (call 18, §8) and 2
+> (`bambu filament map`, §3) are built, and so is step 3's `plate_approve.py --color` (§5); the
+> rest is not. The parts
 > already built that it leans on are named in §2. Its open calls are in §12, and they are only
 > the ones Omar has not answered.
 
@@ -97,10 +98,14 @@ a plate in pink and the send could refuse it. So the map is a new verb on the sa
 
 - **New in the `bambu` command:** `bambu filament map --colors <by-color JSON> --json`. It reads
   the trays the way `bambu filament` does (it prints `{ams, vt_tray, vir_slot}`,
-  `3d-models:tools/bambu/src/commands/filament.ts:L84 "vir_slot: r.vir_slot"`). It runs
+  `3d-models:tools/bambu/src/commands/filament.ts:L86 "vir_slot: r.vir_slot"`). It runs
   `reconcile` with each design color as a one-color plate and prints one row per design color:
   status, tray, tray hex, distance, and the nearest tray when there is no match. It is read-only,
-  like `bambu filament`.
+  like `bambu filament`. Built (step 2): the rows come from one `reconcile` call over every design
+  color (`3d-models:tools/bambu/src/filament-map.ts:L108 "export function mapColors("`), and the
+  tests include §10's PASS and FAIL cases (`tools/bambu/src/filament-map.test.ts`). The by-color
+  rows carry a hex but no material, so the map never gives material-mismatch; the send still
+  checks the material against the slice's own.
 - **New in the send-plate skill:** a script, color_map.py, in the skill's own scripts folder. It
   runs `plates by-color --json` on the design, calls `bambu filament map`, and turns each row that
   is not `matched` into one question. It writes the answers to a color-map.json beside the

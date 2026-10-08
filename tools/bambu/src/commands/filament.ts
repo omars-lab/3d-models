@@ -1,5 +1,6 @@
 // `bambu filament` — read-only view of the filament the printer has loaded (AMS + external spool).
 //   list (default) : the loaded trays, one line each — material, color, brand, remaining
+//   map --colors   : each design color of a `plates by-color --json` file → the loaded tray it prints from
 //
 // This is the discovery seam the print-model skill (docs/design/printing/print-model-design.md §5.5) builds on: pick
 // the filament before deciding nozzle/settings. It reaches the printer WITHOUT moving it — the same
@@ -18,13 +19,14 @@
 // `print.vt_tray` object (absent here). Parsing the array defensively is what surfaced the loaded
 // external slot — see isRecord() below, where the array-vs-object trap actually bit.
 
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { Command } from "commander";
 import { MqttBackend, type PrinterStatus } from "../backends/mqtt.js";
 import { collectSlots, colorHex, type Slot } from "../frame.js";
 import { readPlateMeta } from "../threemf.js";
 import { logicalSlotsFromPlate, physicalTraysFromSlots, reconcile, renderReport } from "../filament-sync.js";
+import { designColorsFromByColor, mapColors, renderColorMap, type DesignColor } from "../filament-map.js";
 
 function requireConfigured(b: { configured(): boolean }): void {
   if (!b.configured()) {
@@ -69,7 +71,7 @@ function renderFilament(s: PrinterStatus): string {
 }
 
 export function registerFilament(program: Command): void {
-  program
+  const filament = program
     .command("filament")
     .description("read-only view of loaded filament (AMS trays + external spool)")
     .option("--json", "print the raw ams/vt_tray frame instead of a summary")
@@ -87,6 +89,45 @@ export function registerFilament(program: Command): void {
         }
       } catch (err) {
         console.error(`filament failed: ${(err as Error).message}`);
+        process.exitCode = 1;
+      } finally {
+        await mqtt.close();
+      }
+    });
+
+  // `filament map` (print-time-color-map-design §3, §4): each design color of a `plates by-color`
+  // run against the loaded trays, through the send's own `reconcile`, so a tray goes to one color.
+  // Read-only like `filament`: one status read, nothing sent, nothing written.
+  filament
+    .command("map")
+    .description("map each design color of a `plates by-color --json` file to a loaded tray, by the send's own color match (read-only)")
+    .requiredOption("--colors <file>", "the JSON `bambu plates by-color --json` printed (one row per design color)")
+    .option("--json", "print the map as JSON (the send-plate skill's shape) instead of one line per color")
+    .action(async (_opts: unknown, cmd: Command) => {
+      // Both `filament` and `map` take --json, and Commander hands a --json written after `map` to
+      // `filament`, so `map` reads its options merged with its parent's (filament-map.test.ts).
+      const opts = cmd.optsWithGlobals<{ colors: string; json?: boolean }>();
+      // Read the colors first (no printer needed) so a bad file fails before we connect.
+      let colors: DesignColor[];
+      try {
+        colors = designColorsFromByColor(JSON.parse(readFileSync(resolve(opts.colors), "utf8")));
+      } catch (err) {
+        console.error(`--colors ${opts.colors}: ${(err as Error).message}`);
+        process.exitCode = 2;
+        return;
+      }
+
+      const mqtt = new MqttBackend();
+      requireConfigured(mqtt);
+      try {
+        await mqtt.connect();
+        const s = await mqtt.requestStatus();
+        const readAt = new Date().toISOString();
+        const map = mapColors(colors, physicalTraysFromSlots(collectSlots(s)));
+        if (opts.json) console.log(JSON.stringify({ read_at: readAt, ...map }, null, 2));
+        else console.log(`${renderColorMap(map)}\n(trays read ${readAt})`);
+      } catch (err) {
+        console.error(`filament map failed: ${(err as Error).message}`);
         process.exitCode = 1;
       } finally {
         await mqtt.close();
