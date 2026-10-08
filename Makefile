@@ -993,3 +993,11 @@ validate-orders:
 validate-pattern-catalog:
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/skills/pattern-catalog/scripts/catalog.py --self-test
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) $(ROOT_DIR)/.claude/skills/pattern-catalog/scripts/catalog.py sync --check
+
+# The draw-side-view skill — the wholesale form of .githooks/pre-commit.d/52-side-views.
+# Self-test first (every part kind drawn, the refusals, a stale picture caught), then every
+# <name>.side.yaml under docs/ has its SVG current and its PNG beside it.
+.PHONY: validate-side-views
+validate-side-views:
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/draw-side-view/scripts/side_view.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/draw-side-view/scripts/side_view.py check
