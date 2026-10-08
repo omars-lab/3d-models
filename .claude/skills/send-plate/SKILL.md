@@ -52,6 +52,8 @@ Ask the tool, which reads the table the way the CLI will:
 - **Omar said yes in chat for this plate, this send:** write it down before anything else. On a
   branch off `origin/master`:
   `python3 .claude/skills/manage-approvals/scripts/plate_approve.py docs/design/plates/<name>.md --approved --by 'Omar, in chat: "<his words>"'`.
+  When his yes names the color (a one-color plate), add `--color "#RRGGBB"`: the send then
+  refuses any other `--color` on that yes.
   It adds the row, sets `stage: approved` and leaves the box unticked. Ship it (PR, merge), then fast-forward the vault (`git -C <vault> merge --ff-only origin/master`)
   so the CLI reads it. His yes must name this plate. A general "go ahead" from earlier in the
   session does not cover a plate he has not seen.
@@ -96,7 +98,8 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
    trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool. Every
    one-color plate's color is picked at the send (call 18): its recipe names no color, so pass
    the color Omar named with his yes, `--color "#RRGGBB"`, on the dry run and the send alike, and
-   the dry run's `color:` line and tray match show which spool it took. With neither `--color` nor
+   the dry run's `color:` line and tray match show which spool it took. A yes recorded with
+   `--color` covers that color only, and the send refuses another. With neither `--color` nor
    `--ams-mapping`, the send refuses a one-color plate, dry run too, rather than print it in the
    slice's own color (Studio's default green). Two exceptions go out without it: a multi-color
    plate (phones-01) matches its list tray by tray, and a frozen production plate that still

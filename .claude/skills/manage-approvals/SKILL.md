@@ -48,6 +48,10 @@ so a geometry change in bikar makes no iteration. Look at the render before aski
 - A yes: `… plate_approve.py <plate> --approved --by "Omar, tick on this page"` (or
   `'Omar, in chat: "<his words>"'`). It refuses when the recipe is not a recorded iteration, or
   that iteration is not on master yet.
+- A yes for one color: add `--color "#RRGGBB"` when Omar's yes names the color a one-color plate
+  prints in (call 18 puts it at the send). The row's Covers then reads `… in #RRGGBB`, and
+  `print send` refuses any other `--color` on that yes; a new color needs a new yes (D-103). A
+  recipe that fixes its own colors (multi-color, or frozen production) refuses `--color`.
 - A hold: `… --held --by "Omar, tick: <his note>"`.
 - Never write a yes Omar did not give (D-093).
 
@@ -55,7 +59,7 @@ so a geometry change in bikar makes no iteration. Look at the render before aski
 
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
-| `scripts/plate_approve.py` | Writes the Approvals table and the iterations file; reads them back for a send | A recipe changed (`--iterate`); a tick or a chat yes (`--approved`, `--held`); promotion (`--standing`); a send (`--sent`); "may it go out" (`--status`) | `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate` |
+| `scripts/plate_approve.py` | Writes the Approvals table and the iterations file; reads them back for a send | A recipe changed (`--iterate`); a tick or a chat yes (`--approved [--color]`, `--held`); promotion (`--standing`); a send (`--sent`); "may it go out" (`--status`) | `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --iterate` |
 | `scripts/iterations.py` | Reads and writes `approvals.yaml`, hashes a recipe, and asks git what a commit holds and whether it is on master | Imported by the plates gate, `plate_approve.py` and `tools/plate_grade.py`; not run by hand | — |
 
 Both self-test: `python3 .claude/skills/manage-approvals/scripts/plate_approve.py --self-test`,

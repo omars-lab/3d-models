@@ -41,6 +41,24 @@ export interface ColorAtSend {
   line: string;
 }
 
+/** Does the send's color match the one the yes covers (print-time-color-map §5)? A yes that names a
+ * color covers that color only, so the send must name the same one with `--color`; a tray picked
+ * with `--ams-mapping` alone says no color, so it is refused too. A new color is a new yes (D-103).
+ * A yes that names none covers whatever the send names (null line: nothing to report). PURE. */
+export function colorMatchesYes(yesColor: string | null, color?: string): ColorAtSend | null {
+  if (yesColor === null) return null;
+  if (color !== undefined && color.toUpperCase() === yesColor.toUpperCase()) {
+    return { ok: true, line: `color: ${yesColor}, the color the yes covers` };
+  }
+  const named = color === undefined ? "names no color" : `names ${color}`;
+  return {
+    ok: false,
+    line:
+      `color: the yes covers this plate in ${yesColor} and the send ${named}; pass --color ${yesColor}, ` +
+      "or a new color needs a new yes (D-103)",
+  };
+}
+
 /** May this send go out with the color it names? PURE. */
 export function colorAtSend(input: ColorAtSendInput): ColorAtSend {
   if (input.color !== undefined) return { ok: true, line: `color: ${input.color}, named at the send (--color)` };

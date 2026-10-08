@@ -7,7 +7,8 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 90ab01
 # Print-time color map: matching a Lab design's colors to the loaded trays
 
 > **Status: draft, written from Omar's picks of 2026-10-08.** Build steps 1 (call 18, §8) and 2
-> (`bambu filament map`, §3) are built; the rest is not. The parts
+> (`bambu filament map`, §3) are built, and so is step 3's `plate_approve.py --color` (§5); the
+> rest is not. The parts
 > already built that it leans on are named in §2. Its open calls are in §12, and they are only
 > the ones Omar has not answered.
 
@@ -77,7 +78,7 @@ are stand-ins.*
    color.
 7. **The send, color named.** send-plate runs `print send … --color "#RRGGBB"` with the mapped
    tray's color. The send reads the trays again and refuses if that color is no longer loaded
-   (`3d-models:tools/bambu/src/commands/print.ts:L411 "✗ filament:"`).
+   (`3d-models:tools/bambu/src/commands/print.ts:L423 "✗ filament:"`).
 8. **The next color.** Each plate is its own yes and its own send.
 
 The send's re-read is the gate (step 7); the map at step 4 is a plan. The trays can change between
@@ -114,7 +115,7 @@ a plate in pink and the send could refuse it. So the map is a new verb on the sa
 
 **Why send-plate, not a new skill or print-model.** send-plate already owns the filament check
 (step 4.2, `bambu filament-sync`) and already passes `--color` for a recipe with no color
-(`3d-models:.claude/skills/send-plate/SKILL.md:L97 "picked at the send"`). Putting the map in the
+(`3d-models:.claude/skills/send-plate/SKILL.md:L99 "picked at the send"`). Putting the map in the
 same skill means one skill reads the trays at the plan and again at the send. A new skill would
 split that reading across two skills. print-model plans a print up to the owner's gate and never
 sends; it does not own the trays. This choice is easy to undo, since the script can move later.
@@ -184,8 +185,13 @@ a tag. The options, with what each leads to:
 The answers go in color-map.json: one row per design color with the design hex, the tray, the tray
 hex, the status, the answer, and the time the trays were read. The plate page shows the same row.
 Omar's yes on that page covers that plate in that tray color. The skill records the color with the
-yes: `plate_approve.py` gains a `--color` that puts the color into the yes row's "Covers" cell.
-Without it, a yes on a recipe with no color would not say which color it allowed, after call 18.
+yes: `plate_approve.py --approved --color "#RRGGBB"` puts the color into the yes row's "Covers"
+cell (`iteration 2 @ 1a2b3c4d5e in #0047BB`). Without it, a yes on a recipe with no color would not
+say which color it allowed, after call 18. Built: `print send` reads the color back from
+`--status --json` and refuses a send whose `--color` differs or is missing, dry run included
+(`colorMatchesYes` in `3d-models:tools/bambu/src/color-at-send.ts:L48 "export function colorMatchesYes"`).
+A yes with no color still covers whatever color the send names, so the yeses written before this
+keep working. A recipe that fixes its own colors refuses `--color`.
 
 **When the trays change before the send.** The send refuses (step 7). The skill maps that plate
 again. If the new map gives the same tray hex, the yes still covers it. If it gives a different
@@ -296,7 +302,7 @@ per-color plate. The changes, which are task #244:
    "always at the send", printing green because nobody named a color is a silent default. So
    `print send` refuses a one-color plate whose recipe has no color unless `--color` or
    `--ams-mapping` is given, dry run too
-   (`3d-models:tools/bambu/src/color-at-send.ts:L59 "and this one names none"`). It already
+   (`3d-models:tools/bambu/src/color-at-send.ts:L77 "and this one names none"`). It already
    refused both at once
    (`3d-models:tools/bambu/src/commands/print.ts:L290 "--color and --ams-mapping both pick the spool"`).
 4. **send-plate's step 4.2 text** changes from "a recipe with no `color:` is one whose color is

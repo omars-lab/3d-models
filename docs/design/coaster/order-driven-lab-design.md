@@ -713,7 +713,7 @@ out right, and the pages are checked against the same numbers in a real browser.
 | `shelf.fixture.yaml`, `expected-shelf.json` | A starting shelf (§9.2's format), pointing at other fixtures' plans and, for fixture 5, at its own `print-logs/` whose rows close prints; then on hand, held, available and the buy list | 2 |
 | `wrong-shelf.json` | The shelf as the hard case gets it wrong; `fixture.yaml`'s `wrong_shelf_must_say` holds the words the check must give when it refuses it | 2 |
 | `settings.fixture.yaml`, `expected-price.json` | The twelve settings of §9.3 with made-up values, and the cost lines, break-even and suggested price they give, or "no price" with the empty setting named | 3 |
-| `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings | 3 |
+| `expected-scenarios.json` | The scenarios of §9.7, worked on the same made-up settings; once the what-if and the price breaks are built, also their rows and columns at a made-up number of coasters a month | 3 |
 
 Two files sit beside the folders, shared by all of them, because two fixtures can print the same
 plate: `slices.json`, one frozen slice[^frozen] per recipe some fixture plans (its hash, minutes,
@@ -834,35 +834,46 @@ being forgotten.
 | 0, before phase 1 | The eight fixture folders; goldens worked by hand from §4, §9.2 and §9.3; the wrong plans; the runner; `make validate-orders`, with every fixture listed as waiting |
 | 1, the planner | The plan checks pass on fixtures 1, 2, 3, 7 and 8, on real slices. Phases 0 and 1 shipped together: the runner and its fixtures came with the planner, not before it |
 | 2, the shelf | The shelf checks pass on fixtures 4, 5 and 7, and each fixture's wrong shelf is refused. Shipped with `bambu shelf show` and the `sent` row, which `print send` writes |
-| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7. Shipped with `bambu order price`; fixture 1's README holds the hand working |
+| 3, the price | The price checks pass on fixtures 1, 6 and 7, and the scenario check in §9.7. Shipped with `bambu order price`; fixture 1's README holds the hand working. Not yet: §9.7's what-if and price breaks (D-113), checked by the last PASS and FAIL lines of its validator |
 | 4, the pages | The browser run, with its screenshots, over all eight |
 
 ### 9.7 Pricing ideas: the ways to set a price, side by side
 
 In plain words: before settling on one price, lay out the ways of setting it next to each other.
-For each, see what it earns per coaster and how many coasters a month it takes to cover the
-shop's fixed costs. Call 2 picks the method a quote uses. This view is where that choice is tried
+For each, see what it earns per coaster, how many coasters a month it takes to cover the
+shop's fixed costs, and what a month looks like if the shop makes and sells a given number of
+coasters. Call 2 picks the method a quote uses. This view is where that choice is tried
 out, and later where a quote is checked against the other ways.
 
 Every market number below is from the
-[consolidated pricing research](../../research/2026-10-04-coaster-pricing.md), with its hedges.
-That research found no sales volumes, only asking prices on one day, so nothing below says what
-buyers pay. The first three rows are call 2's three methods. The other four are ways to shape a
-price, and work on top of whichever method call 2 picks.
+[consolidated market research](../../research/coaster-market-pricing.md) (2026-10-08: two
+independent researchers and a checker who re-opened the pages behind the load-bearing numbers),
+with its hedges. The cost and filament numbers are from the earlier
+[cost research](../../research/2026-10-04-coaster-pricing.md), as in §9.3. Both found asking
+prices only: nothing either one reached shows what a buyer paid, and neither found any sales
+volumes. Most market numbers rest on search-result snippets, not on pages read, because Etsy,
+eBay, Amazon and other shops refused automated reads; the research marks which. Two prices are in Canadian
+dollars (Chemist Tree, the Aga Khan Museum set), and the research keeps them out of the US-dollar
+bands rather than convert them at a rate it did not look up. The first three rows are call 2's
+three methods. The other four are ways to shape a price, and work on top of whichever method
+call 2 picks ([D-113](../../working-model/decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view)
+picked cost plus a markup, checked against the market band).
 
 | Strategy | How the price is set | Pros | Cons | Implications | What the research gives it |
 |---|---|---|---|---|---|
-| Cost-plus | Break-even × (1 + markup), §9.3 | Never below cost; every number explained | Needs all twelve settings; the markup is a judgment | Call 2's pick; the other rows are compared to it | One coaster's plastic, power, wear and failures cost about $0.98–1.37, before labor, packaging and fees. Labor is likely the largest cost |
-| Market range | A pick inside what similar coasters are listed at | Easy to sell at; no settings needed to pick it | Can sell below cost: a five-color order has five plates and five warm-ups that a one-color listing does not | The band moves without us, so repeat the search before using it | Printed coasters about $5 each (median of 39 listings, one pass, not re-checked); sets of 4 median $20 (23 listings), sets of 6 $25.50 (12). First page only, asking prices, not sales |
-| Story, premium | A pick above the band, for the Islamic geometry and the handmade, loose-piece build | Earns the most per coaster, if it sells | Nothing to check it against: no sales, and the research found no evidence of a premium for the loose-piece build. It calls the build a difference in the product, not proof of a premium | An untested bet until a few real sales; the page labels it as one | Printed Islamic sets $6.25–7.50 a coaster, from 4 listings, three of them from one shop, all smaller than ours (112.5 mm), none a frame with loose pieces. Medium-low evidence |
-| By finish | One price per line: Matte or Basic, Silk+, and Sparkle or Silk Multi-Color | A menu buyers can see; a visible reason for a higher price | The filament cost barely differs, so a finish step is a price choice, not a cost passed on | A "Silk" tier means Silk+: plain PLA Silk is not on the US store. Silk+ refills come in four colors only | Silk+ costs the same as Basic and Matte ($15.99 refill, $18.99 spool). Sparkle and Silk Multi-Color cost $24.99, spool only, no bulk discount: $0.67 a full plate against $0.43–0.51 |
-| Sets and bundles | 4 or 6 coasters, with a holder, priced as one | Warm-ups, packaging and the fixed fee spread over more coasters; listings already sell this way | The holder is not designed: no construction, no slice, no cost | Each set size is planned as its own order, so its cost per coaster is its own. A holder design joins the backlog | Sets of 4 median $20 (23 listings), sets of 6 $25.50 (12); one Islamic set of 4 with a holder listed at $25 |
-| Custom theme | The custom order's own plan, priced as usual, plus a surcharge for the design time | Pays for the back-and-forth a custom order takes | Nothing to set the surcharge from. More colors already cost more through the formula (one plate and one warm-up per color), so the surcharge must not charge for them again | The surcharge covers design minutes only. A color the store does not sell (Silk Gold) cannot be priced at all | Nothing: the research did not look at custom work |
-| Launch price | A lower price for the first orders, for a set count or a set time | First sales and first reviews come sooner | Can sell below cost, and a first price sets what buyers expect | Selling below break-even is a choice to lose money on purpose. Call 5 decides whether the view allows it | Nothing: the research found no sales volumes and nothing on launch prices |
+| Cost-plus | Break-even × (1 + markup), §9.3 | Never below cost; every number explained | Needs all twelve settings; the markup is a judgment | Call 2's pick; the other rows are compared to it | Cost (the cost research): one coaster's plastic, power, wear and failures cost about $0.98–1.37, before labor, packaging and fees. Labor is likely the largest cost. The check (the market research, §1.4): a printed Islamic geometric set sits at about $20–$30 for a set of 4, about $5–$7.50 a coaster. That is the checker's reading of the bands, which both researchers reached on their own, not a number any listing states; low to medium confidence |
+| Market range | A pick inside what similar coasters are listed at | Easy to sell at; no settings needed to pick it | Can sell below cost: a five-color order has five plates and five warm-ups that a one-color listing does not | The band moves without us, so repeat the search before using it | A plain 3D-printed set of 4 lists at about $17–$20, about $4.25–$5.00 a coaster: median $16.95 over 21 US-dollar sets of 4 pooled from both researchers (19 of them snippets, 2 pages read), $20 over 23 Etsy listings read in a browser on Oct 4. Middle half about $13–$28 a set ($12.75–$28.19). Under about $13 is cheaper than most printed sets; over about $35–$39 is dearer than any printed set seen. Sets of 6: median $20 over 5 listings ($25.50 over 12 on Oct 4), low confidence. None of the listings seen charges more for a bigger coaster. Asking prices, not sales |
+| Story, premium | A pick above the band, for the Islamic geometry and the handmade, loose-piece build | Earns the most per coaster, if it sells | Nothing to check it against: no sales, and the research found no evidence of a premium for the loose-piece build. It calls the build a difference in the product, not proof of a premium | An untested bet until a few real sales; the page labels it as one | Islamic-themed printed sets list at $25 for 4, $35 for 5 and $45 for 6, about $6.25–$7.50 a coaster: few listings with a known set size, read in a browser on Oct 4, three of them from one shop, all smaller than 110 mm (ours is 112.5 mm), none a frame with loose pieces; the $35 set of 5 shows again as a snippet in both 2026-10-08 passes. Low to medium confidence. The ceiling, other materials: the Leighton House museum shop's 110 mm laser-cut MDF set of 4 at £24 (page read; a museum sells its name too, so low transfer), a marble set at $44.99 and a maple set at CAD 145 (both pages read) |
+| By finish | One price per line: Matte or Basic, Silk+, and Sparkle or Silk Multi-Color | A menu buyers can see; a visible reason for a higher price | The filament cost barely differs, so a finish step is a price choice, not a cost passed on | A "Silk" tier means Silk+: plain PLA Silk is not on the US store. Silk+ refills come in four colors only | Silk+ costs the same as Basic and Matte ($15.99 refill, $18.99 spool). Sparkle and Silk Multi-Color cost $24.99, spool only, no bulk discount: $0.67 a full plate against $0.43–0.51 (the cost research). The market research did not look at finish steps; it found color choice free wherever it was offered (3 pages read, 3 snippets) |
+| Sets and bundles | 4 or 6 coasters, with a holder, priced as one | Warm-ups, packaging and the fixed fee spread over more coasters; listings already sell this way | The holder is not designed: no construction, no slice, no cost | Each set size is planned as its own order, so its cost per coaster is its own. A holder design joins the backlog. This row tries a set price typed in; the price breaks below work one out from a single price instead | Offer a set of 4 first, a set of 6 second, a single as an option: both researchers agree, by listing counts, not sales. Per coaster, a set of 4 lists about 15–25% below a single, and a set of 6 about another 15–20% below a set of 4: four same-seller cases, all pages read, only one of them 3D printed, and the 4 → 6 case compares a painted set with a natural one. A holder comes in most printed sets, and no listing seen prices a set with and without one; a gift box is included, never charged. The steps pay for themselves only where part of the cost is per order (packing, the fixed fee, hands-on time per order); a cost that is all per coaster takes the step straight out of the markup |
+| Custom theme | The custom order's own plan, priced as usual, plus a surcharge for the design time | Pays for the back-and-forth a custom order takes | Nothing to set the surcharge from. More colors already cost more through the formula (one plate and one warm-up per color), so the surcharge must not charge for them again | The surcharge covers design minutes only. A color the store does not sell (Silk Gold) cannot be priced at all | Little: the market research found personalization free, or a small add-on of about $2 (one leather listing, page read), and color choice free; no evidence of a large premium. It did not look at custom design work |
+| Launch price | A lower price for the first orders, for a set count or a set time | First sales and first reviews come sooner | Can sell below cost, and a first price sets what buyers expect | Selling below break-even is a choice to lose money on purpose. Call 5 decides whether the view allows it | Nothing: neither research round found a sold price, a sales volume or anything on launch prices |
 
 **The view.** A Scenarios view in the Price tab, beside the Breakdown, with one row per strategy.
 Each row shows the price per coaster, the margin per coaster, and how many coasters a month it
-takes to cover the shop's fixed costs (its break-even volume[^scenario]):
+takes to cover the shop's fixed costs (its break-even volume[^scenario]). Once a number of
+coasters a month is typed in, it also shows that month's revenue, margin and profit (the what-if,
+below):
 
 ```text
 cost each   = order cost ÷ coasters in the order                     (§9.3's cost)
@@ -874,19 +885,22 @@ Labor is already inside the cost, so the margin is what is left after paying for
 "To cover" is how many coasters a month pay the fixed costs at that margin. It is not a forecast
 of what will sell.
 
-The view needs one input that §9.3 does not: **monthly fixed costs**, what the shop pays each month
-whatever it sells. The research's reference is the plan of Shopify (a service for running an
+The view needs inputs that §9.3 does not. The first is **monthly fixed costs**, what the shop
+pays each month whatever it sells; the others are the what-if's coasters a month and the price
+breaks' settings, below. The cost research's reference for fixed costs is the plan of Shopify (a service for running an
 online shop) at $39 a month, or $29 a month paid
 yearly, if the shop sells there. It starts empty, like every setting, and it is not one of §9.3's
-twelve, because a quote does not use it. The rows that are not formulas (a market pick, a story
+twelve, because a quote does not use it; nor are the what-if's and the breaks' inputs. The rows that are not formulas (a market pick, a story
 price, finish steps, set prices, a surcharge, a launch discount) each take a candidate price from
 Omar, and start empty too.
 
-![The Scenarios view in the Price tab for the 4 × gBV order. Seven strategies, one row each:
-cost-plus, market range, story or premium, by finish, sets of 4 and 6 with a holder, custom theme
-and launch price. Every price, margin and coasters-to-cover cell is a dash, because every input
-at left is empty, each with the research's reference beside it. Below: the three formulas, and
-what a scenario is not.](order-driven-lab-media/price-scenarios-mockup.png)
+![The Scenarios view in the Price tab for the 4 × gBV order. A "make and sell X coasters a month"
+input above seven strategies, one row each: cost-plus, market range, story or premium, by finish,
+sets of 4 and 6 with a holder, custom theme and launch price. Below them, six price-break rows:
+single, set of 4, set of 6, gift order, café order and wholesale. Every price, margin,
+coasters-to-cover and a-month cell is a dash, because every input at left is empty, each with the
+research's reference or starting point beside it. Below: the formulas, and what a scenario is
+not.](order-driven-lab-media/price-scenarios-mockup.png)
 
 *The [mockup](order-driven-lab-media/price-scenarios-mockup.html), drawn in the Lab's look.
 Every number is a dash on purpose.*
@@ -895,7 +909,8 @@ Every number is a dash on purpose.*
 
 - A row shows no number while any of its inputs is empty, the same rule as §9.3.
 - Every row uses the cost from §9.3, never a cost of its own.
-- A set row works out its own order of 4 or 6 coasters. Until the planner plans each size as its
+- A set row, and each price-break row, works out an order of its own size (4 or 6 coasters, or
+  the gift, café or wholesale order's coasters). Until the planner plans each size as its
   own order, that is the plan scaled as in §9.3's "By quantity": grams and minutes by the ratio,
   beds by one set per plan's worth of coasters started. The row says "scaled".
 - A row below break-even carries a tag saying so.
@@ -907,6 +922,112 @@ Every number is a dash on purpose.*
 - **Custom theme** adds the design minutes × the labor rate to the order's cost, then prices it
   as cost-plus. More colors are already in the cost, so they are not charged again.
 - **Launch price** is the cost-plus price × (1 − the launch discount).
+
+**Not built yet.** Phase 3 shipped the seven rows and their three columns. The what-if and the
+price breaks below are the next addition to it, asked for in
+[D-113](../../working-model/decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view)
+(Omar: "pricing expeirence should also simulate quantity", "if we make and sell x"), and the last
+PASS and FAIL lines of the validator below are their check.
+
+**Make and sell X a month.** One more input, **coasters a month** (X): a whole number the owner
+types to try, empty to start like every other input. When it is filled, every row adds three
+columns beside "to cover":
+
+```text
+revenue a month = price each × X
+margin a month  = margin each × X
+profit a month  = margin a month − monthly fixed costs
+```
+
+- **Revenue is what buyers pay**, before the selling fee. The fee is already taken off in the
+  margin, so it is not taken off twice.
+- **Profit is after Omar's time.** Labor is inside the cost, so profit a month is what is left
+  after paying his hands-on time at his labor rate and the month's fixed costs.
+- **Each row assumes all X coasters sell at its price, in orders shaped like its own**: the
+  page's order for the seven strategies, and the order size each price-break row names. A month
+  that mixes sizes is not worked out; the rows side by side are the comparison.
+- **Profit and "to cover" must agree.** Profit a month is zero or more exactly when X is at
+  least "to cover", because "to cover" is the smallest whole X whose margin a month pays the fixed
+  costs. A row whose margin each is zero or less shows a loss at every X.
+- **Full precision, rounded only when shown**, as in §9.3: margin each is multiplied by X before
+  it is rounded.
+- **Empty X shows dashes, not $0.** A row with any other input empty shows dashes too, whatever X
+  is. Zeros would read as "sold nothing", which is a forecast nobody made.
+- **X is a number to try, not a forecast.** The research found no sales volumes, so nothing here
+  says how many coasters a month will sell.
+
+D-113 also asks the what-if for printer hours against one printer's month, Omar's hours and the
+spools to buy. Those come from the plan scaled to X coasters, as in §9.3's "By quantity", and are
+not designed here yet.
+
+**Price breaks by set size and by order size.** Six more rows under the seven, each worked from
+one single price and a break, so a set or a bulk price is tried against what an order of that size
+costs to make. Every setting starts empty. The
+[market research](../../research/coaster-market-pricing.md#3-price-breaks) gives each one a
+starting point, shown beside it for the owner to type in or replace; none is a settled value.
+
+| Setting | What it is | Starting point from the market research | How sure, and why |
+|---|---|---|---|
+| Single price each | What one coaster bought alone sells for | none: the research offers a single only as an option beside sets | Omar's to choose |
+| Set-of-4 break | The share off the single price, per coaster, in a set of 4 | 15–25% | low to medium: four same-seller cases, all pages read, one of them 3D printed (−25% at 4) |
+| Set-of-6 break | The share off the set-of-4 price, per coaster, in a set of 6 | another 15–20% | low to medium: one same-seller case, a painted set of 4 against a natural set of 6, plus medians across sellers |
+| Gift-order break, and its size in coasters | The share off the set-of-4 price for a small gift order of a few sets | about 10% | low: a glass seller and a cork seller (snippets) and one ceramic seller (page read), none of them 3D printed |
+| Café-order break, and its size in coasters | The share off the set-of-4 price for a café or event order | up to about 20% | low: as above; tiers beyond that wait until our own cost at 50 or 100 coasters is measured |
+| Wholesale share, wholesale fee percent, and its size in coasters | What a reselling shop pays, as a share of the set-of-4 price; what the wholesale channel takes | half of retail ("keystone"), before any channel commission; the commission is not settled | medium on the half (a glossary page read; Faire's own page refused, its rule seen only as a snippet); the commission rests on third-party snippets that disagree, 10% to 25% |
+
+```text
+single      = single price each                                    an order of 1
+set of 4    = single      × (1 − set-of-4 break)                   an order of 4
+set of 6    = set of 4    × (1 − set-of-6 break)                   an order of 6
+gift order  = set of 4    × (1 − gift-order break)                 an order of the gift-order size
+café order  = set of 4    × (1 − café-order break)                 an order of the café-order size
+wholesale   = set of 4    × wholesale share                        an order of the wholesale size
+```
+
+Each row then runs the same margin each, to cover and what-if formulas as the seven, with the cost
+each of an order of its own size: the plan scaled, as in §9.3's "By quantity", and marked
+"scaled". The wholesale row uses the wholesale fee percent in place of the fee percent, and
+**assumes** the same fixed fee per order, since the research found none for a wholesale channel.
+The three order-size breaks start from the set-of-4 price because a set of 4 is what the research
+found listed first.
+
+- **Each break applies once**, to the price named on its line: the set-of-6 break to the set-of-4
+  price, never again to the single. The Sets and bundles row above takes a set price Omar types,
+  which already holds whatever break he chose, so no break applies to it.
+- **The research's breaks transfer as what a buyer sees elsewhere, not as what we can afford.**
+  Only one of the set-size cases is a 3D-printed coaster, and the order-size breaks come from glass,
+  cork and printed-surface sellers, whose cost spreads a setup over the order. Ours falls with
+  order size only through per-order work and fuller plates, neither measured yet. So a break pays
+  for itself only where the row's own cost each falls by as much; the margin column is what shows
+  whether it does.
+- **Wholesale needs retail at least twice the cost**, more with a channel commission, because a
+  reselling shop expects to double what it pays. A wholesale row below break-even says so with
+  the same tag.
+
+**A worked example, all made up.** Fixture 1's FIXTURE settings (§9.6; its README holds the hand
+working of the seven rows), plus these made-up values: single price $150, set-of-4 break 0.2,
+set-of-6 break 0.15, a gift order of 8 coasters at 0.1 off, a café order of 24 at 0.2 off, a
+wholesale order of 24 at a share of 0.5 and a wholesale fee percent of 0.2, and X = 40. None is a
+price or a real cost. Cost each comes from the plan scaled to each size, as §9.3 scales it:
+$72.98 for 1 coaster (one set of five beds, so five warm-ups), $68.48 for 4, $68.32 for 6 (ten
+beds), $67.98 for 8 (ten beds) and $67.65 for 24 (thirty beds).
+
+| Row | Price each | Cost each | Margin each | To cover | Revenue a month | Margin a month | Profit a month |
+|---|---|---|---|---|---|---|---|
+| cost-plus (fixture 1) | 171.83 | 68.48 | 68.73 | 15 | 6,873.17 | 2,749.27 | 1,749.27 |
+| market range (fixture 1) | 50.00 | 68.48 | −28.73 | never, below break-even | 2,000.00 | −1,149.27 | −2,149.27 |
+| single | 150.00 | 72.98 | 120 − 1 − 72.98 = 46.02 | 22 | 6,000.00 | 1,840.73 | 840.73 |
+| set of 4 | 150 × 0.8 = 120.00 | 68.48 | 96 − 0.25 − 68.48 = 27.27 | 37 | 4,800.00 | 1,090.73 | 90.73 |
+| set of 6 | 120 × 0.85 = 102.00 | 68.32 | 81.60 − 0.1667 − 68.315 = 13.12 | 77 | 4,080.00 | 524.73 | −475.27 |
+| gift order, 8 | 120 × 0.9 = 108.00 | 67.98 | 86.40 − 0.13 − 67.98 = 18.29 | 55 | 4,320.00 | 731.73 | −268.27 |
+| café order, 24 | 120 × 0.8 = 96.00 | 67.65 | 76.80 − 0.04 − 67.65 = 9.11 | 110 | 3,840.00 | 364.40 | −635.60 |
+| wholesale, 24 | 120 × 0.5 = 60.00 | 67.65 | 48 − 0.04 − 67.65 = −19.69 | never, below break-even | 2,400.00 | −787.60 | −1,787.60 |
+
+The made-up costs are almost all per coaster (cost each falls only from $72.98 to $67.65 between 1
+and 24 coasters), so each break comes nearly straight out of the margin, as the research warns.
+At X = 40 the set of 4 just covers the fixed costs (37 ≤ 40) and the set of 6 does not (77 > 40),
+and the profit column agrees with both. The wholesale row fails the keystone test: retail at $120
+a coaster is less than twice its $67.65 cost.
 
 **Validator:** every scenario runs through the one formula and shows only what it can work out.
 
@@ -922,6 +1043,26 @@ number, and only the golden worked from a 6-coaster order catches it. Fixture 1'
 for this reason: at $2 the two costs each happen to be equal to the cent, and the check could not
 tell them apart. Also FAIL: any
 row that shows a number while one of its inputs is empty.
+
+PASS, the what-if and the price breaks (once built): on fixture 1 with X = 40 and the made-up
+break settings of the worked example above, every row of the worked table, its price, cost each,
+margin each, "to cover" and the three a-month columns, equals the golden to the cent. The other
+five strategy rows get the same three columns, worked by hand in fixture 1's README beside the
+seven rows it already holds.
+The cost-plus row shows revenue $6,873.17, margin $2,749.27 and profit $1,749.27 a month. Its
+profit is above zero at X = 15 and below it at X = 14, where "to cover" says 15. The set-of-6 row
+prices at $102.00, one break on the set-of-4 price, and takes its cost each from an order of 6.
+With X empty, every what-if cell is a dash.
+
+FAIL: profit a month worked per coaster and never multiplied by X. The cost-plus row then shows
+$68.73 − $1,000 = −$931.27 a month, a believable loss on a row that makes $1,749.27 a month, and
+it does not change as X does; only the golden at X = 40 catches it. Also FAIL: the set-of-4 break applied a
+second time on the way to the set of 6, $150 × 0.8 × 0.8 × 0.85 = $81.60 each, which gives a
+margin each of −$3.20 and "never". It reads as "sets of 6 lose money", a plausible finding, so
+only the golden's $102.00 catches it; the same goes for a break taken off the Sets and bundles
+row's typed price. Also FAIL: margin each rounded before it is multiplied, $68.73 × 40 =
+$2,749.20 against the golden's $2,749.27. Also FAIL: an empty X shown as $0 revenue and −$1,000
+profit, a forecast nobody made.
 
 **A skill, a page or a gate.** Two earlier evaluations each weighed a proposed skill against how
 often its job actually came back:
@@ -1230,7 +1371,8 @@ can be reused for another print.
 [^scenario]: **scenario, margin, break-even volume** — a scenario is one way of setting the price,
     worked out for the order on the page. The margin is what one coaster leaves after the selling
     fee and its cost, labor included. The break-even volume is how many coasters a month that
-    margin needs to cover the shop's fixed costs.
+    margin needs to cover the shop's fixed costs. The what-if takes a number of coasters a month
+    the owner types and shows that month's revenue, margin and profit at the scenario's price.
 [^hash]: **hash** — a short fingerprint computed from a file's contents; any change to the file
     changes it.
 [^reviewtheme]: **review-theme** — this repo's skill in which six simulated coffee drinkers score

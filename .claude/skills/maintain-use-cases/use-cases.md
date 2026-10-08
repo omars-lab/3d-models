@@ -2,7 +2,7 @@
 name: use-cases
 description: Actor / use-case map for the whole 3d-models experience, with hash-pinned code pointers validated by the pre-commit hook
 as_of:
-  3d-models: f816216870d2bf71ec5f70d0e30f93aa980e9501
+  3d-models: 3b20f5e76492789e3dbdeb5fa367e30955978639
   bikar: 6e6c6dcde6f090fbe2ccb7fbca40917555b56e97
   qiyas: 5cd8635c4e56ecd89572e6772878ee09125c9d79
   youtube: beb19b3df61cc1bdc74abb2e6ef916c1e8dc7692
