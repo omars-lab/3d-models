@@ -222,7 +222,7 @@ bed: x2d
 profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
-  color: "#F5547C"          # only if call 3 says the color goes in the recipe
+  # no color: it is named at the send, never in the recipe (call 18, 2026-10-08)
 items:
   - { bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr, piece: Middle, params: { size: 112.5 }, label: MIDDLE }
   - { bkr: bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr, piece: Kite,   params: { size: 112.5 }, label: KITE }
@@ -258,7 +258,7 @@ plate prints) and the plate page (what was approved and sent). Each holds a diff
 |---|---|---|
 | Which pieces are one group, and that group's color | The `.bkr`: the `fill … color <Name>` line names the group; the palette line `Name = #hex` gives its color | The Lab only edits the `.bkr`; the share link carries it; the palette name is already the `--piece` a recipe asks for (D-090) |
 | Which groups print together, and on which plate | The recipe: one per color, its `items` naming the pieces | Recipes are what the slicer and the plate pages read |
-| Which tray actually fed it | The send (`--color`, or the recipe's `profile.color`) and the plate page's record of the run | The tray is a fact about the printer on the day, not about the design |
+| Which tray actually fed it | The send (`--color`, or the tray `--ams-mapping` picks; a one-color recipe carries no color, call 18) and the plate page's record of the run | The tray is a fact about the printer on the day, not about the design |
 
 **The name is the group; the color is not the name.** Two groups can share a color and keep their
 own names (Middle, Kite and Star are all pink above and still print as three `--piece` outputs on

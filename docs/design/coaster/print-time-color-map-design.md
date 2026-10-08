@@ -6,7 +6,8 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 90ab01
 
 # Print-time color map: matching a Lab design's colors to the loaded trays
 
-> **Status: draft, written from Omar's picks of 2026-10-08.** Nothing here is built yet. The parts
+> **Status: draft, written from Omar's picks of 2026-10-08.** Only build step 1 (call 18, §8) is
+> built; the rest is not. The parts
 > already built that it leans on are named in §2. Its open calls are in §12, and they are only
 > the ones Omar has not answered.
 
@@ -76,7 +77,7 @@ are stand-ins.*
    color.
 7. **The send, color named.** send-plate runs `print send … --color "#RRGGBB"` with the mapped
    tray's color. The send reads the trays again and refuses if that color is no longer loaded
-   (`3d-models:tools/bambu/src/commands/print.ts:L400 "✗ filament:"`).
+   (`3d-models:tools/bambu/src/commands/print.ts:L411 "✗ filament:"`).
 8. **The next color.** Each plate is its own yes and its own send.
 
 The send's re-read is the gate (step 7); the map at step 4 is a plan. The trays can change between
@@ -259,11 +260,11 @@ That one is a navigation, though, and this one is a fetch, so it needs the hub t
 Call 18 picked "always at the send". What is built writes the color into the recipe for a
 per-color plate. The changes, which are task #244:
 
-1. **The recipe writer stops writing `color:`.** `recipeText` writes
-   `` `  color:    ${…}` `` today
-   (`3d-models:tools/bambu/src/by-color.ts:L253 "c.hex.toUpperCase()"`), and the type comment calls
-   that hex "the recipe's profile.color"
-   (`3d-models:tools/bambu/src/by-color.ts:L141 "the recipe's profile.color"`). One writer serves
+1. **The recipe writer stops writing `color:`.** Before call 18, `recipeText` wrote a
+   `  color:` line under `profile:`. It now writes a header line in its place
+   (`3d-models:tools/bambu/src/by-color.ts:L255 "${COLOR_AT_SEND}"`), and the type comment says the
+   hex goes in the recipe's title, never its profile
+   (`3d-models:tools/bambu/src/by-color.ts:L141 "never its profile"`). One writer serves
    both `plates by-color` and `bambu order plan`, so both change, and so does
    `.claude/skills/color-themes/scripts/theme_plates.py`, which calls `plates by-color`. The
    design color stays in the recipe's name (`<prefix>-<code or hex>`), its comment header, and the
@@ -284,15 +285,16 @@ per-color plate. The changes, which are task #244:
      throws on a plate with more than one filament
      (`3d-models:tools/bambu/src/filament-sync.ts:L125 "export function chooseColor("`). Its
      colors stay in its recipe, as the one exception, mapped with `--ams-mapping` at the send.
-3. **The send refuses a one-color plate with no color named.** Today, with no `--color`, a plate
-   prints "in the slice's own color, Studio's default green"
-   (`3d-models:.claude/skills/send-plate/SKILL.md:L100 "Studio's default green."`), which is the
+3. **The send refuses a one-color plate with no color named.** Before call 18, a plate sent with
+   no `--color` printed in the slice's own color, Studio's default green, which is the
    preset's color set by `setFilamentColor`
    (`3d-models:tools/bambu/src/commands/slice.ts:L156 "export function setFilamentColor("`). Under
    "always at the send", printing green because nobody named a color is a silent default. So
    `print send` refuses a one-color plate whose recipe has no color unless `--color` or
-   `--ams-mapping` is given. It already refuses both at once
-   (`3d-models:tools/bambu/src/commands/print.ts:L289 "--color and --ams-mapping both pick the spool"`).
+   `--ams-mapping` is given, dry run too
+   (`3d-models:tools/bambu/src/color-at-send.ts:L59 "and this one names none"`). It already
+   refused both at once
+   (`3d-models:tools/bambu/src/commands/print.ts:L290 "--color and --ams-mapping both pick the spool"`).
 4. **send-plate's step 4.2 text** changes from "a recipe with no `color:` is one whose color is
    picked at the send" to "every one-color plate's color is picked at the send".
 5. **The compose field stays.** `PlateProfile.color` in `slice compose`

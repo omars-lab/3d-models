@@ -12,7 +12,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-      "recipe_hash": "c371495377ce",
+      "recipe_hash": "fc3ad2ce8a74",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
@@ -53,7 +53,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-      "recipe_hash": "640d04cc803b",
+      "recipe_hash": "b25f97171df0",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
@@ -94,7 +94,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-      "recipe_hash": "913b359b3139",
+      "recipe_hash": "5976992c57f7",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
@@ -135,7 +135,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-      "recipe_hash": "0f5521749a10",
+      "recipe_hash": "c975045c745b",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",
@@ -187,7 +187,7 @@
       },
       "settings": "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       "filament": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-      "recipe_hash": "b89b906be8a2",
+      "recipe_hash": "b1e810be5c1b",
       "items": [
         {
           "construction": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr",

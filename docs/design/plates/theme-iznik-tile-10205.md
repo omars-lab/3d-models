@@ -1,7 +1,7 @@
 ---
 plate: theme-iznik-tile-10205
 recipe: theme-iznik-tile-10205.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -32,6 +32,9 @@ Middle ×1, Star ×10. Not on the printer: it prints once the spool is bought an
 - **Middle ×1, Star ×10**, every one in PLA Basic Maroon Red (10205), the gBV coaster at sheets-04g's size
   (112.5 mm).
 - White ground, cobalt and turquoise with a red accent, after the glazed tiles of Ottoman Iznik.
+
+**The color is picked at the send:** `bambu print send … --color "#9D2235"`.
+The recipe names no color (call 18), so say the color with the yes.
 
 **Before you say yes:**
 

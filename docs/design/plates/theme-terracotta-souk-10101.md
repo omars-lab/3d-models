@@ -1,7 +1,7 @@
 ---
 plate: theme-terracotta-souk-10101
 recipe: theme-terracotta-souk-10101.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -32,6 +32,9 @@ frame ×1. On the printer now, so it can print as soon as you say yes. The plate
 - **frame ×1**, in PLA Basic Black (10101), the gBV coaster at sheets-04g's size
   (112.5 mm).
 - Fired clay, brass and sand in a black frame, like a market stall of pots and lamps.
+
+**The color is picked at the send:** `bambu print send … --color "#000000"`.
+The recipe names no color (call 18), so say the color with the yes.
 
 **Before you say yes:**
 

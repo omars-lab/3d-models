@@ -1,7 +1,7 @@
 ---
 plate: theme-terracotta-souk-10401
 recipe: theme-terracotta-souk-10401.yaml
-iteration: 1
+iteration: 2
 stage: waiting
 times_printed: 0
 runs: []
@@ -32,6 +32,9 @@ Middle ×1, Star ×10. Not on the printer: it prints once the spool is bought an
 - **Middle ×1, Star ×10**, every one in PLA Basic Gold (10401), the gBV coaster at sheets-04g's size
   (112.5 mm).
 - Fired clay, brass and sand in a black frame, like a market stall of pots and lamps.
+
+**The color is picked at the send:** `bambu print send … --color "#E4BD68"`.
+The recipe names no color (call 18), so say the color with the yes.
 
 **Before you say yes:**
 

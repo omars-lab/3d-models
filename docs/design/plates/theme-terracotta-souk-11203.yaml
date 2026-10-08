@@ -5,12 +5,13 @@
 #
 #   KITE  Kite pieces of gBV (10)
 #   HEX   Hex pieces of gBV (10)
+#
+# The color is named at the send (`bambu print send --color`), not here (call 18).
 
 bed: x2d
 profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Matte @BBL X2D 0.4 nozzle"
-  color:    "#B15533"
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr

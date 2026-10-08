@@ -48,6 +48,7 @@ import { bedCheck, newestBedPhoto, readVerdict } from "../bed-check.js";
 import { plateSwitchCheck } from "../print-options.js";
 import { checkNozzles, printerNozzles } from "../nozzle-check.js";
 import { checkSliceFresh } from "../slice-fresh.js";
+import { colorAtSend, plateRecipePath, recipeColor } from "../color-at-send.js";
 import { bedPhoto } from "./bed.js";
 import {
   chooseColor,
@@ -296,6 +297,16 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
       return;
     }
     projectOpts = buildProjectOptions(remoteUploadName(abs), opts, plateNo, slicePlate.type.token);
+    // The color is named at the send (call 18): a one-color plate's recipe fixes none, so a send that
+    // names none is refused here, dry run or not (color-at-send.ts).
+    const colorCheck = colorAtSend({
+      used: await readUsedFilaments(abs, plateNo ?? 1),
+      fixed: recipeColor(plateRecipePath(plateNameOf(abs), repoRoot() ?? process.cwd())),
+      color: opts.color,
+      amsMapping: opts.amsMapping,
+    });
+    if (!colorCheck.ok) throw new Error(`✗ ${colorCheck.line}.`);
+    console.error(`✓ ${colorCheck.line}.`);
   } catch (err) {
     console.error((err as Error).message);
     process.exitCode = 2;
@@ -722,7 +733,7 @@ export function registerPrint(program: Command): void {
     )
     .option("--plate <n>", "plate index inside the .3mf to print (default 1 → Metadata/plate_1.gcode)")
     .option("--ams-mapping <spec>", '[X2D-UNCONFIRMED] filament→tray map, one tray number per filament: e.g. "2" (AMS 0, third slot), "254" (external spool), "-1,4", or "none" (default: matched from the loaded trays)')
-    .option("--color <hex>", 'the color a one-color plate prints in, "#RRGGBB": feeds it from the loaded tray of that color, in place of the color the slice carries (default: the slice\'s color)')
+    .option("--color <hex>", 'the color a one-color plate prints in, "#RRGGBB": feeds it from the loaded tray of that color, in place of the color the slice carries. Required for a one-color plate (call 18: the color is named at the send, never in the recipe) unless --ams-mapping picks the tray')
     .option("--md5 <hex>", "[X2D-UNCONFIRMED] .3mf checksum for firmware that validates it (default empty)")
     .option("--no-bed-leveling", "skip bed leveling before this print (default: auto, the printer decides, as Studio sends it)")
     .option("--no-flow-cali", "skip flow calibration before this print (default: auto)")

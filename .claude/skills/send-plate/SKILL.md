@@ -93,11 +93,14 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
    off with `bambu storage list` and `bambu storage rm <name>`, which deletes from his printer, so
    ask him first.
 2. `bambu filament-sync --plate build/plates/<name>.plate.3mf`: the plate's colors match loaded
-   trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool. A recipe with
-   no `color:` is one whose color is picked at the send: pass the color Omar named with his yes,
-   `--color "#RRGGBB"`, on the dry run and the send alike, and the dry run's `color:` line and
-   tray match show which spool it took. With no `--color` it prints in the slice's own color,
-   Studio's default green.
+   trays. A mismatch is Omar's to fix at the AMS; say which tray needs which spool. Every
+   one-color plate's color is picked at the send (call 18): its recipe names no color, so pass
+   the color Omar named with his yes, `--color "#RRGGBB"`, on the dry run and the send alike, and
+   the dry run's `color:` line and tray match show which spool it took. With neither `--color` nor
+   `--ams-mapping`, the send refuses a one-color plate, dry run too, rather than print it in the
+   slice's own color (Studio's default green). Two exceptions go out without it: a multi-color
+   plate (phones-01) matches its list tray by tray, and a frozen production plate that still
+   fixes its color (phones-02, D-095) goes out in that color.
 3. `bambu print send build/plates/<name>.plate.3mf --dry-run`. Every line must be green:
    `✓ approval`, `✓ printer`, `✓ plate`, `✓ nozzle`, `✓ slice`, `✓ storage`, the warnings sidecar, the
    filament plan. It saves a bed photo under `.bambu/bed/` and prints its path (or take one with

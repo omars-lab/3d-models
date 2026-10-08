@@ -5,12 +5,13 @@
 #
 #   MIDDLE  Middle pieces of gBV (1)
 #   STAR    Star pieces of gBV (10)
+#
+# The color is named at the send (`bambu print send --color`), not here (call 18).
 
 bed: x2d
 profile:
   settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
-  color:    "#E4BD68"
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr

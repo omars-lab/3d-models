@@ -135,7 +135,7 @@ def flags(spool: dict, con: dict) -> list[str]:
         out.append(
             f"**A {len(spool['hexes'])}-color spool ({shades}).** The color catalog files {spool['name']} as "
             f"{spool.get('kind', 'more than one color')}: {how}. The theme picture draws it as its first "
-            "color only, and the plate is sliced as that color, the one the AMS reports for the tray.")
+            "color only, and that is the color the send names, the one the AMS reports for the tray.")
     return out
 
 
@@ -198,6 +198,9 @@ bottom row"). It prints as one plate per color, {n_plates} plates in all; this o
 - **{what}**, {every} {full}, the {con['short']} coaster at sheets-04g's size
   ({con['params']['size']} mm).
 - {theme['mood']}
+
+**The color is picked at the send:** `bambu print send … --color "{spool['hexes'][0][:7].upper()}"`.
+The recipe names no color (call 18), so say the color with the yes.
 
 **Before you say yes:**
 
@@ -463,6 +466,9 @@ def self_test() -> int:
         fails.append("the page does not flag the two-color spool by its kind, and the gap")
     if "PLA Silk Neon City (13903)" not in page or "$0.29 of filament" not in page:
         fails.append("the page does not name the spool by the catalog, or carry its filament cost")
+    # Call 18: the recipe names no color, so the page says which one to name at the send.
+    if '--color "#0047BB"`' not in page or "sliced as that color" in page:
+        fails.append("the page does not say the color is picked at the send, by the spool's first hex")
     gold = {**plate, "name": "theme-t-13402", "usd": None, "grams": 2.2}
     gpage = page_text(theme, con, gold, cat["13402"], "PLA Sparkle", False, 3, "../t.svg", "2026-10-05")
     if "-color spool" in gpage or "Not on the printer" not in gpage or "no price in the price file" not in gpage:

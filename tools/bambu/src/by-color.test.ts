@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
-import { type Demand, type PlateColor, groupByColor, itemLabels, normalHex, pieceGroups, readPiecesBkr, writeRecipes } from "./by-color.js";
+import { COLOR_AT_SEND, type Demand, type PlateColor, groupByColor, itemLabels, normalHex, pieceGroups, readPiecesBkr, writeRecipes } from "./by-color.js";
 
 // The one-plate-per-color writer (infill-color-ux-design §4.5) on a made-up pieces file. The real gBV
 // files go through it in `bambu order fixtures`; these pin each rule with the input that breaks it.
@@ -162,15 +162,18 @@ describe("writeRecipes — the recipe compose.ts slices", () => {
   const plates = groupByColor([demand(A, null, WHITE, -1, 2), demand(A, "Kite", BLACK, 1, 2), demand(A, "Star", BLACK, 3, 2)]);
   const written = writeRecipes(plates, "fixture-t", ["about line"], (it) => (it.piece === "Kite" ? 10 : it.piece ? 20 : 1));
 
-  it("names each plate by its color code and writes the profile for its line", () => {
+  it("names each plate by its color code and writes the profile for its line, with no color in it", () => {
     expect(written.map((w) => w.name)).toEqual(["fixture-t-10100", "fixture-t-10101"]);
     const recipe = parseYaml(written[1]!.text) as { bed: string; profile: Record<string, string>; items: Array<Record<string, unknown>> };
     expect(recipe.bed).toBe("x2d");
+    // The color is named at the send, never fixed in a recipe (call 18): the profile has no `color`.
     expect(recipe.profile).toEqual({
       settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D",
       filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle",
-      color: "#000000",
     });
+    expect(written[1]!.text).not.toMatch(/^\s+color:/m);
+    expect(written[1]!.text).toContain(`# ${COLOR_AT_SEND}`);
+    expect(written[1]!.text.split("\n")[0]).toContain("#000000");
     expect(recipe.items).toEqual([
       { bkr: A, piece: "Kite", params: { size: 100 }, count: 2, label: "KITE" },
       { bkr: A, piece: "Star", params: { size: 100 }, count: 2, label: "STAR" },
