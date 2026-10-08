@@ -83,12 +83,12 @@ One bed, 49 minutes, about 18.5 g (43 minutes and 18.3 g before the letters).
 
 **Your answer:**
 
-- [ ] Yes, in pink
+- [x] Yes, in pink
 - [ ] Yes, in silk blue
 - [ ] Yes, in black
 - [ ] Yes, in green
 - [ ] Not yet
-- Notes:
+- Notes: Yes recorded 2026-10-08; it waits for the carved ids (plate, iteration, piece) and is asked again then, since the ids change the plate.
 
 **Your comment, answered (2026-10-07).** You asked: "Can these all be printeind in smae color? can
 we have minimal letters printiend on each AT AB (a top, a bottom), BT, BB, ETC".
@@ -140,10 +140,10 @@ click when the coaster is lifted; and is the band's underside, printed over air,
 each of its four pairs got its letter (`O` to `R`, as under call 1), which changes the plate, so
 that yes no longer covers it (D-097). A tick here is the yes for the lettered plate:
 
-- [ ] Yes, with the letters, in pink
+- [x] Yes, with the letters, in pink
 - [ ] Yes, with the letters, in another color (name it in Notes)
 - [ ] Not yet
-- Notes:
+- Notes: Yes recorded 2026-10-08; it waits for the carved ids (plate, iteration, piece) and is asked again then, since the ids change the plate.
 
 ### 3. Print sld-1, the dovetail coupon?
 
@@ -226,10 +226,10 @@ on solid strap. Nothing with an id has printed yet.*
 [split-01's page](../../design/plates/split-01.md). Adding the id changed the plate, so that yes no
 longer covers it (D-097). A tick here is the yes for the plate with its id:
 
-- [ ] Yes, with the id, after spl-1, in pink
+- [x] Yes, with the id, after spl-1, in pink
 - [ ] Yes, with the id, in another color or another order (say which in Notes)
 - [ ] Not yet
-- Notes:
+- Notes: Yes recorded 2026-10-08; it waits for the carved ids (plate, iteration, piece) and is asked again then, since the ids change the plate. It also waits for the stud-layout plate (call 12).
 
 ### 5. Print split-02, the split coaster whose pieces carry a flange? ^mtorlk
 
@@ -269,10 +269,10 @@ cannot slip through.
 Adding the id changed the plate, so that yes no longer covers it (D-097). A tick here is the yes
 for the plate with its id:
 
-- [ ] Yes, with the id, in pink
+- [x] Yes, with the id, in pink
 - [ ] Yes, with the id, in another color (name it in Notes)
 - [ ] Not yet
-- Notes:
+- Notes: Yes recorded 2026-10-08; it waits for the carved ids (plate, iteration, piece) and is asked again then, since the ids change the plate.
 
 ### 6. Print sheets-04g-fit, the kites and middle piece at a ladder of gaps? ^8wfkhe
 
@@ -294,12 +294,12 @@ the sheets-04g coaster you already have. One bed, 25 minutes, about 5 g, before 
 
 **Your answer:**
 
-- [ ] Yes, in pink
+- [x] Yes, in pink
 - [ ] Yes, in silk blue
 - [ ] Yes, in black
 - [ ] Yes, in green
 - [ ] Not yet
-- Notes:
+- Notes: Yes recorded 2026-10-08; it waits for the carved ids (plate, iteration, piece) and is asked again then, since the ids change the plate.
 
 **Your comment, answered (2026-10-07).** You asked: "we should re-print minimal consturciton with
 this to fit in again. can we use small dots to distingush (on top of peices (3 dots for biggest, 1
@@ -346,7 +346,7 @@ not into five rungs. The plate prints no kite dots until you pick.
 
 **Your answer:**
 
-- [ ] Keep each rung in its own pile
+- [x] Keep each rung in its own pile
 - [ ] Step each rung's height
 - [ ] Smaller dots (a calibration coupon first)
 - Notes:
@@ -363,8 +363,8 @@ not a choice; its page has the same boxes.
 
 - [ ] It printed (say per piece in Notes whether it is a keep, if you remember)
 - [ ] It did not print, or it failed
-- [ ] I don't remember
-- Notes:
+- [x] I don't remember
+- Notes: Recorded as outcome unknown. minis-01 is reprinted with ids instead (2026-10-08).
 
 ### 8a. How did the sheets-04c coaster come out?
 
@@ -380,7 +380,7 @@ watcher logged it finished at 01:20 UTC on 2026-10-04, with no pause. Nobody has
 - [ ] Keep: as good as the first one
 - [ ] Adjust: usable, but something is off (say what in Notes)
 - [ ] Drop: not usable
-- Notes:
+- Notes: Not asked. Replaced 2026-10-08 by a reprint of sheets-04c with carved ids, judged then.
 
 ### 8b. Call sheets-04c repeatable, or keep it an experiment
 
@@ -399,7 +399,7 @@ of this plate as laid out, and a full bed.
 
 - [ ] Repeatable
 - [ ] Keep it an experiment
-- Notes:
+- Notes: Not asked. Replaced 2026-10-08 by a reprint of sheets-04c with carved ids, judged then.
 
 ## The split coaster (calls 9 to 15)
 
@@ -433,8 +433,8 @@ last box and write its name in Notes.
 - [ ] Cool Plate SuperTack (and buy one)
 - [ ] Textured PEI, as now
 - [ ] Smooth PEI (and buy one)
-- [ ] The glacier plate is something else
-- Notes:
+- [x] The glacier plate is something else
+- Notes: The glacier plate: the smooth light-blue plate from another maker, sliced as the smooth plate type, the bed check names it (#607, D-108). No SuperTack bought. (2026-10-08, asked in chat.)
 
 ### 10. Round the cut edges or not
 
@@ -445,7 +445,7 @@ last box and write its name in Notes.
 
 **Your answer:**
 
-- [ ] Sharp edges
+- [x] Sharp edges
 - [ ] Round-over on each cut edge
 - Notes:
 
@@ -458,9 +458,9 @@ last box and write its name in Notes.
 
 **Your answer:**
 
-- [ ] Press fit, glue optional
+- [x] Press fit, glue optional
 - [ ] Glue always (epoxy)
-- Notes:
+- Notes: Studs for the coaster halves; the dovetail stays for piece halves (sld-1). (2026-10-08, asked in chat.)
 
 ### 12. How many studs
 
@@ -476,9 +476,9 @@ for 56.*
 
 **Your answer:**
 
-- [ ] About 9, 25 mm apart
+- [x] About 9, 25 mm apart
 - [ ] Every crossing (56)
-- Notes:
+- Notes: Settled by a dedicated stud-layout plate first: three wedge pairs cut from gBV at 25, 15 and 10 mm spacing, after spl-1 sets the gap. split-01 waits for it. (2026-10-08, asked in chat.)
 
 ### 13. Where splitting lives
 
@@ -492,7 +492,7 @@ tick changes that work.
 
 **Your answer:**
 
-- [ ] A bikar coaster clause
+- [x] A bikar coaster clause
 - [ ] The slicer's cut by hand
 - Notes:
 
