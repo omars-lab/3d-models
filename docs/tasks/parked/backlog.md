@@ -4,18 +4,21 @@ Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-mo
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
-## Pattern catalog vault — step 2, the generator, is next
+## Pattern catalog vault — step 3, the planned patterns, is next
 
 [`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
 pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
 through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 2026-09-27.
 
-Step 1 is done (2026-09-28, see [done.md](done.md)): Omar commented on the CS-1 note
-[Simple 20-step Six-Fold Star Rosette](../../catalog/patterns/simple-20-step-six-fold-star-rosette-cs-1.md)
-(thread wtsm68) and a session answered with `reviews reply`. That note is still the only one.
-Step 2 is not started: `tools/catalog.py sync`, a note for each construction in the ledger, the
-style notes and the index, done when `sync --check` passes and every ledger row has a note with
-its pictures.
+Steps 1 and 2 are done (see [done.md](done.md)). The catalog page is
+[`docs/catalog/index.md`](../../catalog/index.md); the `pattern-catalog` skill writes it. Step 3
+is next: a note with status planned for each queued candidate in the
+[consolidated screen](../../research/candidate-screen-2026-09-27.md), and the catalog-expansion
+backlog linking each queue entry to its note. Step 4 then makes `make validate` fail when a
+construction has no note (a hook, since `hook_parity` wants one for every validate target).
+
+Step 5's size question now has a number: the 36 pictures step 2 committed average 39 kB, 1.4 MB
+in all.
 
 ## The FAQ — waiting on Omar
 
