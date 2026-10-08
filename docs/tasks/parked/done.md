@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-10-07 — The use-case map's bikar pin moved to bikar main (643178a): all 21 bikar anchors whose lines had moved sat on exactly one line, so `validate.py --repair` moved them, 18 in the map and 3 in two docs that cite the same lines
 - 2026-10-06 — A note on joining the two halves of a split piece: can they slide, clip or screw together, with a coupon for each way (3d-models #576)
 - 2026-10-05 — The launch-store skill: one pre-launch checklist for the store, each line saying who does it and where it is tracked, and a check that keeps each call's tick in step with its Decided line. The check found the storefront design's own list showing eight decided calls as open; those ticks are fixed, and `make validate-orders` now runs the check (3d-models #573)
 - 2026-10-05 — Omar's answers on the 2026-10-05 open-calls page read back into the decisions log as D-101 to D-106, among them the swatch question (D-105: print our own swatch card) and the storefront calls (3d-models #564)
