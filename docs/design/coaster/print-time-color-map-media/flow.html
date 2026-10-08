@@ -1,0 +1,131 @@
+<!doctype html>
+<!--
+  The print-time color map, end to end: print-time-color-map-design.md §2.
+  A drawing, not a screenshot of anything built. The steps, the skill, the commands
+  and the hub routes are the doc's; pink #F5547C and black #000000 are colors the
+  plate recipes already use; the blue and green trays are stand-ins, as are the
+  design's colors.
+
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1400,600
+            --screenshot=flow.png file://.../flow.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Print-time color map flow</title>
+    <style>
+      :root {
+        --bg: #14120d;
+        --panel: #1d1a13;
+        --edge: #2c2718;
+        --ink: #e8e2d0;
+        --dim: #9a917a;
+        --gold: #d6b254;
+        --pass: #7fbf6a;
+        --warn: #e0a83a;
+        --fail: #d96f5e;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; padding: 28px 32px; background: var(--bg); color: var(--ink);
+        font: 15px/1.4 -apple-system, "Helvetica Neue", Arial, sans-serif;
+        width: 1400px; height: 600px; overflow: hidden;
+      }
+      h1 { margin: 0 0 4px; font-size: 22px; color: var(--gold); font-weight: 600; }
+      .sub { color: var(--dim); margin-bottom: 18px; }
+      .lanes { display: grid; grid-template-columns: 300px 1fr; gap: 14px 18px; }
+      .lane-label {
+        border-right: 2px solid var(--edge); padding: 10px 12px 10px 0; color: var(--dim);
+        font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+      }
+      .lane-label b { display: block; color: var(--ink); font-size: 16px; text-transform: none; letter-spacing: 0; margin-bottom: 4px; }
+      .row { display: flex; gap: 12px; align-items: stretch; }
+      .box {
+        background: var(--panel); border: 1px solid var(--edge); border-radius: 8px;
+        padding: 10px 12px; flex: 1; min-width: 0;
+      }
+      .box .n { color: var(--gold); font-weight: 700; margin-right: 6px; }
+      .box .t { font-weight: 600; }
+      .box .d { color: var(--dim); font-size: 13px; margin-top: 4px; }
+      .box code { font: 12px/1.3 Menlo, monospace; color: var(--ink); background: #0e0c08; padding: 1px 4px; border-radius: 3px; }
+      .arrow { align-self: center; color: var(--gold); font-size: 22px; flex: 0 0 auto; }
+      .ask { border-color: var(--warn); }
+      .send { border-color: var(--pass); }
+      .readonly { border-style: dashed; }
+      .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; border: 1px solid #555; margin-right: 3px; }
+      table.map { border-collapse: collapse; margin-top: 6px; font-size: 13px; }
+      table.map td { padding: 2px 8px 2px 0; }
+      .ok { color: var(--pass); } .q { color: var(--warn); } .no { color: var(--fail); }
+      .choices span { display: inline-block; border: 1px solid var(--edge); border-radius: 12px; padding: 1px 9px; margin: 4px 4px 0 0; font-size: 13px; }
+      .note { color: var(--dim); font-size: 13px; margin-top: 16px; }
+    </style>
+  </head>
+  <body>
+    <h1>Colors are matched to the loaded trays when the skill prints a Lab design</h1>
+    <div class="sub">The Lab never sends. The send-plate skill maps each color, asks about each one it cannot match, and sends one plate per color, each with its color named and its own yes.</div>
+
+    <div class="lanes">
+      <div class="lane-label"><b>Coaster Lab</b>in the browser, anywhere</div>
+      <div class="row">
+        <div class="box readonly">
+          <span class="t">Hub, read only, tailnet only</span>
+          <div class="d"><code>GET /api/trays</code> and <code>/api/status</code>. No send route. The access code stays on the home machine.</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box">
+          <span class="n">1</span><span class="t">Pick colors per group</span>
+          <div class="d">From the filaments we own or can buy. Trays shown when the hub answers; otherwise the baked list, marked "not checked".</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box">
+          <span class="n">2</span><span class="t">Export the design</span>
+          <div class="d">A <code>.bkr</code> pieces file with a color per group</div>
+        </div>
+      </div>
+
+      <div class="lane-label"><b>send-plate skill</b>Claude, on the home machine</div>
+      <div class="row">
+        <div class="box">
+          <span class="n">3</span><span class="t">One recipe per color</span>
+          <div class="d"><code>bambu plates by-color</code>, no <code>color:</code> line in the recipe (call 18)</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box">
+          <span class="n">4</span><span class="t">Read the trays, map</span>
+          <div class="d"><code>bambu filament map</code> (proposed): read on this machine, not through the hub; the same matcher <code>print send</code> uses</div>
+          <table class="map">
+            <tr><td><span class="sw" style="background:#F5547C"></span>pink</td><td>→ tray 1</td><td class="ok">matched</td></tr>
+            <tr><td><span class="sw" style="background:#000000"></span>black</td><td>→ tray 3</td><td class="ok">matched</td></tr>
+            <tr><td><span class="sw" style="background:#C8A24A"></span>gold</td><td>→ none</td><td class="q">missing</td></tr>
+          </table>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box ask">
+          <span class="n">5</span><span class="t">One question per mismatch</span>
+          <div class="d">"Gold is on no tray."</div>
+          <div class="choices"><span>Load it</span><span>Use the nearest</span><span>Stop</span></div>
+          <div class="d">After "load it", the trays are read and mapped again.</div>
+        </div>
+      </div>
+
+      <div class="lane-label"><b>Omar, then the printer</b>one yes per send (D-093)</div>
+      <div class="row">
+        <div class="box">
+          <span class="n">6</span><span class="t">A page per plate</span>
+          <div class="d">Each page names its mapped color; the yes covers that plate in that color.</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box send">
+          <span class="n">7</span><span class="t">Send, color named</span>
+          <div class="d"><code>print send … --color "#F5547C"</code><br/>The send reads the trays again and refuses if the color is no longer loaded.</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box send">
+          <span class="n">8</span><span class="t">The next color</span>
+          <div class="d">Plate 2 black, plate 3 gold: each its own yes and its own send.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">A drawing. Pink and black are colors the plate recipes use today; the gold design color and the tray numbers are stand-ins.</div>
+  </body>
