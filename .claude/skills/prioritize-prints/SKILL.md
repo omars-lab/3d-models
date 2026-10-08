@@ -37,8 +37,16 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    the frontmatter.
 2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/design/plates/minis-06.md): In short, What it is, Why
-   print it, Pictures, Cost and risk, Your call, Timeline. The page starts at `proposed`, with
-   `maturity: experiment`; only the [grade-plate](../grade-plate/SKILL.md) skill raises it.
+   print it, After the print, Pictures, Cost and risk, Your call, Timeline. The page starts at
+   `proposed`, with `maturity: experiment`; only the [grade-plate](../grade-plate/SKILL.md) skill
+   raises it.
+   **After the print** says, before it prints, what gets asked when it comes off the bed: a table
+   `| Pieces | The question | What we expect, and why | What each answer changes |`, a row per
+   question (Omar, 2026-10-08: "anticipated table of printing this and each one and why we are
+   printing it"). The plates gate (P12) refuses an experiment page that is proposed, waiting,
+   approved or sent without it, or with an empty cell: a question whose answer changes nothing is
+   not worth the print. The review-print skill asks the rows one at a time when it comes back.
+   Theme and swatch pages get theirs from the color-themes skill's `after_print.py`.
    A plate that is designed but waits on a build before it can have a recipe (the sampler
    sheets, [sheets-01](../../../docs/design/plates/sheets-01.md)) gets its page now, at `planned`,
    with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue

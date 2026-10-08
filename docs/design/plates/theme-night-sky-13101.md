@@ -46,6 +46,15 @@ A theme on a screen is a guess at how the colors sit together. Printing its plat
 pieces in the frame settles it for this theme. The persona scores beside each theme are simulated,
 not customer research; these prints are the first thing to hold them against.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| frame ×1 | Does Onyx Black Sparkle look the way the theme picture draws it, beside the theme's other colors in the frame? | Close, not exact: the picture draws the color catalog's screen color, not a printed surface. | Looks right: the color stays in the theme. Off: the color-themes skill swaps in the nearest color and draws the theme again, and this plate is cut again in it. |
+| frame ×1 | Does the frame lie flat, with no corner lifted, and do the other plates' pieces drop into it? | Flat: it is the frame sheets-04g printed at this size, on the same bed. | Flat: the frame is kept as it is. A lifted corner: the frame recipe gets a brim, as a new iteration, before the rest of the theme is printed. |
+
 ## Pictures
 
 The theme as the gallery draws it.

@@ -89,13 +89,13 @@ The stud split coaster waits on it: [split-01](split-01.md) is cut at whatever s
 this plate picks, and so is the stud-layout plate that comes after it. The trap pairs also bear
 on [split-02](split-02.md), which holds its pieces by a flange instead of a lip and has no studs.
 
-### What each pair tells us, and what it changes
+## After the print
 
 Judged by hand, as [the split design §9](../pieces/split-with-studs-design.md#9-the-coupon-spl-1)
 says: press each pair together, shake it, pull it apart. These are the questions asked after the
 print, one at a time.
 
-| Pairs | The question | What we expect, and why | What each answer changes |
+| Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
 | A to F (2 mm stud, gaps −0.10 to 0.15) | Which gap presses in by hand, holds when shaken, and comes apart without breaking? | Nobody knows yet. The sources disagree on which way to size a printed stud, and none measured an X2D; our polygon pieces fit best at 0 and below ([§4.1](../pieces/split-with-studs-design.md#41-the-stud-and-socket)). | The tightest gap that holds becomes the stud gap on split-01 and the stud-layout plate (split-02 has no studs). If every gap is loose, the ladder moves tighter; if every gap binds, looser, and the plate is printed again. |
 | G, H (1.5 mm stud) | Does a socket under 2 mm print open, and does the stud hold? | Doubtful: 2 mm is the smallest hole the printing rules we follow call printable. | Holds: smaller studs are allowed where gBV's straps are narrow, so more places for a stud. Fails: 2 mm is the smallest stud. |

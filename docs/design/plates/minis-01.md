@@ -38,6 +38,16 @@ pattern raised on a slab), size 40. One bed, about 1 h 13 m and 22 g.
 It checks how narrow a raised strap can be (CAL-CST-01) and the smallest feature that stays
 readable at mini size (CAL-CST-02) ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| CS-1 ×2, CS-2 ×2 | Do the straps stand up whole at 40 mm, or do the narrowest break or fail to print? | Whole, if the strap floor CAL-CST-01 bets on holds: the straps are at that floor. | Whole: the floor stands for mini coasters and CAL-CST-01 moves. Broken or missing: the floor goes up and the minis are drawn again. |
+| CS-1 ×2, CS-2 ×2 | Is the smallest feature still readable at 40 mm, held at arm's length? | Readable, but close: the smallest features sit near the size CAL-CST-02 bets is the least that reads. | Readable: CAL-CST-02 moves and 40 mm stays the mini size. Lost: minis go up in size, or their smallest features are left out. |
+| all four | Do they read as coasters you would set a cup on, or as tokens? | As small coasters: the pattern is the same one the 90 mm coasters carry. | Coasters: 40 mm minis stay the cheap way to try a pattern. Tokens: mini plates move to a bigger size. |
+
 ## Pictures
 
 ![minis-01 review sheet](minis-01-media/sheet.png)

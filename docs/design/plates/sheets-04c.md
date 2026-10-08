@@ -46,6 +46,14 @@ It asks no new question: it repeats a piece already printed and kept. So it carr
 unblocks no decision, and it scores lowest in the queue (a repeat is worth the least). Its use is
 a second coaster: to keep, to give away, or to try the sheets-04b pieces in a second one.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| the coaster, with the sheets-04b pieces | Do the sheets-04b pieces fit this coaster the same as the first one? | The same: the file has not changed since sheets-04 printed it. | Same: the gap sheets-04b picks belongs to the coaster, not to one print. Different: hole size moves from print to print (CAL-HOL-01), and the gap needs room for it. |
+
 ## Pictures
 
 The review sheet: it reads as the ten-point star, every hole open (openness 0.38, nothing solid,

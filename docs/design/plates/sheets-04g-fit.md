@@ -64,6 +64,16 @@ should re-print minimal consturciton with this to fit in again"), so the plate p
   stay in when the coaster is turned over; for each middle piece, does it go in, and does it
   rattle or turn.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| Kites, 0.05 to 0.25 | Which kite rung drops into its hole by hand and stays when the coaster is turned over? | A middle rung: gap 0 was too tight on sheets-04g, and a wide gap leaves nothing to grip in a floorless coaster. | That rung is the kites' gap on the next sheets-04g iteration and the theme plates (CAL-LSE-01). All too tight: the ladder moves looser. All fall out: kites need a press. |
+| Middle piece, 0 to 0.15 (dots 4 to 1) | Which middle piece goes in and sits without rattling or turning? | Gap 0: it is cut along the round strap edge now, which took out the 0.45 mm of play at its notches. | That gap is the middle piece's on the next iteration. Gap 0 still rattles: the corners were not the whole cause, and the sheets-04g fit issue is opened again. |
+| the fresh coaster and the sheets-04g one | Do the pieces fit the fresh coaster the same as the old one? | The same: the coaster has not changed, and the gap comes off the piece. | Same: one gap per piece shape is enough. Different: hole size moves from print to print, and the gaps need room for it. |
+
 ## Pictures
 
 The slice from above (2026-10-07, with the coaster), front of the bed at the bottom, drawn only

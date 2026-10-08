@@ -58,6 +58,15 @@ It is the cheapest test of a two-color plate: 22 minutes and 5 g. It shows wheth
 changes color where the slice says, before a coaster and its colored pieces go on one bed. The
 quarter phones show how much detail survives at 10 mm long.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| the four phones | Did each phone print in its own color, pink on slot 1 and black on slot 2? | Yes: the slice put them on those slots, and the slicer's own picture shows them in their colors. | Yes: a two-color plate can be sliced without the Studio window, for when two-color plates come back (D-110 made plates one color). Swapped or one color: the slot mapping is fixed first. |
+| the two quarter phones | Does a quarter-size phone still read as a phone, lens bumps and all? | The outline yes, the lens bumps a blur: it is six layers tall. | Reads: 10 mm is big enough for a small figure. A blob: small figures stay above a quarter size. |
+
 ## Pictures
 
 The slice: the big pink phone at the top, the big black phone below it, and a quarter phone of

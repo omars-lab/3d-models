@@ -77,6 +77,17 @@ It tries the look you would get with no change to the faces: the coaster as it i
 flush. It answers whether the flanged pieces print clean, whether they go into the lower half and
 the upper half closes over them, and whether the halves line up and stay together without studs.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| MIDDLE, KITE, HEX, STAR, OUTER | Does each piece's 0.8 mm band print clean, its underside flat where it sticks out over nothing? | A slight droop on the underside: the band sticks out 0.8 mm with nothing under it. | Clean or a slight droop: the flange can be built as drawn. Drooped so a piece will not seat: the band gets a sloped underside, as a new iteration, or the flange is out (D-100). |
+| the pieces in LOWER, then UPPER | Do the pieces go into the lower half, and does the upper half close over them with both faces flush? | They go in, at 0.25 mm all round. Whether both faces come out flush is the open part. | Flush: the flange keeps today's look on both faces, its case in D-100. Proud or sunk: the band or the cut height changes, as a new iteration. |
+| LOWER, UPPER, closed | Do the halves line up, and stay together when the closed coaster is lifted and tipped, with no studs and no glue? | They line up, since the pieces sit in both halves. Staying together is doubtful: only friction holds them. | Stay together: a flange coaster needs no studs. Come apart: the flange needs glue (split design call 3), which counts against it in D-100. |
+| LOWER, bottom face | Is the id 2 readable at 2 mm tall, the right way round when the coaster is turned over? | Just readable: it is smaller than split-01's 2.5 mm, squeezed under the strip the undercuts leave. | Readable: 2 mm is enough on a flange coaster. Not: the flange coaster's id goes somewhere else, decided before its next iteration. |
+
 ## Pictures
 
 Opened up: the lower half, the pieces lifted over their holes with the band showing as a step on

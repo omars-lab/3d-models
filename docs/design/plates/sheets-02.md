@@ -75,6 +75,15 @@ Choices made while building it, not decided by you:
 - **What to read off it:** compare each row against row A, down each column. The gBV column
   changes the most: by row D its star of holes has become a ring of round holes.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| rows A to D, each column | Which row looks best, and at which row does a star stop reading as a star? | B or C may soften without losing the star; by D the gBV star is a ring of round holes. | The row picked sets the tip the minimal coasters are drawn with (smooth-lines call 2); the row where the star is lost is the most the tip knob should allow. |
+| rows A and B | Does the 0.3 mm softening show at all? | It may barely show: the printer already rounds a sharp point a little. | Shows: 0.3 is the light step. Does not: the light step moves up toward 0.75. |
+
 ## Pictures
 
 Drawn from the assembled mesh (`bambu slice sheet … --stl`, then `tools/print_review.py art`).

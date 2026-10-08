@@ -40,6 +40,16 @@ To see every style side by side before choosing one. It also touches the strap f
 (CAL-CST-01, CAL-CST-07) and the twist lean ceiling (CAL-CST-08)
 ([bets.md](../../../.claude/skills/calibrate/bets.md)).
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| all seven | For each pattern, which style looks best in the hand: solid, minimal, interlock, or the CS-1 twist? | No guess: this is a taste call, and the reason the plate exists. | The style picked is the one the next coaster plates for that pattern are made in; the others stay in the Lab. |
+| minimal and interlock, both patterns | Do the open straps stand up whole at 40 mm? | Whole, if the floors CAL-CST-01 and CAL-CST-07 bet on hold. | Whole: both bets move. Broken: the floor goes up for open styles. |
+| CS-1 twist | Does the twist (height 6, twist 15) print clean, with no droop where it leans? | Clean, if the lean ceiling CAL-CST-08 bets on holds. | Clean: the twist stays a style at that lean and CAL-CST-08 moves. Drooped: the lean ceiling comes down. |
+
 ## Pictures
 
 The sheet shows one thing to know: at 40 mm the minimals read almost solid. Openness is 0.05

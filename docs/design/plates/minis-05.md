@@ -65,6 +65,17 @@ for are in the [joins design](../coaster/coaster-borderless-joins-design.md).
   whether a key falls out when one coaster is lifted; whether a coaster alone looks wrong; whether
   the tab's neck survives a few matings.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| Keys ×6 in the butterfly-key coasters | At which clearance (0.05, 0.10, 0.15) does a key go in by hand, hold the pair when one coaster is lifted, and come out again? | 0.10, the middle rung: 0.05 may bind and 0.15 may fall out. | That clearance becomes the key file's. All bind: the ladder moves looser. All fall out: tighter. |
+| Tab coaster ×2 | Does the tab's 2 mm neck survive a few matings, and does it hold the pair? | It survives a few: 2 mm is the neck CAL-CST-06 bets on. | Survives: built-in tabs are a way (joins Q1) and CAL-CST-06 moves. Snaps: tabs need a wider neck, or loose keys win Q1. |
+| the key pair and the tab pair | Which holds a pair better in the hand, loose keys or built-in tabs? | No guess: a feel call. | Answers joins Q1: the pick is the join the next joined coasters use. |
+| one key coaster and one tab coaster, alone, beside the plain frame | Does a coaster used alone look wrong with its notches or its tab? | The notches may show; a tab sticks out. | Fine alone: a join can go on any coaster. Looks wrong: joins go only on coasters sold as sets (joins Q2). |
+
 ## Pictures
 
 The review sheet: every coaster reads as the pattern, with the art filling the hexagon.

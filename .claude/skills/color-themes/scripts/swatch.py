@@ -44,6 +44,9 @@ from pathlib import Path
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import after_print  # noqa: E402  the questions asked when it comes off the bed (P12)
+
 SKILL = Path(__file__).resolve().parent.parent
 ROOT = SKILL.parent.parent.parent
 PALETTE = SKILL / "palette.yaml"
@@ -139,6 +142,7 @@ def page_text(c: dict, minutes: int, grams: float, today: str) -> str:
         have = "Not on the printer: it prints once the spool is bought and loaded."
     spool = (f"a {c['kind']} spool ({', '.join(c['hexes'])}), so one chip shows only part of it"
              if len(c["hexes"]) > 1 else f"one color, {send}")
+    after = after_print.section(after_print.swatch_rows(c["code"], f"{c['line']} {c['name']}"))
     return f"""---
 plate: {name}
 recipe: {name}.yaml
@@ -186,7 +190,7 @@ for {c['line']} {c['name']}, code {c['code']}, {spool}. {have} The plate is
 A picture on a screen is not the color a coaster comes out in. The chip settles it for this spool,
 and sits beside the others when picking a theme.
 
-## Pictures
+{after}## Pictures
 
 The chip, drawn from bikar's `Swatch-Chip.bkr` (every swatch's chip, with its own code).
 
@@ -324,6 +328,8 @@ def self_test() -> int:
     head = yaml.safe_load(page.split("---")[1])
     if head["plate"] != "swatch-10204" or head["grams"] != 5.5 or head["stage"] != "waiting":
         fails.append(f"page frontmatter wrong: {head}")
+    if page.find("## After the print") < page.find("## Why print it") or page.find("## After the print") > page.find("## Pictures"):
+        fails.append("the page's after-print table is missing or out of place")
     for bad, why in (("1234567", "six or more digits"), ("10A04", "a letter"), ("99999", "not in the catalog")):
         try:
             color(bad, catalog, owned)

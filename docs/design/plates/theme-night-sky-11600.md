@@ -46,6 +46,15 @@ A theme on a screen is a guess at how the colors sit together. Printing its plat
 pieces in the frame settles it for this theme. The persona scores beside each theme are simulated,
 not customer research; these prints are the first thing to hold them against.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| Kite ×10 | Does Marine Blue look the way the theme picture draws it, beside the theme's other colors in the frame? | Close, not exact: the picture draws the color catalog's screen color, not a printed surface. | Looks right: the color stays in the theme. Off: the color-themes skill swaps in the nearest color and draws the theme again, and this plate is cut again in it. |
+| Kite ×10, in the frame | Do the pieces drop into the frame and stay, without pressing? | The kites too tight and the middle too loose: they are cut at gap 0, the fit sheets-04g printed and found off. | Drop in and stay: the gap is kept for every theme plate. Tight or loose: every theme plate is cut again at the gaps sheets-04g-fit settles, each as a new iteration of its recipe. |
+
 ## Pictures
 
 The theme as the gallery draws it.

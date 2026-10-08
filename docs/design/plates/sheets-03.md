@@ -75,6 +75,15 @@ Choices made while building it, not decided by you:
 - **What to read off it:** compare each row against row A, down each column. The weld only adds
   plastic: the straps get no thinner, and the holes get smaller and rounder each row down.
 
+## After the print
+
+What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| rows A to D, each column | How much weld looks right: none, light, medium or strong? | No guess: a taste call. By D the holes are nearly round, which may read as another pattern. | The row picked sets the weld the minimal coasters are drawn with (smooth-lines call 3). |
+| this card beside sheets-02 | Which softens a crossing better, a weld or rounded points? | No guess: the two change different corners. | One wins: it carries the softening and the other stays at 0. Both wanted: bikar must allow weld and rounding together, which it refuses now. |
+
 ## Pictures
 
 Drawn from the assembled mesh (`bambu slice sheet … --stl`, then `tools/print_review.py art`).
