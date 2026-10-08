@@ -1,0 +1,26 @@
+#!/bin/sh
+# Pattern catalog (.claude/skills/pattern-catalog/scripts/catalog.py sync --check).
+# docs/catalog/ holds one note per pattern, written from the ledger, the planned
+# list, the plates, the prints and bikar. Nothing else notices when one of those
+# changes and the notes do not, or when bikar gains a pattern file that no ledger
+# row or planned entry claims, so the pattern has no note at all. This runs the
+# check when any of its inputs, the catalog itself or the tool is staged. It reads
+# bikar at origin/main ($BIKAR_DIR, then ~/Workspace/git/bikar-work).
+# Override once: PATTERN_CATALOG_OK=1 git commit
+#
+# wholesale: make validate-pattern-catalog
+[ -n "$PATTERN_CATALOG_OK" ] && exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the pattern catalog check" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `.claude`.
+TOOL="$(git rev-parse --show-toplevel)/.claude/skills/pattern-catalog/scripts/catalog.py"
+if [ ! -f "$TOOL" ]; then
+  echo "pre-commit: no pattern catalog tool in this worktree ($TOOL) — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^(docs/constructions/ledger\.md|docs/catalog/|docs/design/plates/|docs/prints/[^/]+/index\.md$|\.claude/skills/pattern-catalog/|\.claude/skills/import-construction/coaster-styles\.md$)'; then
+  exec python3 "$TOOL" sync --check
+fi
+exit 0

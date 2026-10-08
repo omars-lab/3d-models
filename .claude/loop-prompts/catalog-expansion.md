@@ -38,19 +38,23 @@ queue has grown by screened sources, each with a written GO or NO-GO.
 2. **Pick by ROI:**
    1. A finished reconstruction with no ledger row. Migrate it with the
       `import-construction` skill: one bikar PR, then one 3d-models PR (ledger row,
-      `CS-<n>` entry, vendored STL, gallery).
+      `CS-<n>` entry, vendored STL, gallery). Then run the `pattern-catalog` sync: the
+      pattern's planned note becomes its ledger note, and the sync says to take its
+      `docs/catalog/planned.yaml` entry out.
    2. A migrated row with a blank oracle cell. Run the check and record the verdict it
       prints.
    3. The queue is short (fewer than three screened GO candidates): discover more. Crawl
       outward from the discovery wiki to new creators and patterns. Screen each one for how
-      buildable it is and what it teaches, then write GO or NO-GO with the date. Aim for new
+      buildable it is and what it teaches, then write GO or NO-GO with the date. Each GO
+      gets a `docs/catalog/planned.yaml` entry and a sync the same day, so it has its note
+      while it waits. Aim for new
       creators, fold counts and tilings, not ten more 8-fold rosettes.
    4. A GO candidate that is not yet reconstructed: hand it to the video-reconstruction
       loop. Name the id; don't reconstruct it here.
 3. **Ship it.** One PR per repo, each from its own worktree. When a construction needs
    something bikar can't express, add that to bikar in its own PR first; that is how the
    earlier migrations went.
-4. **Record it,** in the same PR (the `manage-tasks` skill moves the task lines). The ledger row, the count, and the screening verdict. Move
+4. **Record it,** in the same PR (the `manage-tasks` skill moves the task lines). The ledger row, the count, the screening verdict, and the catalog notes the sync wrote (hook `51-pattern-catalog` refuses the commit if they are out of step). Move
    the item to the done list with the date and PR number; add new finds, including screened
    candidates and hand-offs, to the backlog. Take any new D- id from
    `python3 tools/next_id.py next D`.
