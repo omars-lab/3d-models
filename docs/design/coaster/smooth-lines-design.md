@@ -366,6 +366,12 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
    `tip` knob, 0 by default (bikar #328), and [sampler sheet 2](../plates/sheets-02.md) is
    built to compare the values in the hand. Whether it is on by default is still call 2.
 5. **Add option 8 light** (SKIMS soft weld) as a style knob, order-free blend; strong as a look.
+   *Done, bikar #329 (2026-10-07):* `holes weld <mm>` on a straps-only coaster; the blend is
+   order-free (a smooth minimum of the distances to a hole's two nearest sides) and only adds
+   strap. Refused beside `round`, loose pieces and split. Every minimal coaster carries it as a
+   `weld` knob, 0 by default, and the mesh check passes on all seven at 0.6, 1.2 and 2.4 mm.
+   [Sampler sheet 3](../plates/sheets-03.md) is built to compare them in the hand. How much, if
+   any, is still call 3.
 6. Later looks: option 7 (width), the pillow top, option 6 (mitred).
 7. **Option 4 only if** open call 2 says star points must stay needle-sharp and the coupon shows the
    shaved tip is visible.

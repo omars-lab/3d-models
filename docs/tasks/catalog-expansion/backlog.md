@@ -381,11 +381,13 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    0.05 down to a −0.10 press fit (bikar #300), and waits on Omar's tick.
    Sheet 2 is built in full ([sheets-02](../../design/plates/sheets-02.md): option 5 as
    `holes round`, bikar #325, fed by a `tip` knob on every minimal coaster and its card, bikar
-   #328) and waits on Omar's tick.
-   What is left: sheet 3 needs option 8 and its card piece; sheet 5 the
+   #328) and waits on Omar's tick. Sheet 3 is built in full too
+   ([sheets-03](../../design/plates/sheets-03.md): option 8 as `holes weld`, fed by a `weld`
+   knob on every minimal coaster, and its card, bikar #329) and waits on Omar's tick.
+   What is left: sheet 5 the
    sheet plate's color parts per sample (its tall-piece row's height shipped, bikar #313) and its raised row raised fills
-   (loose-pieces §6 item 1, a bikar branch is enough). Sheets 3 and 5 have plate pages
-   at `planned` (sheets-03 and sheets-05 in [docs/design/plates](../../design/plates/README.md)), whose `needs:`
+   (loose-pieces §6 item 1, a bikar branch is enough). Sheet 5 has a plate page
+   at `planned` ([sheets-05](../../design/plates/sheets-05.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
 9. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put
    an id on every prototype, at Omar's ask on the 2026-10-06 calls page ("every proptoty should
