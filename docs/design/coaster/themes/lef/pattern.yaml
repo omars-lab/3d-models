@@ -26,9 +26,9 @@ construction: lEfWSogWscs
 short: lEf
 fold: 8
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.2 drafts the names, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: the monument, then the fold (Omar, 2026-10-08; storefront
+# DESIGN.md "Pattern names"). It leads the product title.
+history_name: "Itimad-ud-Daula Eight-Fold Rosette"
 
 found_at: Tomb of Itimad-ud-Daula, Agra, India
 era: Mughal, 1620s

@@ -32,9 +32,9 @@ short: Ntn
 fold: 10
 form: Star
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: the monument, then the fold (Omar, 2026-10-08; storefront
+# DESIGN.md "Pattern names"). It leads the product title.
+history_name: "Mustansiriya Madrasa Ten-Fold Star"
 
 found_at: Mustansiriya Madrasa, Baghdad, Iraq
 
