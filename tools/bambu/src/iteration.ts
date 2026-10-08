@@ -29,6 +29,9 @@ export interface IterationKey {
   // The `--window <side>[@x,y]` cut (bikar #293), present ONLY when the item is a window: an absent key
   // hashes exactly as before, so every id minted before windows existed is unchanged.
   window?: string;
+  // The id cut into the piece's bed face (`--bottom-id`, D-109), present ONLY when the piece carries
+  // one, for the same reason: the cut changes the mesh, and every id minted before ids is unchanged.
+  bottom_id?: string;
   slice_profile: {
     settings: string; // "<machine>;<process>" display names
     filament: string; // filament display name(s)

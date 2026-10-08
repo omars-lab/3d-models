@@ -37,7 +37,7 @@ import { stlBounds, footprint, scaledCenteredStl } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
-import { recipeHashOf } from "../send-gate.js";
+import { recipeHashOf, recipeIterationOf } from "../send-gate.js";
 import { writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
@@ -64,12 +64,15 @@ export interface ManifestItemBkr {
   count?: number; // copies on the plate (default 1)
   label?: string; // what the person at the printer calls it ("GAP 05"); names it in the bed map, never in the id
   filament?: number; // the 1-based filament slot it prints in; needed on every item when the plate has two or more
+  id?: string; // the piece's one-character id, cut into its bed face after the plate's id_code and iteration (D-109)
+  no_id?: string; // why it carries no id, and how it is kept apart instead (a piece too small, one printed face down)
 }
 export interface ManifestItemIteration {
   iteration: string; // an already-known it-<sha12>
   count?: number;
   label?: string;
   filament?: number;
+  no_id?: string; // a reprint by id re-renders a frozen key, so it cannot take a new id: say why it has none
 }
 export interface ManifestItemStl {
   stl: string; // repo-relative path of a mesh file (may be gitignored, e.g. .bambu/imports/<name>.stl)
@@ -78,12 +81,14 @@ export interface ManifestItemStl {
   count?: number;
   label?: string;
   filament?: number;
+  no_id?: string; // a file bikar did not make cannot be cut: say why it has none
 }
 export type ManifestItem = ManifestItemBkr | ManifestItemIteration | ManifestItemStl;
 export interface PlateManifest {
   bed?: string; // bed footprint name (default x2d)
   beds?: number; // the most beds the arrange may use (default 1); a spill past it is refused
   profile?: PlateProfile; // the ONE slice profile the plate is sliced under
+  id_code?: string; // the plate's 1-3 character code, the first line of every piece's carved id (D-109)
   items: ManifestItem[];
 }
 
@@ -146,14 +151,86 @@ export function parseWindow(text: string): WindowSpec | null {
   return { side, x: m[2] === undefined ? 0 : Number(m[2]), y: m[3] === undefined ? 0 : Number(m[3]) };
 }
 
-/** The bikar flags that pick WHAT an item renders — its piece, params and window — shared by every
- *  verb that renders a resolved item, so a window can never reach one verb's render and miss another's. */
-export function itemRenderFlags(r: { piece: string; params: Record<string, number>; window: string }): string[] {
+/** The bikar flags that pick WHAT an item renders — its piece, params, window and carved id — shared by
+ *  every verb that renders a resolved item, so a window can never reach one verb's render and miss another's. */
+export function itemRenderFlags(r: {
+  piece: string;
+  params: Record<string, number>;
+  window: string;
+  bottomId?: string;
+}): string[] {
   const out: string[] = [];
   if (r.piece) out.push("--piece", r.piece);
   for (const [k, v] of Object.entries(r.params)) out.push("--param", `${k}=${v}`);
   if (r.window) out.push("--window", r.window);
+  if (r.bottomId) out.push("--bottom-id", r.bottomId);
   return out;
+}
+
+// ── The carved id (D-109) ────────────────────────────────────────────────────────────────────────
+// Every experimental piece carries its plate, the recipe's iteration and its own id, cut into the face
+// that sits on the bed. bikar cuts it (`--bottom-id`, bikar #330) in two lines of at most three
+// characters: the plate's code, then the iteration and the piece's id — `SP1/2 D` is plate SP1,
+// iteration 2, piece D. The iteration is not written in the recipe: it is the one the manage-approvals
+// store records for the recipe as it is (`recipeIterationOf`), so an edit can never print last
+// iteration's number. bikar cuts 0-9, A-Z, `-` and space and refuses an id holding both 0 and O; the
+// letter O is left out here altogether, so a code and a piece id never have to be read apart from a zero.
+
+/** One character of an id code or piece id: a digit or a capital letter other than O. */
+const ID_CHAR = "[0-9A-NP-Z]";
+const ID_CODE = new RegExp(`^${ID_CHAR}{1,3}$`);
+const PIECE_ID = new RegExp(`^${ID_CHAR}$`);
+
+/** The text bikar cuts: `<code>/<iteration> <id>`. Throws when the iteration does not fit its one
+ *  digit, since a line of four characters is past what bikar cuts at a size that prints. */
+export function bottomIdText(code: string, iteration: number, id: string): string {
+  if (!Number.isInteger(iteration) || iteration < 1 || iteration > 9) {
+    throw new Error(
+      `iteration ${iteration} does not fit the carved id's one digit (1 to 9): ` +
+        "start a new plate with its own id_code for the next round of this experiment",
+    );
+  }
+  return `${code}/${iteration} ${id}`;
+}
+
+/** Check the recipe's `id_code:` and each item's `id:` / `no_id:`. A recipe with an id_code gives every
+ *  item one or the other; a recipe without one may not give any item an `id:`. Ids are unique. */
+function checkIds(m: Record<string, unknown>, items: Record<string, unknown>[]): void {
+  const code = m.id_code;
+  if (code !== undefined && (typeof code !== "string" || !ID_CODE.test(code))) {
+    throw new Error(
+      `\`id_code:\` must be 1 to 3 of 0-9 and A-Z without the letter O (cut into every piece), got ${JSON.stringify(code)}`,
+    );
+  }
+  const ids = new Set<string>();
+  items.forEach((it, i) => {
+    const where = `items[${i}]`;
+    if (it.no_id !== undefined && (typeof it.no_id !== "string" || !it.no_id.trim())) {
+      throw new Error(`${where}: \`no_id:\` must say why the piece has no id and how it is kept apart instead`);
+    }
+    if (it.id !== undefined) {
+      if (it.no_id !== undefined) throw new Error(`${where}: an item has \`id:\` or \`no_id:\`, not both`);
+      if (typeof it.bkr !== "string") {
+        throw new Error(
+          `${where}: only a \`bkr:\` item can be cut — an \`iteration:\` item re-renders a frozen key and an ` +
+            "`stl:` item renders nothing; give it `no_id:` instead",
+        );
+      }
+      if (code === undefined) throw new Error(`${where}: \`id:\` needs the recipe's \`id_code:\`, the first line of the id`);
+      const id = typeof it.id === "number" ? String(it.id) : it.id; // a YAML `id: 7` is a number
+      if (typeof id !== "string" || !PIECE_ID.test(id)) {
+        throw new Error(`${where}: \`id:\` must be one of 0-9 and A-Z without the letter O, got ${JSON.stringify(it.id)}`);
+      }
+      if (ids.has(id)) throw new Error(`${where}: \`id: ${id}\` is already another item's — two pieces with one id cannot be told apart`);
+      ids.add(id);
+      it.id = id;
+    } else if (code !== undefined && it.no_id === undefined) {
+      throw new Error(
+        `${where}: the recipe has an id_code, so every item needs \`id:\` (its one character) or \`no_id:\` ` +
+          "(why it has none and how it is kept apart instead)",
+      );
+    }
+  });
 }
 
 /** Parse + validate a plate manifest. Throws a clear, actionable error (naming the offending item)
@@ -219,6 +296,7 @@ export function parseManifest(text: string): PlateManifest {
       labels.add(it.label);
     }
   });
+  checkIds(m, items as Record<string, unknown>[]);
   if (m.beds !== undefined && (typeof m.beds !== "number" || !Number.isInteger(m.beds) || m.beds < 1)) {
     throw new Error(`\`beds:\` must be an integer >= 1 (the most beds the plate may use), got ${JSON.stringify(m.beds)}`);
   }
@@ -235,6 +313,7 @@ export function parseManifest(text: string): PlateManifest {
     bed: typeof m.bed === "string" ? m.bed : undefined,
     beds: typeof m.beds === "number" ? m.beds : undefined,
     profile: (m.profile as PlateProfile) ?? undefined,
+    ...(typeof m.id_code === "string" ? { id_code: m.id_code } : {}),
     items: items as ManifestItem[],
   };
 }
@@ -413,6 +492,7 @@ export interface ResolvedItem {
   piece: string;
   params: Record<string, number>;
   window: string; // the `--window` cut, "" for the whole piece
+  bottomId: string; // the carved id bikar cuts into its bed face (`SP1/2 D`), "" for none (D-109)
   count: number;
   sourceSha256: string;
   iteration: string; // it-<sha12>
@@ -515,6 +595,7 @@ function resolveStlItem(
     piece: "",
     params,
     window: "",
+    bottomId: "",
     count: item.count ?? 1,
     sourceSha256: item.sha256,
     iteration: iterationId(key),
@@ -553,6 +634,7 @@ export async function resolveManifestItems(
   bikarRef: string,
   sliceProfile: { settings: string; filament: string },
   root: string = repoRoot() ?? process.cwd(),
+  ids: { code: string; iteration: number } | null = null, // the plate's id_code and recipe iteration (D-109)
 ): Promise<ResolvedItem[]> {
   const resolved: ResolvedItem[] = [];
   let n = 0;
@@ -588,6 +670,13 @@ export async function resolveManifestItems(
       params = item.params ?? {};
       window = item.window ?? "";
     }
+    const id = isIterationItem(item) ? undefined : item.id;
+    if (id !== undefined && !ids) {
+      throw new Error(
+        `items[${n - 1}]: \`id: ${id}\` needs the plate's id_code and iteration, which only \`slice compose\` reads so far (D-109)`,
+      );
+    }
+    const bottomId = id !== undefined && ids ? bottomIdText(ids.code, ids.iteration, id) : "";
     const sourceSha256 = await blobSha(bikarRef, sourcePath);
     const key: IterationKey = {
       source: `bikar:${sourcePath}@${bikarRef}`,
@@ -595,6 +684,7 @@ export async function resolveManifestItems(
       piece,
       params,
       ...(window ? { window } : {}), // absent unless cut: pre-window ids stay byte-identical
+      ...(bottomId ? { bottom_id: bottomId } : {}), // absent unless carved: pre-id ids stay byte-identical
       slice_profile: itemSliceProfile(item, sliceProfile),
     };
     resolved.push({
@@ -604,6 +694,7 @@ export async function resolveManifestItems(
       piece,
       params,
       window,
+      bottomId,
       count: item.count ?? 1,
       sourceSha256,
       iteration: iterationId(key),
@@ -683,7 +774,14 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   let resolved: ResolvedItem[];
   try {
     checkItemFilaments(manifest.items, filaments); // again: -f may have changed the count
-    resolved = await resolveManifestItems(manifest.items, bikarRef, sliceProfile);
+    // A plate with an id_code cuts `<code>/<iteration> <id>` into each piece (D-109). The iteration is
+    // read from the approvals store, never written in the recipe, so an edit cannot keep an old number.
+    let ids: { code: string; iteration: number } | null = null;
+    if (manifest.id_code) {
+      const name = basename(absManifest).replace(/\.ya?ml$/i, "");
+      ids = { code: manifest.id_code, iteration: recipeIterationOf(name, repoRoot() ?? process.cwd()) };
+    }
+    resolved = await resolveManifestItems(manifest.items, bikarRef, sliceProfile, undefined, ids);
   } catch (err) {
     console.error((err as Error).message);
     process.exitCode = 2;
@@ -698,7 +796,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   const footprints = new Map<string, [number, number]>(); // cacheKey → [x, y]
   const renderPlan: string[] = [];
   const cacheKeyOf = (r: ResolvedItem): string =>
-    `${r.sourceSha256}:${r.piece}:${JSON.stringify(r.params)}:${r.window}`;
+    `${r.sourceSha256}:${r.piece}:${JSON.stringify(r.params)}:${r.window}:${r.bottomId}`;
   const pieceLabel = (r: ResolvedItem): string => (r.file ? `file ${basename(r.sourcePath)}` : r.piece ? r.piece : "default solid");
   for (const r of resolved) {
     const ck = cacheKeyOf(r);
@@ -725,11 +823,18 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     // renders the file's default last solid (its own model — the only way to render a clip is --piece).
     const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "-o", stl];
     args.push(...itemRenderFlags(r));
-    renderPlan.push(`  ${r.entry}: render ${pieceLabel(r)} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
+    const idNote = r.bottomId ? ` id "${r.bottomId}"` : "";
+    renderPlan.push(`  ${r.entry}: render ${pieceLabel(r)}${idNote} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
     const res = await runWithTimeout("node", args, { timeoutMs: 120_000, label: "bikar_render" });
     if (res.code !== 0 || res.timedOut || !existsSync(stl)) {
-      console.error(`bikar render failed for ${r.entry} (${r.sourcePath}, piece ${pieceLabel(r)}):`);
+      console.error(`bikar render failed for ${r.entry} (${r.sourcePath}, piece ${pieceLabel(r)}${idNote}):`);
       console.error((res.stderr || res.stdout || "").trim().split("\n").slice(-6).join("\n"));
+      if (r.bottomId) {
+        console.error(
+          `  If the id is what bikar refused, leave this piece without one: mark its item ` +
+            `\`no_id: "<bikar's reason>"\` in the recipe (D-109).`,
+        );
+      }
       process.exitCode = 1;
       return;
     }
