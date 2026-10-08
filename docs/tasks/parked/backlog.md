@@ -84,11 +84,3 @@ How this repo's decisions log joins a decision hub (Omar's call;
 should block and bring this repo in, then a studio status page rendered from the repos. The
 hub decision gates the other two. Source: bikar's cross-repo-dependencies doc and decision
 ledger.
-
-## The use-case map's bikar pin is 21 anchors behind
-
-Moving the map's bikar pin to bikar main turns up 21 bikar anchors whose lines moved. The coaster
-PRs since have left the pin where it was, so the map still checks against an older bikar. Advance
-the pin with `validate.py --refresh`, let `--repair` move the anchors that match one line, and fix
-the rest by hand, in a PR of its own. Found by the 88q-u2eWZqg coaster step (3d-models #585),
-2026-10-06.
