@@ -2,7 +2,7 @@
 plate: sheets-04g-fit
 recipe: sheets-04g-fit.yaml
 iteration: 4
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling?"
@@ -132,6 +132,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ 9872c01d7d | reset 2026-10-08 |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
 
 ## Timeline
 

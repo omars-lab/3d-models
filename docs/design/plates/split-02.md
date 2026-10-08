@@ -2,7 +2,7 @@
 plate: split-02
 recipe: split-02.yaml
 iteration: 4
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
@@ -139,6 +139,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
 
 ## Timeline
 
