@@ -2,14 +2,16 @@
 plate: split-01
 recipe: split-01.yaml
 iteration: 2
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs?"
 kind: new
 maturity: experiment
 bets: []
-unblocks: []
+unblocks:
+  - "D-100: lip or flange, which way a split coaster holds its loose pieces (with split-02)"
+  - "split design plan item 4: whether a whole gBV split closes flat and holds"
 minutes: 89
 grams: 30
 bed_plates: 1
@@ -112,6 +114,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, after spl-1, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
 
 ## Timeline
 

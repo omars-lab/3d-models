@@ -52,9 +52,9 @@ says what came off the bed.
 
 - [ ] **It printed** — I write the record, with your verdict per piece if you give one
 - [ ] **It did not print, or it failed** — say what happened in the notes
-- [ ] **I don't remember** — the page stays at sent
+- [x] **I don't remember** — the page stays at sent
 
-Notes:
+Notes: Omar, in chat, 2026-10-08: "I don't remember". So what came off this bed stays unknown. It is not judged from memory: it gets printed again as a new iteration with an id carved into each piece, and that print is the one judged (the reprint set Omar picked the same day, with sheets-04b, sheets-04c, minis-02 and sheets-04g).
 
 ## Approvals
 
@@ -69,3 +69,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-09-19 | proposed — the first compose plate, plan step P4.2 | 3d-models #280 |
 | 2026-09-25 | sent — from Bambu Studio, after `print send` could not pick the tray | [dispatch notes](../../issues/first-party-dispatch.md#2026-09-26-the-send-picks-the-tray) |
+| 2026-10-08 | reviewed — Omar does not remember what came off the bed, so the result stays unknown; it is to be printed again with carved ids | [the calls page, call 7](../../working-model/feedback-requests/2026-10-06-open-calls.md) |

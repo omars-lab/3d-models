@@ -2,14 +2,16 @@
 plate: split-02
 recipe: split-02.yaml
 iteration: 2
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
 kind: new
 maturity: experiment
 bets: []
-unblocks: []
+unblocks:
+  - "D-100: lip or flange, which way a split coaster holds its loose pieces (with split-01)"
+  - "whether split halves line up and stay together by their outlines alone, with no studs"
 minutes: 107
 grams: 31
 bed_plates: 1
@@ -115,6 +117,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | |
 
 ## Timeline
 
