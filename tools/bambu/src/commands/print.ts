@@ -48,7 +48,7 @@ import { bedCheck, newestBedPhoto, readVerdict } from "../bed-check.js";
 import { plateSwitchCheck } from "../print-options.js";
 import { checkNozzles, printerNozzles } from "../nozzle-check.js";
 import { checkSliceFresh } from "../slice-fresh.js";
-import { colorAtSend, plateRecipePath, recipeColor } from "../color-at-send.js";
+import { colorAtSend, colorMatchesYes, plateRecipePath, recipeColor } from "../color-at-send.js";
 import { bedPhoto } from "./bed.js";
 import {
   chooseColor,
@@ -329,6 +329,18 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
       return;
     }
     console.error("  (dry run — a real send stops here.)");
+  }
+  // A yes may name the color it covers (plate_approve.py --color); the send must name the same one.
+  const yesColor = colorMatchesYes(approval.color, opts.color);
+  if (yesColor !== null) {
+    console.error(`${yesColor.ok ? "✓" : "✗"} ${yesColor.line}.`);
+    if (!yesColor.ok) {
+      if (!opts.dryRun) {
+        process.exitCode = 2;
+        return;
+      }
+      console.error("  (dry run — a real send stops here.)");
+    }
   }
 
   // One status read serves both the idle check and the filament match.

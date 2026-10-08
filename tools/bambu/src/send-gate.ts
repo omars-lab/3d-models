@@ -48,6 +48,7 @@ export interface Approval {
   sends: number; // how many times the timeline says it went out
   standing: boolean; // a production plate's standing approval (D-095), not spent by a send
   recipe: string | null; // the plate's recipe hash now (iterations.py), or null with no recipe
+  color: string | null; // the one color the open yes covers ("#RRGGBB"), or null when it names none
 }
 
 /** Runs the manage-approvals skill's `plate_approve.py` with these arguments and returns its stdout;
@@ -77,6 +78,7 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
     sends: 0,
     standing: false,
     recipe: null,
+    color: null,
   });
   if (!existsSync(page)) return no("no plate page, so nothing to approve");
   try {
@@ -89,6 +91,7 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
       sends: Number(st.sends ?? 0),
       standing: st.standing === true,
       recipe: typeof st.recipe === "string" ? st.recipe : null,
+      color: typeof st.color === "string" ? st.color : null,
     };
   } catch (err) {
     return no(`plate_approve.py did not read the page: ${lastLine(err)}`);
