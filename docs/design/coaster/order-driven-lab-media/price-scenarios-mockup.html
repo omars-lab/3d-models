@@ -4,14 +4,16 @@
   Lab's look (mockup.css). Nothing here runs; it exists to be screenshotted into
   price-scenarios-mockup.png.
 
-  Real: the seven strategies and how each sets its price (§9.7); the formula's names (§9.3); the
-  references, all from the consolidated pricing research (docs/research/2026-10-04-coaster-pricing.md),
-  with its hedges.
+  Real: the seven strategies and how each sets its price (§9.7); the what-if's three columns and
+  the six price-break rows (D-113); the formula's names (§9.3); the market references, from the
+  consolidated market research (docs/research/coaster-market-pricing.md), and the fixed-cost
+  reference, from the cost research (docs/research/2026-10-04-coaster-pricing.md), with their hedges.
   Stand-ins, with a dotted underline: the order number.
-  Empty, on purpose: every price, margin and break-even count, because every §9.3 setting and every
-  candidate price is still empty. Nothing on this page is a price.
+  Empty, on purpose: every price, margin, break-even count and a-month cell, because every §9.3
+  setting, every candidate price, every break and the coasters a month are still empty. Nothing on
+  this page is a price.
 
-  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1280,790
+  Re-shoot: Chrome --headless=new --hide-scrollbars --window-size=1440,960
             --screenshot=price-scenarios-mockup.png file://.../price-scenarios-mockup.html
 -->
 <html lang="en">
@@ -20,13 +22,16 @@
     <title>Price scenarios mockup</title>
     <link rel="stylesheet" href="mockup.css" />
     <style>
-      .lab-panel { width: 360px; }
+      .lab-panel { width: 400px; }
       .sub { display: flex; gap: 0.3rem; font-size: 0.72rem; margin-bottom: 0.2rem; }
       .sub span { padding: 0.1rem 0.5rem; border-bottom: 2px solid transparent; color: var(--ink-dim); }
       .sub span.on { border-color: var(--gold); color: var(--gold); }
       .row > .card:first-child { flex: 1.5; }
       .formula { font-size: 0.66rem; }
       .grid td .how { display: block; font-size: 0.64rem; color: var(--ink-dim); }
+      .grid th.month, .grid td.month { background: rgba(214, 178, 84, 0.06); }
+      .card h2.next { margin-top: 0.9rem; }
+      .whatif { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; margin-bottom: 0.4rem; }
     </style>
   </head>
   <body>
@@ -44,35 +49,57 @@
             <tr><td>The twelve settings</td><td><span class="chip pending">0 of 12</span></td><td class="src">the Breakdown view</td></tr>
             <tr><td>Monthly fixed costs</td><td><span class="chip pending">your records</span></td><td class="src">Shopify plan $39/mo, $29 paid yearly</td></tr>
             <tr><td>Market pick, per coaster</td><td><span class="chip pending">your choice</span></td><td class="src">band below</td></tr>
-            <tr><td>Story price, per coaster</td><td><span class="chip pending">your choice</span></td><td class="src">no evidence of a premium</td></tr>
+            <tr><td>Story price, per coaster</td><td><span class="chip pending">your choice</span></td><td class="src">Islamic printed sets $6.25–7.50 a coaster</td></tr>
             <tr><td>Finish step, Silk+ · Sparkle</td><td><span class="chip pending">your choice</span></td><td class="src">Silk+ costs the same; Sparkle +$0.16–0.24 a full plate</td></tr>
-            <tr><td>Set of 4 · 6, with holder</td><td><span class="chip pending">your choice</span></td><td class="src">medians $20 · $25.50</td></tr>
-            <tr><td>Custom theme surcharge</td><td><span class="chip pending">your choice</span></td><td class="src">not in the research</td></tr>
+            <tr><td>Set of 4 · 6, with holder</td><td><span class="chip pending">your choice</span></td><td class="src">plain printed set of 4 ≈ $17–20</td></tr>
+            <tr><td>Custom theme surcharge</td><td><span class="chip pending">your choice</span></td><td class="src">personalization free or ≈ $2</td></tr>
             <tr><td>Launch: off, for how many</td><td><span class="chip pending">your choice</span></td><td class="src">not in the research</td></tr>
           </table>
-          <p class="note">Every input starts empty. A row fills only when all of its inputs are filled; the page never fills a blank with a guess.</p>
+        </section>
+        <section>
+          <h2>Price breaks</h2>
+          <table class="grid">
+            <tr><th>Input</th><th>Value</th><th>Starting point</th></tr>
+            <tr><td>Single price each</td><td><span class="chip pending">your choice</span></td><td class="src">none</td></tr>
+            <tr><td>Set of 4, off the single</td><td><span class="chip pending">empty</span></td><td class="src">15–25%</td></tr>
+            <tr><td>Set of 6, off the set of 4</td><td><span class="chip pending">empty</span></td><td class="src">another 15–20%</td></tr>
+            <tr><td>Gift order: off · coasters</td><td><span class="chip pending">empty</span></td><td class="src">≈ 10%</td></tr>
+            <tr><td>Café order: off · coasters</td><td><span class="chip pending">empty</span></td><td class="src">up to ≈ 20%</td></tr>
+            <tr><td>Wholesale: share · fee · coasters</td><td><span class="chip pending">empty</span></td><td class="src">½ of retail; fee not settled</td></tr>
+          </table>
+          <p class="note">Every input starts empty. A row fills only when all of its inputs are filled; the page never fills a blank with a guess. Starting points are other sellers' asking prices, mostly not 3D printed.</p>
         </section>
         <section>
           <h2>What similar coasters are listed at</h2>
-          <div class="band"><span>a coaster: printed ≈ $5 · Islamic sets $6.25–7.50</span></div>
-          <p class="note">Asking prices on one day's first page, not sales. The Islamic sets are 4 listings, three from one shop, all smaller than ours, none a frame with loose pieces.</p>
+          <div class="band"><span>set of 4: plain printed ≈ $17–20 · Islamic geometric ≈ $20–30</span></div>
+          <p class="note">Asking prices, not sales; most from search snippets. The Islamic sets are few listings, three from one shop, all smaller than ours. Canadian-dollar prices are kept out of the band.</p>
         </section>
       </aside>
       <section class="lab-stage">
         <div class="sub"><span>Breakdown</span><span class="on">Scenarios</span></div>
         <section class="card">
+          <div class="whatif"><span>Make and sell</span><span class="chip pending">X coasters</span><span>a month</span><span class="src">a number to try, not a forecast</span></div>
           <h2>Seven ways to set the price, side by side</h2>
           <table class="grid">
-            <tr><th>Strategy</th><th class="num">Price a coaster</th><th class="num">Margin a coaster</th><th class="num">Coasters a month to cover fixed costs</th><th>Against the band</th></tr>
-            <tr><td>Cost-plus<span class="how">break-even × (1 + markup)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="tag warn">needs 12 settings</span></td></tr>
-            <tr><td>Market range<span class="how">a pick inside the band</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="tag warn">needs a pick</span></td></tr>
-            <tr><td>Story, premium<span class="how">a pick above the band, for the Islamic, handmade story</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="tag warn">needs a pick</span></td></tr>
-            <tr><td>By finish<span class="how">Matte · Silk+ · Sparkle, each its own price</span></td><td class="num">— · — · —</td><td class="num">— · — · —</td><td class="num">— · — · —</td><td><span class="tag warn">needs steps</span></td></tr>
-            <tr><td>Set of 4 · set of 6, with holder<span class="how">its own plan: the set is planned as its own order</span></td><td class="num">— · —</td><td class="num">— · —</td><td class="num">— · —</td><td><span class="tag dim">holder not designed</span></td></tr>
-            <tr><td>Custom theme<span class="how">the theme's own plates, plus a surcharge</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="tag warn">needs a surcharge</span></td></tr>
-            <tr><td>Launch price<span class="how">a lower price for the first orders</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="tag fail">tagged if below break-even</span></td></tr>
+            <tr><th>Strategy</th><th class="num">Price a coaster</th><th class="num">Margin a coaster</th><th class="num">Coasters a month to cover</th><th class="num month">Revenue a month</th><th class="num month">Margin a month</th><th class="num month">Profit a month</th><th>Against the band</th></tr>
+            <tr><td>Cost-plus<span class="how">break-even × (1 + markup)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag warn">needs 12 settings</span></td></tr>
+            <tr><td>Market range<span class="how">a pick inside the band</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag warn">needs a pick</span></td></tr>
+            <tr><td>Story, premium<span class="how">a pick above the band</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag warn">needs a pick</span></td></tr>
+            <tr><td>By finish<span class="how">Matte · Silk+ · Sparkle</span></td><td class="num">— · — · —</td><td class="num">— · — · —</td><td class="num">— · — · —</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag warn">needs steps</span></td></tr>
+            <tr><td>Set of 4 · set of 6, with holder<span class="how">a set price typed in; its own plan</span></td><td class="num">— · —</td><td class="num">— · —</td><td class="num">— · —</td><td class="num month">— · —</td><td class="num month">— · —</td><td class="num month">— · —</td><td><span class="tag dim">holder not designed</span></td></tr>
+            <tr><td>Custom theme<span class="how">the theme's own plates, plus a surcharge</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag warn">needs a surcharge</span></td></tr>
+            <tr><td>Launch price<span class="how">a lower price for the first orders</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td><span class="tag fail">tagged if below break-even</span></td></tr>
           </table>
-          <p class="note">Margin a coaster = price after the selling fee, less the cost of one coaster, labor included. Coasters a month = monthly fixed costs ÷ that margin, rounded up; a margin at or below zero shows "never".</p>
+          <h2 class="next">Price breaks: one single price, each break applied once</h2>
+          <table class="grid">
+            <tr><th>Size</th><th class="num">Price a coaster</th><th class="num">Margin a coaster</th><th class="num">Coasters a month to cover</th><th class="num month">Revenue a month</th><th class="num month">Margin a month</th><th class="num month">Profit a month</th><th>Cost from</th></tr>
+            <tr><td>Single<span class="how">the single price</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">an order of 1, scaled</td></tr>
+            <tr><td>Set of 4<span class="how">single × (1 − set-of-4 break)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">an order of 4</td></tr>
+            <tr><td>Set of 6<span class="how">set of 4 × (1 − set-of-6 break)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">an order of 6, scaled</td></tr>
+            <tr><td>Gift order<span class="how">set of 4 × (1 − gift break)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">its size, scaled</td></tr>
+            <tr><td>Café order<span class="how">set of 4 × (1 − café break)</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">its size, scaled</td></tr>
+            <tr><td>Wholesale<span class="how">set of 4 × wholesale share; its own fee</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num month">—</td><td class="num month">—</td><td class="num month">—</td><td class="src">its size, scaled</td></tr>
+          </table>
         </section>
         <div class="row">
           <section class="card">
@@ -80,14 +107,16 @@
             <div class="formula">
               cost each &nbsp;&nbsp;&nbsp;&nbsp;= order cost ÷ coasters (§9.3)<br />
               margin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= price × (1 − fee %) − fixed fee each − cost each<br />
-              to cover &nbsp;&nbsp;&nbsp;&nbsp;= ⌈ monthly fixed costs ÷ margin ⌉
+              to cover &nbsp;&nbsp;&nbsp;&nbsp;= ⌈ monthly fixed costs ÷ margin ⌉<br />
+              revenue a month = price × X &nbsp;·&nbsp; margin a month = margin × X<br />
+              profit a month &nbsp;= margin a month − monthly fixed costs
             </div>
           </section>
           <section class="card">
             <h2>What a scenario is not</h2>
             <div class="kv"><span class="k">A quote</span><span>the Breakdown's suggested price is the quote</span></div>
             <div class="kv"><span class="k">What buyers pay</span><span>no sales are known yet</span></div>
-            <div class="kv"><span class="k">A forecast</span><span>the count is what covers costs, not what sells</span></div>
+            <div class="kv"><span class="k">A forecast</span><span>X and the count are numbers to try, not what sells</span></div>
           </section>
         </div>
       </section>
