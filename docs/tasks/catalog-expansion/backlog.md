@@ -379,7 +379,8 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    day, and all the small pieces fell right through the floorless coaster's holes at every gap.
    The next try, [sheets-04b](../../design/plates/sheets-04b.md), is pieces only, 4 mm tall and flat, at
    0.05 down to a −0.10 press fit (bikar #300), and waits on Omar's tick.
-   What is left: sheets 2 and 3 need smooth-lines options 5 and 8 and their card pieces; sheet 5 the
+   What is left: sheet 2 needs a `tip` knob on its three coasters and its card piece (option 5 shipped as
+   `holes round`, bikar #325, 2026-10-07); sheet 3 needs option 8 and its card piece; sheet 5 the
    sheet plate's color parts per sample (its tall-piece row's height shipped, bikar #313) and its raised row raised fills
    (loose-pieces §6 item 1, a bikar branch is enough). Each sheet already has a plate page
    at `planned` (sheets-01 to sheets-05 in [docs/design/plates](../../design/plates/README.md)), whose `needs:`

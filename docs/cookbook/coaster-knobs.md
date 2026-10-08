@@ -84,7 +84,8 @@ coaster Coaster
 standing with no slab under it (openwork, minimal) at least 1.6 mm. bikar refuses
 anything thinner (check CV2), because the printer can't lay it down reliably.
 
-Related: [the outline](#the-outline), [band width in a flat weave](weave.md#band-width).
+Related: [the outline](#the-outline), [band width in a flat weave](weave.md#band-width),
+[rounded hole points](#rounded-hole-points).
 
 ## Raised or carved
 <!--covers:relief-->
@@ -230,7 +231,83 @@ ring. bikar refuses a coaster that comes out as two separate pieces (check CV6b)
 both the frame and the straps now stand with nothing under them, so both are held to the
 1.6 mm floor.
 
-Related: [strap width](#strap-width), [join coasters](#join-coasters-edge-to-edge).
+Related: [strap width](#strap-width), [rounded hole points](#rounded-hole-points),
+[join coasters](#join-coasters-edge-to-edge).
+
+## Rounded hole points
+<!--covers:holes-->
+
+A strap hole is its face moved in by half a strap, so the hole keeps every sharp point the face
+has. `holes round <mm>` rounds each of those points to that radius: the strap gets a little wider
+at the point, and the hole's straight sides and inside corners stay where they were. The picture
+is a straps-only star with its hole points sharp, rounded 1 mm and rounded 2 mm: the
+four-sided holes soften, and at 2 mm they read as petals. A hole too small for the full round
+takes the largest one it can hold, so the small triangles between the points become round dots
+rather than closing. The star's outer points are its outline, not a hole, so they stay sharp.
+`holes round 0` is the sharp hole.
+
+<!-- recipe: coaster-holes-round; swap: holes round 0 | holes round 1 | holes round 2 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 30
+  divide c into 8
+  connect every 3
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4
+  strap width 2
+  holes round 1
+```
+![A straps-only star with its hole points sharp, rounded 1 mm and rounded 2 mm](img/coaster-holes-round.png)
+
+**Watch out:** `holes round` needs holes the straps wall: `outline pattern` or
+[`openwork`](#openwork-cut-through-between-the-straps). bikar refuses it on a coaster with a
+slab under the straps, and beside [`loose`](#loose-pieces-in-an-open-frame) and
+[`split`](#split-coasters-two-halves-that-trap-the-pieces), whose pieces are cut to the sharp
+hole. Where an openwork frame cuts across a hole, the corners the frame makes stay sharp. Past
+about 1.5 mm a star's points turn into petals; that is a different look, and
+[sampler sheet 2](../design/plates/sheets-02.md) is where the two get compared.
+
+Related: [strap width](#strap-width), [openwork](#openwork-cut-through-between-the-straps),
+[smoother lines, option 5](../design/coaster/smooth-lines-design.md#5-round-the-hole-points),
+[the reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
+
+## Twisted straps
+<!--covers:twist-->
+
+`twist <deg>` turns a straps-only coaster's strap network by that many degrees from the bottom
+to the top, so the straps rise as a spiral. The picture is a 40 mm star 12 mm tall at 0, 15
+and 30 degrees.
+
+<!-- recipe: coaster-twist; swap: twist 0 | twist 15 | twist 30 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 20
+  divide c into 8
+  connect every 3
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 12
+  strap width 2
+  twist 15
+```
+![A straps-only star 12 mm tall, twisted 0, 15 and 30 degrees](img/coaster-twist.png)
+
+**Watch out:** the outer wall leans further the more it turns, the wider the coaster and the
+shorter it is, and bikar refuses a lean past 45° from upright (check CV12), since that wall would
+print over air. This star 60 mm across and 8 mm tall is refused at 30°, and bikar's
+7apC5Q9QS-8 twist coaster at its 10 mm height passes at 9° and is refused at 10°: a wide coaster
+takes a small twist, and a taller one takes more.
+`twist` needs `outline pattern`, since a twisted slab shows no spiral, and bikar refuses it
+beside an `edge`, because the top ring turns off the base and leaves no flat top to round.
+`twist 0` is the straight coaster.
+
+Related: [strap width](#strap-width), [rounded hole points](#rounded-hole-points),
+[the reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
 
 ## Join coasters edge to edge
 <!--covers:interlock-->

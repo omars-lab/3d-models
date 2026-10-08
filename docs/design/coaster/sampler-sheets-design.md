@@ -35,7 +35,7 @@ and the [loose-pieces calls](loose-pieces-design.md#7-open-calls-for-omar) 3 and
 | Sheet | Answers | Can it be made today? | Plate page |
 |---|---|---|---|
 | 1. Edge and top | smooth-lines call 1 (do the steps show?) and call 4 (the top) | yes: rows B and C from bikar main (#291, #293, #294), row A from the old edge kept in this repo ([how](../../../src/Samplers/sheets-01-row-a/README.md)) | [sheets-01](../plates/sheets-01.md) |
-| 2. Star points | smooth-lines call 2 (sharp or softened) | no: needs hole-point rounding and its card piece | [sheets-02](../plates/sheets-02.md) |
+| 2. Star points | smooth-lines call 2 (sharp or softened) | not yet: hole-point rounding shipped (`holes round`, bikar #325); it needs a `tip` knob on the three coasters and its card piece | [sheets-02](../plates/sheets-02.md) |
 | 3. Soft weld | smooth-lines call 3 (how much SKIMS) | no: needs the soft weld and its card piece | [sheets-03](../plates/sheets-03.md) |
 | 4. Fit | loose-pieces call 4 (the gaps, and printing it) | yes: bikar's `Loose-Fit-Coupon.bkr` (#296), on the loose pieces of #292 | [sheets-04](../plates/sheets-04.md) |
 | 5. Fill height | loose-pieces call 3 (raised fills everywhere, or only as loose pieces) | two rows of three: lowered and flush exist; raised is refused | [sheets-05](../plates/sheets-05.md) |
@@ -119,7 +119,8 @@ A against B answers call 1: if Omar cannot see or feel the difference, the edge 
 the smooth-lines design already says. B against C answers call 4.
 
 **Sheet 2 — star points.** Columns: CS-2 star, gBV star, CS-1 inside corners. Rows: tip round 0,
-0.3, 0.75 and 1.5 mm. Waits on hole-point rounding (option 5), which is not built. The 1.5 row is
+0.3, 0.75 and 1.5 mm. Hole-point rounding (option 5) shipped 2026-10-07 as `holes round <mm>`
+(bikar #325); the sheet waits on a `tip` knob on the three coasters that feeds it, and its card. The 1.5 row is
 there on purpose: it is where stars turn into flowers, and seeing it is the point.
 
 **Sheet 3 — soft weld.** Columns: CS-1 crossing, CS-2 star with its octagons, gBV star. Rows: none,
