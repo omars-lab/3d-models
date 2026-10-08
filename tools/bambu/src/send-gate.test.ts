@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, recipeHashOf, spendApproval } from "./send-gate.js";
+import { type ApproveTool, plateApproval, plateApproveTool, plateNameOf, printerBusy, recipeHashOf, recipeIterationOf, spendApproval } from "./send-gate.js";
 import { checkSliceFresh } from "./slice-fresh.js";
 
 // The send checks (send-gate.ts, D-093, D-096, D-097), run against the real `plate_approve.py` (the
@@ -143,6 +143,18 @@ describe("plateApproval", () => {
     expect(fresh.line).toContain("the recipe changed since this slice");
   });
 
+  it("names the recipe's iteration for the carved id, and refuses one an edit has not recorded (D-109)", () => {
+    const path = page("p-iter", {});
+    expect(plateApproval("p-iter", root).iteration).toBe(1);
+    expect(recipeIterationOf("p-iter", root)).toBe(1);
+    writeFileSync(path.replace(/\.md$/, ".yaml"), "bed: x2d\nspacing: 4\n");
+    expect(plateApproval("p-iter", root).iteration).toBeNull();
+    expect(() => recipeIterationOf("p-iter", root)).toThrow(/--iterate/);
+    plateApproveTool([path, "--iterate", "--date", "2026-10-02"]);
+    expect(recipeIterationOf("p-iter", root)).toBe(2);
+    expect(() => recipeIterationOf("nowhere", root)).toThrow(/no plate page/);
+  });
+
   it("has no recipe hash for a plate with no page", () => {
     expect(recipeHashOf("nowhere.plate.3mf", root)).toBeNull();
   });
@@ -211,7 +223,7 @@ describe("spendApproval", () => {
       seen.push(args);
       return "| 2026-10-03 | sent — by `bambu print send`, on the standing approval of a production plate (D-095) | this page |\n";
     };
-    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true, recipe: null, color: null }, tool);
+    const row = spendApproval("/p.md", "2026-10-03", { page: "/p.md", exists: true, approved: true, how: "", sends: 0, standing: true, recipe: null, color: null, iteration: null }, tool);
     expect(seen[0]).toContain("--standing");
     expect(row).toContain("standing approval");
   });

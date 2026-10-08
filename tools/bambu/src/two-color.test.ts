@@ -69,6 +69,7 @@ function item(entry: string, iteration: string, label: string, filament: number)
     piece: "Kite",
     params: {},
     window: "",
+    bottomId: "",
     count: 1,
     sourceSha256: "s",
     iteration,

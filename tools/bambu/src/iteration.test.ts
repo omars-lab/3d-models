@@ -45,4 +45,11 @@ describe("iterationId — content-addressed it-<sha12>", () => {
     expect(iterationId(key({ slice_profile: { settings: "X2D;0.28 Draft", filament: "PLA Basic" } }))).not.toBe(base);
     expect(iterationId(key({ source_sha256: "b".repeat(64) }))).not.toBe(base);
   });
+
+  it("changes with a carved id, and stays the same without one (D-109)", () => {
+    const base = iterationId(key());
+    expect(iterationId(key({ bottom_id: "SP1/2 D" }))).not.toBe(base);
+    expect(iterationId(key({ bottom_id: "SP1/2 D" }))).not.toBe(iterationId(key({ bottom_id: "SP1/3 D" })));
+    expect(iterationId(key({ bottom_id: undefined }))).toBe(base);
+  });
 });

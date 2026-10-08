@@ -49,6 +49,7 @@ export interface Approval {
   standing: boolean; // a production plate's standing approval (D-095), not spent by a send
   recipe: string | null; // the plate's recipe hash now (iterations.py), or null with no recipe
   color: string | null; // the one color the open yes covers ("#RRGGBB"), or null when it names none
+  iteration: number | null; // the recipe's iteration when it is the latest recorded one, else null (D-109)
 }
 
 /** Runs the manage-approvals skill's `plate_approve.py` with these arguments and returns its stdout;
@@ -79,6 +80,7 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
     standing: false,
     recipe: null,
     color: null,
+    iteration: null,
   });
   if (!existsSync(page)) return no("no plate page, so nothing to approve");
   try {
@@ -92,6 +94,7 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
       standing: st.standing === true,
       recipe: typeof st.recipe === "string" ? st.recipe : null,
       color: typeof st.color === "string" ? st.color : null,
+      iteration: typeof st.iteration === "number" ? st.iteration : null,
     };
   } catch (err) {
     return no(`plate_approve.py did not read the page: ${lastLine(err)}`);
@@ -103,6 +106,22 @@ export function plateApproval(name: string, root: string, tool: ApproveTool = pl
  * a plate with no page or no recipe. */
 export function recipeHashOf(plate: string, root: string, tool: ApproveTool = plateApproveTool): string | null {
   return plateApproval(plateNameOf(plate), root, tool).recipe;
+}
+
+/** The iteration number a plate's recipe is now, for the id cut into each piece (D-109), from the
+ * same `plate_approve.py --status` read. Throws, naming the fix, when the recipe as it is has no
+ * recorded iteration: an id that names the wrong iteration is worse than no print. */
+export function recipeIterationOf(name: string, root: string, tool: ApproveTool = plateApproveTool): number {
+  const a = plateApproval(name, root, tool);
+  if (!a.exists) throw new Error(`${name} has no plate page (${a.page}), so no iteration to cut into its ids`);
+  if (a.iteration === null) {
+    throw new Error(
+      `${name}'s recipe as it is now is not a recorded iteration, so its pieces cannot carry one: ` +
+        `\`python3 .claude/skills/manage-approvals/scripts/plate_approve.py ${name} --iterate\`` +
+        (a.recipe === null ? ` (${a.how})` : ""),
+    );
+  }
+  return a.iteration;
 }
 
 /**

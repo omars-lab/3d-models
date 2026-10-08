@@ -274,12 +274,22 @@ def iterate(page: Path, date: str) -> str:
 
 
 def status(page: Path, paths: tuple[Path, Path, Path] | None = None) -> dict:
-    """{approved, how, sends, standing, color, recipe}: what `bambu print send` asks before it
-    sends. `recipe` is the plate's recipe hash now (iterations.py), which the send compares with
-    the one its slice recorded; `color` is the one color the open yes covers, or None when it
-    names none (then the send's --color is the send's to name). `paths` is (prints, bets, rubric), by default the ones in the page's own
-    repo."""
-    return {**_approval(page, paths), "recipe": pg.recipe_hash(page)}
+    """{approved, how, sends, standing, color, recipe, iteration}: what `bambu print send` asks
+    before it sends. `recipe` is the plate's recipe hash now (iterations.py), which the send
+    compares with the one its slice recorded; `color` is the one color the open yes covers, or None
+    when it names none (then the send's --color is the send's to name). `iteration` is the
+    recipe's iteration number when the recipe as it is now is the latest one recorded, else None:
+    `bambu slice compose` cuts it into each piece's id (D-109). `paths` is (prints, bets, rubric),
+    by default the ones in the page's own repo."""
+    h = pg.recipe_hash(page)
+    return {**_approval(page, paths), "recipe": h, "iteration": recipe_iteration(page, h)}
+
+
+def recipe_iteration(page: Path, h: str | None) -> int | None:
+    """The iteration the recipe is now: the latest recorded one, when its hash is the recipe's.
+    An edit not yet recorded with --iterate has none, and neither does an older recipe put back."""
+    its = pg.iterations_of(page)
+    return its[-1]["iteration"] if h is not None and its and its[-1]["recipe"] == h else None
 
 
 def _approval(page: Path, paths: tuple[Path, Path, Path] | None) -> dict:
@@ -416,12 +426,17 @@ def self_test() -> int:
         except Refused as e:
             check("reprint as-is" in str(e), "--iterate on a recipe that did not change is refused",
                   str(e))
+        check(status(m8)["iteration"] == 1, "the status names the recipe's iteration",
+              str(status(m8)))
         (plates / "minis-08.yaml").write_text("bed: x2d\nspacing: 4\n", encoding="utf-8")
         st = status(m8)
         check(not st["approved"] and "--iterate" in st["how"] and any("P9" in f for f in gate()),
               "a recipe changed after the yes is refused on the send and found by the gate",
               f"{st} {gate()}")
+        check(st["iteration"] is None, "an edit not yet recorded has no iteration", str(st))
         did = iterate(m8, "2026-10-07")
+        check(status(m8)["iteration"] == 2, "--iterate gives the edit iteration 2",
+              str(status(m8)))
         rows = pg.approvals(m8.read_text(encoding="utf-8"))[0]
         fm = pg.parse_frontmatter(m8.read_text(encoding="utf-8"))[0]
         check("reset" in did and rows[-1]["spent"] == "reset 2026-10-07" and fm["iteration"] == 2
