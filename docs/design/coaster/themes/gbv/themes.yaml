@@ -27,9 +27,9 @@ slice:        { plate: sheets-04g, minutes: 86, grams: 27 }
 groups:
   - { id: middle, piece: Middle, orbits: [0], label: "the middle (one 20-sided piece)" }
   - { id: kite,   piece: Kite,   orbits: [1], label: "the kites (10)" }
-  - { id: hex,    piece: Hex,    orbits: [2], label: "the inner six-sided ring (10)" }
+  - { id: hex,    piece: Hex,    orbits: [2], label: "the inner ring of six-sided pieces (10)" }
   - { id: star,   piece: Star,   orbits: [3], label: "the stars (10)" }
-  - { id: outer,  piece: Outer,  orbits: [4], label: "the outer six-sided ring (10)" }
+  - { id: outer,  piece: Outer,  orbits: [4], label: "the outer ring of six-sided pieces (10)" }
 
 themes:
   - id: all-green
