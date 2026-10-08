@@ -15,8 +15,17 @@
 # opened, looking for a photo or catalogue entry. None shows this star. Khalil's gate photo shows a
 # carved-brick tympanum with a different, irregular field of interlaced stars and polygons; his
 # other photo is the information sign, text only; the Wikipedia article's door photos are too small
-# to make out any star; the video's description could not be read (YouTube's bot check). So the
-# tie stays the maker's word only.
+# to make out any star. So the tie stays the maker's word only.
+#
+# Rechecked 2026-10-07 (storefront docs/research/2026-10-07-dates-to-scholars-consolidated.md): the
+# video's description was read in a browser and shows no photo of the building; all 43 photos in
+# Commons' "Mustansiriyya Madrasa" category were looked at, and none shows this single star (ten-
+# pointed stars appear only inside repeating fields). Two more were looked at, which closes the
+# sweep: Mohammed Fadhil Salih's "School Gate of Mustansiryah" (outside the category; the field over
+# the door is a repeating star field, half behind an iron gate) and Salam Pax's "Mustansiriya door"
+# at Flickr's largest size, 600 px (the spandrel is a repeating field of stars and rosettes).
+# The story's dates now follow the Baghdad
+# chronicles: work began AH 625 (1227–28), opened 5 Rajab 631 (6 April 1234).
 
 construction: NtnlGMTElBk
 short: Ntn
@@ -35,9 +44,9 @@ caption: A single ten-pointed star, drawn as one interlaced band, after a drawin
 # Two or three sentences for the product page and the pattern's article.
 story: >
   Our ten-fold star follows a drawing by the artist Samira Mian, who attributes it to the
-  Mustansiriya in Baghdad. The Abbasid caliph al-Mustansir founded the madrasa in 1227, and it
-  opened in 1233; it is one of the few surviving landmarks of Abbasid Baghdad. Its façade is
-  decorated in carved brick, and its main entrance carries star and polygon figures.
+  Mustansiriya in Baghdad. The Abbasid caliph al-Mustansir ordered the madrasa built; work began in
+  1227–28, and it opened in 1234; it is one of the few surviving landmarks of Abbasid Baghdad. Its
+  façade is decorated in carved brick, and its main entrance carries star and polygon figures.
 
 # Facts scholars disagree on, and lines not to print. The story above avoids each one.
 contested:
@@ -48,6 +57,9 @@ contested:
     "carved in stone".
   - Girih tiles. Lu and Steinhardt (2007) redraw one of its spandrels with girih tiles; whether the
     craftsmen worked that way is argued. Say "can be redrawn with girih tiles", never "made with".
+  - Opening year. 1233 in Wikipedia, Ma'ruf and Islam Online is AH 631 written as the year it
+    began; the opening was 5 Rajab 631, 6 April 1234. The inscriptions' 630 is when the caliph
+    ordered it, not its finish. Print no weekday (the chronicles disagree).
   - Do not print "the oldest university", "survived the Mongol sack" without saying parts were
     devastated and later restored, or any day-level date.
 
@@ -57,6 +69,15 @@ sources:
     supports: [caption, fold, story]
   - title: Wikipedia, "Mustansiriyya Madrasa"
     url: https://en.wikipedia.org/wiki/Mustansiriyya_Madrasa
+    supports: [story]
+  - title: Mustafa Jawad, "al-Madrasa al-Mustansiriyya", Sumer 14 (1958), pp. 30–34 (al-Khazraji and Ibn Abi al-Surur)
+    url: https://archive.org/details/0775014001002005
+    supports: [story]
+  - title: Kitab al-Hawadith, ed. Mustafa Jawad (Baghdad, 1932), pp. 53, 55
+    url: https://archive.org/details/20241009_20241009_0819
+    supports: [story]
+  - title: Guy Le Strange, Baghdad during the Abbasid Caliphate (1900), p. 266
+    url: https://archive.org/details/bub_gb_rdcoAAAAYAAJ
     supports: [story]
   - title: Mohammed Harith Khalil, the Mustansiriya's information sign (photo, Wikimedia Commons)
     url: https://commons.wikimedia.org/wiki/File:%D9%85%D8%B9%D9%84%D9%88%D9%85%D8%A7%D8%AA_%D8%B9%D9%86_%D8%A7%D9%84%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%86%D8%B5%D8%B1%D9%8A%D8%A9.jpg
