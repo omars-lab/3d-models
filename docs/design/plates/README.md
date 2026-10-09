@@ -47,7 +47,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 25 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
 | 26 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
 
-**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [sheets-05](sheets-05.md) (value 5).
+**Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [stud-1](stud-1.md) (value 6), [sheets-05](sheets-05.md) (value 5).
 
 **Held for hardware risk:** none.
 
