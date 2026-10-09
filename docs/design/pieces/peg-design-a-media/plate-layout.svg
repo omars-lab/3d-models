@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 740" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="740" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">The proposed plate: 12 pairs on spl-2's footprint</text>
+  <text x="30" y="60" font-size="13" fill="#555">From above, 7 px per mm: 24 tiles of 15 mm on a 17 mm pitch, about 83 mm square. Each tile shows the id cut into it. G is spl-2's answer.</text>
+  <text x="30" y="78" font-size="13" fill="#555">The order here is for reading, pairs side by side; the plate tool sets the real places, as it did for spl-2.</text>
+
+  <g font-size="11" text-anchor="middle">
+    <!-- row 0 -->
+    <rect x="40" y="100" width="105" height="105" rx="6" fill="#d6d2cc"/>
+    <text x="92.5" y="152" font-size="22" font-weight="700" fill="#222">1A</text><text x="92.5" y="172" fill="#333">lower, G−0.05</text>
+    <rect x="159" y="100" width="105" height="105" rx="6" fill="#d6d2cc"/>
+    <text x="211.5" y="152" font-size="22" font-weight="700" fill="#222">1M</text><text x="211.5" y="172" fill="#333">upper, G−0.05</text>
+    <rect x="278" y="100" width="105" height="105" rx="6" fill="#d6d2cc"/>
+    <text x="330.5" y="152" font-size="22" font-weight="700" fill="#222">1B</text><text x="330.5" y="172" fill="#333">lower, G−0.05</text>
+    <rect x="397" y="100" width="105" height="105" rx="6" fill="#d6d2cc"/>
+    <text x="449.5" y="152" font-size="22" font-weight="700" fill="#222">1N</text><text x="449.5" y="172" fill="#333">upper, G−0.05</text>
+    <rect x="516" y="100" width="105" height="105" rx="6" fill="#9fd6cf"/>
+    <text x="568.5" y="152" font-size="22" font-weight="700" fill="#222">1C</text><text x="568.5" y="172" fill="#333">lower, G−0.05</text>
+    <!-- row 1 -->
+    <rect x="40" y="219" width="105" height="105" rx="6" fill="#9fd6cf"/>
+    <text x="92.5" y="271" font-size="22" font-weight="700" fill="#222">1P</text><text x="92.5" y="291" fill="#333">upper, G−0.05</text>
+    <rect x="159" y="219" width="105" height="105" rx="6" fill="#9fd6cf"/>
+    <text x="211.5" y="271" font-size="22" font-weight="700" fill="#222">1D</text><text x="211.5" y="291" fill="#333">lower, G−0.05</text>
+    <rect x="278" y="219" width="105" height="105" rx="6" fill="#9fd6cf"/>
+    <text x="330.5" y="271" font-size="22" font-weight="700" fill="#222">1Q</text><text x="330.5" y="291" fill="#333">upper, G−0.05</text>
+    <rect x="397" y="219" width="105" height="105" rx="6" fill="#a9c3f0"/>
+    <text x="449.5" y="271" font-size="22" font-weight="700" fill="#222">1E</text><text x="449.5" y="291" fill="#333">lower, G−0.05</text>
+    <rect x="516" y="219" width="105" height="105" rx="6" fill="#a9c3f0"/>
+    <text x="568.5" y="271" font-size="22" font-weight="700" fill="#222">1R</text><text x="568.5" y="291" fill="#333">upper, G−0.05</text>
+    <!-- row 2 -->
+    <rect x="40" y="338" width="105" height="105" rx="6" fill="#a9c3f0"/>
+    <text x="92.5" y="390" font-size="22" font-weight="700" fill="#222">1F</text><text x="92.5" y="410" fill="#333">lower, G−0.05</text>
+    <rect x="159" y="338" width="105" height="105" rx="6" fill="#a9c3f0"/>
+    <text x="211.5" y="390" font-size="22" font-weight="700" fill="#222">1S</text><text x="211.5" y="410" fill="#333">upper, G−0.05</text>
+    <rect x="278" y="338" width="105" height="105" rx="6" fill="#ffffff" stroke="#555" stroke-dasharray="5 4"/>
+    <text x="330.5" y="390" font-size="22" font-weight="700" fill="#222">1G</text><text x="330.5" y="410" fill="#333">lower, no stud</text>
+    <rect x="397" y="338" width="105" height="105" rx="6" fill="#ffffff" stroke="#555" stroke-dasharray="5 4"/>
+    <text x="449.5" y="390" font-size="22" font-weight="700" fill="#222">1T</text><text x="449.5" y="410" fill="#333">upper, no socket</text>
+    <rect x="516" y="338" width="105" height="105" rx="6" fill="#f0d78a"/>
+    <text x="568.5" y="390" font-size="22" font-weight="700" fill="#222">1H</text><text x="568.5" y="410" fill="#333">lower</text>
+    <!-- row 3 -->
+    <rect x="40" y="457" width="105" height="105" rx="6" fill="#f0d78a"/>
+    <text x="92.5" y="509" font-size="22" font-weight="700" fill="#222">1U</text><text x="92.5" y="529" fill="#333">upper, flats G−0.10</text>
+    <rect x="159" y="457" width="105" height="105" rx="6" fill="#f0d78a"/>
+    <text x="211.5" y="509" font-size="22" font-weight="700" fill="#222">1I</text><text x="211.5" y="529" fill="#333">lower</text>
+    <rect x="278" y="457" width="105" height="105" rx="6" fill="#f0d78a"/>
+    <text x="330.5" y="509" font-size="22" font-weight="700" fill="#222">1V</text><text x="330.5" y="529" fill="#333">upper, flats G−0.20</text>
+    <rect x="397" y="457" width="105" height="105" rx="6" fill="#f4b98a"/>
+    <text x="449.5" y="509" font-size="22" font-weight="700" fill="#222">1J</text><text x="449.5" y="529" fill="#333">lower, ribs 0.05</text>
+    <rect x="516" y="457" width="105" height="105" rx="6" fill="#f4b98a"/>
+    <text x="568.5" y="509" font-size="22" font-weight="700" fill="#222">1W</text><text x="568.5" y="529" fill="#333">upper, bore G+0.10</text>
+    <!-- row 4 -->
+    <rect x="40" y="576" width="105" height="105" rx="6" fill="#f4b98a"/>
+    <text x="92.5" y="628" font-size="22" font-weight="700" fill="#222">1K</text><text x="92.5" y="648" fill="#333">lower, ribs 0.10</text>
+    <rect x="159" y="576" width="105" height="105" rx="6" fill="#f4b98a"/>
+    <text x="211.5" y="628" font-size="22" font-weight="700" fill="#222">1X</text><text x="211.5" y="648" fill="#333">upper, bore G+0.10</text>
+    <rect x="278" y="576" width="105" height="105" rx="6" fill="#e8a29a"/>
+    <text x="330.5" y="628" font-size="22" font-weight="700" fill="#222">1L</text><text x="330.5" y="648" fill="#333">lower, split stud</text>
+    <rect x="397" y="576" width="105" height="105" rx="6" fill="#e8a29a"/>
+    <text x="449.5" y="628" font-size="22" font-weight="700" fill="#222">1Y</text><text x="449.5" y="648" fill="#333">upper, gap −0.10</text>
+  </g>
+
+  <g font-size="13" fill="#222">
+    <text x="660" y="116" font-size="15" font-weight="600">Key</text>
+    <rect x="660" y="132" width="22" height="22" rx="3" fill="#d6d2cc"/><text x="692" y="148">round, as today (control)</text>
+    <rect x="660" y="166" width="22" height="22" rx="3" fill="#9fd6cf"/><text x="692" y="182">round + mouth chamfer</text>
+    <rect x="660" y="200" width="22" height="22" rx="3" fill="#a9c3f0"/><text x="692" y="216">+ root groove too</text>
+    <rect x="660" y="234" width="22" height="22" rx="3" fill="#ffffff" stroke="#555" stroke-dasharray="4 3"/><text x="692" y="250">flat faces, no stud</text>
+    <rect x="660" y="268" width="22" height="22" rx="3" fill="#f0d78a"/><text x="692" y="284">hexagon socket</text>
+    <rect x="660" y="302" width="22" height="22" rx="3" fill="#f4b98a"/><text x="692" y="318">three crush ribs</text>
+    <rect x="660" y="336" width="22" height="22" rx="3" fill="#e8a29a"/><text x="692" y="352">split stud</text>
+    <text x="660" y="400">Lowers 1A to 1L carry the full</text>
+    <text x="660" y="418">id, PG1 1A, on the bottom.</text>
+    <text x="660" y="436">Uppers 1M to 1Y carry the short</text>
+    <text x="660" y="454">id on the outer face (D-115);</text>
+    <text x="660" y="472">no O, so none reads as a zero.</text>
+    <text x="660" y="508">Gaps are across the diameter.</text>
+    <text x="660" y="526">Rib numbers are squeeze per side.</text>
+    <text x="660" y="562">PG1 is a placeholder name.</text>
+  </g>
+</svg>

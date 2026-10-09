@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="470" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 1: the round stud with lead-ins</text>
+  <text x="30" y="60" font-size="13" fill="#555">Cut through, side view, to scale (60 px per mm), at a 0.25 mm gap. Dark gray: lower half. Light gray: upper half. White: air.</text>
+
+  <!-- left panel: today -->
+  <text x="60" y="96" font-size="15" font-weight="600" fill="#222">Today</text>
+  <rect x="60" y="110" width="360" height="120" fill="#b3ada6"/>
+  <rect x="172.5" y="134" width="135" height="96" fill="#ffffff"/>
+  <rect x="60" y="230" width="360" height="120" fill="#8d8780"/>
+  <polygon points="180,230 180,158 192,146 288,146 300,158 300,230" fill="#8d8780"/>
+  <line x1="60" y1="230" x2="420" y2="230" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <!-- labels -->
+  <line x1="192" y1="150" x2="120" y2="380" stroke="#333" stroke-width="1"/>
+  <circle cx="192" cy="150" r="3" fill="#222"/>
+  <text x="60" y="398" font-size="13" fill="#222">0.2 mm top chamfer</text>
+  <line x1="307" y1="228" x2="330" y2="380" stroke="#333" stroke-width="1"/>
+  <circle cx="307" cy="228" r="3" fill="#222"/>
+  <text x="270" y="398" font-size="13" fill="#222">square socket mouth</text>
+  <line x1="180" y1="232" x2="200" y2="420" stroke="#333" stroke-width="1"/>
+  <circle cx="180" cy="232" r="3" fill="#222"/>
+  <text x="140" y="436" font-size="13" fill="#222">square stud root</text>
+
+  <!-- right panel: option 1 -->
+  <text x="500" y="96" font-size="15" font-weight="600" fill="#222">Option 1</text>
+  <rect x="500" y="110" width="360" height="120" fill="#b3ada6"/>
+  <polygon points="612.5,134 747.5,134 747.5,212 765.5,230 594.5,230 612.5,212" fill="#ffffff"/>
+  <rect x="500" y="230" width="360" height="120" fill="#8d8780"/>
+  <rect x="608" y="230" width="12" height="12" fill="#ffffff"/>
+  <rect x="740" y="230" width="12" height="12" fill="#ffffff"/>
+  <polygon points="620,242 620,158 632,146 728,146 740,158 740,242" fill="#8d8780"/>
+  <line x1="500" y1="230" x2="608" y2="230" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="752" y1="230" x2="860" y2="230" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <!-- labels -->
+  <line x1="757" y1="222" x2="800" y2="380" stroke="#c0392b" stroke-width="1.2"/>
+  <circle cx="757" cy="222" r="3.5" fill="#c0392b"/>
+  <text x="700" y="398" font-size="13" fill="#c0392b">0.3 mm chamfer in the mouth</text>
+  <line x1="614" y1="238" x2="590" y2="420" stroke="#c0392b" stroke-width="1.2"/>
+  <circle cx="614" cy="238" r="3.5" fill="#c0392b"/>
+  <text x="500" y="436" font-size="13" fill="#c0392b">0.2 mm groove round the stud root</text>
+  <line x1="632" y1="150" x2="560" y2="380" stroke="#333" stroke-width="1"/>
+  <circle cx="632" cy="150" r="3" fill="#222"/>
+  <text x="500" y="398" font-size="13" fill="#222">top chamfer</text>
+
+  <text x="30" y="462" font-size="12" fill="#555">The mouth chamfer cuts 0.3 mm into the 0.9 mm socket wall, inside the closed pair. The groove gives any flare at the stud's foot somewhere to go.</text>
+</svg>

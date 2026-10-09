@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="520" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 5: LEGO-style line contact against a thin wall</text>
+  <text x="30" y="60" font-size="13" fill="#555">Both seen from below the upper part, looking up at the studs. Red: where they touch. Our own drawings of the geometry, not a copy of anyone's picture.</text>
+
+  <text x="100" y="118" font-size="15" font-weight="600" fill="#222">A 2×2 LEGO brick on the studs below it</text>
+  <text x="100" y="134" font-size="12" fill="#555">15 px per mm, from the repo's LEGO survey</text>
+  <rect x="101.5" y="141.5" width="237" height="237" fill="#b3ada6"/>
+  <rect x="124" y="164" width="192" height="192" fill="#ffffff"/>
+  <g fill="#2a9d8f" fill-opacity="0.55" stroke="#1f6f66" stroke-dasharray="4 3">
+    <circle cx="160" cy="200" r="36"/><circle cx="280" cy="200" r="36"/>
+    <circle cx="160" cy="320" r="36"/><circle cx="280" cy="320" r="36"/>
+  </g>
+  <circle cx="220" cy="260" r="48.9" fill="#b3ada6"/>
+  <circle cx="220" cy="260" r="36" fill="#ffffff"/>
+  <g fill="#c0392b">
+    <circle cx="254.5" cy="294.5" r="4"/><circle cx="185.5" cy="294.5" r="4"/>
+    <circle cx="185.5" cy="225.5" r="4"/><circle cx="254.5" cy="225.5" r="4"/>
+    <circle cx="316" cy="320" r="4"/><circle cx="280" cy="356" r="4"/>
+    <circle cx="124" cy="320" r="4"/><circle cx="160" cy="356" r="4"/>
+    <circle cx="124" cy="200" r="4"/><circle cx="160" cy="164" r="4"/>
+    <circle cx="316" cy="200" r="4"/><circle cx="280" cy="164" r="4"/>
+  </g>
+  <text x="100" y="404" font-size="13" fill="#222">Each stud (teal, 4.8 mm drawn) touches at three lines:</text>
+  <text x="100" y="422" font-size="13" fill="#222">the hollow tube in the middle and two outer walls.</text>
+  <text x="100" y="440" font-size="13" fill="#222">The tube wall (about 0.86 mm) and the walls bend a</text>
+  <text x="100" y="458" font-size="13" fill="#222">little; nothing has to stretch round a whole ring.</text>
+  <text x="100" y="476" font-size="13" fill="#222">Molded ABS, held to 0.01 or 0.1 mm (sources differ).</text>
+
+  <text x="530" y="118" font-size="15" font-weight="600" fill="#222">What it would mean for our 2 mm stud</text>
+  <text x="530" y="134" font-size="12" fill="#555">30 px per mm, a sketch, not a tested design</text>
+  <rect x="570" y="170" width="180" height="180" fill="#b3ada6"/>
+  <circle cx="660" cy="260" r="58" fill="#ffffff"/>
+  <g fill="none" stroke="#b3ada6" stroke-width="13.5">
+    <path d="M 632.23 236.70 A 36.25 36.25 0 0 1 687.77 236.70"/>
+    <path d="M 694.06 247.60 A 36.25 36.25 0 0 1 666.29 295.70"/>
+    <path d="M 653.71 295.70 A 36.25 36.25 0 0 1 625.94 247.60"/>
+  </g>
+  <circle cx="660" cy="260" r="30" fill="#8d8780"/>
+  <g fill="#c0392b">
+    <circle cx="660" cy="230" r="4"/><circle cx="686" cy="275" r="4"/><circle cx="634" cy="275" r="4"/>
+  </g>
+  <line x1="690" y1="232" x2="780" y2="190" stroke="#333" stroke-width="1"/>
+  <text x="770" y="164" font-size="13" fill="#222">three fingers,</text>
+  <text x="770" y="180" font-size="13" fill="#222">one line thick,</text>
+  <line x1="712" y1="276" x2="780" y2="300" stroke="#333" stroke-width="1"/>
+  <text x="770" y="316" font-size="13" fill="#222">air behind them</text>
+  <text x="530" y="404" font-size="13" fill="#222">The idea carries over: touch at a few lines and let</text>
+  <text x="530" y="422" font-size="13" fill="#222">something thin bend. Our 0.9 mm socket wall is solid</text>
+  <text x="530" y="440" font-size="13" fill="#222">plastic round the hole, so it cannot bend like LEGO's.</text>
+  <text x="530" y="458" font-size="13" fill="#222">We would have to make something thin on purpose,</text>
+  <text x="530" y="476" font-size="13" fill="#222">and LEGO's 0.1 to 0.2 mm of squeeze does not carry over.</text>
+</svg>

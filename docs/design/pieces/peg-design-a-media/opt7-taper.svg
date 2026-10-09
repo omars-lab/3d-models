@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="500" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 7: a tapered stud in a tapered socket</text>
+  <text x="30" y="60" font-size="13" fill="#555">Left and middle: cut through, side view, 80 px per mm, a 5° taper, drawn line to line when home. Right: the sizes involved, 500 px per mm.</text>
+
+  <g transform="translate(0,40)">
+  <text x="40" y="56" font-size="15" font-weight="600" fill="#222">1 mm from home</text>
+  <rect x="40" y="72" width="260" height="148" fill="#b3ada6"/>
+  <polygon points="90,220 101.2,92 238.8,92 250,220" fill="#ffffff"/>
+  <rect x="40" y="300" width="260" height="70" fill="#8d8780"/>
+  <polygon points="90,300 99.8,188 240.2,188 250,300" fill="#8d8780"/>
+  <text x="40" y="396" font-size="13" fill="#222">Loose for most of the travel: about</text>
+  <text x="40" y="414" font-size="13" fill="#222">0.09 mm of air each side at 1 mm out,</text>
+  <text x="40" y="432" font-size="13" fill="#222">closing only as the faces meet.</text>
+
+  <text x="340" y="96" font-size="15" font-weight="600" fill="#222">Home</text>
+  <rect x="330" y="150" width="240" height="150" fill="#b3ada6"/>
+  <polygon points="370,300 381.2,172 518.8,172 530,300" fill="#ffffff"/>
+  <rect x="330" y="300" width="240" height="70" fill="#8d8780"/>
+  <polygon points="370,300 379.8,188 520.2,188 530,300" fill="#8d8780"/>
+  <line x1="330" y1="300" x2="370" y2="300" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="530" y1="300" x2="570" y2="300" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="370" y1="300" x2="379.8" y2="188" stroke="#c0392b" stroke-width="3"/>
+  <line x1="530" y1="300" x2="520.2" y2="188" stroke="#c0392b" stroke-width="3"/>
+  <text x="330" y="396" font-size="13" fill="#222">Touches along both sides only at</text>
+  <text x="330" y="414" font-size="13" fill="#222">the end (red). The stud stays 0.2 mm</text>
+  <text x="330" y="432" font-size="13" fill="#222">short of the socket floor, as today.</text>
+
+  <text x="620" y="96" font-size="15" font-weight="600" fill="#222">How much does a taper move?</text>
+  <text x="620" y="114" font-size="12" fill="#555">side shift over the 1.4 mm stud, per side</text>
+  <g font-size="12" fill="#222">
+    <rect x="620" y="140" width="210" height="16" fill="#8d8780"/><text x="620" y="134">one line, 0.42 mm</text>
+    <rect x="620" y="186" width="61" height="16" fill="#2a9d8f"/><text x="620" y="180">5° taper: 0.12 mm</text>
+    <rect x="620" y="232" width="24.5" height="16" fill="#c0392b"/><text x="620" y="226">2° taper: 0.05 mm</text>
+    <rect x="620" y="278" width="8.7" height="16" fill="#2a9d8f"/><text x="620" y="272">one 0.2 mm layer at 5°: 0.02 mm</text>
+  </g>
+  <text x="620" y="340" font-size="13" fill="#222">Each layer is a flat slice, so a taper</text>
+  <text x="620" y="358" font-size="13" fill="#222">prints as seven tiny steps. At 2° the whole</text>
+  <text x="620" y="376" font-size="13" fill="#222">taper is an eighth of a line, maybe lost</text>
+  <text x="620" y="394" font-size="13" fill="#222">in the printer's own error. 5° is the</text>
+  <text x="620" y="412" font-size="13" fill="#222">least that is likely to show as a shape;</text>
+  <text x="620" y="430" font-size="13" fill="#222">whether it does is untested.</text>
+  </g>
+</svg>
