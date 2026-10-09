@@ -22,9 +22,10 @@ construction: GimTvN9hw4U
 short: Gim
 fold: 6
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: its fold and shape, with "star rosette" only where the
+# drawing meets that class's rules (Omar, 2026-10-08; storefront DESIGN.md "Pattern names" and
+# docs/research/2026-10-08-pattern-family-names-consolidated.md). It leads the product title.
+history_name: "Six-Fold Star Rosette"
 
 # One line under the pattern's picture.
 caption: A six-pointed star rosette, built step by step from a hexagon, drawn after a GeoGebra lesson by Sarah Brewer (mathémartiste).

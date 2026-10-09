@@ -17,9 +17,10 @@ short: 0ke
 fold: 10
 form: Star
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: its fold and shape, with "star rosette" only where the
+# drawing meets that class's rules (Omar, 2026-10-08; storefront DESIGN.md "Pattern names" and
+# docs/research/2026-10-08-pattern-family-names-consolidated.md). It leads the product title.
+history_name: "Ten-Pointed Star"
 
 # One line under the pattern's picture.
 caption: A circle divided into five, then ten, giving a ten-pointed star, drawn after a lesson by the artist Samira Mian.
@@ -39,6 +40,10 @@ contested:
     "Ptolemy's method", "Ptolemy's pentagon", "first" or "goes back to Ptolemy".
   - No building is known for this star. Do not give it one, and do not credit the method to any
     other named teacher.
+  - Rueda. López de Arenas's "rueda de diez" (Carpintería de lo blanco, 1633) is a worked figure
+    in a carpentry manual for finding joint mouths, not the star's name, and the 1912 edition's
+    figures are its 1867 and 1912 editors' redrawings. Body copy only, credited to his text and
+    the edition read; never in a title, never "from".
 
 sources:
   - title: Samira Mian, "#13 - Tenfold Rosette 3 Ways Tutorial - Drawing & Painting Islamic Geometric Pattern" (YouTube, 2020)

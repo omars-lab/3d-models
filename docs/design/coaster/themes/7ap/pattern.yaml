@@ -14,9 +14,10 @@ construction: 7apC5Q9QS-8
 short: 7ap
 fold: 8
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: its fold and shape, with "star rosette" only where the
+# drawing meets that class's rules (Omar, 2026-10-08; storefront DESIGN.md "Pattern names" and
+# docs/research/2026-10-08-pattern-family-names-consolidated.md). It leads the product title.
+history_name: "Eight-Fold Rosette"
 
 # One line under the pattern's picture. Checked against a top-down drawing of the construction
 # (bikar-main 144c075, 2026-10-07): each rosette's heart is a plain octagon, with no star points.
