@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="593.16" height="416.8" viewBox="0 0 593.16 416.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Option E: a 3 mm stud split by a slot, so its two prongs bend in</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Option E: a 3 mm stud split by a slot, so its two prongs bend in</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper</text>
+<text x="20" y="70" font-size="12.5" fill="#555555">half. White: air. Solid blue: printed on the bed (first layer). To scale.</text>
+<g data-panel="1. Cut through the slot, to scale">
+<text x="20" y="106" font-size="14" font-weight="bold" fill="#222222">1. Cut through the slot, to scale</text>
+<g transform="translate(117.6,126)">
+<polygon data-kind="half" points="0,140.8 288,140.8 288,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="288" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 288,70.4 288,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="288" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="97.6,70.4 190.4,70.4 190.4,19.2 97.6,19.2" fill="#ffffff"/>
+<polygon data-kind="stud" points="96,70.4 192,70.4 192,32 185.6,25.6 102.4,25.6 96,32" fill="#8e8a83"/>
+<polygon data-kind="air" points="136,57.6 152,57.6 152,25.6 136,25.6" fill="#ffffff"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="96" y1="86.4" x2="136" y2="86.4"/>
+<line x1="96" y1="82.4" x2="96" y2="90.4"/>
+<line x1="136" y1="82.4" x2="136" y2="90.4"/>
+</g>
+<text x="116" y="101.4" font-size="11" fill="#444444" text-anchor="middle">prong 1.25</text>
+</g>
+<circle data-label-dot="1" cx="143.2" cy="151.6" r="2.6" fill="#222222"/>
+<polyline points="143.2,151.6 103.6,151.6 93.6,151.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="155.6" font-size="12" fill="#222222" text-anchor="end">upper half</text>
+<circle data-label-dot="1" cx="143.2" cy="231.6" r="2.6" fill="#222222"/>
+<polyline points="143.2,231.6 103.6,231.6 93.6,231.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="235.6" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="290.4" cy="164.4" r="2.6" fill="#222222"/>
+<polyline points="290.4,164.4 419.6,164.4 429.6,164.4" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="433.6" y="168.4" font-size="12" fill="#222222" text-anchor="start">3.0 mm stud</text>
+<circle data-label-dot="1" cx="261.6" cy="177.2" r="2.6" fill="#222222"/>
+<polyline points="261.6,177.2 419.6,180.4 429.6,180.4" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="433.6" y="184.4" font-size="12" fill="#222222" text-anchor="start">0.5 mm slot, 1.0 deep</text>
+<text x="20" y="294.8" font-size="12" fill="#444444">Each prong is a short beam 1.25 mm thick. Even if the slot ran the stud's full 1.4 mm,</text>
+<text x="20" y="311.8" font-size="12" fill="#444444">bending a prong the 2 to 3 percent PLA can take moves its tip only about 0.02 to 0.03</text>
+<text x="20" y="328.8" font-size="12" fill="#444444">mm, so the pair gives about 0.05 mm across the diameter: less than a small hole prints</text>
+<text x="20" y="345.8" font-size="12" fill="#444444">undersize.</text>
+<text x="20" y="362.8" font-size="12" fill="#444444">The prongs stand upright, the weak way for layers, and a 3 mm stud needs more room</text>
+<text x="20" y="379.8" font-size="12" fill="#444444">than a 2 mm one, so fewer sites fit on a coaster.</text>
+</g>
+</svg>

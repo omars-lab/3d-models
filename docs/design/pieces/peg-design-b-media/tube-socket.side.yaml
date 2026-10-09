@@ -1,0 +1,24 @@
+# Option D of peg-design-b: a LEGO-style socket. The stud goes into a thin tube that a moat of air
+# frees from the rest of the half, so the tube's wall can flex instead of the stud being forced.
+# Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Bore 2.3 mm, tube wall 0.84 mm (two lines), moat 0.5 mm, socket 1.6 mm deep on a 0.6 mm floor.
+title: "Option D: a LEGO-style socket, a thin tube freed by a moat"
+panels:
+  - title: "1. Closed, cut through the stud, to scale"
+    width: 10
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 10, 2.2], first: bottom, label: "lower half", label_at: [0.8, 1.1], label_side: left}
+      - {kind: half, side: upper, box: [0, 2.2, 10, 2.2], first: top, label: "upper half", label_at: [0.8, 3.9], label_side: left}
+      - {kind: air, box: [2.51, 2.2, 0.5, 1.6], label: "moat", label_at: [2.76, 2.5], label_side: left}
+      - {kind: air, box: [6.99, 2.2, 0.5, 1.6]}
+      - {kind: socket, box: [3.85, 2.2, 2.3, 1.6]}
+      - {kind: stud, side: lower, box: [4, 2.2, 2, 1.4], toward: up, chamfer: 0.2, label: "2.0 mm stud", label_at: [5.6, 3.3]}
+      - {kind: dim, from: [3.01, 1.7], to: [3.85, 1.7], text: "tube wall 0.84", place: below}
+    notes:
+      - "The tube wall is two lines thick and free on its outside, so a stud a little too big
+        bends the wall out instead of needing a hammer. That is the job LEGO's tube does between
+        four studs."
+      - "Socket, tube and moat together need a site about 3.4 mm from center to the nearest edge,
+        more than a gBV crossing has, so this one is for wider parts, not today's coaster."

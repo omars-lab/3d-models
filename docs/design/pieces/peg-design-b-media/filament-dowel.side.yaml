@@ -1,0 +1,36 @@
+# Option G of peg-design-b: a loose pin cut from 1.75 mm filament, in a socket in each half.
+# Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sockets 1.95 mm wide (filament 1.75 + 0.20 across the diameter, one rung of the ladder), 1.6 mm
+# deep in each half on a 0.6 mm floor; the pin is cut 3.0 mm long, so 0.2 mm is left over.
+title: "Option G: a pin cut from 1.75 mm filament, in a socket in each half"
+panels:
+  - title: "1. Closed, to scale"
+    width: 8
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 8, 2.2], first: bottom, label: "lower half", label_at: [0.8, 1.1], label_side: left}
+      - {kind: half, side: upper, box: [0, 2.2, 8, 2.2], first: top, label: "upper half", label_at: [0.8, 3.6], label_side: left}
+      - {kind: socket, box: [3.025, 0.6, 1.95, 3.2]}
+      - {kind: piece, color: "#3a7d44", box: [3.125, 0.7, 1.75, 3.0], label: "1.75 mm filament, 3.0 long", label_at: [4.6, 2.8]}
+      - {kind: dim, from: [7.4, 0.6], to: [7.4, 2.2], text: "1.6"}
+      - {kind: dim, from: [7.4, 2.2], to: [7.4, 3.8], text: "1.6"}
+    notes:
+      - "Both halves get the same plain hole, and nothing stands proud of either cut face, so
+        nothing can snap off in the bag or in the hand."
+      - "The pin's size comes from the filament maker's drawing tolerance, not from the printer.
+        Only the hole is printed, so only one part's error is in the fit."
+
+  - title: "2. As printed, and the pin"
+    width: 18
+    scale: [24, 24]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 8, 2.2], first: bottom, last: top, label: "lower half", label_at: [1, 1.1], label_side: left}
+      - {kind: socket, box: [3.025, 0.6, 1.95, 1.6]}
+      - {kind: half, side: upper, box: [10, 0, 8, 2.2], first: bottom, last: top, label: "upper half, face down", label_at: [17, 1.1]}
+      - {kind: socket, box: [13.025, 0.6, 1.95, 1.6]}
+      - {kind: piece, color: "#3a7d44", box: [7.4, 3.2, 3.0, 0.7], label: "pin, cut from the spool", label_at: [10.2, 3.55]}
+      - {kind: bed, line: [0, 0, 18]}
+    notes:
+      - "Both sockets open upward as printed, so the top layers form both mouths and the bed's
+        squash does not reach them. The pins are cut by hand, or a jig, one per site."

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1437.37" height="366.3" viewBox="0 0 1437.37 366.3" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Option G: a pin cut from 1.75 mm filament, in a socket in each half</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Option G: a pin cut from 1.75 mm filament, in a socket in each half</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). To scale.</text>
+<g data-panel="1. Closed, to scale">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. Closed, to scale</text>
+<g transform="translate(117.6,109.5)">
+<polygon data-kind="half" points="0,140.8 256,140.8 256,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="256" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 256,70.4 256,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="256" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="96.8,121.6 159.2,121.6 159.2,19.2 96.8,19.2" fill="#ffffff"/>
+<polygon data-kind="piece" points="100,118.4 156,118.4 156,22.4 100,22.4" fill="#3a7d44"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="236.8" y1="121.6" x2="236.8" y2="70.4"/>
+<line x1="232.8" y1="121.6" x2="240.8" y2="121.6"/>
+<line x1="232.8" y1="70.4" x2="240.8" y2="70.4"/>
+</g>
+<text x="243.8" y="100" font-size="11" fill="#444444" text-anchor="start">1.6</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="236.8" y1="70.4" x2="236.8" y2="19.2"/>
+<line x1="232.8" y1="70.4" x2="240.8" y2="70.4"/>
+<line x1="232.8" y1="19.2" x2="240.8" y2="19.2"/>
+</g>
+<text x="243.8" y="48.8" font-size="11" fill="#444444" text-anchor="start">1.6</text>
+</g>
+<circle data-label-dot="1" cx="143.2" cy="135.1" r="2.6" fill="#222222"/>
+<polyline points="143.2,135.1 103.6,135.1 93.6,135.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="139.1" font-size="12" fill="#222222" text-anchor="end">upper half</text>
+<circle data-label-dot="1" cx="143.2" cy="215.1" r="2.6" fill="#222222"/>
+<polyline points="143.2,215.1 103.6,215.1 93.6,215.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="219.1" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="264.8" cy="160.7" r="2.6" fill="#222222"/>
+<polyline points="264.8,160.7 392.89,160.7 402.89,160.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="406.89" y="164.7" font-size="12" fill="#222222" text-anchor="start">1.75 mm filament, 3.0 long</text>
+<text x="20" y="278.3" font-size="12" fill="#444444">Both halves get the same plain hole, and nothing stands proud of either cut face, so</text>
+<text x="20" y="295.3" font-size="12" fill="#444444">nothing can snap off in the bag or in the hand.</text>
+<text x="20" y="312.3" font-size="12" fill="#444444">The pin's size comes from the filament maker's drawing tolerance, not from the printer.</text>
+<text x="20" y="329.3" font-size="12" fill="#444444">Only the hole is printed, so only one part's error is in the fit.</text>
+</g>
+<g data-panel="2. As printed, and the pin">
+<text x="634.25" y="89.5" font-size="14" font-weight="bold" fill="#222222">2. As printed, and the pin</text>
+<g transform="translate(737.85,107.5)">
+<polygon data-kind="half" points="0,93.6 192,93.6 192,40.8 0,40.8" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="93.6" x2="192" y2="93.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="0" y1="40.8" x2="192" y2="40.8" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="72.6,79.2 119.4,79.2 119.4,40.8 72.6,40.8" fill="#ffffff"/>
+<polygon data-kind="half" points="240,93.6 432,93.6 432,40.8 240,40.8" fill="#aba69f"/>
+<line data-mark="first" x1="240" y1="93.6" x2="432" y2="93.6" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="240" y1="40.8" x2="432" y2="40.8" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="312.6,79.2 359.4,79.2 359.4,40.8 312.6,40.8" fill="#ffffff"/>
+<polygon data-kind="piece" points="177.6,16.8 249.6,16.8 249.6,0 177.6,0" fill="#3a7d44"/>
+<rect data-kind="bed" x="-6" y="97.6" width="444" height="5" fill="#cfcbc3"/>
+<text x="442" y="103.6" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="761.85" cy="174.7" r="2.6" fill="#222222"/>
+<polyline points="761.85,174.7 717.85,174.7 707.85,174.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="703.85" y="178.7" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="982.65" cy="115.9" r="2.6" fill="#222222"/>
+<polyline points="982.65,115.9 1251.09,115.9 1261.09,115.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1265.09" y="119.9" font-size="12" fill="#222222" text-anchor="start">pin, cut from the spool</text>
+<circle data-label-dot="1" cx="1145.85" cy="174.7" r="2.6" fill="#222222"/>
+<polyline points="1145.85,174.7 1251.09,174.7 1261.09,174.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1265.09" y="178.7" font-size="12" fill="#222222" text-anchor="start">upper half, face down</text>
+<text x="634.25" y="240.7" font-size="12" fill="#444444">Both sockets open upward as printed, so the top layers form both mouths and the bed's squash does not reach them. The pins</text>
+<text x="634.25" y="257.7" font-size="12" fill="#444444">are cut by hand, or a jig, one per site.</text>
+</g>
+</svg>
