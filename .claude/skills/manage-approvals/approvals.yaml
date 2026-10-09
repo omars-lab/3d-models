@@ -25,6 +25,8 @@ pkt-1:
   - {iteration: 2, recipe: 'e3004df33f89', date: '2026-10-07'}
   - {iteration: 3, recipe: 'b051d78a6e07', date: '2026-10-08'}
   - {iteration: 4, recipe: '84cff7e88fb4', date: '2026-10-08'}
+pkt-2:
+  - {iteration: 1, recipe: '1c5170def09c', date: '2026-10-08'}
 sheets-01:
   - {iteration: 1, recipe: '89d1abcb4071', date: '2026-10-03'}
 sheets-02:

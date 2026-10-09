@@ -550,6 +550,7 @@ the [piece groups](2026-10-05-open-calls-media/gbv-groups.png), each with a lip-
 - [ ] Peg and socket
 - [ ] Taller pieces
 - Notes: None picked on paper: try them in print. A second pocket plate, pkt-2, prints the four side by side (pocket only, pocket and glue, peg and socket, pieces 0.2 mm taller) at the air gap pkt-1 shows comes free, and the pick is made from the pieces in hand. (2026-10-08, asked in chat.)
+- Revised 2026-10-08 after pkt-1 — Omar picked pocket only, at coaster size; the other joins return only if a full-size piece rattles. [pkt-2](../../design/plates/pkt-2.md) is that plate.
 
 **Your comment, answered (2026-10-07).** You asked: "waht happened to the dove tail slider".
 
