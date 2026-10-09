@@ -85,7 +85,12 @@ When a print teaches something new, add or correct a rule here, with the date an
   - loose pieces at a ladder of gaps: `<ring>_dots`, the most dots on the biggest piece (the
     tightest gap), one dot on the smallest.
   Ids and letters run on from the last plate's, so no two prototypes on the shelf share one
-  (spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2). A piece too small to take a mark, or
+  (spl-1 is A to N, pkt-1 O to R, split-01 1, split-02 2). **Never hand out both letters of a
+  look-alike pair on one plate:** B and D, M and N, O and 0. Omar, 2026-10-09, on spl-2: "but
+  node b and d are confusing", "m and n oto", "we shuld remeber this". When a ladder takes
+  letters, skip B, D, M, N and O. bikar's pair-to-letter mapping still hands them out in order,
+  so a plate that needs more than the remaining letters says so in its header until bikar skips
+  them itself. A piece too small to take a mark, or
   to take enough dots to count its rungs, says so in the plate header, with how its rungs are
   kept apart instead. The row sits at the piece's widest spot (bikar #324), and a gBV kite at
   size 112.5 still holds only one dot, at gaps 0.05 to 0.15, and none at 0.20 or 0.25.

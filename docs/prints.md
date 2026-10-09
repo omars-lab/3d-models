@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- A 2 mm stud went in by hand at every gap from 0.15 to 0.40 mm and held from 0.15 to 0.25, though spl-1 needed a hammer at 0.15; and at 0.25 one pair held (1E) while its twin fell apart (1F). So the fit moves about 0.05 to 0.10 mm from print to print (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). And carved B and D, M and N, look alike at this size. ([2026-10-09-spl-2](prints/2026-10-09-spl-2/index.md))
 - Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); and an id on the upper's cut face is hidden once the pair closes. ([2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md))
 - A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md))
 - All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate. ([2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md))
@@ -40,6 +41,20 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-09-spl-2](prints/2026-10-09-spl-2/index.md)
+
+- **Plate:** [spl-2](design/plates/spl-2.md) — the split coupon again, looser: at what gap does a stud go in by hand
+- **Lesson:** A 2 mm stud went in by hand at every gap from 0.15 to 0.40 mm and held from 0.15 to 0.25, though spl-1 needed a hammer at 0.15; and at 0.25 one pair held (1E) while its twin fell apart (1F). So the fit moves about 0.05 to 0.10 mm from print to print (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). And carved B and D, M and N, look alike at this size.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 24 (10 keep, 14 drop)
+- **What happened:** Every pair closed by hand. SL2 1A to 1E (0.15 to 0.25 mm) held when shaken; SL2 1F to 1L (0.25 to 0.40 mm) were very loose and fell apart. None broke when pulled. 1D may have clicked in. All the uppers' ids on their top faces read.
+- **Why:** Not measured on the pieces (no calipers reading). The same 0.15 mm gap needed a hammer on spl-1, printed earlier the same day with the same nozzle, preset and spool, so the printer varies from print to print by about as much as one or two rungs of the ladder. Why it varies (chamber warmth, the plate, the spool's moisture) is not known.
+- **What it changed:** The stud gap on split-01, stud-1 and pkt-2 is 0.25 mm, Omar's pick (D-116), the loosest gap that held here; 1F at the same gap fell apart, so a whole coaster at 0.25 may come out loose. split-01 and stud-1 set it in their recipes; pkt-2's pocket coaster has no stud-gap knob yet, so it waits on a bikar change. Coupon uppers keep their id on top (D-115 stands). Piece letters skip B, D, M, N and O.
+- **Decided from it:** [D-116](working-model/decisions-log.md#d-116--a-split-coasters-stud-gap-is-025-mm) (A split coaster's stud gap is 0.25 mm)
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/spl-2-media/bed.png), [ids-lowers](design/plates/spl-2-media/ids-lowers.png), [ids-uppers](design/plates/spl-2-media/ids-uppers.png)
+
+![render, not a photo: bed](design/plates/spl-2-media/bed.png)
 
 ### [2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md)
 
@@ -141,7 +156,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-8 records; 0 measured with a tool, so no bet has moved yet.
+9 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

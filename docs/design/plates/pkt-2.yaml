@@ -12,6 +12,10 @@
 # wide and 0.4 thick, 0.4 of air above and below the band, so the band is 2.2 - 0.8 - 0.8 = 0.6.
 # The ten stars stay open holes, as in the minimal coaster.
 #
+# The stud gap is settled at 0.25 mm (D-116, Omar off spl-2: "it should be 1e"), but this file's
+# split line sets no gap and has no knob for one, so its sockets take the kernel's 0.05. The plate
+# waits on a bikar change that adds the knob; then it passes stud_gap 0.25 as split-01 does.
+#
 # The pieces are inside the halves, so the plate is two objects, not 33. A pocket registers no
 # ring pieces: bikar renders only Lower and Upper.
 #

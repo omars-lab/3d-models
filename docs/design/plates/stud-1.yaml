@@ -14,9 +14,9 @@
 #   10     10 mm          13                   6
 #
 # 25 mm is the coaster file's default and split-01's. The id goes on each lower half's bottom face,
-# mirrored, as on split-01 (1), split-02 (2) and pkt-2 (3). The stud gap stays 0.05 mm, the coaster
-# file's default, until spl-1 says which gap holds (task #251); if spl-1's winner differs, the gap
-# moves to it as a new iteration of this plate.
+# mirrored, as on split-01 (1), split-02 (2) and pkt-2 (3). The stud gap is 0.25 mm, as on
+# split-01: spl-1 needed a hammer to close or sit flush at every gap to 0.15, and on spl-2 Omar picked 0.25, "it should
+# be 1e" (D-116). The coaster file's default is 0.05, so every item passes stud_gap.
 #
 # No loose pieces: split-01 asks how the pieces seat at full size, and pieces here would mix that
 # question into this one (a pair that rocks could be the pieces or the studs).
@@ -43,31 +43,31 @@ no_id_reasons:
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Lower
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 25, id: 4 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 25, id: 4 }
     label:  LOWER25
     no_id:  *lower
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Upper
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 25, id: 4 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 25, id: 4 }
     label:  UPPER25
     no_id:  *upper
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Lower
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 15, id: 5 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 15, id: 5 }
     label:  LOWER15
     no_id:  *lower
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Upper
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 15, id: 5 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 15, id: 5 }
     label:  UPPER15
     no_id:  *upper
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Lower
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 10, id: 6 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 10, id: 6 }
     label:  LOWER10
     no_id:  *lower
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Upper
-    params: { size: 112.5, wedge: 72, wedge_from: 9, stud_spacing: 10, id: 6 }
+    params: { size: 112.5, stud_gap: 0.25, wedge: 72, wedge_from: 9, stud_spacing: 10, id: 6 }
     label:  UPPER10
     no_id:  *upper

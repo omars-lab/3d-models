@@ -3,9 +3,9 @@ plate: spl-2
 print_log: '[[print-logs/spl-2|print log]]'
 recipe: spl-2.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-09-spl-2]
 answers: "At what gap between a 2 mm stud and its socket does a split coaster's pair close flush by hand and stay closed, now that spl-1 found every gap up to 0.15 mm needed a hammer?"
 kind: new
 maturity: experiment
@@ -135,3 +135,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-09 | proposed — spl-1 found every stud gap up to 0.15 mm needed a hammer, so the ladder goes on to 0.40 | [spl-1's record](../../prints/2026-10-09-spl-1/index.md) |
 | 2026-10-09 | sent — by `bambu print send`; spends the approval of 2026-10-09, iteration 1 @ 84ecead3d5 in #F5547C | this page |
+| 2026-10-09 | printed — on the X2D, glacier plate, one bed, all 18 layers, about 50 minutes against the slicer's 45; judged by id: every pair closed by hand, `SL2 1A` to `SL2 1E` (0.15 to 0.25 mm) held when shaken and `SL2 1F` on (0.25 to 0.40) were very loose and fell apart; none broke when pulled; every upper's id on its top face reads (D-115 stands), though B and D, and M and N, look alike; Omar set the stud gap at 0.25 mm, `1E` (D-116) | [the record](../../prints/2026-10-09-spl-2/index.md) |
