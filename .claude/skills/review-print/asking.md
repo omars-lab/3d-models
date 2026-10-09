@@ -47,6 +47,11 @@ Pieces: <each carved id>, <what it is in plain words, and where its id is>
   here.
 - **Four options at most.** When the results he could find, plus "Not judged yet", come to more
   than four, keep the likeliest results and let "not looked yet" go through Other.
+- **Name the pieces as they are now, not as they printed.** An earlier row may have closed a
+  pair, and a letter on a cut face is then hidden inside it. spl-1 row 4 asked for KT, LT and DT
+  after rows 1 to 3 had hammered them onto their lowers ("what lt and dt peices?", "i see nt and
+  mt"). Ask instead for the closed pair, by the id still showing ("the pair with SL1 4K on its
+  bottom"), and pick a check that works on it closed.
 - **One check per question.** If a row asks two things (does it print clean, and does it hold),
   ask them as two questions, the one he does first first.
 
@@ -68,27 +73,33 @@ What is wrong with it:
 - It never says what "shows" looks like next to "doesn't show".
 - It ends with filler about Other.
 
-## Do: the same row, as an SOP
+## Do: the same row, as an SOP, asked of the pieces as they are now
 
 > spl-1, row 4: does the socket show through the top?
 >
-> Pieces: KT, LT and DT, three of the flat uppers. Each has its id and a round socket hole on
-> the same face.
+> Pieces: three closed pairs, found by the id on the bottom: SL1 4K (floor 0.8 mm), SL1 4L
+> (1.0 mm) and SL1 4D (0.6 mm). Leave them closed.
 >
-> 1. Pick up KT.
-> 2. Turn it so the face with the socket hole points away from you.
-> 3. Hold it up between your eye and a window or a lamp.
-> 4. Look at the face toward you, at the spot over the socket.
-> 5. Do the same with LT, then with DT.
+> 1. Pick up the pair with SL1 4K on its bottom.
+> 2. Turn it so SL1 4K faces down.
+> 3. Hold it under a lamp, tilted so the light skims across the top face.
+> 4. Look at the middle of the top face, right over the stud.
+> 5. Do the same with SL1 4L, then SL1 4D.
 >
-> Shows: a round dot, lighter or darker than the rest, right over the socket.
-> Doesn't show: that face looks the same all over.
+> Shows: a round dent or spot in the middle, about 2 mm across.
+> Doesn't show: the middle looks like the rest of the face.
 >
-> Which of KT, LT and DT show the socket?
+> Which of 4K, 4L and 4D show a dent or spot?
 
-Options: "None show" (the floor stays 0.6 mm), "Only DT shows" (the floor goes up to 0.8 mm),
-"DT and KT show, LT doesn't" (the floor goes up to 1.0 mm), "All three show" (no floor here
-works; it gets its own coupon).
+Options: "None show" (the floor stays 0.6 mm), "Only 4D shows" (the floor goes up to 0.8 mm),
+"4D and 4K show, 4L doesn't" (the floor goes up to 1.0 mm), "All three show" (no floor here
+works; it gets its own coupon). Omar answered it in one pick.
+
+## Do: a row with several checks, split
+
+spl-1 row 5 asked four things of the trap pairs: does the hexagon drop in, does the pair close
+flat, does it rattle, does the lip hold. Asked as four questions in one AskUserQuestion call, each
+its own short procedure in the order he does them, all four came back answered.
 
 ## Do: a fit question
 
