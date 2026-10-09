@@ -242,7 +242,9 @@ spl-2 finds. It costs no print time and no extra part.
 
 **Cons.** No source here measured a mouth chamfer or a root groove at our size; the chamfer is a
 rule of thumb and the groove is a machinist's trick for a pin seating past a burr, with no 3D
-printing source found. [split-with-studs §4.1](split-with-studs-design.md#41-the-stud-and-socket)
+printing source found. A groove 0.2 mm wide is under half a 0.42 mm line, and by the same rule
+Lego Lab uses for ribs (§5.3) the slicer may not draw it at all; if the slice shows no groove, it
+is widened to one line, about 0.45 mm, before the plate is built. [split-with-studs §4.1](split-with-studs-design.md#41-the-stud-and-socket)
 left the mouth square because "a chamfer there would open a gap visible from the side". Read against
 the geometry, the chamfer is on the cut face, inside the closed pair, and stops 0.6 mm or more
 short of the side through the 0.9 mm wall. So it shows only where a socket sits within a chamfer's
@@ -553,7 +555,8 @@ pairs.
 **Why these values.** G − 0.05 is one rung tighter than spl-2's answer, a gap that by definition
 did not close flush by hand on spl-2. If the lead-in pairs close flush there and the plain pairs
 next to them do not, the lead-ins are worth 0.05 mm of fit, measured side by side on one bed. The
-plain pairs also re-check spl-2, as spl-2's 0.15 pairs re-checked spl-1. The hexagon is drawn
+0.2 mm groove is under one line wide, so the slice is checked for it first and the groove widened
+to one line if it is missing (§5.1). The plain pairs also re-check spl-2, as spl-2's 0.15 pairs re-checked spl-1. The hexagon is drawn
 tighter than the round because its corners take the seam and the extra plastic. The ribs sit in a
 bore loose enough that only they touch; their reach is the bore's room per side plus the squeeze.
 The split stud is drawn 0.10 mm tighter than G so its halves bend in, about 3% strain if G is a
