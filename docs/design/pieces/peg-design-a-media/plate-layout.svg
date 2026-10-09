@@ -57,7 +57,7 @@
     <rect x="278" y="576" width="105" height="105" rx="6" fill="#e8a29a"/>
     <text x="330.5" y="628" font-size="22" font-weight="700" fill="#222">1L</text><text x="330.5" y="648" fill="#333">lower, split stud</text>
     <rect x="397" y="576" width="105" height="105" rx="6" fill="#e8a29a"/>
-    <text x="449.5" y="628" font-size="22" font-weight="700" fill="#222">1Y</text><text x="449.5" y="648" fill="#333">upper, gap −0.10</text>
+    <text x="449.5" y="628" font-size="22" font-weight="700" fill="#222">1Y</text><text x="449.5" y="648" fill="#333">upper, G−0.10</text>
   </g>
 
   <g font-size="13" fill="#222">

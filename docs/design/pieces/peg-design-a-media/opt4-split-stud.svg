@@ -13,7 +13,7 @@
 
   <text x="560" y="122" font-size="15" font-weight="600" fill="#222">From the side, going in</text>
   <rect x="540" y="290" width="280" height="40" fill="#8d8780"/>
-  <polygon points="620,290 620,218 632,206 668,206 668,266 692,266 692,206 728,206 740,218 740,290" fill="#8d8780"/>
+  <polygon points="620,290 620,218 632,206 668,206 668,290" fill="#8d8780"/><polygon points="692,290 692,206 728,206 740,218 740,290" fill="#8d8780"/>
   <line x1="623" y1="150" x2="623" y2="290" stroke="#333" stroke-width="1.5" stroke-dasharray="6 4"/>
   <line x1="737" y1="150" x2="737" y2="290" stroke="#333" stroke-width="1.5" stroke-dasharray="6 4"/>
   <path d="M 600 230 L 640 230" stroke="#c0392b" stroke-width="2.5" marker-end="url(#a)"/>
@@ -21,10 +21,10 @@
   <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker></defs>
   <text x="760" y="178" font-size="13" fill="#c0392b">the socket squeezes</text>
   <text x="760" y="194" font-size="13" fill="#c0392b">the two halves together</text>
-  <line x1="692" y1="262" x2="756" y2="262" stroke="#333" stroke-width="1"/>
-  <text x="760" y="266" font-size="13" fill="#222">slot 1.0 mm deep</text>
-  <text x="540" y="360" font-size="13" fill="#222">Drawn tighter than the stud, like spl-1's -0.10 mm</text>
-  <text x="540" y="378" font-size="13" fill="#222">rung. The two halves bend in, so the force stays</text>
-  <text x="540" y="396" font-size="13" fill="#222">small. They are built up in layers, the weak way</text>
-  <text x="540" y="414" font-size="13" fill="#222">to bend: do they bend, or snap off?</text>
+  <line x1="680" y1="250" x2="756" y2="250" stroke="#333" stroke-width="1"/>
+  <text x="760" y="246" font-size="13" fill="#222">slot the stud's full</text><text x="760" y="262" font-size="13" fill="#222">1.4 mm, down to the face</text>
+  <text x="540" y="360" font-size="13" fill="#222">Drawn 0.10 mm tighter than the gap that goes in by</text>
+  <text x="540" y="378" font-size="13" fill="#222">hand (spl-2's answer). Each half bends in 0.05 mm,</text>
+  <text x="540" y="396" font-size="13" fill="#222">about 3% strain. They are built up in layers, the</text>
+  <text x="540" y="414" font-size="13" fill="#222">weak way to bend: do they bend, or snap off?</text>
 </svg>
