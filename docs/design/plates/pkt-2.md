@@ -24,7 +24,7 @@ pictures:
   - pkt-2-media/side-upper.png
   - pkt-2-media/halves.png
 needs:
-  - "the split pocket coaster file on bikar main (bikar PR, not merged), so the slice pins a commit main keeps"
+  - "the split pocket coaster file on bikar main (bikar #333, not merged), so the slice pins a commit main keeps"
 ---
 
 # pkt-2 — the split gBV coaster with its pieces printed in place in pockets
