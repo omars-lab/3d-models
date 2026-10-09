@@ -27,6 +27,6 @@ The X2D is dual-nozzle: a main nozzle for parts and an auxiliary nozzle for supp
 - [ ] Does a settled or open `CAL-*` bet motivate this print? (A coupon that only measures the
       machine/material/nozzle belongs on the machine card, not the prototype catalog.)
 - [ ] Is printing currently owner-gated / on hold? If so, a dispatch is a deliberate owner call.
-- [ ] Will `--record` capture the geometry pin, the nine-field profile header, and the questions?
+- [ ] Will `--record` capture the geometry pin, the ten-field profile header, and the questions?
 
 If any box is unchecked, prepare the plate but do not dispatch — hand it back for a decision.

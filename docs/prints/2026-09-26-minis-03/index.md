@@ -10,6 +10,7 @@ profile:
   spool: ~
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: ~
   layer_mm: 0.2
   slicer_profile: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   ambient_c: ~

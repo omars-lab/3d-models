@@ -43,7 +43,7 @@ estimates block (time / length / grams), and a metrics view.** Detail:
 | Per-run record schema (geometry + process + outcome + photos) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; enforced by [`.claude/gates/prints_gate.py`](../../../.claude/gates/prints_gate.py) |
 | "A version is a `(geometry, process)` pair" — the identity concept | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §3 |
 | Geometry identity pins (`objects[].source`, `source_sha256`, `pins.bikar_ref`, `piece`, `params`) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; gate rule R1 |
-| Process identity (nine-field `profile` block) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; gate `PROFILE_FIELDS` |
+| Process identity (ten-field `profile` block) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1; gate `PROFILE_FIELDS` |
 | Repeated-element multiplicity (`objects[].count`) | **yes** | [`prints-tab-design.md`](prints-tab-design.md) §4.1 (R8) |
 | Feedback block (`feedback: {symptom, cause, next}`) | **yes, per-record** | [`prints-tab-design.md`](prints-tab-design.md) §4.1 (R9/R11) |
 | `photos[]` with sha256 + cross-record uniqueness | **yes** | gate rule R2 |
@@ -93,7 +93,7 @@ fork [`CLAUDE.md`](../../../CLAUDE.md) forbids); it names the one that already e
 > identical slice inputs ⇒ a deterministic identical plate. The one field the
 > reprint use adds beyond §3's pair is the **slice-profile inputs** (the preset
 > *display names* `slice` consumes, §3.2) — because those are not re-derivable from
-> the nine-field process `profile` alone (a `slicer_profile` name is one of the nine;
+> the ten-field process `profile` alone (a `slicer_profile` name is one of the ten;
 > the machine + filament preset names are not).
 
 ### 2.2 The iteration id — content-addressed, human-labelled
@@ -174,10 +174,10 @@ run:      2026-09-14-plate1-machine-card
 plate:    "Plate 1 — Machine Card"
 status:   printed
 plate_3mf: keyhole__it-9f3c1a2b4d5e.3mf     # R10 — the plate this came off (new naming, §2.3)
-profile:                                     # the nine-field process identity (unchanged)
+profile:                                     # the ten-field process identity (unchanged)
   machine: "Bambu Lab X2D"
   material: "PLA Basic"
-  # … spool, nozzle_mm, nozzle_type, layer_mm, slicer_profile, ambient_c, instrument …
+  # … spool, nozzle_mm, nozzle_type, nozzle_side, layer_mm, slicer_profile, ambient_c, instrument …
 pins:
   bikar_ref: 8dda702fc943d1876c56fe14b5b608ed53ea51e8
 objects:
@@ -368,7 +368,7 @@ only on the new fields), and the schema is extended, not replaced (PMR-2, no for
 ([`slice.ts`](../../../tools/bambu/src/commands/slice.ts); [`bambu` SKILL](../../../.claude/skills/bambu/SKILL.md)).
 `iteration.key.slice_profile.settings` / `.filament` store **those exact strings**, so a
 reprint feeds them straight back to `slice` with no re-spelling. This is deliberately
-*not* re-derived from the nine-field `profile` block: the process `profile` is the
+*not* re-derived from the ten-field `profile` block: the process `profile` is the
 record's calibration identity (what it printed under, for a reading); `slice_profile` is
 the *slicer input* (what to type to reproduce the `.3mf`). They overlap (both name the
 process preset) but are not the same fact, and the reprint path needs the machine +

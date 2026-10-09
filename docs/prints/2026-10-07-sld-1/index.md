@@ -10,6 +10,7 @@ profile:
   spool: "620317506F7D477AB7EB1CD14089FFDA"
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: left
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle"
   ambient_c: ~
@@ -81,7 +82,7 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked; which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate."
+  lesson: "All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate."
   symptom: ~
   cause: ~
   next: "Which of the three gaps felt best is still Omar's to say; the kite pair the joining note adds waits on that gap"

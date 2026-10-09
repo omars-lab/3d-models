@@ -50,8 +50,9 @@ Confirmed column carries the survey's hedge verbatim.
 | Material — color | AMS `tray_color` (`RRGGBBAA` → `#RRGGBB`) | **confirmed-in-repo** (`#F5547C`) — hex, not a color name |
 | Material — brand | AMS `tray_sub_brands` + Bambu vendor from `tray_info_idx` | **confirmed for Bambu RFID spools**; third-party spool = **manual** |
 | Spool id | AMS `tray_uuid` (Studio tray SN) | **H2-proxy — unconfirmed** (not seen 2026-09-17); Bambu-RFID only, else **manual** |
-| Nozzle — diameter | .3mf `nozzle_diameter` (G-code `0.4,0.4`); frame `nozzle_diameter` as cross-check | **.3mf confirmed-in-repo**; frame field **H2-proxy — unconfirmed** |
-| Nozzle — type | frame `nozzle_type` / accessory setting | **H2-proxy — unconfirmed** → best-effort machine, else **manual** |
+| Nozzle — diameter | .3mf `nozzle_diameter` (G-code `0.4,0.4`); frame `nozzle_diameter` as cross-check | **.3mf confirmed-in-repo**; frame field **seen on the X2D 2026-10-09** (`"0.4"`; see [the note below](#the-one-unproven-thing--a-validation-observation-not-an-assumption)) |
+| Nozzle — type | frame `nozzle_type`, and `device.nozzle.info[].type` per nozzle | **seen on the X2D 2026-10-09** (`HS01` on both nozzles) → filled; absent from a frame → **manual** |
+| Nozzle — which one (left / right) | .3mf `filament_map` (or the plate's `filament_maps`), checked against `physical_extruder_map` | **confirmed-in-repo 2026-10-09**: left on every X2D plate since sheets-04; the minis-03/04 files disagree with themselves, so no side |
 | Layer height | .3mf `layer_height` / G-code header | **confirmed-in-repo** (0.2) |
 | Profile (process+filament) | .3mf `print_settings_id` + `filament_settings_id` | **confirmed-in-repo** (the names `slice` resolves) |
 | Slicer version | `BambuStudio --version`; .3mf `Application` / `X-BBL-Client-Version` | **confirmed-in-repo** (2.08.02.61) |
@@ -149,6 +150,16 @@ inspected:
 2. **`nozzle_diameter`** / **`nozzle_type`** in *this* machine's pushall frame (only the `.3mf`
    values are confirmed today — the `.3mf` is the authoritative source regardless, so this is a
    cross-check, not a blocker);
+   *seen 2026-10-09, during spl-2:* the X2D's report carries a top-level `nozzle_type: "HS01"` and
+   `nozzle_diameter: "0.4"`, one `device.nozzle.info[]` entry per nozzle
+   (`{id, diameter: 0.4, type: "HS01", wear: 0, sn: "N/A"}`, id 0 the right nozzle and id 1 the
+   left), and `job.stage[0].tool: ["HS01","HS01"]`. `HS01` reads as standard flow, hardened
+   steel, the way Bambu Studio's
+   [`s_parse_nozzle_type`](https://github.com/bambulab/BambuStudio/blob/d1398b73d1151f78df7dea1ed9794d2b0a99deb4/src/slic3r/GUI/DeviceCore/DevNozzleSystem.cpp)
+   reads it (second letter the flow, next two digits the material). So the header fills the
+   type from the entry for the nozzle the slice used, and the record's profile carries it, with
+   `nozzle_side` beside it. No report was saved during any earlier print, so the eight records
+   before this date keep `nozzle_type: ~`;
 3. **`tray_uuid`** (spool id) on the X2D AMS tray, and **which chamber field** the X2D reports
    (flat `chamber_temper`
    `3d-models:tools/bambu/src/commands/status.ts:L48 "chamber_temper"` vs a nested `device.ctc`).

@@ -20,7 +20,7 @@ import { createHash } from "node:crypto";
 
 /** The five fields that determine what a plate can teach and what a re-slice would reproduce.
  *  `slice_profile` is the preset DISPLAY names `slice` consumes (machine;process and filament) — not
- *  re-derivable from the nine-field process profile alone (print-metadata-and-reprint-design.md §2.1). */
+ *  re-derivable from the ten-field process profile alone (print-metadata-and-reprint-design.md §2.1). */
 export interface IterationKey {
   source: string; // "bikar:<path>@<ref>" or "bikar:<path>"
   source_sha256: string; // the bkr blob sha at the pinned ref

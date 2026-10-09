@@ -8,10 +8,12 @@
 //
 // The load-bearing rule (the design's Validator): a field is filled ONLY from a source that actually
 // carried it. Machine-side fields the X2D has not been observed to answer (get_version firmware over
-// MQTT, the frame's nozzle_diameter/nozzle_type, the AMS tray_uuid) are H2-proxy plausible but
-// UNCONFIRMED — they print `unconfirmed` (with the real source to fall back on), NEVER a fabricated
-// value. Genuinely-manual fields (ambient room temp, enclosure, caliper, settings-changed) print as
-// the exact paper blanks. Fabricating a blank the machine did not answer is the by-design FAIL.
+// MQTT, the AMS tray_uuid) are H2-proxy plausible but UNCONFIRMED — they print `unconfirmed` (with
+// the real source to fall back on), NEVER a fabricated value. The nozzle fields moved out of that set
+// on 2026-10-09: the X2D's report, read live during spl-2, carries a top-level `nozzle_type` ("HS01")
+// and `nozzle_diameter` ("0.4") and one `device.nozzle.info[]` entry per nozzle, so they fill when the
+// frame carries them. Genuinely-manual fields (ambient room temp, enclosure, caliper, settings-changed)
+// print as the exact paper blanks. Fabricating a blank the machine did not answer is the by-design FAIL.
 
 import type { PrinterStatus } from "./backends/mqtt.js";
 import { readPlateMeta, type PlateMeta } from "./threemf.js";
@@ -38,8 +40,9 @@ export interface Header {
   material_brand: Field; // AMS tray_sub_brands (Bambu RFID) — else manual
   spool_id: Field; // AMS tray_uuid — H2-proxy unconfirmed / Bambu-RFID only
   nozzle_diameter: Field; // AUTHORITATIVE from .3mf; todo-plate without it — never from the frame alone
-  nozzle_diameter_frame: Field; // frame nozzle_diameter — cross-check ONLY, H2-proxy unconfirmed
-  nozzle_type: Field; // frame nozzle_type — H2-proxy unconfirmed → else manual
+  nozzle_diameter_frame: Field; // frame nozzle_diameter — a cross-check of the .3mf, never the record's size
+  nozzle_type: Field; // the report's nozzle code, e.g. "HS01 (standard flow, hardened steel)" → else manual
+  nozzle_side: Field; // .3mf: which nozzle (left / right) each filament was sliced onto
   layer_height: Field; // slice-side: layer_height
   profile: Field; // slice-side: print_settings_id + filament_settings_id
   slicer_version: Field; // slice-side: Application / X-BBL-Client-Version
@@ -65,6 +68,102 @@ function frameNozzle(frame: PrinterStatus): string | null {
   if (Array.isArray(raw)) return raw.length ? raw.map(String).join(",") : null;
   const s = String(raw).trim();
   return s ? s : null;
+}
+
+const FLOW: Record<string, string> = {
+  S: "standard flow",
+  A: "standard flow",
+  X: "standard flow",
+  H: "high flow",
+  E: "high flow",
+  U: "TPU high flow",
+  B: "E3D high flow",
+};
+const MATERIAL: Record<string, string> = { "00": "stainless steel", "01": "hardened steel", "05": "tungsten carbide" };
+
+/**
+ * Spell out a nozzle code the printer reports, e.g. "HS01" → "standard flow, hardened steel". Read the
+ * way Bambu Studio reads it (s_parse_nozzle_type in
+ * https://github.com/bambulab/BambuStudio/blob/d1398b73d1151f78df7dea1ed9794d2b0a99deb4/src/slic3r/GUI/DeviceCore/DevNozzleSystem.cpp):
+ * the second letter is the flow type and the next two digits the material. null for a code it cannot
+ * read ("N/A", too short, an unknown letter or material), so the code is then recorded on its own.
+ */
+export function describeNozzleType(code: string): string | null {
+  const c = code.trim();
+  if (c.length < 4) return null;
+  const flow = FLOW[c.charAt(1)];
+  const material = MATERIAL[c.slice(2, 4)];
+  return flow && material ? `${flow}, ${material}` : null;
+}
+
+interface ReportNozzle {
+  id: number;
+  type: string | null;
+  diameter: string | null;
+}
+
+/** The report's per-nozzle list, `device.nozzle.info[]` (id 0 = right, 1 = left on the X2D). */
+function reportNozzles(frame: PrinterStatus): ReportNozzle[] {
+  const device = pick(frame, "device");
+  const nozzle = device && typeof device === "object" ? (device as Record<string, unknown>).nozzle : undefined;
+  const info = nozzle && typeof nozzle === "object" ? (nozzle as Record<string, unknown>).info : undefined;
+  if (!Array.isArray(info)) return [];
+  const out: ReportNozzle[] = [];
+  for (const e of info) {
+    if (!e || typeof e !== "object") continue;
+    const r = e as Record<string, unknown>;
+    const id = Number(r.id);
+    if (!Number.isInteger(id)) continue;
+    const type = r.type != null && String(r.type).trim() && String(r.type).trim() !== "N/A" ? String(r.type).trim() : null;
+    const diameter = r.diameter != null && String(r.diameter).trim() ? String(r.diameter).trim() : null;
+    out.push({ id, type, diameter });
+  }
+  return out;
+}
+
+/**
+ * The nozzle type the print used: the `device.nozzle.info[]` entry for each nozzle the slice put a
+ * filament on, else the report's top-level `nozzle_type`. The printer's code is kept verbatim, with
+ * its plain reading beside it when describeNozzleType can give one.
+ */
+function nozzleTypeField(frame: PrinterStatus, plate: PlateMeta | null): Field {
+  const label = (code: string) => {
+    const words = describeNozzleType(code);
+    return words ? `${code} (${words})` : code;
+  };
+  const used = [...new Set((plate?.nozzleSides ?? []).map((n) => n.physicalId).filter((n): n is number => n != null))];
+  const nozzles = reportNozzles(frame);
+  if (used.length) {
+    const types = used.map((id) => nozzles.find((n) => n.id === id)?.type ?? null);
+    if (types.every((t): t is string => t != null)) {
+      const distinct = [...new Set(types)];
+      if (distinct.length === 1) return filled(label(distinct[0]!), `report device.nozzle.info id ${used.join(",")}`);
+      return filled(
+        used.map((id, i) => `${id === 1 ? "left" : "right"} ${label(types[i]!)}`).join("; "),
+        "report device.nozzle.info",
+      );
+    }
+  }
+  const top = pick(frame, "nozzle_type");
+  if (top != null && String(top).trim() && String(top).trim() !== "N/A") {
+    return filled(label(String(top).trim()), "report nozzle_type");
+  }
+  return manual("operator (the report carried no nozzle_type)");
+}
+
+/** Which nozzle the slice put each filament on; one word when they all agree. */
+function nozzleSideField(plate: PlateMeta | null): Field {
+  if (!plate) return todoPlate(".3mf filament_map — pass --plate");
+  const sides = plate.nozzleSides;
+  if (!sides.length) return unconfirmed(".3mf has no slice_info filament list");
+  const blank = sides.find((s) => s.side == null);
+  if (blank) return unconfirmed(`.3mf filament ${blank.filament}: ${blank.why}`);
+  const distinct = [...new Set(sides.map((s) => s.side))];
+  if (distinct.length === 1) return filled(distinct[0]!, ".3mf filament_map + physical_extruder_map");
+  return filled(
+    sides.map((s) => `filament ${s.filament} ${s.side}`).join(", "),
+    ".3mf filament_map + physical_extruder_map",
+  );
 }
 
 function materialBrand(t: Tray): Field {
@@ -99,21 +198,19 @@ export function buildHeader(frame: PrinterStatus, plate: PlateMeta | null, now: 
     : unconfirmed("AMS tray_uuid (not observed on X2D; manual for third-party spools)");
 
   // ---- nozzle ----
-  // The .3mf is the AUTHORITATIVE nozzle source. Without --plate we do NOT print a diameter — the
-  // frame's nozzle_diameter is unconfirmed on this machine, so filling from it would be the FAIL case.
+  // The .3mf is the AUTHORITATIVE nozzle size: it is what the plate was sliced for. Without --plate we
+  // do NOT print a size from the frame — the frame says what is fitted now, which is the cross-check.
   const slicedNozzle = plate && plate.nozzleDiameters.length ? plate.nozzleDiameters.join(",") : null;
   const nozzle_diameter = slicedNozzle
     ? filled(`${slicedNozzle} mm`, ".3mf nozzle_diameter")
     : todoPlate(".3mf nozzle_diameter — pass --plate");
   const fNozzle = frameNozzle(frame);
   const nozzle_diameter_frame = fNozzle
-    ? { value: `${fNozzle} mm`, state: "unconfirmed" as const, source: "frame nozzle_diameter (cross-check only, H2-proxy)" }
-    : unconfirmed("frame nozzle_diameter (not observed on X2D; .3mf is authoritative)");
-  const fType = pick(frame, "nozzle_type");
-  const nozzle_type =
-    fType != null && String(fType).trim()
-      ? { value: String(fType).trim(), state: "unconfirmed" as const, source: "frame nozzle_type (H2-proxy)" }
-      : manual("operator (nozzle_type not observed on X2D frame)");
+    ? filled(`${fNozzle} mm`, "report nozzle_diameter (cross-check of the .3mf)")
+    : unconfirmed("report nozzle_diameter (absent from this frame; the .3mf is the size of record)");
+  // The type: the report's code for the nozzle(s) the slice used (seen on the X2D 2026-10-09).
+  const nozzle_type = nozzleTypeField(frame, plate);
+  const nozzle_side = nozzleSideField(plate);
 
   // Cross-check: loaded nozzle (frame) vs sliced-for nozzle (.3mf). A mismatch is a real bench error.
   let nozzle_mismatch: string | null = null;
@@ -169,6 +266,7 @@ export function buildHeader(frame: PrinterStatus, plate: PlateMeta | null, now: 
     nozzle_diameter,
     nozzle_diameter_frame,
     nozzle_type,
+    nozzle_side,
     layer_height,
     profile,
     slicer_version,
@@ -209,8 +307,9 @@ export function renderHeader(h: Header): string {
   lines.push(
     `Nozzle    diameter ${show(h.nozzle_diameter, "______")}  type ${show(h.nozzle_type, "______")}  (brass / hardened / CHT — they do not flow alike)`,
   );
+  lines.push(`          which nozzle: ${show(h.nozzle_side, "left / right")}`);
   if (h.nozzle_diameter_frame.value) {
-    lines.push(`          frame nozzle (cross-check, ${h.nozzle_diameter_frame.state}): ${h.nozzle_diameter_frame.value}`);
+    lines.push(`          fitted now (report, cross-check): ${h.nozzle_diameter_frame.value}`);
   }
   lines.push(`Layer height ${show(h.layer_height, "______")}`);
   lines.push(`Profile   ${show(h.profile, "________________________________")}  (slicer profile name VERBATIM)`);
@@ -230,6 +329,7 @@ export interface RecordProfile {
   spool?: string;
   nozzle_mm?: string;
   nozzle_type?: string;
+  nozzle_side?: string;
   layer_mm?: string;
   slicer_profile?: string;
 }
@@ -247,6 +347,7 @@ export function headerToRecordProfile(h: Header): RecordProfile {
     spool: val(h.spool_id),
     nozzle_mm: val(h.nozzle_diameter),
     nozzle_type: val(h.nozzle_type),
+    nozzle_side: val(h.nozzle_side),
     layer_mm: val(h.layer_height),
     slicer_profile: val(h.profile),
   };

@@ -88,6 +88,20 @@ def _sentence(text: str) -> str:
     return text if text.endswith((".", "?", "!")) else text + "."
 
 
+def nozzle_line(profile) -> str:
+    """The nozzle a print ran on, from the record's profile: its size, which one, its type.
+    A fit or gap result holds for the nozzle it was measured with, so the page says it beside
+    each record, and says plainly when a part of it was not recorded."""
+    p = profile if isinstance(profile, dict) else {}
+    size = p.get("nozzle_mm")
+    size_s = "size not recorded" if size in (None, "") else (
+        str(size) if str(size).endswith("mm") else f"{size} mm")
+    side = _one_line(p.get("nozzle_side"))
+    side_s = f"{side} nozzle" if side in ("left", "right") else side or "which nozzle not recorded"
+    kind = _one_line(p.get("nozzle_type"))
+    return f"- **Nozzle:** {size_s}, {side_s}, {('type ' + kind) if kind else 'type not recorded'}"
+
+
 def read_records(prints: Path) -> tuple[list[dict], list[str]]:
     recs, findings = [], []
     for d in record_dirs(prints):
@@ -130,6 +144,7 @@ def render(root: Path) -> tuple[str, str, list[str]]:
             rec_lines.append(f"- **Plate:** {plate} (no plate page names this run)")
         lesson = _one_line(fb.get("lesson"))
         rec_lines.append(f"- **Lesson:** {_sentence(lesson) if lesson else 'No lesson written yet.'}")
+        rec_lines.append(nozzle_line(r.get("profile")))
         objs = [o for o in (r.get("objects") or []) if isinstance(o, dict)]
         counts = {v: sum(1 for o in objs if o.get("verdict") == v) for v in VERDICTS}
         tally = ", ".join(f"{n} {v}" for v, n in counts.items() if n)
@@ -241,6 +256,7 @@ def _fixture(tmp: Path, *, photo: bool, decision: str) -> Path:
         encoding="utf-8")
     fm = {
         "run": "2026-01-02-pl-1", "plate": "pl-1 — a test plate", "status": "printed",
+        "profile": {"nozzle_mm": 0.4, "nozzle_type": None, "nozzle_side": "left"},
         "objects": [{"entry": "a", "verdict": "keep"}, {"entry": "b", "verdict": "drop"}],
         "readings": [],
         "photos": [{"file": "photos/top.jpg", "of": "the plate from above"}] if photo else [],
@@ -283,6 +299,17 @@ def self_test() -> int:
         plate_at = text.find("- **Plate:**")
         report(text.find("- **Lesson:** Gap 0.2 fits.", plate_at) == text.find("\n", plate_at) + 1,
                "the record's Lesson line comes first after its Plate line", text)
+        report("- **Nozzle:** 0.4 mm, left nozzle, type not recorded" in text,
+               "the record names its nozzle, and says the type was not recorded", text)
+    report(nozzle_line({"nozzle_mm": "0.4,0.4 mm", "nozzle_side": "right",
+                        "nozzle_type": "HS01 (standard flow, hardened steel)"})
+           == "- **Nozzle:** 0.4,0.4 mm, right nozzle, type HS01 (standard flow, hardened steel)",
+           "a record made from the printer's report shows the type it carried")
+    report(nozzle_line({"nozzle_mm": 0.4, "nozzle_side": None})
+           == "- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded",
+           "a record with no side says so, never guesses one")
+    report(nozzle_line(None) == "- **Nozzle:** size not recorded, which nozzle not recorded, type not recorded",
+           "a record with no profile says every part was not recorded")
     cases = {"the strap broke": "The strap broke.", "bikar now cuts it": "bikar now cuts it.",
              "naqsh, not bikar": "naqsh, not bikar.", "`tools/x.py` reads it": "`tools/x.py` reads it.",
              "tools/x.py reads it": "tools/x.py reads it.", "0.2 mm fits": "0.2 mm fits.",

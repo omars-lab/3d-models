@@ -95,7 +95,7 @@ settles); `--how` swaps in the **process identity** — machine / material / noz
 (exact) — combined with AND, reporting "N of M" and distinguishing "no match" from the zero-record
 baseline. `--shipped` / `--drafts` narrow the trees and `--json` emits the raw records (`how` and
 all). It parses nothing itself: it shells to the same `prints_gate.py` (its read-only `--list`
-projection, which slices the `how` from the record's nine-field profile), so the list and the gate
+projection, which slices the `how` from the record's ten-field profile), so the list and the gate
 can never disagree about a record, and a record that does not parse is shown as broken rather than
 hidden — even under a filter, since hiding a broken record is the one failure this verb exists to
 avoid.

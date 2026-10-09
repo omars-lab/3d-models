@@ -35,6 +35,8 @@ interface How {
   machine?: string | null;
   material?: string | null;
   nozzle_mm?: number | null;
+  nozzle_type?: string | null; // the printer's code and its reading, e.g. "HS01 (standard flow, hardened steel)"
+  nozzle_side?: string | null; // which nozzle the slice used: left / right
   layer_mm?: number | null;
   slicer_profile?: string | null;
 }
@@ -123,6 +125,9 @@ function renderHowTable(recs: Rec[]): string {
     machine: r.error ? "" : String(r.how?.machine ?? "—"),
     material: r.error ? "" : String(r.how?.material ?? "—"),
     nozzle: r.error ? "" : r.how?.nozzle_mm != null ? `${r.how.nozzle_mm}` : "—",
+    // The code alone ("HS01"); the record carries its plain reading.
+    ntype: r.error ? "" : r.how?.nozzle_type ? String(r.how.nozzle_type).split(" ")[0]! : "—",
+    side: r.error ? "" : String(r.how?.nozzle_side ?? "—"),
     layer: r.error ? "" : r.how?.layer_mm != null ? `${r.how.layer_mm}` : "—",
     profile: r.error ? "" : String(r.how?.slicer_profile ?? "—"),
     source: r.source ?? "",
@@ -132,13 +137,15 @@ function renderHowTable(recs: Rec[]): string {
     plate: Math.max(5, ...rows.map((r) => r.plate.length)),
     machine: Math.max(7, ...rows.map((r) => r.machine.length)),
     material: Math.max(8, ...rows.map((r) => r.material.length)),
+    ntype: Math.max(4, ...rows.map((r) => r.ntype.length)),
+    side: Math.max(4, ...rows.map((r) => r.side.length)),
     profile: Math.max(7, ...rows.map((r) => r.profile.length)),
     source: Math.max(6, ...rows.map((r) => r.source.length)),
   };
-  const header = `${pad("DATE", w.date)}  ${pad("PLATE", w.plate)}  ${pad("MACHINE", w.machine)}  ${pad("MATERIAL", w.material)}  NOZ   LYR   ${pad("PROFILE", w.profile)}  ${pad("SOURCE", w.source)}`;
+  const header = `${pad("DATE", w.date)}  ${pad("PLATE", w.plate)}  ${pad("MACHINE", w.machine)}  ${pad("MATERIAL", w.material)}  NOZ   ${pad("TYPE", w.ntype)}  ${pad("SIDE", w.side)}  LYR   ${pad("PROFILE", w.profile)}  ${pad("SOURCE", w.source)}`;
   const lines = rows.map(
     (r) =>
-      `${pad(r.date, w.date)}  ${pad(r.plate, w.plate)}  ${pad(r.machine, w.machine)}  ${pad(r.material, w.material)}  ${pad(r.nozzle, 4)}  ${pad(r.layer, 4)}  ${pad(r.profile, w.profile)}  ${pad(r.source, w.source)}`,
+      `${pad(r.date, w.date)}  ${pad(r.plate, w.plate)}  ${pad(r.machine, w.machine)}  ${pad(r.material, w.material)}  ${pad(r.nozzle, 4)}  ${pad(r.ntype, w.ntype)}  ${pad(r.side, w.side)}  ${pad(r.layer, 4)}  ${pad(r.profile, w.profile)}  ${pad(r.source, w.source)}`,
   );
   return [header, ...lines].join("\n");
 }
