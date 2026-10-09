@@ -2,7 +2,7 @@
 plate: spl-2
 recipe: spl-2.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "At what gap between a 2 mm stud and its socket does a split coaster's pair close flush by hand and stay closed, now that spl-1 found every gap up to 0.15 mm needed a hammer?"
@@ -126,6 +126,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-09 | approved | Omar, in chat: "Yes, in pink" | iteration 1 @ 84ecead3d5 in #F5547C | |
 
 ## Timeline
 

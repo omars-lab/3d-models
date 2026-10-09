@@ -20,7 +20,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [spl-2](spl-2.md) | waiting | 6 | 0.9 | 6.82 | watch | At what gap between a 2 mm stud and its socket does a split coaster's pair close flush by hand and stay closed, now that spl-1 found every gap up to 0.15 mm needed a hammer? |
+| 1 | [spl-2](spl-2.md) | approved | 6 | 0.9 | 6.82 | watch | At what gap between a 2 mm stud and its socket does a split coaster's pair close flush by hand and stay closed, now that spl-1 found every gap up to 0.15 mm needed a hammer? |
 | 2 | [theme-night-sky-11600](theme-night-sky-11600.md) | waiting | 1 | 0.2 | 6.39 | ok | Night sky, one of its 4 plates: do its Kite ×10 come out as the theme draws them, in PLA Matte Marine Blue (11600)? |
 | 3 | [sheets-04g-fit](sheets-04g-fit.md) | approved | 8 | 1.5 | 5.30 | watch | At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling? |
 | 4 | [theme-iznik-tile-10205](theme-iznik-tile-10205.md) | waiting | 1 | 0.3 | 3.92 | ok | Iznik tile, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Maroon Red (10205)? |
