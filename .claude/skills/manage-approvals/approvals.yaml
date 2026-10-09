@@ -51,6 +51,8 @@ spl-1:
   - {iteration: 2, recipe: '09090078b0ab', date: '2026-10-07'}
   - {iteration: 3, recipe: '9e364699dabf', date: '2026-10-08'}
   - {iteration: 4, recipe: 'e76b84eb6cfd', date: '2026-10-08'}
+spl-2:
+  - {iteration: 1, recipe: '10027b938820', date: '2026-10-09'}
 split-01:
   - {iteration: 1, recipe: 'e38ffecaeced', date: '2026-10-05'}
   - {iteration: 2, recipe: 'b9579380525b', date: '2026-10-07'}

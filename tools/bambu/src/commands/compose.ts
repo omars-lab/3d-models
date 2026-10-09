@@ -181,8 +181,10 @@ export function itemRenderFlags(r: {
 // docs/issues/carved-id-fit.md). Where it does not fit, the recipe cuts less (D-114): `id_form: short`
 // cuts the iteration and the piece (`3C`), `id_form: piece` the piece alone (`C`). And an id is cut only
 // into a face that is hidden in use. A piece printed face down — every upper half — has the coaster's
-// top on the bed, and a split coupon reads show-through on exactly that face, so it carries no id at
-// all, whatever would fit. No gate can see which face is the top; each such piece's `no_id:` says so.
+// top on the bed, so on a coaster it carries no id at all, whatever would fit. A coupon is the
+// exception (D-115): it is never used, and an upper's letter on its cut face is hidden once its pair
+// closes, so a coupon upper carries the short id on its top (spl-2). No gate can see which face is
+// the top; each piece without an id says why in its `no_id:`.
 
 /** One character of an id code or piece id: a digit or a capital letter other than O. */
 const ID_CHAR = "[0-9A-NP-Z]";
