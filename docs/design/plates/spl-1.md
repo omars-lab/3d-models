@@ -1,8 +1,9 @@
 ---
 plate: spl-1
+print_log: '[[print-logs/spl-1|print log]]'
 recipe: spl-1.yaml
 iteration: 4
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "For a split coaster: which gap between a 2 mm stud and its socket presses in and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves?"
@@ -163,7 +164,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | sent 2026-10-08 |
 
 ## Timeline
 
@@ -173,3 +174,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-06 | sliced — local slice from bikar main after bikar #319, fits one bed, 43 minutes, 18.3 g, no slicer warnings | this page |
 | 2026-10-07 | changed (iteration 2): a letter on each pair's cut faces, A to N, on Omar's comment on the 2026-10-06 calls page (bikar #323) | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 49 minutes, 18.5 g, no slicer warnings | this page |
+| 2026-10-08 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 4 @ d99e8c88b1 in #F5547C | this page |
