@@ -71,7 +71,11 @@ D-114), never by a bed name or a pair letter alone, and saying exactly what to d
 what to look for. A piece with no id is named by the mark it does carry ("the upper with `QT` on
 its cut face"). The page's table names them the same way. Omar, 2026-10-08, on pkt-1: "i want
 the questions to reference the piece ids", "be percidse in your questiosn", "update the .md to
-be percise too". Build the options from the row's
+be percise too". **Write each question as a short procedure, in the format
+[`asking.md`](asking.md) sets out, with its do and don't examples**: one line on what is being
+checked, the pieces by id, numbered steps of one action each, what each result looks like, then
+the question. No recap, no filler (Omar, 2026-10-09: "not clear and straighformward and in
+simple sop format ... easy to get a mistake"). Read it before each round. Build the options from the row's
 last cell, one option per answer it names, each saying what that answer changes, plus "not
 judged yet". Ask the next row only once this one is answered. Each answer goes into the record
 below as those pieces' `verdict` and `notes`, in Omar's words; a row he leaves unanswered stays
