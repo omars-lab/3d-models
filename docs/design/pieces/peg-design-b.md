@@ -14,7 +14,7 @@ produced-by: research subagent B (Claude Opus 5.5), from web research recorded i
 > [the research file](../../research/2026-10-09-peg-design-b.md).
 
 **In short.** Our printer is steady but biased: round holes print small and round studs print
-large, together about 0.2 to 0.5 mm across the diameter by the one source with a table. That is
+large, together about 0.2 to 0.5 mm across the diameter by the one source here with a table. That is
 why spl-1 needed a hammer at every gap up to 0.15, and it means the right gap may sit at or past
 the top of spl-2's ladder. Three cheap changes go after that bias directly: a hex socket (flat
 sides print true where circles shrink), a small chamfer at the socket mouth (so a lip or bump
@@ -52,7 +52,7 @@ What has been printed:
 - **spl-2** ([page](../plates/spl-2.md)) runs 0.15 to 0.40 in 0.05 steps. It was approved and
   sent to the printer on 2026-10-09 and has not been judged yet.
 
-Why it is tight: the one source with a hole-and-shaft table, Creative3DP, says holes print 0.1 to
+Why it is tight: the one source here with a hole-and-shaft table, Creative3DP, says holes print 0.1 to
 0.3 mm small and shafts 0.1 to 0.2 mm large (research §1, C1). A Bambu H2D owner found round
 sections small while square sections were true (S2). Repeatability is good (σ about 0.02 mm, C9),
 so this is a steady bias, not scatter. Stacking C1's ranges, a gap drawn at 0.15 nets −0.35 to
@@ -315,7 +315,7 @@ goes in as the pin.
 
 **Pros.**
 
-- Extruded filament is round and true to a few hundredths, so only the holes vary.
+- Extruded filament is made to a set diameter, so mostly the holes vary (no filament spec was fetched this pass to put a number on it).
 - The pin lies along its own length, the strong way, unlike an upright printed stud (S13).
 - Same room as a 2 mm stud.
 
