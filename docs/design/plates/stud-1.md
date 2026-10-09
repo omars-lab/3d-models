@@ -1,8 +1,8 @@
 ---
 plate: stud-1
 recipe: stud-1.yaml
-iteration: 1
-stage: planned
+iteration: 2
+stage: waiting
 times_printed: 0
 runs: []
 answers: "How far apart should a split coaster's studs be: does a slice of split-01's lip coaster hold together and line up with its studs 25, 15 or 10 mm apart?"
@@ -12,7 +12,7 @@ bets: []
 unblocks:
   - "split design call 4: how many studs, about 9 at 25 mm apart or every crossing at 10 mm"
   - "the stud spacing split-01's whole coaster is cut at, if 25 mm does not hold"
-minutes: 53
+minutes: 48
 grams: 16
 bed_plates: 1
 risk: ok
@@ -20,8 +20,6 @@ pictures:
   - stud-1-media/opened.png
   - stud-1-media/bed.png
   - stud-1-media/ids.png
-needs:
-  - "spl-1 judged, for its stud answer: which stud gap holds, and whether the 2 mm stud holds or the 3 mm one is needed; the plate is cut at that gap and size before it goes to Omar"
 ---
 
 # stud-1 — how far apart the studs go on a split coaster
@@ -31,9 +29,9 @@ the same in every way but how far apart their studs are: 25 mm (3 studs on the s
 and 10 mm (13). Each slice is a lower half and an upper half that press together. It answers the
 split design's [call 4, how many studs](../pieces/split-with-studs-design.md#10-open-calls-for-omar):
 the fewest studs that hold the halves flat and lined up. The plate is
-[`stud-1.yaml`](stud-1.yaml). One bed, 53 minutes, about 16 g, in the color you pick when you say
-yes. **It waits on [spl-1](spl-1.md)**: spl-1 says which stud gap holds, and whether the 2 mm stud
-is strong enough. Until then the plate stays planned.
+[`stud-1.yaml`](stud-1.yaml). One bed, 48 minutes, about 16 g, in the color you pick when you say
+yes. The stud gap is the one you picked off [spl-2](spl-2.md), 0.25 mm: "it should be 1e"
+([D-116](../../working-model/decisions-log.md#d-116--a-split-coasters-stud-gap-is-025-mm)).
 
 ## What it is
 
@@ -45,7 +43,7 @@ is strong enough. Until then the plate stays planned.
   split-01. bikar picks the studs again on the slice, so each slice carries whole studs and whole
   sockets, never one cut through. A fifth of the coaster is a fifth of the bed and the time, and
   still has the straps, the lip, the holes and the studs of the whole coaster.
-- **The three pairs.** The studs are 2 mm across with a 0.05 mm socket gap, as on split-01. Only
+- **The three pairs.** The studs are 2 mm across with a 0.25 mm socket gap, as on split-01 (D-116). Only
   the least distance between two studs changes:
 
   | Lower (its id) | Upper | Studs at least this far apart | Studs on the slice | On the whole coaster |
@@ -74,9 +72,8 @@ stay open, which is fine: the studs sit on the straps, not in the holes.
 
 **What I assumed, for you to change:**
 
-- **The stud gap stays 0.05 mm**, the coaster file's default, until spl-1 is judged. If spl-1's
-  winner is another gap, or the 3 mm stud, the plate moves to it as a new iteration of the recipe
-  before it asks for a yes.
+- **The 2 mm stud.** Nothing snapped on spl-1 at 1.5, 2 or 3 mm, so the plate keeps split-01's
+  2 mm. The stud gap is no longer an assumption: it is 0.25 mm, your pick (D-116).
 - **25, 15 and 10 mm.** 25 is split-01's and gives the whole coaster ten studs; 10 is the other
   end of call 4, every crossing; 15 is between them. Nothing closer than 10, the closest call 4
   names.
@@ -102,7 +99,7 @@ bed: `4` with the upper of 3 sockets, `5` with 7, `6` with 13.
 
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
-| Lower `4` with the upper of 3 sockets, `5` with 7, `6` with 13 | **Do:** Take each lower with its upper. Lay them cut faces together, each stud over its socket, and press them closed with your thumbs. **Look for:** Which pairs close all the way by hand, with no gap at the cut? Which take a lot of force, or will not close? Say which by the lower's id. | All three close. `6` takes the most force: 13 snug studs at once, where `4` has 3. | All close: the spacing is picked on the next rows. `6` will not close by hand: 10 mm is out at this gap. None close: the stud gap is wrong, and spl-1's answer is checked again. |
+| Lower `4` with the upper of 3 sockets, `5` with 7, `6` with 13 | **Do:** Take each lower with its upper. Lay them cut faces together, each stud over its socket, and press them closed with your thumbs. **Look for:** Which pairs close all the way by hand, with no gap at the cut? Which take a lot of force, or will not close? Say which by the lower's id. | All three close. `6` takes the most force: 13 snug studs at once, where `4` has 3. | All close: the spacing is picked on the next rows. `6` will not close by hand: 10 mm is out at this gap. None close: 0.25 mm is too tight on a slice, and D-116 is looked at again. |
 | The three closed pairs: `4`, `5`, `6` | **Do:** Run a fingertip along the outside edge of each closed pair, across the line where the halves meet, all the way round. **Look for:** Can you feel a step, one half sticking out past the other? Where, and on which pair? | No step on any: two studs are enough to fix one half on the other, and even `4` has three. | No step on `4`: three studs line up a slice, and the coaster's ten line it up. A step on `4`: spacing goes down to the closest pair with no step. |
 | The three closed pairs: `4`, `5`, `6` | **Do:** Hold each closed pair by its lower half, upper half facing down, and shake it. Then lay it on the table and push a fingernail under the upper half's straps at the far corners and between studs. **Look for:** Does an upper half fall off? Does a strap lift away from the lower half, and show a gap, when you push it? On which pair, and where? | `4` may lift a little between its studs, the design's own warning; `5` and `6` should not. | The fewest studs where nothing lifts or falls becomes the stud spacing on every split coaster (call 4), and split-01 is cut again at it if that is not 25 mm. |
 | The three pairs: `4`, `5`, `6` | **Do:** Pull each closed pair apart by hand. **Look for:** Do the halves come apart with every stud whole? Does a stud snap off, or a strap crack beside a socket? On which pair? | They come apart whole. `6`, with 13 studs, takes the most pull; bikar keeps a socket wall between every two sockets, so the straps should not crack. | Whole: the spacing stands. Studs snap on `6` only: 10 mm is out, the next spacing up is kept. A crack beside a socket: bikar's least wall between sockets goes up. |
@@ -132,7 +129,7 @@ to change those numbers, so the three spacings look alike from above and below.
 
 ## Cost and risk
 
-One bed, 53 minutes, about 16 g (local slice, 2026-10-08, against bikar main at #332, X2D preset
+One bed, 48 minutes, about 16 g (local slice, 2026-10-09, against bikar main, X2D preset
 and PLA Basic, sliced for the Textured PEI plate Bambu Studio has saved, no slicer warnings,
 nothing sent). One color, so no swaps.
 
@@ -141,9 +138,7 @@ top of the lowers; a stud the nozzle knocks off is a lost data point, not a risk
 
 ## Your call
 
-It stays planned until spl-1 is judged; then the stud gap is set and the page asks for a yes.
-
-- [ ] **Approve as it stands, once spl-1 is in** — say the color with the yes
+- [ ] **Approve as it stands** — say the color with the yes
 - [ ] **Hold** — say why in the notes
 
 Notes:
@@ -161,3 +156,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-08 | proposed — task #241, after bikar #332 gave the split coaster a stud spacing and a slice; planned until spl-1 is judged | this page |
 | 2026-10-08 | sliced — local slice from bikar main at #332, fits one bed, 53 minutes, 16 g, no slicer warnings | this page |
+| 2026-10-09 | changed (iteration 2): stud gap 0.25 mm, Omar's pick off spl-2, "it should be 1e" (D-116); no longer waits on spl-1; no yes to reset | [D-116](../../working-model/decisions-log.md#d-116--a-split-coasters-stud-gap-is-025-mm) |
+| 2026-10-09 | sliced — local slice from bikar main, fits one bed, 48 minutes, 16 g, no slicer warnings; 5 minutes less than the last slice, cause not looked into | this page |

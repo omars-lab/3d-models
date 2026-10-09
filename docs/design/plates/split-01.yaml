@@ -10,7 +10,10 @@
 #
 # The coaster is bikar's gBV_JTt3Kxk-split-lip-coaster.bkr at its defaults: size 112.5 (the 1.25x
 # coaster sheets-04g printed), strap 3.75, closed height 4.4, cut at half, lip 0.8, gap 0.25 per
-# face, studs 2 mm across at least 25 mm apart, for the halves to line up. The ten stars have no
+# face, studs 2 mm across at least 25 mm apart, for the halves to line up. One knob moves off its
+# default: stud_gap 0.25, how much wider a socket is than its stud, where the file says 0.05. spl-1
+# needed a hammer to close or sit flush at every gap to 0.15, and on spl-2 Omar picked 0.25: "it should be 1e" (D-116).
+# Every item passes it, so the whole coaster is one set of knobs. The ten stars have no
 # pieces here and stay open holes, as in the minimal coaster: a star's window moved in by a 0.8 mm
 # lip closes up its arms, so it would show no star.
 #
@@ -54,33 +57,33 @@ no_id_reasons:
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Lower
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  LOWER
     no_id:  *lower
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Upper
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  UPPER
     no_id:  *upper
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Middle
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  MIDDLE
     id:     M
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Kite
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  KITE
     no_id:  *kite
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Hex
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  HEX
     id:     H
     id_form: short
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Outer
-    params: { size: 112.5, id: 1 }
+    params: { size: 112.5, stud_gap: 0.25, id: 1 }
     label:  OUTER
     id:     R
     id_form: short

@@ -24,7 +24,7 @@ pictures:
   - pkt-2-media/side-upper.png
   - pkt-2-media/halves.png
 needs:
-  - "the split pocket coaster file on bikar main (bikar #333, not merged), so the slice pins a commit main keeps"
+  - "a stud_gap knob on the split pocket coaster file (bikar), so it can take the 0.25 mm stud gap of D-116; bikar #333 is merged, but its split line sets no gap, so the kernel default of 0.05 applies"
 ---
 
 # pkt-2 — the split gBV coaster with its pieces printed in place in pockets
@@ -53,7 +53,11 @@ bikar file is on main.
   above and below it. The band is 2.2 − 0.8 − 0.8 = 0.6 mm thick, three layers, and reaches 0.55
   mm past each neck.
 - **The stars stay open holes**, as in the minimal coaster and split-01.
-- **Studs** 2 mm across, at least 25 mm apart, on the lower half, so the halves line up.
+- **Studs** 2 mm across, at least 25 mm apart, on the lower half, so the halves line up. Their
+  socket gap is 0.05 mm, the kernel's default, for now: you set the split coaster's stud gap at
+  0.25 mm off spl-2
+  ([D-116](../../working-model/decisions-log.md#d-116--a-split-coasters-stud-gap-is-025-mm)), but
+  the pocket coaster file has no knob for it yet, so this plate waits on that bikar change.
 - **Its id, 3**, after split-01's 1 and split-02's 2. It is cut into the lower half's bottom face,
   the face the coaster stands on, mirrored so it reads the right way round when you turn the
   coaster over. The piece halves carry no id: each is held in its own hole of the coaster marked 3

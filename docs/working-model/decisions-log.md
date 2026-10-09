@@ -6575,3 +6575,34 @@ with the uppers' ids pictured, so his yes or hold on that page confirms or corre
 **What would reverse it:** an id on the outer face that shows through to the cut face, or that
 spoils the face a coupon is judged on, which would move it back to the cut face with a bigger
 letter.
+
+## D-116 — A split coaster's stud gap is 0.25 mm
+
+Omar, 2026-10-09, in chat, judging spl-2: "it should be 1e". `SL2 1E` is the first of the two
+pairs at a 0.25 mm gap between a 2 mm stud and its socket. On spl-2 every pair closed by hand;
+`SL2 1A` to `1E` (0.15 to 0.25 mm) held when shaken, and `1F` on were "very loose / not stuck
+together" ([the record](../prints/2026-10-09-spl-2/index.md)). The studs on split-01, stud-1 and
+pkt-2 were cut at the kernel's 0.05 mm, which needed a hammer on spl-1.
+
+### The options on the table
+
+- **0.15 mm**, the rule the spl-2 page wrote before the print: the tightest gap whose two pairs
+  both close by hand and hold. Both 0.15 pairs did. But the same gap needed a hammer on spl-1,
+  printed earlier the same day with the same nozzle, preset and spool.
+- **0.20 mm**, one rung looser. Both pairs held; `1D` "might have had a lcikc".
+- **0.25 mm**, Omar's pick: the loosest gap where a pair held. Its twin, `1F`, fell apart.
+
+### What it changes
+
+- **split-01 and stud-1 cut their studs at 0.25 mm.** Their recipes pass `stud_gap: 0.25` to the
+  split lip coaster, which takes it as a knob. The recipe change is a new iteration for each.
+- **pkt-2 is at 0.25 too, once bikar lets it.** The split pocket coaster writes no gap on its
+  studs, so they take the kernel's 0.05 mm, and it has no knob for it yet. Until that bikar change
+  lands, pkt-2 is not sent.
+- **The fit moves between prints by about 0.05 to 0.10 mm** (0.4 mm nozzle, 0.42 mm outer and
+  0.45 mm inner wall lines, 0.20 mm layers): 0.15 was a hammer fit on spl-1 and a hand fit on
+  spl-2. 0.25 sits on the loose side of that, so a coaster that comes out tight still closes. A
+  stud gap measured with another nozzle or other line widths does not carry over.
+
+**What would reverse it:** a whole coaster at 0.25 coming apart as `1F` did, which moves it back
+to 0.20; or stud-1's several studs binding where one did not, which moves it looser.
