@@ -114,6 +114,9 @@ step 6.
    `python3 tools/fit_gap.py walls <plate.3mf> <frame.stl> <piece.stl>...` reads the same off the
    slice's own wall paths, layer by layer, which shows what the slicer did to each group.
    sheets-04g found its loose middle piece this way ([the issue](../../../docs/issues/sheets-04g-fit.md)).
+   For a split coaster's studs, `python3 tools/fit_gap.py studs <plate.3mf> <plate.bedmap.json>`
+   gives each pair's stud and socket as sliced, and the gap between them. On spl-1 every gap came
+   out as drawn, so the tight fit came from the printer, not the slice.
 4. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
    and check there is no location data in them first.
 5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one

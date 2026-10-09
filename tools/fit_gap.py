@@ -2,7 +2,14 @@
 """How a loose piece sits in its pocket: the gap all round, outline against outline.
 
     python3 tools/fit_gap.py <frame.stl> <piece.stl> [<piece.stl> ...] [--z <mm>] [--json]
+    python3 tools/fit_gap.py walls <plate.3mf> <frame.stl> <piece.stl> [...] [--z <mm>]
+    python3 tools/fit_gap.py studs <plate.3mf> <plate.bedmap.json>
     python3 tools/fit_gap.py --self-test
+
+`studs` reads a split plate's slice: for each stud pair on the bed map, the stud's and the
+socket's diameter as the slicer's wall paths make them (median over the layers, and the
+socket's lowest layer on its own), and the gap between them. spl-1 found every drawn gap kept
+to within 0.005 mm, so a fit that comes out tighter than drawn is the nozzle, not the slice.
 
 Both meshes must be in the same frame: each piece where its pocket is, as bikar renders a
 `loose` coaster's pieces without `pack zipper`. The tool cuts the frame and every piece flat at
@@ -189,6 +196,13 @@ def measure(frame_loops, piece_tris, z):
 def gcode_walls(text, z):
     """The outer-wall loops the slicer printed on the layer nearest height z:
     {object label: [(loop, line width), ...]}, arcs (G2/G3) walked in short steps."""
+    layers = gcode_all_walls(text)
+    nearest = min(layers, key=lambda h: abs(h - z))
+    return nearest, layers[nearest]
+
+
+def gcode_all_walls(text):
+    """Every layer's outer-wall loops: {height: {object label: [(loop, line width), ...]}}."""
     layers, cur, obj, feature, width = {}, None, None, None, None
     x = y = 0.0
     run = []
@@ -241,8 +255,7 @@ def gcode_walls(text, z):
                 run.append((nx, ny))
             x, y = nx, ny
     close()
-    nearest = min(layers, key=lambda h: abs(h - z))
-    return nearest, layers[nearest]
+    return layers
 
 
 def offset_by_area(A, P, k, area_after, grow):
@@ -255,11 +268,71 @@ def offset_by_area(A, P, k, area_after, grow):
     return (-s * P + s * math.sqrt(disc)) / (2 * k) if k else -c / (s * P)
 
 
-def walls_report(plate, frame, pieces, z):
+def plate_gcode(plate):
     import zipfile
     with zipfile.ZipFile(plate) as zf:
         name = next(n for n in zf.namelist() if n.endswith(".gcode"))
-        text = zf.read(name).decode("utf-8", "replace")
+        return zf.read(name).decode("utf-8", "replace")
+
+
+ROUND = 0.97    # 4πA/P² at or over this is a circle; a hexagon is 0.907, a letter far less
+NEAR = 12.0     # mm: a round wall this far from every object's spot on the bed is not one of ours
+
+
+def round_walls(layers, objects, max_d):
+    """Every round outer wall under max_d across, put with the bed-map object it sits nearest:
+    {entry: [(height, printed diameter, line width), ...]}. A wall round a stud is printed
+    outside its path, so the stud is the path plus one line width; a wall round a socket is
+    printed inside it, so the socket is the path less one. Which one it is comes from the
+    object's piece: round walls on a Lower are studs, on an Upper sockets."""
+    out = {o["entry"]: [] for o in objects}
+    for h in sorted(layers):
+        for loops in layers[h].values():
+            for poly, w in loops:
+                A, P = abs(area(poly)), perimeter(poly)
+                if P == 0 or 4 * math.pi * A / (P * P) < ROUND:
+                    continue
+                d = 2 * math.sqrt(A / math.pi)
+                if d > max_d:
+                    continue
+                c = centroid(poly)
+                o = min(objects, key=lambda o: math.dist(c, (o["x"], o["y"])))
+                if math.dist(c, (o["x"], o["y"])) > NEAR:
+                    continue
+                stud = o["piece"] == "Lower"
+                out[o["entry"]].append((h, d + w if stud else d - w, w))
+    return out
+
+
+def studs_report(plate, bedmap, max_d):
+    """Stud and socket diameters as sliced, per pair: the toolpath, before the nozzle."""
+    objects = json.loads(Path(bedmap).read_text())["objects"]
+    walls = round_walls(gcode_all_walls(plate_gcode(plate)), objects, max_d)
+    by_pair = {}
+    for o in objects:
+        if o["piece"] in ("Lower", "Upper"):
+            key = json.dumps(o["params"], sort_keys=True)
+            by_pair.setdefault(key, {})[o["piece"]] = o
+    print("as sliced: the wall paths, plus or less one line width; the nozzle's squish is not in it")
+    print(f"{'pair':28} {'stud':>6} {'socket':>7} {'mouth':>6} {'gap':>7} {'at mouth':>8} "
+          f"{'stud z':>11} {'socket z':>11}")
+    for key, pair in by_pair.items():
+        lo, up = pair.get("Lower"), pair.get("Upper")
+        st = walls[lo["entry"]] if lo else []
+        so = walls[up["entry"]] if up else []
+        if not st or not so:
+            print(f"{key:28} no round stud or socket found")
+            continue
+        stud = sorted(d for _, d, _ in st)[len(st) // 2]
+        socket = sorted(d for _, d, _ in so)[len(so) // 2]
+        mouth = min(so)[1]  # the socket's lowest layer
+        zs = lambda ws: f"{min(h for h, _, _ in ws):.1f}-{max(h for h, _, _ in ws):.1f}"
+        print(f"{key:28} {stud:6.3f} {socket:7.3f} {mouth:6.3f} {socket - stud:+7.3f} "
+              f"{mouth - stud:+8.3f} {zs(st):>11} {zs(so):>11}")
+
+
+def walls_report(plate, frame, pieces, z):
+    text = plate_gcode(plate)
     h, objs = gcode_walls(text, z)
     frame_label = max(objs, key=lambda o: len(objs[o]))
     pocket_loops = sorted(objs[frame_label], key=lambda lw: abs(area(lw[0])))[:-1]  # drop the rim
@@ -355,6 +428,22 @@ def self_test():
         ("a square's corners are 90 degrees", loose and abs(loose["piece_tip"] - 90) < 1e-6),
         ("a piece away from every pocket is not matched", away is None),
     ]
+    # A 2 mm stud on a lower at (10, 0) and a 2.1 mm socket on an upper at (40, 0), as wall
+    # paths 0.42 wide: the stud's path is 1.58 across, the socket's 2.52. A square letter on
+    # the lower is not round and is left out.
+    ring = lambda cx, d: [(cx + d / 2 * math.cos(i * math.pi / 90), d / 2 * math.sin(i * math.pi / 90))
+                          for i in range(180)]
+    objs = [{"entry": "c1", "piece": "Lower", "x": 10, "y": 0},
+            {"entry": "c2", "piece": "Upper", "x": 40, "y": 0}]
+    layers = {0.4: {"1": [(ring(10, 1.58), 0.42), ([(9, 3), (10, 3), (10, 4), (9, 4)], 0.42)],
+                    "2": [(ring(40, 2.52), 0.42)]}}
+    got = round_walls(layers, objs, 4.0)
+    checks += [
+        ("a stud's printed edge is its path plus one line width",
+         len(got["c1"]) == 1 and abs(got["c1"][0][1] - 2.0) < 1e-3),
+        ("a socket's printed edge is its path less one line width",
+         len(got["c2"]) == 1 and abs(got["c2"][0][1] - 2.1) < 1e-3),
+    ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -371,6 +460,9 @@ if __name__ == "__main__":
         i = a.index("--z")
         z = float(a[i + 1])
         del a[i:i + 2]
+    if len(a) == 3 and a[0] == "studs":
+        studs_report(a[1], a[2], 4.0)
+        sys.exit(0)
     if len(a) >= 4 and a[0] == "walls":
         walls_report(a[1], a[2], a[3:], z)
         sys.exit(0)
