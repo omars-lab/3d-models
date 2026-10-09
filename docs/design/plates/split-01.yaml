@@ -23,9 +23,10 @@
 # The carved id (D-109, D-114) goes on each piece's bed face, which is hidden in use. The middle
 # piece carries the whole id, SP1/<iteration> M. The lower half's bottom already carries the
 # coaster's own 1, and a letter beside it would say nothing more. The hex and outer rings come out
-# of bikar as one render of ten pieces, and bikar cuts one id per render, so they carry none until
-# it cuts one into each piece. The kites have room for none. The upper half carries none: it
-# prints face down, so its bed face is the top.
+# of bikar as one render of ten pieces; bikar cuts the id into each of the ten (bikar #331), the
+# short form only (D-114): <iteration>H on a hex, <iteration>R on an outer piece (O reads as a
+# zero). The kites have room for none. The upper half carries none: it prints face down, so its
+# bed face is the top.
 #
 # No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
 #
@@ -49,7 +50,6 @@ no_id_reasons:
   - &lower "Its bottom, the bed face, already carries the coaster's own id mark, 1, cut by the coaster file; a piece letter beside it would say nothing the 1 does not (D-114)."
   - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). It is the only upper half on the plate, and it closes onto the lower half beside it."
   - &kite "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the coaster they came off the bed beside, from the plate's bed map."
-  - &ring "A hex or outer piece comes out of bikar as one ring of ten, and bikar cuts one id per render, so only one of the ten would carry it (D-114); an id that marks one piece in ten is not an id. The ring stays together from the plate's bed map until bikar cuts an id into each piece of a ring."
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
@@ -76,9 +76,11 @@ items:
     piece:  Hex
     params: { size: 112.5, id: 1 }
     label:  HEX
-    no_id:  *ring
+    id:     H
+    id_form: short
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
     piece:  Outer
     params: { size: 112.5, id: 1 }
     label:  OUTER
-    no_id:  *ring
+    id:     R
+    id_form: short

@@ -56,11 +56,13 @@ split-01:
   - {iteration: 2, recipe: 'b9579380525b', date: '2026-10-07'}
   - {iteration: 3, recipe: '465fd99647ef', date: '2026-10-08'}
   - {iteration: 4, recipe: '534eab5ca96f', date: '2026-10-08'}
+  - {iteration: 5, recipe: '9af343b1e586', date: '2026-10-08'}
 split-02:
   - {iteration: 1, recipe: 'b244b2df2fe5', date: '2026-10-05'}
   - {iteration: 2, recipe: '61108820f7c4', date: '2026-10-07'}
   - {iteration: 3, recipe: 'e6e107200dc7', date: '2026-10-08'}
   - {iteration: 4, recipe: '9a18463c35d7', date: '2026-10-08'}
+  - {iteration: 5, recipe: '388f10b7db81', date: '2026-10-08'}
 swatch-10101:
   - {iteration: 1, recipe: 'e35368796eee', date: '2026-10-05'}
 swatch-10204:
