@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1687.99" height="654.1" viewBox="0 0 1687.99 654.1" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>The split coupon's stud and socket, and where it may bind</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">The split coupon's stud and socket, and where it may bind</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</text>
+<g data-panel="1. The pair closed, to scale">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. The pair closed, to scale</text>
+<g transform="translate(117.6,109.5)">
+<polygon data-kind="half" points="0,140.8 480,140.8 480,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="480" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 480,70.4 480,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="480" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="204.8,70.4 275.2,70.4 275.2,19.2 204.8,19.2" fill="#ffffff"/>
+<polygon data-kind="stud" points="208,70.4 272,70.4 272,32 265.6,25.6 214.4,25.6 208,32" fill="#8e8a83"/>
+<line data-kind="seam" x1="0" y1="70.4" x2="480" y2="70.4" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="208" y1="89.6" x2="272" y2="89.6"/>
+<line x1="208" y1="85.6" x2="208" y2="93.6"/>
+<line x1="272" y1="85.6" x2="272" y2="93.6"/>
+</g>
+<text x="240" y="104.6" font-size="11" fill="#444444" text-anchor="middle">2.0 mm stud</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="320" y1="70.4" x2="320" y2="25.6"/>
+<line x1="316" y1="70.4" x2="324" y2="70.4"/>
+<line x1="316" y1="25.6" x2="324" y2="25.6"/>
+</g>
+<text x="327" y="52" font-size="11" fill="#444444" text-anchor="start">1.4 mm tall</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="400" y1="70.4" x2="400" y2="19.2"/>
+<line x1="396" y1="70.4" x2="404" y2="70.4"/>
+<line x1="396" y1="19.2" x2="404" y2="19.2"/>
+</g>
+<text x="407" y="48.8" font-size="11" fill="#444444" text-anchor="start">socket 1.6 mm</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="400" y1="19.2" x2="400" y2="0"/>
+<line x1="396" y1="19.2" x2="404" y2="19.2"/>
+<line x1="396" y1="0" x2="404" y2="0"/>
+</g>
+<text x="407" y="13.6" font-size="11" fill="#444444" text-anchor="start">floor 0.6 mm</text>
+</g>
+<circle data-label-dot="1" cx="181.6" cy="144.7" r="2.6" fill="#222222"/>
+<polyline points="181.6,144.7 103.6,144.7 93.6,144.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="148.7" font-size="12" fill="#222222" text-anchor="end">upper half</text>
+<circle data-label-dot="1" cx="181.6" cy="215.1" r="2.6" fill="#222222"/>
+<polyline points="181.6,215.1 103.6,215.1 93.6,215.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="219.1" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="373.6" cy="167.1" r="2.6" fill="#222222"/>
+<polyline points="373.6,167.1 614.39,167.1 624.39,167.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="628.39" y="171.1" font-size="12" fill="#222222" text-anchor="start">stud</text>
+<text x="20" y="278.3" font-size="12" fill="#444444">The gap is diametral: socket width less stud width. spl-1 went from -0.10 to 0.15 mm and every pair</text>
+<text x="20" y="295.3" font-size="12" fill="#444444">needed a hammer; spl-2 tries 0.15 to 0.40 mm.</text>
+</g>
+<g data-panel="2. How the two halves print">
+<text x="715.83" y="89.5" font-size="14" font-weight="bold" fill="#222222">2. How the two halves print</text>
+<g transform="translate(902.11,107.5)">
+<polygon data-kind="half" points="0,115.2 240,115.2 240,44.8 0,44.8" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="115.2" x2="240" y2="115.2" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="0" y1="44.8" x2="240" y2="44.8" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="stud" points="104,44.8 136,44.8 136,6.4 132.8,0 107.2,0 104,6.4" fill="#8e8a83"/>
+<polygon data-kind="half" points="272,115.2 512,115.2 512,44.8 272,44.8" fill="#aba69f"/>
+<line data-mark="first" x1="272" y1="115.2" x2="512" y2="115.2" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="272" y1="44.8" x2="512" y2="44.8" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="374.4,96 409.6,96 409.6,44.8 374.4,44.8" fill="#ffffff"/>
+<rect data-kind="bed" x="-6" y="119.2" width="524" height="5" fill="#cfcbc3"/>
+<text x="522" y="125.2" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="1014.11" cy="120.3" r="2.6" fill="#222222"/>
+<polyline points="1014.11,120.3 882.11,120.3 872.11,120.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="868.11" y="124.3" font-size="12" fill="#222222" text-anchor="end">stud built up in layers</text>
+<circle data-label-dot="1" cx="950.11" cy="187.5" r="2.6" fill="#222222"/>
+<polyline points="950.11,187.5 882.11,187.5 872.11,187.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="868.11" y="191.5" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="1294.11" cy="152.3" r="2.6" fill="#222222"/>
+<polyline points="1294.11,152.3 1495.35,152.3 1505.35,152.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1509.35" y="156.3" font-size="12" fill="#222222" text-anchor="start">socket mouth, no chamfer</text>
+<circle data-label-dot="1" cx="1350.11" cy="187.5" r="2.6" fill="#222222"/>
+<polyline points="1350.11,187.5 1495.35,187.5 1505.35,187.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1509.35" y="191.5" font-size="12" fill="#222222" text-anchor="start">upper half, turned over</text>
+<text x="715.83" y="262.3" font-size="12" fill="#444444">Both halves print outer face down, so the stud stands up off the lower half's last layer and the socket opens upward through the upper half's last</text>
+<text x="715.83" y="279.3" font-size="12" fill="#444444">layer. The cut faces are both top skins.</text>
+</g>
+<g data-panel="3. Four places it may bind, near the end of travel">
+<text x="20" y="360.3" font-size="14" font-weight="bold" fill="#222222">3. Four places it may bind, near the end of travel</text>
+<g transform="translate(20,380.3)">
+<polygon data-kind="half" points="0,140.8 480,140.8 480,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="480" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 480,70.4 480,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="480" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="204.8,70.4 275.2,70.4 275.2,19.2 204.8,19.2" fill="#ffffff"/>
+<polygon data-kind="stud" points="208,70.4 272,70.4 272,32 265.6,25.6 214.4,25.6 208,32" fill="#8e8a83"/>
+<line data-kind="seam" x1="0" y1="70.4" x2="480" y2="70.4" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<line data-kind="arrow" x1="112" y1="25.6" x2="203.2" y2="65.6" stroke="#444444" stroke-width="1.6"/>
+<polyline points="192.95,66.56 203.2,65.6 196.97,57.41" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="169.6" y="49.6" font-size="12" fill="#444444">a</text>
+<line data-kind="arrow" x1="112" y1="115.2" x2="208" y2="73.6" stroke="#444444" stroke-width="1.6"/>
+<polyline points="201.73,81.77 208,73.6 197.75,72.59" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="172" y="98.4" font-size="12" fill="#444444">b</text>
+<line data-kind="arrow" x1="368" y1="25.6" x2="273.6" y2="44.8" stroke="#444444" stroke-width="1.6"/>
+<polyline points="281.42,38.11 273.6,44.8 283.42,47.91" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="332.8" y="39.2" font-size="12" fill="#444444">c</text>
+<line data-kind="arrow" x1="368" y1="115.2" x2="416" y2="72" stroke="#444444" stroke-width="1.6"/>
+<polyline points="412.66,81.74 416,72 405.97,74.3" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="404" y="97.6" font-size="12" fill="#444444">d</text>
+</g>
+<text x="20" y="549.1" font-size="12" fill="#444444">a: a ridge on the socket mouth, which is the upper half's last layer. b: a flare where the stud</text>
+<text x="20" y="566.1" font-size="12" fill="#444444">meets the lower cut face. c: the seam's start-and-stop bump, lined up on one side of the stud. d:</text>
+<text x="20" y="583.1" font-size="12" fill="#444444">the two cut faces, both top skins, not flat, so they touch on high spots first.</text>
+<text x="20" y="600.1" font-size="12" fill="#444444">spl-1's 0.15 mm pair went in by hand and needed a hammer only to close flush, so the binding is at</text>
+<text x="20" y="617.1" font-size="12" fill="#444444">the end of travel. The stud is 0.2 mm short of the socket floor, so it is not bottoming out.</text>
+</g>
+</svg>

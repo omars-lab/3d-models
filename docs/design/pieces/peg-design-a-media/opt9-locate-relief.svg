@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="500" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 9: one stud locates, one stops turning, the rest are loose</text>
+  <text x="30" y="60" font-size="13" fill="#555">Left: a 90 mm coaster from below, studs 25 mm apart, 4 px per mm, sockets drawn large. Right: each socket, 30 px per mm.</text>
+
+  <circle cx="230" cy="280" r="180" fill="#b3ada6"/>
+  <g fill="#ffffff" stroke="#555" stroke-width="1">
+    <circle cx="130" cy="180" r="14"/><circle cx="230" cy="180" r="14"/><circle cx="330" cy="180" r="14"/>
+    <circle cx="130" cy="280" r="14"/>
+    <circle cx="130" cy="380" r="14"/><circle cx="230" cy="380" r="14"/><circle cx="330" cy="380" r="14"/>
+  </g>
+  <circle cx="230" cy="280" r="10" fill="#ffffff" stroke="#2a9d8f" stroke-width="3"/>
+  <rect x="314" y="270" width="32" height="20" rx="10" fill="#ffffff" stroke="#d9a520" stroke-width="3"/>
+  <line x1="230" y1="280" x2="330" y2="280" stroke="#d9a520" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="196" y="314" font-size="12" fill="#1f6f66">locates</text>
+  <text x="300" y="314" font-size="12" fill="#9c7614">slot</text>
+  <text x="96" y="214" font-size="12" fill="#333">loose</text>
+
+  <g transform="translate(470,110)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#1f6f66">Tight round socket, at the middle</text>
+    <rect x="0" y="16" width="90" height="90" fill="#b3ada6"/>
+    <circle cx="45" cy="61" r="33.75" fill="#ffffff"/>
+    <circle cx="45" cy="61" r="30" fill="#8d8780"/>
+    <text x="110" y="44" font-size="13" fill="#222">The one close fit. It holds the</text>
+    <text x="110" y="62" font-size="13" fill="#222">halves still sideways, in both</text>
+    <text x="110" y="80" font-size="13" fill="#222">directions.</text>
+
+    <text x="0" y="140" font-size="15" font-weight="600" fill="#9c7614">Slot socket, on a line out from it</text>
+    <rect x="0" y="156" width="90" height="90" fill="#b3ada6"/>
+    <rect x="3" y="167.25" width="84" height="67.5" rx="33.75" fill="#ffffff"/>
+    <circle cx="45" cy="201" r="30" fill="#8d8780"/>
+    <text x="110" y="184" font-size="13" fill="#222">Close across the line, long along</text>
+    <text x="110" y="202" font-size="13" fill="#222">it. It stops the halves turning; any</text>
+    <text x="110" y="220" font-size="13" fill="#222">spacing error goes along the slot.</text>
+
+    <text x="0" y="280" font-size="15" font-weight="600" fill="#333">Loose socket, or no stud</text>
+    <rect x="0" y="296" width="90" height="90" fill="#b3ada6"/>
+    <circle cx="45" cy="341" r="42" fill="#ffffff"/>
+    <circle cx="45" cy="341" r="30" fill="#8d8780"/>
+    <text x="110" y="324" font-size="13" fill="#222">Never touches, so it cannot fight</text>
+    <text x="110" y="342" font-size="13" fill="#222">the other two. It could be</text>
+    <text x="110" y="360" font-size="13" fill="#222">left off altogether.</text>
+  </g>
+</svg>

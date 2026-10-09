@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="500" fill="#f7f5f1"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 6: a snap — a split prong with barbs, or a ring bead</text>
+  <text x="30" y="60" font-size="13" fill="#555">Left: a split prong, cut through, side view, 30 px per mm, closed. Right: the bead a ring snap on a 2 mm stud could have, 200 px per mm.</text>
+
+  <text x="60" y="104" font-size="15" font-weight="600" fill="#222">Split prong with barbs</text>
+  <rect x="200" y="160" width="270" height="170" fill="#b3ada6"/>
+  <polygon points="296,330 296,274 288,274 288,226 384,226 384,274 376,274 376,330" fill="#ffffff"/>
+  <rect x="200" y="330" width="270" height="70" fill="#8d8780"/>
+  <polygon points="300,330 300,270 292.5,266 300,240 324,240 324,330" fill="#8d8780"/>
+  <polygon points="348,330 348,240 372,240 379.5,266 372,270 372,330" fill="#8d8780"/>
+  <line x1="200" y1="330" x2="296" y2="330" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="376" y1="330" x2="470" y2="330" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="296" y1="252" x2="140" y2="200" stroke="#333" stroke-width="1"/>
+  <text x="40" y="180" font-size="13" fill="#222">lead angle: a gentle</text>
+  <text x="40" y="196" font-size="13" fill="#222">slope to go in</text>
+  <line x1="296" y1="269" x2="212" y2="300" stroke="#333" stroke-width="1"/>
+  <text x="40" y="290" font-size="13" fill="#222">return angle: steep</text>
+  <text x="40" y="306" font-size="13" fill="#222">to hold; at 90° it never</text>
+  <text x="40" y="322" font-size="13" fill="#222">comes out (Fictiv)</text>
+  <line x1="336" y1="300" x2="500" y2="300" stroke="#333" stroke-width="1"/>
+  <text x="504" y="296" font-size="13" fill="#222">slot lets the</text>
+  <text x="504" y="312" font-size="13" fill="#222">two arms bend in</text>
+  <line x1="440" y1="240" x2="440" y2="330" stroke="#222" stroke-width="1"/>
+  <line x1="434" y1="240" x2="446" y2="240" stroke="#222" stroke-width="1"/>
+  <text x="446" y="262" font-size="12" fill="#222">3 mm</text>
+  <text x="60" y="430" font-size="13" fill="#222">The arms need length to bend without breaking: about 3 mm here,</text>
+  <text x="60" y="448" font-size="13" fill="#222">against our 1.4 mm stud in a 1.6 mm socket. Built up in layers they</text>
+  <text x="60" y="466" font-size="13" fill="#222">bend the weak way. BOSL2's snap pin prints lying down to dodge that.</text>
+
+  <text x="600" y="104" font-size="15" font-weight="600" fill="#222">Ring snap: how big a bead?</text>
+  <text x="600" y="122" font-size="12" fill="#555">bead height ≈ allowed strain × 2 mm (Covestro)</text>
+  <g font-size="12" fill="#222">
+    <rect x="600" y="150" width="84" height="18" fill="#8d8780"/><text x="694" y="164">one line, 0.42 mm</text>
+    <rect x="600" y="182" width="40" height="18" fill="#8d8780"/><text x="694" y="196">one layer, 0.20 mm</text>
+    <rect x="600" y="214" width="32" height="18" fill="#2a9d8f"/><text x="694" y="228">at 8% strain: 0.16 mm</text>
+    <rect x="600" y="246" width="16" height="18" fill="#2a9d8f"/><text x="694" y="260">at 4% strain: 0.08 mm</text>
+    <rect x="600" y="278" width="8" height="18" fill="#c0392b"/><text x="694" y="292">4%, halved along Z: 0.04 mm</text>
+  </g>
+  <text x="600" y="340" font-size="13" fill="#222">Every bead the sources allow is smaller</text>
+  <text x="600" y="358" font-size="13" fill="#222">than half a line, and the bead would sit</text>
+  <text x="600" y="376" font-size="13" fill="#222">across one or two layers. The printer</text>
+  <text x="600" y="394" font-size="13" fill="#222">cannot place a bump that small reliably,</text>
+  <text x="600" y="412" font-size="13" fill="#222">so a ring snap on a 2 mm stud is out.</text>
+</svg>

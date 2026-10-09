@@ -1,0 +1,56 @@
+# The split coupon's stud and socket today (peg-design-a §1). Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sizes from split-with-studs-design §4.1 and spl-2: a 15 mm tile 4.4 mm tall cut at 2.2 mm, a
+# 2.0 mm stud 1.4 mm tall with a 0.2 mm chamfer on its top, a socket 1.6 mm deep on a 0.6 mm floor,
+# drawn here at a 0.20 mm gap (diametral).
+title: "The split coupon's stud and socket, and where it may bind"
+panels:
+  - title: "1. The pair closed, to scale"
+    width: 15
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 15, 2.2], first: bottom, label: lower half, label_at: [2, 1.1], label_side: left}
+      - {kind: half, side: upper, box: [0, 2.2, 15, 2.2], first: top, label: upper half, label_at: [2, 3.3], label_side: left}
+      - {kind: socket, box: [6.4, 2.2, 2.2, 1.6]}
+      - {kind: stud, side: lower, box: [6.5, 2.2, 2.0, 1.4], toward: up, chamfer: 0.2, label: stud, label_at: [8.0, 2.6]}
+      - {kind: seam, line: [0, 2.2, 15]}
+      - {kind: dim, from: [6.5, 1.6], to: [8.5, 1.6], text: 2.0 mm stud, place: below}
+      - {kind: dim, from: [10, 2.2], to: [10, 3.6], text: 1.4 mm tall}
+      - {kind: dim, from: [12.5, 2.2], to: [12.5, 3.8], text: socket 1.6 mm}
+      - {kind: dim, from: [12.5, 3.8], to: [12.5, 4.4], text: floor 0.6 mm}
+    notes:
+      - "The gap is diametral: socket width less stud width. spl-1 went from -0.10 to 0.15 mm and
+        every pair needed a hammer; spl-2 tries 0.15 to 0.40 mm."
+
+  - title: "2. How the two halves print"
+    width: 32
+    scale: [16, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 15, 2.2], first: bottom, last: top, label: lower half, label_at: [3, 1.1], label_side: left}
+      - {kind: stud, side: lower, box: [6.5, 2.2, 2.0, 1.4], toward: up, chamfer: 0.2, label: stud built up in layers, label_at: [7.0, 3.2], label_side: left}
+      - {kind: half, side: upper, box: [17, 0, 15, 2.2], first: bottom, last: top, label: "upper half, turned over", label_at: [28, 1.1]}
+      - {kind: socket, box: [23.4, 0.6, 2.2, 1.6], label: "socket mouth, no chamfer", label_at: [24.5, 2.2]}
+      - {kind: bed, line: [0, 0, 32]}
+    notes:
+      - "Both halves print outer face down, so the stud stands up off the lower half's last layer and
+        the socket opens upward through the upper half's last layer. The cut faces are both top skins."
+
+  - title: "3. Four places it may bind, near the end of travel"
+    width: 15
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 15, 2.2], first: bottom}
+      - {kind: half, side: upper, box: [0, 2.2, 15, 2.2], first: top}
+      - {kind: socket, box: [6.4, 2.2, 2.2, 1.6]}
+      - {kind: stud, side: lower, box: [6.5, 2.2, 2.0, 1.4], toward: up, chamfer: 0.2}
+      - {kind: seam, line: [0, 2.2, 15]}
+      - {kind: arrow, from: [3.5, 3.6], to: [6.35, 2.35], text: "a"}
+      - {kind: arrow, from: [3.5, 0.8], to: [6.5, 2.1], text: "b"}
+      - {kind: arrow, from: [11.5, 3.6], to: [8.55, 3.0], text: "c"}
+      - {kind: arrow, from: [11.5, 0.8], to: [13, 2.15], text: "d"}
+    notes:
+      - "a: a ridge on the socket mouth, which is the upper half's last layer. b: a flare where the
+        stud meets the lower cut face. c: the seam's start-and-stop bump, lined up on one side of the
+        stud. d: the two cut faces, both top skins, not flat, so they touch on high spots first."
+      - "spl-1's 0.15 mm pair went in by hand and needed a hammer only to close flush, so the binding is
+        at the end of travel. The stud is 0.2 mm short of the socket floor, so it is not bottoming out."

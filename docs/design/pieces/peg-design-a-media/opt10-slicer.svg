@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="920" height="500" fill="#f7f5f1"/>
+  <text x="30" y="36" font-size="20" font-weight="700" fill="#222">Option 10: let the slicer fix the size instead of the model</text>
+  <text x="30" y="60" font-size="13" fill="#555">From above, 80 px per mm, at a 0.25 mm drawn gap. The printing error is a made-up 0.05 mm per side, drawn three times too big so it shows.</text>
+
+  <text x="40" y="110" font-size="15" font-weight="600" fill="#222">As drawn</text>
+  <rect x="40" y="130" width="240" height="240" fill="#b3ada6"/>
+  <circle cx="160" cy="250" r="90" fill="#ffffff"/>
+  <circle cx="160" cy="250" r="80" fill="#8d8780"/>
+  <text x="40" y="400" font-size="13" fill="#222">Socket 2.25 mm, stud 2.0 mm:</text>
+  <text x="40" y="418" font-size="13" fill="#222">a thin ring of air all round.</text>
+
+  <text x="340" y="110" font-size="15" font-weight="600" fill="#222">As printed, no setting</text>
+  <rect x="340" y="130" width="240" height="240" fill="#b3ada6"/>
+  <circle cx="460" cy="250" r="78" fill="#ffffff"/>
+  <circle cx="460" cy="250" r="92" fill="#c0392b" fill-opacity="0.85"/>
+  <circle cx="460" cy="250" r="78" fill="#8d8780"/>
+  <circle cx="460" cy="250" r="90" fill="none" stroke="#2a9d8f" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <path d="M 538 244 Q 530 250 538 256" fill="#e07a1f" stroke="#e07a1f" stroke-width="3"/>
+  <text x="340" y="400" font-size="13" fill="#222">The socket prints small and the stud</text>
+  <text x="340" y="418" font-size="13" fill="#222">big; the two errors add. Red: where</text>
+  <text x="340" y="436" font-size="13" fill="#222">they would have to squeeze. Orange:</text>
+  <text x="340" y="454" font-size="13" fill="#222">the seam bump. Dashed: as drawn.</text>
+
+  <text x="640" y="110" font-size="15" font-weight="600" fill="#222">With the slicer's settings</text>
+  <rect x="640" y="130" width="240" height="240" fill="#b3ada6"/>
+  <circle cx="760" cy="250" r="90" fill="#ffffff"/>
+  <circle cx="760" cy="250" r="80" fill="#8d8780"/>
+  <text x="640" y="400" font-size="13" fill="#222">Hole compensation opens every hole by</text>
+  <text x="640" y="418" font-size="13" fill="#222">twice its setting; contour compensation</text>
+  <text x="640" y="436" font-size="13" fill="#222">trims outside edges. Bambu also has a</text>
+  <text x="640" y="454" font-size="13" fill="#222">circle-only setting tuned per filament.</text>
+  <text x="640" y="472" font-size="13" fill="#222">It acts on every hole it reaches.</text>
+</svg>
