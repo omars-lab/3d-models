@@ -23,7 +23,7 @@ page. How the catalog is laid out and why: [the plan](plan.md).
 | ![n3IidKfXE1I\|96](media/n3IidKfXE1I/n3IidKfXE1I-plain.png) | [Variable-angled 12-6-4 Star Rosette](patterns/variable-angled-12-6-4-star-rosette-cs-10.md) | CS-10 | built | plain |
 | ![sDO9fpu76v8\|96](media/sDO9fpu76v8/sDO9fpu76v8-plain.png) | [Pattern from the Royal Alcazar](patterns/pattern-from-the-royal-alcazar-cs-11.md) | CS-11 | built | plain |
 | ![bknVRSMcLj0\|96](media/bknVRSMcLj0/bknVRSMcLj0-plain.png) | [Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette](patterns/imamzadeh-ismail-shrine-isfahan-six-fold-kite-rosette-cs-12.md) | CS-12 | built | plain |
-| ![gBV_JTt3Kxk\|96](media/gBV_JTt3Kxk/gBV_JTt3Kxk-minimal.png) | [The Itimad-ud-Daula ten-fold rosette in a rhombus tile](patterns/the-itimad-ud-daula-ten-fold-rosette-in-a-rhombus-tile-cs-13.md) | CS-13 | printed | minimal, minimal-pieces, split-flange, split-lip |
+| ![gBV_JTt3Kxk\|96](media/gBV_JTt3Kxk/gBV_JTt3Kxk-minimal.png) | [The Itimad-ud-Daula ten-fold rosette in a rhombus tile](patterns/the-itimad-ud-daula-ten-fold-rosette-in-a-rhombus-tile-cs-13.md) | CS-13 | printed | minimal, minimal-pieces, split-flange, split-lip, split-pocket |
 | ![jlTmt_279M4\|96](media/jlTmt_279M4/jlTmt_279M4-minimal.png) | [Sevenfold stars in a tilted square](patterns/sevenfold-stars-in-a-tilted-square-cs-14.md) | CS-14 | built | minimal |
 | ![NtnlGMTElBk\|96](media/NtnlGMTElBk/NtnlGMTElBk-minimal.png) | [The Mustansiriya ten-fold interlaced star](patterns/the-mustansiriya-ten-fold-interlaced-star-cs-15.md) | CS-15 | built | minimal |
 | ![0ke_GpoBa-s\|96](media/0ke_GpoBa-s/0ke_GpoBa-s-minimal.png) | [A pentagon after Ptolemy's *Almagest*, doubled to ten](patterns/a-pentagon-after-ptolemys-almagest-doubled-to-ten-cs-16.md) | CS-16 | built | minimal |
@@ -86,3 +86,4 @@ Screened and queued, or held. Add one to [the planned list](planned.yaml) and sy
 | [minimal-pieces](styles/minimal-pieces.md) | 1 |
 | [split-flange](styles/split-flange.md) | 1 |
 | [split-lip](styles/split-lip.md) | 1 |
+| [split-pocket](styles/split-pocket.md) | 1 |
