@@ -62,10 +62,19 @@ about 11.6 g, in the color you pick when you say yes.
   | Q | P4aL, P4aU | two layers of air, 0.4 mm necks, first pair |
   | R | P4bL, P4bU | two layers of air, 0.4 mm necks, second pair |
 
-**What to try in the hand.** Push each piece half from the face: does it move in its pocket, or
-did it print fused? Close each pair: does it close flat, and does the hexagon move or click when
-you lift and tip it? Look at the band's underside where it shows through the gap: is it flat, or
-did it sag onto the neck below?
+**Which piece is which in the hand.** Each lower tile has an id cut into its bed face, the flat
+outer face it printed on (see [the id picture](#pictures)). An upper tile has no id there, so you
+know it by the letter on its cut face. Each pair is:
+
+| Pair | Lower: id on the bed face | Lower: cut face | Upper: cut face | Air round the hexagon | Necks |
+|---|---|---|---|---|---|
+| O | `4S` | `OB` | `OT` | one layer, 0.2 mm | 0.6 mm |
+| P | `4P` | `PB` | `PT` | one layer, 0.2 mm | 0.6 mm |
+| Q | `4Q` | `QB` | `QT` | two layers, 0.4 mm | 0.4 mm |
+| R | `4R` | `RB` | `RT` | two layers, 0.4 mm | 0.4 mm |
+
+**What to try in the hand.** The questions are in [After the print](#after-the-print), one row
+each, naming each tile by the id above.
 
 **The color is picked at the send.** Say it with the yes.
 
@@ -90,13 +99,15 @@ costs one 25 mm tile, not a coaster.
 ## After the print
 
 What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+Each row names the tiles by their ids from [the table above](#what-it-is), says what to do with
+your hands, and what to look for.
 
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
-| O and P (P2a, P2b): one layer of air | Does each piece half move in its pocket when pushed from the face, or did it print fused? | Unknown: 0.2 mm is one layer, the least air a printed gap can have, and it may fuse. | Loose in both pairs: way c is built at one layer, and pkt-2 takes 0.2 mm. Fused in one pair only: one bad layer, so one layer still counts. Fused in both: two layers is the least. |
-| Q and R (P4a, P4b): two layers of air | Does each piece half move in its pocket, and did the 0.4 mm necks hold? | Loose, at twice the air; the necks are thinner than the deboss floor, so one may tear. | Loose and whole: pkt-2 uses two layers if one fused. Fused at two layers too: way c is out, and split-01 and split-02 are the ways left (call 15b). Torn necks: necks go back to 0.6 mm with two layers of air. |
-| all four pairs, closed | Does each pair close flat, and does the hexagon move or click when the closed tile is lifted and tipped? | A click is likely: the band has air above and below it. | Silent: pressing the halves together is enough. A click: way c needs glue or a tighter room, which pkt-2 tries. |
-| all four pairs, open | Is the band's underside, printed over air, flat where it shows through the gap? | A small sag: the band is printed over nothing. | Flat: the 0.6 mm band is kept. Sagged onto the neck below: the band fused there, so pkt-2 gets more air under the band or a thicker band. |
+| `4S` and `OT`, `4P` and `PT` (one layer of air) | **Do:** Hold each of the four tiles by its square edge. Press the hexagon in its middle with your thumb, from the flat outer face: on `4S` and `4P` the side with the id, on `OT` and `PT` the top. **Look for:** Does the hexagon move apart from the square round it, or are they one solid piece? | Unknown: 0.2 mm is one layer, the least air a printed gap can have, and it may fuse. | All four move: way c is built at one layer, and pkt-2 takes 0.2 mm. Only one pair (`4S`/`OT` or `4P`/`PT`) fused: one bad layer, so one layer still counts. Both pairs fused: two layers is the least. |
+| `4Q` and `QT`, `4R` and `RT` (two layers of air, 0.4 mm necks) | **Do:** Press each hexagon the same way, then turn the tile over and press it from the cut face. **Look for:** Does the hexagon move? Does it stay in its pocket, or has the thin rim of the square over it (the neck, 0.4 mm) cracked or broken, so the hexagon falls or pushes out? | Moves, at twice the air; the necks are thinner than the deboss floor, so one may break. | Moves, rims whole: pkt-2 uses two layers. Moves, a rim broke: pkt-2 keeps two layers with 0.6 mm necks. Fused at two layers too: way c is out, and split-01 and split-02 are the ways left (call 15b). |
+| Each pair whose hexagons move: `4Q` onto `QT`, `4R` onto `RT` (and `4S`/`OT`, `4P`/`PT` if they moved) | **Do:** Close the pair: stud into socket, cut faces together, `QB` against `QT`. Lay it on the table, then pick it up and tip it side to side next to your ear. **Look for:** On the table: does it sit flat, with no gap showing at the cut? Tipped: do you hear a click or feel the hexagon shift? | A click is likely: the band has air above and below it. | Flat and silent: pressing the halves together is enough. A gap at the cut: the hexagon halves are too tall to close. A click: way c needs glue or a tighter room, which pkt-2 tries. |
+| Each tile, open | **Do:** Hold the tile cut face up, under a light. Look into the gap round the hexagon. **Look for:** The band is the wide ring of the hexagon inside the pocket. Is it level, or does it droop down onto the narrow neck below it? | A small droop: the band is printed over nothing. | Level: the 0.6 mm band is kept. Drooped onto the neck: the band fused there, so pkt-2 gets more air under the band or a thicker band. |
 
 ## Pictures
 
