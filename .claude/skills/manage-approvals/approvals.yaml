@@ -63,6 +63,8 @@ split-02:
   - {iteration: 3, recipe: 'e6e107200dc7', date: '2026-10-08'}
   - {iteration: 4, recipe: '9a18463c35d7', date: '2026-10-08'}
   - {iteration: 5, recipe: '388f10b7db81', date: '2026-10-08'}
+stud-1:
+  - {iteration: 1, recipe: '030637fb41f8', date: '2026-10-08'}
 swatch-10101:
   - {iteration: 1, recipe: 'e35368796eee', date: '2026-10-05'}
 swatch-10204:
