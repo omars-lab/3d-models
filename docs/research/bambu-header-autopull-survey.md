@@ -68,7 +68,7 @@ once here (`vir_slot` array vs the H2 `vt_tray` object, PR #192).*
   `nozzle_diameter`) are the resolved keys serialized into `project_settings.config`.
   https://github.com/bambulab/BambuStudio/wiki/Command-Line-Usage
 - **[CONFIRMED-IN-REPO]** — memory `bambu-x2d-bringup` + PRs #179 / #188 / #192: `setup discover`
-  read **firmware `01.02.00.00`** and **serial `20P6AJ641401412`** off the device (SSDP, receive-
+  read **firmware `01.02.00.00`** and **serial `<the printer serial>`** off the device (SSDP, receive-
   only); `status show` proved the pushall frame carries the standard temp/state/layer fields;
   `filament` proved `print.ams.ams[].tray[]` carries `tray_type` / `tray_sub_brands` /
   `tray_color` (RRGGBBAA) / `tray_info_idx` (`GFA00`) / `remain`, and the external spool arrives as

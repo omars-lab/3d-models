@@ -12,7 +12,7 @@
 // frame key that actually carried it; a key not present prints `absent`, never a fabricated value.
 //
 // Confidence: the state/progress/layer/temperature keys below are the ones `status show`
-// (commands/status.ts) already reads live off the X2D — proven on 20P6AJ641401412 at bring-up (memory:
+// (commands/status.ts) already reads live off the X2D — proven on our printer at bring-up (memory:
 // bambu-x2d-bringup), so they are `filled` when present. Filament-consumed (grams/length) is NOT among
 // them and is NOT confirmed on the X2D report; it is marked `unconfirmed` and left to the RAW frame the
 // capture verb persists beside the record, so the first real print (#63) settles the field name with no

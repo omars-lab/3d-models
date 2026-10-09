@@ -14,7 +14,7 @@
 // the frame carries no AMS/tray data at all, says exactly that (with a --json escape hatch) rather
 // than rendering a confident-but-empty table.
 //
-// CONFIRMED on the live X2D (20P6AJ641401412, 2026-09-17): the frame carries `print.ams.ams[]` with
+// CONFIRMED on the live X2D (2026-09-17): the frame carries `print.ams.ams[]` with
 // `tray[]` exactly as documented (empty trays report only `{id,state}`), and the external spool is
 // `print.vir_slot` as an ARRAY (id "254" sentinel + a loaded virtual slot), NOT the H2-family
 // `print.vt_tray` object (absent here). Parsing the array defensively is what surfaced the loaded

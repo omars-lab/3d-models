@@ -6,7 +6,7 @@
 
 ## Context
 
-A physical **Bambu X2D** now exists on the LAN (`192.168.1.186`, serial `20P6AJ641401412`,
+A physical **Bambu X2D** now exists on the LAN (host and serial in the `.env`,
 firmware `01.02.00.00`). For the entire life of this project **nothing has ever been printed** —
 `docs/tasks/coaster-pipeline/backlog.md` opens with *"PLANNING DOCUMENT, NOTHING MEASURED"* and the bet registry agrees:
 **21 registered CAL bets · 21 `Calibrated` records — 21 provisional, 0 measured**. Every physical

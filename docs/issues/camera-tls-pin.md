@@ -15,7 +15,7 @@ The camera on X1/H2-class printers is RTSP over TLS on port 322
 The first version handed that URL to ffmpeg. ffmpeg 8 checks the printer's certificate, and the
 check failed: `certificate verify failed`.
 
-What the printer sends: one certificate naming its serial (`CN=20P6AJ641401412`), issued by
+What the printer sends: one certificate naming its serial (`CN=<the printer serial>`), issued by
 "BBL Device CA N6-V2", valid 2026-04-16 to 2036. It does not send the CA certificate. So the check
 needs that CA from somewhere else, and nowhere here has it:
 
@@ -79,7 +79,7 @@ person sending can still look at the bed. Spotting objects is the X2D's own job 
 Until then MQTT (8883) and FTPS (990) skipped the certificate check (`rejectUnauthorized: false`),
 and both carry the access code: MQTT as its password, FTPS as its login. Fetching what each port
 presents showed the same certificate as the camera's: the same SHA-256 fingerprint
-(`7A:61:0F:AE:…:EB:A8:5D:FF`), `CN=20P6AJ641401412`, valid to 2036-04-13. The one difference is
+(`7A:61:0F:AE:…:EB:A8:5D:FF`), `CN=<the printer serial>`, valid to 2036-04-13. The one difference is
 that 8883 and 990 also send the intermediate "BBL Device CA N6-V2" (issued by "BBL CA2 RSA"),
 where 322 sends the certificate alone. The pinned options do not depend on that: the pinned
 certificate is the trust anchor whatever the server sends after it.
