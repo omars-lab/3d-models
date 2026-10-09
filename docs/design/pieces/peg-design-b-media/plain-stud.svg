@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1286.4" height="661.8" viewBox="0 0 1286.4 661.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Option A: the plain round stud, today and with a chamfer at the socket mouth</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Option A: the plain round stud, today and with a chamfer at the socket mouth</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface).</text>
+<text x="20" y="70" font-size="12.5" fill="#555555">To scale.</text>
+<g data-panel="1. Today (spl-1, spl-2): closed, to scale">
+<text x="20" y="106" font-size="14" font-weight="bold" fill="#222222">1. Today (spl-1, spl-2): closed, to scale</text>
+<g transform="translate(117.6,126)">
+<polygon data-kind="half" points="0,140.8 256,140.8 256,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="256" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 256,70.4 256,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="256" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="91.2,70.4 164.8,70.4 164.8,19.2 91.2,19.2" fill="#ffffff"/>
+<polygon data-kind="stud" points="96,70.4 160,70.4 160,32 153.6,25.6 102.4,25.6 96,32" fill="#8e8a83"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="236.8" y1="70.4" x2="236.8" y2="19.2"/>
+<line x1="232.8" y1="70.4" x2="240.8" y2="70.4"/>
+<line x1="232.8" y1="19.2" x2="240.8" y2="19.2"/>
+</g>
+<text x="243.8" y="48.8" font-size="11" fill="#444444" text-anchor="start">socket 1.6</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="236.8" y1="19.2" x2="236.8" y2="0"/>
+<line x1="232.8" y1="19.2" x2="240.8" y2="19.2"/>
+<line x1="232.8" y1="0" x2="240.8" y2="0"/>
+</g>
+<text x="243.8" y="13.6" font-size="11" fill="#444444" text-anchor="start">floor 0.6</text>
+</g>
+<circle data-label-dot="1" cx="143.2" cy="151.6" r="2.6" fill="#222222"/>
+<polyline points="143.2,151.6 103.6,151.6 93.6,151.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="155.6" font-size="12" fill="#222222" text-anchor="end">upper half</text>
+<circle data-label-dot="1" cx="143.2" cy="231.6" r="2.6" fill="#222222"/>
+<polyline points="143.2,231.6 103.6,231.6 93.6,231.6" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="235.6" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="264.8" cy="156.4" r="2.6" fill="#222222"/>
+<polyline points="264.8,156.4 433.7,156.4 443.7,156.4" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="447.7" y="160.4" font-size="12" fill="#222222" text-anchor="start">2.0 mm stud</text>
+<text x="20" y="294.8" font-size="12" fill="#444444">The gap is the socket's width less the stud's, across the diameter: 0.30 mm here, so 0.15 mm a side. The stud is one</text>
+<text x="20" y="311.8" font-size="12" fill="#444444">layer shorter than the socket, so the cut faces meet flat.</text>
+<text x="20" y="328.8" font-size="12" fill="#444444">Only the stud has a lead-in. The socket's top edge is square, and it meets the stud's root, where the lower half's last</text>
+<text x="20" y="345.8" font-size="12" fill="#444444">layer turns up into the stud.</text>
+</g>
+<g data-panel="2. With a 0.3 mm chamfer at the socket mouth">
+<text x="846.4" y="106" font-size="14" font-weight="bold" fill="#222222">2. With a 0.3 mm chamfer at the socket mouth</text>
+<g transform="translate(846.4,126)">
+<polygon data-kind="half" points="0,140.8 256,140.8 256,70.4 0,70.4" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="140.8" x2="256" y2="140.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,70.4 256,70.4 256,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="256" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="91.2,70.4 164.8,70.4 164.8,19.2 91.2,19.2" fill="#ffffff"/>
+<polygon data-kind="air" points="81.6,70.4 174.4,70.4 174.4,64 81.6,64" fill="#ffffff"/>
+<polygon data-kind="air" points="86.4,64 169.6,64 169.6,57.6 86.4,57.6" fill="#ffffff"/>
+<polygon data-kind="stud" points="96,70.4 160,70.4 160,32 153.6,25.6 102.4,25.6 96,32" fill="#8e8a83"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="81.6" y1="86.4" x2="174.4" y2="86.4"/>
+<line x1="81.6" y1="82.4" x2="81.6" y2="90.4"/>
+<line x1="174.4" y1="82.4" x2="174.4" y2="90.4"/>
+</g>
+<text x="128" y="101.4" font-size="11" fill="#444444" text-anchor="middle">2.9 mm at the mouth</text>
+</g>
+<circle data-label-dot="1" cx="1017.6" cy="193.2" r="2.6" fill="#222222"/>
+<polyline points="1017.6,193.2 1116.4,193.2 1126.4,193.2" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1130.4" y="197.2" font-size="12" fill="#222222" text-anchor="start">mouth chamfer</text>
+<text x="846.4" y="294.8" font-size="12" fill="#444444">The mouth opens 0.3 mm a side wider, closing back over two layers,</text>
+<text x="846.4" y="311.8" font-size="12" fill="#444444">so a bump at the stud's root, or a lip the cut face leaves around</text>
+<text x="846.4" y="328.8" font-size="12" fill="#444444">the hole, has somewhere to go.</text>
+<text x="846.4" y="345.8" font-size="12" fill="#444444">The site picker keeps at least 0.9 mm of wall around a socket at a</text>
+<text x="846.4" y="362.8" font-size="12" fill="#444444">0.15 mm gap. The chamfer thins its first 0.4 mm to about 0.6, and</text>
+<text x="846.4" y="379.8" font-size="12" fill="#444444">at a 0.30 gap on the tightest sites to about 0.5, a line and a</text>
+<text x="846.4" y="396.8" font-size="12" fill="#444444">bit. It stays hidden inside the coaster only while that is so.</text>
+</g>
+<g data-panel="3. How the two halves print">
+<text x="20" y="461.8" font-size="14" font-weight="bold" fill="#222222">3. How the two halves print</text>
+<g transform="translate(123.6,481.8)">
+<polygon data-kind="half" points="0,86.4 192,86.4 192,33.6 0,33.6" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="86.4" x2="192" y2="86.4" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="0" y1="33.6" x2="192" y2="33.6" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="stud" points="72,33.6 120,33.6 120,4.8 115.2,0 76.8,0 72,4.8" fill="#8e8a83"/>
+<line data-mark="last" x1="72" y1="0" x2="120" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="half" points="240,86.4 432,86.4 432,33.6 240,33.6" fill="#aba69f"/>
+<line data-mark="first" x1="240" y1="86.4" x2="432" y2="86.4" stroke="#2f6fd8" stroke-width="4"/>
+<line data-mark="last" x1="240" y1="33.6" x2="432" y2="33.6" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="308.4,72 363.6,72 363.6,33.6 308.4,33.6" fill="#ffffff"/>
+<rect data-kind="bed" x="-6" y="90.4" width="444" height="5" fill="#cfcbc3"/>
+<text x="442" y="96.4" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="147.6" cy="541.8" r="2.6" fill="#222222"/>
+<polyline points="147.6,541.8 103.6,541.8 93.6,541.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="545.8" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="234" cy="491.4" r="2.6" fill="#222222"/>
+<polyline points="234,491.4 636.84,491.4 646.84,491.4" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="650.84" y="495.4" font-size="12" fill="#222222" text-anchor="start">stud prints last</text>
+<circle data-label-dot="1" cx="531.6" cy="541.8" r="2.6" fill="#222222"/>
+<polyline points="531.6,541.8 636.84,541.8 646.84,541.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="650.84" y="545.8" font-size="12" fill="#222222" text-anchor="start">upper half, face down</text>
+<text x="20" y="607.8" font-size="12" fill="#444444">Both halves print face down. The stud's top and the socket's mouth are the last layers, not the first, so the bed's</text>
+<text x="20" y="624.8" font-size="12" fill="#444444">squash (elephant foot) does not reach either.</text>
+</g>
+</svg>

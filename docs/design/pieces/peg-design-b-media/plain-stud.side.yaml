@@ -1,0 +1,54 @@
+# Option A of peg-design-b: today's round stud and socket, and the same joint with a chamfer at the
+# socket mouth. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sizes from spl-2: 15 mm tile cut at 2.2 mm, a 2.0 mm stud 1.4 mm tall with a 0.2 mm top chamfer,
+# a 1.6 mm deep socket on a 0.6 mm floor. The gap drawn is 0.30 mm across the diameter, one rung of
+# spl-2's ladder; the 0.3 mm mouth chamfer is drawn as two 0.2 mm layers (0.3 and 0.15 mm a side).
+title: "Option A: the plain round stud, today and with a chamfer at the socket mouth"
+panels:
+  - title: "1. Today (spl-1, spl-2): closed, to scale"
+    width: 8
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 8, 2.2], first: bottom, label: "lower half", label_at: [0.8, 1.1], label_side: left}
+      - {kind: half, side: upper, box: [0, 2.2, 8, 2.2], first: top, label: "upper half", label_at: [0.8, 3.6], label_side: left}
+      - {kind: socket, box: [2.85, 2.2, 2.3, 1.6]}
+      - {kind: stud, side: lower, box: [3, 2.2, 2, 1.4], toward: up, chamfer: 0.2, label: "2.0 mm stud", label_at: [4.6, 3.45]}
+      - {kind: dim, from: [7.4, 2.2], to: [7.4, 3.8], text: "socket 1.6"}
+      - {kind: dim, from: [7.4, 3.8], to: [7.4, 4.4], text: "floor 0.6"}
+    notes:
+      - "The gap is the socket's width less the stud's, across the diameter: 0.30 mm here, so 0.15
+        mm a side. The stud is one layer shorter than the socket, so the cut faces meet flat."
+      - "Only the stud has a lead-in. The socket's top edge is square, and it meets the stud's root,
+        where the lower half's last layer turns up into the stud."
+
+  - title: "2. With a 0.3 mm chamfer at the socket mouth"
+    width: 8
+    scale: [32, 32]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 8, 2.2], first: bottom}
+      - {kind: half, side: upper, box: [0, 2.2, 8, 2.2], first: top}
+      - {kind: socket, box: [2.85, 2.2, 2.3, 1.6]}
+      - {kind: air, box: [2.55, 2.2, 2.9, 0.2], label: "mouth chamfer", label_at: [5.35, 2.3]}
+      - {kind: air, box: [2.7, 2.4, 2.6, 0.2]}
+      - {kind: stud, side: lower, box: [3, 2.2, 2, 1.4], toward: up, chamfer: 0.2}
+      - {kind: dim, from: [2.55, 1.7], to: [5.45, 1.7], text: "2.9 mm at the mouth", place: below}
+    notes:
+      - "The mouth opens 0.3 mm a side wider, closing back over two layers, so a bump at the stud's root,
+        or a lip the cut face leaves around the hole, has somewhere to go."
+      - "The site picker keeps at least 0.9 mm of wall around a socket at a 0.15 mm gap. The chamfer
+        thins its first 0.4 mm to about 0.6, and at a 0.30 gap on the tightest sites to about 0.5,
+        a line and a bit. It stays hidden inside the coaster only while that is so."
+
+  - title: "3. How the two halves print"
+    width: 18
+    scale: [24, 24]
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 8, 2.2], first: bottom, last: top, label: "lower half", label_at: [1, 1.1], label_side: left}
+      - {kind: stud, side: lower, box: [3, 2.2, 2, 1.4], toward: up, chamfer: 0.2, last: top, label: "stud prints last", label_at: [4.6, 3.2]}
+      - {kind: half, side: upper, box: [10, 0, 8, 2.2], first: bottom, last: top, label: "upper half, face down", label_at: [17, 1.1]}
+      - {kind: socket, box: [12.85, 0.6, 2.3, 1.6]}
+      - {kind: bed, line: [0, 0, 18]}
+    notes:
+      - "Both halves print face down. The stud's top and the socket's mouth are the last layers, not
+        the first, so the bed's squash (elephant foot) does not reach either."
