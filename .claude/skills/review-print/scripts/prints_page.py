@@ -74,8 +74,17 @@ def _one_line(text) -> str:
     return " ".join(str(text).split()) if text not in (None, "") else ""
 
 
+# Lowercase names that open a line as written: capitalizing them would misname the tool.
+NAMES = {"bikar", "naqsh", "qiyas"}
+
+
 def _sentence(text: str) -> str:
-    text = text[:1].upper() + text[1:]
+    """Capitalize a plain opening word and end with a stop; a line that opens with a
+    backtick, a path, a digit or a lowercase name stays as written."""
+    first = text.split(" ", 1)[0]
+    plain = first[:1].islower() and "/" not in first and "." not in first.rstrip(".,;:")
+    if plain and first.rstrip(".,;:") not in NAMES:
+        text = text[:1].upper() + text[1:]
     return text if text.endswith((".", "?", "!")) else text + "."
 
 
@@ -119,6 +128,8 @@ def render(root: Path) -> tuple[str, str, list[str]]:
             rec_lines.append(f"- **Plate:** [{name}]({rel}) — {tested or plate}")
         else:
             rec_lines.append(f"- **Plate:** {plate} (no plate page names this run)")
+        lesson = _one_line(fb.get("lesson"))
+        rec_lines.append(f"- **Lesson:** {_sentence(lesson) if lesson else 'No lesson written yet.'}")
         objs = [o for o in (r.get("objects") or []) if isinstance(o, dict)]
         counts = {v: sum(1 for o in objs if o.get("verdict") == v) for v in VERDICTS}
         tally = ", ".join(f"{n} {v}" for v, n in counts.items() if n)
@@ -160,7 +171,6 @@ def render(root: Path) -> tuple[str, str, list[str]]:
         if shown:
             rec_lines += ["", f"![{shown[0]}]({shown[1]})"]
         rec_lines.append("")
-        lesson = _one_line(fb.get("lesson"))
         if lesson:
             lesson_lines.append(f"- {_sentence(lesson)} ([{run}]({link}))")
         else:
@@ -270,6 +280,16 @@ def self_test() -> int:
         report("- Gap 0.2 fits. ([2026-01-02-pl-1](prints/2026-01-02-pl-1/index.md))" in text,
                "the lesson rolls up with a link to its record", text)
         report("2 (1 keep, 1 drop)" in text, "the verdicts are counted")
+        plate_at = text.find("- **Plate:**")
+        report(text.find("- **Lesson:** Gap 0.2 fits.", plate_at) == text.find("\n", plate_at) + 1,
+               "the record's Lesson line comes first after its Plate line", text)
+    cases = {"the strap broke": "The strap broke.", "bikar now cuts it": "bikar now cuts it.",
+             "naqsh, not bikar": "naqsh, not bikar.", "`tools/x.py` reads it": "`tools/x.py` reads it.",
+             "tools/x.py reads it": "tools/x.py reads it.", "0.2 mm fits": "0.2 mm fits.",
+             "Done?": "Done?"}
+    bad = {t: _sentence(t) for t, want in cases.items() if _sentence(t) != want}
+    report(not bad, "only a plain opening word is capitalized; names, paths, code and digits stay",
+           str(bad))
     with tempfile.TemporaryDirectory() as t:
         root = _fixture(Path(t), photo=True, decision="D-001")
         write(root)

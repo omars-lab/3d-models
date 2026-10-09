@@ -203,7 +203,7 @@ carry them, which is the honest limit of a diagram.
 | the test that compares (`H2`) | `bikar:packages/lab/tests/orb-composites.test.ts:L87 "const RECORDED_DROP"` |
 | the drift ceiling that test holds | `bikar:packages/lab/tests/orb-composites.test.ts:L133 "const MAX_DRIFT_CEILING"` |
 | the recorded composites (`H3`) | `bikar:packages/lab/src/scripts.ts:L64 "readonly qiyasComposite"` |
-| the build target that publishes (`H5`) | `3d-models:Makefile:L286 "orbs:"` |
+| the build target that publishes (`H5`) | `3d-models:Makefile:L289 "orbs:"` |
 | the gallery design | [`../design/orb/orb-lab-design.md`](../design/orb/orb-lab-design.md) |
 
 `sweep-orb-validate.ts` will not guess where qiyas comes from: it requires either a
