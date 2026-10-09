@@ -3,9 +3,9 @@ plate: spl-1
 print_log: '[[print-logs/spl-1|print log]]'
 recipe: spl-1.yaml
 iteration: 4
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-09-spl-1]
 answers: "For a split coaster: which gap between a 2 mm stud and its socket presses in and holds, whether a 1.5 or 3 mm stud does better, whether a socket shows through a 0.6, 0.8 or 1.0 mm floor on the top face, and whether a 0.8 mm lip keeps a loose piece in between the halves?"
 kind: new
 maturity: experiment
@@ -175,3 +175,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-07 | changed (iteration 2): a letter on each pair's cut faces, A to N, on Omar's comment on the 2026-10-06 calls page (bikar #323) | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 49 minutes, 18.5 g, no slicer warnings | this page |
 | 2026-10-08 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 4 @ d99e8c88b1 in #F5547C | this page |
+| 2026-10-09 | printed — on the X2D, glacier plate, one bed, all 18 layers, about 63 minutes against the slicer's 49; judged by id: every stud pair needed a hammer, from `SL1 4A` (gap −0.10) to `SL1 4F` (0.15), which alone went in by hand, so the next ladder goes looser; no socket shows through `SL1 4D`, `4K` or `4L`, so the floor stays 0.6 mm; both lips held, and `4U` (room 0.2) rattles where `4T` (room 0) does not; the upper's letter is hidden once a pair closes, so it moves to the outer face | [the record](../../prints/2026-10-09-spl-1/index.md) |
