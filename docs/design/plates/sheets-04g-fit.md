@@ -69,12 +69,15 @@ should re-print minimal consturciton with this to fit in again"), so the plate p
 ## After the print
 
 What gets asked when it comes off the bed, one row at a time (the review-print skill asks them).
+Each row names the pieces by the id cut into their bottoms, as the [pictures](#pictures) show:
+`4GF 4A` is the middle piece reading 4GF over 4 A, and the fresh coaster carries a small `Z`. The
+kites have no id and no dots, so each row names them by the pile they came off the bed in.
 
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
-| Kites, 0.05 to 0.25 | Which kite rung drops into its hole by hand and stays when the coaster is turned over? | A middle rung: gap 0 was too tight on sheets-04g, and a wide gap leaves nothing to grip in a floorless coaster. | That rung is the kites' gap on the next sheets-04g iteration and the theme plates (CAL-LSE-01). All too tight: the ladder moves looser. All fall out: kites need a press. |
-| Middle piece, 0 to 0.15 (dots 4 to 1) | Which middle piece goes in and sits without rattling or turning? | Gap 0: it is cut along the round strap edge now, which took out the 0.45 mm of play at its notches. | That gap is the middle piece's on the next iteration. Gap 0 still rattles: the corners were not the whole cause, and the sheets-04g fit issue is opened again. |
-| the fresh coaster and the sheets-04g one | Do the pieces fit the fresh coaster the same as the old one? | The same: the coaster has not changed, and the gap comes off the piece. | Same: one gap per piece shape is enough. Different: hole size moves from print to print, and the gaps need room for it. |
+| The kites (no id): five piles of ten, one per gap, 0.05, 0.10, 0.15, 0.20 and 0.25 mm, kept apart as they came off the bed; the fresh coaster (`Z` on its bottom) | **Do:** Take one kite from each pile and push it by hand into a kite hole of the `Z` coaster, a different hole for each pile. Then hold the coaster upside down over the table. **Look for:** Which piles' kites go in by hand, and which will not go in? Of those that went in, which stay in upside down, and which drop out? Say each by its pile's gap. | A middle rung: gap 0 was too tight on sheets-04g, and a wide gap leaves nothing to grip in a floorless coaster. | That rung is the kites' gap on the next sheets-04g iteration and the theme plates (CAL-LSE-01). All too tight: the ladder moves looser. All fall out: kites need a press. |
+| `4GF 4A` (gap 0, four dots on top), `4GF 4B` (0.05, three dots), `4GF 4C` (0.10, two), `4GF 4D` (0.15, one) | **Do:** Push each middle piece in turn into the middle hole of the `Z` coaster. With it in, shake the coaster gently next to your ear, then try to turn the piece with a fingertip. **Look for:** Which go in by hand? Of those, which sit silent and do not turn, and which rattle or turn? Say each by its id. | Gap 0: it is cut along the round strap edge now, which took out the 0.45 mm of play at its notches. | That gap is the middle piece's on the next iteration. Gap 0 still rattles: the corners were not the whole cause, and the sheets-04g fit issue is opened again. |
+| The fresh coaster (`Z` on its bottom, on a strap left of the middle) and the sheets-04g coaster (no id) | **Do:** Take the kite pile and the middle piece that fit best in the `Z` coaster, and push them into the sheets-04g coaster the same way. **Look for:** Does each go in as easily, and sit as firmly, as in the `Z` coaster, or is it tighter or looser? | The same: the coaster has not changed, and the gap comes off the piece. | Same: one gap per piece shape is enough. Different: hole size moves from print to print, and the gaps need room for it. |
 
 ## Pictures
 
