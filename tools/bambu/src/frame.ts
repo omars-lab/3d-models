@@ -3,7 +3,7 @@
 // `status`, `filament` and `header` all read the SAME cached report, so the shape-tolerant helpers
 // that dig fields out of it live here — one code path, never two that can drift (the repo's D-052
 // tenet). The frame drifts field names and shapes by model (the X2D reports `vir_slot` as an ARRAY,
-// verified 2026-09-17 on 20P6AJ641401412, where the H2 family uses a `vt_tray` OBJECT), so every
+// verified 2026-09-17 on our printer, where the H2 family uses a `vt_tray` OBJECT), so every
 // helper is defensive and never assumes a shape it has not seen.
 
 import type { PrinterStatus } from "./backends/mqtt.js";

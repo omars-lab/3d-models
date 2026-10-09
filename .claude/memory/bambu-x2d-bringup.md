@@ -10,8 +10,7 @@ metadata:
 
 **The X2D is physically on the LAN and reachable** (verified 2026-09-16 via `tools/bambu setup discover`, a passive receive-only SSDP listen on UDP 2021 — print-safe). Discovered identity:
 
-- **host** `192.168.1.186` (iface wlan0) — goes in `.mcp.json` as `PRINTER_HOST`
-- **serial** `20P6AJ641401412` — goes in `.mcp.json` as `BAMBU_SERIAL` (a device id, not a secret; the *access code/token* is the secret and is never committed)
+- **host** and **serial**: in the dotenvx `.env` as `PRINTER_HOST` and `BAMBU_SERIAL`, never written in a tracked file (this repo is public; removed from here 2026-10-09). The *access code/token* is the secret and is never committed either.
 - **firmware** `01.02.00.00`
 - **model** First X2D [N6]
 
