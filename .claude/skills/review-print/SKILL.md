@@ -66,7 +66,12 @@ same day, so what it taught is tied to the exact piece and size.
 **Ask the page's questions first, one at a time.** Every experiment plate page has an
 `## After the print` table, written before it printed (plates gate P12): the pieces, the
 question, what we expected and why, and what each answer changes. Ask each row as its own
-AskUserQuestion, in table order, naming the pieces to pick up. Build the options from the row's
+AskUserQuestion, in table order, naming the pieces to pick up **by the id cut into them** (D-109,
+D-114), never by a bed name or a pair letter alone, and saying exactly what to do with them and
+what to look for. A piece with no id is named by the mark it does carry ("the upper with `QT` on
+its cut face"). The page's table names them the same way. Omar, 2026-10-08, on pkt-1: "i want
+the questions to reference the piece ids", "be percidse in your questiosn", "update the .md to
+be percise too". Build the options from the row's
 last cell, one option per answer it names, each saying what that answer changes, plus "not
 judged yet". Ask the next row only once this one is answered. Each answer goes into the record
 below as those pieces' `verdict` and `notes`, in Omar's words; a row he leaves unanswered stays

@@ -52,6 +52,13 @@ When a print teaches something new, add or correct a rule here, with the date an
   system border is too big". The dovetail band there is about 11 mm, as the frame rule gives.
   The narrower joins are on minis-05 (key, tab, plain) and minis-06 (slim dovetail, band
   8.4 mm). Pick from what those show rather than another dovetail pair at the default knobs.
+- **A piece printed in place needs two layers of air round it, not one.** On pkt-1, both pairs
+  at one layer (0.2 mm, `4S`/`OT` and `4P`/`PT`) printed fused. Both pairs at two layers (0.4 mm,
+  `4Q`/`QT` and `4R`/`RT`) came out with slight movement, with their 0.4 mm necks whole and the
+  0.6 mm band level. Closed, they sat flat and silent: the page expected a click, and there was
+  none. This holds for PLA Basic at 0.2 mm layers on the X2D's preset. It transfers to another
+  layer height only as a count of layers, so check it at the new height. (pkt-1, 2026-10-08,
+  judged by hand, no reading.)
 
 ## What goes on a different plate
 
