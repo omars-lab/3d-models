@@ -1,0 +1,61 @@
+# spl-2 — the split coupon again, looser: at what gap does a 2 mm stud go in by hand
+#
+# spl-1 (docs/prints/2026-10-09-spl-1) laddered a 2 mm stud from -0.10 to 0.15 mm of gap, and every
+# pair needed a hammer to close; 0.15 (SL1 4F) came closest, going in by hand and needing a tap to
+# sit flush. tools/fit_gap.py studs read the slice: every gap came out as drawn, to within 0.005 mm,
+# so the tight fit is the printer (holes smaller than drawn, studs larger, or both), and the answer
+# lies further out. This plate goes on from there: the same tile, the same 2 mm stud and 0.6 mm
+# floor, at six gaps from 0.15 to 0.40 mm, two pairs at each so one odd pair cannot decide a rung.
+#   gap ladder, 2 mm stud, floor 0.6:  0.15 0.20 0.25 0.30 0.35 0.40, ×2   (labels G15a … G40b)
+# 0.15 is spl-1's best rung printed again, so the two plates can be told apart from the printer.
+# spl-1 settled the rest: the floor stays 0.6 (no socket showed through), 2 mm is the stud, and
+# both lips held, so no floor, stud-size or trap pairs here.
+#
+# Fit pairs: bikar's patterns/Coupons/Split-Fit-Coupon.bkr, a 15 mm square tile 4.4 mm tall cut at
+# 2.2, one stud (its gap range runs to 0.5 since bikar's split-fit-looser change). Lower is the stud
+# half, Upper the socket half, printed face down. Pairs A to L in the order below; each half's cut
+# face carries the pair letter, AB on the lower and AT on the upper.
+#
+# The carved id (D-109, D-114, D-115): each lower carries the whole id, SL2/<iteration> <letter>, on
+# its bottom, its pair letter as its id. Each upper carries the short id, <iteration><letter>, M to Y
+# (no O), on its bed face, which is the coaster's top. D-114 keeps ids off a face that shows in use;
+# D-115 lifts that for coupons, on Omar's lesson from spl-1: the upper's letter on its cut face is
+# hidden once the pair closes, "label should have been on other side".
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/spl-2.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SL2
+
+items:
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.15, pair: 1 }, id: A, label: G15aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.15, pair: 1 }, id: M, id_form: short, label: G15aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.15, pair: 2 }, id: B, label: G15bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.15, pair: 2 }, id: N, id_form: short, label: G15bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.2, pair: 3 }, id: C, label: G20aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.2, pair: 3 }, id: P, id_form: short, label: G20aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.2, pair: 4 }, id: D, label: G20bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.2, pair: 4 }, id: Q, id_form: short, label: G20bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.25, pair: 5 }, id: E, label: G25aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.25, pair: 5 }, id: R, id_form: short, label: G25aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.25, pair: 6 }, id: F, label: G25bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.25, pair: 6 }, id: S, id_form: short, label: G25bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.3, pair: 7 }, id: G, label: G30aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.3, pair: 7 }, id: T, id_form: short, label: G30aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.3, pair: 8 }, id: H, label: G30bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.3, pair: 8 }, id: U, id_form: short, label: G30bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.35, pair: 9 }, id: I, label: G35aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.35, pair: 9 }, id: V, id_form: short, label: G35aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.35, pair: 10 }, id: J, label: G35bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.35, pair: 10 }, id: W, id_form: short, label: G35bU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.4, pair: 11 }, id: K, label: G40aL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.4, pair: 11 }, id: X, id_form: short, label: G40aU }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Lower, params: { gap: 0.4, pair: 12 }, id: L, label: G40bL }
+  - { bkr: "bikar:patterns/Coupons/Split-Fit-Coupon.bkr", piece: Upper, params: { gap: 0.4, pair: 12 }, id: Y, id_form: short, label: G40bU }

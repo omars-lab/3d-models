@@ -6552,3 +6552,26 @@ Omar, 2026-10-08, in chat, picking from four ways to mark the pieces D-109's ful
 
 **What would reverse it:** short ids that get mixed up across plates on the shelf, which would
 argue for C on the pieces that matter most.
+
+## D-115 — On a coupon, the upper half's id goes on its outer face
+
+Omar, 2026-10-09, in chat, judging spl-1: "when we add embeded labesl .. the female side gets
+hidden after ... label should have been on other side add this as learning". On spl-1 an upper
+half's only mark was its pair letter on the cut face (D-114 kept ids off its outer face), and
+once a pair was hammered closed that letter was inside it, so row 4's questions asked for pieces
+he could no longer find ("what lt and dt peices?").
+
+### What it changes
+
+- **On a coupon, an upper half carries the short id on its outer face**, the face that prints on
+  the bed and is the coaster's top: `1M` on spl-2. A coupon is never used as a coaster, so the
+  face that shows in use is the one you judge it by, and an id there is what lets you find it.
+- **A coaster that is sold keeps D-114:** no id on a face that shows in use.
+- **The cut-face letters stay** (`AB`, `AT`), for pairing the halves while they are open.
+
+This reads his lesson as a rule for the next coupon. spl-2 is its first plate, and it goes to him
+with the uppers' ids pictured, so his yes or hold on that page confirms or corrects it.
+
+**What would reverse it:** an id on the outer face that shows through to the cut face, or that
+spoils the face a coupon is judged on, which would move it back to the cut face with a bigger
+letter.
