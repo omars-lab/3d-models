@@ -1,0 +1,51 @@
+# pkt-2 — way c at coaster size: the gBV split coaster with its pieces printed in place in pockets
+#
+# Omar, 2026-10-08, after pkt-1's record: "Pocket only, at coaster size". pkt-1 printed way c on a
+# 25 mm tile and found one layer of air (0.2 mm) fuses the band and two layers (0.4 mm) come out
+# loose. This plate asks the same of a whole coaster: every loose piece of the gBV coaster cut at
+# the split, each half printing its own piece halves in place, in closed pockets. Glue, a peg and
+# taller pieces come back only if a full-size piece rattles.
+#
+# The coaster is bikar's gBV_JTt3Kxk-split-pocket-coaster.bkr at its defaults: size 112.5 (the
+# size split-01 and split-02 print), strap 3.75, closed height 4.4, cut at half, gap 0.25 per
+# side, studs 2 mm across at least 25 mm apart, and the pocket at pkt-1's loose rung: necks 0.8
+# wide and 0.4 thick, 0.4 of air above and below the band, so the band is 2.2 - 0.8 - 0.8 = 0.6.
+# The ten stars stay open holes, as in the minimal coaster.
+#
+# The pieces are inside the halves, so the plate is two objects, not 33. A pocket registers no
+# ring pieces: bikar renders only Lower and Upper.
+#
+# The coaster carries its id, 3, cut into the lower half's bottom face, after split-01's 1 and
+# split-02's 2. The stud-layout plate, in flight at the same time, must not take 3. The piece
+# halves printed in place carry no id of their own: each sits in its hole of the coaster with 3
+# on its bottom, and it cannot leave it.
+#
+# No color here, on purpose. The send picks it: `bambu print send … --color "#RRGGBB"`.
+#
+#   LOWER    the lower half, studs on its cut face, its piece halves in place (3)
+#   UPPER    the upper half, printed face down, sockets on its cut face, its piece halves in place
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/pkt-2.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: PK2
+no_id_reasons:
+  - &lower "Its bottom, the bed face, already carries the coaster's own id mark, 3, cut by the coaster file; a piece letter beside it would say nothing the 3 does not (D-114). Its piece halves print in place inside it and cannot leave their holes."
+  - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). It is the only upper half on the plate, and it closes onto the lower half beside it; its piece halves print in place inside it."
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-pocket-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, id: 3 }
+    label:  LOWER
+    no_id:  *lower
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-pocket-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, id: 3 }
+    label:  UPPER
+    no_id:  *upper

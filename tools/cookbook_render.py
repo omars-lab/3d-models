@@ -138,11 +138,12 @@ LOOSE_LIFT = 30  # mm the loose pieces float above the frame, so pocket and piec
 STRAP_COLOR = "#a8a8a8"  # a split coaster's halves when it names no base color: one neutral gray for both
 
 
-def loose_parts(cli, src, text, extra, name, tmp, frame_piece="Frame"):
+def loose_parts(cli, src, text, extra, name, tmp, frame_piece="Frame", none_ok=False):
     """A loose coaster drawn the way it is printed: the frame (`--piece Frame`) in
     its base (or straps) color, and each loose color's pieces lifted above their pockets in that
     color. The pieces are whichever palette colors bikar builds as a `--piece`; a
-    color it says is not a piece is not loose."""
+    color it says is not a piece is not loose. `none_ok` is for a coaster whose pieces print
+    inside its halves, so there are none to lift."""
     palette = dict(re.findall(r"^\s+(\w+)\s*=\s*(#[0-9a-fA-F]{6})\s*$", text, re.M))
     base = re.search(r"^\s+color\s+(?:base|straps)\s+(\w+)", text, re.M)  # a slab, or an open frame's straps
     frame = os.path.join(tmp, "frame.stl")
@@ -156,7 +157,7 @@ def loose_parts(cli, src, text, extra, name, tmp, frame_piece="Frame"):
             parts.append((stl, (0, 0, LOOSE_LIFT), hexcode))
         elif "is not a piece" not in done.stderr:
             raise RuntimeError(f"recipe '{name}' did not draw: {done.stderr.strip().splitlines()[0]}")
-    if not parts:
+    if not parts and not none_ok:
         raise RuntimeError(f"recipe '{name}' has a loose line but bikar built no pieces")
     return frame, palette.get(base.group(1)) if base else None, parts
 
@@ -165,12 +166,15 @@ def split_parts(cli, src, text, extra, name, tmp):
     """A split coaster drawn opened up: the lower half (`--piece Lower`), each
     loose color's pieces lifted over their pockets, and the upper half
     (`--piece Upper`, printed face down) turned back over and lifted above them,
-    so both holds and the pieces between them show."""
-    lower, color, parts = loose_parts(cli, src, text, extra, name, tmp, frame_piece="Lower")
+    so both holds and the pieces between them show. A pocket hold (way c) prints each piece
+    half inside its half, so there are no pieces to lift: the upper half floats one lift up."""
+    pocket = bool(re.search(r"\bhold\s+pocket\b", text))
+    lower, color, parts = loose_parts(cli, src, text, extra, name, tmp, frame_piece="Lower",
+                                      none_ok=pocket)
     color = color or STRAP_COLOR
     upper = os.path.join(tmp, "upper.stl")
     run(["node", cli, "render", src, "--piece", "Upper", "--format", "stl", "-o", upper, *extra], name)
-    parts.append((upper, (0, 0, 2 * LOOSE_LIFT), color, True))
+    parts.append((upper, (0, 0, (2 if parts else 1) * LOOSE_LIFT), color, True))
     return lower, color, parts
 
 
