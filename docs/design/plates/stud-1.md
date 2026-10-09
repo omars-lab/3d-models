@@ -21,7 +21,7 @@ pictures:
   - stud-1-media/bed.png
   - stud-1-media/ids.png
 needs:
-  - "spl-1's stud answer (task #251): which stud gap holds, and whether the 2 mm stud holds or the 3 mm one is needed; the plate is cut at that gap and size before it goes to Omar"
+  - "spl-1 judged, for its stud answer: which stud gap holds, and whether the 2 mm stud holds or the 3 mm one is needed; the plate is cut at that gap and size before it goes to Omar"
 ---
 
 # stud-1 — how far apart the studs go on a split coaster
