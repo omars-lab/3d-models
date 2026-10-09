@@ -15,9 +15,10 @@ construction: 88q-u2eWZqg
 short: 88q
 fold: 16
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: its fold and shape, with "star rosette" only where the
+# drawing meets that class's rules (Omar, 2026-10-08; storefront DESIGN.md "Pattern names" and
+# docs/research/2026-10-08-pattern-family-names-consolidated.md). It leads the product title.
+history_name: "Sixteen-Petal Rosette"
 
 # One line under the pattern's picture.
 caption: Sixteen petals from two octagons, drawn as one unbroken line, after a lesson by Eman Zainab.

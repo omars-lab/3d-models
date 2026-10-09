@@ -23,12 +23,13 @@ short: rDu
 fold: 8
 form: Star
 
-# The name the shop uses for the pattern. Empty until the naming style is chosen (storefront
-# backlog S3.3, Omar picks).
-history_name: ""
+# The name the shop uses for the pattern: its fold and shape, with "star rosette" only where the
+# drawing meets that class's rules (Omar, 2026-10-08; storefront DESIGN.md "Pattern names" and
+# docs/research/2026-10-08-pattern-family-names-consolidated.md). It leads the product title.
+history_name: "Eight-Pointed Star"
 
 # One line under the pattern's picture.
-caption: An eight-pointed star in a square tile, framed by octagons, drawn after a GeoGebra lesson by Sarah Brewer.
+caption: An eight-pointed star of two crossed squares in a square tile, drawn after a GeoGebra lesson by Sarah Brewer.
 
 # Two or three sentences for the product page and the pattern's article.
 story: >
