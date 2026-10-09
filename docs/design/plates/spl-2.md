@@ -1,8 +1,9 @@
 ---
 plate: spl-2
+print_log: '[[print-logs/spl-2|print log]]'
 recipe: spl-2.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "At what gap between a 2 mm stud and its socket does a split coaster's pair close flush by hand and stay closed, now that spl-1 found every gap up to 0.15 mm needed a hammer?"
@@ -126,10 +127,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-09 | approved | Omar, in chat: "Yes, in pink" | iteration 1 @ 84ecead3d5 in #F5547C | |
+| 2026-10-09 | approved | Omar, in chat: "Yes, in pink" | iteration 1 @ 84ecead3d5 in #F5547C | sent 2026-10-09 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-09 | proposed — spl-1 found every stud gap up to 0.15 mm needed a hammer, so the ladder goes on to 0.40 | [spl-1's record](../../prints/2026-10-09-spl-1/index.md) |
+| 2026-10-09 | sent — by `bambu print send`; spends the approval of 2026-10-09, iteration 1 @ 84ecead3d5 in #F5547C | this page |
