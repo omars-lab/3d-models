@@ -96,7 +96,9 @@ What this changes, read plainly:
 - **0.25 is the loose edge, not the middle.** The two pairs at 0.25 disagreed, one held and one
   fell apart. The pairs that both held were 0.15 and 0.20, so 0.20 is the middle of what held on
   this print. spl-2's own written rule ("the tightest gap whose two pairs both close flush by
-  hand and do not rattle") would have picked 0.15. Omar's pick is the loosest that still held,
+  hand and do not rattle") would have picked 0.15 if `1A` and `1B` sat flush, and 0.20 if they
+  did not; the notes we have say they closed by hand, not whether they sat flush, and spl-2's
+  judged record will say. Omar's pick is the loosest that still held,
   which is the easiest to assemble; which of the three readings becomes the coaster's gap is his
   call (see [open questions](#open-questions)).
 - **The fit moves from print to print.** At 0.15, spl-1 needed a hammer to sit flush and spl-2
@@ -142,7 +144,8 @@ What the sources agree on, and what carries over to a 2 mm stud on our printer:
 5. **Let the slicer size the circles.** Bambu Studio has an "Auto Circle Holes-contour
    Compensation" that resizes "circular hole/shaft features" by a model built into each
    filament ([Bambu circle page](https://wiki.bambulab.com/en/software/bambu-studio/manual/auto-circle-contour-compensation)).
-   It is off in our process settings. More under [the options](#the-options).
+   It is off by default, and off in the coupon process file this repo keeps for its tests;
+   spl-2's own slice has not been checked for it. More under [the options](#the-options).
 
 What does not carry over without a test: any published gap number. Every source here measured
 bigger features, other printers, or did not say. That is the K10 condition for the whole doc: a
@@ -193,8 +196,8 @@ Both researchers ruled snaps out at this size, and the sources hold up:
   is for molded parts; its round-snap rule (the strain halves, so the bump can be twice as large)
   is useful in kind but its strain limits are for other plastics.
 
-spl-2's `1D` "might have had a click" at 0.20. That is a plain press fit seating past the stud's
-chamfer, not a snap, and it is worth listening for again on PG1.
+spl-2's `1D` "might have had a click" at 0.20. Most likely that is a plain press fit seating past the
+stud's chamfer, not a snap, and it is worth listening for again on PG1.
 
 ## The options
 
@@ -326,8 +329,9 @@ generator, not in each plate. PG1's round `1E` and `1F` are at the same 0.25 as 
 bed that runs tight or loose does not land on one shape. Lower and upper of a pair sit side by
 side.
 
-**Print settings.** spl-2's process exactly, including circle compensation off and the seam as
-it was, so the round pairs compare with spl-2. The hex sockets' seam goes wherever the slicer
+**Print settings.** spl-2's process exactly, seam and circle compensation included, so the round
+pairs compare with spl-2. Check spl-2's slice for the circle setting before slicing PG1; we
+expect it off (the default) but have not read it from spl-2's file. The hex sockets' seam goes wherever the slicer
 puts it; whether it lands in a corner is something to look at in the slice before sending, not
 an assumption.
 
@@ -376,7 +380,7 @@ what the docs claim. Snippet-only means neither the researcher nor this check re
 | Snap fits do not work at 2 mm in PLA | Fictiv; Hubs; BOSL2; Covestro; PLA Basic data sheet | holds |
 | LEGO's line contact and lead-in carry over, its numbers and bending ABS wall do not | MachineBlocks; Brickset | holds |
 | Crush ribs absorb variation, but are smaller than a line at 2 mm | Hackaday; New Screwdriver | holds for the first half; the second is both researchers' arithmetic |
-| Slicer circle compensation is off in our settings and worth a test | Bambu circle page; our process settings | holds |
+| Slicer circle compensation is off in our settings and worth a test | Bambu circle page; the coupon process file this repo keeps | holds; spl-2's own slice not read |
 | A split stud is weak at 2 mm | Fictiv (strain across the layers) | holds in kind |
 | One locating stud, the rest relieved | Carr Lane | holds |
 | A separate dowel is an option | A: printed lying down (Hubs orientation page); B: filament | holds in kind; neither is a front runner |
@@ -422,7 +426,8 @@ left PLA Basic's coverage by circle compensation open; the slicer's own profile 
 ## Open questions
 
 - **Which reading of spl-2 becomes the gap**: Omar's 0.25 (loosest that held, easiest to put
-  together), 0.20 (the middle of what held), or 0.15 (spl-2's own written rule). PG1 holds all
+  together), 0.20 (the middle of what held), or what spl-2's own written rule gives (0.15 if
+  `1A` and `1B` sat flush, else 0.20). PG1 holds all
   three in view; the call is his, and it should wait for PG1's round pairs.
 - **Cut-face letters on coupons.** D-115 keeps them, and their `AB` uses a B; PG1 proposes
   dropping them. Omar's call on the plate page.
