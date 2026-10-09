@@ -81,6 +81,7 @@ objects:
 readings: []
 photos: []
 feedback:
+  lesson: "All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked; which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate."
   symptom: ~
   cause: ~
   next: "Which of the three gaps felt best is still Omar's to say; the kite pair the joining note adds waits on that gap"

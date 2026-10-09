@@ -12,19 +12,122 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 `prints.html` surface — the styled version a visitor lands on — is a later rung
 (S7); see the design doc §8–§9. Nothing here waits on that.
 
+## Lessons — what the prints taught
+
+<!-- lessons:start -->
+
+One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
+
+- Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight; and an id on the upper's cut face is hidden once the pair closes. ([2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md))
+- A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused. ([2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md))
+- All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked; which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate. ([2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md))
+- A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first. ([2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md))
+- One color per plate: the same phones took about 13 minutes in one color against phones-01's 62 in two, and the plate became the first production plate. ([2026-10-04-phones-02](prints/2026-10-04-phones-02/index.md))
+- A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm. ([2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md))
+- A slice must carry the whole X2D preset: Studio's command line ignores `inherits`, and its built-in settings fit the tiny holes and the tight pegs. ([2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md))
+- At 40 mm a mini is too small to show its pattern, and the dovetail's fixed 5.7 mm frame takes over a quarter of the piece. ([2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md))
+
+<!-- lessons:end -->
+
 ## Records — what has actually printed
 
-Newest first. Each record names its run, its plate and a verdict per piece; the prints gate
-checks every one.
+Each record names its run, its plate, a verdict per piece in Omar's words, and its feedback:
+what happened, why, and what it changed. The prints gate checks every record, and
+`make validate-prints` fails when this list and the lessons above are not what the records give. When
+a print comes back, its record and this page ship in the same PR (the
+[review-print skill](../.claude/skills/review-print/SKILL.md#when-a-print-comes-back)).
 
-- [2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md) — minis-03 at 80 mm and half the
-  height, plus the twist. Every piece `adjust`; the slice had fallen back to Bambu Studio's
-  built-in settings.
-- [2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md) — minimal-frames at 40 mm and a
-  dovetail pair. Every piece `adjust`: much too small, the pair loose.
+<!-- records:start -->
 
-Nothing was measured with a tool on either, so no bet has moved yet. `make validate-prints`
-prints how many records it checked.
+Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md)
+
+- **Plate:** [spl-1](design/plates/spl-1.md) — the split coupon: how tight a stud, how thick a floor, does a lip hold a piece
+- **Pieces:** 30 (1 keep, 16 adjust, 13 drop)
+- **What happened:** Every stud pair needed a hammer to close, from gap -0.10 to 0.15 mm and at 1.5, 2 and 3 mm; only SL1 4F (2 mm, 0.15) went in by hand, and it needed a hammer to sit flush. Nothing snapped.
+- **Why:** Not the slice. tools/fit_gap.py studs read the sliced wall paths: every pair's gap came out as drawn, to within 0.005 mm (4A -0.098 for -0.10, 4F +0.155 for 0.15), and the upper prints with its socket opening upward, so first-layer squish cannot narrow the mouth. What is left is the printer: printed holes running smaller than drawn, studs larger, or both. Not measured on the pieces themselves (no calipers reading), and the ladder never went loose enough to find the fit.
+- **What it changed:** A looser stud ladder, above 0.15 mm, before any studded coaster (split-01, stud-1, pkt-2, all cut at 0.05) is sent. The 0.6 mm floor stays. Lips hold a loose piece, and room 0 is the room. The upper's letter goes on its outer face, not its cut face, so it can still be read once the pair is closed.
+- **Decided from it:** [D-115](working-model/decisions-log.md#d-115--on-a-coupon-the-upper-halfs-id-goes-on-its-outer-face) (On a coupon, the upper half's id goes on its outer face)
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/spl-1-media/bed.png), [slice](design/plates/spl-1-media/slice.png), [ids-a-f](design/plates/spl-1-media/ids-a-f.png), [ids-g-l](design/plates/spl-1-media/ids-g-l.png), [ids-trap](design/plates/spl-1-media/ids-trap.png)
+
+![render, not a photo: bed](design/plates/spl-1-media/bed.png)
+
+### [2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md)
+
+- **Plate:** [pkt-1](design/plates/pkt-1.md) — the pocket coupon: does a piece printed in its pocket come out loose
+- **Pieces:** 8 (4 keep, 4 drop)
+- **What happened:** At one layer of air (0.2 mm) the hexagon printed fused to its square in both pairs (4S/OT, 4P/PT).
+- **Why:** One 0.2 mm layer of air is too little for the band to print free; both pairs fused, so it was not one bad layer.
+- **What it changed:** Way c works at two layers of air (0.4 mm) with 0.4 mm necks and the 0.6 mm band: loose, rims whole, band level, and closed pairs flat and silent. pkt-2 builds there.
+- **Photos of the print:** none. Rendered pictures from the plate page: [cut-lower-0.2](design/plates/pkt-1-media/cut-lower-0.2.png), [cut-closed-0.2](design/plates/pkt-1-media/cut-closed-0.2.png), [cut-closed-0.4](design/plates/pkt-1-media/cut-closed-0.4.png), [bed](design/plates/pkt-1-media/bed.png), [slice](design/plates/pkt-1-media/slice.png), [ids](design/plates/pkt-1-media/ids.png)
+
+![render, not a photo: cut-lower-0.2](design/plates/pkt-1-media/cut-lower-0.2.png)
+
+### [2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md)
+
+- **Plate:** [sld-1](design/plates/sld-1.md) — the dovetail coupon: three rail and slot pairs at 0.10, 0.15 and 0.20 mm a side
+- **Pieces:** 6 (6 keep)
+- **What it changed:** Which of the three gaps felt best is still Omar's to say; the kite pair the joining note adds waits on that gap.
+- **Photos of the print:** none. Rendered pictures from the plate page: [side-cut](design/plates/sld-1-media/side-cut.png), [slice](design/plates/sld-1-media/slice.png), [bed](design/plates/sld-1-media/bed.png)
+
+![render, not a photo: side-cut](design/plates/sld-1-media/side-cut.png)
+
+### [2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md)
+
+- **Plate:** [sheets-04g](design/plates/sheets-04g.md) — the gBV minimal coaster at 1.25 times wide and every one of its 41 pieces, one bed, one color
+- **Pieces:** 6 (2 adjust, 4 not-judged)
+- **What happened:** The ten kites were too tight to go into their holes, and the middle piece was loose in its hole; nothing said yet about the hexes, the stars, the outer pieces or the coaster.
+- **Why:** Two causes, one per symptom. The middle piece was cut with sharp inward corners, but the coaster's strap rounds those corners off, so at each of its ten inward corners the piece stood 0.45 mm short of the wall: play the piece could rattle in. The kites had no play anywhere, and a kite is the thinnest piece on the plate, with 3.8 times as much edge for its size as the middle piece and a 36 degree point, so any width the printer adds to a piece, or takes from a hole, binds it first. Measured on bikar's own geometry and the slice; the printer's own widening was not measured.
+- **What it changed:** Bikar now cuts every piece along the strap's real, rounded edge (no more corner play), and a fit plate, sheets-04g-fit, tries kites at five gaps and middle pieces at four in this same coaster.
+- **Photos of the print:** none. Rendered pictures from the plate page: [coaster](design/plates/sheets-04g-media/coaster.png), [pieces](design/plates/sheets-04g-media/pieces.png), [bed](design/plates/sheets-04g-media/bed.png)
+
+![render, not a photo: coaster](design/plates/sheets-04g-media/coaster.png)
+
+### [2026-10-04-phones-02](prints/2026-10-04-phones-02/index.md)
+
+- **Plate:** [phones-02](design/plates/phones-02.md) — phones-01 in pink only, with the small phones 1.25 times wider and longer and twice as thick
+- **Pieces:** 2 (2 keep)
+- **What it changed:** Omar asked to save it as production ready; the plate is promoted, and a reprint goes out on its standing approval.
+- **Decided from it:** [D-098](working-model/decisions-log.md#d-098--production-is-one-good-run-as-laid-out-with-no-fill-bar) (Production is one good run as laid out, with no fill bar)
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/phones-02-media/bed.png)
+
+![render, not a photo: bed](design/plates/phones-02-media/bed.png)
+
+### [2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md)
+
+- **Plate:** [sheets-04](design/plates/sheets-04.md) — the gBV fit: loose pieces at four gaps, set into the baseless minimal coaster
+- **Pieces:** 7 (1 keep, 6 adjust)
+- **What happened:** All the small pieces fell right through the coaster's holes, at every gap from 0.05 to 0.20 mm.
+- **Why:** The minimal coaster has no floor (frame F3 in the loose-pieces design), so only friction holds a piece, and every gap on the plate was positive: each piece was smaller than its hole. The loose-pieces design said as much for F3 (pieces drop unless the fit is tight). The pieces were also 1.2 mm thin, so most of each wall was first layers, where elephant-foot compensation (0.15 on this preset) narrows the piece further. Not measured.
+- **What it changed:** A pieces-only plate (sheets-05) with flat pieces 4 mm tall, flush with the coaster, at gaps from 0.05 down through 0 into a press fit, set into this same coaster.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed-map](design/plates/sheets-04-media/bed-map.png), [fit-in-coaster](design/plates/sheets-04-media/fit-in-coaster.png), [flat-and-peaked](design/plates/sheets-04-media/flat-and-peaked.png), [gbv-frame-and-pieces](design/plates/sheets-04-media/gbv-frame-and-pieces.png)
+
+![render, not a photo: bed-map](design/plates/sheets-04-media/bed-map.png)
+
+### [2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md)
+
+- **Plate:** [minis-04](design/plates/minis-04.md) — minis-03 at 80 mm and half the height, plus the twist
+- **Pieces:** 5 (5 adjust)
+- **What happened:** Tiny holes in the print; the pegs pair's border is too big and the pegs fit too tight.
+- **Why:** The slice ran on Studio's built-in defaults, not the X2D preset: our slicer passed only the top preset file and Studio's command line does not follow `inherits`, so elephant-foot compensation was 0 (preset 0.15), the top was 4 layers / 0.6 mm (preset 5 / 1.0), walls were Arachne and the top zig-zag. The holes fit those settings; the tight pegs fit compensation 0 plus the slot shape; the border is the dovetail frame rule by design. Causes ranked in docs/design/printing/print-quality-design.md; none measured.
+- **What it changed:** Flatten the preset chain and re-slice minis-04 to compare previews; fix the slot offset in bikar; then a clearance ladder at 1.4 mm (T1) before CAL-FIT-01 moves; the narrower joins are on minis-05 and minis-06.
+- **Photos of the print:** none, and the plate page has no rendered pictures.
+
+### [2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md)
+
+- **Plate:** [minis-03](design/plates/minis-03.md) — openwork minis at 40 mm
+- **Pieces:** 4 (4 adjust)
+- **What happened:** Minis too small; the mated pegs pair has a wide solid band at the join and fits a bit loose.
+- **Why:** Size 40 is too small to show the pattern; the pegs frame is a fixed 5.7 mm per side, so the band is over a quarter of a 40 mm piece; clearance 0.15 mm is loose on this machine by feel.
+- **What it changed:** Next sample plate at 70 mm; pegs pairs at clearance 0.10 and 0.05; try a shallower dovetail (depth 2) for a narrower frame.
+- **Photos of the print:** [all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg), [the CS-1 minimal-frame close up, the mated pegs pair behind it](prints/2026-09-26-minis-03/photos/pegs-pair-and-cs1.jpg)
+
+![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
+
+8 records; 0 measured with a tool, so no bet has moved yet.
+
+<!-- records:end -->
 
 ## Queue — what to print next
 

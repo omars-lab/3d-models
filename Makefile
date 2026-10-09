@@ -163,10 +163,10 @@ validate-timelapse:
 # docs/design/plates/ agrees with the records on its count and with itself on its approval, and the
 # queue in docs/design/plates/README.md is current (print-review-design.md §6). Each `--self-test`
 # builds a clean fixture, requires it clean, then breaks it once per rule. The grader's self-test
-# checks that a plate `plate_grade.py --derive` writes passes that gate (D-095).
+# checks that a plate `plate_grade.py --derive` writes passes that gate (D-095); prints_page.py, that docs/prints.md is current.
 validate-prints: prints-manifest validate-color-map
 	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py --self-test
-	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py
+	BIKAR_DIR=$(BIKAR_DIR) $(PYTHON) ${ROOT_DIR}/.claude/gates/prints_gate.py && $(PYTHON) ${ROOT_DIR}/.claude/skills/review-print/scripts/prints_page.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/skills/review-print/scripts/prints_page.py
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
 	$(PYTHON) ${ROOT_DIR}/tools/plate_grade.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/skills/monitor-print/scripts/print_monitor.py --self-test

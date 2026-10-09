@@ -121,13 +121,27 @@ step 6.
    and check there is no location data in them first.
 5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
    verdict per piece.
-6. **Carry the lesson forward.** Write a rule for the next plate in the calling skill's rules
-   ([`sample-rules.md`](../print-coaster-samples/sample-rules.md) for samples). If the eye
-   missed it before the print, add a check to [`rubric.md`](rubric.md), with the date and
-   plate. If a number would have caught it, re-measure over the pieces on record and move the
-   flag.
-7. **Ship it** as a PR. The record is what the Prints page and the Coaster Lab show against
-   each style.
+6. **Carry the lesson forward.** In the record's `feedback`, write:
+   - `lesson`: what the print taught, in one line (the symptom and its cause);
+   - `next`: what it changes for the next plate;
+   - `decisions`: the D-ids decided from it, such as `[D-115]`, if any.
+
+   The Prints page lists these for every record. Then write a rule for the next plate in the
+   calling skill's rules ([`sample-rules.md`](../print-coaster-samples/sample-rules.md) for
+   samples). If the eye missed it before the print, add a check to [`rubric.md`](rubric.md),
+   with the date and plate. If a number would have caught it, re-measure over the pieces on
+   record and move the flag.
+7. **Regenerate the Prints page and ship it** in the same PR as the record:
+   `python3 .claude/skills/review-print/scripts/prints_page.py --write`. It rewrites the
+   Lessons and Records parts of [`docs/prints.md`](../../../docs/prints.md) from every record,
+   and the prints gate fails while the page is behind. The record is also what the Coaster Lab
+   shows against each style.
 
 Hand feel is not a measurement. "Loose" goes in the notes, and a bet moves only on a reading
 under `readings` (the print-model skill's compare loop).
+
+## Scripts — when to use each
+
+| Script | What it does | When to reach for it | Command |
+|---|---|---|---|
+| `scripts/prints_page.py` | Writes the Lessons and Records parts of `docs/prints.md` from every record in `docs/prints/`: the run, its plate page, what happened and why, what it changed, its decisions, and its photos (or the plate page's renders, said plainly). With no flag it checks the page is current. | After writing or changing a print record, in the same PR. `make validate-prints` and hook `39-prints` run the check. | `python3 .claude/skills/review-print/scripts/prints_page.py --write` (check: no flag; tests: `--self-test`) |
