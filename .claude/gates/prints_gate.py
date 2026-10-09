@@ -177,14 +177,16 @@ PIECE_VERDICTS = ("keep", "adjust", "drop", "not-judged")
 
 REQUIRED_TOP = ("run", "plate", "status", "outcome", "profile", "pins", "objects")
 PROFILE_FIELDS = (
-    "machine", "material", "spool", "nozzle_mm", "nozzle_type",
+    "machine", "material", "spool", "nozzle_mm", "nozzle_type", "nozzle_side",
     "layer_mm", "slicer_profile", "ambient_c", "instrument",
 )
 # The "how" `print list` projects: the process-identity subset that lets an operator
 # restart a plate from a number, not a memory (prints-tab-design.md §4.1). A SUBSET of
 # PROFILE_FIELDS, sliced from it — never a second list of field names to drift apart.
 # Order is display order.
-HOW_FIELDS = ("machine", "material", "nozzle_mm", "layer_mm", "slicer_profile")
+HOW_FIELDS = (
+    "machine", "material", "nozzle_mm", "nozzle_type", "nozzle_side", "layer_mm", "slicer_profile",
+)
 assert set(HOW_FIELDS) <= set(PROFILE_FIELDS), "HOW_FIELDS must be a subset of PROFILE_FIELDS"
 OBJECT_FIELDS = ("entry", "source", "source_sha256")
 
@@ -676,7 +678,8 @@ def _fixture_record(prints: Path, run_name: str, sha: str, photo: bytes) -> Path
         "plate_3mf": f"{run_name}.3mf",
         # R11 — a measured record carries a feedback block, present even if empty.
         "feedback": {},
-        "profile": {f: ("Bambu A1" if f == "machine" else 0.4 if f.endswith("_mm") else "x")
+        "profile": {f: ("Bambu A1" if f == "machine" else "left" if f == "nozzle_side"
+                        else 0.4 if f.endswith("_mm") else "x")
                     for f in PROFILE_FIELDS},
         "pins": {"bikar_ref": _FIX_REF, "self_ref": "~"},
         "objects": [{
@@ -1024,7 +1027,8 @@ def self_test() -> int:
               and one.get("settles") == ["CAL-FEA-01"] and one.get("date") == "2026-09-14"
               # the "how": every HOW_FIELDS key present, none dropped, sourced from profile
               and set(how) == set(HOW_FIELDS)
-              and how.get("machine") == "Bambu A1" and how.get("nozzle_mm") == 0.4)
+              and how.get("machine") == "Bambu A1" and how.get("nozzle_mm") == 0.4
+              and how.get("nozzle_side") == "left")
         print(f"self-test {'ok  ' if ok else 'FAIL'}: list_records projects a clean record + its how"
               + ("" if ok else f" — got {listed}"))
         failures += 0 if ok else 1
