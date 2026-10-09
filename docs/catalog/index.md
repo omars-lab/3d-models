@@ -17,14 +17,14 @@ page. How the catalog is laid out and why: [the plan](plan.md).
 | ![GimTvN9hw4U\|96](media/GimTvN9hw4U/GimTvN9hw4U-plain.png) | [Simple 20-step Six-Fold Star Rosette](patterns/simple-20-step-six-fold-star-rosette-cs-1.md) | CS-1 | printed | plain, interlock, minimal, border, twist, minimal-frame, minimal-pegs, minimal-key, minimal-tab, lobed, radial |
 | ![7apC5Q9QS-8\|96](media/7apC5Q9QS-8/7apC5Q9QS-8-plain.png) | [Geogebra for Beginners — 8-Fold Rosette Walkthrough](patterns/geogebra-for-beginners-8-fold-rosette-walkthrough-cs-2.md) | CS-2 | printed | plain, interlock, minimal, border, twist, minimal-frame, minimal-pegs, fill |
 | ![tA8eSdVx_EQ\|96](media/tA8eSdVx_EQ/tA8eSdVx_EQ-plain.png) | [5-minute 7-fold Star Rosette](patterns/5-minute-7-fold-star-rosette-cs-6.md) | CS-6 | built | plain |
-| ![lEfWSogWscs\|96](media/lEfWSogWscs/lEfWSogWscs-plain.png) | [Pattern from the Tomb of Itimad ad-Daula](patterns/pattern-from-the-tomb-of-itimad-ad-daula-cs-7.md) | CS-7 | built | plain |
+| ![lEfWSogWscs\|96](media/lEfWSogWscs/lEfWSogWscs-plain.png) | [Pattern from the Tomb of Itimad ad-Daula](patterns/pattern-from-the-tomb-of-itimad-ad-daula-cs-7.md) | CS-7 | built | plain, cup-band |
 | ![rDuxHF3xMOc\|96](media/rDuxHF3xMOc/rDuxHF3xMOc-plain.png) | [8-fold Star Rosette with Sequences](patterns/8-fold-star-rosette-with-sequences-cs-8.md) | CS-8 | printed | plain, minimal-frame |
 | ![nmEjCTzMbDg\|96](media/nmEjCTzMbDg/nmEjCTzMbDg-plain.png) | [n-fold Flower in GeoGebra Classic 5](patterns/n-fold-flower-in-geogebra-classic-5-cs-9.md) | CS-9 | built | plain |
 | ![n3IidKfXE1I\|96](media/n3IidKfXE1I/n3IidKfXE1I-plain.png) | [Variable-angled 12-6-4 Star Rosette](patterns/variable-angled-12-6-4-star-rosette-cs-10.md) | CS-10 | built | plain |
 | ![sDO9fpu76v8\|96](media/sDO9fpu76v8/sDO9fpu76v8-plain.png) | [Pattern from the Royal Alcazar](patterns/pattern-from-the-royal-alcazar-cs-11.md) | CS-11 | built | plain |
 | ![bknVRSMcLj0\|96](media/bknVRSMcLj0/bknVRSMcLj0-plain.png) | [Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette](patterns/imamzadeh-ismail-shrine-isfahan-six-fold-kite-rosette-cs-12.md) | CS-12 | built | plain |
-| ![gBV_JTt3Kxk\|96](media/gBV_JTt3Kxk/gBV_JTt3Kxk-minimal.png) | [The Itimad-ud-Daula ten-fold rosette in a rhombus tile](patterns/the-itimad-ud-daula-ten-fold-rosette-in-a-rhombus-tile-cs-13.md) | CS-13 | printed | minimal, minimal-pieces, split-flange, split-lip, split-pocket |
-| ![jlTmt_279M4\|96](media/jlTmt_279M4/jlTmt_279M4-minimal.png) | [Sevenfold stars in a tilted square](patterns/sevenfold-stars-in-a-tilted-square-cs-14.md) | CS-14 | built | minimal |
+| ![gBV_JTt3Kxk\|96](media/gBV_JTt3Kxk/gBV_JTt3Kxk-minimal.png) | [The Itimad-ud-Daula ten-fold rosette in a rhombus tile](patterns/the-itimad-ud-daula-ten-fold-rosette-in-a-rhombus-tile-cs-13.md) | CS-13 | printed | minimal, cup-band, minimal-pieces, split-flange, split-lip, split-pocket |
+| ![jlTmt_279M4\|96](media/jlTmt_279M4/jlTmt_279M4-minimal.png) | [Sevenfold stars in a tilted square](patterns/sevenfold-stars-in-a-tilted-square-cs-14.md) | CS-14 | built | minimal, cup-band |
 | ![NtnlGMTElBk\|96](media/NtnlGMTElBk/NtnlGMTElBk-minimal.png) | [The Mustansiriya ten-fold interlaced star](patterns/the-mustansiriya-ten-fold-interlaced-star-cs-15.md) | CS-15 | built | minimal |
 | ![0ke_GpoBa-s\|96](media/0ke_GpoBa-s/0ke_GpoBa-s-minimal.png) | [A pentagon after Ptolemy's *Almagest*, doubled to ten](patterns/a-pentagon-after-ptolemys-almagest-doubled-to-ten-cs-16.md) | CS-16 | built | minimal |
 | ![88q-u2eWZqg\|96](media/88q-u2eWZqg/88q-u2eWZqg-minimal.png) | [A 16-petal rosette in one unbroken line](patterns/a-16-petal-rosette-in-one-unbroken-line-cs-17.md) | CS-17 | built | minimal |
@@ -83,6 +83,7 @@ Screened and queued, or held. Add one to [the planned list](planned.yaml) and sy
 | [lobed](styles/lobed.md) | 1 |
 | [fill](styles/fill.md) | 1 |
 | [radial](styles/radial.md) | 1 |
+| [cup-band](styles/cup-band.md) | 3 |
 | [minimal-pieces](styles/minimal-pieces.md) | 1 |
 | [split-flange](styles/split-flange.md) | 1 |
 | [split-lip](styles/split-lip.md) | 1 |

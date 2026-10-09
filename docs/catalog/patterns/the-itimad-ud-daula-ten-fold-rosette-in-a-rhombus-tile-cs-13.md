@@ -10,6 +10,7 @@ creator:
 catalog id: CS-13
 bikar files:
   - patterns/Constructions/gBV_JTt3Kxk.bkr
+  - patterns/Constructions/gBV_JTt3Kxk-cup-band.bkr
   - patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
   - patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
   - patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
@@ -23,7 +24,7 @@ tags:
 
 # The Itimad-ud-Daula ten-fold rosette in a rhombus tile (CS-13)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=gBV_JTt3Kxk), written in naqsh and made in 5 coaster styles. Its catalog id is CS-13.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=gBV_JTt3Kxk), written in naqsh and made in 6 coaster styles. Its catalog id is CS-13.
 
 ## Pictures
 
@@ -35,6 +36,10 @@ name, for example #minimal.
 The straps alone: no slab, every empty space in the pattern is a hole, top edges rounded over.
 
 ![minimal](../media/gBV_JTt3Kxk/gBV_JTt3Kxk-minimal.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ### minimal-pieces
 

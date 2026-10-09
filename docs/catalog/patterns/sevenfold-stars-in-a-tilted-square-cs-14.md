@@ -10,6 +10,7 @@ creator:
 catalog id: CS-14
 bikar files:
   - patterns/Constructions/jlTmt_279M4.bkr
+  - patterns/Constructions/jlTmt_279M4-cup-band.bkr
   - patterns/Constructions/jlTmt_279M4-minimal-coaster.bkr
 tags:
   - 7-fold
@@ -19,7 +20,7 @@ tags:
 
 # Sevenfold stars in a tilted square (CS-14)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=jlTmt_279M4), written in naqsh and made in 1 coaster style. Its catalog id is CS-14.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=jlTmt_279M4), written in naqsh and made in 2 coaster styles. Its catalog id is CS-14.
 
 ## Pictures
 
@@ -31,6 +32,10 @@ name, for example #minimal.
 The straps alone: no slab, every empty space in the pattern is a hole, top edges rounded over.
 
 ![minimal](../media/jlTmt_279M4/jlTmt_279M4-minimal.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

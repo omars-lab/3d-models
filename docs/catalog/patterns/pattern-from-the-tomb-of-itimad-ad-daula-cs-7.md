@@ -11,13 +11,14 @@ catalog id: CS-7
 bikar files:
   - patterns/Constructions/lEfWSogWscs.bkr
   - patterns/Constructions/lEfWSogWscs-coaster.bkr
+  - patterns/Constructions/lEfWSogWscs-cup-band.bkr
 tags:
   - coaster
 ---
 
 # Pattern from the Tomb of Itimad ad-Daula (CS-7)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=lEfWSogWscs), written in naqsh and made in 1 coaster style. Its catalog id is CS-7.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=lEfWSogWscs), written in naqsh and made in 2 coaster styles. Its catalog id is CS-7.
 
 ## Pictures
 
@@ -29,6 +30,10 @@ name, for example #plain.
 The pattern's straps raised on a full slab.
 
 ![plain](../media/lEfWSogWscs/lEfWSogWscs-plain.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 
