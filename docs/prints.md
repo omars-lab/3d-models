@@ -18,12 +18,12 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
-- Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight; and an id on the upper's cut face is hidden once the pair closes. ([2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md))
-- A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused. ([2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md))
-- All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked; which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate. ([2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md))
-- A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first. ([2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md))
+- Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); and an id on the upper's cut face is hidden once the pair closes. ([2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md))
+- A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md))
+- All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate. ([2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md))
+- A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md))
 - One color per plate: the same phones took about 13 minutes in one color against phones-01's 62 in two, and the plate became the first production plate. ([2026-10-04-phones-02](prints/2026-10-04-phones-02/index.md))
-- A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm. ([2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md))
+- A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md))
 - A slice must carry the whole X2D preset: Studio's command line ignores `inherits`, and its built-in settings fit the tiny holes and the tight pegs. ([2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md))
 - At 40 mm a mini is too small to show its pattern, and the dovetail's fixed 5.7 mm frame takes over a quarter of the piece. ([2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md))
 
@@ -44,7 +44,8 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 ### [2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md)
 
 - **Plate:** [spl-1](design/plates/spl-1.md) — the split coupon: how tight a stud, how thick a floor, does a lip hold a piece
-- **Lesson:** Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight; and an id on the upper's cut face is hidden once the pair closes.
+- **Lesson:** Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); and an id on the upper's cut face is hidden once the pair closes.
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 30 (1 keep, 16 adjust, 13 drop)
 - **What happened:** Every stud pair needed a hammer to close, from gap -0.10 to 0.15 mm and at 1.5, 2 and 3 mm; only SL1 4F (2 mm, 0.15) went in by hand, and it needed a hammer to sit flush. Nothing snapped.
 - **Why:** Not the slice. tools/fit_gap.py studs read the sliced wall paths: every pair's gap came out as drawn, to within 0.005 mm (4A -0.098 for -0.10, 4F +0.155 for 0.15), and the upper prints with its socket opening upward, so first-layer squish cannot narrow the mouth. What is left is the printer: printed holes running smaller than drawn, studs larger, or both. Not measured on the pieces themselves (no calipers reading), and the ladder never went loose enough to find the fit.
@@ -57,7 +58,8 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 ### [2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md)
 
 - **Plate:** [pkt-1](design/plates/pkt-1.md) — the pocket coupon: does a piece printed in its pocket come out loose
-- **Lesson:** A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused.
+- **Lesson:** A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers).
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 8 (4 keep, 4 drop)
 - **What happened:** At one layer of air (0.2 mm) the hexagon printed fused to its square in both pairs (4S/OT, 4P/PT).
 - **Why:** One 0.2 mm layer of air is too little for the band to print free; both pairs fused, so it was not one bad layer.
@@ -69,7 +71,8 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 ### [2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md)
 
 - **Plate:** [sld-1](design/plates/sld-1.md) — the dovetail coupon: three rail and slot pairs at 0.10, 0.15 and 0.20 mm a side
-- **Lesson:** All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked; which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate.
+- **Lesson:** All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate.
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 6 (6 keep)
 - **What it changed:** Which of the three gaps felt best is still Omar's to say; the kite pair the joining note adds waits on that gap.
 - **Photos of the print:** none. Rendered pictures from the plate page: [side-cut](design/plates/sld-1-media/side-cut.png), [slice](design/plates/sld-1-media/slice.png), [bed](design/plates/sld-1-media/bed.png)
@@ -79,7 +82,8 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 ### [2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md)
 
 - **Plate:** [sheets-04g](design/plates/sheets-04g.md) — the gBV minimal coaster at 1.25 times wide and every one of its 41 pieces, one bed, one color
-- **Lesson:** A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first.
+- **Lesson:** A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers).
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 6 (2 adjust, 4 not-judged)
 - **What happened:** The ten kites were too tight to go into their holes, and the middle piece was loose in its hole; nothing said yet about the hexes, the stars, the outer pieces or the coaster.
 - **Why:** Two causes, one per symptom. The middle piece was cut with sharp inward corners, but the coaster's strap rounds those corners off, so at each of its ten inward corners the piece stood 0.45 mm short of the wall: play the piece could rattle in. The kites had no play anywhere, and a kite is the thinnest piece on the plate, with 3.8 times as much edge for its size as the middle piece and a 36 degree point, so any width the printer adds to a piece, or takes from a hole, binds it first. Measured on bikar's own geometry and the slice; the printer's own widening was not measured.
@@ -92,6 +96,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 - **Plate:** [phones-02](design/plates/phones-02.md) — phones-01 in pink only, with the small phones 1.25 times wider and longer and twice as thick
 - **Lesson:** One color per plate: the same phones took about 13 minutes in one color against phones-01's 62 in two, and the plate became the first production plate.
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 2 (2 keep)
 - **What it changed:** Omar asked to save it as production ready; the plate is promoted, and a reprint goes out on its standing approval.
 - **Decided from it:** [D-098](working-model/decisions-log.md#d-098--production-is-one-good-run-as-laid-out-with-no-fill-bar) (Production is one good run as laid out, with no fill bar)
@@ -102,7 +107,8 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 ### [2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md)
 
 - **Plate:** [sheets-04](design/plates/sheets-04.md) — the gBV fit: loose pieces at four gaps, set into the baseless minimal coaster
-- **Lesson:** A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm.
+- **Lesson:** A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers).
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
 - **Pieces:** 7 (1 keep, 6 adjust)
 - **What happened:** All the small pieces fell right through the coaster's holes, at every gap from 0.05 to 0.20 mm.
 - **Why:** The minimal coaster has no floor (frame F3 in the loose-pieces design), so only friction holds a piece, and every gap on the plate was positive: each piece was smaller than its hole. The loose-pieces design said as much for F3 (pieces drop unless the fit is tight). The pieces were also 1.2 mm thin, so most of each wall was first layers, where elephant-foot compensation (0.15 on this preset) narrows the piece further. Not measured.
@@ -115,6 +121,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 - **Plate:** [minis-04](design/plates/minis-04.md) — minis-03 at 80 mm and half the height, plus the twist
 - **Lesson:** A slice must carry the whole X2D preset: Studio's command line ignores `inherits`, and its built-in settings fit the tiny holes and the tight pegs.
+- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded
 - **Pieces:** 5 (5 adjust)
 - **What happened:** Tiny holes in the print; the pegs pair's border is too big and the pegs fit too tight.
 - **Why:** The slice ran on Studio's built-in defaults, not the X2D preset: our slicer passed only the top preset file and Studio's command line does not follow `inherits`, so elephant-foot compensation was 0 (preset 0.15), the top was 4 layers / 0.6 mm (preset 5 / 1.0), walls were Arachne and the top zig-zag. The holes fit those settings; the tight pegs fit compensation 0 plus the slot shape; the border is the dovetail frame rule by design. Causes ranked in docs/design/printing/print-quality-design.md; none measured.
@@ -125,6 +132,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 - **Plate:** [minis-03](design/plates/minis-03.md) — openwork minis at 40 mm
 - **Lesson:** At 40 mm a mini is too small to show its pattern, and the dovetail's fixed 5.7 mm frame takes over a quarter of the piece.
+- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded
 - **Pieces:** 4 (4 adjust)
 - **What happened:** Minis too small; the mated pegs pair has a wide solid band at the join and fits a bit loose.
 - **Why:** Size 40 is too small to show the pattern; the pegs frame is a fixed 5.7 mm per side, so the band is over a quarter of a 40 mm piece; clearance 0.15 mm is loose on this machine by feel.
@@ -158,9 +166,10 @@ A record pins the two identities that together decide what a plate can teach
 
 - **Geometry** — the `.bkr` source, the blob's `sha256`, the bikar commit it was
   read at, and the piece selected. The same file at two commits is two versions.
-- **Process** — the nine-field profile header the print protocol already defines
+- **Process** — the ten-field profile header the print protocol already defines
   ([`protocol.md`](../.claude/skills/calibrate/protocol.md)): machine, material,
-  spool, nozzle, layer height, slicer profile, ambient, instrument. The same
+  spool, nozzle (its size, its type, and which of the two), layer height, slicer profile,
+  ambient, instrument. The same
   geometry at two layer heights is two versions.
 
 On top of that pair: the outcome, the readings (each linked to the bet it moves),

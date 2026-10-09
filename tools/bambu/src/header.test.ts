@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildHeader, renderHeader, headerToRecordProfile } from "./header.js";
-import { parseProjectSettings, type PlateMeta } from "./threemf.js";
+import { buildHeader, renderHeader, headerToRecordProfile, describeNozzleType } from "./header.js";
+import { parseNozzleSides, parseProjectSettings, type PlateMeta } from "./threemf.js";
 import type { PrinterStatus } from "./backends/mqtt.js";
 
-// A pushall frame carrying a loaded AMS tray (the PASS-case shape the design names), plus the chamber
-// the X2D reports. NO nozzle_diameter / nozzle_type — those are the X2D-unconfirmed frame fields.
+// A pushall frame carrying a loaded AMS tray, plus the chamber, and NO nozzle fields — the shape of a
+// frame that did not carry them, which must leave the nozzle type a blank rather than guess one.
 const LOADED_FRAME: PrinterStatus = {
   ams: {
     ams: [{ id: "0", tray: [{ id: "0", tray_type: "PLA", tray_color: "F5547CFF", tray_sub_brands: "PLA Basic", tray_info_idx: "GFA00", remain: 84 }] }],
@@ -13,17 +13,55 @@ const LOADED_FRAME: PrinterStatus = {
   _age_seconds: 1,
 };
 
+// The same frame with the nozzle fields as the X2D reported them live on 2026-10-09 (during spl-2):
+// a top-level code and size, and one `device.nozzle.info[]` entry per nozzle (id 0 right, 1 left).
+const X2D_REPORT_FRAME: PrinterStatus = {
+  ...LOADED_FRAME,
+  nozzle_type: "HS01",
+  nozzle_diameter: "0.4",
+  device: {
+    nozzle: {
+      info: [
+        { id: 0, diameter: 0.4, type: "HS01", wear: 0, sn: "N/A" },
+        { id: 1, diameter: 0.4, type: "HS01", wear: 0, sn: "N/A" },
+      ],
+    },
+  },
+};
+
 // An X2D plate's project_settings.config (the fields the .3mf stamps), as JSON the reader parses.
+// filament_map / physical_extruder_map / the line widths are as every X2D plate since sheets-04 has them.
 const X2D_PLATE_JSON = JSON.stringify({
   printer_settings_id: ["Bambu Lab X2D 0.4 nozzle"],
   printer_model: ["Bambu Lab X2D"],
   nozzle_diameter: ["0.4", "0.4"],
   layer_height: ["0.2"],
+  line_width: "0.42",
+  outer_wall_line_width: "0.42",
+  filament_map: ["1"],
+  physical_extruder_map: ["1", "0"],
   print_settings_id: ["0.20mm Standard @BBL X2D"],
   filament_settings_id: ["Bambu PLA Basic @BBL X2D 0.4 nozzle"],
   version: ["01.09.05.51"],
   "X-BBL-Client-Version": ["02.08.02.61"],
 });
+
+// slice_info.config, cut down from spl-1's: plate 1 prints filament 1, its own map puts it on 1 (left).
+const sliceInfo = (filamentMaps: string, filaments = [1]) => `<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <plate>
+    <metadata key="index" value="1"/>
+    <metadata key="filament_maps" value="${filamentMaps}"/>
+    ${filaments.map((id) => `<filament id="${id}" type="PLA" color="#00AE42" used_g="18.72"/>`).join("\n    ")}
+  </plate>
+</config>`;
+
+/** The X2D plate with its nozzle sides read from slice_info, as readPlateMeta builds it. */
+function x2dPlate(): PlateMeta {
+  const plate = parseProjectSettings(X2D_PLATE_JSON);
+  plate.nozzleSides = parseNozzleSides(X2D_PLATE_JSON, sliceInfo("1"));
+  return plate;
+}
 
 describe("parseProjectSettings", () => {
   it("pulls the slice-side fields out of the .3mf config, unwrapping BambuStudio's array values", () => {
@@ -44,9 +82,9 @@ describe("parseProjectSettings", () => {
   });
 });
 
-describe("buildHeader — PASS case (frame tray + X2D --plate)", () => {
-  const plate = parseProjectSettings(X2D_PLATE_JSON);
-  const h = buildHeader(LOADED_FRAME, plate, new Date("2026-09-17T12:00:00Z"));
+describe("buildHeader — PASS case (X2D report + X2D --plate)", () => {
+  const plate = x2dPlate();
+  const h = buildHeader(X2D_REPORT_FRAME, plate, new Date("2026-09-17T12:00:00Z"));
 
   it("fills material type / color / brand from the AMS tray", () => {
     expect(h.material_type).toMatchObject({ value: "PLA", state: "filled" });
@@ -97,8 +135,97 @@ describe("buildHeader — PASS case (frame tray + X2D --plate)", () => {
     expect(profile.nozzle_mm).toBe("0.4,0.4 mm");
     expect(profile.layer_mm).toBe("0.2 mm");
     expect(profile.slicer_profile).toContain("0.20mm Standard @BBL X2D");
-    // nozzle_type was not observed on the frame → it must NOT be pre-filled in the record.
-    expect(profile.nozzle_type).toBeUndefined();
+    // The report carries the nozzle code (X2D, 2026-10-09), so the record gets it, spelled out.
+    expect(profile.nozzle_type).toBe("HS01 (standard flow, hardened steel)");
+    expect(profile.nozzle_side).toBe("left");
+  });
+
+  it("fills the nozzle type from the report entry for the nozzle the slice used", () => {
+    expect(h.nozzle_type).toMatchObject({ value: "HS01 (standard flow, hardened steel)", state: "filled" });
+    expect(h.nozzle_type.source).toContain("device.nozzle.info id 1");
+    expect(h.nozzle_side).toMatchObject({ value: "left", state: "filled" });
+    expect(h.nozzle_diameter_frame).toMatchObject({ value: "0.4 mm", state: "filled" });
+    expect(renderHeader(h)).toContain("which nozzle: left");
+  });
+
+  it("names the used nozzle's type, not the other one's, when the two differ", () => {
+    const frame: PrinterStatus = {
+      ...X2D_REPORT_FRAME,
+      device: { nozzle: { info: [{ id: 0, type: "HH01" }, { id: 1, type: "HS00" }] } },
+    };
+    expect(buildHeader(frame, plate).nozzle_type.value).toBe("HS00 (standard flow, stainless steel)");
+  });
+});
+
+describe("buildHeader — a frame without nozzle fields", () => {
+  it("leaves the nozzle type a blank for the operator, never a guess", () => {
+    const h = buildHeader(LOADED_FRAME, x2dPlate());
+    expect(h.nozzle_type).toMatchObject({ value: null, state: "manual" });
+    expect(headerToRecordProfile(h).nozzle_type).toBeUndefined();
+  });
+
+  it("falls back to the top-level code when the per-nozzle list is absent", () => {
+    const frame: PrinterStatus = { ...LOADED_FRAME, nozzle_type: "HS01" };
+    expect(buildHeader(frame, x2dPlate()).nozzle_type).toMatchObject({
+      value: "HS01 (standard flow, hardened steel)",
+      source: "report nozzle_type",
+    });
+  });
+});
+
+describe("describeNozzleType", () => {
+  it("reads the code the way Bambu Studio does: flow letter, then material digits", () => {
+    expect(describeNozzleType("HS01")).toBe("standard flow, hardened steel");
+    expect(describeNozzleType("HH01")).toBe("high flow, hardened steel");
+    expect(describeNozzleType("HS00")).toBe("standard flow, stainless steel");
+    expect(describeNozzleType("HS05")).toBe("standard flow, tungsten carbide");
+  });
+
+  it("gives null for a code it cannot read, so the raw code stands alone", () => {
+    expect(describeNozzleType("N/A")).toBeNull();
+    expect(describeNozzleType("HZ01")).toBeNull();
+    expect(describeNozzleType("HS99")).toBeNull();
+  });
+});
+
+describe("parseNozzleSides", () => {
+  it("puts filament 1 on the left when the plate map says 1 and the physical map agrees", () => {
+    expect(parseNozzleSides(X2D_PLATE_JSON, sliceInfo("1"))).toEqual([
+      expect.objectContaining({ filament: 1, side: "left", physicalId: 1 }),
+    ]);
+  });
+
+  it("lets the plate's own map win over the project-wide one", () => {
+    const sides = parseNozzleSides(X2D_PLATE_JSON, sliceInfo("1 2", [1, 2]));
+    expect(sides.map((s) => s.side)).toEqual(["left", "right"]);
+    expect(sides.map((s) => s.physicalId)).toEqual([1, 0]);
+  });
+
+  it("falls back to the project filament_map when the plate has no map", () => {
+    const xml = sliceInfo("1").replace(/\s*<metadata key="filament_maps"[^>]*>/, "");
+    expect(parseNozzleSides(X2D_PLATE_JSON, xml)[0]).toMatchObject({ side: "left" });
+    expect(parseNozzleSides(X2D_PLATE_JSON, xml)[0]!.why).toContain("project filament_map");
+  });
+
+  it("gives NO side when the file disagrees with itself (minis-03/04: physical_extruder_map [\"0\"])", () => {
+    // The by-design FAIL: filament_map 1 says left, but the one-entry physical map names nozzle 0
+    // (right). Picking either would be a guess, so the side is blank and both readings are named.
+    const minis = JSON.stringify({ ...JSON.parse(X2D_PLATE_JSON), physical_extruder_map: ["0"] });
+    const [only] = parseNozzleSides(minis, sliceInfo("1"));
+    expect(only).toMatchObject({ filament: 1, side: null, physicalId: null });
+    expect(only!.why).toContain("says left");
+    expect(only!.why).toContain('["0"]');
+    const plate = parseProjectSettings(minis);
+    plate.nozzleSides = parseNozzleSides(minis, sliceInfo("1"));
+    const h = buildHeader(X2D_REPORT_FRAME, plate);
+    expect(h.nozzle_side.state).toBe("unconfirmed");
+    expect(headerToRecordProfile(h).nozzle_side).toBeUndefined();
+    // No side → no way to say which nozzle's entry applies, so the top-level code is used instead.
+    expect(h.nozzle_type.source).toBe("report nozzle_type");
+  });
+
+  it("gives no side for a map value that is neither 1 nor 2", () => {
+    expect(parseNozzleSides(X2D_PLATE_JSON, sliceInfo("3"))[0]).toMatchObject({ side: null });
   });
 });
 
@@ -111,7 +238,11 @@ describe("buildHeader — FAIL guard (frame has no nozzle, no --plate)", () => {
     expect(h.nozzle_diameter.value).toBeNull();
   });
 
-  it("marks the frame nozzle cross-check unconfirmed (not observed on this X2D)", () => {
+  it("marks which nozzle todo-plate — the side comes only from the .3mf", () => {
+    expect(h.nozzle_side).toMatchObject({ value: null, state: "todo-plate" });
+  });
+
+  it("marks the frame nozzle cross-check unconfirmed when the frame did not carry it", () => {
     expect(h.nozzle_diameter_frame.state).toBe("unconfirmed");
     expect(h.nozzle_diameter_frame.value).toBeNull();
   });

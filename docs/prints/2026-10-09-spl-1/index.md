@@ -10,6 +10,7 @@ profile:
   spool: "620317506F7D477AB7EB1CD14089FFDA"
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: left
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle"
   ambient_c: ~
@@ -334,7 +335,7 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight; and an id on the upper's cut face is hidden once the pair closes."
+  lesson: "Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); and an id on the upper's cut face is hidden once the pair closes."
   decisions: [D-115]
   symptom: "Every stud pair needed a hammer to close, from gap -0.10 to 0.15 mm and at 1.5, 2 and 3 mm; only SL1 4F (2 mm, 0.15) went in by hand, and it needed a hammer to sit flush. Nothing snapped"
   cause: "Not the slice. tools/fit_gap.py studs read the sliced wall paths: every pair's gap came out as drawn, to within 0.005 mm (4A -0.098 for -0.10, 4F +0.155 for 0.15), and the upper prints with its socket opening upward, so first-layer squish cannot narrow the mouth. What is left is the printer: printed holes running smaller than drawn, studs larger, or both. Not measured on the pieces themselves (no calipers reading), and the ladder never went loose enough to find the fit"

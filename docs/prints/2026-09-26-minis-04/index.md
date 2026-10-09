@@ -10,6 +10,7 @@ profile:
   spool: ~
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: ~
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle (named only: the slice ran about 54 process and 50 filament settings at Studio's built-in defaults, see below)"
   ambient_c: ~

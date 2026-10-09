@@ -72,6 +72,15 @@ export interface PlateMeta {
   slicerVersion: string | null; // Application / X-BBL-Client-Version, e.g. "BambuStudio-02.08.02.61"
   filamentColors: string[]; // filament_colour[] in slice/logical order — one per logical AMS slot
   filamentTypes: string[]; // filament_type[] in the same order; "" for a slot the config left blank
+  nozzleSides: FilamentNozzle[]; // which nozzle each used filament printed from (slice_info, readPlateMeta)
+}
+
+/** Which nozzle of a two-nozzle printer one filament was sliced onto. */
+export interface FilamentNozzle {
+  filament: number; // 1-based filament id, as slice_info names it
+  side: "left" | "right" | null; // null when the file does not say it in a way that agrees with itself
+  physicalId: number | null; // the printer's own nozzle id (the report's device.nozzle.info[].id)
+  why: string; // where the side came from, or why it is null
 }
 
 function firstString(v: unknown): string | null {
@@ -107,6 +116,7 @@ export function parseProjectSettings(json: string): PlateMeta {
       slicerVersion: null,
       filamentColors: [],
       filamentTypes: [],
+      nozzleSides: [],
     };
   }
   const nozzle = s.nozzle_diameter;
@@ -120,14 +130,70 @@ export function parseProjectSettings(json: string): PlateMeta {
     slicerVersion: firstString(s.version) ?? firstString(s.Application) ?? firstString(s["X-BBL-Client-Version"]),
     filamentColors: Array.isArray(s.filament_colour) ? s.filament_colour.map(String) : [],
     filamentTypes: Array.isArray(s.filament_type) ? s.filament_type.map(String) : [],
+    nozzleSides: [],
   };
 }
 
-/** Read + parse the plate's project_settings.config. null when the file has no such member. */
-export async function readPlateMeta(threemf: string): Promise<PlateMeta | null> {
+/** Read + parse the plate's project_settings.config, plus which nozzle each used filament printed
+ *  from (slice_info.config). null when the file has no project_settings member. */
+export async function readPlateMeta(threemf: string, plate = 1): Promise<PlateMeta | null> {
   const raw = await readMember(threemf, "Metadata/project_settings.config");
   if (!raw) return null;
-  return parseProjectSettings(raw);
+  const meta = parseProjectSettings(raw);
+  const sliceInfo = await readMember(threemf, "Metadata/slice_info.config");
+  if (sliceInfo) meta.nozzleSides = parseNozzleSides(raw, sliceInfo, plate);
+  return meta;
+}
+
+/**
+ * Which nozzle each filament of plate `plate` was sliced onto. PURE.
+ *
+ * Bambu Studio's own numbering (PartPlate::get_physical_extruder_by_filament_id,
+ * https://github.com/bambulab/BambuStudio/blob/df0c52fd34e9331cf2250e1e02722f50d8adc277/src/slic3r/GUI/PartPlate.cpp#L1527-L1559):
+ * a filament's `filament_map` value is 1 for the left nozzle and 2 for the right, the plate's own
+ * `filament_maps` in slice_info.config taking the place of the project-wide `filament_map`; and
+ * `physical_extruder_map[value - 1]` is the printer's id for that nozzle, 1 the left and 0 the right
+ * (the ids the report's `device.nozzle.info[]` carries). The two readings must agree: a file whose
+ * `physical_extruder_map` lacks the entry or names the other nozzle (the early minis plates carry a
+ * one-entry `["0"]`) gets no side, and says both readings rather than pick one.
+ */
+export function parseNozzleSides(projectJson: string, sliceInfoXml: string, plate = 1): FilamentNozzle[] {
+  let s: Record<string, unknown> = {};
+  try {
+    s = JSON.parse(projectJson) as Record<string, unknown>;
+  } catch {
+    return [];
+  }
+  const list = (v: unknown): string[] => (Array.isArray(v) ? v.map(String) : v != null ? [String(v)] : []);
+  const globalMap = list(s.filament_map);
+  const physical = list(s.physical_extruder_map);
+  let plateMap: string[] = [];
+  for (const block of sliceInfoXml.match(/<plate>[\s\S]*?<\/plate>/g) ?? []) {
+    const index = block.match(/<metadata\s+key="index"\s+value="(\d+)"/);
+    if (!index || Number(index[1]) !== plate) continue;
+    const m = block.match(/<metadata\s+key="filament_maps"\s+value="([^"]*)"/);
+    plateMap = m ? (m[1] ?? "").trim().split(/[\s,]+/).filter(Boolean) : [];
+  }
+  return parseUsedFilaments(sliceInfoXml, plate).map((filament): FilamentNozzle => {
+    const fromPlate = plateMap[filament - 1];
+    const value = fromPlate ?? globalMap[filament - 1];
+    const where = fromPlate !== undefined ? "slice_info filament_maps" : "project filament_map";
+    if (value !== "1" && value !== "2") {
+      return { filament, side: null, physicalId: null, why: `${where} gives ${value ?? "nothing"}, not 1 (left) or 2 (right)` };
+    }
+    const side = value === "1" ? "left" : "right";
+    const phys = physical[Number(value) - 1];
+    const want = side === "left" ? 1 : 0;
+    if (phys === undefined || Number(phys) !== want) {
+      return {
+        filament,
+        side: null,
+        physicalId: null,
+        why: `${where} says ${side} (${value}) but physical_extruder_map ${JSON.stringify(physical)} gives nozzle ${phys ?? "nothing"}, not ${want}`,
+      };
+    }
+    return { filament, side, physicalId: want, why: `${where} ${value} and physical_extruder_map agree: nozzle ${want}` };
+  });
 }
 
 /**

@@ -10,6 +10,7 @@ profile:
   spool: "620317506F7D477AB7EB1CD14089FFDA"
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: left
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle"
   ambient_c: ~

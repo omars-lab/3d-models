@@ -10,6 +10,7 @@ profile:
   spool: ~
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: left
   layer_mm: 0.2
   slicer_profile: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
   ambient_c: ~
@@ -80,7 +81,7 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first."
+  lesson: "A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers)."
   symptom: "the ten kites were too tight to go into their holes, and the middle piece was loose in its hole; nothing said yet about the hexes, the stars, the outer pieces or the coaster"
   cause: "two causes, one per symptom. The middle piece was cut with sharp inward corners, but the coaster's strap rounds those corners off, so at each of its ten inward corners the piece stood 0.45 mm short of the wall: play the piece could rattle in. The kites had no play anywhere, and a kite is the thinnest piece on the plate, with 3.8 times as much edge for its size as the middle piece and a 36 degree point, so any width the printer adds to a piece, or takes from a hole, binds it first. Measured on bikar's own geometry and the slice; the printer's own widening was not measured."
   next: "bikar now cuts every piece along the strap's real, rounded edge (no more corner play), and a fit plate, sheets-04g-fit, tries kites at five gaps and middle pieces at four in this same coaster"

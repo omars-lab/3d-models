@@ -10,6 +10,7 @@ profile:
   spool: ~
   nozzle_mm: 0.4
   nozzle_type: ~
+  nozzle_side: left
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle"
   ambient_c: ~
@@ -108,7 +109,7 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused."
+  lesson: "A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers)."
   symptom: "At one layer of air (0.2 mm) the hexagon printed fused to its square in both pairs (4S/OT, 4P/PT)"
   cause: "One 0.2 mm layer of air is too little for the band to print free; both pairs fused, so it was not one bad layer"
   next: "Way c works at two layers of air (0.4 mm) with 0.4 mm necks and the 0.6 mm band: loose, rims whole, band level, and closed pairs flat and silent. pkt-2 builds there"

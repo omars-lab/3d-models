@@ -64,10 +64,10 @@ it is the pair of identities that together determine what a plate can teach:
   commit the blob was read at, and the piece selected. Two prints of the same file
   at different commits are different versions; the pin makes that checkable
   ([`../../research/prints-tab-survey.md`](../../research/prints-tab-survey.md) §4).
-- **Process identity:** the nine-field profile header the print protocol already
+- **Process identity:** the ten-field profile header the print protocol already
   defines (`.claude/skills/calibrate/protocol.md`) — machine, material, spool,
-  nozzle diameter, nozzle type, layer height, slicer profile, ambient temperature,
-  instrument. The same geometry at 0.2 mm and at 0.12 mm layers are different
+  nozzle diameter, nozzle type, which nozzle (left or right, added 2026-10-09 for the
+  two-nozzle X2D), layer height, slicer profile, ambient temperature, instrument. The same geometry at 0.2 mm and at 0.12 mm layers are different
   versions, because they can print differently and teach different numbers.
 
 ## 4. The record format
@@ -99,12 +99,13 @@ status:   printed                          # the 10-state lifecycle (print-model
 outcome:  readings                         # readings|no-reading|partial
 sheet:    docs/prints/plate-1-bench-sheet.md  # optional — the bench sheet this print realizes; many prints → one sheet, so no uniqueness (R7)
 plate_3mf: 2026-09-14-plate1-machine-card.3mf  # the sliced plate this print came off; REQUIRED once status is sliced-or-later (R10). Named, not resolved — the .3mf may be large/gitignored
-profile:                                   # the nine-field process identity (protocol.md)
+profile:                                   # the ten-field process identity (protocol.md)
   machine:        "Bambu A1"
   material:       "PLA Basic"
   spool:          "Bambu PLA Basic black, lot ..."
   nozzle_mm:      0.4
   nozzle_type:    "hardened steel"
+  nozzle_side:    left                     # which nozzle printed it, read off the .3mf; ~ when the file cannot say
   layer_mm:       0.2
   slicer_profile: "0.20mm Standard @A1"
   ambient_c:      24

@@ -173,6 +173,7 @@ export async function scaffoldRecord(opts: ScaffoldOpts): Promise<string> {
     `  spool: ${pf(p.spool)}`,
     `  nozzle_mm: ${pf(p.nozzle_mm)}`,
     `  nozzle_type: ${pf(p.nozzle_type)}`,
+    `  nozzle_side: ${pf(p.nozzle_side)}`,
     `  layer_mm: ${pf(p.layer_mm)}`,
     `  slicer_profile: ${JSON.stringify(p.slicer_profile ?? basename(opts.plateFile))}`,
     `  ambient_c: ${TODO}`, // manual — the printer cannot know room temp (chamber ≠ room)

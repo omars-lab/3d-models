@@ -14,7 +14,7 @@ anecdote, not calibration (bikar Tenet 30).
 | Machine | model + firmware version |
 | Material | brand, type, **and color** — pigment changes effective flow; a "PLA" reading is not transferable across colors, let alone brands |
 | Spool | so a re-measure can rule the spool in or out |
-| Nozzle | diameter **and** type (brass / hardened / CHT — they do not flow alike) |
+| Nozzle | diameter **and** type (brass / hardened / CHT — they do not flow alike), and on a two-nozzle printer which one (left / right) |
 | Layer height | |
 | Profile | the slicer profile name **verbatim**, plus any setting changed from it |
 | Ambient | rough room temperature; enclosure open or closed |

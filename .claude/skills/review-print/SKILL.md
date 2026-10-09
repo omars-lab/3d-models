@@ -126,6 +126,18 @@ step 6.
    - `next`: what it changes for the next plate;
    - `decisions`: the D-ids decided from it, such as `[D-115]`, if any.
 
+   **A fit or gap lesson names what it was measured with**: the nozzle size, the outer and inner
+   wall line widths and the layer height, read off the record's profile and the `.3mf`
+   (`line_width`, `outer_wall_line_width`, `inner_wall_line_width`). Write them as one clause,
+   such as "(0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers)". The
+   lesson holds only for those settings. A gap that fit with a 0.4 mm nozzle says nothing yet
+   about a 0.6 mm one, or about lines drawn at a different width, because the printed wall is
+   built from those lines. The early minis plates were sliced with 0.4 mm lines and the outer
+   wall left at the slicer's default; every plate since sheets-04 uses 0.42 and 0.45. The
+   record's `nozzle_side` says which of the two nozzles printed it, and `nozzle_type` says the
+   printer's code for it (such as `HS01`, standard flow, hardened steel), when the draft could
+   read it from the printer. Leave either `~` when nothing recorded it.
+
    The Prints page lists these for every record. Then write a rule for the next plate in the
    calling skill's rules ([`sample-rules.md`](../print-coaster-samples/sample-rules.md) for
    samples). If the eye missed it before the print, add a check to [`rubric.md`](rubric.md),
