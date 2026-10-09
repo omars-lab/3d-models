@@ -1,8 +1,9 @@
 ---
 plate: pkt-1
+print_log: '[[print-logs/pkt-1|print log]]'
 recipe: pkt-1.yaml
 iteration: 4
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "For a split coaster's way c: does a piece half printed in place in its closed pocket come out loose at one layer of air (0.2 mm) or only at two (0.4 mm), does the closed piece move or click when the coaster is lifted, and is the band's underside, printed over air, flat?"
@@ -154,7 +155,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ 741ced0d16 | reset 2026-10-07 |
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | sent 2026-10-08 |
 
 ## Timeline
 
@@ -164,3 +165,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-06 | sliced — local slice from bikar main after bikar #320, fits one bed, 34 minutes, 11.6 g, no slicer warnings | this page |
 | 2026-10-07 | changed (iteration 2): a letter on each pair's cut faces, O to R, on Omar's comment on spl-1 on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 35 minutes, 11.6 g, no slicer warnings | this page |
+| 2026-10-08 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 4 @ d99e8c88b1 in #F5547C | this page |
