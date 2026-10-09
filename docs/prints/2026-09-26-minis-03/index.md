@@ -74,6 +74,7 @@ photos:
     of: "the CS-1 minimal-frame close up, the mated pegs pair behind it"
     why: "shows how the openwork reads at 40 mm"
 feedback:
+  lesson: "At 40 mm a mini is too small to show its pattern, and the dovetail's fixed 5.7 mm frame takes over a quarter of the piece."
   symptom: "minis too small; the mated pegs pair has a wide solid band at the join and fits a bit loose"
   cause: "size 40 is too small to show the pattern; the pegs frame is a fixed 5.7 mm per side, so the band is over a quarter of a 40 mm piece; clearance 0.15 mm is loose on this machine by feel"
   next: "next sample plate at 70 mm; pegs pairs at clearance 0.10 and 0.05; try a shallower dovetail (depth 2) for a narrower frame"

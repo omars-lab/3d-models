@@ -14,6 +14,7 @@ bikar files:
   - patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
   - patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
   - patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
+  - patterns/Constructions/gBV_JTt3Kxk-split-pocket-coaster.bkr
 tags:
   - 10-fold
   - rosette
@@ -22,7 +23,7 @@ tags:
 
 # The Itimad-ud-Daula ten-fold rosette in a rhombus tile (CS-13)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=gBV_JTt3Kxk), written in naqsh and made in 4 coaster styles. Its catalog id is CS-13.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=gBV_JTt3Kxk), written in naqsh and made in 5 coaster styles. Its catalog id is CS-13.
 
 ## Pictures
 
@@ -52,6 +53,12 @@ The pieces coaster cut into two printed halves with flush faces: each piece carr
 The pieces coaster cut into two printed halves that trap the pieces between them: each pocket has a lip on both faces and the pieces drop in from the cut, two halves joined by studs (the stars stay open).
 
 ![split lip](../media/gBV_JTt3Kxk/gBV_JTt3Kxk-split-lip.png)
+
+### split-pocket
+
+The pieces coaster cut into two printed halves, each printing its piece halves in place in closed pockets: a plug through each neck and a band in the room, air above and below, nothing placed by hand (the stars stay open).
+
+![split pocket](../media/gBV_JTt3Kxk/gBV_JTt3Kxk-split-pocket.png)
 
 ## Checks against the video
 

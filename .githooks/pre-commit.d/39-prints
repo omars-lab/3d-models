@@ -8,7 +8,9 @@
 # Then the plates gate (.claude/gates/plates_gate.py): each plate page in
 # docs/design/plates/ agrees with the records on its count, and with itself on its
 # approval, and the queue on docs/design/plates/README.md is current
-# (docs/design/printing/print-review-design.md §6).
+# (docs/design/printing/print-review-design.md §6). Between them, the Lessons and
+# Records parts of docs/prints.md must match the records
+# (.claude/skills/review-print/scripts/prints_page.py; `--write` refreshes them).
 #
 # wholesale: make validate-prints
 # Override once: PRINTS_GATE_OK=1 git commit
@@ -28,5 +30,7 @@ fi
 # a sibling repo are both facts across files that a staged-only scope cannot see.
 # Cheap at zero records — it prints the count and exits.
 python3 "$GATE" || exit 1
+# A record changes the Prints page, so the page is checked against every record.
+python3 "$(git rev-parse --show-toplevel)/.claude/skills/review-print/scripts/prints_page.py" || exit 1
 # A record changes a plate's count, so the plates gate runs whenever this hook does.
 exec python3 "$(dirname "$GATE")/plates_gate.py"

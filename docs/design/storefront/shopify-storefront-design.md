@@ -1420,4 +1420,4 @@ Gathered from a sweep of the three repos on 2026-10-04. Each gap names where thi
 - The store's tooling, theme, hosting and its rights blocker: coffee-house-storefront's
   `DESIGN.md`, 2026-10-04 (a private repo, so cited in words).
 - The hero picture's command: `bikar:packages/cli/src/index.ts:L1255 "function renderCoasterPreview"`
-- The gallery already draws every splittable coaster with it: `3d-models:Makefile:L830 "--format preview"`
+- The gallery already draws every splittable coaster with it: `3d-models:Makefile:L833 "--format preview"`

@@ -39,6 +39,8 @@ objects:
 readings: []
 photos: []
 feedback:
+  lesson: "One color per plate: the same phones took about 13 minutes in one color against phones-01's 62 in two, and the plate became the first production plate."
+  decisions: [D-098]
   symptom: ~
   cause: ~
   next: "Omar asked to save it as production ready; the plate is promoted, and a reprint goes out on its standing approval"

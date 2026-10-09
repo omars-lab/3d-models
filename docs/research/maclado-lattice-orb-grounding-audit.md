@@ -54,7 +54,7 @@ All verified in `~/Workspace/git/bikar` at the doc's pinned commit `1083046` (ex
 - **The hull-face generalisation (M4c generalised the cut "one tile per hull triangle → one tile per hull face") — confirmed** in family §8 and `maclado-lattice.test.ts` (`path.length − hullEdgeCount + hullFaceCount === 2`).
 - **`latticeWalk`/`siteSeparations` analysis-only — confirmed.** Signatures exact (`maclado-lattice.ts:37,71`); M4c explicitly: *"no solidify/seam/weave machinery consumes it."*
 - **`place?: 'dodecahedral'`, only rule registered — confirmed** (`parser.ts:168`; `placement-rule.ts:61,90-93` "v1 ships the one dodecahedral rule").
-- **`3d-models:Makefile:L293 "patterns/Orbs"` — confirmed** (line 290 is the `for bkr in $(BIKAR_DIR)/patterns/Orbs/*.bkr` glob).
+- **`3d-models:Makefile:L296 "patterns/Orbs"` — confirmed** (line 290 is the `for bkr in $(BIKAR_DIR)/patterns/Orbs/*.bkr` glob).
 
 ## Misgrounded or missing citations
 
