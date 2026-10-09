@@ -1,8 +1,8 @@
 ---
 plate: split-02
 recipe: split-02.yaml
-iteration: 4
-stage: approved
+iteration: 5
+stage: waiting
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
@@ -21,6 +21,8 @@ pictures:
   - split-02-media/how-it-holds.png
   - split-02-media/bed.png
   - split-02-media/ids.png
+  - split-02-media/ids-hex.png
+  - split-02-media/ids-outer.png
 ---
 
 # split-02 — the split gBV coaster whose pieces carry a flange (option C)
@@ -106,14 +108,19 @@ The slice: both halves on the right, the HEX and OUTER rows at the left with the
 
 ![split-02 on the bed](split-02-media/bed.png)
 
-The id cut into the middle piece's bed face, seen from below: the plate, the iteration and M
-(D-109). It is the only piece that carries one. The upper half prints face down, so its bed face
-is the top you see. The hex and outer rings come out of bikar as one render of ten pieces and
-bikar cuts one id per render, so only one piece in ten would carry it; they carry none until it
-cuts one into each piece. [The recipe](split-02.yaml) says how each piece is told apart, and
+The ids cut into the bed faces, seen from below (D-109). The middle piece carries the whole id:
+the plate, the iteration and M. The hex and outer rings come out of bikar as one render of ten
+pieces, and bikar now cuts the id into each of the ten (bikar #331). They take the short form only
+(D-114): 5H on each hex piece and 5R on each outer piece, since an O would read as a zero. The
+kites and stars have no room for one. The upper half prints face down, so its bed face is the top
+you see. [The recipe](split-02.yaml) says how each piece is told apart, and
 [the carved-id fit note](../../issues/carved-id-fit.md) says why.
 
-![The bottom of the middle piece: a twenty-sided piece reading SP2 over 4 M, turned on its side](split-02-media/ids.png)
+![The bottom of the middle piece: a twenty-sided piece reading SP2 over 5 M, turned on its side](split-02-media/ids.png)
+
+![The bottoms of the ten hex pieces, each reading 5H inside its flange](split-02-media/ids-hex.png)
+
+![The bottoms of the ten outer pieces, each reading 5R inside its flange](split-02-media/ids-outer.png)
 
 ## Cost and risk
 
@@ -139,7 +146,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|---|---|
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | reset 2026-10-08 |
 
 ## Timeline
 
@@ -149,3 +156,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-05 | sliced — local slice against bikar #305, fits one bed, 107 minutes, 31 g, no slicer warnings | this page |
 | 2026-10-07 | changed (iteration 2): its id, 2, cut 2 mm tall into the lower half's bottom face, on Omar's comment on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 107 minutes, 31.5 g, no slicer warnings; the id did not change the time | this page |
+| 2026-10-08 | changed (iteration 5): the short id cut into each hex piece (5H) and each outer piece (5R), now that bikar cuts one into each piece of a ring (bikar #331); the middle piece reads SP2/5 M; the yes in pink given for iteration 4 is reset | this page |
