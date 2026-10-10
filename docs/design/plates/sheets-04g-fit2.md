@@ -2,7 +2,7 @@
 plate: sheets-04g-fit2
 recipe: sheets-04g-fit2.yaml
 iteration: 1
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A (gap 0, too tight) and B (0.05, a bit too easy), sit firmly in a coaster from the same print?"
@@ -146,6 +146,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-10 | approved | Omar, in chat: "send it when it's ready" | iteration 1 @ 4734dde389 in #F5547C | |
 
 ## Timeline
 
