@@ -331,6 +331,24 @@ def studs_report(plate, bedmap, max_d):
               f"{mouth - stud:+8.3f} {zs(st):>11} {zs(so):>11}")
 
 
+def assign_loops(ls, groups, target, shared=False):
+    """Wall loops to groups by expected loop area. A piece loop goes to the one group it is
+    nearest (by ratio), so the first layer's wider line and elephant-foot shrink never hand a
+    loop to two groups. A pocket loop is `shared`: a gap ladder of one shape (sheets-04g-fit2's
+    middle pieces at 0, 0.025 and 0.05) all go into the same hole, so the hole goes to every
+    group whose pocket it matches, not only the first."""
+    out = {g: [] for g in groups}
+    off = lambda a, g: abs(math.log(a / target(groups[g])))
+    for lw in ls:
+        a = abs(area(lw[0]))
+        near = [g for g in groups if off(a, g) < 0.5]
+        if near and not shared:
+            near = [min(near, key=lambda g: off(a, g))]
+        for g in near:
+            out[g].append(lw)
+    return out
+
+
 def walls_report(plate, frame, pieces, z):
     text = plate_gcode(plate)
     h, objs = gcode_walls(text, z)
@@ -351,18 +369,8 @@ def walls_report(plate, frame, pieces, z):
         if m is not None:
             groups[Path(path).stem] = (m, shape(m["_piece"]), shape(m["_pocket"]))
 
-    def assign(ls, target):
-        # Each wall loop goes to the one group whose expected loop area it is nearest (by ratio),
-        # so the first layer's wider line and elephant-foot shrink never hand a loop to two groups.
-        out = {g: [] for g in groups}
-        for lw in ls:
-            a = abs(area(lw[0]))
-            g = min(groups, key=lambda g: abs(math.log(a / target(groups[g]))))
-            if abs(math.log(a / target(groups[g]))) < 0.5:
-                out[g].append(lw)
-        return out
-    piece_of = assign(piece_loops, lambda s: s[1][0] - s[1][1] * 0.21)
-    pocket_of = assign(pocket_loops, lambda s: s[2][0] + s[2][1] * 0.21)
+    piece_of = assign_loops(piece_loops, groups, lambda s: s[1][0] - s[1][1] * 0.21)
+    pocket_of = assign_loops(pocket_loops, groups, lambda s: s[2][0] + s[2][1] * 0.21, shared=True)
     for g, (m, (A, P, k), (Ah, Ph, kh)) in groups.items():
         mine, holes = piece_of[g], pocket_of[g]
         if not mine or not holes:
@@ -427,6 +435,18 @@ def self_test():
          tight and abs(tight["gap_max"] + 0.1) < 1e-6 and abs(tight["gap_min"] + 0.1 * 2 ** 0.5) < 1e-6),
         ("a square's corners are 90 degrees", loose and abs(loose["piece_tip"] - 90) < 1e-6),
         ("a piece away from every pocket is not matched", away is None),
+    ]
+    # Two pieces of one shape at two gaps, laddered against one hole: each piece loop goes to
+    # its own group, and the one hole goes to both.
+    sq = lambda s: [(-s, -s), (s, -s), (s, s), (-s, s)]
+    groups = {"g0": (None, (100.0, 40.0, 0), (100.0, 40.0, 0)),
+              "g1": (None, (96.0, 39.2, 0), (100.0, 40.0, 0))}
+    pieces = assign_loops([(sq(5), 0.4), (sq(4.9), 0.4)], groups, lambda s: s[1][0])
+    holes = assign_loops([(sq(5), 0.4)], groups, lambda s: s[2][0], shared=True)
+    checks += [
+        ("a ladder's piece loops go one to each group",
+         [len(pieces["g0"]), len(pieces["g1"])] == [1, 1] and pieces["g1"][0][0] == sq(4.9)),
+        ("a ladder's one hole goes to every group", [len(holes["g0"]), len(holes["g1"])] == [1, 1]),
     ]
     # A 2 mm stud on a lower at (10, 0) and a 2.1 mm socket on an upper at (40, 0), as wall
     # paths 0.42 wide: the stud's path is 1.58 across, the socket's 2.52. A square letter on
