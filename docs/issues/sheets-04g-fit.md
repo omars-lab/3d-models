@@ -165,9 +165,9 @@ What was the same, read off the two sliced files:
   (148.3, 134.4) on the second, 2.2 mm apart.
 - **Same printer, same smooth glacier plate, same spool of pink PLA Basic**, the same day, about two hours apart.
 
-So whatever moved the fit happened at the printer or in the hand, not in the files. Nothing was
-measured with calipers, so it stays unknown which moved: the coaster's holes, the pieces, or the
-feel. The likely suspects are a first layer squashed more or less (the bottom edge flares
+So whatever moved the fit happened at the printer or in the hand, not in the outlines or the
+settings. Nothing was measured with calipers, so it stays unknown which moved: the coaster's
+holes, the pieces, or the feel. The likely suspects are a first layer squashed more or less (the bottom edge flares
 outward, which tightens a piece going in bed face first), how the plate was cleaned, and the
 room. None of them was checked.
 

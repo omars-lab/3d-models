@@ -19,7 +19,9 @@
 # The middle pieces carry the same dots as on fit2: three at gap 0, two at 0.025, one at 0.05.
 # The carved id (D-109, D-114) goes on each middle piece's bed face, 4GJ/<iteration> <letter>:
 # A at gap 0, C at 0.025, E at 0.05, the same letters as on fit2, so the code tells the plates
-# apart. B, D, M, N and O are skipped (Omar, 2026-10-09). The coaster carries Z.
+# apart. B, D, M, N and O are skipped (Omar, 2026-10-09). The coaster carries 3, not the Z of the
+# two fit plates before it: `id_form: piece` cuts the one character only, so three coasters all
+# carved Z could not be told apart on the table, and each piece is judged only in its own coaster.
 #
 #   COASTER               the gBV minimal coaster, as sheets-04g-fit2 printed it (1)
 #   KITE 0.05             ten kites at gap 0.05, one dot each (10)
@@ -44,7 +46,7 @@ items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
     params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
     label:  COASTER
-    id:     Z
+    id:     "3"
     id_form: piece
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
     piece:  Kite

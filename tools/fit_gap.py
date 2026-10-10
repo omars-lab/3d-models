@@ -349,12 +349,27 @@ def assign_loops(ls, groups, target, shared=False):
     return out
 
 
+def assign_objects(objs, groups, target):
+    """Piece wall loops to groups, a whole slice object at a time. Each group is its own object
+    on the plate, so when as many objects as groups come near a group's expected loop area, they
+    pair in order of size: the biggest object with the biggest group. Loop by loop, a step
+    smaller than the slicer's own offset sends every loop to one group (sheets-04g-fit3's kites
+    at 0.05 and 0.075, 0.3 mm² apart, all twenty went to the 0.05). Otherwise, loop by loop."""
+    mean = lambda ls: sum(abs(area(lw[0])) for lw in ls) / len(ls)
+    near = {o: ls for o, ls in objs.items()
+            if ls and any(abs(math.log(mean(ls) / target(groups[g]))) < 0.5 for g in groups)}
+    if len(near) == len(groups) > 1:
+        by_size = sorted(near, key=lambda o: mean(near[o]))
+        return {g: near[o] for g, o in zip(sorted(groups, key=lambda g: target(groups[g])), by_size)}
+    return assign_loops([lw for ls in near.values() for lw in ls], groups, target)
+
+
 def walls_report(plate, frame, pieces, z):
     text = plate_gcode(plate)
     h, objs = gcode_walls(text, z)
     frame_label = max(objs, key=lambda o: len(objs[o]))
     pocket_loops = sorted(objs[frame_label], key=lambda lw: abs(area(lw[0])))[:-1]  # drop the rim
-    piece_loops = [lw for o, ls in objs.items() if o != frame_label for lw in ls]
+    piece_objs = {o: ls for o, ls in objs.items() if o != frame_label}
     loops = slice_loops(load_triangles(frame), z)
     print(f"slicer outer walls on the layer at z = {h} mm (frame object {frame_label})")
     print(f"{'group':8} {'width':>5} {'pieces':>6} {'piece edge in':>13} {'pockets':>7} "
@@ -369,7 +384,7 @@ def walls_report(plate, frame, pieces, z):
         if m is not None:
             groups[Path(path).stem] = (m, shape(m["_piece"]), shape(m["_pocket"]))
 
-    piece_of = assign_loops(piece_loops, groups, lambda s: s[1][0] - s[1][1] * 0.21)
+    piece_of = assign_objects(piece_objs, groups, lambda s: s[1][0] - s[1][1] * 0.21)
     pocket_of = assign_loops(pocket_loops, groups, lambda s: s[2][0] + s[2][1] * 0.21, shared=True)
     for g, (m, (A, P, k), (Ah, Ph, kh)) in groups.items():
         mine, holes = piece_of[g], pocket_of[g]
@@ -447,6 +462,14 @@ def self_test():
         ("a ladder's piece loops go one to each group",
          [len(pieces["g0"]), len(pieces["g1"])] == [1, 1] and pieces["g1"][0][0] == sq(4.9)),
         ("a ladder's one hole goes to every group", [len(holes["g0"]), len(holes["g1"])] == [1, 1]),
+    ]
+    # The same ladder sliced with every loop 0.2 mm bigger, as two objects, beside a far piece:
+    # loop by loop, both 10.2 (104) and 10.0 (100) are nearest g0; by object, each to its own.
+    sliced = {"7": [(sq(5.1), 0.4)] * 3, "8": [(sq(5.0), 0.4)] * 3, "9": [(sq(20), 0.4)]}
+    by_obj = assign_objects(sliced, groups, lambda s: s[1][0])
+    checks += [
+        ("a ladder sliced with a common offset pairs object to group by size",
+         by_obj["g0"] == sliced["7"] and by_obj["g1"] == sliced["8"]),
     ]
     # A 2 mm stud on a lower at (10, 0) and a 2.1 mm socket on an upper at (40, 0), as wall
     # paths 0.42 wide: the stud's path is 1.58 across, the socket's 2.52. A square letter on
