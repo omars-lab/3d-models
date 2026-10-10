@@ -1,8 +1,9 @@
 ---
 plate: sheets-04g-fit
+print_log: '[[print-logs/sheets-04g-fit|print log]]'
 recipe: sheets-04g-fit.yaml
 iteration: 4
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling?"
@@ -135,7 +136,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ 9872c01d7d | reset 2026-10-08 |
-| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | |
+| 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | sent 2026-10-10 |
 
 ## Timeline
 
@@ -145,3 +146,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-04 | sliced: local slice fits one bed, 25 minutes, 5.3 g, no slicer warnings | this page |
 | 2026-10-07 | changed (iteration 2): a fresh gBV minimal coaster added, and dots on each middle piece, four at gap 0 to one at 0.15, on Omar's comment on the 2026-10-06 calls page | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced: local slice fits one bed, 78 minutes, 21.4 g, no slicer warnings | this page |
+| 2026-10-10 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 4 @ d99e8c88b1 in #F5547C | this page |
