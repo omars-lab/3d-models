@@ -111,3 +111,30 @@ with new gaps, or a plate of only the two pieces Omar named, at a ladder of gaps
 The fit plate wins on return for the time: it answers the question the reprint would only guess
 at, and it reuses the coaster, because the whole gap comes off the piece and the coaster's outline
 did not change. The pick for each group then goes into a sheets-04g iteration.
+
+## What the fit plate showed
+
+**2026-10-10.** sheets-04g-fit printed, and Omar tried its pieces by hand, first in the fresh
+coaster printed beside them (`Z` on its bottom), then in the older sheets-04g coaster. The record
+is [2026-10-10-sheets-04g-fit](../prints/2026-10-10-sheets-04g-fit/index.md).
+
+- **The kites fit at 0.05 mm.** "the biggest size fits well, rest too small/lost". The kites
+  carry no mark, so which pile that was is worked out, not read off a piece: a smaller gap makes
+  a bigger kite, so the biggest are the 0.05 pile. The 0.10 to 0.25 piles were too small for the
+  `Z` coaster.
+- **The middle piece wants a gap between 0 and 0.05.** `4GF 4A` (gap 0) went in "but to tight";
+  `4GF 4B` (0.05) "is good but comes off a bit to easy". Omar asked: "is there a midway between a
+  and b?" So gap 0 no longer rattles since the corner fix above; it is now too tight.
+- **The same pieces sit about one rung looser in the older coaster.** There `4GF 4A` "fits but
+  easliy removable", `4GF 4B` "is loose", and "all small kites are loose". So the older
+  coaster's holes came out about one 0.05 mm step larger than the `Z` coaster's. The coaster's
+  source gained two knobs between the two prints, both left at 0, which should not change the
+  holes; the two meshes were not compared. This is one pair of coasters, a first reading and not
+  a rule, but it agrees with [spl-2](../prints/2026-10-09-spl-2/index.md), where a stud's fit
+  moved 0.05 to 0.10 mm from one print to the next.
+
+**What it changes.** The fit plate's case for reusing the old coaster (the table above) assumed
+the holes come out the same each time. They did not, by about as much as one step of the ladder.
+So the halfway test, a middle piece at 0.025 mm between `4A` and `4B`, prints its own fresh coaster
+on the same bed, and its pieces are judged in that coaster. A gap picked in one coaster may still
+come out one step loose or tight in the next.
