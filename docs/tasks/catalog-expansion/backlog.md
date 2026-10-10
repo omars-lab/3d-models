@@ -70,8 +70,8 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       through the unit points, and the 180° ray as a segment to a derived far point, so no free
       point sits off the frame) is on youtube branch `coaster-n_I` (6e7fc45), still 9/9 at mean
       0.886, waiting on Omar's merge into main. The O1 check for arcs is on the same branch.
-      The importer change that rotates a list of arcs is its own bikar PR
-      (`import-conjugate-arcs`). With both, the import lowers in full (nothing refused), and both
+      The importer change that rotates a list of arcs is on bikar main (bikar #318,
+      2026-10-06). With both, the import lowers in full (nothing refused), and both
       checks pass: O1 34 compared, 0 failed, and O2 edge 0.982 with recall and precision 1.0.
       Left: in bikar, the golden, fixture, minimal coaster, `--check` at 40/60/90 mm and the Lab
       entry, following the 88q PR (#317). Then in this repo, the ledger row, `CS-18`, the gallery
@@ -384,9 +384,9 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    #328) and waits on Omar's tick. Sheet 3 is built in full too
    ([sheets-03](../../design/plates/sheets-03.md): option 8 as `holes weld`, fed by a `weld`
    knob on every minimal coaster, and its card, bikar #329) and waits on Omar's tick.
-   What is left: sheet 5 the
-   sheet plate's color parts per sample (its tall-piece row's height shipped, bikar #313) and its raised row raised fills
-   (loose-pieces §6 item 1, a bikar branch is enough). Sheet 5 has a plate page
+   What is left: sheet 5's recipe, redone to Omar's 2026-10-08 color pick (one color per plate,
+   so a one-color card with a pocket per sample and its fills as loose pieces on a second plate;
+   its tall-piece row's height shipped, bikar #313). Sheet 5 has a plate page
    at `planned` ([sheets-05](../../design/plates/sheets-05.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
 9. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put

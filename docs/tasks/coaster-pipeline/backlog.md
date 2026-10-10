@@ -16,7 +16,7 @@ open here today: the split coupons and plates wait on Omar's tick, under "Owner-
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
-   expected. (P4.3, board #4.)
+   expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
 2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
@@ -52,15 +52,6 @@ Sending a print and which filament to load.
   waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
-- **The split coupon, [spl-1](../../design/plates/spl-1.md)** — waiting on Omar's tick, with the
-  color in the yes (the lightest loaded, for the show-through check). Twelve stud fit pairs (gaps
-  −0.10 to 0.15, a 1.5 and a 3 mm stud, floors 0.8 and 1.0) and two trapped-piece pairs: one bed,
-  43 minutes, 18.3 g. Its answers set the split coasters' stud gap and socket floor.
-- **The pocket coupon, [pkt-1](../../design/plates/pkt-1.md)** — waiting on Omar's tick, with the
-  color in the yes. Way c: each half prints its piece half in place in a closed pocket. Two pairs
-  at one layer of air (0.6 mm necks) and two at two layers (0.4 mm necks): one bed, 34 minutes,
-  11.6 g. Its answers say whether way c works at all, and how much air a printed-in-place piece
-  needs.
 - **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
   [split-02](../../design/plates/split-02.md) (flange)** — waiting on Omar's tick on each page, with
   the color in the yes. The gBV coaster at 112.5 mm cut in two halves that close over its loose
@@ -74,8 +65,9 @@ Sending a print and which filament to load.
   Omar's ask). Omar leans towards c (printed in place): its first build, a pocket printed in
   place in bikar and a coupon at one and two layers of air
   ([§1.4](../../design/printing/finish-techniques-brainstorm.md#14-way-c-making-the-two-piece-halves-feel-like-one)),
-  is built, and its plate [pkt-1](../../design/plates/pkt-1.md) waits on a tick above (bikar #320,
-  3d-models #590).
+  is built (bikar #320, 3d-models #590), and its plate [pkt-1](../../design/plates/pkt-1.md)
+  printed on 2026-10-09: one layer of air fuses, two leave the piece free
+  ([the record](../../prints/2026-10-09-pkt-1/index.md)).
   On 2026-10-05 Omar said of way a "Only one of the faces will be glossay here, and I want the
   coaster to be flat ... leaning towards c", and asked "can two pieces sldie into each other /
   clip or be screwed onto each other?" The
@@ -103,9 +95,10 @@ Sending a print and which filament to load.
   showed off, so printing [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) first lets
   these plates take its gaps as a new iteration; and Neon City (13903) is a two-color spool, so
   its pieces will not all match the picture.
-- **Did [minis-01](../../design/plates/minis-01.md) and [minis-02](../../design/plates/minis-02.md) print?**
-  Both went out from Bambu Studio on 2026-09-25 and neither has a record. Each page has the
-  tick boxes; a yes means writing the record, which is item 1 above for minis-01.
+- **Did [minis-02](../../design/plates/minis-02.md) print?** It went out from Bambu Studio on
+  2026-09-25 and has no record. Its page has the tick boxes; a yes means writing the record.
+  minis-01, sent the same day, is answered: Omar does not remember, so it is printed again with
+  carved ids (3d-models #629).
 
 Other owner-gated work lives where its loop is:
 bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
