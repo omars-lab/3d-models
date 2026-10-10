@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- Halfway worked: printed beside its own coaster, the middle piece at 0.025 mm sat between gap 0 (super tight) and 0.05 (loose) and was the one Omar picked, so the slicer does keep a 0.025 mm step apart in feel. The kites at 0.05 went the other way from sheets-04g-fit: they fit that plate's coaster well and were tough to push into this one, though they hold once in. A coaster's holes move from print to print by about a 0.05 mm rung, now seen on three coasters, so a gap is judged in a coaster from the same bed. ([2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md))
 - In the fresh Z coaster, printed on the same bed, the kites fit at 0.05 mm and every looser rung was too small, and the middle piece sits between 4A (gap 0, too tight) and 4B (0.05, good but comes out a little too easily). In the older sheets-04g coaster the same pieces sat about one 0.05 mm rung looser: 4A fit but came out easily, 4B and every kite were loose. So the coaster's holes came out about one rung larger on that print than on this one. One pair of coasters: a first reading, not a rule. ([2026-10-10-sheets-04g-fit](prints/2026-10-10-sheets-04g-fit/index.md))
 - A 2 mm stud went in by hand at every gap from 0.15 to 0.40 mm and held from 0.15 to 0.25, though spl-1 needed a hammer at 0.15; and at 0.25 one pair held (1E) while its twin fell apart (1F). So the fit moves about 0.05 to 0.10 mm from print to print (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). And carved B and D, M and N, look alike at this size. ([2026-10-09-spl-2](prints/2026-10-09-spl-2/index.md))
 - Every stud gap from -0.10 to 0.15 mm needed a hammer while the slice kept each gap as drawn, so the printer runs tight (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); and an id on the upper's cut face is hidden once the pair closes. ([2026-10-09-spl-1](prints/2026-10-09-spl-1/index.md))
@@ -42,6 +43,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md)
+
+- **Plate:** [sheets-04g-fit2](design/plates/sheets-04g-fit2.md) — the middle piece at 0.025 mm, halfway between sheets-04g-fit's A and B, with both as controls, the kites at 0.05 and a fresh coaster
+- **Lesson:** Halfway worked: printed beside its own coaster, the middle piece at 0.025 mm sat between gap 0 (super tight) and 0.05 (loose) and was the one Omar picked, so the slicer does keep a 0.025 mm step apart in feel. The kites at 0.05 went the other way from sheets-04g-fit: they fit that plate's coaster well and were tough to push into this one, though they hold once in. A coaster's holes move from print to print by about a 0.05 mm rung, now seen on three coasters, so a gap is judged in a coaster from the same bed.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 5 (1 keep, 1 adjust, 2 drop, 1 not-judged)
+- **What happened:** Z coaster: 4GH 1A super tight, 4GH 1C the winner, 4GH 1E loose; the 0.05 kites tough to push in but all stay in upside down.
+- **Why:** Not measured on the pieces (no calipers reading). The kites tighter and 4GH 1A tighter than on sheets-04g-fit, but 4GH 1E looser than that plate's 0.05 piece: not one shift of the whole coaster, and not explained. Nothing on this plate separates the coaster's holes from the pieces.
+- **What it changed:** The middle piece's gap is 0.025 mm on the next sheets-04g iteration. The kites want a little more gap than 0.05; sheets-04g-fit found 0.10 too small, so the next kite step sits between the two. How big a step is Omar's call.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/sheets-04g-fit2-media/bed.png), [ids](design/plates/sheets-04g-fit2-media/ids.png)
+
+![render, not a photo: bed](design/plates/sheets-04g-fit2-media/bed.png)
 
 ### [2026-10-10-sheets-04g-fit](prints/2026-10-10-sheets-04g-fit/index.md)
 
@@ -170,7 +184,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-10 records; 0 measured with a tool, so no bet has moved yet.
+11 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

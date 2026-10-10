@@ -3,9 +3,9 @@ plate: sheets-04g-fit2
 print_log: '[[print-logs/sheets-04g-fit2|print log]]'
 recipe: sheets-04g-fit2.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-10-sheets-04g-fit2]
 answers: "Does a middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A (gap 0, too tight) and B (0.05, a bit too easy), sit firmly in a coaster from the same print?"
 kind: new
 maturity: experiment
@@ -98,6 +98,14 @@ The coaster carries a small `Z` on a strap left of the middle, in the same place
 sheets-04g-fit ([its picture](sheets-04g-fit-media/ids-coaster.png)). The kites carry no id; there is
 one rung of them.
 
+## The print
+
+The print as the chamber camera saw it: 16 pictures from 15:13 to 16:24 UTC, half a second each, the last held. 1 picture with someone at the printer left out. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![sheets-04g-fit2 printing, as the chamber camera saw it](sheets-04g-fit2-media/timelapse.webp)
+
+![sheets-04g-fit2 finished, on the bed](sheets-04g-fit2-media/finished.webp)
+
 ## What the slice lays down
 
 The question is whether a 0.025 mm step survives slicing, or whether the slicer rounds it onto 0 or
@@ -156,3 +164,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-10 | proposed: the middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A and B, with both again as controls, one kite rung at 0.05 and a fresh coaster, on Omar's "is there a midway between a and b?" | [sheets-04g-fit](sheets-04g-fit.md) |
 | 2026-10-10 | sliced: local slice fits one bed, 67 minutes, 18.9 g, no slicer warnings; the walls as sliced keep the three gaps 0.025 apart | this page |
 | 2026-10-10 | sent — by `bambu print send`; spends the approval of 2026-10-10, iteration 1 @ 4734dde389 in #F5547C | this page |
+| 2026-10-10 | printed — on the X2D, glacier plate, one bed, all 22 layers, 75 minutes against the slicer's 67; judged by hand in the `Z` coaster: `4GH 1C` (0.025) the winner, `4GH 1A` (gap 0) super tight, `4GH 1E` (0.05) loose; the 0.05 kites tough to push in but all stay in upside down, so they want a little more gap | [the record](../../prints/2026-10-10-sheets-04g-fit2/index.md) |
