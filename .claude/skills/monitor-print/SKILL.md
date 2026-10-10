@@ -90,8 +90,12 @@ The watcher comes back once the script exits. By then it has looked at the last 
   with their metadata stripped, and a `## The print` section on the page that shows both. It
   refuses, writing nothing, when a QR code can be read in any frame (the repo is public and the
   printer wears QR stickers), or when either file is over 400 KB. A refusal is Omar's call:
-  show him the picture, and never get round the check. If the watcher could not publish, run it
-  yourself from the vault: `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish`.
+  show him the picture, and never get round the check. A picture with someone in it (a hand
+  lifting the plate off, an arm reaching in) stays off the page: `--leave-out <frame>` drops it,
+  and the section says how many were left out. Omar's call on 2026-10-10, after sheets-04g-fit2's
+  last frame caught his hand. Leaving a picture out is for a person, never for a QR code. If the
+  watcher could not publish, run it yourself from the vault:
+  `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish [--leave-out <frame>]`.
 - **Send Omar the timelapse**: the full-size GIF in `.bambu/monitor/<name>/timelapse.gif`
   (SendUserFile), which plays everywhere. Open it first. If the watch died before making it,
   rebuild it from the frames: `print_monitor.py <name> --gif`.
@@ -119,7 +123,7 @@ all), and the timelapse.
 | `scripts/print_monitor.py` | Polls the printer, adds each change and any stall to the plate's `print-logs/<name>.md` (linking it from the page the first time), saves a chamber picture on the clock and at every row, makes the GIF at the end, logs to `.bambu/monitor/<name>.log` | Right after a send, or to pick up watching a print already running; the main session starts it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> [--snapshot-every 10] [--stall-after 15]` |
 | same, `--next` | Waits until the run log has a row, a picture, a timeout or the end past line `--after`, prints them and `cursor=<n>`; `ev=quiet` after `--wait` minutes, `ev=watch_silent` (exit 3) when the script has died | The watcher's loop ([`watcher.md`](watcher.md)); give the Bash call a 10-minute timeout | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --next --after <cursor> --wait 9` |
 | same, `--look` | Adds one line to `.bambu/monitor/<name>/looks.md`: the picture and what it showed | The watcher, after opening each picture | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --look <frame> "<what it shows>"` |
-| same, `--publish` | Animated WebP and finished still, 480 px, metadata stripped, into `<name>-media/`, and a `## The print` section on the page; refuses on a readable QR code or a file over 400 KB | The print has ended; the watcher runs it, or you do if it could not | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish` |
+| same, `--publish` | Animated WebP and finished still, 480 px, metadata stripped, into `<name>-media/`, and a `## The print` section on the page; `--leave-out` keeps a picture with a person in it off; refuses on a readable QR code, a file over 400 KB, or a left-out name that is not a picture | The print has ended; the watcher runs it, or you do if it could not | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish [--leave-out <frame>]` |
 | same, `--gif` | Rebuilds the full-size `timelapse.gif` in `.bambu/` from the frames already taken | The watch died before the end, or frames were added by hand | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif` |
 | same, `--sent` | Writes the send's `sent` row and exits: each tray it fed, its color and the slice's grams for it, which the shelf (`bambu shelf show`) takes off the spool when the print closes | `print send` calls it itself right after the print starts; by hand only when the send said it could not name a tray | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --sent '#00ae42' 'AMS 0 · slot 3' 27.28` |
-| same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page, reads the log back through the plates gate, and publishes made-up frames, one with a real QR code that must be refused | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |
+| same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page, reads the log back through the plates gate, and publishes made-up frames, one with a real QR code that must be refused, then left out by name | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |

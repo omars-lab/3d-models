@@ -60,6 +60,10 @@ an animated WebP, 480 px wide, and the last frame as a WebP still, both with the
 stripped, into `docs/design/plates/<plate>-media/`, and a `## The print` section that shows them,
 after `## Pictures`. It refuses, writing nothing, when zbarimg reads a code in any frame of either
 (the repo is public, and the printer wears QR stickers), or when one is over 400 KB.
+`--leave-out <frame>` (repeatable, the file name with or without `.jpg`) keeps a picture off the
+page, for one that shows a person: sheets-04g-fit2's last frame caught Omar's hand lifting the
+plate, and his call was to drop it (2026-10-10). A name that is not a frame refuses, so a typo
+cannot publish the picture it meant to leave out.
 
 A `finished` row is not a print record. The record (`docs/prints/`, the Timeline's `printed`
 row) is written when the pieces are judged, as before.
@@ -428,13 +432,15 @@ def codes_in(paths: list[Path]) -> int:
     return n
 
 
-def print_section(name: str, frames: list[Path]) -> str:
+def print_section(name: str, frames: list[Path], left_out: int = 0) -> str:
     def hm(f: Path) -> str:
         m = re.match(r"\d{8}T(\d\d)(\d\d)\d\dZ$", f.stem)
         return f"{m[1]}:{m[2]}" if m else f.stem
+    dropped = (f" {left_out} picture{'s' if left_out > 1 else ''} with someone at the printer "
+               f"left out." if left_out else "")
     return (f"{PRINT_HEADING}\n\n"
             f"The print as the chamber camera saw it: {len(frames)} pictures from {hm(frames[0])} to "
-            f"{hm(frames[-1])} UTC, half a second each, the last held. Made by the monitor-print "
+            f"{hm(frames[-1])} UTC, half a second each, the last held.{dropped} Made by the monitor-print "
             f"skill's `print_monitor.py --publish`; what the printer said is in the print log.\n\n"
             f"![{name} printing, as the chamber camera saw it]({name}-media/timelapse.webp)\n\n"
             f"![{name} finished, on the bed]({name}-media/finished.webp)\n")
@@ -461,16 +467,22 @@ def with_print_section(text: str, section: str) -> str:
     return out.rstrip("\n") + "\n"
 
 
-def publish(plate: str, log: Log) -> int:
+def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
     """Make `<plate>-media/timelapse.webp` and `finished.webp` beside the page and show both in its
-    `## The print` section. Refuses, writing nothing, when a code reads in either or one is over
-    the cap."""
+    `## The print` section, without the frames named in `leave_out`. Refuses, writing nothing,
+    when a code reads in either, one is over the cap, or a left-out name is not a frame."""
     page = page_of(plate)
     name = page.stem
     if not page.is_file():
         print(f"print-monitor: no plate page {page}", file=sys.stderr)
         return 2
-    frames = sorted(frames_dir(name).glob("*.jpg"))
+    taken = sorted(frames_dir(name).glob("*.jpg"))
+    drop = {Path(x).name if x.endswith(".jpg") else f"{Path(x).name}.jpg" for x in leave_out}
+    if unknown := drop - {f.name for f in taken}:
+        print(f"print-monitor: not a picture of {name}: {', '.join(sorted(unknown))}; nothing "
+              f"published", file=sys.stderr)
+        return 2
+    frames = [f for f in taken if f.name not in drop]
     if len(frames) < 2:
         print(f"print-monitor: {len(frames)} pictures of {name}; a timelapse needs two", file=sys.stderr)
         return 2
@@ -478,7 +490,7 @@ def publish(plate: str, log: Log) -> int:
     work.mkdir(parents=True, exist_ok=True)
     made = {"timelapse.webp": webp_cmd(frames, work / "timelapse.webp"),
             "finished.webp": still_cmd(frames[-1], work / "finished.webp")}
-    log("publish_start", frames=len(frames))
+    log("publish_start", frames=len(frames), left_out=len(drop))
     try:
         for cmd in made.values():
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=PUBLISH_TIMEOUT_S)
@@ -497,7 +509,7 @@ def publish(plate: str, log: Log) -> int:
     if codes:
         log("publish_refused", codes=codes)
         print(f"print-monitor: {codes} readable code(s) in the pictures; nothing published. Look at "
-              f"{work} and leave the frame out of the timelapse.", file=sys.stderr)
+              f"{work}, find the frame and name it with --leave-out.", file=sys.stderr)
         return 1
     big = {f: (work / f).stat().st_size for f in made if (work / f).stat().st_size > MEDIA_MAX_BYTES}
     if big:
@@ -508,11 +520,12 @@ def publish(plate: str, log: Log) -> int:
     media.mkdir(exist_ok=True)
     for f in made:
         (media / f).write_bytes((work / f).read_bytes())
-    page.write_text(with_print_section(page.read_text(encoding="utf-8"), print_section(name, frames)),
+    page.write_text(with_print_section(page.read_text(encoding="utf-8"), print_section(name, frames, len(drop))),
                     encoding="utf-8")
     sizes = " ".join(f"{f.split('.')[0]}_bytes={(media / f).stat().st_size}" for f in made)
-    log("publish_done", frames=len(frames), msg=sizes)
-    print(f"ev=publish plate={name} frames={len(frames)} {sizes} dir={media}", flush=True)
+    log("publish_done", frames=len(frames), left_out=len(drop), msg=sizes)
+    print(f"ev=publish plate={name} frames={len(frames)} left_out={len(drop)} {sizes} dir={media}",
+          flush=True)
     return 0
 
 
@@ -845,15 +858,22 @@ def self_test() -> int:
             check(rc == 1 and not media_of(pg.PLATES / "x.md").exists()
                   and (pg.PLATES / "x.md").read_text(encoding="utf-8") == body,
                   "a QR code in a middle frame: refused, nothing written", f"rc={rc}")
-            (fr / "20261010T152500Z.jpg").unlink()
-            rc = publish("x", quiet)
+            rc = publish("x", quiet, ["20261010T152600Z"])
+            check(rc == 2 and not media_of(pg.PLATES / "x.md").exists()
+                  and (pg.PLATES / "x.md").read_text(encoding="utf-8") == body,
+                  "a left-out name that is no frame (a typo): refused, nothing written", f"rc={rc}")
+            rc = publish("x", quiet, ["20261010T152500Z"])
             media = media_of(pg.PLATES / "x.md")
             sizes = [(media / f).stat().st_size for f in ("timelapse.webp", "finished.webp")
                      if (media / f).is_file()]
+            text = (pg.PLATES / "x.md").read_text(encoding="utf-8")
             check(rc == 0 and len(sizes) == 2 and max(sizes) <= MEDIA_MAX_BYTES
-                  and PRINT_HEADING in (pg.PLATES / "x.md").read_text(encoding="utf-8"),
-                  "the same frames without it: both WebPs beside the page, under the cap, and the "
-                  "section on it", f"rc={rc} sizes={sizes}")
+                  and "2 pictures from 15:15 to 15:35 UTC" in text
+                  and "1 picture with someone at the printer left out." in text
+                  and (fr / "20261010T152500Z.jpg").is_file(),
+                  "that frame left out by name: both WebPs beside the page, under the cap, the "
+                  "section saying one was left out, and the frame itself kept in .bambu/",
+                  f"rc={rc} sizes={sizes}")
         except (FileNotFoundError, subprocess.CalledProcessError) as e:
             check(False, "publishing needs magick and zbarimg", f"{e} (brew install imagemagick zbar)")
         finally:
@@ -892,6 +912,9 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--publish", action="store_true",
                     help="put the timelapse and the finished plate on the page, as small WebPs in "
                          "<plate>-media/, refusing any picture where a QR code reads")
+    ap.add_argument("--leave-out", action="append", metavar="FRAME",
+                    help="with --publish: a picture to keep off the page, such as one showing a "
+                         "person (the frame's file name; repeat for each)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
@@ -904,7 +927,7 @@ def main(argv: list[str]) -> int:
         print(add_look(page_of(a.plate).stem, *a.look))
         return 0
     if a.publish:
-        return publish(a.plate, Log(LOGS / f"{page_of(a.plate).stem}.log"))
+        return publish(a.plate, Log(LOGS / f"{page_of(a.plate).stem}.log"), a.leave_out or [])
     if a.sent:
         when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
         try:
