@@ -237,9 +237,12 @@ another way and never send from Bambu Studio for him.
 ## 6. Watch it
 
 Right after the send goes through, hand the print to the
-[monitor-print](../monitor-print/SKILL.md) skill. It writes the printer's state onto the page,
-checks the print is still moving, takes a chamber picture every 10 minutes for you to look at,
-and makes a timelapse GIF when the print ends. A send with no watch after it is not finished.
+[monitor-print](../monitor-print/SKILL.md) skill: start its script in the background, start its
+watcher agent, and go back to other work. The script writes the printer's state into the plate's
+print log, checks the print is still moving and takes a chamber picture every 10 minutes; the
+watcher looks at each picture, comes back only when something needs Omar or the print is over,
+and puts a small timelapse and the finished plate on the page. A send with no watch after it is
+not finished.
 
 ## 7. Report
 
