@@ -6,6 +6,9 @@ the print is still moving, take a chamber picture every few minutes and make a t
         [--stall-after 15] [--snapshot-every 10]
     python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --gif
     python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --sent <hex> <tray> <grams> [--sent …]
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --next [--after N] [--wait 9]
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --look <frame> "<what it shows>"
+    python3 .claude/skills/monitor-print/scripts/print_monitor.py <plate> --publish
     python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test
 
 `<plate>` is a plate name (`sheets-04b`) or the path of its page. Run it from the main checkout
@@ -44,6 +47,19 @@ its color and the slice's grams for it (`fed #00ae42 from AMS 0 · slot 3, 27.28
 a two-tray plate separates them with `; `). The send writes it, before the watch starts. The
 shelf (`bambu shelf show`) takes those grams off the matching spool when the next `finished`,
 `failed` or `stopped` row closes the print (order-driven-lab-design §9.2).
+
+**The background watcher's side** (monitor-print's `watcher.md`). `--next` blocks until the run
+log has a row, a picture, a timeout or the end past line `--after`, prints those lines and
+`cursor=<n>` for the next call, and gives up after `--wait` minutes with `ev=quiet`, or at once
+with `ev=watch_silent` (exit 3) when the log has gone three minutes with no line, which means
+the watch itself has died. `--look` adds one line to `.bambu/monitor/<plate>/looks.md`: which
+picture, and what the watcher saw in it.
+
+**Publishing.** `--publish` puts the print on its page, small (Omar, 2026-10-10): the frames as
+an animated WebP, 480 px wide, and the last frame as a WebP still, both with their metadata
+stripped, into `docs/design/plates/<plate>-media/`, and a `## The print` section that shows them,
+after `## Pictures`. It refuses, writing nothing, when zbarimg reads a code in any frame of either
+(the repo is public, and the printer wears QR stickers), or when one is over 400 KB.
 
 A `finished` row is not a print record. The record (`docs/prints/`, the Timeline's `printed`
 row) is written when the pieces are judged, as before.
@@ -365,6 +381,198 @@ def make_gif(name: str, log: Log) -> Path | None:
     return out
 
 
+# ---------------------------------------------------------------------------
+# publishing: the timelapse and the finished plate onto the plate's page
+# ---------------------------------------------------------------------------
+
+# Omar, 2026-10-10: publish them, but small. Measured on sheets-04g-fit2's frames: an animated WebP
+# at 480 px is about 120 KB where the 640 px GIF was 1.4 MB, and a WebP still about 10 KB where a
+# PNG was 250 KB. The cap stops a long print from growing the repo by megabytes unnoticed.
+MEDIA_WIDTH = 480
+MEDIA_QUALITY = 60
+MEDIA_MAX_BYTES = 400_000
+PUBLISH_TIMEOUT_S = 180
+PRINT_HEADING = "## The print"
+
+
+def media_of(page: Path) -> Path:
+    return page.parent / f"{page.stem}-media"
+
+
+def webp_cmd(frames: list[Path], out: Path) -> list[str]:
+    """The GIF's timing, as an animated WebP: smaller, and with no picture metadata."""
+    return ["magick", "-loop", "0", "-delay", "50", *map(str, frames[:-1]),
+            "-delay", "200", str(frames[-1]), "-resize", f"{MEDIA_WIDTH}x", "-strip",
+            "-quality", str(MEDIA_QUALITY), str(out)]
+
+
+def still_cmd(frame: Path, out: Path) -> list[str]:
+    return ["magick", str(frame), "-resize", f"{MEDIA_WIDTH}x", "-strip",
+            "-quality", str(MEDIA_QUALITY), str(out)]
+
+
+def codes_in(paths: list[Path]) -> int:
+    """How many codes zbarimg reads in these pictures, every frame of an animated one. The repo is
+    public and the printer wears QR stickers, so a picture with a readable code is never published.
+    What a code says is never printed: it may be the printer's serial.
+
+    One file per call: given several, zbarimg exits 4 ("none found") when any one of them has no
+    code, so a code in the timelapse hid behind a clean still (found by the self-test)."""
+    n = 0
+    for p in paths:
+        r = subprocess.run(["zbarimg", "--quiet", "--raw", str(p)], capture_output=True, text=True,
+                           timeout=PUBLISH_TIMEOUT_S)
+        if r.returncode not in (0, 4):
+            raise RuntimeError(f"zbarimg exited {r.returncode} on {p.name}: {cell(r.stderr)[:200]}")
+        n += len([ln for ln in r.stdout.splitlines() if ln.strip()])
+    return n
+
+
+def print_section(name: str, frames: list[Path]) -> str:
+    def hm(f: Path) -> str:
+        m = re.match(r"\d{8}T(\d\d)(\d\d)\d\dZ$", f.stem)
+        return f"{m[1]}:{m[2]}" if m else f.stem
+    return (f"{PRINT_HEADING}\n\n"
+            f"The print as the chamber camera saw it: {len(frames)} pictures from {hm(frames[0])} to "
+            f"{hm(frames[-1])} UTC, half a second each, the last held. Made by the monitor-print "
+            f"skill's `print_monitor.py --publish`; what the printer said is in the print log.\n\n"
+            f"![{name} printing, as the chamber camera saw it]({name}-media/timelapse.webp)\n\n"
+            f"![{name} finished, on the bed]({name}-media/finished.webp)\n")
+
+
+def with_print_section(text: str, section: str) -> str:
+    """The page with its `## The print` section replaced, or added after `## Pictures` (before
+    `## Your call` when it has no Pictures, at the end when it has neither)."""
+    def span(heading: str) -> tuple[int, int] | None:
+        m = re.search(rf"^{re.escape(heading)}\b.*$", text, flags=re.MULTILINE)
+        if not m:
+            return None
+        nxt = re.search(r"^## ", text[m.end():], flags=re.MULTILINE)
+        return m.start(), (m.end() + nxt.start()) if nxt else len(text)
+    block = section.rstrip("\n") + "\n\n"
+    if s := span(PRINT_HEADING):
+        out = text[:s[0]] + block + text[s[1]:]
+    elif s := span("## Pictures"):
+        out = text[:s[1]] + block + text[s[1]:]
+    elif m := re.search(r"^## Your call\b", text, flags=re.MULTILINE):
+        out = text[:m.start()] + block + text[m.start():]
+    else:
+        out = text.rstrip("\n") + "\n\n" + block
+    return out.rstrip("\n") + "\n"
+
+
+def publish(plate: str, log: Log) -> int:
+    """Make `<plate>-media/timelapse.webp` and `finished.webp` beside the page and show both in its
+    `## The print` section. Refuses, writing nothing, when a code reads in either or one is over
+    the cap."""
+    page = page_of(plate)
+    name = page.stem
+    if not page.is_file():
+        print(f"print-monitor: no plate page {page}", file=sys.stderr)
+        return 2
+    frames = sorted(frames_dir(name).glob("*.jpg"))
+    if len(frames) < 2:
+        print(f"print-monitor: {len(frames)} pictures of {name}; a timelapse needs two", file=sys.stderr)
+        return 2
+    work = LOGS / name / "publish"
+    work.mkdir(parents=True, exist_ok=True)
+    made = {"timelapse.webp": webp_cmd(frames, work / "timelapse.webp"),
+            "finished.webp": still_cmd(frames[-1], work / "finished.webp")}
+    log("publish_start", frames=len(frames))
+    try:
+        for cmd in made.values():
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=PUBLISH_TIMEOUT_S)
+            if r.returncode != 0:
+                log("publish_failed", rc=r.returncode, msg=cell(r.stderr)[:200])
+                print(f"print-monitor: magick failed: {cell(r.stderr)[:200]}", file=sys.stderr)
+                return 1
+        codes = codes_in([work / f for f in made])
+    except subprocess.TimeoutExpired:
+        log("publish_timeout", timeout_s=PUBLISH_TIMEOUT_S)
+        return 1
+    except (FileNotFoundError, RuntimeError) as e:
+        log("publish_failed", msg=cell(str(e))[:200])
+        print(f"print-monitor: {e} (brew install imagemagick zbar)", file=sys.stderr)
+        return 1
+    if codes:
+        log("publish_refused", codes=codes)
+        print(f"print-monitor: {codes} readable code(s) in the pictures; nothing published. Look at "
+              f"{work} and leave the frame out of the timelapse.", file=sys.stderr)
+        return 1
+    big = {f: (work / f).stat().st_size for f in made if (work / f).stat().st_size > MEDIA_MAX_BYTES}
+    if big:
+        log("publish_refused", too_big=",".join(big))
+        print(f"print-monitor: over {MEDIA_MAX_BYTES} bytes: {big}; nothing published", file=sys.stderr)
+        return 1
+    media = media_of(page)
+    media.mkdir(exist_ok=True)
+    for f in made:
+        (media / f).write_bytes((work / f).read_bytes())
+    page.write_text(with_print_section(page.read_text(encoding="utf-8"), print_section(name, frames)),
+                    encoding="utf-8")
+    sizes = " ".join(f"{f.split('.')[0]}_bytes={(media / f).stat().st_size}" for f in made)
+    log("publish_done", frames=len(frames), msg=sizes)
+    print(f"ev=publish plate={name} frames={len(frames)} {sizes} dir={media}", flush=True)
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# the background watcher's side: wait for the next thing worth a look, note what a picture showed
+# ---------------------------------------------------------------------------
+
+# The run-log events a watcher wakes for: a row, a picture, the end, and any call that timed out.
+WAKE = re.compile(r" ev=(row|snapshot_done|exit|gif_done|gif_failed|gif_skipped|\w+_timeout) ")
+# The watch polls every 30 s and logs before and after each poll, so this long with no line at
+# all means the watch itself has died, not the printer.
+SILENT_AFTER_S = 180
+
+
+def next_events(lines: list[str], after: int) -> tuple[list[str], int]:
+    """The wake-worthy lines past line `after` (1-based count already seen), and the new count."""
+    return [ln for ln in lines[after:] if WAKE.search(ln + " ")], len(lines)
+
+
+def wait_next(name: str, after: int, wait_s: float, every: float = 5) -> int:
+    """Block until the run log has a line worth a look past `after`, or `wait_s` passes.
+
+    Prints each such line, then `cursor=<n>` to pass as `--after` next time. Prints `ev=quiet`
+    when the time ran out with nothing new, and `ev=watch_silent` when the log has had no line at
+    all for SILENT_AFTER_S (the watch process is gone). Fits in one 10-minute Bash call."""
+    path = LOGS / f"{name}.log"
+    end = time.time() + wait_s
+    while True:
+        lines = path.read_text(encoding="utf-8").splitlines() if path.is_file() else []
+        hits, cursor = next_events(lines, after)
+        if hits:
+            print("\n".join(hits))
+            print(f"cursor={cursor}")
+            return 0
+        if path.is_file() and time.time() - path.stat().st_mtime > SILENT_AFTER_S:
+            print(f"ev=watch_silent plate={name} quiet_s={int(time.time() - path.stat().st_mtime)}")
+            print(f"cursor={cursor}")
+            return 3
+        if time.time() >= end:
+            print(f"ev=quiet plate={name}")
+            print(f"cursor={cursor}")
+            return 0
+        time.sleep(every)
+
+
+def looks_of(name: str) -> Path:
+    return LOGS / name / "looks.md"
+
+
+def add_look(name: str, frame: str, note: str) -> str:
+    """One line in `.bambu/monitor/<plate>/looks.md`: which picture, what the watcher saw in it."""
+    when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
+    line = f"- {when} `{Path(frame).name}`: {cell(note)}"
+    p = looks_of(name)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("a", encoding="utf-8") as f:
+        f.write(line + "\n")
+    return line
+
+
 def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, snap_s: float) -> int:
     page = page_of(plate)
     name = page.stem
@@ -557,6 +765,100 @@ def self_test() -> int:
         found = pg.check_print_logs(Path(tmp), pg.read_pages(Path(tmp)))
         check(not found, "a log that starts with the send's row reads back clean through the gate", found)
 
+    # The background watcher wakes for rows, pictures, the end and timeouts, never for polls.
+    log_lines = [
+        "2026-10-10T15:23:00Z pid=1 ev=poll_start",
+        "2026-10-10T15:23:01Z pid=1 ev=poll_done state=RUNNING layer=3 pct=8 err=0 job=x",
+        "2026-10-10T15:23:37Z pid=1 ev=snapshot_done path=20261010T152335Z.jpg bytes=99074",
+        '2026-10-10T15:32:11Z pid=1 ev=row event=progress msg="25%"',
+        "2026-10-10T15:33:00Z pid=1 ev=poll_timeout timeout_s=60",
+        "2026-10-10T16:20:00Z pid=1 ev=exit reason=finished",
+    ]
+    hits, cur = next_events(log_lines, 0)
+    check([h.split(" ev=")[1].split(" ")[0] for h in hits] == ["snapshot_done", "row", "poll_timeout", "exit"]
+          and cur == 6, "the watcher wakes for a picture, a row, a timeout and the end, not a poll", hits)
+    hits, cur = next_events(log_lines, 3)
+    check(len(hits) == 3 and hits[0].endswith('msg="25%"') and cur == 6,
+          "the cursor skips what the watcher has already seen", hits)
+    check(next_events(log_lines[:2], 0) == ([], 2), "polls alone wake nobody")
+    with tempfile.TemporaryDirectory() as tmp:
+        global LOGS
+        saved, LOGS = LOGS, Path(tmp)
+        try:
+            line = add_look("x", "/a/b/20261010T152335Z.jpg", "first layer down | flat")
+            check(line.endswith("`20261010T152335Z.jpg`: first layer down / flat")
+                  and looks_of("x").read_text(encoding="utf-8") == line + "\n",
+                  "a look names its picture and keeps a | from breaking the line", line)
+        finally:
+            LOGS = saved
+
+    # Publishing: the section lands after Pictures once, and a second publish replaces it.
+    body = ("---\nplate: x\n---\n\n# x\n\n## Pictures\n\n![bed](x-media/bed.png)\n\n"
+            "## What the slice lays down\n\nwalls\n\n## Your call\n\n- [ ] Approve\n")
+    shots = [Path("20261010T151500Z.jpg"), Path("20261010T162000Z.jpg")]
+    once = with_print_section(body, print_section("x", shots))
+    check(once.index("## Pictures") < once.index(PRINT_HEADING) < once.index("## What the slice")
+          and "2 pictures from 15:15 to 16:20 UTC" in once and "](x-media/timelapse.webp)" in once,
+          "the print's section goes after the pictures, with both media linked", once)
+    twice = with_print_section(once, print_section("x", shots[:1] * 3))
+    check(twice.count(PRINT_HEADING) == 1 and "3 pictures" in twice
+          and twice.replace(print_section("x", shots[:1] * 3), "") == once.replace(print_section("x", shots), ""),
+          "publishing again replaces the section and leaves the rest of the page alone", twice)
+    bare = with_print_section("# x\n\n## Your call\n\n- [ ] Approve\n", print_section("x", shots))
+    check(bare.index(PRINT_HEADING) < bare.index("## Your call"), "no Pictures: before Your call", bare)
+    cmd = webp_cmd([Path("a.jpg"), Path("b.jpg"), Path("c.jpg")], Path("t.webp"))
+    check(cmd[cmd.index("c.jpg") - 2:cmd.index("c.jpg")] == ["-delay", "200"] and "-strip" in cmd
+          and f"{MEDIA_WIDTH}x" in cmd, "the WebP holds the last frame, is 480 px and drops metadata", cmd)
+
+    # The by-design refusal, on real pictures: a frame showing a QR code (this one says
+    # "print-monitor self-test", drawn by segno) in the middle of a timelapse publishes nothing.
+    qr = ["#######..###.##...#######", "#.....#....####...#.....#", "#.###.#..###...##.#.###.#",
+          "#.###.#.#.##.####.#.###.#", "#.###.#.#.#.##..#.#.###.#", "#.....#..##...#.#.#.....#",
+          "#######.#.#.#.#.#.#######", ".........#..#.#.#........", "##...###.##.####....##...",
+          ".#...#.#..#....#...##....", "##...#####.##.###...#..##", "####...#..##...#.#####...",
+          "#.....##.##....#..##.#.##", "#.##......#.#..###.#.###.", "#..#####.#....##.########",
+          "#.#....#..#.#...#.##.##.#", "#..####.#...#########.#.#", "........#.#...#.#...##.#.",
+          "#######.#...#.#.#.#.###.#", "#.....#.#.##..#.#...#..#.", "#.###.#..################",
+          "#.###.#..##.#....##..#.##", "#.###.#...#.#.##...#....#", "#.....#.##..#..###.#.#..#",
+          "#######.#.#####.#....#..#"]
+    with tempfile.TemporaryDirectory() as tmp:
+        t = Path(tmp)
+        saved_logs, saved_plates = LOGS, pg.PLATES
+        LOGS, pg.PLATES = t / "monitor", t / "plates"
+        try:
+            pg.PLATES.mkdir()
+            (pg.PLATES / "x.md").write_text(body, encoding="utf-8")
+            fr = frames_dir("x")
+            fr.mkdir(parents=True)
+            side = len(qr) + 8
+            pbm = t / "qr.pbm"
+            pbm.write_text(f"P1\n{side} {side}\n" + "\n".join(
+                " ".join("1" if c == "#" else "0" for c in "...." + row + "....")
+                for row in ["." * len(qr)] * 4 + qr + ["." * len(qr)] * 4) + "\n", encoding="ascii")
+            for stamp, src in (("20261010T151500Z", None), ("20261010T152500Z", pbm),
+                               ("20261010T153500Z", None)):
+                art = ["xc:gray60"] if src is None else [str(src), "-scale", "400x400"]
+                subprocess.run(["magick", "-size", "800x600", "xc:gray60", *art, "-gravity", "center",
+                                "-composite", str(fr / f"{stamp}.jpg")], check=True, timeout=60)
+            quiet = Log(t / "x.log")
+            rc = publish("x", quiet)
+            check(rc == 1 and not media_of(pg.PLATES / "x.md").exists()
+                  and (pg.PLATES / "x.md").read_text(encoding="utf-8") == body,
+                  "a QR code in a middle frame: refused, nothing written", f"rc={rc}")
+            (fr / "20261010T152500Z.jpg").unlink()
+            rc = publish("x", quiet)
+            media = media_of(pg.PLATES / "x.md")
+            sizes = [(media / f).stat().st_size for f in ("timelapse.webp", "finished.webp")
+                     if (media / f).is_file()]
+            check(rc == 0 and len(sizes) == 2 and max(sizes) <= MEDIA_MAX_BYTES
+                  and PRINT_HEADING in (pg.PLATES / "x.md").read_text(encoding="utf-8"),
+                  "the same frames without it: both WebPs beside the page, under the cap, and the "
+                  "section on it", f"rc={rc} sizes={sizes}")
+        except (FileNotFoundError, subprocess.CalledProcessError) as e:
+            check(False, "publishing needs magick and zbarimg", f"{e} (brew install imagemagick zbar)")
+        finally:
+            LOGS, pg.PLATES = saved_logs, saved_plates
+
     print(f"self-test: {'PASS' if not fails else f'FAIL ({fails})'}")
     return 1 if fails else 0
 
@@ -576,12 +878,33 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--sent", nargs=3, action="append", metavar=("HEX", "TRAY", "GRAMS"),
                     help="only write the send's row: a tray it fed, its color and the slice's grams "
                          "(repeat for each tray), then exit")
+    ap.add_argument("--next", action="store_true",
+                    help="for the background watcher: wait until the run log has a row, a picture, "
+                         "a timeout or the end past --after, print them and the new cursor, exit")
+    ap.add_argument("--after", type=int, default=0,
+                    help="with --next: the cursor the last --next printed (lines already seen)")
+    ap.add_argument("--wait", type=float, default=9,
+                    help="with --next: minutes to wait before printing ev=quiet (default 9, inside "
+                         "one 10-minute Bash call)")
+    ap.add_argument("--look", nargs=2, metavar=("FRAME", "NOTE"),
+                    help="for the background watcher: add what one picture showed to "
+                         ".bambu/monitor/<plate>/looks.md, then exit")
+    ap.add_argument("--publish", action="store_true",
+                    help="put the timelapse and the finished plate on the page, as small WebPs in "
+                         "<plate>-media/, refusing any picture where a QR code reads")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
         return self_test()
     if not a.plate:
         ap.error("name a plate")
+    if a.next:
+        return wait_next(page_of(a.plate).stem, a.after, a.wait * 60)
+    if a.look:
+        print(add_look(page_of(a.plate).stem, *a.look))
+        return 0
+    if a.publish:
+        return publish(a.plate, Log(LOGS / f"{page_of(a.plate).stem}.log"))
     if a.sent:
         when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
         try:
