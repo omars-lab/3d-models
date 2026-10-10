@@ -1,8 +1,9 @@
 ---
 plate: sheets-04g-fit2
+print_log: '[[print-logs/sheets-04g-fit2|print log]]'
 recipe: sheets-04g-fit2.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does a middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A (gap 0, too tight) and B (0.05, a bit too easy), sit firmly in a coaster from the same print?"
@@ -146,7 +147,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-10 | approved | Omar, in chat: "send it when it's ready" | iteration 1 @ 4734dde389 in #F5547C | |
+| 2026-10-10 | approved | Omar, in chat: "send it when it's ready" | iteration 1 @ 4734dde389 in #F5547C | sent 2026-10-10 |
 
 ## Timeline
 
@@ -154,3 +155,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-10 | proposed: the middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A and B, with both again as controls, one kite rung at 0.05 and a fresh coaster, on Omar's "is there a midway between a and b?" | [sheets-04g-fit](sheets-04g-fit.md) |
 | 2026-10-10 | sliced: local slice fits one bed, 67 minutes, 18.9 g, no slicer warnings; the walls as sliced keep the three gaps 0.025 apart | this page |
+| 2026-10-10 | sent — by `bambu print send`; spends the approval of 2026-10-10, iteration 1 @ 4734dde389 in #F5547C | this page |
