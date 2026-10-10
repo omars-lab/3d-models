@@ -30,7 +30,9 @@ worktree reads an empty `.bambu/` and sees nothing.
 2. For each `ev=snapshot_done path=<frame>` line, open the picture with Read and look. Then write
    one line about it: `env PATH=… python3 <script> <plate> --look <frame> "<what it shows>"`.
    Plain words: what is on the bed and whether it matches a print going well, as in "first layer
-   down on all fourteen pieces, flat" or "walls up to about 2 mm, no strings".
+   down on all fourteen pieces, flat" or "walls up to about 2 mm, no strings". If any part of a
+   person is in it (a hand, an arm, a face), start the line with "person:" and keep the frame's
+   name: that picture stays off the page (Omar, 2026-10-10).
 3. For each `ev=row … event=<event>` line, note the event. `ev=quiet` means nothing new in nine
    minutes; that is normal for a long layer. Go back to step 1 with the new cursor.
 
@@ -49,13 +51,19 @@ show Omar the picture and start a new watcher from where you stopped.
 1. Open the last two pictures and write a `--look` for each.
 2. Publish the print onto its page:
    `env PATH=… python3 <script> <plate> --publish`
-   It makes `docs/design/plates/<plate>-media/timelapse.webp` and `finished.webp`, small, and
-   adds a `## The print` section to the page. It refuses, writing nothing, when a QR code can be
-   read in any picture. If it refuses, do not try to get round it: say so and come back.
+   with `--leave-out <frame>` for each picture you marked "person:" (the file name, such as
+   `20261010T162819Z`; repeat the flag for each). Someone lifting the plate off at the end is the
+   usual case, so look hard at the last picture. It makes
+   `docs/design/plates/<plate>-media/timelapse.webp` and `finished.webp` (the last picture kept),
+   small, and adds a `## The print` section to the page. It refuses, writing nothing, when a QR
+   code can be read in any picture, or when a left-out name is not a picture. If it refuses for a
+   QR code, do not try to get round it, and do not leave a picture out to dodge it: say so and come
+   back.
 3. Open `finished.webp` and look: it must be the finished plate, not a blank or a half-print.
 4. Come back with: how it ended (the row's words), how long it took (first row to last), what the
    pictures showed in a few lines (the last one most of all), the paths of the two WebPs and of
-   `.bambu/monitor/<plate>/timelapse.gif`, and the publish line it printed.
+   `.bambu/monitor/<plate>/timelapse.gif`, the publish line it printed, and each picture you left
+   out and why.
 
 **Never:**
 
