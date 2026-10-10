@@ -22,7 +22,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 |---|---|---|---|---|---|---|---|
 | 1 | [theme-night-sky-11600](theme-night-sky-11600.md) | waiting | 1 | 0.2 | 6.39 | ok | Night sky, one of its 4 plates: do its Kite ×10 come out as the theme draws them, in PLA Matte Marine Blue (11600)? |
 | 2 | [stud-1](stud-1.md) | waiting | 6 | 1.0 | 6.25 | ok | How far apart should a split coaster's studs be: does a slice of split-01's lip coaster hold together and line up with its studs 25, 15 or 10 mm apart? |
-| 3 | [sheets-04g-fit2](sheets-04g-fit2.md) | waiting | 8 | 1.3 | 6.12 | watch | Does a middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A (gap 0, too tight) and B (0.05, a bit too easy), sit firmly in a coaster from the same print? |
+| 3 | [sheets-04g-fit2](sheets-04g-fit2.md) | approved | 8 | 1.3 | 6.12 | watch | Does a middle piece at 0.025 mm per face, halfway between sheets-04g-fit's A (gap 0, too tight) and B (0.05, a bit too easy), sit firmly in a coaster from the same print? |
 | 4 | [theme-iznik-tile-10205](theme-iznik-tile-10205.md) | waiting | 1 | 0.3 | 3.92 | ok | Iznik tile, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Maroon Red (10205)? |
 | 5 | [theme-night-sky-13402](theme-night-sky-13402.md) | waiting | 1 | 0.3 | 3.92 | ok | Night sky, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Sparkle Classic Gold Sparkle (13402)? |
 | 6 | [theme-terracotta-souk-10401](theme-terracotta-souk-10401.md) | waiting | 1 | 0.3 | 3.92 | ok | Terracotta souk, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Gold (10401)? |
