@@ -138,3 +138,40 @@ the holes come out the same each time. They did not, by about as much as one ste
 So the halfway test, a middle piece at 0.025 mm between `4A` and `4B`, prints its own fresh coaster
 on the same bed, and its pieces are judged in that coaster. A gap picked in one coaster may still
 come out one step loose or tight in the next.
+
+## The same file, a different fit
+
+**2026-10-10.** [sheets-04g-fit2](../design/plates/sheets-04g-fit2.md) printed the middle piece at
+0.025 mm, with gap 0 and 0.05 again as controls, the 0.05 kites again, and a fresh `Z` coaster.
+Omar picked `4GH 1C` (0.025): "4gh ic is winner". The record is
+[2026-10-10-sheets-04g-fit2](../prints/2026-10-10-sheets-04g-fit2/index.md).
+
+The repeats did not repeat. The 0.05 kites "fit well" in sheets-04g-fit's `Z` coaster and were
+"tought to insert" in this one. Gap 0 went from "to tight" to "sauper tight". The 0.05 middle piece
+went from "good but comes off a bit to easy" to "loose". So the kites and gap 0 felt tighter and
+the 0.05 middle piece looser: not one shift of the whole coaster.
+
+What was the same, read off the two sliced files:
+
+- **The coaster and the 0.05 kites are the same mesh.** Both plates carry the same iteration ids
+  (`it-f472bd0548e1` and `it-f357c32a4f5a`), made from the same bikar commit, source hashes and
+  params.
+- **The middle pieces have the same outline.** Their gaps match, but the dots on top and the
+  carved id on the bed face differ, so they are not the same mesh.
+- **The slicer settings are the same.** `project_settings.config` is byte-identical between the
+  two `.3mf` files. `model_settings.config` holds no per-object setting, only names and ids, and
+  `slice_info.config` differs only in the objects, minutes and grams.
+- **The coaster sat in the same place.** Its center is at (148.3, 136.6) on the first bed and
+  (148.3, 134.4) on the second, 2.2 mm apart.
+- **Same printer, same smooth glacier plate, same spool of pink PLA Basic**, the same day, about two hours apart.
+
+So whatever moved the fit happened at the printer or in the hand, not in the outlines or the
+settings. Nothing was measured with calipers, so it stays unknown which moved: the coaster's
+holes, the pieces, or the feel. The likely suspects are a first layer squashed more or less (the bottom edge flares
+outward, which tightens a piece going in bed face first), how the plate was cleaned, and the
+room. None of them was checked.
+
+**What it changes.** A step of 0.025 mm, read by hand in one print, is inside how far the same
+file moved between two prints. `4GH 1C` winning once is a good sign, not a settled gap. The next
+fit plate repeats the controls beside any new gap, and the first caliper reading on the two `Z`
+coasters' middle holes is worth more than another print read by hand.

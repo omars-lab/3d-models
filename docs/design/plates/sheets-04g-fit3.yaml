@@ -1,0 +1,75 @@
+# sheets-04g-fit3 — the 0.025 middle piece again, and the kites one half-step looser
+#
+# Omar, 2026-10-10, on sheets-04g-fit2: "4gh ic is winner" (the middle piece at 0.025 mm per face),
+# "1a sauper tight, 1e loose", and the 0.05 kites "could be a bit smaller, tought to insert",
+# though "All stay in".
+#
+# The repeats on fit2 did not repeat: the same coaster mesh, the same 0.05 kites and the same
+# slicer settings fit differently from sheets-04g-fit (docs/issues/sheets-04g-fit.md, "The same
+# file, a different fit"). So one win at 0.025 is a good sign, not a settled gap, and this plate
+# prints all three middle pieces again, 0 and 0.05 as controls beside the 0.025, in a fresh coaster.
+#
+# The kites: 0.05 again, as the control, and 0.075, halfway to sheets-04g-fit's 0.10, which was
+# "too small/lost". The 0.075 is an assumption on the page, not a decision.
+#
+# Telling the two kite rungs apart: a kite has no room for a carved id (D-114) but holds one dot at
+# this size up to gap 0.15 (bikar #324). As on the middle pieces, the most dots go on the biggest:
+# one dot on the 0.05 kites, none on the 0.075. A dot is in the top, so it does not touch the fit.
+#
+# The middle pieces carry the same dots as on fit2: three at gap 0, two at 0.025, one at 0.05.
+# The carved id (D-109, D-114) goes on each middle piece's bed face, 4GJ/<iteration> <letter>:
+# A at gap 0, C at 0.025, E at 0.05, the same letters as on fit2, so the code tells the plates
+# apart. B, D, M, N and O are skipped (Omar, 2026-10-09). The coaster carries 3, not the Z of the
+# two fit plates before it: `id_form: piece` cuts the one character only, so three coasters all
+# carved Z could not be told apart on the table, and each piece is judged only in its own coaster.
+#
+#   COASTER               the gBV minimal coaster, as sheets-04g-fit2 printed it (1)
+#   KITE 0.05             ten kites at gap 0.05, one dot each (10)
+#   KITE 0.075            ten kites at gap 0.075, no dot (10)
+#   MIDDLE 0 … 0.05       one middle piece at each of 0, 0.025 and 0.05, three dots to one (3)
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/sheets-04g-fit3.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: 4GJ
+no_id_reasons:
+  - &kite "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. The two kite rungs are told apart by a dot in the top: one on the 0.05 kites, none on the 0.075."
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER
+    id:     "3"
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05, kite_dots: 1 }
+    label:  KITE 0.05
+    no_id:  *kite
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Kite
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.075 }
+    label:  KITE 0.075
+    no_id:  *kite
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0, middle_dots: 3 }
+    label:  MIDDLE 0
+    id:     A
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.025, middle_dots: 2 }
+    label:  MIDDLE 0.025
+    id:     C
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr
+    piece:  Middle
+    params: { size: 112.5, strap: 3.75, height: 4.4, gap: 0.05, middle_dots: 1 }
+    label:  MIDDLE 0.05
+    id:     E

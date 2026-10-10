@@ -12,7 +12,15 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+1. **A carved id leaves the gBV minimal coaster's mesh open, and compose does not check.** The
+   coaster at sheets-04g-fit3's size passes bikar's mesh check with no id, and fails it with any
+   one-letter `--bottom-id` (`Z` and `3` alike, round 1.25 or 0): not watertight, 13 to 22
+   degenerate triangles, and about 79,000 triangles in place of 131,000. `slice compose` renders
+   without `--check`, so the open mesh goes to the slicer, which patched it on sheets-04g-fit and
+   fit2 (both printed). Two fixes: find the cut's defect in bikar's bottom-id on a
+   frame with many holes, and have compose render with `--check` so the next one stops at the
+   recipe. The middle pieces with a full id pass. Found on sheets-04g-fit3, 2026-10-10.
+2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
    so packing no longer decides whether a plate is production; it now saves time and filament

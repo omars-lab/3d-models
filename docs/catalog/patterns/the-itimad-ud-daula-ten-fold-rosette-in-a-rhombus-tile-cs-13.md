@@ -88,6 +88,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 | [sheets-04g](../../design/plates/sheets-04g.md) | minimal, minimal pieces |
 | [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) | minimal, minimal pieces |
 | [sheets-04g-fit2](../../design/plates/sheets-04g-fit2.md) | minimal, minimal pieces |
+| [sheets-04g-fit3](../../design/plates/sheets-04g-fit3.md) | minimal, minimal pieces |
 | [split-01](../../design/plates/split-01.md) | split lip |
 | [split-02](../../design/plates/split-02.md) | split flange |
 | [stud-1](../../design/plates/stud-1.md) | split lip |
