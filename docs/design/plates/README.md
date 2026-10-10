@@ -51,9 +51,9 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md), [sheets-04g-fit](sheets-04g-fit.md).
+**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md).
 
-**Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1.
+**Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04g-fit](sheets-04g-fit.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1.
 <!-- queue:end -->
 
 ## How a plate moves

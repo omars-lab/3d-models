@@ -3,9 +3,9 @@ plate: sheets-04g-fit
 print_log: '[[print-logs/sheets-04g-fit|print log]]'
 recipe: sheets-04g-fit.yaml
 iteration: 4
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-10-sheets-04g-fit]
 answers: "At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling?"
 kind: new
 maturity: experiment
@@ -147,3 +147,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-07 | changed (iteration 2): a fresh gBV minimal coaster added, and dots on each middle piece, four at gap 0 to one at 0.15, on Omar's comment on the 2026-10-06 calls page | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced: local slice fits one bed, 78 minutes, 21.4 g, no slicer warnings | this page |
 | 2026-10-10 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 4 @ d99e8c88b1 in #F5547C | this page |
+| 2026-10-10 | printed — on the X2D, glacier plate, one bed, all 22 layers, 91 minutes against the slicer's 78; judged by hand: in the `Z` coaster the 0.05 mm kites fit and the 0.10 to 0.25 kites were too small, `4GF 4A` (gap 0) was too tight and `4GF 4B` (0.05) good but came out a little too easily, so Omar asked for a midway; `4GF 4C` and `4GF 4D` not judged; in the older sheets-04g coaster the same pieces sat about one rung looser | [the record](../../prints/2026-10-10-sheets-04g-fit/index.md) |
