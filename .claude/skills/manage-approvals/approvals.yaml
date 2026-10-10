@@ -48,6 +48,8 @@ sheets-04g-fit:
   - {iteration: 4, recipe: '3fbfaef70a14', date: '2026-10-08'}
 sheets-04g-fit2:
   - {iteration: 1, recipe: '7f4fb4ae5eb1', date: '2026-10-10'}
+sheets-04g-fit3:
+  - {iteration: 1, recipe: 'f26ad98511ad', date: '2026-10-10'}
 sld-1:
   - {iteration: 1, recipe: '715916738916', date: '2026-10-05'}
 spl-1:
