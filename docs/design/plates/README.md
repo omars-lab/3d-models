@@ -22,37 +22,36 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 |---|---|---|---|---|---|---|---|
 | 1 | [theme-night-sky-11600](theme-night-sky-11600.md) | waiting | 1 | 0.2 | 6.39 | ok | Night sky, one of its 4 plates: do its Kite ×10 come out as the theme draws them, in PLA Matte Marine Blue (11600)? |
 | 2 | [stud-1](stud-1.md) | waiting | 6 | 1.0 | 6.25 | ok | How far apart should a split coaster's studs be: does a slice of split-01's lip coaster hold together and line up with its studs 25, 15 or 10 mm apart? |
-| 3 | [sheets-04g-fit](sheets-04g-fit.md) | approved | 8 | 1.5 | 5.30 | watch | At what gap does a kite drop into the sheets-04g coaster by hand and stay, and at what gap does the middle piece, now cut along the strap's real edge, sit without rattling? |
-| 4 | [theme-iznik-tile-10205](theme-iznik-tile-10205.md) | waiting | 1 | 0.3 | 3.92 | ok | Iznik tile, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Maroon Red (10205)? |
-| 5 | [theme-night-sky-13402](theme-night-sky-13402.md) | waiting | 1 | 0.3 | 3.92 | ok | Night sky, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Sparkle Classic Gold Sparkle (13402)? |
-| 6 | [theme-terracotta-souk-10401](theme-terracotta-souk-10401.md) | waiting | 1 | 0.3 | 3.92 | ok | Terracotta souk, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Gold (10401)? |
-| 7 | [theme-iznik-tile-10604](theme-iznik-tile-10604.md) | waiting | 1 | 0.3 | 3.42 | ok | Iznik tile, one of its 4 plates: do its Hex ×10 come out as the theme draws them, in PLA Basic Cobalt Blue (10604)? |
-| 8 | [theme-terracotta-souk-11401](theme-terracotta-souk-11401.md) | waiting | 1 | 0.3 | 3.39 | ok | Terracotta souk, one of its 4 plates: do its Outer ×10 come out as the theme draws them, in PLA Matte Desert Tan (11401)? |
-| 9 | [split-01](split-01.md) | waiting | 6 | 1.8 | 3.36 | watch | Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs? |
-| 10 | [theme-iznik-tile-10605](theme-iznik-tile-10605.md) | waiting | 1 | 0.3 | 2.87 | ok | Iznik tile, one of its 4 plates: do its Kite ×10, Outer ×10 come out as the theme draws them, in PLA Basic Turquoise (10605)? |
-| 11 | [split-02](split-02.md) | approved | 6 | 2.1 | 2.87 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
-| 12 | [theme-terracotta-souk-11203](theme-terracotta-souk-11203.md) | waiting | 1 | 0.4 | 2.84 | ok | Terracotta souk, one of its 4 plates: do its Kite ×10, Hex ×10 come out as the theme draws them, in PLA Matte Terracotta (11203)? |
-| 13 | [swatch-10204](swatch-10204.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Hot Pink (10204) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
-| 14 | [swatch-10501](swatch-10501.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Bambu Green (10501) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
-| 15 | [swatch-10101](swatch-10101.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Black (10101) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
-| 16 | [swatch-13903](swatch-13903.md) | waiting | 1 | 0.4 | 2.68 | ok | What does PLA Silk Neon City (13903) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
-| 17 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
-| 18 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
-| 19 | [theme-night-sky-11602](theme-night-sky-11602.md) | waiting | 1 | 0.5 | 2.04 | ok | Night sky, one of its 4 plates: do its Hex ×10, Outer ×10 come out as the theme draws them, in PLA Matte Dark Blue (11602)? |
-| 20 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
-| 21 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
-| 22 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
-| 23 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
-| 24 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
-| 25 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 26 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 27 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
+| 3 | [theme-iznik-tile-10205](theme-iznik-tile-10205.md) | waiting | 1 | 0.3 | 3.92 | ok | Iznik tile, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Maroon Red (10205)? |
+| 4 | [theme-night-sky-13402](theme-night-sky-13402.md) | waiting | 1 | 0.3 | 3.92 | ok | Night sky, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Sparkle Classic Gold Sparkle (13402)? |
+| 5 | [theme-terracotta-souk-10401](theme-terracotta-souk-10401.md) | waiting | 1 | 0.3 | 3.92 | ok | Terracotta souk, one of its 4 plates: do its Middle ×1, Star ×10 come out as the theme draws them, in PLA Basic Gold (10401)? |
+| 6 | [theme-iznik-tile-10604](theme-iznik-tile-10604.md) | waiting | 1 | 0.3 | 3.42 | ok | Iznik tile, one of its 4 plates: do its Hex ×10 come out as the theme draws them, in PLA Basic Cobalt Blue (10604)? |
+| 7 | [theme-terracotta-souk-11401](theme-terracotta-souk-11401.md) | waiting | 1 | 0.3 | 3.39 | ok | Terracotta souk, one of its 4 plates: do its Outer ×10 come out as the theme draws them, in PLA Matte Desert Tan (11401)? |
+| 8 | [split-01](split-01.md) | waiting | 6 | 1.8 | 3.36 | watch | Does a split gBV coaster close over its loose pieces and hold them by a lip on each face, with the pieces dropped in at a loose gap and the halves lined up by studs? |
+| 9 | [theme-iznik-tile-10605](theme-iznik-tile-10605.md) | waiting | 1 | 0.3 | 2.87 | ok | Iznik tile, one of its 4 plates: do its Kite ×10, Outer ×10 come out as the theme draws them, in PLA Basic Turquoise (10605)? |
+| 10 | [split-02](split-02.md) | approved | 6 | 2.1 | 2.87 | watch | Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean? |
+| 11 | [theme-terracotta-souk-11203](theme-terracotta-souk-11203.md) | waiting | 1 | 0.4 | 2.84 | ok | Terracotta souk, one of its 4 plates: do its Kite ×10, Hex ×10 come out as the theme draws them, in PLA Matte Terracotta (11203)? |
+| 12 | [swatch-10204](swatch-10204.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Hot Pink (10204) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 13 | [swatch-10501](swatch-10501.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Bambu Green (10501) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 14 | [swatch-10101](swatch-10101.md) | waiting | 1 | 0.4 | 2.82 | ok | What does PLA Basic Black (10101) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 15 | [swatch-13903](swatch-13903.md) | waiting | 1 | 0.4 | 2.68 | ok | What does PLA Silk Neon City (13903) really look like printed: its top, its sheen and its bed face, on a chip and on our own straps? |
+| 16 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
+| 17 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
+| 18 | [theme-night-sky-11602](theme-night-sky-11602.md) | waiting | 1 | 0.5 | 2.04 | ok | Night sky, one of its 4 plates: do its Hex ×10, Outer ×10 come out as the theme draws them, in PLA Matte Dark Blue (11602)? |
+| 19 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
+| 20 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
+| 21 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
+| 22 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
+| 23 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
+| 24 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 25 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 26 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [sheets-05](sheets-05.md) (value 5).
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md).
+**Went to the printer, no record yet:** [minis-01](minis-01.md), [minis-02](minis-02.md), [phones-01](phones-01.md), [sheets-04b](sheets-04b.md), [sheets-04c](sheets-04c.md), [sheets-04g-fit](sheets-04g-fit.md).
 
 **Printed:** [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1.
 <!-- queue:end -->
