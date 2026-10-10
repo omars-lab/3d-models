@@ -2,6 +2,10 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-08 — Worktrees cut from 15 towards Omar's budget of 5, without losing work: in 3d-models nine subagent worktrees removed, 35 local and 5 remote dead branches deleted, every tip saved under `refs/snapshots/2026-10-08/`, one worktree's unsaved print-record draft and bambu files copied out before it went; bikar's `next-bikar` and `revendor-prep` deleted; three hifth research worktrees removed. Six 3d-models worktrees remain, one over budget: dropping `-pm` or `-master-ro` is Omar's call. The memory notes that lived only in the shared checkout landed (3d-models #622)
+
+- 2026-10-06 — bikar's `bikar-next` and `coaster-n_I` branches deleted, each tip saved under `refs/snapshots/2026-10-06/` first; the importer change from them landed as bikar #318
+
 - 2026-09-30: the gallery redeployed from master 42ef7de (gh-pages a9cfe0c). It carries the
   re-centred CS-6 and the three D-087 minimal coasters, Ntnl, gBV and jlTmt. The live CS-6
   picture was checked against the build by hash.

@@ -12,15 +12,7 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **The plates gate checks every prototype carries its id.** The rule "every prototype carries
-   its id" (Omar, 2026-10-06 calls page) is in the print-coaster-samples skill's
-   [sample rules](../../../.claude/skills/print-coaster-samples/sample-rules.md) and in the
-   prioritize-prints skill's steps (3d-models #600), so today a plate without ids passes unless
-   someone reads the skill. A plates gate rule could check that each experiment plate's recipe
-   gives its pieces an id, or says why one has none. That is one miss so far, so per the
-   [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate that
-   ships without ids comes before the gate. Found by the 2026-10-07 id work.
-2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+1. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
    so packing no longer decides whether a plate is production; it now saves time and filament
