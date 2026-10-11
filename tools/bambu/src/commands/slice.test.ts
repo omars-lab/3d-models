@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { filamentMapModeEnum, filamentCount, injectFilamentMapMode } from "./slice.js";
+import { filamentMapModeEnum, filamentCount, injectFilamentMapMode, resolvePresetList } from "./slice.js";
 
 // These lock in the X2D filament-grouping mechanism measured 2026-09-17 (see
 // docs/issues/x2d-filament-grouping-mode.md). The live-slice acceptance (Studio honours the merged
@@ -80,5 +80,25 @@ describe("injectFilamentMapMode — merge into the ONE process config", () => {
     expect(() => injectFilamentMapMode(machine, "Auto For Flush", scratch)).toThrow(
       /needs a process preset/,
     );
+  });
+});
+
+describe("resolvePresetList — a checked-in preset is read from the CLI's own checkout", () => {
+  // The shell starts in the vault while a worktree's CLI runs, and both hold the file once merged.
+  // The CLI's checkout must win, or a worktree slice reads the vault's copy (sheets-04g-fit3's drift).
+  const fakeStudio = join(mkdtempSync(join(tmpdir(), "studio-")), "Contents", "MacOS", "BambuStudio");
+
+  it("takes a repo path from the CLI checkout even when the cwd has its own copy", () => {
+    const checkout = mkdtempSync(join(tmpdir(), "checkout-"));
+    mkdirSync(join(checkout, "presets"));
+    writeFileSync(join(checkout, "presets", "house.json"), "{}");
+    const cwdCopy = join(process.cwd(), "presets", "house.json");
+    expect(resolvePresetList("presets/house.json", "settings", fakeStudio, checkout)).toBe(join(checkout, "presets", "house.json"));
+    expect(resolvePresetList("presets/house.json", "settings", fakeStudio, checkout)).not.toBe(cwdCopy);
+  });
+
+  it("refuses a repo path the checkout does not have rather than slicing without it", () => {
+    const checkout = mkdtempSync(join(tmpdir(), "checkout-"));
+    expect(() => resolvePresetList("presets/missing.json", "settings", fakeStudio, checkout)).toThrow(/cannot resolve preset/);
   });
 });

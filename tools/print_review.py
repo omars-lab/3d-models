@@ -7,7 +7,7 @@
     python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
-    python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below]
+    python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -62,9 +62,13 @@ the layer nearest z mm, inside a square `side` mm across centred at x,y on the b
 bead of its own line width colored by what it is (outer and inner wall, bottom surface, gap
 fill). Black inside the print is bed no line covers. It counts the slits: bare pockets that lines
 close in on every side and that are under half a millimetre across on average. `--below` swaps
-left and right, so the first layer reads like a photo of the bed face. It is for holes in a face:
+left and right, so the first layer reads like a photo of the bed face. `--px N` sets the picture's
+side (1200 by default): a slit is counted in pixels, so a whole coaster wants about 25 px a
+millimetre (`--px 2800` for 112 mm) to count the same slits a close-up does. It is for holes in a face:
 whether the slicer left them, or the printer did (the beads are drawn at the width the slicer
-asked for, not as they came out).
+asked for, not as they came out). `--check` is the bed-face design's check: it draws at 30 px a
+millimeter unless `--px` says otherwise, prints PASS or FAIL, and exits 1 when the bare share is
+0.6% or more or the largest bare pocket is 0.2 sq mm or more.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -550,6 +554,11 @@ def side_sheet(out, frame, args):
 PATHS_PX = 1200   # the side of a `paths` picture, px
 ARC_STEP = 0.05   # mm: an arc is drawn as chords this long
 SLIT_WIDE = 0.5   # mm: bare bed closed in by lines, thinner than this on average, is a slit
+# `paths --check`, the bed-face design's validator: fitted to ten slices (five pieces, stock and
+# house preset), drawn at CHECK_PX_PER_MM; docs/design/printing/bed-face-slicing-design.md §6
+CHECK_PX_PER_MM = 30
+CHECK_MAX_SHARE = 0.6    # % of the first layer left bare
+CHECK_MAX_POCKET = 0.2   # sq mm, the largest single bare pocket
 FEATURE_COLORS = {"Outer wall": (235, 90, 130), "Inner wall": (180, 60, 110),
                   "Bottom surface": (250, 185, 90), "Internal solid infill": (240, 220, 120),
                   "Gap infill": (90, 190, 250)}
@@ -635,50 +644,62 @@ def pockets(mask, w, h):
     return out
 
 
-def paths_picture(moves, region, below=False):
+def paths_picture(moves, region, below=False, px=PATHS_PX):
     """The moves inside a square region, each drawn as a bead of its own line width with round
     ends, colored by feature, on black: black left inside the print is bed nothing covered.
     `below` swaps left and right, the way the bed face looks to a person turning the piece over.
-    Returns the picture and the slits, as (count, mm²): the bare pockets that lines close in on
-    every side and that are thin, under SLIT_WIDE across on average (twice the area over the rim).
-    A hole the design cuts is closed in by its wall too, but it is wide."""
+    Returns the picture and the slits, as (count, mm², the largest one's mm², the printed mm²):
+    the bare pockets that lines close in on every side and that are thin, under SLIT_WIDE across
+    on average (twice the area over the rim). A hole the design cuts is closed in by its wall too,
+    but it is wide. The printed area is every pixel a line covers, so slits over printed plus slits
+    is the share of the face left bare, which compares a kite with a whole coaster."""
     cx, cy, side = region
-    k = PATHS_PX / side
-    f = lambda px, py: (((cx + side / 2 - px) if below else (px - cx + side / 2)) * k,
-                        (cy + side / 2 - py) * k)
-    img = Image.new("RGB", (PATHS_PX, PATHS_PX), (0, 0, 0))
+    k = px / side
+    f = lambda x, y: (((cx + side / 2 - x) if below else (x - cx + side / 2)) * k,
+                        (cy + side / 2 - y) * k)
+    img = Image.new("RGB", (px, px), (0, 0, 0))
     d = ImageDraw.Draw(img)
     for feature, width, run in moves:
         color, r = FEATURE_COLORS.get(feature, (160, 160, 160)), width * k / 2
         pts = [f(*p) for p in run]
         d.line(pts, fill=color, width=max(1, round(width * k)))
-        for px, py in pts:
-            d.ellipse([px - r, py - r, px + r, py + r], fill=color)
+        for x, y in pts:
+            d.ellipse([x - r, y - r, x + r, y + r], fill=color)
     bare = [v == 0 for v in img.convert("L").tobytes()]
-    slits = [n for n, rim, edge in pockets(bare, PATHS_PX, PATHS_PX)
+    slits = [n for n, rim, edge in pockets(bare, px, px)
              if not edge and 2 * n / rim / k < SLIT_WIDE]
-    return img, (len(slits), sum(slits) / k / k)
+    printed = (len(bare) - sum(bare)) / k / k
+    return img, (len(slits), sum(slits) / k / k, max(slits, default=0) / k / k, printed)
 
 
-def paths_sheet(out, plate, z, region, below=False):
+def bed_face_ok(area, largest, printed):
+    """The bed-face check: the bare share and the largest pocket both under their bars."""
+    share = 100 * area / (area + printed) if area + printed else 0
+    return share < CHECK_MAX_SHARE and largest < CHECK_MAX_POCKET
+
+
+def paths_sheet(out, plate, z, region, below=False, px=PATHS_PX):
     import zipfile
     with zipfile.ZipFile(plate) as zf:
         name = next(n for n in zf.namelist() if n.endswith(".gcode"))
         text = zf.read(name).decode("utf-8", "replace")
     height, moves = gcode_layer(text, z)
-    img, (n, area) = paths_picture(moves, region, below)
+    img, (n, area, largest, printed) = paths_picture(moves, region, below, px)
     font = ImageFont.load_default(size=28)
     d = ImageDraw.Draw(img)
     legend = [(f, c) for f, c in FEATURE_COLORS.items() if any(m[0] == f for m in moves)]
     for i, (feat, color) in enumerate(legend):
         d.rectangle([10, 10 + 36 * i, 34, 34 + 36 * i], fill=color)
         d.text((44, 22 + 36 * i), feat, fill=(255, 255, 255), font=font, anchor="lm")
-    d.text((10, PATHS_PX - 20), f"z {height:.2f} mm · {region[2]:g} mm across · "
+    d.text((10, px - 20), f"z {height:.2f} mm · {region[2]:g} mm across · "
            f"{'from below' if below else 'from above'} · slits {n}, {area:.2f} sq mm",
            fill=(255, 255, 255), font=font, anchor="lm")
     img.save(out)
-    print(f"layer {height:.2f} mm  slits {n}  bare {area:.3f} mm²")
+    share = 100 * area / (area + printed) if area + printed else 0
+    print(f"layer {height:.2f} mm  slits {n}  bare {area:.3f} mm²  largest {largest:.3f} mm²  "
+          f"printed {printed:.1f} mm²  bare share {share:.2f}%")
     print("wrote", out)
+    return bed_face_ok(area, largest, printed)
 
 
 def paths_self_test():
@@ -701,10 +722,23 @@ def paths_self_test():
                      "G1 X1 Y0", "G3 X-1 Y0 I-1 J0 E1"])
     _, moves = gcode_layer(arc, 0.2)
     _, hole = paths_picture([m for m in gcode_layer(text, 0.2)[1] if m[0] == "Outer wall"], region)
+    big, short_big = paths_picture(gcode_layer(text, 0.4)[1], region, px=2400)
     return [
+        ("paths: --px sets the picture's side and keeps the bare area in sq mm",
+         big.size == (2400, 2400) and abs(short_big[1] - short[1]) < 0.15 * short[1]),
         ("paths: fill that reaches the wall leaves no slit", full[0] == 0),
         ("paths: a wide hole closed in by its wall is not a slit", hole[0] == 0),
         ("paths: fill stopped short of the wall leaves slits", short[0] >= 2 and short[1] > 0.5),
+        ("paths: the printed area is the square out to the wall's outer edge (10.4 mm a side)",
+         abs(full[3] - 10.4 ** 2) < 3),
+        ("paths: the largest slit is one of the slits, not their sum",
+         0 < short[2] < short[1]),
+        ("paths --check: the stock radial coaster fails on its largest pocket alone, "
+         "the house radial passes, the stock middle piece passes",
+         not bed_face_ok(24.240, 0.390, 4504.8) and bed_face_ok(5.007, 0.164, 4535.7)
+         and bed_face_ok(0.413, 0.050, 200.7)),
+        ("paths --check: the stock small kites fail, the house kites pass on share 0.51%",
+         not bed_face_ok(3.429, 0.587, 65.5) and bed_face_ok(0.358, 0.049, 69.4)),
         ("paths: the layer nearest z is the one drawn", gcode_layer(text, 0.35)[0] == 0.4),
         ("paths: a half-circle arc ends where it should, through the top",
          len(moves) == 1 and math.dist(moves[0][2][-1], (-1, 0)) < 1e-6
@@ -899,9 +933,22 @@ if __name__ == "__main__":
     if len(a) >= 3 and a[0] == "bottom":
         bottom_sheet(a[1], a[2:])
         sys.exit(0)
-    if len(a) in (5, 6) and a[0] == "paths" and a[5:] in ([], ["--below"]):
-        paths_sheet(a[1], a[2], float(a[3]), parse_region(a[4]), below=a[5:] == ["--below"])
-        sys.exit(0)
+    if len(a) >= 5 and a[0] == "paths":
+        rest, below, px, check = a[5:], False, None, False
+        while rest[:1] in (["--below"], ["--check"]) or (rest[:1] == ["--px"] and rest[1:2] and rest[1].isdigit()):
+            if rest[0] == "--px":
+                px, rest = int(rest[1]), rest[2:]
+            else:
+                below, check, rest = below or rest[0] == "--below", check or rest[0] == "--check", rest[1:]
+        if not rest:
+            region = parse_region(a[4])
+            if px is None:
+                px = round(CHECK_PX_PER_MM * region[2]) if check else PATHS_PX
+            ok = paths_sheet(a[1], a[2], float(a[3]), region, below=below, px=px)
+            if check:
+                print(("PASS" if ok else "FAIL") + f": bed face (bare share under {CHECK_MAX_SHARE}%, "
+                      f"largest pocket under {CHECK_MAX_POCKET} sq mm, at {px / region[2]:.0f} px a mm)")
+            sys.exit(0 if ok or not check else 1)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])
         sys.exit(0)

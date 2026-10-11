@@ -182,6 +182,11 @@ sets them. This transfers because it is the vendor's preset for this printer, no
 layer height; it was tuned for general parts, not 1.4 mm openwork, which is what change 4
 is for.
 
+Later, 2026-10-10: slits on the underside led to a proposed house preset for the first layer
+(rings instead of diagonal lines, more overlap, a 0.42 mm first line), held for a coupon print.
+The stock chain stays the default until then. See the
+[bed-face design](bed-face-slicing-design.md#5-what-we-change).
+
 **Default:** dovetail clearance stays at 0.15 per face for any plate meant to be kept,
 the sliding step of CAL-FIT-01, until T1 settles it. This carries over only as a
 starting point: the ladder is diametral and assumes compensation is applied separately,

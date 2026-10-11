@@ -14,7 +14,8 @@
 import { Command } from "commander";
 import { existsSync, statSync, readdirSync, writeFileSync, readFileSync, mkdtempSync, renameSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, dirname, extname, join, resolve } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { runWithTimeout, ev } from "../log.js";
 import { surveyBackends, preferenceFor } from "../backends/router.js";
 import { locateStudio } from "../backends/studio-cli.js";
@@ -76,10 +77,16 @@ function findPreset(root: string, subdirs: string[], name: string): string | nul
   return null;
 }
 
-/** Resolve each ';'-joined token: an existing file passes through; a preset name → its bundled JSON.
- *  Throws with a clear, actionable message (listing where it looked) rather than deferring to the
- *  slicer's opaque "can not find setting file". */
-export function resolvePresetList(value: string, kind: "settings" | "filament", studioBin: string): string {
+/** The checkout this CLI runs from. A recipe names a checked-in preset by its repo path
+ *  (`tools/bambu/presets/bed-face-0.20.json`), and that path must mean this checkout's copy: the
+ *  shell usually starts in the vault, and reading the vault's copy from a worktree's CLI is the
+ *  same-file drift sheets-04g-fit3 wrote up. */
+const CLI_ROOT = repoRoot(dirname(fileURLToPath(import.meta.url)));
+
+/** Resolve each ';'-joined token: a repo path in the CLI's own checkout, then an existing file from
+ *  the cwd, pass through; a preset name → its bundled JSON. Throws with a clear, actionable message
+ *  (listing where it looked) rather than deferring to the slicer's opaque "can not find setting file". */
+export function resolvePresetList(value: string, kind: "settings" | "filament", studioBin: string, cliRoot = CLI_ROOT): string {
   const subdirs = kind === "filament" ? ["filament"] : ["machine", "process"];
   const root = profilesRoot(studioBin);
   return value
@@ -87,6 +94,8 @@ export function resolvePresetList(value: string, kind: "settings" | "filament", 
     .map((t) => t.trim())
     .filter(Boolean)
     .map((tok) => {
+      const inCheckout = cliRoot && !isAbsolute(tok) && tok.endsWith(".json") ? join(cliRoot, tok) : null;
+      if (inCheckout && existsSync(inCheckout)) return inCheckout; // a checked-in preset
       const asPath = resolve(tok);
       if (existsSync(asPath)) return asPath; // already a JSON path
       const hit = root ? findPreset(root, subdirs, tok) : null;
