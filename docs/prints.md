@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- The house bed-face preset did not clean the coaster's bottom in print: the rings closed the slits at the strap edges but left dashes and small triangles down the middle of each strap and at the junctions, and Omar found as many slits as on the stock coaster, or more, though the slicer's plan had the bare share falling from 1.10% to 0.26%. The 0.42 mm first line did fill the small kites' core. And every fit came out about one 0.025 mm rung tighter than fit2's (0.4 mm nozzle, 0.42 mm first line and 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-11-bedface-1](prints/2026-10-11-bedface-1/index.md))
 - Halfway worked: printed beside its own coaster, the middle piece at 0.025 mm sat between gap 0 (super tight) and 0.05 (loose) and was the one Omar picked, so the slicer does keep a 0.025 mm step apart in feel. The kites at 0.05 went the other way from sheets-04g-fit: they fit that plate's coaster well and were tough to push into this one, though they hold once in. A coaster's holes move from print to print by about a 0.05 mm rung, now seen on three coasters, so a gap is judged in a coaster from the same bed. ([2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md))
 - In the fresh Z coaster, printed on the same bed, the kites fit at 0.05 mm and every looser rung was too small, and the middle piece sits between 4A (gap 0, too tight) and 4B (0.05, good but comes out a little too easily). In the older sheets-04g coaster the same pieces sat about one 0.05 mm rung looser: 4A fit but came out easily, 4B and every kite were loose. So the coaster's holes came out about one rung larger on that print than on this one. One pair of coasters: a first reading, not a rule. ([2026-10-10-sheets-04g-fit](prints/2026-10-10-sheets-04g-fit/index.md))
 - A 2 mm stud went in by hand at every gap from 0.15 to 0.40 mm and held from 0.15 to 0.25, though spl-1 needed a hammer at 0.15; and at 0.25 one pair held (1E) while its twin fell apart (1F). So the fit moves about 0.05 to 0.10 mm from print to print (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). And carved B and D, M and N, look alike at this size. ([2026-10-09-spl-2](prints/2026-10-09-spl-2/index.md))
@@ -43,6 +44,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-11-bedface-1](prints/2026-10-11-bedface-1/index.md)
+
+- **Plate:** [bedface-1](design/plates/bedface-1.md) — sheets-04g-fit2's pieces again, on the house bed-face preset (rings on the first layer, 30% overlap, a 0.42 mm first line)
+- **Lesson:** The house bed-face preset did not clean the coaster's bottom in print: the rings closed the slits at the strap edges but left dashes and small triangles down the middle of each strap and at the junctions, and Omar found as many slits as on the stock coaster, or more, though the slicer's plan had the bare share falling from 1.10% to 0.26%. The 0.42 mm first line did fill the small kites' core. And every fit came out about one 0.025 mm rung tighter than fit2's (0.4 mm nozzle, 0.42 mm first line and 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI).
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 5 (1 keep, 2 adjust, 2 not-judged)
+- **What happened:** F coaster: slits about the same as fit2's Z coaster, or more (the photo: dashes and triangles down the strap middles and at the junctions). Kites: no dent in the middle, but too tight in the F coaster. Middle piece: FC1 1E (0.05) the winner, where fit2's winner was 4GH 1C (0.025) and its 0.05 piece was loose.
+- **Why:** Not separated by this plate; three suspects. The rings: where the rings from two sides of a strap meet, the slicer leaves specks, which the design's §3.3 drew and counted as small; in print they show as dashes. The narrower first line: 0.42 mm squashes less than 0.5, so the specks the plan leaves are not closed by squash (design §7). The glacier plate: sliced as Smooth PEI, it gets no extra 0.02 mm push on the first layer (design §3.4). The tighter fit: the plan kept the outer edge in place, so a wider first layer in print would have to come from the overlap or the narrower line, not measured; and coasters already move by about one rung from print to print (fit2's record), so one plate cannot say how much of the shift is the preset.
+- **What it changed:** The house preset does not roll out; every plate stays on the X2D 0.20 mm Standard. The slit fix is reworked, and the slicer's plan is no longer taken as proof of a clean bottom (docs/issues/bed-face-preset-failed-in-print.md). The fit shift is read again with fit3 before any gap changes.
+- **Photos of the print:** [the F coaster's bottom, held up in the hand: rings along every strap, with dark dashes and small triangles down the strap middles and at the junctions](prints/2026-10-11-bedface-1/photos/f-coaster-bed-face.jpg)
+
+![photo: the F coaster's bottom, held up in the hand: rings along every strap, with dark dashes and small triangles down the strap middles and at the junctions](prints/2026-10-11-bedface-1/photos/f-coaster-bed-face.jpg)
 
 ### [2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md)
 
@@ -184,7 +198,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-11 records; 0 measured with a tool, so no bet has moved yet.
+12 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

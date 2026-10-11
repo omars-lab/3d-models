@@ -4,7 +4,12 @@ status: draft
 
 # The bed face: slits, a bare core, and the slicer settings that close them
 
-**Status:** proposed, 2026-10-10. Nothing in it has been printed yet; the test plate is [bedface-1](../plates/bedface-1.md) (§5.2). Every number comes from slicing
+**Status:** proposed 2026-10-10; **the house preset failed in print on 2026-10-11 and does not
+roll out.** [bedface-1](../plates/bedface-1.md) came out no cleaner than stock on the coaster's
+bottom, with dashes where the rings meet, and every fit one rung tighter; only the kites' core
+filled, as planned. What was tried and what comes next:
+[the issue](../../issues/bed-face-preset-failed-in-print.md). The sections below are the plan as
+written before the print. Every number comes from slicing
 five pieces with the installed Bambu Studio and drawing the sliced G-code; the record, with the
 commands, is [`../../research/2026-10-10-bed-face-slits.md`](../../research/2026-10-10-bed-face-slits.md)
 (cited below as "the research"). §9 adds a sweep over all four X2D nozzles and seven pieces, with
@@ -88,6 +93,10 @@ house radial coaster is one such dot, about 0.45 mm across (0.164 sq mm), above 
 These are far smaller and fewer than the slits they replace, but they are there, and the coupon
 must show whether they show in the print.
 
+**In print they showed** (bedface-1, 2026-10-11): down the middle of the straps and at the
+junctions they read as short dark dashes and small triangles, and Omar found the coaster's bottom
+"About the same" as stock, then "F has a lot of slits" ([the record](../../prints/2026-10-11-bedface-1/index.md)).
+
 ![The star coaster's center, 14 mm: today, rings only, the house preset](bed-face-slicing-media/star-center.png)
 
 ### 3.4 The glacier plate (a hedge)
@@ -127,7 +136,10 @@ the narrower line reaches their core.
 today, at every layer checked. The narrower first line moves the first layer's outer wall center in
 by about 0.04 mm (half the width change), so its planned outer edge stays where it was, and the
 layers above are unchanged. Whether a narrower first line also changes the elephant foot in print
-is not known; the coupon's fit pieces measure it. Arachne moves the outer walls by 0.017 to 0.028 mm
+is not known; the coupon's fit pieces measure it. **In print the fit did not carry over** on
+bedface-1: every piece came out about one 0.025 mm rung tighter than fit2's, though coasters also
+move by about that much from print to print, so one plate cannot say how much was the preset.
+Arachne moves the outer walls by 0.017 to 0.028 mm
 at every layer, the size of one 0.025 mm fit step, so every fit we have measured would have to be
 measured again (the research, "Do the outer walls move?").
 
@@ -217,7 +229,9 @@ FAIL: the stock radial coaster, which fails on its largest pocket alone (0.390) 
 What this check can and cannot say: the drawing is the slicer's plan at the width it asks for.
 Bed left bare in the plan is very likely bare in the print, since nothing is laid there. Bed
 covered in the plan is not proof the print is covered: flow, squash and the plate decide that. So a
-PASS means "the slicer is not planning slits", never "the underside will be clean".
+PASS means "the slicer is not planning slits", never "the underside will be clean". bedface-1 is
+the case: its coaster passed at 0.26% bare against stock's 1.10%, and in the hand the two read the
+same.
 
 ## 7. What this does not settle
 
@@ -237,9 +251,10 @@ PASS means "the slicer is not planning slits", never "the underside will be clea
 
 ## 8. What comes next
 
-1. The coupon (§5.2): [bedface-1](../plates/bedface-1.md), its page up for Omar's yes on 2026-10-10.
-2. If the coupon favors it: the recipes and the recipe-writing tools switch to the house preset
-   (§5.3).
+1. The coupon (§5.2): [bedface-1](../plates/bedface-1.md), printed 2026-10-11. It did not favor
+   the preset.
+2. The recipes stay on stock (§5.3 is not done). The next step is Omar's, from the options in
+   [the issue](../../issues/bed-face-preset-failed-in-print.md#what-replaced-it).
 3. A simulator, which Omar asked for on 2026-10-10 ("can we also build a simulator ehere we can
    play with nozzle size and shape size to dind ideal settings"): the same slice-and-draw run over
    nozzle sizes, strap widths and piece sizes, each scored by the check in §6, so the settings can
@@ -293,6 +308,9 @@ What it says, inside those hedges:
 - **A narrower line is not a dropped piece.** The printed area moves with the line width (the kites
   from a 90 mm coaster print 0.83 to 0.85 of the 0.4 stock area at the 0.2 and with the 0.4 house
   preset, all ten kites there), so the sweep counts pieces instead of comparing area. The count cannot see a strap dropped inside a one-piece coaster.
+
+The "best" column carries the same gap as the check: on bedface-1 the 0.4 house setting it ranks
+best printed no cleaner than stock (the issue linked in the status line).
 
 The bars are the weak point: they were fitted at the 0.4, and at the 0.8 the line is wider than a
 0.5 mm slit, so some of the 0.8 failures may close under squash. Item 4 of §8 is how that gets
