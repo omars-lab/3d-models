@@ -12,7 +12,19 @@
 // mints no parallel id, so nothing forks (CLAUDE.md "a migration never buys a fork", D-052).
 
 import { Command } from "commander";
-import { existsSync, readFileSync, writeFileSync, mkdtempSync, mkdirSync, statSync, readdirSync, copyFileSync, realpathSync } from "node:fs";
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdtempSync,
+  mkdirSync,
+  statSync,
+  readdirSync,
+  copyFileSync,
+  realpathSync,
+  renameSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
@@ -31,14 +43,14 @@ import {
 } from "../backends/warnings.js";
 import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs, filamentCount } from "./slice.js";
 import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
-import type { FlattenedPreset } from "../preset-chain.js";
+import type { FlattenedPreset, SettingMismatch } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
 import { stlBounds, footprint, scaledCenteredStl } from "../mesh.js";
 import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
 import { recipeHashOf, recipeIterationOf } from "../send-gate.js";
-import { writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
+import { readMember, writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
 // A small hand-authorable file. Two item spellings resolve to the SAME iteration id (§3):
@@ -67,6 +79,7 @@ export interface ManifestItemBkr {
   id?: string; // the piece's one-character id, cut into its bed face after the plate's id_code and iteration (D-109)
   id_form?: IdForm; // how much of the id to cut where the full one has no room (D-114); default full
   no_id?: string; // why it carries no id, and how it is kept apart instead (a piece too small, one printed face down)
+  object_settings?: Record<string, string>; // slicer settings for this piece alone (OBJECT_SETTINGS), e.g. concentric bottom rings
 }
 export interface ManifestItemIteration {
   iteration: string; // an already-known it-<sha12>
@@ -279,6 +292,169 @@ function checkIds(m: Record<string, unknown>, items: Record<string, unknown>[]):
   });
 }
 
+// ── Settings for one piece (`object_settings:`) ──────────────────────────────────────────────────
+// A plate is sliced under one profile, but Bambu Studio keeps some settings per object too, so two
+// pieces on one plate can print their bed face two ways and be compared side by side (bedface-2). Only
+// settings Studio was seen to honor per object are allowed, each with the values it takes, since Studio
+// drops a key or value it does not know without a word. The research behind each:
+// docs/research/2026-10-10-bed-face-per-piece-and-bedface-1.md.
+
+/** The bottom-surface patterns allowed: the stock one and the rings bedface-1 printed with. */
+const BOTTOM_PATTERNS = ["monotonic", "monotonicline", "concentric"];
+
+/** The settings a piece may carry, each with a check on its value. Add one only once a slice has shown
+ *  Studio honors it per object (read back from the sliced file, as compose does after every slice). */
+export const OBJECT_SETTINGS: Record<string, { check: (v: string) => boolean; takes: string }> = {
+  bottom_surface_pattern: { check: (v) => BOTTOM_PATTERNS.includes(v), takes: BOTTOM_PATTERNS.join(", ") },
+  infill_wall_overlap: {
+    check: (v) => /^\d{1,3}%$/.test(v) && Number(v.slice(0, -1)) <= 100,
+    takes: 'a percent from 0% to 100%, e.g. "30%"',
+  },
+};
+
+/** Settings a piece may not carry, with the reason, since a plain "not allowed" would send the next
+ *  person to try it again. */
+const REFUSED_OBJECT_SETTINGS: Record<string, string> = {
+  initial_layer_line_width:
+    "Studio takes the first layer's line width from the plate, not the piece, so a per-piece value would " +
+    "print as the plate's (docs/research/2026-10-10-bed-face-per-piece-and-bedface-1.md §1). Give it its own plate",
+};
+
+/** Check an item's `object_settings:` and return it with every value as text (YAML reads `30%` as text
+ *  already; a bare number is refused rather than guessed at). Throws naming the item and the key. */
+function checkObjectSettings(raw: unknown, where: string): Record<string, string> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error(`${where}: \`object_settings:\` must be a mapping of slicer setting → value`);
+  }
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    const refused = REFUSED_OBJECT_SETTINGS[k];
+    if (refused) throw new Error(`${where}: \`object_settings.${k}\` cannot be set per piece: ${refused}`);
+    const rule = OBJECT_SETTINGS[k];
+    if (!rule) {
+      throw new Error(
+        `${where}: \`object_settings.${k}\` is not one Studio was seen to honor per piece. Allowed: ` +
+          `${Object.keys(OBJECT_SETTINGS).join(", ")}. Add it to OBJECT_SETTINGS once a slice shows it held`,
+      );
+    }
+    if (typeof v !== "string" || !rule.check(v)) {
+      throw new Error(`${where}: \`object_settings.${k}\` takes ${rule.takes}, got ${JSON.stringify(v)}`);
+    }
+    out[k] = v;
+  }
+  if (Object.keys(out).length === 0) {
+    throw new Error(`${where}: \`object_settings:\` is empty; leave it out for the plate's own settings`);
+  }
+  return out;
+}
+
+/** One object's own settings in a sliced plate's `Metadata/model_settings.config`. */
+export interface ObjectSettingsRead {
+  name: string; // the object's name: the staged mesh it came from (`<iteration>.stl`)
+  settings: Record<string, string>; // every object-level `<metadata key value>` but its name
+}
+
+/** Read each object's own settings: the `<metadata key value>` lines of an `<object>` before its first
+ *  `<part>`. The part's lines (matrix, source file) are the mesh's, not settings. PURE. */
+export function readObjectSettings(xml: string): ObjectSettingsRead[] {
+  const out: ObjectSettingsRead[] = [];
+  for (const m of xml.matchAll(/<object\b[^>]*>([\s\S]*?)<\/object>/g)) {
+    const head = (m[1] ?? "").split(/<part\b/)[0] ?? "";
+    let name = "";
+    const settings: Record<string, string> = {};
+    for (const md of head.matchAll(/<metadata key="([^"]*)" value="([^"]*)"\/>/g)) {
+      if (md[1] === "name") name = md[2] ?? "";
+      else settings[md[1] ?? ""] = md[2] ?? "";
+    }
+    out.push({ name, settings });
+  }
+  return out;
+}
+
+/** Add each named object's settings to `model_settings.config`, as lines after its name, which is where
+ *  Studio writes them. Every object of a name gets them (an item's `count` copies share its name). Throws
+ *  when a name matches no object, or when an object already holds one of the keys: either means the file
+ *  is not the one this plate arranged. PURE. */
+export function injectObjectSettings(xml: string, byName: Map<string, Record<string, string>>): string {
+  const seen = new Set<string>();
+  const result = xml.replace(/(<object\b[^>]*>)([\s\S]*?)(<\/object>)/g, (whole, open: string, body: string, close: string) => {
+    const nameLine = /^([ \t]*)<metadata key="name" value="([^"]*)"\/>\n/m.exec(body.split(/<part\b/)[0] ?? "");
+    const name = nameLine?.[2] ?? "";
+    const add = byName.get(name);
+    if (!nameLine || !add) return whole;
+    const have = readObjectSettings(whole)[0]?.settings ?? {};
+    for (const k of Object.keys(add)) {
+      if (k in have) throw new Error(`object ${name} already sets ${k} in the arranged plate; not overwriting it`);
+    }
+    seen.add(name);
+    const indent = nameLine[1] ?? "";
+    const lines = Object.entries(add)
+      .map(([k, v]) => `${indent}<metadata key="${k}" value="${v}"/>\n`)
+      .join("");
+    const at = nameLine.index + nameLine[0].length;
+    return `${open}${body.slice(0, at)}${lines}${body.slice(at)}${close}`;
+  });
+  const missing = [...byName.keys()].filter((n) => !seen.has(n));
+  if (missing.length > 0) throw new Error(`no object named ${missing.join(", ")} in the arranged plate`);
+  return result;
+}
+
+/** What the read-back found wrong: for each item with settings, every one of its `count` objects must
+ *  be in the sliced file and hold every key at its value, and every other object must hold none of the
+ *  OBJECT_SETTINGS keys, so the stock piece beside it is stock. [] when the slice is as the recipe says. PURE. */
+export function objectSettingsMissing(
+  read: ObjectSettingsRead[],
+  want: { name: string; count: number; settings: Record<string, string> }[],
+): string[] {
+  const problems: string[] = [];
+  const counts = new Map<string, number>();
+  for (const w of want) counts.set(w.name, (counts.get(w.name) ?? 0) + w.count);
+  for (const o of read.filter((r) => !counts.has(r.name))) {
+    for (const k of Object.keys(OBJECT_SETTINGS)) {
+      if (k in o.settings) problems.push(`${o.name}: ${k} is ${o.settings[k]} in the slice, the recipe sets none for it`);
+    }
+  }
+  for (const w of want) {
+    const objs = read.filter((o) => o.name === w.name);
+    const need = counts.get(w.name) ?? w.count;
+    if (objs.length < need) problems.push(`${w.name}: ${objs.length} object(s) in the slice, ${need} expected`);
+    for (const o of objs) {
+      for (const [k, v] of Object.entries(w.settings)) {
+        if (o.settings[k] !== v) problems.push(`${w.name}: ${k} is ${o.settings[k] ?? "(absent)"} in the slice, the recipe sets ${v}`);
+      }
+    }
+  }
+  return [...new Set(problems)];
+}
+
+/** The one preset mismatch a two-pass slice may carry: Studio turns the prime tower off when it opens a
+ *  plate with one filament, and says so in its log. Only that key, only "1" → "0", only with one
+ *  filament and only with the log line; anything else still fails the preset check. PURE. */
+export function primeTowerDroppedByStudio(m: SettingMismatch, filaments: number, studioLog: string): boolean {
+  const one = (v: unknown) => (Array.isArray(v) && v.length === 1 ? v[0] : v);
+  return (
+    m.key === "enable_prime_tower" &&
+    String(one(m.expected)) === "1" &&
+    String(one(m.actual)) === "0" &&
+    filaments === 1 &&
+    studioLog.includes("disable prime tower for only one filament")
+  );
+}
+
+/** Copy the arranged plate to `out` with each named piece's settings written into it. The file is a
+ *  zip; its one changed member is replaced with the `zip` tool, as `unzip` reads it everywhere else. */
+async function writeObjectSettings(arranged: string, out: string, byName: Map<string, Record<string, string>>): Promise<void> {
+  const member = "Metadata/model_settings.config";
+  const xml = await readMember(arranged, member);
+  if (xml === null) throw new Error(`the arranged plate has no ${member}`);
+  const work = mkdtempSync(join(tmpdir(), "bambu-object-settings-"));
+  mkdirSync(join(work, "Metadata"));
+  writeFileSync(join(work, member), injectObjectSettings(xml, byName));
+  copyFileSync(arranged, out);
+  const res = await runWithTimeout("zip", ["-q", out, member], { cwd: work, timeoutMs: 30_000, label: "zip_object_settings" });
+  if (res.code !== 0) throw new Error(`zip exit ${res.code ?? "null"}: ${(res.stderr || res.stdout).trim()}`);
+}
+
 /** Parse + validate a plate manifest. Throws a clear, actionable error (naming the offending item)
  *  rather than letting a malformed manifest reach the renderer or slicer. */
 export function parseManifest(text: string): PlateManifest {
@@ -299,6 +475,12 @@ export function parseManifest(text: string): PlateManifest {
     if (!raw || typeof raw !== "object") throw new Error(`items[${i}] is not a mapping`);
     const it = raw as Record<string, unknown>;
     const where = `items[${i}]`;
+    if (it.object_settings !== undefined) {
+      if (typeof it.bkr !== "string" || it.stl !== undefined || it.iteration !== undefined) {
+        throw new Error(`${where}: only a \`bkr:\` item takes \`object_settings:\` (its id is minted with them)`);
+      }
+      it.object_settings = checkObjectSettings(it.object_settings, where);
+    }
     if (it.stl !== undefined) {
       checkStlItem(it, where);
     } else if (typeof it.iteration === "string") {
@@ -545,6 +727,7 @@ export interface ResolvedItem {
   label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
   filament: number; // the 1-based filament slot (1 when the item names none)
   file?: string; // an `stl:` item's absolute path: copied (scaled by its scale params) instead of rendered
+  objectSettings?: Record<string, string>; // the item's `object_settings:`, absent when it has none
 }
 
 /** Resolve a bikar-tracked blob's source_sha256 at a ref, or throw a clear error. */
@@ -724,6 +907,7 @@ export async function resolveManifestItems(
     }
     const form = isIterationItem(item) ? undefined : item.id_form;
     const bottomId = id !== undefined && ids ? bottomIdText(ids.code, ids.iteration, id, form) : "";
+    const objectSettings = isIterationItem(item) ? undefined : item.object_settings;
     const sourceSha256 = await blobSha(bikarRef, sourcePath);
     const key: IterationKey = {
       source: `bikar:${sourcePath}@${bikarRef}`,
@@ -732,6 +916,7 @@ export async function resolveManifestItems(
       params,
       ...(window ? { window } : {}), // absent unless cut: pre-window ids stay byte-identical
       ...(bottomId ? { bottom_id: bottomId } : {}), // absent unless carved: pre-id ids stay byte-identical
+      ...(objectSettings ? { object_settings: objectSettings } : {}), // absent unless set: ids stay byte-identical
       slice_profile: itemSliceProfile(item, sliceProfile),
     };
     resolved.push({
@@ -747,6 +932,7 @@ export async function resolveManifestItems(
       iteration: iterationId(key),
       label: item.label ?? "",
       filament: item.filament ?? 1,
+      ...(objectSettings ? { objectSettings } : {}),
     });
   }
   return resolved;
@@ -950,10 +1136,21 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       return;
     }
   }
+  // A plate where some piece carries its own settings is sliced in two passes: arrange and slice as
+  // usual, write each piece's settings into that file, then slice it again as it lies. The first pass
+  // must slice, not only arrange: an arranged-only export carries no nozzle list
+  // (`extruder_nozzle_stats: []`), and Studio refuses to slice it ("No valid nozzle found", bedface-2,
+  // 2026-10-11). Without any settings, the one pass below is unchanged.
+  const settingsByName = new Map<string, Record<string, string>>();
+  for (const r of resolved) if (r.objectSettings) settingsByName.set(stagedName(r), r.objectSettings);
+  const twoPass = settingsByName.size > 0;
+  const arrangedDir = twoPass ? mkdtempSync(join(tmpdir(), "bambu-arranged-")) : "";
+  const arrangedPath = join(arrangedDir, "arranged.3mf");
+  const withSettingsPath = join(arrangedDir, "with-settings.3mf");
   const studioArgs = buildStudioArgs(
     inputs,
-    outDir,
-    outFile,
+    twoPass ? arrangedDir : outDir,
+    twoPass ? "arranged.3mf" : outFile,
     {
       settings: settingsResolved,
       filament: filamentResolved,
@@ -963,6 +1160,15 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     },
     raw,
   );
+  const sliceArgs = twoPass
+    ? buildStudioArgs(
+        [withSettingsPath],
+        outDir,
+        outFile,
+        { settings: settingsResolved, filament: filamentResolved, arrange: false, plate: "0" },
+        raw,
+      )
+    : [];
 
   // 7. --dry-run: print the plan, the resolved iteration ids, the pre-check, and the Studio argv —
   //    render happened (local, no slicer), but nothing is sliced and no record is written.
@@ -979,8 +1185,23 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     for (const f of check.failures) console.log(`  ✗ ${f}`);
     console.log(`beds allowed: ${maxBeds} (the slice decides; a spill past it is refused after slicing)`);
     if (!studioBin) console.log("(BambuStudio not found — preset names shown unresolved)");
-    console.log("dry run — would execute:");
-    console.log([studioBin ?? "<BambuStudio>", ...studioArgs].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" "));
+    const shown = (args: string[]) =>
+      [studioBin ?? "<BambuStudio>", ...args].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" ");
+    if (twoPass) {
+      console.log("settings per piece (written into the arranged plate, then read back from the slice):");
+      for (const r of resolved.filter((x) => x.objectSettings)) {
+        const set = Object.entries(r.objectSettings!).map(([k, v]) => `${k}=${v}`).join(" ");
+        console.log(`  ${r.entry}: ${stagedName(r)} ${set}`);
+      }
+      console.log("dry run — would execute, arrange and slice as stock:");
+      console.log(shown(studioArgs));
+      console.log("then the slice again, of that plate with the settings written in:");
+      console.log(shown(sliceArgs));
+      rmSync(arrangedDir, { recursive: true, force: true });
+    } else {
+      console.log("dry run — would execute:");
+      console.log(shown(studioArgs));
+    }
     return;
   }
 
@@ -1001,8 +1222,27 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
 
   // 8. Slice.
   const timeoutMs = Math.max(30, Number(opts.timeout) || 600) * 1000;
-  ev("compose_start", { manifest: basename(absManifest), items: resolved.length, inputs: inputs.length });
-  const res = await runWithTimeout(studioBin, studioArgs, { timeoutMs, label: "studio_compose" });
+  ev("compose_start", { manifest: basename(absManifest), items: resolved.length, inputs: inputs.length, two_pass: twoPass });
+  let res = await runWithTimeout(studioBin, studioArgs, { timeoutMs, label: "studio_compose" });
+  if (twoPass && !res.timedOut) {
+    if (res.code !== 0 || !existsSync(arrangedPath)) {
+      console.error(`compose first slice (stock, before the per-piece settings) failed (exit ${res.code ?? "null"}).`);
+      console.error((res.stderr || res.stdout).trim().split("\n").slice(-8).join("\n"));
+      process.exitCode = 1;
+      return;
+    }
+    try {
+      await writeObjectSettings(arrangedPath, withSettingsPath, settingsByName);
+    } catch (err) {
+      console.error(`could not write the per-piece settings into the arranged plate: ${(err as Error).message}`);
+      process.exitCode = 1;
+      return;
+    }
+    res = await runWithTimeout(studioBin, sliceArgs, { timeoutMs, label: "studio_compose_slice" });
+    // Kept when the second slice fails, so the file Studio refused can be opened; named in the error.
+    if (res.code === 0 && existsSync(outPath)) rmSync(arrangedDir, { recursive: true, force: true });
+    else console.error(`the plate with the settings written in is kept at ${withSettingsPath}`);
+  }
   if (res.timedOut) {
     console.error(`compose slice timed out after ${opts.timeout}s. Raise --timeout, or compose fewer parts.`);
     process.exitCode = 1;
@@ -1016,9 +1256,30 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     return;
   }
   const kb = Math.round(statSync(outPath).size / 1024);
-  if (!(await enforceSliceCarriesPresets(outPath, presets))) {
+  const studioLog = `${res.stdout}\n${res.stderr}`;
+  const allowed = twoPass ? (m: SettingMismatch) => primeTowerDroppedByStudio(m, filaments, studioLog) : undefined;
+  if (!(await enforceSliceCarriesPresets(outPath, presets, allowed))) {
     process.exitCode = 1;
     return;
+  }
+  // The read-back: every piece with settings must carry them in the slice, or it would print as stock
+  // while its page says otherwise. Studio drops what it does not take without a word.
+  if (twoPass) {
+    const xml = await readMember(outPath, "Metadata/model_settings.config");
+    const want = resolved
+      .filter((r) => r.objectSettings)
+      .map((r) => ({ name: stagedName(r), count: r.count, settings: r.objectSettings! }));
+    const problems = xml === null ? ["the slice has no Metadata/model_settings.config"] : objectSettingsMissing(readObjectSettings(xml), want);
+    if (problems.length > 0) {
+      const rejected = outPath.replace(/\.3mf$/i, "") + ".settings-mismatch.3mf";
+      renameSync(outPath, rejected);
+      console.error("per-piece settings check: FAIL — the slice does not carry them:");
+      for (const p of problems) console.error(`  ✗ ${p}`);
+      console.error(`The plate was moved aside to ${rejected}; do not send it.`);
+      process.exitCode = 1;
+      return;
+    }
+    console.log(`per-piece settings check: PASS — ${want.length} piece(s) carry their settings in the slice, and the rest carry none.`);
   }
 
   // A plate that spilled onto more beds than the manifest allows is refused: no sidecar, no record,
@@ -1042,8 +1303,8 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   }
 
   // Warnings sidecar — same capture/classify/sidecar as `slice plate`, so `bambu print send` can gate
-  // the composed plate without re-slicing.
-  const combined = `${res.stdout}\n${res.stderr}`;
+  // the composed plate without re-slicing. On two passes, the slice's own output (the second pass).
+  const combined = studioLog;
   const warnings = parseSlicerWarnings(combined);
   const { expected, unexpected } = classifyWarnings(warnings, loadManifest());
   const sidecar: WarningsSidecar = {

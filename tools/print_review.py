@@ -8,6 +8,7 @@
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
+    python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -69,6 +70,9 @@ whether the slicer left them, or the printer did (the beads are drawn at the wid
 asked for, not as they came out). `--check` is the bed-face design's check: it draws at 30 px a
 millimeter unless `--px` says otherwise, prints PASS or FAIL, and exits 1 when the bare share is
 0.6% or more or the largest bare pocket is 0.2 sq mm or more.
+
+`join` puts pictures side by side on black, each scaled to the same height, for a page that
+compares two drawings: a piece's first layer on stock beside the same piece on other settings.
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -231,6 +235,27 @@ def compose(tiles, names):
         im.paste(t, (x, 0))
         d.text((x + S / 2, S + CAPTION / 2), name, fill=200, font=font, anchor="mm")
     return im
+
+
+JOIN_PX = 1000  # the height `join` scales each picture to
+JOIN_GAP = 20   # px of black between two joined pictures
+
+
+def join_pictures(pictures, height=JOIN_PX):
+    """Pictures side by side on black, each scaled to `height` keeping its shape."""
+    scaled = [p.convert("RGB").resize((round(p.width * height / p.height), height), Image.LANCZOS)
+              for p in pictures]
+    im = Image.new("RGB", (sum(s.width for s in scaled) + JOIN_GAP * (len(scaled) - 1), height))
+    x = 0
+    for s in scaled:
+        im.paste(s, (x, 0))
+        x += s.width + JOIN_GAP
+    return im
+
+
+def join_sheet(out, paths):
+    join_pictures([Image.open(p) for p in paths]).save(out)
+    print("wrote", out)
 
 
 def sheet(out, paths):
@@ -850,6 +875,15 @@ def self_test():
     checks += bed_self_test()
     checks += side_self_test()
     checks += paths_self_test()
+    tall, wide = Image.new("RGB", (100, 200), (255, 0, 0)), Image.new("RGB", (300, 100), (0, 0, 255))
+    joined = join_pictures([tall, wide], height=200)
+    checks += [
+        ("join scales each picture to one height, keeping its shape, with a gap between",
+         joined.size == (100 + JOIN_GAP + 600, 200)),
+        ("join keeps the order: the first picture on the left, black in the gap",
+         joined.getpixel((50, 100)) == (255, 0, 0) and joined.getpixel((100 + JOIN_GAP // 2, 100)) == (0, 0, 0)
+         and joined.getpixel((100 + JOIN_GAP + 300, 100)) == (0, 0, 255)),
+    ]
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -939,6 +973,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) in (3, 4) and a[0] == "bed" and a[3:] in ([], ["--zoom"]):
         bed_sheet(a[1], a[2], zoom=a[3:] == ["--zoom"])
+        sys.exit(0)
+    if len(a) >= 4 and a[0] == "join":
+        join_sheet(a[1], a[2:])
         sys.exit(0)
     if len(a) >= 6 and a[0] == "side":
         side_sheet(a[1], a[2], a[3:])

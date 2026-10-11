@@ -30,11 +30,11 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 ## Waiting on Omar
 
-- **The bed-face slits: what to try next.** bedface-1's preset was no cleaner in print than
-  stock, and the plan's bare share ranked it the wrong way. Four next steps, each with what it
-  verifies, are in [the issue](../../issues/bed-face-preset-failed-in-print.md#what-replaced-it):
-  a split plate at the stock line width (recommended), the same plate on the gold plate, fixing
-  the plan's score first, or staying on stock. Also unanswered from bedface-1: round the carved
+- **The bed-face slits: bedface-2 waits on the yes and a color.** bedface-1's preset was no
+  cleaner in print than stock, and the plan's bare share ranked it the wrong way. Of the four
+  next steps in [the issue](../../issues/bed-face-preset-failed-in-print.md#what-replaced-it),
+  Omar picked the split plate at the stock line width on 2026-10-11: [bedface-2](../../design/plates/bedface-2.md),
+  stock beside rings on one bed, built and sliced. Also unanswered from bedface-1: round the carved
   letters (FC1 vs 4GH), how FC1 1A and 1C felt, and whether the kites stay in upside down.
   Found by the bedface-1 judging, 2026-10-11.
 - **Two of the print review's six calls**, in

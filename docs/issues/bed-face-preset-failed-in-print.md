@@ -65,3 +65,9 @@ the repo as the record of what was tried. The next step is Omar's call, from the
 | **bedface-1 again on the gold Textured PEI plate** | Whether the extra 0.02 mm squash closes the meeting lines (suspect 3) | Same recipe, so it reads straight against this plate | Mixes the plate into every fit we judged on the glacier; tests one suspect | A yes would tie the preset to the gold plate |
 | **Fix the plan first: score the meeting lines as bare**, then print what it ranks best | Nothing in print until the next plate; it makes the drawing agree with this photo | No print; every later setting is ranked on a check that has been held against a print | Fitting the check to one photo is a bet on one print | The simulator's "best" column is re-run; its §9 table may change |
 | **Stop: stay on stock** | Nothing | No more prints on this; fits stay as judged | The slits Omar asked about stay; the kites keep their dent | The bed-face design closes as not fixed |
+
+**2026-10-11: A was picked** ("go A"). The plate is [bedface-2](../design/plates/bedface-2.md): two
+gBV coasters on one bed at the stock 0.5 mm first line, `S` on stock and `R` with rings and the 30%
+overlap on that coaster alone, through a new `object_settings:` block in the plate recipe. In the
+slicer's plan `R` is 0.41% bare against `S`'s 0.93%; the print decides. Every plate stays on stock
+until it does.

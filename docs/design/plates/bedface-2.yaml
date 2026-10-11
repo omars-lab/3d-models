@@ -1,0 +1,53 @@
+# bedface-2 — two coasters on one bed: stock beside rings, both at the stock first line
+#
+# bedface-1 printed the house bed-face preset (rings on the first layer, 30% overlap, a 0.42 mm
+# first line) and its undersides were no cleaner than stock (docs/issues/bed-face-preset-failed-in-print.md).
+# That plate changed three things at once, so it cannot say which one failed. Of the four next
+# steps in the issue, Omar picked the first on 2026-10-11 ("go A"): a split plate at the stock line
+# width.
+#
+# So this plate is two of the gBV minimal coaster, at bedface-1's size, side by side on the stock
+# 0.20 mm Standard preset, with its 0.5 mm first line. One prints as stock. The other carries the
+# rings and the 30% overlap as settings on that piece alone (`object_settings:`), which Bambu's
+# command line honors per piece where it does not honor the first line's width (research
+# 2026-10-10-bed-face-per-piece-and-bedface-1.md §1). If the ring coaster's underside is cleaner,
+# rings close their meeting lines once squashed like stock, and the narrow line was what failed;
+# if not, rings are dropped for good.
+#
+# Coasters only: the slits Omar asked about are on the coaster's underside, and the kites' bare
+# core needs the narrow line, which cannot be set per piece. The middle pieces are left off too;
+# their fit was judged on fit2 and bedface-1, and a change in the overlap would mix a fit question
+# into this one.
+#
+# The carved id (D-109, D-114): S on the stock coaster, R on the ring one, cut by `id_form: piece`.
+# B, D, M, N and O are left out of the code and the letters (Omar, 2026-10-09), and F and Z are
+# the letters earlier coasters carry.
+#
+#   COASTER STOCK   the gBV minimal coaster on the stock preset (1)
+#   COASTER RINGS   the same coaster, rings and 30% overlap on this piece alone (1)
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+# Slice it for the plate on the bed: `--plate-type hot_plate` on the glacier plate.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/bedface-2.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: FC2
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER STOCK
+    id:     S
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER RINGS
+    id:     R
+    id_form: piece
+    object_settings: { bottom_surface_pattern: concentric, infill_wall_overlap: "30%" }

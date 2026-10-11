@@ -38,6 +38,7 @@ import {
   type FlattenedPreset,
   type PresetConfig,
   type PresetLookup,
+  type SettingMismatch,
   type SliceComparison,
   writeFlattened,
 } from "../preset-chain.js";
@@ -197,10 +198,19 @@ export async function checkSliceCarriesPresets(
   return compareSliceToPresets(JSON.parse(raw) as PresetConfig, presets);
 }
 
-/** Report the check; on any mismatch move the plate aside (so nothing sends it) and return false. */
-export async function enforceSliceCarriesPresets(threemf: string, presets: FlattenedPreset[]): Promise<boolean> {
+/** Report the check; on any mismatch move the plate aside (so nothing sends it) and return false.
+ *  `allowed` names a mismatch the caller knows Studio makes on purpose: it is printed, not failed. */
+export async function enforceSliceCarriesPresets(
+  threemf: string,
+  presets: FlattenedPreset[],
+  allowed: (m: SettingMismatch) => boolean = () => false,
+): Promise<boolean> {
   if (presets.length === 0) return true;
   const result = await checkSliceCarriesPresets(threemf, presets);
+  if (result) {
+    for (const m of result.mismatches.filter(allowed)) console.log(`preset check: allowed — ${formatMismatch(m)}`);
+    result.mismatches = result.mismatches.filter((m) => !allowed(m));
+  }
   const mismatches = result?.mismatches ?? null;
   if (result && result.mismatches.length === 0) {
     console.log(`preset check: PASS — the slice carries every value its ${presets.length} flattened preset(s) set.`);

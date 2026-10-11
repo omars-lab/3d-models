@@ -181,6 +181,25 @@ iPhone mini and a gummy bear beside its coaster).
   scale as its params, so the same file at another size is another recipe. The draft record
   keeps that source and hash as given, since there is no bikar blob to look up.
 
+A `bkr` item may also carry slicer settings for that piece alone, added for
+[bedface-2](../plates/bedface-2.md) (2026-10-11):
+
+```yaml
+    object_settings: { bottom_surface_pattern: concentric, infill_wall_overlap: "30%" }
+```
+
+- **Only settings Studio was seen to honor per piece** are taken: today those two
+  ([the per-piece test](../../research/2026-10-10-bed-face-per-piece-and-bedface-1.md#1-which-of-the-three-settings-bambu-takes-per-piece)).
+  `initial_layer_line_width` is refused with the reason, since the slice keeps it plate-wide;
+  any other key is refused as untried.
+- **They are part of the recipe:** the iteration key carries them, so the same mesh with rings
+  is another iteration. An item without the block keeps the id it had before.
+- **The slice runs twice.** The first pass arranges and slices as stock; the settings are written
+  under each copy's `<object>` in that plate's `Metadata/model_settings.config`; the second pass
+  slices it again without arranging. The first pass must slice, not only arrange, or the second
+  refuses the plate for an empty nozzle list (research §3). The final `.3mf` is read back, and a
+  copy missing a setting fails the slice.
+
 ## 4.1 Known gap
 
 The prints gate (R1) accepts only `bikar:` sources. A record holding a `3d-models:` object

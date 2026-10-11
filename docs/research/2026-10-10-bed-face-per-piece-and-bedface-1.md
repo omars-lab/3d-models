@@ -4,6 +4,7 @@ produced-by: Claude Opus 5.5, building the bedface-1 test plate on Omar's "send 
 feeds:
   - docs/design/printing/bed-face-slicing-design.md
   - docs/design/plates/bedface-1.md
+  - docs/design/plates/bedface-2.md
 ---
 
 # Bed face: what can be set per piece, and bedface-1 against fit2
@@ -87,3 +88,48 @@ Notes on reading it:
   house keys read back from the `.3mf`. fit2's stock slice: 67 minutes, 18.9 g.
 
 This is the slicer's plan, not the print. Whether the print matches it is what bedface-1 is for.
+
+## 3. bedface-2: rings per piece at the stock line
+
+Added 2026-10-11, after bedface-1 printed no cleaner than stock and Omar picked the split plate
+("go A"). §1 above is what makes it possible: the rings and the overlap go on one piece, and the
+first line stays at the stock 0.5 mm on both.
+
+**Method.** `bambu slice compose docs/design/plates/bedface-2.yaml --plate-type hot_plate`, with
+the recipe's new `object_settings:` block on the ring coaster. Compose now slices twice. The first
+pass arranges and slices the plate as stock (`--arrange 1 --slice 0`); the per-piece keys are then
+written into that plate's `Metadata/model_settings.config`, under the ring coaster's `<object>`,
+the way §1 did by hand; the second pass slices that plate again, not arranging it. The keys are read
+back from the final `.3mf` on every copy of the piece, and the plate is refused if any is missing.
+
+Two things found on the way:
+
+- **The first pass must slice, not only arrange.** A plate exported after `--arrange 1` with no
+  slice carries an empty nozzle list (`extruder_nozzle_stats: []` in its settings), and the second
+  pass refuses it: "No valid nozzle found. Please check nozzle count." (exit 156).
+- **The second pass turns the prime tower off.** On a one-filament plate Studio logs
+  `disable_wipe_tower_after_mapping: disable prime tower for only one filament!` and writes
+  `enable_prime_tower = 0`, where the preset says 1. The preset check allows that one difference,
+  and only when the plate has one filament and the log carries that line.
+
+**Result.** One bed, 107 minutes, about 32 g, no slicer warnings; `curr_bed_type` High Temp Plate,
+`initial_layer_line_width` 0.5. Each coaster drawn and measured with
+`python3 tools/print_review.py paths <png> build/plates/bedface-2.plate.3mf 0.2 <x>,<y>,118 --below --check`,
+the windows centered on the coasters from `bedface-2.plate.bedmap.json`:
+
+| Coaster | Window (x, y, side mm) | Slits | Bare share | Largest spot (sq mm) | Check |
+|---|---|---|---|---|---|
+| `S`, stock | 192.8, 128.0, 118 | 1413 | 0.93% (38.36 sq mm) | 0.429 | FAIL |
+| `R`, rings and 30% overlap | 83.7, 128.0, 118 | 670 | 0.41% (17.06 sq mm) | 0.152 | PASS |
+
+Each window takes in its own coaster and the very edge of the other one, as the drawings show.
+Earlier, on a scratch run of the same two settings on fit2's layout (the coaster's window taking in
+other pieces), the ring coaster measured 0.65% with 819 slits and a 0.673 sq mm spot, against fit2's
+stock 1.10%, 1556 and 0.677.
+
+The drawing of `R` shows the same kind of specks down the middle of the straps and where straps
+cross that bedface-1's coaster showed as dashes in print. Whether the wider line closes them is the
+plate's question; the plan cannot say.
+
+A plate with no `object_settings:` block composes as before: bedface-1's dry run gives its five
+pieces the ids its record carries (it-b2cb0c66967d and the rest).
