@@ -4,7 +4,7 @@ status: draft
 
 # The bed face: slits, a bare core, and the slicer settings that close them
 
-**Status:** proposed, 2026-10-10. Nothing in it has been printed. Every number comes from slicing
+**Status:** proposed, 2026-10-10. Nothing in it has been printed yet; the test plate is [bedface-1](../plates/bedface-1.md) (§5.2). Every number comes from slicing
 five pieces with the installed Bambu Studio and drawing the sliced G-code; the record, with the
 commands, is [`../../research/2026-10-10-bed-face-slits.md`](../../research/2026-10-10-bed-face-slits.md)
 (cited below as "the research"). §9 adds a sweep over all four X2D nozzles and seven pieces, with
@@ -35,8 +35,9 @@ deaign.md on our approach to fix this rohbustly across all coaster and pieces".
    layer by 56% to 90% across the five pieces sliced (§4).
 4. **It is a plan, not a print.** The pictures show what the slicer asks for at the line width it
    asks for. A narrower first line squashes less, which an older write-up lists as a cause of
-   holes on the underside (§7). So the preset is printed on a small coupon, stock beside it,
-   before any plate uses it (§5).
+   holes on the underside (§7). So the preset is printed on one test plate,
+   [bedface-1](../plates/bedface-1.md), judged beside the same pieces printed on stock, before any
+   other plate uses it (§5).
 
 ## 2. What the first layer is made of
 
@@ -153,11 +154,29 @@ the coupon is Omar's to approve and judge.
 
 ### 5.2 The coupon
 
-One small plate in two halves, on the glacier plate, sliced as Smooth PEI: the stock preset on one
-half and the house preset on the other. Each half holds a row of small kites, a middle piece in its
-frame and a star coaster. Omar turns them over and compares the undersides, and tries each middle
-piece in its frame. The question for him: which half's underside is cleaner, and does either half's
-middle piece fit differently?
+**First plan: one plate in two halves**, stock on one and house on the other. It cannot test the
+whole preset. Bambu's command line takes per-piece settings from the plate file, so a test slice
+gave a middle piece and a kite row all three house settings on a stock plate. The middle piece took
+the rings and the 30% overlap (bare share 0.29% to 0.09%, largest spot 0.072 to 0.011 sq mm). But
+the per-piece first-line width was ignored: the kites given 0.42 sliced at 0.5, unchanged at 4.44%
+bare and a 0.584 sq mm spot. The 0.42 line, the one setting that fills the kites' core, can only be
+set for the whole plate ([the record](../../research/2026-10-10-bed-face-per-piece-and-bedface-1.md#1-which-of-the-three-settings-bambu-takes-per-piece)).
+
+**What prints instead: [bedface-1](../plates/bedface-1.md)**, one plate on the house preset only,
+which Omar picked on 2026-10-10 ("send the plate"; of the options, "One plate, new preset only", in
+pink). It is [sheets-04g-fit2](../plates/sheets-04g-fit2.md) piece for piece: the gBV coaster, ten
+small kites and three middle pieces with carved ids, in the same pink on the same glacier plate,
+sliced as Smooth PEI, in the same places on the bed. fit2 printed on the stock preset the same day
+and its pieces are on hand, so each piece is judged beside its fit2 twin: the undersides, and the
+fit in each plate's own coaster. The star coaster of the first plan is left out; the gBV coaster's
+straps carry the same slits.
+
+In the plan, every piece's first layer is barer on fit2's stock slice than on bedface-1's (the plate
+page has the table, and [the record](../../research/2026-10-10-bed-face-per-piece-and-bedface-1.md#2-bedface-1-against-sheets-04g-fit2)
+the commands). The coaster and the kites pass §6's check; two of the three middle pieces sit
+just over a bar. Their carved letters make a face this doc had not measured, which bedface-1 also
+answers (§6). What it cannot separate: a fit change from the 0.42 line against one from the rings,
+since both are on every piece. If the fit moves, a second plate splits them.
 
 ### 5.3 How it is rolled out, once the coupon says yes
 
@@ -218,7 +237,7 @@ PASS means "the slicer is not planning slits", never "the underside will be clea
 
 ## 8. What comes next
 
-1. The coupon (§5.2), as a plate page for Omar's yes.
+1. The coupon (§5.2): [bedface-1](../plates/bedface-1.md), its page up for Omar's yes on 2026-10-10.
 2. If the coupon favors it: the recipes and the recipe-writing tools switch to the house preset
    (§5.3).
 3. A simulator, which Omar asked for on 2026-10-10 ("can we also build a simulator ehere we can

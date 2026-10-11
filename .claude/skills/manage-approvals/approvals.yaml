@@ -4,6 +4,8 @@
 # differs from the one before; `recipe` is its hash. A yes on the plate's page names the
 # iteration it covers and the master commit it approved. The plates gate (P9) checks this file
 # against the pages and the recipes; do not edit it by hand.
+bedface-1:
+  - {iteration: 1, recipe: '71a316e78c58', date: '2026-10-10'}
 minis-01:
   - {iteration: 1, recipe: '36ae647592c8', date: '2026-10-03'}
 minis-02:
