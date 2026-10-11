@@ -620,7 +620,7 @@ def gcode_layer(text, z):
 
 def pockets(mask, w, h):
     """4-connected components of the True cells: (size, cells on its rim, touches the picture's
-    edge). A rim cell has a False cell beside it."""
+    edge, its first cell's index). A rim cell has a False cell beside it."""
     seen = bytearray(w * h)
     out = []
     for start in range(w * h):
@@ -640,8 +640,22 @@ def pockets(mask, w, h):
                 if mask[nb] and not seen[nb]:
                     seen[nb] = 1
                     q.append(nb)
-        out.append((n, rim, edge))
+        out.append((n, rim, edge, start))
     return out
+
+
+def slit_pockets(img, k):
+    """The bare mask of a paths picture drawn at k px/mm, its slits (the bare pockets lines close
+    in on every side that are thinner than SLIT_WIDE on average) and its wide pockets (closed in
+    too, but wider: a hole the design cuts, or a core no line reached), each as (pixels, first
+    pixel's index)."""
+    w, h = img.size
+    bare = [v == 0 for v in img.convert("L").tobytes()]
+    slits, wide = [], []
+    for n, rim, edge, start in pockets(bare, w, h):
+        if not edge:
+            (slits if 2 * n / rim / k < SLIT_WIDE else wide).append((n, start))
+    return bare, slits, wide
 
 
 def paths_picture(moves, region, below=False, px=PATHS_PX):
@@ -665,9 +679,8 @@ def paths_picture(moves, region, below=False, px=PATHS_PX):
         d.line(pts, fill=color, width=max(1, round(width * k)))
         for x, y in pts:
             d.ellipse([x - r, y - r, x + r, y + r], fill=color)
-    bare = [v == 0 for v in img.convert("L").tobytes()]
-    slits = [n for n, rim, edge in pockets(bare, px, px)
-             if not edge and 2 * n / rim / k < SLIT_WIDE]
+    bare, found, _ = slit_pockets(img, k)
+    slits = [n for n, _ in found]
     printed = (len(bare) - sum(bare)) / k / k
     return img, (len(slits), sum(slits) / k / k, max(slits, default=0) / k / k, printed)
 
