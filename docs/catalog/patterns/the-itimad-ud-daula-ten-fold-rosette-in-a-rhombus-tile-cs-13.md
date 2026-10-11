@@ -79,6 +79,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 
 | Plate | Styles of this pattern on it |
 |---|---|
+| [bedface-1](../../design/plates/bedface-1.md) | minimal, minimal pieces |
 | [pkt-2](../../design/plates/pkt-2.md) | split pocket |
 | [sheets-01](../../design/plates/sheets-01.md) | minimal |
 | [sheets-02](../../design/plates/sheets-02.md) | minimal |
