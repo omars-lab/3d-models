@@ -1,8 +1,9 @@
 ---
 plate: bedface-1
+print_log: '[[print-logs/bedface-1|print log]]'
 recipe: bedface-1.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the house bed-face preset close the slits on a coaster's underside and the bare core in a small kite, without moving the fit, against sheets-04g-fit2's pieces printed on the stock preset?"
@@ -156,7 +157,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-10 | approved | Omar, in chat: "send the plate" (of the options: one plate, new preset only; pink) | iteration 1 @ f181ccbe97 in #F5547C | |
+| 2026-10-10 | approved | Omar, in chat: "send the plate" (of the options: one plate, new preset only; pink) | iteration 1 @ f181ccbe97 in #F5547C | sent 2026-10-10 |
 
 ## Timeline
 
@@ -164,3 +165,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-10 | proposed: sheets-04g-fit2's pieces on the house bed-face preset, on Omar's "send the plate" and his pick of one plate on the new preset only, in pink | [the bed-face design](../printing/bed-face-slicing-design.md) |
 | 2026-10-10 | sliced: one bed, 67 minutes, 19 g, no slicer warnings; the first layer's bare share down from fit2's stock slice on every piece, the coaster and kites passing the check, two middle pieces just over it | this page |
+| 2026-10-10 | sent — by `bambu print send`; spends the approval of 2026-10-10, iteration 1 @ f181ccbe97 in #F5547C | this page |
