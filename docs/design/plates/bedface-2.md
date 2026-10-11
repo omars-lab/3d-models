@@ -2,7 +2,7 @@
 plate: bedface-2
 recipe: bedface-2.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "At the stock 0.5 mm first line, do rings and a 30% overlap leave a coaster's underside with fewer slits than stock, printed side by side on one bed?"
@@ -131,6 +131,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-11 | approved | Omar, in chat: "go on print" (pink #F5547C, the color suggested with the ask) | iteration 1 @ 4134bb96ba in #F5547C | |
 
 ## Timeline
 
