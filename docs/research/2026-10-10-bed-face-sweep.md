@@ -82,10 +82,11 @@ Table: `python3 tools/bed_face_sweep.py table` prints the table below.
 
 Self-test: `python3 tools/bed_face_sweep.py --self-test` (run by `make validate-print-review`).
 
-**Size and time.** 56 slices. The first run sliced and scored 43 of them in 8.0 minutes
-(02:00:30 to 02:08:30 UTC), about 11 seconds a slice, of which the slicer took 3 to 13. The rest
-were sliced in a second run. Scoring all 56 again from the kept slices took 5.0 minutes. A full
-sweep from nothing would be about 10 minutes at that rate.
+**Size and time.** 56 slices. The main run sliced and scored 43 of them in 8.0 minutes
+(02:00:30 to 02:08:30 UTC on 2026-10-11, the evening of the 10th locally), about 11 seconds a
+slice, of which the slicer took 3 to 13. The other 13 came from two smaller runs: a 2-job trial and
+an 11-job run. Scoring all 56 again from the kept slices took 5.0 minutes. A full sweep from
+nothing is estimated at about 10 minutes at that rate; it was not timed in one piece.
 
 ## Results
 

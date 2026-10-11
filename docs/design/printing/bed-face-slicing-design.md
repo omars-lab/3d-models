@@ -188,7 +188,7 @@ If the coupon favors the house preset:
 **Validator:** `python3 tools/print_review.py paths <out.png> <plate.3mf> 0.2 <x>,<y>,<side> --below --check`
 over each whole piece. It draws the first layer at 30 px a millimeter and fails when the bare share
 is 0.6% or more, or the largest bare pocket is 0.2 sq mm or more. Both bars are fitted to the ten
-slices in §4, so they are a bet on five pieces, not a rule for every shape; the simulator (§8) is
+slices in §4, so they are a bet on five pieces, not a rule for every shape; the simulator (§9) is
 what widens the set.
 PASS: the house preset on all five pieces, including the two closest to a bar: the radial coaster's
 ring dot (largest pocket 0.164) and the small kites (share 0.51%). The stock middle piece passes too.
