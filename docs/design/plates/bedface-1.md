@@ -2,7 +2,7 @@
 plate: bedface-1
 recipe: bedface-1.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the house bed-face preset close the slits on a coaster's underside and the bare core in a small kite, without moving the fit, against sheets-04g-fit2's pieces printed on the stock preset?"
@@ -156,6 +156,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-10 | approved | Omar, in chat: "send the plate" (of the options: one plate, new preset only; pink) | iteration 1 @ f181ccbe97 in #F5547C | |
 
 ## Timeline
 
