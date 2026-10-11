@@ -141,7 +141,9 @@ catalog (Simplify3D's Print Quality Guide + Bambu's wiki) rather than inventing 
 to the documented cause, and emits the fix as a one-line advisory pointing at the decision that owns it
 — never a silent change. The seven modeled defects, the symptom→cause→revision table, and the loop steps
 are [`rubric.md`](rubric.md) §Recovery loop; the symptom lands in the record's `feedback` block
-([`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md) §4.1). A physical, new finding graduates
+([`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md) §4.1). A revised slicer
+setting is printed on one piece beside the same piece on stock, on one bed, when Studio takes it per
+piece ([best-practices](best-practices.md), "Try a changed slicer setting beside stock"). A physical, new finding graduates
 into [`best-practices.md`](best-practices.md) (self-healing, §8).
 
 ## The calibration exception (never forget it)
