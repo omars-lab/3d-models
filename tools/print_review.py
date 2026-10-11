@@ -7,6 +7,7 @@
     python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
+    python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -55,6 +56,15 @@ row at the same scale and with the tallest point of each written under it. It is
 tall a piece stands against the walls it sits in. Both meshes must be in the same frame: a
 piece at the place of its hole, as bikar's coupons put them. The label, line and piece repeat,
 one row each.
+
+`paths` draws what the slicer lays down on one layer of a sliced plate: every extruding move on
+the layer nearest z mm, inside a square `side` mm across centred at x,y on the bed, each as a
+bead of its own line width colored by what it is (outer and inner wall, bottom surface, gap
+fill). Black inside the print is bed no line covers. It counts the slits: bare pockets that lines
+close in on every side and that are under half a millimetre across on average. `--below` swaps
+left and right, so the first layer reads like a photo of the bed face. It is for holes in a face:
+whether the slicer left them, or the printer did (the beads are drawn at the width the slicer
+asked for, not as they came out).
 
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
@@ -537,6 +547,171 @@ def side_sheet(out, frame, args):
     print("wrote", out)
 
 
+PATHS_PX = 1200   # the side of a `paths` picture, px
+ARC_STEP = 0.05   # mm: an arc is drawn as chords this long
+SLIT_WIDE = 0.5   # mm: bare bed closed in by lines, thinner than this on average, is a slit
+FEATURE_COLORS = {"Outer wall": (235, 90, 130), "Inner wall": (180, 60, 110),
+                  "Bottom surface": (250, 185, 90), "Internal solid infill": (240, 220, 120),
+                  "Gap infill": (90, 190, 250)}
+
+
+def gcode_layer(text, z):
+    """Every extruding move on the layer nearest height z, as (feature, line width, points),
+    arcs (G2/G3) walked in short chords. Returns the layer's height and the moves."""
+    heights = [float(ln.split(":")[1]) for ln in text.splitlines() if ln.startswith("; Z_HEIGHT:")]
+    if not heights:
+        raise SystemExit("paths: the G-code has no '; Z_HEIGHT:' lines")
+    want = min(heights, key=lambda h: abs(h - z))
+    moves, cur, feature, width, x, y, run = [], None, None, 0.0, 0.0, 0.0, []
+
+    def close():
+        nonlocal run
+        if len(run) >= 2 and cur == want:
+            moves.append((feature, width, run))
+        run = []
+
+    for line in text.splitlines():
+        if line.startswith("; Z_HEIGHT:"):
+            close()
+            cur = float(line.split(":")[1])
+        elif line.startswith("; FEATURE:"):
+            close()
+            feature = line.split(":", 1)[1].strip()
+        elif line.startswith("; LINE_WIDTH:"):
+            close()
+            width = float(line.split(":")[1])
+        elif line[:3] in ("G0 ", "G1 ", "G2 ", "G3 "):
+            words = {w[0]: float(w[1:]) for w in line.split(";")[0].split()[1:]
+                     if len(w) > 1 and w[0] in "XYEIJ"}
+            nx, ny = words.get("X", x), words.get("Y", y)
+            if words.get("E", 0) <= 0 or cur != want:
+                close()
+                x, y = nx, ny
+                continue
+            if not run:
+                run = [(x, y)]
+            if line[:2] in ("G2", "G3"):
+                cx, cy = x + words.get("I", 0), y + words.get("J", 0)
+                a0, a1 = math.atan2(y - cy, x - cx), math.atan2(ny - cy, nx - cx)
+                sweep = a1 - a0
+                if line[:2] == "G3" and sweep <= 0:
+                    sweep += 2 * math.pi
+                if line[:2] == "G2" and sweep >= 0:
+                    sweep -= 2 * math.pi
+                r = math.hypot(x - cx, y - cy)
+                n = max(2, int(abs(sweep) * r / ARC_STEP))
+                run += [(cx + r * math.cos(a0 + sweep * i / n), cy + r * math.sin(a0 + sweep * i / n))
+                        for i in range(1, n + 1)]
+            else:
+                run.append((nx, ny))
+            x, y = nx, ny
+    close()
+    return want, moves
+
+
+def pockets(mask, w, h):
+    """4-connected components of the True cells: (size, cells on its rim, touches the picture's
+    edge). A rim cell has a False cell beside it."""
+    seen = bytearray(w * h)
+    out = []
+    for start in range(w * h):
+        if not mask[start] or seen[start]:
+            continue
+        seen[start] = 1
+        q, n, rim, edge = deque([start]), 0, 0, False
+        while q:
+            p = q.popleft()
+            n += 1
+            px, py = p % w, p // w
+            edge = edge or px in (0, w - 1) or py in (0, h - 1)
+            nbs = [nb for nb in ((p - 1) if px else -1, (p + 1) if px < w - 1 else -1,
+                                 (p - w) if py else -1, (p + w) if py < h - 1 else -1) if nb >= 0]
+            rim += any(not mask[nb] for nb in nbs)
+            for nb in nbs:
+                if mask[nb] and not seen[nb]:
+                    seen[nb] = 1
+                    q.append(nb)
+        out.append((n, rim, edge))
+    return out
+
+
+def paths_picture(moves, region, below=False):
+    """The moves inside a square region, each drawn as a bead of its own line width with round
+    ends, colored by feature, on black: black left inside the print is bed nothing covered.
+    `below` swaps left and right, the way the bed face looks to a person turning the piece over.
+    Returns the picture and the slits, as (count, mm²): the bare pockets that lines close in on
+    every side and that are thin, under SLIT_WIDE across on average (twice the area over the rim).
+    A hole the design cuts is closed in by its wall too, but it is wide."""
+    cx, cy, side = region
+    k = PATHS_PX / side
+    f = lambda px, py: (((cx + side / 2 - px) if below else (px - cx + side / 2)) * k,
+                        (cy + side / 2 - py) * k)
+    img = Image.new("RGB", (PATHS_PX, PATHS_PX), (0, 0, 0))
+    d = ImageDraw.Draw(img)
+    for feature, width, run in moves:
+        color, r = FEATURE_COLORS.get(feature, (160, 160, 160)), width * k / 2
+        pts = [f(*p) for p in run]
+        d.line(pts, fill=color, width=max(1, round(width * k)))
+        for px, py in pts:
+            d.ellipse([px - r, py - r, px + r, py + r], fill=color)
+    bare = [v == 0 for v in img.convert("L").tobytes()]
+    slits = [n for n, rim, edge in pockets(bare, PATHS_PX, PATHS_PX)
+             if not edge and 2 * n / rim / k < SLIT_WIDE]
+    return img, (len(slits), sum(slits) / k / k)
+
+
+def paths_sheet(out, plate, z, region, below=False):
+    import zipfile
+    with zipfile.ZipFile(plate) as zf:
+        name = next(n for n in zf.namelist() if n.endswith(".gcode"))
+        text = zf.read(name).decode("utf-8", "replace")
+    height, moves = gcode_layer(text, z)
+    img, (n, area) = paths_picture(moves, region, below)
+    font = ImageFont.load_default(size=28)
+    d = ImageDraw.Draw(img)
+    legend = [(f, c) for f, c in FEATURE_COLORS.items() if any(m[0] == f for m in moves)]
+    for i, (feat, color) in enumerate(legend):
+        d.rectangle([10, 10 + 36 * i, 34, 34 + 36 * i], fill=color)
+        d.text((44, 22 + 36 * i), feat, fill=(255, 255, 255), font=font, anchor="lm")
+    d.text((10, PATHS_PX - 20), f"z {height:.2f} mm · {region[2]:g} mm across · "
+           f"{'from below' if below else 'from above'} · slits {n}, {area:.2f} sq mm",
+           fill=(255, 255, 255), font=font, anchor="lm")
+    img.save(out)
+    print(f"layer {height:.2f} mm  slits {n}  bare {area:.3f} mm²")
+    print("wrote", out)
+
+
+def paths_self_test():
+    """Made-up G-code on two layers: a 10 mm square wall loop 0.4 wide, filled with lines 0.4
+    apart that reach the wall, has no slits; the same fill stopped 0.4 short of the wall leaves
+    slits; the layer asked for is the one drawn; and an arc is walked as one."""
+    def layer(z, fill_end):
+        g = [f"; Z_HEIGHT: {z}", "; FEATURE: Outer wall", "; LINE_WIDTH: 0.4", "G1 X0 Y0",
+             "G1 X10 Y0 E1", "G1 X10 Y10 E1", "G1 X0 Y10 E1", "G1 X0 Y0 E1",
+             "; FEATURE: Bottom surface", "; LINE_WIDTH: 0.42"]
+        for i in range(1, 25):
+            yy = i * 0.4
+            g += [f"G1 X{0.2 + fill_end} Y{yy}", f"G1 X{9.8 - fill_end} Y{yy} E1"]
+        return g
+    text = "\n".join(layer(0.2, 0.0) + layer(0.4, 0.4))
+    region = (5, 5, 12)
+    _, full = paths_picture(gcode_layer(text, 0.2)[1], region)
+    _, short = paths_picture(gcode_layer(text, 0.4)[1], region)
+    arc = "\n".join(["; Z_HEIGHT: 0.2", "; FEATURE: Outer wall", "; LINE_WIDTH: 0.4",
+                     "G1 X1 Y0", "G3 X-1 Y0 I-1 J0 E1"])
+    _, moves = gcode_layer(arc, 0.2)
+    _, hole = paths_picture([m for m in gcode_layer(text, 0.2)[1] if m[0] == "Outer wall"], region)
+    return [
+        ("paths: fill that reaches the wall leaves no slit", full[0] == 0),
+        ("paths: a wide hole closed in by its wall is not a slit", hole[0] == 0),
+        ("paths: fill stopped short of the wall leaves slits", short[0] >= 2 and short[1] > 0.5),
+        ("paths: the layer nearest z is the one drawn", gcode_layer(text, 0.35)[0] == 0.4),
+        ("paths: a half-circle arc ends where it should, through the top",
+         len(moves) == 1 and math.dist(moves[0][2][-1], (-1, 0)) < 1e-6
+         and max(p[1] for p in moves[0][2]) > 0.99),
+    ]
+
+
 def side_self_test():
     """A 4 x 4 x 4 mm frame with a 2 mm square hole through it, and a 1 mm tall piece in the hole,
     cut through the middle: the frame stands either side of the hole and not in it, the piece sits
@@ -627,6 +802,7 @@ def self_test():
     ]
     checks += bed_self_test()
     checks += side_self_test()
+    checks += paths_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -722,6 +898,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) >= 3 and a[0] == "bottom":
         bottom_sheet(a[1], a[2:])
+        sys.exit(0)
+    if len(a) in (5, 6) and a[0] == "paths" and a[5:] in ([], ["--below"]):
+        paths_sheet(a[1], a[2], float(a[3]), parse_region(a[4]), below=a[5:] == ["--below"])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])
