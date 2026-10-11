@@ -110,6 +110,14 @@ the house preset the middle is filled.
 
 ![The 0.025 middle piece from below, stock then house, then the row of kites, stock then house](bedface-1-media/first-layer.png)
 
+## The print
+
+The print as the chamber camera saw it: 21 pictures from 03:34 to 04:48 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![bedface-1 printing, as the chamber camera saw it](bedface-1-media/timelapse.webp)
+
+![bedface-1 finished, on the bed](bedface-1-media/finished.webp)
+
 ## What the slice lays down
 
 Each piece's first layer, drawn at 30 px a millimeter from the slice's G-code and measured with the
