@@ -1,0 +1,9 @@
+{
+  "type": "process",
+  "name": "Naqsh bed face 0.20mm @BBL X2D",
+  "from": "User",
+  "inherits": "0.20mm Standard @BBL X2D",
+  "bottom_surface_pattern": "concentric",
+  "infill_wall_overlap": "30%",
+  "initial_layer_line_width": "0.42"
+}

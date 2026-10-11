@@ -328,7 +328,7 @@ per-color plate. The changes, which are task #244:
 3. **The send refuses a one-color plate with no color named.** Before call 18, a plate sent with
    no `--color` printed in the slice's own color, Studio's default green, which is the
    preset's color set by `setFilamentColor`
-   (`3d-models:tools/bambu/src/commands/slice.ts:L156 "export function setFilamentColor("`). Under
+   (`3d-models:tools/bambu/src/commands/slice.ts:L165 "export function setFilamentColor("`). Under
    "always at the send", printing green because nobody named a color is a silent default. So
    `print send` refuses a one-color plate whose recipe has no color unless `--color` or
    `--ams-mapping` is given, dry run too
