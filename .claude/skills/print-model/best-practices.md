@@ -114,6 +114,22 @@ research file; this file adds *our* data on top.
   `open -a "Bambu Studio" …` fails ("Unable to find application named 'Bambu Studio'") — the `.app`
   bundle name is `BambuStudio` with no space, so use the bundle id `com.bambulab.bambu-studio` (stable
   across a display-name rename), not the display name.
+- **Try a changed slicer setting beside stock, on one bed (2026-10-11).** When a revision from the
+  recovery loop is a slicer setting, print it on one piece and the same piece on stock beside it,
+  on the same bed, rather than on a plate of its own. [bedface-1](../../../docs/design/plates/bedface-1.md)
+  put the bed-face preset (rings, a 30% overlap and a narrower first line) on its own plate. Its
+  plan scored the coaster 0.26% bare against 1.10% for an older stock slice, yet the print came out
+  no cleaner, and one plate on another day could not say which of three suspects was to blame
+  ([the issue](../../../docs/issues/bed-face-preset-failed-in-print.md),
+  [the record](../../../docs/prints/2026-10-11-bedface-1/index.md)).
+  [bedface-2](../../../docs/design/plates/bedface-2.md) puts a stock coaster `S` beside a ring coaster
+  `R` instead, with the settings on `R` alone through `object_settings:` in the plate recipe
+  ([the composer design, §4](../../../docs/design/printing/plate-composer-design.md#4-the-manifest)).
+  The plate, the day, the spool and the squash are then the same for both, and only the setting
+  differs. Three limits: only settings Studio was seen to honor per piece can split this way
+  (today `bottom_surface_pattern` and `infill_wall_overlap`); `initial_layer_line_width` applies to
+  the whole plate, so testing it still takes a plate of its own, and the page says so; and the
+  plan's bare share is a guess that already ranked bedface-1 the wrong way, so the print decides.
 
 ## Grounded rules, by decision
 
