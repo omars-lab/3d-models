@@ -1,0 +1,290 @@
+<title>Bed-Face Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a workbench — controls on top, the drawing of the bed face and its readings side by side,
+   then the whole sweep for the piece as a grid you can click, then the best per piece. */
+:root {
+  --bg: #f4f2f3; --panel: #ffffff; --ink: #1f1a1d; --muted: #675d63; --line: #e0d9dd;
+  --accent: #b83a66; --accent-soft: #f6dfe8; --pass: #1d7f47; --pass-soft: #dcf1e4;
+  --fail: #b8352a; --fail-soft: #f8e0dc; --warn: #8a5a00; --warn-soft: #f7ead0; --bed: #0c0b0c;
+  --display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #151214; --panel: #1f1a1d; --ink: #f1eaee; --muted: #a99da4; --line: #3a3237;
+  --accent: #ee77a1; --accent-soft: #3d2330; --pass: #5bc98a; --pass-soft: #183326;
+  --fail: #f27566; --fail-soft: #3a1d1a; --warn: #e8b850; --warn-soft: #3a2e14; --bed: #000000;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #151214; --panel: #1f1a1d; --ink: #f1eaee; --muted: #a99da4; --line: #3a3237;
+  --accent: #ee77a1; --accent-soft: #3d2330; --pass: #5bc98a; --pass-soft: #183326;
+  --fail: #f27566; --fail-soft: #3a1d1a; --warn: #e8b850; --warn-soft: #3a2e14; --bed: #000000;
+  color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px;
+        display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+h1 { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.05; }
+h2 { font-size: 1.45rem; }
+.eyebrow { font: 600 .78rem/1 var(--display); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); }
+header { display: grid; gap: 10px; }
+header p { margin: 0; max-width: 68ch; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 18px 28px; padding: 18px; background: var(--panel);
+            border: 1px solid var(--line); border-radius: 10px; }
+.ctl { display: grid; gap: 6px; min-width: 0; }
+.ctl > span { font: 600 .78rem/1 var(--display); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { font: 500 .95rem/1 var(--body); padding: 9px 12px; border-radius: 6px; cursor: pointer;
+              border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.seg button small { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-left: 4px; }
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.seg button[aria-pressed="true"] small { color: var(--panel); opacity: .85; }
+.seg button:focus-visible, td button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.result { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .result { grid-template-columns: minmax(0, 1fr); } }
+.pics { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 560px) { .pics { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.frame { background: var(--bed); border-radius: 8px; display: grid; place-items: center; aspect-ratio: 1;
+         overflow: hidden; max-width: 100%; }
+.frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.frame .none { color: #bdb3b8; font-size: .9rem; padding: 16px; text-align: center; }
+figcaption { font-size: .84rem; color: var(--muted); }
+.readout { display: grid; gap: 14px; padding: 18px; background: var(--panel); border: 1px solid var(--line);
+           border-radius: 10px; min-width: 0; }
+.verdict { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pill { font: 600 .78rem/1 var(--display); letter-spacing: .08em; text-transform: uppercase; padding: 6px 9px; border-radius: 999px; }
+.pill.pass { background: var(--pass-soft); color: var(--pass); }
+.pill.fail { background: var(--fail-soft); color: var(--fail); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.best { background: var(--accent-soft); color: var(--accent); }
+.big { font: 600 1.15rem/1.3 var(--display); margin: 0; }
+.meter { display: grid; gap: 4px; }
+.meter .row { display: flex; justify-content: space-between; gap: 8px; font-size: .9rem; }
+.meter .row b { font: 600 .92rem var(--mono); font-variant-numeric: tabular-nums; }
+.track { position: relative; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.track i { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.track .bar { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .55; }
+dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: .9rem; }
+dt { color: var(--muted); }
+dd { margin: 0; font-family: var(--mono); font-size: .85rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .82rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--line); }
+section > h2 + p { margin: 4px 0 12px; color: var(--muted); max-width: 72ch; }
+.tablewrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font: 600 .76rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td button { all: unset; cursor: pointer; display: grid; gap: 3px; padding: 6px 8px; border-radius: 6px;
+            border: 1px solid transparent; width: 100%; box-sizing: border-box; }
+td button:hover { border-color: var(--line); }
+td button.sel { background: var(--accent-soft); }
+td button.top { border-color: var(--accent); }
+.num { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.notes { display: grid; gap: 8px; font-size: .92rem; color: var(--muted); max-width: 78ch; }
+.notes p { margin: 0; }
+code { font-family: var(--mono); font-size: .85em; }
+@media (prefers-reduced-motion: no-preference) { .track i { transition: width .25s ease; } }
+</style>
+
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Bambu X2D · first layer, seen from below</div>
+    <h1>Bed-face simulator</h1>
+    <p>Each picture is the slicer's plan for the layer that touches the bed, drawn from the sliced G-code.
+       Pick a piece, a nozzle and a preset to see where bare bed is left. White marks the slits the check counts.
+       Green marks wider bare spots that lines close in on: a hole the design cuts, or a middle no line reached.</p>
+  </header>
+
+  <section class="controls" aria-label="Settings">
+    <div class="ctl"><span>Piece</span><div class="seg" id="fam"></div></div>
+    <div class="ctl"><span id="varlabel">Strap</span><div class="seg" id="var"></div></div>
+    <div class="ctl"><span>Nozzle</span><div class="seg" id="noz"></div></div>
+    <div class="ctl"><span>Preset</span><div class="seg" id="pre"></div></div>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="pics">
+      <figure><div class="frame" id="whole"></div><figcaption id="wholecap">The whole piece.</figcaption></figure>
+      <figure><div class="frame" id="close"></div><figcaption>Close-up, 6 mm across, on the largest slit.</figcaption></figure>
+    </div>
+    <div class="readout">
+      <div class="verdict" id="verdict"></div>
+      <p class="big" id="headline"></p>
+      <div class="meter" id="m-share"></div>
+      <div class="meter" id="m-pocket"></div>
+      <dl id="facts"></dl>
+      <div class="legend">
+        <span><i style="background:#eb5a82"></i>Outer wall</span>
+        <span><i style="background:#b43c6e"></i>Inner wall</span>
+        <span><i style="background:#fab95a"></i>Bottom surface</span>
+        <span><i style="background:#5abefa"></i>Gap infill</span>
+        <span><i style="background:#ffffff"></i>Slit</span>
+        <span><i style="background:#3ce65a"></i>Wide bare</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="gridtitle">This piece at every nozzle</h2>
+    <p>Click a cell to draw it. The outlined cell is the best for this piece: it passes, drops no piece
+       and leaves no new wide bare spot, and it has the least bare share of those that do. Where the house
+       preset leaves a slice exactly as stock had it, stock is named.</p>
+    <div class="tablewrap"><table id="grid"></table></div>
+  </section>
+
+  <section>
+    <h2>Best setting per piece</h2>
+    <p>For each piece, the best of all eight slices, and which preset is better at each nozzle.</p>
+    <div class="tablewrap"><table id="best"></table></div>
+  </section>
+
+  <section class="notes">
+    <h2>How far to trust this</h2>
+    <p>This is the slicer's plan, not a print. A bare spot in the plan may close when the first layer squashes,
+       and the plan says nothing about how the plastic flows. How well the plan matches the bed face of a real piece
+       is what the stock-against-house coupon print will measure.</p>
+    <p>The pass marks (<span id="bars"></span>) were set on ten slices at the 0.4 nozzle. At 0.2, 0.6 and 0.8 they are
+       the same marks applied as they are, not marks fitted to those nozzles. At 0.8 a line is wider than the
+       0.5 mm a slit may be, so a gap between two lines there is more likely to count as wide bare than as a slit.</p>
+    <p>Only the 0.4 nozzle is fitted on the printer. The other three nozzles' slices use Bambu's own presets for them,
+       with the house changes made the same way: concentric first layer, 30% overlap, and a first line as wide as the
+       nozzle's ordinary line. Slices made <span id="made"></span> with <code>tools/bed_face_sweep.py run</code>.</p>
+  </section>
+</main>
+
+<script>
+const DATA = /*DATA*/null;
+const FAM = {
+  star:   { label: "Star", varLabel: "Strap", vars: [["star-2", "2 mm"], ["star-3", "3 mm"], ["star-4", "4 mm"]] },
+  radial: { label: "Radial", varLabel: "Strap", vars: [["radial-3", "3 mm"]] },
+  kite:   { label: "Small kites", varLabel: "Coaster size", vars: [["kite-90", "90 mm"], ["kite-112", "112.5 mm"], ["kite-125", "125 mm"]] },
+};
+const NOZ = ["0.2", "0.4", "0.6", "0.8"];
+const PRE = [["stock", "Bambu stock"], ["house", "House bed face"]];
+const state = { fam: "star", shape: "star-3", noz: "0.4", pre: "stock" };
+try { Object.assign(state, JSON.parse(localStorage.getItem("bfs-state") || "{}")); } catch (e) {}
+
+const $ = id => document.getElementById(id);
+const jobId = (s, n, p) => `${s}-n${n}-${p}`;
+const fmt = (v, d) => v == null ? "–" : Number(v).toFixed(d);
+const famOf = s => Object.keys(FAM).find(f => FAM[f].vars.some(v => v[0] === s));
+
+function seg(el, items, current, pick) {
+  el.innerHTML = "";
+  for (const [key, label, small] of items) {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-pressed", String(key === current));
+    b.innerHTML = label + (small ? ` <small>${small}</small>` : "");
+    b.onclick = () => pick(key);
+    el.appendChild(b);
+  }
+}
+
+function lineOf(n) {
+  const j = DATA.jobs[jobId(state.shape, n, "stock")] || DATA.jobs[jobId(state.shape, n, "house")];
+  return j ? j.config.line_width + " line" : "";
+}
+
+function meter(el, label, value, bar, unit, digits) {
+  const max = bar * 2.5, w = Math.min(100, 100 * value / max), ok = value < bar;
+  el.innerHTML = `<div class="row"><span>${label}</span><b>${fmt(value, digits)} ${unit}</b></div>
+    <div class="track"><i style="width:${w}%;background:var(${ok ? "--pass" : "--fail"})"></i>
+    <span class="bar" style="left:${100 * bar / max}%"></span></div>
+    <div class="row"><span class="num">must stay under ${bar} ${unit}</span></div>`;
+}
+
+function cell(j, id) {
+  if (!j) return `<span class="num">not sliced</span>`;
+  const flags = (j.lost ? " · piece dropped" : "") + (j.core ? " · wide bare" : "");
+  return `<span class="pill ${j.pass ? "pass" : "fail"}" style="justify-self:start">${j.pass ? "Pass" : "Fail"}</span>
+    <span class="num">${fmt(j.share_pct, 2)}% · ${fmt(j.largest_mm2, 3)} sq mm${flags}</span>`;
+}
+
+function render() {
+  state.fam = famOf(state.shape) || "star";
+  try { localStorage.setItem("bfs-state", JSON.stringify(state)); } catch (e) {}
+  seg($("fam"), Object.entries(FAM).map(([k, f]) => [k, f.label]), state.fam,
+      k => { state.shape = FAM[k].vars[Math.min(1, FAM[k].vars.length - 1)][0]; render(); });
+  $("varlabel").textContent = FAM[state.fam].varLabel;
+  seg($("var"), FAM[state.fam].vars, state.shape, k => { state.shape = k; render(); });
+  seg($("noz"), NOZ.map(n => [n, n + " mm", lineOf(n)]), state.noz, k => { state.noz = k; render(); });
+  seg($("pre"), PRE, state.pre, k => { state.pre = k; render(); });
+
+  const id = jobId(state.shape, state.noz, state.pre), j = DATA.jobs[id];
+  const shape = DATA.shapes[state.shape];
+  if (!j) {
+    $("whole").innerHTML = `<div class="none">This slice is not in the sweep.</div>`;
+    $("close").innerHTML = ""; $("verdict").innerHTML = ""; $("headline").textContent = shape.title;
+    $("m-share").innerHTML = $("m-pocket").innerHTML = $("facts").innerHTML = "";
+  } else {
+    $("whole").innerHTML = `<img src="${j.whole}" alt="First layer of ${shape.title}, ${state.noz} mm nozzle, ${state.pre} preset, seen from below">`;
+    $("close").innerHTML = j.close
+      ? `<img src="${j.close}" alt="Close-up of the largest slit">`
+      : `<div class="none">No slit to zoom on.</div>`;
+    $("wholecap").textContent = `The whole piece, ${fmt(j.region[2], 0)} mm square around it, cropped.`;
+    const pills = [`<span class="pill ${j.pass ? "pass" : "fail"}">${j.pass ? "Passes the check" : "Fails the check"}</span>`];
+    if (DATA.best[state.shape] === id) pills.push(`<span class="pill best">Best for this piece</span>`);
+    else if (DATA.best[`${state.shape}-n${state.noz}`] === id) pills.push(`<span class="pill best">Best at this nozzle</span>`);
+    if (j.lost) pills.push(`<span class="pill warn">${j.islands_lost} piece${j.islands_lost > 1 ? "s" : ""} dropped</span>`);
+    if (j.core) pills.push(`<span class="pill warn">${j.wide_new} new wide bare spot${j.wide_new > 1 ? "s" : ""}</span>`);
+    $("verdict").innerHTML = pills.join("");
+    $("headline").textContent = `${shape.title} · ${state.noz} mm nozzle · ${PRE.find(p => p[0] === state.pre)[1]}`;
+    meter($("m-share"), "Bare share of the face", j.share_pct, DATA.bars.share, "%", 2);
+    meter($("m-pocket"), "Largest slit", j.largest_mm2, DATA.bars.pocket, "sq mm", 3);
+    const c = j.config, mins = Math.round(j.seconds / 60);
+    const facts = [
+      ["Slits", `${j.slits} · ${fmt(j.bare_mm2, 2)} sq mm in all`],
+      ["Printed", `${j.islands} piece${j.islands > 1 ? "s" : ""} · ${fmt(j.printed_mm2, 0)} sq mm` + (j.printed_vs_04_stock ? ` · ${fmt(100 * j.printed_vs_04_stock, 1)}% of 0.4 stock` : "")],
+      ["Wide bare", `${j.wide_n} spots, ${fmt(j.wide_mm2, 1)} sq mm` + (j.wide_new != null ? ` · ${j.wide_new > 0 ? `${j.wide_new} more than 0.4 stock` : j.wide_new < 0 ? `${-j.wide_new} fewer than 0.4 stock` : "as many as 0.4 stock"}` : "")],
+      ["First layer", `${c.initial_layer_print_height} mm tall · ${c.initial_layer_line_width} mm line`],
+      ["Pattern", `${c.bottom_surface_pattern} · overlap ${c.infill_wall_overlap}`],
+      ["Layers above", `${c.layer_height} mm · ${c.line_width} mm line`],
+      ["Slicer's estimate", `${mins} min · ${fmt(j.grams, 1)} g`],
+      ["Preset", c.print_settings_id],
+    ];
+    $("facts").innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  }
+
+  $("gridtitle").textContent = `${shape.title} at every nozzle`;
+  const best = DATA.best[state.shape];
+  let g = `<thead><tr><th>Nozzle</th>${PRE.map(p => `<th>${p[1]}</th>`).join("")}</tr></thead><tbody>`;
+  for (const n of NOZ) {
+    g += `<tr><td><b>${n} mm</b><div class="num">${lineOf(n)}</div></td>`;
+    for (const [p] of PRE) {
+      const k = jobId(state.shape, n, p), jj = DATA.jobs[k];
+      const cls = [k === id ? "sel" : "", k === best ? "top" : ""].join(" ");
+      g += `<td><button type="button" class="${cls}" data-n="${n}" data-p="${p}">${cell(jj, k)}</button></td>`;
+    }
+    g += `</tr>`;
+  }
+  $("grid").innerHTML = g + `</tbody>`;
+  $("grid").querySelectorAll("button").forEach(b => b.onclick = () => { state.noz = b.dataset.n; state.pre = b.dataset.p; render(); });
+
+  let t = `<thead><tr><th>Piece</th><th>Best of all</th>${NOZ.map(n => `<th>${n} mm</th>`).join("")}</tr></thead><tbody>`;
+  for (const s of Object.keys(DATA.shapes)) {
+    const b = DATA.jobs[DATA.best[s]];
+    t += `<tr><td>${DATA.shapes[s].title}</td><td>${b ? `<button type="button" data-s="${s}" data-n="${b.nozzle}" data-p="${b.preset}">
+      <b>${b.nozzle} mm · ${b.preset}</b>${cell(b)}</button>` : "–"}</td>`;
+    for (const n of NOZ) {
+      const bb = DATA.jobs[DATA.best[`${s}-n${n}`]];
+      t += `<td>${bb ? `<button type="button" data-s="${s}" data-n="${n}" data-p="${bb.preset}"><b>${bb.preset}</b>${cell(bb)}</button>` : "–"}</td>`;
+    }
+    t += `</tr>`;
+  }
+  $("best").innerHTML = t + `</tbody>`;
+  $("best").querySelectorAll("button").forEach(b => b.onclick = () => {
+    state.shape = b.dataset.s; state.noz = b.dataset.n; state.pre = b.dataset.p; render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+$("bars").textContent = `bare share under ${DATA.bars.share}%, largest slit under ${DATA.bars.pocket} sq mm, a slit thinner than ${DATA.bars.slit} mm on average`;
+$("made").textContent = DATA.made;
+render();
+</script>

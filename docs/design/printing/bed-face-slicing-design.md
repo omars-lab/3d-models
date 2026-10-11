@@ -7,7 +7,9 @@ status: draft
 **Status:** proposed, 2026-10-10. Nothing in it has been printed. Every number comes from slicing
 five pieces with the installed Bambu Studio and drawing the sliced G-code; the record, with the
 commands, is [`../../research/2026-10-10-bed-face-slits.md`](../../research/2026-10-10-bed-face-slits.md)
-(cited below as "the research"). No decision id is taken here.
+(cited below as "the research"). §9 adds a sweep over all four X2D nozzles and seven pieces, with
+its own record, [`../../research/2026-10-10-bed-face-sweep.md`](../../research/2026-10-10-bed-face-sweep.md)
+("the sweep"). No decision id is taken here.
 
 **The question.** Omar, 2026-10-10, with a photo of a pink coaster's underside: "why do i get gaps
 like this in the plate touching side". The photo shows short dark slits along the straps, a
@@ -186,7 +188,7 @@ If the coupon favors the house preset:
 **Validator:** `python3 tools/print_review.py paths <out.png> <plate.3mf> 0.2 <x>,<y>,<side> --below --check`
 over each whole piece. It draws the first layer at 30 px a millimeter and fails when the bare share
 is 0.6% or more, or the largest bare pocket is 0.2 sq mm or more. Both bars are fitted to the ten
-slices in §4, so they are a bet on five pieces, not a rule for every shape; the simulator (§8) is
+slices in §4, so they are a bet on five pieces, not a rule for every shape; the simulator (§9) is
 what widens the set.
 PASS: the house preset on all five pieces, including the two closest to a bar: the radial coaster's
 ring dot (largest pocket 0.164) and the small kites (share 0.51%). The stock middle piece passes too.
@@ -208,8 +210,10 @@ PASS means "the slicer is not planning slits", never "the underside will be clea
   line is squashed less and may grip less. Only the coupon settles which wins.
 - **Ring specks in print.** Whether the specks and the 0.45 mm dot close up under squash is not
   known.
-- **Other nozzles, other sizes, other plates.** Everything here is one nozzle (0.4), one filament
-  (Bambu PLA Basic), one layer height (0.2), one plate type (Smooth PEI) and five pieces.
+- **Other nozzles, other sizes, other plates.** §4 to §6 are one nozzle (0.4), one filament
+  (Bambu PLA Basic), one layer height (0.2), one plate type (Smooth PEI) and five pieces. §9 widens
+  that to four nozzles and seven pieces, in the plan only: no nozzle but the 0.4 is fitted, and the
+  bars in §6 were fitted at the 0.4. Other filaments and plates are still unchecked.
 - **Walls 3 and overlap alone** were not checked for wall movement.
 
 ## 8. What comes next
@@ -220,4 +224,57 @@ PASS means "the slicer is not planning slits", never "the underside will be clea
 3. A simulator, which Omar asked for on 2026-10-10 ("can we also build a simulator ehere we can
    play with nozzle size and shape size to dind ideal settings"): the same slice-and-draw run over
    nozzle sizes, strap widths and piece sizes, each scored by the check in §6, so the settings can
-   be chosen per piece size rather than from five examples.
+   be chosen per piece size rather than from five examples. Built: §9.
+4. The bars for other nozzles. Before a 0.2 or 0.6 nozzle is bought for the bed face, a coupon at
+   that nozzle, so its PASS and FAIL rest on a print and not on bars fitted at the 0.4.
+
+## 9. The simulator: every nozzle, three sizes of piece
+
+`tools/bed_face_sweep.py run` slices seven pieces at each of the X2D's four nozzles, with the
+nozzle's stock preset and with the house preset (§5) written for that nozzle, and scores each
+first layer with the check in §6. 56 slices take about 10 minutes. `page` builds a page to play with:
+pick the piece, strap and nozzle, see the drawing from below with the slits marked, the numbers and
+PASS or FAIL, and the best setting per piece. Published:
+[Bed-face simulator](https://claude.ai/artifact/VktCoMbqRt3pNCRtUnv6bV) (private to Omar's
+account). Every number below is from the sweep's table, and every one is the slicer's plan, not a
+print.
+
+The pieces are the star coaster at strap 2, 3 and 4, the radial coaster at strap 3, and a row of
+gBV small kites cut from a 90, 112.5 and 125 mm coaster. Besides the check, a slice is marked when
+it drops a piece, or when it leaves a wide bare spot the 0.4 stock slice of the same piece does not
+have (a middle no line reached). The best setting is the slice that passes, is unmarked, and has the
+least bare share.
+
+| Piece | 0.2 nozzle | 0.4 nozzle | 0.6 nozzle | 0.8 nozzle | Best |
+|---|---|---|---|---|---|
+| star, strap 2 | house, PASS 0.12% | house, PASS 0.14% | FAIL 0.54% | FAIL, bare middles | 0.2 house |
+| star, strap 3 | house, PASS 0.16% | house, PASS 0.37% | house, PASS 0.16% | FAIL, bare middles | 0.2 house |
+| star, strap 4 | house, PASS 0.14% | house, PASS 0.39% | house, PASS 0.10% | house, PASS 0.12% | 0.6 house |
+| radial, strap 3 | house, PASS 0.05% | house, PASS 0.11% | FAIL, largest slit 0.555 sq mm | house, PASS, but 5 bare middles | 0.2 house |
+| kites from 90 | FAIL 0.79% | FAIL 3.28% | FAIL 2.72% | FAIL 8.65% | none passes |
+| kites from 112.5 | house, PASS 0.36% | house, PASS 0.52% | FAIL 0.69% | FAIL 3.98% | 0.2 house |
+| kites from 125 | FAIL 0.76% | house, PASS 0.49% | FAIL 5.37% | FAIL 3.67% | 0.4 house |
+
+What it says, inside those hedges:
+
+- **The 0.4 nozzle with the house preset is the one setting that passes nearly everything**: six of
+  the seven pieces, all but the kites from a 90 mm coaster. Stock at the 0.4 passes none of them.
+- **The 0.2 nozzle is a little cleaner and about four times slower on a coaster.** The house preset there passes five of
+  seven with the lowest share on four, but the slicer's estimate for a star coaster is 241 to 290
+  minutes against 52 to 72 at the 0.4.
+- **At the 0.6 and 0.8 nozzles the house preset mostly changes nothing.** The stock first line
+  already equals the line, and on narrow straps and kites the first layer is all walls, with no
+  bottom surface for the pattern or the overlap to act on: nine of the fourteen house slices there
+  score the same as stock.
+- **At the 0.8, thin straps get bare middles.** At strap 2 and 3 the walls close in 54 and 158 small
+  bare spots that the 0.4 slice fills, mostly where straps cross. Only strap 4 comes out clean.
+- **The kites from a 90 mm coaster fail at every setting.** It is the smallest piece in the sweep,
+  and its least bad slice (0.2, house) still leaves 0.79% bare. A kite that small wants a bigger
+  coaster or a different first layer than any tried here.
+- **A narrower line is not a dropped piece.** The printed area moves with the line width (the kites
+  from a 90 mm coaster print 0.83 to 0.85 of the 0.4 stock area at the 0.2 and with the 0.4 house
+  preset, all ten kites there), so the sweep counts pieces instead of comparing area. The count cannot see a strap dropped inside a one-piece coaster.
+
+The bars are the weak point: they were fitted at the 0.4, and at the 0.8 the line is wider than a
+0.5 mm slit, so some of the 0.8 failures may close under squash. Item 4 of §8 is how that gets
+settled.
