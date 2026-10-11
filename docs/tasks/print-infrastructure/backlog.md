@@ -30,6 +30,13 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 ## Waiting on Omar
 
+- **The bed-face slits: what to try next.** bedface-1's preset was no cleaner in print than
+  stock, and the plan's bare share ranked it the wrong way. Four next steps, each with what it
+  verifies, are in [the issue](../../issues/bed-face-preset-failed-in-print.md#what-replaced-it):
+  a split plate at the stock line width (recommended), the same plate on the gold plate, fixing
+  the plan's score first, or staying on stock. Also unanswered from bedface-1: round the carved
+  letters (FC1 vs 4GH), how FC1 1A and 1C felt, and whether the kites stay in upside down.
+  Found by the bedface-1 judging, 2026-10-11.
 - **Two of the print review's six calls**, in
   [print-review-design.md](../../design/printing/print-review-design.md) §9: one queue for every
   plate (call 1) and the scoring weights (call 4). Call 6 (does a recipe change void a yes) was

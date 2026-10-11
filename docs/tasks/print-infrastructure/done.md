@@ -2,6 +2,8 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-11 — bedface-1 printed, watched and judged: the house bed-face preset's coaster came out no cleaner than stock in the hand (dashes and triangles where the rings meet), though the slicer's plan had its bare share falling from 1.10% to 0.26%; the kites lost their dent but came out too tight. The preset does not roll out, and every plate stays on stock ([the issue](../../issues/bed-face-preset-failed-in-print.md); 3d-models #689, #690, #691)
+- 2026-10-10 — Why the coaster's bed face has slits, and a fix to try: the bed-face slicing design, with before/after first layers drawn from the G-code for five pieces, and a simulator over every X2D nozzle and three piece sizes (3d-models #685, #686)
 - 2026-10-09 — Every print record names the nozzle that printed it, and every fit lesson the nozzle it was measured with (3d-models #665)
 - 2026-10-08 — Pricing: two market-price research passes and a checker's consolidation (3d-models #630, #631, #634); the order-driven Lab design's §9.7 cites it and adds a make-and-sell-X-a-month what-if and six price breaks (3d-models #636); both are built in `tools/bambu`'s `price.ts` and its order price command (D-113, 3d-models #639)
 - 2026-10-08 — `plate_approve --color`: a yes names the color it covers, and the send refuses a different one (3d-models #638)
