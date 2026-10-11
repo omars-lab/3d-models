@@ -32,6 +32,10 @@ export interface IterationKey {
   // The id cut into the piece's bed face (`--bottom-id`, D-109), present ONLY when the piece carries
   // one, for the same reason: the cut changes the mesh, and every id minted before ids is unchanged.
   bottom_id?: string;
+  // Slicer settings set on this piece alone (`object_settings:`, e.g. concentric bottom rings), present
+  // ONLY when the item carries some: the same mesh printed another way is another recipe, and every id
+  // minted before per-piece settings is unchanged.
+  object_settings?: Record<string, string>;
   slice_profile: {
     settings: string; // "<machine>;<process>" display names
     filament: string; // filament display name(s)

@@ -6,6 +6,8 @@
 # against the pages and the recipes; do not edit it by hand.
 bedface-1:
   - {iteration: 1, recipe: '71a316e78c58', date: '2026-10-10'}
+bedface-2:
+  - {iteration: 1, recipe: '770dd045a05f', date: '2026-10-11'}
 minis-01:
   - {iteration: 1, recipe: '36ae647592c8', date: '2026-10-03'}
 minis-02:
