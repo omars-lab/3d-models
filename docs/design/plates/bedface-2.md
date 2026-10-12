@@ -3,9 +3,9 @@ plate: bedface-2
 print_log: '[[print-logs/bedface-2|print log]]'
 recipe: bedface-2.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-12-bedface-2]
 answers: "At the stock 0.5 mm first line, do rings and a 30% overlap leave a coaster's underside with fewer slits than stock, printed side by side on one bed?"
 kind: new
 maturity: experiment
@@ -159,3 +159,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-11 | sliced: one bed, 107 minutes, 32 g, no slicer warnings; the ring coaster's first layer 0.41% bare against stock's 0.93%, and it passes the check where stock fails | this page |
 | 2026-10-11 | sent — by `bambu print send`; spends the approval of 2026-10-11, iteration 1 @ 4134bb96ba in #F5547C | this page |
 | 2026-10-11 | sent — by `bambu print send`; spends the approval of 2026-10-11, iteration 1 @ 4134bb96ba in #F5547C | this page |
+| 2026-10-12 | printed — on the X2D, glacier plate, twice from the same slice, 120 minutes each against the slicer's 107, all 22 layers; one pair judged by hand: `R` and `S` "About the same", "both have slits, byt in different places" (on `S` along the strap edges, on `R` down the strap middles and where straps meet). Rings are dropped and the coaster stays on stock; rows 2 and 3 not judged yet | [the record](../../prints/2026-10-12-bedface-2/index.md) |
