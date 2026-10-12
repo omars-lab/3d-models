@@ -7,7 +7,10 @@ status: draft
 **Status:** proposed 2026-10-10; **the house preset failed in print on 2026-10-11 and does not
 roll out.** [bedface-1](../plates/bedface-1.md) came out no cleaner than stock on the coaster's
 bottom, with dashes where the rings meet, and every fit one rung tighter; only the kites' core
-filled, as planned. What was tried and what comes next:
+filled, as planned. **On 2026-10-12 rings were dropped:** [bedface-2](../plates/bedface-2.md)
+printed rings beside stock, both at the stock 0.5 mm first line, and Omar found them about the same,
+"both have slits, byt in different places": along the strap edges on stock, where the rings meet on
+the ring coaster ([the record](../../prints/2026-10-12-bedface-2/index.md)). What was tried and what comes next:
 [the issue](../../issues/bed-face-preset-failed-in-print.md). The sections below are the plan as
 written before the print. Every number comes from slicing
 five pieces with the installed Bambu Studio and drawing the sliced G-code; the record, with the

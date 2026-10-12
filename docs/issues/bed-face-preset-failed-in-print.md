@@ -71,3 +71,33 @@ gBV coasters on one bed at the stock 0.5 mm first line, `S` on stock and `R` wit
 overlap on that coaster alone, through a new `object_settings:` block in the plate recipe. In the
 slicer's plan `R` is 0.41% bare against `S`'s 0.93%; the print decides. Every plate stays on stock
 until it does.
+
+## 2026-10-12: bedface-2, rings move the slits, they do not close them
+
+bedface-2 printed (twice, from one slice), and Omar judged one pair by hand: `R` against `S`,
+"About the same", then "both have slits, byt in different places". His photos show where. On the
+stock coaster `S` the slits run along the strap edges, where the diagonal fill turns short of the
+wall. On the ring coaster `R` the edges are closed, and the specks and small triangles sit down the
+strap middles and where straps meet, the same places bedface-1's `F` had them. The record is
+[2026-10-12-bedface-2](../prints/2026-10-12-bedface-2/index.md).
+
+**What it settles.** Both coasters were squashed alike, at the stock 0.5 mm first line, so the
+narrower line (suspect 2) did not make bedface-1's dashes: where the rings meet (suspect 1) did. As
+the plate page set out before the print, that drops rings for good, and every plate stays on the
+X2D 0.20 mm Standard. And the slicer's plan ranked the ring bottom cleaner for the second plate
+running (0.41% bare against 0.93%) while the print found them about even, so the plan's bare share
+is not a way to rank first-layer settings.
+
+**What it does not settle.** The slits on the stock coaster are still there, so the question Omar
+asked on 2026-10-10 is still open. The glacier plate's missing 0.02 mm push (suspect 3) was the
+same for both coasters and is still untested. And `R` changed two things, the rings and the 30%
+overlap: its strap edges came out closed, and this plate cannot say which of the two closed them.
+Rows 2 and 3 of the page (`R` beside `F`, and `FC1 1E`'s fit in each) are not judged yet.
+
+**What is left, Omar's to pick:**
+
+| Option | What it verifies | Pros | Cons | Implications |
+|---|---|---|---|---|
+| **Stock lines with the 30% overlap only, beside stock** | Whether the overlap alone closes the slits along the strap edges, which is where stock leaves them | The edges were closed on `R`, and stock's diagonal lines have no meeting line down the middle to open; the overlap is set per piece, so the same two-coaster plate works | The edges may have closed because of the rings, not the overlap; the overlap may move a loose piece's fit (row 3 is not judged) | A yes puts the overlap on the coasters and sends fits to be checked again before it goes on a plate with loose pieces; a no leaves the overlap out too |
+| **Stock on the gold Textured PEI plate, beside stock on the glacier** | Whether the extra 0.02 mm push the gold plate gets closes the stock slits (suspect 3) | Changes nothing in the slice but the plate type; tests the one suspect never tested | Two plates means two prints; mixes the plate into fits judged on the glacier | A yes ties a clean bottom to the gold plate for coasters |
+| **Stop: stay on stock** | Nothing | No more prints on this; every fit stays as judged | The slits Omar asked about stay | The bed-face design closes as not fixed |

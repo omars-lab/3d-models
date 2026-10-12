@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- Rings did not clean the coaster's bottom at the stock 0.5 mm first line either: Omar found the ring coaster and the stock coaster about the same, "both have slits, but in different places". On stock the slits run along the strap edges; with rings they move to the strap middles and to where straps meet, where the rings from the two sides come together. So bedface-1's dashes were not the narrow line's doing, and rings are dropped (0.4 mm nozzle, 0.5 mm first line, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-12-bedface-2](prints/2026-10-12-bedface-2/index.md))
 - The house bed-face preset did not clean the coaster's bottom in print: the rings closed the slits at the strap edges but left dashes and small triangles down the middle of each strap and at the junctions, and Omar found as many slits as on the stock coaster, or more, though the slicer's plan had the bare share falling from 1.10% to 0.26%. The 0.42 mm first line did fill the small kites' core. And every fit came out about one 0.025 mm rung tighter than fit2's (0.4 mm nozzle, 0.42 mm first line and 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-11-bedface-1](prints/2026-10-11-bedface-1/index.md))
 - Halfway worked: printed beside its own coaster, the middle piece at 0.025 mm sat between gap 0 (super tight) and 0.05 (loose) and was the one Omar picked, so the slicer does keep a 0.025 mm step apart in feel. The kites at 0.05 went the other way from sheets-04g-fit: they fit that plate's coaster well and were tough to push into this one, though they hold once in. A coaster's holes move from print to print by about a 0.05 mm rung, now seen on three coasters, so a gap is judged in a coaster from the same bed. ([2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md))
 - In the fresh Z coaster, printed on the same bed, the kites fit at 0.05 mm and every looser rung was too small, and the middle piece sits between 4A (gap 0, too tight) and 4B (0.05, good but comes out a little too easily). In the older sheets-04g coaster the same pieces sat about one 0.05 mm rung looser: 4A fit but came out easily, 4B and every kite were loose. So the coaster's holes came out about one rung larger on that print than on this one. One pair of coasters: a first reading, not a rule. ([2026-10-10-sheets-04g-fit](prints/2026-10-10-sheets-04g-fit/index.md))
@@ -44,6 +45,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-12-bedface-2](prints/2026-10-12-bedface-2/index.md)
+
+- **Plate:** [bedface-2](design/plates/bedface-2.md) — two gBV coasters on one bed, stock beside rings and a 30% overlap, both at the stock 0.5 mm first line
+- **Lesson:** Rings did not clean the coaster's bottom at the stock 0.5 mm first line either: Omar found the ring coaster and the stock coaster about the same, "both have slits, but in different places". On stock the slits run along the strap edges; with rings they move to the strap middles and to where straps meet, where the rings from the two sides come together. So bedface-1's dashes were not the narrow line's doing, and rings are dropped (0.4 mm nozzle, 0.5 mm first line, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI).
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 2 (1 keep, 1 drop)
+- **What happened:** S: slits along the strap edges. R: specks and small triangles down the strap middles and at the junctions. About the same amount on each, in different places.
+- **Why:** Rings leave a meeting line down the middle of each strap and at each junction, and it opens in print at the 0.5 mm line as it did at 0.42, so the narrower line (the issue's second suspect) is cleared of bedface-1's dashes and where rings meet (the first) is what stands. The slicer's plan had R at 0.41% bare against S's 0.93%, so for the second plate running the plan ranked the ring bottom cleaner than the print. The glacier plate's missing 0.02 mm push (the third suspect) was the same for both coasters, so it is still untested.
+- **What it changed:** Rings and the 30% overlap are not used; every plate stays on the X2D 0.20 mm Standard, as the page's row 1 said for this answer. Whether to keep chasing the stock slits, and how, is Omar's call from the issue's remaining options (docs/issues/bed-face-preset-failed-in-print.md).
+- **Photos of the print:** [the S coaster's bottom, close up: short dark slits along each strap, a line or two in from the edges, where the diagonal fill meets the wall loops](prints/2026-10-12-bedface-2/photos/s-coaster-bed-face.jpg), [the R coaster's bottom, close up, the carved R near the bottom: rings along every strap, with small dark specks and triangles down the strap middles and where straps meet](prints/2026-10-12-bedface-2/photos/r-coaster-bed-face.jpg)
+
+![photo: the S coaster's bottom, close up: short dark slits along each strap, a line or two in from the edges, where the diagonal fill meets the wall loops](prints/2026-10-12-bedface-2/photos/s-coaster-bed-face.jpg)
 
 ### [2026-10-11-bedface-1](prints/2026-10-11-bedface-1/index.md)
 
@@ -198,7 +212,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-12 records; 0 measured with a tool, so no bet has moved yet.
+13 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
