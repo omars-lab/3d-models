@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- Starting the first layer on the gold plate, 0.02 mm closer to the bed than on the glacier plate, left fewer slits on both coasters: Omar found G better than bedface-2's S, with one corner still slit, and K better than R, though still with a good amount. But the gold plate's grain is not fine on a coaster, so the gold plate is out. What carries forward is the squish, not the plate (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as the Textured PEI plate, which lowers the nozzle 0.02 mm for the first layer). ([2026-10-12-bedface-3](prints/2026-10-12-bedface-3/index.md))
 - Rings did not clean the coaster's bottom at the stock 0.5 mm first line either: Omar found the ring coaster and the stock coaster about the same, "both have slits, but in different places". On stock the slits run along the strap edges; with rings they move to the strap middles and to where straps meet, where the rings from the two sides come together. So bedface-1's dashes were not the narrow line's doing, and rings are dropped (0.4 mm nozzle, 0.5 mm first line, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-12-bedface-2](prints/2026-10-12-bedface-2/index.md))
 - The house bed-face preset did not clean the coaster's bottom in print: the rings closed the slits at the strap edges but left dashes and small triangles down the middle of each strap and at the junctions, and Omar found as many slits as on the stock coaster, or more, though the slicer's plan had the bare share falling from 1.10% to 0.26%. The 0.42 mm first line did fill the small kites' core. And every fit came out about one 0.025 mm rung tighter than fit2's (0.4 mm nozzle, 0.42 mm first line and 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-11-bedface-1](prints/2026-10-11-bedface-1/index.md))
 - Halfway worked: printed beside its own coaster, the middle piece at 0.025 mm sat between gap 0 (super tight) and 0.05 (loose) and was the one Omar picked, so the slicer does keep a 0.025 mm step apart in feel. The kites at 0.05 went the other way from sheets-04g-fit: they fit that plate's coaster well and were tough to push into this one, though they hold once in. A coaster's holes move from print to print by about a 0.05 mm rung, now seen on three coasters, so a gap is judged in a coaster from the same bed. ([2026-10-10-sheets-04g-fit2](prints/2026-10-10-sheets-04g-fit2/index.md))
@@ -45,6 +46,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-12-bedface-3](prints/2026-10-12-bedface-3/index.md)
+
+- **Plate:** [bedface-3](design/plates/bedface-3.md) — bedface-2's two gBV coasters again, stock beside rings and a 30% overlap, on the gold Textured PEI plate
+- **Lesson:** Starting the first layer on the gold plate, 0.02 mm closer to the bed than on the glacier plate, left fewer slits on both coasters: Omar found G better than bedface-2's S, with one corner still slit, and K better than R, though still with a good amount. But the gold plate's grain is not fine on a coaster, so the gold plate is out. What carries forward is the squish, not the plate (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as the Textured PEI plate, which lowers the nozzle 0.02 mm for the first layer).
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 2 (1 adjust, 1 drop)
+- **What happened:** G: slits along the inside of the outer edge in one star point, fewer than S. K: dashes down the strap middles and where straps meet, fewer than R. Both bottoms grainy from the plate.
+- **Why:** The plate was the only change from bedface-2, and both coasters had fewer slits, so the glacier plate's missing 0.02 mm push (the issue's third suspect) is part of the cause. Not the whole: G still has a slit corner and K a good amount. Changing the plate also changed the surface the first layer lands on, so the 0.02 mm and the texture are not told apart by this print.
+- **What it changed:** The gold plate is out (row 3) and rings stay dropped (row 2 depends on the gold plate). Whether to get the same closer first layer on the smooth glacier plate, and how, is Omar's call from the issue (docs/issues/bed-face-preset-failed-in-print.md).
+- **Photos of the print:** [one star point of the G coaster's bottom, close up: the gold plate's grain over the whole face, and short dark slits along the inside of the outer edge](prints/2026-10-12-bedface-3/photos/g-coaster-bed-face.jpg), [the K coaster's bottom, most of it, the carved K left of center: grain all over, with short dark dashes down the strap middles and where straps meet](prints/2026-10-12-bedface-3/photos/k-coaster-bed-face.jpg), [the G coaster on the gold plate during the print, from above, after the first layers: the walls and the diagonal fill inside each strap, the carved G near the top](prints/2026-10-12-bedface-3/photos/g-layer2-on-the-bed.jpg), [the K coaster on the gold plate during the print, from above, after the first layers: the walls and fill inside each strap, the carved K near the top](prints/2026-10-12-bedface-3/photos/k-layer2-on-the-bed.jpg)
+
+![photo: one star point of the G coaster's bottom, close up: the gold plate's grain over the whole face, and short dark slits along the inside of the outer edge](prints/2026-10-12-bedface-3/photos/g-coaster-bed-face.jpg)
 
 ### [2026-10-12-bedface-2](prints/2026-10-12-bedface-2/index.md)
 
@@ -212,7 +226,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-13 records; 0 measured with a tool, so no bet has moved yet.
+14 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
