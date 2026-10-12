@@ -218,3 +218,13 @@ The design (PR #191) is complete; this skill is being built out task by task:
 proactive-advisory sweep, and the self-healing graduation are written; the skill reasons a model up to
 the owner gate. What remains is downstream and owner-gated: the dispatch port (§9) and the first real
 plate (#9), which fills best-practices' `[measured]` tag with our own data.
+
+## Scripts — when to use each
+
+| Script | What it does | When to reach for it | Command |
+|---|---|---|---|
+| `scripts/layer_extrusion.py` | Reads a sliced plate's own G-code and gives, per piece on one layer, the plastic pushed, the line laid and plastic per mm of line, by feature, against the first stock piece; lists each piece's own settings | A per-piece setting that changes how much plastic goes down (first-layer flow): prove it reached the G-code, on the layer meant and no other, before the plate is approved | `python3 .claude/skills/print-model/scripts/layer_extrusion.py build/plates/<name>.plate.3mf --layer 1` (and `--layer 2`; `--json`; `--self-test`) |
+| `scripts/slice-copies.sh` | Slices N copies of one model onto one X2D plate, packed tight | "As many of this as fit on one sheet" | `.claude/skills/print-model/scripts/slice-copies.sh` (usage in its header) |
+| `scripts/grid-plate.sh` + `scripts/grid_plate.py` | Places N copies of one mesh on an even grid and slices it with the positions kept | A display layout, evenly spaced, not packed | `.claude/skills/print-model/scripts/grid-plate.sh` (usage in its header) |
+| `scripts/grid_plate_test.py` | Checks the grid is even, inside the bed and not overlapping | After editing `grid_plate.py` | `python3 .claude/skills/print-model/scripts/grid_plate_test.py` |
+| `scripts/slice-machine-card.sh` | Slices the 23-rung machine card onto one plate with the brim off | Reprinting the machine card | `.claude/skills/print-model/scripts/slice-machine-card.sh` (usage in its header) |

@@ -10,6 +10,10 @@ bedface-2:
   - {iteration: 1, recipe: '770dd045a05f', date: '2026-10-11'}
 bedface-3:
   - {iteration: 1, recipe: 'f927317984bb', date: '2026-10-12'}
+bedface-4:
+  - {iteration: 1, recipe: '89c9910a9330', date: '2026-10-12'}
+  - {iteration: 2, recipe: '45e06fdf60c2', date: '2026-10-12'}
+  - {iteration: 3, recipe: '43da531610fd', date: '2026-10-12'}
 minis-01:
   - {iteration: 1, recipe: '36ae647592c8', date: '2026-10-03'}
 minis-02:
