@@ -1,0 +1,127 @@
+# bedface-4 — the bottom slits, tested on pieces: five settings beside stock, two pieces each
+#
+# The gBV minimal coaster's bottom keeps coming out with slits: lines that stop short of the strap
+# walls on the stock pattern (bedface-1, bedface-2, bedface-3; docs/issues/bed-face-preset-failed-in-print.md).
+# Omar, 2026-10-12, in chat: print pieces of a shape instead of the whole shape to validate assumptions,
+# "not bare minimum kind of tiny experiments" but "generally more efficient". So each piece here is a
+# 50 mm square cut out of the real coaster (bikar's `window`), holding its straps, a star hole and the
+# rim, at the coaster's own size and line width.
+#
+# The settings and their order are plate 1 of the checked research plan
+# (docs/research/2026-10-12-first-layer-slits-consolidated.md §3). Every setting gets two pieces,
+# because slits come and go from spot to spot, and a stock pair sits on the same bed:
+#
+#   STOCK A, STOCK B      the stock X2D preset, the control (H, J)
+#   OVERLAP 30 A, B       infill/wall overlap 30% on the stock monotonic bottom (L, P)
+#   OVERLAP 55 A, B       infill/wall overlap 55% on the stock monotonic bottom (2, T)
+#   FLOW 105 A, B         first-layer flow 1.05 (U, W)
+#   FLOW 110 A, B         first-layer flow 1.10 (X, Y)
+#   MONOLINE A, B         the monotonicline bottom pattern, with the profile's 45% travel extend (4, 7)
+#
+# First-layer flow is per piece: a scratch slice of a stock and a 1.05 window (2026-10-12) laid 1.052x
+# the stock piece's plastic per mm of line on layer 1 and 1.000x on layer 2, read off the G-code that is
+# sent by .claude/skills/print-model/scripts/layer_extrusion.py. The PLA Basic profile's own flow is 0.98,
+# so these pieces also cover the "use 1.00" advice. No overlap on the monotonicline pieces: the slicer
+# ignores it on that pattern.
+#
+# The carved id (D-109, D-114): one character per piece. B, D, M, N and O are left out (Omar,
+# 2026-10-09), V too (it reads like U), and F, A, C, E, S, R, G, K and Z are the letters earlier
+# coasters carry. Q is left out too: its tail makes it 4.5 mm tall, and bikar found no flat spot on
+# the piece's bed face big enough for it, so the first OVERLAP 55 piece carries 2.
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+# Slice it for the glacier plate: `--plate-type hot_plate`.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/bedface-4.yaml --plate-type hot_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: FC4
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  STOCK A
+    id:     H
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  STOCK B
+    id:     J
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 30 A
+    id:     L
+    id_form: piece
+    object_settings: { infill_wall_overlap: "30%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 30 B
+    id:     P
+    id_form: piece
+    object_settings: { infill_wall_overlap: "30%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 A
+    id:     "2"
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 B
+    id:     T
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  FLOW 105 A
+    id:     U
+    id_form: piece
+    object_settings: { initial_layer_flow_ratio: "1.05" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  FLOW 105 B
+    id:     W
+    id_form: piece
+    object_settings: { initial_layer_flow_ratio: "1.05" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  FLOW 110 A
+    id:     X
+    id_form: piece
+    object_settings: { initial_layer_flow_ratio: "1.1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  FLOW 110 B
+    id:     Y
+    id_form: piece
+    object_settings: { initial_layer_flow_ratio: "1.1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  MONOLINE A
+    id:     "4"
+    id_form: piece
+    object_settings: { bottom_surface_pattern: monotonicline }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  MONOLINE B
+    id:     "7"
+    id_form: piece
+    object_settings: { bottom_surface_pattern: monotonicline }

@@ -309,7 +309,8 @@ function checkIds(m: Record<string, unknown>, items: Record<string, unknown>[]):
 // pieces on one plate can print their bed face two ways and be compared side by side (bedface-2). Only
 // settings Studio was seen to honor per object are allowed, each with the values it takes, since Studio
 // drops a key or value it does not know without a word. The research behind each:
-// docs/research/2026-10-10-bed-face-per-piece-and-bedface-1.md.
+// docs/research/2026-10-10-bed-face-per-piece-and-bedface-1.md, and for the first-layer flow
+// docs/research/2026-10-12-first-layer-slits-consolidated.md.
 
 /** The bottom-surface patterns allowed: the stock one and the rings bedface-1 printed with. */
 const BOTTOM_PATTERNS = ["monotonic", "monotonicline", "concentric"];
@@ -321,6 +322,13 @@ export const OBJECT_SETTINGS: Record<string, { check: (v: string) => boolean; ta
   infill_wall_overlap: {
     check: (v) => /^\d{1,3}%$/.test(v) && Number(v.slice(0, -1)) <= 100,
     takes: 'a percent from 0% to 100%, e.g. "30%"',
+  },
+  // Proven per piece 2026-10-12: a 1.05 piece laid 1.052x the stock piece's plastic per mm on layer 1
+  // and 1.000x on layer 2, in the G-code that is sent (.claude/skills/print-model/scripts/layer_extrusion.py).
+  // No trailing zero: Studio writes "1.10" back as "1.1", and the read-back compares text (bedface-4).
+  initial_layer_flow_ratio: {
+    check: (v) => /^[01]\.\d?[1-9]$/.test(v) && Number(v) >= 0.8 && Number(v) <= 1.2,
+    takes: 'a ratio from 0.8 to 1.2, as text with no trailing zero, e.g. "1.05" or "1.1"',
   },
 };
 

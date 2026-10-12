@@ -82,6 +82,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 | [bedface-1](../../design/plates/bedface-1.md) | minimal, minimal pieces |
 | [bedface-2](../../design/plates/bedface-2.md) | minimal |
 | [bedface-3](../../design/plates/bedface-3.md) | minimal |
+| [bedface-4](../../design/plates/bedface-4.md) | minimal |
 | [pkt-2](../../design/plates/pkt-2.md) | split pocket |
 | [sheets-01](../../design/plates/sheets-01.md) | minimal |
 | [sheets-02](../../design/plates/sheets-02.md) | minimal |

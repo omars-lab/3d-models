@@ -55,6 +55,16 @@ describe("object_settings: — parsed against the allowed list", () => {
     expect(() => parseManifest(recipe("    object_settings: {}"))).toThrow(/is empty/);
   });
 
+  it("takes a first-layer flow as text, and refuses a bare number, one out of range, or a trailing zero", () => {
+    const m = parseManifest(recipe('    object_settings: { initial_layer_flow_ratio: "1.05" }'));
+    expect((m.items[0] as { object_settings?: unknown }).object_settings).toEqual({ initial_layer_flow_ratio: "1.05" });
+    expect(() => parseManifest(recipe('    object_settings: { initial_layer_flow_ratio: "1.1" }'))).not.toThrow();
+    expect(() => parseManifest(recipe("    object_settings: { initial_layer_flow_ratio: 1.05 }"))).toThrow(/as text/);
+    expect(() => parseManifest(recipe('    object_settings: { initial_layer_flow_ratio: "1.5" }'))).toThrow(/0.8 to 1.2/);
+    // Studio writes 1.10 back as 1.1, so the read-back would fail a slice that holds it.
+    expect(() => parseManifest(recipe('    object_settings: { initial_layer_flow_ratio: "1.10" }'))).toThrow(/no trailing zero/);
+  });
+
   it("refuses it on an item that is not rendered from bikar", () => {
     const text = `
 profile: { settings: "m;p", filament: "f" }
