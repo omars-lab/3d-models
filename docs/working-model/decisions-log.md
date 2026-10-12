@@ -6606,3 +6606,41 @@ pkt-2 were cut at the kernel's 0.05 mm, which needed a hammer on spl-1.
 
 **What would reverse it:** a whole coaster at 0.25 coming apart as `1F` did, which moves it back
 to 0.20; or stud-1's several studs binding where one did not, which moves it looser.
+
+## D-117 — The coaster-bottom slits: try the gold plate, with both coasters
+
+Omar, 2026-10-12, in chat, answering
+[the bottom-slits page](feedback-requests/2026-10-12-bottom-slits.md). He asked "should we try
+reprintign both on our other plate?", then "from bamu itself?", meaning Bambu's own gold Textured
+PEI Plate. After the recommendation he said: "yes, both on gold in pink".
+
+bedface-2 printed a stock coaster (`S`) beside one with rings and a 30% overlap (`R`), twice, on the
+glacier plate. Both had slits, in different places: along the strap edges on `S`, down the strap
+middles on `R` ([the record](../prints/2026-10-12-bedface-2/index.md)).
+
+### The options on the table
+
+- **1. Push the fill further into the wall, nothing else.** A stock coaster beside one with only the
+  30% overlap. It aims at `S`'s edge slits. The clean edges on `R` may have come from the rings, so
+  it may show nothing new.
+- **2. Try the gold plate.** The same coaster on each plate. On the gold plate the X2D lowers the
+  nozzle 0.02 mm for the first layer, which the glacier plate (sliced as the High Temp Plate) never
+  gets. It tests the issue's third possible cause, which nobody had tried.
+- **3. Stop here.** The coaster stays on stock settings, and the slits stay.
+
+### What was picked
+
+Option 2, changed: both of bedface-2's coasters, stock and rings, on the gold plate in one print
+(pink #F5547C). Set beside bedface-2's two, it changes the plate and nothing else for both at once,
+so one print answers the plate question for both settings. That is [bedface-3](../design/plates/bedface-3.md),
+with new letters `G` (stock) and `K` (rings).
+
+### What it changes
+
+- bedface-3 is sliced for the Textured PEI Plate, and the send needs the gold plate on the bed (the
+  bed photo shows which). It turns the printer's two plate checks back on for a Bambu plate (D-108).
+- Option 1 is not dropped. It waits on this answer.
+
+**What would reverse it:** the gold plate leaving the same slits as the glacier one, which rules the
+plate out and brings option 1 or 3 back; or the gold plate's grainy bottom looking wrong on a
+coaster, which rules it out even if it closes the slits.

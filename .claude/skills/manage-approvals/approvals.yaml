@@ -8,6 +8,8 @@ bedface-1:
   - {iteration: 1, recipe: '71a316e78c58', date: '2026-10-10'}
 bedface-2:
   - {iteration: 1, recipe: '770dd045a05f', date: '2026-10-11'}
+bedface-3:
+  - {iteration: 1, recipe: 'f927317984bb', date: '2026-10-12'}
 minis-01:
   - {iteration: 1, recipe: '36ae647592c8', date: '2026-10-03'}
 minis-02:
