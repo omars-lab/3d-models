@@ -2,7 +2,7 @@
 plate: bedface-3
 recipe: bedface-3.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the gold Textured PEI Plate leave fewer slits on a coaster's underside than the glacier plate did, for the stock coaster and the ring one?"
@@ -117,6 +117,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-12 | approved | Omar, in chat: "yes, both on gold in pink" | iteration 1 @ 4b79a95a1d in #F5547C | |
 
 ## Timeline
 
