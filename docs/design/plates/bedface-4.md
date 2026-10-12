@@ -1,8 +1,9 @@
 ---
 plate: bedface-4
+print_log: '[[print-logs/bedface-4|print log]]'
 recipe: bedface-4.yaml
 iteration: 3
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "On a piece of the gBV coaster, which first-layer setting leaves fewer slits along the strap edges than stock: the fill pushed 30% or 55% into the wall, 5% or 10% more plastic on the first layer, or the monotonicline bottom?"
@@ -153,10 +154,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-12 | approved | Omar, in chat: "lets print it, switching back to galcier plate first", color "green" | iteration 3 @ 6ca4ebdd61 in #00AE42 | |
+| 2026-10-12 | approved | Omar, in chat: "lets print it, switching back to galcier plate first", color "green" | iteration 3 @ 6ca4ebdd61 in #00AE42 | sent 2026-10-12 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-12 | proposed: plate 1 of the checked research plan on the bottom slits, as pieces of the coaster, on Omar's "go" for printing pieces of a shape | [the research plan](../../research/2026-10-12-first-layer-slits-consolidated.md) |
+| 2026-10-12 | sent — by `bambu print send`; spends the approval of 2026-10-12, iteration 3 @ 6ca4ebdd61 in #00AE42 | this page |
