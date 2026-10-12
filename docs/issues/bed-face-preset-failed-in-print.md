@@ -116,6 +116,17 @@ on stock (as `S`) and `K` with rings and the overlap (as `R`). Omar judged them 
 
 The record is [2026-10-12-bedface-3](../prints/2026-10-12-bedface-3/index.md).
 
+The same spot on every bottom so far: a small star hole and the straps round it, cut from each
+record's photo. The coaster repeats ten times round, so any star hole is the same spot. Stock on
+the left, rings on the right.
+
+![The same star hole on five coaster bottoms: S (stock, glacier) with lines and slits along the straps, G (stock, gold) grainy, F (rings and the thinner first line, glacier) and R (rings, glacier) with small dashes where the rings meet, K (rings, gold) grainy with fewer](bed-face-preset-failed-in-print-media/same-spot-five-bottoms.jpg)
+
+Made with `python3 tools/print_review.py compare <out.png> "S: stock, glacier=<photo>@260,350,420,420" …`.
+Each cut is a box in that photo's pixels, sized to take about 20 mm of coaster: the size comes from
+the strap width in that photo, so it is close, not measured. The photos were taken at different
+angles and in different light, so read where the slits are, not small changes in color.
+
 **What it settles.** The plate was the only change, and both coasters came out with fewer slits.
 So the glacier plate's missing 0.02 mm push (suspect 3) is part of the cause. But the gold plate is
 out, because its grain is not fine on a coaster. That also keeps rings dropped, since the page made
