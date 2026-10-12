@@ -55,7 +55,8 @@ show Omar the picture and start a new watcher from where you stopped.
    `20261010T162819Z`; repeat the flag for each). Someone lifting the plate off at the end is the
    usual case, so look hard at the last picture. It makes
    `docs/design/plates/<plate>-media/timelapse.webp` and `finished.webp` (the last picture kept),
-   small, and adds a `## The print` section to the page. It refuses, writing nothing, when a QR
+   small, and adds a `## The print` section to the page; on a reprint, `timelapse-2.webp`,
+   `finished-2.webp` and `## The second print`, with the first print left as it was. It refuses, writing nothing, when a QR
    code can be read in any picture, or when a left-out name is not a picture. If it refuses for a
    QR code, do not try to get round it, and do not leave a picture out to dodge it: say so and come
    back.
