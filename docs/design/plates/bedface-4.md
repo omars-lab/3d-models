@@ -2,7 +2,7 @@
 plate: bedface-4
 recipe: bedface-4.yaml
 iteration: 3
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "On a piece of the gBV coaster, which first-layer setting leaves fewer slits along the strap edges than stock: the fill pushed 30% or 55% into the wall, 5% or 10% more plastic on the first layer, or the monotonicline bottom?"
@@ -153,6 +153,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-12 | approved | Omar, in chat: "lets print it, switching back to galcier plate first", color "green" | iteration 3 @ 6ca4ebdd61 in #00AE42 | |
 
 ## Timeline
 
