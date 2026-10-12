@@ -60,8 +60,8 @@ Listed with the strongest outside evidence first.
 
 1. **Start the nozzle a little lower.** Try 0.02 mm lower than now. That is the same trim the
    textured plate gets.
-   - Gaps between first-layer lines most often mean the nozzle is too high. Three sources read
-     here say so. Two of the three were only seen in search summaries.
+   - Gaps between first-layer lines most often mean the nozzle is too high. Three sources here
+     say so. Only one was read in full; the other two were seen only in search summaries.
    - Two X2D users lowered it by 0.014 mm and 0.02 mm, with good and partial results.
    - Our gold textured plate, which starts 0.02 mm lower, gave fewer slits.
    - How: a copy of the start G-code with the textured value used for the glacier plate, or the

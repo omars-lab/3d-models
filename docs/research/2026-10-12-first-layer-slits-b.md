@@ -254,8 +254,10 @@ shared calibration, not in H2 hardware.
 
 **Bed temperature.**
 
-- Stock: 55 °C on the first layer for every plate type with this filament (source read,
-  fdm_filament_pla and the X2D PLA Basic profile).
+- Stock: 55 °C on the first layer for the smooth (hot) plate, the textured plate and the
+  engineering plate with this filament (source read, fdm_filament_pla and the X2D PLA Basic
+  profile). I did not check the cool plate or other plate types. The glacier plate is sliced as
+  the smooth plate here.
 - The glacier plate's maker reportedly gives PLA 45 to 55 °C (snippet,
   [BIQU Panda build plate](https://biqu.equipment/collections/all-accessories/products/panda-build-plate)).
 - **No source here ties bed temperature to gaps between first-layer lines.** Note that 55 °C
