@@ -99,6 +99,14 @@ The print as the chamber camera saw it: 13 pictures from 21:33 to 23:33 UTC, hal
 
 ![bedface-2 finished, on the bed](bedface-2-media/finished.webp)
 
+## The second print
+
+The second print of this plate, on 2026-10-12, as the chamber camera saw it: 13 pictures from 03:00 to 04:59 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![bedface-2 printing, as the chamber camera saw it](bedface-2-media/timelapse-2.webp)
+
+![bedface-2 finished, on the bed](bedface-2-media/finished-2.webp)
+
 ## What the slice lays down
 
 Each coaster's first layer, drawn at 30 px a millimeter from the slice's G-code and measured with the
