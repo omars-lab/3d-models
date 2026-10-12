@@ -111,6 +111,10 @@ accepts input).
 
 1. **Read the model** — bounds, minimum feature, repeated pieces — and **look at it** with the
    [review-print](../review-print/SKILL.md) skill: a piece that is not worth printing stops here.
+   When the print is there to answer a question (a setting, a fit, a join), ask first whether a
+   piece of the shape answers it as well as the whole: [`experiments.md`](experiments.md), read at
+   run time, says which piece, how many settings share a bed, and when the whole shape is still
+   the right print.
 2. **Discover filament** — `bambu filament` lists the loaded AMS trays + external spool (read-only).
 3. **Pick filament** — one clear match is chosen and *stated*; only when several are plausible does it
    **AskUserQuestion** (bias to action; reserve the question for the pivotal call).
@@ -143,7 +147,9 @@ to the documented cause, and emits the fix as a one-line advisory pointing at th
 are [`rubric.md`](rubric.md) §Recovery loop; the symptom lands in the record's `feedback` block
 ([`prints-tab-design.md`](../../../docs/design/printing/prints-tab-design.md) §4.1). A revised slicer
 setting is printed on one piece beside the same piece on stock, on one bed, when Studio takes it per
-piece ([best-practices](best-practices.md), "Try a changed slicer setting beside stock"). A physical, new finding graduates
+piece ([best-practices](best-practices.md), "Try a changed slicer setting beside stock"), and the
+piece is a slice of the shape, not the whole of it, when a slice holds the defect
+([`experiments.md`](experiments.md)). A physical, new finding graduates
 into [`best-practices.md`](best-practices.md) (self-healing, §8).
 
 ## The calibration exception (never forget it)

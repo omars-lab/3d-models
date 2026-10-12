@@ -55,6 +55,12 @@ the whole print. Identity must be readable from the geometry or the filename.
 State the print orientation the measurement assumes: a bridge or an overhang
 number means nothing without it, and a coupon printed on its side answers a
 different question than the one asked.
+When the unknown depends on the shape as well as the machine (how the first layer's lines lie
+between a coaster's straps, how a piece sits in its hole), the coupon is a piece cut from the real
+shape at its real size, not a generic chip that lacks the feature. Several rungs then share a bed
+as pieces, with a stock piece among them. Which piece, and when a generic coupon is still right:
+print-model's [`experiments.md`](../print-model/experiments.md). A pure machine property (warp,
+the wall floor) keeps its generic coupon, as above.
 
 **Emit the print pack** — the `.bkr`, the exact CLI line per rung, the
 measurement protocol from `protocol.md` (instrument, where on the part, how many

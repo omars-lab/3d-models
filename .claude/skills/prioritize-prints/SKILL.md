@@ -47,6 +47,10 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    approved or sent without it, or with an empty cell: a question whose answer changes nothing is
    not worth the print. The review-print skill asks the rows one at a time when it comes back.
    Theme and swatch pages get theirs from the color-themes skill's `after_print.py`.
+   An experiment plate prints pieces of the shape, several settings to a bed with a stock piece
+   among them, unless the question is about the whole object. **Why print it** names the piece and
+   says in one sentence why it answers for the whole; a whole-shape experiment says instead why a
+   piece would not do. The rule: print-model's [`experiments.md`](../print-model/experiments.md).
    A plate that is designed but waits on a build before it can have a recipe (the sampler
    sheets, [sheets-01](../../../docs/design/plates/sheets-01.md)) gets its page now, at `planned`,
    with `recipe:` and the costs empty and `needs:` listing the builds it waits on; the queue

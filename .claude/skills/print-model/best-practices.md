@@ -130,6 +130,12 @@ research file; this file adds *our* data on top.
   (today `bottom_surface_pattern` and `infill_wall_overlap`); `initial_layer_line_width` applies to
   the whole plate, so testing it still takes a plate of its own, and the page says so; and the
   plan's bare share is a guess that already ranked bedface-1 the wrong way, so the print decides.
+- **The piece beside stock can be a slice of the shape (2026-10-12).** bedface-1 to 3 each spent a
+  plate of one or two whole coasters on one or two settings, though the coaster repeats ten times
+  round and one repeat already holds the straps, star hole and rim the slits were seen between. So the rule above goes one
+  step further: print one repeat (straps, a star hole, the rim) per setting, several on one bed,
+  with a stock repeat among them. Which piece, the sentence that says why it answers for the whole,
+  and when the whole shape is still the right print: [`experiments.md`](experiments.md).
 
 ## Grounded rules, by decision
 

@@ -136,6 +136,11 @@ step 6.
    contrast? doesnt have to be whole cosater". Neither bikar nor qiyas can cut a picture: bikar's
    `crop` cuts a tile wall's layout, and qiyas's wedge-and-ring mask is inside its scoring, not a
    command.
+   A plate of experiment pieces (print-model's [`experiments.md`](../print-model/experiments.md))
+   is read the same way inside one bed: the stock piece first, then each setting's pieces, the same
+   spot on each. Name each by the id carved into it. Before a piece's answer moves the next plate,
+   check the page's sentence on why the piece answers for the whole still holds for what was seen:
+   a lifted corner or a rough top on a piece says nothing about the whole coaster.
 5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
    verdict per piece.
 6. **Carry the lesson forward.** In the record's `feedback`, write:
