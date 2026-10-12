@@ -9,6 +9,7 @@
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
     python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
+    python3 tools/print_review.py compare <out.png> <LABEL>=<picture>@<x>,<y>,<w>,<h> | <LABEL>=<picture>@<cx>,<cy>,<r>,<a0>,<a1> [...]
     python3 tools/print_review.py --self-test
 
 The sheet is white material on black, one tile per STL, the way the piece reads from above,
@@ -74,6 +75,16 @@ millimeter unless `--px` says otherwise, prints PASS or FAIL, and exits 1 when t
 `join` puts pictures side by side on black, each scaled to the same height, for a page that
 compares two drawings: a piece's first layer on stock beside the same piece on other settings.
 
+`compare` cuts the same part out of each experiment's picture and lays the cuts side by side on
+white, each scaled to one height, with its label under it. It is for comparing one spot across
+prints, not whole coasters: a strap corner on three bottoms, or the drawing beside the photo.
+Each cut is given in that picture's own pixels: four numbers are a box (x, y, width, height),
+five a wedge (centre x, y, radius, and the two angles it runs between, in degrees clockwise from
+straight up like a clock face; 0,360 is the whole circle). A wedge is turned so its middle points
+up, so wedges cut from photos taken at different turns line up; a box suits a photo taken at a
+slant, where a wedge's centre is not the coaster's. Each cut fills the same height whatever its
+size, so cut the same span of coaster from each, or the slits will not read at one scale.
+
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
 """
@@ -86,7 +97,7 @@ import zipfile
 from collections import deque
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 S = 400          # tile size, px
 CAPTION = 32     # caption band under each tile, px
@@ -255,6 +266,84 @@ def join_pictures(pictures, height=JOIN_PX):
 
 def join_sheet(out, paths):
     join_pictures([Image.open(p) for p in paths]).save(out)
+    print("wrote", out)
+
+
+COMPARE_PX = 700     # the height `compare` scales each cut to
+COMPARE_CAPTION = 44  # the label band under each cut, px
+WHITE = (255, 255, 255)
+
+
+def parse_cut(text):
+    """LABEL=path@x,y,w,h (a box) or LABEL=path@cx,cy,r,a0,a1 (a wedge), in the picture's pixels.
+    The label ends at the first `=` and the cut starts after the last `@`, so a path may hold either."""
+    label, _, rest = text.partition("=")
+    path, _, spec = rest.rpartition("@")
+    try:
+        nums = [float(v) for v in spec.split(",")]
+    except ValueError:
+        nums = []
+    if not label or not path or len(nums) not in (4, 5):
+        sys.exit(f"compare: {text!r} is not LABEL=path@x,y,w,h or LABEL=path@cx,cy,r,a0,a1")
+    return label, path, nums
+
+
+def cut_picture(img, nums):
+    """The part of `img` the numbers name, on white. Four numbers are a box: x, y, width, height.
+    Five are a wedge: centre, radius, and the angles it runs between, in degrees clockwise from
+    straight up, like a clock face; 0,360 is the whole circle. A wedge is turned so its middle
+    points up, so wedges cut from pictures taken at different turns line up side by side; a
+    circle is left as it was taken."""
+    img = img.convert("RGB")
+    if len(nums) == 4:
+        x, y, w, h = nums
+        out = Image.new("RGB", (round(w), round(h)), WHITE)
+        out.paste(img, (-round(x), -round(y)))
+        return out
+    cx, cy, r, a0, a1 = nums
+    side = round(2 * r)
+    square = Image.new("RGB", (side, side), WHITE)
+    square.paste(img, (round(r - cx), round(r - cy)))
+    whole = a1 - a0 >= 360
+    mid = 0 if whole else (a0 + a1) / 2
+    if mid:
+        square = square.rotate(mid, resample=Image.BICUBIC, fillcolor=WHITE)  # counterclockwise
+    mask = Image.new("L", (side, side), 0)
+    d = ImageDraw.Draw(mask)
+    if whole:
+        d.ellipse([0, 0, side - 1, side - 1], fill=255)
+    else:  # PIL counts angles from three o'clock, clockwise
+        half = (a1 - a0) / 2
+        d.pieslice([0, 0, side - 1, side - 1], start=-half - 90, end=half - 90, fill=255)
+    out = Image.new("RGB", (side, side), WHITE)
+    out.paste(square, mask=mask)
+    return out.crop(mask.getbbox())
+
+
+def compare_pictures(cuts, height=COMPARE_PX):
+    """(label, picture) pairs side by side on white, each scaled to `height` keeping its shape,
+    with its label in a band beneath it."""
+    scaled = [(name, p.resize((max(1, round(p.width * height / p.height)), height), Image.LANCZOS))
+              for name, p in cuts]
+    im = Image.new("RGB", (sum(p.width for _, p in scaled) + JOIN_GAP * (len(scaled) - 1),
+                           height + COMPARE_CAPTION), WHITE)
+    d = ImageDraw.Draw(im)
+    font = ImageFont.load_default(size=26)
+    x = 0
+    for name, p in scaled:
+        im.paste(p, (x, 0))
+        d.text((x + p.width / 2, height + COMPARE_CAPTION / 2), name, fill=(30, 30, 30), font=font, anchor="mm")
+        x += p.width + JOIN_GAP
+    return im
+
+
+def compare_sheet(out, specs):
+    cuts = []
+    for label, path, nums in map(parse_cut, specs):
+        cut = cut_picture(ImageOps.exif_transpose(Image.open(path)), nums)
+        print(f"{label}: {'box' if len(nums) == 4 else 'wedge'} {cut.width}x{cut.height} px from {path}")
+        cuts.append((label, cut))
+    compare_pictures(cuts).save(out)
     print("wrote", out)
 
 
@@ -884,9 +973,49 @@ def self_test():
          joined.getpixel((50, 100)) == (255, 0, 0) and joined.getpixel((100 + JOIN_GAP // 2, 100)) == (0, 0, 0)
          and joined.getpixel((100 + JOIN_GAP + 300, 100)) == (0, 0, 255)),
     ]
+    checks += compare_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
+
+
+def compare_self_test():
+    """A 400 x 300 picture, red on the left half and blue on the right, with a green dot near the
+    top right. A box comes out its own size and keeps what was in it; a wedge across the right
+    half is turned to point up and is blue inside, white outside; a circle is not turned; the
+    sheet keeps the order, one height, and a label under each."""
+    red, blue, green = (255, 0, 0), (0, 0, 255), (0, 200, 0)
+    pic = Image.new("RGB", (400, 300), red)
+    pic.paste(blue, (200, 0, 400, 300))
+    pic.paste(green, (300, 40, 310, 50))
+    near = lambda a, b: all(abs(x - y) < 40 for x, y in zip(a, b))
+    box = cut_picture(pic, [295, 35, 20, 20])
+    edge = cut_picture(pic, [390, 290, 20, 20])  # half off the picture: the rest is white
+    wedge = cut_picture(pic, [200, 150, 100, 45, 135])  # the right side, pointing three o'clock
+    circle = cut_picture(pic, [200, 150, 100, 0, 360])
+    w, h = wedge.size
+    sheet = compare_pictures([("A", box), ("B", circle)], height=100)
+    ink = lambda x0, x1: sheet.crop((x0, 100, x1, 100 + COMPARE_CAPTION)).getextrema()[0][0] < 128
+    return [
+        ("compare: a box comes out its own size, with what was inside it",
+         box.size == (20, 20) and box.getpixel((10, 10)) == green and box.getpixel((1, 1)) == blue),
+        ("compare: a box past the picture's edge is white there", edge.getpixel((15, 15)) == WHITE
+         and edge.getpixel((5, 5)) == blue),
+        ("compare: a wedge is turned so its middle points up",
+         near(wedge.getpixel((w // 2, 5)), blue) and h > w * 0.6),
+        ("compare: a wedge across the blue half holds no red, and is white outside its sides",
+         not any(near(wedge.getpixel((x, y)), red) for x in range(0, w, 7) for y in range(0, h, 7))
+         and wedge.getpixel((2, h - 2)) == WHITE and wedge.getpixel((w - 3, h - 2)) == WHITE),
+        ("compare: a circle is not turned: red on the left, blue on the right, white in the corners",
+         circle.getpixel((40, 100)) == red and circle.getpixel((160, 100)) == blue
+         and circle.getpixel((2, 2)) == WHITE),
+        ("compare: the sheet keeps the order, scales each to one height, and labels each",
+         sheet.size == (100 + JOIN_GAP + 100, 100 + COMPARE_CAPTION)
+         and near(sheet.getpixel((50, 50)), green) and near(sheet.getpixel((100 + JOIN_GAP + 20, 50)), red)
+         and ink(0, 100) and ink(100 + JOIN_GAP, 200 + JOIN_GAP)),
+        ("compare: the label ends at the first = and the cut starts after the last @",
+         parse_cut("G=a@b/c=d.jpg@1,2,3,4,5") == ("G", "a@b/c=d.jpg", [1, 2, 3, 4, 5])),
+    ]
 
 
 def bed_self_test():
@@ -976,6 +1105,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) >= 4 and a[0] == "join":
         join_sheet(a[1], a[2:])
+        sys.exit(0)
+    if len(a) >= 3 and a[0] == "compare":
+        compare_sheet(a[1], a[2:])
         sys.exit(0)
     if len(a) >= 6 and a[0] == "side":
         side_sheet(a[1], a[2], a[3:])

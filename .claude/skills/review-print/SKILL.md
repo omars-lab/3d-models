@@ -119,6 +119,23 @@ step 6.
    out as drawn, so the tight fit came from the printer, not the slice.
 4. **Attach the photos.** Put them in `photos/`, list each with its sha256 and what it shows,
    and check there is no location data in them first.
+
+   **When the plate is one in a series of experiments, compare the same spot across them**, not
+   whole pieces. Cut the same small part out of each experiment's photo (a star hole and its
+   straps, one strap corner) and lay the cuts side by side with a label each:
+   `python3 tools/print_review.py compare <out.png> "S: stock, glacier=<photo>@x,y,w,h" "G: stock, gold=<photo>@x,y,w,h" …`.
+   Four numbers are a box in that photo's pixels; five (`@cx,cy,r,a0,a1`) are a wedge, angles
+   clockwise from straight up, turned so its middle points up (`0,360` is a whole circle). Use a
+   box for photos taken at a slant, where a wedge's centre is not the coaster's; use a wedge for
+   drawings from the slice, which are square to the bed. Size each cut to the same span of
+   coaster (the strap width in each photo gives the scale), since every cut is drawn at one
+   height. Open the sheet and look before it goes anywhere: a hand seen through a hole means
+   another cut. The bed-face slits were compared this way across bedface-1, 2 and 3
+   ([the issue](../../../docs/issues/bed-face-preset-failed-in-print.md#2026-10-12-bedface-3-fewer-slits-on-the-gold-plate-but-the-plate-is-out));
+   Omar asked for it on 2026-10-12: "a cropped version of different experieemtns to compare and
+   contrast? doesnt have to be whole cosater". Neither bikar nor qiyas can cut a picture: bikar's
+   `crop` cuts a tile wall's layout, and qiyas's wedge-and-ring mask is inside its scoring, not a
+   command.
 5. **Check it.** Run `python3 .claude/gates/prints_gate.py`. It holds every rule, including one
    verdict per piece.
 6. **Carry the lesson forward.** In the record's `feedback`, write:
@@ -157,3 +174,4 @@ under `readings` (the print-model skill's compare loop).
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `scripts/prints_page.py` | Writes the Lessons and Records parts of `docs/prints.md` from every record in `docs/prints/`: the run, its plate page, what happened and why, what it changed, its decisions, and its photos (or the plate page's renders, said plainly). With no flag it checks the page is current. | After writing or changing a print record, in the same PR. `make validate-prints` and hook `39-prints` run the check. | `python3 .claude/skills/review-print/scripts/prints_page.py --write` (check: no flag; tests: `--self-test`) |
+| `tools/print_review.py compare` (shared, in `tools/`) | Cuts a box or a wedge out of each picture, turns each wedge to point up, and lays the cuts side by side on white at one height, a label under each | Comparing one spot across a series of experiments, from their photos or slice drawings (step 4) | `python3 tools/print_review.py compare <out.png> "<label>=<picture>@x,y,w,h" "<label>=<picture>@cx,cy,r,a0,a1" …` (tests: `python3 tools/print_review.py --self-test`) |
