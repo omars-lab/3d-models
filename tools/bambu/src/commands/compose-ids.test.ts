@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { bottomIdText, idRecipeRoot, itemRenderFlags, parseManifest, resolveManifestItems } from "./compose.js";
+import { bottomIdText, idRecipeRoot, itemRenderFlags, parseManifest, renderStlArgs, resolveManifestItems } from "./compose.js";
 
 // The carved id (D-109): a recipe with an `id_code:` gives every item an `id:` or a `no_id:`, and each
 // `id:` item renders with `--bottom-id <code>/<iteration> <id>`. The bikar blob read is stubbed so the
@@ -108,6 +108,23 @@ describe("itemRenderFlags — the id reaches bikar", () => {
     ]);
     expect(itemRenderFlags({ piece: "Lower", params: {}, window: "", bottomId: "" })).toEqual(["--piece", "Lower"]);
     expect(itemRenderFlags({ piece: "Lower", params: {}, window: "" })).toEqual(["--piece", "Lower"]);
+  });
+});
+
+describe("renderStlArgs — every rendered piece passes bikar's mesh gate", () => {
+  // compose rendered without --check, so carved-id pieces with holes in the bed face reached the slicer.
+  it("carries --check for a plain piece, a window and a carved id alike", () => {
+    const items: Parameters<typeof renderStlArgs>[1][] = [
+      { sourcePath: "patterns/Coasters/Split-Fit.bkr", piece: "Lower", params: {}, window: "" },
+      { sourcePath: "patterns/Coasters/gBV.bkr", piece: "", params: { size: 112.5 }, window: "50@13,30", bottomId: "S" },
+    ];
+    for (const r of items) {
+      const args = renderStlArgs("cli.js", r, "out.stl");
+      expect(args.slice(0, 2)).toEqual(["cli.js", "render"]);
+      expect(args).toContain("--check");
+      expect(args.slice(args.indexOf("-o"), args.indexOf("-o") + 2)).toEqual(["-o", "out.stl"]);
+      expect(args.slice(args.indexOf("-o") + 2)).toEqual(itemRenderFlags(r));
+    }
   });
 });
 
