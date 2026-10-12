@@ -181,6 +181,18 @@ export function itemRenderFlags(r: {
   return out;
 }
 
+/** The whole `bikar render` command for one resolved item, to an STL, shared by `slice compose` and
+ *  `slice sheet`. It always carries `--check`, bikar's mesh gate: a mesh that is not closed is refused
+ *  and no file is written, so it never reaches the slicer. compose once rendered without it, and every
+ *  carved-id plate went to the slicer with holes in its bed face that nothing reported. */
+export function renderStlArgs(
+  bikarCli: string,
+  r: { sourcePath: string; piece: string; params: Record<string, number>; window: string; bottomId?: string },
+  stl: string,
+): string[] {
+  return [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "--check", "-o", stl, ...itemRenderFlags(r)];
+}
+
 // ── The carved id (D-109) ────────────────────────────────────────────────────────────────────────
 // Every experimental piece carries its plate, the recipe's iteration and its own id, cut into the face
 // that sits on the bed. bikar cuts it (`--bottom-id`, bikar #330) in two lines of at most three
@@ -1054,8 +1066,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     }
     // `--piece` renders a NAMED piece/tile/clip; a plain orb has none, so omit the flag and bikar
     // renders the file's default last solid (its own model — the only way to render a clip is --piece).
-    const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "-o", stl];
-    args.push(...itemRenderFlags(r));
+    const args = renderStlArgs(bikarCli, r, stl);
     const idNote = r.bottomId ? ` id "${r.bottomId}"` : "";
     renderPlan.push(`  ${r.entry}: render ${pieceLabel(r)}${idNote} @ ${JSON.stringify(r.params)} → ${r.iteration}`);
     const res = await runWithTimeout("node", args, { timeoutMs: 120_000, label: "bikar_render" });

@@ -34,7 +34,7 @@ import {
   resolveBed,
   bedFitPrecheck,
   resolveManifestItems,
-  itemRenderFlags,
+  renderStlArgs,
   type Bed,
   type ManifestItemBkr,
   type PlateProfile,
@@ -321,8 +321,7 @@ interface SheetOpts {
 
 /** Render one resolved item to STL with the mesh check on; throw with bikar's own words on a FAIL. */
 async function renderChecked(r: ResolvedItem, bikarCli: string, stl: string): Promise<void> {
-  const args = [bikarCli, "render", resolve(bikarDir(), r.sourcePath), "--format", "stl", "--check", "-o", stl];
-  args.push(...itemRenderFlags(r));
+  const args = renderStlArgs(bikarCli, r, stl);
   const res = await runWithTimeout("node", args, { timeoutMs: 180_000, label: "bikar_render_sheet" });
   if (res.code !== 0 || res.timedOut || !existsSync(stl)) {
     const tail = (res.stderr || res.stdout || "").trim().split("\n").slice(-6).join("\n");
