@@ -31,8 +31,8 @@ from the last plate. It is not sliced yet.
 
 ![A side view of the first layer. Left, the blue glacier plate: round lines with small gaps between them. Right, the gold textured plate: the nozzle sits lower and the lines are flatter and touch](2026-10-12-bottom-slits-media/option-2-gold-plate.png)
 
-Every coaster so far printed on the blue plate. On the gold plate, the printer presses the first
-layer a little flatter by itself. Two prints, same coaster and same settings, one on each plate.
+Every coaster since the blue plate came on 2026-10-07 printed on it, bedface-1 and bedface-2
+included. On the gold plate, the printer presses the first layer a little flatter by itself. Two prints, same coaster and same settings, one on each plate.
 
 ### 3. Stop here
 
@@ -45,7 +45,7 @@ Keep the normal settings. The slits stay.
 | | Pros | Cons | What it leads to |
 |---|---|---|---|
 | **1. Fill further in** | Aims at the exact spot. One plate. Only one thing changes | The clean edges may have come from the rings, so this may show nothing new. Loose pieces might fit tighter; nobody has checked | Better: it goes on the coasters, after we check the loose pieces still fit. Same: it is dropped too |
-| **2. Gold plate** | Tests something never tried. The coaster and its settings stay the same | Two prints. Every fit so far was judged on the blue plate, so fits would need checking again | Better: coasters print on the gold plate. Same: the plate is ruled out |
+| **2. Gold plate** | Tests something never tried. The coaster and its settings stay the same | Two prints. Recent fits were judged on the blue plate, so fits would need checking again | Better: coasters print on the gold plate. Same: the plate is ruled out |
 | **3. Stop** | No more prints spent. Every fit stays as judged | The slits you asked about stay | The question closes, not fixed |
 
 **Your answer:**
@@ -54,6 +54,10 @@ Keep the normal settings. The slits stay.
 - [ ] 2. Try the gold plate
 - [ ] 3. Stop here
 - Notes:
+
+**Decided 2026-10-12:** 2, changed to both coasters on the gold plate in one print, in pink (in
+chat: "yes, both on gold in pink") → [D-117](../decisions-log.md). The print is
+[bedface-3](../../design/plates/bedface-3.md).
 
 The full story is in [the print record](../../prints/2026-10-12-bedface-2/index.md) and
 [the issue](../../issues/bed-face-preset-failed-in-print.md).

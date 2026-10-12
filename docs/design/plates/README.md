@@ -39,14 +39,15 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 17 | [sheets-01](sheets-01.md) | waiting | 6 | 2.3 | 2.65 | ok | Do the 0.4 mm steps on today's coaster edges show in the hand, and which top (round 1 or the full dome) looks right? |
 | 18 | [minis-06](minis-06.md) | waiting | 8 | 3.8 | 2.11 | ok | How thin can the dovetail band go, and does the new slot fix minis-04's tight pegs? |
 | 19 | [theme-night-sky-11602](theme-night-sky-11602.md) | waiting | 1 | 0.5 | 2.04 | ok | Night sky, one of its 4 plates: do its Hex ×10, Outer ×10 come out as the theme draws them, in PLA Matte Dark Blue (11602)? |
-| 20 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
-| 21 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
-| 22 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
-| 23 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
-| 24 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
-| 25 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 26 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
-| 27 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
+| 20 | [bedface-3](bedface-3.md) | proposed | 4 | 2.1 | 1.90 | ok | Does the gold Textured PEI Plate leave fewer slits on a coaster's underside than the glacier plate did, for the stock coaster and the ring one? |
+| 21 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
+| 22 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
+| 23 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
+| 24 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
+| 25 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
+| 26 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 27 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
+| 28 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [sheets-05](sheets-05.md) (value 5).
 

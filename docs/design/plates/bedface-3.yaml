@@ -1,0 +1,44 @@
+# bedface-3 — bedface-2's two coasters again, on the gold plate
+#
+# bedface-2 printed the gBV minimal coaster twice on the glacier plate, stock beside rings and a
+# 30% overlap, and both came out with slits, in different places: along the strap edges on stock,
+# down the strap middles on rings (docs/prints/2026-10-12-bedface-2/index.md). The issue's third
+# suspect was never tested: the glacier plate is sliced as the High Temp Plate and so misses the
+# 0.02 mm the X2D lowers the nozzle by on the Textured PEI Plate's first layer
+# (docs/issues/bed-face-preset-failed-in-print.md).
+#
+# Omar, 2026-10-12, in chat: "yes, both on gold in pink". So this is bedface-2's recipe unchanged,
+# sliced for and printed on Bambu's gold Textured PEI Plate. Set beside bedface-2, it changes the
+# plate and nothing else, for both coasters at once.
+#
+# The carved id (D-109, D-114): G on the stock coaster, K on the ring one. B, D, M, N and O are
+# left out (Omar, 2026-10-09), and F, Z, S and R are the letters earlier coasters carry.
+#
+#   COASTER STOCK   the gBV minimal coaster on the stock preset (1)
+#   COASTER RINGS   the same coaster, rings and 30% overlap on this piece alone (1)
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+# Slice it for the gold plate: `--plate-type textured_plate`.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/bedface-3.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: FC3
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER STOCK
+    id:     G
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    label:  COASTER RINGS
+    id:     K
+    id_form: piece
+    object_settings: { bottom_surface_pattern: concentric, infill_wall_overlap: "30%" }
