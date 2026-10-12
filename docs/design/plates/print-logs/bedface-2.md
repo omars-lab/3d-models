@@ -14,3 +14,5 @@ What the printer said while [bedface-2](../bedface-2.md) printed, one row per ch
 | 2026-10-11 22:34 | progress | 15/22 | 50% | 50% |
 | 2026-10-11 23:03 | progress | 19/22 | 75% | 75% |
 | 2026-10-11 23:33 | finished | 22/22 | 100% | FINISH |
+| 2026-10-12 02:59 | sent |  |  | fed #f5547c from AMS 0 · slot 0, 32.24 g by the slice |
+| 2026-10-12 03:00 | watching | 0/22 | 0% | RUNNING |
