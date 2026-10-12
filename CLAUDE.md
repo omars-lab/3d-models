@@ -155,16 +155,17 @@ a *tenet*, a rule that changes how the next doc gets written; then it goes in th
 file, or in the taxonomy, not in a register.
 
 There is deliberately **no issue catalog** and no automated link checker — both
-[rejected on measurement](docs/design/process/issue-register-evaluation.md): 5 of 15 defects
-graduated into a guard, all 7 July-2026 fixes shipped a test and needed no entry,
-and §5.1 measured ~11% false alarms against a <1% dead-link rate. The
-checkable invariant is not *does this URL resolve* but *is every load-bearing number
-attributed to a source the research file records as fetched*.
+[rejected on measurement](docs/design/process/issue-register-evaluation.md): 5 of 15 defects graduated
+into a guard, all 7 July-2026 fixes shipped a test and needed no entry, and §5.1 measured ~11% false
+alarms against a <1% dead-link rate. The checkable invariant is not *does this URL resolve* but *is
+every load-bearing number attributed to a source the research file records as fetched*.
 
 **Self-improvement is part of finishing.** A *recurring* manual step gets fixed in the PR that hit
 it, as a defect gets a guard ([migrations](docs/constructions/ledger.md) each fill the last gap).
 **Use what we ship before calling it done:** a new keyword gets a real recipe and picture, not a
-not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose`).
+not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose`). **A page Omar
+decides from opens on a marked-up picture, gives each option its own, and is looked at in Obsidian
+before he hears of it** ([rules](.claude/skills/request-feedback/page-template.md#rules); 2026-10-12).
 
 ## Robustness over ease — especially when offering the choice
 
@@ -193,7 +194,6 @@ migration never buys a fork — [D-041](docs/working-model/decisions-log.md), [D
 Before proposing a new skill or hook, read
 [`docs/design/process/dsl-extension-skill-evaluation.md`](docs/design/process/dsl-extension-skill-evaluation.md)
 and [`docs/design/process/issue-register-evaluation.md`](docs/design/process/issue-register-evaluation.md): both
-evaluated a proposed skill against measured recurrence and both concluded *no
-skill, a gate instead*. Anthropic's own guidance on this file applies to this
-file — bloat makes it ignored, so keep it under 200 lines and prefer deleting a
-rule or converting it to a hook over adding prose.
+evaluated a proposed skill against measured recurrence and both concluded *no skill, a gate
+instead*. Anthropic's own guidance on this file applies to this file — bloat makes it ignored, so
+keep it under 200 lines and prefer deleting a rule or converting it to a hook over adding prose.

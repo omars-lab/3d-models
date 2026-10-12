@@ -36,7 +36,10 @@ file every run; it is kept apart so it can improve without this file changing.
    there only if it goes through cleanly. Never discard another session's changes to make room.
    Then open it:
    `open "obsidian://open?vault=docs&file=working-model/feedback-requests/<name-without-.md>"`.
-5. **Tell him** in two lines: how many calls there are, and the link.
+5. **Look at it as he will.** Bring Obsidian to the front, screenshot the page top to bottom
+   (`screencapture -o -x <png>`, scrolling between shots) and read each shot. The first screen
+   must show a picture, and every picture must show. If not, fix the page before telling him.
+6. **Tell him** in two lines: how many calls there are, and the link.
 
 ## Reading the answers back
 
