@@ -3,9 +3,9 @@ plate: bedface-3
 print_log: '[[print-logs/bedface-3|print log]]'
 recipe: bedface-3.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-12-bedface-3]
 answers: "Does the gold Textured PEI Plate leave fewer slits on a coaster's underside than the glacier plate did, for the stock coaster and the ring one?"
 kind: new
 maturity: experiment
@@ -135,3 +135,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-12 | proposed: bedface-2's two coasters again, sliced for and printed on the gold plate, on Omar's "yes, both on gold in pink" (D-117) | [the bottom-slits page](../../working-model/feedback-requests/2026-10-12-bottom-slits.md) |
 | 2026-10-12 | sliced: one bed, 107 minutes, 32 g, no slicer warnings; `G` 0.91% bare, `K` 0.42%, both nearly bedface-2's | this page |
 | 2026-10-12 | sent — by `bambu print send`; spends the approval of 2026-10-12, iteration 1 @ 4b79a95a1d in #F5547C | this page |
+| 2026-10-12 | printed — on the X2D, gold Textured PEI plate, 120 minutes against the slicer's 107, all 22 layers; judged by hand: `G` fewer slits than `S` ("its better, but one corner had skits"), `K` fewer than `R` ("it had a good amount of slit"), and the gold plate's grain not fine on a coaster. The gold plate is out and rings stay dropped; the next step on the slits is Omar's | [the record](../../prints/2026-10-12-bedface-3/index.md) |
