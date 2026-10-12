@@ -77,6 +77,14 @@ they meet. The letters read backwards, as seen from below.
 
 ![The gBV coaster's first layer from below: stock with bare slits along the straps (left), rings and 30% overlap with specks where the rings meet (right)](bedface-3-media/coaster-first-layer.png)
 
+## The print
+
+The print as the chamber camera saw it: 13 pictures from 15:41 to 17:42 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![bedface-3 printing, as the chamber camera saw it](bedface-3-media/timelapse.webp)
+
+![bedface-3 finished, on the bed](bedface-3-media/finished.webp)
+
 ## What the slice lays down
 
 Measured the same way as bedface-2
