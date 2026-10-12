@@ -31,10 +31,17 @@ bed face, where the walls are whole.
 
 All 44 compose recipes were dry-run with the check, against bikar before the fix. It refuses
 six, every one a gBV coaster with an id: bedface-1, -2 and -3 (ids F, S, G) and sheets-04g-fit,
--fit2 and -fit3 (ids Z, Z, 3). Every other recipe passes, the minis, sheets, splits, studs, swatches
-and themes among them, so no plate fails the check on purpose. (The two phone plates copy a
-downloaded mesh that lives only in the main checkout, outside git, so they were run there; bikar
-renders nothing for them.) Five of the six printed with the
+-fit2 and -fit3 (ids Z, Z, 3). The minis, sheets, splits, studs, swatches and themes pass, so no
+plate fails the check on purpose. Two more do not get as far as the check:
+
+- **pkt-1** stops at its first piece, because its id `4S` no longer fits on the bed face (bikar
+  raises it while laying the id, before any check, and does so with `--check` left off too). That
+  plate printed with its ids on 2026-10-08, so bikar's id placement has changed since; which change
+  was not traced. It is not a mesh problem and is not changed here.
+- **The two phone plates** copy a downloaded mesh that lives only in the main checkout, outside git,
+  so a worktree cannot run them. bikar renders nothing for them.
+
+Five of the six printed with the
 gaps. That most likely did not change what printed, for the reason above. Nobody checked
 it against a slice made from a closed mesh, though, so the bedface records do not lean on it either way.
 
@@ -45,8 +52,21 @@ it against a slice made from a closed mesh, though, so the bedface records do no
   in `compose-ids.test.ts` checks that the flag is there for a plain piece, a window and a carved id.
   A piece that fails is refused before anything reaches the slicer, with bikar's last lines and the
   hint on cutting less of the id.
-- **bikar closes the face.** The bikar fix lays the bed face without the in-line points, then puts
-  each one back by splitting the triangle that holds its stretch of edge, so the face stays closed
-  and no triangle is flat. The test there fails on the window piece before the fix and passes after.
+- **bikar closes the face** ([bikar #339](https://github.com/NaqshCoffee/bikar/pull/339)). It lays
+  the bed face without the in-line points, then puts each one back by splitting the triangle that
+  holds its stretch of edge, so the face stays closed and no triangle is flat. Its three new tests (a
+  box with a stepped hole, the whole coaster, the window piece) fail before the fix and pass after,
+  and no other coaster's saved mesh changed.
+
+## After the fix
+
+The 44 recipes were dry-run again with the check, against bikar with #339 in. All six that were
+refused now pass, and every recipe that passed before still passes. pkt-1 and the phone plates
+stop where they did, for the reasons above.
+
+| Render | Before | After |
+|---|---|---|
+| Whole gBV coaster, id `S` | not closed, 22 flat triangles | closed, 0 flat |
+| The 50 mm window, with an id | not closed, 11 flat triangles | closed, 0 flat |
 
 `bambu coaster` renders with `--format parts`, not an STL, and is not changed here.
