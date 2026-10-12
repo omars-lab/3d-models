@@ -58,7 +58,10 @@ picture, and what the watcher saw in it.
 **Publishing.** `--publish` puts the print on its page, small (Omar, 2026-10-10): the frames as
 an animated WebP, 480 px wide, and the last frame as a WebP still, both with their metadata
 stripped, into `docs/design/plates/<plate>-media/`, and a `## The print` section that shows them,
-after `## Pictures`. It refuses, writing nothing, when zbarimg reads a code in any frame of either
+after `## Pictures`. A plate printed again keeps every print: the print log's `sent` rows split
+the frames folder into prints, the timelapse and `--publish` use only the newest one, and a
+reprint gets its own files (`timelapse-2.webp`, `finished-2.webp`, `timelapse-2.gif`) and its
+own section (`## The second print`) after the first. It refuses, writing nothing, when zbarimg reads a code in any frame of either
 (the repo is public, and the printer wears QR stickers), or when one is over 400 KB.
 `--leave-out <frame>` (repeatable, the file name with or without `.jpg`) keeps a picture off the
 page, for one that shows a person: sheets-04g-fit2's last frame caught Omar's hand lifting the
@@ -336,6 +339,36 @@ def frames_dir(name: str) -> Path:
     return LOGS / name / "frames"
 
 
+def sends_of(name: str) -> list[str]:
+    """The time of every `sent` row in the plate's print log, oldest first: one per print."""
+    log = log_of(pg.PLATES / f"{name}.md")
+    if not log.is_file():
+        return []
+    rows, _ = pg.print_log(log.read_text(encoding="utf-8"))
+    return [when for when, event in rows if event == "sent"]
+
+
+def this_print(name: str) -> tuple[list[Path], int]:
+    """The frames of the plate's newest print, and which print it is (1 for the first send).
+
+    The frames folder keeps every print's pictures, named by the UTC minute they were taken; the
+    print log's `sent` rows say where one print ends and the next begins. bedface-2's reprint
+    (2026-10-12) found this: the watch put its frames beside the first print's, so its timelapse
+    would have played both prints as one, and publishing it would have replaced the first print's
+    pictures on the page."""
+    frames = sorted(frames_dir(name).glob("*.jpg"))
+    sends = sends_of(name)
+    if not sends:
+        return frames, 1
+    since = re.sub(r"\D", "", sends[-1])           # 2026-10-12 02:59 → 202610120259
+    return [f for f in frames if re.sub(r"\D", "", f.stem)[:12] >= since], len(sends)
+
+
+def print_suffix(n: int) -> str:
+    """The first print's files keep the plain names; a reprint's carry its number."""
+    return "" if n == 1 else f"-{n}"
+
+
 def snapshot(name: str, log: Log) -> Path | None:
     """One chamber frame into the plate's frames folder, or None (logged) when the camera fails."""
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -363,11 +396,11 @@ def gif_cmd(frames: list[Path], out: Path) -> list[str]:
 
 
 def make_gif(name: str, log: Log) -> Path | None:
-    frames = sorted(frames_dir(name).glob("*.jpg"))
+    frames, n = this_print(name)
     if len(frames) < 2:
         log("gif_skipped", frames=len(frames))
         return None
-    out = LOGS / name / "timelapse.gif"
+    out = LOGS / name / f"timelapse{print_suffix(n)}.gif"
     log("gif_start", frames=len(frames))
     try:
         r = subprocess.run(gif_cmd(frames, out), capture_output=True, text=True, timeout=GIF_TIMEOUT_S)
@@ -432,32 +465,52 @@ def codes_in(paths: list[Path]) -> int:
     return n
 
 
-def print_section(name: str, frames: list[Path], left_out: int = 0) -> str:
+ORDINALS = {2: "second", 3: "third", 4: "fourth", 5: "fifth", 6: "sixth", 7: "seventh",
+            8: "eighth", 9: "ninth", 10: "tenth"}
+
+
+def print_heading(n: int) -> str:
+    """`## The print` for the first send, `## The second print` for a reprint, and so on."""
+    if n == 1:
+        return PRINT_HEADING
+    return f"## The {ORDINALS[n]} print" if n in ORDINALS else f"## Print {n}"
+
+
+def print_section(name: str, frames: list[Path], left_out: int = 0, n: int = 1) -> str:
     def hm(f: Path) -> str:
         m = re.match(r"\d{8}T(\d\d)(\d\d)\d\dZ$", f.stem)
         return f"{m[1]}:{m[2]}" if m else f.stem
     dropped = (f" {left_out} picture{'s' if left_out > 1 else ''} with someone at the printer "
                f"left out." if left_out else "")
-    return (f"{PRINT_HEADING}\n\n"
-            f"The print as the chamber camera saw it: {len(frames)} pictures from {hm(frames[0])} to "
+    m = re.match(r"(\d{4})(\d\d)(\d\d)T", frames[0].stem)
+    which = ("The print" if n == 1 else
+             f"The {ORDINALS.get(n, f'print number {n}')} print of this plate"
+             + (f", on {m[1]}-{m[2]}-{m[3]}," if m else ","))
+    sfx = print_suffix(n)
+    return (f"{print_heading(n)}\n\n"
+            f"{which} as the chamber camera saw it: {len(frames)} pictures from {hm(frames[0])} to "
             f"{hm(frames[-1])} UTC, half a second each, the last held.{dropped} Made by the monitor-print "
             f"skill's `print_monitor.py --publish`; what the printer said is in the print log.\n\n"
-            f"![{name} printing, as the chamber camera saw it]({name}-media/timelapse.webp)\n\n"
-            f"![{name} finished, on the bed]({name}-media/finished.webp)\n")
+            f"![{name} printing, as the chamber camera saw it]({name}-media/timelapse{sfx}.webp)\n\n"
+            f"![{name} finished, on the bed]({name}-media/finished{sfx}.webp)\n")
 
 
-def with_print_section(text: str, section: str) -> str:
-    """The page with its `## The print` section replaced, or added after `## Pictures` (before
-    `## Your call` when it has no Pictures, at the end when it has neither)."""
+def with_print_section(text: str, section: str, n: int = 1) -> str:
+    """The page with print `n`'s section replaced, or added after the last earlier print's
+    section, else after `## Pictures` (before `## Your call` when it has no Pictures, at the end
+    when it has neither). Another print's section is never touched."""
     def span(heading: str) -> tuple[int, int] | None:
-        m = re.search(rf"^{re.escape(heading)}\b.*$", text, flags=re.MULTILINE)
+        m = re.search(rf"^{re.escape(heading)}[ \t]*$", text, flags=re.MULTILINE)
         if not m:
             return None
         nxt = re.search(r"^## ", text[m.end():], flags=re.MULTILINE)
         return m.start(), (m.end() + nxt.start()) if nxt else len(text)
     block = section.rstrip("\n") + "\n\n"
-    if s := span(PRINT_HEADING):
+    earlier = next((s for k in range(n - 1, 0, -1) if (s := span(print_heading(k)))), None)
+    if s := span(print_heading(n)):
         out = text[:s[0]] + block + text[s[1]:]
+    elif s := earlier:
+        out = text[:s[1]] + block + text[s[1]:]
     elif s := span("## Pictures"):
         out = text[:s[1]] + block + text[s[1]:]
     elif m := re.search(r"^## Your call\b", text, flags=re.MULTILINE):
@@ -469,18 +522,20 @@ def with_print_section(text: str, section: str) -> str:
 
 def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
     """Make `<plate>-media/timelapse.webp` and `finished.webp` beside the page and show both in its
-    `## The print` section, without the frames named in `leave_out`. Refuses, writing nothing,
+    `## The print` section, without the frames named in `leave_out`. Only the newest print's
+    frames are used, and a reprint gets its own files (`timelapse-2.webp`) and its own section
+    (`## The second print`) after the earlier ones, which stay as they are. Refuses, writing nothing,
     when a code reads in either, one is over the cap, or a left-out name is not a frame."""
     page = page_of(plate)
     name = page.stem
     if not page.is_file():
         print(f"print-monitor: no plate page {page}", file=sys.stderr)
         return 2
-    taken = sorted(frames_dir(name).glob("*.jpg"))
+    taken, n = this_print(name)
     drop = {Path(x).name if x.endswith(".jpg") else f"{Path(x).name}.jpg" for x in leave_out}
     if unknown := drop - {f.name for f in taken}:
-        print(f"print-monitor: not a picture of {name}: {', '.join(sorted(unknown))}; nothing "
-              f"published", file=sys.stderr)
+        print(f"print-monitor: not a picture of {name}'s newest print: {', '.join(sorted(unknown))}; "
+              f"nothing published", file=sys.stderr)
         return 2
     frames = [f for f in taken if f.name not in drop]
     if len(frames) < 2:
@@ -488,9 +543,10 @@ def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
         return 2
     work = LOGS / name / "publish"
     work.mkdir(parents=True, exist_ok=True)
-    made = {"timelapse.webp": webp_cmd(frames, work / "timelapse.webp"),
-            "finished.webp": still_cmd(frames[-1], work / "finished.webp")}
-    log("publish_start", frames=len(frames), left_out=len(drop))
+    sfx = print_suffix(n)
+    made = {f"timelapse{sfx}.webp": webp_cmd(frames, work / f"timelapse{sfx}.webp"),
+            f"finished{sfx}.webp": still_cmd(frames[-1], work / f"finished{sfx}.webp")}
+    log("publish_start", print=n, frames=len(frames), left_out=len(drop))
     try:
         for cmd in made.values():
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=PUBLISH_TIMEOUT_S)
@@ -520,12 +576,12 @@ def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
     media.mkdir(exist_ok=True)
     for f in made:
         (media / f).write_bytes((work / f).read_bytes())
-    page.write_text(with_print_section(page.read_text(encoding="utf-8"), print_section(name, frames, len(drop))),
-                    encoding="utf-8")
+    page.write_text(with_print_section(page.read_text(encoding="utf-8"),
+                                       print_section(name, frames, len(drop), n), n), encoding="utf-8")
     sizes = " ".join(f"{f.split('.')[0]}_bytes={(media / f).stat().st_size}" for f in made)
-    log("publish_done", frames=len(frames), left_out=len(drop), msg=sizes)
-    print(f"ev=publish plate={name} frames={len(frames)} left_out={len(drop)} {sizes} dir={media}",
-          flush=True)
+    log("publish_done", print=n, frames=len(frames), left_out=len(drop), msg=sizes)
+    print(f"ev=publish plate={name} print={n} frames={len(frames)} left_out={len(drop)} {sizes} "
+          f"dir={media}", flush=True)
     return 0
 
 
@@ -819,6 +875,41 @@ def self_test() -> int:
           "publishing again replaces the section and leaves the rest of the page alone", twice)
     bare = with_print_section("# x\n\n## Your call\n\n- [ ] Approve\n", print_section("x", shots))
     check(bare.index(PRINT_HEADING) < bare.index("## Your call"), "no Pictures: before Your call", bare)
+
+    # A reprint: its own section after the first, its own files, and the first left as it was.
+    again = [Path("20261012T030000Z.jpg"), Path("20261012T045900Z.jpg")]
+    two = with_print_section(once, print_section("x", again, 0, 2), 2)
+    first = print_section("x", shots)
+    check(first in two and two.index(first) < two.index("## The second print") < two.index("## What the slice")
+          and "](x-media/timelapse-2.webp)" in two and "](x-media/finished-2.webp)" in two
+          and "on 2026-10-12" in two and two.count("](x-media/timelapse.webp)") == 1,
+          "a reprint's section goes after the first print's, with its own files, the first untouched", two)
+    two_again = with_print_section(two, print_section("x", again[:1] * 3, 0, 2), 2)
+    check(two_again.count("## The second print") == 1 and first in two_again and "3 pictures" in two_again,
+          "publishing the reprint again replaces only its own section", two_again)
+    check(with_print_section(two, first) == two, "publishing the first print again changes nothing else")
+    with tempfile.TemporaryDirectory() as tmp:
+        saved_logs, saved_plates = LOGS, pg.PLATES
+        LOGS, pg.PLATES = Path(tmp) / "monitor", Path(tmp) / "plates"
+        try:
+            pg.PLATES.mkdir()
+            p = pg.PLATES / "x.md"
+            p.write_text(page_text, encoding="utf-8")
+            fr = frames_dir("x")
+            fr.mkdir(parents=True)
+            for s in ("20261011T213349Z", "20261011T233352Z", "20261012T030042Z", "20261012T045941Z"):
+                (fr / f"{s}.jpg").write_bytes(b"")
+            got = this_print("x")
+            check(got == (sorted(fr.glob("*.jpg")), 1), "no send row yet: every frame, the first print", got)
+            append_to_log(p, sent_line("2026-10-11 21:33", [("#f5547c", "AMS 0 · slot 0", 32.24)]))
+            append_to_log(p, row_line("2026-10-11 23:33", "finished", _f("FINISH"), "FINISH"))
+            append_to_log(p, sent_line("2026-10-12 02:59", [("#f5547c", "AMS 0 · slot 0", 32.24)]))
+            frames, n = this_print("x")
+            check(n == 2 and [f.stem for f in frames] == ["20261012T030042Z", "20261012T045941Z"],
+                  "a second send: only the frames since it, and it is print 2 (the bedface-2 reprint)",
+                  f"n={n} {[f.stem for f in frames]}")
+        finally:
+            LOGS, pg.PLATES = saved_logs, saved_plates
     cmd = webp_cmd([Path("a.jpg"), Path("b.jpg"), Path("c.jpg")], Path("t.webp"))
     check(cmd[cmd.index("c.jpg") - 2:cmd.index("c.jpg")] == ["-delay", "200"] and "-strip" in cmd
           and f"{MEDIA_WIDTH}x" in cmd, "the WebP holds the last frame, is 480 px and drops metadata", cmd)

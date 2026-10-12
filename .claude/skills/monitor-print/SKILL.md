@@ -96,6 +96,12 @@ The watcher comes back once the script exits. By then it has looked at the last 
   last frame caught his hand. Leaving a picture out is for a person, never for a QR code. If the
   watcher could not publish, run it yourself from the vault:
   `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish [--leave-out <frame>]`.
+- **A reprint keeps the first print.** The print log's `sent` rows split the frames folder into
+  prints, and the GIF and `--publish` use only the newest. A reprint's files carry its number
+  (`timelapse-2.webp`, `finished-2.webp`, `timelapse-2.gif`) and its section is
+  `## The second print`, after the first, which stays as it was. bedface-2's reprint (2026-10-12)
+  found the gap: before, its timelapse would have played both prints as one and replaced the
+  first print's pictures on the page.
 - **Send Omar the timelapse**: the full-size GIF in `.bambu/monitor/<name>/timelapse.gif`
   (SendUserFile), which plays everywhere. Open it first. If the watch died before making it,
   rebuild it from the frames: `print_monitor.py <name> --gif`.
@@ -124,6 +130,6 @@ all), and the timelapse.
 | same, `--next` | Waits until the run log has a row, a picture, a timeout or the end past line `--after`, prints them and `cursor=<n>`; `ev=quiet` after `--wait` minutes, `ev=watch_silent` (exit 3) when the script has died | The watcher's loop ([`watcher.md`](watcher.md)); give the Bash call a 10-minute timeout | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --next --after <cursor> --wait 9` |
 | same, `--look` | Adds one line to `.bambu/monitor/<name>/looks.md`: the picture and what it showed | The watcher, after opening each picture | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --look <frame> "<what it shows>"` |
 | same, `--publish` | Animated WebP and finished still, 480 px, metadata stripped, into `<name>-media/`, and a `## The print` section on the page; `--leave-out` keeps a picture with a person in it off; refuses on a readable QR code, a file over 400 KB, or a left-out name that is not a picture | The print has ended; the watcher runs it, or you do if it could not | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish [--leave-out <frame>]` |
-| same, `--gif` | Rebuilds the full-size `timelapse.gif` in `.bambu/` from the frames already taken | The watch died before the end, or frames were added by hand | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif` |
+| same, `--gif` | Rebuilds the full-size `timelapse.gif` (a reprint's `timelapse-2.gif`) in `.bambu/` from the newest print's frames | The watch died before the end, or frames were added by hand | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif` |
 | same, `--sent` | Writes the send's `sent` row and exits: each tray it fed, its color and the slice's grams for it, which the shelf (`bambu shelf show`) takes off the spool when the print closes | `print send` calls it itself right after the print starts; by hand only when the send said it could not name a tray | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --sent '#00ae42' 'AMS 0 · slot 3' 27.28` |
 | same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page, reads the log back through the plates gate, and publishes made-up frames, one with a real QR code that must be refused, then left out by name | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |
