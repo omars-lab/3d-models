@@ -3,9 +3,9 @@ plate: bedface-4
 print_log: '[[print-logs/bedface-4|print log]]'
 recipe: bedface-4.yaml
 iteration: 3
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-13-bedface-4]
 answers: "On a piece of the gBV coaster, which first-layer setting leaves fewer slits along the strap edges than stock: the fill pushed 30% or 55% into the wall, 5% or 10% more plastic on the first layer, or the monotonicline bottom?"
 kind: new
 maturity: experiment
@@ -170,3 +170,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-12 | proposed: plate 1 of the checked research plan on the bottom slits, as pieces of the coaster, on Omar's "go" for printing pieces of a shape | [the research plan](../../research/2026-10-12-first-layer-slits-consolidated.md) |
 | 2026-10-12 | sent — by `bambu print send`; spends the approval of 2026-10-12, iteration 3 @ 6ca4ebdd61 in #00AE42 | this page |
+| 2026-10-13 | printed — on the X2D, glacier plate, in green, 194 minutes against the slicer's 173, all 22 layers; judged by hand: 55% overlap left the fewest slits with no ridge (`2` the best piece), 10% more first-layer plastic a few fewer than stock, 30% split (`P` fewer, `L` more), 5% flow split (`U` a bit fewer, `W` the same), monotonicline about the same as stock, in other places; the stock pieces slit a little less than the whole `S` coaster | [the record](../../prints/2026-10-13-bedface-4/index.md) |
