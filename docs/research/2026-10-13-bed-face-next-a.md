@@ -160,7 +160,8 @@ The tooltip says the overlap is a percent "relative to line width of sparse infi
 The code uses a different base:
 [PerimeterGenerator.cpp L1400](https://github.com/bambulab/BambuStudio/blob/v02.08.02.61/src/libslic3r/PerimeterGenerator.cpp#L1400)
 takes the percent of half the wall spacing plus half the solid-fill spacing. The setting has no
-upper limit in the code; our compose tool caps it at 100%.
+upper limit in the code; our compose tool caps it at 100%. That code has no test for the layer, so
+the overlap applies to every layer of the piece, the top face included, not only the first.
 
 My estimate, not measured: with every first-layer line 0.5 mm wide and 0.2 mm tall, the spacing is
 about 0.46 mm, and the base is about the same. So each step reaches about this far into the wall:
@@ -370,7 +371,8 @@ Prusa forum "low density on first layer" and "Gap Between Solid Infill and Perim
 OrcaSlicer infill wiki page; Klipper's pressure-advance page.
 
 Snippet only (5): the Duet forum post, the Voron forum thread, the Cura forum thread, Bambu forum
-67165, MatterHackers' infill page.
+67165, MatterHackers' infill page. The unattributed snippet in §5.8 is not counted, since I could
+not find its page.
 
 Code read at the tag v02.08.02.61 (8 files): PrintConfig.hpp, PrintConfig.cpp, Fill.cpp,
 FillRectilinear.cpp, PerimeterGenerator.cpp, GCode.cpp, ExtrusionEntity.hpp,

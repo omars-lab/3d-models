@@ -48,7 +48,8 @@ note which straps they sit on.
   More plastic makes each line wider.
 - **Evidence:** medium, mostly our own.
   - bedface-4 showed 55% beat 30% with no ridge, and 1.10 flow beat 1.05.
-  - On a Prusa, overlap "50%+" was the only workaround one user found (fetched).
+  - On a Prusa, overlap "50%+" was the only workaround one user found (fetched). He dropped it
+    because it changed the other layers too, and settled on 25% with a lower first layer.
   - In Bambu Studio, 75% closed a gap in one user's preview only (fetched).
   - On an H2S, 50% did not fix a gap tied to one side of the bed (fetched).
   - Nobody I found printed 75% or 100% on a first layer and reported the result.
@@ -59,6 +60,12 @@ note which straps they sit on.
   wall out and tighten the fits of loose pieces. bedface-4 showed no ridge at 55% with flow 1.0;
   1.1 with 100% has never been tried. Check the bottom face for a ridge, and test-fit a 100% piece
   against its neighbor before using it on a whole coaster.
+- **The top face gets it too:** the overlap is not a first-layer setting. In the code it applies
+  to every layer of the piece
+  ([PerimeterGenerator.cpp L1396-1401](https://github.com/bambulab/BambuStudio/blob/v02.08.02.61/src/libslic3r/PerimeterGenerator.cpp#L1396),
+  with no test for the layer), so the top fill is pushed into the top walls by the same amount.
+  The extra flow is first-layer only. bedface-4 checked the bottom for a ridge, not the top, so
+  look at the top face of every overlap piece as well.
 
 ### 2. Clean the plate and check the bed before each test plate
 
@@ -186,6 +193,8 @@ note which straps they sit on.
   For the fill angle, it may not (item 3).
 - **That the arranger's turns are random enough to pair.** If compose gains a way to fix each
   piece's turn, use it and drop the pairing.
+- **That 55% did not mark the top faces on bedface-4.** Nobody looked; the plate's question was
+  about the bottom only.
 - **That my millimeter estimates for the overlap are close.** They come from reading the code,
   with every first-layer line 0.5 mm wide. A slice measurement would settle them.
 - **The order of the whole-plate steps.** I kept the merged research's order and moved the slower
