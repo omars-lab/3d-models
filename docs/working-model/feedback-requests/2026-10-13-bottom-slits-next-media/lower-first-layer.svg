@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1005.28" height="556.7" viewBox="0 0 1005.28 556.7" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>A first layer 0.02 mm lower: the same plastic, pressed flatter</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">A first layer 0.02 mm lower: the same plastic, pressed flatter</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Gold and teal: the piece. White: air. Solid blue: printed on the bed (first layer). To scale.</text>
+<g data-panel="1. Stock height: 0.20 mm first layer">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. Stock height: 0.20 mm first layer</text>
+<g transform="translate(155.4,107.5)">
+<polygon data-kind="piece" points="0,108 100.8,108 100.8,60 0,60" fill="#dcaa33"/>
+<line data-mark="first" x1="0" y1="108" x2="100.8" y2="108" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="air" points="100.8,108 129.6,108 129.6,60 100.8,60" fill="#ffffff"/>
+<polygon data-kind="piece" points="129.6,108 576,108 576,60 129.6,60" fill="#3f9189"/>
+<line data-mark="first" x1="129.6" y1="108" x2="576" y2="108" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="arrow" x1="115.2" y1="0" x2="115.2" y2="57.6" stroke="#444444" stroke-width="1.6"/>
+<polyline points="110.2,48.6 115.2,57.6 120.2,48.6" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="127.2" y="32.8" font-size="12" fill="#444444">notch: bare plate shows</text>
+<rect data-kind="bed" x="-6" y="112" width="588" height="5" fill="#cfcbc3"/>
+<text x="586" y="118" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="205.8" cy="191.5" r="2.6" fill="#222222"/>
+<polyline points="205.8,191.5 135.4,191.5 125.4,191.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="121.4" y="195.5" font-size="12" fill="#222222" text-anchor="end">inner wall line</text>
+<circle data-label-dot="1" cx="683.4" cy="191.5" r="2.6" fill="#222222"/>
+<polyline points="683.4,191.5 812.64,191.5 822.64,191.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="826.64" y="195.5" font-size="12" fill="#222222" text-anchor="start">fill lines</text>
+<text x="20" y="255.1" font-size="12" fill="#444444">Where a fill line stops short of the wall, the plate shows through. On the bottom that reads as a slit.</text>
+</g>
+<g data-panel="2. 0.02 mm lower: 0.18 mm first layer">
+<text x="20" y="320.1" font-size="14" font-weight="bold" fill="#222222">2. 0.02 mm lower: 0.18 mm first layer</text>
+<g transform="translate(199.92,338.1)">
+<polygon data-kind="piece" points="0,108 112.8,108 112.8,64.8 0,64.8" fill="#dcaa33"/>
+<line data-mark="first" x1="0" y1="108" x2="112.8" y2="108" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="air" points="112.8,108 120,108 120,64.8 112.8,64.8" fill="#ffffff"/>
+<polygon data-kind="piece" points="120,108 576,108 576,64.8 120,64.8" fill="#3f9189"/>
+<line data-mark="first" x1="120" y1="108" x2="576" y2="108" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="arrow" x1="116.4" y1="0" x2="116.4" y2="62.4" stroke="#444444" stroke-width="1.6"/>
+<polyline points="111.4,53.4 116.4,62.4 121.4,53.4" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="128.4" y="35.2" font-size="12" fill="#444444">notch, smaller</text>
+<rect data-kind="bed" x="-6" y="112" width="588" height="5" fill="#cfcbc3"/>
+<text x="586" y="118" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="255.12" cy="424.5" r="2.6" fill="#222222"/>
+<polyline points="255.12,424.5 179.92,424.5 169.92,424.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="165.92" y="428.5" font-size="12" fill="#222222" text-anchor="end">inner wall line, wider</text>
+<circle data-label-dot="1" cx="727.92" cy="424.5" r="2.6" fill="#222222"/>
+<polyline points="727.92,424.5 857.16,424.5 867.16,424.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="871.16" y="428.5" font-size="12" fill="#222222" text-anchor="start">fill lines, wider</text>
+<text x="20" y="485.7" font-size="12" fill="#444444">The nozzle sits 0.02 mm closer to the plate, so each line spreads about 11% wider. That helps only if the slit is a squash problem, which bedface-3</text>
+<text x="20" y="502.7" font-size="12" fill="#444444">suggests and does not prove.</text>
+<text x="20" y="519.7" font-size="12" fill="#444444">It applies to every piece on the bed, the stock pair too.</text>
+</g>
+</svg>

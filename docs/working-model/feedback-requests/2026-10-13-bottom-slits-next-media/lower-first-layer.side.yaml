@@ -1,0 +1,34 @@
+# The lower first layer, option 2 on the 2026-10-13 bottom-slits page. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# A schematic, not a measurement. Line widths are the X2D 0.4 mm preset's rough first-layer widths;
+# the lower panel keeps each line's plastic and makes it 0.02 mm thinner, so it spreads about 11%.
+# Whether that closes the notch on a real bed is what the plate would test.
+title: "A first layer 0.02 mm lower: the same plastic, pressed flatter"
+columns: 1
+panels:
+  - title: "1. Stock height: 0.20 mm first layer"
+    width: 2.4
+    scale: [240, 240]
+    parts:
+      - {kind: piece, box: [0, 0, 0.42, 0.2], first: bottom, label: inner wall line, label_at: [0.21, 0.1], label_side: left}
+      - {kind: air, box: [0.42, 0, 0.12, 0.2]}
+      - {kind: piece, color: teal, box: [0.54, 0, 1.86, 0.2], first: bottom, label: fill lines, label_at: [2.2, 0.1]}
+      - {kind: arrow, from: [0.48, 0.45], to: [0.48, 0.21], text: "notch: bare plate shows"}
+      - {kind: bed, line: [0, 0, 2.4]}
+    notes:
+      - "Where a fill line stops short of the wall, the plate shows through. On the bottom that reads
+        as a slit."
+
+  - title: "2. 0.02 mm lower: 0.18 mm first layer"
+    width: 2.4
+    scale: [240, 240]
+    parts:
+      - {kind: piece, box: [0, 0, 0.47, 0.18], first: bottom, label: "inner wall line, wider", label_at: [0.23, 0.09], label_side: left}
+      - {kind: air, box: [0.47, 0, 0.03, 0.18]}
+      - {kind: piece, color: teal, box: [0.5, 0, 1.9, 0.18], first: bottom, label: "fill lines, wider", label_at: [2.2, 0.09]}
+      - {kind: arrow, from: [0.485, 0.45], to: [0.485, 0.19], text: "notch, smaller"}
+      - {kind: bed, line: [0, 0, 2.4]}
+    notes:
+      - "The nozzle sits 0.02 mm closer to the plate, so each line spreads about 11% wider. That
+        helps only if the slit is a squash problem, which bedface-3 suggests and does not prove."
+      - "It applies to every piece on the bed, the stock pair too."
