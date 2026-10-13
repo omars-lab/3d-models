@@ -130,6 +130,14 @@ Two cautions on these numbers:
   was no cleaner, because the lines open up where they meet. These numbers say which pieces are
   worth looking at closely, not which one wins.
 
+## The print
+
+The print as the chamber camera saw it: 21 pictures from 23:12 to 02:26 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![bedface-4 printing, as the chamber camera saw it](bedface-4-media/timelapse.webp)
+
+![bedface-4 finished, on the bed](bedface-4-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 173 minutes (2 h 53 min), about 52 g (local slice, 2026-10-12, X2D 0.20 mm Standard and
