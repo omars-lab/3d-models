@@ -58,8 +58,9 @@ piece with its carved id. Compare the same spot on each piece with
 - **How it is applied:** not this file's call. Either slice the glacier as Textured PEI, which the
   send refuses today ([the issue](../issues/sliced-for-wrong-plate.md)), or set the printer's
   manual first-layer offset, which Omar sets and the plate page must record.
-- **Risk:** no risk to the machine at −0.02 (Bambu's own textured height). −0.04 goes past any
-  height Bambu's code uses; the risk is the nozzle marking the smooth plate, not damage. More squash
+- **Risk:** no risk to the machine at −0.02 (Bambu's own textured height). −0.04 is past what the
+  start code applies, but inside the printer menu's own ±0.05 mm offset range (2026-10-12 plan).
+  The risk there is the nozzle marking the smooth plate, not damage. More squash
   may widen the bottom edge, so loose-piece fits are checked again.
 - **How to test:** put the whole next bed on −0.02 (see §3). The stock pair on that bed is read
   against bedface-4's `H` and `J` photos. That is a photo-to-photo read across two prints, weaker
@@ -163,7 +164,7 @@ piece with its carved id. Compare the same spot on each piece with
 - **Transfer condition:** the coaster has straps at many angles, so no single angle suits all of
   them. This picks the least-bad angle; it cannot remove the slits.
 - **Risk:** the top face's lines turn too.
-- **How to test:** only if the bed has room after items 2 to 4.
+- **How to test:** a pair of its own, both pieces at the same angle, on a later bed.
 
 ### 8. One wall on the first layer
 
@@ -209,7 +210,9 @@ plate:
 | 5 | overlap 55% and flow 1.1 | item 3, against pair 2 |
 | 6 | elephant-foot 0 | item 4, needs compose to take the key first |
 
-Turn one piece of each pair a quarter turn, as bedface-4 did, so item 7 gets a free look.
+Lay both pieces of a pair the same way, unturned. In bedface-4 the stock and overlap pairs had
+one piece turned, and the 30% pair split (`P` fewer, `L` more), so it gave no verdict. A turned
+piece is a different test (item 7), not a repeat. It gets its own pair only on a later bed.
 
 ## 4. What this file assumes, not decides
 
