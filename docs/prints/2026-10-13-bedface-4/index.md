@@ -30,7 +30,7 @@ objects:
     notes:
       - "The piece carved H: stock settings, not turned on the bed, the control. Its bottom has short dark notches along the strap edges (the photo)"
       - "Omar, asked whether H and J slit about as much as bedface-2's whole S coaster: \"they have less than s, but they both have slits\"; asked how much less: \"A little less\""
-      - "The page reads \"a little less\" as: the pieces stand in for the whole coaster, so the rows below can rank the settings. Whether H and J look alike was not said; to me (Claude) the two photos look alike"
+      - "The page offered two answers, about as many or clearly fewer. I (Claude) read \"a little less\" as nearer the first, which the page reads as: the pieces stand in for the whole coaster, so the rows below can rank the settings. Whether H and J look alike was not said; to me the two photos look alike"
       - "Verdict adjust, on the setup, not the design, as for bedface-3's G: stock still slits, and the setup is what changes"
   - entry: "c2"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr"
@@ -66,7 +66,7 @@ objects:
     iteration: "it-68f0821bf336"
     verdict: adjust
     notes:
-      - "The piece carved P: the fill pushed 30% into the wall, turned a quarter turn. Its bottom looks smoother along the strap edges than L's, with few notches (the photo)"
+      - "The piece carved P: the fill pushed 30% into the wall, turned a quarter turn. Its bottom looks smoother along the strap edges than L's, with few notches (the photo; the id reads P to me, Claude, not certain)"
       - "Omar: \"P has fewer, l has more\""
       - "Verdict adjust: fewer than stock, but the 55% pieces did better (row 3), so the overlap goes up, not back on as 30%. The pair split, so 30% on its own has no verdict"
   - entry: "c5"
@@ -80,7 +80,7 @@ objects:
     notes:
       - "The piece carved 2: the fill pushed 55% into the wall (infill_wall_overlap 55%), turned a quarter turn. Its bottom is smooth along the strap edges, with very few notches (the photo)"
       - "Omar, asked whether 2 and T have fewer slits than L and P, and a ridge where the fill meets the wall: picked \"Fewer, no ridge\"; then, in chat: \"2 is better than T\""
-      - "The best piece on the plate, in Omar's words. The slice ranked it best too (101 slits against H's 356)"
+      - "Better than T in Omar's words. Omar did not set it beside the flow pieces; of the twelve photos it looks the cleanest to me (Claude). The slice ranked it best too (101 slits against H's 356)"
       - "Verdict keep: fewer slits than 30% and no ridge, which the page read as \"55% beats 30%\""
   - entry: "c6"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr"
@@ -129,7 +129,7 @@ objects:
     notes:
       - "The piece carved X: 10% more plastic on the first layer (initial_layer_flow_ratio 1.1), turned. Its bottom edges look fairly smooth (the photo)"
       - "Omar, asked about X and Y beside J: \"thye still have slits but Y has less than J and X has less than Y\""
-      - "The fewest slits of the four flow pieces. The page expected flow to do nothing (research §1); it helped a little, in order: X fewer than Y, Y fewer than J, U a bit fewer than J, W the same"
+      - "The fewest slits of the four flow pieces, by Omar's answer. The id reads X to me (Claude), not certain. The page expected flow to do nothing (research §1); it helped a little, in order: X fewer than Y, Y fewer than J, U a bit fewer than J, W the same"
       - "Verdict keep: fewer than stock. Still slits, so not a fix on its own"
   - entry: "c10"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr"
@@ -140,7 +140,7 @@ objects:
     iteration: "it-92a133f7370e"
     verdict: keep
     notes:
-      - "The piece carved Y: 10% more plastic on the first layer, turned. Its bottom has a few notches on the left straps (the photo)"
+      - "The piece carved Y: 10% more plastic on the first layer, turned. Its bottom has a few notches on the left straps (the photo; the id reads Y to me, Claude, not certain)"
       - "Omar: \"thye still have slits but Y has less than J and X has less than Y\""
       - "Verdict keep: fewer than stock, as X"
   - entry: "c11"
@@ -152,7 +152,7 @@ objects:
     iteration: "it-266d61af8ffa"
     verdict: drop
     notes:
-      - "The piece carved 4: the monotonicline bottom pattern, turned. Its bottom has short dark dashes along the lower-right straps and the bottom strap (the photo)"
+      - "The piece carved 4: the monotonicline bottom pattern, turned. Its bottom has short dark dashes along the lower-right straps and the bottom strap (the photo; the id reads 4 to me, Claude, not certain)"
       - "Omar, asked about the slits at the strap ends of 4 and 7 beside H and J: \"both have slits but in different places\"; asked to count them against stock: \"About the same\""
       - "Verdict drop: about the same as stock, which the page read as \"the pattern is dropped\""
   - entry: "c12"
@@ -183,12 +183,12 @@ photos:
     why: "the 30% piece Omar found worse than stock"
   - file: photos/piece-p-bed-face.jpg
     sha256: fbe535488da9b4493db0ac32dbcf144908dbe8927a098d0767029bd991115785
-    of: "the bottom of the piece carved P (overlap 30%, turned), whole: smoother strap edges, few notches"
+    of: "the bottom of the piece carved P (overlap 30%, turned), whole: smoother strap edges, few notches; the id reads P to me (Claude), not certain"
     why: "the 30% piece Omar found better than stock; the pair split"
   - file: photos/piece-2-bed-face.jpg
     sha256: 5497d34a2b60a86cce5aad78ffab168d7cde554f3da8b179e6b7a3bd0e034a86
     of: "the bottom of the piece carved 2 (overlap 55%, turned), whole: smooth strap edges, very few notches"
-    why: "the best piece on the plate, in Omar's words"
+    why: "the 55% piece Omar found better than T; the cleanest of the twelve photos to me (Claude)"
   - file: photos/piece-t-bed-face.jpg
     sha256: 28bd70ff5a3e3c841de7c517f91aefd280a9b58767aaed8c65c8f98fded681a0
     of: "the bottom of the piece carved T (overlap 55%), whole: more notches than 2, most on the left side"
@@ -207,7 +207,7 @@ photos:
     why: "the flow piece with the fewest slits"
   - file: photos/piece-y-bed-face.jpg
     sha256: 02971908d8ff81363dcde460725e94f5b81c52eb7e91eeb9696a8b401264953b
-    of: "the bottom of the piece carved Y (flow 1.10, turned), whole: a few notches on the left straps"
+    of: "the bottom of the piece carved Y (flow 1.10, turned), whole: a few notches on the left straps; the id reads Y to me (Claude), not certain"
     why: "the other 1.10 piece, fewer slits than stock, more than X"
   - file: photos/piece-4-bed-face.jpg
     sha256: 685ef84ef2beb2777c34c0ae8c42ac4a3cebf5820bdec2710625cf430bb6bbdf
@@ -218,11 +218,11 @@ photos:
     of: "the bottom of the piece carved 7 (monotonicline), whole: dashes along the top-right and right-hand straps, and a small pink smear near the top-left corner"
     why: "the other monotonicline piece"
 feedback:
-  lesson: "On pieces of the gBV coaster on the smooth glacier plate, pushing the fill 55% into the wall closed the most slits along the strap edges, with no ridge: the piece carved 2 was the best on the plate. 10% more plastic on the first layer helped a little, against what the research expected (X fewer than Y, Y fewer than J), but every flow piece still slit. 30% overlap split (P fewer, L more). The monotonicline bottom only moved the slits. The stock pieces slit a little less than bedface-2's whole stock coaster, so the pieces stand in for the coaster (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI plate)"
+  lesson: "On pieces of the gBV coaster on the smooth glacier plate, pushing the fill 55% into the wall left fewer slits along the strap edges than 30%, with no ridge, and 2 did better than T. 55% and the flow pieces were not set side by side; of the twelve photos 2 looks the cleanest to me (Claude). 10% more plastic on the first layer helped a little, against what the research expected (X fewer than Y, Y fewer than J), but every flow piece still slit. 30% overlap split (P fewer, L more). The monotonicline bottom only moved the slits. The stock pieces slit a little less than bedface-2's whole stock coaster, which I (Claude) read as nearer \"about as many\" than \"clearly fewer\": the pieces stand in for the coaster (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI plate)"
   decisions: []
   symptom: "Stock H and J: short notches along the strap edges, a little fewer than the whole S coaster. 55%: very few on 2, more on T. 1.10 flow: fewer than stock, still some. 1.05: U a bit fewer, W the same. 30%: P fewer, L more. Monotonicline: about as many, in other places"
   cause: "Lines that stop short of the strap wall on the first layer, as the slice drawings show. Pushing the fill into the wall closes them; more plastic widens the lines a little. The turn may matter for the overlap pieces: in both pairs the turned piece did better (P over L, 2 over T), as the slice ranked them, but two pairs are too few to say. My (Claude's) reading, not Omar's"
-  next: "Verdicts by one rule: keep where a setting left fewer slits than stock and nothing on the plate beat it (2, T, X, Y); adjust where it left fewer but a stronger version of it did better (P, U), and for the stock pair, whose setup is what changes; drop where it left the same or more (L, W, 4, 7). What prints next with 55% overlap, 10% flow or both, and on a whole coaster or more pieces, is Omar's call"
+  next: "Verdicts by one rule: keep where a setting left fewer slits than stock and no stronger version of the same setting did better (2, T, X, Y); adjust where it left fewer but a stronger version of it did better (P, U), and for the stock pair, whose setup is what changes; drop where it left the same or more (L, W, 4, 7). What prints next with 55% overlap, 10% flow or both, and on a whole coaster or more pieces, is Omar's call"
 ---
 
 Omar judged this plate by hand on 2026-10-13, turning the pieces over side by side, and sent a
@@ -231,11 +231,13 @@ photo of each piece's bottom. The rows of the page's
 time, with one follow-up round for rows 1 and 5.
 
 - **Row 1, `H` and `J` (stock) against bedface-2's `S`:** "they have less than s, but they both
-  have slits". Asked how much less: "A little less". So the pieces stand in for the whole
-  coaster, and the rows below can rank the settings.
+  have slits". Asked how much less: "A little less". The page offered "about as many" or
+  "clearly fewer"; I (Claude) read "a little less" as nearer the first, so the pieces stand in
+  for the whole coaster and the rows below can rank the settings.
 - **Row 2, `L` and `P` (30% overlap):** "P has fewer, l has more". The pair split.
-- **Row 3, `2` and `T` (55% overlap):** "Fewer, no ridge", then "2 is better than T". `2` is the
-  best piece on the plate.
+- **Row 3, `2` and `T` (55% overlap):** "Fewer, no ridge", then "2 is better than T". Omar did
+  not set them beside the flow pieces; of the twelve photos, `2` looks the cleanest to me
+  (Claude).
 - **Row 4, the flow pieces:** "W is almost identical to J. U is a bit better", and "thye still
   have slits but Y has less than J and X has less than Y". The page expected flow to do nothing;
   10% more plastic helped a little.
@@ -244,7 +246,7 @@ time, with one follow-up round for rows 1 and 5.
 
 | Setting | Pieces | In Omar's words | What the page set that answer to mean |
 |---|---|---|---|
-| stock | `H`, `J` | a little less than `S`, still slits | the pieces stand for the coaster |
+| stock | `H`, `J` | a little less than `S`, still slits | the pieces stand for the coaster, by my (Claude's) reading of "a little less" |
 | overlap 30% | `L`, `P` | `P` fewer, `L` more | split, no verdict on 30% alone |
 | overlap 55% | `2`, `T` | fewer than 30%, no ridge; `2` better than `T` | 55% beats 30% |
 | flow 1.05 | `U`, `W` | `U` a bit better than `J`, `W` the same | weak |
@@ -261,7 +263,7 @@ The photos, each piece's bottom, carved id up:
 
 ![P, overlap 30%, turned: smoother strap edges](photos/piece-p-bed-face.jpg)
 
-![2, overlap 55%, turned: smooth strap edges, the best on the plate](photos/piece-2-bed-face.jpg)
+![2, overlap 55%, turned: smooth strap edges, very few notches](photos/piece-2-bed-face.jpg)
 
 ![T, overlap 55%: more notches than 2, most on the left](photos/piece-t-bed-face.jpg)
 
@@ -278,21 +280,23 @@ The photos, each piece's bottom, carved id up:
 ![7, monotonicline: dashes along the top-right and right-hand straps](photos/piece-7-bed-face.jpg)
 
 All twelve photos were re-saved with no metadata; none carried a location. Each was cut down to
-the piece, which leaves out the lap at the bottom edge of several. The carved ids on `W`, `X`
-and `4` are hard to read in the photos. `W` is named by elimination: Omar sent it with `U`'s
+the piece, which leaves out the lap at the bottom edge of several. The carved ids on `P`, `W`,
+`X`, `Y` and `4` are hard to read in the photos; the names on those are my (Claude's) reading.
+`W` is named by elimination: Omar sent it with `U`'s
 photo, while the flow 1.05 row was being asked.
 
 **What the answers mean, as the page set them out before the print.**
 
-- Row 1, "a little less": the pieces slit like the coaster, so every row below can be trusted.
+- Row 1, "a little less": I (Claude) read this as nearer "about as many" than "clearly fewer", so the pieces slit like the coaster and every row below can be trusted. Omar did not pick between the two.
 - Row 3, "Fewer and no ridge": "55% beats 30%".
 - Row 4, fewer on 1.10: "the first-layer flow goes on the next coaster, and the overlap and flow
   get one plate together".
 - Row 5, "About the same": "the pattern is dropped".
 
 Row 2 split, so 30% on its own has no answer; row 3 supersedes it anyway. What stands: 55%
-overlap is the strongest setting here, and 10% more first-layer plastic helps a little. Neither
-alone left a piece with no slits. What prints next, and how, is Omar's call. The open history is
+overlap beats 30%, and 10% more first-layer plastic helps a little. Which of the two helps more
+was not asked: the rows set each against stock or 30%, not against each other. Neither alone
+left a piece with no slits. What prints next, and how, is Omar's call. The open history is
 in [the issue](../../issues/bed-face-preset-failed-in-print.md).
 
 One thing I (Claude) noticed, not Omar: in both overlap pairs the turned piece did better (`P`
@@ -304,5 +308,6 @@ against the slicer's 173, all 22 layers, no pause or error (the
 timelapse is on [the page](../../design/plates/bedface-4.md#the-print).
 
 The source hashes and iteration ids are the ones `bambu slice compose` recorded when the plate was
-built, at bikar `11ea0fd0`. Nothing was measured with a tool, so there are no readings and no bet
+built, at bikar `11ea0fd0`. The send ran from an older bikar checkout (`951995ab`), which does not
+change what printed: the printer got the sliced file made at `11ea0fd0`. Nothing was measured with a tool, so there are no readings and no bet
 moves.
