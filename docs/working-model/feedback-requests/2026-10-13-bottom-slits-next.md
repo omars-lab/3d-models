@@ -6,7 +6,7 @@ date: 2026-10-13
 
 Two calls: tick one box under each. The next session writes your answers into the decisions log and builds the plate you pick. With no tick a call stays open, and nobody picks for you.
 
-![Three bedface-4 bottoms side by side: H on stock settings with a row of dark dots along the strap edge, circled; 2 with the fill pushed 55% into the wall; X with 10% more plastic on the first layer](2026-10-13-bottom-slits-next-media/bottoms.png)
+![Three bedface-4 bottoms side by side: H on stock settings with a row of dark dots along the strap edge, circled; 2 with the fill pushed 55% into the wall; X with 10% more plastic on the first layer](2026-10-13-bottom-slits-next-media/bottoms-labeled.png)
 
 *Your photos of three bedface-4 pieces, cropped to the same corner. The slits are the row of dark dots along the strap edge on `H`, circled. To me (Claude), `2` and `X` both look smoother. You never set those two side by side.*
 
@@ -27,7 +27,7 @@ The research behind this page: [the combined plan](../../research/2026-10-13-bed
 
 The next step is to push the fill further: 75% and 100%. Then add the 10% extra plastic on top of 55% and 75%, to see whether the two together beat either alone.
 
-![The slicer's drawing of the first layer at one strap corner, four ways: stock with black notches along the inner wall, circled; 55% with few; 75% with almost none; 100% with the fill running over the inner wall, circled](2026-10-13-bottom-slits-next-media/overlap-closeup.png)
+![The slicer's drawing of the first layer at one strap corner, four ways: stock with black notches along the inner wall, circled; 55% with few; 75% with almost none; 100% with the fill running over the inner wall, circled](2026-10-13-bottom-slits-next-media/overlap-grid.png)
 
 *Drawn from the slicer's file, not a photo. Orange is the first layer's fill, pink the walls, black is bare plate. Stock leaves notches where the slits show. At 100% the fill runs over the inner wall, where a ridge could form. The drawing cannot show the extra plastic, and it showed 55% near clean when the print was not.*
 
@@ -49,7 +49,7 @@ The same bed, with the nozzle 0.02 mm closer to the plate for the first layer. I
 
 ### 3. Stop: stay on stock
 
-![The stock bottom as it stays: a row of dark dots along the strap edge, circled](2026-10-13-bottom-slits-next-media/stock-stays.png)
+![The stock bottom as it stays: a row of dark dots along the strap edge, circled](2026-10-13-bottom-slits-next-media/stock-stays-labeled.png)
 
 *`H`, stock: this is the bottom every coaster keeps if we stop.*
 
