@@ -1,0 +1,191 @@
+# The Bambu Lab X2D, 0.4 mm nozzle, the smooth glacier plate, Bambu PLA Basic: the setup every judged
+# plate but bedface-3 printed on. Written by teach-simulator (scripts/fit.py fit --write); the
+# comment above the first key is kept when the fit rewrites the rest.
+#
+# The glacier plate is not Bambu's, and the slicer has no type for it. The print records slice it as
+# the High Temp plate (glacier-plate memory, D-108), so `match` names "High Temp Plate", and a slice
+# for Bambu's own High Temp plate matches this profile too. The two are different surfaces; nothing
+# here says the fit carries to the Bambu plate (K10). If both are ever used, add a profile for the
+# other and name the one a slice printed on with --setup.
+
+setup: x2d-0.4-glacier-pla-basic
+plate: glacier (smooth, not Bambu's), sliced as the High Temp plate
+match:
+  printer_model: Bambu Lab X2D
+  nozzle_diameter: '0.4'
+  curr_bed_type: High Temp Plate
+  filament_settings_id: Bambu PLA Basic @BBL X2D 0.4 nozzle
+can_fit: true
+predictions:
+- plate: bedface-5
+  date: '2026-10-14'
+  model: s1.0-L0.25-t1.0-turns0
+  order_fewest_bare_first:
+  - R
+  - S
+  - E
+  - K
+  - A
+  - G
+  - F
+  - '9'
+  - C
+  - '8'
+  - '5'
+  - '3'
+  fitted_pct:
+    R: 0.028
+    S: 0.039
+    E: 0.042
+    K: 0.042
+    A: 0.054
+    G: 0.054
+    F: 0.08
+    '9': 0.09
+    C: 0.102
+    '8': 0.115
+    '5': 0.721
+    '3': 0.754
+model:
+  spread: 1.0
+  pull_mm: 0.25
+  thin: 1.0
+  at_turns: false
+  turn_deg: 60
+fit:
+  date: '2026-10-14'
+  pairs:
+  - P/J
+  - L/H
+  - T/L
+  - 2/P
+  - 2/T
+  - W/J
+  - U/J
+  - Y/J
+  - X/Y
+  - 4/J
+  - 7/H
+  - F/Z
+  - R/S
+  ties: 4
+  pieces:
+  - '2'
+  - '4'
+  - '7'
+  - F
+  - H
+  - J
+  - L
+  - P
+  - R
+  - S
+  - T
+  - U
+  - W
+  - X
+  - Y
+  - Z
+  plates:
+  - bedface-1
+  - bedface-2
+  - bedface-4
+  - sheets-04g-fit2
+  left_out_across_setups:
+  - G/S
+  - K/R
+  models_tried: 39
+  models_level_with_pick: 4
+  grid:
+    spread:
+    - 1.0
+    - 1.05
+    - 1.1
+    pull_mm:
+    - 0.0
+    - 0.25
+    - 0.5
+    - 1.0
+    thin:
+    - 0.5
+    - 1.0
+    at_turns:
+    - false
+    - true
+  band_pp: 0.13
+agreement:
+  held_out_by_plate:
+    all:
+    - 4
+    - 13
+    not_ties:
+    - 4
+    - 9
+    ties:
+    - 0
+    - 4
+  meets_iterate_bar: false
+  held_out_folds:
+  - - bedface-4
+  - - bedface-1
+    - sheets-04g-fit2
+  - - bedface-2
+  fold_choices:
+  - s1.1-L0.25-t1.0-turns0
+  - s1.0-L0.25-t1.0-turns0
+  - s1.0-L0.25-t1.0-turns0
+  taught_on_all:
+    all:
+    - 7
+    - 13
+    not_ties:
+    - 5
+    - 9
+    ties:
+    - 2
+    - 4
+  held_out_one_pair:
+    all:
+    - 5
+    - 13
+    not_ties:
+    - 5
+    - 9
+    ties:
+    - 0
+    - 4
+  plain_plan:
+    all:
+    - 4
+    - 13
+    not_ties:
+    - 3
+    - 9
+    ties:
+    - 1
+    - 4
+  spread_only:
+    spread: 1.0
+    all:
+      all:
+      - 5
+      - 13
+      not_ties:
+      - 5
+      - 9
+      ties:
+      - 0
+      - 4
+    held_out:
+      all:
+      - 5
+      - 13
+      not_ties:
+      - 5
+      - 9
+      ties:
+      - 0
+      - 4
+line: held out one plate at a time, Fitted ranks 4 of 13 judged pairs as Omar did (4 of 9 not ties, 0
+  of 4 ties; does not meet the iterate bar); taught on all of them it ranks 7 of 13, the plain plan 4
+  of 13. Tie band 0.13 points, carried over from the plan unmeasured.

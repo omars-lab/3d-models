@@ -36,6 +36,7 @@ is never read without how far the plan has tracked the prints.
 import argparse
 import hashlib
 import json
+import math
 import re
 import subprocess
 import sys
@@ -53,16 +54,19 @@ from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 
 SKILL = Path(__file__).resolve().parents[1]
 PAIRS = SKILL / "judged-pairs.yaml"
+SETUPS = SKILL / "setups"
+MATCH_KEYS = ("printer_model", "nozzle_diameter", "curr_bed_type", "filament_settings_id")
 OUT = ROOT / "build/simulate"
 MACHINE, PROCESS, FILAMENT = bfs.NOZZLES["0.4"]
 PIECE = {"bkr": "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr",
          "params": {"size": 112.5, "strap": 3.75, "height": 4.4, "round": 1.25},
          "window": "50@13,30"}
-SPREADS = "plan,1.0,1.1,1.2"
+SPREADS = "plan,1.0,1.1,1.2,fitted"
 EXTRUDING = ("G0 ", "G1 ", "G2 ", "G3 ")
 START = "; start printing object, unique label id:"
 STOP = "; stop printing object, unique label id:"
 CAPTION_PX = 60
+TURN_DEG = 60          # a turn sharper than this slows the head enough to count as a line start
 
 
 # ---- slicing ----------------------------------------------------------------------------------
@@ -220,14 +224,128 @@ def widen(moves, factor):
     return [(f, w * factor, run) for f, w, run in moves]
 
 
+def strokes(moves):
+    """The moves grouped into strokes: one stroke is what the nozzle lays without stopping, from a
+    travel to the next. The reader splits a stroke wherever the feature or the line width changes, so
+    a move that starts where the last one ended is the same stroke going on."""
+    out = []
+    for move in moves:
+        if out and dist(out[-1][-1][2][-1], move[2][0]) < 1e-3:
+            out[-1].append(move)
+        else:
+            out.append([move])
+    return out
+
+
+def turn_deg(d0, d1):
+    dot = max(-1.0, min(1.0, d0[0] * d1[0] + d0[1] * d1[1]))
+    return math.degrees(math.acos(dot))
+
+
+def line_starts(moves, pull_mm, thin, at_turns, turn=TURN_DEG):
+    """The Fitted line ends: the first `pull_mm` of every stroke is laid `thin` short of its width
+    (1 = not laid at all), and, when `at_turns`, again after every turn sharper than `turn` degrees,
+    where the head slows and the bead thins the same way. A stand-in fitted to printed pieces, not a
+    model of the nozzle's pressure."""
+    if pull_mm <= 0:
+        return list(moves)
+    out = []
+    for stroke in strokes(moves):
+        left, last = pull_mm, None
+        for f, w, run in stroke:
+            pieces = []                      # [thin?, points]
+            for a, b in zip(run, run[1:]):
+                d = dist(a, b)
+                if not d:
+                    continue
+                way = ((b[0] - a[0]) / d, (b[1] - a[1]) / d)
+                if at_turns and last is not None and turn_deg(last, way) > turn:
+                    left = pull_mm
+                last = way
+                cuts = [(a, b, left > 0)]
+                if 0 < left < d:
+                    p = (a[0] + way[0] * left, a[1] + way[1] * left)
+                    cuts = [(a, p, True), (p, b, False)]
+                left = max(0.0, left - d)
+                for p0, p1, is_thin in cuts:
+                    if pieces and pieces[-1][0] == is_thin:
+                        pieces[-1][1].append(p1)
+                    else:
+                        pieces.append([is_thin, [p0, p1]])
+            for is_thin, pts in pieces:
+                width = w * (1 - thin) if is_thin else w
+                if width > 0:
+                    out.append((f, width, pts))
+    return out
+
+
+def fitted(moves, model, flow, lower, h):
+    """The Fitted reading of a first layer: the spread model at the profile's spread, then its line
+    ends. `model` is a setup profile's `model`."""
+    spread = widen(moves, factor_for(model["spread"], flow, lower, h))
+    return line_starts(spread, model["pull_mm"], model["thin"], model["at_turns"])
+
+
 def factor_for(spread, flow, lower, h):
     """How many times its planned width each bead is drawn: 1 for `plan`, the spread model else."""
     return 1.0 if spread == "plan" else spread * flow * h / (h - lower)
 
 
 def spreads_of(text):
-    """`plan,1.0,1.1` -> ["plan", 1.0, 1.1]."""
-    return [s if s == "plan" else float(s) for s in text.split(",")]
+    """`plan,1.0,fitted` -> ["plan", 1.0, "fitted"]."""
+    return [s if s in ("plan", "fitted") else float(s) for s in text.split(",")]
+
+
+# ---- setups: one fitted profile per printer setup ---------------------------------------------
+
+def setup_of(plate):
+    """The printer setup a slice was made for, as the keys a profile matches on: the machine, the
+    nozzle, the plate type and the filament preset."""
+    with zipfile.ZipFile(plate) as zf:
+        conf = json.loads(zf.read("Metadata/project_settings.config"))
+    return {k: str(conf[k][0] if isinstance(conf.get(k), list) else conf.get(k)) for k in MATCH_KEYS}
+
+
+def profiles(where=None):
+    where = Path(where or SETUPS)
+    return {p.stem: yaml.safe_load(p.read_text()) for p in sorted(where.glob("*.yaml"))}
+
+
+def profile_for(setup, name=None, where=None):
+    """(name, profile) for a slice's setup: the profile named, else the one whose `match` is this
+    setup; (None, None) when none matches. Two profiles matching one slice (the slice cannot tell two
+    plates of one type apart) stop the run until one is named with --setup."""
+    found = profiles(where)
+    if name:
+        if name not in found:
+            raise SystemExit(f"simulate: no setup profile {name} in {where or SETUPS}")
+        return name, found[name]
+    hits = [(n, p) for n, p in found.items()
+            if {k: str(x) for k, x in (p.get("match") or {}).items()} == setup]
+    if len(hits) > 1:
+        raise SystemExit("simulate: setups " + ", ".join(n for n, _ in hits) + " both match this "
+                         "slice; name the one it printed on with --setup")
+    return hits[0] if hits else (None, None)
+
+
+def fitted_note(setup, name, prof):
+    """What the Fitted reading stands on for this slice, said before any Fitted number: the profile
+    and its held-out agreement, or why there is no Fitted reading and the plain plan stands."""
+    said = ", ".join(setup[k] for k in MATCH_KEYS)
+    if not prof:
+        return (f"Fitted: no setup profile matches this slice ({said}), so there is no Fitted "
+                f"reading; the plain plan stands, labeled Plan. teach-simulator makes a profile.")
+    if not prof.get("can_fit") or not prof.get("model"):
+        return (f"Fitted: this slice's setup is {name}, which carries no fit ({prof.get('why', 'no reason given')}); "
+                f"the plain plan stands, labeled Plan.")
+    return f"Fitted ({name}, taught {prof['fit']['date']}): {prof['line']}"
+
+
+def fitted_model(setup, name=None):
+    """The Fitted model for a slice's setup, or None; and the note that goes with it."""
+    n, prof = profile_for(setup, name)
+    ok = bool(prof and prof.get("can_fit") and prof.get("model"))
+    return (prof["model"] if ok else None), fitted_note(setup, n, prof)
 
 
 def first_moves(text, label_id=None):
@@ -238,23 +356,31 @@ def first_moves(text, label_id=None):
     return h, moves
 
 
-def score_at(moves, factor, tag="-"):
-    """The check's numbers, and the marked picture, with every bead `factor` times as wide."""
+def score_at(moves, factor, tag="-", drawn=None):
+    """The check's numbers, and the marked picture, with every bead `factor` times as wide, or of
+    `drawn` moves when given (the Fitted reading's, already widened and cut)."""
     t0 = time.time()
     bfs.log("score_start", obj=tag, factor=round(factor, 4))
-    nums, img, _ = bfs.score(widen(moves, factor))
+    nums, img, _ = bfs.score(drawn if drawn is not None else widen(moves, factor))
     bfs.log("score_end", obj=tag, factor=round(factor, 4), slits=nums["slits"],
             share=nums["share_pct"], secs=round(time.time() - t0, 1))
     return nums, img
 
 
-def score_text(text, label_id, spreads, flow=1.0, lower=0.0, pictures=None):
-    """{spread: numbers} for one object's first layer, and its marked pictures by spread when asked."""
+def score_text(text, label_id, spreads, flow=1.0, lower=0.0, pictures=None, model=None):
+    """{spread: numbers} for one object's first layer, and its marked pictures by spread when asked.
+    `fitted` is scored only with a setup profile's model; without one it is left out."""
     h, moves = first_moves(text, label_id)
     out = {}
     for s in spreads:
-        f = factor_for(s, flow, lower, h)
-        nums, img = score_at(moves, f, label_id or "-")
+        if s == "fitted":
+            if not model:
+                continue
+            f = factor_for(model["spread"], flow, lower, h)
+            nums, img = score_at(moves, f, label_id or "-", fitted(moves, model, flow, lower, h))
+        else:
+            f = factor_for(s, flow, lower, h)
+            nums, img = score_at(moves, f, label_id or "-")
         nums.update(spread=s, flow=flow, lower_mm=lower, height=h, factor=round(f, 4))
         out[s] = nums
         if pictures is not None:
@@ -273,7 +399,10 @@ def flow_of(settings, plate):
 
 
 def kind(spread, flow, lower):
-    """Plan when the beads are drawn as the slicer planned them; Theory once the model widens them."""
+    """Plan when the beads are drawn as the slicer planned them; Theory once the model widens them;
+    Fitted when a setup profile, taught on printed pieces, draws them."""
+    if spread == "fitted":
+        return "Fitted (a setup profile taught on printed pieces; not Measured)"
     plain = spread == "plan" or (spread == 1 and flow == 1 and lower == 0)
     return "Plan" if plain else "Plan widened by the spread model (Theory)"
 
@@ -316,10 +445,13 @@ def run(args):
     pics_s, pics_v = {}, {}
     sp = slice_variant(stock, out)
     vp = slice_variant(v, out)
-    s_nums = score_text(bfs.read_slice(sp)[0], None, spreads, pictures=pics_s)
-    v_nums = score_text(bfs.read_slice(vp)[0], None, spreads, vflow, lower, pics_v)
+    model, fnote = fitted_model(setup_of(vp), args.setup)
+    if not model:
+        spreads = [s for s in spreads if s != "fitted"]
+    s_nums = score_text(bfs.read_slice(sp)[0], None, spreads, pictures=pics_s, model=model)
+    v_nums = score_text(bfs.read_slice(vp)[0], None, spreads, vflow, lower, pics_v, model)
     agree = agreement_line(out)
-    result = {"name": name, "spec": v, "calibration": agree,
+    result = {"name": name, "spec": v, "calibration": agree, "fitted": fnote,
               "kind": {str(s): kind(s, vflow, lower) for s in spreads},
               "stock_slice": str(sp), "variant_slice": str(vp),
               "stock": {str(s): n for s, n in s_nums.items()},
@@ -331,6 +463,7 @@ def run(args):
         result.setdefault("pictures", []).append(str(dest / f"spread-{s}.png"))
     (dest / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(agree)
+    print(fnote)
     for s in spreads:
         print(f"spread {s} ({kind(s, vflow, lower)}):")
         print("  " + line("stock", s_nums[s]))
@@ -358,17 +491,19 @@ def plate(args):
         if not p:
             raise SystemExit(f"simulate: the plate did not slice; see {out / 'plates/logs'}")
     objs, text = plate_objects(p)
+    model, fnote = fitted_model(setup_of(p), args.setup)
     rows = []
     for label, o, lid in objs:
         flow = flow_of(o["settings"], p)
-        for s, n in score_text(text, lid, spreads, flow, args.lower_mm).items():
+        for s, n in score_text(text, lid, spreads, flow, args.lower_mm, model=model).items():
             rows.append({"label": label, "turn_deg": o.get("turn_deg", 0), "settings": o["settings"],
                          "kind": kind(s, flow, args.lower_mm), **n})
     (out / "plates").mkdir(parents=True, exist_ok=True)
     dest = out / "plates" / (p.name[:-4] + ".json")
-    dest.write_text(json.dumps({"plate": str(p), "rows": rows}, indent=2) + "\n")
+    dest.write_text(json.dumps({"plate": str(p), "fitted": fnote, "rows": rows}, indent=2) + "\n")
     print(agreement_line(out))
-    print(f"| Piece | Settings | Turned on the bed | Spread | Slits | Bare share | Largest pocket (sq mm) |")
+    print(fnote)
+    print(f"| Piece | Settings | Turned on the bed | Reading | Slits | Bare share | Largest pocket (sq mm) |")
     print("|---|---|---|---|---|---|---|")
     for r in rows:
         sets = ", ".join(f"{k} {x}" for k, x in r["settings"].items()) or "stock"
@@ -422,6 +557,7 @@ def calibrate(args):
     cache_p = out / "calibrate-cache.json"
     cache = json.loads(cache_p.read_text()) if cache_p.exists() else {}
     bfs.log("calibrate_start", pairs=len(spec["pairs"]), spreads=args.spread)
+    taught = {n: p["model"] for n, p in profiles().items() if p.get("can_fit") and p.get("model")}
     plates, scores, digests = {}, {}, {}
     for key, piece in spec["pieces"].items():
         key = str(key)
@@ -437,51 +573,60 @@ def calibrate(args):
         digests[key] = shape_digest(moves)
         flow, lower = float(piece.get("flow", 1)), float(piece.get("lower_mm", 0))
         for s in spreads:
-            f = factor_for(s, flow, lower, h)
-            ck = f"{piece['plate']}|{stamp}|{piece['label']}|{f:.5f}"
-            if ck not in cache:
-                cache[ck] = score_at(moves, f, key)[0]
-                cache_p.write_text(json.dumps(cache, indent=1) + "\n")
+            if s == "fitted":
+                model = taught.get(piece.get("setup"))
+                if not model:
+                    scores[(key, s)] = None
+                    continue
+                f = factor_for(model["spread"], flow, lower, h)
+                ck = f"{piece['plate']}|{stamp}|{piece['label']}|fitted|{model_key(model)}|{f:.5f}"
+                if ck not in cache:
+                    cache[ck] = score_at(moves, f, key, fitted(moves, model, flow, lower, h))[0]
+                    cache_p.write_text(json.dumps(cache, indent=1) + "\n")
+            else:
+                f = factor_for(s, flow, lower, h)
+                ck = f"{piece['plate']}|{stamp}|{piece['label']}|{f:.5f}"
+                if ck not in cache:
+                    cache[ck] = score_at(moves, f, key)[0]
+                    cache_p.write_text(json.dumps(cache, indent=1) + "\n")
             scores[(key, s)] = cache[ck]
     by_spread, rows = {}, []
     for s in spreads:
-        tally = {"plan": [0, 0], "model": [0, 0]}
+        tally = {"plan": [0, 0], "model": [0, 0], "ties": [0, 0], "not_ties": [0, 0]}
         for pair in spec["pairs"]:
             a, b = str(pair["a"]), str(pair["b"])
             group = "model" if digests[a] == digests[b] else "plan"
             sa, sb = scores[(a, s)], scores[(b, s)]
+            if s == "fitted" and (sa is None or sb is None
+                                  or spec["pieces"][pair["a"]].get("setup") != spec["pieces"][pair["b"]].get("setup")):
+                continue          # Fitted reads a pair only inside one taught setup
             plan = relation(sa["share_pct"], sb["share_pct"], band)
             ok = agrees(pair["omar"], plan)
-            tally[group][0] += ok
-            tally[group][1] += 1
+            for g in (group, "ties" if is_tie(pair) else "not_ties"):
+                tally[g][0] += ok
+                tally[g][1] += 1
             rows.append({"spread": s, "a": a, "b": b, "omar": pair["omar"], "words": pair["words"],
                          "plan": plan, "agrees": ok, "seen_by": group,
                          "a_share": sa["share_pct"], "b_share": sb["share_pct"],
                          "a_slits": sa["slits"], "b_slits": sb["slits"]})
         by_spread[s] = tally
     total = {s: t["plan"][0] + t["model"][0] for s, t in by_spread.items()}
-    best = max(total.values())
-    best_s = [s for s in spreads if total[s] == best]
     m = len(spec["pairs"])
-    t1 = by_spread[spreads[0]]
-    bar = {k: scores[(str(k), spreads[0])]["pass"] for k in spec["pieces"]}
-    first = "the plain plan" if spreads[0] == "plan" else f"spread {spreads[0]} (Theory)"
-    line = (f"Calibration ({time.strftime('%Y-%m-%d')}, {m} judged pairs, tie band {band} points of "
-            f"bare share): {first} ranks {total[spreads[0]]} of {m} as Omar "
-            f"did ({t1['plan'][0]} of {t1['plan'][1]} it can tell apart, {t1['model'][0]} of "
-            f"{t1['model'][1]} it draws alike); best spread {', '.join(map(str, best_s))} at {best} of "
-            f"{m} (Theory).")
+    bar = {k: scores[(str(k), spreads[0])]["pass"] for k in spec["pieces"] if scores[(str(k), spreads[0])]}
+    line = agreement_text(by_spread, spreads, m, band)
     result = {"line": line, "band_pp": band, "spreads": spreads,
               "by_spread": {str(s): t for s, t in by_spread.items()}, "pairs": rows,
               "passes_bar_plain": bar, "digests": digests}
     (out / "calibrate.json").write_text(json.dumps(result, indent=2) + "\n")
     print(line)
     print()
-    print("| Spread | Pairs the plan tells apart | Pairs drawn alike (model only) | All |")
-    print("|---|---|---|---|")
+    print("| Reading | Pairs that are not ties | Ties (Omar: same) | All | Pairs the plan tells apart "
+          "| Pairs drawn alike |")
+    print("|---|---|---|---|---|---|")
     for s, t in by_spread.items():
-        print(f"| {s} | {t['plan'][0]} of {t['plan'][1]} | {t['model'][0]} of {t['model'][1]} | "
-              f"{total[s]} of {m} |")
+        print(f"| {s} | {t['not_ties'][0]} of {t['not_ties'][1]} | {t['ties'][0]} of {t['ties'][1]} | "
+              f"{total[s]} of {t['ties'][1] + t['not_ties'][1]} | {t['plan'][0]} of {t['plan'][1]} | {t['model'][0]} of "
+              f"{t['model'][1]} |")
     for s in spreads:
         print()
         print(f"Spread {s}:")
@@ -492,10 +637,41 @@ def calibrate(args):
                   f"{r['a_share']:.2f}% | {r['b_share']:.2f}% | {r['a_slits']} | {r['b_slits']} | "
                   f"{'yes' if r['agrees'] else 'no'} | {'apart' if r['seen_by'] == 'plan' else 'alike'} |")
     passing = [k for k, ok in bar.items() if ok]
+    first = "the plain plan" if spreads[0] == "plan" else f"reading {spreads[0]}"
     print()
     print(f"The 0.6% bar, {first}: {len(passing)} of {len(bar)} judged pieces pass it "
           f"({', '.join(map(str, passing)) or 'none'}); every one of them still slit in print.")
-    bfs.log("calibrate_end", best=best, of=m)
+    bfs.log("calibrate_end", best=max(t["not_ties"][0] for t in by_spread.values()), of=m)
+
+
+def model_key(model):
+    return f"s{model['spread']}-L{model['pull_mm']}-t{model['thin']}-turns{int(bool(model['at_turns']))}"
+
+
+def is_tie(pair):
+    """A pair Omar called the same. A reading that says 'no difference' to every pair scores every
+    tie right, so ties are counted apart and the loop's bar is on the pairs that are not ties."""
+    return pair["omar"] == "same"
+
+
+def agreement_text(by_spread, spreads, m, band):
+    """The agreement line every result carries: the first reading, and the best one, each on the
+    pairs that are not ties (the bar) with all pairs beside it. Fitted reads only the pairs inside
+    one taught setup, so each reading says how many pairs it read; best is by share, not count."""
+    nt = {s: t["not_ties"] for s, t in by_spread.items()}
+    tot = {s: t["plan"][0] + t["model"][0] for s, t in by_spread.items()}
+    n = {s: t["not_ties"][1] + t["ties"][1] for s, t in by_spread.items()}
+    best = max(spreads, key=lambda s: (nt[s][0] / max(1, nt[s][1]), tot[s] / max(1, n[s])))
+    s0 = spreads[0]
+
+    def name(s):
+        return ("the plain plan" if s == "plan" else
+                "Fitted (taught on these same pairs, so not held out)" if s == "fitted"
+                else f"spread {s} (Theory)")
+    return (f"Calibration ({time.strftime('%Y-%m-%d')}, {m} judged pairs, "
+            f"{m - nt[s0][1]} of them ties, tie band {band} points of bare share): {name(s0)} ranks "
+            f"{nt[s0][0]} of {nt[s0][1]} pairs that are not ties as Omar did ({tot[s0]} of {n[s0]} with the "
+            f"ties); best {name(best)} at {nt[best][0]} of {nt[best][1]} ({tot[best]} of {n[best]}).")
 
 
 # ---- self-test --------------------------------------------------------------------------------
@@ -588,13 +764,15 @@ def main():
     ap.add_argument("--plates", default=None, help="where the judged plates' slices are")
     ap.add_argument("--plate-type", default="hot_plate")
     ap.add_argument("--lower-mm", type=float, default=0.0, help="plate: a nozzle this much closer (Theory)")
+    ap.add_argument("--setup", default=None, help="the setup profile to read Fitted with (setups/<name>.yaml); "
+                    "default: the one whose match is the slice's printer, nozzle, plate type and filament")
     args = ap.parse_args()
     if args.self_test:
         checks = self_test()
         for name, ok in checks:
             print("PASS" if ok else "FAIL", name)
         sys.exit(0 if all(ok for _, ok in checks) else 1)
-    args.spread = args.spread or ("plan" if args.cmd == "plate" else SPREADS)
+    args.spread = args.spread or ("plan,fitted" if args.cmd == "plate" else SPREADS)
     if args.cmd in ("run", "plate") and not args.target:
         ap.error(f"{args.cmd} needs a file")
     if args.cmd == "run":

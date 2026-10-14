@@ -894,6 +894,8 @@ validate-print-review:
 	$(PYTHON) $(ROOT_DIR)/tools/print_review.py --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/bed_face_sweep.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-first-layer/scripts/simulate.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/teach-simulator/scripts/fit.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/teach-simulator/scripts/marks.py --self-test
 
 # The note mover (tools/move_doc.py): moves a docs/ note and rewrites every
 # reference to it. Its self-test moves a real note in a copy of this repo and

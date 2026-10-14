@@ -1,0 +1,20 @@
+# The Bambu Lab X2D, 0.4 mm nozzle, Bambu's textured PEI plate, Bambu PLA Basic: bedface-3's setup.
+# Written by hand on 2026-10-14; teach-simulator fits it once it has pairs of its own.
+#
+# It carries no fit, and is never pooled with the glacier plate's: a textured plate presses its grain
+# into the bed face, so a slit there is a different thing from a slit on a smooth plate, and nothing
+# says the glacier numbers carry to it (K10).
+
+setup: x2d-0.4-textured-pei-pla-basic
+plate: Bambu textured PEI
+match:
+  printer_model: Bambu Lab X2D
+  nozzle_diameter: '0.4'
+  curr_bed_type: Textured PEI Plate
+  filament_settings_id: Bambu PLA Basic @BBL X2D 0.4 nozzle
+can_fit: false
+why: >-
+  two pieces (G, K) on one plate, each judged only against a glacier piece (G/S, K/R), so no pair has
+  both pieces on this plate; and the plate's grain hides the slits in their photos, so they cannot be
+  marked
+predictions: []

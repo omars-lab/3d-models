@@ -1,0 +1,141 @@
+# Where the slits sit on each judged piece, read from its bed-face photo, for teach-simulator.
+#
+# These are Claude's readings of Omar's photos, not Omar's. Omar's verdicts are in judged-pairs.yaml;
+# nothing here changes them. Marked 2026-10-14 by eye, by the rubric in
+# ../teach-simulator/marking-rubric.md.
+#
+# Not blind: every piece was marked knowing Omar's verdicts and the print records' own descriptions
+# of the photos. A mark can lean toward the verdict it was read beside. A blind re-mark (pieces
+# shuffled, verdicts hidden) is the check this file has not had.
+#
+# Levels, for each place a slit can sit: 0 none, 1 a few, 2 some, 3 many. null means the place
+# does not exist on that piece (no rings, no id) or the photo cannot show it; `why` says which.
+#   wall:      along a wall, where the fill meets the wall loops
+#   middle:    in the middle of a strap, away from the walls (a seam or a crossing of fill lines)
+#   ring_seam: where rings close or the rings from two sides of a strap meet (ring layouts only)
+#   id:        at the carved id
+#
+# Each photo gets one line saying how far it can be read. bedface-4's photos are about 1000 px wide,
+# taken at an angle under room light, with glare across the right third, so only the left two-thirds
+# of each piece is read.
+
+read_by: Claude (by eye, from the photos); not Omar's reading
+marked: 2026-10-14
+rubric: ../teach-simulator/marking-rubric.md
+
+pieces:
+  H:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-h-bed-face.jpg
+    layout: stock
+    marks: { wall: 3, middle: 1, ring_seam: null, id: 0 }
+    seen: "rows of dots along the outer and inner walls of the top-left, left and lower straps"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  J:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-j-bed-face.jpg
+    layout: stock
+    marks: { wall: 2, middle: 2, ring_seam: null, id: 0 }
+    seen: "fewer wall dots than H; longer dashes mid-strap by the star and on the lower-left strap"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  L:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-l-bed-face.jpg
+    layout: overlap 30%
+    marks: { wall: 3, middle: 2, ring_seam: null, id: 0 }
+    seen: "many rows of dots on every left strap; wavy ridges across the fill"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  P:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-p-bed-face.jpg
+    layout: overlap 30%
+    marks: { wall: 1, middle: 1, ring_seam: null, id: 0 }
+    seen: "a few dots along the walls and in the fill"
+    photo_quality: "flatter light than the others, which may hide fine dots; may read low"
+  "2":
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-2-bed-face.jpg
+    layout: overlap 55%
+    marks: { wall: 1, middle: 1, ring_seam: null, id: 0 }
+    seen: "a few dots along the walls and in the fill"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  T:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-t-bed-face.jpg
+    layout: overlap 55%
+    marks: { wall: 2, middle: 2, ring_seam: null, id: 1 }
+    seen: "dots on the top-left strap, dashes in the lower-left fill, a notch below the id"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  U:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-u-bed-face.jpg
+    layout: stock
+    marks: { wall: 2, middle: 1, ring_seam: null, id: 0 }
+    seen: "dots along the inner walls, fewer than H"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  W:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-w-bed-face.jpg
+    layout: stock
+    marks: { wall: 2, middle: 1, ring_seam: null, id: 0 }
+    seen: "dots along the left outer wall, dashes at the star's corners"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  X:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-x-bed-face.jpg
+    layout: stock
+    marks: { wall: 1, middle: 1, ring_seam: null, id: 0 }
+    seen: "very clean; a few dots"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  Y:
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-y-bed-face.jpg
+    layout: stock
+    marks: { wall: 1, middle: 1, ring_seam: null, id: 0 }
+    seen: "a few dots; not told apart from X at this photo's size"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  "4":
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-4-bed-face.jpg
+    layout: monotonicline
+    marks: { wall: 1, middle: 3, ring_seam: null, id: 0 }
+    seen: "top-left clean; rows of short dashes across the lower straps"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  "7":
+    photo: docs/prints/2026-10-13-bedface-4/photos/piece-7-bed-face.jpg
+    layout: monotonicline
+    marks: { wall: 1, middle: 3, ring_seam: null, id: 0 }
+    seen: "rows of dashes across the straps; a pink smear at the top-left corner"
+    photo_quality: "at an angle, glare on the right third; left two-thirds readable"
+  F:
+    photo: docs/prints/2026-10-11-bedface-1/photos/f-coaster-bed-face.jpg
+    layout: rings
+    marks: { wall: 1, middle: 2, ring_seam: 3, id: 0 }
+    seen: "small triangles where the rings close, at the strap junctions, and dot rows along the ring lines"
+    photo_quality: "whole coaster held in the hand at an angle; the upper part readable"
+  Z:
+    photo: null
+    layout: stock
+    marks: { wall: null, middle: null, ring_seam: null, id: null }
+    why: "no photo: sheets-04g-fit2 was judged by hand and its record has none"
+    photo_quality: "none"
+  S:
+    photo: docs/prints/2026-10-12-bedface-2/photos/s-coaster-bed-face.jpg
+    layout: stock
+    marks: { wall: 3, middle: 1, ring_seam: null, id: 0 }
+    seen: "dense rows of dots along the walls; line texture across the fill"
+    photo_quality: "whole coaster at an angle, glare at the lower right"
+  R:
+    photo: docs/prints/2026-10-12-bedface-2/photos/r-coaster-bed-face.jpg
+    layout: rings
+    marks: { wall: 1, middle: 1, ring_seam: 3, id: 0 }
+    seen: "teardrop and triangle gaps where the rings close; a few dots along the walls"
+    photo_quality: "whole coaster at an angle, glare on the right side"
+  G:
+    photo: docs/prints/2026-10-12-bedface-3/photos/g-coaster-bed-face.jpg
+    layout: stock
+    marks: { wall: null, middle: null, ring_seam: null, id: null }
+    why: "the textured plate's grain is pressed into the whole face and hides slits; some dashes along a wall, not countable"
+    photo_quality: "readable as a photo, but the texture masks what is being marked"
+  K:
+    photo: docs/prints/2026-10-12-bedface-3/photos/k-coaster-bed-face.jpg
+    layout: rings
+    marks: { wall: null, middle: null, ring_seam: null, id: null }
+    why: "the textured plate's grain hides slits, as on G"
+    photo_quality: "readable as a photo, but the texture masks what is being marked"
+
+# Photos looked at and not marked: they show the second layer from above, not the bed face. Small dark
+# pinholes sit where the wall loops meet at strap junctions and at line ends; that is the second
+# layer, so it is not a first-layer mark.
+not_marked:
+  - docs/prints/2026-10-12-bedface-3/photos/g-layer2-on-the-bed.jpg
+  - docs/prints/2026-10-12-bedface-3/photos/k-layer2-on-the-bed.jpg
