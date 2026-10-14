@@ -17,7 +17,7 @@ Two calls: tick one box under each. The next session writes your answers into th
 
 ## What we learned
 
-- Pushing the fill 55% into the wall left fewer slits than 30%, with no ridge. In your words, "2 is better than T".
+- Pushing the fill 55% into the wall left fewer slits than 30%, with no ridge. Your answer was "Fewer, no ridge".
 - 10% more plastic on the first layer helped a little: "Y has less than J and X has less than Y". Every flow piece still slit.
 - The slicer's drawing is not the print. It showed 55% almost clean, and the pieces still slit.
 
