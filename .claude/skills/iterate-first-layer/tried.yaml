@@ -1,0 +1,99 @@
+# Every first-layer idea already tried against the bottom slits, so a round never re-proposes one
+# without saying what is different. The main session appends one entry per variant at the end of
+# each round (step d in SKILL.md); never edit an old entry's result, add a new entry instead.
+#
+# Fields:
+#   idea      what was changed, in plain words
+#   settings  the keys and values, as compose or a process file takes them (empty when not a setting)
+#   tried     plan (sliced and drawn only), print (printed and judged by Omar), built (a plate made
+#             and not printed yet), or needs a tool (proposed, not run: the tool is named in result)
+#   result    a few words; Omar's words in quotes, exactly as he wrote them
+#   recorded  where the full record is
+
+entries:
+  - idea: Rings on the first layer (concentric bottom) with the fill 30% into the wall, whole coaster; bedface-1 also a 0.42 mm first line (the house bed-face preset)
+    settings: { bottom_surface_pattern: concentric, infill_wall_overlap: "30%" }
+    tried: print
+    result: "No cleaner than stock; dashes where the rings meet. bedface-2: \"both have slits, byt in different places\""
+    recorded: docs/prints/2026-10-11-bedface-1/index.md, docs/prints/2026-10-12-bedface-2/index.md, docs/issues/bed-face-preset-failed-in-print.md
+
+  - idea: Fill pushed 30% into the wall (overlap 30%)
+    settings: { infill_wall_overlap: "30%" }
+    tried: print
+    result: "Mixed: \"P has fewer, l has more\". The plan ranked L cleaner than H; the print did not"
+    recorded: docs/prints/2026-10-13-bedface-4/index.md
+
+  - idea: Fill pushed 55% into the wall (overlap 55%)
+    settings: { infill_wall_overlap: "55%" }
+    tried: print
+    result: "The best of bedface-4: \"Fewer, no ridge\"; \"2 is better than T\". Still slit"
+    recorded: docs/prints/2026-10-13-bedface-4/index.md
+
+  - idea: Monotonicline bottom instead of monotonic
+    settings: { bottom_surface_pattern: monotonicline }
+    tried: print
+    result: "\"About the same\" as stock; dropped"
+    recorded: docs/prints/2026-10-13-bedface-4/index.md
+
+  - idea: First-layer flow 1.05
+    settings: { initial_layer_flow_ratio: "1.05" }
+    tried: print
+    result: "\"W is almost identical to J. U is a bit better\""
+    recorded: docs/prints/2026-10-13-bedface-4/index.md
+
+  - idea: First-layer flow 1.10
+    settings: { initial_layer_flow_ratio: "1.1" }
+    tried: print
+    result: "\"thye still have slits but Y has less than J and X has less than Y\""
+    recorded: docs/prints/2026-10-13-bedface-4/index.md
+
+  - idea: The gold textured plate, which starts the first layer 0.02 mm closer to the bed
+    settings: {}
+    tried: print
+    result: "Fewer slits on both coasters (\"Fewer\"), but its grain is \"Not fine\" on a coaster; the plate is out, the closer first layer is what carries forward"
+    recorded: docs/prints/2026-10-12-bedface-3/index.md
+
+  - idea: A slower first layer (30 mm/s walls, 60 mm/s fill against the profile's 50 and 105)
+    settings: {}
+    tried: plan
+    result: "Not printed. Only 19 of stock H's 730 bottom moves are long enough to reach 60 mm/s, so it moved to last"
+    recorded: docs/research/2026-10-13-bed-face-next-consolidated.md
+
+  - idea: Fill angle turned, to run along one strap direction
+    settings: {}
+    tried: plan
+    result: "The straps run five ways 36 degrees apart; no angle beat stock's 45 by more than the plan's noise (0.13 points)"
+    recorded: docs/research/2026-10-14-fill-angle-sweep.md
+
+  - idea: Arachne walls, 4 of them, on the whole coaster
+    settings: { wall_generator: arachne, wall_loops: "4" }
+    tried: plan
+    result: "Worse than 30% overlap in the plan; with 4 walls the strap is not filled by walls, so fill and line ends remain"
+    recorded: docs/research/2026-10-10-bed-face-slits.md
+
+  # The three walls-only entries were measured with the drawing before the fill-angle sweep fixed
+  # it, so their bare shares run high (stock read 0.87% then, 0.70% now). Compare them with each
+  # other, not with numbers made since; `simulate.py run` remeasures any of them beside stock.
+  - idea: Walls-only straps, 4 classic walls
+    settings: { wall_loops: "4" }
+    tried: plan
+    result: "0.94% bare against stock 0.87%; only three walls fit a side, a gap-fill line runs down the middle. Strap 3.70 did the same (0.84%)"
+    recorded: docs/research/2026-10-14-no-slits-slices.md
+
+  - idea: Walls-only straps, 4 classic walls, no elephant-foot shrink
+    settings: { wall_loops: "4", elefant_foot_compensation: "0" }
+    tried: plan
+    result: "0.87% bare, the same as stock; a 0.05 mm hairline seam down each strap"
+    recorded: docs/research/2026-10-14-no-slits-slices.md
+
+  - idea: Walls-only straps, 5 Arachne walls
+    settings: { wall_generator: arachne, wall_loops: "5" }
+    tried: plan
+    result: "0.65% bare, largest pocket 0.34 sq mm; no line ends along the straps, slivers left at the crossings. Not printed"
+    recorded: docs/research/2026-10-14-no-slits-slices.md
+
+  - idea: "bedface-5: overlap 55%, 75% and 100%, and 55% and 75% with flow 1.10, beside stock"
+    settings: { infill_wall_overlap: "55% / 75% / 100%", initial_layer_flow_ratio: "1.1 on two pairs" }
+    tried: built
+    result: "Built, not printed. In the plan 100% leaves 13 slits against stock's 312 to 348"
+    recorded: docs/design/plates/bedface-5.md
