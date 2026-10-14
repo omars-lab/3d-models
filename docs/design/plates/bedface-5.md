@@ -98,6 +98,14 @@ The slits the slicer's plan leaves on each piece, counted on the local slice by 
 - **Turned pieces.** The slicer's arranger turned eight pieces a quarter turn and left `3`, `8`, `C` and `S` as drawn. Stock, 55%, 75% and 75% with flow each have one piece of each turn. Both 100% pieces and both 55%-with-flow pieces are turned, so read those against `5`, the turned stock piece. In the plan the turn moves the count a little (`3` 348 against `5` 312), not the order.
 - **Flow is not in the drawing.** The 10% extra plastic changes how wide each line spreads, which the drawing does not show, so `G`, `K`, `R` and `S` count about the same as the pieces without flow.
 
+## The print
+
+The print as the chamber camera saw it: 21 pictures from 20:07 to 23:25 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log. The last two pictures have a black strip down the right edge: the camera caught the room's window there, and the view outside is hidden. The bed is untouched.
+
+![bedface-5 printing, as the chamber camera saw it](bedface-5-media/timelapse.webp)
+
+![bedface-5 finished, on the bed](bedface-5-media/finished.webp)
+
 ## Cost and risk
 
 One bed, about 177 minutes (2 h 57 min) and 52.5 g on the slicer's count. bedface-4 took 194 minutes against its count of 173, so expect a little over three hours. Local slice 2026-10-14 for the glacier plate: preset check PASS, per-piece settings PASS on all ten pieces that have them, no warnings. One color, picked at the send, so no swaps.
