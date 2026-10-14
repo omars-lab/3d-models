@@ -10,3 +10,7 @@ What the printer said while [bedface-5](../bedface-5.md) printed, one row per ch
 |---|---|---|---|---|
 | 2026-10-14 20:07 | sent |  |  | fed #00ae42 from AMS 0 · slot 3, 52.54 g by the slice |
 | 2026-10-14 20:07 | watching | 0/22 | 0% | RUNNING |
+| 2026-10-14 20:56 | progress | 4/22 | 25% | 25% |
+| 2026-10-14 21:46 | progress | 15/22 | 50% | 50% |
+| 2026-10-14 22:34 | progress | 19/22 | 75% | 75% |
+| 2026-10-14 23:25 | finished | 22/22 | 100% | FINISH |
