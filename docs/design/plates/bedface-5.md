@@ -26,7 +26,7 @@ pictures:
 
 **In short.** The same twelve 50 mm squares of the gBV coaster as bedface-4, on the glacier plate, at the normal height. Two are stock. The other ten try five settings, two pieces each: the fill pushed 55%, 75% and 100% into the wall, and 55% and 75% each with 10% more plastic on the first layer.
 
-This is option 1 on [the bottom-slits decision page](../../working-model/feedback-requests/2026-10-13-bottom-slits-next.md), from [the checked research plan](../../research/2026-10-13-bed-face-next-consolidated.md). It builds on [bedface-4](bedface-4.md), where in your words "2 is better than T" (55% beat 30%) and "Y has less than J and X has less than Y" (10% more plastic helped a little), and every piece still slit.
+This is option 1 on [the bottom-slits decision page](../../working-model/feedback-requests/2026-10-13-bottom-slits-next.md), from [the checked research plan](../../research/2026-10-13-bed-face-next-consolidated.md). It builds on [bedface-4](bedface-4.md), where 55% left fewer slits than 30% with no ridge (your answer: "Fewer, no ridge") and "Y has less than J and X has less than Y" (10% more plastic helped a little), and every piece still slit.
 
 ## What we seek to learn
 
@@ -69,6 +69,7 @@ What gets asked when the plate comes off the bed, one row at a time. Name each p
 | `8`, `9` (55%) beside `3`, `5`, and bedface-4's `2`, `T` | **Do:** Turn them over, side by side. **Look for:** Fewer slits than `3`, `5`? About as many as `2`, `T`? | Fewer than stock, like `2` and `T`. | Like `2`, `T`: 55% repeats, and it is the base for the rows below. Not like them: 55% is less sure than it looked; weigh the rows below against `3`, `5` only. |
 | `A`, `C` (75%) and `E`, `F` (100%) beside `8`, `9` | **Do:** Turn all six over. Run a fingernail across the strap edges, then turn them face up. **Look for:** Fewer slits than 55%? A ridge you can feel on the bottom, or a bump on the top face over the straps? | 75% fewer slits than 55%, no ridge. 100% fewest, maybe a ridge: the slicer draws its fill over the inner wall. | 75% cleaner, no ridge: 75% is the new base. 100% cleaner still and no ridge: 100% is. A ridge: the step before it is the pick. No better than 55%: the overlap has done all it can. |
 | `G`, `K` (55% and flow) beside `8`, `9`; `R`, `S` (75% and flow) beside `A`, `C` | **Do:** Turn each pair over beside the pair without flow. **Look for:** Fewer slits with the extra plastic, the same, or more? | A little fewer: each helped a little alone on bedface-4. | Fewer: both settings go on the next whole coaster. The same: the overlap alone goes on it, and flow is dropped. |
+| All twelve | **Do:** Lay all twelve bottom up. Then run a finger along each piece's outer edge where it touched the bed. **Look for:** Which bottom would you be happy to sell? Pick your favorite. Does any piece have a flared edge, a thin lip of extra plastic at the bed (elephant's foot)? | The cleanest overlap pieces look best. 100% and the flow pieces are the likeliest to flare, since both lay down more plastic. | Your favorite sells: its setting goes on the next whole coaster, even if another piece had fewer slits. A flare on a piece: that setting needs a fix before it goes on a coaster with pieces that fit together. |
 
 ## Pictures
 

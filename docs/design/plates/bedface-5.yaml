@@ -2,9 +2,9 @@
 #
 # The gBV minimal coaster's bottom keeps coming out with slits: lines that stop short of the strap
 # walls (bedface-1 to bedface-4; docs/issues/bed-face-preset-failed-in-print.md). bedface-4 tried five
-# settings beside stock. In Omar's words: "2 is better than T" (55% overlap beat 30%), "Y has less than
-# J and X has less than Y" (10% more first-layer plastic helped a little), and the monotonicline pair
-# was "About the same". Every piece still slit.
+# settings beside stock. 55% overlap left fewer slits than 30% with no ridge (Omar's answer: "Fewer, no
+# ridge"); in his words "Y has less than J and X has less than Y" (10% more first-layer plastic helped a
+# little), and the monotonicline pair was "About the same". Every piece still slit.
 #
 # This plate is option 1 of the bottom-slits decision page
 # (docs/working-model/feedback-requests/2026-10-13-bottom-slits-next.md), from the checked research plan
