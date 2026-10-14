@@ -142,7 +142,7 @@ Two earlier results agree. Arachne with 4 walls was worse than 30% overlap on th
 | Walls-only straps, Arachne, 5 walls | Every line end along a strap; the leftover, by varying width | New keys `wall_generator`, `wall_loops` | Changes both faces' look; crossings still bare | Plan (§4); theory |
 | Walls-only straps, classic, 4 walls, with no elephant-foot shrink | The same, with fixed-width walls | New keys `wall_loops`, `elefant_foot_compensation` | Leaves a 0.05 mm seam; no shrink means the bottom edge may flare and fits move | Plan (§4); theory |
 | Rings (concentric bottom) | The turns | Per piece today | Tried twice: slits moved to the ring seams | Measured (bedface-1, bedface-2) |
-| Fill angle along one strap direction | Line ends on the straps it lines up with | New key `infill_direction` | If gBV's straps run in ten directions 18° apart (research pass A assumed this and did not measure it), one angle lines up with one of them at best | Research (the 2026-10-13 research, the fill-angle row); theory |
+| Fill angle along one strap direction | Line ends on the straps it lines up with | New key `infill_direction` | gBV's straps run in five directions 36° apart. Fill along one leaves a 6 sq mm gap beside it, and no angle beat stock's 45° by more than the plan's noise ([the fill-angle sweep](../../research/2026-10-14-fill-angle-sweep.md)) | Plan; measured directions |
 
 **(b) Close the gap at each line end**
 
@@ -175,7 +175,7 @@ The 4.0 mm figure is arithmetic: eight beads take 0.5 + 7 × 0.46 ≈ 3.70 mm, p
 
 1. **`wall_generator` and `wall_loops`, together.** They unlock walls-only straps, the only lever sliced here that removes line ends along the straps in the plan. Without them, the test needs a whole-plate preset, which puts every piece on the plate on it, so no stock pair can sit beside it.
 2. **`elefant_foot_compensation`.** It unlocks the classic-walls version and the "no shrink" lever on its own, and it is the key that decides whether a strap width is a whole number of lines on the first layer.
-3. **`infill_direction`.** Cheap to add and to test, but if the straps run in ten directions (not measured), it can help at most one of them.
+3. **`infill_direction`.** Cheap to add, but the fill-angle sweep found no angle clearly better than stock in the plan ([the sweep](../../research/2026-10-14-fill-angle-sweep.md)). Its use would be a print test of whether a fill halfway between two strap directions does better than the plan says.
 
 Each key needs its own small change to compose and a slice showing it held per piece. That is a tool change, not part of this doc.
 
@@ -192,7 +192,7 @@ Pieces, not whole coasters: the same 50 mm window of the gBV coaster as bedface-
 | 5 | 4 classic walls, elephant foot 0, flow 1.10 | Does a little more plastic close that seam? |
 | 6 | Stock with elephant foot 0 alone | How much of pair 4's change is the shrink, not the walls; and does the edge flare? |
 
-Each pair is turned on the bed the same way, so the turn is not a second change. On bedface-4, four pairs had one piece turned a quarter turn and one not. In the two overlap pairs the turned piece looked cleaner ("P has fewer, l has more"; "2 is better than T"). If the straps run in ten directions 18° apart ([research pass A](../../research/2026-10-13-bed-face-next-a.md) assumed this and did not measure it), a quarter turn gives the same set of angles, so the turn alone should not matter. That is **theory, not yet tested,** and turning every piece the same way keeps it out of the way.
+Each pair is turned on the bed the same way, so the turn is not a second change. On bedface-4, four pairs had one piece turned a quarter turn and one not. In the two overlap pairs the turned piece looked cleaner ("P has fewer, l has more"; "2 is better than T"). The straps run in five directions 36° apart (**measured**, [the fill-angle sweep](../../research/2026-10-14-fill-angle-sweep.md); [research pass A](../../research/2026-10-13-bed-face-next-a.md) had assumed ten). A quarter turn moves them 18° and leaves the fill meeting them at the same five angles, mirrored, so the angle does not explain the turn. What does is not known, and turning every piece the same way keeps it out of the way.
 
 Each pair is judged with the scan in §2 if Omar wants it, so "zero" can be said, not only "fewer".
 
