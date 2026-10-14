@@ -790,7 +790,15 @@ def paths_picture(moves, region, below=False, px=PATHS_PX):
     for feature, width, run in moves:
         color, r = FEATURE_COLORS.get(feature, (160, 160, 160)), width * k / 2
         pts = [f(*p) for p in run]
-        d.line(pts, fill=color, width=max(1, round(width * k)))
+        # Each bead is drawn as its own rectangle, not with a wide line: Pillow's wide lines come
+        # out a pixel or so thin at some angles, which opened hairlines between fill lines laid
+        # 0.458 mm apart at 0.5 mm wide and counted thousands of slits at a 22.5 degree fill.
+        for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+            length = math.hypot(x1 - x0, y1 - y0)
+            if length:
+                nx, ny = -(y1 - y0) / length * r, (x1 - x0) / length * r
+                d.polygon([(x0 + nx, y0 + ny), (x1 + nx, y1 + ny),
+                           (x1 - nx, y1 - ny), (x0 - nx, y0 - ny)], fill=color)
         for x, y in pts:
             d.ellipse([x - r, y - r, x + r, y + r], fill=color)
     bare, found, _ = slit_pockets(img, k)
@@ -850,7 +858,21 @@ def paths_self_test():
     _, moves = gcode_layer(arc, 0.2)
     _, hole = paths_picture([m for m in gcode_layer(text, 0.2)[1] if m[0] == "Outer wall"], region)
     big, short_big = paths_picture(gcode_layer(text, 0.4)[1], region, px=2400)
+    # The slicer's real first layer: fill 0.5 mm wide laid 0.458 mm apart, so the beads overlap.
+    # Run at a 22.5 degree fill across the square and out past it, they leave no bed bare at any
+    # angle; Pillow's wide lines once left hairlines here and counted them as slits.
+    tilted = []
+    for deg in (22.5, 27, 45):
+        a = math.radians(deg)
+        ux, uy, nx, ny = math.cos(a), math.sin(a), -math.sin(a), math.cos(a)
+        fill = [("Bottom surface", 0.5,
+                 [(5 + o * nx - 20 * ux, 5 + o * ny - 20 * uy), (5 + o * nx + 20 * ux, 5 + o * ny + 20 * uy)])
+                for o in (i * 0.458 for i in range(-40, 41))]
+        wall = [m for m in gcode_layer(text, 0.2)[1] if m[0] == "Outer wall"]
+        tilted.append(paths_picture(wall + fill, region, px=360)[1][0])
     return [
+        ("paths: overlapping fill lines leave no slit at a 22.5, 27 or 45 degree fill, "
+         "at the check's 30 px a mm", tilted == [0, 0, 0]),
         ("paths: --px sets the picture's side and keeps the bare area in sq mm",
          big.size == (2400, 2400) and abs(short_big[1] - short[1]) < 0.15 * short[1]),
         ("paths: fill that reaches the wall leaves no slit", full[0] == 0),
