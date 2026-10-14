@@ -1,0 +1,124 @@
+# bedface-5 — the bottom slits, round two on pieces: overlap pushed further, and overlap with flow
+#
+# The gBV minimal coaster's bottom keeps coming out with slits: lines that stop short of the strap
+# walls (bedface-1 to bedface-4; docs/issues/bed-face-preset-failed-in-print.md). bedface-4 tried five
+# settings beside stock. In Omar's words: "2 is better than T" (55% overlap beat 30%), "Y has less than
+# J and X has less than Y" (10% more first-layer plastic helped a little), and the monotonicline pair
+# was "About the same". Every piece still slit.
+#
+# This plate is option 1 of the bottom-slits decision page
+# (docs/working-model/feedback-requests/2026-10-13-bottom-slits-next.md), from the checked research plan
+# (docs/research/2026-10-13-bed-face-next-consolidated.md): 30% overlap, flow 1.05 and monotonicline
+# leave; 55% stays as the link to bedface-4; 75% and 100% push the fill further; and 55% and 75% each
+# get flow 1.10 on top, to see whether the two settings add up. Same piece, same window, same height
+# as bedface-4, and a stock pair on the same bed:
+#
+#   STOCK A, STOCK B            the stock X2D preset, the control (3, 5)
+#   OVERLAP 55 A, B             infill/wall overlap 55%, as bedface-4's 2 and T (8, 9)
+#   OVERLAP 75 A, B             infill/wall overlap 75% (A, C)
+#   OVERLAP 100 A, B            infill/wall overlap 100%; may raise a ridge where fill runs over the wall (E, F)
+#   OVERLAP 55 FLOW A, B        55% and first-layer flow 1.10 (G, K)
+#   OVERLAP 75 FLOW A, B        75% and first-layer flow 1.10 (R, S)
+#
+# The carved id (D-109, D-114): one character per piece. B, D, M, N, O, Q and V stay out, as on
+# bedface-4, and so does Z (it reads like bedface-4's 2), and 6 (it reads like 9 turned over). The
+# letters left after bedface-4 run out at I, so this plate reuses the letters bedface-1 to bedface-3
+# carved on whole coasters (A, C, E, F, G, K, R, S). Those are full 112.5 mm coasters, these are 50 mm
+# squares, so a piece is never mistaken for one of them. No id from bedface-4's squares is reused.
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+# Slice it for the glacier plate: `--plate-type hot_plate`.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/bedface-5.yaml --plate-type hot_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: FC5
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  STOCK A
+    id:     "3"
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  STOCK B
+    id:     "5"
+    id_form: piece
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 A
+    id:     "8"
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 B
+    id:     "9"
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 75 A
+    id:     A
+    id_form: piece
+    object_settings: { infill_wall_overlap: "75%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 75 B
+    id:     C
+    id_form: piece
+    object_settings: { infill_wall_overlap: "75%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 100 A
+    id:     E
+    id_form: piece
+    object_settings: { infill_wall_overlap: "100%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 100 B
+    id:     F
+    id_form: piece
+    object_settings: { infill_wall_overlap: "100%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 FLOW A
+    id:     G
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%", initial_layer_flow_ratio: "1.1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 55 FLOW B
+    id:     K
+    id_form: piece
+    object_settings: { infill_wall_overlap: "55%", initial_layer_flow_ratio: "1.1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 75 FLOW A
+    id:     R
+    id_form: piece
+    object_settings: { infill_wall_overlap: "75%", initial_layer_flow_ratio: "1.1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-coaster.bkr
+    params: { size: 112.5, strap: 3.75, height: 4.4, round: 1.25 }
+    window: 50@13,30
+    label:  OVERLAP 75 FLOW B
+    id:     S
+    id_form: piece
+    object_settings: { infill_wall_overlap: "75%", initial_layer_flow_ratio: "1.1" }
