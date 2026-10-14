@@ -77,24 +77,24 @@ What gets asked when the plate comes off the bed, one row at a time. Name each p
 
 The first layer the slicer plans, seen from below, for `5`, `9`, `A` and `E`: one piece of each overlap, all four turned the same way on the bed. Black inside a strap is bed that no line covers. The drawing cannot show the extra plastic, and [bedface-4](bedface-4.md) showed the plan reads cleaner than the print, so these say where to look, not which wins.
 
-The slits the slicer's plan leaves on each piece, counted by `tools/print_review.py paths … --check` on the local slice. The check's bar is under 0.6% bare and no pocket of 0.2 sq mm or more.
+The slits the slicer's plan leaves on each piece, counted on the local slice by `python3 .claude/skills/simulate-first-layer/scripts/simulate.py plate build/plates/bedface-5.plate.3mf`, which draws each piece on its own with `tools/print_review.py`'s drawing as fixed in [the fill-angle sweep](../../research/2026-10-14-fill-angle-sweep.md) (it had drawn false hairlines; recounted 2026-10-14). The check's bar is under 0.6% bare and no pocket of 0.2 sq mm or more. That bar has passed pieces that slit in print, so it says where to look, not what will come out clean.
 
 | Piece | Setting | Turned on the bed | Slits in the plan | Bare share | Largest pocket (sq mm) |
 |---|---|---|---|---|---|
-| `3` | stock | no | 374 | 0.93% | 0.45 |
-| `5` | stock | yes | 350 | 0.88% | 0.50 |
-| `8` | 55% | no | 151 | 0.15% | 0.16 |
-| `9` | 55% | yes | 106 | 0.10% | 0.16 |
-| `A` | 75% | yes | 84 | 0.06% | 0.16 |
-| `C` | 75% | no | 54 | 0.11% | 0.49 |
-| `E` | 100% | yes | 19 | 0.04% | 0.15 |
-| `F` | 100% | yes | 21 | 0.08% | 0.42 |
-| `G` | 55% and flow | yes | 102 | 0.14% | 0.23 |
-| `K` | 55% and flow | yes | 117 | 0.13% | 0.16 |
-| `R` | 75% and flow | yes | 67 | 0.05% | 0.16 |
-| `S` | 75% and flow | no | 55 | 0.06% | 0.18 |
+| `3` | stock | no | 348 | 0.71% | 0.39 |
+| `5` | stock | yes | 312 | 0.69% | 0.46 |
+| `8` | 55% | no | 132 | 0.11% | 0.17 |
+| `9` | 55% | yes | 81 | 0.07% | 0.13 |
+| `A` | 75% | yes | 37 | 0.04% | 0.13 |
+| `C` | 75% | no | 24 | 0.10% | 0.47 |
+| `E` | 100% | yes | 13 | 0.04% | 0.13 |
+| `F` | 100% | yes | 13 | 0.07% | 0.42 |
+| `G` | 55% and flow | yes | 89 | 0.11% | 0.23 |
+| `K` | 55% and flow | yes | 100 | 0.09% | 0.13 |
+| `R` | 75% and flow | yes | 34 | 0.04% | 0.13 |
+| `S` | 75% and flow | no | 25 | 0.05% | 0.18 |
 
-- **Turned pieces.** The slicer's arranger turned eight pieces a quarter turn and left `3`, `8`, `C` and `S` as drawn. Stock, 55%, 75% and 75% with flow each have one piece of each turn. Both 100% pieces and both 55%-with-flow pieces are turned, so read those against `5`, the turned stock piece. In the plan the turn moves the count a little (`3` 374 against `5` 350), not the order.
+- **Turned pieces.** The slicer's arranger turned eight pieces a quarter turn and left `3`, `8`, `C` and `S` as drawn. Stock, 55%, 75% and 75% with flow each have one piece of each turn. Both 100% pieces and both 55%-with-flow pieces are turned, so read those against `5`, the turned stock piece. In the plan the turn moves the count a little (`3` 348 against `5` 312), not the order.
 - **Flow is not in the drawing.** The 10% extra plastic changes how wide each line spreads, which the drawing does not show, so `G`, `K`, `R` and `S` count about the same as the pieces without flow.
 
 ## Cost and risk

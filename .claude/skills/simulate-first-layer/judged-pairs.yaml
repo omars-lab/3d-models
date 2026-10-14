@@ -1,0 +1,82 @@
+# The pairs of printed pieces Omar compared, and what he said, for `simulate.py calibrate`.
+#
+# Each pair says how Omar found piece `a` against piece `b`: better (fewer slits), worse, same, or
+# not_better (no fewer, maybe more). His words are quoted exactly from the print record named in
+# `source`, typos kept. Where one answer covered two pieces, the pair is the one the page asked about
+# with the turn on the bed matched (both turned or both not), and `note` says so.
+#
+# Every piece here still had slits in print (each record's lesson says so), so none of them is a
+# clean bottom, whatever the plan says.
+#
+# Add a pair when a new plate is judged. Never reword Omar's answer, and never add a pair he did not
+# compare.
+
+# Two settings closer than this, in points of bare share, count as the same in the plan. It is the
+# spread the fill-angle sweep measured between fill angles that lay the same lines on the whole
+# coaster (docs/research/2026-10-14-fill-angle-sweep.md).
+band_pp: 0.13
+
+# Each piece: the plate it printed on (its slice in build/plates/<plate>.plate.3mf), its label in that
+# plate's bed map, and what the plain plan cannot see: the first-layer flow ratio, and how much closer
+# to the bed the nozzle started (the textured plate's 0.02 mm, bedface-3). Both feed the spread model
+# only, which is Theory.
+pieces:
+  H:   { plate: bedface-4, label: STOCK A }
+  J:   { plate: bedface-4, label: STOCK B }
+  L:   { plate: bedface-4, label: OVERLAP 30 A }
+  P:   { plate: bedface-4, label: OVERLAP 30 B }
+  "2": { plate: bedface-4, label: OVERLAP 55 A }
+  T:   { plate: bedface-4, label: OVERLAP 55 B }
+  U:   { plate: bedface-4, label: FLOW 105 A, flow: 1.05 }
+  W:   { plate: bedface-4, label: FLOW 105 B, flow: 1.05 }
+  X:   { plate: bedface-4, label: FLOW 110 A, flow: 1.1 }
+  Y:   { plate: bedface-4, label: FLOW 110 B, flow: 1.1 }
+  "4": { plate: bedface-4, label: MONOLINE A }
+  "7": { plate: bedface-4, label: MONOLINE B }
+  F:   { plate: bedface-1, label: COASTER }
+  Z:   { plate: sheets-04g-fit2, label: COASTER }
+  S:   { plate: bedface-2, label: COASTER STOCK }
+  R:   { plate: bedface-2, label: COASTER RINGS }
+  G:   { plate: bedface-3, label: COASTER STOCK, lower_mm: 0.02 }
+  K:   { plate: bedface-3, label: COASTER RINGS, lower_mm: 0.02 }
+
+pairs:
+  - { a: P, b: J, omar: better, words: "P has fewer, l has more",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "asked about L and P against H and J; P and J are both turned" }
+  - { a: L, b: H, omar: worse, words: "P has fewer, l has more",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "the lowercase l is L; L and H are both not turned" }
+  - { a: T, b: L, omar: better, words: "Fewer, no ridge",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "asked about 2 and T against L and P; T and L are both not turned" }
+  - { a: "2", b: P, omar: better, words: "Fewer, no ridge",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "2 and P are both turned" }
+  - { a: "2", b: T, omar: better, words: "2 is better than T",
+      source: docs/prints/2026-10-13-bedface-4/index.md }
+  - { a: W, b: J, omar: same, words: "W is almost identical to J. U is a bit better",
+      source: docs/prints/2026-10-13-bedface-4/index.md }
+  - { a: U, b: J, omar: better, words: "W is almost identical to J. U is a bit better",
+      source: docs/prints/2026-10-13-bedface-4/index.md }
+  - { a: Y, b: J, omar: better, words: "thye still have slits but Y has less than J and X has less than Y",
+      source: docs/prints/2026-10-13-bedface-4/index.md }
+  - { a: X, b: Y, omar: better, words: "thye still have slits but Y has less than J and X has less than Y",
+      source: docs/prints/2026-10-13-bedface-4/index.md }
+  - { a: "4", b: J, omar: same, words: "About the same",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "asked to count 4 and 7 against stock; 4 and J are both turned" }
+  - { a: "7", b: H, omar: same, words: "About the same",
+      source: docs/prints/2026-10-13-bedface-4/index.md,
+      note: "7 and H are both not turned" }
+  - { a: F, b: Z, omar: not_better, words: "About the same; then: F as a coaster has more slits",
+      source: docs/prints/2026-10-11-bedface-1/index.md,
+      note: "Z is the stock coaster from sheets-04g-fit2; F the house rings preset" }
+  - { a: R, b: S, omar: same, words: "About the same; then: both have slits, byt in different places",
+      source: docs/prints/2026-10-12-bedface-2/index.md }
+  - { a: G, b: S, omar: better, words: "Fewer",
+      source: docs/prints/2026-10-12-bedface-3/index.md,
+      note: "across plates: bedface-3 on the textured plate against bedface-2's stock coaster" }
+  - { a: K, b: R, omar: better, words: "Fewer",
+      source: docs/prints/2026-10-12-bedface-3/index.md,
+      note: "across plates: bedface-3's rings coaster against bedface-2's" }
