@@ -2,7 +2,7 @@
 plate: bedface-5
 recipe: bedface-5.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "On a piece of the gBV coaster, does pushing the fill 75% or 100% into the wall close the bottom slits that 55% left, and does 10% more first-layer plastic on top of 55% or 75% close more than the overlap alone?"
@@ -116,6 +116,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-14 | approved | Omar, in chat: "send it", then picked "Print bedface-5" and "Green" | iteration 1 @ b95fa92e4a in #00AE42 | |
 
 ## Timeline
 
