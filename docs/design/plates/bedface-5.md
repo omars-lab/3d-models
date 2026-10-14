@@ -1,8 +1,9 @@
 ---
 plate: bedface-5
+print_log: '[[print-logs/bedface-5|print log]]'
 recipe: bedface-5.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "On a piece of the gBV coaster, does pushing the fill 75% or 100% into the wall close the bottom slits that 55% left, and does 10% more first-layer plastic on top of 55% or 75% close more than the overlap alone?"
@@ -116,10 +117,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-14 | approved | Omar, in chat: "send it", then picked "Print bedface-5" and "Green" | iteration 1 @ b95fa92e4a in #00AE42 | |
+| 2026-10-14 | approved | Omar, in chat: "send it", then picked "Print bedface-5" and "Green" | iteration 1 @ b95fa92e4a in #00AE42 | sent 2026-10-14 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-14 | proposed: option 1 of the bottom-slits decision page, on Omar's "i was expecitng a new set of experimetns to run" | [the decision page](../../working-model/feedback-requests/2026-10-13-bottom-slits-next.md) |
+| 2026-10-14 | sent — by `bambu print send`; spends the approval of 2026-10-14, iteration 1 @ b95fa92e4a in #00AE42 | this page |
