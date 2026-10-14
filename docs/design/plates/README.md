@@ -41,7 +41,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 19 | [theme-night-sky-11602](theme-night-sky-11602.md) | waiting | 1 | 0.5 | 2.04 | ok | Night sky, one of its 4 plates: do its Hex ×10, Outer ×10 come out as the theme draws them, in PLA Matte Dark Blue (11602)? |
 | 20 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
 | 21 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
-| 22 | [bedface-5](bedface-5.md) | proposed | 4 | 3.5 | 1.15 | ok | On a piece of the gBV coaster, does pushing the fill 75% or 100% into the wall close the bottom slits that 55% left, and does 10% more first-layer plastic on top of 55% or 75% close more than the overlap alone? |
+| 22 | [bedface-5](bedface-5.md) | approved | 4 | 3.5 | 1.15 | ok | On a piece of the gBV coaster, does pushing the fill 75% or 100% into the wall close the bottom slits that 55% left, and does 10% more first-layer plastic on top of 55% or 75% close more than the overlap alone? |
 | 23 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
 | 24 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
 | 25 | [theme-iznik-tile-10100](theme-iznik-tile-10100.md) | waiting | 1 | 1.1 | 0.90 | ok | Iznik tile, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Jade White (10100)? |
