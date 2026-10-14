@@ -20,25 +20,31 @@ band_pp: 0.13
 # plate's bed map, and what the plain plan cannot see: the first-layer flow ratio, and how much closer
 # to the bed the nozzle started (the textured plate's 0.02 mm, bedface-3). Both feed the spread model
 # only, which is Theory.
+#
+# `setup` names the printer setup the piece printed on, one of the profiles in setups/: the machine,
+# nozzle, plate and filament. teach-simulator fits a setup only on pairs whose two pieces share it, so
+# a pair across setups (G/S and K/R: the textured plate against the glacier plate) is never pooled
+# into either fit. The slice cannot tell the glacier plate from Bambu's own High Temp plate (both
+# slice as "High Temp Plate"), so the glacier tag comes from the print records, not the slice.
 pieces:
-  H:   { plate: bedface-4, label: STOCK A }
-  J:   { plate: bedface-4, label: STOCK B }
-  L:   { plate: bedface-4, label: OVERLAP 30 A }
-  P:   { plate: bedface-4, label: OVERLAP 30 B }
-  "2": { plate: bedface-4, label: OVERLAP 55 A }
-  T:   { plate: bedface-4, label: OVERLAP 55 B }
-  U:   { plate: bedface-4, label: FLOW 105 A, flow: 1.05 }
-  W:   { plate: bedface-4, label: FLOW 105 B, flow: 1.05 }
-  X:   { plate: bedface-4, label: FLOW 110 A, flow: 1.1 }
-  Y:   { plate: bedface-4, label: FLOW 110 B, flow: 1.1 }
-  "4": { plate: bedface-4, label: MONOLINE A }
-  "7": { plate: bedface-4, label: MONOLINE B }
-  F:   { plate: bedface-1, label: COASTER }
-  Z:   { plate: sheets-04g-fit2, label: COASTER }
-  S:   { plate: bedface-2, label: COASTER STOCK }
-  R:   { plate: bedface-2, label: COASTER RINGS }
-  G:   { plate: bedface-3, label: COASTER STOCK, lower_mm: 0.02 }
-  K:   { plate: bedface-3, label: COASTER RINGS, lower_mm: 0.02 }
+  H:   { plate: bedface-4, label: STOCK A, setup: x2d-0.4-glacier-pla-basic }
+  J:   { plate: bedface-4, label: STOCK B, setup: x2d-0.4-glacier-pla-basic }
+  L:   { plate: bedface-4, label: OVERLAP 30 A, setup: x2d-0.4-glacier-pla-basic }
+  P:   { plate: bedface-4, label: OVERLAP 30 B, setup: x2d-0.4-glacier-pla-basic }
+  "2": { plate: bedface-4, label: OVERLAP 55 A, setup: x2d-0.4-glacier-pla-basic }
+  T:   { plate: bedface-4, label: OVERLAP 55 B, setup: x2d-0.4-glacier-pla-basic }
+  U:   { plate: bedface-4, label: FLOW 105 A, flow: 1.05, setup: x2d-0.4-glacier-pla-basic }
+  W:   { plate: bedface-4, label: FLOW 105 B, flow: 1.05, setup: x2d-0.4-glacier-pla-basic }
+  X:   { plate: bedface-4, label: FLOW 110 A, flow: 1.1, setup: x2d-0.4-glacier-pla-basic }
+  Y:   { plate: bedface-4, label: FLOW 110 B, flow: 1.1, setup: x2d-0.4-glacier-pla-basic }
+  "4": { plate: bedface-4, label: MONOLINE A, setup: x2d-0.4-glacier-pla-basic }
+  "7": { plate: bedface-4, label: MONOLINE B, setup: x2d-0.4-glacier-pla-basic }
+  F:   { plate: bedface-1, label: COASTER, setup: x2d-0.4-glacier-pla-basic }
+  Z:   { plate: sheets-04g-fit2, label: COASTER, setup: x2d-0.4-glacier-pla-basic }
+  S:   { plate: bedface-2, label: COASTER STOCK, setup: x2d-0.4-glacier-pla-basic }
+  R:   { plate: bedface-2, label: COASTER RINGS, setup: x2d-0.4-glacier-pla-basic }
+  G:   { plate: bedface-3, label: COASTER STOCK, lower_mm: 0.02, setup: x2d-0.4-textured-pei-pla-basic }
+  K:   { plate: bedface-3, label: COASTER RINGS, lower_mm: 0.02, setup: x2d-0.4-textured-pei-pla-basic }
 
 pairs:
   - { a: P, b: J, omar: better, words: "P has fewer, l has more",

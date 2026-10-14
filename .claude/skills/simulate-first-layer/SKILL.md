@@ -1,6 +1,6 @@
 ---
 name: simulate-first-layer
-description: Show how a coaster's first layer (the bottom face, where the slits are) will come out before printing, from a local slice — one setting against stock side by side, every piece on a plate one row each, or how far those numbers have tracked Omar's verdicts on printed plates. Use for "what would 75% overlap do to the bottom", "simulate this setting", "will this plate's bottom have slits", "redo the planned-slit table", "check the bottom before we send", "how much do we trust the slicer's drawing", and when iterate-first-layer calls it. It measures the slicer's plan, not the print, and every number goes out with calibrate's agreement line. Slices locally only; never sends to the printer. For rounds of new ideas, use iterate-first-layer.
+description: Show how a coaster's first layer (the bottom face, where the slits are) will come out before printing, from a local slice — one setting against stock side by side, every piece on a plate one row each, or how far those numbers have tracked Omar's verdicts on printed plates. Use for "what would 75% overlap do to the bottom", "simulate this setting", "will this plate's bottom have slits", "redo the planned-slit table", "check the bottom before we send", "how much do we trust the slicer's drawing", and when iterate-first-layer calls it. It measures the slicer's plan, not the print, and every number goes out with calibrate's agreement line. A Fitted reading, taught on one printer setup's judged prints by teach-simulator, goes out with that setup's held-out line. Slices locally only; never sends to the printer. For rounds of new ideas, use iterate-first-layer.
 ---
 
 # simulate-first-layer — the bottom face, as the slicer plans it
@@ -64,14 +64,66 @@ What it gets wrong, read from the pair rows:
 
 **Do not trust a ranking from it yet.** At its best it ranks fewer than half of the judged pairs as
 Omar did. It is useful to see where on a piece the bare bed sits, and to rule out a variant that leaves
-the plan worse than stock; it is not a stand-in for a print. The iterate loop stops at its first step
-on these numbers (its rule: more than half, or no round).
+the plan worse than stock; it is not a stand-in for a print. The iterate loop now stops at its first
+step unless the Fitted reading, held out one plate at a time, clears its bar (see Fitted, below).
 
 **The 0.6% bar.** The plate check passes a piece under 0.6% bare with no pocket of 0.2 sq mm or more.
 In the plain plan 6 of the 18 judged pieces pass it (`P`, `2`, `T`, `4`, `F`, `R`), and every one of
 them still slit in print. Since the fill-angle sweep fixed the drawing, stock itself reads 0.69% to
 0.74%, close to the bar. So passing it says the plan leaves little bare bed, not that the print will
 be clean. The bar is not changed here.
+
+## Fitted: the reading taught on one setup's prints
+
+`--spread fitted` (on by default in `plate` and `calibrate`) draws the **Fitted** reading: the spread
+model at a taught spread, then the first stretch of every stroke laid thin, where a line starts and
+the pressure lags (and, if taught so, again after every sharp turn). A stroke is what the nozzle lays
+from one travel to the next. Its four numbers come from
+[teach-simulator](../teach-simulator/SKILL.md), which picks them because they rank the judged pairs
+as Omar did. **Fitted is not Measured**: no bead was measured, and its numbers stand only as far as
+its held-out score says.
+
+`run` and `plate` print the setup's line (its held-out agreement) before any Fitted number. Quote it
+with every Fitted number, as the calibrate line goes with Plan and Theory.
+
+**How far it tracks (2026-10-14, the glacier setup).** Taught on all 13 glacier pairs, Fitted ranks 7
+as Omar did, against the plan's 4. Held out one plate at a time it ranks 4, and none of the 4 ties, so
+it does not meet the iterate bar. Its first real test is bedface-5, predicted before it prints. The
+marks, the fit and the prediction are in the
+[fit research](../../../docs/research/2026-10-14-first-layer-fit.md).
+
+### Setups and profiles
+
+A **setup** is the machine, the nozzle, the build plate and the filament. Each has one profile in
+[`setups/`](setups/), written by teach-simulator: the fitted numbers, what they were fit on, the
+agreement numbers and the date. simulate.py reads the slice's printer, nozzle, plate type and
+filament preset from its project settings and uses the profile whose `match` is that setup.
+
+- **No profile matches**: it says so, prints no Fitted reading, and the plain plan stands, labeled
+  Plan.
+- **The profile carries no fit** (`can_fit: false`): it prints the profile's `why` and the plain
+  plan. The textured plate (bedface-3) is one: two pieces, each judged only against a glacier piece,
+  and its grain hides the slits in the photos.
+- **Two profiles match one slice**: it stops until one is named with `--setup <name>`. The slicer has
+  no type for the glacier plate, which is sliced as the High Temp plate, so a slice for Bambu's own
+  High Temp plate also matches the glacier profile. Nothing says the glacier fit carries to that
+  plate.
+
+A pair whose two pieces printed on different setups (bedface-3's against bedface-2's) is never pooled
+into a fit; calibrate scores no Fitted reading for it.
+
+### What Fitted cannot see
+
+- **Anything the judged pieces did not vary.** It was taught on stock, wall overlap, first-layer flow,
+  monotonicline and rings on one setup. A change outside that (speed, temperature, a new fill
+  pattern, a larger shape) is read by the same four numbers, which nothing has checked there.
+- **Pressure as a nozzle has it.** The thin line start is a stand-in fitted to the photos, not a
+  model of the extruder; it cannot say how a slower start or a priming move would change the start.
+- **The bed's own height, spot to spot, and the plate's surface.** A slit from a low spot is not in
+  the model.
+- **Whether a gap closes by squash after the second layer.** Like the plan, it reads the first layer
+  alone.
+- **The tie band.** Fitted carries the plan's 0.13-point band over without measuring its own noise.
 
 ## The variant file (`run`)
 
@@ -100,8 +152,8 @@ lower_mm: 0.0                                # Theory only: a nozzle this much c
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `scripts/simulate.py run` | Slices one variant and stock alike, scores both at each reading, writes a side-by-side picture per reading and `result.json` under `build/simulate/runs/<name>/` | One setting or one idea against stock, before it goes on a plate | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py run <variant.yaml> [--spread plan,1.0]` |
-| `scripts/simulate.py plate` | Every piece on a plate, one row each: settings, turn on the bed, slits, bare share, largest pocket. Takes a recipe (sliced first) or a sliced `.plate.3mf` | A plate page's planned-slit table; a check before a send | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py plate docs/design/plates/<plate>.yaml` |
-| `scripts/simulate.py calibrate` | Re-scores every judged pair at each reading and prints the agreement line, a table per reading and the 0.6% bar's record; caches scores in `build/simulate/` | First in every iterate round; after a plate is judged and its pairs are added to `judged-pairs.yaml` | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py calibrate` |
+| `scripts/simulate.py plate` | Every piece on a plate, one row each: settings, turn on the bed, slits, bare share, largest pocket. Takes a recipe (sliced first) or a sliced `.plate.3mf` | A plate page's planned-slit table; a check before a send. Reads Plan and Fitted by default; `--setup <name>` names the profile when two match | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py plate docs/design/plates/<plate>.yaml` |
+| `scripts/simulate.py calibrate` | Re-scores every judged pair at each reading and prints the agreement line, a table per reading (Fitted on the pairs its setup was taught on, so not held out) and the 0.6% bar's record; caches scores in `build/simulate/` | First in every iterate round; after a plate is judged and its pairs are added to `judged-pairs.yaml` | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py calibrate` |
 | `scripts/simulate.py --self-test` | Checks piece isolation, the bead drawing at a spread, the model's math, settings read-back, placement and the agreement rules on made-up G-code | After editing the script; `make validate-print-review` runs it | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py --self-test` |
 
 Logs go to `build/simulate/simulate.log`, one line per event with a UTC time, the pid and `ev=`

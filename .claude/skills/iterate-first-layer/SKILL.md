@@ -38,11 +38,20 @@ line: how many of the pairs Omar has judged the plan ranks as he did, split into
 draws differently and pairs it draws the same (those only the spread model can tell apart), and the
 spread that agrees best. That line goes at the top of every round report and the round record.
 
-- **Stop** if neither the plain plan nor the best spread agrees with Omar on more than half of the
-  judged pairs. Report the line and the disagreeing pairs instead of running a round: the simulator
-  is not tracking the prints, and ideas ranked by it would be ranked by noise.
-- Otherwise the round reads every variant at `plan` and at the best spread. Name which is which in
-  every report: `plan` is **Plan**, any spread is **Theory**.
+Then read the setup's profile: the slice's setup (`teach-simulator/scripts/fit.py show-setup`) and
+its line under `agreement` in `simulate-first-layer/setups/<setup>.yaml`, written by
+[teach-simulator](../teach-simulator/SKILL.md). That line goes on top too.
+
+- **Stop** unless the Fitted reading, **held out one plate at a time**, ranks more than half of the
+  judged pairs that are not ties as Omar did, **and** at least half of the ties (the profile's
+  `agreement.meets_iterate_bar`). Report both lines and the disagreeing pairs instead of running a
+  round: the simulator is not tracking the prints, and ideas ranked by it would be ranked by noise.
+  A setup with no profile, or one that carries no fit, stops here too. (Until 2026-10-14 the bar was
+  "the plain plan or the best spread agrees on more than half of all pairs", scored on the same pairs
+  it was read from; a held-out score is the honest one, and the ties are kept apart because a
+  reading that calls everything different can never get one.)
+- Otherwise the round reads every variant at `plan` and at `fitted`. Name which is which in every
+  report: `plan` is **Plan**, any spread is **Theory**, `fitted` is **Fitted**.
 
 **(b) The ideation agent proposes.** Start a fresh `general-purpose` agent (not a fork: it should
 not inherit this session's framing). Its prompt:
@@ -59,11 +68,11 @@ variant's `variant:` block to `build/simulate/round-<n>/<name>.yaml` (gitignored
 **(c) The simulation agent runs them.** A fork is fine. Its prompt names the variant files and the
 spread, and asks it to:
 
-- run `python3 .claude/skills/simulate-first-layer/scripts/simulate.py run <file> --spread plan,<best>`
+- run `python3 .claude/skills/simulate-first-layer/scripts/simulate.py run <file> --spread plan,fitted`
   for each file;
 - open every picture the runs print (Read the PNG) and say what it sees: where the bare bed is
   (strap edges, middles, crossings), and whether it moved from where stock has it;
-- report each variant's numbers against stock at each spread, whether the prediction held, and what
+- report each variant's numbers against stock at each reading, whether the prediction held, and what
   the plan cannot see for this variant: squash and spread, the pressure lag at line ends, the bed
   height, and anything the variant changes off the first layer (the top face, the fits, a flare).
 
@@ -73,8 +82,8 @@ spread, and asks it to:
 round two builds on round one in the same agent.
 
 **(e) Stop** after the round cap (default 3, or what Omar set) or after two rounds in a row with no
-gain. A gain is a variant whose bare share, at the reading the round trusts (`plan` or the best
-spread), beats the best so far by more than the tie band calibrate uses (0.13 points). Within the
+gain. A gain is a variant whose bare share, at the reading the round trusts (`fitted`, the one
+that met the bar), beats the best so far by more than the tie band calibrate uses (0.13 points). Within the
 band is noise.
 
 **(f) Write it up.** Nothing is sent to the printer.
@@ -101,5 +110,6 @@ This skill has no scripts of its own. It calls the simulator's, by path.
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `simulate-first-layer/scripts/simulate.py calibrate` | Re-scores every judged pair against Omar's verdicts and prints the agreement line | Step (a), at the start of every loop | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py calibrate` |
-| `simulate-first-layer/scripts/simulate.py run` | Slices one variant beside stock and scores both, with a side-by-side picture per spread | Step (c), once per variant file | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py run build/simulate/round-<n>/<name>.yaml --spread plan,<best>` |
+| `teach-simulator/scripts/fit.py show-setup` | Prints a slice's setup and the profile that matches it, whose held-out line and bar are step (a)'s | Step (a), after calibrate | `python3 .claude/skills/teach-simulator/scripts/fit.py show-setup <plate>` |
+| `simulate-first-layer/scripts/simulate.py run` | Slices one variant beside stock and scores both, with a side-by-side picture per reading | Step (c), once per variant file | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py run build/simulate/round-<n>/<name>.yaml --spread plan,fitted` |
 | `simulate-first-layer/scripts/simulate.py plate` | Scores every piece on a sliced plate, one row each | Step (f), on the proposed plate before handing it on | `python3 .claude/skills/simulate-first-layer/scripts/simulate.py plate docs/design/plates/<plate>.yaml` |
