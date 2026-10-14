@@ -19,6 +19,8 @@ commands, is [`../../research/2026-10-10-bed-face-slits.md`](../../research/2026
 its own record, [`../../research/2026-10-10-bed-face-sweep.md`](../../research/2026-10-10-bed-face-sweep.md)
 ("the sweep"). No decision id is taken here.
 
+**2026-10-14:** why the slits come back whatever we change, and an experiment program aimed at zero: [the no-slits design](no-slits-design.md).
+
 **The question.** Omar, 2026-10-10, with a photo of a pink coaster's underside: "why do i get gaps
 like this in the plate touching side". The photo shows short dark slits along the straps, a
 five-pointed star-shaped hole, and scalloped edges where the fill lines turn. Then: "create a
