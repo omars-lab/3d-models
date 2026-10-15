@@ -1,8 +1,9 @@
 ---
 plate: split-02
+print_log: '[[print-logs/split-02|print log]]'
 recipe: split-02.yaml
 iteration: 5
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
@@ -12,8 +13,8 @@ bets: []
 unblocks:
   - "D-100: lip or flange, which way a split coaster holds its loose pieces (with split-01)"
   - "whether split halves line up and stay together by their outlines alone, with no studs"
-minutes: 107
-grams: 31
+minutes: 112
+grams: 32
 bed_plates: 1
 risk: watch
 pictures:
@@ -129,8 +130,9 @@ you see. [The recipe](split-02.yaml) says how each piece is told apart, and
 
 ## Cost and risk
 
-One bed, 107 minutes, about 31 g (local slice, 2026-10-05, X2D preset and PLA Basic, sliced
-for the Textured PEI plate Bambu Studio has saved, no slicer warnings, nothing sent). One color, so no swaps.
+One bed, 112 minutes, about 32 g (local slice, 2026-10-15, X2D preset and PLA Basic, sliced
+for the glacier plate as Smooth PEI, no slicer warnings). The first slices, on 2026-10-05 and
+2026-10-07, were for the Textured PEI plate and came to 107 minutes. One color, so no swaps.
 
 **Risk: watch.** Each piece's band starts 0.6 mm up and sticks out 0.8 mm with nothing under it,
 two lines of overhang that may droop; that is a look to judge, not a risk to the printer. The
@@ -152,7 +154,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-07 | approved | Omar, tick on the 2026-10-06 calls page: "Yes, in pink" | iteration 1 @ d0e7506f93 | reset 2026-10-07 |
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 2 @ fcdbac0237 | reset 2026-10-08 |
 | 2026-10-08 | approved | Omar, in chat, in pink | iteration 4 @ d99e8c88b1 in #F5547C | reset 2026-10-08 |
-| 2026-10-08 | approved | Omar, in chat | iteration 5 @ dd8df3a20b in #F5547C | |
+| 2026-10-08 | approved | Omar, in chat | iteration 5 @ dd8df3a20b in #F5547C | sent 2026-10-15 |
 
 ## Timeline
 
@@ -163,3 +165,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-07 | changed (iteration 2): its id, 2, cut 2 mm tall into the lower half's bottom face, on Omar's comment on the 2026-10-06 calls page (bikar #323); the yes in pink given before it is reset | [the calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md) |
 | 2026-10-07 | sliced — local slice from bikar main after bikar #323, fits one bed, 107 minutes, 31.5 g, no slicer warnings; the id did not change the time | this page |
 | 2026-10-08 | changed (iteration 5): the short id cut into each hex piece (5H) and each outer piece (5R), now that bikar cuts one into each piece of a ring (bikar #331); the middle piece reads SP2/5 M; the yes in pink given for iteration 4 is reset | this page |
+| 2026-10-15 | sliced — local slice for the glacier plate (Smooth PEI), fits one bed, 112 minutes, 31.8 g, no slicer warnings; the recipe is iteration 5, unchanged | this page |
+| 2026-10-15 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 5 @ dd8df3a20b in #F5547C | this page |
