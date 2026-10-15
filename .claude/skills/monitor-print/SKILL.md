@@ -66,7 +66,12 @@ The watcher waits on the run log (`--next`), opens every picture and writes a li
 - **paused**: tell Omar at once, with the code and its meaning.
 - **stalled**: the printer says RUNNING but no new layer or percent has come for 15 minutes. Tell
   Omar, with the newest picture. It may be a long layer, so do not call it failed.
-- **lost**: the printer stopped answering. Say so; the print may still be going.
+- **lost**: the printer stopped answering. Say so; the print may still be going. Check this
+  Mac's network first: when the router answers and the printer does not, the printer is off or
+  off the Wi-Fi, which is Omar's to look at. Once `bambu status show` answers again, start the
+  watch with `--pick-up`: it writes a print found already over as `finished` (or `failed`,
+  `stopped`) with a picture and the GIF, and a print still going as `watching`. split-02 left the
+  Wi-Fi at 69% on 2026-10-15 and came back FINISH, layer 22 of 22.
 - **the watch went silent** (`ev=watch_silent`): the script has died. Check `pgrep -fl
   print_monitor`; if it is gone and the print is still running, start it again (§1 step 1).
 
@@ -130,6 +135,7 @@ all), and the timelapse.
 | same, `--next` | Waits until the run log has a row, a picture, a timeout or the end past line `--after`, prints them and `cursor=<n>`; `ev=quiet` after `--wait` minutes, `ev=watch_silent` (exit 3) when the script has died | The watcher's loop ([`watcher.md`](watcher.md)); give the Bash call a 10-minute timeout | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --next --after <cursor> --wait 9` |
 | same, `--look` | Adds one line to `.bambu/monitor/<name>/looks.md`: the picture and what it showed | The watcher, after opening each picture | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --look <frame> "<what it shows>"` |
 | same, `--publish` | Animated WebP and finished still, 480 px, metadata stripped, into `<name>-media/`, and a `## The print` section on the page; `--leave-out` keeps a picture with a person in it off; refuses on a readable QR code, a file over 400 KB, or a left-out name that is not a picture | The print has ended; the watcher runs it, or you do if it could not | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --publish [--leave-out <frame>]` |
+| same, `--pick-up` | Watches as usual, but a print found already finished, failed or cancelled on the first look is written as that end and the watch stops | The last watch ended `lost` and the printer answers again | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --pick-up` |
 | same, `--gif` | Rebuilds the full-size `timelapse.gif` (a reprint's `timelapse-2.gif`) in `.bambu/` from the newest print's frames | The watch died before the end, or frames were added by hand | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --gif` |
 | same, `--sent` | Writes the send's `sent` row and exits: each tray it fed, its color and the slice's grams for it, which the shelf (`bambu shelf show`) takes off the spool when the print closes | `print send` calls it itself right after the print starts; by hand only when the send said it could not name a tray | `python3 .claude/skills/monitor-print/scripts/print_monitor.py <name> --sent '#00ae42' 'AMS 0 · slot 3' 27.28` |
 | same, `--self-test` | Runs the monitor on made-up printer reports and a made-up page, reads the log back through the plates gate, and publishes made-up frames, one with a real QR code that must be refused, then left out by name | After editing it; `make validate-prints` runs it | `python3 .claude/skills/monitor-print/scripts/print_monitor.py --self-test` |
