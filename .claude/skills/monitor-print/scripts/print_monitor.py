@@ -29,7 +29,9 @@ list: `watching` (the first look), `preparing`, `printing`, `paused` (with the e
 what it means), `resumed`, `progress` (25, 50, 75%), `error` (a new error with no pause),
 `finished`, `failed`, `stopped` (the printer went idle, or moved to another job) and `lost` (no
 reply for `--lost-after` minutes). The last four end the watch; a pause does not, because a
-paused print is waiting on Omar and may resume.
+paused print is waiting on Omar and may resume. After a `lost`, start it again with `--pick-up`
+once the printer answers: a print found already over is written as its end (`finished`, `failed`
+or `stopped`), not as `watching`, which would never end.
 
 **Is it moving?** While the printer says RUNNING, the layer or the percent should change. When
 neither has for `--stall-after` minutes, the monitor writes a `stalled` row; when they move
@@ -171,7 +173,14 @@ def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: flo
     prev = st.get("state")
     if not st.get("seen"):
         st["seen"] = True
-        rows.append(("watching", said(code, state)))
+        # A watch picked up after a lost one (`--pick-up`) may find the print already over: the
+        # end is its first row, or the log would say `watching` forever (split-02, 2026-10-15).
+        if st.get("pick_up") and state in ("FINISH", "FAILED"):
+            ended = ("finished" if state == "FINISH" else
+                     "stopped" if code == CANCELLED else "failed")
+            rows.append((ended, f"{said(code, state)}, found when the watch picked up again"))
+        else:
+            rows.append(("watching", said(code, state)))
     elif state != prev:
         if state in ("PREPARE", "SLICING"):
             rows.append(("preparing", state))
@@ -642,7 +651,8 @@ def add_look(name: str, frame: str, note: str) -> str:
     return line
 
 
-def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, snap_s: float) -> int:
+def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, snap_s: float,
+          pick_up: bool = False) -> int:
     page = page_of(plate)
     name = page.stem
     if not page.is_file():
@@ -650,8 +660,8 @@ def watch(plate: str, every: float, lost_after_s: float, stall_after_s: float, s
         return 2
     log = Log(LOGS / f"{name}.log")
     log("start", plate=name, every_s=int(every), lost_after_s=int(lost_after_s),
-        stall_after_s=int(stall_after_s), snapshot_every_s=int(snap_s))
-    st: dict = {}
+        stall_after_s=int(stall_after_s), snapshot_every_s=int(snap_s), pick_up=int(pick_up))
+    st: dict = {"pick_up": True} if pick_up else {}
     last_shot: float | None = None
     while True:
         frame = poll(log)
@@ -752,6 +762,18 @@ def self_test() -> int:
     check(rows == [], "a missed poll inside the window writes nothing", rows)
     st, rows = step(st, None, 330, "sheets-04b", 300)
     check([e for e, _ in rows] == ["lost"], "no reply for the whole window is lost", rows)
+    # Picked up after a lost watch: a print already over is that end, one running is watching
+    # (split-02, 2026-10-15: the printer left the Wi-Fi at 69% and came back FINISH 22/22).
+    st, rows = step({"pick_up": True}, _f("FINISH", 20, 100), 0, "sheets-04b", 600)
+    check([e for e, _ in rows] == ["finished"], "picked up on a finished print: finished ends it", rows)
+    st, rows = step({"pick_up": True}, _f("FAILED", 3, 10, err=0x0300400C), 0, "sheets-04b", 600)
+    check([e for e, _ in rows] == ["stopped"], "picked up on a cancelled print: stopped", rows)
+    st, rows = step({"pick_up": True}, _f("RUNNING", 15, 80), 0, "sheets-04b", 600)
+    check([e for e, _ in rows] == ["watching", "progress"],
+          "picked up on a running print: watching, and the mark the lost watch missed", rows)
+    st, rows = step({}, _f("FINISH", 20, 100), 0, "sheets-04b", 600)
+    check([e for e, _ in rows] == ["watching"],
+          "without --pick-up a first FINISH is still watching (it may be the last job's)", rows)
 
     # Is it moving: a stall after the window, once; moving again says so; a pause resets the clock.
     st, rows = step({}, _f("RUNNING", 5, 20), 0, "sheets-04b", 600, 900)
@@ -1006,6 +1028,9 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--leave-out", action="append", metavar="FRAME",
                     help="with --publish: a picture to keep off the page, such as one showing a "
                          "person (the frame's file name; repeat for each)")
+    ap.add_argument("--pick-up", action="store_true",
+                    help="take over after a watch that lost the printer: a print found already "
+                         "finished or failed is written as that end, not as watching")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args(argv)
     if a.self_test:
@@ -1034,7 +1059,8 @@ def main(argv: list[str]) -> int:
     if a.gif:
         name = page_of(a.plate).stem
         return 0 if make_gif(name, Log(LOGS / f"{name}.log")) else 1
-    return watch(a.plate, a.every, a.lost_after * 60, a.stall_after * 60, a.snapshot_every * 60)
+    return watch(a.plate, a.every, a.lost_after * 60, a.stall_after * 60, a.snapshot_every * 60,
+                 a.pick_up)
 
 
 if __name__ == "__main__":
