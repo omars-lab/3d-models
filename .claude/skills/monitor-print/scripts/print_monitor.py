@@ -104,6 +104,7 @@ SNAPSHOT_TIMEOUT_S = 45
 GIF_TIMEOUT_S = 120
 TERMINAL = ("finished", "failed", "stopped", "lost")
 MILESTONES = (25, 50, 75)
+PICKED_UP = "found when the watch picked up again"
 
 # What an error code means, in plain words. Only codes we have met and looked up: an unknown code
 # is shown as its number, never guessed at. Source: Bambu's HMS list as mirrored in
@@ -178,7 +179,7 @@ def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: flo
         if st.get("pick_up") and state in ("FINISH", "FAILED"):
             ended = ("finished" if state == "FINISH" else
                      "stopped" if code == CANCELLED else "failed")
-            rows.append((ended, f"{said(code, state)}, found when the watch picked up again"))
+            rows.append((ended, f"{said(code, state)}, {PICKED_UP}"))
         else:
             rows.append(("watching", said(code, state)))
     elif state != prev:
@@ -485,12 +486,38 @@ def print_heading(n: int) -> str:
     return f"## The {ORDINALS[n]} print" if n in ORDINALS else f"## Print {n}"
 
 
-def print_section(name: str, frames: list[Path], left_out: int = 0, n: int = 1) -> str:
+def gap_in(log_text: str) -> tuple[str, str, str] | None:
+    """When the newest print's watch lost the printer and a `--pick-up` found the print already
+    over: (when it was lost, how it ended, when that was found), else None. The last picture is
+    then the bed as the pick-up found it, maybe hours later and maybe cleared, not the print on it
+    (split-02, 2026-10-15: lost at 69%, found finished with the pieces already off)."""
+    lines = pg.table_lines(log_text)[2:]
+    rows = [(r[1], r[2], r[3].rstrip().rstrip("|").rsplit("|", 1)[-1].strip())
+            for ln in lines if (r := pg.LOG_ROW.match(ln))]
+    sent = max((i for i, (_, ev, _) in enumerate(rows) if ev == "sent"), default=-1)
+    rows = rows[sent + 1:]
+    for i, (when, ev, _) in enumerate(rows):
+        if ev == "lost" and i + 1 < len(rows):
+            end_when, end_ev, said_ = rows[i + 1]
+            if end_ev in TERMINAL and PICKED_UP in said_:
+                return when, end_ev, end_when
+    return None
+
+
+def print_section(name: str, frames: list[Path], left_out: int = 0, n: int = 1,
+                  gap: tuple[str, str, str] | None = None) -> str:
     def hm(f: Path) -> str:
         m = re.match(r"\d{8}T(\d\d)(\d\d)\d\dZ$", f.stem)
         return f"{m[1]}:{m[2]}" if m else f.stem
     dropped = (f" {left_out} picture{'s' if left_out > 1 else ''} with someone at the printer "
                f"left out." if left_out else "")
+    if gap:
+        lost, ended, found = (gap[0][-5:], gap[1], gap[2][-5:])
+        dropped += (f" The watch lost the printer at {lost} UTC and found the print {ended} at "
+                    f"{found}, when it picked up again; there are no pictures in between, and the "
+                    f"last one is the bed as the watch found it then, not the print on it.")
+    still = ("after the print: the bed as the watch found it when it picked up again" if gap
+             else "finished, on the bed")
     m = re.match(r"(\d{4})(\d\d)(\d\d)T", frames[0].stem)
     which = ("The print" if n == 1 else
              f"The {ORDINALS.get(n, f'print number {n}')} print of this plate"
@@ -501,7 +528,7 @@ def print_section(name: str, frames: list[Path], left_out: int = 0, n: int = 1) 
             f"{hm(frames[-1])} UTC, half a second each, the last held.{dropped} Made by the monitor-print "
             f"skill's `print_monitor.py --publish`; what the printer said is in the print log.\n\n"
             f"![{name} printing, as the chamber camera saw it]({name}-media/timelapse{sfx}.webp)\n\n"
-            f"![{name} finished, on the bed]({name}-media/finished{sfx}.webp)\n")
+            f"![{name} {still}]({name}-media/finished{sfx}.webp)\n")
 
 
 def with_print_section(text: str, section: str, n: int = 1) -> str:
@@ -585,8 +612,11 @@ def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
     media.mkdir(exist_ok=True)
     for f in made:
         (media / f).write_bytes((work / f).read_bytes())
+    log_md = log_of(page)
+    gap = gap_in(log_md.read_text(encoding="utf-8")) if log_md.is_file() else None
     page.write_text(with_print_section(page.read_text(encoding="utf-8"),
-                                       print_section(name, frames, len(drop), n), n), encoding="utf-8")
+                                       print_section(name, frames, len(drop), n, gap), n),
+                    encoding="utf-8")
     sizes = " ".join(f"{f.split('.')[0]}_bytes={(media / f).stat().st_size}" for f in made)
     log("publish_done", print=n, frames=len(frames), left_out=len(drop), msg=sizes)
     print(f"ev=publish plate={name} print={n} frames={len(frames)} left_out={len(drop)} {sizes} "
@@ -910,6 +940,26 @@ def self_test() -> int:
     check(two_again.count("## The second print") == 1 and first in two_again and "3 pictures" in two_again,
           "publishing the reprint again replaces only its own section", two_again)
     check(with_print_section(two, first) == two, "publishing the first print again changes nothing else")
+
+    # A watch that lost the printer and picked up a finished print: the section says so, and the
+    # last picture is not captioned as the print on the bed (split-02, 2026-10-15).
+    head = f"{pg.PRINT_LOG_HEAD}\n|---|---|---|---|---|\n"
+    sent = "| 2026-10-15 20:24 | sent |  |  | fed #f5547c from AMS 0 · slot 0, 31.77 g by the slice |\n"
+    lost_log = (head + sent + "| 2026-10-15 20:24 | watching | 0/22 | 0% | RUNNING |\n"
+                "| 2026-10-15 22:03 | lost |  |  | no reply for 10 min |\n"
+                f"| 2026-10-15 23:49 | finished | 22/22 | 100% | FINISH, {PICKED_UP} |\n")
+    gap = gap_in(lost_log)
+    picked = print_section("x", shots, 0, 1, gap)
+    check(gap == ("2026-10-15 22:03", "finished", "2026-10-15 23:49")
+          and "lost the printer at 22:03 UTC and found the print finished at 23:49" in picked
+          and "finished, on the bed" not in picked and "](x-media/finished.webp)" in picked,
+          "a lost watch picked up on a finished print: the section says so, the still is not the print", picked)
+    clean_log = (head + sent + "| 2026-10-15 20:24 | watching | 0/22 | 0% | RUNNING |\n"
+                 "| 2026-10-15 22:15 | finished | 22/22 | 100% | FINISH |\n")
+    check(gap_in(clean_log) is None and print_section("x", shots, 0, 1, gap_in(clean_log)) == first,
+          "a clean watch: the section as before")
+    check(gap_in(lost_log + sent.replace("20:24", "23:55")) is None,
+          "a reprint after a lost watch: the gap was the first print's, not this one's")
     with tempfile.TemporaryDirectory() as tmp:
         saved_logs, saved_plates = LOGS, pg.PLATES
         LOGS, pg.PLATES = Path(tmp) / "monitor", Path(tmp) / "plates"
