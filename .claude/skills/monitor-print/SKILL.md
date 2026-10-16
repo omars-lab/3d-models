@@ -71,7 +71,10 @@ The watcher waits on the run log (`--next`), opens every picture and writes a li
   off the Wi-Fi, which is Omar's to look at. Once `bambu status show` answers again, start the
   watch with `--pick-up`: it writes a print found already over as `finished` (or `failed`,
   `stopped`) with a picture and the GIF, and a print still going as `watching`. split-02 left the
-  Wi-Fi at 69% on 2026-10-15 and came back FINISH, layer 22 of 22.
+  Wi-Fi at 69% on 2026-10-15 and came back FINISH, layer 22 of 22, the pieces already off the
+  bed. `--publish` reads that gap off the print log: the page says when the watch lost the
+  printer and when it found the print over, and the last picture is captioned as the bed then,
+  not as the print on it.
 - **the watch went silent** (`ev=watch_silent`): the script has died. Check `pgrep -fl
   print_monitor`; if it is gone and the print is still running, start it again (§1 step 1).
 
