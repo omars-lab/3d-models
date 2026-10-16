@@ -128,6 +128,14 @@ you see. [The recipe](split-02.yaml) says how each piece is told apart, and
 
 ![The bottoms of the ten outer pieces, each reading 5R inside its flange](split-02-media/ids-outer.png)
 
+## The print
+
+The print as the chamber camera saw it: 12 pictures from 20:24 to 23:49 UTC, half a second each, the last held. The watch lost the printer at 22:03 UTC and found the print finished at 23:49, when it picked up again; there are no pictures in between, and the last one is the bed as the watch found it then, not the print on it. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![split-02 printing, as the chamber camera saw it](split-02-media/timelapse.webp)
+
+![split-02 after the print: the bed as the watch found it when it picked up again](split-02-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 112 minutes, about 32 g (local slice, 2026-10-15, X2D preset and PLA Basic, sliced

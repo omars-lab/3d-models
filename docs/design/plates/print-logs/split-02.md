@@ -10,3 +10,7 @@ What the printer said while [split-02](../split-02.md) printed, one row per chan
 |---|---|---|---|---|
 | 2026-10-15 20:24 | sent |  |  | fed #f5547c from AMS 0 · slot 0, 31.77 g by the slice |
 | 2026-10-15 20:24 | watching | 0/22 | 0% | RUNNING |
+| 2026-10-15 20:56 | progress | 2/22 | 25% | 25% |
+| 2026-10-15 21:27 | progress | 5/22 | 50% | 50% |
+| 2026-10-15 22:03 | lost |  |  | no reply for 10 min |
+| 2026-10-15 23:49 | finished | 22/22 | 100% | FINISH, found when the watch picked up again |
