@@ -14,8 +14,8 @@ its pictures. This skill gets both right before he hears the plate is ready.
 
 The hub is a separate repo (`omars-lab/3d-model-hub`), always running on 127.0.0.1:4717. It
 reads its own copy of 3d-models at `origin/master` (refreshed every 10 minutes), so **a fix
-reaches the page only once it is merged**. Answers he saves land in the plate page's
-`## Judged` table, through a PR the hub opens.
+reaches the page only once it is merged**. Answers he saves are kept on the hub at once, then
+sent together to the plate page's `## Judged` table, through one PR the hub opens.
 
 ## Steps
 
@@ -55,9 +55,23 @@ reaches the page only once it is merged**. Answers he saves land in the plate pa
 
 ## After he answers
 
-Each saved answer opens or adds to an `After-print answers: <plate>` PR in 3d-models. Merge it
-like any PR. Then review-print writes the print record from the `## Judged` table ("When a print
-comes back"). Never edit the `## Judged` table by hand: it is his record.
+A save is instant: the hub keeps the answer in its state folder
+(`~/Library/Application Support/3d-model-hub/answers/<plate>.jsonl`) and sends nothing yet. The
+plate's saved answers go to 3d-models together, as one `After-print answers: <plate>` PR, once
+every question has an answer ("not judged yet" counts), or when he presses **Send now**. A send
+that fails keeps every answer saved, and the page says why.
+
+Follow it the way page comments are followed: run `make -s -C <hub checkout> watch-answers` with
+the Monitor tool. It prints one line per event, never his words:
+
+| Line | Means | Do |
+|---|---|---|
+| `ev=answer_saved` | One answer kept on the hub | Nothing yet |
+| `ev=answers_sending` | The send started | Nothing yet |
+| `ev=answers_sent pr=<n> url=<url>` | The PR is open | Merge it like any PR, then review-print writes the print record from the `## Judged` table ("When a print comes back") |
+| `ev=answers_not_sent reason=<why>` | Nothing was pushed; the answers stay saved | Fix the reason (a refused answer, changes left in the hub's 3d-models copy), then ask him to press Send now |
+
+Never edit the `## Judged` table by hand: it is his record.
 
 ## Scripts — when to use each
 
