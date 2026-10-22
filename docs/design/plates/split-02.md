@@ -3,9 +3,9 @@ plate: split-02
 print_log: '[[print-logs/split-02|print log]]'
 recipe: split-02.yaml
 iteration: 5
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-15-split-02]
 answers: "Does a split gBV coaster close over flanged loose pieces and hold them with both faces flush, the halves lined up by their outlines alone, and does the pieces' 0.8 mm step print clean?"
 kind: new
 maturity: experiment
@@ -189,4 +189,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-08 | changed (iteration 5): the short id cut into each hex piece (5H) and each outer piece (5R), now that bikar cuts one into each piece of a ring (bikar #331); the middle piece reads SP2/5 M; the yes in pink given for iteration 4 is reset | this page |
 | 2026-10-15 | sliced — local slice for the glacier plate (Smooth PEI), fits one bed, 112 minutes, 31.8 g, no slicer warnings; the recipe is iteration 5, unchanged | this page |
 | 2026-10-15 | sent — by `bambu print send`; spends the approval of 2026-10-08, iteration 5 @ dd8df3a20b in #F5547C | this page |
+| 2026-10-15 | printed — all 22 layers, found finished at 23:49 UTC after the watch lost the printer at 22:03; judged by hand on 2026-10-22: the bands clean or a slight droop, the faces flush, the pieces loose and rattling with a margin round the stars and kites, the halves come apart with a space between them, the 2 not readable; every piece adjust | [the record](../../prints/2026-10-15-split-02/index.md) |
 | 2026-10-22 | reviewed — row 5 of After the print added after the print, on Omar's word: "on split 02, i wasnt asked if the peices wiggle"; the recipe is unchanged | this page |
