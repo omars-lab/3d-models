@@ -46,3 +46,7 @@ the full advance is usually just as cheap.
 
 **How to apply (the full path):** `--refresh`, then `--repair`, then hand-fix whatever is
 still reported. Related: [[use-case-map-mechanics]], [[contract-and-schema-mirror]].
+
+## From the memory index (moved 2026-10-09)
+
+advancing the pins reports moved anchors (19, then 12); `validate.py --repair` (#418) moves the one-line single-match ones, hand-fix the rest; when only the 3d-models pin must move, `--refresh` then sed-restore the three sibling pins; schema-mirror hook needs a `youtube:` pin, and a youtube advance can turn it red until bikar re-vendors the schema (bikar #289 → #448)

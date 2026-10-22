@@ -51,3 +51,7 @@ guessed.
 glacier) in every bed verdict note, `--non-bambu` for the glacier and `--bambu-plate` for gold;
 follow send-plate step 4. The switches are printer-wide: they stay off until a gold-plate for-bed.
 Related: [[bambu-x2d-bringup]], [[bambu-studio-conf-holds-access-code]].
+
+## From the memory index (moved 2026-10-09)
+
+2026-10-07: smooth light-blue non-Bambu plate, reads P0101 like the Textured PEI; print on it sliced `hot_plate` with a bed verdict naming it (#607) and `--non-bambu`; `bambu options for-bed <plate> --yes` sets Foreign Object + Type Detection to fit, standing go (D-108, #609)

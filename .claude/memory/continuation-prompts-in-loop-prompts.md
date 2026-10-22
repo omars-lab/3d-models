@@ -45,3 +45,7 @@ tags simply moved with the text. The video loop keeps its lists in the youtube r
 **How to apply:** when the state changes, update the matching file rather than writing a new
 one. A new loop gets its own file only when it has a different goal. Related:
 [[omar-working-preferences]], [[branch-state-across-repos]].
+
+## From the memory index (moved 2026-10-09)
+
+committed, loop-shaped, goal first with a "met when", links the plans, ROI order; one loop per job, indexed in its README; each loop has its own `docs/tasks/<loop>/{backlog,done}.md` (fed as it runs, shipped items move to done), `docs/tasks/parked/backlog.md` for no-loop work; update the file, do not add a new one

@@ -10,3 +10,7 @@ Omar builds 3D-printable Islamic geometric orbs (star-lattice spheres, STL) plus
 **Where things live:** open work is the task system mirrored by `docs/working-model/plan.md`; the dated ship log (PR + sha per merge, 2026-07-23 → 2026-09-02) is archived verbatim in `docs/research/shipped-record.md`; new ships go to plan §3, never to memory. Durable text cites stable ids (D-number, CAL-*, PR + sha), never task numbers.
 
 **Topic memories:** mechanics — [[bikar-build-and-test-traps]], [[bikar-dev-server-and-browser-checks]], [[git-and-gh-mechanics]], [[use-case-map-mechanics]], [[docs-gate-quirks]], [[deploy-verification]], [[calibration-baseline-trailer]], [[qiyas-runtime-and-gates]]; engine facts — [[orb-kernel-facts]], [[woven-orb-clearance]], [[maclado-family-facts]], [[breakdown-page-instrument]], [[orb-lab-conventions]], [[composition-and-wall-facts]], [[lego-lab-and-ldraw-facts]], [[text-emit-facts]]; system — [[contract-and-schema-mirror]], [[bikar-secrets-and-supabase]], [[studio-folder-store]], [[d3-integration-decisions]], [[rosette-explorer-findings]], [[branch-state-across-repos]], [[owner-gated-and-on-hold]], [[omar-working-preferences]].
+
+## From the memory index (moved 2026-10-09)
+
+hub for the cross-repo orb build (bikar DSL 3D + qiyas + gallery): repo roles, where open work and the archived ship log live (`docs/research/shipped-record.md`), and the index of topic memories below

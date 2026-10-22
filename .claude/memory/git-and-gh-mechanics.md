@@ -25,3 +25,7 @@ metadata:
 **Why:** each produced a wrong "done" or a lost change once.
 
 **How to apply:** count files in the commit, verify merges remotely, never stack ([[stacked-pr-stranding]]), never `--auto` ([[gh-auto-merge-footgun]]), always PR ([[pr-flow-for-all-repos]]), read main's CI first ([[check-main-ci-not-just-the-pr]]).
+
+## From the memory index (moved 2026-10-09)
+
+bad pathspec aborts the whole add, force-push denied, local `--delete-branch` fails while the remote merge succeeded, branch fresh off origin/main; read `origin/master:` never local `master:` (the pm worktree's ref lags — false bets.md drift 2026-09-22); a squash-merged branch is dead by content diff, not `git cherry`; chained `branch -D && push --delete` is denied, run them separately; zsh word-splits `$files` in dead-branch diff loops (false EMPTY) — use `bash -c`, diff vs the PR's merge commit; bikar pre-push CI on a deletion fixed (skip on deletion-only pushes); hand-merge a stale branch without loss: sync targets rewrite managed-block conflicts, prove every `+` line survives, safe-delete after a real merge commit

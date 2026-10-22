@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 9aae5724-5284-48f1-85cb-3c0496a1c2e1
-  modified: 2026-10-04T18:19:02.896Z
+  modified: 2026-10-09T21:23:39.724Z
 ---
 
 **The X2D is physically on the LAN and reachable** (verified 2026-09-16 via `tools/bambu setup discover`, a passive receive-only SSDP listen on UDP 2021 — print-safe). Discovered identity:
@@ -42,3 +42,7 @@ Two things about representing *this* machine surfaced during Phase A prep and ar
   - **Second gotcha: `npm --prefix tools/bambu run bambu -- slice …` runs with cwd=`tools/bambu`**, so a relative STL path resolves against the wrong root (`no such file`). Pass the STL as an absolute path (or run via `bin/bambu` from the repo root).
 - **AMS / filament schema CONFIRMED on the live X2D (2026-09-17, `bambu filament`, task #32, PR #192).** The read-only `pushing.pushall` frame exposes filament exactly where the H2-family docs said, resolving the research file's `[X2D-UNCONFIRMED — H2-proxy]` hedge (Topic 2): `print.ams.ams[]` (wrapper object, `ams_exist_bits`), each unit with `tray[]`; a **loaded** tray carries `tray_type`/`tray_sub_brands`/`tray_color` (RRGGBBAA)/`tray_info_idx` (e.g. `GFA00`)/`remain`, an **empty** tray reports only `{id,state}`. AMS 0 slot 0 read back real data (PLA Basic · #F5547C · GFA00 · 100%). **Divergence from the H2 docs:** the external spool is `print.vir_slot` **as an ARRAY** (id `254` sentinel + a loaded virtual slot id `255`), NOT the `print.vt_tray` object (absent on this machine) — so any parser must treat `vir_slot` as an array and must NOT treat an array as a record (`typeof [] === "object"` bit the first cut, dropping the loaded external slot; `isRecord()` in `filament.ts` now excludes arrays). This is the discovery seam #35's AskUserQuestion filament-pick reads.
 - **The CLI backend is now grounded (D-054).** The griches-MCP-drives / BambuStudio-CLI-slices split was chosen inside #177 without a checked-in survey; A10/A11 fixed that — `docs/research/bambu-control-transport-survey.md` (16 options + AppleScript floor, an option rubric) and `docs/design/printing/bambu-cli-design.md` (mermaid router, rubric verbatim, two-layer-split decision, X2D dual-nozzle validation gate). The shipped `router.ts` already matches the rubric-optimal shape; the design validates it rather than proposing a new one. PR #183. Landscape fact worth keeping: **no surveyed tool names the X2D** — best proxies name the H2 family (X2D's sibling, shares firmware `01.02.00.00`): griches (H2D-tested), DMontgomery40 (H2/H2S/H2D/H2C). So X2D dual-nozzle transport support is *unconfirmed everywhere* and is isolated to a bring-up validation gate, not assumed.
+
+## From the memory index (moved 2026-10-09)
+
+every connection checks a pinned certificate since 2026-10-04 (#535): `bambu setup printer-pin` once per machine or nothing connects; X2D live on the LAN; **#8 CLOSED 2026-09-16** — first-party MQTT (D-055, amends D-054, PR #188) proved read-only transport end-to-end (`status show` → live temps/state/progress off the device). Dispatch (#9) still CAL-gated; the setup SKILL's LAN+Dev-Mode toggle steps landed via #224. Plate 1 slice prep (A4/A5, preset trio + MC-4) done on master (#210/#214) + PR #185

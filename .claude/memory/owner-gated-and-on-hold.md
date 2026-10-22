@@ -24,3 +24,7 @@ metadata:
 **Why:** these need credentials or ownership decisions the session does not hold; attempting them produces a confident failure.
 
 **How to apply:** when a task lands on one of these, finish everything else, then hand the exact command back. Related: [[deploy-verification]], [[contract-and-schema-mirror]], [[bikar-studio-access]], [[calibration-baseline-trailer]].
+
+## From the memory index (moved 2026-10-09)
+
+printing paused (no CAL bet settled), `schema-v*` tag/publish, contract acceptance, Cloudflare/GHCR settings are Omar's; `print send --yes` runs only on his explicit chat go for that send (else hand him `!`); the 553 was no USB drive (X2D: USB, not microSD); the second send started then paused 0500-8051 (our `bed_type: "auto"` vs Studio's real plate type); resume/stop is his; `options set` is his per change except the two plate switches, standing via `options for-bed` (D-108)

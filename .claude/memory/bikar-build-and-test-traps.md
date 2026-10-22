@@ -23,3 +23,7 @@ metadata:
 **Why:** each of these cost a session a wrong diagnosis; none is visible from the error text.
 
 **How to apply:** before debugging a type error in a sibling package, rebuild; before trusting a test run, check cwd and node_modules provenance. Related: [[bikar-dev-server-and-browser-checks]], [[git-and-gh-mechanics]].
+
+## From the memory index (moved 2026-10-09)
+
+stale core dist, worktree node_modules, vitest/Playwright cwd, eslint complexity 10, `--silent` loglevel leak, CLI `-o`; the whole-corpus tests are split per pattern since bikar #302 (a timeout names the slow pattern), and never run two repos' push gates at once
