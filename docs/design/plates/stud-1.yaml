@@ -9,8 +9,8 @@
 # Everything is split-01's but the slice, the stud spacing and the carved id:
 #
 #   pair   stud_spacing   studs on the slice   id
-#   25     25 mm           3                   4
-#   15     15 mm           7                   5
+#   25     25 mm           2                   4
+#   15     15 mm           6                   5
 #   10     10 mm          13                   6
 #
 # 25 mm is the coaster file's default and split-01's. The id goes on each lower half's bottom face,
@@ -38,7 +38,7 @@ profile:
 id_code: ST1
 no_id_reasons:
   - &lower "Its bottom, the bed face, already carries the coaster's own id mark (4, 5 or 6), cut by the coaster file; a piece letter beside it would say nothing the number does not (D-114)."
-  - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). The three uppers are told apart by their sockets, which match their lower's studs: 3 at 25 mm, 7 at 15 mm, 13 at 10 mm."
+  - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). The three uppers are told apart by their sockets, which match their lower's studs: 2 at 25 mm, 6 at 15 mm, 13 at 10 mm."
 
 items:
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-lip-coaster.bkr
