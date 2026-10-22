@@ -580,9 +580,9 @@ ordered design on our side before printing"). What changes with call 8 is only t
   line's variant, config id and colors (§12.2). Under call 8 option A there is no signature, so
   the hub instead rebuilds the design from the line's link, checks the link's hash, counts its
   colors and compares the count with the variant's band.
-- **A color theme line** must name a theme in the catalog, and its colors must equal that
-  theme's colors exactly. These lines come from Shopify's own product form, which cannot sign; the
-  form writes the same `_v` and `_colors` as hidden fields.
+- **A color theme line** must name a theme in the catalog in `_theme`, and its colors must equal
+  that theme's colors exactly. These lines come from Shopify's own product form, which cannot
+  sign; the form writes `_v`, `_theme` and `_colors` as hidden fields.
 - **Both** must have a colors count inside the variant's band, and every color must exist in the
   catalog.
 
@@ -816,6 +816,12 @@ underscored fields.
 | `_link` | no | the share link | yes, when there is no `_config` |
 | `_sig` | no | `ed25519:…` | yes: §11.3 |
 | `_colors` | no | `Frame=11100;Middle=11601;…` | yes: the colors, by code |
+| `_theme` | no | `ice-to-navy`, or left off a custom line | yes: the theme a theme line claims (§11.3) |
+
+The visible "Theme" is display only, so a theme line also names its theme's id in `_theme`, and
+§11.3's check compares `_colors` with that theme's colors. Call 8 is decided (the Lab in a frame,
+the hub checks every line), and coffee-house-storefront's order fixtures S1 and S4 to S7 already
+carry `_theme` next to `_colors`.
 
 The hub reads only underscored attributes. Names shown to the buyer are for the buyer, and are
 never parsed. A leading underscore hides an attribute at checkout; Shopify's admin still shows it.
