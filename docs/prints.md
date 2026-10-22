@@ -31,7 +31,10 @@ One line per print, written by `python3 .claude/skills/review-print/scripts/prin
 - A piece printed in its pocket comes out loose with two layers of air (0.4 mm); with one layer (0.2 mm) both pairs fused (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-09-pkt-1](prints/2026-10-09-pkt-1/index.md))
 - All three dovetail gaps, 0.10, 0.15 and 0.20 mm a side, worked (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers); which felt best is not said yet. On the glacier plate the printer stopped twice before the first layer, and ran on the gold plate. ([2026-10-07-sld-1](prints/2026-10-07-sld-1/index.md))
 - A piece cut with sharp inward corners rattles where the strap rounds its hole, and the thinnest, sharpest pieces (the kites) bind first (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-04-sheets-04g](prints/2026-10-04-sheets-04g/index.md))
+- It printed to the end, all 20 layers, as sheets-04 did. Nothing was judged, so it says nothing yet about whether hole size moves from print to print. ([2026-10-04-sheets-04c](prints/2026-10-04-sheets-04c/index.md))
 - One color per plate: the same phones took about 13 minutes in one color against phones-01's 62 in two, and the plate became the first production plate. ([2026-10-04-phones-02](prints/2026-10-04-phones-02/index.md))
+- A two-color plate on the X2D took about 62 minutes against the slicer's 22: one color swap on each of its 22 layers, about 1.6 minutes a swap, which the slicer does not count. Omar dropped plates that switch colors after it. ([2026-10-04-phones-01](prints/2026-10-04-phones-01/index.md))
+- The second send printed all 20 layers. The fit questions were never asked one by one; Omar's one recorded word on it is that the bottom row fit better in the minimal coaster. ([2026-10-03-sheets-04b](prints/2026-10-03-sheets-04b/index.md))
 - A coaster with no floor holds a loose piece only by friction, so every piece smaller than its hole fell through, at every gap from 0.05 to 0.20 mm (0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers). ([2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md))
 - A slice must carry the whole X2D preset: Studio's command line ignores `inherits`, and its built-in settings fit the tiny holes and the tight pegs. ([2026-09-26-minis-04](prints/2026-09-26-minis-04/index.md))
 - At 40 mm a mini is too small to show its pattern, and the dovetail's fixed 5.7 mm frame takes over a quarter of the piece. ([2026-09-26-minis-03](prints/2026-09-26-minis-03/index.md))
@@ -219,6 +222,17 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![render, not a photo: coaster](design/plates/sheets-04g-media/coaster.png)
 
+### [2026-10-04-sheets-04c](prints/2026-10-04-sheets-04c/index.md)
+
+- **Plate:** [sheets-04c](design/plates/sheets-04c.md) — the gBV minimal coaster alone, 90 mm, a second one of the coaster sheets-04 printed
+- **Lesson:** It printed to the end, all 20 layers, as sheets-04 did. Nothing was judged, so it says nothing yet about whether hole size moves from print to print.
+- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded
+- **Pieces:** 1 (1 not-judged)
+- **What it changed:** D-109 prints sheets-04c again with carved ids, as a new iteration, and judges it then. sheets-04g has since printed the same coaster at 112.5 mm.
+- **Photos of the print:** none. Rendered pictures from the plate page: [sheet](design/plates/sheets-04c-media/sheet.png), [bed](design/plates/sheets-04c-media/bed.png)
+
+![render, not a photo: sheet](design/plates/sheets-04c-media/sheet.png)
+
 ### [2026-10-04-phones-02](prints/2026-10-04-phones-02/index.md)
 
 - **Plate:** [phones-02](design/plates/phones-02.md) — phones-01 in pink only, with the small phones 1.25 times wider and longer and twice as thick
@@ -230,6 +244,32 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 - **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/phones-02-media/bed.png)
 
 ![render, not a photo: bed](design/plates/phones-02-media/bed.png)
+
+### [2026-10-04-phones-01](prints/2026-10-04-phones-01/index.md)
+
+- **Plate:** [phones-01](design/plates/phones-01.md) — four mini iPhones, two at the sheets-04d size and two at a quarter of it, pink and black
+- **Lesson:** A two-color plate on the X2D took about 62 minutes against the slicer's 22: one color swap on each of its 22 layers, about 1.6 minutes a swap, which the slicer does not count. Omar dropped plates that switch colors after it.
+- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded
+- **Pieces:** 4 (2 adjust, 2 not-judged)
+- **What happened:** It printed to the end, all 22 layers, about three times the sliced time.
+- **Why:** The color swaps: a nozzle change, a reheat and a prime tower pass on every layer.
+- **What it changed:** Phones-02 printed the same phones in pink only, with the quarter phones 1.25 times wider and longer and twice as thick, at Omar's ask.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/phones-01-media/bed.png)
+
+![render, not a photo: bed](design/plates/phones-01-media/bed.png)
+
+### [2026-10-03-sheets-04b](prints/2026-10-03-sheets-04b/index.md)
+
+- **Plate:** [sheets-04b](design/plates/sheets-04b.md) — the gBV fit again, pieces only: hexagons and stars 4 mm tall, the gap from 0.05 mm down through zero into a press fit
+- **Lesson:** The second send printed all 20 layers. The fit questions were never asked one by one; Omar's one recorded word on it is that the bottom row fit better in the minimal coaster.
+- **Nozzle:** 0.4 mm, which nozzle not recorded, type not recorded
+- **Pieces:** 6 (6 not-judged)
+- **What happened:** The first send stopped at layer 0: the slice was made for a Cool Plate and a Textured PEI Plate was on the bed (0500-8051), and the print was cancelled (0300-400C). Re-sliced for Textured PEI, the second send finished.
+- **Why:** The first send's slice named the wrong plate type; written up in docs/issues/sliced-for-wrong-plate.md.
+- **What it changed:** D-109 prints sheets-04b again with carved ids, as a new iteration, and judges it then. sheets-04g already took no gap from Omar's word.
+- **Photos of the print:** none. Rendered pictures from the plate page: [side-cut](design/plates/sheets-04b-media/side-cut.png), [bed-map](design/plates/sheets-04b-media/bed-map.png)
+
+![render, not a photo: side-cut](design/plates/sheets-04b-media/side-cut.png)
 
 ### [2026-10-02-sheets-04](prints/2026-10-02-sheets-04/index.md)
 
@@ -268,7 +308,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-17 records; 0 measured with a tool, so no bet has moved yet.
+20 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

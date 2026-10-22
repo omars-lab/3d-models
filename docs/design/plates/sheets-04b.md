@@ -3,9 +3,10 @@ plate: sheets-04b
 print_log: '[[print-logs/sheets-04b|print log]]'
 recipe: sheets-04b.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs:
+  - 2026-10-03-sheets-04b
 answers: "At which gap does a full-height gBV piece stay in the floorless minimal coaster: does height alone hold it at 0.05, or does it need zero or a press fit, and do the small stars take a press?"
 kind: new
 maturity: experiment
@@ -151,4 +152,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-03 | reviewed — side cut added at Omar's ask, the piece heights against the coaster's, measured off the meshes | this page |
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c. Cancelled at layer 0: the slice was made for a Cool Plate and a Textured PEI Plate was on the bed (0500-8051); slice it again for that plate, and it needs a new yes | [the issue](../../issues/sliced-for-wrong-plate.md) |
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ a6bbca029c | this page |
-
+| 2026-10-03 | printed — the second send, all 20 layers, finished at 23:05 UTC; recorded 2026-10-22: every set not judged, since the questions were never asked; Omar's one line, that the bottom row fit better, is a note on HEX 00 | [the record](../../prints/2026-10-03-sheets-04b/index.md) |

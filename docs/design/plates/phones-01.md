@@ -3,9 +3,10 @@ plate: phones-01
 print_log: '[[print-logs/phones-01|print log]]'
 recipe: phones-01.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs:
+  - 2026-10-04-phones-01
 answers: "Does a two-color plate sliced without the Studio window print each phone in its own color, and does a quarter-size phone still read as a phone?"
 kind: new
 maturity: experiment
@@ -113,3 +114,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-04 | proposed — at Omar's ask: two phones at the sheets-04d size and two at a quarter, pink and black | this page |
 | 2026-10-04 | sliced — local two-color slice fits one bed, 22 minutes, 5 g, no slicer warnings | this page |
 | 2026-10-04 | sent — by `bambu print send`; spends the approval of 2026-10-04, iteration 1 @ cd19dfe7e6 | this page |
+| 2026-10-04 | printed — all 22 layers, about 62 minutes against the slicer's 22, the time going to the color swaps; recorded 2026-10-22: the quarter phones adjust from Omar's ask to make them bigger, the full-size phones not judged | [the record](../../prints/2026-10-04-phones-01/index.md) |
