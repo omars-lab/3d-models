@@ -3,9 +3,9 @@ plate: bedface-5
 print_log: '[[print-logs/bedface-5|print log]]'
 recipe: bedface-5.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-14-bedface-5]
 answers: "On a piece of the gBV coaster, does pushing the fill 75% or 100% into the wall close the bottom slits that 55% left, and does 10% more first-layer plastic on top of 55% or 75% close more than the overlap alone?"
 kind: new
 maturity: experiment
@@ -145,3 +145,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-14 | proposed: option 1 of the bottom-slits decision page, on Omar's "i was expecitng a new set of experimetns to run" | [the decision page](../../working-model/feedback-requests/2026-10-13-bottom-slits-next.md) |
 | 2026-10-14 | sent — by `bambu print send`; spends the approval of 2026-10-14, iteration 1 @ b95fa92e4a in #00AE42 | this page |
+| 2026-10-14 | printed — on the X2D, glacier plate, in green, about 198 minutes against the slicer's 177, all 22 layers; judged by hand on 2026-10-22: stock as many slits as bedface-4's, 55% (`8`, `9`) more than bedface-4's `2` and `T` but cleaner-looking than 75% and 100%, which left fewer slits and looked filled in, flow the same as without; Omar's pick to sell is `8` | [the record](../../prints/2026-10-14-bedface-5/index.md) |

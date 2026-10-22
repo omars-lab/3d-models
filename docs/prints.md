@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- On pieces of the gBV coaster on the smooth glacier plate, Omar picked the 55% overlap piece 8 as the bottom he would sell. Pushing the fill 75% or 100% into the wall left fewer slits than 55%, but those bottoms "look like we fileld in blanks", and 8 and 9 look cleaner: fewer slits is not the same as a better-looking bottom. 10% more first-layer plastic on top of 55% or 75% changed nothing he could see. Stock repeated bedface-4 ("As many"), so the two prints read against each other; but this plate's 55% pair slit more than bedface-4's 55% pair ("2, T were better, less slits"), so 55% did not fully repeat (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-14-bedface-5](prints/2026-10-14-bedface-5/index.md))
 - On pieces of the gBV coaster on the smooth glacier plate, pushing the fill 55% into the wall left fewer slits along the strap edges than 30%, with no ridge, and 2 did better than T. 55% and the flow pieces were not set side by side; of the twelve photos 2 looks the cleanest to me (Claude). 10% more plastic on the first layer helped a little, against what the research expected (X fewer than Y, Y fewer than J), but every flow piece still slit. 30% overlap split (P fewer, L more). The monotonicline bottom only moved the slits. The stock pieces slit a little less than bedface-2's whole stock coaster, which I (Claude) read as nearer "about as many" than "clearly fewer": the pieces stand in for the coaster (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI plate). ([2026-10-13-bedface-4](prints/2026-10-13-bedface-4/index.md))
 - Starting the first layer on the gold plate, 0.02 mm closer to the bed than on the glacier plate, left fewer slits on both coasters: Omar found G better than bedface-2's S, with one corner still slit, and K better than R, though still with a good amount. But the gold plate's grain is not fine on a coaster, so the gold plate is out. What carries forward is the squish, not the plate (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as the Textured PEI plate, which lowers the nozzle 0.02 mm for the first layer). ([2026-10-12-bedface-3](prints/2026-10-12-bedface-3/index.md))
 - Rings did not clean the coaster's bottom at the stock 0.5 mm first line either: Omar found the ring coaster and the stock coaster about the same, "both have slits, but in different places". On stock the slits run along the strap edges; with rings they move to the strap middles and to where straps meet, where the rings from the two sides come together. So bedface-1's dashes were not the narrow line's doing, and rings are dropped (0.4 mm nozzle, 0.5 mm first line, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, glacier plate sliced as Smooth PEI). ([2026-10-12-bedface-2](prints/2026-10-12-bedface-2/index.md))
@@ -47,6 +48,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-14-bedface-5](prints/2026-10-14-bedface-5/index.md)
+
+- **Plate:** [bedface-5](design/plates/bedface-5.md) — twelve 50 mm pieces of the gBV coaster on the glacier plate: stock beside the fill pushed 55%, 75% and 100% into the wall, and 55% and 75% with 10% more first-layer plastic, two pieces each
+- **Lesson:** On pieces of the gBV coaster on the smooth glacier plate, Omar picked the 55% overlap piece 8 as the bottom he would sell. Pushing the fill 75% or 100% into the wall left fewer slits than 55%, but those bottoms "look like we fileld in blanks", and 8 and 9 look cleaner: fewer slits is not the same as a better-looking bottom. 10% more first-layer plastic on top of 55% or 75% changed nothing he could see. Stock repeated bedface-4 ("As many"), so the two prints read against each other; but this plate's 55% pair slit more than bedface-4's 55% pair ("2, T were better, less slits"), so 55% did not fully repeat (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate).
+- **Nozzle:** 0.4 mm, left nozzle, type hardened steel (the slice's setting)
+- **Pieces:** 12 (2 keep, 2 adjust, 8 drop)
+- **What happened:** Stock 3 and 5: as many slits as bedface-4's stock. 55% (8, 9): more than bedface-4's 2 and T, but the cleanest-looking bottoms here. 75% and 100% (A, C, E, F): fewer slits than 55%, filled-in look. 55% and 75% with flow: the same as without.
+- **Why:** Lines that stop short of the strap wall on the first layer. Pushing the fill further into the wall covers the gaps but lays plastic over them, which Omar saw as filled-in. My (Claude's) reading of his words, not his.
+- **What it changed:** Verdicts by one rule: keep the setting Omar picked to sell (55%: 8, 9); drop the settings that lost to it, whatever their slit count (75%, 100%), and the flow pieces, which were the same as without flow (G, K, R, S); adjust the stock pair, whose setup is what changes. The page set the favorite to mean its setting goes on the next whole coaster. Whether any piece flared at the bed was asked and not answered. What prints next is Omar's call.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/bedface-5-media/bed.png), [first-layer](design/plates/bedface-5-media/first-layer.png)
+
+![render, not a photo: bed](design/plates/bedface-5-media/bed.png)
 
 ### [2026-10-13-bedface-4](prints/2026-10-13-bedface-4/index.md)
 
@@ -240,7 +254,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-15 records; 0 measured with a tool, so no bet has moved yet.
+16 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
