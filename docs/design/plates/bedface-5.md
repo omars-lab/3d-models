@@ -79,6 +79,7 @@ Omar's answers to the rows of After the print, word for word, one row each, olde
 | Row | Answer | His words | Date |
 |---|---|---|---|
 | 1 | As many | — | 2026-10-22 |
+| 2 | in my words | 2, T were better, less slits | 2026-10-22 |
 
 ## Pictures
 
