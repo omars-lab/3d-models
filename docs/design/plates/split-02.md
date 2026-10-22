@@ -108,6 +108,8 @@ Omar's answers to the rows of After the print, word for word, one row each, olde
 | 2 | Flush | — | 2026-10-22 |
 | 3 | Come apart | — | 2026-10-22 |
 | 4 | Not | — | 2026-10-22 |
+| 5 | Loose | they do; and when i shake it makes a shound ...; also there is a margin around stars, kite, etc | 2026-10-22 |
+| 3 | Come apart | also the two hafs have a space inbetween them | 2026-10-22 |
 
 ## Pictures
 
