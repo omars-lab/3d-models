@@ -72,6 +72,17 @@ What gets asked when the plate comes off the bed, one row at a time. Name each p
 | `G`, `K` (55% and flow) beside `8`, `9`; `R`, `S` (75% and flow) beside `A`, `C` | **Do:** Turn each pair over beside the pair without flow. **Look for:** Fewer slits with the extra plastic, the same, or more? | A little fewer: each helped a little alone on bedface-4. | Fewer: both settings go on the next whole coaster. The same: the overlap alone goes on it, and flow is dropped. |
 | All twelve | **Do:** Lay all twelve bottom up. Then run a finger along each piece's outer edge where it touched the bed. **Look for:** Which bottom would you be happy to sell? Pick your favorite. Does any piece have a flared edge, a thin lip of extra plastic at the bed (elephant's foot)? | The cleanest overlap pieces look best. 100% and the flow pieces are the likeliest to flare, since both lay down more plastic. | Your favorite sells: its setting goes on the next whole coaster, even if another piece had fewer slits. A flare on a piece: that setting needs a fix before it goes on a coaster with pieces that fit together. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | As many | — | 2026-10-22 |
+| 2 | in my words | 2, T were better, less slits | 2026-10-22 |
+| 3 | in my words | A C E F do have less slits tahn 8, 9 but 8, 9 look cleaner ... the others look like we fileld in blanks, etc | 2026-10-22 |
+| 4 | The same | — | 2026-10-22 |
+
 ## Pictures
 
 ![The first layer the slicer plans for 5 (stock), 9 (55%), A (75%) and E (100%), seen from below: black notches along the strap walls on stock, fewer at 55% and 75%, almost none at 100%](bedface-5-media/first-layer.png)
