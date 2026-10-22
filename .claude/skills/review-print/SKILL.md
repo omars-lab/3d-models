@@ -83,7 +83,8 @@ supposed to compare, what I am to compare". The page shows one row at a time: ea
 picture with its id, "pick up these" beside "against these" (an earlier print's photos), the Do
 and Look for, one button per answer the row's last cell names, "in my words", "not judged yet",
 and a note box. Each answer lands word for word in the plate page's `## Judged` table
-(`after_print.py answer`), one line per answer, newest last. So:
+(`after_print.py answer`), one line per answer, newest last. Getting a plate onto that page is
+the [`judge-page`](../judge-page/SKILL.md) skill. So:
 
 - Before telling him a plate is ready to judge, make its piece pictures
   (`after_print.py pieces <plate>`) and ship them with the page, so the hub shows every piece.
