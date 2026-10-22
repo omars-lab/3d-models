@@ -97,6 +97,17 @@ pieces apart off the bed.
 | The closed coaster: the lower half (`2`) and the upper half, no glue | **Do:** Close it as in the row above. Run a finger round the rim, then pick the coaster up by its rim, tip it on its side, and turn it over. **Look for:** Do the two halves' rims line up, with no step at the edge? Lifted, tipped and turned over, does it stay closed, or does a half slide or drop away? | They line up, since the pieces sit in both halves. Staying together is doubtful: only friction holds them. | Stay together: a flange coaster needs no studs. Come apart: the flange needs glue (split design call 3), which counts against it in D-100. |
 | The lower half's bottom face (`2`, 2 mm tall) | **Do:** Turn the closed coaster over so it rests on its top, and look at the bottom face. **Look for:** Can you find the `2` and read it without tilting the coaster? Is it the right way round, not mirrored, and are its strokes open, not filled in? | Just readable: it is smaller than split-01's 2.5 mm, squeezed under the strip the undercuts leave. | Readable: 2 mm is enough on a flange coaster. Not: the flange coaster's id goes somewhere else, decided before its next iteration. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | Clean or a slight droop | — | 2026-10-22 |
+| 2 | Flush | — | 2026-10-22 |
+| 3 | Come apart | — | 2026-10-22 |
+| 4 | Not | — | 2026-10-22 |
+
 ## Pictures
 
 Opened up: the lower half, the pieces lifted over their holes with the band showing as a step on
