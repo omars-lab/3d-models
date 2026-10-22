@@ -21,3 +21,7 @@ Use `find`, not `rm -f src/Coasters/*-mini.stl`: zsh (the default shell here) st
 
 A fresh worktree off origin/master has no minis and needs nothing (2026-09-17, #255 and
 the border-design PR). Related: [[3d-models-deploy]], [[use-cases-refresh-surfaces-anchor-drift]].
+
+## From the memory index (moved 2026-10-09)
+
+hook 35 reports the grandfathered `*-mini.stl` baseline entries as resolving once `make coasters` has run locally; `find src/Coasters -name '*-mini.stl' -delete` first (zsh fails on the bare glob when none exist), never shrink the baseline

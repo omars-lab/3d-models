@@ -30,3 +30,7 @@ Grounded conclusion: **no viable retroactive print-history source over the LAN.*
 cloud-mode switch. Counting GUI prints stays on the shipped `bambu print capture` verb (run after a
 print, MQTT → draft record; see [[print-model-skill]] and PR #289). The counting gap #71 aimed at
 is therefore only partly closed (a GUI print is counted only if capture is run afterward) — accepted.
+
+## From the memory index (moved 2026-10-09)
+
+no retroactive print-history source over the LAN (cloud `my/tasks` is empty in LAN mode, FTPS SD-card is partial/estimate-only, MQTT is live-only); decided 2026-09-21 forward-only via `bambu print capture` — don't re-explore

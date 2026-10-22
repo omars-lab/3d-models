@@ -49,3 +49,7 @@ Phase 1 and the qiyas data-model-API D-API-2 (see [[islamic-orb-project]],
 `docs/design/orb/d3-integration-design.md` §5, `qiyas/docs/design/data-model-http-api.md`): a shared
 d3 layer / explorer and a qiyas data API can be served from this org-gated surface — behind
 the same GitHub-org gate, internet-reachable but not open to the world.
+
+## From the memory index (moved 2026-10-09)
+
+org-gated but internet-reachable; both bikar.naqshcoffee.com AND (as of 2026-09-02, verified live) bikar-studio.pages.dev now 302 to Access — no anonymous host; #63 lockdown done, only the optional CI service token remains

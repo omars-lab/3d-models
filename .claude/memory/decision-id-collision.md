@@ -41,3 +41,7 @@ recheck it at merge time, not when the PR opened.
 
 Pair with [[stacked-pr-stranding]] and [[git-and-gh-mechanics]]; the force-push /
 `gh pr merge` classifier blocks are in [[pr-flow-for-all-repos]].
+
+## From the memory index (moved 2026-10-09)
+
+two concurrent sessions grabbed the same next D-0xx (both D-051, 2026-09-02); first-merged owns the id, the open PR renumbers corpus-wide (mine → D-052); take ids from `tools/next_id.py next D`, hook 46 blocks a clash

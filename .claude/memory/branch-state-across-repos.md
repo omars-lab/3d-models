@@ -60,3 +60,7 @@ Since 2026-09-02 a pre-commit hook refuses direct commits on main/master in both
 **Why:** a stale local `main` can be ahead of origin with pre-rebase duplicates; "origin authoritative" was once asserted before being verified.
 
 **How to apply:** sentinel-verify before any reset or delete; a parity test that diffs an ahead/behind count another session can move is flaky by construction — mask it. Flow rules: [[pr-flow-for-all-repos]], [[git-and-gh-mechanics]].
+
+## From the memory index (moved 2026-10-09)
+
+branch inventory, last re-verified 2026-10-08 (eighth pass: 9 subagent worktrees removed in 3d-models, 3 in hifth; 6 3d-models worktrees left vs a budget of 5, pm and master-ro duplicate 5bcc21a and dropping one is Omar's call; hifth walk-1 kept for its differing private assets; the only work not merged anywhere is still sacred-patterns `wip/react-d3-2024`). Read the state with `python3 .claude/skills/consolidate-branches/scripts/branch_inventory.py inventory --commands`. Deleted tips are snapshotted under `refs/snapshots/<date>/`. 3d-models = master + gh-pages, with the pm/master-ro/hub-ro worktrees left alone. bikar is a bare repo whose work trees are all detached. youtube's remote is `studio:git/youtube.git`. review-md's merged branches are gone. Left for Omar: hifth's 116 merged remote branches (every hifth push runs the full ~5 min checks; a deletion skip was refused as a CI bypass), review-md's two branches to look at, and the video-loop PRs #405–#410. Also covers the superseded branch that must never merge, and the guards and protection

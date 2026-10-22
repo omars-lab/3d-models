@@ -15,3 +15,7 @@ When a PR check is red, look at main's last run of the same workflow before read
 **Recurrence, 2026-09-17 (admin merges):** while bikar's checks were billing-blocked (every run `steps: 0`, nothing measured), #209 (interlock coaster files) and #210 (Coaster Lab, whose roster test globs every `*-coaster.bkr` on disk) were admin-merged within hours of each other. Each was green locally on its own base; together they made main red on `coaster-presets.test.ts` (`expected 2 to be 4`) and nobody saw it until the next branch ran the full suite. Fixed in #211 by rostering the twins. When CI cannot run, **the local full suite on a rebased branch is the merge gate**, and after every admin merge run it once on `origin/main` itself before the next one.
 
 **How to apply:** `gh run list -R NaqshCoffee/bikar -b main -w ci -L 3` first. If main is red for the same reason, fix that in its own PR off main (never stacked on the feature branch), merge it, rebase the feature branch so its `pull_request` run uses the fixed workflow file, then poll to green. Pair with [[gh-auto-merge-footgun]] and [[pr-flow-for-all-repos]].
+
+## From the memory index (moved 2026-10-09)
+
+bikar `ci` was red on main for four runs and three PRs merged past it; read main's last run first, fix in its own PR off main, rebase, then poll to green; under a billing block the local full suite on `origin/main` after each admin merge is the gate (#209+#210 → #211)

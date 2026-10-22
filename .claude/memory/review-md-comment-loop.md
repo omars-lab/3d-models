@@ -26,3 +26,7 @@ resolve command yet". The source at `~/Workspace/git/review-md` is 0.1.1 and doc
 and `reviews resolve`, so read that `skills/reviews/SKILL.md`, not the cache. Omar installs it with
 `/plugin marketplace add omars-lab/review-md` then `/plugin install review-md@review-md`
 (user-level installs are his to run). Related: [[render-mockups-not-ascii]].
+
+## From the memory index (moved 2026-10-09)
+
+"comments in the wiki" = review-md threads: `reviews list docs --open`, reply per thread with PR/commit, `--resolve` only when fully done; plugin not installed (stale 0.1.0 cache), read the 0.1.1 source skill; never hand-edit sidecars

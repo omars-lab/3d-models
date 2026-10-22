@@ -28,3 +28,7 @@ in coffee-house-storefront", "under git coffeehouse", then "rmeeber fhis and fin
   (CLAUDE.md, gitleaks hooks, dotenvx secrets): don't edit it from a 3d-models session unless asked.
 
 Related: [[orb-repo-roles]], [[only-touch-our-repos]].
+
+## From the memory index (moved 2026-10-09)
+
+the Shopify store is built at `/Users/omareid/Workspace/git-naqshcoffee/coffee-house-storefront` (NaqshCoffee, private, `main`; Omar 2026-10-04); its own DESIGN.md already decided Horizon theme + Lab iframe + naqshop CLI, and flags per-design selling rights

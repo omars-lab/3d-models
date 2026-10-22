@@ -40,3 +40,7 @@ confirm zero unlowered via `--coverage`, then fixture → base → coaster → g
 the 3d-models vendoring PR per [[pr-flow-for-all-repos]] (the pointer/ledger gate resolves the
 `.bkr` at bikar's git ref — never `CONSTRUCTIONS_OK=1`). Related: [[islamic-orb-project]],
 [[orb-repo-roles]], [[3d-models-use-case-hook]], [[decision-id-collision-recurred]].
+
+## From the memory index (moved 2026-10-09)
+
+P5.1 COMPLETE 2026-09-22: all five list-literal constructions + nmEj (bikar #243, CS-9) on bikar main, 3d-models vendors CS-1/2/6/7/8/9/10/11, ledger 8 migrated / 1 by design / 0 remaining; file holds the migration techniques (list-literal fix #227, rebuild before probing, refuse-don't-guess arcs, `--emit-coords` B′ producer, printer emits all of lower())

@@ -43,3 +43,7 @@ option sets, ask the dominating-variant question *before* offering the options, 
 each option's row carry its short-term-challenge and ownership consequence, not just a
 cost. The master option-presentation tenet lives in `~/.claude/CLAUDE.md` — these
 augment it. Related: [[omar-working-preferences]].
+
+## From the memory index (moved 2026-10-09)
+
+D-080 (3d-models PR #290): the arc cached_coords producer is **B′ bikar self-bootstrap** (not a GeoGebra dump nor a new engine); memory itself holds the graduated tenet — evaluate options on a dominating-variant search, short-term challenges, and long-term build-vs-reuse ownership (now rubric criterion C13)

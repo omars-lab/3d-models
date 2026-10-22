@@ -37,3 +37,7 @@ color swtichign to be saved as a memory - it results in alot more waste and slow
   picked at the send with `bambu print send --color "#RRGGBB"` (sheets-04g).
 
 Related: [[look-before-you-print]], [[approvals-one-per-send]].
+
+## From the memory index (moved 2026-10-09)
+
+Omar 2026-10-04: "alot more waste and slower prints"; phones-01 took 62 min vs 22 sliced, ~1.6 min per swap (1.0 to black, 2.2 to pink), the slicer counts none; ~1.5 g (a third of that plate) went to the prime tower; prefer one color per plate, estimate slicer + 1.6 × swaps; one-color phones-02 took 13 vs 12 sliced; Omar then dropped multi-color plates for one color picked at the send (`--color`)
