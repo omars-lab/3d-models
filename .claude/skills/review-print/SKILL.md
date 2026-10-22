@@ -75,12 +75,24 @@ be percise too". **Write each question as a short procedure, in the format
 [`asking.md`](asking.md) sets out, with its do and don't examples**: one line on what is being
 checked, the pieces by id, numbered steps of one action each, what each result looks like, then
 the question. No recap, no filler (Omar, 2026-10-09: "not clear and straighformward and in
-simple sop format ... easy to get a mistake"). Read it before each round. Build the options from the row's
-last cell, one option per answer it names, each saying what that answer changes, plus "not
-judged yet". Ask the next row only once this one is answered. Each answer goes into the record
-below as those pieces' `verdict` and `notes`, in Omar's words; a row he leaves unanswered stays
-`not-judged`. An answer that differs from "what we expect" is the lesson to carry forward in
-step 6.
+simple sop format ... easy to get a mistake"). Read it before writing the table.
+
+**Omar answers on the hub's judging page, not in chat.** He turned down a chat round on
+2026-10-22 and asked for a page "where I can see each peiece individually, and what peices im
+supposed to compare, what I am to compare". The page shows one row at a time: each piece as a
+picture with its id, "pick up these" beside "against these" (an earlier print's photos), the Do
+and Look for, one button per answer the row's last cell names, "in my words", "not judged yet",
+and a note box. Each answer lands word for word in the plate page's `## Judged` table
+(`after_print.py answer`), one line per answer, newest last. So:
+
+- Before telling him a plate is ready to judge, make its piece pictures
+  (`after_print.py pieces <plate>`) and ship them with the page, so the hub shows every piece.
+- Point him to the hub page. `after_print.py waiting` lists the plates still to judge.
+- When he has answered, read the `## Judged` table (`after_print.py questions <plate> --json`,
+  `answers`). The newest line per row counts. Each answer becomes those pieces' `verdict` and
+  `notes` in the record below, in his words; a row with no answer, or "not judged yet", stays
+  `not-judged`. An answer that differs from "what we expect" is the lesson to carry forward in
+  step 6. Never edit the `## Judged` table by hand: it is his record.
 
 1. **Start from the draft.** `slice compose` wrote one at `.bambu/records/<date>-<plate>/`
    with every piece, its `params`, and the printer settings read off the `.3mf`. Copy it to
@@ -179,4 +191,9 @@ under `readings` (the print-model skill's compare loop).
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `scripts/prints_page.py` | Writes the Lessons and Records parts of `docs/prints.md` from every record in `docs/prints/`: the run, its plate page, what happened and why, what it changed, its decisions, and its photos (or the plate page's renders, said plainly). With no flag it checks the page is current. | After writing or changing a print record, in the same PR. `make validate-prints` and hook `39-prints` run the check. | `python3 .claude/skills/review-print/scripts/prints_page.py --write` (check: no flag; tests: `--self-test`) |
+| `scripts/after_print.py questions` | Reads one plate page's After-the-print table: each row's pieces by carved id (with label, turn, piece picture and any photo, including another plate's), its Do and Look for, what we expect, the answers it names, and the `## Judged` lines so far | The hub's judging page calls it; read `answers` from it when Omar says he has judged | `python3 .claude/skills/review-print/scripts/after_print.py questions <plate> --json` |
+| `scripts/after_print.py answer` | Adds one line to the plate page's `## Judged` table (made after `## After the print` the first time): the row, the answer, his words exactly, the date. Refuses an answer the row does not name, a missing row, or "in my words" with no words | The hub page's save button calls it; by hand only to record an answer he gave in chat, in his words | `python3 .claude/skills/review-print/scripts/after_print.py answer <plate> <row> "<answer>" -n "<his words>"` |
+| `scripts/after_print.py waiting` | Lists the plates printed to the finish with no record yet, and how many rows are answered | Before telling Omar what is left to judge | `python3 .claude/skills/review-print/scripts/after_print.py waiting` |
+| `scripts/after_print.py pieces` | Cuts the slice's bed picture into one picture per piece, `<plate>-media/pieces/<id>.png`; refuses when the slice's pieces do not match the recipe's | When a plate finishes, before pointing Omar to the judging page | `python3 .claude/skills/review-print/scripts/after_print.py pieces <plate>` |
+| `scripts/after_print.py measure` | Tallies how every plate page's After-the-print rows read: answers named, pieces by carved id, Do and Look for; fails only on a page it cannot read | After changing the script, or the way pages write that table | `python3 .claude/skills/review-print/scripts/after_print.py measure` (tests: `--self-test`) |
 | `tools/print_review.py compare` (shared, in `tools/`) | Cuts a box or a wedge out of each picture, turns each wedge to point up, and lays the cuts side by side on white at one height, a label under each | Comparing one spot across a series of experiments, from their photos or slice drawings (step 4) | `python3 tools/print_review.py compare <out.png> "<label>=<picture>@x,y,w,h" "<label>=<picture>@cx,cy,r,a0,a1" …` (tests: `python3 tools/print_review.py --self-test`) |

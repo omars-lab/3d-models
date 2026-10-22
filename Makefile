@@ -172,7 +172,7 @@ validate-prints: prints-manifest validate-color-map
 	$(PYTHON) ${ROOT_DIR}/.claude/skills/review-print/scripts/prints_page.py
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/gates/plates_gate.py
 	$(PYTHON) ${ROOT_DIR}/tools/plate_grade.py --self-test
-	$(PYTHON) ${ROOT_DIR}/.claude/skills/monitor-print/scripts/print_monitor.py --self-test
+	$(PYTHON) ${ROOT_DIR}/.claude/skills/monitor-print/scripts/print_monitor.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/skills/review-print/scripts/after_print.py --self-test && $(PYTHON) ${ROOT_DIR}/.claude/skills/review-print/scripts/after_print.py measure --quiet
 
 # `core.hooksPath` is repo-wide, so pre-commit.d/ runs in every worktree of this
 # clone — including the `.gh-pages` one `deploy` creates, which tracks .githooks
