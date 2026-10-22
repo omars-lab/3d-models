@@ -80,6 +80,7 @@ Omar's answers to the rows of After the print, word for word, one row each, olde
 |---|---|---|---|
 | 1 | As many | — | 2026-10-22 |
 | 2 | in my words | 2, T were better, less slits | 2026-10-22 |
+| 3 | in my words | A C E F do have less slits tahn 8, 9 but 8, 9 look cleaner ... the others look like we fileld in blanks, etc | 2026-10-22 |
 
 ## Pictures
 
