@@ -53,10 +53,11 @@ Sending a print and which filament to load.
   pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
   computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
 - **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
-  [split-02](../../design/plates/split-02.md) (flange)** — waiting on Omar's tick on each page, with
-  the color in the yes. The gBV coaster at 112.5 mm cut in two halves that close over its loose
-  pieces: one bed each, 89 minutes and 30 g, 107 minutes and 31 g (D-100, 2026-10-05). Whether
-  the halves are glued is still the split design's call 3.
+  [split-02](../../design/plates/split-02.md) (flange)** — the gBV coaster at 112.5 mm cut in two
+  halves that close over its loose pieces (D-100, 2026-10-05). split-02 printed in pink on
+  2026-10-15 and waits on Omar's judging, the questions on its page. split-01 (one bed, 89
+  minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
+  is still the split design's call 3.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the

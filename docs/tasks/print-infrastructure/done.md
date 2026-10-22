@@ -2,6 +2,23 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-16 — The print watch picks itself back up after the printer drops off the network, and says on the plate's page when it lost the printer and when it found it again (3d-models #737, #738)
+- 2026-10-14 — bedface-5 built, approved, sent in green and watched to the finish: twelve 50 mm pieces of the gBV coaster try the fill pushed 55%, 75% and 100% into the wall, and 55% and 75% with 10% more first-layer plastic, beside two stock pieces; a misquote fixed and a "which bottom would you sell" row added. Judging the pieces waits on Omar (3d-models #727, #728, #733, #734, #735)
+- 2026-10-14 — The teach-simulator skill: one profile per printer setup, fitted from judged prints, with a glacier-plate profile; held out a plate at a time it called 4 of 13 right, so it is not trusted yet (3d-models #732)
+- 2026-10-14 — Two skills, simulate-first-layer (the bottom face as the slicer plans it) and iterate-first-layer (rounds of ideas against the bottom slits); bedface-5's planned-slit table recounted with the fixed drawing (3d-models #731)
+- 2026-10-14 — The fill-angle sweep: the straps' fill run five ways, and no angle beats stock in the slicer's plan (3d-models #730)
+- 2026-10-14 — The no-slits design: why the bottom slits keep coming back, and a program of plates aimed at none (3d-models #729)
+- 2026-10-13 — A decision page, with pictures, on what to print next for the bottom slits; Omar picked option 1, which became bedface-5 (3d-models #724, #725, #726)
+- 2026-10-13 — Research on what else to try for the bottom slits: two passes on their own and a checker's merged plan (3d-models #721, #722, #723)
+- 2026-10-13 — bedface-4 built, approved, sent in green, watched and judged: the fill pushed 55% into the wall left fewer slits than 30% with no ridge, 10% more first-layer plastic helped a little, and every piece still slit (3d-models #716, #717, #718, #719, #720)
+- 2026-10-12 — A print question is tried on a piece of the coaster, not a whole coaster: the rule is in the print skills, and the piece is a 50 mm square cut from the real coaster by bikar's `window` (3d-models #711, #716)
+- 2026-10-12 — The holes a carved bottom id left in the coaster's bed face are closed (bikar #339), and compose checks every piece's mesh before it slices (3d-models #715)
+- 2026-10-12 — Research on the thin slits in the first layer (temperature, flow, speed): two passes and a merged plan (3d-models #712, #713, #714)
+- 2026-10-12 — `print_review compare` cuts the same spot from each experiment's picture and lays them side by side (3d-models #710)
+- 2026-10-12 — bedface-3, bedface-2's two coasters again on the gold plate (D-117): built, approved, sent in pink, watched and judged. Fewer slits, but the gold plate is out (3d-models #705, #706, #707, #708, #709)
+- 2026-10-12 — bedface-2, stock beside rings on the glacier plate: built, approved, sent in pink, watched, printed a second time with its own timelapse, and judged. The rings move the slits, they do not close them (3d-models #693, #695, #696, #697, #698, #699, #700, #701, #702)
+- 2026-10-11 — `print_review paths` draws a sliced layer and counts its slits (3d-models #684)
+- 2026-10-10 — A watcher agent follows a running print in the background and looks at the chamber pictures, and a small timelapse goes on the plate's page; `--leave-out` keeps a picture with a person in it off the page (3d-models #679, #681)
 - 2026-10-11 — bedface-1 printed, watched and judged: the house bed-face preset's coaster came out no cleaner than stock in the hand (dashes and triangles where the rings meet), though the slicer's plan had its bare share falling from 1.10% to 0.26%; the kites lost their dent but came out too tight. The preset does not roll out, and every plate stays on stock ([the issue](../../issues/bed-face-preset-failed-in-print.md); 3d-models #689, #690, #691)
 - 2026-10-10 — Why the coaster's bed face has slits, and a fix to try: the bed-face slicing design, with before/after first layers drawn from the G-code for five pieces, and a simulator over every X2D nozzle and three piece sizes (3d-models #685, #686)
 - 2026-10-09 — Every print record names the nozzle that printed it, and every fit lesson the nozzle it was measured with (3d-models #665)

@@ -12,15 +12,7 @@ look at, and a failure that names its cause.
 Order within the list: a check that passes wrongly first, then a step done by hand on every
 plate, then anything you can't see before sending, then config ergonomics.
 
-1. **A carved id leaves the gBV minimal coaster's mesh open, and compose does not check.** The
-   coaster at sheets-04g-fit3's size passes bikar's mesh check with no id, and fails it with any
-   one-letter `--bottom-id` (`Z` and `3` alike, round 1.25 or 0): not watertight, 13 to 22
-   degenerate triangles, and about 79,000 triangles in place of 131,000. `slice compose` renders
-   without `--check`, so the open mesh goes to the slicer, which patched it on sheets-04g-fit and
-   fit2 (both printed). Two fixes: find the cut's defect in bikar's bottom-id on a
-   frame with many holes, and have compose render with `--check` so the next one stops at the
-   recipe. The middle pieces with a full id pass. Found on sheets-04g-fit3, 2026-10-10.
-2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
+1. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
    so packing no longer decides whether a plate is production; it now saves time and filament
@@ -30,12 +22,14 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 ## Waiting on Omar
 
-- **The bed-face slits: bedface-3 tries the gold plate.** bedface-1's preset was no cleaner in
-  print than stock. [bedface-2](../../design/plates/bedface-2.md) printed stock beside rings on
-  the glacier plate, and both had slits, in different places. On 2026-10-12 Omar picked the gold
-  plate for both ([D-117](../../working-model/decisions-log.md)):
-  [bedface-3](../../design/plates/bedface-3.md), built and sliced, sent once the gold plate is on
-  the bed. Still unanswered: bedface-2's rows 2 and 3 (`R` beside `F`, `FC1 1E` in `S` and `R`),
+- **The bed-face slits: bedface-5's pieces wait to be judged.** bedface-1's preset was no cleaner
+  in print than stock, bedface-2's rings moved the slits without closing them, and bedface-3's gold
+  plate left fewer slits but the plate is out. [bedface-4](../../design/plates/bedface-4.md) found
+  the fill pushed 55% into the wall leaves fewer slits than 30%, and 10% more first-layer plastic
+  helps a little, with every piece still slit. [bedface-5](../../design/plates/bedface-5.md)
+  printed in green on 2026-10-14: 75% and 100% into the wall, and 55% and 75% with the extra
+  plastic. Its "After the print" rows need Omar's hands on the twelve pieces. Also still
+  unanswered: bedface-2's rows 2 and 3 (`R` beside `F`, `FC1 1E` in `S` and `R`),
   and from bedface-1: round the carved letters (FC1 vs 4GH), how FC1 1A and 1C felt, and whether
   the kites stay in upside down. Found by the bedface-1 judging, 2026-10-11.
 - **Two of the print review's six calls**, in
