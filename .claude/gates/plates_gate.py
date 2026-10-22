@@ -225,9 +225,6 @@ ID_FORMS_LINE = re.compile(r'^const ID_FORMS: readonly IdForm\[\] = \[([^\]]+)\]
 ID_BASELINE = {
     "minis-01": "sent before D-109; its reprint with ids is a new iteration (step 3)",
     "minis-02": "sent before D-109; its reprint with ids is a new iteration (step 3)",
-    "phones-01": "sent before D-109; its reprint with ids is a new iteration (step 3)",
-    "sheets-04b": "sent before D-109; its reprint with ids is a new iteration (step 3)",
-    "sheets-04c": "sent before D-109; its reprint with ids is a new iteration (step 3)",
     "minis-05": "waiting; its pieces are probed and converted with minis-01 and -02 (step 3)",
     "minis-06": "waiting; its pieces are probed and converted with minis-01 and -02 (step 3)",
     "sheets-01": "sheet format: `slice sheet` does not cut ids yet (step 3)",

@@ -3,9 +3,10 @@ plate: sheets-04c
 print_log: '[[print-logs/sheets-04c|print log]]'
 recipe: sheets-04c.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs:
+  - 2026-10-04-sheets-04c
 answers: "A second gBV minimal coaster, the minimal construction from sheets-04, on its own: no new question, the same coaster again."
 kind: repeat
 maturity: experiment
@@ -94,3 +95,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-03 | proposed — at Omar's ask: sheets-04's minimal construction, the gBV minimal coaster, alone | this page |
 | 2026-10-03 | sliced — local slice fits one bed, 42 minutes, 10 g, no slicer warnings | this page |
 | 2026-10-03 | sent — by `bambu print send`; spends the approval of 2026-10-03, iteration 1 @ b7641b3143 | this page |
+| 2026-10-04 | printed — all 20 layers, finished at 01:20 UTC; recorded 2026-10-22: not judged, since calls 8a and 8b gave way to a reprint with ids (D-109) | [the record](../../prints/2026-10-04-sheets-04c/index.md) |

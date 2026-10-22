@@ -121,6 +121,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 | Print | Piece | Verdict | What was seen |
 |---|---|---|---|
 | [2026-10-02-sheets-04](../../prints/2026-10-02-sheets-04/index.md) | minimal | keep | no remark on the coaster itself; it is kept as the frame the next pieces plate is set into |
+| [2026-10-04-sheets-04c](../../prints/2026-10-04-sheets-04c/index.md) | minimal | not-judged | The gBV minimal coaster at the file's own settings: 90 mm across, 3 mm straps, 4 mm tall, no floor; Not asked whether the sheets-04b pieces fit it the same as the first one. The 2026-10-06 open calls 8a and 8b would have asked; they were replaced on 2026-10-08 by a reprint with carved ids, judged then |
 | [2026-10-04-sheets-04g](../../prints/2026-10-04-sheets-04g/index.md) | minimal, 112.5 mm | not-judged | no remark on the coaster itself yet |
 | [2026-10-04-sheets-04g](../../prints/2026-10-04-sheets-04g/index.md) | minimal pieces, middle, 112.5 mm | adjust | adn the middle piece was too lose |
 | [2026-10-04-sheets-04g](../../prints/2026-10-04-sheets-04g/index.md) | minimal pieces, kite, 112.5 mm, 10 of them | adjust | the small kits were too tight ti fit |
