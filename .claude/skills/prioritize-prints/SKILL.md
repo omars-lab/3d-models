@@ -47,6 +47,9 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    approved or sent without it, or with an empty cell: a question whose answer changes nothing is
    not worth the print. The review-print skill asks the rows one at a time when it comes back.
    Theme and swatch pages get theirs from the color-themes skill's `after_print.py`.
+   A plate with loose pieces always has a row asking whether they wiggle or rattle in their holes
+   once the coaster is closed (Omar, 2026-10-22: "on split 02, i wasnt asked if the peices
+   wiggle"; split-01's rattle row is the model).
    An experiment plate prints pieces of the shape, several settings to a bed with a stock piece
    among them, unless the question is about the whole object. **Why print it** names the piece and
    says in one sentence why it answers for the whole; a whole-shape experiment says instead why a
