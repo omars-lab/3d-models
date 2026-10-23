@@ -40,6 +40,10 @@ The rubric lives in [`rubric.md`](rubric.md). Read it every run; it grows as pri
      hides how tall each stands. `python3 tools/print_review.py side <out.png> <frame.stl>
      <label> <x0>,<y0>,<x1>,<y1> <piece.stl> …` cuts both straight down along that line and
      prints both heights. Render the pieces where their holes are, so the meshes line up.
+   - When a split coaster's halves are held by pins, `python3 tools/print_review.py pins
+     <out.png> <lower.stl> …` draws each lower half in grey with its pin tops as white
+     squares and prints the pin count, so where the pins reach (and where they don't) shows
+     before the print. split-05 picked its pin sizes from this.
 3. **Read the PNG yourself**, every time, all of it. The numbers flag only the plain cases. On
    2026-09-25 they flagged neither tA8e's wedges nor anything that needs a sense of what the
    pattern *should* look like ([`rubric.md`](rubric.md) §What the numbers catch).
