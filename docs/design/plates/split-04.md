@@ -2,7 +2,7 @@
 plate: split-04
 recipe: split-04.yaml
 iteration: 2
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "On three slices of the flange coaster, each with every piece kind (middle, kite, hex, star, outer) in a border held by four 1.7 mm pins: which piece gap, 0.25, 0.15 or 0.10 mm, gives each kind a snug fit with no wiggle, do the halves close with no space, and do the pins hold them shut?"
@@ -165,6 +165,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-22 | approved | Omar, in chat: "approve, send it"; color "Green, slot 3" | iteration 2 @ 980086e355 in #00AE42 | |
 
 ## Timeline
 
