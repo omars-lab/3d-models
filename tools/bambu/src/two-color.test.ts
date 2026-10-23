@@ -74,6 +74,7 @@ function item(entry: string, iteration: string, label: string, filament: number)
     sourceSha256: "s",
     iteration,
     label,
+    group: "",
     filament,
   };
 }

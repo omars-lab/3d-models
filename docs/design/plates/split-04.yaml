@@ -1,0 +1,214 @@
+# split-04 — every piece kind, the middle one too, in a pinned border at three piece gaps
+#
+# Replaces split-03 before it printed. Omar, 2026-10-22: "how can we make a version of it where we
+# test the fit of mini pieces with border - start, kite, center, etc each of the diferent pieces,
+# if the surorunding border was pined, would they be sniug fit", then picked "Split-03 plus the
+# centre piece", then "also add more pins".
+#
+# Each set is the same 72° slice from 9° of bikar's gBV_JTt3Kxk-split-flange-coaster.bkr at size
+# 112.5, now with the middle piece and its opening (wedge_center 1, bikar's `wedge … center 1`):
+# a lower half, an upper half, and one of each piece kind, middle, kites, hexes, stars and outer.
+#
+#   Pins:    stud 1.7, stud_gap 0.25, stud_spacing 10. At the default spacing (25) a slice carries
+#            2 pins; at 10 it carries 4, all on the slice's outer part. The middle's border has no
+#            room for a 1.7 mm pin at any spacing tried (6 to 25). 1.2 mm pins would give 6; that
+#            is the page's Your call.
+#   Closing: room 0.2 shortens every piece so the halves can meet (split-02 left a space).
+#   Fit:     the piece gap per face, one set each: 0.25 (split-02's, the control), 0.15, 0.10.
+#            The halves do not change with the gap, so any upper closes any lower.
+#
+# Every item prints with setting 8, the bed-face setting Omar picked on bedface-5:
+# infill_wall_overlap 55%. Slice it for the glacier plate: `--plate-type hot_plate`.
+#
+# The ids. Each lower half carries the coaster file's own id mark on its bottom, one number per
+# set: 7 for gap 0.25, 8 for 0.15, 9 for 0.10. The middle, hexes and outer pieces carry the short
+# carved id (D-114), a letter per set and kind, none of the look-alikes (B, D, M, N, O, I, S, Z,
+# G, Q): middle A, hex E, outer F at 0.25; C, J, K at 0.15; L, T, U at 0.10. Kites and stars have
+# no room for an id, so they stay with the set they came off the bed beside, from the bed map.
+#
+# Each set is a `group:`, so the slice lays each set out in a block of its own, the three blocks
+# side by side, left to right as listed here, instead of mixing them across the bed (Omar,
+# 2026-10-22, on split-03: "unclear which pieces is for what, can we group related pieces into a
+# rectangle").
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+#
+#   LOWER-25 / UPPER-25 / MIDDLE-25 / KITE-25 / HEX-25 / STAR-25 / OUTER-25   gap 0.25, id 7
+#   LOWER-15 / UPPER-15 / MIDDLE-15 / KITE-15 / HEX-15 / STAR-15 / OUTER-15   gap 0.15, id 8
+#   LOWER-10 / UPPER-10 / MIDDLE-10 / KITE-10 / HEX-10 / STAR-10 / OUTER-10   gap 0.10, id 9
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/split-04.yaml --plate-type hot_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SP4
+no_id_reasons:
+  - &lower "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. The coaster file's own id mark on its bottom, 7, 8 or 9, names its set."
+  - &upper "An upper half prints face down, so its bed face is the top that shows in use, and an id is cut only on a face hidden in use (D-114). The halves are the same for every set, so any upper closes onto any lower; keep it with the lower beside it."
+  - &kite "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the set they came off the bed beside, from the plate's bed map."
+  - &star "bikar refuses even the one-letter id here (D-114): it needs a flat bed-face patch with 0.8 mm to every edge and 1.2 mm of solid over it, and this piece has none. Pieces stay with the set they came off the bed beside, from the plate's bed map."
+
+items:
+  # gap 0.25, id 7: split-02's fit, the control
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  LOWER-25
+    group:  "set 7, gap 0.25"
+    no_id:  *lower
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  UPPER-25
+    group:  "set 7, gap 0.25"
+    no_id:  *upper
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  MIDDLE-25
+    group:  "set 7, gap 0.25"
+    id:     A
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  KITE-25
+    group:  "set 7, gap 0.25"
+    no_id:  *kite
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  HEX-25
+    group:  "set 7, gap 0.25"
+    id:     E
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  STAR-25
+    group:  "set 7, gap 0.25"
+    no_id:  *star
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.25, id: 7 }
+    label:  OUTER-25
+    group:  "set 7, gap 0.25"
+    id:     F
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  # gap 0.15, id 8
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  LOWER-15
+    group:  "set 8, gap 0.15"
+    no_id:  *lower
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  UPPER-15
+    group:  "set 8, gap 0.15"
+    no_id:  *upper
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  MIDDLE-15
+    group:  "set 8, gap 0.15"
+    id:     C
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  KITE-15
+    group:  "set 8, gap 0.15"
+    no_id:  *kite
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  HEX-15
+    group:  "set 8, gap 0.15"
+    id:     J
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  STAR-15
+    group:  "set 8, gap 0.15"
+    no_id:  *star
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.15, id: 8 }
+    label:  OUTER-15
+    group:  "set 8, gap 0.15"
+    id:     K
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  # gap 0.10, id 9
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  LOWER-10
+    group:  "set 9, gap 0.10"
+    no_id:  *lower
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  UPPER-10
+    group:  "set 9, gap 0.10"
+    no_id:  *upper
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  MIDDLE-10
+    group:  "set 9, gap 0.10"
+    id:     L
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  KITE-10
+    group:  "set 9, gap 0.10"
+    no_id:  *kite
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  HEX-10
+    group:  "set 9, gap 0.10"
+    id:     T
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  STAR-10
+    group:  "set 9, gap 0.10"
+    no_id:  *star
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.7, stud_gap: 0.25, stud_spacing: 10, room: 0.2, wedge: 72, wedge_from: 9, wedge_center: 1, gap: 0.1, id: 9 }
+    label:  OUTER-10
+    group:  "set 9, gap 0.10"
+    id:     U
+    id_form: short
+    object_settings: { infill_wall_overlap: "55%" }

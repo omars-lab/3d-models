@@ -2,7 +2,7 @@
 plate: split-03
 recipe: split-03.yaml
 iteration: 1
-stage: proposed
+stage: retired
 times_printed: 0
 runs: []
 answers: "On three slices of the flange coaster, do 1.7 mm pins line the halves up and hold them shut, do the halves now close with no space between them, and which piece gap, 0.25, 0.15 or 0.10 mm, stops the pieces rattling and the margin round the stars and kites?"
@@ -161,3 +161,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-22 | proposed: from split-02's record, on Omar's words "the split one didnt' ahve pins and was loose", "how do we iterate on that one?", "with the 8 that won"; pins from bikar #341 | this page |
 | 2026-10-22 | sliced — local slice from bikar main after bikar #341, for the glacier plate (Smooth PEI), fits one bed, 75 minutes, 20.9 g, no slicer warnings, setting 8 on all 18 pieces | this page |
+| 2026-10-22 | retired: replaced by [split-04](split-04.md) before it printed, on Omar's pick "split-03 plus the centre piece" and "also add more pins" | [split-04](split-04.md) |

@@ -50,6 +50,7 @@ import { scaffoldRecord, type ScaffoldObject } from "../records.js";
 import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
 import { recipeHashOf, recipeIterationOf } from "../send-gate.js";
+import { footprintCentres, layoutGroups, writePlacements, type GroupLayout, type LayoutPiece, type PlacedPiece } from "../group-layout.js";
 import { readMember, writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
@@ -75,6 +76,7 @@ export interface ManifestItemBkr {
   window?: string; // `--window <side>[@x,y]`: a square sample cut at the coaster's own scale (bikar #293)
   count?: number; // copies on the plate (default 1)
   label?: string; // what the person at the printer calls it ("GAP 05"); names it in the bed map, never in the id
+  group?: string; // the set it belongs to on the bed: a plate whose items name groups lays each group out in a block of its own
   filament?: number; // the 1-based filament slot it prints in; needed on every item when the plate has two or more
   id?: string; // the piece's one-character id, cut into its bed face after the plate's id_code and iteration (D-109)
   id_form?: IdForm; // how much of the id to cut where the full one has no room (D-114); default full
@@ -85,6 +87,7 @@ export interface ManifestItemIteration {
   iteration: string; // an already-known it-<sha12>
   count?: number;
   label?: string;
+  group?: string;
   filament?: number;
   no_id?: string; // a reprint by id re-renders a frozen key, so it cannot take a new id: say why it has none
 }
@@ -94,6 +97,7 @@ export interface ManifestItemStl {
   scale?: number | [number, number, number]; // one scale, or one per axis [x, y, z] (default 1)
   count?: number;
   label?: string;
+  group?: string;
   filament?: number;
   no_id?: string; // a file bikar did not make cannot be cut: say why it has none
 }
@@ -461,17 +465,38 @@ export function primeTowerDroppedByStudio(m: SettingMismatch, filaments: number,
   );
 }
 
-/** Copy the arranged plate to `out` with each named piece's settings written into it. The file is a
- *  zip; its one changed member is replaced with the `zip` tool, as `unzip` reads it everywhere else. */
-async function writeObjectSettings(arranged: string, out: string, byName: Map<string, Record<string, string>>): Promise<void> {
+/** Copy the arranged plate to `out` with each named piece's settings written into it and, for a
+ *  plate laid out by group, each object moved to its place. The file is a zip; its changed members
+ *  are replaced with the `zip` tool, as `unzip` reads it everywhere else. */
+async function writeObjectSettings(
+  arranged: string,
+  out: string,
+  byName: Map<string, Record<string, string>>,
+  placed: PlacedPiece[] | null,
+): Promise<void> {
   const member = "Metadata/model_settings.config";
   const xml = await readMember(arranged, member);
   if (xml === null) throw new Error(`the arranged plate has no ${member}`);
   const work = mkdtempSync(join(tmpdir(), "bambu-object-settings-"));
   mkdirSync(join(work, "Metadata"));
   writeFileSync(join(work, member), injectObjectSettings(xml, byName));
+  const members = [member];
+  if (placed) {
+    const modelMember = "3D/3dmodel.model";
+    const model = await readMember(arranged, modelMember);
+    if (model === null) throw new Error(`the arranged plate has no ${modelMember}`);
+    const meshes = new Map<string, string>();
+    for (const path of new Set([...model.matchAll(/\bp:path="([^"]*)"/g)].map((m) => m[1]!))) {
+      const mesh = await readMember(arranged, path.replace(/^\//, ""));
+      if (mesh === null) throw new Error(`the arranged plate has no ${path}`);
+      meshes.set(path, mesh);
+    }
+    mkdirSync(join(work, "3D"));
+    writeFileSync(join(work, modelMember), writePlacements(model, xml, placed, footprintCentres(model, meshes)));
+    members.push(modelMember);
+  }
   copyFileSync(arranged, out);
-  const res = await runWithTimeout("zip", ["-q", out, member], { cwd: work, timeoutMs: 30_000, label: "zip_object_settings" });
+  const res = await runWithTimeout("zip", ["-q", out, ...members], { cwd: work, timeoutMs: 30_000, label: "zip_object_settings" });
   if (res.code !== 0) throw new Error(`zip exit ${res.code ?? "null"}: ${(res.stderr || res.stdout).trim()}`);
 }
 
@@ -544,6 +569,7 @@ export function parseManifest(text: string): PlateManifest {
       labels.add(it.label);
     }
   });
+  checkGroups(items as Record<string, unknown>[]);
   checkIds(m, items as Record<string, unknown>[]);
   if (m.beds !== undefined && (typeof m.beds !== "number" || !Number.isInteger(m.beds) || m.beds < 1)) {
     throw new Error(`\`beds:\` must be an integer >= 1 (the most beds the plate may use), got ${JSON.stringify(m.beds)}`);
@@ -564,6 +590,20 @@ export function parseManifest(text: string): PlateManifest {
     ...(typeof m.id_code === "string" ? { id_code: m.id_code } : {}),
     items: items as ManifestItem[],
   };
+}
+
+/** A plate's `group:` fields: every item names one, or none does, since a piece with no group would
+ *  have no block to sit in. Throws naming the item. */
+export function checkGroups(items: Record<string, unknown>[]): void {
+  const named = items.filter((it) => it.group !== undefined).length;
+  items.forEach((it, i) => {
+    if (it.group !== undefined && (typeof it.group !== "string" || !it.group.trim())) {
+      throw new Error(`items[${i}]: \`group:\` must be a non-empty string (the set it sits with on the bed)`);
+    }
+    if (named > 0 && it.group === undefined) {
+      throw new Error(`items[${i}]: other items name a \`group:\`, so this one needs one too, or it has no block on the bed`);
+    }
+  });
 }
 
 /** Each item's `filament:` slot against the plate's filament count. One filament: the field may be
@@ -667,6 +707,7 @@ export interface BedMapRow {
   object: string; // the 3MF object id
   entry: string; // c1, c2, … ("" when the object matched no item)
   label: string; // the manifest `label:`, else the entry
+  group?: string; // the manifest `group:`, only on a plate laid out by group
   piece: string;
   params: Record<string, number>;
   iteration: string;
@@ -700,6 +741,7 @@ export function bedMap(placements: Placement[], resolved: ResolvedItem[]): BedMa
         object: p.objectId,
         entry: r?.entry ?? "",
         label: r ? r.label || r.entry : p.name,
+        ...(r?.group ? { group: r.group } : {}),
         piece: r?.piece ?? "",
         params: r?.params ?? {},
         iteration: r?.iteration ?? p.name.replace(/\.stl$/i, ""),
@@ -745,6 +787,7 @@ export interface ResolvedItem {
   sourceSha256: string;
   iteration: string; // it-<sha12>
   label: string; // the manifest's `label:`, "" when it has none; not part of the iteration key
+  group: string; // the manifest's `group:`, "" when the plate names none; not part of the iteration key
   filament: number; // the 1-based filament slot (1 when the item names none)
   file?: string; // an `stl:` item's absolute path: copied (scaled by its scale params) instead of rendered
   objectSettings?: Record<string, string>; // the item's `object_settings:`, absent when it has none
@@ -849,6 +892,7 @@ function resolveStlItem(
     sourceSha256: item.sha256,
     iteration: iterationId(key),
     label: item.label ?? "",
+    group: item.group ?? "",
     filament: item.filament ?? 1,
     file,
   };
@@ -951,6 +995,7 @@ export async function resolveManifestItems(
       sourceSha256,
       iteration: iterationId(key),
       label: item.label ?? "",
+      group: item.group ?? "",
       filament: item.filament ?? 1,
       ...(objectSettings ? { objectSettings } : {}),
     });
@@ -1162,7 +1207,23 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
   // 2026-10-11). Without any settings, the one pass below is unchanged.
   const settingsByName = new Map<string, Record<string, string>>();
   for (const r of resolved) if (r.objectSettings) settingsByName.set(stagedName(r), r.objectSettings);
-  const twoPass = settingsByName.size > 0;
+  // A plate whose items name groups is laid out here, one block per group (group-layout.ts), and
+  // takes the same two passes: Studio arranges and slices, the objects are moved, and it slices again.
+  let layout: GroupLayout | null = null;
+  if (resolved.some((r) => r.group)) {
+    const layoutPieces: LayoutPiece[] = resolved.flatMap((r) => {
+      const [w, h] = footprints.get(cacheKeyOf(r))!;
+      return Array.from({ length: r.count }, () => ({ name: stagedName(r), group: r.group, w, h }));
+    });
+    try {
+      layout = layoutGroups(layoutPieces, bed);
+    } catch (err) {
+      console.error(`the plate's groups do not fit the bed: ${(err as Error).message}`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+  const twoPass = settingsByName.size > 0 || layout !== null;
   const arrangedDir = twoPass ? mkdtempSync(join(tmpdir(), "bambu-arranged-")) : "";
   const arrangedPath = join(arrangedDir, "arranged.3mf");
   const withSettingsPath = join(arrangedDir, "with-settings.3mf");
@@ -1206,6 +1267,13 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
     if (!studioBin) console.log("(BambuStudio not found — preset names shown unresolved)");
     const shown = (args: string[]) =>
       [studioBin ?? "<BambuStudio>", ...args].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" ");
+    if (layout) {
+      console.log("bed layout by group (each block's corners, bed millimetres):");
+      for (const b of layout.blocks) {
+        const n = layout.pieces.filter((p) => p.group === b.group).length;
+        console.log(`  ${b.group}: ${n} piece(s), x ${b.x0.toFixed(1)}–${b.x1.toFixed(1)}, y ${b.y0.toFixed(1)}–${b.y1.toFixed(1)}`);
+      }
+    }
     if (twoPass) {
       console.log("settings per piece (written into the arranged plate, then read back from the slice):");
       for (const r of resolved.filter((x) => x.objectSettings)) {
@@ -1251,7 +1319,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       return;
     }
     try {
-      await writeObjectSettings(arrangedPath, withSettingsPath, settingsByName);
+      await writeObjectSettings(arrangedPath, withSettingsPath, settingsByName, layout?.pieces ?? null);
     } catch (err) {
       console.error(`could not write the per-piece settings into the arranged plate: ${(err as Error).message}`);
       process.exitCode = 1;

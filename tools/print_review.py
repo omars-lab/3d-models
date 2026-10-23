@@ -482,14 +482,16 @@ def crosses(line, box):
                for i in range(n + 1))
 
 
-def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None):
+def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None, inside=None):
     """Where a label's box goes: at the object's centre if the box lies wholly on that object
     (`own`, its footprint alone) or covers no object, and no other label; else the nearest place
     on rings round it that covers no object, whose leader line crosses no other label and whose
     box sits on no other leader. A box on top of small look-alike pieces hides the very thing the
     picture is for, and a leader running through a neighbour's box points at the wrong row
     (sheets-04g-fit: kite rungs under their labels, then KITE 0.10's line through KITE 0.05). A box
-    on its own piece points at nothing else. `size` is the picture's (width, height)."""
+    on its own piece points at nothing else. `size` is the picture's (width, height). `inside`, a
+    (left, top, right, bottom) box in px, keeps the label within its piece's group box, so a label
+    never sits over the next set (split-04: HEX-15's label over set 7's edge)."""
     w, h = size
     for r in range(0, max(w, h), 12):
         for k in range(1 if r == 0 else 16):
@@ -498,6 +500,8 @@ def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None):
             b = d.textbbox((x, y), name, font=font, anchor="mm")
             box = (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
             if box[0] < 0 or box[1] < 0 or box[2] >= w or box[3] >= h:
+                continue
+            if inside and (box[0] < inside[0] or box[1] < inside[1] or box[2] > inside[2] or box[3] > inside[3]):
                 continue
             if any(box[0] < t[2] and t[0] < box[2] and box[1] < t[3] and t[1] < box[3] for t in taken):
                 continue
@@ -511,12 +515,20 @@ def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None):
     return at, (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
 
 
-def bed_picture(plate, labels, names=True, zoom=False):
+GROUP_PAD = 3            # mm between a group's pieces and the box drawn round them
+GROUP_INK = (250, 215, 60)
+
+
+def bed_picture(plate, labels, names=True, zoom=False, groups=None):
     """The bed from above, front edge at the bottom: each object in its own shade, its label on a
     white box on its own object when it fits there whole, else clear of every object and every
     other label with a line from the box to its object. `labels` maps object id -> label;
     names=False leaves the boxes off. zoom=True draws only the pieces' part of the bed, ZOOM_MARGIN
-    mm round them, at the scale that puts its long side at ZOOM_PX."""
+    mm round them, at the scale that puts its long side at ZOOM_PX. `groups` maps object id -> the
+    plate's `group:`; each group gets a yellow box round its pieces, GROUP_PAD mm out, and its name
+    on a yellow tag above the box, so a set reads as one block (split-03 mixed its sets; Omar,
+    2026-10-22: "group related pieces into a rectangle")."""
+    groups = groups or {}
     with zipfile.ZipFile(plate) as zf:
         objects = plate_objects(zf)
     x0, y0, x1, y1, px = 0, 0, BED_MM, BED_MM, BED_PX
@@ -553,16 +565,35 @@ def bed_picture(plate, labels, names=True, zoom=False):
         xs = [p[0] for t in tris for p in t] or [0]
         ys = [p[1] for t in tris for p in t] or [0]
         named.append((labels.get(oid, oid), ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)))
-    taken, lines = [], []
-    for (name, centre), own in zip(named, owns) if names else []:
+    taken, lines, tags = [], [], []
+    blocks = {}
+    for oid, tris in objects:
+        if oid in groups:
+            b = blocks.setdefault(groups[oid], [math.inf, math.inf, -math.inf, -math.inf])
+            for t in tris:
+                for x, y in t:
+                    b[:] = [min(b[0], x), min(b[1], y), max(b[2], x), max(b[3], y)]
+    rects = {}
+    for g, (bx0, by0, bx1, by1) in blocks.items():
+        (lx, ty), (rx, by) = f((bx0 - GROUP_PAD, by1 + GROUP_PAD)), f((bx1 + GROUP_PAD, by0 - GROUP_PAD))
+        rects[g] = (lx + 3, ty + 3, rx - 3, by - 3)
+        d.rectangle([lx, ty, rx, by], outline=GROUP_INK, width=3)
+        tb = d.textbbox(((lx + rx) / 2, ty - 22), g, font=font, anchor="mm")
+        tag = (tb[0] - 6, tb[1] - 4, tb[2] + 6, tb[3] + 4)
+        taken.append(tag)
+        tags.append((g, tag))
+    for (oid, _), (name, centre), own in zip(objects, named, owns) if names else []:
         at = f(centre)
-        (x, y), box = label_spot(d, font, name, at, taken, mask, (w, h), lines, own)
+        (x, y), box = label_spot(d, font, name, at, taken, mask, (w, h), lines, own, rects.get(groups.get(oid)))
         taken.append(box)
         if (x, y) != at:
             lines.append((at, (x, y)))
             d.line([at, (x, y)], fill=(255, 255, 255), width=2)
             d.ellipse([at[0] - 4, at[1] - 4, at[0] + 4, at[1] + 4], fill=(255, 255, 255))
-    for (name, centre), box in zip(named if names else [], taken):
+    for g, box in tags:
+        d.rectangle(box, fill=GROUP_INK)
+        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), g, fill=(0, 0, 0), font=font, anchor="mm")
+    for (name, centre), box in zip(named if names else [], taken[len(tags):]):
         d.rectangle(box, fill=(255, 255, 255))
         d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), name, fill=(0, 0, 0), font=font, anchor="mm")
     caption = "front of the bed" if not zoom else \
@@ -573,12 +604,14 @@ def bed_picture(plate, labels, names=True, zoom=False):
 
 def bed_sheet(out, plate, zoom=False):
     side = Path(re.sub(r"\.3mf$", "", plate, flags=re.I) + ".bedmap.json")
-    labels = {}
+    labels, groups = {}, {}
     if side.exists():
-        labels = {r["object"]: r["label"] for r in json.loads(side.read_text())["objects"]}
+        rows = json.loads(side.read_text())["objects"]
+        labels = {r["object"]: r["label"] for r in rows}
+        groups = {r["object"]: r["group"] for r in rows if r.get("group")}
     else:
         print(f"no bed map at {side}: naming objects by their 3MF id")
-    img, named, _, _ = bed_picture(plate, labels, zoom=zoom)
+    img, named, _, _ = bed_picture(plate, labels, zoom=zoom, groups=groups)
     for name, (x, y) in named:
         print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
     img.save(out)
@@ -1096,7 +1129,30 @@ def bed_self_test():
     on_own = lambda b, cx: all(sum(bare.getpixel((x, y))) > 300 for x in (int(b[0]), int(b[2]) - 1)
                                for y in (int(b[1]), int(b[3]) - 1)) and b[0] < cx < b[2]
     zf_ = lambda mm: (mm - (120 - 7.5 - ZOOM_MARGIN)) * ZOOM_PX / (17 + 15 + 2 * ZOOM_MARGIN)
+    # Two sets of two squares, as split-04's sets sit: each set gets a yellow box GROUP_PAD mm out
+    # from its pieces and a tag above it, and each piece's label stays inside its own set's box.
+    sets = io.BytesIO()
+    with zipfile.ZipFile(sets, "w") as zf:
+        zf.writestr("3D/3dmodel.model", pair.replace("120 100 0", "60 100 0").replace("137 100 0", "60 140 0")
+                    .replace("</build>", '<item objectid="6" transform="1 0 0 0 1 0 0 0 1 180 100 0"/>'
+                             '<item objectid="8" transform="1 0 0 0 1 0 0 0 1 180 140 0"/></build>')
+                    .replace("</resources>", "".join(
+                        f'<object id="{i}"><components><component p:path="/3D/Objects/o.model" objectid="1" '
+                        'transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>' for i in (6, 8)) + "</resources>"))
+        zf.writestr("3D/Objects/o.model", square)
+    groups = {"2": "set A", "4": "set A", "6": "set B", "8": "set B"}
+    gimg, _, gboxes, _ = bed_picture(sets, {k: f"P{k}" for k in groups}, groups=groups)
+    gp = lambda x, y: (round(x * BED_PX), round((BED_MM - y) * BED_PX))
+    rect = lambda cx: (gp(cx - 7.5 - GROUP_PAD, 0)[0], gp(0, 147.5 + GROUP_PAD)[1],
+                       gp(cx + 7.5 + GROUP_PAD, 0)[0], gp(0, 92.5 - GROUP_PAD)[1])
+    within = lambda b, r: r[0] <= b[0] and b[2] <= r[2] and r[1] <= b[1] and b[3] <= r[3]
     return [
+        ("bed draws a box round each set, GROUP_PAD mm out from its pieces",
+         gimg.getpixel(gp(60 - 7.5 - GROUP_PAD, 120)) == GROUP_INK and gimg.getpixel(gp(180 + 7.5 + GROUP_PAD, 120)) == GROUP_INK
+         and gimg.getpixel(gp(120, 120)) != GROUP_INK),
+        ("bed tags each set above its box", len(gboxes) == 6 and all(b[3] <= rect(c)[1] for b, c in zip(gboxes[:2], (60, 180)))),
+        ("bed keeps each piece's label inside its own set's box",
+         all(within(b, rect(c)) for b, c in zip(gboxes[2:], (60, 60, 180, 180)))),
         ("bed --zoom draws only the pieces' part of the bed, long side at ZOOM_PX",
          zimg.size[0] == ZOOM_PX and zimg.size[1] < ZOOM_PX + CAPTION),
         ("bed --zoom puts each label on its own piece, with no lines",
