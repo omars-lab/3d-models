@@ -1,0 +1,80 @@
+# split-06 — the whole flange coaster at split-05's set 3, no labels
+#
+# From split-05's print, Omar, 2026-10-23: "both are good", "2a one probably better", "2c one
+# shakes a bit"; then "lets send a 2a print with the whole patterh, no labels, a production piece".
+#
+# The whole of bikar's gBV_JTt3Kxk-split-flange-coaster.bkr at size 112.5 (wedge 360, the file's
+# default): a lower half, an upper half, and every ring of loose pieces, middle, kites, hexes,
+# stars and outer pieces.
+#
+#   Pins:    1.2 mm, stud_spacing 6, stud_gap 0.25: split-05's set 3, 31 pins round every outer
+#            edge and point. None reaches the ring round the middle piece: no point there has room.
+#   Closing: room 0.2, as split-04 and split-05.
+#   Fit:     piece gap 0.10 per face for the middle, hexes, stars and outer pieces; the kites 0.12,
+#            set 3's kite.
+#
+# Every item prints with setting 8, the bed-face setting Omar picked on bedface-5:
+# infill_wall_overlap 55%.
+#
+# No labels, as Omar asked: no id carved into any piece, and id 0 on the coaster file, so the lower
+# half's bottom carries no mark either.
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+#
+#   LOWER / UPPER / MIDDLE / KITES-G12 / HEXES / STARS / OUTERS
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/split-06.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SP6
+no_id_reasons:
+  - &nolabel "No labels: Omar asked for the whole coaster with none, as the piece we would sell (2026-10-23). One coaster on the bed, so nothing needs telling apart."
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  LOWER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  UPPER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  MIDDLE
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.12 }
+    label:  KITES-G12
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  HEXES
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  STARS
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, room: 0.2, gap: 0.1 }
+    label:  OUTERS
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
