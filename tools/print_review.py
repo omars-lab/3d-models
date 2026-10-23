@@ -373,6 +373,23 @@ def art_sheet(out, paths):
     print("wrote", out)
 
 
+def pins_sheet(out, paths):
+    """A split half from above in grey, its pin tops (the faces at its top height) drawn
+    large and white over it, so where the pins sit reads against the art. Prints each count."""
+    tiles = []
+    for p in paths:
+        tris = load_triangles(p)
+        base, _ = silhouette(tris)
+        top, _ = silhouette(tris, top=True)
+        mask = [v > 127 for v in top.tobytes()]
+        n = len(components(mask, S, S))
+        print(f"{p.rsplit('/', 1)[-1]:40} pins {n}")
+        tiles.append(ImageChops.lighter(base.point(lambda v: 90 if v > 127 else 0),
+                                        top.filter(ImageFilter.MaxFilter(9))))
+    compose(tiles, [p.rsplit("/", 1)[-1].removesuffix(".stl") for p in paths]).save(out)
+    print("wrote", out)
+
+
 def footprint(tris, region):
     """The faces at the piece's lowest height, inside `region` = (x, y, side) mm in the STL's
     own frame, the square filling an S-px tile."""
@@ -1177,6 +1194,9 @@ if __name__ == "__main__":
         sys.exit(0 if self_test() else 1)
     if len(a) >= 3 and a[0] in ("sheet", "art"):
         (sheet if a[0] == "sheet" else art_sheet)(a[1], a[2:])
+        sys.exit(0)
+    if len(a) >= 3 and a[0] == "pins":
+        pins_sheet(a[1], a[2:])
         sys.exit(0)
     if len(a) in (3, 4) and a[0] == "bed" and a[3:] in ([], ["--zoom"]):
         bed_sheet(a[1], a[2], zoom=a[3:] == ["--zoom"])
