@@ -2,7 +2,7 @@
 plate: split-05
 recipe: split-05.yaml
 iteration: 2
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "On two slices of the flange coaster with split-04's snug 0.10 mm piece gap, one held by 1.2 mm pins and one by 1.0 mm pins: do the smaller pins reach round the border so the halves close flush all the way, do they hold, and does the kite fit at 0.12 or 0.13 mm?"
@@ -137,6 +137,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-23 | approved | Omar, in chat: "send the print", then "Green, slot 3" | iteration 2 @ 83609518be in #00AE42 | |
 
 ## Timeline
 
