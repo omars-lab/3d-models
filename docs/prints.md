@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- On the flange coaster's pinned slice at a 0.10 mm piece gap, 1.2 mm pins placed at least 6 mm apart round every outer edge and point (6 in a slice, 31 on a whole coaster) hold the halves better than 1.0 mm pins (11 in a slice, 54 on a whole coaster): both came out good, and the 1.0 mm set shakes a bit. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-23-split-05](prints/2026-10-23-split-05/index.md))
 - In a pinned border, a 0.10 mm gap per face gives the middle, hex, star and outer pieces a snug fit that goes in by hand and does not rattle; the small kite is tight at 0.10. At 0.15 the pieces still wiggle a little, and at 0.25 they are very loose. The halves close flush only on the sides that have a pin: with four 1.7 mm pins on the slice's outer part, the unpinned sides lift and leave a space (0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Smooth PEI for the glacier plate). ([2026-10-23-split-04](prints/2026-10-23-split-04/index.md))
 - The flange holds a loose piece flush on both faces, and its 0.8 mm band prints with at most a slight droop underneath; but at 0.25 mm all round the pieces are loose in their holes and rattle when the coaster is shaken, with a margin Omar could see round the stars and kites. With no studs and no glue the two halves come apart, with a space between them, and a 2 mm id under the undercut strip does not read (0.4 mm nozzle, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-15-split-02](prints/2026-10-15-split-02/index.md))
 - On pieces of the gBV coaster on the smooth glacier plate, Omar picked the 55% overlap piece 8 as the bottom he would sell. Pushing the fill 75% or 100% into the wall left fewer slits than 55%, but those bottoms "look like we fileld in blanks", and 8 and 9 look cleaner: fewer slits is not the same as a better-looking bottom. 10% more first-layer plastic on top of 55% or 75% changed nothing he could see. Stock repeated bedface-4 ("As many"), so the two prints read against each other; but this plate's 55% pair slit more than bedface-4's 55% pair ("2, T were better, less slits"), so 55% did not fully repeat (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-14-bedface-5](prints/2026-10-14-bedface-5/index.md))
@@ -53,6 +54,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-23-split-05](prints/2026-10-23-split-05/index.md)
+
+- **Plate:** [split-05](design/plates/split-05.md) — two slices of the flange coaster at a 0.10 mm piece gap, one held by 1.2 mm pins, one by 1.0 mm pins, the kite at 0.12 and 0.13 mm
+- **Lesson:** On the flange coaster's pinned slice at a 0.10 mm piece gap, 1.2 mm pins placed at least 6 mm apart round every outer edge and point (6 in a slice, 31 on a whole coaster) hold the halves better than 1.0 mm pins (11 in a slice, 54 on a whole coaster): both came out good, and the 1.0 mm set shakes a bit. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 14 (12 keep, 2 adjust)
+- **What happened:** Omar: both sets good; set 3 (1.2 mm pins, middle carved 2A) probably better; set 5 (1.0 mm pins, middle carved 2C) shakes a bit.
+- **Why:** Not measured. A thinner pin with the same 0.25 mm of play round it has more room to move for its size, which may be the shake; not checked.
+- **What it changed:** 1.2 mm pins, 6 mm apart, are the pin for the flange coaster. The pieces keep 0.10 mm; the kite keeps 0.12 mm, set 3's, since its kite was in the set Omar picked, though the two kites were not compared on their own. Still open: whether the ring round the middle piece, where no pin fits, closes flush. Omar asked next for a whole coaster at set 3's settings with no ids, as a production piece.
+- **Photos of the print:** none. Rendered pictures from the plate page: [pins](design/plates/split-05-media/pins.png), [bed](design/plates/split-05-media/bed.png)
+
+![render, not a photo: pins](design/plates/split-05-media/pins.png)
 
 ### [2026-10-23-split-04](prints/2026-10-23-split-04/index.md)
 
@@ -322,7 +336,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-21 records; 0 measured with a tool, so no bet has moved yet.
+22 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
