@@ -1,8 +1,9 @@
 ---
 plate: split-05
+print_log: '[[print-logs/split-05|print log]]'
 recipe: split-05.yaml
 iteration: 2
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "On two slices of the flange coaster with split-04's snug 0.10 mm piece gap, one held by 1.2 mm pins and one by 1.0 mm pins: do the smaller pins reach round the border so the halves close flush all the way, do they hold, and does the kite fit at 0.12 or 0.13 mm?"
@@ -117,7 +118,7 @@ set 3 (pins 1.2) on the left, set 5 (pins 1.0) on the right. Drawn from the slic
 
 ## Cost and risk
 
-One bed, 67 minutes, about 18 g (local slice, 2026-10-23, X2D preset and PLA Basic, from bikar main). Sliced for the glacier plate (`--plate-type hot_plate`, Smooth PEI), as split-04. The slicer gave no warnings, and every one of the 14 pieces carries setting 8. One color, so no swaps.
+One bed, 67 minutes, about 18 g (local slice, 2026-10-23, X2D preset and PLA Basic, from bikar main). Proposed for the glacier plate, as split-04; at the send the gold Textured PEI plate was on the bed and Omar chose to print on it, so it was sliced again for that plate (`--plate-type textured_plate`, same minutes and grams). Its bottom face and seat may differ from split-04's for that reason. The slicer gave no warnings, and every one of the 14 pieces carries setting 8. One color, so no swaps.
 
 **Risk: watch.** As on split-04: each band sticks out 0.8 mm with nothing under it and may droop,
 a look to judge. The kites and stars are small loose pieces that can lift or get knocked. The
@@ -137,10 +138,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-23 | approved | Omar, in chat: "send the print", then "Green, slot 3" | iteration 2 @ 83609518be in #00AE42 | |
+| 2026-10-23 | approved | Omar, in chat: "send the print", then "Green, slot 3" | iteration 2 @ 83609518be in #00AE42 | sent 2026-10-23 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-23 | proposed: after split-04's print, on Omar's words "we need more pints all the way around border ... the border sides with pins are flush, without are not" and his pick "1.2 and 1.0, side by side" for the pins; split-04's 0.10 mm gap, the kite at 0.12 and 0.13 | this page |
+| 2026-10-23 | sent — by `bambu print send`; spends the approval of 2026-10-23, iteration 2 @ 83609518be in #00AE42 | this page |
