@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- In a pinned border, a 0.10 mm gap per face gives the middle, hex, star and outer pieces a snug fit that goes in by hand and does not rattle; the small kite is tight at 0.10. At 0.15 the pieces still wiggle a little, and at 0.25 they are very loose. The halves close flush only on the sides that have a pin: with four 1.7 mm pins on the slice's outer part, the unpinned sides lift and leave a space (0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Smooth PEI for the glacier plate). ([2026-10-23-split-04](prints/2026-10-23-split-04/index.md))
 - The flange holds a loose piece flush on both faces, and its 0.8 mm band prints with at most a slight droop underneath; but at 0.25 mm all round the pieces are loose in their holes and rattle when the coaster is shaken, with a margin Omar could see round the stars and kites. With no studs and no glue the two halves come apart, with a space between them, and a 2 mm id under the undercut strip does not read (0.4 mm nozzle, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-15-split-02](prints/2026-10-15-split-02/index.md))
 - On pieces of the gBV coaster on the smooth glacier plate, Omar picked the 55% overlap piece 8 as the bottom he would sell. Pushing the fill 75% or 100% into the wall left fewer slits than 55%, but those bottoms "look like we fileld in blanks", and 8 and 9 look cleaner: fewer slits is not the same as a better-looking bottom. 10% more first-layer plastic on top of 55% or 75% changed nothing he could see. Stock repeated bedface-4 ("As many"), so the two prints read against each other; but this plate's 55% pair slit more than bedface-4's 55% pair ("2, T were better, less slits"), so 55% did not fully repeat (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-14-bedface-5](prints/2026-10-14-bedface-5/index.md))
 - On pieces of the gBV coaster on the smooth glacier plate, pushing the fill 55% into the wall left fewer slits along the strap edges than 30%, with no ridge, and 2 did better than T. 55% and the flow pieces were not set side by side; of the twelve photos 2 looks the cleanest to me (Claude). 10% more plastic on the first layer helped a little, against what the research expected (X fewer than Y, Y fewer than J), but every flow piece still slit. 30% overlap split (P fewer, L more). The monotonicline bottom only moved the slits. The stock pieces slit a little less than bedface-2's whole stock coaster, which I (Claude) read as nearer "about as many" than "clearly fewer": the pieces stand in for the coaster (0.4 mm nozzle, 0.5 mm first line, 0.20 mm layers, sliced as a Smooth PEI plate). ([2026-10-13-bedface-4](prints/2026-10-13-bedface-4/index.md))
@@ -52,6 +53,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-23-split-04](prints/2026-10-23-split-04/index.md)
+
+- **Plate:** [split-04](design/plates/split-04.md) — three slices of the flange coaster, every piece kind in a border held by four 1.7 mm pins, at piece gaps 0.25, 0.15 and 0.10 mm
+- **Lesson:** In a pinned border, a 0.10 mm gap per face gives the middle, hex, star and outer pieces a snug fit that goes in by hand and does not rattle; the small kite is tight at 0.10. At 0.15 the pieces still wiggle a little, and at 0.25 they are very loose. The halves close flush only on the sides that have a pin: with four 1.7 mm pins on the slice's outer part, the unpinned sides lift and leave a space (0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Smooth PEI for the glacier plate).
+- **Nozzle:** 0.4 mm, left nozzle, type HS01
+- **Pieces:** 21 (4 keep, 8 adjust, 9 drop)
+- **What happened:** Set 7 (0.25): very loose. Set 8 (0.15): a little wiggle. Set 9 (0.10): in by hand, snug, no rattle when shaken, the small kite tight. The halves: flush where a pin is, a space where none is, with or without the pieces in. The bands: clean, as on split-02.
+- **Why:** Not measured. The space follows the pins, not the pieces: it is there with no pieces in, only on the unpinned sides, so the 0.2 mm the pieces were shortened did its job and the halves need holding all round. Why the kite alone is tight at 0.10 is not known; its sharp tips leave least room, as the page expected.
+- **What it changed:** Every piece kind except the kite keeps 0.10 mm. The kite adjusts: a little more gap than 0.10, under 0.15. The halves adjust: pins on every side of the border, Omar's words "we need more pints all the way around border". The pins fit in the middle's border is still open: no 1.7 mm pin fits there, so pins all round likely means a smaller pin. Setting 8 stays for split coasters, pieces included. What prints next is Omar's call.
+- **Photos of the print:** none. Rendered pictures from the plate page: [opened](design/plates/split-04-media/opened.png), [bed](design/plates/split-04-media/bed.png)
+
+![render, not a photo: opened](design/plates/split-04-media/opened.png)
 
 ### [2026-10-15-split-02](prints/2026-10-15-split-02/index.md)
 
@@ -308,7 +322,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-20 records; 0 measured with a tool, so no bet has moved yet.
+21 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

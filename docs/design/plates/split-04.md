@@ -3,9 +3,9 @@ plate: split-04
 print_log: '[[print-logs/split-04|print log]]'
 recipe: split-04.yaml
 iteration: 2
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-23-split-04]
 answers: "On three slices of the flange coaster, each with every piece kind (middle, kite, hex, star, outer) in a border held by four 1.7 mm pins: which piece gap, 0.25, 0.15 or 0.10 mm, gives each kind a snug fit with no wiggle, do the halves close with no space, and do the pins hold them shut?"
 kind: new
 maturity: experiment
@@ -105,6 +105,18 @@ their bottom. The upper halves, stars and kites carry none, so they are named by
 | The pins, each set | **Do:** Close each set, all four pins into their holes. Pick it up by the rim, tip it on its side and turn it over. Then press on the middle piece's border from above. **Look for:** Do the pins go in by hand? Do the rims line up, with no step? Does it stay closed when turned over? Does the border round the middle lift or flex, with no pin there? | They go in and line the halves up. With four pins it is more likely to stay shut than split-03's two. The middle's border may flex. | Hold: 4 pins of 1.7 mm at 0.25 play are the flange coaster's pins. Line up but don't hold: less play, smaller pins in more spots, or glue (split design call 3). Don't go in: more play. The middle's border flexes: it needs a pin of its own, so a smaller pin or a different border. |
 | The bands, each set's pieces | **Do:** Hold a piece by its edges and look at the underside of its band, the wider step round its middle. **Look for:** Is it as clean as split-02's, or worse? | The same as split-02: clean, or a slight droop. Setting 8 changes only the bottom face. | Clean: setting 8 stays for split coasters. Worse: setting 8 goes on the halves only, not the pieces. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 3 | in my words | set 7 is very loose; set 8: better but stil a little wiggle; set 9: no shaking on last one | 2026-10-23 |
+| 2 | in my words | set 9: in by hand, all snug, but some peices were tight (small kite) | 2026-10-23 |
+| 4 | in my words | Space only where no pin | 2026-10-23 |
+| 5 | in my words | we need more pints all the way around border ... the border sides with pins are flush, without are not | 2026-10-23 |
+| 6 | in my words | Clean, same as split-02 | 2026-10-23 |
+
 ## Pictures
 
 Opened up: one set, the lower half at the bottom, the pieces lifted over their holes with the
@@ -174,3 +186,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-22 | proposed: in place of split-03, on Omar's words "test the fit of mini pieces with border - start, kite, center, etc", his pick "split-03 plus the centre piece" and "also add more pins"; the middle piece from bikar #342; each set laid out in a block of its own | this page |
 | 2026-10-22 | sent — by `bambu print send`; spends the approval of 2026-10-22, iteration 2 @ 980086e355 in #00AE42 | this page |
+| 2026-10-23 | printed — all 21 layers, 03:41 to 05:31 UTC in green; judged by hand the same day: set 7 (0.25) very loose, set 8 (0.15) a little wiggle, set 9 (0.10) in by hand and snug with no rattle but the small kite tight; the halves flush where a pin is and a space where none is; the bands clean. Next: pins on every side of the border | [the record](../../prints/2026-10-23-split-04/index.md) |
