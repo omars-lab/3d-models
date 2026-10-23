@@ -338,7 +338,7 @@ per-color plate. The changes, which are task #244:
 4. **send-plate's step 4.2 text** changes from "a recipe with no `color:` is one whose color is
    picked at the send" to "every one-color plate's color is picked at the send".
 5. **The compose field stays.** `PlateProfile.color` in `slice compose`
-   (`3d-models:tools/bambu/src/commands/compose.ts:L67 "the color(s) the slice carries"`) is still
+   (`3d-models:tools/bambu/src/commands/compose.ts:L68 "the color(s) the slice carries"`) is still
    needed by phones-01. It stops being written for one-color plates.
 
 ## 9. Build order
