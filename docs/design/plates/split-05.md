@@ -3,9 +3,9 @@ plate: split-05
 print_log: '[[print-logs/split-05|print log]]'
 recipe: split-05.yaml
 iteration: 2
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-23-split-05]
 answers: "On two slices of the flange coaster with split-04's snug 0.10 mm piece gap, one held by 1.2 mm pins and one by 1.0 mm pins: do the smaller pins reach round the border so the halves close flush all the way, do they hold, and does the kite fit at 0.12 or 0.13 mm?"
 kind: new
 maturity: experiment
@@ -62,8 +62,8 @@ The carved ids:
 
 | Set | Pins | Middle | Hex | Outer |
 |---|---|---|---|---|
-| 3 | 1.2 mm | `1A` | `1E` | `1F` |
-| 5 | 1.0 mm | `1C` | `1J` | `1K` |
+| 3 | 1.2 mm | `2A` | `2E` | `2F` |
+| 5 | 1.0 mm | `2C` | `2J` | `2K` |
 
 **The color is picked at the send**: say it with the yes ("yes, in green").
 
@@ -96,8 +96,17 @@ they are named by their set.
 | The pins, each set | **Do:** Look at the pins standing on each lower half before closing anything. **Look for:** Did every pin print whole, or did any come out broken, bent or missing? Which set? | 1.2 mm all whole. 1.0 mm mostly whole; a few may be weak. | Whole: that size stays in the running. Broken: that size is out. |
 | The halves of each set, closed with no pieces in | **Do:** Close each set with its own upper half, every pin in its hole, and pinch. Look all the way round the edge where the halves meet. **Look for:** Is it flush all the way round, or is there a space anywhere? Where: the outer edge, the inner straps, or round the middle piece? | Set 3 flush round the outside, maybe a space inside. Set 5 flush in more places. Both may show a space round the middle, where no pin is. | Flush all round: that pin size is the coaster's. A space only round the middle: the middle needs its own hold (a pin needs a wider strap there, or glue). A space elsewhere: more pins or less play. |
 | The pins hold, each set | **Do:** Close each set. Pick it up by the rim, tip it on its side and turn it over. **Look for:** Do the pins go in by hand? Does it stay closed when turned over? | It goes in by hand and stays closed; more pins hold better. | Holds: that pin size is the coaster's. Falls open: less play round the pins, or glue. Will not go in: more play. |
-| Each set's pieces: `1A` `1E` `1F` (set 3), `1C` `1J` `1K` (set 5), each set's star | **Do:** Put each piece in its hole in its own set, close it and shake it, then push each piece side to side with a fingertip. **Look for:** Snug and still, as split-04's set 9? Any tight or wiggling? | Snug and still, as split-04's set 9. | Snug: 0.10 mm stays the gap. Different from set 9: the pins change how the halves sit, and the gap is looked at again. |
+| Each set's pieces: `2A` `2E` `2F` (set 3), `2C` `2J` `2K` (set 5), each set's star | **Do:** Put each piece in its hole in its own set, close it and shake it, then push each piece side to side with a fingertip. **Look for:** Snug and still, as split-04's set 9? Any tight or wiggling? | Snug and still, as split-04's set 9. | Snug: 0.10 mm stays the gap. Different from set 9: the pins change how the halves sit, and the gap is looked at again. |
 | The kites: set 3's (0.12 mm) and set 5's (0.13 mm) | **Do:** Put each kite in its hole by hand, in either set, close it and shake it. **Look for:** Does each go in without pressing? Does either wiggle? | Both go in. 0.12 snug, 0.13 maybe a touch loose. | The tightest that goes in by hand and does not wiggle becomes the kite's gap. Both tight: try 0.14. Both loose: 0.11. |
+
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 2 | in my words | both are good | 2026-10-23 |
+| 4 | in my words | 2a one probably better; 2c one shakes a bit | 2026-10-23 |
 
 ## Pictures
 
@@ -146,3 +155,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-23 | proposed: after split-04's print, on Omar's words "we need more pints all the way around border ... the border sides with pins are flush, without are not" and his pick "1.2 and 1.0, side by side" for the pins; split-04's 0.10 mm gap, the kite at 0.12 and 0.13 | this page |
 | 2026-10-23 | sent — by `bambu print send`; spends the approval of 2026-10-23, iteration 2 @ 83609518be in #00AE42 | this page |
+| 2026-10-23 | printed — all 21 layers, 17:44 to 19:00 UTC in green on the gold Textured PEI plate; judged by hand the same day: both sets good, set 3 (1.2 mm pins, middle 2A) probably better, set 5 (1.0 mm pins, middle 2C) shakes a bit. The ids printed as 2A … 2K, the recipe's iteration 2, not the 1A … 1K this page first named. Next: 1.2 mm pins | [the record](../../prints/2026-10-23-split-05/index.md) |
