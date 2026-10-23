@@ -1,8 +1,9 @@
 ---
 plate: split-04
+print_log: '[[print-logs/split-04|print log]]'
 recipe: split-04.yaml
 iteration: 2
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "On three slices of the flange coaster, each with every piece kind (middle, kite, hex, star, outer) in a border held by four 1.7 mm pins: which piece gap, 0.25, 0.15 or 0.10 mm, gives each kind a snug fit with no wiggle, do the halves close with no space, and do the pins hold them shut?"
@@ -165,10 +166,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-22 | approved | Omar, in chat: "approve, send it"; color "Green, slot 3" | iteration 2 @ 980086e355 in #00AE42 | |
+| 2026-10-22 | approved | Omar, in chat: "approve, send it"; color "Green, slot 3" | iteration 2 @ 980086e355 in #00AE42 | sent 2026-10-22 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-22 | proposed: in place of split-03, on Omar's words "test the fit of mini pieces with border - start, kite, center, etc", his pick "split-03 plus the centre piece" and "also add more pins"; the middle piece from bikar #342; each set laid out in a block of its own | this page |
+| 2026-10-22 | sent — by `bambu print send`; spends the approval of 2026-10-22, iteration 2 @ 980086e355 in #00AE42 | this page |
