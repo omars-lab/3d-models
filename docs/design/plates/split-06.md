@@ -2,7 +2,7 @@
 plate: split-06
 recipe: split-06.yaml
 iteration: 4
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the whole flange coaster, with split-05's set 3 settings (1.2 mm pins, 0.10 mm piece gap, the kite at 0.12), its 40 pins in four rings (between the small kites, between the bigger kites, between the stars, and on the outer points; none round the middle star) and no labels, close flush all the way round, hold together and keep its pieces snug, so it is a coaster to keep?"
@@ -146,6 +146,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-24 | approved | Omar, in chat: "send in green" | iteration 4 @ 52f7ddc85a in #00AE42 | |
 
 ## Timeline
 
