@@ -1,0 +1,62 @@
+# The inner hexagon (split-06, size 112.5) cut in two and joined by a slide (a dovetail).
+# Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Halves 2.1 mm: a 0.6 mm face block and 1.5 mm of band, the band 0.8 mm a side wider than the face.
+# The hexagon is about 16 mm along the rail. Rail sizes from SLD-1 (0.8 mm rail, 1.0 mm slot, 4 mm at
+# its root, 0.3 mm a side wider at its top in 0.2 mm layers) and a lower one (0.6 mm rail, 0.8 mm
+# slot, 0.2 mm a side wider at its top). Gaps drawn: 0.15 and 0.10 mm a side.
+title: "The hexagon: two halves joined by a slide, and where the slot runs thin"
+panels:
+  - title: "1. SLD-1's rail: the slot half along the slot, as it prints"
+    width: 16
+    scale: [20, 40]
+    parts:
+      - {kind: piece, box: [0.8, 0, 14.4, 0.6], first: bottom}
+      - {kind: flange, box: [0, 0.6, 16, 1.5], label: "upper half, face down", label_at: [8, 0.8]}
+      - {kind: air, box: [0, 1.1, 16, 1.0], label: "slot 1.0 deep, open at both ends", label_at: [8, 1.6]}
+      - {kind: dim, from: [0.4, 0.6], to: [0.4, 1.1], text: "0.5 over air"}
+      - {kind: bed, line: [0, 0, 16]}
+    warn:
+      - "Where the slot crosses the band's overhang, at both ends, only 0.5 mm of band is left under
+        it, printed over air. The coaster keeps at least 0.6 mm under its own pin holes, and that
+        floor sits on solid layers, not on air, so the rule does not carry over as it is."
+
+  - title: "2. A lower rail: the same view"
+    width: 16
+    scale: [20, 40]
+    parts:
+      - {kind: piece, box: [0.8, 0, 14.4, 0.6], first: bottom}
+      - {kind: flange, box: [0, 0.6, 16, 1.5]}
+      - {kind: air, box: [0, 1.3, 16, 0.8], label: "slot 0.8 deep", label_at: [8, 1.7]}
+      - {kind: dim, from: [0.4, 0.6], to: [0.4, 1.3], text: "0.7 over air"}
+      - {kind: bed, line: [0, 0, 16]}
+    notes:
+      - "A 0.6 mm rail in a 0.8 mm slot leaves 0.7 mm. The price is a smaller lock: the rail's top is
+        0.2 mm a side wider than its root, against 0.3 for SLD-1's."
+
+  - title: "3. SLD-1's rail, closed, across it, to scale"
+    width: 12
+    scale: [32, 32]
+    parts:
+      - {kind: piece, color: teal, box: [0.8, 0, 10.4, 0.6], first: bottom}
+      - {kind: flange, color: teal, box: [0, 0.6, 12, 1.5], label: lower half, label_at: [0.4, 1.2], label_side: left}
+      - {kind: flange, box: [0, 2.1, 12, 1.5], label: upper half, label_at: [0.4, 3.0], label_side: left}
+      - {kind: piece, box: [0.8, 3.6, 10.4, 0.6], first: top}
+      - {kind: dovetail, at: [6, 2.1], width: 4, height: 0.8, flare: 0.3, gap: 0.15, depth: 1.0, steps: 0.2, color: teal}
+      - {kind: dim, from: [10.5, 2.1], to: [10.5, 2.9], text: "rail 0.8"}
+    notes:
+      - "Each face is a first layer. The rail slides in from one end; the pair then cannot lift apart."
+
+  - title: "4. The lower rail, closed, across it, to scale"
+    width: 12
+    scale: [32, 32]
+    parts:
+      - {kind: piece, color: teal, box: [0.8, 0, 10.4, 0.6], first: bottom}
+      - {kind: flange, color: teal, box: [0, 0.6, 12, 1.5]}
+      - {kind: flange, box: [0, 2.1, 12, 1.5]}
+      - {kind: piece, box: [0.8, 3.6, 10.4, 0.6], first: top}
+      - {kind: dovetail, at: [6, 2.1], width: 4, height: 0.6, flare: 0.2, gap: 0.10, depth: 0.8, steps: 0.2, color: teal}
+      - {kind: dim, from: [10.5, 2.1], to: [10.5, 2.7], text: "rail 0.6"}
+    notes:
+      - "At 0.10 mm a side the lock is 0.1 mm more than the gap; at 0.20 it would be none, so that
+        gap is left out for this rail."
