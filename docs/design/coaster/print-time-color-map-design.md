@@ -302,9 +302,9 @@ per-color plate. The changes, which are task #244:
 
 1. **The recipe writer stops writing `color:`.** Before call 18, `recipeText` wrote a
    `  color:` line under `profile:`. It now writes a header line in its place
-   (`3d-models:tools/bambu/src/by-color.ts:L255 "${COLOR_AT_SEND}"`), and the type comment says the
+   (`3d-models:tools/bambu/src/by-color.ts:L267 "${COLOR_AT_SEND}"`), and the type comment says the
    hex goes in the recipe's title, never its profile
-   (`3d-models:tools/bambu/src/by-color.ts:L141 "never its profile"`). One writer serves
+   (`3d-models:tools/bambu/src/by-color.ts:L153 "never its profile"`). One writer serves
    both `plates by-color` and `bambu order plan`, so both change, and so does
    `.claude/skills/color-themes/scripts/theme_plates.py`, which calls `plates by-color`. The
    design color stays in the recipe's name (`<prefix>-<code or hex>`), its comment header, and the
