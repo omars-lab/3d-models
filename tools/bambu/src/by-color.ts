@@ -34,6 +34,18 @@ export interface BandsOrbit {
   faces?: number[]; // its face indices (bikar #311 on); needed only when a piece is taken out
 }
 
+/** The orbits in `bikar bands --json` output. Throws when it has none: a CLI built before bikar #270
+ *  prints rings only, and reading that as "no orbits" blamed the .bkr ("loose orbit 0: bands reports
+ *  no such orbit") for a stale build. */
+export function readBandsJson(stdout: string, cli: string): BandsOrbit[] {
+  const listing = (JSON.parse(stdout) as { orbits?: { orbits?: BandsOrbit[]; refused?: string } }).orbits;
+  if (!listing) {
+    throw new Error(`${cli}: bikar bands printed no orbits, so this build is older than its source (bikar #270 on); rebuild it with \`npm run build\` in the bikar checkout`);
+  }
+  if (listing.refused) throw new Error(`bikar bands refused to list orbits: ${listing.refused}`);
+  return listing.orbits ?? [];
+}
+
 /** A group of pieces: what one `--piece <name>` item renders, and how many pieces that is. */
 export interface PieceGroup {
   piece: string;

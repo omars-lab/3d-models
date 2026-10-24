@@ -8,7 +8,7 @@ import { isAbsolute, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 import { bikarDir, locateBikarCli } from "./backends/bikar.js";
-import { type BandsOrbit, type PieceGroup, type WrittenRecipe, pieceGroups, readPiecesBkr } from "./by-color.js";
+import { type PieceGroup, type WrittenRecipe, pieceGroups, readBandsJson, readPiecesBkr } from "./by-color.js";
 import { canonicalJson } from "./iteration.js";
 import { runWithTimeout } from "./log.js";
 import type { CatalogColor, GroupsOf, SliceFacts } from "./order.js";
@@ -75,7 +75,7 @@ export async function fetchGroups(pairs: Array<{ construction: string; params: R
     if (res.code !== 0 || res.timedOut) {
       throw new Error(`bikar bands ${construction} failed (exit ${res.code ?? "timeout"}): ${res.stderr.trim().split("\n").pop() ?? ""}`);
     }
-    const orbits = (JSON.parse(res.stdout) as { orbits?: { orbits?: BandsOrbit[] } }).orbits?.orbits ?? [];
+    const orbits = readBandsJson(res.stdout, cli);
     groupCache.set(key, pieceGroups(readPiecesBkr(readFileSync(file, "utf8")), orbits));
   }
   return (construction, params) => {
