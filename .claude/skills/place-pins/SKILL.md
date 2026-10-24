@@ -53,9 +53,15 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
    the first ([the plate](../../../docs/design/plates/split-06.md); bikar's pin rings and bosses).
 5. **Check it.** Render the lower half again and draw the plate's pins picture
    (`python3 tools/print_review.py pins <png> <lower.stl>`). The pins must stand where Omar's
-   marks are, and only there. Then slice the plate and update its page: pin count, where they
-   stand, and the questions after the print (is it flush round each kept ring; do the notched
-   pieces still sit).
+   marks are, and only there. Then slice the plate and check that no pin disc bites a piece's
+   hidden ledge: `ledge_check.py build/plates/<name>.plate.3mf` (below). With `stud_boss: 1` a
+   disc round each pin notches every ledge it reaches. On split-06 the discs flattened the pink
+   hex pieces' points and clipped their shoulders, so the ledge there reached 0.17 mm past the
+   face instead of 0.8 mm, and those pieces wiggled while the green ones, with the same face,
+   held (Omar, 2026-10-24: "the blunt pieces wiggle more than the pointy kites"). A bitten piece
+   means the ring moves, not the check: draw the map again and pick a radius whose discs miss
+   the points. Then update the plate's page: pin count, where they stand, and the questions
+   after the print (is it flush round each kept ring; do the notched pieces still sit).
 6. **A recipe change resets the yes**: `plate_approve.py <page> --iterate` (manage-approvals).
 
 ## Scripts — when to use each
@@ -64,6 +70,7 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
 |---|---|---|---|
 | `scripts/ring_map.py` | Finds every spot on the cut face with room for a pin, groups them into rings by radius, and draws the face with each ring lettered and colored, with a legend (radius, pins, first turn); prints the same as lines | Step 2, and again whenever the pin size, the strap width or the bosses change | `python3 .claude/skills/place-pins/scripts/ring_map.py <lower.stl> --z 0.5 --stud 1.2 --gap 0.25 --out <map.png>` |
 | `tools/split_sites.py --rings 1` | The widest room in each 1 mm ring out from the centre, and the biggest pin it takes | To answer "how big a pin fits round the middle" without a picture | `python3 tools/split_sites.py <lower.stl> --z 2.05 --stud 1.2 --gap 0.25 --rings 1` |
+| `scripts/ledge_check.py` | Reads a sliced plate and, for every loose piece, checks that its ledge reaches past its face by the ledge's own width along every side and round every corner; names each bitten corner by its angle and how far the ledge reaches; exit 1 when any piece is bitten. PASS: split-02 and split-05 (no discs). FAIL: split-06 as printed (pink hex point 0.17 mm, blunt ends 0.25 and 0.46 mm, against 0.8 mm along the sides) | Step 5, after every slice of a plate with pins; `make validate-print-review` runs its self-test (a clean kite passes, the same kite with its point bitten fails) | `python3 .claude/skills/place-pins/scripts/ledge_check.py build/plates/<name>.plate.3mf [--tol 0.25]` |
 | `tools/print_review.py pins` | The plate's pins picture: the lower half from above, each pin a white square | Step 5, and for the plate page | `python3 tools/print_review.py pins <png> <lower.stl>…` |
 
 `ring_map.py` imports `tools/split_sites.py` by walking up to the repo root, so the room is
