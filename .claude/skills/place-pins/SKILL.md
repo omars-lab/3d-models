@@ -40,10 +40,14 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
 3. **Ask Omar from the picture.** Send it (SendUserFile) with one free-text question: which rings
    to keep, drop or add. He may mark the picture instead; read his marks against the letters.
    When he marks a few pins, take it as their whole ring in every repeat and say so.
-4. **Write the rings into the plate.** Each kept ring becomes an entry in the coaster file's pin
-   rings param (radius, count, turn), with bosses on when a ring stands where the groove was. The
-   kernel snaps each pin to the roomiest point near its spot and refuses a spot with no room, so a
-   refusal means the ring was read wrong: draw the map again, do not loosen the wall.
+4. **Write the rings into the plate.** Each kept ring is three params on every item of the plate:
+   `stud_ringN` (radius, mm), `stud_ringN_n` (pins) and `stud_ringN_turn` (degrees from +x of the
+   first pin), N = 1 to 3; add `stud_boss: 1` when a ring stands where the groove was. Any ring
+   turns the automatic pick off, so a pin the old layout had and you want kept must be in a ring
+   too. The kernel snaps each pin to the roomiest point within 1.5 mm and refuses a pin with no
+   room, naming the ring and the angle: draw the map again, do not loosen the wall. `--check` on the
+   render lists every pin's radius and angle, so read the old layout's rings off it. split-06 was
+   the first ([the plate](../../../docs/design/plates/split-06.md); bikar's pin rings and bosses).
 5. **Check it.** Render the lower half again and draw the plate's pins picture
    (`python3 tools/print_review.py pins <png> <lower.stl>`). The pins must stand where Omar's
    marks are, and only there. Then slice the plate and update its page: pin count, where they
