@@ -21,6 +21,9 @@ pictures:
   - split-06-media/pins.png
   - split-06-media/bed.png
   - split-06-media/ledges.png
+  - split-06-media/fix-move-pins.png
+  - split-06-media/fix-smaller-discs.png
+  - split-06-media/fix-leave-it.png
 ---
 
 # split-06 — the whole flange coaster, set 3's settings, no labels
@@ -57,12 +60,46 @@ more than the pointy kites". The cause is our pins, not the pattern.
 The picture shows the ledge's outline corner to corner, so a round cut shows as a flat one. Drawn
 from the outlines in the sliced plate file, measured layer by layer.
 
-**How to fix it, for the next version:**
+**How to fix it, for the next version.** Each picture below is drawn from pieces rendered by
+bikar at that option's settings, not from a sketch. On the left, one hex piece and one outer
+piece: the grey face, the orange ledge, and under each corner how far the ledge reaches past the
+face, in mm (0.80 is a whole ledge). This is the worst direction at each corner, a different
+measure from the 0.3 and 1.4 mm above. On the right, the lower half from above round one hex
+piece, each pin with its disc in dashed blue.
+
+### 1. Move the pins off the points (my pick)
+
+![Move the pins: the hex piece and the outer piece with every corner's ledge at 0.80 mm and no bites; on the right the lower half round one hex piece, the old pin spots as hollow grey circles on the hex piece's point, shoulders and blunt end, and the new pins beside them in the strap between the pieces](split-06-media/fix-move-pins.png)
+
+Three rings move a little; the pin count stays 40. Between the small kites: 14.3 to 13.6 mm out.
+Between the bigger kites: 25.1 to 27.2 mm. Between the stars: 33.5 mm at 18° to 33.8 mm at 13°,
+off the line where the hex and outer pieces meet. The outer ring at 54.4 mm stays.
+
+Rendered and measured: all 41 pieces have every corner at 0.80. The ring at 13.6 mm has little
+room to spare: half a degree off and a corner drops to 0.70.
+
+### 2. Make the discs smaller
+
+![Smaller discs: the hex piece still bitten at its point (0.25 mm), both shoulders (0.54) and its blunt end (0.33), and the outer piece at its blunt end (0.53); on the right the same pin spots as today with slightly smaller blue discs](split-06-media/fix-smaller-discs.png)
+
+The disc has no size setting of its own. It is the pin, plus the gap round the pin, plus a fixed
+0.9 mm wall in bikar. With the same 1.2 mm pins and the gap cut from 0.25 to 0.10 mm, the disc's
+radius goes from 1.625 to 1.55 mm. Even with no gap at all it could not go below 1.5.
+
+Rendered and measured: the hex point reaches 0.25 (was 0.17) and the outer piece's blunt end
+0.53 (was 0.46). The bites shrink but stay. A tighter gap is also a new fit for the pins.
+
+### 3. Leave it
+
+![Leave it: the ledges as printed, the hex piece bitten at its point (0.17 mm), both shoulders (0.46) and its blunt end (0.25), and the outer piece at its blunt end (0.46); on the right the pins standing on the hex piece's point, its shoulders, and where it meets the outer piece](split-06-media/fix-leave-it.png)
+
+The coaster as printed. The rings between the small kites, the bigger kites and the stars land
+on the hex piece's point, its shoulders and its blunt end.
 
 | Option | What it gives | What it costs | What it commits us to |
 |---|---|---|---|
 | **Move the pins off the points** (my pick) | Every ledge whole again, so every piece is held the same way | The rings move, so the next plate is a new experiment | Rule for every later coaster: no pin or disc may land on a piece's point |
-| **Make the discs smaller** | The pins stay where you put them | Smaller cuts, but still cuts; the small kites' ring may lose the room it needed | The pin ring between the small kites needs a new check |
+| **Make the discs smaller** | The pins stay where you put them | Smaller cuts, but still cuts: the hex point reaches 0.25 of 0.80 | A tighter gap round each pin (0.10 mm), a new fit to test |
 | **Leave it** | Nothing to change | The hex pieces keep wiggling | The coaster is not a production plate as it is |
 
 My pick is to move the pins, because it removes the cut instead of shrinking it.
