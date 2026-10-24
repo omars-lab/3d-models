@@ -1,18 +1,18 @@
 ---
 plate: split-06
 recipe: split-06.yaml
-iteration: 3
+iteration: 4
 stage: proposed
 times_printed: 0
 runs: []
-answers: "Does the whole flange coaster, with split-05's set 3 settings (1.2 mm pins, 0.10 mm piece gap, the kite at 0.12), its 50 pins in five rings (round the middle star, between the small kites, between the bigger kites, between the stars, and on the outer points) and no labels, close flush all the way round, hold together and keep its pieces snug, so it is a coaster to keep?"
+answers: "Does the whole flange coaster, with split-05's set 3 settings (1.2 mm pins, 0.10 mm piece gap, the kite at 0.12), its 40 pins in four rings (between the small kites, between the bigger kites, between the stars, and on the outer points; none round the middle star) and no labels, close flush all the way round, hold together and keep its pieces snug, so it is a coaster to keep?"
 kind: new
 maturity: experiment
 bets: []
 unblocks:
   - "D-100: lip or flange, which way a split coaster holds its loose pieces (with split-01)"
   - "the flange coaster as a production plate (D-098: one run kept as laid out)"
-minutes: 119
+minutes: 117
 grams: 31
 bed_plates: 1
 risk: watch
@@ -23,17 +23,22 @@ pictures:
 
 # split-06 — the whole flange coaster, set 3's settings, no labels
 
-![The whole lower half of the flange coaster from above, grey, with its 50 pins of 1.2 mm as white squares in five rings of ten: round the middle star, between the small kites, between the bigger kites, between the stars, and on the outer points](split-06-media/pins.png)
+![The whole lower half of the flange coaster from above, grey, with its 40 pins of 1.2 mm as white squares in four rings of ten: between the small kites, between the bigger kites, between the stars, and on the outer points](split-06-media/pins.png)
 
 **In short.** On [split-05](split-05.md) you said "both are good", "2a one probably better", "2c
 one shakes a bit", then: "lets send a 2a print with the whole patterh, no labels, a production
 piece". This plate is that: the whole coaster at set 3's settings, with nothing carved into any
 piece. The plate is [`split-06.yaml`](split-06.yaml).
 
-**What changed in this version (2026-10-23).** On the pins picture you wrote: "I was expecting
+**What changed in this version (2026-10-24).** You said "remove inner most radial set of pins". So
+the ring of ten round the middle star is gone, and 40 pins in four rings are left, as above. The
+middle piece now has no pins of its own round it; the ring between the small kites, 14.3 mm out,
+is the nearest. The filled discs under the pins stay: without them the ring between the small
+kites has no room for a 1.2 mm pin.
+
+**Earlier (iteration 3, 2026-10-23).** On the pins picture you wrote: "I was expecting
 another set of pins on the same radius / circle as the small kites, inbetween each two adjacent
-kits, sme for the first layer of bigger kites, and stars". So there are three more rings of ten,
-and you can see all five above:
+kits, sme for the first layer of bigger kites, and stars". That added three rings of ten:
 
 - **Between the small kites**: on the kites' own circle, 14.3 mm out, one between each two kites.
 - **Between the bigger kites**: on their circle, 25.1 mm out, one between each two.
@@ -56,11 +61,10 @@ the small stars' notches (your red marks) and one stray pin at the left.
 The whole flange coaster at 112.5 mm across: a lower half, an upper half, and every loose piece,
 the middle, the kites, the hexes, the stars and the outer pieces.
 
-- **50 pins of 1.2 mm, in five rings of ten**: 9.6 mm out from the centre, in the middle star's
-  inner corners; 14.3 mm, between the small kites; 25.1 mm, between the bigger kites; 33.5 mm,
+- **40 pins of 1.2 mm, in four rings of ten**: 14.3 mm out from the centre, between the small kites; 25.1 mm, between the bigger kites; 33.5 mm,
   between the stars; and 54.4 mm, on the outer points. The play round each pin stays 0.25 mm, as set 3.
 - **Each pin stands on a filled disc.** The loose pieces' rims sit in a groove cut into the strap,
-  and round the middle star that groove left room for a pin under 0.75 mm. So the groove is filled in
+  and between the small kites that groove leaves 1.33 mm of room where a pin needs 1.625 mm. So the groove is filled in
   a small disc round each pin, in both halves, and each loose piece's rim has a matching round notch
   there so it still drops in. You picked this ("Fill the hidden groove at each pin").
 - **Piece gap 0.10 mm** for the middle, hexes, stars and outer pieces; **0.12 mm for the kites**,
@@ -82,8 +86,8 @@ the middle, the kites, the hexes, the stars and the outer pieces.
 ## Why print it
 
 The slices settled the pin (1.2 mm) and the piece gap (0.10 mm). What is left only a whole coaster
-can show: whether the ring round the middle closes flush on its new pins, whether the notched
-pieces still sit, whether fifty pins close the halves flush everywhere or make them hard to press
+can show: whether the middle closes flush with no ring of pins round it, whether the notched
+pieces still sit, whether forty pins close the halves flush everywhere or make them hard to press
 together, whether the halves stay
 flat across the full 112.5 mm, and how it goes together with every piece in. If you keep it as it
 comes off the bed, it is the first production plate of this coaster (D-098), and it can be printed
@@ -97,9 +101,9 @@ the answer does not cover them.
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
 | The whole coaster, put together | **Do:** Put every piece in the lower half, close the upper half on its pins and pinch it all the way round. Look at the edge and round the middle piece, and shake it. **Look for:** Is it a coaster you would keep as it is? If not, what is wrong? | Flush round the outside, as set 3. Round the middle, maybe a space. No shake. | Keep: it becomes the production plate. Not kept: what is wrong decides the next change. |
-| The ring round the middle piece | **Do:** Pinch the closed coaster round the middle piece. **Look for:** Flush, or a space? | Flush: ten pins hold it now. | Flush: the ring stays. A space: the pins there need a tighter play, or glue. |
+| Round the middle piece | **Do:** Pinch the closed coaster round the middle piece. **Look for:** Flush, or a space? | Flush, but less sure than before: the nearest pins are the ring between the small kites, 14.3 mm out. | Flush: no ring is needed there. A space: put the ring round the middle star back. |
 | Between the kites and the stars | **Do:** Pinch the closed coaster between each two small kites, each two bigger kites and each two stars. **Look for:** Flush, or a space? | Flush: a pin now stands between each two. | Flush: the three new rings stay. A space: that ring's pins need a tighter play. |
-| Closing it | **Do:** Close the upper half on the lower and press it down. **Look for:** Does it go on with an even press, or do some pins fight it? | An even press: 50 pins at 0.25 mm play each. | Even: nothing to do. Hard to close: drop a ring, or loosen the play to 0.30. |
+| Closing it | **Do:** Close the upper half on the lower and press it down. **Look for:** Does it go on with an even press, or do some pins fight it? | An even press: 40 pins at 0.25 mm play each. | Even: nothing to do. Hard to close: drop a ring, or loosen the play to 0.30. |
 | The outer edge | **Do:** Pinch the closed coaster between each pair of outer points. **Look for:** Flush, or a space? | Flush: a pin on every outer point. | Flush: ten is enough. A space: add a ring between the points. |
 | The middle piece and the stars, by the round notches | **Do:** Look at the rim of the middle piece and of each piece next to a pin, where a round notch is cut. Press each down. **Look for:** Does it sit flat and flush, or rock or stand proud? | Flat and flush: the notch is the disc's size plus the piece gap. | Flush: the bosses stay. Proud or rocking: the notch needs more room. |
 | The halves, laid flat | **Do:** Put the closed coaster on a table and press each side. **Look for:** Does it rock? | Flat. | Flat: nothing to do. Rocks: the halves bow over the full width; look at the bed face and the cooling. |
@@ -108,7 +112,7 @@ the answer does not cover them.
 ## Pictures
 
 Where the pins stand on the whole lower half, from above, at the top of this page: the half in grey,
-each 1.2 mm pin a white square, in five rings of ten. Drawn from the coaster file at the plate's settings by
+each 1.2 mm pin a white square, in four rings of ten. Drawn from the coaster file at the plate's settings by
 `tools/print_review.py pins`.
 
 The bed, from above, as the slice lays it out, each piece named. Drawn from the sliced plate by
@@ -118,15 +122,16 @@ The bed, from above, as the slice lays it out, each piece named. Drawn from the 
 
 ## Cost and risk
 
-One bed, 119 minutes, about 31 g (local slice, 2026-10-24, X2D preset and PLA Basic, from bikar #344, the five pin rings), sliced for the gold Textured PEI plate (`--plate-type textured_plate`). The slicer gave no warnings, and all 7 items carry setting 8. One color, so no swaps.
+One bed, 117 minutes, about 31 g (local slice, 2026-10-24, X2D preset and PLA Basic, from bikar #344, iteration 4, the four pin rings), sliced for the gold Textured PEI plate (`--plate-type textured_plate`). The slicer gave no warnings, and all 7 items carry setting 8. One color, so no swaps.
 
 **Risk: watch.** As on split-05: each band sticks out 0.8 mm with nothing under it and may droop,
 a look to judge. The kites and stars are small loose pieces that can lift or get knocked. The pins
 are 1.2 mm and stand on the lower half's cut face, so a pin that prints badly breaks off as a look,
 not a danger to the printer. The pin discs notch the rims of the pieces next to a pin, which no print has tried yet, so a
-notched piece might sit a little proud. New on this version: 50 pins where there were 20, so the
-halves may take a firmer press to close; the ring between the stars stands 1.8 mm inside the
-stars' circle, where there was room.
+notched piece might sit a little proud. New on this version: no pins round the middle piece, so the
+middle may not close as tightly as the rest. Still from iteration 3: 40 pins where there were 20,
+so the halves may take a firmer press to close; the ring between the stars stands 1.8 mm inside
+the stars' circle, where there was room.
 
 ## Your call
 
@@ -149,3 +154,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-23 | proposed: after split-05's print, on Omar's words "lets send a 2a print with the whole patterh, no labels, a production piece"; set 3's 1.2 mm pins, the 0.10 mm piece gap, the kite at 0.12 | this page |
 | 2026-10-24 | sliced: iteration 2, 20 pins in two rings with a filled groove at each (bikar #343), on Omar's "remove redC add blue"; 112 minutes, about 32 g, no warnings | this page |
 | 2026-10-24 | sliced: iteration 3, 50 pins in five rings, three more between the small kites, the bigger kites and the stars (bikar #344), on Omar's comment on the pins picture; 119 minutes, about 31 g, no warnings | this page |
+| 2026-10-24 | sliced: iteration 4, 40 pins in four rings, the ring round the middle star removed on Omar's "remove inner most radial set of pins"; 117 minutes, about 31 g, no warnings | this page |
