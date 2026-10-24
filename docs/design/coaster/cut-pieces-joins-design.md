@@ -108,10 +108,10 @@ pushed home. That is one reason §4.2 tries two gaps.
 
 bikar's slide checks that the outline never turns inward and refuses one that does, with no
 allowance. That rules out the star (0.48) and the middle (0.77). The hexagons' bands measured 0.994
-and 0.999, not 1.0, while their faces measured 1.0. The likely cause is the notches split-06 cuts
-in each band for the coaster's pins; that is a guess, not checked. If so, the slide refuses the
-hexagons as split-06 cuts them too, unless the outline the rail runs on is the face (which never
-turns inward) or the check allows the notches. The kite's band is 4 mm wide at most, and SLD-1's
+and 0.999, not 1.0, while their faces measured 1.0. The cause is the notches split-06 cuts in
+each band round the coaster's pins (§2.4). So the slide refuses the hexagons as split-06 cuts them
+too, unless the outline the rail runs on is the face (which never turns inward), the check allows
+the notches, or the coaster's pins move off the pieces (§2.4). The kite's band is 4 mm wide at most, and SLD-1's
 rail is 4 mm at its root and 0.3 mm a side wider at its top, so the kite takes no slide.
 
 ### 2.3 Where the slot runs thin
@@ -125,6 +125,35 @@ and this one is printed over air. A lower rail, 0.6 mm in a 0.8 mm slot, leaves 
 by 0.2 mm a side instead of 0.3, so it holds at 0.10 and 0.15 mm a side and not at 0.20. SLD-1's
 clearances carry over only so far: same rail, layer height and printer, but its halves were 1.6 mm
 regular hexagons with no band, so the thin end is new.
+
+### 2.4 Risk: pins that bite a piece's point
+
+Two kinds of pin are in play, and neither may sit where it bites a piece's point.
+
+**The coaster's own pins already do.** split-06 fills a 1 mm disc round each coaster pin
+(stud_boss 1), and cuts a matching notch in the band of each loose piece beside it. Measured from
+split-06's plate file (by the session that sent split-06, 2026-10-24): the inner hexagon and the
+outer piece have the same face, a six-cornered kite with a sharp 72° tip. At the band, the outer
+piece keeps its 72° tip and only its blunt end is notched. The inner hexagon has its tip bitten flat,
+about 1.5 mm across with two 126° corners, and both shoulders notched. split-02 (no pins) and
+split-05 (pins, no discs) have clean, matching bands on both. The bite is under the strap, so the
+face does not show it, but a cut inner hexagon would carry it in both halves, and it is what turns
+the hexagons' band outlines inward (§2.2). Before plate one, the coaster's pin rings should move so
+no disc reaches a piece's point (the place-pins skill places them), or plate one should say it is
+testing bitten pieces.
+
+**The piece's own pins are placed away from its points.** Each pin in §2.1 sits where the band
+has the full 1.625 mm of room round it, which by itself keeps it off a point:
+
+| Piece | Where its pins sit |
+|---|---|
+| Small kite | one, on the long axis 0.6 mm from the middle toward the blunt end, about 6 mm from the sharp tip |
+| Star | one, at the middle; each arm's point is 4 mm or more away |
+| Middle | three, at the middle and about 5 mm either side along its longest line; each where the band has the full room, which an arm's narrowing point does not have |
+| Hexagons | two, on the long axis about 4 mm either side of the middle, each at least 2 mm from the band's end |
+
+bikar's step 2 (§5) should refuse a piece pin closer than its room rule to the outline, which
+covers the points, and the plate page should draw where each pin sits from above.
 
 ## 3. What bikar can and cannot do today
 
@@ -209,7 +238,8 @@ its answer decides whether plate two is needed at all.
 2. **Pins on a piece half.** A per-piece-kind count and gap for pins on the cut face, reusing the
    coaster's pin site picker against the band's outline, with the hole kept at 0.6 mm of floor:
    deep over the face block, shallower where it hangs past. Refuse a pin with no room, with the
-   room it found.
+   room it found. Refuse too any pin or disc, the piece's own or the coaster's, that cuts into a
+   piece's point (§2.4), naming the piece and the point.
 3. **A slide on a piece half.** Reuse the dovetail kernel's layer widths on a half's cut face.
    Either run the rail on the face's outline, or allow the hexagons' notches; keep the refusal for
    an outline that turns inward and say which piece it refused. Refuse a slot that leaves under
