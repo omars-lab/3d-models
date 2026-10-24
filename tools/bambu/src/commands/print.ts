@@ -50,6 +50,7 @@ import { checkNozzles, printerNozzles } from "../nozzle-check.js";
 import { checkSliceFresh } from "../slice-fresh.js";
 import { colorAtSend, colorMatchesYes, plateRecipePath, recipeColor } from "../color-at-send.js";
 import { bedPhoto } from "./bed.js";
+import { reportPlateChecks } from "./plate-checks.js";
 import {
   chooseColor,
   feedsFromAms,
@@ -311,6 +312,17 @@ async function runSend(plate: string, opts: SendOpts): Promise<void> {
     console.error((err as Error).message);
     process.exitCode = 2;
     return;
+  }
+
+  // The plate checks list (.claude/skills/send-plate/plate-checks.yaml): each past mistake a script
+  // can catch from the plate, run here before any printer call so a dry run shows them with no
+  // printer set up. A ✗, including a check that could not run, refuses the send; no flag skips one.
+  if (!reportPlateChecks(abs, repoRoot() ?? process.cwd())) {
+    if (!opts.dryRun) {
+      process.exitCode = 2;
+      return;
+    }
+    console.error("  (dry run — a real send stops here.)");
   }
 
   const cfg = loadConfig();

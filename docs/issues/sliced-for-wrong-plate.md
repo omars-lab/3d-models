@@ -101,6 +101,13 @@ and which no flag skips. Each refuses a real send and only reports on a dry run:
   change and an item swapped is. A slice that recorded no hash, made before this check, is refused
   as well: nothing says which recipe it came from. A `.bkr` edited in bikar under an unchanged
   recipe is not seen. The code is `tools/bambu/src/slice-fresh.ts`.
+- **The plate checks list** (2026-10-24, after split-06): Omar asked for "a hook that blocks prints
+  until they pass validation". The same reasoning holds, so it is the send again, not a git hook:
+  `print send` runs every entry in `.claude/skills/send-plate/plate-checks.yaml` that applies to
+  the plate, one past mistake each with the script that catches it (split-06's bitten ledges,
+  minis-05's second bed). Any `✗` refuses, a check that cannot run is a `✗`, and no flag skips
+  one. The git hook guards only the list itself (`53-plate-checks`). The code is
+  `tools/bambu/src/plate-checks.ts`.
 
 ## What it means for sheets-04b
 

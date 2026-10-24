@@ -1,0 +1,27 @@
+#!/bin/sh
+# Plate checks list gate. `bambu print send` runs every entry in
+# .claude/skills/send-plate/plate-checks.yaml and refuses a plate on any ✗, so a list that does not
+# read, or names a script that is gone, would refuse every send. This blocks a commit that breaks
+# the list: it must parse, and every file it names must be in the repo.
+#
+# wholesale: make validate-plate-checks
+# wholesale-requires: node
+#
+# Scoped: only the list, the code that reads it, a script under .claude/skills/ (a check may name
+# one), or a delete or rename can break it. No override: a broken list stops every send.
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+gone=$(git diff --cached --name-only --diff-filter=DR)
+if [ -z "$gone" ] && ! echo "$staged" | grep -qE '^\.claude/skills/send-plate/plate-checks\.yaml$|^tools/bambu/src/(commands/)?plate-checks|^\.claude/skills/[^/]+/scripts/'; then
+  exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+if [ ! -f "$ROOT/.claude/skills/send-plate/plate-checks.yaml" ]; then
+  echo "pre-commit: no plate checks list in this worktree — skipping" >&2
+  exit 0
+fi
+if [ ! -d "$ROOT/tools/bambu/node_modules" ]; then
+  npm ci --silent --prefix "$ROOT/tools/bambu" || exit 1
+fi
+cd "$ROOT" && exec tools/bambu/bin/bambu plate-checks verify

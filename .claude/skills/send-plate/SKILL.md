@@ -68,6 +68,7 @@ it makes is the tray read, and with `--trays <file>` it makes none.
 | `scripts/color_map.py pages` | Writes the color block on each mapped plate page, checks, and lists each send's `--color` | Every question is answered | `python3 .claude/skills/send-plate/scripts/color_map.py pages <color-map.json>` |
 | `scripts/color_map.py check` | The design's §10 check, plate by plate: one row per color, each `--color` the hex of its tray, no tray shared unless Omar chose "use the nearest" | Before the sends, or after anything changed the map or the pages | `python3 .claude/skills/send-plate/scripts/color_map.py check <color-map.json>` |
 | `scripts/color_map.py --self-test` | The §10 pass case (pink and black loaded, gold loaded on the ask) and fail case (gold and tan, one gold tray), on made-up trays, no printer | After changing the script; `make validate-prints` runs it | `python3 .claude/skills/send-plate/scripts/color_map.py --self-test` |
+| `plate-checks.yaml` + `bambu plate-checks` | The checks every plate must pass before a send, one per past mistake; `print send` runs them, dry run too, and refuses on any `✗`. `verify` checks the list itself | Any send runs them; run `run` alone to check a plate early; add an entry when a new mistake gets a script | `tools/bambu/bin/bambu plate-checks run build/plates/<name>.plate.3mf`; `tools/bambu/bin/bambu plate-checks verify` (`make validate-plate-checks`) |
 
 `--trays <file>` takes a saved `bambu filament --json` in place of the printer, for testing or
 for planning against trays read earlier; the map then says where its trays came from.
@@ -156,6 +157,11 @@ PEI Plate on the bed, and the X2D paused it at layer 0 with 0500-8051
    none: the photo settles it in the next step. The `nozzle:` line compares the nozzle sizes the
    slice was made for with the ones fitted; `✗ nozzle` means slice again. The `bed:` line is `✗`
    on this first dry run, because nobody has looked at the photo yet.
+   It also runs the **plate checks** (`plate-checks.yaml` beside this file): one line per past
+   mistake a script can catch, e.g. `✓ ledge` (split-06's bitten pin ledges) and `✓ sliced`
+   (minis-05's second bed). Any `✗` refuses the send, a check that cannot run is a `✗`, and no flag
+   skips one. Fix the plate, or the list (`make validate-plate-checks`). To run them alone:
+   `bambu plate-checks run build/plates/<name>.plate.3mf`.
 4. **Open the photo and look, then write down what it shows.** Say what is on the bed: empty or
    not, the build plate seated or not, and which plate it is (the Textured PEI Plate is gold and
    grainy; Omar's glacier plate, from 2026-10-07, is smooth light blue with a honeycomb strip on

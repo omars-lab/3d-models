@@ -62,6 +62,8 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
    means the ring moves, not the check: draw the map again and pick a radius whose discs miss
    the points. Then update the plate's page: pin count, where they stand, and the questions
    after the print (is it flush round each kept ring; do the notched pieces still sit).
+   The send runs the same ledge check on every plate with a split-flange piece and refuses a
+   bitten one (`.claude/skills/send-plate/plate-checks.yaml`), so this step finds it early.
 6. **A recipe change resets the yes**: `plate_approve.py <page> --iterate` (manage-approvals).
 
 ## Scripts — when to use each

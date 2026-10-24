@@ -311,9 +311,15 @@ def main():
     ap.add_argument("--tol", type=float, default=0.25,
                     help="how far short of its own width the ledge may fall at a corner, mm")
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--write-fixture", metavar="DIR",
+                    help="write the self-test's clean.3mf and bitten.3mf into DIR (for the send's tests)")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
+    if a.write_fixture:
+        for name, ledge in [("clean", CLEAN), ("bitten", BITTEN)]:
+            write_plate(Path(a.write_fixture) / f"{name}.3mf", ledge)
+        return 0
     if not a.plate:
         ap.error("give a plate, or --self-test")
     try:
