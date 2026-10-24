@@ -148,6 +148,28 @@ def draw(segs, cl, sites, need, stud, path, title):
         f.write("\n".join(o))
 
 
+def print_rings(cl, band: float, gap: float, wall: float) -> None:
+    """The widest room in each ring round the centre, and the biggest stud it takes.
+
+    A rosette repeats round its middle, so a ring at one radius has the same room at
+    each of its repeats: one number per ring says whether a stud fits all the way
+    round it. The centre is the middle of the cut face's bounding box."""
+    xs = [c[0] for c in cl]
+    ys = [c[1] for c in cl]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    rings: dict[int, tuple[float, float, float]] = {}
+    for x, y, d in cl:
+        k = int(math.hypot(x - cx, y - cy) // band)
+        if k not in rings or d > rings[k][2]:
+            rings[k] = (x, y, d)
+    print(f"rings round ({cx:.2f}, {cy:.2f}), {band} mm bands, wall {wall} mm, gap {gap} mm")
+    for k in sorted(rings):
+        x, y, d = rings[k]
+        stud = 2 * (d - wall) - gap
+        print(f"ring={k * band:.1f}..{(k + 1) * band:.1f} widest_room_mm={d:.2f} "
+              f"biggest_stud_mm={max(stud, 0):.2f} at=({x - cx:.2f},{y - cy:.2f})")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("stl")
@@ -159,6 +181,8 @@ def main(argv=None):
     ap.add_argument("--step", type=float, default=0.2, help="sample grid, mm")
     ap.add_argument("--sweep", help="comma list of stud diameters to count sites for")
     ap.add_argument("--svg", help="write the cut face with the chosen sites")
+    ap.add_argument("--rings", type=float, metavar="BAND",
+                    help="list the room ring by ring out from the centre, in bands this many mm wide")
     a = ap.parse_args(argv)
 
     segs = slice_at(a.stl, a.z)
@@ -177,6 +201,8 @@ def main(argv=None):
         sites = pick(cl, need, a.spacing)
         room = sum(1 for c in cl if c[2] >= need) * a.step * a.step
         print(f"stud={s} need_clearance={need:.2f} room_mm2={room:.1f} sites={len(sites)}")
+    if a.rings:
+        print_rings(cl, a.rings, a.gap, a.wall)
     if a.svg:
         need = (a.stud + a.gap) / 2 + a.wall
         sites = pick(cl, need, a.spacing)
