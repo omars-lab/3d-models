@@ -42,10 +42,13 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
    When he marks a few pins, take it as their whole ring in every repeat and say so.
 4. **Write the rings into the plate.** Each kept ring is three params on every item of the plate:
    `stud_ringN` (radius, mm), `stud_ringN_n` (pins) and `stud_ringN_turn` (degrees from +x of the
-   first pin), N = 1 to 3; add `stud_boss: 1` when a ring stands where the groove was. Any ring
+   first pin), N = 1 to 5; add `stud_boss: 1` when a ring stands where the groove was. Any ring
    turns the automatic pick off, so a pin the old layout had and you want kept must be in a ring
-   too. The kernel snaps each pin to the roomiest point within 1.5 mm and refuses a pin with no
-   room, naming the ring and the angle: draw the map again, do not loosen the wall. `--check` on the
+   too. A pin stands exactly where its ring puts it when that spot has room, so every repeat
+   matches; only a pin without room there moves, to the roomiest point within 1.5 mm, and a pin
+   with no room in reach is refused, naming the ring and the angle: draw the map again, do not
+   loosen the wall. When Omar asks for a ring on a circle that has no room (split-06's stars, at
+   35.3 mm), use the nearest radius on the same line that has room, and say how far in it moved. `--check` on the
    render lists every pin's radius and angle, so read the old layout's rings off it. split-06 was
    the first ([the plate](../../../docs/design/plates/split-06.md); bikar's pin rings and bosses).
 5. **Check it.** Render the lower half again and draw the plate's pins picture
