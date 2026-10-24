@@ -29,6 +29,9 @@ Format: `` - `<path glob>` — why ``. The glob is matched against the worktree'
 - `*/3d-models-pm` — a standing read-only checkout another loop reads.
 - `*/3d-models-master-ro` — a standing read-only checkout another loop reads.
 - `*/3d-models-hub-ro` — a standing read-only checkout another loop reads.
+- `*/3d-models-hub-rw` — the checkout the hub's judging page writes Omar's answers into
+  (`HUB_RW_CHECKOUT` in 3d-model-hub's Makefile). It is clean and detached at an old master
+  most of the time, so the plan called it dead on 2026-10-23; removing it would break the page.
 - `*/.claude/worktrees/agent-*` — a subagent's worktree, owned by its session.
 - `*/bikar-main` — bikar's push-and-delete worktree; the bare repo has no work tree of its own.
 - `*-work` — a loop's standing working tree, reused for each next PR.
