@@ -1,8 +1,9 @@
 ---
 plate: split-06
+print_log: '[[print-logs/split-06|print log]]'
 recipe: split-06.yaml
 iteration: 4
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the whole flange coaster, with split-05's set 3 settings (1.2 mm pins, 0.10 mm piece gap, the kite at 0.12), its 40 pins in four rings (between the small kites, between the bigger kites, between the stars, and on the outer points; none round the middle star) and no labels, close flush all the way round, hold together and keep its pieces snug, so it is a coaster to keep?"
@@ -146,7 +147,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-24 | approved | Omar, in chat: "send in green" | iteration 4 @ 52f7ddc85a in #00AE42 | |
+| 2026-10-24 | approved | Omar, in chat: "send in green" | iteration 4 @ 52f7ddc85a in #00AE42 | sent 2026-10-24 |
 
 ## Timeline
 
@@ -156,3 +157,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-24 | sliced: iteration 2, 20 pins in two rings with a filled groove at each (bikar #343), on Omar's "remove redC add blue"; 112 minutes, about 32 g, no warnings | this page |
 | 2026-10-24 | sliced: iteration 3, 50 pins in five rings, three more between the small kites, the bigger kites and the stars (bikar #344), on Omar's comment on the pins picture; 119 minutes, about 31 g, no warnings | this page |
 | 2026-10-24 | sliced: iteration 4, 40 pins in four rings, the ring round the middle star removed on Omar's "remove inner most radial set of pins"; 117 minutes, about 31 g, no warnings | this page |
+| 2026-10-24 | sent — by `bambu print send`; spends the approval of 2026-10-24, iteration 4 @ 52f7ddc85a in #00AE42 | this page |
