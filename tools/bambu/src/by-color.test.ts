@@ -89,7 +89,7 @@ const BANDS_FACES = BANDS.map((b) => ({ ...b, faces: b.orbit === 1 ? ORBIT_1_FAC
 
 describe("readBandsJson — the orbits bikar bands prints", () => {
   const CLI = "/bikar/packages/cli/dist/index.js";
-  const rings = { rings: [{ ring: 0, radius: 0, tiles: 1, colour: "Middle" }] };
+  const rings = { rings: [{ ring: 0, radius: 0, tiles: 1, color: "Middle" }] };
 
   it("reads the orbit listing", () => {
     const out = JSON.stringify({ ...rings, orbits: { rotation_order: 10, orbits: BANDS } });
