@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1312.67" height="393.3" viewBox="0 0 1312.67 393.3" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>The small kite: two halves joined by one pin</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">The small kite: two halves joined by one pin</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Gold and teal: the piece. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). To scale.</text>
+<g data-panel="1. Closed, to scale">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. Closed, to scale</text>
+<g transform="translate(117.6,109.5)">
+<polygon data-kind="piece" points="35.2,184.8 149.6,184.8 149.6,158.4 35.2,158.4" fill="#3f9189"/>
+<line data-mark="first" x1="35.2" y1="184.8" x2="149.6" y2="184.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="0,158.4 184.8,158.4 184.8,92.4 0,92.4" fill="#3f9189"/>
+<polygon data-kind="flange" points="0,92.4 184.8,92.4 184.8,26.4 0,26.4" fill="#dcaa33"/>
+<polygon data-kind="piece" points="35.2,26.4 149.6,26.4 149.6,0 35.2,0" fill="#dcaa33"/>
+<line data-mark="first" x1="35.2" y1="0" x2="149.6" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="socket" points="60.5,92.4 124.3,92.4 124.3,39.6 60.5,39.6" fill="#ffffff"/>
+<polygon data-kind="stud" points="66,92.4 118.8,92.4 118.8,57.2 110,48.4 74.8,48.4 66,57.2" fill="#3f9189"/>
+<line data-kind="seam" x1="0" y1="92.4" x2="184.8" y2="92.4" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="176" y1="92.4" x2="176" y2="39.6"/>
+<line x1="172" y1="92.4" x2="180" y2="92.4"/>
+<line x1="172" y1="39.6" x2="180" y2="39.6"/>
+</g>
+<text x="183" y="70" font-size="11" fill="#444444" text-anchor="start">hole 1.2</text>
+<g data-kind="dim" stroke="#666666" stroke-width="1">
+<line x1="176" y1="39.6" x2="176" y2="0"/>
+<line x1="172" y1="39.6" x2="180" y2="39.6"/>
+<line x1="172" y1="0" x2="180" y2="0"/>
+</g>
+<text x="183" y="23.8" font-size="11" fill="#444444" text-anchor="start">floor 0.9</text>
+</g>
+<circle data-label-dot="1" cx="130.8" cy="162.3" r="2.6" fill="#222222"/>
+<polyline points="130.8,162.3 103.6,162.3 93.6,162.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="166.3" font-size="12" fill="#222222" text-anchor="end">upper half</text>
+<circle data-label-dot="1" cx="130.8" cy="241.5" r="2.6" fill="#222222"/>
+<polyline points="130.8,241.5 103.6,241.5 93.6,241.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="245.5" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="223.2" cy="171.1" r="2.6" fill="#222222"/>
+<polyline points="223.2,171.1 367.07,171.1 377.07,171.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="381.07" y="175.1" font-size="12" fill="#222222" text-anchor="start">1.2 mm pin</text>
+<text x="20" y="322.3" font-size="12" fill="#444444">The hole sits wholly over the face block, so its floor is the 0.6</text>
+<text x="20" y="339.3" font-size="12" fill="#444444">mm face block plus 0.3 mm of band: 0.9 mm, more than the 0.6 mm the</text>
+<text x="20" y="356.3" font-size="12" fill="#444444">coaster's own pin holes keep.</text>
+</g>
+<g data-panel="2. How the two halves print">
+<text x="506.67" y="89.5" font-size="14" font-weight="bold" fill="#222222">2. How the two halves print</text>
+<g transform="translate(661.15,109.5)">
+<polygon data-kind="piece" points="25.6,99.2 108.8,99.2 108.8,80 25.6,80" fill="#3f9189"/>
+<line data-mark="first" x1="25.6" y1="99.2" x2="108.8" y2="99.2" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="0,80 134.4,80 134.4,32 0,32" fill="#3f9189"/>
+<line data-mark="last" x1="0" y1="32" x2="134.4" y2="32" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="stud" points="48,32 86.4,32 86.4,6.4 80,0 54.4,0 48,6.4" fill="#3f9189"/>
+<line data-mark="last" x1="48" y1="0" x2="86.4" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="275.2,99.2 358.4,99.2 358.4,80 275.2,80" fill="#dcaa33"/>
+<line data-mark="first" x1="275.2" y1="99.2" x2="358.4" y2="99.2" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="249.6,80 384,80 384,32 249.6,32" fill="#dcaa33"/>
+<line data-mark="last" x1="249.6" y1="32" x2="384" y2="32" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="293.6,70.4 340,70.4 340,32 293.6,32" fill="#ffffff"/>
+<rect data-kind="bed" x="-6" y="103.2" width="396" height="5" fill="#cfcbc3"/>
+<text x="394" y="109.2" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="670.75" cy="167.1" r="2.6" fill="#222222"/>
+<polyline points="670.75,167.1 641.15,167.1 631.15,167.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="627.15" y="171.1" font-size="12" fill="#222222" text-anchor="end">lower half, pin up</text>
+<circle data-label-dot="1" cx="1035.55" cy="167.1" r="2.6" fill="#222222"/>
+<polyline points="1035.55,167.1 1126.39,167.1 1136.39,167.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1140.39" y="171.1" font-size="12" fill="#222222" text-anchor="start">upper half, turned over</text>
+<text x="506.67" y="248.3" font-size="12" fill="#444444">Both faces print on the bed. The pin's tip and the hole's mouth are last layers, so the bed's squash reaches neither.</text>
+<text x="506.67" y="265.3" font-size="12" fill="#c0392b">Two pins along the long axis only just fit: the band leaves the 1.625 mm of room split-06 gives a 1.2 mm pin only from</text>
+<text x="506.67" y="282.3" font-size="12" fill="#c0392b">about 1.8 mm on one side of the middle to 0.6 mm on the other, 2.4 mm, and two holes need about 2.3 mm between centres. The</text>
+<text x="506.67" y="299.3" font-size="12" fill="#c0392b">outer hole would also hang past the face block, so it could only be 0.9 mm deep. One pin has room to spare.</text>
+</g>
+</svg>
