@@ -80,7 +80,7 @@ are stand-ins.*
    and grams; the map writes its color block onto the page once the page exists (§3).
 7. **The send, color named.** send-plate runs `print send … --color "#RRGGBB"` with the mapped
    tray's color. The send reads the trays again and refuses if that color is no longer loaded
-   (`3d-models:tools/bambu/src/commands/print.ts:L423 "✗ filament:"`).
+   (`3d-models:tools/bambu/src/commands/print.ts:L435 "✗ filament:"`).
 8. **The next color.** Each plate is its own yes and its own send.
 
 The send's re-read is the gate (step 7); the map at step 4 is a plan. The trays can change between
@@ -134,7 +134,7 @@ a plate in pink and the send could refuse it. So the map is a new verb on the sa
 
 **Why send-plate, not a new skill or print-model.** send-plate already owns the filament check
 (step 4.2, `bambu filament-sync`) and already passes `--color` for a recipe with no color
-(`3d-models:.claude/skills/send-plate/SKILL.md:L143 "picked at the send"`). Putting the map in the
+(`3d-models:.claude/skills/send-plate/SKILL.md:L144 "picked at the send"`). Putting the map in the
 same skill means one skill reads the trays at the plan and again at the send. A new skill would
 split that reading across two skills. print-model plans a print up to the owner's gate and never
 sends; it does not own the trays. This choice is easy to undo, since the script can move later.
@@ -334,7 +334,7 @@ per-color plate. The changes, which are task #244:
    `--ams-mapping` is given, dry run too
    (`3d-models:tools/bambu/src/color-at-send.ts:L77 "and this one names none"`). It already
    refused both at once
-   (`3d-models:tools/bambu/src/commands/print.ts:L290 "--color and --ams-mapping both pick the spool"`).
+   (`3d-models:tools/bambu/src/commands/print.ts:L291 "--color and --ams-mapping both pick the spool"`).
 4. **send-plate's step 4.2 text** changes from "a recipe with no `color:` is one whose color is
    picked at the send" to "every one-color plate's color is picked at the send".
 5. **The compose field stays.** `PlateProfile.color` in `slice compose`

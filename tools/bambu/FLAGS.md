@@ -547,3 +547,19 @@ each spool's grams left, each color's on hand, held and available, and the buy l
 |---|---|
 | `--logs <dir>` | the print logs to close prints from (default: the shelf file's logs:, else docs/design/plates/print-logs) |
 | `--json` | print the shelf as JSON |
+
+### `bambu plate-checks`
+
+the checks every plate must pass before a send (.claude/skills/send-plate/plate-checks.yaml)
+
+### `bambu plate-checks run`
+
+run every check that applies to one sliced plate, as the send does
+
+| Argument | Required | Description |
+|---|---|---|
+| `plate3mf` | yes |  |
+
+### `bambu plate-checks verify`
+
+check the list itself: every entry reads, every file it names is in the repo
