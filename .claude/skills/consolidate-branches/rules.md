@@ -144,3 +144,10 @@ brace), so someone has to read it.
 - A local branch and its `origin/` twin at the same tip map to one snapshot name. Pushing both
   refspecs fails with "receives from more than one src", so `snapshot` writes and pushes the name
   once (review-md, 2026-10-04).
+- A generated line can keep a merged branch at `diverged`. In 3d-models, the "Waiting on a build"
+  queue line in `docs/design/plates/README.md` is rebuilt by every plate PR. So a plate branch's
+  copy of that line matches neither master nor its PR's merge commit, even when every other file
+  it touched landed. Prove the rest by hand: compare each file with the PR's merge commit, and
+  check that master's current queue line still names the plate. Then snapshot the branch. `pkt-2`
+  (PR #657) was proven this way on 2026-10-24. It stays checked out in `3d-models-work`, so it is
+  kept and not deleted.
