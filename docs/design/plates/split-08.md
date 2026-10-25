@@ -3,9 +3,9 @@ plate: split-08
 print_log: '[[print-logs/split-08|print log]]'
 recipe: split-08.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-25-split-08]
 answers: "With split-06's pins where they stand, does a thinner wall round each pin socket (0.7 or 0.45 mm, beside split-06's 0.9 mm) bite less of the hex piece's hidden ledge so it stops wiggling, while each socket still holds when pressed and nothing splits or cracks round it?"
 kind: new
 maturity: experiment
@@ -120,6 +120,14 @@ the answer does not cover them. Do each one on all three sets, the lower half wi
 | Closing it | **Do:** Close each upper half on its lower and press it down. **Look for:** Flush all round, and does it go on with an even press? | Flush and even on all three: the pins and play are the same. | Flush: nothing to change. A thin set not flush: its sockets lean; that wall is out. |
 | The outer pieces | **Do:** Push each outer piece (1F, 1J, 1P) side to side in its closed set. **Look for:** Snug, or wiggling? | Snug on all three: its blunt end was bitten less on split-06, and not at all on the 0.7 and 0.45 sets. | Snug: nothing to change. One wiggles: note which wall. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | in my words | the middle one was the best one, 1c i think; the left most one shakes; middle and right dont shake; left ond did (1a shook) | 2026-10-25 |
+
 ## Pictures
 
 Where the pins stand on one set's lower half, from above, at the top of this page. Drawn from the
@@ -162,3 +170,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-24 | proposed: on D-118, Omar's "Wait for the wall test" for split-06's bitten ledges, and "yes want to test 329"; three walls on one bed, split-06's pins | this page |
 | 2026-10-25 | sent — by `bambu print send`; spends the approval of 2026-10-25, iteration 1 @ 13f3d8604c in #00AE42 | this page |
+| 2026-10-25 | printed — all 21 layers, 15:07 to 17:01 UTC in green on the gold Textured PEI plate; judged by hand the same day: the 0.9 mm set (middle 1A) shook, the 0.7 and 0.45 mm sets did not, and the 0.7 mm set (middle 1C) was the best. "The bigger kites are still not symmetric" is open. Next: split-07 at a 0.7 mm wall (D-119) | [the record](../../prints/2026-10-25-split-08/index.md) |
