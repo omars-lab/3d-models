@@ -2,7 +2,7 @@
 plate: split-08
 recipe: split-08.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "With split-06's pins where they stand, does a thinner wall round each pin socket (0.7 or 0.45 mm, beside split-06's 0.9 mm) bite less of the hex piece's hidden ledge so it stops wiggling, while each socket still holds when pressed and nothing splits or cracks round it?"
@@ -153,6 +153,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-25 | approved | Omar, in chat: "bed ready for test print in green", "send when ready" | iteration 1 @ 13f3d8604c in #00AE42 | |
 
 ## Timeline
 
