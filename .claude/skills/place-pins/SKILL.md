@@ -17,8 +17,9 @@ picks rings, not spots, and the coaster file takes the rings he picked.
 
 ## Two things that decide the room
 
-- **The pin size.** A pin needs half its width plus half the play (`stud_gap`) plus a 0.9 mm wall
-  round its hole: 1.625 mm of room from its centre for a 1.2 mm pin at 0.25 mm play.
+- **The pin size.** A pin needs half its width plus half the play (`stud_gap`) plus a wall
+  round its hole: 0.7 mm on the flange coaster (D-119), so 1.425 mm of room from its centre for a
+  1.2 mm pin at 0.25 mm play (`ring_map.py --wall 0.7`; bikar's own default is 0.9).
 - **The hidden groove.** Each loose piece's rim (its flange) sits in a groove cut 0.8 mm into the
   strap on each side, at the halves' cut. That leaves only the middle of the strap for a pin. On
   the flange coaster at 112.5 mm the ring round the middle star has room for a 0.71 mm pin at
@@ -82,9 +83,10 @@ measured one way in both.
 
 - **Rings, not spots.** A pin that is not part of a ring breaks the rosette's symmetry and holds one
   repeat tighter than the rest.
-- **Keep the wall.** 0.9 mm round the hole is bikar's socket wall by default; a pin that fits only
-  with less is a pin that does not fit. The wall is a setting since bikar #345 (`studs … wall
-  <mm>`, `stud_wall`, at least one 0.4 mm line), and [split-08](../../../docs/design/plates/split-08.md)
-  tests 0.7 and 0.45 mm beside 0.9; until it is judged, keep 0.9 (D-118).
+- **Keep the wall.** 0.7 mm round the hole (`stud_wall: 0.7`); a pin that fits only with less is
+  a pin that does not fit. The wall is a setting since bikar #345 (`studs … wall <mm>`, at least
+  one 0.4 mm line). [split-08](../../../docs/design/plates/split-08.md) printed 0.9, 0.7 and
+  0.45 mm side by side: the 0.9 mm set shook and Omar picked 0.7 (D-119). 0.45 did not shake
+  either, but whether its one-line wall holds when pressed was not asked.
 - **Quality first.** Fewer pins where they hold beat many where they show: a boss changes the
   piece's rim, so the page asks whether the notched pieces still sit flush.

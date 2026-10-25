@@ -6685,3 +6685,34 @@ point at 0.37 mm and the 0.45 mm wall bites no piece.
 
 **What would reverse it:** the 0.45 or 0.7 mm wall cracking or letting the pin go when pressed, or
 the hex pieces still wiggling at the thinner walls. Then split-07 moves the pins (option 1).
+
+## D-119 — The flange coaster's socket wall is 0.7 mm
+
+Omar, 2026-10-25, in chat, judging [split-08](../design/plates/split-08.md) from the pieces in hand:
+"the middle one was the best one, 1c i think", "the left most one shakes", "middle and right dont
+shake", "left ond did (1a shook)". This answers D-118's wall test.
+
+split-08 printed one slice of split-06 three times on one bed, with the pins where split-06 had
+them and a wall of 0.9 mm (split-06's), 0.7 mm or 0.45 mm round each pin socket. The carved ids
+place each set: 1A is the 0.9 mm set's middle piece and 1C the 0.7 mm set's.
+
+### The options on the table
+
+- **0.9 mm, as split-06.** Nothing changes. It shook, and its discs bite the hex point down to
+  0.17 mm of the 0.80 mm ledge.
+- **0.7 mm.** Did not shake, and Omar picked it. Measured on the slice, it still bites the hex
+  piece's point (0.37 mm left) and blunt end (0.45 mm), less than half of 0.9's bite, and clears the
+  outer piece.
+- **0.45 mm.** Did not shake either, and bites no piece. But it is one 0.4 mm line wide, and whether
+  it holds the pin when pressed, or cracks, was not asked.
+- **Move the pins (D-118's option 1).** Not needed now that a thinner wall stops the shake.
+
+### What was picked
+
+0.7 mm. split-07, the whole flange coaster with split-06's pins where they stand, takes
+`stud_wall: 0.7`, and the place-pins skill now places pins with a 0.7 mm wall.
+
+**What would reverse it:** the 0.7 mm wall shaking, cracking or letting a pin go on the whole
+coaster (split-07). Then try 0.45 mm if its sockets prove to hold, or move the pins (D-118's
+option 1). Omar's "the bigger kites are still not symmetric" is open apart from this: the drawn
+pieces are mirror-symmetric, so a photo with the lopsided side marked comes first.
