@@ -1,0 +1,86 @@
+# split-07 — the whole flange coaster, split-06's pins where they stand, a 0.7 mm socket wall
+#
+# split-06 printed the whole coaster with a 0.9 mm wall round each pin socket. The disc that wall
+# makes round each pin bit the hidden ledges of the hex and outer pieces, and those pieces wiggled
+# (Omar, 2026-10-24: "the blunt pieces wiggle more than the pointy kites"). split-08 tried three
+# walls on one slice. Omar, 2026-10-25: "the middle one was the best one, 1c i think", "left ond
+# did (1a shook)", "middle and right dont shake". So the 0.9 mm wall shook, and 0.7 mm was the best
+# (D-119).
+#
+# split-07 is split-06 with one change: stud_wall 0.7 on every item (bikar's split
+# `studs … wall <mm>`). Disc radius 1.425 mm round each pin, where split-06's was 1.625.
+#
+#   Pins:    as split-06's iteration 4: 1.2 mm, stud_gap 0.25, in rings 2 to 5 (54.4, 14.3, 25.1
+#            and 33.5 mm out, 10 each), 40 pins in all. stud_boss 1.
+#   Closing: room 0.2.
+#   Fit:     piece gap 0.10 per face for the middle, hexes, stars and outer pieces; the kites 0.12.
+#
+# Every item prints with setting 8, the bed-face setting Omar picked on bedface-5:
+# infill_wall_overlap 55%.
+#
+# No labels, as split-06: no id carved into any piece, and id 0 on the coaster file.
+#
+# No color here, on purpose: the send picks it (`bambu print send … --color "#RRGGBB"`).
+#
+#   LOWER / UPPER / MIDDLE / KITES-G12 / HEXES / STARS / OUTERS
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/split-07.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SP7
+
+# The send's ledge check refuses a plate whose pin discs bite a piece's ledge. This one still bites,
+# less than split-06: a 0.7 mm wall leaves a 1.425 mm disc round each pin, where split-06's 0.9 mm
+# left 1.625. Omar picked that wall on split-08's pieces in hand, so the bite is by design here.
+ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the ledges, less than split-06 did (D-119)"
+no_id_reasons:
+  - &nolabel "No labels: Omar asked for the whole coaster with none, as the piece we would sell (2026-10-23). One coaster on the bed, so nothing needs telling apart. split-07 keeps this (2026-10-25)."
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  LOWER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  UPPER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  MIDDLE
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7 }
+    label:  KITES-G12
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  HEXES
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  STARS
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 14.3, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7 }
+    label:  OUTERS
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
