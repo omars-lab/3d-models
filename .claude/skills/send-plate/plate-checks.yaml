@@ -26,9 +26,9 @@ checks:
     mistake: "split-06, 2026-10-24: the pin discs bit the pink hex pieces' hidden ledges, so they wiggled in the groove"
     source: docs/design/plates/split-06.md
     applies: { any_item_bkr_contains: "split-flange" }
-    command: "python3 .claude/skills/place-pins/scripts/ledge_check.py {plate3mf}"
-    pass: "every loose piece's ledge reaches its full width round every corner"
-    fail: "a piece's ledge falls short at a corner, so a pin disc bit it: move the pins (exit 2 means the plate could not be read)"
+    command: "python3 .claude/skills/place-pins/scripts/ledge_check.py {plate3mf} --recipe {yaml}"
+    pass: "every loose piece's ledge reaches its full width round every corner; or, on a recipe with `ledge_bitten_by_design:` (a plate testing the bite, split-08), a piece is bitten as it says"
+    fail: "a piece's ledge falls short at a corner, so a pin disc bit it: move the pins; or a by-design recipe whose pieces are not bitten, so the test is not what it says (exit 2 means the plate could not be read)"
 
   - id: sliced
     mistake: "minis-05, 2026-09-30: the plate spilled onto a second bed, and a send prints only the first"
