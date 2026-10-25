@@ -72,7 +72,7 @@ coaster) without bosses, low in the lower half (0.5 mm) with them.
 |---|---|---|---|
 | `scripts/ring_map.py` | Finds every spot on the cut face with room for a pin, groups them into rings by radius, and draws the face with each ring lettered and colored, with a legend (radius, pins, first turn); prints the same as lines | Step 2, and again whenever the pin size, the strap width or the bosses change | `python3 .claude/skills/place-pins/scripts/ring_map.py <lower.stl> --z 0.5 --stud 1.2 --gap 0.25 --out <map.png>` |
 | `tools/split_sites.py --rings 1` | The widest room in each 1 mm ring out from the centre, and the biggest pin it takes | To answer "how big a pin fits round the middle" without a picture | `python3 tools/split_sites.py <lower.stl> --z 2.05 --stud 1.2 --gap 0.25 --rings 1` |
-| `scripts/ledge_check.py` | Reads a sliced plate and, for every loose piece, checks that its ledge reaches past its face by the ledge's own width along every side and round every corner; names each bitten corner by its angle and how far the ledge reaches; exit 1 when any piece is bitten. PASS: split-02 and split-05 (no discs). FAIL: split-06 as printed (pink hex point 0.17 mm, blunt ends 0.25 and 0.46 mm, against 0.8 mm along the sides) | Step 5, after every slice of a plate with pins; `make validate-print-review` runs its self-test (a clean kite passes, the same kite with its point bitten fails) | `python3 .claude/skills/place-pins/scripts/ledge_check.py build/plates/<name>.plate.3mf [--tol 0.25]` |
+| `scripts/ledge_check.py` | Reads a sliced plate and, for every loose piece, checks that its ledge reaches past its face by the ledge's own width along every side and round every corner; names each bitten corner by its angle and how far the ledge reaches, and each object by its bed-map label; exit 1 when any piece is bitten. With `--recipe`, a recipe that says `ledge_bitten_by_design: "<why>"` (a plate testing the bite, split-08) turns it round: exit 0 only when a piece is bitten. `--draw DIR` writes one picture per set (the recipe's `group:`): face grey, ledge orange, each bitten corner ringed blue with its reach. A piece with its id carved in its face is checked like any other: only an object whose holes take over a quarter of its outline is a half and skipped (the first run on split-08 skipped every piece with an id). PASS: split-02 and split-05 (no discs). FAIL: split-06 as printed (pink hex point 0.17 mm, blunt ends 0.25 and 0.46 mm, against 0.8 mm along the sides) | Step 5, after every slice of a plate with pins, and `--draw` for the page's ledge pictures; the send runs it with `--recipe` (plate-checks.yaml); `make validate-print-review` runs its self-test (a clean kite passes, the bitten one fails, the by-design recipe turns both round, `--draw` writes one picture) | `python3 .claude/skills/place-pins/scripts/ledge_check.py build/plates/<name>.plate.3mf [--recipe docs/design/plates/<name>.yaml] [--draw docs/design/plates/<name>-media] [--tol 0.25]` |
 | `tools/print_review.py pins` | The plate's pins picture: the lower half from above, each pin a white square | Step 5, and for the plate page | `python3 tools/print_review.py pins <png> <lower.stl>…` |
 
 `ring_map.py` imports `tools/split_sites.py` by walking up to the repo root, so the room is
@@ -82,7 +82,9 @@ measured one way in both.
 
 - **Rings, not spots.** A pin that is not part of a ring breaks the rosette's symmetry and holds one
   repeat tighter than the rest.
-- **Keep the wall.** 0.9 mm round the hole is bikar's socket wall; a pin that fits only with less
-  is a pin that does not fit.
+- **Keep the wall.** 0.9 mm round the hole is bikar's socket wall by default; a pin that fits only
+  with less is a pin that does not fit. The wall is a setting since bikar #345 (`studs … wall
+  <mm>`, `stud_wall`, at least one 0.4 mm line), and [split-08](../../../docs/design/plates/split-08.md)
+  tests 0.7 and 0.45 mm beside 0.9; until it is judged, keep 0.9 (D-118).
 - **Quality first.** Fewer pins where they hold beat many where they show: a boss changes the
   piece's rim, so the page asks whether the notched pieces still sit flush.

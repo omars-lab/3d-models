@@ -196,6 +196,18 @@ describe("split-06's shape is refused", () => {
     expect(results.map((r) => `${r.mark} ${r.id}`)).toEqual(["✓ ledge", "✓ sliced"]);
   });
 
+  // split-08 bites on purpose (its 0.9 mm set is split-06's control): its recipe says so with
+  // `ledge_bitten_by_design:`, so the check turns round and still tests the plate is what it says.
+  it("a recipe that bites by design passes a bitten plate and refuses a clean one", () => {
+    const recipe = plateRecipePath("split-08", root);
+    const ledgeOf = (plate: string) =>
+      runPlateChecks(loadPlateChecks(root), join(dir, plate), recipe, root, realLedgeOnly).find((r) => r.id === "ledge")!;
+    const bitten = ledgeOf("bitten.3mf");
+    expect(bitten).toMatchObject({ ok: true, mark: "✓" });
+    const clean = ledgeOf("clean.3mf");
+    expect(clean).toMatchObject({ ok: false, mark: "✗" });
+  });
+
   it("a plate the script cannot read is refused too", () => {
     const junk = join(dir, "junk.3mf");
     writeFileSync(junk, "not a zip");

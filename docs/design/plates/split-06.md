@@ -104,6 +104,11 @@ on the hex piece's point, its shoulders and its blunt end.
 
 My pick is to move the pins, because it removes the cut instead of shrinking it.
 
+**Decided 2026-10-24:** wait for the wall test → [D-118](../../working-model/decisions-log.md#d-118--the-bitten-ledges-on-split-06-test-a-thinner-socket-wall-before-moving-the-pins).
+A fourth way: a thinner wall round each socket makes a smaller disc with the pins where they
+stand. [split-08](split-08.md) tries walls of 0.9, 0.7 and 0.45 mm; split-07 (moving the pins)
+waits on it.
+
 **Your idea: cut the pieces in two.** You asked: "why arent we doing split infil pieces with pins
 for the tiny kits and sliding for bigger ... so that it feels like both faces were pronted on
 plate". Today each loose piece prints standing up, so its bottom face is smooth from the bed and
