@@ -1,8 +1,9 @@
 ---
 plate: split-08
+print_log: '[[print-logs/split-08|print log]]'
 recipe: split-08.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "With split-06's pins where they stand, does a thinner wall round each pin socket (0.7 or 0.45 mm, beside split-06's 0.9 mm) bite less of the hex piece's hidden ledge so it stops wiggling, while each socket still holds when pressed and nothing splits or cracks round it?"
@@ -153,10 +154,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-25 | approved | Omar, in chat: "bed ready for test print in green", "send when ready" | iteration 1 @ 13f3d8604c in #00AE42 | |
+| 2026-10-25 | approved | Omar, in chat: "bed ready for test print in green", "send when ready" | iteration 1 @ 13f3d8604c in #00AE42 | sent 2026-10-25 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-24 | proposed: on D-118, Omar's "Wait for the wall test" for split-06's bitten ledges, and "yes want to test 329"; three walls on one bed, split-06's pins | this page |
+| 2026-10-25 | sent — by `bambu print send`; spends the approval of 2026-10-25, iteration 1 @ 13f3d8604c in #00AE42 | this page |
