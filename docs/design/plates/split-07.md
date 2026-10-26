@@ -146,6 +146,14 @@ and middle half shows its pin or its hole as a dot.
 
 ![split-07 on the bed from above, shaded by height: the lower and upper halves of the whole coaster with their pins and sockets as dots, and two halves of every loose piece: 20 hexagon halves and 20 outer halves alternating light (slot) and dark (rail), 20 star halves, 20 kite halves and the two middle halves, each with its pin or hole showing, each group named](split-07-media/bed.png)
 
+## The print
+
+The print as the chamber camera saw it: 17 pictures from 18:03 to 20:41 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![split-07 printing, as the chamber camera saw it](split-07-media/timelapse.webp)
+
+![split-07 finished, on the bed](split-07-media/finished.webp)
+
 ## Cost and risk
 
 **About 137 minutes and 36 g of PLA** (the slicer's estimate, 8231 s and 36.49 g), one bed, no
