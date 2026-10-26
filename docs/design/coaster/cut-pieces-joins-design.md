@@ -316,6 +316,6 @@ skills, with the pieces drawn from the real mesh.
 ## Yours to do
 
 - Picked: B (D-120). Nothing to do until the plate's page is up; then a yes and a color.
-- Answered: the slide gap is 0.15 mm a side. sld-1's three gaps all worked, so bikar takes the
-  middle one (§5 item 3); say if one of the other two felt better.
+- Optional: the slide gap is 0.15 mm a side, picked by Claude, not by you: sld-1's three gaps
+  all worked, so bikar takes the middle one (§5 item 3). Say if one of the other two felt better.
 - Optional: hold one split-06 whole piece of each kind back, so plate one has its control in hand.
