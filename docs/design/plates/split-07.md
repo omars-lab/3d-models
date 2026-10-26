@@ -137,9 +137,13 @@ from the coaster file at the plate's settings by `tools/print_review.py pins`. T
 the cut, the pin and the slide come from the [joins design](../coaster/cut-pieces-joins-design.md).
 
 The bed, from above, as the slice lays it out, each group named: two of every loose piece now,
-one per half. Drawn from the sliced plate by `tools/print_review.py bed`.
+one per half. Drawn from the sliced plate by `tools/print_review.py bed`. From above a half has
+the whole piece's outline, so the picture is shaded by height, darker the lower: a pin stands
+out as a bright dot and a hole or slot sinks dark. In the hexagon and outer columns the halves
+alternate: the light ones carry the slot as a dark band, the dark ones the rail. Each star, kite
+and middle half shows its pin or its hole as a dot.
 
-![split-07 on the bed from above: the lower and upper halves of the whole coaster, and two halves of every loose piece: 20 hexagon halves, 20 outer halves, 20 stars, 20 kites and the two middle halves, each group named](split-07-media/bed.png)
+![split-07 on the bed from above, shaded by height: the lower and upper halves of the whole coaster with their pins and sockets as dots, and two halves of every loose piece: 20 hexagon halves and 20 outer halves alternating light (slot) and dark (rail), 20 star halves, 20 kite halves and the two middle halves, each with its pin or hole showing, each group named](split-07-media/bed.png)
 
 ## Cost and risk
 
