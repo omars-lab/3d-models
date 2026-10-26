@@ -1,8 +1,9 @@
 ---
 plate: split-07
+print_log: '[[print-logs/split-07|print log]]'
 recipe: split-07.yaml
 iteration: 3
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Cut in two at its middle and printed face down, does every loose piece of the flange coaster come out with two bed faces, join back into one piece (pins on the kite, star and middle, a slide on the hexagons and outer pieces), and still fit the coaster, which now has a 0.7 mm wall round each pin socket, snug and flush?"
@@ -170,7 +171,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-26 | approved | Omar, in chat: "yes in green" | iteration 3 @ ff079190be in #00AE42 | |
+| 2026-10-26 | approved | Omar, in chat: "yes in green" | iteration 3 @ ff079190be in #00AE42 | sent 2026-10-26 |
 
 ## Timeline
 
@@ -182,3 +183,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-25 | sliced — for the gold Textured PEI plate, 7 objects, no slicer warnings: 6801 s and 31.44 g; the hex points' ledges whole, the blunt end 0.45 mm | this page |
 | 2026-10-25 | changed (iteration 3): every loose piece cut in two and joined, pins on the kites, stars and middle, a slide on the hexagons and outer pieces (D-120, Omar: "Cut them, wait for the slide"); the yes not yet given, so none to reset | [`split-07.yaml`](split-07.yaml) |
 | 2026-10-25 | sliced — for the gold Textured PEI plate, 7 objects, 82 loose halves, no slicer warnings: 8231 s and 36.49 g; the ledges as before, the hexagons' blunt end 0.45 mm | this page |
+| 2026-10-26 | sent — by `bambu print send`; spends the approval of 2026-10-26, iteration 3 @ ff079190be in #00AE42 | this page |
