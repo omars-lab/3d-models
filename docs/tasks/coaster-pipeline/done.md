@@ -2,6 +2,14 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-25 — Cut pieces, first two of three steps: the design for cutting each loose piece in two so both faces print on the bed (D-120), then bikar's cut and pins on a half, each in the cookbook and the design doc (3d-models #775, #788, #789; bikar #346, #347)
+- 2026-10-25 — split-07, the whole flange coaster with a 0.7 mm socket wall, proposed and sliced; iteration 2 moved the inner ring of pins to 13.0 mm, off the hex pieces' points. It now waits for the slide, to be rebuilt as the cut-pieces plate (3d-models #787, #790)
+- 2026-10-25 — split-08, three socket walls on one slice: built, approved, sent, watched and judged. Omar picked 0.7 mm, and 0.9 mm shook (D-118, D-119) (3d-models #781, #783, #784, #785, #786)
+- 2026-10-24 — split-06, the whole flange coaster: pin rings placed, approved, sent and watched to the finish, with pictures of the fix; judging it waits on Omar (3d-models #765, #767, #769, #770, #771, #772, #774, #779)
+- 2026-10-24 — The place-pins skill, a check that pins leave each piece's hidden ledge whole, and a look at why the kites wiggle (3d-models #766, #776, #777)
+- 2026-10-23 — split-04 and split-05: each built, approved, sent, logged and recorded (3d-models #755–#759, #760–#764)
+- 2026-10-22 — split-02's wiggle question asked and answered, and its record written; split-03 built; records written for phones-01, sheets-04b and sheets-04c (3d-models #748–#753)
+- 2026-10-22 — bedface-5 answers read back from the hub and its record written (3d-models #743, #746, #747)
 - 2026-10-16 — split-02, the flange split coaster, sent in pink on the glacier plate and watched to the finish, with its print log and timelapse; judging it waits on Omar (3d-models #736, #739)
 - 2026-10-10 — sheets-04g-fit3 proposed: the middle piece at 0, 0.025 and 0.05 mm again, kites at 0.05 and 0.075 mm, and a fresh coaster carved `3`. The same coaster file under the same slicer settings fit differently on fit and fit2, so one 0.025 mm win is a good sign, not a settled gap; that is written up in the [issue](../../issues/sheets-04g-fit.md). It waits on Omar's yes and a color (3d-models #683)
 - 2026-10-10 — sheets-04g-fit2 approved, sent in pink, printed and judged by Omar: `4GH 1C` (0.025 mm) fits best, and the kites want more gap (3d-models #676, #677, #678, #680, #682)

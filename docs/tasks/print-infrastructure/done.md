@@ -2,6 +2,9 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-24 — The send refuses a plate until the past-mistakes checks pass, and a check that orders add up (3d-models #778, #780)
+- 2026-10-22 — Judging prints on the hub: the judge-page skill, answers saved the moment they are given and watched for, and review-print reading those answers back (3d-models #742, #744, #745)
+- 2026-10-22 — The storefront theme line (3d-models #741)
 - 2026-10-16 — The print watch picks itself back up after the printer drops off the network, and says on the plate's page when it lost the printer and when it found it again (3d-models #737, #738)
 - 2026-10-14 — bedface-5 built, approved, sent in green and watched to the finish: twelve 50 mm pieces of the gBV coaster try the fill pushed 55%, 75% and 100% into the wall, and 55% and 75% with 10% more first-layer plastic, beside two stock pieces; a misquote fixed and a "which bottom would you sell" row added. Judging the pieces waits on Omar (3d-models #727, #728, #733, #734, #735)
 - 2026-10-14 — The teach-simulator skill: one profile per printer setup, fitted from judged prints, with a glacier-plate profile; held out a plate at a time it called 4 of 13 right, so it is not trusted yet (3d-models #732)
