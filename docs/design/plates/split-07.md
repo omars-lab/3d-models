@@ -2,7 +2,7 @@
 plate: split-07
 recipe: split-07.yaml
 iteration: 3
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Cut in two at its middle and printed face down, does every loose piece of the flange coaster come out with two bed faces, join back into one piece (pins on the kite, star and middle, a slide on the hexagons and outer pieces), and still fit the coaster, which now has a 0.7 mm wall round each pin socket, snug and flush?"
@@ -170,6 +170,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-26 | approved | Omar, in chat: "yes in green" | iteration 3 @ ff079190be in #00AE42 | |
 
 ## Timeline
 
