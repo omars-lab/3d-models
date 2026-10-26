@@ -4,26 +4,29 @@
 # A cut across the kite through the pin, 0.6 mm from its middle along its long axis. Sizes measured
 # 2026-10-24 from the kite rendered at split-06's settings: there the face block reaches 1.33 mm from
 # the pin's centre to its nearest edge and the band about 2.0 mm, so the face is drawn 2.6 mm across
-# and the band 4.2 mm. The pin is split-05's pick, 1.2 mm in a hole 0.25 mm wider; it is 1.0 mm
-# tall in a 1.2 mm hole, so the cut faces close flat. Halves 2.1 mm, face block 0.6 mm.
+# and the band 4.2 mm. The pin is split-05's pick, 1.2 mm in a hole 0.25 mm wider. The hole keeps
+# 0.6 mm of floor, so over the face block it is 1.5 mm deep, and the pin is 0.2 mm shorter, 1.3 mm,
+# as bikar builds it (corrected 2026-10-25; first drawn as a 1.0 mm pin over a 0.9 mm floor).
+# Halves 2.1 mm, face block 0.6 mm.
 title: "The small kite: two halves joined by one pin"
 panels:
   - title: "1. Closed, to scale"
-    width: 4.2
+    width: 5.2
     scale: [44, 44]
     parts:
       - {kind: piece, color: teal, box: [0.8, 0, 2.6, 0.6], first: bottom}
       - {kind: flange, color: teal, box: [0, 0.6, 4.2, 1.5], label: lower half, label_at: [0.3, 1.2], label_side: left}
       - {kind: flange, box: [0, 2.1, 4.2, 1.5], label: upper half, label_at: [0.3, 3.0], label_side: left}
       - {kind: piece, box: [0.8, 3.6, 2.6, 0.6], first: top}
-      - {kind: socket, box: [1.375, 2.1, 1.45, 1.2]}
-      - {kind: stud, color: teal, box: [1.5, 2.1, 1.2, 1.0], toward: up, label: "1.2 mm pin", label_at: [2.4, 2.8]}
+      - {kind: socket, box: [1.375, 2.1, 1.45, 1.5]}
+      - {kind: stud, color: teal, box: [1.5, 2.1, 1.2, 1.3], toward: up, label: "1.2 mm pin", label_at: [2.1, 2.5], label_side: left}
       - {kind: seam, line: [0, 2.1, 4.2]}
-      - {kind: dim, from: [4.0, 2.1], to: [4.0, 3.3], text: "hole 1.2"}
-      - {kind: dim, from: [4.0, 3.3], to: [4.0, 4.2], text: "floor 0.9"}
+      - {kind: dim, from: [4.6, 2.1], to: [4.6, 3.6], text: "hole 1.5"}
+      - {kind: dim, from: [4.6, 3.6], to: [4.6, 4.2], text: "floor 0.6"}
     notes:
-      - "The hole sits wholly over the face block, so its floor is the 0.6 mm face block plus 0.3 mm
-        of band: 0.9 mm, more than the 0.6 mm the coaster's own pin holes keep."
+      - "The hole sits wholly over the face block, so it goes through the band and keeps the face
+        block as its floor: 0.6 mm, what the coaster's own pin holes keep. The pin is 1.3 mm, 0.2
+        short of the hole's floor, so the halves close flat."
 
   - title: "2. How the two halves print"
     width: 12
@@ -31,10 +34,10 @@ panels:
     parts:
       - {kind: piece, color: teal, box: [0.8, 0, 2.6, 0.6], first: bottom}
       - {kind: flange, color: teal, box: [0, 0.6, 4.2, 1.5], last: top, label: "lower half, pin up", label_at: [0.3, 1.3], label_side: left}
-      - {kind: stud, color: teal, box: [1.5, 2.1, 1.2, 1.0], toward: up, last: top}
+      - {kind: stud, color: teal, box: [1.5, 2.1, 1.2, 1.3], toward: up, last: top}
       - {kind: piece, box: [8.6, 0, 2.6, 0.6], first: bottom}
       - {kind: flange, box: [7.8, 0.6, 4.2, 1.5], last: top, label: "upper half, turned over", label_at: [11.7, 1.3]}
-      - {kind: socket, box: [9.175, 0.9, 1.45, 1.2]}
+      - {kind: socket, box: [9.175, 0.6, 1.45, 1.5]}
       - {kind: bed, line: [0, 0, 12]}
     notes:
       - "Both faces print on the bed. The pin's tip and the hole's mouth are last layers, so the
@@ -42,5 +45,5 @@ panels:
     warn:
       - "Two pins along the long axis only just fit: the band leaves the 1.625 mm of room split-06
         gives a 1.2 mm pin only from about 1.8 mm on one side of the middle to 0.6 mm on the other,
-        2.4 mm, and two holes need about 2.3 mm between centres. The outer hole would also hang
+        2.4 mm, and two holes need 2.35 mm between centres (the pin, its gap and a wall). The outer hole would also hang
         past the face block, so it could only be 0.9 mm deep. One pin has room to spare."

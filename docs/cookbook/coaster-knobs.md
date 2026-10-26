@@ -677,7 +677,55 @@ printed yet.
 
 Related: [loose pieces in pockets](#loose-pieces-in-pockets),
 [the split design, §11](../design/pieces/split-with-studs-design.md),
-[an id on each half](#an-id-on-each-half-of-a-split-coaster).
+[an id on each half](#an-id-on-each-half-of-a-split-coaster),
+[pins in a cut piece](#pins-that-close-a-cut-piece).
+
+## Pins that close a cut piece
+
+A flange piece prints with one face up, so that face comes out rougher than the one on the bed.
+`halves 1` on the hold cuts each loose piece in two at its middle, so both halves print face
+down and both faces come off the bed smooth. The two halves then need lining up when they are
+glued, and that is what pins are for. `pin <⌀>` on the hold sizes them, and `pins <n>`, last on
+a `loose` line, asks for `n` on each of that line's pieces. Each pin stands on the lower half's
+cut face and goes into a hole in the upper half. One pin goes where the piece has the most room;
+more spread out from there. The picture draws the star coaster opened up with no pins, one pin
+and two pins on its gold middle piece, with the pins drawn 3 mm wide so they show.
+
+<!-- recipe: coaster-half-pins; swap: pins 0 | pins 1 | pins 2 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 45
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    Teal = #2f8f8f
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 2 color Teal
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4.4
+  strap width 4
+  loose where orbit == 0 clearance 0.25 pack zipper pins 1
+  split at 2.2 studs 2 hold flange 0.8 room 0.2 halves 1 pin 3
+```
+![The star coaster opened up three times, its gold middle piece cut in two with no pins, one pin and two pins](img/coaster-half-pins.png)
+
+**Watch out:** `halves` is the switch. With it off, `pin` and `pins` build nothing, so a pattern
+can carry every pin knob at 0. `pins` on a coaster that is not split is refused. With halves on,
+`pins` with no `pin` size is refused, and so is a piece with room for fewer pins than it asks
+for: bikar names the piece and its widest room. The hole is wider than the pin by `gap` (0.25 mm
+by default), keeps a `wall` round it (0.9 mm by default) and two pins stand at least `spacing`
+apart (the pin, its gap and a wall by default). The hole stops at a 0.6 mm floor, and the pin is
+0.2 mm shorter than its hole so the cut faces close flat. Cutting pieces in two has not been
+printed yet.
+
+Related: [split coasters](#split-coasters-two-halves-that-trap-the-pieces),
+[the cut-pieces design](../design/coaster/cut-pieces-joins-design.md),
+[the language reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
 
 ## An id on each half of a split coaster
 <!--covers:mark-->

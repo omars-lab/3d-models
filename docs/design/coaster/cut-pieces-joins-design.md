@@ -78,11 +78,17 @@ is the outline's area over the area of its convex hull: 1.0 means it never turns
 
 ### 2.1 A pin in a half
 
-A half is 2.1 mm: the 0.6 mm face block and 1.5 mm of band. A 1.2 mm pin 1.0 mm tall goes into a
-1.45 mm hole 1.2 mm deep, so the cut faces close flat. Where the hole sits wholly over the face
-block its floor is 0.9 mm, above the 0.6 mm the coaster keeps under its own pin holes (CAL-CST-03).
-Where it hangs past the face block, there is nothing under the band but air, so the hole can only
-be 0.9 mm deep to keep 0.6 mm of band under it.
+A half is 2.1 mm: the 0.6 mm face block and 1.5 mm of band. A 1.2 mm pin goes into a 1.45 mm hole
+that keeps 0.6 mm of floor under it, the floor the coaster keeps under its own pin holes
+(CAL-CST-03). Where the hole sits wholly over the face block it is 1.5 mm deep (2.1 less 0.6).
+Where it hangs past the face block there is nothing under the band but air, so it can only be
+0.9 mm deep (the band's 1.5 less 0.6). The pin is 0.2 mm shorter than its hole, so the cut faces
+close flat and a little sag at the hole's floor does not hold them apart.
+
+*Corrected 2026-10-25, when bikar built it:* this section first said a 1.0 mm pin in a 1.2 mm hole
+over a 0.9 mm floor. That floor was a slip: the rule is 0.6 mm, and the hole goes as deep as the
+rule allows. On the flange coaster every hole sits over the face block (§5 step 2), so every
+pin is 1.3 mm tall.
 
 split-06's notes give a 1.2 mm pin 1.625 mm of room
 ([split-06.yaml](../plates/split-06.yaml)). Carrying that, and the 0.25 mm gap, to a piece half
@@ -94,16 +100,16 @@ pushed home. That is one reason §4.2 tries two gaps.
 - **Small kite: one pin, not two.** Along its long axis the band has 1.625 mm of room only from
   about 1.8 mm on one side of the middle to 0.6 mm on the other, and the face block reaches 0.725
   mm (half the hole) only from 1.5 mm on one side to 1.35 mm on the other. One pin 0.6 mm off the middle has 2.0 mm of band
-  room and 1.33 mm of face room. Two holes need about 2.3 mm between centres, which leaves the
+  room and 1.33 mm of face room. Two holes need 2.35 mm between centres (the pin, its gap and a wall), which leaves the
   outer one at the rule's edge and hanging past the face block, so two pins are not proposed.
 - **Star: one pin, at its middle.** 2.05 mm of face room, 2.94 of band room. Along its longest
-  line the room for a second pin runs out before the 2.3 mm spacing (1.44 mm of band room
+  line the room for a second pin runs out before the 2.35 mm spacing (1.44 mm of band room
   1.5 mm out on one side), so one pin.
 - **Middle: three pins.** The face has room for a pin from 8 mm on one side to 8 mm on the other.
 - **Hexagons: two pins** about 4 mm either side of the middle, with room to spare, as the
   comparison for the slide.
 
-![Two side views of the small kite to scale. 1: the two halves closed, a 1.2 mm pin from the lower half in a 1.2 mm hole in the upper half, a 0.9 mm floor over the face block. 2: both halves printed face down, the pin standing up on one, the hole open on the other; a red note says two pins only just fit.](cut-pieces-joins-media/kite-pin.png)
+![Two side views of the small kite to scale. 1: the two halves closed, a 1.2 mm pin 1.3 mm tall from the lower half in a 1.5 mm deep hole in the upper half, a 0.6 mm floor over the face block. 2: both halves printed face down, the pin standing up on one, the hole open on the other; a red note says two pins only just fit.](cut-pieces-joins-media/kite-pin.png)
 
 ### 2.2 A slide in a half
 
@@ -251,6 +257,30 @@ pairs are tried in a flange coaster Omar has in hand: split-06's, or split-07's 
    deep over the face block, shallower where it hangs past. Refuse a pin with no room, with the
    room it found. Refuse too any pin or disc, the piece's own or the coaster's, that cuts into a
    piece's point (§2.4), naming the piece and the point.
+   **How it is spelled (built 2026-10-25, [bikar 347](https://github.com/NaqshCoffee/bikar/pull/347)):**
+   the pin size goes on the hold, `hold flange … halves 1 pin 1.2 gap 0.25 wall 0.9 spacing 0`,
+   and each piece kind asks for its count, `loose … pins 2`. `gap` and `wall` default to
+   split-05's 0.25 mm and the coaster's 0.9 mm socket wall; `spacing 0` means the least that
+   fits, the pin, its gap and a wall, 2.35 mm. The flange coaster pattern carries all of it as
+   params (`pin`, `pin_gap`, `pin_wall`, `pin_spacing`, and `pins_middle`, `pins_kite`,
+   `pins_hex`, `pins_star`, `pins_outer`), each off at 0. Pins stand on the lower half; the
+   upper half takes the holes. On split-04's slice with one pin on the kite and star and two on
+   the others, every hole sits over the face block, so every hole is 1.5 mm and every pin 1.3 mm;
+   a hanging hole does not come up on this coaster, so the 0.9 mm case is built but not yet seen.
+   `halves` is the switch: with it off, `pin` and `pins` build nothing, so each knob on its own
+   still builds (bikar builds every param at its range ends, one at a time). bikar always refuses
+   pins on a coaster that is not split. With halves on it refuses pins with no pin size, a wall
+   thinner than one line, a spacing under the least, and more pins than a piece has room for (a
+   second kite pin: "has room for 1 of its 2 pins … widest room on it is 1.95 mm"), and a coaster
+   stud whose bite reaches a piece's point.
+   bikar calls a convex corner sharper than 90° a point. That is a line drawn through this
+   coaster's own corners, not a printed reading: every tip on it is 36° or 72° and every shoulder
+   108° or more, so any line between 72° and 108° sorts them the same
+   ([§2.4](#24-risk-pins-that-bite-a-pieces-point)). A coaster with a corner between 72° and
+   108° has not been seen, and on one the line would need looking at again. split-07 as it printed still builds whole but is refused with halves on, because one
+   of its studs bites a point. So cut pieces that fit split-07 as printed cannot be built: the
+   plate needs a coaster whose studs sit off the points (the place-pins skill), which also means
+   printing that coaster.
 3. **A slide on a piece half.** Reuse the dovetail kernel's layer widths on a half's cut face.
    Either run the rail on the face's outline, or allow the hexagons' notches; keep the refusal for
    an outline that turns inward and say which piece it refused. Refuse a slot that leaves under

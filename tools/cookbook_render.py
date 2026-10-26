@@ -56,6 +56,9 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Fonts for the labels under each copy, first one present wins (see the montage call).
+LABEL_FONTS = ("/System/Library/Fonts/Helvetica.ttc", "/System/Library/Fonts/Supplemental/Arial.ttf",
+               "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
 sys.path.insert(0, os.path.join(ROOT, "build"))
 from brick_previews import mate_offset, openscad, render as openscad_render  # noqa: E402
 
@@ -249,8 +252,14 @@ def draw(cli, name, options, snippet):
             for label, png in pngs:
                 cmd += ["-label", label, png]
             cmd += ["-tile", f"{len(pngs)}x1", "-geometry", "+8+8", "-pointsize", "20",
-                    "-background", "white", out]
-            run(cmd, name)
+                    "-background", "white"]
+            # Name the label font: ImageMagick's own default comes from Ghostscript's font
+            # list, which a Ghostscript upgrade can leave pointing nowhere ("unable to read
+            # font `'"), and then every multi-copy picture fails (2026-10-25).
+            font = next((f for f in LABEL_FONTS if os.path.exists(f)), None)
+            if font:
+                cmd += ["-font", font]
+            run(cmd + [out], name)
     return os.path.relpath(out, ROOT), len(copies)
 
 
