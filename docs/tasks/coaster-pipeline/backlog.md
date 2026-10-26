@@ -20,6 +20,9 @@ consturciotn and move back to split coasters and split inflills"), so they come 
    band. Then one plate with the cut pairs (no join, at split-06's gaps and 0.02 mm looser) beside
    the joined pairs, and its page. Omar's pick, 2026-10-25. Steps (a) and (b) merged (bikar #346,
    #347); split-07's inner pin ring moved from 14.3 to 13.0 mm so the pins clear the hex points.
+   split-07 is that plate: it waits for step (c), then its loose pieces are cut and joined
+   (Omar, 2026-10-25, on split-07's bed picture: "outers, hexes, middle, kites all not split",
+   then "Cut them, wait for the slide"). Its yes and color come after.
 2. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
    kites are still not eymetric". As drawn they are mirror-symmetric, so the difference comes in the
    slice or the print. Needs a photo with the lopsided side marked (split-07's page asks for it),
@@ -67,13 +70,14 @@ Sending a print and which filament to load.
 - **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
   [split-02](../../design/plates/split-02.md) (flange)** — the gBV coaster at 112.5 mm cut in two
   halves that close over its loose pieces (D-100, 2026-10-05). split-02 printed in pink on
-  2026-10-15 and waits on Omar's judging, the questions on its page. split-01 (one bed, 89
+  2026-10-15 and was judged and recorded on 2026-10-22 (3d-models #748–#751). split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
 - **Send [split-07](../../design/plates/split-07.md), the whole flange coaster with a 0.7 mm
   socket wall** — split-06 again with the wall Omar picked on split-08 (D-119). One bed, about
-  116 minutes and 31 g. Waits on Omar's yes, with the color in it. Built 2026-10-25 after
-  split-08's verdicts and his "go".
+  113 minutes and 31 g. Built 2026-10-25 after split-08's verdicts and his "go". It now waits
+  for the slide (item 1, step c): then its loose pieces are cut and joined, and Omar's yes, with
+  the color in it, comes after.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
