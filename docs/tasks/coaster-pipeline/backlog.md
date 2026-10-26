@@ -11,31 +11,19 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
 consturciotn and move back to split coasters and split inflills"), so they come first.
 
-1. **Cut pieces: the cut and the joins on one plate** (D-120). Cut each loose piece of the flange
-   coaster in two so both faces print on the bed, as the
-   [cut-pieces design](../../design/coaster/cut-pieces-joins-design.md) lays out. bikar first, all
-   three steps of its §5: (a) a knob on `hold flange` that cuts each loose piece in two and turns
-   the upper half over; (b) pins on a half, refusing any pin or disc on a piece's point; (c) a slide
-   on a half, with the hexagons' notches handled and a slot refused if it leaves under 0.5 mm of
-   band. Then one plate with the cut pairs (no join, at split-06's gaps and 0.02 mm looser) beside
-   the joined pairs, and its page. Omar's pick, 2026-10-25. Steps (a) and (b) merged (bikar #346,
-   #347); split-07's inner pin ring moved from 14.3 to 13.0 mm so the pins clear the hex points.
-   split-07 is that plate: it waits for step (c), then its loose pieces are cut and joined
-   (Omar, 2026-10-25, on split-07's bed picture: "outers, hexes, middle, kites all not split",
-   then "Cut them, wait for the slide"). Its yes and color come after.
-2. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
+1. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
    kites are still not eymetric". As drawn they are mirror-symmetric, so the difference comes in the
    slice or the print. Needs a photo with the lopsided side marked (split-07's page asks for it),
    then a look at the sliced walls of one bigger kite (`tools/fit_gap.py walls`) against the drawing.
-3. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+2. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
-4. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+3. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-5. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -44,7 +32,7 @@ consturciotn and move back to split coasters and split inflills"), so they come 
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-6. **Standard-size plate (P5.2)** — only after item 3 settles the CAL-CST numbers (board #6).
+5. **Standard-size plate (P5.2)** — only after item 2 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
@@ -73,11 +61,11 @@ Sending a print and which filament to load.
   2026-10-15 and was judged and recorded on 2026-10-22 (3d-models #748–#751). split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
-- **Send [split-07](../../design/plates/split-07.md), the whole flange coaster with a 0.7 mm
-  socket wall** — split-06 again with the wall Omar picked on split-08 (D-119). One bed, about
-  113 minutes and 31 g. Built 2026-10-25 after split-08's verdicts and his "go". It now waits
-  for the slide (item 1, step c): then its loose pieces are cut and joined, and Omar's yes, with
-  the color in it, comes after.
+- **Send [split-07](../../design/plates/split-07.md), the whole flange coaster with every loose
+  piece cut in two and joined** — split-06 again with the 0.7 mm wall Omar picked on split-08
+  (D-119), and each loose piece cut at its middle and printed as two face-down halves: pins on the
+  middle, kites and stars, a slide on the hexagons and outer pieces (D-120). One bed, about 137
+  minutes and 36 g. Rebuilt 2026-10-25. Waits on Omar's yes, with the color in it.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
