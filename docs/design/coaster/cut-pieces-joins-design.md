@@ -1,12 +1,14 @@
 ---
-status: draft
+status: decided
 date: 2026-10-24
 produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 90f2c48 and of bikar's split and dovetail code in the shared checkout, with piece outlines measured from STLs rendered at split-06's settings; no new web research
 ---
 
 # Cut pieces with pins and slides: both faces printed on the bed
 
-> Status: draft 2026-10-24, decides nothing. Asked by Omar on 2026-10-24, after split-06: "why
+> Status: decided 2026-10-25, option B, one plate with the cut and the joins
+> ([D-120](../../working-model/decisions-log.md#d-120--cut-pieces-the-cut-and-the-joins-on-one-plate)).
+> Drafted 2026-10-24. Asked by Omar on 2026-10-24, after split-06: "why
 > arent we doing split infil pieces with pins for the tiny kits and sliding for bigger ... so that
 > it feels like both faces were pronted on plate", then "do we need a sub agent to design more
 > experiments with this in mind".
@@ -21,10 +23,9 @@ that does. They get pins instead. And the cut halves need no join to stay in the
 strap over each half's band catches it, as it catches a whole piece today. A join only makes the
 pair one part to place and keeps it lined up.
 
-So the proposal is two plates, in order. First, cut pieces with no join, one of each kind, tried
-in the split-06 coaster Omar already has (§4.1). Then the joins: pins on the kite, star and
-middle, and a slide beside pins on the hexagon (§4.2). bikar cannot build either plate yet (§3);
-§5 lists what it needs.
+The draft proposed two plates in order: cut pieces with no join (§4.1), then the joins: pins on the
+kite, star and middle, and a slide beside pins on the hexagon (§4.2). Omar picked one plate with
+both (§4.3, D-120), so all of §5 comes before the print. bikar cannot build it yet (§3).
 
 ![Three side views. 1: today's whole piece in the split-06 coaster; its bottom face is a first layer and its top face the last layer. 2: the same piece cut at its middle into two 2.1 mm halves, the cut inside the band under the straps. 3: both halves printed face down, the band stepping out over air as it does today.](cut-pieces-joins-media/cut-piece.png)
 
@@ -226,8 +227,13 @@ through the face also fails.
 | **B. One plate with both** | One print, the no-join and the joined pairs side by side. | Waits on all three bikar steps; more to judge at once; a fit problem in the cut itself muddies every join. | All bikar work before any print. |
 | **C. As first asked: pins on the kite, a slide on every bigger piece** | Matches the first idea exactly. | The slide refuses the star and middle (§2.2); a new slide that clips a rail to an inward-turning outline is new geometry with no print behind it. | A new slide in bikar before anything prints. |
 
-My pick is A, because plate one tests the thing Omar wants (faces) with the least new code, and
+My pick was A, because plate one tests the thing Omar wants (faces) with the least new code, and
 its answer decides whether plate two is needed at all.
+
+**Decided 2026-10-25:** B, one plate with both → [D-120](../../working-model/decisions-log.md#d-120--cut-pieces-the-cut-and-the-joins-on-one-plate).
+So §4.1's rows and §4.2's rows go on one bed, and bikar takes all three steps of §5 first. The
+pairs are tried in a flange coaster Omar has in hand: split-06's, or split-07's once printed (its
+0.7 mm socket wall bites the hexagon's point less, §2.4).
 
 ## 5. What bikar needs
 
@@ -245,11 +251,11 @@ its answer decides whether plate two is needed at all.
    an outline that turns inward and say which piece it refused. Refuse a slot that leaves under
    0.5 mm of band over the step, so the thin end is a printed setting and not an accident.
 
-After each step, a plate file and page per the print-coaster-samples and prioritize-prints skills,
-with the pieces drawn from the real mesh.
+After all three steps, one plate file and page per the print-coaster-samples and prioritize-prints
+skills, with the pieces drawn from the real mesh.
 
 ## Yours to do
 
-- Pick A, B or C (§4.3).
-- If A: say yes to bikar step 1 and plate one, in green.
+- Picked: B (D-120). Nothing to do until the plate's page is up; then a yes and a color.
+- Optional: say which of sld-1's three slide gaps felt best, and the hexagon rows shrink to that one.
 - Optional: hold one split-06 whole piece of each kind back, so plate one has its control in hand.

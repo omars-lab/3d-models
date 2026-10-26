@@ -9,18 +9,25 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 ## Open, in ROI order
 
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
-consturciotn and move back to split coasters and split inflills"), so they come first. None is
-open here today: the split coupons and plates wait on Omar's tick, under "Owner-gated" below.
+consturciotn and move back to split coasters and split inflills"), so they come first.
 
-1. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+1. **Cut pieces: the cut and the joins on one plate** (D-120). Cut each loose piece of the flange
+   coaster in two so both faces print on the bed, as the
+   [cut-pieces design](../../design/coaster/cut-pieces-joins-design.md) lays out. bikar first, all
+   three steps of its §5: (a) a knob on `hold flange` that cuts each loose piece in two and turns
+   the upper half over; (b) pins on a half, refusing any pin or disc on a piece's point; (c) a slide
+   on a half, with the hexagons' notches handled and a slot refused if it leaves under 0.5 mm of
+   band. Then one plate with the cut pairs (no join, at split-06's gaps and 0.02 mm looser) beside
+   the joined pairs, and its page. Omar's pick, 2026-10-25.
+2. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
-2. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+3. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-3. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -29,7 +36,7 @@ open here today: the split coupons and plates wait on Omar's tick, under "Owner-
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-4. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
+5. **Standard-size plate (P5.2)** — only after item 1 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
