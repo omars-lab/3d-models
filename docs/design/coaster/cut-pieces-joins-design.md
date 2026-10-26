@@ -239,8 +239,13 @@ pairs are tried in a flange coaster Omar has in hand: split-06's, or split-07's 
 
 1. **Cut the loose pieces.** A knob on `hold flange` that cuts each loose piece at its middle into
    two halves, a face block and half the band each, turns the upper half over (never mirrors it)
-   and packs the pair side by side, each half named for `--piece`. One call inside it: the 0.2 mm
+   and packs the pair side by side, both halves reachable through `--piece`. One call inside it: the 0.2 mm
    of room splits evenly, so each half is 2.1 mm.
+   **How it is spelled and named (built 2026-10-25, [bikar #346](https://github.com/NaqshCoffee/bikar/pull/346)):** `hold flange … room 0.2 halves 1`. Both
+   halves stay in their color's output, so `--piece Kite` gives every Kite half, upper and lower
+   alike; there is no separate name per half. The knob is refused on a lip hold (its piece is not
+   the same both ways up) and on a `loose` clause with no `pack`, since an unpacked half would
+   land on top of its twin. The closed coaster in the Lab is unchanged; only the bed changes.
 2. **Pins on a piece half.** A per-piece-kind count and gap for pins on the cut face, reusing the
    coaster's pin site picker against the band's outline, with the hole kept at 0.6 mm of floor:
    deep over the face block, shallower where it hangs past. Refuse a pin with no room, with the
