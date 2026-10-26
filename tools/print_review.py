@@ -47,7 +47,9 @@ turning the piece over sees it, the piece filling its tile. It is for reading th
 it, turned as it was turned, on the bed square with the front edge at the bottom, and each one
 named by the label in the bed map `bambu slice compose` wrote beside the plate
 (`<plate>.bedmap.json`; without it, by the object's file name). It is for plates whose sets look
-alike, so the person at the printer bags each one under the right name. A label sits on its own
+alike, so the person at the printer bags each one under the right name. Each piece's top faces
+are shaded by height, darker the lower, so a piece cut in two shows its pins bright and its holes
+and slots dark, where a flat fill would draw a half as a whole piece. A label sits on its own
 piece when it fits there whole, and otherwise beside it, clear of every piece, with a line to it.
 `--zoom` draws only the part of the bed the pieces take, larger, so a plate of many small pieces
 (SPL-1: 30 squares 15 mm across) gets each label on its own piece instead of a web of lines.
@@ -453,14 +455,19 @@ ZOOM_MARGIN = 8  # mm of bed kept round the pieces on a --zoom picture
 NUM = r"(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)"
 
 
-def transform(text):
-    """A 3MF transform (12 numbers, row-vector form) as a function of (x, y) -> (x, y)."""
+def transform(text, with_z=False):
+    """A 3MF transform (12 numbers, row-vector form) as a function of (x, y) -> (x, y), or of
+    (x, y, z) -> (x, y, z) with_z."""
     m = [float(v) for v in text.split()] if text else [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+    if with_z:
+        return lambda x, y, z: (x * m[0] + y * m[3] + z * m[6] + m[9], x * m[1] + y * m[4] + z * m[7] + m[10],
+                                x * m[2] + y * m[5] + z * m[8] + m[11])
     return lambda x, y: (x * m[0] + y * m[3] + m[9], x * m[1] + y * m[4] + m[10])
 
 
-def plate_objects(zf):
-    """[(object id, [triangle as three (x, y) bed points])] for every build item of a 3MF."""
+def plate_objects(zf, with_z=False):
+    """[(object id, [triangle as three (x, y) bed points])] for every build item of a 3MF; the
+    points are (x, y, z) with_z."""
     model = zf.read("3D/3dmodel.model").decode()
     comps = {}
     for oid, body in re.findall(r'<object id="([^"]+)"[^>]*>(.*?)</object>', model, re.S):
@@ -471,7 +478,7 @@ def plate_objects(zf):
         if (path, oid) not in meshes:
             text = zf.read(path.lstrip("/")).decode()
             body = re.search(rf'<object id="{oid}"[^>]*>(.*?)</object>', text, re.S).group(1)
-            vs = [(float(x), float(y)) for x, y in re.findall(rf'<vertex x="{NUM}" y="{NUM}"', body)]
+            vs = [tuple(map(float, v)) for v in re.findall(rf'<vertex x="{NUM}" y="{NUM}" z="{NUM}"', body)]
             ts = [(int(a), int(b), int(c)) for a, b, c in re.findall(r'<triangle v1="(\d+)" v2="(\d+)" v3="(\d+)"', body)]
             meshes[(path, oid)] = (vs, ts)
         return meshes[(path, oid)]
@@ -480,12 +487,12 @@ def plate_objects(zf):
     out = []
     for tag in re.findall(r"<item\b[^>]*>", build):
         oid = re.search(r'objectid="([^"]+)"', tag).group(1)
-        place = transform((re.search(r'transform="([^"]*)"', tag) or [None, ""])[1])
+        place = transform((re.search(r'transform="([^"]*)"', tag) or [None, ""])[1], True)
         tris = []
         for path, sub, t in comps.get(oid, []):
-            local = transform(t)
+            local = transform(t, True)
             vs, ts = mesh(path, sub)
-            pts = [place(*local(x, y)) for x, y in vs]
+            pts = [place(*local(*v)) if with_z else place(*local(*v))[:2] for v in vs]
             tris += [(pts[a], pts[b], pts[c]) for a, b, c in ts]
         out.append((oid, tris))
     return out
@@ -532,6 +539,29 @@ def label_spot(d, font, name, at, taken, mask, size, lines=(), own=None, inside=
     return at, (b[0] - 6, b[1] - 4, b[2] + 6, b[3] + 4)
 
 
+RELIEF_LOW = 0.45        # how dark an object's lowest top face is drawn, against its highest
+
+
+def relief(d, f, tris, shade):
+    """Paint an object's upward faces over its outline, lowest first, darker the lower they sit
+    against the object's own top. From above, a piece cut in two at its middle has the whole
+    piece's outline, so a flat fill drew split-07's 82 halves as whole pieces (Omar, 2026-10-26:
+    "i don't see the split infill pieces"); its pins stand out bright and its holes and slots
+    sink dark, and a pin half's face sits darker than a hole half's, so the pairs read. A piece
+    of one height draws as before."""
+    up = []
+    for t in tris:
+        (ax, ay, az), (bx, by, bz), (cx, cy, cz) = t
+        if (bx - ax) * (cy - ay) - (by - ay) * (cx - ax) > 1e-9:  # faces up: counter-clockwise from above
+            up.append(((az + bz + cz) / 3, t))
+    if not up:
+        return
+    lo, hi = min(z for z, _ in up), max(z for z, _ in up)
+    for z, t in sorted(up, key=lambda u: u[0]):
+        k = 1 if hi - lo < 1e-6 else RELIEF_LOW + (1 - RELIEF_LOW) * (z - lo) / (hi - lo)
+        d.polygon([f(p[:2]) for p in t], fill=tuple(round(c * k) for c in shade))
+
+
 GROUP_PAD = 3            # mm between a group's pieces and the box drawn round them
 GROUP_INK = (250, 215, 60)
 
@@ -547,7 +577,8 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
     2026-10-22: "group related pieces into a rectangle")."""
     groups = groups or {}
     with zipfile.ZipFile(plate) as zf:
-        objects = plate_objects(zf)
+        solids = plate_objects(zf, with_z=True)
+    objects = [(oid, [tuple(p[:2] for p in t) for t in tris]) for oid, tris in solids]
     x0, y0, x1, y1, px = 0, 0, BED_MM, BED_MM, BED_PX
     pts = [p for _, tris in objects for t in tris for p in t]
     if zoom and pts:
@@ -578,6 +609,7 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
             d.polygon([f(p) for p in t], fill=shades[k % len(shades)])
             m.polygon([f(p) for p in t], fill=255)
             o.polygon([f(p) for p in t], fill=255)
+        relief(d, f, solids[k][1], shades[k % len(shades)])
         owns.append(own)
         xs = [p[0] for t in tris for p in t] or [0]
         ys = [p[1] for t in tris for p in t] or [0]
@@ -1163,7 +1195,19 @@ def bed_self_test():
     rect = lambda cx: (gp(cx - 7.5 - GROUP_PAD, 0)[0], gp(0, 147.5 + GROUP_PAD)[1],
                        gp(cx + 7.5 + GROUP_PAD, 0)[0], gp(0, 92.5 - GROUP_PAD)[1])
     within = lambda b, r: r[0] <= b[0] and b[2] <= r[2] and r[1] <= b[1] and b[3] <= r[3]
+    # A pin half, as split-07's are: a 15 mm square face 1 mm up with a 2 mm pin standing 1 mm on
+    # it. From above both have one outline, so only the height tells the pin from the face.
+    pinned = io.BytesIO()
+    with zipfile.ZipFile(pinned, "w") as zf:
+        zf.writestr("3D/3dmodel.model", pair)
+        zf.writestr("3D/Objects/o.model", square.replace('z="0"', 'z="1"').replace(
+            "</vertices>", '<vertex x="-1" y="-1" z="2"/><vertex x="1" y="-1" z="2"/>'
+                           '<vertex x="1" y="1" z="2"/><vertex x="-1" y="1" z="2"/></vertices>').replace(
+            "</triangles>", '<triangle v1="4" v2="5" v3="6"/><triangle v1="4" v2="6" v3="7"/></triangles>'))
+    pimg = bed_picture(pinned, {}, names=False)[0]
+    pin_at, face_at = sum(pimg.getpixel(gp(120, 100))), sum(pimg.getpixel(gp(125, 100)))
     return [
+        ("bed draws a pin brighter than the face it stands on", pin_at > face_at + 60),
         ("bed draws a box round each set, GROUP_PAD mm out from its pieces",
          gimg.getpixel(gp(60 - 7.5 - GROUP_PAD, 120)) == GROUP_INK and gimg.getpixel(gp(180 + 7.5 + GROUP_PAD, 120)) == GROUP_INK
          and gimg.getpixel(gp(120, 120)) != GROUP_INK),
