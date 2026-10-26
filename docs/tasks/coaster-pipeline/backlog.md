@@ -58,6 +58,10 @@ Sending a print and which filament to load.
   2026-10-15 and waits on Omar's judging, the questions on its page. split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
+- **Send [split-07](../../design/plates/split-07.md), the whole flange coaster with a 0.7 mm
+  socket wall** — split-06 again with the wall Omar picked on split-08 (D-119). One bed, about
+  116 minutes and 31 g. Waits on Omar's yes, with the color in it. Built 2026-10-25 after
+  split-08's verdicts and his "go".
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the

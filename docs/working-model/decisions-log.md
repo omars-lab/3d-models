@@ -6644,3 +6644,75 @@ with new letters `G` (stock) and `K` (rings).
 **What would reverse it:** the gold plate leaving the same slits as the glacier one, which rules the
 plate out and brings option 1 or 3 back; or the gold plate's grainy bottom looking wrong on a
 coaster, which rules it out even if it closes the slits.
+
+## D-118 — The bitten ledges on split-06: test a thinner socket wall before moving the pins
+
+Omar, 2026-10-24, in chat, answering how to fix split-06's bitten ledges (task #322). He picked
+"Wait for the wall test", then said "yes want to test 329".
+
+On [split-06](../design/plates/split-06.md) the disc round each pin (pin bosses) bit the hidden
+ledge of the hex pieces: their point reached 0.17 mm past the face instead of 0.80, and they
+wiggled.
+
+### The options on the table
+
+- **1. Move the pins off the points** (the recommendation). Three rings move a little, the count
+  stays 40, and every ledge is whole again (rendered and measured: all 41 pieces at 0.80). Cost: the
+  next plate is a new experiment, and the ring at 13.6 mm has little room to spare. It commits every
+  later coaster to a rule that no pin or disc lands on a piece's point.
+- **2. Make the discs smaller.** The pins stay where Omar put them. Cost: with the gap round each pin
+  cut from 0.25 to 0.10 mm the bites shrink but stay (the hex point reaches 0.25 of 0.80), and the
+  tighter gap is a new fit to test.
+- **3. Leave it.** Nothing to change. Cost: the hex pieces keep wiggling, and the coaster is not a
+  production plate as it is.
+- **4. Wait for the wall test.** The disc is the pin, its gap and a fixed 0.9 mm wall. Making the
+  wall a setting and printing thinner walls beside 0.9 tells whether a thinner one shrinks the disc
+  enough while still holding the pin. The pins stay where they are if it works. Cost: a bikar change
+  and one more print before split-07, and a wall one line wide may crack.
+
+### What was picked
+
+Option 4. bikar's socket wall became a setting (`studs … wall <mm>`, at least one 0.4 mm line,
+[bikar #345](https://github.com/NaqshCoffee/bikar/pull/345)), and [split-08](../design/plates/split-08.md)
+prints one slice of split-06 three times on one bed, with walls of 0.9 (the control), 0.7 and
+0.45 mm and the pins where split-06 had them. Measured on its slice, the 0.7 mm wall leaves the hex
+point at 0.37 mm and the 0.45 mm wall bites no piece.
+
+### What it changes
+
+- split-07 (moving the pins) waits on split-08's answer.
+- The place-pins skill keeps 0.9 mm as the wall until split-08 is judged.
+
+**What would reverse it:** the 0.45 or 0.7 mm wall cracking or letting the pin go when pressed, or
+the hex pieces still wiggling at the thinner walls. Then split-07 moves the pins (option 1).
+
+## D-119 — The flange coaster's socket wall is 0.7 mm
+
+Omar, 2026-10-25, in chat, judging [split-08](../design/plates/split-08.md) from the pieces in hand:
+"the middle one was the best one, 1c i think", "the left most one shakes", "middle and right dont
+shake", "left ond did (1a shook)". This answers D-118's wall test.
+
+split-08 printed one slice of split-06 three times on one bed, with the pins where split-06 had
+them and a wall of 0.9 mm (split-06's), 0.7 mm or 0.45 mm round each pin socket. The carved ids
+place each set: 1A is the 0.9 mm set's middle piece and 1C the 0.7 mm set's.
+
+### The options on the table
+
+- **0.9 mm, as split-06.** Nothing changes. It shook, and its discs bite the hex point down to
+  0.17 mm of the 0.80 mm ledge.
+- **0.7 mm.** Did not shake, and Omar picked it. Measured on the slice, it still bites the hex
+  piece's point (0.37 mm left) and blunt end (0.45 mm), less than half of 0.9's bite, and clears the
+  outer piece.
+- **0.45 mm.** Did not shake either, and bites no piece. But it is one 0.4 mm line wide, and whether
+  it holds the pin when pressed, or cracks, was not asked.
+- **Move the pins (D-118's option 1).** Not needed now that a thinner wall stops the shake.
+
+### What was picked
+
+0.7 mm. split-07, the whole flange coaster with split-06's pins where they stand, takes
+`stud_wall: 0.7`, and the place-pins skill now places pins with a 0.7 mm wall.
+
+**What would reverse it:** the 0.7 mm wall shaking, cracking or letting a pin go on the whole
+coaster (split-07). Then try 0.45 mm if its sockets prove to hold, or move the pins (D-118's
+option 1). Omar's "the bigger kites are still not symmetric" is open apart from this: the drawn
+pieces are mirror-symmetric, so a photo with the lopsided side marked comes first.

@@ -20,6 +20,10 @@ risk: watch
 pictures:
   - split-06-media/pins.png
   - split-06-media/bed.png
+  - split-06-media/ledges.png
+  - split-06-media/fix-move-pins.png
+  - split-06-media/fix-smaller-discs.png
+  - split-06-media/fix-leave-it.png
 ---
 
 # split-06 — the whole flange coaster, set 3's settings, no labels
@@ -30,6 +34,88 @@ pictures:
 one shakes a bit", then: "lets send a 2a print with the whole patterh, no labels, a production
 piece". This plate is that: the whole coaster at set 3's settings, with nothing carved into any
 piece. The plate is [`split-06.yaml`](split-06.yaml).
+
+## What you saw off the bed (2026-10-24)
+
+**The two bigger kites do not match, and the blunt ones wiggle more.** You asked why one of the
+two bigger kites has a sharper point than the other, and then said: "the blunt pieces wiggle
+more than the pointy kites". The cause is our pins, not the pattern.
+
+![The pink hex piece and the green outer piece side by side: the same grey face on both, and round each face the hidden ledge in orange. The hex piece's ledge has its point cut flat and both shoulders clipped, each marked with a blue ring; the outer piece's ledge keeps its sharp point and is clipped only at its blunt end](split-06-media/ledges.png)
+
+- **The faces are the same.** Measured on the sliced plate, the pink hex piece and the green outer
+  piece have exactly the same top and bottom face: six corners, a 72° point, the same size.
+- **The hidden ledge is not.** Each piece has a wider ledge at mid-height that sits in the groove
+  between the two halves and holds it in. Each pin of the coaster stands on a filled disc in that
+  groove, and each piece's ledge is cut back round the disc so it still drops in. On the hex
+  pieces, the discs fall on the point and on both shoulders. The point of the ledge is cut flat,
+  about 1.5 mm across, and it reaches only 0.3 mm past the face there, where the outer piece's
+  ledge reaches 1.4 mm. The outer pieces are cut back only at their blunt end, where the ring on
+  the outer points stands.
+- **That is why the hex pieces wiggle.** With less ledge under the point and the shoulders, less
+  of the hex piece is held in the groove, so it has more room to move.
+- **The pins did it, nothing else.** split-02 (no pins) and split-05 (pins, no filled discs) were
+  measured the same way: both have clean ledges, the same on both kinds of piece.
+
+The picture shows the ledge's outline corner to corner, so a round cut shows as a flat one. Drawn
+from the outlines in the sliced plate file, measured layer by layer.
+
+**How to fix it, for the next version.** Each picture below is drawn from pieces rendered by
+bikar at that option's settings, not from a sketch. On the left, one hex piece and one outer
+piece: the grey face, the orange ledge, and under each corner how far the ledge reaches past the
+face, in mm (0.80 is a whole ledge). This is the worst direction at each corner, a different
+measure from the 0.3 and 1.4 mm above. On the right, the lower half from above round one hex
+piece, each pin with its disc in dashed blue.
+
+### 1. Move the pins off the points (my pick)
+
+![Move the pins: the hex piece and the outer piece with every corner's ledge at 0.80 mm and no bites; on the right the lower half round one hex piece, the old pin spots as hollow grey circles on the hex piece's point, shoulders and blunt end, and the new pins beside them in the strap between the pieces](split-06-media/fix-move-pins.png)
+
+Three rings move a little; the pin count stays 40. Between the small kites: 14.3 to 13.6 mm out.
+Between the bigger kites: 25.1 to 27.2 mm. Between the stars: 33.5 mm at 18° to 33.8 mm at 13°,
+off the line where the hex and outer pieces meet. The outer ring at 54.4 mm stays.
+
+Rendered and measured: all 41 pieces have every corner at 0.80. The ring at 13.6 mm has little
+room to spare: half a degree off and a corner drops to 0.70.
+
+### 2. Make the discs smaller
+
+![Smaller discs: the hex piece still bitten at its point (0.25 mm), both shoulders (0.54) and its blunt end (0.33), and the outer piece at its blunt end (0.53); on the right the same pin spots as today with slightly smaller blue discs](split-06-media/fix-smaller-discs.png)
+
+The disc has no size setting of its own. It is the pin, plus the gap round the pin, plus a fixed
+0.9 mm wall in bikar. With the same 1.2 mm pins and the gap cut from 0.25 to 0.10 mm, the disc's
+radius goes from 1.625 to 1.55 mm. Even with no gap at all it could not go below 1.5.
+
+Rendered and measured: the hex point reaches 0.25 (was 0.17) and the outer piece's blunt end
+0.53 (was 0.46). The bites shrink but stay. A tighter gap is also a new fit for the pins.
+
+### 3. Leave it
+
+![Leave it: the ledges as printed, the hex piece bitten at its point (0.17 mm), both shoulders (0.46) and its blunt end (0.25), and the outer piece at its blunt end (0.46); on the right the pins standing on the hex piece's point, its shoulders, and where it meets the outer piece](split-06-media/fix-leave-it.png)
+
+The coaster as printed. The rings between the small kites, the bigger kites and the stars land
+on the hex piece's point, its shoulders and its blunt end.
+
+| Option | What it gives | What it costs | What it commits us to |
+|---|---|---|---|
+| **Move the pins off the points** (my pick) | Every ledge whole again, so every piece is held the same way | The rings move, so the next plate is a new experiment | Rule for every later coaster: no pin or disc may land on a piece's point |
+| **Make the discs smaller** | The pins stay where you put them | Smaller cuts, but still cuts: the hex point reaches 0.25 of 0.80 | A tighter gap round each pin (0.10 mm), a new fit to test |
+| **Leave it** | Nothing to change | The hex pieces keep wiggling | The coaster is not a production plate as it is |
+
+My pick is to move the pins, because it removes the cut instead of shrinking it.
+
+**Decided 2026-10-24:** wait for the wall test → [D-118](../../working-model/decisions-log.md#d-118--the-bitten-ledges-on-split-06-test-a-thinner-socket-wall-before-moving-the-pins).
+A fourth way: a thinner wall round each socket makes a smaller disc with the pins where they
+stand. [split-08](split-08.md) tries walls of 0.9, 0.7 and 0.45 mm; split-07 (moving the pins)
+waits on it.
+
+**Your idea: cut the pieces in two.** You asked: "why arent we doing split infil pieces with pins
+for the tiny kits and sliding for bigger ... so that it feels like both faces were pronted on
+plate". Today each loose piece prints standing up, so its bottom face is smooth from the bed and
+its top face is the last layer, and the two faces look different. Cutting each piece at its middle
+would print both halves face down, so both faces would look like the bed. The small kites would
+join with a pin, and the bigger pieces with a slide. The next experiments for this are designed in
+the cut-pieces design, still under review in PR #775. That design also carries the rule above, so no pin of a cut piece bites a point.
 
 **What changed in this version (2026-10-24).** You said "remove inner most radial set of pins". So
 the ring of ten round the middle star is gone, and 40 pins in four rings are left, as above. The
@@ -158,3 +244,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-24 | sliced: iteration 3, 50 pins in five rings, three more between the small kites, the bigger kites and the stars (bikar #344), on Omar's comment on the pins picture; 119 minutes, about 31 g, no warnings | this page |
 | 2026-10-24 | sliced: iteration 4, 40 pins in four rings, the ring round the middle star removed on Omar's "remove inner most radial set of pins"; 117 minutes, about 31 g, no warnings | this page |
 | 2026-10-24 | sent — by `bambu print send`; spends the approval of 2026-10-24, iteration 4 @ 52f7ddc85a in #00AE42 | this page |
+| 2026-10-24 | reviewed: Omar saw the two bigger kites differ and the blunt ones wiggle more; the pin discs cut the hex pieces' hidden ledge at the point and shoulders; his idea to cut each piece in two | this page, "What you saw off the bed" |

@@ -896,6 +896,7 @@ validate-print-review:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/simulate-first-layer/scripts/simulate.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/teach-simulator/scripts/fit.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/teach-simulator/scripts/marks.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/place-pins/scripts/ledge_check.py --self-test
 
 # The note mover (tools/move_doc.py): moves a docs/ note and rewrites every
 # reference to it. Its self-test moves a real note in a copy of this repo and
@@ -1018,3 +1019,14 @@ validate-side-views:
 validate-color-map:
 	@[ -d $(ROOT_DIR)/tools/bambu/node_modules ] || npm ci --silent --prefix $(ROOT_DIR)/tools/bambu
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/send-plate/scripts/color_map.py --self-test
+
+# The plate checks every send runs (.claude/skills/send-plate/plate-checks.yaml) — the wholesale
+# form of .githooks/pre-commit.d/53-plate-checks. The ledge script's self-test, the send's tests
+# (split-06's bitten kite refused through the real script), then the list itself: every entry
+# reads and every file it names is in the repo. Never reaches the printer.
+.PHONY: validate-plate-checks
+validate-plate-checks:
+	@[ -d $(ROOT_DIR)/tools/bambu/node_modules ] || npm ci --silent --prefix $(ROOT_DIR)/tools/bambu
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/place-pins/scripts/ledge_check.py --self-test
+	npm --prefix $(BAMBU_DIR) run --silent test -- src/plate-checks.test.ts
+	cd $(ROOT_DIR) && tools/bambu/bin/bambu plate-checks verify

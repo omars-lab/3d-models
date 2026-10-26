@@ -1,0 +1,39 @@
+# The checks every plate must pass before `bambu print send` lets it go, dry run too.
+#
+# One entry per past mistake that a script can catch from the plate alone. The send reads this
+# list at run time (tools/bambu/src/plate-checks.ts), runs every entry that applies to the plate,
+# and prints one ✓ or ✗ line each. Any ✗ refuses the send. A check that cannot run (its script
+# missing, python3 not found, a timeout) is a ✗ too, never a skip. No flag skips one.
+#
+# Each entry:
+#   id        short name, shown on the send's line
+#   mistake   the plate and date it came from, and one plain line saying what went wrong
+#   source    the page or write-up that records it
+#   applies   which plates it runs on, read from the plate's recipe (docs/design/plates/<name>.yaml):
+#               always                                    every plate
+#               { any_item_bkr_contains: "<text>" }       a plate with an item whose bkr has <text>
+#   command   run from the repo root; {plate3mf} is the sliced plate, {yaml} its recipe, {beds} the
+#             recipe's `beds:` (1 when it sets none)
+#   pass      what exit 0 means
+#   fail      what any other exit means
+#
+# Mistakes only the eye can catch (a bare wedge, a near-solid piece) stay in
+# .claude/skills/review-print/rubric.md. `make validate-plate-checks` checks this file: every
+# script named here exists and every applies rule reads.
+
+checks:
+  - id: ledge
+    mistake: "split-06, 2026-10-24: the pin discs bit the pink hex pieces' hidden ledges, so they wiggled in the groove"
+    source: docs/design/plates/split-06.md
+    applies: { any_item_bkr_contains: "split-flange" }
+    command: "python3 .claude/skills/place-pins/scripts/ledge_check.py {plate3mf} --recipe {yaml}"
+    pass: "every loose piece's ledge reaches its full width round every corner; or, on a recipe with `ledge_bitten_by_design:` (a plate testing the bite, split-08), a piece is bitten as it says"
+    fail: "a piece's ledge falls short at a corner, so a pin disc bit it: move the pins; or a by-design recipe whose pieces are not bitten, so the test is not what it says (exit 2 means the plate could not be read)"
+
+  - id: sliced
+    mistake: "minis-05, 2026-09-30: the plate spilled onto a second bed, and a send prints only the first"
+    source: docs/design/plates/minis-05.md
+    applies: always
+    command: "tools/bambu/bin/bambu validate sliced {plate3mf} --beds {beds}"
+    pass: "no more beds than the recipe allows, no object the slicer skipped, no slicer warning outside the by-design list"
+    fail: "a spill past the allowed beds, a skipped object, or an unexpected slicer warning; the output names which"

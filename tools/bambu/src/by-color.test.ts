@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parse as parseYaml } from "yaml";
-import { COLOR_AT_SEND, type Demand, type PlateColor, groupByColor, itemLabels, normalHex, pieceGroups, readPiecesBkr, writeRecipes } from "./by-color.js";
+import { COLOR_AT_SEND, type Demand, type PlateColor, groupByColor, itemLabels, normalHex, pieceGroups, readBandsJson, readPiecesBkr, writeRecipes } from "./by-color.js";
 
 // The one-plate-per-color writer (infill-color-ux-design §4.5) on a made-up pieces file. The real gBV
 // files go through it in `bambu order fixtures`; these pin each rule with the input that breaks it.
@@ -86,6 +86,27 @@ const ONE_KITE = BKR.replace("Star = #2f6db5", "Star = #2f6db5\nKite_13 = #2f6db
   "fill faces where index == 13 color Kite_13\nfill faces where orbit == 0",
 );
 const BANDS_FACES = BANDS.map((b) => ({ ...b, faces: b.orbit === 1 ? ORBIT_1_FACES : [100 + b.orbit] }));
+
+describe("readBandsJson — the orbits bikar bands prints", () => {
+  const CLI = "/bikar/packages/cli/dist/index.js";
+  const rings = { rings: [{ ring: 0, radius: 0, tiles: 1, color: "Middle" }] };
+
+  it("reads the orbit listing", () => {
+    const out = JSON.stringify({ ...rings, orbits: { rotation_order: 10, orbits: BANDS } });
+    expect(readBandsJson(out, CLI)).toEqual(BANDS);
+  });
+
+  // 2026-10-24: a bikar checkout whose CLI was built before #270 printed rings only, and the orders
+  // check read that as an empty listing and blamed the .bkr ("loose orbit 0: bands reports no such orbit").
+  it("names a stale CLI build when the output has no orbits, not the .bkr", () => {
+    expect(() => readBandsJson(JSON.stringify(rings), CLI)).toThrow(`${CLI}: bikar bands printed no orbits, so this build is older than its source`);
+  });
+
+  it("passes on bikar's own refusal", () => {
+    const out = JSON.stringify({ ...rings, orbits: { refused: "no centre" } });
+    expect(() => readBandsJson(out, CLI)).toThrow("bikar bands refused to list orbits: no centre");
+  });
+});
 
 describe("pieceGroups — one piece taken out of its ring", () => {
   it("prints the piece under its own name and one fewer in its ring", () => {
