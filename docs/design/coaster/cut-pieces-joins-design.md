@@ -285,6 +285,30 @@ pairs are tried in a flange coaster Omar has in hand: split-06's, or split-07's 
    Either run the rail on the face's outline, or allow the hexagons' notches; keep the refusal for
    an outline that turns inward and say which piece it refused. Refuse a slot that leaves under
    0.5 mm of band over the step, so the thin end is a printed setting and not an accident.
+   **How it is spelled (built 2026-10-25, [bikar #348](https://github.com/NaqshCoffee/bikar/pull/348)):**
+   the rail's size goes on the hold, `hold flange … halves 1 slide 4 gap 0.15 height 0.8`, and
+   each piece kind asks for it, `loose … slide 1`. `4` is SLD-1's rail width at its root;
+   `height` is in whole 0.2 mm layers, at slope 2 as SLD-1 printed it. The rail stands on the
+   lower half and the slot is sunk into the upper half, one layer deeper so the cut faces close
+   flat, and the slot runs out through the band at both ends so the rail slides in from the side.
+   The rail runs on the face's outline, through its middle along its long way, so a hexagon whose
+   band a stud notches is still one clean run. The flange coaster pattern carries it all as params
+   (`slide`, `slide_gap`, `slide_height`, and `slide_middle`, `slide_kite`, `slide_hex`,
+   `slide_star`, `slide_outer`), each off at 0, and `halves` is the switch, as for pins.
+   **Default:** a 0.15 mm gap a side. sld-1 printed 0.10, 0.15 and 0.20, and Omar said all
+   three worked without naming one as best ([sld-1's record](../../prints/2026-10-07-sld-1/index.md),
+   [pinned](https://github.com/omars-lab/3d-models/blob/18a3d5aeb34e6983711eb9e9d8e2af18b1abf40e/docs/prints/2026-10-07-sld-1/index.md),
+   [D-120](../../working-model/decisions-log.md#d-120--cut-pieces-the-cut-and-the-joins-on-one-plate)).
+   0.15 is the middle of what worked, and it still holds on the lower 0.6 mm rail (§2.3), where
+   0.20 would lift out. That is a pick between three settings that all printed, not a reading
+   that 0.15 is best.
+   On split-04's slice it builds on the two hexagons and the two outer pieces. It refuses, by name:
+   the star and the middle ("can't take a slide: its face turns inward at (x, y)"), the kite ("too
+   narrow for the slide: its face reaches 1.47 mm from the rail's middle line, and the slot needs
+   3.00 mm a side, 2.60 mm at its widest and one 0.40 mm line of wall"), a 1.0 mm rail, whose
+   1.2 mm slot leaves 0.30 mm of band at its ends, under 0.5, pins and a slide on one piece, and a
+   slide with no size on the hold. Without the piece's name it refuses a gap the rail does not
+   lock past (0.6 mm rail at 0.20) and a height that is not whole layers.
 
 After all three steps, one plate file and page per the print-coaster-samples and prioritize-prints
 skills, with the pieces drawn from the real mesh.
@@ -292,5 +316,6 @@ skills, with the pieces drawn from the real mesh.
 ## Yours to do
 
 - Picked: B (D-120). Nothing to do until the plate's page is up; then a yes and a color.
-- Optional: say which of sld-1's three slide gaps felt best, and the hexagon rows shrink to that one.
+- Optional: the slide gap is 0.15 mm a side, picked by Claude, not by you: sld-1's three gaps
+  all worked, so bikar takes the middle one (§5 item 3). Say if one of the other two felt better.
 - Optional: hold one split-06 whole piece of each kind back, so plate one has its control in hand.
