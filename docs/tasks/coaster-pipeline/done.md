@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-25 — Cut pieces, the third step: bikar's slide on a half, in the cookbook and the design (bikar #348, 3d-models #792); split-07 rebuilt as the cut-pieces plate, every loose piece cut in two and joined by pins or a slide, sliced at about 137 minutes and 36 g (3d-models #793)
 - 2026-10-25 — Cut pieces, first two of three steps: the design for cutting each loose piece in two so both faces print on the bed (D-120), then bikar's cut and pins on a half, each in the cookbook and the design doc (3d-models #775, #788, #789; bikar #346, #347)
 - 2026-10-25 — split-07, the whole flange coaster with a 0.7 mm socket wall, proposed and sliced; iteration 2 moved the inner ring of pins to 13.0 mm, off the hex pieces' points. It now waits for the slide, to be rebuilt as the cut-pieces plate (3d-models #787, #790)
 - 2026-10-25 — split-08, three socket walls on one slice: built, approved, sent, watched and judged. Omar picked 0.7 mm, and 0.9 mm shook (D-118, D-119) (3d-models #781, #783, #784, #785, #786)

@@ -101,6 +101,7 @@ split-06:
 split-07:
   - {iteration: 1, recipe: 'c6e0983525bf', date: '2026-10-25'}
   - {iteration: 2, recipe: 'c2c162893723', date: '2026-10-25'}
+  - {iteration: 3, recipe: 'cfd6b22eaf86', date: '2026-10-25'}
 split-08:
   - {iteration: 1, recipe: '4a3f17ab6e5f', date: '2026-10-24'}
 stud-1:

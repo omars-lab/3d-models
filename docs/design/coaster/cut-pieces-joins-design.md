@@ -280,7 +280,9 @@ pairs are tried in a flange coaster Omar has in hand: split-06's, or split-07's 
    108° has not been seen, and on one the line would need looking at again. split-07 as it printed still builds whole but is refused with halves on, because one
    of its studs bites a point. So cut pieces that fit split-07 as printed cannot be built: the
    plate needs a coaster whose studs sit off the points (the place-pins skill), which also means
-   printing that coaster.
+   printing that coaster. Done on paper 2026-10-25: split-07's iteration 2 moved its inner ring
+   from 14.3 to 13.0 mm, off the points, and its iteration 3 builds every piece cut, with the
+   joins of §4.2's first column ([split-07](../plates/split-07.md)).
 3. **A slide on a piece half.** Reuse the dovetail kernel's layer widths on a half's cut face.
    Either run the rail on the face's outline, or allow the hexagons' notches; keep the refusal for
    an outline that turns inward and say which piece it refused. Refuse a slot that leaves under
