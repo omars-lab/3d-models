@@ -727,6 +727,53 @@ Related: [split coasters](#split-coasters-two-halves-that-trap-the-pieces),
 [the cut-pieces design](../design/coaster/cut-pieces-joins-design.md),
 [the language reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
 
+## A slide that closes a cut piece
+
+Pins line a cut piece's halves up for glue; a slide holds them together with none. `slide <mm>`
+on the hold sizes a dovetail rail by its width at the root, and `slide 1`, last on a `loose`
+line, asks for it on each of that line's pieces. The rail stands on the lower half's cut face,
+wider at its top than at its root, and the upper half has a matching slot sunk into its own. The
+slot runs out through both sides of the piece, so the halves close by sliding one into the other
+from the side, and once closed they can only slide back out, not lift apart. The rail runs
+across the middle of the piece's face, the long way. The picture draws the star coaster opened
+up with its gold middle piece cut in two, with no slide and with a slide, its rail drawn 10 mm wide so it shows (the size a real piece takes is smaller, SLD-1 printed 4 mm).
+
+<!-- recipe: coaster-half-slide; swap: slide 0 | slide 1 -->
+```bkr
+pattern star
+  circle c center(0, 0) radius 45
+  divide c into 8
+  connect every 3
+  palette pal
+    Slab = #9a9a9a
+    Gold = #d4af37
+    Teal = #2f8f8f
+    fill void where orbit == 0 color Gold
+    fill void where orbit == 2 color Teal
+
+coaster Coaster
+  outline pattern
+  inscribe star
+  base 4.4
+  strap width 4
+  loose where orbit == 0 clearance 0.25 pack zipper slide 1
+  split at 2.2 studs 2 hold flange 0.8 room 0.2 halves 1 slide 10
+```
+![The star coaster opened up twice, its gold middle piece cut in two, first with no slide and then with a dovetail rail drawn 10 mm wide on one half and its slot in the other](img/coaster-half-slide.png)
+
+**Watch out:** only a piece whose face never turns inward takes a slide, so a star piece is
+refused, named, and so is a piece too narrow for the slot with one 0.4 mm line of wall each
+side of it (bikar says how far the face reaches and how much it needs). The slot is one layer
+deeper than the rail, so bikar refuses a slot that leaves under 0.5 mm of band where it runs out
+past the face; a lower rail (`height 0.6`) fixes that. The gap is 0.15 mm a side by default, the
+middle of the three gaps a test print found all work; a gap the rail's flare does not reach past
+is refused, since the rail would lift straight out. A piece takes pins or a slide, not both, and
+`halves` is the switch, as for pins. A slide on a cut piece has not been printed yet.
+
+Related: [pins that close a cut piece](#pins-that-close-a-cut-piece),
+[the cut-pieces design](../design/coaster/cut-pieces-joins-design.md),
+[the language reference](https://github.com/NaqshCoffee/bikar/blob/main/docs/language-reference.md).
+
 ## An id on each half of a split coaster
 <!--covers:mark-->
 
