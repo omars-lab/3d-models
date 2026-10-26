@@ -6716,3 +6716,34 @@ place each set: 1A is the 0.9 mm set's middle piece and 1C the 0.7 mm set's.
 coaster (split-07). Then try 0.45 mm if its sockets prove to hold, or move the pins (D-118's
 option 1). Omar's "the bigger kites are still not symmetric" is open apart from this: the drawn
 pieces are mirror-symmetric, so a photo with the lopsided side marked comes first.
+
+## D-120 — Cut pieces: the cut and the joins on one plate
+
+Omar, 2026-10-25, in chat, after asking "what happened to spliting the infull peices so both faces
+are printed on mat". He picked "B: cut and joins on one plate", then added "i remember were
+printed dovetail sliders" (sld-1, 2026-10-07: all three gaps worked, none picked as best).
+
+The [cut-pieces design](../design/coaster/cut-pieces-joins-design.md) cuts each loose piece of the
+flange coaster through its thickness, so both halves print face down and both faces of the coaster
+come off the bed.
+
+### The options on the table
+
+- **A. Plate one, then plate two** (the design's pick). The cut alone first, with no join, then the
+  joins. Needs only the cut in bikar before the first print, and answers the face question first.
+  Cost: two rounds before a coaster with joins.
+- **B. One plate with both.** The no-join halves and the joined halves side by side on one bed.
+  One print. Cost: all three bikar steps (the cut, pins on a half, a slide on a half) come before
+  any print, more to judge at once, and a fit problem in the cut itself muddies every join.
+- **C. As first asked: pins on the kite, a slide on every bigger piece.** Cost: bikar's slide
+  refuses the star and the middle, so a new slide for outlines that turn inward comes first.
+
+### What was picked
+
+B. bikar gets all three steps of the design's §5 before the plate is built: cut each loose piece
+in two, pins on a half, a slide on a half. Then one plate holds the cut pairs with no join and the
+joined pairs, tried in a flange coaster Omar already has.
+
+**What would reverse it:** the bikar work for the joins stalling (the slide on the hexagons is
+refused today because of the notches round the coaster's pins). Then the cut-only rows go out
+alone, which is option A's first plate.

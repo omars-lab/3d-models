@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1542.88" height="609.9" viewBox="0 0 1542.88 609.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>A loose piece cut in two at its middle, so both faces print on the bed</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">A loose piece cut in two at its middle, so both faces print on the bed</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. Gold and teal: the piece. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</text>
+<g data-panel="1. Today (split-06): one whole piece">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. Today (split-06): one whole piece</text>
+<g transform="translate(20,109.5)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="158.4" x2="72" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,158.4 432,158.4 432,79.2 360,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="360" y1="158.4" x2="432" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="72" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,79.2 432,79.2 432,0 360,0" fill="#aba69f"/>
+<line data-mark="first" x1="360" y1="0" x2="432" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,158.4 86.4,158.4 86.4,136.8 72,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="72" y1="158.4" x2="86.4" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="345.6,158.4 360,158.4 360,136.8 345.6,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="345.6" y1="158.4" x2="360" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,21.6 86.4,21.6 86.4,0 72,0" fill="#aba69f"/>
+<line data-mark="first" x1="72" y1="0" x2="86.4" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="345.6,21.6 360,21.6 360,0 345.6,0" fill="#aba69f"/>
+<line data-mark="first" x1="345.6" y1="0" x2="360" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="86.4,158.4 345.6,158.4 345.6,136.8 86.4,136.8" fill="#dcaa33"/>
+<line data-mark="first" x1="86.4" y1="158.4" x2="345.6" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="72,136.8 360,136.8 360,28.8 72,28.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="86.4,28.8 345.6,28.8 345.6,7.2 86.4,7.2" fill="#dcaa33"/>
+<line data-mark="last" x1="86.4" y1="7.2" x2="345.6" y2="7.2" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+</g>
+<circle data-label-dot="1" cx="372.8" cy="120.3" r="2.6" fill="#222222"/>
+<polyline points="372.8,120.3 466,120.3 476,120.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="480" y="124.3" font-size="12" fill="#222222" text-anchor="start">strap over the band</text>
+<circle data-label-dot="1" cx="236" cy="127.5" r="2.6" fill="#222222"/>
+<polyline points="236,127.5 466,136.3 476,136.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="480" y="140.3" font-size="12" fill="#222222" text-anchor="start">top face: printed last</text>
+<circle data-label-dot="1" cx="326" cy="192.3" r="2.6" fill="#222222"/>
+<polyline points="326,192.3 466,192.3 476,192.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="480" y="196.3" font-size="12" fill="#222222" text-anchor="start">band</text>
+<text x="20" y="295.9" font-size="12" fill="#444444">The piece prints standing up. Its bottom face is a first layer (solid blue) and its top face is the last layer (orange dashes), so the two</text>
+<text x="20" y="312.9" font-size="12" fill="#444444">faces of the coaster do not match.</text>
+</g>
+<g data-panel="2. Cut at its middle, no join">
+<text x="955.12" y="89.5" font-size="14" font-weight="bold" fill="#222222">2. Cut at its middle, no join</text>
+<g transform="translate(955.12,109.5)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="158.4" x2="72" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,158.4 432,158.4 432,79.2 360,79.2" fill="#8e8a83"/>
+<line data-mark="first" x1="360" y1="158.4" x2="432" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="0" x2="72" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="360,79.2 432,79.2 432,0 360,0" fill="#aba69f"/>
+<line data-mark="first" x1="360" y1="0" x2="432" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,158.4 86.4,158.4 86.4,136.8 72,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="72" y1="158.4" x2="86.4" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="345.6,158.4 360,158.4 360,136.8 345.6,136.8" fill="#8e8a83"/>
+<line data-mark="first" x1="345.6" y1="158.4" x2="360" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="72,21.6 86.4,21.6 86.4,0 72,0" fill="#aba69f"/>
+<line data-mark="first" x1="72" y1="0" x2="86.4" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="lip" points="345.6,21.6 360,21.6 360,0 345.6,0" fill="#aba69f"/>
+<line data-mark="first" x1="345.6" y1="0" x2="360" y2="0" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="86.4,158.4 345.6,158.4 345.6,136.8 86.4,136.8" fill="#3f9189"/>
+<line data-mark="first" x1="86.4" y1="158.4" x2="345.6" y2="158.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="72,136.8 360,136.8 360,82.8 72,82.8" fill="#3f9189"/>
+<polygon data-kind="flange" points="72,82.8 360,82.8 360,28.8 72,28.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="86.4,28.8 345.6,28.8 345.6,7.2 86.4,7.2" fill="#dcaa33"/>
+<line data-mark="first" x1="86.4" y1="7.2" x2="345.6" y2="7.2" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="seam" x1="72" y1="82.8" x2="360" y2="82.8" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+</g>
+<circle data-label-dot="1" cx="1261.12" cy="163.5" r="2.6" fill="#222222"/>
+<polyline points="1261.12,163.5 1401.12,163.5 1411.12,163.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1415.12" y="167.5" font-size="12" fill="#222222" text-anchor="start">upper piece half</text>
+<circle data-label-dot="1" cx="1261.12" cy="221.1" r="2.6" fill="#222222"/>
+<polyline points="1261.12,221.1 1401.12,221.1 1411.12,221.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1415.12" y="225.1" font-size="12" fill="#222222" text-anchor="start">lower piece half</text>
+<text x="955.12" y="295.9" font-size="12" fill="#444444">Each half is a 0.6 mm face block and 1.5 mm of band, 2.1 mm in all. Both faces are now</text>
+<text x="955.12" y="312.9" font-size="12" fill="#444444">first layers. The cut runs through the band, under the straps, so neither face shows it.</text>
+<text x="955.12" y="329.9" font-size="12" fill="#444444">Each half is caught by its own strap once the coaster closes, so the halves stay in even</text>
+<text x="955.12" y="346.9" font-size="12" fill="#444444">with nothing joining them. A join only makes the pair one part to place and keeps it</text>
+<text x="955.12" y="363.9" font-size="12" fill="#444444">lined up.</text>
+</g>
+<g data-panel="3. How the two halves print">
+<text x="20" y="428.9" font-size="14" font-weight="bold" fill="#222222">3. How the two halves print</text>
+<g transform="translate(123.6,448.9)">
+<polygon data-kind="piece" points="19.2,50.4 196.8,50.4 196.8,36 19.2,36" fill="#3f9189"/>
+<line data-mark="first" x1="19.2" y1="50.4" x2="196.8" y2="50.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="0,36 216,36 216,0 0,0" fill="#3f9189"/>
+<line data-mark="last" x1="0" y1="0" x2="216" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="331.2,50.4 508.8,50.4 508.8,36 331.2,36" fill="#dcaa33"/>
+<line data-mark="first" x1="331.2" y1="50.4" x2="508.8" y2="50.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="flange" points="312,36 528,36 528,0 312,0" fill="#dcaa33"/>
+<line data-mark="last" x1="312" y1="0" x2="528" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<rect data-kind="bed" x="-6" y="54.4" width="540" height="5" fill="#cfcbc3"/>
+<text x="538" y="60.4" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="152.4" cy="468.1" r="2.6" fill="#222222"/>
+<polyline points="152.4,468.1 103.6,468.1 93.6,468.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="472.1" font-size="12" fill="#222222" text-anchor="end">lower half</text>
+<circle data-label-dot="1" cx="615.6" cy="468.1" r="2.6" fill="#222222"/>
+<polyline points="615.6,468.1 732.84,468.1 742.84,468.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="746.84" y="472.1" font-size="12" fill="#222222" text-anchor="start">upper half, turned over</text>
+<text x="20" y="538.9" font-size="12" fill="#444444">Both halves print face down. The band steps out 0.8 mm past the face block with air under it: the same step every flange piece has printed</text>
+<text x="20" y="555.9" font-size="12" fill="#444444">since split-02, where its underside came out clean or with a slight droop.</text>
+<text x="20" y="572.9" font-size="12" fill="#444444">The upper half is turned over, never mirrored, so a lopsided outline still fits its hole.</text>
+</g>
+</svg>

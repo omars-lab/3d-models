@@ -1,0 +1,55 @@
+# A loose piece of the split flange coaster (split-06), whole as today and cut in two at its middle.
+# Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sizes measured 2026-10-24 from the hexagon piece rendered at split-06's settings: the piece is
+# 4.2 mm tall (4.4 less room 0.2), a 0.6 mm face block, a 3.0 mm band, a 0.6 mm face block; the band
+# is 0.8 mm a side wider than the face. The coaster is cut at 2.2 mm; the strap over the band is
+# 0.6 mm thick. The air gap round the piece (0.10 mm) is left out so the shapes read.
+title: "A loose piece cut in two at its middle, so both faces print on the bed"
+panels:
+  - title: "1. Today (split-06): one whole piece"
+    width: 24
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true, first: bottom}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true, first: top}
+      - {kind: lip, side: lower, box: [4, 0, 0.8, 0.6], both: true, first: bottom}
+      - {kind: lip, side: upper, box: [4, 3.8, 0.8, 0.6], both: true, first: top, label: strap over the band, label_at: [4.4, 4.1]}
+      - {kind: piece, box: [4.8, 0, 14.4, 0.6], first: bottom}
+      - {kind: flange, box: [4, 0.6, 16, 3.0], label: band, label_at: [17, 2.1]}
+      - {kind: piece, box: [4.8, 3.6, 14.4, 0.6], last: top, label: "top face: printed last", label_at: [12, 3.9]}
+    notes:
+      - "The piece prints standing up. Its bottom face is a first layer (solid blue) and its top face
+        is the last layer (orange dashes), so the two faces of the coaster do not match."
+
+  - title: "2. Cut at its middle, no join"
+    width: 24
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true, first: bottom}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true, first: top}
+      - {kind: lip, side: lower, box: [4, 0, 0.8, 0.6], both: true, first: bottom}
+      - {kind: lip, side: upper, box: [4, 3.8, 0.8, 0.6], both: true, first: top}
+      - {kind: piece, color: teal, box: [4.8, 0, 14.4, 0.6], first: bottom}
+      - {kind: flange, color: teal, box: [4, 0.6, 16, 1.5], label: lower piece half, label_at: [17, 1.3]}
+      - {kind: flange, box: [4, 2.1, 16, 1.5], label: upper piece half, label_at: [17, 2.9]}
+      - {kind: piece, box: [4.8, 3.6, 14.4, 0.6], first: top}
+      - {kind: seam, line: [4, 2.1, 16]}
+    notes:
+      - "Each half is a 0.6 mm face block and 1.5 mm of band, 2.1 mm in all. Both faces are now first
+        layers. The cut runs through the band, under the straps, so neither face shows it."
+      - "Each half is caught by its own strap once the coaster closes, so the halves stay in even with
+        nothing joining them. A join only makes the pair one part to place and keeps it lined up."
+
+  - title: "3. How the two halves print"
+    width: 22
+    scale: [24, 24]
+    parts:
+      - {kind: piece, color: teal, box: [0.8, 0, 7.4, 0.6], first: bottom}
+      - {kind: flange, color: teal, box: [0, 0.6, 9, 1.5], last: top, label: lower half, label_at: [1.2, 1.3], label_side: left}
+      - {kind: piece, box: [13.8, 0, 7.4, 0.6], first: bottom}
+      - {kind: flange, box: [13, 0.6, 9, 1.5], last: top, label: "upper half, turned over", label_at: [20.5, 1.3]}
+      - {kind: bed, line: [0, 0, 22]}
+    notes:
+      - "Both halves print face down. The band steps out 0.8 mm past the face block with air under
+        it: the same step every flange piece has printed since split-02, where its underside came
+        out clean or with a slight droop."
+      - "The upper half is turned over, never mirrored, so a lopsided outline still fits its hole."
