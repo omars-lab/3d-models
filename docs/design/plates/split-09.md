@@ -94,3 +94,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-27 | proposed: on Omar's "the two primary big patterns came out real nice, i want a production plate with just those, no infill"; split-07's halves, two of each, the most one bed holds | this page |
+| 2026-10-27 | reviewed: held by Omar, "split-09 feels like the consturciton palge, not the infill test plate", "i want to rpint tht later"; the loose-piece test plate, [split-10](split-10.md), comes first | this page |
