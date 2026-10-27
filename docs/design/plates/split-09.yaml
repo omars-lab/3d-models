@@ -1,0 +1,53 @@
+# split-09 — the flange coaster's two halves only, as many as fit on one bed
+#
+# Omar, 2026-10-27, after split-07: "the two primary big patterns came out real nice, i want a
+# production plate with just those, no infill, and as many of the halves we can print on same
+# plate". The two big patterns are the coaster's lower and upper halves (the frame with its pins
+# and sockets). "No infill" means no loose pieces: split-07's stars and middle came out with domed,
+# flared faces, and they get their own experiment plate.
+#
+# Every half is split-07's exactly: the same file, the same params, setting 8
+# (infill_wall_overlap 55%), so what came off split-07's bed is what this bed makes. The loose-piece
+# params (halves, pins, slide) stay on each item, unchanged, so each half resolves to the very mesh
+# split-07 printed (it-b3f9797bf2e3, it-2e7fa82b808f).
+#
+# Four is the most one bed holds: the X2D bed is 256 mm square, each half about 112.5 mm across its
+# points; the slicer's arrange fills each row from about 25 to 251 mm, leaving about 30 mm, and a
+# fifth half needs about 112.
+#
+# A new layout is an experiment until one run of it is kept as laid out (D-095, D-098); then
+# grade-plate makes it production.
+#
+# No labels, as split-06 and split-07. No color here: the send picks it.
+#
+#   LOWER ×2 / UPPER ×2
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/split-09.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SP9
+
+ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the ledges, less than split-06 did (D-119); split-07's halves, unchanged"
+no_id_reasons:
+  - &nolabel "No labels: the coaster halves as we would sell them, as split-06 and split-07 (Omar, 2026-10-23)."
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1 }
+    count:  2
+    label:  LOWER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1 }
+    count:  2
+    label:  UPPER
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }

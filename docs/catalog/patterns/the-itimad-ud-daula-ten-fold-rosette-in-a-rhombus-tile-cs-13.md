@@ -102,6 +102,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 | [split-06](../../design/plates/split-06.md) | split flange |
 | [split-07](../../design/plates/split-07.md) | split flange |
 | [split-08](../../design/plates/split-08.md) | split flange |
+| [split-09](../../design/plates/split-09.md) | split flange |
 | [stud-1](../../design/plates/stud-1.md) | split lip |
 | [swatch-10101](../../design/plates/swatch-10101.md) | minimal |
 | [swatch-10204](../../design/plates/swatch-10204.md) | minimal |
