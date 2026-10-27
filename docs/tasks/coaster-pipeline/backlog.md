@@ -11,19 +11,31 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
 consturciotn and move back to split coasters and split inflills"), so they come first.
 
-1. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
+1. **Print split-10, then carry each answer into the flange coaster.** Omar, 2026-10-27, on
+   split-07's loose pieces: the stars' faces curve, the middle has a "webbed duck feel", the
+   "dovetail kites are really loose". [split-10](../../design/plates/split-10.md) puts one piece
+   per setting beside a stock one (supports under the step, a whole star, kite gap 0.11, kite pin
+   hole 0.20, dovetail 0.10). Waits on Omar's yes and color. Its answers set the next whole
+   coaster's params; split-09 (the halves only) is held until then.
+2. **A slope under the flange step, in bikar.** Each cut half prints face down, and the band under
+   the frame's lip steps 0.8 mm out over air above the 0.6 mm face; at a star's points it sags and
+   the face edge flares (split-07). split-10 tries supports under it, which leave marks to pick
+   off. The lasting fix is a 45° slope under the step in the split-flange file, so the overhang
+   prints with no support. A bikar change; worth doing whichever way split-10's stars answer,
+   unless STAR-WHOLE shows the cut alone caused it.
+3. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
    kites are still not eymetric". As drawn they are mirror-symmetric, so the difference comes in the
    slice or the print. Needs a photo with the lopsided side marked (split-07's page asks for it),
    then a look at the sliced walls of one bigger kite (`tools/fit_gap.py walls`) against the drawing.
-2. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+4. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
-3. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+5. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+6. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -32,7 +44,7 @@ consturciotn and move back to split coasters and split inflills"), so they come 
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-5. **Standard-size plate (P5.2)** — only after item 2 settles the CAL-CST numbers (board #6).
+7. **Standard-size plate (P5.2)** — only after item 4 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 

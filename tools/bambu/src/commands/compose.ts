@@ -334,6 +334,10 @@ export const OBJECT_SETTINGS: Record<string, { check: (v: string) => boolean; ta
     check: (v) => /^[01]\.\d?[1-9]$/.test(v) && Number(v) >= 0.8 && Number(v) <= 1.2,
     takes: 'a ratio from 0.8 to 1.2, as text with no trailing zero, e.g. "1.05" or "1.1"',
   },
+  // Supports under one piece, the preset's own kind: split-10 holds up the 0.8 mm step under a cut
+  // star half, which printed over air on split-07 and came off flared. Proven per piece 2026-10-27:
+  // the read-back held it, and the G-code has support lines under that piece only.
+  enable_support: { check: (v) => v === "1", takes: '"1" (leave it out for none)' },
 };
 
 /** Settings a piece may not carry, with the reason, since a plain "not allowed" would send the next

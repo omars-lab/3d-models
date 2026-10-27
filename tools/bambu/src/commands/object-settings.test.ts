@@ -65,6 +65,14 @@ describe("object_settings: — parsed against the allowed list", () => {
     expect(() => parseManifest(recipe('    object_settings: { initial_layer_flow_ratio: "1.10" }'))).toThrow(/no trailing zero/);
   });
 
+  it("takes supports under one piece as \"1\", and refuses \"0\" or a bare number", () => {
+    const m = parseManifest(recipe('    object_settings: { enable_support: "1" }'));
+    expect((m.items[0] as { object_settings?: unknown }).object_settings).toEqual({ enable_support: "1" });
+    // Off is the preset's own value, so it is written by leaving the key out, not as "0".
+    expect(() => parseManifest(recipe('    object_settings: { enable_support: "0" }'))).toThrow(/leave it out/);
+    expect(() => parseManifest(recipe("    object_settings: { enable_support: 1 }"))).toThrow();
+  });
+
   it("refuses it on an item that is not rendered from bikar", () => {
     const text = `
 profile: { settings: "m;p", filament: "f" }
