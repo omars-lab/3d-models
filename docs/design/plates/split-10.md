@@ -2,7 +2,7 @@
 plate: split-10
 recipe: split-10.yaml
 iteration: 3
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Which change fixes each loose piece split-07 got wrong: the stars' curved faces, the middle's webbed feel, the loose kites and the dovetail fit?"
@@ -108,6 +108,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-27 | approved | Omar, in chat: "go in green" | iteration 3 @ d67cb942f8 in #00AE42 | |
 
 ## Timeline
 
