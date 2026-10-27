@@ -1,4 +1,4 @@
-# split-10 — the flange coaster's loose pieces, one of each kind per setting, a stock piece beside each
+# split-10 — the flange coaster's loose pieces, each fix bracketed, a stock piece beside each
 #
 # split-07 printed the whole flange coaster with every loose piece cut in two. Omar, 2026-10-27,
 # with photos: the stars' faces "are not a star extruded, they have a curve"; "the middle piece
@@ -10,15 +10,24 @@
 # each ring down to one piece (two bodies, its lower and upper halves); the middle piece is one
 # already and takes no wedge.
 #
+# Iteration 2 (Omar, "does this maximize the testing we can do to reduce prints?", then
+# "Everything, slope included"): each fit is bracketed both ways from stock, so one print finds
+# the fit instead of one step per print, and each fit variant prints twice, so one bad piece does
+# not decide it.
+#
 #   Stars (the curve): stock cut star / a whole star (halves 0: does the cut cause the curve?) /
-#     a cut star with supports under the 0.8 mm step that each half prints over air.
-#   Middle (the "webbed" feel): stock / with supports, the same step under its edge.
-#   Kites (loose): stock gap 0.12 / gap 0.11 / pin hole 0.20 in place of 0.25.
-#   Hexes and outer pieces (the dovetail slide): stock 0.15 a side / 0.10 a side.
+#     a cut star with supports under the 0.8 mm step each half prints over air / a cut star with a
+#     45° slope under that step (slope 0.2, bikar #349).
+#   Middle (the "webbed" feel): stock / with supports / with the slope.
+#   Kites (loose), two of each: gap 0.12 (stock) / 0.10 / 0.08 a face; pin hole 0.25 wider than
+#     the pin (stock) / 0.20 / 0.15.
+#   Hexes and outer pieces (the dovetail slide), two of each: 0.15 a side (stock) / 0.10 / 0.05.
 #     "Dovetail kites" may mean the kites or the pieces with the dovetail; both are here.
 #
-# A chamfer under the step would end the overhang in the model itself; that is a bikar change, on
-# the coaster backlog, not this bed.
+# The sloped star and middle set slide_hex 0 and slide_outer 0: bikar refuses a slope on any
+# piece of a coaster that also asks for a slide, and the whole coaster is built even when one
+# piece is picked. Neither the star nor the middle has a slide, so their meshes change only by the
+# slope.
 #
 # No labels: an id may go only on a face hidden in use (D-114), and both faces of a cut piece show.
 # Pieces are told apart by where they sit on the bed: the page's bed picture names each.
@@ -59,6 +68,12 @@ items:
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%", enable_support: "1" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2 }
+    label:  STAR-SLOPE
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Middle
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1 }
     label:  MIDDLE-STOCK
@@ -71,44 +86,85 @@ items:
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%", enable_support: "1" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, slope: 0.2 }
+    label:  MIDDLE-SLOPE
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Kite
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  KITE-STOCK
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Kite
-    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.11, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
-    label:  KITE-G11
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  KITE-G10
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.08, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  KITE-G08
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Kite
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.2, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  KITE-PIN20
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.15, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  KITE-PIN15
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Hex
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  HEX-STOCK
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Hex
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.1, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  HEX-SLIDE10
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.05, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  HEX-SLIDE05
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Outer
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  OUTER-STOCK
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Outer
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.1, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
     label:  OUTER-SLIDE10
+    no_id:  *nolabel
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Outer
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 3, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.05, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  OUTER-SLIDE05
     no_id:  *nolabel
     object_settings: { infill_wall_overlap: "55%" }
