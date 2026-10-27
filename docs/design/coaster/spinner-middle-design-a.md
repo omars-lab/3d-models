@@ -39,7 +39,7 @@ decide it.
 |---|---|---|---|---|---|
 | **A. Round flange, PLA on PLA** (recommended first) | a round disc on its own flange, under the frame's lip | height and halves unchanged; nothing to buy; built from the loose-piece code we have; the test print is one slice | turns, does not coast (S20 says fully printed spinners lack spin time; a designer's claim, not a measurement); the kites' undercuts must be trimmed near the middle (M2); the disc's face must sit a layer below both faces or it drags on the table | the art call (§2) comes next; a 36° click to bring the pattern back in line is a later add | whether a round piece turns by a fingertip with no rattle, at which gap, on our printer |
 | B. Steel balls in a printed groove | the disc on 2 to 2.5 mm steel balls (S13), dropped in when the halves close | smoother than A, likely; the balls go in at assembly, so no pause in a print (S17) | the groove crosses the 2.2 mm cut, so the halves' line-up becomes a bearing part; printed grooves are rough (S8) and balls can work out (S16); groove reaches the kites' undercuts (M2); chrome steel in a wet coaster, rust not covered by any source found | a new groove shape in bikar for four parts; buying and counting balls per coaster | whether printed grooves at our 0.2 mm layers give a better spin than A, and whether balls stay put |
-| C. Commercial thin bearing (6704, 20×27×4 mm) | the disc pressed into the bearing's 20 mm hole, the bearing in the frame | a real spin (S18, S19); cheap, about £1 at ten (S10) | needs the coaster 5.2 mm or taller (§3.3); the 27 mm bearing cuts into the ten small kites (M2), so the pattern round the middle changes; metal in a wet coaster | a different-looking, thicker product; a pattern change near the middle; a part to stock | nothing about our geometry until the pattern is redrawn; it is a product change, not a test |
+| C. Commercial thin bearing (6704, 20×27×4 mm) | the disc pressed into the bearing's 20 mm hole, the bearing in the frame | a real spin (S18, S19); cheap (S10) | needs the coaster 5.2 mm or taller (§3.3); the 27 mm bearing cuts into the ten small kites (M2), so the pattern round the middle changes; metal in a wet coaster | a different-looking, thicker product; a pattern change near the middle; a part to stock | nothing about our geometry until the pattern is redrawn; it is a product change, not a test |
 
 **Recommendation.** Print option A first as one slice of the coaster with three gaps and a stock
 slice beside it (§7). It answers the question that decides everything else, whether a round piece
@@ -167,7 +167,7 @@ The thin bearings found are all 4 mm tall: 6700 is 10 × 15 × 4 mm (S9), 6704 i
 
 That makes C a different product, thicker and with a redrawn middle, not a change to this one.
 What it would give: the "decent spin" of a steel bearing (S19) and a real fidget feel. What it
-costs in money is small, under £2 a bearing (S10).
+costs in money is small (S10).
 
 ## 4. Living with a mug
 

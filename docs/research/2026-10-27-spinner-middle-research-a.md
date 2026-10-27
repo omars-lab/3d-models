@@ -123,11 +123,11 @@ resistance of precision steel bearings".
 
 **S9. Simply Bearings, 6700ZZ thin-section ball bearing.** FETCHED.
 <https://www.simplybearings.co.uk/products/6700-zz-eu>
-"Inside diameter 10 mm, outside diameter 15 mm, width 4 mm"; £3.40 ex VAT each, £3.03 at 10+.
+"Inside diameter 10 mm, outside diameter 15 mm, width 4 mm" (price on the page, left out here: public repo).
 
 **S10. Henderson Bearings, 61704 / 6704 thin-section ball bearing 20x27x4 mm.** FETCHED.
 <https://www.hendersonbearings.co.uk/61704-6704-thin-section-ball-bearing-20x27x4mm.html>
-Bore 20 mm, outside 27 mm, width 4 mm; £1.91 + VAT each, £0.96 at 10, £0.86 at 50.
+Bore 20 mm, outside 27 mm, width 4 mm (price on the page, left out here: public repo).
 
 **S11. The 67xx series, all 4 mm wide.** SNIPPET (eBay listings, not a maker's catalog).
 <https://www.ebay.de/itm/127001265740>
