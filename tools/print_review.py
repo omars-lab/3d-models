@@ -5,7 +5,7 @@
     python3 tools/print_review.py art <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
-    python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom]
+    python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom] [--key]
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
     python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
@@ -53,6 +53,11 @@ and slots dark, where a flat fill would draw a half as a whole piece. A label si
 piece when it fits there whole, and otherwise beside it, clear of every piece, with a line to it.
 `--zoom` draws only the part of the bed the pieces take, larger, so a plate of many small pieces
 (SPL-1: 30 squares 15 mm across) gets each label on its own piece instead of a web of lines.
+`--key` drops the labels for numbers: each label gets one number and one color, shared by all
+its copies, numbered in the bed map's order (the recipe's), the number sits on the deepest point
+of each half of each piece, and a list beside the bed reads number, color, label and how many
+copies. It is for a bed of many small look-alike pieces whose
+labels cannot sit on them (split-10: 29 pieces in 18 kinds, where labels and lines tangled).
 
 `side` cuts the frame and a piece straight down along a line, x0,y0 to x1,y1 mm in their shared
 frame, and draws the cut from the side: the frame grey, the piece gold, one row per label, every
@@ -562,11 +567,61 @@ def relief(d, f, tris, shade):
         d.polygon([f(p[:2]) for p in t], fill=tuple(round(c * k) for c in shade))
 
 
+KEY_W = 420              # px of the list beside a --key bed picture
+KEY_ROW = 36             # px per row of that list
+BADGE_R = 15             # px radius of the number on each piece of a --key bed picture
+
+
+def key_shades(n):
+    """n colors far apart round the wheel, alternately lighter and darker, so neighbours in the
+    list do not look alike."""
+    import colorsys
+    return [tuple(round(c * 255) for c in colorsys.hsv_to_rgb((i * 0.618034) % 1, 0.55, 0.95 if i % 2 else 0.75))
+            for i in range(n)]
+
+
+def parts(own):
+    """An object's footprint split into the pieces that lie apart on the bed, as masks: a piece cut
+    in two comes off the bed as two halves, and each half is bagged, so each gets its own badge.
+    A part smaller than a badge is a speck, not a half, and is left out."""
+    rest, out = own.copy(), []
+    while (box := rest.getbbox()) is not None:
+        x = box[0]
+        y = next(y for y in range(box[1], box[3]) if rest.getpixel((x, y)))
+        ImageDraw.floodfill(rest, (x, y), 128)
+        part = rest.point(lambda v: 255 if v == 128 else 0)
+        rest = rest.point(lambda v: 0 if v == 128 else v)
+        if part.histogram()[255] >= math.pi * BADGE_R ** 2:
+            out.append(part)
+    return out
+
+
+def deepest(own):
+    """The pixel of a footprint farthest from its edge, found by wearing the footprint down a
+    pixel at a time: the badge goes there, on the piece, not at its box centre, which on a kite
+    or a star can be bare bed."""
+    box = own.getbbox()
+    if box is None:
+        return None
+    left, top = box[0] - 2, box[1] - 2
+    m = own.crop((left, top, box[2] + 2, box[3] + 2))
+    while True:
+        worn = m.filter(ImageFilter.MinFilter(3))
+        if worn.getbbox() is None:
+            break
+        m = worn
+    b = m.getbbox()
+    cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+    x, y = min(((x, y) for y in range(b[1], b[3]) for x in range(b[0], b[2]) if m.getpixel((x, y))),
+               key=lambda q: (q[0] - cx) ** 2 + (q[1] - cy) ** 2)
+    return x + left, y + top
+
+
 GROUP_PAD = 3            # mm between a group's pieces and the box drawn round them
 GROUP_INK = (250, 215, 60)
 
 
-def bed_picture(plate, labels, names=True, zoom=False, groups=None):
+def bed_picture(plate, labels, names=True, zoom=False, groups=None, key=False):
     """The bed from above, front edge at the bottom: each object in its own shade, its label on a
     white box on its own object when it fits there whole, else clear of every object and every
     other label with a line from the box to its object. `labels` maps object id -> label;
@@ -574,7 +629,9 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
     mm round them, at the scale that puts its long side at ZOOM_PX. `groups` maps object id -> the
     plate's `group:`; each group gets a yellow box round its pieces, GROUP_PAD mm out, and its name
     on a yellow tag above the box, so a set reads as one block (split-03 mixed its sets; Omar,
-    2026-10-22: "group related pieces into a rectangle")."""
+    2026-10-22: "group related pieces into a rectangle"). key=True numbers the pieces instead of
+    naming them, one number and color per label, with the list beside the bed (KEY_W px wide);
+    the third value returned is then the badges' boxes and the fourth the list's rows."""
     groups = groups or {}
     with zipfile.ZipFile(plate) as zf:
         solids = plate_objects(zf, with_z=True)
@@ -588,7 +645,7 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
         y1 = min(BED_MM, max(p[1] for p in pts) + ZOOM_MARGIN)
         px = ZOOM_PX / max(x1 - x0, y1 - y0)
     w, h = round((x1 - x0) * px), round((y1 - y0) * px)
-    img = Image.new("RGB", (w, h + CAPTION), (24, 24, 24))
+    img = Image.new("RGB", (w + (KEY_W if key else 0), h + CAPTION), (24, 24, 24))
     mask = Image.new("L", (w, h), 0)
     d, m = ImageDraw.Draw(img), ImageDraw.Draw(mask)
     d.rectangle([0, 0, w - 1, h - 1], outline=(90, 90, 90), width=2)
@@ -601,6 +658,11 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
     shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
               (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
     font = ImageFont.load_default(size=26)
+    present = [labels.get(oid, oid) for oid, _ in objects]  # the map's order is the recipe's
+    kinds = list(dict.fromkeys([v for v in labels.values() if v in present] + present))
+    if key:
+        palette = dict(zip(kinds, key_shades(len(kinds))))
+        shades = [palette[labels.get(oid, oid)] for oid, _ in objects]
     named, owns = [], []
     for k, (oid, tris) in enumerate(objects):
         own = Image.new("L", (w, h), 0)
@@ -631,6 +693,8 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
         tag = (tb[0] - 6, tb[1] - 4, tb[2] + 6, tb[3] + 4)
         taken.append(tag)
         tags.append((g, tag))
+    if key:
+        return keyed(img, d, font, (w, h), objects, labels, kinds, shades, owns, tags, zoom, (x0, y0, x1, y1))
     for (oid, _), (name, centre), own in zip(objects, named, owns) if names else []:
         at = f(centre)
         (x, y), box = label_spot(d, font, name, at, taken, mask, (w, h), lines, own, rects.get(groups.get(oid)))
@@ -645,13 +709,52 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None):
     for (name, centre), box in zip(named if names else [], taken[len(tags):]):
         d.rectangle(box, fill=(255, 255, 255))
         d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), name, fill=(0, 0, 0), font=font, anchor="mm")
-    caption = "front of the bed" if not zoom else \
-        f"front of the bed (this is {x0:.0f} to {x1:.0f} mm across, {y0:.0f} to {y1:.0f} mm back)"
-    d.text((w / 2, h + CAPTION / 2), caption, fill=(200, 200, 200), font=font, anchor="mm")
+    bed_caption(d, font, w, h, zoom, (x0, y0, x1, y1))
     return img, named, taken, lines
 
 
-def bed_sheet(out, plate, zoom=False):
+def bed_caption(d, font, w, h, zoom, span):
+    x0, y0, x1, y1 = span
+    caption = "front of the bed" if not zoom else \
+        f"front of the bed (this is {x0:.0f} to {x1:.0f} mm across, {y0:.0f} to {y1:.0f} mm back)"
+    d.text((w / 2, h + CAPTION / 2), caption, fill=(200, 200, 200), font=font, anchor="mm")
+
+
+def keyed(img, d, font, size, objects, labels, kinds, shades, owns, tags, zoom, span):
+    """The rest of a --key bed picture: a numbered badge on the deepest point of each part of each
+    piece, the group tags, and the list beside the bed, numbered in the bed map's order."""
+    w, h = size
+    small = ImageFont.load_default(size=20)
+    badges, named = [], []
+    for (oid, _), own in zip(objects, owns):
+        name = labels.get(oid, oid)
+        n = kinds.index(name) + 1
+        named.append((name, deepest(own)))
+        for part in parts(own) or [own]:
+            if (at := deepest(part)) is None:
+                continue
+            x, y = at
+            box = (x - BADGE_R, y - BADGE_R, x + BADGE_R, y + BADGE_R)
+            d.ellipse(box, fill=(0, 0, 0), outline=(255, 255, 255), width=2)
+            d.text((x, y), str(n), fill=(255, 255, 255), font=small, anchor="mm")
+            badges.append(box)
+    for g, box in tags:
+        d.rectangle(box, fill=GROUP_INK)
+        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), g, fill=(0, 0, 0), font=font, anchor="mm")
+    rows = []
+    for i, name in enumerate(kinds):
+        y = 20 + i * KEY_ROW + KEY_ROW / 2
+        copies = sum(labels.get(oid, oid) == name for oid, _ in objects)
+        d.ellipse((w + 16, y - BADGE_R, w + 16 + 2 * BADGE_R, y + BADGE_R), fill=(0, 0, 0), outline=(255, 255, 255), width=2)
+        d.text((w + 16 + BADGE_R, y), str(i + 1), fill=(255, 255, 255), font=small, anchor="mm")
+        d.rectangle((w + 56, y - 11, w + 84, y + 11), fill=shades[[labels.get(o, o) for o, _ in objects].index(name)])
+        d.text((w + 96, y), name + (f"  x{copies}" if copies > 1 else ""), fill=(230, 230, 230), font=font, anchor="lm")
+        rows.append((i + 1, name, copies))
+    bed_caption(d, font, w, h, zoom, span)
+    return img, named, badges, rows
+
+
+def bed_sheet(out, plate, zoom=False, key=False):
     side = Path(re.sub(r"\.3mf$", "", plate, flags=re.I) + ".bedmap.json")
     labels, groups = {}, {}
     if side.exists():
@@ -660,9 +763,13 @@ def bed_sheet(out, plate, zoom=False):
         groups = {r["object"]: r["group"] for r in rows if r.get("group")}
     else:
         print(f"no bed map at {side}: naming objects by their 3MF id")
-    img, named, _, _ = bed_picture(plate, labels, zoom=zoom, groups=groups)
-    for name, (x, y) in named:
-        print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
+    img, named, _, rows = bed_picture(plate, labels, zoom=zoom, groups=groups, key=key)
+    if key:
+        for n, name, copies in rows:
+            print(f"{n:3}  {name:16} x{copies}")
+    else:
+        for name, (x, y) in named:
+            print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
     img.save(out)
     print("wrote", out)
 
@@ -1206,7 +1313,30 @@ def bed_self_test():
             "</triangles>", '<triangle v1="4" v2="5" v3="6"/><triangle v1="4" v2="6" v3="7"/></triangles>'))
     pimg = bed_picture(pinned, {}, names=False)[0]
     pin_at, face_at = sum(pimg.getpixel(gp(120, 100))), sum(pimg.getpixel(gp(125, 100)))
+    # --key on the two sets: two copies of A, two of B. Then a piece made of two 8 mm halves with a
+    # 6 mm gap between them, as a kite's two halves come off the bed as one object: its box centre
+    # is the gap, so a badge there would point at bare bed.
+    kimg, _, kbadges, krows = bed_picture(sets, {"6": "B", "8": "B", "2": "A", "4": "A"}, key=True)
+    kbare = bed_picture(sets, {}, names=False)[0]
+    halves = io.BytesIO()
+    with zipfile.ZipFile(halves, "w") as zf:
+        zf.writestr("3D/3dmodel.model", pair.replace('<item objectid="4" transform="1 0 0 0 1 0 0 0 1 137 100 0"/>', ''))
+        zf.writestr("3D/Objects/o.model", '<model><resources><object id="1"><mesh><vertices>' + "".join(
+            f'<vertex x="{x}" y="{y}" z="0"/>' for x0 in (-11, 3) for x, y in ((x0, -4), (x0 + 8, -4), (x0 + 8, 4), (x0, 4)))
+            + '</vertices><triangles><triangle v1="0" v2="1" v3="2"/><triangle v1="0" v2="2" v3="3"/>'
+            '<triangle v1="4" v2="5" v3="6"/><triangle v1="4" v2="6" v3="7"/></triangles></mesh></object></resources></model>')
+    _, _, hbadges, _ = bed_picture(halves, {"2": "KITE"}, key=True)
+    hbare = bed_picture(halves, {}, names=False)[0]
+    mid = lambda b: (round((b[0] + b[2]) / 2), round((b[1] + b[3]) / 2))
     return [
+        ("bed --key lists each label once, numbered in the map's order not the bed's, with its copies",
+         krows == [(1, "B", 2), (2, "A", 2)]),
+        ("bed --key gives copies of one label one color, and another label another",
+         kimg.getpixel(gp(55, 95)) == kimg.getpixel(gp(55, 135)) != kimg.getpixel(gp(175, 95))),
+        ("bed --key puts one badge on each piece", len(kbadges) == 4 and all(sum(kbare.getpixel(mid(b))) > 300 for b in kbadges)),
+        ("bed --key puts a badge on each half of a two-halves piece, none in the gap between",
+         len(hbadges) == 2 and all(sum(hbare.getpixel(mid(b))) > 300 for b in hbadges)),
+        ("bed --key widens the picture by the list", kimg.size[0] == gimg.size[0] + KEY_W),
         ("bed draws a pin brighter than the face it stands on", pin_at > face_at + 60),
         ("bed draws a box round each set, GROUP_PAD mm out from its pieces",
          gimg.getpixel(gp(60 - 7.5 - GROUP_PAD, 120)) == GROUP_INK and gimg.getpixel(gp(180 + 7.5 + GROUP_PAD, 120)) == GROUP_INK
@@ -1242,8 +1372,8 @@ if __name__ == "__main__":
     if len(a) >= 3 and a[0] == "pins":
         pins_sheet(a[1], a[2:])
         sys.exit(0)
-    if len(a) in (3, 4) and a[0] == "bed" and a[3:] in ([], ["--zoom"]):
-        bed_sheet(a[1], a[2], zoom=a[3:] == ["--zoom"])
+    if len(a) >= 3 and a[0] == "bed" and set(a[3:]) <= {"--zoom", "--key"} and len(set(a[3:])) == len(a[3:]):
+        bed_sheet(a[1], a[2], zoom="--zoom" in a[3:], key="--key" in a[3:])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "join":
         join_sheet(a[1], a[2:])
