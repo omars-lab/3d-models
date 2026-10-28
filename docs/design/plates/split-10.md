@@ -65,8 +65,8 @@ middle are the only pieces that try it.
 **"Dovetail kites".** The kites are joined by a pin, and the hexagon and outer pieces by the
 dovetail. Both are on this bed, so the answers below settle which you meant.
 
-**Telling the pieces apart.** Open each piece's halves and count the raised dots on the cut
-face. That face hides once the halves close, so the dots never show in use (D-114). Within a
+**Telling the pieces apart.** Open each piece's halves and count the small round dots sunk
+into the cut face (shallow wells, so the halves still close flat). That face hides once the halves close, so the dots never show in use (D-114). Within a
 kind, each version has its own count:
 
 | Kind | No dots | 1 dot | 2 dots | 3 dots | 4 dots |
