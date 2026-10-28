@@ -870,6 +870,46 @@ def outlines(tris, px=FOOT_PX, tol=FOOT_TOL):
     return rings
 
 
+# What the slicer lays on the bed besides the pieces, by the G-code feature that draws it.
+BASE_KINDS = {"Support": "support", "Support interface": "support", "Support transition": "support",
+              "Raft": "raft", "Brim": "brim", "Skirt": "skirt"}
+
+
+def bases(text, px=FOOT_PX, tol=FOOT_TOL):
+    """The first layer's supports, rafts, brims and skirts as {kind: rings} in bed mm, each bead
+    drawn its own width and the covered area traced as `outlines` traces a piece. A brim round a
+    piece comes out as a ring with the piece's hole in it."""
+    _, moves = gcode_layer(text, 0)
+    out = {}
+    for kind in sorted(set(BASE_KINDS.values())):
+        runs = [(w, run) for f, w, run in moves if BASE_KINDS.get(f) == kind]
+        if not runs:
+            continue
+        xs = [x for _, run in runs for x, _ in run]
+        ys = [y for _, run in runs for _, y in run]
+        x0, y1 = min(xs) - 2, max(ys) + 2
+        mask = Image.new("1", (math.ceil((max(xs) + 2 - x0) * px), math.ceil((y1 - min(ys) + 2) * px)), 0)
+        d = ImageDraw.Draw(mask)
+        for width, run in runs:
+            r = width * px / 2
+            pts = [((x - x0) * px, (y1 - y) * px) for x, y in run]
+            for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+                length = math.hypot(bx - ax, by - ay)
+                if length:
+                    nx, ny = -(by - ay) / length * r, (bx - ax) / length * r
+                    d.polygon([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)], fill=1)
+            for x, y in pts:
+                d.ellipse([x - r, y - r, x + r, y + r], fill=1)
+        rings = []
+        for loop in mask_loops(mask):
+            ring = [(round(x0 + c / px, 2), round(y1 - r / px, 2)) for c, r in simplify(loop, tol * px)]
+            if abs(ring_area(ring)) >= FOOT_SPECK:
+                rings.append([list(p) for p in ring])
+        if rings:
+            out[kind] = rings
+    return out
+
+
 def footprints(plate, bedmap=None):
     """The bed.json dict for a sliced plate (format in `footprints_sheet`)."""
     side = Path(bedmap) if bedmap else Path(re.sub(r"\.3mf$", "", str(plate), flags=re.I) + ".bedmap.json")
@@ -878,6 +918,8 @@ def footprints(plate, bedmap=None):
     by_oid = {r["object"]: r for r in rows}
     with zipfile.ZipFile(plate) as zf:
         objects = plate_objects(zf)
+        gcode = next((n for n in zf.namelist() if n.endswith(".gcode")), None)
+        base = bases(zf.read(gcode).decode("utf-8", "replace")) if gcode else {}
     labels = {r["object"]: r["label"] for r in rows}
     kinds = kind_order(labels, [oid for oid, _ in objects])
     order = {r["object"]: i for i, r in enumerate(rows)}
@@ -893,7 +935,10 @@ def footprints(plate, bedmap=None):
             "dots": (r.get("params") or {}).get(f"dots_{piece.lower()}", 0) if piece else None,
             "outlines": outlines(tris)})
     name = re.sub(r"\.plate\.3mf$|\.3mf$", "", head.get("plate") or Path(plate).name, flags=re.I)
-    return {"plate": name, "bed": {"w": BED_MM, "h": BED_MM}, "pieces": pieces}
+    out = {"plate": name, "bed": {"w": BED_MM, "h": BED_MM}, "pieces": pieces}
+    if base:
+        out["bases"] = [{"kind": k, "outlines": v} for k, v in base.items()]
+    return out
 
 
 def footprints_sheet(out, plate):
@@ -920,7 +965,11 @@ def footprints_sheet(out, plate):
       `kind` the number the `--key` bed picture puts on the piece, and `dots` the dots on each
       half's cut face (the recipe's `dots_<piece>`, 0 when it sets none). A plate without a bed map
       gets the 3MF ids and nulls.
-    Pieces are listed in the bed map's order, which is the recipe's."""
+    Pieces are listed in the bed map's order, which is the recipe's.
+    - `bases`, only when the slice lays any: what goes on the bed besides the pieces, read off the
+      G-code's first layer, as [{"kind": "support" | "raft" | "brim" | "skirt", "outlines": rings}].
+      A brim ring has a hole where its piece stands, so these too want fill-rule evenodd. They
+      belong to no piece and take no comments; a plate sliced without G-code has none."""
     data = footprints(plate)
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(data, separators=(",", ":")) + "\n")
@@ -1018,7 +1067,11 @@ CHECK_MAX_SHARE = 0.6    # % of the first layer left bare
 CHECK_MAX_POCKET = 0.2   # sq mm, the largest single bare pocket
 FEATURE_COLORS = {"Outer wall": (235, 90, 130), "Inner wall": (180, 60, 110),
                   "Bottom surface": (250, 185, 90), "Internal solid infill": (240, 220, 120),
-                  "Gap infill": (90, 190, 250)}
+                  "Gap infill": (90, 190, 250),
+                  # a base under a piece (star-1), named in the legend rather than left an unlabeled grey
+                  "Support": (150, 150, 150), "Support interface": (200, 200, 200),
+                  "Support transition": (120, 120, 120), "Raft": (130, 200, 130),
+                  "Brim": (170, 120, 230), "Skirt": (110, 110, 200)}
 
 
 def gcode_layer(text, z):
@@ -1340,6 +1393,7 @@ def self_test():
     ]
     checks += compare_self_test()
     checks += footprints_self_test()
+    checks += bases_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -1381,6 +1435,33 @@ def compare_self_test():
          and ink(0, 100) and ink(100 + JOIN_GAP, 200 + JOIN_GAP)),
         ("compare: the label ends at the first = and the cut starts after the last @",
          parse_cut("G=a@b/c=d.jpg@1,2,3,4,5") == ("G", "a@b/c=d.jpg", [1, 2, 3, 4, 5])),
+    ]
+
+
+def bases_self_test():
+    """G-code made up as the slicer writes it: on the first layer, a brim laid as square loops
+    round a 10 mm hole (where the piece stands), a skirt line, and a piece's outer wall; on the
+    second layer, more brim. The brim must trace as two rings, the outside and the hole; the skirt
+    as one; the wall is the piece's, not a base; and nothing above the first layer counts."""
+    def loop(a, b):
+        return [f"G1 X{a} Y{a} E0.1", f"G1 X{b} Y{a} E0.1", f"G1 X{b} Y{b} E0.1", f"G1 X{a} Y{b} E0.1", f"G1 X{a} Y{a} E0.1"]
+    lines = ["; Z_HEIGHT: 0.2", "; FEATURE: Brim", "; LINE_WIDTH: 0.5"]
+    s = 0.25
+    while s < 10:
+        lines += [f"G0 X{s:.2f} Y{s:.2f}"] + loop(f"{s:.2f}", f"{30 - s:.2f}")
+        s += 0.45
+    lines += ["; FEATURE: Skirt", "G0 X50 Y0", "G1 X80 Y0 E1",
+              "; FEATURE: Outer wall", "G0 X100 Y100", "G1 X120 Y100 E1",
+              "; Z_HEIGHT: 0.4", "; FEATURE: Brim", "G0 X200 Y200", "G1 X220 Y200 E1"]
+    got = bases("\n".join(lines))
+    areas = sorted(abs(ring_area(r)) for r in got.get("brim", []))
+    xs = [p[0] for rings in got.values() for r in rings for p in r]
+    return [
+        ("bases names only the kinds the first layer lays, and not a piece's wall", sorted(got) == ["brim", "skirt"]),
+        ("bases traces a brim round a piece as its outside and the piece's hole",
+         len(areas) == 2 and abs(areas[0] - 100) < 10 and abs(areas[1] - 900) < 30),
+        ("bases traces a skirt line as one ring, its bead's width wide", len(got.get("skirt", [])) == 1),
+        ("bases reads the first layer only", max(xs, default=0) < 100),
     ]
 
 

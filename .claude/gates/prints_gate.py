@@ -923,12 +923,15 @@ def self_test() -> int:
         seen = {}
         found = []
         skipped = 0
+        pin_skipped = 0
         for rec in record_dirs(prints):
             f, _, _ = check_record(rec, seen)
-            skipped += sum(1 for x in f if x.startswith("__skip__"))
+            # The pin's own R16 skip is counted apart from the one object's R1 skip.
+            pin_skipped += sum(1 for x in f if x.startswith("__skip__") and x.endswith(":bikar_ref"))
+            skipped += sum(1 for x in f if x.startswith("__skip__") and not x.endswith(":bikar_ref"))
             found += [x for x in f if not x.startswith("__skip__")]
         global BIKAR_DIR  # noqa: PLW0603
-        ok = (not found) and skipped == 1 if not (BIKAR_DIR / ".git").exists() else True
+        ok = (not found) and skipped == 1 and pin_skipped == 1 if not (BIKAR_DIR / ".git").exists() else True
         print(f"self-test {'ok  ' if ok else 'FAIL'}: R1 unverified when bikar is absent"
               + ("" if ok else f" — got findings={found}, skipped={skipped}"))
         failures += 0 if ok else 1

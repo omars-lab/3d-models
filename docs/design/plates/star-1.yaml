@@ -1,0 +1,88 @@
+# star-1 — the flange coaster's sloped star, printed on a base two ways, beside one on none
+#
+# Omar, 2026-10-28, on split-10's middle piece 7 on the hub page: "I want to see a star printed with
+# a base like 7". The base under 7 was supports: the preset's tree supports met the middle piece's
+# wide flange overhang and laid a ring a few mm wide on the bed round it. The star on split-10 with
+# supports on got only a few twigs, since a star's step out is narrow. So this plate gives the
+# star a base in the two ways that do not wait for a wide overhang:
+#
+#   version      base                                dots
+#   SLOPE-NONE   none, the control                   1
+#   SLOPE-GRID   grid supports (normal, not tree)    2
+#   SLOPE-BRIM   a brim, 5 mm, round the outside     3
+#
+# The sloped star (split-10's STAR-SLOPE), since Omar's comment sat on it. The stock star is not
+# here: a star half's cut face has room for at most 3 dots, so one plate tells only three versions
+# apart. The stock star takes this plate's answer, or gets its own plate after. No raft: a raft
+# changes the bottom face, which is the face being judged. Two copies of each, so a result counts
+# only when both agree. Every param is split-10's but the dots.
+#
+# Each star is a `group:` of its own, so the slice lays it out in a block of its own, 14 mm from
+# the next: a 5 mm brim or grid supports round one star must not run into its neighbour's, which
+# Studio refuses as a path conflict.
+#
+# How to tell them apart: dots on each half's cut face, as on split-10, 1 to 3. They stay off the
+# bed face, which is the face being judged here. A star half has no room for a carved id. Keep
+# each star's two halves together off the bed.
+#
+# No color here: the send picks it.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/star-1.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SR1
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 1 }
+    count:  1
+    label:  SLOPE-NONE-1
+    group:  "SLOPE-NONE, copy 1"
+    no_id:  "1 dot on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 1 }
+    count:  1
+    label:  SLOPE-NONE-2
+    group:  "SLOPE-NONE, copy 2"
+    no_id:  "1 dot on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 2 }
+    count:  1
+    label:  SLOPE-GRID-1
+    group:  "SLOPE-GRID, copy 1"
+    no_id:  "2 dots on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 2 }
+    count:  1
+    label:  SLOPE-GRID-2
+    group:  "SLOPE-GRID, copy 2"
+    no_id:  "2 dots on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 3 }
+    count:  1
+    label:  SLOPE-BRIM-1
+    group:  "SLOPE-BRIM, copy 1"
+    no_id:  "3 dots on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%", brim_type: "outer_only", brim_width: "5" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 3 }
+    count:  1
+    label:  SLOPE-BRIM-2
+    group:  "SLOPE-BRIM, copy 2"
+    no_id:  "3 dots on each half's cut face, hidden once the halves close; each version has its own count, 1 to 3. A star half has no room for a carved id"
+    object_settings: { infill_wall_overlap: "55%", brim_type: "outer_only", brim_width: "5" }

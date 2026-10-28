@@ -338,6 +338,14 @@ export const OBJECT_SETTINGS: Record<string, { check: (v: string) => boolean; ta
   // star half, which printed over air on split-07 and came off flared. Proven per piece 2026-10-27:
   // the read-back held it, and the G-code has support lines under that piece only.
   enable_support: { check: (v) => v === "1", takes: '"1" (leave it out for none)' },
+  // A base on the bed under one piece, three ways, for star-1 (Omar on split-10's middle piece 7,
+  // 2026-10-28: "a star printed with a base like 7"). The preset's tree supports only reach a wide
+  // overhang; grid supports, a raft and a brim do not wait for one. Each is read back from the slice,
+  // and star-1's page shows its first layer per piece.
+  support_type: { check: (v) => v === "normal(auto)" || v === "tree(auto)", takes: '"normal(auto)" or "tree(auto)"' },
+  raft_layers: { check: (v) => /^[1-3]$/.test(v), takes: '"1" to "3" (leave it out for none)' },
+  brim_type: { check: (v) => v === "outer_only" || v === "no_brim", takes: '"outer_only" or "no_brim"' },
+  brim_width: { check: (v) => /^([1-9]|10)$/.test(v), takes: 'whole mm from "1" to "10"' },
 };
 
 /** Settings a piece may not carry, with the reason, since a plain "not allowed" would send the next
