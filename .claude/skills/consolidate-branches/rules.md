@@ -151,3 +151,12 @@ brace), so someone has to read it.
   check that master's current queue line still names the plate. Then snapshot the branch. `pkt-2`
   (PR #657) was proven this way on 2026-10-24. It stays checked out in `3d-models-work`, so it is
   kept and not deleted.
+- A rewritten history makes every older branch look `diverged`. hifth's main was rewritten on
+  2026-10-08 (`git filter-repo --strip-blobs-with-ids`) to remove two pictures of held text, so a
+  branch left on the old history shows about +500–900 / −1432 and still carries those pictures.
+  Prove such a branch dead by hand: compare its tree with the rewritten twin of the same merge on
+  `origin/<default>` (find it by commit subject). The only differences should be the removed
+  files. Then snapshot it with `--no-push` only. **Never run the printed `snapshot` line on these
+  tips:** pushing them puts the removed pictures back on GitHub. The old-history branches and the
+  `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs already on hifth's GitHub carry them too,
+  and purging those is Omar's (2026-10-27 pass).
