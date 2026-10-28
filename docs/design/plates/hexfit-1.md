@@ -2,7 +2,7 @@
 plate: hexfit-1
 recipe: hexfit-1.yaml
 iteration: 3
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "How tight can the hexagon piece's dovetail be, down past zero, and still slide on and hold; and does a slot as deep as the rail hold better than one a layer deeper?"
@@ -98,6 +98,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-28 | approved | Omar, in chat: "go in green if plate ready" | iteration 3 @ 65814017c0 in #00AE42 | |
 
 ## Timeline
 
