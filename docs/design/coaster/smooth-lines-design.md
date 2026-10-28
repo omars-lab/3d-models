@@ -2,7 +2,7 @@
 status: draft
 ---
 
-# Smoother coaster lines — the options, side by side
+# Smoother coaster lines — the options, side by side ^iykpc9
 
 Omar, 2026-09-29: *"our coaster lines are rough; put together options for making them smoother,
 with web research and pictures we can review in Obsidian. One option should be lines influenced by

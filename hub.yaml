@@ -1,0 +1,119 @@
+# How this repo shows on the local launcher (~/Workspace/git/hubs). Phase 1: today's ports.
+# Check it with `uv run ~/Workspace/git/hubs/launcher/check.py --repo .`
+
+runners:
+  - id: 3d-models
+    port: 8613
+    health: /
+    start: make site              # also opens a browser tab; gains --bind 127.0.0.1 in Phase 2
+    host_name: 3d-models
+
+# Every page below is served by the same `make site` and published by the same `make deploy`.
+hubs:
+  - id: 3d-models
+    name: 3D models
+    description: Cookie-cutter gallery, Studio, Orb Lab, Lego Lab, prints register.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-coaster
+    name: Coaster Lab
+    description: Size a rosette coaster for your printer; the checks say what will print and why.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /coaster.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/coaster.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-studio
+    name: Studio
+    description: The index of every lab and notes page, who each is for and what you get from it.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /studio.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/studio.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-orb-lab
+    name: Orb Lab
+    description: Turn the knobs on an Islamic geometric orb and download a design that prints.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /lab.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/lab.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-lego-lab
+    name: Lego Lab
+    description: Size a LEGO-compatible brick; the checks say what will hold and what is still a guess.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /lego.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/lego.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-prints
+    name: Prints
+    description: What has actually come off the printer, one record per print.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /prints.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/prints.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-status
+    name: Gallery status
+    description: What the gallery was built from, the bikar version behind the pictures, and the last deploy.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /status.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/status.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-design
+    name: Design notes
+    description: Why the geometry engine works the way it does, with real brick cross-sections beside each note.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /design.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/design.html
+      host: github-pages
+      deploy: make deploy
+
+  - id: 3d-models-breakdown
+    name: Orb breakdown
+    description: Watch one orb turn, then watch it get built, step by step.
+    visibility: public
+    use: published
+    fallback: local
+    local: { runner: 3d-models, path: /breakdown.html }
+    published:
+      url: https://blog.bytesofpurpose.com/3d-models/breakdown.html
+      host: github-pages
+      deploy: make deploy
