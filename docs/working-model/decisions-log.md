@@ -6747,3 +6747,33 @@ joined pairs, tried in a flange coaster Omar already has.
 **What would reverse it:** the bikar work for the joins stalling (the slide on the hexagons is
 refused today because of the notches round the coaster's pins). Then the cut-only rows go out
 alone, which is option A's first plate.
+
+## D-121 — An experiment piece's version dots go on its bottom face
+
+Omar, 2026-10-28, in chat, after his page note on split-10 that he wants to tell the versions
+apart from the outside. He picked "Dots on the bottom". The question: how should each version be
+marked so he can tell them apart without opening the piece, when the hexagon plate needs more
+versions than the cut-face dots allowed (six at most, D-114).
+
+### The options on the table
+
+- **Dots on the bottom** (the pick). The same dot count, moved to the face that sits on the bed,
+  so turning the piece over shows it. Cost: the face shown off carries small wells; a bikar change
+  to put the dots there and allow more of them (bikar #352, now up to 8).
+- **Notches on the edge.** Seen from any side. Cost: the edge is what fits the frame, so a notch
+  changes the fit being tested.
+- **Keep dots on the cut face.** Nothing to build. Cost: the piece has to be opened to read it,
+  and six is the most it holds.
+
+### What was picked
+
+Dots on the bottom, for every experiment plate from hexfit-1 on. On a piece cut in two, the dots
+go on the lower half's bed face only. hexfit-1 also showed that bikar's carved bottom id cannot
+go beside them there: it cuts the id on every half, and the upper half's bed face is the coaster's
+top, with no room for even one letter. So on such a plate the dot count is the piece's only mark,
+written on the page as `no_id:` per piece, and the page tells Omar to keep each pair's halves
+together. This narrows D-114 (dots on the hidden cut face) for experiments; D-115 (the upper
+half's id on its outer face on a coupon) stands where there is room.
+
+**What would reverse it:** the wells showing through or weakening the face on a piece Omar wants
+to keep, or a plate whose versions need more than eight counts.
