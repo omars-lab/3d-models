@@ -85,3 +85,4 @@ Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `
 - [Print pieces, not whole shapes](print-pieces-not-whole-shapes.md) — Omar 2026-10-12: test a print question on one repeat of the shape, several settings per bed, a stock control beside; not a whole coaster per round, not a tiny coupon either
 - [Simulator learns each setup](simulator-learns-each-setup.md) — Omar 2026-10-14: teach-simulator skill fits a profile per machine/nozzle/plate/filament from judged prints; never pool setups
 - [Print feedback on a hub page](print-feedback-on-hub-page.md) — Omar 2026-10-22: judge prints on the hub page, pieces as tiles by carved id; answers saved word for word on the plate page, review-print writes the record
+- [hifth history rewrite and branches](hifth-history-rewrite-branches.md) — 2026-10-08 scrub of two held-text pictures: old-history branches look diverged, prove dead by tree, never push their snapshots; GitHub purge is Omar's
