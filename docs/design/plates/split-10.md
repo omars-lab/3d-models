@@ -3,7 +3,7 @@ plate: split-10
 print_log: '[[print-logs/split-10|print log]]'
 recipe: split-10.yaml
 iteration: 4
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Which change fixes each loose piece split-07 got wrong: the stars' curved faces, the middle's webbed feel, the loose kites and the dovetail fit?"
@@ -121,7 +121,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
 | 2026-10-27 | approved | Omar, in chat: "go in green" | iteration 3 @ d67cb942f8 in #00AE42 | sent 2026-10-27 |
-| 2026-10-27 | approved | Omar, in chat: "send it in green" | iteration 4 @ f867a8141d in #00AE42 | |
+| 2026-10-27 | approved | Omar, in chat: "send it in green" | iteration 4 @ f867a8141d in #00AE42 | sent 2026-10-27 |
 
 ## Timeline
 
@@ -132,3 +132,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-27 | changed: on Omar's "the middle peice had 3 asymetric pins ... should have been 1 in middel and 4 or 6 radially around the middle near the edges with enough room": every middle takes a centre pin and six round it, and MIDDLE-PINS5 a centre pin and four (bikar #350); 30 pieces, about 55 minutes | this page, [`split-10.yaml`](split-10.yaml) |
 | 2026-10-27 | sent — by `bambu print send`; spends the approval of 2026-10-27, iteration 3 @ d67cb942f8 in #00AE42 | this page |
 | 2026-10-27 | changed: on Omar's "i don't want to test anythign unitl we repreint with lavles": dots on every cut face (bikar #351), counted per version; KITE-G10, KITE-PIN20 and KITE-PIN15 dropped to the loose-pieces backlog; 24 pieces, about 61 minutes. The first print stays unjudged | this page, [`split-10.yaml`](split-10.yaml) |
+| 2026-10-27 | sent — by `bambu print send`; spends the approval of 2026-10-27, iteration 4 @ f867a8141d in #00AE42 | this page |
