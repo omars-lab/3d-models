@@ -27,3 +27,11 @@ metadata:
 ## From the memory index (moved 2026-10-09)
 
 stale core dist, worktree node_modules, vitest/Playwright cwd, eslint complexity 10, `--silent` loglevel leak, CLI `-o`; the whole-corpus tests are split per pattern since bikar #302 (a timeout names the slow pattern), and never run two repos' push gates at once
+
+## The push gate needs docker on PATH (2026-10-25)
+
+bikar's pre-push runs `make local.ci-strict`, which probes `docker info` and fails the push with five "NOT VERIFIED (docker unavailable)" orb-sweep steps when it cannot. `docker` is `/usr/local/bin/docker`, so a pinned PATH without `/usr/local/bin` fails the push even with Docker Desktop running. Start Docker (`open -a Docker`) and keep `/usr/local/bin` in the PATH.
+
+## The main bikar checkout is too old to slice split-07/09 (2026-10-27)
+
+`~/Workspace/git/bikar` sat at 7d5990a and is another session's: never fast-forward it. It rejects the split flange coaster's `stud` params ("Unknown param override 'stud'"). Slice split-07 or split-09 with `BIKAR_DIR` pointing at a bikar clone at 112d257 or newer, including any re-slice at send time.

@@ -4,7 +4,7 @@ date: 2026-09-30
 produced-by: Claude (Opus 5.5), from a read of this repo at origin/master c2e37c9 and of bikar at origin/main cca3adb
 ---
 
-# Loose pieces, fill height either way, and "assemble your own coaster"
+# Loose pieces, fill height either way, and "assemble your own coaster" ^tfuhdk
 
 > Status: draft 2026-09-30, for Omar to decide the four calls in
 > [Open calls for Omar](#7-open-calls-for-omar). Asked by Omar on 2026-09-29 in review thread

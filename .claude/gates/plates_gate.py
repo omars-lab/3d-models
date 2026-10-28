@@ -262,11 +262,16 @@ def records_by_plate(prints: Path) -> dict[str, list[str]]:
     return {k: sorted(v) for k, v in out.items()}
 
 
+def is_sidecar(p: Path) -> bool:
+    """A hidden `.<page>.comments.md` holds review-md threads, not a page; pathlib's glob matches it."""
+    return p.name.startswith(".")
+
+
 def read_pages(plates: Path) -> list[tuple[Path, dict | None, str, str | None]]:
     """(path, frontmatter, body, error) for every page in `plates`, README excluded."""
     out = []
     for p in sorted(plates.glob("*.md")):
-        if p.name == "README.md":
+        if p.name == "README.md" or is_sidecar(p):
             continue
         text = p.read_text(encoding="utf-8")
         data, err = parse_frontmatter(text)
@@ -362,7 +367,7 @@ def check_print_logs(plates: Path, pages: list) -> list[str]:
         else:
             linked.add(name)
     logs = plates / LOGS
-    for log in sorted(logs.glob("*.md")):
+    for log in sorted(p for p in logs.glob("*.md") if not is_sidecar(p)):
         name, shown = log.stem, f"{LOGS}/{log.name}"
         text = log.read_text(encoding="utf-8")
         data, err = parse_frontmatter(text)
@@ -1984,6 +1989,12 @@ CASES = [
     ("P12 a printed plate with a table is checked the same way",
      _edit("minis-09", "## Your call", _AFTER_MD.replace(_AFTER_ROW, "| A |  | x | y |")
            + "## Your call"), "minis-09: P12 row 1"),
+    ("review-md thread files beside the pages and the logs are not pages",
+     _then(_print_log("minis-09", *_LOGGED),
+           lambda plates: [(d / ".minis-09.comments.md").write_text(
+               "---\nreview:\n  threads: []\n---\n", encoding="utf-8")
+               for d in (plates, plates / LOGS)]),
+     None),
 ]
 
 
