@@ -16,3 +16,7 @@ What the printer said while [split-10](../split-10.md) printed, one row per chan
 | 2026-10-27 18:58 | finished | 21/21 | 100% | FINISH |
 | 2026-10-28 03:00 | sent |  |  | fed #00ae42 from AMS 0 · slot 3, 14.81 g by the slice |
 | 2026-10-28 03:00 | watching | 0/21 | 0% | RUNNING |
+| 2026-10-28 03:17 | progress | 3/21 | 25% | 25% |
+| 2026-10-28 03:33 | progress | 6/21 | 50% | 50% |
+| 2026-10-28 03:50 | progress | 9/21 | 75% | 75% |
+| 2026-10-28 04:08 | finished | 21/21 | 100% | FINISH |
