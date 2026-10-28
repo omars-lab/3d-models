@@ -1,8 +1,9 @@
 ---
 plate: hexfit-1
+print_log: '[[print-logs/hexfit-1|print log]]'
 recipe: hexfit-1.yaml
 iteration: 3
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "How tight can the hexagon piece's dovetail be, down past zero, and still slide on and hold; and does a slot as deep as the rail hold better than one a layer deeper?"
@@ -98,10 +99,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-28 | approved | Omar, in chat: "go in green if plate ready" | iteration 3 @ 65814017c0 in #00AE42 | |
+| 2026-10-28 | approved | Omar, in chat: "go in green if plate ready" | iteration 3 @ 65814017c0 in #00AE42 | sent 2026-10-28 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-10-28 | proposed: on Omar's split-10 note that none of the hexagons was tight, and his picks "Dovetail, past zero", "Yes, add one" (the slot as deep as the rail) and "Dots on the bottom"; 16 pieces | this page |
+| 2026-10-28 | sent — by `bambu print send`; spends the approval of 2026-10-28, iteration 3 @ 65814017c0 in #00AE42 | this page |
