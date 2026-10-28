@@ -115,6 +115,12 @@ split-10:
   - {iteration: 2, recipe: 'ddaf5a631c28', date: '2026-10-27'}
   - {iteration: 3, recipe: '79f5e427811f', date: '2026-10-27'}
   - {iteration: 4, recipe: 'c099bd2178f3', date: '2026-10-27'}
+star-1:
+  - {iteration: 1, recipe: '412bfc29f3e8', date: '2026-10-28'}
+  - {iteration: 2, recipe: '8239a9e63d96', date: '2026-10-28'}
+  - {iteration: 3, recipe: '8baca509997e', date: '2026-10-28'}
+  - {iteration: 4, recipe: 'bbc98a21e01a', date: '2026-10-28'}
+  - {iteration: 5, recipe: '00465c55e409', date: '2026-10-28'}
 stud-1:
   - {iteration: 1, recipe: '030637fb41f8', date: '2026-10-08'}
   - {iteration: 2, recipe: '27cdb1af502b', date: '2026-10-09'}

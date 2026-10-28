@@ -73,6 +73,21 @@ describe("object_settings: — parsed against the allowed list", () => {
     expect(() => parseManifest(recipe("    object_settings: { enable_support: 1 }"))).toThrow();
   });
 
+  it("takes a base under one piece: grid supports, a raft, or a brim, and refuses values Studio would drop", () => {
+    const grid = parseManifest(recipe('    object_settings: { enable_support: "1", support_type: "normal(auto)" }'));
+    expect((grid.items[0] as { object_settings?: unknown }).object_settings).toEqual({
+      enable_support: "1",
+      support_type: "normal(auto)",
+    });
+    const brim = parseManifest(recipe('    object_settings: { brim_type: "outer_only", brim_width: "5" }'));
+    expect((brim.items[0] as { object_settings?: unknown }).object_settings).toEqual({ brim_type: "outer_only", brim_width: "5" });
+    expect(() => parseManifest(recipe('    object_settings: { raft_layers: "2" }'))).not.toThrow();
+    expect(() => parseManifest(recipe('    object_settings: { raft_layers: "0" }'))).toThrow(/leave it out/);
+    expect(() => parseManifest(recipe('    object_settings: { support_type: "normal" }'))).toThrow(/normal\(auto\)/);
+    expect(() => parseManifest(recipe('    object_settings: { brim_width: "5.5" }'))).toThrow(/whole mm/);
+    expect(() => parseManifest(recipe('    object_settings: { brim_type: "auto_brim" }'))).toThrow();
+  });
+
   it("refuses it on an item that is not rendered from bikar", () => {
     const text = `
 profile: { settings: "m;p", filament: "f" }
