@@ -6,6 +6,7 @@
     python3 tools/print_review.py edge <out.png> <x>,<y>,<side> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom] [--key]
+    python3 tools/print_review.py footprints <plate>-media/bed.json <plate.3mf>
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
     python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
@@ -617,6 +618,13 @@ def deepest(own):
     return x + left, y + top
 
 
+def kind_order(labels, oids):
+    """The labels on the bed, each once, in the bed map's order (the recipe's): kind n of a --key
+    bed picture is entry n - 1 here, and `footprints` writes the same n, so the two never drift."""
+    present = [labels.get(oid, oid) for oid in oids]
+    return list(dict.fromkeys([v for v in labels.values() if v in present] + present))
+
+
 GROUP_PAD = 3            # mm between a group's pieces and the box drawn round them
 GROUP_INK = (250, 215, 60)
 
@@ -658,8 +666,7 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None, key=False):
     shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
               (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
     font = ImageFont.load_default(size=26)
-    present = [labels.get(oid, oid) for oid, _ in objects]  # the map's order is the recipe's
-    kinds = list(dict.fromkeys([v for v in labels.values() if v in present] + present))
+    kinds = kind_order(labels, [oid for oid, _ in objects])
     if key:
         palette = dict(zip(kinds, key_shades(len(kinds))))
         shades = [palette[labels.get(oid, oid)] for oid, _ in objects]
@@ -772,6 +779,153 @@ def bed_sheet(out, plate, zoom=False, key=False):
             print(f"{name:12} at {x:6.1f}, {y:6.1f} mm from the front-left corner")
     img.save(out)
     print("wrote", out)
+
+
+FOOT_PX = 8          # px per mm the outlines are traced at: a kite under 10 mm across is 80 px
+FOOT_TOL = 0.15      # mm an outline may stray from the traced edge when simplified
+FOOT_SPECK = 0.25    # sq mm: a loop smaller than this is a speck, not a piece's edge
+
+
+def mask_loops(mask):
+    """The edges of a filled mask as closed loops of pixel corners (column, row), one per edge:
+    each piece's outside and any hole through it. Every set pixel gives the sides it shares with
+    an unset one, walked clockwise as the picture shows it, and the sides chain into loops; where
+    two pixels touch only at a corner the walk turns right, so they come out as two loops."""
+    w, h = mask.size
+    px = mask.load()
+    on = lambda c, r: 0 <= c < w and 0 <= r < h and px[c, r]
+    out = {}
+    for r in range(h):
+        for c in range(w):
+            if not px[c, r]:
+                continue
+            for cond, a, b in ((not on(c, r - 1), (c, r), (c + 1, r)), (not on(c + 1, r), (c + 1, r), (c + 1, r + 1)),
+                               (not on(c, r + 1), (c + 1, r + 1), (c, r + 1)), (not on(c - 1, r), (c, r + 1), (c, r))):
+                if cond:
+                    out.setdefault(a, []).append(b)
+    loops = []
+    while out:
+        start = next(iter(out))
+        loop, at, came = [start], start, None
+        while True:
+            ends = out[at]
+            if len(ends) > 1 and came is not None:  # a corner touch: take the right turn
+                dx, dy = at[0] - came[0], at[1] - came[1]
+                right = (at[0] - dy, at[1] + dx)
+                nxt = right if right in ends else ends[0]
+            else:
+                nxt = ends[0]
+            ends.remove(nxt)
+            if not ends:
+                del out[at]
+            came, at = at, nxt
+            if at == start:
+                break
+            loop.append(at)
+        loops.append(loop)
+    return loops
+
+
+def simplify(ring, tol):
+    """A closed ring with every point dropped that lies within `tol` of the line its neighbours
+    keep (Douglas-Peucker, split at the two points farthest apart so the ring stays closed)."""
+    def dp(pts):
+        if len(pts) < 3:
+            return pts
+        (ax, ay), (bx, by) = pts[0], pts[-1]
+        L = math.hypot(bx - ax, by - ay) or 1e-12
+        far, k = max((abs((bx - ax) * (ay - y) - (ax - x) * (by - ay)) / L, i) for i, (x, y) in enumerate(pts[1:-1], 1))
+        return dp(pts[:k + 1])[:-1] + dp(pts[k:]) if far > tol else [pts[0], pts[-1]]
+    if len(ring) < 4:
+        return ring
+    j = max(range(len(ring)), key=lambda i: (ring[i][0] - ring[0][0]) ** 2 + (ring[i][1] - ring[0][1]) ** 2)
+    return dp(ring[:j + 1])[:-1] + dp(ring[j:] + [ring[0]])[:-1]
+
+
+def ring_area(ring):
+    return sum(x0 * y1 - x1 * y0 for (x0, y0), (x1, y1) in zip(ring, ring[1:] + ring[:1])) / 2
+
+
+def outlines(tris, px=FOOT_PX, tol=FOOT_TOL):
+    """One object's outlines seen from above, in bed mm: every triangle of the mesh projected onto
+    the bed and filled (as `bed_picture` fills it), the filled area's edges traced and simplified.
+    Not the faces at the lowest height: a star's underside is stepped and a kite's is sloped, and
+    tracing the bed face alone drew stars as pentagons and kites as slivers. A piece cut in two
+    gives a loop per half."""
+    xs = [p[0] for t in tris for p in t]
+    ys = [p[1] for t in tris for p in t]
+    if not xs:
+        return []
+    x0, y1 = min(xs) - 1, max(ys) + 1
+    w, h = math.ceil((max(xs) + 1 - x0) * px), math.ceil((y1 - min(ys) + 1) * px)
+    mask = Image.new("1", (w, h), 0)
+    d = ImageDraw.Draw(mask)
+    for t in tris:
+        d.polygon([((x - x0) * px, (y1 - y) * px) for x, y, *_ in t], fill=1)
+    rings = []
+    for loop in mask_loops(mask):
+        ring = [(round(x0 + c / px, 2), round(y1 - r / px, 2)) for c, r in simplify(loop, tol * px)]
+        if abs(ring_area(ring)) >= FOOT_SPECK:
+            rings.append([list(p) for p in ring])
+    return rings
+
+
+def footprints(plate, bedmap=None):
+    """The bed.json dict for a sliced plate (format in `footprints_sheet`)."""
+    side = Path(bedmap) if bedmap else Path(re.sub(r"\.3mf$", "", str(plate), flags=re.I) + ".bedmap.json")
+    rows = json.loads(side.read_text())["objects"] if side.exists() else []
+    head = json.loads(side.read_text()) if side.exists() else {}
+    by_oid = {r["object"]: r for r in rows}
+    with zipfile.ZipFile(plate) as zf:
+        objects = plate_objects(zf)
+    labels = {r["object"]: r["label"] for r in rows}
+    kinds = kind_order(labels, [oid for oid, _ in objects])
+    order = {r["object"]: i for i, r in enumerate(rows)}
+    copies, pieces = {}, []
+    for oid, tris in sorted(objects, key=lambda o: order.get(o[0], len(order))):
+        r = by_oid.get(oid, {})
+        entry = r.get("entry", oid)
+        copies[entry] = copies.get(entry, 0) + 1
+        piece = r.get("piece")
+        pieces.append({
+            "id": f"{entry}/{copies[entry]}", "entry": entry, "copy": copies[entry], "object": oid,
+            "label": labels.get(oid, oid), "name": piece, "kind": kinds.index(labels.get(oid, oid)) + 1,
+            "dots": (r.get("params") or {}).get(f"dots_{piece.lower()}", 0) if piece else None,
+            "outlines": outlines(tris)})
+    name = re.sub(r"\.plate\.3mf$|\.3mf$", "", head.get("plate") or Path(plate).name, flags=re.I)
+    return {"plate": name, "bed": {"w": BED_MM, "h": BED_MM}, "pieces": pieces}
+
+
+def footprints_sheet(out, plate):
+    """Write `<plate>-media/bed.json`: what the hub draws the bed from as an SVG, one shape per piece.
+
+        {"plate": "split-10",
+         "bed": {"w": 256, "h": 256},
+         "pieces": [{"id": "c9/2", "entry": "c9", "copy": 2, "object": "48",
+                     "label": "KITE-STOCK", "name": "Kite", "kind": 9, "dots": 0,
+                     "outlines": [[[x, y], ...], ...]}, ...]}
+
+    - Coordinates are bed mm, the frame `bed` draws in and the bed map's x and y use: x from the
+      bed's left edge, y from its front edge, growing toward the back. To draw it as bed.png does,
+      front edge at the bottom, an SVG takes y as `bed.h - y`.
+    - `outlines` are closed rings (the first point is not repeated), the piece seen from above:
+      the whole mesh projected, not the face on the bed. A piece cut in two has a ring per half;
+      a hole through a piece would be a ring of its own, so draw them with fill-rule evenodd.
+      Traced at FOOT_PX px a mm and simplified to FOOT_TOL mm, so a ring sits within about 0.2 mm
+      of the true edge.
+    - `entry` is the recipe item's code in the bed map (`c1` is the first item), `copy` counts that
+      entry's objects from 1 in the bed map's order, and `id` is the two joined, `<entry>/<copy>`.
+      `object` is the 3MF object id.
+    - `label` is the recipe's label, `name` the piece kind the bed map names (Star, Kite, ...),
+      `kind` the number the `--key` bed picture puts on the piece, and `dots` the dots on each
+      half's cut face (the recipe's `dots_<piece>`, 0 when it sets none). A plate without a bed map
+      gets the 3MF ids and nulls.
+    Pieces are listed in the bed map's order, which is the recipe's."""
+    data = footprints(plate)
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    Path(out).write_text(json.dumps(data, separators=(",", ":")) + "\n")
+    rings = sum(len(p["outlines"]) for p in data["pieces"])
+    print(f"wrote {out}: {len(data['pieces'])} pieces, {rings} outlines, {Path(out).stat().st_size} bytes")
 
 
 SIDE_PX = 60     # px per mm on a side cut: a 0.05 mm gap is 3 px
@@ -1185,6 +1339,7 @@ def self_test():
          and joined.getpixel((100 + JOIN_GAP + 300, 100)) == (0, 0, 255)),
     ]
     checks += compare_self_test()
+    checks += footprints_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
     return all(ok for _, ok in checks)
@@ -1226,6 +1381,70 @@ def compare_self_test():
          and ink(0, 100) and ink(100 + JOIN_GAP, 200 + JOIN_GAP)),
         ("compare: the label ends at the first = and the cut starts after the last @",
          parse_cut("G=a@b/c=d.jpg@1,2,3,4,5") == ("G", "a@b/c=d.jpg", [1, 2, 3, 4, 5])),
+    ]
+
+
+def footprints_self_test():
+    """A 3MF in memory, as split-10's pieces sit: a star whose face on the bed is only its inner
+    pentagon (the five points stand on a step above it), a piece cut into two halves lying apart,
+    and a bar turned a quarter. The outline must be the star seen from above, ten corners with the
+    points, not the pentagon the bed face alone draws; the halves must come out as two rings; the
+    turned bar must stand along y; and each object gets its entry, copy, kind and dots from the
+    bed map, copies counted in the map's order."""
+    import io
+    import tempfile
+    ring = lambda r, a0, n: [(r * math.cos(math.radians(a0 + 360 * k / n)), r * math.sin(math.radians(a0 + 360 * k / n))) for k in range(n)]
+    star = [p for o, i in zip(ring(10, 90, 5), ring(4, 126, 5)) for p in (o, i)]
+    pent = ring(4, 126, 5)
+    vs = [(0, 0, 1)] + [(x, y, 1) for x, y in star] + [(0, 0, 0)] + [(x, y, 0) for x, y in pent]
+    ts = [(0, 1 + k, 1 + (k + 1) % 10) for k in range(10)] + [(11, 12 + k, 12 + (k + 1) % 5) for k in range(5)]
+    sq = lambda x0, y0, x1, y1: [(x0, y0, 0), (x1, y0, 0), (x1, y1, 0), (x0, y1, 0)]
+    halves = sq(-11, -4, -3, 4) + sq(3, -4, 11, 4)
+    bar = sq(-10, -2, 10, 2)
+    mesh = lambda oid, vs, ts: (f'<object id="{oid}"><mesh><vertices>' + "".join(f'<vertex x="{x}" y="{y}" z="{z}"/>' for x, y, z in vs)
+                                + '</vertices><triangles>' + "".join(f'<triangle v1="{a}" v2="{b}" v3="{c}"/>' for a, b, c in ts)
+                                + '</triangles></mesh></object>')
+    quad = lambda n: [(4 * k, 4 * k + 1, 4 * k + 2) for k in range(n)] + [(4 * k, 4 * k + 2, 4 * k + 3) for k in range(n)]
+    parts_ = ('<model><resources>' + mesh(1, vs, ts) + mesh(2, halves, quad(2)) + mesh(3, bar, quad(1)) + '</resources></model>')
+    comp = lambda oid, sub: (f'<object id="{oid}"><components><component p:path="/3D/Objects/o.model" objectid="{sub}" '
+                             'transform="1 0 0 0 1 0 0 0 1 0 0 0"/></components></object>')
+    model = ('<model><resources>' + comp(2, 1) + comp(4, 2) + comp(6, 3) + '</resources><build>'
+             '<item objectid="2" transform="1 0 0 0 1 0 0 0 1 60 60 0"/>'
+             '<item objectid="4" transform="1 0 0 0 1 0 0 0 1 150 150 0"/>'
+             '<item objectid="6" transform="0 1 0 -1 0 0 0 0 1 100 180 0"/></build></model>')
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("3D/3dmodel.model", model)
+        zf.writestr("3D/Objects/o.model", parts_)
+    rows = [{"object": "2", "entry": "c1", "label": "STAR", "piece": "Star", "params": {"dots_star": 2}},
+            {"object": "6", "entry": "c2", "label": "KITE", "piece": "Kite", "params": {}},
+            {"object": "4", "entry": "c2", "label": "KITE", "piece": "Kite", "params": {"dots_kite": 0}}]
+    with tempfile.TemporaryDirectory() as tmp:
+        side = Path(tmp) / "t.plate.bedmap.json"
+        side.write_text(json.dumps({"plate": "t.plate.3mf", "bed": "x2d", "objects": rows}))
+        data = footprints(buf, side)
+    p = {q["object"]: q for q in data["pieces"]}
+
+    def inside(pt, ring_):
+        x, y, hit = pt[0], pt[1], False
+        for (ax, ay), (bx, by) in zip(ring_, ring_[1:] + ring_[:1]):
+            if (ay > y) != (by > y) and x < ax + (y - ay) * (bx - ax) / (by - ay):
+                hit = not hit
+        return hit
+    st = p["2"]["outlines"]
+    bx = [q[0] for r in p["6"]["outlines"] for q in r]
+    by = [q[1] for r in p["6"]["outlines"] for q in r]
+    return [
+        ("footprints draws a star seen from above, its points in, not the pentagon it stands on",
+         len(st) == 1 and 10 <= len(st[0]) <= 14 and inside((60, 68.5), st[0]) and inside((52, 62.6), st[0])
+         and not inside((60, 54), st[0])),
+        ("footprints gives a piece cut in two a ring per half", len(p["4"]["outlines"]) == 2),
+        ("footprints turns a bar a quarter turn", abs(max(bx) - min(bx) - 4) < 0.3 and abs(max(by) - min(by) - 20) < 0.3),
+        ("footprints names copies by entry, counted in the bed map's order",
+         [q["id"] for q in data["pieces"]] == ["c1/1", "c2/1", "c2/2"] and p["6"]["copy"] == 1),
+        ("footprints numbers kinds as the --key picture does, and reads the dots",
+         (p["2"]["kind"], p["4"]["kind"], p["2"]["dots"], p["6"]["dots"]) == (1, 2, 2, 0)),
+        ("footprints names the plate and the bed", data["plate"] == "t" and data["bed"] == {"w": BED_MM, "h": BED_MM}),
     ]
 
 
@@ -1374,6 +1593,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) >= 3 and a[0] == "bed" and set(a[3:]) <= {"--zoom", "--key"} and len(set(a[3:])) == len(a[3:]):
         bed_sheet(a[1], a[2], zoom="--zoom" in a[3:], key="--key" in a[3:])
+        sys.exit(0)
+    if len(a) == 3 and a[0] == "footprints":
+        footprints_sheet(a[1], a[2])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "join":
         join_sheet(a[1], a[2:])

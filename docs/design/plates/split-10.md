@@ -98,7 +98,10 @@ setting 8 (infill and wall overlap 55%). Only the one setting named above change
 The bed, from above, as the reprint's slice lays it out: one number and color per kind, the
 number on every half, and the list of kinds beside it. The small round marks on the halves are
 the pins, pin holes and dots on each cut face. Drawn from the sliced plate by
-`tools/print_review.py bed --zoom --key`, at the top of this page.
+`tools/print_review.py bed --zoom --key`, at the top of this page. Beside it, `split-10-media/bed.json`
+holds each piece's outline seen from above, named by recipe entry and copy (`c9/2` is KITE-STOCK's
+second), for the hub to draw the bed as shapes; `tools/print_review.py footprints` writes it, and
+the format is in that command's docstring.
 
 ## Cost and risk
 

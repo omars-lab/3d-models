@@ -73,6 +73,9 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
      is plate_1.png in the Metadata folder inside the `.3mf`. A plate that spills onto a second
      bed is refused by `bambu slice compose`, naming what spilled, unless the recipe sets
      `beds: <n>`; `bambu validate sliced` prints the bed count and fails past `--beds`.
+   - The bed's outlines, for the hub's drawing of the bed: `python3 tools/print_review.py
+     footprints docs/design/plates/<plate>-media/bed.json <scratch>/build/plates/<plate>.plate.3mf`
+     (it reads the bed map beside the `.3mf`), committed with the bed picture.
    - `minutes`, `grams` and `bed_plates` come from that slice. Shrink every picture
      (`magick in.png -resize 1400x -strip -colors 64 PNG8:out.png`) into `<plate>-media/`.
    - Set `risk:` by the machine, not the print: `watch` for small loose parts or anything a
