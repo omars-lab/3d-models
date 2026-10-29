@@ -77,6 +77,8 @@ Omar's answers to the rows of After the print, word for word, one row each, olde
 |---|---|---|---|
 | 1 | 2 to 5 dots holds | Omar, in chat 2026-10-29: "4 might have been the best, 1 too loose, 6 too tight" | 2026-10-28 |
 | 2 | Same | — | 2026-10-29 |
+| 1 | 2 to 5 dots holds | Omar, in chat 2026-10-29: "4 might have been the best, 1 too loose, 6 too tight" | 2026-10-29 |
+| 2 | Same | — | 2026-10-29 |
 
 ## Pictures
 
