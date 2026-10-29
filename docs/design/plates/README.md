@@ -53,9 +53,9 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [hexfit-1](hexfit-1.md), [minis-01](minis-01.md), [minis-02](minis-02.md), [split-06](split-06.md), [split-07](split-07.md), [split-10](split-10.md).
+**Went to the printer, no record yet:** [hexfit-1](hexfit-1.md), [minis-01](minis-01.md), [minis-02](minis-02.md), [split-07](split-07.md), [split-10](split-10.md).
 
-**Printed:** [bedface-1](bedface-1.md) ×1, [bedface-2](bedface-2.md) ×1, [bedface-3](bedface-3.md) ×1, [bedface-4](bedface-4.md) ×1, [bedface-5](bedface-5.md) ×1, [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-01](phones-01.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04b](sheets-04b.md) ×1, [sheets-04c](sheets-04c.md) ×1, [sheets-04g-fit](sheets-04g-fit.md) ×1, [sheets-04g-fit2](sheets-04g-fit2.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1, [split-02](split-02.md) ×1, [split-03](split-03.md) ×0, [split-04](split-04.md) ×1, [split-05](split-05.md) ×1, [split-08](split-08.md) ×1.
+**Printed:** [bedface-1](bedface-1.md) ×1, [bedface-2](bedface-2.md) ×1, [bedface-3](bedface-3.md) ×1, [bedface-4](bedface-4.md) ×1, [bedface-5](bedface-5.md) ×1, [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-01](phones-01.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04b](sheets-04b.md) ×1, [sheets-04c](sheets-04c.md) ×1, [sheets-04g-fit](sheets-04g-fit.md) ×1, [sheets-04g-fit2](sheets-04g-fit2.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1, [split-02](split-02.md) ×1, [split-03](split-03.md) ×0, [split-04](split-04.md) ×1, [split-05](split-05.md) ×1, [split-06](split-06.md) ×1, [split-08](split-08.md) ×1.
 <!-- queue:end -->
 
 ## How a plate moves
