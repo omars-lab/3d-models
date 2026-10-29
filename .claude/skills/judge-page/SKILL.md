@@ -1,6 +1,6 @@
 ---
 name: judge-page
-description: Get a printed plate ready for Omar to judge on the hub's judging page (http://127.0.0.1:4717/judge.html) — check its After-the-print questions read cleanly, cut one picture per piece from the slice, ship them with the page, look at the page in a browser at desktop and phone width, then send him the link. Use when a print finishes (monitor-print says finished), when Omar asks to "make a judge page", "get <plate> ready to judge", "put <plate> on the hub", or asks why a plate is missing from the judging page or shows no pictures. Not for writing the print record after he answers — that is review-print.
+description: Get a printed plate ready for Omar to judge on the hub's judging page (http://127.0.0.1:4717/judge.html) — check its After-the-print questions read cleanly, cut one picture per piece from the slice, ship them with the page, look at the page in a browser at desktop and phone width, then send him the link. Use when a print finishes (monitor-print says finished), when Omar asks to "make a judge page", "get <plate> ready to judge", "put <plate> on the hub", or asks why a plate is missing from the judging page or shows no pictures. Also when Omar asks to open the hub, the judging page or the plate page with comments, or which questions he still owes ("open the pieces I need to answer about"): run scripts/open_questions.py. Not for writing the print record after he answers — that is review-print.
 ---
 
 # judge-page — a printed plate, ready to judge on the hub
@@ -73,13 +73,22 @@ the Monitor tool. It prints one line per event, never his words:
 
 Never edit the `## Judged` table by hand: it is his record.
 
+## When Omar asks to see what he owes
+
+"Open the hub", "open the plate page with comments", "which pieces do I still need to answer
+about": run `open_questions.py`. It lists every plate on the hub with its unanswered rows,
+starts the comments server when it is down, and opens the first open row with comments on, so
+he can press C on a piece. Give him the list it prints. Asked 2026-10-29, after doing it by hand
+meant finding the open rows, starting the server and building the address.
+
 ## Scripts — when to use each
 
-This skill has no scripts of its own. Every step uses review-print's `after_print.py`, so the
-judging page and the record read the same table through the same parser.
+Steps 1 to 6 use review-print's `after_print.py`, so the judging page and the record read the
+same table through the same parser. This skill's own script only opens the page.
 
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
+| `.claude/skills/judge-page/scripts/open_questions.py` | Lists the plates on the hub with unanswered rows, starts the comments server if needed, opens the first open row | Omar asks to open the hub or see what he still owes; `--list` to only list | `python3 .claude/skills/judge-page/scripts/open_questions.py [<plate>] [--list]` |
 | `review-print/scripts/after_print.py waiting` | Lists the plates sent, finished on the printer and not yet recorded, with how many rows are answered | Step 1 | `python3 .claude/skills/review-print/scripts/after_print.py waiting` |
 | `review-print/scripts/after_print.py measure` | Flags any After-the-print cell the parser cannot read; exit 1 when one is found | Step 2 | `python3 .claude/skills/review-print/scripts/after_print.py measure` |
 | `review-print/scripts/after_print.py questions` | The rows exactly as the hub sees them | Step 2, to read a row as the page will | `python3 .claude/skills/review-print/scripts/after_print.py questions <plate> --json` |
