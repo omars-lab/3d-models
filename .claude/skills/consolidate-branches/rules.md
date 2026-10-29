@@ -16,9 +16,6 @@ header. `*` matches every repo.
 - `bikar` `feat/strapwork-outer-edge-closure` — the June medallion weave work (36 commits), parked
   with a handoff plan on the branch. Omar chose to keep it parked (2026-10-28); picking it up means
   a large hand merge.
-- `bikar` `salvage/dsl-contract-ci-gate` — a June CI check of three sample patterns against qiyas's
-  contract. Not merged (2026-10-28): main's `svg-renderer.test.ts` parity test already checks the
-  same five labels on every change, and the workflow pins qiyas `v0.1.3`, an image never published.
 - `bikar` `archive/core-license-middleware` — the April license client for bikar-core 0.2.0,
   archived on purpose.
 - `bikar` `archive/minimal-frame-coasters-rejected` — six minimal-frame coasters Omar turned down
@@ -180,3 +177,12 @@ brace), so someone has to read it.
   branch (`git switch -c <branch> origin/<default>`) instead of adding one (2026-10-28).
 - The store repos live under `~/Workspace/git-naqshcoffee/`, not `~/Workspace/git/`; the inventory
   reads every `coffee-house*` folder there as well (2026-10-28).
+- The storefront's pre-push check runs `make check-repo`, which needs Docker running. With Docker
+  down, a snapshot push fails; `open -a Docker`, wait for `docker info`, and push again
+  (2026-10-28).
+- A merged branch can be the only place an older branch's commits live. When a session merges a
+  `salvage/*` branch in (rather than squashing it) and then deletes the salvage branch, the old
+  commits survive only inside the merge branch, because the PR squash put none of them on main.
+  Snapshot the merge branch before deleting it; that snapshot keeps the whole history. Find which
+  ref holds a commit with `git for-each-ref --contains <sha>` (bikar's `dsl-contract-gate` and
+  `review-reader-runtime-origin`, 2026-10-29).
