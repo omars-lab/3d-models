@@ -160,3 +160,11 @@ brace), so someone has to read it.
   tips:** pushing them puts the removed pictures back on GitHub. The old-history branches and the
   `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs already on hifth's GitHub carry them too,
   and purging those is Omar's (2026-10-27 pass).
+- A plain `git status` rewrites a worktree's index when a file's stat is stale, which made every
+  worktree the inventory read look live for the next 6 hours (2026-10-28: the store's `r18-parts`,
+  last used Oct 15, came back "live"). The inventory now reads the age first and runs status with
+  `--no-optional-locks`; do the same in any hand check of a worktree's age.
+- A hook refuses `git worktree add` past 9 worktrees. Reuse a clean `-work` tree for the merge
+  branch (`git switch -c <branch> origin/<default>`) instead of adding one (2026-10-28).
+- The store repos live under `~/Workspace/git-naqshcoffee/`, not `~/Workspace/git/`; the inventory
+  reads every `coffee-house*` folder there as well (2026-10-28).

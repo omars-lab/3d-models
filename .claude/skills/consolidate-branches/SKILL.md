@@ -5,7 +5,8 @@ description: Bring every branch, worktree and stash across our repos back to mai
 
 # consolidate-branches — everything back to main, nothing lost
 
-Many sessions and subagents leave branches, worktrees and stashes across eight repos. Most of
+Many sessions and subagents leave branches, worktrees and stashes across our repos (eight under
+`~/Workspace/git` and the `coffee-house*` store repos under `~/Workspace/git-naqshcoffee`). Most of
 it has landed through squash merges, so git's ancestry no longer shows it as merged. Some of it has
 not landed. And sometimes a local default branch holds commits its remote lacks, which is the other
 direction work can be lost in. This skill sorts all of it, keeps what is unmerged, and deletes only
