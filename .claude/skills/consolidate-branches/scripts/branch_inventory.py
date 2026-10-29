@@ -11,7 +11,8 @@ plan: keep it, delete it (it is proven dead), fast-forward it, or have someone l
   branch_inventory.py survives <repo> <merged-file> <merge-base> <side>…
   branch_inventory.py --self-test
 
-`inventory` with no repos reads the ones in DEFAULT_REPOS under ~/Workspace/git. It only reads:
+`inventory` with no repos reads the ones in DEFAULT_REPOS under ~/Workspace/git, plus every
+`coffee-house*` repo under ~/Workspace/git-naqshcoffee. It only reads:
 it runs `git fetch --prune` (so the origin default is current) and `gh pr list`, and nothing that
 writes. `snapshot` writes refs under refs/snapshots/<date>/ and pushes them; it never deletes.
 The keep lists, the leave-alone worktrees and the live window come from ../rules.md, read at run
@@ -30,7 +31,14 @@ import time
 from pathlib import Path
 
 GIT = Path.home() / "Workspace/git"
-DEFAULT_REPOS = ["3d-models", "bikar-main", "qiyas", "sacred-patterns", "3d-model-hub", "youtube", "hifth", "review-md"]
+DEFAULT_REPOS = ["3d-models", "bikar", "qiyas", "sacred-patterns", "3d-model-hub", "youtube", "hifth", "review-md"]
+# The NaqshCoffee store repos sit in a folder of their own; every `coffee-house*` there is read too.
+STORE = Path.home() / "Workspace/git-naqshcoffee"
+STORE_GLOB = "coffee-house*"
+
+
+def default_repos():
+    return [GIT / r for r in DEFAULT_REPOS] + sorted(STORE.glob(STORE_GLOB))
 RULES = Path(__file__).resolve().parent.parent / "rules.md"
 DEAD = {"ancestor", "no-changes", "content-on-default", "content-in-pr", "changes-on-default"}
 
@@ -310,13 +318,16 @@ def inventory(repo, rules, prs=True, fetch=True):
         path = wt["worktree"]
         br = wt.get("branch", "").removeprefix("refs/heads/")
         exists = Path(path).exists()
+        # Read the age before any status call, and status without optional locks: a plain
+        # `git status` rewrites the index, which made every worktree look live after each run.
+        hours = last_touch_hours(path) if exists else None
         item = {"path": path, "branch": br or None, "head": wt.get("HEAD", ""),
                 "main": exists and Path(git(path, "rev-parse", "--path-format=absolute", "--git-common-dir"))
                 == Path(git(path, "rev-parse", "--absolute-git-dir")),
-                "dirty": git(path, "status", "--porcelain").splitlines() if exists else [],
-                "ignored": [l[3:] for l in git(path, "status", "--porcelain", "--ignored").splitlines()
+                "dirty": git(path, "--no-optional-locks", "status", "--porcelain").splitlines() if exists else [],
+                "ignored": [l[3:] for l in git(path, "--no-optional-locks", "status", "--porcelain", "--ignored").splitlines()
                             if l.startswith("!! ")] if exists else [],
-                "hours": last_touch_hours(path) if exists else None}
+                "hours": hours}
         item["action"], item["reason"] = plan_worktree(item, rules, base, merged, repo)
         if not exists:
             item["action"], item["reason"] = "keep", "path is gone; `git worktree prune` clears the record"
@@ -566,6 +577,20 @@ def self_test():
         if survives(repo, repo / "d.txt", "main", ["unique"]) != 1:
             bad.append("survives passes a file that lost a line")
 
+        idle = Path(tmp) / "idle"                                # a worktree last used ten hours ago,
+        g("worktree", "add", "-q", "--detach", str(idle), "main")  # with a file whose stat is stale,
+        old_t = time.time() - 10 * 3600                          # so a plain `git status` rewrites the index
+        idle_git = Path(git(idle, "rev-parse", "--absolute-git-dir"))
+        for p in (idle_git / "index", idle_git / "logs/HEAD"):
+            if p.exists():
+                os.utime(p, (old_t, old_t))
+        os.utime(idle / "a.txt")
+        for _ in range(2):                                       # a second run must not see the first one's touch
+            seen = [w for w in inventory(repo, load_rules(), prs=False, fetch=False)["worktrees"]
+                    if Path(w["path"]).resolve() == idle.resolve()]
+        if not seen or seen[0].get("hours") is None or seen[0]["hours"] < 9:
+            bad.append(f"the inventory's own status call made an idle worktree look live: {seen}")
+
     rules = load_rules()
     live = {"path": "/r/.claude/worktrees/agent-abc", "branch": "feat", "action": "keep", "reason": "live"}
     plans = {("local", "worktree-agent-abc", "ancestor"): "keep",     # its subagent worktree is alive
@@ -638,7 +663,7 @@ def main():
         return survives(Path(a.repo).resolve(), a.merged_file, a.merge_base, a.sides)
 
     rules = load_rules()
-    paths = [Path(p) for p in a.repos] or [GIT / r for r in DEFAULT_REPOS]
+    paths = [Path(p) for p in a.repos] or default_repos()
     results = []
     for p in paths:
         if not (p / ".git").exists() and not (p / "HEAD").exists():
