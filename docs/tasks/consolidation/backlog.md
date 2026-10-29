@@ -21,3 +21,12 @@ Left by that pass:
 2. **Waiting on Omar: purge hifth's GitHub.** About 130 old-history branches, about 60
    `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs, and `refs/pull/*` (needs GitHub
    Support) still hold the removed pictures. Found by the 2026-10-27 pass.
+3. **Waiting on Omar: bikar's pattern upload to Supabase fails.** The "Sync patterns to Supabase"
+   run on bikar main last worked 2026-10-10. Every run since 2026-10-22, 13 of them, fails the
+   same way: all 187 patterns compile, then the upload stops within a quarter second with
+   `fetch failed`. Nothing in the sync script, the workflow or the packages changed between the
+   last good run and the first bad one, so the cause is the Supabase project or the
+   `SUPABASE_URL` secret. Twelve quiet days fits a free project paused for inactivity. The bikar
+   studio's pattern list is read from that table, so nothing merged since 2026-10-10, the 0.01 mm
+   dovetail gap included, reaches it. Unpausing the project or fixing the secret is Omar's;
+   after that, re-run the latest failed run. Found 2026-10-29.

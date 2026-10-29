@@ -85,7 +85,8 @@ Sending a print and which filament to load.
   piece cut in two and joined** — split-06 again with the 0.7 mm wall Omar picked on split-08
   (D-119), and each loose piece cut at its middle and printed as two face-down halves: pins on the
   middle, kites and stars, a slide on the hexagons and outer pieces (D-120). One bed, about 137
-  minutes and 36 g. Rebuilt 2026-10-25. Waits on Omar's yes, with the color in it.
+  minutes and 36 g. Rebuilt 2026-10-25, sent and printed. Waits on Omar judging the pieces off
+  the bed, then its print record.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
@@ -130,7 +131,7 @@ Sending a print and which filament to load.
   carved ids (3d-models #629).
 
 Other owner-gated work lives where its loop is:
-bikar CI secrets in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
+bikar CI secrets and the Supabase pattern upload in the [consolidation backlog](../consolidation/backlog.md), the FAQ review
 in [parked](../parked/backlog.md).
 
 ## After this plate
