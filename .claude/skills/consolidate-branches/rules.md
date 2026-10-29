@@ -110,10 +110,12 @@ brace), so someone has to read it.
   delete, not only for the complicated ones.
 - In bikar, a snapshot push runs the full pre-push suite (about 5 minutes). Only a push that
   deletes refs and nothing else skips it. Run that push in the background.
-- In hifth, every push runs the full pre-push checks (about 5 minutes), deletions included, so
-  each `push origin --delete` costs one full run. A deletion skip like bikar's was refused by the
-  permission check as a CI bypass (2026-10-04), so hifth's remote deletes are Omar's to run or to
-  unblock. If the checks fail on typecheck with `Cannot find module 'preact'`, the main
+- In hifth, a push runs the full pre-push checks (about 5 minutes), except a push that only
+  deletes branches: since hifth #538 (2026-10-29, Omar's yes) that one skips them, as bikar's
+  does, so remote deletes are ours to run. Still one branch per push; 352 old-history branches
+  went that way in 41 minutes, each first matched against its local backup and re-verified.
+  Before #538 a deletion skip was refused as a CI bypass (2026-10-04): it needed Omar's yes, and
+  a change like it to another repo's gate needs one too. If the checks fail on typecheck with `Cannot find module 'preact'`, the main
   checkout's `node_modules` is stale: `pnpm install --frozen-lockfile` there, not `--no-verify`.
   If only the "pitch build's Study Quran commentary" tests fail (34 on 2026-10-29), the private
   pitch data is older than main's pitch tools: it is gitignored, so a pull never rebuilds it.
