@@ -11,7 +11,7 @@ notebook. Read [`recipe-rules.md`](recipe-rules.md) every run; it is the rubric 
 sharpens as recipes come back wrong.
 
 Work in a worktree on a branch off `origin/master`. Pictures render against a built bikar:
-`BIKAR_DIR=<bikar checkout>` (defaults to `~/Workspace/git/bikar-main`).
+`BIKAR_DIR=<bikar checkout>` (defaults to `~/Workspace/git/bikar`).
 
 ## How one run goes
 

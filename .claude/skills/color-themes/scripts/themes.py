@@ -194,7 +194,7 @@ def edge_shade(hexstr: str) -> str:
 
 
 def bikar_dir() -> Path:
-    return Path(os.environ.get("BIKAR_DIR", os.path.expanduser("~/Workspace/git/bikar-main")))
+    return Path(os.environ.get("BIKAR_DIR", os.path.expanduser("~/Workspace/git/bikar")))
 
 
 def bikar_path(ref: str) -> Path:

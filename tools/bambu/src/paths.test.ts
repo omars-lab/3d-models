@@ -28,11 +28,11 @@ describe("platesDir", () => {
 // The default once pointed at ~/Workspace/git/bikar, the bare repo, whose leftover files are a
 // 12 September build that fails on current .bkr files. It must match the Makefile's BIKAR_DIR.
 describe("bikarDir", () => {
-  it("defaults to the bikar-main work tree, and BIKAR_DIR overrides it", () => {
+  it("defaults to the bikar checkout, and BIKAR_DIR overrides it", () => {
     const saved = process.env.BIKAR_DIR;
     try {
       delete process.env.BIKAR_DIR;
-      expect(bikarDir()).toBe(join(homedir(), "Workspace", "git", "bikar-main"));
+      expect(bikarDir()).toBe(join(homedir(), "Workspace", "git", "bikar"));
       process.env.BIKAR_DIR = "/elsewhere/bikar";
       expect(bikarDir()).toBe("/elsewhere/bikar");
     } finally {

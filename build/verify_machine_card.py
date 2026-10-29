@@ -341,7 +341,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    bikar_dir = Path(args.bikar_dir or Path.home() / "Workspace/git/bikar-main").resolve()
+    bikar_dir = Path(args.bikar_dir or Path.home() / "Workspace/git/bikar").resolve()
     cli = bikar_dir / "packages/cli/dist/index.js"
     if not cli.exists():
         print(f"bikar CLI not built — run 'npm run build' in {bikar_dir}")

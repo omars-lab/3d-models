@@ -74,7 +74,7 @@ FAINT = ('<style>g[data-layer="-1"]{display:inline!important}'
 
 
 def bikar_cli():
-    bikar_dir = os.environ.get("BIKAR_DIR", os.path.expanduser("~/Workspace/git/bikar-main"))
+    bikar_dir = os.environ.get("BIKAR_DIR", os.path.expanduser("~/Workspace/git/bikar"))
     cli = os.path.join(bikar_dir, "packages", "cli", "dist", "index.js")
     if not os.path.exists(cli):
         sys.exit(f"bikar CLI not built at {cli} — set BIKAR_DIR to a built bikar checkout")

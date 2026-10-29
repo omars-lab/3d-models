@@ -138,7 +138,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 PRINTS = ROOT / "docs" / "prints"
-BIKAR_DIR = Path(os.environ.get("BIKAR_DIR", Path.home() / "Workspace/git/bikar-main"))
+BIKAR_DIR = Path(os.environ.get("BIKAR_DIR", Path.home() / "Workspace/git/bikar"))
 
 RUN_NAME = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9][a-z0-9-]*$")
 SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
@@ -644,7 +644,12 @@ def run(prints: Path) -> int:
         where = "docs/prints/" if shipped else f"{prints}/"
         print(f"prints: 0 records checked — {where} is empty (nothing printed yet)")
     else:
-        tail = f"; {skipped} source pin(s) not verified (bikar not checked out)" if skipped else ""
+        # Name the cause that applies: a bikar folder that is not there, or only meshes kept
+        # out of git. A default folder that silently vanished skipped 245 pins under the old
+        # wording, which read like a machine with no bikar at all.
+        why = (f"no bikar checkout at {BIKAR_DIR}; set BIKAR_DIR" if not (BIKAR_DIR / ".git").exists()
+               else "meshes not on disk to re-read, pinned by their recipes")
+        tail = f"; {skipped} source pin(s) not verified ({why})" if skipped else ""
         print(f"prints: {n} record(s) checked, {readings} reading(s), {photos} photo(s){tail}")
     print("OK")
     return 0
