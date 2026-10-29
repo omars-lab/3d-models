@@ -69,6 +69,15 @@ Every piece is split-10's HEX-STOCK in everything else: size, pins, the 0.7 mm w
 | 1 dot (HEX-STOCK), 2 dots (HEX-G05), 3 dots (HEX-G03), 4 dots (HEX-G01), 5 dots (HEX-G00), 6 dots (HEX-T02), 7 dots (HEX-T04) | **Do:** Take each piece's two halves (the lower half has the dots; keep its upper half with it) and slide them together on the dovetail, then hold the lower half and try to wiggle the upper one side to side. Do both copies of each count. **Look for:** The fewest dots, the loosest fit, that slides on and does not wiggle. | Somewhere between 3 dots (0.03) and 6 dots (0.02 too wide): split-10's 0.05 still had play, and the ones past zero should bind. | 2 to 5 dots holds: the dovetail goes to that gap. Only 6 or 7 dots holds: the dovetail goes past zero to that one. All wiggle, even 7 dots: side to side is not the problem; the next answer says if depth is. 3 dots already binds: the next plate tries between 0.03 and 0.05. |
 | 1 dot (HEX-STOCK), 8 dots (HEX-SLOT0) | **Do:** Slide each piece's two halves together on the dovetail, then hold the lower half and try to rock the upper one up and down, lifting one edge. **Look for:** Does the 8-dot piece rock less than the 1-dot piece? | 8 dots rocks less, if the play you felt on split-10 is the slot being a layer deeper than the rail. | 8 dots rocks less: slots go to the rail's own depth. Same: depth is not the play, and slots stay as they are. 8 dots will not go on: slots stay a layer deeper. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | 2 to 5 dots holds | Omar, in chat 2026-10-29: "4 might have been the best, 1 too loose, 6 too tight" | 2026-10-28 |
+| 2 | Same | — | 2026-10-29 |
+
 ## Pictures
 
 The bed, from above, as the slice lays it out: one number and color per version, and the list
