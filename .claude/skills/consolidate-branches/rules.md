@@ -12,7 +12,19 @@ header. `*` matches every repo.
 - `*` `gh-pages` — the deployed site, with its own history on purpose.
   It is never merged into the default branch and never deleted.
 - `sacred-patterns` `wip/react-d3-2024` — prior art the d3 work cites.
-  It was kept on purpose and is the only unmerged work we hold on to.
+  It was kept on purpose.
+- `bikar` `feat/strapwork-outer-edge-closure` — the June medallion weave work (36 commits), parked
+  with a handoff plan on the branch. Omar chose to keep it parked (2026-10-28); picking it up means
+  a large hand merge.
+- `bikar` `salvage/dsl-contract-ci-gate` — a June CI check of three sample patterns against qiyas's
+  contract. Not merged (2026-10-28): main's `svg-renderer.test.ts` parity test already checks the
+  same five labels on every change, and the workflow pins qiyas `v0.1.3`, an image never published.
+- `bikar` `archive/core-license-middleware` — the April license client for bikar-core 0.2.0,
+  archived on purpose.
+- `bikar` `archive/minimal-frame-coasters-rejected` — six minimal-frame coasters Omar turned down
+  (Sept 25); main kept rDux's only.
+- `coffee-house-storefront` `feat/cup-bare-picture` — an early cup picture kept for the record;
+  main has the fuller version.
 
 ## Never merge
 
