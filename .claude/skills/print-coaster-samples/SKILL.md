@@ -18,7 +18,7 @@ comments and replies.
 
 1. **Pick the patterns and styles.** The user names them, or default to every style that has a
    `-<style>-coaster.bkr` file in bikar for each pattern asked about
-   (`ls ../bikar-main/patterns/Constructions/<id>-*coaster.bkr`, read at origin/main).
+   (`ls ../bikar/patterns/Constructions/<id>-*coaster.bkr`, read at origin/main).
 2. **Apply the rules** in [`sample-rules.md`](sample-rules.md): how many copies of each, which
    mini params, which styles go on a separate plate and why.
 3. **Check each item before it goes on the plate** — the mesh gate at the exact params the plate

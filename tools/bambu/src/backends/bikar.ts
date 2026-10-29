@@ -14,11 +14,11 @@ import { join } from "node:path";
 import { runWithTimeout } from "../log.js";
 
 /**
- * The bikar checkout dir: BIKAR_DIR env, else ~/Workspace/git/bikar-main — the Makefile's default.
+ * The bikar checkout dir: BIKAR_DIR env, else ~/Workspace/git/bikar — the Makefile's default.
  * Not ~/Workspace/git/bikar: that is the bare repo, and the files left in it are a stale build.
  */
 export function bikarDir(): string {
-  return process.env.BIKAR_DIR ?? join(homedir(), "Workspace", "git", "bikar-main");
+  return process.env.BIKAR_DIR ?? join(homedir(), "Workspace", "git", "bikar");
 }
 
 /** The built bikar CLI entrypoint, or null if bikar isn't checked out / built. */

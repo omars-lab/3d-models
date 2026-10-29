@@ -42,7 +42,8 @@ Format: `` - `<path glob>` — why ``. The glob is matched against the worktree'
   (`HUB_RW_CHECKOUT` in 3d-model-hub's Makefile). It is clean and detached at an old master
   most of the time, so the plan called it dead on 2026-10-23; removing it would break the page.
 - `*/.claude/worktrees/agent-*` — a subagent's worktree, owned by its session.
-- `*/bikar-main` — bikar's push-and-delete worktree; the bare repo has no work tree of its own.
+- `*/bikar` — bikar's own checkout on `main`, the default `BIKAR_DIR` the gates read. Since
+  2026-10-29 it is an ordinary checkout, no longer a bare repo with `bikar-main` beside it.
 - `*-work` — a loop's standing working tree, reused for each next PR.
   The global rule is one working worktree per repo per session, reused, so a clean detached
   `-work` tree is waiting for its loop's next branch, not abandoned.
@@ -118,8 +119,8 @@ brace), so someone has to read it.
   as a separate command, and `git worktree remove <path>`. If you chain them, or delete several
   branches in one push, the auto-mode permission check refuses the command.
 - If the permission check refuses a delete, list it for Omar. Do not retry it another way.
-- In bikar, push and delete from a worktree such as `bikar-main`. The bare repo has no work tree,
-  and the pre-push hook needs one. `snapshot` does this itself: given a bare repo, it pushes from
+- In bikar, push and delete from a work tree: `~/Workspace/git/bikar` itself since it stopped being
+  a bare repo (2026-10-29), or a worktree of it. The pre-push hook needs a work tree. `snapshot` does this itself: given a bare repo, it pushes from
   the repo's first worktree (it used to push from the bare repo and fail with "this operation must
   be run in a work tree", 2026-10-05).
 
