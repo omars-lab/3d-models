@@ -3,9 +3,9 @@ plate: split-06
 print_log: '[[print-logs/split-06|print log]]'
 recipe: split-06.yaml
 iteration: 4
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-24-split-06]
 answers: "Does the whole flange coaster, with split-05's set 3 settings (1.2 mm pins, 0.10 mm piece gap, the kite at 0.12), its 40 pins in four rings (between the small kites, between the bigger kites, between the stars, and on the outer points; none round the middle star) and no labels, close flush all the way round, hold together and keep its pieces snug, so it is a coaster to keep?"
 kind: new
 maturity: experiment
@@ -244,4 +244,5 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-24 | sliced: iteration 3, 50 pins in five rings, three more between the small kites, the bigger kites and the stars (bikar #344), on Omar's comment on the pins picture; 119 minutes, about 31 g, no warnings | this page |
 | 2026-10-24 | sliced: iteration 4, 40 pins in four rings, the ring round the middle star removed on Omar's "remove inner most radial set of pins"; 117 minutes, about 31 g, no warnings | this page |
 | 2026-10-24 | sent — by `bambu print send`; spends the approval of 2026-10-24, iteration 4 @ 52f7ddc85a in #00AE42 | this page |
+| 2026-10-24 | printed — all 21 layers, 13:02 to 15:16 UTC in green on the gold Textured PEI plate; looked at by hand the same day: the blunt hex pieces wiggle more than the kites, read as the pin discs cutting their hidden ledge. The page's eight questions were not asked. Next: split-08 tried the socket wall (D-119) | [the record](../../prints/2026-10-24-split-06/index.md) |
 | 2026-10-24 | reviewed: Omar saw the two bigger kites differ and the blunt ones wiggle more; the pin discs cut the hex pieces' hidden ledge at the point and shoulders; his idea to cut each piece in two | this page, "What you saw off the bed" |

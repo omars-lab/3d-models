@@ -19,6 +19,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
 - On the flange coaster's pinned slice (1.2 mm pins, 0.25 mm play, split-06's pin rings), a 0.9 mm wall round each pin socket left the set shaking when closed; 0.7 and 0.45 mm walls did not shake, and Omar picked the 0.7 mm set. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-25-split-08](prints/2026-10-25-split-08/index.md))
+- On the whole flange coaster with 1.2 mm pins in four rings and a filled disc round each pin (0.9 mm socket wall), the hex pieces wiggled more than the kites: the discs cut the hex pieces' hidden ledge at the point and both shoulders, so less of each is held in the groove. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, setting 8, sliced for the gold Textured PEI plate. ([2026-10-24-split-06](prints/2026-10-24-split-06/index.md))
 - On the flange coaster's pinned slice at a 0.10 mm piece gap, 1.2 mm pins placed at least 6 mm apart round every outer edge and point (6 in a slice, 31 on a whole coaster) hold the halves better than 1.0 mm pins (11 in a slice, 54 on a whole coaster): both came out good, and the 1.0 mm set shakes a bit. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-23-split-05](prints/2026-10-23-split-05/index.md))
 - In a pinned border, a 0.10 mm gap per face gives the middle, hex, star and outer pieces a snug fit that goes in by hand and does not rattle; the small kite is tight at 0.10. At 0.15 the pieces still wiggle a little, and at 0.25 they are very loose. The halves close flush only on the sides that have a pin: with four 1.7 mm pins on the slice's outer part, the unpinned sides lift and leave a space (0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Smooth PEI for the glacier plate). ([2026-10-23-split-04](prints/2026-10-23-split-04/index.md))
 - The flange holds a loose piece flush on both faces, and its 0.8 mm band prints with at most a slight droop underneath; but at 0.25 mm all round the pieces are loose in their holes and rattle when the coaster is shaken, with a margin Omar could see round the stars and kites. With no studs and no glue the two halves come apart, with a space between them, and a 2 mm id under the undercut strip does not read (0.4 mm nozzle, 0.20 mm layers, sliced as a Smooth PEI / High Temp plate). ([2026-10-15-split-02](prints/2026-10-15-split-02/index.md))
@@ -69,6 +70,19 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 - **Photos of the print:** none. Rendered pictures from the plate page: [pins](design/plates/split-08-media/pins.png), [bed](design/plates/split-08-media/bed.png), [ledges-wall-0-9-mm](design/plates/split-08-media/ledges-wall-0-9-mm.png), [ledges-wall-0-7-mm](design/plates/split-08-media/ledges-wall-0-7-mm.png), [ledges-wall-0-45-mm](design/plates/split-08-media/ledges-wall-0-45-mm.png)
 
 ![render, not a photo: pins](design/plates/split-08-media/pins.png)
+
+### [2026-10-24-split-06](prints/2026-10-24-split-06/index.md)
+
+- **Plate:** [split-06](design/plates/split-06.md) — the whole flange coaster at split-05's set 3, no labels: 1.2 mm pins in four rings of ten, 0.25 mm play, filled discs round each pin
+- **Lesson:** On the whole flange coaster with 1.2 mm pins in four rings and a filled disc round each pin (0.9 mm socket wall), the hex pieces wiggled more than the kites: the discs cut the hex pieces' hidden ledge at the point and both shoulders, so less of each is held in the groove. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, setting 8, sliced for the gold Textured PEI plate.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01 (standard flow, hardened steel)
+- **Pieces:** 7 (1 adjust, 6 not-judged)
+- **What happened:** Omar: "the blunt pieces wiggle more than the pointy kites"; and one of the two bigger kites has a sharper point than the other.
+- **Why:** The pin discs, read from the sliced plate layer by layer: the hex piece's ledge reaches 0.3 mm past its face at the point, the outer piece's 1.4 mm. split-02 (no pins) and split-05 (pins, no discs) have whole ledges on both. That this is the wiggle is read, not checked by hand. The sharper point is the outer piece: the two bigger kites have the same face but differ in their ledge.
+- **What it changed:** Split-08 tried the socket wall at 0.9, 0.7 and 0.45 mm and kept 0.7 (D-119); split-07 took it with the pins where split-06 had them. Moving the pins off the hex pieces' points (the page's first fix) is not yet built. The page's eight questions on the whole coaster were never asked.
+- **Photos of the print:** none. Rendered pictures from the plate page: [pins](design/plates/split-06-media/pins.png), [bed](design/plates/split-06-media/bed.png), [ledges](design/plates/split-06-media/ledges.png), [fix-move-pins](design/plates/split-06-media/fix-move-pins.png), [fix-smaller-discs](design/plates/split-06-media/fix-smaller-discs.png), [fix-leave-it](design/plates/split-06-media/fix-leave-it.png)
+
+![render, not a photo: pins](design/plates/split-06-media/pins.png)
 
 ### [2026-10-23-split-05](prints/2026-10-23-split-05/index.md)
 
@@ -351,7 +365,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-23 records; 0 measured with a tool, so no bet has moved yet.
+24 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
