@@ -115,6 +115,11 @@ brace), so someone has to read it.
   permission check as a CI bypass (2026-10-04), so hifth's remote deletes are Omar's to run or to
   unblock. If the checks fail on typecheck with `Cannot find module 'preact'`, the main
   checkout's `node_modules` is stale: `pnpm install --frozen-lockfile` there, not `--no-verify`.
+  If only the "pitch build's Study Quran commentary" tests fail (34 on 2026-10-29), the private
+  pitch data is older than main's pitch tools: it is gitignored, so a pull never rebuilds it.
+  Copy `apps/web/public/assets/private/study-quran` aside, then rebuild it with
+  `node packages/etl/tools/pitch/extract.mjs` and re-run `make pitch-e2e`. Never print its
+  output: it is held text.
 - Run the delete commands one at a time: `git branch -D <b>`, then `git push origin --delete <b>`
   as a separate command, and `git worktree remove <path>`. If you chain them, or delete several
   branches in one push, the auto-mode permission check refuses the command.
