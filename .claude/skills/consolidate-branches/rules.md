@@ -187,3 +187,18 @@ brace), so someone has to read it.
   Snapshot the merge branch before deleting it; that snapshot keeps the whole history. Find which
   ref holds a commit with `git for-each-ref --contains <sha>` (bikar's `dsl-contract-gate` and
   `review-reader-runtime-origin`, 2026-10-29).
+- Untracked files in a main checkout are not always work to save. Before opening a save PR,
+  check whether each one is already committed somewhere else. internal-agent's `places-cli`,
+  `quip-cli` and `supabase-cli` matched `coffee-house-clis`'s committed copies byte for byte
+  (`diff -rq`). qiyas's two skill folders were symlinks into sacred-patterns' committed skills.
+  Committing a second copy creates a fork nothing keeps in sync, so leave them and list them for
+  Omar (2026-10-29).
+- To save another session's uncommitted files in a shared main checkout without moving them:
+  `git switch -c <save-branch>` in the checkout, stage the files by name, commit, push, PR, merge.
+  Then `git fetch origin <default>:<default>`, then `git switch <default>`. The files match the
+  merge, so nothing changes on disk (youtube, the hub, the storefront, hifth, coffee-house,
+  shopify-app-cli, 2026-10-29).
+- A snapshot push can fail on a flaky push-check test after the local ref is already written.
+  Re-run the failed check on its own; if it passes on the same commit, push only the ref
+  (`git push origin refs/snapshots/<date>/<branch>`). Don't re-run `snapshot`, which refuses to
+  move an existing ref (the storefront's `StoreMark.test.tsx`, 2026-10-29).
