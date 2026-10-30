@@ -1,8 +1,9 @@
 ---
 plate: cedar-stencil-1
+print_log: '[[print-logs/cedar-stencil-1|print log]]'
 recipe: cedar-stencil-1.yaml
 iteration: 5
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Can a pre-K class trace the Lebanon flag's cedar, sized to a flag that fills a sideways sheet of Letter paper, with this card?"
@@ -92,7 +93,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-10-30 | approved | Omar, in chat: "print docs/design/plates/cedar-stencil-1.md in green" | iteration 5 @ e585c10475 in #00AE42 | |
+| 2026-10-30 | approved | Omar, in chat: "print docs/design/plates/cedar-stencil-1.md in green" | iteration 5 @ e585c10475 in #00AE42 | sent 2026-10-30 |
 
 ## Timeline
 
@@ -101,3 +102,12 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-30 | proposed: on Omar's ask for a cedar stencil to trace a landscape Lebanon flag on printer paper, for pre-K; a card and a loose cedar, sliced clean | this page |
 | 2026-10-30 | changed: the flag now fills the sheet (11 × 8.5 in), on Omar's question; the cedar is sized to the 108 mm white band, and the loose cedar prints in the card's opening so both fit one bed | this page, the recipe |
 | 2026-10-30 | changed: the card only, not the loose cedar, and 0.6 mm thick so it bends, on Omar's asks | this page, the recipe |
+| 2026-10-30 | sent — by `bambu print send`; spends the approval of 2026-10-30, iteration 5 @ e585c10475 in #00AE42 | this page |
+
+## The print
+
+The print as the chamber camera saw it: 13 pictures from 18:43 to 19:17 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![cedar-stencil-1 printing, as the chamber camera saw it](cedar-stencil-1-media/timelapse.webp)
+
+![cedar-stencil-1 finished, on the bed](cedar-stencil-1-media/finished.webp)
