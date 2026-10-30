@@ -65,8 +65,9 @@ is scaled so the opening, the line a child traces, spans the white band exactly.
 
 - **The flag fills the sheet**, as you asked, rather than the official 2:3. See above to switch.
 - **0.6 mm thick.** "A few layers" read as three. For floppier, set `thick = 0.4`; for a card that
-  survives more handling, `thick = 0.8`. The thinnest parts are the 16 mm strips beside the
-  opening, so those are where it would crease or tear first.
+  survives more handling, `thick = 0.8`. The weakest spots are the thin slivers of card, 1–3 mm wide,
+  that reach into the opening between neighbouring fronds: a crayon pushed against them could
+  bend or tear them long before the rest of the card creases.
 - **US Letter paper.** For A4, set `paper = "a4"` in the source and re-render the STL.
 - **One card.** A class needs more; at 30 minutes each, several fit one bed side by side if you
   want a batch (`count` in the recipe).
@@ -83,7 +84,7 @@ The slicer finds nothing to warn about. Any one color works.
 
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
-| The card | **Do:** Peel the card off the bed and bend it gently end to end. Turn a sheet of Letter paper sideways, fold it in half side to side and open it. Lay the card on it, its top and bottom edges flush with the paper's and its middle notches on the fold. Trace the cedar opening with a crayon, then mark the four side notches with a pencil. Lift the card and measure from the cedar's tip to the top stripe mark, and from its base to the bottom one. **Look for:** Does it bend without creasing, does it lie flat on the paper, does the crayon follow the whole outline, and do the tip and base touch the stripe marks? | It bends and springs back, it lies flat, the crayon follows the outline, and both ends touch, since the card is sized from the paper and the opening spans the white band. | Creases or tears beside the opening: go to 0.8 mm. Too stiff: 0.4 mm. Crayon catches in the fronds: grow the opening more. Gap at the stripes: check for shrink first. Works: print more cards for the class. |
+| The card | **Do:** Peel the card off the bed and bend it gently end to end. Turn a sheet of Letter paper sideways, fold it in half side to side and open it. Lay the card on it, its top and bottom edges flush with the paper's and its middle notches on the fold. Trace the cedar opening with a crayon, then mark the four side notches with a pencil. Lift the card and measure from the cedar's tip to the top stripe mark, and from its base to the bottom one. **Look for:** Does it bend without creasing, does it lie flat on the paper, does the crayon follow the whole outline, and do the tip and base touch the stripe marks? Do any of the thin slivers between the fronds bend or tear? | It bends and springs back, it lies flat, the crayon follows the outline, and both ends touch, since the card is sized from the paper and the opening spans the white band. | Slivers between the fronds bend or tear: grow the opening more (which fills the narrowest gaps) or go to 0.8 mm. Creases elsewhere: 0.8 mm. Too stiff: 0.4 mm. Crayon catches in the fronds: grow the opening more. Gap at the stripes: check for shrink first. Works: print more cards for the class. |
 
 ## Approvals
 
