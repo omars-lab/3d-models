@@ -174,9 +174,12 @@ brace), so someone has to read it.
   Prove such a branch dead by hand: compare its tree with the rewritten twin of the same merge on
   `origin/<default>` (find it by commit subject). The only differences should be the removed
   files. Then snapshot it with `--no-push` only. **Never run the printed `snapshot` line on these
-  tips:** pushing them puts the removed pictures back on GitHub. The old-history branches and the
-  `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs already on hifth's GitHub carry them too,
-  and purging those is Omar's (2026-10-27 pass).
+  tips:** pushing them puts more copies of the removed pictures on GitHub. The 62
+  `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs already on hifth's GitHub carry them,
+  and so do GitHub's own pull request copies. Omar decided on 2026-10-30 to leave those as they
+  are: "dont do rewrite, keep history as is, accept the risk". So don't purge them, don't rewrite
+  history again, and don't list the purge as owed. The 352 old-history branches were deleted
+  on 2026-10-29.
 - A plain `git status` rewrites a worktree's index when a file's stat is stale, which made every
   worktree the inventory read look live for the next 6 hours (2026-10-28: the store's `r18-parts`,
   last used Oct 15, came back "live"). The inventory now reads the age first and runs status with
