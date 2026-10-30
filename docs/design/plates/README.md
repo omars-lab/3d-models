@@ -48,7 +48,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 26 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
 | 27 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
 | 28 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
-| 29 | [cedar-stencil-1](cedar-stencil-1.md) | waiting | 2 | 2.4 | 0.83 | ok | Can a pre-K class trace a correctly sized Lebanon flag cedar on a sideways sheet of Letter paper with this card? |
+| 29 | [cedar-stencil-1](cedar-stencil-1.md) | waiting | 2 | 2.3 | 0.88 | ok | Can a pre-K class trace the Lebanon flag's cedar, sized to a flag that fills a sideways sheet of Letter paper, with this card? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [sheets-05](sheets-05.md) (value 5).
 

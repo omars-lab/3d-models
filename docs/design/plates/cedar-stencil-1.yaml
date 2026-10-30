@@ -4,17 +4,22 @@
 # were to make a landscape lebanon flag with a normal printer paper ... we should get the right
 # aspect ratio", then "this is for prek".
 #
-# The flag is 2:3 and fills the width of a US Letter sheet turned sideways: 279.4 x 186.3 mm,
-# with a 14.8 mm strip above and below to trim. The cedar is a third of the flag's width and
-# spans the white band, as on the flag; its outline is Wikimedia's Flag_of_Lebanon.svg, grown
-# 1.5 mm all round so a crayon can follow it and the loose piece's frond tips do not snap.
+# On Omar's "will this fit in middle of flag that is 8.5 in tall by 11 wide?": the whole sideways
+# Letter sheet is the flag (11 x 8.5 in, about 1.29:1, not the official 2:3). Red stripes 54 mm,
+# white band 108 mm, and the cedar opening spans the band tip to base, 108 mm wide too (the
+# cedar's own shape). The first version drew a 2:3 flag inside the sheet with a 93 mm cedar, which
+# would have floated in this band. The outline is Wikimedia's Flag_of_Lebanon.svg.
 #
-#   SHEET   a card as tall as the paper (215.9 mm), 140 mm wide, with the cedar cut out. Its top
-#           and bottom edges sit on the paper's; its notches sit on a fold down the paper's middle.
-#           Slots mark the stripe lines and trim lines for the grown-up's pencil.
-#   CEDAR   the cedar on its own, to trace around.
+#   STENCIL one file, two pieces. The card is as tall as the paper (215.9 mm) and 140 mm wide,
+#           with the cedar cut out; its top and bottom edges sit on the paper's, its middle
+#           notches on a fold down the paper's middle, and the notches on its sides mark the
+#           stripe lines for the grown-up's pencil. The loose cedar, to trace around, prints in
+#           the opening with a 1 mm gap: side by side the two do not fit one bed. The loose
+#           cedar is grown 1.5 mm round the outline so its frond tips do not snap; the opening
+#           2.5 mm, so a crayon can follow it.
 #
-# Source and how to rebuild the STLs: src/Stencils/LebanonCedar.scad (paper = "a4" for A4).
+# Source and how to rebuild the STLs: src/Stencils/LebanonCedar.scad (paper = "a4" for A4,
+# flag = "official" for a 2:3 flag with trim lines).
 #
 # No ids cut into the pieces (no_id below): they are a classroom tool, and an id cut into the
 # face would show up in the traced line. id_code ARZ names the plate only.
@@ -30,11 +35,7 @@ profile:
 id_code: ARZ
 
 items:
-  - stl:      src/Stencils/lebanon-cedar-sheet-letter.stl
-    sha256:   7c974e82cf6d6a0c334f44c96222f0d7d6123860edf38676f0b216d3d0efd807
-    label:    SHEET
-    no_id:    "a classroom tracing card; an id cut into its face would show in the traced line, and it is the only card on the bed"
-  - stl:      src/Stencils/lebanon-cedar-cedar-letter.stl
-    sha256:   2db78ebe8ac9fa02753c393650e84acf07a5f30c67b4012e82bc4400b9d86893
-    label:    CEDAR
-    no_id:    "the loose cedar is traced around; an id would catch the crayon, and its shape alone tells it apart"
+  - stl:      src/Stencils/lebanon-cedar-stencil-letter.stl
+    sha256:   475319d971bec39f79f89d21c54d53dc9b263fab465d6d1e1c73122b72ec2c01
+    label:    STENCIL
+    no_id:    "a classroom tracing card with its loose cedar in the opening; an id cut into either face would show in the traced line"
