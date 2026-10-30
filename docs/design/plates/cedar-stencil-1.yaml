@@ -1,0 +1,40 @@
+# cedar-stencil-1 — the Lebanon flag's cedar, as a stencil for a pre-K class
+#
+# Omar, 2026-10-30: "a stencil of the arz within the lebanon flag for us to trace around if we
+# were to make a landscape lebanon flag with a normal printer paper ... we should get the right
+# aspect ratio", then "this is for prek".
+#
+# The flag is 2:3 and fills the width of a US Letter sheet turned sideways: 279.4 x 186.3 mm,
+# with a 14.8 mm strip above and below to trim. The cedar is a third of the flag's width and
+# spans the white band, as on the flag; its outline is Wikimedia's Flag_of_Lebanon.svg, grown
+# 1.5 mm all round so a crayon can follow it and the loose piece's frond tips do not snap.
+#
+#   SHEET   a card as tall as the paper (215.9 mm), 140 mm wide, with the cedar cut out. Its top
+#           and bottom edges sit on the paper's; its notches sit on a fold down the paper's middle.
+#           Slots mark the stripe lines and trim lines for the grown-up's pencil.
+#   CEDAR   the cedar on its own, to trace around.
+#
+# Source and how to rebuild the STLs: src/Stencils/LebanonCedar.scad (paper = "a4" for A4).
+#
+# No ids cut into the pieces (no_id below): they are a classroom tool, and an id cut into the
+# face would show up in the traced line. id_code ARZ names the plate only.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/cedar-stencil-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: ARZ
+
+items:
+  - stl:      src/Stencils/lebanon-cedar-sheet-letter.stl
+    sha256:   7c974e82cf6d6a0c334f44c96222f0d7d6123860edf38676f0b216d3d0efd807
+    label:    SHEET
+    no_id:    "a classroom tracing card; an id cut into its face would show in the traced line, and it is the only card on the bed"
+  - stl:      src/Stencils/lebanon-cedar-cedar-letter.stl
+    sha256:   2db78ebe8ac9fa02753c393650e84acf07a5f30c67b4012e82bc4400b9d86893
+    label:    CEDAR
+    no_id:    "the loose cedar is traced around; an id would catch the crayon, and its shape alone tells it apart"
