@@ -16,6 +16,12 @@ bedface-4:
   - {iteration: 3, recipe: '43da531610fd', date: '2026-10-12'}
 bedface-5:
   - {iteration: 1, recipe: '0c49ccb110c4', date: '2026-10-14'}
+cedar-stencil-1:
+  - {iteration: 1, recipe: 'a492931c461a', date: '2026-10-30'}
+  - {iteration: 2, recipe: '9dff338c14b1', date: '2026-10-30'}
+  - {iteration: 3, recipe: 'fcde4148f9ce', date: '2026-10-30'}
+  - {iteration: 4, recipe: '484fd883e3de', date: '2026-10-30'}
+  - {iteration: 5, recipe: '6a3d9b564b0b', date: '2026-10-30'}
 hexfit-1:
   - {iteration: 1, recipe: 'ce10b0895421', date: '2026-10-28'}
   - {iteration: 2, recipe: '26200ae3ed06', date: '2026-10-28'}

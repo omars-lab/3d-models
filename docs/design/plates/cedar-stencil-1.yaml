@@ -1,0 +1,40 @@
+# cedar-stencil-1 — the Lebanon flag's cedar, as a stencil for a pre-K class
+#
+# Omar, 2026-10-30: "a stencil of the arz within the lebanon flag for us to trace around if we
+# were to make a landscape lebanon flag with a normal printer paper ... we should get the right
+# aspect ratio", then "this is for prek".
+#
+# On Omar's "will this fit in middle of flag that is 8.5 in tall by 11 wide?": the whole sideways
+# Letter sheet is the flag (11 x 8.5 in, about 1.29:1, not the official 2:3). Red stripes 54 mm,
+# white band 108 mm, and the cedar opening spans the band tip to base, 108 mm wide too (the
+# cedar's own shape). The first version drew a 2:3 flag inside the sheet with a 93 mm cedar, which
+# would have floated in this band. The outline is Wikimedia's Flag_of_Lebanon.svg.
+#
+#   SHEET   the card, the only piece printed (Omar: "i want the bigger piece, not the smaller
+#           one"), 0.6 mm thick so it bends ("thin, maybe a few layers ... still bendable"). As
+#           tall as the paper (215.9 mm) and 140 mm wide, with the cedar cut out, grown 1.5 mm
+#           round the outline so a crayon can follow it. Its top and bottom edges sit on the
+#           paper's, its middle notches on a fold down the paper's middle, and the notches on its
+#           sides mark the stripe lines for the grown-up's pencil.
+#
+# Source and how to rebuild the STLs: src/Stencils/LebanonCedar.scad (paper = "a4" for A4,
+# flag = "official" for a 2:3 flag with trim lines).
+#
+# No id cut into the card (no_id below): it is a classroom tool, and an id cut into the face
+# would show up in the traced line. id_code ARZ names the plate only.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/cedar-stencil-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: ARZ
+
+items:
+  - stl:      src/Stencils/lebanon-cedar-sheet-letter.stl
+    sha256:   d8c9158d4be943eb10b874e8ec387edd3e4bfcff058bc37585ca931a426332ba
+    label:    SHEET
+    no_id:    "a classroom tracing card; an id cut into its face would show in the traced line, and it is the only piece on the bed"
