@@ -2,7 +2,7 @@
 plate: cedar-stencil-1
 recipe: cedar-stencil-1.yaml
 iteration: 5
-stage: waiting
+stage: approved
 times_printed: 0
 runs: []
 answers: "Can a pre-K class trace the Lebanon flag's cedar, sized to a flag that fills a sideways sheet of Letter paper, with this card?"
@@ -92,6 +92,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-30 | approved | Omar, in chat: "print docs/design/plates/cedar-stencil-1.md in green" | iteration 5 @ e585c10475 in #00AE42 | |
 
 ## Timeline
 
