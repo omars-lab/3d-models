@@ -10,19 +10,18 @@
 # cedar's own shape). The first version drew a 2:3 flag inside the sheet with a 93 mm cedar, which
 # would have floated in this band. The outline is Wikimedia's Flag_of_Lebanon.svg.
 #
-#   STENCIL one file, two pieces. The card is as tall as the paper (215.9 mm) and 140 mm wide,
-#           with the cedar cut out; its top and bottom edges sit on the paper's, its middle
-#           notches on a fold down the paper's middle, and the notches on its sides mark the
-#           stripe lines for the grown-up's pencil. The loose cedar, to trace around, prints in
-#           the opening with a 1 mm gap: side by side the two do not fit one bed. The loose
-#           cedar is grown 1.5 mm round the outline so its frond tips do not snap; the opening
-#           2.5 mm, so a crayon can follow it.
+#   SHEET   the card, the only piece printed (Omar: "i want the bigger piece, not the smaller
+#           one"), 0.6 mm thick so it bends ("thin, maybe a few layers ... still bendable"). As
+#           tall as the paper (215.9 mm) and 140 mm wide, with the cedar cut out, grown 1.5 mm
+#           round the outline so a crayon can follow it. Its top and bottom edges sit on the
+#           paper's, its middle notches on a fold down the paper's middle, and the notches on its
+#           sides mark the stripe lines for the grown-up's pencil.
 #
 # Source and how to rebuild the STLs: src/Stencils/LebanonCedar.scad (paper = "a4" for A4,
 # flag = "official" for a 2:3 flag with trim lines).
 #
-# No ids cut into the pieces (no_id below): they are a classroom tool, and an id cut into the
-# face would show up in the traced line. id_code ARZ names the plate only.
+# No id cut into the card (no_id below): it is a classroom tool, and an id cut into the face
+# would show up in the traced line. id_code ARZ names the plate only.
 #
 # Validate (no hardware; slicing is local):
 #   bambu slice compose docs/design/plates/cedar-stencil-1.yaml --dry-run
@@ -35,7 +34,7 @@ profile:
 id_code: ARZ
 
 items:
-  - stl:      src/Stencils/lebanon-cedar-stencil-letter.stl
-    sha256:   475319d971bec39f79f89d21c54d53dc9b263fab465d6d1e1c73122b72ec2c01
-    label:    STENCIL
-    no_id:    "a classroom tracing card with its loose cedar in the opening; an id cut into either face would show in the traced line"
+  - stl:      src/Stencils/lebanon-cedar-sheet-letter.stl
+    sha256:   d8c9158d4be943eb10b874e8ec387edd3e4bfcff058bc37585ca931a426332ba
+    label:    SHEET
+    no_id:    "a classroom tracing card; an id cut into its face would show in the traced line, and it is the only piece on the bed"

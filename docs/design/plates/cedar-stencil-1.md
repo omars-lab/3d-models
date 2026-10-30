@@ -1,7 +1,7 @@
 ---
 plate: cedar-stencil-1
 recipe: cedar-stencil-1.yaml
-iteration: 4
+iteration: 5
 stage: waiting
 times_printed: 0
 runs: []
@@ -10,8 +10,8 @@ kind: new
 maturity: experiment
 bets: []
 unblocks: []
-minutes: 94
-grams: 71
+minutes: 30
+grams: 18
 bed_plates: 1
 risk: ok
 pictures:
@@ -24,11 +24,10 @@ pictures:
 
 **In short.** You asked for a stencil of the cedar (the arz) to trace when making a landscape
 Lebanon flag on ordinary printer paper, for a pre-K class. The flag fills the whole sheet turned
-sideways, 11 in wide by 8.5 in tall. The plate prints a card as tall as the paper with the cedar cut
-out, and the loose cedar to trace around, lying in the card's opening. The recipe is
-[`cedar-stencil-1.yaml`](cedar-stencil-1.yaml) and the source is
-[`LebanonCedar.scad`](../../../src/Stencils/LebanonCedar.scad). It needs one bed, about 1 h 34 m
-and 71 g of PLA.
+sideways, 11 in wide by 8.5 in tall. The plate prints one thin card, 0.6 mm and bendable, as tall
+as the paper, with the cedar cut out. The recipe is [`cedar-stencil-1.yaml`](cedar-stencil-1.yaml)
+and the source is [`LebanonCedar.scad`](../../../src/Stencils/LebanonCedar.scad). It needs one bed,
+about 30 minutes and 18 g of PLA.
 
 ## The flag on the page
 
@@ -46,48 +45,45 @@ because it is sized to the taller white band. The first version of this plate dr
 flag across the sheet, 186 mm tall, with strips to trim above and below. It was changed after you
 asked for a flag that fills the sheet. Setting `flag = "official"` in the source brings it back.
 
-## The two pieces
+## The card
 
-![The card with the cedar cut out, and the loose cedar beside it (on the bed it lies in the opening)](cedar-stencil-1-media/pieces.png)
+![The card with the cedar cut out](cedar-stencil-1-media/pieces.png)
 
-- **The card** (140 × 215.9 mm, 3 mm thick). Its top and bottom edges line up with the paper's,
-  so it can only sit at the right height. To center it, fold the paper in half side to side and
-  line up the two middle notches with the fold. A child traces inside the cedar opening.
-  The notches on the card's sides are for the grown-up's pencil. They mark where the stripes
-  start, and a ruler joins the marks across the sheet.
-- **The loose cedar**, to trace around, for children who find that easier. It prints inside the
-  card's opening with a 1 mm gap all round; lift it out after the print. Side by side, the two
-  pieces do not fit on one bed.
+- **Size.** 140 × 215.9 mm, and 0.6 mm thick (three layers), so it bends like a plastic sheet
+  rather than standing stiff. Its top and bottom edges line up with the paper's, so it can only
+  sit at the right height. To center it, fold the paper in half side to side and line up the two
+  middle notches with the fold. A child traces inside the cedar opening.
+- **The side notches** are for the grown-up's pencil. They mark where the stripes start, and a
+  ruler joins the marks across the sheet.
+- **Only the card prints.** You asked for the bigger piece, not the loose cedar.
 
-Neither outline is the exact flag drawing. The exact outline has frond tips 2–3 mm wide; a crayon
-(8–11 mm across) can't get into them, and on the loose piece they would snap off. So the loose
-cedar is 1.5 mm fatter all round, and the opening is 2.5 mm fatter. The cedar is scaled so that the
-opening, the line a child actually traces, spans the white band exactly. A tracing around the
-loose cedar comes out 1 mm smaller on each side, so its tip and base fall about 1 mm short of the
-stripes.
+The opening is not the exact flag drawing. The exact outline has frond tips 2–3 mm wide, and a
+crayon (8–11 mm across) can't get into them. So the opening is 1.5 mm bigger all round. The cedar
+is scaled so the opening, the line a child traces, spans the white band exactly.
 
 ## Assumptions made
 
 - **The flag fills the sheet**, as you asked, rather than the official 2:3. See above to switch.
+- **0.6 mm thick.** "A few layers" read as three. For floppier, set `thick = 0.4`; for a card that
+  survives more handling, `thick = 0.8`. The thinnest parts are the 16 mm strips beside the
+  opening, so those are where it would crease or tear first.
 - **US Letter paper.** For A4, set `paper = "a4"` in the source and re-render the STL.
-- **One card and one loose cedar.** A class needs more cards; each one means printing the plate
-  again.
+- **One card.** A class needs more; at 30 minutes each, several fit one bed side by side if you
+  want a batch (`count` in the recipe).
 - **No carved id.** It's a classroom tool, and an id cut into the face would show up in the traced
   line.
 
 ## On the bed
 
-![The slicer's picture of the plate: the card, with the loose cedar in its opening](cedar-stencil-1-media/bed.png)
+![The slicer's picture of the plate: the card alone](cedar-stencil-1-media/bed.png)
 
-The slicer finds nothing to warn about and adds no brim, so nothing joins the loose cedar to the
-card. Any one color works.
+The slicer finds nothing to warn about. Any one color works.
 
 ## After the print
 
 | Pieces | The question | What we expect, and why | What each answer changes |
 |---|---|---|---|
-| The card | **Do:** Lift the loose cedar out of the opening. Turn a sheet of Letter paper sideways, fold it in half side to side and open it. Lay the card on it, its top and bottom edges flush with the paper's and its middle notches on the fold. Trace the cedar opening with a crayon, then mark the four side notches with a pencil. Lift the card and measure from the cedar's tip to the top stripe mark, and from its base to the bottom one. **Look for:** Does the crayon follow the whole outline, and do the tip and base touch the stripe marks? | The crayon follows it and both touch, since the card is sized from the paper and the opening spans the white band. | Crayon catches in the fronds: grow the opening more. Gap at the stripes: check the print for shrink before changing the source. Works: print more cards for the class. |
-| The loose cedar | **Do:** Did it lift out of the opening without force? Hand it to a child (or try it yourself) and trace around it with a crayon. **Look for:** Does it stay put while tracing, and do any frond tips bend or snap? | It lifts out freely, since there is a 1 mm gap, and nothing snaps at 3 mm thick with the grown outline. | Stuck to the card: widen the gap. Slips: add a small knob to hold it by. Snaps: thicken it or grow it more. |
+| The card | **Do:** Peel the card off the bed and bend it gently end to end. Turn a sheet of Letter paper sideways, fold it in half side to side and open it. Lay the card on it, its top and bottom edges flush with the paper's and its middle notches on the fold. Trace the cedar opening with a crayon, then mark the four side notches with a pencil. Lift the card and measure from the cedar's tip to the top stripe mark, and from its base to the bottom one. **Look for:** Does it bend without creasing, does it lie flat on the paper, does the crayon follow the whole outline, and do the tip and base touch the stripe marks? | It bends and springs back, it lies flat, the crayon follows the outline, and both ends touch, since the card is sized from the paper and the opening spans the white band. | Creases or tears beside the opening: go to 0.8 mm. Too stiff: 0.4 mm. Crayon catches in the fronds: grow the opening more. Gap at the stripes: check for shrink first. Works: print more cards for the class. |
 
 ## Approvals
 
@@ -102,3 +98,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-30 | proposed: on Omar's ask for a cedar stencil to trace a landscape Lebanon flag on printer paper, for pre-K; a card and a loose cedar, sliced clean | this page |
 | 2026-10-30 | changed: the flag now fills the sheet (11 × 8.5 in), on Omar's question; the cedar is sized to the 108 mm white band, and the loose cedar prints in the card's opening so both fit one bed | this page, the recipe |
+| 2026-10-30 | changed: the card only, not the loose cedar, and 0.6 mm thick so it bends, on Omar's asks | this page, the recipe |
