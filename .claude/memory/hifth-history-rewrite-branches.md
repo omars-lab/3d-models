@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: b317004f-c205-413f-8ef8-7b5f99a1b742
-  modified: 2026-10-28T00:05:44.895Z
+  modified: 2026-10-30T15:37:09.865Z
 ---
 
 hifth's main was rewritten on 2026-10-08 (`git filter-repo --strip-blobs-with-ids`) to remove two
@@ -19,8 +19,11 @@ same names.
   commit subject on origin/main); the only differences should be the two pictures.
 - **Never push a snapshot of such a tip** (`branch_inventory.py snapshot … --no-push` only): it
   re-publishes the scrubbed pictures.
-- Still on hifth's GitHub as of 2026-10-27, Omar's to purge: ~130 old-history branches, ~60
-  `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs, and `refs/pull/*` (needs GitHub Support).
+- 2026-10-29: all 352 old-history branches on GitHub were deleted (hifth #538 lets a delete-only
+  push skip the tests). Still on GitHub: 62 `refs/snapshots/2026-10-04/*` and `2026-10-08/*`
+  refs, plus GitHub's `refs/pull/*`.
+- **Decided 2026-10-30 (Omar): no purge, no more rewrites.** "dont do rewrite, keep history as is,
+  accept the risk". Don't raise the purge again, and don't list it as owed.
 - 2026-10-27 pass: the three agent branches at 17a22559 matched new main's #193 merge (94233180)
   bar the two pictures; local-only snapshots written, branches deleted.
 
