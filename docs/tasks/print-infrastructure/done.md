@@ -2,6 +2,9 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-29 — The hub's plates page has a "Waiting on you" box: unanswered after-print questions, comments asking Omar, plates waiting for a yes, and pages behind their print log. A judging card opens from anywhere on it (3d-model-hub #21)
+- 2026-10-29 — The judge-page skill opens the hub at the questions Omar still owes, with comments on, in one command (3d-models #829)
+- 2026-10-28 — The plate hub: a plates list, and a plate page whose bed pieces can be clicked and commented on one at a time; the bed drawing shows the brim, supports, raft and skirt the slicer lays down; a piece panel says what sets a piece apart from the other versions of its kind (3d-model-hub #16, #17, #18, #19, #20)
 - 2026-10-24 — The send refuses a plate until the past-mistakes checks pass, and a check that orders add up (3d-models #778, #780)
 - 2026-10-22 — Judging prints on the hub: the judge-page skill, answers saved the moment they are given and watched for, and review-print reading those answers back (3d-models #742, #744, #745)
 - 2026-10-22 — The storefront theme line (3d-models #741)

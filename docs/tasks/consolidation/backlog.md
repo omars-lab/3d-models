@@ -30,3 +30,8 @@ Left by that pass:
    studio's pattern list is read from that table, so nothing merged since 2026-10-10, the 0.01 mm
    dovetail gap included, reaches it. Unpausing the project or fixing the secret is Omar's;
    after that, re-run the latest failed run. Found 2026-10-29.
+4. **Remove the merged hub worktree `3d-model-hub-owed`.** Its branch (waiting-on-you) merged as
+   3d-model-hub #21; delete the worktree and the local branch. Found 2026-10-29.
+5. **Check the public gallery is current.** Compare the gh-pages deploy date with the newest
+   coaster cards (CS-16 and CS-17, added 2026-10-06), and run `make deploy` if the site is behind.
+   Found 2026-10-29.
