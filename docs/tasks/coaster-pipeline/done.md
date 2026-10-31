@@ -2,6 +2,15 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-10-29 — hexfit-1's two after-print answers saved from the hub: 4 dots (0.01 mm a side) holds best, and the slot depth stays the same. bikar's dovetail slide now defaults to a 0.01 mm gap a side. Its print record is still to write (3d-models #828, bikar #356)
+- 2026-10-29 — split-06's print record, from what Omar said off the bed (3d-models #823)
+- 2026-10-28 — hexfit-1, the hexagon dovetail fit plate: bikar fits from stock down past zero, with dots on the bed face and a slot as deep as the rail, then the plate, Omar's yes in green, the send and the print to the end (bikar #352, 3d-models #814, #816, #817, #819)
+- 2026-10-28 — star-1 built: the sloped star with no base, grid supports and a brim. It waits on Omar's yes and color (3d-models #818)
+- 2026-10-28 — split-10 iteration 4: dots sunk into every cut face so each version can be told apart, then Omar's yes in green, the send, and a 68-minute print with every piece whole; its bed outline for the hub's drawing. Judging it waits on Omar (bikar #351, 3d-models #808, #809, #810, #811, #812, #813)
+- 2026-10-27 — split-10, the flange coaster's loose pieces one per setting beside a stock piece: built, then a 45° slope under each flange and every fit tried looser and tighter (iteration 2), then the middle pieces pinned in the centre with an even ring (iteration 3); approved, sent in green and printed in about 67 minutes (bikar #349, #350; 3d-models #799, #800, #803, #805, #806)
+- 2026-10-27 — split-09, the flange coaster's two halves only, two of each, the most one bed holds; held until split-10 answers (3d-models #798)
+- 2026-10-27 — The spinner middle piece: two research passes and a checker's combined design to act on (3d-models #804)
+- 2026-10-26 — split-07, the cut-pieces flange coaster: the bed picture shaded by height so cut halves read as halves, then Omar's yes in green, the send, and a 2 h 38 min print with its log and timelapse on the page. Judging it waits on Omar (3d-models #794, #795, #796, #797)
 - 2026-10-25 — Cut pieces, the third step: bikar's slide on a half, in the cookbook and the design (bikar #348, 3d-models #792); split-07 rebuilt as the cut-pieces plate, every loose piece cut in two and joined by pins or a slide, sliced at about 137 minutes and 36 g (3d-models #793)
 - 2026-10-25 — Cut pieces, first two of three steps: the design for cutting each loose piece in two so both faces print on the bed (D-120), then bikar's cut and pins on a half, each in the cookbook and the design doc (3d-models #775, #788, #789; bikar #346, #347)
 - 2026-10-25 — split-07, the whole flange coaster with a 0.7 mm socket wall, proposed and sliced; iteration 2 moved the inner ring of pins to 13.0 mm, off the hex pieces' points. It now waits for the slide, to be rebuilt as the cut-pieces plate (3d-models #787, #790)

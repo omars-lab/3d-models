@@ -11,20 +11,20 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
 consturciotn and move back to split coasters and split inflills"), so they come first.
 
-1. **Reprint split-10 with dots, then carry each answer into the flange coaster.** Omar,
-   2026-10-27, on split-07's loose pieces: the stars' faces curve, the middle has a "webbed duck
-   feel", the "dovetail kites are really loose". [split-10](../../design/plates/split-10.md)
-   brackets each fit both ways beside a stock piece. Its first print went out with no labels, and
-   Omar will not judge it until a reprint carries them ("i don't want to test anythign unitl we
-   repreint with lavles"), so iteration 4 puts dots on every cut face. Waits on Omar's yes and
-   color. Its answers set the next whole coaster's params; split-09 (the halves only) is held
-   until then.
-2. **A slope under the flange step, in bikar.** Each cut half prints face down, and the band under
-   the frame's lip steps 0.8 mm out over air above the 0.6 mm face; at a star's points it sags and
-   the face edge flares (split-07). split-10 tries supports under it, which leave marks to pick
-   off. The lasting fix is a 45° slope under the step in the split-flange file, so the overhang
-   prints with no support. A bikar change; worth doing whichever way split-10's stars answer,
-   unless STAR-WHOLE shows the cut alone caused it.
+Two sessions share this loop (agreed 2026-10-31). The print session owns every send, watch and
+print log, and any plate built or rebuilt for a print. The records session writes the print
+records and does the rest. Each item says whose it is.
+
+1. **Write hexfit-1's print record** (records session). Both answers are in: 4 dots (0.01 mm a
+   side) holds best, and the slot depth stays the same. Omar's comment on the page says "both
+   rock". Write the record with the review-print skill, then answer that comment. Found 2026-10-29.
+2. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
+   answers to its five questions on the hub and on his "pins of 6" comment. The records session
+   writes the record, and the print session builds the next plate from it.
+   [split-10](../../design/plates/split-10.md) tries each loose-piece fit both ways beside a stock
+   piece. Its answers set the next whole coaster's settings, and split-09 (the halves only) is held
+   until then. The question came from Omar on 2026-10-27, about split-07's loose pieces: the stars'
+   faces curve, the middle has a "webbed duck feel", and the "dovetail kites are really loose".
 3. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
    than the pin), keeping only stock and gap 0.08. Put them on the next kite plate once split-10
@@ -81,12 +81,20 @@ Sending a print and which filament to load.
   2026-10-15 and was judged and recorded on 2026-10-22 (3d-models #748–#751). split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
-- **Send [split-07](../../design/plates/split-07.md), the whole flange coaster with every loose
-  piece cut in two and joined** — split-06 again with the 0.7 mm wall Omar picked on split-08
-  (D-119), and each loose piece cut at its middle and printed as two face-down halves: pins on the
-  middle, kites and stars, a slide on the hexagons and outer pieces (D-120). One bed, about 137
-  minutes and 36 g. Rebuilt 2026-10-25, sent and printed. Waits on Omar judging the pieces off
-  the bed, then its print record.
+- **Judge [split-07](../../design/plates/split-07.md), the whole flange coaster with every loose
+  piece cut in two and joined.** It is split-06 again with the 0.7 mm wall Omar picked on split-08
+  (D-119). Each loose piece is cut at its middle and printed as two face-down halves, with pins on
+  the middle, kites and stars and a slide on the hexagons and outer pieces (D-120). It printed on
+  2026-10-26. It waits on Omar judging the pieces off the bed (8 questions on the hub). Then the
+  records session writes its print record, and any reprint goes to the print session.
+- **[star-1](../../design/plates/star-1.md), the sloped star with no base** (print session) — built
+  2026-10-28 (3d-models #818). Omar said yes to green (#839), and it was sent on 2026-10-31. The
+  print session is watching it and will ship its sent page and print log together. After that it
+  waits on Omar judging it, and the records session writes its print record.
+- **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
+  is settled. Then each one needs Omar's yes before the print session sends it.
+- **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30, and its
+  page still has one question open for Omar.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
