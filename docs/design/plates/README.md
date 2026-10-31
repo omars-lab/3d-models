@@ -20,7 +20,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [star-1](star-1.md) | proposed | 4 | 0.3 | 13.23 | ok | Does a base on the bed under the flange coaster's sloped star (grid supports or a brim) give it a cleaner bottom and sharper tips than no base, and which one? |
+| 1 | [star-1](star-1.md) | approved | 4 | 0.3 | 13.23 | ok | Does a base on the bed under the flange coaster's sloped star (grid supports or a brim) give it a cleaner bottom and sharper tips than no base, and which one? |
 | 2 | [sheets-04g-fit3](sheets-04g-fit3.md) | proposed | 10 | 1.4 | 7.37 | watch | Does the 0.025 mm middle piece win again beside its two controls in a fresh coaster, and does a 0.075 mm kite go in easier than the 0.05 one and still stay in? |
 | 3 | [theme-night-sky-11600](theme-night-sky-11600.md) | waiting | 1 | 0.2 | 6.39 | ok | Night sky, one of its 4 plates: do its Kite ×10 come out as the theme draws them, in PLA Matte Marine Blue (11600)? |
 | 4 | [stud-1](stud-1.md) | waiting | 6 | 1.0 | 5.75 | ok | How far apart should a split coaster's studs be: does a slice of split-01's lip coaster hold together and line up with its studs 25, 15 or 10 mm apart? |
