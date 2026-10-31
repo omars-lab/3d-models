@@ -2,7 +2,7 @@
 plate: star-1
 recipe: star-1.yaml
 iteration: 5
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does a base on the bed under the flange coaster's sloped star (grid supports or a brim) give it a cleaner bottom and sharper tips than no base, and which one?"
@@ -94,6 +94,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-10-31 | approved | Omar, in chat: "go star 1 in green" | iteration 5 @ c4106309d3 in #00AE42 | |
 
 ## Timeline
 
