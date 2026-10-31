@@ -661,6 +661,16 @@ def self_blob(root: str, path: str, staged: set[str], at_commit: bool) -> tuple[
 #: the verdict depend on whether someone had run `make`.
 SCAN_SKIP_DIRS = frozenset({".git", "node_modules", "build", "dist", ".venv", "__pycache__"})
 
+
+def is_checkout(path: str) -> bool:
+    """A folder with its own `.git` is another checkout, gated by its own run.
+
+    An agent worktree under `.claude/worktrees/` holds a full copy of the docs at
+    whatever commit it branched from; scanning it judged a week-old copy against
+    today's files and blocked unrelated commits (make-stencil, 2026-10-30).
+    """
+    return os.path.exists(os.path.join(path, ".git"))
+
 #: A repo name that means "your repo here". The bare form `repo:path:L10` is how
 #: this rule is *taught* — in CLAUDE.md and in the skill — and a teaching example
 #: is not a claim about a file. Recognising one reserved name is the whole
@@ -737,7 +747,11 @@ def markdown_files(root: str) -> list[tuple[str, str]]:
     """
     out: list[tuple[str, str]] = []
     for dirpath, dirnames, files in os.walk(root):
-        dirnames[:] = sorted(d for d in dirnames if d not in SCAN_SKIP_DIRS)
+        dirnames[:] = sorted(
+            d
+            for d in dirnames
+            if d not in SCAN_SKIP_DIRS and not is_checkout(os.path.join(dirpath, d))
+        )
         for name in sorted(files):
             if not name.endswith(".md"):
                 continue
@@ -1560,6 +1574,8 @@ def self_test() -> int:
             "Write a pointer as `repo:path:L137` — this one names no file.\n",
         )
         write("node_modules/pkg/README.md", 'junk `3d-models:Makefile:L99999 "nope"`\n')
+        write("wt/agent/.git", "gitdir: elsewhere\n")
+        write("wt/agent/docs/old.md", 'stale `3d-models:Makefile:L99999 "nope"`\n')
         git("add", "-A")
         git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "base")
         head = run_git(tmp, "rev-parse", "HEAD")
@@ -1576,8 +1592,9 @@ def self_test() -> int:
             [("docs/map.md", 1, "Makefile", 2)],
         )
         expect(
-            "...so the teaching placeholder and node_modules are both left out",
-            {c.doc for c in found} & {"docs/teaching.md", "node_modules/pkg/README.md"},
+            "...so the teaching placeholder, node_modules and a nested checkout are left out",
+            {c.doc for c in found}
+            & {"docs/teaching.md", "node_modules/pkg/README.md", "wt/agent/docs/old.md"},
             set(),
         )
         expect(

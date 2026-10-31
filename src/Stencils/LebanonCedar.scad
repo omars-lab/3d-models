@@ -5,7 +5,7 @@
 // The cedar's tips touch both red stripes, and it keeps its own shape (about as wide as tall). The cedar outline is the outer edge of the
 // green path in Wikimedia's Flag_of_Lebanon.svg (public domain, 2880 x 1920 px, kept here), with
 // the white details inside it left out so the stencil hole is one opening. It comes in as a
-// polygon from lebanon-cedar-outline.scad (make_cedar_outline.py writes it): Bambu Studio would
+// polygon from lebanon-cedar-outline.scad (the make-stencil skill's svg_outline.py writes it): Bambu Studio would
 // not slice the card with the SVG imported directly.
 //
 // flag = "page" (Omar, 2026-10-30: "a flag that is 8.5 in tall by 11 wide"): the whole sheet is the
