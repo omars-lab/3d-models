@@ -1,0 +1,85 @@
+# star-2 — the sloped star with three pins on a triangle round its middle, at three pin sizes
+#
+# Omar, 2026-11-01, on star-1's hub page: "overall, on all the stars, we should shift to a 3 pin
+# model in an equilateral triangle, midpoint of triangle should be midpoint of star", and "5 & 6
+# were hard to take off, 3 and 4 might have been best". So every star here is star-1's SLOPE-GRID
+# (the sloped star on grid supports), its one middle pin swapped for three on a triangle centred
+# on the star (`pins_star 3, pins_star_ring 1`, bikar's new `pins <n> ring 1`). The brim is out.
+#
+#   version  pin     band round each hole   triangle side   tells (copy 1 / copy 2)
+#   TRI-12   1.2 mm  0.9 mm                 2.37 mm         1 dot cut face / 1 dot bottom
+#   TRI-10   1.0 mm  0.6 mm                 2.80 mm         2 dots cut face / 2 dots bottom
+#   TRI-08   0.8 mm  0.6 mm                 3.23 mm         3 dots cut face / 4 dots cut face
+#
+# The triangle sides are bikar's, measured on this star. 1.2 mm is the pin split-06, hexfit-1 and
+# star-1 printed; 1.0 and 0.8 mm pins and the 0.6 mm band are new here: a smaller pin lets the
+# triangle sit wider, which should stop the halves turning, but a 0.8 mm pin is two lines across
+# and may snap. The 1-pin control is star-1's two SLOPE-GRID stars, already printed. The stock
+# star (no slope) is left out: a star half's faces take only so many dots, and six pieces use them.
+#
+# Every piece is told apart by its dots: no star half has room for a carved id (bikar's refusal,
+# in each `no_id:`). The dot count and face each piece has were measured to fit on this star.
+#
+# Each star is a `group:` of its own, so grid supports round one never run into its neighbour's.
+#
+# No color here: the send picks it.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/star-2.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SR2
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 1.2, pin_wall: 0.9, dots_star: 1, dots_bottom: 0 }
+    count:  1
+    label:  TRI-12-1
+    group:  "TRI-12, copy 1"
+    no_id:  "1 dot on each half's cut face. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 1.2, pin_wall: 0.9, dots_star: 1, dots_bottom: 1 }
+    count:  1
+    label:  TRI-12-2
+    group:  "TRI-12, copy 2"
+    no_id:  "1 dot on the lower half's bottom, the face on the table. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 1.0, pin_wall: 0.6, dots_star: 2, dots_bottom: 0 }
+    count:  1
+    label:  TRI-10-1
+    group:  "TRI-10, copy 1"
+    no_id:  "2 dots on each half's cut face. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 1.0, pin_wall: 0.6, dots_star: 2, dots_bottom: 1 }
+    count:  1
+    label:  TRI-10-2
+    group:  "TRI-10, copy 2"
+    no_id:  "2 dots on the lower half's bottom, the face on the table. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 0.8, pin_wall: 0.6, dots_star: 3, dots_bottom: 0 }
+    count:  1
+    label:  TRI-08-1
+    group:  "TRI-08, copy 1"
+    no_id:  "3 dots on each half's cut face. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, pins_star: 3, pins_star_ring: 1, pin: 0.8, pin_wall: 0.6, dots_star: 4, dots_bottom: 0 }
+    count:  1
+    label:  TRI-08-2
+    group:  "TRI-08, copy 2"
+    no_id:  "4 dots on each half's cut face. bikar: bottom id fits nowhere on the bed face of either half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1", support_type: "normal(auto)" }
