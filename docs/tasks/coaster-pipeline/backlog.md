@@ -88,9 +88,17 @@ Sending a print and which filament to load.
   2026-10-26. It waits on Omar judging the pieces off the bed (8 questions on the hub). Then the
   records session writes its print record, and any reprint goes to the print session.
 - **[star-1](../../design/plates/star-1.md), the sloped star with no base** (print session) — built
-  2026-10-28 (3d-models #818). Omar said yes to green (#839), and it was sent on 2026-10-31. The
-  print session is watching it and will ship its sent page and print log together. After that it
-  waits on Omar judging it, and the records session writes its print record.
+  2026-10-28 (3d-models #818). It printed in green on 2026-10-31 (#841). Omar's first comments on
+  2026-11-01: grid supports best, brim hard to take off, copies could not be told apart, move every
+  star to three pins on a triangle. Those comments became star-2. It still waits on Omar answering
+  row 1 on the hub, then the records session writes its print record.
+- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle**
+  (print session sends) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0 and 0.8 mm pins,
+  two copies each, all on grid supports, each copy told apart by its dots. Waits on Omar's yes and
+  color on its page.
+- **The hub's judging page shows the bed drawing, not the supports** — Omar on star-1 (2026-11-01)
+  asked why he could not see the supports. The page uses the plate's first picture; make it pick
+  the first-layer picture when there is one. A hub PR.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
 - **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30, and its
