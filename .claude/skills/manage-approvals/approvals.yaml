@@ -127,6 +127,9 @@ star-1:
   - {iteration: 3, recipe: '8baca509997e', date: '2026-10-28'}
   - {iteration: 4, recipe: 'bbc98a21e01a', date: '2026-10-28'}
   - {iteration: 5, recipe: '00465c55e409', date: '2026-10-28'}
+star-2:
+  - {iteration: 1, recipe: '4692dac5627b', date: '2026-11-01'}
+  - {iteration: 2, recipe: '1d6f4d36a62f', date: '2026-11-01'}
 stud-1:
   - {iteration: 1, recipe: '030637fb41f8', date: '2026-10-08'}
   - {iteration: 2, recipe: '27cdb1af502b', date: '2026-10-09'}
