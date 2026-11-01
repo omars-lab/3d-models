@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-01 — star-2 built from Omar's star-1 comments: bikar can now put three pins on a circle round a piece's middle (a triangle centred on the star), and the plate tries it at three pin sizes, two copies each on grid supports, each copy with its own dots. It waits on Omar's yes and color (bikar #364, 3d-models #842)
 - 2026-10-29 — hexfit-1's two after-print answers saved from the hub: 4 dots (0.01 mm a side) holds best, and the slot depth stays the same. bikar's dovetail slide now defaults to a 0.01 mm gap a side. Its print record is still to write (3d-models #828, bikar #356)
 - 2026-10-29 — split-06's print record, from what Omar said off the bed (3d-models #823)
 - 2026-10-28 — hexfit-1, the hexagon dovetail fit plate: bikar fits from stock down past zero, with dots on the bed face and a slot as deep as the rail, then the plate, Omar's yes in green, the send and the print to the end (bikar #352, 3d-models #814, #816, #817, #819)
