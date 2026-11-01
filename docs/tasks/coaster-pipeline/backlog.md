@@ -15,9 +15,11 @@ Two sessions share this loop (agreed 2026-10-31). The print session owns every s
 print log, and any plate built or rebuilt for a print. The records session writes the print
 records and does the rest. Each item says whose it is.
 
-1. **Write hexfit-1's print record** (records session). Both answers are in: 4 dots (0.01 mm a
-   side) holds best, and the slot depth stays the same. Omar's comment on the page says "both
-   rock". Write the record with the review-print skill, then answer that comment. Found 2026-10-29.
+1. **The hexagon pieces' halves still rock up and down.** On hexfit-1 the side-to-side play is
+   settled (0.01 mm a side, now bikar's default), but Omar said "both rock" of the stock piece
+   and the one with the slot cut to the rail's depth, so depth is not the cause. Ideas not yet
+   built: a taller rail, or a pin beside the dovetail. A plate of hex pieces trying them beside
+   stock. Found by hexfit-1's print record, 2026-11-01.
 2. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
    answers to its five questions on the hub and on his "pins of 6" comment. The records session
    writes the record, and the print session builds the next plate from it.

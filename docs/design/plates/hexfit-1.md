@@ -3,9 +3,9 @@ plate: hexfit-1
 print_log: '[[print-logs/hexfit-1|print log]]'
 recipe: hexfit-1.yaml
 iteration: 3
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-28-hexfit-1]
 answers: "How tight can the hexagon piece's dovetail be, down past zero, and still slide on and hold; and does a slot as deep as the rail hold better than one a layer deeper?"
 kind: new
 maturity: experiment
@@ -118,3 +118,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-28 | proposed: on Omar's split-10 note that none of the hexagons was tight, and his picks "Dovetail, past zero", "Yes, add one" (the slot as deep as the rail) and "Dots on the bottom"; 16 pieces | this page |
 | 2026-10-28 | sent — by `bambu print send`; spends the approval of 2026-10-28, iteration 3 @ 65814017c0 in #00AE42 | this page |
+| 2026-10-28 | printed — all 15 layers, 22:44 to 23:31 UTC in green; judged by hand: 4 dots (0.01 mm a side) held best, 1 dot "too loose", 6 dots "too tight", and the slot cut to the rail's depth rocked the same as stock ("both rock"). Next: bikar's dovetail defaults to 0.01 mm a side (bikar #356); the rocking is still open | [the record](../../prints/2026-10-28-hexfit-1/index.md) |

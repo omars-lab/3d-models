@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) held best; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-10-28-hexfit-1](prints/2026-10-28-hexfit-1/index.md))
 - On the flange coaster's pinned slice (1.2 mm pins, 0.25 mm play, split-06's pin rings), a 0.9 mm wall round each pin socket left the set shaking when closed; 0.7 and 0.45 mm walls did not shake, and Omar picked the 0.7 mm set. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-25-split-08](prints/2026-10-25-split-08/index.md))
 - On the whole flange coaster with 1.2 mm pins in four rings and a filled disc round each pin (0.9 mm socket wall), the hex pieces wiggled more than the kites: the discs cut the hex pieces' hidden ledge at the point and both shoulders, so less of each is held in the groove. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, setting 8, sliced for the gold Textured PEI plate. ([2026-10-24-split-06](prints/2026-10-24-split-06/index.md))
 - On the flange coaster's pinned slice at a 0.10 mm piece gap, 1.2 mm pins placed at least 6 mm apart round every outer edge and point (6 in a slice, 31 on a whole coaster) hold the halves better than 1.0 mm pins (11 in a slice, 54 on a whole coaster): both came out good, and the 1.0 mm set shakes a bit. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-23-split-05](prints/2026-10-23-split-05/index.md))
@@ -56,6 +57,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-28-hexfit-1](prints/2026-10-28-hexfit-1/index.md)
+
+- **Plate:** [hexfit-1](design/plates/hexfit-1.md) — the hexagon dovetail, from stock down past zero
+- **Lesson:** On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) held best; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01 (standard flow, hardened steel)
+- **Pieces:** 8 (1 keep, 6 drop, 1 not-judged)
+- **What happened:** Omar: "4 might have been the best, 1 too loose, 6 too tight"; on rocking, "Same" and "both rock".
+- **Why:** Side to side is the dovetail gap, settled at 0.01 mm. The up-and-down rock is not the slot depth (8 dots rocked the same as stock); what causes it is not yet known.
+- **What it changed:** Bikar's dovetail now defaults to 0.01 mm a side (bikar #356). The rock is still open: a taller rail or a pin beside the dovetail are the ideas to try, neither built yet.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/hexfit-1-media/bed.png)
+
+![render, not a photo: bed](design/plates/hexfit-1-media/bed.png)
 
 ### [2026-10-25-split-08](prints/2026-10-25-split-08/index.md)
 
@@ -365,7 +379,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-24 records; 0 measured with a tool, so no bet has moved yet.
+25 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
