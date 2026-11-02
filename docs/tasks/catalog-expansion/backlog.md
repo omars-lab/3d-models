@@ -335,6 +335,12 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
      [done.md](done.md)). The radial coaster now splits into a straps body and a Gold body, the top
      fillet kept. Printing it in more than one color still waits on a first-layer coupon, which is
      Omar's to print (write the bet with `calibrate` first).
+   - **Waiting on Omar: the look and the colors.** D-081 settled only the `orbit` grouping and the
+     solid fill. The [multicolor design](../../design/coaster/multicolor-design.md#3-the-look-flush-or-lowered-fills)
+     §3 leaves two calls to Omar: fills flush with the lines (built, passes every gate) or lowered
+     below them (fewer color changes, needs a parser and kernel change first), and which colors.
+     Its §10 step 1 is Omar looking at the bikar #261 picture. From the session task board,
+     2026-11-02.
 6. **Lines and loose pieces in two colors, on any coaster; plus fill height and "assemble your own
    coaster".** Omar, 2026-09-29, review thread 3kqnku, asked three things: the fill height at either
    end, loose inner pieces for a printed frame, and a guided page. On 2026-10-01 (thread nhtq79, on

@@ -21,8 +21,10 @@ records and does the rest. Each item says whose it is.
    built: a taller rail, or a pin beside the dovetail. A plate of hex pieces trying them beside
    stock. Found by hexfit-1's print record, 2026-11-01.
 2. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
-   answers to its five questions on the hub and on his "pins of 6" comment. The records session
-   writes the record, and the print session builds the next plate from it.
+   answers to its five questions on the hub and on his reply to the "pins of 6" page comment on
+   the hub (thread `t_1cc863`). The records session writes the split-10 and split-07 records. The
+   print session builds the next split-10 plate only after both are written. That plate needs
+   Omar's yes before it is sent (updated 2026-11-02).
    [split-10](../../design/plates/split-10.md) tries each loose-piece fit both ways beside a stock
    piece. Its answers set the next whole coaster's settings, and split-09 (the halves only) is held
    until then. The question came from Omar on 2026-10-27, about split-07's loose pieces: the stars'
@@ -54,7 +56,11 @@ records and does the rest. Each item says whose it is.
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-8. **Standard-size plate (P5.2)** — only after item 5 settles the CAL-CST numbers (board #6).
+8. **hexfit-1's print record drops Omar's hedge.** He said "4 might have been the best, 1 too
+   loose, 6 too tight", but the record's lesson says 4 dots "held best" and the text says he
+   "named it the best", as if he were sure. Put his "might have been" back in the next change to
+   [the record](../../prints/2026-10-28-hexfit-1/index.md), lesson and timeline both. Records session. Found 2026-11-02.
+9. **Standard-size plate (P5.2)** — only after item 5 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
@@ -83,28 +89,53 @@ Sending a print and which filament to load.
   2026-10-15 and was judged and recorded on 2026-10-22 (3d-models #748–#751). split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
+- **The split design's open calls, and whether to buy a SuperTack plate.** The
+  [split-with-studs design](../../design/pieces/split-with-studs-design.md#10-open-calls-for-omar)
+  §10 still lists calls 1 to 5 as Omar's: which bed plate gives the two faces, the edge
+  round-over, glue or press fit, how many studs, and where the split lives. Call 1's recommended
+  option is a Cool Plate SuperTack, which is a purchase, so buying one is part of that call. Call 6,
+  how a split coaster holds its loose pieces, is decided (D-100). Later work leans on some of
+  these (the stud gap is D-116), but the design has no
+  Decided line for them yet. Waits on Omar. From the session task board (#539, call 6 from #556),
+  2026-11-02.
+- **Judge the rest of [sheets-04g](../../design/plates/sheets-04g.md)'s pieces.** It printed in
+  green on 2026-10-04, and Omar judged two kinds of piece by hand: the small kites too tight, the
+  middle piece too loose. The outer pieces and the coaster are still `not-judged` in
+  [the record](../../prints/2026-10-04-sheets-04g/index.md). Waits on Omar's hands on the pieces
+  off the bed; then the records session fills in the verdicts. From the session task board,
+  2026-11-02.
 - **Judge [split-07](../../design/plates/split-07.md), the whole flange coaster with every loose
   piece cut in two and joined.** It is split-06 again with the 0.7 mm wall Omar picked on split-08
   (D-119). Each loose piece is cut at its middle and printed as two face-down halves, with pins on
   the middle, kites and stars and a slide on the hexagons and outer pieces (D-120). It printed on
   2026-10-26. It waits on Omar judging the pieces off the bed (8 questions on the hub). Then the
   records session writes its print record, and any reprint goes to the print session.
+- **split-06's remaining questions** — its print record is written (3d-models #823), but six
+  pieces are not judged yet and the hexagons are marked "adjust". Waits on Omar answering those
+  questions on the hub; then the records session adds them to the record. Found 2026-11-02.
 - **[star-1](../../design/plates/star-1.md), the sloped star with no base** (print session) — built
   2026-10-28 (3d-models #818). It printed in green on 2026-10-31 (#841). Omar's first comments on
   2026-11-01: grid supports best, brim hard to take off, copies could not be told apart, move every
-  star to three pins on a triangle. Those comments became star-2. It still waits on Omar answering
-  row 1 on the hub, then the records session writes its print record.
-- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle**
-  (print session sends) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0 and 0.8 mm pins,
-  two copies each, all on grid supports, each copy told apart by its dots. Omar said yes in green on
-  2026-11-01 ("yes in green"), recorded on its page; the print session sends it.
-- **The hub's judging page shows the bed drawing, not the supports** — Omar on star-1 (2026-11-01)
-  asked why he could not see the supports. The page uses the plate's first picture; make it pick
-  the first-layer picture when there is one. A hub PR.
+  star to three pins on a triangle. Those comments became star-2. The print is finished. It waits
+  on Omar taking the halves off the bed and judging them on the hub, whose judging page now shows
+  the first-layer picture with supports and brim (3d-models #847). Then the records session writes
+  its print record (updated 2026-11-02).
+- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle — printed,
+  waiting to be judged** (print session) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0
+  and 0.8 mm pins, two copies each, all on grid supports, each copy told apart by its dots. Omar
+  said yes in green on 2026-11-01. It was sent in green on 2026-11-02 at 18:05 UTC and finished at
+  18:29 UTC with every piece in place; its print log and timelapse are on the page. It waits on
+  Omar taking the halves off the bed and judging them on the hub. Then the print session writes
+  its print record.
+- **The judging page's first-layer picture has no piece numbers or key.** On star-1 the three
+  bases tell the columns apart, but on star-2 all six stars sit on identical supports. After
+  star-2 prints, check whether Omar can tell the pin sizes apart on the hub. If not, draw the key
+  numbers onto the first-layer picture (`tools/print_review.py`) or fix the caption in the hub.
+  Follow-up to 3d-models #847. Found 2026-11-02.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
-- **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30, and its
-  page still has one question open for Omar.
+- **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30. Its
+  record waits on Omar answering its one open question on the hub (checked 2026-11-02).
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
@@ -142,7 +173,10 @@ Sending a print and which filament to load.
   Omar's. Two things to know first: every plate cuts its pieces at `gap: 0`, the fit sheets-04g
   showed off, so printing [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) first lets
   these plates take its gaps as a new iteration; and Neon City (13903) is a two-color spool, so
-  its pieces will not all match the picture.
+  its pieces will not all match the picture. After that, check the theme scores against real
+  customers: the scores on the [themes page](../../design/coaster/themes/gbv-themes.md) come from
+  the review-theme skill's made-up personas, not from buyers, so they rank ideas but do not say
+  what sells. That check waits on the first real orders (session task board, 2026-11-02).
 - **Did [minis-02](../../design/plates/minis-02.md) print?** It went out from Bambu Studio on
   2026-09-25 and has no record. Its page has the tick boxes; a yes means writing the record.
   minis-01, sent the same day, is answered: Omar does not remember, so it is printed again with

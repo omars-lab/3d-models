@@ -30,8 +30,21 @@ Left by that pass:
    studio's pattern list is read from that table, so nothing merged since 2026-10-10, the 0.01 mm
    dovetail gap included, reaches it. Unpausing the project or fixing the secret is Omar's;
    after that, re-run the latest failed run. Found 2026-10-29.
-4. **Remove the merged hub worktree `3d-model-hub-owed`.** Its branch (waiting-on-you) merged as
-   3d-model-hub #21; delete the worktree and the local branch. Found 2026-10-29.
-5. **Check the public gallery is current.** Compare the gh-pages deploy date with the newest
-   coaster cards (CS-16 and CS-17, added 2026-10-06), and run `make deploy` if the site is behind.
-   Found 2026-10-29.
+4. **Waiting on Omar: deploy the public gallery.** Checked 2026-11-02: gh-pages was last deployed
+   2026-09-30 (from master 42ef7de), so the split coaster cards CS-16 and CS-17 (#583, #591, added
+   2026-10-06) and everything since are not live. `make deploy` changes the public site, so it
+   runs on Omar's yes. Found 2026-10-29.
+5. **Warn when the gallery falls behind master.** Nothing keeps the gallery current: no hook or
+   Make target deploys it, and nothing says it is stale. `status.html` shows the last deploy, but
+   only to someone who opens it, and five weeks went by unseen. Add a check to `make validate`
+   that compares the gh-pages tip's source commit with master and prints a warning (not a
+   failure) when files the gallery ships have changed for more than a week. Deploying itself
+   stays a manual step, because it publishes. Found 2026-11-02.
+6. **Waiting on Omar: which leftover backup copies to drop.** The duplicate `-pm` and
+   `-master-ro` worktrees here, hifth's merged remote branches and review-md's two branches hold
+   nothing their main lacks, but each removal is his call. The list is in the
+   [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
+   Found by the 2026-10-08 pass, still open 2026-11-02.
+7. **Waiting on Omar: bikar's pre-push hook runs the full test suite even for a tag on a commit
+   main already passed.** An edit to skip it was refused as a way round a check, so whether to
+   skip it is his call. Found 2026-09-21, still open 2026-11-02.

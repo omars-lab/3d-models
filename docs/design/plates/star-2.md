@@ -1,8 +1,9 @@
 ---
 plate: star-2
+print_log: '[[print-logs/star-2|print log]]'
 recipe: star-2.yaml
 iteration: 2
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "With three pins on a triangle round the sloped star's middle, do the star's halves close and stop turning, and which pin size (1.2, 1.0 or 0.8 mm) holds best without snapping?"
@@ -88,6 +89,14 @@ The supports stay out of the bottom dots. This is TRI-10 copy 2's lower half on 
 
 ![The first layer of TRI-10 copy 2's lower half, close up: a pink star outline with two clean round holes in it, grey support lines round the outside only](star-2-media/bottom-dots.png)
 
+## The print
+
+The print as the chamber camera saw it: 13 pictures from 18:05 to 18:29 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![star-2 printing, as the chamber camera saw it](star-2-media/timelapse.webp)
+
+![star-2 finished, on the bed](star-2-media/finished.webp)
+
 ## Cost and risk
 
 **About 20 minutes and 2.3 g of PLA** (the slicer's estimate), one bed, no prime tower, one color.
@@ -108,10 +117,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-01 | approved | Omar, in chat: "yes in green" | iteration 2 @ 0f2e32e976 in #00AE42 | |
+| 2026-11-01 | approved | Omar, in chat: "yes in green" | iteration 2 @ 0f2e32e976 in #00AE42 | sent 2026-11-02 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-11-01 | proposed: on Omar's star-1 comments, "shift to a 3 pin model in an equilateral triangle" and "3 and 4 might have been best"; three pin sizes on a triangle, all on grid supports, six stars | this page |
+| 2026-11-02 | sent — by `bambu print send`; spends the approval of 2026-11-01, iteration 2 @ 0f2e32e976 in #00AE42 | this page |
