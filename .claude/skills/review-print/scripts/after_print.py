@@ -358,6 +358,18 @@ def waiting(plates: Path, prints: Path) -> list[dict]:
     return out
 
 
+def bed_shown(pictures: list[str]) -> str | None:
+    """The bed picture the judging page shows when no piece has one of its own: the slice's first
+    layer when the page lists it, since it draws the supports, brim and skirt the pieces came off
+    (Omar on star-1, 2026-11-01: "Why don't I see the supports that were actually printed here?"),
+    else the bed drawing, which shows the pieces alone."""
+    for name in ("first-layer.png", "bed.png"):
+        hit = next((p for p in pictures if p.endswith(name)), None)
+        if hit:
+            return hit
+    return None
+
+
 def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
     page, _, data, body = read_page(plate, plates)
     rows, problems = rows_of(plate, plates)
@@ -374,7 +386,7 @@ def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
         if r["every_piece"]:
             r["groups"] = [{"these": [{"plate": plate, "id": k, **v} for k, v in info[plate].items()],
                             "these_text": r["pieces"], "against": [], "against_text": ""}]
-    bed = next((p for p in data.get("pictures") or [] if p.endswith("bed.png")), None)
+    bed = bed_shown(data.get("pictures") or [])
     return {"plate": plate, "title": pg.title_of(body), "stage": data.get("stage"),
             "bed_picture": str((plates / bed).relative_to(ROOT)) if bed else None,
             "rows": rows, "answers": judged(body), "notes": problems}
@@ -480,6 +492,12 @@ def self_test() -> int:
         check("page around it untouched", text.startswith(head + after) and text.endswith(tail), True)
         check("the gate still reads the questions", len(pg.after_print(body)[0]), 1)
         check("stage untouched", "stage: sent" in text, True)
+
+    # the picture shown when no piece has its own: the first layer (supports drawn) wins over the bed
+    check("first layer over bed", bed_shown(["x-media/bed.png", "x-media/first-layer.png"]),
+          "x-media/first-layer.png")
+    check("bed when no first layer", bed_shown(["x-media/on-paper.png", "x-media/bed.png"]), "x-media/bed.png")
+    check("FAIL: neither listed gives none", bed_shown(["x-media/on-paper.png"]), None)
 
     # the bed map is trusted only when its labels match the recipe's items
     items = [{"label": "STOCK A", "id": "3"}, {"label": "55 A", "id": "8"}]
