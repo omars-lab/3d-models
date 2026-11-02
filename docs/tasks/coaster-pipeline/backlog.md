@@ -127,11 +127,6 @@ Sending a print and which filament to load.
   18:29 UTC with every piece in place; its print log and timelapse are on the page. It waits on
   Omar taking the halves off the bed and judging them on the hub. Then the print session writes
   its print record.
-- **The judging page's first-layer picture has no piece numbers or key.** On star-1 the three
-  bases tell the columns apart, but on star-2 all six stars sit on identical supports. After
-  star-2 prints, check whether Omar can tell the pin sizes apart on the hub. If not, draw the key
-  numbers onto the first-layer picture (`tools/print_review.py`) or fix the caption in the hub.
-  Follow-up to 3d-models #847. Found 2026-11-02.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
 - **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30. Its
