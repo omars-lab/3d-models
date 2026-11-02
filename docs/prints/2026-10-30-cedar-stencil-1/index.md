@@ -14,7 +14,7 @@ profile:
   layer_mm: 0.2
   slicer_profile: "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle"
   ambient_c: ~
-  instrument: "none; used in class, answered in chat"
+  instrument: "none; Omar tried it, answered in chat"
 pins:
   bikar_ref: 8392ad19bc131b6d4fa6b8be2c018033d503324a
   self_ref: ~
@@ -31,14 +31,14 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "A 0.6 mm, three-layer PLA card sized to the paper works as a pre-K tracing stencil: Omar said \"stencil was good\". 0.4 mm nozzle, 0.20 mm layers"
+  lesson: "A 0.6 mm, three-layer PLA card sized to the paper works as a tracing stencil, on Omar's word: \"stencil was good\". 0.4 mm nozzle, 0.20 mm layers"
   decisions: []
   symptom: "Omar, in chat: \"stencil was good\""
   cause: "Sized from the paper, with the opening grown for a crayon and the card thin enough to bend"
   next: "Print more cards for the class when Omar asks; the make-stencil skill keeps 0.6 mm as its default"
 ---
 
-Omar used the card and answered its one after-print question in chat on 2026-11-02, "stencil
+Omar tried the card and answered its one after-print question in chat on 2026-11-02, "stencil
 was good". The coaster-print session wrote it on the plate page as the "Works" answer (#850).
 
 | Question | Answer | In Omar's words |
