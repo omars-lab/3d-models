@@ -87,6 +87,14 @@ The slicer finds nothing to warn about. Any one color works.
 |---|---|---|---|
 | The card | **Do:** Peel the card off the bed and bend it gently end to end. Turn a sheet of Letter paper sideways, fold it in half side to side and open it. Lay the card on it, its top and bottom edges flush with the paper's and its middle notches on the fold. Trace the cedar opening with a crayon, then mark the four side notches with a pencil. Lift the card and measure from the cedar's tip to the top stripe mark, and from its base to the bottom one. **Look for:** Does it bend without creasing, does it lie flat on the paper, does the crayon follow the whole outline, and do the tip and base touch the stripe marks? Do any of the thin slivers between the fronds bend or tear? | It bends and springs back, it lies flat, the crayon follows the outline, and both ends touch, since the card is sized from the paper and the opening spans the white band. | Works: print more cards for the class. Slivers bend or tear: grow the opening more, which fills the narrowest gaps, or make the card thicker at 0.8 mm. Wrong stiffness: a crease means 0.8 mm, too stiff to bend means 0.4 mm. Crayon catches or misses the stripes: grow the opening more if it catches; for a gap at the stripes, check the card for shrink first. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | Works | Omar, in chat: "stencil was good" | 2026-11-02 |
+
 ## Approvals
 
 Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through the manage-approvals skill's `plate_approve.py`; a send spends the open approval, and a recipe change resets it.
