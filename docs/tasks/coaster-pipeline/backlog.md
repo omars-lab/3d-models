@@ -129,8 +129,6 @@ Sending a print and which filament to load.
   its print record.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
-- **cedar-stencil-1's print record** (print session) — the stencil printed on 2026-10-30. Its
-  record waits on Omar answering its one open question on the hub (checked 2026-11-02).
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
   [finish techniques brainstorm](../../design/printing/finish-techniques-brainstorm.md#5-open-for-omar):
   which plate the glacier plate is, and whether to start with way a (each piece cut at the
