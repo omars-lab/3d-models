@@ -96,8 +96,8 @@ Sending a print and which filament to load.
   row 1 on the hub, then the records session writes its print record.
 - **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle**
   (print session sends) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0 and 0.8 mm pins,
-  two copies each, all on grid supports, each copy told apart by its dots. Waits on Omar's yes and
-  color on its page.
+  two copies each, all on grid supports, each copy told apart by its dots. Omar said yes in green on
+  2026-11-01 ("yes in green"), recorded on its page; the print session sends it.
 - **The hub's judging page shows the bed drawing, not the supports** — Omar on star-1 (2026-11-01)
   asked why he could not see the supports. The page uses the plate's first picture; make it pick
   the first-layer picture when there is one. A hub PR.

@@ -2,7 +2,7 @@
 plate: star-2
 recipe: star-2.yaml
 iteration: 2
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "With three pins on a triangle round the sloped star's middle, do the star's halves close and stop turning, and which pin size (1.2, 1.0 or 0.8 mm) holds best without snapping?"
@@ -108,6 +108,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-01 | approved | Omar, in chat: "yes in green" | iteration 2 @ 0f2e32e976 in #00AE42 | |
 
 ## Timeline
 
