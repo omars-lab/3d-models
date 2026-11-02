@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-02 — cedar-stencil-1's print record: the 0.6 mm tracing card is kept, on Omar's "stencil was good"; the plate page now shows it printed (3d-models #851)
 - 2026-11-02 — Checked whether star-2's pin sizes can be told apart for judging: the first-layer picture shows six identical columns, but Omar judges from the pieces, whose dots name the size, so no key is drawn on the picture; the first question now says to count each star's dots before closing it, since closing hides the cut-face dots (3d-models #849)
 - 2026-11-02 — The hub's judging page shows a plate's first-layer picture, supports and brim included, when it has one, instead of the bed drawing; asked by Omar on star-1 (3d-models #847)
 - 2026-11-01 — hexfit-1's print record: 4 dots (0.01 mm a side) kept, the rest dropped but 7 dots (not judged); the slot cut to the rail's depth rocked the same as stock ("both rock")

@@ -3,9 +3,9 @@ plate: cedar-stencil-1
 print_log: '[[print-logs/cedar-stencil-1|print log]]'
 recipe: cedar-stencil-1.yaml
 iteration: 5
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-30-cedar-stencil-1]
 answers: "Can a pre-K class trace the Lebanon flag's cedar, sized to a flag that fills a sideways sheet of Letter paper, with this card?"
 kind: new
 maturity: experiment
@@ -111,6 +111,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-30 | changed: the flag now fills the sheet (11 × 8.5 in), on Omar's question; the cedar is sized to the 108 mm white band, and the loose cedar prints in the card's opening so both fit one bed | this page, the recipe |
 | 2026-10-30 | changed: the card only, not the loose cedar, and 0.6 mm thick so it bends, on Omar's asks | this page, the recipe |
 | 2026-10-30 | sent — by `bambu print send`; spends the approval of 2026-10-30, iteration 5 @ e585c10475 in #00AE42 | this page |
+| 2026-10-30 | printed — all 3 layers, 18:43 to 19:17 UTC in green; judged in use: "Works", Omar in chat on 2026-11-02, "stencil was good". Next: more cards for the class when asked | [the record](../../prints/2026-10-30-cedar-stencil-1/index.md) |
 
 ## The print
 

@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- A 0.6 mm, three-layer PLA card sized to the paper works as a pre-K tracing stencil: Omar said "stencil was good". 0.4 mm nozzle, 0.20 mm layers. ([2026-10-30-cedar-stencil-1](prints/2026-10-30-cedar-stencil-1/index.md))
 - On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) held best; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-10-28-hexfit-1](prints/2026-10-28-hexfit-1/index.md))
 - On the flange coaster's pinned slice (1.2 mm pins, 0.25 mm play, split-06's pin rings), a 0.9 mm wall round each pin socket left the set shaking when closed; 0.7 and 0.45 mm walls did not shake, and Omar picked the 0.7 mm set. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-25-split-08](prints/2026-10-25-split-08/index.md))
 - On the whole flange coaster with 1.2 mm pins in four rings and a filled disc round each pin (0.9 mm socket wall), the hex pieces wiggled more than the kites: the discs cut the hex pieces' hidden ledge at the point and both shoulders, so less of each is held in the groove. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers, setting 8, sliced for the gold Textured PEI plate. ([2026-10-24-split-06](prints/2026-10-24-split-06/index.md))
@@ -57,6 +58,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-10-30-cedar-stencil-1](prints/2026-10-30-cedar-stencil-1/index.md)
+
+- **Plate:** [cedar-stencil-1](design/plates/cedar-stencil-1.md) — the Lebanon flag's cedar, as a stencil for a pre-K class
+- **Lesson:** A 0.6 mm, three-layer PLA card sized to the paper works as a pre-K tracing stencil: Omar said "stencil was good". 0.4 mm nozzle, 0.20 mm layers.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01 (standard flow, hardened steel)
+- **Pieces:** 1 (1 keep)
+- **What happened:** Omar, in chat: "stencil was good".
+- **Why:** Sized from the paper, with the opening grown for a crayon and the card thin enough to bend.
+- **What it changed:** Print more cards for the class when Omar asks; the make-stencil skill keeps 0.6 mm as its default.
+- **Photos of the print:** none. Rendered pictures from the plate page: [on-paper](design/plates/cedar-stencil-1-media/on-paper.png), [pieces](design/plates/cedar-stencil-1-media/pieces.png), [bed](design/plates/cedar-stencil-1-media/bed.png)
+
+![render, not a photo: on-paper](design/plates/cedar-stencil-1-media/on-paper.png)
 
 ### [2026-10-28-hexfit-1](prints/2026-10-28-hexfit-1/index.md)
 
@@ -379,7 +393,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-25 records; 0 measured with a tool, so no bet has moved yet.
+26 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 
