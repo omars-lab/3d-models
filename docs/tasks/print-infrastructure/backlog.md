@@ -14,8 +14,9 @@ plate, then anything you can't see before sending, then config ergonomics.
 
 1. **The hub's plates page runs wider than a phone screen.** On a phone it scrolls sideways;
    fix the layout in 3d-model-hub so it fits at phone width, and look at it in a browser at that
-   width before calling it done. Found 2026-10-29, after the "Waiting on you" box landed
-   (3d-model-hub #21).
+   width before calling it done. The fix is in the 3d-model-hub repo; the hub runs locally at
+   http://127.0.0.1:4717. Found 2026-10-29, after the "Waiting on you" box landed
+   (3d-model-hub #21); still too wide on 2026-11-02.
 2. **A plate-packing skill: try layouts, measure the empty bed, keep the best.** Lay a plate's
    pieces out several ways, measure each with `python3 tools/plate_grade.py --fill`, and keep
    the fullest that still slices clean. Worth less since D-098 (2026-10-04): the fill bar is 0,
