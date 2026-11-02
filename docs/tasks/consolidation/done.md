@@ -2,6 +2,7 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-02 — The merged hub worktree `3d-model-hub-owed` was found already removed, with nothing left to clean up; the gallery's deploy date checked (last deployed 2026-09-30) and put on the backlog as waiting on Omar
 - 2026-10-29 — Every tool reads bikar from `~/Workspace/git/bikar`, and the `bikar-main` checkout is gone; bikar's failing pattern upload to Supabase diagnosed and put on this backlog for Omar (3d-models #824, #825)
 - 2026-10-27 — Branches across the eight repos checked again, and none held work its main lacked, so nothing needed merging. Six dead 3d-models branches deleted, each saved under `refs/snapshots/2026-10-27/`. bikar's local main brought up to date. Three old hifth branches deleted, saved on this Mac only, because pushing them would put back the pictures hifth's history rewrite removed. The worktree limit raised to 9 on Omar's word, and the hifth trap written into the skill's rules
 - 2026-10-24 — Branches and worktrees brought back to main again across the repos, with no work lost in either direction; the consolidate-branches skill sharpened from it (3d-models #768, #773)
