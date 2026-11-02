@@ -85,6 +85,8 @@ Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `
 - [Print pieces, not whole shapes](print-pieces-not-whole-shapes.md) — Omar 2026-10-12: test a print question on one repeat of the shape, several settings per bed, a stock control beside; not a whole coaster per round, not a tiny coupon either
 - [Simulator learns each setup](simulator-learns-each-setup.md) — Omar 2026-10-14: teach-simulator skill fits a profile per machine/nozzle/plate/filament from judged prints; never pool setups
 - [Print feedback on a hub page](print-feedback-on-hub-page.md) — Omar 2026-10-22: judge prints on the hub page, pieces as tiles by carved id; answers saved word for word on the plate page, review-print writes the record
+- [Open the hub at owed questions](open-hub-at-owed-questions.md) — Omar 2026-10-29: "open the hub with comments" runs judge-page's `open_questions.py` (#829); repeated by-hand flows become skill scripts
+- [Owed plate items live on the hub](owed-items-live-on-plate-hub.md) — Omar 2026-10-29: plate to-dos show in the plates page's "Waiting on you" box (hub #21); comment replies need `ask: "omar"` to show there
 - [Experiment pieces carry ids](experiment-pieces-carry-ids.md) — Omar 2026-10-27 on split-10: no piece on an experiment plate goes without an id; D-115 beats D-114 for experiments
 - [hifth history rewrite and branches](hifth-history-rewrite-branches.md) — 2026-10-08 scrub of two held-text pictures: old-history branches look diverged, prove dead by tree, never push their snapshots; no purge, history kept as is (Omar 2026-10-30)
 - [Stencil thickness liked](stencil-thickness-liked.md) — Omar 2026-10-30: the 0.6 mm, three-layer bendable cedar card was right; default for tracing stencils (make-stencil skill)
