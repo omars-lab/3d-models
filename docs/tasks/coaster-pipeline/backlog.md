@@ -120,11 +120,13 @@ Sending a print and which filament to load.
   on Omar taking the halves off the bed and judging them on the hub, whose judging page now shows
   the first-layer picture with supports and brim (3d-models #847). Then the records session writes
   its print record (updated 2026-11-02).
-- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle — printing
-  now** (print session) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0 and 0.8 mm pins,
-  two copies each, all on grid supports, each copy told apart by its dots. Omar said yes in green on
-  2026-11-01. It was sent in green on 2026-11-02 at 18:05 UTC and is printing. When it ends, the
-  main session ships its page, print log and timelapse in one PR. Then Omar judges it on the hub.
+- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle — printed,
+  waiting to be judged** (print session) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0
+  and 0.8 mm pins, two copies each, all on grid supports, each copy told apart by its dots. Omar
+  said yes in green on 2026-11-01. It was sent in green on 2026-11-02 at 18:05 UTC and finished at
+  18:29 UTC with every piece in place; its print log and timelapse are on the page. It waits on
+  Omar taking the halves off the bed and judging them on the hub. Then the print session writes
+  its print record.
 - **The judging page's first-layer picture has no piece numbers or key.** On star-1 the three
   bases tell the columns apart, but on star-2 all six stars sit on identical supports. After
   star-2 prints, check whether Omar can tell the pin sizes apart on the hub. If not, draw the key

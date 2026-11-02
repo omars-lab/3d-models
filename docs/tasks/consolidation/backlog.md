@@ -40,3 +40,11 @@ Left by that pass:
    that compares the gh-pages tip's source commit with master and prints a warning (not a
    failure) when files the gallery ships have changed for more than a week. Deploying itself
    stays a manual step, because it publishes. Found 2026-11-02.
+6. **Waiting on Omar: which leftover backup copies to drop.** The duplicate `-pm` and
+   `-master-ro` worktrees here, hifth's merged remote branches and review-md's two branches hold
+   nothing their main lacks, but each removal is his call. The list is in the
+   [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
+   Found by the 2026-10-08 pass, still open 2026-11-02.
+7. **Waiting on Omar: bikar's pre-push hook runs the full test suite even for a tag on a commit
+   main already passed.** An edit to skip it was refused as a way round a check, so whether to
+   skip it is his call. Found 2026-09-21, still open 2026-11-02.
