@@ -24,6 +24,18 @@ plate, then anything you can't see before sending, then config ergonomics.
    per print, and nothing more. Packing by hand has come up once (sheets-04d, rows), so per
    the [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate
    that wants packing comes before the skill. Session task board, 2026-10-03.
+3. **Orders phase 4: the hub's Orders tab and the Lab's "Add to order" button.** The last phase
+   of the [order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work)
+   §11: Plan, Price (with its Scenarios view) and Inventory pages in a hub Orders tab, and one
+   "Add to order" button in bikar's Coaster Lab. Phases 1 to 3 already work from the terminal
+   (`bambu order plan`, `bambu shelf show`, `bambu order price`). Checked 2026-11-02: neither
+   3d-model-hub nor bikar main has the pages or the button yet. The two calls it waited on look
+   answered in the decisions log on 2026-10-08: the pages live in the hub (D-112), and the price
+   is cost plus a markup checked against a market band (D-113); the third, no order files in this
+   repo, is D-101. The design's §10 has no Decided line for the first two yet, so add those when
+   this is taken. Done when a real-browser run shows "Add to order" opening the hub's Plan page
+   with the design filled in, and its numbers equal phase 1's JSON. From the session task board,
+   2026-11-02.
 
 ## Waiting on Omar
 
@@ -48,16 +60,23 @@ plate, then anything you can't see before sending, then config ergonomics.
   Omar 2026-09-30) and Omar saying how that confirmation should work. Found by hub step 3,
   2026-09-30.
 
-- **Two of the order-driven Lab's three calls**, in
-  [order-driven-lab-design.md](../../design/coaster/order-driven-lab-design.md#10-open-calls-for-omar)
-  §10: where orders, the shelf and the three pages live (the hub is recommended), and how the
-  price is set (cost-plus with a market band is recommended; his comment asks for the quantity
-  simulations in item 4 first). Order files in this repo was decided 2026-10-05: never, an
-  iCloud folder instead (D-101). Phase 1 does not wait on them. 2026-10-04.
-- **How the Lab learns which colors are loaded** (call 4 of the 2026-10-05 page). Omar asked
-  "cant it lookup on printer with cli": the CLI already reads the trays
+- **Hub step 1: run the live printer reading on the hub page.** The read is built; running it is
+  Omar's step, listed under "Things only you can do" on the
+  [2026-09-29 open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md).
+  The hub's printer reading is read-only, trays and status with no send (D-111). The tray list
+  for the Lab and the print-time color match both reuse this read, so they have nothing to serve
+  until it runs. On macOS the background `node` may also need allowing under Local Network
+  settings. From the session task board, 2026-11-02.
+- **The piece-colors screen's four calls** (#538), in the
+  [piece colors design](../../design/coaster/infill-color-ux-design.md#8-open-calls-for-omar) §8:
+  which way of printing the screen offers first, a color per group or per piece too, whether a
+  plate's color goes in its recipe or only at the send, and how the Lab learns which colors are
+  loaded. Phases 1 to 5 are built; the "match the loaded trays" helper waits on call 4, and phase
+  5 was built under the recommended pick for call 2. On call 4 (also call 4 of the 2026-10-05
+  page), Omar asked "cant it lookup on printer with cli": the CLI already reads the trays
   (`bambu filament --json`), but a page in the browser cannot run it, so the hub would serve the
-  list. Waiting on his tick.
+  list. D-103, D-110 and D-111 touch the same questions as calls 1, 3 and 4, but the design has
+  no Decided line for any of the four. Waiting on his ticks.
 
 ## Found elsewhere, maybe this loop's
 
