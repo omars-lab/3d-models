@@ -89,6 +89,21 @@ Sending a print and which filament to load.
   2026-10-15 and was judged and recorded on 2026-10-22 (3d-models #748–#751). split-01 (one bed, 89
   minutes and 30 g) waits on Omar's tick, with the color in the yes. Whether the halves are glued
   is still the split design's call 3.
+- **The split design's open calls, and whether to buy a SuperTack plate.** The
+  [split-with-studs design](../../design/pieces/split-with-studs-design.md#10-open-calls-for-omar)
+  §10 still lists calls 1 to 5 as Omar's: which bed plate gives the two faces, the edge
+  round-over, glue or press fit, how many studs, and where the split lives. Call 1's recommended
+  option is a Cool Plate SuperTack, which is a purchase, so buying one is part of that call. Call 6,
+  how a split coaster holds its loose pieces, is decided (D-100). Later work leans on some of
+  these (the stud gap is D-116), but the design has no
+  Decided line for them yet. Waits on Omar. From the session task board (#539, call 6 from #556),
+  2026-11-02.
+- **Judge the rest of [sheets-04g](../../design/plates/sheets-04g.md)'s pieces.** It printed in
+  green on 2026-10-04, and Omar judged two kinds of piece by hand: the small kites too tight, the
+  middle piece too loose. The outer pieces and the coaster are still `not-judged` in
+  [the record](../../prints/2026-10-04-sheets-04g/index.md). Waits on Omar's hands on the pieces
+  off the bed; then the records session fills in the verdicts. From the session task board,
+  2026-11-02.
 - **Judge [split-07](../../design/plates/split-07.md), the whole flange coaster with every loose
   piece cut in two and joined.** It is split-06 again with the 0.7 mm wall Omar picked on split-08
   (D-119). Each loose piece is cut at its middle and printed as two face-down halves, with pins on
@@ -156,7 +171,10 @@ Sending a print and which filament to load.
   Omar's. Two things to know first: every plate cuts its pieces at `gap: 0`, the fit sheets-04g
   showed off, so printing [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) first lets
   these plates take its gaps as a new iteration; and Neon City (13903) is a two-color spool, so
-  its pieces will not all match the picture.
+  its pieces will not all match the picture. After that, check the theme scores against real
+  customers: the scores on the [themes page](../../design/coaster/themes/gbv-themes.md) come from
+  the review-theme skill's made-up personas, not from buyers, so they rank ideas but do not say
+  what sells. That check waits on the first real orders (session task board, 2026-11-02).
 - **Did [minis-02](../../design/plates/minis-02.md) print?** It went out from Bambu Studio on
   2026-09-25 and has no record. Its page has the tick boxes; a yes means writing the record.
   minis-01, sent the same day, is answered: Omar does not remember, so it is printed again with
