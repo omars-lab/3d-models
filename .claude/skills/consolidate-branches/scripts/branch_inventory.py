@@ -50,9 +50,11 @@ def unique_repos(paths):
     """
     seen, kept = {}, []
     for p in paths:
-        common = git(p, "rev-parse", "--path-format=absolute", "--git-common-dir")
-        if common in seen:
-            print(f"## {p.name}: a worktree of {seen[common].name}, listed once", file=sys.stderr)
+        common, own = git(p, "rev-parse", "--path-format=absolute", "--git-common-dir", "--git-dir").splitlines()
+        if common in seen:                                      # the main checkout wins whichever
+            main, other = (p, seen[common]) if own == common else (seen[common], p)  # order the glob gave
+            print(f"## {other.name}: a worktree of {main.name}, listed once", file=sys.stderr)
+            kept[kept.index(seen[common])] = seen[common] = main
             continue
         seen[common] = p
         kept.append(p)
@@ -650,6 +652,8 @@ def self_test():
             bad.append("a bare repo's snapshot did not push through its worktree")
         if unique_repos([bare, tree, repo]) != [bare, repo]:
             bad.append(f"unique_repos kept a worktree as a second repo: {unique_repos([bare, tree, repo])}")
+        if unique_repos([tree, bare]) != [bare]:
+            bad.append("unique_repos kept the worktree when the glob listed it before its repo")
 
         def dated(path, text, msg, at):                              # hifth's shape: main rewritten under a
             env = dict(os.environ, GIT_AUTHOR_DATE=f"@{at} +0000", GIT_COMMITTER_DATE=f"@{at} +0000")

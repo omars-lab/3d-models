@@ -2,7 +2,7 @@
 date: 2026-11-03
 repo: 3d-models
 session: the "else" session (everything but prints), e778ebdd
-branch: snapshot-guard-removed-files, PR #865; stale-gallery, PR #864
+branch: consolidation-other-repos, PR #866 (the session's earlier PRs: #864 stale-gallery, #865 snapshot guard)
 folded: no
 ---
 
