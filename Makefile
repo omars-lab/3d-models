@@ -488,7 +488,7 @@ LAB_WORKER_PAGES = lab.html lego.html breakdown.html coaster.html
 
 lab lego-lab: lab-vendor
 
-lab-vendor:
+lab-vendor: node-check
 	@for page in $(LAB_PAGES); do \
 		[ -f "$(BIKAR_DIR)/packages/lab/$$page" ] \
 			|| { echo "no packages/lab/$$page in $(BIKAR_DIR) — the studio entries live on bikar's lego-lab work; override with 'make lab BIKAR_DIR=...'"; exit 1; }; \
@@ -1036,4 +1036,25 @@ pillow-check:
 		echo "Pillow required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
 		echo "  install it there:  $(PYTHON) -m pip install pillow"; \
 		echo "  or use one that does:  make <target> PYTHON=/path/to/python3"; \
+		exit 1; }
+
+# Node: this repo pins v22 (CLAUDE.md); the system node is v18 and Vite refuses it
+# with an error that looks like a code bug (CustomEvent is not defined). Put the
+# pinned nvm node first on PATH for every recipe when it is installed, so
+# `make deploy` works from a plain shell. On 2026-11-03 Omar's deploy died in
+# lab-vendor on the bare v18. Override with NODE_VERSION=... for another nvm node.
+NODE_VERSION ?= v22.22.3
+NODE_BIN := $(HOME)/.nvm/versions/node/$(NODE_VERSION)/bin
+ifneq ($(wildcard $(NODE_BIN)/node),)
+export PATH := $(NODE_BIN):$(PATH)
+endif
+
+# Every target that runs Vite or npm depends on this, so an old node says what
+# to do instead of a traceback.
+node-check:
+	@command -v node >/dev/null || { echo "no node on PATH; install nvm's $(NODE_VERSION) (nvm install $(NODE_VERSION))"; exit 1; }
+	@node -e 'process.exit(+process.versions.node.split(".")[0] >= 20 ? 0 : 1)' || { \
+		echo "Node $$(node --version) is too old for Vite (needs 20+), and nvm has no $(NODE_VERSION) at $(NODE_BIN)."; \
+		echo "  install it:  nvm install $(NODE_VERSION)"; \
+		echo "  or name one you have:  make <target> NODE_VERSION=v20.20.2"; \
 		exit 1; }
