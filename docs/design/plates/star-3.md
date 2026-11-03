@@ -1,8 +1,9 @@
 ---
 plate: star-3
+print_log: '[[print-logs/star-3|print log]]'
 recipe: star-3.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "With three 1.2 mm pins on a triangle round its middle, as star-2 picked, do the flat star's halves close and stop turning?"
@@ -79,6 +80,14 @@ shape but one pin in the middle, not three.
 
 **Risk: ok.** Small flat pieces, no supports, as split-10's flat star printed.
 
+## The print
+
+The print as the chamber camera saw it: 6 pictures from 23:16 to 23:26 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![star-3 printing, as the chamber camera saw it](star-3-media/timelapse.webp)
+
+![star-3 finished, on the bed](star-3-media/finished.webp)
+
 ## Your call
 
 - [ ] **Approve as it stands**: say the color with the yes
@@ -92,10 +101,11 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-03 | approved | Omar, in chat: "Yes, in green (Recommended)" | iteration 1 @ e516ba6d94 in #00AE42 | |
+| 2026-11-03 | approved | Omar, in chat: "Yes, in green (Recommended)" | iteration 1 @ e516ba6d94 in #00AE42 | sent 2026-11-03 |
 
 ## Timeline
 
 | Date | What happened | Where it is written |
 |---|---|---|
 | 2026-11-03 | proposed: on star-2's answers ("left most was best"), the flat star with three 1.2 mm pins on a triangle, two copies | this page |
+| 2026-11-03 | sent — by `bambu print send`; spends the approval of 2026-11-03, iteration 1 @ e516ba6d94 in #00AE42 | this page |
