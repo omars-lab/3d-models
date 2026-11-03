@@ -4,6 +4,7 @@ decisions:
   - D-081
   - D-126
   - D-127
+  - D-128
 ---
 
 # Multicolor constructions — the consolidated design
@@ -426,3 +427,35 @@ Omar's; nothing was merged here.
   per change like other AMS printers, which no fetched source tests.
 - **K10, CAL-CST-01 → fill width:** transfers only if a two-color pocket prints at least as well
   as a one-color rib; not shown.
+
+## 13. Calls recorded here on 2026-11-03
+
+This section holds a call whose home is another doc. The
+[construction import design](../../constructions/geogebra-construction-import-design.md) §5.2 and
+§13 defer the `frame` block (P5.3) "until a public fixture needs it"; that doc was not this
+session's to edit, so the line sits here, beside the other 2026-11-03 calls, until someone who
+owns it moves it.
+
+**Decided 2026-11-03 (provisional):** P5.3, the `frame` block for free points off the root
+frame, is **closed, not built**. The importer refuses a free point that is not (0,0), (±1,0) or
+(0,±1) and asks for a rewrite relative to A and B (bikar,
+`packages/core/src/import/geogebra/lower.ts`, D-062). What was checked, 2026-11-03: of the
+[ledger](../../constructions/ledger.md)'s 34 constructions, read in youtube's reconstructions
+folder as checked out that day, every one of the 14 migrated has all its free points on the
+frame, so the refusal has stopped no migration. Seven of the 20 not yet migrated write a literal
+point off the frame: `_U6G8QSfWnk` and `Y6kS1MvnKoc` (the ends of drawn-out diameters and slide
+framing lines), `fhGHzop7ULw` (a base line and arc ends past the unit points), `A9fefFurD_s`
+(two arc ends, hidden scaffold), `LoCRh3SOhls` (the whole drawing at R = 11.5 cm, so A = (0,
+11.5)), `xtox61vADMA` (A and B dragged a few hundredths off (0,0) and (1,0)) and `yZN_wn0uvTY`
+(six free points kept literal on purpose, a faithful copy of a pattern already migrated as gBV).
+In each the off-frame point is scaffold extent, a scale choice or a dragged frame point, the
+kind a rewrite puts back on the frame, as `n_ICgwOr6qs`'s source was rewritten ("lines through
+the unit points keep every free point on the frame"); none has been tried through the importer,
+so that is the expected kind, not a shown result. The five public `.ggb` files under youtube's
+test fixtures (`kYSaZ6w5`, `NPR3zDqQ`, `pu3C9uwJ`, `rbzdz7db`, `tqfsrpcf`) all place free points
+off the frame, but they test the XML reader and never reach bikar's importer, so they do not
+need the block. The survey's line "no reconstruction places a free point off the unit frame" was
+true of the nine it read and is not true of the 34. What reopens P5.3: the first migration where
+the refusal fires and a rewrite cannot put the point on the frame without changing the drawing.
+Picked by Claude under Omar's 2026-11-03 blanket authorization; that first fixture, or Omar,
+reopens it. → D-128
