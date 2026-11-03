@@ -1,0 +1,257 @@
+# naqsh construction — n_ICgwOr6qs
+# title: Reconstruction of "UPDATED #8 - Sheikh Zayed Grand Mosque Fivefold Motif - A Geometric
+# url: https://www.youtube.com/watch?v=n_ICgwOr6qs
+# steps: 44 statements, 9 tagged steps
+# source: reconstructions/n_ICgwOr6qs/construction.ggb-commands sha256:7bd99568dd4327c17f44d6b88e3b946549fd21c2e1333ac47f0cbe0e19b50761
+
+param size = 90 range 40..120   # mm, finished coaster span across the strap network — the print knob
+param height = 4 range 1.4..16   # mm, strap wall height
+param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
+param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param tip = 0 range 0..1.5   # mm, hole-point round: each sharp point of a strap hole rounded to this radius; 0 is sharp
+param weld = 0 range 0..2.4   # mm, soft weld: the straps melt together over this blend where they join; 0 is sharp, keep tip or weld at 0
+param unit = ($size - $strap) / 3.6542   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
+
+blueprint n_ICgwOr6qs_scaffold
+  # ────────────────────────────────────────────────────────
+  # root frame — A = centre, B/D = unit-circle divisions (D-061)
+  circle unit center(0, 0) radius $unit
+  divide unit into 4
+  # ────────────────────────────────────────────────────────
+  # O = (0, 0)
+  point O = unit.mpt
+  # E = (1, 0)
+  point E = unit.cpt0
+  # c = Circle(O, E)
+  circle c center(O) through E
+  # N = (0, 1)
+  point N = unit.cpt1
+  # v = Line(O, N)
+  line v from O to N
+  # rad0 = Line(O, E)
+  line rad0 from O to E
+  # D72 = Rotate(E, 72°, O)
+  point D72 = rotate E by 72 around O
+  # D144 = Rotate(E, 144°, O)
+  point D144 = rotate E by 144 around O
+  # D288 = Rotate(E, 288°, O)
+  point D288 = rotate E by 288 around O
+  # cf = Circle(D144, D72)
+  circle cf center(D144) through D72
+  # D180 = Rotate(E, 180°, O)
+  point D180 = rotate E by 180 around O
+  # Far = Translate(D180, u180)
+  point Far = translate D180 by O D180
+  # ray180 = Segment(O, Far)
+  segment ray180 from O to Far
+  # ray108 = Rotate(ray180, -72°, O)
+  segment ray108 = rotate ray180 by -72 around O
+  # t108 = Intersect(cf, ray108)
+  point t108 = intersect cf ray108
+  # t180 = Intersect(cf, ray180)
+  point t180 = intersect cf ray180
+  # sOE = Segment(O, E)
+  segment sOE from O to E
+  # sO288 = Segment(O, D288)
+  segment sO288 from O to D288
+  # i0 = Intersect(cf, sOE)
+  point i0 = intersect cf sOE
+  # i288 = Intersect(cf, sO288)
+  point i288 = intersect cf sO288
+  # fa1 = CircularArc(D144, i0, t108)
+  circle fa1_host center(D144) through i0
+  # ────────────────────────────────────────────────────────
+  # t=05:58  fa2 = CircularArc(D144, t180, i288)
+  circle fa2_host center(D144) through t180
+  # ────────────────────────────────────────────────────────
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  point i0_f2 = rotate i0 by 72 around O
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  point t108_f2 = rotate t108 by 72 around O
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  circle fa1_host_f2 = rotate fa1_host by 72 around O
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  point t180_f2 = rotate t180 by 72 around O
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  point i288_f2 = rotate i288 by 72 around O
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  circle fa2_host_f2 = rotate fa2_host by 72 around O
+  # ────────────────────────────────────────────────────────
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  point i0_f3 = rotate i0 by 144 around O
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  point t108_f3 = rotate t108 by 144 around O
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  circle fa1_host_f3 = rotate fa1_host by 144 around O
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  point t180_f3 = rotate t180 by 144 around O
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  point i288_f3 = rotate i288 by 144 around O
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  circle fa2_host_f3 = rotate fa2_host by 144 around O
+  # ────────────────────────────────────────────────────────
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  point i0_f4 = rotate i0 by 216 around O
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  point t108_f4 = rotate t108 by 216 around O
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  circle fa1_host_f4 = rotate fa1_host by 216 around O
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  point t180_f4 = rotate t180 by 216 around O
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  point i288_f4 = rotate i288 by 216 around O
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  circle fa2_host_f4 = rotate fa2_host by 216 around O
+  # ────────────────────────────────────────────────────────
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  point i0_f5 = rotate i0 by 288 around O
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  point t108_f5 = rotate t108 by 288 around O
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  circle fa1_host_f5 = rotate fa1_host by 288 around O
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  point t180_f5 = rotate t180 by 288 around O
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  point i288_f5 = rotate i288 by 288 around O
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  circle fa2_host_f5 = rotate fa2_host by 288 around O
+  # ────────────────────────────────────────────────────────
+  # D252 = Rotate(E, 252°, O)
+  point D252 = rotate E by 252 around O
+  # cb = Circle(D252, D180)
+  circle cb center(D252) through D180
+  # ray288 = Rotate(ray180, 108°, O)
+  segment ray288 = rotate ray180 by 108 around O
+  # ray216 = Rotate(ray180, 36°, O)
+  segment ray216 = rotate ray180 by 36 around O
+  # ray306 = Rotate(ray180, 126°, O)
+  segment ray306 = rotate ray180 by 126 around O
+  # ray198 = Rotate(ray180, 18°, O)
+  segment ray198 = rotate ray180 by 18 around O
+  # t288 = Intersect(cb, ray288)
+  point t288 = intersect cb ray288
+  # t216 = Intersect(cb, ray216)
+  point t216 = intersect cb ray216
+  # X306 = Intersect(cb, ray306)
+  point X306 = intersect cb ray306
+  # X198 = Intersect(cb, ray198)
+  point X198 = intersect cb ray198
+  # ba1 = CircularArc(D252, t288, X306)
+  circle ba1_host center(D252) through t288
+  # ────────────────────────────────────────────────────────
+  # t=07:40  ba2 = CircularArc(D252, X198, t216)
+  circle ba2_host center(D252) through X198
+  # ────────────────────────────────────────────────────────
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  point t288_b2 = rotate t288 by 72 around O
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  point X306_b2 = rotate X306 by 72 around O
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  circle ba1_host_b2 = rotate ba1_host by 72 around O
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  point X198_b2 = rotate X198 by 72 around O
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  point t216_b2 = rotate t216 by 72 around O
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  circle ba2_host_b2 = rotate ba2_host by 72 around O
+  # ────────────────────────────────────────────────────────
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  point t288_b3 = rotate t288 by 144 around O
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  point X306_b3 = rotate X306 by 144 around O
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  circle ba1_host_b3 = rotate ba1_host by 144 around O
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  point X198_b3 = rotate X198 by 144 around O
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  point t216_b3 = rotate t216 by 144 around O
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  circle ba2_host_b3 = rotate ba2_host by 144 around O
+  # ────────────────────────────────────────────────────────
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  point t288_b4 = rotate t288 by 216 around O
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  point X306_b4 = rotate X306 by 216 around O
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  circle ba1_host_b4 = rotate ba1_host by 216 around O
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  point X198_b4 = rotate X198 by 216 around O
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  point t216_b4 = rotate t216 by 216 around O
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  circle ba2_host_b4 = rotate ba2_host by 216 around O
+  # ────────────────────────────────────────────────────────
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  point t288_b5 = rotate t288 by 288 around O
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  point X306_b5 = rotate X306 by 288 around O
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  circle ba1_host_b5 = rotate ba1_host by 288 around O
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  point X198_b5 = rotate X198 by 288 around O
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  point t216_b5 = rotate t216 by 288 around O
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  circle ba2_host_b5 = rotate ba2_host by 288 around O
+
+pattern n_ICgwOr6qs on n_ICgwOr6qs_scaffold
+  # ────────────────────────────────────────────────────────
+  # fa1 = CircularArc(D144, i0, t108)
+  connect arc i0 -> t108 on fa1_host
+  # ────────────────────────────────────────────────────────
+  # t=05:58  fa2 = CircularArc(D144, t180, i288)
+  connect arc t180 -> i288 on fa2_host
+  # ────────────────────────────────────────────────────────
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  connect arc i0_f2 -> t108_f2 on fa1_host_f2
+  # t=06:20  f2 = Rotate({fa1, fa2}, 72°, O)
+  connect arc t180_f2 -> i288_f2 on fa2_host_f2
+  # ────────────────────────────────────────────────────────
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  connect arc i0_f3 -> t108_f3 on fa1_host_f3
+  # t=06:46  f3 = Rotate({fa1, fa2}, 144°, O)
+  connect arc t180_f3 -> i288_f3 on fa2_host_f3
+  # ────────────────────────────────────────────────────────
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  connect arc i0_f4 -> t108_f4 on fa1_host_f4
+  # t=07:06  f4 = Rotate({fa1, fa2}, 216°, O)
+  connect arc t180_f4 -> i288_f4 on fa2_host_f4
+  # ────────────────────────────────────────────────────────
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  connect arc i0_f5 -> t108_f5 on fa1_host_f5
+  # t=07:15  f5 = Rotate({fa1, fa2}, 288°, O)
+  connect arc t180_f5 -> i288_f5 on fa2_host_f5
+  # ────────────────────────────────────────────────────────
+  # ba1 = CircularArc(D252, t288, X306)
+  connect arc t288 -> X306 on ba1_host
+  # ────────────────────────────────────────────────────────
+  # t=07:40  ba2 = CircularArc(D252, X198, t216)
+  connect arc X198 -> t216 on ba2_host
+  # ────────────────────────────────────────────────────────
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  connect arc t288_b2 -> X306_b2 on ba1_host_b2
+  # t=07:48  b2 = Rotate({ba1, ba2}, 72°, O)
+  connect arc X198_b2 -> t216_b2 on ba2_host_b2
+  # ────────────────────────────────────────────────────────
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  connect arc t288_b3 -> X306_b3 on ba1_host_b3
+  # b3 = Rotate({ba1, ba2}, 144°, O)
+  connect arc X198_b3 -> t216_b3 on ba2_host_b3
+  # ────────────────────────────────────────────────────────
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  connect arc t288_b4 -> X306_b4 on ba1_host_b4
+  # t=07:55  b4 = Rotate({ba1, ba2}, 216°, O)
+  connect arc X198_b4 -> t216_b4 on ba2_host_b4
+  # ────────────────────────────────────────────────────────
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  connect arc t288_b5 -> X306_b5 on ba1_host_b5
+  # t=08:00  b5 = Rotate({ba1, ba2}, 288°, O)
+  connect arc X198_b5 -> t216_b5 on ba2_host_b5
+
+coaster Coaster
+  outline pattern
+  inscribe n_ICgwOr6qs
+  base $height
+  strap width $strap
+  edge fillet $round top
+  holes round $tip weld $weld
