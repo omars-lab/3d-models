@@ -139,7 +139,7 @@ outer pair) that reads as a shape of its own, and the recommended pick on the
 Omar picked none of the four there and said he would choose in the Coaster Lab (the picker,
 bikar PR #288), so this is a default, not his taste call: the file keeps A until his Lab pick
 replaces it, and the file is not edited for this line. Picked by Claude under Omar's 2026-11-03
-blanket authorization; Omar's Lab pick overturns it. → D-127
+blanket authorization; Omar's Lab pick overturns it. → [D-127](../../working-model/decisions-log.md#d-127--cs-1s-radial-fill-stays-a-the-snowflake-until-omar-picks-in-the-lab)
 
 ## 3. The look: flush or lowered fills
 
@@ -182,7 +182,7 @@ filled construction coaster only as candidate palettes: the §10 plate's constru
 laid out. The §10 sample plate (flush beside 0.6 mm lowered, a light fill next to a dark strap) is
 where the taste call is made, so this stands until that plate is judged. Picked by Claude under
 Omar's 2026-11-03 blanket authorization; the §10 sample plate's judging, or Omar, can overturn
-it. → D-126
+it. → [D-126](../../working-model/decisions-log.md#d-126--fills-flush-by-build-order-colors-from-the-themes-gallery-the-10-plate-decides-the-look)
 
 **Default:** fills flush with the straps (fill height = strap height, 1.2 mm), as in bikar
 [PR #261](https://github.com/NaqshCoffee/bikar/pull/261)'s prototype, the one version that is built
@@ -459,4 +459,4 @@ need the block. The survey's line "no reconstruction places a free point off the
 true of the nine it read and is not true of the 34. What reopens P5.3: the first migration where
 the refusal fires and a rewrite cannot put the point on the frame without changing the drawing.
 Picked by Claude under Omar's 2026-11-03 blanket authorization; that first fixture, or Omar,
-reopens it. → D-128
+reopens it. → [D-128](../../working-model/decisions-log.md#d-128--the-p53-frame-block-is-closed-unbuilt-the-first-off-frame-point-a-rewrite-cannot-save-reopens-it)

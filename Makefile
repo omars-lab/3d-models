@@ -1077,3 +1077,11 @@ GALLERY_STALE_DAYS ?= 7
 validate-gallery:
 	@$(PYTHON) $(ROOT_DIR)/.claude/gates/gallery_stale.py --self-test
 	@$(PYTHON) $(ROOT_DIR)/.claude/gates/gallery_stale.py --days $(GALLERY_STALE_DAYS) -- $(DEPLOY_PATHS) || [ $$? -eq 3 ]
+
+# The youtube rungs that are done and not yet imported here (D-122). Read-only;
+# `make intake INTAKE=--write` moves the ledger's youtube pin and stubs the rows.
+INTAKE ?= --list
+.PHONY: intake
+intake:
+	$(PYTHON) $(ROOT_DIR)/tools/reconstruction_intake.py --self-test
+	$(PYTHON) $(ROOT_DIR)/tools/reconstruction_intake.py $(INTAKE)

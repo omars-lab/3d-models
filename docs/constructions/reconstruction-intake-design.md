@@ -145,7 +145,7 @@ where it gets its next id:
   ledger row are no longer invisible to it.
 - **Step 7** loses two stale claims: the ledger hook is `44-constructions` (it says hook 38),
   and a missing row now fails L3 (it says the gate only reports one)
-  (`3d-models:.claude/skills/import-construction/SKILL.md:L182 "hook 38"`).
+  (`3d-models:.claude/skills/import-construction/SKILL.md:L184 "hook 38"`).
 
 Not to build: a second import skill, a "bulk import" mode, or a hook that starts an import. The
 ordering is a taste call and belongs to prioritize-design; youtube's `make ladder` screens
@@ -180,13 +180,13 @@ Smallest first. Each ships with the test that fails before it and passes after.
 1. **Stale sentences.** The gate's "youtube has no remote today" (gone 2026-11-03: the
    `TIP_REFS` comment now says youtube's local `main` is the record and `origin` a push mirror
    on the studio machine), the ledger's "no
-   remote" (`3d-models:docs/constructions/ledger.md:L14 "no remote"`), step 7's hook number and
+   remote" (its [pin paragraph](ledger.md)), step 7's hook number and
    "reports", and the same two in the umbrella design's "Gate" bullet, which still says the
    gate "reports, without blocking, every youtube id without a row"
    ([geogebra-construction-import-design.md](geogebra-construction-import-design.md)).
-   A doc correction, no test. *Partly done 2026-11-03:* the gate's sentence is fixed; the
-   ledger's, the skill's and the umbrella design's are still owed, because this change did not
-   touch those files.
+   A doc correction, no test. *Done 2026-11-03:* the gate's sentence, the ledger's (its
+   "done" now means the rung's own state file), the skill's step 0 and 7, and the umbrella
+   design's "Gate" bullet are all rewritten in the same PR.
 2. **The rung reader and the completed test**, in tools/reconstruction_intake.py, reusing the
    gate's youtube helpers. Test: a self-test builds a scratch youtube repo with five rungs
    (fresh PASS, accepted PARTIAL, done with a FAIL verdict, done with a stale digest, blocked);
@@ -239,7 +239,7 @@ Smallest first. Each ships with the test that fails before it and passes after.
 
   **Decided 2026-11-03 (provisional):** (b), a small intake tool that only reads at session
   start and writes ledger rows and the pin when asked. Picked by Claude under Omar's 2026-11-03
-  blanket authorization; Omar can reverse it. → D-122
+  blanket authorization; Omar can reverse it. → [D-122](../working-model/decisions-log.md#d-122--reconstruction-intake-a-small-tool-lists-the-finished-youtube-rungs-writes-their-ledger-rows-on-request-and-moves-the-pin-as-it-goes)
 - [ ] **(a) Only extend the gate's session line.** Pros: least code. Cons: rows are still typed
   by hand. Implies: the reader (item 2) goes into the gate, item 6 is dropped, and the 9
   missing rows stay a chore.
@@ -254,7 +254,7 @@ Smallest first. Each ships with the test that fails before it and passes after.
   runs the write mode.
 
   **Decided 2026-11-03 (provisional):** the pin moves at every intake write and at every import
-  PR. Picked by Claude under Omar's 2026-11-03 blanket authorization; Omar can reverse it. → D-122
+  PR. Picked by Claude under Omar's 2026-11-03 blanket authorization; Omar can reverse it. → [D-122](../working-model/decisions-log.md#d-122--reconstruction-intake-a-small-tool-lists-the-finished-youtube-rungs-writes-their-ledger-rows-on-request-and-moves-the-pin-as-it-goes)
 - [ ] **Only at import PRs.** Pros: fewer PRs. Cons: between imports the pin lags and L3 keeps
   failing on new rungs. Implies: rows are owed for days at a time, as today.
 
@@ -266,7 +266,7 @@ Smallest first. Each ships with the test that fails before it and passes after.
 
   **Decided 2026-11-03 (provisional):** an accepted PARTIAL counts as completed and the list
   marks it "accepted partial". Picked by Claude under Omar's 2026-11-03 blanket authorization;
-  Omar can reverse it. → D-122
+  Omar can reverse it. → [D-122](../working-model/decisions-log.md#d-122--reconstruction-intake-a-small-tool-lists-the-finished-youtube-rungs-writes-their-ledger-rows-on-request-and-moves-the-pin-as-it-goes)
 - [ ] **No, fresh PASS only.** Pros: a stricter queue. Cons: two meanings of done; `88q-u2eWZqg`
   never enters the queue unless someone overrides it. Implies: a second rule to keep in step
   with youtube's.

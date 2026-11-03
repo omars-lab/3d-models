@@ -465,7 +465,7 @@ share link and no second copy of any panel. Implied, not built: the step bar and
 (§6 item 4). The hedge from §4 and the three pictures stands: the Lab sits behind the org's
 sign-in, so if "folks" means people outside the org, a separate page beside the Lab stays possible
 later, and that is a hosting call, not a change to this pick. Picked by Claude under Omar's
-2026-11-03 blanket authorization; Omar, looking at the three pictures, can overturn it. → D-124
+2026-11-03 blanket authorization; Omar, looking at the three pictures, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** three pictures, one per option, in the
 [sampler sheets design](sampler-sheets-design.md#where-the-guided-page-lives-three-pictures-not-a-sheet).
@@ -483,7 +483,7 @@ the mesh gate counting raised fills, and the fill preset's range widened (§2, �
 the two checks §2 says stop holding (the minimum feature and CAL-CST-04's slot ratio) carried
 into the build. Implied, not built. Loose pieces keep giving proud and recessed on their own
 (bikar #313), so nothing is lost while the kernel work waits. Picked by Claude under Omar's
-2026-11-03 blanket authorization; the sheet 5 reading, or Omar, can overturn it. → D-124
+2026-11-03 blanket authorization; the sheet 5 reading, or Omar, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** sampler sheet 5, fill height (lowered, flush and raised on the same windows) —
 [the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-05.md).
@@ -510,7 +510,7 @@ CAL-LSE-01). A slab pocket is a closed hole to the slicer (§3.4), so those numb
 ladder from below without replacing it; the plates session may shift the F1 ladder down when it
 proposes the plate. Nothing to build; whether and when it prints is Omar's and the plates
 session's. Picked by Claude under Omar's 2026-11-03 blanket authorization; the F1 reading, or
-Omar, can overturn it. → D-124
+Omar, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
 [the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-04.md).

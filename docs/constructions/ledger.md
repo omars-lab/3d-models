@@ -9,12 +9,12 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `e55a57797befcba7040447b38c7fc9a1475e7bdf` (2026-10-01)
+Youtube pin: `1f1ec577bd20f3ce34cb5150fa7b3d41be0640ef` (2026-11-03)
 
-The pin is a commit in the youtube repo (branch `main`, no remote). Every
+The pin is a commit in the youtube repo (branch `main`). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
-with a `construction.ggb-commands` exists at the pin) or **done** (that id is
-listed in the pin's docs/tasks/done.md) — is read at that commit and nowhere
+with a `construction.ggb-commands` exists at the pin) or **done** (the rung's own
+`rung.yaml` at the pin says so) — is read at that commit and nowhere
 else, so the column does not shift when someone checks out a different youtube
 branch. The gate re-reads youtube at this pin; when youtube is not checked out
 it says so and skips the cross-check rather than passing or failing it. It also
@@ -22,6 +22,8 @@ reads youtube's `main` branch (a ref, not the working tree) and fails when a
 reconstruction there has no row here, or when a row's id is not at the pin — so
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
+`python3 tools/reconstruction_intake.py --list` names the rungs done in youtube with no
+row or coaster here, and `--write` moves this pin and stubs their rows (D-122).
 
 Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
@@ -151,8 +153,8 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `xtox61vADMA` | Discrete variable star rosette, sliders n and k (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `ZFQt67eZ9Sg` | Alhambra Hall of the Two Sisters doors, 8-fold in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `XfY1r7QKYwA` | 7-fold star rosette, the 27-minute build (Sarah Brewer) | done | — | — | — | — | — | — | — |
-| `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | done | — | — | — | — | — | — | — |
-| `LoCRh3SOhls` | A tenfold rosette in a pentagon, ink on filmed paper (Samira Mian) | done | — | — | — | — | — | — | — |
+| `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | blocked | — | — | — | — | — | — | — |
+| `LoCRh3SOhls` | A tenfold rosette in a pentagon, ink on filmed paper (Samira Mian) | queued | — | — | — | — | — | — | — |
 
 ## Oracle notes
 

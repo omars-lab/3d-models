@@ -200,7 +200,11 @@ frame is a transpile error whose message says "rewrite relative to A, B". Free
 numbers become `param`s. This covers all nine reconstructions (survey §1) with
 no new literal-carrying syntax. A `frame` block for arbitrary free points is
 deferred to a bikar `dsl-design` decision, opened only when a public fixture
-needs it.
+needs it. **Closed unbuilt on 2026-11-03** after a check of all 34 constructions
+(none migrated was stopped by the refusal; the seven off-frame literals are the kind a rewrite
+puts back on the frame): the check and the reopening condition are in the
+[multicolor design](../design/coaster/multicolor-design.md#13-calls-recorded-here-on-2026-11-03) §13 →
+[D-128](../working-model/decisions-log.md#d-128--the-p53-frame-block-is-closed-unbuilt-the-first-off-frame-point-a-rewrite-cannot-save-reopens-it).
 
 ### 5.3 What lowering must refuse (D-058)
 
@@ -330,8 +334,9 @@ before invoking the slicer.
   row marked "no piece by design": the by-design failure the gate must not
   skip.
 - **Gate** `.claude/gates/constructions_ledger.py` (`make validate-constructions`):
-  **fails** on a row whose `.bkr` or STL path is missing; **reports**, without
-  blocking, every youtube id without a row (the `20-use-cases` reminder shape).
+  **fails** on a row whose `.bkr` or STL path is missing, on a youtube reconstruction
+  with no row here, and on a row that says done while its rung says otherwise (L4);
+  `tools/reconstruction_intake.py --write` stubs the missing rows (D-122).
   Counts `<!--count:constructions-migrated-->` and
   `<!--count:constructions-total-->` pin the two numbers to the tool that prints
   them. A worktree self-test keeps the verdict checkout-independent.
@@ -364,7 +369,7 @@ passes after. Tier-0 witnesses precede any composite golden.
 | 2 Transpiler, first construction, cookbook | P2.1 `bikar import geogebra` · P2.2 `GimTvN9hw4U` golden + O1/O2 · P2.3 slice-1 coaster · P2.3b `qiyas mesh compare` (O3) · P2.4 readability rules + header · P2.5 cookbook with conformance test · P2.6 `7apC5Q9QS-8` · P2.7 disc coaster | P1.3, P1.4, P1.5, P1.2b |
 | 3 Repeatable process | P3.1 skill · P3.2 ledger + gate + hook · P3.3 catalog `CS-*`, `make coasters`, gallery section | P2.5, P2.7, P2.2 |
 | 4 Many on one plate | P4.1 `bambu slice compose` + plate doc · P4.2 `docs/design/plates/minis-01.yaml` · P4.3 print record (owner-gated) | P3.3, P3.2, Plate 1 |
-| 5 Scale the corpus | P5.1 remaining rungs in ladder order · P5.2 standard-size plate · P5.3 `frame` decision if a public fixture needs it | P3.1, P4.3, P1.2 |
+| 5 Scale the corpus | P5.1 remaining rungs in ladder order · P5.2 standard-size plate · P5.3 `frame` block closed unbuilt (D-128, 2026-11-03) | P3.1, P4.3, P1.2 |
 
 Critical path to the first mini STL: P0.5 → P1.1 → P1.3 → P2.1 → P2.2 → P2.3,
 with P1.4 + P1.5 in parallel and P1.2b alongside (O1 gates P2.2's acceptance,
@@ -395,7 +400,8 @@ O3 gates the catalog entry). P1.2, P1.6 and P1.7 are off the critical path.
 - Headless STL from GeoGebra (survey §14): not needed; not claimed.
 - Whether Bambu Studio's `--arrange 1` places every manifest reliably; the
   first plate answers it and P2 of §4.3 is the fallback.
-- The `frame` block (D-062): deferred until a fixture needs it.
+- The `frame` block (D-062): closed unbuilt on 2026-11-03 (D-128); the first migration where the
+  refusal fires and a rewrite cannot save the drawing reopens it.
 - Decision ids: D-056…D-064 assume PRs #182 (D-053) and #183 (D-054) merge
   first; the first-merged PR owns an id and the open one renumbers
   (survey §12).

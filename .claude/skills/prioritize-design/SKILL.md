@@ -31,7 +31,8 @@ Three rules the design settled (D-085 to D-088 in the
    [review-print rubric](../review-print/rubric.md) (the fill verdicts and the `open`,
    `biggest` and `sym` hints come from there; never copy them here).
 2. **Collect the candidates.** The [constructions ledger](../../../docs/constructions/ledger.md)
-   rows done in youtube with no coaster, or the set the user names. Their coaster notes and
+   rows done in youtube with no coaster (`python3 tools/reconstruction_intake.py --list` prints
+   them), or the set the user names. Their coaster notes and
    rebuild scores are in the catalog-expansion backlog's screened queue
    ([backlog](../../../docs/tasks/catalog-expansion/backlog.md)); their pictures are the
    feedback pages' media folders and the youtube reconstructions' step renders.

@@ -411,7 +411,7 @@ with the full dome, on one labeled card, so the comparison is the staircase agai
 and round 1 against round 1.5. Whether and when it prints stays Omar's and the plates session's;
 if the steps cannot be seen or felt, what is left of the edge work (§5 step 3) and options 5 to 8
 are style, not fixes. Picked by Claude under Omar's 2026-11-03 blanket authorization; the coupon
-reading, or Omar, can overturn it. → D-123
+reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 **Call 2 — star points: sharp or softened?**
 
@@ -426,7 +426,7 @@ bikar #325) goes on by default on the minimal coasters at a value inside that ra
 value read off [sampler sheet 2](../plates/sheets-02.md); option 4 is not needed, and 1.5 mm stays
 a look, not a default. The default change is implied, not made: every minimal coaster still
 carries `tip` at 0 (bikar #328) until the sheet is read. Picked by Claude under Omar's 2026-11-03
-blanket authorization; the sheet reading, or Omar, can overturn it. → D-123
+blanket authorization; the sheet reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 **Call 3 — how much SKIMS?**
 
@@ -441,7 +441,7 @@ bikar #329) stays at 0 on every minimal coaster, and a coaster that wants the me
 to a light value (the researchers drew light as 0.6 mm on CS-2 and 1.2 mm on CS-1; the number is
 read off [sampler sheet 3](../plates/sheets-03.md)); strong stays a named look, never a default.
 Nothing to build and no default change. Picked by Claude under Omar's 2026-11-03 blanket
-authorization; the sheet reading, or Omar, can overturn it. → D-123
+authorization; the sheet reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 **Call 4 — the top.**
 
@@ -456,7 +456,7 @@ authorization; the sheet reading, or Omar, can overturn it. → D-123
 off [sampler sheet 1](../plates/sheets-01.md), rows B and C. Until that reading, round 1 stays the
 default on every coaster; the default change is implied, not made, and the pillow top stays
 unbuilt. Picked by Claude under Omar's 2026-11-03 blanket authorization; the sheet reading, or
-Omar, can overturn it. → D-123
+Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 ## 7. Where this came from
 
