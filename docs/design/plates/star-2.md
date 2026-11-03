@@ -77,6 +77,15 @@ infill and wall overlap 55%, grid supports (normal, not tree).
 | All six stars, by their dots: 1 dot (TRI-12), 2 dots (TRI-10), 3 and 4 dots (TRI-08) | **Do:** 1. Peel off the supports. 2. Before closing a star, count its dots (cut face or bottom) and set it on that size's spot: 1 dot is 1.2 mm, 2 dots 1.0 mm, 3 or 4 dots 0.8 mm. Closing hides the cut-face dots. 3. Press each star's two halves together. 4. Hold the star by its edges. 5. Try to twist the halves against each other. 6. Do the same with one of star-1's 2-dot stars. **Look for:** halves that close flat and do not turn, beside star-1's star, which can turn round its one pin. | All three triangles stop the turning that one middle pin allows. The 1.2 mm pins close the tightest, and the 0.8 mm pins may be loose or snap. | All hold, none turn: stars take the 1.2 mm triangle, the proven pin. Only the 1.0 or 0.8 mm hold: stars take that size. A pin snapped or would not close: that size is out. They still turn: the triangle needs to sit wider, so a smaller star wall or a bigger star is the next plate. |
 | All six stars, bottoms up | **Do:** 1. Turn each star over. 2. Look at its bottom and five tips. **Look for:** a bottom as clean as star-1's 2-dot stars, and whether the bottom dots on the copy-2 stars show grey support inside them. | As clean as star-1's grid stars: only the pins changed. | As clean: the bottom is settled and the next plate is about the join only. Support stuck in the bottom dots: bottom dots and grid supports do not mix, so later plates keep dots on the cut face. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | in my words | the right two's pins broke and turned | 2026-11-02 |
+| 2 | As clean | — | 2026-11-02 |
+
 ## Pictures
 
 The first layer from above, from the slice itself (`tools/print_review.py paths` at 0.2 mm): the
