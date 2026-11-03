@@ -1,19 +1,24 @@
 ---
-status: draft
+status: decided
 date: 2026-10-04
 produced-by: Claude (Opus 5.5), from a read of this repo at origin/master ec01d92 and of bikar at origin/main 6629f24
 ---
 
 # Piece colors: a Coaster Lab screen for coloring the pieces, with helpers that show the cost
 
-> Status: draft 2026-10-04, for Omar to decide the four calls in
-> [Open calls for Omar](#8-open-calls-for-omar). Asked by Omar on 2026-10-04: "i also want to
-> build a customization ux where one can confifure the infill colors with tooling helpers". Built
-> since: phase 1 (`plates by-color`), phase 2 (its `--costs` view, 2026-10-05), phase 3 (the
-> Piece colors screen) and phase 4 (its helpers, all but "match the loaded trays", which waits on
-> call 4) and phase 5 (one piece at a time, 2026-10-06, built under my pick for call 2, which is
-> still open). It adds no grammar and changes no decision; it is the detailed design of steps 3,
-> 5 and 6 of the guided page in
+> Status: the four calls in [§8](#8-open-calls-for-omar) are decided. Omar answered them on
+> 2026-10-08, as calls 16 to 19 of the
+> [2026-10-06 open-calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md#16-how-the-lab-prints-a-colored-coaster),
+> logged as [D-110](../../working-model/decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send)
+> and [D-111](../../working-model/decisions-log.md#d-111--colors-are-matched-to-the-loaded-trays-at-print-time-the-hub-reads-the-printer-never-sends);
+> this page carried his ticks from 2026-11-03. Asked by Omar on 2026-10-04: "i also want to
+> build a customization ux where one can confifure the infill colors with tooling helpers". Built:
+> phase 1 (`plates by-color`), phase 2 (its `--costs` view, 2026-10-05), phase 3 (the Piece
+> colors screen), phase 4 (its helpers, all but "match the loaded trays", which waits on the
+> hub's tray route) and phase 5 (one piece at a time, 2026-10-06). Call 3 went the other way from
+> what was built first; the change is built as the
+> [print-time color map design §8](print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code)
+> lists. It adds no grammar; it is the detailed design of steps 3, 5 and 6 of the guided page in
 > [loose-pieces §4](loose-pieces-design.md#4-the-assemble-your-own-coaster-guided-page), plus
 > the helpers around them.
 
@@ -100,9 +105,10 @@ Three gaps turned up while reading bikar main 6629f24. Each one shapes the build
 
 The mockup at the top is the screen. It is step 3 of the guided page, "Pick colors", with the
 parts list (step 5) and the print hand-off (step 6) shown beside it, because the cost of a color
-choice only makes sense next to the plates it makes. Where the guided page itself lives is
-[loose-pieces call 2](loose-pieces-design.md#7-open-calls-for-omar), still open; this screen goes
-wherever that page goes and does not reopen the question.
+choice only makes sense next to the plates it makes. Where the guided page itself lives follows
+[loose-pieces call 2](loose-pieces-design.md#7-open-calls-for-omar) (decided the same day as this
+page's ticks were carried over, 2026-11-03: a guided mode in the Lab); this screen goes wherever
+that page goes and does not reopen the question.
 
 **What is on it, top to bottom:**
 
@@ -164,8 +170,13 @@ Six helpers, each grounded in what exists. "New" means nothing does this today.
 `bambu filament --json` already reads the loaded trays off the printer
 (`tools/bambu/src/commands/filament.ts`). The Lab cannot ask the printer itself: it is a web page,
 and the printer's access code stays with the tools that send, which is why 3d-model-hub stays the
-plate builder and the Lab stays a design tool. So the tray list reaches the Lab one of two ways,
-and that is call 4. Either way the Lab only reads a list of colors; it never talks to the printer.
+plate builder and the Lab stays a design tool. So the tray list reaches the Lab through something
+that can run the command, and that was call 4. **Decided 2026-10-08 (D-111):** the hub reads the
+printer and serves the trays on a read-only route, and the Lab shows them as a hint; the real
+match to a tray happens at print time on this machine, in the send-plate skill
+([print-time color map design §6 and §7](print-time-color-map-design.md#6-the-read-only-hub-api)).
+The Lab only reads a list of colors; it never talks to the printer. Until the hub's route is built
+and running, the Lab's tray chips are its baked snapshot, marked "loaded, not checked".
 
 ### 4.2 Group selection
 
@@ -268,7 +279,10 @@ is resolved later.
 
 **The color in the `.bkr` is a wish; the tray is the fact.** The hex in the palette tints the
 picture. What prints is the tray the send feeds from. Whether the recipe also records the color,
-so the send finds the tray with no `--color`, is call 3.
+so the send finds the tray with no `--color`, was call 3. **Decided 2026-10-08 (D-110):** always
+at the send. No one-color recipe names a color; the design color stays in the recipe's name and
+comment header, and the send refuses a one-color plate with no color named
+([print-time color map design §8](print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code)).
 
 ## 6. What a color choice costs
 
@@ -345,15 +359,19 @@ Each phase names the test that shows it works. Ordered by what it gives Omar for
 | 1 | **Export by color.** The `plates by-color` command: read a `.bkr`, group palette names by color, write one recipe per color, the frame riding along when it shares a color; print each recipe's slice minutes, grams and bed count | 3d-models `tools/bambu` | Makes a multi-color coaster printable today, by editing palette lines by hand, with no Lab work. Everything after builds on it | On the gBV pieces file with the mockup's colors: three recipes; `bambu slice compose <each> --dry-run` places every item; the per-piece check in §9 passes; a recolor of one group moves only that group's items |
 | 2 | **The cost table in the command.** All three routes of §6 for the chosen colors, slice numbers where sliced, estimates labeled where not. **Built 2026-10-05:** `plates by-color --costs [--slice]` writes `costs.json` and `costs.html`, a page with each plate's picture, time, watched time, grams and dollars, and the time and cost per coaster | 3d-models | Omar sees the cost before any plate page exists | The one-color route's minutes equal `bambu validate sliced`'s for the same recipe; a choice that spills one recipe onto a second bed shows that bed, not a total |
 | 3 | **The Piece colors screen.** Group rows with a color each (a palette-line rewriter, tested apart from the page like `setOrbitFill`), the tray chips, the flat colored picture, the filled-in command. **Built 2026-10-05** (bikar #304): the rows, the themes and gradient, the flat colored preview and the share link | bikar `packages/lab` | The screen Omar asked for, on top of a tool that already works | A real-browser run: pick pink for Kite, the `.bkr` has `Kite = #F5547C`, the picture's kites turn pink, the command matches; the share link carries the colors and no printer detail |
-| 4 | **The helpers in the screen.** Contrast hints, "match the loaded trays", the estimate half of the cost table. **Built 2026-10-05:** the contrast hints (bikar #304); a row whose color no loaded tray holds says "load before the send" and still exports, and a cost estimate shows the three routes with plates, swaps, minutes and grams, each marked "about" (bikar #310). "Match the loaded trays" waits on call 4, how the Lab gets the printer's tray list | bikar `packages/lab` | Speeds up choosing; nothing new reaches the printer | The mockup's choice raises the Middle/Kite hint; Kite in blue clears it; a color with no tray shows "load before the send" and still exports |
-| 5 | **One piece at a time.** Prove `index` with `loose` first, then the "pick" switch. **Built 2026-10-06** (bikar #311): a "Color one piece" switch takes a clicked piece out of its group, with its own color and a "Back to <group>" button; `bikar bands` lists each ring's faces, and `plates by-color` prints a taken-out piece on its color's plate with one fewer in its ring (3d-models #579). Built under my pick for call 2, which is still open | bikar core test, then the Lab | The finest choice, and the one that adds most plates; last because it is the least certain and the least asked for | A gBV fixture with one kite named apart: `--piece KiteBlue` gives exactly one body, `--piece Kite` gives nine, and the Lab's piece numbering picks the same face |
+| 4 | **The helpers in the screen.** Contrast hints, "match the loaded trays", the estimate half of the cost table. **Built 2026-10-05:** the contrast hints (bikar #304); a row whose color no loaded tray holds says "load before the send" and still exports, and a cost estimate shows the three routes with plates, swaps, minutes and grams, each marked "about" (bikar #310). "Match the loaded trays" waits on the hub's read-only tray route and the Lab's read of it (call 4, D-111; [print-time color map design §9](print-time-color-map-design.md#9-build-order) steps 4 and 5) | bikar `packages/lab` | Speeds up choosing; nothing new reaches the printer | The mockup's choice raises the Middle/Kite hint; Kite in blue clears it; a color with no tray shows "load before the send" and still exports |
+| 5 | **One piece at a time.** Prove `index` with `loose` first, then the "pick" switch. **Built 2026-10-06** (bikar #311): a "Color one piece" switch takes a clicked piece out of its group, with its own color and a "Back to <group>" button; `bikar bands` lists each ring's faces, and `plates by-color` prints a taken-out piece on its color's plate with one fewer in its ring (3d-models #579). Built under my pick for call 2, which Omar then chose (D-110) | bikar core test, then the Lab | The finest choice, and the one that adds most plates; last because it is the least certain and the least asked for | A gBV fixture with one kite named apart: `--piece KiteBlue` gives exactly one body, `--piece Kite` gives nine, and the Lab's piece numbering picks the same face |
 
 The Loose button (loose-pieces §6 item 4) is not in this list: it is that doc's, and phases 1 and 2
 do not need it. Phase 3 needs it only for coasters that are not loose yet.
 
 ## 8. Open calls for Omar
 
-Tick one box per call. My pick is first, with its reason.
+All four are decided. Omar ticked them on 2026-10-08 as calls 16 to 19 of the
+[2026-10-06 open-calls page](../../working-model/feedback-requests/2026-10-06-open-calls.md#16-how-the-lab-prints-a-colored-coaster),
+where this page's calls were asked again with pictures; the ticks were carried over here on
+2026-11-03. Two went against my pick: call 3 and call 4. The tables stay as they were offered,
+so the reason for each pick can still be read. My pick is first in each.
 
 **1. Which way of printing does the screen offer first?** (§6)
 
@@ -363,10 +381,14 @@ Tick one box per call. My pick is first, with its reason.
 | The whole set, once per color | No new recipe at all: sheets-04g plus `--color`; the spares make more coasters in any mix | Three times the time and plastic for one coaster; two frames and 82 pieces left over | Phase 1 shrinks to the cost table; the screen picks the colors to send in |
 | Allow one plate, many colors, with its cost shown | One send; nothing to sort by hand | The route Omar dropped: about 70 extra minutes and a prime tower here | Reopens the 2026-10-04 decision; the bleed hint (§4.3) has to be built |
 
-- [ ] **One plate per color**, and show the other two as costs beside it.
+- [x] **One plate per color**, and show the other two as costs beside it.
 - [ ] The whole set, once per color.
 - [ ] Allow a many-color plate.
-- Notes:
+- Notes: **Decided 2026-10-08:** one plate per color, the other two routes shown as costs beside
+  it; so phase 1 writes a recipe per color and each gets its own plate page and its own yes, as
+  the table says. Omar's tick on
+  [call 16](../../working-model/feedback-requests/2026-10-06-open-calls.md#16-how-the-lab-prints-a-colored-coaster),
+  logged as [D-110](../../working-model/decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 **2. A color per group, or per piece too?** (§4.2, §7 phase 5)
 
@@ -376,10 +398,13 @@ Tick one box per call. My pick is first, with its reason.
 | Per piece from the start | Full freedom | Rests on the untested `index` path; every odd piece can add a plate | The screen needs the pick switch and per-piece checks from day one |
 | Per group only, never per piece | Simplest, always symmetric | Rules out a single accent piece | Phase 5 is dropped |
 
-- [ ] **Per group now, per piece later.**
+- [x] **Per group now, per piece later.**
 - [ ] Per piece from the start.
 - [ ] Per group only.
-- Notes:
+- Notes: **Decided 2026-10-08:** a color per group now, one piece at a time later; phase 5
+  waited for the `index` test, which passed (§4.2), and is built. Omar's tick on
+  [call 17](../../working-model/feedback-requests/2026-10-06-open-calls.md#17-a-color-per-group-or-per-piece-too),
+  logged as [D-110](../../working-model/decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 **3. Does a plate's color go in its recipe, or only at the send?** (§5)
 
@@ -390,9 +415,15 @@ Tick one box per call. My pick is first, with its reason.
 | Always in the recipe | Every page shows its color | sheets-04g's "pick at print time" goes away | Each color of the whole-set route is its own recipe |
 
 - [ ] **In the recipe for per-color plates, at the send for whole-set plates.**
-- [ ] Always at the send.
+- [x] Always at the send.
 - [ ] Always in the recipe.
-- Notes:
+- Notes: **Decided 2026-10-08:** always at the send, not my pick. One habit for every plate:
+  no one-color recipe names a color, the pink plate's page says pink in words, and the recipe's
+  color field is written only for phones-01, the one two-color plate. The built split was
+  changed to match ([print-time color map design §8](print-time-color-map-design.md#8-what-call-18-changes-in-the-built-code)).
+  Omar's tick on
+  [call 18](../../working-model/feedback-requests/2026-10-06-open-calls.md#18-where-a-plates-color-is-written),
+  logged as [D-110](../../working-model/decisions-log.md#d-110--a-plate-prints-one-color-named-at-the-send).
 
 **4. How does the Lab learn which trays are loaded?** (§4.1)
 
@@ -405,10 +436,21 @@ Tick one box per call. My pick is first, with its reason.
 - [ ] **Paste or drop the tray list.**
 - [ ] The hub serves it.
 - [ ] No tray list.
-- Notes:
+- [x] None of the three as written: match the colors at print time, and the hub serves the trays
+  read-only as a hint for the Lab.
+- Notes: **Decided 2026-10-08:** not my pick. When the print skill takes a Lab design, it reads
+  the trays on this machine, matches each design color to a loaded tray, and asks one question
+  per color that does not match (load it, use the nearest, or stop). The Lab never sends. The hub
+  gets a read-only printer route on the private network, trays and status with no send, and the
+  Lab may show what is loaded as a hint; until that route is built and running, the Lab shows its
+  baked tray snapshot as "loaded, not checked". The
+  [print-time color map design](print-time-color-map-design.md) has the details. Omar's note on
+  [call 19](../../working-model/feedback-requests/2026-10-06-open-calls.md#19-how-the-lab-learns-which-colors-are-loaded),
+  logged as [D-111](../../working-model/decisions-log.md#d-111--colors-are-matched-to-the-loaded-trays-at-print-time-the-hub-reads-the-printer-never-sends).
 
 Where the screen lives is not asked again here: it follows
-[loose-pieces call 2](loose-pieces-design.md#7-open-calls-for-omar), still open.
+[loose-pieces call 2](loose-pieces-design.md#7-open-calls-for-omar) (decided the same day as
+these ticks were carried over, 2026-11-03: a guided mode in the Lab).
 
 ## 9. Checks
 
@@ -461,5 +503,6 @@ says it cannot.
   subset takes less room, not more.
 - **No decision is changed.** D-073 (a name is a label), D-075 (name to slot), D-076 (the Lab's
   color knob), D-077 and D-078 (slice, warn not cap), D-081 (groups are orbits) and D-090 (loose
-  pieces in two colors) are used as they stand. Omar's 2026-10-04 one-color rule is the default
-  here; reopening it is option 3 of call 1.
+  pieces in two colors) are used as they stand, and so are D-110 and D-111, which answered this
+  page's four calls (§8). Omar's 2026-10-04 one-color rule is the default here; reopening it was
+  option 3 of call 1, and he kept the rule.
