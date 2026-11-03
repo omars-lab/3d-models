@@ -2,6 +2,7 @@
 status: decided
 decisions:
   - D-081
+  - D-126
 ---
 
 # Multicolor constructions — the consolidated design
@@ -17,7 +18,9 @@ which stay as the record. The checker's raw notes, measurements and re-fetched s
 [../../research/multicolor-verification.md](../../research/multicolor-verification.md). The grammar change
 (§2, the `orbit` word) was approved on 2026-09-27 as [D-081](../../working-model/decisions-log.md#d-081--pieces-are-grouped-by-orbit-about-the-patterns-true-centre-and-the-openwork-coaster-fills-chosen-orbits-solid),
 together with filling chosen orbits solid on the openwork coaster. The look (§3) and the colors
-are still Omar's to approve. Nothing here has been sliced in the Bambu Studio window or printed.*
+were picked provisionally on 2026-11-03 (D-126): flush fills, and themes from the color-themes
+gallery; the §10 sample plate, or Omar, can overturn both. Nothing here has been sliced in the
+Bambu Studio window or printed.*
 
 ## 0. What this doc decides, in one screen
 
@@ -26,7 +29,7 @@ are still Omar's to approve. Nothing here has been sliced in the Bambu Studio wi
 | How are shapes grouped into color classes? | A new fill word **`orbit`**: faces that a rotation (or, where the pattern has a mirror line, a reflection) about the pattern's centre carries onto each other | It is Omar's rule stated as a test the engine can check face by face; `ring` breaks it on 7 of the 8 coasters measured |
 | Which word? | **`orbit`**, not `class` | `class` already means `.class` tags and `classify` in the language; `orbit` is already the importer's word for exactly these copies |
 | Where is the centre? | The **area-weighted centroid** of the faces, refused when the faces have no symmetry about it | Any symmetry of the face set fixes that point; B's "outermost `rotate N around`" rule refuses 7apC5Q9QS-8, which has no such block |
-| Flush or lowered fills? | **Build flush first; add the fill height as one knob on the same path; the look is Omar's call** | Flush builds and passes every gate today (reproduced); lowered halves the color-change layers but needs a parser and kernel change first |
+| Flush or lowered fills? | **Flush, provisionally (D-126); the fill height is the next knob on the same path; the §10 sample plate, or Omar, can overturn it** | Flush builds and passes every gate today (reproduced); lowered halves the color-change layers but needs a parser and kernel change first |
 | How do colors reach the printer? | The shipped route: `--format parts` → multi-part 3MF → `bambu slice coaster` | Both researchers agree; nothing new on the printer side |
 | How many colors? | **Warn, not cap**, slots read from the machine (D-078), not A's fixed 4 | D-078 already decided it; A's cap contradicts a shipped decision |
 | bikar PR #261 | The two kernel fixes are sound and should land; the prototype preset should wait for Omar's look call | §9 |
@@ -150,6 +153,23 @@ and arithmetic on the layer count, not on an X2D measurement.
 is the case fill height = strap height. Build order follows what exists: flush first (it is built
 and gated), then the fill height. Which look Omar wants on the shelf is **his taste call**; the
 first sample plate that has both (§10) is where he makes it.
+
+**Decided 2026-11-03 (provisional):** flush fills are the default (fill height = strap height,
+1.2 mm, as built in bikar PR #261); the lowered fill stays the fill-height knob to build next
+(§10 step 6), not a second mode. The colors come from the existing
+[color-themes gallery](themes/gbv-themes.md) and its review-theme scores, not from a palette
+invented here. On the one construction that has a scored gallery today, gBV, the highest score is
+a tie at 3.8 of 5 between Black and gold and Silk black and gold; those scores are six simulated
+coffee-drinker personas reading a picture, not customer research, and the first themes Omar chose
+to print are a different four, the bottom row (Midnight blue, Night sky, Terracotta souk, Iznik
+tile; D-106, [gbv-theme-plates.md](themes/gbv-theme-plates.md)), which this line does not
+change. The gBV themes were drawn and scored on a loose-piece openwork coaster, so they carry to a
+filled construction coaster only as candidate palettes: the §10 plate's construction
+(7apC5Q9QS-8) has no themes yet, and gets its own through the same two skills before the plate is
+laid out. The §10 sample plate (flush beside 0.6 mm lowered, a light fill next to a dark strap) is
+where the taste call is made, so this stands until that plate is judged. Picked by Claude under
+Omar's 2026-11-03 blanket authorization; the §10 sample plate's judging, or Omar, can overturn
+it. → D-126
 
 **Default:** fills flush with the straps (fill height = strap height, 1.2 mm), as in bikar
 [PR #261](https://github.com/NaqshCoffee/bikar/pull/261)'s prototype, the one version that is built
@@ -346,8 +366,8 @@ Omar's; nothing was merged here.
 
 ## 10. Next steps, smallest first
 
-1. **Omar looks** at #261's body picture and says whether flush is a look he wants on the shelf
-   (§3). No build.
+1. **Omar looks** at #261's body picture and confirms or overturns the provisional flush pick
+   (§3, D-126). No build; the pick stands until he, or step 7's plate, says otherwise.
 2. **Slice the prototype** through `bambu slice coaster` and open it in the Studio window: three
    palette names should land on three filaments. No print. Checks the one link in §4 nobody has run.
 3. **Land #261's fixes** (split as §9 says), after Omar's go.
@@ -376,8 +396,12 @@ Omar's; nothing was merged here.
 
 ## 12. Read against itself (K7) and transfer conditions (K10)
 
-- §0, §3 and §10 agree: flush is built first, the look is Omar's, lowered is a knob on the same
-  path. §3's `**Default:**` is a build order, and says so.
+- §0, §3 and §10 agree: flush is built first and stands as the provisional pick (D-126), the
+  look is still settled by Omar or the §10 plate, lowered is a knob on the same path. §3's
+  `**Default:**` is a build order, and says so; the Decided line beside it is provisional, and
+  says so.
+- §3's Decided line and the themes pages agree: the gallery's top score (3.8, gBV) and Omar's
+  first-to-print pick (D-106) are different themes, and the line keeps both as they are.
 - §2.3 says B's centre rule refuses 7apC5Q9QS-8; §7's PASS uses 7apC5Q9QS-8 with A's centre, so the
   PASS is built from the machinery this doc recommends.
 - §7's hard FAIL uses the wrong centre or a radius-only grouping, not the recommended τ = 0.02: it
