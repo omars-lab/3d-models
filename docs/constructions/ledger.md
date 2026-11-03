@@ -136,7 +136,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `cKYbKQvmsbs` | Sultan Barsbay 16 & 8 (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
-| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | FAIL 134/20 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
+| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | PASS 144/0 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
 | `jlTmt_279M4` | Sevenfold stars in a tilted square | done | `bikar/patterns/Constructions/jlTmt_279M4.bkr` | PASS 86/0 | PASS 1.0/1.0 | — | `src/Coasters/jlTmt_279M4-minimal-coaster-standard.stl` | CS-14 | — |
 | `kpFgs2e8YGw` | Star rosettes on a 3-uniform tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
@@ -193,7 +193,10 @@ at their imports on 2026-09-30, on the youtube branches named in each bikar PR
   `nmEjCTzMbDg` hit; every point, line, circle, polygon and mask passes. The O2
   precision is the video's white paint-over masks: the frame shows the clipped
   rosette, the naqsh render draws the mask edges and the rosette under them. A
-  re-render scores the same, so it is not a stale hero.
+  re-render scores the same, so it is not a stale hero. O1 was re-run on
+  2026-11-03, during the blossom import, against bikar's `gBV_JTt3Kxk.bkr`: it
+  reads `PASS: 144 compared, 0 failed, 47 skipped/extra`, the row's cell since
+  then; the arc rows that failed before now compare. O2 was not re-run.
 - **`jlTmt_279M4`** O1 `PASS: 86 compared, 0 failed, 75 skipped/extra` — on
   youtube branch `o1-polyline-ray` (9a92134), which teaches the comparator
   polyline and ray rows and is not on youtube main yet; O2
