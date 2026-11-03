@@ -3,9 +3,9 @@ plate: star-2
 print_log: '[[print-logs/star-2|print log]]'
 recipe: star-2.yaml
 iteration: 2
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-02-star-2]
 answers: "With three pins on a triangle round the sloped star's middle, do the star's halves close and stop turning, and which pin size (1.2, 1.0 or 0.8 mm) holds best without snapping?"
 kind: new
 maturity: experiment
@@ -134,3 +134,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-01 | proposed: on Omar's star-1 comments, "shift to a 3 pin model in an equilateral triangle" and "3 and 4 might have been best"; three pin sizes on a triangle, all on grid supports, six stars | this page |
 | 2026-11-02 | sent — by `bambu print send`; spends the approval of 2026-11-01, iteration 2 @ 0f2e32e976 in #00AE42 | this page |
+| 2026-11-02 | printed — all 17 layers, 18:05 to 18:29 UTC in green; judged on the hub: the 1.2 mm pins best ("left most was best"), the 0.8 mm pins broke and turned, bottoms as clean. Next: the star takes three 1.2 mm pins | [the record](../../prints/2026-11-02-star-2/index.md) |
