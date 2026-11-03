@@ -190,9 +190,13 @@ Smallest first. Each ships with the test that fails before it and passes after.
 
 **Call 1. How to watch.** (Section 3 has the full table.)
 
-- [ ] **(b) A small intake tool, read-only at session start, writes on request (recommended).**
+- [x] **(b) A small intake tool, read-only at session start, writes on request (recommended).**
   Pros: rows get written by one command; one reader of youtube. Cons: one new file. Implies:
   build items 1 to 7.
+
+  **Decided 2026-11-03 (provisional):** (b), a small intake tool that only reads at session
+  start and writes ledger rows and the pin when asked. Picked by Claude under Omar's 2026-11-03
+  blanket authorization; Omar can reverse it. → D-122
 - [ ] **(a) Only extend the gate's session line.** Pros: least code. Cons: rows are still typed
   by hand. Implies: the reader (item 2) goes into the gate, item 6 is dropped, and the 9
   missing rows stay a chore.
@@ -202,17 +206,24 @@ Smallest first. Each ships with the test that fails before it and passes after.
 
 **Call 2. When the pin moves.**
 
-- [ ] **At every intake write, and at every import PR (recommended).** Pros: the pin trails
+- [x] **At every intake write, and at every import PR (recommended).** Pros: the pin trails
   youtube by at most one intake run. Cons: more small PRs. Implies: the loop's "take stock" step
   runs the write mode.
+
+  **Decided 2026-11-03 (provisional):** the pin moves at every intake write and at every import
+  PR. Picked by Claude under Omar's 2026-11-03 blanket authorization; Omar can reverse it. → D-122
 - [ ] **Only at import PRs.** Pros: fewer PRs. Cons: between imports the pin lags and L3 keeps
   failing on new rungs. Implies: rows are owed for days at a time, as today.
 
 **Call 3. Does an accepted PARTIAL count as completed?**
 
-- [ ] **Yes, as youtube's own `done` rule says, marked "accepted partial" in the list
+- [x] **Yes, as youtube's own `done` rule says, marked "accepted partial" in the list
   (recommended).** Pros: one meaning of done across both repos. Cons: `88q-u2eWZqg` (6/9) joins
   the queue. Implies: the oracles here still judge the import on its own.
+
+  **Decided 2026-11-03 (provisional):** an accepted PARTIAL counts as completed and the list
+  marks it "accepted partial". Picked by Claude under Omar's 2026-11-03 blanket authorization;
+  Omar can reverse it. → D-122
 - [ ] **No, fresh PASS only.** Pros: a stricter queue. Cons: two meanings of done; `88q-u2eWZqg`
   never enters the queue unless someone overrides it. Implies: a second rule to keep in step
   with youtube's.
