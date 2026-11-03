@@ -174,7 +174,10 @@ brace), so someone has to read it.
   Prove such a branch dead by hand: compare its tree with the rewritten twin of the same merge on
   `origin/<default>` (find it by commit subject). The only differences should be the removed
   files. Then snapshot it with `--no-push` only. **Never run the printed `snapshot` line on these
-  tips:** pushing them puts more copies of the removed pictures on GitHub. The 62
+  tips:** pushing them puts more copies of the removed pictures on GitHub. Since 2026-11-03 the
+  tool refuses the push itself: before pushing, `snapshot` looks for a commit off the default whose
+  twin (same subject, same author date, twin parents) sits on the default, and when the tip side
+  holds files that twin lacks, it writes the refs locally, names the files and pushes nothing. The 62
   `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs already on hifth's GitHub carry them,
   and so do GitHub's own pull request copies. Omar decided on 2026-10-30 to leave those as they
   are: "dont do rewrite, keep history as is, accept the risk". So don't purge them, don't rewrite
