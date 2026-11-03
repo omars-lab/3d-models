@@ -442,7 +442,8 @@ frame, is **closed, not built**. The importer refuses a free point that is not (
 `packages/core/src/import/geogebra/lower.ts`, D-062). What was checked, 2026-11-03: of the
 [ledger](../../constructions/ledger.md)'s 34 constructions, read in youtube's reconstructions
 folder as checked out that day, every one of the 14 migrated has all its free points on the
-frame, so the refusal has stopped no migration. Seven of the 20 not yet migrated write a literal
+frame, so the refusal has stopped no migration. Of the other 20 (19 not yet migrated, and one,
+`M60LJNNslHU`, with no piece by design), seven write a literal
 point off the frame: `_U6G8QSfWnk` and `Y6kS1MvnKoc` (the ends of drawn-out diameters and slide
 framing lines), `fhGHzop7ULw` (a base line and arc ends past the unit points), `A9fefFurD_s`
 (two arc ends, hidden scaffold), `LoCRh3SOhls` (the whole drawing at R = 11.5 cm, so A = (0,
