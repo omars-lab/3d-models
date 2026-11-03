@@ -16,6 +16,26 @@ pass runs; the backlog says *what* is next; the done list says what shipped.
 | [`consolidation.md`](consolidation.md) | Merge PRs, clean up branches, worktrees and stashes, and lose nothing | all six repos | [backlog](../../docs/tasks/consolidation/backlog.md) | [done](../../docs/tasks/consolidation/done.md) |
 | — | Work no loop owns | — | [parked](../../docs/tasks/parked/backlog.md) | [done](../../docs/tasks/parked/done.md) |
 
+## Which session runs which loop
+
+Two sessions share this repo. Omar split the work between them on 2026-11-03 so the printing
+one stays focused.
+
+- **The plates-and-feedback session** runs the coaster-pipeline loop in full: building and
+  iterating plates, sending them, watching prints, opening the hub for Omar's answers and page
+  comments, acting on those answers, and writing each print record. It also takes the parts of
+  print-infrastructure that serve plates, judging and comments: the hub's plate and judging pages,
+  the comment server, a plate's slice and preflight. A decision of Omar's whose answer changes a
+  plate recipe (the stud gap, the split-with-studs calls) stays with it too.
+- **The other session** takes everything else: consolidation, catalog-expansion, parked, the rest
+  of print-infrastructure (hub features that are not about plates or judging, such as the Orders
+  tab; the plate-packing skill; the gallery and its deploy), and the bookkeeping of Omar's other
+  decisions: recording D- ids when he answers a design's open calls, and the FAQ review.
+
+The lists stay by loop and the sessions split by kind of work, so an item can sit in a backlog
+the other session reads and still be plates' by this rule. When in doubt, ask "does this move a
+print, a judging page or a comment?" Yes stays with plates; no goes to the other session.
+
 Work flows from reconstruction to catalog, then to the print infrastructure, then to the
 printed plate. Consolidation runs beside all of them. The video loop keeps its lists in the
 youtube repo, where it runs, and so does its prompt (moved there 2026-09-28); neither is copied here.
