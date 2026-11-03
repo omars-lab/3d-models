@@ -1,45 +1,60 @@
 ---
-status: draft
+status: built
 date: 2026-09-30
 produced-by: Claude (Opus 5.5), from a read of this repo at origin/master 5d0a4f0 and of youtube at refs/heads/main 30a2709
 ---
 
 # Design: reconstruction intake, from a finished youtube rung to an import here
 
-> Status: draft 2026-09-30, for Omar to decide the three calls in
-> [Open calls for Omar](#7-open-calls-for-omar). Asked by Omar on 2026-09-30: "do we have a
+> Status: built 2026-11-03. The three calls in [Open calls for Omar](#7-open-calls-for-omar)
+> were picked by Claude under Omar's 2026-11-03 blanket authorization (D-122, provisional;
+> Omar can reverse any of them). Of [What would need building](#6-what-would-need-building),
+> items 2, 4, 6 and 7 are built and self-tested; items 1, 3 and 5 are partly done, and each
+> says what is left. The tool is `tools/reconstruction_intake.py`: `--list` names the finished
+> youtube rungs not yet imported here, `--session` is the session-start line, `--write` writes
+> their ledger rows and moves the pin. Asked by Omar on 2026-09-30: "do we have a
 > session start hook that keeps an eye on reconstructions/<id>/rung.yaml in ../youtube to look
 > for completed reconstructions and properly imports them? do we have a skill to do this import?"
 >
-> Short answer: a session start hook exists, but it never reads rung.yaml and it imports
-> nothing. The import skill exists, and it works one id at a time by hand. What is missing is
-> the step between them: turning "done in youtube" into a ledger row and a place in the queue.
+> Short answer, as of 2026-09-30: a session start hook exists, but it never reads rung.yaml
+> and it imports nothing. The import skill exists, and it works one id at a time by hand. What
+> is missing is the step between them: turning "done in youtube" into a ledger row and a place
+> in the queue. As of 2026-11-03 the hook reads rung.yaml through the intake tool, and the
+> tool writes the rows; the import itself stays by hand, one id at a time (call 1).
 
-Every youtube fact below was read at youtube's `main` branch (commit 30a2709, 2026-09-30),
-never from its working tree. The youtube repo has a remote today: `origin` is
+Every youtube fact below was read at youtube's `main` branch (commit 30a2709 on 2026-09-30;
+commit 1f1ec57 for the 2026-11-03 build), never from its working tree. The youtube repo has a remote today: `origin` is
 `studio:git/youtube.git`.
 
 ## 1. What we have today
 
-**The session start hook.** This repo's settings run the ledger gate in session mode at every
-session start (`3d-models:.claude/settings.json:L16-L21 "--session"`). It prints two lines:
-"N constructions not yet migrated" and "N youtube reconstructions have no ledger row". It took
-0.28 s on this machine today.
+Written on 2026-09-30; where the 2026-11-03 build changed a fact, a **Now:** sentence says so.
+
+**The session start hook.** This repo's settings run the intake tool in session mode at every
+session start (`3d-models:.claude/settings.json:L16-L21 "--session"`). On 2026-09-30 it ran
+the ledger gate's session mode instead, which printed two lines: "N constructions not yet
+migrated" and "N youtube reconstructions have no ledger row", in 0.28 s. **Now:** it prints
+the intake lines of [§3](#3-options-for-the-watch) option (b), in 0.43 s on this machine.
 
 **The ledger gate** (`.claude/gates/constructions_ledger.py`) decides what a reconstruction is
 and whether it is done:
 
 - A reconstruction is any youtube folder with a `construction.ggb-commands` file
-  (`3d-models:.claude/gates/constructions_ledger.py:L218 "def youtube_recon_ids"`). It lists
+  (`3d-models:.claude/gates/constructions_ledger.py:L230 "def youtube_recon_ids"`). It lists
   them at the ledger's youtube pin and at youtube's tip branch, read as a ref
-  (`3d-models:.claude/gates/constructions_ledger.py:L239 "TIP_REFS"`). The L3 rule fails when
-  one has no ledger row (`3d-models:.claude/gates/constructions_ledger.py:L36 "A youtube reconstruction with no ledger row"`).
+  (`3d-models:.claude/gates/constructions_ledger.py:L252 "TIP_REFS"`). The L3 rule fails when
+  one has no ledger row (`3d-models:.claude/gates/constructions_ledger.py:L37 "A youtube reconstruction with no ledger row"`).
   It reads both refs this way because a stale pin once hid `bknVRSMcLj0` for ten days
   ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
-- "Done" comes from youtube's task list (docs/tasks/done.md at the pin), and only as a text
-  search: any id that appears anywhere in that file counts
-  (`3d-models:.claude/gates/constructions_ledger.py:L250-L256 "cid in text"`).
-- It never reads rung.yaml. It only reports and blocks; it writes nothing.
+- "Done" came from youtube's task list (docs/tasks/done.md at the pin), and only as a text
+  search: any id that appeared anywhere in that file counted. **Now:** that search is gone;
+  the gate reads every rung.yaml at the pin in one `git cat-file --batch`
+  (`3d-models:.claude/gates/constructions_ledger.py:L368 "def read_rungs"`) and its rule L4
+  fails a row that says done while the rung says otherwise
+  (`3d-models:.claude/gates/constructions_ledger.py:L49 "L4"`).
+- It never read rung.yaml. **Now:** it does, at the pin, and the pin must be an ancestor of
+  youtube's tip ref (rule L2). It still only reports and blocks and writes nothing; the
+  writing is the intake tool's job.
 
 **The import skill** ([import-construction](../../.claude/skills/import-construction/SKILL.md))
 migrates one construction by hand: GeoGebra, then a naqsh `.bkr` in bikar, then the three
@@ -143,12 +158,14 @@ youtube cell is read there. A pin that falls behind hides new reconstructions; t
 `bknVRSMcLj0` went unledgered in September. L3 now also reads the tip, but the youtube column
 is still dated to the pin.
 
-Proposal: **the intake tool's write mode moves the pin.** It sets the pin to youtube's tip,
-adds a stub row for each rung the tip has and the ledger lacks, and fills each stub's youtube
-cell from its rung.yaml `work.status`. That lands as one small 3d-models PR. Each import PR
-also moves the pin to the tip it read, as L3 already forces whenever a row is added.
+Built 2026-11-03 (call 2): **the intake tool's write mode moves the pin.** It sets the pin to
+youtube's tip, adds a stub row for each rung the tip has and the ledger lacks, fills each
+stub's youtube cell from its rung.yaml `work.status`, and refreshes the youtube cell of every
+row that already exists from the same source, so the gate's L4 is always a one-command fix.
+That lands as one small 3d-models PR. Each import PR also moves the pin to the tip it read,
+as L3 already forces whenever a row is added.
 
-What the gate checks, once the pin is at 30a2709 or later:
+What the gate checks, built 2026-11-03 (the pin is at 1f1ec57, past 30a2709):
 
 - The youtube cell of every row matches its rung.yaml status at the pin (replacing the text
   search in done.md). A row that says done while its rung says blocked fails.
@@ -160,31 +177,55 @@ What the gate checks, once the pin is at 30a2709 or later:
 
 Smallest first. Each ships with the test that fails before it and passes after.
 
-1. **Stale sentences.** The gate's "youtube has no remote today"
-   (`3d-models:.claude/gates/constructions_ledger.py:L237 "remote today"`), the ledger's "no
+1. **Stale sentences.** The gate's "youtube has no remote today" (gone 2026-11-03: the
+   `TIP_REFS` comment now says youtube's local `main` is the record and `origin` a push mirror
+   on the studio machine), the ledger's "no
    remote" (`3d-models:docs/constructions/ledger.md:L14 "no remote"`), step 7's hook number and
-   "reports", and the same two in the umbrella design
-   (`3d-models:docs/constructions/geogebra-construction-import-design.md:L333 "without"`).
-   A doc correction, no test.
+   "reports", and the same two in the umbrella design's "Gate" bullet, which still says the
+   gate "reports, without blocking, every youtube id without a row"
+   ([geogebra-construction-import-design.md](geogebra-construction-import-design.md)).
+   A doc correction, no test. *Partly done 2026-11-03:* the gate's sentence is fixed; the
+   ledger's, the skill's and the umbrella design's are still owed, because this change did not
+   touch those files.
 2. **The rung reader and the completed test**, in tools/reconstruction_intake.py, reusing the
    gate's youtube helpers. Test: a self-test builds a scratch youtube repo with five rungs
    (fresh PASS, accepted PARTIAL, done with a FAIL verdict, done with a stale digest, blocked);
-   only the first two come back.
+   only the first two come back. *Built 2026-11-03:* the reader (`read_rungs`, the `Rung`
+   record with its digest check) lives in the gate, because the gate's L4 needs it too; the
+   completed test (`completed()`) and the five-rung self-test live in the tool
+   (`python3 tools/reconstruction_intake.py --self-test`).
 3. **The list** (`--list`, `--session`) and a `make intake` target running the self-test then
    the list. Test: in the scratch repo, a rung with a migrated row and a "no piece by design"
-   row are both absent.
+   row are both absent. *Built 2026-11-03 except the make target* (the Makefile was not in
+   this change's files); until it exists the two commands are
+   `python3 tools/reconstruction_intake.py --self-test` and `python3 tools/reconstruction_intake.py --list`.
+   The test also holds a third absent case: an id with a coaster on disk and no `.bkr` row,
+   the exclusion [§8](#8-validator) adds.
 4. **The hook** in `.claude/settings.json` calls the intake tool's session mode in place of the
    gate's. Test: the self-test asserts session mode prints nothing when nothing is owed and
-   writes no file.
+   writes no file. *Built 2026-11-03.* The gate's `--session` still answers, by calling the
+   same `session_lines()`, so there is one reader whichever entry point runs. When youtube
+   cannot be read the session line says so instead of printing nothing, so silence always
+   means clean.
 5. **Step 0 and prioritize-design** read the list (prose). Check: run step 0 once against
-   youtube main and see it name one of today's 19.
+   youtube main and see it name one of today's 19. *Not done 2026-11-03:* the two skill files
+   were not in this change's files. The list itself was run against youtube main 1f1ec57 and
+   named 17 ids ([§8](#8-validator) says which and why not 19).
 6. **The write mode** (`--write`, in a worktree only): stub rows, pin to tip, the
    `constructions-total` count. Test: after `--write`, the gate passes L3 on the scratch
-   ledger; a second `--write` changes nothing.
+   ledger; a second `--write` changes nothing. *Built 2026-11-03*, with one addition: it also
+   refreshes the youtube cell of every existing row from its rung status, which is what makes
+   item 7's L4 a one-command fix (the self-test's scratch ledger fails L3 and L4 before the
+   write and passes after). It refuses to run on master or main. Run on the real ledger on
+   2026-11-03: the pin moved e55a577 → 1f1ec57, two cells changed (`yZN_wn0uvTY` done → blocked,
+   `LoCRh3SOhls` done → queued), no stub rows, because every rung at the tip already had a row.
 7. **The gate's youtube column** reads rung.yaml at the pin instead of done.md, plus the
    ancestor check. Test: a done.md that mentions an id only as "attempted" no longer makes it
    done (fails today, because of the text search), and a row saying done over a blocked rung
-   fails.
+   fails. *Built 2026-11-03:* rule L4 and the L2 ancestor rule, both in the gate's self-test
+   (`python3 .claude/gates/constructions_ledger.py --self-test`). A youtube cell that differs
+   from its rung in any way other than saying done is a report, not a failure, so a row behind
+   its source is named without blocking a commit.
 
 ## 7. Open calls for Omar
 
@@ -234,10 +275,15 @@ Smallest first. Each ships with the test that fails before it and passes after.
 rungs that have no coaster here: no row naming a `.bkr`, no "no piece by design" row, and no
 `src/Coasters/<id>*-standard.stl` file of any style.
 
-PASS: run today, it lists 19 ids. `NtnlGMTElBk`, which has a coaster, is absent.
-`M60LJNNslHU`, done and PASS but "no piece by design", is absent. `yZN_wn0uvTY`, blocked, is
-absent. `88q-u2eWZqg` is present, marked accepted partial.
+PASS: run on 2026-11-03 against youtube main 1f1ec57, it lists 17 ids: the 19 rows with no
+`.bkr` and no coaster, less `yZN_wn0uvTY` (blocked) and `LoCRh3SOhls` (queued). `NtnlGMTElBk`,
+which has a coaster, is absent. `M60LJNNslHU`, done and PASS but "no piece by design", is
+absent. `88q-u2eWZqg`, the accepted PARTIAL, is absent too, because its row has named a `.bkr`
+since 2026-10-06; the accepted-partial marker is exercised in the tool's self-test, where the
+scratch youtube's accepted PARTIAL is listed and marked. (On 2026-09-30 the same list would
+have had 19 ids, with `88q-u2eWZqg` present and marked.)
 
 FAIL: a scratch rung with status done but verdict FAIL appears in the list. The hard case is a
 rung whose status says done and whose verdict says PASS but whose construction changed after
-the score: its digest no longer matches, and it must be left out.
+the score: its digest no longer matches, and it must be left out. Both are cases in
+`python3 tools/reconstruction_intake.py --self-test`, which fails if either id comes back.
