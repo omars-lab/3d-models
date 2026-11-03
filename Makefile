@@ -1063,3 +1063,17 @@ node-check:
 		echo "  install it:  nvm install $(NODE_VERSION)"; \
 		echo "  or name one you have:  make <target> NODE_VERSION=v20.20.2"; \
 		exit 1; }
+
+# Is the public gallery behind master? Reads the gh-pages tip's "Deploy gallery
+# from master (<sha>)" line and prints a `gallery: WARN` line (which `make
+# validate` repeats in its summary) when a deployed path changed on master more
+# than a week ago and is still unpublished. Fails nothing: `make deploy`
+# publishes, so it stays a hand step. The gate exits 3 on a warning; the recipe
+# folds that to 0 because make would report it as 2, like any failure. Five
+# weeks went unseen before this existed (2026-09-28 to 2026-11-03).
+# GALLERY_STALE_DAYS=0 shows the warning on any unpublished change.
+GALLERY_STALE_DAYS ?= 7
+.PHONY: validate-gallery
+validate-gallery:
+	@$(PYTHON) $(ROOT_DIR)/.claude/gates/gallery_stale.py --self-test
+	@$(PYTHON) $(ROOT_DIR)/.claude/gates/gallery_stale.py --days $(GALLERY_STALE_DAYS) -- $(DEPLOY_PATHS) || [ $$? -eq 3 ]

@@ -59,6 +59,13 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 HOOK_DIR = ROOT / ".githooks" / "pre-commit.d"
 
 _WHOLESALE = re.compile(r"^#\s*wholesale:\s*(.+?)\s*$", re.MULTILINE)
+
+#: An EXTRA check that passes but has something the reader must see prints a
+#: line shaped `<check>: WARN <what>`; the summary repeats that line, so it is
+#: read where the verdict is read and not only mid-stream. An exit code could
+#: not carry it: make reports any failing recipe as 2, whatever the script
+#: returned. gallery_stale.py is the first to use this.
+WARN_LINE = re.compile(r"^\S+: WARN\b")
 _REQUIRES = re.compile(r"^#\s*wholesale-requires:\s*(\S+)\s*$", re.MULTILINE)
 
 # Targets with no hook behind them. Listed here rather than only in the
@@ -77,6 +84,13 @@ EXTRA = [
         "Checks the prototype coupon catalog. Not wired to a hook: coupons are "
         "edited rarely and the check shells out to bikar, which is a sibling "
         "checkout a commit here cannot assume is present.",
+    ),
+    (
+        "make validate-gallery",
+        "Says when the public gallery (gh-pages) has fallen more than a week "
+        "behind master. Not a hook: no commit makes the gallery stale, time "
+        "does. It warns (a `gallery: WARN` line) and fails nothing, since deploying "
+        "publishes and stays a hand step.",
     ),
     (
         "make validate-status",
@@ -217,6 +231,21 @@ def check(hook_dir: Path = HOOK_DIR, quiet: bool = False) -> int:
     return 0
 
 
+def _stream(command: str) -> tuple[int, list[str]]:
+    """Run a shell command, echoing its output as it comes; return (rc, WARN lines)."""
+    proc = subprocess.Popen(  # noqa: S602
+        command, shell=True, cwd=ROOT, stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT, text=True,
+    )
+    warn_lines: list[str] = []
+    assert proc.stdout is not None
+    for line in proc.stdout:
+        print(line, end="")
+        if WARN_LINE.match(line):
+            warn_lines.append(line.rstrip())
+    return proc.wait(), warn_lines
+
+
 def run(strict: bool) -> int:
     rc = check(quiet=True)
     if rc:
@@ -225,6 +254,7 @@ def run(strict: bool) -> int:
     hooks, _ = load_hooks()
     passed: list[str] = []
     failed: list[tuple[str, int]] = []
+    warned: list[tuple[str, str]] = []
     unverified: list[tuple[str, str]] = []
 
     for hook in hooks:
@@ -245,13 +275,17 @@ def run(strict: bool) -> int:
 
     for command, _reason in EXTRA:
         print(f"\n==> [no hook behind this one] {command}")
-        step = subprocess.run(command, shell=True, cwd=ROOT)  # noqa: S602
-        if step.returncode == 0:
+        rc, warn_lines = _stream(command)
+        if rc == 0 and warn_lines:
+            passed.append(command)
+            warned.extend((command, line) for line in warn_lines)
+            print("    ok, with a warning (repeated in the summary)")
+        elif rc == 0:
             passed.append(command)
             print("    ok")
         else:
-            failed.append((command, step.returncode))
-            print(f"    FAILED rc={step.returncode}")
+            failed.append((command, rc))
+            print(f"    FAILED rc={rc}")
 
     print("\n" + "=" * 72)
     if unverified:
@@ -265,6 +299,8 @@ def run(strict: bool) -> int:
         print("=" * 72)
     for name, code in failed:
         print(f"FAILED: {name} (rc={code})")
+    for name, line in warned:
+        print(f"WARNING ({name}): {line}")
 
     # The summary line is the whole contract: it can never read like a clean
     # bill of health when something went unrun.
@@ -274,6 +310,8 @@ def run(strict: bool) -> int:
         verdict = f"{len(passed)} verified, {len(unverified)} NOT VERIFIED"
     else:
         verdict = f"all {len(passed)} verified"
+    if warned:
+        verdict += f", {len(warned)} with a warning"
     print(f"hook-parity: {verdict}")
 
     if failed:

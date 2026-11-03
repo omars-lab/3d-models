@@ -64,6 +64,15 @@ into a `gh-pages` worktree and pushes. No runner is involved at any point, and
 `validate-site-graph` runs as a prerequisite, so a deploy cannot ship a gallery
 whose link graph does not check out.
 
+Nothing deploys on its own, so `make validate` says when the gallery is behind:
+`validate-gallery` (one of the checks with no hook behind them) reads the
+`gh-pages` tip's "Deploy gallery from master (<sha>)" line and, when a file in
+`DEPLOY_PATHS` changed on master more than a week ago and is still unpublished,
+prints a `gallery: WARN` line. The run still passes; the summary repeats every
+`<check>: WARN` line under the verdict, so the warning is read where the verdict
+is read. `make validate-gallery GALLERY_STALE_DAYS=0` shows it for any
+unpublished change.
+
 ## When a sibling's Actions run will not start
 
 A merge here does not depend on Actions, but a cross-repo change often waits on
